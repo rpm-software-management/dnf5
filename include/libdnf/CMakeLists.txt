@@ -1,0 +1,2 @@
+file(GLOB_RECURSE LIBDNF_HEADERS *.hpp)
+install(FILES ${LIBDNF_HEADERS} DESTINATION include/libdnf)

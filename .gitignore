@@ -1,0 +1,5 @@
+build/*
+__pycache__
+*.log
+*.src.rpm
+*.tar.gz

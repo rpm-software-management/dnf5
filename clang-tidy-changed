@@ -1,0 +1,31 @@
+#!/bin/sh
+
+
+# run clang-tidy on new and modified files
+# print the result and store it in clang-tidy-changed.log
+
+
+TOPDIR=$(dirname $(readlink -f $0))
+LOG="$TOPDIR/clang-tidy-changed.log"
+
+
+# get upstream branch (incl. remote)
+UPSTREAM_BRANCH=`git rev-parse --abbrev-ref --symbolic-full-name @{u}`
+
+# list all changed files
+CHANGED_FILES=`git diff --name-only "$UPSTREAM_BRANCH" | egrep '\.(c|cpp|h|hpp)$'`
+
+# list all untracked files
+UNTRACKED_FILES=`git ls-files --others --exclude-standard | egrep '\.(c|cpp|h|hpp)$'`
+
+
+echo -n > "$LOG"
+for FILE in $CHANGED_FILES $UNTRACKED_FILES; do
+    echo "Checking $FILE..."
+    CHECKS=""
+    if [[ "$FILE" == "test/"* ]]; then
+        # exclude several checks failing due to cppunit
+        CHECKS="-llvm-header-guard,-readability-convert-member-functions-to-static,-cppcoreguidelines-owning-memory,-cert-err58-cpp"
+    fi
+    clang-tidy "$FILE" -checks="$CHECKS" -- -std=c++17 -I"$TOPDIR/include" | tee -a "$LOG"
+done

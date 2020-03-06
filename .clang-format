@@ -1,0 +1,195 @@
+---
+Language: Cpp
+BasedOnStyle: Google
+Standard: Cpp11
+
+
+# Characters per line
+ColumnLimit: 120
+
+
+# Do not wrap comments according to ColumnLimit
+ReflowComments: false
+
+
+# Indentation
+IndentWidth: 4
+AccessModifierOffset: -4
+UseTab: false
+
+# Keep up to 2 empty lines
+MaxEmptyLinesToKeep: 2
+
+
+# sort and group includes: c++, system, project
+SortIncludes: true
+IncludeBlocks: Regroup
+IncludeCategories:
+  # C++ Standard Library headers
+  - Regex:           '<[[:alnum:]_-]+>'
+    Priority:        5
+  # system libraries
+  - Regex:           '<.+>'
+    Priority:        4
+  # project includes - libdnf absolute paths
+  - Regex:           '"libdnf/.+"'
+    Priority:        3
+  # project includes - libdnf-cli absolute paths
+  - Regex:           '"libdnf-cli/.+"'
+    Priority:        2
+  # project includes
+  - Regex:           '".+"'
+    Priority:        1
+
+
+# Always break after an open bracket, if the parameters don't fit on a single line, e.g.:
+#
+# someLongFunction(
+#     argument1, argument2);
+#
+AlignAfterOpenBracket: AlwaysBreak
+
+
+# Forbid simple braced statements on a single line.
+#
+# Allowed:
+# if (a) {
+#    return;
+# }
+#
+# Forbidden:
+# if (a) { return; }
+#
+AllowShortBlocksOnASingleLine: false
+
+
+# Forbid short case labels on a single line.
+#
+# Allowed:
+# switch (a) {
+#     case 1:
+#         x = 1;
+#         break;
+# }
+#
+# Forbidden:
+# switch (a) {
+#     case 1: x = 1; break;
+#     case 2: return;
+# }
+#
+AllowShortCaseLabelsOnASingleLine: false
+
+
+# Allow only single line methods defined inside a class.
+#
+# Allowed:
+# class Foo {
+#     void f() { foo(); }
+# };
+# void f() {
+#    foo();
+# }
+#
+# Forbidden:
+# void f() { foo(); }
+AllowShortFunctionsOnASingleLine: Inline
+
+
+# Forbid if statements on a single line.
+#
+# Allowed:
+# if (a)
+#     return ;
+# else {
+#     return;
+# }
+#
+# Forbidden:
+# if (a) return;
+# else
+#     return;
+#
+AllowShortIfStatementsOnASingleLine: Never
+
+
+# Forbid loops on a single line.
+#
+# Allowed:
+# while (i < 1) {
+#     i--;
+# }
+#
+# Forbidden:
+# while (i < 1) i--;
+#
+AllowShortLoopsOnASingleLine: false
+
+
+# Force middle pointer alignment.
+#
+# Examples:
+# char * str;
+# const std::string & str;
+#
+DerivePointerAlignment: false
+PointerAlignment: Middle
+
+
+# Allow only one argument/parameter per line.
+#
+# Allowed:
+# void f(int aaaaaaaaaaaaaaaaaaaa,
+#        int aaaaaaaaaaaaaaaaaaaa,
+#        int aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) {}
+#
+# Forbidden:
+# void f(int aaaaaaaaaaaaaaaaaaaa, int aaaaaaaaaaaaaaaaaaaa,
+#        int aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa) {}
+#
+BinPackArguments: false
+BinPackParameters: false
+
+
+# If the function declaration doesn't fit on a line, put all parameters on the next line.
+#
+# Allowed:
+# void myFunction(
+#     int a, int b, int c, int d, int e);
+#
+# Forbidden:
+# void myFunction(int a,
+#                 int b,
+#                 int c,
+#                 int d,
+#                 int e);
+#
+AllowAllParametersOfDeclarationOnNextLine: true
+
+
+# Allow only per line constructor intitializers.
+#
+# Allowed:
+# MyClass::MyClass()
+#     : member0(0)
+#     , member1(2)
+#
+# Forbidden:
+# MyClass::MyClass() :
+#     member0(0), member1(2)
+#
+AllowAllConstructorInitializersOnNextLine: false
+BreakConstructorInitializers: BeforeComma
+
+
+# Align consecutive C/C++ preprocessor macros.
+#
+# Example:
+# #define SHORT_NAME       42
+# #define LONGER_NAME      0x007f
+# #define EVEN_LONGER_NAME (2)
+# #define foo(x)           (x * x)
+# #define bar(y, z)        (y + z)
+#
+AlignConsecutiveMacros: true
+...

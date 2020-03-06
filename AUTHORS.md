@@ -1,0 +1,84 @@
+The current Red Hat's Software Management / DNF team
+====================================================
+Aleš Matěj <amatej@redhat.com>
+Daniel Mach <dmach@redhat.com>
+Jaroslav Mracek <jmracek@redhat.com>
+Jaroslav Rohel <jrohel@redhat.com>
+Lukáš Hrázký <lhrazky@redhat.com>
+Marek Blaha <mblaha@redhat.com>
+Nicola Sella <nsella@redhat.com>
+Pavla Kratochvilova <pkratoch@redhat.com>
+
+
+All contributors to libdnf (incl. hawkey and libhif)
+====================================================
+Adam Williamson <awilliam@redhat.com>
+Ales Kozumplik <kozumplik@gmail.com>
+Aleš Matěj <amatej@redhat.com>
+Benjamin Kircher <benjamin.kircher@gmail.com>
+Bernhard Rosenkränzer <bero@lindev.ch>
+Colin Walters <walters@verbum.org>
+Corentin Noël <corentin@elementary.io>
+Dan Callaghan <dcallagh@redhat.com>
+Dan Horák <dan@danny.cz>
+Daniel Mach <dmach@redhat.com>
+Eduard Čuba <cuba.edo@gmail.com>
+Elan Ruusamäe <glen@delfi.ee>
+Giuseppe Scrivano <gscrivan@redhat.com>
+Christian Brunner <chb@muc.de>
+Courtney Pacheco <cpacheco@redhat.com>
+Igor Gnatenko <i.gnatenko.brain@gmail.com>
+iliana weller <iweller@amazon.com>
+James Cassell <code@james.cassell.me>
+Jan Pazdziora <jpazdziora@redhat.com>
+Jan Silhan <jsilhan@redhat.com>
+Jaroslav Mracek <jmracek@redhat.com>
+Jaroslav Rohel <jrohel@redhat.com>
+Jeff Law <law@redhat.com>
+Jens Petersen <juhpetersen@gmail.com>
+Jonathan Dieter <jdieter@gmail.com>
+Jonathan Lebon <jlebon@redhat.com>
+Jonathan Wakely <jwakely@redhat.com>
+Jo Shields <directhex@apebox.org>
+Kalev Lember <klember@redhat.com>
+Kevin Howell <khowell@redhat.com>
+Kevin Kofler <kevin.kofler@chello.at>
+Khem Raj <raj.khem@gmail.com>
+Lukáš Hrázký <lhrazky@redhat.com>
+Lumir Balhar <lbalhar@redhat.com>
+Marek Blaha <mblaha@redhat.com>
+Marius Vollmer <mvollmer@redhat.com>
+Martin Hatina <mhatina@redhat.com>
+Martin Sehnoutka <msehnout@redhat.com>
+Matthew Barnes <mbarnes@redhat.com>
+Mihai Moldovan <ionic@ionic.de>
+Michael Mraka <michael.mraka@redhat.com>
+Michael Schroeder <mls@suse.de>
+Michal Domonkos <mdomonko@redhat.com>
+Michal Luscon <mluscon@redhat.com>
+Michal Minar <miminar@redhat.com>
+Michal Ruprich <mruprich@redhat.com>
+Michal Toman <mtoman@fedoraproject.org>
+Neal Gompa <ngompa13@gmail.com>
+Nils Philippsen <nils@redhat.com>
+Panu Matilainen <pmatilai@redhat.com>
+Pat Riehecky <riehecky@fnal.gov>
+Pavla Kratochvilova <pkratoch@redhat.com>
+Peter Hjalmarsson <kanelxake@gmail.com>
+Peter Robinson <pbrobinson@gmail.com>
+Petr Viktorin <pviktori@redhat.com>
+Radek Holy <rholy@redhat.com>
+Rafael Fonseca <rdossant@redhat.com>
+Richard Hughes <richard@hughsie.com>
+Ruixin <peter.bao@mail.utoronto.ca>
+Scott Tsai <scottt.tw@gmail.com>
+Tomas Mlcoch <tmlcoch@redhat.com>
+Tomasz Kłoczko <kloczko.tomasz@gmail.com>
+Tyrone Abdy <tabdy@redhat.com>
+Valentina Mukhamedzhanova <vmukhame@redhat.com>
+Ville Skyttä <ville.skytta@iki.fi>
+Vít Ondruch <vondruch@redhat.com>
+Yavor Atanasov <yavor.k.atanasov@gmail.com>
+Yuri Chornoivan <yurchor@ukr.net>
+Zdeněk Pavlas <zpavlas@redhat.com>
+Zhang Xianwei <zhang.xianwei8@zte.com.cn>
