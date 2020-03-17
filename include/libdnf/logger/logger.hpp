@@ -33,7 +33,7 @@ namespace libdnf {
 /// Logger is an abstract interface used for logging.
 /// An implementation (inherited class) can call callbacks, log the messages to memory, file, or somewhere else.
 ///
-/// @replaces libdnf:libdnf/log.hpp:class:Log
+/// @replaces libdnf:utils/logger.hpp:class:Logger
 class Logger {
 public:
     Logger() = default;
@@ -50,15 +50,31 @@ public:
         return ilevel >= LEVEL_C_STR.size() ? "UNDEFINED" : LEVEL_C_STR[ilevel];
     }
 
+    /// @replaces libdnf:utils/logger.hpp:method:Logger.critical(const std::string & message)
     void critical(const std::string & message) noexcept { write(Level::CRITICAL, message); }
+
+    /// @replaces libdnf:utils/logger.hpp:method:Logger.error(const std::string & message)
     void error(const std::string & message) noexcept { write(Level::ERROR, message); }
+
+    /// @replaces libdnf:utils/logger.hpp:method:Logger.warning(const std::string & message)
     void warning(const std::string & message) noexcept { write(Level::WARNING, message); }
+
+    /// @replaces libdnf:utils/logger.hpp:method:Logger.notice(const std::string & message)
     void notice(const std::string & message) noexcept { write(Level::NOTICE, message); }
+
+    /// @replaces libdnf:utils/logger.hpp:method:Logger.info(const std::string & message)
     void info(const std::string & message) noexcept { write(Level::INFO, message); }
+
+    /// @replaces libdnf:utils/logger.hpp:method:Logger.debug(const std::string & message)
     void debug(const std::string & message) noexcept { write(Level::DEBUG, message); }
+
+    /// @replaces libdnf:utils/logger.hpp:method:Logger.trace(const std::string & message)
     void trace(const std::string & message) noexcept { write(Level::TRACE, message); }
 
+    /// @replaces libdnf:utils/logger.hpp:method:Logger.write(libdnf::Logger::Level level, const std::string & message)
     virtual void write(Level level, const std::string & message) noexcept;
+
+    /// @replaces libdnf:utils/logger.hpp:method:Logger.write(time_t time, pid_t pid, libdnf::Logger::Level level, const std::string & message)
     virtual void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept = 0;
 
 private:
