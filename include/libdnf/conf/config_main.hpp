@@ -1,47 +1,41 @@
 /*
- * Copyright (C) 2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#ifndef _LIBDNF_CONFIG_MAIN_HPP
-#define _LIBDNF_CONFIG_MAIN_HPP
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#ifdef LIBDNF_UNSTABLE_API
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
 
-#include "Config.hpp"
-#include "OptionBool.hpp"
-#include "OptionEnum.hpp"
-#include "OptionNumber.hpp"
-#include "OptionPath.hpp"
-#include "OptionSeconds.hpp"
-#include "OptionString.hpp"
-#include "OptionStringList.hpp"
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef LIBDNF_CONF_CONFIG_MAIN_HPP
+#define LIBDNF_CONF_CONFIG_MAIN_HPP
+
+#include "config.hpp"
+#include "option_bool.hpp"
+#include "option_enum.hpp"
+#include "option_number.hpp"
+#include "option_path.hpp"
+#include "option_seconds.hpp"
+#include "option_string.hpp"
+#include "option_string_list.hpp"
+
+#include "libdnf/logger/logger.hpp"
 
 #include <memory>
 
 namespace libdnf {
 
-/**
-* @class ConfigMain
-*
-* @brief Holds configuration options needed for libdnf
-*
-*/
+/// Holds global configuration
 class ConfigMain : public Config {
 public:
     ConfigMain();
@@ -70,10 +64,10 @@ public:
     OptionStringList & installonlypkgs();
     OptionStringList & group_package_types();
 
-    /*  NOTE: If you set this to 2, then because it keeps the current
-    kernel it means if you ever install an "old" kernel it'll get rid
-    of the newest one so you probably want to use 3 as a minimum
-    ... if you turn it on. */
+    //  NOTE: If you set this to 2, then because it keeps the current
+    // kernel it means if you ever install an "old" kernel it'll get rid
+    // of the newest one so you probably want to use 3 as a minimum
+    // ... if you turn it on.
     OptionNumber<std::uint32_t> & installonly_limit();
 
     OptionStringList & tsflags();
@@ -87,10 +81,11 @@ public:
     OptionBool & obsoletes();
     OptionBool & showdupesfromrepos();
     OptionBool & exit_on_lock();
+    OptionBool & allow_vendor_change();
     OptionSeconds & metadata_timer_sync();
     OptionStringList & disable_excludes();
-    OptionEnum<std::string> & multilib_policy(); // :api
-    OptionBool & best(); // :api
+    OptionEnum<std::string> & multilib_policy();  // :api
+    OptionBool & best();                          // :api
     OptionBool & install_weak_deps();
     OptionString & bugtracker_url();
     OptionBool & zchunk();
@@ -110,9 +105,9 @@ public:
     OptionBool & history_record();
     OptionStringList & history_record_packages();
     OptionString & rpmverbosity();
-    OptionBool & strict(); // :api
-    OptionBool & skip_broken(); // :yum-compatibility
-    OptionBool & autocheck_running_kernel(); // :yum-compatibility
+    OptionBool & strict();                    // :api
+    OptionBool & skip_broken();               // :yum-compatibility
+    OptionBool & autocheck_running_kernel();  // :yum-compatibility
     OptionBool & clean_requirements_on_remove();
     OptionEnum<std::string> & history_list_view();
     OptionBool & upgrade_group_objects_upgrade();
@@ -157,34 +152,23 @@ public:
     OptionNumber<std::uint32_t> & deltarpm_percentage();
     OptionBool & skip_if_unavailable();
 
-    /**
-    * @brief Adds variables from directory
-    *
-    * Additional variables are added from directory. Each file represents one variable.
-    * The variable name is equal to filename and the value is defined by first line of the file.
-    *
-    * @param varsMap Storage where the variables are added.
-    * @param dirPath Path to directory.
-    */
-    static void addVarsFromDir(std::map<std::string, std::string> & varsMap, const std::string & dirPath);
+    /// Adds variables from directory
+    /// Additional variables are added from directory. Each file represents one variable.
+    /// The variable name is equal to filename and the value is defined by first line of the file.
+    /// @param varsMap Storage where the variables are added.
+    /// @param dirPath Path to directory.
+    static void add_vars_from_dir(std::map<std::string, std::string> & vars_map, const std::string & dir_path);
 
-    /**
-    * @brief Adds variables from environment
-    *
-    * Environment variables DNF[0-9] and DNF_VAR_[A-Za-z0-9_]+ are used if exists.
-    * DNF_VAR_ prefix is cut off.
-    *
-    * @param varsMap Storage where the variables are added.
-    */
-    static void addVarsFromEnv(std::map<std::string, std::string> & varsMap);
+    /// Adds variables from environment
+    /// Environment variables DNF[0-9] and DNF_VAR_[A-Za-z0-9_]+ are used if exists. DNF_VAR_ prefix is cut off.
+    /// @param varsMap Storage where the variables are added.
+    static void add_vars_from_env(std::map<std::string, std::string> & vars_map);
 
 private:
     class Impl;
-    std::unique_ptr<Impl> pImpl;
+    std::unique_ptr<Impl> p_impl;
 };
 
-}
-
-#endif
+}  // namespace libdnf
 
 #endif
