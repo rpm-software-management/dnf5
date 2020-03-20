@@ -1,96 +1,98 @@
 /*
- * Copyright (C) 2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#include "OptionPath.hpp"
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#include "bgettext/bgettext-lib.h"
-#include "tinyformat/tinyformat.hpp"
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
 
-#include <sys/types.h>
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#include "libdnf/conf/option_path.hpp"
+
 #include <sys/stat.h>
+#include <sys/types.h>
 #include <unistd.h>
 
 namespace libdnf {
 
-static std::string removeFileProt(const std::string & value)
-{
-    if (value.compare(0, 7, "file://") == 0)
-        return value.substr(7);
+static std::string remove_file_prot(const std::string & value) {
+    const int prefix_len = 7;
+    if (value.compare(0, prefix_len, "file://") == 0) {
+        return value.substr(prefix_len);
+    }
     return value;
 }
 
-OptionPath::OptionPath(const std::string & defaultValue, bool exists, bool absPath)
-: OptionString(defaultValue), exists(exists), absPath(absPath)
-{
-    this->defaultValue = removeFileProt(this->defaultValue);
-    test(this->defaultValue);
-    this->value = this->defaultValue;
+OptionPath::OptionPath(const std::string & default_value, bool exists, bool abs_path)
+    : OptionString(default_value)
+    , exists(exists)
+    , abs_path(abs_path) {
+    this->default_value = remove_file_prot(this->default_value);
+    test(this->default_value);
+    this->value = this->default_value;
 }
 
-OptionPath::OptionPath(const char * defaultValue, bool exists, bool absPath)
-: OptionString(defaultValue), exists(exists), absPath(absPath)
-{
-    if (defaultValue) {
-        this->defaultValue = removeFileProt(this->defaultValue);
-        test(this->defaultValue);
-        this->value = this->defaultValue;
+OptionPath::OptionPath(const char * default_value, bool exists, bool abs_path)
+    : OptionString(default_value)
+    , exists(exists)
+    , abs_path(abs_path) {
+    if (default_value) {
+        this->default_value = remove_file_prot(this->default_value);
+        test(this->default_value);
+        this->value = this->default_value;
     }
 }
 
-OptionPath::OptionPath(const std::string & defaultValue, const std::string & regex, bool icase, bool exists, bool absPath)
-: OptionString(removeFileProt(defaultValue), regex, icase), exists(exists), absPath(absPath)
-{
-    this->defaultValue = removeFileProt(this->defaultValue);
-    test(this->defaultValue);
-    this->value = this->defaultValue;
+OptionPath::OptionPath(
+    const std::string & default_value, const std::string & regex, bool icase, bool exists, bool abs_path)
+    : OptionString(remove_file_prot(default_value), regex, icase)
+    , exists(exists)
+    , abs_path(abs_path) {
+    this->default_value = remove_file_prot(this->default_value);
+    test(this->default_value);
+    this->value = this->default_value;
 }
 
-OptionPath::OptionPath(const char * defaultValue, const std::string & regex, bool icase, bool exists, bool absPath)
-: OptionString(defaultValue, regex, icase), exists(exists), absPath(absPath)
-{
-    if (defaultValue) {
-        this->defaultValue = removeFileProt(this->defaultValue);
-        test(this->defaultValue);
-        this->value = this->defaultValue;
+OptionPath::OptionPath(const char * default_value, const std::string & regex, bool icase, bool exists, bool abs_path)
+    : OptionString(default_value, regex, icase)
+    , exists(exists)
+    , abs_path(abs_path) {
+    if (default_value) {
+        this->default_value = remove_file_prot(this->default_value);
+        test(this->default_value);
+        this->value = this->default_value;
     }
 }
 
-void OptionPath::test(const std::string & value) const
-{
-    if (absPath && value[0] != '/')
-        throw InvalidValue(tfm::format(_("given path '%s' is not absolute."), value));
+void OptionPath::test(const std::string & value) const {
+    if (abs_path && value[0] != '/') {
+        throw NotAllowedValue(value);
+    }
 
-    struct stat buffer; 
-    if (exists && stat(value.c_str(), &buffer))
-        throw InvalidValue(tfm::format(_("given path '%s' does not exist."), value));
+    struct stat buffer;
+    if (exists && stat(value.c_str(), &buffer) != 0) {
+        throw PathNotExists(value);
+    }
 }
 
-void OptionPath::set(Priority priority, const std::string & value)
-{
-    if (priority >= this->priority) {
+void OptionPath::set(Priority priority, const std::string & value) {
+    if (priority >= get_priority()) {
         OptionString::test(value);
-        auto val = removeFileProt(value);
+        auto val = remove_file_prot(value);
         test(val);
         this->value = val;
-        this->priority = priority;
+        set_priority(priority);
     }
 }
 
-}
+}  // namespace libdnf

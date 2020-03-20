@@ -1,77 +1,112 @@
 /*
- * Copyright (C) 2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#ifndef _LIBDNF_OPTION_STRING_HPP
-#define _LIBDNF_OPTION_STRING_HPP
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#ifdef LIBDNF_UNSTABLE_API
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
 
-#include "Option.hpp"
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef LIBDNF_CONF_OPTION_STRING_HPP
+#define LIBDNF_CONF_OPTION_STRING_HPP
+
+#include "option.hpp"
 
 namespace libdnf {
 
+/// Option that stores string value.
+/// Support default value, and check of an input value using the regular expression
+/// @replaces libdnf:conf/OptionString.hpp:class:OptionString
 class OptionString : public Option {
 public:
-    typedef std::string ValueType;
+    using ValueType = std::string;
 
-    OptionString(const std::string & defaultValue);
-    OptionString(const char * defaultValue);
-    OptionString(const std::string & defaultValue, const std::string & regex, bool icase);
-    OptionString(const char * defaultValue, const std::string & regex, bool icase);
+    /// Exception that is generated when an invalid input value is detected.
+    class InvalidValue : public Option::InvalidValue {
+    public:
+        using Option::InvalidValue::InvalidValue;
+        const char * get_domain_name() const noexcept override { return "libdnf::OptionString"; }
+    };
+
+    /// Exception that is generated when not allowed input value is detected.
+    class NotAllowedValue : public InvalidValue {
+    public:
+        using InvalidValue::InvalidValue;
+        const char * get_name() const noexcept override { return "NotAllowedValue"; }
+        const char * get_description() const noexcept override { return "Not allowed value"; }
+    };
+
+    /// Exception that is generated during read an empty Option.
+    class ValueNotSet : public Exception {
+    public:
+        ValueNotSet() : Exception("") {}
+        const char * get_domain_name() const noexcept override { return "libdnf::OptionString"; }
+        const char * get_name() const noexcept override { return "ValueNotSet"; }
+        const char * get_description() const noexcept override { return "Value is not set"; }
+    };
+
+    explicit OptionString(const std::string & default_value);
+    explicit OptionString(const char * default_value);
+    OptionString(const std::string & default_value, std::string regex, bool icase);
+    OptionString(const char * default_value, std::string regex, bool icase);
+
+    /// Makes copy (clone) of this object.
+    /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.clone()
     OptionString * clone() const override;
-    void test(const std::string & value) const;
+
+    /// Sets new value and priority.
+    /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
+    /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
-    std::string fromString(const std::string & value) const;
-    const std::string & getValue() const;
-    const std::string & getDefaultValue() const noexcept;
-    std::string getValueString() const override;
+
+    /// Gets the stored value.
+    /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.getValue()
+    const std::string & get_value() const;
+
+    /// Gets the default value. Default value is used until it is replaced by set() method.
+    /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.getValueString()
+    const std::string & get_default_value() const noexcept;
+
+    /// Gets a string representation of the stored value.
+    /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.getValueString()
+    std::string get_value_string() const override;
 
 protected:
+    void test(const std::string & value) const;
+    std::string from_string(const std::string & value) const;
+
     std::string regex;
     bool icase;
-    std::string defaultValue;
+    std::string default_value;
     std::string value;
 };
 
-inline OptionString * OptionString::clone() const
-{
+inline OptionString * OptionString::clone() const {
     return new OptionString(*this);
 }
 
-inline const std::string & OptionString::getDefaultValue() const noexcept
-{
-    return defaultValue;
+inline const std::string & OptionString::get_default_value() const noexcept {
+    return default_value;
 }
 
-inline std::string OptionString::getValueString() const
-{
-    return getValue();
+inline std::string OptionString::get_value_string() const {
+    return get_value();
 }
 
-inline std::string OptionString::fromString(const std::string & value) const
-{
+inline std::string OptionString::from_string(const std::string & value) const {
     return value;
 }
 
-}
-
-#endif
+}  // namespace libdnf
 
 #endif

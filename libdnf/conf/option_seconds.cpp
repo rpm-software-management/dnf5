@@ -1,78 +1,81 @@
 /*
- * Copyright (C) 2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#include "OptionSeconds.hpp"
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#include "bgettext/bgettext-lib.h"
-#include "tinyformat/tinyformat.hpp"
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#include "libdnf/conf/option_seconds.hpp"
 
 namespace libdnf {
 
-OptionSeconds::OptionSeconds(ValueType defaultValue, ValueType min, ValueType max)
-: OptionNumber(defaultValue, min, max) {}
+OptionSeconds::OptionSeconds(ValueType default_value, ValueType min, ValueType max)
+    : OptionNumber(default_value, min, max) {}
 
-OptionSeconds::OptionSeconds(ValueType defaultValue, ValueType min)
-: OptionNumber(defaultValue, min) {}
+OptionSeconds::OptionSeconds(ValueType default_value, ValueType min) : OptionNumber(default_value, min) {}
 
-OptionSeconds::OptionSeconds(ValueType defaultValue)
-: OptionNumber(defaultValue) {}
+OptionSeconds::OptionSeconds(ValueType default_value) : OptionNumber(default_value) {}
 
-OptionSeconds::ValueType OptionSeconds::fromString(const std::string & value) const
-{
-    if (value.empty())
-        throw InvalidValue(_("no value specified"));
+OptionSeconds::ValueType OptionSeconds::from_string(const std::string & value) const {
+    constexpr int seconds_in_minute = 60;
+    constexpr int minutes_in_hour = 60;
+    constexpr int hours_in_day = 24;
+    if (value.empty()) {
+        throw InvalidValue(value);
+    }
 
-    if (value == "-1" || value == "never") // Special cache timeout, meaning never
+    if (value == "-1" || value == "never") {  // Special cache timeout, meaning never
         return -1;
+    }
 
     std::size_t idx;
     auto res = std::stod(value, &idx);
-    if (res < 0)
-        throw InvalidValue(tfm::format(_("seconds value '%s' must not be negative"), value));
+    if (res < 0) {
+        throw NegativeValue(value);
+    }
 
     if (idx < value.length()) {
-        if (idx < value.length() - 1)
-            throw InvalidValue(tfm::format(_("could not convert '%s' to seconds"), value));
+        if (idx < value.length() - 1) {
+            throw InvalidValue(value);
+        }
         switch (value.back()) {
-            case 's': case 'S':
+            case 's':
+            case 'S':
                 break;
-            case 'm': case 'M':
-                res *= 60;
+            case 'm':
+            case 'M':
+                res *= seconds_in_minute;
                 break;
-            case 'h': case 'H':
-                res *= 60 * 60;
+            case 'h':
+            case 'H':
+                res *= seconds_in_minute * minutes_in_hour;
                 break;
-            case 'd': case 'D':
-                res *= 60 * 60 * 24;
+            case 'd':
+            case 'D':
+                res *= seconds_in_minute * minutes_in_hour * hours_in_day;
                 break;
             default:
-                throw InvalidValue(tfm::format(_("unknown unit '%s'"), value.back()));
+                throw UnknownUnit(std::string(&value.back(), 1));
         }
     }
 
-    return res;
+    return static_cast<ValueType>(res);
 }
 
-void OptionSeconds::set(Priority priority, const std::string & value)
-{
-    set(priority, fromString(value));
+void OptionSeconds::set(Priority priority, const std::string & value) {
+    set(priority, from_string(value));
 }
 
-}
+}  // namespace libdnf

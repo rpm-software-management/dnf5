@@ -1,70 +1,100 @@
 /*
- * Copyright (C) 2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#include "OptionBool.hpp"
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#include "bgettext/bgettext-lib.h"
-#include "tinyformat/tinyformat.hpp"
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#include "libdnf/conf/option_bool.hpp"
+
+#include <sstream>
 
 namespace libdnf {
 
-OptionBool::OptionBool(bool defaultValue, const char * const trueVals[], const char * const falseVals[])
-: Option(Priority::DEFAULT), trueValues(trueVals), falseValues(falseVals)
-, defaultValue(defaultValue), value(defaultValue) {}
+OptionBool::OptionBool(const OptionBool & src) : Option(src), default_value(src.default_value), value(src.value) {
+    if (src.true_values) {
+        true_values = std::make_unique<std::vector<std::string>>(*src.true_values);
+    }
+    if (src.false_values) {
+        false_values = std::make_unique<std::vector<std::string>>(*src.false_values);
+    }
+}
 
-OptionBool::OptionBool(bool defaultValue)
-: OptionBool(defaultValue, nullptr, nullptr) {}
+OptionBool & OptionBool::operator=(const OptionBool & src) {
+    if (this == &src) {
+        return *this;
+    }
+    if (src.true_values) {
+        true_values = std::make_unique<std::vector<std::string>>(*src.true_values);
+    }
+    if (src.false_values) {
+        false_values = std::make_unique<std::vector<std::string>>(*src.false_values);
+    }
+    default_value = src.default_value;
+    value = src.value;
+    return *this;
+}
 
-bool OptionBool::fromString(std::string value) const
-{
-    for (auto & ch : value)
-        ch = std::tolower(ch);
-    for (auto it = getFalseValues(); *it; ++it) {
-        if (value == *it)
+
+OptionBool::OptionBool(
+    bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals)
+    : Option(Priority::DEFAULT)
+    , true_values(std::make_unique<std::vector<std::string>>(true_vals))
+    , false_values(std::make_unique<std::vector<std::string>>(false_vals))
+    , default_value(default_value)
+    , value(default_value) {}
+
+OptionBool::OptionBool(bool default_value)
+    : Option(Priority::DEFAULT)
+    , default_value(default_value)
+    , value(default_value) {}
+
+bool OptionBool::from_string(const std::string & value) const {
+    auto tmp_value = value;
+    // Case insensitive conversion. Convert input value to lower case first.
+    for (auto & ch : tmp_value) {
+        ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
+    }
+    for (auto & false_value : get_false_values()) {
+        if (tmp_value == false_value) {
             return false;
+        }
     }
-    for (auto it = getTrueValues(); *it; ++it) {
-        if (value == *it)
+    for (auto & true_value : get_true_values()) {
+        if (tmp_value == true_value) {
             return true;
+        }
     }
-    throw InvalidValue(tfm::format(_("invalid boolean value '%s'"), value));
+    throw InvalidValue(value);
 }
 
-void OptionBool::set(Priority priority, bool value)
-{
-    if (priority >= this->priority) {
+void OptionBool::set(Priority priority, bool value) {
+    if (priority >= get_priority()) {
         this->value = value;
-        this->priority = priority;
+        set_priority(priority);
     }
 }
 
-void OptionBool::set(Priority priority, const std::string & value)
-{
-    set(priority, fromString(value));
+void OptionBool::set(Priority priority, const std::string & value) {
+    set(priority, from_string(value));
 }
 
-std::string OptionBool::toString(bool value) const
-{
+std::string OptionBool::to_string(bool value) const {
     std::ostringstream oss;
     oss << value;
     return oss.str();
 }
 
-}
+}  // namespace libdnf

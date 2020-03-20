@@ -1,35 +1,37 @@
 /*
- * Copyright (C) 2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#ifndef _LIBDNF_OPTION_HPP
-#define _LIBDNF_OPTION_HPP
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#ifdef LIBDNF_UNSTABLE_API
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
 
-#include <stdexcept>
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef LIBDNF_CONF_OPTION_HPP
+#define LIBDNF_CONF_OPTION_HPP
+
+#include "libdnf/utils/exception.hpp"
+
 #include <string>
 
 namespace libdnf {
 
+/// Option class is an abstract class. Parent of all options. Options are used to store a configuration.
+/// @replaces libdnf:conf/Option.hpp:class:Option
 class Option {
 public:
+    // TODO(jrohel): Prioroties are under discussion and probably will be modified.
+    /// @replaces libdnf:conf/Option.hpp:enum class:Option::Priority
     enum class Priority {
         EMPTY = 0,
         DEFAULT = 10,
@@ -43,46 +45,69 @@ public:
         RUNTIME = 80
     };
 
-    struct Exception : public std::runtime_error {
-        Exception(const std::string & msg) : runtime_error(msg) {}
-        Exception(const char * msg) : runtime_error(msg) {}
-    };
-    struct InvalidValue : Exception {
-        InvalidValue(const std::string & msg) : Exception(msg) {}
-        InvalidValue(const char * msg) : Exception(msg) {}
-    };
-    struct ValueNotSet : Exception {
-        ValueNotSet(const std::string & msg) : Exception(msg) {}
-        ValueNotSet(const char * msg) : Exception(msg) {}
+    /// Option exception
+    class Exception : public RuntimeError {
+    public:
+        using RuntimeError::RuntimeError;
+        const char * get_domain_name() const noexcept override { return "libdnf::Option"; }
+        const char * get_name() const noexcept override { return "Exception"; }
+        const char * get_description() const noexcept override { return "Option exception"; }
     };
 
-    Option(Priority priority = Priority::EMPTY);
-    virtual Option * clone() const = 0;
-    virtual Priority getPriority() const;
-    virtual void set(Priority priority, const std::string & value) = 0;
-    virtual std::string getValueString() const = 0;
-    virtual bool empty() const noexcept;
+    /// Exception that is generated when an invalid input value is detected.
+    class InvalidValue : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "InvalidValue"; }
+        const char * get_description() const noexcept override { return "Invalid value"; }
+    };
+
+    explicit Option(Priority priority = Priority::EMPTY);
+    Option(const Option & src) = default;
     virtual ~Option() = default;
 
+    /// Makes copy (clone) of this object.
+    /// @replaces libdnf:conf/Option.hpp:method:Option.clone()
+    virtual Option * clone() const = 0;
+
+    /// Returns priority (source) of the stored value.
+    /// @replaces libdnf:conf/Option.hpp:method:Option.getPriority()
+    virtual Priority get_priority() const;
+
+    /// Parses input string and sets new value and priority (source).
+    /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
+    /// @replaces libdnf:conf/Option.hpp:method:Option.set(Priority priority, const std::string & value)
+    virtual void set(Priority priority, const std::string & value) = 0;
+
+    /// Gets a string representation of the stored value.
+    /// @replaces libdnf:conf/Option.hpp:method:Option.getValueString()
+    virtual std::string get_value_string() const = 0;
+
+    /// Checks if the option is empty (has no stored value).
+    /// @replaces libdnf:conf/Option.hpp:method:Option.empty()
+    virtual bool empty() const noexcept;
+
 protected:
+    void set_priority(Priority priority);
+
+private:
     Priority priority;
 };
 
-inline Option::Option(Priority priority)
-: priority(priority) {}
+inline Option::Option(Priority priority) : priority(priority) {}
 
-inline Option::Priority Option::getPriority() const
-{
+inline Option::Priority Option::get_priority() const {
     return priority;
 }
 
-inline bool Option::empty() const noexcept
-{
+inline bool Option::empty() const noexcept {
     return priority == Priority::EMPTY;
 }
 
+inline void Option::set_priority(Priority priority) {
+    this->priority = priority;
 }
 
-#endif
+}  // namespace libdnf
 
 #endif
