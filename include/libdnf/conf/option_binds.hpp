@@ -1,83 +1,91 @@
 /*
- * Copyright (C) 2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#ifndef _LIBDNF_OPTION_BINDS_HPP
-#define _LIBDNF_OPTION_BINDS_HPP
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#ifdef LIBDNF_UNSTABLE_API
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
 
-#include "Option.hpp"
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef LIBDNF_CONF_OPTION_BINDS_HPP
+#define LIBDNF_CONF_OPTION_BINDS_HPP
+
+
+#include "option.hpp"
 
 #include <functional>
 #include <map>
 
 namespace libdnf {
 
+/// Maps the options names (text names readed from config file, command line, ...) to options objects.
+/// Supports user defined functions for processing new value and converting value to string.
 class OptionBinds {
 public:
-    struct Exception : public std::runtime_error {
-        Exception(const std::string & what) : runtime_error(what) {}
-    protected:
-        mutable std::string tmpMsg;
-    };
-    struct OutOfRange : public Exception {
-        OutOfRange(const std::string & id) : Exception(id) {}
-        const char * what() const noexcept override;
-    };
-    struct AlreadyExists : public Exception {
-        AlreadyExists(const std::string & id) : Exception(id) {}
-        const char * what() const noexcept override;
+    struct Exception : public RuntimeError {
+        using RuntimeError::RuntimeError;
+        const char * get_domain_name() const noexcept override { return "libdnf::OptionBinds"; }
+        const char * get_name() const noexcept override { return "Exception"; }
+        const char * get_description() const noexcept override { return "OptionBinds exception"; }
     };
 
+    class OptionNotFound : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "OptionNotFound"; }
+        const char * get_description() const noexcept override { return "Option not found"; }
+    };
+
+    class OptionAlreadyExists : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "OptionAlreadyExists"; }
+        const char * get_description() const noexcept override { return "Option already exists"; }
+    };
+
+    /// Extends the option with user-defined functions for processing a new value and converting value to a string.
+    /// It is used as additional level of processing when the option is accesed by its text name.
     class Item final {
     public:
-        typedef std::function<void(Option::Priority, const std::string &)> NewStringFunc;
-        typedef std::function<const std::string & ()> GetValueStringFunc;
+        using NewStringFunc = std::function<void(Option::Priority, const std::string &)>;
+        using GetValueStringFunc = std::function<const std::string &()>;
 
-        Option::Priority getPriority() const;
-        void newString(Option::Priority priority, const std::string & value);
-        std::string getValueString() const;
-        bool getAddValue() const;
+        Option::Priority get_priority() const;
+        void new_string(Option::Priority priority, const std::string & value);
+        std::string get_value_string() const;
+        bool get_is_append_option() const;
 
     private:
         friend class OptionBinds;
 
-        Item(Option & option, const NewStringFunc & newString,
-             const GetValueStringFunc & getValueString, bool addValue);
-        Item(Option & option, NewStringFunc && newString,
-             GetValueStringFunc && getValueString, bool addValue);
-        Item(Option & option);
+        Item(Option & option, NewStringFunc new_string_func, GetValueStringFunc get_value_string_func, bool add_value);
+        explicit Item(Option & option);
         Option * option;
-        NewStringFunc newStr;
-        GetValueStringFunc getValueStr;
-        bool addValue{false}; // hint that new value be added
+        NewStringFunc new_str_func;
+        GetValueStringFunc get_value_str_func;
+        bool is_append_option{false};  // hint that new value be added/appended
     };
 
-    typedef std::map<std::string, Item> Container;
-    typedef Container::iterator iterator;
-    typedef Container::const_iterator const_iterator;
+    using Container = std::map<std::string, Item>;
+    using iterator = Container::iterator;
+    using const_iterator = Container::const_iterator;
 
-    Item & add(const std::string & id, Option & option, const Item::NewStringFunc & newString,
-                 const Item::GetValueStringFunc & getValueString, bool addValue);
-    Item & add(const std::string & id, Option & option, Item::NewStringFunc && newString,
-                 Item::GetValueStringFunc && getValueString, bool addValue);
+    Item & add(
+        const std::string & id,
+        Option & option,
+        Item::NewStringFunc new_string_func,
+        Item::GetValueStringFunc get_value_string_func,
+        bool add_value);
     Item & add(const std::string & id, Option & option);
     Item & at(const std::string & id);
     const Item & at(const std::string & id) const;
@@ -96,8 +104,6 @@ private:
     Container items;
 };
 
-}
-
-#endif
+}  // namespace libdnf
 
 #endif
