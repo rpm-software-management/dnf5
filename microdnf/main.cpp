@@ -17,7 +17,22 @@ You should have received a copy of the GNU General Public License
 along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <libdnf/base/base.hpp>
+#include <libdnf/logger/memory_buffer_logger.hpp>
 
 int main() {
+    libdnf::Base base;
+
+    auto & log_router = base.get_logger();
+
+    // Add circular memory buffer logger
+    const std::size_t max_log_items_to_keep = 10000;
+    const std::size_t prealloc_log_items = 256;
+    log_router.add_logger(std::make_unique<libdnf::MemoryBufferLogger>(max_log_items_to_keep, prealloc_log_items));
+
+    log_router.info("Microdnf start");
+
+    log_router.info("Microdnf end");
+
     return 0;
 }
