@@ -1,101 +1,88 @@
 /*
- * Copyright (C) 2019 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#ifndef _LIBDNF_REPO_PRIVATE_HPP
-#define _LIBDNF_REPO_PRIVATE_HPP
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#include "Repo.hpp"
-#include "../dnf-utils.h"
-#include "../hy-iutil.h"
-#include "../hy-util-private.hpp"
-#include "../hy-types.h"
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
 
-#include <utils.hpp>
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
 
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef LIBDNF_RPM_REPO_REPO_PRIVATE_HPP
+#define LIBDNF_RPM_REPO_REPO_PRIVATE_HPP
+
+#include "libdnf/base/base.hpp"
+#include "libdnf/rpm/repo.hpp"
+
+#include <gpgme.h>
 #include <librepo/librepo.h>
-#include <stdlib.h>
+#include <solv/chksum.h>
+#include <solv/repo.h>
+#include <solv/util.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
-#include <gpgme.h>
-
-#include <solv/chksum.h>
-#include <solv/repo.h>
-#include <solv/util.h>
-
 #include <cctype>
+#include <cstdlib>
+#include <cstring>
+#include <ctime>
 #include <map>
 #include <mutex>
 #include <set>
 
-#include <string.h>
-#include <time.h>
-
-#define MD_TYPE_PRIMARY "primary"
-#define MD_TYPE_FILELISTS "filelists"
+#define MD_TYPE_PRIMARY     "primary"
+#define MD_TYPE_FILELISTS   "filelists"
 #define MD_TYPE_PRESTODELTA "prestodelta"
-#define MD_TYPE_GROUP_GZ "group_gz"
-#define MD_TYPE_GROUP "group"
-#define MD_TYPE_UPDATEINFO "updateinfo"
-#define MD_TYPE_MODULES "modules"
+#define MD_TYPE_GROUP_GZ    "group_gz"
+#define MD_TYPE_GROUP       "group"
+#define MD_TYPE_UPDATEINFO  "updateinfo"
+#define MD_TYPE_MODULES     "modules"
 /* "other" in this context is not a generic "any other metadata", but real metadata type named "other"
  * containing changelogs for packages */
 #define MD_TYPE_OTHER "other"
 
-enum _hy_repo_state {
-    _HY_NEW,
-    _HY_LOADED_FETCH,
-    _HY_LOADED_CACHE,
-    _HY_WRITTEN
-};
+#define CHKSUM_BYTES 32
+
+enum _hy_repo_state { _HY_NEW, _HY_LOADED_FETCH, _HY_LOADED_CACHE, _HY_WRITTEN };
 
 namespace std {
 
-template<>
+template <>
 struct default_delete<LrHandle> {
     void operator()(LrHandle * ptr) noexcept { lr_handle_free(ptr); }
 };
 
-} // namespace std
+}  // namespace std
 
-namespace libdnf {
+namespace libdnf::rpm {
 
-typedef ::Repo LibsolvRepo;
+using LibsolvRepo = ::Repo;
 
 class Key {
 public:
-    Key(gpgme_key_t key, gpgme_subkey_t subkey)
-    {
+    Key(gpgme_key_t key, gpgme_subkey_t subkey) {
         id = subkey->keyid;
         fingerprint = subkey->fpr;
         timestamp = subkey->timestamp;
         userid = key->uids->uid;
     }
 
-    std::string getId() const { return id; }
-    std::string getUserId() const { return userid; }
-    std::string getFingerprint() const { return fingerprint; }
-    long int getTimestamp() const { return timestamp; }
+    std::string get_id() const { return id; }
+    std::string get_user_id() const { return userid; }
+    std::string get_fingerprint() const { return fingerprint; }
+    long int get_timestamp() const { return timestamp; }
 
-    std::vector<char> rawKey;
+    std::vector<char> raw_key;
     std::string url;
 
 private:
@@ -107,70 +94,75 @@ private:
 
 class Repo::Impl {
 public:
-    Impl(Repo & owner, const std::string & id, Type type, std::unique_ptr<ConfigRepo> && conf);
+    Impl(Repo & owner, std::string id, Type type, std::unique_ptr<ConfigRepo> && conf, Base & base);
     ~Impl();
 
     bool load();
-    bool loadCache(bool throwExcept);
-    void downloadMetadata(const std::string & destdir);
-    bool isInSync();
+    void load_cache();
+    bool try_load_cache();
+    void download_metadata(const std::string & destdir);
+    bool is_in_sync();
     void fetch(const std::string & destdir, std::unique_ptr<LrHandle> && h);
-    std::string getCachedir() const;
-    std::string getPersistdir() const;
-    int getAge() const;
+    std::string get_cachedir() const;
+    std::string get_persistdir() const;
+    int64_t get_age() const;
     void expire();
-    bool isExpired() const;
-    int getExpiresIn() const;
-    void downloadUrl(const char * url, int fd);
-    void addCountmeFlag(LrHandle *handle);
-    void setHttpHeaders(const char * headers[]);
-    const char * const * getHttpHeaders() const;
-    const std::string & getMetadataPath(const std::string &metadataType) const;
+    bool is_expired() const;
+    int get_expires_in() const;
+    void download_url(const char * url, int fd);
+    void add_countme_flag(LrHandle * handle);
+    void set_http_headers(const char * headers[]);
+    const char * const * get_http_headers() const;
+    const std::string & get_metadata_path(const std::string & metadata_type) const;
 
-    std::unique_ptr<LrHandle> lrHandleInitBase();
-    std::unique_ptr<LrHandle> lrHandleInitLocal();
-    std::unique_ptr<LrHandle> lrHandleInitRemote(const char *destdir, bool mirrorSetup = true);
+    std::unique_ptr<LrHandle> lr_handle_init_base();
+    std::unique_ptr<LrHandle> lr_handle_init_local();
+    std::unique_ptr<LrHandle> lr_handle_init_remote(const char * destdir, bool mirror_setup = true);
 
-    void attachLibsolvRepo(LibsolvRepo * libsolvRepo);
-    void detachLibsolvRepo();
+    void attach_libsolv_repo(LibsolvRepo * libsolv_repo);
+    void detach_libsolv_repo();
 
+    LrHandle * get_cached_handle();
+
+private:
+    friend class Repo;
     std::string id;
     Type type;
     std::unique_ptr<ConfigRepo> conf;
 
     char ** mirrors{nullptr};
-    int maxMirrorTries{0}; // try them all
+    int max_mirror_tries{0};  // try them all
     // 0 forces expiration on the next call to load(), -1 means undefined value
-    int timestamp;
-    int maxTimestamp{0};
-    bool preserveRemoteTime{false};
-    std::string repomdFn;
-    std::set<std::string> additionalMetadata;
+    int64_t timestamp;
+    int max_timestamp{0};
+    bool preserve_remote_time{false};
+    std::string repomd_fn;
+    std::set<std::string> additional_metadata;
     std::string revision;
     std::vector<std::string> content_tags;
     std::vector<std::pair<std::string, std::string>> distro_tags;
     std::vector<std::pair<std::string, std::string>> metadata_locations;
     unsigned char checksum[CHKSUM_BYTES];
-    bool useIncludes{false};
-    bool loadMetadataOther;
+    bool use_includes{false};
+    bool load_metadata_other;
     std::map<std::string, std::string> substitutions;
 
     std::unique_ptr<RepoCB> callbacks;
-    std::string repoFilePath;
-    LrHandle * getCachedHandle();
+    std::string repo_file_path;
 
-    SyncStrategy syncStrategy;
-    std::map<std::string, std::string> metadataPaths;
+    SyncStrategy sync_strategy;
+    std::map<std::string, std::string> metadata_paths;
 
-    LibsolvRepo * libsolvRepo{nullptr};
-    bool needs_internalizing{false};
+    LibsolvRepo * libsolv_repo{nullptr};
+    // TODO(jrohel): Later with rpm Sack work.
+    //bool needs_internalizing{false};
     int nrefs{1};
 
-    enum _hy_repo_state state_main{_HY_NEW};
-    enum _hy_repo_state state_filelists{_HY_NEW};
-    enum _hy_repo_state state_presto{_HY_NEW};
-    enum _hy_repo_state state_updateinfo{_HY_NEW};
-    enum _hy_repo_state state_other{_HY_NEW};
+    enum _hy_repo_state state_main { _HY_NEW };
+    enum _hy_repo_state state_filelists { _HY_NEW };
+    enum _hy_repo_state state_presto { _HY_NEW };
+    enum _hy_repo_state state_updateinfo { _HY_NEW };
+    enum _hy_repo_state state_other { _HY_NEW };
     Id filenames_repodata{0};
     Id presto_repodata{0};
     Id updateinfo_repodata{0};
@@ -183,34 +175,35 @@ public:
 
     // Lock attachLibsolvRepo(), detachLibsolvRepo() and hy_repo_free() to ensure atomic behavior
     // in threaded environment such as PackageKit.
-    std::mutex attachLibsolvMutex;
+    std::mutex attach_libsolv_mutex;
 
-private:
     Repo * owner;
-    std::unique_ptr<LrResult> lrHandlePerform(LrHandle * handle, const std::string & destDirectory,
-        bool setGPGHomeDir);
-    bool isMetalinkInSync();
-    bool isRepomdInSync();
-    void resetMetadataExpired();
+    Base * base;
+    std::unique_ptr<LrResult> lr_handle_perform(
+        LrHandle * handle, const std::string & dest_directory, bool set_gpg__home_dir);
+    bool is_metalink_in_sync();
+    bool is_repomd_in_sync();
+    void reset_metadata_expired();
     std::vector<Key> retrieve(const std::string & url);
-    void importRepoKeys();
+    void import_repo_keys();
 
-    static int progressCB(void * data, double totalToDownload, double downloaded);
-    static void fastestMirrorCB(void * data, LrFastestMirrorStages stage, void *ptr);
-    static int mirrorFailureCB(void * data, const char * msg, const char * url, const char * metadata);
+    static int progress_cb(void * data, double total_to_download, double downloaded);
+    static void fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr);
+    static int mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata);
 
     bool expired;
     std::unique_ptr<LrHandle> handle;
-    std::unique_ptr<char*[], std::function<void(char **)>> httpHeaders{nullptr, [](char ** ptr)
-    {
-        for (auto item = ptr; *item; ++item)
-            delete[] *item;
-        delete[] ptr;
-    }};
-    bool endsWith(std::string const &str, std::string const &ending) const;
-    std::string getHash() const;
+    std::unique_ptr<char * [], std::function<void(char **)>> http_headers {
+        nullptr, [](char ** ptr) {
+            for (auto item = ptr; *item; ++item)
+                delete[] * item;
+            delete[] ptr;
+        }
+    };
+    static bool ends_with(std::string const & str, std::string const & ending);
+    std::string get_hash() const;
 };
 
-}
+}  // namespace libdnf::rpm
 
 #endif

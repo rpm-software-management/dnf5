@@ -57,7 +57,6 @@ inline Sack::Impl::~Impl() {
     pool_free(pool);
 }
 
-
 }  // namespace libdnf::rpm
 
 
