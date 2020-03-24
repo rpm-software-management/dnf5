@@ -1,27 +1,24 @@
 /*
- * Copyright (C) 2019 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2019-2020 Red Hat, Inc.
 
-#ifndef _LIBDNF_PRESERVE_ORDER_MAP_HPP
-#define _LIBDNF_PRESERVE_ORDER_MAP_HPP
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#ifdef LIBDNF_UNSTABLE_API
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef LIBDNF_UTILS_PRESERVE_ORDER_MAP_HPP
+#define LIBDNF_UTILS_PRESERVE_ORDER_MAP_HPP
 
 #include <cstddef>
 #include <iterator>
@@ -30,51 +27,67 @@
 
 namespace libdnf {
 
-template<typename Key, typename T, class KeyEqual = std::equal_to<Key>>
+/// PreserveOrderMap is an associative container that contains key-value pairs with unique unique keys.
+/// It is similar to standard std::map. But it preserves the order of items and the complexity is linear.
+template <typename Key, typename T, class KeyEqual = std::equal_to<Key>>
 class PreserveOrderMap {
 public:
-    typedef Key key_type;
-    typedef T mapped_type;
-    typedef KeyEqual key_equal;
-    typedef std::pair<const Key, T> value_type;
-    typedef std::vector<std::pair<Key, T>> container_type;
-    typedef typename container_type::size_type size_type;
+    using key_type = Key;
+    using mapped_type = T;
+    using key_equal = KeyEqual;
+    using value_type = std::pair<const Key, T>;
+    using container_type = std::vector<std::pair<Key, T>>;
+    using size_type = typename container_type::size_type;
 
-    template<typename valueType, typename ContainerTypeIterator>
+    template <typename valueType, typename ContainerTypeIterator>
     struct MyBidirIterator {
-        typedef std::bidirectional_iterator_tag iterator_category;
-        typedef typename PreserveOrderMap::value_type value_type;
-        typedef ptrdiff_t difference_type;
-        typedef valueType * pointer;
-        typedef valueType & reference;
+        using iterator_category = std::bidirectional_iterator_tag;
+        using value_type = typename PreserveOrderMap::value_type;
+        using difference_type = ptrdiff_t;
+        using pointer = valueType *;
+        using reference = valueType &;
 
         explicit MyBidirIterator() = default;
         explicit MyBidirIterator(ContainerTypeIterator ci) : ci(ci) {}
 
-        reference operator *() { return reinterpret_cast<reference>(*ci); }
-        pointer operator ->() const { return reinterpret_cast<pointer>(ci.operator->()); }
+        reference operator*() { return reinterpret_cast<reference>(*ci); }
+        pointer operator->() const { return reinterpret_cast<pointer>(ci.operator->()); }
 
-        MyBidirIterator& operator ++() { ++ci; return *this; }
-        MyBidirIterator operator ++(int) { auto tmp = *this; ++*this; return tmp; }
-        MyBidirIterator& operator --() { --ci; return *this; }
-        MyBidirIterator operator --(int) { auto tmp = *this; --*this; return tmp; }
+        MyBidirIterator & operator++() {
+            ++ci;
+            return *this;
+        }
+        MyBidirIterator operator++(int) {
+            auto tmp = *this;
+            ++*this;
+            return tmp;
+        }
+        MyBidirIterator & operator--() {
+            --ci;
+            return *this;
+        }
+        MyBidirIterator operator--(int) {
+            auto tmp = *this;
+            --*this;
+            return tmp;
+        }
 
-        bool operator ==(const MyBidirIterator& other) const { return ci == other.ci; }
-        bool operator !=(const MyBidirIterator& other) const { return ci != other.ci; }
+        bool operator==(const MyBidirIterator & other) const { return ci == other.ci; }
+        bool operator!=(const MyBidirIterator & other) const { return ci != other.ci; }
 
     private:
         friend class PreserveOrderMap;
         ContainerTypeIterator ci;
     };
-    typedef MyBidirIterator<value_type, typename container_type::iterator> iterator;
-    typedef MyBidirIterator<const value_type, typename container_type::const_iterator> const_iterator;
-    typedef std::reverse_iterator<iterator> reverse_iterator;
-    typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
+    using iterator = MyBidirIterator<value_type, typename container_type::iterator>;
+    using const_iterator = MyBidirIterator<const value_type, typename container_type::const_iterator>;
+    using reverse_iterator = std::reverse_iterator<iterator>;
+    using const_reverse_iterator = std::reverse_iterator<const_iterator>;
 
     bool empty() const noexcept { return items.empty(); }
     size_type size() const noexcept { return items.size(); }
     size_type max_size() const noexcept { return items.max_size(); }
-    void reserve(size_type newCapacity) { items.reserve(newCapacity); }
+    void reserve(size_type new_capacity) { items.reserve(new_capacity); }
     size_type capacity() const noexcept { return items.capacity(); }
     void shrink_to_fit() { items.shrink_to_fit(); }
 
@@ -93,83 +106,79 @@ public:
 
     void clear() noexcept { items.clear(); }
 
-    std::pair<iterator, bool> insert(const value_type & value)
-    {
+    std::pair<iterator, bool> insert(const value_type & value) {
         auto it = find(value.first);
         if (it == end()) {
             it = iterator(items.insert(it.ci, value));
             return {it, true};
-        } else {
-            return {it, false};
         }
+        return {it, false};
     }
 
     iterator erase(const_iterator pos) { return iterator(items.erase(pos.ci)); }
     iterator erase(const_iterator first, const_iterator last) { return iterator(items.erase(first.ci, last.ci)); }
 
-    size_type erase(const Key & key)
-    {
+    size_type erase(const Key & key) {
         auto it = find(key);
-        if (it == end())
+        if (it == end()) {
             return 0;
+        }
         items.erase(it.ci);
         return 1;
     }
 
-    size_type count(const Key & key) const
-    {
-        return find(key) != end() ? 1 : 0;
-    }
+    size_type count(const Key & key) const { return find(key) != end() ? 1 : 0; }
 
-    iterator find(const Key & key)
-    {
+    iterator find(const Key & key) {
         auto it = begin();
-        while (it != end() && !KeyEqual()(it->first, key))
+        while (it != end() && !KeyEqual()(it->first, key)) {
             ++it;
+        }
         return it;
     }
 
-    const_iterator find(const Key & key) const
-    {
+    const_iterator find(const Key & key) const {
         auto it = cbegin();
-        while (it != cend() && !KeyEqual()(it->first, key))
+        while (it != cend() && !KeyEqual()(it->first, key)) {
             ++it;
+        }
         return it;
     }
 
     T & operator[](const Key & key) {
         for (auto & item : items) {
-            if (KeyEqual()(item.first, key))
+            if (KeyEqual()(item.first, key)) {
                 return item.second;
+            }
         }
         items.push_back({key, {}});
         return items.back().second;
     }
 
-    T & operator[](Key && key)
-    {
+    T & operator[](Key && key) {
         for (auto & item : items) {
-            if (KeyEqual()(item.first, key))
+            if (KeyEqual()(item.first, key)) {
                 return item.second;
+            }
         }
         items.push_back({std::move(key), {}});
         return items.back().second;
     }
 
-    T & at(const Key & key)
-    {
+    T & at(const Key & key) {
         for (auto & item : items) {
-            if (KeyEqual()(item.first, key))
+            if (KeyEqual()(item.first, key)) {
                 return item.second;
+            }
         }
         throw std::out_of_range("PreserveOrderMap::at");
     }
 
-    const T & at(const Key & key) const
-    {
+    const T & at(const Key & key) const {
         for (auto & item : items) {
-            if (KeyEqual()(item.first, key))
+            if (KeyEqual()(item.first, key)) {
                 return item.second;
+            }
         }
         throw std::out_of_range("PreserveOrderMap::at");
     }
@@ -178,8 +187,6 @@ private:
     container_type items;
 };
 
-}
+}  // namespace libdnf
 
 #endif
-
-#endif //_LIBDNF_PRESERVE_ORDER_MAP_HPP
