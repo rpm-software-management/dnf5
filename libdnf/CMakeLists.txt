@@ -6,6 +6,8 @@ file(GLOB_RECURSE LIBDNF_SOURCES *.cpp)
 list(APPEND LIBDNF_PC_REQUIRES)
 list(APPEND LIBDNF_PC_REQUIRES_PRIVATE)
 
+# set gettext domain for translations
+add_definitions(-DGETTEXT_DOMAIN=\"libdnf\")
 
 # build libdnf.so
 add_library(libdnf SHARED ${LIBDNF_SOURCES})
