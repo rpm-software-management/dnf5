@@ -1,173 +1,159 @@
 /*
- * Copyright (C) 2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#include "ConfigParser.hpp"
-#include "../utils/iniparser/iniparser.hpp"
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#include "libdnf/conf/config_parser.hpp"
+
+#include "libdnf/utils/iniparser.hpp"
 
 #include <algorithm>
 #include <fstream>
 
 namespace libdnf {
 
-void ConfigParser::substitute(std::string & text,
-    const std::map<std::string, std::string> & substitutions)
-{
-    auto start = text.find_first_of("$");
-    while (start != text.npos)
-    {
+void ConfigParser::substitute(std::string & text, const std::map<std::string, std::string> & substitutions) {
+    auto start = text.find_first_of('$');
+    while (start != std::string::npos) {
         auto variable = start + 1;
-        if (variable >= text.length())
+        if (variable >= text.length()) {
             break;
+        }
         bool bracket;
         if (text[variable] == '{') {
             bracket = true;
-            if (++variable >= text.length())
+            if (++variable >= text.length()) {
                 break;
-        } else
+            }
+        } else {
             bracket = false;
-        auto it = std::find_if_not(text.begin()+variable, text.end(),
-            [](char c){return std::isalnum(c) || c=='_';});
-        if (bracket && it == text.end())
+        }
+        auto it = std::find_if_not(
+            text.begin() + variable, text.end(), [](char c) { return std::isalnum(c) != 0 || c == '_'; });
+        if (bracket && it == text.end()) {
             break;
-        auto pastVariable = std::distance(text.begin(), it);
+        }
+        auto past_variable = std::distance(text.begin(), it);
         if (bracket && *it != '}') {
-            start = text.find_first_of("$", pastVariable);
+            start = text.find_first_of('$', past_variable);
             continue;
         }
-        auto subst = substitutions.find(text.substr(variable, pastVariable - variable));
+        auto subst = substitutions.find(text.substr(variable, past_variable - variable));
         if (subst != substitutions.end()) {
-            if (bracket)
-                ++pastVariable;
-            text.replace(start, pastVariable - start, subst->second);
-            start = text.find_first_of("$", start + subst->second.length());
+            if (bracket) {
+                ++past_variable;
+            }
+            text.replace(start, past_variable - start, subst->second);
+            start = text.find_first_of('$', start + subst->second.length());
         } else {
-            start = text.find_first_of("$", pastVariable);
+            start = text.find_first_of('$', past_variable);
         }
     }
 }
 
-static void read(ConfigParser & cfgParser, IniParser & parser)
-{
-    IniParser::ItemType readedType;
-    while ((readedType = parser.next()) != IniParser::ItemType::END_OF_INPUT) {
-        auto section = parser.getSection();
-        if (readedType == IniParser::ItemType::SECTION) {
-            cfgParser.addSection(std::move(section), std::move(parser.getRawItem()));
-        }
-        else if (readedType == IniParser::ItemType::KEY_VAL) {
-            cfgParser.setValue(section, std::move(parser.getKey()), std::move(parser.getValue()), std::move(parser.getRawItem()));
-        }
-        else if (readedType == IniParser::ItemType::COMMENT_LINE || readedType == IniParser::ItemType::EMPTY_LINE) {
-            if (section.empty())
-                cfgParser.getHeader() += parser.getRawItem();
-            else
-                cfgParser.addCommentLine(section, std::move(parser.getRawItem()));
+static void read(ConfigParser & cfg_parser, IniParser & parser) {
+    IniParser::ItemType readed_type;
+    while ((readed_type = parser.next()) != IniParser::ItemType::END_OF_INPUT) {
+        auto section = parser.get_section();
+        if (readed_type == IniParser::ItemType::SECTION) {
+            cfg_parser.add_section(std::move(section), std::move(parser.get_raw_item()));
+        } else if (readed_type == IniParser::ItemType::KEY_VAL) {
+            cfg_parser.set_value(
+                section, std::move(parser.get_key()), std::move(parser.get_value()), std::move(parser.get_raw_item()));
+        } else if (readed_type == IniParser::ItemType::COMMENT_LINE || readed_type == IniParser::ItemType::EMPTY_LINE) {
+            if (section.empty()) {
+                cfg_parser.get_header() += parser.get_raw_item();
+            } else {
+                cfg_parser.add_comment_line(section, std::move(parser.get_raw_item()));
+            }
         }
     }
 }
 
-void ConfigParser::read(const std::string & filePath)
-{
-    try {
-        IniParser parser(filePath);
-        ::libdnf::read(*this, parser);
-    } catch (const IniParser::CantOpenFile & e) {
-        throw CantOpenFile(e.what());
-    } catch (const IniParser::Exception & e) {
-        throw ParsingError(e.what() + std::string(" at line ") + std::to_string(e.getLineNumber()));
-    }
+void ConfigParser::read(const std::string & file_path) {
+    IniParser parser(file_path);
+    ::libdnf::read(*this, parser);
 }
 
-void ConfigParser::read(std::unique_ptr<std::istream> && inputStream)
-{
-    try {
-        IniParser parser(std::move(inputStream));
-        ::libdnf::read(*this, parser);
-    } catch (const IniParser::CantOpenFile & e) {
-        throw CantOpenFile(e.what());
-    } catch (const IniParser::Exception & e) {
-        throw ParsingError(e.what() + std::string(" at line ") + std::to_string(e.getLineNumber()));
-    }
+void ConfigParser::read(std::unique_ptr<std::istream> && input_stream) {
+    IniParser parser(std::move(input_stream));
+    ::libdnf::read(*this, parser);
 }
 
-static std::string createRawItem(const std::string & value, const std::string & oldRawItem)
-{
-    auto eqlPos = oldRawItem.find('=');
-    if (eqlPos == oldRawItem.npos)
+static std::string create_raw_item(const std::string & value, const std::string & old_raw_item) {
+    auto eql_pos = old_raw_item.find('=');
+    if (eql_pos == std::string::npos) {
         return "";
-    auto valuepos = oldRawItem.find_first_not_of(" \t", eqlPos + 1);
-    auto keyAndDelimLength = valuepos != oldRawItem.npos ? valuepos : oldRawItem.length();
-    return oldRawItem.substr(0, keyAndDelimLength) + value + '\n';
+    }
+    auto value_pos = old_raw_item.find_first_not_of(" \t", eql_pos + 1);
+    auto key_and_delim_length = value_pos != std::string::npos ? value_pos : old_raw_item.length();
+    return old_raw_item.substr(0, key_and_delim_length) + value + '\n';
 }
 
-void ConfigParser::setValue(const std::string & section, const std::string & key, const std::string & value)
-{
-    auto rawIter = rawItems.find(section + ']' + key);
-    auto raw = createRawItem(value, rawIter != rawItems.end() ? rawIter->second : "");
-    setValue(section, key, value, raw);
+void ConfigParser::set_value(const std::string & section, const std::string & key, const std::string & value) {
+    auto raw_iter = raw_items.find(section + ']' + key);
+    auto raw = create_raw_item(value, raw_iter != raw_items.end() ? raw_iter->second : "");
+    set_value(section, key, value, raw);
 }
 
-void ConfigParser::setValue(const std::string & section, std::string && key, std::string && value)
-{
-    auto rawIter = rawItems.find(section + ']' + key);
-    auto raw = createRawItem(value, rawIter != rawItems.end() ? rawIter->second : "");
-    setValue(section, std::move(key), std::move(value), std::move(raw));
+void ConfigParser::set_value(const std::string & section, std::string && key, std::string && value) {
+    auto raw_iter = raw_items.find(section + ']' + key);
+    auto raw = create_raw_item(value, raw_iter != raw_items.end() ? raw_iter->second : "");
+    set_value(section, std::move(key), std::move(value), std::move(raw));
 }
 
-const std::string &
-ConfigParser::getValue(const std::string & section, const std::string & key) const
-{
+const std::string & ConfigParser::get_value(const std::string & section, const std::string & key) const {
     auto sect = data.find(section);
-    if (sect == data.end())
-        throw MissingSection("OptionReader::getValue(): Missing section " + section);
-    auto keyVal = sect->second.find(key);
-    if (keyVal == sect->second.end())
-        throw MissingOption("OptionReader::getValue(): Missing option " + key +
-            " in section " + section);
-    return keyVal->second;
+    if (sect == data.end()) {
+        throw SectionNotFound(section);
+    }
+    auto key_val = sect->second.find(key);
+    if (key_val == sect->second.end()) {
+        throw OptionNotFound(key + " in section " + section);
+    }
+    return key_val->second;
 }
 
-std::string
-ConfigParser::getSubstitutedValue(const std::string & section, const std::string & key) const
-{
-    auto ret = getValue(section, key);
+std::string ConfigParser::get_substituted_value(const std::string & section, const std::string & key) const {
+    auto ret = get_value(section, key);
     substitute(ret, substitutions);
     return ret;
 }
 
-static void writeKeyVals(std::ostream & out, const std::string & section, const ConfigParser::Container::mapped_type & keyValMap, const std::map<std::string, std::string> & rawItems)
-{
-    for (const auto & keyVal : keyValMap) {
-        auto first = keyVal.first[0];
-        if (first == '#' || first == ';')
-            out << keyVal.second;
-        else {
-            auto rawItem = rawItems.find(section + ']' + keyVal.first);
-            if (rawItem != rawItems.end())
-                out << rawItem->second;
-            else {
-                out << keyVal.first << "=";
-                for (const auto chr : keyVal.second) {
+static void write_key_vals(
+    std::ostream & out,
+    const std::string & section,
+    const ConfigParser::Container::mapped_type & key_val_map,
+    const std::map<std::string, std::string> & raw_items) {
+    for (const auto & key_val : key_val_map) {
+        auto first = key_val.first[0];
+        if (first == '#' || first == ';') {
+            out << key_val.second;
+        } else {
+            auto raw_item = raw_items.find(section + ']' + key_val.first);
+            if (raw_item != raw_items.end()) {
+                out << raw_item->second;
+            } else {
+                out << key_val.first << "=";
+                for (const auto chr : key_val.second) {
                     out << chr;
-                    if (chr == '\n')
+                    if (chr == '\n') {
                         out << " ";
+                    }
                 }
                 out << "\n";
             }
@@ -175,49 +161,52 @@ static void writeKeyVals(std::ostream & out, const std::string & section, const 
     }
 }
 
-static void writeSection(std::ostream & out, const std::string & section, const ConfigParser::Container::mapped_type & keyValMap, const std::map<std::string, std::string> & rawItems)
-{
-    auto rawItem = rawItems.find(section);
-    if (rawItem != rawItems.end())
-        out << rawItem->second;
-    else
-        out << "[" << section << "]" << "\n";
-    writeKeyVals(out, section, keyValMap, rawItems);
+static void write_section(
+    std::ostream & out,
+    const std::string & section,
+    const ConfigParser::Container::mapped_type & key_val_map,
+    const std::map<std::string, std::string> & raw_items) {
+    auto raw_item = raw_items.find(section);
+    if (raw_item != raw_items.end()) {
+        out << raw_item->second;
+    } else {
+        out << "[" << section << "]"
+            << "\n";
+    }
+    write_key_vals(out, section, key_val_map, raw_items);
 }
 
-void ConfigParser::write(const std::string & filePath, bool append) const
-{
+void ConfigParser::write(const std::string & file_path, bool append) const {
     std::ofstream ofs;
     ofs.exceptions(std::ofstream::failbit | std::ofstream::badbit);
-    ofs.open(filePath, append ? std::ofstream::app : std::ofstream::trunc);
+    ofs.open(file_path, append ? std::ofstream::app : std::ofstream::trunc);
     write(ofs);
 }
 
-void ConfigParser::write(const std::string & filePath, bool append, const std::string & section) const
-{
+void ConfigParser::write(const std::string & file_path, bool append, const std::string & section) const {
     auto sit = data.find(section);
-    if (sit == data.end())
-        throw MissingSection("ConfigParser::write(): Missing section " + section);
+    if (sit == data.end()) {
+        throw SectionNotFound(section);
+    }
     std::ofstream ofs;
     ofs.exceptions(std::ofstream::failbit | std::ofstream::badbit);
-    ofs.open(filePath, append ? std::ofstream::app : std::ofstream::trunc);
-    writeSection(ofs, sit->first, sit->second, rawItems);
+    ofs.open(file_path, append ? std::ofstream::app : std::ofstream::trunc);
+    write_section(ofs, sit->first, sit->second, raw_items);
 }
 
-void ConfigParser::write(std::ostream & outputStream) const
-{
-    outputStream << header;
+void ConfigParser::write(std::ostream & output_stream) const {
+    output_stream << header;
     for (const auto & section : data) {
-        writeSection(outputStream, section.first, section.second, rawItems);
+        write_section(output_stream, section.first, section.second, raw_items);
     }
 }
 
-void ConfigParser::write(std::ostream & outputStream, const std::string & section) const
-{
+void ConfigParser::write(std::ostream & output_stream, const std::string & section) const {
     auto sit = data.find(section);
-    if (sit == data.end())
-        throw MissingSection("ConfigParser::write(): Missing section " + section);
-    writeSection(outputStream, sit->first, sit->second, rawItems);
+    if (sit == data.end()) {
+        throw SectionNotFound(section);
+    }
+    write_section(output_stream, sit->first, sit->second, raw_items);
 }
 
-}
+}  // namespace libdnf
