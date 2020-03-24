@@ -45,6 +45,20 @@ if(WITH_COMPS)
     target_link_libraries(libdnf ${LIBCOMPS_LIBRARIES})
 endif()
 
+# GLIB librepo and libmodulemd uses glib2 in API :(
+pkg_check_modules (GLIB2 glib-2.0>=2.46.0)
+include_directories(${GLIB2_INCLUDE_DIRS})
+target_link_libraries(libdnf ${GLIB2_LIBRARIES})
+
+# GPGME
+PKG_CHECK_MODULES(GPGME gpgme REQUIRED)
+list(APPEND LIBDNF_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
+target_link_libraries(libdnf ${GPGME_LIBRARIES})
+
+pkg_check_modules(LIBREPO REQUIRED librepo)
+list(APPEND LIBDNF_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
+target_link_libraries(libdnf ${LIBREPO_LIBRARIES})
+
 
 # sort the pkg-config requires and concatenate them into a string
 list(SORT LIBDNF_PC_REQUIRES)
