@@ -1,90 +1,115 @@
 /*
- * Copyright (C) 2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2018-2020 Red Hat, Inc.
 
-#ifndef _INIPARSER_HPP
-#define _INIPARSER_HPP
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
-#include <exception>
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+#ifndef LIBDNF_UTILS_INIPARSER_HPP
+#define LIBDNF_UTILS_INIPARSER_HPP
+
+#include "exception.hpp"
+
 #include <fstream>
 #include <memory>
 #include <string>
 
-/**
-* @class IniParser
-*
-* @brief Simple .INI file parser
-*
-* The goal is to be compatible with dnf / yum .ini configuration files.
-*/
+namespace libdnf {
+
+/// @class IniParser
+///
+/// @brief Simple .INI file parser
+///
+/// IniParser is lowlevel one pass parser of .ini files designed primary for DNF .ini configuration files.
+/// It parses input text to tokens - SECTION, KEY_VAL, COMMENT_LINE, EMPTY_LINE, and END_OF_INPUT.
 class IniParser {
 public:
-    struct Exception : public std::exception {
-        Exception(int lineNumber) : lineNumber(lineNumber) {}
-        Exception() : lineNumber(0) {}
-        int getLineNumber() const noexcept { return lineNumber; }
-    protected:
-        int lineNumber;
+    class Exception : public RuntimeError {
+    public:
+        using RuntimeError::RuntimeError;
+        const char * get_domain_name() const noexcept override { return "libdnf::IniParser"; }
+        const char * get_name() const noexcept override { return "Exception"; }
+        const char * get_description() const noexcept override { return "IniParser exception"; }
     };
-    struct CantOpenFile : public Exception {
-        CantOpenFile() {}
-        const char * what() const noexcept override;
+
+    class CantOpenFile : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "CantOpenFile"; }
+        const char * get_description() const noexcept override { return "Can't open file"; }
     };
-    struct MissingSectionHeader : public Exception {
-        MissingSectionHeader(int lineNumber) : Exception(lineNumber) {}
-        const char * what() const noexcept override;
+
+    class MissingSectionHeader : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "MissingSectionHeader"; }
+        const char * get_description() const noexcept override { return "Missing section header"; }
     };
-    struct MissingBracket : public Exception {
-        MissingBracket(int lineNumber) : Exception(lineNumber) {}
-        const char * what() const noexcept override;
+
+    class MissingBracket : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "MissingBracket"; }
+        const char * get_description() const noexcept override { return "Missing ']'"; }
     };
-    struct EmptySectionName : public Exception {
-        EmptySectionName(int lineNumber) : Exception(lineNumber) {}
-        const char * what() const noexcept override;
+
+    class EmptySectionName : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "EmptySectionName"; }
+        const char * get_description() const noexcept override { return "Empty section name"; }
     };
-    struct TextAfterSection : public Exception {
-        TextAfterSection(int lineNumber) : Exception(lineNumber) {}
-        const char * what() const noexcept override;
+
+    class TextAfterSection : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "TextAfterSection"; }
+        const char * get_description() const noexcept override { return "Text after section"; }
     };
-    struct IllegalContinuationLine : public Exception {
-        IllegalContinuationLine(int lineNumber) : Exception(lineNumber) {}
-        const char * what() const noexcept override;
+
+    class IllegalContinuationLine : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "IllegalContinuationLine"; }
+        const char * get_description() const noexcept override { return "Illegal continuation line"; }
     };
-    struct MissingKey : public Exception {
-        MissingKey(int lineNumber) : Exception(lineNumber) {}
-        const char * what() const noexcept override;
+
+    class MissingKey : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "MissingKey"; }
+        const char * get_description() const noexcept override { return "Missing key"; }
     };
-    struct MissingEqual : public Exception {
-        MissingEqual(int lineNumber) : Exception(lineNumber) {}
-        const char * what() const noexcept override;
+
+    class MissingEqual : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "MissingEqual"; }
+        const char * get_description() const noexcept override { return "Missing '='"; }
     };
 
     enum class ItemType {
-        SECTION,        // [section_name]
-        KEY_VAL,        // key = value, (multiline value supported)
-        COMMENT_LINE,   // line starting with '#' or ';' character
-        EMPTY_LINE,     // zero length or only contains whitespace characters
+        SECTION,       // [section_name]
+        KEY_VAL,       // key = value, (multiline value supported)
+        COMMENT_LINE,  // line starting with '#' or ';' character
+        EMPTY_LINE,    // zero length or only contains whitespace characters
         END_OF_INPUT
     };
 
-    IniParser(const std::string & filePath);
-    IniParser(std::unique_ptr<std::istream> && inputStream);
+    explicit IniParser(const std::string & file_path);
+    explicit IniParser(std::unique_ptr<std::istream> && input_stream);
     /**
     * @brief Parse one item from input file
     *
@@ -94,35 +119,55 @@ public:
     * @return IniParser::ItemType Type of parsed value
     */
     ItemType next();
-    const std::string & getSection() const noexcept;
-    const std::string & getKey() const noexcept;
-    std::string & getKey() noexcept;
-    const std::string & getValue() const noexcept;
-    std::string & getValue() noexcept;
-    const std::string & getRawItem() const noexcept;
-    std::string & getRawItem() noexcept;
-    const std::string & getLine() const noexcept;
-    void clearLine() noexcept;
-    void trimValue() noexcept;
+    const std::string & get_section() const noexcept;
+    const std::string & get_key() const noexcept;
+    std::string & get_key() noexcept;
+    const std::string & get_value() const noexcept;
+    std::string & get_value() noexcept;
+    const std::string & get_raw_item() const noexcept;
+    std::string & get_raw_item() noexcept;
+    const std::string & get_line() const noexcept;
+    void clear_line() noexcept;
+    void trim_value() noexcept;
 
 private:
     std::unique_ptr<std::istream> is;
-    int lineNumber;
+    int line_number;
     std::string section;
     std::string key;
     std::string value;
-    std::string rawItem;
+    std::string raw_item;
     std::string line;
 };
 
-inline const std::string & IniParser::getSection() const noexcept { return section; }
-inline const std::string & IniParser::getKey() const noexcept { return key; }
-inline std::string & IniParser::getKey() noexcept { return key; }
-inline const std::string & IniParser::getValue() const noexcept { return value; }
-inline std::string & IniParser::getValue() noexcept { return value; }
-inline const std::string & IniParser::getRawItem() const noexcept { return rawItem; }
-inline std::string & IniParser::getRawItem() noexcept { return rawItem; }
-inline const std::string & IniParser::getLine() const noexcept { return line; }
-inline void IniParser::clearLine() noexcept { line.clear(); }
+inline const std::string & IniParser::get_section() const noexcept {
+    return section;
+}
+inline const std::string & IniParser::get_key() const noexcept {
+    return key;
+}
+inline std::string & IniParser::get_key() noexcept {
+    return key;
+}
+inline const std::string & IniParser::get_value() const noexcept {
+    return value;
+}
+inline std::string & IniParser::get_value() noexcept {
+    return value;
+}
+inline const std::string & IniParser::get_raw_item() const noexcept {
+    return raw_item;
+}
+inline std::string & IniParser::get_raw_item() noexcept {
+    return raw_item;
+}
+inline const std::string & IniParser::get_line() const noexcept {
+    return line;
+}
+inline void IniParser::clear_line() noexcept {
+    line.clear();
+}
+
+}  // namespace libdnf
 
 #endif
