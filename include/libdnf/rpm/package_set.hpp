@@ -21,8 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_PACKAGE_SET_HPP
 #define LIBDNF_RPM_PACKAGE_SET_HPP
 
-#include "../dnf-types.h"
-#include "../hy-package.h"
+
+#include "package.hpp"
+#include "sack.hpp"
 
 #include <solv/bitmap.h>
 #include <solv/pooltypes.h>
@@ -35,8 +36,8 @@ namespace libdnf::rpm {
 
 class PackageSet {
 public:
-    explicit PackageSet(DnfSack * sack);
-    PackageSet(DnfSack * sack, Map * map);
+    explicit PackageSet(Sack * sack);
+    PackageSet(Sack * sack, Map * map);
     PackageSet(const PackageSet & pset);
     PackageSet(PackageSet && pset) noexcept;
     ~PackageSet();
@@ -49,13 +50,13 @@ public:
     PackageSet & operator/=(const Map * other);
     void clear();
     bool empty();
-    void set(DnfPackage * pkg);
+    void set(const Package & pkg);
     void set(Id id);
-    bool has(DnfPackage * pkg) const;
+    bool has(const Package & pkg) const;
     bool has(Id id) const;
     void remove(Id id);
     Map * get_map() const;
-    DnfSack * get_sack() const;
+    Sack * get_sack() const;
     size_t size() const;
 
     /**

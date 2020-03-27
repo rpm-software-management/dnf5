@@ -18,11 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "../dnf-sack.h"
-#include "../hy-util-private.hpp"
 #include "libdnf/rpm/package_set.hpp"
-
-#include <assert.h>
 
 
 namespace libdnf::rpm {
@@ -30,31 +26,31 @@ namespace libdnf::rpm {
 
 class PackageSet::Impl {
 public:
-    Impl(DnfSack * sack);
-    Impl(DnfSack * sack, Map * map);
+    Impl(Sack * sack);
+    Impl(Sack * sack, Map * map);
     Impl(const PackageSet & pset);
     ~Impl();
 
 private:
     friend PackageSet;
-    DnfSack * sack;
+    Sack * sack;
     Map map;
 };
 
 
-PackageSet::PackageSet(DnfSack * sack) : pImpl(new Impl(sack)) {}
-PackageSet::PackageSet(DnfSack * sack, Map * map_source) : pImpl(new Impl(sack, map_source)) {}
+PackageSet::PackageSet(Sack * sack) : pImpl(new Impl(sack)) {}
+PackageSet::PackageSet(Sack * sack, Map * map_source) : pImpl(new Impl(sack, map_source)) {}
 PackageSet::PackageSet(const PackageSet & pset) : pImpl(new Impl(pset)) {}
 PackageSet::PackageSet(PackageSet && pset) noexcept : pImpl(std::move(pset.pImpl)) {}
 PackageSet::~PackageSet() = default;
 
 
-PackageSet::Impl::Impl(DnfSack * sack) : sack(sack) {
-    map_init(&map, dnf_sack_get_pool(sack)->nsolvables);
+PackageSet::Impl::Impl(Sack * sack) : sack(sack) {
+    map_init(&map, sack->get_pool()->nsolvables);
 }
 
 
-PackageSet::Impl::Impl(DnfSack * sack, Map * map_source) : sack(sack) {
+PackageSet::Impl::Impl(Sack * sack, Map * map_source) : sack(sack) {
     map_init_clone(&map, map_source);
 }
 
@@ -66,6 +62,28 @@ PackageSet::Impl::Impl(const PackageSet & pset) : sack(pset.pImpl->sack) {
 
 PackageSet::Impl::~Impl() {
     map_free(&map);
+}
+
+
+// see http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetTable
+static const unsigned char _BitCountLookup[256] = {
+    #define B2(n) n, n + 1, n + 1, n + 2
+    #define B4(n) B2(n), B2(n + 1), B2(n + 1), B2(n + 2)
+    #define B6(n) B4(n), B4(n + 1), B4(n + 1), B4(n + 2)
+    B6(0), B6(1), B6(1), B6(2)
+};
+
+
+inline size_t map_count(Map * m) {
+    unsigned char * ti = m->map;
+    unsigned char * end = ti + m->size;
+    unsigned c = 0;
+
+    while (ti < end) {
+        c += _BitCountLookup[*ti++];
+    }
+
+    return c;
 }
 
 
@@ -83,7 +101,7 @@ Id PackageSet::operator[](unsigned int index) const {
             ti++;
             continue;
         }
-        id = (ti - pImpl->map.map) << 3;
+        id = static_cast<Id>(ti - pImpl->map.map) << 3;
 
         index++;
         for (unsigned char byte = *ti; index; byte >>= 1) {
@@ -150,18 +168,24 @@ bool PackageSet::empty() {
 }
 
 
-void PackageSet::set(DnfPackage * pkg) {
-    MAPSET(&pImpl->map, dnf_package_get_id(pkg));
+void PackageSet::set(const Package & pkg) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+    MAPSET(&pImpl->map, pkg.get_id());
+#pragma GCC diagnostic pop
 }
 
 
 void PackageSet::set(Id id) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
     MAPSET(&pImpl->map, id);
+#pragma GCC diagnostic pop
 }
 
 
-bool PackageSet::has(DnfPackage * pkg) const {
-    return MAPTST(&pImpl->map, dnf_package_get_id(pkg));
+bool PackageSet::has(const Package & pkg) const {
+    return MAPTST(&pImpl->map, pkg.get_id());
 }
 
 
@@ -171,16 +195,19 @@ bool PackageSet::has(Id id) const {
 
 
 void PackageSet::remove(Id id) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
     MAPCLR(&pImpl->map, id);
+#pragma GCC diagnostic pop
 }
 
 
-Map * PackageSet::getMap() const {
+Map * PackageSet::get_map() const {
     return &pImpl->map;
 }
 
 
-DnfSack * PackageSet::getSack() const {
+Sack * PackageSet::get_sack() const {
     return pImpl->sack;
 }
 
@@ -211,7 +238,7 @@ Id PackageSet::next(Id previous) const {
             ti++;
             continue;
         }
-        id = (ti - pImpl->map.map) << 3;
+        id = static_cast<Id>(ti - pImpl->map.map) << 3;
         for (unsigned char byte = *ti; 1; byte >>= 1, id++) {
             if (byte & 0x01)
                 return id;
