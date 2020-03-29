@@ -34,14 +34,39 @@ class Base;
 
 namespace libdnf::rpm {
 
-class RepoSack : public libdnf::sack::Sack<Repo, RepoQuery> {
+class RepoSack : public sack::Sack<Repo, RepoQuery> {
 public:
     explicit RepoSack(Base & base) : base(&base) {}
 
     /// Creates new repository and add it into RepoSack
     RepoWeakPtr new_repo(const std::string & id);
 
+    /// Creates new repositories according to the configuration in the file defined by path.
+    /// The created repositories are added into RepoSack.
+    void new_repos_from_file(const std::string & path);
+
+    // "config_file_path" contains the main configuration, but may also contain the rpm repository definition.
+    // It is analyzed by two parsers. The codes of parsers are similar. However, the repository configuration
+    // parser applies variables/substitutions.
+    /// Creates new repositories according to the configuration in the file defined by "config_file_path"
+    /// configuration option.
+    /// The created repositories are added into RepoSack.
+    void new_repos_from_file();
+
+    /// Creates new repositories according to the configuration in the files with ".repo" extension in the directories
+    /// defined by "reposdir" configuration option.
+    /// The created repositories are added into RepoSack.
+    /// The files in the directories are read in alphabetical order.
+    void new_repos_from_dirs();
+
 private:
+    //TODO(jrohel): Make public?
+    /// Creates new repositories according to the configuration in the files with ".repo" extension in the directory
+    /// defined by dir_path.
+    /// The created repositories are added into RepoSack.
+    /// The files in the directory are read in alphabetical order.
+    void new_repos_from_dir(const std::string & dir_path);
+
     Base * base;
 };
 
