@@ -5,6 +5,25 @@
 #include <cppunit/TestRunner.h>
 #include <cppunit/extensions/TestFactoryRegistry.h>
 
+#include <chrono>
+#include <iostream>
+
+
+class TimingListener : public CppUnit::TestListener {
+public:
+    void startTest(CppUnit::Test *) override {
+        start = std::chrono::high_resolution_clock::now();
+    }
+
+    void endTest(CppUnit::Test *) override {
+        auto end = std::chrono::high_resolution_clock::now();
+        auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
+        std::cout << " (duration: " << duration << "ms)";
+    }
+private:
+    std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::from_time_t(0);
+};
+
 
 int main() {
     // Create the event manager and test controller
@@ -13,6 +32,9 @@ int main() {
     // Add a listener that colllects test result
     CPPUNIT_NS::TestResultCollector result;
     controller.addListener(&result);
+
+    TimingListener timer;
+    controller.addListener(&timer);
 
     // Add a listener that print dots as test run.
     CPPUNIT_NS::BriefTestProgressListener progress;
