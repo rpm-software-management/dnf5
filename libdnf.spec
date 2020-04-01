@@ -28,6 +28,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 
 %bcond_with    sanitizers
 %bcond_without tests
+%bcond_with    performance_tests
 
 
 # ========== versions of dependencies ==========
@@ -370,7 +371,8 @@ Package management service with a DBus interface
     -DWITH_RUBY=%{?with_ruby:ON}%{!?with_ruby:OFF} \
     \
     -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF} \
-    -DWITH_TESTS=%{?with_tests:ON}%{!?with_tests:OFF}
+    -DWITH_TESTS=%{?with_tests:ON}%{!?with_tests:OFF} \
+    -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
 %make_build
 %if %{with man}
     make doc-man

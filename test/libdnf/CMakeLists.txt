@@ -10,4 +10,9 @@ target_link_directories(run_tests PUBLIC ${CMAKE_BINARY_DIR}/libdnf)
 target_link_libraries(run_tests stdc++ libdnf cppunit)
 
 
+if(WITH_PERFORMANCE_TESTS)
+    target_compile_options(run_tests PRIVATE -DWITH_PERFORMANCE_TESTS)
+endif()
+
+
 add_test(NAME test_libdnf COMMAND ${CMAKE_CURRENT_BINARY_DIR}/run_tests DEPENDS run_tests COMMENT "Running libdnf C++ tests...")

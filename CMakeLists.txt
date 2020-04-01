@@ -34,6 +34,7 @@ option(WITH_MAN "Build man pages" ON)
 
 # build options - tests
 option(WITH_TESTS "Build tests" ON)
+option(WITH_PERFORMANCE_TESTS "Build performance tests (DEBUG ONLY)" OFF)
 
 # build options - debugging
 option(WITH_SANITIZERS "Build with address, leak and undefined sanitizers (DEBUG ONLY)" OFF)
@@ -43,6 +44,11 @@ option(WITH_GO "Build Go bindings" ON)
 option(WITH_PERL5 "Build Perl 5 bindings" ON)
 option(WITH_PYTHON3 "Build Python 3 bindings" ON)
 option(WITH_RUBY "Build Ruby bindings" ON)
+
+
+if(WITH_PERFORMANCE_TESTS AND WITH_SANITIZERS)
+    message(FATAL_ERROR "Cannot perform performance tests with sanitizers enabled because they influence the results. Disable sanitizers to continue.")
+endif()
 
 
 # includes

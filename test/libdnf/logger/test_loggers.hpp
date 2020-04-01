@@ -27,7 +27,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class LoggersTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(LoggersTest);
+
+    #ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_loggers);
+    #endif
+
     CPPUNIT_TEST_SUITE_END();
 
 public:
