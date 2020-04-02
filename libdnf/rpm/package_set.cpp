@@ -116,7 +116,7 @@ Id PackageSet::operator[](unsigned int index) const {
 }
 
 
-PackageSet & PackageSet::operator+=(const PackageSet & other) {
+PackageSet & PackageSet::operator|=(const PackageSet & other) {
     map_or(&pImpl->map, &other.pImpl->map);
     return *this;
 }
@@ -128,13 +128,13 @@ PackageSet & PackageSet::operator-=(const PackageSet & other) {
 }
 
 
-PackageSet & PackageSet::operator/=(const PackageSet & other) {
+PackageSet & PackageSet::operator&=(const PackageSet & other) {
     map_and(&pImpl->map, &other.pImpl->map);
     return *this;
 }
 
 
-PackageSet & PackageSet::operator+=(const Map * other) {
+PackageSet & PackageSet::operator|=(const Map * other) {
     map_or(&pImpl->map, const_cast<Map *>(other));
     return *this;
 }
@@ -145,7 +145,7 @@ PackageSet & PackageSet::operator-=(const Map * other) {
 }
 
 
-PackageSet & PackageSet::operator/=(const Map * other) {
+PackageSet & PackageSet::operator&=(const Map * other) {
     map_and(&pImpl->map, const_cast<Map *>(other));
     return *this;
 }

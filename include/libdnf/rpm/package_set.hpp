@@ -42,12 +42,12 @@ public:
     PackageSet(PackageSet && pset) noexcept;
     ~PackageSet();
     Id operator[](unsigned int index) const;
-    PackageSet & operator+=(const PackageSet & other);
+    PackageSet & operator|=(const PackageSet & other);
     PackageSet & operator-=(const PackageSet & other);
-    PackageSet & operator/=(const PackageSet & other);
-    PackageSet & operator+=(const Map * other);
+    PackageSet & operator&=(const PackageSet & other);
+    PackageSet & operator|=(const Map * other);
     PackageSet & operator-=(const Map * other);
-    PackageSet & operator/=(const Map * other);
+    PackageSet & operator&=(const Map * other);
     void clear();
     bool empty();
     void set(const Package & pkg);
