@@ -26,6 +26,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
+
+class PackageSet;
+
+
 struct PackageId {
 public:
     PackageId() = default;
@@ -60,8 +64,11 @@ class ReldepList;
 
 class Sack {
 public:
+    Sack();
+    ~Sack();
 private:
     friend Package;
+    friend PackageSet;
     friend Reldep;
     friend ReldepList;
     class Impl;

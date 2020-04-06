@@ -24,19 +24,39 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/sack.hpp"
 
 extern "C" {
-#include <solv/pooltypes.h>
+#include <solv/pool.h>
 }
 
 namespace libdnf::rpm {
 
+
+class PackageSet;
+
+
 class Sack::Impl {
 public:
+    explicit Impl();
+    ~Impl();
 private:
     Pool * pool;
     friend Package;
+    friend PackageSet;
     friend Reldep;
     friend ReldepList;
 };
+
+
+inline Sack::Impl::Impl() {
+    pool = pool_create();
+    // TODO(dmach): hard-code a number to enable tests; remove when Sack is capable of loading repos
+    pool->nsolvables = 32;
+}
+
+
+inline Sack::Impl::~Impl() {
+    pool_free(pool);
+}
+
 
 }  // namespace libdnf::rpm
 

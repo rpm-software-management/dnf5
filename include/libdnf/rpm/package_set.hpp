@@ -23,10 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "package.hpp"
+#include "package_set_iterator.hpp"
 #include "sack.hpp"
-
-#include <solv/bitmap.h>
-#include <solv/pooltypes.h>
 
 #include <memory>
 
@@ -34,14 +32,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 
 
+class PackageSetIterator;
+
+
 /// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
 class PackageSet {
 public:
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
     explicit PackageSet(Sack * sack);
-
-    /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_from_bitmap(DnfSack * sack, Map * m)
-    PackageSet(Sack * sack, Map * map);
 
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_clone(DnfPackageSet * pset)
     PackageSet(const PackageSet & pset);
@@ -51,8 +49,9 @@ public:
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_free(DnfPackageSet * pset)
     ~PackageSet();
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator[](unsigned int index)
-    Id operator[](unsigned int index) const;
+    using iterator = PackageSetIterator;
+    iterator begin() const;
+    iterator end() const;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator+=(const libdnf::PackageSet & other)
     PackageSet & operator|=(const PackageSet & other);
@@ -63,15 +62,6 @@ public:
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator/=(const libdnf::PackageSet & other)
     PackageSet & operator&=(const PackageSet & other);
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator+=(const Map * other)
-    PackageSet & operator|=(const Map * other);
-
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator-=(const Map * other)
-    PackageSet & operator-=(const Map * other);
-
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator/=(const Map * other)
-    PackageSet & operator&=(const Map * other);
-
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.clear()
     void clear();
 
@@ -80,24 +70,12 @@ public:
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.set(DnfPackage * pkg)
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_add(DnfPackageSet * pset, DnfPackage * pkg)
-    void set(const Package & pkg);
-
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.set(Id id)
-    void set(Id id);
+    void add(const Package & pkg);
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(DnfPackage * pkg)
-    bool has(const Package & pkg) const;
+    bool contains(const Package & pkg) const;
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(Id id)
-    /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_has(DnfPackageSet * pset, DnfPackage * pkg)
-    bool has(Id id) const;
-
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.remove(Id id)
-    void remove(Id id);
-
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.getMap()
-    /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_get_map(DnfPackageSet * pset)
-    Map * get_map() const;
+    void remove(const Package & pkg);
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.getSack()
     Sack * get_sack() const;
@@ -106,15 +84,8 @@ public:
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_count(DnfPackageSet * pset)
     size_t size() const;
 
-    /// @brief Returns next id in packageset or -1 if end of package set reached
-    ///
-    /// @param previous Id of previous element
-    /// @return Id
-    ///
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.next(Id previous)
-    Id next(Id previous) const;
-
 private:
+    friend PackageSetIterator;
     class Impl;
     std::unique_ptr<Impl> pImpl;
 };

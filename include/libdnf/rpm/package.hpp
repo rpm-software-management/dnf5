@@ -28,7 +28,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+
 namespace libdnf::rpm {
+
+
+class PackageSetIterator;
+
 
 /// @replaces libdnf/hy-package.h:struct:DnfPackage
 /// @replaces dnf:dnf/package.py:class:Package
@@ -249,7 +254,7 @@ public:
 
     // TODO(dmach): getBugUrl() not possible due to lack of support in libsolv and metadata?
 
-private:
+protected:
     /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
     Package(Sack * sack, PackageId id);
     const char * get_name_cstring() const noexcept;
@@ -267,6 +272,8 @@ private:
 
     const char * get_evr_cstring() const noexcept;
 
+private:
+    friend PackageSetIterator;
     Sack * sack;
     PackageId id;
 };
