@@ -46,6 +46,9 @@ public:
     /// Swaps the logger at the "index" position with another "logger".
     void swap_logger(std::unique_ptr<Logger> & logger, size_t index) { loggers.at(index).swap(logger); }
 
+    /// Returns number of loggers registered in LogRouter.
+    size_t get_loggers_count() const noexcept { return loggers.size(); }
+
     void write(Level level, const std::string & message) noexcept override;
     void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept override;
 
