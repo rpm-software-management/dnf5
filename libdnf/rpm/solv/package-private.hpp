@@ -43,6 +43,10 @@ const char * BASE_EPOCH = "0";
 inline static Solvable *
 get_solvable(Pool * pool, libdnf::rpm::PackageId package_id)
 {
+    // Check that libsolv Id is identical with internal structure of PackageId
+    static_assert(std::is_same<decltype(PackageId::id), ::Id>::value,
+                  "libdnf PackageId::id type differs from libsolv internal Id type");
+
     return pool_id2solvable(pool, package_id.id);
 }
 
