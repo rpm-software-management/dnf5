@@ -30,6 +30,10 @@ struct PackageId {
     int id;
 };
 
+struct DependencyId {
+    int id;
+};
+
 // forward declarations
 class Package;
 
