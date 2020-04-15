@@ -35,6 +35,8 @@ public:
 private:
     Pool * pool;
     friend Package;
+    friend Reldep;
+    friend ReldepList;
 };
 
 }  // namespace libdnf::rpm

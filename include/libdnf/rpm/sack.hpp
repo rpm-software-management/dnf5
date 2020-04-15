@@ -30,18 +30,34 @@ struct PackageId {
     int id;
 };
 
-struct DependencyId {
+struct ReldepId {
+public:
+    ReldepId();
+    ReldepId(int id);
     int id;
 };
 
+inline ReldepId::ReldepId()
+: id(0)
+{}
+
+inline ReldepId::ReldepId(int id)
+: id(id)
+{}
+
+
 // forward declarations
 class Package;
+class Reldep;
+class ReldepList;
 
 class Sack {
 public:
     
 private:
     friend Package;
+    friend Reldep;
+    friend ReldepList;
     class Impl;
     std::unique_ptr<Impl> pImpl;
 };
