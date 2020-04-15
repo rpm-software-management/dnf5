@@ -17,10 +17,9 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <stdexcept>
 #include "libdnf/rpm/reldep.hpp"
 #include "reldep_splitter.hpp"
-#include "sack-impl.hpp"
+#include "sack_impl.hpp"
 
 /* workaround, libsolv lacks 'extern "C"' in its header file */
 extern "C" {
@@ -53,6 +52,11 @@ Reldep::Reldep(Sack * sack, const std::string & reldep_string)
 
 
 Reldep::Reldep(const Reldep & reldep)
+        : sack(reldep.sack)
+        , id(reldep.id)
+{}
+
+Reldep::Reldep(const Reldep && reldep) noexcept
         : sack(reldep.sack)
         , id(reldep.id)
 {}

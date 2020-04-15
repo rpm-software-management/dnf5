@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_DEPENDENCYCONTAINER_HPP
-#define LIBDNF_DEPENDENCYCONTAINER_HPP
+#ifndef LIBDNF_RPM_RELDEP_LIST_HPP
+#define LIBDNF_RPM_RELDEP_LIST_HPP
 
 #include "reldep.hpp"
 #include "sack.hpp"
@@ -28,6 +28,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
+// forward declarations
+class Package;
 
 /// @replaces libdnf/dnf-reldep-list.h:struct:DnfReldepList
 /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:struct:DependencyContainer
@@ -37,6 +39,8 @@ public:
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:DependencyContainer(const DependencyContainer &src)
     ReldepList(const ReldepList & src);
 
+    ReldepList(ReldepList && src) noexcept;
+
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_new(DnfSack *sack)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:DependencyContainer(DnfSack *sack)
     explicit ReldepList(Sack * sack);
@@ -45,13 +49,14 @@ public:
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:~DependencyContainer()
     ~ReldepList();
 
-    ReldepList &operator=(ReldepList && src) noexcept;
-    bool operator==(const ReldepList & r) const;
-    bool operator!=(const ReldepList & r) const;
+    bool operator==(const ReldepList & other) const noexcept;
+    bool operator!=(const ReldepList & other) const noexcept;
+    ReldepList & operator=(const ReldepList & src);
+    ReldepList & operator=(ReldepList && src) noexcept;
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_add(DnfReldepList *reldep_list, DnfReldep *reldep)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:add(Dependency *dependency)
-    void add(Reldep & Reldep);
+    void add(Reldep & reldep);
 
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:add(Id id))
     void add(ReldepId id);
@@ -90,6 +95,7 @@ public:
     int size() const noexcept;
 
 private:
+    friend Package;
     class Impl;
     std::unique_ptr<Impl> pImpl;
 };
@@ -97,4 +103,4 @@ private:
 
 }  // namespace libdnf::rpm
 
-#endif //LIBDNF_DEPENDENCYCONTAINER_HPP
+#endif // LIBDNF_RPM_RELDEP_LIST_HPP

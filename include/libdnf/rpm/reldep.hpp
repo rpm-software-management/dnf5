@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RELDEP_HPP
-#define LIBDNF_RELDEP_HPP
+#ifndef LIBDNF_RPM_RELDEP_HPP
+#define LIBDNF_RPM_RELDEP_HPP
 
 #include "sack.hpp"
 
@@ -26,8 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-// forward declarations
-class ReldepList;
 
 namespace libdnf::rpm {
 /// @brief Represent a relational dependency from libsolv
@@ -56,10 +54,17 @@ public:
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
     Reldep(const Reldep & reldep);
+    
+    Reldep(const Reldep && reldep) noexcept;
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:~Dependency();
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
     ~Reldep();
+
+    bool operator==(const Reldep & other) const noexcept;
+    bool operator!=(const Reldep & other) const noexcept;
+    Reldep & operator=(const Reldep & other) noexcept = default;
+    Reldep & operator=(Reldep && other) noexcept;
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getName()
     const char * get_name() const;
@@ -117,7 +122,23 @@ private:
     ReldepId id;
 };
 
+inline bool Reldep::operator==(const Reldep & other) const noexcept
+{
+    return id == other.id && sack == other.sack;
+}
+
+inline bool Reldep::operator!=(const Reldep & other) const noexcept
+{
+    return id != other.id || sack != other.sack;
+}
+
+inline Reldep & Reldep::operator=(Reldep && other) noexcept
+{
+    id = other.id;
+    sack = other.sack;
+    return *this;
+}
 
 }  // namespace libdnf::rpm
 
-#endif //LIBDNF_RELDEP_HPP
+#endif // LIBDNF_RPM_RELDEP_HPP

@@ -17,52 +17,28 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "libdnf/rpm/reldep_list.hpp"
+#include "libdnf/rpm/reldep.hpp"
+#include "reldep_list_impl.hpp"
+#include "reldep_splitter.hpp"
+#include "sack_impl.hpp"
+
 // libsolv
 extern "C" {
 #include <solv/dataiterator.h>
 #include <solv/queue.h>
 }
 
-#include "libdnf/rpm/reldep_list.hpp"
-#include "libdnf/rpm/reldep.hpp"
-#include "reldep_splitter.hpp"
-#include "sack-impl.hpp"
-#include "solv/id_queue.hpp"
 
 namespace libdnf::rpm {
-
-class ReldepList::Impl {
-public:
-    Impl(const ReldepList::Impl & src);
-    Impl(Sack * sack);
-    Impl(Sack * sack, libdnf::rpm::solv::IdQueue queue_src);
-    ~Impl();
-
-private:
-    friend class ReldepList;
-    Sack * sack;
-    libdnf::rpm::solv::IdQueue queue;
-};
-
-ReldepList::Impl::Impl(const ReldepList::Impl & src)
-        : sack(src.sack), queue(src.queue)
-{}
-
-ReldepList::Impl::Impl(Sack * sack)
-        : sack(sack)
-{}
-
-ReldepList::Impl::Impl(Sack * sack, libdnf::rpm::solv::IdQueue queue_src)
-        : sack(sack), queue(queue_src)
-{}
-
-ReldepList::Impl::~Impl()
-{}
 
 ReldepList::ReldepList(const ReldepList & src)
         : pImpl(new Impl(*src.pImpl))
 {}
 
+ReldepList::ReldepList(ReldepList && src) noexcept
+        : pImpl(std::move(src.pImpl))
+{}
 
 ReldepList::ReldepList(Sack * sack)
         : pImpl(new Impl(sack))
@@ -72,23 +48,22 @@ ReldepList::~ReldepList() = default;
 
 ReldepId ReldepList::get_id(int index) const noexcept
 {
-    return pImpl->queue[index];
+    return ReldepId(pImpl->queue[index]);
 }
 
-
-ReldepList &ReldepList::operator=(ReldepList && src) noexcept
+ReldepList & ReldepList::operator=(ReldepList && src) noexcept
 {
     // TODO Use move
     pImpl->sack = src.pImpl->sack;
-    queue_init_clone(pImpl->queue.get_queue(), src.pImpl->queue.get_queue());
+    queue_init_clone(&pImpl->queue.get_queue(), &src.pImpl->queue.get_queue());
     return *this;
 }
 
-bool ReldepList::operator!=(const ReldepList &r) const { return !(*this == r); }
-bool ReldepList::operator==(const ReldepList &r) const
+bool ReldepList::operator!=(const ReldepList & other) const noexcept { return !(*this == other); }
+bool ReldepList::operator==(const ReldepList & other) const noexcept
 {
     auto & this_queue = pImpl->queue;
-    auto & other_queue = r.pImpl->queue;
+    auto & other_queue = other.pImpl->queue;
     auto this_count = this_queue.size();
     if (this_count != other_queue.size())
         return false;
@@ -99,7 +74,14 @@ bool ReldepList::operator==(const ReldepList &r) const
         }
     }
 
-    return pImpl->sack->pImpl->pool == r.pImpl->sack->pImpl->pool;
+    return pImpl->sack->pImpl->pool == other.pImpl->sack->pImpl->pool;
+}
+
+ReldepList & ReldepList::operator=(const ReldepList & src)
+{
+    pImpl->queue = src.pImpl->queue;
+    pImpl->sack = src.pImpl->sack;
+    return *this;
 }
 
 void ReldepList::add(Reldep & reldep)

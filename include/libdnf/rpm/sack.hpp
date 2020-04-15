@@ -27,18 +27,29 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 
 struct PackageId {
-    int id;
+public:
+    PackageId() = default;
+    explicit PackageId(int id);
+
+    bool operator==(const PackageId & other) const noexcept { return id == other.id; };
+    bool operator!=(const PackageId & other) const noexcept { return id != other.id; };
+
+    int id{0};
 };
 
 struct ReldepId {
 public:
-    ReldepId();
-    ReldepId(int id);
-    int id;
+    ReldepId() = default;
+    explicit ReldepId(int id);
+
+    bool operator==(const ReldepId & other) const noexcept { return id == other.id; };
+    bool operator!=(const ReldepId & other) const noexcept { return id != other.id; };
+
+    int id{0};
 };
 
-inline ReldepId::ReldepId()
-: id(0)
+inline PackageId::PackageId(int id)
+: id(id)
 {}
 
 inline ReldepId::ReldepId(int id)

@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_PACKAGE_HPP
 
 
+#include "reldep_list.hpp"
 #include "sack.hpp"
 
 #include <string>
@@ -33,6 +34,10 @@ namespace libdnf::rpm {
 /// @replaces dnf:dnf/package.py:class:Package
 class Package {
 public:
+    /// @replaces libdnf/hy-package.h:function:dnf_package_get_identical(DnfPackage * pkg)
+    bool operator==(const Package & other) const noexcept;
+    bool operator!=(const Package & other) const noexcept;
+
     /// @replaces libdnf/hy-package.h:function:dnf_package_get_id(DnfPackage * pkg)
     PackageId get_id() const noexcept { return id; };
 
@@ -123,74 +128,69 @@ public:
     /// TODO(dmach): files, directories, info about ghost etc. - existing implementation returns incomplete data
     std::vector<std::string> get_files();
 
-
-/// TODO everything bellow
-    
-    /// @replaces dnf:dnf/package.py:attribute:Package.changelogs
-    /// @replaces libdnf:libdnf/hy-package-private.hpp:function:dnf_package_get_changelogs(DnfPackage * pkg)
-    void get_changelogs() const;
-
     // DEPENDENCIES
 
     /// @replaces dnf:dnf/package.py:attribute:Package.provides
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_provides(DnfPackage * pkg)
-    void get_provides() const;
+    ReldepList get_provides() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.requires
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_requires(DnfPackage * pkg)
-    void get_requires() const;
+    ReldepList get_requires() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.requires_pre
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_requires_pre(DnfPackage * pkg)
-    void get_requires_pre() const;
+    ReldepList get_requires_pre() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.conflicts
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_conflicts(DnfPackage * pkg)
-    void get_conflicts() const;
+    ReldepList get_conflicts() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.obsoletes
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_obsoletes(DnfPackage * pkg)
-    void get_obsoletes() const;
+    ReldepList get_obsoletes() const;
 
-    // TODO(dmach): getBugUrl() not possible due to lack of support in libsolv and metadata?
+    /// @replaces dnf:dnf/package.py:attribute:Package.prereq_ignoreinst
+    /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_prereq_ignoreinst(DnfPackage * pkg)
+    ReldepList get_prereq_ignoreinst() const;
+
+    /// @replaces dnf:dnf/package.py:attribute:Package.regular_requires
+    /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_regular_requires(DnfPackage * pkg)
+    ReldepList get_regular_requires() const;
 
     // WEAK DEPENDENCIES
 
     /// @replaces dnf:dnf/package.py:attribute:Package.recommends
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_recommends(DnfPackage * pkg)
-    void get_recommends() const;
+    ReldepList get_recommends() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.suggests
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_suggests(DnfPackage * pkg)
-    void get_suggests() const;
+    ReldepList get_suggests() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.enhances
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_enhances(DnfPackage * pkg)
-    void get_enhances() const;
+    ReldepList get_enhances() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.supplements
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_supplements(DnfPackage * pkg)
-    void get_supplements() const;
-
+    ReldepList get_supplements() const;
 
     // REPODATA
 
-    /// @replaces dnf:dnf/package.py:attribute:Package.repo
-    /// @replaces dnf:dnf/package.py:attribute:Package.repoid
-    /// @replaces dnf:dnf/package.py:attribute:Package.reponame
-    /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_repo(DnfPackage * pkg)
-    /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_reponame(DnfPackage * pkg)
-    void get_repo() const;
-
     /// @replaces dnf:dnf/package.py:attribute:Package.baseurl
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_baseurl(DnfPackage * pkg)
-    std::string get_baseurl() const;
+    std::string get_baseurl();
 
     /// @replaces dnf:dnf/package.py:attribute:Package.location
     /// @replaces dnf:dnf/package.py:attribute:Package.relativepath
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_location(DnfPackage * pkg)
-    std::string get_location() const;
+    std::string get_location();
 
+    /// TODO get_changelogs - requires changelog
+    /// @replaces dnf:dnf/package.py:attribute:Package.changelogs
+    /// @replaces libdnf:libdnf/hy-package-private.hpp:function:dnf_package_get_changelogs(DnfPackage * pkg)
+    // void get_changelogs() const;
 
     // SYSTEM
 
@@ -198,24 +198,52 @@ public:
     /// @replaces dnf:dnf/package.py:attribute:Package.installed
     bool is_installed() const;
 
+    /// TODO is_local
     /// @replaces dnf:dnf/package.py:method:Package.localPkg(self)
     /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_is_local(DnfPackage * pkg)
-    bool is_local() const;
+    //bool is_local() const;
 
+    /// TODO get_from_repo_id - requires swdb
     /// For an installed package, return repoid of repo from the package was installed.
     /// For an available package, return an empty string.
     ///
     /// @replaces dnf:dnf/package.py:attribute:Package.ui_from_repo
     /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_origin(DnfPackage * pkg)
-    void get_from_repo_id() const;
+    // void get_from_repo_id() const;
 
-    /// @replaces dnf:dnf/package.py:attribute:Package.reason
-    void get_reason() const;
+    /// @replaces dnf:dnf/package.py:attribute:Package.hdr_end
+    /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_hdr_end(DnfPackage * pkg)
+    unsigned long long  get_hdr_end() noexcept;
 
+    /// @replaces dnf:dnf/package.py:attribute:Package.installtime
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_installtime(DnfPackage * pkg)
-    void get_install_time() const;
+    unsigned long long  get_install_time() noexcept;
+
+    /// @brief Media number for the package
+    ///
+    /// @replaces dnf:dnf/package.py:attribute:Package.medianr
+    /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_medianr(DnfPackage * pkg)
+    unsigned long long  get_media_number() noexcept;
+
+    /// @brief The rpmdb ID for the package
+    ///
+    /// @replaces dnf:dnf/package.py:attribute:Package.rpmdbid
+    /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_rpmdbid(DnfPackage * pkg)
+    unsigned long long  get_rpmdbid() noexcept;
+
+    /// TODO get_repo - requires Repo
+    /// @replaces dnf:dnf/package.py:attribute:Package.repo
+    /// @replaces dnf:dnf/package.py:attribute:Package.repoid
+    /// @replaces dnf:dnf/package.py:attribute:Package.reponame
+    /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_repo(DnfPackage * pkg)
+    /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_reponame(DnfPackage * pkg)
+    // void get_repo() const;
+
+    // TODO(dmach): getBugUrl() not possible due to lack of support in libsolv and metadata?
 
 private:
+    /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
+    Package(Sack * sack, PackageId id);
     const char * get_name_cstring() const noexcept;
 
     /// @return const char* !! Return temporal values !!
@@ -231,10 +259,23 @@ private:
 
     const char * get_evr_cstring() const noexcept;
 
-    PackageId id = {0};
     Sack * sack;
+    PackageId id;
 };
 
+inline Package::Package(Sack * sack, PackageId id)
+: sack(sack), id(id)
+{}
+
+inline bool Package::operator==(const Package & other) const noexcept
+{
+    return id == other.id && sack == other.sack;
+}
+
+inline bool Package::operator!=(const Package & other) const noexcept
+{
+    return id != other.id || sack != other.sack;
+}
 
 }  // namespace libdnf::rpm
 

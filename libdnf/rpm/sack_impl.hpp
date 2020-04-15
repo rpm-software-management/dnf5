@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_SACK_PRIVATE_HPP
-#define LIBDNF_RPM_SACK_PRIVATE_HPP
+#ifndef LIBDNF_RPM_SACK_IMPL_HPP
+#define LIBDNF_RPM_SACK_IMPL_HPP
 
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/rpm/sack.hpp"
@@ -42,4 +42,4 @@ private:
 }  // namespace libdnf::rpm
 
 
-#endif // LIBDNF_RPM_SACK_PRIVATE_HPP
+#endif // LIBDNF_RPM_SACK_IMPL_HPP

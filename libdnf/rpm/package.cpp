@@ -19,7 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/rpm/package.hpp"
-#include "sack-impl.hpp"
+#include "reldep_list_impl.hpp"
+#include "sack_impl.hpp"
 #include "solv/package-private.hpp"
 
 
@@ -220,6 +221,154 @@ Package::get_files()
 {
     Pool * pool = sack->pImpl->pool;
     return libdnf::rpm::solv::get_files(pool, id);
+}
+
+ReldepList
+Package::get_provides() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_provides(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_requires() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_provides(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_requires_pre() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_requires_pre(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_conflicts() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_conflicts(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_obsoletes() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_obsoletes(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_recommends() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_recommends(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_suggests() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_suggests(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_enhances() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_enhances(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_supplements() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_supplements(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_prereq_ignoreinst() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_prereq_ignoreinst(pool, id, list.pImpl->queue);
+    return list;
+}
+
+ReldepList
+Package::get_regular_requires() const
+{
+    Pool * pool = sack->pImpl->pool;
+    ReldepList list(sack);
+    libdnf::rpm::solv::get_regular_requires(pool, id, list.pImpl->queue);
+    return list;
+}
+
+std::string
+Package::get_baseurl()
+{
+    Pool * pool = sack->pImpl->pool;
+    return cstring2string(libdnf::rpm::solv::get_baseurl(pool, id));
+}
+
+std::string
+Package::get_location()
+{
+    Pool * pool = sack->pImpl->pool;
+    return cstring2string(libdnf::rpm::solv::get_location(pool, id));
+}
+
+bool
+Package::is_installed() const
+{
+    Pool * pool = sack->pImpl->pool;
+    return libdnf::rpm::solv::is_installed(pool, libdnf::rpm::solv::get_solvable(pool, id));
+}
+
+unsigned long long
+Package::get_hdr_end() noexcept
+{
+    Pool * pool = sack->pImpl->pool;
+    return libdnf::rpm::solv::get_hdr_end(pool, id);
+}
+
+unsigned long long
+Package::get_install_time() noexcept
+{
+    Pool * pool = sack->pImpl->pool;
+    return libdnf::rpm::solv::get_install_time(pool, id);
+}
+
+unsigned long long
+Package::get_media_number() noexcept
+{
+    Pool * pool = sack->pImpl->pool;
+    return libdnf::rpm::solv::get_media_number(pool, id);
+}
+
+unsigned long long
+Package::get_rpmdbid() noexcept
+{
+    Pool * pool = sack->pImpl->pool;
+    return libdnf::rpm::solv::get_rpmdbid(pool, id);
 }
 
 }  // namespace libdnf::rpm

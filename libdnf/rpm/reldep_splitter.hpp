@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_DEPENDENCY_SPLITTER_HPP
-#define LIBDNF_DEPENDENCY_SPLITTER_HPP
+#ifndef LIBDNF_RPM_RELDEP_SPLITTER_HPP
+#define LIBDNF_RPM_RELDEP_SPLITTER_HPP
 
 #include "libdnf/rpm/reldep.hpp"
 
@@ -76,4 +76,4 @@ inline const char * ReldepSplitter::get_evr_cstr() const noexcept
 
 }  // namespace libdnf::rpm
 
-#endif // LIBDNF_DEPENDENCY_SPLITTER_HPP
+#endif // LIBDNF_RPM_RELDEP_SPLITTER_HPP

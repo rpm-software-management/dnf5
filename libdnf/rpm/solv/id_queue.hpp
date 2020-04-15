@@ -40,7 +40,7 @@ public:
     void push_back(Id id1, Id id2);
     Id operator[](int index) const;
     int * data() const noexcept;
-    Queue * get_queue() noexcept;
+    Queue & get_queue() noexcept;
     int size() const noexcept;
     void clear() noexcept;
     void append(const IdQueue & src);
@@ -65,7 +65,7 @@ inline void IdQueue::push_back(Id id) { queue_push(&queue, id); }
 inline void IdQueue::push_back(Id id1, Id id2) { queue_push2(&queue, id1, id2); }
 inline Id IdQueue::operator[](int index) const { return queue.elements[index]; }
 inline int * IdQueue::data() const noexcept { return queue.elements; }
-inline Queue * IdQueue::get_queue() noexcept { return &queue; }
+inline Queue & IdQueue::get_queue() noexcept { return queue; }
 inline int IdQueue::size() const noexcept { return queue.count; }
 inline void IdQueue::clear() noexcept { queue_empty(&queue); }
 inline void IdQueue::append(const IdQueue & src) { queue_insertn(&queue, size(), src.size(), src.data()); }

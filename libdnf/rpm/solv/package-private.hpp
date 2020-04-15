@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/rpm/package.hpp"
+#include "id_queue.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -40,7 +41,7 @@ namespace libdnf::rpm::solv {
 
 const char * BASE_EPOCH = "0";
 
-inline static Solvable *
+inline Solvable *
 get_solvable(Pool * pool, libdnf::rpm::PackageId package_id)
 {
     // Check that libsolv Id is identical with internal structure of PackageId
@@ -116,6 +117,22 @@ lookup_cstring(Solvable * solvable, unsigned type)
 {
     repo_internalize_trigger(solvable->repo);
     return solvable_lookup_str(solvable, type);
+}
+
+static inline void
+reldeps_for(Solvable * solvable, IdQueue & queue, Id type)
+{
+    Id marker = -1;
+    Id solv_type = type;
+
+    if (type == SOLVABLE_REQUIRES)
+        marker = -1;
+
+    if (type == SOLVABLE_PREREQMARKER) {
+        solv_type = SOLVABLE_REQUIRES;
+        marker = 1;
+    }
+    solvable_lookup_deparray(solvable, solv_type, &queue.get_queue(), marker);
 }
 
 inline const char *
@@ -302,6 +319,115 @@ get_files(Pool * pool, libdnf::rpm::PackageId package_id)
     }
     dataiterator_free(&di);
     return ret;
+}
+
+inline void
+get_provides(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_PROVIDES);
+}
+
+inline void
+get_requires(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_REQUIRES);
+    IdQueue tmp_queue;
+    reldeps_for(get_solvable(pool, package_id), tmp_queue, SOLVABLE_PREREQMARKER);
+    queue.insert(tmp_queue);
+}
+
+inline void
+get_requires_pre(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_PREREQMARKER);
+}
+
+inline void
+get_conflicts(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_CONFLICTS);
+}
+
+inline void
+get_obsoletes(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_OBSOLETES);
+}
+
+inline void
+get_recommends(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_RECOMMENDS);
+}
+
+inline void
+get_suggests(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_SUGGESTS);
+}
+
+inline void
+get_enhances(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_ENHANCES);
+}
+
+inline void
+get_supplements(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_SUPPLEMENTS);
+}
+
+inline void
+get_prereq_ignoreinst(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_PREREQ_IGNOREINST);
+}
+
+inline void
+get_regular_requires(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept
+{
+    reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_REQUIRES);
+}
+
+/// @return const char* !! Return temporal value !!
+inline const char *
+get_baseurl(Pool * pool, libdnf::rpm::PackageId package_id) noexcept
+{
+    return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_MEDIABASE);
+}
+
+/// @return const char* !! Return temporal value !!
+inline const char *
+get_location(Pool * pool, libdnf::rpm::PackageId package_id) noexcept
+{
+    auto solvable = get_solvable(pool, package_id);
+    repo_internalize_trigger(solvable->repo);
+    return solvable_lookup_location(solvable, NULL);
+}
+
+inline unsigned long long
+get_hdr_end(Pool * pool, libdnf::rpm::PackageId package_id) noexcept
+{
+    return lookup_num(get_solvable(pool, package_id), SOLVABLE_HEADEREND);
+}
+
+inline unsigned long long
+get_install_time(Pool * pool, libdnf::rpm::PackageId package_id) noexcept
+{
+    return lookup_num(get_solvable(pool, package_id), SOLVABLE_INSTALLTIME);
+}
+
+inline unsigned long long
+get_media_number(Pool * pool, libdnf::rpm::PackageId package_id) noexcept
+{
+    return lookup_num(get_solvable(pool, package_id), SOLVABLE_MEDIANR);
+}
+
+inline unsigned long long
+get_rpmdbid(Pool * pool, libdnf::rpm::PackageId package_id) noexcept
+{
+    return lookup_num(get_solvable(pool, package_id), RPM_RPMDBID);
 }
 
 }  // namespace libdnf::rpm::solv
