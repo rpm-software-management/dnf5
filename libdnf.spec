@@ -68,7 +68,11 @@ BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  pkgconfig(zck) >= %{zchunk_version}
 %endif
 
+%if %{with html} || %{with man}
+BuildRequires:  python3dist(breathe)
 BuildRequires:  python3dist(sphinx)
+BuildRequires:  python3dist(sphinx-rtd-theme)
+%endif
 
 %if %{with sanitizers}
 BuildRequires:  libasan-static
