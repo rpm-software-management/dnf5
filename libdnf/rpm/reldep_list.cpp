@@ -53,9 +53,7 @@ ReldepId ReldepList::get_id(int index) const noexcept
 
 ReldepList & ReldepList::operator=(ReldepList && src) noexcept
 {
-    // TODO Use move
-    pImpl->sack = src.pImpl->sack;
-    queue_init_clone(&pImpl->queue.get_queue(), &src.pImpl->queue.get_queue());
+    pImpl.swap(src.pImpl);
     return *this;
 }
 
