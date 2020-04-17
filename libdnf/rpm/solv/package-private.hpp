@@ -430,6 +430,7 @@ get_rpmdbid(Pool * pool, libdnf::rpm::PackageId package_id) noexcept
     return lookup_num(get_solvable(pool, package_id), RPM_RPMDBID);
 }
 
+
 }  // namespace libdnf::rpm::solv
 
 

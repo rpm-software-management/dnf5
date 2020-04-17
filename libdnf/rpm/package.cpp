@@ -371,4 +371,32 @@ Package::get_rpmdbid() noexcept
     return libdnf::rpm::solv::get_rpmdbid(pool, id);
 }
 
+Checksum
+Package::get_checksum()
+{
+    Pool * pool = sack->pImpl->pool;
+
+    Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, id);
+    int type;
+    libdnf::rpm::solv::repo_internalize_trigger(solvable->repo);
+    const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_CHECKSUM, &type);
+    Checksum checksum(chksum, type);
+
+    return checksum;
+}
+
+Checksum
+Package::get_hdr_checksum()
+{
+    Pool * pool = sack->pImpl->pool;
+
+    Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, id);
+    int type;
+    libdnf::rpm::solv::repo_internalize_trigger(solvable->repo);
+    const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_HDRID, &type);
+    Checksum checksum(chksum, type);
+
+    return checksum;
+}
+
 }  // namespace libdnf::rpm

@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_PACKAGE_HPP
 #define LIBDNF_RPM_PACKAGE_HPP
 
-
+#include "checksum.hpp"
 #include "reldep_list.hpp"
 #include "sack.hpp"
 
@@ -186,6 +186,14 @@ public:
     /// @replaces dnf:dnf/package.py:attribute:Package.relativepath
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_location(DnfPackage * pkg)
     std::string get_location();
+
+    /// @replaces dnf:dnf/package.py:attribute:Package.chksum
+    /// @replaces libdnf:libdnf/hy-package-private.hpp:function:dnf_package_get_chksum(DnfPackage *pkg, int *type)
+    Checksum get_checksum();
+
+    /// @replaces dnf:dnf/package.py:attribute:Package.hdr_chksum
+    /// @replaces libdnf:libdnf/hy-package-private.hpp:function:dnf_package_get_hdr_chksum(DnfPackage *pkg, int *type)
+    Checksum get_hdr_checksum();
 
     /// TODO get_changelogs - requires changelog
     /// @replaces dnf:dnf/package.py:attribute:Package.changelogs
