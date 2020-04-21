@@ -80,7 +80,7 @@ public:
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_extend(DnfReldepList *rl1, DnfReldepList *rl2)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:extend(DependencyContainer *container)
-    void insert(ReldepList & source);
+    void append(ReldepList & source);
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_index(DnfReldepList *reldep_list, gint index)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:get(int index)

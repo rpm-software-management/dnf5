@@ -17,39 +17,40 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "reldep_splitter.hpp"
+#include "reldep_parser.hpp"
 
 #include <regex>
 #include <string>
 
-namespace libdnf::rpm {
+namespace libdnf::rpm::solv {
 
-static const std::regex RELDEP_REGEX("^(\\S*)\\s*(<=|>=|<|>|=)?\\s*(\\S*)$");
+static const std::regex RELDEP_REGEX("^(\\S*)\\s*(\\S*)?\\s*(\\S*)$");
 
 static bool
 set_cmp_type(Reldep::ComparisonType * cmp_type, std::string cmp_type_string, long int length)
 {
-    const char * cstring = cmp_type_string.c_str();
-
     if (length == 2) {
-        // The second character is always '=' because of regex
-        if (cstring[0] == '<') {
+        // The second character must be '='
+        if (cmp_type_string[1] != '=') {
+            return false;
+        }
+        if (cmp_type_string[0] == '<') {
             *cmp_type = Reldep::ComparisonType::LT_EQ;
             return true;
-        } else if (cstring[0] == '>') {
+        } else if (cmp_type_string[0] == '>') {
             *cmp_type = Reldep::ComparisonType::GT_EQ;
             return true;
         } else {
             return false;
         }
     } else if (length == 1) {
-        if (cstring[0] == '>') {
+        if (cmp_type_string[0] == '>') {
             *cmp_type = Reldep::ComparisonType::GT;
             return true;
-        } else if (cstring[0] == '<') {
+        } else if (cmp_type_string[0] == '<') {
             *cmp_type = Reldep::ComparisonType::LT;
             return true;
-        } else if (cstring[0] == '=') {
+        } else if (cmp_type_string[0] == '=') {
             *cmp_type = Reldep::ComparisonType::EQ;
             return true;
         } else {
@@ -60,7 +61,7 @@ set_cmp_type(Reldep::ComparisonType * cmp_type, std::string cmp_type_string, lon
 }
 
 bool
-ReldepSplitter::parse(const std::string & reldep_str)
+ReldepParser::parse(const std::string & reldep_str)
 {
     enum { NAME = 1, CMP_TYPE = 2, EVR = 3};
     std::smatch match;
@@ -79,6 +80,8 @@ ReldepSplitter::parse(const std::string & reldep_str)
                 auto cmp_type_string = cmp_type_sub_match.str();
                 return set_cmp_type(&cmp_type, cmp_type_string, cmp_type_length);
             } else {
+                cmp_type = libdnf::rpm::Reldep::ComparisonType::NONE;
+                evr.clear();
                 return true;
             }
         } else {
@@ -87,4 +90,4 @@ ReldepSplitter::parse(const std::string & reldep_str)
     }
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::rpm::solv

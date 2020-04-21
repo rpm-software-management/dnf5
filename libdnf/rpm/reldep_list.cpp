@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/reldep_list.hpp"
 #include "libdnf/rpm/reldep.hpp"
 #include "reldep_list_impl.hpp"
-#include "reldep_splitter.hpp"
+#include "solv/reldep_parser.hpp"
 #include "sack_impl.hpp"
 
 // libsolv
@@ -94,7 +94,7 @@ void ReldepList::add(ReldepId id)
 
 bool ReldepList::add_reldep_with_glob(const std::string & reldep_str)
 {
-    ReldepSplitter dep_splitter;
+    solv::ReldepParser dep_splitter;
     if(!dep_splitter.parse(reldep_str))
         return false;
     Dataiterator di;
@@ -123,9 +123,9 @@ bool ReldepList::add_reldep(const std::string & reldep_str)
     }
 }
 
-void ReldepList::insert(ReldepList & source)
+void ReldepList::append(ReldepList & source)
 {
-    pImpl->queue.insert(source.pImpl->queue);
+    pImpl->queue.append(source.pImpl->queue);
 }
 
 Reldep ReldepList::get(int index) const noexcept

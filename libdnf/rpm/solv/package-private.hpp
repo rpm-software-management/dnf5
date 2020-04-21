@@ -333,7 +333,7 @@ get_requires(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) no
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_REQUIRES);
     IdQueue tmp_queue;
     reldeps_for(get_solvable(pool, package_id), tmp_queue, SOLVABLE_PREREQMARKER);
-    queue.insert(tmp_queue);
+    queue.append(tmp_queue);
 }
 
 inline void

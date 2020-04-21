@@ -94,7 +94,7 @@ inline IdQueue & IdQueue::operator=(const IdQueue & src)
         return *this;
     }
     queue_empty(&queue);
-    insert(src);
+    append(src);
     return *this;
 }
 

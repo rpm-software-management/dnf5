@@ -17,22 +17,21 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_RELDEP_SPLITTER_HPP
-#define LIBDNF_RPM_RELDEP_SPLITTER_HPP
+#ifndef LIBDNF_RPM_SOLV_RELDEP_PARSER_HPP
+#define LIBDNF_RPM_SOLV_RELDEP_PARSER_HPP
 
 #include "libdnf/rpm/reldep.hpp"
 
 #include <string>
 
 
+namespace libdnf::rpm::solv {
 
-namespace libdnf::rpm {
-
-struct ReldepSplitter
+struct ReldepParser
 {
 public:
-    /// @brief Parse realdep std::string into thee elements (name, evr, and comparison type), and transforms
-    /// into libdnf::rpm::Reldep::ComparisonType.
+    /// @brief Parse realdep std::string into thee elements (name, evr, and comparison type), and transforms into libdnf::rpm::Reldep::ComparisonType.
+    /// If parsing is not succesfull, the object contains a garbage.
     ///
     /// @param reldepStr p_reldepStr: std::string & that represent reldep
     /// @return bool - true if parsing was succesful
@@ -49,31 +48,32 @@ private:
     libdnf::rpm::Reldep::ComparisonType cmp_type{libdnf::rpm::Reldep::ComparisonType::NONE};
 };
 
-inline const std::string & ReldepSplitter::get_name() const noexcept
+
+inline const std::string & ReldepParser::get_name() const noexcept
 {
     return name;
 }
 
-inline const std::string & ReldepSplitter::get_evr() const noexcept
+inline const std::string & ReldepParser::get_evr() const noexcept
 {
     return evr;
 }
 
-inline libdnf::rpm::Reldep::ComparisonType ReldepSplitter::get_cmp_type() const noexcept
+inline libdnf::rpm::Reldep::ComparisonType ReldepParser::get_cmp_type() const noexcept
 {
     return cmp_type;
 }
 
-inline const char * ReldepSplitter::get_name_cstr() const noexcept
+inline const char * ReldepParser::get_name_cstr() const noexcept
 {
     return name.empty() ? NULL : name.c_str();
 }
 
-inline const char * ReldepSplitter::get_evr_cstr() const noexcept
+inline const char * ReldepParser::get_evr_cstr() const noexcept
 {
     return evr.empty() ? NULL : evr.c_str();
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::rpm::solv
 
-#endif // LIBDNF_RPM_RELDEP_SPLITTER_HPP
+#endif // LIBDNF_RPM_SOLV_RELDEP_PARSER_HPP
