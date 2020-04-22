@@ -26,9 +26,7 @@ namespace libdnf::rpm::solv {
 
 static const std::regex RELDEP_REGEX("^(\\S*)\\s*(\\S*)?\\s*(\\S*)$");
 
-static bool
-set_cmp_type(Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length)
-{
+static bool set_cmp_type(Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length) {
     if (length == 2) {
         // The second character must be '='
         if (cmp_type_string[1] != '=') {
@@ -60,10 +58,8 @@ set_cmp_type(Reldep::CmpType * cmp_type, std::string cmp_type_string, long int l
     return false;
 }
 
-bool
-ReldepParser::parse(const std::string & reldep_str)
-{
-    enum { NAME = 1, CMP_TYPE = 2, EVR = 3};
+bool ReldepParser::parse(const std::string & reldep_str) {
+    enum { NAME = 1, CMP_TYPE = 2, EVR = 3 };
     std::smatch match;
     if (!std::regex_match(reldep_str, match, RELDEP_REGEX)) {
         return false;

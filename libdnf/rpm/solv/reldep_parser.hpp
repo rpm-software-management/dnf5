@@ -27,8 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm::solv {
 
-struct ReldepParser
-{
+struct ReldepParser {
 public:
     /// @brief Parse realdep std::string into thee elements (name, evr, and comparison type), and transforms into libdnf::rpm::Reldep::ComparisonType.
     /// If parsing is not succesfull, the object contains a garbage.
@@ -49,31 +48,26 @@ private:
 };
 
 
-inline const std::string & ReldepParser::get_name() const noexcept
-{
+inline const std::string & ReldepParser::get_name() const noexcept {
     return name;
 }
 
-inline const std::string & ReldepParser::get_evr() const noexcept
-{
+inline const std::string & ReldepParser::get_evr() const noexcept {
     return evr;
 }
 
-inline libdnf::rpm::Reldep::CmpType ReldepParser::get_cmp_type() const noexcept
-{
+inline libdnf::rpm::Reldep::CmpType ReldepParser::get_cmp_type() const noexcept {
     return cmp_type;
 }
 
-inline const char * ReldepParser::get_name_cstr() const noexcept
-{
+inline const char * ReldepParser::get_name_cstr() const noexcept {
     return name.empty() ? NULL : name.c_str();
 }
 
-inline const char * ReldepParser::get_evr_cstr() const noexcept
-{
+inline const char * ReldepParser::get_evr_cstr() const noexcept {
     return evr.empty() ? NULL : evr.c_str();
 }
 
 }  // namespace libdnf::rpm::solv
 
-#endif // LIBDNF_RPM_SOLV_RELDEP_PARSER_HPP
+#endif  // LIBDNF_RPM_SOLV_RELDEP_PARSER_HPP

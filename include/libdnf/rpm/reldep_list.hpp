@@ -33,8 +33,7 @@ class Package;
 
 /// @replaces libdnf/dnf-reldep-list.h:struct:DnfReldepList
 /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:struct:DependencyContainer
-class ReldepList
-{
+class ReldepList {
 public:
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:DependencyContainer(const DependencyContainer &src)
     ReldepList(const ReldepList & src);
@@ -103,4 +102,4 @@ private:
 
 }  // namespace libdnf::rpm
 
-#endif // LIBDNF_RPM_RELDEP_LIST_HPP
+#endif  // LIBDNF_RPM_RELDEP_LIST_HPP

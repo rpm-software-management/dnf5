@@ -48,13 +48,9 @@ public:
     int id{0};
 };
 
-inline PackageId::PackageId(int id)
-: id(id)
-{}
+inline PackageId::PackageId(int id) : id(id) {}
 
-inline ReldepId::ReldepId(int id)
-: id(id)
-{}
+inline ReldepId::ReldepId(int id) : id(id) {}
 
 
 // forward declarations
@@ -64,7 +60,6 @@ class ReldepList;
 
 class Sack {
 public:
-    
 private:
     friend Package;
     friend Reldep;
@@ -76,4 +71,4 @@ private:
 
 }  // namespace libdnf::rpm
 
-#endif // LIBDNF_RPM_SACK_HPP
+#endif  // LIBDNF_RPM_SACK_HPP

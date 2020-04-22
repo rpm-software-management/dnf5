@@ -18,10 +18,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "libdnf/rpm/reldep_list.hpp"
-#include "libdnf/rpm/reldep.hpp"
+
 #include "reldep_list_impl.hpp"
 #include "sack_impl.hpp"
 #include "solv/reldep_parser.hpp"
+
+#include "libdnf/rpm/reldep.hpp"
 
 // libsolv
 extern "C" {
@@ -32,34 +34,27 @@ extern "C" {
 
 namespace libdnf::rpm {
 
-ReldepList::ReldepList(const ReldepList & src)
-        : pImpl(new Impl(*src.pImpl))
-{}
+ReldepList::ReldepList(const ReldepList & src) : pImpl(new Impl(*src.pImpl)) {}
 
-ReldepList::ReldepList(ReldepList && src) noexcept
-        : pImpl(std::move(src.pImpl))
-{}
+ReldepList::ReldepList(ReldepList && src) noexcept : pImpl(std::move(src.pImpl)) {}
 
-ReldepList::ReldepList(Sack * sack)
-        : pImpl(new Impl(sack))
-{}
+ReldepList::ReldepList(Sack * sack) : pImpl(new Impl(sack)) {}
 
 ReldepList::~ReldepList() = default;
 
-ReldepId ReldepList::get_id(int index) const noexcept
-{
+ReldepId ReldepList::get_id(int index) const noexcept {
     return ReldepId(pImpl->queue[index]);
 }
 
-ReldepList & ReldepList::operator=(ReldepList && src) noexcept
-{
+ReldepList & ReldepList::operator=(ReldepList && src) noexcept {
     pImpl.swap(src.pImpl);
     return *this;
 }
 
-bool ReldepList::operator!=(const ReldepList & other) const noexcept { return !(*this == other); }
-bool ReldepList::operator==(const ReldepList & other) const noexcept
-{
+bool ReldepList::operator!=(const ReldepList & other) const noexcept {
+    return !(*this == other);
+}
+bool ReldepList::operator==(const ReldepList & other) const noexcept {
     auto & this_queue = pImpl->queue;
     auto & other_queue = other.pImpl->queue;
     auto this_count = this_queue.size();
@@ -75,65 +70,58 @@ bool ReldepList::operator==(const ReldepList & other) const noexcept
     return pImpl->sack->pImpl->pool == other.pImpl->sack->pImpl->pool;
 }
 
-ReldepList & ReldepList::operator=(const ReldepList & src)
-{
+ReldepList & ReldepList::operator=(const ReldepList & src) {
     pImpl->queue = src.pImpl->queue;
     pImpl->sack = src.pImpl->sack;
     return *this;
 }
 
-void ReldepList::add(Reldep & reldep)
-{
+void ReldepList::add(Reldep & reldep) {
     pImpl->queue.push_back(reldep.id.id);
 }
 
-void ReldepList::add(ReldepId id)
-{
+void ReldepList::add(ReldepId id) {
     pImpl->queue.push_back(id.id);
 }
 
-bool ReldepList::add_reldep_with_glob(const std::string & reldep_str)
-{
+bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
     solv::ReldepParser dep_splitter;
-    if(!dep_splitter.parse(reldep_str))
+    if (!dep_splitter.parse(reldep_str))
         return false;
     Dataiterator di;
-    Pool *pool = pImpl->sack->pImpl->pool;
+    Pool * pool = pImpl->sack->pImpl->pool;
 
-    dataiterator_init(&di, pool, 0, 0, 0, dep_splitter.get_name_cstr(),
-                      SEARCH_STRING | SEARCH_GLOB);
+    dataiterator_init(&di, pool, 0, 0, 0, dep_splitter.get_name_cstr(), SEARCH_STRING | SEARCH_GLOB);
     while (dataiterator_step(&di)) {
-        ReldepId id = Reldep::get_reldep_id(pImpl->sack, di.kv.str, dep_splitter.get_evr_cstr(),
-                                            dep_splitter.get_cmp_type());
+        ReldepId id =
+            Reldep::get_reldep_id(pImpl->sack, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type());
         add(id);
     }
     dataiterator_free(&di);
     return true;
 }
 
-bool ReldepList::add_reldep(const std::string & reldep_str)
-{
+bool ReldepList::add_reldep(const std::string & reldep_str) {
     try {
         ReldepId id = Reldep::get_reldep_id(pImpl->sack, reldep_str);
         add(id);
         return true;
-    }
-    catch (...) {
+    } catch (...) {
         return false;
     }
 }
 
-void ReldepList::append(ReldepList & source)
-{
+void ReldepList::append(ReldepList & source) {
     pImpl->queue.append(source.pImpl->queue);
 }
 
-Reldep ReldepList::get(int index) const noexcept
-{
+Reldep ReldepList::get(int index) const noexcept {
     ReldepId id(pImpl->queue[index]);
     return Reldep(pImpl->sack, id);
 }
 
-int ReldepList::size() const noexcept { return pImpl->queue.size(); }
+int ReldepList::size() const noexcept {
+    return pImpl->queue.size();
+}
 
 }  // namespace libdnf::rpm

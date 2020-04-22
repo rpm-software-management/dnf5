@@ -33,17 +33,9 @@ namespace libdnf::rpm {
 /// @replaces libdnf/dnf-reldep.h:struct:DnfReldep
 /// @replaces libdnf/repo/solvable/Dependency.hpp:struct:Dependency
 /// @replaces hawkey:hawkey/__init__.py:class:Reldep
-class Reldep
-{
+class Reldep {
 public:
-    enum class CmpType {
-        NONE = 0,
-        GT = (1 << 0),
-        EQ = (1 << 1),
-        GTE = (GT | EQ),
-        LT = (1 << 2),
-        LTE = (LT | EQ)
-    };
+    enum class CmpType { NONE = 0, GT = (1 << 0), EQ = (1 << 1), GTE = (GT | EQ), LT = (1 << 2), LTE = (LT | EQ) };
 
     /// @brief Creates a reldep from Char*. If parsing fails it raises std::runtime_error.
     ///
@@ -54,7 +46,7 @@ public:
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
     Reldep(const Reldep & reldep);
-    
+
     Reldep(const Reldep && reldep) noexcept;
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:~Dependency();
@@ -122,18 +114,15 @@ private:
     ReldepId id;
 };
 
-inline bool Reldep::operator==(const Reldep & other) const noexcept
-{
+inline bool Reldep::operator==(const Reldep & other) const noexcept {
     return id == other.id && sack == other.sack;
 }
 
-inline bool Reldep::operator!=(const Reldep & other) const noexcept
-{
+inline bool Reldep::operator!=(const Reldep & other) const noexcept {
     return id != other.id || sack != other.sack;
 }
 
-inline Reldep & Reldep::operator=(Reldep && other) noexcept
-{
+inline Reldep & Reldep::operator=(Reldep && other) noexcept {
     id = other.id;
     sack = other.sack;
     return *this;
@@ -141,4 +130,4 @@ inline Reldep & Reldep::operator=(Reldep && other) noexcept
 
 }  // namespace libdnf::rpm
 
-#endif // LIBDNF_RPM_RELDEP_HPP
+#endif  // LIBDNF_RPM_RELDEP_HPP

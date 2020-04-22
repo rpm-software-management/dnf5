@@ -221,23 +221,23 @@ public:
 
     /// @replaces dnf:dnf/package.py:attribute:Package.hdr_end
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_hdr_end(DnfPackage * pkg)
-    unsigned long long  get_hdr_end() noexcept;
+    unsigned long long get_hdr_end() noexcept;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.installtime
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_installtime(DnfPackage * pkg)
-    unsigned long long  get_install_time() noexcept;
+    unsigned long long get_install_time() noexcept;
 
     /// @brief Media number for the package
     ///
     /// @replaces dnf:dnf/package.py:attribute:Package.medianr
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_medianr(DnfPackage * pkg)
-    unsigned long long  get_media_number() noexcept;
+    unsigned long long get_media_number() noexcept;
 
     /// @brief The rpmdb ID for the package
     ///
     /// @replaces dnf:dnf/package.py:attribute:Package.rpmdbid
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_rpmdbid(DnfPackage * pkg)
-    unsigned long long  get_rpmdbid() noexcept;
+    unsigned long long get_rpmdbid() noexcept;
 
     /// TODO get_repo - requires Repo
     /// @replaces dnf:dnf/package.py:attribute:Package.repo
@@ -271,21 +271,16 @@ private:
     PackageId id;
 };
 
-inline Package::Package(Sack * sack, PackageId id)
-: sack(sack), id(id)
-{}
+inline Package::Package(Sack * sack, PackageId id) : sack(sack), id(id) {}
 
-inline bool Package::operator==(const Package & other) const noexcept
-{
+inline bool Package::operator==(const Package & other) const noexcept {
     return id == other.id && sack == other.sack;
 }
 
-inline bool Package::operator!=(const Package & other) const noexcept
-{
+inline bool Package::operator!=(const Package & other) const noexcept {
     return id != other.id || sack != other.sack;
 }
 
 }  // namespace libdnf::rpm
 
 #endif  // LIBDNF_RPM_PACKAGE_HPP
-

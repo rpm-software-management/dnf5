@@ -21,8 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RELDEP_LIST_IMPL_HPP
 #define LIBDNF_RPM_RELDEP_LIST_IMPL_HPP
 
-#include "libdnf/rpm/reldep_list.hpp"
 #include "solv/id_queue.hpp"
+
+#include "libdnf/rpm/reldep_list.hpp"
 
 namespace libdnf::rpm {
 
@@ -32,7 +33,7 @@ public:
     Impl(Sack * sack);
     Impl(Sack * sack, libdnf::rpm::solv::IdQueue queue_src);
     ~Impl();
-    
+
 
 private:
     friend class ReldepList;
@@ -41,21 +42,14 @@ private:
     libdnf::rpm::solv::IdQueue queue;
 };
 
-inline ReldepList::Impl::Impl(const ReldepList::Impl & src)
-        : sack(src.sack), queue(src.queue)
-{}
+inline ReldepList::Impl::Impl(const ReldepList::Impl & src) : sack(src.sack), queue(src.queue) {}
 
-inline ReldepList::Impl::Impl(Sack * sack)
-        : sack(sack)
-{}
+inline ReldepList::Impl::Impl(Sack * sack) : sack(sack) {}
 
-inline ReldepList::Impl::Impl(Sack * sack, libdnf::rpm::solv::IdQueue queue_src)
-        : sack(sack), queue(queue_src)
-{}
+inline ReldepList::Impl::Impl(Sack * sack, libdnf::rpm::solv::IdQueue queue_src) : sack(sack), queue(queue_src) {}
 
-inline ReldepList::Impl::~Impl()
-{}
+inline ReldepList::Impl::~Impl() {}
 
 }  // namespace libdnf::rpm
 
-#endif // LIBDNF_RPM_RELDEP_LIST_IMPL_HPP
+#endif  // LIBDNF_RPM_RELDEP_LIST_IMPL_HPP

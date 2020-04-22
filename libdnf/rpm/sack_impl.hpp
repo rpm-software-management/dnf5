@@ -31,7 +31,6 @@ namespace libdnf::rpm {
 
 class Sack::Impl {
 public:
-
 private:
     Pool * pool;
     friend Package;
@@ -42,4 +41,4 @@ private:
 }  // namespace libdnf::rpm
 
 
-#endif // LIBDNF_RPM_SACK_IMPL_HPP
+#endif  // LIBDNF_RPM_SACK_IMPL_HPP

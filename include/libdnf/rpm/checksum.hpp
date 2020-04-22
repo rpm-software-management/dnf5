@@ -29,24 +29,15 @@ namespace libdnf::rpm {
 class Package;
 
 /// Class contains checksum and checksum type
-class Checksum
-{
+class Checksum {
 public:
-    enum class Type {
-        UNKNOWN,
-        MD5,
-        SHA1,
-        SHA224,
-        SHA256,
-        SHA384,
-        SHA512
-    };
+    enum class Type { UNKNOWN, MD5, SHA1, SHA224, SHA256, SHA384, SHA512 };
     Type get_type() const noexcept;
     std::string get_type_str() const;
 
     /// Return checksum in hex format
     const std::string & get_checksum() const noexcept { return checksum; };
-    
+
 
 private:
     friend class Package;
@@ -60,11 +51,9 @@ private:
 
 
 /// Constructor requires checksum in hex and libsolv checksum type
-inline Checksum::Checksum(const char * checksum, int libsolv_type)
-    : checksum(checksum), libsolv_type(libsolv_type)
-{}
+inline Checksum::Checksum(const char * checksum, int libsolv_type) : checksum(checksum), libsolv_type(libsolv_type) {}
 
 
 }  // namespace libdnf::rpm
 
-#endif // LIBDNF_RPM_CHECKSUM_HPP
+#endif  // LIBDNF_RPM_CHECKSUM_HPP

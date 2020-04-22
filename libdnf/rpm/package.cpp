@@ -19,380 +19,284 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/rpm/package.hpp"
+
 #include "reldep_list_impl.hpp"
 #include "sack_impl.hpp"
-#include "solv/package-private.hpp"
+#include "solv/package_private.hpp"
 
 
-
-inline static std::string
-cstring2string(const char * input)
-{
+inline static std::string cstring2string(const char * input) {
     return input ? std::string(input) : std::string();
 }
 
 
 namespace libdnf::rpm {
 
-const char *
-Package::get_name_cstring() const noexcept
-{
+const char * Package::get_name_cstring() const noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_name(pool, id);
+    return solv::get_name(pool, id);
 }
 
-std::string
-Package::get_name() const
-{
+std::string Package::get_name() const {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_name(pool, id));
+    return cstring2string(solv::get_name(pool, id));
 }
 
-const char *
-Package::get_epoch_cstring()
-{
+const char * Package::get_epoch_cstring() {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_epoch_cstring(pool, id);
+    return solv::get_epoch_cstring(pool, id);
 }
 
-unsigned long
-Package::get_epoch()
-{
+unsigned long Package::get_epoch() {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_epoch(pool, id);
+    return solv::get_epoch(pool, id);
 }
 
-const char *
-Package::get_version_cstring() noexcept
-{
+const char * Package::get_version_cstring() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_version(pool, id);
+    return solv::get_version(pool, id);
 }
 
-std::string
-Package::get_version()
-{
+std::string Package::get_version() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_version(pool, id));
+    return cstring2string(solv::get_version(pool, id));
 }
 
-const char *
-Package::get_release_cstring() noexcept
-{
+const char * Package::get_release_cstring() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_release(pool, id);
+    return solv::get_release(pool, id);
 }
 
-std::string
-Package::get_release()
-{
+std::string Package::get_release() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_release(pool, id));
+    return cstring2string(solv::get_release(pool, id));
 }
 
-const char *
-Package::get_arch_cstring() const noexcept
-{
+const char * Package::get_arch_cstring() const noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_arch(pool, id);
+    return solv::get_arch(pool, id);
 }
 
-std::string
-Package::get_arch() const
-{
+std::string Package::get_arch() const {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_arch(pool, id));
+    return cstring2string(solv::get_arch(pool, id));
 }
 
-const char *
-Package::get_evr_cstring() const noexcept
-{
+const char * Package::get_evr_cstring() const noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_evr(pool, id);
+    return solv::get_evr(pool, id);
 }
 
-std::string
-Package::get_evr() const
-{
+std::string Package::get_evr() const {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_evr(pool, id));
+    return cstring2string(solv::get_evr(pool, id));
 }
 
-std::string
-Package::get_nevra()
-{
+std::string Package::get_nevra() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_nevra(pool, id));
+    return cstring2string(solv::get_nevra(pool, id));
 }
 
-std::string
-Package::get_group()
-{
+std::string Package::get_group() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_group(pool, id));
+    return cstring2string(solv::get_group(pool, id));
 }
 
-unsigned long long
-Package::get_size() noexcept
-{
+unsigned long long Package::get_size() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_size(pool, id);
+    return solv::get_size(pool, id);
 }
 
-unsigned long long
-Package::get_download_size() noexcept
-{
+unsigned long long Package::get_download_size() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_download_size(pool, id);
+    return solv::get_download_size(pool, id);
 }
 
-unsigned long long
-Package::get_install_size() noexcept
-{
+unsigned long long Package::get_install_size() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_install_size(pool, id);
+    return solv::get_install_size(pool, id);
 }
 
-std::string
-Package::get_license()
-{
+std::string Package::get_license() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_license(pool, id));
+    return cstring2string(solv::get_license(pool, id));
 }
 
-std::string
-Package::get_sourcerpm()
-{
+std::string Package::get_sourcerpm() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_sourcerpm(pool, id));
+    return cstring2string(solv::get_sourcerpm(pool, id));
 }
 
-unsigned long long
-Package::get_build_time() noexcept
-{
+unsigned long long Package::get_build_time() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_build_time(pool, id);
+    return solv::get_build_time(pool, id);
 }
 
-std::string
-Package::get_build_host()
-{
+std::string Package::get_build_host() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_build_host(pool, id));
+    return cstring2string(solv::get_build_host(pool, id));
 }
 
-std::string
-Package::get_packager()
-{
+std::string Package::get_packager() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_packager(pool, id));
+    return cstring2string(solv::get_packager(pool, id));
 }
 
-std::string
-Package::get_vendor()
-{
+std::string Package::get_vendor() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_vendor(pool, id));
+    return cstring2string(solv::get_vendor(pool, id));
 }
 
-std::string
-Package::get_url()
-{
+std::string Package::get_url() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_url(pool, id));
+    return cstring2string(solv::get_url(pool, id));
 }
 
-std::string
-Package::get_summary()
-{
+std::string Package::get_summary() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_summary(pool, id));
+    return cstring2string(solv::get_summary(pool, id));
 }
 
-std::string
-Package::get_description()
-{
+std::string Package::get_description() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_description(pool, id));
+    return cstring2string(solv::get_description(pool, id));
 }
 
-std::vector<std::string>
-Package::get_files()
-{
+std::vector<std::string> Package::get_files() {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_files(pool, id);
+    return solv::get_files(pool, id);
 }
 
-ReldepList
-Package::get_provides() const
-{
+ReldepList Package::get_provides() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_provides(pool, id, list.pImpl->queue);
+    solv::get_provides(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_requires() const
-{
+ReldepList Package::get_requires() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_provides(pool, id, list.pImpl->queue);
+    solv::get_provides(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_requires_pre() const
-{
+ReldepList Package::get_requires_pre() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_requires_pre(pool, id, list.pImpl->queue);
+    solv::get_requires_pre(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_conflicts() const
-{
+ReldepList Package::get_conflicts() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_conflicts(pool, id, list.pImpl->queue);
+    solv::get_conflicts(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_obsoletes() const
-{
+ReldepList Package::get_obsoletes() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_obsoletes(pool, id, list.pImpl->queue);
+    solv::get_obsoletes(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_recommends() const
-{
+ReldepList Package::get_recommends() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_recommends(pool, id, list.pImpl->queue);
+    solv::get_recommends(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_suggests() const
-{
+ReldepList Package::get_suggests() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_suggests(pool, id, list.pImpl->queue);
+    solv::get_suggests(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_enhances() const
-{
+ReldepList Package::get_enhances() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_enhances(pool, id, list.pImpl->queue);
+    solv::get_enhances(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_supplements() const
-{
+ReldepList Package::get_supplements() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_supplements(pool, id, list.pImpl->queue);
+    solv::get_supplements(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_prereq_ignoreinst() const
-{
+ReldepList Package::get_prereq_ignoreinst() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_prereq_ignoreinst(pool, id, list.pImpl->queue);
+    solv::get_prereq_ignoreinst(pool, id, list.pImpl->queue);
     return list;
 }
 
-ReldepList
-Package::get_regular_requires() const
-{
+ReldepList Package::get_regular_requires() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack);
-    libdnf::rpm::solv::get_regular_requires(pool, id, list.pImpl->queue);
+    solv::get_regular_requires(pool, id, list.pImpl->queue);
     return list;
 }
 
-std::string
-Package::get_baseurl()
-{
+std::string Package::get_baseurl() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_baseurl(pool, id));
+    return cstring2string(solv::get_baseurl(pool, id));
 }
 
-std::string
-Package::get_location()
-{
+std::string Package::get_location() {
     Pool * pool = sack->pImpl->pool;
-    return cstring2string(libdnf::rpm::solv::get_location(pool, id));
+    return cstring2string(solv::get_location(pool, id));
 }
 
-bool
-Package::is_installed() const
-{
+bool Package::is_installed() const {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::is_installed(pool, libdnf::rpm::solv::get_solvable(pool, id));
+    return solv::is_installed(pool, solv::get_solvable(pool, id));
 }
 
-unsigned long long
-Package::get_hdr_end() noexcept
-{
+unsigned long long Package::get_hdr_end() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_hdr_end(pool, id);
+    return solv::get_hdr_end(pool, id);
 }
 
-unsigned long long
-Package::get_install_time() noexcept
-{
+unsigned long long Package::get_install_time() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_install_time(pool, id);
+    return solv::get_install_time(pool, id);
 }
 
-unsigned long long
-Package::get_media_number() noexcept
-{
+unsigned long long Package::get_media_number() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_media_number(pool, id);
+    return solv::get_media_number(pool, id);
 }
 
-unsigned long long
-Package::get_rpmdbid() noexcept
-{
+unsigned long long Package::get_rpmdbid() noexcept {
     Pool * pool = sack->pImpl->pool;
-    return libdnf::rpm::solv::get_rpmdbid(pool, id);
+    return solv::get_rpmdbid(pool, id);
 }
 
-Checksum
-Package::get_checksum()
-{
+Checksum Package::get_checksum() {
     Pool * pool = sack->pImpl->pool;
 
-    Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, id);
+    Solvable * solvable = solv::get_solvable(pool, id);
     int type;
-    libdnf::rpm::solv::repo_internalize_trigger(solvable->repo);
+    solv::repo_internalize_trigger(solvable->repo);
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_CHECKSUM, &type);
     Checksum checksum(chksum, type);
 
     return checksum;
 }
 
-Checksum
-Package::get_hdr_checksum()
-{
+Checksum Package::get_hdr_checksum() {
     Pool * pool = sack->pImpl->pool;
 
-    Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, id);
+    Solvable * solvable = solv::get_solvable(pool, id);
     int type;
-    libdnf::rpm::solv::repo_internalize_trigger(solvable->repo);
+    solv::repo_internalize_trigger(solvable->repo);
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_HDRID, &type);
     Checksum checksum(chksum, type);
 
