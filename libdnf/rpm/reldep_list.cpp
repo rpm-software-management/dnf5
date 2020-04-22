@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/reldep_list.hpp"
 #include "libdnf/rpm/reldep.hpp"
 #include "reldep_list_impl.hpp"
-#include "solv/reldep_parser.hpp"
 #include "sack_impl.hpp"
+#include "solv/reldep_parser.hpp"
 
 // libsolv
 extern "C" {
