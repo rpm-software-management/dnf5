@@ -36,13 +36,13 @@ namespace libdnf::rpm {
 class Reldep
 {
 public:
-    enum class ComparisonType {
+    enum class CmpType {
         NONE = 0,
-        GT = 1,
-        EQ = 2,
-        GT_EQ = 3,
-        LT = 4,
-        LT_EQ = 6
+        GT = (1 << 0),
+        EQ = (1 << 1),
+        GTE = (GT | EQ),
+        LT = (1 << 2),
+        LTE = (LT | EQ)
     };
 
     /// @brief Creates a reldep from Char*. If parsing fails it raises std::runtime_error.
@@ -98,7 +98,7 @@ private:
     /// @param cmpType p_cmpType: ComparisonType, and their combinations
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:get_id()
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_new(DnfSack *sack, const char *name, int cmp_type, const char *evr)
-    Reldep(Sack * sack, const char * name, const char * version, ComparisonType cmp_type);
+    Reldep(Sack * sack, const char * name, const char * version, CmpType cmp_type);
 
     /// @brief Returns Id of reldep
     ///
@@ -108,7 +108,7 @@ private:
     /// @param cmpType p_cmpType: ComparisonType, and their combinations
     /// @return DependencyId
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char *name, const char *version, int cmpType)
-    static ReldepId get_reldep_id(Sack * sack, const char * name, const char * version, ComparisonType cmp_type);
+    static ReldepId get_reldep_id(Sack * sack, const char * name, const char * version, CmpType cmp_type);
 
     /// @brief Returns Id of reldep or raises std::runtime_error if parsing fails
     ///

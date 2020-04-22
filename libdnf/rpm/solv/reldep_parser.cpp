@@ -27,7 +27,7 @@ namespace libdnf::rpm::solv {
 static const std::regex RELDEP_REGEX("^(\\S*)\\s*(\\S*)?\\s*(\\S*)$");
 
 static bool
-set_cmp_type(Reldep::ComparisonType * cmp_type, std::string cmp_type_string, long int length)
+set_cmp_type(Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length)
 {
     if (length == 2) {
         // The second character must be '='
@@ -35,23 +35,23 @@ set_cmp_type(Reldep::ComparisonType * cmp_type, std::string cmp_type_string, lon
             return false;
         }
         if (cmp_type_string[0] == '<') {
-            *cmp_type = Reldep::ComparisonType::LT_EQ;
+            *cmp_type = Reldep::CmpType::LTE;
             return true;
         } else if (cmp_type_string[0] == '>') {
-            *cmp_type = Reldep::ComparisonType::GT_EQ;
+            *cmp_type = Reldep::CmpType::GTE;
             return true;
         } else {
             return false;
         }
     } else if (length == 1) {
         if (cmp_type_string[0] == '>') {
-            *cmp_type = Reldep::ComparisonType::GT;
+            *cmp_type = Reldep::CmpType::GT;
             return true;
         } else if (cmp_type_string[0] == '<') {
-            *cmp_type = Reldep::ComparisonType::LT;
+            *cmp_type = Reldep::CmpType::LT;
             return true;
         } else if (cmp_type_string[0] == '=') {
-            *cmp_type = Reldep::ComparisonType::EQ;
+            *cmp_type = Reldep::CmpType::EQ;
             return true;
         } else {
             return false;
@@ -80,7 +80,7 @@ ReldepParser::parse(const std::string & reldep_str)
                 auto cmp_type_string = cmp_type_sub_match.str();
                 return set_cmp_type(&cmp_type, cmp_type_string, cmp_type_length);
             } else {
-                cmp_type = libdnf::rpm::Reldep::ComparisonType::NONE;
+                cmp_type = libdnf::rpm::Reldep::CmpType::NONE;
                 evr.clear();
                 return true;
             }

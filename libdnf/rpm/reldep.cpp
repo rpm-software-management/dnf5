@@ -38,7 +38,7 @@ Reldep::Reldep(Sack * sack, ReldepId id)
         , id(id)
 {}
 
-Reldep::Reldep(Sack * sack, const char * name, const char * version, ComparisonType cmp_type)
+Reldep::Reldep(Sack * sack, const char * name, const char * version, CmpType cmp_type)
         : sack(sack)
 {
     id = get_reldep_id(sack, name, version, cmp_type);
@@ -68,13 +68,13 @@ const char * Reldep::get_version() const { return pool_id2evr(sack->pImpl->pool,
 const char * Reldep::to_string() const { return pool_dep2str(sack->pImpl->pool, id.id); }
 
 ReldepId
-Reldep::get_reldep_id(Sack * sack, const char * name, const char * version, ComparisonType cmp_type)
+Reldep::get_reldep_id(Sack * sack, const char * name, const char * version, CmpType cmp_type)
 {
-    static_assert(static_cast<int>(Reldep::ComparisonType::EQ) == REL_EQ,
+    static_assert(static_cast<int>(Reldep::CmpType::EQ) == REL_EQ,
                   "Reldep::ComparisonType::EQ is not identical to solv/REL_EQ");
-    static_assert(static_cast<int>(Reldep::ComparisonType::LT) == REL_LT,
+    static_assert(static_cast<int>(Reldep::CmpType::LT) == REL_LT,
                   "Reldep::ComparisonType::LT is not identical to solv/REL_LT");
-    static_assert(static_cast<int>(Reldep::ComparisonType::GT) == REL_GT,
+    static_assert(static_cast<int>(Reldep::CmpType::GT) == REL_GT,
                   "Reldep::ComparisonType::GT is not identical to solv/REL_GT");
     Pool * pool = sack->pImpl->pool;
     Id id = pool_str2id(pool, name, 1);

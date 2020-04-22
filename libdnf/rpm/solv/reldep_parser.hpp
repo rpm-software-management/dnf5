@@ -40,12 +40,12 @@ public:
     const char * get_name_cstr() const noexcept;
     const std::string & get_evr() const noexcept;
     const char * get_evr_cstr() const noexcept;
-    libdnf::rpm::Reldep::ComparisonType get_cmp_type() const noexcept;
+    libdnf::rpm::Reldep::CmpType get_cmp_type() const noexcept;
 
 private:
     std::string name;
     std::string evr;
-    libdnf::rpm::Reldep::ComparisonType cmp_type{libdnf::rpm::Reldep::ComparisonType::NONE};
+    libdnf::rpm::Reldep::CmpType cmp_type{libdnf::rpm::Reldep::CmpType::NONE};
 };
 
 
@@ -59,7 +59,7 @@ inline const std::string & ReldepParser::get_evr() const noexcept
     return evr;
 }
 
-inline libdnf::rpm::Reldep::ComparisonType ReldepParser::get_cmp_type() const noexcept
+inline libdnf::rpm::Reldep::CmpType ReldepParser::get_cmp_type() const noexcept
 {
     return cmp_type;
 }
