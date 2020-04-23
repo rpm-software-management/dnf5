@@ -40,7 +40,7 @@ extern "C" {
 
 namespace libdnf::rpm::solv {
 
-const char * BASE_EPOCH = "0";
+constexpr const char * BASE_EPOCH = "0";
 
 inline Solvable * get_solvable(Pool * pool, libdnf::rpm::PackageId package_id) {
     // Check that libsolv Id is identical with internal structure of PackageId
@@ -269,7 +269,7 @@ std::vector<std::string> get_files(Pool * pool, libdnf::rpm::PackageId package_i
     dataiterator_init(
         &di, pool, solvable->repo, package_id.id, SOLVABLE_FILELIST, nullptr, SEARCH_FILES | SEARCH_COMPLETE_FILELIST);
     while (dataiterator_step(&di) != 0) {
-        ret.push_back(di.kv.str);
+        ret.emplace_back(di.kv.str);
     }
     dataiterator_free(&di);
     return ret;

@@ -61,11 +61,11 @@ inline libdnf::rpm::Reldep::CmpType ReldepParser::get_cmp_type() const noexcept 
 }
 
 inline const char * ReldepParser::get_name_cstr() const noexcept {
-    return name.empty() ? NULL : name.c_str();
+    return name.empty() ? nullptr : name.c_str();
 }
 
 inline const char * ReldepParser::get_evr_cstr() const noexcept {
-    return evr.empty() ? NULL : evr.c_str();
+    return evr.empty() ? nullptr : evr.c_str();
 }
 
 }  // namespace libdnf::rpm::solv

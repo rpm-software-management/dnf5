@@ -59,8 +59,9 @@ const char * Reldep::get_relation() const {
 const char * Reldep::get_version() const {
     return pool_id2evr(sack->pImpl->pool, id.id);
 }
-const char * Reldep::to_string() const {
-    return pool_dep2str(sack->pImpl->pool, id.id);
+std::string Reldep::to_string() {
+    auto * cstring = pool_dep2str(sack->pImpl->pool, id.id);
+    return cstring ? std::string(cstring) : std::string();
 }
 
 ReldepId Reldep::get_reldep_id(Sack * sack, const char * name, const char * version, CmpType cmp_type) {

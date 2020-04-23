@@ -106,6 +106,7 @@ bool ReldepList::add_reldep(const std::string & reldep_str) {
         ReldepId id = Reldep::get_reldep_id(pImpl->sack, reldep_str);
         add(id);
         return true;
+    // TODO(jmracek) Make catch error more specific
     } catch (...) {
         return false;
     }
