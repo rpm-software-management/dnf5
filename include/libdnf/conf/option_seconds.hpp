@@ -69,7 +69,8 @@ public:
     /// @replaces libdnf:conf/OptionSeconds.hpp:method:OptionSeconds.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
 
-protected:
+    /// Parses input string and returns result.
+    /// @replaces libdnf:conf/OptionSeconds.hpp:method:OptionSeconds.fromString(const std::string & value)
     ValueType from_string(const std::string & value) const;
 };
 

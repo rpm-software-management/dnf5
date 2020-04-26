@@ -100,9 +100,16 @@ public:
     /// @replaces libdnf:conf/OptionNumber.hpp:method:OptionNumber<T>.getValueString()
     std::string get_value_string() const override;
 
-protected:
+    /// Tests input value and throws exception if the value is not allowed.
+    /// @replaces libdnf:conf/OptionNumber.hpp:method:OptionNumber<T>.test(ValueType value)
     void test(ValueType value) const;
+
+    /// Parses input string and returns result.
+    /// @replaces libdnf:conf/OptionNumber.hpp:method:OptionNumber<T>.fromString(const std::string & value)
     T from_string(const std::string & value) const;
+
+    /// Converts input value to the string.
+    /// @replaces libdnf:conf/OptionNumber.hpp:method:OptionNumber<T>.toString(ValueType value)
     std::string to_string(ValueType value) const;
 
 private:

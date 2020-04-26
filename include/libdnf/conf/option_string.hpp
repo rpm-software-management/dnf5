@@ -81,10 +81,15 @@ public:
     /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.getValueString()
     std::string get_value_string() const override;
 
-protected:
+    /// Tests input value and throws exception if the value is not allowed.
+    /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.test(const std::string & value)
     void test(const std::string & value) const;
+
+    /// Returns copy of input string. Must be present for compatibility with other option types.
+    /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.fromString(const std::string & value)
     std::string from_string(const std::string & value) const;
 
+protected:
     std::string regex;
     bool icase;
     std::string default_value;

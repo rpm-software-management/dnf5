@@ -103,9 +103,16 @@ public:
     /// @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.getFalseValues()
     const std::vector<std::string> & get_false_values() const noexcept;
 
-protected:
+    /// Does nothing. But it must be present for compatibility with other option types.
+    /// @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.test(bool /*unused*/)
     void test(bool /*unused*/) const;
+
+    /// Parses input string and returns result.
+    /// @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.fromString(const std::string & value)
     bool from_string(const std::string & value) const;
+
+    /// Converts input value to the string.
+    /// @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.toString(bool value)
     std::string to_string(bool value) const;
 
 private:

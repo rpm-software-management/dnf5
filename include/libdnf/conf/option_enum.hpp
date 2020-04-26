@@ -82,9 +82,16 @@ public:
     /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.getValueString()
     std::string get_value_string() const override;
 
-protected:
+    /// Tests input value and throws exception if the value is not allowed.
+    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.test(ValueType value)
     void test(ValueType value) const;
+
+    /// Parses input string and returns result.
+    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.fromString(const std::string & value)
     ValueType from_string(const std::string & value) const;
+
+    /// Converts input value to the string.
+    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<T>.toString(ValueType value)
     std::string to_string(ValueType value) const;
 
 private:
@@ -141,8 +148,12 @@ public:
     /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.getValueString()
     std::string get_value_string() const override;
 
-protected:
+    /// Tests input value and throws exception if the value is not allowed.
+    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.test(const std::string & value)
     void test(const std::string & value) const;
+
+    /// Parses input string and returns result.
+    /// @replaces libdnf:conf/OptionEnum.hpp:method:OptionEnum<std::string>.fromString(const std::string & value)
     std::string from_string(const std::string & value) const;
 
 private:

@@ -73,11 +73,19 @@ public:
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValueString()
     std::string get_value_string() const override;
 
-protected:
+    /// Tests input value and throws exception if the value is not allowed.
+    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.test(const std::vector<std::string> & value)
     void test(const std::vector<std::string> & value) const;
+
+    /// Parses input string and returns result.
+    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.fromString(const std::string & value)
     ValueType from_string(const std::string & value) const;
+
+    /// Converts input value to the string.
+    /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.toString(const ValueType & value)
     std::string to_string(const ValueType & value) const;
 
+protected:
     std::string regex;
     bool icase;
     ValueType default_value;
