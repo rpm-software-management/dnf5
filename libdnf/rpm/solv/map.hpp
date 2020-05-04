@@ -27,6 +27,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <solv/bitmap.h>
 #include <solv/pooltypes.h>
 
+namespace libdnf::rpm {
+
+class Query;
+class Sack;
+
+}  // namespace libdnf::rpm
 
 namespace libdnf::rpm::solv {
 
@@ -80,6 +86,9 @@ public:
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.set(Id id)
     void add(Id id);
 
+    /// Faster, but unsafe version of add() method that is doesn't check bitmap range
+    void add_unsafe(Id id);
+
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(Id id)
     bool contains(Id id) const;
 
@@ -114,15 +123,15 @@ public:
     /// Intersection operator
     SolvMap & operator&=(const SolvMap & other);
 
+    SolvMap & operator=(const SolvMap & other);
+    SolvMap & operator=(SolvMap && other) noexcept;
+
 protected:
     /// Check if `id` is in bitmap range.
     /// Throws std::out_of_range
     void check_id_in_bitmap_range(Id id) const;
 
     // ITEM OPERATIONS - UNSAFE
-
-    /// Faster, but unsafe version of add() method that is doesn't check bitmap range
-    void add_unsafe(Id id);
 
     /// Faster, but unsafe version of contains() method that is doesn't check bitmap range
     bool contains_unsafe(Id id) const;
@@ -131,6 +140,8 @@ protected:
     void remove_unsafe(Id id);
 
 private:
+    friend class libdnf::rpm::Query;
+    friend class libdnf::rpm::Sack;
     Map map;
 };
 
@@ -291,6 +302,16 @@ inline SolvMap & SolvMap::operator&=(const SolvMap & other) {
     return *this;
 }
 
+inline SolvMap & SolvMap::operator=(const SolvMap & other) {
+    map_free(&map);
+    map_init_clone(&map, &other.map);
+    return *this;
+}
+
+inline SolvMap & SolvMap::operator=(SolvMap && other) noexcept {
+    std::swap(map, other.map);
+    return *this;
+}
 
 }  // namespace libdnf::rpm::solv
 

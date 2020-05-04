@@ -61,8 +61,13 @@ bool match_string(const std::string & value, QueryCmp cmp, const std::string & p
             break;
 
         // TODO(jrohel): implement missing comparisons
+        case QueryCmp::NOT_GLOB:
+        case QueryCmp::NOT_IGLOB:
+        case QueryCmp::NOT_IEXACT:
         case QueryCmp::CONTAINS:
+        case QueryCmp::NOT_CONTAINS:
         case QueryCmp::ICONTAINS:
+        case QueryCmp::NOT_ICONTAINS:
         case QueryCmp::STARTSWITH:
         case QueryCmp::ISTARTSWITH:
         case QueryCmp::ENDSWITH:

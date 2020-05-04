@@ -48,8 +48,11 @@ enum class QueryCmp : uint32_t {
     // STRINGS
     EXACT = (EQ),                        // case-sensitive exact match
     IEXACT = (ICASE | EXACT),            // case-insensitive exact match
+    NOT_IEXACT = (NOT | IEXACT),         // not case-insensitive exact match
     CONTAINS = (1 << 16),                // case-sensitive containment test
+    NOT_CONTAINS = (NOT | CONTAINS),     // not case-sensitive containment test
     ICONTAINS = (ICASE | CONTAINS),      // case-insensitive containment test
+    NOT_ICONTAINS = (NOT | ICONTAINS),   // not case-insensitive containment test
     STARTSWITH = (1 << 17),              // case-sensitive starts-with
     ISTARTSWITH = (ICASE | STARTSWITH),  // case-insensitive starts-with
     ENDSWITH = (1 << 18),                // case-sensitive ends-with
@@ -57,7 +60,9 @@ enum class QueryCmp : uint32_t {
     REGEX = (1 << 19),                   // case-sensitive regular expression match.
     IREGEX = (ICASE | REGEX),            // case-insensitive regular expression match.
     GLOB = (1 << 20),                    // case-sensitive glob match
+    NOT_GLOB = (NOT | GLOB),               // not case-sensitive glob match
     IGLOB = (ICASE | GLOB),              // case-insensitive glob match
+    NOT_IGLOB = (NOT | IGLOB),           // not case-insensitive glob match
 };
 
 
@@ -74,6 +79,11 @@ inline QueryCmp operator&(QueryCmp lhs, QueryCmp rhs) {
         static_cast<std::underlying_type<QueryCmp>::type>(rhs));
 }
 
+inline QueryCmp operator-(QueryCmp lhs, QueryCmp rhs) {
+    return static_cast<QueryCmp>(
+        static_cast<std::underlying_type<QueryCmp>::type>(lhs) -
+        static_cast<std::underlying_type<QueryCmp>::type>(rhs));
+}
 
 }  // namespace libdnf::sack
 
