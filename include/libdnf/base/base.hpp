@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_BASE_HPP
 #define LIBDNF_BASE_BASE_HPP
 
+#include <libdnf/conf/config_main.hpp>
 #include <libdnf/logger/log_router.hpp>
 
 namespace libdnf {
@@ -30,9 +31,11 @@ namespace libdnf {
 /// :class:`.Base` instances are stateful objects owning various data.
 class Base {
 public:
+    ConfigMain & get_config() { return config; }
     LogRouter & get_logger() { return log_router; }
 
 private:
+    ConfigMain config;
     LogRouter log_router;
 };
 
