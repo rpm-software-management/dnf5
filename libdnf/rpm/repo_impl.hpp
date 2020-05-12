@@ -40,20 +40,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <mutex>
 #include <set>
 
-#define MD_TYPE_PRIMARY     "primary"
-#define MD_TYPE_FILELISTS   "filelists"
-#define MD_TYPE_PRESTODELTA "prestodelta"
-#define MD_TYPE_GROUP_GZ    "group_gz"
-#define MD_TYPE_GROUP       "group"
-#define MD_TYPE_UPDATEINFO  "updateinfo"
-#define MD_TYPE_MODULES     "modules"
-/* "other" in this context is not a generic "any other metadata", but real metadata type named "other"
- * containing changelogs for packages */
-#define MD_TYPE_OTHER "other"
 
 #define CHKSUM_BYTES 32
-
-enum _hy_repo_state { _HY_NEW, _HY_LOADED_FETCH, _HY_LOADED_CACHE, _HY_WRITTEN };
 
 namespace std {
 
@@ -92,8 +80,62 @@ private:
     long int timestamp;
 };
 
+// Information about attached libsolv repository
+class LibsolvRepoExt {
+public:
+    enum class DataType { FILENAMES, PRESTO, UPDATEINFO, OTHER };
+    enum class DataState { NEW, LOADED_FETCH, LOADED_CACHE, WRITTEN };
+
+    Id get_data_id(DataType which) const noexcept;
+    void set_data_id(DataType which, Id repodata) noexcept;
+    void set_data_state(DataType which, DataState state) noexcept;
+
+    // Returns "true" when all solvables in the repository are stored contiguously -> No interleaving
+    // with solvables from other repositories.
+    // Complexity: Linear to the current number of solvables in  repository
+    bool is_one_piece() const;
+
+    // Internalize repository if needed.
+    void internalize();
+
+    LibsolvRepo * repo{nullptr};
+
+    // Checksum of data in .solv file. Used for validity check of .solvx files.
+    unsigned char checksum[CHKSUM_BYTES];
+
+    DataState state_main{DataState::NEW};
+    DataState state_filelists{DataState::NEW};
+    DataState state_presto{DataState::NEW};
+    DataState state_updateinfo{DataState::NEW};
+    DataState state_other{DataState::NEW};
+    Id filenames_repodata{0};
+    Id presto_repodata{0};
+    Id updateinfo_repodata{0};
+    Id other_repodata{0};
+    //int load_flags{0};
+    /* the following three elements are needed for repo rewriting */
+    int main_nsolvables{0};
+    int main_nrepodata{0};
+    int main_end{0};
+
+private:
+    bool needs_internalizing{false};
+};
+
+
 class Repo::Impl {
 public:
+    // Names of well known metadata files in rpm repository
+    // Final metadata file name is (hash-) + this constant + ".xml" [+ compression suffix]
+    static constexpr const char * MD_FILENAME_PRIMARY = "primary";
+    static constexpr const char * MD_FILENAME_FILELISTS = "filelists";
+    static constexpr const char * MD_FILENAME_PRESTODELTA = "prestodelta";
+    static constexpr const char * MD_FILENAME_UPDATEINFO = "updateinfo";
+    static constexpr const char * MD_FILENAME_OTHER = "other";
+    static constexpr const char * MD_FILENAME_GROUP_GZ = "group_gz";
+    static constexpr const char * MD_FILENAME_GROUP = "group";
+    static constexpr const char * MD_FILENAME_MODULES = "modules";
+
     Impl(Repo & owner, std::string id, Type type, std::unique_ptr<ConfigRepo> && conf, Base & base);
     ~Impl();
 
@@ -124,7 +166,8 @@ public:
 
     LrHandle * get_cached_handle();
 
-private:
+
+public:
     friend class Repo;
     std::string id;
     Type type;
@@ -142,7 +185,6 @@ private:
     std::vector<std::string> content_tags;
     std::vector<std::pair<std::string, std::string>> distro_tags;
     std::vector<std::pair<std::string, std::string>> metadata_locations;
-    unsigned char checksum[CHKSUM_BYTES];
     bool use_includes{false};
     bool load_metadata_other;
     std::map<std::string, std::string> substitutions;
@@ -152,30 +194,6 @@ private:
 
     SyncStrategy sync_strategy;
     std::map<std::string, std::string> metadata_paths;
-
-    LibsolvRepo * libsolv_repo{nullptr};
-    // TODO(jrohel): Later with rpm Sack work.
-    //bool needs_internalizing{false};
-    int nrefs{1};
-
-    enum _hy_repo_state state_main { _HY_NEW };
-    enum _hy_repo_state state_filelists { _HY_NEW };
-    enum _hy_repo_state state_presto { _HY_NEW };
-    enum _hy_repo_state state_updateinfo { _HY_NEW };
-    enum _hy_repo_state state_other { _HY_NEW };
-    Id filenames_repodata{0};
-    Id presto_repodata{0};
-    Id updateinfo_repodata{0};
-    Id other_repodata{0};
-    int load_flags{0};
-    /* the following three elements are needed for repo rewriting */
-    int main_nsolvables{0};
-    int main_nrepodata{0};
-    int main_end{0};
-
-    // Lock attachLibsolvRepo(), detachLibsolvRepo() and hy_repo_free() to ensure atomic behavior
-    // in threaded environment such as PackageKit.
-    std::mutex attach_libsolv_mutex;
 
     Repo * owner;
     Base * base;
@@ -202,6 +220,9 @@ private:
     };
     static bool ends_with(std::string const & str, std::string const & ending);
     std::string get_hash() const;
+
+    // Information about attached libsolv repository
+    LibsolvRepoExt libsolv_repo_ext;
 };
 
 }  // namespace libdnf::rpm

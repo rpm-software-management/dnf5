@@ -20,6 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SACK_IMPL_HPP
 #define LIBDNF_RPM_SACK_IMPL_HPP
 
+#include "repo_impl.hpp"
+
+#include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/rpm/sack.hpp"
 
@@ -35,10 +38,44 @@ class PackageSet;
 
 class Sack::Impl {
 public:
-    explicit Impl();
+    struct RepodataInfo {
+        LibsolvRepoExt::DataState state;
+        Id solv_id;
+    };
+
+    explicit Impl(Base & base);
     ~Impl();
+
+    /// Loads main metadata (solvables) from available repo.
+    /// @replaces libdnf/dnf-sack.cpp:method:load_yum_repo()
+    void load_repo_main(Repo & repo);
+
+    /// Loads additional metadata (filelist, others, ...) from available repo.
+    /// @replaces libdnf/dnf-sack.cpp:method:load_ext()
+    RepodataInfo load_repo_ext(
+        Repo & repo, const char * suffix, const char * which_filename, int flags, bool (*cb)(LibsolvRepo *, FILE *));
+
+    /// Writes solv file with main libsolv repodata.
+    /// @replaces libdnf/dnf-sack.cpp:method:write_main()
+    void write_main(LibsolvRepoExt & repo, bool switchtosolv);
+
+    /// Writes solvx file with extended libsolv repodata.
+    /// @replaces libdnf/dnf-sack.cpp:method:write_ext()
+    void write_ext(LibsolvRepoExt & libsolv_repo_ext, LibsolvRepoExt::DataType which_repodata, const char * suffix);
+
+    void internalize_libsolv_repos();
+
 private:
+    /// Constructs libsolv repository cache filename for given repository id and optional extension.
+    std::string give_repo_solv_cache_fn(const std::string & repoid, const char * ext = nullptr);
+
+    bool considered_uptodate{true};
+    bool provides_ready{false};
+
+    Base * base;
     Pool * pool;
+
+    friend Sack;
     friend Package;
     friend PackageSet;
     friend Reldep;
@@ -46,7 +83,7 @@ private:
 };
 
 
-inline Sack::Impl::Impl() {
+inline Sack::Impl::Impl(Base & base) : base(&base) {
     pool = pool_create();
     // TODO(dmach): hard-code a number to enable tests; remove when Sack is capable of loading repos
     pool->nsolvables = 32;

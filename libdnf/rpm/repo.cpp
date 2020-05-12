@@ -223,7 +223,7 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
     }
     auto & ret = (it != metadata_paths.end()) ? it->second : empty;
     if (ret.empty()) {
-        logger.debug(fmt::format("not found \"{}\" for: {}", metadata_type, conf->name().get_value()));
+        logger.debug(fmt::format("not found \"{}\" for: {}", metadata_type, id));
     }
     return ret;
 }
@@ -337,8 +337,8 @@ Repo::Impl::Impl(Repo & owner, std::string id, Type type, std::unique_ptr<Config
 
 Repo::Impl::~Impl() {
     g_strfreev(mirrors);
-    if (libsolv_repo) {
-        libsolv_repo->appdata = nullptr;
+    if (libsolv_repo_ext.repo) {
+        libsolv_repo_ext.repo->appdata = nullptr;
     }
 }
 
@@ -473,14 +473,17 @@ std::string Repo::get_metadata_path(const std::string & metadata_type) {
 
 std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_base() {
     std::unique_ptr<LrHandle> h(lr_handle_init());
-    std::vector<const char *> dlist = {
-        MD_TYPE_PRIMARY, MD_TYPE_FILELISTS, MD_TYPE_PRESTODELTA, MD_TYPE_GROUP_GZ, MD_TYPE_UPDATEINFO};
+    std::vector<const char *> dlist = {MD_FILENAME_PRIMARY,
+                                       MD_FILENAME_FILELISTS,
+                                       MD_FILENAME_PRESTODELTA,
+                                       MD_FILENAME_GROUP_GZ,
+                                       MD_FILENAME_UPDATEINFO};
 
 #ifdef MODULEMD
-    dlist.push_back(MD_TYPE_MODULES);
+    dlist.push_back(MD_FILENAME_MODULES);
 #endif
     if (load_metadata_other) {
-        dlist.push_back(MD_TYPE_OTHER);
+        dlist.push_back(MD_FILENAME_OTHER);
     }
     for (auto & item : additional_metadata) {
         dlist.push_back(item.c_str());
@@ -496,7 +499,7 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_base() {
     handle_set_opt(h.get(), LRO_MAXPARALLELDOWNLOADS, conf->max_parallel_downloads().get_value());
 
     LrUrlVars * vars = nullptr;
-    vars = lr_urlvars_set(vars, MD_TYPE_GROUP_GZ, MD_TYPE_GROUP);
+    vars = lr_urlvars_set(vars, MD_FILENAME_GROUP_GZ, MD_FILENAME_GROUP);
     handle_set_opt(h.get(), LRO_YUMSLIST, vars);
 
     return h;
@@ -1034,7 +1037,7 @@ void Repo::Impl::load_cache() {
 
     // Load timestamp unless explicitly expired
     if (timestamp != 0) {
-        timestamp = mtime(get_metadata_path(MD_TYPE_PRIMARY).c_str());
+        timestamp = mtime(get_metadata_path(MD_FILENAME_PRIMARY).c_str());
     }
     g_strfreev(this->mirrors);
     this->mirrors = mirrors;
@@ -1300,7 +1303,7 @@ void Repo::Impl::download_metadata(const std::string & destdir) {
 bool Repo::Impl::load() {
     auto & logger = base->get_logger();
     try {
-        if (!get_metadata_path(MD_TYPE_PRIMARY).empty() || try_load_cache()) {
+        if (!get_metadata_path(MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
             reset_metadata_expired();
             if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
                 logger.debug(fmt::format(_("repo: using cache for: {}"), id));
@@ -1309,7 +1312,7 @@ bool Repo::Impl::load() {
 
             if (is_in_sync()) {
                 // the expired metadata still reflect the origin:
-                utimes(get_metadata_path(MD_TYPE_PRIMARY).c_str(), nullptr);
+                utimes(get_metadata_path(MD_FILENAME_PRIMARY).c_str(), nullptr);
                 expired = false;
                 return true;
             }
@@ -1379,7 +1382,7 @@ std::string Repo::Impl::get_persistdir() const {
 }
 
 int64_t Repo::Impl::get_age() const {
-    return time(nullptr) - mtime(get_metadata_path(MD_TYPE_PRIMARY).c_str());
+    return time(nullptr) - mtime(get_metadata_path(MD_FILENAME_PRIMARY).c_str());
 }
 
 void Repo::Impl::expire() {
@@ -1444,7 +1447,7 @@ void Repo::Impl::reset_metadata_expired() {
     if (expired || conf->metadata_expire().get_value() == -1)
         return;
     if (conf->get_master_config().check_config_file_age().get_value() && !repo_file_path.empty() &&
-        mtime(repo_file_path.c_str()) > mtime(get_metadata_path(MD_TYPE_PRIMARY).c_str()))
+        mtime(repo_file_path.c_str()) > mtime(get_metadata_path(MD_FILENAME_PRIMARY).c_str()))
         expired = true;
     else
         expired = get_age() > conf->metadata_expire().get_value();
@@ -1461,39 +1464,24 @@ LrHandle * Repo::Impl::get_cached_handle() {
 }
 
 void Repo::Impl::attach_libsolv_repo(LibsolvRepo * libsolv_repo) {
-    std::lock_guard<std::mutex> guard(attach_libsolv_mutex);
-
-    if (this->libsolv_repo)
-        // A libsolvRepo was attached to this object before. Remove it's reference to this object.
-        this->libsolv_repo->appdata = nullptr;
-    else
-        // The libsolvRepo will reference this object. Increase reference counter.
-        ++nrefs;
+    if (this->libsolv_repo_ext.repo) {
+        throw LogicError("libdnf::rpm::Repo: Some libsolv repository is already attached.");
+    }
 
     libsolv_repo->appdata = owner;  // The libsolvRepo references back to us.
     libsolv_repo->subpriority = -owner->get_cost();
     libsolv_repo->priority = -owner->get_priority();
-    this->libsolv_repo = libsolv_repo;
+    this->libsolv_repo_ext.repo = libsolv_repo;
 }
 
 void Repo::Impl::detach_libsolv_repo() {
-    attach_libsolv_mutex.lock();
-    if (!libsolv_repo) {
+    if (!libsolv_repo_ext.repo) {
         // Nothing to do, libsolvRepo is not attached.
-        attach_libsolv_mutex.unlock();
         return;
     }
 
-    libsolv_repo->appdata = nullptr;  // Removes reference to this object from libsolvRepo.
-    this->libsolv_repo = nullptr;
-
-    if (--nrefs <= 0) {
-        // There is no reference to this object, we are going to destroy it.
-        // Mutex is part of this object, we must unlock it before destroying.
-        attach_libsolv_mutex.unlock();
-        delete owner;
-    } else
-        attach_libsolv_mutex.unlock();
+    libsolv_repo_ext.repo->appdata = nullptr;  // Removes reference to this object from libsolvRepo.
+    this->libsolv_repo_ext.repo = nullptr;
 }
 
 void Repo::set_max_mirror_tries(int max_mirror_tries) {
@@ -1571,6 +1559,69 @@ std::vector<std::string> Repo::get_mirrors() const {
             mirrors.emplace_back(*mirror);
     }
     return mirrors;
+}
+
+Id LibsolvRepoExt::get_data_id(DataType which) const noexcept {
+    switch (which) {
+        case DataType::FILENAMES:
+            return filenames_repodata;
+        case DataType::PRESTO:
+            return presto_repodata;
+        case DataType::UPDATEINFO:
+            return updateinfo_repodata;
+        case DataType::OTHER:
+            return other_repodata;
+    }
+    return 0;
+}
+
+void LibsolvRepoExt::set_data_id(DataType which, Id repodata) noexcept {
+    switch (which) {
+        case DataType::FILENAMES:
+            filenames_repodata = repodata;
+            return;
+        case DataType::PRESTO:
+            presto_repodata = repodata;
+            return;
+        case DataType::UPDATEINFO:
+            updateinfo_repodata = repodata;
+            return;
+        case DataType::OTHER:
+            other_repodata = repodata;
+            return;
+    }
+}
+
+void LibsolvRepoExt::set_data_state(DataType which, DataState state) noexcept {
+    switch (which) {
+        case DataType::FILENAMES:
+            state_filelists = state;
+            return;
+        case DataType::PRESTO:
+            state_presto = state;
+            return;
+        case DataType::UPDATEINFO:
+            state_updateinfo = state;
+            return;
+        case DataType::OTHER:
+            state_other = state;
+            return;
+    }
+}
+
+bool LibsolvRepoExt::is_one_piece() const {
+    for (auto i = repo->start; i < repo->end; ++i)
+        if (repo->pool->solvables[i].repo != repo)
+            return false;
+    return true;
+}
+
+void LibsolvRepoExt::internalize() {
+    if (!needs_internalizing) {
+        return;
+    }
+    repo_internalize(repo);
+    needs_internalizing = false;
 }
 
 int PackageTargetCB::end([[maybe_unused]] TransferStatus status, [[maybe_unused]] const char * msg) {
