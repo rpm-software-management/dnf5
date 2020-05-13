@@ -38,7 +38,7 @@ class Sack;
 /// @replaces libdnf/hy-query.h:struct:HyQuery
 /// @replaces libdnf/sack/query.hpp:struct:Query
 /// @replaces hawkey:hawkey/__init__.py:class:Query
-class Query {
+class SolvQuery {
 public:
     enum class InitFlags {
         APPLY_EXCLUDES = 0,
@@ -50,7 +50,7 @@ public:
 
     struct NotSupportedCmpType : public RuntimeError {
         using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::Query"; }
+        const char * get_domain_name() const noexcept override { return "libdnf::rpm::SolvQuery"; }
         const char * get_name() const noexcept override { return "NotSupportedCmpType"; }
         const char * get_description() const noexcept override { return "Query exception"; }
     };
@@ -59,28 +59,28 @@ public:
     /// @replaces libdnf/hy-query.h:function:hy_query_create_flags(DnfSack *sack, int flags);
     /// @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
-    explicit Query(Sack * sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
-    Query(const Query & src);
-    Query(Query && src) noexcept;
-    ~Query();
+    explicit SolvQuery(Sack * sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
+    SolvQuery(const SolvQuery & src);
+    SolvQuery(SolvQuery && src) noexcept;
+    ~SolvQuery();
 
-    Query & operator=(const Query & src);
-    Query & operator=(Query && src) noexcept;
+    SolvQuery & operator=(const SolvQuery & src);
+    SolvQuery & operator=(SolvQuery && src) noexcept;
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB, IEXACT, NOT_IEXACT, ICONTAINS, NOT_ICONTAINS, IGLOB, NOT_IGLOB, CONTAINS, NOT_CONTAINS.
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NAME
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_NAME
-    Query & ifilter_name(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
+    SolvQuery & ifilter_name(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
 
     /// cmp_type could be only libdnf::sack::QueryCmp::GT, LT, GTE, LTE, EQ.
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_EVR
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_EVR
-    Query & ifilter_evr(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
+    SolvQuery & ifilter_evr(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB.
-    Query & ifilter_arch(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
+    SolvQuery & ifilter_arch(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
 
     /// Requires full nevra including epoch. QueryCmp::EQ, NEG, GT, GTE, LT, and LTE are tolerant when epoch 0 is not present.
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GT, GTE, LT, LTE, GLOB, NOT_GLOB, IGLOB, NOT_IGLOB, IEXACT, NOT_IEXACT.
@@ -89,19 +89,19 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_NEVRA
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA_STRICT
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_NEVRA_STRICT
-    Query & ifilter_nevra_strict(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
+    SolvQuery & ifilter_nevra_strict(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GT, GTE, LT, LTE, GLOB, NOT_GLOB.
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_VERSION
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_VERSION
-    Query & ifilter_version(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
+    SolvQuery & ifilter_version(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GT, GTE, LT, LTE, GLOB, NOT_GLOB.
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RELEASE
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_RELEASE
-    Query & ifilter_release(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
+    SolvQuery & ifilter_release(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;

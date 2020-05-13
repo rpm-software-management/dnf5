@@ -41,27 +41,27 @@ static inline bool hy_is_glob_pattern(const char * pattern) {
     return strpbrk(pattern, "*[?") != nullptr;
 }
 
-class Query::Impl {
+class SolvQuery::Impl {
 public:
     Impl(Sack * sack, InitFlags flags);
-    Impl(const Query::Impl & src) = default;
-    Impl(const Query::Impl && src) noexcept;
+    Impl(const SolvQuery::Impl & src) = default;
+    Impl(const SolvQuery::Impl && src) noexcept;
     ~Impl();
 
-    Query::Impl & operator=(const Query::Impl & src);
-    Query::Impl & operator=(Query::Impl && src) noexcept;
+    SolvQuery::Impl & operator=(const SolvQuery::Impl & src);
+    SolvQuery::Impl & operator=(SolvQuery::Impl && src) noexcept;
 
 private:
-    friend class Query;
+    friend class SolvQuery;
     Sack * sack;
     solv::SolvMap id_map;
 };
 
-Query::Query(Sack * sack, InitFlags flags) : p_impl(new Impl(sack, flags)) {}
+SolvQuery::SolvQuery(Sack * sack, InitFlags flags) : p_impl(new Impl(sack, flags)) {}
 
-Query::Query(const Query & src) : p_impl(new Impl(*src.p_impl)) {}
+SolvQuery::SolvQuery(const SolvQuery & src) : p_impl(new Impl(*src.p_impl)) {}
 
-Query & Query::operator=(const Query & src) {
+SolvQuery & SolvQuery::operator=(const SolvQuery & src) {
     if (this == &src) {
         return *this;
     }
@@ -70,12 +70,12 @@ Query & Query::operator=(const Query & src) {
     return *this;
 }
 
-Query & Query::operator=(Query && src) noexcept {
+SolvQuery & SolvQuery::operator=(SolvQuery && src) noexcept {
     std::swap(p_impl, src.p_impl);
     return *this;
 }
 
-Query::Impl::Impl(Sack * sack, InitFlags flags)
+SolvQuery::Impl::Impl(Sack * sack, InitFlags flags)
     : sack(sack)
     , id_map(solv::SolvMap(static_cast<int>(sack->pImpl->get_nsolvables()))) {
     switch (flags) {
@@ -91,7 +91,7 @@ Query::Impl::Impl(Sack * sack, InitFlags flags)
     }
 }
 
-Query::Impl & Query::Impl::operator=(const Query::Impl & src) {
+SolvQuery::Impl & SolvQuery::Impl::operator=(const SolvQuery::Impl & src) {
     if (this == &src) {
         return *this;
     }
@@ -100,13 +100,13 @@ Query::Impl & Query::Impl::operator=(const Query::Impl & src) {
     return *this;
 }
 
-Query::Impl & Query::Impl::operator=(Query::Impl && src) noexcept {
+SolvQuery::Impl & SolvQuery::Impl::operator=(SolvQuery::Impl && src) noexcept {
     std::swap(id_map, src.id_map);
     std::swap(sack, src.sack);
     return *this;
 }
 
-Query & Query::ifilter_name(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_name(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
     auto & sorted_solvables = p_impl->sack->pImpl->get_sorted_solvables();
@@ -232,7 +232,7 @@ filter_evr_internal(std::vector<std::string> & patterns, Pool * pool, solv::Solv
     query_result &= filter_result;
 }
 
-Query & Query::ifilter_evr(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_evr(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::GT:
@@ -256,7 +256,7 @@ Query & Query::ifilter_evr(libdnf::sack::QueryCmp cmp_type, std::vector<std::str
     return *this;
 }
 
-Query & Query::ifilter_arch(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_arch(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
@@ -403,7 +403,7 @@ filter_nevra_internal(Pool * pool, const char * c_pattern, std::vector<Solvable 
     }
 }
 
-Query & Query::ifilter_nevra_strict(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_nevra_strict(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -489,7 +489,7 @@ filter_version_internal(Pool * pool, const char * c_pattern, solv::SolvMap & can
     }
 }
 
-Query & Query::ifilter_version(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_version(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -561,7 +561,7 @@ filter_release_internal(Pool * pool, const char * c_pattern, solv::SolvMap & can
     }
 }
 
-Query & Query::ifilter_release(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_release(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
