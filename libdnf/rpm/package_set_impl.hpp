@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/rpm/package_set.hpp"
-#include "libdnf/rpm/solv/map.hpp"
+#include "libdnf/rpm/solv/solv_map.hpp"
 
 extern "C" {
 #include <solv/pool.h>

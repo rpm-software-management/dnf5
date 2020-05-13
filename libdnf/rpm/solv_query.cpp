@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/solv_query.hpp"
 
 #include "sack_impl.hpp"
-#include "solv/map.hpp"
+#include "solv/solv_map.hpp"
 #include "solv/package_private.hpp"
 
 extern "C" {

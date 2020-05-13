@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/package_set_iterator.hpp"
 #include "libdnf/rpm/solv_sack.hpp"
-#include "libdnf/rpm/solv/map.hpp"
+#include "libdnf/rpm/solv/solv_map.hpp"
 
 
 namespace libdnf::rpm {
