@@ -26,6 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #include <solv/chksum.h>
 #include <solv/evr.h>
+#include <solv/repo.h>
+#include <solv/solvable.h>
 }
 
 #include <fnmatch.h>
@@ -616,6 +618,307 @@ SolvQuery & SolvQuery::ifilter_release(libdnf::sack::QueryCmp cmp_type, std::vec
         p_impl->id_map &= filter_result;
     }
     
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_reponame(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+    bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
+
+    Id repo_id;
+    bool repo_ids[pool->nrepos];
+    for (repo_id = 0; repo_id < pool->nrepos; ++repo_id)
+         repo_ids[repo_id] = false;
+    
+    for (auto & pattern : patterns) {
+        libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
+        const char * c_pattern = pattern.c_str();
+        // Replace GLOB with EQ when the pattern is not a glob
+        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+            tmp_cmp_type =
+                (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
+        }
+        switch (tmp_cmp_type) {
+            case libdnf::sack::QueryCmp::EQ:
+                Repo * r;
+                FOR_REPOS(repo_id, r) {
+                    if (!strcmp(r->name, c_pattern)) {
+                        repo_ids[repo_id] = true;
+                    break;
+                    }
+                }
+                break;
+            case libdnf::sack::QueryCmp::GLOB:
+                FOR_REPOS(repo_id, r) {
+                    if (fnmatch(c_pattern, r->name, 0) == 0) {
+                        repo_ids[repo_id] = true;
+                    }
+                }
+                break;
+            default:
+                throw NotSupportedCmpType("Used unsupported CmpType");
+        }
+    }
+    for (PackageId candidate_id : p_impl->id_map) {
+        auto * solvable = solv::get_solvable(pool, candidate_id);
+        if (solvable->repo && repo_ids[solvable->repo->repoid]) {
+            filter_result.add_unsafe(candidate_id);
+        }
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        p_impl->id_map -= filter_result;
+    } else {
+        p_impl->id_map &= filter_result;
+    }
+    
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_sourcerpm(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+    bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
+
+    for (auto & pattern : patterns) {
+        libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
+        const char * c_pattern = pattern.c_str();
+        // Replace GLOB with EQ when the pattern is not a glob
+        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+            tmp_cmp_type =
+                (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
+        }
+        switch (tmp_cmp_type) {
+            case libdnf::sack::QueryCmp::EQ:
+                for (PackageId candidate_id : p_impl->id_map) {
+                    auto * solvable = solv::get_solvable(pool, candidate_id);
+                    const char *name = solvable_lookup_str(solvable, SOLVABLE_SOURCENAME);
+                    if (name == NULL) {
+                        name = pool_id2str(pool, solvable->name);
+                    }
+                    auto name_len = strlen(name);
+
+                    if (strncmp(c_pattern, name, name_len) != 0) {// early check -> performance
+                        continue;
+                    }
+                    auto * sourcerpm = solv::get_sourcerpm(pool, candidate_id);
+                    if (sourcerpm && !strcmp(c_pattern, sourcerpm)) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+                break;
+            case libdnf::sack::QueryCmp::GLOB:
+                for (PackageId candidate_id : p_impl->id_map) {
+                    auto * sourcerpm = solv::get_sourcerpm(pool, candidate_id);
+                    if (sourcerpm && (fnmatch(c_pattern, sourcerpm, 0) == 0)) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+                break;
+            default:
+                throw NotSupportedCmpType("Used unsupported CmpType");
+        }
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        p_impl->id_map -= filter_result;
+    } else {
+        p_impl->id_map &= filter_result;
+    }
+
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_epoch(libdnf::sack::QueryCmp cmp_type, std::vector<unsigned long> & patterns) {
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+
+    switch (cmp_type) {
+        case libdnf::sack::QueryCmp::EQ:
+            for (auto & pattern : patterns) {
+                for (PackageId candidate_id : p_impl->id_map) {
+                    auto candidate_epoch = solv::get_epoch(pool, candidate_id);
+                    if (candidate_epoch == pattern) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+            }
+            break;
+        case libdnf::sack::QueryCmp::GT:
+            for (auto & pattern : patterns) {
+                for (PackageId candidate_id : p_impl->id_map) {
+                    auto candidate_epoch = solv::get_epoch(pool, candidate_id);
+                    if (candidate_epoch > pattern) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+            }
+            break;
+        case libdnf::sack::QueryCmp::LT:
+            for (auto & pattern : patterns) {
+                for (PackageId candidate_id : p_impl->id_map) {
+                    auto candidate_epoch = solv::get_epoch(pool, candidate_id);
+                    if (candidate_epoch < pattern) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+            }
+            break;
+        case libdnf::sack::QueryCmp::GTE:
+            for (auto & pattern : patterns) {
+                for (PackageId candidate_id : p_impl->id_map) {
+                    auto candidate_epoch = solv::get_epoch(pool, candidate_id);
+                    if (candidate_epoch >= pattern) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+            }
+            break;
+        case libdnf::sack::QueryCmp::LTE:
+            for (auto & pattern : patterns) {
+                for (PackageId candidate_id : p_impl->id_map) {
+                    auto candidate_epoch = solv::get_epoch(pool, candidate_id);
+                    if (candidate_epoch <= pattern) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+            }
+            break;
+        default:
+            throw NotSupportedCmpType("Used unsupported CmpType");
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        p_impl->id_map -= filter_result;
+    } else {
+        p_impl->id_map &= filter_result;
+    }
+
+    return *this;
+}
+
+static void
+filter_dataiterator(Pool * pool, Id keyname, int flags, solv::SolvMap & candidates, solv::SolvMap & filter_result,  const char * c_pattern)
+{
+    Dataiterator di;
+
+    for (PackageId candidate_id : candidates) {
+        dataiterator_init(&di, pool, 0, candidate_id.id, keyname, c_pattern, flags);
+        while (dataiterator_step(&di)) {
+            filter_result.add_unsafe(candidate_id);
+            break;
+        }
+        dataiterator_free(&di);
+    }
+}
+
+static void
+filter_dataiterator_internal(Pool * pool, Id keyname, solv::SolvMap & candidates, libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns)
+{
+    solv::SolvMap filter_result(pool->nsolvables);
+
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and more effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
+
+    for (auto & pattern : patterns) {
+        libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
+        const char * c_pattern = pattern.c_str();
+        // Remove GLOB when the pattern is not a glob
+        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+            tmp_cmp_type =
+                (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
+        }
+        int flags = 0;
+
+        switch (tmp_cmp_type) {
+            case libdnf::sack::QueryCmp::EQ:
+                flags = SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_STRING;
+                break;
+            case libdnf::sack::QueryCmp::IEXACT:
+                flags = SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_NOCASE | SEARCH_STRING;
+                break;
+            case libdnf::sack::QueryCmp::GLOB:
+                flags = SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_GLOB;
+                break;
+            case libdnf::sack::QueryCmp::IGLOB:
+                flags = SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_NOCASE | SEARCH_GLOB;
+                break;
+            case libdnf::sack::QueryCmp::CONTAINS:
+                flags = SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_SUBSTRING;
+                break;
+            case libdnf::sack::QueryCmp::ICONTAINS:
+                flags = SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_NOCASE | SEARCH_SUBSTRING;
+                break;
+            default:
+                throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
+        }
+        filter_dataiterator(pool, keyname, flags, candidates, filter_result,  c_pattern);
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        candidates -= filter_result;
+    } else {
+        candidates &= filter_result;
+    }
+}
+
+SolvQuery & SolvQuery::ifilter_file(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+
+    filter_dataiterator_internal(pool, SOLVABLE_FILELIST, p_impl->id_map, cmp_type, patterns);
+
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_description(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+
+    filter_dataiterator_internal(pool, SOLVABLE_DESCRIPTION, p_impl->id_map, cmp_type, patterns);
+
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_summary(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+
+    filter_dataiterator_internal(pool, SOLVABLE_SUMMARY, p_impl->id_map, cmp_type, patterns);
+
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_url(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+
+    filter_dataiterator_internal(pool, SOLVABLE_URL, p_impl->id_map, cmp_type, patterns);
+
     return *this;
 }
 
