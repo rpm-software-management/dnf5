@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_MAP_ITERATOR_HPP
 #define LIBDNF_RPM_SOLV_MAP_ITERATOR_HPP
 
+#include "libdnf/rpm/sack.hpp"
 
 #include <bits/stdc++.h>
 #include <solv/bitmap.h>
@@ -41,12 +42,12 @@ public:
     SolvMapIterator(const SolvMapIterator & other);
 
     using iterator_category = std::forward_iterator_tag;
-    using difference_type = Id;
-    using value_type = Id;
+    using difference_type = PackageId;
+    using value_type = PackageId;
     using pointer = void;
     using reference = void;
 
-    Id operator*() const { return current_value; }
+    PackageId operator*() const { return current_value; }
 
     SolvMapIterator & operator++();
     SolvMapIterator operator++(int) { return ++(*this); }
@@ -54,8 +55,8 @@ public:
     bool operator==(const SolvMapIterator & other) const { return current_value == other.current_value; }
     bool operator!=(const SolvMapIterator & other) const { return current_value != other.current_value; }
 
-    void begin() { current_value = BEGIN; }
-    void end() { current_value = END; }
+    void begin() { current_value.id = BEGIN; }
+    void end() { current_value.id = END; }
 
 protected:
     const Map * get_map() const noexcept { return map; }
@@ -74,14 +75,14 @@ private:
     const unsigned char * map_end;
 
     // value of the iterator
-    Id current_value = BEGIN;
+    PackageId current_value = PackageId(BEGIN);
 };
 
 
 inline SolvMapIterator::SolvMapIterator(const Map * map) : map{map} {
     map_current = map->map;
     map_end = map_current + map->size;
-    current_value = BEGIN;
+    current_value.id = BEGIN;
     ++(*this);
 }
 
@@ -90,7 +91,7 @@ inline SolvMapIterator::SolvMapIterator(const SolvMapIterator & other) : SolvMap
 
 
 inline SolvMapIterator & SolvMapIterator::operator++() {
-    if (current_value >= 0) {
+    if (current_value.id >= 0) {
         // skip (previous / 8) bytes
         //current += previous >> 3;
 
@@ -100,15 +101,15 @@ inline SolvMapIterator & SolvMapIterator::operator++() {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
         // reset previously seen bits to 0
-        byte >>= (current_value & 7) + 1;
+        byte >>= (current_value.id & 7) + 1;
 #pragma GCC diagnostic pop
 
-        auto bit = ffs(byte << ((current_value & 7) + 1));
+        auto bit = ffs(byte << ((current_value.id & 7) + 1));
         if (bit) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
             // return (current byte * 8) + bit position - 1
-            current_value = ((map_current - map->map) << 3) + bit - 1;
+            current_value.id = ((map_current - map->map) << 3) + bit - 1;
 #pragma GCC diagnostic pop
             return *this;
         }
@@ -130,13 +131,13 @@ inline SolvMapIterator & SolvMapIterator::operator++() {
 #pragma GCC diagnostic ignored "-Wconversion"
         // now we have a byte that has at least one bit set
         // return (current byte * 8) + bit position - 1
-        current_value = ((map_current - map->map) << 3) + ffs(*map_current) - 1;
+        current_value.id = ((map_current - map->map) << 3) + ffs(*map_current) - 1;
 #pragma GCC diagnostic pop
         return *this;
     }
 
     // not found
-    current_value = END;
+    current_value.id = END;
     return *this;
 }
 

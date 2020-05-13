@@ -90,17 +90,17 @@ std::size_t PackageSet::size() const {
 
 
 void PackageSet::add(const Package & pkg) {
-    pImpl->add(static_cast<Id>(pkg.get_id().id));
+    pImpl->add(pkg.get_id());
 }
 
 
 bool PackageSet::contains(const Package & pkg) const {
-    return pImpl->contains(static_cast<Id>(pkg.get_id().id));
+    return pImpl->contains(pkg.get_id());
 }
 
 
 void PackageSet::remove(const Package & pkg) {
-    pImpl->remove(static_cast<Id>(pkg.get_id().id));
+    pImpl->remove(pkg.get_id());
 }
 
 

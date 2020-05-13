@@ -84,16 +84,16 @@ public:
     // ITEM OPERATIONS
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.set(Id id)
-    void add(Id id);
+    void add(PackageId package_id);
 
     /// Faster, but unsafe version of add() method that is doesn't check bitmap range
-    void add_unsafe(Id id);
+    void add_unsafe(PackageId package_id);
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(Id id)
-    bool contains(Id id) const;
+    bool contains(PackageId package_id) const;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.remove(Id id)
-    void remove(Id id);
+    void remove(PackageId package_id);
 
     // SET OPERATIONS - Map
 
@@ -129,15 +129,15 @@ public:
 protected:
     /// Check if `id` is in bitmap range.
     /// Throws std::out_of_range
-    void check_id_in_bitmap_range(Id id) const;
+    void check_id_in_bitmap_range(PackageId package_id) const;
 
     // ITEM OPERATIONS - UNSAFE
 
     /// Faster, but unsafe version of contains() method that is doesn't check bitmap range
-    bool contains_unsafe(Id id) const;
+    bool contains_unsafe(PackageId package_id) const;
 
     /// Faster, but unsafe version of remove() method that is doesn't check bitmap range
-    void remove_unsafe(Id id);
+    void remove_unsafe(PackageId package_id);
 
 private:
     friend class libdnf::rpm::Query;
@@ -164,9 +164,9 @@ inline SolvMap::~SolvMap() {
 }
 
 
-inline void SolvMap::check_id_in_bitmap_range(Id id) const {
+inline void SolvMap::check_id_in_bitmap_range(PackageId package_id) const {
     // map.size is in bytes, << 3 multiplies the number with 8 and gives size in bits
-    if (id < 0 || id >= (map.size << 3)) {
+    if (package_id.id < 0 || package_id.id >= (map.size << 3)) {
         throw std::out_of_range("Id is out of bitmap range");
     }
 }
@@ -185,44 +185,44 @@ inline SolvMap::iterator SolvMap::end() const {
 }
 
 
-inline void SolvMap::add(Id id) {
-    check_id_in_bitmap_range(id);
-    add_unsafe(id);
+inline void SolvMap::add(PackageId package_id) {
+    check_id_in_bitmap_range(package_id);
+    add_unsafe(package_id);
 }
 
 
-inline bool SolvMap::contains(Id id) const {
-    if (id < 0 || id >= (map.size << 3)) {
+inline bool SolvMap::contains(PackageId package_id) const {
+    if (package_id.id < 0 || package_id.id >= (map.size << 3)) {
         // if Id is outside bitmap range, then bitmap doesn't contain it
         return false;
     }
-    return contains_unsafe(id);
+    return contains_unsafe(package_id);
 }
 
 
-inline void SolvMap::remove(Id id) {
-    check_id_in_bitmap_range(id);
-    remove_unsafe(id);
+inline void SolvMap::remove(PackageId package_id) {
+    check_id_in_bitmap_range(package_id);
+    remove_unsafe(package_id);
 }
 
 
-inline void SolvMap::add_unsafe(Id id) {
+inline void SolvMap::add_unsafe(PackageId package_id) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
-    MAPSET(&map, id);
+    MAPSET(&map, package_id.id);
 #pragma GCC diagnostic pop
 }
 
 
-inline bool SolvMap::contains_unsafe(Id id) const {
-    return MAPTST(&map, id);
+inline bool SolvMap::contains_unsafe(PackageId package_id) const {
+    return MAPTST(&map, package_id.id);
 }
 
 
-inline void SolvMap::remove_unsafe(Id id) {
+inline void SolvMap::remove_unsafe(PackageId package_id) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
-    MAPCLR(&map, id);
+    MAPCLR(&map, package_id.id);
 #pragma GCC diagnostic pop
 }
 

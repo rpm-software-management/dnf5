@@ -51,6 +51,10 @@ inline Solvable * get_solvable(Pool * pool, libdnf::rpm::PackageId package_id) {
     return pool_id2solvable(pool, package_id.id);
 }
 
+inline libdnf::rpm::PackageId get_package_id(Pool * pool, Solvable * solvable) {
+    return libdnf::rpm::PackageId(pool_solvable2id(pool, solvable));
+}
+
 static char * pool_tmpdup(Pool * pool, const char * s) {
     char * dup = pool_alloctmpspace(pool, static_cast<int>(strlen(s)) + 1);
     return strcpy(dup, s);
@@ -62,7 +66,7 @@ static char * pool_tmpdup(Pool * pool, const char * s) {
 /// without 'pool' of course but either the caller would have to provide buffers
 /// to store the split pieces, or this would call strdup (which is more expensive
 /// than the pool temp space).
-void pool_split_evr(Pool * pool, const char * evr_c, char ** epoch, char ** version, char ** release) {
+inline void pool_split_evr(Pool * pool, const char * evr_c, char ** epoch, char ** version, char ** release) {
     char * evr = pool_tmpdup(pool, evr_c);
     char * e;
     char * v;
@@ -96,7 +100,7 @@ void pool_split_evr(Pool * pool, const char * evr_c, char ** epoch, char ** vers
     *release = r;
 }
 
-void repo_internalize_trigger(::Repo * repo) {
+inline void repo_internalize_trigger(::Repo * repo) {
     // TODO(jmracek) add lazy call of repo_internalize(repo)
     repo_internalize(repo);
 }
@@ -260,7 +264,7 @@ inline const char * get_description(Pool * pool, libdnf::rpm::PackageId package_
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_DESCRIPTION);
 }
 
-std::vector<std::string> get_files(Pool * pool, libdnf::rpm::PackageId package_id) {
+inline std::vector<std::string> get_files(Pool * pool, libdnf::rpm::PackageId package_id) {
     Solvable * solvable = get_solvable(pool, package_id);
     Dataiterator di;
     std::vector<std::string> ret;
