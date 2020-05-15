@@ -28,11 +28,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
+#include <memory>
 
 class RpmPackageSetTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(RpmPackageSetTest);
 
-    #ifndef WITH_PERFORMANCE_TESTS
+#ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_add);
     CPPUNIT_TEST(test_contains);
     CPPUNIT_TEST(test_remove);
@@ -40,10 +41,10 @@ class RpmPackageSetTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_intersection);
     CPPUNIT_TEST(test_difference);
     CPPUNIT_TEST(test_iterator);
-    #endif
+#endif
 
-    #ifdef WITH_PERFORMANCE_TESTS
-    #endif
+#ifdef WITH_PERFORMANCE_TESTS
+#endif
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -63,9 +64,9 @@ public:
 
 
 private:
-    libdnf::rpm::Sack * sack;
-    libdnf::rpm::PackageSet * set1;
-    libdnf::rpm::PackageSet * set2;
+    std::unique_ptr<libdnf::rpm::Sack> sack;
+    std::unique_ptr<libdnf::rpm::PackageSet> set1;
+    std::unique_ptr<libdnf::rpm::PackageSet> set2;
 };
 
 
