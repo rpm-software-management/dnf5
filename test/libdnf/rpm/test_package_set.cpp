@@ -37,7 +37,8 @@ public:
 
 
 void RpmPackageSetTest::setUp() {
-    sack = std::make_unique<libdnf::rpm::Sack>();
+    base = std::make_unique<libdnf::Base>();
+    sack = std::make_unique<libdnf::rpm::Sack>(*base);
 
     // set1 contains packages 0 - 15
     set1 = std::make_unique<libdnf::rpm::PackageSet>(sack.get());

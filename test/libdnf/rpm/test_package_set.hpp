@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_RPM_PACKAGE_SET_HPP
 
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package_set.hpp"
 #include "libdnf/rpm/sack.hpp"
 
@@ -64,6 +65,7 @@ public:
 
 
 private:
+    std::unique_ptr<libdnf::Base> base;
     std::unique_ptr<libdnf::rpm::Sack> sack;
     std::unique_ptr<libdnf::rpm::PackageSet> set1;
     std::unique_ptr<libdnf::rpm::PackageSet> set2;
