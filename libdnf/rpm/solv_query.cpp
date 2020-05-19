@@ -108,6 +108,17 @@ SolvQuery::Impl & SolvQuery::Impl::operator=(SolvQuery::Impl && src) noexcept {
     return *this;
 }
 
+
+template <const char * (*c_string_getter_fnc)(Pool * pool, libdnf::rpm::PackageId)>
+inline static void filter_glob_internal(Pool * pool, const char * c_pattern, const solv::SolvMap & candidates, solv::SolvMap & filter_result, int fnm_flags) {
+    for (PackageId candidate_id : candidates) {
+        const char * candidate_c_string = c_string_getter_fnc(pool, candidate_id);
+        if (fnmatch(c_pattern, candidate_c_string, fnm_flags) == 0) {
+            filter_result.add_unsafe(candidate_id);
+        }
+    }
+}
+
 SolvQuery & SolvQuery::ifilter_name(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
@@ -158,14 +169,10 @@ SolvQuery & SolvQuery::ifilter_name(libdnf::sack::QueryCmp cmp_type, std::vector
                     }
                 }
             } break;
-            case libdnf::sack::QueryCmp::IGLOB: {
-                for (PackageId candidate_id : p_impl->id_map) {
-                    const char * name = solv::get_name(pool, candidate_id);
-                    if (fnmatch(c_pattern, name, FNM_CASEFOLD) == 0) {
-                        filter_result.add_unsafe(candidate_id);
-                    }
-                }
-            } break;
+            case libdnf::sack::QueryCmp::IGLOB:
+                filter_glob_internal<solv::get_name>(
+                    pool, c_pattern, p_impl->id_map, filter_result, FNM_CASEFOLD);
+                break;
             case libdnf::sack::QueryCmp::CONTAINS: {
                 for (PackageId candidate_id : p_impl->id_map) {
                     const char * name = solv::get_name(pool, candidate_id);
@@ -174,14 +181,10 @@ SolvQuery & SolvQuery::ifilter_name(libdnf::sack::QueryCmp cmp_type, std::vector
                     }
                 }
             } break;
-            case libdnf::sack::QueryCmp::GLOB: {
-                for (PackageId candidate_id : p_impl->id_map) {
-                    const char * name = solv::get_name(pool, candidate_id);
-                    if (fnmatch(c_pattern, name, 0) == 0) {
-                        filter_result.add_unsafe(candidate_id);
-                    }
-                }
-            } break;
+            case libdnf::sack::QueryCmp::GLOB:
+                filter_glob_internal<solv::get_name>(
+                    pool, c_pattern, p_impl->id_map, filter_result, 0);
+                break;
             default:
                 throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
         }
@@ -289,14 +292,10 @@ SolvQuery & SolvQuery::ifilter_arch(libdnf::sack::QueryCmp cmp_type, std::vector
                     }
                 }
             } break;
-            case libdnf::sack::QueryCmp::GLOB: {
-                for (PackageId candidate_id : p_impl->id_map) {
-                    const char * arch = solv::get_arch(pool, candidate_id);
-                    if (fnmatch(c_pattern, arch, 0) == 0) {
-                        filter_result.add_unsafe(candidate_id);
-                    }
-                }
-            } break;
+            case libdnf::sack::QueryCmp::GLOB:
+                filter_glob_internal<solv::get_arch>(
+                    pool, c_pattern, p_impl->id_map, filter_result, 0);
+                break;
             default:
                 throw NotSupportedCmpType("Unsupported CmpType");
         }
@@ -417,7 +416,6 @@ SolvQuery & SolvQuery::ifilter_nevra_strict(libdnf::sack::QueryCmp cmp_type, std
 
     solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
     Pool * pool = p_impl->sack->pImpl->get_pool();
-    int fn_flags = ((cmp_type & libdnf::sack::QueryCmp::ICASE) == libdnf::sack::QueryCmp::ICASE) ? FNM_CASEFOLD : 0;
 
     auto & sorted_solvables = p_impl->sack->pImpl->get_sorted_solvables();
 
@@ -456,14 +454,13 @@ SolvQuery & SolvQuery::ifilter_nevra_strict(libdnf::sack::QueryCmp cmp_type, std
                 filter_nevra_internal<cmp_lte>(pool, c_pattern, sorted_solvables, filter_result);
                 break;
             case libdnf::sack::QueryCmp::GLOB:
-            case libdnf::sack::QueryCmp::IGLOB: {
-                for (PackageId candidate_id : p_impl->id_map) {
-                    const char * nevra = solv::get_nevra(pool, candidate_id);
-                    if (fnmatch(c_pattern, nevra, fn_flags) == 0) {
-                        filter_result.add_unsafe(candidate_id);
-                    }
-                }
-            } break;
+                filter_glob_internal<solv::get_nevra>(
+                    pool, c_pattern, p_impl->id_map, filter_result, 0);
+                break;
+            case libdnf::sack::QueryCmp::IGLOB:
+                filter_glob_internal<solv::get_nevra>(
+                    pool, c_pattern, p_impl->id_map, filter_result, FNM_CASEFOLD);
+                break;
             case libdnf::sack::QueryCmp::IEXACT: {
                 for (PackageId candidate_id : p_impl->id_map) {
                     const char * nevra = solv::get_nevra(pool, candidate_id);
@@ -523,12 +520,8 @@ SolvQuery & SolvQuery::ifilter_version(libdnf::sack::QueryCmp cmp_type, std::vec
                 filter_version_internal<cmp_eq>(pool, c_pattern, p_impl->id_map, filter_result);
                 break;
             case libdnf::sack::QueryCmp::GLOB:
-                for (PackageId candidate_id : p_impl->id_map) {
-                    const char * version = solv::get_version(pool, candidate_id);
-                    if (fnmatch(c_pattern, version, 0) == 0) {
-                        filter_result.add_unsafe(candidate_id);
-                    }
-                }
+                filter_glob_internal<solv::get_version>(
+                    pool, c_pattern, p_impl->id_map, filter_result, 0);
                 break;
             case libdnf::sack::QueryCmp::GT:
                 filter_version_internal<cmp_gt>(pool, c_pattern, p_impl->id_map, filter_result);
@@ -590,15 +583,11 @@ SolvQuery & SolvQuery::ifilter_release(libdnf::sack::QueryCmp cmp_type, std::vec
         }
         switch (tmp_cmp_type) {
             case libdnf::sack::QueryCmp::EQ:
-                filter_version_internal<cmp_eq>(pool, c_pattern, p_impl->id_map, filter_result);
+                filter_release_internal<cmp_eq>(pool, c_pattern, p_impl->id_map, filter_result);
                 break;
             case libdnf::sack::QueryCmp::GLOB:
-                for (PackageId candidate_id : p_impl->id_map) {
-                    const char * version = solv::get_release(pool, candidate_id);
-                    if (fnmatch(c_pattern, version, 0) == 0) {
-                        filter_result.add_unsafe(candidate_id);
-                    }
-                }
+                filter_glob_internal<solv::get_release>(
+                    pool, c_pattern, p_impl->id_map, filter_result, 0);
                 break;
             case libdnf::sack::QueryCmp::GT:
                 filter_release_internal<cmp_gt>(pool, c_pattern, p_impl->id_map, filter_result);
