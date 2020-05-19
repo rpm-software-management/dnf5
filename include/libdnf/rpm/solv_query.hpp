@@ -145,6 +145,12 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_URL
     SolvQuery & ifilter_url(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
 
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_LOCATION
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_LOCATION
+    SolvQuery & ifilter_location(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
+
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;
