@@ -21,13 +21,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_package_set.hpp"
 
 #include "libdnf/rpm/package.hpp"
-#include "libdnf/rpm/sack.hpp"
 
-#include <cstdint>
+#include <filesystem>
+#include <vector>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RpmPackageSetTest);
-
 
 // make constructor public so we can create Package instances in the tests
 class TestPackage : public libdnf::rpm::Package {
@@ -38,7 +37,28 @@ public:
 
 void RpmPackageSetTest::setUp() {
     base = std::make_unique<libdnf::Base>();
+
+    // Tunes main configuration. Sets path to cache directory.
+    auto cwd = std::filesystem::current_path();
+    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cwd.native());
+
+    repo_sack = std::make_unique<libdnf::rpm::RepoSack>(*base);
     sack = std::make_unique<libdnf::rpm::Sack>(*base);
+
+    // Creates new repository in the repo_sack
+    auto repo = repo_sack->new_repo("dnf-ci-fedora");
+
+    // Tunes repository configuration (baseurl is mandatory)
+    auto repo_path = cwd / "../../../test/libdnf/rpm/repos-data/dnf-ci-fedora/";
+    auto baseurl = "file://" + repo_path.native();
+    auto repo_cfg = repo->get_config();
+    repo_cfg->baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);
+
+    // Loads repository into rpm::Repo.
+    repo->load();
+
+    // Loads rpm::Repo into rpm::Sack
+    sack->load_repo(*repo.get(), false, libdnf::rpm::Sack::LoadRepoFlags::NONE);
 
     // set1 contains packages 0 - 15
     set1 = std::make_unique<libdnf::rpm::PackageSet>(sack.get());

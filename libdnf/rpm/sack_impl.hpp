@@ -85,8 +85,6 @@ private:
 
 inline Sack::Impl::Impl(Base & base) : base(&base) {
     pool = pool_create();
-    // TODO(dmach): hard-code a number to enable tests; remove when Sack is capable of loading repos
-    pool->nsolvables = 32;
 }
 
 
