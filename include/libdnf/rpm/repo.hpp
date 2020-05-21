@@ -36,7 +36,7 @@ class Base;
 
 namespace libdnf::rpm {
 
-class Sack;
+class SolvSack;
 
 class LrException : public RuntimeError {
 public:
@@ -345,7 +345,7 @@ public:
 
 private:
     class Impl;
-    friend class Sack;
+    friend class SolvSack;
     friend struct PackageTarget;
     std::unique_ptr<Impl> p_impl;
 };

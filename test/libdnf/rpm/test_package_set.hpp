@@ -68,7 +68,7 @@ public:
 private:
     std::unique_ptr<libdnf::Base> base;
     std::unique_ptr<libdnf::rpm::RepoSack> repo_sack;
-    std::unique_ptr<libdnf::rpm::Sack> sack;
+    std::unique_ptr<libdnf::rpm::SolvSack> sack;
     std::unique_ptr<libdnf::rpm::PackageSet> set1;
     std::unique_ptr<libdnf::rpm::PackageSet> set2;
 };

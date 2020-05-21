@@ -38,7 +38,7 @@ ReldepList::ReldepList(const ReldepList & src) : pImpl(new Impl(*src.pImpl)) {}
 
 ReldepList::ReldepList(ReldepList && src) noexcept : pImpl(std::move(src.pImpl)) {}
 
-ReldepList::ReldepList(Sack * sack) : pImpl(new Impl(sack)) {}
+ReldepList::ReldepList(SolvSack * sack) : pImpl(new Impl(sack)) {}
 
 ReldepList::~ReldepList() = default;
 
@@ -106,7 +106,7 @@ bool ReldepList::add_reldep(const std::string & reldep_str) {
         ReldepId id = Reldep::get_reldep_id(pImpl->sack, reldep_str);
         add(id);
         return true;
-    // TODO(jmracek) Make catch error more specific
+        // TODO(jmracek) Make catch error more specific
     } catch (...) {
         return false;
     }

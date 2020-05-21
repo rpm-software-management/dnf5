@@ -35,7 +35,7 @@ void RepoTest::setUp() {}
 
 void RepoTest::tearDown() {}
 
-using LoadFlags = libdnf::rpm::Sack::LoadRepoFlags;
+using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
 
 void RepoTest::test_repo_basics() {
     libdnf::Base base;
@@ -49,7 +49,7 @@ void RepoTest::test_repo_basics() {
     base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cwd.native());
 
     libdnf::rpm::RepoSack repo_sack(base);
-    libdnf::rpm::Sack sack(base);
+    libdnf::rpm::SolvSack sack(base);
 
     // Creates new repositories in the repo_sack
     auto repo = repo_sack.new_repo("dnf-ci-fedora");
@@ -67,7 +67,7 @@ void RepoTest::test_repo_basics() {
         log_router.error(ex.what());
     }
 
-    // Loads rpm::Repo into rpm::Sack
+    // Loads rpm::Repo into rpm::SolvSack
     try {
         sack.load_repo(
             *repo.get(),

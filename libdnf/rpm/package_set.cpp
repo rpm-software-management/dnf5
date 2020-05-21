@@ -19,17 +19,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/rpm/package_set.hpp"
+
+#include "package_set_impl.hpp"
+
 #include "libdnf/rpm/package_set_iterator.hpp"
 #include "libdnf/rpm/sack.hpp"
 #include "libdnf/rpm/solv/map.hpp"
-
-#include "package_set_impl.hpp"
 
 
 namespace libdnf::rpm {
 
 
-PackageSet::PackageSet(Sack * sack) : pImpl(new Impl(sack)) {}
+PackageSet::PackageSet(SolvSack * sack) : pImpl(new Impl(sack)) {}
 
 
 PackageSet::PackageSet(const PackageSet & other) : pImpl(new Impl(other)) {}
@@ -103,7 +104,7 @@ void PackageSet::remove(const Package & pkg) {
 }
 
 
-Sack * PackageSet::get_sack() const {
+SolvSack * PackageSet::get_sack() const {
     return pImpl->get_sack();
 }
 

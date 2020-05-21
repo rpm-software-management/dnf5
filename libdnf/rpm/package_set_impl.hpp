@@ -38,10 +38,10 @@ namespace libdnf::rpm {
 class PackageSet::Impl : public libdnf::rpm::solv::SolvMap {
 public:
     /// Initialize with an empty map
-    explicit Impl(Sack * sack);
+    explicit Impl(SolvSack * sack);
 
     /// Clone from an existing map
-    explicit Impl(Sack * sack, Map * map);
+    explicit Impl(SolvSack * sack, Map * map);
 
     /// Clone from an existing PackageSet
     explicit Impl(const PackageSet & other);
@@ -49,26 +49,23 @@ public:
     /// Copy constructor: clone from an existing PackageSet::Impl
     Impl(const Impl & other);
 
-    Sack * get_sack() const noexcept { return sack; }
+    SolvSack * get_sack() const noexcept { return sack; }
 
 private:
     friend PackageSet;
-    Sack * sack;
+    SolvSack * sack;
 };
 
 
-inline PackageSet::Impl::Impl(Sack * sack)
+inline PackageSet::Impl::Impl(SolvSack * sack)
     : libdnf::rpm::solv::SolvMap::SolvMap(sack->pImpl->pool->nsolvables)
     , sack(sack) {}
 
 
-inline PackageSet::Impl::Impl(Sack * sack, Map * map)
-    : libdnf::rpm::solv::SolvMap::SolvMap(map)
-    , sack(sack) {}
+inline PackageSet::Impl::Impl(SolvSack * sack, Map * map) : libdnf::rpm::solv::SolvMap::SolvMap(map), sack(sack) {}
 
 
-inline PackageSet::Impl::Impl(const PackageSet & other)
-    : Impl(*other.pImpl) {}
+inline PackageSet::Impl::Impl(const PackageSet & other) : Impl(*other.pImpl) {}
 
 
 inline PackageSet::Impl::Impl(const PackageSet::Impl & other)

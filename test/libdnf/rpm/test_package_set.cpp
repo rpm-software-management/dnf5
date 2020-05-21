@@ -31,7 +31,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RpmPackageSetTest);
 // make constructor public so we can create Package instances in the tests
 class TestPackage : public libdnf::rpm::Package {
 public:
-    TestPackage(libdnf::rpm::Sack * sack, libdnf::rpm::PackageId id) : libdnf::rpm::Package(sack, id) {}
+    TestPackage(libdnf::rpm::SolvSack * sack, libdnf::rpm::PackageId id) : libdnf::rpm::Package(sack, id) {}
 };
 
 
@@ -43,7 +43,7 @@ void RpmPackageSetTest::setUp() {
     base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cwd.native());
 
     repo_sack = std::make_unique<libdnf::rpm::RepoSack>(*base);
-    sack = std::make_unique<libdnf::rpm::Sack>(*base);
+    sack = std::make_unique<libdnf::rpm::SolvSack>(*base);
 
     // Creates new repository in the repo_sack
     auto repo = repo_sack->new_repo("dnf-ci-fedora");
@@ -57,8 +57,8 @@ void RpmPackageSetTest::setUp() {
     // Loads repository into rpm::Repo.
     repo->load();
 
-    // Loads rpm::Repo into rpm::Sack
-    sack->load_repo(*repo.get(), false, libdnf::rpm::Sack::LoadRepoFlags::NONE);
+    // Loads rpm::Repo into rpm::SolvSack
+    sack->load_repo(*repo.get(), false, libdnf::rpm::SolvSack::LoadRepoFlags::NONE);
 
     // set1 contains packages 0 - 15
     set1 = std::make_unique<libdnf::rpm::PackageSet>(sack.get());

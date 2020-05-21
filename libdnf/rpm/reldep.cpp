@@ -34,13 +34,13 @@ extern "C" {
 namespace libdnf::rpm {
 
 
-Reldep::Reldep(Sack * sack, ReldepId id) : sack(sack), id(id) {}
+Reldep::Reldep(SolvSack * sack, ReldepId id) : sack(sack), id(id) {}
 
-Reldep::Reldep(Sack * sack, const char * name, const char * version, CmpType cmp_type) : sack(sack) {
+Reldep::Reldep(SolvSack * sack, const char * name, const char * version, CmpType cmp_type) : sack(sack) {
     id = get_reldep_id(sack, name, version, cmp_type);
 }
 
-Reldep::Reldep(Sack * sack, const std::string & reldep_string) : sack(sack) {
+Reldep::Reldep(SolvSack * sack, const std::string & reldep_string) : sack(sack) {
     id = get_reldep_id(sack, reldep_string);
 }
 
@@ -64,7 +64,7 @@ std::string Reldep::to_string() {
     return cstring ? std::string(cstring) : std::string();
 }
 
-ReldepId Reldep::get_reldep_id(Sack * sack, const char * name, const char * version, CmpType cmp_type) {
+ReldepId Reldep::get_reldep_id(SolvSack * sack, const char * name, const char * version, CmpType cmp_type) {
     static_assert(
         static_cast<int>(Reldep::CmpType::EQ) == REL_EQ, "Reldep::ComparisonType::EQ is not identical to solv/REL_EQ");
     static_assert(
@@ -81,7 +81,7 @@ ReldepId Reldep::get_reldep_id(Sack * sack, const char * name, const char * vers
     return ReldepId(id);
 }
 
-ReldepId Reldep::get_reldep_id(Sack * sack, const std::string & reldep_str) {
+ReldepId Reldep::get_reldep_id(SolvSack * sack, const std::string & reldep_str) {
     if (reldep_str[0] == '(') {
         // Rich dependency
         Pool * pool = sack->pImpl->pool;

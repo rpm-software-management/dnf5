@@ -36,7 +36,7 @@ namespace libdnf::rpm {
 class PackageSet;
 
 
-class Sack::Impl {
+class SolvSack::Impl {
 public:
     struct RepodataInfo {
         LibsolvRepoExt::DataState state;
@@ -75,7 +75,7 @@ private:
     Base * base;
     Pool * pool;
 
-    friend Sack;
+    friend SolvSack;
     friend Package;
     friend PackageSet;
     friend Reldep;
@@ -83,12 +83,12 @@ private:
 };
 
 
-inline Sack::Impl::Impl(Base & base) : base(&base) {
+inline SolvSack::Impl::Impl(Base & base) : base(&base) {
     pool = pool_create();
 }
 
 
-inline Sack::Impl::~Impl() {
+inline SolvSack::Impl::~Impl() {
     pool_free(pool);
 }
 

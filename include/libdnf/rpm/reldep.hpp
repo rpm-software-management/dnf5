@@ -42,7 +42,7 @@ public:
     /// @param sack p_sack:...
     /// @param dependency p_dependency:...
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, const std::string & dependency)
-    Reldep(Sack * sack, const std::string & reldep_string);
+    Reldep(SolvSack * sack, const std::string & reldep_string);
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
     Reldep(const Reldep & reldep);
@@ -80,27 +80,27 @@ private:
 
     /// @brief Creates a reldep from Id
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, Id id)
-    Reldep(Sack * sack, ReldepId dependency_id);
+    Reldep(SolvSack * sack, ReldepId dependency_id);
 
     /// @brief Creates a reldep from name, version, and comparison type.
     ///
-    /// @param sack p_sack: DnfSack*
+    /// @param sack p_sack: SolvSack*
     /// @param name p_name: Required
     /// @param version p_version: Can be also NULL
     /// @param cmpType p_cmpType: ComparisonType, and their combinations
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:get_id()
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_new(DnfSack *sack, const char *name, int cmp_type, const char *evr)
-    Reldep(Sack * sack, const char * name, const char * version, CmpType cmp_type);
+    Reldep(SolvSack * sack, const char * name, const char * version, CmpType cmp_type);
 
     /// @brief Returns Id of reldep
     ///
-    /// @param sack p_sack: DnfSack*
+    /// @param sack p_sack: SolvSack*
     /// @param name p_name: Required
     /// @param version p_version: Can be also NULL
     /// @param cmpType p_cmpType: ComparisonType, and their combinations
     /// @return DependencyId
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char *name, const char *version, int cmpType)
-    static ReldepId get_reldep_id(Sack * sack, const char * name, const char * version, CmpType cmp_type);
+    static ReldepId get_reldep_id(SolvSack * sack, const char * name, const char * version, CmpType cmp_type);
 
     /// @brief Returns Id of reldep or raises std::runtime_error if parsing fails
     ///
@@ -108,9 +108,9 @@ private:
     /// @param reldepStr p_reldepStr: const Char* of reldep
     /// @return DependencyId
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
-    static ReldepId get_reldep_id(Sack * sack, const std::string & reldep_str);
+    static ReldepId get_reldep_id(SolvSack * sack, const std::string & reldep_str);
 
-    Sack * sack;
+    SolvSack * sack;
     ReldepId id;
 };
 

@@ -112,7 +112,7 @@ void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
 
 }  // end of anonymous namespace
 
-void Sack::Impl::write_main(LibsolvRepoExt & libsolv_repo_ext, bool switchtosolv) {
+void SolvSack::Impl::write_main(LibsolvRepoExt & libsolv_repo_ext, bool switchtosolv) {
     auto & logger = base->get_logger();
     LibsolvRepo * libsolv_repo = libsolv_repo_ext.repo;
     const char * name = libsolv_repo->name;
@@ -176,7 +176,7 @@ static int write_ext_updateinfo_filter(LibsolvRepo * repo, Repokey * key, void *
     return repo_write_stdkeyfilter(repo, key, 0);
 }
 
-void Sack::Impl::write_ext(
+void SolvSack::Impl::write_ext(
     LibsolvRepoExt & libsolv_repo_ext, LibsolvRepoExt::DataType which_repodata, const char * suffix) {
     auto & logger = base->get_logger();
     auto libsolv_repo = libsolv_repo_ext.repo;
@@ -242,7 +242,7 @@ void Sack::Impl::write_ext(
     libsolv_repo_ext.set_data_state(which_repodata, LibsolvRepoExt::DataState::WRITTEN);
 }
 
-void Sack::Impl::load_repo_main(Repo & repo) {
+void SolvSack::Impl::load_repo_main(Repo & repo) {
     auto repo_impl = repo.p_impl.get();
     if (repo_impl->repomd_fn.empty()) {
         throw Exception("repo md file name is empty");
@@ -292,7 +292,7 @@ void Sack::Impl::load_repo_main(Repo & repo) {
     provides_ready = false;
 }
 
-Sack::Impl::RepodataInfo Sack::Impl::load_repo_ext(
+SolvSack::Impl::RepodataInfo SolvSack::Impl::load_repo_ext(
     Repo & repo, const char * suffix, const char * which_filename, int flags, bool (*cb)(LibsolvRepo *, FILE *)) {
     RepodataInfo info;
     auto & logger = base->get_logger();
@@ -339,7 +339,7 @@ Sack::Impl::RepodataInfo Sack::Impl::load_repo_ext(
     return info;
 }
 
-void Sack::Impl::internalize_libsolv_repos() {
+void SolvSack::Impl::internalize_libsolv_repos() {
     int i;
     LibsolvRepo * libsolv_repo;
 
@@ -353,7 +353,7 @@ void Sack::Impl::internalize_libsolv_repos() {
     }
 }
 
-void Sack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
+void SolvSack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
     auto & logger = pImpl->base->get_logger();
     auto repo_impl = repo.p_impl.get();
     pImpl->load_repo_main(repo);
@@ -440,7 +440,7 @@ void Sack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
     pImpl->considered_uptodate = false;
 }
 
-std::string Sack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {
+std::string SolvSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {
     auto & cachedir = base->get_config().cachedir().get_value();
     std::string fn = cachedir + "/" + repoid;
     if (ext) {
@@ -449,8 +449,8 @@ std::string Sack::Impl::give_repo_solv_cache_fn(const std::string & repoid, cons
     return fn + ".solv";
 }
 
-Sack::Sack(Base & base) : pImpl{new Impl(base)} {}
+SolvSack::SolvSack(Base & base) : pImpl{new Impl(base)} {}
 
-Sack::~Sack() = default;
+SolvSack::~SolvSack() = default;
 
 }  // namespace libdnf::rpm

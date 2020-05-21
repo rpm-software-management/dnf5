@@ -256,7 +256,7 @@ public:
 
 protected:
     /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
-    Package(Sack * sack, PackageId id);
+    Package(SolvSack * sack, PackageId id);
     const char * get_name_cstring() const noexcept;
 
     /// @return const char* !! Return temporal values !!
@@ -274,11 +274,11 @@ protected:
 
 private:
     friend PackageSetIterator;
-    Sack * sack;
+    SolvSack * sack;
     PackageId id;
 };
 
-inline Package::Package(Sack * sack, PackageId id) : sack(sack), id(id) {}
+inline Package::Package(SolvSack * sack, PackageId id) : sack(sack), id(id) {}
 
 inline bool Package::operator==(const Package & other) const noexcept {
     return id == other.id && sack == other.sack;

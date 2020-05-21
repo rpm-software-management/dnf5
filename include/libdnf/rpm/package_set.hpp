@@ -39,7 +39,7 @@ class PackageSetIterator;
 class PackageSet {
 public:
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
-    explicit PackageSet(Sack * sack);
+    explicit PackageSet(SolvSack * sack);
 
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_clone(DnfPackageSet * pset)
     PackageSet(const PackageSet & pset);
@@ -78,7 +78,7 @@ public:
     void remove(const Package & pkg);
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.getSack()
-    Sack * get_sack() const;
+    SolvSack * get_sack() const;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.size()
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_count(DnfPackageSet * pset)
@@ -94,4 +94,4 @@ private:
 }  // namespace libdnf::rpm
 
 
-#endif // LIBDNF_RPM_PACKAGE_SET_HPP
+#endif  // LIBDNF_RPM_PACKAGE_SET_HPP
