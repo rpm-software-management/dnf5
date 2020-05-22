@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "checksum.hpp"
 #include "reldep_list.hpp"
-#include "sack.hpp"
+#include "solv_sack.hpp"
 
 #include <string>
 #include <vector>

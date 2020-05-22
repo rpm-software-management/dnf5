@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/reldep.hpp"
 
-#include "sack_impl.hpp"
+#include "solv_sack_impl.hpp"
 #include "solv/reldep_parser.hpp"
 
 // workaround, libsolv lacks 'extern "C"' in its header file

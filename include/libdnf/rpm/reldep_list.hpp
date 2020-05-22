@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_RELDEP_LIST_HPP
 
 #include "reldep.hpp"
-#include "sack.hpp"
 
 #include <memory>
 

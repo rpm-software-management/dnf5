@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package.hpp"
 #include "package_set_iterator.hpp"
-#include "sack.hpp"
+#include "solv_sack.hpp"
 
 #include <memory>
 

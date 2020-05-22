@@ -29,7 +29,7 @@ extern "C" {
 #include <solv/pool.h>
 }
 
-#include "sack_impl.hpp"
+#include "solv_sack_impl.hpp"
 
 
 namespace libdnf::rpm {

@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package.hpp"
 
 #include "reldep_list_impl.hpp"
-#include "sack_impl.hpp"
+#include "solv_sack_impl.hpp"
 #include "solv/package_private.hpp"
 
 

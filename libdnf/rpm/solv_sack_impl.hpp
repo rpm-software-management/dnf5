@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package.hpp"
-#include "libdnf/rpm/sack.hpp"
+#include "libdnf/rpm/solv_sack.hpp"
 
 extern "C" {
 #include <solv/pool.h>

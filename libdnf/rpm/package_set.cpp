@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_set_impl.hpp"
 
 #include "libdnf/rpm/package_set_iterator.hpp"
-#include "libdnf/rpm/sack.hpp"
+#include "libdnf/rpm/solv_sack.hpp"
 #include "libdnf/rpm/solv/map.hpp"
 
 

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RELDEP_HPP
 #define LIBDNF_RPM_RELDEP_HPP
 
-#include "sack.hpp"
+#include "solv_sack.hpp"
 
 #include <memory>
 #include <string>
