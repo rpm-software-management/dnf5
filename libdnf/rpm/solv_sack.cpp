@@ -164,8 +164,6 @@ void SolvSack::Impl::write_main(LibsolvRepoExt & libsolv_repo_ext, bool switchto
         unlink(tmp_fn_templ.c_str());
         throw;
     }
-
-    libsolv_repo_ext.state_main = LibsolvRepoExt::DataState::WRITTEN;
 }
 
 // this filter makes sure only the updateinfo repodata is written
@@ -177,14 +175,13 @@ static int write_ext_updateinfo_filter(LibsolvRepo * repo, Repokey * key, void *
 }
 
 void SolvSack::Impl::write_ext(
-    LibsolvRepoExt & libsolv_repo_ext, LibsolvRepoExt::DataType which_repodata, const char * suffix) {
+    LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix) {
     auto & logger = base->get_logger();
     auto libsolv_repo = libsolv_repo_ext.repo;
     const char * repo_id = libsolv_repo->name;
 
-    Id repodata = libsolv_repo_ext.get_data_id(which_repodata);
-    assert(repodata);
-    Repodata * data = repo_id2repodata(libsolv_repo, repodata);
+    assert(repodata_id);
+    Repodata * data = repo_id2repodata(libsolv_repo, repodata_id);
     auto fn = give_repo_solv_cache_fn(repo_id, suffix);
     auto tmp_fn_templ = fn + ".XXXXXX";
     int tmp_fd = mkstemp(tmp_fn_templ.data());
@@ -198,7 +195,7 @@ void SolvSack::Impl::write_ext(
 
     logger.debug(fmt::format("{}: storing {} to: {}", __func__, repo_id, tmp_fn_templ));
     int ret;
-    if (which_repodata != LibsolvRepoExt::DataType::UPDATEINFO)
+    if (which_repodata != RepodataType::UPDATEINFO)
         ret = repodata_write(data, fp);
     else {
         // block replaces: ret = write_ext_updateinfo(hrepo, data, fp);
@@ -216,14 +213,13 @@ void SolvSack::Impl::write_ext(
         throw Exception(_("write_ext() has failed"));
         // g_set_error(error, DNF_ERROR, DNF_ERROR_FAILED, _("write_ext(%1$d) has failed: %2$d"), which_repodata, ret);
     }
-    if (libsolv_repo_ext.is_one_piece() && which_repodata != LibsolvRepoExt::DataType::UPDATEINFO) {
+    if (libsolv_repo_ext.is_one_piece() && which_repodata != RepodataType::UPDATEINFO) {
         // switch over to written solv file activate paging
         std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(tmp_fn_templ.c_str(), "r"), &close_file);
         if (fp) {
             int flags = REPO_USE_LOADING | REPO_EXTEND_SOLVABLES;
             // do not pollute the main pool with directory component ids
-            if (which_repodata == LibsolvRepoExt::DataType::FILENAMES ||
-                which_repodata == LibsolvRepoExt::DataType::OTHER)
+            if (which_repodata == RepodataType::FILENAMES || which_repodata == RepodataType::OTHER)
                 flags |= REPO_LOCALPOOL;
             repodata_extend_block(data, libsolv_repo->start, libsolv_repo->end - libsolv_repo->start);
             data->state = REPODATA_LOADING;
@@ -238,11 +234,10 @@ void SolvSack::Impl::write_ext(
         unlink(tmp_fn_templ.c_str());
         throw;
     }
-
-    libsolv_repo_ext.set_data_state(which_repodata, LibsolvRepoExt::DataState::WRITTEN);
 }
 
-void SolvSack::Impl::load_repo_main(Repo & repo) {
+SolvSack::Impl::RepodataState SolvSack::Impl::load_repo_main(Repo & repo) {
+    RepodataState data_state = RepodataState::NEW;
     auto repo_impl = repo.p_impl.get();
     if (repo_impl->repomd_fn.empty()) {
         throw Exception("repo md file name is empty");
@@ -267,7 +262,7 @@ void SolvSack::Impl::load_repo_main(Repo & repo) {
             throw Exception(_("repo_add_solv() has failed."));
             // g_set_error (error, DNF_ERROR, DNF_ERROR_INTERNAL_ERROR, _("repo_add_solv() has failed."));
         }
-        repo_impl->libsolv_repo_ext.state_main = LibsolvRepoExt::DataState::LOADED_CACHE;
+        data_state = RepodataState::LOADED_CACHE;
     } else {
         auto primary = repo.get_metadata_path(Repo::Impl::MD_FILENAME_PRIMARY);
         if (primary.empty()) {
@@ -285,11 +280,12 @@ void SolvSack::Impl::load_repo_main(Repo & repo) {
             throw Exception(_("repo_add_repomdxml/rpmmd() has failed."));
             // g_set_error (error, DNF_ERROR,  DNF_ERROR_INTERNAL_ERROR, _("repo_add_repomdxml/rpmmd() has failed."));
         }
-        repo_impl->libsolv_repo_ext.state_main = LibsolvRepoExt::DataState::LOADED_FETCH;
+        data_state = RepodataState::LOADED_FETCH;
     }
 
     repo_impl->attach_libsolv_repo(libsolv_repo.release());
     provides_ready = false;
+    return data_state;
 }
 
 SolvSack::Impl::RepodataInfo SolvSack::Impl::load_repo_ext(
@@ -316,8 +312,8 @@ SolvSack::Impl::RepodataInfo SolvSack::Impl::load_repo_ext(
             // g_set_error_literal (error, DNF_ERROR, DNF_ERROR_INTERNAL_ERROR, _("failed to add solv"));
             throw Exception(_("repo_add_solv() has failed."));
         }
-        info.state = LibsolvRepoExt::DataState::LOADED_CACHE;
-        info.solv_id = libsolv_repo->nrepodata - 1;
+        info.state = RepodataState::LOADED_CACHE;
+        info.id = libsolv_repo->nrepodata - 1;
         return info;
     }
 
@@ -331,9 +327,9 @@ SolvSack::Impl::RepodataInfo SolvSack::Impl::load_repo_ext(
     int previous_last = libsolv_repo->nrepodata - 1;
     auto ok = cb(libsolv_repo, fp.get());
     if (ok) {
-        info.state = LibsolvRepoExt::DataState::LOADED_FETCH;
+        info.state = RepodataState::LOADED_FETCH;
         assert(previous_last == libsolv_repo->nrepodata - 2);
-        info.solv_id = libsolv_repo->nrepodata - 1;
+        info.id = libsolv_repo->nrepodata - 1;
     }
     provides_ready = false;
     return info;
@@ -353,13 +349,12 @@ void SolvSack::Impl::internalize_libsolv_repos() {
     }
 }
 
-void SolvSack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
-    auto & logger = pImpl->base->get_logger();
+void SolvSack::Impl::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
+    auto & logger = base->get_logger();
     auto repo_impl = repo.p_impl.get();
-    pImpl->load_repo_main(repo);
-    //repo_impl->libsolv_repo_ext.load_flags = flags;
-    if (repo_impl->libsolv_repo_ext.state_main == LibsolvRepoExt::DataState::LOADED_FETCH && build_cache) {
-        pImpl->write_main(repo_impl->libsolv_repo_ext, true);
+    auto state = load_repo_main(repo);
+    if (state == RepodataState::LOADED_FETCH && build_cache) {
+        write_main(repo_impl->libsolv_repo_ext, true);
     }
     repo_impl->libsolv_repo_ext.main_nsolvables = repo_impl->libsolv_repo_ext.repo->nsolvables;
     repo_impl->libsolv_repo_ext.main_nrepodata = repo_impl->libsolv_repo_ext.repo->nrepodata;
@@ -367,7 +362,7 @@ void SolvSack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
     if (any(flags & LoadRepoFlags::USE_FILELISTS)) {
         try {
             // do not pollute the main pool with directory component ids flags |= REPO_LOCALPOOL
-            auto retval = pImpl->load_repo_ext(
+            auto repodata_info = load_repo_ext(
                 repo,
                 SOLV_EXT_FILENAMES,
                 Repo::Impl::MD_FILENAME_FILELISTS,
@@ -375,48 +370,42 @@ void SolvSack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
                 [](LibsolvRepo * repo, FILE * fp) {
                     return repo_add_rpmmd(repo, fp, "FL", REPO_EXTEND_SOLVABLES) == 0;
                 });
-            repo_impl->libsolv_repo_ext.state_filelists = retval.state;
-            repo_impl->libsolv_repo_ext.filenames_repodata = retval.solv_id;
+            if (repodata_info.state == RepodataState::LOADED_FETCH && build_cache) {
+                write_ext(repo_impl->libsolv_repo_ext, repodata_info.id, RepodataType::FILENAMES, SOLV_EXT_FILENAMES);
+            }
         } catch (const NoCapability & ex) {
             logger.debug(fmt::format("no filelists metadata available for {}", repo_impl->id));
-        }
-        if (repo_impl->libsolv_repo_ext.state_filelists == LibsolvRepoExt::DataState::LOADED_FETCH && build_cache) {
-            pImpl->write_ext(repo_impl->libsolv_repo_ext, LibsolvRepoExt::DataType::FILENAMES, SOLV_EXT_FILENAMES);
         }
     }
     if (any(flags & LoadRepoFlags::USE_OTHER)) {
         try {
             // do not pollute the main pool with directory component ids flags |= REPO_LOCALPOOL
-            auto retval = pImpl->load_repo_ext(
+            auto repodata_info = load_repo_ext(
                 repo,
                 SOLV_EXT_OTHER,
                 Repo::Impl::MD_FILENAME_OTHER,
                 REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL,
                 [](LibsolvRepo * repo, FILE * fp) { return repo_add_rpmmd(repo, fp, 0, REPO_EXTEND_SOLVABLES) == 0; });
-            repo_impl->libsolv_repo_ext.state_other = retval.state;
-            repo_impl->libsolv_repo_ext.other_repodata = retval.solv_id;
+            if (repodata_info.state == RepodataState::LOADED_FETCH && build_cache) {
+                write_ext(repo_impl->libsolv_repo_ext, repodata_info.id, RepodataType::OTHER, SOLV_EXT_OTHER);
+            }
         } catch (const NoCapability & ex) {
             logger.debug(fmt::format("no other metadata available for {}", repo_impl->id));
-        }
-        if (repo_impl->libsolv_repo_ext.state_other == LibsolvRepoExt::DataState::LOADED_FETCH && build_cache) {
-            pImpl->write_ext(repo_impl->libsolv_repo_ext, LibsolvRepoExt::DataType::OTHER, SOLV_EXT_OTHER);
         }
     }
     if (any(flags & LoadRepoFlags::USE_PRESTO)) {
         try {
-            auto retval = pImpl->load_repo_ext(
+            auto repodata_info = load_repo_ext(
                 repo,
                 SOLV_EXT_PRESTO,
                 Repo::Impl::MD_FILENAME_PRESTODELTA,
                 REPO_EXTEND_SOLVABLES,
                 [](LibsolvRepo * repo, FILE * fp) { return repo_add_deltainfoxml(repo, fp, 0) == 0; });
-            repo_impl->libsolv_repo_ext.state_presto = retval.state;
-            repo_impl->libsolv_repo_ext.presto_repodata = retval.solv_id;
+            if (repodata_info.state == RepodataState::LOADED_FETCH && build_cache) {
+                write_ext(repo_impl->libsolv_repo_ext, repodata_info.id, RepodataType::PRESTO, SOLV_EXT_PRESTO);
+            }
         } catch (const NoCapability & ex) {
             logger.debug(fmt::format("no presto metadata available for {}", repo_impl->id));
-        }
-        if (repo_impl->libsolv_repo_ext.state_presto == LibsolvRepoExt::DataState::LOADED_FETCH && build_cache) {
-            pImpl->write_ext(repo_impl->libsolv_repo_ext, LibsolvRepoExt::DataType::PRESTO, SOLV_EXT_PRESTO);
         }
     }
     // updateinfo must come *after* all other extensions, as it is not a real
@@ -424,20 +413,22 @@ void SolvSack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
     if (any(flags & LoadRepoFlags::USE_UPDATEINFO)) {
         try {
             // the updateinfo is not a real extension flags = 0
-            auto retval = pImpl->load_repo_ext(
+            auto repodata_info = load_repo_ext(
                 repo, SOLV_EXT_UPDATEINFO, Repo::Impl::MD_FILENAME_UPDATEINFO, 0, [](LibsolvRepo * repo, FILE * fp) {
                     return repo_add_updateinfoxml(repo, fp, 0) == 0;
                 });
-            repo_impl->libsolv_repo_ext.state_updateinfo = retval.state;
-            repo_impl->libsolv_repo_ext.updateinfo_repodata = retval.solv_id;
+            if (repodata_info.state == RepodataState::LOADED_FETCH && build_cache) {
+                write_ext(repo_impl->libsolv_repo_ext, repodata_info.id, RepodataType::UPDATEINFO, SOLV_EXT_UPDATEINFO);
+            }
         } catch (const NoCapability & ex) {
             logger.debug(fmt::format("no updateinfo available for {}", repo_impl->id));
         }
-        if (repo_impl->libsolv_repo_ext.state_updateinfo == LibsolvRepoExt::DataState::LOADED_FETCH && build_cache) {
-            pImpl->write_ext(repo_impl->libsolv_repo_ext, LibsolvRepoExt::DataType::UPDATEINFO, SOLV_EXT_UPDATEINFO);
-        }
     }
-    pImpl->considered_uptodate = false;
+    considered_uptodate = false;
+}
+
+void SolvSack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
+    pImpl->load_repo(repo, build_cache, flags);
 }
 
 std::string SolvSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {

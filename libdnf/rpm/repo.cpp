@@ -1561,54 +1561,6 @@ std::vector<std::string> Repo::get_mirrors() const {
     return mirrors;
 }
 
-Id LibsolvRepoExt::get_data_id(DataType which) const noexcept {
-    switch (which) {
-        case DataType::FILENAMES:
-            return filenames_repodata;
-        case DataType::PRESTO:
-            return presto_repodata;
-        case DataType::UPDATEINFO:
-            return updateinfo_repodata;
-        case DataType::OTHER:
-            return other_repodata;
-    }
-    return 0;
-}
-
-void LibsolvRepoExt::set_data_id(DataType which, Id repodata) noexcept {
-    switch (which) {
-        case DataType::FILENAMES:
-            filenames_repodata = repodata;
-            return;
-        case DataType::PRESTO:
-            presto_repodata = repodata;
-            return;
-        case DataType::UPDATEINFO:
-            updateinfo_repodata = repodata;
-            return;
-        case DataType::OTHER:
-            other_repodata = repodata;
-            return;
-    }
-}
-
-void LibsolvRepoExt::set_data_state(DataType which, DataState state) noexcept {
-    switch (which) {
-        case DataType::FILENAMES:
-            state_filelists = state;
-            return;
-        case DataType::PRESTO:
-            state_presto = state;
-            return;
-        case DataType::UPDATEINFO:
-            state_updateinfo = state;
-            return;
-        case DataType::OTHER:
-            state_other = state;
-            return;
-    }
-}
-
 bool LibsolvRepoExt::is_one_piece() const {
     for (auto i = repo->start; i < repo->end; ++i)
         if (repo->pool->solvables[i].repo != repo)

@@ -83,13 +83,6 @@ private:
 // Information about attached libsolv repository
 class LibsolvRepoExt {
 public:
-    enum class DataType { FILENAMES, PRESTO, UPDATEINFO, OTHER };
-    enum class DataState { NEW, LOADED_FETCH, LOADED_CACHE, WRITTEN };
-
-    Id get_data_id(DataType which) const noexcept;
-    void set_data_id(DataType which, Id repodata) noexcept;
-    void set_data_state(DataType which, DataState state) noexcept;
-
     // Returns "true" when all solvables in the repository are stored contiguously -> No interleaving
     // with solvables from other repositories.
     // Complexity: Linear to the current number of solvables in  repository
@@ -103,17 +96,7 @@ public:
     // Checksum of data in .solv file. Used for validity check of .solvx files.
     unsigned char checksum[CHKSUM_BYTES];
 
-    DataState state_main{DataState::NEW};
-    DataState state_filelists{DataState::NEW};
-    DataState state_presto{DataState::NEW};
-    DataState state_updateinfo{DataState::NEW};
-    DataState state_other{DataState::NEW};
-    Id filenames_repodata{0};
-    Id presto_repodata{0};
-    Id updateinfo_repodata{0};
-    Id other_repodata{0};
-    //int load_flags{0};
-    /* the following three elements are needed for repo rewriting */
+    // the following three elements are needed for repo cache (.solv and .solvx updateinfo) writting
     int main_nsolvables{0};
     int main_nrepodata{0};
     int main_end{0};

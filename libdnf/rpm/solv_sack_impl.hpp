@@ -38,17 +38,22 @@ class PackageSet;
 
 class SolvSack::Impl {
 public:
+    enum class RepodataType { FILENAMES, PRESTO, UPDATEINFO, OTHER };
+    enum class RepodataState { NEW, LOADED_FETCH, LOADED_CACHE };
     struct RepodataInfo {
-        LibsolvRepoExt::DataState state;
-        Id solv_id;
+        RepodataState state;
+        Id id;
     };
 
     explicit Impl(Base & base);
     ~Impl();
 
+    /// Loads rpm::Repo into SolvSack.
+    void load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags);
+
     /// Loads main metadata (solvables) from available repo.
     /// @replaces libdnf/dnf-sack.cpp:method:load_yum_repo()
-    void load_repo_main(Repo & repo);
+    RepodataState load_repo_main(Repo & repo);
 
     /// Loads additional metadata (filelist, others, ...) from available repo.
     /// @replaces libdnf/dnf-sack.cpp:method:load_ext()
@@ -61,7 +66,7 @@ public:
 
     /// Writes solvx file with extended libsolv repodata.
     /// @replaces libdnf/dnf-sack.cpp:method:write_ext()
-    void write_ext(LibsolvRepoExt & libsolv_repo_ext, LibsolvRepoExt::DataType which_repodata, const char * suffix);
+    void write_ext(LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix);
 
     void internalize_libsolv_repos();
 
