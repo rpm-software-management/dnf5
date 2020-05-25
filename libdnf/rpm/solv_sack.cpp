@@ -431,13 +431,17 @@ void SolvSack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
     pImpl->load_repo(repo, build_cache, flags);
 }
 
+// TODO(jrohel): we want to change directory for solv(x) cache (into repo metadata directory?)
 std::string SolvSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {
-    auto & cachedir = base->get_config().cachedir().get_value();
-    std::string fn = cachedir + "/" + repoid;
+    std::filesystem::path cachedir = base->get_config().cachedir().get_value();
+    auto fn = cachedir / repoid;
     if (ext) {
-        return fn + ext + ".solvx";
+        fn += ext;
+        fn += ".solvx";
+    } else {
+        fn += ".solv";
     }
-    return fn + ".solv";
+    return fn;
 }
 
 SolvSack::SolvSack(Base & base) : pImpl{new Impl(base)} {}
