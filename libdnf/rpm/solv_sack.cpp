@@ -29,6 +29,7 @@ extern "C" {
 #include <solv/repo.h>
 #include <solv/repo_deltainfoxml.h>
 #include <solv/repo_repomdxml.h>
+#include <solv/repo_rpmdb.h>
 #include <solv/repo_rpmmd.h>
 #include <solv/repo_solv.h>
 #include <solv/repo_updateinfoxml.h>
@@ -349,9 +350,43 @@ void SolvSack::Impl::internalize_libsolv_repos() {
     }
 }
 
-void SolvSack::Impl::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
+bool SolvSack::Impl::load_system_repo(Repo & repo) {
     auto & logger = base->get_logger();
     auto repo_impl = repo.p_impl.get();
+    auto id = repo.get_id().c_str();
+
+    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, id), &libsolv_repo_free);
+
+    logger.debug("load_system_repo(): fetching rpmdb");
+    int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
+    int rc = repo_add_rpmdb(libsolv_repo.get(), nullptr, flagsrpm);
+    if (rc != 0) {
+        // g_set_error(error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("failed loading RPMDB"));
+        logger.warning(fmt::format(_("load_system_repo(): failed loading RPMDB: {}"), pool_errstr(pool)));
+        return false;
+    }
+
+    repo_impl->attach_libsolv_repo(libsolv_repo.release());
+
+    auto libsolv_repo_ext = repo_impl->libsolv_repo_ext;
+
+    pool_set_installed(pool, libsolv_repo_ext.repo);
+
+    // TODO(jrohel): Probably not needed for system repository. For consistency with available repositories?
+    libsolv_repo_ext.main_nsolvables = libsolv_repo_ext.repo->nsolvables;
+    libsolv_repo_ext.main_nrepodata = libsolv_repo_ext.repo->nrepodata;
+    libsolv_repo_ext.main_end = libsolv_repo_ext.repo->end;
+
+    provides_ready = false;
+    considered_uptodate = false;
+
+    return true;
+}
+
+void SolvSack::Impl::load_available_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
+    auto & logger = base->get_logger();
+    auto repo_impl = repo.p_impl.get();
+
     auto state = load_repo_main(repo);
     if (state == RepodataState::LOADED_FETCH && build_cache) {
         write_main(repo_impl->libsolv_repo_ext, true);
@@ -427,9 +462,25 @@ void SolvSack::Impl::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flag
     considered_uptodate = false;
 }
 
+
 void SolvSack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
-    pImpl->load_repo(repo, build_cache, flags);
+    auto repo_impl = repo.p_impl.get();
+    if (repo_impl->type != Repo::Type::AVAILABLE) {
+        throw LogicError("SolvSack::load_repo(): User can load only \"available\" repository");
+    }
+    pImpl->load_available_repo(repo, build_cache, flags);
 }
+
+void SolvSack::create_system_repo([[maybe_unused]] bool build_cache) {
+    if (pImpl->system_repo) {
+        throw LogicError("SolvSack::create_system_repo(): System repo already exists");
+    }
+    auto repo_config = std::make_unique<ConfigRepo>(pImpl->base->get_config());
+    pImpl->system_repo =
+        std::make_unique<Repo>(SYSTEM_REPO_NAME, std::move(repo_config), *pImpl->base, Repo::Type::SYSTEM);
+    pImpl->load_system_repo(*pImpl->system_repo);
+}
+
 
 // TODO(jrohel): we want to change directory for solv(x) cache (into repo metadata directory?)
 std::string SolvSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {

@@ -48,8 +48,15 @@ public:
     explicit Impl(Base & base);
     ~Impl();
 
-    /// Loads rpm::Repo into SolvSack.
-    void load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags);
+    void internalize_libsolv_repos();
+
+private:
+    /// Loads system repository into SolvSack
+    /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
+    bool load_system_repo(Repo & repo);
+
+    /// Loads available repository into SolvSack
+    void load_available_repo(Repo & repo, bool build_cache, LoadRepoFlags flags);
 
     /// Loads main metadata (solvables) from available repo.
     /// @replaces libdnf/dnf-sack.cpp:method:load_yum_repo()
@@ -68,9 +75,6 @@ public:
     /// @replaces libdnf/dnf-sack.cpp:method:write_ext()
     void write_ext(LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix);
 
-    void internalize_libsolv_repos();
-
-private:
     /// Constructs libsolv repository cache filename for given repository id and optional extension.
     std::string give_repo_solv_cache_fn(const std::string & repoid, const char * ext = nullptr);
 
@@ -79,6 +83,7 @@ private:
 
     Base * base;
     Pool * pool;
+    std::unique_ptr<Repo> system_repo;
 
     friend SolvSack;
     friend Package;
