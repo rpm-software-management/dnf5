@@ -51,6 +51,9 @@ void RepoTest::test_repo_basics() {
     libdnf::rpm::RepoSack repo_sack(base);
     libdnf::rpm::SolvSack sack(base);
 
+    // Creates system repository and loads it into rpm::SolvSack.
+    sack.create_system_repo(false);
+
     // Creates new repositories in the repo_sack
     auto repo = repo_sack.new_repo("dnf-ci-fedora");
 
