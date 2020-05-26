@@ -69,4 +69,17 @@ void Base::load_config_from_file() {
     load_config_from_file(config.config_file_path().get_value());
 }
 
+void Base::load_config_from_dir(const std::string & dir_path) {
+    for (auto & dentry : std::filesystem::directory_iterator(dir_path)) {
+        auto & path = dentry.path();
+        if (path.extension() == ".conf") {
+            load_config_from_file_path(config, path, "main", get_logger());
+        }
+    }
+}
+
+void Base::load_config_from_dir() {
+    load_config_from_dir(libdnf::CONF_DIRECTORY);
+}
+
 }  // namespace libdnf

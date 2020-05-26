@@ -51,6 +51,14 @@ private:
     /// Loads main configuration from file defined by path.
     void load_config_from_file(const std::string & path);
 
+    //TODO(jrohel): Make public? Will we support drop-in configuration directories?
+    /// Loads main configuration from files with ".conf" extension from directory defined by dir_path.
+    void load_config_from_dir(const std::string & dir_path);
+
+    //TODO(jrohel): Make public? Will we support drop-in configuration directories?
+    /// Loads main configuration from files with ".conf" extension from directory defined by the current configuration.
+    void load_config_from_dir();
+
     ConfigMain config;
     LogRouter log_router;
     rpm::RepoSack rpm_repo_sack{*this};
