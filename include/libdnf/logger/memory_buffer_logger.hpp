@@ -45,7 +45,7 @@ public:
     std::size_t get_items_count() const { return items.size(); }
     const Item & get_item(std::size_t item_idx) const;
     void clear() noexcept;
-    void write_to_logger(Logger * logger);
+    void write_to_logger(Logger & logger);
 
 private:
     mutable std::mutex items_mutex;

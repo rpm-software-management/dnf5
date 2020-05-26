@@ -112,7 +112,7 @@ void LoggersTest::test_loggers() {
     // 4. Write messages from original (replaced) MemoryBufferLoger instance into LogRouter instance. They will be routed
     //    to both attached stream loggers.
     // ====================
-    dynamic_cast<libdnf::MemoryBufferLogger &>(*tmp_logger).write_to_logger(log_router.get());
+    dynamic_cast<libdnf::MemoryBufferLogger &>(*tmp_logger).write_to_logger(*log_router);
 
     // Messages from memory logger was written to log_router. Memory logger is not needed anymore.
     tmp_logger.reset();

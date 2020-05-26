@@ -57,15 +57,15 @@ const MemoryBufferLogger::Item & MemoryBufferLogger::get_item(std::size_t item_i
     return items[idx];
 }
 
-void MemoryBufferLogger::write_to_logger(Logger * logger) {
+void MemoryBufferLogger::write_to_logger(Logger & logger) {
     std::lock_guard<std::mutex> guard(items_mutex);
     for (size_t idx = first_item_idx; idx < items.size(); ++idx) {
         auto & msg = items[idx];
-        logger->write(msg.time, msg.pid, msg.level, msg.message);
+        logger.write(msg.time, msg.pid, msg.level, msg.message);
     }
     for (size_t idx = 0; idx < first_item_idx; ++idx) {
         auto & msg = items[idx];
-        logger->write(msg.time, msg.pid, msg.level, msg.message);
+        logger.write(msg.time, msg.pid, msg.level, msg.message);
     }
 }
 
