@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_MAP_ITERATOR_HPP
 #define LIBDNF_RPM_SOLV_MAP_ITERATOR_HPP
 
-#include "libdnf/rpm/sack.hpp"
+#include "libdnf/rpm/solv_sack.hpp"
 
 #include <bits/stdc++.h>
 #include <solv/bitmap.h>

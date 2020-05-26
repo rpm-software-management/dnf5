@@ -29,8 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
-class Query;
-class Sack;
+class SolvSack;
 
 }  // namespace libdnf::rpm
 
@@ -140,8 +139,7 @@ protected:
     void remove_unsafe(PackageId package_id);
 
 private:
-    friend class libdnf::rpm::Query;
-    friend class libdnf::rpm::Sack;
+    friend class libdnf::rpm::SolvSack;
     Map map;
 };
 

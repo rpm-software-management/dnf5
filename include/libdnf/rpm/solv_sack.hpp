@@ -70,6 +70,7 @@ class Package;
 class Reldep;
 class ReldepList;
 class Repo;
+class SolvQuery;
 
 class SolvSack;
 
@@ -127,6 +128,7 @@ private:
     friend PackageSet;
     friend Reldep;
     friend ReldepList;
+    friend SolvQuery;
     class Impl;
     std::unique_ptr<Impl> pImpl;
 };

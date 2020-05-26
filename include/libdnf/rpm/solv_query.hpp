@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_QUERY_HPP
 #define LIBDNF_RPM_SOLV_QUERY_HPP
 
-#include "sack.hpp"
+#include "solv_sack.hpp"
 
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/utils/exception.hpp"
@@ -59,7 +59,7 @@ public:
     /// @replaces libdnf/hy-query.h:function:hy_query_create_flags(DnfSack *sack, int flags);
     /// @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
-    explicit SolvQuery(Sack * sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
+    explicit SolvQuery(SolvSack * sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
     SolvQuery(const SolvQuery & src);
     SolvQuery(SolvQuery && src) noexcept;
     ~SolvQuery();

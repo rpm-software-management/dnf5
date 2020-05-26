@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/solv_query.hpp"
 
-#include "sack_impl.hpp"
+#include "solv_sack_impl.hpp"
 #include "solv/package_private.hpp"
 #include "solv/solv_map.hpp"
 
@@ -45,7 +45,7 @@ static inline bool hy_is_glob_pattern(const char * pattern) {
 
 class SolvQuery::Impl {
 public:
-    Impl(Sack * sack, InitFlags flags);
+    Impl(SolvSack * sack, InitFlags flags);
     Impl(const SolvQuery::Impl & src) = default;
     Impl(const SolvQuery::Impl && src) noexcept;
     ~Impl();
@@ -55,11 +55,11 @@ public:
 
 private:
     friend class SolvQuery;
-    Sack * sack;
+    SolvSack * sack;
     solv::SolvMap id_map;
 };
 
-SolvQuery::SolvQuery(Sack * sack, InitFlags flags) : p_impl(new Impl(sack, flags)) {}
+SolvQuery::SolvQuery(SolvSack * sack, InitFlags flags) : p_impl(new Impl(sack, flags)) {}
 
 SolvQuery::SolvQuery(const SolvQuery & src) : p_impl(new Impl(*src.p_impl)) {}
 
@@ -77,7 +77,7 @@ SolvQuery & SolvQuery::operator=(SolvQuery && src) noexcept {
     return *this;
 }
 
-SolvQuery::Impl::Impl(Sack * sack, InitFlags flags)
+SolvQuery::Impl::Impl(SolvSack * sack, InitFlags flags)
     : sack(sack)
     , id_map(solv::SolvMap(static_cast<int>(sack->pImpl->get_nsolvables()))) {
     switch (flags) {
@@ -639,7 +639,7 @@ SolvQuery & SolvQuery::ifilter_reponame(libdnf::sack::QueryCmp cmp_type, std::ve
         }
         switch (tmp_cmp_type) {
             case libdnf::sack::QueryCmp::EQ:
-                Repo * r;
+                ::Repo * r;
                 FOR_REPOS(repo_id, r) {
                     if (strcmp(r->name, c_pattern) == 0) {
                         repo_ids[repo_id] = true;
