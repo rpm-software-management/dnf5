@@ -24,7 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fmt/format.h>
 
+#include <algorithm>
 #include <filesystem>
+#include <vector>
 
 namespace libdnf {
 
@@ -70,11 +72,16 @@ void Base::load_config_from_file() {
 }
 
 void Base::load_config_from_dir(const std::string & dir_path) {
+    std::vector<std::filesystem::path> paths;
     for (auto & dentry : std::filesystem::directory_iterator(dir_path)) {
         auto & path = dentry.path();
         if (path.extension() == ".conf") {
-            load_config_from_file_path(config, path, "main", get_logger());
+            paths.push_back(path);
         }
+    }
+    std::sort(paths.begin(), paths.end());
+    for (auto & path : paths) {
+        load_config_from_file_path(config, path, "main", get_logger());
     }
 }
 

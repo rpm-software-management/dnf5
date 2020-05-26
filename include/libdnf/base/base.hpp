@@ -53,10 +53,12 @@ private:
 
     //TODO(jrohel): Make public? Will we support drop-in configuration directories?
     /// Loads main configuration from files with ".conf" extension from directory defined by dir_path.
+    /// The files in the directory are read in alphabetical order.
     void load_config_from_dir(const std::string & dir_path);
 
     //TODO(jrohel): Make public? Will we support drop-in configuration directories?
     /// Loads main configuration from files with ".conf" extension from directory defined by the current configuration.
+    /// The files in the directory are read in alphabetical order.
     void load_config_from_dir();
 
     ConfigMain config;
