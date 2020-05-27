@@ -20,10 +20,32 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef MICRODNF_UTILS_HPP
 #define MICRODNF_UTILS_HPP
 
+#include <filesystem>
+#include <string>
+
 namespace microdnf {
 
 /// Returns "true" if program runs with effective user ID = 0
 bool am_i_root() noexcept;
+
+namespace xdg {
+
+/// Returns user home directory
+std::filesystem::path get_user_home_dir();
+
+/// Returns user cache directory
+std::filesystem::path get_user_cache_dir();
+
+/// Returns user configuration directory
+std::filesystem::path get_user_config_dir();
+
+/// Returns user data directory
+std::filesystem::path get_user_data_dir();
+
+/// Returns user runtime directory
+std::filesystem::path get_user_runtime_dir();
+
+}  // namespace xdg
 
 }  // namespace microdnf
 
