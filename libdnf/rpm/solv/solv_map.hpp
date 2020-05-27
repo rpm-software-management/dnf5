@@ -74,7 +74,7 @@ public:
     /// Return the number of solvables in the SolvMap (number of 1s in the bitmap).
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.size()
-    std::size_t size() const;
+    std::size_t size() const noexcept;
 
     bool empty() const;
 
@@ -246,7 +246,7 @@ inline bool SolvMap::empty() const {
 }
 
 
-inline std::size_t SolvMap::size() const {
+inline std::size_t SolvMap::size() const noexcept {
     unsigned char * byte = map.map;
     unsigned char * end = byte + map.size;
     std::size_t result = 0;

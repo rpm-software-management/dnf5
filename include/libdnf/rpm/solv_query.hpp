@@ -151,6 +151,11 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_LOCATION
     SolvQuery & ifilter_location(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
 
+    /// Return the number of packages in the SolvQuery.
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:Query.size()
+    std::size_t size() const noexcept;
+
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;

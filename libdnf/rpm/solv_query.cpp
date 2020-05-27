@@ -956,4 +956,8 @@ SolvQuery & SolvQuery::ifilter_location(libdnf::sack::QueryCmp cmp_type, std::ve
     return *this;
 }
 
+std::size_t SolvQuery::size() const noexcept {
+    return p_impl->id_map.size();
+}
+
 }  //  namespace libdnf::rpm
