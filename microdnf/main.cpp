@@ -17,8 +17,16 @@ You should have received a copy of the GNU General Public License
 along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "utils.hpp"
+
 #include <libdnf/base/base.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
+#include <libdnf/logger/stream_logger.hpp>
+
+#include <filesystem>
+#include <fstream>
+
+namespace fs = std::filesystem;
 
 int main() {
     libdnf::Base base;
@@ -31,6 +39,23 @@ int main() {
     log_router.add_logger(std::make_unique<libdnf::MemoryBufferLogger>(max_log_items_to_keep, prealloc_log_items));
 
     log_router.info("Microdnf start");
+
+    // Without "root" effective privileges program switches to user specific directories
+    if (!microdnf::am_i_root()) {
+        auto tmp = fs::temp_directory_path() / "microdnf";
+        if (base.get_config().logdir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
+            auto logdir = tmp / "log";
+            base.get_config().logdir().set(libdnf::Option::Priority::RUNTIME, logdir);
+            fs::create_directories(logdir);
+        }
+    }
+
+    // Swap to destination logger (log to file) and write messages from memory buffer logger to it
+    auto log_file = fs::path(base.get_config().logdir().get_value()) / "microdnf.log";
+    auto log_stream = std::make_unique<std::ofstream>(log_file, std::ios::app);
+    std::unique_ptr<libdnf::Logger> logger = std::make_unique<libdnf::StreamLogger>(std::move(log_stream));
+    log_router.swap_logger(logger, 0);
+    dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
 
     log_router.info("Microdnf end");
 
