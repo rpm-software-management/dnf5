@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_BASE_HPP
 #define LIBDNF_BASE_BASE_HPP
 
-#include <libdnf/conf/config_main.hpp>
-#include <libdnf/logger/log_router.hpp>
+#include "libdnf/conf/config_main.hpp"
+#include "libdnf/logger/log_router.hpp"
 
 namespace libdnf {
 
