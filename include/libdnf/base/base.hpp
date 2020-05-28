@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/repo_sack.hpp"
 #include "libdnf/rpm/solv_sack.hpp"
 
+#include <map>
+
 namespace libdnf {
 
 
@@ -38,11 +40,15 @@ public:
     rpm::RepoSack & get_rpm_repo_sack() { return rpm_repo_sack; }
     rpm::SolvSack & get_rpm_solv_sack() { return rpm_solv_sack; }
 
+    /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
+    std::map<std::string, std::string> & get_variables() { return variables; }
+
 private:
     ConfigMain config;
     LogRouter log_router;
     rpm::RepoSack rpm_repo_sack{*this};
     rpm::SolvSack rpm_solv_sack{*this};
+    std::map<std::string, std::string> variables;
 };
 
 
