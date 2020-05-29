@@ -29,10 +29,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
+namespace libdnf::rpm::solv {
+
+class SolvMap;
+
+}  // namespace libdnf::rpm::solv
+
 namespace libdnf::rpm {
 
-
 class PackageSetIterator;
+class SolvQuery;
 
 
 /// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
@@ -86,6 +92,8 @@ public:
 
 private:
     friend PackageSetIterator;
+    friend SolvQuery;
+    PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map);
     class Impl;
     std::unique_ptr<Impl> pImpl;
 };

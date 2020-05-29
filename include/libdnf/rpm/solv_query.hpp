@@ -67,6 +67,12 @@ public:
     SolvQuery & operator=(const SolvQuery & src);
     SolvQuery & operator=(SolvQuery && src) noexcept;
 
+    /// Return query result in PackageSet
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:Query.runSet()
+    /// @replaces libdnf/sack/query.hpp:method:Query.run()
+    PackageSet get_package_set();
+
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB, IEXACT, NOT_IEXACT, ICONTAINS, NOT_ICONTAINS, IGLOB, NOT_IGLOB, CONTAINS, NOT_CONTAINS.
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NAME

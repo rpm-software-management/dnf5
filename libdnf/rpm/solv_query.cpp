@@ -18,6 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "libdnf/rpm/solv_query.hpp"
+#include "libdnf/rpm/package_set.hpp"
 
 #include "solv_sack_impl.hpp"
 #include "solv/package_private.hpp"
@@ -108,6 +109,9 @@ SolvQuery::Impl & SolvQuery::Impl::operator=(SolvQuery::Impl && src) noexcept {
     return *this;
 }
 
+PackageSet SolvQuery::get_package_set() {
+    return PackageSet(p_impl->sack, p_impl->id_map);
+}
 
 template <const char * (*c_string_getter_fnc)(Pool * pool, libdnf::rpm::PackageId)>
 inline static void filter_glob_internal(

@@ -41,7 +41,7 @@ public:
     explicit Impl(SolvSack * sack);
 
     /// Clone from an existing map
-    explicit Impl(SolvSack * sack, Map * map);
+    explicit Impl(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map);
 
     /// Clone from an existing PackageSet
     explicit Impl(const PackageSet & other);
@@ -62,8 +62,8 @@ inline PackageSet::Impl::Impl(SolvSack * sack)
     , sack(sack->get_weak_ptr()) {}
 
 
-inline PackageSet::Impl::Impl(SolvSack * sack, Map * map)
-    : libdnf::rpm::solv::SolvMap::SolvMap(map)
+inline PackageSet::Impl::Impl(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map)
+    : libdnf::rpm::solv::SolvMap::SolvMap(solv_map)
     , sack(sack->get_weak_ptr()) {}
 
 

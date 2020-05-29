@@ -39,6 +39,9 @@ PackageSet::PackageSet(const PackageSet & other) : pImpl(new Impl(other)) {}
 PackageSet::PackageSet(PackageSet && other) noexcept : pImpl(std::move(other.pImpl)) {}
 
 
+PackageSet::PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map) : pImpl(new Impl(sack, solv_map)) {}
+
+
 PackageSet::~PackageSet() = default;
 
 
