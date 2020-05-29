@@ -110,7 +110,6 @@ inline void Query<T>::ifilter(Query<T>::FilterFunctionString * getter, QueryCmp 
 template <typename T>
 inline void Query<T>::ifilter(
     Query<T>::FilterFunctionVectorString * getter, QueryCmp cmp, const std::string & pattern) {
-    std::size_t filtered = 0;
 
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto values = getter(*it);
@@ -118,7 +117,6 @@ inline void Query<T>::ifilter(
             ++it;
         } else {
             it = get_data().erase(it);
-            ++filtered;
         }
     }
 }
