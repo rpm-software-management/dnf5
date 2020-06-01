@@ -34,6 +34,9 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context {
 public:
+    /// Load rpm repository to rpm::RepoSack
+    void load_rpm_repo(libdnf::rpm::Repo & repo);
+
     /// Select commend to execute
     void select_command(Command * cmd) { selected_command = cmd; }
 
