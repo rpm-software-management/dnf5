@@ -49,7 +49,7 @@ public:
     Impl(SolvSack * sack, InitFlags flags);
     Impl(const SolvQuery::Impl & src) = default;
     Impl(const SolvQuery::Impl && src) noexcept;
-    ~Impl();
+    ~Impl() = default;
 
     SolvQuery::Impl & operator=(const SolvQuery::Impl & src);
     SolvQuery::Impl & operator=(SolvQuery::Impl && src) noexcept;
@@ -63,6 +63,8 @@ private:
 SolvQuery::SolvQuery(SolvSack * sack, InitFlags flags) : p_impl(new Impl(sack, flags)) {}
 
 SolvQuery::SolvQuery(const SolvQuery & src) : p_impl(new Impl(*src.p_impl)) {}
+
+SolvQuery::~SolvQuery() = default;
 
 SolvQuery & SolvQuery::operator=(const SolvQuery & src) {
     if (this == &src) {
