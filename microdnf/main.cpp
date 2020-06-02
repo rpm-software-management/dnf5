@@ -40,6 +40,8 @@ int main() {
 
     log_router.info("Microdnf start");
 
+    base.load_config_from_file();
+
     // Without "root" effective privileges program switches to user specific directories
     if (!microdnf::am_i_root()) {
         auto tmp = fs::temp_directory_path() / "microdnf";
@@ -56,6 +58,24 @@ int main() {
     std::unique_ptr<libdnf::Logger> logger = std::make_unique<libdnf::StreamLogger>(std::move(log_stream));
     log_router.swap_logger(logger, 0);
     dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
+
+    // detect values of basic variables (arch, basearch, and releasever) for substitutions
+    auto arch = microdnf::detect_arch();
+    auto & variables = base.get_variables();
+    variables["arch"] = arch;
+    variables["basearch"] = microdnf::get_base_arch(arch.c_str());
+    variables["releasever"] = microdnf::detect_release(base.get_config().installroot().get_value());
+
+    // load additional variables from environment and directories
+    libdnf::ConfigMain::add_vars_from_env(variables);
+    for (auto & dir : base.get_config().varsdir().get_value()) {
+        libdnf::ConfigMain::add_vars_from_dir(variables, dir);
+    }
+
+    // create rpm repositories according configuration files
+    auto & rpm_repo_sack = base.get_rpm_repo_sack();
+    rpm_repo_sack.new_repos_from_file();
+    rpm_repo_sack.new_repos_from_dirs();
 
     log_router.info("Microdnf end");
 
