@@ -17,19 +17,55 @@ You should have received a copy of the GNU General Public License
 along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "argument_parser.hpp"
+#include "context.hpp"
 #include "utils.hpp"
 
+#include <fcntl.h>
+#include <fmt/format.h>
 #include <libdnf/base/base.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
 #include <libdnf/logger/stream_logger.hpp>
+#include <string.h>
 
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 
 namespace fs = std::filesystem;
 
-int main() {
-    libdnf::Base base;
+namespace microdnf {
+
+static void print_help() {
+    std::cout << "Help" << std::endl;
+    std::cout << "microdnf version: " << VERSION << std::endl;
+}
+
+void parse_args(Context & ctx, int argc, char * argv[]) {
+    auto microdnf = ctx.arg_parser.add_new_command("microdnf");
+    microdnf->set_short_description("Utility for packages maintaining");
+    microdnf->set_description("This is a program for maintaining packages");
+    microdnf->commands_help_header = "List of commands:";
+    microdnf->opt_args_help_header = "Global optional arguments:";
+    ctx.arg_parser.set_root_command(microdnf);
+
+    for (auto & command : ctx.commands) {
+        command->set_argument_parser(ctx);
+    }
+
+    try {
+        ctx.arg_parser.parse(argc, argv);
+    } catch (const std::exception & ex) {
+        std::cout << ex.what() << std::endl;
+        return;
+    }
+}
+
+}  // namespace microdnf
+
+int main(int argc, char * argv[]) {
+    microdnf::Context context;
+    libdnf::Base & base = context.base;
 
     auto & log_router = base.get_logger();
 
@@ -40,6 +76,16 @@ int main() {
 
     log_router.info("Microdnf start");
 
+    // Register commands
+
+    // Parse command line arguments
+    microdnf::parse_args(context, argc, argv);
+    if (!context.selected_command) {
+        microdnf::print_help();
+        return 0;
+    }
+
+    // Load main configuration
     base.load_config_from_file();
 
     // Without "root" effective privileges program switches to user specific directories
@@ -55,6 +101,19 @@ int main() {
             auto cache_dir = microdnf::xdg::get_user_cache_dir() / "microdnf";
             base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dir);
         }
+    }
+
+    // Try to open the current directory to see if we have
+    // read and execute access. If not, chdir to /
+    auto fd = open(".", O_RDONLY);
+    if (fd == -1) {
+        char errBuf[1024];
+        auto errCode = errno;
+        strerror_r(errCode, errBuf, sizeof(errBuf));
+        log_router.warning("No read/execute access in current directory, moving to /");
+        chdir("/");
+    } else {
+        close(fd);
     }
 
     // Swap to destination logger (log to file) and write messages from memory buffer logger to it
@@ -77,10 +136,27 @@ int main() {
         libdnf::ConfigMain::add_vars_from_dir(variables, dir);
     }
 
+    // Preconfigure selected command
+    context.selected_command->pre_configure(context);
+    //pre_configure_plugins
+
     // create rpm repositories according configuration files
     auto & rpm_repo_sack = base.get_rpm_repo_sack();
     rpm_repo_sack.new_repos_from_file();
     rpm_repo_sack.new_repos_from_dirs();
+
+    //configure_plugins
+    //configure_from_options(context);
+
+    // Configure selected command
+    context.selected_command->configure(context);
+
+    // Run selected command
+    try {
+        context.selected_command->run(context);
+    } catch (std::exception & ex) {
+        log_router.error(fmt::format("Command returned error: {}", ex.what()));
+    }
 
     log_router.info("Microdnf end");
 
