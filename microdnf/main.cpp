@@ -19,6 +19,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "argument_parser.hpp"
 #include "commands/repolist/repolist.hpp"
+#include "commands/repoquery/repoquery.hpp"
 #include "context.hpp"
 #include "utils.hpp"
 
@@ -79,6 +80,7 @@ int main(int argc, char * argv[]) {
 
     // Register commands
     context.commands.push_back(std::make_unique<microdnf::CmdRepolist>());
+    context.commands.push_back(std::make_unique<microdnf::CmdRepoquery>());
 
     // Parse command line arguments
     microdnf::parse_args(context, argc, argv);
