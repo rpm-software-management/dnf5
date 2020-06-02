@@ -35,6 +35,9 @@ namespace libdnf {
 /// :class:`.Base` instances are stateful objects owning various data.
 class Base {
 public:
+    /// Loads main configuration from file defined by the current configuration.
+    void load_config_from_file();
+
     ConfigMain & get_config() { return config; }
     LogRouter & get_logger() { return log_router; }
     rpm::RepoSack & get_rpm_repo_sack() { return rpm_repo_sack; }
@@ -44,6 +47,10 @@ public:
     std::map<std::string, std::string> & get_variables() { return variables; }
 
 private:
+    //TODO(jrohel): Make public?
+    /// Loads main configuration from file defined by path.
+    void load_config_from_file(const std::string & path);
+
     ConfigMain config;
     LogRouter log_router;
     rpm::RepoSack rpm_repo_sack{*this};
