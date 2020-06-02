@@ -50,6 +50,11 @@ int main() {
             base.get_config().logdir().set(libdnf::Option::Priority::RUNTIME, logdir);
             fs::create_directories(logdir);
         }
+        if (base.get_config().cachedir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
+            // Sets path to cache directory.
+            auto cache_dir = microdnf::xdg::get_user_cache_dir() / "microdnf";
+            base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dir);
+        }
     }
 
     // Swap to destination logger (log to file) and write messages from memory buffer logger to it
