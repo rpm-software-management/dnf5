@@ -18,6 +18,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "argument_parser.hpp"
+#include "commands/repolist/repolist.hpp"
 #include "context.hpp"
 #include "utils.hpp"
 
@@ -77,6 +78,7 @@ int main(int argc, char * argv[]) {
     log_router.info("Microdnf start");
 
     // Register commands
+    context.commands.push_back(std::make_unique<microdnf::CmdRepolist>());
 
     // Parse command line arguments
     microdnf::parse_args(context, argc, argv);
