@@ -39,7 +39,7 @@ public:
     explicit RepoSack(Base & base) : base(&base) {}
 
     /// Creates new repository and add it into RepoSack
-    RepoWeakPtr new_repo(const std::string & id, Repo::Type type = Repo::Type::AVAILABLE);
+    RepoWeakPtr new_repo(const std::string & id);
 
 private:
     Base * base;
