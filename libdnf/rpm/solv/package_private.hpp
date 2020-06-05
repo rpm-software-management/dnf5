@@ -193,6 +193,54 @@ inline const char * get_nevra(Pool * pool, libdnf::rpm::PackageId package_id) no
 }
 
 /// @return const char* !! Return temporal value !!
+inline const char * get_full_nevra(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+    Solvable * solvable = get_solvable(pool, package_id);
+    const char * name = pool_id2str(pool, solvable->name);
+    const char * evr = pool_id2str(pool, solvable->evr);
+    const char * arch = pool_id2str(pool, solvable->arch);
+    bool present_epoch = false;
+
+    for (const char * e = evr + 1; *e != '-' && *e != '\0'; ++e) {
+        if (*e == ':') {
+            present_epoch = true;
+            break;
+        }
+    }
+    char * output_string;
+    int extra_epoch_length = 0;
+    int name_length = static_cast<int>(strlen(name));
+    int evr_length = static_cast<int>(strlen(evr));
+    int arch_length = static_cast<int>(strlen(arch));
+    if (!present_epoch) {
+        extra_epoch_length = 2;
+    }
+
+    output_string = pool_alloctmpspace(
+        pool, name_length + evr_length + extra_epoch_length + arch_length + 3);
+
+    strcpy(output_string, name);
+
+    output_string[name_length++] = '-';
+
+    if (extra_epoch_length == 2) {
+        output_string[name_length++] = '0';
+        output_string[name_length++] = ':';
+        output_string[name_length] = '\0';
+    }
+
+    if (evr_length) {
+        strcpy(output_string + name_length, evr);
+        name_length += evr_length;
+    }
+
+    if (arch_length) {
+        output_string[name_length++] = '.';
+        strcpy(output_string + name_length, arch);
+    }
+    return output_string;
+}
+
+/// @return const char* !! Return temporal value !!
 inline const char * get_group(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_GROUP);
 }

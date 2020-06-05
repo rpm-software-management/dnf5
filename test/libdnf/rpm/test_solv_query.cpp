@@ -79,6 +79,12 @@ void RpmSolvQueryTest::test_ifilter_name() {
         "CQRlib-devel-1.1.2-16.fc29.src",
         "CQRlib-devel-1.1.2-16.fc29.x86_64"
     };
+    std::set<std::string> full_nevras{
+        "CQRlib-0:1.1.1-4.fc29.src",
+        "CQRlib-0:1.1.1-4.fc29.x86_64",
+        "nodejs-1:5.12.1-1.fc29.src",
+        "nodejs-1:5.12.1-1.fc29.x86_64"
+    };
 
     /// Test QueryCmp::EQ
     libdnf::rpm::SolvQuery query(sack.get());
@@ -164,4 +170,15 @@ void RpmSolvQueryTest::test_ifilter_name() {
     /// Test unsupported cmp type
     CPPUNIT_ASSERT_THROW(query8.ifilter_name(libdnf::sack::QueryCmp::GT, names_icontains);,
                          libdnf::rpm::SolvQuery::NotSupportedCmpType);
+
+    /// Test QueryCmp::EQ with two elements
+    libdnf::rpm::SolvQuery query9(sack.get());
+    std::vector<std::string> names3{"CQRlib", "nodejs"};
+    query9.ifilter_name(libdnf::sack::QueryCmp::EQ, names3);
+    CPPUNIT_ASSERT(query9.size() == 4);
+    auto pset8 = query9.get_package_set();
+    for (auto pkg : pset8) {
+        CPPUNIT_ASSERT(full_nevras.find(pkg.get_full_nevra()) != full_nevras.end());
+    }
+
 }

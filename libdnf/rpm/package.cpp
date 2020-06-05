@@ -97,6 +97,11 @@ std::string Package::get_nevra() {
     return cstring2string(solv::get_nevra(pool, id));
 }
 
+std::string Package::get_full_nevra() {
+    Pool * pool = sack->pImpl->pool;
+    return cstring2string(solv::get_full_nevra(pool, id));
+}
+
 std::string Package::get_group() {
     Pool * pool = sack->pImpl->pool;
     return cstring2string(solv::get_group(pool, id));

@@ -74,8 +74,13 @@ public:
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_evr(DnfPackage * pkg)
     std::string get_evr() const;
 
+    /// Reurn nevra withou epoch when epoch is 0
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_nevra(DnfPackage * pkg)
     std::string get_nevra();
+
+    /// Reurn always nevra with epoch
+    /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_nevra(DnfPackage * pkg)
+    std::string get_full_nevra();
 
     /// @replaces dnf:dnf/package.py:attribute:Package.group
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_group(DnfPackage * pkg)
