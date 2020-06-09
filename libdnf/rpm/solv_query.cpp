@@ -232,10 +232,11 @@ template <bool (*cmp_fnc)(int value_to_cmp)>
 inline static void filter_evr_internal(std::vector<std::string> & patterns, Pool * pool, solv::SolvMap & query_result) {
     solv::SolvMap filter_result(static_cast<int>(pool->nsolvables));
     for (auto & pattern : patterns) {
-        Id match_evr = pool_str2id(pool, pattern.c_str(), 1);
+        const char * pattern_c_str = pattern.c_str();
         for (PackageId candidate_id : query_result) {
             Solvable * solvable = solv::get_solvable(pool, candidate_id);
-            int cmp = pool_evrcmp(pool, solvable->evr, match_evr, EVRCMP_COMPARE);
+            int cmp = pool_evrcmp_str(
+                pool, pool_id2str(pool, solvable->evr), pattern_c_str, EVRCMP_COMPARE);
             if (cmp_fnc(cmp)) {
                 filter_result.add_unsafe(candidate_id);
             }
