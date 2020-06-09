@@ -26,6 +26,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/base/base.hpp>
 
 #include <memory>
+#include <utility>
 #include <vector>
 
 namespace microdnf {
@@ -40,11 +41,11 @@ public:
     /// Select commend to execute
     void select_command(Command * cmd) { selected_command = cmd; }
 
-    ArgumentParser arg_parser;
     libdnf::Base base;
-
+    std::vector<std::pair<std::string, std::string>> setopts;
     std::vector<std::unique_ptr<Command>> commands;
     Command * selected_command{nullptr};
+    ArgumentParser arg_parser;
 };
 
 }  // namespace microdnf
