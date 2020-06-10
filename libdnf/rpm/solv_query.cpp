@@ -433,7 +433,7 @@ inline static void filter_nevra_internal(
     }
 }
 
-SolvQuery & SolvQuery::ifilter_nevra_strict(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
