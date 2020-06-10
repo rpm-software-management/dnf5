@@ -362,9 +362,13 @@ bool NevraID::parse(Pool * pool, const char * nevra_pattern, bool createEVRId) {
 
     auto name_len = evr_delim - nevra_pattern;
 
-    // strip epoch "0:"
-    if (evr_delim[1] == '0' && evr_delim[2] == ':') {
-        evr_delim += 2;
+    // strip epoch "0:" or "00:" and so on
+    // it is similar how libsolv strips "0 "epoch
+    int index = 1;
+    while (evr_delim[index] == '0') {
+        if (evr_delim[++index] == ':') {
+            evr_delim += index;
+        }
     }
 
     // test version and arch presence
