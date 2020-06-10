@@ -86,7 +86,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
         "nodejs-1:5.12.1-1.fc29.x86_64"
     };
 
-    /// Test QueryCmp::EQ
+    // Test QueryCmp::EQ
     libdnf::rpm::SolvQuery query(sack.get());
     std::vector<std::string> names{"CQRlib"};
     query.ifilter_name(libdnf::sack::QueryCmp::EQ, names);
@@ -96,7 +96,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
         CPPUNIT_ASSERT(nevras.find(pkg.get_nevra()) != nevras.end());
     }
 
-    /// Test QueryCmp::GLOB
+    // Test QueryCmp::GLOB
     libdnf::rpm::SolvQuery query2(sack.get());
     std::vector<std::string> names2{"CQ?lib"};
     query2.ifilter_name(libdnf::sack::QueryCmp::GLOB, names2);
@@ -106,7 +106,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
         CPPUNIT_ASSERT(nevras.find(pkg.get_nevra()) != nevras.end());
     }
 
-    /// Test two filters ifilter_name().ifilter_arch()
+    // Test two filters ifilter_name().ifilter_arch()
     std::vector<std::string> arches{"src"};
     libdnf::rpm::SolvQuery query3(sack.get());
     query3.ifilter_name(libdnf::sack::QueryCmp::EQ, names).ifilter_arch(libdnf::sack::QueryCmp::EQ, arches);
@@ -116,12 +116,12 @@ void RpmSolvQueryTest::test_ifilter_name() {
         CPPUNIT_ASSERT(pkg.get_nevra() == "CQRlib-1.1.1-4.fc29.src");
     }
 
-    /// Test QueryCmp::NEQ
+    // Test QueryCmp::NEQ
     libdnf::rpm::SolvQuery query4(sack.get());
     query4.ifilter_name(libdnf::sack::QueryCmp::NEQ, names);
     CPPUNIT_ASSERT(query4.size() == 287);
 
-    /// Test QueryCmp::IEXACT
+    // Test QueryCmp::IEXACT
     libdnf::rpm::SolvQuery query5(sack.get());
     std::vector<std::string> names_icase{"cqrlib"};
     query5.ifilter_name(libdnf::sack::QueryCmp::IEXACT, names_icase);
@@ -133,7 +133,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query5.ifilter_name(libdnf::sack::QueryCmp::EQ, names_icase);
     CPPUNIT_ASSERT(query5.size() == 0);
 
-    /// Test QueryCmp::IGLOB
+    // Test QueryCmp::IGLOB
     libdnf::rpm::SolvQuery query6(sack.get());
     std::vector<std::string> names_glob_icase{"cq?lib"};
     query6.ifilter_name(libdnf::sack::QueryCmp::IGLOB, names_glob_icase);
@@ -145,7 +145,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query6.ifilter_name(libdnf::sack::QueryCmp::GLOB, names_glob_icase);
     CPPUNIT_ASSERT(query6.size() == 0);
 
-    /// Test QueryCmp::CONTAINS
+    // Test QueryCmp::CONTAINS
     libdnf::rpm::SolvQuery query7(sack.get());
     std::vector<std::string> names_contains{"QRli"};
     query7.ifilter_name(libdnf::sack::QueryCmp::CONTAINS, names_contains);
@@ -155,7 +155,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
         CPPUNIT_ASSERT(nevras_contains.find(pkg.get_nevra()) != nevras_contains.end());
     }
 
-    /// Test QueryCmp::ICONTAINS
+    // Test QueryCmp::ICONTAINS
     libdnf::rpm::SolvQuery query8(sack.get());
     std::vector<std::string> names_icontains{"qRli"};
     query8.ifilter_name(libdnf::sack::QueryCmp::ICONTAINS, names_icontains);
@@ -167,11 +167,11 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query8.ifilter_name(libdnf::sack::QueryCmp::CONTAINS, names_icontains);
     CPPUNIT_ASSERT(query8.size() == 0);
 
-    /// Test unsupported cmp type
+    // Test unsupported cmp type
     CPPUNIT_ASSERT_THROW(query8.ifilter_name(libdnf::sack::QueryCmp::GT, names_icontains);,
                          libdnf::rpm::SolvQuery::NotSupportedCmpType);
 
-    /// Test QueryCmp::EQ with two elements
+    // Test QueryCmp::EQ with two elements
     libdnf::rpm::SolvQuery query9(sack.get());
     std::vector<std::string> names3{"CQRlib", "nodejs"};
     query9.ifilter_name(libdnf::sack::QueryCmp::EQ, names3);
@@ -181,4 +181,80 @@ void RpmSolvQueryTest::test_ifilter_name() {
         CPPUNIT_ASSERT(full_nevras.find(pkg.get_full_nevra()) != full_nevras.end());
     }
 
+}
+
+void RpmSolvQueryTest::test_ifilter_nevra() {
+    std::set<std::string> nevras{"CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64"};
+
+    {
+        // Test QueryCmp::EQ - argument without 0 epoch - two elements
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> nevras_without_0_epoch{"CQRlib-1.1.1-4.fc29.src", "CQRlib-1.1.1-4.fc29.x86_64"};
+        query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_without_0_epoch);
+        CPPUNIT_ASSERT(query.size() == 2);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
+        }
+    }
+
+    {
+        // Test QueryCmp::EQ - argument without 0 epoch - two elements
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> nevras_with_0_epoch{"CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64"};
+        query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_with_0_epoch);
+        CPPUNIT_ASSERT(query.size() == 2);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
+        }
+    }
+
+    {
+        // Test QueryCmp::EQ - argument without 0 epoch - single argument
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> nevras_without_0_epoch{"CQRlib-1.1.1-4.fc29.src"};
+        query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_without_0_epoch);
+        CPPUNIT_ASSERT(query.size() == 1);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(pkg.get_full_nevra() == "CQRlib-0:1.1.1-4.fc29.src");
+        }
+    }
+
+    {
+        // Test QueryCmp::EQ - argument without 0 epoch - single argument
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> nevras_with_0_epoch{"CQRlib-0:1.1.1-4.fc29.src"};
+        query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_with_0_epoch);
+        CPPUNIT_ASSERT(query.size() == 1);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(pkg.get_full_nevra() == "CQRlib-0:1.1.1-4.fc29.src");
+        }
+    }
+
+    {
+        // Test QueryCmp::EQ - argument with unknown version - two elements
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> nevras_with_0_epoch{"CQRlib-0:1.1.1-unknown.src", "CQRlib-0:1.1.1-unknown1.x86_64"};
+        query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_with_0_epoch);
+        CPPUNIT_ASSERT(query.size() == 0);
+    }
+
+    {
+        // Test QueryCmp::EQ - argument with unknown version - single argument
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> nevras_without_0_epoch{"CQRlib-1.1.1-unknown2.src"};
+        query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_without_0_epoch);
+        CPPUNIT_ASSERT(query.size() == 0);
+    }
+
+    {
+        // Test QueryCmp::EQ - argument without epoch, but package with epoch - single argument
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> nevras_with_0_epoch{"nodejs-5.12.1-1.fc29.x86_64"};
+        query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_with_0_epoch);
+        CPPUNIT_ASSERT(query.size() == 0);
+    }
 }
