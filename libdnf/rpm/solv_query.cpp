@@ -321,17 +321,25 @@ SolvQuery & SolvQuery::ifilter_arch(libdnf::sack::QueryCmp cmp_type, std::vector
 }
 
 struct NevraID {
+    NevraID() : name(0), arch(0), evr(0) {};
+    NevraID(const NevraID & src) = default;
+    NevraID(NevraID && src) noexcept = default;
+    NevraID & operator=(const NevraID & src) = default;
+    NevraID & operator=(NevraID && src) = default;
     Id name;
     Id arch;
     Id evr;
+    std::string evr_str;
+
     /// @brief Parsing function for nevra string into name, evr, arch and transforming it into libsolv Id
-    /// int create_evr {allowed only `0` or `1`} - when `0` it will not create a new id when string is unknown to pool and parser returns false
+    /// bool createEVRId - when `false` it will store evr as std::string (evr_str), when `true` it sets Id evr. When string is unknown to pool it returns false
+    /// evr is stored only as Id (createEVRId==true, evr), or a string (evr_str) but not both.
     ///
-    /// @return bool Returns true if parsing succesful and all elements is known to pool
-    bool parse(Pool * pool, const char * nevra_pattern, int create_evr);
+    /// @return bool Returns true if parsing succesful and all elements is known to pool but related to createEVRId
+    bool parse(Pool * pool, const char * nevra_pattern, bool createEVRId);
 };
 
-bool NevraID::parse(Pool * pool, const char * nevra_pattern, int create_evr) {
+bool NevraID::parse(Pool * pool, const char * nevra_pattern, bool createEVRId) {
     const char * evr_delim = nullptr;
     const char * release_delim = nullptr;
     const char * arch_delim = nullptr;
@@ -360,7 +368,8 @@ bool NevraID::parse(Pool * pool, const char * nevra_pattern, int create_evr) {
     }
 
     // test version and arch presence
-    if (release_delim - evr_delim <= 1 || !arch_delim || arch_delim <= release_delim + 1 || arch_delim == end - 1) {
+    if (release_delim - evr_delim <= 1 || !arch_delim || arch_delim <= release_delim + 1
+        || arch_delim == end - 1) {
         return false;
     }
 
@@ -369,9 +378,18 @@ bool NevraID::parse(Pool * pool, const char * nevra_pattern, int create_evr) {
         return false;
     }
     ++evr_delim;
-    if (!(evr = pool_strn2id(pool, evr_delim, static_cast<unsigned>(arch_delim - evr_delim), create_evr))) {
-        return false;
+
+    // evr
+    if (createEVRId) {
+        if (!(evr = pool_strn2id(
+            pool, evr_delim, static_cast<unsigned>(arch_delim - evr_delim), 0))) {
+            return false;
+        }
+    } else {
+        evr_str.clear();
+        evr_str.append(evr_delim, arch_delim);
     }
+
     ++arch_delim;
     if (!(arch = pool_strn2id(pool, arch_delim, static_cast<unsigned>(end - arch_delim), 0))) {
         return false;
@@ -401,12 +419,13 @@ template <bool (*cmp_fnc)(int value_to_cmp)>
 inline static void filter_nevra_internal(
     Pool * pool, const char * c_pattern, std::vector<Solvable *> & sorted_solvables, solv::SolvMap & filter_result) {
     NevraID nevra_id;
-    if (!nevra_id.parse(pool, c_pattern, 1)) {
+    if (!nevra_id.parse(pool, c_pattern, false)) {
         return;
     }
     auto low = std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), nevra_id, name_arch_compare_lower_id);
     while (low != sorted_solvables.end() && (*low)->name == nevra_id.name && (*low)->arch == nevra_id.arch) {
-        int cmp = pool_evrcmp(pool, (*low)->evr, nevra_id.evr, EVRCMP_COMPARE);
+        int cmp = pool_evrcmp_str(
+            pool, pool_id2str(pool, (*low)->evr), nevra_id.evr_str.c_str(), EVRCMP_COMPARE);
         if (cmp_fnc(cmp)) {
             filter_result.add_unsafe(solv::get_package_id(pool, *low));
         }
@@ -439,7 +458,7 @@ SolvQuery & SolvQuery::ifilter_nevra_strict(libdnf::sack::QueryCmp cmp_type, std
         switch (tmp_cmp_type) {
             case libdnf::sack::QueryCmp::EQ: {
                 NevraID nevra_id;
-                if (!nevra_id.parse(pool, c_pattern, 0)) {
+                if (!nevra_id.parse(pool, c_pattern, true)) {
                     continue;
                 }
                 auto low = std::lower_bound(
