@@ -66,6 +66,7 @@ public:
         for (auto it : registered_weak_ptrs) {
             it->invalidate_guard();
         }
+        registered_weak_ptrs.clear();
     }
 
 private:
