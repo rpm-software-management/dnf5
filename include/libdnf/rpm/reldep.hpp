@@ -45,18 +45,17 @@ public:
     Reldep(SolvSack * sack, const std::string & reldep_string);
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
-    Reldep(const Reldep & reldep);
-
-    Reldep(const Reldep && reldep) noexcept;
+    Reldep(const Reldep & reldep) = default;
+    Reldep(Reldep && reldep) = delete;
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:~Dependency();
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
-    ~Reldep();
+    ~Reldep() = default;
 
     bool operator==(const Reldep & other) const noexcept;
     bool operator!=(const Reldep & other) const noexcept;
     Reldep & operator=(const Reldep & other) noexcept = default;
-    Reldep & operator=(Reldep && other) noexcept;
+    Reldep & operator=(Reldep && other) = delete;
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getName()
     const char * get_name() const;
@@ -120,12 +119,6 @@ inline bool Reldep::operator==(const Reldep & other) const noexcept {
 
 inline bool Reldep::operator!=(const Reldep & other) const noexcept {
     return id != other.id || sack != other.sack;
-}
-
-inline Reldep & Reldep::operator=(Reldep && other) noexcept {
-    id = other.id;
-    sack = other.sack;
-    return *this;
 }
 
 }  // namespace libdnf::rpm

@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/reldep.hpp"
 
-#include "solv_sack_impl.hpp"
 #include "solv/reldep_parser.hpp"
+#include "solv_sack_impl.hpp"
 
 // workaround, libsolv lacks 'extern "C"' in its header file
 extern "C" {
@@ -34,7 +34,7 @@ extern "C" {
 namespace libdnf::rpm {
 
 
-Reldep::Reldep(SolvSack * sack, ReldepId id) : sack(sack), id(id) {}
+Reldep::Reldep(SolvSack * sack, ReldepId dependency_id) : sack(sack), id(dependency_id) {}
 
 Reldep::Reldep(SolvSack * sack, const char * name, const char * version, CmpType cmp_type) : sack(sack) {
     id = get_reldep_id(sack, name, version, cmp_type);
@@ -44,12 +44,6 @@ Reldep::Reldep(SolvSack * sack, const std::string & reldep_string) : sack(sack) 
     id = get_reldep_id(sack, reldep_string);
 }
 
-
-Reldep::Reldep(const Reldep & reldep) : sack(reldep.sack), id(reldep.id) {}
-
-Reldep::Reldep(const Reldep && reldep) noexcept : sack(reldep.sack), id(reldep.id) {}
-
-Reldep::~Reldep() = default;
 const char * Reldep::get_name() const {
     return pool_id2str(sack->pImpl->pool, id.id);
 }
@@ -87,16 +81,17 @@ ReldepId Reldep::get_reldep_id(SolvSack * sack, const std::string & reldep_str) 
         Pool * pool = sack->pImpl->pool;
         Id id = pool_parserpmrichdep(pool, reldep_str.c_str());
         // TODO(jmracek) Replace runtime_error. Do we need to throw an error?
-        if (!id)
+        if (id == 0) {
             throw std::runtime_error("Cannot parse a dependency string");
+        }
         return ReldepId(id);
-    } else {
-        solv::ReldepParser dep_splitter;
-        if (!dep_splitter.parse(reldep_str))
-            throw std::runtime_error("Cannot parse a dependency string");
-        return get_reldep_id(
-            sack, dep_splitter.get_name_cstr(), dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type());
     }
+
+    solv::ReldepParser dep_splitter;
+    if (!dep_splitter.parse(reldep_str)) {
+        throw std::runtime_error("Cannot parse a dependency string");
+    }
+    return get_reldep_id(sack, dep_splitter.get_name_cstr(), dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type());
 }
 
 }  // namespace libdnf::rpm
