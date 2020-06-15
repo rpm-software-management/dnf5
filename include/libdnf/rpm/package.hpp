@@ -274,11 +274,11 @@ protected:
 
 private:
     friend PackageSetIterator;
-    SolvSack * sack;
+    SolvSackWeakPtr sack;
     PackageId id;
 };
 
-inline Package::Package(SolvSack * sack, PackageId id) : sack(sack), id(id) {}
+inline Package::Package(SolvSack * sack, PackageId id) : sack(sack->get_weak_ptr()), id(id) {}
 
 inline bool Package::operator==(const Package & other) const noexcept {
     return id == other.id && sack == other.sack;

@@ -169,77 +169,77 @@ std::vector<std::string> Package::get_files() {
 
 ReldepList Package::get_provides() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_provides(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_requires() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_provides(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_requires_pre() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_requires_pre(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_conflicts() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_conflicts(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_obsoletes() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_obsoletes(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_recommends() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_recommends(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_suggests() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_suggests(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_enhances() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_enhances(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_supplements() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_supplements(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_prereq_ignoreinst() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_prereq_ignoreinst(pool, id, list.pImpl->queue);
     return list;
 }
 
 ReldepList Package::get_regular_requires() const {
     Pool * pool = sack->pImpl->pool;
-    ReldepList list(sack);
+    ReldepList list(sack.get());
     solv::get_regular_requires(pool, id, list.pImpl->queue);
     return list;
 }
