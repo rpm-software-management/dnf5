@@ -481,6 +481,9 @@ void SolvSack::create_system_repo([[maybe_unused]] bool build_cache) {
     pImpl->load_system_repo(*pImpl->system_repo);
 }
 
+SolvSackWeakPtr SolvSack::get_weak_ptr() {
+    return SolvSackWeakPtr(this, &pImpl->data_guard);
+}
 
 // TODO(jrohel): we want to change directory for solv(x) cache (into repo metadata directory?)
 std::string SolvSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {

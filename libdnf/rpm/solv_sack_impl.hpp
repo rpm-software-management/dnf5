@@ -85,6 +85,8 @@ private:
     Pool * pool;
     std::unique_ptr<Repo> system_repo;
 
+    WeakPtrGuard<SolvSack, false> data_guard;
+
     friend SolvSack;
     friend Package;
     friend PackageSet;

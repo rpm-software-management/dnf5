@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_SACK_HPP
 
 #include "libdnf/utils/exception.hpp"
+#include "libdnf/utils/weak_ptr.hpp"
 
 #include <memory>
 
@@ -70,6 +71,10 @@ class Reldep;
 class ReldepList;
 class Repo;
 
+class SolvSack;
+
+using SolvSackWeakPtr = WeakPtr<SolvSack, false>;
+
 class SolvSack {
 public:
     class Exception : public RuntimeError {
@@ -113,6 +118,9 @@ public:
 
     /// Creates system repository and loads it into SolvSack. Only one system repository can be in SolvSack.
     void create_system_repo(bool build_cache);
+
+    /// Create WeakPtr to SolvSack
+    SolvSackWeakPtr get_weak_ptr();
 
 private:
     friend Package;
