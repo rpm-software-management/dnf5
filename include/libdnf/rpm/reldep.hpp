@@ -54,7 +54,7 @@ public:
 
     bool operator==(const Reldep & other) const noexcept;
     bool operator!=(const Reldep & other) const noexcept;
-    Reldep & operator=(const Reldep & other) noexcept = default;
+    Reldep & operator=(const Reldep & other) = default;
     Reldep & operator=(Reldep && other) = delete;
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getName()
@@ -109,7 +109,7 @@ private:
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
     static ReldepId get_reldep_id(SolvSack * sack, const std::string & reldep_str);
 
-    SolvSack * sack;
+    SolvSackWeakPtr sack;
     ReldepId id;
 };
 

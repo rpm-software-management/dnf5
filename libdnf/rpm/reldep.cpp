@@ -34,13 +34,14 @@ extern "C" {
 namespace libdnf::rpm {
 
 
-Reldep::Reldep(SolvSack * sack, ReldepId dependency_id) : sack(sack), id(dependency_id) {}
+Reldep::Reldep(SolvSack * sack, ReldepId dependency_id) : sack(sack->get_weak_ptr()), id(dependency_id) {}
 
-Reldep::Reldep(SolvSack * sack, const char * name, const char * version, CmpType cmp_type) : sack(sack) {
+Reldep::Reldep(SolvSack * sack, const char * name, const char * version, CmpType cmp_type)
+    : sack(sack->get_weak_ptr()) {
     id = get_reldep_id(sack, name, version, cmp_type);
 }
 
-Reldep::Reldep(SolvSack * sack, const std::string & reldep_string) : sack(sack) {
+Reldep::Reldep(SolvSack * sack, const std::string & reldep_string) : sack(sack->get_weak_ptr()) {
     id = get_reldep_id(sack, reldep_string);
 }
 
