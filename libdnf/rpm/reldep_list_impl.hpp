@@ -29,26 +29,18 @@ namespace libdnf::rpm {
 
 class ReldepList::Impl {
 public:
-    Impl(const ReldepList::Impl & src);
-    Impl(SolvSack * sack);
-    Impl(SolvSack * sack, libdnf::rpm::solv::IdQueue queue_src);
-    ~Impl();
+    Impl(const ReldepList::Impl & src) = default;
+    Impl(SolvSack * sack) : sack(sack->get_weak_ptr()) {}
+    Impl(SolvSack * sack, libdnf::rpm::solv::IdQueue queue_src) : sack(sack->get_weak_ptr()), queue(queue_src) {}
+    ~Impl() = default;
 
 
 private:
     friend class ReldepList;
     friend Package;
-    SolvSack * sack;
+    SolvSackWeakPtr sack;
     libdnf::rpm::solv::IdQueue queue;
 };
-
-inline ReldepList::Impl::Impl(const ReldepList::Impl & src) : sack(src.sack), queue(src.queue) {}
-
-inline ReldepList::Impl::Impl(SolvSack * sack) : sack(sack) {}
-
-inline ReldepList::Impl::Impl(SolvSack * sack, libdnf::rpm::solv::IdQueue queue_src) : sack(sack), queue(queue_src) {}
-
-inline ReldepList::Impl::~Impl() {}
 
 }  // namespace libdnf::rpm
 

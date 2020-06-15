@@ -88,13 +88,15 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
     solv::ReldepParser dep_splitter;
     if (!dep_splitter.parse(reldep_str))
         return false;
-    Dataiterator di;
-    Pool * pool = pImpl->sack->pImpl->pool;
 
+    auto * sack = pImpl->sack.get();
+    Pool * pool = sack->pImpl->pool;
+
+    Dataiterator di;
     dataiterator_init(&di, pool, 0, 0, 0, dep_splitter.get_name_cstr(), SEARCH_STRING | SEARCH_GLOB);
     while (dataiterator_step(&di)) {
-        ReldepId id =
-            Reldep::get_reldep_id(pImpl->sack, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type());
+        ReldepId id = Reldep::get_reldep_id(
+            sack, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type());
         add(id);
     }
     dataiterator_free(&di);
@@ -103,7 +105,7 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
 
 bool ReldepList::add_reldep(const std::string & reldep_str) {
     try {
-        ReldepId id = Reldep::get_reldep_id(pImpl->sack, reldep_str);
+        ReldepId id = Reldep::get_reldep_id(pImpl->sack.get(), reldep_str);
         add(id);
         return true;
         // TODO(jmracek) Make catch error more specific
@@ -118,7 +120,7 @@ void ReldepList::append(ReldepList & source) {
 
 Reldep ReldepList::get(int index) const noexcept {
     ReldepId id(pImpl->queue[index]);
-    return Reldep(pImpl->sack, id);
+    return Reldep(pImpl->sack.get(), id);
 }
 
 int ReldepList::size() const noexcept {
