@@ -128,6 +128,11 @@ private:
 
     WeakPtrGuard<SolvSack, false> data_guard;
 
+    std::vector<Solvable *> cached_sorted_solvables;
+    int cached_sorted_solvables_size{0};
+    solv::SolvMap cached_solvables{0};
+    int cached_solvables_size{0};
+
     friend SolvSack;
     friend Package;
     friend PackageSet;
