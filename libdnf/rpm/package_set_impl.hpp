@@ -49,20 +49,22 @@ public:
     /// Copy constructor: clone from an existing PackageSet::Impl
     Impl(const Impl & other);
 
-    SolvSack * get_sack() const noexcept { return sack; }
+    SolvSack * get_sack() const { return sack.get(); }
 
 private:
     friend PackageSet;
-    SolvSack * sack;
+    SolvSackWeakPtr sack;
 };
 
 
 inline PackageSet::Impl::Impl(SolvSack * sack)
     : libdnf::rpm::solv::SolvMap::SolvMap(sack->pImpl->pool->nsolvables)
-    , sack(sack) {}
+    , sack(sack->get_weak_ptr()) {}
 
 
-inline PackageSet::Impl::Impl(SolvSack * sack, Map * map) : libdnf::rpm::solv::SolvMap::SolvMap(map), sack(sack) {}
+inline PackageSet::Impl::Impl(SolvSack * sack, Map * map)
+    : libdnf::rpm::solv::SolvMap::SolvMap(map)
+    , sack(sack->get_weak_ptr()) {}
 
 
 inline PackageSet::Impl::Impl(const PackageSet & other) : Impl(*other.pImpl) {}
@@ -70,7 +72,7 @@ inline PackageSet::Impl::Impl(const PackageSet & other) : Impl(*other.pImpl) {}
 
 inline PackageSet::Impl::Impl(const PackageSet::Impl & other)
     : libdnf::rpm::solv::SolvMap::SolvMap(other.get_map())
-    , sack{other.get_sack()} {}
+    , sack(other.get_sack()->get_weak_ptr()) {}
 
 
 }  // namespace libdnf::rpm
