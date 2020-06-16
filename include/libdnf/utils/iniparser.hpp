@@ -138,6 +138,7 @@ private:
     std::string value;
     std::string raw_item;
     std::string line;
+    bool line_ready;
 };
 
 inline const std::string & IniParser::get_section() const noexcept {

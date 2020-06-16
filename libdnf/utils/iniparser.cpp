@@ -29,6 +29,7 @@ IniParser::IniParser(const std::string & file_path) : is(new std::ifstream(file_
     }
     is->exceptions(std::ifstream::badbit);
     line_number = 0;
+    line_ready = false;
 }
 
 IniParser::IniParser(std::unique_ptr<std::istream> && input_stream) : is(std::move(input_stream)) {
@@ -37,6 +38,7 @@ IniParser::IniParser(std::unique_ptr<std::istream> && input_stream) : is(std::mo
     }
     is->exceptions(std::ifstream::badbit);
     line_number = 0;
+    line_ready = false;
 }
 
 void IniParser::trim_value() noexcept {
@@ -53,10 +55,11 @@ void IniParser::trim_value() noexcept {
 IniParser::ItemType IniParser::next() {
     bool previous_line_with_key_val = false;
     raw_item.clear();
-    while (!line.empty() || !is->eof()) {
-        if (line.empty()) {
+    while (line_ready || !is->eof()) {
+        if (!line_ready) {
             std::getline(*is, line, DELIMITER);
             ++line_number;
+            line_ready = true;
         }
 
         // remove UTF-8 BOM (Byte order mark)
@@ -71,10 +74,15 @@ IniParser::ItemType IniParser::next() {
                 return ItemType::KEY_VAL;
             }
             if (line.length() == 0) {
+                if (is->eof()) {
+                    return ItemType::END_OF_INPUT;
+                }
+                line_ready = false;
+                raw_item = DELIMITER;
                 return ItemType::EMPTY_LINE;
             }
             raw_item = line + DELIMITER;
-            line.clear();
+            line_ready = false;
             return ItemType::COMMENT_LINE;
         }
         auto start = line.find_first_not_of(" \t\r");
@@ -82,11 +90,11 @@ IniParser::ItemType IniParser::next() {
             if (previous_line_with_key_val) {
                 value += DELIMITER;
                 raw_item += line + DELIMITER;
-                line.clear();
+                line_ready = false;
                 continue;
             }
             raw_item = line + DELIMITER;
-            line.clear();
+            line_ready = false;
             return ItemType::EMPTY_LINE;
         }
         auto end = line.find_last_not_of(" \t\r");
@@ -115,7 +123,7 @@ IniParser::ItemType IniParser::next() {
             }
             this->section = line.substr(start, end_sect_pos - start);
             raw_item = line + DELIMITER;
-            line.clear();
+            line_ready = false;
             return ItemType::SECTION;
         }
 
@@ -129,7 +137,7 @@ IniParser::ItemType IniParser::next() {
             }
             value += DELIMITER + line.substr(start, end - start + 1);
             raw_item += line + DELIMITER;
-            line.clear();
+            line_ready = false;
         } else {
             if (line[start] == '=') {
                 throw MissingKey(std::to_string(line_number));
@@ -148,7 +156,7 @@ IniParser::ItemType IniParser::next() {
             }
             previous_line_with_key_val = true;
             raw_item = line + DELIMITER;
-            line.clear();
+            line_ready = false;
         }
     }
     trim_value();
