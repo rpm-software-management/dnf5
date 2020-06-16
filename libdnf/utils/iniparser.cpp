@@ -81,7 +81,10 @@ IniParser::ItemType IniParser::next() {
                 raw_item = DELIMITER;
                 return ItemType::EMPTY_LINE;
             }
-            raw_item = line + DELIMITER;
+            raw_item = line;
+            if (!is->eof()) {
+                raw_item += DELIMITER;
+            }
             line_ready = false;
             return ItemType::COMMENT_LINE;
         }
@@ -89,11 +92,17 @@ IniParser::ItemType IniParser::next() {
         if (start == std::string::npos) {
             if (previous_line_with_key_val) {
                 value += DELIMITER;
-                raw_item += line + DELIMITER;
+                raw_item += line;
+                if (!is->eof()) {
+                    raw_item += DELIMITER;
+                }
                 line_ready = false;
                 continue;
             }
-            raw_item = line + DELIMITER;
+            raw_item = line;
+            if (!is->eof()) {
+                raw_item += DELIMITER;
+            }
             line_ready = false;
             return ItemType::EMPTY_LINE;
         }
@@ -122,7 +131,10 @@ IniParser::ItemType IniParser::next() {
                 }
             }
             this->section = line.substr(start, end_sect_pos - start);
-            raw_item = line + DELIMITER;
+            raw_item = line;
+            if (!is->eof()) {
+                raw_item += DELIMITER;
+            }
             line_ready = false;
             return ItemType::SECTION;
         }
@@ -136,7 +148,10 @@ IniParser::ItemType IniParser::next() {
                 throw IllegalContinuationLine(std::to_string(line_number));
             }
             value += DELIMITER + line.substr(start, end - start + 1);
-            raw_item += line + DELIMITER;
+            raw_item += line;
+            if (!is->eof()) {
+                raw_item += DELIMITER;
+            }
             line_ready = false;
         } else {
             if (line[start] == '=') {
@@ -155,7 +170,10 @@ IniParser::ItemType IniParser::next() {
                 value.clear();
             }
             previous_line_with_key_val = true;
-            raw_item = line + DELIMITER;
+            raw_item = line;
+            if (!is->eof()) {
+                raw_item += DELIMITER;
+            }
             line_ready = false;
         }
     }
