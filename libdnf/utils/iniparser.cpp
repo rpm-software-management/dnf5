@@ -68,12 +68,12 @@ IniParser::ItemType IniParser::next() {
             line.erase(0, 3);
         }
 
-        if (line.length() == 0 || line[0] == '#' || line[0] == ';') {  // do not support [rR][eE][mM] comment
+        if (line.empty() || line[0] == '#' || line[0] == ';') {  // do not support [rR][eE][mM] comment
             if (previous_line_with_key_val) {
                 trim_value();
                 return ItemType::KEY_VAL;
             }
-            if (line.length() == 0) {
+            if (line.empty()) {
                 if (is->eof()) {
                     return ItemType::END_OF_INPUT;
                 }
