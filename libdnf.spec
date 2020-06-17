@@ -51,6 +51,7 @@ BuildRequires:  pkgconfig(check)
 %if ! %{with tests_disabled}
 BuildRequires:  pkgconfig(cppunit)
 %endif
+BuildRequires:  pkgconfig(fmt)
 BuildRequires:  pkgconfig(gpgme)
 BuildRequires:  pkgconfig(json-c)
 %if %{with comps}
