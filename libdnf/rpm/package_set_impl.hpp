@@ -35,13 +35,13 @@ extern "C" {
 namespace libdnf::rpm {
 
 
-class PackageSet::Impl : public libdnf::rpm::solv::SolvMap {
+class PackageSet::Impl : public solv::SolvMap {
 public:
     /// Initialize with an empty map
     explicit Impl(SolvSack * sack);
 
     /// Clone from an existing map
-    explicit Impl(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map);
+    explicit Impl(SolvSack * sack, solv::SolvMap & solv_map);
 
     /// Clone from an existing PackageSet
     explicit Impl(const PackageSet & other);
@@ -58,12 +58,12 @@ private:
 
 
 inline PackageSet::Impl::Impl(SolvSack * sack)
-    : libdnf::rpm::solv::SolvMap::SolvMap(sack->pImpl->pool->nsolvables)
+    : solv::SolvMap::SolvMap(sack->pImpl->pool->nsolvables)
     , sack(sack->get_weak_ptr()) {}
 
 
-inline PackageSet::Impl::Impl(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map)
-    : libdnf::rpm::solv::SolvMap::SolvMap(solv_map)
+inline PackageSet::Impl::Impl(SolvSack * sack, solv::SolvMap & solv_map)
+    : solv::SolvMap::SolvMap(solv_map)
     , sack(sack->get_weak_ptr()) {}
 
 
@@ -71,7 +71,7 @@ inline PackageSet::Impl::Impl(const PackageSet & other) : Impl(*other.pImpl) {}
 
 
 inline PackageSet::Impl::Impl(const PackageSet::Impl & other)
-    : libdnf::rpm::solv::SolvMap::SolvMap(other.get_map())
+    : solv::SolvMap::SolvMap(other.get_map())
     , sack(other.get_sack()->get_weak_ptr()) {}
 
 
