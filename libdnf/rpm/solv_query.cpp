@@ -56,7 +56,7 @@ public:
 
 private:
     friend class SolvQuery;
-    SolvSack * sack;
+    SolvSackWeakPtr sack;
     solv::SolvMap query_result;
 };
 
@@ -81,7 +81,7 @@ SolvQuery & SolvQuery::operator=(SolvQuery && src) noexcept {
 }
 
 SolvQuery::Impl::Impl(SolvSack * sack, InitFlags flags)
-    : sack(sack)
+    : sack(sack->get_weak_ptr())
     , query_result(solv::SolvMap(static_cast<int>(sack->pImpl->get_nsolvables()))) {
     switch (flags) {
         case InitFlags::EMPTY:
@@ -112,7 +112,7 @@ SolvQuery::Impl & SolvQuery::Impl::operator=(SolvQuery::Impl && src) noexcept {
 }
 
 PackageSet SolvQuery::get_package_set() {
-    return PackageSet(p_impl->sack, p_impl->query_result);
+    return PackageSet(p_impl->sack.get(), p_impl->query_result);
 }
 
 template <const char * (*c_string_getter_fnc)(Pool * pool, libdnf::rpm::PackageId)>
