@@ -78,8 +78,10 @@ public:
     virtual void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept = 0;
 
 private:
+#ifndef SWIG
     static constexpr std::array<const char *, static_cast<unsigned int>(Level::TRACE) + 1> LEVEL_C_STR = {
         "CRITICAL", "ERROR", "WARNING", "NOTICE", "INFO", "DEBUG", "TRACE"};
+#endif
 };
 
 

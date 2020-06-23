@@ -33,8 +33,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
-class Sack;
-
 /// @replaces libdnf/hy-query.h:struct:HyQuery
 /// @replaces libdnf/sack/query.hpp:struct:Query
 /// @replaces hawkey:hawkey/__init__.py:class:Query

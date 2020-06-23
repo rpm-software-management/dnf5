@@ -2,13 +2,26 @@
 
 
 %include <exception.i>
-%include <std_string.i>
 
+#if defined(SWIGPYTHON)
+%import(module="libdnf.common") "common.i"
+%import(module="libdnf.conf") "conf.i"
+%import(module="libdnf.logger") "logger.i"
+%import(module="libdnf.rpm") "rpm.i"
+#elif defined(SWIGRUBY)
+%import(module="libdnf/common") "common.i"
+%import(module="libdnf/conf") "conf.i"
+%import(module="libdnf/logger") "logger.i"
+%import(module="libdnf/rpm") "rpm.i"
+#elif defined(SWIGPERL)
+%import(module="libdnf::common") "common.i"
+%import(module="libdnf::conf") "conf.i"
+%import(module="libdnf::logger") "logger.i"
+%import(module="libdnf::rpm") "rpm.i"
+#endif
 
 %{
-    // make SWIG wrap following headers
     #include "libdnf/base/base.hpp"
-    using namespace libdnf;
 %}
 
 #define CV __perl_CV

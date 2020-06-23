@@ -40,7 +40,7 @@ option(WITH_PERFORMANCE_TESTS "Build performance tests (DEBUG ONLY)" OFF)
 option(WITH_SANITIZERS "Build with address, leak and undefined sanitizers (DEBUG ONLY)" OFF)
 
 # build options - bindings
-option(WITH_GO "Build Go bindings" ON)
+option(WITH_GO "Build Go bindings" OFF)
 option(WITH_PERL5 "Build Perl 5 bindings" ON)
 option(WITH_PYTHON3 "Build Python 3 bindings" ON)
 option(WITH_RUBY "Build Ruby bindings" ON)

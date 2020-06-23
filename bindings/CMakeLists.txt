@@ -39,7 +39,7 @@ endif()
 
 
 # list of all modules that will be included in libdnf bindings
-list(APPEND SWIG_LIBDNF_MODULES base)
+list(APPEND SWIG_LIBDNF_MODULES base common conf logger rpm)
 
 
 # list of all modules that will be included in libdnf-cli bindings

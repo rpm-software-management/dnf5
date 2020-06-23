@@ -28,12 +28,13 @@ namespace libdnf::rpm {
 
 /// Weak pointer to rpm repository. RepoWeakPtr does not own the repository (ptr_owner = false).
 /// Repositories are owned by RepoSack.
-using RepoWeakPtr = libdnf::WeakPtr<Repo, false>;
+using RepoWeakPtr = WeakPtr<Repo, false>;
 
 class RepoQuery : public libdnf::sack::Query<RepoWeakPtr> {
 public:
+#ifndef SWIG
     using Query<RepoWeakPtr>::Query;
-
+#endif
     RepoQuery & ifilter_enabled(bool enabled);
     RepoQuery & ifilter_expired(bool expired);
     RepoQuery & ifilter_id(sack::QueryCmp cmp, const std::string & pattern);
