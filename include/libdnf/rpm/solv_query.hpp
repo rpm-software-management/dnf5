@@ -61,7 +61,7 @@ public:
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
     explicit SolvQuery(SolvSack * sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
     SolvQuery(const SolvQuery & src);
-    SolvQuery(SolvQuery && src) noexcept;
+    SolvQuery(SolvQuery && src) noexcept = default;
     ~SolvQuery();
 
     SolvQuery & operator=(const SolvQuery & src);

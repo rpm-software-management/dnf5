@@ -48,7 +48,7 @@ class SolvQuery::Impl {
 public:
     Impl(SolvSack * sack, InitFlags flags);
     Impl(const SolvQuery::Impl & src) = default;
-    Impl(const SolvQuery::Impl && src) noexcept;
+    Impl(const SolvQuery::Impl && src) = delete;
     ~Impl() = default;
 
     SolvQuery::Impl & operator=(const SolvQuery::Impl & src);
