@@ -94,7 +94,7 @@ public:
 private:
     /// Loads system repository into SolvSack
     /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
-    bool load_system_repo(Repo & repo);
+    bool load_system_repo();
 
     /// Loads available repository into SolvSack
     void load_available_repo(Repo & repo, LoadRepoFlags flags);

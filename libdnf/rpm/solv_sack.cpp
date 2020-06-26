@@ -350,10 +350,10 @@ void SolvSack::Impl::internalize_libsolv_repos() {
     }
 }
 
-bool SolvSack::Impl::load_system_repo(Repo & repo) {
+bool SolvSack::Impl::load_system_repo() {
     auto & logger = base->get_logger();
-    auto repo_impl = repo.p_impl.get();
-    auto id = repo.get_id().c_str();
+    auto repo_impl = system_repo->p_impl.get();
+    auto id = system_repo->get_id().c_str();
 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, id), &libsolv_repo_free);
 
@@ -480,7 +480,7 @@ void SolvSack::create_system_repo(bool build_cache) {
     repo_config->build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
     pImpl->system_repo =
         std::make_unique<Repo>(SYSTEM_REPO_NAME, std::move(repo_config), *pImpl->base, Repo::Type::SYSTEM);
-    pImpl->load_system_repo(*pImpl->system_repo);
+    pImpl->load_system_repo();
 }
 
 SolvSackWeakPtr SolvSack::get_weak_ptr() {
