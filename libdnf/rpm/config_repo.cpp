@@ -77,6 +77,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionString> user_agent{master_config.user_agent()};
     OptionChild<OptionBool> countme{master_config.countme()};
     OptionEnum<std::string> failovermethod{"priority", {"priority", "roundrobin"}};
+    OptionBool build_cache{true};
 };
 
 ConfigRepo::Impl::Impl(Config & owner, ConfigMain & master_config) : owner(owner), master_config(master_config) {
@@ -166,6 +167,7 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & master_config) : owner(owner
     owner.opt_binds().add("enabled_metadata", enabled_metadata);
     owner.opt_binds().add("user_agent", user_agent);
     owner.opt_binds().add("countme", countme);
+    owner.opt_binds().add("build_cache", build_cache);
 }
 
 ConfigRepo::ConfigRepo(ConfigMain & master_config) : p_impl(new Impl(*this, master_config)) {}
@@ -308,5 +310,7 @@ OptionChild<OptionBool> & ConfigRepo::countme() {
 OptionEnum<std::string> & ConfigRepo::failovermethod() {
     return p_impl->failovermethod;
 }
-
+OptionBool & ConfigRepo::build_cache() {
+    return p_impl->build_cache;
+}
 }  // namespace libdnf::rpm

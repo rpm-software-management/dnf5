@@ -76,6 +76,8 @@ public:
     OptionChild<OptionBool> & deltarpm();
     OptionChild<OptionNumber<std::uint32_t>> & deltarpm_percentage();
     OptionChild<OptionBool> & skip_if_unavailable();
+    /// If true it will create libsolv cache that will speed up the next loading process
+    OptionBool & build_cache();
 
     // option recognized by other tools, e.g. gnome-software, but unused in dnf
     OptionString & enabled_metadata();
