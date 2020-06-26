@@ -111,6 +111,32 @@ void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
     repo_free(libsolv_repo, 1);
 }
 
+// return true if q1 is a superset of q2
+// only works if there are no duplicates both in q1 and q2
+// the map parameter must point to an empty map that can hold all ids
+// (it is also returned empty)
+int is_superset(Queue * q1, Queue * q2, Map * m) {
+    int cnt = 0;
+    for (int i = 0; i < q2->count; i++) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+        MAPSET(m, q2->elements[i]);
+#pragma GCC diagnostic pop
+    }
+    for (int i = 0; i < q1->count; i++) {
+        if (MAPTST(m, q1->elements[i])) {
+            cnt++;
+        }
+    }
+    for (int i = 0; i < q2->count; i++) {
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wconversion"
+        MAPCLR(m, q2->elements[i]);
+#pragma GCC diagnostic pop
+    }
+    return cnt == q2->count;
+}
+
 }  // end of anonymous namespace
 
 void SolvSack::Impl::write_main(LibsolvRepoExt & libsolv_repo_ext, bool switchtosolv) {
@@ -237,6 +263,62 @@ void SolvSack::Impl::write_ext(
     }
 }
 
+void SolvSack::Impl::rewrite_repos(Queue * addedfileprovides, Queue * addedfileprovides_inst) {
+    int i;
+    auto & logger = base->get_logger();
+
+    Map providedids;
+    map_init(&providedids, pool->ss.nstrings);
+
+    Queue fileprovidesq;
+    queue_init(&fileprovidesq);
+
+    LibsolvRepo * libsolv_repo;
+    FOR_REPOS(i, libsolv_repo) {
+        auto repo = static_cast<Repo *>(libsolv_repo->appdata);
+        if (!repo) {
+            continue;
+        }
+        if (!(repo->get_config()->build_cache().get_value())) {
+            continue;
+        }
+        auto & libsolv_repo_ext = repo->p_impl.get()->libsolv_repo_ext;
+        if (libsolv_repo_ext.main_nrepodata < 2) {
+            continue;
+        }
+        /* now check if the repo already contains all of our file provides */
+        Queue * addedq = libsolv_repo == pool->installed && addedfileprovides_inst ?
+            addedfileprovides_inst : addedfileprovides;
+        if (!addedq->count) {
+            continue;
+        }
+        Repodata * data = repo_id2repodata(libsolv_repo, 1);
+        queue_empty(&fileprovidesq);
+        if (repodata_lookup_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES,
+                                    &fileprovidesq)) {
+            if (is_superset(&fileprovidesq, addedq, &providedids)) {
+                continue;
+            }
+        }
+        repodata_set_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, addedq);
+        repodata_internalize(data);
+        /* re-write main data only */
+        int oldnrepodata = libsolv_repo->nrepodata;
+        int oldnsolvables = libsolv_repo->nsolvables;
+        int oldend = libsolv_repo->end;
+        libsolv_repo->nrepodata = libsolv_repo_ext.main_nrepodata;
+        libsolv_repo->nsolvables = libsolv_repo_ext.main_nsolvables;
+        libsolv_repo->end = libsolv_repo_ext.main_end;
+        logger.debug(fmt::format("rewriting repo: {}", libsolv_repo->name));
+        write_main(libsolv_repo_ext, false);
+        libsolv_repo->nrepodata = oldnrepodata;
+        libsolv_repo->nsolvables = oldnsolvables;
+        libsolv_repo->end = oldend;
+    }
+    queue_free(&fileprovidesq);
+    map_free(&providedids);
+}
+
 SolvSack::Impl::RepodataState SolvSack::Impl::load_repo_main(Repo & repo) {
     RepodataState data_state = RepodataState::NEW;
     auto repo_impl = repo.p_impl.get();
@@ -348,6 +430,24 @@ void SolvSack::Impl::internalize_libsolv_repos() {
             repo_internalize(libsolv_repo);
         }
     }
+}
+
+void SolvSack::Impl::make_provides_ready() {
+    if (provides_ready)
+        return;
+    internalize_libsolv_repos();
+    Queue addedfileprovides;
+    Queue addedfileprovides_inst;
+    queue_init(&addedfileprovides);
+    queue_init(&addedfileprovides_inst);
+    pool_addfileprovides_queue(pool, &addedfileprovides, &addedfileprovides_inst);
+    if (addedfileprovides.count || addedfileprovides_inst.count) {
+        rewrite_repos(&addedfileprovides, &addedfileprovides_inst);
+    }
+    queue_free(&addedfileprovides);
+    queue_free(&addedfileprovides_inst);
+    pool_createwhatprovides(pool);
+    provides_ready = true;
 }
 
 bool SolvSack::Impl::load_system_repo() {

@@ -91,6 +91,8 @@ public:
 
     void internalize_libsolv_repos();
 
+    void make_provides_ready();
+
 private:
     /// Loads system repository into SolvSack
     /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
@@ -115,6 +117,8 @@ private:
     /// Writes solvx file with extended libsolv repodata.
     /// @replaces libdnf/dnf-sack.cpp:method:write_ext()
     void write_ext(LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix);
+
+    void rewrite_repos(Queue * addedfileprovides, Queue * addedfileprovides_inst);
 
     /// Constructs libsolv repository cache filename for given repository id and optional extension.
     std::string give_repo_solv_cache_fn(const std::string & repoid, const char * ext = nullptr);
