@@ -113,12 +113,12 @@ public:
     SolvSack(Base & base);
     ~SolvSack();
 
-    //TODO(jrohel): Provide/use configuration options for build_cache and flags?
+    //TODO(jrohel): Provide/use configuration options for flags?
     /// Loads rpm::Repo into SolvSack.
-    void load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags);
+    void load_repo(Repo & repo, LoadRepoFlags flags);
 
     /// Creates system repository and loads it into SolvSack. Only one system repository can be in SolvSack.
-    void create_system_repo(bool build_cache);
+    void create_system_repo(bool build_cache = false);
 
     /// Create WeakPtr to SolvSack
     SolvSackWeakPtr get_weak_ptr();

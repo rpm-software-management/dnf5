@@ -58,7 +58,7 @@ void RpmPackageSetTest::setUp() {
     repo->load();
 
     // Loads rpm::Repo into rpm::SolvSack
-    sack->load_repo(*repo.get(), false, libdnf::rpm::SolvSack::LoadRepoFlags::NONE);
+    sack->load_repo(*repo.get(), libdnf::rpm::SolvSack::LoadRepoFlags::NONE);
 
     // set1 contains packages 0 - 15
     set1 = std::make_unique<libdnf::rpm::PackageSet>(sack.get());

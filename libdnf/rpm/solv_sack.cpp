@@ -383,10 +383,11 @@ bool SolvSack::Impl::load_system_repo(Repo & repo) {
     return true;
 }
 
-void SolvSack::Impl::load_available_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
+void SolvSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
     auto & logger = base->get_logger();
     auto repo_impl = repo.p_impl.get();
 
+    bool build_cache = repo.get_config()->build_cache().get_value();
     auto state = load_repo_main(repo);
     if (state == RepodataState::LOADED_FETCH && build_cache) {
         write_main(repo_impl->libsolv_repo_ext, true);
@@ -463,19 +464,20 @@ void SolvSack::Impl::load_available_repo(Repo & repo, bool build_cache, LoadRepo
 }
 
 
-void SolvSack::load_repo(Repo & repo, bool build_cache, LoadRepoFlags flags) {
+void SolvSack::load_repo(Repo & repo, LoadRepoFlags flags) {
     auto repo_impl = repo.p_impl.get();
     if (repo_impl->type != Repo::Type::AVAILABLE) {
         throw LogicError("SolvSack::load_repo(): User can load only \"available\" repository");
     }
-    pImpl->load_available_repo(repo, build_cache, flags);
+    pImpl->load_available_repo(repo, flags);
 }
 
-void SolvSack::create_system_repo([[maybe_unused]] bool build_cache) {
+void SolvSack::create_system_repo(bool build_cache) {
     if (pImpl->system_repo) {
         throw LogicError("SolvSack::create_system_repo(): System repo already exists");
     }
     auto repo_config = std::make_unique<ConfigRepo>(pImpl->base->get_config());
+    repo_config->build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
     pImpl->system_repo =
         std::make_unique<Repo>(SYSTEM_REPO_NAME, std::move(repo_config), *pImpl->base, Repo::Type::SYSTEM);
     pImpl->load_system_repo(*pImpl->system_repo);

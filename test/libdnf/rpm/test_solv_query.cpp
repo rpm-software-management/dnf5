@@ -59,7 +59,7 @@ void RpmSolvQueryTest::setUp() {
     repo->load();
 
     // Loads rpm::Repo into rpm::SolvSack
-    sack->load_repo(*repo.get(), false, libdnf::rpm::SolvSack::LoadRepoFlags::NONE);
+    sack->load_repo(*repo.get(), libdnf::rpm::SolvSack::LoadRepoFlags::NONE);
 }
 
 

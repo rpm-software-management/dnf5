@@ -97,7 +97,7 @@ private:
     bool load_system_repo(Repo & repo);
 
     /// Loads available repository into SolvSack
-    void load_available_repo(Repo & repo, bool build_cache, LoadRepoFlags flags);
+    void load_available_repo(Repo & repo, LoadRepoFlags flags);
 
     /// Loads main metadata (solvables) from available repo.
     /// @replaces libdnf/dnf-sack.cpp:method:load_yum_repo()

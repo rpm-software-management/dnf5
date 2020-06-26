@@ -74,7 +74,6 @@ void RepoTest::test_repo_basics() {
     try {
         sack.load_repo(
             *repo.get(),
-            true,
             LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER);
     } catch (const std::exception & ex) {
         log_router.error(ex.what());
