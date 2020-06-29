@@ -280,7 +280,7 @@ void SolvSack::Impl::rewrite_repos(Queue * addedfileprovides, Queue * addedfilep
             continue;
         }
         /* now check if the repo already contains all of our file provides */
-        Queue * addedq = libsolv_repo == pool->installed && addedfileprovides_inst ?
+        Queue * addedq = libsolv_repo == pool->installed ?
             addedfileprovides_inst : addedfileprovides;
         if (!addedq->count) {
             continue;
