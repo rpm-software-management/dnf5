@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "repo_impl.hpp"
 #include "solv_sack_impl.hpp"
+#include "solv/id_queue.hpp"
 
 #include "libdnf/rpm/repo.hpp"
 
