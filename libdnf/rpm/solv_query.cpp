@@ -986,6 +986,89 @@ SolvQuery & SolvQuery::ifilter_location(libdnf::sack::QueryCmp cmp_type, std::ve
     return *this;
 }
 
+SolvQuery & SolvQuery::ifilter_provides(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list) {
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+
+    p_impl->sack->pImpl->make_provides_ready();
+
+    switch (cmp_type) {
+        case libdnf::sack::QueryCmp::EQ: {
+            Id p;
+            Id pp;
+            auto reldep_list_size = reldep_list.size();
+            for (int index = 0; index < reldep_list_size; ++index) {
+                Id reldep_id = reldep_list.get_id(index).id;
+                FOR_PROVIDES(p, pp, reldep_id) {
+                    filter_result.add_unsafe(PackageId(p));
+                }
+            }
+            break;
+        }
+        default:
+            throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        p_impl->query_result -= filter_result;
+    } else {
+        p_impl->query_result &= filter_result;
+    }
+
+    return *this;
+}
+
+/// Provide libdnf::sack::QueryCmp without NOT flag
+static void str2reldep_internal(ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
+    bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
+
+    for (auto & pattern : patterns) {
+        libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
+        const char * c_pattern = pattern.c_str();
+        // Remove GLOB when the pattern is not a glob
+        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+            tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
+        }
+
+        switch (tmp_cmp_type) {
+            case libdnf::sack::QueryCmp::EQ:
+                reldep_list.add_reldep(pattern);
+                break;
+            case libdnf::sack::QueryCmp::GLOB:
+                reldep_list.add_reldep_with_glob(pattern);
+                break;
+
+            default:
+                throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
+        }
+    }
+}
+
+SolvQuery & SolvQuery::ifilter_provides(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    ReldepList reldep_list(p_impl->sack.get());
+
+    str2reldep_internal(reldep_list, cmp_type, patterns);
+
+    if (cmp_not) {
+        return ifilter_provides(libdnf::sack::QueryCmp::NEQ, reldep_list);
+    } else {
+        return ifilter_provides(libdnf::sack::QueryCmp::EQ, reldep_list);
+    }
+}
+
 std::size_t SolvQuery::size() const noexcept {
     return p_impl->query_result.size();
 }

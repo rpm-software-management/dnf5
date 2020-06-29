@@ -157,6 +157,18 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_LOCATION
     SolvQuery & ifilter_location(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns);
 
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_PROVIDES
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_PROVIDES
+    SolvQuery & ifilter_provides(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_PROVIDES
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_PROVIDES
+    SolvQuery & ifilter_provides(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
     /// Return the number of packages in the SolvQuery.
     ///
     /// @replaces libdnf/sack/query.hpp:method:Query.size()
