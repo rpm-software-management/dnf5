@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "repo_impl.hpp"
 #include "solv_sack_impl.hpp"
-#include "solv/id_queue.hpp"
 
 #include "libdnf/rpm/repo.hpp"
 
@@ -116,20 +115,20 @@ void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
 // only works if there are no duplicates both in q1 and q2
 // the map parameter must point to an empty map that can hold all ids
 // (it is also returned empty)
-int is_superset(solv::IdQueue & q1, Queue * q2, solv::SolvMap & map) {
+int is_superset(const solv::IdQueue & q1, const solv::IdQueue * q2, solv::SolvMap & map) {
     int cnt = 0;
-    for (int i = 0; i < q2->count; i++) {
-        map.add_unsafe(PackageId(q2->elements[i]));
+    for (int i = 0; i < q2->size(); i++) {
+        map.add_unsafe(PackageId((*q2)[i]));
     }
     for (int i = 0; i < q1.size(); i++) {
         if (map.contains_unsafe(PackageId(q1[i]))) {
             cnt++;
         }
     }
-    for (int i = 0; i < q2->count; i++) {
-        map.remove_unsafe(PackageId(q2->elements[i]));
+    for (int i = 0; i < q2->size(); i++) {
+        map.remove_unsafe(PackageId((*q2)[i]));
     }
-    return cnt == q2->count;
+    return cnt == q2->size();
 }
 
 }  // end of anonymous namespace
@@ -258,7 +257,7 @@ void SolvSack::Impl::write_ext(
     }
 }
 
-void SolvSack::Impl::rewrite_repos(Queue * addedfileprovides, Queue * addedfileprovides_inst) {
+void SolvSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQueue & addedfileprovides_inst) {
     int i;
     auto & logger = base->get_logger();
 
@@ -280,9 +279,9 @@ void SolvSack::Impl::rewrite_repos(Queue * addedfileprovides, Queue * addedfilep
             continue;
         }
         /* now check if the repo already contains all of our file provides */
-        Queue * addedq = libsolv_repo == pool->installed ?
-            addedfileprovides_inst : addedfileprovides;
-        if (!addedq->count) {
+        solv::IdQueue * addedq = libsolv_repo == pool->installed ?
+            &addedfileprovides_inst : &addedfileprovides;
+        if (addedq->size() == 0) {
             continue;
         }
         Repodata * data = repo_id2repodata(libsolv_repo, 1);
@@ -293,7 +292,7 @@ void SolvSack::Impl::rewrite_repos(Queue * addedfileprovides, Queue * addedfilep
                 continue;
             }
         }
-        repodata_set_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, addedq);
+        repodata_set_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &addedq->get_queue());
         repodata_internalize(data);
         /* re-write main data only */
         int oldnrepodata = libsolv_repo->nrepodata;
@@ -427,16 +426,13 @@ void SolvSack::Impl::make_provides_ready() {
     if (provides_ready)
         return;
     internalize_libsolv_repos();
-    Queue addedfileprovides;
-    Queue addedfileprovides_inst;
-    queue_init(&addedfileprovides);
-    queue_init(&addedfileprovides_inst);
-    pool_addfileprovides_queue(pool, &addedfileprovides, &addedfileprovides_inst);
-    if (addedfileprovides.count || addedfileprovides_inst.count) {
-        rewrite_repos(&addedfileprovides, &addedfileprovides_inst);
+    solv::IdQueue addedfileprovides;
+    solv::IdQueue addedfileprovides_inst;
+    pool_addfileprovides_queue(pool, &addedfileprovides.get_queue(),
+                               &addedfileprovides_inst.get_queue());
+    if (addedfileprovides.size() || addedfileprovides_inst.size()) {
+        rewrite_repos(addedfileprovides, addedfileprovides_inst);
     }
-    queue_free(&addedfileprovides);
-    queue_free(&addedfileprovides_inst);
     pool_createwhatprovides(pool);
     provides_ready = true;
 }

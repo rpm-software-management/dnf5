@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SACK_IMPL_HPP
 #define LIBDNF_RPM_SACK_IMPL_HPP
 
+#include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
 
 #include "repo_impl.hpp"
@@ -118,7 +119,7 @@ private:
     /// @replaces libdnf/dnf-sack.cpp:method:write_ext()
     void write_ext(LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix);
 
-    void rewrite_repos(Queue * addedfileprovides, Queue * addedfileprovides_inst);
+    void rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQueue & addedfileprovides_inst);
 
     /// Constructs libsolv repository cache filename for given repository id and optional extension.
     std::string give_repo_solv_cache_fn(const std::string & repoid, const char * ext = nullptr);
