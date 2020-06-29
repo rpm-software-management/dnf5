@@ -413,12 +413,16 @@ void SolvSack::Impl::internalize_libsolv_repos() {
     LibsolvRepo * libsolv_repo;
 
     FOR_REPOS(i, libsolv_repo) {
-        if (auto repo = static_cast<Repo *>(libsolv_repo->appdata)) {
-            repo->p_impl->libsolv_repo_ext.internalize();
-        } else {
-            // TODO(jrohel): Do we allow existence of libsolv repo without appdata set?
-            repo_internalize(libsolv_repo);
-        }
+        internalize_libsolv_repo(libsolv_repo);
+    }
+}
+
+void SolvSack::Impl::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
+    if (auto repo = static_cast<Repo *>(libsolv_repo->appdata)) {
+        repo->p_impl->libsolv_repo_ext.internalize();
+    } else {
+        // TODO(jrohel): Do we allow existence of libsolv repo without appdata set?
+        repo_internalize(libsolv_repo);
     }
 }
 

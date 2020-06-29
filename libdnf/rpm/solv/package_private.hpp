@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "id_queue.hpp"
+#include "solv_private.hpp"
 
 #include "libdnf/rpm/package.hpp"
 
@@ -100,18 +101,13 @@ inline void pool_split_evr(Pool * pool, const char * evr_c, char ** epoch, char 
     *release = r;
 }
 
-inline void repo_internalize_trigger(::Repo * repo) {
-    // TODO(jmracek) add lazy call of repo_internalize(repo)
-    repo_internalize(repo);
-}
-
 static inline unsigned long long lookup_num(Solvable * solvable, unsigned type) {
-    repo_internalize_trigger(solvable->repo);
+    SolvPrivate::internalize_libsolv_repo(solvable->repo);
     return solvable_lookup_num(solvable, type, 0);
 }
 
 static inline const char * lookup_cstring(Solvable * solvable, unsigned type) {
-    repo_internalize_trigger(solvable->repo);
+    SolvPrivate::internalize_libsolv_repo(solvable->repo);
     return solvable_lookup_str(solvable, type);
 }
 
@@ -229,7 +225,7 @@ inline const char * get_license(Pool * pool, libdnf::rpm::PackageId package_id) 
 /// @return const char* !! Return temporal value !!
 inline const char * get_sourcerpm(Pool * pool, libdnf::rpm::PackageId package_id) {
     Solvable * solvable = get_solvable(pool, package_id);
-    repo_internalize_trigger(solvable->repo);
+    SolvPrivate::internalize_libsolv_repo(solvable->repo);
     return solvable_lookup_sourcepkg(solvable);
 }
 
@@ -272,7 +268,7 @@ inline std::vector<std::string> get_files(Pool * pool, libdnf::rpm::PackageId pa
     Dataiterator di;
     std::vector<std::string> ret;
 
-    repo_internalize_trigger(solvable->repo);
+    SolvPrivate::internalize_libsolv_repo(solvable->repo);
     dataiterator_init(
         &di, pool, solvable->repo, package_id.id, SOLVABLE_FILELIST, nullptr, SEARCH_FILES | SEARCH_COMPLETE_FILELIST);
     while (dataiterator_step(&di) != 0) {
@@ -337,7 +333,7 @@ inline const char * get_baseurl(Pool * pool, libdnf::rpm::PackageId package_id) 
 /// @return const char* !! Return temporal value !!
 inline const char * get_location(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
     auto solvable = get_solvable(pool, package_id);
-    repo_internalize_trigger(solvable->repo);
+    SolvPrivate::internalize_libsolv_repo(solvable->repo);
     return solvable_lookup_location(solvable, nullptr);
 }
 

@@ -32,6 +32,13 @@ class Base;
 
 }  // namespace libdnf
 
+namespace libdnf::rpm::solv {
+
+class SolvPrivate;
+
+}  // namespace libdnf::rpm::solv
+
+
 namespace libdnf::rpm {
 
 
@@ -129,6 +136,7 @@ private:
     friend Reldep;
     friend ReldepList;
     friend SolvQuery;
+    friend solv::SolvPrivate;
     class Impl;
     std::unique_ptr<Impl> pImpl;
 };

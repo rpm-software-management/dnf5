@@ -92,6 +92,8 @@ public:
 
     void internalize_libsolv_repos();
 
+    static void internalize_libsolv_repo(LibsolvRepo * libsolv_repo);
+
     void make_provides_ready();
 
 private:

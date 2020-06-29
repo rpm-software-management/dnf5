@@ -289,7 +289,7 @@ Checksum Package::get_checksum() {
 
     Solvable * solvable = solv::get_solvable(pool, id);
     int type;
-    solv::repo_internalize_trigger(solvable->repo);
+    solv::SolvPrivate::internalize_libsolv_repo(solvable->repo);
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_CHECKSUM, &type);
     Checksum checksum(chksum, type);
 
@@ -301,7 +301,7 @@ Checksum Package::get_hdr_checksum() {
 
     Solvable * solvable = solv::get_solvable(pool, id);
     int type;
-    solv::repo_internalize_trigger(solvable->repo);
+    solv::SolvPrivate::internalize_libsolv_repo(solvable->repo);
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_HDRID, &type);
     Checksum checksum(chksum, type);
 
