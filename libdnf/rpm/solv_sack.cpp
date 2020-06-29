@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "repo_impl.hpp"
 #include "solv_sack_impl.hpp"
+#include "solv/id_queue.hpp"
 
 #include "libdnf/rpm/repo.hpp"
 
@@ -115,24 +116,18 @@ void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
 // only works if there are no duplicates both in q1 and q2
 // the map parameter must point to an empty map that can hold all ids
 // (it is also returned empty)
-int is_superset(Queue * q1, Queue * q2, Map * m) {
+int is_superset(solv::IdQueue & q1, Queue * q2, solv::SolvMap & map) {
     int cnt = 0;
     for (int i = 0; i < q2->count; i++) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-        MAPSET(m, q2->elements[i]);
-#pragma GCC diagnostic pop
+        map.add_unsafe(PackageId(q2->elements[i]));
     }
-    for (int i = 0; i < q1->count; i++) {
-        if (MAPTST(m, q1->elements[i])) {
+    for (int i = 0; i < q1.size(); i++) {
+        if (map.contains_unsafe(PackageId(q1[i]))) {
             cnt++;
         }
     }
     for (int i = 0; i < q2->count; i++) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-        MAPCLR(m, q2->elements[i]);
-#pragma GCC diagnostic pop
+        map.remove_unsafe(PackageId(q2->elements[i]));
     }
     return cnt == q2->count;
 }
@@ -267,11 +262,9 @@ void SolvSack::Impl::rewrite_repos(Queue * addedfileprovides, Queue * addedfilep
     int i;
     auto & logger = base->get_logger();
 
-    Map providedids;
-    map_init(&providedids, pool->ss.nstrings);
+    solv::SolvMap providedids(pool->ss.nstrings);
 
-    Queue fileprovidesq;
-    queue_init(&fileprovidesq);
+    solv::IdQueue fileprovidesq;
 
     LibsolvRepo * libsolv_repo;
     FOR_REPOS(i, libsolv_repo) {
@@ -293,10 +286,10 @@ void SolvSack::Impl::rewrite_repos(Queue * addedfileprovides, Queue * addedfilep
             continue;
         }
         Repodata * data = repo_id2repodata(libsolv_repo, 1);
-        queue_empty(&fileprovidesq);
+        fileprovidesq.clear();
         if (repodata_lookup_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES,
-                                    &fileprovidesq)) {
-            if (is_superset(&fileprovidesq, addedq, &providedids)) {
+                                    &fileprovidesq.get_queue())) {
+            if (is_superset(fileprovidesq, addedq, providedids)) {
                 continue;
             }
         }
@@ -315,8 +308,6 @@ void SolvSack::Impl::rewrite_repos(Queue * addedfileprovides, Queue * addedfilep
         libsolv_repo->nsolvables = oldnsolvables;
         libsolv_repo->end = oldend;
     }
-    queue_free(&fileprovidesq);
-    map_free(&providedids);
 }
 
 SolvSack::Impl::RepodataState SolvSack::Impl::load_repo_main(Repo & repo) {
