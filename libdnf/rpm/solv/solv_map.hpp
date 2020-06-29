@@ -91,8 +91,14 @@ public:
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(Id id)
     bool contains(PackageId package_id) const;
 
+    /// Faster, but unsafe version of contains() method that is doesn't check bitmap range
+    bool contains_unsafe(PackageId package_id) const;
+
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.remove(Id id)
     void remove(PackageId package_id);
+
+    /// Faster, but unsafe version of remove() method that is doesn't check bitmap range
+    void remove_unsafe(PackageId package_id);
 
     // SET OPERATIONS - Map
 
@@ -129,14 +135,6 @@ protected:
     /// Check if `id` is in bitmap range.
     /// Throws std::out_of_range
     void check_id_in_bitmap_range(PackageId package_id) const;
-
-    // ITEM OPERATIONS - UNSAFE
-
-    /// Faster, but unsafe version of contains() method that is doesn't check bitmap range
-    bool contains_unsafe(PackageId package_id) const;
-
-    /// Faster, but unsafe version of remove() method that is doesn't check bitmap range
-    void remove_unsafe(PackageId package_id);
 
 private:
     friend class libdnf::rpm::SolvSack;
