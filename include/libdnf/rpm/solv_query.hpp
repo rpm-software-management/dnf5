@@ -169,6 +169,120 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_PROVIDES
     SolvQuery & ifilter_provides(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
 
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_CONFLICTS
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_CONFLICTS
+    SolvQuery & ifilter_conflicts(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_CONFLICTS
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_CONFLICTS
+    SolvQuery & ifilter_conflicts(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_CONFLICTS
+    SolvQuery & ifilter_conflicts(libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_ENHANCES
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_ENHANCES
+    SolvQuery & ifilter_enhances(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_ENHANCES
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_ENHANCES
+    SolvQuery & ifilter_enhances(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_ENHANCES
+    SolvQuery & ifilter_enhances(libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_OBSOLETES
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_OBSOLETES
+    SolvQuery & ifilter_obsoletes(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_OBSOLETES
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_OBSOLETES
+    SolvQuery & ifilter_obsoletes(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_RECOMMENDS
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_RECOMMENDS
+    SolvQuery & ifilter_recommends(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_RECOMMENDS
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_RECOMMENDS
+    SolvQuery & ifilter_recommends(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_RECOMMENDS
+    SolvQuery & ifilter_recommends(libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_REQUIRES
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_REQUIRES
+    SolvQuery & ifilter_requires(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REQUIRES
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_REQUIRES
+    SolvQuery & ifilter_requires(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_REQUIRES
+    SolvQuery & ifilter_requires(libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_SUGGESTS
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_SUGGESTS
+    SolvQuery & ifilter_suggests(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUGGESTS
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SUGGESTS
+    SolvQuery & ifilter_suggests(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_SUGGESTS
+    SolvQuery & ifilter_suggests(libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const Dependency * reldep) - cmp_type = HY_PKG_SUPPLEMENTS
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DependencyContainer * reldeplist) - cmp_type = HY_PKG_SUPPLEMENTS
+    SolvQuery & ifilter_supplements(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_SUPPLEMENTS
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_SUPPLEMENTS
+    SolvQuery & ifilter_supplements(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_SUPPLEMENTS
+    SolvQuery & ifilter_supplements(libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+
     /// Return the number of packages in the SolvQuery.
     ///
     /// @replaces libdnf/sack/query.hpp:method:Query.size()
