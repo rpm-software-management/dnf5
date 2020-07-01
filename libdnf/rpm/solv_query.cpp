@@ -1231,6 +1231,60 @@ SolvQuery & SolvQuery::ifilter_obsoletes(libdnf::sack::QueryCmp cmp_type, const 
     return *this;
 }
 
+SolvQuery & SolvQuery::ifilter_obsoletes(libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set) {
+    bool cmp_not = false;
+    switch (cmp_type) {
+        case libdnf::sack::QueryCmp::EQ:
+            break;
+        case libdnf::sack::QueryCmp::NEQ:
+            cmp_not = true;
+            break;
+
+        default:
+            throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
+    }
+
+    solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+
+    p_impl->sack->pImpl->make_provides_ready();
+
+    int obsprovides = pool_get_flag(pool, POOL_FLAG_OBSOLETEUSESPROVIDES);
+
+    auto & target = *package_set.pImpl.get();
+    for (auto package_id: p_impl->query_result) {
+        Solvable * solvable = solv::get_solvable(pool, package_id);
+        if (!solvable->repo)
+            continue;
+        for (Id * r_id = solvable->repo->idarraydata + solvable->obsoletes; *r_id; ++r_id) {
+            Id r;
+            Id rr;
+
+            FOR_PROVIDES(r, rr, *r_id) {
+                if (!target.contains(PackageId(r))) {
+                    continue;
+                }
+                assert(r != SYSTEMSOLVABLE);
+                Solvable * so = pool_id2solvable(pool, r);
+                if (!obsprovides && !pool_match_nevr(pool, so, *r_id)) {
+                    continue; /* only matching pkg names */
+                }
+                filter_result.add_unsafe(PackageId(package_id));
+                break;
+            }
+        }
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        p_impl->query_result -= filter_result;
+    } else {
+        p_impl->query_result &= filter_result;
+    }
+
+    return *this;
+}
+
 SolvQuery & SolvQuery::ifilter_recommends(libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list) {
     p_impl->filter_reldep(SOLVABLE_RECOMMENDS, cmp_type, reldep_list);
     return *this;
