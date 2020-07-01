@@ -117,7 +117,7 @@ public:
         USE_OTHER = 1 << 4,
     };
 
-    SolvSack(Base & base);
+    explicit SolvSack(Base & base);
     ~SolvSack();
 
     //TODO(jrohel): Provide/use configuration options for flags?

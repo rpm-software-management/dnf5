@@ -86,7 +86,7 @@ inline void pool_split_evr(Pool * pool, const char * evr_c, char ** epoch, char 
         v = evr;
         e = nullptr;
         r = nullptr;
-    } else { // *e == ':'
+    } else {  // *e == ':'
         *e = '\0';
         v = e + 1;
         e = evr;

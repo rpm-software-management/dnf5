@@ -20,10 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SACK_IMPL_HPP
 #define LIBDNF_RPM_SACK_IMPL_HPP
 
+#include "repo_impl.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
-
-#include "repo_impl.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package.hpp"
@@ -36,8 +35,7 @@ extern "C" {
 #include <vector>
 
 constexpr const char * SOLVABLE_NAME_ADVISORY_PREFIX = "patch:";
-constexpr size_t SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH =
-    std::char_traits<char>::length(SOLVABLE_NAME_ADVISORY_PREFIX);
+constexpr size_t SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH = std::char_traits<char>::length(SOLVABLE_NAME_ADVISORY_PREFIX);
 
 inline bool is_package(const Pool * pool, Id solvable_id) {
     Solvable * solvable = pool_id2solvable(pool, solvable_id);
@@ -187,9 +185,11 @@ inline solv::SolvMap & SolvSack::Impl::get_solvables() {
     Id solvable_id;
 
     // loop over all package solvables
-    FOR_POOL_SOLVABLES(solvable_id)
-    if (is_package(pool, solvable_id))
-        cached_solvables.add_unsafe(PackageId(solvable_id));
+    FOR_POOL_SOLVABLES(solvable_id) {
+        if (is_package(pool, solvable_id)) {
+            cached_solvables.add_unsafe(PackageId(solvable_id));
+        }
+    }
     return cached_solvables;
 }
 

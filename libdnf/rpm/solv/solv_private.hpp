@@ -29,8 +29,8 @@ namespace libdnf::rpm::solv {
 class SolvPrivate {
 public:
     static void internalize_libsolv_repo(LibsolvRepo * libsolv_repo);
-private:
 
+private:
 };
 
 inline void SolvPrivate::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {

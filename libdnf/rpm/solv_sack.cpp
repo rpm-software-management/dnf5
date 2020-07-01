@@ -279,15 +279,13 @@ void SolvSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQu
             continue;
         }
         // now check if the repo already contains all of our file provides
-        solv::IdQueue * addedq = libsolv_repo == pool->installed ?
-            &addedfileprovides_inst : &addedfileprovides;
+        solv::IdQueue * addedq = libsolv_repo == pool->installed ? &addedfileprovides_inst : &addedfileprovides;
         if (addedq->size() == 0) {
             continue;
         }
         Repodata * data = repo_id2repodata(libsolv_repo, 1);
         fileprovidesq.clear();
-        if (repodata_lookup_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES,
-                                    &fileprovidesq.get_queue())) {
+        if (repodata_lookup_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &fileprovidesq.get_queue())) {
             if (is_superset(fileprovidesq, addedq, providedids)) {
                 continue;
             }
@@ -412,9 +410,7 @@ void SolvSack::Impl::internalize_libsolv_repos() {
     int i;
     LibsolvRepo * libsolv_repo;
 
-    FOR_REPOS(i, libsolv_repo) {
-        internalize_libsolv_repo(libsolv_repo);
-    }
+    FOR_REPOS(i, libsolv_repo) { internalize_libsolv_repo(libsolv_repo); }
 }
 
 void SolvSack::Impl::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
@@ -433,8 +429,7 @@ void SolvSack::Impl::make_provides_ready() {
     internalize_libsolv_repos();
     solv::IdQueue addedfileprovides;
     solv::IdQueue addedfileprovides_inst;
-    pool_addfileprovides_queue(pool, &addedfileprovides.get_queue(),
-                               &addedfileprovides_inst.get_queue());
+    pool_addfileprovides_queue(pool, &addedfileprovides.get_queue(), &addedfileprovides_inst.get_queue());
     if (!addedfileprovides.empty() || !addedfileprovides_inst.empty()) {
         rewrite_repos(addedfileprovides, addedfileprovides_inst);
     }
