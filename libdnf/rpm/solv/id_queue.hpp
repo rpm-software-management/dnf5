@@ -51,6 +51,7 @@ public:
     void push_back(Id id1, Id id2);
     int * data() const noexcept;
     Queue & get_queue() noexcept;
+    bool empty() const noexcept { return queue.count == 0; };
     int size() const noexcept;
     void clear() noexcept;
     void append(const IdQueue & src);
