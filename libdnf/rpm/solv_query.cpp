@@ -138,7 +138,7 @@ inline static void filter_glob_internal(
     }
 }
 
-SolvQuery & SolvQuery::ifilter_name(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_name(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
     auto & sorted_solvables = p_impl->sack->pImpl->get_sorted_solvables();
@@ -237,7 +237,7 @@ inline static bool cmp_lte(int cmp) {
 }
 
 template <bool (*cmp_fnc)(int value_to_cmp)>
-inline static void filter_evr_internal(std::vector<std::string> & patterns, Pool * pool, solv::SolvMap & query_result) {
+inline static void filter_evr_internal(const std::vector<std::string> & patterns, Pool * pool, solv::SolvMap & query_result) {
     solv::SolvMap filter_result(static_cast<int>(pool->nsolvables));
     for (auto & pattern : patterns) {
         const char * pattern_c_str = pattern.c_str();
@@ -254,7 +254,7 @@ inline static void filter_evr_internal(std::vector<std::string> & patterns, Pool
     query_result &= filter_result;
 }
 
-SolvQuery & SolvQuery::ifilter_evr(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_evr(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::GT:
@@ -278,7 +278,7 @@ SolvQuery & SolvQuery::ifilter_evr(libdnf::sack::QueryCmp cmp_type, std::vector<
     return *this;
 }
 
-SolvQuery & SolvQuery::ifilter_arch(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_arch(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
@@ -445,7 +445,7 @@ inline static void filter_nevra_internal(
     }
 }
 
-SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -535,7 +535,7 @@ inline static void filter_version_internal(
     }
 }
 
-SolvQuery & SolvQuery::ifilter_version(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_version(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -600,7 +600,7 @@ inline static void filter_release_internal(
     }
 }
 
-SolvQuery & SolvQuery::ifilter_release(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_release(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -652,7 +652,7 @@ SolvQuery & SolvQuery::ifilter_release(libdnf::sack::QueryCmp cmp_type, std::vec
     return *this;
 }
 
-SolvQuery & SolvQuery::ifilter_reponame(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_reponame(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -713,7 +713,7 @@ SolvQuery & SolvQuery::ifilter_reponame(libdnf::sack::QueryCmp cmp_type, std::ve
     return *this;
 }
 
-SolvQuery & SolvQuery::ifilter_sourcerpm(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_sourcerpm(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -773,7 +773,7 @@ SolvQuery & SolvQuery::ifilter_sourcerpm(libdnf::sack::QueryCmp cmp_type, std::v
     return *this;
 }
 
-SolvQuery & SolvQuery::ifilter_epoch(libdnf::sack::QueryCmp cmp_type, std::vector<unsigned long> & patterns) {
+SolvQuery & SolvQuery::ifilter_epoch(libdnf::sack::QueryCmp cmp_type, const std::vector<unsigned long> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -872,7 +872,7 @@ static void filter_dataiterator_internal(
     Id keyname,
     solv::SolvMap & candidates,
     libdnf::sack::QueryCmp cmp_type,
-    std::vector<std::string> & patterns) {
+    const std::vector<std::string> & patterns) {
     solv::SolvMap filter_result(pool->nsolvables);
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
@@ -925,7 +925,7 @@ static void filter_dataiterator_internal(
     }
 }
 
-SolvQuery & SolvQuery::ifilter_file(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_file(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
 
     filter_dataiterator_internal(pool, SOLVABLE_FILELIST, p_impl->query_result, cmp_type, patterns);
@@ -933,7 +933,7 @@ SolvQuery & SolvQuery::ifilter_file(libdnf::sack::QueryCmp cmp_type, std::vector
     return *this;
 }
 
-SolvQuery & SolvQuery::ifilter_description(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_description(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
 
     filter_dataiterator_internal(pool, SOLVABLE_DESCRIPTION, p_impl->query_result, cmp_type, patterns);
@@ -941,7 +941,7 @@ SolvQuery & SolvQuery::ifilter_description(libdnf::sack::QueryCmp cmp_type, std:
     return *this;
 }
 
-SolvQuery & SolvQuery::ifilter_summary(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_summary(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
 
     filter_dataiterator_internal(pool, SOLVABLE_SUMMARY, p_impl->query_result, cmp_type, patterns);
@@ -949,7 +949,7 @@ SolvQuery & SolvQuery::ifilter_summary(libdnf::sack::QueryCmp cmp_type, std::vec
     return *this;
 }
 
-SolvQuery & SolvQuery::ifilter_url(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_url(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     Pool * pool = p_impl->sack->pImpl->get_pool();
 
     filter_dataiterator_internal(pool, SOLVABLE_URL, p_impl->query_result, cmp_type, patterns);
@@ -957,7 +957,7 @@ SolvQuery & SolvQuery::ifilter_url(libdnf::sack::QueryCmp cmp_type, std::vector<
     return *this;
 }
 
-SolvQuery & SolvQuery::ifilter_location(libdnf::sack::QueryCmp cmp_type, std::vector<std::string> & patterns) {
+SolvQuery & SolvQuery::ifilter_location(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
