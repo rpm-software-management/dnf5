@@ -435,7 +435,7 @@ void SolvSack::Impl::make_provides_ready() {
     solv::IdQueue addedfileprovides_inst;
     pool_addfileprovides_queue(pool, &addedfileprovides.get_queue(),
                                &addedfileprovides_inst.get_queue());
-    if (addedfileprovides.size() || addedfileprovides_inst.size()) {
+    if (!addedfileprovides.empty() || !addedfileprovides_inst.empty()) {
         rewrite_repos(addedfileprovides, addedfileprovides_inst);
     }
     pool_createwhatprovides(pool);
