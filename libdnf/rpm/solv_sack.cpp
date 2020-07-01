@@ -278,7 +278,7 @@ void SolvSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQu
         if (libsolv_repo_ext.main_nrepodata < 2) {
             continue;
         }
-        /* now check if the repo already contains all of our file provides */
+        // now check if the repo already contains all of our file provides
         solv::IdQueue * addedq = libsolv_repo == pool->installed ?
             &addedfileprovides_inst : &addedfileprovides;
         if (addedq->size() == 0) {
@@ -294,7 +294,7 @@ void SolvSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQu
         }
         repodata_set_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &addedq->get_queue());
         repodata_internalize(data);
-        /* re-write main data only */
+        // re-write main data only
         int oldnrepodata = libsolv_repo->nrepodata;
         int oldnsolvables = libsolv_repo->nsolvables;
         int oldend = libsolv_repo->end;
@@ -427,8 +427,9 @@ void SolvSack::Impl::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
 }
 
 void SolvSack::Impl::make_provides_ready() {
-    if (provides_ready)
+    if (provides_ready) {
         return;
+    }
     internalize_libsolv_repos();
     solv::IdQueue addedfileprovides;
     solv::IdQueue addedfileprovides_inst;
