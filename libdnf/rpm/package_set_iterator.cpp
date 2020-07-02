@@ -34,8 +34,8 @@ PackageSetIterator::PackageSetIterator(const PackageSet & package_set)
 
 
 PackageSetIterator::PackageSetIterator(const PackageSetIterator & other)
-    : pImpl{new Impl(other.pImpl->package_set)}
-    , current_value{other.pImpl->package_set.get_sack(), PackageId(*(*pImpl))} {}
+    : pImpl{new Impl(*other.pImpl)}
+    , current_value{other.current_value} {}
 
 
 PackageSetIterator::~PackageSetIterator() {}

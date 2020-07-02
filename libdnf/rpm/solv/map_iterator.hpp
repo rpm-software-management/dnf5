@@ -39,7 +39,7 @@ class SolvMap;
 class SolvMapIterator {
 public:
     explicit SolvMapIterator(const Map * map);
-    SolvMapIterator(const SolvMapIterator & other);
+    SolvMapIterator(const SolvMapIterator & other) = default;
 
     using iterator_category = std::forward_iterator_tag;
     using difference_type = PackageId;
@@ -85,9 +85,6 @@ inline SolvMapIterator::SolvMapIterator(const Map * map) : map{map} {
     current_value.id = BEGIN;
     ++(*this);
 }
-
-
-inline SolvMapIterator::SolvMapIterator(const SolvMapIterator & other) : SolvMapIterator(other.map) {}
 
 
 inline SolvMapIterator & SolvMapIterator::operator++() {

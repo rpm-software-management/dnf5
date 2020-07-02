@@ -34,7 +34,7 @@ namespace libdnf::rpm {
 class PackageSetIterator::Impl : public libdnf::rpm::solv::SolvMap::iterator {
 public:
     Impl(const PackageSet & package_set);
-    Impl(const PackageSetIterator::Impl & package_set_iterator_impl);
+    Impl(const PackageSetIterator::Impl & package_set_iterator_impl) = default;
 
     PackageSetIterator::Impl & operator++();
 
@@ -49,11 +49,6 @@ inline PackageSetIterator::Impl::Impl(const PackageSet & package_set)
     : libdnf::rpm::solv::SolvMap::iterator(package_set.pImpl->get_map())
     , package_set{package_set}
     , current_value{package_set.get_sack(), PackageId(-1)} {}
-
-
-inline PackageSetIterator::Impl::Impl(const PackageSetIterator::Impl & package_set_iterator_impl)
-    : PackageSetIterator::Impl::Impl(package_set_iterator_impl.package_set) {}
-
 
 inline PackageSetIterator::Impl & PackageSetIterator::Impl::operator++() {
     // construct and store package based on Id obtained from the underlying iterator
