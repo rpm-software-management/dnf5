@@ -258,3 +258,47 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         CPPUNIT_ASSERT(query.size() == 0);
     }
 }
+
+void RpmSolvQueryTest::test_ifilter_provides() {
+    {
+        // Test QueryCmp::EQ - string
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> provides{"glibc-langpack-hr"};
+        query.ifilter_provides(libdnf::sack::QueryCmp::EQ, provides);
+        CPPUNIT_ASSERT(query.size() == 1);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(pkg.get_full_nevra() == "glibc-langpack-hr-0:2.28-9.fc29.x86_64");
+        }
+    }
+
+    {
+        // Test QueryCmp::NEQ - string
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> provides{"glibc-langpack-hr"};
+        query.ifilter_provides(libdnf::sack::QueryCmp::NEQ, provides);
+        CPPUNIT_ASSERT(query.size() == 288);
+    }
+}
+
+void RpmSolvQueryTest::test_ifilter_requires() {
+    {
+        // Test QueryCmp::EQ - string
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> requires{"wget"};
+        query.ifilter_requires(libdnf::sack::QueryCmp::EQ, requires);
+        CPPUNIT_ASSERT(query.size() == 1);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(pkg.get_full_nevra() == "abcde-0:2.9.2-1.fc29.noarch");
+        }
+    }
+
+    {
+        // Test QueryCmp::NEQ - string
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> requires{"wget"};
+        query.ifilter_requires(libdnf::sack::QueryCmp::NEQ, requires);
+        CPPUNIT_ASSERT(query.size() == 288);
+    }
+}

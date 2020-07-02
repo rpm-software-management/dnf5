@@ -39,6 +39,8 @@ class RpmSolvQueryTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_size);
     CPPUNIT_TEST(test_ifilter_name);
     CPPUNIT_TEST(test_ifilter_nevra);
+    CPPUNIT_TEST(test_ifilter_provides);
+    CPPUNIT_TEST(test_ifilter_requires);
 #endif
 
 #ifdef WITH_PERFORMANCE_TESTS
@@ -53,6 +55,8 @@ public:
     void test_size();
     void test_ifilter_name();
     void test_ifilter_nevra();
+    void test_ifilter_provides();
+    void test_ifilter_requires();
 
 private:
     std::unique_ptr<libdnf::Base> base;
