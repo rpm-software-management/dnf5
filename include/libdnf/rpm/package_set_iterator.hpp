@@ -60,9 +60,6 @@ public:
 private:
     class Impl;
     std::unique_ptr<Impl> pImpl;
-
-    // value of the iterator
-    Package current_value;
 };
 
 

@@ -28,57 +28,48 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 
 
-PackageSetIterator::PackageSetIterator(const PackageSet & package_set)
-    : pImpl{new Impl(package_set)}
-    , current_value{package_set.get_sack(), PackageId(*(*pImpl))} {}
+PackageSetIterator::PackageSetIterator(const PackageSet & package_set) : pImpl{new Impl(package_set)} {}
 
-
-PackageSetIterator::PackageSetIterator(const PackageSetIterator & other)
-    : pImpl{new Impl(*other.pImpl)}
-    , current_value{other.current_value} {}
-
+PackageSetIterator::PackageSetIterator(const PackageSetIterator & other) : pImpl{new Impl(*other.pImpl)} {}
 
 PackageSetIterator::~PackageSetIterator() {}
 
-
 void PackageSetIterator::begin() {
     pImpl->begin();
-    current_value.id = PackageId(*(*pImpl));
+    pImpl->current_value.id = PackageId(*(*pImpl));
 }
 
 
 void PackageSetIterator::end() {
     pImpl->end();
-    current_value.id = PackageId(*(*pImpl));
+    pImpl->current_value.id = PackageId(*(*pImpl));
 }
 
 
 Package PackageSetIterator::operator*() {
-    return current_value;
+    return pImpl->current_value;
 }
 
 
 PackageSetIterator & PackageSetIterator::operator++() {
     ++(*pImpl);
-    current_value.id = static_cast<PackageId>(*(*pImpl));
     return *this;
 }
 
 
 PackageSetIterator PackageSetIterator::operator++(int) {
     ++(*pImpl);
-    current_value.id = static_cast<PackageId>(*(*pImpl));
     return *this;
 }
 
 
 bool PackageSetIterator::operator==(const PackageSetIterator & other) const {
-    return current_value == other.current_value;
+    return pImpl->current_value == other.pImpl->current_value;
 }
 
 
 bool PackageSetIterator::operator!=(const PackageSetIterator & other) const {
-    return current_value != other.current_value;
+    return pImpl->current_value != other.pImpl->current_value;
 }
 
 
