@@ -43,7 +43,6 @@ PackageSetIterator::~PackageSetIterator() {}
 
 void PackageSetIterator::begin() {
     pImpl->begin();
-    ++(*pImpl);
     current_value.id = PackageId(*(*pImpl));
 }
 

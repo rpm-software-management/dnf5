@@ -55,7 +55,7 @@ public:
     bool operator==(const SolvMapIterator & other) const { return current_value == other.current_value; }
     bool operator!=(const SolvMapIterator & other) const { return current_value != other.current_value; }
 
-    void begin() { current_value.id = BEGIN; }
+    void begin();
     void end() { current_value.id = END; }
 
 protected:
@@ -75,7 +75,7 @@ private:
     const unsigned char * map_end;
 
     // value of the iterator
-    PackageId current_value = PackageId(BEGIN);
+    PackageId current_value;
 };
 
 
@@ -86,6 +86,10 @@ inline SolvMapIterator::SolvMapIterator(const Map * map) : map{map} {
     ++(*this);
 }
 
+inline void SolvMapIterator::begin() {
+    current_value.id = BEGIN;
+    ++*this;
+}
 
 inline SolvMapIterator & SolvMapIterator::operator++() {
     if (current_value.id >= 0) {
