@@ -7,8 +7,9 @@
 
 %{
     // make SWIG wrap following headers
-    // #include "libdnf/base/base.hpp"
+    #include "libdnf/base/base.hpp"
+    using namespace libdnf;
 %}
 
 #define CV __perl_CV
-// %include "libdnf/base/base.hpp"
+%include "libdnf/base/base.hpp"
