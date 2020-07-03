@@ -48,11 +48,8 @@ bool Nevra::parse(const std::string & nevra_str, Form form)
     }
     name = match[NAME].str();
     std::ssub_match epoch_sub_match = match[EPOCH];
-    if (epoch_sub_match.length() == 0) {
-        epoch = EPOCH_NOT_SET;
-    } else {
-        epoch = std::stoi(epoch_sub_match.str());
-    }
+    epoch = epoch_sub_match.str();
+
     std::ssub_match version_sub_match = match[VERSION];
     version = version_sub_match.str();
 
@@ -69,7 +66,7 @@ void
 Nevra::clear() noexcept
 {
     name.clear();
-    epoch = EPOCH_NOT_SET;
+    epoch.clear();
     version.clear();
     release.clear();
     arch.clear();
@@ -78,8 +75,7 @@ Nevra::clear() noexcept
 bool
 Nevra::has_just_name() const
 {
-    return !name.empty() && epoch == EPOCH_NOT_SET && 
-        version.empty() && release.empty() && arch.empty();
+    return !name.empty() && epoch.empty() && version.empty() && release.empty() && arch.empty();
 }
 
 

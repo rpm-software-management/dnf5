@@ -28,27 +28,26 @@ namespace libdnf::rpm {
 struct Nevra {
 public:
     enum class Form { NEVRA = 1, NEVR = 2, NEV = 3, NA = 4, NAME = 5 };
-    
-    static constexpr int EPOCH_NOT_SET = -1;
 
-    Nevra();
+    Nevra() = default;
 
     bool parse(const std::string & nevra_str, Form form);
     void clear() noexcept;
 
     const std::string & get_name() const noexcept;
-    int get_epoch() const noexcept;
+    const std::string & get_epoch() const noexcept;
     const std::string & get_version() const noexcept;
     const std::string & get_release() const noexcept;
     const std::string & get_arch() const noexcept;
 
     void set_name(const std::string & name);
-    void set_epoch(int epoch);
+    void set_epoch(const std::string & epoch);
     void set_version(const std::string & version);
     void set_release(const std::string & release);
     void set_arch(const std::string & arch);
 
     void set_name(std::string && name);
+    void set_epoch(std::string && epoch);
     void set_version(std::string && version);
     void set_release(std::string && release);
     void set_arch(std::string && arch);
@@ -57,22 +56,18 @@ public:
 
 private:
     std::string name;
-    // TODO(jmracek) What about to store epoch as a string?
-    int epoch;
+    std::string epoch;
     std::string version;
     std::string release;
     std::string arch;
 };
-
-inline Nevra::Nevra()
-: epoch(EPOCH_NOT_SET) {}
 
 inline const std::string & Nevra::get_name() const noexcept
 {
     return name;
 }
 
-inline int Nevra::get_epoch() const noexcept
+inline const std::string &  Nevra::get_epoch() const noexcept
 {
     return epoch;
 }
@@ -96,7 +91,7 @@ inline void Nevra::set_name(const std::string & name)
     this->name = name;
 }
 
-inline void Nevra::set_epoch(int epoch)
+inline void Nevra::set_epoch(const std::string & epoch)
 {
     this->epoch = epoch;
 }
@@ -119,6 +114,11 @@ inline void Nevra::set_arch(const std::string & arch)
 inline void Nevra::set_name(std::string && name)
 {
     this->name = std::move(name);
+}
+
+inline void Nevra::set_epoch(std::string && epoch)
+{
+    this->epoch = std::move(epoch);
 }
 
 inline void Nevra::set_version(std::string && version)
