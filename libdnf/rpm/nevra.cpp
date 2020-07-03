@@ -25,7 +25,7 @@ namespace libdnf::rpm {
 
 
 #define PKG_NAME "([^:(/=<> ]+)"
-#define PKG_EPOCH "(([0-9]+):)?"
+#define PKG_EPOCH "(([\\][*?0-9]+):)?"
 #define PKG_VERSION "([^-:(/=<> ]+)"
 #define PKG_RELEASE PKG_VERSION
 #define PKG_ARCH "([^-:.(/=<> ]+)"
