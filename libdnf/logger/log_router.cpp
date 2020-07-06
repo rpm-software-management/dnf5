@@ -27,7 +27,7 @@ std::unique_ptr<Logger> LogRouter::release_logger(size_t index) {
     return ret;
 }
 
-void LogRouter::write(Level level, const std::string & message) noexcept {
+void LogRouter::log(Level level, const std::string & message) noexcept {
     auto now = time(nullptr);
     auto pid = getpid();
     for (auto & logger : loggers) {

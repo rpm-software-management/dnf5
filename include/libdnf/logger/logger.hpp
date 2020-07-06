@@ -51,28 +51,28 @@ public:
     }
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.critical(const std::string & message)
-    void critical(const std::string & message) noexcept { write(Level::CRITICAL, message); }
+    void critical(const std::string & message) noexcept { log(Level::CRITICAL, message); }
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.error(const std::string & message)
-    void error(const std::string & message) noexcept { write(Level::ERROR, message); }
+    void error(const std::string & message) noexcept { log(Level::ERROR, message); }
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.warning(const std::string & message)
-    void warning(const std::string & message) noexcept { write(Level::WARNING, message); }
+    void warning(const std::string & message) noexcept { log(Level::WARNING, message); }
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.notice(const std::string & message)
-    void notice(const std::string & message) noexcept { write(Level::NOTICE, message); }
+    void notice(const std::string & message) noexcept { log(Level::NOTICE, message); }
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.info(const std::string & message)
-    void info(const std::string & message) noexcept { write(Level::INFO, message); }
+    void info(const std::string & message) noexcept { log(Level::INFO, message); }
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.debug(const std::string & message)
-    void debug(const std::string & message) noexcept { write(Level::DEBUG, message); }
+    void debug(const std::string & message) noexcept { log(Level::DEBUG, message); }
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.trace(const std::string & message)
-    void trace(const std::string & message) noexcept { write(Level::TRACE, message); }
+    void trace(const std::string & message) noexcept { log(Level::TRACE, message); }
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.write(libdnf::Logger::Level level, const std::string & message)
-    virtual void write(Level level, const std::string & message) noexcept;
+    virtual void log(Level level, const std::string & message) noexcept;
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.write(time_t time, pid_t pid, libdnf::Logger::Level level, const std::string & message)
     virtual void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept = 0;

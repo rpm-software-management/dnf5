@@ -49,7 +49,7 @@ public:
     /// Returns number of loggers registered in LogRouter.
     size_t get_loggers_count() const noexcept { return loggers.size(); }
 
-    void write(Level level, const std::string & message) noexcept override;
+    void log(Level level, const std::string & message) noexcept override;
     void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept override;
 
 private:

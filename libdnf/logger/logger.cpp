@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-void Logger::write(Level level, const std::string & message) noexcept {
+void Logger::log(Level level, const std::string & message) noexcept {
     write(time(nullptr), getpid(), level, message);
 }
 
