@@ -847,6 +847,58 @@ SolvQuery & SolvQuery::ifilter_epoch(libdnf::sack::QueryCmp cmp_type, const std:
     return *this;
 }
 
+SolvQuery & SolvQuery::ifilter_epoch(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+
+    bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
+
+    for (auto & pattern : patterns) {
+        libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
+        const char * c_pattern = pattern.c_str();
+        // Replace GLOB with EQ when the pattern is not a glob
+        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+            tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
+        }
+
+        switch (tmp_cmp_type) {
+            case libdnf::sack::QueryCmp::EQ:
+                for (PackageId candidate_id : p_impl->query_result) {
+                    auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                    if (strcmp(candidate_epoch, c_pattern) == 0) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+                break;
+            case libdnf::sack::QueryCmp::GLOB:
+                for (PackageId candidate_id : p_impl->query_result) {
+                    auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                    if (fnmatch(c_pattern, candidate_epoch, 0) == 0) {
+                        filter_result.add_unsafe(candidate_id);
+                    }
+                }
+                break;
+            default:
+                throw NotSupportedCmpType("Used unsupported CmpType");
+        }
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        p_impl->query_result -= filter_result;
+    } else {
+        p_impl->query_result &= filter_result;
+    }
+
+    return *this;
+}
+
 static void filter_dataiterator(
     Pool * pool,
     Id keyname,
