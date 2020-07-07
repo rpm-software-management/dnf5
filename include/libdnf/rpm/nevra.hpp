@@ -25,19 +25,30 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
+/// @replaces hawkey:hawkey/__init__.py:class:Nevra
 struct Nevra {
 public:
     enum class Form { NEVRA = 1, NEVR = 2, NEV = 3, NA = 4, NAME = 5 };
 
     Nevra() = default;
 
+    /// Returns false when parsing failed and stored data are in inconsistance state.
     bool parse(const std::string & nevra_str, Form form);
     void clear() noexcept;
 
+    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.name
     const std::string & get_name() const noexcept;
+
+    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.epoch
     const std::string & get_epoch() const noexcept;
+
+    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.version
     const std::string & get_version() const noexcept;
+
+    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.release
     const std::string & get_release() const noexcept;
+
+    /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.arch
     const std::string & get_arch() const noexcept;
 
     void set_name(const std::string & name);
@@ -52,6 +63,12 @@ public:
     void set_release(std::string && release);
     void set_arch(std::string && arch);
 
+    std::string get_evr() const;
+
+    // TODO(jmracek) Shall ve ass get_evr method?
+    // TODO(jmracek) Add comperators ==
+
+    /// @replaces hawkey:hawkey/__init__.py:method:Nevra.has_just_name()
     bool has_just_name() const;
 
 private:
