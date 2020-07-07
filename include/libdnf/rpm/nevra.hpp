@@ -79,23 +79,19 @@ private:
     std::string arch;
 };
 
-inline const std::string & Nevra::get_name() const noexcept
-{
+inline const std::string & Nevra::get_name() const noexcept {
     return name;
 }
 
-inline const std::string &  Nevra::get_epoch() const noexcept
-{
+inline const std::string & Nevra::get_epoch() const noexcept {
     return epoch;
 }
 
-inline const std::string & Nevra::get_version() const noexcept
-{
+inline const std::string & Nevra::get_version() const noexcept {
     return version;
 }
 
-inline const std::string & Nevra::get_release() const noexcept
-{
+inline const std::string & Nevra::get_release() const noexcept {
     return release;
 }
 
@@ -103,53 +99,43 @@ inline const std::string & Nevra::get_arch() const noexcept {
     return arch;
 }
 
-inline void Nevra::set_name(const std::string & name)
-{
+inline void Nevra::set_name(const std::string & name) {
     this->name = name;
 }
 
-inline void Nevra::set_epoch(const std::string & epoch)
-{
+inline void Nevra::set_epoch(const std::string & epoch) {
     this->epoch = epoch;
 }
 
-inline void Nevra::set_version(const std::string & version)
-{
+inline void Nevra::set_version(const std::string & version) {
     this->version = version;
 }
 
-inline void Nevra::set_release(const std::string & release)
-{
+inline void Nevra::set_release(const std::string & release) {
     this->release = release;
 }
 
-inline void Nevra::set_arch(const std::string & arch)
-{
+inline void Nevra::set_arch(const std::string & arch) {
     this->arch = arch;
 }
 
-inline void Nevra::set_name(std::string && name)
-{
+inline void Nevra::set_name(std::string && name) {
     this->name = std::move(name);
 }
 
-inline void Nevra::set_epoch(std::string && epoch)
-{
+inline void Nevra::set_epoch(std::string && epoch) {
     this->epoch = std::move(epoch);
 }
 
-inline void Nevra::set_version(std::string && version)
-{
+inline void Nevra::set_version(std::string && version) {
     this->version = std::move(version);
 }
 
-inline void Nevra::set_release(std::string && release)
-{
+inline void Nevra::set_release(std::string && release) {
     this->release = std::move(release);
 }
 
-inline void Nevra::set_arch(std::string && arch)
-{
+inline void Nevra::set_arch(std::string && arch) {
     this->arch = std::move(arch);
 }
 
