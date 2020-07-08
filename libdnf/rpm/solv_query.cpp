@@ -37,6 +37,36 @@ extern "C" {
 
 #include <fnmatch.h>
 
+namespace {
+
+inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate) {
+    switch (cmp_type) {
+        case libdnf::sack::QueryCmp::EQ: {
+            return strcmp(candidate, c_pattern) == 0;
+        } break;
+        case libdnf::sack::QueryCmp::GLOB: {
+            return fnmatch(c_pattern, candidate, 0) == 0;
+        } break;
+        default:
+            throw libdnf::rpm::SolvQuery::NotSupportedCmpType("Unsupported CmpType");
+    }
+}
+
+inline bool hy_is_glob_pattern(const char * pattern) {
+    return strpbrk(pattern, "*[?") != nullptr;
+}
+
+/// Remove GLOB when the pattern is not a glob
+inline libdnf::sack::QueryCmp remove_glob_when_unneeded(libdnf::sack::QueryCmp cmp_type, const char * pattern, bool cmp_glob) {
+// Remove GLOB when the pattern is not a glob
+    if (cmp_glob && !hy_is_glob_pattern(pattern)) {
+        return (cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
+    }
+    return cmp_type;
+}
+
+}  //  namespace
+
 namespace libdnf::rpm {
 
 
@@ -44,9 +74,6 @@ static inline bool name_compare_lower_id(const Solvable * first, Id id_name) {
     return first->name < id_name;
 }
 
-static inline bool hy_is_glob_pattern(const char * pattern) {
-    return strpbrk(pattern, "*[?") != nullptr;
-}
 
 class SolvQuery::Impl {
 public:
@@ -507,6 +534,161 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const std:
             } break;
             default:
                 throw NotSupportedCmpType("Unsupported CmpType");
+        }
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        p_impl->query_result -= filter_result;
+    } else {
+        p_impl->query_result &= filter_result;
+    }
+
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevra & pattern) {
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
+
+    solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+
+    auto & name = pattern.get_name();
+    const char * name_c_pattern = name.c_str();
+    auto name_cmp_type = remove_glob_when_unneeded(cmp_type, name_c_pattern, cmp_glob);
+
+    auto & epoch = pattern.get_epoch();
+    const char * epoch_c_pattern = name.c_str();
+    auto epoch_cmp_type = remove_glob_when_unneeded(cmp_type, epoch_c_pattern, cmp_glob);
+
+    auto & version = pattern.get_version();
+    const char * version_c_pattern = name.c_str();
+    auto version_cmp_type = remove_glob_when_unneeded(cmp_type, version_c_pattern, cmp_glob);
+
+    auto & release = pattern.get_release();
+    const char * release_c_pattern = name.c_str();
+    auto release_cmp_type = remove_glob_when_unneeded(cmp_type, release_c_pattern, cmp_glob);
+
+    auto & arch = pattern.get_arch();
+    const char * arch_c_pattern = name.c_str();
+    auto arch_cmp_type = remove_glob_when_unneeded(cmp_type, arch_c_pattern, cmp_glob);
+
+
+    if (!name.empty()) {
+        auto & sorted_solvables = p_impl->sack->pImpl->get_sorted_solvables();
+
+        switch (name_cmp_type) {
+            case libdnf::sack::QueryCmp::EQ: {
+                Id name_id = pool_str2id(pool, name_c_pattern, 0);
+                if (name_id == 0) {
+                    break;
+                }
+                auto low =
+                    std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
+                while (low != sorted_solvables.end() && (*low)->name == name_id) {
+                    auto candidate_id = solv::get_package_id(pool, *low);
+                    if (!epoch.empty()) {
+                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch)) {
+                            ++low;
+                            continue;
+                        }
+                    }
+                    if (!version.empty()) {
+                        auto candidate_version = solv::get_version(pool, candidate_id);
+                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version)) {
+                            ++low;
+                            continue;
+                        }
+                    }
+                    if (!release.empty()) {
+                        auto candidate_release = solv::get_release(pool, candidate_id);
+                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release)) {
+                            ++low;
+                            continue;
+                        }
+                    }
+                    if (!arch.empty()) {
+                        auto candidate_arch = solv::get_arch(pool, candidate_id);
+                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch)) {
+                            ++low;
+                            continue;
+                        }
+                    }
+                    filter_result.add_unsafe(candidate_id);
+                    ++low;
+                }
+            } break;
+            case libdnf::sack::QueryCmp::GLOB: {
+                for (PackageId candidate_id : p_impl->query_result) {
+                    const char * candidate_name = solv::get_name(pool, candidate_id);
+
+                    if (fnmatch(name_c_pattern, candidate_name, 0) != 0) {
+                        continue;
+                    }
+                    if (!epoch.empty()) {
+                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch)) {
+                            continue;
+                        }
+                    }
+                    if (!version.empty()) {
+                        auto candidate_version = solv::get_version(pool, candidate_id);
+                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version)) {
+                            continue;
+                        }
+                    }
+                    if (!release.empty()) {
+                        auto candidate_release = solv::get_release(pool, candidate_id);
+                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release)) {
+                            continue;
+                        }
+                    }
+                    if (!arch.empty()) {
+                        auto candidate_arch = solv::get_arch(pool, candidate_id);
+                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch)) {
+                            continue;
+                        }
+                    }
+                    filter_result.add_unsafe(candidate_id);
+                }
+            } break;
+            default:
+                throw NotSupportedCmpType("Unsupported CmpType");
+        }
+    } else if (!epoch.empty() || !version.empty() || !release.empty() || !arch.empty()) {
+        for (PackageId candidate_id : p_impl->query_result) {
+            if (!epoch.empty()) {
+                auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch)) {
+                    continue;
+                }
+            }
+            if (!version.empty()) {
+                auto candidate_version = solv::get_version(pool, candidate_id);
+                if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version)) {
+                    continue;
+                }
+            }
+            if (!release.empty()) {
+                auto candidate_release = solv::get_release(pool, candidate_id);
+                if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release)) {
+                    continue;
+                }
+            }
+            if (!arch.empty()) {
+                auto candidate_arch = solv::get_arch(pool, candidate_id);
+                if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch)) {
+                    continue;
+                }
+            }
+            filter_result.add_unsafe(candidate_id);
         }
     }
 

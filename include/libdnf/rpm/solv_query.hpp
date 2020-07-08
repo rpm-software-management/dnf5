@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_QUERY_HPP
 #define LIBDNF_RPM_SOLV_QUERY_HPP
 
+#include "nevra.hpp"
 #include "solv_sack.hpp"
 
 #include "libdnf/common/sack/query_cmp.hpp"
@@ -94,6 +95,9 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NEVRA_STRICT
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_NEVRA_STRICT
     SolvQuery & ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB.
+    SolvQuery & ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevra & pattern);
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GT, GTE, LT, LTE, GLOB, NOT_GLOB.
     ///
