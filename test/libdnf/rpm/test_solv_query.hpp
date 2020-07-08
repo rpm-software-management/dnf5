@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_set.hpp"
 #include "libdnf/rpm/repo_sack.hpp"
 #include "libdnf/rpm/solv_sack.hpp"
+#include "libdnf/utils/temp.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -62,6 +63,8 @@ private:
     std::unique_ptr<libdnf::Base> base;
     std::unique_ptr<libdnf::rpm::RepoSack> repo_sack;
     std::unique_ptr<libdnf::rpm::SolvSack> sack;
+
+    libdnf::utils::TempDir * temp;
 };
 
 

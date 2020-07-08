@@ -30,12 +30,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(RepoTest);
 
 
-void RepoTest::setUp() {}
+void RepoTest::setUp() {
+    temp = new libdnf::utils::TempDir("libdnf_unittest_", {"installroot", "cache"});
+}
 
 
-void RepoTest::tearDown() {}
+void RepoTest::tearDown() {
+    delete temp;
+}
+
 
 using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
+
 
 void RepoTest::test_repo_basics() {
     libdnf::Base base;
@@ -44,9 +50,11 @@ void RepoTest::test_repo_basics() {
     auto & log_router = base.get_logger();
     log_router.add_logger(std::make_unique<libdnf::StreamLogger>(std::make_unique<std::ofstream>("repo.log")));
 
-    // Sets path to cache directory.
-    auto cwd = std::filesystem::current_path();
-    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cwd.native());
+    // set installroot to a temp directory
+    base.get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
+
+    // set cachedir to a temp directory
+    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
 
     libdnf::rpm::RepoSack repo_sack(base);
     libdnf::rpm::SolvSack sack(base);
@@ -58,7 +66,7 @@ void RepoTest::test_repo_basics() {
     auto repo = repo_sack.new_repo("dnf-ci-fedora");
 
     // Tunes repositotory configuration (baseurl is mandatory)
-    auto repo_path = cwd / "../../../test/libdnf/rpm/repos-data/dnf-ci-fedora/";
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/";
     auto baseurl = "file://" + repo_path.native();
     auto repo_cfg = repo->get_config();
     repo_cfg->baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);

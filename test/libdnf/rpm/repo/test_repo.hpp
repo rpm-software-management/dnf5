@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TEST_REPO_REPO_HPP
 
 
+#include "libdnf/utils/temp.hpp"
+
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -35,6 +37,9 @@ public:
     void tearDown() override;
 
     void test_repo_basics();
+
+private:
+    libdnf::utils::TempDir * temp;
 };
 
 #endif

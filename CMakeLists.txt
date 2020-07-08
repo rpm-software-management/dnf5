@@ -75,6 +75,7 @@ if(NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     add_compile_options(-Wl,--as-needed)
 endif()
 
+add_definitions(-DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
 if(WITH_SANITIZERS)
     message(WARNING "Building with sanitizers enabled!")

@@ -37,11 +37,14 @@ public:
 
 
 void RpmSolvQueryTest::setUp() {
+    temp = new libdnf::utils::TempDir("libdnf_unittest_", {"installroot", "cache"});
     base = std::make_unique<libdnf::Base>();
 
-    // Tunes main configuration. Sets path to cache directory.
-    auto cwd = std::filesystem::current_path();
-    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cwd.native());
+    // set installroot to a temp directory
+    base->get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
+
+    // set cachedir to a temp directory
+    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
 
     repo_sack = std::make_unique<libdnf::rpm::RepoSack>(*base);
     sack = std::make_unique<libdnf::rpm::SolvSack>(*base);
@@ -50,7 +53,7 @@ void RpmSolvQueryTest::setUp() {
     auto repo = repo_sack->new_repo("dnf-ci-fedora");
 
     // Tunes repository configuration (baseurl is mandatory)
-    auto repo_path = cwd / "../../../test/libdnf/rpm/repos-data/dnf-ci-fedora/";
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/";
     auto baseurl = "file://" + repo_path.native();
     auto repo_cfg = repo->get_config();
     repo_cfg->baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);
@@ -63,7 +66,9 @@ void RpmSolvQueryTest::setUp() {
 }
 
 
-void RpmSolvQueryTest::tearDown() {}
+void RpmSolvQueryTest::tearDown() {
+    delete temp;
+}
 
 
 void RpmSolvQueryTest::test_size() {
