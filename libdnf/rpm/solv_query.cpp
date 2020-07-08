@@ -1093,9 +1093,10 @@ void SolvQuery::Impl::filter_reldep(
 }
 
 void SolvQuery::Impl::filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list) {
-    bool cmp_not = false;
+    bool cmp_not;
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ:
+            cmp_not = false;
             break;
         case libdnf::sack::QueryCmp::NEQ:
             cmp_not = true;
@@ -1141,9 +1142,10 @@ void SolvQuery::Impl::filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_t
 }
 
 void SolvQuery::Impl::filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set) {
-    bool cmp_not = false;
+    bool cmp_not;
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ:
+            cmp_not = false;
             break;
         case libdnf::sack::QueryCmp::NEQ:
             cmp_not = true;
@@ -1231,9 +1233,10 @@ SolvQuery & SolvQuery::ifilter_obsoletes(libdnf::sack::QueryCmp cmp_type, const 
 }
 
 SolvQuery & SolvQuery::ifilter_obsoletes(libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set) {
-    bool cmp_not = false;
+    bool cmp_not;
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ:
+            cmp_not = false;
             break;
         case libdnf::sack::QueryCmp::NEQ:
             cmp_not = true;
