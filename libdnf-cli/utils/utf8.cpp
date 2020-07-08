@@ -27,7 +27,7 @@ std::size_t length(const std::string & str) {
     wchar_t wide_char = 0;
 
     while (ptr <= end) {
-        auto bytes = std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state);
+        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state));
         if (bytes <= 0) {
             break;
         }
@@ -62,7 +62,7 @@ std::size_t width(const std::string & str) {
     wchar_t wide_char = 0;
 
     while (ptr <= end) {
-        auto bytes = std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state);
+        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state));
         if (bytes <= 0) {
             break;
         }
@@ -97,7 +97,7 @@ std::string substr_length(const std::string & str, std::string::size_type pos, s
     wchar_t wide_char = 0;
 
     while (ptr <= end) {
-        auto bytes = std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state);
+        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state));
         if (bytes <= 0) {
             break;
         }
@@ -145,7 +145,7 @@ std::string substr_width(const std::string & str, std::string::size_type pos, st
     wchar_t wide_char = 0;
 
     while (ptr <= end) {
-        auto bytes = std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state);
+        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state));
         if (bytes <= 0) {
             break;
         }
