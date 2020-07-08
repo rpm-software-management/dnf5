@@ -148,6 +148,7 @@ private:
 
 inline SolvSack::Impl::Impl(Base & base) : base(&base) {
     pool = pool_create();
+    pool_set_rootdir(pool, base.get_config().installroot().get_value().c_str());
 }
 
 
