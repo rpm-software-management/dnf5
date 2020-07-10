@@ -49,17 +49,10 @@ bool Nevra::parse(const std::string & nevra_str, Form form) {
         return false;
     }
     name = match[NAME].str();
-    std::ssub_match epoch_sub_match = match[EPOCH];
-    epoch = epoch_sub_match.str();
-
-    std::ssub_match version_sub_match = match[VERSION];
-    version = version_sub_match.str();
-
-    std::ssub_match release_sub_match = match[RELEASE];
-    release = release_sub_match.str();
-
-    std::ssub_match arch_sub_match = match[ARCH];
-    arch = arch_sub_match.str();
+    epoch = match[EPOCH].str();
+    version = match[VERSION].str();
+    release = match[RELEASE].str();
+    arch = match[ARCH].str();
 
     return true;
 }
