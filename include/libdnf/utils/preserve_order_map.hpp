@@ -50,7 +50,7 @@ public:
         explicit MyBidirIterator() = default;
         explicit MyBidirIterator(ContainerTypeIterator ci) : ci(ci) {}
 
-        reference operator*() { return reinterpret_cast<reference>(*ci); }
+        reference operator*() const { return reinterpret_cast<reference>(*ci); }
         pointer operator->() const { return reinterpret_cast<pointer>(ci.operator->()); }
 
         MyBidirIterator & operator++() {
@@ -116,6 +116,7 @@ public:
     }
 
     iterator erase(const_iterator pos) { return iterator(items.erase(pos.ci)); }
+    iterator erase(iterator pos) { return iterator(items.erase(pos.ci)); }
     iterator erase(const_iterator first, const_iterator last) { return iterator(items.erase(first.ci, last.ci)); }
 
     size_type erase(const Key & key) {
