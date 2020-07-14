@@ -39,8 +39,8 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    static void test_iniparser();
-    static void test_iniparser2();
+    void test_iniparser();
+    void test_iniparser2();
 
 private:
 };

@@ -35,8 +35,8 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    static void test_weak_ptr();
-    static void test_weak_ptr_is_owner();
+    void test_weak_ptr();
+    void test_weak_ptr_is_owner();
 
 private:
 };

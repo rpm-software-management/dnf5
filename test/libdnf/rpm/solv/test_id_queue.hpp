@@ -35,8 +35,8 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    static void test_push_back();
-    static void test_operators();
+    void test_push_back();
+    void test_operators();
 
 private:
 };

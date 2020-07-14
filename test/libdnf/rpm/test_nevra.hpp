@@ -34,7 +34,7 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    static void test_nevra();
+    void test_nevra();
 };
 
 #endif

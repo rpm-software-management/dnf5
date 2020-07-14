@@ -39,12 +39,12 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    static void test_set_basics();
-    static void test_set_equal_operator();
-    static void test_set_assignment_operator();
-    static void test_set_unary_operators();
-    static void test_set_unary_methods();
-    static void test_set_binary_operators();
+    void test_set_basics();
+    void test_set_equal_operator();
+    void test_set_assignment_operator();
+    void test_set_unary_operators();
+    void test_set_unary_methods();
+    void test_set_binary_operators();
 
 private:
 };

@@ -38,7 +38,7 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    static void test_loggers();
+    void test_loggers();
 
 private:
 };

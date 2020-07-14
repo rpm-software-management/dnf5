@@ -34,7 +34,7 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    static void test_parser();
+    void test_parser();
 
 private:
 };

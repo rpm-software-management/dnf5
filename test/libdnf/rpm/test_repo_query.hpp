@@ -34,7 +34,7 @@ public:
     void setUp() override;
     void tearDown() override;
 
-    static void test_query_basics();
+    void test_query_basics();
 };
 
 #endif
