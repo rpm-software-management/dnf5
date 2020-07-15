@@ -23,11 +23,15 @@ std::size_t length(const std::string & str) {
     // multi-byte string state; required by mbrtowc()
     std::mbstate_t state = std::mbstate_t();
 
+    // maximum length of a multibyte character in the current locale
+    // expand the macro to a constant once, avoid calling the underlying function in the cycle
+    const auto mb_cur_max = MB_CUR_MAX;
+
     // the wide char read from the input string
     wchar_t wide_char = 0;
 
     while (ptr <= end) {
-        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state));
+        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, mb_cur_max, &state));
         if (bytes <= 0) {
             break;
         }
@@ -58,11 +62,15 @@ std::size_t width(const std::string & str) {
     // multi-byte string state; required by mbrtowc()
     std::mbstate_t state = std::mbstate_t();
 
+    // maximum length of a multibyte character in the current locale
+    // expand the macro to a constant once, avoid calling the underlying function in the cycle
+    const auto mb_cur_max = MB_CUR_MAX;
+
     // the wide char read from the input string
     wchar_t wide_char = 0;
 
     while (ptr <= end) {
-        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state));
+        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, mb_cur_max, &state));
         if (bytes <= 0) {
             break;
         }
@@ -93,11 +101,15 @@ std::string substr_length(const std::string & str, std::string::size_type pos, s
     // multi-byte string state; required by mbrtowc()
     std::mbstate_t state = std::mbstate_t();
 
+    // maximum length of a multibyte character in the current locale
+    // expand the macro to a constant once, avoid calling the underlying function in the cycle
+    const auto mb_cur_max = MB_CUR_MAX;
+
     // the wide char read from the input string
     wchar_t wide_char = 0;
 
     while (ptr <= end) {
-        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state));
+        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, mb_cur_max, &state));
         if (bytes <= 0) {
             break;
         }
@@ -141,11 +153,15 @@ std::string substr_width(const std::string & str, std::string::size_type pos, st
     // multi-byte string state; required by mbrtowc()
     std::mbstate_t state = std::mbstate_t();
 
+    // maximum length of a multibyte character in the current locale
+    // expand the macro to a constant once, avoid calling the underlying function in the cycle
+    const auto mb_cur_max = MB_CUR_MAX;
+
     // the wide char read from the input string
     wchar_t wide_char = 0;
 
     while (ptr <= end) {
-        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, MB_CUR_MAX, &state));
+        auto bytes = static_cast<int64_t>(std::mbrtowc(&wide_char, ptr, mb_cur_max, &state));
         if (bytes <= 0) {
             break;
         }
