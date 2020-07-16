@@ -153,6 +153,13 @@ inline SolvSack::Impl::Impl(Base & base) : base(&base) {
 
 
 inline SolvSack::Impl::~Impl() {
+    Id repo_id;
+    LibsolvRepo * r;
+    FOR_REPOS(repo_id, r) {
+        if (auto repo = static_cast<Repo *>(r->appdata)) {
+            repo->p_impl->detach_libsolv_repo();
+        }
+    }
     pool_free(pool);
 }
 
