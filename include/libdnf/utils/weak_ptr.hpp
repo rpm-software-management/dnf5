@@ -176,6 +176,7 @@ public:
                 src.guard->unregister_ptr(&src);
             }
             src.guard = nullptr;
+            delete ptr;
             ptr = src.ptr;
             src.ptr = nullptr;
         } else {
@@ -187,6 +188,7 @@ public:
             }
             guard = src.guard;
             src.guard = nullptr;
+            delete ptr;
             ptr = src.ptr;
             src.ptr = nullptr;
             if (is_valid()) {
