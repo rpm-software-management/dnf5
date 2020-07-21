@@ -39,13 +39,13 @@ extern "C" {
 
 namespace {
 
-inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate) {
+inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate, bool all_candidates) {
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ: {
             return strcmp(candidate, c_pattern) == 0;
         } break;
         case libdnf::sack::QueryCmp::GLOB: {
-            return fnmatch(c_pattern, candidate, 0) == 0;
+            return all_candidates || fnmatch(c_pattern, candidate, 0) == 0;
         } break;
         default:
             throw libdnf::rpm::SolvQuery::NotSupportedCmpType("Unsupported CmpType");
@@ -562,22 +562,27 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevr
     auto & name = pattern.get_name();
     const char * name_c_pattern = name.c_str();
     auto name_cmp_type = remove_glob_when_unneeded(cmp_type, name_c_pattern, cmp_glob);
+    bool all_names = cmp_glob && (name == "*");
 
     auto & epoch = pattern.get_epoch();
     const char * epoch_c_pattern = name.c_str();
     auto epoch_cmp_type = remove_glob_when_unneeded(cmp_type, epoch_c_pattern, cmp_glob);
+    bool all_epoch = cmp_glob && (epoch == "*");
 
     auto & version = pattern.get_version();
     const char * version_c_pattern = name.c_str();
     auto version_cmp_type = remove_glob_when_unneeded(cmp_type, version_c_pattern, cmp_glob);
+    bool all_version = cmp_glob && (version == "*");
 
     auto & release = pattern.get_release();
     const char * release_c_pattern = name.c_str();
     auto release_cmp_type = remove_glob_when_unneeded(cmp_type, release_c_pattern, cmp_glob);
+    bool all_release = cmp_glob && (release == "*");
 
     auto & arch = pattern.get_arch();
     const char * arch_c_pattern = name.c_str();
     auto arch_cmp_type = remove_glob_when_unneeded(cmp_type, arch_c_pattern, cmp_glob);
+    bool all_arch = cmp_glob && (arch == "*");
 
 
     if (!name.empty()) {
@@ -595,28 +600,28 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevr
                     auto candidate_id = solv::get_package_id(pool, *low);
                     if (!epoch.empty()) {
                         auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch)) {
+                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
                             ++low;
                             continue;
                         }
                     }
                     if (!version.empty()) {
                         auto candidate_version = solv::get_version(pool, candidate_id);
-                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version)) {
+                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
                             ++low;
                             continue;
                         }
                     }
                     if (!release.empty()) {
                         auto candidate_release = solv::get_release(pool, candidate_id);
-                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release)) {
+                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
                             ++low;
                             continue;
                         }
                     }
                     if (!arch.empty()) {
                         auto candidate_arch = solv::get_arch(pool, candidate_id);
-                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch)) {
+                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
                             ++low;
                             continue;
                         }
@@ -629,30 +634,30 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevr
                 for (PackageId candidate_id : p_impl->query_result) {
                     const char * candidate_name = solv::get_name(pool, candidate_id);
 
-                    if (fnmatch(name_c_pattern, candidate_name, 0) != 0) {
+                    if (!all_names && fnmatch(name_c_pattern, candidate_name, 0) != 0) {
                         continue;
                     }
                     if (!epoch.empty()) {
                         auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch)) {
+                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
                             continue;
                         }
                     }
                     if (!version.empty()) {
                         auto candidate_version = solv::get_version(pool, candidate_id);
-                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version)) {
+                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
                             continue;
                         }
                     }
                     if (!release.empty()) {
                         auto candidate_release = solv::get_release(pool, candidate_id);
-                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release)) {
+                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
                             continue;
                         }
                     }
                     if (!arch.empty()) {
                         auto candidate_arch = solv::get_arch(pool, candidate_id);
-                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch)) {
+                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
                             continue;
                         }
                     }
@@ -666,25 +671,25 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevr
         for (PackageId candidate_id : p_impl->query_result) {
             if (!epoch.empty()) {
                 auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch)) {
+                if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
                     continue;
                 }
             }
             if (!version.empty()) {
                 auto candidate_version = solv::get_version(pool, candidate_id);
-                if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version)) {
+                if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
                     continue;
                 }
             }
             if (!release.empty()) {
                 auto candidate_release = solv::get_release(pool, candidate_id);
-                if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release)) {
+                if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
                     continue;
                 }
             }
             if (!arch.empty()) {
                 auto candidate_arch = solv::get_arch(pool, candidate_id);
-                if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch)) {
+                if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
                     continue;
                 }
             }
