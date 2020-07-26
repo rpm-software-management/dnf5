@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_NEVRA_HPP
 
 #include <string>
+#include <vector>
 
 namespace libdnf::rpm {
 
@@ -29,6 +30,9 @@ namespace libdnf::rpm {
 struct Nevra {
 public:
     enum class Form { NEVRA = 1, NEVR = 2, NEV = 3, NA = 4, NAME = 5 };
+
+    /// The forms and their order determine pkg_spec matching
+    static const std::vector<Form> PKG_SPEC_FORMS;
 
     Nevra() = default;
 
@@ -78,6 +82,8 @@ private:
     std::string release;
     std::string arch;
 };
+
+inline const std::vector<Nevra::Form> Nevra::PKG_SPEC_FORMS ({Nevra::Form::NEVRA, Nevra::Form::NA, Nevra::Form::NAME, Nevra::Form::NEVR, Nevra::Form::NEV});
 
 inline const std::string & Nevra::get_name() const noexcept {
     return name;
