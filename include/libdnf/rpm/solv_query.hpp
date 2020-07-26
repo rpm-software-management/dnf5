@@ -298,6 +298,10 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:Query.size()
     std::size_t size() const noexcept;
 
+    /// @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
+    std::pair<bool, std::unique_ptr<Nevra>> subject_solution(const std::string & subject,
+        bool icase, bool with_nevra, bool with_provides, bool with_filenames, const std::vector<Nevra::Form> & forms);
+
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;

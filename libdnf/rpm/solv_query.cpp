@@ -71,6 +71,13 @@ inline libdnf::sack::QueryCmp remove_glob_when_unneeded(libdnf::sack::QueryCmp c
     return cmp_type;
 }
 
+/// @brief Test if pattern is file path
+/// Return true if pattern start with "/" or pattern[0] == '*' && pattern[1] == '/'
+static inline bool is_file_pattern(const std::string & pattern)
+{
+    return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
+}
+
 }  //  namespace
 
 namespace libdnf::rpm {
@@ -91,9 +98,13 @@ public:
     SolvQuery::Impl & operator=(const SolvQuery::Impl & src);
     SolvQuery::Impl & operator=(SolvQuery::Impl && src) noexcept;
 
+    void filter_provides(Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result);
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+
+    void filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result);
+    void filter_nevra(Pool * pool, const std::vector<Solvable *> sorted_solvables,const std::string & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result);
 
 private:
     friend class SolvQuery;
@@ -460,7 +471,7 @@ static inline bool name_arch_compare_lower_id(const Solvable * first, const Nevr
 
 template <bool (*cmp_fnc)(int value_to_cmp)>
 inline static void filter_nevra_internal(
-    Pool * pool, const char * c_pattern, std::vector<Solvable *> & sorted_solvables, solv::SolvMap & filter_result) {
+    Pool * pool, const char * c_pattern, const std::vector<Solvable *> & sorted_solvables, solv::SolvMap & filter_result) {
     NevraID nevra_id;
     if (!nevra_id.parse(pool, c_pattern, false)) {
         return;
@@ -490,57 +501,7 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const std:
     auto & sorted_solvables = p_impl->sack->pImpl->get_sorted_solvables();
 
     for (auto & pattern : patterns) {
-        libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
-        const char * c_pattern = pattern.c_str();
-        // Remove GLOB when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
-            tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
-        }
-
-        switch (tmp_cmp_type) {
-            case libdnf::sack::QueryCmp::EQ: {
-                NevraID nevra_id;
-                if (!nevra_id.parse(pool, c_pattern, true)) {
-                    continue;
-                }
-                auto low = std::lower_bound(
-                    sorted_solvables.begin(), sorted_solvables.end(), nevra_id, nevra_compare_lower_id);
-                while (low != sorted_solvables.end() && (*low)->name == nevra_id.name &&
-                       (*low)->arch == nevra_id.arch && (*low)->evr == nevra_id.evr) {
-                    filter_result.add_unsafe(solv::get_package_id(pool, *low));
-                    ++low;
-                }
-            } break;
-            case libdnf::sack::QueryCmp::GT:
-                filter_nevra_internal<cmp_gt>(pool, c_pattern, sorted_solvables, filter_result);
-                break;
-            case libdnf::sack::QueryCmp::LT:
-                filter_nevra_internal<cmp_lt>(pool, c_pattern, sorted_solvables, filter_result);
-                break;
-            case libdnf::sack::QueryCmp::GTE:
-                filter_nevra_internal<cmp_gte>(pool, c_pattern, sorted_solvables, filter_result);
-                break;
-            case libdnf::sack::QueryCmp::LTE:
-                filter_nevra_internal<cmp_lte>(pool, c_pattern, sorted_solvables, filter_result);
-                break;
-            case libdnf::sack::QueryCmp::GLOB:
-                filter_glob_internal<solv::get_nevra>(pool, c_pattern, p_impl->query_result, filter_result, 0);
-                break;
-            case libdnf::sack::QueryCmp::IGLOB:
-                filter_glob_internal<solv::get_nevra>(
-                    pool, c_pattern, p_impl->query_result, filter_result, FNM_CASEFOLD);
-                break;
-            case libdnf::sack::QueryCmp::IEXACT: {
-                for (PackageId candidate_id : p_impl->query_result) {
-                    const char * nevra = solv::get_nevra(pool, candidate_id);
-                    if (strcasecmp(nevra, c_pattern) == 0) {
-                        filter_result.add_unsafe(candidate_id);
-                    }
-                }
-            } break;
-            default:
-                throw NotSupportedCmpType("Unsupported CmpType");
-        }
+        p_impl->filter_nevra(pool, sorted_solvables, pattern, cmp_glob, cmp_type, filter_result);
     }
 
     // Apply filter results to query
@@ -563,178 +524,8 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevr
     bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
 
     solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
-    Pool * pool = p_impl->sack->pImpl->get_pool();
 
-    auto & name = pattern.get_name();
-    const char * name_c_pattern = name.c_str();
-    auto name_cmp_type = remove_glob_when_unneeded(cmp_type, name_c_pattern, cmp_glob);
-    bool all_names = cmp_glob && (name == "*");
-
-    auto & epoch = pattern.get_epoch();
-    const char * epoch_c_pattern = name.c_str();
-    auto epoch_cmp_type = remove_glob_when_unneeded(cmp_type, epoch_c_pattern, cmp_glob);
-    bool all_epoch = cmp_glob && (epoch == "*");
-
-    auto & version = pattern.get_version();
-    const char * version_c_pattern = name.c_str();
-    auto version_cmp_type = remove_glob_when_unneeded(cmp_type, version_c_pattern, cmp_glob);
-    bool all_version = cmp_glob && (version == "*");
-
-    auto & release = pattern.get_release();
-    const char * release_c_pattern = name.c_str();
-    auto release_cmp_type = remove_glob_when_unneeded(cmp_type, release_c_pattern, cmp_glob);
-    bool all_release = cmp_glob && (release == "*");
-
-    auto & arch = pattern.get_arch();
-    const char * arch_c_pattern = name.c_str();
-    auto arch_cmp_type = remove_glob_when_unneeded(cmp_type, arch_c_pattern, cmp_glob);
-    bool all_arch = cmp_glob && (arch == "*");
-
-
-    if (!name.empty()) {
-        auto & sorted_solvables = p_impl->sack->pImpl->get_sorted_solvables();
-
-        switch (name_cmp_type) {
-            case libdnf::sack::QueryCmp::EQ: {
-                Id name_id = pool_str2id(pool, name_c_pattern, 0);
-                if (name_id == 0) {
-                    break;
-                }
-                auto low =
-                    std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
-                while (low != sorted_solvables.end() && (*low)->name == name_id) {
-                    auto candidate_id = solv::get_package_id(pool, *low);
-                    if (!epoch.empty()) {
-                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
-                            ++low;
-                            continue;
-                        }
-                    }
-                    if (!version.empty()) {
-                        auto candidate_version = solv::get_version(pool, candidate_id);
-                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
-                            ++low;
-                            continue;
-                        }
-                    }
-                    if (!release.empty()) {
-                        auto candidate_release = solv::get_release(pool, candidate_id);
-                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
-                            ++low;
-                            continue;
-                        }
-                    }
-                    if (!arch.empty()) {
-                        auto candidate_arch = solv::get_arch(pool, candidate_id);
-                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
-                            ++low;
-                            continue;
-                        }
-                    }
-                    filter_result.add_unsafe(candidate_id);
-                    ++low;
-                }
-            } break;
-            case libdnf::sack::QueryCmp::IEXACT: {
-                for (PackageId candidate_id : p_impl->query_result) {
-                    const char * candidate_name = solv::get_name(pool, candidate_id);
-                    if (strcasecmp(candidate_name, name_c_pattern) != 0) {
-                        continue;
-                    }
-                    if (!epoch.empty()) {
-                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
-                            continue;
-                        }
-                    }
-                    if (!version.empty()) {
-                        auto candidate_version = solv::get_version(pool, candidate_id);
-                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
-                            continue;
-                        }
-                    }
-                    if (!release.empty()) {
-                        auto candidate_release = solv::get_release(pool, candidate_id);
-                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
-                            continue;
-                        }
-                    }
-                    if (!arch.empty()) {
-                        auto candidate_arch = solv::get_arch(pool, candidate_id);
-                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
-                            continue;
-                        }
-                    }
-                    filter_result.add_unsafe(candidate_id);
-                }
-            } break;
-            case libdnf::sack::QueryCmp::GLOB: {
-                for (PackageId candidate_id : p_impl->query_result) {
-                    const char * candidate_name = solv::get_name(pool, candidate_id);
-
-                    if (!all_names && fnmatch(name_c_pattern, candidate_name, 0) != 0) {
-                        continue;
-                    }
-                    if (!epoch.empty()) {
-                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
-                            continue;
-                        }
-                    }
-                    if (!version.empty()) {
-                        auto candidate_version = solv::get_version(pool, candidate_id);
-                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
-                            continue;
-                        }
-                    }
-                    if (!release.empty()) {
-                        auto candidate_release = solv::get_release(pool, candidate_id);
-                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
-                            continue;
-                        }
-                    }
-                    if (!arch.empty()) {
-                        auto candidate_arch = solv::get_arch(pool, candidate_id);
-                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
-                            continue;
-                        }
-                    }
-                    filter_result.add_unsafe(candidate_id);
-                }
-            } break;
-            default:
-                throw NotSupportedCmpType("Unsupported CmpType");
-        }
-    } else if (!epoch.empty() || !version.empty() || !release.empty() || !arch.empty()) {
-        for (PackageId candidate_id : p_impl->query_result) {
-            if (!epoch.empty()) {
-                auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
-                    continue;
-                }
-            }
-            if (!version.empty()) {
-                auto candidate_version = solv::get_version(pool, candidate_id);
-                if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
-                    continue;
-                }
-            }
-            if (!release.empty()) {
-                auto candidate_release = solv::get_release(pool, candidate_id);
-                if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
-                    continue;
-                }
-            }
-            if (!arch.empty()) {
-                auto candidate_arch = solv::get_arch(pool, candidate_id);
-                if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
-                    continue;
-                }
-            }
-            filter_result.add_unsafe(candidate_id);
-        }
-    }
+    p_impl->filter_nevra(pattern, cmp_glob, cmp_type, filter_result);
 
     // Apply filter results to query
     if (cmp_not) {
@@ -1282,21 +1073,7 @@ SolvQuery & SolvQuery::ifilter_provides(libdnf::sack::QueryCmp cmp_type, const R
     Pool * pool = p_impl->sack->pImpl->get_pool();
 
     p_impl->sack->pImpl->make_provides_ready();
-
-    switch (cmp_type) {
-        case libdnf::sack::QueryCmp::EQ: {
-            Id p;
-            Id pp;
-            auto reldep_list_size = reldep_list.size();
-            for (int index = 0; index < reldep_list_size; ++index) {
-                Id reldep_id = reldep_list.get_id(index).id;
-                FOR_PROVIDES(p, pp, reldep_id) { filter_result.add_unsafe(PackageId(p)); }
-            }
-            break;
-        }
-        default:
-            throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
-    }
+    p_impl->filter_provides(pool, cmp_type, reldep_list, filter_result);
 
     // Apply filter results to query
     if (cmp_not) {
@@ -1310,28 +1087,35 @@ SolvQuery & SolvQuery::ifilter_provides(libdnf::sack::QueryCmp cmp_type, const R
 
 /// Provide libdnf::sack::QueryCmp without NOT flag
 static void str2reldep_internal(
+    ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern) {
+
+    libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
+    const char * c_pattern = pattern.c_str();
+    // Remove GLOB when the pattern is not a glob
+    if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
+    }
+
+    switch (tmp_cmp_type) {
+        case libdnf::sack::QueryCmp::EQ:
+            reldep_list.add_reldep(pattern);
+            break;
+        case libdnf::sack::QueryCmp::GLOB:
+            reldep_list.add_reldep_with_glob(pattern);
+            break;
+
+        default:
+            throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
+    }
+}
+
+/// Provide libdnf::sack::QueryCmp without NOT flag
+static void str2reldep_internal(
     ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
 
     for (auto & pattern : patterns) {
-        libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
-        const char * c_pattern = pattern.c_str();
-        // Remove GLOB when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
-            tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
-        }
-
-        switch (tmp_cmp_type) {
-            case libdnf::sack::QueryCmp::EQ:
-                reldep_list.add_reldep(pattern);
-                break;
-            case libdnf::sack::QueryCmp::GLOB:
-                reldep_list.add_reldep_with_glob(pattern);
-                break;
-
-            default:
-                throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
-        }
+        str2reldep_internal(reldep_list, cmp_type, cmp_glob, pattern);
     }
 }
 
@@ -1350,6 +1134,23 @@ SolvQuery & SolvQuery::ifilter_provides(libdnf::sack::QueryCmp cmp_type, const s
         return ifilter_provides(libdnf::sack::QueryCmp::NEQ, reldep_list);
     } else {
         return ifilter_provides(libdnf::sack::QueryCmp::EQ, reldep_list);
+    }
+}
+
+void filter_provides(Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result) {
+    switch (cmp_type) {
+        case libdnf::sack::QueryCmp::EQ: {
+            Id p;
+            Id pp;
+            auto reldep_list_size = reldep_list.size();
+            for (int index = 0; index < reldep_list_size; ++index) {
+                Id reldep_id = reldep_list.get_id(index).id;
+                FOR_PROVIDES(p, pp, reldep_id) { filter_result.add_unsafe(PackageId(p)); }
+            }
+            break;
+        }
+        default:
+            throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
     }
 }
 
@@ -1466,6 +1267,235 @@ void SolvQuery::Impl::filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_t
         query_result -= filter_result;
     } else {
         query_result &= filter_result;
+    }
+}
+
+void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result) {
+    Pool * pool = sack->pImpl->get_pool();
+    
+    auto & name = pattern.get_name();
+    const char * name_c_pattern = name.c_str();
+    auto name_cmp_type = remove_glob_when_unneeded(cmp_type, name_c_pattern, cmp_glob);
+    bool all_names = cmp_glob && (name == "*");
+
+    auto & epoch = pattern.get_epoch();
+    const char * epoch_c_pattern = name.c_str();
+    auto epoch_cmp_type = remove_glob_when_unneeded(cmp_type, epoch_c_pattern, cmp_glob);
+    bool all_epoch = cmp_glob && (epoch == "*");
+
+    auto & version = pattern.get_version();
+    const char * version_c_pattern = name.c_str();
+    auto version_cmp_type = remove_glob_when_unneeded(cmp_type, version_c_pattern, cmp_glob);
+    bool all_version = cmp_glob && (version == "*");
+
+    auto & release = pattern.get_release();
+    const char * release_c_pattern = name.c_str();
+    auto release_cmp_type = remove_glob_when_unneeded(cmp_type, release_c_pattern, cmp_glob);
+    bool all_release = cmp_glob && (release == "*");
+
+    auto & arch = pattern.get_arch();
+    const char * arch_c_pattern = name.c_str();
+    auto arch_cmp_type = remove_glob_when_unneeded(cmp_type, arch_c_pattern, cmp_glob);
+    bool all_arch = cmp_glob && (arch == "*");
+
+
+    if (!name.empty()) {
+        auto & sorted_solvables = sack->pImpl->get_sorted_solvables();
+
+        switch (name_cmp_type) {
+            case libdnf::sack::QueryCmp::EQ: {
+                Id name_id = pool_str2id(pool, name_c_pattern, 0);
+                if (name_id == 0) {
+                    break;
+                }
+                auto low =
+                    std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
+                while (low != sorted_solvables.end() && (*low)->name == name_id) {
+                    auto candidate_id = solv::get_package_id(pool, *low);
+                    if (!epoch.empty()) {
+                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
+                            ++low;
+                            continue;
+                        }
+                    }
+                    if (!version.empty()) {
+                        auto candidate_version = solv::get_version(pool, candidate_id);
+                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
+                            ++low;
+                            continue;
+                        }
+                    }
+                    if (!release.empty()) {
+                        auto candidate_release = solv::get_release(pool, candidate_id);
+                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
+                            ++low;
+                            continue;
+                        }
+                    }
+                    if (!arch.empty()) {
+                        auto candidate_arch = solv::get_arch(pool, candidate_id);
+                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
+                            ++low;
+                            continue;
+                        }
+                    }
+                    filter_result.add_unsafe(candidate_id);
+                    ++low;
+                }
+            } break;
+            case libdnf::sack::QueryCmp::IEXACT: {
+                for (PackageId candidate_id : query_result) {
+                    const char * candidate_name = solv::get_name(pool, candidate_id);
+                    if (strcasecmp(candidate_name, name_c_pattern) != 0) {
+                        continue;
+                    }
+                    if (!epoch.empty()) {
+                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
+                            continue;
+                        }
+                    }
+                    if (!version.empty()) {
+                        auto candidate_version = solv::get_version(pool, candidate_id);
+                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
+                            continue;
+                        }
+                    }
+                    if (!release.empty()) {
+                        auto candidate_release = solv::get_release(pool, candidate_id);
+                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
+                            continue;
+                        }
+                    }
+                    if (!arch.empty()) {
+                        auto candidate_arch = solv::get_arch(pool, candidate_id);
+                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
+                            continue;
+                        }
+                    }
+                    filter_result.add_unsafe(candidate_id);
+                }
+            } break;
+            case libdnf::sack::QueryCmp::GLOB: {
+                for (PackageId candidate_id : query_result) {
+                    const char * candidate_name = solv::get_name(pool, candidate_id);
+
+                    if (!all_names && fnmatch(name_c_pattern, candidate_name, 0) != 0) {
+                        continue;
+                    }
+                    if (!epoch.empty()) {
+                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
+                            continue;
+                        }
+                    }
+                    if (!version.empty()) {
+                        auto candidate_version = solv::get_version(pool, candidate_id);
+                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
+                            continue;
+                        }
+                    }
+                    if (!release.empty()) {
+                        auto candidate_release = solv::get_release(pool, candidate_id);
+                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
+                            continue;
+                        }
+                    }
+                    if (!arch.empty()) {
+                        auto candidate_arch = solv::get_arch(pool, candidate_id);
+                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
+                            continue;
+                        }
+                    }
+                    filter_result.add_unsafe(candidate_id);
+                }
+            } break;
+            default:
+                throw NotSupportedCmpType("Unsupported CmpType");
+        }
+    } else if (!epoch.empty() || !version.empty() || !release.empty() || !arch.empty()) {
+        for (PackageId candidate_id : query_result) {
+            if (!epoch.empty()) {
+                auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
+                    continue;
+                }
+            }
+            if (!version.empty()) {
+                auto candidate_version = solv::get_version(pool, candidate_id);
+                if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
+                    continue;
+                }
+            }
+            if (!release.empty()) {
+                auto candidate_release = solv::get_release(pool, candidate_id);
+                if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
+                    continue;
+                }
+            }
+            if (!arch.empty()) {
+                auto candidate_arch = solv::get_arch(pool, candidate_id);
+                if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
+                    continue;
+                }
+            }
+            filter_result.add_unsafe(candidate_id);
+        }
+    }
+}
+
+void SolvQuery::Impl::filter_nevra(Pool * pool, const std::vector<Solvable *> sorted_solvables, const std::string & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result) {
+    libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
+    const char * c_pattern = pattern.c_str();
+    // Remove GLOB when the pattern is not a glob
+    if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
+    }
+
+    switch (tmp_cmp_type) {
+        case libdnf::sack::QueryCmp::EQ: {
+            NevraID nevra_id;
+            if (!nevra_id.parse(pool, c_pattern, true)) {
+                return;
+            }
+            auto low = std::lower_bound(
+                sorted_solvables.begin(), sorted_solvables.end(), nevra_id, nevra_compare_lower_id);
+            while (low != sorted_solvables.end() && (*low)->name == nevra_id.name &&
+                    (*low)->arch == nevra_id.arch && (*low)->evr == nevra_id.evr) {
+                filter_result.add_unsafe(solv::get_package_id(pool, *low));
+                ++low;
+            }
+        } break;
+        case libdnf::sack::QueryCmp::GT:
+            filter_nevra_internal<cmp_gt>(pool, c_pattern, sorted_solvables, filter_result);
+            break;
+        case libdnf::sack::QueryCmp::LT:
+            filter_nevra_internal<cmp_lt>(pool, c_pattern, sorted_solvables, filter_result);
+            break;
+        case libdnf::sack::QueryCmp::GTE:
+            filter_nevra_internal<cmp_gte>(pool, c_pattern, sorted_solvables, filter_result);
+            break;
+        case libdnf::sack::QueryCmp::LTE:
+            filter_nevra_internal<cmp_lte>(pool, c_pattern, sorted_solvables, filter_result);
+            break;
+        case libdnf::sack::QueryCmp::GLOB:
+            filter_glob_internal<solv::get_nevra>(pool, c_pattern, query_result, filter_result, 0);
+            break;
+        case libdnf::sack::QueryCmp::IGLOB:
+            filter_glob_internal<solv::get_nevra>(
+                pool, c_pattern, query_result, filter_result, FNM_CASEFOLD);
+            break;
+        case libdnf::sack::QueryCmp::IEXACT: {
+            for (PackageId candidate_id : query_result) {
+                const char * nevra = solv::get_nevra(pool, candidate_id);
+                if (strcasecmp(nevra, c_pattern) == 0) {
+                    filter_result.add_unsafe(candidate_id);
+                }
+            }
+        } break;
+        default:
+            throw NotSupportedCmpType("Unsupported CmpType");
     }
 }
 
@@ -1627,6 +1657,55 @@ SolvQuery & SolvQuery::ifilter_supplements(libdnf::sack::QueryCmp cmp_type, cons
 
 std::size_t SolvQuery::size() const noexcept {
     return p_impl->query_result.size();
+}
+
+std::pair<bool, std::unique_ptr<Nevra>> SolvQuery::subject_solution(const std::string & subject,
+        bool icase, bool with_nevra, bool with_provides, bool with_filenames, const std::vector<Nevra::Form> & forms) {
+    SolvSack * sack = p_impl->sack.get();
+    Pool * pool = sack->pImpl->get_pool();
+    solv::SolvMap filter_result(static_cast<int>(sack->pImpl->get_nsolvables()));
+
+    if (with_nevra) {
+        const std::vector<Nevra::Form> & test_forms = forms.empty() ? Nevra::PKG_SPEC_FORMS : forms;
+        Nevra nevra_obj;
+        for (auto form: test_forms) {
+            if (nevra_obj.parse(subject, form)) {
+                p_impl->filter_nevra(nevra_obj, true, icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB, filter_result);
+                if (!filter_result.empty()) {
+                    // Apply filter results to query
+                    p_impl->query_result &= filter_result;
+                    return {true, std::unique_ptr<Nevra>(new Nevra(std::move(nevra_obj)))};
+                }
+            }
+        }
+        if (forms.empty()) {
+            auto & sorted_solvables = sack->pImpl->get_sorted_solvables();
+            p_impl->filter_nevra(pool, sorted_solvables, subject, true, icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB, filter_result);
+            if (!filter_result.empty()) {
+                p_impl->query_result &= filter_result;
+                return {true, std::unique_ptr<Nevra>()};
+            }
+        }
+    }
+    if (with_provides) {
+        ReldepList reldep_list(sack);
+        str2reldep_internal(reldep_list, libdnf::sack::QueryCmp::GLOB, true, subject);
+        sack->pImpl->make_provides_ready();
+        p_impl->filter_provides(pool, libdnf::sack::QueryCmp::EQ, reldep_list, filter_result);
+        if (!filter_result.empty()) {
+            p_impl->query_result &= filter_result;
+            return {true, std::unique_ptr<Nevra>()};
+        }
+    }
+    if (with_filenames && is_file_pattern(subject)) {
+        filter_dataiterator(pool, SOLVABLE_FILELIST, SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_GLOB, p_impl->query_result, filter_result, subject.c_str());
+        if (!filter_result.empty()) {
+            p_impl->query_result &= filter_result;
+            return {true, std::unique_ptr<Nevra>()};
+        }
+    }
+    p_impl->query_result.clear();
+    return {false, std::unique_ptr<Nevra>()};
 }
 
 }  //  namespace libdnf::rpm
