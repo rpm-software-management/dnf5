@@ -44,8 +44,14 @@ inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_p
         case libdnf::sack::QueryCmp::EQ: {
             return strcmp(candidate, c_pattern) == 0;
         } break;
+        case libdnf::sack::QueryCmp::IEXACT: {
+            return strcasecmp(candidate, c_pattern) == 0;
+        } break;
         case libdnf::sack::QueryCmp::GLOB: {
             return all_candidates || fnmatch(c_pattern, candidate, 0) == 0;
+        } break;
+        case libdnf::sack::QueryCmp::IGLOB: {
+            return all_candidates || fnmatch(c_pattern, candidate, FNM_CASEFOLD) == 0;
         } break;
         default:
             throw libdnf::rpm::SolvQuery::NotSupportedCmpType("Unsupported CmpType");
@@ -628,6 +634,39 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevr
                     }
                     filter_result.add_unsafe(candidate_id);
                     ++low;
+                }
+            } break;
+            case libdnf::sack::QueryCmp::IEXACT: {
+                for (PackageId candidate_id : p_impl->query_result) {
+                    const char * candidate_name = solv::get_name(pool, candidate_id);
+                    if (strcasecmp(candidate_name, name_c_pattern) != 0) {
+                        continue;
+                    }
+                    if (!epoch.empty()) {
+                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
+                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
+                            continue;
+                        }
+                    }
+                    if (!version.empty()) {
+                        auto candidate_version = solv::get_version(pool, candidate_id);
+                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
+                            continue;
+                        }
+                    }
+                    if (!release.empty()) {
+                        auto candidate_release = solv::get_release(pool, candidate_id);
+                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
+                            continue;
+                        }
+                    }
+                    if (!arch.empty()) {
+                        auto candidate_arch = solv::get_arch(pool, candidate_id);
+                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
+                            continue;
+                        }
+                    }
+                    filter_result.add_unsafe(candidate_id);
                 }
             } break;
             case libdnf::sack::QueryCmp::GLOB: {
