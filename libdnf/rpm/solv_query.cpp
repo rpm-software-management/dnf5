@@ -514,7 +514,7 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const std:
     return *this;
 }
 
-SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevra & pattern) {
+SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const libdnf::rpm::Nevra & pattern) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -1137,7 +1137,7 @@ SolvQuery & SolvQuery::ifilter_provides(libdnf::sack::QueryCmp cmp_type, const s
     }
 }
 
-void filter_provides(Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result) {
+void SolvQuery::Impl::filter_provides(Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result) {
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ: {
             Id p;
@@ -1659,8 +1659,8 @@ std::size_t SolvQuery::size() const noexcept {
     return p_impl->query_result.size();
 }
 
-std::pair<bool, std::unique_ptr<Nevra>> SolvQuery::subject_solution(const std::string & subject,
-        bool icase, bool with_nevra, bool with_provides, bool with_filenames, const std::vector<Nevra::Form> & forms) {
+std::pair<bool, libdnf::rpm::Nevra> SolvQuery::subject_solution(const std::string & subject,
+        bool icase, bool with_nevra, bool with_provides, bool with_filenames, const std::vector<libdnf::rpm::Nevra::Form> & forms) {
     SolvSack * sack = p_impl->sack.get();
     Pool * pool = sack->pImpl->get_pool();
     solv::SolvMap filter_result(static_cast<int>(sack->pImpl->get_nsolvables()));
@@ -1674,16 +1674,16 @@ std::pair<bool, std::unique_ptr<Nevra>> SolvQuery::subject_solution(const std::s
                 if (!filter_result.empty()) {
                     // Apply filter results to query
                     p_impl->query_result &= filter_result;
-                    return {true, std::unique_ptr<Nevra>(new Nevra(std::move(nevra_obj)))};
+                    return {true, libdnf::rpm::Nevra(std::move(nevra_obj))};
                 }
             }
         }
         if (forms.empty()) {
-            auto & sorted_solvables = sack->pImpl->get_sorted_solvables();
+            auto & sorted_solvables = p_impl->sack->pImpl->get_sorted_solvables();
             p_impl->filter_nevra(pool, sorted_solvables, subject, true, icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB, filter_result);
             if (!filter_result.empty()) {
                 p_impl->query_result &= filter_result;
-                return {true, std::unique_ptr<Nevra>()};
+                return {true, libdnf::rpm::Nevra()};
             }
         }
     }
@@ -1694,18 +1694,18 @@ std::pair<bool, std::unique_ptr<Nevra>> SolvQuery::subject_solution(const std::s
         p_impl->filter_provides(pool, libdnf::sack::QueryCmp::EQ, reldep_list, filter_result);
         if (!filter_result.empty()) {
             p_impl->query_result &= filter_result;
-            return {true, std::unique_ptr<Nevra>()};
+            return {true, libdnf::rpm::Nevra()};
         }
     }
     if (with_filenames && is_file_pattern(subject)) {
         filter_dataiterator(pool, SOLVABLE_FILELIST, SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_GLOB, p_impl->query_result, filter_result, subject.c_str());
         if (!filter_result.empty()) {
             p_impl->query_result &= filter_result;
-            return {true, std::unique_ptr<Nevra>()};
+            return {true, libdnf::rpm::Nevra()};
         }
     }
     p_impl->query_result.clear();
-    return {false, std::unique_ptr<Nevra>()};
+    return {false, libdnf::rpm::Nevra()};
 }
 
 }  //  namespace libdnf::rpm

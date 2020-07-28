@@ -35,6 +35,8 @@ public:
     static const std::vector<Form> PKG_SPEC_FORMS;
 
     Nevra() = default;
+    Nevra(const Nevra & src) = default;
+    Nevra(Nevra && src) = default;
 
     /// Returns false when parsing failed and stored data are in inconsistance state.
     bool parse(const std::string & nevra_str, Form form);

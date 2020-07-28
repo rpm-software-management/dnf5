@@ -97,7 +97,7 @@ public:
     SolvQuery & ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB, IEXACT, NOT_IEXACT, IGLOB, NOT_IGLOB.
-    SolvQuery & ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const Nevra & pattern);
+    SolvQuery & ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const libdnf::rpm::Nevra & pattern);
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GT, GTE, LT, LTE, GLOB, NOT_GLOB.
     ///
@@ -298,9 +298,10 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:Query.size()
     std::size_t size() const noexcept;
 
+    // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     /// @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
-    std::pair<bool, std::unique_ptr<Nevra>> subject_solution(const std::string & subject,
-        bool icase, bool with_nevra, bool with_provides, bool with_filenames, const std::vector<Nevra::Form> & forms);
+    std::pair<bool, libdnf::rpm::Nevra> subject_solution(const std::string & subject,
+        bool icase, bool with_nevra, bool with_provides, bool with_filenames, const std::vector<libdnf::rpm::Nevra::Form> & forms);
 
 private:
     class Impl;
