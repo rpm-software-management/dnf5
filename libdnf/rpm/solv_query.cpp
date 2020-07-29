@@ -1279,22 +1279,22 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
     bool all_names = cmp_glob && (name == "*");
 
     auto & epoch = pattern.get_epoch();
-    const char * epoch_c_pattern = name.c_str();
+    const char * epoch_c_pattern = epoch.c_str();
     auto epoch_cmp_type = remove_glob_when_unneeded(cmp_type, epoch_c_pattern, cmp_glob);
     bool all_epoch = cmp_glob && (epoch == "*");
 
     auto & version = pattern.get_version();
-    const char * version_c_pattern = name.c_str();
+    const char * version_c_pattern = version.c_str();
     auto version_cmp_type = remove_glob_when_unneeded(cmp_type, version_c_pattern, cmp_glob);
     bool all_version = cmp_glob && (version == "*");
 
     auto & release = pattern.get_release();
-    const char * release_c_pattern = name.c_str();
+    const char * release_c_pattern = release.c_str();
     auto release_cmp_type = remove_glob_when_unneeded(cmp_type, release_c_pattern, cmp_glob);
     bool all_release = cmp_glob && (release == "*");
 
     auto & arch = pattern.get_arch();
-    const char * arch_c_pattern = name.c_str();
+    const char * arch_c_pattern = arch.c_str();
     auto arch_cmp_type = remove_glob_when_unneeded(cmp_type, arch_c_pattern, cmp_glob);
     bool all_arch = cmp_glob && (arch == "*");
 
@@ -1664,7 +1664,6 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::subject_solution(const std::strin
     SolvSack * sack = p_impl->sack.get();
     Pool * pool = sack->pImpl->get_pool();
     solv::SolvMap filter_result(static_cast<int>(sack->pImpl->get_nsolvables()));
-
     if (with_nevra) {
         const std::vector<Nevra::Form> & test_forms = forms.empty() ? Nevra::PKG_SPEC_FORMS : forms;
         Nevra nevra_obj;
