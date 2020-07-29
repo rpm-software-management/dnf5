@@ -182,7 +182,7 @@ ReldepList Package::get_provides() const {
 ReldepList Package::get_requires() const {
     Pool * pool = sack->pImpl->pool;
     ReldepList list(sack.get());
-    solv::get_provides(pool, id, list.pImpl->queue);
+    solv::get_requires(pool, id, list.pImpl->queue);
     return list;
 }
 
