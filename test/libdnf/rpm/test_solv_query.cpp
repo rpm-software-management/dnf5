@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_solv_query.hpp"
 
+#include "libdnf/rpm/package_set.hpp"
 #include "libdnf/rpm/solv_query.hpp"
 
 #include <filesystem>
@@ -35,41 +36,10 @@ public:
     TestPackage(libdnf::rpm::SolvSack * sack, libdnf::rpm::PackageId id) : libdnf::rpm::Package(sack, id) {}
 };
 
-
 void RpmSolvQueryTest::setUp() {
-    temp = new libdnf::utils::TempDir("libdnf_unittest_", {"installroot", "cache"});
-    base = std::make_unique<libdnf::Base>();
-
-    // set installroot to a temp directory
-    base->get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
-
-    // set cachedir to a temp directory
-    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
-
-    repo_sack = std::make_unique<libdnf::rpm::RepoSack>(*base);
-    sack = std::make_unique<libdnf::rpm::SolvSack>(*base);
-
-    // Creates new repository in the repo_sack
-    auto repo = repo_sack->new_repo("dnf-ci-fedora");
-
-    // Tunes repository configuration (baseurl is mandatory)
-    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/";
-    auto baseurl = "file://" + repo_path.native();
-    auto repo_cfg = repo->get_config();
-    repo_cfg->baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);
-
-    // Loads repository into rpm::Repo.
-    repo->load();
-
-    // Loads rpm::Repo into rpm::SolvSack
-    sack->load_repo(*repo.get(), libdnf::rpm::SolvSack::LoadRepoFlags::NONE);
+    RepoFixture::setUp();
+    add_repo("dnf-ci-fedora");
 }
-
-
-void RpmSolvQueryTest::tearDown() {
-    delete temp;
-}
-
 
 void RpmSolvQueryTest::test_size() {
     libdnf::rpm::SolvQuery query(sack.get());

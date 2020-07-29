@@ -22,18 +22,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_RPM_PACKAGE_SET_HPP
 
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/rpm/package_set.hpp"
-#include "libdnf/rpm/repo_sack.hpp"
-#include "libdnf/rpm/solv_sack.hpp"
-#include "libdnf/utils/temp.hpp"
+#include "repo_fixture.hpp"
 
-#include <cppunit/TestCase.h>
+#include "libdnf/rpm/package_set.hpp"
+
 #include <cppunit/extensions/HelperMacros.h>
 
 #include <memory>
 
-class RpmPackageSetTest : public CppUnit::TestCase {
+
+class RpmPackageSetTest : public RepoFixture {
     CPPUNIT_TEST_SUITE(RpmPackageSetTest);
 
 #ifndef WITH_PERFORMANCE_TESTS
@@ -53,7 +51,6 @@ class RpmPackageSetTest : public CppUnit::TestCase {
 
 public:
     void setUp() override;
-    void tearDown() override;
 
     void test_add();
     void test_contains();
@@ -67,13 +64,8 @@ public:
 
 
 private:
-    std::unique_ptr<libdnf::Base> base;
-    std::unique_ptr<libdnf::rpm::RepoSack> repo_sack;
-    std::unique_ptr<libdnf::rpm::SolvSack> sack;
     std::unique_ptr<libdnf::rpm::PackageSet> set1;
     std::unique_ptr<libdnf::rpm::PackageSet> set2;
-
-    libdnf::utils::TempDir * temp;
 };
 
 

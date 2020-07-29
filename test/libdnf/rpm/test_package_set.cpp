@@ -36,32 +36,8 @@ public:
 
 
 void RpmPackageSetTest::setUp() {
-    temp = new libdnf::utils::TempDir("libdnf_unittest_", {"installroot", "cache"});
-    base = std::make_unique<libdnf::Base>();
-
-    // set installroot to a temp directory
-    base->get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
-
-    // set cachedir to a temp directory
-    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
-
-    repo_sack = std::make_unique<libdnf::rpm::RepoSack>(*base);
-    sack = std::make_unique<libdnf::rpm::SolvSack>(*base);
-
-    // Creates new repository in the repo_sack
-    auto repo = repo_sack->new_repo("dnf-ci-fedora");
-
-    // Tunes repository configuration (baseurl is mandatory)
-    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/";
-    auto baseurl = "file://" + repo_path.native();
-    auto repo_cfg = repo->get_config();
-    repo_cfg->baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);
-
-    // Loads repository into rpm::Repo.
-    repo->load();
-
-    // Loads rpm::Repo into rpm::SolvSack
-    sack->load_repo(*repo.get(), libdnf::rpm::SolvSack::LoadRepoFlags::NONE);
+    RepoFixture::setUp();
+    add_repo("dnf-ci-fedora");
 
     // set1 contains packages 0 - 15
     set1 = std::make_unique<libdnf::rpm::PackageSet>(sack.get());
@@ -78,11 +54,6 @@ void RpmPackageSetTest::setUp() {
 
     TestPackage pkg24(sack.get(), libdnf::rpm::PackageId(24));
     set2->add(pkg24);
-}
-
-
-void RpmPackageSetTest::tearDown() {
-    delete temp;
 }
 
 
