@@ -51,7 +51,11 @@ private:
 
 
 /// Constructor requires checksum in hex and libsolv checksum type
-inline Checksum::Checksum(const char * checksum, int libsolv_type) : checksum(checksum), libsolv_type(libsolv_type) {}
+inline Checksum::Checksum(const char * checksum, int libsolv_type) : libsolv_type(libsolv_type) {
+    if (checksum != nullptr) {
+        this->checksum = checksum;
+    }
+}
 
 
 }  // namespace libdnf::rpm
