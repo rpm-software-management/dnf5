@@ -307,3 +307,29 @@ void RpmSolvQueryTest::test_ifilter_requires() {
         CPPUNIT_ASSERT(query.size() == 288);
     }
 }
+
+void RpmSolvQueryTest::test_subject_solution() {
+    {
+        // Test NA
+        libdnf::rpm::SolvQuery query(sack.get());
+        auto return_value = query.subject_solution("wget.x86_64", false, true, false, false, {});
+        CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
+        CPPUNIT_ASSERT_EQUAL(return_value.first, true);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
+        }
+    }
+
+    {
+        // Test a provide
+        libdnf::rpm::SolvQuery query(sack.get());
+        auto return_value = query.subject_solution("wget > 1", false, true, true, false, {});
+        CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
+        CPPUNIT_ASSERT_EQUAL(return_value.first, true);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
+        }
+    }
+}
