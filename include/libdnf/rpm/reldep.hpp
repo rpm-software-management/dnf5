@@ -46,7 +46,7 @@ public:
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
     Reldep(const Reldep & reldep) = default;
-    Reldep(Reldep && reldep) = delete;
+    Reldep(Reldep && reldep);
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:~Dependency();
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)

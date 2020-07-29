@@ -45,6 +45,8 @@ Reldep::Reldep(SolvSack * sack, const std::string & reldep_string) : sack(sack->
     id = get_reldep_id(sack, reldep_string);
 }
 
+Reldep::Reldep(Reldep && reldep) : sack(std::move(reldep.sack)), id(std::move(reldep.id)) {}
+
 const char * Reldep::get_name() const {
     return pool_id2str(sack->pImpl->pool, id.id);
 }
