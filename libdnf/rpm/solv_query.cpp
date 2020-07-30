@@ -1670,6 +1670,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::subject_solution(const std::strin
         for (auto form: test_forms) {
             if (nevra_obj.parse(subject, form)) {
                 p_impl->filter_nevra(nevra_obj, true, icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB, filter_result);
+                filter_result &= p_impl->query_result;
                 if (!filter_result.empty()) {
                     // Apply filter results to query
                     p_impl->query_result &= filter_result;
@@ -1680,6 +1681,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::subject_solution(const std::strin
         if (forms.empty()) {
             auto & sorted_solvables = p_impl->sack->pImpl->get_sorted_solvables();
             p_impl->filter_nevra(pool, sorted_solvables, subject, true, icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB, filter_result);
+            filter_result &= p_impl->query_result;
             if (!filter_result.empty()) {
                 p_impl->query_result &= filter_result;
                 return {true, libdnf::rpm::Nevra()};
@@ -1691,6 +1693,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::subject_solution(const std::strin
         str2reldep_internal(reldep_list, libdnf::sack::QueryCmp::GLOB, true, subject);
         sack->pImpl->make_provides_ready();
         p_impl->filter_provides(pool, libdnf::sack::QueryCmp::EQ, reldep_list, filter_result);
+        filter_result &= p_impl->query_result;
         if (!filter_result.empty()) {
             p_impl->query_result &= filter_result;
             return {true, libdnf::rpm::Nevra()};
