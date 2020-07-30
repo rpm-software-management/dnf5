@@ -58,6 +58,39 @@ inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_p
     }
 }
 
+bool is_valid_candidate(Pool * pool, libdnf::rpm::PackageId candidate_id, Id src, bool all_epoch, bool all_version, bool all_release, bool all_arch, bool test_epoch, bool test_version, bool test_release, bool test_arch, const char * epoch_c_pattern, const char * version_c_pattern, const char * release_c_pattern, const char * arch_c_pattern, libdnf::sack::QueryCmp epoch_cmp_type, libdnf::sack::QueryCmp version_cmp_type, libdnf::sack::QueryCmp release_cmp_type, libdnf::sack::QueryCmp arch_cmp_type) {
+    if (src != 0) {
+        if (libdnf::rpm::solv::get_solvable(pool, candidate_id)->arch == src) {
+            return false;
+        }
+    }
+    if (test_arch) {
+        auto candidate_arch = libdnf::rpm::solv::get_arch(pool, candidate_id);
+        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
+            return false;
+        }
+    }
+    if (test_epoch) {
+        auto candidate_epoch = libdnf::rpm::solv::get_epoch_cstring(pool, candidate_id);
+        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
+            return false;
+        }
+    }
+    if (test_version) {
+        auto candidate_version = libdnf::rpm::solv::get_version(pool, candidate_id);
+        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
+            return false;
+        }
+    }
+    if (test_release) {
+        auto candidate_release = libdnf::rpm::solv::get_release(pool, candidate_id);
+        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
+            return false;
+        }
+    }
+    return true;
+}
+
 inline bool hy_is_glob_pattern(const char * pattern) {
     return strpbrk(pattern, "*[?") != nullptr;
 }
@@ -1282,21 +1315,25 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
     const char * epoch_c_pattern = epoch.c_str();
     auto epoch_cmp_type = remove_glob_when_unneeded(cmp_type, epoch_c_pattern, cmp_glob);
     bool all_epoch = cmp_glob && (epoch == "*");
+    bool test_epoch = !epoch.empty();
 
     auto & version = pattern.get_version();
     const char * version_c_pattern = version.c_str();
     auto version_cmp_type = remove_glob_when_unneeded(cmp_type, version_c_pattern, cmp_glob);
     bool all_version = cmp_glob && (version == "*");
+    bool test_version = !version.empty();
 
     auto & release = pattern.get_release();
     const char * release_c_pattern = release.c_str();
     auto release_cmp_type = remove_glob_when_unneeded(cmp_type, release_c_pattern, cmp_glob);
     bool all_release = cmp_glob && (release == "*");
+    bool test_release = !release.empty();
 
     auto & arch = pattern.get_arch();
     const char * arch_c_pattern = arch.c_str();
     auto arch_cmp_type = remove_glob_when_unneeded(cmp_type, arch_c_pattern, cmp_glob);
     bool all_arch = cmp_glob && (arch == "*");
+    bool test_arch = !arch.empty();
 
     Id src = with_src ? 0 : pool_str2id(pool, "src", 0);;
 
@@ -1314,39 +1351,9 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
                     std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
                 while (low != sorted_solvables.end() && (*low)->name == name_id) {
                     auto candidate_id = solv::get_package_id(pool, *low);
-                    if (!epoch.empty()) {
-                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
-                            ++low;
-                            continue;
-                        }
-                    }
-                    if (!with_src) {
-                        if (solv::get_solvable(pool, candidate_id)->arch == src) {
-                            ++low;
-                            continue;
-                        }
-                    }
-                    if (!version.empty()) {
-                        auto candidate_version = solv::get_version(pool, candidate_id);
-                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
-                            ++low;
-                            continue;
-                        }
-                    }
-                    if (!release.empty()) {
-                        auto candidate_release = solv::get_release(pool, candidate_id);
-                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
-                            ++low;
-                            continue;
-                        }
-                    }
-                    if (!arch.empty()) {
-                        auto candidate_arch = solv::get_arch(pool, candidate_id);
-                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
-                            ++low;
-                            continue;
-                        }
+                    if (!is_valid_candidate(pool, candidate_id, src, all_epoch, all_version, all_release, all_arch, test_epoch, test_version, test_release, test_arch, epoch_c_pattern, version_c_pattern, release_c_pattern, arch_c_pattern, epoch_cmp_type, version_cmp_type, release_cmp_type, arch_cmp_type)) {
+                        ++low;
+                        continue;
                     }
                     filter_result.add_unsafe(candidate_id);
                     ++low;
@@ -1354,77 +1361,25 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
             } break;
             case libdnf::sack::QueryCmp::IEXACT: {
                 for (PackageId candidate_id : query_result) {
-                    if (!with_src) {
-                        if (solv::get_solvable(pool, candidate_id)->arch == src) {
-                            continue;
-                        }
-                    }
                     const char * candidate_name = solv::get_name(pool, candidate_id);
                     if (strcasecmp(candidate_name, name_c_pattern) != 0) {
                         continue;
                     }
-                    if (!epoch.empty()) {
-                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
-                            continue;
-                        }
-                    }
-                    if (!version.empty()) {
-                        auto candidate_version = solv::get_version(pool, candidate_id);
-                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
-                            continue;
-                        }
-                    }
-                    if (!release.empty()) {
-                        auto candidate_release = solv::get_release(pool, candidate_id);
-                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
-                            continue;
-                        }
-                    }
-                    if (!arch.empty()) {
-                        auto candidate_arch = solv::get_arch(pool, candidate_id);
-                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
-                            continue;
-                        }
+                    if (!is_valid_candidate(pool, candidate_id, src, all_epoch, all_version, all_release, all_arch, test_epoch, test_version, test_release, test_arch, epoch_c_pattern, version_c_pattern, release_c_pattern, arch_c_pattern, epoch_cmp_type, version_cmp_type, release_cmp_type, arch_cmp_type)) {
+                        continue;
                     }
                     filter_result.add_unsafe(candidate_id);
                 }
             } break;
             case libdnf::sack::QueryCmp::GLOB: {
                 for (PackageId candidate_id : query_result) {
-                    if (!with_src) {
-                        if (solv::get_solvable(pool, candidate_id)->arch == src) {
-                            continue;
-                        }
-                    }
                     const char * candidate_name = solv::get_name(pool, candidate_id);
-
                     if (!all_names && fnmatch(name_c_pattern, candidate_name, 0) != 0) {
                         continue;
                     }
-                    if (!epoch.empty()) {
-                        auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
-                            continue;
-                        }
-                    }
-                    if (!version.empty()) {
-                        auto candidate_version = solv::get_version(pool, candidate_id);
-                        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
-                            continue;
-                        }
-                    }
-                    if (!release.empty()) {
-                        auto candidate_release = solv::get_release(pool, candidate_id);
-                        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
-                            continue;
-                        }
-                    }
-                    if (!arch.empty()) {
-                        auto candidate_arch = solv::get_arch(pool, candidate_id);
-                        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
-                            continue;
-                        }
+
+                    if (!is_valid_candidate(pool, candidate_id, src, all_epoch, all_version, all_release, all_arch, test_epoch, test_version, test_release, test_arch, epoch_c_pattern, version_c_pattern, release_c_pattern, arch_c_pattern, epoch_cmp_type, version_cmp_type, release_cmp_type, arch_cmp_type)) {
+                        continue;
                     }
                     filter_result.add_unsafe(candidate_id);
                 }
@@ -1434,34 +1389,8 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
         }
     } else if (!epoch.empty() || !version.empty() || !release.empty() || !arch.empty()) {
         for (PackageId candidate_id : query_result) {
-            if (!with_src) {
-                if (solv::get_solvable(pool, candidate_id)->arch == src) {
-                    continue;
-                }
-            }
-            if (!epoch.empty()) {
-                auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
-                if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
-                    continue;
-                }
-            }
-            if (!version.empty()) {
-                auto candidate_version = solv::get_version(pool, candidate_id);
-                if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
-                    continue;
-                }
-            }
-            if (!release.empty()) {
-                auto candidate_release = solv::get_release(pool, candidate_id);
-                if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
-                    continue;
-                }
-            }
-            if (!arch.empty()) {
-                auto candidate_arch = solv::get_arch(pool, candidate_id);
-                if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
-                    continue;
-                }
+            if (!is_valid_candidate(pool, candidate_id, src, all_epoch, all_version, all_release, all_arch, test_epoch, test_version, test_release, test_arch, epoch_c_pattern, version_c_pattern, release_c_pattern, arch_c_pattern, epoch_cmp_type, version_cmp_type, release_cmp_type, arch_cmp_type)) {
+                continue;
             }
             filter_result.add_unsafe(candidate_id);
         }
