@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "test_id_queue.hpp"
+
 #include "../../../../libdnf/rpm/solv/id_queue.hpp"
 
 
@@ -32,8 +33,7 @@ void IdQueueTest::tearDown() {}
 
 
 // Test push_back(), operator[], size(), and clear()
-void IdQueueTest::test_push_back()
-{
+void IdQueueTest::test_push_back() {
     libdnf::rpm::solv::IdQueue id_queue;
     CPPUNIT_ASSERT(id_queue.size() == 0);
 
@@ -57,8 +57,7 @@ void IdQueueTest::test_push_back()
 }
 
 /// Test operators, copy and move constructors
-void IdQueueTest::test_operators()
-{
+void IdQueueTest::test_operators() {
     libdnf::rpm::solv::IdQueue id_queue_same1;
     libdnf::rpm::solv::IdQueue id_queue_same2;
     libdnf::rpm::solv::IdQueue id_queue_different3;
@@ -95,4 +94,44 @@ void IdQueueTest::test_operators()
     CPPUNIT_ASSERT(id_queue_same2[1] == 2);
     CPPUNIT_ASSERT(id_queue_same2[2] == 2);
     CPPUNIT_ASSERT(id_queue_same2[3] == 5);
+}
+
+void IdQueueTest::test_iterator_empty() {
+    std::vector<Id> expected = {};
+    std::vector<Id> result;
+    libdnf::rpm::solv::IdQueue queue;
+
+    for (auto it = queue.begin(); it != queue.end(); it++) {
+        result.push_back(*it);
+    }
+    CPPUNIT_ASSERT(result == expected);
+}
+
+void IdQueueTest::test_iterator_full() {
+    std::vector<Id> expected = {0, 1, 2, 3, 4};
+    std::vector<Id> result;
+    libdnf::rpm::solv::IdQueue queue;
+    queue.push_back(0, 1);
+    queue.push_back(2, 3);
+    queue.push_back(4);
+
+    for (auto it = queue.begin(); it != queue.end(); it++) {
+        result.push_back(*it);
+    }
+    CPPUNIT_ASSERT(result == expected);
+}
+
+void IdQueueTest::test_iterator_performance() {
+    constexpr int max = 1000000;
+    libdnf::rpm::solv::IdQueue queue;
+    for (int i = 0; i < max; i++) {
+        queue.push_back(i);
+    }
+
+    for (int i = 0; i < 10; i++) {
+        std::vector<Id> result;
+        for (auto it = queue.begin(); it != queue.end(); it++) {
+            result.push_back(*it);
+        }
+    }
 }

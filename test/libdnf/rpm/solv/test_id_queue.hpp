@@ -29,6 +29,9 @@ class IdQueueTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(IdQueueTest);
     CPPUNIT_TEST(test_push_back);
     CPPUNIT_TEST(test_operators);
+    CPPUNIT_TEST(test_iterator_empty);
+    CPPUNIT_TEST(test_iterator_full);
+    CPPUNIT_TEST(test_iterator_performance);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -37,8 +40,11 @@ public:
 
     void test_push_back();
     void test_operators();
+    void test_iterator_empty();
+    void test_iterator_full();
+    void test_iterator_performance();
 
 private:
 };
 
-#endif // LIBDNF_TEST_RPM_SOLV_ID_QUEUE_HPP
+#endif  // LIBDNF_TEST_RPM_SOLV_ID_QUEUE_HPP
