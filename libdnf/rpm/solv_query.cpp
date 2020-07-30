@@ -103,7 +103,7 @@ public:
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
 
-    void filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result);
+    void filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result, bool with_src);
     void filter_nevra(Pool * pool, const std::vector<Solvable *> sorted_solvables,const std::string & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result);
 
 private:
@@ -525,7 +525,7 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const libd
 
     solv::SolvMap filter_result(static_cast<int>(p_impl->sack->pImpl->get_nsolvables()));
 
-    p_impl->filter_nevra(pattern, cmp_glob, cmp_type, filter_result);
+    p_impl->filter_nevra(pattern, cmp_glob, cmp_type, filter_result, true);
 
     // Apply filter results to query
     if (cmp_not) {
@@ -1270,7 +1270,7 @@ void SolvQuery::Impl::filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_t
     }
 }
 
-void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result) {
+void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result, bool with_src) {
     Pool * pool = sack->pImpl->get_pool();
     
     auto & name = pattern.get_name();
@@ -1298,6 +1298,8 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
     auto arch_cmp_type = remove_glob_when_unneeded(cmp_type, arch_c_pattern, cmp_glob);
     bool all_arch = cmp_glob && (arch == "*");
 
+    Id src = with_src ? 0 : pool_str2id(pool, "src", 0);;
+
 
     if (!name.empty()) {
         auto & sorted_solvables = sack->pImpl->get_sorted_solvables();
@@ -1315,6 +1317,12 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
                     if (!epoch.empty()) {
                         auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
                         if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
+                            ++low;
+                            continue;
+                        }
+                    }
+                    if (!with_src) {
+                        if (solv::get_solvable(pool, candidate_id)->arch == src) {
                             ++low;
                             continue;
                         }
@@ -1346,6 +1354,11 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
             } break;
             case libdnf::sack::QueryCmp::IEXACT: {
                 for (PackageId candidate_id : query_result) {
+                    if (!with_src) {
+                        if (solv::get_solvable(pool, candidate_id)->arch == src) {
+                            continue;
+                        }
+                    }
                     const char * candidate_name = solv::get_name(pool, candidate_id);
                     if (strcasecmp(candidate_name, name_c_pattern) != 0) {
                         continue;
@@ -1379,6 +1392,11 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
             } break;
             case libdnf::sack::QueryCmp::GLOB: {
                 for (PackageId candidate_id : query_result) {
+                    if (!with_src) {
+                        if (solv::get_solvable(pool, candidate_id)->arch == src) {
+                            continue;
+                        }
+                    }
                     const char * candidate_name = solv::get_name(pool, candidate_id);
 
                     if (!all_names && fnmatch(name_c_pattern, candidate_name, 0) != 0) {
@@ -1416,6 +1434,11 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
         }
     } else if (!epoch.empty() || !version.empty() || !release.empty() || !arch.empty()) {
         for (PackageId candidate_id : query_result) {
+            if (!with_src) {
+                if (solv::get_solvable(pool, candidate_id)->arch == src) {
+                    continue;
+                }
+            }
             if (!epoch.empty()) {
                 auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
                 if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
@@ -1660,7 +1683,7 @@ std::size_t SolvQuery::size() const noexcept {
 }
 
 std::pair<bool, libdnf::rpm::Nevra> SolvQuery::subject_solution(const std::string & subject,
-        bool icase, bool with_nevra, bool with_provides, bool with_filenames, const std::vector<libdnf::rpm::Nevra::Form> & forms) {
+        bool icase, bool with_nevra, bool with_provides, bool with_filenames, bool with_src, const std::vector<libdnf::rpm::Nevra::Form> & forms) {
     SolvSack * sack = p_impl->sack.get();
     Pool * pool = sack->pImpl->get_pool();
     solv::SolvMap filter_result(static_cast<int>(sack->pImpl->get_nsolvables()));
@@ -1669,7 +1692,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::subject_solution(const std::strin
         Nevra nevra_obj;
         for (auto form: test_forms) {
             if (nevra_obj.parse(subject, form)) {
-                p_impl->filter_nevra(nevra_obj, true, icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB, filter_result);
+                p_impl->filter_nevra(nevra_obj, true, icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB, filter_result, with_src);
                 filter_result &= p_impl->query_result;
                 if (!filter_result.empty()) {
                     // Apply filter results to query

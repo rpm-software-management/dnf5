@@ -301,7 +301,7 @@ public:
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     /// @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf::rpm::Nevra> subject_solution(const std::string & subject,
-        bool icase, bool with_nevra, bool with_provides, bool with_filenames, const std::vector<libdnf::rpm::Nevra::Form> & forms);
+        bool icase, bool with_nevra, bool with_provides, bool with_filenames, bool with_src, const std::vector<libdnf::rpm::Nevra::Form> & forms);
 
 private:
     class Impl;

@@ -312,7 +312,7 @@ void RpmSolvQueryTest::test_subject_solution() {
     {
         // Test NA
         libdnf::rpm::SolvQuery query(sack.get());
-        auto return_value = query.subject_solution("wget.x86_64", false, true, false, false, {});
+        auto return_value = query.subject_solution("wget.x86_64", false, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         auto pset = query.get_package_set();
@@ -324,7 +324,7 @@ void RpmSolvQueryTest::test_subject_solution() {
     {
         // Test a provide
         libdnf::rpm::SolvQuery query(sack.get());
-        auto return_value = query.subject_solution("wget > 1", false, true, true, false, {});
+        auto return_value = query.subject_solution("wget > 1", false, true, true, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         auto pset = query.get_package_set();
