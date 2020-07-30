@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_ID_QUEUE_HPP
 #define LIBDNF_RPM_SOLV_ID_QUEUE_HPP
 
+#include "queue_iterator.hpp"
+
 #include <utility>
 
 extern "C" {
@@ -30,6 +32,10 @@ namespace libdnf::rpm::solv {
 
 struct IdQueue {
 public:
+    using iterator = IdQueueIterator;
+    iterator begin() const;
+    iterator end() const;
+
     IdQueue();
     IdQueue(const IdQueue & src);
     IdQueue(IdQueue && src);
@@ -148,6 +154,17 @@ inline void IdQueue::append(const IdQueue & src) {
 
 inline void IdQueue::reserve(int n) {
     queue_prealloc(&queue, n);
+}
+
+inline IdQueue::iterator IdQueue::begin() const {
+    iterator it(&queue);
+    return it;
+}
+
+inline IdQueue::iterator IdQueue::end() const {
+    iterator it(&queue);
+    it.end();
+    return it;
 }
 
 }  // namespace libdnf::rpm::solv
