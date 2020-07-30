@@ -34,6 +34,8 @@ public:
     Impl(SolvSack * sack, libdnf::rpm::solv::IdQueue queue_src) : sack(sack->get_weak_ptr()), queue(queue_src) {}
     ~Impl() = default;
 
+    SolvSack * get_sack() const { return sack.get(); }
+    libdnf::rpm::solv::IdQueue & get_idqueue() { return queue; }
 
 private:
     friend class ReldepList;

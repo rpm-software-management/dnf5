@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/reldep_list.hpp"
 
 #include "reldep_list_impl.hpp"
-#include "solv_sack_impl.hpp"
 #include "solv/reldep_parser.hpp"
+#include "solv_sack_impl.hpp"
 
 #include "libdnf/rpm/reldep.hpp"
 
@@ -95,8 +95,7 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
     Dataiterator di;
     dataiterator_init(&di, pool, 0, 0, 0, dep_splitter.get_name_cstr(), SEARCH_STRING | SEARCH_GLOB);
     while (dataiterator_step(&di)) {
-        ReldepId id = Reldep::get_reldep_id(
-            sack, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type());
+        ReldepId id = Reldep::get_reldep_id(sack, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type());
         add(id);
     }
     dataiterator_free(&di);
@@ -125,6 +124,21 @@ Reldep ReldepList::get(int index) const noexcept {
 
 int ReldepList::size() const noexcept {
     return pImpl->queue.size();
+}
+
+ReldepList::iterator ReldepList::begin() const {
+    ReldepList::iterator it(*this);
+    it.begin();
+    return it;
+}
+ReldepList::iterator ReldepList::end() const {
+    ReldepList::iterator it(*this);
+    it.end();
+    return it;
+}
+
+SolvSack * ReldepList::get_sack() const {
+    return pImpl->get_sack();
 }
 
 }  // namespace libdnf::rpm

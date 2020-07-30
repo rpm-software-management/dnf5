@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_RELDEP_LIST_HPP
 
 #include "reldep.hpp"
+#include "reldep_list_iterator.hpp"
 
 #include <memory>
 
@@ -29,6 +30,7 @@ namespace libdnf::rpm {
 
 // forward declarations
 class Package;
+class ReldepListIterator;
 
 /// @replaces libdnf/dnf-reldep-list.h:struct:DnfReldepList
 /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:struct:DependencyContainer
@@ -46,6 +48,10 @@ public:
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_free(DnfReldepList *reldep_list)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:~DependencyContainer()
     ~ReldepList();
+
+    using iterator = ReldepListIterator;
+    iterator begin() const;
+    iterator end() const;
 
     bool operator==(const ReldepList & other) const noexcept;
     bool operator!=(const ReldepList & other) const noexcept;
@@ -92,7 +98,10 @@ public:
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:count()
     int size() const noexcept;
 
+    SolvSack * get_sack() const;
+
 private:
+    friend ReldepListIterator;
     friend Package;
     class Impl;
     std::unique_ptr<Impl> pImpl;

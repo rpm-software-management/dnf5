@@ -24,6 +24,7 @@
     #include "libdnf/rpm/package_set_iterator.hpp"
     #include "libdnf/rpm/reldep.hpp"
     #include "libdnf/rpm/reldep_list.hpp"
+    #include "libdnf/rpm/reldep_list_iterator.hpp"
     #include "libdnf/rpm/repo.hpp"
     #include "libdnf/rpm/repo_query.hpp"
     #include "libdnf/rpm/repo_sack.hpp"
@@ -36,6 +37,10 @@
 %include "libdnf/rpm/checksum.hpp"
 %include "libdnf/rpm/solv_sack.hpp"
 %include "libdnf/rpm/reldep.hpp"
+
+%rename(next) libdnf::rpm::ReldepListIterator::operator++();
+%rename(value) libdnf::rpm::ReldepListIterator::operator*();
+%include "libdnf/rpm/reldep_list_iterator.hpp"
 %include "libdnf/rpm/reldep_list.hpp"
 %include "libdnf/rpm/package.hpp"
 
@@ -59,3 +64,4 @@
 %include "libdnf/rpm/repo_sack.hpp"
 
 add_iterator(PackageSet)
+add_iterator(ReldepList)

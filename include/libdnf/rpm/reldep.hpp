@@ -28,6 +28,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::rpm {
+
+class ReldepListIterator;
+
 /// @brief Represent a relational dependency from libsolv
 ///
 /// @replaces libdnf/dnf-reldep.h:struct:DnfReldep
@@ -74,12 +77,14 @@ public:
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
     ReldepId get_id() const noexcept { return id; };
 
-private:
-    friend ReldepList;
-
+protected:
     /// @brief Creates a reldep from Id
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, Id id)
     Reldep(SolvSack * sack, ReldepId dependency_id);
+
+private:
+    friend ReldepList;
+    friend ReldepListIterator;
 
     /// @brief Creates a reldep from name, version, and comparison type.
     ///
