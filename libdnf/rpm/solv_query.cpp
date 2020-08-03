@@ -17,6 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "../utils/utils_internal.hpp"
 #include "libdnf/rpm/solv_query.hpp"
 
 #include "package_set_impl.hpp"
@@ -91,14 +92,10 @@ bool is_valid_candidate(Pool * pool, libdnf::rpm::PackageId candidate_id, Id src
     return true;
 }
 
-inline bool hy_is_glob_pattern(const char * pattern) {
-    return strpbrk(pattern, "*[?") != nullptr;
-}
-
 /// Remove GLOB when the pattern is not a glob
 inline libdnf::sack::QueryCmp remove_glob_when_unneeded(libdnf::sack::QueryCmp cmp_type, const char * pattern, bool cmp_glob) {
 // Remove GLOB when the pattern is not a glob
-    if (cmp_glob && !hy_is_glob_pattern(pattern)) {
+    if (cmp_glob && !libdnf::utils::is_glob_pattern(pattern)) {
         return (cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
     }
     return cmp_type;
@@ -232,7 +229,7 @@ SolvQuery & SolvQuery::ifilter_name(libdnf::sack::QueryCmp cmp_type, const std::
         libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
         const char * c_pattern = pattern.c_str();
         // Remove GLOB when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
             tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
         }
 
@@ -371,7 +368,7 @@ SolvQuery & SolvQuery::ifilter_arch(libdnf::sack::QueryCmp cmp_type, const std::
         libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
         const char * c_pattern = pattern.c_str();
         // Remove GLOB when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
             tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
         }
 
@@ -598,7 +595,7 @@ SolvQuery & SolvQuery::ifilter_version(libdnf::sack::QueryCmp cmp_type, const st
         libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
         const char * c_pattern = pattern.c_str();
         // Replace GLOB with EQ when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
             tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
         }
         switch (tmp_cmp_type) {
@@ -663,7 +660,7 @@ SolvQuery & SolvQuery::ifilter_release(libdnf::sack::QueryCmp cmp_type, const st
         libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
         const char * c_pattern = pattern.c_str();
         // Replace GLOB with EQ when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
             tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
         }
         switch (tmp_cmp_type) {
@@ -721,7 +718,7 @@ SolvQuery & SolvQuery::ifilter_reponame(libdnf::sack::QueryCmp cmp_type, const s
         libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
         const char * c_pattern = pattern.c_str();
         // Replace GLOB with EQ when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
             tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
         }
         switch (tmp_cmp_type) {
@@ -777,7 +774,7 @@ SolvQuery & SolvQuery::ifilter_sourcerpm(libdnf::sack::QueryCmp cmp_type, const 
         libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
         const char * c_pattern = pattern.c_str();
         // Replace GLOB with EQ when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
             tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
         }
         switch (tmp_cmp_type) {
@@ -913,7 +910,7 @@ SolvQuery & SolvQuery::ifilter_epoch(libdnf::sack::QueryCmp cmp_type, const std:
         libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
         const char * c_pattern = pattern.c_str();
         // Replace GLOB with EQ when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
             tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
         }
 
@@ -988,7 +985,7 @@ static void filter_dataiterator_internal(
         libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
         const char * c_pattern = pattern.c_str();
         // Remove GLOB when the pattern is not a glob
-        if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+        if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
             tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
         }
         int flags = 0;
@@ -1125,7 +1122,7 @@ static void str2reldep_internal(
     libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
     const char * c_pattern = pattern.c_str();
     // Remove GLOB when the pattern is not a glob
-    if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+    if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
         tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
     }
 
@@ -1401,7 +1398,7 @@ void SolvQuery::Impl::filter_nevra(Pool * pool, const std::vector<Solvable *> so
     libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
     const char * c_pattern = pattern.c_str();
     // Remove GLOB when the pattern is not a glob
-    if (cmp_glob && !hy_is_glob_pattern(c_pattern)) {
+    if (cmp_glob && !libdnf::utils::is_glob_pattern(c_pattern)) {
         tmp_cmp_type = (tmp_cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
     }
 
