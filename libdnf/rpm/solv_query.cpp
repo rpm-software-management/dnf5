@@ -1611,7 +1611,7 @@ std::size_t SolvQuery::size() const noexcept {
     return p_impl->query_result.size();
 }
 
-std::pair<bool, libdnf::rpm::Nevra> SolvQuery::subject_solution(const std::string & subject,
+std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(const std::string & subject,
         bool icase, bool with_nevra, bool with_provides, bool with_filenames, bool with_src, const std::vector<libdnf::rpm::Nevra::Form> & forms) {
     SolvSack * sack = p_impl->sack.get();
     Pool * pool = sack->pImpl->get_pool();

@@ -308,11 +308,11 @@ void RpmSolvQueryTest::test_ifilter_requires() {
     }
 }
 
-void RpmSolvQueryTest::test_subject_solution() {
+void RpmSolvQueryTest::test_resolve_pkg_spec() {
     {
         // Test NA
         libdnf::rpm::SolvQuery query(sack.get());
-        auto return_value = query.subject_solution("wget.x86_64", false, true, false, false, true, {});
+        auto return_value = query.resolve_pkg_spec("wget.x86_64", false, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         auto pset = query.get_package_set();
@@ -324,7 +324,7 @@ void RpmSolvQueryTest::test_subject_solution() {
     {
         // Test a provide
         libdnf::rpm::SolvQuery query(sack.get());
-        auto return_value = query.subject_solution("wget > 1", false, true, true, false, true, {});
+        auto return_value = query.resolve_pkg_spec("wget > 1", false, true, true, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         auto pset = query.get_package_set();
@@ -335,7 +335,7 @@ void RpmSolvQueryTest::test_subject_solution() {
     {
         // Test NEVRA glob
         libdnf::rpm::SolvQuery query(sack.get());
-        auto return_value = query.subject_solution("wge?-?:1.1?.5-?.fc29.x8?_64", false, true, false, false, true, {});
+        auto return_value = query.resolve_pkg_spec("wge?-?:1.1?.5-?.fc29.x8?_64", false, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         auto pset = query.get_package_set();
@@ -346,7 +346,7 @@ void RpmSolvQueryTest::test_subject_solution() {
     {
         // Test NEVRA icase
         libdnf::rpm::SolvQuery query(sack.get());
-        auto return_value = query.subject_solution("wgeT-0:1.19.5-5.Fc29.X86_64", true, true, false, false, true, {});
+        auto return_value = query.resolve_pkg_spec("wgeT-0:1.19.5-5.Fc29.X86_64", true, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         auto pset = query.get_package_set();

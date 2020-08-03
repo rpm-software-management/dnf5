@@ -42,7 +42,7 @@ class RpmSolvQueryTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_ifilter_nevra);
     CPPUNIT_TEST(test_ifilter_provides);
     CPPUNIT_TEST(test_ifilter_requires);
-    CPPUNIT_TEST(test_subject_solution);
+    CPPUNIT_TEST(test_resolve_pkg_spec);
 #endif
 
 #ifdef WITH_PERFORMANCE_TESTS
@@ -59,7 +59,7 @@ public:
     void test_ifilter_nevra();
     void test_ifilter_provides();
     void test_ifilter_requires();
-    void test_subject_solution();
+    void test_resolve_pkg_spec();
 
 private:
     std::unique_ptr<libdnf::Base> base;
