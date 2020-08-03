@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_RPM_PACKAGE_SET_HPP
-#define TEST_LIBDNF_RPM_PACKAGE_SET_HPP
+#ifndef TEST_LIBDNF_RPM_SOLV_QUERY_HPP
+#define TEST_LIBDNF_RPM_SOLV_QUERY_HPP
 
 
 #include "libdnf/base/base.hpp"
@@ -70,4 +70,4 @@ private:
 };
 
 
-#endif  // TEST_LIBDNF_RPM_PACKAGE_SET_HPP
+#endif  // TEST_LIBDNF_RPM_SOLV_QUERY_HPP

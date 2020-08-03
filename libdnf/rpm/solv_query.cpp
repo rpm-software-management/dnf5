@@ -17,9 +17,9 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "../utils/utils_internal.hpp"
 #include "libdnf/rpm/solv_query.hpp"
 
+#include "../utils/utils_internal.hpp"
 #include "package_set_impl.hpp"
 #include "solv/package_private.hpp"
 #include "solv/solv_map.hpp"
@@ -40,7 +40,8 @@ extern "C" {
 
 namespace {
 
-inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate, bool all_candidates) {
+inline bool is_valid_candidate(
+    libdnf::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate, bool all_candidates) {
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ: {
             return strcmp(candidate, c_pattern) == 0;
@@ -59,7 +60,26 @@ inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_p
     }
 }
 
-bool is_valid_candidate(Pool * pool, libdnf::rpm::PackageId candidate_id, Id src, bool all_epoch, bool all_version, bool all_release, bool all_arch, bool test_epoch, bool test_version, bool test_release, bool test_arch, const char * epoch_c_pattern, const char * version_c_pattern, const char * release_c_pattern, const char * arch_c_pattern, libdnf::sack::QueryCmp epoch_cmp_type, libdnf::sack::QueryCmp version_cmp_type, libdnf::sack::QueryCmp release_cmp_type, libdnf::sack::QueryCmp arch_cmp_type) {
+bool is_valid_candidate(
+    Pool * pool,
+    libdnf::rpm::PackageId candidate_id,
+    Id src,
+    bool all_epoch,
+    bool all_version,
+    bool all_release,
+    bool all_arch,
+    bool test_epoch,
+    bool test_version,
+    bool test_release,
+    bool test_arch,
+    const char * epoch_c_pattern,
+    const char * version_c_pattern,
+    const char * release_c_pattern,
+    const char * arch_c_pattern,
+    libdnf::sack::QueryCmp epoch_cmp_type,
+    libdnf::sack::QueryCmp version_cmp_type,
+    libdnf::sack::QueryCmp release_cmp_type,
+    libdnf::sack::QueryCmp arch_cmp_type) {
     if (src != 0) {
         if (libdnf::rpm::solv::get_solvable(pool, candidate_id)->arch == src) {
             return false;
@@ -93,8 +113,9 @@ bool is_valid_candidate(Pool * pool, libdnf::rpm::PackageId candidate_id, Id src
 }
 
 /// Remove GLOB when the pattern is not a glob
-inline libdnf::sack::QueryCmp remove_glob_when_unneeded(libdnf::sack::QueryCmp cmp_type, const char * pattern, bool cmp_glob) {
-// Remove GLOB when the pattern is not a glob
+inline libdnf::sack::QueryCmp remove_glob_when_unneeded(
+    libdnf::sack::QueryCmp cmp_type, const char * pattern, bool cmp_glob) {
+    // Remove GLOB when the pattern is not a glob
     if (cmp_glob && !libdnf::utils::is_glob_pattern(pattern)) {
         return (cmp_type - libdnf::sack::QueryCmp::GLOB) | libdnf::sack::QueryCmp::EQ;
     }
@@ -103,8 +124,7 @@ inline libdnf::sack::QueryCmp remove_glob_when_unneeded(libdnf::sack::QueryCmp c
 
 /// @brief Test if pattern is file path
 /// Return true if pattern start with "/" or pattern[0] == '*' && pattern[1] == '/'
-static inline bool is_file_pattern(const std::string & pattern)
-{
+static inline bool is_file_pattern(const std::string & pattern) {
     return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
 }
 
@@ -128,13 +148,25 @@ public:
     SolvQuery::Impl & operator=(const SolvQuery::Impl & src);
     SolvQuery::Impl & operator=(SolvQuery::Impl && src) noexcept;
 
-    void filter_provides(Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result);
+    void filter_provides(
+        Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result);
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
 
-    void filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result, bool with_src);
-    void filter_nevra(Pool * pool, const std::vector<Solvable *> sorted_solvables,const std::string & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result);
+    void filter_nevra(
+        const Nevra & pattern,
+        bool cmp_glob,
+        libdnf::sack::QueryCmp cmp_type,
+        solv::SolvMap & filter_result,
+        bool with_src);
+    void filter_nevra(
+        Pool * pool,
+        const std::vector<Solvable *> sorted_solvables,
+        const std::string & pattern,
+        bool cmp_glob,
+        libdnf::sack::QueryCmp cmp_type,
+        solv::SolvMap & filter_result);
 
 private:
     friend class SolvQuery;
@@ -501,7 +533,10 @@ static inline bool name_arch_compare_lower_id(const Solvable * first, const Nevr
 
 template <bool (*cmp_fnc)(int value_to_cmp)>
 inline static void filter_nevra_internal(
-    Pool * pool, const char * c_pattern, const std::vector<Solvable *> & sorted_solvables, solv::SolvMap & filter_result) {
+    Pool * pool,
+    const char * c_pattern,
+    const std::vector<Solvable *> & sorted_solvables,
+    solv::SolvMap & filter_result) {
     NevraID nevra_id;
     if (!nevra_id.parse(pool, c_pattern, false)) {
         return;
@@ -1118,7 +1153,6 @@ SolvQuery & SolvQuery::ifilter_provides(libdnf::sack::QueryCmp cmp_type, const R
 /// Provide libdnf::sack::QueryCmp without NOT flag
 static void str2reldep_internal(
     ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern) {
-
     libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
     const char * c_pattern = pattern.c_str();
     // Remove GLOB when the pattern is not a glob
@@ -1167,7 +1201,8 @@ SolvQuery & SolvQuery::ifilter_provides(libdnf::sack::QueryCmp cmp_type, const s
     }
 }
 
-void SolvQuery::Impl::filter_provides(Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result) {
+void SolvQuery::Impl::filter_provides(
+    Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result) {
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ: {
             Id p;
@@ -1300,9 +1335,14 @@ void SolvQuery::Impl::filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_t
     }
 }
 
-void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result, bool with_src) {
+void SolvQuery::Impl::filter_nevra(
+    const Nevra & pattern,
+    bool cmp_glob,
+    libdnf::sack::QueryCmp cmp_type,
+    solv::SolvMap & filter_result,
+    bool with_src) {
     Pool * pool = sack->pImpl->get_pool();
-    
+
     auto & name = pattern.get_name();
     const char * name_c_pattern = name.c_str();
     auto name_cmp_type = remove_glob_when_unneeded(cmp_type, name_c_pattern, cmp_glob);
@@ -1332,8 +1372,7 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
     bool all_arch = cmp_glob && (arch == "*");
     bool test_arch = !arch.empty();
 
-    Id src = with_src ? 0 : pool_str2id(pool, "src", 0);;
-
+    Id src = with_src ? 0 : pool_str2id(pool, "src", 0);
 
     if (!name.empty()) {
         auto & sorted_solvables = sack->pImpl->get_sorted_solvables();
@@ -1348,7 +1387,26 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
                     std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
                 while (low != sorted_solvables.end() && (*low)->name == name_id) {
                     auto candidate_id = solv::get_package_id(pool, *low);
-                    if (!is_valid_candidate(pool, candidate_id, src, all_epoch, all_version, all_release, all_arch, test_epoch, test_version, test_release, test_arch, epoch_c_pattern, version_c_pattern, release_c_pattern, arch_c_pattern, epoch_cmp_type, version_cmp_type, release_cmp_type, arch_cmp_type)) {
+                    if (!is_valid_candidate(
+                            pool,
+                            candidate_id,
+                            src,
+                            all_epoch,
+                            all_version,
+                            all_release,
+                            all_arch,
+                            test_epoch,
+                            test_version,
+                            test_release,
+                            test_arch,
+                            epoch_c_pattern,
+                            version_c_pattern,
+                            release_c_pattern,
+                            arch_c_pattern,
+                            epoch_cmp_type,
+                            version_cmp_type,
+                            release_cmp_type,
+                            arch_cmp_type)) {
                         ++low;
                         continue;
                     }
@@ -1362,7 +1420,26 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
                     if (strcasecmp(candidate_name, name_c_pattern) != 0) {
                         continue;
                     }
-                    if (!is_valid_candidate(pool, candidate_id, src, all_epoch, all_version, all_release, all_arch, test_epoch, test_version, test_release, test_arch, epoch_c_pattern, version_c_pattern, release_c_pattern, arch_c_pattern, epoch_cmp_type, version_cmp_type, release_cmp_type, arch_cmp_type)) {
+                    if (!is_valid_candidate(
+                            pool,
+                            candidate_id,
+                            src,
+                            all_epoch,
+                            all_version,
+                            all_release,
+                            all_arch,
+                            test_epoch,
+                            test_version,
+                            test_release,
+                            test_arch,
+                            epoch_c_pattern,
+                            version_c_pattern,
+                            release_c_pattern,
+                            arch_c_pattern,
+                            epoch_cmp_type,
+                            version_cmp_type,
+                            release_cmp_type,
+                            arch_cmp_type)) {
                         continue;
                     }
                     filter_result.add_unsafe(candidate_id);
@@ -1375,7 +1452,26 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
                         continue;
                     }
 
-                    if (!is_valid_candidate(pool, candidate_id, src, all_epoch, all_version, all_release, all_arch, test_epoch, test_version, test_release, test_arch, epoch_c_pattern, version_c_pattern, release_c_pattern, arch_c_pattern, epoch_cmp_type, version_cmp_type, release_cmp_type, arch_cmp_type)) {
+                    if (!is_valid_candidate(
+                            pool,
+                            candidate_id,
+                            src,
+                            all_epoch,
+                            all_version,
+                            all_release,
+                            all_arch,
+                            test_epoch,
+                            test_version,
+                            test_release,
+                            test_arch,
+                            epoch_c_pattern,
+                            version_c_pattern,
+                            release_c_pattern,
+                            arch_c_pattern,
+                            epoch_cmp_type,
+                            version_cmp_type,
+                            release_cmp_type,
+                            arch_cmp_type)) {
                         continue;
                     }
                     filter_result.add_unsafe(candidate_id);
@@ -1386,7 +1482,26 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
         }
     } else if (!epoch.empty() || !version.empty() || !release.empty() || !arch.empty()) {
         for (PackageId candidate_id : query_result) {
-            if (!is_valid_candidate(pool, candidate_id, src, all_epoch, all_version, all_release, all_arch, test_epoch, test_version, test_release, test_arch, epoch_c_pattern, version_c_pattern, release_c_pattern, arch_c_pattern, epoch_cmp_type, version_cmp_type, release_cmp_type, arch_cmp_type)) {
+            if (!is_valid_candidate(
+                    pool,
+                    candidate_id,
+                    src,
+                    all_epoch,
+                    all_version,
+                    all_release,
+                    all_arch,
+                    test_epoch,
+                    test_version,
+                    test_release,
+                    test_arch,
+                    epoch_c_pattern,
+                    version_c_pattern,
+                    release_c_pattern,
+                    arch_c_pattern,
+                    epoch_cmp_type,
+                    version_cmp_type,
+                    release_cmp_type,
+                    arch_cmp_type)) {
                 continue;
             }
             filter_result.add_unsafe(candidate_id);
@@ -1394,7 +1509,13 @@ void SolvQuery::Impl::filter_nevra(const Nevra & pattern, bool cmp_glob, libdnf:
     }
 }
 
-void SolvQuery::Impl::filter_nevra(Pool * pool, const std::vector<Solvable *> sorted_solvables, const std::string & pattern, bool cmp_glob, libdnf::sack::QueryCmp cmp_type, solv::SolvMap & filter_result) {
+void SolvQuery::Impl::filter_nevra(
+    Pool * pool,
+    const std::vector<Solvable *> sorted_solvables,
+    const std::string & pattern,
+    bool cmp_glob,
+    libdnf::sack::QueryCmp cmp_type,
+    solv::SolvMap & filter_result) {
     libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
     const char * c_pattern = pattern.c_str();
     // Remove GLOB when the pattern is not a glob
@@ -1408,10 +1529,10 @@ void SolvQuery::Impl::filter_nevra(Pool * pool, const std::vector<Solvable *> so
             if (!nevra_id.parse(pool, c_pattern, true)) {
                 return;
             }
-            auto low = std::lower_bound(
-                sorted_solvables.begin(), sorted_solvables.end(), nevra_id, nevra_compare_lower_id);
-            while (low != sorted_solvables.end() && (*low)->name == nevra_id.name &&
-                    (*low)->arch == nevra_id.arch && (*low)->evr == nevra_id.evr) {
+            auto low =
+                std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), nevra_id, nevra_compare_lower_id);
+            while (low != sorted_solvables.end() && (*low)->name == nevra_id.name && (*low)->arch == nevra_id.arch &&
+                   (*low)->evr == nevra_id.evr) {
                 filter_result.add_unsafe(solv::get_package_id(pool, *low));
                 ++low;
             }
@@ -1432,8 +1553,7 @@ void SolvQuery::Impl::filter_nevra(Pool * pool, const std::vector<Solvable *> so
             filter_glob_internal<solv::get_nevra>(pool, c_pattern, query_result, filter_result, 0);
             break;
         case libdnf::sack::QueryCmp::IGLOB:
-            filter_glob_internal<solv::get_nevra>(
-                pool, c_pattern, query_result, filter_result, FNM_CASEFOLD);
+            filter_glob_internal<solv::get_nevra>(pool, c_pattern, query_result, filter_result, FNM_CASEFOLD);
             break;
         case libdnf::sack::QueryCmp::IEXACT: {
             for (PackageId candidate_id : query_result) {
@@ -1608,17 +1728,28 @@ std::size_t SolvQuery::size() const noexcept {
     return p_impl->query_result.size();
 }
 
-std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(const std::string & subject,
-        bool icase, bool with_nevra, bool with_provides, bool with_filenames, bool with_src, const std::vector<libdnf::rpm::Nevra::Form> & forms) {
+std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
+    const std::string & subject,
+    bool icase,
+    bool with_nevra,
+    bool with_provides,
+    bool with_filenames,
+    bool with_src,
+    const std::vector<libdnf::rpm::Nevra::Form> & forms) {
     SolvSack * sack = p_impl->sack.get();
     Pool * pool = sack->pImpl->get_pool();
     solv::SolvMap filter_result(static_cast<int>(sack->pImpl->get_nsolvables()));
     if (with_nevra) {
         const std::vector<Nevra::Form> & test_forms = forms.empty() ? Nevra::PKG_SPEC_FORMS : forms;
         Nevra nevra_obj;
-        for (auto form: test_forms) {
+        for (auto form : test_forms) {
             if (nevra_obj.parse(subject, form)) {
-                p_impl->filter_nevra(nevra_obj, true, icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB, filter_result, with_src);
+                p_impl->filter_nevra(
+                    nevra_obj,
+                    true,
+                    icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB,
+                    filter_result,
+                    with_src);
                 filter_result &= p_impl->query_result;
                 if (!filter_result.empty()) {
                     // Apply filter results to query
@@ -1629,7 +1760,13 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(const std::strin
         }
         if (forms.empty()) {
             auto & sorted_solvables = p_impl->sack->pImpl->get_sorted_solvables();
-            p_impl->filter_nevra(pool, sorted_solvables, subject, true, icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB, filter_result);
+            p_impl->filter_nevra(
+                pool,
+                sorted_solvables,
+                subject,
+                true,
+                icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB,
+                filter_result);
             filter_result &= p_impl->query_result;
             if (!filter_result.empty()) {
                 p_impl->query_result &= filter_result;
@@ -1649,7 +1786,13 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(const std::strin
         }
     }
     if (with_filenames && is_file_pattern(subject)) {
-        filter_dataiterator(pool, SOLVABLE_FILELIST, SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_GLOB, p_impl->query_result, filter_result, subject.c_str());
+        filter_dataiterator(
+            pool,
+            SOLVABLE_FILELIST,
+            SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_GLOB,
+            p_impl->query_result,
+            filter_result,
+            subject.c_str());
         if (!filter_result.empty()) {
             p_impl->query_result &= filter_result;
             return {true, libdnf::rpm::Nevra()};

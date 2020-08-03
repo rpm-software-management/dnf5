@@ -85,7 +85,8 @@ private:
     std::string arch;
 };
 
-inline const std::vector<Nevra::Form> Nevra::PKG_SPEC_FORMS ({Nevra::Form::NEVRA, Nevra::Form::NA, Nevra::Form::NAME, Nevra::Form::NEVR, Nevra::Form::NEV});
+inline const std::vector<Nevra::Form> Nevra::PKG_SPEC_FORMS(
+    {Nevra::Form::NEVRA, Nevra::Form::NA, Nevra::Form::NAME, Nevra::Form::NEVR, Nevra::Form::NEV});
 
 inline const std::string & Nevra::get_name() const noexcept {
     return name;
