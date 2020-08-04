@@ -1729,7 +1729,7 @@ std::size_t SolvQuery::size() const noexcept {
 }
 
 std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
-    const std::string & subject,
+    const std::string & pkg_spec,
     bool icase,
     bool with_nevra,
     bool with_provides,
@@ -1743,7 +1743,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
         const std::vector<Nevra::Form> & test_forms = forms.empty() ? Nevra::PKG_SPEC_FORMS : forms;
         Nevra nevra_obj;
         for (auto form : test_forms) {
-            if (nevra_obj.parse(subject, form)) {
+            if (nevra_obj.parse(pkg_spec, form)) {
                 p_impl->filter_nevra(
                     nevra_obj,
                     true,
@@ -1763,7 +1763,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
             p_impl->filter_nevra(
                 pool,
                 sorted_solvables,
-                subject,
+                pkg_spec,
                 true,
                 icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB,
                 filter_result);
@@ -1776,7 +1776,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
     }
     if (with_provides) {
         ReldepList reldep_list(sack);
-        str2reldep_internal(reldep_list, libdnf::sack::QueryCmp::GLOB, true, subject);
+        str2reldep_internal(reldep_list, libdnf::sack::QueryCmp::GLOB, true, pkg_spec);
         sack->pImpl->make_provides_ready();
         p_impl->filter_provides(pool, libdnf::sack::QueryCmp::EQ, reldep_list, filter_result);
         filter_result &= p_impl->query_result;
@@ -1785,14 +1785,14 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
             return {true, libdnf::rpm::Nevra()};
         }
     }
-    if (with_filenames && is_file_pattern(subject)) {
+    if (with_filenames && is_file_pattern(pkg_spec)) {
         filter_dataiterator(
             pool,
             SOLVABLE_FILELIST,
             SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_GLOB,
             p_impl->query_result,
             filter_result,
-            subject.c_str());
+            pkg_spec.c_str());
         if (!filter_result.empty()) {
             p_impl->query_result &= filter_result;
             return {true, libdnf::rpm::Nevra()};
