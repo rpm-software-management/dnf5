@@ -5,7 +5,7 @@
 #include <cwchar>
 
 
-namespace libdnf_cli::utils::utf8 {
+namespace libdnf::cli::utils::utf8 {
 
 
 /// return length of an utf-8 encoded string
@@ -191,4 +191,4 @@ std::string substr_width(const std::string & str, std::string::size_type pos, st
 }
 
 
-}  // namespace libdnf_cli::utils::utf8
+}  // namespace libdnf::cli::utils::utf8
