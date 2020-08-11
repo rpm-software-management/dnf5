@@ -36,6 +36,8 @@ extern "C" {
 #include <solv/repo_updateinfoxml.h>
 #include <solv/repo_write.h>
 #include <solv/solv_xfopen.h>
+#include <solv/solver.h>
+#include <solv/testcase.h>
 }
 
 #include <fmt/format.h>
@@ -569,6 +571,22 @@ void SolvSack::create_system_repo(bool build_cache) {
     pImpl->system_repo =
         std::make_unique<Repo>(SYSTEM_REPO_NAME, std::move(repo_config), *pImpl->base, Repo::Type::SYSTEM);
     pImpl->load_system_repo();
+}
+
+void SolvSack::dump_debugdata(const std::string & dir) {
+    Solver *solver = solver_create(pImpl->pool);
+
+    try {
+        std::filesystem::create_directory(dir);
+
+        int ret = testcase_write(solver, dir.c_str(), 0, NULL, NULL);
+        if (!ret) {
+            throw SystemError(errno, fmt::format("Failed to write debug data to {}", dir));
+        }
+    } catch (...) {
+        solver_free(solver);
+        throw;
+    }
 }
 
 SolvSackWeakPtr SolvSack::get_weak_ptr() {

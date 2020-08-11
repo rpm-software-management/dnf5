@@ -127,6 +127,9 @@ public:
     /// Creates system repository and loads it into SolvSack. Only one system repository can be in SolvSack.
     void create_system_repo(bool build_cache = false);
 
+    // TODO (lhrazky): There's an overlap with dumping the debugdata on the Goal class
+    void dump_debugdata(const std::string & dir);
+
     /// Create WeakPtr to SolvSack
     SolvSackWeakPtr get_weak_ptr();
 
