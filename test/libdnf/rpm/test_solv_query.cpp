@@ -43,7 +43,7 @@ void RpmSolvQueryTest::setUp() {
 
 void RpmSolvQueryTest::test_size() {
     libdnf::rpm::SolvQuery query(sack.get());
-    CPPUNIT_ASSERT_EQUAL(289lu, query.size());
+    CPPUNIT_ASSERT_EQUAL(291lu, query.size());
 }
 
 void RpmSolvQueryTest::test_ifilter_name() {
@@ -90,7 +90,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     // Test QueryCmp::NEQ
     libdnf::rpm::SolvQuery query4(sack.get());
     query4.ifilter_name(libdnf::sack::QueryCmp::NEQ, names);
-    CPPUNIT_ASSERT_EQUAL(287lu, query4.size());
+    CPPUNIT_ASSERT_EQUAL(289lu, query4.size());
 
     // Test QueryCmp::IEXACT
     libdnf::rpm::SolvQuery query5(sack.get());
@@ -279,7 +279,7 @@ void RpmSolvQueryTest::test_ifilter_provides() {
         libdnf::rpm::SolvQuery query(sack.get());
         std::vector<std::string> provides{"glibc-langpack-hr"};
         query.ifilter_provides(libdnf::sack::QueryCmp::NEQ, provides);
-        CPPUNIT_ASSERT_EQUAL(288lu, query.size());
+        CPPUNIT_ASSERT_EQUAL(290lu, query.size());
     }
 }
 
@@ -301,7 +301,7 @@ void RpmSolvQueryTest::test_ifilter_requires() {
         libdnf::rpm::SolvQuery query(sack.get());
         std::vector<std::string> requires {"wget"};
         query.ifilter_requires(libdnf::sack::QueryCmp::NEQ, requires);
-        CPPUNIT_ASSERT_EQUAL(288lu, query.size());
+        CPPUNIT_ASSERT_EQUAL(290lu, query.size());
     }
 }
 
