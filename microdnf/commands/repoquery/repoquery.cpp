@@ -170,25 +170,21 @@ void CmdRepoquery::run(Context & ctx) {
         }
     }
 
-    std::vector<std::string> patterns_to_show;
-    if (patterns_to_show_options->size() > 0) {
-        patterns_to_show.reserve(patterns_to_show_options->size());
-        for (auto & pattern : *patterns_to_show_options) {
-            patterns_to_show.emplace_back(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value());
-        }
+    libdnf::rpm::PackageSet result_pset(&solv_sack);
+    libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
+    for (auto & pattern : *patterns_to_show_options) {
+        libdnf::rpm::SolvQuery solv_query(full_solv_query);
+        solv_query.resolve_pkg_spec(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), true, true, true, true, true, {});
+        result_pset |= solv_query.get_package_set();
     }
 
-    libdnf::rpm::SolvQuery solv_query(&solv_sack);
-    solv_query.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
-
-    auto package_set = solv_query.get_package_set();
     if (info_option->get_value()) {
-        for (auto package : package_set) {
+        for (auto package : result_pset) {
             print_package_info(package);
             std::cout << '\n';
         }
     } else {
-        for (auto package : package_set) {
+        for (auto package : result_pset) {
             std::cout << package.get_full_nevra() << '\n';
         }
     }
