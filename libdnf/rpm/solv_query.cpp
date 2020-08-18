@@ -41,7 +41,7 @@ extern "C" {
 namespace {
 
 inline bool is_valid_candidate(
-    libdnf::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate, bool all_candidates) {
+    libdnf::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate) {
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ: {
             return strcmp(candidate, c_pattern) == 0;
@@ -50,10 +50,10 @@ inline bool is_valid_candidate(
             return strcasecmp(candidate, c_pattern) == 0;
         } break;
         case libdnf::sack::QueryCmp::GLOB: {
-            return all_candidates || fnmatch(c_pattern, candidate, 0) == 0;
+            return fnmatch(c_pattern, candidate, 0) == 0;
         } break;
         case libdnf::sack::QueryCmp::IGLOB: {
-            return all_candidates || fnmatch(c_pattern, candidate, FNM_CASEFOLD) == 0;
+            return fnmatch(c_pattern, candidate, FNM_CASEFOLD) == 0;
         } break;
         default:
             throw libdnf::rpm::SolvQuery::NotSupportedCmpType("Unsupported CmpType");
@@ -64,10 +64,6 @@ bool is_valid_candidate(
     Pool * pool,
     libdnf::rpm::PackageId candidate_id,
     Id src,
-    bool all_epoch,
-    bool all_version,
-    bool all_release,
-    bool all_arch,
     bool test_epoch,
     bool test_version,
     bool test_release,
@@ -87,25 +83,25 @@ bool is_valid_candidate(
     }
     if (test_arch) {
         auto candidate_arch = libdnf::rpm::solv::get_arch(pool, candidate_id);
-        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch, all_arch)) {
+        if (!is_valid_candidate(arch_cmp_type, arch_c_pattern, candidate_arch)) {
             return false;
         }
     }
     if (test_epoch) {
         auto candidate_epoch = libdnf::rpm::solv::get_epoch_cstring(pool, candidate_id);
-        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch, all_epoch)) {
+        if (!is_valid_candidate(epoch_cmp_type, epoch_c_pattern, candidate_epoch)) {
             return false;
         }
     }
     if (test_version) {
         auto candidate_version = libdnf::rpm::solv::get_version(pool, candidate_id);
-        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version, all_version)) {
+        if (!is_valid_candidate(version_cmp_type, version_c_pattern, candidate_version)) {
             return false;
         }
     }
     if (test_release) {
         auto candidate_release = libdnf::rpm::solv::get_release(pool, candidate_id);
-        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release, all_release)) {
+        if (!is_valid_candidate(release_cmp_type, release_c_pattern, candidate_release)) {
             return false;
         }
     }
@@ -1353,25 +1349,25 @@ void SolvQuery::Impl::filter_nevra(
     const char * epoch_c_pattern = epoch.c_str();
     auto epoch_cmp_type = remove_glob_when_unneeded(cmp_type, epoch_c_pattern, cmp_glob);
     bool all_epoch = cmp_glob && (epoch == "*");
-    bool test_epoch = !epoch.empty();
+    bool test_epoch = !all_epoch && !epoch.empty();
 
     auto & version = pattern.get_version();
     const char * version_c_pattern = version.c_str();
     auto version_cmp_type = remove_glob_when_unneeded(cmp_type, version_c_pattern, cmp_glob);
     bool all_version = cmp_glob && (version == "*");
-    bool test_version = !version.empty();
+    bool test_version = !all_version && !version.empty();
 
     auto & release = pattern.get_release();
     const char * release_c_pattern = release.c_str();
     auto release_cmp_type = remove_glob_when_unneeded(cmp_type, release_c_pattern, cmp_glob);
     bool all_release = cmp_glob && (release == "*");
-    bool test_release = !release.empty();
+    bool test_release = !all_release && !release.empty();
 
     auto & arch = pattern.get_arch();
     const char * arch_c_pattern = arch.c_str();
     auto arch_cmp_type = remove_glob_when_unneeded(cmp_type, arch_c_pattern, cmp_glob);
     bool all_arch = cmp_glob && (arch == "*");
-    bool test_arch = !arch.empty();
+    bool test_arch = !all_arch && !arch.empty();
 
     Id src = with_src ? 0 : pool_str2id(pool, "src", 0);
 
@@ -1392,10 +1388,6 @@ void SolvQuery::Impl::filter_nevra(
                             pool,
                             candidate_id,
                             src,
-                            all_epoch,
-                            all_version,
-                            all_release,
-                            all_arch,
                             test_epoch,
                             test_version,
                             test_release,
@@ -1425,10 +1417,6 @@ void SolvQuery::Impl::filter_nevra(
                             pool,
                             candidate_id,
                             src,
-                            all_epoch,
-                            all_version,
-                            all_release,
-                            all_arch,
                             test_epoch,
                             test_version,
                             test_release,
@@ -1457,10 +1445,6 @@ void SolvQuery::Impl::filter_nevra(
                             pool,
                             candidate_id,
                             src,
-                            all_epoch,
-                            all_version,
-                            all_release,
-                            all_arch,
                             test_epoch,
                             test_version,
                             test_release,
@@ -1487,10 +1471,6 @@ void SolvQuery::Impl::filter_nevra(
                     pool,
                     candidate_id,
                     src,
-                    all_epoch,
-                    all_version,
-                    all_release,
-                    all_arch,
                     test_epoch,
                     test_version,
                     test_release,
