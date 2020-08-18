@@ -250,6 +250,9 @@ Requires:       libdnf%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
 BuildRequires:  pkgconfig(ruby)
 BuildRequires:  swig >= %{swig_version}
+%if ! %{with tests_disabled}
+BuildRequires:  rubygem-test-unit
+%endif
 
 %description -n ruby-libdnf
 Ruby bindings for the libdnf library.
@@ -270,6 +273,9 @@ Provides:       ruby(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 BuildRequires:  pkgconfig(ruby)
 BuildRequires:  swig >= %{swig_version}
+%if ! %{with tests_disabled}
+BuildRequires:  rubygem-test-unit
+%endif
 
 %description -n ruby-libdnf-cli
 Ruby bindings for the libdnf-cli library.
