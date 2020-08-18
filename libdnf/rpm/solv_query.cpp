@@ -154,6 +154,7 @@ public:
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
     void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
 
+    /// @param cmp_glob performance optimization - it must be in synchronization with cmp_type
     void filter_nevra(
         const Nevra & pattern,
         bool cmp_glob,
