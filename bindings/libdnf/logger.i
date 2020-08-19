@@ -11,6 +11,9 @@
 %import(module="libdnf::common") "common.i"
 #endif
 
+typedef int64_t time_t;
+typedef int32_t pid_t;
+
 %{
     #include "libdnf/logger/log_router.hpp"
     #include "libdnf/logger/memory_buffer_logger.hpp"
