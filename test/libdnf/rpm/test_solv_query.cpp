@@ -259,6 +259,38 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
     }
 }
 
+void RpmSolvQueryTest::test_ifilter_version() {
+    std::set<std::string> nevras{"CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64"};
+
+    {
+        // Test QueryCmp::EQ - argument without 0 epoch - two elements
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> version{"1.1.1"};
+        query.ifilter_version(libdnf::sack::QueryCmp::EQ, version);
+        CPPUNIT_ASSERT(query.size() == 2);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
+        }
+    }
+}
+
+void RpmSolvQueryTest::test_ifilter_release() {
+    std::set<std::string> nevras{"CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64", "lame-0:3.100-4.fc29.src", "lame-0:3.100-4.fc29.x86_64", "lame-libs-0:3.100-4.fc29.x86_64"};
+
+    {
+        // Test QueryCmp::EQ - argument without 0 epoch - two elements
+        libdnf::rpm::SolvQuery query(sack.get());
+        std::vector<std::string> release{"4.fc29"};
+        query.ifilter_release(libdnf::sack::QueryCmp::EQ, release);
+        CPPUNIT_ASSERT(query.size() == 5);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
+        }
+    }
+}
+
 void RpmSolvQueryTest::test_ifilter_provides() {
     {
         // Test QueryCmp::EQ - string

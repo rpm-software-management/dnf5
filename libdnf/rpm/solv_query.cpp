@@ -602,14 +602,16 @@ SolvQuery & SolvQuery::ifilter_nevra(libdnf::sack::QueryCmp cmp_type, const libd
 template <bool (*cmp_fnc)(int value_to_cmp)>
 inline static void filter_version_internal(
     Pool * pool, const char * c_pattern, solv::SolvMap & candidates, solv::SolvMap & filter_result) {
+    char * formated_c_pattern = solv_dupjoin(c_pattern, "-0", nullptr);
     for (PackageId candidate_id : candidates) {
         const char * version = solv::get_version(pool, candidate_id);
         char * vr = pool_tmpjoin(pool, version, "-0", nullptr);
-        int cmp = pool_evrcmp_str(pool, vr, c_pattern, EVRCMP_COMPARE);
+        int cmp = pool_evrcmp_str(pool, vr, formated_c_pattern, EVRCMP_COMPARE);
         if (cmp_eq(cmp)) {
             filter_result.add_unsafe(candidate_id);
         }
     }
+    solv_free(formated_c_pattern);
 }
 
 SolvQuery & SolvQuery::ifilter_version(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
@@ -667,14 +669,16 @@ SolvQuery & SolvQuery::ifilter_version(libdnf::sack::QueryCmp cmp_type, const st
 template <bool (*cmp_fnc)(int value_to_cmp)>
 inline static void filter_release_internal(
     Pool * pool, const char * c_pattern, solv::SolvMap & candidates, solv::SolvMap & filter_result) {
+    char * formated_c_pattern = solv_dupjoin("0-", c_pattern, nullptr);
     for (PackageId candidate_id : candidates) {
         const char * release = solv::get_release(pool, candidate_id);
         char * vr = pool_tmpjoin(pool, "0-", release, nullptr);
-        int cmp = pool_evrcmp_str(pool, vr, c_pattern, EVRCMP_COMPARE);
+        int cmp = pool_evrcmp_str(pool, vr, formated_c_pattern, EVRCMP_COMPARE);
         if (cmp_eq(cmp)) {
             filter_result.add_unsafe(candidate_id);
         }
     }
+    solv_free(formated_c_pattern);
 }
 
 SolvQuery & SolvQuery::ifilter_release(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
