@@ -247,7 +247,7 @@ public:
     ///
     /// @replaces dnf:dnf/package.py:attribute:Package.rpmdbid
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_rpmdbid(DnfPackage * pkg)
-    unsigned long long get_rpmdbid() noexcept;
+    unsigned long long get_rpmdbid() const noexcept;
 
     /// TODO get_repo - requires Repo
     /// @replaces dnf:dnf/package.py:attribute:Package.repo

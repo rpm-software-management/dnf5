@@ -279,7 +279,7 @@ unsigned long long Package::get_media_number() noexcept {
     return solv::get_media_number(pool, id);
 }
 
-unsigned long long Package::get_rpmdbid() noexcept {
+unsigned long long Package::get_rpmdbid() const noexcept {
     Pool * pool = sack->pImpl->pool;
     return solv::get_rpmdbid(pool, id);
 }
