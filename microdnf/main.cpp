@@ -18,8 +18,12 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "argument_parser.hpp"
+#include "commands/install/install.hpp"
+#include "commands/reinstall/reinstall.hpp"
+#include "commands/remove/remove.hpp"
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
+#include "commands/upgrade/upgrade.hpp"
 #include "context.hpp"
 #include "utils.hpp"
 
@@ -126,8 +130,12 @@ int main(int argc, char * argv[]) {
     log_router.info("Microdnf start");
 
     // Register commands
+    context.commands.push_back(std::make_unique<microdnf::CmdInstall>());
+    context.commands.push_back(std::make_unique<microdnf::CmdReinstall>());
+    context.commands.push_back(std::make_unique<microdnf::CmdRemove>());
     context.commands.push_back(std::make_unique<microdnf::CmdRepolist>());
     context.commands.push_back(std::make_unique<microdnf::CmdRepoquery>());
+    context.commands.push_back(std::make_unique<microdnf::CmdUpgrade>());
 
     // Parse command line arguments
     bool help_printed = microdnf::parse_args(context, argc, argv);
