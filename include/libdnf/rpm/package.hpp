@@ -197,6 +197,11 @@ public:
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_location(DnfPackage * pkg)
     std::string get_location();
 
+    /// Returns package location (file path) in the filesystem.
+    /// For packages in remote repo returns where the package will be/has been downloaded.
+    /// @replaces dnf:dnf/package.py:attribute:Package.localPkg
+    std::string get_local_filepath() const;
+
     /// @replaces dnf:dnf/package.py:attribute:Package.chksum
     /// @replaces libdnf:libdnf/hy-package-private.hpp:function:dnf_package_get_chksum(DnfPackage *pkg, int *type)
     Checksum get_checksum();

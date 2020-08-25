@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_private.hpp"
 
+#include <filesystem>
 
 namespace libdnf::rpm::solv {
 
@@ -44,8 +45,7 @@ const char * get_full_nevra(Pool * pool, libdnf::rpm::PackageId package_id) {
         extra_epoch_length = 2;
     }
 
-    output_string = pool_alloctmpspace(
-        pool, name_length + evr_length + extra_epoch_length + arch_length + 3);
+    output_string = pool_alloctmpspace(pool, name_length + evr_length + extra_epoch_length + arch_length + 3);
 
     strcpy(output_string, name);
 
@@ -69,5 +69,15 @@ const char * get_full_nevra(Pool * pool, libdnf::rpm::PackageId package_id) {
     return output_string;
 }
 
-}  // namespace libdnf::rpm::solv
+//TODO(jrohel): What about local repositories? The original code in DNF4 uses baseurl+get_location(pool, package_id).
+std::string get_local_filepath(Pool * pool, libdnf::rpm::PackageId package_id) {
+    auto solvable = get_solvable(pool, package_id);
+    if (auto repo = static_cast<Repo *>(solvable->repo->appdata)) {
+        auto dir = std::filesystem::path(repo->get_cachedir()) / "packages";
+        return dir / std::filesystem::path(get_location(pool, package_id)).filename();
+    } else {
+        return "";
+    }
+}
 
+}  // namespace libdnf::rpm::solv

@@ -259,6 +259,11 @@ std::string Package::get_location() {
     return cstring2string(solv::get_location(pool, id));
 }
 
+std::string Package::get_local_filepath() const {
+    Pool * pool = sack->pImpl->pool;
+    return solv::get_local_filepath(pool, id);
+}
+
 bool Package::is_installed() const {
     Pool * pool = sack->pImpl->pool;
     return solv::is_installed(pool, solv::get_solvable(pool, id));

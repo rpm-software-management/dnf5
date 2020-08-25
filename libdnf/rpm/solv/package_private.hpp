@@ -43,7 +43,7 @@ namespace libdnf::rpm::solv {
 
 constexpr const char * BASE_EPOCH = "0";
 
-inline Solvable * get_solvable(Pool * pool, libdnf::rpm::PackageId package_id) {
+inline Solvable * get_solvable(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
     // Check that libsolv Id is identical with internal structure of PackageId
     static_assert(
         std::is_same<decltype(PackageId::id), ::Id>::value,
@@ -336,6 +336,8 @@ inline const char * get_location(Pool * pool, libdnf::rpm::PackageId package_id)
     SolvPrivate::internalize_libsolv_repo(solvable->repo);
     return solvable_lookup_location(solvable, nullptr);
 }
+
+std::string get_local_filepath(Pool * pool, libdnf::rpm::PackageId package_id);
 
 inline unsigned long long get_hdr_end(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_HEADEREND);
