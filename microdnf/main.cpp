@@ -156,6 +156,13 @@ int main(int argc, char * argv[]) {
             auto cache_dir = microdnf::xdg::get_user_cache_dir() / "microdnf";
             base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dir);
         }
+    } else {
+        auto tmp = fs::temp_directory_path() / "microdnf";
+        if (base.get_config().cachedir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
+            // Sets path to cache directory.
+            auto system_cache_dir = base.get_config().system_cachedir().get_value();
+            base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, system_cache_dir);
+        }
     }
 
     // Try to open the current directory to see if we have
