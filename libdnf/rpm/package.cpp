@@ -284,6 +284,11 @@ unsigned long long Package::get_rpmdbid() noexcept {
     return solv::get_rpmdbid(pool, id);
 }
 
+Repo * Package::get_repo() const noexcept {
+    Pool * pool = sack->pImpl->pool;
+    return solv::get_repo(pool, id);
+}
+
 Checksum Package::get_checksum() {
     Pool * pool = sack->pImpl->pool;
 

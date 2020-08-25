@@ -353,6 +353,10 @@ inline unsigned long long get_rpmdbid(Pool * pool, libdnf::rpm::PackageId packag
     return lookup_num(get_solvable(pool, package_id), RPM_RPMDBID);
 }
 
+inline Repo * get_repo(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+    auto solvable = get_solvable(pool, package_id);
+    return static_cast<Repo *>(solvable->repo->appdata);
+}
 
 }  // namespace libdnf::rpm::solv
 

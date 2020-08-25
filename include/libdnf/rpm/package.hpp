@@ -255,7 +255,7 @@ public:
     /// @replaces dnf:dnf/package.py:attribute:Package.reponame
     /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_repo(DnfPackage * pkg)
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_reponame(DnfPackage * pkg)
-    // void get_repo() const;
+    Repo * get_repo() const noexcept;
 
     // TODO(dmach): getBugUrl() not possible due to lack of support in libsolv and metadata?
 
