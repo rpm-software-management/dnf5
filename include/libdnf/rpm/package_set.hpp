@@ -39,6 +39,7 @@ namespace libdnf::rpm {
 
 class PackageSetIterator;
 class SolvQuery;
+class Transaction;
 
 
 /// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
@@ -93,6 +94,7 @@ public:
 private:
     friend PackageSetIterator;
     friend SolvQuery;
+    friend Transaction;
     PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map);
     class Impl;
     std::unique_ptr<Impl> pImpl;

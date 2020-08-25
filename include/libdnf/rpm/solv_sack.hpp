@@ -78,6 +78,7 @@ class Reldep;
 class ReldepList;
 class Repo;
 class SolvQuery;
+class Transaction;
 
 class SolvSack;
 
@@ -139,6 +140,7 @@ private:
     friend Reldep;
     friend ReldepList;
     friend SolvQuery;
+    friend Transaction;
     friend solv::SolvPrivate;
     class Impl;
     std::unique_ptr<Impl> pImpl;
