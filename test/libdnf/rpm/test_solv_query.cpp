@@ -371,6 +371,23 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         }
     }
     {
+        // Test NEVRA glob - icase == false, nothing found
+        libdnf::rpm::SolvQuery query(sack.get());
+        auto return_value = query.resolve_pkg_spec("wGe?-?:1.1?.5-?.fc29.x8?_64", false, true, false, false, true, {});
+        CPPUNIT_ASSERT_EQUAL(query.size(), 0lu);
+    }
+    {
+        // Test NEVRA glob - icase == true
+        libdnf::rpm::SolvQuery query(sack.get());
+        auto return_value = query.resolve_pkg_spec("wGe?-?:1.1?.5-?.fc29.x8?_64", true, true, false, false, true, {});
+        CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
+        CPPUNIT_ASSERT_EQUAL(return_value.first, true);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
+        }
+    }
+    {
         // Test NEVRA icase
         libdnf::rpm::SolvQuery query(sack.get());
         auto return_value = query.resolve_pkg_spec("wgeT-0:1.19.5-5.Fc29.X86_64", true, true, false, false, true, {});
