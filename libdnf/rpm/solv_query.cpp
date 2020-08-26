@@ -1438,10 +1438,12 @@ void SolvQuery::Impl::filter_nevra(
                     filter_result.add_unsafe(candidate_id);
                 }
             } break;
-            case libdnf::sack::QueryCmp::GLOB: {
+            case libdnf::sack::QueryCmp::GLOB:
+            case libdnf::sack::QueryCmp::IGLOB: {
+                int fnmatch_flags = name_cmp_type == libdnf::sack::QueryCmp::IGLOB ? FNM_CASEFOLD : 0;
                 for (PackageId candidate_id : query_result) {
                     const char * candidate_name = solv::get_name(pool, candidate_id);
-                    if (!all_names && fnmatch(name_c_pattern, candidate_name, 0) != 0) {
+                    if (!all_names && fnmatch(name_c_pattern, candidate_name, fnmatch_flags) != 0) {
                         continue;
                     }
 
