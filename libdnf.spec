@@ -316,6 +316,7 @@ License:        GPLv2+
 Requires:       libdnf%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
+BuildRequires:  pkgconfig(sdbus-c++)
 
 %description -n dnfdaemon-server
 Package management service with a DBus interface

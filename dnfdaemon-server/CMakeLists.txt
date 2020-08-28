@@ -2,8 +2,19 @@ if(NOT WITH_DNFDAEMON_SERVER)
     return()
 endif()
 
-
+set(DNFDAEMON_SERVER_BIN dnfdaemon-server)
 file(GLOB_RECURSE DNFDAEMON_SERVER_SOURCES *.cpp)
-add_executable(dnfdaemon-server main.cpp ${DNFDAEMON_SERVER_SOURCES})
-target_link_libraries(dnfdaemon-server PUBLIC libdnf libdnf-cli)
-install(TARGETS dnfdaemon-server RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+find_package(sdbus-c++ REQUIRED)
+
+add_executable(${DNFDAEMON_SERVER_BIN} ${DNFDAEMON_SERVER_SOURCES})
+
+target_link_libraries(
+    ${DNFDAEMON_SERVER_BIN}
+    PUBLIC
+        libdnf
+        libdnf-cli
+        sdbus-c++
+)
+
+install(TARGETS ${DNFDAEMON_SERVER_BIN} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})

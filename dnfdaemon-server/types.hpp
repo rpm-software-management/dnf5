@@ -17,22 +17,15 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "SessionManager.hpp"
+#ifndef DNFDAEMON_SERVER_TYPES_HPP
+#define DNFDAEMON_SERVER_TYPES_HPP
 
 #include <sdbus-c++/sdbus-c++.h>
-#include <iostream>
 
-int main() {
-    const char* serviceName = "org.rpm.dnf.v0";
-    std::unique_ptr<sdbus::IConnection> connection = NULL;
-    try {
-        connection = sdbus::createSystemBusConnection(serviceName);
-    } catch (const sdbus::Error &e) {
-        //std::cerr << tfm::format("Fatal error: %s", e.what()) << std::endl;
-        std::cerr << "Fatal error: " << e.what() << std::endl;
-        return 1;
-    }
+#include <map>
+#include <string>
 
-    auto sessionManager = SessionManager(*connection, "/org/rpm/dnf/v0");
-    connection->enterEventLoop();
-}
+using KeyValueMap = std::map<std::string, sdbus::Variant>;
+using KeyValueMapList = std::vector<KeyValueMap>;
+
+#endif
