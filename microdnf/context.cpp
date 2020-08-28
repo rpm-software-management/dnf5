@@ -21,6 +21,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_set.hpp>
+#include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 
 #include <filesystem>
 #include <iostream>
@@ -107,33 +108,49 @@ void Context::load_rpm_repo(libdnf::rpm::Repo & repo) {
 
 class PkgDownloadCB : public libdnf::rpm::PackageTargetCB {
 public:
-    PkgDownloadCB(const std::string & what) : what(what) {}
+    PkgDownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
+        : multi_progress_bar(&mp_bar), what(what) {
+            progress_bar = new libdnf::cli::progressbar::DownloadProgressBar(-1, what);
+            multi_progress_bar->add_bar(progress_bar);
+        }
 
     int end(TransferStatus status, const char * msg) override {
         switch (status) {
             case TransferStatus::SUCCESSFUL:
-                std::cout << "[DONE] " << what << std::endl;
+                //std::cout << "[DONE] " << what << std::endl;
                 break;
             case TransferStatus::ALREADYEXISTS:
-                std::cout << "[SKIPPED] " << what << ": " << msg << std::endl;
+                //std::cout << "[SKIPPED] " << what << ": " << msg << std::endl;
+                progress_bar->add_message(libdnf::cli::progressbar::MessageType::SUCCESS, msg);
                 break;
             case TransferStatus::ERROR:
-                std::cout << "[ERROR] " << what << ": " << msg << std::endl;
+                //std::cout << "[ERROR] " << what << ": " << msg << std::endl;
+                progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg);
                 break;
         }
+        multi_progress_bar->print();
         return 0;
     }
 
     int progress(double total_to_download, double downloaded) override {
-        if (total_to_download > 0 && is_time_to_print()) {
-            std::cout << "[PROGRESS] " << what << ": " << static_cast<int64_t>(downloaded);
-            std::cout << "/" << static_cast<int64_t>(total_to_download) << std::endl;
+        auto total = static_cast<int64_t>(total_to_download);
+        if (total > 0) {
+            progress_bar->set_total_ticks(total);
+        }
+        if (progress_bar->get_state() == libdnf::cli::progressbar::ProgressBarState::READY) {
+            progress_bar->start();
+        }
+        progress_bar->set_ticks(static_cast<int64_t>(downloaded));
+        if (is_time_to_print()) {
+            multi_progress_bar->print();
         }
         return 0;
     }
 
     int mirror_failure(const char * msg, const char * url) override {
-        std::cout << "Mirror failure: " << msg << " " << url << std::endl;
+        //std::cout << "Mirror failure: " << msg << " " << url << std::endl;
+        std::string message = std::string(msg) + " - " + url;
+        progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, message);
         return 0;
     }
 
@@ -151,12 +168,15 @@ private:
 
     static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
 
+    libdnf::cli::progressbar::MultiProgressBar * multi_progress_bar;
+    libdnf::cli::progressbar::DownloadProgressBar * progress_bar;
     std::string what;
 };
 
 std::chrono::time_point<std::chrono::steady_clock> PkgDownloadCB::prev_print_time = std::chrono::steady_clock::now();
 
 void download_packages(libdnf::rpm::PackageSet & package_set, const char * dest_dir) {
+    libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     std::vector<std::unique_ptr<PkgDownloadCB>> pkg_download_callbacks_guard;
     std::vector<std::unique_ptr<libdnf::rpm::PackageTarget>> targets_guard;
     std::vector<libdnf::rpm::PackageTarget *> targets;
@@ -173,7 +193,7 @@ void download_packages(libdnf::rpm::PackageSet & package_set, const char * dest_
             std::filesystem::create_directory(destination);
         }
 
-        auto pkg_download_cb = std::make_unique<PkgDownloadCB>(package.get_nevra());
+        auto pkg_download_cb = std::make_unique<PkgDownloadCB>(multi_progress_bar, package.get_nevra());
         auto pkg_download_cb_ptr = pkg_download_cb.get();
         pkg_download_callbacks_guard.push_back(std::move(pkg_download_cb));
 
