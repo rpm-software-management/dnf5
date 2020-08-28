@@ -122,10 +122,12 @@ public:
             case TransferStatus::ALREADYEXISTS:
                 //std::cout << "[SKIPPED] " << what << ": " << msg << std::endl;
                 progress_bar->add_message(libdnf::cli::progressbar::MessageType::SUCCESS, msg);
+                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
             case TransferStatus::ERROR:
                 //std::cout << "[ERROR] " << what << ": " << msg << std::endl;
                 progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg);
+                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
                 break;
         }
         multi_progress_bar->print();
