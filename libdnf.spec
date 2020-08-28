@@ -323,6 +323,10 @@ Package management service with a DBus interface
 
 %files -n dnfdaemon-server
 %{_bindir}/dnfdaemon-server
+%{_unitdir}/dnfdaemon.service
+%{_sysconfdir}/dbus-1/system.d/org.rpm.dnf.v0.conf
+%{_datadir}/dbus-1/system-services/org.rpm.dnf.v0.service
+%{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy
 %license COPYING.md
 %license gpl-2.0.txt
 %{_mandir}/man8/dnfdaemon-server.8.gz
@@ -380,7 +384,7 @@ Package management service with a DBus interface
     \
     -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF} \
     -DWITH_TESTS=%{?with_tests:ON}%{!?with_tests:OFF} \
-    -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
+    -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF}
 %make_build
 %if %{with man}
     make doc-man

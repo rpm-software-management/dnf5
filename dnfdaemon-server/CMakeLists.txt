@@ -18,3 +18,6 @@ target_link_libraries(
 )
 
 install(TARGETS ${DNFDAEMON_SERVER_BIN} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+add_subdirectory(polkit)
+add_subdirectory(dbus)

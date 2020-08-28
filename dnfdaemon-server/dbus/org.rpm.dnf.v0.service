@@ -1,0 +1,5 @@
+[D-BUS Service]
+Name=org.rpm.dnf.v0
+Exec=/usr/bin/dnfdaemon-server
+User=root
+SystemdService=dnfdaemon.service

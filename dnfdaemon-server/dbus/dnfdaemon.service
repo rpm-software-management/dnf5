@@ -1,0 +1,8 @@
+[Unit]
+Description=DNF daemon
+
+[Service]
+Type=dbus
+BusName=org.rpm.dnf.v0
+User=root
+ExecStart=/usr/bin/dnfdaemon-server
