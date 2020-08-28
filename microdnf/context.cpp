@@ -19,6 +19,10 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "context.hpp"
 
+#include <libdnf/rpm/package.hpp>
+#include <libdnf/rpm/package_set.hpp>
+
+#include <filesystem>
 #include <iostream>
 #include <string>
 
@@ -56,11 +60,11 @@ public:
 
     void start(const char * what) override { std::cout << "Start downloading: \"" << what << "\"" << std::endl; }
 
-    void end() override { std::cout << "End downloading" << std::endl; }
+    void end() override { std::cout << "Done." << std::endl; }
 
     // TODO(jrohel): Progress bar
-    int progress([[maybe_unused]] double totalToDownload, [[maybe_unused]] double downloaded) override {
-        //std::cout << "Downloaded " << downloaded << "/" << totalToDownload << std::endl;
+    int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
+        //std::cout << "Downloaded " << downloaded << "/" << total_to_download << std::endl;
         return 0;
     }
 
@@ -98,6 +102,102 @@ void Context::load_rpm_repo(libdnf::rpm::Repo & repo) {
     } catch (const std::runtime_error & ex) {
         logger.warning(ex.what());
         std::cout << ex.what() << std::endl;
+    }
+}
+
+class PkgDownloadCB : public libdnf::rpm::PackageTargetCB {
+public:
+    PkgDownloadCB(const std::string & what) : what(what) {}
+
+    int end(TransferStatus status, const char * msg) override {
+        switch (status) {
+            case TransferStatus::SUCCESSFUL:
+                std::cout << "[DONE] " << what << std::endl;
+                break;
+            case TransferStatus::ALREADYEXISTS:
+                std::cout << "[SKIPPED] " << what << ": " << msg << std::endl;
+                break;
+            case TransferStatus::ERROR:
+                std::cout << "[ERROR] " << what << ": " << msg << std::endl;
+                break;
+        }
+        return 0;
+    }
+
+    int progress(double total_to_download, double downloaded) override {
+        if (total_to_download > 0 && is_time_to_print()) {
+            std::cout << "[PROGRESS] " << what << ": " << static_cast<int64_t>(downloaded);
+            std::cout << "/" << static_cast<int64_t>(total_to_download) << std::endl;
+        }
+        return 0;
+    }
+
+    int mirror_failure(const char * msg, const char * url) override {
+        std::cout << "Mirror failure: " << msg << " " << url << std::endl;
+        return 0;
+    }
+
+private:
+    static bool is_time_to_print() {
+        auto now = std::chrono::steady_clock::now();
+        auto delta = now - prev_print_time;
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
+        if (ms > 400) {
+            prev_print_time = now;
+            return true;
+        }
+        return false;
+    }
+
+    static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
+
+    std::string what;
+};
+
+std::chrono::time_point<std::chrono::steady_clock> PkgDownloadCB::prev_print_time = std::chrono::steady_clock::now();
+
+void download_packages(libdnf::rpm::PackageSet & package_set, const char * dest_dir) {
+    std::vector<std::unique_ptr<PkgDownloadCB>> pkg_download_callbacks_guard;
+    std::vector<std::unique_ptr<libdnf::rpm::PackageTarget>> targets_guard;
+    std::vector<libdnf::rpm::PackageTarget *> targets;
+
+    std::string destination;
+    if (dest_dir) {
+        destination = dest_dir;
+    }
+    for (auto package : package_set) {
+        auto repo = package.get_repo();
+        auto checksum = package.get_checksum();
+        if (!dest_dir) {
+            destination = std::filesystem::path(repo->get_cachedir()) / "packages";
+            std::filesystem::create_directory(destination);
+        }
+
+        auto pkg_download_cb = std::make_unique<PkgDownloadCB>(package.get_nevra());
+        auto pkg_download_cb_ptr = pkg_download_cb.get();
+        pkg_download_callbacks_guard.push_back(std::move(pkg_download_cb));
+
+        auto pkg_target = std::make_unique<libdnf::rpm::PackageTarget>(
+            repo,
+            package.get_location().c_str(),
+            destination.c_str(),
+            static_cast<int>(checksum.get_type()),
+            checksum.get_checksum().c_str(),
+            static_cast<int64_t>(package.get_download_size()),
+            package.get_baseurl().empty() ? nullptr : package.get_baseurl().c_str(),
+            true,
+            0,
+            0,
+            pkg_download_cb_ptr);
+        targets.push_back(pkg_target.get());
+        targets_guard.push_back(std::move(pkg_target));
+    }
+
+    std::cout << "Downloading Packages:" << std::endl;
+    try {
+        libdnf::rpm::PackageTarget::download_packages(targets, true);
+    } catch (const std::runtime_error & ex) {
+        std::cout << "Exception: " << ex.what() << std::endl;
     }
 }
 

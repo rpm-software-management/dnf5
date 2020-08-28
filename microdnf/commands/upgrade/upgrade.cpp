@@ -102,46 +102,7 @@ void CmdUpgrade::run(Context & ctx) {
         result_pset |= solv_query.get_package_set();
     }
 
-    for (auto package : result_pset) {
-        std::cout << package.get_full_nevra() << '\n';
-        std::cout << package.get_url() << '\n';
-        std::cout << package.get_baseurl() << '\n';
-        std::cout << package.get_location() << '\n';
-        //auto repo = package.get_repo();
-        //fd = open();
-        //repo.download_url(url, fd);
-        //close(fd);
-    }
-
-    // download packages
-    std::vector<libdnf::rpm::PackageTarget *> targets;
-    try {
-        for (auto package : result_pset) {
-            auto repo = package.get_repo();
-            auto destination = fs::path(repo->get_cachedir()) / "packages";
-            auto checksum = package.get_checksum();
-            auto pkg_target = new libdnf::rpm::PackageTarget(repo, package.get_location().c_str(), destination.c_str(),
-                                    static_cast<int>(checksum.get_type()), checksum.get_checksum().c_str(),
-                                    static_cast<int64_t>(package.get_download_size()), package.get_baseurl().empty() ? nullptr : package.get_baseurl().c_str(), true,
-                                    0, 0, nullptr);
-            targets.push_back(pkg_target);
-        }
-        std::cout << "Start packages download" << std::endl;
-        try {
-            libdnf::rpm::PackageTarget::download_packages(targets, true);
-        } catch (const std::runtime_error & ex) {
-            std::cout << "Exception: " << ex.what() << std::endl;
-        }
-        std::cout << "Done packages download" << std::endl;
-    } catch (...) {
-        for (auto target : targets) {
-            delete target;
-        }
-        throw;
-    }
-    for (auto target : targets) {
-        delete target;
-    }
+    download_packages(result_pset, nullptr);
 
     std::vector<std::unique_ptr<libdnf::rpm::TransactionItem>> transaction_items;
     auto ts = libdnf::rpm::Transaction(ctx.base);

@@ -48,6 +48,9 @@ public:
     ArgumentParser arg_parser;
 };
 
+/// Downoad packages to destdir. If destdir == nullptr, packages are downloaded to the cache.
+void download_packages(libdnf::rpm::PackageSet & package_set, const char * dest_dir);
+
 }  // namespace microdnf
 
 #endif
