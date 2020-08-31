@@ -121,6 +121,9 @@ public:
                 break;
             case TransferStatus::ALREADYEXISTS:
                 //std::cout << "[SKIPPED] " << what << ": " << msg << std::endl;
+                // skipping the download -> downloading 0 bytes
+                progress_bar->set_ticks(0);
+                progress_bar->set_total_ticks(0);
                 progress_bar->add_message(libdnf::cli::progressbar::MessageType::SUCCESS, msg);
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
@@ -161,7 +164,8 @@ private:
         auto now = std::chrono::steady_clock::now();
         auto delta = now - prev_print_time;
         auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-        if (ms > 400) {
+        if (ms > 100) {
+            // 100ms equals to 10 FPS and that seems to be smooth enough
             prev_print_time = now;
             return true;
         }
@@ -221,6 +225,9 @@ void download_packages(libdnf::rpm::PackageSet & package_set, const char * dest_
     } catch (const std::runtime_error & ex) {
         std::cout << "Exception: " << ex.what() << std::endl;
     }
+    // print a completed progress bar
+    multi_progress_bar.print();
+    // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
 }
 
 }  // namespace microdnf
