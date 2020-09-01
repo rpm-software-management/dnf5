@@ -47,6 +47,8 @@ public:
     ~Session();
     sdbus::IConnection &connection;
     libdnf::Base base;
+    template <typename ItemType>
+    ItemType session_configuration_value(const std::string key, const ItemType &default_value);
 private:
     KeyValueMap session_configuration;
     std::string object_path;

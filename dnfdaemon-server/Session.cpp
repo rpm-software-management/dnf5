@@ -19,6 +19,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "Session.hpp"
 #include "types.hpp"
+#include "utils.hpp"
 #include "services/repoconf/RepoConf.hpp"
 
 #include <libdnf/logger/logger.hpp>
@@ -41,24 +42,13 @@ void StderrLogger::write(time_t, pid_t, Level, const std::string & message) noex
 }
 
 template <typename ItemType>
-ItemType get_config_value(const KeyValueMap &configuration, const std::string key, const ItemType &default_value) {
-    auto it = configuration.find(key);
-    if (it == configuration.end()) {
-        return default_value;
-    }
-    try {
-        return it->second.get<ItemType>();
-    } catch (sdbus::Error &e) {
-        throw sdbus::Error("org.rpm.dnf.v0.Error", "Incorrect configuration item type.");
-        //throw sdbus::Error(REPO_CONF_ERROR, tfm::format("Incorrect configuration item \"%s\" type.", key));
-    }
+ItemType Session::session_configuration_value(const std::string key, const ItemType &default_value) {
+    return key_value_map_get(session_configuration, key, default_value);
 }
 
 
 Session::Session(sdbus::IConnection &connection, KeyValueMap session_configuration, std::string object_path) : connection(connection), session_configuration(session_configuration), object_path(object_path)
 {
-    std::string install_root = get_config_value<std::string>(session_configuration, "dnf.installroot", "/");
-
     // set-up log router for base
     auto & log_router = base.get_logger();
     log_router.add_logger(std::make_unique<StderrLogger>());
@@ -78,3 +68,7 @@ Session::~Session() {
         s->dbus_deregister();
     }
 }
+
+// explicit instantiation of session_configuration_value template
+template std::string Session::session_configuration_value<std::string>(std::string, const std::string&);
+template int Session::session_configuration_value<int>(std::string, const int&);
