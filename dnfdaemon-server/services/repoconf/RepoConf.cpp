@@ -18,6 +18,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "dnfdaemon-server/types.hpp"
+#include "dnfdaemon-server/utils.hpp"
 #include "configuration.hpp"
 #include "RepoConf.hpp"
 
@@ -29,7 +30,7 @@ void RepoConf::dbus_register(const std::string object_path)
 {
     const std::string interfaceName = "org.rpm.dnf.v0.rpm.RepoConf";
     dbus_object = sdbus::createObject(session.connection, object_path);
-    dbus_object->registerMethod(interfaceName, "list", "as", "aa{sv}", [this](sdbus::MethodCall call) -> void {this->list(call);});
+    dbus_object->registerMethod(interfaceName, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {this->list(call);});
     dbus_object->registerMethod(interfaceName, "get", "s", "a{sv}", [this](sdbus::MethodCall call) -> void {this->get(call);});
     dbus_object->registerMethod(interfaceName, "enable", "as", "as", [this](sdbus::MethodCall call) -> void {this->enable_disable(call, true);});
     dbus_object->registerMethod(interfaceName, "disable", "as", "as", [this](sdbus::MethodCall call) -> void {this->enable_disable(call, false);});
@@ -99,8 +100,10 @@ KeyValueMapList RepoConf::repo_list(const std::vector<std::string> &ids)
 
 void RepoConf::list(sdbus::MethodCall call)
 {
-    std::vector<std::string> ids;
-    call >> ids;
+    KeyValueMap options;
+    std::vector<std::string> default_ids{};
+    call >> options;
+    std::vector<std::string> ids = key_value_map_get<std::vector<std::string>>(options, "ids", default_ids);
 
     auto out = repo_list(std::move(ids));
 
