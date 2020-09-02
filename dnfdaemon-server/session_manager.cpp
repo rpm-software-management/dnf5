@@ -17,8 +17,9 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "Session.hpp"
-#include "SessionManager.hpp"
+#include "session_manager.hpp"
+
+#include "session.hpp"
 #include "types.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
@@ -27,8 +28,9 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <sstream>
 #include <string>
 
-SessionManager::SessionManager(sdbus::IConnection &connection, std::string object_path) : object_path(object_path), connection(connection)
-{
+SessionManager::SessionManager(sdbus::IConnection & connection, const std::string & object_path)
+    : object_path(object_path)
+    , connection(connection) {
     dbus_register();
 }
 
@@ -36,24 +38,29 @@ SessionManager::~SessionManager() {
     dbus_object->unregister();
 }
 
-void SessionManager::dbus_register()
-{
-    const std::string interfaceName = "org.rpm.dnf.v0.SessionManager";
+void SessionManager::dbus_register() {
+    const std::string interface_name = "org.rpm.dnf.v0.SessionManager";
 
     dbus_object = sdbus::createObject(connection, object_path);
-    dbus_object->registerMethod(interfaceName, "open_session", "a{sv}", "o", [this](sdbus::MethodCall call) -> void {this->open_session(call);});
-    dbus_object->registerMethod(interfaceName, "close_session", "o", "b", [this](sdbus::MethodCall call) -> void {this->close_session(call);});
+    dbus_object->registerMethod(interface_name, "open_session", "a{sv}", "o", [this](sdbus::MethodCall call) -> void {
+        this->open_session(std::move(call));
+    });
+    dbus_object->registerMethod(interface_name, "close_session", "o", "b", [this](sdbus::MethodCall call) -> void {
+        this->close_session(std::move(call));
+    });
     dbus_object->finishRegistration();
 
     // register signal handler for NameOwnerChanged
     name_changed_proxy = sdbus::createProxy(connection, "org.freedesktop.DBus", "/org/freedesktop/DBus");
-    name_changed_proxy->registerSignalHandler("org.freedesktop.DBus", "NameOwnerChanged", [this](sdbus::Signal& signal) -> void {this->on_name_owner_changed(signal);});
+    name_changed_proxy->registerSignalHandler(
+        "org.freedesktop.DBus", "NameOwnerChanged", [this](sdbus::Signal & signal) -> void {
+            this->on_name_owner_changed(signal);
+        });
     name_changed_proxy->finishRegistration();
 }
 
 
-std::string gen_session_id()
-{
+std::string gen_session_id() {
     static std::random_device rd;
     static std::uniform_int_distribution<> dist(0, 15);
 
@@ -66,7 +73,7 @@ std::string gen_session_id()
 }
 
 
-void SessionManager::on_name_owner_changed(sdbus::Signal &signal) {
+void SessionManager::on_name_owner_changed(sdbus::Signal & signal) {
     std::string name;
     std::string old_owner;
     std::string new_owner;
@@ -77,8 +84,7 @@ void SessionManager::on_name_owner_changed(sdbus::Signal &signal) {
     }
 }
 
-void SessionManager::open_session(sdbus::MethodCall call)
-{
+void SessionManager::open_session(sdbus::MethodCall call) {
     auto sender = call.getSender();
     KeyValueMap configuration;
     call >> configuration;
@@ -86,7 +92,8 @@ void SessionManager::open_session(sdbus::MethodCall call)
     // generate UUID-like session id
     const std::string sessionid = object_path + "/" + gen_session_id();
     // store newly created session
-    sessions[std::move(sender)].emplace(sessionid, std::make_unique<Session>(connection, std::move(configuration), sessionid));
+    sessions[std::move(sender)].emplace(
+        sessionid, std::make_unique<Session>(connection, std::move(configuration), sessionid));
 
     auto reply = call.createReply();
     reply << sdbus::ObjectPath{sessionid};
@@ -94,8 +101,7 @@ void SessionManager::open_session(sdbus::MethodCall call)
 }
 
 
-void SessionManager::close_session(sdbus::MethodCall call)
-{
+void SessionManager::close_session(sdbus::MethodCall call) {
     auto sender = call.getSender();
     sdbus::ObjectPath session_id;
     call >> session_id;
@@ -114,4 +120,3 @@ void SessionManager::close_session(sdbus::MethodCall call)
     reply << retval;
     reply.send();
 }
-

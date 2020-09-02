@@ -16,8 +16,9 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
  */
 
-#ifndef DNF_REPOCONFIG_DAEMON_CONFIGURATION_HPP
-#define DNF_REPOCONFIG_DAEMON_CONFIGURATION_HPP
+
+#ifndef DNFDAEMON_SERVER_SERVICES_REPOCONF_CONFIGURATION_HPP
+#define DNFDAEMON_SERVER_SERVICES_REPOCONF_CONFIGURATION_HPP
 
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/conf/config_parser.hpp"
@@ -35,14 +36,14 @@ public:
         std::unique_ptr<libdnf::rpm::ConfigRepo> repoconfig;
     };
 
-    Configuration() : cfg_main(new libdnf::ConfigMain), install_root("/") {};
-    Configuration(std::string install_root);
+    Configuration() : cfg_main(new libdnf::ConfigMain), install_root("/"){};
+    explicit Configuration(const std::string & install_root);
     ~Configuration() = default;
 
     void read_configuration();
-    const std::map<std::string, std::unique_ptr<RepoInfo>> & get_repos() {return repos;}
-    RepoInfo* find_repo(const std::string &repoid);
-    libdnf::ConfigParser* find_parser(const std::string &file_path);
+    const std::map<std::string, std::unique_ptr<RepoInfo>> & get_repos() { return repos; }
+    RepoInfo * find_repo(const std::string & repoid);
+    libdnf::ConfigParser * find_parser(const std::string & file_path);
 
 private:
     std::unique_ptr<libdnf::ConfigMain> cfg_main;
@@ -53,11 +54,11 @@ private:
     std::map<std::string, std::string> substitutions;
     std::string install_root;
 
-    void read_repos(const libdnf::ConfigParser *repo_parser, const std::string &file_path);
+    void read_repos(const libdnf::ConfigParser * repo_parser, const std::string & file_path);
     void set_substitutions();
     void read_main_config();
     void read_repo_configs();
-    std::string prepend_install_root(std::string path);
+    std::string prepend_install_root(const std::string & path);
 };
 
 

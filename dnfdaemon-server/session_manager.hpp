@@ -20,7 +20,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_SERVER_SESSIONMANAGER_HPP
 #define DNFDAEMON_SERVER_SESSIONMANAGER_HPP
 
-#include "Session.hpp"
+#include "session.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -30,12 +30,12 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 class SessionManager {
 public:
-    SessionManager(sdbus::IConnection &connection, std::string object_path);
+    SessionManager(sdbus::IConnection & connection, const std::string & object_path);
     ~SessionManager();
 
 private:
     std::string object_path;
-    sdbus::IConnection &connection;
+    sdbus::IConnection & connection;
     // map {sender_address: {session_id: Session object}}
     std::map<std::string, std::map<std::string, std::unique_ptr<Session>>> sessions;
     std::unique_ptr<sdbus::IObject> dbus_object;
@@ -44,7 +44,7 @@ private:
     void dbus_register();
     void open_session(sdbus::MethodCall call);
     void close_session(sdbus::MethodCall call);
-    void on_name_owner_changed(sdbus::Signal &signal);
+    void on_name_owner_changed(sdbus::Signal & signal);
 };
 
 #endif

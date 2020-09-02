@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #ifndef DNFDAEMON_SERVER_UTILS_HPP
 #define DNFDAEMON_SERVER_UTILS_HPP
 
@@ -28,29 +29,27 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 
 template <typename ItemType>
-ItemType key_value_map_get(const KeyValueMap map, const std::string key)
-{
+ItemType key_value_map_get(const KeyValueMap & map, const std::string & key) {
     auto it = map.find(key);
     if (it == map.end()) {
         throw sdbus::Error("org.rpm.dnf.v0.Error", "Key not present in the map.");
     }
     try {
         return it->second.get<ItemType>();
-    } catch (sdbus::Error &e) {
+    } catch (sdbus::Error & e) {
         throw sdbus::Error("org.rpm.dnf.v0.Error", "Incorrect map item type.");
     }
 }
 
 template <typename ItemType>
-ItemType key_value_map_get(const KeyValueMap map, const std::string key, const ItemType &default_value)
-{
+ItemType key_value_map_get(const KeyValueMap & map, const std::string & key, const ItemType & default_value) {
     auto it = map.find(key);
     if (it == map.end()) {
         return default_value;
     }
     try {
         return it->second.get<ItemType>();
-    } catch (sdbus::Error &e) {
+    } catch (sdbus::Error & e) {
         throw sdbus::Error("org.rpm.dnf.v0.Error", "Incorrect map item type.");
     }
 }
