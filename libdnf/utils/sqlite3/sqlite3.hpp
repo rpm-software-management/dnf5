@@ -22,8 +22,7 @@
 #ifndef _SQLITE3_HPP
 #define _SQLITE3_HPP
 
-#include "../../error.hpp"
-#include "../../log.hpp"
+#include "libdnf/utils/exception.hpp"
 
 #include <sqlite3.h>
 
@@ -35,10 +34,10 @@
 
 class SQLite3 {
 public:
-    class Error : public libdnf::Error {
+    class Error : public libdnf::Exception {
     public:
         Error(const SQLite3& s, int code, const std::string &msg) :
-            libdnf::Error("SQLite error on \"" + s.getPath() + "\": " + msg + ": " + s.getError()),
+            libdnf::Exception("SQLite error on \"" + s.getPath() + "\": " + msg + ": " + s.getError()),
             ecode{code}
         {}
 
@@ -64,8 +63,9 @@ public:
             Error(Statement& stmt, int code, const std::string& msg) :
                 SQLite3::Error(stmt.db, code, msg)
             {
-                auto logger(libdnf::Log::getLogger());
-                logger->debug(std::string("SQL statement being executed: ") + stmt.getExpandedSql());
+                // TODO(dmach): replace with a new logger
+                // auto logger(libdnf::Log::getLogger());
+                // logger->debug(std::string("SQL statement being executed: ") + stmt.getExpandedSql());
             }
         };
 
@@ -85,7 +85,7 @@ public:
         Statement(SQLite3 &db, const std::string &sql)
           : db(db)
         {
-            auto result = sqlite3_prepare_v2(db.db, sql.c_str(), sql.length() + 1, &stmt, nullptr);
+            auto result = sqlite3_prepare_v2(db.db, sql.c_str(), static_cast<int>(sql.length()) + 1, &stmt, nullptr);
             if (result != SQLITE_OK)
                 throw Error(*this, result, "Statement failed");
         };
@@ -141,14 +141,14 @@ public:
 
         void bind(int pos, const Blob &val)
         {
-            auto result = sqlite3_bind_blob(stmt, pos, val.data, val.size, SQLITE_TRANSIENT);
+            auto result = sqlite3_bind_blob(stmt, pos, val.data, static_cast<int>(val.size), SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
                 throw Error(*this, result, "Blob bind failed");
         }
 
         void bind(int pos, const std::vector< unsigned char > &val)
         {
-            auto result = sqlite3_bind_blob(stmt, pos, val.data(), val.size(), SQLITE_TRANSIENT);
+            auto result = sqlite3_bind_blob(stmt, pos, val.data(), static_cast<int>(val.size()), SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
                 throw Error(*this, result, "Blob bind failed");
         }

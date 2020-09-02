@@ -59,6 +59,11 @@ pkg_check_modules(LIBREPO REQUIRED librepo)
 list(APPEND LIBDNF_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBREPO_LIBRARIES})
 
+# SQLite3
+pkg_check_modules(SQLite3 REQUIRED sqlite3)
+list(APPEND LIBDNF_PC_REQUIRES "${SQLite3_MODULE_NAME}")
+target_link_libraries(libdnf ${SQLite3_LIBRARIES})
+
 
 # sort the pkg-config requires and concatenate them into a string
 list(SORT LIBDNF_PC_REQUIRES)

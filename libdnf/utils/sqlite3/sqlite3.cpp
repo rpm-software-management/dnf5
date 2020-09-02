@@ -19,7 +19,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "Sqlite3.hpp"
+#include "sqlite3.hpp"
 
 void
 SQLite3::open()
