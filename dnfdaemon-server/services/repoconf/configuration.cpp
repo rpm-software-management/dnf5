@@ -19,16 +19,15 @@
 
 #include "configuration.hpp"
 
+#include <fmt/format.h>
 #include <glob.h>
 #include <rpm/rpmlib.h>
 
 #include <filesystem>
 #include <iostream>
 
-Configuration::Configuration(const std::string & install_root) : Configuration() {
-    if (!install_root.empty()) {
-        this->install_root = install_root;
-    }
+Configuration::Configuration(Session & session) : cfg_main(new libdnf::ConfigMain), session(session) {
+    install_root = session.session_configuration_value<std::string>("installroot", "/");
 }
 
 void Configuration::read_configuration() {
@@ -50,7 +49,7 @@ std::string Configuration::prepend_install_root(const std::string & path) {
 }
 
 void Configuration::read_main_config() {
-    // TODO(mblaha): fix the logger: auto logger(libdnf::Log::getLogger());
+    auto & logger = session.get_base()->get_logger();
     // create new main config parser and read the config file
     std::unique_ptr<libdnf::ConfigParser> main_parser(new libdnf::ConfigParser);
     main_parser->set_substitutions(substitutions);
@@ -74,8 +73,11 @@ void Configuration::read_main_config() {
                             libdnf::Option::Priority::MAINCONFIG,
                             main_parser->get_substituted_value("main", option_key));
                     } catch (const std::exception & e) {
-                        /*XXX logger->warning(tfm::format("Config error in file \"%s\" section \"[main]\" key \"%s\": %s",
-                                                    main_config_path, option_key, e.what()));*/
+                        logger.warning(fmt::format(
+                            "Config error in file \"{}\" section \"[main]\" key \"{}\": {}",
+                            main_config_path,
+                            option_key,
+                            e.what()));
                     }
                 }
             }
@@ -85,12 +87,12 @@ void Configuration::read_main_config() {
         // store the parser so it can be used for saving the config file later on
         config_parsers[std::move(main_config_path)] = std::move(main_parser);
     } catch (const std::exception & e) {
-        //XXX logger->warning(tfm::format("Error parsing config file %s: %s", main_config_path, e.what()));
+        logger.warning(fmt::format("Error parsing config file \"{}\": {}", main_config_path, e.what()));
     }
 }
 
 void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const std::string & file_path) {
-    //XXX auto logger(libdnf::Log::getLogger());
+    auto & logger = session.get_base()->get_logger();
     const auto & cfg_parser_data = repo_parser->get_data();
     for (const auto & cfg_parser_data_iter : cfg_parser_data) {
         if (cfg_parser_data_iter.first != "main") {
@@ -114,8 +116,12 @@ void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const s
                             libdnf::Option::Priority::REPOCONFIG,
                             repo_parser->get_substituted_value(section, option_key));
                     } catch (const std::exception & e) {
-                        /*XXX logger->warning(tfm::format("Config error in file \"%s\" section \"[%s]\" key \"%s\": %s",
-                                                    file_path, section, option_key, e.what()));*/
+                        logger.warning(fmt::format(
+                            "Config error in file \"{}\" section \"[{}]\" key \"{}\": {}",
+                            file_path,
+                            section,
+                            option_key,
+                            e.what()));
                     }
                 }
             }
@@ -129,14 +135,15 @@ void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const s
 }
 
 void Configuration::read_repo_configs() {
-    //XXX auto logger(libdnf::Log::getLogger());
+    auto & logger = session.get_base()->get_logger();
     for (const auto & repos_dir : cfg_main->reposdir().get_value()) {
         // use canonical to resolve symlinks in repos_dir
         std::string pattern;
         try {
             pattern = std::filesystem::canonical(prepend_install_root(repos_dir)).string() + "/*.repo";
         } catch (std::filesystem::filesystem_error & e) {
-            //XXX logger->debug(tfm::format("Error reading repository configuration directory %s: %s", repos_dir, e.what()));
+            logger.debug(
+                fmt::format("Error reading repository configuration directory \"{}\": {}", repos_dir, e.what()));
             continue;
         }
         glob_t glob_result;
@@ -148,7 +155,7 @@ void Configuration::read_repo_configs() {
             try {
                 repo_parser->read(file_path);
             } catch (libdnf::ConfigParser::Exception & e) {
-                //XXX logger->warning(tfm::format("Error parsing config file %s: %s", file_path, e.what()));
+                logger.warning(fmt::format("Error parsing config file \"{}\": {}", file_path, e.what()));
                 continue;
             }
             read_repos(repo_parser.get(), file_path);

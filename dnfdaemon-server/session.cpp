@@ -50,19 +50,20 @@ ItemType Session::session_configuration_value(const std::string & key, const Ite
 
 Session::Session(sdbus::IConnection & connection, KeyValueMap session_configuration, std::string object_path)
     : connection(connection)
+    , base(std::make_unique<libdnf::Base>())
     , session_configuration(session_configuration)
     , object_path(object_path) {
     // set-up log router for base
-    auto & log_router = base.get_logger();
+    auto & log_router = base->get_logger();
     log_router.add_logger(std::make_unique<StderrLogger>());
     // load configuration
-    base.load_config_from_file();
+    base->load_config_from_file();
 
     /* instantiate all services provided by the daemon */
     services.emplace_back(std::make_unique<RepoConf>(*this));
 
     for (auto & s : services) {
-        s->dbus_register(object_path);
+        s->dbus_register();
     }
 }
 

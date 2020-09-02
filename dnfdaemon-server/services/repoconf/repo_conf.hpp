@@ -34,7 +34,7 @@ class RepoConf : public IDbusSessionService {
 public:
     using IDbusSessionService::IDbusSessionService;
     ~RepoConf() = default;
-    void dbus_register(const std::string & object_path);
+    void dbus_register();
     void dbus_deregister();
 
 private:

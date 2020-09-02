@@ -20,6 +20,8 @@
 #ifndef DNFDAEMON_SERVER_SERVICES_REPOCONF_CONFIGURATION_HPP
 #define DNFDAEMON_SERVER_SERVICES_REPOCONF_CONFIGURATION_HPP
 
+#include "dnfdaemon-server/session.hpp"
+
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/rpm/config_repo.hpp"
@@ -36,8 +38,7 @@ public:
         std::unique_ptr<libdnf::rpm::ConfigRepo> repoconfig;
     };
 
-    Configuration() : cfg_main(new libdnf::ConfigMain), install_root("/"){};
-    explicit Configuration(const std::string & install_root);
+    explicit Configuration(Session & session);
     ~Configuration() = default;
 
     void read_configuration();
@@ -53,6 +54,7 @@ private:
     std::map<std::string, std::unique_ptr<libdnf::ConfigParser>> config_parsers;
     std::map<std::string, std::string> substitutions;
     std::string install_root;
+    Session & session;
 
     void read_repos(const libdnf::ConfigParser * repo_parser, const std::string & file_path);
     void set_substitutions();

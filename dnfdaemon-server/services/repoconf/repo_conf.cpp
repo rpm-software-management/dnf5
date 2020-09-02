@@ -27,9 +27,9 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
-void RepoConf::dbus_register(const std::string & object_path) {
+void RepoConf::dbus_register() {
     const std::string interface_name = "org.rpm.dnf.v0.rpm.RepoConf";
-    dbus_object = sdbus::createObject(session.connection, object_path);
+    dbus_object = sdbus::createObject(session.get_connection(), session.get_object_path());
     dbus_object->registerMethod(
         interface_name, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void { this->list(call); });
     dbus_object->registerMethod(
@@ -52,7 +52,7 @@ bool RepoConf::check_authorization(const std::string & actionid, const std::stri
     const std::string destination_name = "org.freedesktop.PolicyKit1";
     const std::string object_path = "/org/freedesktop/PolicyKit1/Authority";
     const std::string interface_name = "org.freedesktop.PolicyKit1.Authority";
-    auto polkit_proxy = sdbus::createProxy(session.connection, destination_name, object_path);
+    auto polkit_proxy = sdbus::createProxy(session.get_connection(), destination_name, object_path);
     polkit_proxy->finishRegistration();
 
     // call CheckAuthorization method
@@ -77,8 +77,7 @@ bool RepoConf::check_authorization(const std::string & actionid, const std::stri
 }
 
 KeyValueMapList RepoConf::repo_list(const std::vector<std::string> & ids) {
-    auto install_root = session.session_configuration_value<std::string>("installroot", "/");
-    Configuration cfg(install_root);
+    Configuration cfg(session);
     cfg.read_configuration();
 
     bool empty_ids = ids.empty();
@@ -136,8 +135,7 @@ void RepoConf::get(sdbus::MethodCall call) {
 }
 
 std::vector<std::string> RepoConf::enable_disable_repos(const std::vector<std::string> & ids, const bool enable) {
-    auto install_root = session.session_configuration_value<std::string>("installroot", "/");
-    Configuration cfg(install_root);
+    Configuration cfg(session);
     cfg.read_configuration();
 
     std::vector<std::string> out;

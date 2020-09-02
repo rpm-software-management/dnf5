@@ -35,7 +35,7 @@ class IDbusSessionService {
 public:
     explicit IDbusSessionService(Session & session) : session(session){};
     virtual ~IDbusSessionService() = default;
-    virtual void dbus_register(const std::string & object_path) = 0;
+    virtual void dbus_register() = 0;
     virtual void dbus_deregister() = 0;
 
 protected:
@@ -46,12 +46,17 @@ class Session {
 public:
     Session(sdbus::IConnection & connection, KeyValueMap session_configuration, std::string object_path);
     ~Session();
-    sdbus::IConnection & connection;
-    libdnf::Base base;
+
     template <typename ItemType>
     ItemType session_configuration_value(const std::string & key, const ItemType & default_value);
 
+    std::string get_object_path() { return object_path; };
+    sdbus::IConnection & get_connection() { return connection; };
+    libdnf::Base * get_base() { return base.get(); };
+
 private:
+    sdbus::IConnection & connection;
+    std::unique_ptr<libdnf::Base> base;
     KeyValueMap session_configuration;
     std::string object_path;
     std::vector<std::unique_ptr<IDbusSessionService>> services{};
