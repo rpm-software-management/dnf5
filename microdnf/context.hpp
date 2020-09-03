@@ -24,6 +24,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/command.hpp"
 
 #include <libdnf/base/base.hpp>
+#include <libdnf/rpm/transaction.hpp>
 
 #include <memory>
 #include <utility>
@@ -48,8 +49,21 @@ public:
     ArgumentParser arg_parser;
 };
 
+class RpmTransactionItem : public libdnf::rpm::TransactionItem {
+public:
+    enum class Actions { INSTALL, ERASE, UPGRADE, DOWNGRADE, REINSTALL };
+
+    RpmTransactionItem(libdnf::rpm::Package pkg, Actions action) : TransactionItem(pkg), action(action) {}
+    Actions get_action() const noexcept { return action; }
+
+private:
+    Actions action;
+};
+
 /// Downoad packages to destdir. If destdir == nullptr, packages are downloaded to the cache.
 void download_packages(libdnf::rpm::PackageSet & package_set, const char * dest_dir);
+
+void run_transaction(libdnf::rpm::Transaction & transaction);
 
 }  // namespace microdnf
 

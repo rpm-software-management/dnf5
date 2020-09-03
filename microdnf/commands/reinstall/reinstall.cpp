@@ -65,15 +65,6 @@ void CmdReinstall::set_argument_parser(Context & ctx) {
 
 void CmdReinstall::configure([[maybe_unused]] Context & ctx) {}
 
-class TransCB : public libdnf::rpm::TransactionCB {
-    void install_start(const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & header, uint64_t total) override {
-        std::cout << "Start: " << header.get_full_nevra() << "Size: " << total << std::endl;
-    }
-    void install_progress(const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & header, uint64_t amount, uint64_t total) override {
-        std::cout << "Progress: " << header.get_full_nevra() << " " << amount << '/' << total << std::endl;
-    }
-};
-
 void CmdReinstall::run(Context & ctx) {
     using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
     auto & solv_sack = ctx.base.get_rpm_solv_sack();
@@ -104,18 +95,17 @@ void CmdReinstall::run(Context & ctx) {
 
     download_packages(result_pset, nullptr);
 
-    std::vector<std::unique_ptr<libdnf::rpm::TransactionItem>> transaction_items;
+    std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
     auto ts = libdnf::rpm::Transaction(ctx.base);
     for (auto package : result_pset) {
-        auto item = std::make_unique<libdnf::rpm::TransactionItem>(package);
+        // auto item = std::make_unique<libdnf::rpm::Transaction::Item>(package);
+        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::REINSTALL);
         auto item_ptr = item.get();
         transaction_items.push_back(std::move(item));
         ts.reinstall(*item_ptr);
     }
-    TransCB trans_cb;
-    ts.register_cb(&trans_cb);
-    ts.run();
-    ts.register_cb(nullptr);
+    std::cout << std::endl;
+    run_transaction(ts);
 }
 
 }  // namespace microdnf
