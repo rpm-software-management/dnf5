@@ -147,7 +147,6 @@ void CmdRepoquery::set_argument_parser(Context & ctx) {
 void CmdRepoquery::configure([[maybe_unused]] Context & ctx) {}
 
 void CmdRepoquery::run(Context & ctx) {
-    using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
     auto & solv_sack = ctx.base.get_rpm_solv_sack();
 
     // To search in the system repository (installed packages)
@@ -159,15 +158,11 @@ void CmdRepoquery::run(Context & ctx) {
     // To search in available repositories (available packages)
     if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
         auto enabled_repos = ctx.base.get_rpm_repo_sack().new_query().ifilter_enabled(true);
-        for (auto & repo : enabled_repos.get_data()) {
-            ctx.load_rpm_repo(*repo.get());
-        }
-
-        for (auto & repo : enabled_repos.get_data()) {
-            solv_sack.load_repo(
-                *repo.get(),
-                LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER);
-        }
+        using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
+        auto flags =
+            LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
+        ctx.load_rpm_repos(enabled_repos, flags);
+        std::cout << std::endl;
     }
 
     libdnf::rpm::PackageSet result_pset(&solv_sack);

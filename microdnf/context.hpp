@@ -36,8 +36,9 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context {
 public:
-    /// Load rpm repository to rpm::RepoSack
-    void load_rpm_repo(libdnf::rpm::Repo & repo);
+    /// Updates the repositories metadata cache.
+    /// Loads the updated metadata into rpm::RepoSack and into rpm::SolvSack.
+    void load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::SolvSack::LoadRepoFlags flags);
 
     /// Select commend to execute
     void select_command(Command * cmd) { selected_command = cmd; }
@@ -47,6 +48,10 @@ public:
     std::vector<std::unique_ptr<Command>> commands;
     Command * selected_command{nullptr};
     ArgumentParser arg_parser;
+
+private:
+    /// Updates the repository metadata cache and load it into rpm::RepoSack.
+    void load_rpm_repo(libdnf::rpm::Repo & repo);
 };
 
 class RpmTransactionItem : public libdnf::rpm::TransactionItem {

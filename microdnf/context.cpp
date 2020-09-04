@@ -20,6 +20,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
+#include <libdnf-cli/utils/tty.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
@@ -59,13 +60,34 @@ class MicrodnfRepoCB : public libdnf::rpm::RepoCB {
 public:
     explicit MicrodnfRepoCB(libdnf::ConfigMain & config) : config(&config) {}
 
-    void start(const char * what) override { std::cout << "Start downloading: \"" << what << "\"" << std::endl; }
+    void start(const char * what) override {
+        progress_bar.set_description(what);
+        progress_bar.set_auto_finish(false);
+        progress_bar.set_total_ticks(0);
+        progress_bar.start();
+    }
 
-    void end() override { std::cout << "Done." << std::endl; }
+    void end() override {
+        progress_bar.set_ticks(progress_bar.get_total_ticks());
+        progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+        print_progress_bar();
+    }
 
-    // TODO(jrohel): Progress bar
     int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
-        //std::cout << "Downloaded " << downloaded << "/" << total_to_download << std::endl;
+        progress_bar.set_total_ticks(static_cast<int64_t>(total_to_download));
+        progress_bar.set_ticks(static_cast<int64_t>(downloaded));
+        if (is_time_to_print()) {
+            print_progress_bar();
+        }
+        return 0;
+    }
+
+    int handle_mirror_failure(
+        [[maybe_unused]] const char * msg,
+        [[maybe_unused]] const char * url,
+        [[maybe_unused]] const char * metadata) override {
+        progress_bar.add_message(libdnf::cli::progressbar::MessageType::WARNING, msg);
+        print_progress_bar();
         return 0;
     }
 
@@ -90,19 +112,84 @@ public:
         return userconfirm(*config);
     }
 
+    void add_message(libdnf::cli::progressbar::MessageType type, const std::string & message) {
+        progress_bar.add_message(type, message);
+        print_progress_bar();
+    }
+
+    void end_line() {
+        if (progress_bar.get_state() != libdnf::cli::progressbar::ProgressBarState::READY) {
+            std::cout << std::endl;
+        }
+    }
+
 private:
+    void print_progress_bar() {
+        if (libdnf::cli::utils::tty::is_interactive()) {
+            std::cout << libdnf::cli::utils::tty::clear_line;
+            for (std::size_t i = 0; i < msg_lines; i++) {
+                std::cout << libdnf::cli::utils::tty::cursor_up << libdnf::cli::utils::tty::clear_line;
+            }
+            std::cout << "\r";
+        }
+        std::cout << progress_bar << std::flush;
+        msg_lines = progress_bar.get_messages().size();
+    }
+
+    static bool is_time_to_print() {
+        auto now = std::chrono::steady_clock::now();
+        auto delta = now - prev_print_time;
+        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
+        if (ms > 100) {
+            // 100ms equals to 10 FPS and that seems to be smooth enough
+            prev_print_time = now;
+            return true;
+        }
+        return false;
+    }
+
+    static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
+
     libdnf::ConfigMain * config;
+    libdnf::cli::progressbar::DownloadProgressBar progress_bar{-1, ""};
+    std::size_t msg_lines{0};
 };
+
+std::chrono::time_point<std::chrono::steady_clock> MicrodnfRepoCB::prev_print_time = std::chrono::steady_clock::now();
 
 void Context::load_rpm_repo(libdnf::rpm::Repo & repo) {
     //repo->set_substitutions(variables);
     auto & logger = base.get_logger();
-    repo.set_callbacks(std::make_unique<microdnf::MicrodnfRepoCB>(base.get_config()));
+    auto callback = std::make_unique<microdnf::MicrodnfRepoCB>(base.get_config());
+    auto callback_ptr = callback.get();
+    repo.set_callbacks(std::move(callback));
     try {
         repo.load();
     } catch (const std::runtime_error & ex) {
+        //std::cout << ex.what() << std::endl;
         logger.warning(ex.what());
-        std::cout << ex.what() << std::endl;
+        callback_ptr->add_message(libdnf::cli::progressbar::MessageType::ERROR, ex.what());
+        callback_ptr->end_line();
+        throw;
+    }
+    callback_ptr->end_line();
+}
+
+void Context::load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::SolvSack::LoadRepoFlags flags) {
+    std::cout << "Updating repositories metadata and load them:" << std::endl;
+    for (auto & repo : repos.get_data()) {
+        try {
+            load_rpm_repo(*repo.get());
+            auto & solv_sack = base.get_rpm_solv_sack();
+            // std::cout << "Loading repository \"" << repo->get_config()->name().get_value() << "\" into sack." << std::endl;
+            solv_sack.load_repo(*repo.get(), flags);
+        } catch (const std::runtime_error & ex) {
+            if (!repo->get_config()->skip_if_unavailable().get_value()) {
+                std::cerr << "Error: Unable to load repository \"" << repo->get_id()
+                          << "\" and \"skip_if_unavailable\" is disabled for it." << std::endl;
+                throw;
+            }
+        }
     }
 }
 
