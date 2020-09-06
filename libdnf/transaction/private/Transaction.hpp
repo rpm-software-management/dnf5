@@ -21,6 +21,11 @@
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_PRIVATE_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_PRIVATE_HPP
 
+
+//namespace libdnf {
+//    class Transaction;
+//}
+
 #include "../Transaction.hpp"
 
 namespace libdnf {
@@ -32,7 +37,7 @@ typedef std::shared_ptr< Transaction > TransactionPtr;
 class Transaction : public libdnf::Transaction {
 public:
     // create an empty object, don't read from db
-    explicit Transaction(SQLite3Ptr conn);
+    explicit Transaction(libdnf::utils::SQLite3Ptr conn);
 
     void setId(int64_t value) { id = value; }
     void setDtBegin(int64_t value) { dtBegin = value; }

@@ -37,8 +37,8 @@ namespace libdnf {
 
 class RPMItem : public Item {
 public:
-    explicit RPMItem(SQLite3Ptr conn);
-    RPMItem(SQLite3Ptr conn, int64_t pk);
+    explicit RPMItem(libdnf::utils::SQLite3Ptr conn);
+    RPMItem(libdnf::utils::SQLite3Ptr conn, int64_t pk);
     virtual ~RPMItem() = default;
 
     const std::string &getName() const noexcept { return name; }
@@ -61,11 +61,11 @@ public:
     ItemType getItemType() const noexcept override { return itemType; }
     void save() override;
 
-    static TransactionItemPtr getTransactionItem(SQLite3Ptr conn, const std::string &nevra);
-    static std::vector< int64_t > searchTransactions(SQLite3Ptr conn, const std::vector< std::string > &patterns);
-    static std::vector< TransactionItemPtr > getTransactionItems(SQLite3Ptr conn,
+    static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &nevra);
+    static std::vector< int64_t > searchTransactions(libdnf::utils::SQLite3Ptr conn, const std::vector< std::string > &patterns);
+    static std::vector< TransactionItemPtr > getTransactionItems(libdnf::utils::SQLite3Ptr conn,
                                                                  int64_t transaction_id);
-    static TransactionItemReason resolveTransactionItemReason(SQLite3Ptr conn,
+    static TransactionItemReason resolveTransactionItemReason(libdnf::utils::SQLite3Ptr conn,
                                                               const std::string &name,
                                                               const std::string &arch,
                                                               int64_t maxTransactionId);

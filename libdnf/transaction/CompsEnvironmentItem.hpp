@@ -41,9 +41,9 @@ namespace libdnf {
 
 class CompsEnvironmentItem : public Item {
 public:
-    explicit CompsEnvironmentItem(SQLite3Ptr conn);
+    explicit CompsEnvironmentItem(libdnf::utils::SQLite3Ptr conn);
 
-    CompsEnvironmentItem(SQLite3Ptr conn, int64_t pk);
+    CompsEnvironmentItem(libdnf::utils::SQLite3Ptr conn, int64_t pk);
 
     virtual ~CompsEnvironmentItem() = default;
 
@@ -66,11 +66,11 @@ public:
                                       bool installed,
                                       CompsPackageType groupType);
     std::vector< CompsEnvironmentGroupPtr > getGroups();
-    static TransactionItemPtr getTransactionItem(SQLite3Ptr conn, const std::string &envid);
+    static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &envid);
     static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
-        SQLite3Ptr conn,
+        libdnf::utils::SQLite3Ptr conn,
         const std::string &pattern);
-    static std::vector< TransactionItemPtr > getTransactionItems(SQLite3Ptr conn,
+    static std::vector< TransactionItemPtr > getTransactionItems(libdnf::utils::SQLite3Ptr conn,
                                                                  int64_t transactionId);
 
 protected:

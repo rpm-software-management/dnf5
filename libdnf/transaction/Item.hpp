@@ -24,7 +24,7 @@
 #include <memory>
 #include <string>
 
-#include "../utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 namespace libdnf {
 class Item;
@@ -38,7 +38,7 @@ namespace libdnf {
 class Item {
 public:
     /// Default constructor.
-    explicit Item(SQLite3Ptr conn);
+    explicit Item(libdnf::utils::SQLite3Ptr conn);
 
     /// Default destructor.
     virtual ~Item() = default;
@@ -56,7 +56,7 @@ public:
 protected:
     void dbInsert();
 
-    SQLite3Ptr conn;
+    libdnf::utils::SQLite3Ptr conn;
     int64_t id = 0;
     const ItemType itemType = ItemType::UNKNOWN;
 };

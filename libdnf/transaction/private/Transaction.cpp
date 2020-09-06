@@ -18,18 +18,21 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "../../utils/bgettext/bgettext-lib.h"
-#include "../../utils/tinyformat/tinyformat.hpp"
 
-#include "CompsEnvironmentItem.hpp"
-#include "CompsGroupItem.hpp"
-#include "RPMItem.hpp"
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include <fmt/format.h>
+//#include "../../utils/tinyformat/tinyformat.hpp"
+
+#include "../CompsEnvironmentItem.hpp"
+#include "../CompsGroupItem.hpp"
+#include "../RPMItem.hpp"
+#include "../TransactionItem.hpp"
 #include "Transaction.hpp"
-#include "TransactionItem.hpp"
+
 
 namespace libdnf {
 
-swdb_private::Transaction::Transaction(SQLite3Ptr conn)
+swdb_private::Transaction::Transaction(libdnf::utils::SQLite3Ptr conn)
   : libdnf::Transaction(conn)
 {
 }
@@ -55,7 +58,7 @@ swdb_private::Transaction::finish(TransactionState state)
     for (auto i : getItems()) {
         if (i->getState() == TransactionItemState::UNKNOWN) {
             throw std::runtime_error(
-                tfm::format(_("TransactionItem state is not set: %s"), i->getItem()->toStr()));
+                fmt::format(_("TransactionItem state is not set: %s"), i->getItem()->toStr()));
         }
     }
 
@@ -81,7 +84,7 @@ swdb_private::Transaction::dbInsert()
         "  ) "
         "VALUES "
         "  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
     query.bindv(getDtBegin(),
                 getDtEnd(),
                 getRpmdbVersionBegin(),
@@ -94,7 +97,7 @@ swdb_private::Transaction::dbInsert()
         query.bind(9, getId());
     }
     query.step();
-    setId(conn->lastInsertRowID());
+    setId(conn->last_insert_rowid());
 
     // add used software - has to be added at initialization state
     if (!softwarePerformedWith.empty()) {
@@ -107,7 +110,7 @@ swdb_private::Transaction::dbInsert()
             VALUES
                 (?, ?)
         )**";
-        SQLite3::Statement swQuery(*conn.get(), sql);
+        libdnf::utils::SQLite3::Statement swQuery(*conn.get(), sql);
         bool first = true;
         for (auto software : softwarePerformedWith) {
             if (!first) {
@@ -139,7 +142,7 @@ swdb_private::Transaction::dbUpdate()
         "  state=? "
         "WHERE "
         "  id = ?";
-    SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
     query.bindv(getDtBegin(),
                 getDtEnd(),
                 getRpmdbVersionBegin(),
@@ -249,7 +252,7 @@ swdb_private::Transaction::addConsoleOutputLine(int fileDescriptor, const std::s
         VALUES
             (?, ?, ?);
     )**";
-    SQLite3::Statement query(*conn, sql);
+    libdnf::utils::SQLite3::Statement query(*conn, sql);
     query.bindv(getId(), fileDescriptor, line);
     query.step();
 }

@@ -30,6 +30,7 @@ namespace libdnf {
 
 class Base;
 class Goal;
+class Swdb;
 
 }  // namespace libdnf
 
@@ -161,6 +162,7 @@ private:
     friend ReldepList;
     friend SolvQuery;
     friend Transaction;
+    friend libdnf::Swdb;
     friend solv::SolvPrivate;
     class Impl;
     std::unique_ptr<Impl> pImpl;

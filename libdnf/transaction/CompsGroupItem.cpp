@@ -25,13 +25,13 @@
 
 namespace libdnf {
 
-CompsGroupItem::CompsGroupItem(SQLite3Ptr conn)
+CompsGroupItem::CompsGroupItem(libdnf::utils::SQLite3Ptr conn)
   : Item{conn}
   , packageTypes(CompsPackageType::DEFAULT)
 {
 }
 
-CompsGroupItem::CompsGroupItem(SQLite3Ptr conn, int64_t pk)
+CompsGroupItem::CompsGroupItem(libdnf::utils::SQLite3Ptr conn, int64_t pk)
   : Item{conn}
   , packageTypes(CompsPackageType::DEFAULT)
 {
@@ -64,7 +64,7 @@ CompsGroupItem::dbSelect(int64_t pk)
         "  comps_group "
         "WHERE "
         "  item_id = ?";
-    SQLite3::Query query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
     query.bindv(pk);
     query.step();
 
@@ -92,7 +92,7 @@ CompsGroupItem::dbInsert()
         "  ) "
         "VALUES "
         "  (?, ?, ?, ?, ?)";
-    SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
     query.bindv(getId(),
                 getGroupId(),
                 getName(),
@@ -102,7 +102,7 @@ CompsGroupItem::dbInsert()
 }
 
 static TransactionItemPtr
-compsGroupTransactionItemFromQuery(SQLite3Ptr conn, SQLite3::Query &query, int64_t transID)
+compsGroupTransactionItemFromQuery(libdnf::utils::SQLite3Ptr conn, libdnf::utils::SQLite3::Query &query, int64_t transID)
 {
 
     auto trans_item = std::make_shared< TransactionItem >(conn, transID);
@@ -123,7 +123,7 @@ compsGroupTransactionItemFromQuery(SQLite3Ptr conn, SQLite3::Query &query, int64
 }
 
 TransactionItemPtr
-CompsGroupItem::getTransactionItem(SQLite3Ptr conn, const std::string &groupid)
+CompsGroupItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &groupid)
 {
     const char *sql = R"**(
         SELECT
@@ -152,9 +152,9 @@ CompsGroupItem::getTransactionItem(SQLite3Ptr conn, const std::string &groupid)
             ti.trans_id DESC
     )**";
 
-    SQLite3::Query query(*conn, sql);
+    libdnf::utils::SQLite3::Query query(*conn, sql);
     query.bindv(groupid);
-    if (query.step() == SQLite3::Statement::StepResult::ROW) {
+    if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto trans_item =
             compsGroupTransactionItemFromQuery(conn, query, query.get< int64_t >("trans_id"));
         if (trans_item->getAction() == TransactionItemAction::REMOVE) {
@@ -166,7 +166,7 @@ CompsGroupItem::getTransactionItem(SQLite3Ptr conn, const std::string &groupid)
 }
 
 std::vector< TransactionItemPtr >
-CompsGroupItem::getTransactionItemsByPattern(SQLite3Ptr conn, const std::string &pattern)
+CompsGroupItem::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr conn, const std::string &pattern)
 {
     const char *sql = R"**(
         SELECT DISTINCT
@@ -183,12 +183,12 @@ CompsGroupItem::getTransactionItemsByPattern(SQLite3Ptr conn, const std::string 
 
     // HACK: create a private connection to avoid undefined behavior
     // after forking process in Anaconda
-    SQLite3 privateConn(conn->getPath());
-    SQLite3::Query query(privateConn, sql);
+    libdnf::utils::SQLite3 privateConn(conn->get_path());
+    libdnf::utils::SQLite3::Query query(privateConn, sql);
     std::string pattern_sql = pattern;
     std::replace(pattern_sql.begin(), pattern_sql.end(), '*', '%');
     query.bindv(pattern, pattern, pattern);
-    while (query.step() == SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto groupid = query.get< std::string >("groupid");
         auto trans_item = getTransactionItem(conn, groupid);
         if (!trans_item) {
@@ -200,7 +200,7 @@ CompsGroupItem::getTransactionItemsByPattern(SQLite3Ptr conn, const std::string 
 }
 
 std::vector< TransactionItemPtr >
-CompsGroupItem::getTransactionItems(SQLite3Ptr conn, int64_t transactionId)
+CompsGroupItem::getTransactionItems(libdnf::utils::SQLite3Ptr conn, int64_t transactionId)
 {
     std::vector< TransactionItemPtr > result;
 
@@ -222,10 +222,10 @@ CompsGroupItem::getTransactionItems(SQLite3Ptr conn, int64_t transactionId)
         WHERE
             ti.trans_id = ?
     )**";
-    SQLite3::Query query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
     query.bindv(transactionId);
 
-    while (query.step() == SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto trans_item = compsGroupTransactionItemFromQuery(conn, query, transactionId);
         result.push_back(trans_item);
     }
@@ -261,10 +261,10 @@ CompsGroupItem::loadPackages()
         "  comps_group_package "
         "WHERE "
         "  group_id = ?";
-    SQLite3::Query query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
     query.bindv(getId());
 
-    while (query.step() == SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto pkg = std::make_shared< CompsGroupPackage >(*this);
         pkg->setId(query.get< int >("id"));
         pkg->setName(query.get< std::string >("name"));
@@ -326,7 +326,7 @@ CompsGroupPackage::dbInsert()
         VALUES
             (?, ?, ?, ?)
     )**";
-    SQLite3::Statement query(*getGroup().conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*getGroup().conn.get(), sql);
     query.bindv(
         getGroup().getId(), getName(), getInstalled(), static_cast< int >(getPackageType()));
     query.step();
@@ -345,7 +345,7 @@ CompsGroupPackage::dbUpdate()
         WHERE
             id = ?
     )**";
-    SQLite3::Statement query(*getGroup().conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*getGroup().conn.get(), sql);
     query.bindv(
         getName(), getInstalled(), static_cast< int >(getPackageType()), getId());
     query.step();
@@ -365,11 +365,11 @@ CompsGroupPackage::dbSelectOrInsert()
             AND group_id = ?
     )**";
 
-    SQLite3::Statement query(*getGroup().conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*getGroup().conn.get(), sql);
     query.bindv(getName(), getGroup().getId());
-    SQLite3::Statement::StepResult result = query.step();
+    libdnf::utils::SQLite3::Statement::StepResult result = query.step();
 
-    if (result == SQLite3::Statement::StepResult::ROW) {
+    if (result == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         setId(query.get< int >(0));
         dbUpdate();
     } else {

@@ -27,6 +27,10 @@ pkg_check_modules(LIBFMT REQUIRED fmt)
 list(APPEND LIBDNF_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBFMT_LIBRARIES})
 
+pkg_check_modules(JSONC REQUIRED json-c)
+include_directories(${JSONC_INCLUDE_DIRS})
+target_link_libraries(libdnf ${JSONC_LIBRARIES})
+
 pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.7)
 list(APPEND LIBDNF_PC_REQUIRES "${LIBSOLV_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBSOLV_LIBRARIES})

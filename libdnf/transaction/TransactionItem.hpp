@@ -24,7 +24,7 @@
 #include <memory>
 #include <string>
 
-#include "../utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 namespace libdnf {
 class TransactionItem;
@@ -100,7 +100,7 @@ class TransactionItem : public TransactionItemBase {
 public:
     explicit TransactionItem(Transaction *trans);
 
-    TransactionItem(SQLite3Ptr conn, int64_t transID);
+    TransactionItem(libdnf::utils::SQLite3Ptr conn, int64_t transID);
 
     int64_t getId() const noexcept { return id; }
     void setId(int64_t value) { id = value; }
@@ -130,7 +130,7 @@ protected:
     Transaction *trans;
 
     const int64_t transID;
-    SQLite3Ptr conn;
+    libdnf::utils::SQLite3Ptr conn;
 
     // TODO: replace with objects? it's just repoid, probably not necessary
     std::vector< TransactionItemPtr > replacedBy;

@@ -22,19 +22,19 @@
 #include <map>
 #include <sstream>
 
-#include "../hy-subject.h"
-#include "../nevra.hpp"
+//#include "../hy-subject.h"
+#include "libdnf/rpm/nevra.hpp"
 
 #include "RPMItem.hpp"
 
 namespace libdnf {
 
-RPMItem::RPMItem(SQLite3Ptr conn)
+RPMItem::RPMItem(libdnf::utils::SQLite3Ptr conn)
   : Item{conn}
 {
 }
 
-RPMItem::RPMItem(SQLite3Ptr conn, int64_t pk)
+RPMItem::RPMItem(libdnf::utils::SQLite3Ptr conn, int64_t pk)
   : Item{conn}
 {
     dbSelect(pk);
@@ -64,7 +64,7 @@ RPMItem::dbSelect(int64_t pk)
         "  rpm "
         "WHERE "
         "  item_id = ?";
-    SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
     query.bindv(pk);
     query.step();
 
@@ -87,13 +87,13 @@ RPMItem::dbInsert()
         "  rpm "
         "VALUES "
         "  (?, ?, ?, ?, ?, ?)";
-    SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
     query.bindv(getId(), getName(), getEpoch(), getVersion(), getRelease(), getArch());
     query.step();
 }
 
 static TransactionItemPtr
-transactionItemFromQuery(SQLite3Ptr conn, SQLite3::Query &query, int64_t transID)
+transactionItemFromQuery(libdnf::utils::SQLite3Ptr conn, libdnf::utils::SQLite3::Query &query, int64_t transID)
 {
     auto trans_item = std::make_shared< TransactionItem >(conn, transID);
     auto item = std::make_shared< RPMItem >(conn);
@@ -113,7 +113,7 @@ transactionItemFromQuery(SQLite3Ptr conn, SQLite3::Query &query, int64_t transID
 }
 
 std::vector< TransactionItemPtr >
-RPMItem::getTransactionItems(SQLite3Ptr conn, int64_t transaction_id)
+RPMItem::getTransactionItems(libdnf::utils::SQLite3Ptr conn, int64_t transaction_id)
 {
     std::vector< TransactionItemPtr > result;
 
@@ -141,10 +141,10 @@ RPMItem::getTransactionItems(SQLite3Ptr conn, int64_t transaction_id)
         "  ti.trans_id = ? "
         "  AND ti.repo_id = r.id "
         "  AND ti.item_id = i.item_id";
-    SQLite3::Query query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
     query.bindv(transaction_id);
 
-    while (query.step() == SQLite3::Statement::StepResult::ROW) {
+    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         result.push_back(transactionItemFromQuery(conn, query, transaction_id));
     }
     return result;
@@ -181,12 +181,12 @@ RPMItem::dbSelectOrInsert()
         "  AND release = ? "
         "  AND arch = ?";
 
-    SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
 
     query.bindv(getName(), getEpoch(), getVersion(), getRelease(), getArch());
-    SQLite3::Statement::StepResult result = query.step();
+    libdnf::utils::SQLite3::Statement::StepResult result = query.step();
 
-    if (result == SQLite3::Statement::StepResult::ROW) {
+    if (result == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         setId(query.get< int >(0));
     } else {
         // insert and get the ID back
@@ -195,16 +195,16 @@ RPMItem::dbSelectOrInsert()
 }
 
 TransactionItemPtr
-RPMItem::getTransactionItem(SQLite3Ptr conn, const std::string &nevra)
+RPMItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &nevra)
 {
-    Nevra nevraObject;
-    if (!nevraObject.parse(nevra.c_str(), HY_FORM_NEVRA)) {
+    libdnf::rpm::Nevra nevraObject;
+    if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
         return nullptr;
     }
-    // TODO: hy_nevra_possibility should set epoch to 0 if epoch is not specified and HY_FORM_NEVRA
+    // TODO: hy_nevra_possibility should set epoch to 0 if epoch is not specified and libdnf::rpm::Nevra::Form::NEVRA
     // is used
-    if (nevraObject.getEpoch() < 0) {
-        nevraObject.setEpoch(0);
+    if (nevraObject.get_epoch().empty()) {
+        nevraObject.set_epoch("0");
     }
 
     const char *sql = R"**(
@@ -237,23 +237,23 @@ RPMItem::getTransactionItem(SQLite3Ptr conn, const std::string &nevra)
            ti.id DESC
         LIMIT 1
     )**";
-    SQLite3::Query query(*conn, sql);
-    query.bindv(nevraObject.getName(),
-                nevraObject.getEpoch(),
-                nevraObject.getVersion(),
-                nevraObject.getRelease(),
-                nevraObject.getArch());
-    if (query.step() == SQLite3::Statement::StepResult::ROW) {
+    libdnf::utils::SQLite3::Query query(*conn, sql);
+    query.bindv(nevraObject.get_name(),
+                nevraObject.get_epoch(),
+                nevraObject.get_version(),
+                nevraObject.get_release(),
+                nevraObject.get_arch());
+    if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         return transactionItemFromQuery(conn, query, query.get< int64_t >("trans_id"));
     }
     return nullptr;
 }
 
 TransactionItemReason
-RPMItem::resolveTransactionItemReason(SQLite3Ptr conn,
+RPMItem::resolveTransactionItemReason(libdnf::utils::SQLite3Ptr conn,
                                       const std::string &name,
                                       const std::string &arch,
-                                      int64_t maxTransactionId)
+                                      [[maybe_unused]] int64_t maxTransactionId)
 {
     const char *sql = R"**(
         SELECT
@@ -277,10 +277,10 @@ RPMItem::resolveTransactionItemReason(SQLite3Ptr conn,
     )**";
 
     if (arch != "") {
-        SQLite3::Query query(*conn, sql);
+        libdnf::utils::SQLite3::Query query(*conn, sql);
         query.bindv(name, arch);
 
-        if (query.step() == SQLite3::Statement::StepResult::ROW) {
+        if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
             auto action = static_cast< TransactionItemAction >(query.get< int64_t >("action"));
             if (action == TransactionItemAction::REMOVE) {
                 return TransactionItemReason::UNKNOWN;
@@ -298,17 +298,17 @@ RPMItem::resolveTransactionItemReason(SQLite3Ptr conn,
                 name = ?
         )**";
 
-        SQLite3::Query arch_query(*conn, arch_sql);
+        libdnf::utils::SQLite3::Query arch_query(*conn, arch_sql);
         arch_query.bindv(name);
 
         TransactionItemReason result = TransactionItemReason::UNKNOWN;
 
-        while (arch_query.step() == SQLite3::Statement::StepResult::ROW) {
+        while (arch_query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
             auto rpm_arch = arch_query.get< std::string >("arch");
 
-            SQLite3::Query query(*conn, sql);
+            libdnf::utils::SQLite3::Query query(*conn, sql);
             query.bindv(name, rpm_arch);
-            while (query.step() == SQLite3::Statement::StepResult::ROW) {
+            while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
                 auto action = static_cast< TransactionItemAction >(query.get< int64_t >("action"));
                 if (action == TransactionItemAction::REMOVE) {
                     continue;
@@ -360,7 +360,7 @@ RPMItem::operator<(const RPMItem &other) const
 }
 
 std::vector< int64_t >
-RPMItem::searchTransactions(SQLite3Ptr conn, const std::vector< std::string > &patterns)
+RPMItem::searchTransactions(libdnf::utils::SQLite3Ptr conn, const std::vector< std::string > &patterns)
 {
     std::vector< int64_t > result;
 
@@ -385,10 +385,10 @@ RPMItem::searchTransactions(SQLite3Ptr conn, const std::vector< std::string > &p
         ORDER BY
            trans_id DESC
     )**";
-    SQLite3::Query query(*conn, sql);
+    libdnf::utils::SQLite3::Query query(*conn, sql);
     for (auto pattern : patterns) {
         query.bindv(pattern, pattern, pattern, pattern, pattern);
-        while (query.step() == SQLite3::Statement::StepResult::ROW) {
+        while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
             result.push_back(query.get< int64_t >("id"));
         }
     }

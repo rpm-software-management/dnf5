@@ -32,10 +32,10 @@ struct Swdb;
 class Transformer;
 }
 
-#include "../hy-types.h"
-#include "../sack/query.hpp"
-#include "../sack/packageset.hpp"
-#include "../utils/sqlite3/Sqlite3.hpp"
+//#include "../hy-types.h"
+//#include "../sack/query.hpp"
+#include "libdnf/rpm/package_set.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 #include "CompsGroupItem.hpp"
 #include "Transaction.hpp"
@@ -46,18 +46,18 @@ namespace libdnf {
 
 struct Swdb {
 public:
-    explicit Swdb(SQLite3Ptr conn);
+    explicit Swdb(libdnf::utils::SQLite3Ptr conn);
     explicit Swdb(const std::string &path);
     ~Swdb();
 
-    SQLite3Ptr getConn() { return conn; }
+    libdnf::utils::SQLite3Ptr getConn() { return conn; }
 
     // Database
     // FIXME load this from conf
     static constexpr const char *defaultPath = "/var/lib/dnf/history.sqlite";
     static constexpr const char *defaultDatabaseName = "history.sqlite";
 
-    const std::string &getPath() { return conn->getPath(); }
+    const std::string &getPath() { return conn->get_path(); }
     void resetDatabase();
     void closeDatabase();
 
@@ -116,13 +116,13 @@ public:
     /**
     * @brief Remove packages from PackageSet that were installed as Dependency or WEAK_DEPENDENCY
     */
-    void filterUserinstalled(PackageSet & installed) const;
+    void filterUserinstalled(libdnf::rpm::PackageSet & installed) const;
 
 protected:
     friend class Transformer;
 
-    explicit Swdb(SQLite3Ptr conn, bool autoClose);
-    SQLite3Ptr conn;
+    explicit Swdb(libdnf::utils::SQLite3Ptr conn, bool autoClose);
+    libdnf::utils::SQLite3Ptr conn;
     bool autoClose;
     std::unique_ptr< swdb_private::Transaction > transactionInProgress = nullptr;
     std::map< std::string, TransactionItemPtr > itemsInProgress;

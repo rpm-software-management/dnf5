@@ -25,7 +25,7 @@
 #include <set>
 #include <string>
 
-#include "../utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 namespace libdnf {
 class Transaction;
@@ -40,7 +40,7 @@ namespace libdnf {
 class Transaction {
 public:
     // load from db
-    Transaction(SQLite3Ptr conn, int64_t pk);
+    Transaction(libdnf::utils::SQLite3Ptr conn, int64_t pk);
     virtual ~Transaction() = default;
 
     bool operator==(const Transaction &other) const;
@@ -62,12 +62,12 @@ public:
     std::vector< std::pair< int, std::string > > getConsoleOutput() const;
 
 protected:
-    explicit Transaction(SQLite3Ptr conn);
+    explicit Transaction(libdnf::utils::SQLite3Ptr conn);
     void dbSelect(int64_t transaction_id);
     std::set< std::shared_ptr< RPMItem > > softwarePerformedWith;
 
     friend class TransactionItem;
-    SQLite3Ptr conn;
+    libdnf::utils::SQLite3Ptr conn;
 
     int64_t id = 0;
     int64_t dtBegin = 0;

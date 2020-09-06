@@ -18,7 +18,7 @@
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
  */
 
-#include "../utils/bgettext/bgettext-lib.h"
+#include "libdnf/utils/bgettext/bgettext-lib.h"
 
 #include "TransactionItem.hpp"
 
@@ -121,7 +121,7 @@ TransactionItemBase::isBackwardAction() const
     }
 }
 
-TransactionItem::TransactionItem(SQLite3Ptr conn, int64_t transID)
+TransactionItem::TransactionItem(libdnf::utils::SQLite3Ptr conn, int64_t transID)
   : trans(nullptr)
   , transID(transID)
   , conn(conn)
@@ -163,7 +163,7 @@ TransactionItem::dbInsert()
     )**";
 
     // save the transaction item
-    SQLite3::Statement query(*(conn.get()), sql);
+    libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
     query.bindv(trans->getId(),
                 getItem()->getId(),
                 swdb_private::Repo::getCached(conn, getRepoid())->getId(),
@@ -171,7 +171,7 @@ TransactionItem::dbInsert()
                 static_cast< int >(getReason()),
                 static_cast< int >(getState()));
     query.step();
-    setId(conn->lastInsertRowID());
+    setId(conn->last_insert_rowid());
 }
 
 void
@@ -181,7 +181,7 @@ TransactionItem::saveReplacedBy()
         return;
     }
     const char *sql = "INSERT OR REPLACE INTO item_replaced_by VALUES (?, ?)";
-    SQLite3::Statement replacedByQuery(*(conn.get()), sql);
+    libdnf::utils::SQLite3::Statement replacedByQuery(*(conn.get()), sql);
     bool first = true;
     for (const auto &newItem : replacedBy) {
         if (!first) {
@@ -206,7 +206,7 @@ TransactionItem::saveState()
           id = ?
     )**";
 
-    SQLite3::Statement query(*conn, sql);
+    libdnf::utils::SQLite3::Statement query(*conn, sql);
     query.bindv(static_cast< int >(getState()), getId());
     query.step();
 }
@@ -232,7 +232,7 @@ TransactionItem::dbUpdate()
           id = ?
     )**";
 
-    SQLite3::Statement query(*(conn.get()), sql);
+    libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
     query.bindv(trans->getId(),
                 getItem()->getId(),
                 swdb_private::Repo::getCached(trans->conn, getRepoid())->getId(),

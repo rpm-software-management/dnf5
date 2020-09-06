@@ -25,7 +25,7 @@
 #include <memory>
 #include <string>
 
-#include "../../utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 namespace libdnf {
 namespace swdb_private {
@@ -35,10 +35,10 @@ typedef std::shared_ptr< Repo > RepoPtr;
 
 class Repo {
 public:
-    static RepoPtr getCached(SQLite3Ptr conn, const std::string &repoid);
+    static RepoPtr getCached(libdnf::utils::SQLite3Ptr conn, const std::string &repoid);
     static std::map< std::string, RepoPtr > cache;
 
-    Repo(SQLite3Ptr conn);
+    Repo(libdnf::utils::SQLite3Ptr conn);
 
     int64_t getId() const noexcept { return id; }
     void setId(int64_t value) { id = value; }
@@ -54,7 +54,7 @@ protected:
 
     int64_t id = 0;
     std::string repoId;
-    SQLite3Ptr conn;
+    libdnf::utils::SQLite3Ptr conn;
 };
 
 } // namespace swdb_private

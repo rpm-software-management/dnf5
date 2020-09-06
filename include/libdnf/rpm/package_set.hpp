@@ -96,6 +96,7 @@ private:
     friend SolvQuery;
     friend Transaction;
     friend libdnf::Goal;
+    friend libdnf::Swdb;
     PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map);
     class Impl;
     std::unique_ptr<Impl> pImpl;

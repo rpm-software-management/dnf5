@@ -390,7 +390,10 @@ MergedTransaction::mergeItem(ItemPairMap &itemPairMap, TransactionItemBasePtr mT
             }
             // altered -> transfer install to the altered package
             mTransItem->setAction(TransactionItemAction::INSTALL);
+
             // don't break
+            // gcc doesn't support [[fallthrough]]
+            __attribute__((fallthrough));
         case TransactionItemAction::REINSTALL:
         case TransactionItemAction::REASON_CHANGE:
             // The original item has been reinstalled or the reason has been changed

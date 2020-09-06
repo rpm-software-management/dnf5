@@ -26,7 +26,7 @@ namespace swdb_private {
 // initialize static variable Repo::cache
 std::map< std::string, RepoPtr > Repo::cache;
 
-Repo::Repo(SQLite3Ptr conn)
+Repo::Repo(libdnf::utils::SQLite3Ptr conn)
   : conn{conn}
 {
 }
@@ -45,14 +45,14 @@ Repo::dbInsert()
         "  repo "
         "VALUES "
         "  (null, ?)";
-    SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
     query.bindv(getRepoId());
     query.step();
-    setId(conn->lastInsertRowID());
+    setId(conn->last_insert_rowid());
 }
 
 std::shared_ptr< Repo >
-Repo::getCached(SQLite3Ptr conn, const std::string &repoid)
+Repo::getCached(libdnf::utils::SQLite3Ptr conn, const std::string &repoid)
 {
     // HACK: this is kind of ugly - key is generated from repoid and sqlite3 pointer
     auto key = repoid + "/" + std::to_string(reinterpret_cast< std::size_t >(conn.get()));
@@ -81,11 +81,11 @@ Repo::dbSelectOrInsert()
         "WHERE "
         "  repoid = ? ";
 
-    SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
     query.bindv(getRepoId());
-    SQLite3::Statement::StepResult result = query.step();
+    libdnf::utils::SQLite3::Statement::StepResult result = query.step();
 
-    if (result == SQLite3::Statement::StepResult::ROW) {
+    if (result == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         setId(query.get< int >(0));
     } else {
         // insert and get the ID back

@@ -22,7 +22,7 @@
 
 namespace libdnf {
 
-Item::Item(SQLite3Ptr conn)
+Item::Item(libdnf::utils::SQLite3Ptr conn)
   : conn{conn}
 {
 }
@@ -41,10 +41,10 @@ Item::dbInsert()
         "  item "
         "VALUES "
         "  (null, ?)";
-    SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
     query.bindv(static_cast< int >(itemType));
     query.step();
-    setId(conn->lastInsertRowID());
+    setId(conn->last_insert_rowid());
 }
 
 std::string
