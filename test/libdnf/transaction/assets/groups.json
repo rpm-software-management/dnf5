@@ -1,0 +1,31 @@
+R"**(
+{
+   "meta" : {
+      "version" : "0.6.0"
+   },
+   "ENVIRONMENTS" : {
+      "minimal-environment" : {
+         "pkg_types" : 14,
+         "grp_types" : 15,
+         "ui_name" : "Minimálna inštalácia",
+         "name" : "Minimal Install",
+         "pkg_exclude" : [],
+         "full_list" : [
+            "core"
+         ]
+      }
+   },
+   "GROUPS" : {
+      "core" : {
+         "pkg_types" : 1,
+         "name" : "Core",
+         "pkg_exclude" : [],
+         "full_list" : [
+            "dnf-yum"
+         ],
+         "grp_types" : 0,
+         "ui_name" : "Úplný základ"
+      }
+   }
+}
+)**"
