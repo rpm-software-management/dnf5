@@ -2,8 +2,6 @@
 #include <iostream>
 #include <string>
 
-#include "../backports.hpp"
-
 #include "libdnf/transaction/CompsEnvironmentItem.hpp"
 #include "libdnf/transaction/CompsGroupItem.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
@@ -21,7 +19,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TransactionItemReasonTest);
 void
 TransactionItemReasonTest::setUp()
 {
-    conn = std::make_shared< SQLite3 >(":memory:");
+    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
     Transformer::createDatabase(conn);
 }
 

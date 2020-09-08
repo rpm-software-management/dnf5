@@ -1,7 +1,7 @@
 #ifndef LIBDNF_SWDB_RPMITEM_TEST_HPP
 #define LIBDNF_SWDB_RPMITEM_TEST_HPP
 
-#include "libdnf/utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -21,7 +21,7 @@ public:
     void testGetTransactionItems();
 
 private:
-    std::shared_ptr< SQLite3 > conn;
+    std::shared_ptr< libdnf::utils::SQLite3 > conn;
 };
 
 #endif // LIBDNF_SWDB_RPMITEM_TEST_HPP

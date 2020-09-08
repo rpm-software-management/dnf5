@@ -4,7 +4,7 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libdnf/utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 class WorkflowTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(WorkflowTest);
@@ -18,7 +18,7 @@ public:
     void testDefaultWorkflow();
 
 private:
-    std::shared_ptr< SQLite3 > conn;
+    std::shared_ptr< libdnf::utils::SQLite3 > conn;
 };
 
 #endif // LIBDNF_SWDB_WORKFLOW_TEST_HPP

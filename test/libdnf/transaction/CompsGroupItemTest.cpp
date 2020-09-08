@@ -3,8 +3,6 @@
 #include <iostream>
 #include <string>
 
-#include "../backports.hpp"
-
 #include "libdnf/transaction/CompsGroupItem.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 
@@ -17,7 +15,7 @@ using namespace libdnf;
 void
 CompsGroupItemTest::setUp()
 {
-    conn = std::make_shared< SQLite3 >(":memory:");
+    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
     Transformer::createDatabase(conn);
 }
 
@@ -27,7 +25,7 @@ CompsGroupItemTest::tearDown()
 }
 
 static std::shared_ptr< CompsGroupItem >
-createCompsGroup(std::shared_ptr< SQLite3 > conn)
+createCompsGroup(std::shared_ptr< libdnf::utils::SQLite3 > conn)
 {
     auto grp = std::make_shared< CompsGroupItem >(conn);
     grp->setGroupId("core");

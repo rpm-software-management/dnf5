@@ -3,8 +3,6 @@
 #include <iostream>
 #include <string>
 
-#include "../backports.hpp"
-
 #include "libdnf/transaction/CompsEnvironmentItem.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 
@@ -17,7 +15,7 @@ using namespace libdnf;
 void
 CompsEnvironmentItemTest::setUp()
 {
-    conn = std::make_shared< SQLite3 >(":memory:");
+    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
     Transformer::createDatabase(conn);
 }
 
@@ -27,7 +25,7 @@ CompsEnvironmentItemTest::tearDown()
 }
 
 static std::shared_ptr< CompsEnvironmentItem >
-createCompsEnvironment(std::shared_ptr< SQLite3 > conn)
+createCompsEnvironment(std::shared_ptr< libdnf::utils::SQLite3 > conn)
 {
     auto env = std::make_shared< CompsEnvironmentItem >(conn);
     env->setEnvironmentId("minimal");

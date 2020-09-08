@@ -3,8 +3,6 @@
 #include <iostream>
 #include <string>
 
-#include "../backports.hpp"
-
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 
@@ -17,7 +15,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RpmItemTest);
 void
 RpmItemTest::setUp()
 {
-    conn = std::make_shared< SQLite3 >(":memory:");
+    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
     Transformer::createDatabase(conn);
 }
 

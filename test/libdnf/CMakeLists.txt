@@ -14,6 +14,10 @@ target_compile_options(run_tests PRIVATE "-Wno-unused-value")
 target_link_directories(run_tests PUBLIC ${CMAKE_BINARY_DIR}/libdnf)
 target_link_libraries(run_tests stdc++ libdnf cppunit)
 
+pkg_check_modules(JSONC REQUIRED json-c)
+include_directories(${JSONC_INCLUDE_DIRS})
+target_link_libraries(run_tests ${JSONC_LIBRARIES})
+
 
 if(WITH_PERFORMANCE_TESTS)
     target_compile_options(run_tests PRIVATE -DWITH_PERFORMANCE_TESTS)

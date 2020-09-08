@@ -2,7 +2,7 @@
 #define LIBDNF_SWDB_RPMITEM_TEST_HPP
 
 #include "libdnf/transaction/Transformer.hpp"
-#include "libdnf/utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -29,8 +29,8 @@ public:
 
 protected:
     TransformerMock transformer;
-    std::shared_ptr< SQLite3 > swdb;
-    std::shared_ptr< SQLite3 > history;
+    std::shared_ptr< libdnf::utils::SQLite3 > swdb;
+    std::shared_ptr< libdnf::utils::SQLite3 > history;
 };
 
 #endif // LIBDNF_SWDB_RPMITEM_TEST_HPP

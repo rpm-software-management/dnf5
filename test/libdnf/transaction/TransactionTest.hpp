@@ -4,7 +4,7 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libdnf/utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 class TransactionTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(TransactionTest);
@@ -24,7 +24,7 @@ public:
     void testComparison();
 
 private:
-    std::shared_ptr< SQLite3 > conn;
+    std::shared_ptr< libdnf::utils::SQLite3 > conn;
 };
 
 #endif // LIBDNF_SWDB_TRANSACTION_TEST_HPP

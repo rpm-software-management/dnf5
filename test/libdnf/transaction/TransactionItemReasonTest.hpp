@@ -4,7 +4,7 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libdnf/utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 class TransactionItemReasonTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(TransactionItemReasonTest);
@@ -34,7 +34,7 @@ public:
     void testTransactionItemReasonCompare();
 
 private:
-    std::shared_ptr< SQLite3 > conn;
+    std::shared_ptr< libdnf::utils::SQLite3 > conn;
 };
 
 #endif // LIBDNF_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP

@@ -1,11 +1,8 @@
-#include "libdnf/hy-subject.h"
-#include "libdnf/nevra.hpp"
+#include "libdnf/rpm/nevra.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/Transaction.hpp"
 #include "libdnf/transaction/private/Transaction.hpp"
 #include "libdnf/transaction/Transformer.hpp"
-
-#include "../backports.hpp"
 
 #include "TransactionTest.hpp"
 
@@ -14,29 +11,29 @@ using namespace libdnf;
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionTest);
 
 static RPMItemPtr
-nevraToRPMItem(SQLite3Ptr conn, std::string nevra)
+nevraToRPMItem(libdnf::utils::SQLite3Ptr conn, std::string nevra)
 {
-    libdnf::Nevra nevraObject;
-    if (!nevraObject.parse(nevra.c_str(), HY_FORM_NEVRA)) {
+    libdnf::rpm::Nevra nevraObject;
+    if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
         return nullptr;
     }
-    if (nevraObject.getEpoch() < 0) {
-        nevraObject.setEpoch(0);
+    if (nevraObject.get_epoch().empty()) {
+        nevraObject.set_epoch("0");
     }
 
     auto rpm = std::make_shared< RPMItem >(conn);
-    rpm->setName(nevraObject.getName());
-    rpm->setEpoch(nevraObject.getEpoch());
-    rpm->setVersion(nevraObject.getVersion());
-    rpm->setRelease(nevraObject.getRelease());
-    rpm->setArch(nevraObject.getArch());
+    rpm->setName(nevraObject.get_name());
+    rpm->setEpoch(std::stoi(nevraObject.get_epoch()));
+    rpm->setVersion(nevraObject.get_version());
+    rpm->setRelease(nevraObject.get_release());
+    rpm->setArch(nevraObject.get_arch());
     return rpm;
 }
 
 void
 TransactionTest::setUp()
 {
-    conn = std::make_shared< SQLite3 >(":memory:");
+    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
     Transformer::createDatabase(conn);
 }
 

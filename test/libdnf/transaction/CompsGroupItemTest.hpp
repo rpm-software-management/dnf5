@@ -4,7 +4,7 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libdnf/utils/sqlite3/Sqlite3.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 class CompsGroupItemTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(CompsGroupItemTest);
@@ -20,7 +20,7 @@ public:
     void testGetTransactionItems();
 
 private:
-    std::shared_ptr< SQLite3 > conn;
+    std::shared_ptr< libdnf::utils::SQLite3 > conn;
 };
 
 #endif // LIBDNF_SWDB_COMPSENVIRONMENTITEM_TEST_HPP

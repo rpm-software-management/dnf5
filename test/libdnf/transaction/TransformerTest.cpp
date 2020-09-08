@@ -3,8 +3,6 @@
 #include <sstream>
 #include <string>
 
-#include "../backports.hpp"
-
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/Swdb.hpp"
 #include "libdnf/transaction/Transaction.hpp"
@@ -34,8 +32,8 @@ static const char *groups_json =
 void
 TransformerTest::setUp()
 {
-    swdb = std::make_shared< SQLite3 >(":memory:");
-    history = std::make_shared< SQLite3 >(":memory:");
+    swdb = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
+    history = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
     Transformer::createDatabase(swdb);
     history.get()->exec(create_history_sql);
 }
