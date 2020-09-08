@@ -41,7 +41,7 @@ public:
     ~PackageSetIterator();
 
     using iterator_category = std::forward_iterator_tag;
-    using difference_type = Package;
+    using difference_type = int;
     using value_type = Package;
     using pointer = void;
     using reference = void;

@@ -41,7 +41,7 @@ public:
     ~ReldepListIterator();
 
     using iterator_category = std::forward_iterator_tag;
-    using difference_type = Reldep;
+    using difference_type = int;
     using value_type = Reldep;
     using pointer = void;
     using reference = void;
