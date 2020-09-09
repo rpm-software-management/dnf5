@@ -113,7 +113,8 @@ public:
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_buildtime(DnfPackage * pkg)
     unsigned long long get_build_time() noexcept;
 
-    std::string get_build_host();
+    // TODO not supported by libsolv: https://github.com/openSUSE/libsolv/issues/400
+    //std::string get_build_host();
 
     /// @replaces dnf:dnf/package.py:attribute:Package.packager
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_packager(DnfPackage * pkg)

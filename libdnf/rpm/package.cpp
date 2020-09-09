@@ -137,10 +137,11 @@ unsigned long long Package::get_build_time() noexcept {
     return solv::get_build_time(pool, id);
 }
 
-std::string Package::get_build_host() {
-    Pool * pool = sack->pImpl->pool;
-    return cstring2string(solv::get_build_host(pool, id));
-}
+// TODO not supported by libsolv: https://github.com/openSUSE/libsolv/issues/400
+//std::string Package::get_build_host() {
+//    Pool * pool = sack->pImpl->pool;
+//    return cstring2string(solv::get_build_host(pool, id));
+//}
 
 std::string Package::get_packager() {
     Pool * pool = sack->pImpl->pool;

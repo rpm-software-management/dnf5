@@ -233,10 +233,11 @@ inline unsigned long long get_build_time(Pool * pool, libdnf::rpm::PackageId pac
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_BUILDTIME);
 }
 
+// TODO not supported by libsolv: https://github.com/openSUSE/libsolv/issues/400
 /// @return const char* !! Return temporal value !!
-inline const char * get_build_host(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
-    return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_BUILDHOST);
-}
+//inline const char * get_build_host(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+//    return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_BUILDHOST);
+//}
 
 /// @return const char* !! Return temporal value !!
 inline const char * get_packager(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
