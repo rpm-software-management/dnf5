@@ -20,6 +20,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_conf.hpp"
 
 #include "configuration.hpp"
+#include "dnfdaemon-server/dbus.hpp"
 #include "dnfdaemon-server/types.hpp"
 #include "dnfdaemon-server/utils.hpp"
 
@@ -28,18 +29,23 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 void RepoConf::dbus_register() {
-    const std::string interface_name = "org.rpm.dnf.v0.rpm.RepoConf";
     dbus_object = sdbus::createObject(session.get_connection(), session.get_object_path());
     dbus_object->registerMethod(
-        interface_name, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void { this->list(call); });
+        dnfdaemon::INTERFACE_REPOCONF, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
+            this->list(call);
+        });
     dbus_object->registerMethod(
-        interface_name, "get", "s", "a{sv}", [this](sdbus::MethodCall call) -> void { this->get(call); });
-    dbus_object->registerMethod(interface_name, "enable", "as", "as", [this](sdbus::MethodCall call) -> void {
-        this->enable_disable(call, true);
-    });
-    dbus_object->registerMethod(interface_name, "disable", "as", "as", [this](sdbus::MethodCall call) -> void {
-        this->enable_disable(call, false);
-    });
+        dnfdaemon::INTERFACE_REPOCONF, "get", "s", "a{sv}", [this](sdbus::MethodCall call) -> void {
+            this->get(call);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPOCONF, "enable", "as", "as", [this](sdbus::MethodCall call) -> void {
+            this->enable_disable(call, true);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPOCONF, "disable", "as", "as", [this](sdbus::MethodCall call) -> void {
+            this->enable_disable(call, false);
+        });
     dbus_object->finishRegistration();
 }
 
@@ -124,9 +130,9 @@ void RepoConf::get(sdbus::MethodCall call) {
     auto ids = std::vector<std::string>{std::move(id)};
     auto lst = repo_list(ids);
     if (lst.empty()) {
-        throw sdbus::Error(REPO_CONF_ERROR, "Repository not found");
+        throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Repository not found");
     } else if (lst.size() > 1) {
-        throw sdbus::Error(REPO_CONF_ERROR, "Multiple repositories found");
+        throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Multiple repositories found");
     } else {
         auto reply = call.createReply();
         reply << lst[0];
@@ -155,7 +161,8 @@ std::vector<std::string> RepoConf::enable_disable_repos(const std::vector<std::s
         try {
             cfg.find_parser(config_file)->write(config_file, false);
         } catch (std::exception & e) {
-            throw sdbus::Error(REPO_CONF_ERROR, std::string("Unable to write configuration file: ") + e.what());
+            throw sdbus::Error(
+                dnfdaemon::ERROR_REPOCONF, std::string("Unable to write configuration file: ") + e.what());
         }
     }
 
@@ -164,9 +171,9 @@ std::vector<std::string> RepoConf::enable_disable_repos(const std::vector<std::s
 
 void RepoConf::enable_disable(sdbus::MethodCall call, const bool & enable) {
     auto sender = call.getSender();
-    auto is_authorized = check_authorization("org.rpm.dnf.v0.rpm.RepoConf.write", sender);
+    auto is_authorized = check_authorization(dnfdaemon::POLKIT_REPOCONF_WRITE, sender);
     if (!is_authorized) {
-        throw sdbus::Error(REPO_CONF_ERROR, "Not authorised.");
+        throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Not authorised.");
     }
     std::vector<std::string> ids;
     call >> ids;

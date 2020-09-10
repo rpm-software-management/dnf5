@@ -21,6 +21,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_SERVER_UTILS_HPP
 #define DNFDAEMON_SERVER_UTILS_HPP
 
+#include "dbus.hpp"
 #include "types.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
@@ -32,12 +33,12 @@ template <typename ItemType>
 ItemType key_value_map_get(const KeyValueMap & map, const std::string & key) {
     auto it = map.find(key);
     if (it == map.end()) {
-        throw sdbus::Error("org.rpm.dnf.v0.Error", "Key not present in the map.");
+        throw sdbus::Error(dnfdaemon::ERROR, "Key not present in the map.");
     }
     try {
         return it->second.get<ItemType>();
     } catch (sdbus::Error & e) {
-        throw sdbus::Error("org.rpm.dnf.v0.Error", "Incorrect map item type.");
+        throw sdbus::Error(dnfdaemon::ERROR, "Incorrect map item type.");
     }
 }
 
@@ -50,7 +51,7 @@ ItemType key_value_map_get(const KeyValueMap & map, const std::string & key, con
     try {
         return it->second.get<ItemType>();
     } catch (sdbus::Error & e) {
-        throw sdbus::Error("org.rpm.dnf.v0.Error", "Incorrect map item type.");
+        throw sdbus::Error(dnfdaemon::ERROR, "Incorrect map item type.");
     }
 }
 

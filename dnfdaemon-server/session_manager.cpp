@@ -19,6 +19,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "session_manager.hpp"
 
+#include "dbus.hpp"
 #include "session.hpp"
 #include "types.hpp"
 
@@ -39,15 +40,15 @@ SessionManager::~SessionManager() {
 }
 
 void SessionManager::dbus_register() {
-    const std::string interface_name = "org.rpm.dnf.v0.SessionManager";
-
     dbus_object = sdbus::createObject(connection, object_path);
-    dbus_object->registerMethod(interface_name, "open_session", "a{sv}", "o", [this](sdbus::MethodCall call) -> void {
-        this->open_session(std::move(call));
-    });
-    dbus_object->registerMethod(interface_name, "close_session", "o", "b", [this](sdbus::MethodCall call) -> void {
-        this->close_session(std::move(call));
-    });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_SESSION_MANAGER, "open_session", "a{sv}", "o", [this](sdbus::MethodCall call) -> void {
+            this->open_session(std::move(call));
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_SESSION_MANAGER, "close_session", "o", "b", [this](sdbus::MethodCall call) -> void {
+            this->close_session(std::move(call));
+        });
     dbus_object->finishRegistration();
 
     // register signal handler for NameOwnerChanged

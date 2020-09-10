@@ -28,8 +28,6 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-const std::string REPO_CONF_ERROR = "org.rpm.dnf.v0.rpm.RepoConf.Error";
-
 class RepoConf : public IDbusSessionService {
 public:
     using IDbusSessionService::IDbusSessionService;

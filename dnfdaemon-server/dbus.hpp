@@ -17,24 +17,27 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifndef DNFDAEMON_SERVER_DBUS_HPP
+#define DNFDAEMON_SERVER_DBUS_HPP
 
-#include "dbus.hpp"
-#include "session_manager.hpp"
+namespace dnfdaemon {
 
-#include <sdbus-c++/sdbus-c++.h>
+const char * const DBUS_NAME = "org.rpm.dnf.v0";
+const char * const DBUS_OBJECT_PATH = "/org/rpm/dnf/v0";
 
-#include <iostream>
+// interfaces
+const char * const INTERFACE_BASE = "org.rpm.dnf.v0.Base";
+const char * const INTERFACE_REPO = "org.rpm.dnf.v0.rpm.Repo";
+const char * const INTERFACE_REPOCONF = "org.rpm.dnf.v0.rpm.RepoConf";
+const char * const INTERFACE_SESSION_MANAGER = "org.rpm.dnf.v0.SessionManager";
 
-int main() {
-    std::unique_ptr<sdbus::IConnection> connection = nullptr;
-    try {
-        connection = sdbus::createSystemBusConnection(dnfdaemon::DBUS_NAME);
-    } catch (const sdbus::Error & e) {
-        //std::cerr << tfm::format("Fatal error: %s", e.what()) << std::endl;
-        std::cerr << "Fatal error: " << e.what() << std::endl;
-        return 1;
-    }
+// polkit actions
+const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.RepoConf.write";
 
-    auto session_manager = SessionManager(*connection, dnfdaemon::DBUS_OBJECT_PATH);
-    connection->enterEventLoop();
-}
+// errors
+const char * const ERROR = "org.rpm.dnf.v0.Error";
+const char * const ERROR_REPOCONF = "org.rpm.dnf.v0.rpm.RepoConf.Error";
+
+}  // namespace dnfdaemon
+
+#endif
