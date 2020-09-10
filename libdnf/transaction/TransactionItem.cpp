@@ -21,68 +21,22 @@
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
 #include "TransactionItem.hpp"
+#include "Types.hpp"
+#include "transaction_item_action.hpp"
+
 
 namespace libdnf {
 
-// TODO: translations
-static const std::map< TransactionItemAction, std::string > transactionItemActionName = {
-    {TransactionItemAction::INSTALL, "Install"},
-    {TransactionItemAction::DOWNGRADE, "Downgrade"},
-    {TransactionItemAction::DOWNGRADED, "Downgraded"},
-    {TransactionItemAction::OBSOLETE, "Obsolete"},
-    {TransactionItemAction::OBSOLETED, "Obsoleted"},
-    {TransactionItemAction::UPGRADE, "Upgrade"},
-    {TransactionItemAction::UPGRADED, "Upgraded"},
-    {TransactionItemAction::REMOVE, "Removed"},
-    {TransactionItemAction::REINSTALL, "Reinstall"},
-    {TransactionItemAction::REINSTALLED, "Reinstalled"},
-    {TransactionItemAction::REASON_CHANGE, "Reason Change"},
-};
 
-static const std::map< TransactionItemAction, std::string > transactionItemActionShort = {
-    {TransactionItemAction::INSTALL, "I"},
-    {TransactionItemAction::DOWNGRADE, "D"},
-    {TransactionItemAction::DOWNGRADED, "D"},
-    {TransactionItemAction::OBSOLETE, "O"},
-    {TransactionItemAction::OBSOLETED, "O"},
-    {TransactionItemAction::UPGRADE, "U"},
-    {TransactionItemAction::UPGRADED, "U"},
-    // "R" is for Reinstall, therefore use "E" for rEmove (or Erase)
-    {TransactionItemAction::REMOVE, "E"},
-    {TransactionItemAction::REINSTALL, "R"},
-    {TransactionItemAction::REINSTALLED, "R"},
-    // TODO: replace "?" with something better
-    {TransactionItemAction::REASON_CHANGE, "?"},
-};
-
-/*
-static const std::map<std::string, TransactionItemReason> nameTransactionItemReason = {
-    {, "I"},
-    {TransactionItemAction::DOWNGRADE, "D"},
-    {TransactionItemAction::DOWNGRADED, "D"},
-    {TransactionItemAction::OBSOLETE, "O"},
-    {TransactionItemAction::OBSOLETED, "O"},
-    {TransactionItemAction::UPGRADE, "U"},
-    {TransactionItemAction::UPGRADED, "U"},
-    // "R" is for Reinstall, therefore use "E" for rEmove (or Erase)
-    {TransactionItemAction::REMOVE, "E"},
-    {TransactionItemAction::REINSTALL, "R"},
-};
-TransactionItemReason to_TransactionItemReason(const std::string & s) {
-    return
-*/
-
-const std::string &
-TransactionItemBase::getActionName()
-{
-    return transactionItemActionName.at(getAction());
+std::string TransactionItemBase::getActionName() {
+    return transaction::TransactionItemAction_get_name(action);
 }
 
-const std::string &
-TransactionItemBase::getActionShort()
-{
-    return transactionItemActionShort.at(getAction());
+
+std::string TransactionItemBase::getActionShort() {
+    return transaction::TransactionItemAction_get_short(action);
 }
+
 
 TransactionItem::TransactionItem(Transaction *trans)
   : trans(trans)
@@ -91,35 +45,16 @@ TransactionItem::TransactionItem(Transaction *trans)
 {
 }
 
-bool
-TransactionItemBase::isForwardAction() const
-{
-    switch (action) {
-        case TransactionItemAction::INSTALL:
-        case TransactionItemAction::DOWNGRADE:
-        case TransactionItemAction::OBSOLETE:
-        case TransactionItemAction::UPGRADE:
-        case TransactionItemAction::REINSTALL:
-            return true;
-        default:
-            return false;
-    }
+
+bool TransactionItemBase::isForwardAction() const {
+    return transaction::TransactionItemAction_is_forward_action(action);
 }
 
-bool
-TransactionItemBase::isBackwardAction() const
-{
-    switch (action) {
-        case TransactionItemAction::REMOVE:
-        case TransactionItemAction::DOWNGRADED:
-        case TransactionItemAction::OBSOLETED:
-        case TransactionItemAction::UPGRADED:
-        case TransactionItemAction::REINSTALLED:
-            return true;
-        default:
-            return false;
-    }
+
+bool TransactionItemBase::isBackwardAction() const {
+    return transaction::TransactionItemAction_is_backward_action(action);
 }
+
 
 TransactionItem::TransactionItem(libdnf::utils::SQLite3Ptr conn, int64_t transID)
   : trans(nullptr)

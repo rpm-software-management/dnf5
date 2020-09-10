@@ -66,8 +66,8 @@ public:
     TransactionItemReason getReason() const noexcept { return reason; }
     void setReason(TransactionItemReason value) { reason = value; }
 
-    const std::string &getActionName();
-    const std::string &getActionShort();
+    std::string getActionName();
+    std::string getActionShort();
 
     TransactionItemState getState() const noexcept { return state; }
     void setState(TransactionItemState value) { state = value; }
