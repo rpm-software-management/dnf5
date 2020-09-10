@@ -31,7 +31,7 @@
 #include "CompsGroupItem.hpp"
 #include "RPMItem.hpp"
 #include "Transaction.hpp"
-#include "private/TransformerTransaction.hpp"
+#include "TransformerTransaction.hpp"
 #include "TransactionItem.hpp"
 
 namespace libdnf {
