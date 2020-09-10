@@ -21,9 +21,13 @@
 #ifndef LIBDNF_TRANSACTION_TYPES_HPP
 #define LIBDNF_TRANSACTION_TYPES_HPP
 
-#include "TransactionItemReason.hpp"
+#include "transaction_item_reason.hpp"
 
 namespace libdnf {
+
+
+using TransactionItemReason = libdnf::transaction::TransactionItemReason;
+
 
 enum class TransactionState : int {
     UNKNOWN = 0,

@@ -340,9 +340,9 @@ TransactionItemReasonTest::testCompareReasons()
 }
 
 void
-TransactionItemReasonTest::testTransactionItemReasonCompare()
+TransactionItemReasonTest::test_TransactionItemReason_compare()
 {
-    CPPUNIT_ASSERT_EQUAL(-1, TransactionItemReasonCompare(TransactionItemReason::GROUP, TransactionItemReason::USER));
-    CPPUNIT_ASSERT_EQUAL(0, TransactionItemReasonCompare(TransactionItemReason::USER, TransactionItemReason::USER));
-    CPPUNIT_ASSERT_EQUAL(1, TransactionItemReasonCompare(TransactionItemReason::USER, TransactionItemReason::GROUP));
+    CPPUNIT_ASSERT_EQUAL(-1, TransactionItemReason_compare(TransactionItemReason::GROUP, TransactionItemReason::USER));
+    CPPUNIT_ASSERT_EQUAL(0, TransactionItemReason_compare(TransactionItemReason::USER, TransactionItemReason::USER));
+    CPPUNIT_ASSERT_EQUAL(1, TransactionItemReason_compare(TransactionItemReason::USER, TransactionItemReason::GROUP));
 }
