@@ -108,8 +108,8 @@ Swdb::initTransaction()
     if (transactionInProgress) {
         throw std::logic_error(_("In progress"));
     }
-    transactionInProgress = std::unique_ptr< swdb_private::Transaction >(
-        new swdb_private::Transaction(conn));
+    transactionInProgress = std::unique_ptr< Transaction >(
+        new Transaction(conn));
     itemsInProgress.clear();
 }
 
@@ -162,7 +162,7 @@ Swdb::closeTransaction()
         throw std::logic_error(_("Not in progress"));
     }
     int64_t result = transactionInProgress->getId();
-    transactionInProgress = std::unique_ptr< swdb_private::Transaction >(nullptr);
+    transactionInProgress = std::unique_ptr< Transaction >(nullptr);
     itemsInProgress.clear();
     return result;
 }

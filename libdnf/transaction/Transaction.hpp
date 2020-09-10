@@ -40,7 +40,8 @@ namespace libdnf {
 class Transaction {
 public:
     // load from db
-    Transaction(libdnf::utils::SQLite3Ptr conn, int64_t pk);
+    explicit Transaction(libdnf::utils::SQLite3Ptr conn);
+    explicit Transaction(libdnf::utils::SQLite3Ptr conn, int64_t pk);
     virtual ~Transaction() = default;
 
     bool operator==(const Transaction &other) const;
@@ -48,22 +49,55 @@ public:
     bool operator>(const Transaction &other) const;
 
     int64_t getId() const noexcept { return id; }
+    void setId(int64_t value) { id = value; }
+
     int64_t getDtBegin() const noexcept { return dtBegin; }
+    void setDtBegin(int64_t value) { dtBegin = value; }
+
     int64_t getDtEnd() const noexcept { return dtEnd; }
+    void setDtEnd(int64_t value) { dtEnd = value; }
+
     const std::string &getRpmdbVersionBegin() const noexcept { return rpmdbVersionBegin; }
+    void setRpmdbVersionBegin(const std::string &value) { rpmdbVersionBegin = value; }
+
     const std::string &getRpmdbVersionEnd() const noexcept { return rpmdbVersionEnd; }
+    void setRpmdbVersionEnd(const std::string &value) { rpmdbVersionEnd = value; }
+
     const std::string &getReleasever() const noexcept { return releasever; }
+    void setReleasever(const std::string &value) { releasever = value; }
+
     uint32_t getUserId() const noexcept { return userId; }
+    void setUserId(uint32_t value) { userId = value; }
+
     const std::string &getCmdline() const noexcept { return cmdline; }
+    void setCmdline(const std::string &value) { cmdline = value; }
+
     TransactionState getState() const noexcept { return state; }
+    void setState(TransactionState value) { state = value; }
 
     virtual std::vector< TransactionItemPtr > getItems();
     const std::set< std::shared_ptr< RPMItem > > getSoftwarePerformedWith() const;
     std::vector< std::pair< int, std::string > > getConsoleOutput() const;
 
+    void begin();
+    void finish(TransactionState state);
+    TransactionItemPtr addItem(std::shared_ptr< Item > item,
+                               const std::string &repoid,
+                               TransactionItemAction action,
+                               TransactionItemReason reason);
+
+    void addConsoleOutputLine(int fileDescriptor, const std::string &line);
+    void addSoftwarePerformedWith(std::shared_ptr< RPMItem > software);
+
 protected:
-    explicit Transaction(libdnf::utils::SQLite3Ptr conn);
     void dbSelect(int64_t transaction_id);
+
+    void saveItems();
+    std::vector< TransactionItemPtr > items;
+
+    void dbInsert();
+    void dbUpdate();
+
     std::set< std::shared_ptr< RPMItem > > softwarePerformedWith;
 
     friend class TransactionItem;

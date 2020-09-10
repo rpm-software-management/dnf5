@@ -30,7 +30,7 @@
 #include "CompsEnvironmentItem.hpp"
 #include "CompsGroupItem.hpp"
 #include "RPMItem.hpp"
-#include "private/Transaction.hpp"
+#include "Transaction.hpp"
 #include "private/TransformerTransaction.hpp"
 #include "TransactionItem.hpp"
 

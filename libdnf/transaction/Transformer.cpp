@@ -556,7 +556,7 @@ Transformer::processGroupPersistor(libdnf::utils::SQLite3Ptr swdb, struct json_o
     Swdb swdbObj(swdb, false);
     auto lastTrans = swdbObj.getLastTransaction();
 
-    auto trans = swdb_private::Transaction(swdb);
+    auto trans = Transaction(swdb);
 
     // load sequences
     struct json_object *groups;

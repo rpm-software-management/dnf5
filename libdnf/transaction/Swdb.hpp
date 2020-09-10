@@ -40,7 +40,6 @@ class Transformer;
 #include "CompsGroupItem.hpp"
 #include "Transaction.hpp"
 #include "TransactionItem.hpp"
-#include "private/Transaction.hpp"
 
 namespace libdnf {
 
@@ -124,7 +123,7 @@ protected:
     explicit Swdb(libdnf::utils::SQLite3Ptr conn, bool autoClose);
     libdnf::utils::SQLite3Ptr conn;
     bool autoClose;
-    std::unique_ptr< swdb_private::Transaction > transactionInProgress = nullptr;
+    std::unique_ptr< Transaction > transactionInProgress = nullptr;
     std::map< std::string, TransactionItemPtr > itemsInProgress;
 
 private:

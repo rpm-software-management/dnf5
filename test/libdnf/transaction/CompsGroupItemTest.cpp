@@ -76,7 +76,7 @@ CompsGroupItemTest::testCreate()
 void
 CompsGroupItemTest::testGetTransactionItems()
 {
-    libdnf::swdb_private::Transaction trans(conn);
+    libdnf::Transaction trans(conn);
     auto grp = createCompsGroup(conn);
     auto ti = trans.addItem(grp, "", TransactionItemAction::INSTALL, TransactionItemReason::USER);
     ti->setState(TransactionItemState::DONE);

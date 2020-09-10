@@ -76,7 +76,7 @@ CompsEnvironmentItemTest::testCreate()
 void
 CompsEnvironmentItemTest::testGetTransactionItems()
 {
-    libdnf::swdb_private::Transaction trans(conn);
+    libdnf::Transaction trans(conn);
     auto env = createCompsEnvironment(conn);
     auto ti = trans.addItem(env, "", TransactionItemAction::INSTALL, TransactionItemReason::USER);
     ti->setState(TransactionItemState::DONE);

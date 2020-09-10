@@ -34,7 +34,7 @@ WorkflowTest::testDefaultWorkflow()
     // TODO: init/begin/end trans
 
     // STEP 1: create transaction object
-    libdnf::swdb_private::Transaction trans(conn);
+    libdnf::Transaction trans(conn);
     CPPUNIT_ASSERT_EQUAL(TransactionState::UNKNOWN, trans.getState());
 
     // STEP 2: set vars

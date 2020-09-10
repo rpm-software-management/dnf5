@@ -21,7 +21,7 @@
 #ifndef LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP
 #define LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP
 
-#include "Transaction.hpp"
+#include "../Transaction.hpp"
 
 namespace libdnf {
 
@@ -29,9 +29,9 @@ namespace libdnf {
  * Class overrides default behavior with
  * inserting rows with explicitly set IDs
  */
-class TransformerTransaction : public swdb_private::Transaction {
+class TransformerTransaction : public Transaction {
 public:
-    using swdb_private::Transaction::Transaction;
+    using Transaction::Transaction;
     void begin()
     {
         dbInsert();

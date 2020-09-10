@@ -1,7 +1,6 @@
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/Transaction.hpp"
-#include "libdnf/transaction/private/Transaction.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 
 #include "TransactionTest.hpp"
@@ -45,7 +44,7 @@ TransactionTest::tearDown()
 void
 TransactionTest::testInsert()
 {
-    libdnf::swdb_private::Transaction trans(conn);
+    libdnf::Transaction trans(conn);
     trans.setDtBegin(1);
     trans.setDtEnd(2);
     trans.setRpmdbVersionBegin("begin - TransactionTest::testInsert");
@@ -87,7 +86,7 @@ void
 TransactionTest::testInsertWithSpecifiedId()
 {
     // it is not allowed to save a transaction with arbitrary ID
-    libdnf::swdb_private::Transaction trans(conn);
+    libdnf::Transaction trans(conn);
     trans.setId(INT64_MAX);
     CPPUNIT_ASSERT_THROW(trans.begin(), std::runtime_error);
 }
@@ -95,7 +94,7 @@ TransactionTest::testInsertWithSpecifiedId()
 void
 TransactionTest::testUpdate()
 {
-    libdnf::swdb_private::Transaction trans(conn);
+    libdnf::Transaction trans(conn);
     trans.setDtBegin(1);
     trans.setDtEnd(2);
     trans.setRpmdbVersionBegin("begin - TransactionTest::testInsert");
@@ -123,8 +122,8 @@ void
 TransactionTest::testComparison()
 {
     // test operator ==, > and <
-    libdnf::swdb_private::Transaction first(conn);
-    libdnf::swdb_private::Transaction second(conn);
+    libdnf::Transaction first(conn);
+    libdnf::Transaction second(conn);
 
     // id comparison test
     first.setId(1);

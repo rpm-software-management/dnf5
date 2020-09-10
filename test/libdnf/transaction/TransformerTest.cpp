@@ -6,7 +6,6 @@
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/Swdb.hpp"
 #include "libdnf/transaction/Transaction.hpp"
-#include "libdnf/transaction/private/Transaction.hpp"
 #include "libdnf/transaction/TransactionItem.hpp"
 #include "libdnf/transaction/Types.hpp"
 

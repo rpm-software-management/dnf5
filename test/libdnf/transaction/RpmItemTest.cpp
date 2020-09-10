@@ -55,7 +55,7 @@ RpmItemTest::testCreateDuplicates()
     rpm->setRelease("5.fc26");
     rpm->setArch("x86_64");
 
-    libdnf::swdb_private::Transaction trans(conn);
+    libdnf::Transaction trans(conn);
 
     // add a RPM twice, but with different reasons
     auto ti1 = trans.addItem(rpm, "base", TransactionItemAction::INSTALL, TransactionItemReason::GROUP);
@@ -82,7 +82,7 @@ RpmItemTest::testGetTransactionItems()
     // change following constant to modify number of tested RPMItems
     constexpr int num = 10;
 
-    libdnf::swdb_private::Transaction trans(conn);
+    libdnf::Transaction trans(conn);
 
     auto create_start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < num; i++) {
