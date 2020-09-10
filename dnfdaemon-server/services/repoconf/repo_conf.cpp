@@ -21,7 +21,6 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "configuration.hpp"
 #include "dnfdaemon-server/dbus.hpp"
-#include "dnfdaemon-server/types.hpp"
 #include "dnfdaemon-server/utils.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
@@ -63,7 +62,7 @@ bool RepoConf::check_authorization(const std::string & actionid, const std::stri
 
     // call CheckAuthorization method
     sdbus::Struct<bool, bool, std::map<std::string, std::string>> auth_result;
-    sdbus::Struct<std::string, KeyValueMap> subject{"system-bus-name", {{"name", sender}}};
+    sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sender}}};
     std::map<std::string, std::string> details{};
     uint flags = 0;
     std::string cancelation_id = "";
@@ -82,17 +81,17 @@ bool RepoConf::check_authorization(const std::string & actionid, const std::stri
     return res_is_authorized;
 }
 
-KeyValueMapList RepoConf::repo_list(const std::vector<std::string> & ids) {
+dnfdaemon::KeyValueMapList RepoConf::repo_list(const std::vector<std::string> & ids) {
     Configuration cfg(session);
     cfg.read_configuration();
 
     bool empty_ids = ids.empty();
-    KeyValueMapList out;
+    dnfdaemon::KeyValueMapList out;
     for (auto & repo : cfg.get_repos()) {
         if (empty_ids || std::find(ids.begin(), ids.end(), repo.first) != ids.end()) {
             auto parser = cfg.find_parser(repo.second->file_path);
             if (parser) {
-                KeyValueMap dbus_repo;
+                dnfdaemon::KeyValueMap dbus_repo;
                 dbus_repo.emplace(std::make_pair("repoid", repo.first));
                 for (const auto & section : parser->get_data()) {
                     if (section.first == repo.first) {
@@ -111,7 +110,7 @@ KeyValueMapList RepoConf::repo_list(const std::vector<std::string> & ids) {
 }
 
 void RepoConf::list(sdbus::MethodCall call) {
-    KeyValueMap options;
+    dnfdaemon::KeyValueMap options;
     std::vector<std::string> default_ids{};
     call >> options;
     std::vector<std::string> ids = key_value_map_get<std::vector<std::string>>(options, "ids", default_ids);

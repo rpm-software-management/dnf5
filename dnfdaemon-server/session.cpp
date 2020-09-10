@@ -19,8 +19,9 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "session.hpp"
 
+#include "dbus.hpp"
+#include "services/repo/repo.hpp"
 #include "services/repoconf/repo_conf.hpp"
-#include "types.hpp"
 #include "utils.hpp"
 
 #include <libdnf/logger/logger.hpp>
@@ -48,20 +49,38 @@ ItemType Session::session_configuration_value(const std::string & key, const Ite
 }
 
 
-Session::Session(sdbus::IConnection & connection, KeyValueMap session_configuration, std::string object_path)
+Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session_configuration, std::string object_path)
     : connection(connection)
     , base(std::make_unique<libdnf::Base>())
     , session_configuration(session_configuration)
     , object_path(object_path) {
+
     // set-up log router for base
     auto & log_router = base->get_logger();
     log_router.add_logger(std::make_unique<StderrLogger>());
+
     // load configuration
     base->load_config_from_file();
 
-    /* instantiate all services provided by the daemon */
-    services.emplace_back(std::make_unique<RepoConf>(*this));
+    // set cachedir
+    auto system_cache_dir = base->get_config().system_cachedir().get_value();
+    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, system_cache_dir);
+    // set variables
+    auto & variables = base->get_variables();
+    variables["arch"] = "x86_64";
+    variables["basearch"] = "x86_64";
+    variables["releasever"] = "32";
 
+    // load repo configuration
+    auto & rpm_repo_sack = base->get_rpm_repo_sack();
+    rpm_repo_sack.new_repos_from_file();
+    rpm_repo_sack.new_repos_from_dirs();
+
+    // instantiate all services provided by the daemon
+    services.emplace_back(std::make_unique<RepoConf>(*this));
+    services.emplace_back(std::make_unique<Repo>(*this));
+
+    // Register all provided services on d-bus
     for (auto & s : services) {
         s->dbus_register();
     }

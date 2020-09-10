@@ -20,8 +20,8 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_SERVER_SERVICES_REPOCONF_HPP
 #define DNFDAEMON_SERVER_SERVICES_REPOCONF_HPP
 
+#include "dnfdaemon-server/dbus.hpp"
 #include "dnfdaemon-server/session.hpp"
-#include "dnfdaemon-server/types.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -42,7 +42,7 @@ private:
     void enable_disable(sdbus::MethodCall call, const bool & enable);
     bool check_authorization(const std::string & actionid, const std::string & sender);
 
-    KeyValueMapList repo_list(const std::vector<std::string> & ids);
+    dnfdaemon::KeyValueMapList repo_list(const std::vector<std::string> & ids);
     std::vector<std::string> enable_disable_repos(const std::vector<std::string> & ids, const bool enable);
 };
 

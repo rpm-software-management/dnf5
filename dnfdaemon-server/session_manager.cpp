@@ -21,7 +21,6 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dbus.hpp"
 #include "session.hpp"
-#include "types.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -87,7 +86,7 @@ void SessionManager::on_name_owner_changed(sdbus::Signal & signal) {
 
 void SessionManager::open_session(sdbus::MethodCall call) {
     auto sender = call.getSender();
-    KeyValueMap configuration;
+    dnfdaemon::KeyValueMap configuration;
     call >> configuration;
 
     // generate UUID-like session id

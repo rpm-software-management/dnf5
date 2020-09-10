@@ -20,7 +20,20 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_SERVER_DBUS_HPP
 #define DNFDAEMON_SERVER_DBUS_HPP
 
+#include <sdbus-c++/sdbus-c++.h>
+
+#include <map>
+#include <string>
+
 namespace dnfdaemon {
+
+// types
+using KeyValueMap = std::map<std::string, sdbus::Variant>;
+using KeyValueMapList = std::vector<KeyValueMap>;
+
+
+
+// constants
 
 const char * const DBUS_NAME = "org.rpm.dnf.v0";
 const char * const DBUS_OBJECT_PATH = "/org/rpm/dnf/v0";
