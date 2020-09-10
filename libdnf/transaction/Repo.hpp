@@ -28,7 +28,6 @@
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 namespace libdnf {
-namespace swdb_private {
 
 class Repo;
 typedef std::shared_ptr< Repo > RepoPtr;
@@ -57,7 +56,6 @@ protected:
     libdnf::utils::SQLite3Ptr conn;
 };
 
-} // namespace swdb_private
 } // namespace libdnf
 
 #endif // LIBDNF_TRANSACTION_REPO_HPP

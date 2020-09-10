@@ -21,7 +21,6 @@
 #include "Repo.hpp"
 
 namespace libdnf {
-namespace swdb_private {
 
 // initialize static variable Repo::cache
 std::map< std::string, RepoPtr > Repo::cache;
@@ -93,5 +92,4 @@ Repo::dbSelectOrInsert()
     }
 }
 
-} // namespace swdb_private
 } // namespace libdnf

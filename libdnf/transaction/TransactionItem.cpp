@@ -101,7 +101,7 @@ TransactionItem::dbInsert()
     libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
     query.bindv(trans->getId(),
                 getItem()->getId(),
-                swdb_private::Repo::getCached(conn, getRepoid())->getId(),
+                Repo::getCached(conn, getRepoid())->getId(),
                 static_cast< int >(getAction()),
                 static_cast< int >(getReason()),
                 static_cast< int >(getState()));
@@ -170,7 +170,7 @@ TransactionItem::dbUpdate()
     libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
     query.bindv(trans->getId(),
                 getItem()->getId(),
-                swdb_private::Repo::getCached(trans->conn, getRepoid())->getId(),
+                Repo::getCached(trans->conn, getRepoid())->getId(),
                 static_cast< int >(getAction()),
                 static_cast< int >(getReason()),
                 static_cast< int >(getState()),
