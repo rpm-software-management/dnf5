@@ -183,7 +183,7 @@ MergedTransaction::getConsoleOutput()
  *      With complete transaction pair we need to get a new Upgrade/Downgrade package and
  *      compare versions with original package from pair.
  */
-std::vector< TransactionItemBasePtr >
+std::vector< TransactionItemPtr >
 MergedTransaction::getItems()
 {
     ItemPairMap itemPairMap;
@@ -194,12 +194,12 @@ MergedTransaction::getItems()
         // iterate over transaction items
         for (auto transItem : transItems) {
             // get item and its type
-            auto mTransItem = std::dynamic_pointer_cast< TransactionItemBase >(transItem);
+            auto mTransItem = std::dynamic_pointer_cast< TransactionItem >(transItem);
             mergeItem(itemPairMap, mTransItem);
         }
     }
 
-    std::vector< TransactionItemBasePtr > items;
+    std::vector< TransactionItemPtr > items;
     for (const auto &row : itemPairMap) {
         ItemPair itemPair = row.second;
         items.push_back(itemPair.first);
@@ -237,7 +237,7 @@ getItemIdentifier(ItemPtr item)
  */
 void
 MergedTransaction::resolveRPMDifference(ItemPair &previousItemPair,
-                                        TransactionItemBasePtr mTransItem)
+                                        TransactionItemPtr mTransItem)
 {
     auto firstItem = previousItemPair.first->getItem();
     auto secondItem = mTransItem->getItem();
@@ -265,7 +265,7 @@ MergedTransaction::resolveRPMDifference(ItemPair &previousItemPair,
 }
 
 void
-MergedTransaction::resolveErase(ItemPair &previousItemPair, TransactionItemBasePtr mTransItem)
+MergedTransaction::resolveErase(ItemPair &previousItemPair, TransactionItemPtr mTransItem)
 {
     /*
      * The original item has been removed - it has to be installed now unless the rpmdb
@@ -296,7 +296,7 @@ MergedTransaction::resolveErase(ItemPair &previousItemPair, TransactionItemBaseP
  * \param mTransItem new transaction item
  */
 void
-MergedTransaction::resolveAltered(ItemPair &previousItemPair, TransactionItemBasePtr mTransItem)
+MergedTransaction::resolveAltered(ItemPair &previousItemPair, TransactionItemPtr mTransItem)
 {
     auto newState = mTransItem->getAction();
     auto firstState = previousItemPair.first->getAction();
@@ -355,7 +355,7 @@ MergedTransaction::resolveAltered(ItemPair &previousItemPair, TransactionItemBas
  * \param mTransItem transaction item
  */
 void
-MergedTransaction::mergeItem(ItemPairMap &itemPairMap, TransactionItemBasePtr mTransItem)
+MergedTransaction::mergeItem(ItemPairMap &itemPairMap, TransactionItemPtr mTransItem)
 {
     // get item identifier
     std::string name = getItemIdentifier(mTransItem->getItem());

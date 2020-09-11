@@ -20,7 +20,7 @@
 
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 #include "Types.hpp"
 #include "transaction_item_action.hpp"
 
@@ -28,12 +28,12 @@
 namespace libdnf::transaction {
 
 
-std::string TransactionItemBase::getActionName() {
+std::string TransactionItem::getActionName() {
     return TransactionItemAction_get_name(action);
 }
 
 
-std::string TransactionItemBase::getActionShort() {
+std::string TransactionItem::getActionShort() {
     return TransactionItemAction_get_short(action);
 }
 
@@ -46,12 +46,12 @@ TransactionItem::TransactionItem(Transaction *trans)
 }
 
 
-bool TransactionItemBase::isForwardAction() const {
+bool TransactionItem::isForwardAction() const {
     return TransactionItemAction_is_forward_action(action);
 }
 
 
-bool TransactionItemBase::isBackwardAction() const {
+bool TransactionItem::isBackwardAction() const {
     return TransactionItemAction_is_backward_action(action);
 }
 

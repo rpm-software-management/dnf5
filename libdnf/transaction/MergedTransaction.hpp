@@ -35,7 +35,7 @@ typedef std::shared_ptr< MergedTransaction > MergedTransactionPtr;
 
 #include "RPMItem.hpp"
 #include "transaction.hpp"
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 
 namespace libdnf::transaction {
 
@@ -56,28 +56,28 @@ public:
     std::set< RPMItemPtr > getSoftwarePerformedWith() const;
     std::vector< std::pair< int, std::string > > getConsoleOutput();
 
-    std::vector< TransactionItemBasePtr > getItems();
+    std::vector< TransactionItemPtr > getItems();
 
 protected:
     std::vector< TransactionPtr > transactions;
 
     struct ItemPair {
-        ItemPair(TransactionItemBasePtr first, TransactionItemBasePtr second)
+        ItemPair(TransactionItemPtr first, TransactionItemPtr second)
           : first{first}
           , second{second}
         {
         }
         ItemPair(){};
-        TransactionItemBasePtr first = nullptr;
-        TransactionItemBasePtr second = nullptr;
+        TransactionItemPtr first = nullptr;
+        TransactionItemPtr second = nullptr;
     };
 
     typedef std::map< std::string, ItemPair > ItemPairMap;
 
-    void mergeItem(ItemPairMap &itemPairMap, TransactionItemBasePtr transItem);
-    void resolveRPMDifference(ItemPair &previousItemPair, TransactionItemBasePtr mTransItem);
-    void resolveErase(ItemPair &previousItemPair, TransactionItemBasePtr mTransItem);
-    void resolveAltered(ItemPair &previousItemPair, TransactionItemBasePtr mTransItem);
+    void mergeItem(ItemPairMap &itemPairMap, TransactionItemPtr transItem);
+    void resolveRPMDifference(ItemPair &previousItemPair, TransactionItemPtr mTransItem);
+    void resolveErase(ItemPair &previousItemPair, TransactionItemPtr mTransItem);
+    void resolveAltered(ItemPair &previousItemPair, TransactionItemPtr mTransItem);
 };
 
 }  // namespace libdnf::transaction

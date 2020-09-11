@@ -6,7 +6,7 @@
 #include "libdnf/transaction/CompsGroupItem.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/transaction.hpp"
-#include "libdnf/transaction/TransactionItem.hpp"
+#include "libdnf/transaction/transaction_item.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 #include "libdnf/transaction/Types.hpp"
 

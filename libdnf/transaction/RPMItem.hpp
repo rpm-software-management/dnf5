@@ -30,7 +30,7 @@ typedef std::shared_ptr< RPMItem > RPMItemPtr;
 }
 
 #include "Item.hpp"
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 #include "Types.hpp"
 
 namespace libdnf::transaction {

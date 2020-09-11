@@ -42,7 +42,7 @@ typedef std::shared_ptr< CompsGroupPackage > CompsGroupPackagePtr;
 }
 
 #include "Item.hpp"
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 
 namespace libdnf::transaction {
 

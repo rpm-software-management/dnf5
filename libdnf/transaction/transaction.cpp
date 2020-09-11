@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "CompsEnvironmentItem.hpp"
 #include "CompsGroupItem.hpp"
 #include "RPMItem.hpp"
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 

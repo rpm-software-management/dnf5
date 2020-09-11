@@ -1,25 +1,26 @@
 /*
- * Copyright (C) 2017-2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2017-2020 Red Hat, Inc.
 
-#ifndef LIBDNF_TRANSACTION_TRANSACTIONITEM_HPP
-#define LIBDNF_TRANSACTION_TRANSACTIONITEM_HPP
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+
+#ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_HPP
+#define LIBDNF_TRANSACTION_TRANSACTION_ITEM_HPP
+
 
 #include <memory>
 #include <string>
@@ -41,8 +42,14 @@ typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 
 namespace libdnf::transaction {
 
-class TransactionItemBase {
+typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
+
+class TransactionItem {
 public:
+    explicit TransactionItem(Transaction *trans);
+
+    TransactionItem(libdnf::utils::SQLite3Ptr conn, int64_t transID);
+
     ItemPtr getItem() const noexcept { return item; }
     void setItem(ItemPtr value) { item = value; }
 
@@ -86,22 +93,6 @@ public:
      */
     bool isBackwardAction() const;
 
-protected:
-    ItemPtr item;
-    std::string repoid;
-    TransactionItemAction action = TransactionItemAction::INSTALL;
-    TransactionItemReason reason = TransactionItemReason::UNKNOWN;
-    TransactionItemState state = TransactionItemState::UNKNOWN;
-};
-
-typedef std::shared_ptr< TransactionItemBase > TransactionItemBasePtr;
-
-class TransactionItem : public TransactionItemBase {
-public:
-    explicit TransactionItem(Transaction *trans);
-
-    TransactionItem(libdnf::utils::SQLite3Ptr conn, int64_t transID);
-
     int64_t getId() const noexcept { return id; }
     void setId(int64_t value) { id = value; }
 
@@ -126,7 +117,12 @@ public:
     bool operator<(TransactionItemPtr other) { return (getItem()->toStr() < other->getItem()->toStr()); }
 
 protected:
+    ItemPtr item;
     int64_t id = 0;
+    std::string repoid;
+    TransactionItemAction action = TransactionItemAction::INSTALL;
+    TransactionItemReason reason = TransactionItemReason::UNKNOWN;
+    TransactionItemState state = TransactionItemState::UNKNOWN;
     Transaction *trans;
 
     const int64_t transID;
@@ -139,6 +135,8 @@ protected:
     void dbUpdate();
 };
 
+
 }  // namespace libdnf::transaction
 
-#endif // LIBDNF_TRANSACTION_TRANSACTIONITEM_HPP
+
+#endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_HPP

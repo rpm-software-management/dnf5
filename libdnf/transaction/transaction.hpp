@@ -34,7 +34,7 @@ typedef std::shared_ptr<Transaction> TransactionPtr;
 }  // namespace libdnf::transaction
 
 #include "Item.hpp"
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 
 
 namespace libdnf::transaction {

@@ -39,7 +39,7 @@ class Transformer;
 
 #include "CompsGroupItem.hpp"
 #include "transaction.hpp"
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 
 namespace libdnf::transaction {
 

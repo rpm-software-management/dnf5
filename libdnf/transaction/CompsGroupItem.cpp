@@ -21,7 +21,7 @@
 #include <algorithm>
 
 #include "CompsGroupItem.hpp"
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 
 namespace libdnf::transaction {
 

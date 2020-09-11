@@ -43,7 +43,7 @@
 #include "RPMItem.hpp"
 #include "Swdb.hpp"
 #include "transaction.hpp"
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 #include "Transformer.hpp"
 
 namespace libdnf::transaction {

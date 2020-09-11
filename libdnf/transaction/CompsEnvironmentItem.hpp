@@ -35,7 +35,7 @@ typedef std::shared_ptr< CompsEnvironmentGroup > CompsEnvironmentGroupPtr;
 
 #include "Item.hpp"
 #include "CompsGroupItem.hpp"
-#include "TransactionItem.hpp"
+#include "transaction_item.hpp"
 
 namespace libdnf::transaction {
 
