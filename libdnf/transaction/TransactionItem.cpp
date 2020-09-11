@@ -25,16 +25,16 @@
 #include "transaction_item_action.hpp"
 
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 
 std::string TransactionItemBase::getActionName() {
-    return transaction::TransactionItemAction_get_name(action);
+    return TransactionItemAction_get_name(action);
 }
 
 
 std::string TransactionItemBase::getActionShort() {
-    return transaction::TransactionItemAction_get_short(action);
+    return TransactionItemAction_get_short(action);
 }
 
 
@@ -47,12 +47,12 @@ TransactionItem::TransactionItem(Transaction *trans)
 
 
 bool TransactionItemBase::isForwardAction() const {
-    return transaction::TransactionItemAction_is_forward_action(action);
+    return TransactionItemAction_is_forward_action(action);
 }
 
 
 bool TransactionItemBase::isBackwardAction() const {
-    return transaction::TransactionItemAction_is_backward_action(action);
+    return TransactionItemAction_is_backward_action(action);
 }
 
 
@@ -188,4 +188,4 @@ TransactionItem::getInstalledBy() const {
     return trans->getUserId();
 }
 
-} // namespace libdnf
+}  // namespace libdnf::transaction

@@ -11,7 +11,7 @@
 
 #include "TransformerTest.hpp"
 
-using namespace libdnf;
+using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransformerTest);
 
@@ -54,7 +54,7 @@ TransformerTest::testGroupTransformation()
     swdb->backup("db.sql");
 
     // check basic stuff in generated transaction
-    libdnf::Transaction trans(swdb, 1);
+    Transaction trans(swdb, 1);
     CPPUNIT_ASSERT_EQUAL((int64_t)1, trans.getId());
     CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans.getState());
 
@@ -111,7 +111,7 @@ TransformerTest::testTransformTrans()
     transformer.transformTrans(swdb, history);
 
     // check first transaction attributes
-    libdnf::Transaction first(swdb, 1);
+    Transaction first(swdb, 1);
     CPPUNIT_ASSERT(first.getId() == 1);
     CPPUNIT_ASSERT(first.getDtBegin() == 1513267401);
     CPPUNIT_ASSERT(first.getDtEnd() == 1513267509);
@@ -163,7 +163,7 @@ TransformerTest::testTransformTrans()
     }
 
     // check second transaction attributes
-    libdnf::Transaction second(swdb, 2);
+    Transaction second(swdb, 2);
     CPPUNIT_ASSERT(second.getId() == 2);
     CPPUNIT_ASSERT(second.getDtBegin() == 1513267535);
     CPPUNIT_ASSERT(second.getDtEnd() == 1513267539);

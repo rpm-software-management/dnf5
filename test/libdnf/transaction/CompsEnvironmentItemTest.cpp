@@ -10,7 +10,7 @@
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsEnvironmentItemTest);
 
-using namespace libdnf;
+using namespace libdnf::transaction;
 
 void
 CompsEnvironmentItemTest::setUp()
@@ -76,14 +76,14 @@ CompsEnvironmentItemTest::testCreate()
 void
 CompsEnvironmentItemTest::testGetTransactionItems()
 {
-    libdnf::Transaction trans(conn);
+    Transaction trans(conn);
     auto env = createCompsEnvironment(conn);
     auto ti = trans.addItem(env, "", TransactionItemAction::INSTALL, TransactionItemReason::USER);
     ti->setState(TransactionItemState::DONE);
     trans.begin();
     trans.finish(TransactionState::DONE);
 
-    libdnf::Transaction trans2(conn, trans.getId());
+    Transaction trans2(conn, trans.getId());
 
     auto transItems = trans2.getItems();
     CPPUNIT_ASSERT_EQUAL(1, static_cast< int >(transItems.size()));

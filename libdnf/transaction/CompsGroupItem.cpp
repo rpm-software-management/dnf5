@@ -23,7 +23,7 @@
 #include "CompsGroupItem.hpp"
 #include "TransactionItem.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 CompsGroupItem::CompsGroupItem(libdnf::utils::SQLite3Ptr conn)
   : Item{conn}
@@ -378,4 +378,4 @@ CompsGroupPackage::dbSelectOrInsert()
     }
 }
 
-} // namespace libdnf
+}  // namespace libdnf::transaction

@@ -27,7 +27,7 @@
 #include <map>
 #include <vector>
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 class MergedTransaction;
 typedef std::shared_ptr< MergedTransaction > MergedTransactionPtr;
@@ -37,7 +37,7 @@ typedef std::shared_ptr< MergedTransaction > MergedTransactionPtr;
 #include "Transaction.hpp"
 #include "TransactionItem.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 class MergedTransaction {
 public:
@@ -80,6 +80,6 @@ protected:
     void resolveAltered(ItemPair &previousItemPair, TransactionItemBasePtr mTransItem);
 };
 
-} // namespace libdnf
+}  // namespace libdnf::transaction
 
 #endif // LIBDNF_TRANSACTION_TRANSACTION_HPP

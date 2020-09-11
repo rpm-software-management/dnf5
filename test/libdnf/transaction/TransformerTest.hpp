@@ -6,12 +6,12 @@
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-class TransformerMock : protected libdnf::Transformer {
+class TransformerMock : protected libdnf::transaction::Transformer {
 public:
     TransformerMock();
-    using libdnf::Transformer::Exception;
-    using libdnf::Transformer::processGroupPersistor;
-    using libdnf::Transformer::transformTrans;
+    using libdnf::transaction::Transformer::Exception;
+    using libdnf::transaction::Transformer::processGroupPersistor;
+    using libdnf::transaction::Transformer::transformTrans;
 };
 
 class TransformerTest : public CppUnit::TestCase {

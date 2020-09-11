@@ -27,7 +27,7 @@
 
 #include "RPMItem.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 RPMItem::RPMItem(libdnf::utils::SQLite3Ptr conn)
   : Item{conn}
@@ -398,4 +398,4 @@ RPMItem::searchTransactions(libdnf::utils::SQLite3Ptr conn, const std::vector< s
     return result;
 }
 
-} // namespace libdnf
+}  // namespace libdnf::transaction

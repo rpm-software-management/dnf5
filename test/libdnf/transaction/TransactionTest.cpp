@@ -5,7 +5,7 @@
 
 #include "TransactionTest.hpp"
 
-using namespace libdnf;
+using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionTest);
 
@@ -44,7 +44,7 @@ TransactionTest::tearDown()
 void
 TransactionTest::testInsert()
 {
-    libdnf::Transaction trans(conn);
+    Transaction trans(conn);
     trans.setDtBegin(1);
     trans.setDtEnd(2);
     trans.setRpmdbVersionBegin("begin - TransactionTest::testInsert");
@@ -69,7 +69,7 @@ TransactionTest::testInsert()
     CPPUNIT_ASSERT_THROW(trans.begin(), std::runtime_error);
 
     // load the saved transaction from database and compare values
-    libdnf::Transaction trans2(conn, trans.getId());
+    Transaction trans2(conn, trans.getId());
     CPPUNIT_ASSERT(trans2.getId() == trans.getId());
     CPPUNIT_ASSERT(trans2.getDtBegin() == trans.getDtBegin());
     CPPUNIT_ASSERT(trans2.getDtEnd() == trans.getDtEnd());
@@ -86,7 +86,7 @@ void
 TransactionTest::testInsertWithSpecifiedId()
 {
     // it is not allowed to save a transaction with arbitrary ID
-    libdnf::Transaction trans(conn);
+    Transaction trans(conn);
     trans.setId(INT64_MAX);
     CPPUNIT_ASSERT_THROW(trans.begin(), std::runtime_error);
 }
@@ -94,7 +94,7 @@ TransactionTest::testInsertWithSpecifiedId()
 void
 TransactionTest::testUpdate()
 {
-    libdnf::Transaction trans(conn);
+    Transaction trans(conn);
     trans.setDtBegin(1);
     trans.setDtEnd(2);
     trans.setRpmdbVersionBegin("begin - TransactionTest::testInsert");
@@ -106,7 +106,7 @@ TransactionTest::testUpdate()
     trans.begin();
     trans.finish(TransactionState::DONE);
 
-    libdnf::Transaction trans2(conn, trans.getId());
+    Transaction trans2(conn, trans.getId());
     CPPUNIT_ASSERT(trans2.getId() == trans.getId());
     CPPUNIT_ASSERT(trans2.getDtBegin() == trans.getDtBegin());
     CPPUNIT_ASSERT(trans2.getDtEnd() == trans.getDtEnd());
@@ -122,8 +122,8 @@ void
 TransactionTest::testComparison()
 {
     // test operator ==, > and <
-    libdnf::Transaction first(conn);
-    libdnf::Transaction second(conn);
+    Transaction first(conn);
+    Transaction second(conn);
 
     // id comparison test
     first.setId(1);

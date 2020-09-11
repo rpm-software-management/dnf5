@@ -26,7 +26,7 @@
 
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 class TransactionItem;
 typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 }
@@ -39,7 +39,7 @@ typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 #include "Transaction.hpp"
 #include "Types.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 class TransactionItemBase {
 public:
@@ -139,6 +139,6 @@ protected:
     void dbUpdate();
 };
 
-} // namespace libdnf
+}  // namespace libdnf::transaction
 
 #endif // LIBDNF_TRANSACTION_TRANSACTIONITEM_HPP

@@ -27,7 +27,7 @@
 #include <sys/stat.h>
 #include <vector>
 
-namespace libdnf {
+namespace libdnf::transaction {
 struct Swdb;
 class Transformer;
 }
@@ -41,7 +41,7 @@ class Transformer;
 #include "Transaction.hpp"
 #include "TransactionItem.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 struct Swdb {
 public:
@@ -129,6 +129,6 @@ protected:
 private:
 };
 
-} // namespace libdnf
+} // namespace libdnf::transaction
 
 #endif // LIBDNF_TRANSACTION_SWDB_HPP

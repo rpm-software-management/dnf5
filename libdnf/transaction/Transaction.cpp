@@ -29,7 +29,7 @@
 #include <fmt/format.h>
 
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 Transaction::Transaction(libdnf::utils::SQLite3Ptr conn, int64_t pk)
   : conn{conn}
@@ -393,4 +393,4 @@ Transaction::addConsoleOutputLine(int fileDescriptor, const std::string &line)
 }
 
 
-} // namespace libdnf
+}  // namespace libdnf::transaction

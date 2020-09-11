@@ -20,7 +20,7 @@
 
 #include "Item.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 Item::Item(libdnf::utils::SQLite3Ptr conn)
   : conn{conn}
@@ -53,4 +53,4 @@ Item::toStr() const
     return "<Item #" + std::to_string(getId()) + ">";
 }
 
-} // namespace libdnf
+}  // namespace libdnf::transaction

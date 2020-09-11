@@ -12,7 +12,7 @@
 
 #include "WorkflowTest.hpp"
 
-using namespace libdnf;
+using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(WorkflowTest);
 
@@ -34,7 +34,7 @@ WorkflowTest::testDefaultWorkflow()
     // TODO: init/begin/end trans
 
     // STEP 1: create transaction object
-    libdnf::Transaction trans(conn);
+    Transaction trans(conn);
     CPPUNIT_ASSERT_EQUAL(TransactionState::UNKNOWN, trans.getState());
 
     // STEP 2: set vars
@@ -118,7 +118,7 @@ WorkflowTest::testDefaultWorkflow()
 
     // VERIFY
     // verify that data is available via public API
-    auto trans2 = libdnf::Transaction(conn, trans.getId());
+    auto trans2 = Transaction(conn, trans.getId());
     CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans2.getState());
 
     CPPUNIT_ASSERT(trans2.getItems().size() == 5);

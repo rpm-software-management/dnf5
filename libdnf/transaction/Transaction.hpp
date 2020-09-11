@@ -27,7 +27,7 @@
 
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 class Transaction;
 typedef std::shared_ptr< Transaction > TransactionPtr;
 }
@@ -35,7 +35,7 @@ typedef std::shared_ptr< Transaction > TransactionPtr;
 #include "Item.hpp"
 #include "TransactionItem.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 class Transaction {
 public:
@@ -115,6 +115,6 @@ protected:
     TransactionState state = TransactionState::UNKNOWN;
 };
 
-} // namespace libdnf
+}  // namespace libdnf::transaction
 
 #endif // LIBDNF_TRANSACTION_TRANSACTION_HPP

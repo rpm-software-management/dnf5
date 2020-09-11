@@ -23,7 +23,7 @@
 
 #include "Transaction.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 /**
  * Class overrides default behavior with
@@ -39,6 +39,6 @@ public:
     }
 };
 
-} // namespace libdnf
+}  // namespace libdnf::transaction
 
 #endif // LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP

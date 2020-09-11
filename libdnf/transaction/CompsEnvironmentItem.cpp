@@ -22,7 +22,7 @@
 
 #include "CompsEnvironmentItem.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 typedef const char *string;
 
@@ -350,4 +350,4 @@ CompsEnvironmentGroup::dbInsert()
     setId(getEnvironment().conn->last_insert_rowid());
 }
 
-} // namespace libdnf
+}  // namespace libdnf::transaction

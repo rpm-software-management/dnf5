@@ -38,7 +38,7 @@
 #include "Swdb.hpp"
 #include "Transformer.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 Swdb::Swdb(libdnf::utils::SQLite3Ptr conn)
   : conn{conn}
@@ -549,4 +549,4 @@ Swdb::searchTransactionsByRPM(const std::vector< std::string > &patterns)
     return RPMItem::searchTransactions(conn, patterns);
 }
 
-} // namespace libdnf
+}  // namespace libdnf::transaction

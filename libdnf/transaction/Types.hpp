@@ -24,11 +24,7 @@
 #include "transaction_item_action.hpp"
 #include "transaction_item_reason.hpp"
 
-namespace libdnf {
-
-
-using TransactionItemAction = libdnf::transaction::TransactionItemAction;
-using TransactionItemReason = libdnf::transaction::TransactionItemReason;
+namespace libdnf::transaction {
 
 
 enum class TransactionState : int {
@@ -46,7 +42,7 @@ enum class TransactionItemState : int {
 enum class ItemType : int { UNKNOWN = 0, RPM = 1, GROUP = 2, ENVIRONMENT = 3 };
 
 
-} // namespace libdnf
+}  // namespace libdnf::transaction
 
 
 #endif // LIBDNF_TRANSACTION_TYPES_HPP

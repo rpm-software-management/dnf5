@@ -24,7 +24,7 @@
 #include <memory>
 #include <vector>
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 enum class CompsPackageType : int {
     CONDITIONAL = 1 << 0,
@@ -44,7 +44,7 @@ typedef std::shared_ptr< CompsGroupPackage > CompsGroupPackagePtr;
 #include "Item.hpp"
 #include "TransactionItem.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 class CompsGroupItem : public Item {
 public:
@@ -126,6 +126,6 @@ private:
     void dbUpdate();
 };
 
-} // namespace libdnf
+}  // namespace libdnf::transaction
 
 #endif // LIBDNF_TRANSACTION_COMPSGROUPITEM_HPP

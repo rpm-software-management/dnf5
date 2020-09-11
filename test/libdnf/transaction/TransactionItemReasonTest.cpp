@@ -12,7 +12,7 @@
 
 #include "TransactionItemReasonTest.hpp"
 
-using namespace libdnf;
+using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionItemReasonTest);
 

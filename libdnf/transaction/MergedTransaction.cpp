@@ -20,7 +20,7 @@
 
 #include "MergedTransaction.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 /**
  * Create a new MergedTransaction object with a single transaction
@@ -413,4 +413,4 @@ MergedTransaction::mergeItem(ItemPairMap &itemPairMap, TransactionItemBasePtr mT
     }
 }
 
-} // namespace libdnf
+}  // namespace libdnf::transaction

@@ -10,7 +10,7 @@
 
 #include "MergedTransactionTest.hpp"
 
-using namespace libdnf;
+using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(MergedTransactionTest);
 
@@ -21,11 +21,11 @@ MergedTransactionTest::setUp()
     Transformer::createDatabase(conn);
 }
 
-static libdnf::TransactionPtr
+static TransactionPtr
 initTransFirst(libdnf::utils::SQLite3Ptr conn)
 {
     // create the first transaction
-    auto first = std::make_shared< libdnf::Transaction >(conn);
+    auto first = std::make_shared< Transaction >(conn);
     first->setDtBegin(1);
     first->setDtEnd(2);
     first->setRpmdbVersionBegin("begin 1");
@@ -45,11 +45,11 @@ initTransFirst(libdnf::utils::SQLite3Ptr conn)
     return first;
 }
 
-static libdnf::TransactionPtr
+static TransactionPtr
 initTransSecond(libdnf::utils::SQLite3Ptr conn)
 {
     // create the second transaction
-    auto second = std::make_shared< libdnf::Transaction >(conn);
+    auto second = std::make_shared< Transaction >(conn);
     second->setDtBegin(3);
     second->setDtEnd(4);
     second->setRpmdbVersionBegin("begin 2");
@@ -358,7 +358,7 @@ createTrans(libdnf::utils::SQLite3Ptr conn, std::string nevra, std::string repoi
         nevraObject.setEpoch(0);
     }
 
-    auto trans = std::make_shared< libdnf::Transaction >(conn);
+    auto trans = std::make_shared< Transaction >(conn);
     auto rpm = nevraToRPMItem(conn, nevra);
 
     //std::string repoid = "";
@@ -392,7 +392,7 @@ MergedTransactionTest::test_add_remove_installed()
             (('Erase', 'lotus-0:3-16.x86_64', None, set()),))
     */
 
-    auto trans1 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans1 = std::make_shared< Transaction >(conn);
     auto trans1_tour = trans1->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo1",
@@ -400,7 +400,7 @@ MergedTransactionTest::test_add_remove_installed()
         TransactionItemReason::USER
     );
 
-    auto trans2 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans2 = std::make_shared< Transaction >(conn);
     auto trans2_tour = trans2->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo2",
@@ -431,7 +431,7 @@ MergedTransactionTest::test_add_remove_removed()
             ops.add, 'Erase', 'tour-0:4.6-1.noarch')
     */
 
-    auto trans1 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans1 = std::make_shared< Transaction >(conn);
     auto trans1_tour = trans1->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo1",
@@ -439,7 +439,7 @@ MergedTransactionTest::test_add_remove_removed()
         TransactionItemReason::USER
     );
 
-    auto trans2 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans2 = std::make_shared< Transaction >(conn);
     auto trans2_tour = trans2->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo2",
@@ -471,7 +471,7 @@ MergedTransactionTest::test_add_install_installed()
             ops.add, 'Install', 'tour-0:4.6-1.noarch')
     */
 
-    auto trans1 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans1 = std::make_shared< Transaction >(conn);
     auto trans1_tour = trans1->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo1",
@@ -479,7 +479,7 @@ MergedTransactionTest::test_add_install_installed()
         TransactionItemReason::USER
     );
 
-    auto trans2 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans2 = std::make_shared< Transaction >(conn);
     auto trans2_tour = trans2->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo2",
@@ -510,7 +510,7 @@ MergedTransactionTest::test_add_install_removed()
             (('Reinstall', 'tour-0:4.6-1.noarch', 'tour-0:4.6-1.noarch', set()),))
 
     */
-    auto trans1 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans1 = std::make_shared< Transaction >(conn);
     auto trans1_tour = trans1->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo1",
@@ -518,7 +518,7 @@ MergedTransactionTest::test_add_install_removed()
         TransactionItemReason::DEPENDENCY
     );
 
-    auto trans2 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans2 = std::make_shared< Transaction >(conn);
     auto trans2_tour = trans2->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo2",
@@ -554,7 +554,7 @@ MergedTransactionTest::test_add_obsoleted_installed()
             (('Install', 'tour-0:4.6-1.noarch', None, set()),))
     */
 
-    auto trans1 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans1 = std::make_shared< Transaction >(conn);
     auto trans1_lotus = trans1->addItem(
         nevraToRPMItem(conn, "lotus-0:3-16.x86_64"),
         "repo1",
@@ -562,7 +562,7 @@ MergedTransactionTest::test_add_obsoleted_installed()
         TransactionItemReason::DEPENDENCY
     );
 
-    auto trans2 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans2 = std::make_shared< Transaction >(conn);
     auto trans2_tour = trans2->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo2",
@@ -623,7 +623,7 @@ MergedTransactionTest::test_add_obsoleted_obsoleted()
         )
     */
 
-    auto trans1 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans1 = std::make_shared< Transaction >(conn);
     auto trans1_tour = trans1->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo1",
@@ -632,7 +632,7 @@ MergedTransactionTest::test_add_obsoleted_obsoleted()
     );
 
     /*
-    auto trans2 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans2 = std::make_shared< Transaction >(conn);
     auto trans2_tour = trans2->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo2",
@@ -660,7 +660,7 @@ MergedTransactionTest::test_add_obsoleted_obsoleted()
 void
 MergedTransactionTest::test_downgrade()
 {
-    auto trans1 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans1 = std::make_shared< Transaction >(conn);
     trans1->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo2",
@@ -700,7 +700,7 @@ MergedTransactionTest::test_downgrade()
 void
 MergedTransactionTest::test_install_downgrade()
 {
-    auto trans1 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans1 = std::make_shared< Transaction >(conn);
     trans1->addItem(
         nevraToRPMItem(conn, "tour-0:4.8-1.noarch"),
         "repo1",
@@ -708,7 +708,7 @@ MergedTransactionTest::test_install_downgrade()
         TransactionItemReason::USER
     );
 
-    auto trans2 = std::make_shared< libdnf::Transaction >(conn);
+    auto trans2 = std::make_shared< Transaction >(conn);
     trans2->addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo2",
@@ -738,7 +738,7 @@ MergedTransactionTest::test_install_downgrade()
 void
 MergedTransactionTest::test_multilib_identity()
 {
-    auto trans = std::make_shared< libdnf::Transaction >(conn);
+    auto trans = std::make_shared< Transaction >(conn);
     trans->addItem(
         nevraToRPMItem(conn, "gtk3-3.24.8-1.fc30.i686"),
         "repo2",

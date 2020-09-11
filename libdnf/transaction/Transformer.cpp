@@ -46,7 +46,7 @@
 #include "TransactionItem.hpp"
 #include "Transformer.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 static const char *sql_create_tables =
 #include "sql/create_tables.sql"
@@ -682,4 +682,4 @@ Transformer::historyPath()
     return historyDir + "/" + possibleFiles.back();
 }
 
-} // namespace libdnf
+}  // namespace libdnf::transaction

@@ -20,7 +20,7 @@
 
 #include "Repo.hpp"
 
-namespace libdnf {
+namespace libdnf::transaction {
 
 // initialize static variable Repo::cache
 std::map< std::string, RepoPtr > Repo::cache;
@@ -92,4 +92,4 @@ Repo::dbSelectOrInsert()
     }
 }
 
-} // namespace libdnf
+}  // namespace libdnf::transaction
