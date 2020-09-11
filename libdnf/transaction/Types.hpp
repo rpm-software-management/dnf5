@@ -27,12 +27,6 @@
 namespace libdnf::transaction {
 
 
-enum class TransactionState : int {
-    UNKNOWN = 0,
-    DONE = 1,
-    ERROR = 2
-};
-
 enum class TransactionItemState : int {
     UNKNOWN = 0,  // default state, must be changed before save
     DONE = 1,

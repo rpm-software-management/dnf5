@@ -5,7 +5,7 @@
 
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/Swdb.hpp"
-#include "libdnf/transaction/Transaction.hpp"
+#include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/TransactionItem.hpp"
 #include "libdnf/transaction/Types.hpp"
 
@@ -55,8 +55,8 @@ TransformerTest::testGroupTransformation()
 
     // check basic stuff in generated transaction
     Transaction trans(swdb, 1);
-    CPPUNIT_ASSERT_EQUAL((int64_t)1, trans.getId());
-    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans.getState());
+    CPPUNIT_ASSERT_EQUAL((int64_t)1, trans.get_id());
+    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans.get_state());
 
     // load transaction items
     auto items = trans.getItems();
@@ -112,15 +112,15 @@ TransformerTest::testTransformTrans()
 
     // check first transaction attributes
     Transaction first(swdb, 1);
-    CPPUNIT_ASSERT(first.getId() == 1);
-    CPPUNIT_ASSERT(first.getDtBegin() == 1513267401);
-    CPPUNIT_ASSERT(first.getDtEnd() == 1513267509);
-    CPPUNIT_ASSERT(first.getRpmdbVersionBegin() == "2213:9795b6a4db5e5368628b5240ec63a629833c5594");
-    CPPUNIT_ASSERT(first.getRpmdbVersionEnd() == "2213:9eab991133c166f8bcf3ecea9fb422b853f7aebc");
-    CPPUNIT_ASSERT(first.getReleasever() == "26");
-    CPPUNIT_ASSERT(first.getUserId() == 1000);
-    CPPUNIT_ASSERT(first.getCmdline() == "upgrade -y");
-    CPPUNIT_ASSERT(first.getState() == TransactionState::DONE);
+    CPPUNIT_ASSERT(first.get_id() == 1);
+    CPPUNIT_ASSERT(first.get_dt_begin() == 1513267401);
+    CPPUNIT_ASSERT(first.get_dt_end() == 1513267509);
+    CPPUNIT_ASSERT(first.get_rpmdb_version_begin() == "2213:9795b6a4db5e5368628b5240ec63a629833c5594");
+    CPPUNIT_ASSERT(first.get_rpmdb_version_end() == "2213:9eab991133c166f8bcf3ecea9fb422b853f7aebc");
+    CPPUNIT_ASSERT(first.get_releasever() == "26");
+    CPPUNIT_ASSERT(first.get_user_id() == 1000);
+    CPPUNIT_ASSERT(first.get_cmdline() == "upgrade -y");
+    CPPUNIT_ASSERT(first.get_state() == TransactionState::DONE);
 
     // check first transaction output
     auto firstOut = first.getConsoleOutput();
@@ -164,15 +164,15 @@ TransformerTest::testTransformTrans()
 
     // check second transaction attributes
     Transaction second(swdb, 2);
-    CPPUNIT_ASSERT(second.getId() == 2);
-    CPPUNIT_ASSERT(second.getDtBegin() == 1513267535);
-    CPPUNIT_ASSERT(second.getDtEnd() == 1513267539);
-    CPPUNIT_ASSERT(second.getRpmdbVersionBegin() ==
+    CPPUNIT_ASSERT(second.get_id() == 2);
+    CPPUNIT_ASSERT(second.get_dt_begin() == 1513267535);
+    CPPUNIT_ASSERT(second.get_dt_end() == 1513267539);
+    CPPUNIT_ASSERT(second.get_rpmdb_version_begin() ==
                    "2213:9eab991133c166f8bcf3ecea9fb422b853f7aebc");
-    CPPUNIT_ASSERT(second.getRpmdbVersionEnd() == "2214:e02004142740afb5b6d148d50bc84be4ab41ad13");
-    CPPUNIT_ASSERT(second.getUserId() == 1000);
-    CPPUNIT_ASSERT(second.getCmdline() == "-y install Foo");
-    CPPUNIT_ASSERT(second.getState() == TransactionState::DONE);
+    CPPUNIT_ASSERT(second.get_rpmdb_version_end() == "2214:e02004142740afb5b6d148d50bc84be4ab41ad13");
+    CPPUNIT_ASSERT(second.get_user_id() == 1000);
+    CPPUNIT_ASSERT(second.get_cmdline() == "-y install Foo");
+    CPPUNIT_ASSERT(second.get_state() == TransactionState::DONE);
 
     // check second transaction console output
     auto secondOut = second.getConsoleOutput();

@@ -101,7 +101,7 @@ RpmItemTest::testGetTransactionItems()
     std::chrono::duration< double > create_duration = create_finish - create_start;
 
     auto read_start = std::chrono::high_resolution_clock::now();
-    auto items = RPMItem::getTransactionItems(conn, trans.getId());
+    auto items = RPMItem::getTransactionItems(conn, trans.get_id());
     for (auto i : items) {
         auto rpm = std::dynamic_pointer_cast< RPMItem >(i->getItem());
         // std::cout << rpm->getNEVRA() << std::endl;

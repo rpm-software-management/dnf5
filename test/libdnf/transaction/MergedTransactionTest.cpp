@@ -5,7 +5,7 @@
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/MergedTransaction.hpp"
-#include "libdnf/transaction/Transaction.hpp"
+#include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 
 #include "MergedTransactionTest.hpp"
@@ -26,12 +26,12 @@ initTransFirst(libdnf::utils::SQLite3Ptr conn)
 {
     // create the first transaction
     auto first = std::make_shared< Transaction >(conn);
-    first->setDtBegin(1);
-    first->setDtEnd(2);
-    first->setRpmdbVersionBegin("begin 1");
-    first->setRpmdbVersionEnd("end 1");
-    first->setUserId(1000);
-    first->setCmdline("dnf install foo");
+    first->set_dt_begin(1);
+    first->set_dt_end(2);
+    first->set_rpmdb_version_begin("begin 1");
+    first->set_rpmdb_version_end("end 1");
+    first->set_user_id(1000);
+    first->set_cmdline("dnf install foo");
 
     auto dnfRpm = std::make_shared< RPMItem >(conn);
     dnfRpm->setName("dnf");
@@ -50,12 +50,12 @@ initTransSecond(libdnf::utils::SQLite3Ptr conn)
 {
     // create the second transaction
     auto second = std::make_shared< Transaction >(conn);
-    second->setDtBegin(3);
-    second->setDtEnd(4);
-    second->setRpmdbVersionBegin("begin 2");
-    second->setRpmdbVersionEnd("end 2");
-    second->setUserId(1001);
-    second->setCmdline("dnf install bar");
+    second->set_dt_begin(3);
+    second->set_dt_end(4);
+    second->set_rpmdb_version_begin("begin 2");
+    second->set_rpmdb_version_end("end 2");
+    second->set_user_id(1001);
+    second->set_cmdline("dnf install bar");
 
     auto rpmRpm = std::make_shared< RPMItem >(conn);
     rpmRpm->setName("rpm");
@@ -102,11 +102,11 @@ MergedTransactionTest::testMerge()
     CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, merged.listStates().at(0));
     CPPUNIT_ASSERT_EQUAL(TransactionState::ERROR, merged.listStates().at(1));
 
-    CPPUNIT_ASSERT_EQUAL((int64_t)1, merged.getDtBegin());
-    CPPUNIT_ASSERT_EQUAL((int64_t)4, merged.getDtEnd());
+    CPPUNIT_ASSERT_EQUAL((int64_t)1, merged.get_dt_begin());
+    CPPUNIT_ASSERT_EQUAL((int64_t)4, merged.get_dt_end());
 
-    CPPUNIT_ASSERT_EQUAL(std::string("begin 1"), merged.getRpmdbVersionBegin());
-    CPPUNIT_ASSERT_EQUAL(std::string("end 2"), merged.getRpmdbVersionEnd());
+    CPPUNIT_ASSERT_EQUAL(std::string("begin 1"), merged.get_rpmdb_version_begin());
+    CPPUNIT_ASSERT_EQUAL(std::string("end 2"), merged.get_rpmdb_version_end());
 
     auto output = merged.getConsoleOutput();
     CPPUNIT_ASSERT_EQUAL(1, output.at(0).first);

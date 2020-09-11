@@ -42,7 +42,7 @@ MergedTransaction::merge(TransactionPtr trans)
 {
     bool inserted = false;
     for (auto it = transactions.begin(); it < transactions.end(); ++it) {
-        if ((*it)->getId() > trans->getId()) {
+        if ((*it)->get_id() > trans->get_id()) {
             transactions.insert(it, trans);
             inserted = true;
             break;
@@ -62,7 +62,7 @@ MergedTransaction::listIds() const
 {
     std::vector< int64_t > ids;
     for (auto t : transactions) {
-        ids.push_back(t->getId());
+        ids.push_back(t->get_id());
     }
     return ids;
 }
@@ -76,7 +76,7 @@ MergedTransaction::listUserIds() const
 {
     std::vector< uint32_t > users;
     for (auto t : transactions) {
-        users.push_back(t->getUserId());
+        users.push_back(t->get_user_id());
     }
     return users;
 }
@@ -90,7 +90,7 @@ MergedTransaction::listCmdlines() const
 {
     std::vector< std::string > cmdLines;
     for (auto t : transactions) {
-        cmdLines.push_back(t->getCmdline());
+        cmdLines.push_back(t->get_cmdline());
     }
     return cmdLines;
 }
@@ -100,7 +100,7 @@ MergedTransaction::listStates() const
 {
     std::vector< TransactionState > result;
     for (auto t : transactions) {
-        result.push_back(t->getState());
+        result.push_back(t->get_state());
     }
     return result;
 }
@@ -110,31 +110,31 @@ MergedTransaction::listReleasevers() const
 {
     std::vector< std::string > result;
     for (auto t : transactions) {
-        result.push_back(t->getReleasever());
+        result.push_back(t->get_releasever());
     }
     return result;
 }
 
 int64_t
-MergedTransaction::getDtBegin() const noexcept
+MergedTransaction::get_dt_begin() const noexcept
 {
-    return transactions.front()->getDtBegin();
+    return transactions.front()->get_dt_begin();
 }
 int64_t
-MergedTransaction::getDtEnd() const noexcept
+MergedTransaction::get_dt_end() const noexcept
 {
-    return transactions.back()->getDtEnd();
+    return transactions.back()->get_dt_end();
 }
 const std::string &
-MergedTransaction::getRpmdbVersionBegin() const noexcept
+MergedTransaction::get_rpmdb_version_begin() const noexcept
 {
-    return transactions.front()->getRpmdbVersionBegin();
+    return transactions.front()->get_rpmdb_version_begin();
 }
 
 const std::string &
-MergedTransaction::getRpmdbVersionEnd() const noexcept
+MergedTransaction::get_rpmdb_version_end() const noexcept
 {
-    return transactions.back()->getRpmdbVersionEnd();
+    return transactions.back()->get_rpmdb_version_end();
 }
 
 std::set< RPMItemPtr >

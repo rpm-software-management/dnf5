@@ -1,6 +1,6 @@
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
-#include "libdnf/transaction/Transaction.hpp"
+#include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 
 #include "TransactionTest.hpp"
@@ -45,14 +45,14 @@ void
 TransactionTest::testInsert()
 {
     Transaction trans(conn);
-    trans.setDtBegin(1);
-    trans.setDtEnd(2);
-    trans.setRpmdbVersionBegin("begin - TransactionTest::testInsert");
-    trans.setRpmdbVersionEnd("end - TransactionTest::testInsert");
-    trans.setReleasever("26");
-    trans.setUserId(1000);
-    trans.setCmdline("dnf install foo");
-    trans.setState(TransactionState::DONE);
+    trans.set_dt_begin(1);
+    trans.set_dt_end(2);
+    trans.set_rpmdb_version_begin("begin - TransactionTest::testInsert");
+    trans.set_rpmdb_version_end("end - TransactionTest::testInsert");
+    trans.set_releasever("26");
+    trans.set_user_id(1000);
+    trans.set_cmdline("dnf install foo");
+    trans.set_state(TransactionState::DONE);
 
     trans.addSoftwarePerformedWith(nevraToRPMItem(conn, "rpm-4.14.2-1.fc29.x86_64"));
     trans.addSoftwarePerformedWith(nevraToRPMItem(conn, "dnf-3.5.1-1.fc29.noarch"));
@@ -69,16 +69,16 @@ TransactionTest::testInsert()
     CPPUNIT_ASSERT_THROW(trans.begin(), std::runtime_error);
 
     // load the saved transaction from database and compare values
-    Transaction trans2(conn, trans.getId());
-    CPPUNIT_ASSERT(trans2.getId() == trans.getId());
-    CPPUNIT_ASSERT(trans2.getDtBegin() == trans.getDtBegin());
-    CPPUNIT_ASSERT(trans2.getDtEnd() == trans.getDtEnd());
-    CPPUNIT_ASSERT(trans2.getRpmdbVersionBegin() == trans.getRpmdbVersionBegin());
-    CPPUNIT_ASSERT(trans2.getRpmdbVersionEnd() == trans.getRpmdbVersionEnd());
-    CPPUNIT_ASSERT(trans2.getReleasever() == trans.getReleasever());
-    CPPUNIT_ASSERT(trans2.getUserId() == trans.getUserId());
-    CPPUNIT_ASSERT(trans2.getCmdline() == trans.getCmdline());
-    CPPUNIT_ASSERT(trans2.getState() == trans.getState());
+    Transaction trans2(conn, trans.get_id());
+    CPPUNIT_ASSERT(trans2.get_id() == trans.get_id());
+    CPPUNIT_ASSERT(trans2.get_dt_begin() == trans.get_dt_begin());
+    CPPUNIT_ASSERT(trans2.get_dt_end() == trans.get_dt_end());
+    CPPUNIT_ASSERT(trans2.get_rpmdb_version_begin() == trans.get_rpmdb_version_begin());
+    CPPUNIT_ASSERT(trans2.get_rpmdb_version_end() == trans.get_rpmdb_version_end());
+    CPPUNIT_ASSERT(trans2.get_releasever() == trans.get_releasever());
+    CPPUNIT_ASSERT(trans2.get_user_id() == trans.get_user_id());
+    CPPUNIT_ASSERT(trans2.get_cmdline() == trans.get_cmdline());
+    CPPUNIT_ASSERT(trans2.get_state() == trans.get_state());
     CPPUNIT_ASSERT(trans2.getSoftwarePerformedWith().size() == 2);
 }
 
@@ -87,7 +87,7 @@ TransactionTest::testInsertWithSpecifiedId()
 {
     // it is not allowed to save a transaction with arbitrary ID
     Transaction trans(conn);
-    trans.setId(INT64_MAX);
+    trans.set_id(INT64_MAX);
     CPPUNIT_ASSERT_THROW(trans.begin(), std::runtime_error);
 }
 
@@ -95,27 +95,27 @@ void
 TransactionTest::testUpdate()
 {
     Transaction trans(conn);
-    trans.setDtBegin(1);
-    trans.setDtEnd(2);
-    trans.setRpmdbVersionBegin("begin - TransactionTest::testInsert");
-    trans.setRpmdbVersionEnd("end - TransactionTest::testInsert");
-    trans.setReleasever("26");
-    trans.setUserId(1000);
-    trans.setCmdline("dnf install foo");
-    trans.setState(TransactionState::ERROR);
+    trans.set_dt_begin(1);
+    trans.set_dt_end(2);
+    trans.set_rpmdb_version_begin("begin - TransactionTest::testInsert");
+    trans.set_rpmdb_version_end("end - TransactionTest::testInsert");
+    trans.set_releasever("26");
+    trans.set_user_id(1000);
+    trans.set_cmdline("dnf install foo");
+    trans.set_state(TransactionState::ERROR);
     trans.begin();
     trans.finish(TransactionState::DONE);
 
-    Transaction trans2(conn, trans.getId());
-    CPPUNIT_ASSERT(trans2.getId() == trans.getId());
-    CPPUNIT_ASSERT(trans2.getDtBegin() == trans.getDtBegin());
-    CPPUNIT_ASSERT(trans2.getDtEnd() == trans.getDtEnd());
-    CPPUNIT_ASSERT(trans2.getRpmdbVersionBegin() == trans.getRpmdbVersionBegin());
-    CPPUNIT_ASSERT(trans2.getRpmdbVersionEnd() == trans.getRpmdbVersionEnd());
-    CPPUNIT_ASSERT(trans2.getReleasever() == trans.getReleasever());
-    CPPUNIT_ASSERT(trans2.getUserId() == trans.getUserId());
-    CPPUNIT_ASSERT(trans2.getCmdline() == trans.getCmdline());
-    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans2.getState());
+    Transaction trans2(conn, trans.get_id());
+    CPPUNIT_ASSERT(trans2.get_id() == trans.get_id());
+    CPPUNIT_ASSERT(trans2.get_dt_begin() == trans.get_dt_begin());
+    CPPUNIT_ASSERT(trans2.get_dt_end() == trans.get_dt_end());
+    CPPUNIT_ASSERT(trans2.get_rpmdb_version_begin() == trans.get_rpmdb_version_begin());
+    CPPUNIT_ASSERT(trans2.get_rpmdb_version_end() == trans.get_rpmdb_version_end());
+    CPPUNIT_ASSERT(trans2.get_releasever() == trans.get_releasever());
+    CPPUNIT_ASSERT(trans2.get_user_id() == trans.get_user_id());
+    CPPUNIT_ASSERT(trans2.get_cmdline() == trans.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans2.get_state());
 }
 
 void
@@ -126,26 +126,26 @@ TransactionTest::testComparison()
     Transaction second(conn);
 
     // id comparison test
-    first.setId(1);
-    second.setId(2);
+    first.set_id(1);
+    second.set_id(2);
     CPPUNIT_ASSERT(first > second);
     CPPUNIT_ASSERT(second < first);
 
     // begin timestamp comparison test
-    second.setId(1);
-    first.setDtBegin(1);
-    second.setDtBegin(2);
+    second.set_id(1);
+    first.set_dt_begin(1);
+    second.set_dt_begin(2);
     CPPUNIT_ASSERT(first > second);
     CPPUNIT_ASSERT(second < first);
 
     // rpmdb comparison test
-    second.setDtBegin(1);
-    first.setRpmdbVersionBegin("0");
-    second.setRpmdbVersionBegin("1");
+    second.set_dt_begin(1);
+    first.set_rpmdb_version_begin("0");
+    second.set_rpmdb_version_begin("1");
     CPPUNIT_ASSERT(first > second);
     CPPUNIT_ASSERT(second < first);
 
     // equality
-    second.setRpmdbVersionBegin("0");
+    second.set_rpmdb_version_begin("0");
     CPPUNIT_ASSERT(first == second);
 }

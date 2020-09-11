@@ -34,7 +34,7 @@ typedef std::shared_ptr< MergedTransaction > MergedTransactionPtr;
 }
 
 #include "RPMItem.hpp"
-#include "Transaction.hpp"
+#include "transaction.hpp"
 #include "TransactionItem.hpp"
 
 namespace libdnf::transaction {
@@ -49,10 +49,10 @@ public:
     std::vector< std::string > listCmdlines() const;
     std::vector< TransactionState > listStates() const;
     std::vector< std::string > listReleasevers() const;
-    int64_t getDtBegin() const noexcept;
-    int64_t getDtEnd() const noexcept;
-    const std::string &getRpmdbVersionBegin() const noexcept;
-    const std::string &getRpmdbVersionEnd() const noexcept;
+    int64_t get_dt_begin() const noexcept;
+    int64_t get_dt_end() const noexcept;
+    const std::string &get_rpmdb_version_begin() const noexcept;
+    const std::string &get_rpmdb_version_end() const noexcept;
     std::set< RPMItemPtr > getSoftwarePerformedWith() const;
     std::vector< std::pair< int, std::string > > getConsoleOutput();
 

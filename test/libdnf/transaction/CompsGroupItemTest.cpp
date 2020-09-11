@@ -83,7 +83,7 @@ CompsGroupItemTest::testGetTransactionItems()
     trans.begin();
     trans.finish(TransactionState::DONE);
 
-    Transaction trans2(conn, trans.getId());
+    Transaction trans2(conn, trans.get_id());
 
     auto transItems = trans2.getItems();
     CPPUNIT_ASSERT_EQUAL(1, static_cast< int >(transItems.size()));

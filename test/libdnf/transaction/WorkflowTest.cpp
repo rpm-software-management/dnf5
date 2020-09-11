@@ -5,7 +5,7 @@
 #include "libdnf/transaction/CompsEnvironmentItem.hpp"
 #include "libdnf/transaction/CompsGroupItem.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
-#include "libdnf/transaction/Transaction.hpp"
+#include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/TransactionItem.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 #include "libdnf/transaction/Types.hpp"
@@ -35,10 +35,10 @@ WorkflowTest::testDefaultWorkflow()
 
     // STEP 1: create transaction object
     Transaction trans(conn);
-    CPPUNIT_ASSERT_EQUAL(TransactionState::UNKNOWN, trans.getState());
+    CPPUNIT_ASSERT_EQUAL(TransactionState::UNKNOWN, trans.get_state());
 
     // STEP 2: set vars
-    trans.setReleasever("26");
+    trans.set_releasever("26");
 
     // populate goal
     // resolve dependencies
@@ -114,12 +114,12 @@ WorkflowTest::testDefaultWorkflow()
     // STEP 6
     // mark completed transaction
     trans.finish(TransactionState::DONE);
-    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans.getState());
+    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans.get_state());
 
     // VERIFY
     // verify that data is available via public API
-    auto trans2 = Transaction(conn, trans.getId());
-    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans2.getState());
+    auto trans2 = Transaction(conn, trans.get_id());
+    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans2.get_state());
 
     CPPUNIT_ASSERT(trans2.getItems().size() == 5);
 

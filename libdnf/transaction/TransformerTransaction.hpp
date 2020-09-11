@@ -21,7 +21,7 @@
 #ifndef LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP
 #define LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP
 
-#include "Transaction.hpp"
+#include "transaction.hpp"
 
 namespace libdnf::transaction {
 

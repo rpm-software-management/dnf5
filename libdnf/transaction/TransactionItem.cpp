@@ -99,7 +99,7 @@ TransactionItem::dbInsert()
 
     // save the transaction item
     libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
-    query.bindv(trans->getId(),
+    query.bindv(trans->get_id(),
                 getItem()->getId(),
                 Repo::getCached(conn, getRepoid())->getId(),
                 static_cast< int >(getAction()),
@@ -168,7 +168,7 @@ TransactionItem::dbUpdate()
     )**";
 
     libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
-    query.bindv(trans->getId(),
+    query.bindv(trans->get_id(),
                 getItem()->getId(),
                 Repo::getCached(trans->conn, getRepoid())->getId(),
                 static_cast< int >(getAction()),
@@ -183,9 +183,9 @@ TransactionItem::getInstalledBy() const {
     if (!trans) {
         // null pointer -> create a local instance to return the user id
         Transaction t(conn, transID);
-        return t.getUserId();
+        return t.get_user_id();
     }
-    return trans->getUserId();
+    return trans->get_user_id();
 }
 
 }  // namespace libdnf::transaction

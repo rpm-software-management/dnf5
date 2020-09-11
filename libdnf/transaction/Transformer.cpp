@@ -42,7 +42,7 @@
 
 #include "RPMItem.hpp"
 #include "Swdb.hpp"
-#include "Transaction.hpp"
+#include "transaction.hpp"
 #include "TransactionItem.hpp"
 #include "Transformer.hpp"
 
@@ -209,20 +209,20 @@ Transformer::transformTrans(libdnf::utils::SQLite3Ptr swdb, libdnf::utils::SQLit
     libdnf::utils::SQLite3::Query query(*history.get(), trans_sql);
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto trans = std::make_shared< TransformerTransaction >(swdb);
-        trans->setId(query.get< int >("id"));
-        trans->setDtBegin(query.get< int64_t >("dt_begin"));
-        trans->setDtEnd(query.get< int64_t >("dt_end"));
-        trans->setRpmdbVersionBegin(query.get< std::string >("rpmdb_version_begin"));
-        trans->setRpmdbVersionEnd(query.get< std::string >("rpmdb_version_end"));
+        trans->set_id(query.get< int >("id"));
+        trans->set_dt_begin(query.get< int64_t >("dt_begin"));
+        trans->set_dt_end(query.get< int64_t >("dt_end"));
+        trans->set_rpmdb_version_begin(query.get< std::string >("rpmdb_version_begin"));
+        trans->set_rpmdb_version_end(query.get< std::string >("rpmdb_version_end"));
 
         // set release version if available
-        auto it = releasever.find(trans->getId());
+        auto it = releasever.find(trans->get_id());
         if (it != releasever.end()) {
-            trans->setReleasever(it->second);
+            trans->set_releasever(it->second);
         }
 
-        trans->setUserId(query.get< int >("user_id"));
-        trans->setCmdline(query.get< std::string >("cmdline"));
+        trans->set_user_id(query.get< int >("user_id"));
+        trans->set_cmdline(query.get< std::string >("cmdline"));
 
         TransactionState state = query.get< int >("state") == 0 ? TransactionState::DONE : TransactionState::ERROR;
 
@@ -274,7 +274,7 @@ Transformer::transformTransWith(libdnf::utils::SQLite3Ptr swdb,
 
     // transform stdout
     libdnf::utils::SQLite3::Query query(*history.get(), sql);
-    query.bindv(trans->getId());
+    query.bindv(trans->get_id());
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         // create RPM item object
         auto rpm = std::make_shared< RPMItem >(swdb);
@@ -303,7 +303,7 @@ Transformer::transformOutput(libdnf::utils::SQLite3Ptr history, std::shared_ptr<
 
     // transform stdout
     libdnf::utils::SQLite3::Query query(*history.get(), sql);
-    query.bindv(trans->getId());
+    query.bindv(trans->get_id());
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         trans->addConsoleOutputLine(1, query.get< std::string >("line"));
     }
@@ -321,7 +321,7 @@ Transformer::transformOutput(libdnf::utils::SQLite3Ptr history, std::shared_ptr<
 
     // transform stderr
     libdnf::utils::SQLite3::Query errorQuery(*history.get(), sql);
-    errorQuery.bindv(trans->getId());
+    errorQuery.bindv(trans->get_id());
     while (errorQuery.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         trans->addConsoleOutputLine(2, errorQuery.get< std::string >("msg"));
     }
@@ -384,7 +384,7 @@ Transformer::transformRPMItems(libdnf::utils::SQLite3Ptr swdb,
     )**";
 
     libdnf::utils::SQLite3::Query query(*history.get(), pkg_sql);
-    query.bindv(trans->getId());
+    query.bindv(trans->get_id());
 
     TransactionItemPtr last = nullptr;
 
@@ -585,16 +585,16 @@ Transformer::processGroupPersistor(libdnf::utils::SQLite3Ptr swdb, struct json_o
     trans.begin();
 
     auto now = time(NULL);
-    trans.setDtBegin(now);
-    trans.setDtEnd(now);
+    trans.set_dt_begin(now);
+    trans.set_dt_end(now);
 
     if (lastTrans) {
-        trans.setRpmdbVersionBegin(lastTrans->getRpmdbVersionEnd());
-        trans.setRpmdbVersionEnd(trans.getRpmdbVersionBegin());
+        trans.set_rpmdb_version_begin(lastTrans->get_rpmdb_version_end());
+        trans.set_rpmdb_version_end(trans.get_rpmdb_version_begin());
     } else {
         // no transaction found -> use 0 packages + hash for an empty string
-        trans.setRpmdbVersionBegin("0:da39a3ee5e6b4b0d3255bfef95601890afd80709");
-        trans.setRpmdbVersionEnd(trans.getRpmdbVersionBegin());
+        trans.set_rpmdb_version_begin("0:da39a3ee5e6b4b0d3255bfef95601890afd80709");
+        trans.set_rpmdb_version_end(trans.get_rpmdb_version_begin());
     }
 
     for (auto i : trans.getItems()) {

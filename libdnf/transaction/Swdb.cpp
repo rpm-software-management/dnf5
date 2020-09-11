@@ -124,10 +124,10 @@ Swdb::beginTransaction(int64_t dtBegin,
     }
 
     // begin transaction
-    transactionInProgress->setDtBegin(dtBegin);
-    transactionInProgress->setRpmdbVersionBegin(rpmdbVersionBegin);
-    transactionInProgress->setCmdline(cmdline);
-    transactionInProgress->setUserId(userId);
+    transactionInProgress->set_dt_begin(dtBegin);
+    transactionInProgress->set_rpmdb_version_begin(rpmdbVersionBegin);
+    transactionInProgress->set_cmdline(cmdline);
+    transactionInProgress->set_user_id(userId);
     transactionInProgress->begin();
 
     // save rpm items to map to resolve RPM callbacks
@@ -140,7 +140,7 @@ Swdb::beginTransaction(int64_t dtBegin,
         itemsInProgress[rpmItem->getNEVRA()] = item;
     }
 
-    return transactionInProgress->getId();
+    return transactionInProgress->get_id();
 }
 
 int64_t
@@ -149,10 +149,10 @@ Swdb::endTransaction(int64_t dtEnd, std::string rpmdbVersionEnd, TransactionStat
     if (!transactionInProgress) {
         throw std::logic_error(_("Not in progress"));
     }
-    transactionInProgress->setDtEnd(dtEnd);
-    transactionInProgress->setRpmdbVersionEnd(rpmdbVersionEnd);
+    transactionInProgress->set_dt_end(dtEnd);
+    transactionInProgress->set_rpmdb_version_end(rpmdbVersionEnd);
     transactionInProgress->finish(state);
-    return transactionInProgress->getId();
+    return transactionInProgress->get_id();
 }
 
 int64_t
@@ -161,7 +161,7 @@ Swdb::closeTransaction()
     if (!transactionInProgress) {
         throw std::logic_error(_("Not in progress"));
     }
-    int64_t result = transactionInProgress->getId();
+    int64_t result = transactionInProgress->get_id();
     transactionInProgress = std::unique_ptr< Transaction >(nullptr);
     itemsInProgress.clear();
     return result;
@@ -317,7 +317,7 @@ Swdb::setReleasever(std::string value)
     if (!transactionInProgress) {
         throw std::logic_error(_("Not in progress"));
     }
-    transactionInProgress->setReleasever(value);
+    transactionInProgress->set_releasever(value);
 }
 
 

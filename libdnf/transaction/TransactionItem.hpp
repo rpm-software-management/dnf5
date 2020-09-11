@@ -36,7 +36,7 @@ typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 #include "CompsGroupItem.hpp"
 #include "RPMItem.hpp"
 #include "Repo.hpp"
-#include "Transaction.hpp"
+#include "transaction.hpp"
 #include "Types.hpp"
 
 namespace libdnf::transaction {

@@ -38,7 +38,7 @@ class Transformer;
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 #include "CompsGroupItem.hpp"
-#include "Transaction.hpp"
+#include "transaction.hpp"
 #include "TransactionItem.hpp"
 
 namespace libdnf::transaction {
