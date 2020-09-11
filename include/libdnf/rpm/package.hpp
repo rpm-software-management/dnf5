@@ -29,6 +29,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
+namespace libdnf {
+
+class Goal;
+
+}  // namespace libdnf
+
 namespace libdnf::rpm {
 
 
@@ -285,6 +291,7 @@ protected:
 
 private:
     friend PackageSetIterator;
+    friend libdnf::Goal;
     SolvSackWeakPtr sack;
     PackageId id;
 };

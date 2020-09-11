@@ -33,6 +33,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
+namespace libdnf {
+
+class Goal;
+
+}  // namespace libdnf
+
+
 namespace libdnf::rpm {
 
 /// @replaces libdnf/hy-query.h:struct:HyQuery
@@ -318,6 +325,7 @@ public:
         const std::vector<libdnf::rpm::Nevra::Form> & forms);
 
 private:
+    friend libdnf::Goal;
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

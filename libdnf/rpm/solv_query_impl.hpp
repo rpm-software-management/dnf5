@@ -69,6 +69,7 @@ public:
 
 private:
     friend class SolvQuery;
+    friend libdnf::Goal;
     SolvSackWeakPtr sack;
     solv::SolvMap query_result;
 };

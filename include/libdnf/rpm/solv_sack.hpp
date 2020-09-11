@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 class Base;
+class Goal;
 
 }  // namespace libdnf
 
@@ -135,6 +136,7 @@ public:
     SolvSackWeakPtr get_weak_ptr();
 
 private:
+    friend libdnf::Goal;
     friend Package;
     friend PackageSet;
     friend Reldep;

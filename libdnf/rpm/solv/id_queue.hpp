@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_SOLV_ID_QUEUE_HPP
 
 #include "queue_iterator.hpp"
+#include "solv_map.hpp"
 
 #include <utility>
 
@@ -29,6 +30,7 @@ extern "C" {
 }
 
 namespace libdnf::rpm::solv {
+
 
 struct IdQueue {
 public:
@@ -57,6 +59,7 @@ public:
     void push_back(Id id1, Id id2);
     int * data() const noexcept;
     Queue & get_queue() noexcept;
+    const Queue & get_queue() const noexcept;
     bool empty() const noexcept { return queue.count == 0; };
     int size() const noexcept;
     void clear() noexcept;
@@ -141,6 +144,9 @@ inline int * IdQueue::data() const noexcept {
 inline Queue & IdQueue::get_queue() noexcept {
     return queue;
 }
+inline const Queue & IdQueue::get_queue() const noexcept {
+    return queue;
+}
 inline int IdQueue::size() const noexcept {
     return queue.count;
 }
@@ -165,6 +171,13 @@ inline IdQueue::iterator IdQueue::end() const {
     iterator it(&queue);
     it.end();
     return it;
+}
+
+void inline solv_map_to_id_queue(IdQueue & ids, const SolvMap & src) {
+    ids.clear();
+    for (auto solv_id : src) {
+        ids.push_back(solv_id.id);
+    }
 }
 
 }  // namespace libdnf::rpm::solv
