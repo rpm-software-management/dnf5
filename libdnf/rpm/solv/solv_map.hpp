@@ -62,6 +62,9 @@ public:
     /// Copy constructor: clone from an existing SolvMap
     SolvMap(const SolvMap & other);
 
+    /// Move constructor
+    SolvMap(SolvMap && other) noexcept;
+
     ~SolvMap();
 
     // GENERIC OPERATIONS
@@ -154,6 +157,12 @@ inline SolvMap::SolvMap(const Map * other) {
 
 inline SolvMap::SolvMap(const SolvMap & other) : SolvMap(other.get_map()) {}
 
+inline SolvMap::SolvMap(SolvMap && other) noexcept {
+    map.size = other.map.size;
+    map.map = other.map.map;
+    other.map.size = 0;
+    other.map.map = nullptr;
+}
 
 inline SolvMap::~SolvMap() {
     map_free(&map);
