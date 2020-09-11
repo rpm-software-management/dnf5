@@ -303,6 +303,9 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:Query.size()
     std::size_t size() const noexcept;
 
+    /// @replaces libdnf/sack/query.hpp:method:Query.empty()
+    bool empty() const noexcept;
+
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     /// @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf::rpm::Nevra> resolve_pkg_spec(

@@ -1739,6 +1739,10 @@ std::size_t SolvQuery::size() const noexcept {
     return p_impl->query_result.size();
 }
 
+bool SolvQuery::empty() const noexcept {
+    return p_impl->query_result.empty();
+}
+
 std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
     const std::string & pkg_spec,
     bool icase,
