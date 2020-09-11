@@ -1711,6 +1711,30 @@ SolvQuery & SolvQuery::ifilter_supplements(libdnf::sack::QueryCmp cmp_type, cons
     return *this;
 }
 
+SolvQuery & SolvQuery::ifilter_installed() {
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+    auto * installed_repo = pool->installed;
+    for (PackageId candidate_id : p_impl->query_result) {
+        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+        if (solvable->repo != installed_repo) {
+            p_impl->query_result.remove_unsafe(candidate_id);
+        }
+    }
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_available() {
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+    auto * installed_repo = pool->installed;
+    for (PackageId candidate_id : p_impl->query_result) {
+        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+        if (solvable->repo == installed_repo) {
+            p_impl->query_result.remove_unsafe(candidate_id);
+        }
+    }
+    return *this;
+}
+
 std::size_t SolvQuery::size() const noexcept {
     return p_impl->query_result.size();
 }

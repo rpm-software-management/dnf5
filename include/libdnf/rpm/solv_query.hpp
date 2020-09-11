@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_SOLV_QUERY_HPP
 
 #include "nevra.hpp"
+#include "package_set.hpp"
 #include "solv_sack.hpp"
 
 #include "libdnf/common/sack/query_cmp.hpp"
@@ -292,6 +293,10 @@ public:
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_SUPPLEMENTS
     SolvQuery & ifilter_supplements(libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+
+    SolvQuery & ifilter_installed();
+
+    SolvQuery & ifilter_available();
 
     /// Return the number of packages in the SolvQuery.
     ///
