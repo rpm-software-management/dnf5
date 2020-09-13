@@ -38,17 +38,23 @@ namespace fs = std::filesystem;
 
 namespace microdnf {
 
-static void print_help() {
-    std::cout << "Help" << std::endl;
-    std::cout << "microdnf version: " << VERSION << std::endl;
-}
-
-void parse_args(Context & ctx, int argc, char * argv[]) {
+static bool parse_args(Context & ctx, int argc, char * argv[]) {
     auto microdnf = ctx.arg_parser.add_new_command("microdnf");
     microdnf->set_short_description("Utility for packages maintaining");
-    microdnf->set_description("This is a program for maintaining packages");
+    microdnf->set_description("Microdnf is a program for maintaining packages.");
     microdnf->commands_help_header = "List of commands:";
-    microdnf->opt_args_help_header = "Global optional arguments:";
+    microdnf->named_args_help_header = "Global arguments:";
+    auto help = ctx.arg_parser.add_new_named_arg("help");
+    help->set_long_name("help");
+    help->set_short_name('h');
+    help->set_short_description("Print help");
+    help->parse_hook = [microdnf](
+                               [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                               [[maybe_unused]] const char * option,
+                               [[maybe_unused]] const char * value) {
+        microdnf->help();
+        return true;};
+    microdnf->add_named_arg(help);
     ctx.arg_parser.set_root_command(microdnf);
 
     for (auto & command : ctx.commands) {
@@ -59,8 +65,8 @@ void parse_args(Context & ctx, int argc, char * argv[]) {
         ctx.arg_parser.parse(argc, argv);
     } catch (const std::exception & ex) {
         std::cout << ex.what() << std::endl;
-        return;
     }
+    return help->get_parse_count() > 0;
 }
 
 }  // namespace microdnf
@@ -83,10 +89,14 @@ int main(int argc, char * argv[]) {
     context.commands.push_back(std::make_unique<microdnf::CmdRepoquery>());
 
     // Parse command line arguments
-    microdnf::parse_args(context, argc, argv);
+    bool help_printed = microdnf::parse_args(context, argc, argv);
     if (!context.selected_command) {
-        microdnf::print_help();
-        return 0;
+        if (help_printed) {
+            return 0;
+        } else {
+            context.arg_parser.get_root_command()->help();
+            return 1;
+        }
     }
 
     // Load main configuration
