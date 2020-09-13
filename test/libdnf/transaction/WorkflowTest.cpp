@@ -107,7 +107,7 @@ WorkflowTest::testDefaultWorkflow()
 
     // STEP 5: run RPM transaction; callback: mark completed items
     for (auto i : trans.getItems()) {
-        i->setState(TransactionItemState::DONE);
+        i->set_state(TransactionItemState::DONE);
         i->save();
     }
 
@@ -124,22 +124,22 @@ WorkflowTest::testDefaultWorkflow()
     CPPUNIT_ASSERT(trans2.getItems().size() == 5);
 
     for (auto i : trans2.getItems()) {
-        if (i->getId() == 1) {
-            CPPUNIT_ASSERT(i->getAction() == TransactionItemAction::INSTALL);
-            CPPUNIT_ASSERT(i->getReason() == TransactionItemReason::GROUP);
-            CPPUNIT_ASSERT(i->getRepoid() == "base");
-        } else if (i->getId() == 2) {
-            CPPUNIT_ASSERT(i->getAction() == TransactionItemAction::OBSOLETE);
-            CPPUNIT_ASSERT(i->getReason() == TransactionItemReason::USER);
-            CPPUNIT_ASSERT(i->getRepoid() == "base");
-        } else if (i->getId() == 3) {
-            CPPUNIT_ASSERT(i->getAction() == TransactionItemAction::OBSOLETED);
-            CPPUNIT_ASSERT(i->getReason() == TransactionItemReason::USER);
-            CPPUNIT_ASSERT(i->getRepoid() == "f20");
+        if (i->get_id() == 1) {
+            CPPUNIT_ASSERT(i->get_action() == TransactionItemAction::INSTALL);
+            CPPUNIT_ASSERT(i->get_reason() == TransactionItemReason::GROUP);
+            CPPUNIT_ASSERT(i->get_repoid() == "base");
+        } else if (i->get_id() == 2) {
+            CPPUNIT_ASSERT(i->get_action() == TransactionItemAction::OBSOLETE);
+            CPPUNIT_ASSERT(i->get_reason() == TransactionItemReason::USER);
+            CPPUNIT_ASSERT(i->get_repoid() == "base");
+        } else if (i->get_id() == 3) {
+            CPPUNIT_ASSERT(i->get_action() == TransactionItemAction::OBSOLETED);
+            CPPUNIT_ASSERT(i->get_reason() == TransactionItemReason::USER);
+            CPPUNIT_ASSERT(i->get_repoid() == "f20");
         }
 
         // CPPUNIT_ASSERT(i->getItem()->getItemType() == "rpm");
-        CPPUNIT_ASSERT_EQUAL(TransactionItemState::DONE, i->getState());
+        CPPUNIT_ASSERT_EQUAL(TransactionItemState::DONE, i->get_state());
         // std::cout << "TransactionItem: " << i->getItem()->toStr() << std::endl;
         if (i->getItem()->getItemType() == ItemType::GROUP) {
             auto grp = std::dynamic_pointer_cast< CompsGroupItem >(i->getItem());

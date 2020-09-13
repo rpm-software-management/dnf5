@@ -73,7 +73,7 @@ TransactionItemReasonTest::test_OneTransaction_OneTransactionItem()
     TransactionItemAction action = TransactionItemAction::INSTALL;
     TransactionItemReason reason = TransactionItemReason::GROUP;
     auto ti = swdb.addItem(rpm_bash, repoid, action, reason);
-    ti->setState(TransactionItemState::DONE);
+    ti->set_state(TransactionItemState::DONE);
 
     swdb.beginTransaction(1, "", "", 0);
     swdb.endTransaction(2, "", TransactionState::DONE);
@@ -113,7 +113,7 @@ TransactionItemReasonTest::test_OneFailedTransaction_OneTransactionItem()
     TransactionItemAction action = TransactionItemAction::INSTALL;
     TransactionItemReason reason = TransactionItemReason::GROUP;
     auto ti = swdb.addItem(rpm_bash, repoid, action, reason);
-    ti->setState(TransactionItemState::DONE);
+    ti->set_state(TransactionItemState::DONE);
 
     swdb.beginTransaction(1, "", "", 0);
     swdb.endTransaction(2, "", TransactionState::ERROR);
@@ -154,7 +154,7 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::GROUP;
         auto ti = swdb.addItem(rpm_bash, repoid, action, reason);
-        ti->setState(TransactionItemState::DONE);
+        ti->set_state(TransactionItemState::DONE);
     }
 
     {
@@ -168,7 +168,7 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::USER;
         auto ti = swdb.addItem(rpm_bash, repoid, action, reason);
-        ti->setState(TransactionItemState::DONE);
+        ti->set_state(TransactionItemState::DONE);
     }
 
     swdb.beginTransaction(1, "", "", 0);
@@ -210,7 +210,7 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::GROUP;
         auto ti = swdb.addItem(rpm_bash, repoid, action, reason);
-        ti->setState(TransactionItemState::DONE);
+        ti->set_state(TransactionItemState::DONE);
 
         swdb.beginTransaction(1, "", "", 0);
         swdb.endTransaction(2, "", TransactionState::DONE);
@@ -230,7 +230,7 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::USER;
         auto ti = swdb.addItem(rpm_bash, repoid, action, reason);
-        ti->setState(TransactionItemState::DONE);
+        ti->set_state(TransactionItemState::DONE);
 
         swdb.beginTransaction(1, "", "", 0);
         swdb.endTransaction(2, "", TransactionState::DONE);
@@ -272,7 +272,7 @@ TransactionItemReasonTest::testRemovedPackage()
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::GROUP;
         auto ti = swdb.addItem(rpm_bash, repoid, action, reason);
-        ti->setState(TransactionItemState::DONE);
+        ti->set_state(TransactionItemState::DONE);
 
         swdb.beginTransaction(1, "", "", 0);
         swdb.endTransaction(2, "", TransactionState::DONE);
@@ -292,7 +292,7 @@ TransactionItemReasonTest::testRemovedPackage()
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::USER;
         auto ti = swdb.addItem(rpm_bash, repoid, action, reason);
-        ti->setState(TransactionItemState::DONE);
+        ti->set_state(TransactionItemState::DONE);
 
         swdb.beginTransaction(1, "", "", 0);
         swdb.endTransaction(2, "", TransactionState::DONE);
@@ -301,7 +301,7 @@ TransactionItemReasonTest::testRemovedPackage()
         swdb.initTransaction();
         action = TransactionItemAction::REMOVE;
         auto ti_remove = swdb.addItem(rpm_bash, repoid, action, reason);
-        ti_remove->setState(TransactionItemState::DONE);
+        ti_remove->set_state(TransactionItemState::DONE);
         swdb.beginTransaction(1, "", "", 0);
         swdb.endTransaction(2, "", TransactionState::DONE);
         swdb.closeTransaction();

@@ -189,7 +189,7 @@ Swdb::setItemDone(const std::string &nevra)
         throw std::logic_error(_("No transaction in progress"));
     }
     auto item = itemsInProgress[nevra];
-    item->setState(TransactionItemState::DONE);
+    item->set_state(TransactionItemState::DONE);
     item->saveState();
 }
 
@@ -208,7 +208,7 @@ Swdb::resolveRPMTransactionItemReason(const std::string &name,
                 continue;
             }
             if (rpm->getName() == name && rpm->getArch() == arch) {
-                return i->getReason();
+                return i->get_reason();
             }
         }
     }

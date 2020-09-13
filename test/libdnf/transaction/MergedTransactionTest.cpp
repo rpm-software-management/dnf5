@@ -190,7 +190,7 @@ MergedTransactionTest::testMergeEraseInstallReinstall()
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
     auto item = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::REINSTALL, item->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::REINSTALL, item->get_action());
 }
 
 /// Erase -> Install = Downgrade
@@ -204,7 +204,7 @@ MergedTransactionTest::testMergeEraseInstallDowngrade()
 
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
     auto item = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADE, item->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADE, item->get_action());
 }
 
 /// Erase -> Install = Upgrade
@@ -217,7 +217,7 @@ MergedTransactionTest::testMergeEraseInstallUpgrade()
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
     auto item = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADE, item->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADE, item->get_action());
 }
 
 /// Reinstall/Reason change -> (new action) = (new action)
@@ -235,9 +235,9 @@ MergedTransactionTest::testMergeReinstallAny()
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(2, (int)items.size());
     auto item = items.at(1);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADE, item->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADE, item->get_action());
     auto oldItem = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADED, oldItem->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADED, oldItem->get_action());
 }
 
 /// Install -> Erase = (nothing)
@@ -264,7 +264,7 @@ MergedTransactionTest::testMergeInstallAlter()
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
     auto item = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, item->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, item->get_action());
     auto rpm = std::dynamic_pointer_cast< RPMItem >(item->getItem());
     CPPUNIT_ASSERT_EQUAL(std::string("1.0.1"), rpm->getVersion());
 }
@@ -284,9 +284,9 @@ MergedTransactionTest::testMergeAlterReinstall()
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(2, (int)items.size());
     auto item = items.at(1);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADE, item->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADE, item->get_action());
     auto oldItem = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADED, oldItem->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::UPGRADED, oldItem->get_action());
 }
 
 /// Downgrade/Upgrade/Obsoleting -> Erase/Obsoleted = Erase/Obsolete (with old package)
@@ -303,7 +303,7 @@ MergedTransactionTest::testMergeAlterErase()
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
     auto item = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::REMOVE, item->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::REMOVE, item->get_action());
     auto rpm = std::dynamic_pointer_cast< RPMItem >(item->getItem());
     CPPUNIT_ASSERT_EQUAL(std::string("0.9.9"), rpm->getVersion());
 }
@@ -322,7 +322,7 @@ MergedTransactionTest::testMergeAlterAlter()
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
     auto item = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::REINSTALL, item->getAction());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::REINSTALL, item->get_action());
 }
 
 
@@ -533,9 +533,9 @@ MergedTransactionTest::test_add_install_removed()
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
 
     auto item = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item->getRepoid());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::REINSTALL, item->getAction());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->getReason());
+    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item->get_repoid());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::REINSTALL, item->get_action());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->get_reason());
 }
 
 void
@@ -580,9 +580,9 @@ MergedTransactionTest::test_add_obsoleted_installed()
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
 
     auto item = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item->getRepoid());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, item->getAction());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->getReason());
+    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item->get_repoid());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, item->get_action());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->get_reason());
 }
 
 void
@@ -652,9 +652,9 @@ MergedTransactionTest::test_add_obsoleted_obsoleted()
 
     auto item = items.at(0);
     CPPUNIT_ASSERT_EQUAL(std::string("tour-4.6-1.noarch"), item->getRPMItem()->getNEVRA());
-    CPPUNIT_ASSERT_EQUAL(std::string("repo1"), item->getRepoid());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, item->getAction());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::DEPENDENCY, item->getReason());
+    CPPUNIT_ASSERT_EQUAL(std::string("repo1"), item->get_repoid());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, item->get_action());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::DEPENDENCY, item->get_reason());
 }
 
 void
@@ -682,17 +682,17 @@ MergedTransactionTest::test_downgrade()
     {
         auto item = items.at(0);
         CPPUNIT_ASSERT_EQUAL(std::string("tour-4.8-1.noarch"), item->getItem()->toStr());
-        CPPUNIT_ASSERT_EQUAL(std::string("repo1"), item->getRepoid());
-        CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADED, item->getAction());
-        CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->getReason());
+        CPPUNIT_ASSERT_EQUAL(std::string("repo1"), item->get_repoid());
+        CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADED, item->get_action());
+        CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->get_reason());
     }
 
     {
         auto item = items.at(1);
         CPPUNIT_ASSERT_EQUAL(std::string("tour-4.6-1.noarch"), item->getItem()->toStr());
-        CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item->getRepoid());
-        CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADE, item->getAction());
-        CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->getReason());
+        CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item->get_repoid());
+        CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADE, item->get_action());
+        CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->get_reason());
     }
 
 }
@@ -730,9 +730,9 @@ MergedTransactionTest::test_install_downgrade()
 
     auto item = items.at(0);
     CPPUNIT_ASSERT_EQUAL(std::string("tour-4.6-1.noarch"), item->getItem()->toStr());
-    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item->getRepoid());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, item->getAction());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->getReason());
+    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item->get_repoid());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, item->get_action());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item->get_reason());
 }
 
 void
@@ -771,27 +771,27 @@ MergedTransactionTest::test_multilib_identity()
 
     auto item0 = items.at(0);
     CPPUNIT_ASSERT_EQUAL(std::string("gtk3-3.24.10-1.fc31.i686"), item0->getItem()->toStr());
-    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item0->getRepoid());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADED, item0->getAction());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item0->getReason());
+    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item0->get_repoid());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADED, item0->get_action());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item0->get_reason());
 
     auto item1 = items.at(1);
     CPPUNIT_ASSERT_EQUAL(std::string("gtk3-3.24.8-1.fc30.i686"), item1->getItem()->toStr());
-    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item1->getRepoid());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADE, item1->getAction());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item1->getReason());
+    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item1->get_repoid());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADE, item1->get_action());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item1->get_reason());
 
     auto item2 = items.at(2);
     CPPUNIT_ASSERT_EQUAL(std::string("gtk3-3.24.10-1.fc31.x86_64"), item2->getItem()->toStr());
-    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item2->getRepoid());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADED, item2->getAction());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item2->getReason());
+    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item2->get_repoid());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADED, item2->get_action());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item2->get_reason());
 
     auto item3 = items.at(3);
     CPPUNIT_ASSERT_EQUAL(std::string("gtk3-3.24.8-1.fc30.x86_64"), item3->getItem()->toStr());
-    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item3->getRepoid());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADE, item3->getAction());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item3->getReason());
+    CPPUNIT_ASSERT_EQUAL(std::string("repo2"), item3->get_repoid());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemAction::DOWNGRADE, item3->get_action());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, item3->get_reason());
 }
 
 /*

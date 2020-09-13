@@ -429,11 +429,11 @@ Transformer::transformRPMItems(libdnf::utils::SQLite3Ptr swdb,
 
             // add TransactionItem object
             transItem = trans->addItem(rpm, repoid, action, reason);
-            transItem->setState(query.get< std::string >("done") == "TRUE" ? TransactionItemState::DONE : TransactionItemState::ERROR);
+            transItem->set_state(query.get< std::string >("done") == "TRUE" ? TransactionItemState::DONE : TransactionItemState::ERROR);
         } else {
             // item has been obsoleted - we just need to update the action
             transItem = pastObsoleted->second;
-            transItem->setAction(action);
+            transItem->set_action(action);
         }
 
         // resolve replaced by
@@ -598,7 +598,7 @@ Transformer::processGroupPersistor(libdnf::utils::SQLite3Ptr swdb, struct json_o
     }
 
     for (auto i : trans.getItems()) {
-        i->setState(TransactionItemState::DONE);
+        i->set_state(TransactionItemState::DONE);
         i->save();
     }
 

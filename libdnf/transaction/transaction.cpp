@@ -203,7 +203,7 @@ Transaction::finish(TransactionState state)
     }
 
     for (auto i : getItems()) {
-        if (i->getState() == TransactionItemState::UNKNOWN) {
+        if (i->get_state() == TransactionItemState::UNKNOWN) {
             throw std::runtime_error(
                 fmt::format(_("TransactionItem state is not set: {}"), i->getItem()->toStr()));
         }
@@ -312,15 +312,15 @@ Transaction::addItem(std::shared_ptr< Item > item,
         if (i->getItem()->toStr() != item->toStr()) {
             continue;
         }
-        if (i->getRepoid() != repoid) {
+        if (i->get_repoid() != repoid) {
             continue;
         }
-        if (i->getAction() != action) {
+        if (i->get_action() != action) {
             continue;
         }
-        if (reason > i->getReason()) {
+        if (reason > i->get_reason()) {
             // use the more significant reason
-            i->setReason(reason);
+            i->set_reason(reason);
         }
         // don't add duplicates to the list
         // return an existing transaction item if exists
@@ -328,9 +328,9 @@ Transaction::addItem(std::shared_ptr< Item > item,
     }
     auto trans_item = std::make_shared< TransactionItem >(this);
     trans_item->setItem(item);
-    trans_item->setRepoid(repoid);
-    trans_item->setAction(action);
-    trans_item->setReason(reason);
+    trans_item->set_repoid(repoid);
+    trans_item->set_action(action);
+    trans_item->set_reason(reason);
     items.push_back(trans_item);
     return trans_item;
 }

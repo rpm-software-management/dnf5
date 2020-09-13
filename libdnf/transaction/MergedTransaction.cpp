@@ -248,18 +248,18 @@ MergedTransaction::resolveRPMDifference(ItemPair &previousItemPair,
     if (firstRPM->getVersion() == secondRPM->getVersion() &&
         firstRPM->getEpoch() == secondRPM->getEpoch()) {
         // reinstall
-        mTransItem->setAction(TransactionItemAction::REINSTALL);
+        mTransItem->set_action(TransactionItemAction::REINSTALL);
         previousItemPair.first = mTransItem;
         previousItemPair.second = nullptr;
         return;
     } else if ((*firstRPM) < (*secondRPM)) {
         // Upgrade to secondRPM
-        previousItemPair.first->setAction(TransactionItemAction::UPGRADED);
-        mTransItem->setAction(TransactionItemAction::UPGRADE);
+        previousItemPair.first->set_action(TransactionItemAction::UPGRADED);
+        mTransItem->set_action(TransactionItemAction::UPGRADE);
     } else {
         // Downgrade to secondRPM
-        previousItemPair.first->setAction(TransactionItemAction::DOWNGRADED);
-        mTransItem->setAction(TransactionItemAction::DOWNGRADE);
+        previousItemPair.first->set_action(TransactionItemAction::DOWNGRADED);
+        mTransItem->set_action(TransactionItemAction::DOWNGRADE);
     }
     previousItemPair.second = mTransItem;
 }
@@ -272,13 +272,13 @@ MergedTransaction::resolveErase(ItemPair &previousItemPair, TransactionItemPtr m
      *  has changed. Resolve the difference between packages and mark it as Upgrade,
      *  Reinstall or Downgrade
      */
-    if (mTransItem->getAction() == TransactionItemAction::INSTALL) {
+    if (mTransItem->get_action() == TransactionItemAction::INSTALL) {
         if (mTransItem->getItem()->getItemType() == ItemType::RPM) {
             // resolve the difference between RPM packages
             resolveRPMDifference(previousItemPair, mTransItem);
         } else {
             // difference between comps can't be resolved
-            mTransItem->setAction(TransactionItemAction::REINSTALL);
+            mTransItem->set_action(TransactionItemAction::REINSTALL);
         }
     }
     previousItemPair.first = mTransItem;
@@ -298,13 +298,13 @@ MergedTransaction::resolveErase(ItemPair &previousItemPair, TransactionItemPtr m
 void
 MergedTransaction::resolveAltered(ItemPair &previousItemPair, TransactionItemPtr mTransItem)
 {
-    auto newState = mTransItem->getAction();
-    auto firstState = previousItemPair.first->getAction();
+    auto newState = mTransItem->get_action();
+    auto firstState = previousItemPair.first->get_action();
 
     if (newState == TransactionItemAction::REMOVE || newState == TransactionItemAction::OBSOLETED) {
         // package is being Erased
         // move Erased action to the previous state
-        previousItemPair.first->setAction(newState);
+        previousItemPair.first->set_action(newState);
         previousItemPair.second = nullptr;
     } else if (newState == TransactionItemAction::DOWNGRADED ||
                newState == TransactionItemAction::UPGRADED) {
@@ -341,7 +341,7 @@ MergedTransaction::resolveAltered(ItemPair &previousItemPair, TransactionItemPtr
                 resolveRPMDifference(previousItemPair, mTransItem);
             } else {
                 // difference between comps can't be resolved
-                previousItemPair.second->setAction(TransactionItemAction::REINSTALL);
+                previousItemPair.second->set_action(TransactionItemAction::REINSTALL);
                 previousItemPair.first = previousItemPair.second;
                 previousItemPair.second = nullptr;
             }
@@ -368,10 +368,10 @@ MergedTransaction::mergeItem(ItemPairMap &itemPairMap, TransactionItemPtr mTrans
 
     ItemPair &previousItemPair = previous->second;
 
-    auto firstState = previousItemPair.first->getAction();
-    auto newState = mTransItem->getAction();
+    auto firstState = previousItemPair.first->get_action();
+    auto newState = mTransItem->get_action();
 
-    if (firstState == TransactionItemAction::INSTALL && mTransItem->isBackwardAction()) {
+    if (firstState == TransactionItemAction::INSTALL && mTransItem->is_backward_action()) {
         return;
     }
 
@@ -389,7 +389,7 @@ MergedTransaction::mergeItem(ItemPairMap &itemPairMap, TransactionItemPtr mTrans
                 break;
             }
             // altered -> transfer install to the altered package
-            mTransItem->setAction(TransactionItemAction::INSTALL);
+            mTransItem->set_action(TransactionItemAction::INSTALL);
 
             // don't break
             // gcc doesn't support [[fallthrough]]

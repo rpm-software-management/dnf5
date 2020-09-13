@@ -109,10 +109,10 @@ compsGroupTransactionItemFromQuery(libdnf::utils::SQLite3Ptr conn, libdnf::utils
     auto item = std::make_shared< CompsGroupItem >(conn);
     trans_item->setItem(item);
 
-    trans_item->setId(query.get< int >("ti_id"));
-    trans_item->setAction(static_cast< TransactionItemAction >(query.get< int >("ti_action")));
-    trans_item->setReason(static_cast< TransactionItemReason >(query.get< int >("ti_reason")));
-    trans_item->setState(static_cast< TransactionItemState >(query.get< int >("ti_state")));
+    trans_item->set_id(query.get< int >("ti_id"));
+    trans_item->set_action(static_cast< TransactionItemAction >(query.get< int >("ti_action")));
+    trans_item->set_reason(static_cast< TransactionItemReason >(query.get< int >("ti_reason")));
+    trans_item->set_state(static_cast< TransactionItemState >(query.get< int >("ti_state")));
     item->setId(query.get< int >("item_id"));
     item->setGroupId(query.get< std::string >("groupid"));
     item->setName(query.get< std::string >("name"));
@@ -157,7 +157,7 @@ CompsGroupItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::st
     if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto trans_item =
             compsGroupTransactionItemFromQuery(conn, query, query.get< int64_t >("trans_id"));
-        if (trans_item->getAction() == TransactionItemAction::REMOVE) {
+        if (trans_item->get_action() == TransactionItemAction::REMOVE) {
             return nullptr;
         }
         return trans_item;

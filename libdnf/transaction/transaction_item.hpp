@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 namespace libdnf::transaction {
+class Transaction;
 class TransactionItem;
 typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 }
@@ -37,16 +38,19 @@ typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 #include "CompsGroupItem.hpp"
 #include "RPMItem.hpp"
 #include "Repo.hpp"
-#include "transaction.hpp"
 #include "Types.hpp"
+
 
 namespace libdnf::transaction {
 
-typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 
 class TransactionItem {
 public:
-    explicit TransactionItem(Transaction *trans);
+    using Action = TransactionItemAction;
+    using Reason = TransactionItemReason;
+    using State = TransactionItemState;
+
+    explicit TransactionItem(Transaction * trans);
 
     TransactionItem(libdnf::utils::SQLite3Ptr conn, int64_t transID);
 
@@ -64,37 +68,29 @@ public:
     }
     RPMItemPtr getRPMItem() const noexcept { return std::dynamic_pointer_cast< RPMItem >(item); }
 
-    const std::string &getRepoid() const noexcept { return repoid; }
-    void setRepoid(const std::string &value) { repoid = value; }
+    int64_t get_id() const noexcept { return id; }
+    void set_id(int64_t value) { id = value; }
 
-    TransactionItemAction getAction() const noexcept { return action; }
-    void setAction(TransactionItemAction value) { action = value; }
+    Action get_action() const noexcept { return action; }
+    void set_action(Action value) { action = value; }
+    std::string get_action_name();
+    std::string get_action_short();
 
-    TransactionItemReason getReason() const noexcept { return reason; }
-    void setReason(TransactionItemReason value) { reason = value; }
+    Reason get_reason() const noexcept { return reason; }
+    void set_reason(Reason value) { reason = value; }
 
-    std::string getActionName();
-    std::string getActionShort();
+    State get_state() const noexcept { return state; }
+    void set_state(State value) { state = value; }
 
-    TransactionItemState getState() const noexcept { return state; }
-    void setState(TransactionItemState value) { state = value; }
+    const std::string & get_repoid() const noexcept { return repoid; }
+    void set_repoid(const std::string & value) { repoid = value; }
 
-    /**
-     * @brief Has the item appeared on the system during the transaction?
-     *
-     * @return bool
-     */
-    bool isForwardAction() const;
+    /// Has the item appeared on the system during the transaction?
+    bool is_forward_action() const;
 
-    /**
-     * @brief Has the item got removed from the system during the transaction?
-     *
-     * @return bool
-     */
-    bool isBackwardAction() const;
+    /// Has the item got removed from the system during the transaction?
+    bool is_backward_action() const;
 
-    int64_t getId() const noexcept { return id; }
-    void setId(int64_t value) { id = value; }
 
     uint32_t getInstalledBy() const;
 
@@ -117,14 +113,15 @@ public:
     bool operator<(TransactionItemPtr other) { return (getItem()->toStr() < other->getItem()->toStr()); }
 
 protected:
-    ItemPtr item;
     int64_t id = 0;
+    Action action = Action::INSTALL;
+    Reason reason = Reason::UNKNOWN;
+    State state = State::UNKNOWN;
     std::string repoid;
-    TransactionItemAction action = TransactionItemAction::INSTALL;
-    TransactionItemReason reason = TransactionItemReason::UNKNOWN;
-    TransactionItemState state = TransactionItemState::UNKNOWN;
-    Transaction *trans;
 
+    Transaction * trans;
+
+    ItemPtr item;
     const int64_t transID;
     libdnf::utils::SQLite3Ptr conn;
 

@@ -63,16 +63,16 @@ RpmItemTest::testCreateDuplicates()
     // test that the duplicate wasn't inserted
     CPPUNIT_ASSERT(trans.getItems().size() == 1);
     // test that the best reason (from ti1) was used
-    CPPUNIT_ASSERT(ti1->getReason() == TransactionItemReason::GROUP);
-    CPPUNIT_ASSERT(ti2->getReason() == TransactionItemReason::GROUP);
+    CPPUNIT_ASSERT(ti1->get_reason() == TransactionItemReason::GROUP);
+    CPPUNIT_ASSERT(ti2->get_reason() == TransactionItemReason::GROUP);
 
     auto ti3 = trans.addItem(rpm, "base", TransactionItemAction::INSTALL, TransactionItemReason::USER);
     // test that the duplicate wasn't inserted
     CPPUNIT_ASSERT(trans.getItems().size() == 1);
     // test that the best reason (from ti3) was used
-    CPPUNIT_ASSERT(ti1->getReason() == TransactionItemReason::USER);
-    CPPUNIT_ASSERT(ti2->getReason() == TransactionItemReason::USER);
-    CPPUNIT_ASSERT(ti3->getReason() == TransactionItemReason::USER);
+    CPPUNIT_ASSERT(ti1->get_reason() == TransactionItemReason::USER);
+    CPPUNIT_ASSERT(ti2->get_reason() == TransactionItemReason::USER);
+    CPPUNIT_ASSERT(ti3->get_reason() == TransactionItemReason::USER);
 }
 
 void
@@ -93,7 +93,7 @@ RpmItemTest::testGetTransactionItems()
         rpm->setRelease("2");
         rpm->setArch("x86_64");
         auto ti = trans.addItem(rpm, "base", TransactionItemAction::INSTALL, TransactionItemReason::USER);
-        ti->setState(TransactionItemState::DONE);
+        ti->set_state(TransactionItemState::DONE);
     }
     trans.begin();
     trans.finish(TransactionState::DONE);

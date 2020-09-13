@@ -145,9 +145,9 @@ TransformerTest::testTransformTrans()
         if (rpm->getName() == "chrony" && rpm->getVersion() == "3.1") {
             CPPUNIT_ASSERT(rpm->getEpoch() == 1);
             CPPUNIT_ASSERT(rpm->getRelease() == "4.fc26");
-            CPPUNIT_ASSERT(item->getAction() == TransactionItemAction::UPGRADED);
-            CPPUNIT_ASSERT(item->getReason() == TransactionItemReason::USER);
-            CPPUNIT_ASSERT(item->getState() == TransactionItemState::DONE);
+            CPPUNIT_ASSERT(item->get_action() == TransactionItemAction::UPGRADED);
+            CPPUNIT_ASSERT(item->get_reason() == TransactionItemReason::USER);
+            CPPUNIT_ASSERT(item->get_state() == TransactionItemState::DONE);
 
             // TODO repo, replaced
         } else { // chrony 3.2
@@ -155,9 +155,9 @@ TransformerTest::testTransformTrans()
             CPPUNIT_ASSERT(rpm->getVersion() == "3.2");
             CPPUNIT_ASSERT(rpm->getRelease() == "4.fc26");
 
-            CPPUNIT_ASSERT(item->getAction() == TransactionItemAction::UPGRADE);
-            CPPUNIT_ASSERT(item->getReason() == TransactionItemReason::USER);
-            CPPUNIT_ASSERT(item->getState() == TransactionItemState::DONE);
+            CPPUNIT_ASSERT(item->get_action() == TransactionItemAction::UPGRADE);
+            CPPUNIT_ASSERT(item->get_reason() == TransactionItemReason::USER);
+            CPPUNIT_ASSERT(item->get_state() == TransactionItemState::DONE);
             // TODO repo, replaced
         }
     }
@@ -202,9 +202,9 @@ TransformerTest::testTransformTrans()
         CPPUNIT_ASSERT(kernel->getVersion() == "4.11");
         CPPUNIT_ASSERT(kernel->getRelease() == "301.fc26");
 
-        CPPUNIT_ASSERT(item->getAction() == TransactionItemAction::INSTALL);
-        CPPUNIT_ASSERT(item->getReason() == TransactionItemReason::DEPENDENCY);
-        CPPUNIT_ASSERT(item->getState() == TransactionItemState::DONE);
+        CPPUNIT_ASSERT(item->get_action() == TransactionItemAction::INSTALL);
+        CPPUNIT_ASSERT(item->get_reason() == TransactionItemReason::DEPENDENCY);
+        CPPUNIT_ASSERT(item->get_state() == TransactionItemState::DONE);
     }
 
     swdb->backup("sql.db");

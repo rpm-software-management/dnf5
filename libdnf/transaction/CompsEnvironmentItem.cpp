@@ -111,10 +111,10 @@ compsEnvironmentTransactionItemFromQuery(libdnf::utils::SQLite3Ptr conn, libdnf:
     auto item = std::make_shared< CompsEnvironmentItem >(conn);
 
     trans_item->setItem(item);
-    trans_item->setId(query.get< int >("ti_id"));
-    trans_item->setAction(static_cast< TransactionItemAction >(query.get< int >("ti_action")));
-    trans_item->setReason(static_cast< TransactionItemReason >(query.get< int >("ti_reason")));
-    trans_item->setState(static_cast< TransactionItemState >(query.get< int >("ti_state")));
+    trans_item->set_id(query.get< int >("ti_id"));
+    trans_item->set_action(static_cast< TransactionItemAction >(query.get< int >("ti_action")));
+    trans_item->set_reason(static_cast< TransactionItemReason >(query.get< int >("ti_reason")));
+    trans_item->set_state(static_cast< TransactionItemState >(query.get< int >("ti_state")));
     item->setId(query.get< int >("item_id"));
     item->setEnvironmentId(query.get< std::string >("environmentid"));
     item->setName(query.get< std::string >("name"));
@@ -161,7 +161,7 @@ CompsEnvironmentItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const s
         auto trans_item =
             compsEnvironmentTransactionItemFromQuery(conn, query, query.get< int64_t >("trans_id"));
 
-        if (trans_item->getAction() == TransactionItemAction::REMOVE) {
+        if (trans_item->get_action() == TransactionItemAction::REMOVE) {
             return nullptr;
         }
         return trans_item;
@@ -232,8 +232,8 @@ CompsEnvironmentItem::getTransactionItems(libdnf::utils::SQLite3Ptr conn, int64_
         auto item = std::make_shared< CompsEnvironmentItem >(conn);
         trans_item->setItem(item);
 
-        trans_item->setId(query.get< int >(0));
-        trans_item->setState(static_cast< TransactionItemState >(query.get< int >(1)));
+        trans_item->set_id(query.get< int >(0));
+        trans_item->set_state(static_cast< TransactionItemState >(query.get< int >(1)));
         item->setId(query.get< int >(2));
         item->setEnvironmentId(query.get< std::string >(3));
         item->setName(query.get< std::string >(4));

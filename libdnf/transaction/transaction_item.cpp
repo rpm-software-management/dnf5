@@ -20,6 +20,7 @@
 
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
+#include "transaction.hpp"
 #include "transaction_item.hpp"
 #include "Types.hpp"
 #include "transaction_item_action.hpp"
@@ -28,12 +29,12 @@
 namespace libdnf::transaction {
 
 
-std::string TransactionItem::getActionName() {
+std::string TransactionItem::get_action_name() {
     return TransactionItemAction_get_name(action);
 }
 
 
-std::string TransactionItem::getActionShort() {
+std::string TransactionItem::get_action_short() {
     return TransactionItemAction_get_short(action);
 }
 
@@ -46,12 +47,12 @@ TransactionItem::TransactionItem(Transaction *trans)
 }
 
 
-bool TransactionItem::isForwardAction() const {
+bool TransactionItem::is_forward_action() const {
     return TransactionItemAction_is_forward_action(action);
 }
 
 
-bool TransactionItem::isBackwardAction() const {
+bool TransactionItem::is_backward_action() const {
     return TransactionItemAction_is_backward_action(action);
 }
 
@@ -67,7 +68,7 @@ void
 TransactionItem::save()
 {
     getItem()->save();
-    if (getId() == 0) {
+    if (get_id() == 0) {
         dbInsert();
     } else {
         dbUpdate();
@@ -101,12 +102,12 @@ TransactionItem::dbInsert()
     libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
     query.bindv(trans->get_id(),
                 getItem()->getId(),
-                Repo::getCached(conn, getRepoid())->getId(),
-                static_cast< int >(getAction()),
-                static_cast< int >(getReason()),
-                static_cast< int >(getState()));
+                Repo::getCached(conn, get_repoid())->getId(),
+                static_cast< int >(get_action()),
+                static_cast< int >(get_reason()),
+                static_cast< int >(get_state()));
     query.step();
-    setId(conn->last_insert_rowid());
+    set_id(conn->last_insert_rowid());
 }
 
 void
@@ -123,7 +124,7 @@ TransactionItem::saveReplacedBy()
             // reset the prepared statement, so it can be executed again
             replacedByQuery.reset();
         }
-        replacedByQuery.bindv(getId(), newItem->getId());
+        replacedByQuery.bindv(get_id(), newItem->get_id());
         replacedByQuery.step();
         first = false;
     }
@@ -142,7 +143,7 @@ TransactionItem::saveState()
     )**";
 
     libdnf::utils::SQLite3::Statement query(*conn, sql);
-    query.bindv(static_cast< int >(getState()), getId());
+    query.bindv(static_cast< int >(get_state()), get_id());
     query.step();
 }
 
@@ -170,11 +171,11 @@ TransactionItem::dbUpdate()
     libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
     query.bindv(trans->get_id(),
                 getItem()->getId(),
-                Repo::getCached(trans->conn, getRepoid())->getId(),
-                static_cast< int >(getAction()),
-                static_cast< int >(getReason()),
-                static_cast< int >(getState()),
-                getId());
+                Repo::getCached(trans->conn, get_repoid())->getId(),
+                static_cast< int >(get_action()),
+                static_cast< int >(get_reason()),
+                static_cast< int >(get_state()),
+                get_id());
     query.step();
 }
 

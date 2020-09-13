@@ -98,11 +98,11 @@ transactionItemFromQuery(libdnf::utils::SQLite3Ptr conn, libdnf::utils::SQLite3:
     auto trans_item = std::make_shared< TransactionItem >(conn, transID);
     auto item = std::make_shared< RPMItem >(conn);
     trans_item->setItem(item);
-    trans_item->setId(query.get< int >("id"));
-    trans_item->setAction(static_cast< TransactionItemAction >(query.get< int >("action")));
-    trans_item->setReason(static_cast< TransactionItemReason >(query.get< int >("reason")));
-    trans_item->setRepoid(query.get< std::string >("repoid"));
-    trans_item->setState(static_cast< TransactionItemState >(query.get< int >("state")));
+    trans_item->set_id(query.get< int >("id"));
+    trans_item->set_action(static_cast< TransactionItemAction >(query.get< int >("action")));
+    trans_item->set_reason(static_cast< TransactionItemReason >(query.get< int >("reason")));
+    trans_item->set_repoid(query.get< std::string >("repoid"));
+    trans_item->set_state(static_cast< TransactionItemState >(query.get< int >("state")));
     item->setId(query.get< int >("item_id"));
     item->setName(query.get< std::string >("name"));
     item->setEpoch(query.get< int >("epoch"));

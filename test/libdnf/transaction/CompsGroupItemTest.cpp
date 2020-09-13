@@ -79,7 +79,7 @@ CompsGroupItemTest::testGetTransactionItems()
     Transaction trans(conn);
     auto grp = createCompsGroup(conn);
     auto ti = trans.addItem(grp, "", TransactionItemAction::INSTALL, TransactionItemReason::USER);
-    ti->setState(TransactionItemState::DONE);
+    ti->set_state(TransactionItemState::DONE);
     trans.begin();
     trans.finish(TransactionState::DONE);
 
