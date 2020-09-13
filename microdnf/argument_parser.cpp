@@ -20,8 +20,11 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "argument_parser.hpp"
 
 #include <fmt/format.h>
+#include <libsmartcols/libsmartcols.h>
 
 #include <cstring>
+#include <iomanip>
+#include <iostream>
 
 namespace microdnf {
 
@@ -269,6 +272,99 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
     ++parse_count;
     if (parse_hook) {
         parse_hook(this, option, argc, argv);
+    }
+}
+
+
+static struct libscols_table * create_help_table(const std::string & name) {
+    struct libscols_table * table = scols_new_table();
+    scols_table_set_name(table, name.c_str());
+    scols_table_enable_noheadings(table, 1);
+    scols_table_set_column_separator(table, "  ");
+
+    scols_table_enable_colors(table, 1);
+    scols_table_new_column(table, "argument", 5, 0);
+    //scols_column_set_cmpfunc(cl, scols_cmpstr_cells, nullptr);
+    scols_table_new_column(table, "descr", 0.5, SCOLS_FL_WRAP);
+    return table;
+}
+
+static void add_line_into_table(
+    struct libscols_table * table, const std::string & arg_names, const std::string & descr) {
+    enum { COL_ARG_NAMES, COL_DESCR };
+    struct libscols_line * ln = scols_table_new_line(table, nullptr);
+    scols_line_set_data(ln, COL_ARG_NAMES, arg_names.c_str());
+    scols_line_set_data(ln, COL_DESCR, descr.c_str());
+}
+
+void ArgumentParser::Command::help() const noexcept {
+    bool print = false;
+    std::cout.flags(std::ios::left);
+
+    if (!description.empty()) {
+        std::cout << description << '\n';
+        print = true;
+    }
+
+    if (!commands_help_header.empty()) {
+        auto table = create_help_table(commands_help_header);
+        auto out = scols_table_get_stream(table);
+        if (print) {
+            fputs("\n", out);
+        }
+        fputs((commands_help_header + '\n').c_str(), out);
+        for (auto arg : cmds) {
+            // std::cout << std::setw(15) << arg->get_name() << arg->get_short_description() << '\n';
+            add_line_into_table(table, arg->get_name(), arg->get_short_description());
+        }
+        scols_print_table(table);
+        scols_unref_table(table);
+        print = true;
+    }
+
+    if (!named_args_help_header.empty()) {
+        auto table = create_help_table(named_args_help_header);
+        auto out = scols_table_get_stream(table);
+        if (print) {
+            fputs("\n", out);
+        }
+        fputs((named_args_help_header + '\n').c_str(), out);
+        for (auto arg : named_args) {
+            std::string arg_names;
+            if (arg->get_short_name() != '\0') {
+                arg_names = std::string("-") + arg->get_short_name();
+                if (arg->get_has_arg()) {
+                    arg_names += arg->arg_value_help.empty() ? " VALUE" : ' ' + arg->arg_value_help;
+                }
+                if (!arg->get_long_name().empty()) {
+                    arg_names += ", ";
+                }
+            }
+            if (!arg->get_long_name().empty()) {
+                arg_names += "--" + arg->get_long_name();
+                if (arg->get_has_arg()) {
+                    arg_names += arg->arg_value_help.empty() ? "=VALUE" : '=' + arg->arg_value_help;
+                }
+            }
+            add_line_into_table(table, "  " + arg_names, arg->get_short_description());
+        }
+        scols_print_table(table);
+        scols_unref_table(table);
+        print = true;
+    }
+
+    if (!positional_args_help_header.empty()) {
+        auto table = create_help_table(named_args_help_header);
+        auto out = scols_table_get_stream(table);
+        if (print) {
+            fputs("\n", out);
+        }
+        fputs((positional_args_help_header + '\n').c_str(), out);
+        for (auto arg : pos_args) {
+            add_line_into_table(table, "  " + arg->get_name(), arg->get_short_description());
+        }
+        scols_print_table(table);
+        scols_unref_table(table);
     }
 }
 

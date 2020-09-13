@@ -47,6 +47,7 @@ public:
         void reset_parse_count() noexcept { parse_count = 0; }
         Argument * get_conflict_argument() const;
         static std::string get_conflict_arg_msg(Argument * conflict_arg);
+        virtual void help() const noexcept {}
 
     protected:
         std::string name;
@@ -109,6 +110,8 @@ public:
         // returns number of consumed arguments
         int parse_short(const char * option, int argc, const char * const argv[]);
 
+        std::string arg_value_help;
+
     private:
         std::string long_name;
         char short_name{'\0'};
@@ -132,6 +135,7 @@ public:
         NamedArg & get_named_arg(const std::string & name) const;
         PositionalArg & get_positional_arg(const std::string & name) const;
         std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])> parse_hook;
+        void help() const noexcept override;
 
         std::string commands_help_header;
         std::string named_args_help_header;
