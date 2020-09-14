@@ -35,6 +35,7 @@ option(WITH_MAN "Build man pages" ON)
 # build options - tests
 option(WITH_TESTS "Build tests" ON)
 option(WITH_PERFORMANCE_TESTS "Build performance tests (DEBUG ONLY)" OFF)
+option(WITH_DNFDAEMON_TESTS "Build dnfdaemon tests (requires configured dbus)" OFF)
 
 # build options - debugging
 option(WITH_SANITIZERS "Build with address, leak and undefined sanitizers (DEBUG ONLY)" OFF)

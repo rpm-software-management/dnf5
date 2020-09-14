@@ -29,6 +29,7 @@ Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
 %bcond_with    sanitizers
 %bcond_without tests
 %bcond_with    performance_tests
+%bcond_with    dnfdaemon_tests
 
 
 # ========== versions of dependencies ==========
@@ -317,6 +318,12 @@ Requires:       libdnf%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 BuildRequires:  pkgconfig(sdbus-c++)
+%if %{with dnfdaemon_tests}
+BuildRequires:  dbus-daemon
+BuildRequires:  polkit
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(dbus-python)
+%endif
 
 %description -n dnfdaemon-server
 Package management service with a DBus interface
@@ -385,6 +392,7 @@ Package management service with a DBus interface
     -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF} \
     -DWITH_TESTS=%{?with_tests:ON}%{!?with_tests:OFF} \
     -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF}
+    -DWITH_DNFDAEMON_TESTS=%{?with_dnfdaemon_tests:ON}%{!?with_dnfdaemon_tests:OFF}
 %make_build
 %if %{with man}
     make doc-man
