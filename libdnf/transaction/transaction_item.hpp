@@ -33,12 +33,14 @@ class TransactionItem;
 typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 }
 
-#include "Item.hpp"
 #include "CompsEnvironmentItem.hpp"
 #include "CompsGroupItem.hpp"
 #include "RPMItem.hpp"
 #include "Repo.hpp"
-#include "Types.hpp"
+#include "transaction_item_action.hpp"
+#include "transaction_item_reason.hpp"
+#include "transaction_item_state.hpp"
+#include "transaction_item_type.hpp"
 
 
 namespace libdnf::transaction {
@@ -49,6 +51,7 @@ public:
     using Action = TransactionItemAction;
     using Reason = TransactionItemReason;
     using State = TransactionItemState;
+    using Type = TransactionItemType;
 
     explicit TransactionItem(Transaction * trans);
 

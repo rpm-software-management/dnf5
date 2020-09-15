@@ -215,13 +215,13 @@ getItemIdentifier(ItemPtr item)
 {
     auto itemType = item->getItemType();
     std::string name;
-    if (itemType == ItemType::RPM) {
+    if (itemType == TransactionItemType::RPM) {
         auto rpm = std::dynamic_pointer_cast< RPMItem >(item);
         name = rpm->getName() + "." + rpm->getArch();
-    } else if (itemType == ItemType::GROUP) {
+    } else if (itemType == TransactionItemType::GROUP) {
         auto group = std::dynamic_pointer_cast< CompsGroupItem >(item);
         name = group->getGroupId();
-    } else if (itemType == ItemType::ENVIRONMENT) {
+    } else if (itemType == TransactionItemType::ENVIRONMENT) {
         auto env = std::dynamic_pointer_cast< CompsEnvironmentItem >(item);
         name = env->getEnvironmentId();
     }
@@ -273,7 +273,7 @@ MergedTransaction::resolveErase(ItemPair &previousItemPair, TransactionItemPtr m
      *  Reinstall or Downgrade
      */
     if (mTransItem->get_action() == TransactionItemAction::INSTALL) {
-        if (mTransItem->getItem()->getItemType() == ItemType::RPM) {
+        if (mTransItem->getItem()->getItemType() == TransactionItemType::RPM) {
             // resolve the difference between RPM packages
             resolveRPMDifference(previousItemPair, mTransItem);
         } else {
@@ -336,7 +336,7 @@ MergedTransaction::resolveAltered(ItemPair &previousItemPair, TransactionItemPtr
         if (previousItemPair.second == nullptr) {
             previousItemPair.second = mTransItem;
         } else {
-            if (mTransItem->getItem()->getItemType() == ItemType::RPM) {
+            if (mTransItem->getItem()->getItemType() == TransactionItemType::RPM) {
                 // resolve the difference between RPM packages
                 resolveRPMDifference(previousItemPair, mTransItem);
             } else {

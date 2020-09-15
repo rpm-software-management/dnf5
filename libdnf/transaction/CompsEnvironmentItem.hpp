@@ -31,11 +31,11 @@ typedef std::shared_ptr< CompsEnvironmentItem > CompsEnvironmentItemPtr;
 
 class CompsEnvironmentGroup;
 typedef std::shared_ptr< CompsEnvironmentGroup > CompsEnvironmentGroupPtr;
+
 }
 
 #include "Item.hpp"
 #include "CompsGroupItem.hpp"
-#include "transaction_item.hpp"
 
 namespace libdnf::transaction {
 
@@ -60,7 +60,7 @@ public:
     void setPackageTypes(CompsPackageType value) { packageTypes = value; }
 
     std::string toStr() const override;
-    ItemType getItemType() const noexcept override { return itemType; }
+    Type getItemType() const noexcept override { return itemType; }
     void save() override;
     CompsEnvironmentGroupPtr addGroup(std::string groupId,
                                       bool installed,
@@ -74,7 +74,7 @@ public:
                                                                  int64_t transactionId);
 
 protected:
-    const ItemType itemType = ItemType::ENVIRONMENT;
+    const Type itemType = Type::ENVIRONMENT;
     std::string environmentId;
     std::string name;
     std::string translatedName;

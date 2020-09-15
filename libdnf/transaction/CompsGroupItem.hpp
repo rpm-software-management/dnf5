@@ -65,7 +65,7 @@ public:
     void setPackageTypes(CompsPackageType value) { packageTypes = value; }
 
     std::string toStr() const override;
-    ItemType getItemType() const noexcept override { return itemType; }
+    Type getItemType() const noexcept override { return itemType; }
     void save() override;
     CompsGroupPackagePtr addPackage(std::string name, bool installed, CompsPackageType pkgType);
     std::vector< CompsGroupPackagePtr > getPackages();
@@ -77,7 +77,7 @@ public:
                                                                  int64_t transactionId);
 
 protected:
-    const ItemType itemType = ItemType::GROUP;
+    const Type itemType = Type::GROUP;
     std::string groupId;
     std::string name;
     std::string translatedName;

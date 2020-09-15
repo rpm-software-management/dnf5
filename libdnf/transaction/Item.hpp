@@ -31,12 +31,14 @@ class Item;
 typedef std::shared_ptr< Item > ItemPtr;
 }
 
-#include "Types.hpp"
+#include "transaction_item_type.hpp"
 
 namespace libdnf::transaction {
 
 class Item {
 public:
+    using Type = TransactionItemType;
+
     /// Default constructor.
     explicit Item(libdnf::utils::SQLite3Ptr conn);
 
@@ -49,7 +51,7 @@ public:
     /// Sets the ID of this item.
     void setId(int64_t value) { id = value; }
 
-    virtual ItemType getItemType() const noexcept { return itemType; }
+    virtual Type getItemType() const noexcept { return itemType; }
     virtual std::string toStr() const;
     virtual void save();
 
@@ -58,7 +60,7 @@ protected:
 
     libdnf::utils::SQLite3Ptr conn;
     int64_t id = 0;
-    const ItemType itemType = ItemType::UNKNOWN;
+    const Type itemType = Type::UNKNOWN;
 };
 
 }  // namespace libdnf::transaction

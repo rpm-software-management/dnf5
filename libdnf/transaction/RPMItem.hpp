@@ -31,7 +31,7 @@ typedef std::shared_ptr< RPMItem > RPMItemPtr;
 
 #include "Item.hpp"
 #include "transaction_item.hpp"
-#include "Types.hpp"
+#include "transaction_item_reason.hpp"
 
 namespace libdnf::transaction {
 
@@ -58,7 +58,7 @@ public:
 
     std::string getNEVRA() const;
     std::string toStr() const override;
-    ItemType getItemType() const noexcept override { return itemType; }
+    Type getItemType() const noexcept override { return itemType; }
     void save() override;
 
     static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &nevra);
@@ -73,7 +73,7 @@ public:
     bool operator<(const RPMItem &other) const;
 
 protected:
-    const ItemType itemType = ItemType::RPM;
+    const Type itemType = Type::RPM;
     std::string name;
     int32_t epoch = 0;
     std::string version;

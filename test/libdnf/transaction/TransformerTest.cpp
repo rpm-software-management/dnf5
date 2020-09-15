@@ -7,7 +7,6 @@
 #include "libdnf/transaction/Swdb.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
-#include "libdnf/transaction/Types.hpp"
 
 #include "TransformerTest.hpp"
 
@@ -66,7 +65,7 @@ TransformerTest::testGroupTransformation()
     for (auto transItem : items) {
         auto item = transItem->getItem();
         auto type = item->getItemType();
-        if (type == ItemType::GROUP) {
+        if (type == TransactionItemType::GROUP) {
             auto group = std::dynamic_pointer_cast< CompsGroupItem >(item);
 
             CPPUNIT_ASSERT(group->getGroupId() == "core");
@@ -82,7 +81,7 @@ TransformerTest::testGroupTransformation()
             CPPUNIT_ASSERT(groupPkg->getInstalled() == true);
             CPPUNIT_ASSERT(groupPkg->getPackageType() == CompsPackageType::MANDATORY);
 
-        } else if (type == ItemType::ENVIRONMENT) {
+        } else if (type == TransactionItemType::ENVIRONMENT) {
             auto env = std::dynamic_pointer_cast< CompsEnvironmentItem >(item);
             CPPUNIT_ASSERT("minimal-environment" == env->getEnvironmentId());
             CPPUNIT_ASSERT("Minimal Install" == env->getName());

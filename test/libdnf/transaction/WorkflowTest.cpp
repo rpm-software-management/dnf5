@@ -8,7 +8,6 @@
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
 #include "libdnf/transaction/Transformer.hpp"
-#include "libdnf/transaction/Types.hpp"
 
 #include "WorkflowTest.hpp"
 
@@ -141,14 +140,14 @@ WorkflowTest::testDefaultWorkflow()
         // CPPUNIT_ASSERT(i->getItem()->getItemType() == "rpm");
         CPPUNIT_ASSERT_EQUAL(TransactionItemState::DONE, i->get_state());
         // std::cout << "TransactionItem: " << i->getItem()->toStr() << std::endl;
-        if (i->getItem()->getItemType() == ItemType::GROUP) {
+        if (i->getItem()->getItemType() == TransactionItemType::GROUP) {
             auto grp = std::dynamic_pointer_cast< CompsGroupItem >(i->getItem());
             CPPUNIT_ASSERT(grp->getPackages().size() == 1);
             for (auto i : grp->getPackages()) {
                 // std::cout << "  CompsGroupPackage: " << i->getName() << std::endl;
             }
         }
-        if (i->getItem()->getItemType() == ItemType::ENVIRONMENT) {
+        if (i->getItem()->getItemType() == TransactionItemType::ENVIRONMENT) {
             auto env = std::dynamic_pointer_cast< CompsEnvironmentItem >(i->getItem());
             CPPUNIT_ASSERT(env->getGroups().size() == 1);
             for (auto i : env->getGroups()) {

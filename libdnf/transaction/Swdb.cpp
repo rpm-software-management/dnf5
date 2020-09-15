@@ -133,7 +133,7 @@ Swdb::beginTransaction(int64_t dtBegin,
     // save rpm items to map to resolve RPM callbacks
     for (auto item : transactionInProgress->getItems()) {
         auto transItem = item->getItem();
-        if (transItem->getItemType() != ItemType::RPM) {
+        if (transItem->getItemType() != TransactionItemType::RPM) {
             continue;
         }
         auto rpmItem = std::dynamic_pointer_cast< RPMItem >(transItem);
