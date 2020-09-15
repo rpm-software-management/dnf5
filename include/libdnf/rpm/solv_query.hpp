@@ -71,7 +71,7 @@ public:
     ///
     /// @replaces libdnf/sack/query.hpp:method:Query.runSet()
     /// @replaces libdnf/sack/query.hpp:method:Query.run()
-    PackageSet get_package_set();
+    PackageSet get_package_set() const;
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB, IEXACT, NOT_IEXACT, ICONTAINS, NOT_ICONTAINS, IGLOB, NOT_IGLOB, CONTAINS, NOT_CONTAINS.
     ///

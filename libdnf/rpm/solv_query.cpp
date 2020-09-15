@@ -222,7 +222,7 @@ SolvQuery::Impl & SolvQuery::Impl::operator=(SolvQuery::Impl && src) noexcept {
     return *this;
 }
 
-PackageSet SolvQuery::get_package_set() {
+PackageSet SolvQuery::get_package_set() const {
     return PackageSet(p_impl->sack.get(), p_impl->query_result);
 }
 
