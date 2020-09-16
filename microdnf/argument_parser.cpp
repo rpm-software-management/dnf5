@@ -20,11 +20,12 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "argument_parser.hpp"
 
 #include <fmt/format.h>
-#include <libsmartcols/libsmartcols.h>
 
 #include <cstring>
 #include <iomanip>
 #include <iostream>
+
+#include "libdnf-cli/output/argument_parser.hpp"
 
 namespace microdnf {
 
@@ -276,27 +277,6 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
 }
 
 
-static struct libscols_table * create_help_table(const std::string & name) {
-    struct libscols_table * table = scols_new_table();
-    scols_table_set_name(table, name.c_str());
-    scols_table_enable_noheadings(table, 1);
-    scols_table_set_column_separator(table, "  ");
-
-    scols_table_enable_colors(table, 1);
-    scols_table_new_column(table, "argument", 5, 0);
-    //scols_column_set_cmpfunc(cl, scols_cmpstr_cells, nullptr);
-    scols_table_new_column(table, "descr", 0.5, SCOLS_FL_WRAP);
-    return table;
-}
-
-static void add_line_into_table(
-    struct libscols_table * table, const std::string & arg_names, const std::string & descr) {
-    enum { COL_ARG_NAMES, COL_DESCR };
-    struct libscols_line * ln = scols_table_new_line(table, nullptr);
-    scols_line_set_data(ln, COL_ARG_NAMES, arg_names.c_str());
-    scols_line_set_data(ln, COL_DESCR, descr.c_str());
-}
-
 void ArgumentParser::Command::help() const noexcept {
     bool print = false;
     std::cout.flags(std::ios::left);
@@ -307,24 +287,22 @@ void ArgumentParser::Command::help() const noexcept {
     }
 
     if (!commands_help_header.empty()) {
-        auto table = create_help_table(commands_help_header);
-        auto out = scols_table_get_stream(table);
+        auto table = libdnf::cli::output::create_help_table(commands_help_header);
+        auto out = libdnf::cli::output::get_stream(table);
         if (print) {
             fputs("\n", out);
         }
         fputs((commands_help_header + '\n').c_str(), out);
         for (auto arg : cmds) {
-            // std::cout << std::setw(15) << arg->get_name() << arg->get_short_description() << '\n';
-            add_line_into_table(table, arg->get_name(), arg->get_short_description());
+            libdnf::cli::output::add_line_into_help_table(table, arg->get_name(), arg->get_short_description());
         }
-        scols_print_table(table);
-        scols_unref_table(table);
+        libdnf::cli::output::print_and_unref_help_table(table);
         print = true;
     }
 
     if (!named_args_help_header.empty()) {
-        auto table = create_help_table(named_args_help_header);
-        auto out = scols_table_get_stream(table);
+        auto table = libdnf::cli::output::create_help_table(named_args_help_header);
+        auto out = libdnf::cli::output::get_stream(table);
         if (print) {
             fputs("\n", out);
         }
@@ -346,25 +324,23 @@ void ArgumentParser::Command::help() const noexcept {
                     arg_names += arg->arg_value_help.empty() ? "=VALUE" : '=' + arg->arg_value_help;
                 }
             }
-            add_line_into_table(table, "  " + arg_names, arg->get_short_description());
+            libdnf::cli::output::add_line_into_help_table(table, "  " + arg_names, arg->get_short_description());
         }
-        scols_print_table(table);
-        scols_unref_table(table);
+        libdnf::cli::output::print_and_unref_help_table(table);
         print = true;
     }
 
     if (!positional_args_help_header.empty()) {
-        auto table = create_help_table(named_args_help_header);
+        auto table = libdnf::cli::output::create_help_table(named_args_help_header);
         auto out = scols_table_get_stream(table);
         if (print) {
             fputs("\n", out);
         }
         fputs((positional_args_help_header + '\n').c_str(), out);
         for (auto arg : pos_args) {
-            add_line_into_table(table, "  " + arg->get_name(), arg->get_short_description());
+            libdnf::cli::output::add_line_into_help_table(table, "  " + arg->get_name(), arg->get_short_description());
         }
-        scols_print_table(table);
-        scols_unref_table(table);
+        libdnf::cli::output::print_and_unref_help_table(table);
     }
 }
 

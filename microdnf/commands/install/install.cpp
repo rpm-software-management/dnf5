@@ -27,7 +27,6 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/repo.hpp>
 #include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
-#include <libsmartcols/libsmartcols.h>
 
 #include <iostream>
 #include <filesystem>
