@@ -24,6 +24,7 @@
 
 //#include "../hy-subject.h"
 #include "libdnf/rpm/nevra.hpp"
+#include "libdnf/transaction/db/rpm.hpp"
 
 #include "RPMItem.hpp"
 
@@ -81,15 +82,8 @@ RPMItem::dbInsert()
 {
     // populates this->id
     Item::save();
-
-    const char *sql =
-        "INSERT INTO "
-        "  rpm "
-        "VALUES "
-        "  (?, ?, ?, ?, ?, ?)";
-    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
-    query.bindv(getId(), getName(), getEpoch(), getVersion(), getRelease(), getArch());
-    query.step();
+    auto query = rpm_insert_new_query(conn);
+    rpm_insert(*query, *this);
 }
 
 static TransactionItemPtr
@@ -116,36 +110,9 @@ std::vector< TransactionItemPtr >
 RPMItem::getTransactionItems(libdnf::utils::SQLite3Ptr conn, int64_t transaction_id)
 {
     std::vector< TransactionItemPtr > result;
-
-    const char *sql =
-        "SELECT "
-        // trans_item
-        "  ti.id, "
-        "  ti.action, "
-        "  ti.reason, "
-        "  ti.state, "
-        // repo
-        "  r.repoid, "
-        // rpm
-        "  i.item_id, "
-        "  i.name, "
-        "  i.epoch, "
-        "  i.version, "
-        "  i.release, "
-        "  i.arch "
-        "FROM "
-        "  trans_item ti, "
-        "  repo r, "
-        "  rpm i "
-        "WHERE "
-        "  ti.trans_id = ? "
-        "  AND ti.repo_id = r.id "
-        "  AND ti.item_id = i.item_id";
-    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
-    query.bindv(transaction_id);
-
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        result.push_back(transactionItemFromQuery(conn, query, transaction_id));
+    auto query = rpm_transaction_item_select_new_query(conn, transaction_id);
+    while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        result.push_back(transactionItemFromQuery(conn, *query, transaction_id));
     }
     return result;
 }
@@ -169,26 +136,10 @@ RPMItem::toStr() const
 void
 RPMItem::dbSelectOrInsert()
 {
-    const char *sql =
-        "SELECT "
-        "  item_id "
-        "FROM "
-        "  rpm "
-        "WHERE "
-        "  name = ? "
-        "  AND epoch = ? "
-        "  AND version = ? "
-        "  AND release = ? "
-        "  AND arch = ?";
+    auto query = rpm_select_pk_new_query(conn);
+    setId(rpm_select_pk(*query, *this));
 
-    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
-
-    query.bindv(getName(), getEpoch(), getVersion(), getRelease(), getArch());
-    libdnf::utils::SQLite3::Statement::StepResult result = query.step();
-
-    if (result == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        setId(query.get< int >(0));
-    } else {
+    if (!getId()) {
         // insert and get the ID back
         dbInsert();
     }
