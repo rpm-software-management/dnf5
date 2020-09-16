@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "RPMItem.hpp"
 #include "transaction_item.hpp"
 
+#include "libdnf/transaction/db/trans.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
@@ -78,33 +79,8 @@ Transaction::operator>(const Transaction &other) const
 void
 Transaction::dbSelect(int64_t pk)
 {
-    const char *sql =
-        "SELECT "
-        "  dt_begin, "
-        "  dt_end, "
-        "  rpmdb_version_begin, "
-        "  rpmdb_version_end, "
-        "  releasever, "
-        "  user_id, "
-        "  cmdline, "
-        "  state "
-        "FROM "
-        "  trans "
-        "WHERE "
-        "  id = ?";
-    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
-    query.bindv(pk);
-    query.step();
-
-    id = pk;
-    dt_begin = query.get< int >("dt_begin");
-    dt_end = query.get< int >("dt_end");
-    rpmdb_version_begin = query.get< std::string >("rpmdb_version_begin");
-    rpmdb_version_end = query.get< std::string >("rpmdb_version_end");
-    releasever = query.get< std::string >("releasever");
-    user_id = query.get< uint32_t >("user_id");
-    cmdline = query.get< std::string >("cmdline");
-    state = static_cast< TransactionState >(query.get< int >("state"));
+    auto query = trans_select_new_query(conn);
+    trans_select(*query, pk, *this);
 }
 
 /**
@@ -216,39 +192,12 @@ Transaction::finish(TransactionState state)
 void
 Transaction::dbInsert()
 {
-    const char *sql =
-        "INSERT INTO "
-        "  trans ("
-        "    dt_begin, "
-        "    dt_end, "
-        "    rpmdb_version_begin, "
-        "    rpmdb_version_end, "
-        "    releasever, "
-        "    user_id, "
-        "    cmdline, "
-        "    state, "
-        "    id "
-        "  ) "
-        "VALUES "
-        "  (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
-    query.bindv(get_dt_begin(),
-                get_dt_end(),
-                get_rpmdb_version_begin(),
-                get_rpmdb_version_end(),
-                get_releasever(),
-                get_user_id(),
-                get_cmdline(),
-                static_cast< int >(get_state()));
-    if (get_id() > 0) {
-        query.bind(9, get_id());
-    }
-    query.step();
-    set_id(conn->last_insert_rowid());
+    auto query = trans_insert_new_query(conn);
+    trans_insert(*query, *this);
 
     // add used software - has to be added at initialization state
     if (!softwarePerformedWith.empty()) {
-        sql = R"**(
+        const char * sql = R"**(
             INSERT OR REPLACE INTO
                 trans_with (
                     trans_id,
@@ -275,31 +224,8 @@ Transaction::dbInsert()
 void
 Transaction::dbUpdate()
 {
-    const char *sql =
-        "UPDATE "
-        "  trans "
-        "SET "
-        "  dt_begin=?, "
-        "  dt_end=?, "
-        "  rpmdb_version_begin=?, "
-        "  rpmdb_version_end=?, "
-        "  releasever=?, "
-        "  user_id=?, "
-        "  cmdline=?, "
-        "  state=? "
-        "WHERE "
-        "  id = ?";
-    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
-    query.bindv(get_dt_begin(),
-                get_dt_end(),
-                get_rpmdb_version_begin(),
-                get_rpmdb_version_end(),
-                get_releasever(),
-                get_user_id(),
-                get_cmdline(),
-                static_cast< int >(get_state()),
-                get_id());
-    query.step();
+    auto query = trans_update_new_query(conn);
+    trans_update(*query, *this);
 }
 
 TransactionItemPtr
