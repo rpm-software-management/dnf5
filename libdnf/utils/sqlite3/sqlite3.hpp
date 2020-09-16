@@ -202,6 +202,8 @@ public:
             return get(idx, Identity<T>{});
         }
 
+        int64_t last_insert_rowid() { return db.last_insert_rowid(); }
+
         ~Statement() {
             free_expanded_sql();
             sqlite3_finalize(stmt);
