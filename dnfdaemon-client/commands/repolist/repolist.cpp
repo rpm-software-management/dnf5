@@ -68,7 +68,7 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
     enabled->set_conflict_arguments(conflict_args);
     disabled->set_conflict_arguments(conflict_args);
 
-    auto repolist = ctx.arg_parser.add_new_command("repolist");
+    auto repolist = ctx.arg_parser.add_new_command(command);
     repolist->set_short_description("display the configured software repositories");
     repolist->set_description("");
     repolist->named_args_help_header = "Optional arguments:";
@@ -97,6 +97,7 @@ public:
     std::string get_id() { return rawdata["id"]; }
     std::string get_name() { return rawdata["name"]; }
     bool is_enabled() { return rawdata["enabled"]; }
+    uint64_t get_size() { return rawdata["repo_size"]; }
 
 private:
     dnfdaemon::KeyValueMap rawdata;
@@ -145,29 +146,47 @@ void CmdRepolist::run(Context & ctx) {
     }
     options["patterns_to_show"] = patterns_to_show;
 
+    options["command"] = command;
+
+    if (command == "repoinfo") {
+        // load repositories
+        if (ctx.wait_for_repos() == Context::RepoStatus::ERROR) {
+            throw std::runtime_error("Failed to load repositories");
+        };
+    }
+
     // call list() method on repo interface via dbus
     dnfdaemon::KeyValueMapList repositories;
     ctx.session_proxy->callMethod("list").onInterface(dnfdaemon::INTERFACE_REPO).withArguments(options).storeResultsTo(repositories);
 
-    // print the output table
-    bool with_status = enable_disable_option->get_value() == "all";
-    auto table = create_repolist_table(with_status);
+    if (command == "repolist") {
+        // print the output table
+        bool with_status = enable_disable_option->get_value() == "all";
+        auto table = create_repolist_table(with_status);
 
-    for (auto & raw_repo : repositories) {
-        RepoDbus repo(raw_repo);
-        add_line_into_table(
-            table,
-            with_status,
-            repo.get_id().c_str(),
-            repo.get_name().c_str(),
-            repo.is_enabled());
+        for (auto & raw_repo : repositories) {
+            RepoDbus repo(raw_repo);
+            add_line_into_table(
+                table,
+                with_status,
+                repo.get_id().c_str(),
+                repo.get_name().c_str(),
+                repo.is_enabled());
+        }
+
+        auto cl = scols_table_get_column(table, COL_REPO_ID);
+        scols_sort_table(table, cl);
+        scols_print_table(table);
+        scols_unref_table(table);
+    } else {
+        // repoinfo command
+        // TODO(mblaha): output using smartcols
+        for (auto & raw_repo : repositories) {
+            RepoDbus repo(raw_repo);
+            std::cout << "REPO: " << repo.get_id() << std::endl;
+            std::cout << "size: " << repo.get_size() << std::endl;
+        }
     }
-
-    auto cl = scols_table_get_column(table, COL_REPO_ID);
-    scols_sort_table(table, cl);
-    scols_print_table(table);
-    scols_unref_table(table);
-
 }
 
 }  // namespace dnfdaemon::client

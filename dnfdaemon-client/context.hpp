@@ -43,12 +43,17 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context {
 public:
+    enum class RepoStatus {NOT_READY, PENDING, READY, ERROR};
+    Context(sdbus::IConnection & connection) : connection(connection), repositories_status(RepoStatus::NOT_READY) {};
+
     /// Initialize dbus connection and server session
     void init_session();
 
-    /// Updates the repositories metadata cache.
-    /// Loads the updated metadata into rpm::RepoSack and into rpm::SolvSack.
-    void load_rpm_repos(libdnf::rpm::RepoSet & repos, libdnf::rpm::SolvSack::LoadRepoFlags flags);
+    // initialize repository metadata loading on server side and wait for results
+    RepoStatus wait_for_repos();
+
+    // signal handlers
+    void on_repositories_ready(const bool & result);
 
     /// Select command to execute
     void select_command(Command * cmd) { selected_command = cmd; }
@@ -62,8 +67,10 @@ public:
 
 private:
     /// system d-bus connection
-    std::unique_ptr<sdbus::IConnection> connection;
+    //std::unique_ptr<sdbus::IConnection> connection;
+    sdbus::IConnection & connection;
     sdbus::ObjectPath session_object_path;
+    RepoStatus repositories_status;
 };
 
 }  // namespace dnfdaemon::client

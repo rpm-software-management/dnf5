@@ -31,12 +31,14 @@ namespace dnfdaemon::client {
 
 class CmdRepolist : public Command {
 public:
+    CmdRepolist(const char * command) : command(command) {};
     void set_argument_parser(Context & ctx) override;
     void run(Context & ctx) override;
 
 private:
     libdnf::OptionEnum<std::string> * enable_disable_option{nullptr};
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_show_options{nullptr};
+    const std::string command;
 };
 
 }  // namespace dnfdaemon::client

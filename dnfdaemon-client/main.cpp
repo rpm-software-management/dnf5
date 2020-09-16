@@ -22,6 +22,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 #include "utils.hpp"
 
+#include <dnfdaemon-server/dbus.hpp>
 #include <fcntl.h>
 #include <fmt/format.h>
 #include <libdnf/base/base.hpp>
@@ -104,14 +105,18 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
 }  // namespace dnfdaemon::client
 
 int main(int argc, char * argv[]) {
-    dnfdaemon::client::Context context;
+    auto connection = sdbus::createSystemBusConnection();
+    connection->enterEventLoopAsync();
+
+    dnfdaemon::client::Context context(*connection);
 
     // TODO(mblaha): logging
 
     //log_router.info("Dnfdaemon-client start");
 
     // Register commands
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>());
+    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repolist"));
+    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repoinfo"));
 
     // Parse command line arguments
     bool help_printed = dnfdaemon::client::parse_args(context, argc, argv);
