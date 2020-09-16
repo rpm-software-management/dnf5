@@ -19,6 +19,7 @@
  */
 
 #include "Item.hpp"
+#include "libdnf/transaction/db/item.hpp"
 
 namespace libdnf::transaction {
 
@@ -36,15 +37,8 @@ Item::save()
 void
 Item::dbInsert()
 {
-    const char *sql =
-        "INSERT INTO "
-        "  item "
-        "VALUES "
-        "  (null, ?)";
-    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
-    query.bindv(static_cast< int >(itemType));
-    query.step();
-    setId(conn->last_insert_rowid());
+    auto query = item_insert_new_query(conn, itemType);
+    setId(item_insert(*query));
 }
 
 std::string
