@@ -116,7 +116,7 @@ public:
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_REPONAME
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char **matches) - cmp_type = HY_PKG_REPONAME
-    SolvQuery & ifilter_reponame(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+    SolvQuery & ifilter_repoid(libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB.
     ///
