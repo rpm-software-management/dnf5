@@ -17,10 +17,9 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DNFDAEMON_SERVER_SERVICES_REPOCONF_HPP
-#define DNFDAEMON_SERVER_SERVICES_REPOCONF_HPP
+#ifndef DNFDAEMON_SERVER_SERVICES_BASE_BASE_HPP
+#define DNFDAEMON_SERVER_SERVICES_BASE_BASE_HPP
 
-#include "dnfdaemon-server/dbus.hpp"
 #include "dnfdaemon-server/session.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
@@ -28,21 +27,15 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
-class RepoConf : public IDbusSessionService {
+class Base : public IDbusSessionService {
 public:
     using IDbusSessionService::IDbusSessionService;
-    ~RepoConf() = default;
+    ~Base() = default;
     void dbus_register();
     void dbus_deregister();
 
 private:
-    void list(sdbus::MethodCall call);
-    void get(sdbus::MethodCall call);
-    void enable_disable(sdbus::MethodCall call, const bool & enable);
-    bool check_authorization(const std::string & actionid, const std::string & sender);
-
-    dnfdaemon::KeyValueMapList repo_list(const std::vector<std::string> & ids);
-    std::vector<std::string> enable_disable_repos(const std::vector<std::string> & ids, const bool enable);
+    void read_all_repos(sdbus::MethodCall call);
 };
 
 #endif

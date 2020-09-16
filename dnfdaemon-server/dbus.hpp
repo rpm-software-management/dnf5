@@ -44,6 +44,10 @@ const char * const INTERFACE_REPO = "org.rpm.dnf.v0.rpm.Repo";
 const char * const INTERFACE_REPOCONF = "org.rpm.dnf.v0.rpm.RepoConf";
 const char * const INTERFACE_SESSION_MANAGER = "org.rpm.dnf.v0.SessionManager";
 
+// signals
+const char * const SIGNAL_REPO_LOAD_START = "repo_load_start";
+const char * const SIGNAL_REPO_LOAD_END = "repo_load_end";
+
 // polkit actions
 const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.RepoConf.write";
 

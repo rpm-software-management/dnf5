@@ -23,7 +23,9 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnfdaemon-server/utils.hpp"
 
 #include <fmt/format.h>
+#include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/repo.hpp>
+#include <libdnf/rpm/solv_query.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
@@ -41,6 +43,17 @@ void Repo::dbus_deregister() {
     dbus_object->unregister();
 }
 
+uint64_t repo_size(libdnf::rpm::SolvSack & sack, const libdnf::WeakPtr<libdnf::rpm::Repo, false> & repo) {
+    uint64_t size = 0;
+    libdnf::rpm::SolvQuery query(&sack);
+    std::vector<std::string> reponames = {repo->get_id()};
+    auto pkgset = query.ifilter_reponame(libdnf::sack::QueryCmp::EQ, reponames).get_package_set();
+    for (auto pkg : pkgset) {
+        size += pkg.get_download_size();
+    }
+    return size;
+}
+
 void Repo::list(sdbus::MethodCall call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
@@ -48,9 +61,14 @@ void Repo::list(sdbus::MethodCall call) {
     std::string enable_disable = key_value_map_get<std::string>(options, "enable_disable", "enabled");
     std::vector<std::string> default_patterns{};
     std::vector<std::string> patterns_to_show = key_value_map_get<std::vector<std::string>>(options, "patterns_to_show", std::move(default_patterns));
+    std::string command = key_value_map_get<std::string>(options, "command", "repolist");
+
+    // repoinfo command needs repositories loaded into sack
+    // TODO(mblaha): check that repos are loaded
 
     // prepare repository query filtered by options
     auto base = session.get_base();
+    auto & solv_sack = base->get_rpm_solv_sack();
     auto & rpm_repo_sack = base->get_rpm_repo_sack();
     auto repos_query = rpm_repo_sack.new_query();
 
@@ -73,6 +91,10 @@ void Repo::list(sdbus::MethodCall call) {
         out_repo.emplace(std::make_pair("id", repo->get_id()));
         out_repo.emplace(std::make_pair("name", repo->get_config()->name().get_value()));
         out_repo.emplace(std::make_pair("enabled", repo->is_enabled()));
+        // TODO(mblaha): add all other repository attributes
+        if (command == "repoinfo") {
+            out_repo.emplace(std::make_pair("repo_size", repo_size(solv_sack, repo)));
+        }
         out_repositories.push_back(std::move(out_repo));
     }
 

@@ -39,6 +39,7 @@ public:
 
 protected:
     Session & session;
+    std::unique_ptr<sdbus::IObject> dbus_object;
 };
 
 class Session {

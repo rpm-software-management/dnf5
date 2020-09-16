@@ -20,6 +20,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "session.hpp"
 
 #include "dbus.hpp"
+#include "services/base/base.hpp"
 #include "services/repo/repo.hpp"
 #include "services/repoconf/repo_conf.hpp"
 #include "utils.hpp"
@@ -77,6 +78,7 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     rpm_repo_sack.new_repos_from_dirs();
 
     // instantiate all services provided by the daemon
+    services.emplace_back(std::make_unique<Base>(*this));
     services.emplace_back(std::make_unique<RepoConf>(*this));
     services.emplace_back(std::make_unique<Repo>(*this));
 

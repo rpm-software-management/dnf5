@@ -35,7 +35,6 @@ public:
     void dbus_deregister();
 
 private:
-    std::unique_ptr<sdbus::IObject> dbus_object;
     void list(sdbus::MethodCall call);
 };
 
