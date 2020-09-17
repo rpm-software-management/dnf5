@@ -10,7 +10,7 @@ using namespace libdnf::transaction;
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionTest);
 
 static RPMItemPtr
-nevraToRPMItem(libdnf::utils::SQLite3Ptr conn, std::string nevra)
+nevraToRPMItem(Transaction & trans, std::string nevra)
 {
     libdnf::rpm::Nevra nevraObject;
     if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
@@ -20,7 +20,7 @@ nevraToRPMItem(libdnf::utils::SQLite3Ptr conn, std::string nevra)
         nevraObject.set_epoch("0");
     }
 
-    auto rpm = std::make_shared< RPMItem >(conn);
+    auto rpm = std::make_shared< RPMItem >(trans);
     rpm->setName(nevraObject.get_name());
     rpm->setEpoch(std::stoi(nevraObject.get_epoch()));
     rpm->setVersion(nevraObject.get_version());
@@ -32,19 +32,20 @@ nevraToRPMItem(libdnf::utils::SQLite3Ptr conn, std::string nevra)
 void
 TransactionTest::setUp()
 {
-    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
-    Transformer::createDatabase(conn);
+    conn = new libdnf::utils::SQLite3(":memory:");
+    Transformer::createDatabase(*conn);
 }
 
 void
 TransactionTest::tearDown()
 {
+    delete conn;
 }
 
 void
 TransactionTest::testInsert()
 {
-    Transaction trans(conn);
+    Transaction trans(*conn);
     trans.set_dt_begin(1);
     trans.set_dt_end(2);
     trans.set_rpmdb_version_begin("begin - TransactionTest::testInsert");
@@ -54,10 +55,10 @@ TransactionTest::testInsert()
     trans.set_cmdline("dnf install foo");
     trans.set_state(TransactionState::DONE);
 
-    trans.addSoftwarePerformedWith(nevraToRPMItem(conn, "rpm-4.14.2-1.fc29.x86_64"));
-    trans.addSoftwarePerformedWith(nevraToRPMItem(conn, "dnf-3.5.1-1.fc29.noarch"));
+    trans.addSoftwarePerformedWith(nevraToRPMItem(trans, "rpm-4.14.2-1.fc29.x86_64"));
+    trans.addSoftwarePerformedWith(nevraToRPMItem(trans, "dnf-3.5.1-1.fc29.noarch"));
     // test adding a duplicate; only a single occurrence of the rpm is expected
-    trans.addSoftwarePerformedWith(nevraToRPMItem(conn, "rpm-4.14.2-1.fc29.x86_64"));
+    trans.addSoftwarePerformedWith(nevraToRPMItem(trans, "rpm-4.14.2-1.fc29.x86_64"));
 
     trans.begin();
 
@@ -69,7 +70,7 @@ TransactionTest::testInsert()
     CPPUNIT_ASSERT_THROW(trans.begin(), std::runtime_error);
 
     // load the saved transaction from database and compare values
-    Transaction trans2(conn, trans.get_id());
+    Transaction trans2(*conn, trans.get_id());
     CPPUNIT_ASSERT(trans2.get_id() == trans.get_id());
     CPPUNIT_ASSERT(trans2.get_dt_begin() == trans.get_dt_begin());
     CPPUNIT_ASSERT(trans2.get_dt_end() == trans.get_dt_end());
@@ -86,7 +87,7 @@ void
 TransactionTest::testInsertWithSpecifiedId()
 {
     // it is not allowed to save a transaction with arbitrary ID
-    Transaction trans(conn);
+    Transaction trans(*conn);
     trans.set_id(INT64_MAX);
     CPPUNIT_ASSERT_THROW(trans.begin(), std::runtime_error);
 }
@@ -94,7 +95,7 @@ TransactionTest::testInsertWithSpecifiedId()
 void
 TransactionTest::testUpdate()
 {
-    Transaction trans(conn);
+    Transaction trans(*conn);
     trans.set_dt_begin(1);
     trans.set_dt_end(2);
     trans.set_rpmdb_version_begin("begin - TransactionTest::testInsert");
@@ -106,7 +107,7 @@ TransactionTest::testUpdate()
     trans.begin();
     trans.finish(TransactionState::DONE);
 
-    Transaction trans2(conn, trans.get_id());
+    Transaction trans2(*conn, trans.get_id());
     CPPUNIT_ASSERT(trans2.get_id() == trans.get_id());
     CPPUNIT_ASSERT(trans2.get_dt_begin() == trans.get_dt_begin());
     CPPUNIT_ASSERT(trans2.get_dt_end() == trans.get_dt_end());
@@ -122,8 +123,8 @@ void
 TransactionTest::testComparison()
 {
     // test operator ==, > and <
-    Transaction first(conn);
-    Transaction second(conn);
+    Transaction first(*conn);
+    Transaction second(*conn);
 
     // id comparison test
     first.set_id(1);

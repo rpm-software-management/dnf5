@@ -25,7 +25,7 @@ namespace libdnf::transaction {
 // initialize static variable Repo::cache
 std::map< std::string, RepoPtr > Repo::cache;
 
-Repo::Repo(libdnf::utils::SQLite3Ptr conn)
+Repo::Repo(libdnf::utils::SQLite3 & conn)
   : conn{conn}
 {
 }
@@ -44,17 +44,17 @@ Repo::dbInsert()
         "  repo "
         "VALUES "
         "  (null, ?)";
-    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(conn, sql);
     query.bindv(getRepoId());
     query.step();
-    setId(conn->last_insert_rowid());
+    setId(conn.last_insert_rowid());
 }
 
 std::shared_ptr< Repo >
-Repo::getCached(libdnf::utils::SQLite3Ptr conn, const std::string &repoid)
+Repo::getCached(libdnf::utils::SQLite3 & conn, const std::string &repoid)
 {
     // HACK: this is kind of ugly - key is generated from repoid and sqlite3 pointer
-    auto key = repoid + "/" + std::to_string(reinterpret_cast< std::size_t >(conn.get()));
+    auto key = repoid + "/" + std::to_string(reinterpret_cast< std::size_t >(&conn));
     auto it = cache.find(key);
     if (it == cache.end()) {
         // cache miss
@@ -80,7 +80,7 @@ Repo::dbSelectOrInsert()
         "WHERE "
         "  repoid = ? ";
 
-    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(conn, sql);
     query.bindv(getRepoId());
     libdnf::utils::SQLite3::Statement::StepResult result = query.step();
 

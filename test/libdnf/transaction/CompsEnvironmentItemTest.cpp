@@ -15,19 +15,20 @@ using namespace libdnf::transaction;
 void
 CompsEnvironmentItemTest::setUp()
 {
-    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
-    Transformer::createDatabase(conn);
+    conn = new libdnf::utils::SQLite3(":memory:");
+    Transformer::createDatabase(*conn);
 }
 
 void
 CompsEnvironmentItemTest::tearDown()
 {
+    delete conn;
 }
 
 static std::shared_ptr< CompsEnvironmentItem >
-createCompsEnvironment(std::shared_ptr< libdnf::utils::SQLite3 > conn)
+createCompsEnvironment(Transaction & trans)
 {
-    auto env = std::make_shared< CompsEnvironmentItem >(conn);
+    auto env = std::make_shared< CompsEnvironmentItem >(trans);
     env->setEnvironmentId("minimal");
     env->setName("Minimal Environment");
     env->setTranslatedName("translated(Minimal Environment)");
@@ -41,9 +42,10 @@ createCompsEnvironment(std::shared_ptr< libdnf::utils::SQLite3 > conn)
 void
 CompsEnvironmentItemTest::testCreate()
 {
-    auto env = createCompsEnvironment(conn);
+    Transaction trans(*conn);
+    auto env = createCompsEnvironment(trans);
 
-    CompsEnvironmentItem env2(conn, env->getId());
+    CompsEnvironmentItem env2(trans, env->getId());
     CPPUNIT_ASSERT(env2.getId() == env->getId());
     CPPUNIT_ASSERT(env2.getEnvironmentId() == env->getEnvironmentId());
     CPPUNIT_ASSERT(env2.getName() == env->getName());
@@ -76,14 +78,14 @@ CompsEnvironmentItemTest::testCreate()
 void
 CompsEnvironmentItemTest::testGetTransactionItems()
 {
-    Transaction trans(conn);
-    auto env = createCompsEnvironment(conn);
+    Transaction trans(*conn);
+    auto env = createCompsEnvironment(trans);
     auto ti = trans.addItem(env, "", TransactionItemAction::INSTALL, TransactionItemReason::USER);
     ti->set_state(TransactionItemState::DONE);
     trans.begin();
     trans.finish(TransactionState::DONE);
 
-    Transaction trans2(conn, trans.get_id());
+    Transaction trans2(*conn, trans.get_id());
 
     auto transItems = trans2.getItems();
     CPPUNIT_ASSERT_EQUAL(1, static_cast< int >(transItems.size()));

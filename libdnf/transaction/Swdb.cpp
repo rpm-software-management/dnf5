@@ -40,14 +40,14 @@
 
 namespace libdnf::transaction {
 
-Swdb::Swdb(libdnf::utils::SQLite3Ptr conn)
-  : conn{conn}
+Swdb::Swdb(libdnf::utils::SQLite3 & conn)
+  : conn{&conn}
   , autoClose(true)
 {
 }
 
-Swdb::Swdb(libdnf::utils::SQLite3Ptr conn, bool autoClose)
-  : conn{conn}
+Swdb::Swdb(libdnf::utils::SQLite3 & conn, bool autoClose)
+  : conn{&conn}
   , autoClose(autoClose)
 {
 }
@@ -58,8 +58,8 @@ Swdb::Swdb(const std::string &path)
 {
     if (path == ":memory:") {
         // writing to an in-memory database
-        conn = std::make_shared<libdnf::utils::SQLite3>(path);
-        Transformer::createDatabase(conn);
+        conn = new libdnf::utils::SQLite3(path);
+        Transformer::createDatabase(*conn);
     } else if (!std::filesystem::exists(path.c_str())) {
         // writing to a file that doesn't exist and must be created
 
@@ -69,10 +69,10 @@ Swdb::Swdb(const std::string &path)
         Transformer transformer(path.substr(0, found), path);
         transformer.transform();
 
-        conn = std::make_shared<libdnf::utils::SQLite3>(path);
+        conn = new libdnf::utils::SQLite3(path);
     } else {
         // writing to an existing file
-        conn = std::make_shared<libdnf::utils::SQLite3>(path);
+        conn = new libdnf::utils::SQLite3(path);
     }
 }
 
@@ -84,7 +84,7 @@ Swdb::resetDatabase()
         remove(getPath().c_str());
     }
     conn->open();
-    Transformer::createDatabase(conn);
+    Transformer::createDatabase(get_connection());
 }
 
 void
@@ -109,7 +109,7 @@ Swdb::initTransaction()
         throw std::logic_error(_("In progress"));
     }
     transactionInProgress = std::unique_ptr< Transaction >(
-        new Transaction(conn));
+        new Transaction(get_connection()));
     itemsInProgress.clear();
 }
 
@@ -213,7 +213,7 @@ Swdb::resolveRPMTransactionItemReason(const std::string &name,
         }
     }
 
-    return RPMItem::resolveTransactionItemReason(conn, name, arch, maxTransactionId);
+    return RPMItem::resolveTransactionItemReason(get_connection(), name, arch, maxTransactionId);
 }
 
 const std::string
@@ -263,11 +263,13 @@ Swdb::getRPMRepo(const std::string &nevra)
     return "";
 }
 
+/*
 TransactionItemPtr
 Swdb::getRPMTransactionItem(const std::string &nevra)
 {
     return RPMItem::getTransactionItem(conn, nevra);
 }
+*/
 
 TransactionPtr
 Swdb::getLastTransaction()
@@ -281,10 +283,10 @@ Swdb::getLastTransaction()
             id DESC
         LIMIT 1
     )**";
-    libdnf::utils::SQLite3::Statement query(*conn, sql);
+    libdnf::utils::SQLite3::Statement query(get_connection(), sql);
     if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto transId = query.get< int64_t >(0);
-        auto transaction = std::make_shared< Transaction >(conn, transId);
+        auto transaction = std::make_shared< Transaction >(get_connection(), transId);
         return transaction;
     }
     return nullptr;
@@ -301,11 +303,11 @@ Swdb::listTransactions()
         ORDER BY
             id
     )**";
-    libdnf::utils::SQLite3::Statement query(*conn, sql);
+    libdnf::utils::SQLite3::Statement query(get_connection(), sql);
     std::vector< TransactionPtr > result;
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto transId = query.get< int64_t >(0);
-        auto transaction = std::make_shared< Transaction >(conn, transId);
+        auto transaction = std::make_shared< Transaction >(get_connection(), transId);
         result.push_back(transaction);
     }
     return result;
@@ -330,17 +332,21 @@ Swdb::addConsoleOutputLine(int fileDescriptor, std::string line)
     transactionInProgress->addConsoleOutputLine(fileDescriptor, line);
 }
 
+/*
 TransactionItemPtr
 Swdb::getCompsGroupItem(const std::string &groupid)
 {
     return CompsGroupItem::getTransactionItem(conn, groupid);
 }
+*/
 
+/*
 std::vector< TransactionItemPtr >
 Swdb::getCompsGroupItemsByPattern(const std::string &pattern)
 {
     return CompsGroupItem::getTransactionItemsByPattern(conn, pattern);
 }
+*/
 
 std::vector< std::string >
 Swdb::getPackageCompsGroups(const std::string &packageName)
@@ -492,18 +498,23 @@ Swdb::getCompsGroupEnvironments(const std::string &groupId)
     return result;
 }
 
+/*
 TransactionItemPtr
 Swdb::getCompsEnvironmentItem(const std::string &envid)
 {
     return CompsEnvironmentItem::getTransactionItem(conn, envid);
 }
+*/
 
+/*
 std::vector< TransactionItemPtr >
 Swdb::getCompsEnvironmentItemsByPattern(const std::string &pattern)
 {
     return CompsEnvironmentItem::getTransactionItemsByPattern(conn, pattern);
 }
+*/
 
+/*
 RPMItemPtr
 Swdb::createRPMItem()
 {
@@ -521,6 +532,7 @@ Swdb::createCompsGroupItem()
 {
     return std::make_shared< CompsGroupItem >(conn);
 }
+*/
 
 /**
  * Filter unneeded packages from pool
@@ -533,7 +545,7 @@ Swdb::filterUserinstalled(libdnf::rpm::PackageSet & installed) const
     // TODO(dmach): if performance is an issue, rewrite this using the libsolv layer
     for (auto it = installed.begin(); it != installed.end(); it++) {
         auto pkg = *it;
-        auto reason = RPMItem::resolveTransactionItemReason(conn, pkg.get_name(), pkg.get_arch(), -1);
+        auto reason = RPMItem::resolveTransactionItemReason(get_connection(), pkg.get_name(), pkg.get_arch(), -1);
         // if not dep or weak, than consider it user installed
         if (reason == TransactionItemReason::DEPENDENCY ||
             reason == TransactionItemReason::WEAK_DEPENDENCY) {
@@ -546,7 +558,7 @@ Swdb::filterUserinstalled(libdnf::rpm::PackageSet & installed) const
 std::vector< int64_t >
 Swdb::searchTransactionsByRPM(const std::vector< std::string > &patterns)
 {
-    return RPMItem::searchTransactions(conn, patterns);
+    return RPMItem::searchTransactions(get_connection(), patterns);
 }
 
 }  // namespace libdnf::transaction

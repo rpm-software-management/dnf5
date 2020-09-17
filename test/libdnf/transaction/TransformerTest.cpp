@@ -30,15 +30,17 @@ static const char *groups_json =
 void
 TransformerTest::setUp()
 {
-    swdb = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
-    history = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
-    Transformer::createDatabase(swdb);
-    history.get()->exec(create_history_sql);
+    swdb = new libdnf::utils::SQLite3(":memory:");
+    history = new libdnf::utils::SQLite3(":memory:");
+    Transformer::createDatabase(*swdb);
+    history->exec(create_history_sql);
 }
 
 void
 TransformerTest::tearDown()
 {
+    delete swdb;
+    delete history;
 }
 
 void
@@ -48,12 +50,12 @@ TransformerTest::testGroupTransformation()
     struct json_object *groupsJson = json_tokener_parse (groups_json);
 
     // perform the transformation
-    transformer.processGroupPersistor(swdb, groupsJson);
+    transformer.processGroupPersistor(*swdb, groupsJson);
 
     swdb->backup("db.sql");
 
     // check basic stuff in generated transaction
-    Transaction trans(swdb, 1);
+    Transaction trans(*swdb, 1);
     CPPUNIT_ASSERT_EQUAL((int64_t)1, trans.get_id());
     CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans.get_state());
 
@@ -107,10 +109,10 @@ void
 TransformerTest::testTransformTrans()
 {
     // perform database transformation
-    transformer.transformTrans(swdb, history);
+    transformer.transformTrans(*swdb, *history);
 
     // check first transaction attributes
-    Transaction first(swdb, 1);
+    Transaction first(*swdb, 1);
     CPPUNIT_ASSERT(first.get_id() == 1);
     CPPUNIT_ASSERT(first.get_dt_begin() == 1513267401);
     CPPUNIT_ASSERT(first.get_dt_end() == 1513267509);
@@ -162,7 +164,7 @@ TransformerTest::testTransformTrans()
     }
 
     // check second transaction attributes
-    Transaction second(swdb, 2);
+    Transaction second(*swdb, 2);
     CPPUNIT_ASSERT(second.get_id() == 2);
     CPPUNIT_ASSERT(second.get_dt_begin() == 1513267535);
     CPPUNIT_ASSERT(second.get_dt_end() == 1513267539);

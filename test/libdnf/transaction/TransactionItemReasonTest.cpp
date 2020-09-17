@@ -19,20 +19,21 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TransactionItemReasonTest);
 void
 TransactionItemReasonTest::setUp()
 {
-    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
-    Transformer::createDatabase(conn);
+    conn = new libdnf::utils::SQLite3(":memory:");
+    Transformer::createDatabase(*conn);
 }
 
 void
 TransactionItemReasonTest::tearDown()
 {
+    delete conn;
 }
 
 // no transactions -> UNKNOWN reason
 void
 TransactionItemReasonTest::testNoTransaction()
 {
-    Swdb swdb(conn);
+    Swdb swdb(*conn);
 
     CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
                              swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
@@ -43,7 +44,7 @@ TransactionItemReasonTest::testNoTransaction()
 void
 TransactionItemReasonTest::testEmptyTransaction()
 {
-    Swdb swdb(conn);
+    Swdb swdb(*conn);
 
     swdb.initTransaction();
     swdb.beginTransaction(1, "", "", 0);
@@ -59,11 +60,11 @@ TransactionItemReasonTest::testEmptyTransaction()
 void
 TransactionItemReasonTest::test_OneTransaction_OneTransactionItem()
 {
-    Swdb swdb(conn);
+    Swdb swdb(*conn);
 
     swdb.initTransaction();
 
-    auto rpm_bash = std::make_shared< RPMItem >(conn);
+    auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
     rpm_bash->setName("bash");
     rpm_bash->setEpoch(0);
     rpm_bash->setVersion("4.4.12");
@@ -99,11 +100,11 @@ TransactionItemReasonTest::test_OneTransaction_OneTransactionItem()
 void
 TransactionItemReasonTest::test_OneFailedTransaction_OneTransactionItem()
 {
-    Swdb swdb(conn);
+    Swdb swdb(*conn);
 
     swdb.initTransaction();
 
-    auto rpm_bash = std::make_shared< RPMItem >(conn);
+    auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
     rpm_bash->setName("bash");
     rpm_bash->setEpoch(0);
     rpm_bash->setVersion("4.4.12");
@@ -139,12 +140,12 @@ TransactionItemReasonTest::test_OneFailedTransaction_OneTransactionItem()
 void
 TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
 {
-    Swdb swdb(conn);
+    Swdb swdb(*conn);
 
     swdb.initTransaction();
 
     {
-        auto rpm_bash = std::make_shared< RPMItem >(conn);
+        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
         rpm_bash->setName("bash");
         rpm_bash->setEpoch(0);
         rpm_bash->setVersion("4.4.12");
@@ -158,7 +159,7 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
     }
 
     {
-        auto rpm_bash = std::make_shared< RPMItem >(conn);
+        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
         rpm_bash->setName("bash");
         rpm_bash->setEpoch(0);
         rpm_bash->setVersion("4.4.12");
@@ -195,12 +196,12 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
 void
 TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
 {
-    Swdb swdb(conn);
+    Swdb swdb(*conn);
 
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< RPMItem >(conn);
+        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
         rpm_bash->setName("bash");
         rpm_bash->setEpoch(0);
         rpm_bash->setVersion("4.4.12");
@@ -220,7 +221,7 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< RPMItem >(conn);
+        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
         rpm_bash->setName("bash");
         rpm_bash->setEpoch(0);
         rpm_bash->setVersion("4.4.12");
@@ -257,12 +258,12 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
 void
 TransactionItemReasonTest::testRemovedPackage()
 {
-    Swdb swdb(conn);
+    Swdb swdb(*conn);
 
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< RPMItem >(conn);
+        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
         rpm_bash->setName("bash");
         rpm_bash->setEpoch(0);
         rpm_bash->setVersion("4.4.12");
@@ -282,7 +283,7 @@ TransactionItemReasonTest::testRemovedPackage()
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< RPMItem >(conn);
+        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
         rpm_bash->setName("bash");
         rpm_bash->setEpoch(0);
         rpm_bash->setVersion("4.4.12");

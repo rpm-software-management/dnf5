@@ -53,9 +53,9 @@ static const char *sql_create_tables =
     ;
 
 void
-Transformer::createDatabase(libdnf::utils::SQLite3Ptr conn)
+Transformer::createDatabase(libdnf::utils::SQLite3 & conn)
 {
-    conn->exec(sql_create_tables);
+    conn.exec(sql_create_tables);
 }
 
 /**
@@ -117,7 +117,7 @@ Transformer::Transformer(const std::string &inputDir, const std::string &outputF
 void
 Transformer::transform()
 {
-    auto swdb = std::make_shared<libdnf::utils::SQLite3>(":memory:");
+    libdnf::utils::SQLite3 swdb(":memory:");
 
     if (std::filesystem::exists(outputFile.c_str())) {
         throw std::runtime_error("DB file already exists:" + outputFile);
@@ -132,14 +132,14 @@ Transformer::transform()
     // migrate history db if it exists
     try {
         // make a copy of source database to make creating indexes temporary
-        auto history = std::make_shared<libdnf::utils::SQLite3>(":memory:");
-        history->restore(historyPath().c_str());
+        libdnf::utils::SQLite3 history(":memory:");
+        history.restore(historyPath().c_str());
 
         // create additional indexes in the source database to increase conversion speed
-        history->exec("CREATE INDEX IF NOT EXISTS i_trans_cmdline_tid ON trans_cmdline(tid);");
-        history->exec("CREATE INDEX IF NOT EXISTS i_trans_data_pkgs_tid ON trans_data_pkgs(tid);");
-        history->exec("CREATE INDEX IF NOT EXISTS i_trans_script_stdout_tid ON trans_script_stdout(tid);");
-        history->exec("CREATE INDEX IF NOT EXISTS i_trans_with_pkgs_tid_pkgtupid ON trans_with_pkgs(tid, pkgtupid);");
+        history.exec("CREATE INDEX IF NOT EXISTS i_trans_cmdline_tid ON trans_cmdline(tid);");
+        history.exec("CREATE INDEX IF NOT EXISTS i_trans_data_pkgs_tid ON trans_data_pkgs(tid);");
+        history.exec("CREATE INDEX IF NOT EXISTS i_trans_script_stdout_tid ON trans_script_stdout(tid);");
+        history.exec("CREATE INDEX IF NOT EXISTS i_trans_with_pkgs_tid_pkgtupid ON trans_with_pkgs(tid, pkgtupid);");
 
         // transform objects
         transformTrans(swdb, history);
@@ -152,7 +152,7 @@ Transformer::transform()
     }
 
     // dump database to a file
-    swdb->backup(outputFile);
+    swdb.backup(outputFile);
 }
 
 /**
@@ -161,7 +161,7 @@ Transformer::transform()
  * \param swdb pointer to history database SQLite3 object
  */
 void
-Transformer::transformTrans(libdnf::utils::SQLite3Ptr swdb, libdnf::utils::SQLite3Ptr history)
+Transformer::transformTrans(libdnf::utils::SQLite3 & swdb, libdnf::utils::SQLite3 & history)
 {
     std::vector< std::shared_ptr< TransformerTransaction > > result;
 
@@ -199,41 +199,41 @@ Transformer::transformTrans(libdnf::utils::SQLite3Ptr swdb, libdnf::utils::SQLit
 
     // get release version for all the transactions
     std::map< int64_t, std::string > releasever;
-    libdnf::utils::SQLite3::Query releasever_query(*history.get(), releasever_sql);
+    libdnf::utils::SQLite3::Query releasever_query(history, releasever_sql);
     while (releasever_query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         std::string releaseVerStr = releasever_query.get< std::string >("releasever");
         releasever[releasever_query.get< int64_t >("tid")] = releaseVerStr;
     }
 
     // iterate over history transactions
-    libdnf::utils::SQLite3::Query query(*history.get(), trans_sql);
+    libdnf::utils::SQLite3::Query query(history, trans_sql);
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto trans = std::make_shared< TransformerTransaction >(swdb);
-        trans->set_id(query.get< int >("id"));
-        trans->set_dt_begin(query.get< int64_t >("dt_begin"));
-        trans->set_dt_end(query.get< int64_t >("dt_end"));
-        trans->set_rpmdb_version_begin(query.get< std::string >("rpmdb_version_begin"));
-        trans->set_rpmdb_version_end(query.get< std::string >("rpmdb_version_end"));
+        TransformerTransaction trans(swdb);
+        trans.set_id(query.get< int >("id"));
+        trans.set_dt_begin(query.get< int64_t >("dt_begin"));
+        trans.set_dt_end(query.get< int64_t >("dt_end"));
+        trans.set_rpmdb_version_begin(query.get< std::string >("rpmdb_version_begin"));
+        trans.set_rpmdb_version_end(query.get< std::string >("rpmdb_version_end"));
 
         // set release version if available
-        auto it = releasever.find(trans->get_id());
+        auto it = releasever.find(trans.get_id());
         if (it != releasever.end()) {
-            trans->set_releasever(it->second);
+            trans.set_releasever(it->second);
         }
 
-        trans->set_user_id(query.get< int >("user_id"));
-        trans->set_cmdline(query.get< std::string >("cmdline"));
+        trans.set_user_id(query.get< int >("user_id"));
+        trans.set_cmdline(query.get< std::string >("cmdline"));
 
         TransactionState state = query.get< int >("state") == 0 ? TransactionState::DONE : TransactionState::ERROR;
 
-        transformRPMItems(swdb, history, trans);
-        transformTransWith(swdb, history, trans);
+        transformRPMItems(history, trans);
+        transformTransWith(history, trans);
 
-        trans->begin();
+        trans.begin();
 
         transformOutput(history, trans);
 
-        trans->finish(state);
+        trans.finish(state);
     }
 }
 
@@ -254,9 +254,8 @@ fillRPMItem(std::shared_ptr< RPMItem > rpm, libdnf::utils::SQLite3::Query &query
  * \param swdb pointer to history database SQLite3 object
  */
 void
-Transformer::transformTransWith(libdnf::utils::SQLite3Ptr swdb,
-                                libdnf::utils::SQLite3Ptr history,
-                                std::shared_ptr< TransformerTransaction > trans)
+Transformer::transformTransWith(libdnf::utils::SQLite3 & history,
+                                TransformerTransaction & trans)
 {
     const char *sql = R"**(
         SELECT
@@ -273,13 +272,13 @@ Transformer::transformTransWith(libdnf::utils::SQLite3Ptr swdb,
     )**";
 
     // transform stdout
-    libdnf::utils::SQLite3::Query query(*history.get(), sql);
-    query.bindv(trans->get_id());
+    libdnf::utils::SQLite3::Query query(history, sql);
+    query.bindv(trans.get_id());
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         // create RPM item object
-        auto rpm = std::make_shared< RPMItem >(swdb);
+        auto rpm = std::make_shared< RPMItem >(trans);
         fillRPMItem(rpm, query);
-        trans->addSoftwarePerformedWith(rpm);
+        trans.addSoftwarePerformedWith(rpm);
     }
 }
 
@@ -288,7 +287,7 @@ Transformer::transformTransWith(libdnf::utils::SQLite3Ptr swdb,
  * \param swdb pointer to history database SQLite3 object
  */
 void
-Transformer::transformOutput(libdnf::utils::SQLite3Ptr history, std::shared_ptr< TransformerTransaction > trans)
+Transformer::transformOutput(libdnf::utils::SQLite3 & history, TransformerTransaction & trans)
 {
     const char *sql = R"**(
         SELECT
@@ -302,10 +301,10 @@ Transformer::transformOutput(libdnf::utils::SQLite3Ptr history, std::shared_ptr<
     )**";
 
     // transform stdout
-    libdnf::utils::SQLite3::Query query(*history.get(), sql);
-    query.bindv(trans->get_id());
+    libdnf::utils::SQLite3::Query query(history, sql);
+    query.bindv(trans.get_id());
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        trans->addConsoleOutputLine(1, query.get< std::string >("line"));
+        trans.addConsoleOutputLine(1, query.get< std::string >("line"));
     }
 
     sql = R"**(
@@ -320,15 +319,15 @@ Transformer::transformOutput(libdnf::utils::SQLite3Ptr history, std::shared_ptr<
     )**";
 
     // transform stderr
-    libdnf::utils::SQLite3::Query errorQuery(*history.get(), sql);
-    errorQuery.bindv(trans->get_id());
+    libdnf::utils::SQLite3::Query errorQuery(history, sql);
+    errorQuery.bindv(trans.get_id());
     while (errorQuery.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        trans->addConsoleOutputLine(2, errorQuery.get< std::string >("msg"));
+        trans.addConsoleOutputLine(2, errorQuery.get< std::string >("msg"));
     }
 }
 
 static void
-getYumdbData(int64_t itemId, libdnf::utils::SQLite3Ptr history, TransactionItemReason &reason, std::string &repoid)
+getYumdbData(int64_t itemId, libdnf::utils::SQLite3 & history, TransactionItemReason &reason, std::string &repoid)
 {
     const char *sql = R"**(
         SELECT
@@ -342,7 +341,7 @@ getYumdbData(int64_t itemId, libdnf::utils::SQLite3Ptr history, TransactionItemR
     )**";
 
     // load reason and repoid data from yumdb
-    libdnf::utils::SQLite3::Query query(*history.get(), sql);
+    libdnf::utils::SQLite3::Query query(history, sql);
     query.bindv(itemId);
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         std::string key = query.get< std::string >("key");
@@ -361,9 +360,8 @@ getYumdbData(int64_t itemId, libdnf::utils::SQLite3Ptr history, TransactionItemR
  * \param trans Transaction whose items should be transformed
  */
 void
-Transformer::transformRPMItems(libdnf::utils::SQLite3Ptr swdb,
-                               libdnf::utils::SQLite3Ptr history,
-                               std::shared_ptr< TransformerTransaction > trans)
+Transformer::transformRPMItems(libdnf::utils::SQLite3 & history,
+                               TransformerTransaction & trans)
 {
     // the order is important here - its Update, Updated
     const char *pkg_sql = R"**(
@@ -383,8 +381,8 @@ Transformer::transformRPMItems(libdnf::utils::SQLite3Ptr swdb,
             t.tid=?
     )**";
 
-    libdnf::utils::SQLite3::Query query(*history.get(), pkg_sql);
-    query.bindv(trans->get_id());
+    libdnf::utils::SQLite3::Query query(history, pkg_sql);
+    query.bindv(trans.get_id());
 
     TransactionItemPtr last = nullptr;
 
@@ -402,7 +400,7 @@ Transformer::transformRPMItems(libdnf::utils::SQLite3Ptr swdb,
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
 
         // create RPM item object
-        auto rpm = std::make_shared< RPMItem >(swdb);
+        auto rpm = std::make_shared< RPMItem >(trans);
         fillRPMItem(rpm, query);
 
         // get item state/action
@@ -428,7 +426,7 @@ Transformer::transformRPMItems(libdnf::utils::SQLite3Ptr swdb,
             getYumdbData(query.get< int64_t >("id"), history, reason, repoid);
 
             // add TransactionItem object
-            transItem = trans->addItem(rpm, repoid, action, reason);
+            transItem = trans.addItem(rpm, repoid, action, reason);
             transItem->set_state(query.get< std::string >("done") == "TRUE" ? TransactionItemState::DONE : TransactionItemState::ERROR);
         } else {
             // item has been obsoleted - we just need to update the action
@@ -460,12 +458,12 @@ Transformer::transformRPMItems(libdnf::utils::SQLite3Ptr swdb,
  * \param group group json object
  */
 CompsGroupItemPtr
-Transformer::processGroup(libdnf::utils::SQLite3Ptr swdb, const char *groupId, struct json_object *group)
+Transformer::processGroup(Transaction & trans, const char *groupId, struct json_object *group)
 {
     struct json_object *value;
 
     // create group
-    auto compsGroup = std::make_shared< CompsGroupItem >(swdb);
+    auto compsGroup = std::make_shared< CompsGroupItem >(trans);
 
     compsGroup->setGroupId(groupId);
 
@@ -504,12 +502,12 @@ Transformer::processGroup(libdnf::utils::SQLite3Ptr swdb, const char *groupId, s
  * \param env environment json object
  */
 std::shared_ptr< CompsEnvironmentItem >
-Transformer::processEnvironment(libdnf::utils::SQLite3Ptr swdb, const char *envId, struct json_object *env)
+Transformer::processEnvironment(Transaction & trans, const char *envId, struct json_object *env)
 {
     struct json_object *value;
 
     // create environment
-    auto compsEnv = std::make_shared< CompsEnvironmentItem >(swdb);
+    auto compsEnv = std::make_shared< CompsEnvironmentItem >(trans);
     compsEnv->setEnvironmentId(envId);
 
     if (json_object_object_get_ex (env, "name", &value)) {
@@ -549,7 +547,7 @@ Transformer::processEnvironment(libdnf::utils::SQLite3Ptr swdb, const char *envI
  * \param root group persistor root node
  */
 void
-Transformer::processGroupPersistor(libdnf::utils::SQLite3Ptr swdb, struct json_object *root)
+Transformer::processGroupPersistor(libdnf::utils::SQLite3 & swdb, struct json_object *root)
 {
     // there is no rpmdb change in this transaction,
     // use rpmdb version from the last converted transaction
@@ -565,7 +563,7 @@ Transformer::processGroupPersistor(libdnf::utils::SQLite3Ptr swdb, struct json_o
     // add groups
     if (json_object_object_get_ex(root, "GROUPS", &groups)) {
         json_object_object_foreach(groups, key, val) {
-            trans.addItem(processGroup (swdb, key, val),
+            trans.addItem(processGroup (trans, key, val),
                           {}, // repoid
                           TransactionItemAction::INSTALL,
                           TransactionItemReason::USER);
@@ -575,7 +573,7 @@ Transformer::processGroupPersistor(libdnf::utils::SQLite3Ptr swdb, struct json_o
     // add environments
     if (json_object_object_get_ex(root, "ENVIRONMENTS", &envs)) {
         json_object_object_foreach(envs, key, val) {
-            trans.addItem(processEnvironment (swdb, key, val),
+            trans.addItem(processEnvironment (trans, key, val),
                           {}, // repoid
                           TransactionItemAction::INSTALL,
                           TransactionItemReason::USER);
@@ -610,7 +608,7 @@ Transformer::processGroupPersistor(libdnf::utils::SQLite3Ptr swdb, struct json_o
  * \param swdb pointer to swdb SQLite3 object
  */
 void
-Transformer::transformGroups(libdnf::utils::SQLite3Ptr swdb)
+Transformer::transformGroups(libdnf::utils::SQLite3 & swdb)
 {
     std::string groupsFile(inputDir);
 

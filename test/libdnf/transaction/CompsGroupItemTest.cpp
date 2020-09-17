@@ -15,19 +15,20 @@ using namespace libdnf::transaction;
 void
 CompsGroupItemTest::setUp()
 {
-    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
-    Transformer::createDatabase(conn);
+    conn = new libdnf::utils::SQLite3(":memory:");
+    Transformer::createDatabase(*conn);
 }
 
 void
 CompsGroupItemTest::tearDown()
 {
+    delete conn;
 }
 
 static std::shared_ptr< CompsGroupItem >
-createCompsGroup(std::shared_ptr< libdnf::utils::SQLite3 > conn)
+createCompsGroup(Transaction & trans)
 {
-    auto grp = std::make_shared< CompsGroupItem >(conn);
+    auto grp = std::make_shared< CompsGroupItem >(trans);
     grp->setGroupId("core");
     grp->setName("Smallest possible installation");
     grp->setTranslatedName("translated(Smallest possible installation)");
@@ -41,9 +42,10 @@ createCompsGroup(std::shared_ptr< libdnf::utils::SQLite3 > conn)
 void
 CompsGroupItemTest::testCreate()
 {
-    auto grp = createCompsGroup(conn);
+    Transaction trans(*conn);
+    auto grp = createCompsGroup(trans);
 
-    CompsGroupItem grp2(conn, grp->getId());
+    CompsGroupItem grp2(trans, grp->getId());
     CPPUNIT_ASSERT(grp2.getId() == grp->getId());
     CPPUNIT_ASSERT(grp2.getGroupId() == grp->getGroupId());
     CPPUNIT_ASSERT(grp2.getName() == grp->getName());
@@ -76,14 +78,14 @@ CompsGroupItemTest::testCreate()
 void
 CompsGroupItemTest::testGetTransactionItems()
 {
-    Transaction trans(conn);
-    auto grp = createCompsGroup(conn);
+    Transaction trans(*conn);
+    auto grp = createCompsGroup(trans);
     auto ti = trans.addItem(grp, "", TransactionItemAction::INSTALL, TransactionItemReason::USER);
     ti->set_state(TransactionItemState::DONE);
     trans.begin();
     trans.finish(TransactionState::DONE);
 
-    Transaction trans2(conn, trans.get_id());
+    Transaction trans2(*conn, trans.get_id());
 
     auto transItems = trans2.getItems();
     CPPUNIT_ASSERT_EQUAL(1, static_cast< int >(transItems.size()));

@@ -18,7 +18,7 @@ public:
     void testDefaultWorkflow();
 
 private:
-    std::shared_ptr< libdnf::utils::SQLite3 > conn;
+    libdnf::utils::SQLite3 * conn;
 };
 
 #endif // LIBDNF_SWDB_WORKFLOW_TEST_HPP

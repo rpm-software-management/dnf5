@@ -41,8 +41,8 @@ namespace libdnf::transaction {
 
 class MergedTransaction {
 public:
-    explicit MergedTransaction(TransactionPtr trans);
-    void merge(TransactionPtr trans);
+    explicit MergedTransaction(Transaction & trans);
+    void merge(Transaction & trans);
 
     std::vector< int64_t > listIds() const;
     std::vector< uint32_t > listUserIds() const;
@@ -59,7 +59,7 @@ public:
     std::vector< TransactionItemPtr > getItems();
 
 protected:
-    std::vector< TransactionPtr > transactions;
+    std::vector<Transaction *> transactions;
 
     struct ItemPair {
         ItemPair(TransactionItemPtr first, TransactionItemPtr second)

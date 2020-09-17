@@ -20,7 +20,7 @@ public:
     void testGetTransactionItems();
 
 private:
-    std::shared_ptr< libdnf::utils::SQLite3 > conn;
+    libdnf::utils::SQLite3 * conn;
 };
 
 #endif // LIBDNF_SWDB_COMPSENVIRONMENTITEM_TEST_HPP

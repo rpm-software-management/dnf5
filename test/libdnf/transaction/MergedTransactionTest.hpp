@@ -60,7 +60,7 @@ public:
 
     void test_multilib_identity();
 private:
-    std::shared_ptr< libdnf::utils::SQLite3 > conn;
+    libdnf::utils::SQLite3 * conn;
 };
 
 #endif // LIBDNF_SWDB_MERGEDTRANSACTION_TEST_HPP

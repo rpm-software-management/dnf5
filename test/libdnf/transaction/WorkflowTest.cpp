@@ -18,13 +18,14 @@ CPPUNIT_TEST_SUITE_REGISTRATION(WorkflowTest);
 void
 WorkflowTest::setUp()
 {
-    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
-    Transformer::createDatabase(conn);
+    conn = new libdnf::utils::SQLite3(":memory:");
+    Transformer::createDatabase(*conn);
 }
 
 void
 WorkflowTest::tearDown()
 {
+    delete conn;
 }
 
 void
@@ -33,7 +34,7 @@ WorkflowTest::testDefaultWorkflow()
     // TODO: init/begin/end trans
 
     // STEP 1: create transaction object
-    Transaction trans(conn);
+    Transaction trans(*conn);
     CPPUNIT_ASSERT_EQUAL(TransactionState::UNKNOWN, trans.get_state());
 
     // STEP 2: set vars
@@ -45,7 +46,7 @@ WorkflowTest::testDefaultWorkflow()
 
     // STEP 3: associate RPMs to the transaction
     // bash-4.4.12-5.fc26.x86_64
-    auto rpm_bash = std::make_shared< RPMItem >(conn);
+    auto rpm_bash = std::make_shared< RPMItem >(trans);
     rpm_bash->setName("bash");
     rpm_bash->setEpoch(0);
     rpm_bash->setVersion("4.4.12");
@@ -57,7 +58,7 @@ WorkflowTest::testDefaultWorkflow()
     trans.addItem(rpm_bash, repoid, action, reason);
 
     // systemd-233-6.fc26
-    auto rpm_systemd = std::make_shared< RPMItem >(conn);
+    auto rpm_systemd = std::make_shared< RPMItem >(trans);
     rpm_systemd->setName("systemd");
     rpm_systemd->setEpoch(0);
     rpm_systemd->setVersion("233");
@@ -69,7 +70,7 @@ WorkflowTest::testDefaultWorkflow()
     auto ti_rpm_systemd = trans.addItem(rpm_systemd, repoid, action, reason);
 
     // sysvinit-2.88-14.dsf.fc20
-    auto rpm_sysvinit = std::make_shared< RPMItem >(conn);
+    auto rpm_sysvinit = std::make_shared< RPMItem >(trans);
     rpm_sysvinit->setName("sysvinit");
     rpm_sysvinit->setEpoch(0);
     rpm_sysvinit->setVersion("2.88");
@@ -81,7 +82,7 @@ WorkflowTest::testDefaultWorkflow()
     auto ti_rpm_sysvinit = trans.addItem(rpm_sysvinit, repoid, action, reason);
     ti_rpm_sysvinit->addReplacedBy(ti_rpm_systemd);
 
-    auto comps_group_core = std::make_shared< CompsGroupItem >(conn);
+    auto comps_group_core = std::make_shared< CompsGroupItem >(trans);
     comps_group_core->setGroupId("core");
     comps_group_core->setName("Core");
     comps_group_core->setTranslatedName("Úplný základ");
@@ -91,7 +92,7 @@ WorkflowTest::testDefaultWorkflow()
     reason = TransactionItemReason::USER;
     trans.addItem(comps_group_core, repoid, action, reason);
 
-    auto comps_environment_minimal = std::make_shared< CompsEnvironmentItem >(conn);
+    auto comps_environment_minimal = std::make_shared< CompsEnvironmentItem >(trans);
     comps_environment_minimal->setEnvironmentId("minimal");
     comps_environment_minimal->setName("Minimal");
     comps_environment_minimal->setTranslatedName("mmm");
@@ -117,7 +118,7 @@ WorkflowTest::testDefaultWorkflow()
 
     // VERIFY
     // verify that data is available via public API
-    auto trans2 = Transaction(conn, trans.get_id());
+    auto trans2 = Transaction(*conn, trans.get_id());
     CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans2.get_state());
 
     CPPUNIT_ASSERT(trans2.getItems().size() == 5);

@@ -40,6 +40,10 @@ typedef std::shared_ptr<Transaction> TransactionPtr;
 namespace libdnf::transaction {
 
 
+class Item;
+class Transformer;
+
+
 /// @replaces libdnf:transaction/Types.hpp:enum:TransactionState
 enum class TransactionState : int { UNKNOWN = 0, DONE = 1, ERROR = 2 };
 
@@ -51,8 +55,8 @@ public:
 
     explicit Transaction() = default;
     // load from db
-    explicit Transaction(libdnf::utils::SQLite3Ptr conn);
-    explicit Transaction(libdnf::utils::SQLite3Ptr conn, int64_t pk);
+    explicit Transaction(libdnf::utils::SQLite3 & conn);
+    explicit Transaction(libdnf::utils::SQLite3 & conn, int64_t pk);
     virtual ~Transaction() = default;
 
     bool operator==(const Transaction & other) const;
@@ -175,7 +179,12 @@ public:
     void addConsoleOutputLine(int fileDescriptor, const std::string & line);
     void addSoftwarePerformedWith(std::shared_ptr<RPMItem> software);
 
+    libdnf::utils::SQLite3 & get_connection() { return conn; }
+
 protected:
+    friend Item;
+    friend Transformer;
+
     void dbSelect(int64_t transaction_id);
 
     void saveItems();
@@ -187,7 +196,7 @@ protected:
     std::set<std::shared_ptr<RPMItem>> softwarePerformedWith;
 
     friend class TransactionItem;
-    libdnf::utils::SQLite3Ptr conn;
+    libdnf::utils::SQLite3 & conn;
 
 private:
     int64_t id = 0;

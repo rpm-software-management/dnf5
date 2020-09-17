@@ -32,13 +32,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
-Transaction::Transaction(libdnf::utils::SQLite3Ptr conn, int64_t pk)
+Transaction::Transaction(libdnf::utils::SQLite3 & conn, int64_t pk)
   : conn{conn}
 {
     dbSelect(pk);
 }
 
-Transaction::Transaction(libdnf::utils::SQLite3Ptr conn)
+Transaction::Transaction(libdnf::utils::SQLite3 & conn)
   : conn{conn}
 {
 }
@@ -94,13 +94,13 @@ Transaction::getItems()
         return items;
     }
     std::vector< TransactionItemPtr > result;
-    auto rpms = RPMItem::getTransactionItems(conn, get_id());
+    auto rpms = RPMItem::getTransactionItems(*this);
     result.insert(result.end(), rpms.begin(), rpms.end());
 
-    auto comps_groups = CompsGroupItem::getTransactionItems(conn, get_id());
+    auto comps_groups = CompsGroupItem::getTransactionItems(*this);
     result.insert(result.end(), comps_groups.begin(), comps_groups.end());
 
-    auto comps_environments = CompsEnvironmentItem::getTransactionItems(conn, get_id());
+    auto comps_environments = CompsEnvironmentItem::getTransactionItems(*this);
     result.insert(result.end(), comps_environments.begin(), comps_environments.end());
 
     return result;
@@ -125,11 +125,12 @@ Transaction::getSoftwarePerformedWith() const
 
     std::set< std::shared_ptr< RPMItem > > software;
 
-    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Query query(conn, sql);
     query.bindv(get_id());
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        software.insert(std::make_shared< RPMItem >(conn, query.get< int64_t >("item_id")));
+        auto rpm = std::make_shared< RPMItem >(*const_cast<Transaction *>(this), query.get<int64_t>("item_id"));
+        software.insert(rpm);
     }
 
     return software;
@@ -149,7 +150,7 @@ Transaction::getConsoleOutput() const
         ORDER BY
             id
     )**";
-    libdnf::utils::SQLite3::Query query(*conn, sql);
+    libdnf::utils::SQLite3::Query query(conn, sql);
     query.bindv(get_id());
     std::vector< std::pair< int, std::string > > result;
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
@@ -206,7 +207,7 @@ Transaction::dbInsert()
             VALUES
                 (?, ?)
         )**";
-        libdnf::utils::SQLite3::Statement swQuery(*conn.get(), sql);
+        libdnf::utils::SQLite3::Statement swQuery(conn, sql);
         bool first = true;
         for (auto software : softwarePerformedWith) {
             if (!first) {
@@ -224,7 +225,7 @@ Transaction::dbInsert()
 void
 Transaction::dbUpdate()
 {
-    auto query = trans_update_new_query(conn);
+    auto query = trans_update_new_query(get_connection());
     trans_update(*query, *this);
 }
 
@@ -252,7 +253,7 @@ Transaction::addItem(std::shared_ptr< Item > item,
         // return an existing transaction item if exists
         return i;
     }
-    auto trans_item = std::make_shared< TransactionItem >(this);
+    auto trans_item = std::make_shared< TransactionItem >(*this);
     trans_item->setItem(item);
     trans_item->set_repoid(repoid);
     trans_item->set_action(action);
@@ -313,7 +314,7 @@ Transaction::addConsoleOutputLine(int fileDescriptor, const std::string &line)
         VALUES
             (?, ?, ?);
     )**";
-    libdnf::utils::SQLite3::Statement query(*conn, sql);
+    libdnf::utils::SQLite3::Statement query(conn, sql);
     query.bindv(get_id(), fileDescriptor, line);
     query.step();
 }

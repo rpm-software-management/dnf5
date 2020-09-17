@@ -15,20 +15,22 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RpmItemTest);
 void
 RpmItemTest::setUp()
 {
-    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
-    Transformer::createDatabase(conn);
+    conn = new libdnf::utils::SQLite3(":memory:");
+    Transformer::createDatabase(*conn);
 }
 
 void
 RpmItemTest::tearDown()
 {
+    delete conn;
 }
 
 void
 RpmItemTest::testCreate()
 {
+    Transaction trans(*conn);
     // bash-4.4.12-5.fc26.x86_64
-    RPMItem rpm(conn);
+    RPMItem rpm(trans);
     rpm.setName("bash");
     rpm.setEpoch(0);
     rpm.setVersion("4.4.12");
@@ -36,7 +38,7 @@ RpmItemTest::testCreate()
     rpm.setArch("x86_64");
     rpm.save();
 
-    RPMItem rpm2(conn, rpm.getId());
+    RPMItem rpm2(trans, rpm.getId());
     CPPUNIT_ASSERT(rpm2.getId() == rpm.getId());
     CPPUNIT_ASSERT(rpm2.getName() == rpm.getName());
     CPPUNIT_ASSERT(rpm2.getEpoch() == rpm.getEpoch());
@@ -47,15 +49,15 @@ RpmItemTest::testCreate()
 void
 RpmItemTest::testCreateDuplicates()
 {
+    Transaction trans(*conn);
+
     // bash-4.4.12-5.fc26.x86_64
-    auto rpm = std::make_shared< RPMItem >(conn);
+    auto rpm = std::make_shared< RPMItem >(trans);
     rpm->setName("bash");
     rpm->setEpoch(0);
     rpm->setVersion("4.4.12");
     rpm->setRelease("5.fc26");
     rpm->setArch("x86_64");
-
-    Transaction trans(conn);
 
     // add a RPM twice, but with different reasons
     auto ti1 = trans.addItem(rpm, "base", TransactionItemAction::INSTALL, TransactionItemReason::GROUP);
@@ -82,11 +84,11 @@ RpmItemTest::testGetTransactionItems()
     // change following constant to modify number of tested RPMItems
     constexpr int num = 10;
 
-    Transaction trans(conn);
+    Transaction trans(*conn);
 
     auto create_start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < num; i++) {
-        auto rpm = std::make_shared< RPMItem >(conn);
+        auto rpm = std::make_shared< RPMItem >(trans);
         rpm->setName("name_" + std::to_string(i));
         rpm->setEpoch(0);
         rpm->setVersion("1");
@@ -101,7 +103,7 @@ RpmItemTest::testGetTransactionItems()
     std::chrono::duration< double > create_duration = create_finish - create_start;
 
     auto read_start = std::chrono::high_resolution_clock::now();
-    auto items = RPMItem::getTransactionItems(conn, trans.get_id());
+    auto items = RPMItem::getTransactionItems(trans);
     for (auto i : items) {
         auto rpm = std::dynamic_pointer_cast< RPMItem >(i->getItem());
         // std::cout << rpm->getNEVRA() << std::endl;

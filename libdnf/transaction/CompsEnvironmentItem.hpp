@@ -41,10 +41,8 @@ namespace libdnf::transaction {
 
 class CompsEnvironmentItem : public Item {
 public:
-    explicit CompsEnvironmentItem(libdnf::utils::SQLite3Ptr conn);
-
-    CompsEnvironmentItem(libdnf::utils::SQLite3Ptr conn, int64_t pk);
-
+    using Item::Item;
+    explicit CompsEnvironmentItem(Transaction & trans, int64_t pk);
     virtual ~CompsEnvironmentItem() = default;
 
     const std::string &getEnvironmentId() const noexcept { return environmentId; }
@@ -66,12 +64,11 @@ public:
                                       bool installed,
                                       CompsPackageType groupType);
     std::vector< CompsEnvironmentGroupPtr > getGroups();
-    static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &envid);
-    static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
-        libdnf::utils::SQLite3Ptr conn,
-        const std::string &pattern);
-    static std::vector< TransactionItemPtr > getTransactionItems(libdnf::utils::SQLite3Ptr conn,
-                                                                 int64_t transactionId);
+    //static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &envid);
+    //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
+    //    libdnf::utils::SQLite3Ptr conn,
+    //    const std::string &pattern);
+    static std::vector< TransactionItemPtr > getTransactionItems(Transaction & trans);
 
 protected:
     const Type itemType = Type::ENVIRONMENT;

@@ -34,10 +34,10 @@ typedef std::shared_ptr< Repo > RepoPtr;
 
 class Repo {
 public:
-    static RepoPtr getCached(libdnf::utils::SQLite3Ptr conn, const std::string &repoid);
+    static RepoPtr getCached(libdnf::utils::SQLite3 & conn, const std::string &repoid);
     static std::map< std::string, RepoPtr > cache;
 
-    Repo(libdnf::utils::SQLite3Ptr conn);
+    Repo(libdnf::utils::SQLite3 & conn);
 
     int64_t getId() const noexcept { return id; }
     void setId(int64_t value) { id = value; }
@@ -53,7 +53,7 @@ protected:
 
     int64_t id = 0;
     std::string repoId;
-    libdnf::utils::SQLite3Ptr conn;
+    libdnf::utils::SQLite3 & conn;
 };
 
 }  // namespace libdnf::transaction

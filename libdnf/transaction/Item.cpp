@@ -19,14 +19,16 @@
  */
 
 #include "Item.hpp"
+#include "transaction.hpp"
 #include "libdnf/transaction/db/item.hpp"
 
 namespace libdnf::transaction {
 
-Item::Item(libdnf::utils::SQLite3Ptr conn)
-  : conn{conn}
+Item::Item(Transaction & trans)
+  : trans{trans}
 {
 }
+
 
 void
 Item::save()
@@ -37,7 +39,7 @@ Item::save()
 void
 Item::dbInsert()
 {
-    auto query = item_insert_new_query(conn, itemType);
+    auto query = item_insert_new_query(trans.get_connection(), itemType);
     setId(item_insert(*query));
 }
 

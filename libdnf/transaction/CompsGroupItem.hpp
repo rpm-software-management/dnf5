@@ -48,8 +48,8 @@ namespace libdnf::transaction {
 
 class CompsGroupItem : public Item {
 public:
-    explicit CompsGroupItem(libdnf::utils::SQLite3Ptr conn);
-    CompsGroupItem(libdnf::utils::SQLite3Ptr conn, int64_t pk);
+    using Item::Item;
+    CompsGroupItem(Transaction & trans, int64_t pk);
     virtual ~CompsGroupItem() = default;
 
     const std::string &getGroupId() const noexcept { return groupId; }
@@ -69,12 +69,11 @@ public:
     void save() override;
     CompsGroupPackagePtr addPackage(std::string name, bool installed, CompsPackageType pkgType);
     std::vector< CompsGroupPackagePtr > getPackages();
-    static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &groupid);
-    static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
-        libdnf::utils::SQLite3Ptr conn,
-        const std::string &pattern);
-    static std::vector< TransactionItemPtr > getTransactionItems(libdnf::utils::SQLite3Ptr conn,
-                                                                 int64_t transactionId);
+    //static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &groupid);
+    //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
+    //    libdnf::utils::SQLite3Ptr conn,
+    //    const std::string &pattern);
+    static std::vector< TransactionItemPtr > getTransactionItems(Transaction & trans);
 
 protected:
     const Type itemType = Type::GROUP;

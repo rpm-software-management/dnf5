@@ -34,7 +34,7 @@ public:
     void test_TransactionItemReason_compare();
 
 private:
-    std::shared_ptr< libdnf::utils::SQLite3 > conn;
+    libdnf::utils::SQLite3 * conn;
 };
 
 #endif // LIBDNF_SWDB_TRANSACTION_ITEM_REASON_TEST_HPP

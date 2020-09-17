@@ -26,10 +26,17 @@ namespace libdnf::transaction {
  * Create a new MergedTransaction object with a single transaction
  * \param trans initial transaction
  */
-MergedTransaction::MergedTransaction(TransactionPtr trans)
-  : transactions{trans}
+MergedTransaction::MergedTransaction(Transaction & trans)
+  : transactions{&trans}
 {
 }
+
+/*
+MergedTransaction::MergedTransaction(Transaction & trans)
+  : transactions{std::make_shared<Transaction>(trans)}
+{
+}
+*/
 
 /**
  * Merge \trans into this transaction
@@ -38,18 +45,18 @@ MergedTransaction::MergedTransaction(TransactionPtr trans)
  * \param trans transaction to be merged with
  */
 void
-MergedTransaction::merge(TransactionPtr trans)
+MergedTransaction::merge(Transaction & trans)
 {
     bool inserted = false;
     for (auto it = transactions.begin(); it < transactions.end(); ++it) {
-        if ((*it)->get_id() > trans->get_id()) {
-            transactions.insert(it, trans);
+        if ((*it)->get_id() > trans.get_id()) {
+            transactions.insert(it, &trans);
             inserted = true;
             break;
         }
     }
     if (!inserted) {
-        transactions.push_back(trans);
+        transactions.push_back(&trans);
     }
 }
 

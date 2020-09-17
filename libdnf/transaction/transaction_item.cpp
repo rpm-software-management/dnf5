@@ -38,10 +38,8 @@ std::string TransactionItem::get_action_short() {
 }
 
 
-TransactionItem::TransactionItem(Transaction *trans)
+TransactionItem::TransactionItem(Transaction & trans)
   : trans(trans)
-  , transID(0)
-  , conn(trans->conn)
 {
 }
 
@@ -55,13 +53,6 @@ bool TransactionItem::is_backward_action() const {
     return TransactionItemAction_is_backward_action(action);
 }
 
-
-TransactionItem::TransactionItem(libdnf::utils::SQLite3Ptr conn, int64_t transID)
-  : trans(nullptr)
-  , transID(transID)
-  , conn(conn)
-{
-}
 
 void
 TransactionItem::save()
@@ -77,11 +68,6 @@ TransactionItem::save()
 void
 TransactionItem::dbInsert()
 {
-    if (trans == nullptr) {
-        throw std::runtime_error(
-            _("Attempt to insert transaction item into completed transaction"));
-    }
-
     const char *sql = R"**(
         INSERT INTO
           trans_item (
@@ -98,15 +84,15 @@ TransactionItem::dbInsert()
     )**";
 
     // save the transaction item
-    libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
-    query.bindv(trans->get_id(),
+    libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
+    query.bindv(trans.get_id(),
                 getItem()->getId(),
-                Repo::getCached(conn, get_repoid())->getId(),
+                Repo::getCached(trans.get_connection(), get_repoid())->getId(),
                 static_cast< int >(get_action()),
                 static_cast< int >(get_reason()),
                 static_cast< int >(get_state()));
     query.step();
-    set_id(conn->last_insert_rowid());
+    set_id(query.last_insert_rowid());
 }
 
 void
@@ -116,7 +102,7 @@ TransactionItem::saveReplacedBy()
         return;
     }
     const char *sql = "INSERT OR REPLACE INTO item_replaced_by VALUES (?, ?)";
-    libdnf::utils::SQLite3::Statement replacedByQuery(*(conn.get()), sql);
+    libdnf::utils::SQLite3::Statement replacedByQuery(trans.get_connection(), sql);
     bool first = true;
     for (const auto &newItem : replacedBy) {
         if (!first) {
@@ -141,7 +127,7 @@ TransactionItem::saveState()
           id = ?
     )**";
 
-    libdnf::utils::SQLite3::Statement query(*conn, sql);
+    libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
     query.bindv(static_cast< int >(get_state()), get_id());
     query.step();
 }
@@ -149,10 +135,6 @@ TransactionItem::saveState()
 void
 TransactionItem::dbUpdate()
 {
-    if (trans == nullptr) {
-        throw std::runtime_error(_("Attempt to update transaction item in completed transaction"));
-    }
-
     const char *sql = R"**(
         UPDATE
           trans_item
@@ -167,10 +149,10 @@ TransactionItem::dbUpdate()
           id = ?
     )**";
 
-    libdnf::utils::SQLite3::Statement query(*(conn.get()), sql);
-    query.bindv(trans->get_id(),
+    libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
+    query.bindv(trans.get_id(),
                 getItem()->getId(),
-                Repo::getCached(trans->conn, get_repoid())->getId(),
+                Repo::getCached(trans.conn, get_repoid())->getId(),
                 static_cast< int >(get_action()),
                 static_cast< int >(get_reason()),
                 static_cast< int >(get_state()),
@@ -180,12 +162,7 @@ TransactionItem::dbUpdate()
 
 uint32_t
 TransactionItem::getInstalledBy() const {
-    if (!trans) {
-        // null pointer -> create a local instance to return the user id
-        Transaction t(conn, transID);
-        return t.get_user_id();
-    }
-    return trans->get_user_id();
+    return trans.get_user_id();
 }
 
 }  // namespace libdnf::transaction

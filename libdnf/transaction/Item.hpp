@@ -28,6 +28,7 @@
 
 namespace libdnf::transaction {
 class Item;
+class Transaction;
 typedef std::shared_ptr< Item > ItemPtr;
 }
 
@@ -39,10 +40,7 @@ class Item {
 public:
     using Type = TransactionItemType;
 
-    /// Default constructor.
-    explicit Item(libdnf::utils::SQLite3Ptr conn);
-
-    /// Default destructor.
+    explicit Item(Transaction & trans);
     virtual ~Item() = default;
 
     /// Returns the ID of this item.
@@ -58,7 +56,7 @@ public:
 protected:
     void dbInsert();
 
-    libdnf::utils::SQLite3Ptr conn;
+    Transaction & trans;
     int64_t id = 0;
     const Type itemType = Type::UNKNOWN;
 };

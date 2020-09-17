@@ -29,8 +29,8 @@ public:
 
 protected:
     TransformerMock transformer;
-    std::shared_ptr< libdnf::utils::SQLite3 > swdb;
-    std::shared_ptr< libdnf::utils::SQLite3 > history;
+    libdnf::utils::SQLite3 * swdb;
+    libdnf::utils::SQLite3 * history;
 };
 
 #endif // LIBDNF_SWDB_RPMITEM_TEST_HPP

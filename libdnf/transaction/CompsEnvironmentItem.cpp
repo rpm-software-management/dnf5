@@ -21,23 +21,19 @@
 #include <algorithm>
 
 #include "CompsEnvironmentItem.hpp"
+#include "transaction.hpp"
 
 namespace libdnf::transaction {
 
 typedef const char *string;
 
-CompsEnvironmentItem::CompsEnvironmentItem(libdnf::utils::SQLite3Ptr conn)
-  : Item{conn}
-  , packageTypes{CompsPackageType::DEFAULT}
-{
-}
 
-CompsEnvironmentItem::CompsEnvironmentItem(libdnf::utils::SQLite3Ptr conn, int64_t pk)
-  : Item{conn}
-  , packageTypes{CompsPackageType::DEFAULT}
+CompsEnvironmentItem::CompsEnvironmentItem(Transaction & trans, int64_t pk)
+  : Item{trans}
 {
     dbSelect(pk);
 }
+
 
 void
 CompsEnvironmentItem::save()
@@ -66,7 +62,7 @@ CompsEnvironmentItem::dbSelect(int64_t pk)
         WHERE
             item_id = ?
     )**";
-    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Query query(trans.get_connection(), sql);
     query.bindv(pk);
     query.step();
 
@@ -95,7 +91,7 @@ CompsEnvironmentItem::dbInsert()
         VALUES
             (?, ?, ?, ?, ?)
     )**";
-    libdnf::utils::SQLite3::Statement query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
     query.bindv(getId(),
                 getEnvironmentId(),
                 getName(),
@@ -104,10 +100,11 @@ CompsEnvironmentItem::dbInsert()
     query.step();
 }
 
+/*
 static TransactionItemPtr
-compsEnvironmentTransactionItemFromQuery(libdnf::utils::SQLite3Ptr conn, libdnf::utils::SQLite3::Query &query, int64_t transID)
+compsEnvironmentTransactionItemFromQuery(libdnf::utils::SQLite3Ptr conn, libdnf::utils::SQLite3::Query &query, Transaction & trans)
 {
-    auto trans_item = std::make_shared< TransactionItem >(conn, transID);
+    auto trans_item = std::make_shared< TransactionItem >(trans);
     auto item = std::make_shared< CompsEnvironmentItem >(conn);
 
     trans_item->setItem(item);
@@ -123,7 +120,9 @@ compsEnvironmentTransactionItemFromQuery(libdnf::utils::SQLite3Ptr conn, libdnf:
 
     return trans_item;
 }
+*/
 
+/*
 TransactionItemPtr
 CompsEnvironmentItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &envid)
 {
@@ -147,7 +146,6 @@ CompsEnvironmentItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const s
             trans t ON ti.trans_id = t.id
         WHERE
             t.state = 1
-            /* see comment in TransactionItem.hpp - TransactionItemAction */
             AND ti.action not in (3, 5, 7)
             AND i.environmentid = ?
         ORDER BY
@@ -168,7 +166,9 @@ CompsEnvironmentItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const s
     }
     return nullptr;
 }
+*/
 
+/*
 std::vector< TransactionItemPtr >
 CompsEnvironmentItem::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr conn, const std::string &pattern)
 {
@@ -202,9 +202,10 @@ CompsEnvironmentItem::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr con
     }
     return result;
 }
+*/
 
 std::vector< TransactionItemPtr >
-CompsEnvironmentItem::getTransactionItems(libdnf::utils::SQLite3Ptr conn, int64_t transactionId)
+CompsEnvironmentItem::getTransactionItems(Transaction & trans)
 {
     std::vector< TransactionItemPtr > result;
 
@@ -224,12 +225,12 @@ CompsEnvironmentItem::getTransactionItems(libdnf::utils::SQLite3Ptr conn, int64_
             ti.trans_id = ?
             AND ti.item_id = i.item_id
     )**";
-    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
-    query.bindv(transactionId);
+    libdnf::utils::SQLite3::Query query(trans.get_connection(), sql);
+    query.bindv(trans.get_id());
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto trans_item = std::make_shared< TransactionItem >(conn, transactionId);
-        auto item = std::make_shared< CompsEnvironmentItem >(conn);
+        auto trans_item = std::make_shared< TransactionItem >(trans);
+        auto item = std::make_shared< CompsEnvironmentItem >(trans);
         trans_item->setItem(item);
 
         trans_item->set_id(query.get< int >(0));
@@ -277,7 +278,7 @@ CompsEnvironmentItem::loadGroups()
         ORDER BY
             groupid ASC
     )**";
-    libdnf::utils::SQLite3::Query query(*conn.get(), sql);
+    libdnf::utils::SQLite3::Query query(trans.get_connection(), sql);
     query.bindv(getId());
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
@@ -343,11 +344,11 @@ CompsEnvironmentGroup::dbInsert()
         VALUES
             (?, ?, ?, ?)
     )**";
-    libdnf::utils::SQLite3::Statement query(*getEnvironment().conn, sql);
+    libdnf::utils::SQLite3::Statement query(getEnvironment().trans.get_connection(), sql);
     query.bindv(
         getEnvironment().getId(), getGroupId(), getInstalled(), static_cast< int >(getGroupType()));
     query.step();
-    setId(getEnvironment().conn->last_insert_rowid());
+    setId(query.last_insert_rowid());
 }
 
 }  // namespace libdnf::transaction

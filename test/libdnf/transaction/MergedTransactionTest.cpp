@@ -17,12 +17,12 @@ CPPUNIT_TEST_SUITE_REGISTRATION(MergedTransactionTest);
 void
 MergedTransactionTest::setUp()
 {
-    conn = std::make_shared< libdnf::utils::SQLite3 >(":memory:");
-    Transformer::createDatabase(conn);
+    conn = new libdnf::utils::SQLite3(":memory:");
+    Transformer::createDatabase(*conn);
 }
 
 static TransactionPtr
-initTransFirst(libdnf::utils::SQLite3Ptr conn)
+initTransFirst(libdnf::utils::SQLite3 & conn)
 {
     // create the first transaction
     auto first = std::make_shared< Transaction >(conn);
@@ -33,7 +33,7 @@ initTransFirst(libdnf::utils::SQLite3Ptr conn)
     first->set_user_id(1000);
     first->set_cmdline("dnf install foo");
 
-    auto dnfRpm = std::make_shared< RPMItem >(conn);
+    auto dnfRpm = std::make_shared< RPMItem >(*first);
     dnfRpm->setName("dnf");
     dnfRpm->setEpoch(0);
     dnfRpm->setVersion("3.0.0");
@@ -46,7 +46,7 @@ initTransFirst(libdnf::utils::SQLite3Ptr conn)
 }
 
 static TransactionPtr
-initTransSecond(libdnf::utils::SQLite3Ptr conn)
+initTransSecond(libdnf::utils::SQLite3 & conn)
 {
     // create the second transaction
     auto second = std::make_shared< Transaction >(conn);
@@ -57,7 +57,7 @@ initTransSecond(libdnf::utils::SQLite3Ptr conn)
     second->set_user_id(1001);
     second->set_cmdline("dnf install bar");
 
-    auto rpmRpm = std::make_shared< RPMItem >(conn);
+    auto rpmRpm = std::make_shared< RPMItem >(*second);
     rpmRpm->setName("rpm");
     rpmRpm->setEpoch(0);
     rpmRpm->setVersion("4.14.0");
@@ -72,23 +72,24 @@ initTransSecond(libdnf::utils::SQLite3Ptr conn)
 void
 MergedTransactionTest::tearDown()
 {
+    delete conn;
 }
 
 void
 MergedTransactionTest::testMerge()
 {
-    auto first = initTransFirst(conn);
+    auto first = initTransFirst(*conn);
     first->begin();
     first->addConsoleOutputLine(1, "Foo");
     first->finish(TransactionState::DONE);
 
-    auto second = initTransSecond(conn);
+    auto second = initTransSecond(*conn);
     second->begin();
     second->addConsoleOutputLine(1, "Bar");
     second->finish(TransactionState::ERROR);
 
-    MergedTransaction merged(first);
-    merged.merge(second);
+    MergedTransaction merged(*first);
+    merged.merge(*second);
 
     CPPUNIT_ASSERT_EQUAL((int64_t)1, merged.listIds().at(0));
     CPPUNIT_ASSERT_EQUAL((int64_t)2, merged.listIds().at(1));
@@ -128,7 +129,7 @@ MergedTransactionTest::testMerge()
 }
 
 static MergedTransactionPtr
-prepareMergedTransaction(libdnf::utils::SQLite3Ptr conn,
+prepareMergedTransaction(libdnf::utils::SQLite3 & conn,
                          TransactionItemAction actionFirst,
                          TransactionItemAction actionSecond,
                          const std::string &versionFirst,
@@ -138,7 +139,8 @@ prepareMergedTransaction(libdnf::utils::SQLite3Ptr conn,
 
 )
 {
-    auto firstRPM = std::make_shared< RPMItem >(conn);
+    auto first = initTransFirst(conn);
+    auto firstRPM = std::make_shared< RPMItem >(*first);
     firstRPM->setName("foo");
     firstRPM->setEpoch(0);
     firstRPM->setVersion(versionFirst);
@@ -146,7 +148,8 @@ prepareMergedTransaction(libdnf::utils::SQLite3Ptr conn,
     firstRPM->setArch("x86_64");
     firstRPM->save();
 
-    auto secondRPM = std::make_shared< RPMItem >(conn);
+    auto second = initTransSecond(conn);
+    auto secondRPM = std::make_shared< RPMItem >(*second);
     secondRPM->setName("foo");
     secondRPM->setEpoch(0);
     secondRPM->setVersion(versionSecond);
@@ -154,9 +157,8 @@ prepareMergedTransaction(libdnf::utils::SQLite3Ptr conn,
     secondRPM->setArch("x86_64");
     secondRPM->save();
 
-    auto first = initTransFirst(conn);
     if (oldFirstAction != TransactionItemAction::INSTALL) {
-        auto oldFirst = std::make_shared< RPMItem >(conn);
+        auto oldFirst = std::make_shared< RPMItem >(*first);
         oldFirst->setName("foo");
         oldFirst->setEpoch(0);
         oldFirst->setVersion(oldFirstVersion);
@@ -170,13 +172,12 @@ prepareMergedTransaction(libdnf::utils::SQLite3Ptr conn,
     first->begin();
     first->finish(TransactionState::DONE);
 
-    auto second = initTransSecond(conn);
     second->addItem(secondRPM, "base", actionSecond, TransactionItemReason::USER);
     second->begin();
     second->finish(TransactionState::DONE);
 
-    auto merged = std::make_shared< MergedTransaction >(first);
-    merged->merge(second);
+    auto merged = std::make_shared< MergedTransaction >(*first);
+    merged->merge(*second);
     return merged;
 }
 
@@ -185,7 +186,7 @@ void
 MergedTransactionTest::testMergeEraseInstallReinstall()
 {
     auto merged = prepareMergedTransaction(
-        conn, TransactionItemAction::REMOVE, TransactionItemAction::INSTALL, "1.0.0", "1.0.0");
+        *conn, TransactionItemAction::REMOVE, TransactionItemAction::INSTALL, "1.0.0", "1.0.0");
 
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
@@ -198,7 +199,7 @@ void
 MergedTransactionTest::testMergeEraseInstallDowngrade()
 {
     auto merged = prepareMergedTransaction(
-        conn, TransactionItemAction::REMOVE, TransactionItemAction::INSTALL, "0.11.0", "0.10.9");
+        *conn, TransactionItemAction::REMOVE, TransactionItemAction::INSTALL, "0.11.0", "0.10.9");
 
     auto items = merged->getItems();
 
@@ -212,7 +213,7 @@ void
 MergedTransactionTest::testMergeEraseInstallUpgrade()
 {
     auto merged = prepareMergedTransaction(
-        conn, TransactionItemAction::OBSOLETED, TransactionItemAction::INSTALL, "0.11.0", "0.12.0");
+        *conn, TransactionItemAction::OBSOLETED, TransactionItemAction::INSTALL, "0.11.0", "0.12.0");
 
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
@@ -224,7 +225,7 @@ MergedTransactionTest::testMergeEraseInstallUpgrade()
 void
 MergedTransactionTest::testMergeReinstallAny()
 {
-    auto merged = prepareMergedTransaction(conn,
+    auto merged = prepareMergedTransaction(*conn,
                                            TransactionItemAction::REINSTALL,
                                            TransactionItemAction::UPGRADE,
                                            "1.0.0",
@@ -245,7 +246,7 @@ void
 MergedTransactionTest::testMergeInstallErase()
 {
     auto merged = prepareMergedTransaction(
-        conn, TransactionItemAction::INSTALL, TransactionItemAction::REMOVE, "1.0.0", "1.0.0");
+        *conn, TransactionItemAction::INSTALL, TransactionItemAction::REMOVE, "1.0.0", "1.0.0");
 
     auto items = merged->getItems();
 
@@ -259,7 +260,7 @@ void
 MergedTransactionTest::testMergeInstallAlter()
 {
     auto merged = prepareMergedTransaction(
-        conn, TransactionItemAction::INSTALL, TransactionItemAction::UPGRADE, "1.0.0", "1.0.1");
+        *conn, TransactionItemAction::INSTALL, TransactionItemAction::UPGRADE, "1.0.0", "1.0.1");
 
     auto items = merged->getItems();
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
@@ -273,7 +274,7 @@ MergedTransactionTest::testMergeInstallAlter()
 void
 MergedTransactionTest::testMergeAlterReinstall()
 {
-    auto merged = prepareMergedTransaction(conn,
+    auto merged = prepareMergedTransaction(*conn,
                                            TransactionItemAction::UPGRADE,
                                            TransactionItemAction::REINSTALL,
                                            "1.0.0",
@@ -293,7 +294,7 @@ MergedTransactionTest::testMergeAlterReinstall()
 void
 MergedTransactionTest::testMergeAlterErase()
 {
-    auto merged = prepareMergedTransaction(conn,
+    auto merged = prepareMergedTransaction(*conn,
                                            TransactionItemAction::UPGRADE,
                                            TransactionItemAction::REMOVE,
                                            "1.0.0",
@@ -312,7 +313,7 @@ MergedTransactionTest::testMergeAlterErase()
 void
 MergedTransactionTest::testMergeAlterAlter()
 {
-    auto merged = prepareMergedTransaction(conn,
+    auto merged = prepareMergedTransaction(*conn,
                                            TransactionItemAction::DOWNGRADE,
                                            TransactionItemAction::UPGRADE,
                                            "1.0.0",
@@ -327,7 +328,7 @@ MergedTransactionTest::testMergeAlterAlter()
 
 
 static RPMItemPtr
-nevraToRPMItem(libdnf::utils::SQLite3Ptr conn, std::string nevra)
+nevraToRPMItem(Transaction & trans, std::string nevra)
 {
     libdnf::rpm::Nevra nevraObject;
     if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
@@ -337,7 +338,7 @@ nevraToRPMItem(libdnf::utils::SQLite3Ptr conn, std::string nevra)
         nevraObject.set_epoch("0");
     }
 
-    auto rpm = std::make_shared< RPMItem >(conn);
+    auto rpm = std::make_shared< RPMItem >(trans);
     rpm->setName(nevraObject.get_name());
     rpm->setEpoch(std::stoi(nevraObject.get_epoch()));
     rpm->setVersion(nevraObject.get_version());
@@ -358,12 +359,12 @@ createTrans(libdnf::utils::SQLite3Ptr conn, std::string nevra, std::string repoi
         nevraObject.setEpoch(0);
     }
 
-    auto trans = std::make_shared< Transaction >(conn);
+    Transaction trans(conn);
     auto rpm = nevraToRPMItem(conn, nevra);
 
     //std::string repoid = "";
     //TransactionItemReason reason = TransactionItemReason::USER;
-    auto ti = trans->addItem(rpm, repoid, action, reason);
+    auto ti = trans.addItem(rpm, repoid, action, reason);
     for (auto obs : obsoletes) {
         //ti->addReplacedBy(obs);
     }
@@ -392,17 +393,17 @@ MergedTransactionTest::test_add_remove_installed()
             (('Erase', 'lotus-0:3-16.x86_64', None, set()),))
     */
 
-    auto trans1 = std::make_shared< Transaction >(conn);
-    auto trans1_tour = trans1->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans1(*conn);
+    auto trans1_tour = trans1.addItem(
+        nevraToRPMItem(trans1, "tour-0:4.6-1.noarch"),
         "repo1",
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER
     );
 
-    auto trans2 = std::make_shared< Transaction >(conn);
-    auto trans2_tour = trans2->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans2(*conn);
+    auto trans2_tour = trans2.addItem(
+        nevraToRPMItem(trans2, "tour-0:4.6-1.noarch"),
         "repo2",
         TransactionItemAction::REMOVE,
         TransactionItemReason::DEPENDENCY
@@ -431,17 +432,17 @@ MergedTransactionTest::test_add_remove_removed()
             ops.add, 'Erase', 'tour-0:4.6-1.noarch')
     */
 
-    auto trans1 = std::make_shared< Transaction >(conn);
-    auto trans1_tour = trans1->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans1(*conn);
+    auto trans1_tour = trans1.addItem(
+        nevraToRPMItem(trans1, "tour-0:4.6-1.noarch"),
         "repo1",
         TransactionItemAction::REMOVE,
         TransactionItemReason::USER
     );
 
-    auto trans2 = std::make_shared< Transaction >(conn);
-    auto trans2_tour = trans2->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans2(*conn);
+    auto trans2_tour = trans2.addItem(
+        nevraToRPMItem(trans2, "tour-0:4.6-1.noarch"),
         "repo2",
         TransactionItemAction::REMOVE,
         TransactionItemReason::DEPENDENCY
@@ -471,17 +472,17 @@ MergedTransactionTest::test_add_install_installed()
             ops.add, 'Install', 'tour-0:4.6-1.noarch')
     */
 
-    auto trans1 = std::make_shared< Transaction >(conn);
-    auto trans1_tour = trans1->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans1(*conn);
+    auto trans1_tour = trans1.addItem(
+        nevraToRPMItem(trans1, "tour-0:4.6-1.noarch"),
         "repo1",
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER
     );
 
-    auto trans2 = std::make_shared< Transaction >(conn);
-    auto trans2_tour = trans2->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans2(*conn);
+    auto trans2_tour = trans2.addItem(
+        nevraToRPMItem(trans2, "tour-0:4.6-1.noarch"),
         "repo2",
         TransactionItemAction::INSTALL,
         TransactionItemReason::GROUP
@@ -510,17 +511,17 @@ MergedTransactionTest::test_add_install_removed()
             (('Reinstall', 'tour-0:4.6-1.noarch', 'tour-0:4.6-1.noarch', set()),))
 
     */
-    auto trans1 = std::make_shared< Transaction >(conn);
-    auto trans1_tour = trans1->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans1(*conn);
+    auto trans1_tour = trans1.addItem(
+        nevraToRPMItem(trans1, "tour-0:4.6-1.noarch"),
         "repo1",
         TransactionItemAction::REMOVE,
         TransactionItemReason::DEPENDENCY
     );
 
-    auto trans2 = std::make_shared< Transaction >(conn);
-    auto trans2_tour = trans2->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans2(*conn);
+    auto trans2_tour = trans2.addItem(
+        nevraToRPMItem(trans2, "tour-0:4.6-1.noarch"),
         "repo2",
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER
@@ -554,22 +555,22 @@ MergedTransactionTest::test_add_obsoleted_installed()
             (('Install', 'tour-0:4.6-1.noarch', None, set()),))
     */
 
-    auto trans1 = std::make_shared< Transaction >(conn);
-    auto trans1_lotus = trans1->addItem(
-        nevraToRPMItem(conn, "lotus-0:3-16.x86_64"),
+    Transaction trans1(*conn);
+    auto trans1_lotus = trans1.addItem(
+        nevraToRPMItem(trans1, "lotus-0:3-16.x86_64"),
         "repo1",
         TransactionItemAction::INSTALL,
         TransactionItemReason::DEPENDENCY
     );
 
-    auto trans2 = std::make_shared< Transaction >(conn);
-    auto trans2_tour = trans2->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans2(*conn);
+    auto trans2_tour = trans2.addItem(
+        nevraToRPMItem(trans2, "tour-0:4.6-1.noarch"),
         "repo2",
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER
     );
-    auto trans2_lotus = trans2->addItem(nevraToRPMItem(conn, "lotus-0:3-16.x86_64"), "repo1", TransactionItemAction::OBSOLETED, TransactionItemReason::DEPENDENCY);
+    auto trans2_lotus = trans2.addItem(nevraToRPMItem(trans2, "lotus-0:3-16.x86_64"), "repo1", TransactionItemAction::OBSOLETED, TransactionItemReason::DEPENDENCY);
 
     trans2_lotus->addReplacedBy(trans2_tour);
 
@@ -623,23 +624,23 @@ MergedTransactionTest::test_add_obsoleted_obsoleted()
         )
     */
 
-    auto trans1 = std::make_shared< Transaction >(conn);
-    auto trans1_tour = trans1->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans1(*conn);
+    auto trans1_tour = trans1.addItem(
+        nevraToRPMItem(trans1, "tour-0:4.6-1.noarch"),
         "repo1",
         TransactionItemAction::INSTALL,
         TransactionItemReason::DEPENDENCY
     );
 
     /*
-    auto trans2 = std::make_shared< Transaction >(conn);
-    auto trans2_tour = trans2->addItem(
+    Transaction trans2(conn);
+    auto trans2_tour = trans2.addItem(
         nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
         "repo2",
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER
     );
-    auto trans2_lotus = trans2->addItem(nevraToRPMItem(conn, "lotus-0:3-16.x86_64"), "repo1", TransactionItemAction::OBSOLETED, TransactionItemReason::DEPENDENCY);
+    auto trans2_lotus = trans2.addItem(nevraToRPMItem(conn, "lotus-0:3-16.x86_64"), "repo1", TransactionItemAction::OBSOLETED, TransactionItemReason::DEPENDENCY);
 
     trans2_lotus->addReplacedBy(trans2_tour);
     */
@@ -660,15 +661,15 @@ MergedTransactionTest::test_add_obsoleted_obsoleted()
 void
 MergedTransactionTest::test_downgrade()
 {
-    auto trans1 = std::make_shared< Transaction >(conn);
-    trans1->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans1(*conn);
+    trans1.addItem(
+        nevraToRPMItem(trans1, "tour-0:4.6-1.noarch"),
         "repo2",
         TransactionItemAction::DOWNGRADE,
         TransactionItemReason::USER
     );
-    trans1->addItem(
-        nevraToRPMItem(conn, "tour-0:4.8-1.noarch"),
+    trans1.addItem(
+        nevraToRPMItem(trans1, "tour-0:4.8-1.noarch"),
         "repo1",
         TransactionItemAction::DOWNGRADED,
         TransactionItemReason::USER
@@ -700,23 +701,23 @@ MergedTransactionTest::test_downgrade()
 void
 MergedTransactionTest::test_install_downgrade()
 {
-    auto trans1 = std::make_shared< Transaction >(conn);
-    trans1->addItem(
-        nevraToRPMItem(conn, "tour-0:4.8-1.noarch"),
+    Transaction trans1(*conn);
+    trans1.addItem(
+        nevraToRPMItem(trans1, "tour-0:4.8-1.noarch"),
         "repo1",
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER
     );
 
-    auto trans2 = std::make_shared< Transaction >(conn);
-    trans2->addItem(
-        nevraToRPMItem(conn, "tour-0:4.6-1.noarch"),
+    Transaction trans2(*conn);
+    trans2.addItem(
+        nevraToRPMItem(trans2, "tour-0:4.6-1.noarch"),
         "repo2",
         TransactionItemAction::DOWNGRADE,
         TransactionItemReason::USER
     );
-    trans2->addItem(
-        nevraToRPMItem(conn, "tour-0:4.8-1.noarch"),
+    trans2.addItem(
+        nevraToRPMItem(trans2, "tour-0:4.8-1.noarch"),
         "repo1",
         TransactionItemAction::DOWNGRADED,
         TransactionItemReason::USER
@@ -738,27 +739,27 @@ MergedTransactionTest::test_install_downgrade()
 void
 MergedTransactionTest::test_multilib_identity()
 {
-    auto trans = std::make_shared< Transaction >(conn);
-    trans->addItem(
-        nevraToRPMItem(conn, "gtk3-3.24.8-1.fc30.i686"),
+    Transaction trans(*conn);
+    trans.addItem(
+        nevraToRPMItem(trans, "gtk3-3.24.8-1.fc30.i686"),
         "repo2",
         TransactionItemAction::DOWNGRADE,
         TransactionItemReason::USER
     );
-    trans->addItem(
-        nevraToRPMItem(conn, "gtk3-3.24.10-1.fc31.i686"),
+    trans.addItem(
+        nevraToRPMItem(trans, "gtk3-3.24.10-1.fc31.i686"),
         "repo2",
         TransactionItemAction::DOWNGRADED,
         TransactionItemReason::USER
     );
-    trans->addItem(
-        nevraToRPMItem(conn, "gtk3-3.24.8-1.fc30.x86_64"),
+    trans.addItem(
+        nevraToRPMItem(trans, "gtk3-3.24.8-1.fc30.x86_64"),
         "repo2",
         TransactionItemAction::DOWNGRADE,
         TransactionItemReason::USER
     );
-    trans->addItem(
-        nevraToRPMItem(conn, "gtk3-3.24.10-1.fc31.x86_64"),
+    trans.addItem(
+        nevraToRPMItem(trans, "gtk3-3.24.10-1.fc31.x86_64"),
         "repo2",
         TransactionItemAction::DOWNGRADED,
         TransactionItemReason::USER

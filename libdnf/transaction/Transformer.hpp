@@ -56,28 +56,26 @@ public:
     Transformer(const std::string &inputDir, const std::string &outputFile);
     void transform();
 
-    static void createDatabase(libdnf::utils::SQLite3Ptr conn);
+    static void createDatabase(libdnf::utils::SQLite3 & conn);
 
     static TransactionItemReason getReason(const std::string &reason);
 
 protected:
-    void transformTrans(libdnf::utils::SQLite3Ptr swdb, libdnf::utils::SQLite3Ptr history);
+    void transformTrans(libdnf::utils::SQLite3 & swdb, libdnf::utils::SQLite3 & history);
 
-    void transformGroups(libdnf::utils::SQLite3Ptr swdb);
-    void processGroupPersistor(libdnf::utils::SQLite3Ptr swdb, struct json_object *root);
+    void transformGroups(libdnf::utils::SQLite3 & swdb);
+    void processGroupPersistor(libdnf::utils::SQLite3 & swdb, struct json_object *root);
 
 private:
-    void transformRPMItems(libdnf::utils::SQLite3Ptr swdb,
-                           libdnf::utils::SQLite3Ptr history,
-                           std::shared_ptr< TransformerTransaction > trans);
-    void transformOutput(libdnf::utils::SQLite3Ptr history, std::shared_ptr< TransformerTransaction > trans);
-    void transformTransWith(libdnf::utils::SQLite3Ptr swdb,
-                            libdnf::utils::SQLite3Ptr history,
-                            std::shared_ptr< TransformerTransaction > trans);
-    CompsGroupItemPtr processGroup(libdnf::utils::SQLite3Ptr swdb,
+    void transformRPMItems(libdnf::utils::SQLite3 & history,
+                           TransformerTransaction & trans);
+    void transformOutput(libdnf::utils::SQLite3 & history, TransformerTransaction & trans);
+    void transformTransWith(libdnf::utils::SQLite3 & history,
+                            TransformerTransaction & trans);
+    CompsGroupItemPtr processGroup(Transaction & trans,
                                    const char *groupId,
                                    struct json_object *group);
-    std::shared_ptr<CompsEnvironmentItem> processEnvironment(libdnf::utils::SQLite3Ptr swdb,
+    std::shared_ptr<CompsEnvironmentItem> processEnvironment(Transaction & trans,
                                                              const char *envId,
                                                              struct json_object *env);
     std::string historyPath();

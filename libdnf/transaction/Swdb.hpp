@@ -45,11 +45,9 @@ namespace libdnf::transaction {
 
 struct Swdb {
 public:
-    explicit Swdb(libdnf::utils::SQLite3Ptr conn);
+    explicit Swdb(libdnf::utils::SQLite3 & conn);
     explicit Swdb(const std::string &path);
     ~Swdb();
-
-    libdnf::utils::SQLite3Ptr getConn() { return conn; }
 
     // Database
     // FIXME load this from conf
@@ -86,16 +84,18 @@ public:
     void setItemDone(const std::string &nevra);
 
     // Item: constructors
+    /*
     RPMItemPtr createRPMItem();
     CompsGroupItemPtr createCompsGroupItem();
     CompsEnvironmentItemPtr createCompsEnvironmentItem();
+    */
 
     // Item: RPM
     TransactionItemReason resolveRPMTransactionItemReason(const std::string &name,
                                                           const std::string &arch,
                                                           int64_t maxTransactionId);
     const std::string getRPMRepo(const std::string &nevra);
-    TransactionItemPtr getRPMTransactionItem(const std::string &nevra);
+    //TransactionItemPtr getRPMTransactionItem(const std::string &nevra);
     std::vector< int64_t > searchTransactionsByRPM(const std::vector< std::string > &patterns);
 
     // Item: CompsGroup
@@ -117,11 +117,14 @@ public:
     */
     void filterUserinstalled(libdnf::rpm::PackageSet & installed) const;
 
+    libdnf::utils::SQLite3 & get_connection() const { return *conn; }
+
+    Transaction * get_transaction_in_progress() { return transactionInProgress.get(); }
 protected:
     friend class Transformer;
 
-    explicit Swdb(libdnf::utils::SQLite3Ptr conn, bool autoClose);
-    libdnf::utils::SQLite3Ptr conn;
+    explicit Swdb(libdnf::utils::SQLite3 & conn, bool autoClose);
+    libdnf::utils::SQLite3 * conn;
     bool autoClose;
     std::unique_ptr< Transaction > transactionInProgress = nullptr;
     std::map< std::string, TransactionItemPtr > itemsInProgress;

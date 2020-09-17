@@ -53,9 +53,7 @@ public:
     using State = TransactionItemState;
     using Type = TransactionItemType;
 
-    explicit TransactionItem(Transaction * trans);
-
-    TransactionItem(libdnf::utils::SQLite3Ptr conn, int64_t transID);
+    explicit TransactionItem(Transaction & trans);
 
     ItemPtr getItem() const noexcept { return item; }
     void setItem(ItemPtr value) { item = value; }
@@ -102,11 +100,9 @@ protected:
     State state = State::UNKNOWN;
     std::string repoid;
 
-    Transaction * trans;
+    Transaction & trans;
 
     ItemPtr item;
-    const int64_t transID;
-    libdnf::utils::SQLite3Ptr conn;
 
     // TODO: replace with objects? it's just repoid, probably not necessary
     std::vector< TransactionItemPtr > replacedBy;
