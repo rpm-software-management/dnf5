@@ -37,7 +37,7 @@ class Transformer;
 #include "libdnf/rpm/package_set.hpp"
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
-#include "CompsGroupItem.hpp"
+#include "comps_group.hpp"
 #include "transaction.hpp"
 #include "transaction_item.hpp"
 

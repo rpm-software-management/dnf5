@@ -1,33 +1,35 @@
 /*
- * Copyright (C) 2017-2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2017-2020 Red Hat, Inc.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 
 #include <algorithm>
 
-#include "CompsGroupItem.hpp"
+#include "comps_group.hpp"
 #include "transaction.hpp"
 #include "transaction_item.hpp"
 
+
 namespace libdnf::transaction {
 
+
 /*
-CompsGroupItem::CompsGroupItem(libdnf::utils::SQLite3Ptr conn)
+CompsGroup::CompsGroup(libdnf::utils::SQLite3Ptr conn)
   : Item{conn}
   , packageTypes(CompsPackageType::DEFAULT)
 {
@@ -35,7 +37,7 @@ CompsGroupItem::CompsGroupItem(libdnf::utils::SQLite3Ptr conn)
 */
 
 
-CompsGroupItem::CompsGroupItem(Transaction & trans, int64_t pk)
+CompsGroup::CompsGroup(Transaction & trans, int64_t pk)
   : Item{trans}
 {
     dbSelect(pk);
@@ -43,7 +45,7 @@ CompsGroupItem::CompsGroupItem(Transaction & trans, int64_t pk)
 
 
 void
-CompsGroupItem::save()
+CompsGroup::save()
 {
     if (getId() == 0) {
         dbInsert();
@@ -56,7 +58,7 @@ CompsGroupItem::save()
 }
 
 void
-CompsGroupItem::dbSelect(int64_t pk)
+CompsGroup::dbSelect(int64_t pk)
 {
     const char *sql =
         "SELECT "
@@ -73,14 +75,14 @@ CompsGroupItem::dbSelect(int64_t pk)
     query.step();
 
     setId(pk);
-    setGroupId(query.get< std::string >("groupid"));
-    setName(query.get< std::string >("name"));
-    setTranslatedName(query.get< std::string >("translated_name"));
-    setPackageTypes(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
+    set_group_id(query.get< std::string >("groupid"));
+    set_name(query.get< std::string >("name"));
+    set_translated_name(query.get< std::string >("translated_name"));
+    set_package_types(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
 }
 
 void
-CompsGroupItem::dbInsert()
+CompsGroup::dbInsert()
 {
     // populates this->id
     Item::save();
@@ -98,10 +100,10 @@ CompsGroupItem::dbInsert()
         "  (?, ?, ?, ?, ?)";
     libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
     query.bindv(getId(),
-                getGroupId(),
-                getName(),
-                getTranslatedName(),
-                static_cast< int >(getPackageTypes()));
+                get_group_id(),
+                get_name(),
+                get_translated_name(),
+                static_cast< int >(get_package_types()));
     query.step();
 }
 
@@ -109,7 +111,7 @@ static TransactionItemPtr
 compsGroupTransactionItemFromQuery(Transaction & trans, libdnf::utils::SQLite3::Query & query)
 {
     auto trans_item = std::make_shared< TransactionItem >(trans);
-    auto item = std::make_shared< CompsGroupItem >(trans);
+    auto item = std::make_shared< CompsGroup >(trans);
     trans_item->setItem(item);
 
     trans_item->set_id(query.get< int >("ti_id"));
@@ -117,17 +119,17 @@ compsGroupTransactionItemFromQuery(Transaction & trans, libdnf::utils::SQLite3::
     trans_item->set_reason(static_cast< TransactionItemReason >(query.get< int >("ti_reason")));
     trans_item->set_state(static_cast< TransactionItemState >(query.get< int >("ti_state")));
     item->setId(query.get< int >("item_id"));
-    item->setGroupId(query.get< std::string >("groupid"));
-    item->setName(query.get< std::string >("name"));
-    item->setTranslatedName(query.get< std::string >("translated_name"));
-    item->setPackageTypes(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
+    item->set_group_id(query.get< std::string >("groupid"));
+    item->set_name(query.get< std::string >("name"));
+    item->set_translated_name(query.get< std::string >("translated_name"));
+    item->set_package_types(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
 
     return trans_item;
 }
 
 /*
 TransactionItemPtr
-CompsGroupItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &groupid)
+CompsGroup::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &groupid)
 {
     const char *sql = R"**(
         SELECT
@@ -171,7 +173,7 @@ CompsGroupItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::st
 
 /*
 std::vector< TransactionItemPtr >
-CompsGroupItem::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr conn, const std::string &pattern)
+CompsGroup::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr conn, const std::string &pattern)
 {
     const char *sql = R"**(
         SELECT DISTINCT
@@ -206,7 +208,7 @@ CompsGroupItem::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr conn, con
 */
 
 std::vector< TransactionItemPtr >
-CompsGroupItem::getTransactionItems(Transaction & trans)
+CompsGroup::getTransactionItems(Transaction & trans)
 {
     std::vector< TransactionItemPtr > result;
 
@@ -238,18 +240,13 @@ CompsGroupItem::getTransactionItems(Transaction & trans)
     return result;
 }
 
-std::string
-CompsGroupItem::toStr() const
-{
-    return "@" + getGroupId();
-}
 
 /**
  * Lazy loader for packages associated with the group.
  * \return list of packages associated with the group (installs and excludes).
  */
 std::vector< CompsGroupPackagePtr >
-CompsGroupItem::getPackages()
+CompsGroup::getPackages()
 {
     if (packages.empty()) {
         loadPackages();
@@ -258,7 +255,7 @@ CompsGroupItem::getPackages()
 }
 
 void
-CompsGroupItem::loadPackages()
+CompsGroup::loadPackages()
 {
     const char *sql =
         "SELECT "
@@ -272,21 +269,21 @@ CompsGroupItem::loadPackages()
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto pkg = std::make_shared< CompsGroupPackage >(*this);
-        pkg->setId(query.get< int >("id"));
-        pkg->setName(query.get< std::string >("name"));
-        pkg->setInstalled(query.get< bool >("installed"));
-        pkg->setPackageType(static_cast< CompsPackageType >(query.get< int >("pkg_type")));
+        pkg->set_id(query.get< int >("id"));
+        pkg->set_name(query.get< std::string >("name"));
+        pkg->set_installed(query.get< bool >("installed"));
+        pkg->set_package_type(static_cast< CompsPackageType >(query.get< int >("pkg_type")));
         packages.push_back(pkg);
     }
 }
 
 CompsGroupPackagePtr
-CompsGroupItem::addPackage(std::string name, bool installed, CompsPackageType pkgType)
+CompsGroup::add_package(std::string name, bool installed, CompsPackageType pkg_type)
 {
     // try to find an existing package and override it with the new values
     CompsGroupPackagePtr pkg = nullptr;
     for (auto & i : packages) {
-        if (i->getName() == name) {
+        if (i->get_name() == name) {
             pkg = i;
             break;
         }
@@ -297,13 +294,13 @@ CompsGroupItem::addPackage(std::string name, bool installed, CompsPackageType pk
         packages.push_back(pkg);
     }
 
-    pkg->setName(name);
-    pkg->setInstalled(installed);
-    pkg->setPackageType(pkgType);
+    pkg->set_name(name);
+    pkg->set_installed(installed);
+    pkg->set_package_type(pkg_type);
     return pkg;
 }
 
-CompsGroupPackage::CompsGroupPackage(CompsGroupItem &group)
+CompsGroupPackage::CompsGroupPackage(CompsGroup & group)
   : group(group)
 {
 }
@@ -311,7 +308,7 @@ CompsGroupPackage::CompsGroupPackage(CompsGroupItem &group)
 void
 CompsGroupPackage::save()
 {
-    if (getId() == 0) {
+    if (get_id() == 0) {
         dbSelectOrInsert();
     } else {
         dbUpdate();
@@ -332,9 +329,9 @@ CompsGroupPackage::dbInsert()
         VALUES
             (?, ?, ?, ?)
     )**";
-    libdnf::utils::SQLite3::Statement query(getGroup().trans.get_connection(), sql);
+    libdnf::utils::SQLite3::Statement query(get_group().trans.get_connection(), sql);
     query.bindv(
-        getGroup().getId(), getName(), getInstalled(), static_cast< int >(getPackageType()));
+        get_group().getId(), get_name(), get_installed(), static_cast< int >(get_package_type()));
     query.step();
 }
 
@@ -351,9 +348,9 @@ CompsGroupPackage::dbUpdate()
         WHERE
             id = ?
     )**";
-    libdnf::utils::SQLite3::Statement query(getGroup().trans.get_connection(), sql);
+    libdnf::utils::SQLite3::Statement query(get_group().trans.get_connection(), sql);
     query.bindv(
-        getName(), getInstalled(), static_cast< int >(getPackageType()), getId());
+        get_name(), get_installed(), static_cast< int >(get_package_type()), get_id());
     query.step();
 }
 
@@ -371,17 +368,18 @@ CompsGroupPackage::dbSelectOrInsert()
             AND group_id = ?
     )**";
 
-    libdnf::utils::SQLite3::Statement query(getGroup().trans.get_connection(), sql);
-    query.bindv(getName(), getGroup().getId());
+    libdnf::utils::SQLite3::Statement query(get_group().trans.get_connection(), sql);
+    query.bindv(get_name(), get_group().getId());
     libdnf::utils::SQLite3::Statement::StepResult result = query.step();
 
     if (result == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        setId(query.get< int >(0));
+        set_id(query.get< int >(0));
         dbUpdate();
     } else {
         // insert and get the ID back
         dbInsert();
     }
 }
+
 
 }  // namespace libdnf::transaction

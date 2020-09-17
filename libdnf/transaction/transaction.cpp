@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction.hpp"
 #include "CompsEnvironmentItem.hpp"
-#include "CompsGroupItem.hpp"
+#include "comps_group.hpp"
 #include "RPMItem.hpp"
 #include "transaction_item.hpp"
 
@@ -97,7 +97,7 @@ Transaction::getItems()
     auto rpms = RPMItem::getTransactionItems(*this);
     result.insert(result.end(), rpms.begin(), rpms.end());
 
-    auto comps_groups = CompsGroupItem::getTransactionItems(*this);
+    auto comps_groups = CompsGroup::getTransactionItems(*this);
     result.insert(result.end(), comps_groups.begin(), comps_groups.end());
 
     auto comps_environments = CompsEnvironmentItem::getTransactionItems(*this);

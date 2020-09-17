@@ -3,7 +3,7 @@
 #include <string>
 
 #include "libdnf/transaction/CompsEnvironmentItem.hpp"
-#include "libdnf/transaction/CompsGroupItem.hpp"
+#include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
@@ -82,11 +82,11 @@ WorkflowTest::testDefaultWorkflow()
     auto ti_rpm_sysvinit = trans.addItem(rpm_sysvinit, repoid, action, reason);
     ti_rpm_sysvinit->addReplacedBy(ti_rpm_systemd);
 
-    auto comps_group_core = std::make_shared< CompsGroupItem >(trans);
-    comps_group_core->setGroupId("core");
-    comps_group_core->setName("Core");
-    comps_group_core->setTranslatedName("Úplný základ");
-    comps_group_core->addPackage("bash", true, CompsPackageType::MANDATORY);
+    auto comps_group_core = std::make_shared< CompsGroup >(trans);
+    comps_group_core->set_group_id("core");
+    comps_group_core->set_name("Core");
+    comps_group_core->set_translated_name("Úplný základ");
+    comps_group_core->add_package("bash", true, CompsPackageType::MANDATORY);
     repoid = "";
     action = TransactionItemAction::INSTALL;
     reason = TransactionItemReason::USER;
@@ -142,7 +142,7 @@ WorkflowTest::testDefaultWorkflow()
         CPPUNIT_ASSERT_EQUAL(TransactionItemState::DONE, i->get_state());
         // std::cout << "TransactionItem: " << i->getItem()->toStr() << std::endl;
         if (i->getItem()->getItemType() == TransactionItemType::GROUP) {
-            auto grp = std::dynamic_pointer_cast< CompsGroupItem >(i->getItem());
+            auto grp = std::dynamic_pointer_cast< CompsGroup >(i->getItem());
             CPPUNIT_ASSERT(grp->getPackages().size() == 1);
             for (auto i : grp->getPackages()) {
                 // std::cout << "  CompsGroupPackage: " << i->getName() << std::endl;

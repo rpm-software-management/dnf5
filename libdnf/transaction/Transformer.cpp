@@ -454,25 +454,25 @@ Transformer::transformRPMItems(libdnf::utils::SQLite3 & history,
 }
 
 /**
- * Construct CompsGroupItem object from JSON
+ * Construct CompsGroup object from JSON
  * \param group group json object
  */
-CompsGroupItemPtr
+CompsGroupPtr
 Transformer::processGroup(Transaction & trans, const char *groupId, struct json_object *group)
 {
     struct json_object *value;
 
     // create group
-    auto compsGroup = std::make_shared< CompsGroupItem >(trans);
+    auto compsGroup = std::make_shared< CompsGroup >(trans);
 
-    compsGroup->setGroupId(groupId);
+    compsGroup->set_group_id(groupId);
 
     if (json_object_object_get_ex(group, "name", &value)) {
-        compsGroup->setName(json_object_get_string(value));
+        compsGroup->set_name(json_object_get_string(value));
     }
 
     if (json_object_object_get_ex(group, "ui_name", &value)) {
-        compsGroup->setTranslatedName(json_object_get_string(value));
+        compsGroup->set_translated_name(json_object_get_string(value));
     }
 
     // TODO parse pkg_types to CompsPackageType
@@ -480,7 +480,7 @@ Transformer::processGroup(Transaction & trans, const char *groupId, struct json_
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
             const char *key = json_object_get_string(json_object_array_get_idx(value, i));
-            compsGroup->addPackage(key, true, CompsPackageType::MANDATORY);
+            compsGroup->add_package(key, true, CompsPackageType::MANDATORY);
         }
     }
 
@@ -489,7 +489,7 @@ Transformer::processGroup(Transaction & trans, const char *groupId, struct json_
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
             const char *key = json_object_get_string(json_object_array_get_idx(value, i));
-            compsGroup->addPackage(key, false, CompsPackageType::MANDATORY);
+            compsGroup->add_package(key, false, CompsPackageType::MANDATORY);
         }
     }
 

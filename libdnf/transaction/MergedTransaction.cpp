@@ -226,8 +226,8 @@ getItemIdentifier(ItemPtr item)
         auto rpm = std::dynamic_pointer_cast< RPMItem >(item);
         name = rpm->getName() + "." + rpm->getArch();
     } else if (itemType == TransactionItemType::GROUP) {
-        auto group = std::dynamic_pointer_cast< CompsGroupItem >(item);
-        name = group->getGroupId();
+        auto group = std::dynamic_pointer_cast< CompsGroup >(item);
+        name = group->get_group_id();
     } else if (itemType == TransactionItemType::ENVIRONMENT) {
         auto env = std::dynamic_pointer_cast< CompsEnvironmentItem >(item);
         name = env->getEnvironmentId();

@@ -68,20 +68,20 @@ TransformerTest::testGroupTransformation()
         auto item = transItem->getItem();
         auto type = item->getItemType();
         if (type == TransactionItemType::GROUP) {
-            auto group = std::dynamic_pointer_cast< CompsGroupItem >(item);
+            auto group = std::dynamic_pointer_cast< CompsGroup >(item);
 
-            CPPUNIT_ASSERT(group->getGroupId() == "core");
-            CPPUNIT_ASSERT("Core" == group->getName());
-            CPPUNIT_ASSERT("Úplný základ" == group->getTranslatedName());
+            CPPUNIT_ASSERT(group->get_group_id() == "core");
+            CPPUNIT_ASSERT("Core" == group->get_name());
+            CPPUNIT_ASSERT("Úplný základ" == group->get_translated_name());
 
             auto packages = group->getPackages();
 
             CPPUNIT_ASSERT(1 == packages.size());
 
             auto groupPkg = packages[0];
-            CPPUNIT_ASSERT(groupPkg->getName() == "dnf-yum");
-            CPPUNIT_ASSERT(groupPkg->getInstalled() == true);
-            CPPUNIT_ASSERT(groupPkg->getPackageType() == CompsPackageType::MANDATORY);
+            CPPUNIT_ASSERT(groupPkg->get_name() == "dnf-yum");
+            CPPUNIT_ASSERT(groupPkg->get_installed() == true);
+            CPPUNIT_ASSERT(groupPkg->get_package_type() == CompsPackageType::MANDATORY);
 
         } else if (type == TransactionItemType::ENVIRONMENT) {
             auto env = std::dynamic_pointer_cast< CompsEnvironmentItem >(item);

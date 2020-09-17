@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "libdnf/transaction/CompsGroupItem.hpp"
+#include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 
 #include "CompsGroupItemTest.hpp"
@@ -25,16 +25,16 @@ CompsGroupItemTest::tearDown()
     delete conn;
 }
 
-static std::shared_ptr< CompsGroupItem >
+static std::shared_ptr< CompsGroup >
 createCompsGroup(Transaction & trans)
 {
-    auto grp = std::make_shared< CompsGroupItem >(trans);
-    grp->setGroupId("core");
-    grp->setName("Smallest possible installation");
-    grp->setTranslatedName("translated(Smallest possible installation)");
-    grp->setPackageTypes(CompsPackageType::DEFAULT);
-    grp->addPackage("bash", true, CompsPackageType::MANDATORY);
-    grp->addPackage("rpm", false, CompsPackageType::OPTIONAL);
+    auto grp = std::make_shared< CompsGroup >(trans);
+    grp->set_group_id("core");
+    grp->set_name("Smallest possible installation");
+    grp->set_translated_name("translated(Smallest possible installation)");
+    grp->set_package_types(CompsPackageType::DEFAULT);
+    grp->add_package("bash", true, CompsPackageType::MANDATORY);
+    grp->add_package("rpm", false, CompsPackageType::OPTIONAL);
     grp->save();
     return grp;
 }
@@ -45,33 +45,33 @@ CompsGroupItemTest::testCreate()
     Transaction trans(*conn);
     auto grp = createCompsGroup(trans);
 
-    CompsGroupItem grp2(trans, grp->getId());
+    CompsGroup grp2(trans, grp->getId());
     CPPUNIT_ASSERT(grp2.getId() == grp->getId());
-    CPPUNIT_ASSERT(grp2.getGroupId() == grp->getGroupId());
-    CPPUNIT_ASSERT(grp2.getName() == grp->getName());
-    CPPUNIT_ASSERT(grp2.getTranslatedName() == grp->getTranslatedName());
-    CPPUNIT_ASSERT(grp2.getPackageTypes() == grp->getPackageTypes());
+    CPPUNIT_ASSERT(grp2.get_group_id() == grp->get_group_id());
+    CPPUNIT_ASSERT(grp2.get_name() == grp->get_name());
+    CPPUNIT_ASSERT(grp2.get_translated_name() == grp->get_translated_name());
+    CPPUNIT_ASSERT(grp2.get_package_types() == grp->get_package_types());
 
     {
         auto pkg = grp2.getPackages().at(0);
-        CPPUNIT_ASSERT(pkg->getName() == "bash");
-        CPPUNIT_ASSERT(pkg->getInstalled() == true);
-        CPPUNIT_ASSERT(pkg->getPackageType() == CompsPackageType::MANDATORY);
+        CPPUNIT_ASSERT(pkg->get_name() == "bash");
+        CPPUNIT_ASSERT(pkg->get_installed() == true);
+        CPPUNIT_ASSERT(pkg->get_package_type() == CompsPackageType::MANDATORY);
     }
     {
         auto pkg = grp2.getPackages().at(1);
-        CPPUNIT_ASSERT(pkg->getName() == "rpm");
-        CPPUNIT_ASSERT(pkg->getInstalled() == false);
-        CPPUNIT_ASSERT(pkg->getPackageType() == CompsPackageType::OPTIONAL);
+        CPPUNIT_ASSERT(pkg->get_name() == "rpm");
+        CPPUNIT_ASSERT(pkg->get_installed() == false);
+        CPPUNIT_ASSERT(pkg->get_package_type() == CompsPackageType::OPTIONAL);
     }
 
     // test adding a duplicate group
-    grp2.addPackage("rpm", true, CompsPackageType::MANDATORY);
+    grp2.add_package("rpm", true, CompsPackageType::MANDATORY);
     {
         auto pkg = grp2.getPackages().at(1);
-        CPPUNIT_ASSERT(pkg->getName() == "rpm");
-        CPPUNIT_ASSERT(pkg->getInstalled() == true);
-        CPPUNIT_ASSERT(pkg->getPackageType() == CompsPackageType::MANDATORY);
+        CPPUNIT_ASSERT(pkg->get_name() == "rpm");
+        CPPUNIT_ASSERT(pkg->get_installed() == true);
+        CPPUNIT_ASSERT(pkg->get_package_type() == CompsPackageType::MANDATORY);
     }
 }
 
@@ -92,13 +92,13 @@ CompsGroupItemTest::testGetTransactionItems()
 
     auto transItem = transItems.at(0);
 
-    auto grp2 = std::dynamic_pointer_cast<CompsGroupItem>(transItem->getItem());
+    auto grp2 = std::dynamic_pointer_cast<CompsGroup>(transItem->getItem());
     {
         auto pkg = grp2->getPackages().at(0);
-        CPPUNIT_ASSERT_EQUAL(std::string("bash"), pkg->getName());
+        CPPUNIT_ASSERT_EQUAL(std::string("bash"), pkg->get_name());
     }
     {
         auto pkg = grp2->getPackages().at(1);
-        CPPUNIT_ASSERT_EQUAL(std::string("rpm"), pkg->getName());
+        CPPUNIT_ASSERT_EQUAL(std::string("rpm"), pkg->get_name());
     }
 }

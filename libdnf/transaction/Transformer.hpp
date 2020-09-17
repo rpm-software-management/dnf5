@@ -28,7 +28,7 @@
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 #include "CompsEnvironmentItem.hpp"
-#include "CompsGroupItem.hpp"
+#include "comps_group.hpp"
 #include "RPMItem.hpp"
 #include "transaction.hpp"
 #include "TransformerTransaction.hpp"
@@ -72,7 +72,7 @@ private:
     void transformOutput(libdnf::utils::SQLite3 & history, TransformerTransaction & trans);
     void transformTransWith(libdnf::utils::SQLite3 & history,
                             TransformerTransaction & trans);
-    CompsGroupItemPtr processGroup(Transaction & trans,
+    CompsGroupPtr processGroup(Transaction & trans,
                                    const char *groupId,
                                    struct json_object *group);
     std::shared_ptr<CompsEnvironmentItem> processEnvironment(Transaction & trans,

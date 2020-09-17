@@ -3,7 +3,7 @@
 #include <string>
 
 #include "libdnf/transaction/CompsEnvironmentItem.hpp"
-#include "libdnf/transaction/CompsGroupItem.hpp"
+#include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/Swdb.hpp"
 #include "libdnf/transaction/transaction.hpp"
