@@ -106,15 +106,6 @@ public:
     void saveReplacedBy();
     void saveState();
 
-    std::size_t getHash() { return reinterpret_cast< std::size_t >(this); }
-    bool operator==(TransactionItem & other) { return (other.getHash() == getHash()); }
-    bool operator==(TransactionItemPtr other) { return (other->getHash() == getHash()); }
-
-    // needed for sorting a list of transaction items in Python
-    // TODO: consider replacing trivial string comparison with something better
-    bool operator<(TransactionItem & other) { return (getItem()->toStr() < other.getItem()->toStr()); }
-    bool operator<(TransactionItemPtr other) { return (getItem()->toStr() < other->getItem()->toStr()); }
-
 protected:
     int64_t id = 0;
     Action action = Action::INSTALL;
