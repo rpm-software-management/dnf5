@@ -60,17 +60,6 @@ public:
     ItemPtr getItem() const noexcept { return item; }
     void setItem(ItemPtr value) { item = value; }
 
-    // typed items - workaround for lack of shared_ptr<> downcast support in SWIG
-    CompsEnvironmentItemPtr getCompsEnvironmentItem() const noexcept
-    {
-        return std::dynamic_pointer_cast< CompsEnvironmentItem >(item);
-    }
-    CompsGroupItemPtr getCompsGroupItem() const noexcept
-    {
-        return std::dynamic_pointer_cast< CompsGroupItem >(item);
-    }
-    RPMItemPtr getRPMItem() const noexcept { return std::dynamic_pointer_cast< RPMItem >(item); }
-
     int64_t get_id() const noexcept { return id; }
     void set_id(int64_t value) { id = value; }
 

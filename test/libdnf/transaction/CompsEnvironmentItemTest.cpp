@@ -90,7 +90,7 @@ CompsEnvironmentItemTest::testGetTransactionItems()
 
     auto transItem = transItems.at(0);
 
-    auto env2 = transItem->getCompsEnvironmentItem();
+    auto env2 = std::dynamic_pointer_cast<CompsEnvironmentItem>(transItem->getItem());
     {
         auto group = env2->getGroups().at(0);
         CPPUNIT_ASSERT_EQUAL(std::string("base"), group->getGroupId());

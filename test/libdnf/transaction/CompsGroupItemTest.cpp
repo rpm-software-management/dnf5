@@ -90,7 +90,7 @@ CompsGroupItemTest::testGetTransactionItems()
 
     auto transItem = transItems.at(0);
 
-    auto grp2 = transItem->getCompsGroupItem();
+    auto grp2 = std::dynamic_pointer_cast<CompsGroupItem>(transItem->getItem());
     {
         auto pkg = grp2->getPackages().at(0);
         CPPUNIT_ASSERT_EQUAL(std::string("bash"), pkg->getName());
