@@ -108,11 +108,6 @@ inline libdnf::sack::QueryCmp remove_glob_when_unneeded(
     return cmp_type;
 }
 
-/// @brief Test if pattern is file path
-/// Return true if pattern start with "/" or pattern[0] == '*' && pattern[1] == '/'
-static inline bool is_file_pattern(const std::string & pattern) {
-    return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
-}
 
 }  //  namespace
 
@@ -1752,7 +1747,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
             return {true, libdnf::rpm::Nevra()};
         }
     }
-    if (with_filenames && is_file_pattern(pkg_spec)) {
+    if (with_filenames && libdnf::utils::is_file_pattern(pkg_spec)) {
         filter_dataiterator(
             pool,
             SOLVABLE_FILELIST,

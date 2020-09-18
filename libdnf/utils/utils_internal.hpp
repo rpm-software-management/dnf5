@@ -32,6 +32,12 @@ inline bool is_glob_pattern(const char * pattern) {
     return strpbrk(pattern, "*[?") != nullptr;
 }
 
+/// @brief Test if pattern is file path
+/// Return true if pattern start with "/" or pattern[0] == '*' && pattern[1] == '/'
+static inline bool is_file_pattern(const std::string & pattern) {
+    return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
+}
+
 
 }  // namespace libdnf::utils
 
