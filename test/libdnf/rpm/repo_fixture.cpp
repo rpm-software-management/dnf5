@@ -21,6 +21,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_fixture.hpp"
 
 #include <filesystem>
+#include <map>
+
+
+// Static map (class_name -> cache_dir) that allows re-using cache dirs among test cases in a class.
+// Prevents creating solv files over and over again.
+static std::map<std::string, std::unique_ptr<libdnf::utils::TempDir>> cache_dirs;
 
 
 void RepoFixture::add_repo(const std::string & name) {
@@ -50,15 +56,20 @@ void RepoFixture::add_repo(const std::string & name) {
 void RepoFixture::setUp() {
     temp = std::make_unique<libdnf::utils::TempDir>(
         "libdnf_unittest_",
-        std::vector<std::string>{"installroot", "cache"}
+        std::vector<std::string>{"installroot"}
     );
     base = std::make_unique<libdnf::Base>();
 
     // set installroot to a temp directory
     base->get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
 
-    // set cachedir to a temp directory
-    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
+    // use the shared cache dir (see cache_dirs comment for more details)
+    auto class_name = typeid(*this).name();
+    auto it = cache_dirs.find(class_name);
+    if (it == cache_dirs.end()) {
+        cache_dirs.insert({class_name, std::make_unique<libdnf::utils::TempDir>("libdnf_unittest_")});
+    }
+    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dirs.at(class_name)->get_path());
 
     repo_sack = &(base->get_rpm_repo_sack());
     sack = &(base->get_rpm_solv_sack());
