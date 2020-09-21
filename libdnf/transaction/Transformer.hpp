@@ -27,7 +27,7 @@
 
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
-#include "CompsEnvironmentItem.hpp"
+#include "comps_environment.hpp"
 #include "comps_group.hpp"
 #include "RPMItem.hpp"
 #include "transaction.hpp"
@@ -75,7 +75,7 @@ private:
     CompsGroupPtr processGroup(Transaction & trans,
                                    const char *groupId,
                                    struct json_object *group);
-    std::shared_ptr<CompsEnvironmentItem> processEnvironment(Transaction & trans,
+    std::shared_ptr<CompsEnvironment> processEnvironment(Transaction & trans,
                                                              const char *envId,
                                                              struct json_object *env);
     std::string historyPath();

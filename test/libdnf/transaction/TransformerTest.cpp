@@ -84,18 +84,18 @@ TransformerTest::testGroupTransformation()
             CPPUNIT_ASSERT(groupPkg->get_package_type() == CompsPackageType::MANDATORY);
 
         } else if (type == TransactionItemType::ENVIRONMENT) {
-            auto env = std::dynamic_pointer_cast< CompsEnvironmentItem >(item);
-            CPPUNIT_ASSERT("minimal-environment" == env->getEnvironmentId());
-            CPPUNIT_ASSERT("Minimal Install" == env->getName());
-            CPPUNIT_ASSERT("Minimálna inštalácia" == env->getTranslatedName());
+            auto env = std::dynamic_pointer_cast< CompsEnvironment >(item);
+            CPPUNIT_ASSERT("minimal-environment" == env->get_environment_id());
+            CPPUNIT_ASSERT("Minimal Install" == env->get_name());
+            CPPUNIT_ASSERT("Minimálna inštalácia" == env->get_translated_name());
 
-            auto groups = env->getGroups();
+            auto groups = env->get_groups();
             CPPUNIT_ASSERT(1 == groups.size());
 
             auto envGroup = groups[0];
-            CPPUNIT_ASSERT(envGroup->getGroupId() == "core");
-            CPPUNIT_ASSERT(envGroup->getInstalled() == true);
-            CPPUNIT_ASSERT(envGroup->getGroupType() == CompsPackageType::MANDATORY);
+            CPPUNIT_ASSERT(envGroup->get_group_id() == "core");
+            CPPUNIT_ASSERT(envGroup->get_installed() == true);
+            CPPUNIT_ASSERT(envGroup->get_group_type() == CompsPackageType::MANDATORY);
 
         } else {
             CPPUNIT_FAIL("Invalid item type: " + std::to_string(static_cast< int >(type)));

@@ -1,34 +1,36 @@
 /*
- * Copyright (C) 2017-2018 Red Hat, Inc.
- *
- * Licensed under the GNU Lesser General Public License Version 2.1
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Lesser General Public
- * License as published by the Free Software Foundation; either
- * version 2.1 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
- * Lesser General Public License for more details.
- *
- * You should have received a copy of the GNU Lesser General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA
- */
+Copyright (C) 2017-2020 Red Hat, Inc.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
 
 #include <algorithm>
 
-#include "CompsEnvironmentItem.hpp"
+#include "comps_environment.hpp"
 #include "transaction.hpp"
 
+
 namespace libdnf::transaction {
+
 
 typedef const char *string;
 
 
-CompsEnvironmentItem::CompsEnvironmentItem(Transaction & trans, int64_t pk)
+CompsEnvironment::CompsEnvironment(Transaction & trans, int64_t pk)
   : Item{trans}
 {
     dbSelect(pk);
@@ -36,20 +38,20 @@ CompsEnvironmentItem::CompsEnvironmentItem(Transaction & trans, int64_t pk)
 
 
 void
-CompsEnvironmentItem::save()
+CompsEnvironment::save()
 {
     if (getId() == 0) {
         dbInsert();
     } else {
         // dbUpdate();
     }
-    for (const auto &i : getGroups()) {
+    for (const auto &i : get_groups()) {
         i->save();
     }
 }
 
 void
-CompsEnvironmentItem::dbSelect(int64_t pk)
+CompsEnvironment::dbSelect(int64_t pk)
 {
     const char *sql = R"**(
         SELECT
@@ -67,14 +69,14 @@ CompsEnvironmentItem::dbSelect(int64_t pk)
     query.step();
 
     setId(pk);
-    setEnvironmentId(query.get< std::string >("environmentid"));
-    setName(query.get< std::string >("name"));
-    setTranslatedName(query.get< std::string >("translated_name"));
-    setPackageTypes(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
+    set_environment_id(query.get< std::string >("environmentid"));
+    set_name(query.get< std::string >("name"));
+    set_translated_name(query.get< std::string >("translated_name"));
+    set_package_types(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
 }
 
 void
-CompsEnvironmentItem::dbInsert()
+CompsEnvironment::dbInsert()
 {
     // populates this->id
     Item::save();
@@ -93,10 +95,10 @@ CompsEnvironmentItem::dbInsert()
     )**";
     libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
     query.bindv(getId(),
-                getEnvironmentId(),
-                getName(),
-                getTranslatedName(),
-                static_cast< int >(getPackageTypes()));
+                get_environment_id(),
+                get_name(),
+                get_translated_name(),
+                static_cast< int >(get_package_types()));
     query.step();
 }
 
@@ -113,10 +115,10 @@ compsEnvironmentTransactionItemFromQuery(libdnf::utils::SQLite3Ptr conn, libdnf:
     trans_item->set_reason(static_cast< TransactionItemReason >(query.get< int >("ti_reason")));
     trans_item->set_state(static_cast< TransactionItemState >(query.get< int >("ti_state")));
     item->setId(query.get< int >("item_id"));
-    item->setEnvironmentId(query.get< std::string >("environmentid"));
+    item->set_environment_id(query.get< std::string >("environmentid"));
     item->setName(query.get< std::string >("name"));
-    item->setTranslatedName(query.get< std::string >("translated_name"));
-    item->setPackageTypes(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
+    item->set_translated_name(query.get< std::string >("translated_name"));
+    item->set_package_types(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
 
     return trans_item;
 }
@@ -205,7 +207,7 @@ CompsEnvironmentItem::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr con
 */
 
 std::vector< TransactionItemPtr >
-CompsEnvironmentItem::getTransactionItems(Transaction & trans)
+CompsEnvironment::getTransactionItems(Transaction & trans)
 {
     std::vector< TransactionItemPtr > result;
 
@@ -230,16 +232,16 @@ CompsEnvironmentItem::getTransactionItems(Transaction & trans)
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto trans_item = std::make_shared< TransactionItem >(trans);
-        auto item = std::make_shared< CompsEnvironmentItem >(trans);
+        auto item = std::make_shared< CompsEnvironment >(trans);
         trans_item->setItem(item);
 
         trans_item->set_id(query.get< int >(0));
         trans_item->set_state(static_cast< TransactionItemState >(query.get< int >(1)));
         item->setId(query.get< int >(2));
-        item->setEnvironmentId(query.get< std::string >(3));
-        item->setName(query.get< std::string >(4));
-        item->setTranslatedName(query.get< std::string >(5));
-        item->setPackageTypes(static_cast< CompsPackageType >(query.get< int >(6)));
+        item->set_environment_id(query.get< std::string >(3));
+        item->set_name(query.get< std::string >(4));
+        item->set_translated_name(query.get< std::string >(5));
+        item->set_package_types(static_cast< CompsPackageType >(query.get< int >(6)));
 
         result.push_back(trans_item);
     }
@@ -247,9 +249,9 @@ CompsEnvironmentItem::getTransactionItems(Transaction & trans)
 }
 
 std::string
-CompsEnvironmentItem::toStr() const
+CompsEnvironment::toStr() const
 {
-    return "@" + getEnvironmentId();
+    return "@" + get_environment_id();
 }
 
 /**
@@ -257,7 +259,7 @@ CompsEnvironmentItem::toStr() const
  * \return vector of groups associated with the environment
  */
 std::vector< CompsEnvironmentGroupPtr >
-CompsEnvironmentItem::getGroups()
+CompsEnvironment::get_groups()
 {
     if (groups.empty()) {
         loadGroups();
@@ -266,7 +268,7 @@ CompsEnvironmentItem::getGroups()
 }
 
 void
-CompsEnvironmentItem::loadGroups()
+CompsEnvironment::loadGroups()
 {
     const char *sql = R"**(
         SELECT
@@ -283,22 +285,22 @@ CompsEnvironmentItem::loadGroups()
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto group = std::make_shared< CompsEnvironmentGroup >(*this);
-        group->setId(query.get< int >("id"));
-        group->setGroupId(query.get< std::string >("groupid"));
+        group->set_id(query.get< int >("id"));
+        group->set_group_id(query.get< std::string >("groupid"));
 
-        group->setInstalled(query.get< bool >("installed"));
-        group->setGroupType(static_cast< CompsPackageType >(query.get< int >("group_type")));
+        group->set_installed(query.get< bool >("installed"));
+        group->set_group_type(static_cast< CompsPackageType >(query.get< int >("group_type")));
         groups.push_back(group);
     }
 }
 
 CompsEnvironmentGroupPtr
-CompsEnvironmentItem::addGroup(std::string groupId, bool installed, CompsPackageType groupType)
+CompsEnvironment::add_group(std::string group_id, bool installed, CompsPackageType group_type)
 {
     // try to find an existing group and override it with the new values
     CompsEnvironmentGroupPtr grp = nullptr;
     for (auto & i : groups) {
-        if (i->getGroupId() == groupId) {
+        if (i->get_group_id() == group_id) {
             grp = i;
             break;
         }
@@ -309,13 +311,13 @@ CompsEnvironmentItem::addGroup(std::string groupId, bool installed, CompsPackage
         groups.push_back(grp);
     }
 
-    grp->setGroupId(groupId);
-    grp->setInstalled(installed);
-    grp->setGroupType(groupType);
+    grp->set_group_id(group_id);
+    grp->set_installed(installed);
+    grp->set_group_type(group_type);
     return grp;
 }
 
-CompsEnvironmentGroup::CompsEnvironmentGroup(CompsEnvironmentItem &environment)
+CompsEnvironmentGroup::CompsEnvironmentGroup(CompsEnvironment &environment)
   : environment(environment)
 {
 }
@@ -323,7 +325,7 @@ CompsEnvironmentGroup::CompsEnvironmentGroup(CompsEnvironmentItem &environment)
 void
 CompsEnvironmentGroup::save()
 {
-    if (getId() == 0) {
+    if (get_id() == 0) {
         dbInsert();
     } else {
         // dbUpdate();
@@ -344,11 +346,11 @@ CompsEnvironmentGroup::dbInsert()
         VALUES
             (?, ?, ?, ?)
     )**";
-    libdnf::utils::SQLite3::Statement query(getEnvironment().trans.get_connection(), sql);
+    libdnf::utils::SQLite3::Statement query(get_environment().trans.get_connection(), sql);
     query.bindv(
-        getEnvironment().getId(), getGroupId(), getInstalled(), static_cast< int >(getGroupType()));
+        get_environment().getId(), get_group_id(), get_installed(), static_cast< int >(get_group_type()));
     query.step();
-    setId(query.last_insert_rowid());
+    set_id(query.last_insert_rowid());
 }
 
 }  // namespace libdnf::transaction

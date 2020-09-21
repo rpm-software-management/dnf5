@@ -229,8 +229,8 @@ getItemIdentifier(ItemPtr item)
         auto group = std::dynamic_pointer_cast< CompsGroup >(item);
         name = group->get_group_id();
     } else if (itemType == TransactionItemType::ENVIRONMENT) {
-        auto env = std::dynamic_pointer_cast< CompsEnvironmentItem >(item);
-        name = env->getEnvironmentId();
+        auto env = std::dynamic_pointer_cast< CompsEnvironment >(item);
+        name = env->get_environment_id();
     }
     return name;
 }

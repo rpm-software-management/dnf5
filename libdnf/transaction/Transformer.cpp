@@ -501,21 +501,21 @@ Transformer::processGroup(Transaction & trans, const char *groupId, struct json_
  * Construct CompsEnvironmentItem object from JSON
  * \param env environment json object
  */
-std::shared_ptr< CompsEnvironmentItem >
+std::shared_ptr< CompsEnvironment >
 Transformer::processEnvironment(Transaction & trans, const char *envId, struct json_object *env)
 {
     struct json_object *value;
 
     // create environment
-    auto compsEnv = std::make_shared< CompsEnvironmentItem >(trans);
-    compsEnv->setEnvironmentId(envId);
+    auto compsEnv = std::make_shared< CompsEnvironment >(trans);
+    compsEnv->set_environment_id(envId);
 
     if (json_object_object_get_ex (env, "name", &value)) {
-        compsEnv->setName(json_object_get_string(value));
+        compsEnv->set_name(json_object_get_string(value));
     }
 
     if (json_object_object_get_ex (env, "ui_name", &value)) {
-        compsEnv->setTranslatedName(json_object_get_string(value));
+        compsEnv->set_translated_name(json_object_get_string(value));
     }
 
     // TODO parse pkg_types/grp_types to CompsPackageType
@@ -523,7 +523,7 @@ Transformer::processEnvironment(Transaction & trans, const char *envId, struct j
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
             const char *key = json_object_get_string(json_object_array_get_idx(value, i));
-            compsEnv->addGroup(key, true, CompsPackageType::MANDATORY);
+            compsEnv->add_group(key, true, CompsPackageType::MANDATORY);
         }
     }
 
@@ -532,7 +532,7 @@ Transformer::processEnvironment(Transaction & trans, const char *envId, struct j
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
             const char *key = json_object_get_string(json_object_array_get_idx(value, i));
-            compsEnv->addGroup(key, false, CompsPackageType::MANDATORY);
+            compsEnv->add_group(key, false, CompsPackageType::MANDATORY);
         }
     }
 

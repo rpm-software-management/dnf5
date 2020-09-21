@@ -33,7 +33,7 @@ class TransactionItem;
 typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 }
 
-#include "CompsEnvironmentItem.hpp"
+#include "comps_environment.hpp"
 #include "comps_group.hpp"
 #include "RPMItem.hpp"
 #include "Repo.hpp"

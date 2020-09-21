@@ -2,7 +2,7 @@
 #include <iostream>
 #include <string>
 
-#include "libdnf/transaction/CompsEnvironmentItem.hpp"
+#include "libdnf/transaction/comps_environment.hpp"
 #include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/RPMItem.hpp"
 #include "libdnf/transaction/transaction.hpp"
@@ -92,11 +92,11 @@ WorkflowTest::testDefaultWorkflow()
     reason = TransactionItemReason::USER;
     trans.addItem(comps_group_core, repoid, action, reason);
 
-    auto comps_environment_minimal = std::make_shared< CompsEnvironmentItem >(trans);
-    comps_environment_minimal->setEnvironmentId("minimal");
-    comps_environment_minimal->setName("Minimal");
-    comps_environment_minimal->setTranslatedName("mmm");
-    comps_environment_minimal->addGroup("core", true, CompsPackageType::MANDATORY);
+    auto comps_environment_minimal = std::make_shared< CompsEnvironment >(trans);
+    comps_environment_minimal->set_environment_id("minimal");
+    comps_environment_minimal->set_name("Minimal");
+    comps_environment_minimal->set_translated_name("mmm");
+    comps_environment_minimal->add_group("core", true, CompsPackageType::MANDATORY);
     repoid = "";
     action = TransactionItemAction::INSTALL;
     reason = TransactionItemReason::USER;
@@ -149,10 +149,10 @@ WorkflowTest::testDefaultWorkflow()
             }
         }
         if (i->getItem()->getItemType() == TransactionItemType::ENVIRONMENT) {
-            auto env = std::dynamic_pointer_cast< CompsEnvironmentItem >(i->getItem());
-            CPPUNIT_ASSERT(env->getGroups().size() == 1);
-            for (auto i : env->getGroups()) {
-                // std::cout << "  CompsEnvironmentGroup: @" << i->getGroupId() << std::endl;
+            auto env = std::dynamic_pointer_cast< CompsEnvironment >(i->getItem());
+            CPPUNIT_ASSERT(env->get_groups().size() == 1);
+            for (auto i : env->get_groups()) {
+                // std::cout << "  CompsEnvironmentGroup: @" << i->get_group_id() << std::endl;
             }
         }
     }
