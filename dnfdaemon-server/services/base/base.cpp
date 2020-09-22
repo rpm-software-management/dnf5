@@ -91,13 +91,21 @@ void Base::read_all_repos(sdbus::MethodCall call) {
         auto & rpm_repo_sack = base->get_rpm_repo_sack();
         auto enabled_repos = rpm_repo_sack.new_query().ifilter_enabled(true);
         auto & solv_sack = base->get_rpm_solv_sack();
+        bool retval = true;
         for (auto & repo : enabled_repos.get_data()) {
             repo->set_callbacks(std::make_unique<DbusRepoCB>(dbus_object.get()));
-            repo->load();
+            try {
+                repo->load();
+            } catch (const std::runtime_error & ex) {
+                if (!repo->get_config()->skip_if_unavailable().get_value()) {
+                    retval = false;
+                    break;
+                }
+            }
             solv_sack.load_repo(*repo.get(), flags);
         }
         auto reply = call.createReply();
-        reply << true;
+        reply << retval;
         reply.send();
     }).detach();
 }
