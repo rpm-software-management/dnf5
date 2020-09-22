@@ -36,7 +36,6 @@ typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
 #include "comps_environment.hpp"
 #include "comps_group.hpp"
 #include "rpm_package.hpp"
-#include "Repo.hpp"
 #include "transaction_item_action.hpp"
 #include "transaction_item_reason.hpp"
 #include "transaction_item_state.hpp"

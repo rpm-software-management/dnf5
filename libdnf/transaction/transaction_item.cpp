@@ -24,6 +24,8 @@
 #include "transaction_item.hpp"
 #include "transaction_item_action.hpp"
 
+#include "libdnf/transaction/db/repo.hpp"
+
 
 namespace libdnf::transaction {
 
@@ -83,11 +85,21 @@ TransactionItem::dbInsert()
           (null, ?, ?, ?, ?, ?, ?)
     )**";
 
+    // try to find an existing repo
+    auto query_repo_select_pkg = repo_select_pk_new_query(trans.get_connection());
+    auto repo_id = repo_select_pk(*query_repo_select_pkg, get_repoid());
+
+    if (!repo_id) {
+        // if an existing repo was not found, insert a new record
+        auto query_repo_insert = repo_insert_new_query(trans.get_connection());
+        repo_id = repo_insert(*query_repo_insert, get_repoid());
+    }
+
     // save the transaction item
     libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
     query.bindv(trans.get_id(),
                 getItem()->getId(),
-                Repo::getCached(trans.get_connection(), get_repoid())->getId(),
+                repo_id,
                 static_cast< int >(get_action()),
                 static_cast< int >(get_reason()),
                 static_cast< int >(get_state()));
@@ -149,10 +161,21 @@ TransactionItem::dbUpdate()
           id = ?
     )**";
 
+    // try to find an existing repo
+    auto query_repo_select_pkg = repo_select_pk_new_query(trans.get_connection());
+    auto repo_id = repo_select_pk(*query_repo_select_pkg, get_repoid());
+
+    if (!repo_id) {
+        // if an existing repo was not found, insert a new record
+        auto query_repo_insert = repo_insert_new_query(trans.get_connection());
+        repo_id = repo_insert(*query_repo_insert, get_repoid());
+    }
+
+
     libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
     query.bindv(trans.get_id(),
                 getItem()->getId(),
-                Repo::getCached(trans.conn, get_repoid())->getId(),
+                repo_id,
                 static_cast< int >(get_action()),
                 static_cast< int >(get_reason()),
                 static_cast< int >(get_state()),
