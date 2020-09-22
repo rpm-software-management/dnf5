@@ -51,7 +51,7 @@ $sack->load_repo($repo->get(), $libdnf::rpm::SolvSack::LoadRepoFlags_NONE);
 #test_size()
 {
     my $query = new libdnf::rpm::SolvQuery($sack);
-    is($query->size(), 289);
+    is($query->size(), 291);
 }
 
 my @nevras = ("CQRlib-1.1.1-4.fc29.src", "CQRlib-1.1.1-4.fc29.x86_64");

@@ -54,7 +54,7 @@ class TestSimpleNumber < Test::Unit::TestCase
 
     def test_size()
         query = Rpm::SolvQuery.new(@sack)
-        assert_equal(query.size(), 289, 'Number of items in the newly created query')
+        assert_equal(query.size(), 291, 'Number of items in the newly created query')
     end
 
     def test_ifilter_name()

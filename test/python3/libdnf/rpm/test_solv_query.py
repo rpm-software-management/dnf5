@@ -49,7 +49,7 @@ class TestSolvQuery(unittest.TestCase):
 
     def test_size(self):
         query = libdnf.rpm.SolvQuery(self.sack)
-        self.assertEqual(query.size(), 289)
+        self.assertEqual(query.size(), 291)
 
     def test_ifilter_name(self):
 
