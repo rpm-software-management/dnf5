@@ -34,7 +34,7 @@
 
 #include "libdnf/rpm/solv_sack_impl.hpp"
 
-#include "RPMItem.hpp"
+#include "rpm_package.hpp"
 #include "Swdb.hpp"
 #include "Transformer.hpp"
 
@@ -136,7 +136,7 @@ Swdb::beginTransaction(int64_t dtBegin,
         if (transItem->getItemType() != TransactionItemType::RPM) {
             continue;
         }
-        auto rpmItem = std::dynamic_pointer_cast< RPMItem >(transItem);
+        auto rpmItem = std::dynamic_pointer_cast< Package >(transItem);
         itemsInProgress[rpmItem->getNEVRA()] = item;
     }
 
@@ -203,17 +203,17 @@ Swdb::resolveRPMTransactionItemReason(const std::string &name,
     // -2: latest and lastTransaction data in memory
     if (maxTransactionId == -2 && transactionInProgress != nullptr) {
         for (auto i : transactionInProgress->getItems()) {
-            auto rpm = std::dynamic_pointer_cast< RPMItem >(i->getItem());
+            auto rpm = std::dynamic_pointer_cast< Package >(i->getItem());
             if (!rpm) {
                 continue;
             }
-            if (rpm->getName() == name && rpm->getArch() == arch) {
+            if (rpm->get_name() == name && rpm->get_arch() == arch) {
                 return i->get_reason();
             }
         }
     }
 
-    return RPMItem::resolveTransactionItemReason(get_connection(), name, arch, maxTransactionId);
+    return Package::resolveTransactionItemReason(get_connection(), name, arch, maxTransactionId);
 }
 
 const std::string
@@ -267,7 +267,7 @@ Swdb::getRPMRepo(const std::string &nevra)
 TransactionItemPtr
 Swdb::getRPMTransactionItem(const std::string &nevra)
 {
-    return RPMItem::getTransactionItem(conn, nevra);
+    return Package::getTransactionItem(conn, nevra);
 }
 */
 
@@ -515,10 +515,10 @@ Swdb::getCompsEnvironmentItemsByPattern(const std::string &pattern)
 */
 
 /*
-RPMItemPtr
-Swdb::createRPMItem()
+PackagePtr
+Swdb::createPackage()
 {
-    return std::make_shared< RPMItem >(conn);
+    return std::make_shared< Package >(conn);
 }
 
 CompsEnvironmentItemPtr
@@ -545,7 +545,7 @@ Swdb::filterUserinstalled(libdnf::rpm::PackageSet & installed) const
     // TODO(dmach): if performance is an issue, rewrite this using the libsolv layer
     for (auto it = installed.begin(); it != installed.end(); it++) {
         auto pkg = *it;
-        auto reason = RPMItem::resolveTransactionItemReason(get_connection(), pkg.get_name(), pkg.get_arch(), -1);
+        auto reason = Package::resolveTransactionItemReason(get_connection(), pkg.get_name(), pkg.get_arch(), -1);
         // if not dep or weak, than consider it user installed
         if (reason == TransactionItemReason::DEPENDENCY ||
             reason == TransactionItemReason::WEAK_DEPENDENCY) {
@@ -558,7 +558,7 @@ Swdb::filterUserinstalled(libdnf::rpm::PackageSet & installed) const
 std::vector< int64_t >
 Swdb::searchTransactionsByRPM(const std::vector< std::string > &patterns)
 {
-    return RPMItem::searchTransactions(get_connection(), patterns);
+    return Package::searchTransactions(get_connection(), patterns);
 }
 
 }  // namespace libdnf::transaction

@@ -3,7 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include "libdnf/transaction/RPMItem.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 
 #include "RpmItemTest.hpp"
@@ -30,20 +30,20 @@ RpmItemTest::testCreate()
 {
     Transaction trans(*conn);
     // bash-4.4.12-5.fc26.x86_64
-    RPMItem rpm(trans);
-    rpm.setName("bash");
-    rpm.setEpoch(0);
-    rpm.setVersion("4.4.12");
-    rpm.setRelease("5.fc26");
-    rpm.setArch("x86_64");
+    Package rpm(trans);
+    rpm.set_name("bash");
+    rpm.set_epoch(0);
+    rpm.set_version("4.4.12");
+    rpm.set_release("5.fc26");
+    rpm.set_arch("x86_64");
     rpm.save();
 
-    RPMItem rpm2(trans, rpm.getId());
+    Package rpm2(trans, rpm.getId());
     CPPUNIT_ASSERT(rpm2.getId() == rpm.getId());
-    CPPUNIT_ASSERT(rpm2.getName() == rpm.getName());
-    CPPUNIT_ASSERT(rpm2.getEpoch() == rpm.getEpoch());
-    CPPUNIT_ASSERT(rpm2.getVersion() == rpm.getVersion());
-    CPPUNIT_ASSERT(rpm2.getRelease() == rpm.getRelease());
+    CPPUNIT_ASSERT(rpm2.get_name() == rpm.get_name());
+    CPPUNIT_ASSERT(rpm2.get_epoch() == rpm.get_epoch());
+    CPPUNIT_ASSERT(rpm2.get_version() == rpm.get_version());
+    CPPUNIT_ASSERT(rpm2.get_release() == rpm.get_release());
 }
 
 void
@@ -52,12 +52,12 @@ RpmItemTest::testCreateDuplicates()
     Transaction trans(*conn);
 
     // bash-4.4.12-5.fc26.x86_64
-    auto rpm = std::make_shared< RPMItem >(trans);
-    rpm->setName("bash");
-    rpm->setEpoch(0);
-    rpm->setVersion("4.4.12");
-    rpm->setRelease("5.fc26");
-    rpm->setArch("x86_64");
+    auto rpm = std::make_shared< Package >(trans);
+    rpm->set_name("bash");
+    rpm->set_epoch(0);
+    rpm->set_version("4.4.12");
+    rpm->set_release("5.fc26");
+    rpm->set_arch("x86_64");
 
     // add a RPM twice, but with different reasons
     auto ti1 = trans.addItem(rpm, "base", TransactionItemAction::INSTALL, TransactionItemReason::GROUP);
@@ -81,19 +81,19 @@ void
 RpmItemTest::testGetTransactionItems()
 {
     // performance looks good: 100k records take roughly 3.3s to write, 0.2s to read
-    // change following constant to modify number of tested RPMItems
+    // change following constant to modify number of tested Packages
     constexpr int num = 10;
 
     Transaction trans(*conn);
 
     auto create_start = std::chrono::high_resolution_clock::now();
     for (int i = 0; i < num; i++) {
-        auto rpm = std::make_shared< RPMItem >(trans);
-        rpm->setName("name_" + std::to_string(i));
-        rpm->setEpoch(0);
-        rpm->setVersion("1");
-        rpm->setRelease("2");
-        rpm->setArch("x86_64");
+        auto rpm = std::make_shared< Package >(trans);
+        rpm->set_name("name_" + std::to_string(i));
+        rpm->set_epoch(0);
+        rpm->set_version("1");
+        rpm->set_release("2");
+        rpm->set_arch("x86_64");
         auto ti = trans.addItem(rpm, "base", TransactionItemAction::INSTALL, TransactionItemReason::USER);
         ti->set_state(TransactionItemState::DONE);
     }
@@ -103,9 +103,9 @@ RpmItemTest::testGetTransactionItems()
     std::chrono::duration< double > create_duration = create_finish - create_start;
 
     auto read_start = std::chrono::high_resolution_clock::now();
-    auto items = RPMItem::getTransactionItems(trans);
+    auto items = Package::getTransactionItems(trans);
     for (auto i : items) {
-        auto rpm = std::dynamic_pointer_cast< RPMItem >(i->getItem());
+        auto rpm = std::dynamic_pointer_cast< Package >(i->getItem());
         // std::cout << rpm->getNEVRA() << std::endl;
     }
     auto read_finish = std::chrono::high_resolution_clock::now();

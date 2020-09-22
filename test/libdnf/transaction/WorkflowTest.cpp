@@ -4,7 +4,7 @@
 
 #include "libdnf/transaction/comps_environment.hpp"
 #include "libdnf/transaction/comps_group.hpp"
-#include "libdnf/transaction/RPMItem.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
 #include "libdnf/transaction/Transformer.hpp"
@@ -46,36 +46,36 @@ WorkflowTest::testDefaultWorkflow()
 
     // STEP 3: associate RPMs to the transaction
     // bash-4.4.12-5.fc26.x86_64
-    auto rpm_bash = std::make_shared< RPMItem >(trans);
-    rpm_bash->setName("bash");
-    rpm_bash->setEpoch(0);
-    rpm_bash->setVersion("4.4.12");
-    rpm_bash->setRelease("5.fc26");
-    rpm_bash->setArch("x86_64");
+    auto rpm_bash = std::make_shared< Package >(trans);
+    rpm_bash->set_name("bash");
+    rpm_bash->set_epoch(0);
+    rpm_bash->set_version("4.4.12");
+    rpm_bash->set_release("5.fc26");
+    rpm_bash->set_arch("x86_64");
     std::string repoid = "base";
     TransactionItemAction action = TransactionItemAction::INSTALL;
     TransactionItemReason reason = TransactionItemReason::GROUP;
     trans.addItem(rpm_bash, repoid, action, reason);
 
     // systemd-233-6.fc26
-    auto rpm_systemd = std::make_shared< RPMItem >(trans);
-    rpm_systemd->setName("systemd");
-    rpm_systemd->setEpoch(0);
-    rpm_systemd->setVersion("233");
-    rpm_systemd->setRelease("6.fc26");
-    rpm_systemd->setArch("x86_64");
+    auto rpm_systemd = std::make_shared< Package >(trans);
+    rpm_systemd->set_name("systemd");
+    rpm_systemd->set_epoch(0);
+    rpm_systemd->set_version("233");
+    rpm_systemd->set_release("6.fc26");
+    rpm_systemd->set_arch("x86_64");
     repoid = "base";
     action = TransactionItemAction::OBSOLETE;
     reason = TransactionItemReason::USER;
     auto ti_rpm_systemd = trans.addItem(rpm_systemd, repoid, action, reason);
 
     // sysvinit-2.88-14.dsf.fc20
-    auto rpm_sysvinit = std::make_shared< RPMItem >(trans);
-    rpm_sysvinit->setName("sysvinit");
-    rpm_sysvinit->setEpoch(0);
-    rpm_sysvinit->setVersion("2.88");
-    rpm_sysvinit->setRelease("14.dsf.fc20");
-    rpm_sysvinit->setArch("x86_64");
+    auto rpm_sysvinit = std::make_shared< Package >(trans);
+    rpm_sysvinit->set_name("sysvinit");
+    rpm_sysvinit->set_epoch(0);
+    rpm_sysvinit->set_version("2.88");
+    rpm_sysvinit->set_release("14.dsf.fc20");
+    rpm_sysvinit->set_arch("x86_64");
     repoid = "f20";
     action = TransactionItemAction::OBSOLETED;
     reason = TransactionItemReason::USER;

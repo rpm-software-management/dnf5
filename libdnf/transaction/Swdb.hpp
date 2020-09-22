@@ -85,7 +85,7 @@ public:
 
     // Item: constructors
     /*
-    RPMItemPtr createRPMItem();
+    PackagePtr createPackage();
     CompsGroupItemPtr createCompsGroupItem();
     CompsEnvironmentItemPtr createCompsEnvironmentItem();
     */

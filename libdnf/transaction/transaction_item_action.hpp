@@ -30,7 +30,7 @@ namespace libdnf::transaction {
 
 // Any time you add a new action, change functions that resolve reasons,
 // because removed items (RPMs) must be excluded from reason resolution:
-// * RPMItem.cpp - RPMItem::resolveTransactionItemReason
+// * Package.cpp - Package::resolveTransactionItemReason
 enum class TransactionItemAction : int {
     INSTALL = 1,       // a new package that was installed on the system
     DOWNGRADE = 2,     // an older package version that replaced previously installed version

@@ -4,7 +4,7 @@
 
 #include "libdnf/transaction/comps_environment.hpp"
 #include "libdnf/transaction/comps_group.hpp"
-#include "libdnf/transaction/RPMItem.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/Swdb.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
@@ -64,12 +64,12 @@ TransactionItemReasonTest::test_OneTransaction_OneTransactionItem()
 
     swdb.initTransaction();
 
-    auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
-    rpm_bash->setName("bash");
-    rpm_bash->setEpoch(0);
-    rpm_bash->setVersion("4.4.12");
-    rpm_bash->setRelease("5.fc26");
-    rpm_bash->setArch("x86_64");
+    auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+    rpm_bash->set_name("bash");
+    rpm_bash->set_epoch(0);
+    rpm_bash->set_version("4.4.12");
+    rpm_bash->set_release("5.fc26");
+    rpm_bash->set_arch("x86_64");
     std::string repoid = "base";
     TransactionItemAction action = TransactionItemAction::INSTALL;
     TransactionItemReason reason = TransactionItemReason::GROUP;
@@ -104,12 +104,12 @@ TransactionItemReasonTest::test_OneFailedTransaction_OneTransactionItem()
 
     swdb.initTransaction();
 
-    auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
-    rpm_bash->setName("bash");
-    rpm_bash->setEpoch(0);
-    rpm_bash->setVersion("4.4.12");
-    rpm_bash->setRelease("5.fc26");
-    rpm_bash->setArch("x86_64");
+    auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+    rpm_bash->set_name("bash");
+    rpm_bash->set_epoch(0);
+    rpm_bash->set_version("4.4.12");
+    rpm_bash->set_release("5.fc26");
+    rpm_bash->set_arch("x86_64");
     std::string repoid = "base";
     TransactionItemAction action = TransactionItemAction::INSTALL;
     TransactionItemReason reason = TransactionItemReason::GROUP;
@@ -145,12 +145,12 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
     swdb.initTransaction();
 
     {
-        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
-        rpm_bash->setName("bash");
-        rpm_bash->setEpoch(0);
-        rpm_bash->setVersion("4.4.12");
-        rpm_bash->setRelease("5.fc26");
-        rpm_bash->setArch("x86_64");
+        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        rpm_bash->set_name("bash");
+        rpm_bash->set_epoch(0);
+        rpm_bash->set_version("4.4.12");
+        rpm_bash->set_release("5.fc26");
+        rpm_bash->set_arch("x86_64");
         std::string repoid = "base";
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::GROUP;
@@ -159,12 +159,12 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
     }
 
     {
-        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
-        rpm_bash->setName("bash");
-        rpm_bash->setEpoch(0);
-        rpm_bash->setVersion("4.4.12");
-        rpm_bash->setRelease("5.fc26");
-        rpm_bash->setArch("i686");
+        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        rpm_bash->set_name("bash");
+        rpm_bash->set_epoch(0);
+        rpm_bash->set_version("4.4.12");
+        rpm_bash->set_release("5.fc26");
+        rpm_bash->set_arch("i686");
         std::string repoid = "base";
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::USER;
@@ -201,12 +201,12 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
-        rpm_bash->setName("bash");
-        rpm_bash->setEpoch(0);
-        rpm_bash->setVersion("4.4.12");
-        rpm_bash->setRelease("5.fc26");
-        rpm_bash->setArch("x86_64");
+        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        rpm_bash->set_name("bash");
+        rpm_bash->set_epoch(0);
+        rpm_bash->set_version("4.4.12");
+        rpm_bash->set_release("5.fc26");
+        rpm_bash->set_arch("x86_64");
         std::string repoid = "base";
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::GROUP;
@@ -221,12 +221,12 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
-        rpm_bash->setName("bash");
-        rpm_bash->setEpoch(0);
-        rpm_bash->setVersion("4.4.12");
-        rpm_bash->setRelease("5.fc26");
-        rpm_bash->setArch("i686");
+        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        rpm_bash->set_name("bash");
+        rpm_bash->set_epoch(0);
+        rpm_bash->set_version("4.4.12");
+        rpm_bash->set_release("5.fc26");
+        rpm_bash->set_arch("i686");
         std::string repoid = "base";
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::USER;
@@ -263,12 +263,12 @@ TransactionItemReasonTest::testRemovedPackage()
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
-        rpm_bash->setName("bash");
-        rpm_bash->setEpoch(0);
-        rpm_bash->setVersion("4.4.12");
-        rpm_bash->setRelease("5.fc26");
-        rpm_bash->setArch("x86_64");
+        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        rpm_bash->set_name("bash");
+        rpm_bash->set_epoch(0);
+        rpm_bash->set_version("4.4.12");
+        rpm_bash->set_release("5.fc26");
+        rpm_bash->set_arch("x86_64");
         std::string repoid = "base";
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::GROUP;
@@ -283,12 +283,12 @@ TransactionItemReasonTest::testRemovedPackage()
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< RPMItem >(*swdb.get_transaction_in_progress());
-        rpm_bash->setName("bash");
-        rpm_bash->setEpoch(0);
-        rpm_bash->setVersion("4.4.12");
-        rpm_bash->setRelease("5.fc26");
-        rpm_bash->setArch("i686");
+        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        rpm_bash->set_name("bash");
+        rpm_bash->set_epoch(0);
+        rpm_bash->set_version("4.4.12");
+        rpm_bash->set_release("5.fc26");
+        rpm_bash->set_arch("i686");
         std::string repoid = "base";
         TransactionItemAction action = TransactionItemAction::INSTALL;
         TransactionItemReason reason = TransactionItemReason::USER;

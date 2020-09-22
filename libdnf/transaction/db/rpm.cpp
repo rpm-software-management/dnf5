@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rpm.hpp"
 
-#include "libdnf/transaction/RPMItem.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
 
 
 namespace libdnf::transaction {
@@ -81,14 +81,14 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_insert_new_query(libdnf::
 }
 
 
-int64_t rpm_insert(libdnf::utils::SQLite3::Statement & query, const RPMItem & rpm) {
+int64_t rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(
         rpm.getId(),
-        rpm.getName(),
-        rpm.getEpoch(),
-        rpm.getVersion(),
-        rpm.getRelease(),
-        rpm.getArch()
+        rpm.get_name(),
+        rpm.get_epoch(),
+        rpm.get_version(),
+        rpm.get_release(),
+        rpm.get_arch()
     );
     query.step();
     int64_t result = query.last_insert_rowid();
@@ -117,13 +117,13 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_select_pk_new_query(libdn
 }
 
 
-int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const RPMItem & rpm) {
+int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(
-        rpm.getName(),
-        rpm.getEpoch(),
-        rpm.getVersion(),
-        rpm.getRelease(),
-        rpm.getArch()
+        rpm.get_name(),
+        rpm.get_epoch(),
+        rpm.get_version(),
+        rpm.get_release(),
+        rpm.get_arch()
     );
 
     int64_t result = 0;

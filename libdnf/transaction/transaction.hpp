@@ -165,7 +165,7 @@ public:
     void set_state(State value) { state = value; }
 
     virtual std::vector<TransactionItemPtr> getItems();
-    const std::set<std::shared_ptr<RPMItem>> getSoftwarePerformedWith() const;
+    const std::set<std::shared_ptr<Package>> getSoftwarePerformedWith() const;
     std::vector<std::pair<int, std::string>> getConsoleOutput() const;
 
     void begin();
@@ -177,7 +177,7 @@ public:
         TransactionItemReason reason);
 
     void addConsoleOutputLine(int fileDescriptor, const std::string & line);
-    void addSoftwarePerformedWith(std::shared_ptr<RPMItem> software);
+    void addSoftwarePerformedWith(std::shared_ptr<Package> software);
 
     libdnf::utils::SQLite3 & get_connection() { return conn; }
 
@@ -193,7 +193,7 @@ protected:
     void dbInsert();
     void dbUpdate();
 
-    std::set<std::shared_ptr<RPMItem>> softwarePerformedWith;
+    std::set<std::shared_ptr<Package>> softwarePerformedWith;
 
     friend class TransactionItem;
     libdnf::utils::SQLite3 & conn;

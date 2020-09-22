@@ -3,7 +3,7 @@
 #include <sstream>
 #include <string>
 
-#include "libdnf/transaction/RPMItem.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/Swdb.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
@@ -142,19 +142,19 @@ TransformerTest::testTransformTrans()
     auto items = first.getItems();
     CPPUNIT_ASSERT(items.size() == 2);
     for (auto item : items) {
-        auto rpm = std::dynamic_pointer_cast< RPMItem >(item->getItem());
-        if (rpm->getName() == "chrony" && rpm->getVersion() == "3.1") {
-            CPPUNIT_ASSERT(rpm->getEpoch() == 1);
-            CPPUNIT_ASSERT(rpm->getRelease() == "4.fc26");
+        auto rpm = std::dynamic_pointer_cast< Package >(item->getItem());
+        if (rpm->get_name() == "chrony" && rpm->get_version() == "3.1") {
+            CPPUNIT_ASSERT(rpm->get_epoch() == 1);
+            CPPUNIT_ASSERT(rpm->get_release() == "4.fc26");
             CPPUNIT_ASSERT(item->get_action() == TransactionItemAction::UPGRADED);
             CPPUNIT_ASSERT(item->get_reason() == TransactionItemReason::USER);
             CPPUNIT_ASSERT(item->get_state() == TransactionItemState::DONE);
 
             // TODO repo, replaced
         } else { // chrony 3.2
-            CPPUNIT_ASSERT(rpm->getEpoch() == 1);
-            CPPUNIT_ASSERT(rpm->getVersion() == "3.2");
-            CPPUNIT_ASSERT(rpm->getRelease() == "4.fc26");
+            CPPUNIT_ASSERT(rpm->get_epoch() == 1);
+            CPPUNIT_ASSERT(rpm->get_version() == "3.2");
+            CPPUNIT_ASSERT(rpm->get_release() == "4.fc26");
 
             CPPUNIT_ASSERT(item->get_action() == TransactionItemAction::UPGRADE);
             CPPUNIT_ASSERT(item->get_reason() == TransactionItemReason::USER);
@@ -197,11 +197,11 @@ TransformerTest::testTransformTrans()
     items = second.getItems();
     CPPUNIT_ASSERT(items.size() == 1);
     for (auto item : items) {
-        auto kernel = std::dynamic_pointer_cast< RPMItem >(item->getItem());
-        CPPUNIT_ASSERT(kernel->getName() == "kernel");
-        CPPUNIT_ASSERT(kernel->getEpoch() == 0);
-        CPPUNIT_ASSERT(kernel->getVersion() == "4.11");
-        CPPUNIT_ASSERT(kernel->getRelease() == "301.fc26");
+        auto kernel = std::dynamic_pointer_cast< Package >(item->getItem());
+        CPPUNIT_ASSERT(kernel->get_name() == "kernel");
+        CPPUNIT_ASSERT(kernel->get_epoch() == 0);
+        CPPUNIT_ASSERT(kernel->get_version() == "4.11");
+        CPPUNIT_ASSERT(kernel->get_release() == "301.fc26");
 
         CPPUNIT_ASSERT(item->get_action() == TransactionItemAction::INSTALL);
         CPPUNIT_ASSERT(item->get_reason() == TransactionItemReason::DEPENDENCY);

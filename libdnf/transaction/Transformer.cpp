@@ -40,7 +40,7 @@
 //#include "../utils/filesystem.hpp"
 //#include "../utils/utils.hpp"
 
-#include "RPMItem.hpp"
+#include "rpm_package.hpp"
 #include "Swdb.hpp"
 #include "transaction.hpp"
 #include "transaction_item.hpp"
@@ -226,7 +226,7 @@ Transformer::transformTrans(libdnf::utils::SQLite3 & swdb, libdnf::utils::SQLite
 
         TransactionState state = query.get< int >("state") == 0 ? TransactionState::DONE : TransactionState::ERROR;
 
-        transformRPMItems(history, trans);
+        transformPackages(history, trans);
         transformTransWith(history, trans);
 
         trans.begin();
@@ -238,13 +238,13 @@ Transformer::transformTrans(libdnf::utils::SQLite3 & swdb, libdnf::utils::SQLite
 }
 
 static void
-fillRPMItem(std::shared_ptr< RPMItem > rpm, libdnf::utils::SQLite3::Query &query)
+fillPackage(std::shared_ptr< Package > rpm, libdnf::utils::SQLite3::Query &query)
 {
-    rpm->setName(query.get< std::string >("name"));
-    rpm->setEpoch(query.get< int32_t >("epoch"));
-    rpm->setVersion(query.get< std::string >("version"));
-    rpm->setRelease(query.get< std::string >("release"));
-    rpm->setArch(query.get< std::string >("arch"));
+    rpm->set_name(query.get< std::string >("name"));
+    rpm->set_epoch(query.get< int32_t >("epoch"));
+    rpm->set_version(query.get< std::string >("version"));
+    rpm->set_release(query.get< std::string >("release"));
+    rpm->set_arch(query.get< std::string >("arch"));
     rpm->save();
 }
 
@@ -276,8 +276,8 @@ Transformer::transformTransWith(libdnf::utils::SQLite3 & history,
     query.bindv(trans.get_id());
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         // create RPM item object
-        auto rpm = std::make_shared< RPMItem >(trans);
-        fillRPMItem(rpm, query);
+        auto rpm = std::make_shared< Package >(trans);
+        fillPackage(rpm, query);
         trans.addSoftwarePerformedWith(rpm);
     }
 }
@@ -360,7 +360,7 @@ getYumdbData(int64_t itemId, libdnf::utils::SQLite3 & history, TransactionItemRe
  * \param trans Transaction whose items should be transformed
  */
 void
-Transformer::transformRPMItems(libdnf::utils::SQLite3 & history,
+Transformer::transformPackages(libdnf::utils::SQLite3 & history,
                                TransformerTransaction & trans)
 {
     // the order is important here - its Update, Updated
@@ -400,8 +400,8 @@ Transformer::transformRPMItems(libdnf::utils::SQLite3 & history,
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
 
         // create RPM item object
-        auto rpm = std::make_shared< RPMItem >(trans);
-        fillRPMItem(rpm, query);
+        auto rpm = std::make_shared< Package >(trans);
+        fillPackage(rpm, query);
 
         // get item state/action
         std::string stateString = query.get< std::string >("state");

@@ -27,18 +27,18 @@
 #include "libdnf/transaction/db/rpm.hpp"
 
 #include "transaction.hpp"
-#include "RPMItem.hpp"
+#include "rpm_package.hpp"
 
 namespace libdnf::transaction {
 
 /*
-RPMItem::RPMItem(libdnf::utils::SQLite3Ptr conn)
+Package::Package(libdnf::utils::SQLite3Ptr conn)
   : Item{conn}
 {
 }
 */
 
-RPMItem::RPMItem(Transaction & trans, int64_t pk)
+Package::Package (Transaction & trans, int64_t pk)
   : Item{trans}
 {
     dbSelect(pk);
@@ -46,7 +46,7 @@ RPMItem::RPMItem(Transaction & trans, int64_t pk)
 
 
 void
-RPMItem::save()
+Package::save()
 {
     if (getId() == 0) {
         dbSelectOrInsert();
@@ -56,7 +56,7 @@ RPMItem::save()
 }
 
 void
-RPMItem::dbSelect(int64_t pk)
+Package::dbSelect(int64_t pk)
 {
     const char *sql =
         "SELECT "
@@ -74,15 +74,15 @@ RPMItem::dbSelect(int64_t pk)
     query.step();
 
     setId(pk);
-    setName(query.get< std::string >(0));
-    setEpoch(query.get< int >(1));
-    setVersion(query.get< std::string >(2));
-    setRelease(query.get< std::string >(3));
-    setArch(query.get< std::string >(4));
+    set_name(query.get< std::string >(0));
+    set_epoch(query.get< int >(1));
+    set_version(query.get< std::string >(2));
+    set_release(query.get< std::string >(3));
+    set_arch(query.get< std::string >(4));
 }
 
 void
-RPMItem::dbInsert()
+Package::dbInsert()
 {
     // populates this->id
     Item::save();
@@ -94,7 +94,7 @@ static TransactionItemPtr
 transactionItemFromQuery(Transaction & trans, libdnf::utils::SQLite3::Query &query)
 {
     auto trans_item = std::make_shared< TransactionItem >(trans);
-    auto item = std::make_shared< RPMItem >(trans);
+    auto item = std::make_shared< Package >(trans);
     trans_item->setItem(item);
     trans_item->set_id(query.get< int >("id"));
     trans_item->set_action(static_cast< TransactionItemAction >(query.get< int >("action")));
@@ -102,16 +102,16 @@ transactionItemFromQuery(Transaction & trans, libdnf::utils::SQLite3::Query &que
     trans_item->set_repoid(query.get< std::string >("repoid"));
     trans_item->set_state(static_cast< TransactionItemState >(query.get< int >("state")));
     item->setId(query.get< int >("item_id"));
-    item->setName(query.get< std::string >("name"));
-    item->setEpoch(query.get< int >("epoch"));
-    item->setVersion(query.get< std::string >("version"));
-    item->setRelease(query.get< std::string >("release"));
-    item->setArch(query.get< std::string >("arch"));
+    item->set_name(query.get< std::string >("name"));
+    item->set_epoch(query.get< int >("epoch"));
+    item->set_version(query.get< std::string >("version"));
+    item->set_release(query.get< std::string >("release"));
+    item->set_arch(query.get< std::string >("arch"));
     return trans_item;
 }
 
 std::vector< TransactionItemPtr >
-RPMItem::getTransactionItems(Transaction & trans)
+Package::getTransactionItems(Transaction & trans)
 {
     std::vector< TransactionItemPtr > result;
     auto query = rpm_transaction_item_select_new_query(trans.get_connection(), trans.get_id());
@@ -122,7 +122,7 @@ RPMItem::getTransactionItems(Transaction & trans)
 }
 
 std::string
-RPMItem::getNEVRA() const
+Package::getNEVRA() const
 {
     // TODO: use string formatting
     if (epoch > 0) {
@@ -132,13 +132,13 @@ RPMItem::getNEVRA() const
 }
 
 std::string
-RPMItem::toStr() const
+Package::toStr() const
 {
     return getNEVRA();
 }
 
 void
-RPMItem::dbSelectOrInsert()
+Package::dbSelectOrInsert()
 {
     auto query = rpm_select_pk_new_query(trans.get_connection());
     setId(rpm_select_pk(*query, *this));
@@ -151,7 +151,7 @@ RPMItem::dbSelectOrInsert()
 
 /*
 TransactionItemPtr
-RPMItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &nevra)
+Package::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &nevra)
 {
     libdnf::rpm::Nevra nevraObject;
     if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
@@ -207,7 +207,7 @@ RPMItem::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &n
 */
 
 TransactionItemReason
-RPMItem::resolveTransactionItemReason(libdnf::utils::SQLite3 & conn,
+Package::resolveTransactionItemReason(libdnf::utils::SQLite3 & conn,
                                       const std::string &name,
                                       const std::string &arch,
                                       [[maybe_unused]] int64_t maxTransactionId)
@@ -281,17 +281,11 @@ RPMItem::resolveTransactionItemReason(libdnf::utils::SQLite3 & conn,
     return TransactionItemReason::UNKNOWN;
 }
 
-/**
- * Compare RPM packages
- * This method doesn't care about compare package names
- * \param other RPMItem to compare with
- * \return true if other package is newer (has higher version and/or epoch)
- */
 bool
-RPMItem::operator<(const RPMItem &other) const
+Package::operator<(const Package &other) const
 {
     // compare epochs
-    int32_t epochDif = other.getEpoch() - getEpoch();
+    int32_t epochDif = other.get_epoch() - get_epoch();
     if (epochDif > 0) {
         return true;
     } else if (epoch < 0) {
@@ -299,8 +293,8 @@ RPMItem::operator<(const RPMItem &other) const
     }
 
     // compare versions
-    std::stringstream versionThis(getVersion());
-    std::stringstream versionOther(other.getVersion());
+    std::stringstream versionThis( get_version());
+    std::stringstream versionOther(other.get_version());
 
     std::string bufferThis;
     std::string bufferOther;
@@ -317,7 +311,7 @@ RPMItem::operator<(const RPMItem &other) const
 }
 
 std::vector< int64_t >
-RPMItem::searchTransactions(libdnf::utils::SQLite3 & conn, const std::vector< std::string > &patterns)
+Package::searchTransactions(libdnf::utils::SQLite3 & conn, const std::vector< std::string > &patterns)
 {
     std::vector< int64_t > result;
 

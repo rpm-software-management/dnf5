@@ -1,5 +1,5 @@
 #include "libdnf/rpm/nevra.hpp"
-#include "libdnf/transaction/RPMItem.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/Transformer.hpp"
 
@@ -9,8 +9,8 @@ using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionTest);
 
-static RPMItemPtr
-nevraToRPMItem(Transaction & trans, std::string nevra)
+static PackagePtr
+nevraToPackage(Transaction & trans, std::string nevra)
 {
     libdnf::rpm::Nevra nevraObject;
     if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
@@ -20,12 +20,12 @@ nevraToRPMItem(Transaction & trans, std::string nevra)
         nevraObject.set_epoch("0");
     }
 
-    auto rpm = std::make_shared< RPMItem >(trans);
-    rpm->setName(nevraObject.get_name());
-    rpm->setEpoch(std::stoi(nevraObject.get_epoch()));
-    rpm->setVersion(nevraObject.get_version());
-    rpm->setRelease(nevraObject.get_release());
-    rpm->setArch(nevraObject.get_arch());
+    auto rpm = std::make_shared< Package >(trans);
+    rpm->set_name(nevraObject.get_name());
+    rpm->set_epoch(std::stoi(nevraObject.get_epoch()));
+    rpm->set_version(nevraObject.get_version());
+    rpm->set_release(nevraObject.get_release());
+    rpm->set_arch(nevraObject.get_arch());
     return rpm;
 }
 
@@ -55,10 +55,10 @@ TransactionTest::testInsert()
     trans.set_cmdline("dnf install foo");
     trans.set_state(TransactionState::DONE);
 
-    trans.addSoftwarePerformedWith(nevraToRPMItem(trans, "rpm-4.14.2-1.fc29.x86_64"));
-    trans.addSoftwarePerformedWith(nevraToRPMItem(trans, "dnf-3.5.1-1.fc29.noarch"));
+    trans.addSoftwarePerformedWith(nevraToPackage(trans, "rpm-4.14.2-1.fc29.x86_64"));
+    trans.addSoftwarePerformedWith(nevraToPackage(trans, "dnf-3.5.1-1.fc29.noarch"));
     // test adding a duplicate; only a single occurrence of the rpm is expected
-    trans.addSoftwarePerformedWith(nevraToRPMItem(trans, "rpm-4.14.2-1.fc29.x86_64"));
+    trans.addSoftwarePerformedWith(nevraToPackage(trans, "rpm-4.14.2-1.fc29.x86_64"));
 
     trans.begin();
 

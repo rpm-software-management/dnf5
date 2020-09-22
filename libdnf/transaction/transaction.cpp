@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction.hpp"
 #include "comps_environment.hpp"
 #include "comps_group.hpp"
-#include "RPMItem.hpp"
+#include "rpm_package.hpp"
 #include "transaction_item.hpp"
 
 #include "libdnf/transaction/db/trans.hpp"
@@ -94,7 +94,7 @@ Transaction::getItems()
         return items;
     }
     std::vector< TransactionItemPtr > result;
-    auto rpms = RPMItem::getTransactionItems(*this);
+    auto rpms = Package::getTransactionItems(*this);
     result.insert(result.end(), rpms.begin(), rpms.end());
 
     auto comps_groups = CompsGroup::getTransactionItems(*this);
@@ -109,9 +109,9 @@ Transaction::getItems()
 /**
  * Load list of software performed with for current transaction from the database.
  * Transaction has to be saved in advance, otherwise empty list will be returned.
- * \return list of RPMItem objects that performed the transaction
+ * \return list of Package objects that performed the transaction
  */
-const std::set< std::shared_ptr< RPMItem > >
+const std::set< std::shared_ptr< Package > >
 Transaction::getSoftwarePerformedWith() const
 {
     const char *sql = R"**(
@@ -123,13 +123,13 @@ Transaction::getSoftwarePerformedWith() const
             trans_id = ?
     )**";
 
-    std::set< std::shared_ptr< RPMItem > > software;
+    std::set< std::shared_ptr< Package > > software;
 
     libdnf::utils::SQLite3::Query query(conn, sql);
     query.bindv(get_id());
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto rpm = std::make_shared< RPMItem >(*const_cast<Transaction *>(this), query.get<int64_t>("item_id"));
+        auto rpm = std::make_shared< Package >(*const_cast<Transaction *>(this), query.get<int64_t>("item_id"));
         software.insert(rpm);
     }
 
@@ -283,10 +283,10 @@ Transaction::saveItems()
  * Append software to softwarePerformedWith list.
  * Software is saved to the database using save method and therefore
  * all the software has to be added before transaction is saved.
- * \param software RPMItem used to perform the transaction
+ * \param software Package used to perform the transaction
  */
 void
-Transaction::addSoftwarePerformedWith(std::shared_ptr< RPMItem > software)
+Transaction::addSoftwarePerformedWith(std::shared_ptr< Package > software)
 {
     softwarePerformedWith.insert(software);
 }

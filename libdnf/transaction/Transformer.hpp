@@ -29,7 +29,7 @@
 
 #include "comps_environment.hpp"
 #include "comps_group.hpp"
-#include "RPMItem.hpp"
+#include "rpm_package.hpp"
 #include "transaction.hpp"
 #include "TransformerTransaction.hpp"
 #include "transaction_item.hpp"
@@ -67,7 +67,7 @@ protected:
     void processGroupPersistor(libdnf::utils::SQLite3 & swdb, struct json_object *root);
 
 private:
-    void transformRPMItems(libdnf::utils::SQLite3 & history,
+    void transformPackages(libdnf::utils::SQLite3 & history,
                            TransformerTransaction & trans);
     void transformOutput(libdnf::utils::SQLite3 & history, TransformerTransaction & trans);
     void transformTransWith(libdnf::utils::SQLite3 & history,

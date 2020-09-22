@@ -144,10 +144,10 @@ MergedTransaction::get_rpmdb_version_end() const noexcept
     return transactions.back()->get_rpmdb_version_end();
 }
 
-std::set< RPMItemPtr >
+std::set< PackagePtr >
 MergedTransaction::getSoftwarePerformedWith() const
 {
-    std::set< RPMItemPtr > software;
+    std::set< PackagePtr > software;
     for (auto t : transactions) {
         auto tranSoft = t->getSoftwarePerformedWith();
         software.insert(tranSoft.begin(), tranSoft.end());
@@ -223,8 +223,8 @@ getItemIdentifier(ItemPtr item)
     auto itemType = item->getItemType();
     std::string name;
     if (itemType == TransactionItemType::RPM) {
-        auto rpm = std::dynamic_pointer_cast< RPMItem >(item);
-        name = rpm->getName() + "." + rpm->getArch();
+        auto rpm = std::dynamic_pointer_cast< Package >(item);
+        name = rpm->get_name() + "." + rpm->get_arch();
     } else if (itemType == TransactionItemType::GROUP) {
         auto group = std::dynamic_pointer_cast< CompsGroup >(item);
         name = group->get_group_id();
@@ -249,11 +249,11 @@ MergedTransaction::resolveRPMDifference(ItemPair &previousItemPair,
     auto firstItem = previousItemPair.first->getItem();
     auto secondItem = mTransItem->getItem();
 
-    auto firstRPM = std::dynamic_pointer_cast< RPMItem >(firstItem);
-    auto secondRPM = std::dynamic_pointer_cast< RPMItem >(secondItem);
+    auto firstRPM = std::dynamic_pointer_cast< Package >(firstItem);
+    auto secondRPM = std::dynamic_pointer_cast< Package >(secondItem);
 
-    if (firstRPM->getVersion() == secondRPM->getVersion() &&
-        firstRPM->getEpoch() == secondRPM->getEpoch()) {
+    if (firstRPM->get_version() == secondRPM->get_version() &&
+        firstRPM->get_epoch() == secondRPM->get_epoch()) {
         // reinstall
         mTransItem->set_action(TransactionItemAction::REINSTALL);
         previousItemPair.first = mTransItem;

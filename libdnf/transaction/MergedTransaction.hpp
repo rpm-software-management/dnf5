@@ -33,7 +33,7 @@ class MergedTransaction;
 typedef std::shared_ptr< MergedTransaction > MergedTransactionPtr;
 }
 
-#include "RPMItem.hpp"
+#include "rpm_package.hpp"
 #include "transaction.hpp"
 #include "transaction_item.hpp"
 
@@ -53,7 +53,7 @@ public:
     int64_t get_dt_end() const noexcept;
     const std::string &get_rpmdb_version_begin() const noexcept;
     const std::string &get_rpmdb_version_end() const noexcept;
-    std::set< RPMItemPtr > getSoftwarePerformedWith() const;
+    std::set< PackagePtr > getSoftwarePerformedWith() const;
     std::vector< std::pair< int, std::string > > getConsoleOutput();
 
     std::vector< TransactionItemPtr > getItems();
