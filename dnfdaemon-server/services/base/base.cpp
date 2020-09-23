@@ -81,7 +81,7 @@ void Base::dbus_deregister() {
 }
 
 void Base::read_all_repos(sdbus::MethodCall call) {
-    std::thread([this, call=std::move(call)]() {
+    auto worker = std::thread([this, call=std::move(call)]() {
         // TODO(mblaha): get flags from session configuration
         using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
         auto flags =
@@ -96,16 +96,20 @@ void Base::read_all_repos(sdbus::MethodCall call) {
             repo->set_callbacks(std::make_unique<DbusRepoCB>(dbus_object.get()));
             try {
                 repo->load();
+                solv_sack.load_repo(*repo.get(), flags);
             } catch (const std::runtime_error & ex) {
                 if (!repo->get_config()->skip_if_unavailable().get_value()) {
                     retval = false;
                     break;
                 }
             }
-            solv_sack.load_repo(*repo.get(), flags);
         }
+        // TODO(mblaha): call.createReply() can got stucked
         auto reply = call.createReply();
         reply << retval;
         reply.send();
-    }).detach();
+        // mark this thread as finished
+        session.mark_thread_finished(std::this_thread::get_id());
+    });
+    session.register_thread(std::move(worker));
 }

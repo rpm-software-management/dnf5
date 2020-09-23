@@ -21,11 +21,15 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #define DNFDAEMON_SERVER_SESSION_HPP
 
 #include "dbus.hpp"
+
 #include <libdnf/base/base.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
+#include <atomic>
 #include <memory>
+#include <mutex>
 #include <string>
+#include <thread>
 #include <vector>
 
 class Session;
@@ -52,6 +56,9 @@ public:
     std::string get_object_path() { return object_path; };
     sdbus::IConnection & get_connection() { return connection; };
     libdnf::Base * get_base() { return base.get(); };
+    void register_thread(std::thread && thread);
+    void mark_thread_finished(std::thread::id thread_id);
+    void join_threads(const bool only_finished);
 
 private:
     sdbus::IConnection & connection;
@@ -59,6 +66,16 @@ private:
     dnfdaemon::KeyValueMap session_configuration;
     std::string object_path;
     std::vector<std::unique_ptr<IDbusSessionService>> services{};
+
+    std::mutex running_threads_mutex;
+    // flag whether to break the garbage collector infinite loop
+    std::atomic<bool> finish_garbage_collector{false};
+    // thread that joins finished worker threads
+    std::thread running_threads_collector;
+    // vector of started worker threads
+    std::vector<std::thread> running_threads{};
+    // vector of finished threads id
+    std::vector<std::thread::id> finished_threads{};
 };
 
 #endif
