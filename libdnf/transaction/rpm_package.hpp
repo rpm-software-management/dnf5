@@ -46,7 +46,6 @@ class Transaction;
 class Package : public Item {
 public:
     using Item::Item;
-    Package (Transaction & trans, int64_t pk);
     virtual ~Package() = default;
 
     const std::string & get_name() const noexcept { return name; }
@@ -71,7 +70,6 @@ public:
 
     //static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3 & conn, const std::string &nevra);
     static std::vector< int64_t > searchTransactions(libdnf::utils::SQLite3 & conn, const std::vector< std::string > &patterns);
-    static std::vector< TransactionItemPtr > getTransactionItems(Transaction & trans);
     static TransactionItemReason resolveTransactionItemReason(libdnf::utils::SQLite3 & conn,
                                                               const std::string &name,
                                                               const std::string &arch,
@@ -79,13 +77,8 @@ public:
 
     bool operator<(const Package &other) const;
 
-protected:
-    const Type itemType = Type::RPM;
-    void dbSelect(int64_t transaction_id);
-    void dbInsert();
-    void dbSelectOrInsert();
-
 private:
+    const Type itemType = Type::RPM;
     std::string name;
     int32_t epoch = 0;
     std::string version;

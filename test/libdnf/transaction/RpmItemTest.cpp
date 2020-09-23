@@ -5,6 +5,7 @@
 
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/Transformer.hpp"
+#include "libdnf/transaction/db/rpm.hpp"
 
 #include "RpmItemTest.hpp"
 
@@ -38,7 +39,9 @@ RpmItemTest::testCreate()
     rpm.set_arch("x86_64");
     rpm.save();
 
-    Package rpm2(trans, rpm.getId());
+    Package rpm2(trans);
+    auto q_select = rpm_select_new_query(*conn);
+    rpm_select(*q_select, rpm.getId(), rpm2);
     CPPUNIT_ASSERT(rpm2.getId() == rpm.getId());
     CPPUNIT_ASSERT(rpm2.get_name() == rpm.get_name());
     CPPUNIT_ASSERT(rpm2.get_epoch() == rpm.get_epoch());
@@ -103,7 +106,7 @@ RpmItemTest::testGetTransactionItems()
     std::chrono::duration< double > create_duration = create_finish - create_start;
 
     auto read_start = std::chrono::high_resolution_clock::now();
-    auto items = Package::getTransactionItems(trans);
+    auto items = get_transaction_packages(trans);
     for (auto i : items) {
         auto rpm = std::dynamic_pointer_cast< Package >(i->getItem());
         // std::cout << rpm->getNEVRA() << std::endl;

@@ -91,6 +91,7 @@ public:
     void save();
     void saveReplacedBy();
     void saveState();
+    Transaction & get_trans() { return trans; }
 
 protected:
     int64_t id = 0;

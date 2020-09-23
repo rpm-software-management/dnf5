@@ -31,95 +31,24 @@
 
 namespace libdnf::transaction {
 
-/*
-Package::Package(libdnf::utils::SQLite3Ptr conn)
-  : Item{conn}
-{
-}
-*/
-
-Package::Package (Transaction & trans, int64_t pk)
-  : Item{trans}
-{
-    dbSelect(pk);
-}
-
 
 void
 Package::save()
 {
     if (getId() == 0) {
-        dbSelectOrInsert();
+        auto query = rpm_select_pk_new_query(trans.get_connection());
+        setId(rpm_select_pk(*query, *this));
+        if (!getId()) {
+            // populates this->id
+            Item::save();
+            auto query = rpm_insert_new_query(trans.get_connection());
+            rpm_insert(*query, *this);
+        }
     } else {
         // TODO: dbUpdate() ?
     }
 }
 
-void
-Package::dbSelect(int64_t pk)
-{
-    const char *sql =
-        "SELECT "
-        "  name, "
-        "  epoch, "
-        "  version, "
-        "  release, "
-        "  arch "
-        "FROM "
-        "  rpm "
-        "WHERE "
-        "  item_id = ?";
-    libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
-    query.bindv(pk);
-    query.step();
-
-    setId(pk);
-    set_name(query.get< std::string >(0));
-    set_epoch(query.get< int >(1));
-    set_version(query.get< std::string >(2));
-    set_release(query.get< std::string >(3));
-    set_arch(query.get< std::string >(4));
-}
-
-void
-Package::dbInsert()
-{
-    // populates this->id
-    Item::save();
-    auto query = rpm_insert_new_query(trans.get_connection());
-    rpm_insert(*query, *this);
-}
-
-static TransactionItemPtr
-transactionItemFromQuery(Transaction & trans, libdnf::utils::SQLite3::Query &query)
-{
-    auto trans_item = std::make_shared< TransactionItem >(trans);
-    auto item = std::make_shared< Package >(trans);
-    trans_item->setItem(item);
-    trans_item->set_id(query.get< int >("id"));
-    trans_item->set_action(static_cast< TransactionItemAction >(query.get< int >("action")));
-    trans_item->set_reason(static_cast< TransactionItemReason >(query.get< int >("reason")));
-    trans_item->set_repoid(query.get< std::string >("repoid"));
-    trans_item->set_state(static_cast< TransactionItemState >(query.get< int >("state")));
-    item->setId(query.get< int >("item_id"));
-    item->set_name(query.get< std::string >("name"));
-    item->set_epoch(query.get< int >("epoch"));
-    item->set_version(query.get< std::string >("version"));
-    item->set_release(query.get< std::string >("release"));
-    item->set_arch(query.get< std::string >("arch"));
-    return trans_item;
-}
-
-std::vector< TransactionItemPtr >
-Package::getTransactionItems(Transaction & trans)
-{
-    std::vector< TransactionItemPtr > result;
-    auto query = rpm_transaction_item_select_new_query(trans.get_connection(), trans.get_id());
-    while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        result.push_back(transactionItemFromQuery(trans, *query));
-    }
-    return result;
-}
 
 std::string
 Package::getNEVRA() const
@@ -137,17 +66,6 @@ Package::toStr() const
     return getNEVRA();
 }
 
-void
-Package::dbSelectOrInsert()
-{
-    auto query = rpm_select_pk_new_query(trans.get_connection());
-    setId(rpm_select_pk(*query, *this));
-
-    if (!getId()) {
-        // insert and get the ID back
-        dbInsert();
-    }
-}
 
 /*
 TransactionItemPtr

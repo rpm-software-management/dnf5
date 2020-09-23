@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_item.hpp"
 
 #include "libdnf/transaction/db/trans.hpp"
+#include "libdnf/transaction/db/rpm.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
@@ -94,7 +95,8 @@ Transaction::getItems()
         return items;
     }
     std::vector< TransactionItemPtr > result;
-    auto rpms = Package::getTransactionItems(*this);
+
+    auto rpms = get_transaction_packages(*this);
     result.insert(result.end(), rpms.begin(), rpms.end());
 
     auto comps_groups = CompsGroup::getTransactionItems(*this);
@@ -129,8 +131,12 @@ Transaction::getSoftwarePerformedWith() const
     query.bindv(get_id());
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto rpm = std::make_shared< Package >(*const_cast<Transaction *>(this), query.get<int64_t>("item_id"));
-        software.insert(rpm);
+        //auto rpm = std::make_shared< Package >(*const_cast<Transaction *>(this), query.get<int64_t>("item_id"));
+        auto rpm = std::make_shared<Package>(*const_cast<Transaction *>(this));
+        auto q = rpm_select_new_query(conn);
+        if (rpm_select(*q, query.get<int64_t>("item_id"), *rpm)) {
+            software.insert(rpm);
+        }
     }
 
     return software;
