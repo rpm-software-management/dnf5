@@ -149,6 +149,61 @@ inline void Nevra::set_arch(std::string && arch) {
 }
 
 
+/// Create a full nevra string (always contains epoch) from an object
+template <typename T>
+inline std::string to_full_nevra_string(const T & obj) {
+    auto epoch = obj.get_epoch();
+    if (epoch.empty()) {
+        epoch = "0";
+    }
+    // reserve() & append() is about 25% faster than string concatenation
+    std::string result;
+    result.reserve(4 + obj.get_name().size() + epoch.size() + obj.get_version().size() + obj.get_release().size() + obj.get_arch().size());
+    result.append(obj.get_name());
+    result.append("-");
+    result.append(epoch);
+    result.append(":");
+    result.append(obj.get_version());
+    result.append("-");
+    result.append(obj.get_release());
+    result.append(".");
+    result.append(obj.get_arch());
+    return result;
+}
+
+
+/// Create a nevra string (0 epoch excluded) from an object
+template <typename T>
+inline std::string to_nevra_string(const T & obj) {
+    auto epoch = obj.get_epoch();
+    if (epoch.empty() || epoch == "0") {
+        // reserve() & append() is about 25% faster than string concatenation
+        std::string result;
+        result.reserve(3 + obj.get_name().size() + obj.get_version().size() + obj.get_release().size() + obj.get_arch().size());
+        result.append(obj.get_name());
+        result.append("-");
+        result.append(obj.get_version());
+        result.append("-");
+        result.append(obj.get_release());
+        result.append(".");
+        result.append(obj.get_arch());
+        return result;
+    }
+    return to_full_nevra_string(obj);
+}
+
+
+/// Copy nevra attributes from one object to another
+template <typename F, typename T>
+inline void copy_nevra_attributes(const F & from, T & to) {
+    to.set_name(from.get_name());
+    to.set_epoch(from.get_epoch());
+    to.set_version(from.get_version());
+    to.set_release(from.get_release());
+    to.set_arch(from.get_arch());
+}
+
+
 }  // namespace libdnf::rpm
 
 #endif  // LIBDNF_RPM_NEVRA_HPP
