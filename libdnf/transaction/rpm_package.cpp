@@ -59,19 +59,9 @@ uint32_t Package::get_epoch_int() const {
 
 
 std::string
-Package::getNEVRA() const
-{
-    // TODO: use string formatting
-    if (!epoch.empty() && epoch != "0") {
-        return name + "-" + epoch + ":" + version + "-" + release + "." + arch;
-    }
-    return name + "-" + version + "-" + release + "." + arch;
-}
-
-std::string
 Package::toStr() const
 {
-    return getNEVRA();
+    return libdnf::rpm::to_nevra_string(*this);
 }
 
 

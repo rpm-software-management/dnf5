@@ -137,7 +137,7 @@ Swdb::beginTransaction(int64_t dtBegin,
             continue;
         }
         auto rpmItem = std::dynamic_pointer_cast< Package >(transItem);
-        itemsInProgress[rpmItem->getNEVRA()] = item;
+        itemsInProgress[rpmItem->toStr()] = item;
     }
 
     return transactionInProgress->get_id();

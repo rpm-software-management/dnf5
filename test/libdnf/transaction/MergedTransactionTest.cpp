@@ -633,7 +633,7 @@ MergedTransactionTest::test_add_obsoleted_obsoleted()
     CPPUNIT_ASSERT_EQUAL(1, (int)items.size());
 
     auto item = items.at(0);
-    CPPUNIT_ASSERT_EQUAL(std::string("tour-4.6-1.noarch"), std::dynamic_pointer_cast<Package>(item->getItem())->getNEVRA());
+    CPPUNIT_ASSERT_EQUAL(std::string("tour-4.6-1.noarch"), std::dynamic_pointer_cast<Package>(item->getItem())->toStr());
     CPPUNIT_ASSERT_EQUAL(std::string("repo1"), item->get_repoid());
     CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, item->get_action());
     CPPUNIT_ASSERT_EQUAL(TransactionItemReason::DEPENDENCY, item->get_reason());

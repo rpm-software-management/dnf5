@@ -64,7 +64,6 @@ public:
     const std::string & get_arch() const noexcept { return arch; }
     void set_arch(const std::string & value) { arch = value; }
 
-    std::string getNEVRA() const;
     std::string toStr() const override;
     Type getItemType() const noexcept override { return itemType; }
     void save() override;
