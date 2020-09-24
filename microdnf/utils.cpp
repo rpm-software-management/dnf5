@@ -83,8 +83,12 @@ uid_t get_login_uid() noexcept {
 namespace xdg {
 
 std::filesystem::path get_user_home_dir() {
-    if (char * dir = std::getenv("HOME")) {
-        return std::filesystem::path(dir);
+    const char * dir = std::getenv("HOME");
+    if (dir && *dir != '\0') {
+        auto ret = std::filesystem::path(dir);
+        if (ret.is_absolute()) {
+            return ret;
+        }
     }
     if (struct passwd * pw = getpwuid(getuid())) {
         return std::filesystem::path(pw->pw_dir);
@@ -93,31 +97,47 @@ std::filesystem::path get_user_home_dir() {
 }
 
 std::filesystem::path get_user_cache_dir() {
-    if (char * dir = std::getenv("XDG_CACHE_HOME")) {
-        return std::filesystem::path(dir);
+    const char * dir = std::getenv("XDG_CACHE_HOME");
+    if (dir && *dir != '\0') {
+        auto ret = std::filesystem::path(dir);
+        if (ret.is_absolute()) {
+            return ret;
+        }
     }
     return std::filesystem::path(get_user_home_dir()) / ".cache";
 }
 
 std::filesystem::path get_user_config_dir() {
-    if (char * dir = std::getenv("XDG_CONFIG_HOME")) {
-        return std::filesystem::path(dir);
+    const char * dir = std::getenv("XDG_CONFIG_HOME");
+    if (dir && *dir != '\0') {
+        auto ret = std::filesystem::path(dir);
+        if (ret.is_absolute()) {
+            return ret;
+        }
     }
     return std::filesystem::path(get_user_home_dir()) / ".config";
 }
 
 std::filesystem::path get_user_data_dir() {
-    if (char * dir = std::getenv("XDG_DATA_HOME")) {
-        return std::filesystem::path(dir);
+    const char * dir = std::getenv("XDG_DATA_HOME");
+    if (dir && *dir != '\0') {
+        auto ret = std::filesystem::path(dir);
+        if (ret.is_absolute()) {
+            return ret;
+        }
     }
     return std::filesystem::path(get_user_home_dir()) / ".local" / "share";
 }
 
 std::filesystem::path get_user_runtime_dir() {
-    if (char * dir = std::getenv("XDG_RUNTIME_HOME")) {
-        return std::filesystem::path(dir);
+    const char * dir = std::getenv("XDG_RUNTIME_DIR");
+    if (dir && *dir != '\0') {
+        auto ret = std::filesystem::path(dir);
+        if (ret.is_absolute()) {
+            return ret;
+        }
     }
-    return get_user_cache_dir();
+    throw std::runtime_error("get_user_runtime_dir(): Can't determine the user's runtime directory");
 }
 
 }  // namespace xdg

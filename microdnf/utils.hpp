@@ -38,19 +38,24 @@ uid_t get_login_uid() noexcept;
 
 namespace xdg {
 
-/// Returns user home directory
+/// Returns user home directory.
 std::filesystem::path get_user_home_dir();
 
-/// Returns user cache directory
+/// Returns user cache directory.
+/// A base directory relative to which user specific non-essential data files should be stored.
 std::filesystem::path get_user_cache_dir();
 
-/// Returns user configuration directory
+/// Returns user configuration directory.
+/// A base directory relative to which user specific configuration files should be stored.
 std::filesystem::path get_user_config_dir();
 
-/// Returns user data directory
+/// Returns user data directory.
+/// A base directory relative to which user specific data files should be stored.
 std::filesystem::path get_user_data_dir();
 
-/// Returns user runtime directory
+/// Returns user runtime directory.
+/// A base directory relative to which user-specific non-essential runtime files and other file objects
+/// (such as sockets, named pipes, ...) should be stored.
 std::filesystem::path get_user_runtime_dir();
 
 }  // namespace xdg
