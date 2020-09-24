@@ -31,6 +31,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 #include "utils.hpp"
 
+#include "libdnf/utils/xdg.hpp"
+
 #include <fcntl.h>
 #include <fmt/format.h>
 #include <libdnf/base/base.hpp>
@@ -253,7 +255,7 @@ int main(int argc, char * argv[]) {
         }
         if (base.get_config().cachedir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
             // Sets path to cache directory.
-            auto cache_dir = microdnf::xdg::get_user_cache_dir() / "microdnf";
+            auto cache_dir = libdnf::utils::xdg::get_user_cache_dir() / "microdnf";
             base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dir);
         }
     } else {
