@@ -9,26 +9,6 @@ using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionTest);
 
-static PackagePtr
-nevraToPackage(Transaction & trans, std::string nevra)
-{
-    libdnf::rpm::Nevra nevraObject;
-    if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
-        return nullptr;
-    }
-    if (nevraObject.get_epoch().empty()) {
-        nevraObject.set_epoch("0");
-    }
-
-    auto rpm = std::make_shared< Package >(trans);
-    rpm->set_name(nevraObject.get_name());
-    rpm->set_epoch(nevraObject.get_epoch());
-    rpm->set_version(nevraObject.get_version());
-    rpm->set_release(nevraObject.get_release());
-    rpm->set_arch(nevraObject.get_arch());
-    return rpm;
-}
-
 void
 TransactionTest::setUp()
 {
