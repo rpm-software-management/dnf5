@@ -51,8 +51,9 @@ public:
     const std::string & get_name() const noexcept { return name; }
     void set_name(const std::string & value) { name = value; }
 
-    int32_t get_epoch() const noexcept { return epoch; }
-    void set_epoch(int32_t value) { epoch = value; }
+    const std::string & get_epoch() const noexcept { return epoch; }
+    uint32_t get_epoch_int() const;
+    void set_epoch(const std::string & value) { epoch = value; }
 
     const std::string & get_version() const noexcept { return version; }
     void set_version(const std::string & value) { version = value; }
@@ -80,7 +81,7 @@ public:
 private:
     const Type itemType = Type::RPM;
     std::string name;
-    int32_t epoch = 0;
+    std::string epoch;
     std::string version;
     std::string release;
     std::string arch;

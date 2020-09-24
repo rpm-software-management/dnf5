@@ -33,7 +33,7 @@ RpmItemTest::testCreate()
     // bash-4.4.12-5.fc26.x86_64
     Package rpm(trans);
     rpm.set_name("bash");
-    rpm.set_epoch(0);
+    rpm.set_epoch("0");
     rpm.set_version("4.4.12");
     rpm.set_release("5.fc26");
     rpm.set_arch("x86_64");
@@ -57,7 +57,7 @@ RpmItemTest::testCreateDuplicates()
     // bash-4.4.12-5.fc26.x86_64
     auto rpm = std::make_shared< Package >(trans);
     rpm->set_name("bash");
-    rpm->set_epoch(0);
+    rpm->set_epoch("0");
     rpm->set_version("4.4.12");
     rpm->set_release("5.fc26");
     rpm->set_arch("x86_64");
@@ -93,7 +93,7 @@ RpmItemTest::testGetTransactionItems()
     for (int i = 0; i < num; i++) {
         auto rpm = std::make_shared< Package >(trans);
         rpm->set_name("name_" + std::to_string(i));
-        rpm->set_epoch(0);
+        rpm->set_epoch("0");
         rpm->set_version("1");
         rpm->set_release("2");
         rpm->set_arch("x86_64");

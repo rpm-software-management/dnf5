@@ -66,7 +66,7 @@ TransactionItemReasonTest::test_OneTransaction_OneTransactionItem()
 
     auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
     rpm_bash->set_name("bash");
-    rpm_bash->set_epoch(0);
+    rpm_bash->set_epoch("0");
     rpm_bash->set_version("4.4.12");
     rpm_bash->set_release("5.fc26");
     rpm_bash->set_arch("x86_64");
@@ -106,7 +106,7 @@ TransactionItemReasonTest::test_OneFailedTransaction_OneTransactionItem()
 
     auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
     rpm_bash->set_name("bash");
-    rpm_bash->set_epoch(0);
+    rpm_bash->set_epoch("0");
     rpm_bash->set_version("4.4.12");
     rpm_bash->set_release("5.fc26");
     rpm_bash->set_arch("x86_64");
@@ -147,7 +147,7 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
     {
         auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
-        rpm_bash->set_epoch(0);
+        rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
         rpm_bash->set_release("5.fc26");
         rpm_bash->set_arch("x86_64");
@@ -161,7 +161,7 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
     {
         auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
-        rpm_bash->set_epoch(0);
+        rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
         rpm_bash->set_release("5.fc26");
         rpm_bash->set_arch("i686");
@@ -203,7 +203,7 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
 
         auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
-        rpm_bash->set_epoch(0);
+        rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
         rpm_bash->set_release("5.fc26");
         rpm_bash->set_arch("x86_64");
@@ -223,7 +223,7 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
 
         auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
-        rpm_bash->set_epoch(0);
+        rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
         rpm_bash->set_release("5.fc26");
         rpm_bash->set_arch("i686");
@@ -265,7 +265,7 @@ TransactionItemReasonTest::testRemovedPackage()
 
         auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
-        rpm_bash->set_epoch(0);
+        rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
         rpm_bash->set_release("5.fc26");
         rpm_bash->set_arch("x86_64");
@@ -285,7 +285,7 @@ TransactionItemReasonTest::testRemovedPackage()
 
         auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
-        rpm_bash->set_epoch(0);
+        rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
         rpm_bash->set_release("5.fc26");
         rpm_bash->set_arch("i686");

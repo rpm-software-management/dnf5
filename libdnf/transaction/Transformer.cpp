@@ -241,7 +241,7 @@ static void
 fillPackage(std::shared_ptr< Package > rpm, libdnf::utils::SQLite3::Query &query)
 {
     rpm->set_name(query.get< std::string >("name"));
-    rpm->set_epoch(query.get< int32_t >("epoch"));
+    rpm->set_epoch(std::to_string(query.get< uint32_t >("epoch")));
     rpm->set_version(query.get< std::string >("version"));
     rpm->set_release(query.get< std::string >("release"));
     rpm->set_arch(query.get< std::string >("arch"));

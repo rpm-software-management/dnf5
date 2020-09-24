@@ -71,7 +71,7 @@ int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Trans
     ti.set_state(static_cast< TransactionItemState >(query.get< int >("state")));
     item->setId(query.get< int >("item_id"));
     item->set_name(query.get< std::string >("name"));
-    item->set_epoch(query.get< int >("epoch"));
+    item->set_epoch(std::to_string(query.get< uint32_t >("epoch")));
     item->set_version(query.get< std::string >("version"));
     item->set_release(query.get< std::string >("release"));
     item->set_arch(query.get< std::string >("arch"));
@@ -139,7 +139,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_select_pk_new_query(libdn
 int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(
         rpm.get_name(),
-        rpm.get_epoch(),
+        rpm.get_epoch_int(),
         rpm.get_version(),
         rpm.get_release(),
         rpm.get_arch()
@@ -182,7 +182,7 @@ bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package &
     if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         rpm.setId(query.get<int>("item_id"));
         rpm.set_name(query.get<std::string>("name"));
-        rpm.set_epoch(query.get<uint32_t>("epoch"));
+        rpm.set_epoch(std::to_string(query.get<uint32_t>("epoch")));
         rpm.set_version(query.get<std::string>("version"));
         rpm.set_release(query.get<std::string>("release"));
         rpm.set_arch(query.get<std::string>("arch"));

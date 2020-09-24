@@ -35,7 +35,7 @@ initTransFirst(libdnf::utils::SQLite3 & conn)
 
     auto dnfRpm = std::make_shared< Package >(*first);
     dnfRpm->set_name("dnf");
-    dnfRpm->set_epoch(0);
+    dnfRpm->set_epoch("0");
     dnfRpm->set_version("3.0.0");
     dnfRpm->set_release("2.fc26");
     dnfRpm->set_arch("x86_64");
@@ -59,7 +59,7 @@ initTransSecond(libdnf::utils::SQLite3 & conn)
 
     auto rpmRpm = std::make_shared< Package >(*second);
     rpmRpm->set_name("rpm");
-    rpmRpm->set_epoch(0);
+    rpmRpm->set_epoch("0");
     rpmRpm->set_version("4.14.0");
     rpmRpm->set_release("2.fc26");
     rpmRpm->set_arch("x86_64");
@@ -142,7 +142,7 @@ prepareMergedTransaction(libdnf::utils::SQLite3 & conn,
     auto first = initTransFirst(conn);
     auto firstRPM = std::make_shared< Package >(*first);
     firstRPM->set_name("foo");
-    firstRPM->set_epoch(0);
+    firstRPM->set_epoch("0");
     firstRPM->set_version(versionFirst);
     firstRPM->set_release("2.fc26");
     firstRPM->set_arch("x86_64");
@@ -151,7 +151,7 @@ prepareMergedTransaction(libdnf::utils::SQLite3 & conn,
     auto second = initTransSecond(conn);
     auto secondRPM = std::make_shared< Package >(*second);
     secondRPM->set_name("foo");
-    secondRPM->set_epoch(0);
+    secondRPM->set_epoch("0");
     secondRPM->set_version(versionSecond);
     secondRPM->set_release("2.fc26");
     secondRPM->set_arch("x86_64");
@@ -160,7 +160,7 @@ prepareMergedTransaction(libdnf::utils::SQLite3 & conn,
     if (oldFirstAction != TransactionItemAction::INSTALL) {
         auto oldFirst = std::make_shared< Package >(*first);
         oldFirst->set_name("foo");
-        oldFirst->set_epoch(0);
+        oldFirst->set_epoch("0");
         oldFirst->set_version(oldFirstVersion);
         oldFirst->set_release("2.fc26");
         oldFirst->set_arch("x86_64");
@@ -340,7 +340,7 @@ nevraToPackage(Transaction & trans, std::string nevra)
 
     auto rpm = std::make_shared< Package >(trans);
     rpm->set_name(nevraObject.get_name());
-    rpm->set_epoch(std::stoi(nevraObject.get_epoch()));
+    rpm->set_epoch(nevraObject.get_epoch());
     rpm->set_version(nevraObject.get_version());
     rpm->set_release(nevraObject.get_release());
     rpm->set_arch(nevraObject.get_arch());

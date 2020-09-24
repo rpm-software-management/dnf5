@@ -48,7 +48,7 @@ WorkflowTest::testDefaultWorkflow()
     // bash-4.4.12-5.fc26.x86_64
     auto rpm_bash = std::make_shared< Package >(trans);
     rpm_bash->set_name("bash");
-    rpm_bash->set_epoch(0);
+    rpm_bash->set_epoch("0");
     rpm_bash->set_version("4.4.12");
     rpm_bash->set_release("5.fc26");
     rpm_bash->set_arch("x86_64");
@@ -60,7 +60,7 @@ WorkflowTest::testDefaultWorkflow()
     // systemd-233-6.fc26
     auto rpm_systemd = std::make_shared< Package >(trans);
     rpm_systemd->set_name("systemd");
-    rpm_systemd->set_epoch(0);
+    rpm_systemd->set_epoch("0");
     rpm_systemd->set_version("233");
     rpm_systemd->set_release("6.fc26");
     rpm_systemd->set_arch("x86_64");
@@ -72,7 +72,7 @@ WorkflowTest::testDefaultWorkflow()
     // sysvinit-2.88-14.dsf.fc20
     auto rpm_sysvinit = std::make_shared< Package >(trans);
     rpm_sysvinit->set_name("sysvinit");
-    rpm_sysvinit->set_epoch(0);
+    rpm_sysvinit->set_epoch("0");
     rpm_sysvinit->set_version("2.88");
     rpm_sysvinit->set_release("14.dsf.fc20");
     rpm_sysvinit->set_arch("x86_64");

@@ -144,7 +144,7 @@ TransformerTest::testTransformTrans()
     for (auto item : items) {
         auto rpm = std::dynamic_pointer_cast< Package >(item->getItem());
         if (rpm->get_name() == "chrony" && rpm->get_version() == "3.1") {
-            CPPUNIT_ASSERT(rpm->get_epoch() == 1);
+            CPPUNIT_ASSERT(rpm->get_epoch() == "1");
             CPPUNIT_ASSERT(rpm->get_release() == "4.fc26");
             CPPUNIT_ASSERT(item->get_action() == TransactionItemAction::UPGRADED);
             CPPUNIT_ASSERT(item->get_reason() == TransactionItemReason::USER);
@@ -152,7 +152,7 @@ TransformerTest::testTransformTrans()
 
             // TODO repo, replaced
         } else { // chrony 3.2
-            CPPUNIT_ASSERT(rpm->get_epoch() == 1);
+            CPPUNIT_ASSERT(rpm->get_epoch() == "1");
             CPPUNIT_ASSERT(rpm->get_version() == "3.2");
             CPPUNIT_ASSERT(rpm->get_release() == "4.fc26");
 
@@ -199,7 +199,7 @@ TransformerTest::testTransformTrans()
     for (auto item : items) {
         auto kernel = std::dynamic_pointer_cast< Package >(item->getItem());
         CPPUNIT_ASSERT(kernel->get_name() == "kernel");
-        CPPUNIT_ASSERT(kernel->get_epoch() == 0);
+        CPPUNIT_ASSERT(kernel->get_epoch() == "0");
         CPPUNIT_ASSERT(kernel->get_version() == "4.11");
         CPPUNIT_ASSERT(kernel->get_release() == "301.fc26");
 

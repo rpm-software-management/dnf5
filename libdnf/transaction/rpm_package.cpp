@@ -50,12 +50,20 @@ Package::save()
 }
 
 
+uint32_t Package::get_epoch_int() const {
+    if (get_epoch().empty()) {
+        return 0;
+    }
+    return std::stoi(get_epoch());
+}
+
+
 std::string
 Package::getNEVRA() const
 {
     // TODO: use string formatting
-    if (epoch > 0) {
-        return name + "-" + std::to_string(epoch) + ":" + version + "-" + release + "." + arch;
+    if (!epoch.empty() && epoch != "0") {
+        return name + "-" + epoch + ":" + version + "-" + release + "." + arch;
     }
     return name + "-" + version + "-" + release + "." + arch;
 }
@@ -202,11 +210,12 @@ Package::resolveTransactionItemReason(libdnf::utils::SQLite3 & conn,
 bool
 Package::operator<(const Package &other) const
 {
+    // TODO(dmach): replace the whole function with a different implementation, preferably an existing code
     // compare epochs
-    int32_t epochDif = other.get_epoch() - get_epoch();
-    if (epochDif > 0) {
+    int32_t epoch_diff = other.get_epoch_int() - get_epoch_int();
+    if (epoch_diff > 0) {
         return true;
-    } else if (epoch < 0) {
+    } else if (epoch_diff < 0) {
         return false;
     }
 
