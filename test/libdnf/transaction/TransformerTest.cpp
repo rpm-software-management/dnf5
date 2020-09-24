@@ -132,10 +132,10 @@ TransformerTest::testTransformTrans()
     CPPUNIT_ASSERT(firstOut[1].second == "line2");
 
     // check software performed with
-    auto firstSoftWith = first.getSoftwarePerformedWith();
+    auto firstSoftWith = first.get_runtime_packages();
     CPPUNIT_ASSERT(firstSoftWith.size() == 1);
-    for (auto soft : firstSoftWith) {
-        CPPUNIT_ASSERT(soft->getId() == 2);
+    for (auto nevra : firstSoftWith) {
+        CPPUNIT_ASSERT_EQUAL(std::string("chrony-1:3.1-4.fc26.x86_64"), nevra);
     }
 
     // check first transaction items
@@ -184,11 +184,11 @@ TransformerTest::testTransformTrans()
     CPPUNIT_ASSERT(secondOut[1].second == "msg2");
 
     // check second transaction performed with software
-    std::set< int64_t > possibleValues = {2, 3};
-    auto secondSoftWith = second.getSoftwarePerformedWith();
+    std::set<std::string> possibleValues = {"chrony-1:3.1-4.fc26.x86_64", "kernel-4.11-301.fc26.x86_64"};
+    auto secondSoftWith = second.get_runtime_packages();
     CPPUNIT_ASSERT(secondSoftWith.size() == 2);
-    for (auto soft : secondSoftWith) {
-        auto it = possibleValues.find(soft->getId());
+    for (auto nevra : secondSoftWith) {
+        auto it = possibleValues.find(nevra);
         CPPUNIT_ASSERT(it != possibleValues.end());
         possibleValues.erase(it);
     }

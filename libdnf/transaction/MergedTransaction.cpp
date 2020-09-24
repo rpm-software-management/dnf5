@@ -19,6 +19,8 @@
  */
 
 #include "MergedTransaction.hpp"
+#include "comps_environment.hpp"
+#include "comps_group.hpp"
 
 namespace libdnf::transaction {
 
@@ -144,16 +146,16 @@ MergedTransaction::get_rpmdb_version_end() const noexcept
     return transactions.back()->get_rpmdb_version_end();
 }
 
-std::set< PackagePtr >
-MergedTransaction::getSoftwarePerformedWith() const
-{
-    std::set< PackagePtr > software;
+
+std::set<std::string> MergedTransaction::get_runtime_packages() const {
+    std::set<std::string> result;
     for (auto t : transactions) {
-        auto tranSoft = t->getSoftwarePerformedWith();
-        software.insert(tranSoft.begin(), tranSoft.end());
+        auto runtime_packages = t->get_runtime_packages();
+        result.insert(runtime_packages.begin(), runtime_packages.end());
     }
-    return software;
+    return result;
 }
+
 
 std::vector< std::pair< int, std::string > >
 MergedTransaction::getConsoleOutput()

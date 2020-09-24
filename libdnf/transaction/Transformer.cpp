@@ -34,6 +34,7 @@
 #include <vector>
 #include <sstream>
 
+#include "libdnf/rpm/nevra.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 #include "libdnf/utils/fs.hpp"
 #include "libdnf/utils/string.hpp"
@@ -278,7 +279,7 @@ Transformer::transformTransWith(libdnf::utils::SQLite3 & history,
         // create RPM item object
         auto rpm = std::make_shared< Package >(trans);
         fillPackage(rpm, query);
-        trans.addSoftwarePerformedWith(rpm);
+        trans.add_runtime_package(libdnf::rpm::to_nevra_string(*rpm));
     }
 }
 

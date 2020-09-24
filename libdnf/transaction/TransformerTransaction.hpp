@@ -21,7 +21,11 @@
 #ifndef LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP
 #define LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP
 
+
 #include "transaction.hpp"
+
+#include "libdnf/transaction/db/trans_with.hpp"
+
 
 namespace libdnf::transaction {
 
@@ -35,6 +39,7 @@ public:
     void begin()
     {
         dbInsert();
+        save_transaction_runtime_packages(*this);
         saveItems();
     }
 };

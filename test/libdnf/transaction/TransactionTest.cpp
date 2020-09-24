@@ -55,16 +55,16 @@ TransactionTest::testInsert()
     trans.set_cmdline("dnf install foo");
     trans.set_state(TransactionState::DONE);
 
-    trans.addSoftwarePerformedWith(nevraToPackage(trans, "rpm-4.14.2-1.fc29.x86_64"));
-    trans.addSoftwarePerformedWith(nevraToPackage(trans, "dnf-3.5.1-1.fc29.noarch"));
+    trans.add_runtime_package("rpm-4.14.2-1.fc29.x86_64");
+    trans.add_runtime_package("dnf-3.5.1-1.fc29.noarch");
     // test adding a duplicate; only a single occurrence of the rpm is expected
-    trans.addSoftwarePerformedWith(nevraToPackage(trans, "rpm-4.14.2-1.fc29.x86_64"));
+    trans.add_runtime_package("rpm-4.14.2-1.fc29.x86_64");
 
     trans.begin();
 
-    // getSoftwarePerformedWith returns results directly from the db
+    // get_runtime_packages returns results directly from the db
     // that's why it has to be called after begin(), where the records are saved
-    CPPUNIT_ASSERT(trans.getSoftwarePerformedWith().size() == 2);
+    CPPUNIT_ASSERT_EQUAL(2ul, trans.get_runtime_packages().size());
 
     // 2nd begin must throw an exception
     CPPUNIT_ASSERT_THROW(trans.begin(), std::runtime_error);
@@ -80,7 +80,7 @@ TransactionTest::testInsert()
     CPPUNIT_ASSERT(trans2.get_user_id() == trans.get_user_id());
     CPPUNIT_ASSERT(trans2.get_cmdline() == trans.get_cmdline());
     CPPUNIT_ASSERT(trans2.get_state() == trans.get_state());
-    CPPUNIT_ASSERT(trans2.getSoftwarePerformedWith().size() == 2);
+    CPPUNIT_ASSERT_EQUAL(2ul, trans2.get_runtime_packages().size());
 }
 
 void

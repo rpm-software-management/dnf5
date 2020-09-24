@@ -165,7 +165,10 @@ public:
     void set_state(State value) { state = value; }
 
     virtual std::vector<TransactionItemPtr> getItems();
-    const std::set<std::shared_ptr<Package>> getSoftwarePerformedWith() const;
+
+    const std::set<std::string> & get_runtime_packages() const { return runtime_packages; }
+    void add_runtime_package(const std::string & nevra) { runtime_packages.insert(nevra); }
+
     std::vector<std::pair<int, std::string>> getConsoleOutput() const;
 
     void begin();
@@ -177,7 +180,6 @@ public:
         TransactionItemReason reason);
 
     void addConsoleOutputLine(int fileDescriptor, const std::string & line);
-    void addSoftwarePerformedWith(std::shared_ptr<Package> software);
 
     libdnf::utils::SQLite3 & get_connection() { return conn; }
 
@@ -193,7 +195,6 @@ protected:
     void dbInsert();
     void dbUpdate();
 
-    std::set<std::shared_ptr<Package>> softwarePerformedWith;
 
     friend class TransactionItem;
     libdnf::utils::SQLite3 & conn;
@@ -211,6 +212,8 @@ private:
     // TODO(dmach): backport comment support from dnf-4-master
     std::string comment;
     State state = State::UNKNOWN;
+
+    std::set<std::string> runtime_packages;
 };
 
 

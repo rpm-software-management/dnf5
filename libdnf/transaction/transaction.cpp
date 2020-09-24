@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_item.hpp"
 
 #include "libdnf/transaction/db/trans.hpp"
+#include "libdnf/transaction/db/trans_with.hpp"
 #include "libdnf/transaction/db/rpm.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
@@ -37,6 +38,7 @@ Transaction::Transaction(libdnf::utils::SQLite3 & conn, int64_t pk)
   : conn{conn}
 {
     dbSelect(pk);
+    runtime_packages = load_transaction_runtime_packages(*this);
 }
 
 Transaction::Transaction(libdnf::utils::SQLite3 & conn)
@@ -108,39 +110,6 @@ Transaction::getItems()
     return result;
 }
 
-/**
- * Load list of software performed with for current transaction from the database.
- * Transaction has to be saved in advance, otherwise empty list will be returned.
- * \return list of Package objects that performed the transaction
- */
-const std::set< std::shared_ptr< Package > >
-Transaction::getSoftwarePerformedWith() const
-{
-    const char *sql = R"**(
-        SELECT
-            item_id
-        FROM
-            trans_with
-        WHERE
-            trans_id = ?
-    )**";
-
-    std::set< std::shared_ptr< Package > > software;
-
-    libdnf::utils::SQLite3::Query query(conn, sql);
-    query.bindv(get_id());
-
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        //auto rpm = std::make_shared< Package >(*const_cast<Transaction *>(this), query.get<int64_t>("item_id"));
-        auto rpm = std::make_shared<Package>(*const_cast<Transaction *>(this));
-        auto q = rpm_select_new_query(conn);
-        if (rpm_select(*q, query.get<int64_t>("item_id"), *rpm)) {
-            software.insert(rpm);
-        }
-    }
-
-    return software;
-}
 
 std::vector< std::pair< int, std::string > >
 Transaction::getConsoleOutput() const
@@ -174,6 +143,7 @@ Transaction::begin()
         throw std::runtime_error(_("Transaction has already began!"));
     }
     dbInsert();
+    save_transaction_runtime_packages(*this);
     saveItems();
 }
 
@@ -201,31 +171,6 @@ Transaction::dbInsert()
 {
     auto query = trans_insert_new_query(conn);
     trans_insert(*query, *this);
-
-    // add used software - has to be added at initialization state
-    if (!softwarePerformedWith.empty()) {
-        const char * sql = R"**(
-            INSERT OR REPLACE INTO
-                trans_with (
-                    trans_id,
-                    item_id
-                )
-            VALUES
-                (?, ?)
-        )**";
-        libdnf::utils::SQLite3::Statement swQuery(conn, sql);
-        bool first = true;
-        for (auto software : softwarePerformedWith) {
-            if (!first) {
-                swQuery.reset();
-            }
-            first = false;
-            // save the item to create a database id
-            software->save();
-            swQuery.bindv(get_id(), software->getId());
-            swQuery.step();
-        }
-    }
 }
 
 void
@@ -284,18 +229,6 @@ Transaction::saveItems()
     }
 }
 
-
-/**
- * Append software to softwarePerformedWith list.
- * Software is saved to the database using save method and therefore
- * all the software has to be added before transaction is saved.
- * \param software Package used to perform the transaction
- */
-void
-Transaction::addSoftwarePerformedWith(std::shared_ptr< Package > software)
-{
-    softwarePerformedWith.insert(software);
-}
 
 /**
  * Save console output line for current transaction to the database. Transaction has

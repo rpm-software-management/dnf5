@@ -32,16 +32,7 @@ initTransFirst(libdnf::utils::SQLite3 & conn)
     first->set_rpmdb_version_end("end 1");
     first->set_user_id(1000);
     first->set_cmdline("dnf install foo");
-
-    auto dnfRpm = std::make_shared< Package >(*first);
-    dnfRpm->set_name("dnf");
-    dnfRpm->set_epoch("0");
-    dnfRpm->set_version("3.0.0");
-    dnfRpm->set_release("2.fc26");
-    dnfRpm->set_arch("x86_64");
-    dnfRpm->save();
-
-    first->addSoftwarePerformedWith(dnfRpm);
+    first->add_runtime_package("dnf-3.0.0-2.fc26.x86_64");
     return first;
 }
 
@@ -56,16 +47,7 @@ initTransSecond(libdnf::utils::SQLite3 & conn)
     second->set_rpmdb_version_end("end 2");
     second->set_user_id(1001);
     second->set_cmdline("dnf install bar");
-
-    auto rpmRpm = std::make_shared< Package >(*second);
-    rpmRpm->set_name("rpm");
-    rpmRpm->set_epoch("0");
-    rpmRpm->set_version("4.14.0");
-    rpmRpm->set_release("2.fc26");
-    rpmRpm->set_arch("x86_64");
-    rpmRpm->save();
-
-    second->addSoftwarePerformedWith(rpmRpm);
+    second->add_runtime_package("rpm-4.14.0-2.fc26.x86_64");
     return second;
 }
 
@@ -116,15 +98,14 @@ MergedTransactionTest::testMerge()
     CPPUNIT_ASSERT_EQUAL(1, output.at(1).first);
     CPPUNIT_ASSERT_EQUAL(std::string("Bar"), output.at(1).second);
 
-    auto software = merged.getSoftwarePerformedWith();
-    std::set< std::string > names = {"rpm", "dnf"};
+    auto software = merged.get_runtime_packages();
+    std::set< std::string > packages = {"dnf-3.0.0-2.fc26.x86_64", "rpm-4.14.0-2.fc26.x86_64"};
 
-    CPPUNIT_ASSERT(names.size() == 2);
+    CPPUNIT_ASSERT_EQUAL(2ul, packages.size());
 
-    for (auto s : software) {
-        const std::string &name = s->get_name();
-        CPPUNIT_ASSERT_MESSAGE("Name: " + name, names.find(name) != names.end());
-        names.erase(name);
+    for (auto & nevra : software) {
+        CPPUNIT_ASSERT_MESSAGE("Package: " + nevra, packages.find(nevra) != packages.end());
+        packages.erase(nevra);
     }
 }
 
