@@ -110,7 +110,7 @@ public:
 
     // misc
     void setReleasever(std::string value);
-    void addConsoleOutputLine(int fileDescriptor, std::string line);
+    void add_console_output_line(int file_descriptor, const std::string & line);
 
     /**
     * @brief Remove packages from PackageSet that were installed as Dependency or WEAK_DEPENDENCY

@@ -158,11 +158,11 @@ std::set<std::string> MergedTransaction::get_runtime_packages() const {
 
 
 std::vector< std::pair< int, std::string > >
-MergedTransaction::getConsoleOutput()
+MergedTransaction::get_console_output()
 {
     std::vector< std::pair< int, std::string > > output;
     for (auto t : transactions) {
-        auto tranOutput = t->getConsoleOutput();
+        auto tranOutput = t->get_console_output();
         output.insert(output.end(), tranOutput.begin(), tranOutput.end());
     }
     return output;

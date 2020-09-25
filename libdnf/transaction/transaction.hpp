@@ -169,7 +169,13 @@ public:
     const std::set<std::string> & get_runtime_packages() const { return runtime_packages; }
     void add_runtime_package(const std::string & nevra) { runtime_packages.insert(nevra); }
 
-    std::vector<std::pair<int, std::string>> getConsoleOutput() const;
+    /// Get lines recorded during the transaction
+    const std::vector<std::pair<int, std::string>> & get_console_output() const { return console_output; }
+
+    /// Record a line printed during the transction to the database and also store it in the object
+    ///
+    /// The method must be called only on a started transaction
+    void add_console_output_line(int file_descriptor, const std::string & line);
 
     void begin();
     void finish(TransactionState state);
@@ -179,7 +185,6 @@ public:
         TransactionItemAction action,
         TransactionItemReason reason);
 
-    void addConsoleOutputLine(int fileDescriptor, const std::string & line);
 
     libdnf::utils::SQLite3 & get_connection() { return conn; }
 
@@ -214,6 +219,7 @@ private:
     State state = State::UNKNOWN;
 
     std::set<std::string> runtime_packages;
+    std::vector<std::pair<int, std::string>> console_output;
 };
 
 

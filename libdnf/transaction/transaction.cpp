@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm_package.hpp"
 #include "transaction_item.hpp"
 
+#include "libdnf/transaction/db/console_output.hpp"
 #include "libdnf/transaction/db/trans.hpp"
 #include "libdnf/transaction/db/trans_with.hpp"
 #include "libdnf/transaction/db/rpm.hpp"
@@ -39,6 +40,7 @@ Transaction::Transaction(libdnf::utils::SQLite3 & conn, int64_t pk)
 {
     dbSelect(pk);
     runtime_packages = load_transaction_runtime_packages(*this);
+    console_output = console_output_load(*this);
 }
 
 Transaction::Transaction(libdnf::utils::SQLite3 & conn)
@@ -110,31 +112,6 @@ Transaction::getItems()
     return result;
 }
 
-
-std::vector< std::pair< int, std::string > >
-Transaction::getConsoleOutput() const
-{
-    const char *sql = R"**(
-        SELECT
-            file_descriptor,
-            line
-        FROM
-            console_output
-        WHERE
-            trans_id = ?
-        ORDER BY
-            id
-    )**";
-    libdnf::utils::SQLite3::Query query(conn, sql);
-    query.bindv(get_id());
-    std::vector< std::pair< int, std::string > > result;
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto fileDescriptor = query.get< int >("file_descriptor");
-        auto line = query.get< std::string >("line");
-        result.push_back(std::make_pair(fileDescriptor, line));
-    }
-    return result;
-}
 
 void
 Transaction::begin()
@@ -236,26 +213,16 @@ Transaction::saveItems()
  * \param fileDescriptor UNIX file descriptor index (1 = stdout, 2 = stderr).
  * \param line console output content
  */
-void
-Transaction::addConsoleOutputLine(int fileDescriptor, const std::string &line)
-{
+void Transaction::add_console_output_line(int file_descriptor, const std::string & line) {
     if (!get_id()) {
         throw std::runtime_error(_("Can't add console output to unsaved transaction"));
     }
 
-    const char *sql = R"**(
-        INSERT INTO
-            console_output (
-                trans_id,
-                file_descriptor,
-                line
-            )
-        VALUES
-            (?, ?, ?);
-    )**";
-    libdnf::utils::SQLite3::Statement query(conn, sql);
-    query.bindv(get_id(), fileDescriptor, line);
-    query.step();
+    // save the line to the database
+    console_output_insert_line(*this, file_descriptor, line);
+
+    // also store the line in the console_output vector
+    console_output.emplace_back(file_descriptor, line);
 }
 
 

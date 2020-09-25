@@ -62,12 +62,12 @@ MergedTransactionTest::testMerge()
 {
     auto first = initTransFirst(*conn);
     first->begin();
-    first->addConsoleOutputLine(1, "Foo");
+    first->add_console_output_line(1, "Foo");
     first->finish(TransactionState::DONE);
 
     auto second = initTransSecond(*conn);
     second->begin();
-    second->addConsoleOutputLine(1, "Bar");
+    second->add_console_output_line(1, "Bar");
     second->finish(TransactionState::ERROR);
 
     MergedTransaction merged(*first);
@@ -91,7 +91,7 @@ MergedTransactionTest::testMerge()
     CPPUNIT_ASSERT_EQUAL(std::string("begin 1"), merged.get_rpmdb_version_begin());
     CPPUNIT_ASSERT_EQUAL(std::string("end 2"), merged.get_rpmdb_version_end());
 
-    auto output = merged.getConsoleOutput();
+    auto output = merged.get_console_output();
     CPPUNIT_ASSERT_EQUAL(1, output.at(0).first);
     CPPUNIT_ASSERT_EQUAL(std::string("Foo"), output.at(0).second);
 

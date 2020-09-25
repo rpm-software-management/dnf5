@@ -124,7 +124,7 @@ TransformerTest::testTransformTrans()
     CPPUNIT_ASSERT(first.get_state() == TransactionState::DONE);
 
     // check first transaction output
-    auto firstOut = first.getConsoleOutput();
+    auto firstOut = first.get_console_output();
     CPPUNIT_ASSERT(firstOut.size() == 2);
     CPPUNIT_ASSERT(firstOut[0].first == 1);
     CPPUNIT_ASSERT(firstOut[0].second == "line1");
@@ -176,7 +176,7 @@ TransformerTest::testTransformTrans()
     CPPUNIT_ASSERT(second.get_state() == TransactionState::DONE);
 
     // check second transaction console output
-    auto secondOut = second.getConsoleOutput();
+    auto secondOut = second.get_console_output();
     CPPUNIT_ASSERT(secondOut.size() == 2);
     CPPUNIT_ASSERT(secondOut[0].first == 2);
     CPPUNIT_ASSERT(secondOut[0].second == "msg1");

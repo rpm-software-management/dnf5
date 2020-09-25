@@ -54,7 +54,7 @@ public:
     const std::string &get_rpmdb_version_begin() const noexcept;
     const std::string &get_rpmdb_version_end() const noexcept;
     std::set<std::string> get_runtime_packages() const;
-    std::vector< std::pair< int, std::string > > getConsoleOutput();
+    std::vector< std::pair< int, std::string > > get_console_output();
 
     std::vector< TransactionItemPtr > getItems();
 

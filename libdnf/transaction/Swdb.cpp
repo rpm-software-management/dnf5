@@ -324,12 +324,12 @@ Swdb::setReleasever(std::string value)
 
 
 void
-Swdb::addConsoleOutputLine(int fileDescriptor, std::string line)
+Swdb::add_console_output_line(int file_descriptor, const std::string & line)
 {
     if (!transactionInProgress) {
         throw std::logic_error(_("Not in progress"));
     }
-    transactionInProgress->addConsoleOutputLine(fileDescriptor, line);
+    transactionInProgress->add_console_output_line(file_descriptor, line);
 }
 
 /*

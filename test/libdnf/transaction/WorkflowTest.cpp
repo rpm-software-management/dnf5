@@ -111,6 +111,9 @@ WorkflowTest::testDefaultWorkflow()
         i->save();
     }
 
+    trans.add_console_output_line(1, "line1");
+    trans.add_console_output_line(2, "line2");
+
     // STEP 6
     // mark completed transaction
     trans.finish(TransactionState::DONE);
@@ -156,4 +159,7 @@ WorkflowTest::testDefaultWorkflow()
             }
         }
     }
+
+    auto console_output = trans2.get_console_output();
+    CPPUNIT_ASSERT_EQUAL(2ul, console_output.size());
 }

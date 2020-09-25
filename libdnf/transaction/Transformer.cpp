@@ -305,7 +305,7 @@ Transformer::transformOutput(libdnf::utils::SQLite3 & history, TransformerTransa
     libdnf::utils::SQLite3::Query query(history, sql);
     query.bindv(trans.get_id());
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        trans.addConsoleOutputLine(1, query.get< std::string >("line"));
+        trans.add_console_output_line(1, query.get< std::string >("line"));
     }
 
     sql = R"**(
@@ -323,7 +323,7 @@ Transformer::transformOutput(libdnf::utils::SQLite3 & history, TransformerTransa
     libdnf::utils::SQLite3::Query errorQuery(history, sql);
     errorQuery.bindv(trans.get_id());
     while (errorQuery.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        trans.addConsoleOutputLine(2, errorQuery.get< std::string >("msg"));
+        trans.add_console_output_line(2, errorQuery.get< std::string >("msg"));
     }
 }
 
