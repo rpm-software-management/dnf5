@@ -125,7 +125,6 @@ public:
     /// @param type   type of repo
     Repo(
         const std::string & id,
-        std::unique_ptr<ConfigRepo> && conf,
         Base & base,
         Repo::Type type = Repo::Type::AVAILABLE);
 

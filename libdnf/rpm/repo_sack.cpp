@@ -31,8 +31,7 @@ namespace libdnf::rpm {
 
 RepoWeakPtr RepoSack::new_repo(const std::string & id) {
     // TODO(jrohel): Test repo exists
-    auto repo_config = std::make_unique<ConfigRepo>(base->get_config());
-    auto repo = std::make_unique<Repo>(id, std::move(repo_config), *base, Repo::Type::AVAILABLE);
+    auto repo = std::make_unique<Repo>(id, *base, Repo::Type::AVAILABLE);
     return add_item_with_return(std::move(repo));
 }
 

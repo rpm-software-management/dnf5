@@ -568,10 +568,8 @@ void SolvSack::create_system_repo(bool build_cache) {
     if (pImpl->system_repo) {
         throw LogicError("SolvSack::create_system_repo(): System repo already exists");
     }
-    auto repo_config = std::make_unique<ConfigRepo>(pImpl->base->get_config());
-    repo_config->build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
-    pImpl->system_repo =
-        std::make_unique<Repo>(SYSTEM_REPO_NAME, std::move(repo_config), *pImpl->base, Repo::Type::SYSTEM);
+    pImpl->system_repo = std::make_unique<Repo>(SYSTEM_REPO_NAME, *pImpl->base, Repo::Type::SYSTEM);
+    pImpl->system_repo->get_config()->build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
     pImpl->load_system_repo();
 }
 
@@ -579,9 +577,8 @@ Repo & SolvSack::Impl::get_cmdline_repo() {
     if (cmdline_repo) {
         return *cmdline_repo.get();
     }
-    auto repo_config = std::make_unique<ConfigRepo>(base->get_config());
-    repo_config->build_cache().set(libdnf::Option::Priority::RUNTIME, false);
-    cmdline_repo = std::make_unique<Repo>(CMDLINE_REPO_NAME, std::move(repo_config), *base, Repo::Type::SYSTEM);
+    cmdline_repo = std::make_unique<Repo>(CMDLINE_REPO_NAME, *base, Repo::Type::SYSTEM);
+    cmdline_repo->get_config()->build_cache().set(libdnf::Option::Priority::RUNTIME, false);
 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
         repo_create(pool, CMDLINE_REPO_NAME), &libsolv_repo_free);
@@ -603,9 +600,8 @@ Repo & SolvSack::Impl::get_system_repo(bool build_cache) {
         return *system_repo.get();
     }
 
-    auto repo_config = std::make_unique<ConfigRepo>(base->get_config());
-    repo_config->build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
-    system_repo = std::make_unique<Repo>(SYSTEM_REPO_NAME, std::move(repo_config), *base, Repo::Type::SYSTEM);
+    system_repo = std::make_unique<Repo>(SYSTEM_REPO_NAME, *base, Repo::Type::SYSTEM);
+    system_repo->get_config()->build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
         repo_create(pool, SYSTEM_REPO_NAME), &libsolv_repo_free);

@@ -121,7 +121,7 @@ public:
     static constexpr const char * MD_FILENAME_GROUP = "group";
     static constexpr const char * MD_FILENAME_MODULES = "modules";
 
-    Impl(Repo & owner, std::string id, Type type, std::unique_ptr<ConfigRepo> && conf, Base & base);
+    Impl(Repo & owner, std::string id, Type type, Base & base);
     ~Impl();
 
     bool load();
@@ -161,6 +161,9 @@ public:
     friend class Repo;
     std::string id;
     Type type;
+    // TODO (lhrazky) drop the unique_ptr, it is unnecessary here, but it
+    // somehow makes const methods of this class work even though they call
+    // non-const methods on the config.
     std::unique_ptr<ConfigRepo> conf;
 
     char ** mirrors{nullptr};

@@ -350,10 +350,10 @@ static std::string format_user_pass_string(const std::string & user, const std::
     }
 }
 
-Repo::Impl::Impl(Repo & owner, std::string id, Type type, std::unique_ptr<ConfigRepo> && conf, Base & base)
+Repo::Impl::Impl(Repo & owner, std::string id, Type type, Base & base)
     : id(std::move(id))
     , type(type)
-    , conf(std::move(conf))
+    , conf(std::make_unique<ConfigRepo>(base.get_config()))
     , timestamp(-1)
     , load_metadata_other(false)
     , sync_strategy(SyncStrategy::TRY_CACHE)
@@ -368,7 +368,7 @@ Repo::Impl::~Impl() {
     }
 }
 
-Repo::Repo(const std::string & id, std::unique_ptr<ConfigRepo> && conf, Base & base, Repo::Type type) {
+Repo::Repo(const std::string & id, Base & base, Repo::Type type) {
     if (type == Type::AVAILABLE) {
         auto idx = verify_id(id);
         if (idx >= 0) {
@@ -376,7 +376,7 @@ Repo::Repo(const std::string & id, std::unique_ptr<ConfigRepo> && conf, Base & b
             throw RuntimeError(msg);
         }
     }
-    p_impl.reset(new Impl(*this, id, type, std::move(conf), base));
+    p_impl.reset(new Impl(*this, id, type, base));
 }
 
 Repo::~Repo() = default;
