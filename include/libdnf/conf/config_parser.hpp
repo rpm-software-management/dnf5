@@ -38,7 +38,7 @@ namespace libdnf {
 * 
 * @brief Class for parsing dnf/yum .ini configuration files.
 *
-* ConfigParser is used for parsing files. The class adds support for substitutions.
+* ConfigParser is used for parsing files.
 * User can get both substituded and original parsed values.
 * The parsed items are stored into the PreserveOrderMap.
 * ConfigParser preserve order of items. Comments and empty lines are kept.
@@ -67,16 +67,6 @@ public:
         const char * get_description() const noexcept override { return "Option not found"; }
     };
 
-    /**
-    * @brief Substitute values in text according to the substitutions map
-    *
-    * @param text The text for substitution
-    * @param substitutions Substitution map
-    */
-    static void substitute(std::string & text, const std::map<std::string, std::string> & substitutions);
-    void set_substitutions(const std::map<std::string, std::string> & substitutions);
-    void set_substitutions(std::map<std::string, std::string> && substitutions);
-    const std::map<std::string, std::string> & get_substitutions() const;
     /**
     * @brief Reads/parse one INI file
     *
@@ -137,31 +127,17 @@ public:
     void add_comment_line(const std::string & section, const std::string & comment);
     void add_comment_line(const std::string & section, std::string && comment);
     const std::string & get_value(const std::string & section, const std::string & key) const;
-    std::string get_substituted_value(const std::string & section, const std::string & key) const;
     const std::string & get_header() const noexcept;
     std::string & get_header() noexcept;
     const Container & get_data() const noexcept;
     Container & get_data() noexcept;
 
 private:
-    std::map<std::string, std::string> substitutions;
     Container data;
     int item_number{0};
     std::string header;
     std::map<std::string, std::string> raw_items;
 };
-
-inline void ConfigParser::set_substitutions(const std::map<std::string, std::string> & substitutions) {
-    this->substitutions = substitutions;
-}
-
-inline void ConfigParser::set_substitutions(std::map<std::string, std::string> && substitutions) {
-    this->substitutions = std::move(substitutions);
-}
-
-inline const std::map<std::string, std::string> & ConfigParser::get_substitutions() const {
-    return substitutions;
-}
 
 inline bool ConfigParser::add_section(const std::string & section, const std::string & raw_line) {
     if (data.find(section) != data.end()) {

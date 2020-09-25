@@ -31,16 +31,8 @@ Configuration::Configuration(Session & session) : cfg_main(new libdnf::ConfigMai
 }
 
 void Configuration::read_configuration() {
-    set_substitutions();
     read_main_config();
     read_repo_configs();
-}
-
-void Configuration::set_substitutions() {
-    // TODO(mblaha): use libdnf code to detect arch / basearch / releasever once it is ready
-    substitutions["arch"] = "x86_64";
-    substitutions["basearch"] = "x86_64";
-    substitutions["releasever"] = "32";
 }
 
 std::string Configuration::prepend_install_root(const std::string & path) {
@@ -50,38 +42,23 @@ std::string Configuration::prepend_install_root(const std::string & path) {
 
 void Configuration::read_main_config() {
     auto & logger = session.get_base()->get_logger();
-    // create new main config parser and read the config file
-    std::unique_ptr<libdnf::ConfigParser> main_parser(new libdnf::ConfigParser);
-    main_parser->set_substitutions(substitutions);
     auto main_config_path = prepend_install_root(cfg_main->config_file_path().get_value());
+    auto base = session.get_base();
+
     try {
+        // create new main config parser and read the config file
+        std::unique_ptr<libdnf::ConfigParser> main_parser(new libdnf::ConfigParser);
+
         main_parser->read(main_config_path);
-        const auto & cfg_parser_data = main_parser->get_data();
-        // find the [main] section of the main config file
-        const auto cfg_parser_data_iter = cfg_parser_data.find("main");
-        if (cfg_parser_data_iter != cfg_parser_data.end()) {
-            auto opt_binds = cfg_main->opt_binds();
-            const auto & cfg_parser_main_sect = cfg_parser_data_iter->second;
-            for (const auto & opt : cfg_parser_main_sect) {
-                auto option_key = opt.first;
-                // find binding for the given key
-                const auto opt_binds_iter = opt_binds.find(option_key);
-                if (opt_binds_iter != opt_binds.end()) {
-                    // set config option to value from the file with substituted vars
-                    try {
-                        opt_binds_iter->second.new_string(
-                            libdnf::Option::Priority::MAINCONFIG,
-                            main_parser->get_substituted_value("main", option_key));
-                    } catch (const std::exception & e) {
-                        logger.warning(fmt::format(
-                            "Config error in file \"{}\" section \"[main]\" key \"{}\": {}",
-                            main_config_path,
-                            option_key,
-                            e.what()));
-                    }
-                }
-            }
-        }
+        cfg_main->load_from_parser(
+            *main_parser,
+            "main",
+            base->get_vars(),
+            base->get_logger()
+        );
+
+        base->get_vars().load(cfg_main->installroot().get_value(), cfg_main->varsdir().get_value());
+
         // read repos possibly configured in the main config file
         read_repos(main_parser.get(), main_config_path);
         // store the parser so it can be used for saving the config file later on
@@ -92,39 +69,19 @@ void Configuration::read_main_config() {
 }
 
 void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const std::string & file_path) {
-    auto & logger = session.get_base()->get_logger();
     const auto & cfg_parser_data = repo_parser->get_data();
     for (const auto & cfg_parser_data_iter : cfg_parser_data) {
         if (cfg_parser_data_iter.first != "main") {
             // each section other than [main] is considered a repository
             auto section = cfg_parser_data_iter.first;
-            const auto & section_parser = cfg_parser_data_iter.second;
             std::unique_ptr<libdnf::rpm::ConfigRepo> cfg_repo(new libdnf::rpm::ConfigRepo(*cfg_main));
-            auto opt_binds = cfg_repo->opt_binds();
-            for (const auto & opt : section_parser) {
-                auto option_key = opt.first;
-                // skip the comment lines
-                if (option_key[0] == '#') {
-                    continue;
-                }
-                // find binding for the given key
-                const auto opt_binds_iter = opt_binds.find(option_key);
-                if (opt_binds_iter != opt_binds.end()) {
-                    // configure the repo according the value from config file
-                    try {
-                        opt_binds_iter->second.new_string(
-                            libdnf::Option::Priority::REPOCONFIG,
-                            repo_parser->get_substituted_value(section, option_key));
-                    } catch (const std::exception & e) {
-                        logger.warning(fmt::format(
-                            "Config error in file \"{}\" section \"[{}]\" key \"{}\": {}",
-                            file_path,
-                            section,
-                            option_key,
-                            e.what()));
-                    }
-                }
-            }
+
+            cfg_repo->load_from_parser(
+                *repo_parser,
+                section,
+                session.get_base()->get_vars(),
+                session.get_base()->get_logger()
+            );
             // save configured repo
             std::unique_ptr<RepoInfo> repoinfo(new RepoInfo());
             repoinfo->file_path = std::string(file_path);
@@ -151,7 +108,6 @@ void Configuration::read_repo_configs() {
         for (size_t i = 0; i < glob_result.gl_pathc; ++i) {
             std::unique_ptr<libdnf::ConfigParser> repo_parser(new libdnf::ConfigParser);
             std::string file_path = glob_result.gl_pathv[i];
-            repo_parser->set_substitutions(substitutions);
             try {
                 repo_parser->read(file_path);
             } catch (libdnf::ConfigParser::Exception & e) {

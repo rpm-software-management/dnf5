@@ -26,45 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-void ConfigParser::substitute(std::string & text, const std::map<std::string, std::string> & substitutions) {
-    auto start = text.find_first_of('$');
-    while (start != std::string::npos) {
-        auto variable = start + 1;
-        if (variable >= text.length()) {
-            break;
-        }
-        bool bracket;
-        if (text[variable] == '{') {
-            bracket = true;
-            if (++variable >= text.length()) {
-                break;
-            }
-        } else {
-            bracket = false;
-        }
-        auto it = std::find_if_not(
-            text.begin() + variable, text.end(), [](char c) { return std::isalnum(c) != 0 || c == '_'; });
-        if (bracket && it == text.end()) {
-            break;
-        }
-        auto past_variable = std::distance(text.begin(), it);
-        if (bracket && *it != '}') {
-            start = text.find_first_of('$', past_variable);
-            continue;
-        }
-        auto subst = substitutions.find(text.substr(variable, past_variable - variable));
-        if (subst != substitutions.end()) {
-            if (bracket) {
-                ++past_variable;
-            }
-            text.replace(start, past_variable - start, subst->second);
-            start = text.find_first_of('$', start + subst->second.length());
-        } else {
-            start = text.find_first_of('$', past_variable);
-        }
-    }
-}
-
 static void read(ConfigParser & cfg_parser, IniParser & parser) {
     IniParser::ItemType readed_type;
     while ((readed_type = parser.next()) != IniParser::ItemType::END_OF_INPUT) {
@@ -126,12 +87,6 @@ const std::string & ConfigParser::get_value(const std::string & section, const s
         throw OptionNotFound(key + " in section " + section);
     }
     return key_val->second;
-}
-
-std::string ConfigParser::get_substituted_value(const std::string & section, const std::string & key) const {
-    auto ret = get_value(section, key);
-    substitute(ret, substitutions);
-    return ret;
 }
 
 static void write_key_vals(

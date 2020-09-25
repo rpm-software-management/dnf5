@@ -36,7 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 /// Holds global configuration
-class ConfigMain : public Config {
+class ConfigMain : public Config<Option::Priority::MAINCONFIG> {
 public:
     ConfigMain();
     ~ConfigMain();
@@ -151,18 +151,6 @@ public:
     OptionBool & deltarpm();
     OptionNumber<std::uint32_t> & deltarpm_percentage();
     OptionBool & skip_if_unavailable();
-
-    /// Adds variables from directory
-    /// Additional variables are added from directory. Each file represents one variable.
-    /// The variable name is equal to filename and the value is defined by first line of the file.
-    /// @param varsMap Storage where the variables are added.
-    /// @param dirPath Path to directory.
-    static void add_vars_from_dir(std::map<std::string, std::string> & vars_map, const std::string & dir_path);
-
-    /// Adds variables from environment
-    /// Environment variables DNF[0-9] and DNF_VAR_[A-Za-z0-9_]+ are used if exists. DNF_VAR_ prefix is cut off.
-    /// @param varsMap Storage where the variables are added.
-    static void add_vars_from_env(std::map<std::string, std::string> & vars_map);
 
 private:
     class Impl;

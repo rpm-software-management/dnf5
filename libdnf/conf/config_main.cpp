@@ -24,28 +24,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/const.hpp"
 
-#include <dirent.h>
 #include <fmt/format.h>
 #include <glob.h>
-#include <sys/types.h>
 
 #include <algorithm>
 #include <array>
 #include <cctype>
-#include <cstring>
 #include <fstream>
-#include <istream>
 #include <ostream>
 #include <sstream>
 #include <utility>
-
-#define ASCII_LOWERCASE "abcdefghijklmnopqrstuvwxyz"
-#define ASCII_UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
-#define ASCII_LETTERS   ASCII_LOWERCASE ASCII_UPPERCASE
-#define DIGITS          "0123456789"
-#define REPOID_CHARS    ASCII_LETTERS DIGITS "-_.:"
-
-extern char ** environ;
 
 namespace libdnf {
 
@@ -825,61 +813,6 @@ OptionNumber<std::uint32_t> & ConfigMain::deltarpm_percentage() {
 }
 OptionBool & ConfigMain::skip_if_unavailable() {
     return p_impl->skip_if_unavailable;
-}
-
-static void dir_close(DIR * d) {
-    closedir(d);
-}
-
-void ConfigMain::add_vars_from_dir(std::map<std::string, std::string> & vars_map, const std::string & dir_path) {
-    if (DIR * dir = opendir(dir_path.c_str())) {
-        std::unique_ptr<DIR, decltype(&dir_close)> dir_guard(dir, &dir_close);
-        while (auto ent = readdir(dir)) {
-            auto dname = ent->d_name;
-            if (dname[0] == '.' && (dname[1] == '\0' || (dname[1] == '.' && dname[2] == '\0')))
-                continue;
-
-            auto full_path = dir_path;
-            if (full_path.back() != '/') {
-                full_path += "/";
-            }
-            full_path += dname;
-            std::ifstream in_stream(full_path);
-            if (in_stream.fail()) {
-                // log.warning()
-                continue;
-            }
-            std::string line;
-            std::getline(in_stream, line);
-            if (in_stream.fail()) {
-                // log.warning()
-                continue;
-            }
-            vars_map[dname] = std::move(line);
-        }
-    }
-}
-
-void ConfigMain::add_vars_from_env(std::map<std::string, std::string> & vars_map) {
-    if (!environ) {
-        return;
-    }
-
-    for (const char * const * var_ptr = environ; *var_ptr; ++var_ptr) {
-        auto var = *var_ptr;
-        if (auto eql_ptr = strchr(var, '=')) {
-            auto eql_idx = eql_ptr - var;
-            if (eql_idx == 4 && strncmp("DNF", var, 3) == 0 && isdigit(var[3]) != 0) {
-                // DNF[0-9]
-                vars_map[std::string(var, static_cast<size_t>(eql_idx))] = eql_ptr + 1;
-            } else if (
-                // DNF_VAR_[A-Za-z0-9_]+ , DNF_VAR_ prefix is cut off
-                eql_idx > 8 && strncmp("DNF_VAR_", var, 8) == 0 &&
-                static_cast<int>(strspn(var + 8, ASCII_LETTERS DIGITS "_")) == eql_idx - 8) {
-                vars_map[std::string(var + 8, static_cast<size_t>(eql_idx - 8))] = eql_ptr + 1;
-            }
-        }
-    }
 }
 
 }  // namespace libdnf

@@ -196,18 +196,10 @@ int main(int argc, char * argv[]) {
     log_router.swap_logger(logger, 0);
     dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
 
-    // detect values of basic variables (arch, basearch, and releasever) for substitutions
-    auto arch = microdnf::detect_arch();
-    auto & variables = base.get_variables();
-    variables["arch"] = arch;
-    variables["basearch"] = microdnf::get_base_arch(arch.c_str());
-    variables["releasever"] = microdnf::detect_release(base.get_config().installroot().get_value());
-
-    // load additional variables from environment and directories
-    libdnf::ConfigMain::add_vars_from_env(variables);
-    for (auto & dir : base.get_config().varsdir().get_value()) {
-        libdnf::ConfigMain::add_vars_from_dir(variables, dir);
-    }
+    base.get_vars().load(
+        base.get_config().installroot().get_value(),
+        base.get_config().varsdir().get_value()
+    );
 
     // Preconfigure selected command
     context.selected_command->pre_configure(context);

@@ -76,3 +76,5 @@
 %include "libdnf/conf/config_main.hpp"
 
 %include "libdnf/conf/config_parser.hpp"
+
+%include "libdnf/conf/vars.hpp"

@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/logger/log_router.hpp"
 #include "libdnf/rpm/repo_sack.hpp"
 #include "libdnf/rpm/solv_sack.hpp"
+#include "libdnf/conf/vars.hpp"
 
 #include <map>
 
@@ -44,7 +45,7 @@ public:
     rpm::SolvSack & get_rpm_solv_sack() { return rpm_solv_sack; }
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
-    std::map<std::string, std::string> & get_variables() { return variables; }
+    Vars & get_vars() { return vars; }
 
 private:
     //TODO(jrohel): Make public?
@@ -65,7 +66,7 @@ private:
     LogRouter log_router;
     rpm::RepoSack rpm_repo_sack{*this};
     rpm::SolvSack rpm_solv_sack{*this};
-    std::map<std::string, std::string> variables;
+    Vars vars;
 };
 
 

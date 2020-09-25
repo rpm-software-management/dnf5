@@ -57,7 +57,6 @@ private:
     Session & session;
 
     void read_repos(const libdnf::ConfigParser * repo_parser, const std::string & file_path);
-    void set_substitutions();
     void read_main_config();
     void read_repo_configs();
     std::string prepend_install_root(const std::string & path);

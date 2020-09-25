@@ -30,41 +30,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-static void load_config_from_parser(
-    Config & conf, const ConfigParser & parser, const std::string & section, Logger & log) {
-    const auto & cfg_parser_data = parser.get_data();
-    auto cfg_parser_data_iter = cfg_parser_data.find(section);
-    if (cfg_parser_data_iter != cfg_parser_data.end()) {
-        auto opt_binds = conf.opt_binds();
-        const auto & cfg_parser_main_sect = cfg_parser_data_iter->second;
-        for (const auto & opt : cfg_parser_main_sect) {
-            auto opt_binds_iter = opt_binds.find(opt.first);
-            if (opt_binds_iter != opt_binds.end()) {
-                try {
-                    opt_binds_iter->second.new_string(libdnf::Option::Priority::MAINCONFIG, opt.second);
-                } catch (const Option::Exception & ex) {
-                    auto msg = fmt::format(
-                        R"**(Config error in section "{}" key "{}": {}: {})**",
-                        section,
-                        opt.first,
-                        ex.get_description(),
-                        ex.what());
-                    log.warning(msg);
-                }
-            }
-        }
-    }
-}
-
-static void load_config_from_file_path(
-    Config & conf, const std::string & file, const std::string & section, Logger & log) {
-    ConfigParser parser;
-    parser.read(file);
-    load_config_from_parser(conf, parser, section, log);
-}
-
 void Base::load_config_from_file(const std::string & path) {
-    load_config_from_file_path(config, path, "main", log_router);
+    ConfigParser parser;
+    parser.read(path);
+    config.load_from_parser(parser, "main", vars, get_logger());
 }
 
 void Base::load_config_from_file() {
@@ -81,7 +50,7 @@ void Base::load_config_from_dir(const std::string & dir_path) {
     }
     std::sort(paths.begin(), paths.end());
     for (auto & path : paths) {
-        load_config_from_file_path(config, path, "main", get_logger());
+        load_config_from_file(path);
     }
 }
 

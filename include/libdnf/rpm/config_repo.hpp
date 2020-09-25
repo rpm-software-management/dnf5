@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 
 /// Holds repo configuration options. Default values of some options are inherited from ConfigMain.
-class ConfigRepo : public Config {
+class ConfigRepo : public Config<Option::Priority::REPOCONFIG> {
 public:
     explicit ConfigRepo(ConfigMain & master_config);
     ~ConfigRepo();

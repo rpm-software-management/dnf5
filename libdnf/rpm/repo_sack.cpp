@@ -36,35 +36,6 @@ RepoWeakPtr RepoSack::new_repo(const std::string & id) {
     return add_item_with_return(std::move(repo));
 }
 
-static void load_config_from_parser(
-    Config & conf, const ConfigParser & parser, const std::string & section, Base & base) {
-    auto & logger = base.get_logger();
-    const auto & cfg_parser_data = parser.get_data();
-    auto cfg_parser_data_iter = cfg_parser_data.find(section);
-    if (cfg_parser_data_iter != cfg_parser_data.end()) {
-        auto opt_binds = conf.opt_binds();
-        const auto & cfg_parser_sect = cfg_parser_data_iter->second;
-        for (const auto & opt : cfg_parser_sect) {
-            auto opt_binds_iter = opt_binds.find(opt.first);
-            if (opt_binds_iter != opt_binds.end()) {
-                try {
-                    auto value = opt.second;
-                    parser.substitute(value, base.get_variables());
-                    opt_binds_iter->second.new_string(Option::Priority::REPOCONFIG, value);
-                } catch (const Option::Exception & ex) {
-                    auto msg = fmt::format(
-                        R"**(Config error in section "{}" key "{}": {}: {})**",
-                        section,
-                        opt.first,
-                        ex.get_description(),
-                        ex.what());
-                    logger.warning(msg);
-                }
-            }
-        }
-    }
-}
-
 void RepoSack::new_repos_from_file(const std::string & path) {
     auto & logger = base->get_logger();
     ConfigParser parser;
@@ -75,8 +46,7 @@ void RepoSack::new_repos_from_file(const std::string & path) {
         if (section == "main") {
             continue;
         }
-        auto repo_id = section;
-        parser.substitute(repo_id, base->get_variables());
+        auto repo_id = base->get_vars().substitute(section);
 
         logger.debug(fmt::format(
             R"**(Start of loading configuration of repository "{}" from file "{}" section "{}")**",
@@ -86,38 +56,18 @@ void RepoSack::new_repos_from_file(const std::string & path) {
 
         auto bad_char_idx = Repo::verify_id(repo_id);
         if (bad_char_idx >= 0) {
-            bool skip_if_unavailable;
-            auto key_val = cfg_parser_data_iter.second.find("skip_if_unavailable");
-            if (key_val != cfg_parser_data_iter.second.end()) {
-                auto value = key_val->second;
-                parser.substitute(value, base->get_variables());
-                skip_if_unavailable = OptionBool(false).from_string(key_val->second);
-            } else {
-                skip_if_unavailable = base->get_config().skip_if_unavailable().get_value();
-            }
-            if (skip_if_unavailable) {
-                auto msg = fmt::format(
-                    R"**(Skipping repository with bad id "{}" section "{}", char = {} at pos {})**",
-                    repo_id,
-                    section,
-                    repo_id[bad_char_idx],
-                    bad_char_idx + 1);
-                logger.warning(msg);
-                continue;
-            } else {
-                auto msg = fmt::format(
-                    R"**(Bad id for repo "{}" section "{}", char = {} at pos {})**",
-                    repo_id,
-                    section,
-                    repo_id[bad_char_idx],
-                    bad_char_idx + 1);
-                throw RuntimeError(msg);
-            }
+            auto msg = fmt::format(
+                R"**(Bad id for repo "{}" section "{}", char = {} at pos {})**",
+                repo_id,
+                section,
+                repo_id[bad_char_idx],
+                bad_char_idx + 1);
+            throw RuntimeError(msg);
         }
 
         auto repo = new_repo(repo_id);
         auto repo_cfg = repo->get_config();
-        load_config_from_parser(*repo_cfg, parser, section, *base);
+        repo_cfg->load_from_parser(parser, section, base->get_vars(), base->get_logger());
         logger.trace(fmt::format(R"**(Loading configuration of repository "{}" from file "{}" done)**", repo_id, path));
 
         if (repo_cfg->name().get_priority() == Option::Priority::DEFAULT) {
