@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/package_set.hpp"
 
+#include <cppunit/extensions/HelperMacros.h>
+
 #include <iterator>
 #include <vector>
 
@@ -61,13 +63,7 @@ namespace CPPUNIT_NS {
 
 
 /// Converts ReldepList to a vector of strings for easy assertions.
-std::vector<std::string> to_vector(const libdnf::rpm::ReldepList & rdl) {
-    std::vector<std::string> res;
-    for (int i = 0; i < rdl.size(); ++i) {
-        res.emplace_back(rdl.get(i).to_string());
-    }
-    return res;
-}
+std::vector<std::string> to_vector(const libdnf::rpm::ReldepList & rdl);
 
 
 #endif  // TEST_LIBDNF_UTILS_HPP
