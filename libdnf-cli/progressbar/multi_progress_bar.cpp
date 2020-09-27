@@ -148,10 +148,6 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         ticks += bar->get_ticks();
     }
 
-    if (mbar.bars_todo.empty()) {
-        // all bars have finished, set the "Total" bar as finished too according to their states
-        mbar.total.set_state(ProgressBarState::SUCCESS);
-    }
 
     if (tty::is_interactive() || mbar.bars_todo.empty()) {
         // print divider
@@ -164,6 +160,11 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
 
         mbar.total.set_total_ticks(total_ticks);
         mbar.total.set_ticks(ticks);
+
+        if (mbar.bars_todo.empty()) {
+            // all bars have finished, set the "Total" bar as finished too according to their states
+            mbar.total.set_state(ProgressBarState::SUCCESS);
+        }
 
         stream << mbar.total;
         mbar.printed_lines += 2;
