@@ -314,6 +314,7 @@ public:
                 progress_bar->set_ticks(0);
                 progress_bar->set_total_ticks(0);
                 progress_bar->add_message(libdnf::cli::progressbar::MessageType::SUCCESS, msg);
+                progress_bar->start();
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
             case TransferStatus::ERROR:
