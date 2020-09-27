@@ -100,7 +100,8 @@ void ProgressBar::update() {
     }
 
     // compute elapsed seconds
-    elapsed_seconds = std::chrono::duration_cast<std::chrono::seconds>(delta).count();
+    // round the result to display 00m00s less frequently
+    elapsed_seconds = std::chrono::round<std::chrono::seconds>(delta).count();
 
     // compute remaining time
     if (total_ticks >= 0) {
