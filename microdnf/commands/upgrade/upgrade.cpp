@@ -46,16 +46,16 @@ void CmdUpgrade::set_argument_parser(Context & ctx) {
     auto upgrade = ctx.arg_parser.add_new_command("upgrade");
     upgrade->set_short_description("upgrade a package or packages on your system");
     upgrade->set_description("");
-    upgrade->named_args_help_header = "Optional arguments:";
-    upgrade->positional_args_help_header = "Positional arguments:";
-    upgrade->parse_hook = [this, &ctx](
+    upgrade->set_named_args_help_header("Optional arguments:");
+    upgrade->set_positional_args_help_header("Positional arguments:");
+    upgrade->set_parse_hook_func([this, &ctx](
                                 [[maybe_unused]] ArgumentParser::Argument * arg,
                                 [[maybe_unused]] const char * option,
                                 [[maybe_unused]] int argc,
                                 [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
-    };
+    });
 
     upgrade->add_positional_arg(keys);
 

@@ -68,16 +68,16 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
     auto repolist = ctx.arg_parser.add_new_command("repolist");
     repolist->set_short_description("display the configured software repositories");
     repolist->set_description("");
-    repolist->named_args_help_header = "Optional arguments:";
-    repolist->positional_args_help_header = "Positional arguments:";
-    repolist->parse_hook = [this, &ctx](
+    repolist->set_named_args_help_header("Optional arguments:");
+    repolist->set_positional_args_help_header("Positional arguments:");
+    repolist->set_parse_hook_func([this, &ctx](
                                [[maybe_unused]] ArgumentParser::Argument * arg,
                                [[maybe_unused]] const char * option,
                                [[maybe_unused]] int argc,
                                [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
-    };
+    });
 
     repolist->add_named_arg(all);
     repolist->add_named_arg(enabled);
@@ -89,9 +89,9 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
     auto repoinfo = ctx.arg_parser.add_new_command("repoinfo");
     repoinfo->set_short_description("display the configured software repositories");
     repoinfo->set_description("");
-    repoinfo->named_args_help_header = "Optional arguments:";
-    repoinfo->positional_args_help_header = "Positional arguments:";
-    repoinfo->parse_hook = [this, &ctx](
+    repoinfo->set_named_args_help_header("Optional arguments:");
+    repoinfo->set_positional_args_help_header("Positional arguments:");
+    repoinfo->set_parse_hook_func([this, &ctx](
                                [[maybe_unused]] ArgumentParser::Argument * arg,
                                [[maybe_unused]] const char * option,
                                [[maybe_unused]] int argc,
@@ -100,7 +100,7 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
         throw std::logic_error("Not implemented");
         ctx.select_command(this);
         return true;
-    };
+    });
 
     repoinfo->add_named_arg(all);
     repoinfo->add_named_arg(enabled);

@@ -44,16 +44,16 @@ void CmdRemove::set_argument_parser(Context & ctx) {
     auto remove = ctx.arg_parser.add_new_command("remove");
     remove->set_short_description("remove a package or packages from your system");
     remove->set_description("");
-    remove->named_args_help_header = "Optional arguments:";
-    remove->positional_args_help_header = "Positional arguments:";
-    remove->parse_hook = [this, &ctx](
+    remove->set_named_args_help_header("Optional arguments:");
+    remove->set_positional_args_help_header("Positional arguments:");
+    remove->set_parse_hook_func([this, &ctx](
                                 [[maybe_unused]] ArgumentParser::Argument * arg,
                                 [[maybe_unused]] const char * option,
                                 [[maybe_unused]] int argc,
                                 [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
-    };
+    });
 
     remove->add_positional_arg(keys);
 

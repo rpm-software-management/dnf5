@@ -48,31 +48,31 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     auto microdnf = ctx.arg_parser.add_new_command("microdnf");
     microdnf->set_short_description("Utility for packages maintaining");
     microdnf->set_description("Microdnf is a program for maintaining packages.");
-    microdnf->commands_help_header = "List of commands:";
-    microdnf->named_args_help_header = "Global arguments:";
+    microdnf->set_commands_help_header("List of commands:");
+    microdnf->set_named_args_help_header("Global arguments:");
     auto help = ctx.arg_parser.add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
     help->set_short_description("Print help");
-    help->parse_hook = [microdnf](
+    help->set_parse_hook_func([microdnf](
                                [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                [[maybe_unused]] const char * option,
                                [[maybe_unused]] const char * value) {
         microdnf->help();
-        return true;};
+        return true;});
     microdnf->add_named_arg(help);
 
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_arg(true);
-    setopt->arg_value_help = "KEY=VALUE";
+    setopt->set_arg_value_help("KEY=VALUE");
     setopt->set_short_description("set arbitrary config and repo options");
     setopt->set_description(R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
               <option>.  Values  for configuration options like excludepkgs, includepkgs, installonlypkgs and tsflags are appended to the original value,
               they do not override it. However, specifying an empty value (e.g. --setopt=tsflags=) will clear the option.)**");
 
     // --setopt option support
-    setopt->parse_hook = [&ctx](
+    setopt->set_parse_hook_func([&ctx](
                                [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                [[maybe_unused]] const char * option,
                                const char * value) {
@@ -97,7 +97,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
                 throw std::runtime_error(std::string("setopt: \"") + value + "\": " + ex.what());
             }
         }
-        return true;};
+        return true;});
     microdnf->add_named_arg(setopt);
 
 

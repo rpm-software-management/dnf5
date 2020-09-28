@@ -48,16 +48,16 @@ void CmdInstall::set_argument_parser(Context & ctx) {
     auto install = ctx.arg_parser.add_new_command("install");
     install->set_short_description("install a package or packages on your system");
     install->set_description("");
-    install->named_args_help_header = "Optional arguments:";
-    install->positional_args_help_header = "Positional arguments:";
-    install->parse_hook = [this, &ctx](
+    install->set_named_args_help_header("Optional arguments:");
+    install->set_positional_args_help_header("Positional arguments:");
+    install->set_parse_hook_func([this, &ctx](
                                 [[maybe_unused]] ArgumentParser::Argument * arg,
                                 [[maybe_unused]] const char * option,
                                 [[maybe_unused]] int argc,
                                 [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
-    };
+    });
 
     install->add_positional_arg(keys);
 

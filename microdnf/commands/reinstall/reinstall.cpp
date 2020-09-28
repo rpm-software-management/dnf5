@@ -46,16 +46,16 @@ void CmdReinstall::set_argument_parser(Context & ctx) {
     auto reinstall = ctx.arg_parser.add_new_command("reinstall");
     reinstall->set_short_description("reinstall a package or packages");
     reinstall->set_description("");
-    reinstall->named_args_help_header = "Optional arguments:";
-    reinstall->positional_args_help_header = "Positional arguments:";
-    reinstall->parse_hook = [this, &ctx](
+    reinstall->set_named_args_help_header("Optional arguments:");
+    reinstall->set_positional_args_help_header("Positional arguments:");
+    reinstall->set_parse_hook_func([this, &ctx](
                                 [[maybe_unused]] ArgumentParser::Argument * arg,
                                 [[maybe_unused]] const char * option,
                                 [[maybe_unused]] int argc,
                                 [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
-    };
+    });
 
     reinstall->add_positional_arg(keys);
 

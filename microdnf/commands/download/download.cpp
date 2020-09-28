@@ -46,16 +46,16 @@ void CmdDownload::set_argument_parser(Context & ctx) {
     auto download = ctx.arg_parser.add_new_command("download");
     download->set_short_description("download packages to current directory");
     download->set_description("");
-    download->named_args_help_header = "Optional arguments:";
-    download->positional_args_help_header = "Positional arguments:";
-    download->parse_hook = [this, &ctx](
+    download->set_named_args_help_header("Optional arguments:");
+    download->set_positional_args_help_header("Positional arguments:");
+    download->set_parse_hook_func([this, &ctx](
                                [[maybe_unused]] ArgumentParser::Argument * arg,
                                [[maybe_unused]] const char * option,
                                [[maybe_unused]] int argc,
                                [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
-    };
+    });
 
     download->add_positional_arg(keys);
 

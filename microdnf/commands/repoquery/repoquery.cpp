@@ -88,16 +88,16 @@ void CmdRepoquery::set_argument_parser(Context & ctx) {
     auto repoquery = ctx.arg_parser.add_new_command("repoquery");
     repoquery->set_short_description("search for packages matching keyword");
     repoquery->set_description("");
-    repoquery->named_args_help_header = "Optional arguments:";
-    repoquery->positional_args_help_header = "Positional arguments:";
-    repoquery->parse_hook = [this, &ctx](
+    repoquery->set_named_args_help_header("Optional arguments:");
+    repoquery->set_positional_args_help_header("Positional arguments:");
+    repoquery->set_parse_hook_func([this, &ctx](
                                 [[maybe_unused]] ArgumentParser::Argument * arg,
                                 [[maybe_unused]] const char * option,
                                 [[maybe_unused]] int argc,
                                 [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
-    };
+    });
 
     repoquery->add_named_arg(available);
     repoquery->add_named_arg(installed);
