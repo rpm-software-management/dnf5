@@ -29,7 +29,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace microdnf {
 
-ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() const {
+ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() const noexcept {
     if (conflict_args) {
         for (auto arg : *conflict_args) {
             if (arg != this && arg->get_parse_count() > 0) {

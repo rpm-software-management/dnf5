@@ -34,22 +34,25 @@ public:
     class Argument {
     public:
         explicit Argument(std::string name) : name(std::move(name)) {}
+        Argument(const Argument &) = delete;
+        Argument(Argument &&) = delete;
+        Argument & operator=(const Argument &) = delete;
+        Argument & operator=(Argument &&) = delete;
         virtual ~Argument() = default;
-        void set_description(const std::string & descr) { description = descr; }
-        void set_description(std::string && descr) noexcept { description = std::move(descr); }
-        void set_short_description(const std::string & descr) { short_description = descr; }
-        void set_short_description(std::string && descr) noexcept { short_description = std::move(descr); }
+        void set_description(std::string descr) noexcept { description = std::move(descr); }
+        void set_short_description(std::string descr) noexcept { short_description = std::move(descr); }
         void set_conflict_arguments(std::vector<Argument *> * args) noexcept { conflict_args = args; }
         const std::string & get_name() const noexcept { return name; }
         const std::string & get_description() const { return description; }
         const std::string & get_short_description() const { return short_description; }
         int get_parse_count() const noexcept { return parse_count; }
         void reset_parse_count() noexcept { parse_count = 0; }
-        Argument * get_conflict_argument() const;
+        Argument * get_conflict_argument() const noexcept;
         static std::string get_conflict_arg_msg(Argument * conflict_arg);
         virtual void help() const noexcept {}
 
-    protected:
+    private:
+        friend class ArgumentParser;
         std::string name;
         std::string description;
         std::string short_description;
@@ -63,6 +66,8 @@ public:
         constexpr static int UNLIMITED{-1};
         constexpr static int UNLIMITED_BUT_ONE{-2};
 
+        using ParseHookFunc = std::function<bool(PositionalArg * arg, int argc, const char * const argv[])>;
+
         PositionalArg(const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values);
         PositionalArg(
             const std::string & name,
@@ -73,7 +78,7 @@ public:
         void set_store_value(bool enable) noexcept { store_value = enable; }
         bool get_store_value() const noexcept { return store_value; }
         std::vector<std::unique_ptr<libdnf::Option>> * get_linked_values() noexcept { return values; }
-        std::function<bool(PositionalArg * arg, int argc, const char * const argv[])> parse_hook;
+        void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
 
         // returns number of consumed arguments
         int parse(const char * option, int argc, const char * const argv[]);
@@ -83,46 +88,53 @@ public:
         libdnf::Option * init_value;
         std::vector<std::unique_ptr<libdnf::Option>> * values;
         bool store_value{true};
+        ParseHookFunc parse_hook;
     };
 
     class NamedArg : public Argument {
     public:
+        using ParseHookFunc = std::function<bool(NamedArg * arg, const char * option, const char * value)>;
+
         explicit NamedArg(const std::string & name) : Argument(name) {}
-        void set_long_name(const std::string & long_name) { this->long_name = long_name; }
-        void set_long_name(std::string && long_name) noexcept { this->long_name = std::move(long_name); }
+        void set_long_name(std::string long_name) noexcept { this->long_name = std::move(long_name); }
         void set_short_name(char short_name) { this->short_name = short_name; }
         void set_has_arg(bool has_arg) { this->has_arg = has_arg; }
         void link_value(libdnf::Option * value) { this->value = value; }
-        void set_const_value(const std::string & const_value) { const_val = const_value; }
-        void set_const_value(std::string && const_value) noexcept { const_val = std::move(const_value); }
+        void set_const_value(std::string const_value) noexcept { const_val = std::move(const_value); }
         const std::string & get_long_name() const noexcept { return long_name; }
         char get_short_name() const noexcept { return short_name; }
-        bool get_has_arg() { return has_arg; }
+        bool get_has_arg() const noexcept { return has_arg; }
         const std::string & get_const_value() const noexcept { return const_val; }
         libdnf::Option * get_linked_value() noexcept { return value; }
         const libdnf::Option * get_linked_value() const noexcept { return value; }
         void set_store_value(bool enable) noexcept { store_value = enable; }
         bool get_store_value() const noexcept { return store_value; }
-        std::function<bool(NamedArg * arg, const char * option, const char * value)> parse_hook;
+        void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
 
         // returns number of consumed arguments
         int parse_long(const char * option, int argc, const char * const argv[]);
         // returns number of consumed arguments
         int parse_short(const char * option, int argc, const char * const argv[]);
 
-        std::string arg_value_help;
+        void set_arg_value_help(std::string text) { arg_value_help = std::move(text); }
+        const std::string & get_arg_value_help() const noexcept { return arg_value_help; }
 
     private:
+        friend class ArgumentParser;
         std::string long_name;
         char short_name{'\0'};
         bool has_arg{false};
         std::string const_val;  // used if params == 0
         libdnf::Option * value{nullptr};
         bool store_value{true};
+        ParseHookFunc parse_hook;
+        std::string arg_value_help;
     };
 
     class Command : public Argument {
     public:
+        using ParseHookFunc = std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])>;
+
         explicit Command(const std::string & name) : Argument(name) {}
         void parse(const char * option, int argc, const char * const argv[]);
         void add_command(Command * arg) { cmds.push_back(arg); }
@@ -134,17 +146,24 @@ public:
         Command & get_command(const std::string & name) const;
         NamedArg & get_named_arg(const std::string & name) const;
         PositionalArg & get_positional_arg(const std::string & name) const;
-        std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])> parse_hook;
+        void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
         void help() const noexcept override;
-
-        std::string commands_help_header;
-        std::string named_args_help_header;
-        std::string positional_args_help_header;
+        void set_commands_help_header(std::string text) noexcept { commands_help_header = std::move(text);}
+        void set_named_args_help_header(std::string text) noexcept { named_args_help_header = std::move(text);}
+        void set_positional_args_help_header(std::string text) noexcept { positional_args_help_header = std::move(text);}
+        const std::string & get_commands_help_header() const noexcept { return commands_help_header;}
+        const std::string & get_named_args_help_header() const noexcept { return named_args_help_header;}
+        const std::string & get_positional_args_help_header() const noexcept { return positional_args_help_header;}
 
     private:
+        friend class ArgumentParser;
         std::vector<Command *> cmds;
         std::vector<NamedArg *> named_args;
         std::vector<PositionalArg *> pos_args;
+        ParseHookFunc parse_hook;
+        std::string commands_help_header;
+        std::string named_args_help_header;
+        std::string positional_args_help_header;
     };
 
     Command * add_new_command(const std::string & name);
@@ -162,8 +181,8 @@ public:
     std::vector<std::unique_ptr<libdnf::Option>> * add_values(
         std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> && values);
 
-    void set_root_command(Command * command);
-    Command * get_root_command();
+    void set_root_command(Command * command) noexcept { root_command = command; }
+    Command * get_root_command() noexcept { return root_command; }
     void parse(int argc, const char * const argv[]);
     void reset_parse_count();
 
@@ -231,19 +250,10 @@ inline std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_new_va
 }
 
 inline std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_values(
-    std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> && src) {
-    auto ptr = src.get();
-    values.push_back(std::move(src));
+    std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> && values) {
+    auto ptr = values.get();
+    this->values.push_back(std::move(values));
     return ptr;
-}
-
-
-inline void ArgumentParser::set_root_command(Command * command) {
-    root_command = command;
-}
-
-inline ArgumentParser::Command * ArgumentParser::get_root_command() {
-    return root_command;
 }
 
 }  // namespace microdnf
