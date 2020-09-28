@@ -48,7 +48,7 @@ public:
         int get_parse_count() const noexcept { return parse_count; }
         void reset_parse_count() noexcept { parse_count = 0; }
         Argument * get_conflict_argument() const noexcept;
-        static std::string get_conflict_arg_msg(Argument * conflict_arg);
+        static std::string get_conflict_arg_msg(const Argument * conflict_arg);
         virtual void help() const noexcept {}
 
     private:
@@ -148,12 +148,14 @@ public:
         PositionalArg & get_positional_arg(const std::string & name) const;
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
         void help() const noexcept override;
-        void set_commands_help_header(std::string text) noexcept { commands_help_header = std::move(text);}
-        void set_named_args_help_header(std::string text) noexcept { named_args_help_header = std::move(text);}
-        void set_positional_args_help_header(std::string text) noexcept { positional_args_help_header = std::move(text);}
-        const std::string & get_commands_help_header() const noexcept { return commands_help_header;}
-        const std::string & get_named_args_help_header() const noexcept { return named_args_help_header;}
-        const std::string & get_positional_args_help_header() const noexcept { return positional_args_help_header;}
+        void set_commands_help_header(std::string text) noexcept { commands_help_header = std::move(text); }
+        void set_named_args_help_header(std::string text) noexcept { named_args_help_header = std::move(text); }
+        void set_positional_args_help_header(std::string text) noexcept {
+            positional_args_help_header = std::move(text);
+        }
+        const std::string & get_commands_help_header() const noexcept { return commands_help_header; }
+        const std::string & get_named_args_help_header() const noexcept { return named_args_help_header; }
+        const std::string & get_positional_args_help_header() const noexcept { return positional_args_help_header; }
 
     private:
         friend class ArgumentParser;
@@ -198,14 +200,14 @@ private:
 
 inline ArgumentParser::Command * ArgumentParser::add_new_command(const std::string & name) {
     std::unique_ptr<Command> arg(new Command(name));
-    auto ptr = arg.get();
+    auto * ptr = arg.get();
     cmds.push_back(std::move(arg));
     return ptr;
 }
 
 inline ArgumentParser::NamedArg * ArgumentParser::add_new_named_arg(const std::string & name) {
     std::unique_ptr<NamedArg> arg(new NamedArg(name));
-    auto ptr = arg.get();
+    auto * ptr = arg.get();
     named_args.push_back(std::move(arg));
     return ptr;
 }
@@ -213,7 +215,7 @@ inline ArgumentParser::NamedArg * ArgumentParser::add_new_named_arg(const std::s
 inline ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
     const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values) {
     std::unique_ptr<PositionalArg> arg(new PositionalArg(name, values));
-    auto ptr = arg.get();
+    auto * ptr = arg.get();
     pos_args.push_back(std::move(arg));
     return ptr;
 }
@@ -224,34 +226,34 @@ inline ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
     libdnf::Option * init_value,
     std::vector<std::unique_ptr<libdnf::Option>> * values) {
     std::unique_ptr<PositionalArg> arg(new PositionalArg(name, nargs, init_value, values));
-    auto ptr = arg.get();
+    auto * ptr = arg.get();
     pos_args.push_back(std::move(arg));
     return ptr;
 }
 
 inline std::vector<ArgumentParser::Argument *> * ArgumentParser::add_conflict_args_group(
     std::unique_ptr<std::vector<Argument *>> && conflict_args_group) {
-    auto ptr = conflict_args_group.get();
+    auto * ptr = conflict_args_group.get();
     conflict_args_groups.push_back(std::move(conflict_args_group));
     return ptr;
 }
 
 inline libdnf::Option * ArgumentParser::add_init_value(std::unique_ptr<libdnf::Option> && src) {
-    auto ptr = src.get();
+    auto * ptr = src.get();
     values_init.push_back(std::move(src));
     return ptr;
 }
 
 inline std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_new_values() {
     std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> tmp(new std::vector<std::unique_ptr<libdnf::Option>>);
-    auto ptr = tmp.get();
+    auto * ptr = tmp.get();
     values.push_back(std::move(tmp));
     return ptr;
 }
 
 inline std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_values(
     std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> && values) {
-    auto ptr = values.get();
+    auto * ptr = values.get();
     this->values.push_back(std::move(values));
     return ptr;
 }

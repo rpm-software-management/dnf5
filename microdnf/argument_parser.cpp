@@ -31,7 +31,7 @@ namespace microdnf {
 
 ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() const noexcept {
     if (conflict_args) {
-        for (auto arg : *conflict_args) {
+        for (auto * arg : *conflict_args) {
             if (arg != this && arg->get_parse_count() > 0) {
                 return arg;
             }
@@ -40,9 +40,9 @@ ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() con
     return nullptr;
 }
 
-std::string ArgumentParser::Argument::get_conflict_arg_msg(Argument * conflict_arg) {
+std::string ArgumentParser::Argument::get_conflict_arg_msg(const Argument * conflict_arg) {
     std::string msg;
-    if (auto named_arg = dynamic_cast<NamedArg *>(conflict_arg)) {
+    if (const auto * named_arg = dynamic_cast<const NamedArg *>(conflict_arg)) {
         std::string conflict;
         if (!named_arg->get_long_name().empty()) {
             conflict = "\"--" + named_arg->get_long_name() + "\"";
@@ -54,7 +54,7 @@ std::string ArgumentParser::Argument::get_conflict_arg_msg(Argument * conflict_a
             conflict = std::string("\"-") + named_arg->get_short_name() + "\"";
         }
         msg = fmt::format("not allowed with argument {}", conflict);
-    } else if (dynamic_cast<Command *>(conflict_arg)) {
+    } else if (dynamic_cast<const Command *>(conflict_arg)) {
         msg = fmt::format("not allowed with command {}", conflict_arg->name);
     } else {
         msg = fmt::format("not allowed with positional argument {}", conflict_arg->name);
@@ -88,7 +88,7 @@ ArgumentParser::PositionalArg::PositionalArg(
 }
 
 int ArgumentParser::PositionalArg::parse(const char * option, int argc, const char * const argv[]) {
-    if (auto arg = get_conflict_argument()) {
+    if (const auto * arg = get_conflict_argument()) {
         auto conflict = get_conflict_arg_msg(arg);
         auto msg = fmt::format("positional argument \"{}\": {}", option, conflict);
         throw std::runtime_error(msg);
@@ -96,7 +96,7 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
     if (argc < nargs) {
         throw std::runtime_error("Not enough parameters");
     }
-    size_t count = nargs > 0 ? nargs : (nargs == OPTIONAL ? 1 : argc);
+    auto count = static_cast<size_t>(nargs > 0 ? nargs : (nargs == OPTIONAL ? 1 : argc));
     if (store_value) {
         for (size_t i = 0; i < count; ++i) {
             if (values->size() <= i) {
@@ -113,14 +113,14 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
 }
 
 int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const char * const argv[]) {
-    if (auto arg = get_conflict_argument()) {
+    if (const auto * arg = get_conflict_argument()) {
         auto conflict = get_conflict_arg_msg(arg);
         auto msg = fmt::format("argument \"--{}\": {}", option, conflict);
         throw std::runtime_error(msg);
     }
     const char * arg_value;
     int consumed_args;
-    auto assign_ptr = strchr(option, '=');
+    const auto * assign_ptr = strchr(option, '=');
     if (has_arg) {
         if (assign_ptr) {
             arg_value = assign_ptr + 1;
@@ -151,7 +151,7 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
 
 
 int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const char * const argv[]) {
-    if (auto arg = get_conflict_argument()) {
+    if (const auto * arg = get_conflict_argument()) {
         auto conflict = get_conflict_arg_msg(arg);
         auto msg = fmt::format("argument \"-{}\": {:.1}", option, conflict);
         throw std::runtime_error(msg);
@@ -185,7 +185,7 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
 }
 
 ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string & name) const {
-    for (auto item : cmds) {
+    for (auto * item : cmds) {
         if (item->get_name() == name) {
             return *item;
         }
@@ -194,7 +194,7 @@ ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string
 }
 
 ArgumentParser::NamedArg & ArgumentParser::Command::get_named_arg(const std::string & name) const {
-    for (auto item : named_args) {
+    for (auto * item : named_args) {
         if (item->get_name() == name) {
             return *item;
         }
@@ -203,7 +203,7 @@ ArgumentParser::NamedArg & ArgumentParser::Command::get_named_arg(const std::str
 }
 
 ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(const std::string & name) const {
-    for (auto item : pos_args) {
+    for (auto * item : pos_args) {
         if (item->get_name() == name) {
             return *item;
         }
@@ -216,17 +216,18 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
     int short_option_idx = 0;
     for (int i = 1; i < argc;) {
         bool used = false;
-        auto tmp = argv[i];
+        const auto * tmp = argv[i];
         if (*tmp == '-') {
             bool long_option = *++tmp == '-';
             if (long_option) {
                 ++tmp;
             }
-            auto assign_ptr = strchr(tmp, '=');
-            for (auto opt : named_args) {
+            const auto * assign_ptr = strchr(tmp, '=');
+            for (auto * opt : named_args) {
                 if (long_option) {
                     if (!opt->get_long_name().empty() &&
-                        (assign_ptr ? std::string(tmp).compare(0, assign_ptr - tmp, opt->get_long_name()) == 0
+                        (assign_ptr ? std::string(tmp).compare(
+                                          0, static_cast<size_t>(assign_ptr - tmp), opt->get_long_name()) == 0
                                     : opt->get_long_name() == tmp)) {
                         i += opt->parse_long(tmp, argc - i, &argv[i]);
                         used = true;
@@ -250,7 +251,7 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
         if (!used) {
             for (auto & cmd : cmds) {
                 if (cmd->name == argv[i]) {
-                    if (auto arg = get_conflict_argument()) {
+                    if (const auto * arg = get_conflict_argument()) {
                         auto conflict = get_conflict_arg_msg(arg);
                         auto msg = fmt::format("command \"{}\": {}", option, conflict);
                         throw std::runtime_error(msg);
@@ -287,13 +288,13 @@ void ArgumentParser::Command::help() const noexcept {
     }
 
     if (!commands_help_header.empty()) {
-        auto table = libdnf::cli::output::create_help_table(commands_help_header);
-        auto out = libdnf::cli::output::get_stream(table);
+        auto * table = libdnf::cli::output::create_help_table(commands_help_header);
+        auto * out = libdnf::cli::output::get_stream(table);
         if (print) {
             fputs("\n", out);
         }
         fputs((commands_help_header + '\n').c_str(), out);
-        for (auto arg : cmds) {
+        for (const auto * arg : cmds) {
             libdnf::cli::output::add_line_into_help_table(table, arg->get_name(), arg->get_short_description());
         }
         libdnf::cli::output::print_and_unref_help_table(table);
@@ -301,13 +302,13 @@ void ArgumentParser::Command::help() const noexcept {
     }
 
     if (!named_args_help_header.empty()) {
-        auto table = libdnf::cli::output::create_help_table(named_args_help_header);
-        auto out = libdnf::cli::output::get_stream(table);
+        auto * table = libdnf::cli::output::create_help_table(named_args_help_header);
+        auto * out = libdnf::cli::output::get_stream(table);
         if (print) {
             fputs("\n", out);
         }
         fputs((named_args_help_header + '\n').c_str(), out);
-        for (auto arg : named_args) {
+        for (const auto * arg : named_args) {
             std::string arg_names;
             if (arg->get_short_name() != '\0') {
                 arg_names = std::string("-") + arg->get_short_name();
@@ -331,13 +332,13 @@ void ArgumentParser::Command::help() const noexcept {
     }
 
     if (!positional_args_help_header.empty()) {
-        auto table = libdnf::cli::output::create_help_table(named_args_help_header);
-        auto out = scols_table_get_stream(table);
+        auto * table = libdnf::cli::output::create_help_table(named_args_help_header);
+        auto * out = scols_table_get_stream(table);
         if (print) {
             fputs("\n", out);
         }
         fputs((positional_args_help_header + '\n').c_str(), out);
-        for (auto arg : pos_args) {
+        for (const auto * arg : pos_args) {
             libdnf::cli::output::add_line_into_help_table(table, "  " + arg->get_name(), arg->get_short_description());
         }
         libdnf::cli::output::print_and_unref_help_table(table);
