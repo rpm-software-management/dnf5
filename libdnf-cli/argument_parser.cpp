@@ -17,7 +17,8 @@ You should have received a copy of the GNU General Public License
 along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "argument_parser.hpp"
+#include "libdnf-cli/argument_parser.hpp"
+#include "libdnf-cli/output/argument_parser.hpp"
 
 #include <fmt/format.h>
 
@@ -25,9 +26,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iomanip>
 #include <iostream>
 
-#include "libdnf-cli/output/argument_parser.hpp"
-
-namespace microdnf {
+namespace libdnf::cli {
 
 ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() const noexcept {
     if (conflict_args) {
@@ -365,5 +364,4 @@ void ArgumentParser::reset_parse_count() {
     }
 }
 
-
-}  // namespace microdnf
+}  // namespace libdnf::cli

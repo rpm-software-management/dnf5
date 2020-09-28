@@ -17,17 +17,17 @@ You should have received a copy of the GNU General Public License
 along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef MICRODNF_ARGUMENT_PARSER_HPP
-#define MICRODNF_ARGUMENT_PARSER_HPP
+#ifndef LIBDNF_CLI_ARGUMENT_PARSER_HPP
+#define LIBDNF_CLI_ARGUMENT_PARSER_HPP
 
-#include <libdnf/conf/option.hpp>
+#include "libdnf/conf/option.hpp"
 
 #include <functional>
 #include <memory>
 #include <string>
 #include <vector>
 
-namespace microdnf {
+namespace libdnf::cli {
 
 class ArgumentParser {
 public:
@@ -258,6 +258,6 @@ inline std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_values
     return ptr;
 }
 
-}  // namespace microdnf
+}  // namespace libdnf::cli
 
 #endif
