@@ -32,6 +32,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace microdnf {
 
+using namespace libdnf::cli;
 void CmdRepoquery::set_argument_parser(Context & ctx) {
     available_option = dynamic_cast<libdnf::OptionBool *>(
         ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));

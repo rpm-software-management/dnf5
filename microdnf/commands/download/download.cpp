@@ -34,6 +34,8 @@ namespace fs = std::filesystem;
 
 namespace microdnf {
 
+using namespace libdnf::cli;
+
 void CmdDownload::set_argument_parser(Context & ctx) {
     patterns_to_download_options = ctx.arg_parser.add_new_values();
     auto keys = ctx.arg_parser.add_new_positional_arg(

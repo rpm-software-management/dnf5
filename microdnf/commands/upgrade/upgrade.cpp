@@ -34,6 +34,8 @@ namespace fs = std::filesystem;
 
 namespace microdnf {
 
+using namespace libdnf::cli;
+
 void CmdUpgrade::set_argument_parser(Context & ctx) {
     patterns_to_upgrade_options = ctx.arg_parser.add_new_values();
     auto keys = ctx.arg_parser.add_new_positional_arg(

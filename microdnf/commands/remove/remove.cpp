@@ -31,6 +31,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace microdnf {
 
+using namespace libdnf::cli;
 
 void CmdRemove::set_argument_parser(Context & ctx) {
     patterns_to_remove_options = ctx.arg_parser.add_new_values();

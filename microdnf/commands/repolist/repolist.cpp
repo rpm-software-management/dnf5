@@ -26,6 +26,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace microdnf {
 
+using namespace libdnf::cli;
+
 void CmdRepolist::set_argument_parser(Context & ctx) {
     enable_disable_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
         ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(

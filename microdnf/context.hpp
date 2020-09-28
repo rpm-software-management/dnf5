@@ -20,10 +20,10 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef MICRODNF_CONTEXT_HPP
 #define MICRODNF_CONTEXT_HPP
 
-#include "argument_parser.hpp"
 #include "commands/command.hpp"
 
 #include <libdnf/base/base.hpp>
+#include <libdnf-cli/argument_parser.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
 #include <memory>
@@ -47,7 +47,7 @@ public:
     std::vector<std::pair<std::string, std::string>> setopts;
     std::vector<std::unique_ptr<Command>> commands;
     Command * selected_command{nullptr};
-    ArgumentParser arg_parser;
+    libdnf::cli::ArgumentParser arg_parser;
 
 private:
     /// Updates the repository metadata cache and load it into rpm::RepoSack.

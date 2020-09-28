@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "argument_parser.hpp"
 #include "commands/install/install.hpp"
 #include "commands/download/download.hpp"
 #include "commands/reinstall/reinstall.hpp"
@@ -43,6 +42,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace fs = std::filesystem;
 
 namespace microdnf {
+
+using namespace libdnf::cli;
 
 static bool parse_args(Context & ctx, int argc, char * argv[]) {
     auto microdnf = ctx.arg_parser.add_new_command("microdnf");
