@@ -40,8 +40,8 @@ protected:
     void add_repo(const std::string & name);
 
     std::unique_ptr<libdnf::Base> base;
-    std::unique_ptr<libdnf::rpm::RepoSack> repo_sack;
-    std::unique_ptr<libdnf::rpm::SolvSack> sack;
+    libdnf::rpm::RepoSack * repo_sack;
+    libdnf::rpm::SolvSack * sack;
     std::unique_ptr<libdnf::utils::TempDir> temp;
 };
 

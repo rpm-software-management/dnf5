@@ -60,8 +60,8 @@ void RepoFixture::setUp() {
     // set cachedir to a temp directory
     base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
 
-    repo_sack = std::make_unique<libdnf::rpm::RepoSack>(*base);
-    sack = std::make_unique<libdnf::rpm::SolvSack>(*base);
+    repo_sack = &(base->get_rpm_repo_sack());
+    sack = &(base->get_rpm_solv_sack());
 }
 
 void RepoFixture::dump_debugdata() {
