@@ -587,6 +587,7 @@ void SolvSack::dump_debugdata(const std::string & dir) {
         solver_free(solver);
         throw;
     }
+    solver_free(solver);
 }
 
 SolvSackWeakPtr SolvSack::get_weak_ptr() {
