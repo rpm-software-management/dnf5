@@ -21,6 +21,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CLI_ARGUMENT_PARSER_HPP
 
 #include "libdnf/conf/option.hpp"
+#include "libdnf/utils/exception.hpp"
 
 #include <functional>
 #include <memory>
@@ -31,6 +32,28 @@ namespace libdnf::cli {
 
 class ArgumentParser {
 public:
+    /// It reports errors that are a consequence of faulty logic within the program.
+    class LogicError : public libdnf::LogicError {
+        using libdnf::LogicError::LogicError;
+        const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser"; }
+    };
+
+    /// Parent for all ArgumentsParser runtime errors.
+    class Exception : public RuntimeError {
+        using RuntimeError::RuntimeError;
+        const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser"; }
+        const char * get_name() const noexcept override { return "Exception"; }
+        const char * get_description() const noexcept override { return "ArgumentParser exception"; }
+    };
+
+    /// Exception is generated when conflicting arguments are used together.
+    class Conflict : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "Conflict"; }
+        const char * get_description() const noexcept override { return "Conflicting arguments"; }
+    };
+
     class Argument {
     public:
         explicit Argument(std::string name) : name(std::move(name)) {}
@@ -66,6 +89,17 @@ public:
         constexpr static int UNLIMITED{-1};
         constexpr static int UNLIMITED_BUT_ONE{-2};
 
+        /// Exception is generated when there are insufficient values for the positional argument.
+        class FewValues : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override {
+                return "libdnf::cli::ArgumentParser::PositionalArg";
+            }
+            const char * get_name() const noexcept override { return "FewValues"; }
+            const char * get_description() const noexcept override { return "Few values"; }
+        };
+
         using ParseHookFunc = std::function<bool(PositionalArg * arg, int argc, const char * const argv[])>;
 
         PositionalArg(const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values);
@@ -93,6 +127,24 @@ public:
 
     class NamedArg : public Argument {
     public:
+        /// Exception is generated if the argument requires a value and the value is missing.
+        class MissingValue : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::NamedArg"; }
+            const char * get_name() const noexcept override { return "MissingValue"; }
+            const char * get_description() const noexcept override { return "Missing argument value"; }
+        };
+
+        /// Exception is generated if the argument is defined without a value and a value is present.
+        class UnexpectedValue : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::NamedArg"; }
+            const char * get_name() const noexcept override { return "UnexpectedValue"; }
+            const char * get_description() const noexcept override { return "Unexpected argument value"; }
+        };
+
         using ParseHookFunc = std::function<bool(NamedArg * arg, const char * option, const char * value)>;
 
         explicit NamedArg(const std::string & name) : Argument(name) {}
@@ -133,6 +185,33 @@ public:
 
     class Command : public Argument {
     public:
+        /// Exception is generated when a command was not found.
+        class CommandNotFound : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
+            const char * get_name() const noexcept override { return "CommandNotFound"; }
+            const char * get_description() const noexcept override { return "Commnand not found"; }
+        };
+
+        /// Exception is generated when a named argument was not found.
+        class NamedArgNotFound : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
+            const char * get_name() const noexcept override { return "NamedArgNotFound"; }
+            const char * get_description() const noexcept override { return "Named argument not found"; }
+        };
+
+        /// Exception is generated when a positional argument was not found.
+        class PositionalArgNotFound : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
+            const char * get_name() const noexcept override { return "PositionalArgNotFound"; }
+            const char * get_description() const noexcept override { return "Positional argument not found"; }
+        };
+
         using ParseHookFunc = std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])>;
 
         explicit Command(const std::string & name) : Argument(name) {}

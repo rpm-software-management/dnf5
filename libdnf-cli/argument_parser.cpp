@@ -68,7 +68,7 @@ ArgumentParser::PositionalArg::PositionalArg(
     , init_value(nullptr)
     , values(values) {
     if (!values || values->empty()) {
-        throw std::runtime_error("PositionalArg: Error: values constructor parameter can't be nullptr or empty vector");
+        throw LogicError("PositionalArg: \"values\" constructor parameter can't be nullptr or empty vector");
     }
 }
 
@@ -82,7 +82,7 @@ ArgumentParser::PositionalArg::PositionalArg(
     , init_value(init_value)
     , values(values) {
     if (!values) {
-        throw std::runtime_error("PositionalArg: Error: values constructor parameter can't be nullptr");
+        throw LogicError("PositionalArg: \"values\" constructor parameter can't be nullptr");
     }
 }
 
@@ -90,10 +90,10 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
     if (const auto * arg = get_conflict_argument()) {
         auto conflict = get_conflict_arg_msg(arg);
         auto msg = fmt::format("positional argument \"{}\": {}", option, conflict);
-        throw std::runtime_error(msg);
+        throw Conflict(msg);
     }
     if (argc < nargs) {
-        throw std::runtime_error("Not enough parameters");
+        throw FewValues(this->name);
     }
     auto count = static_cast<size_t>(nargs > 0 ? nargs : (nargs == OPTIONAL ? 1 : argc));
     if (store_value) {
@@ -115,7 +115,7 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
     if (const auto * arg = get_conflict_argument()) {
         auto conflict = get_conflict_arg_msg(arg);
         auto msg = fmt::format("argument \"--{}\": {}", option, conflict);
-        throw std::runtime_error(msg);
+        throw Conflict(msg);
     }
     const char * arg_value;
     int consumed_args;
@@ -126,14 +126,14 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
             consumed_args = 1;
         } else {
             if (argc < 2) {
-                throw std::runtime_error("Not enough arguments");
+                throw MissingValue(std::string("--") + option);
             }
             arg_value = argv[1];
             consumed_args = 2;
         }
     } else {
         if (assign_ptr) {
-            throw std::runtime_error(fmt::format("NamedArg: Error: Unexpected argument \"{}\"", assign_ptr + 1));
+            throw UnexpectedValue(std::string("--") + option);
         }
         arg_value = const_val.c_str();
         consumed_args = 1;
@@ -153,7 +153,7 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
     if (const auto * arg = get_conflict_argument()) {
         auto conflict = get_conflict_arg_msg(arg);
         auto msg = fmt::format("argument \"-{}\": {:.1}", option, conflict);
-        throw std::runtime_error(msg);
+        throw Conflict(msg);
     }
     const char * arg_value;
     int consumed_args;
@@ -163,7 +163,7 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
             consumed_args = 1;
         } else {
             if (argc < 2) {
-                throw std::runtime_error("Not enough arguments");
+                throw MissingValue(std::string("-") + *option);
             }
             arg_value = argv[1];
             consumed_args = 2;
@@ -189,7 +189,7 @@ ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string
             return *item;
         }
     }
-    throw std::runtime_error("Commnand not found");
+    throw CommandNotFound(name);
 }
 
 ArgumentParser::NamedArg & ArgumentParser::Command::get_named_arg(const std::string & name) const {
@@ -198,7 +198,7 @@ ArgumentParser::NamedArg & ArgumentParser::Command::get_named_arg(const std::str
             return *item;
         }
     }
-    throw std::runtime_error("Named argument not found");
+    throw NamedArgNotFound(name);
 }
 
 ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(const std::string & name) const {
@@ -207,7 +207,7 @@ ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(cons
             return *item;
         }
     }
-    throw std::runtime_error("Positional argument not found");
+    throw PositionalArgNotFound(name);
 }
 
 void ArgumentParser::Command::parse(const char * option, int argc, const char * const argv[]) {
@@ -253,7 +253,7 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
                     if (const auto * arg = get_conflict_argument()) {
                         auto conflict = get_conflict_arg_msg(arg);
                         auto msg = fmt::format("command \"{}\": {}", option, conflict);
-                        throw std::runtime_error(msg);
+                        throw Conflict(msg);
                     }
                     cmd->parse(argv[i], argc - i, &argv[i]);
                     i = argc;
@@ -347,7 +347,7 @@ void ArgumentParser::Command::help() const noexcept {
 
 void ArgumentParser::parse(int argc, const char * const argv[]) {
     if (!root_command) {
-        throw std::runtime_error("ArgumentParser: Error: root command is not set");
+        throw LogicError("root command is not set");
     }
     root_command->parse(argv[0], argc, argv);
 }
