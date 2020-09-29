@@ -62,8 +62,8 @@ std::string ArgumentParser::Argument::get_conflict_arg_msg(const Argument * conf
 }
 
 ArgumentParser::PositionalArg::PositionalArg(
-    const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values)
-    : Argument(name)
+    ArgumentParser & owner, const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values)
+    : Argument(owner, name)
     , nvals(static_cast<int>(values->size()))
     , init_value(nullptr)
     , values(values) {
@@ -73,11 +73,12 @@ ArgumentParser::PositionalArg::PositionalArg(
 }
 
 ArgumentParser::PositionalArg::PositionalArg(
+    ArgumentParser & owner,
     const std::string & name,
     int nvals,
     libdnf::Option * init_value,
     std::vector<std::unique_ptr<libdnf::Option>> * values)
-    : Argument(name)
+    : Argument(owner, name)
     , nvals(nvals)
     , init_value(init_value)
     , values(values) {

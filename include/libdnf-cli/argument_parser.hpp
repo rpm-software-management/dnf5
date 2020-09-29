@@ -71,7 +71,7 @@ public:
 
     class Argument {
     public:
-        explicit Argument(std::string name) : name(std::move(name)) {}
+        Argument(ArgumentParser & owner, std::string name) : owner(owner), name(std::move(name)) {}
         Argument(const Argument &) = delete;
         Argument(Argument &&) = delete;
         Argument & operator=(const Argument &) = delete;
@@ -88,9 +88,11 @@ public:
         Argument * get_conflict_argument() const noexcept;
         static std::string get_conflict_arg_msg(const Argument * conflict_arg);
         virtual void help() const noexcept {}
+        ArgumentParser & get_owner() const noexcept { return owner; }
 
     private:
         friend class ArgumentParser;
+        ArgumentParser & owner;
         std::string name;
         std::string description;
         std::string short_description;
@@ -117,8 +119,10 @@ public:
 
         using ParseHookFunc = std::function<bool(PositionalArg * arg, int argc, const char * const argv[])>;
 
-        PositionalArg(const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values);
         PositionalArg(
+            ArgumentParser & owner, const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values);
+        PositionalArg(
+            ArgumentParser & owner,
             const std::string & name,
             int nvals,
             libdnf::Option * init_value,
@@ -163,7 +167,7 @@ public:
 
         using ParseHookFunc = std::function<bool(NamedArg * arg, const char * option, const char * value)>;
 
-        explicit NamedArg(const std::string & name) : Argument(name) {}
+        NamedArg(ArgumentParser & owner, const std::string & name) : Argument(owner, name) {}
         void set_long_name(std::string long_name) noexcept { this->long_name = std::move(long_name); }
         void set_short_name(char short_name) { this->short_name = short_name; }
         void set_has_value(bool has_value) { this->has_value = has_value; }
@@ -230,7 +234,7 @@ public:
 
         using ParseHookFunc = std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])>;
 
-        explicit Command(const std::string & name) : Argument(name) {}
+        Command(ArgumentParser & owner, const std::string & name) : Argument(owner, name) {}
         void parse(const char * option, int argc, const char * const argv[]);
         void add_command(Command * arg) { cmds.push_back(arg); }
         void add_named_arg(NamedArg * arg) { named_args.push_back(arg); }
@@ -294,14 +298,14 @@ private:
 };
 
 inline ArgumentParser::Command * ArgumentParser::add_new_command(const std::string & name) {
-    std::unique_ptr<Command> arg(new Command(name));
+    std::unique_ptr<Command> arg(new Command(*this, name));
     auto * ptr = arg.get();
     cmds.push_back(std::move(arg));
     return ptr;
 }
 
 inline ArgumentParser::NamedArg * ArgumentParser::add_new_named_arg(const std::string & name) {
-    std::unique_ptr<NamedArg> arg(new NamedArg(name));
+    std::unique_ptr<NamedArg> arg(new NamedArg(*this, name));
     auto * ptr = arg.get();
     named_args.push_back(std::move(arg));
     return ptr;
@@ -309,7 +313,7 @@ inline ArgumentParser::NamedArg * ArgumentParser::add_new_named_arg(const std::s
 
 inline ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
     const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values) {
-    std::unique_ptr<PositionalArg> arg(new PositionalArg(name, values));
+    std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, name, values));
     auto * ptr = arg.get();
     pos_args.push_back(std::move(arg));
     return ptr;
@@ -320,7 +324,7 @@ inline ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
     int nargs,
     libdnf::Option * init_value,
     std::vector<std::unique_ptr<libdnf::Option>> * values) {
-    std::unique_ptr<PositionalArg> arg(new PositionalArg(name, nargs, init_value, values));
+    std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, name, nargs, init_value, values));
     auto * ptr = arg.get();
     pos_args.push_back(std::move(arg));
     return ptr;
