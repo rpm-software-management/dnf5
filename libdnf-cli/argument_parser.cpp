@@ -265,6 +265,7 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
         if (!used && used_values < pos_args.size()) {
             i += pos_args[used_values]->parse(argv[i], argc - i, &argv[i]);
             ++used_values;
+            used = true;
         }
         if (!used) {
             ++i;
