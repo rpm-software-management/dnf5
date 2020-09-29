@@ -279,7 +279,7 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
             used = true;
         }
         if (!used) {
-            ++i;
+            throw UnknownArgument(argv[i]);
         }
     }
     ++parse_count;

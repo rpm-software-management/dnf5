@@ -54,6 +54,14 @@ public:
         const char * get_description() const noexcept override { return "Conflicting arguments"; }
     };
 
+    /// Exception is generated in the case of an unexpected argument.
+    class UnknownArgument : public Exception {
+    public:
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "UnknownArgument"; }
+        const char * get_description() const noexcept override { return "Unknown argument"; }
+    };
+
     class Argument {
     public:
         explicit Argument(std::string name) : name(std::move(name)) {}
