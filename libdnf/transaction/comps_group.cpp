@@ -24,38 +24,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction.hpp"
 #include "transaction_item.hpp"
 
+#include "libdnf/transaction/db/comps_group_package.hpp"
+
 
 namespace libdnf::transaction {
 
 
-/*
-CompsGroup::CompsGroup(libdnf::utils::SQLite3Ptr conn)
-  : Item{conn}
-  , packageTypes(CompsPackageType::DEFAULT)
-{
-}
-*/
-
-
-CompsGroup::CompsGroup(Transaction & trans, int64_t pk)
-  : Item{trans}
-{
+CompsGroup::CompsGroup(Transaction & trans, int64_t pk) : Item{trans} {
     dbSelect(pk);
+    comps_group_packages_select(*this);
 }
 
 
-void
-CompsGroup::save()
-{
-    if (getId() == 0) {
-        dbInsert();
-    } else {
-        // dbUpdate();
-    }
-    for (auto i : getPackages()) {
-        i->save();
-    }
+void CompsGroup::save() {
+    dbInsert();
+    comps_group_packages_insert(*this);
 }
+
 
 void
 CompsGroup::dbSelect(int64_t pk)
@@ -72,8 +57,11 @@ CompsGroup::dbSelect(int64_t pk)
         "  item_id = ?";
     libdnf::utils::SQLite3::Query query(trans.get_connection(), sql);
     query.bindv(pk);
-    query.step();
 
+    if (query.step() != libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        /// TODO(dmach): replace with a different exception type
+        throw std::runtime_error("Could not find a record in table 'comps_group' with item_id == " + pk);
+    }
     setId(pk);
     set_group_id(query.get< std::string >("groupid"));
     set_name(query.get< std::string >("name"));
@@ -123,6 +111,7 @@ compsGroupTransactionItemFromQuery(Transaction & trans, libdnf::utils::SQLite3::
     item->set_name(query.get< std::string >("name"));
     item->set_translated_name(query.get< std::string >("translated_name"));
     item->set_package_types(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
+    comps_group_packages_select(*item);
 
     return trans_item;
 }
@@ -241,144 +230,18 @@ CompsGroup::getTransactionItems(Transaction & trans)
 }
 
 
-/**
- * Lazy loader for packages associated with the group.
- * \return list of packages associated with the group (installs and excludes).
- */
-std::vector< CompsGroupPackagePtr >
-CompsGroup::getPackages()
-{
-    if (packages.empty()) {
-        loadPackages();
-    }
-    return packages;
+CompsGroupPackage & CompsGroup::new_package() {
+    auto pkg = new CompsGroupPackage(*this);
+    auto pkg_ptr = std::unique_ptr<CompsGroupPackage>(std::move(pkg));
+    // TODO(dmach): following lines are not thread-safe
+    packages.push_back(std::move(pkg_ptr));
+    return *packages.back();
 }
 
-void
-CompsGroup::loadPackages()
-{
-    const char *sql =
-        "SELECT "
-        "  * "
-        "FROM "
-        "  comps_group_package "
-        "WHERE "
-        "  group_id = ?";
-    libdnf::utils::SQLite3::Query query(trans.get_connection(), sql);
-    query.bindv(getId());
-
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto pkg = std::make_shared< CompsGroupPackage >(*this);
-        pkg->set_id(query.get< int >("id"));
-        pkg->set_name(query.get< std::string >("name"));
-        pkg->set_installed(query.get< bool >("installed"));
-        pkg->set_package_type(static_cast< CompsPackageType >(query.get< int >("pkg_type")));
-        packages.push_back(pkg);
-    }
-}
-
-CompsGroupPackagePtr
-CompsGroup::add_package(std::string name, bool installed, CompsPackageType pkg_type)
-{
-    // try to find an existing package and override it with the new values
-    CompsGroupPackagePtr pkg = nullptr;
-    for (auto & i : packages) {
-        if (i->get_name() == name) {
-            pkg = i;
-            break;
-        }
-    }
-
-    if (pkg == nullptr) {
-        pkg = std::make_shared< CompsGroupPackage >(*this);
-        packages.push_back(pkg);
-    }
-
-    pkg->set_name(name);
-    pkg->set_installed(installed);
-    pkg->set_package_type(pkg_type);
-    return pkg;
-}
 
 CompsGroupPackage::CompsGroupPackage(CompsGroup & group)
   : group(group)
 {
-}
-
-void
-CompsGroupPackage::save()
-{
-    if (get_id() == 0) {
-        dbSelectOrInsert();
-    } else {
-        dbUpdate();
-    }
-}
-
-void
-CompsGroupPackage::dbInsert()
-{
-    const char *sql = R"**(
-        INSERT INTO
-            comps_group_package (
-                group_id,
-                name,
-                installed,
-                pkg_type
-            )
-        VALUES
-            (?, ?, ?, ?)
-    )**";
-    libdnf::utils::SQLite3::Statement query(get_group().trans.get_connection(), sql);
-    query.bindv(
-        get_group().getId(), get_name(), get_installed(), static_cast< int >(get_package_type()));
-    query.step();
-}
-
-void
-CompsGroupPackage::dbUpdate()
-{
-    const char *sql = R"**(
-        UPDATE
-            comps_group_package
-        SET
-            name=?,
-            installed=?,
-            pkg_type=?
-        WHERE
-            id = ?
-    )**";
-    libdnf::utils::SQLite3::Statement query(get_group().trans.get_connection(), sql);
-    query.bindv(
-        get_name(), get_installed(), static_cast< int >(get_package_type()), get_id());
-    query.step();
-}
-
-
-void
-CompsGroupPackage::dbSelectOrInsert()
-{
-    const char *sql = R"**(
-        SELECT
-            id
-        FROM
-          comps_group_package
-        WHERE
-            name = ?
-            AND group_id = ?
-    )**";
-
-    libdnf::utils::SQLite3::Statement query(get_group().trans.get_connection(), sql);
-    query.bindv(get_name(), get_group().getId());
-    libdnf::utils::SQLite3::Statement::StepResult result = query.step();
-
-    if (result == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        set_id(query.get< int >(0));
-        dbUpdate();
-    } else {
-        // insert and get the ID back
-        dbInsert();
-    }
 }
 
 

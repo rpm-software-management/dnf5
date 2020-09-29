@@ -481,7 +481,10 @@ Transformer::processGroup(Transaction & trans, const char *groupId, struct json_
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
             const char *key = json_object_get_string(json_object_array_get_idx(value, i));
-            compsGroup->add_package(key, true, CompsPackageType::MANDATORY);
+            auto & pkg = compsGroup->new_package();
+            pkg.set_name(key);
+            pkg.set_installed(true);
+            pkg.set_package_type(CompsPackageType::MANDATORY);
         }
     }
 
@@ -490,7 +493,10 @@ Transformer::processGroup(Transaction & trans, const char *groupId, struct json_
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
             const char *key = json_object_get_string(json_object_array_get_idx(value, i));
-            compsGroup->add_package(key, false, CompsPackageType::MANDATORY);
+            auto & pkg = compsGroup->new_package();
+            pkg.set_name(key);
+            pkg.set_installed(false);
+            pkg.set_package_type(CompsPackageType::MANDATORY);
         }
     }
 

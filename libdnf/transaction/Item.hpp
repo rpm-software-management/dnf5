@@ -53,6 +53,8 @@ public:
     virtual std::string toStr() const;
     virtual void save();
 
+    Transaction & get_transaction() const noexcept { return trans; }
+
 protected:
     void dbInsert();
 

@@ -74,11 +74,11 @@ TransformerTest::testGroupTransformation()
             CPPUNIT_ASSERT("Core" == group->get_name());
             CPPUNIT_ASSERT("Úplný základ" == group->get_translated_name());
 
-            auto packages = group->getPackages();
+            auto & packages = group->get_packages();
 
             CPPUNIT_ASSERT(1 == packages.size());
 
-            auto groupPkg = packages[0];
+            auto & groupPkg = packages[0];
             CPPUNIT_ASSERT(groupPkg->get_name() == "dnf-yum");
             CPPUNIT_ASSERT(groupPkg->get_installed() == true);
             CPPUNIT_ASSERT(groupPkg->get_package_type() == CompsPackageType::MANDATORY);

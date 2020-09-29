@@ -86,7 +86,10 @@ WorkflowTest::testDefaultWorkflow()
     comps_group_core->set_group_id("core");
     comps_group_core->set_name("Core");
     comps_group_core->set_translated_name("Úplný základ");
-    comps_group_core->add_package("bash", true, CompsPackageType::MANDATORY);
+    auto & pkg = comps_group_core->new_package();
+    pkg.set_name("bash");
+    pkg.set_installed(true);
+    pkg.set_package_type(CompsPackageType::MANDATORY);
     repoid = "";
     action = TransactionItemAction::INSTALL;
     reason = TransactionItemReason::USER;
@@ -146,10 +149,7 @@ WorkflowTest::testDefaultWorkflow()
         // std::cout << "TransactionItem: " << i->getItem()->toStr() << std::endl;
         if (i->getItem()->getItemType() == TransactionItemType::GROUP) {
             auto grp = std::dynamic_pointer_cast< CompsGroup >(i->getItem());
-            CPPUNIT_ASSERT(grp->getPackages().size() == 1);
-            for (auto i : grp->getPackages()) {
-                // std::cout << "  CompsGroupPackage: " << i->getName() << std::endl;
-            }
+            CPPUNIT_ASSERT(grp->get_packages().size() == 1);
         }
         if (i->getItem()->getItemType() == TransactionItemType::ENVIRONMENT) {
             auto env = std::dynamic_pointer_cast< CompsEnvironment >(i->getItem());
