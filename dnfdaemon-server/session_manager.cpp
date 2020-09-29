@@ -25,8 +25,10 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <random>
+#include <iostream>
 #include <sstream>
 #include <string>
+#include <thread>
 
 SessionManager::SessionManager(sdbus::IConnection & connection, const std::string & object_path)
     : object_path(object_path)
@@ -78,9 +80,14 @@ void SessionManager::on_name_owner_changed(sdbus::Signal & signal) {
     std::string old_owner;
     std::string new_owner;
     signal >> name >> old_owner >> new_owner;
-    if (new_owner.empty()) {
-        // the sender name disappeared from the dbus, erase all its sessions
-        sessions.erase(old_owner);
+    if (new_owner.empty() && sessions.count(old_owner) > 0) {
+        auto worker = std::thread([this, old_owner=std::move(old_owner)]() {
+            std::lock_guard<std::mutex> lock(sessions_mutex);
+            // the sender name disappeared from the dbus, erase all its sessions
+            sessions.erase(old_owner);
+        });
+        // TODO (mblaha): this .detach() is wrong
+        worker.detach();
     }
 }
 
@@ -89,15 +96,22 @@ void SessionManager::open_session(sdbus::MethodCall call) {
     dnfdaemon::KeyValueMap configuration;
     call >> configuration;
 
-    // generate UUID-like session id
-    const std::string sessionid = object_path + "/" + gen_session_id();
-    // store newly created session
-    sessions[std::move(sender)].emplace(
-        sessionid, std::make_unique<Session>(connection, std::move(configuration), sessionid));
+    auto worker = std::thread([this,sender,configuration,call=std::move(call)]() {
+        // generate UUID-like session id
+        const std::string sessionid = object_path + "/" + gen_session_id();
+        // store newly created session
+        {
+            std::lock_guard<std::mutex> lock(sessions_mutex);
+            sessions[std::move(sender)].emplace(
+                sessionid, std::make_unique<Session>(connection, std::move(configuration), sessionid));
+        }
 
-    auto reply = call.createReply();
-    reply << sdbus::ObjectPath{sessionid};
-    reply.send();
+        auto reply = call.createReply();
+        reply << sdbus::ObjectPath{sessionid};
+        reply.send();
+    });
+    // TODO (mblaha): this .detach() is wrong
+    worker.detach();
 }
 
 
@@ -110,6 +124,7 @@ void SessionManager::close_session(sdbus::MethodCall call) {
     // find sessions created by the same sender
     auto sender_it = sessions.find(sender);
     if (sender_it != sessions.end()) {
+        std::lock_guard<std::mutex> lock(sessions_mutex);
         // delete session with given session_id
         if (sender_it->second.erase(session_id) > 0) {
             retval = true;

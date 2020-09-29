@@ -55,50 +55,54 @@ uint64_t repo_size(libdnf::rpm::SolvSack & sack, const libdnf::WeakPtr<libdnf::r
 }
 
 void Repo::list(sdbus::MethodCall call) {
-    // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
-    std::string enable_disable = key_value_map_get<std::string>(options, "enable_disable", "enabled");
-    std::vector<std::string> default_patterns{};
-    std::vector<std::string> patterns_to_show = key_value_map_get<std::vector<std::string>>(options, "patterns_to_show", std::move(default_patterns));
-    std::string command = key_value_map_get<std::string>(options, "command", "repolist");
+    auto worker = std::thread([this, options=std::move(options), call=std::move(call)]() {
+        // read options from dbus call
+        std::string enable_disable = key_value_map_get<std::string>(options, "enable_disable", "enabled");
+        std::vector<std::string> default_patterns{};
+        std::vector<std::string> patterns_to_show = key_value_map_get<std::vector<std::string>>(options, "patterns_to_show", std::move(default_patterns));
+        std::string command = key_value_map_get<std::string>(options, "command", "repolist");
 
-    // repoinfo command needs repositories loaded into sack
-    // TODO(mblaha): check that repos are loaded
+        // repoinfo command needs repositories loaded into sack
+        // TODO(mblaha): check that repos are loaded
 
-    // prepare repository query filtered by options
-    auto base = session.get_base();
-    auto & solv_sack = base->get_rpm_solv_sack();
-    auto & rpm_repo_sack = base->get_rpm_repo_sack();
-    auto repos_query = rpm_repo_sack.new_query();
+        // prepare repository query filtered by options
+        auto base = session.get_base();
+        auto & solv_sack = base->get_rpm_solv_sack();
+        auto & rpm_repo_sack = base->get_rpm_repo_sack();
+        auto repos_query = rpm_repo_sack.new_query();
 
-    if (enable_disable == "enabled") {
-        repos_query.ifilter_enabled(true);
-    } else if (enable_disable == "disabled") {
-        repos_query.ifilter_enabled(false);
-    }
-
-    if (patterns_to_show.size() > 0) {
-        auto query_names = repos_query;
-        repos_query.ifilter_id(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
-        repos_query |= query_names.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
-    }
-
-    // create reply from the query
-    dnfdaemon::KeyValueMapList out_repositories;
-    for (auto & repo : repos_query.get_data()) {
-        dnfdaemon::KeyValueMap out_repo;
-        out_repo.emplace(std::make_pair("id", repo->get_id()));
-        out_repo.emplace(std::make_pair("name", repo->get_config()->name().get_value()));
-        out_repo.emplace(std::make_pair("enabled", repo->is_enabled()));
-        // TODO(mblaha): add all other repository attributes
-        if (command == "repoinfo") {
-            out_repo.emplace(std::make_pair("repo_size", repo_size(solv_sack, repo)));
+        if (enable_disable == "enabled") {
+            repos_query.ifilter_enabled(true);
+        } else if (enable_disable == "disabled") {
+            repos_query.ifilter_enabled(false);
         }
-        out_repositories.push_back(std::move(out_repo));
-    }
 
-    auto reply = call.createReply();
-    reply << out_repositories;
-    reply.send();
+        if (patterns_to_show.size() > 0) {
+            auto query_names = repos_query;
+            repos_query.ifilter_id(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
+            repos_query |= query_names.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
+        }
+
+        // create reply from the query
+        dnfdaemon::KeyValueMapList out_repositories;
+        for (auto & repo : repos_query.get_data()) {
+            dnfdaemon::KeyValueMap out_repo;
+            out_repo.emplace(std::make_pair("id", repo->get_id()));
+            out_repo.emplace(std::make_pair("name", repo->get_config()->name().get_value()));
+            out_repo.emplace(std::make_pair("enabled", repo->is_enabled()));
+            // TODO(mblaha): add all other repository attributes
+            if (command == "repoinfo") {
+                out_repo.emplace(std::make_pair("repo_size", repo_size(solv_sack, repo)));
+            }
+            out_repositories.push_back(std::move(out_repo));
+        }
+
+        auto reply = call.createReply();
+        reply << out_repositories;
+        reply.send();
+        session.mark_thread_finished(std::this_thread::get_id());
+    });
+    session.register_thread(std::move(worker));
 }

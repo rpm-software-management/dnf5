@@ -26,6 +26,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <map>
 #include <memory>
+#include <mutex>
 #include <string>
 
 class SessionManager {
@@ -36,10 +37,12 @@ public:
 private:
     std::string object_path;
     sdbus::IConnection & connection;
-    // map {sender_address: {session_id: Session object}}
-    std::map<std::string, std::map<std::string, std::unique_ptr<Session>>> sessions;
     std::unique_ptr<sdbus::IObject> dbus_object;
     std::unique_ptr<sdbus::IProxy> name_changed_proxy;
+
+    std::mutex sessions_mutex;
+    // map {sender_address: {session_id: Session object}}
+    std::map<std::string, std::map<std::string, std::unique_ptr<Session>>> sessions;
 
     void dbus_register();
     void open_session(sdbus::MethodCall call);

@@ -28,6 +28,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/logger/logger.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
+#include <chrono>
 #include <iostream>
 #include <string>
 
@@ -55,6 +56,7 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     , base(std::make_unique<libdnf::Base>())
     , session_configuration(session_configuration)
     , object_path(object_path) {
+
     // set-up log router for base
     auto & log_router = base->get_logger();
     log_router.add_logger(std::make_unique<StderrLogger>());
@@ -90,7 +92,7 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     running_threads_collector = std::thread([this]() {
         while (!finish_garbage_collector) {
             join_threads(true);
-            sleep(1);
+            std::this_thread::sleep_for(std::chrono::seconds(1));
         }
     });
 }
@@ -106,17 +108,27 @@ void Session::mark_thread_finished(std::thread::id thread_id) {
 }
 
 void Session::join_threads(const bool only_finished) {
-    std::lock_guard<std::mutex> lock(running_threads_mutex);
-    for (auto thread = running_threads.begin(); thread < running_threads.end();) {
-        auto in_finished = std::find(finished_threads.begin(), finished_threads.end(), thread->get_id());
-        if (thread->joinable() && (!only_finished || (in_finished != finished_threads.end()))) {
-            // join the thread and remove it from registry
-            thread->join();
-            running_threads.erase(thread);
-            finished_threads.erase(in_finished);
-        } else {
-            ++thread;
+    std::vector<std::thread> to_be_joined{};
+
+    {
+        std::lock_guard<std::mutex> lock(running_threads_mutex);
+        for (auto thread=running_threads.begin(); thread < running_threads.end();) {
+            auto in_finished = std::find(finished_threads.begin(), finished_threads.end(), thread->get_id());
+            if (thread->joinable() && (!only_finished || (in_finished != finished_threads.end()))) {
+                to_be_joined.push_back(std::move(*thread));
+                running_threads.erase(thread);
+                if (in_finished != finished_threads.end()) {
+                    finished_threads.erase(in_finished);
+                }
+            } else {
+                ++thread;
+            }
         }
+    }
+
+    for (auto thread=to_be_joined.begin(); thread < to_be_joined.end(); ++thread) {
+        // join the thread and remove it from registry
+        thread->join();
     }
 }
 
@@ -125,6 +137,7 @@ Session::~Session() {
     for (auto & s : services) {
         s->dbus_deregister();
     }
+
     // join all threads
     finish_garbage_collector = true;
     join_threads(false);
