@@ -95,7 +95,18 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
     if (argc < nargs) {
         throw FewValues(this->name);
     }
-    auto count = static_cast<size_t>(nargs > 0 ? nargs : (nargs == OPTIONAL ? 1 : argc));
+    for (int i = 1; i < nargs; ++i) {
+        if (*argv[i] == '-') {
+            throw FewValues(this->name);
+        }
+    }
+    int usable_argc = 1;
+    if (nargs <= 0) {
+        while (usable_argc < argc && *argv[usable_argc] != '-') {
+            ++usable_argc;
+        }
+    }
+    auto count = static_cast<size_t>(nargs > 0 ? nargs : (nargs == OPTIONAL ? 1 : usable_argc));
     if (store_value) {
         for (size_t i = 0; i < count; ++i) {
             if (values->size() <= i) {
@@ -106,7 +117,7 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
     }
     ++parse_count;
     if (parse_hook) {
-        parse_hook(this, argc, argv);
+        parse_hook(this, usable_argc, argv);
     }
     return static_cast<int>(count);
 }
@@ -262,7 +273,7 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
                 }
             }
         }
-        if (!used && used_values < pos_args.size()) {
+        if (!used && *argv[i] != '-' && used_values < pos_args.size()) {
             i += pos_args[used_values]->parse(argv[i], argc - i, &argv[i]);
             ++used_values;
             used = true;
