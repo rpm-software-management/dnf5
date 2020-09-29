@@ -199,7 +199,7 @@ void RpmPackageTest::test_get_description() {
 
 void RpmPackageTest::test_get_files() {
     const auto files = get_pkg("glibc-2.28-9.fc29.x86_64").get_files();
-    const std::vector<std::string> expected = {"/etc/ld.so.conf"};
+    const std::vector<std::string> expected = {"/etc/ld.so.conf", "/var/db",};
 
     CPPUNIT_ASSERT_EQUAL(expected, files);
 }

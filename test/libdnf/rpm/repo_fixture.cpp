@@ -40,9 +40,9 @@ void RepoFixture::add_repo(const std::string & name) {
 
     // Loads rpm::Repo into rpm::SolvSack
     sack->load_repo(*repo.get(),
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_FILELISTS &
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_OTHER &
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_PRESTO &
+        libdnf::rpm::SolvSack::LoadRepoFlags::USE_FILELISTS |
+        libdnf::rpm::SolvSack::LoadRepoFlags::USE_OTHER |
+        libdnf::rpm::SolvSack::LoadRepoFlags::USE_PRESTO |
         libdnf::rpm::SolvSack::LoadRepoFlags::USE_UPDATEINFO
     );
 }
