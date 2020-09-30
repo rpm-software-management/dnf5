@@ -113,7 +113,7 @@ public:
         PositionalArg(const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values);
         PositionalArg(
             const std::string & name,
-            int nargs,
+            int nvals,
             libdnf::Option * init_value,
             std::vector<std::unique_ptr<libdnf::Option>> * values);
 
@@ -126,7 +126,7 @@ public:
         int parse(const char * option, int argc, const char * const argv[]);
 
     private:
-        int nargs;
+        int nvals;
         libdnf::Option * init_value;
         std::vector<std::unique_ptr<libdnf::Option>> * values;
         bool store_value{true};
@@ -158,12 +158,12 @@ public:
         explicit NamedArg(const std::string & name) : Argument(name) {}
         void set_long_name(std::string long_name) noexcept { this->long_name = std::move(long_name); }
         void set_short_name(char short_name) { this->short_name = short_name; }
-        void set_has_arg(bool has_arg) { this->has_arg = has_arg; }
+        void set_has_value(bool has_value) { this->has_value = has_value; }
         void link_value(libdnf::Option * value) { this->value = value; }
         void set_const_value(std::string const_value) noexcept { const_val = std::move(const_value); }
         const std::string & get_long_name() const noexcept { return long_name; }
         char get_short_name() const noexcept { return short_name; }
-        bool get_has_arg() const noexcept { return has_arg; }
+        bool get_has_value() const noexcept { return has_value; }
         const std::string & get_const_value() const noexcept { return const_val; }
         libdnf::Option * get_linked_value() noexcept { return value; }
         const libdnf::Option * get_linked_value() const noexcept { return value; }
@@ -183,7 +183,7 @@ public:
         friend class ArgumentParser;
         std::string long_name;
         char short_name{'\0'};
-        bool has_arg{false};
+        bool has_value{false};
         std::string const_val;  // used if params == 0
         libdnf::Option * value{nullptr};
         bool store_value{true};

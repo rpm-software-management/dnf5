@@ -64,7 +64,7 @@ std::string ArgumentParser::Argument::get_conflict_arg_msg(const Argument * conf
 ArgumentParser::PositionalArg::PositionalArg(
     const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values)
     : Argument(name)
-    , nargs(static_cast<int>(values->size()))
+    , nvals(static_cast<int>(values->size()))
     , init_value(nullptr)
     , values(values) {
     if (!values || values->empty()) {
@@ -74,11 +74,11 @@ ArgumentParser::PositionalArg::PositionalArg(
 
 ArgumentParser::PositionalArg::PositionalArg(
     const std::string & name,
-    int nargs,
+    int nvals,
     libdnf::Option * init_value,
     std::vector<std::unique_ptr<libdnf::Option>> * values)
     : Argument(name)
-    , nargs(nargs)
+    , nvals(nvals)
     , init_value(init_value)
     , values(values) {
     if (!values) {
@@ -92,21 +92,21 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
         auto msg = fmt::format("positional argument \"{}\": {}", option, conflict);
         throw Conflict(msg);
     }
-    if (argc < nargs) {
+    if (argc < nvals) {
         throw FewValues(this->name);
     }
-    for (int i = 1; i < nargs; ++i) {
+    for (int i = 1; i < nvals; ++i) {
         if (*argv[i] == '-') {
             throw FewValues(this->name);
         }
     }
     int usable_argc = 1;
-    if (nargs <= 0) {
+    if (nvals <= 0) {
         while (usable_argc < argc && *argv[usable_argc] != '-') {
             ++usable_argc;
         }
     }
-    auto count = static_cast<size_t>(nargs > 0 ? nargs : (nargs == OPTIONAL ? 1 : usable_argc));
+    auto count = static_cast<size_t>(nvals > 0 ? nvals : (nvals == OPTIONAL ? 1 : usable_argc));
     if (store_value) {
         for (size_t i = 0; i < count; ++i) {
             if (values->size() <= i) {
@@ -131,7 +131,7 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
     const char * arg_value;
     int consumed_args;
     const auto * assign_ptr = strchr(option, '=');
-    if (has_arg) {
+    if (has_value) {
         if (assign_ptr) {
             arg_value = assign_ptr + 1;
             consumed_args = 1;
@@ -168,7 +168,7 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
     }
     const char * arg_value;
     int consumed_args;
-    if (has_arg) {
+    if (has_value) {
         if (option[1] != '\0') {
             arg_value = option + 1;
             consumed_args = 1;
@@ -222,7 +222,7 @@ ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(cons
 }
 
 void ArgumentParser::Command::parse(const char * option, int argc, const char * const argv[]) {
-    size_t used_values = 0;
+    size_t used_positional_arguments = 0;
     int short_option_idx = 0;
     for (int i = 1; i < argc;) {
         bool used = false;
@@ -273,9 +273,9 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
                 }
             }
         }
-        if (!used && *argv[i] != '-' && used_values < pos_args.size()) {
-            i += pos_args[used_values]->parse(argv[i], argc - i, &argv[i]);
-            ++used_values;
+        if (!used && *argv[i] != '-' && used_positional_arguments < pos_args.size()) {
+            i += pos_args[used_positional_arguments]->parse(argv[i], argc - i, &argv[i]);
+            ++used_positional_arguments;
             used = true;
         }
         if (!used) {
@@ -323,7 +323,7 @@ void ArgumentParser::Command::help() const noexcept {
             std::string arg_names;
             if (arg->get_short_name() != '\0') {
                 arg_names = std::string("-") + arg->get_short_name();
-                if (arg->get_has_arg()) {
+                if (arg->get_has_value()) {
                     arg_names += arg->arg_value_help.empty() ? " VALUE" : ' ' + arg->arg_value_help;
                 }
                 if (!arg->get_long_name().empty()) {
@@ -332,7 +332,7 @@ void ArgumentParser::Command::help() const noexcept {
             }
             if (!arg->get_long_name().empty()) {
                 arg_names += "--" + arg->get_long_name();
-                if (arg->get_has_arg()) {
+                if (arg->get_has_value()) {
                     arg_names += arg->arg_value_help.empty() ? "=VALUE" : '=' + arg->arg_value_help;
                 }
             }
