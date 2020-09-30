@@ -65,7 +65,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
 
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
-    setopt->set_has_arg(true);
+    setopt->set_has_value(true);
     setopt->set_arg_value_help("KEY=VALUE");
     setopt->set_short_description("set arbitrary config and repo options");
     setopt->set_description(R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
