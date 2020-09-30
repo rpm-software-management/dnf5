@@ -64,7 +64,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 {
     my $query = new libdnf::rpm::SolvQuery($sack);
     my $names = ["CQRlib"];
-    $query->ifilter_name($libdnf::common::QueryCmp_EQ, new libdnf::common::VectorString($names));
+    $query->ifilter_name($libdnf::common::QueryCmp_EQ, $names);
     is($query->size(), 2);
     my $pset = $query->get_package_set();
     is($pset->size(), 2);
@@ -81,7 +81,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 {
     my $query2 = new libdnf::rpm::SolvQuery($sack);
     my $names2 = ["CQ?lib"];
-    $query2->ifilter_name($libdnf::common::QueryCmp_GLOB, new libdnf::common::VectorString($names2));
+    $query2->ifilter_name($libdnf::common::QueryCmp_GLOB, $names2);
     is($query2->size(), 2);
     my $pset2 = $query2->get_package_set();
     my $it = $pset2->begin();

@@ -67,7 +67,7 @@ class TestSimpleNumber < Test::Unit::TestCase
         # Test QueryCmp::EQ
         query = Rpm::SolvQuery.new(@sack)
         names = ["CQRlib"]
-        query.ifilter_name(Common::QueryCmp_EQ, Common::VectorString.new(names))
+        query.ifilter_name(Common::QueryCmp_EQ, names)
         assert_equal(query.size(), 2)
         pset = query.get_package_set()
         assert_equal(pset.size(), 2)
@@ -81,7 +81,7 @@ class TestSimpleNumber < Test::Unit::TestCase
         # Test QueryCmp::GLOB
         query2 = Rpm::SolvQuery.new(@sack)
         names2 = ["CQ?lib"]
-        query2.ifilter_name(Common::QueryCmp_GLOB, Common::VectorString.new(names2))
+        query2.ifilter_name(Common::QueryCmp_GLOB, names2)
         assert_equal(query2.size(), 2)
         pset2 = query2.get_package_set()
         it = pset2.begin()

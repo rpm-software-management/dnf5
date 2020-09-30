@@ -62,7 +62,7 @@ class TestSolvQuery(unittest.TestCase):
         # Test QueryCmp::EQ
         query = libdnf.rpm.SolvQuery(self.sack)
         names = ["CQRlib"]
-        query.ifilter_name(libdnf.common.QueryCmp_EQ, libdnf.common.VectorString(names))
+        query.ifilter_name(libdnf.common.QueryCmp_EQ, names)
         self.assertEqual(query.size(), 2)
         pset = query.get_package_set()
         self.assertEqual(pset.size(), 2)
@@ -72,7 +72,7 @@ class TestSolvQuery(unittest.TestCase):
         # Test QueryCmp::GLOB
         query2 = libdnf.rpm.SolvQuery(self.sack)
         names2 = ["CQ?lib"]
-        query2.ifilter_name(libdnf.common.QueryCmp_GLOB, libdnf.common.VectorString(names2))
+        query2.ifilter_name(libdnf.common.QueryCmp_GLOB, names2)
         self.assertEqual(query2.size(), 2)
         pset2 = query2.get_package_set()
         for pkg in pset2:
