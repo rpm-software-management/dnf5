@@ -6,6 +6,13 @@ endif()
 message("Building tests")
 
 
+if(WITH_SANITIZERS)
+    set(ASAN_LD_PRELOAD "LD_PRELOAD=${ASAN_LIBRARIES}")
+    set(ASAN_OPTIONS "ASAN_OPTIONS=detect_odr_violation=0")
+    set(LSAN_OPTIONS "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/lsan-suppresions.txt")
+endif()
+
+
 # libdnf
 add_subdirectory(libdnf)
 

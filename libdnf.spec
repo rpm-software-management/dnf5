@@ -78,9 +78,11 @@ BuildRequires:  python3dist(sphinx-rtd-theme)
 %endif
 
 %if %{with sanitizers}
-BuildRequires:  libasan-static
-BuildRequires:  liblsan-static
-BuildRequires:  libubsan-static
+# compiler-rt is required by sanitizers in clang
+BuildRequires:  compiler-rt
+BuildRequires:  libasan
+BuildRequires:  liblsan
+BuildRequires:  libubsan
 %endif
 
 
