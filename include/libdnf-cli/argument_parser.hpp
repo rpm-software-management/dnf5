@@ -54,6 +54,13 @@ public:
         const char * get_description() const noexcept override { return "Conflicting arguments"; }
     };
 
+    /// Exception is thrown when a command requires a positional argument that was not found.
+    class MissingPositionalArgument : public Exception {
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "MissingPositionalArgument"; }
+        const char * get_description() const noexcept override { return "Missing positional argument"; }
+    };
+
     /// Exception is generated in the case of an unexpected argument.
     class UnknownArgument : public Exception {
     public:
@@ -117,6 +124,7 @@ public:
             libdnf::Option * init_value,
             std::vector<std::unique_ptr<libdnf::Option>> * values);
 
+        int get_nvals() const noexcept { return nvals; }
         void set_store_value(bool enable) noexcept { store_value = enable; }
         bool get_store_value() const noexcept { return store_value; }
         std::vector<std::unique_ptr<libdnf::Option>> * get_linked_values() noexcept { return values; }

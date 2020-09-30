@@ -283,6 +283,15 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
         }
     }
     ++parse_count;
+
+    // Test that all required positional arguments are present.
+    for (const auto * pos_arg : pos_args) {
+        const auto nvals = pos_arg->get_nvals();
+        if (pos_arg->get_parse_count() == 0 && nvals != PositionalArg::UNLIMITED && nvals != PositionalArg::OPTIONAL) {
+            throw MissingPositionalArgument(pos_arg->get_name());
+        }
+    }
+
     if (parse_hook) {
         parse_hook(this, option, argc, argv);
     }
