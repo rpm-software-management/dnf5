@@ -458,7 +458,7 @@ Transformer::transformPackages(libdnf::utils::SQLite3 & history,
  * Construct CompsGroup object from JSON
  * \param group group json object
  */
-CompsGroupPtr
+std::shared_ptr<CompsGroup>
 Transformer::processGroup(Transaction & trans, const char *groupId, struct json_object *group)
 {
     struct json_object *value;

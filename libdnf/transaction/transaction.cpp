@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm_package.hpp"
 #include "transaction_item.hpp"
 
+#include "libdnf/transaction/db/comps_group.hpp"
 #include "libdnf/transaction/db/console_output.hpp"
 #include "libdnf/transaction/db/trans.hpp"
 #include "libdnf/transaction/db/trans_with.hpp"
@@ -103,7 +104,7 @@ Transaction::getItems()
     auto rpms = get_transaction_packages(*this);
     result.insert(result.end(), rpms.begin(), rpms.end());
 
-    auto comps_groups = CompsGroup::getTransactionItems(*this);
+    auto comps_groups = get_transaction_comps_groups(*this);
     result.insert(result.end(), comps_groups.begin(), comps_groups.end());
 
     auto comps_environments = CompsEnvironment::getTransactionItems(*this);

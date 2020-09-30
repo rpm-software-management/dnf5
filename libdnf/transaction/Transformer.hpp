@@ -72,7 +72,7 @@ private:
     void transformOutput(libdnf::utils::SQLite3 & history, TransformerTransaction & trans);
     void transformTransWith(libdnf::utils::SQLite3 & history,
                             TransformerTransaction & trans);
-    CompsGroupPtr processGroup(Transaction & trans,
+    std::shared_ptr<CompsGroup> processGroup(Transaction & trans,
                                    const char *groupId,
                                    struct json_object *group);
     std::shared_ptr<CompsEnvironment> processEnvironment(Transaction & trans,

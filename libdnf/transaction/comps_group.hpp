@@ -28,10 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
-class CompsGroup;
-
-typedef std::shared_ptr< CompsGroup > CompsGroupPtr;
-
 enum class CompsPackageType : int {
     CONDITIONAL = 1 << 0,
     DEFAULT = 1 << 1,
@@ -44,7 +40,6 @@ enum class CompsPackageType : int {
 
 #include "Item.hpp"
 #include "transaction_item.hpp"
-#include "libdnf/transaction/db/comps_group.hpp"
 
 
 namespace libdnf::transaction {
@@ -56,7 +51,6 @@ class CompsGroupPackage;
 class CompsGroup : public Item {
 public:
     using Item::Item;
-    CompsGroup(Transaction & trans, int64_t pk);
     virtual ~CompsGroup() = default;
 
     const std::string & get_group_id() const noexcept { return group_id; }
@@ -88,12 +82,9 @@ public:
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
     //    libdnf::utils::SQLite3Ptr conn,
     //    const std::string &pattern);
-    static std::vector< TransactionItemPtr > getTransactionItems(Transaction & trans);
 
 protected:
     const Type itemType = Type::GROUP;
-    void dbSelect(int64_t pk);
-    void dbInsert();
 
 private:
     friend class CompsGroupPackage;
