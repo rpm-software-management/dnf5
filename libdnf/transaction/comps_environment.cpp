@@ -21,78 +21,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_environment.hpp"
 #include "transaction.hpp"
 
+#include "libdnf/transaction/db/comps_environment.hpp"
 #include "libdnf/transaction/db/comps_environment_group.hpp"
 
 
 namespace libdnf::transaction {
 
 
-CompsEnvironment::CompsEnvironment(Transaction & trans, int64_t pk)
-  : Item{trans}
-{
-    dbSelect(pk);
-    comps_environment_groups_select(*this);
-}
-
-
-void
-CompsEnvironment::save()
-{
-    dbInsert();
+void CompsEnvironment::save() {
+    auto query = comps_environment_insert_new_query(trans.get_connection());
+    comps_environment_insert(*query, *this);
     comps_environment_groups_insert(*this);
 }
 
-void
-CompsEnvironment::dbSelect(int64_t pk)
-{
-    const char *sql = R"**(
-        SELECT
-            environmentid,
-            name,
-            translated_name,
-            pkg_types
-        FROM
-            comps_environment
-        WHERE
-            item_id = ?
-    )**";
-    libdnf::utils::SQLite3::Query query(trans.get_connection(), sql);
-    query.bindv(pk);
-    query.step();
-
-    setId(pk);
-    set_environment_id(query.get< std::string >("environmentid"));
-    set_name(query.get< std::string >("name"));
-    set_translated_name(query.get< std::string >("translated_name"));
-    set_package_types(static_cast< CompsPackageType >(query.get< int >("pkg_types")));
-}
-
-void
-CompsEnvironment::dbInsert()
-{
-    // populates this->id
-    Item::save();
-
-    const char *sql = R"**(
-        INSERT INTO
-            comps_environment (
-                item_id,
-                environmentid,
-                name,
-                translated_name,
-                pkg_types
-            )
-        VALUES
-            (?, ?, ?, ?, ?)
-    )**";
-    libdnf::utils::SQLite3::Statement query(trans.get_connection(), sql);
-    query.bindv(getId(),
-                get_environment_id(),
-                get_name(),
-                get_translated_name(),
-                static_cast< int >(get_package_types()));
-    query.step();
-}
 
 /*
 static TransactionItemPtr
@@ -198,55 +139,12 @@ CompsEnvironmentItem::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr con
 }
 */
 
-std::vector< TransactionItemPtr >
-CompsEnvironment::getTransactionItems(Transaction & trans)
-{
-    std::vector< TransactionItemPtr > result;
-
-    const char *sql = R"**(
-        SELECT
-            ti.id,
-            ti.state,
-            i.item_id,
-            i.environmentid,
-            i.name,
-            i.translated_name,
-            i.pkg_types
-        FROM
-            trans_item ti,
-            comps_environment i
-        WHERE
-            ti.trans_id = ?
-            AND ti.item_id = i.item_id
-    )**";
-    libdnf::utils::SQLite3::Query query(trans.get_connection(), sql);
-    query.bindv(trans.get_id());
-
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto trans_item = std::make_shared< TransactionItem >(trans);
-        auto item = std::make_shared< CompsEnvironment >(trans);
-        trans_item->setItem(item);
-
-        trans_item->set_id(query.get< int >(0));
-        trans_item->set_state(static_cast< TransactionItemState >(query.get< int >(1)));
-        item->setId(query.get< int >(2));
-        item->set_environment_id(query.get< std::string >(3));
-        item->set_name(query.get< std::string >(4));
-        item->set_translated_name(query.get< std::string >(5));
-        item->set_package_types(static_cast< CompsPackageType >(query.get< int >(6)));
-        comps_environment_groups_select(*item);
-
-        result.push_back(trans_item);
-    }
-    return result;
-}
 
 std::string
 CompsEnvironment::toStr() const
 {
     return "@" + get_environment_id();
 }
-
 
 
 CompsEnvironmentGroup::CompsEnvironmentGroup(CompsEnvironment &environment)

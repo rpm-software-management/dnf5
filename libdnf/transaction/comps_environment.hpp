@@ -47,7 +47,6 @@ class CompsEnvironmentGroup;
 class CompsEnvironment : public Item {
 public:
     using Item::Item;
-    explicit CompsEnvironment(Transaction & trans, int64_t pk);
     virtual ~CompsEnvironment() = default;
 
     const std::string & get_environment_id() const noexcept { return environment_id; }
@@ -82,9 +81,6 @@ public:
 
 protected:
     const Type itemType = Type::ENVIRONMENT;
-    void loadGroups();
-    void dbSelect(int64_t pk);
-    void dbInsert();
 
 private:
     friend class CompsEnvironmentGroup;

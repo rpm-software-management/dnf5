@@ -57,24 +57,27 @@ CompsEnvironmentItemTest::testCreate()
     trans.begin();
     trans.finish(TransactionState::DONE);
 
-    CompsEnvironment env2(trans, env->getId());
-    CPPUNIT_ASSERT(env2.getId() == env->getId());
-    CPPUNIT_ASSERT(env2.get_environment_id() == env->get_environment_id());
-    CPPUNIT_ASSERT(env2.get_name() == env->get_name());
-    CPPUNIT_ASSERT(env2.get_translated_name() == env->get_translated_name());
-    CPPUNIT_ASSERT(env2.get_package_types() == env->get_package_types());
+    Transaction trans2(*conn, trans.get_id());
+
+    auto env2 = std::dynamic_pointer_cast<CompsEnvironment>(trans.getItems().at(0)->getItem());
+
+    CPPUNIT_ASSERT(env2->getId() == env->getId());
+    CPPUNIT_ASSERT(env2->get_environment_id() == env->get_environment_id());
+    CPPUNIT_ASSERT(env2->get_name() == env->get_name());
+    CPPUNIT_ASSERT(env2->get_translated_name() == env->get_translated_name());
+    CPPUNIT_ASSERT(env2->get_package_types() == env->get_package_types());
 
     {
-        auto & group = env2.get_groups().at(0);
-        CPPUNIT_ASSERT(group->get_group_id() == "base");
-        CPPUNIT_ASSERT(group->get_installed() == false);
-        CPPUNIT_ASSERT(group->get_group_type() == CompsPackageType::OPTIONAL);
-    }
-    {
-        auto & group = env2.get_groups().at(1);
+        auto & group = env2->get_groups().at(0);
         CPPUNIT_ASSERT(group->get_group_id() == "core");
         CPPUNIT_ASSERT(group->get_installed() == true);
         CPPUNIT_ASSERT(group->get_group_type() == CompsPackageType::MANDATORY);
+    }
+    {
+        auto & group = env2->get_groups().at(1);
+        CPPUNIT_ASSERT(group->get_group_id() == "base");
+        CPPUNIT_ASSERT(group->get_installed() == false);
+        CPPUNIT_ASSERT(group->get_group_type() == CompsPackageType::OPTIONAL);
     }
 }
 
