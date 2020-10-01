@@ -393,6 +393,65 @@ void ArgumentParser::Command::help() const noexcept {
     }
 }
 
+ArgumentParser::Command * ArgumentParser::add_new_command(const std::string & id) {
+    std::unique_ptr<Command> arg(new Command(*this, id));
+    auto * ptr = arg.get();
+    cmds.push_back(std::move(arg));
+    return ptr;
+}
+
+ArgumentParser::NamedArg * ArgumentParser::add_new_named_arg(const std::string & id) {
+    std::unique_ptr<NamedArg> arg(new NamedArg(*this, id));
+    auto * ptr = arg.get();
+    named_args.push_back(std::move(arg));
+    return ptr;
+}
+
+ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
+    const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values) {
+    std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, id, values));
+    auto * ptr = arg.get();
+    pos_args.push_back(std::move(arg));
+    return ptr;
+}
+
+ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
+    const std::string & id,
+    int nargs,
+    libdnf::Option * init_value,
+    std::vector<std::unique_ptr<libdnf::Option>> * values) {
+    std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, id, nargs, init_value, values));
+    auto * ptr = arg.get();
+    pos_args.push_back(std::move(arg));
+    return ptr;
+}
+
+std::vector<ArgumentParser::Argument *> * ArgumentParser::add_conflict_args_group(
+    std::unique_ptr<std::vector<Argument *>> && conflict_args_group) {
+    auto * ptr = conflict_args_group.get();
+    conflict_args_groups.push_back(std::move(conflict_args_group));
+    return ptr;
+}
+
+libdnf::Option * ArgumentParser::add_init_value(std::unique_ptr<libdnf::Option> && src) {
+    auto * ptr = src.get();
+    values_init.push_back(std::move(src));
+    return ptr;
+}
+
+std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_new_values() {
+    std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> tmp(new std::vector<std::unique_ptr<libdnf::Option>>);
+    auto * ptr = tmp.get();
+    values.push_back(std::move(tmp));
+    return ptr;
+}
+
+std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_values(
+    std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>> && values) {
+    auto * ptr = values.get();
+    this->values.push_back(std::move(values));
+    return ptr;
+}
 
 void ArgumentParser::parse(int argc, const char * const argv[]) {
     if (!root_command) {
