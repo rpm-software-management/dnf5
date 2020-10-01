@@ -57,4 +57,12 @@ const char * const ERROR_REPOCONF = "org.rpm.dnf.v0.rpm.RepoConf.Error";
 
 }  // namespace dnfdaemon
 
+#define DNFDAEMON_ERROR_REPLY(_CALL, _EXCEPTION)                                     \
+    auto _reply = (_CALL).createErrorReply({dnfdaemon::ERROR, (_EXCEPTION).what()}); \
+    try {                                                                            \
+        _reply.send();                                                               \
+    } catch (...) {                                                                  \
+    }                                                                                \
+    /**/
+
 #endif

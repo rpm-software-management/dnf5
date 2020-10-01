@@ -24,8 +24,8 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <sdbus-c++/sdbus-c++.h>
 
-#include <random>
 #include <iostream>
+#include <random>
 #include <sstream>
 #include <string>
 #include <thread>
@@ -38,6 +38,7 @@ SessionManager::SessionManager(sdbus::IConnection & connection, const std::strin
 
 SessionManager::~SessionManager() {
     dbus_object->unregister();
+    threads_manager.finish();
 }
 
 void SessionManager::dbus_register() {
@@ -82,12 +83,17 @@ void SessionManager::on_name_owner_changed(sdbus::Signal & signal) {
     signal >> name >> old_owner >> new_owner;
     if (new_owner.empty() && sessions.count(old_owner) > 0) {
         auto worker = std::thread([this, old_owner=std::move(old_owner)]() {
-            std::lock_guard<std::mutex> lock(sessions_mutex);
-            // the sender name disappeared from the dbus, erase all its sessions
-            sessions.erase(old_owner);
+            std::map<std::string, std::map<std::string, std::unique_ptr<Session>>> to_be_erased;
+            {
+                std::lock_guard<std::mutex> lock(sessions_mutex);
+                // the sender name disappeared from the dbus, erase all its sessions
+                to_be_erased[old_owner] = std::move(sessions.at(old_owner));
+                sessions.erase(old_owner);
+            }
+            to_be_erased.erase(old_owner);
+            threads_manager.current_thread_finished();
         });
-        // TODO (mblaha): this .detach() is wrong
-        worker.detach();
+        threads_manager.register_thread(std::move(worker));
     }
 }
 
@@ -96,7 +102,7 @@ void SessionManager::open_session(sdbus::MethodCall call) {
     dnfdaemon::KeyValueMap configuration;
     call >> configuration;
 
-    auto worker = std::thread([this,sender,configuration,call=std::move(call)]() {
+    auto worker = std::thread([this,sender=std::move(sender),configuration=std::move(configuration),call=std::move(call)]() {
         // generate UUID-like session id
         const std::string sessionid = object_path + "/" + gen_session_id();
         // store newly created session
@@ -109,9 +115,9 @@ void SessionManager::open_session(sdbus::MethodCall call) {
         auto reply = call.createReply();
         reply << sdbus::ObjectPath{sessionid};
         reply.send();
+        threads_manager.current_thread_finished();
     });
-    // TODO (mblaha): this .detach() is wrong
-    worker.detach();
+    threads_manager.register_thread(std::move(worker));
 }
 
 
@@ -120,18 +126,22 @@ void SessionManager::close_session(sdbus::MethodCall call) {
     sdbus::ObjectPath session_id;
     call >> session_id;
 
-    bool retval = false;
-    // find sessions created by the same sender
-    auto sender_it = sessions.find(sender);
-    if (sender_it != sessions.end()) {
-        std::lock_guard<std::mutex> lock(sessions_mutex);
-        // delete session with given session_id
-        if (sender_it->second.erase(session_id) > 0) {
-            retval = true;
+    auto worker = std::thread([this,sender=std::move(sender),session_id=std::move(session_id),call=std::move(call)]() {
+        bool retval = false;
+        // find sessions created by the same sender
+        auto sender_it = sessions.find(sender);
+        if (sender_it != sessions.end()) {
+            std::lock_guard<std::mutex> lock(sessions_mutex);
+            // delete session with given session_id
+            if (sender_it->second.erase(session_id) > 0) {
+                retval = true;
+            }
         }
-    }
 
-    auto reply = call.createReply();
-    reply << retval;
-    reply.send();
+        auto reply = call.createReply();
+        reply << retval;
+        reply.send();
+        threads_manager.current_thread_finished();
+    });
+    threads_manager.register_thread(std::move(worker));
 }

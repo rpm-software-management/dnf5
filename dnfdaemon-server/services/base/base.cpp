@@ -27,14 +27,13 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <sdbus-c++/sdbus-c++.h>
 #include <unistd.h>
 
-#include <chrono>
 #include <iostream>
 #include <string>
 #include <thread>
 
 class DbusRepoCB : public libdnf::rpm::RepoCB {
 public:
-    DbusRepoCB(sdbus::IObject * dbus_object) : dbus_object(dbus_object) {};
+    DbusRepoCB(sdbus::IObject * dbus_object) : dbus_object(dbus_object){};
     void start(const char * what) override {
         auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START);
         signal << what;
@@ -47,9 +46,7 @@ public:
         dbus_object->emitSignal(signal);
     }
 
-    int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
-        return 0;
-    }
+    int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override { return 0; }
 
     // TODO(mblaha): how to ask the user for confirmation?
     bool repokey_import(
@@ -68,9 +65,10 @@ private:
 
 void Base::dbus_register() {
     dbus_object = sdbus::createObject(session.get_connection(), session.get_object_path());
-    dbus_object->registerMethod(dnfdaemon::INTERFACE_BASE, "read_all_repos", "", "b", [this](sdbus::MethodCall call) -> void {
-        this->read_all_repos(call);
-    });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_BASE, "read_all_repos", "", "b", [this](sdbus::MethodCall call) -> void {
+            this->read_all_repos(call);
+        });
     dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START, "s");
     dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END, "s");
     dbus_object->finishRegistration();
@@ -81,35 +79,39 @@ void Base::dbus_deregister() {
 }
 
 void Base::read_all_repos(sdbus::MethodCall call) {
-    auto worker = std::thread([this, call=std::move(call)]() {
-        // TODO(mblaha): get flags from session configuration
-        using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
-        auto flags =
-            LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
-        auto base = session.get_base();
-        //auto & logger = base->get_logger();
-        auto & rpm_repo_sack = base->get_rpm_repo_sack();
-        auto enabled_repos = rpm_repo_sack.new_query().ifilter_enabled(true);
-        auto & solv_sack = base->get_rpm_solv_sack();
-        bool retval = true;
-        for (auto & repo : enabled_repos.get_data()) {
-            repo->set_callbacks(std::make_unique<DbusRepoCB>(dbus_object.get()));
-            try {
-                repo->load();
-                solv_sack.load_repo(*repo.get(), flags);
-            } catch (const std::runtime_error & ex) {
-                if (!repo->get_config()->skip_if_unavailable().get_value()) {
-                    retval = false;
-                    break;
+    auto worker = std::thread([this, call = std::move(call)]() {
+        try {
+            // TODO(mblaha): get flags from session configuration
+            using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
+            auto flags =
+                LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
+            auto base = session.get_base();
+            //auto & logger = base->get_logger();
+            auto & rpm_repo_sack = base->get_rpm_repo_sack();
+            auto enabled_repos = rpm_repo_sack.new_query().ifilter_enabled(true);
+            auto & solv_sack = base->get_rpm_solv_sack();
+            bool retval = true;
+            for (auto & repo : enabled_repos.get_data()) {
+                repo->set_callbacks(std::make_unique<DbusRepoCB>(dbus_object.get()));
+                try {
+                    repo->load();
+                    solv_sack.load_repo(*repo.get(), flags);
+                } catch (const std::runtime_error & ex) {
+                    if (!repo->get_config()->skip_if_unavailable().get_value()) {
+                        retval = false;
+                        break;
+                    }
                 }
             }
+            // TODO(mblaha): call.createReply() can got stucked
+            auto reply = call.createReply();
+            reply << retval;
+            reply.send();
+        } catch (std::exception & ex) {
+            DNFDAEMON_ERROR_REPLY(call, ex);
         }
-        // TODO(mblaha): call.createReply() can got stucked
-        auto reply = call.createReply();
-        reply << retval;
-        reply.send();
         // mark this thread as finished
-        session.mark_thread_finished(std::this_thread::get_id());
+        session.get_threads_manager().current_thread_finished();
     });
-    session.register_thread(std::move(worker));
+    session.get_threads_manager().register_thread(std::move(worker));
 }

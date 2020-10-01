@@ -21,6 +21,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #define DNFDAEMON_SERVER_SESSIONMANAGER_HPP
 
 #include "session.hpp"
+#include "threads_manager.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -37,6 +38,7 @@ public:
 private:
     std::string object_path;
     sdbus::IConnection & connection;
+    ThreadsManager threads_manager;
     std::unique_ptr<sdbus::IObject> dbus_object;
     std::unique_ptr<sdbus::IProxy> name_changed_proxy;
 

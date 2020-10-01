@@ -87,49 +87,6 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     for (auto & s : services) {
         s->dbus_register();
     }
-
-    // collecting finished worker threads
-    running_threads_collector = std::thread([this]() {
-        while (!finish_garbage_collector) {
-            join_threads(true);
-            std::this_thread::sleep_for(std::chrono::seconds(1));
-        }
-    });
-}
-
-void Session::register_thread(std::thread && thread) {
-    std::lock_guard<std::mutex> lock(running_threads_mutex);
-    running_threads.emplace_back(std::move(thread));
-}
-
-void Session::mark_thread_finished(std::thread::id thread_id) {
-    std::lock_guard<std::mutex> lock(running_threads_mutex);
-    finished_threads.emplace_back(std::move(thread_id));
-}
-
-void Session::join_threads(const bool only_finished) {
-    std::vector<std::thread> to_be_joined{};
-
-    {
-        std::lock_guard<std::mutex> lock(running_threads_mutex);
-        for (auto thread=running_threads.begin(); thread < running_threads.end();) {
-            auto in_finished = std::find(finished_threads.begin(), finished_threads.end(), thread->get_id());
-            if (thread->joinable() && (!only_finished || (in_finished != finished_threads.end()))) {
-                to_be_joined.push_back(std::move(*thread));
-                running_threads.erase(thread);
-                if (in_finished != finished_threads.end()) {
-                    finished_threads.erase(in_finished);
-                }
-            } else {
-                ++thread;
-            }
-        }
-    }
-
-    for (auto thread=to_be_joined.begin(); thread < to_be_joined.end(); ++thread) {
-        // join the thread and remove it from registry
-        thread->join();
-    }
 }
 
 Session::~Session() {
@@ -137,11 +94,7 @@ Session::~Session() {
     for (auto & s : services) {
         s->dbus_deregister();
     }
-
-    // join all threads
-    finish_garbage_collector = true;
-    join_threads(false);
-    running_threads_collector.join();
+    threads_manager.finish();
 }
 
 // explicit instantiation of session_configuration_value template
