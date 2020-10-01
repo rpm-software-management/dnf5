@@ -195,6 +195,33 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
     return consumed_args;
 }
 
+void ArgumentParser::Command::register_command(Command * cmd) {
+    for (auto * item : cmds) {
+        if (item->id == cmd->id) {
+            throw CommandIdExists(cmd->id);
+        }
+    }
+    cmds.push_back(cmd);
+}
+
+void ArgumentParser::Command::register_named_arg(NamedArg * arg) {
+    for (auto * item : named_args) {
+        if (item->id == arg->id) {
+            throw NamedArgIdExists(arg->id);
+        }
+    }
+    named_args.push_back(arg);
+}
+
+void ArgumentParser::Command::register_positional_arg(PositionalArg * arg) {
+    for (auto * item : pos_args) {
+        if (item->id == arg->id) {
+            throw PositionalArgIdExists(arg->id);
+        }
+    }
+    pos_args.push_back(arg);
+}
+
 ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string & id) const {
     for (auto * item : cmds) {
         if (item->get_id() == id) {

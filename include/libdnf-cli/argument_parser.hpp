@@ -313,6 +313,39 @@ public:
             const char * get_description() const noexcept override { return "Positional argument not found"; }
         };
 
+        /// Exception is thrown when a command with the same ID is already registered.
+        class CommandIdExists : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
+            const char * get_name() const noexcept override { return "CommandIdExists"; }
+            const char * get_description() const noexcept override {
+                return "Command with the same ID is already registered";
+            }
+        };
+
+        /// Exception is thrown when a named argument with the same ID is already registered.
+        class NamedArgIdExists : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
+            const char * get_name() const noexcept override { return "NamedArgIdExists"; }
+            const char * get_description() const noexcept override {
+                return "Named argument with the same ID is already registered";
+            }
+        };
+
+        /// Exception is thrown when a positional argument with the same ID is already registered.
+        class PositionalArgIdExists : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
+            const char * get_name() const noexcept override { return "PositionalArgIdExists"; }
+            const char * get_description() const noexcept override {
+                return "Positional argument with the same ID is already registered";
+            }
+        };
+
         using ParseHookFunc = std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])>;
 
         /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
@@ -320,13 +353,16 @@ public:
         void parse(const char * option, int argc, const char * const argv[]);
 
         /// Registers (sub)command to the command.
-        void register_command(Command * arg) { cmds.push_back(arg); }
+        /// An exception is thrown when a command with the same ID is already registered.
+        void register_command(Command * cmd);
 
         /// Registers named argument to the command.
-        void register_named_arg(NamedArg * arg) { named_args.push_back(arg); }
+        /// An exception is thrown when a named argument with the same ID is already registered.
+        void register_named_arg(NamedArg * arg);
 
         /// Registers positional argument to the command.
-        void register_positional_arg(PositionalArg * arg) { pos_args.push_back(arg); }
+        /// An exception is thrown when a positional argument with the same ID is already registered.
+        void register_positional_arg(PositionalArg * arg);
 
         /// Gets a list of registered commands.
         const std::vector<Command *> & get_commands() const noexcept { return cmds; }
