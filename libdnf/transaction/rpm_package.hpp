@@ -22,19 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TRANSACTION_RPM_PACKAGE_HPP
 
 
-#include <memory>
-#include <vector>
-
-
-namespace libdnf::transaction {
-class Package;
-typedef std::shared_ptr< Package > PackagePtr;
-}
-
-
 #include "Item.hpp"
 #include "transaction_item.hpp"
 #include "transaction_item_reason.hpp"
+
+#include <memory>
+#include <vector>
 
 
 namespace libdnf::transaction {

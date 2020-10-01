@@ -308,7 +308,7 @@ MergedTransactionTest::testMergeAlterAlter()
 }
 
 
-static PackagePtr
+static std::shared_ptr<Package>
 nevraToPackage(Transaction & trans, std::string nevra)
 {
     libdnf::rpm::Nevra nevraObject;
@@ -320,11 +320,7 @@ nevraToPackage(Transaction & trans, std::string nevra)
     }
 
     auto rpm = std::make_shared< Package >(trans);
-    rpm->set_name(nevraObject.get_name());
-    rpm->set_epoch(nevraObject.get_epoch());
-    rpm->set_version(nevraObject.get_version());
-    rpm->set_release(nevraObject.get_release());
-    rpm->set_arch(nevraObject.get_arch());
+    libdnf::rpm::copy_nevra_attributes(nevraObject, *rpm);
     return rpm;
 }
 
