@@ -2,6 +2,7 @@
 
 
 %include <exception.i>
+%include <std_common.i>
 
 #if defined(SWIGPYTHON)
 %import(module="libdnf.common") "common.i"
@@ -22,7 +23,9 @@
 
 %{
     #include "libdnf/base/base.hpp"
+    #include "libdnf/base/goal.hpp"
 %}
 
 #define CV __perl_CV
 %include "libdnf/base/base.hpp"
+%include "libdnf/base/goal.hpp"
