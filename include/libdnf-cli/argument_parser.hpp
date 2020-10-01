@@ -71,7 +71,6 @@ public:
 
     class Argument {
     public:
-        Argument(ArgumentParser & owner, std::string name) : owner(owner), name(std::move(name)) {}
         Argument(const Argument &) = delete;
         Argument(Argument &&) = delete;
         Argument & operator=(const Argument &) = delete;
@@ -109,12 +108,15 @@ public:
         /// Returns the first conflicting argument.
         Argument * get_conflict_argument() const noexcept;
 
-        static std::string get_conflict_arg_msg(const Argument * conflict_arg);
         virtual void help() const noexcept {}
-        ArgumentParser & get_owner() const noexcept { return owner; }
 
     private:
         friend class ArgumentParser;
+
+        Argument(ArgumentParser & owner, std::string name) : owner(owner), name(std::move(name)) {}
+        static std::string get_conflict_arg_msg(const Argument * conflict_arg);
+        ArgumentParser & get_owner() const noexcept { return owner; }
+
         ArgumentParser & owner;
         std::string name;
         std::string description;
@@ -142,15 +144,6 @@ public:
 
         using ParseHookFunc = std::function<bool(PositionalArg * arg, int argc, const char * const argv[])>;
 
-        PositionalArg(
-            ArgumentParser & owner, const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values);
-        PositionalArg(
-            ArgumentParser & owner,
-            const std::string & name,
-            int nvals,
-            libdnf::Option * init_value,
-            std::vector<std::unique_ptr<libdnf::Option>> * values);
-
         /// Gets the number of values required by this argument on the command line.
         /// May return special values: OPTIONAL, UNLIMITED, UNLIMITED_BUT_ONE
         int get_nvals() const noexcept { return nvals; }
@@ -169,11 +162,22 @@ public:
         /// Sets the user function for parsing the argument.
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
 
+    private:
+        friend class ArgumentParser;
+
+        PositionalArg(
+            ArgumentParser & owner, const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values);
+        PositionalArg(
+            ArgumentParser & owner,
+            const std::string & name,
+            int nvals,
+            libdnf::Option * init_value,
+            std::vector<std::unique_ptr<libdnf::Option>> * values);
+
         /// Parses input.
         /// Returns number of consumed arguments from the input.
         int parse(const char * option, int argc, const char * const argv[]);
 
-    private:
         int nvals;
         libdnf::Option * init_value;
         std::vector<std::unique_ptr<libdnf::Option>> * values;
@@ -202,8 +206,6 @@ public:
         };
 
         using ParseHookFunc = std::function<bool(NamedArg * arg, const char * option, const char * value)>;
-
-        NamedArg(ArgumentParser & owner, const std::string & name) : Argument(owner, name) {}
 
         /// Sets long name of argument. Long name is prefixed with two dashes on the command line (e.g. "--help").
         void set_long_name(std::string long_name) noexcept { this->long_name = std::move(long_name); }
@@ -253,6 +255,17 @@ public:
         /// Sets the user function for parsing the argument.
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
 
+        /// Sets help text for argument value.
+        void set_arg_value_help(std::string text) { arg_value_help = std::move(text); }
+
+        /// Gets help text for argument value.
+        const std::string & get_arg_value_help() const noexcept { return arg_value_help; }
+
+    private:
+        friend class ArgumentParser;
+
+        NamedArg(ArgumentParser & owner, const std::string & name) : Argument(owner, name) {}
+
         /// Parses long argument.
         /// Returns number of consumed arguments from the input.
         int parse_long(const char * option, int argc, const char * const argv[]);
@@ -262,14 +275,6 @@ public:
         /// Multiple short arguments can be packed in one item. (e.g. "-v -f" -> "-vf").
         int parse_short(const char * option, int argc, const char * const argv[]);
 
-        /// Sets help text for argument value.
-        void set_arg_value_help(std::string text) { arg_value_help = std::move(text); }
-
-        /// Gets help text for argument value.
-        const std::string & get_arg_value_help() const noexcept { return arg_value_help; }
-
-    private:
-        friend class ArgumentParser;
         std::string long_name;
         char short_name{'\0'};
         bool has_value{false};
@@ -310,8 +315,6 @@ public:
         };
 
         using ParseHookFunc = std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])>;
-
-        Command(ArgumentParser & owner, const std::string & name) : Argument(owner, name) {}
 
         /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
         /// Returns number of consumed arguments from the input.
@@ -375,6 +378,9 @@ public:
 
     private:
         friend class ArgumentParser;
+
+        Command(ArgumentParser & owner, const std::string & name) : Argument(owner, name) {}
+
         std::vector<Command *> cmds;
         std::vector<NamedArg *> named_args;
         std::vector<PositionalArg *> pos_args;
