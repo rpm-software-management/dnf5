@@ -89,10 +89,10 @@ TransformerTest::testGroupTransformation()
             CPPUNIT_ASSERT("Minimal Install" == env->get_name());
             CPPUNIT_ASSERT("Minimálna inštalácia" == env->get_translated_name());
 
-            auto groups = env->get_groups();
+            auto & groups = env->get_groups();
             CPPUNIT_ASSERT(1 == groups.size());
 
-            auto envGroup = groups[0];
+            auto & envGroup = groups[0];
             CPPUNIT_ASSERT(envGroup->get_group_id() == "core");
             CPPUNIT_ASSERT(envGroup->get_installed() == true);
             CPPUNIT_ASSERT(envGroup->get_group_type() == CompsPackageType::MANDATORY);

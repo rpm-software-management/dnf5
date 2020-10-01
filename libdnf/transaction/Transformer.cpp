@@ -530,7 +530,10 @@ Transformer::processEnvironment(Transaction & trans, const char *envId, struct j
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
             const char *key = json_object_get_string(json_object_array_get_idx(value, i));
-            compsEnv->add_group(key, true, CompsPackageType::MANDATORY);
+            auto & grp = compsEnv->new_group();
+            grp.set_group_id(key);
+            grp.set_installed(true);
+            grp.set_group_type(CompsPackageType::MANDATORY);
         }
     }
 
@@ -539,7 +542,10 @@ Transformer::processEnvironment(Transaction & trans, const char *envId, struct j
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
             const char *key = json_object_get_string(json_object_array_get_idx(value, i));
-            compsEnv->add_group(key, false, CompsPackageType::MANDATORY);
+            auto & grp = compsEnv->new_group();
+            grp.set_group_id(key);
+            grp.set_installed(false);
+            grp.set_group_type(CompsPackageType::MANDATORY);
         }
     }
 

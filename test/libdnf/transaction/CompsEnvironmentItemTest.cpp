@@ -33,9 +33,17 @@ createCompsEnvironment(Transaction & trans)
     env->set_name("Minimal Environment");
     env->set_translated_name("translated(Minimal Environment)");
     env->set_package_types(CompsPackageType::DEFAULT);
-    env->add_group("core", true, CompsPackageType::MANDATORY);
-    env->add_group("base", false, CompsPackageType::OPTIONAL);
-    env->save();
+
+    auto & grp_core = env->new_group();
+    grp_core.set_group_id("core");
+    grp_core.set_installed(true);
+    grp_core.set_group_type(CompsPackageType::MANDATORY);
+
+    auto & grp_base = env->new_group();
+    grp_base.set_group_id("base");
+    grp_base.set_installed(false);
+    grp_base.set_group_type(CompsPackageType::OPTIONAL);
+
     return env;
 }
 
@@ -44,6 +52,10 @@ CompsEnvironmentItemTest::testCreate()
 {
     Transaction trans(*conn);
     auto env = createCompsEnvironment(trans);
+    auto ti = trans.addItem(env, "", TransactionItemAction::INSTALL, TransactionItemReason::USER);
+    ti->set_state(TransactionItemState::DONE);
+    trans.begin();
+    trans.finish(TransactionState::DONE);
 
     CompsEnvironment env2(trans, env->getId());
     CPPUNIT_ASSERT(env2.getId() == env->getId());
@@ -53,23 +65,14 @@ CompsEnvironmentItemTest::testCreate()
     CPPUNIT_ASSERT(env2.get_package_types() == env->get_package_types());
 
     {
-        auto group = env2.get_groups().at(0);
+        auto & group = env2.get_groups().at(0);
         CPPUNIT_ASSERT(group->get_group_id() == "base");
         CPPUNIT_ASSERT(group->get_installed() == false);
         CPPUNIT_ASSERT(group->get_group_type() == CompsPackageType::OPTIONAL);
     }
     {
-        auto group = env2.get_groups().at(1);
+        auto & group = env2.get_groups().at(1);
         CPPUNIT_ASSERT(group->get_group_id() == "core");
-        CPPUNIT_ASSERT(group->get_installed() == true);
-        CPPUNIT_ASSERT(group->get_group_type() == CompsPackageType::MANDATORY);
-    }
-
-    // test adding a duplicate group
-    env2.add_group("base", true, CompsPackageType::MANDATORY);
-    {
-        auto group = env2.get_groups().at(0);
-        CPPUNIT_ASSERT(group->get_group_id() == "base");
         CPPUNIT_ASSERT(group->get_installed() == true);
         CPPUNIT_ASSERT(group->get_group_type() == CompsPackageType::MANDATORY);
     }
@@ -94,11 +97,11 @@ CompsEnvironmentItemTest::testGetTransactionItems()
 
     auto env2 = std::dynamic_pointer_cast<CompsEnvironment>(transItem->getItem());
     {
-        auto group = env2->get_groups().at(0);
+        auto & group = env2->get_groups().at(0);
         CPPUNIT_ASSERT_EQUAL(std::string("base"), group->get_group_id());
     }
     {
-        auto group = env2->get_groups().at(1);
+        auto & group = env2->get_groups().at(1);
         CPPUNIT_ASSERT_EQUAL(std::string("core"), group->get_group_id());
     }
 }

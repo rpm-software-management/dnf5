@@ -99,7 +99,10 @@ WorkflowTest::testDefaultWorkflow()
     comps_environment_minimal->set_environment_id("minimal");
     comps_environment_minimal->set_name("Minimal");
     comps_environment_minimal->set_translated_name("mmm");
-    comps_environment_minimal->add_group("core", true, CompsPackageType::MANDATORY);
+    auto & grp = comps_environment_minimal->new_group();
+    grp.set_group_id("core");
+    grp.set_installed(true);
+    grp.set_group_type(CompsPackageType::MANDATORY);
     repoid = "";
     action = TransactionItemAction::INSTALL;
     reason = TransactionItemReason::USER;
@@ -154,9 +157,6 @@ WorkflowTest::testDefaultWorkflow()
         if (i->getItem()->getItemType() == TransactionItemType::ENVIRONMENT) {
             auto env = std::dynamic_pointer_cast< CompsEnvironment >(i->getItem());
             CPPUNIT_ASSERT(env->get_groups().size() == 1);
-            for (auto i : env->get_groups()) {
-                // std::cout << "  CompsEnvironmentGroup: @" << i->get_group_id() << std::endl;
-            }
         }
     }
 

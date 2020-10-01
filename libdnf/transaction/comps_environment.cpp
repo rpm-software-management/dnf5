@@ -18,36 +18,28 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include <algorithm>
-
 #include "comps_environment.hpp"
 #include "transaction.hpp"
 
+#include "libdnf/transaction/db/comps_environment_group.hpp"
+
 
 namespace libdnf::transaction {
-
-
-typedef const char *string;
 
 
 CompsEnvironment::CompsEnvironment(Transaction & trans, int64_t pk)
   : Item{trans}
 {
     dbSelect(pk);
+    comps_environment_groups_select(*this);
 }
 
 
 void
 CompsEnvironment::save()
 {
-    if (getId() == 0) {
-        dbInsert();
-    } else {
-        // dbUpdate();
-    }
-    for (const auto &i : get_groups()) {
-        i->save();
-    }
+    dbInsert();
+    comps_environment_groups_insert(*this);
 }
 
 void
@@ -242,6 +234,7 @@ CompsEnvironment::getTransactionItems(Transaction & trans)
         item->set_name(query.get< std::string >(4));
         item->set_translated_name(query.get< std::string >(5));
         item->set_package_types(static_cast< CompsPackageType >(query.get< int >(6)));
+        comps_environment_groups_select(*item);
 
         result.push_back(trans_item);
     }
@@ -254,103 +247,21 @@ CompsEnvironment::toStr() const
     return "@" + get_environment_id();
 }
 
-/**
- * Lazy loader for groups associated with the environment.
- * \return vector of groups associated with the environment
- */
-std::vector< CompsEnvironmentGroupPtr >
-CompsEnvironment::get_groups()
-{
-    if (groups.empty()) {
-        loadGroups();
-    }
-    return groups;
-}
 
-void
-CompsEnvironment::loadGroups()
-{
-    const char *sql = R"**(
-        SELECT
-            *
-        FROM
-            comps_environment_group
-        WHERE
-            environment_id = ?
-        ORDER BY
-            groupid ASC
-    )**";
-    libdnf::utils::SQLite3::Query query(trans.get_connection(), sql);
-    query.bindv(getId());
-
-    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto group = std::make_shared< CompsEnvironmentGroup >(*this);
-        group->set_id(query.get< int >("id"));
-        group->set_group_id(query.get< std::string >("groupid"));
-
-        group->set_installed(query.get< bool >("installed"));
-        group->set_group_type(static_cast< CompsPackageType >(query.get< int >("group_type")));
-        groups.push_back(group);
-    }
-}
-
-CompsEnvironmentGroupPtr
-CompsEnvironment::add_group(std::string group_id, bool installed, CompsPackageType group_type)
-{
-    // try to find an existing group and override it with the new values
-    CompsEnvironmentGroupPtr grp = nullptr;
-    for (auto & i : groups) {
-        if (i->get_group_id() == group_id) {
-            grp = i;
-            break;
-        }
-    }
-
-    if (grp == nullptr) {
-        grp = std::make_shared< CompsEnvironmentGroup >(*this);
-        groups.push_back(grp);
-    }
-
-    grp->set_group_id(group_id);
-    grp->set_installed(installed);
-    grp->set_group_type(group_type);
-    return grp;
-}
 
 CompsEnvironmentGroup::CompsEnvironmentGroup(CompsEnvironment &environment)
   : environment(environment)
 {
 }
 
-void
-CompsEnvironmentGroup::save()
-{
-    if (get_id() == 0) {
-        dbInsert();
-    } else {
-        // dbUpdate();
-    }
+
+CompsEnvironmentGroup & CompsEnvironment::new_group() {
+    auto grp = new CompsEnvironmentGroup(*this);
+    auto grp_ptr = std::unique_ptr<CompsEnvironmentGroup>(grp);
+    // TODO(dmach): following lines are not thread-safe
+    groups.push_back(std::move(grp_ptr));
+    return *groups.back();
 }
 
-void
-CompsEnvironmentGroup::dbInsert()
-{
-    const char *sql = R"**(
-        INSERT INTO
-            comps_environment_group (
-                environment_id,
-                groupid,
-                installed,
-                group_type
-            )
-        VALUES
-            (?, ?, ?, ?)
-    )**";
-    libdnf::utils::SQLite3::Statement query(get_environment().trans.get_connection(), sql);
-    query.bindv(
-        get_environment().getId(), get_group_id(), get_installed(), static_cast< int >(get_group_type()));
-    query.step();
-    set_id(query.last_insert_rowid());
-}
 
 }  // namespace libdnf::transaction
