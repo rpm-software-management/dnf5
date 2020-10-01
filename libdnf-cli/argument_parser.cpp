@@ -54,16 +54,16 @@ std::string ArgumentParser::Argument::get_conflict_arg_msg(const Argument * conf
         }
         msg = fmt::format("not allowed with argument {}", conflict);
     } else if (dynamic_cast<const Command *>(conflict_arg)) {
-        msg = fmt::format("not allowed with command {}", conflict_arg->name);
+        msg = fmt::format("not allowed with command {}", conflict_arg->id);
     } else {
-        msg = fmt::format("not allowed with positional argument {}", conflict_arg->name);
+        msg = fmt::format("not allowed with positional argument {}", conflict_arg->id);
     }
     return msg;
 }
 
 ArgumentParser::PositionalArg::PositionalArg(
-    ArgumentParser & owner, const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values)
-    : Argument(owner, name)
+    ArgumentParser & owner, const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values)
+    : Argument(owner, id)
     , nvals(static_cast<int>(values->size()))
     , init_value(nullptr)
     , values(values) {
@@ -74,11 +74,11 @@ ArgumentParser::PositionalArg::PositionalArg(
 
 ArgumentParser::PositionalArg::PositionalArg(
     ArgumentParser & owner,
-    const std::string & name,
+    const std::string & id,
     int nvals,
     libdnf::Option * init_value,
     std::vector<std::unique_ptr<libdnf::Option>> * values)
-    : Argument(owner, name)
+    : Argument(owner, id)
     , nvals(nvals)
     , init_value(init_value)
     , values(values) {
@@ -94,11 +94,11 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
         throw Conflict(msg);
     }
     if (argc < nvals) {
-        throw FewValues(this->name);
+        throw FewValues(this->id);
     }
     for (int i = 1; i < nvals; ++i) {
         if (*argv[i] == '-') {
-            throw FewValues(this->name);
+            throw FewValues(this->id);
         }
     }
     int usable_argc = 1;
@@ -195,31 +195,31 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
     return consumed_args;
 }
 
-ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string & name) const {
+ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string & id) const {
     for (auto * item : cmds) {
-        if (item->get_name() == name) {
+        if (item->get_id() == id) {
             return *item;
         }
     }
-    throw CommandNotFound(name);
+    throw CommandNotFound(id);
 }
 
-ArgumentParser::NamedArg & ArgumentParser::Command::get_named_arg(const std::string & name) const {
+ArgumentParser::NamedArg & ArgumentParser::Command::get_named_arg(const std::string & id) const {
     for (auto * item : named_args) {
-        if (item->get_name() == name) {
+        if (item->get_id() == id) {
             return *item;
         }
     }
-    throw NamedArgNotFound(name);
+    throw NamedArgNotFound(id);
 }
 
-ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(const std::string & name) const {
+ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(const std::string & id) const {
     for (auto * item : pos_args) {
-        if (item->get_name() == name) {
+        if (item->get_id() == id) {
             return *item;
         }
     }
-    throw PositionalArgNotFound(name);
+    throw PositionalArgNotFound(id);
 }
 
 void ArgumentParser::Command::parse(const char * option, int argc, const char * const argv[]) {
@@ -261,7 +261,7 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
         }
         if (!used) {
             for (auto & cmd : cmds) {
-                if (cmd->name == argv[i]) {
+                if (cmd->id == argv[i]) {
                     if (const auto * arg = get_conflict_argument()) {
                         auto conflict = get_conflict_arg_msg(arg);
                         auto msg = fmt::format("command \"{}\": {}", option, conflict);
@@ -289,7 +289,7 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
     for (const auto * pos_arg : pos_args) {
         const auto nvals = pos_arg->get_nvals();
         if (pos_arg->get_parse_count() == 0 && nvals != PositionalArg::UNLIMITED && nvals != PositionalArg::OPTIONAL) {
-            throw MissingPositionalArgument(pos_arg->get_name());
+            throw MissingPositionalArgument(pos_arg->get_id());
         }
     }
 
@@ -316,7 +316,7 @@ void ArgumentParser::Command::help() const noexcept {
         }
         fputs((commands_help_header + '\n').c_str(), out);
         for (const auto * arg : cmds) {
-            libdnf::cli::output::add_line_into_help_table(table, arg->get_name(), arg->get_short_description());
+            libdnf::cli::output::add_line_into_help_table(table, arg->get_id(), arg->get_short_description());
         }
         libdnf::cli::output::print_and_unref_help_table(table);
         print = true;
@@ -360,7 +360,7 @@ void ArgumentParser::Command::help() const noexcept {
         }
         fputs((positional_args_help_header + '\n').c_str(), out);
         for (const auto * arg : pos_args) {
-            libdnf::cli::output::add_line_into_help_table(table, "  " + arg->get_name(), arg->get_short_description());
+            libdnf::cli::output::add_line_into_help_table(table, "  " + arg->get_id(), arg->get_short_description());
         }
         libdnf::cli::output::print_and_unref_help_table(table);
     }

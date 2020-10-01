@@ -87,9 +87,8 @@ public:
         /// Can contain this argument. Groups of conflicting argument can be used.
         void set_conflict_arguments(std::vector<Argument *> * args) noexcept { conflict_args = args; }
 
-        /// Gets argument name.
-        /// It is like id. Do not confuse with the long name of the named argument.
-        const std::string & get_name() const noexcept { return name; }
+        /// Gets argument id.
+        const std::string & get_id() const noexcept { return id; }
 
         /// Gets a description of the argument.
         const std::string & get_description() const { return description; }
@@ -113,12 +112,12 @@ public:
     private:
         friend class ArgumentParser;
 
-        Argument(ArgumentParser & owner, std::string name) : owner(owner), name(std::move(name)) {}
+        Argument(ArgumentParser & owner, std::string id) : owner(owner), id(std::move(id)) {}
         static std::string get_conflict_arg_msg(const Argument * conflict_arg);
         ArgumentParser & get_owner() const noexcept { return owner; }
 
         ArgumentParser & owner;
-        std::string name;
+        std::string id;
         std::string description;
         std::string short_description;
         std::vector<Argument *> * conflict_args{nullptr};
@@ -166,10 +165,10 @@ public:
         friend class ArgumentParser;
 
         PositionalArg(
-            ArgumentParser & owner, const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values);
+            ArgumentParser & owner, const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values);
         PositionalArg(
             ArgumentParser & owner,
-            const std::string & name,
+            const std::string & id,
             int nvals,
             libdnf::Option * init_value,
             std::vector<std::unique_ptr<libdnf::Option>> * values);
@@ -264,7 +263,7 @@ public:
     private:
         friend class ArgumentParser;
 
-        NamedArg(ArgumentParser & owner, const std::string & name) : Argument(owner, name) {}
+        NamedArg(ArgumentParser & owner, const std::string & id) : Argument(owner, id) {}
 
         /// Parses long argument.
         /// Returns number of consumed arguments from the input.
@@ -321,13 +320,13 @@ public:
         void parse(const char * option, int argc, const char * const argv[]);
 
         /// Registers (sub)command to the command.
-        void add_command(Command * arg) { cmds.push_back(arg); }
+        void register_command(Command * arg) { cmds.push_back(arg); }
 
         /// Registers named argument to the command.
-        void add_named_arg(NamedArg * arg) { named_args.push_back(arg); }
+        void register_named_arg(NamedArg * arg) { named_args.push_back(arg); }
 
         /// Registers positional argument to the command.
-        void add_positional_arg(PositionalArg * arg) { pos_args.push_back(arg); }
+        void register_positional_arg(PositionalArg * arg) { pos_args.push_back(arg); }
 
         /// Gets a list of registered commands.
         const std::vector<Command *> & get_commands() const noexcept { return cmds; }
@@ -340,15 +339,15 @@ public:
 
         /// Returns (sub)command with given ID.
         /// Exception CommandNotFound is thrown if command is not found.
-        Command & get_command(const std::string & name) const;
+        Command & get_command(const std::string & id) const;
 
         /// Returns named argument with given ID.
         /// Exception NamedArgNotFound is thrown if argument is not found.
-        NamedArg & get_named_arg(const std::string & name) const;
+        NamedArg & get_named_arg(const std::string & id) const;
 
         /// Returns positional argument with given ID.
         /// Exception PositionalArgNotFound is thrown if argument is not found.
-        PositionalArg & get_positional_arg(const std::string & name) const;
+        PositionalArg & get_positional_arg(const std::string & id) const;
 
         /// Sets the user function for parsing the argument.
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
@@ -379,7 +378,7 @@ public:
     private:
         friend class ArgumentParser;
 
-        Command(ArgumentParser & owner, const std::string & name) : Argument(owner, name) {}
+        Command(ArgumentParser & owner, const std::string & id) : Argument(owner, id) {}
 
         std::vector<Command *> cmds;
         std::vector<NamedArg *> named_args;
@@ -392,21 +391,21 @@ public:
 
     /// Constructs a new command and stores it to the argument parser.
     /// Returns a pointer to the newly created command.
-    Command * add_new_command(const std::string & name);
+    Command * add_new_command(const std::string & id);
 
     /// Constructs a new named argument and stores it to the argument parser.
     /// Returns a pointer to the newly created named argument.
-    NamedArg * add_new_named_arg(const std::string & name);
+    NamedArg * add_new_named_arg(const std::string & id);
 
     /// Constructs a new positional argument and stores it to the argument parser.
     /// Returns a pointer to the newly created positional argument.
     PositionalArg * add_new_positional_arg(
-        const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values);
+        const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values);
 
     /// Constructs a new positional argument and stores it to the argument parser.
     /// Returns a pointer to the newly created positional argument.
     PositionalArg * add_new_positional_arg(
-        const std::string & name,
+        const std::string & id,
         int nargs,
         libdnf::Option * init_value,
         std::vector<std::unique_ptr<libdnf::Option>> * values);
@@ -453,34 +452,34 @@ private:
     Command * root_command{nullptr};
 };
 
-inline ArgumentParser::Command * ArgumentParser::add_new_command(const std::string & name) {
-    std::unique_ptr<Command> arg(new Command(*this, name));
+inline ArgumentParser::Command * ArgumentParser::add_new_command(const std::string & id) {
+    std::unique_ptr<Command> arg(new Command(*this, id));
     auto * ptr = arg.get();
     cmds.push_back(std::move(arg));
     return ptr;
 }
 
-inline ArgumentParser::NamedArg * ArgumentParser::add_new_named_arg(const std::string & name) {
-    std::unique_ptr<NamedArg> arg(new NamedArg(*this, name));
+inline ArgumentParser::NamedArg * ArgumentParser::add_new_named_arg(const std::string & id) {
+    std::unique_ptr<NamedArg> arg(new NamedArg(*this, id));
     auto * ptr = arg.get();
     named_args.push_back(std::move(arg));
     return ptr;
 }
 
 inline ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
-    const std::string & name, std::vector<std::unique_ptr<libdnf::Option>> * values) {
-    std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, name, values));
+    const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values) {
+    std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, id, values));
     auto * ptr = arg.get();
     pos_args.push_back(std::move(arg));
     return ptr;
 }
 
 inline ArgumentParser::PositionalArg * ArgumentParser::add_new_positional_arg(
-    const std::string & name,
+    const std::string & id,
     int nargs,
     libdnf::Option * init_value,
     std::vector<std::unique_ptr<libdnf::Option>> * values) {
-    std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, name, nargs, init_value, values));
+    std::unique_ptr<PositionalArg> arg(new PositionalArg(*this, id, nargs, init_value, values));
     auto * ptr = arg.get();
     pos_args.push_back(std::move(arg));
     return ptr;
