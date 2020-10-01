@@ -511,215 +511,497 @@ ConfigMain::~ConfigMain() = default;
 OptionNumber<std::int32_t> & ConfigMain::debuglevel() {
     return p_impl->debuglevel;
 }
+const OptionNumber<std::int32_t> & ConfigMain::debuglevel() const {
+    return p_impl->debuglevel;
+}
+
 OptionNumber<std::int32_t> & ConfigMain::errorlevel() {
     return p_impl->errorlevel;
 }
+const OptionNumber<std::int32_t> & ConfigMain::errorlevel() const {
+    return p_impl->errorlevel;
+}
+
 OptionString & ConfigMain::installroot() {
     return p_impl->installroot;
 }
+const OptionString & ConfigMain::installroot() const {
+    return p_impl->installroot;
+}
+
 OptionString & ConfigMain::config_file_path() {
     return p_impl->config_file_path;
 }
+const OptionString & ConfigMain::config_file_path() const {
+    return p_impl->config_file_path;
+}
+
 OptionBool & ConfigMain::plugins() {
     return p_impl->plugins;
 }
+const OptionBool & ConfigMain::plugins() const {
+    return p_impl->plugins;
+}
+
 OptionStringList & ConfigMain::pluginpath() {
     return p_impl->pluginpath;
 }
+const OptionStringList & ConfigMain::pluginpath() const {
+    return p_impl->pluginpath;
+}
+
 OptionStringList & ConfigMain::pluginconfpath() {
     return p_impl->pluginconfpath;
 }
+const OptionStringList & ConfigMain::pluginconfpath() const {
+    return p_impl->pluginconfpath;
+}
+
 OptionString & ConfigMain::persistdir() {
     return p_impl->persistdir;
 }
+const OptionString & ConfigMain::persistdir() const {
+    return p_impl->persistdir;
+}
+
 OptionBool & ConfigMain::transformdb() {
     return p_impl->transformdb;
 }
+const OptionBool & ConfigMain::transformdb() const {
+    return p_impl->transformdb;
+}
+
 OptionNumber<std::int32_t> & ConfigMain::recent() {
     return p_impl->recent;
 }
+const OptionNumber<std::int32_t> & ConfigMain::recent() const {
+    return p_impl->recent;
+}
+
 OptionBool & ConfigMain::reset_nice() {
     return p_impl->reset_nice;
 }
+const OptionBool & ConfigMain::reset_nice() const {
+    return p_impl->reset_nice;
+}
+
 OptionString & ConfigMain::system_cachedir() {
     return p_impl->system_cachedir;
 }
+const OptionString & ConfigMain::system_cachedir() const {
+    return p_impl->system_cachedir;
+}
+
 OptionBool & ConfigMain::cacheonly() {
     return p_impl->cacheonly;
 }
+const OptionBool & ConfigMain::cacheonly() const {
+    return p_impl->cacheonly;
+}
+
 OptionBool & ConfigMain::keepcache() {
     return p_impl->keepcache;
 }
+const OptionBool & ConfigMain::keepcache() const {
+    return p_impl->keepcache;
+}
+
 OptionString & ConfigMain::logdir() {
     return p_impl->logdir;
 }
+const OptionString & ConfigMain::logdir() const {
+    return p_impl->logdir;
+}
+
 OptionNumber<std::int32_t> & ConfigMain::log_size() {
     return p_impl->log_size;
 }
+const OptionNumber<std::int32_t> & ConfigMain::log_size() const {
+    return p_impl->log_size;
+}
+
 OptionNumber<std::int32_t> & ConfigMain::log_rotate() {
     return p_impl->log_rotate;
 }
+const OptionNumber<std::int32_t> & ConfigMain::log_rotate() const {
+    return p_impl->log_rotate;
+}
+
 OptionStringList & ConfigMain::varsdir() {
     return p_impl->varsdir;
 }
+const OptionStringList & ConfigMain::varsdir() const {
+    return p_impl->varsdir;
+}
+
 OptionStringList & ConfigMain::reposdir() {
     return p_impl->reposdir;
 }
+const OptionStringList & ConfigMain::reposdir() const {
+    return p_impl->reposdir;
+}
+
 OptionBool & ConfigMain::debug_solver() {
     return p_impl->debug_solver;
 }
+const OptionBool & ConfigMain::debug_solver() const {
+    return p_impl->debug_solver;
+}
+
 OptionStringList & ConfigMain::installonlypkgs() {
     return p_impl->installonlypkgs;
 }
+const OptionStringList & ConfigMain::installonlypkgs() const {
+    return p_impl->installonlypkgs;
+}
+
 OptionStringList & ConfigMain::group_package_types() {
     return p_impl->group_package_types;
 }
+const OptionStringList & ConfigMain::group_package_types() const {
+    return p_impl->group_package_types;
+}
+
 OptionNumber<std::uint32_t> & ConfigMain::installonly_limit() {
     return p_impl->installonly_limit;
 }
+const OptionNumber<std::uint32_t> & ConfigMain::installonly_limit() const {
+    return p_impl->installonly_limit;
+}
+
 OptionStringList & ConfigMain::tsflags() {
     return p_impl->tsflags;
 }
+const OptionStringList & ConfigMain::tsflags() const {
+    return p_impl->tsflags;
+}
+
 OptionBool & ConfigMain::assumeyes() {
     return p_impl->assumeyes;
 }
+const OptionBool & ConfigMain::assumeyes() const {
+    return p_impl->assumeyes;
+}
+
 OptionBool & ConfigMain::assumeno() {
     return p_impl->assumeno;
 }
+const OptionBool & ConfigMain::assumeno() const {
+    return p_impl->assumeno;
+}
+
 OptionBool & ConfigMain::check_config_file_age() {
     return p_impl->check_config_file_age;
 }
+const OptionBool & ConfigMain::check_config_file_age() const {
+    return p_impl->check_config_file_age;
+}
+
 OptionBool & ConfigMain::defaultyes() {
     return p_impl->defaultyes;
 }
+const OptionBool & ConfigMain::defaultyes() const {
+    return p_impl->defaultyes;
+}
+
 OptionBool & ConfigMain::diskspacecheck() {
     return p_impl->diskspacecheck;
 }
+const OptionBool & ConfigMain::diskspacecheck() const {
+    return p_impl->diskspacecheck;
+}
+
 OptionBool & ConfigMain::localpkg_gpgcheck() {
     return p_impl->localpkg_gpgcheck;
 }
+const OptionBool & ConfigMain::localpkg_gpgcheck() const {
+    return p_impl->localpkg_gpgcheck;
+}
+
 OptionBool & ConfigMain::gpgkey_dns_verification() {
     return p_impl->gpgkey_dns_verification;
 }
+const OptionBool & ConfigMain::gpgkey_dns_verification() const {
+    return p_impl->gpgkey_dns_verification;
+}
+
 OptionBool & ConfigMain::obsoletes() {
     return p_impl->obsoletes;
 }
+const OptionBool & ConfigMain::obsoletes() const {
+    return p_impl->obsoletes;
+}
+
 OptionBool & ConfigMain::showdupesfromrepos() {
     return p_impl->showdupesfromrepos;
 }
+const OptionBool & ConfigMain::showdupesfromrepos() const {
+    return p_impl->showdupesfromrepos;
+}
+
 OptionBool & ConfigMain::exit_on_lock() {
     return p_impl->exit_on_lock;
 }
+const OptionBool & ConfigMain::exit_on_lock() const {
+    return p_impl->exit_on_lock;
+}
+
 OptionBool & ConfigMain::allow_vendor_change() {
     return p_impl->allow_vendor_change;
 }
+const OptionBool & ConfigMain::allow_vendor_change() const {
+    return p_impl->allow_vendor_change;
+}
+
 OptionSeconds & ConfigMain::metadata_timer_sync() {
     return p_impl->metadata_timer_sync;
 }
+const OptionSeconds & ConfigMain::metadata_timer_sync() const {
+    return p_impl->metadata_timer_sync;
+}
+
 OptionStringList & ConfigMain::disable_excludes() {
     return p_impl->disable_excludes;
 }
+const OptionStringList & ConfigMain::disable_excludes() const {
+    return p_impl->disable_excludes;
+}
+
 OptionEnum<std::string> & ConfigMain::multilib_policy() {
     return p_impl->multilib_policy;
 }
+const OptionEnum<std::string> & ConfigMain::multilib_policy() const {
+    return p_impl->multilib_policy;
+}
+
 OptionBool & ConfigMain::best() {
     return p_impl->best;
 }
+const OptionBool & ConfigMain::best() const {
+    return p_impl->best;
+}
+
 OptionBool & ConfigMain::install_weak_deps() {
     return p_impl->install_weak_deps;
 }
+const OptionBool & ConfigMain::install_weak_deps() const {
+    return p_impl->install_weak_deps;
+}
+
 OptionString & ConfigMain::bugtracker_url() {
     return p_impl->bugtracker_url;
 }
+const OptionString & ConfigMain::bugtracker_url() const {
+    return p_impl->bugtracker_url;
+}
+
 OptionBool & ConfigMain::zchunk() {
     return p_impl->zchunk;
 }
+const OptionBool & ConfigMain::zchunk() const {
+    return p_impl->zchunk;
+}
+
 OptionEnum<std::string> & ConfigMain::color() {
     return p_impl->color;
 }
+const OptionEnum<std::string> & ConfigMain::color() const {
+    return p_impl->color;
+}
+
 OptionString & ConfigMain::color_list_installed_older() {
     return p_impl->color_list_installed_older;
 }
+const OptionString & ConfigMain::color_list_installed_older() const {
+    return p_impl->color_list_installed_older;
+}
+
 OptionString & ConfigMain::color_list_installed_newer() {
     return p_impl->color_list_installed_newer;
 }
+const OptionString & ConfigMain::color_list_installed_newer() const {
+    return p_impl->color_list_installed_newer;
+}
+
 OptionString & ConfigMain::color_list_installed_reinstall() {
     return p_impl->color_list_installed_reinstall;
 }
+const OptionString & ConfigMain::color_list_installed_reinstall() const {
+    return p_impl->color_list_installed_reinstall;
+}
+
 OptionString & ConfigMain::color_list_installed_extra() {
     return p_impl->color_list_installed_extra;
 }
+const OptionString & ConfigMain::color_list_installed_extra() const {
+    return p_impl->color_list_installed_extra;
+}
+
 OptionString & ConfigMain::color_list_available_upgrade() {
     return p_impl->color_list_available_upgrade;
 }
+const OptionString & ConfigMain::color_list_available_upgrade() const {
+    return p_impl->color_list_available_upgrade;
+}
+
 OptionString & ConfigMain::color_list_available_downgrade() {
     return p_impl->color_list_available_downgrade;
 }
+const OptionString & ConfigMain::color_list_available_downgrade() const {
+    return p_impl->color_list_available_downgrade;
+}
+
 OptionString & ConfigMain::color_list_available_reinstall() {
     return p_impl->color_list_available_reinstall;
 }
+const OptionString & ConfigMain::color_list_available_reinstall() const {
+    return p_impl->color_list_available_reinstall;
+}
+
 OptionString & ConfigMain::color_list_available_install() {
     return p_impl->color_list_available_install;
 }
+const OptionString & ConfigMain::color_list_available_install() const {
+    return p_impl->color_list_available_install;
+}
+
 OptionString & ConfigMain::color_update_installed() {
     return p_impl->color_update_installed;
 }
+const OptionString & ConfigMain::color_update_installed() const {
+    return p_impl->color_update_installed;
+}
+
 OptionString & ConfigMain::color_update_local() {
     return p_impl->color_update_local;
 }
+const OptionString & ConfigMain::color_update_local() const {
+    return p_impl->color_update_local;
+}
+
 OptionString & ConfigMain::color_update_remote() {
     return p_impl->color_update_remote;
 }
+const OptionString & ConfigMain::color_update_remote() const {
+    return p_impl->color_update_remote;
+}
+
 OptionString & ConfigMain::color_search_match() {
     return p_impl->color_search_match;
 }
+const OptionString & ConfigMain::color_search_match() const {
+    return p_impl->color_search_match;
+}
+
 OptionBool & ConfigMain::history_record() {
     return p_impl->history_record;
 }
+const OptionBool & ConfigMain::history_record() const {
+    return p_impl->history_record;
+}
+
 OptionStringList & ConfigMain::history_record_packages() {
     return p_impl->history_record_packages;
 }
+const OptionStringList & ConfigMain::history_record_packages() const {
+    return p_impl->history_record_packages;
+}
+
 OptionString & ConfigMain::rpmverbosity() {
     return p_impl->rpmverbosity;
 }
+const OptionString & ConfigMain::rpmverbosity() const {
+    return p_impl->rpmverbosity;
+}
+
 OptionBool & ConfigMain::strict() {
     return p_impl->strict;
 }
+const OptionBool & ConfigMain::strict() const {
+    return p_impl->strict;
+}
+
 OptionBool & ConfigMain::skip_broken() {
     return p_impl->skip_broken;
 }
+const OptionBool & ConfigMain::skip_broken() const {
+    return p_impl->skip_broken;
+}
+
 OptionBool & ConfigMain::autocheck_running_kernel() {
     return p_impl->autocheck_running_kernel;
 }
+const OptionBool & ConfigMain::autocheck_running_kernel() const {
+    return p_impl->autocheck_running_kernel;
+}
+
 OptionBool & ConfigMain::clean_requirements_on_remove() {
     return p_impl->clean_requirements_on_remove;
 }
+const OptionBool & ConfigMain::clean_requirements_on_remove() const {
+    return p_impl->clean_requirements_on_remove;
+}
+
 OptionEnum<std::string> & ConfigMain::history_list_view() {
     return p_impl->history_list_view;
 }
+const OptionEnum<std::string> & ConfigMain::history_list_view() const {
+    return p_impl->history_list_view;
+}
+
 OptionBool & ConfigMain::upgrade_group_objects_upgrade() {
     return p_impl->upgrade_group_objects_upgrade;
 }
+const OptionBool & ConfigMain::upgrade_group_objects_upgrade() const {
+    return p_impl->upgrade_group_objects_upgrade;
+}
+
 OptionPath & ConfigMain::destdir() {
     return p_impl->destdir;
 }
+const OptionPath & ConfigMain::destdir() const {
+    return p_impl->destdir;
+}
+
 OptionString & ConfigMain::comment() {
     return p_impl->comment;
 }
+const OptionString & ConfigMain::comment() const {
+    return p_impl->comment;
+}
+
 OptionBool & ConfigMain::downloadonly() {
     return p_impl->downloadonly;
 }
+const OptionBool & ConfigMain::downloadonly() const {
+    return p_impl->downloadonly;
+}
+
 OptionBool & ConfigMain::ignorearch() {
+    return p_impl->ignorearch;
+}
+const OptionBool & ConfigMain::ignorearch() const {
     return p_impl->ignorearch;
 }
 
 OptionString & ConfigMain::module_platform_id() {
     return p_impl->module_platform_id;
 }
+const OptionString & ConfigMain::module_platform_id() const {
+    return p_impl->module_platform_id;
+}
+
 OptionString & ConfigMain::user_agent() {
     return p_impl->user_agent;
 }
+const OptionString & ConfigMain::user_agent() const {
+    return p_impl->user_agent;
+}
+
 OptionBool & ConfigMain::countme() {
+    return p_impl->countme;
+}
+const OptionBool & ConfigMain::countme() const {
     return p_impl->countme;
 }
 
@@ -727,91 +1009,210 @@ OptionBool & ConfigMain::countme() {
 OptionNumber<std::uint32_t> & ConfigMain::retries() {
     return p_impl->retries;
 }
+const OptionNumber<std::uint32_t> & ConfigMain::retries() const {
+    return p_impl->retries;
+}
+
 OptionString & ConfigMain::cachedir() {
     return p_impl->cachedir;
 }
+const OptionString & ConfigMain::cachedir() const {
+    return p_impl->cachedir;
+}
+
 OptionBool & ConfigMain::fastestmirror() {
     return p_impl->fastestmirror;
 }
+const OptionBool & ConfigMain::fastestmirror() const {
+    return p_impl->fastestmirror;
+}
+
 OptionStringList & ConfigMain::excludepkgs() {
     return p_impl->excludepkgs;
 }
+const OptionStringList & ConfigMain::excludepkgs() const {
+    return p_impl->excludepkgs;
+}
+
 OptionStringList & ConfigMain::includepkgs() {
     return p_impl->includepkgs;
 }
+const OptionStringList & ConfigMain::includepkgs() const {
+    return p_impl->includepkgs;
+}
+
 OptionString & ConfigMain::proxy() {
     return p_impl->proxy;
 }
+const OptionString & ConfigMain::proxy() const {
+    return p_impl->proxy;
+}
+
 OptionString & ConfigMain::proxy_username() {
     return p_impl->proxy_username;
 }
+const OptionString & ConfigMain::proxy_username() const {
+    return p_impl->proxy_username;
+}
+
 OptionString & ConfigMain::proxy_password() {
     return p_impl->proxy_password;
 }
+const OptionString & ConfigMain::proxy_password() const {
+    return p_impl->proxy_password;
+}
+
 OptionEnum<std::string> & ConfigMain::proxy_auth_method() {
     return p_impl->proxy_auth_method;
 }
+const OptionEnum<std::string> & ConfigMain::proxy_auth_method() const {
+    return p_impl->proxy_auth_method;
+}
+
 OptionStringList & ConfigMain::protected_packages() {
     return p_impl->protected_packages;
 }
+const OptionStringList & ConfigMain::protected_packages() const {
+    return p_impl->protected_packages;
+}
+
 OptionString & ConfigMain::username() {
     return p_impl->username;
 }
+const OptionString & ConfigMain::username() const {
+    return p_impl->username;
+}
+
 OptionString & ConfigMain::password() {
     return p_impl->password;
 }
+const OptionString & ConfigMain::password() const {
+    return p_impl->password;
+}
+
 OptionBool & ConfigMain::gpgcheck() {
     return p_impl->gpgcheck;
 }
+const OptionBool & ConfigMain::gpgcheck() const {
+    return p_impl->gpgcheck;
+}
+
 OptionBool & ConfigMain::repo_gpgcheck() {
     return p_impl->repo_gpgcheck;
 }
+const OptionBool & ConfigMain::repo_gpgcheck() const {
+    return p_impl->repo_gpgcheck;
+}
+
 OptionBool & ConfigMain::enabled() {
     return p_impl->enabled;
 }
+const OptionBool & ConfigMain::enabled() const {
+    return p_impl->enabled;
+}
+
 OptionBool & ConfigMain::enablegroups() {
     return p_impl->enablegroups;
 }
+const OptionBool & ConfigMain::enablegroups() const {
+    return p_impl->enablegroups;
+}
+
 OptionNumber<std::uint32_t> & ConfigMain::bandwidth() {
     return p_impl->bandwidth;
 }
+const OptionNumber<std::uint32_t> & ConfigMain::bandwidth() const {
+    return p_impl->bandwidth;
+}
+
 OptionNumber<std::uint32_t> & ConfigMain::minrate() {
     return p_impl->minrate;
 }
+const OptionNumber<std::uint32_t> & ConfigMain::minrate() const {
+    return p_impl->minrate;
+}
+
 OptionEnum<std::string> & ConfigMain::ip_resolve() {
     return p_impl->ip_resolve;
 }
+const OptionEnum<std::string> & ConfigMain::ip_resolve() const {
+    return p_impl->ip_resolve;
+}
+
 OptionNumber<float> & ConfigMain::throttle() {
     return p_impl->throttle;
 }
+const OptionNumber<float> & ConfigMain::throttle() const {
+    return p_impl->throttle;
+}
+
 OptionSeconds & ConfigMain::timeout() {
     return p_impl->timeout;
 }
+const OptionSeconds & ConfigMain::timeout() const {
+    return p_impl->timeout;
+}
+
 OptionNumber<std::uint32_t> & ConfigMain::max_parallel_downloads() {
     return p_impl->max_parallel_downloads;
 }
+const OptionNumber<std::uint32_t> & ConfigMain::max_parallel_downloads() const {
+    return p_impl->max_parallel_downloads;
+}
+
 OptionSeconds & ConfigMain::metadata_expire() {
     return p_impl->metadata_expire;
 }
+const OptionSeconds & ConfigMain::metadata_expire() const {
+    return p_impl->metadata_expire;
+}
+
 OptionString & ConfigMain::sslcacert() {
     return p_impl->sslcacert;
 }
+const OptionString & ConfigMain::sslcacert() const {
+    return p_impl->sslcacert;
+}
+
 OptionBool & ConfigMain::sslverify() {
     return p_impl->sslverify;
 }
+const OptionBool & ConfigMain::sslverify() const {
+    return p_impl->sslverify;
+}
+
 OptionString & ConfigMain::sslclientcert() {
     return p_impl->sslclientcert;
 }
+const OptionString & ConfigMain::sslclientcert() const {
+    return p_impl->sslclientcert;
+}
+
 OptionString & ConfigMain::sslclientkey() {
     return p_impl->sslclientkey;
 }
+const OptionString & ConfigMain::sslclientkey() const {
+    return p_impl->sslclientkey;
+}
+
 OptionBool & ConfigMain::deltarpm() {
     return p_impl->deltarpm;
 }
+const OptionBool & ConfigMain::deltarpm() const {
+    return p_impl->deltarpm;
+}
+
 OptionNumber<std::uint32_t> & ConfigMain::deltarpm_percentage() {
     return p_impl->deltarpm_percentage;
 }
+const OptionNumber<std::uint32_t> & ConfigMain::deltarpm_percentage() const {
+    return p_impl->deltarpm_percentage;
+}
+
 OptionBool & ConfigMain::skip_if_unavailable() {
+    return p_impl->skip_if_unavailable;
+}
+const OptionBool & ConfigMain::skip_if_unavailable() const {
     return p_impl->skip_if_unavailable;
 }
 

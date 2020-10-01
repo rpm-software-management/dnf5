@@ -177,140 +177,322 @@ ConfigRepo::ConfigRepo(ConfigRepo && src) : p_impl(std::move(src.p_impl)) {}
 ConfigMain & ConfigRepo::get_master_config() {
     return p_impl->master_config;
 }
+const ConfigMain & ConfigRepo::get_master_config() const {
+    return p_impl->master_config;
+}
 
 OptionString & ConfigRepo::name() {
+    return p_impl->name;
+}
+const OptionString & ConfigRepo::name() const {
     return p_impl->name;
 }
 OptionChild<OptionBool> & ConfigRepo::enabled() {
     return p_impl->enabled;
 }
+const OptionChild<OptionBool> & ConfigRepo::enabled() const {
+    return p_impl->enabled;
+}
+
 OptionChild<OptionString> & ConfigRepo::basecachedir() {
     return p_impl->basecachedir;
 }
+const OptionChild<OptionString> & ConfigRepo::basecachedir() const {
+    return p_impl->basecachedir;
+}
+
 OptionStringList & ConfigRepo::baseurl() {
     return p_impl->baseurl;
 }
+const OptionStringList & ConfigRepo::baseurl() const {
+    return p_impl->baseurl;
+}
+
 OptionString & ConfigRepo::mirrorlist() {
     return p_impl->mirrorlist;
 }
+const OptionString & ConfigRepo::mirrorlist() const {
+    return p_impl->mirrorlist;
+}
+
 OptionString & ConfigRepo::metalink() {
     return p_impl->metalink;
 }
+const OptionString & ConfigRepo::metalink() const {
+    return p_impl->metalink;
+}
+
 OptionString & ConfigRepo::type() {
     return p_impl->type;
 }
+const OptionString & ConfigRepo::type() const {
+    return p_impl->type;
+}
+
 OptionString & ConfigRepo::mediaid() {
     return p_impl->mediaid;
 }
+const OptionString & ConfigRepo::mediaid() const {
+    return p_impl->mediaid;
+}
+
 OptionStringList & ConfigRepo::gpgkey() {
     return p_impl->gpgkey;
 }
+const OptionStringList & ConfigRepo::gpgkey() const {
+    return p_impl->gpgkey;
+}
+
 OptionStringList & ConfigRepo::excludepkgs() {
     return p_impl->excludepkgs;
 }
+const OptionStringList & ConfigRepo::excludepkgs() const {
+    return p_impl->excludepkgs;
+}
+
 OptionStringList & ConfigRepo::includepkgs() {
     return p_impl->includepkgs;
 }
+const OptionStringList & ConfigRepo::includepkgs() const {
+    return p_impl->includepkgs;
+}
+
 OptionChild<OptionBool> & ConfigRepo::fastestmirror() {
     return p_impl->fastestmirror;
 }
+const OptionChild<OptionBool> & ConfigRepo::fastestmirror() const {
+    return p_impl->fastestmirror;
+}
+
 OptionChild<OptionString> & ConfigRepo::proxy() {
     return p_impl->proxy;
 }
+const OptionChild<OptionString> & ConfigRepo::proxy() const {
+    return p_impl->proxy;
+}
+
 OptionChild<OptionString> & ConfigRepo::proxy_username() {
     return p_impl->proxy_username;
 }
+const OptionChild<OptionString> & ConfigRepo::proxy_username() const {
+    return p_impl->proxy_username;
+}
+
 OptionChild<OptionString> & ConfigRepo::proxy_password() {
     return p_impl->proxy_password;
 }
+const OptionChild<OptionString> & ConfigRepo::proxy_password() const {
+    return p_impl->proxy_password;
+}
+
 OptionChild<OptionEnum<std::string>> & ConfigRepo::proxy_auth_method() {
     return p_impl->proxy_auth_method;
 }
+const OptionChild<OptionEnum<std::string>> & ConfigRepo::proxy_auth_method() const {
+    return p_impl->proxy_auth_method;
+}
+
 OptionChild<OptionString> & ConfigRepo::username() {
     return p_impl->username;
 }
+const OptionChild<OptionString> & ConfigRepo::username() const {
+    return p_impl->username;
+}
+
 OptionChild<OptionString> & ConfigRepo::password() {
     return p_impl->password;
 }
+const OptionChild<OptionString> & ConfigRepo::password() const {
+    return p_impl->password;
+}
+
 OptionChild<OptionStringList> & ConfigRepo::protected_packages() {
     return p_impl->protected_packages;
 }
+const OptionChild<OptionStringList> & ConfigRepo::protected_packages() const {
+    return p_impl->protected_packages;
+}
+
 OptionChild<OptionBool> & ConfigRepo::gpgcheck() {
     return p_impl->gpgcheck;
 }
+const OptionChild<OptionBool> & ConfigRepo::gpgcheck() const {
+    return p_impl->gpgcheck;
+}
+
 OptionChild<OptionBool> & ConfigRepo::repo_gpgcheck() {
     return p_impl->repo_gpgcheck;
 }
+const OptionChild<OptionBool> & ConfigRepo::repo_gpgcheck() const {
+    return p_impl->repo_gpgcheck;
+}
+
 OptionChild<OptionBool> & ConfigRepo::enablegroups() {
     return p_impl->enablegroups;
 }
+const OptionChild<OptionBool> & ConfigRepo::enablegroups() const {
+    return p_impl->enablegroups;
+}
+
 OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::retries() {
     return p_impl->retries;
 }
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::retries() const {
+    return p_impl->retries;
+}
+
 OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::bandwidth() {
     return p_impl->bandwidth;
 }
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::bandwidth() const {
+    return p_impl->bandwidth;
+}
+
 OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::minrate() {
     return p_impl->minrate;
 }
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::minrate() const {
+    return p_impl->minrate;
+}
+
 OptionChild<OptionEnum<std::string>> & ConfigRepo::ip_resolve() {
     return p_impl->ip_resolve;
 }
+const OptionChild<OptionEnum<std::string>> & ConfigRepo::ip_resolve() const {
+    return p_impl->ip_resolve;
+}
+
 OptionChild<OptionNumber<float>> & ConfigRepo::throttle() {
     return p_impl->throttle;
 }
+const OptionChild<OptionNumber<float>> & ConfigRepo::throttle() const {
+    return p_impl->throttle;
+}
+
 OptionChild<OptionSeconds> & ConfigRepo::timeout() {
     return p_impl->timeout;
 }
+const OptionChild<OptionSeconds> & ConfigRepo::timeout() const {
+    return p_impl->timeout;
+}
+
 OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::max_parallel_downloads() {
     return p_impl->max_parallel_downloads;
 }
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::max_parallel_downloads() const {
+    return p_impl->max_parallel_downloads;
+}
+
 OptionChild<OptionSeconds> & ConfigRepo::metadata_expire() {
     return p_impl->metadata_expire;
 }
+const OptionChild<OptionSeconds> & ConfigRepo::metadata_expire() const {
+    return p_impl->metadata_expire;
+}
+
 OptionNumber<std::int32_t> & ConfigRepo::cost() {
     return p_impl->cost;
 }
+const OptionNumber<std::int32_t> & ConfigRepo::cost() const {
+    return p_impl->cost;
+}
+
 OptionNumber<std::int32_t> & ConfigRepo::priority() {
     return p_impl->priority;
 }
+const OptionNumber<std::int32_t> & ConfigRepo::priority() const {
+    return p_impl->priority;
+}
+
 OptionBool & ConfigRepo::module_hotfixes() {
     return p_impl->module_hotfixes;
 }
+const OptionBool & ConfigRepo::module_hotfixes() const {
+    return p_impl->module_hotfixes;
+}
+
 OptionChild<OptionString> & ConfigRepo::sslcacert() {
     return p_impl->sslcacert;
 }
+const OptionChild<OptionString> & ConfigRepo::sslcacert() const {
+    return p_impl->sslcacert;
+}
+
 OptionChild<OptionBool> & ConfigRepo::sslverify() {
     return p_impl->sslverify;
 }
+const OptionChild<OptionBool> & ConfigRepo::sslverify() const {
+    return p_impl->sslverify;
+}
+
 OptionChild<OptionString> & ConfigRepo::sslclientcert() {
     return p_impl->sslclientcert;
 }
+const OptionChild<OptionString> & ConfigRepo::sslclientcert() const {
+    return p_impl->sslclientcert;
+}
+
 OptionChild<OptionString> & ConfigRepo::sslclientkey() {
     return p_impl->sslclientkey;
 }
+const OptionChild<OptionString> & ConfigRepo::sslclientkey() const {
+    return p_impl->sslclientkey;
+}
+
 OptionChild<OptionBool> & ConfigRepo::deltarpm() {
     return p_impl->deltarpm;
 }
+const OptionChild<OptionBool> & ConfigRepo::deltarpm() const {
+    return p_impl->deltarpm;
+}
+
 OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::deltarpm_percentage() {
     return p_impl->deltarpm_percentage;
 }
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::deltarpm_percentage() const {
+    return p_impl->deltarpm_percentage;
+}
+
 OptionChild<OptionBool> & ConfigRepo::skip_if_unavailable() {
     return p_impl->skip_if_unavailable;
 }
+const OptionChild<OptionBool> & ConfigRepo::skip_if_unavailable() const {
+    return p_impl->skip_if_unavailable;
+}
+
 OptionString & ConfigRepo::enabled_metadata() {
     return p_impl->enabled_metadata;
 }
+const OptionString & ConfigRepo::enabled_metadata() const {
+    return p_impl->enabled_metadata;
+}
+
 OptionChild<OptionString> & ConfigRepo::user_agent() {
     return p_impl->user_agent;
 }
+const OptionChild<OptionString> & ConfigRepo::user_agent() const {
+    return p_impl->user_agent;
+}
+
 OptionChild<OptionBool> & ConfigRepo::countme() {
     return p_impl->countme;
 }
+const OptionChild<OptionBool> & ConfigRepo::countme() const {
+    return p_impl->countme;
+}
+
 OptionEnum<std::string> & ConfigRepo::failovermethod() {
     return p_impl->failovermethod;
 }
+const OptionEnum<std::string> & ConfigRepo::failovermethod() const {
+    return p_impl->failovermethod;
+}
+
 OptionBool & ConfigRepo::build_cache() {
     return p_impl->build_cache;
 }
+const OptionBool & ConfigRepo::build_cache() const {
+    return p_impl->build_cache;
+}
+
 }  // namespace libdnf::rpm
