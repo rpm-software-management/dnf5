@@ -100,13 +100,13 @@ void CmdRepoquery::set_argument_parser(Context & ctx) {
         return true;
     });
 
-    repoquery->add_named_arg(available);
-    repoquery->add_named_arg(installed);
-    repoquery->add_named_arg(info);
-    repoquery->add_named_arg(nevra);
-    repoquery->add_positional_arg(keys);
+    repoquery->register_named_arg(available);
+    repoquery->register_named_arg(installed);
+    repoquery->register_named_arg(info);
+    repoquery->register_named_arg(nevra);
+    repoquery->register_positional_arg(keys);
 
-    ctx.arg_parser.get_root_command()->add_command(repoquery);
+    ctx.arg_parser.get_root_command()->register_command(repoquery);
 }
 
 void CmdRepoquery::configure([[maybe_unused]] Context & ctx) {}

@@ -59,9 +59,9 @@ void CmdDownload::set_argument_parser(Context & ctx) {
         return true;
     });
 
-    download->add_positional_arg(keys);
+    download->register_positional_arg(keys);
 
-    ctx.arg_parser.get_root_command()->add_command(download);
+    ctx.arg_parser.get_root_command()->register_command(download);
 }
 
 void CmdDownload::configure([[maybe_unused]] Context & ctx) {}

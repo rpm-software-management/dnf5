@@ -56,9 +56,9 @@ void CmdRemove::set_argument_parser(Context & ctx) {
         return true;
     });
 
-    remove->add_positional_arg(keys);
+    remove->register_positional_arg(keys);
 
-    ctx.arg_parser.get_root_command()->add_command(remove);
+    ctx.arg_parser.get_root_command()->register_command(remove);
 }
 
 void CmdRemove::configure([[maybe_unused]] Context & ctx) {}

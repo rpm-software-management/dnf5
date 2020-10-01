@@ -59,9 +59,9 @@ void CmdUpgrade::set_argument_parser(Context & ctx) {
         return true;
     });
 
-    upgrade->add_positional_arg(keys);
+    upgrade->register_positional_arg(keys);
 
-    ctx.arg_parser.get_root_command()->add_command(upgrade);
+    ctx.arg_parser.get_root_command()->register_command(upgrade);
 }
 
 void CmdUpgrade::configure([[maybe_unused]] Context & ctx) {}

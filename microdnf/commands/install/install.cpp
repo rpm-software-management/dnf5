@@ -61,9 +61,9 @@ void CmdInstall::set_argument_parser(Context & ctx) {
         return true;
     });
 
-    install->add_positional_arg(keys);
+    install->register_positional_arg(keys);
 
-    ctx.arg_parser.get_root_command()->add_command(install);
+    ctx.arg_parser.get_root_command()->register_command(install);
 }
 
 void CmdInstall::configure([[maybe_unused]] Context & ctx) {}

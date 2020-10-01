@@ -59,9 +59,9 @@ void CmdReinstall::set_argument_parser(Context & ctx) {
         return true;
     });
 
-    reinstall->add_positional_arg(keys);
+    reinstall->register_positional_arg(keys);
 
-    ctx.arg_parser.get_root_command()->add_command(reinstall);
+    ctx.arg_parser.get_root_command()->register_command(reinstall);
 }
 
 void CmdReinstall::configure([[maybe_unused]] Context & ctx) {}

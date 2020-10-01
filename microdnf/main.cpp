@@ -61,7 +61,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
                                [[maybe_unused]] const char * value) {
         microdnf->help();
         return true;});
-    microdnf->add_named_arg(help);
+    microdnf->register_named_arg(help);
 
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
@@ -99,7 +99,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
             }
         }
         return true;});
-    microdnf->add_named_arg(setopt);
+    microdnf->register_named_arg(setopt);
 
 
     ctx.arg_parser.set_root_command(microdnf);

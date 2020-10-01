@@ -81,12 +81,12 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
         return true;
     });
 
-    repolist->add_named_arg(all);
-    repolist->add_named_arg(enabled);
-    repolist->add_named_arg(disabled);
-    repolist->add_positional_arg(repos);
+    repolist->register_named_arg(all);
+    repolist->register_named_arg(enabled);
+    repolist->register_named_arg(disabled);
+    repolist->register_positional_arg(repos);
 
-    ctx.arg_parser.get_root_command()->add_command(repolist);
+    ctx.arg_parser.get_root_command()->register_command(repolist);
 
     auto repoinfo = ctx.arg_parser.add_new_command("repoinfo");
     repoinfo->set_short_description("display the configured software repositories");
@@ -104,12 +104,12 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
         return true;
     });
 
-    repoinfo->add_named_arg(all);
-    repoinfo->add_named_arg(enabled);
-    repoinfo->add_named_arg(disabled);
-    repoinfo->add_positional_arg(repos);
+    repoinfo->register_named_arg(all);
+    repoinfo->register_named_arg(enabled);
+    repoinfo->register_named_arg(disabled);
+    repoinfo->register_positional_arg(repos);
 
-    ctx.arg_parser.get_root_command()->add_command(repoinfo);
+    ctx.arg_parser.get_root_command()->register_command(repoinfo);
 }
 
 void CmdRepolist::run(Context & ctx) {
