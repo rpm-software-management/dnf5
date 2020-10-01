@@ -161,10 +161,7 @@ public:
     friend class Repo;
     std::string id;
     Type type;
-    // TODO (lhrazky) drop the unique_ptr, it is unnecessary here, but it
-    // somehow makes const methods of this class work even though they call
-    // non-const methods on the config.
-    std::unique_ptr<ConfigRepo> conf;
+    ConfigRepo config;
 
     char ** mirrors{nullptr};
     int max_mirror_tries{0};  // try them all

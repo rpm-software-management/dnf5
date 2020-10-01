@@ -238,7 +238,7 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
     auto & logger = base->get_logger();
     static const std::string empty;
     std::string lookup_metadata_type = metadata_type;
-    if (conf->get_master_config().zchunk().get_value()) {
+    if (config.get_master_config().zchunk().get_value()) {
         if (!ends_with(metadata_type, "_zck")) {
             lookup_metadata_type = metadata_type + "_zck";
         }
@@ -353,7 +353,7 @@ static std::string format_user_pass_string(const std::string & user, const std::
 Repo::Impl::Impl(Repo & owner, std::string id, Type type, Base & base)
     : id(std::move(id))
     , type(type)
-    , conf(std::make_unique<ConfigRepo>(base.get_config()))
+    , config(base.get_config())
     , timestamp(-1)
     , load_metadata_other(false)
     , sync_strategy(SyncStrategy::TRY_CACHE)
@@ -391,12 +391,12 @@ int Repo::verify_id(const std::string & repo_id) {
 }
 
 void Repo::verify() const {
-    if (p_impl->conf->baseurl().empty() &&
-        (p_impl->conf->metalink().empty() || p_impl->conf->metalink().get_value().empty()) &&
-        (p_impl->conf->mirrorlist().empty() || p_impl->conf->mirrorlist().get_value().empty()))
+    if (p_impl->config.baseurl().empty() &&
+        (p_impl->config.metalink().empty() || p_impl->config.metalink().get_value().empty()) &&
+        (p_impl->config.mirrorlist().empty() || p_impl->config.mirrorlist().get_value().empty()))
         throw RuntimeError(fmt::format(_("Repository {} has no mirror or baseurl set."), p_impl->id));
 
-    const auto & type = p_impl->conf->type().get_value();
+    const auto & type = p_impl->config.type().get_value();
     const char * supported_repo_types[]{"rpm-md", "rpm", "repomd", "rpmmd", "yum", "YUM"};
     if (!type.empty()) {
         for (auto supported : supported_repo_types) {
@@ -410,7 +410,7 @@ void Repo::verify() const {
 }
 
 ConfigRepo * Repo::get_config() noexcept {
-    return p_impl->conf.get();
+    return &p_impl->config;
 }
 
 const std::string & Repo::get_id() const noexcept {
@@ -418,24 +418,24 @@ const std::string & Repo::get_id() const noexcept {
 }
 
 void Repo::enable() {
-    p_impl->conf->enabled().set(Option::Priority::RUNTIME, true);
+    p_impl->config.enabled().set(Option::Priority::RUNTIME, true);
 }
 
 void Repo::disable() {
-    p_impl->conf->enabled().set(Option::Priority::RUNTIME, false);
+    p_impl->config.enabled().set(Option::Priority::RUNTIME, false);
 }
 
 bool Repo::is_enabled() const {
-    return p_impl->conf->enabled().get_value();
+    return p_impl->config.enabled().get_value();
 }
 
 bool Repo::is_local() const {
-    auto & conf = p_impl->conf;
-    if ((!conf->metalink().empty() && !conf->metalink().get_value().empty()) ||
-        (!conf->mirrorlist().empty() && !conf->mirrorlist().get_value().empty())) {
+    auto & config = p_impl->config;
+    if ((!config.metalink().empty() && !config.metalink().get_value().empty()) ||
+        (!config.mirrorlist().empty() && !config.mirrorlist().get_value().empty())) {
         return false;
     }
-    if (!conf->baseurl().get_value().empty() && conf->baseurl().get_value()[0].compare(0, 7, "file://") == 0) {
+    if (!config.baseurl().get_value().empty() && config.baseurl().get_value()[0].compare(0, 7, "file://") == 0) {
         return true;
     }
     return false;
@@ -463,10 +463,10 @@ void Repo::set_load_metadata_other(bool value) {
     p_impl->load_metadata_other = value;
 }
 int Repo::get_cost() const {
-    return p_impl->conf->cost().get_value();
+    return p_impl->config.cost().get_value();
 }
 int Repo::get_priority() const {
-    return p_impl->conf->priority().get_value();
+    return p_impl->config.priority().get_value();
 }
 int64_t Repo::get_age() const {
     return p_impl->get_age();
@@ -517,12 +517,12 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_base() {
     dlist.push_back(nullptr);
     handle_set_opt(h.get(), LRO_PRESERVETIME, static_cast<long>(preserve_remote_time));
     handle_set_opt(h.get(), LRO_REPOTYPE, LR_YUMREPO);
-    handle_set_opt(h.get(), LRO_USERAGENT, conf->user_agent().get_value().c_str());
+    handle_set_opt(h.get(), LRO_USERAGENT, config.user_agent().get_value().c_str());
     handle_set_opt(h.get(), LRO_YUMDLIST, dlist.data());
     handle_set_opt(h.get(), LRO_INTERRUPTIBLE, 1L);
-    handle_set_opt(h.get(), LRO_GPGCHECK, conf->repo_gpgcheck().get_value());
+    handle_set_opt(h.get(), LRO_GPGCHECK, config.repo_gpgcheck().get_value());
     handle_set_opt(h.get(), LRO_MAXMIRRORTRIES, static_cast<long>(max_mirror_tries));
-    handle_set_opt(h.get(), LRO_MAXPARALLELDOWNLOADS, conf->max_parallel_downloads().get_value());
+    handle_set_opt(h.get(), LRO_MAXPARALLELDOWNLOADS, config.max_parallel_downloads().get_value());
 
     LrUrlVars * vars = nullptr;
     vars = lr_urlvars_set(vars, MD_FILENAME_GROUP_GZ, MD_FILENAME_GROUP);
@@ -546,8 +546,8 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_local() {
     handle_set_opt(h.get(), LRO_LOCAL, 1L);
 #ifdef LRO_SUPPORTS_CACHEDIR
     /* If zchunk is enabled, set librepo cache dir */
-    if (conf->getMasterConfig().zchunk().get_value()) {
-        handleSetOpt(h.get(), LRO_CACHEDIR, conf->basecachedir().get_value().c_str());
+    if (config.getMasterConfig().zchunk().get_value()) {
+        handleSetOpt(h.get(), LRO_CACHEDIR, config.basecachedir().get_value().c_str());
     }
 #endif
     return h;
@@ -565,7 +565,7 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
 
     handle_set_opt(h.get(), LRO_DESTDIR, destdir);
 
-    auto & ip_resolve = conf->ip_resolve().get_value();
+    auto & ip_resolve = config.ip_resolve().get_value();
     if (ip_resolve == "ipv4") {
         handle_set_opt(h.get(), LRO_IPRESOLVE, LR_IPRESOLVE_V4);
     } else if (ip_resolve == "ipv6") {
@@ -574,9 +574,9 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
 
     enum class Source { NONE, METALINK, MIRRORLIST } source{Source::NONE};
     std::string tmp;
-    if (!conf->metalink().empty() && !(tmp = conf->metalink().get_value()).empty()) {
+    if (!config.metalink().empty() && !(tmp = config.metalink().get_value()).empty()) {
         source = Source::METALINK;
-    } else if (!conf->mirrorlist().empty() && !(tmp = conf->mirrorlist().get_value()).empty()) {
+    } else if (!config.mirrorlist().empty() && !(tmp = config.mirrorlist().get_value()).empty()) {
         source = Source::MIRRORLIST;
     }
     if (source != Source::NONE) {
@@ -592,8 +592,8 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
                 if (tmp.find("metalink") != tmp.npos)
                     handle_set_opt(h.get(), LRO_METALINKURL, tmp.c_str());
             }
-            handle_set_opt(h.get(), LRO_FASTESTMIRROR, conf->fastestmirror().get_value() ? 1L : 0L);
-            auto fastest_mirror_cache_dir = conf->basecachedir().get_value();
+            handle_set_opt(h.get(), LRO_FASTESTMIRROR, config.fastestmirror().get_value() ? 1L : 0L);
+            auto fastest_mirror_cache_dir = config.basecachedir().get_value();
             if (fastest_mirror_cache_dir.back() != '/') {
                 fastest_mirror_cache_dir.push_back('/');
             }
@@ -603,12 +603,12 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
             // use already resolved mirror list
             handle_set_opt(h.get(), LRO_URLS, mirrors);
         }
-    } else if (!conf->baseurl().get_value().empty()) {
+    } else if (!config.baseurl().get_value().empty()) {
         handle_set_opt(h.get(), LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
-        size_t len = conf->baseurl().get_value().size();
+        size_t len = config.baseurl().get_value().size();
         const char * urls[len + 1];
         for (size_t idx = 0; idx < len; ++idx) {
-            urls[idx] = conf->baseurl().get_value()[idx].c_str();
+            urls[idx] = config.baseurl().get_value()[idx].c_str();
         }
         urls[len] = nullptr;
         handle_set_opt(h.get(), LRO_URLS, urls);
@@ -617,22 +617,22 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
     }
 
     // setup username/password if needed
-    auto userpwd = conf->username().get_value();
+    auto userpwd = config.username().get_value();
     if (!userpwd.empty()) {
         // TODO Use URL encoded form, needs support in librepo
-        userpwd = format_user_pass_string(userpwd, conf->password().get_value(), false);
+        userpwd = format_user_pass_string(userpwd, config.password().get_value(), false);
         handle_set_opt(h.get(), LRO_USERPWD, userpwd.c_str());
     }
 
     // setup ssl stuff
-    if (!conf->sslcacert().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_SSLCACERT, conf->sslcacert().get_value().c_str());
+    if (!config.sslcacert().get_value().empty()) {
+        handle_set_opt(h.get(), LRO_SSLCACERT, config.sslcacert().get_value().c_str());
     }
-    if (!conf->sslclientcert().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_SSLCLIENTCERT, conf->sslclientcert().get_value().c_str());
+    if (!config.sslclientcert().get_value().empty()) {
+        handle_set_opt(h.get(), LRO_SSLCLIENTCERT, config.sslclientcert().get_value().c_str());
     }
-    if (!conf->sslclientkey().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_SSLCLIENTKEY, conf->sslclientkey().get_value().c_str());
+    if (!config.sslclientkey().get_value().empty()) {
+        handle_set_opt(h.get(), LRO_SSLCLIENTKEY, config.sslclientkey().get_value().c_str());
     }
 
     handle_set_opt(h.get(), LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
@@ -642,17 +642,17 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
 
 #ifdef LRO_SUPPORTS_CACHEDIR
     // If zchunk is enabled, set librepo cache dir
-    if (conf->getMasterConfig().zchunk().get_value()) {
-        handleSetOpt(h.get(), LRO_CACHEDIR, conf->basecachedir().get_value().c_str());
+    if (config.getMasterConfig().zchunk().get_value()) {
+        handleSetOpt(h.get(), LRO_CACHEDIR, config.basecachedir().get_value().c_str());
     }
 #endif
 
-    auto minrate = conf->minrate().get_value();
+    auto minrate = config.minrate().get_value();
     handle_set_opt(h.get(), LRO_LOWSPEEDLIMIT, static_cast<long>(minrate));
 
-    auto maxspeed = conf->throttle().get_value();
+    auto maxspeed = config.throttle().get_value();
     if (maxspeed > 0 && maxspeed <= 1) {
-        maxspeed *= static_cast<float>(conf->bandwidth().get_value());
+        maxspeed *= static_cast<float>(config.bandwidth().get_value());
     }
     if (maxspeed != 0 && maxspeed < static_cast<float>(minrate)) {
         throw RuntimeError(
@@ -661,7 +661,7 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
     }
     handle_set_opt(h.get(), LRO_MAXSPEED, static_cast<int64_t>(maxspeed));
 
-    long timeout = conf->timeout().get_value();
+    long timeout = config.timeout().get_value();
     if (timeout > 0) {
         handle_set_opt(h.get(), LRO_CONNECTTIMEOUT, timeout);
         handle_set_opt(h.get(), LRO_LOWSPEEDTIME, timeout);
@@ -670,12 +670,12 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
         handle_set_opt(h.get(), LRO_LOWSPEEDTIME, LRO_LOWSPEEDTIME_DEFAULT);
     }
 
-    if (!conf->proxy().empty() && !conf->proxy().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_PROXY, conf->proxy().get_value().c_str());
+    if (!config.proxy().empty() && !config.proxy().get_value().empty()) {
+        handle_set_opt(h.get(), LRO_PROXY, config.proxy().get_value().c_str());
     }
 
     //set proxy authorization method
-    auto proxy_auth_method_str = conf->proxy_auth_method().get_value();
+    auto proxy_auth_method_str = config.proxy_auth_method().get_value();
     auto proxy_auth_method = LR_AUTH_ANY;
     for (auto & auth : PROXYAUTHMETHODS) {
         if (proxy_auth_method_str == auth.name) {
@@ -685,15 +685,15 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
     }
     handle_set_opt(h.get(), LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_method));
 
-    if (!conf->proxy_username().empty()) {
-        userpwd = conf->proxy_username().get_value();
+    if (!config.proxy_username().empty()) {
+        userpwd = config.proxy_username().get_value();
         if (!userpwd.empty()) {
-            userpwd = format_user_pass_string(userpwd, conf->proxy_password().get_value(), true);
+            userpwd = format_user_pass_string(userpwd, config.proxy_password().get_value(), true);
             handle_set_opt(h.get(), LRO_PROXYUSERPWD, userpwd.c_str());
         }
     }
 
-    auto sslverify = conf->sslverify().get_value() ? 1L : 0L;
+    auto sslverify = config.sslverify().get_value() ? 1L : 0L;
     handle_set_opt(h.get(), LRO_SSLVERIFYHOST, sslverify);
     handle_set_opt(h.get(), LRO_SSLVERIFYPEER, sslverify);
 
@@ -911,7 +911,7 @@ void Repo::Impl::import_repo_keys() {
     auto gpg_dir = get_cachedir() + "/pubring";
     auto known_keys = keyids_from_pubring(gpg_dir, logger);
     ensure_socket_dir_exists(logger);
-    for (const auto & gpgkeyUrl : conf->gpgkey().get_value()) {
+    for (const auto & gpgkeyUrl : config.gpgkey().get_value()) {
         auto key_infos = retrieve(gpgkeyUrl);
         for (auto & key_info : key_infos) {
             if (std::find(known_keys.begin(), known_keys.end(), key_info.get_id()) != known_keys.end()) {
@@ -971,8 +971,8 @@ std::unique_ptr<LrResult> Repo::Impl::lr_handle_perform(
     do {
         if (callbacks && progressFunc)
             callbacks->start(
-                !conf->name().get_value().empty() ? conf->name().get_value().c_str()
-                                                  : (!id.empty() ? id.c_str() : "unknown"));
+                !config.name().get_value().empty() ? config.name().get_value().c_str()
+                    : (!id.empty() ? id.c_str() : "unknown"));
 
         GError * err_p{nullptr};
         result.reset(lr_result_init());
@@ -985,10 +985,10 @@ std::unique_ptr<LrResult> Repo::Impl::lr_handle_perform(
         if (ret || bad_gpg || err_p->code != LRE_BADGPG) {
             if (!ret) {
                 std::string source;
-                if (conf->metalink().empty() || (source = conf->metalink().get_value()).empty()) {
-                    if (conf->mirrorlist().empty() || (source = conf->mirrorlist().get_value()).empty()) {
+                if (config.metalink().empty() || (source = config.metalink().get_value()).empty()) {
+                    if (config.mirrorlist().empty() || (source = config.mirrorlist().get_value()).empty()) {
                         bool first = true;
-                        for (const auto & url : conf->baseurl().get_value()) {
+                        for (const auto & url : config.baseurl().get_value()) {
                             if (first)
                                 first = false;
                             else
@@ -1014,7 +1014,7 @@ void Repo::Impl::load_cache() {
     std::unique_ptr<LrResult> r;
 
     // Fetch data
-    r = lr_handle_perform(h.get(), get_cachedir(), conf->repo_gpgcheck().get_value());
+    r = lr_handle_perform(h.get(), get_cachedir(), config.repo_gpgcheck().get_value());
 
     char ** mirrors;
     LrYumRepo * yum_repo;
@@ -1097,7 +1097,7 @@ void Repo::Impl::add_countme_flag(LrHandle * handle) {
 
     // Bail out if not counting or not running as root (since the persistdir is
     // only root-writable)
-    if (!conf->countme().get_value() || getuid() != 0)
+    if (!config.countme().get_value() || getuid() != 0)
         return;
 
     // Bail out if not a remote handle
@@ -1107,8 +1107,8 @@ void Repo::Impl::add_countme_flag(LrHandle * handle) {
         return;
 
     // Bail out if no metalink or mirrorlist is defined
-    auto & metalink = conf->metalink();
-    auto & mirrorlist = conf->mirrorlist();
+    auto & metalink = config.metalink();
+    auto & mirrorlist = config.mirrorlist();
     if ((metalink.empty() || metalink.get_value().empty()) && (mirrorlist.empty() || mirrorlist.get_value().empty()))
         return;
 
@@ -1255,7 +1255,7 @@ bool Repo::Impl::is_repomd_in_sync() {
     std::unique_ptr<LrHandle> h(lr_handle_init_remote(tmpdir));
 
     handle_set_opt(h.get(), LRO_YUMDLIST, dlist);
-    auto r = lr_handle_perform(h.get(), tmpdir, conf->repo_gpgcheck().get_value());
+    auto r = lr_handle_perform(h.get(), tmpdir, config.repo_gpgcheck().get_value());
     result_get_info(r.get(), LRR_YUM_REPO, &yum_repo);
 
     auto same = have_files_same_content_noexcept(repomd_fn.c_str(), yum_repo->repomd);
@@ -1267,7 +1267,7 @@ bool Repo::Impl::is_repomd_in_sync() {
 }
 
 bool Repo::Impl::is_in_sync() {
-    if (!conf->metalink().empty() && !conf->metalink().get_value().empty())
+    if (!config.metalink().empty() && !config.metalink().get_value().empty())
         return is_metalink_in_sync();
     return is_repomd_in_sync();
 }
@@ -1290,7 +1290,7 @@ void Repo::Impl::fetch(const std::string & destdir, std::unique_ptr<LrHandle> &&
     auto tmprepodir = tmpdir + "/" + METADATA_RELATIVE_DIR;
 
     handle_set_opt(h.get(), LRO_DESTDIR, tmpdir.c_str());
-    auto r = lr_handle_perform(h.get(), tmpdir, conf->repo_gpgcheck().get_value());
+    auto r = lr_handle_perform(h.get(), tmpdir, config.repo_gpgcheck().get_value());
 
     std::filesystem::remove_all(repodir);
     if (g_mkdir_with_parents(repodir.c_str(), 0755) == -1) {
@@ -1363,10 +1363,10 @@ bool Repo::Impl::load() {
 
 std::string Repo::Impl::get_hash() const {
     std::string tmp;
-    if (conf->metalink().empty() || (tmp = conf->metalink().get_value()).empty()) {
-        if (conf->mirrorlist().empty() || (tmp = conf->mirrorlist().get_value()).empty()) {
-            if (!conf->baseurl().get_value().empty())
-                tmp = conf->baseurl().get_value()[0];
+    if (config.metalink().empty() || (tmp = config.metalink().get_value()).empty()) {
+        if (config.mirrorlist().empty() || (tmp = config.mirrorlist().get_value()).empty()) {
+            if (!config.baseurl().get_value().empty())
+                tmp = config.baseurl().get_value()[0];
             if (tmp.empty())
                 tmp = id;
         }
@@ -1389,14 +1389,14 @@ std::string Repo::Impl::get_hash() const {
 }
 
 std::string Repo::Impl::get_cachedir() const {
-    auto repodir(conf->basecachedir().get_value());
+    auto repodir(config.basecachedir().get_value());
     if (repodir.back() != '/')
         repodir.push_back('/');
     return repodir + get_hash();
 }
 
 std::string Repo::Impl::get_persistdir() const {
-    auto persdir(conf->get_master_config().persistdir().get_value());
+    auto persdir(config.get_master_config().persistdir().get_value());
     if (persdir.back() != '/')
         persdir.push_back('/');
     std::string result = persdir + "repos/" + get_hash();
@@ -1420,20 +1420,20 @@ bool Repo::Impl::is_expired() const {
     if (expired)
         // explicitly requested expired state
         return true;
-    if (conf->metadata_expire().get_value() == -1)
+    if (config.metadata_expire().get_value() == -1)
         return false;
-    return get_age() > conf->metadata_expire().get_value();
+    return get_age() > config.metadata_expire().get_value();
 }
 
 int Repo::Impl::get_expires_in() const {
-    return conf->metadata_expire().get_value() - static_cast<int>(get_age());
+    return config.metadata_expire().get_value() - static_cast<int>(get_age());
 }
 
 void Repo::Impl::download_url(const char * url, int fd) {
     if (callbacks)
         callbacks->start(
-            !conf->name().get_value().empty() ? conf->name().get_value().c_str()
-                                              : (!id.empty() ? id.c_str() : "unknown"));
+            !config.name().get_value().empty() ? config.name().get_value().c_str()
+                : (!id.empty() ? id.c_str() : "unknown"));
 
     GError * err_p{nullptr};
     lr_download_url(get_cached_handle(), url, fd, &err_p);
@@ -1470,13 +1470,13 @@ bool Repo::fresh() {
 }
 
 void Repo::Impl::reset_metadata_expired() {
-    if (expired || conf->metadata_expire().get_value() == -1)
+    if (expired || config.metadata_expire().get_value() == -1)
         return;
-    if (conf->get_master_config().check_config_file_age().get_value() && !repo_file_path.empty() &&
+    if (config.get_master_config().check_config_file_age().get_value() && !repo_file_path.empty() &&
         mtime(repo_file_path.c_str()) > mtime(get_metadata_path(MD_FILENAME_PRIMARY).c_str()))
         expired = true;
     else
-        expired = get_age() > conf->metadata_expire().get_value();
+        expired = get_age() > config.metadata_expire().get_value();
 }
 
 
@@ -1709,18 +1709,18 @@ int PackageTarget::Impl::mirror_failure_cb(void * data, const char * msg, const 
 }
 
 
-static LrHandle * new_handle(ConfigMain * conf) {
+static LrHandle * new_handle(ConfigMain * config) {
     LrHandle * h = ::lr_handle_init();
     const char * user_agent = USER_AGENT;
     // see dnf.repo.Repo._handle_new_remote() how to pass
-    if (conf) {
-        user_agent = conf->user_agent().get_value().c_str();
-        auto minrate = conf->minrate().get_value();
+    if (config) {
+        user_agent = config->user_agent().get_value().c_str();
+        auto minrate = config->minrate().get_value();
         handle_set_opt(h, LRO_LOWSPEEDLIMIT, static_cast<long>(minrate));
 
-        auto maxspeed = conf->throttle().get_value();
+        auto maxspeed = config->throttle().get_value();
         if (maxspeed > 0 && maxspeed <= 1) {
-            maxspeed *= static_cast<float>(conf->bandwidth().get_value());
+            maxspeed *= static_cast<float>(config->bandwidth().get_value());
         }
         if (maxspeed != 0 && maxspeed < static_cast<float>(minrate))
             throw RuntimeError(
@@ -1728,11 +1728,11 @@ static LrHandle * new_handle(ConfigMain * conf) {
                   "Please change configuration of minrate or throttle"));
         handle_set_opt(h, LRO_MAXSPEED, static_cast<int64_t>(maxspeed));
 
-        if (!conf->proxy().empty() && !conf->proxy().get_value().empty())
-            handle_set_opt(h, LRO_PROXY, conf->proxy().get_value().c_str());
+        if (!config->proxy().empty() && !config->proxy().get_value().empty())
+            handle_set_opt(h, LRO_PROXY, config->proxy().get_value().c_str());
 
         //set proxy authorization method
-        auto proxy_auth_method_str = conf->proxy_auth_method().get_value();
+        auto proxy_auth_method_str = config->proxy_auth_method().get_value();
         auto proxy_auth_method = LR_AUTH_ANY;
         for (auto & auth : PROXYAUTHMETHODS) {
             if (proxy_auth_method_str == auth.name) {
@@ -1742,15 +1742,15 @@ static LrHandle * new_handle(ConfigMain * conf) {
         }
         handle_set_opt(h, LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_method));
 
-        if (!conf->proxy_username().empty()) {
-            auto userpwd = conf->proxy_username().get_value();
+        if (!config->proxy_username().empty()) {
+            auto userpwd = config->proxy_username().get_value();
             if (!userpwd.empty()) {
-                userpwd = format_user_pass_string(userpwd, conf->proxy_password().get_value(), true);
+                userpwd = format_user_pass_string(userpwd, config->proxy_password().get_value(), true);
                 handle_set_opt(h, LRO_PROXYUSERPWD, userpwd.c_str());
             }
         }
 
-        auto sslverify = conf->sslverify().get_value() ? 1L : 0L;
+        auto sslverify = config->sslverify().get_value() ? 1L : 0L;
         handle_set_opt(h, LRO_SSLVERIFYHOST, sslverify);
         handle_set_opt(h, LRO_SSLVERIFYPEER, sslverify);
     }
