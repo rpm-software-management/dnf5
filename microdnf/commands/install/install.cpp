@@ -91,7 +91,12 @@ void CmdInstall::run(Context & ctx) {
         result_pset |= solv_query.get_package_set();
     }
 
-    download_packages(result_pset, nullptr);
+    std::vector<libdnf::rpm::Package> download_pkgs;
+    download_pkgs.reserve(result_pset.size());
+    for (auto package : result_pset) {
+        download_pkgs.push_back(std::move(package));
+    }
+    download_packages(download_pkgs, nullptr);
 
     std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
     auto ts = libdnf::rpm::Transaction(ctx.base);

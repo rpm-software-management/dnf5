@@ -371,7 +371,7 @@ private:
 
 std::chrono::time_point<std::chrono::steady_clock> PkgDownloadCB::prev_print_time = std::chrono::steady_clock::now();
 
-void download_packages(libdnf::rpm::PackageSet & package_set, const char * dest_dir) {
+void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     std::vector<std::unique_ptr<PkgDownloadCB>> pkg_download_callbacks_guard;
     std::vector<std::unique_ptr<libdnf::rpm::PackageTarget>> targets_guard;
@@ -381,7 +381,7 @@ void download_packages(libdnf::rpm::PackageSet & package_set, const char * dest_
     if (dest_dir) {
         destination = dest_dir;
     }
-    for (auto package : package_set) {
+    for (auto package : packages) {
         auto repo = package.get_repo();
         auto checksum = package.get_checksum();
         if (!dest_dir) {

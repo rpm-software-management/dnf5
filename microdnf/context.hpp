@@ -66,7 +66,7 @@ private:
 };
 
 /// Downoad packages to destdir. If destdir == nullptr, packages are downloaded to the cache.
-void download_packages(libdnf::rpm::PackageSet & package_set, const char * dest_dir);
+void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir);
 
 void run_transaction(libdnf::rpm::Transaction & transaction);
 
