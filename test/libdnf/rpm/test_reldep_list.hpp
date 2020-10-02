@@ -21,14 +21,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_RPM_RELDEP_LIST_HPP
 #define TEST_LIBDNF_RPM_RELDEP_LIST_HPP
 
+#include "repo_fixture.hpp"
+
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/solv_sack.hpp"
 
-#include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class ReldepListTest : public CppUnit::TestCase {
+class ReldepListTest : public RepoFixture {
     CPPUNIT_TEST_SUITE(ReldepListTest);
     CPPUNIT_TEST(test_get);
     CPPUNIT_TEST(test_add);
@@ -40,8 +41,6 @@ class ReldepListTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp() override;
-
     void test_get();
     void test_add();
     void test_size();
@@ -49,10 +48,6 @@ public:
     void test_append();
     void test_iterator();
     void test_add_reldep_with_glob();
-
-private:
-    std::unique_ptr<libdnf::Base> base;
-    std::unique_ptr<libdnf::rpm::SolvSack> sack;
 };
 
 #endif  // TEST_LIBDNF_RPM_RELDEP_LIST_HPP

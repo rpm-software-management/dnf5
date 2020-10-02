@@ -25,17 +25,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ReldepListTest);
 
-void ReldepListTest::setUp() {
-    base = std::make_unique<libdnf::Base>();
-    sack = std::make_unique<libdnf::rpm::SolvSack>(*base);
-}
-
 
 void ReldepListTest::test_get() {
-    libdnf::rpm::ReldepList list1(sack.get());
-    libdnf::rpm::Reldep a(sack.get(), "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack.get(), "(lab-list if labirinto.txt)");
-    libdnf::rpm::Reldep c(sack.get(), "(labirinto unless labirinto_c)");
+    libdnf::rpm::ReldepList list1(sack);
+    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
+    libdnf::rpm::Reldep c(sack, "(labirinto unless labirinto_c)");
 
     list1.add(a);
     list1.add(b);
@@ -48,9 +43,9 @@ void ReldepListTest::test_get() {
 
 
 void ReldepListTest::test_add() {
-    libdnf::rpm::ReldepList list1(sack.get());
-    libdnf::rpm::Reldep a(sack.get(), "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack.get(), "(lab-list if labirinto.txt)");
+    libdnf::rpm::ReldepList list1(sack);
+    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
 
     list1.add(a);
     list1.add(b.get_id());
@@ -60,11 +55,11 @@ void ReldepListTest::test_add() {
 
 
 void ReldepListTest::test_size() {
-    libdnf::rpm::ReldepList list1(sack.get());
+    libdnf::rpm::ReldepList list1(sack);
     CPPUNIT_ASSERT(list1.size() == 0);
 
-    libdnf::rpm::Reldep a(sack.get(), "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack.get(), "(lab-list if labirinto.txt)");
+    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
     list1.add(a);
     list1.add(b);
     CPPUNIT_ASSERT(list1.size() == 2);
@@ -72,10 +67,10 @@ void ReldepListTest::test_size() {
 
 
 void ReldepListTest::test_compare() {
-    libdnf::rpm::ReldepList list1(sack.get());
-    libdnf::rpm::ReldepList list2(sack.get());
-    libdnf::rpm::Reldep a(sack.get(), "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack.get(), "(lab-list if labirinto.txt)");
+    libdnf::rpm::ReldepList list1(sack);
+    libdnf::rpm::ReldepList list2(sack);
+    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
 
     CPPUNIT_ASSERT(list1 == list2);
 
@@ -90,18 +85,18 @@ void ReldepListTest::test_compare() {
 
 
 void ReldepListTest::test_append() {
-    libdnf::rpm::Reldep a(sack.get(), "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack.get(), "(lab-list if labirinto.txt)");
-    libdnf::rpm::Reldep c(sack.get(), "(labirinto unless labirinto_c)");
-    libdnf::rpm::Reldep d(sack.get(), "labirinto.txt");
+    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
+    libdnf::rpm::Reldep c(sack, "(labirinto unless labirinto_c)");
+    libdnf::rpm::Reldep d(sack, "labirinto.txt");
 
-    libdnf::rpm::ReldepList list1(sack.get());
+    libdnf::rpm::ReldepList list1(sack);
     list1.add(a);
     list1.add(b);
     list1.add_reldep("delgado > 1.2");
 
 
-    libdnf::rpm::ReldepList list2(sack.get());
+    libdnf::rpm::ReldepList list2(sack);
     list2.add(c);
     list2.add(d);
 
@@ -115,13 +110,13 @@ void ReldepListTest::test_append() {
 }
 
 void ReldepListTest::test_iterator() {
-    libdnf::rpm::Reldep a(sack.get(), "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack.get(), "(lab-list if labirinto.txt)");
-    libdnf::rpm::Reldep c(sack.get(), "(labirinto unless labirinto_c)");
-    libdnf::rpm::Reldep d(sack.get(), "labirinto.txt");
+    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
+    libdnf::rpm::Reldep c(sack, "(labirinto unless labirinto_c)");
+    libdnf::rpm::Reldep d(sack, "labirinto.txt");
     std::vector<libdnf::rpm::Reldep> expected;
     std::vector<libdnf::rpm::Reldep> result;
-    libdnf::rpm::ReldepList list(sack.get());
+    libdnf::rpm::ReldepList list(sack);
 
     expected.push_back(a);
     list.add(a);
@@ -153,31 +148,9 @@ void ReldepListTest::test_iterator() {
 
 // add_reldep_with_glob uses libsolvs Dataiterator which needs the actual packages
 void ReldepListTest::test_add_reldep_with_glob() {
-    libdnf::utils::TempDir temp("libdnf_unittest_", {"installroot", "cache"});
-    // set installroot to a temp directory
-    base->get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp.get_path() / "installroot");
+    add_repo("dnf-ci-fedora");
 
-    // set cachedir to a temp directory
-    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp.get_path() / "cache");
-
-    libdnf::rpm::RepoSack repo_sack(*base);
-
-    // Creates new repository in the repo_sack
-    auto repo = repo_sack.new_repo("dnf-ci-fedora");
-
-    // Tunes repository configuration (baseurl is mandatory)
-    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/";
-    auto baseurl = "file://" + repo_path.native();
-    auto repo_cfg = repo->get_config();
-    repo_cfg->baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);
-
-    // Loads repository into rpm::Repo.
-    repo->load();
-
-    // Loads rpm::Repo into rpm::SolvSack
-    sack->load_repo(*repo.get(), libdnf::rpm::SolvSack::LoadRepoFlags::NONE);
-
-    libdnf::rpm::ReldepList list(sack.get());
+    libdnf::rpm::ReldepList list(sack);
     list.add_reldep_with_glob("dwm*");
-    CPPUNIT_ASSERT(list.size() == 8);
+    CPPUNIT_ASSERT(list.size() == 9);
 }
