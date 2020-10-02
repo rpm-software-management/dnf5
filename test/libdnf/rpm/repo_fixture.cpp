@@ -33,13 +33,10 @@ void RepoFixture::add_repo(const std::string & name) {
     // Creates new repository in the repo_sack
     auto repo = repo_sack->new_repo(name);
 
-    // Tunes repository configuration (baseurl is mandatory)
+    // Sets the repo baseurl
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/";
     repo_path /= name;
-
-    auto baseurl = "file://" + repo_path.native();
-    auto repo_cfg = repo->get_config();
-    repo_cfg->baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);
+    repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path.native());
 
     // Loads repository into rpm::Repo.
     repo->load();

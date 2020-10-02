@@ -65,14 +65,14 @@ void RepoSack::new_repos_from_file(const std::string & path) {
         }
 
         auto repo = new_repo(repo_id);
-        auto repo_cfg = repo->get_config();
-        repo_cfg->load_from_parser(parser, section, base->get_vars(), base->get_logger());
+        auto & repo_cfg = repo->get_config();
+        repo_cfg.load_from_parser(parser, section, base->get_vars(), base->get_logger());
         logger.trace(fmt::format(R"**(Loading configuration of repository "{}" from file "{}" done)**", repo_id, path));
 
-        if (repo_cfg->name().get_priority() == Option::Priority::DEFAULT) {
+        if (repo_cfg.name().get_priority() == Option::Priority::DEFAULT) {
             logger.warning(fmt::format(
                 "Repository \"{}\" is missing name in configuration file \"{}\", using id.", repo_id, path));
-            repo_cfg->name().set(Option::Priority::REPOCONFIG, repo_id);
+            repo_cfg.name().set(Option::Priority::REPOCONFIG, repo_id);
         }
     }
 }

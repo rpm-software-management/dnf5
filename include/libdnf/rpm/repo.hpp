@@ -141,7 +141,7 @@ public:
 
     /// Returns pointer to the repository configuration
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getConfig()
-    ConfigRepo * get_config() noexcept;
+    ConfigRepo & get_config() noexcept;
 
     /// Returns repository id
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getId()

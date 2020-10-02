@@ -260,7 +260,7 @@ void Context::load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::SolvSa
             signal_prepared_repo.notify_one();
 
         } catch (const std::runtime_error & ex) {
-            if (!repo->get_config()->skip_if_unavailable().get_value()) {
+            if (!repo->get_config().skip_if_unavailable().get_value()) {
                 std::cerr << "Error: Unable to load repository \"" << repo->get_id()
                           << "\" and \"skip_if_unavailable\" is disabled for it." << std::endl;
                 except = true;
@@ -283,10 +283,10 @@ void Context::load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::SolvSa
 //         try {
 //             load_rpm_repo(*repo.get());
 //             auto & solv_sack = base.get_rpm_solv_sack();
-//             // std::cout << "Loading repository \"" << repo->get_config()->name().get_value() << "\" into sack." << std::endl;
+//             // std::cout << "Loading repository \"" << repo->get_config().name().get_value() << "\" into sack." << std::endl;
 //             solv_sack.load_repo(*repo.get(), flags);
 //         } catch (const std::runtime_error & ex) {
-//             if (!repo->get_config()->skip_if_unavailable().get_value()) {
+//             if (!repo->get_config().skip_if_unavailable().get_value()) {
 //                 std::cerr << "Error: Unable to load repository \"" << repo->get_id()
 //                           << "\" and \"skip_if_unavailable\" is disabled for it." << std::endl;
 //                 throw;

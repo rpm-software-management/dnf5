@@ -218,7 +218,7 @@ int main(int argc, char * argv[]) {
         auto key = setopt.first.substr(last_dot_pos+1);
         for (auto & repo : query.get_data()) {
             try {
-                repo->get_config()->opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, setopt.second);
+                repo->get_config().opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, setopt.second);
             } catch (const std::exception & ex) {
                 std::cout << "setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what() << std::endl;
             }

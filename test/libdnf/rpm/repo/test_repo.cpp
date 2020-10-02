@@ -67,9 +67,7 @@ void RepoTest::test_repo_basics() {
 
     // Tunes repositotory configuration (baseurl is mandatory)
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/";
-    auto baseurl = "file://" + repo_path.native();
-    auto repo_cfg = repo->get_config();
-    repo_cfg->baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);
+    repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path.native());
 
     // Loads repository into rpm::Repo.
     try {

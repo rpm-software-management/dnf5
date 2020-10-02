@@ -409,8 +409,8 @@ void Repo::verify() const {
     }
 }
 
-ConfigRepo * Repo::get_config() noexcept {
-    return &p_impl->config;
+ConfigRepo & Repo::get_config() noexcept {
+    return p_impl->config;
 }
 
 const std::string & Repo::get_id() const noexcept {
