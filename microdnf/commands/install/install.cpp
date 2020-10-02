@@ -20,7 +20,9 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "install.hpp"
 
 #include "../../context.hpp"
+#include "../../utils.hpp"
 
+#include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_set.hpp>
@@ -73,7 +75,7 @@ void CmdInstall::run(Context & ctx) {
 
     // To search in the system repository (installed packages)
     // Creates system repository in the repo_sack and loads it into rpm::SolvSack.
-    //solv_sack.create_system_repo(false);
+    solv_sack.create_system_repo(false);
 
     // To search in available repositories (available packages)
     auto enabled_repos = ctx.base.get_rpm_repo_sack().new_query().ifilter_enabled(true);
@@ -83,29 +85,30 @@ void CmdInstall::run(Context & ctx) {
 
     std::cout << std::endl;
 
-    libdnf::rpm::PackageSet result_pset(&solv_sack);
-    libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
+    libdnf::Goal goal(&ctx.base);
     for (auto & pattern : *patterns_to_install_options) {
-        libdnf::rpm::SolvQuery solv_query(full_solv_query);
-        solv_query.resolve_pkg_spec(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), true, true, true, true, true, {});
-        result_pset |= solv_query.get_package_set();
+        goal.add_rpm_install(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), {}, true, {});
+    }
+    goal.resolve();
+
+    if (!print_goal(goal)) {
+        return;
     }
 
-    std::vector<libdnf::rpm::Package> download_pkgs;
-    download_pkgs.reserve(result_pset.size());
-    for (auto package : result_pset) {
-        download_pkgs.push_back(std::move(package));
+    std::cout << "Is this ok [y/N]: ";
+    std::string answer;
+    std::getline(std::cin, answer);
+    if (answer.size() != 1 || (answer[0] != 'y' && answer[0] != 'Y')) {
+        std::cout << "Operation aborted." << std::endl;
+        return;
     }
-    download_packages(download_pkgs, nullptr);
+
+    download_packages(goal, nullptr);
 
     std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
-    auto ts = libdnf::rpm::Transaction(ctx.base);
-    for (auto package : result_pset) {
-        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::INSTALL);
-        auto item_ptr = item.get();
-        transaction_items.push_back(std::move(item));
-        ts.install(*item_ptr);
-    }
+    libdnf::rpm::Transaction ts(ctx.base);
+    prepare_transaction(goal, ts, transaction_items);
+
     std::cout << std::endl;
     run_transaction(ts);
 }

@@ -20,7 +20,9 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "remove.hpp"
 
 #include "../../context.hpp"
+#include "../../utils.hpp"
 
+#include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_set.hpp>
@@ -70,29 +72,28 @@ void CmdRemove::run(Context & ctx) {
     // Creates system repository in the repo_sack and loads it into rpm::SolvSack.
     solv_sack.create_system_repo(false);
 
-    libdnf::rpm::PackageSet result_pset(&solv_sack);
-    libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
+    libdnf::Goal goal(&ctx.base);
     for (auto & pattern : *patterns_to_remove_options) {
-        libdnf::rpm::SolvQuery solv_query(full_solv_query);
-        solv_query.resolve_pkg_spec(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), true, true, true, true, true, {});
-        result_pset |= solv_query.get_package_set();
+        goal.add_rpm_remove(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), {}, {});
+    }
+    goal.resolve();
+
+    if (!print_goal(goal)) {
+        return;
     }
 
-    // print debug for development
-    for (auto package : result_pset) {
-        auto rpmdb_id = package.get_rpmdbid();
-        std::cout << "rpmdb_id: " << rpmdb_id << '\n';
-        std::cout << package.get_full_nevra() << '\n';
+    std::cout << "Is this ok [y/N]: ";
+    std::string answer;
+    std::getline(std::cin, answer);
+    if (answer.size() != 1 || (answer[0] != 'y' && answer[0] != 'Y')) {
+        std::cout << "Operation aborted." << std::endl;
+        return;
     }
 
     std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
-    auto ts = libdnf::rpm::Transaction(ctx.base);
-    for (auto package : result_pset) {
-        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::ERASE);
-        auto item_ptr = item.get();
-        transaction_items.push_back(std::move(item));
-        ts.erase(*item_ptr);
-    }
+    libdnf::rpm::Transaction ts(ctx.base);
+    prepare_transaction(goal, ts, transaction_items);
+
     std::cout << std::endl;
     run_transaction(ts);
 }
