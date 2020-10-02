@@ -20,6 +20,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef MICRODNF_UTILS_HPP
 #define MICRODNF_UTILS_HPP
 
+#include <libdnf/base/goal.hpp>
+
 #include <filesystem>
 #include <string>
 
@@ -55,6 +57,8 @@ std::string detect_arch();
 
 /// detect operation system release
 std::string detect_release(const std::string & install_root_path);
+
+bool print_goal(libdnf::Goal & goal);
 
 }  // namespace microdnf
 
