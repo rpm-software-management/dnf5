@@ -18,6 +18,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "context.hpp"
+#include "utils.hpp"
 
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf-cli/utils/tty.hpp>
@@ -655,6 +656,45 @@ void run_transaction(libdnf::rpm::Transaction & transaction) {
         transaction.register_cb(nullptr);
     }
     std::cout << std::endl;
+}
+
+void prepare_transaction(libdnf::Goal & goal, libdnf::rpm::Transaction & ts, std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items) {
+    for (auto & package : goal.list_rpm_removes()) {
+        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::ERASE);
+        auto item_ptr = item.get();
+        transaction_items.push_back(std::move(item));
+        ts.erase(*item_ptr);
+    }
+    for (auto & package : goal.list_rpm_obsoleted()) {
+        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::ERASE);
+        auto item_ptr = item.get();
+        transaction_items.push_back(std::move(item));
+        ts.erase(*item_ptr);
+    }
+    for (auto & package : goal.list_rpm_installs()) {
+        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::INSTALL);
+        auto item_ptr = item.get();
+        transaction_items.push_back(std::move(item));
+        ts.install(*item_ptr);
+    }
+    for (auto & package : goal.list_rpm_reinstalls()) {
+        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::REINSTALL);
+        auto item_ptr = item.get();
+        transaction_items.push_back(std::move(item));
+        ts.reinstall(*item_ptr);
+    }
+    for (auto & package : goal.list_rpm_upgrades()) {
+        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::UPGRADE);
+        auto item_ptr = item.get();
+        transaction_items.push_back(std::move(item));
+        ts.upgrade(*item_ptr);
+    }
+    for (auto & package : goal.list_rpm_downgrades()) {
+        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::DOWNGRADE);
+        auto item_ptr = item.get();
+        transaction_items.push_back(std::move(item));
+        ts.upgrade(*item_ptr);
+    }
 }
 
 }  // namespace microdnf

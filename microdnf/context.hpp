@@ -71,6 +71,8 @@ void download_packages(libdnf::Goal & goal, const char * dest_dir);
 
 void run_transaction(libdnf::rpm::Transaction & transaction);
 
+void prepare_transaction(libdnf::Goal & goal, libdnf::rpm::Transaction & ts, std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items);
+
 }  // namespace microdnf
 
 #endif
