@@ -57,6 +57,11 @@ public:
     void test_ifilter_provides();
     void test_ifilter_requires();
     void test_resolve_pkg_spec();
+    // TODO(jmracek) Add tests when system repo will be available
+    // SolvQuery & ifilter_upgrades();
+    // SolvQuery & ifilter_downgrades();
+    // SolvQuery & ifilter_upgradable();
+    // SolvQuery & ifilter_downgradable();
 };
 
 

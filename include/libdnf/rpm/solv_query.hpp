@@ -305,6 +305,18 @@ public:
 
     SolvQuery & ifilter_available();
 
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_UPGRADES
+    SolvQuery & ifilter_upgrades();
+
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_DOWNGRADES
+    SolvQuery & ifilter_downgrades();
+
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_UPGRADABLE
+    SolvQuery & ifilter_upgradable();
+
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_DOWNGRADABLE
+    SolvQuery & ifilter_downgradable();
+
     /// Return the number of packages in the SolvQuery.
     ///
     /// @replaces libdnf/sack/query.hpp:method:Query.size()

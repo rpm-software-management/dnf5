@@ -108,6 +108,91 @@ inline libdnf::sack::QueryCmp remove_glob_when_unneeded(
     return cmp_type;
 }
 
+/**
+ * Return id of a package that can be upgraded with pkg.
+ *
+ * The returned package Id fulfills the following criteria:
+ * :: it is installed
+ * :: has the same name as pkg
+ * :: arch of the installed pkg is upgradable to the new pkg. In RPM world that
+ *    roughly means: if both pacakges are colored (contains ELF binaries and was
+ *    built with internal dependency generator), they are not upgradable to each
+ *    other (i.e. i386 package can not be upgraded to x86_64, neither the other
+ *    way round). If one of them is noarch and the other one colored then the
+ *    pkg is upgradable (i.e. one can upgrade .noarch to .x86_64 and then again
+ *    to a new version that is .noarch)
+ * :: is of lower version than pkg.
+ * :: if there are multiple packages of that name return the highest version
+ *    (implying we won't claim we can upgrade an old package with an already
+ *    installed version, e.g kernel).
+ *
+ * Or 0 if none such package is installed.
+ */
+Id what_upgrades(Pool * pool, Solvable * solvable) {
+    Id l = 0;
+    Id l_evr = 0;
+    Id p;
+    Id pp;
+    Solvable * updated;
+
+    assert(pool->installed);
+    assert(pool->whatprovides);
+    FOR_PROVIDES(p, pp, solvable->name) {
+        updated = pool_id2solvable(pool, p);
+        if (updated->repo != pool->installed || updated->name != solvable->name) {
+            continue;
+        }
+        if (updated->arch != solvable->arch && updated->arch != ARCH_NOARCH && solvable->arch != ARCH_NOARCH) {
+            continue;
+        }
+        if (pool_evrcmp(pool, updated->evr, solvable->evr, EVRCMP_COMPARE) >= 0) {
+            // >= version installed, this pkg can not be used for upgrade
+            return 0;
+        }
+        if (l == 0 || pool_evrcmp(pool, updated->evr, l_evr, EVRCMP_COMPARE) > 0) {
+            l = p;
+            l_evr = updated->evr;
+        }
+    }
+    return l;
+}
+
+/// Return id of a package that can be upgraded with pkg.
+///
+/// The returned package Id fulfills the following criteria:
+/// :: it is installed
+/// :: has the same name and arch as pkg
+/// :: is of higher version than pkg.
+/// :: if there are multiple such packages return the lowest version (so we won't
+///    claim we can downgrade a package when a lower version is already
+///    installed)
+///
+/// Or 0 if none such package is installed.
+Id what_downgrades(Pool *pool, Solvable * solvable) {
+    Id l = 0;
+    Id l_evr = 0;
+    Id p;
+    Id pp;
+    Solvable * updated;
+
+    assert(pool->installed);
+    assert(pool->whatprovides);
+    FOR_PROVIDES(p, pp, solvable->name) {
+        updated = pool_id2solvable(pool, p);
+        if (updated->repo != pool->installed ||
+            updated->name != solvable->name ||
+            updated->arch != solvable->arch)
+            continue;
+        if (pool_evrcmp(pool, updated->evr, solvable->evr, EVRCMP_COMPARE) <= 0)
+            // <= version installed, this pkg can not be used for downgrade
+            return 0;
+        if (l == 0 || pool_evrcmp(pool, updated->evr, l_evr, EVRCMP_COMPARE) < 0) {
+            l = p;
+            l_evr = updated->evr;
+        }
+    }
+    return l;
+}
 
 }  //  namespace
 
@@ -1694,6 +1779,132 @@ SolvQuery & SolvQuery::ifilter_available() {
             p_impl->query_result.remove_unsafe(candidate_id);
         }
     }
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_upgrades() {
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+    auto * installed_repo = pool->installed;
+
+    if (pool->installed == nullptr) {
+        p_impl->query_result.clear();
+        return *this;
+    }
+
+    p_impl->sack->pImpl->make_provides_ready();
+
+    for (PackageId candidate_id : p_impl->query_result) {
+        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+        if (solvable->repo == installed_repo) {
+            p_impl->query_result.remove_unsafe(candidate_id);
+            continue;
+        }
+        if (what_upgrades(pool, solvable) <= 0) {
+            p_impl->query_result.remove_unsafe(candidate_id);
+        }
+    }
+
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_downgrades() {
+    Pool * pool = p_impl->sack->pImpl->get_pool();
+    auto * installed_repo = pool->installed;
+
+    if (pool->installed == nullptr) {
+        p_impl->query_result.clear();
+        return *this;
+    }
+
+    p_impl->sack->pImpl->make_provides_ready();
+
+    for (PackageId candidate_id : p_impl->query_result) {
+        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+        if (solvable->repo == installed_repo) {
+            p_impl->query_result.remove_unsafe(candidate_id);
+            continue;
+        }
+        if (what_downgrades(pool, solvable) <= 0) {
+            p_impl->query_result.remove_unsafe(candidate_id);
+        }
+    }
+
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_upgradable() {
+    SolvSack * sack = p_impl->sack.get();
+    Pool * pool = sack->pImpl->get_pool();
+    auto * installed_repo = pool->installed;
+
+    if (pool->installed == nullptr) {
+        p_impl->query_result.clear();
+        return *this;
+    }
+
+    sack->pImpl->make_provides_ready();
+    solv::SolvMap filter_result(sack->pImpl->get_nsolvables());
+
+    for (auto pkg_id : sack->pImpl->get_solvables()) {
+//             if (flags == Query::ExcludeFlags::APPLY_EXCLUDES) {
+//                 if (pool->considered && !map_tst(pool->considered, p))
+//                     continue;
+//             } else {
+//                 if (considered_cached && !map_tst(considered_cached, p))
+//                     continue;
+//             }
+//             s = pool_id2solvable(pool, p);
+        // TODO(jmracek) Filter out solvables that were excluded accordin to flags for initiation
+        // When initlad emptu raise Exception
+        Solvable * solvable = solv::get_solvable(pool, pkg_id);
+        if (solvable->repo == installed_repo) {
+            continue;
+        }
+        Id what = what_upgrades(pool, solvable);
+        if (what != 0) {
+            filter_result.add_unsafe(PackageId(what));
+        }
+    }
+    p_impl->query_result &= filter_result;
+
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_downgradable() {
+    SolvSack * sack = p_impl->sack.get();
+    Pool * pool = sack->pImpl->get_pool();
+    auto * installed_repo = pool->installed;
+
+    if (pool->installed == nullptr) {
+        p_impl->query_result.clear();
+        return *this;
+    }
+
+    sack->pImpl->make_provides_ready();
+    solv::SolvMap filter_result(sack->pImpl->get_nsolvables());
+
+    for (auto pkg_id : sack->pImpl->get_solvables()) {
+//             if (flags == Query::ExcludeFlags::APPLY_EXCLUDES) {
+//                 if (pool->considered && !map_tst(pool->considered, p))
+//                     continue;
+//             } else {
+//                 if (considered_cached && !map_tst(considered_cached, p))
+//                     continue;
+//             }
+//             s = pool_id2solvable(pool, p);
+        // TODO(jmracek) Filter out solvables that were excluded accordin to flags for initiation
+        // When initlad emptu raise Exception
+        Solvable * solvable = solv::get_solvable(pool, pkg_id);
+        if (solvable->repo == installed_repo) {
+            continue;
+        }
+        Id what = what_downgrades(pool, solvable);
+        if (what != 0) {
+            filter_result.add_unsafe(PackageId(what));
+        }
+    }
+    p_impl->query_result &= filter_result;
+
     return *this;
 }
 
