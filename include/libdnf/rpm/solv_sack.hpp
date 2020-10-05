@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_SACK_HPP
 #define LIBDNF_RPM_SOLV_SACK_HPP
 
-#include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 
 #include <memory>
 
@@ -33,6 +33,14 @@ class Goal;
 class Swdb;
 
 }  // namespace libdnf
+
+namespace libdnf::advisory {
+
+class Advisory;
+class AdvisorySack;
+class AdvisoryQuery;
+
+}  // namespace libdnf::advisory
 
 namespace libdnf::rpm::solv {
 
@@ -168,6 +176,9 @@ private:
     friend Transaction;
     friend libdnf::Swdb;
     friend solv::SolvPrivate;
+    friend libdnf::advisory::Advisory;
+    friend libdnf::advisory::AdvisorySack;
+    friend libdnf::advisory::AdvisoryQuery;
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

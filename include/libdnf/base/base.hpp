@@ -20,14 +20,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_BASE_HPP
 #define LIBDNF_BASE_BASE_HPP
 
+#include "libdnf/advisory/advisory_sack.hpp"
+#include "libdnf/comps/comps.hpp"
 #include "libdnf/conf/config_main.hpp"
+#include "libdnf/conf/vars.hpp"
 #include "libdnf/logger/log_router.hpp"
+#include "libdnf/plugin/plugins.hpp"
 #include "libdnf/rpm/repo_sack.hpp"
 #include "libdnf/rpm/solv_sack.hpp"
-#include "libdnf/conf/vars.hpp"
 #include "libdnf/transaction/sack.hpp"
-#include "libdnf/plugin/plugins.hpp"
-#include "libdnf/comps/comps.hpp"
 
 #include <map>
 
@@ -59,6 +60,7 @@ public:
     rpm::SolvSack & get_rpm_solv_sack() { return rpm_solv_sack; }
     transaction::TransactionSack & get_transaction_sack() { return transaction_sack; }
     libdnf::comps::Comps & get_comps() { return comps; }
+    libdnf::advisory::AdvisorySack & get_rpm_advisory_sack() { return rpm_advisory_sack; }
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     Vars & get_vars() { return vars; }
@@ -90,6 +92,8 @@ private:
     comps::Comps comps{*this};
     Vars vars;
     plugin::Plugins plugins{*this};
+    libdnf::advisory::AdvisorySack rpm_advisory_sack{*this};
+    std::map<std::string, std::string> variables;
 };
 
 }  // namespace libdnf
