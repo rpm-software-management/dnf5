@@ -319,6 +319,18 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
     }
 
     {
+        // Test NA icase
+        libdnf::rpm::SolvQuery query(sack);
+        auto return_value = query.resolve_pkg_spec("Wget.x86_64", true, true, false, false, true, {});
+        CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
+        CPPUNIT_ASSERT_EQUAL(return_value.first, true);
+        auto pset = query.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
+        }
+    }
+
+    {
         // Test a provide
         libdnf::rpm::SolvQuery query(sack);
         auto return_value = query.resolve_pkg_spec("wget > 1", false, true, true, false, true, {});
