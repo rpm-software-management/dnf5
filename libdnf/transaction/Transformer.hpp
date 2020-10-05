@@ -1,3 +1,7 @@
+// TODO(dmach): keep refactoring and deliver something that works with the new code base
+// the whole file is disabled via the SKIP macro because it doesn't compile with the new code
+#ifdef SKIP
+
 /*
  * Copyright (C) 2017-2018 Red Hat, Inc.
  *
@@ -85,5 +89,7 @@ private:
 };
 
 }  // namespace libdnf::transaction
+
+#endif
 
 #endif

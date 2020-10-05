@@ -51,7 +51,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_package_select_new_qu
 
 void comps_group_packages_select(CompsGroup & group) {
     auto query = comps_group_package_select_new_query(group.get_transaction().get_connection());
-    query->bindv(group.getId());
+    query->bindv(group.get_item_id());
 
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto & pkg = group.new_package();
@@ -86,7 +86,7 @@ void comps_group_packages_insert(CompsGroup & group) {
     auto query = comps_group_package_insert_new_query(group.get_transaction().get_connection());
     for (auto & pkg : group.get_packages()) {
         query->bindv(
-            group.getId(),
+            group.get_item_id(),
             pkg->get_name(),
             pkg->get_installed(),
             static_cast<int>(pkg->get_package_type())

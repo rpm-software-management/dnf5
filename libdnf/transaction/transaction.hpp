@@ -22,6 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TRANSACTION_TRANSACTION_HPP
 
 
+#include "comps_environment.hpp"
+#include "comps_group.hpp"
+#include "rpm_package.hpp"
+
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 #include <memory>
@@ -33,7 +37,6 @@ class Transaction;
 typedef std::shared_ptr<Transaction> TransactionPtr;
 }  // namespace libdnf::transaction
 
-#include "Item.hpp"
 #include "transaction_item.hpp"
 
 
@@ -164,8 +167,6 @@ public:
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setState(libdnf::TransactionState value)
     void set_state(State value) { state = value; }
 
-    virtual std::vector<TransactionItemPtr> getItems();
-
     const std::set<std::string> & get_runtime_packages() const { return runtime_packages; }
     void add_runtime_package(const std::string & nevra) { runtime_packages.insert(nevra); }
 
@@ -179,29 +180,20 @@ public:
 
     void begin();
     void finish(TransactionState state);
-    TransactionItemPtr addItem(
-        std::shared_ptr<Item> item,
-        const std::string & repoid,
-        TransactionItemAction action,
-        TransactionItemReason reason);
 
+    const std::vector<std::unique_ptr<CompsEnvironment>> & get_comps_environments() const noexcept { return comps_environments; }
+    CompsEnvironment & new_comps_environment();
+
+    const std::vector<std::unique_ptr<CompsGroup>> & get_comps_groups() const noexcept { return comps_groups; }
+    CompsGroup & new_comps_group();
+
+    const std::vector<std::unique_ptr<Package>> & get_packages() const noexcept { return packages; }
+    Package & new_package();
 
     libdnf::utils::SQLite3 & get_connection() { return conn; }
 
 protected:
-    friend Item;
     friend Transformer;
-
-    void dbSelect(int64_t transaction_id);
-
-    void saveItems();
-    std::vector<TransactionItemPtr> items;
-
-    void dbInsert();
-    void dbUpdate();
-
-
-    friend class TransactionItem;
     libdnf::utils::SQLite3 & conn;
 
 private:
@@ -220,6 +212,10 @@ private:
 
     std::set<std::string> runtime_packages;
     std::vector<std::pair<int, std::string>> console_output;
+
+    std::vector<std::unique_ptr<CompsEnvironment>> comps_environments;
+    std::vector<std::unique_ptr<CompsGroup>> comps_groups;
+    std::vector<std::unique_ptr<Package>> packages;
 };
 
 

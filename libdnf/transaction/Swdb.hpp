@@ -1,3 +1,7 @@
+// TODO(dmach): probably remove most of the functionality and/or merge it into TransactionSack
+// the whole file is disabled via the SKIP macro because it doesn't compile with the new code
+#ifdef SKIP
+
 /*
  * Copyright (C) 2017-2018 Red Hat, Inc.
  *
@@ -29,7 +33,7 @@
 
 namespace libdnf::transaction {
 struct Swdb;
-class Transformer;
+//class Transformer;
 }
 
 //#include "../hy-types.h"
@@ -67,7 +71,16 @@ public:
     int64_t endTransaction(int64_t dtEnd, std::string rpmdbVersionEnd, TransactionState state);
     int64_t closeTransaction();
     // TODO:
-    std::vector< TransactionItemPtr > getItems() { return transactionInProgress->getItems(); }
+    //std::vector< TransactionItemPtr > getItems() { return transactionInProgress->getItems(); }
+
+    const std::vector<std::unique_ptr<CompsEnvironment>> & get_comps_environments() const noexcept { return transactionInProgress->get_comps_environments(); }
+    //CompsEnvironment & new_comps_environment();
+
+    const std::vector<std::unique_ptr<CompsGroup>> & get_comps_groups() const noexcept { return transactionInProgress->get_comps_groups(); }
+    //CompsGroup & new_comps_group();
+
+    const std::vector<std::unique_ptr<Package>> & get_packages() const noexcept { return transactionInProgress->get_packages(); }
+    //Package & new_package();
 
     TransactionPtr getLastTransaction();
     std::vector< TransactionPtr >
@@ -121,7 +134,7 @@ public:
 
     Transaction * get_transaction_in_progress() { return transactionInProgress.get(); }
 protected:
-    friend class Transformer;
+    //friend class Transformer;
 
     explicit Swdb(libdnf::utils::SQLite3 & conn, bool autoClose);
     libdnf::utils::SQLite3 * conn;
@@ -135,3 +148,5 @@ private:
 } // namespace libdnf::transaction
 
 #endif // LIBDNF_TRANSACTION_SWDB_HPP
+
+#endif

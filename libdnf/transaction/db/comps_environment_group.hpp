@@ -28,9 +28,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
+/// Load EnvironmentGroup objects from the database to the CompsEnvironment object
 void comps_environment_groups_select(CompsEnvironment & env);
 
 
+/// Insert EnvironmentGroup objects associated with a CompsEnvironment into the database
 void comps_environment_groups_insert(CompsEnvironment & env);
 
 

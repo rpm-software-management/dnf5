@@ -42,7 +42,10 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(libdnf:
 
 
 int64_t item_insert(libdnf::utils::SQLite3::Statement & query) {
-    query.step();
+    if (query.step() != libdnf::utils::SQLite3::Statement::StepResult::DONE) {
+        // TODO(dmach): replace with a better exception class
+        throw std::runtime_error("");
+    }
     return query.last_insert_rowid();
 }
 

@@ -113,7 +113,7 @@ void save_transaction_runtime_packages(Transaction & trans) {
         auto pk = rpm_select_pk(*query_rpm_select_pk, rpm);
         if (pk == 0) {
             pk = item_insert(*query_item_insert);
-            rpm.setId(pk);
+            rpm.set_item_id(pk);
             rpm_insert(*query_rpm_insert, rpm);
         }
         query_trans_with_insert->bindv(trans.get_id(), pk);

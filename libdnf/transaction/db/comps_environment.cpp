@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_environment.hpp"
 #include "comps_environment_group.hpp"
 #include "item.hpp"
+#include "trans_item.hpp"
 
 #include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/transaction.hpp"
@@ -63,28 +64,19 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_transaction_ite
 }
 
 
-std::vector<std::shared_ptr<TransactionItem>> get_transaction_comps_environments(Transaction & trans) {
-    std::vector<std::shared_ptr<TransactionItem>> result;
+std::vector<std::unique_ptr<CompsEnvironment>> get_transaction_comps_environments(Transaction & trans) {
+    std::vector<std::unique_ptr<CompsEnvironment>> result;
 
     auto query = comps_environment_transaction_item_select_new_query(trans.get_connection(), trans.get_id());
-
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto trans_item = std::make_shared< TransactionItem >(trans);
-        auto item = std::make_shared< CompsEnvironment >(trans);
-        trans_item->setItem(item);
-
-        trans_item->set_id(query->get<int64_t>("id"));
-        trans_item->set_action(static_cast<TransactionItemAction>(query->get<int>("action")));
-        trans_item->set_reason(static_cast<TransactionItemReason>(query->get<int>("reason")));
-        trans_item->set_state(static_cast<TransactionItemState>(query->get<int>("state")));
-        item->setId(query->get<int64_t>("item_id"));
-        item->set_environment_id(query->get<std::string>("environmentid"));
-        item->set_name(query->get<std::string>("name"));
-        item->set_translated_name(query->get<std::string>("translated_name"));
-        item->set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
-        comps_environment_groups_select(*item);
-
-        result.push_back(trans_item);
+        auto ti = std::make_unique<CompsEnvironment>(trans);
+        transaction_item_select(*query, *ti);
+        ti->set_environment_id(query->get<std::string>("environmentid"));
+        ti->set_name(query->get<std::string>("name"));
+        ti->set_translated_name(query->get<std::string>("translated_name"));
+        ti->set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
+        comps_environment_groups_select(*ti);
+        result.push_back(std::move(ti));
     }
 
     return result;
@@ -125,8 +117,22 @@ int64_t comps_environment_insert(libdnf::utils::SQLite3::Statement & query, Comp
     );
     query.step();
     query.reset();
-    grp.setId(item_id);
+    grp.set_item_id(item_id);
     return item_id;
+}
+
+
+void insert_transaction_comps_environments(Transaction & trans) {
+    auto & conn = trans.get_connection();
+
+    auto query_comps_environment_insert = comps_environment_insert_new_query(conn);
+    auto query_trans_item_insert = trans_item_insert_new_query(conn);
+
+    for (auto & env : trans.get_comps_environments()) {
+        comps_environment_insert(*query_comps_environment_insert, *env);
+        transaction_item_insert(*query_trans_item_insert, *env);
+        comps_environment_groups_insert(*env);
+    }
 }
 
 

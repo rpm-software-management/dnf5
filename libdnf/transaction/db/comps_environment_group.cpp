@@ -51,7 +51,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_group_select_ne
 
 void comps_environment_groups_select(CompsEnvironment & env) {
     auto query = comps_environment_group_select_new_query(env.get_transaction().get_connection());
-    query->bindv(env.getId());
+    query->bindv(env.get_item_id());
 
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto & grp = env.new_group();
@@ -84,14 +84,18 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_group_inser
 
 void comps_environment_groups_insert(CompsEnvironment & env) {
     auto query = comps_environment_group_insert_new_query(env.get_transaction().get_connection());
+
     for (auto & grp : env.get_groups()) {
         query->bindv(
-            env.getId(),
+            env.get_item_id(),
             grp->get_group_id(),
             grp->get_installed(),
             static_cast<int>(grp->get_group_type())
         );
-        query->step();
+        if (query->step() != libdnf::utils::SQLite3::Statement::StepResult::DONE) {
+            // TODO(dmach): replace with a better exception class
+            throw std::runtime_error("");
+        }
         grp->set_id(query->last_insert_rowid());
         query->reset();
     }

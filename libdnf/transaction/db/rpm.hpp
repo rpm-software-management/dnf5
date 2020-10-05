@@ -41,7 +41,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_q
 
 
 /// Use a query to select a record from the 'rpm' table and populate a TransactionItem
-int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionItem & ti);
+int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Package & pkg);
 
 
 /// Create a query (statement) that inserts new records to the 'rpm' table
@@ -69,8 +69,12 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_select_new_query(libdnf::util
 bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package & rpm);
 
 
-/// Return a vector of TransactionItem objects with packages in a transaction
-std::vector<std::shared_ptr<TransactionItem>> get_transaction_packages(Transaction & trans);
+/// Return a vector of Package objects with packages in a transaction
+std::vector<std::unique_ptr<Package>> get_transaction_packages(Transaction & trans);
+
+
+/// Insert Package objects associated with a transaction into the database
+void insert_transaction_packages(Transaction & trans);
 
 
 }  // namespace libdnf::transaction

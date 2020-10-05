@@ -22,35 +22,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TRANSACTION_COMPS_ENVIRONMENT_HPP
 
 
+#include "comps_group.hpp"
+
 #include <memory>
 #include <vector>
 
 
 namespace libdnf::transaction {
 
-class CompsEnvironment;
-typedef std::shared_ptr< CompsEnvironment > CompsEnvironmentPtr;
-
-}
-
-
-#include "Item.hpp"
-#include "comps_group.hpp"
-
-
-namespace libdnf::transaction {
-
 
 class CompsEnvironmentGroup;
+class Transction;
 
 
-class CompsEnvironment : public Item {
+class CompsEnvironment : public TransactionItem {
 public:
-    using Item::Item;
-    virtual ~CompsEnvironment() = default;
+    explicit CompsEnvironment(Transaction & trans);
 
     const std::string & get_environment_id() const noexcept { return environment_id; }
-    void set_environment_id(const std::string &value) { environment_id = value; }
+    void set_environment_id(const std::string & value) { environment_id = value; }
 
     const std::string & get_name() const noexcept { return name; }
     void set_name(const std::string & value) { name = value; }
@@ -61,10 +51,6 @@ public:
     CompsPackageType get_package_types() const noexcept { return package_types; }
     void set_package_types(CompsPackageType value) { package_types = value; }
 
-    std::string toStr() const override;
-    Type getItemType() const noexcept override { return itemType; }
-    void save() override;
-
     /// Create a new CompsEnvironmentGroup object and return a reference to it.
     /// The object is owned by the CompsEnvironment.
     CompsEnvironmentGroup & new_group();
@@ -72,15 +58,12 @@ public:
     /// Get list of groups associated with the environment.
     const std::vector<std::unique_ptr<CompsEnvironmentGroup>> & get_groups() { return groups; }
 
-    //static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &envid);
     // TODO(dmach): rewrite into TransactionSack.list_installed_environments(); how to deal with references to different transactions? We don't want all of them loaded into memory.
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
     //    libdnf::utils::SQLite3Ptr conn,
     //    const std::string &pattern);
-    static std::vector< TransactionItemPtr > getTransactionItems(Transaction & trans);
 
-protected:
-    const Type itemType = Type::ENVIRONMENT;
+    std::string to_string() const { return get_environment_id(); }
 
 private:
     friend class CompsEnvironmentGroup;
@@ -97,7 +80,7 @@ public:
     int64_t get_id() const noexcept { return id; }
     void set_id(int64_t value) { id = value; }
 
-    const CompsEnvironment &get_environment() const noexcept { return environment; }
+    const CompsEnvironment & get_environment() const noexcept { return environment; }
 
     const std::string & get_group_id() const noexcept { return group_id; }
     void set_group_id(const std::string & value) { group_id = value; }
@@ -109,7 +92,7 @@ public:
     void set_group_type(CompsPackageType value) { group_type = value; }
 
 protected:
-    explicit CompsEnvironmentGroup(CompsEnvironment &environment);
+    explicit CompsEnvironmentGroup(CompsEnvironment & environment);
 
 private:
     friend class CompsEnvironment;
@@ -124,4 +107,4 @@ private:
 }  // namespace libdnf::transaction
 
 
-#endif // LIBDNF_TRANSACTION_COMPS_ENVIRONMENT_HPP
+#endif  // LIBDNF_TRANSACTION_COMPS_ENVIRONMENT_HPP

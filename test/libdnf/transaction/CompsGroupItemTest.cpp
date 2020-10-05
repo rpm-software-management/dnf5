@@ -7,6 +7,9 @@
 #include "libdnf/transaction/Transformer.hpp"
 
 #include "CompsGroupItemTest.hpp"
+#include "libdnf/transaction/db/db.hpp"
+#include "libdnf/transaction/transaction.hpp"
+
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupItemTest);
 
@@ -16,7 +19,7 @@ void
 CompsGroupItemTest::setUp()
 {
     conn = new libdnf::utils::SQLite3(":memory:");
-    Transformer::createDatabase(*conn);
+    create_database(*conn);
 }
 
 void
@@ -25,21 +28,26 @@ CompsGroupItemTest::tearDown()
     delete conn;
 }
 
-static std::shared_ptr< CompsGroup >
-createCompsGroup(Transaction & trans)
-{
-    auto grp = std::make_shared< CompsGroup >(trans);
-    grp->set_group_id("core");
-    grp->set_name("Smallest possible installation");
-    grp->set_translated_name("translated(Smallest possible installation)");
-    grp->set_package_types(CompsPackageType::DEFAULT);
+static CompsGroup & create_comps_group(Transaction & trans) {
+    auto & grp = trans.new_comps_group();
 
-    auto & pkg1 = grp->new_package();
+    //auto grp = std::make_shared< CompsGroup >(trans);
+    grp.set_group_id("core");
+    grp.set_name("Smallest possible installation");
+    grp.set_translated_name("translated(Smallest possible installation)");
+    grp.set_package_types(CompsPackageType::DEFAULT);
+
+    grp.set_repoid("");
+    grp.set_action(TransactionItemAction::INSTALL);
+    grp.set_reason(TransactionItemReason::USER);
+    grp.set_state(TransactionItemState::DONE);
+
+    auto & pkg1 = grp.new_package();
     pkg1.set_name("bash");
     pkg1.set_installed(true);
     pkg1.set_package_type(CompsPackageType::MANDATORY);
 
-    auto & pkg2 = grp->new_package();
+    auto & pkg2 = grp.new_package();
     pkg2.set_name("rpm");
     pkg2.set_installed(false);
     pkg2.set_package_type(CompsPackageType::OPTIONAL);
@@ -51,20 +59,20 @@ void
 CompsGroupItemTest::testCreate()
 {
     Transaction trans(*conn);
-    auto grp = createCompsGroup(trans);
-    auto item = trans.addItem(grp, "", TransactionItemAction::INSTALL, TransactionItemReason::USER);
-    item->set_state(TransactionItemState::DONE);
+
+    auto & grp = create_comps_group(trans);
+
     trans.begin();
     trans.finish(TransactionState::DONE);
 
     Transaction trans2(*conn, trans.get_id());
 
-    auto grp2 = std::dynamic_pointer_cast<CompsGroup>(trans.getItems().at(0)->getItem());
-    CPPUNIT_ASSERT(grp2->getId() == grp->getId());
-    CPPUNIT_ASSERT(grp2->get_group_id() == grp->get_group_id());
-    CPPUNIT_ASSERT(grp2->get_name() == grp->get_name());
-    CPPUNIT_ASSERT(grp2->get_translated_name() == grp->get_translated_name());
-    CPPUNIT_ASSERT(grp2->get_package_types() == grp->get_package_types());
+    auto & grp2 = trans2.get_comps_groups().at(0);
+    CPPUNIT_ASSERT(grp2->get_id() == grp.get_id());
+    CPPUNIT_ASSERT(grp2->get_group_id() == grp.get_group_id());
+    CPPUNIT_ASSERT(grp2->get_name() == grp.get_name());
+    CPPUNIT_ASSERT(grp2->get_translated_name() == grp.get_translated_name());
+    CPPUNIT_ASSERT(grp2->get_package_types() == grp.get_package_types());
 
     {
         auto & pkg = grp2->get_packages().at(0);
@@ -84,20 +92,18 @@ void
 CompsGroupItemTest::testGetTransactionItems()
 {
     Transaction trans(*conn);
-    auto grp = createCompsGroup(trans);
-    auto ti = trans.addItem(grp, "", TransactionItemAction::INSTALL, TransactionItemReason::USER);
-    ti->set_state(TransactionItemState::DONE);
+
+    create_comps_group(trans);
+
     trans.begin();
     trans.finish(TransactionState::DONE);
 
     Transaction trans2(*conn, trans.get_id());
 
-    auto transItems = trans2.getItems();
-    CPPUNIT_ASSERT_EQUAL(1, static_cast< int >(transItems.size()));
+    auto & groups = trans2.get_comps_groups();
+    CPPUNIT_ASSERT_EQUAL(1lu, groups.size());
 
-    auto transItem = transItems.at(0);
-
-    auto grp2 = std::dynamic_pointer_cast<CompsGroup>(transItem->getItem());
+    auto & grp2 = groups.at(0);
     {
         auto & pkg = grp2->get_packages().at(0);
         CPPUNIT_ASSERT_EQUAL(std::string("bash"), pkg->get_name());

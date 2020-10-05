@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TRANSACTION_RPM_PACKAGE_HPP
 
 
-#include "Item.hpp"
 #include "transaction_item.hpp"
 #include "transaction_item_reason.hpp"
 
@@ -36,10 +35,9 @@ namespace libdnf::transaction {
 class Transaction;
 
 
-class Package : public Item {
+class Package : public TransactionItem {
 public:
-    using Item::Item;
-    virtual ~Package() = default;
+    explicit Package(Transaction & trans);
 
     const std::string & get_name() const noexcept { return name; }
     void set_name(const std::string & value) { name = value; }
@@ -57,21 +55,16 @@ public:
     const std::string & get_arch() const noexcept { return arch; }
     void set_arch(const std::string & value) { arch = value; }
 
-    std::string toStr() const override;
-    Type getItemType() const noexcept override { return itemType; }
-    void save() override;
+    static std::vector<int64_t> searchTransactions(
+        libdnf::utils::SQLite3 & conn, const std::vector<std::string> & patterns);
+    static TransactionItemReason resolveTransactionItemReason(
+        libdnf::utils::SQLite3 & conn, const std::string & name, const std::string & arch, int64_t maxTransactionId);
 
-    //static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3 & conn, const std::string &nevra);
-    static std::vector< int64_t > searchTransactions(libdnf::utils::SQLite3 & conn, const std::vector< std::string > &patterns);
-    static TransactionItemReason resolveTransactionItemReason(libdnf::utils::SQLite3 & conn,
-                                                              const std::string &name,
-                                                              const std::string &arch,
-                                                              int64_t maxTransactionId);
+    std::string to_string() const;
 
-    bool operator<(const Package &other) const;
+    bool operator<(const Package & other) const;
 
 private:
-    const Type itemType = Type::RPM;
     std::string name;
     std::string epoch;
     std::string version;
@@ -83,4 +76,4 @@ private:
 }  // namespace libdnf::transaction
 
 
-#endif // LIBDNF_TRANSACTION_RPM_PACKAGE_HPP
+#endif  // LIBDNF_TRANSACTION_RPM_PACKAGE_HPP

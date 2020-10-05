@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_group.hpp"
 #include "comps_group_package.hpp"
 #include "item.hpp"
+#include "trans_item.hpp"
 
 #include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/transaction.hpp"
@@ -63,28 +64,23 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_transaction_item_sele
 }
 
 
-std::vector<std::shared_ptr<TransactionItem>> get_transaction_comps_groups(Transaction & trans) {
-    std::vector<std::shared_ptr<TransactionItem>> result;
+std::vector<std::unique_ptr<CompsGroup>> get_transaction_comps_groups(Transaction & trans) {
+    std::vector<std::unique_ptr<CompsGroup>> result;
 
     auto query = comps_group_transaction_item_select_new_query(trans.get_connection(), trans.get_id());
 
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto trans_item = std::make_shared< TransactionItem >(trans);
-        auto item = std::make_shared< CompsGroup >(trans);
-        trans_item->setItem(item);
-
-        trans_item->set_id(query->get<int64_t>("id"));
-        trans_item->set_action(static_cast<TransactionItemAction>(query->get<int>("action")));
-        trans_item->set_reason(static_cast<TransactionItemReason>(query->get<int>("reason")));
-        trans_item->set_state(static_cast<TransactionItemState>(query->get<int>("state")));
-        item->setId(query->get<int64_t>("item_id"));
-        item->set_group_id(query->get<std::string>("groupid"));
-        item->set_name(query->get<std::string>("name"));
-        item->set_translated_name(query->get<std::string>("translated_name"));
-        item->set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
-        comps_group_packages_select(*item);
-
-        result.push_back(trans_item);
+        auto ti = std::make_unique<CompsGroup>(trans);
+        transaction_item_select(*query, *ti);
+//        auto trans_item = std::make_shared< TransactionItem >(trans);
+//        auto item = std::make_shared< CompsGroup >(trans);
+//        trans_item->setItem(item);
+        ti->set_group_id(query->get<std::string>("groupid"));
+        ti->set_name(query->get<std::string>("name"));
+        ti->set_translated_name(query->get<std::string>("translated_name"));
+        ti->set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
+        comps_group_packages_select(*ti);
+        result.push_back(std::move(ti));
     }
 
     return result;
@@ -125,8 +121,22 @@ int64_t comps_group_insert(libdnf::utils::SQLite3::Statement & query, CompsGroup
     );
     query.step();
     query.reset();
-    grp.setId(item_id);
+    grp.set_item_id(item_id);
     return item_id;
+}
+
+
+void insert_transaction_comps_groups(Transaction & trans) {
+    auto & conn = trans.get_connection();
+
+    auto query_comps_group_insert = comps_group_insert_new_query(conn);
+    auto query_trans_item_insert = trans_item_insert_new_query(conn);
+
+    for (auto & grp : trans.get_comps_groups()) {
+        comps_group_insert(*query_comps_group_insert, *grp);
+        transaction_item_insert(*query_trans_item_insert, *grp);
+        comps_group_packages_insert(*grp);
+    }
 }
 
 

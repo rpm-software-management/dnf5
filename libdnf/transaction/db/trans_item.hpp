@@ -18,25 +18,34 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
-#define LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
+#ifndef LIBDNF_TRANSACTION_DB_TRANS_ITEM_HPP
+#define LIBDNF_TRANSACTION_DB_TRANS_ITEM_HPP
 
 
-#include "libdnf/transaction/comps_group.hpp"
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
+
+#include <memory>
 
 
 namespace libdnf::transaction {
 
 
-/// Load GroupPackage objects from the database to the CompsGroup object
-void comps_group_packages_select(CompsGroup & group);
+class TransactionItem;
 
 
-/// Insert GroupPackage objects associated with a CompsGroup into the database
-void comps_group_packages_insert(CompsGroup & group);
+/// Copy 'trans_item' fields from a query to TransactionItem or an object that inherits from it
+void transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionItem & ti);
+
+
+/// Create a query (statement) that inserts new records to the 'trans_item' table
+std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_item_insert_new_query(libdnf::utils::SQLite3 & conn);
+
+
+/// Use a query to insert a new record to the 'trans_item' table
+int64_t transaction_item_insert(libdnf::utils::SQLite3::Statement & query, TransactionItem & ti);
 
 
 }  // namespace libdnf::transaction
 
 
-#endif  // LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
+#endif  // LIBDNF_TRANSACTION_DB_TRANS_ITEM_HPP

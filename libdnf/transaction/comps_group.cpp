@@ -18,69 +18,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include <algorithm>
-
 #include "comps_group.hpp"
+
 #include "transaction.hpp"
 #include "transaction_item.hpp"
 
 #include "libdnf/transaction/db/comps_group.hpp"
 #include "libdnf/transaction/db/comps_group_package.hpp"
 
+#include <algorithm>
+
 
 namespace libdnf::transaction {
 
 
-void CompsGroup::save() {
-    auto query = comps_group_insert_new_query(trans.get_connection());
-    comps_group_insert(*query, *this);
-    comps_group_packages_insert(*this);
-}
+CompsGroup::CompsGroup(Transaction & trans) : TransactionItem::TransactionItem(trans, Type::GROUP) {}
 
-
-/*
-TransactionItemPtr
-CompsGroup::getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &groupid)
-{
-    const char *sql = R"**(
-        SELECT
-            ti.trans_id,
-            ti.id as ti_id,
-            ti.state as ti_state,
-            ti.action as ti_action,
-            ti.reason as ti_reason,
-            i.item_id,
-            i.groupid,
-            i.name,
-            i.translated_name,
-            i.pkg_types
-        FROM
-            trans_item ti
-        JOIN
-            comps_group i USING (item_id)
-        JOIN
-            trans t ON ti.trans_id = t.id
-        WHERE
-            t.state = 1
-            AND ti.action not in (3, 5, 7)
-            AND i.groupid = ?
-        ORDER BY
-            ti.trans_id DESC
-    )**";
-
-    libdnf::utils::SQLite3::Query query(*conn, sql);
-    query.bindv(groupid);
-    if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto trans_item =
-            compsGroupTransactionItemFromQuery(conn, query, query.get< int64_t >("trans_id"));
-        if (trans_item->get_action() == TransactionItemAction::REMOVE) {
-            return nullptr;
-        }
-        return trans_item;
-    }
-    return nullptr;
-}
-*/
 
 /*
 std::vector< TransactionItemPtr >
@@ -127,10 +80,7 @@ CompsGroupPackage & CompsGroup::new_package() {
 }
 
 
-CompsGroupPackage::CompsGroupPackage(CompsGroup & group)
-  : group(group)
-{
-}
+CompsGroupPackage::CompsGroupPackage(CompsGroup & group) : group(group) {}
 
 
 }  // namespace libdnf::transaction

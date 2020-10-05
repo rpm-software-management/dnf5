@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "transaction.hpp"
+
 #include "comps_environment.hpp"
 #include "comps_group.hpp"
 #include "rpm_package.hpp"
@@ -27,9 +28,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/db/comps_environment.hpp"
 #include "libdnf/transaction/db/comps_group.hpp"
 #include "libdnf/transaction/db/console_output.hpp"
-#include "libdnf/transaction/db/trans.hpp"
-#include "libdnf/transaction/db/trans_with.hpp"
 #include "libdnf/transaction/db/rpm.hpp"
+#include "libdnf/transaction/db/trans.hpp"
+#include "libdnf/transaction/db/trans_item.hpp"
+#include "libdnf/transaction/db/trans_with.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
@@ -37,25 +39,28 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
-Transaction::Transaction(libdnf::utils::SQLite3 & conn, int64_t pk)
-  : conn{conn}
-{
-    dbSelect(pk);
+
+Transaction::Transaction(libdnf::utils::SQLite3 & conn, int64_t pk) : conn{conn} {
+    auto query = trans_select_new_query(conn);
+    trans_select(*query, pk, *this);
+
     runtime_packages = load_transaction_runtime_packages(*this);
     console_output = console_output_load(*this);
+
+    comps_environments = get_transaction_comps_environments(*this);
+    comps_groups = get_transaction_comps_groups(*this);
+    packages = get_transaction_packages(*this);
 }
 
-Transaction::Transaction(libdnf::utils::SQLite3 & conn)
-  : conn{conn}
-{
-}
 
-bool
-Transaction::operator==(const Transaction &other) const
-{
+Transaction::Transaction(libdnf::utils::SQLite3 & conn) : conn{conn} {}
+
+
+bool Transaction::operator==(const Transaction & other) const {
     return get_id() == other.get_id() && get_dt_begin() == other.get_dt_begin() &&
            get_rpmdb_version_begin() == other.get_rpmdb_version_begin();
 }
+
 
 /**
  * Compare two transactions on:
@@ -65,70 +70,47 @@ Transaction::operator==(const Transaction &other) const
  * \param other transaction to compare with
  * \return true if other transaction is older
  */
-bool
-Transaction::operator<(const Transaction &other) const
-{
+bool Transaction::operator<(const Transaction & other) const {
     return get_id() > other.get_id() || get_dt_begin() > other.get_dt_begin() ||
            get_rpmdb_version_begin() > other.get_rpmdb_version_begin();
 }
+
 
 /**
  * \param other transaction to compare with
  * \return true if other transaction is newer
  */
-bool
-Transaction::operator>(const Transaction &other) const
-{
+bool Transaction::operator>(const Transaction & other) const {
     return get_id() < other.get_id() || get_dt_begin() < other.get_dt_begin() ||
            get_rpmdb_version_begin() < other.get_rpmdb_version_begin();
 }
 
-void
-Transaction::dbSelect(int64_t pk)
-{
-    auto query = trans_select_new_query(conn);
-    trans_select(*query, pk, *this);
-}
 
-/**
- * Loader for the transaction items.
- * \return list of transaction items associated with the transaction
- */
-std::vector< TransactionItemPtr >
-Transaction::getItems()
-{
-    if (!items.empty()) {
-        return items;
-    }
-    std::vector< TransactionItemPtr > result;
-
-    auto rpms = get_transaction_packages(*this);
-    result.insert(result.end(), rpms.begin(), rpms.end());
-
-    auto comps_groups = get_transaction_comps_groups(*this);
-    result.insert(result.end(), comps_groups.begin(), comps_groups.end());
-
-    auto comps_environments = get_transaction_comps_environments(*this);
-    result.insert(result.end(), comps_environments.begin(), comps_environments.end());
-
-    return result;
-}
-
-
-void
-Transaction::begin()
-{
+void Transaction::begin() {
     if (id != 0) {
         throw std::runtime_error(_("Transaction has already began!"));
     }
-    dbInsert();
-    save_transaction_runtime_packages(*this);
-    saveItems();
+    conn.exec("BEGIN");
+    try {
+        auto query = trans_insert_new_query(conn);
+        trans_insert(*query, *this);
+
+        save_transaction_runtime_packages(*this);
+
+        insert_transaction_comps_environments(*this);
+        insert_transaction_comps_groups(*this);
+        insert_transaction_packages(*this);
+        conn.exec("COMMIT");
+    } catch (...) {
+        conn.exec("ROLLBACK");
+        throw;
+    }
 }
 
-void
-Transaction::finish(TransactionState state)
-{
+
+void Transaction::finish(TransactionState state) {
+    // TODO(dmach): save item states
+    /*
     // save states to the database before checking for UNKNOWN state
     for (auto i : getItems()) {
         i->saveState();
@@ -140,81 +122,21 @@ Transaction::finish(TransactionState state)
                 fmt::format(_("TransactionItem state is not set: {}"), i->getItem()->toStr()));
         }
     }
+    */
 
-    set_state(state);
-    dbUpdate();
-}
-
-void
-Transaction::dbInsert()
-{
-    auto query = trans_insert_new_query(conn);
-    trans_insert(*query, *this);
-}
-
-void
-Transaction::dbUpdate()
-{
-    auto query = trans_update_new_query(get_connection());
-    trans_update(*query, *this);
-}
-
-TransactionItemPtr
-Transaction::addItem(std::shared_ptr< Item > item,
-                                           const std::string &repoid,
-                                           TransactionItemAction action,
-                                           TransactionItemReason reason)
-{
-    for (auto & i : items) {
-        if (i->getItem()->toStr() != item->toStr()) {
-            continue;
-        }
-        if (i->get_repoid() != repoid) {
-            continue;
-        }
-        if (i->get_action() != action) {
-            continue;
-        }
-        if (reason > i->get_reason()) {
-            // use the more significant reason
-            i->set_reason(reason);
-        }
-        // don't add duplicates to the list
-        // return an existing transaction item if exists
-        return i;
-    }
-    auto trans_item = std::make_shared< TransactionItem >(*this);
-    trans_item->setItem(item);
-    trans_item->set_repoid(repoid);
-    trans_item->set_action(action);
-    trans_item->set_reason(reason);
-    items.push_back(trans_item);
-    return trans_item;
-}
-
-void
-Transaction::saveItems()
-{
-    // TODO: remove all existing items from the database first?
-    for (auto i : items) {
-        i->save();
-    }
-
-    /* this has to be done in a separate loop to make sure
-     * that all the items already have ID assigned
-     */
-    for (auto i : items) {
-        i->saveReplacedBy();
+    conn.exec("BEGIN");
+    try {
+        set_state(state);
+        auto query = trans_update_new_query(get_connection());
+        trans_update(*query, *this);
+        conn.exec("COMMIT");
+    } catch (...) {
+        conn.exec("ROLLBACK");
+        throw;
     }
 }
 
 
-/**
- * Save console output line for current transaction to the database. Transaction has
- *  to be saved in advance, otherwise an exception will be thrown.
- * \param fileDescriptor UNIX file descriptor index (1 = stdout, 2 = stderr).
- * \param line console output content
- */
 void Transaction::add_console_output_line(int file_descriptor, const std::string & line) {
     if (!get_id()) {
         throw std::runtime_error(_("Can't add console output to unsaved transaction"));
@@ -225,6 +147,30 @@ void Transaction::add_console_output_line(int file_descriptor, const std::string
 
     // also store the line in the console_output vector
     console_output.emplace_back(file_descriptor, line);
+}
+
+
+CompsEnvironment & Transaction::new_comps_environment() {
+    auto env = std::make_unique<CompsEnvironment>(*this);
+    // TODO(dmach): following lines are not thread-safe
+    comps_environments.push_back(std::move(env));
+    return *comps_environments.back();
+}
+
+
+CompsGroup & Transaction::new_comps_group() {
+    auto grp = std::make_unique<CompsGroup>(*this);
+    // TODO(dmach): following lines are not thread-safe
+    comps_groups.push_back(std::move(grp));
+    return *comps_groups.back();
+}
+
+
+Package & Transaction::new_package() {
+    auto pkg = std::make_unique<Package>(*this);
+    // TODO(dmach): following lines are not thread-safe
+    packages.push_back(std::move(pkg));
+    return *packages.back();
 }
 
 

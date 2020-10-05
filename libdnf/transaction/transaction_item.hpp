@@ -22,27 +22,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TRANSACTION_TRANSACTION_ITEM_HPP
 
 
-#include <memory>
-#include <string>
-
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
-
-namespace libdnf::transaction {
-class Transaction;
-class TransactionItem;
-typedef std::shared_ptr< TransactionItem > TransactionItemPtr;
-}
-
-#include "comps_environment.hpp"
-#include "comps_group.hpp"
-#include "rpm_package.hpp"
 #include "transaction_item_action.hpp"
 #include "transaction_item_reason.hpp"
 #include "transaction_item_state.hpp"
 #include "transaction_item_type.hpp"
 
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
+
+#include <string>
+
 
 namespace libdnf::transaction {
+
+
+class Transaction;
 
 
 class TransactionItem {
@@ -52,10 +45,7 @@ public:
     using State = TransactionItemState;
     using Type = TransactionItemType;
 
-    explicit TransactionItem(Transaction & trans);
-
-    ItemPtr getItem() const noexcept { return item; }
-    void setItem(ItemPtr value) { item = value; }
+    explicit TransactionItem(Transaction & trans, Type item_type);
 
     int64_t get_id() const noexcept { return id; }
     void set_id(int64_t value) { id = value; }
@@ -80,18 +70,22 @@ public:
     /// Has the item got removed from the system during the transaction?
     bool is_backward_action() const;
 
+    int64_t get_item_id() const noexcept { return item_id; }
+    void set_item_id(int64_t value) { item_id = value; }
+
+    Type get_item_type() const noexcept { return item_type; }
 
     uint32_t getInstalledBy() const;
 
-    // int64_t getTransactionId() const noexcept { return trans.getId(); }
+    // TODO(dmach): Reimplement in Package class
+    //const std::vector< TransactionItemPtr > &getReplacedBy() const noexcept { return replacedBy; }
+    //void addReplacedBy(TransactionItemPtr value) { if (value) replacedBy.push_back(value); }
+    //void saveReplacedBy();
 
-    const std::vector< TransactionItemPtr > &getReplacedBy() const noexcept { return replacedBy; }
-    void addReplacedBy(TransactionItemPtr value) { if (value) replacedBy.push_back(value); }
+    // TODO(dmach): Review and bring back if needed
+    //void saveState();
 
-    void save();
-    void saveReplacedBy();
-    void saveState();
-    Transaction & get_trans() { return trans; }
+    Transaction & get_transaction() { return trans; }
 
 protected:
     int64_t id = 0;
@@ -100,15 +94,13 @@ protected:
     State state = State::UNKNOWN;
     std::string repoid;
 
+    int64_t item_id = 0;
+    const Type item_type;
+
     Transaction & trans;
 
-    ItemPtr item;
-
-    // TODO: replace with objects? it's just repoid, probably not necessary
-    std::vector< TransactionItemPtr > replacedBy;
-
-    void dbInsert();
-    void dbUpdate();
+    // TODO(dmach): Reimplement in Package class; it's most likely not needed in Comps{Group,Environment}
+    // std::vector< TransactionItemPtr > replacedBy;
 };
 
 

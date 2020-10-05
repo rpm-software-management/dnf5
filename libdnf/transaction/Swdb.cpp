@@ -1,3 +1,7 @@
+// TODO(dmach): probably remove most of the functionality and/or merge it into TransactionSack
+// the whole file is disabled via the SKIP macro because it doesn't compile with the new code
+#ifdef SKIP
+
 /*
  * Copyright (C) 2017-2018 Red Hat, Inc.
  *
@@ -130,6 +134,7 @@ Swdb::beginTransaction(int64_t dtBegin,
     transactionInProgress->set_user_id(userId);
     transactionInProgress->begin();
 
+    /*
     // save rpm items to map to resolve RPM callbacks
     for (auto item : transactionInProgress->getItems()) {
         auto transItem = item->getItem();
@@ -139,6 +144,7 @@ Swdb::beginTransaction(int64_t dtBegin,
         auto rpmItem = std::dynamic_pointer_cast< Package >(transItem);
         itemsInProgress[rpmItem->toStr()] = item;
     }
+    */
 
     return transactionInProgress->get_id();
 }
@@ -190,7 +196,7 @@ Swdb::setItemDone(const std::string &nevra)
     }
     auto item = itemsInProgress[nevra];
     item->set_state(TransactionItemState::DONE);
-    item->saveState();
+    //item->saveState();
 }
 
 TransactionItemReason
@@ -201,6 +207,7 @@ Swdb::resolveRPMTransactionItemReason(const std::string &name,
     // TODO:
     // -1: latest
     // -2: latest and lastTransaction data in memory
+    /*
     if (maxTransactionId == -2 && transactionInProgress != nullptr) {
         for (auto i : transactionInProgress->getItems()) {
             auto rpm = std::dynamic_pointer_cast< Package >(i->getItem());
@@ -212,6 +219,7 @@ Swdb::resolveRPMTransactionItemReason(const std::string &name,
             }
         }
     }
+    */
 
     return Package::resolveTransactionItemReason(get_connection(), name, arch, maxTransactionId);
 }
@@ -262,14 +270,6 @@ Swdb::getRPMRepo(const std::string &nevra)
     }
     return "";
 }
-
-/*
-TransactionItemPtr
-Swdb::getRPMTransactionItem(const std::string &nevra)
-{
-    return Package::getTransactionItem(conn, nevra);
-}
-*/
 
 TransactionPtr
 Swdb::getLastTransaction()
@@ -331,14 +331,6 @@ Swdb::add_console_output_line(int file_descriptor, const std::string & line)
     }
     transactionInProgress->add_console_output_line(file_descriptor, line);
 }
-
-/*
-TransactionItemPtr
-Swdb::getCompsGroupItem(const std::string &groupid)
-{
-    return CompsGroupItem::getTransactionItem(conn, groupid);
-}
-*/
 
 /*
 std::vector< TransactionItemPtr >
@@ -498,13 +490,6 @@ Swdb::getCompsGroupEnvironments(const std::string &groupId)
     return result;
 }
 
-/*
-TransactionItemPtr
-Swdb::getCompsEnvironmentItem(const std::string &envid)
-{
-    return CompsEnvironmentItem::getTransactionItem(conn, envid);
-}
-*/
 
 /*
 std::vector< TransactionItemPtr >
@@ -562,3 +547,5 @@ Swdb::searchTransactionsByRPM(const std::vector< std::string > &patterns)
 }
 
 }  // namespace libdnf::transaction
+
+#endif

@@ -19,7 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "rpm.hpp"
+#include "item.hpp"
 
+#include "trans_item.hpp"
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 
@@ -61,21 +63,14 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_q
 }
 
 
-int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionItem & ti) {
-    auto item = std::make_shared<Package>(ti.get_trans());
-    ti.setItem(item);
-    ti.set_id(query.get< int >("id"));
-    ti.set_action(static_cast< TransactionItemAction >(query.get< int >("action")));
-    ti.set_reason(static_cast< TransactionItemReason >(query.get< int >("reason")));
-    ti.set_repoid(query.get< std::string >("repoid"));
-    ti.set_state(static_cast< TransactionItemState >(query.get< int >("state")));
-    item->setId(query.get< int >("item_id"));
-    item->set_name(query.get< std::string >("name"));
-    item->set_epoch(std::to_string(query.get< uint32_t >("epoch")));
-    item->set_version(query.get< std::string >("version"));
-    item->set_release(query.get< std::string >("release"));
-    item->set_arch(query.get< std::string >("arch"));
-    return ti.get_id();
+int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Package & pkg) {
+    transaction_item_select(query, pkg);
+    pkg.set_name(query.get< std::string >("name"));
+    pkg.set_epoch(std::to_string(query.get< uint32_t >("epoch")));
+    pkg.set_version(query.get< std::string >("version"));
+    pkg.set_release(query.get< std::string >("release"));
+    pkg.set_arch(query.get< std::string >("arch"));
+    return pkg.get_id();
 }
 
 
@@ -102,7 +97,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_insert_new_query(libdnf::
 
 int64_t rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(
-        rpm.getId(),
+        rpm.get_item_id(),
         rpm.get_name(),
         rpm.get_epoch(),
         rpm.get_version(),
@@ -180,7 +175,7 @@ bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package &
     query.bindv(rpm_id);
 
     if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        rpm.setId(query.get<int>("item_id"));
+        rpm.set_item_id(query.get<int>("item_id"));
         rpm.set_name(query.get<std::string>("name"));
         rpm.set_epoch(std::to_string(query.get<uint32_t>("epoch")));
         rpm.set_version(query.get<std::string>("version"));
@@ -194,17 +189,38 @@ bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package &
 }
 
 
-std::vector<std::shared_ptr<TransactionItem>> get_transaction_packages(Transaction & trans) {
-    std::vector<std::shared_ptr<TransactionItem>> result;
+std::vector<std::unique_ptr<Package>> get_transaction_packages(Transaction & trans) {
+    std::vector<std::unique_ptr<Package>> result;
 
     auto query = rpm_transaction_item_select_new_query(trans.get_connection(), trans.get_id());
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto trans_item = std::make_shared< TransactionItem >(trans);
+        auto trans_item = std::make_unique<Package>(trans);
         rpm_transaction_item_select(*query, *trans_item);
-        result.push_back(trans_item);
+        result.push_back(std::move(trans_item));
     }
 
     return result;
+}
+
+
+void insert_transaction_packages(Transaction & trans) {
+    auto & conn = trans.get_connection();
+
+    auto query_rpm_select_pk = rpm_select_pk_new_query(conn);
+    auto query_item_insert = item_insert_new_query(conn, TransactionItemType::RPM);
+    auto query_rpm_insert = rpm_insert_new_query(conn);
+    auto query_trans_item_insert = trans_item_insert_new_query(conn);
+
+    for (auto & pkg : trans.get_packages()) {
+        pkg->set_item_id(rpm_select_pk(*query_rpm_select_pk, *pkg));
+        if (pkg->get_item_id() == 0) {
+            // insert into 'item' table, create item_id
+            pkg->set_item_id(item_insert(*query_item_insert));
+            // insert into 'rpm' table
+            rpm_insert(*query_rpm_insert, *pkg);
+        }
+        transaction_item_insert(*query_trans_item_insert, *pkg);
+    }
 }
 
 

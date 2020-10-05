@@ -22,36 +22,35 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TRANSACTION_COMPS_GROUP_HPP
 
 
+#include "transaction_item.hpp"
+
 #include <memory>
 #include <vector>
 
 
 namespace libdnf::transaction {
 
-enum class CompsPackageType : int {
-    CONDITIONAL = 1 << 0,
-    DEFAULT = 1 << 1,
-    MANDATORY = 1 << 2,
-    OPTIONAL = 1 << 3
-};
-
-}
-
-
-#include "Item.hpp"
-#include "transaction_item.hpp"
-
-
-namespace libdnf::transaction {
-
 
 class CompsGroupPackage;
+class Transaction;
 
 
-class CompsGroup : public Item {
+/// CompsPackageType determines when a package in a comps group gets installed.
+///
+/// Expected behavior:
+/// * All comps operations are weak, if something is not available, it's silently skipped.
+/// * If something is available but has unresolvable dependencies, an error is reported.
+enum class CompsPackageType : int {
+    CONDITIONAL = 1 << 0,  // a weak dependency
+    DEFAULT = 1 << 1,      // installed by default, but can be unchecked in the UI
+    MANDATORY = 1 << 2,    // installed
+    OPTIONAL = 1 << 3      // not installed by default, but can be checked in the UI
+};
+
+
+class CompsGroup : public TransactionItem {
 public:
-    using Item::Item;
-    virtual ~CompsGroup() = default;
+    explicit CompsGroup(Transaction & trans);
 
     const std::string & get_group_id() const noexcept { return group_id; }
     void set_group_id(const std::string & value) { group_id = value; }
@@ -65,11 +64,6 @@ public:
     CompsPackageType get_package_types() const noexcept { return package_types; }
     void set_package_types(CompsPackageType value) { package_types = value; }
 
-    std::string toStr() const override { return group_id; }
-
-    Type getItemType() const noexcept override { return itemType; }
-    void save() override;
-
     /// Create a new CompsGroupPackage object and return a reference to it.
     /// The object is owned by the CompsGroup.
     CompsGroupPackage & new_package();
@@ -77,14 +71,12 @@ public:
     /// Get list of packages associated with the group.
     const std::vector<std::unique_ptr<CompsGroupPackage>> & get_packages() { return packages; }
 
-    //static TransactionItemPtr getTransactionItem(libdnf::utils::SQLite3Ptr conn, const std::string &groupid);
     // TODO(dmach): rewrite into TransactionSack.list_installed_groups(); how to deal with references to different transactions? We don't want all of them loaded into memory.
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
     //    libdnf::utils::SQLite3Ptr conn,
     //    const std::string &pattern);
 
-protected:
-    const Type itemType = Type::GROUP;
+    std::string to_string() const { return get_group_id(); }
 
 private:
     friend class CompsGroupPackage;
@@ -112,8 +104,6 @@ public:
 
     const CompsGroup & get_group() const noexcept { return group; }
 
-    void save();
-
 protected:
     explicit CompsGroupPackage(CompsGroup & group);
 
@@ -130,4 +120,4 @@ private:
 }  // namespace libdnf::transaction
 
 
-#endif // LIBDNF_TRANSACTION_COMPS_GROUP_HPP
+#endif  // LIBDNF_TRANSACTION_COMPS_GROUP_HPP

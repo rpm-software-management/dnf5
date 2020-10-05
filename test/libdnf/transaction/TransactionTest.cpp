@@ -2,6 +2,7 @@
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/Transformer.hpp"
+#include "libdnf/transaction/db/db.hpp"
 
 #include "TransactionTest.hpp"
 
@@ -13,7 +14,7 @@ void
 TransactionTest::setUp()
 {
     conn = new libdnf::utils::SQLite3(":memory:");
-    Transformer::createDatabase(*conn);
+    create_database(*conn);
 }
 
 void
