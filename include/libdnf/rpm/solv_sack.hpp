@@ -39,6 +39,7 @@ namespace libdnf::advisory {
 class Advisory;
 class AdvisorySack;
 class AdvisoryQuery;
+class AdvisoryCollection;
 
 }  // namespace libdnf::advisory
 
@@ -179,6 +180,7 @@ private:
     friend libdnf::advisory::Advisory;
     friend libdnf::advisory::AdvisorySack;
     friend libdnf::advisory::AdvisoryQuery;
+    friend libdnf::advisory::AdvisoryCollection;
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };
