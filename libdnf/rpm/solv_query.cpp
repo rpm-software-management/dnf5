@@ -118,6 +118,10 @@ static inline bool name_compare_lower_id(const Solvable * first, Id id_name) {
     return first->name < id_name;
 }
 
+static inline bool name_compare_icase_lower_id(const std::pair<Id, Solvable *> first, Id id_name) {
+    return first.first < id_name;
+}
+
 SolvQuery::SolvQuery(SolvSack * sack, InitFlags flags) : p_impl(new Impl(sack, flags)) {}
 
 SolvQuery::SolvQuery(const SolvQuery & src) : p_impl(new Impl(*src.p_impl)) {}
@@ -223,11 +227,16 @@ SolvQuery & SolvQuery::ifilter_name(libdnf::sack::QueryCmp cmp_type, const std::
                 }
             } break;
             case libdnf::sack::QueryCmp::IEXACT: {
-                for (PackageId candidate_id : p_impl->query_result) {
-                    const char * name = solv::get_name(pool, candidate_id);
-                    if (strcasecmp(name, c_pattern) == 0) {
-                        filter_result.add_unsafe(candidate_id);
-                    }
+                auto & sorted_icase_solvables = p_impl->sack->pImpl->get_sorted_icase_solvables();
+                Id icase_name = libdnf::utils::id_to_lowercase_id(pool, pattern.c_str(), 0);
+                if (icase_name == 0) {
+                    continue;
+                }
+                auto low =
+                    std::lower_bound(sorted_icase_solvables.begin(), sorted_icase_solvables.end(), icase_name, name_compare_icase_lower_id);
+                while (low != sorted_icase_solvables.end() && (*low).first == icase_name) {
+                    filter_result.add_unsafe(solv::get_package_id(pool, (*low).second));
+                    ++low;
                 }
             } break;
             case libdnf::sack::QueryCmp::ICONTAINS: {
@@ -1359,30 +1368,36 @@ void SolvQuery::Impl::filter_nevra(
                 }
             } break;
             case libdnf::sack::QueryCmp::IEXACT: {
-                for (PackageId candidate_id : query_result) {
-                    const char * candidate_name = solv::get_name(pool, candidate_id);
-                    if (strcasecmp(candidate_name, name_c_pattern) != 0) {
-                        continue;
-                    }
+                auto & sorted_icase_solvables = sack->pImpl->get_sorted_icase_solvables();
+                Id icase_name = libdnf::utils::id_to_lowercase_id(pool, name_c_pattern, 0);
+                if (icase_name == 0) {
+                    break;
+                }
+                auto low =
+                    std::lower_bound(sorted_icase_solvables.begin(), sorted_icase_solvables.end(), icase_name, name_compare_icase_lower_id);
+                while (low != sorted_icase_solvables.end() && (*low).first == icase_name) {
+                    auto candidate_id = solv::get_package_id(pool, (*low).second);
                     if (!is_valid_candidate(
-                            pool,
-                            candidate_id,
-                            src,
-                            test_epoch,
-                            test_version,
-                            test_release,
-                            test_arch,
-                            epoch_c_pattern,
-                            version_c_pattern,
-                            release_c_pattern,
-                            arch_c_pattern,
-                            epoch_cmp_type,
-                            version_cmp_type,
-                            release_cmp_type,
-                            arch_cmp_type)) {
+                        pool,
+                        candidate_id,
+                        src,
+                        test_epoch,
+                        test_version,
+                        test_release,
+                        test_arch,
+                        epoch_c_pattern,
+                        version_c_pattern,
+                        release_c_pattern,
+                        arch_c_pattern,
+                        epoch_cmp_type,
+                        version_cmp_type,
+                        release_cmp_type,
+                        arch_cmp_type)) {
+                        ++low;
                         continue;
                     }
                     filter_result.add_unsafe(candidate_id);
+                    ++low;
                 }
             } break;
             case libdnf::sack::QueryCmp::GLOB:

@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
 
+#include "../utils/utils_internal.hpp"
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/rpm/solv_sack.hpp"
@@ -56,6 +57,16 @@ static inline bool nevra_solvable_cmp_key(const Solvable * first, const Solvable
     return first->evr < second->evr;
 }
 
+static inline bool nevra_solvable_cmp_icase_key(const std::pair<Id, Solvable *> & first, const std::pair<Id, Solvable *> & second) {
+    if (first.first != second.first) {
+        return first.first < second.first;
+    }
+
+    if (first.second->arch != second.second->arch) {
+        return first.second->arch < second.second->arch;
+    }
+    return first.second->evr < second.second->evr;
+}
 
 namespace libdnf::rpm {
 
@@ -87,6 +98,8 @@ public:
     /// Return sorted list of all package solvables
     std::vector<Solvable *> & get_sorted_solvables();
 
+    /// Return sorted list of all package solvables in format pair<id_of_lowercase_name, Solvable *>
+    std::vector<std::pair<Id, Solvable *>> & get_sorted_icase_solvables();
 
     void internalize_libsolv_repos();
 
@@ -135,6 +148,9 @@ private:
 
     std::vector<Solvable *> cached_sorted_solvables;
     int cached_sorted_solvables_size{0};
+    /// pair<id_of_lowercase_name, Solvable *>
+    std::vector<std::pair<Id, Solvable *>> cached_sorted_icase_solvables;
+    int cached_sorted_icase_solvables_size{0};
     solv::SolvMap cached_solvables{0};
     int cached_solvables_size{0};
 
@@ -178,6 +194,25 @@ inline std::vector<Solvable *> & SolvSack::Impl::get_sorted_solvables() {
     std::sort(cached_sorted_solvables.begin(), cached_sorted_solvables.end(), nevra_solvable_cmp_key);
     cached_sorted_solvables_size = nsolvables;
     return cached_sorted_solvables;
+}
+
+inline std::vector<std::pair<Id, Solvable *>> & SolvSack::Impl::get_sorted_icase_solvables() {
+    Pool * pool = get_pool();
+    auto nsolvables = get_nsolvables();
+    if (nsolvables == cached_sorted_icase_solvables_size) {
+        return cached_sorted_icase_solvables;
+    }
+    Id name = 0;
+    Id icase_name = 0;
+    for (auto * solvable : get_sorted_solvables()) {
+        if (solvable->name != name) {
+            icase_name = libdnf::utils::id_to_lowercase_id(pool, solvable->name, 1);
+        }
+        cached_sorted_icase_solvables.emplace_back(std::make_pair(icase_name, solvable));
+    }
+    std::sort(cached_sorted_icase_solvables.begin(), cached_sorted_icase_solvables.end(), nevra_solvable_cmp_icase_key);
+    cached_sorted_icase_solvables_size = nsolvables;
+    return cached_sorted_icase_solvables;
 }
 
 inline solv::SolvMap & SolvSack::Impl::get_solvables() {

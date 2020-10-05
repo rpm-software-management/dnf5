@@ -361,6 +361,7 @@ inline Repo * get_repo(Pool * pool, libdnf::rpm::PackageId package_id) noexcept 
     return static_cast<Repo *>(solvable->repo->appdata);
 }
 
+
 }  // namespace libdnf::rpm::solv
 
 

@@ -22,6 +22,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_UTILS_UTILS_INTERNAL_HPP
 
 
+extern "C" {
+#include <solv/pool.h>
+}
+
+#include <ctype.h>
 #include <cstring>
 
 
@@ -36,6 +41,20 @@ inline bool is_glob_pattern(const char * pattern) {
 /// Return true if pattern start with "/" or pattern[0] == '*' && pattern[1] == '/'
 static inline bool is_file_pattern(const std::string & pattern) {
     return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
+}
+
+inline Id id_to_lowercase_id(Pool * pool, const char * name_cstring, int create) {
+    int name_length = static_cast<int>(strlen(name_cstring));
+    auto tmp_name_cstring = pool_alloctmpspace(pool, name_length);
+    for (int index = 0; index < name_length; ++index) {
+        tmp_name_cstring[index] = static_cast<char>(tolower(name_cstring[index]));
+    }
+    return pool_strn2id(pool, tmp_name_cstring, static_cast<unsigned int>(name_length), create);
+}
+
+inline Id id_to_lowercase_id(Pool * pool, Id id_input, int create) {
+    auto name_cstring = pool_id2str(pool, id_input);
+    return id_to_lowercase_id(pool, name_cstring, create);
 }
 
 
