@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "argument_parser.hpp"
 #include "commands/repolist/repolist.hpp"
 #include "context.hpp"
 #include "utils.hpp"
@@ -25,6 +24,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnfdaemon-server/dbus.hpp>
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <libdnf-cli/argument_parser.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
 #include <libdnf/logger/stream_logger.hpp>
@@ -43,35 +43,37 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     auto dnfdaemon_client = ctx.arg_parser.add_new_command("dnfdaemon_client");
     dnfdaemon_client->set_short_description("Utility for packages maintaining");
     dnfdaemon_client->set_description("Dnfdaemon-client is a program for maintaining packages.");
-    dnfdaemon_client->commands_help_header = "List of commands:";
-    dnfdaemon_client->named_args_help_header = "Global arguments:";
+    dnfdaemon_client->set_commands_help_header("List of commands:");
+    dnfdaemon_client->set_named_args_help_header("Global arguments:");
     auto help = ctx.arg_parser.add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
     help->set_short_description("Print help");
-    help->parse_hook = [dnfdaemon_client](
-                               [[maybe_unused]] ArgumentParser::NamedArg * arg,
-                               [[maybe_unused]] const char * option,
-                               [[maybe_unused]] const char * value) {
+    help->set_parse_hook_func([dnfdaemon_client](
+                                  [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
+                                  [[maybe_unused]] const char * option,
+                                  [[maybe_unused]] const char * value) {
         dnfdaemon_client->help();
-        return true;};
-    dnfdaemon_client->add_named_arg(help);
+        return true;
+    });
+    dnfdaemon_client->register_named_arg(help);
 
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
-    setopt->set_has_arg(true);
-    setopt->arg_value_help = "KEY=VALUE";
+    setopt->set_has_value(true);
+    setopt->set_arg_value_help("KEY=VALUE");
     setopt->set_short_description("set arbitrary config and repo options");
-    setopt->set_description(R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
+    setopt->set_description(
+        R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
               <option>.  Values  for configuration options like excludepkgs, includepkgs, installonlypkgs and tsflags are appended to the original value,
               they do not override it. However, specifying an empty value (e.g. --setopt=tsflags=) will clear the option.)**");
 
     // --setopt option support
-    setopt->parse_hook = [&ctx](
-                               [[maybe_unused]] ArgumentParser::NamedArg * arg,
-                               [[maybe_unused]] const char * option,
-                               const char * value) {
-        auto val = strchr(value+1, '=');
+    setopt->set_parse_hook_func([&ctx](
+                                    [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
+                                    [[maybe_unused]] const char * option,
+                                    const char * value) {
+        auto val = strchr(value + 1, '=');
         if (!val) {
             throw std::runtime_error(std::string("setopt: Badly formated argument value") + value);
         }
@@ -79,13 +81,15 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
         auto dot_pos = key.rfind('.');
         if (dot_pos != std::string::npos) {
             if (dot_pos == key.size() - 1) {
-                throw std::runtime_error(std::string("setopt: Badly formated argument value: Last key character cannot be '.': ") + value);
+                throw std::runtime_error(
+                    std::string("setopt: Badly formated argument value: Last key character cannot be '.': ") + value);
             }
         }
         // Store option to vector for later use
-        ctx.setopts.emplace_back(key, val+1);
-        return true;};
-    dnfdaemon_client->add_named_arg(setopt);
+        ctx.setopts.emplace_back(key, val + 1);
+        return true;
+    });
+    dnfdaemon_client->register_named_arg(setopt);
 
 
     ctx.arg_parser.set_root_command(dnfdaemon_client);

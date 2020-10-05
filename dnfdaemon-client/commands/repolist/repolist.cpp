@@ -55,14 +55,14 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
     patterns_to_show_options = ctx.arg_parser.add_new_values();
     auto repos = ctx.arg_parser.add_new_positional_arg(
         "repos_to_show",
-        ArgumentParser::PositionalArg::UNLIMITED,
+        libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED,
         ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_show_options);
     repos->set_short_description("List of repos to show");
 
     auto conflict_args =
-        ctx.arg_parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{all, enabled, disabled}));
+        ctx.arg_parser.add_conflict_args_group(std::unique_ptr<std::vector<libdnf::cli::ArgumentParser::Argument *>>(
+            new std::vector<libdnf::cli::ArgumentParser::Argument *>{all, enabled, disabled}));
 
     all->set_conflict_arguments(conflict_args);
     enabled->set_conflict_arguments(conflict_args);
@@ -71,29 +71,28 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
     auto repolist = ctx.arg_parser.add_new_command(command);
     repolist->set_short_description("display the configured software repositories");
     repolist->set_description("");
-    repolist->named_args_help_header = "Optional arguments:";
-    repolist->positional_args_help_header = "Positional arguments:";
-    repolist->parse_hook = [this, &ctx](
-                               [[maybe_unused]] ArgumentParser::Argument * arg,
-                               [[maybe_unused]] const char * option,
-                               [[maybe_unused]] int argc,
-                               [[maybe_unused]] const char * const argv[]) {
+    repolist->set_named_args_help_header("Optional arguments:");
+    repolist->set_positional_args_help_header("Positional arguments:");
+    repolist->set_parse_hook_func([this, &ctx](
+                                      [[maybe_unused]] libdnf::cli::ArgumentParser::Argument * arg,
+                                      [[maybe_unused]] const char * option,
+                                      [[maybe_unused]] int argc,
+                                      [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
-    };
+    });
 
-    repolist->add_named_arg(all);
-    repolist->add_named_arg(enabled);
-    repolist->add_named_arg(disabled);
-    repolist->add_positional_arg(repos);
+    repolist->register_named_arg(all);
+    repolist->register_named_arg(enabled);
+    repolist->register_named_arg(disabled);
+    repolist->register_positional_arg(repos);
 
-    ctx.arg_parser.get_root_command()->add_command(repolist);
-
+    ctx.arg_parser.get_root_command()->register_command(repolist);
 }
 
 class RepoDbus {
 public:
-    RepoDbus(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata) {};
+    RepoDbus(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
     std::string get_id() { return rawdata["id"]; }
     std::string get_name() { return rawdata["name"]; }
     bool is_enabled() { return rawdata["enabled"]; }
@@ -135,7 +134,7 @@ static void add_line_into_table(
 
 void CmdRepolist::run(Context & ctx) {
     // prepare options from command line arguments
-    dnfdaemon::KeyValueMap options={};
+    dnfdaemon::KeyValueMap options = {};
     options["enable_disable"] = enable_disable_option->get_value();
     std::vector<std::string> patterns_to_show;
     if (patterns_to_show_options->size() > 0) {
@@ -157,7 +156,10 @@ void CmdRepolist::run(Context & ctx) {
 
     // call list() method on repo interface via dbus
     dnfdaemon::KeyValueMapList repositories;
-    ctx.session_proxy->callMethod("list").onInterface(dnfdaemon::INTERFACE_REPO).withArguments(options).storeResultsTo(repositories);
+    ctx.session_proxy->callMethod("list")
+        .onInterface(dnfdaemon::INTERFACE_REPO)
+        .withArguments(options)
+        .storeResultsTo(repositories);
 
     if (command == "repolist") {
         // print the output table
@@ -166,12 +168,7 @@ void CmdRepolist::run(Context & ctx) {
 
         for (auto & raw_repo : repositories) {
             RepoDbus repo(raw_repo);
-            add_line_into_table(
-                table,
-                with_status,
-                repo.get_id().c_str(),
-                repo.get_name().c_str(),
-                repo.is_enabled());
+            add_line_into_table(table, with_status, repo.get_id().c_str(), repo.get_name().c_str(), repo.is_enabled());
         }
 
         auto cl = scols_table_get_column(table, COL_REPO_ID);

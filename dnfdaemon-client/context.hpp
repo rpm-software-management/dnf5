@@ -20,9 +20,9 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_CLIENT_CONTEXT_HPP
 #define DNFDAEMON_CLIENT_CONTEXT_HPP
 
-#include "argument_parser.hpp"
 #include "commands/command.hpp"
 
+#include <libdnf-cli/argument_parser.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/rpm/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -35,7 +35,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 using RepoWeakPtr = WeakPtr<Repo, false>;
 using RepoSet = Set<RepoWeakPtr>;
-}
+}  // namespace libdnf::rpm
 
 namespace dnfdaemon::client {
 
@@ -43,8 +43,8 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context {
 public:
-    enum class RepoStatus {NOT_READY, PENDING, READY, ERROR};
-    Context(sdbus::IConnection & connection) : connection(connection), repositories_status(RepoStatus::NOT_READY) {};
+    enum class RepoStatus { NOT_READY, PENDING, READY, ERROR };
+    Context(sdbus::IConnection & connection) : connection(connection), repositories_status(RepoStatus::NOT_READY){};
 
     /// Initialize dbus connection and server session
     void init_session();
@@ -61,7 +61,7 @@ public:
     std::vector<std::pair<std::string, std::string>> setopts;
     std::vector<std::unique_ptr<Command>> commands;
     Command * selected_command{nullptr};
-    ArgumentParser arg_parser;
+    libdnf::cli::ArgumentParser arg_parser;
     /// proxy to dnfdaemon session
     std::unique_ptr<sdbus::IProxy> session_proxy;
 
