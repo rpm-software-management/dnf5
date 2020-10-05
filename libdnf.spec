@@ -319,7 +319,7 @@ License:        GPLv2+
 Requires:       libdnf%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
-BuildRequires:  pkgconfig(sdbus-c++)
+BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
 %if %{with dnfdaemon_tests}
 BuildRequires:  dbus-daemon
 BuildRequires:  polkit
