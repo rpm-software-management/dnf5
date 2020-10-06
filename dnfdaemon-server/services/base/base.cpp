@@ -31,38 +31,6 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <thread>
 
-class DbusRepoCB : public libdnf::rpm::RepoCB {
-public:
-    DbusRepoCB(sdbus::IObject * dbus_object) : dbus_object(dbus_object){};
-    void start(const char * what) override {
-        auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START);
-        signal << what;
-        dbus_object->emitSignal(signal);
-    }
-
-    void end() override {
-        auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END);
-        signal << "";
-        dbus_object->emitSignal(signal);
-    }
-
-    int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override { return 0; }
-
-    // TODO(mblaha): how to ask the user for confirmation?
-    bool repokey_import(
-        [[maybe_unused]] const std::string & id,
-        [[maybe_unused]] const std::string & user_id,
-        [[maybe_unused]] const std::string & fingerprint,
-        [[maybe_unused]] const std::string & url,
-        [[maybe_unused]] long int timestamp) override {
-        return false;
-    }
-
-private:
-    sdbus::IObject * dbus_object;
-};
-
-
 void Base::dbus_register() {
     dbus_object = sdbus::createObject(session.get_connection(), session.get_object_path());
     dbus_object->registerMethod(
@@ -81,29 +49,7 @@ void Base::dbus_deregister() {
 void Base::read_all_repos(sdbus::MethodCall call) {
     auto worker = std::thread([this, call = std::move(call)]() {
         try {
-            // TODO(mblaha): get flags from session configuration
-            using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
-            auto flags =
-                LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
-            auto base = session.get_base();
-            //auto & logger = base->get_logger();
-            auto & rpm_repo_sack = base->get_rpm_repo_sack();
-            auto enabled_repos = rpm_repo_sack.new_query().ifilter_enabled(true);
-            auto & solv_sack = base->get_rpm_solv_sack();
-            bool retval = true;
-            for (auto & repo : enabled_repos.get_data()) {
-                repo->set_callbacks(std::make_unique<DbusRepoCB>(dbus_object.get()));
-                try {
-                    repo->load();
-                    solv_sack.load_repo(*repo.get(), flags);
-                } catch (const std::runtime_error & ex) {
-                    if (!repo->get_config().skip_if_unavailable().get_value()) {
-                        retval = false;
-                        break;
-                    }
-                }
-            }
-            // TODO(mblaha): call.createReply() can got stucked
+            bool retval = session.read_all_repos(dbus_object);
             auto reply = call.createReply();
             reply << retval;
             reply.send();

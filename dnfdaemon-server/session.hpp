@@ -67,6 +67,7 @@ public:
     sdbus::IConnection & get_connection() { return connection; };
     libdnf::Base * get_base() { return base.get(); };
     ThreadsManager & get_threads_manager() { return threads_manager; };
+    bool read_all_repos(std::unique_ptr<sdbus::IObject> & dbus_object);
 
 private:
     sdbus::IConnection & connection;
