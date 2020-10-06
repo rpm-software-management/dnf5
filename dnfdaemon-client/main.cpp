@@ -18,6 +18,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "commands/repolist/repolist.hpp"
+#include "commands/repoquery/repoquery.hpp"
 #include "context.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
@@ -118,8 +119,9 @@ int main(int argc, char * argv[]) {
     //log_router.info("Dnfdaemon-client start");
 
     // Register commands
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repolist"));
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repoinfo"));
+    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repolist"));
+    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepoquery>());
 
     // Parse command line arguments
     bool help_printed = dnfdaemon::client::parse_args(context, argc, argv);
