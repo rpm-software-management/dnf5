@@ -573,6 +573,28 @@ void SolvSack::create_system_repo(bool build_cache) {
     pImpl->load_system_repo();
 }
 
+Repo & SolvSack::Impl::get_cmdline_repo() {
+    if (cmdline_repo) {
+        return *cmdline_repo.get();
+    }
+    auto repo_config = std::make_unique<ConfigRepo>(base->get_config());
+    repo_config->build_cache().set(libdnf::Option::Priority::RUNTIME, false);
+    cmdline_repo = std::make_unique<Repo>(CMDLINE_REPO_NAME, std::move(repo_config), *base, Repo::Type::SYSTEM);
+
+    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, CMDLINE_REPO_NAME), &libsolv_repo_free);
+    cmdline_repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
+    return *cmdline_repo.get();
+}
+
+Package SolvSack::add_cmdline_package(const std::string & fn, bool add_with_hdrid) {
+    auto & repo = pImpl->get_cmdline_repo();
+    auto new_id = repo.p_impl->add_rpm_package(fn, add_with_hdrid);
+
+    pImpl->provides_ready = false;
+    pImpl->considered_uptodate = false;
+    return Package(this, PackageId(new_id));
+}
+
 void SolvSack::dump_debugdata(const std::string & dir) {
     Solver *solver = solver_create(pImpl->pool);
 

@@ -34,6 +34,10 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "libdnf/logger/logger.hpp"
 #include "libdnf/utils/utils.hpp"
 
+extern "C" {
+#include <solv/repo_rpmdb.h>
+}
+
 #include <fcntl.h>
 #include <fmt/format.h>
 #include <glib.h>
@@ -85,6 +89,28 @@ const int COUNTME_VERSION = 0;
 // example: {A, B, C} defines 4 buckets [0, A), [A, B), [B, C), [C, infinity)
 // where each letter represents a window step (starting from 0)
 const std::array<const int, 3> COUNTME_BUCKETS = {{2, 5, 25}};
+
+namespace libdnf {
+namespace {
+
+/// Throw libdnf::RuntimeError when problem detected
+void is_readable_rpm(const char * fn) {
+    if (access(fn, R_OK) != 0) {
+        const char * err_txt = strerror(errno);
+        throw RuntimeError(fmt::format(_("Failed to access RPM: \"{}\": {}"), fn, err_txt));
+    }
+
+    auto len = strlen(fn);
+
+    if (len <= 4 || (strcmp(fn + len - 4, ".rpm") != 0)) {
+        throw RuntimeError(fmt::format(_("Failed to read RPM: \"{}\": {}"), fn, "does't have extension \".rpm\""));
+    }
+}
+
+
+}  // namespace
+}  // namespace libdnf
+
 
 namespace std {
 
@@ -1559,6 +1585,23 @@ std::vector<std::string> Repo::get_mirrors() const {
             mirrors.emplace_back(*mirror);
     }
     return mirrors;
+}
+
+Id Repo::Impl::add_rpm_package(const std::string & fn, bool add_with_hdrid) {
+    auto c_fn = fn.c_str();
+    is_readable_rpm(c_fn);
+
+    int flags = REPO_REUSE_REPODATA|REPO_NO_INTERNALIZE;
+    if (add_with_hdrid) {
+        flags |= RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM;
+    }
+
+    Id new_id = repo_add_rpm(libsolv_repo_ext.repo, c_fn, flags);
+    if (new_id == 0) {
+        throw RuntimeError(_("Failed to read RPM: ") + fn);
+    }
+    libsolv_repo_ext.set_needs_internalizing();
+    return new_id;
 }
 
 bool LibsolvRepoExt::is_one_piece() const {

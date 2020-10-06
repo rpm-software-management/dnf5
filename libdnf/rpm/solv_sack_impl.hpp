@@ -98,6 +98,9 @@ public:
     /// Return sorted list of all package solvables
     std::vector<Solvable *> & get_sorted_solvables();
 
+    /// Create if not already created and return cmdline_repo
+    Repo & get_cmdline_repo();
+
     /// Return sorted list of all package solvables in format pair<id_of_lowercase_name, Solvable *>
     std::vector<std::pair<Id, Solvable *>> & get_sorted_icase_solvables();
 
@@ -143,6 +146,7 @@ private:
     Base * base;
     Pool * pool;
     std::unique_ptr<Repo> system_repo;
+    std::unique_ptr<Repo> cmdline_repo;
 
     WeakPtrGuard<SolvSack, false> data_guard;
 

@@ -291,6 +291,7 @@ protected:
 
 private:
     friend PackageSetIterator;
+    friend SolvSack;
     friend libdnf::Goal;
     SolvSackWeakPtr sack;
     PackageId id;

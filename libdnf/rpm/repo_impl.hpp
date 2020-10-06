@@ -101,6 +101,8 @@ public:
     int main_nrepodata{0};
     int main_end{0};
 
+    void set_needs_internalizing() { needs_internalizing = true; };
+
 private:
     bool needs_internalizing{false};
 };
@@ -149,6 +151,11 @@ public:
 
     LrHandle * get_cached_handle();
 
+    /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
+    /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
+    /// When RPM is not accesible or corrupted it raises libdnf::RuntimeError
+    /// Return Id of a new solvable
+    Id add_rpm_package(const std::string & fn, bool add_with_hdrid);
 
 public:
     friend class Repo;
