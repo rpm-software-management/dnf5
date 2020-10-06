@@ -57,6 +57,7 @@ protected:
     DataItemWeakPtr add_item_with_return(std::unique_ptr<T> && item);
     void add_item(std::unique_ptr<T> && item);
     std::vector<std::unique_ptr<T>> & get_data() { return data; }
+    WeakPtrGuard<T, false> & get_data_guard() { return data_guard; }
 
 private:
     WeakPtrGuard<T, false> data_guard;
