@@ -34,6 +34,7 @@ void transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionI
     ti.set_action(static_cast<TransactionItemAction>(query.get<int>("action")));
     ti.set_reason(static_cast<TransactionItemReason>(query.get<int>("reason")));
     ti.set_state(static_cast<TransactionItemState>(query.get<int>("state")));
+    ti.set_repoid(query.get<std::string>("repoid"));
     ti.set_item_id(query.get<int64_t>("item_id"));
 }
 
@@ -61,15 +62,13 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_item_insert_new_query(l
 
 
 int64_t transaction_item_insert(libdnf::utils::SQLite3::Statement & query, TransactionItem & ti) {
-    auto & conn = ti.get_transaction().get_connection();
-
     // try to find an existing repo
-    auto query_repo_select_pkg = repo_select_pk_new_query(conn);
+    auto query_repo_select_pkg = repo_select_pk_new_query(query.get_db());
     auto repo_id = repo_select_pk(*query_repo_select_pkg, ti.get_repoid());
 
     if (!repo_id) {
         // if an existing repo was not found, insert a new record
-        auto query_repo_insert = repo_insert_new_query(conn);
+        auto query_repo_insert = repo_insert_new_query(query.get_db());
         repo_id = repo_insert(*query_repo_insert, ti.get_repoid());
     }
 

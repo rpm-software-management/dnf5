@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017-2020 Red Hat, Inc.
+Copyright (C) 2020 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -18,26 +18,28 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
-#define LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
+#ifndef LIBDNF_TEST_TRANSACTION_TRANSACTION_TEST_BASE_HPP
+#define LIBDNF_TEST_TRANSACTION_TRANSACTION_TEST_BASE_HPP
 
 
-#include "libdnf/transaction/comps_group.hpp"
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
+#include <cppunit/TestCase.h>
+#include <cppunit/extensions/HelperMacros.h>
+
+#include "libdnf/base/base.hpp"
+#include "libdnf/utils/temp.hpp"
+
+#include <memory>
 
 
-namespace libdnf::transaction {
+class TransactionTestBase : public CppUnit::TestCase {
+public:
+    void setUp() override;
+    void tearDown() override;
+
+protected:
+    std::unique_ptr<libdnf::Base> new_base();
+    std::unique_ptr<libdnf::utils::TempDir> persistdir;
+};
 
 
-/// Load GroupPackage objects from the database to the CompsGroup object
-void comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & group);
-
-
-/// Insert GroupPackage objects associated with a CompsGroup into the database
-void comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & group);
-
-
-}  // namespace libdnf::transaction
-
-
-#endif  // LIBDNF_TRANSACTION_DB_COMPS_GROUP_PACKAGE_HPP
+#endif  // LIBDNF_TEST_TRANSACTION_TRANSACTION_TEST_BASE_HPP

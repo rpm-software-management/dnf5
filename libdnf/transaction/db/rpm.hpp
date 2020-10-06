@@ -70,11 +70,11 @@ bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package &
 
 
 /// Return a vector of Package objects with packages in a transaction
-std::vector<std::unique_ptr<Package>> get_transaction_packages(Transaction & trans);
+std::vector<std::unique_ptr<Package>> get_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
 
 
 /// Insert Package objects associated with a transaction into the database
-void insert_transaction_packages(Transaction & trans);
+void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
 
 
 }  // namespace libdnf::transaction

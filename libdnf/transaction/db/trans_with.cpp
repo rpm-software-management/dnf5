@@ -58,10 +58,10 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> trans_with_select_new_query(libdn
 }
 
 
-std::set<std::string> load_transaction_runtime_packages(Transaction & trans) {
+std::set<std::string> load_transaction_runtime_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     std::set<std::string> result;
 
-    auto query = trans_with_select_new_query(trans.get_connection());
+    auto query = trans_with_select_new_query(conn);
     query->bindv(trans.get_id());
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         libdnf::rpm::Nevra nevra;
@@ -94,15 +94,15 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> trans_with_insert_new_query(libdn
 }
 
 
-void save_transaction_runtime_packages(Transaction & trans) {
+void save_transaction_runtime_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     if (trans.get_runtime_packages().empty()) {
         return;
     }
 
-    auto query_rpm_select_pk = rpm_select_pk_new_query(trans.get_connection());
-    auto query_rpm_insert = rpm_insert_new_query(trans.get_connection());
-    auto query_item_insert = item_insert_new_query(trans.get_connection(), TransactionItemType::RPM);
-    auto query_trans_with_insert = trans_with_insert_new_query(trans.get_connection());
+    auto query_rpm_select_pk = rpm_select_pk_new_query(conn);
+    auto query_rpm_insert = rpm_insert_new_query(conn);
+    auto query_item_insert = item_insert_new_query(conn, TransactionItemType::RPM);
+    auto query_trans_with_insert = trans_with_insert_new_query(conn);
 
 
     for (auto & ti : trans.get_runtime_packages()) {

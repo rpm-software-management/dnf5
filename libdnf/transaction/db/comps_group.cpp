@@ -64,10 +64,10 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_transaction_item_sele
 }
 
 
-std::vector<std::unique_ptr<CompsGroup>> get_transaction_comps_groups(Transaction & trans) {
+std::vector<std::unique_ptr<CompsGroup>> get_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     std::vector<std::unique_ptr<CompsGroup>> result;
 
-    auto query = comps_group_transaction_item_select_new_query(trans.get_connection(), trans.get_id());
+    auto query = comps_group_transaction_item_select_new_query(conn, trans.get_id());
 
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto ti = std::make_unique<CompsGroup>(trans);
@@ -79,7 +79,7 @@ std::vector<std::unique_ptr<CompsGroup>> get_transaction_comps_groups(Transactio
         ti->set_name(query->get<std::string>("name"));
         ti->set_translated_name(query->get<std::string>("translated_name"));
         ti->set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
-        comps_group_packages_select(*ti);
+        comps_group_packages_select(conn, *ti);
         result.push_back(std::move(ti));
     }
 
@@ -109,7 +109,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_group_insert_new_query(
 
 int64_t comps_group_insert(libdnf::utils::SQLite3::Statement & query, CompsGroup & grp) {
     // insert a record to the 'item' table first
-    auto query_item_insert = item_insert_new_query(grp.get_transaction().get_connection(), TransactionItemType::GROUP);
+    auto query_item_insert = item_insert_new_query(query.get_db(), TransactionItemType::GROUP);
     auto item_id = item_insert(*query_item_insert);
 
     query.bindv(
@@ -126,16 +126,14 @@ int64_t comps_group_insert(libdnf::utils::SQLite3::Statement & query, CompsGroup
 }
 
 
-void insert_transaction_comps_groups(Transaction & trans) {
-    auto & conn = trans.get_connection();
-
+void insert_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     auto query_comps_group_insert = comps_group_insert_new_query(conn);
     auto query_trans_item_insert = trans_item_insert_new_query(conn);
 
     for (auto & grp : trans.get_comps_groups()) {
         comps_group_insert(*query_comps_group_insert, *grp);
         transaction_item_insert(*query_trans_item_insert, *grp);
-        comps_group_packages_insert(*grp);
+        comps_group_packages_insert(conn, *grp);
     }
 }
 

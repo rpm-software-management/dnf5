@@ -49,6 +49,8 @@ std::string Package::to_string() const {
 }
 
 
+
+/*
 TransactionItemReason Package::resolveTransactionItemReason(
     libdnf::utils::SQLite3 & conn,
     const std::string & name,
@@ -66,7 +68,6 @@ TransactionItemReason Package::resolveTransactionItemReason(
             rpm i USING (item_id)
         WHERE
             t.state = 1
-            /* see comment in TransactionItem.hpp - TransactionItemAction */
             AND ti.action not in (3, 5, 7, 10)
             AND i.name = ?
             AND i.arch = ?
@@ -122,6 +123,7 @@ TransactionItemReason Package::resolveTransactionItemReason(
     }
     return TransactionItemReason::UNKNOWN;
 }
+*/
 
 bool Package::operator<(const Package & other) const {
     // TODO(dmach): replace the whole function with a different implementation, preferably an existing code
@@ -150,6 +152,7 @@ bool Package::operator<(const Package & other) const {
     return false;
 }
 
+/*
 std::vector<int64_t> Package::searchTransactions(
     libdnf::utils::SQLite3 & conn, const std::vector<std::string> & patterns) {
     std::vector<int64_t> result;
@@ -187,5 +190,6 @@ std::vector<int64_t> Package::searchTransactions(
     result.erase(last, result.end());
     return result;
 }
+*/
 
 }  // namespace libdnf::transaction

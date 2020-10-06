@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_group_package.hpp"
 
 #include "libdnf/transaction/transaction.hpp"
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 
 namespace libdnf::transaction {
@@ -40,6 +39,8 @@ static const char * SQL_COMPS_GROUP_PACKAGE_SELECT = R"**(
         comps_group_package
     WHERE
         group_id = ?
+    ORDER BY
+        id
 )**";
 
 
@@ -49,8 +50,8 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_package_select_new_qu
 }
 
 
-void comps_group_packages_select(CompsGroup & group) {
-    auto query = comps_group_package_select_new_query(group.get_transaction().get_connection());
+void comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & group) {
+    auto query = comps_group_package_select_new_query(conn);
     query->bindv(group.get_item_id());
 
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
@@ -82,8 +83,8 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_group_package_insert_ne
 }
 
 
-void comps_group_packages_insert(CompsGroup & group) {
-    auto query = comps_group_package_insert_new_query(group.get_transaction().get_connection());
+void comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & group) {
+    auto query = comps_group_package_insert_new_query(conn);
     for (auto & pkg : group.get_packages()) {
         query->bindv(
             group.get_item_id(),

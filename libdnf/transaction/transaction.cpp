@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_environment.hpp"
 #include "comps_group.hpp"
 #include "rpm_package.hpp"
+#include "sack.hpp"
 #include "transaction_item.hpp"
 
 #include "libdnf/transaction/db/comps_environment.hpp"
@@ -40,49 +41,36 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-Transaction::Transaction(libdnf::utils::SQLite3 & conn, int64_t pk) : conn{conn} {
-    auto query = trans_select_new_query(conn);
+Transaction::Transaction(TransactionSack & sack, int64_t pk) : sack{sack} {
+    auto conn = transaction_db_connect(sack.base);
+
+    auto query = trans_select_new_query(*conn);
     trans_select(*query, pk, *this);
 
-    runtime_packages = load_transaction_runtime_packages(*this);
-    console_output = console_output_load(*this);
+    runtime_packages = load_transaction_runtime_packages(*conn, *this);
+    console_output = console_output_load(*conn, *this);
 
-    comps_environments = get_transaction_comps_environments(*this);
-    comps_groups = get_transaction_comps_groups(*this);
-    packages = get_transaction_packages(*this);
+    comps_environments = get_transaction_comps_environments(*conn, *this);
+    comps_groups = get_transaction_comps_groups(*conn, *this);
+    packages = get_transaction_packages(*conn, *this);
 }
 
 
-Transaction::Transaction(libdnf::utils::SQLite3 & conn) : conn{conn} {}
+Transaction::Transaction(TransactionSack & sack) : sack{sack} {}
 
 
 bool Transaction::operator==(const Transaction & other) const {
-    return get_id() == other.get_id() && get_dt_begin() == other.get_dt_begin() &&
-           get_rpmdb_version_begin() == other.get_rpmdb_version_begin();
+    return get_id() == other.get_id() && get_dt_begin() == other.get_dt_begin();
 }
 
 
-/**
- * Compare two transactions on:
- *  transaction ID
- *  begin timestamp
- *  packages in the system at the time of transaction
- * \param other transaction to compare with
- * \return true if other transaction is older
- */
 bool Transaction::operator<(const Transaction & other) const {
-    return get_id() > other.get_id() || get_dt_begin() > other.get_dt_begin() ||
-           get_rpmdb_version_begin() > other.get_rpmdb_version_begin();
+    return get_id() > other.get_id() || get_dt_begin() > other.get_dt_begin();
 }
 
 
-/**
- * \param other transaction to compare with
- * \return true if other transaction is newer
- */
 bool Transaction::operator>(const Transaction & other) const {
-    return get_id() < other.get_id() || get_dt_begin() < other.get_dt_begin() ||
-           get_rpmdb_version_begin() < other.get_rpmdb_version_begin();
+    return get_id() < other.get_id() || get_dt_begin() < other.get_dt_begin();
 }
 
 
@@ -90,19 +78,21 @@ void Transaction::begin() {
     if (id != 0) {
         throw std::runtime_error(_("Transaction has already began!"));
     }
-    conn.exec("BEGIN");
+
+    auto conn = transaction_db_connect(sack.base);
+    conn->exec("BEGIN");
     try {
-        auto query = trans_insert_new_query(conn);
+        auto query = trans_insert_new_query(*conn);
         trans_insert(*query, *this);
 
-        save_transaction_runtime_packages(*this);
+        save_transaction_runtime_packages(*conn, *this);
 
-        insert_transaction_comps_environments(*this);
-        insert_transaction_comps_groups(*this);
-        insert_transaction_packages(*this);
-        conn.exec("COMMIT");
+        insert_transaction_comps_environments(*conn, *this);
+        insert_transaction_comps_groups(*conn, *this);
+        insert_transaction_packages(*conn, *this);
+        conn->exec("COMMIT");
     } catch (...) {
-        conn.exec("ROLLBACK");
+        conn->exec("ROLLBACK");
         throw;
     }
 }
@@ -124,14 +114,15 @@ void Transaction::finish(TransactionState state) {
     }
     */
 
-    conn.exec("BEGIN");
+    auto conn = transaction_db_connect(sack.base);
+    conn->exec("BEGIN");
     try {
         set_state(state);
-        auto query = trans_update_new_query(get_connection());
+        auto query = trans_update_new_query(*conn);
         trans_update(*query, *this);
-        conn.exec("COMMIT");
+        conn->exec("COMMIT");
     } catch (...) {
-        conn.exec("ROLLBACK");
+        conn->exec("ROLLBACK");
         throw;
     }
 }
@@ -142,8 +133,10 @@ void Transaction::add_console_output_line(int file_descriptor, const std::string
         throw std::runtime_error(_("Can't add console output to unsaved transaction"));
     }
 
+    auto conn = transaction_db_connect(sack.base);
+
     // save the line to the database
-    console_output_insert_line(*this, file_descriptor, line);
+    console_output_insert_line(*conn, *this, file_descriptor, line);
 
     // also store the line in the console_output vector
     console_output.emplace_back(file_descriptor, line);

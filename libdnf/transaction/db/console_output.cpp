@@ -44,8 +44,8 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> console_output_insert_new_que
 }
 
 
-int64_t console_output_insert_line(Transaction & trans, int file_descriptor, const std::string & line) {
-    auto query = console_output_insert_new_query(trans.get_connection());
+int64_t console_output_insert_line(libdnf::utils::SQLite3 & conn, Transaction & trans, int file_descriptor, const std::string & line) {
+    auto query = console_output_insert_new_query(conn);
 
     query->bindv(
         trans.get_id(),
@@ -76,10 +76,10 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> console_output_select_new_query(l
 }
 
 
-std::vector<std::pair<int, std::string>> console_output_load(Transaction & trans) {
+std::vector<std::pair<int, std::string>> console_output_load(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     std::vector<std::pair<int, std::string>> result;
 
-    auto query = console_output_select_new_query(trans.get_connection());
+    auto query = console_output_select_new_query(conn);
     query->bindv(trans.get_id());
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto file_descriptor = query->get<int>("file_descriptor");

@@ -26,8 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_group.hpp"
 #include "rpm_package.hpp"
 
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
-
 #include <memory>
 #include <set>
 #include <string>
@@ -45,6 +43,7 @@ namespace libdnf::transaction {
 
 class Item;
 class Transformer;
+class TransactionSack;
 
 
 /// @replaces libdnf:transaction/Types.hpp:enum:TransactionState
@@ -56,10 +55,8 @@ class Transaction {
 public:
     using State = TransactionState;
 
-    explicit Transaction() = default;
-    // load from db
-    explicit Transaction(libdnf::utils::SQLite3 & conn);
-    explicit Transaction(libdnf::utils::SQLite3 & conn, int64_t pk);
+    explicit Transaction(TransactionSack & sack);
+    explicit Transaction(TransactionSack & sack, int64_t pk);
     virtual ~Transaction() = default;
 
     bool operator==(const Transaction & other) const;
@@ -190,11 +187,8 @@ public:
     const std::vector<std::unique_ptr<Package>> & get_packages() const noexcept { return packages; }
     Package & new_package();
 
-    libdnf::utils::SQLite3 & get_connection() { return conn; }
-
 protected:
     friend Transformer;
-    libdnf::utils::SQLite3 & conn;
 
 private:
     int64_t id = 0;
@@ -216,6 +210,8 @@ private:
     std::vector<std::unique_ptr<CompsEnvironment>> comps_environments;
     std::vector<std::unique_ptr<CompsGroup>> comps_groups;
     std::vector<std::unique_ptr<Package>> packages;
+
+    TransactionSack & sack;
 };
 
 

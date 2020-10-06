@@ -36,7 +36,7 @@ class TransactionItem;
 
 
 /// Return a vector of CompsEnvironment objects with comps environments in a transaction
-std::vector<std::unique_ptr<CompsEnvironment>> get_transaction_comps_environments(Transaction & trans);
+std::vector<std::unique_ptr<CompsEnvironment>> get_transaction_comps_environments(libdnf::utils::SQLite3 & conn, Transaction & trans);
 
 
 /// Create a query (statement) that inserts new records to the 'comps_environment' table
@@ -48,7 +48,7 @@ int64_t comps_environment_insert(libdnf::utils::SQLite3::Statement & query, Comp
 
 
 /// Insert CompsEnvironment objects associated with a transaction into the database
-void insert_transaction_comps_environments(Transaction & trans);
+void insert_transaction_comps_environments(libdnf::utils::SQLite3 & conn, Transaction & trans);
 
 
 }  // namespace libdnf::transaction

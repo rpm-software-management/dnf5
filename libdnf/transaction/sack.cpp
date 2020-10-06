@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017-2020 Red Hat, Inc.
+Copyright (C) 2020 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -18,32 +18,32 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_DB_TRANS_WITH_HPP
-#define LIBDNF_TRANSACTION_DB_TRANS_WITH_HPP
+#include "sack.hpp"
 
-
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
-
-#include <set>
-#include <string>
+#include "libdnf/base/base.hpp"
 
 
 namespace libdnf::transaction {
 
 
-class Transaction;
+TransactionSack::TransactionSack(libdnf::Base & base) : base{base} {}
 
 
-/// Load records from table 'rpm' associated with a transaction via 'trans_with' table.
-/// Return set of package NEVRAs.
-std::set<std::string> load_transaction_runtime_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
+TransactionSack::~TransactionSack() = default;
 
 
-/// Insert transaction runtime packages to 'rpm' and 'trans_with' tables.
-void save_transaction_runtime_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
+TransactionQuery TransactionSack::new_query() {
+    // create an *empty* query
+    // the content is lazily loaded/cached while running the queries
+    TransactionQuery q;
+    q.sack = this;
+    return q;
+}
+
+
+TransactionWeakPtr TransactionSack::new_transaction() {
+    return add_item_with_return(std::make_unique<Transaction>(*this));
+}
 
 
 }  // namespace libdnf::transaction
-
-
-#endif  // LIBDNF_TRANSACTION_DB_TRANS_WITH_HPP

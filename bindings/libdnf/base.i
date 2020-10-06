@@ -9,16 +9,19 @@
 %import(module="libdnf.conf") "conf.i"
 %import(module="libdnf.logger") "logger.i"
 %import(module="libdnf.rpm") "rpm.i"
+%import(module="libdnf.transaction") "transaction.i"
 #elif defined(SWIGRUBY)
 %import(module="libdnf/common") "common.i"
 %import(module="libdnf/conf") "conf.i"
 %import(module="libdnf/logger") "logger.i"
 %import(module="libdnf/rpm") "rpm.i"
+%import(module="libdnf/transaction") "transaction.i"
 #elif defined(SWIGPERL)
 %import(module="libdnf::common") "common.i"
 %import(module="libdnf::conf") "conf.i"
 %import(module="libdnf::logger") "logger.i"
 %import(module="libdnf::rpm") "rpm.i"
+%import(module="libdnf::transaction") "transaction.i"
 #endif
 
 %{

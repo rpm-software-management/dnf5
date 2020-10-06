@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_environment_group.hpp"
 
 #include "libdnf/transaction/transaction.hpp"
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
 
 
 namespace libdnf::transaction {
@@ -40,6 +39,8 @@ static const char * SQL_COMPS_ENVIRONMENT_GROUP_SELECT = R"**(
         comps_environment_group
     WHERE
         environment_id = ?
+    ORDER BY
+        id
 )**";
 
 
@@ -49,8 +50,8 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_group_select_ne
 }
 
 
-void comps_environment_groups_select(CompsEnvironment & env) {
-    auto query = comps_environment_group_select_new_query(env.get_transaction().get_connection());
+void comps_environment_groups_select(libdnf::utils::SQLite3 & conn, CompsEnvironment & env) {
+    auto query = comps_environment_group_select_new_query(conn);
     query->bindv(env.get_item_id());
 
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
@@ -82,8 +83,8 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_group_inser
 }
 
 
-void comps_environment_groups_insert(CompsEnvironment & env) {
-    auto query = comps_environment_group_insert_new_query(env.get_transaction().get_connection());
+void comps_environment_groups_insert(libdnf::utils::SQLite3 & conn, CompsEnvironment & env) {
+    auto query = comps_environment_group_insert_new_query(conn);
 
     for (auto & grp : env.get_groups()) {
         query->bindv(

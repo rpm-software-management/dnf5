@@ -27,8 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_item_state.hpp"
 #include "transaction_item_type.hpp"
 
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
-
 #include <string>
 
 

@@ -18,32 +18,24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_DB_TRANS_WITH_HPP
-#define LIBDNF_TRANSACTION_DB_TRANS_WITH_HPP
+#ifndef TEST_LIBDNF_TRANSACTION_TEST_WORKFLOW_HPP
+#define TEST_LIBDNF_TRANSACTION_TEST_WORKFLOW_HPP
 
 
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
+#include "transaction_test_base.hpp"
 
-#include <set>
-#include <string>
-
-
-namespace libdnf::transaction {
+#include <cppunit/TestCase.h>
+#include <cppunit/extensions/HelperMacros.h>
 
 
-class Transaction;
+class TransactionWorkflowTest : public TransactionTestBase {
+    CPPUNIT_TEST_SUITE(TransactionWorkflowTest);
+    CPPUNIT_TEST(test_default_workflow);
+    CPPUNIT_TEST_SUITE_END();
+
+public:
+    void test_default_workflow();
+};
 
 
-/// Load records from table 'rpm' associated with a transaction via 'trans_with' table.
-/// Return set of package NEVRAs.
-std::set<std::string> load_transaction_runtime_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
-
-
-/// Insert transaction runtime packages to 'rpm' and 'trans_with' tables.
-void save_transaction_runtime_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
-
-
-}  // namespace libdnf::transaction
-
-
-#endif  // LIBDNF_TRANSACTION_DB_TRANS_WITH_HPP
+#endif  // TEST_LIBDNF_TRANSACTION_TEST_WORKFLOW_HPP

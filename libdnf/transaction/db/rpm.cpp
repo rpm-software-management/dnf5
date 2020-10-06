@@ -189,10 +189,10 @@ bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package &
 }
 
 
-std::vector<std::unique_ptr<Package>> get_transaction_packages(Transaction & trans) {
+std::vector<std::unique_ptr<Package>> get_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     std::vector<std::unique_ptr<Package>> result;
 
-    auto query = rpm_transaction_item_select_new_query(trans.get_connection(), trans.get_id());
+    auto query = rpm_transaction_item_select_new_query(conn, trans.get_id());
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         auto trans_item = std::make_unique<Package>(trans);
         rpm_transaction_item_select(*query, *trans_item);
@@ -203,9 +203,7 @@ std::vector<std::unique_ptr<Package>> get_transaction_packages(Transaction & tra
 }
 
 
-void insert_transaction_packages(Transaction & trans) {
-    auto & conn = trans.get_connection();
-
+void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     auto query_rpm_select_pk = rpm_select_pk_new_query(conn);
     auto query_item_insert = item_insert_new_query(conn, TransactionItemType::RPM);
     auto query_rpm_insert = rpm_insert_new_query(conn);
