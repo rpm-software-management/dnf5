@@ -43,6 +43,7 @@ const char * const DBUS_OBJECT_PATH = "/org/rpm/dnf/v0";
 const char * const INTERFACE_BASE = "org.rpm.dnf.v0.Base";
 const char * const INTERFACE_REPO = "org.rpm.dnf.v0.rpm.Repo";
 const char * const INTERFACE_REPOCONF = "org.rpm.dnf.v0.rpm.RepoConf";
+const char * const INTERFACE_RPM = "org.rpm.dnf.v0.rpm.Rpm";
 const char * const INTERFACE_SESSION_MANAGER = "org.rpm.dnf.v0.SessionManager";
 
 // signals
