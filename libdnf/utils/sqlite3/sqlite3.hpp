@@ -204,6 +204,8 @@ public:
 
         int64_t last_insert_rowid() { return db.last_insert_rowid(); }
 
+        SQLite3 & get_db() const { return db; }
+
         ~Statement() {
             free_expanded_sql();
             sqlite3_finalize(stmt);
