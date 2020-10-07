@@ -216,6 +216,7 @@ public:
     /// Checks if the other WeakPtr instance has the same WeakPtrGuard.
     bool has_same_guard(const WeakPtr & other) const noexcept { return guard == other.guard; }
 
+    TPtr & operator*() const { return *get(); }
     bool operator==(const WeakPtr & other) const { return ptr == other.ptr; }
     bool operator!=(const WeakPtr & other) const { return ptr != other.ptr; }
     bool operator<(const WeakPtr & other) const { return ptr < other.ptr; }
