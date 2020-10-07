@@ -18,12 +18,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "rpm_package.hpp"
-
-#include "transaction.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
 
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/transaction/db/rpm.hpp"
+#include "libdnf/transaction/transaction.hpp"
 
 #include <algorithm>
 #include <map>

@@ -18,13 +18,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "comps_environment.hpp"
-
-#include "transaction.hpp"
-#include "transaction_item.hpp"
+#include "libdnf/transaction/comps_environment.hpp"
 
 #include "libdnf/transaction/db/comps_environment.hpp"
 #include "libdnf/transaction/db/comps_environment_group.hpp"
+#include "libdnf/transaction/transaction.hpp"
+#include "libdnf/transaction/transaction_item.hpp"
 
 
 namespace libdnf::transaction {

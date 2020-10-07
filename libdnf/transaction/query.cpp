@@ -26,10 +26,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 // and the IDs should be passed  to ifilter_id() to load the Transaction objects.
 
 
-#include "query.hpp"
+#include "libdnf/transaction/query.hpp"
 
-#include "rpm_package.hpp"
-#include "sack.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
+#include "libdnf/transaction/sack.hpp"
 
 #include <vector>
 

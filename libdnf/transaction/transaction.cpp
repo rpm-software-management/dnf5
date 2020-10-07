@@ -18,14 +18,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "transaction.hpp"
+#include "libdnf/transaction/transaction.hpp"
 
-#include "comps_environment.hpp"
-#include "comps_group.hpp"
-#include "rpm_package.hpp"
-#include "sack.hpp"
-#include "transaction_item.hpp"
-
+#include "libdnf/transaction/comps_environment.hpp"
+#include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/db/comps_environment.hpp"
 #include "libdnf/transaction/db/comps_group.hpp"
 #include "libdnf/transaction/db/console_output.hpp"
@@ -33,6 +29,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/db/trans.hpp"
 #include "libdnf/transaction/db/trans_item.hpp"
 #include "libdnf/transaction/db/trans_with.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
+#include "libdnf/transaction/sack.hpp"
+#include "libdnf/transaction/transaction_item.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>

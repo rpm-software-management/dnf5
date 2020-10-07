@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "sack.hpp"
+#include "libdnf/transaction/sack.hpp"
 
 #include "libdnf/base/base.hpp"
 

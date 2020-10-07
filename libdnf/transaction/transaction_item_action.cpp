@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "transaction_item_action.hpp"
+#include "libdnf/transaction/transaction_item_action.hpp"
 
 
 namespace libdnf::transaction {
