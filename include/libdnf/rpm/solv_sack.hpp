@@ -139,6 +139,14 @@ public:
     /// @replaces hawkey:hawkey/Sack:method:add_cmdline_package()
     Package add_cmdline_package(const std::string & fn, bool add_with_hdrid);
 
+    // TODO(jmracek) The method is highly experimental, what about to move it somewhere else?
+    /// Adds the given .rpm file to the system repo. The function is mostly for testing purpose (not only for unittests)
+    /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
+    /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
+    /// When RPM is not accesible or corrupted it raises libdnf::RuntimeError
+    /// Return added new Package
+    Package add_system_package(const std::string & fn, bool add_with_hdrid, bool build_cache);
+
     // TODO (lhrazky): There's an overlap with dumping the debugdata on the Goal class
     void dump_debugdata(const std::string & dir);
 
