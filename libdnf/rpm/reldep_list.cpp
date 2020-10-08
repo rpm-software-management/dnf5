@@ -95,8 +95,23 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
     Dataiterator di;
     dataiterator_init(&di, pool, 0, 0, 0, dep_splitter.get_name_cstr(), SEARCH_STRING | SEARCH_GLOB);
     while (dataiterator_step(&di)) {
-        ReldepId id = Reldep::get_reldep_id(sack, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type());
-        add(id);
+        switch (di.key->name) {
+            case SOLVABLE_PROVIDES:
+            case SOLVABLE_OBSOLETES:
+            case SOLVABLE_CONFLICTS:
+            case SOLVABLE_REQUIRES:
+            case SOLVABLE_RECOMMENDS:
+            case SOLVABLE_SUGGESTS:
+            case SOLVABLE_SUPPLEMENTS:
+            case SOLVABLE_ENHANCES:
+            case SOLVABLE_FILELIST:
+                add(Reldep::get_reldep_id(
+                    sack,
+                    di.kv.str,
+                    dep_splitter.get_evr_cstr(),
+                    dep_splitter.get_cmp_type()
+                ));
+        }
     }
     dataiterator_free(&di);
     return true;

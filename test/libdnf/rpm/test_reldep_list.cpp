@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_reldep_list.hpp"
 
+#include "../utils.hpp"
+
 #include "libdnf/rpm/reldep_list.hpp"
 #include "libdnf/utils/temp.hpp"
 
@@ -152,5 +154,7 @@ void ReldepListTest::test_add_reldep_with_glob() {
 
     libdnf::rpm::ReldepList list(sack);
     list.add_reldep_with_glob("dwm*");
-    CPPUNIT_ASSERT(list.size() == 9);
+
+    const std::vector<std::string> expected = {"dwm-6.1-1.fc29.spec", "dwm", "dwm", "dwm(x86-64)", "dwm(x86-64)"};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(list));
 }
