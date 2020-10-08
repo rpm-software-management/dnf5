@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_SACK_HPP
-#define LIBDNF_RPM_SACK_HPP
+#ifndef LIBDNF_RPM_SOLV_SACK_HPP
+#define LIBDNF_RPM_SOLV_SACK_HPP
 
 #include "libdnf/utils/exception.hpp"
 #include "libdnf/utils/weak_ptr.hpp"
@@ -184,4 +184,4 @@ inline constexpr bool any(SolvSack::LoadRepoFlags flags) {
 
 }  // namespace libdnf::rpm
 
-#endif  // LIBDNF_RPM_SACK_HPP
+#endif  // LIBDNF_RPM_SOLV_SACK_HPP

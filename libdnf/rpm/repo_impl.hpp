@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_REPO_REPO_PRIVATE_HPP
-#define LIBDNF_RPM_REPO_REPO_PRIVATE_HPP
+#ifndef LIBDNF_RPM_REPO_IMPL_HPP
+#define LIBDNF_RPM_REPO_IMPL_HPP
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/repo.hpp"
@@ -217,4 +217,4 @@ public:
 
 }  // namespace libdnf::rpm
 
-#endif
+#endif  // LIBDNF_RPM_REPO_IMPL_HPP

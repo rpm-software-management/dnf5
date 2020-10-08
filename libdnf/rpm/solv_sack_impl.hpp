@@ -17,14 +17,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_SACK_IMPL_HPP
-#define LIBDNF_RPM_SACK_IMPL_HPP
+#ifndef LIBDNF_RPM_SOLV_SACK_IMPL_HPP
+#define LIBDNF_RPM_SOLV_SACK_IMPL_HPP
 
+#include "../utils/utils_internal.hpp"
 #include "repo_impl.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
 
-#include "../utils/utils_internal.hpp"
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/rpm/solv_sack.hpp"
@@ -57,7 +57,8 @@ static inline bool nevra_solvable_cmp_key(const Solvable * first, const Solvable
     return first->evr < second->evr;
 }
 
-static inline bool nevra_solvable_cmp_icase_key(const std::pair<Id, Solvable *> & first, const std::pair<Id, Solvable *> & second) {
+static inline bool nevra_solvable_cmp_icase_key(
+    const std::pair<Id, Solvable *> & first, const std::pair<Id, Solvable *> & second) {
     if (first.first != second.first) {
         return first.first < second.first;
     }
@@ -248,4 +249,4 @@ inline solv::SolvMap & SolvSack::Impl::get_solvables() {
 }  // namespace libdnf::rpm
 
 
-#endif  // LIBDNF_RPM_SACK_IMPL_HPP
+#endif  // LIBDNF_RPM_SOLV_SACK_IMPL_HPP

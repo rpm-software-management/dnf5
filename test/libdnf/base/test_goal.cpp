@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_goal.hpp"
 
 #include "libdnf/base/goal.hpp"
+
 #include <libdnf/rpm/solv_query.hpp>
 
 
@@ -52,7 +53,8 @@ void BaseGoalTest::test_install() {
 
 void BaseGoalTest::test_install_from_cmdline() {
     libdnf::Goal goal(base.get());
-    std::filesystem::path rpm_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/x86_64/wget-1.19.5-5.fc29.x86_64.rpm";
+    std::filesystem::path rpm_path =
+        PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/x86_64/wget-1.19.5-5.fc29.x86_64.rpm";
     auto cmd_pkg = sack->add_cmdline_package(rpm_path, false);
     goal.add_rpm_install(cmd_pkg, true);
     goal.resolve();
@@ -73,7 +75,8 @@ void BaseGoalTest::test_install_from_cmdline() {
 }
 
 void BaseGoalTest::test_remove() {
-    std::filesystem::path rpm_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/x86_64/wget-1.19.5-5.fc29.x86_64.rpm";
+    std::filesystem::path rpm_path =
+        PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/x86_64/wget-1.19.5-5.fc29.x86_64.rpm";
     sack->add_system_package(rpm_path, false, false);
     libdnf::Goal goal(base.get());
     goal.add_rpm_remove("wget", {}, {});
@@ -92,4 +95,3 @@ void BaseGoalTest::test_remove() {
     CPPUNIT_ASSERT_EQUAL(remove_set[0].get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
     CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
 }
-

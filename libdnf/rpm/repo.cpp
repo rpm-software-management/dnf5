@@ -397,9 +397,9 @@ void Repo::verify() const {
         throw RuntimeError(fmt::format(_("Repository {} has no mirror or baseurl set."), p_impl->id));
 
     const auto & type = p_impl->conf->type().get_value();
-    const char * supportedRepoTypes[]{"rpm-md", "rpm", "repomd", "rpmmd", "yum", "YUM"};
+    const char * supported_repo_types[]{"rpm-md", "rpm", "repomd", "rpmmd", "yum", "YUM"};
     if (!type.empty()) {
-        for (auto supported : supportedRepoTypes) {
+        for (auto supported : supported_repo_types) {
             if (type == supported) {
                 return;
             }
@@ -1591,9 +1591,9 @@ Id Repo::Impl::add_rpm_package(const std::string & fn, bool add_with_hdrid) {
     auto c_fn = fn.c_str();
     is_readable_rpm(c_fn);
 
-    int flags = REPO_REUSE_REPODATA|REPO_NO_INTERNALIZE;
+    int flags = REPO_REUSE_REPODATA | REPO_NO_INTERNALIZE;
     if (add_with_hdrid) {
-        flags |= RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM;
+        flags |= RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM;
     }
 
     Id new_id = repo_add_rpm(libsolv_repo_ext.repo, c_fn, flags);

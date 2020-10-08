@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "repo_impl.hpp"
-#include "solv_sack_impl.hpp"
 #include "solv/id_queue.hpp"
+#include "solv_sack_impl.hpp"
 
 #include "libdnf/rpm/repo.hpp"
 
@@ -84,15 +84,16 @@ void checksum_fp(unsigned char * out, FILE * fp) {
 // Appends checksum to the end of file.
 // Moves fp to the end of file.
 int checksum_write(const unsigned char * cs, FILE * fp) {
-    if (fseek(fp, 0, SEEK_END) || fwrite(cs, CHKSUM_BYTES, 1, fp) != 1)
+    if ((fseek(fp, 0, SEEK_END) != 0) || fwrite(cs, CHKSUM_BYTES, 1, fp) != 1) {
         return 1;
+    }
     return 0;
 }
 
 // Reads checksum of data in opened file.
 // Calls rewind(fp) before returning.
 bool checksum_read(unsigned char * csout, FILE * fp) {
-    if (fseek(fp, -CHKSUM_BYTES, SEEK_END) || fread(csout, CHKSUM_BYTES, 1, fp) != 1) {
+    if ((fseek(fp, -CHKSUM_BYTES, SEEK_END) != 0) || fread(csout, CHKSUM_BYTES, 1, fp) != 1) {
         return false;
     }
     rewind(fp);
@@ -101,7 +102,7 @@ bool checksum_read(unsigned char * csout, FILE * fp) {
 
 bool can_use_repomd_cache(FILE * fp_solv, unsigned char cs_repomd[CHKSUM_BYTES]) {
     unsigned char cs_cache[CHKSUM_BYTES];
-    return fp_solv && checksum_read(cs_cache, fp_solv) && memcmp(cs_cache, cs_repomd, CHKSUM_BYTES) == 0;
+    return (fp_solv != nullptr) && checksum_read(cs_cache, fp_solv) && memcmp(cs_cache, cs_repomd, CHKSUM_BYTES) == 0;
 }
 
 // Deleter for std::unique_ptr<FILE>
@@ -118,7 +119,7 @@ void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
 // only works if there are no duplicates both in q1 and q2
 // the map parameter must point to an empty map that can hold all ids
 // (it is also returned empty)
-int is_superset(const solv::IdQueue & q1, const solv::IdQueue * q2, solv::SolvMap & map) {
+bool is_superset(const solv::IdQueue & q1, const solv::IdQueue * q2, solv::SolvMap & map) {
     int cnt = 0;
     for (int i = 0; i < q2->size(); i++) {
         map.add_unsafe(PackageId((*q2)[i]));
@@ -193,9 +194,10 @@ void SolvSack::Impl::write_main(LibsolvRepoExt & libsolv_repo_ext, bool switchto
 // this filter makes sure only the updateinfo repodata is written
 static int write_ext_updateinfo_filter(LibsolvRepo * repo, Repokey * key, void * kfdata) {
     auto data = static_cast<Repodata *>(kfdata);
-    if (key->name == 1 && static_cast<Id>(key->size) != data->repodataid)
+    if (key->name == 1 && static_cast<Id>(key->size) != data->repodataid) {
         return -1;
-    return repo_write_stdkeyfilter(repo, key, 0);
+    }
+    return repo_write_stdkeyfilter(repo, key, nullptr);
 }
 
 void SolvSack::Impl::write_ext(
@@ -581,7 +583,8 @@ Repo & SolvSack::Impl::get_cmdline_repo() {
     repo_config->build_cache().set(libdnf::Option::Priority::RUNTIME, false);
     cmdline_repo = std::make_unique<Repo>(CMDLINE_REPO_NAME, std::move(repo_config), *base, Repo::Type::SYSTEM);
 
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, CMDLINE_REPO_NAME), &libsolv_repo_free);
+    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
+        repo_create(pool, CMDLINE_REPO_NAME), &libsolv_repo_free);
     cmdline_repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
     return *cmdline_repo.get();
 }
@@ -604,7 +607,8 @@ Repo & SolvSack::Impl::get_system_repo(bool build_cache) {
     repo_config->build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
     system_repo = std::make_unique<Repo>(SYSTEM_REPO_NAME, std::move(repo_config), *base, Repo::Type::SYSTEM);
 
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, SYSTEM_REPO_NAME), &libsolv_repo_free);
+    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
+        repo_create(pool, SYSTEM_REPO_NAME), &libsolv_repo_free);
     system_repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
     pool_set_installed(pool, system_repo->p_impl->libsolv_repo_ext.repo);
     return *system_repo.get();
@@ -620,7 +624,7 @@ Package SolvSack::add_system_package(const std::string & fn, bool add_with_hdrid
 }
 
 void SolvSack::dump_debugdata(const std::string & dir) {
-    Solver *solver = solver_create(pImpl->pool);
+    Solver * solver = solver_create(pImpl->pool);
 
     try {
         std::filesystem::create_directory(dir);
