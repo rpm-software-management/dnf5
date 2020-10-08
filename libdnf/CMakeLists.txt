@@ -11,7 +11,7 @@ add_definitions(-DGETTEXT_DOMAIN=\"libdnf\")
 
 # build libdnf.so
 add_library(libdnf SHARED ${LIBDNF_SOURCES})
-set(DNF_SO_VERSION 2)
+set(DNF_SO_VERSION 3)
 set_target_properties(libdnf PROPERTIES OUTPUT_NAME "dnf")
 set_target_properties(libdnf PROPERTIES SOVERSION ${DNF_SO_VERSION})
 # required by clang
