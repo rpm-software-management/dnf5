@@ -44,15 +44,15 @@ void Context::init_session() {
 
 void Context::on_repositories_ready(const bool & result) {
     if (result) {
-        repositories_status = RepoStatus::READY;
+        repositories_status = dnfdaemon::RepoStatus::READY;
     } else {
-        repositories_status = RepoStatus::ERROR;
+        repositories_status = dnfdaemon::RepoStatus::ERROR;
     }
 }
 
 
-Context::RepoStatus Context::wait_for_repos() {
-    if (repositories_status == RepoStatus::NOT_READY) {
+dnfdaemon::RepoStatus Context::wait_for_repos() {
+    if (repositories_status == dnfdaemon::RepoStatus::NOT_READY) {
         auto callback = [this](const sdbus::Error* error, const bool & result) {
             if (error == nullptr) {
                 // No error
@@ -62,10 +62,10 @@ Context::RepoStatus Context::wait_for_repos() {
                 this->on_repositories_ready(false);
             }
         };
-        repositories_status = RepoStatus::PENDING;
+        repositories_status = dnfdaemon::RepoStatus::PENDING;
         session_proxy->callMethodAsync("read_all_repos").onInterface(dnfdaemon::INTERFACE_BASE).withTimeout(-1).uponReplyInvoke(callback);
     }
-    while (repositories_status == RepoStatus::PENDING) {
+    while (repositories_status == dnfdaemon::RepoStatus::PENDING) {
         sleep(1);
     }
     return repositories_status;

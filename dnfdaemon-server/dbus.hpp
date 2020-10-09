@@ -30,6 +30,7 @@ namespace dnfdaemon {
 // types
 using KeyValueMap = std::map<std::string, sdbus::Variant>;
 using KeyValueMapList = std::vector<KeyValueMap>;
+enum class RepoStatus { NOT_READY, PENDING, READY, ERROR };
 
 
 

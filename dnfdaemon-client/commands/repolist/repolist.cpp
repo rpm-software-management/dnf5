@@ -150,7 +150,7 @@ void CmdRepolist::run(Context & ctx) {
 
     if (command == "repoinfo") {
         // load repositories
-        if (ctx.wait_for_repos() == Context::RepoStatus::ERROR) {
+        if (ctx.wait_for_repos() == dnfdaemon::RepoStatus::ERROR) {
             throw std::runtime_error("Failed to load repositories");
         };
     }

@@ -22,6 +22,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/command.hpp"
 
+#include <dnfdaemon-server/dbus.hpp>
 #include <libdnf-cli/argument_parser.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/rpm/repo.hpp>
@@ -43,14 +44,13 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context {
 public:
-    enum class RepoStatus { NOT_READY, PENDING, READY, ERROR };
-    Context(sdbus::IConnection & connection) : connection(connection), repositories_status(RepoStatus::NOT_READY){};
+    Context(sdbus::IConnection & connection) : connection(connection), repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
 
     /// Initialize dbus connection and server session
     void init_session();
 
     // initialize repository metadata loading on server side and wait for results
-    RepoStatus wait_for_repos();
+    dnfdaemon::RepoStatus wait_for_repos();
 
     // signal handlers
     void on_repositories_ready(const bool & result);
@@ -70,7 +70,7 @@ private:
     //std::unique_ptr<sdbus::IConnection> connection;
     sdbus::IConnection & connection;
     sdbus::ObjectPath session_object_path;
-    RepoStatus repositories_status;
+    dnfdaemon::RepoStatus repositories_status;
 };
 
 }  // namespace dnfdaemon::client
