@@ -65,6 +65,9 @@ private:
     Actions action;
 };
 
+/// Asks the user for confirmation. The default answer is taken from the configuration.
+bool userconfirm(libdnf::ConfigMain & config);
+
 /// Downoad packages to destdir. If destdir == nullptr, packages are downloaded to the cache.
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir);
 void download_packages(libdnf::Goal & goal, const char * dest_dir);

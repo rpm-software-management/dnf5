@@ -95,10 +95,7 @@ void CmdInstall::run(Context & ctx) {
         return;
     }
 
-    std::cout << "Is this ok [y/N]: ";
-    std::string answer;
-    std::getline(std::cin, answer);
-    if (answer.size() != 1 || (answer[0] != 'y' && answer[0] != 'Y')) {
+    if (!userconfirm(ctx.base.get_config())) {
         std::cout << "Operation aborted." << std::endl;
         return;
     }

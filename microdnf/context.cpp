@@ -36,8 +36,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace microdnf {
 
-/// Asks user for confirmaton
-static bool userconfirm(libdnf::ConfigMain & config) {
+bool userconfirm(libdnf::ConfigMain & config) {
     std::string msg;
     if (config.defaultyes().get_value()) {
         msg = "Is this ok [Y/n]: ";
