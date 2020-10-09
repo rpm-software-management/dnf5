@@ -21,6 +21,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf-cli/utils/tty.hpp>
+#include <libdnf/base/goal.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
@@ -419,6 +420,21 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
     multi_progress_bar.print();
     std::cout << std::endl;
     // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
+}
+
+void download_packages(libdnf::Goal & goal, const char * dest_dir) {
+    auto installs_pkgs = goal.list_rpm_installs();
+    auto reinstalls_pkgs = goal.list_rpm_reinstalls();
+    auto upgrades_pkgs = goal.list_rpm_upgrades();
+    auto downgrades_pkgs = goal.list_rpm_downgrades();
+    auto removes_pkgs = goal.list_rpm_removes();
+    auto obsoleded_pkgs = goal.list_rpm_obsoleted();
+
+    std::vector<libdnf::rpm::Package> download_pkgs = installs_pkgs;
+    download_pkgs.insert(download_pkgs.end(), reinstalls_pkgs.begin(), reinstalls_pkgs.end());
+    download_pkgs.insert(download_pkgs.end(), upgrades_pkgs.begin(), upgrades_pkgs.end());
+    download_pkgs.insert(download_pkgs.end(), downgrades_pkgs.begin(), downgrades_pkgs.end());
+    download_packages(download_pkgs, dest_dir);
 }
 
 class RpmTransCB : public libdnf::rpm::TransactionCB {
