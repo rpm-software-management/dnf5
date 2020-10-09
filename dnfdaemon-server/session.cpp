@@ -134,6 +134,15 @@ Session::~Session() {
 }
 
 bool Session::read_all_repos(std::unique_ptr<sdbus::IObject> & dbus_object) {
+    while (repositories_status == dnfdaemon::RepoStatus::PENDING) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(100));
+    }
+    if (repositories_status == dnfdaemon::RepoStatus::READY) {
+        return true;
+    } else if (repositories_status == dnfdaemon::RepoStatus::ERROR) {
+        return false;
+    }
+    repositories_status = dnfdaemon::RepoStatus::PENDING;
     // TODO(mblaha): get flags from session configuration
     using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
     auto flags =
@@ -155,5 +164,6 @@ bool Session::read_all_repos(std::unique_ptr<sdbus::IObject> & dbus_object) {
             }
         }
     }
+    repositories_status = retval ? dnfdaemon::RepoStatus::READY : dnfdaemon::RepoStatus::ERROR;
     return retval;
 }
