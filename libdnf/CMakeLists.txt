@@ -49,6 +49,11 @@ if(WITH_COMPS)
     target_link_libraries(libdnf ${LIBCOMPS_LIBRARIES})
 endif()
 
+if (WITH_ZCHUNK)
+    pkg_check_modules(ZCHUNKLIB zck>=0.9.11 REQUIRED)
+    add_definitions(-DWITH_ZCHUNK)
+endif()
+
 # GLIB librepo and libmodulemd uses glib2 in API :(
 pkg_check_modules (GLIB2 glib-2.0>=2.46.0)
 include_directories(${GLIB2_INCLUDE_DIRS})
