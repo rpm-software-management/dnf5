@@ -59,7 +59,14 @@ public:
         using RuntimeError::RuntimeError;
         const char * get_domain_name() const noexcept override { return "libdnf::rpm::SolvQuery"; }
         const char * get_name() const noexcept override { return "NotSupportedCmpType"; }
-        const char * get_description() const noexcept override { return "Query exception"; }
+        const char * get_description() const noexcept override { return "SolvQuery exception"; }
+    };
+
+    struct UsedDifferentSack : public RuntimeError {
+        using RuntimeError::RuntimeError;
+        const char * get_domain_name() const noexcept override { return "libdnf::rpm::SolvQuery"; }
+        const char * get_name() const noexcept override { return "UsedDifferentSack"; }
+        const char * get_description() const noexcept override { return "SolvQuery exception"; }
     };
 
     /// @replaces libdnf/hy-query.h:function:hy_query_create(DnfSack *sack);
@@ -73,6 +80,37 @@ public:
 
     SolvQuery & operator=(const SolvQuery & src);
     SolvQuery & operator=(SolvQuery && src) noexcept;
+
+    /// Union operator
+    SolvQuery & operator|=(const SolvQuery & other);
+
+    /// Intersection operator
+    SolvQuery & operator&=(const SolvQuery & other);
+
+    /// Difference operator
+    SolvQuery & operator-=(const SolvQuery & other);
+
+    /// update == union
+    /// Unites query with other query (aka logical or)
+    /// Result of the other query is added to result of this query
+    /// Throw UsedDifferentSack exceptin when other has a different SolvSack from this
+    /// @replaces libdnf/hy-query.h:function:hy_query_union(HyQuery q, HyQuery other)
+    /// @replaces libdnf/sack/query.hpp:method:queryUnion(Query & other)
+    void update(const SolvQuery & other) { *this |= other; }
+
+    /// Intersects query with other query (aka logical and)
+    /// Keep only common packages for both queries in this query
+    /// Throw UsedDifferentSack exceptin when other has a different SolvSack from this
+    /// @replaces libdnf/hy-query.h:function:hy_query_intersection(HyQuery q, HyQuery other)
+    /// @replaces libdnf/sack/query.hpp:method:queryIntersection(Query & other)
+    void intersection(const SolvQuery & other) { *this &= other; }
+
+    /// Computes difference between query and other query (aka q and not other)
+    /// Keep only packages in this query that are absent in other query
+    /// Throw UsedDifferentSack exceptin when other has a different SolvSack from this
+    /// @replaces libdnf/hy-query.h:function:hy_query_difference(HyQuery q, HyQuery other)
+    /// @replaces libdnf/sack/query.hpp:method:queryDifference(Query & other)
+    void difference(const SolvQuery & other) { *this -= other; }
 
     /// Return query result in PackageSet
     ///

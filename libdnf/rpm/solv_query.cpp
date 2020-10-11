@@ -227,6 +227,30 @@ SolvQuery & SolvQuery::operator=(SolvQuery && src) noexcept {
     return *this;
 }
 
+SolvQuery & SolvQuery::operator|=(const SolvQuery & other) {
+    if (p_impl->sack != other.p_impl->sack) {
+        throw UsedDifferentSack("Cannot perform the action with SolvQuery instances initialized with different SolvSacks");
+    }
+    p_impl->query_result |= other.p_impl->query_result;
+    return *this;
+}
+
+SolvQuery & SolvQuery::operator&=(const SolvQuery & other) {
+    if (p_impl->sack != other.p_impl->sack) {
+        throw UsedDifferentSack("Cannot perform the action with SolvQuery instances initialized with different SolvSacks");
+    }
+    p_impl->query_result &= other.p_impl->query_result;
+    return *this;
+}
+
+SolvQuery & SolvQuery::operator-=(const SolvQuery & other) {
+    if (p_impl->sack != other.p_impl->sack) {
+        throw UsedDifferentSack("Cannot perform the action with SolvQuery instances initialized with different SolvSacks");
+    }
+    p_impl->query_result -= other.p_impl->query_result;
+    return *this;
+}
+
 SolvQuery::Impl::Impl(SolvSack * sack, InitFlags flags)
     : sack(sack->get_weak_ptr())
     , query_result(solv::SolvMap(sack->pImpl->get_nsolvables())) {

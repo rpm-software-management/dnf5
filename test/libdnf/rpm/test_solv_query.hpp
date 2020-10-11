@@ -39,6 +39,9 @@ class RpmSolvQueryTest : public RepoFixture {
     CPPUNIT_TEST(test_ifilter_provides);
     CPPUNIT_TEST(test_ifilter_requires);
     CPPUNIT_TEST(test_resolve_pkg_spec);
+    CPPUNIT_TEST(test_update);
+    CPPUNIT_TEST(test_intersection);
+    CPPUNIT_TEST(test_difference);
 #endif
 
 #ifdef WITH_PERFORMANCE_TESTS
@@ -57,6 +60,9 @@ public:
     void test_ifilter_provides();
     void test_ifilter_requires();
     void test_resolve_pkg_spec();
+    void test_update();
+    void test_intersection();
+    void test_difference();
     // TODO(jmracek) Add tests when system repo will be available
     // SolvQuery & ifilter_upgrades();
     // SolvQuery & ifilter_downgrades();

@@ -381,3 +381,76 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         }
     }
 }
+
+void RpmSolvQueryTest::test_update() {
+    std::set<std::string> nevras{"CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64", "lame-0:3.100-4.fc29.src", "lame-0:3.100-4.fc29.x86_64"};
+
+    {
+        libdnf::rpm::SolvQuery query1(sack);
+        std::vector<std::string> release{"4.fc29"};
+        query1.ifilter_release(libdnf::sack::QueryCmp::EQ, release);
+        query1.ifilter_name(libdnf::sack::QueryCmp::EQ, {"CQRlib"});
+        CPPUNIT_ASSERT_EQUAL(2lu, query1.size());
+
+        libdnf::rpm::SolvQuery query2(sack);
+        query2.ifilter_release(libdnf::sack::QueryCmp::EQ, release);
+        query2.ifilter_name(libdnf::sack::QueryCmp::EQ, {"lame"});
+        CPPUNIT_ASSERT_EQUAL(2lu, query2.size());
+
+        query1.update(query2);
+
+        CPPUNIT_ASSERT_EQUAL(4lu, query1.size());
+        auto pset = query1.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
+        }
+    }
+}
+
+void RpmSolvQueryTest::test_intersection() {
+    std::set<std::string> nevras{"lame-0:3.100-4.fc29.src", "lame-0:3.100-4.fc29.x86_64", "lame-libs-0:3.100-4.fc29.x86_64"};
+
+    {
+        libdnf::rpm::SolvQuery query1(sack);
+        std::vector<std::string> release{"4.fc29"};
+        query1.ifilter_release(libdnf::sack::QueryCmp::EQ, release);
+        CPPUNIT_ASSERT_EQUAL(5lu, query1.size());
+
+        libdnf::rpm::SolvQuery query2(sack);
+        query2.ifilter_release(libdnf::sack::QueryCmp::EQ, release);
+        query2.ifilter_name(libdnf::sack::QueryCmp::EQ, {"lame"});
+        CPPUNIT_ASSERT_EQUAL(2lu, query2.size());
+
+        query1.intersection(query2);
+
+        CPPUNIT_ASSERT_EQUAL(2lu, query1.size());
+        auto pset = query1.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
+        }
+    }
+}
+
+void RpmSolvQueryTest::test_difference() {
+    std::set<std::string> nevras{"CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64", "lame-libs-0:3.100-4.fc29.x86_64"};
+
+    {
+        libdnf::rpm::SolvQuery query1(sack);
+        std::vector<std::string> release{"4.fc29"};
+        query1.ifilter_release(libdnf::sack::QueryCmp::EQ, release);
+        CPPUNIT_ASSERT_EQUAL(5lu, query1.size());
+
+        libdnf::rpm::SolvQuery query2(sack);
+        query2.ifilter_release(libdnf::sack::QueryCmp::EQ, release);
+        query2.ifilter_name(libdnf::sack::QueryCmp::EQ, {"lame"});
+        CPPUNIT_ASSERT_EQUAL(2lu, query2.size());
+
+        query1.difference(query2);
+
+        CPPUNIT_ASSERT_EQUAL(3lu, query1.size());
+        auto pset = query1.get_package_set();
+        for (auto pkg : pset) {
+            CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
+        }
+    }
+}
