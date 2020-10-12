@@ -277,6 +277,8 @@ void Context::load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::SolvSa
 }
 
 // Single thread version.
+// TODO keep this and enable conditionally (compiletime or even runtime) or
+// drop when we know the multithreaded implementation is stable
 // void Context::load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::SolvSack::LoadRepoFlags flags) {
 //     std::cout << "Updating repositories metadata and load them:" << std::endl;
 //     for (auto & repo : repos.get_data()) {
