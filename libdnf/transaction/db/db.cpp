@@ -88,4 +88,4 @@ std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & ba
 }
 
 
-}  // libdnf::transaction
+}  // namespace libdnf::transaction

@@ -19,9 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "rpm.hpp"
-#include "item.hpp"
 
+#include "item.hpp"
 #include "trans_item.hpp"
+
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 
@@ -29,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char *SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
+static const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
     SELECT
         /* trans_item */
         ti.id,
@@ -56,7 +57,8 @@ static const char *SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_query(libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
+std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_query(
+    libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_RPM_TRANSACTION_ITEM_SELECT);
     query->bindv(transaction_id);
     return query;
@@ -65,11 +67,11 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_q
 
 int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Package & pkg) {
     transaction_item_select(query, pkg);
-    pkg.set_name(query.get< std::string >("name"));
-    pkg.set_epoch(std::to_string(query.get< uint32_t >("epoch")));
-    pkg.set_version(query.get< std::string >("version"));
-    pkg.set_release(query.get< std::string >("release"));
-    pkg.set_arch(query.get< std::string >("arch"));
+    pkg.set_name(query.get<std::string>("name"));
+    pkg.set_epoch(std::to_string(query.get<uint32_t>("epoch")));
+    pkg.set_version(query.get<std::string>("version"));
+    pkg.set_release(query.get<std::string>("release"));
+    pkg.set_arch(query.get<std::string>("arch"));
     return pkg.get_id();
 }
 
@@ -97,13 +99,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_insert_new_query(libdnf::
 
 int64_t rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(
-        rpm.get_item_id(),
-        rpm.get_name(),
-        rpm.get_epoch(),
-        rpm.get_version(),
-        rpm.get_release(),
-        rpm.get_arch()
-    );
+        rpm.get_item_id(), rpm.get_name(), rpm.get_epoch(), rpm.get_version(), rpm.get_release(), rpm.get_arch());
     query.step();
     int64_t result = query.last_insert_rowid();
     query.reset();
@@ -132,13 +128,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_select_pk_new_query(libdn
 
 
 int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
-    query.bindv(
-        rpm.get_name(),
-        rpm.get_epoch_int(),
-        rpm.get_version(),
-        rpm.get_release(),
-        rpm.get_arch()
-    );
+    query.bindv(rpm.get_name(), rpm.get_epoch_int(), rpm.get_version(), rpm.get_release(), rpm.get_arch());
 
     int64_t result = 0;
     if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {

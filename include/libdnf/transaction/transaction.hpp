@@ -178,7 +178,9 @@ public:
     void begin();
     void finish(TransactionState state);
 
-    const std::vector<std::unique_ptr<CompsEnvironment>> & get_comps_environments() const noexcept { return comps_environments; }
+    const std::vector<std::unique_ptr<CompsEnvironment>> & get_comps_environments() const noexcept {
+        return comps_environments;
+    }
     CompsEnvironment & new_comps_environment();
 
     const std::vector<std::unique_ptr<CompsGroup>> & get_comps_groups() const noexcept { return comps_groups; }

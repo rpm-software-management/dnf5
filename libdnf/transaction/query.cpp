@@ -98,7 +98,12 @@ TransactionQuery & TransactionQuery::ifilter_id(sack::QueryCmp cmp, const std::v
 
         // add additional Transaction objects that were not found in TransactionSack
         std::set<int64_t> load_ids;
-        std::set_difference(patterns.begin(), patterns.end(), seen_ids.begin(), seen_ids.end(), std::inserter(load_ids, load_ids.begin()));
+        std::set_difference(
+            patterns.begin(),
+            patterns.end(),
+            seen_ids.begin(),
+            seen_ids.end(),
+            std::inserter(load_ids, load_ids.begin()));
         for (auto id : load_ids) {
             // add new Transaction to the sack
             auto weakptr = sack->add_item_with_return(std::make_unique<Transaction>(*sack, id));

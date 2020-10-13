@@ -21,12 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 // TODO(dmach): rename the table to trans_runtime_packages or trans_runtime_rpms?
 
 
+#include "libdnf/transaction/db/trans_with.hpp"
+
 #include "libdnf/rpm/nevra.hpp"
-#include "libdnf/transaction/transaction.hpp"
-#include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/db/item.hpp"
 #include "libdnf/transaction/db/rpm.hpp"
-#include "libdnf/transaction/db/trans_with.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
+#include "libdnf/transaction/transaction.hpp"
 
 #include <memory>
 
@@ -49,7 +50,6 @@ static const char * SQL_TRANS_WITH_SELECT = R"**(
     WHERE
         trans_id = ?
 )**";
-
 
 
 std::unique_ptr<libdnf::utils::SQLite3::Query> trans_with_select_new_query(libdnf::utils::SQLite3 & conn) {

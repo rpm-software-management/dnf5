@@ -32,7 +32,8 @@ namespace libdnf::transaction {
 
 
 /// Create a query (statement) that inserts new records to the 'item' table
-std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(libdnf::utils::SQLite3 & conn, TransactionItemType type);
+std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(
+    libdnf::utils::SQLite3 & conn, TransactionItemType type);
 
 
 /// Use a query to insert a new record to the 'item' table

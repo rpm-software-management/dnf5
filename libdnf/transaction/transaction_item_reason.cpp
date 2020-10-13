@@ -97,7 +97,8 @@ bool operator>=(TransactionItemReason lhs, TransactionItemReason rhs) {
 int TransactionItemReason_compare(TransactionItemReason lhs, TransactionItemReason rhs) {
     if (lhs < rhs) {
         return -1;
-    } if (lhs > rhs) {
+    }
+    if (lhs > rhs) {
         return 1;
     } else {
         return 0;

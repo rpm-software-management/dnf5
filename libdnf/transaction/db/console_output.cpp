@@ -44,14 +44,11 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> console_output_insert_new_que
 }
 
 
-int64_t console_output_insert_line(libdnf::utils::SQLite3 & conn, Transaction & trans, int file_descriptor, const std::string & line) {
+int64_t console_output_insert_line(
+    libdnf::utils::SQLite3 & conn, Transaction & trans, int file_descriptor, const std::string & line) {
     auto query = console_output_insert_new_query(conn);
 
-    query->bindv(
-        trans.get_id(),
-        file_descriptor,
-        line
-    );
+    query->bindv(trans.get_id(), file_descriptor, line);
     query->step();
     return query->last_insert_rowid();
 }

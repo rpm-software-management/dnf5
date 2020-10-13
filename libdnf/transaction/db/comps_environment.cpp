@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "comps_environment.hpp"
+
 #include "comps_environment_group.hpp"
 #include "item.hpp"
 #include "trans_item.hpp"
@@ -31,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char *SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT = R"**(
+static const char * SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT = R"**(
     SELECT
         /* trans_item */
         ti.id,
@@ -57,14 +58,16 @@ static const char *SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_transaction_item_select_new_query(libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
+std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_transaction_item_select_new_query(
+    libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT);
     query->bindv(transaction_id);
     return query;
 }
 
 
-std::vector<std::unique_ptr<CompsEnvironment>> get_transaction_comps_environments(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+std::vector<std::unique_ptr<CompsEnvironment>> get_transaction_comps_environments(
+    libdnf::utils::SQLite3 & conn, Transaction & trans) {
     std::vector<std::unique_ptr<CompsEnvironment>> result;
 
     auto query = comps_environment_transaction_item_select_new_query(conn, trans.get_id());
@@ -113,8 +116,7 @@ int64_t comps_environment_insert(libdnf::utils::SQLite3::Statement & query, Comp
         grp.get_environment_id(),
         grp.get_name(),
         grp.get_translated_name(),
-        static_cast<int>(grp.get_package_types())
-    );
+        static_cast<int>(grp.get_package_types()));
     query.step();
     query.reset();
     grp.set_item_id(item_id);

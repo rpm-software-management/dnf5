@@ -34,7 +34,8 @@ static const char * SQL_ITEM_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(libdnf::utils::SQLite3 & conn, TransactionItemType type) {
+std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(
+    libdnf::utils::SQLite3 & conn, TransactionItemType type) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_ITEM_INSERT);
     query->bindv(static_cast<int>(type));
     return query;

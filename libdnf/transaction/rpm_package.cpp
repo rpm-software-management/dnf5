@@ -48,7 +48,6 @@ std::string Package::to_string() const {
 }
 
 
-
 /*
 TransactionItemReason Package::resolveTransactionItemReason(
     libdnf::utils::SQLite3 & conn,

@@ -35,7 +35,8 @@ class Transaction;
 
 
 /// Insert file_descriptor and line into the 'console_output' table.
-int64_t console_output_insert_line(libdnf::utils::SQLite3 & conn, Transaction & trans, int file_descriptor, const std::string & line);
+int64_t console_output_insert_line(
+    libdnf::utils::SQLite3 & conn, Transaction & trans, int file_descriptor, const std::string & line);
 
 
 /// Load records from the 'console_output' table associated with a transaction.

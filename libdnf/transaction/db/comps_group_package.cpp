@@ -18,12 +18,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include <algorithm>
-#include <memory>
-
 #include "comps_group_package.hpp"
 
 #include "libdnf/transaction/transaction.hpp"
+
+#include <algorithm>
+#include <memory>
 
 
 namespace libdnf::transaction {
@@ -87,11 +87,7 @@ void comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & gro
     auto query = comps_group_package_insert_new_query(conn);
     for (auto & pkg : group.get_packages()) {
         query->bindv(
-            group.get_item_id(),
-            pkg->get_name(),
-            pkg->get_installed(),
-            static_cast<int>(pkg->get_package_type())
-        );
+            group.get_item_id(), pkg->get_name(), pkg->get_installed(), static_cast<int>(pkg->get_package_type()));
         query->step();
         pkg->set_id(query->last_insert_rowid());
         query->reset();

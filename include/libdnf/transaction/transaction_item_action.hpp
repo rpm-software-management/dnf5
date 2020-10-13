@@ -32,17 +32,17 @@ namespace libdnf::transaction {
 // because removed items (RPMs) must be excluded from reason resolution:
 // * Package.cpp - Package::resolveTransactionItemReason
 enum class TransactionItemAction : int {
-    INSTALL = 1,       // a new package that was installed on the system
-    DOWNGRADE = 2,     // an older package version that replaced previously installed version
-    DOWNGRADED = 3,    // an original package version that was replaced
-    OBSOLETE = 4,      //
-    OBSOLETED = 5,     //
-    UPGRADE = 6,       //
-    UPGRADED = 7,      //
-    REMOVE = 8,        // a package that was removed from the system
-    REINSTALL = 9,     // a package that was reinstalled with the identical version
-    REINSTALLED = 10,  // a package that was reinstalled with the identical version (old repo, for example)
-    REASON_CHANGE = 11 // a package was kept on the system but it's reason has changed
+    INSTALL = 1,        // a new package that was installed on the system
+    DOWNGRADE = 2,      // an older package version that replaced previously installed version
+    DOWNGRADED = 3,     // an original package version that was replaced
+    OBSOLETE = 4,       //
+    OBSOLETED = 5,      //
+    UPGRADE = 6,        //
+    UPGRADED = 7,       //
+    REMOVE = 8,         // a package that was removed from the system
+    REINSTALL = 9,      // a package that was reinstalled with the identical version
+    REINSTALLED = 10,   // a package that was reinstalled with the identical version (old repo, for example)
+    REASON_CHANGE = 11  // a package was kept on the system but it's reason has changed
 };
 
 
@@ -129,4 +129,4 @@ Reasons:
 * inherited = a package was installed in the past, re-use it's reason in existing transaction
 */
 
-#endif // LIBDNF_TRANSACTION_TYPES_HPP
+#endif  // LIBDNF_TRANSACTION_TYPES_HPP

@@ -36,7 +36,8 @@ class TransactionItem;
 
 
 /// Return a vector of CompsGroup objects with comps groups in a transaction
-std::vector<std::unique_ptr<CompsGroup>> get_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans);
+std::vector<std::unique_ptr<CompsGroup>> get_transaction_comps_groups(
+    libdnf::utils::SQLite3 & conn, Transaction & trans);
 
 
 /// Create a query (statement) that inserts new records to the 'comps_group' table

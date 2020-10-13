@@ -44,7 +44,7 @@ void transaction_db_create(libdnf::utils::SQLite3 & conn);
 std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & base);
 
 
-}  // libdnf::transaction
+}  // namespace libdnf::transaction
 
 
 #endif  // LIBDNF_TRANSACTION_DB_DB_HPP

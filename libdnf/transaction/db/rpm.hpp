@@ -37,7 +37,8 @@ class TransactionItem;
 
 
 /// Create a query that returns all rpm transaction items for a transaction
-std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_query(libdnf::utils::SQLite3 & conn, int64_t transaction_id);
+std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_query(
+    libdnf::utils::SQLite3 & conn, int64_t transaction_id);
 
 
 /// Use a query to select a record from the 'rpm' table and populate a TransactionItem

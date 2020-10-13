@@ -105,8 +105,7 @@ void trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans
         trans.get_releasever(),
         trans.get_user_id(),
         trans.get_cmdline(),
-        static_cast<int>(trans.get_state())
-    );
+        static_cast<int>(trans.get_state()));
 
     if (trans.get_id() > 0) {
         // use an existing primary key
@@ -156,8 +155,7 @@ void trans_update(libdnf::utils::SQLite3::Statement & query, const Transaction &
         trans.get_cmdline(),
         static_cast<int>(trans.get_state()),
         // WHERE id=?
-        trans.get_id()
-    );
+        trans.get_id());
     query.step();
     query.reset();
 }

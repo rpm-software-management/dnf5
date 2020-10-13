@@ -26,7 +26,7 @@ namespace libdnf::transaction {
 
 
 enum class TransactionItemType : int {
-    UNKNOWN = 0, // default type, must be changed before save
+    UNKNOWN = 0,  // default type, must be changed before save
     RPM = 1,
     GROUP = 2,
     ENVIRONMENT = 3
