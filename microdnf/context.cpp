@@ -37,6 +37,13 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace microdnf {
 
 bool userconfirm(libdnf::ConfigMain & config) {
+    // "assumeno" takes precedence over "assumeyes"
+    if (config.assumeno().get_value()) {
+        return false;
+    }
+    if (config.assumeyes().get_value()) {
+        return true;
+    }
     std::string msg;
     if (config.defaultyes().get_value()) {
         msg = "Is this ok [Y/n]: ";
