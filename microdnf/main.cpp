@@ -101,6 +101,22 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
         return true;});
     microdnf->register_named_arg(setopt);
 
+    auto & config = ctx.base.get_config();
+
+    auto assume_yes = ctx.arg_parser.add_new_named_arg("assumeyes");
+    assume_yes->set_long_name("assumeyes");
+    assume_yes->set_short_name('y');
+    assume_yes->set_short_description("automatically answer yes for all questions");
+    assume_yes->set_const_value("true");
+    assume_yes->link_value(&config.assumeyes());
+    microdnf->register_named_arg(assume_yes);
+
+    auto assume_no = ctx.arg_parser.add_new_named_arg("assumeno");
+    assume_no->set_long_name("assumeno");
+    assume_no->set_short_description("automatically answer no for all questions");
+    assume_no->set_const_value("true");
+    assume_no->link_value(&config.assumeno());
+    microdnf->register_named_arg(assume_no);
 
     ctx.arg_parser.set_root_command(microdnf);
 
