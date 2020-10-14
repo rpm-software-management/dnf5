@@ -64,12 +64,12 @@ std::string ArgumentParser::Argument::get_conflict_arg_msg(const Argument * conf
 ArgumentParser::PositionalArg::PositionalArg(
     ArgumentParser & owner, const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values)
     : Argument(owner, id)
-    , nvals(static_cast<int>(values->size()))
     , init_value(nullptr)
     , values(values) {
     if (!values || values->empty()) {
         throw LogicError("PositionalArg: \"values\" constructor parameter can't be nullptr or empty vector");
     }
+    nvals = static_cast<int>(values->size());
 }
 
 ArgumentParser::PositionalArg::PositionalArg(
