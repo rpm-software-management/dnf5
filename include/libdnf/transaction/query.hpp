@@ -48,6 +48,7 @@ public:
 
     TransactionQuery(TransactionSack & sack);
 
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.dbSelect(int64_t transaction_id)
     TransactionQuery & ifilter_id(sack::QueryCmp cmp, int64_t pattern);
     TransactionQuery & ifilter_id(sack::QueryCmp cmp, const std::vector<int64_t> & pattern);
 

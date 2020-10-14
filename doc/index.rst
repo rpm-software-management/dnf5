@@ -15,6 +15,7 @@ Welcome to libdnf's documentation!
    cpp_module
    cpp_repo
    cpp_rpm
+   cpp_transaction
 
 
 Indices and tables
