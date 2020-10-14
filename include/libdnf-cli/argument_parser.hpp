@@ -149,7 +149,8 @@ public:
 
         /// Enables/disables storing parsed values.
         /// Values can be processed / stored in the user parse hook function.
-        void set_store_value(bool enable) noexcept { store_value = enable; }
+        /// The "LogicError" exception is thrown when "true" is requested but the storage array "values" is not set.
+        void set_store_value(bool enable);
 
         /// Returns true if storing the parsed values is enabled.
         bool get_store_value() const noexcept { return store_value; }

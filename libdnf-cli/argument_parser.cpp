@@ -81,10 +81,18 @@ ArgumentParser::PositionalArg::PositionalArg(
     : Argument(owner, id)
     , nvals(nvals)
     , init_value(init_value)
-    , values(values) {
-    if (!values) {
-        throw LogicError("PositionalArg: \"values\" constructor parameter can't be nullptr");
+    , values(values)
+    , store_value(values) {
+    if (values && !init_value) {
+        throw LogicError("PositionalArg: \"init_value\" constructor parameter can't be nullptr if \"value\" is set");
     }
+}
+
+void ArgumentParser::PositionalArg::set_store_value(bool enable) {
+    if (enable && !values) {
+        throw LogicError("PositionalArg::set_store_value(true) was called but storage array \"values\" is not set");
+    }
+    store_value = enable;
 }
 
 int ArgumentParser::PositionalArg::parse(const char * option, int argc, const char * const argv[]) {
