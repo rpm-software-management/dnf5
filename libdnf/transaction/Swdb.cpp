@@ -118,7 +118,7 @@ Swdb::initTransaction()
 }
 
 int64_t
-Swdb::beginTransaction(int64_t dtBegin,
+Swdb::beginTransaction(int64_t dtStart,
                        std::string rpmdbVersionBegin,
                        std::string cmdline,
                        uint32_t userId)
@@ -128,7 +128,7 @@ Swdb::beginTransaction(int64_t dtBegin,
     }
 
     // begin transaction
-    transactionInProgress->set_dt_begin(dtBegin);
+    transactionInProgress->set_dt_start(dtStart);
     transactionInProgress->set_rpmdb_version_begin(rpmdbVersionBegin);
     transactionInProgress->set_cmdline(cmdline);
     transactionInProgress->set_user_id(userId);

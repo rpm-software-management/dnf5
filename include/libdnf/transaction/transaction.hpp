@@ -84,12 +84,12 @@ public:
     /// Get date and time of the transaction start
     ///
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_dt_begin()
-    int64_t get_dt_begin() const noexcept { return dt_begin; }
+    int64_t get_dt_start() const noexcept { return dt_begin; }
 
     /// Set date and time of the transaction start
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setDtBegin(int64_t value)
-    void set_dt_begin(int64_t value) { dt_begin = value; }
+    void set_dt_start(int64_t value) { dt_begin = value; }
 
     /// Get date and time of the transaction end
     ///
@@ -194,7 +194,7 @@ public:
     /// Start the transaction by inserting it into the database
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.begin()
-    void begin();
+    void start();
 
     /// Finish the transaction by updating it's state in the database
     ///

@@ -59,7 +59,7 @@ void TransactionRpmPackageTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(num, trans->get_packages().size());
 
     // save the transaction with all transaction items to the database
-    trans->begin();
+    trans->start();
     trans->finish(TransactionState::DONE);
 
     // create a new Base to force reading the transaction from disk

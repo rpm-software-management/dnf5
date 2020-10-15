@@ -121,7 +121,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     minimal_core.set_group_type(CompsPackageType::MANDATORY);
 
     // save transaction and all associated transaction items
-    trans->begin();
+    trans->start();
 
     // record transaction output coming from rpm transaction callbacks
     trans->add_console_output_line(1, "line1");

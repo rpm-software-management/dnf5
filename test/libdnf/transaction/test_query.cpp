@@ -39,7 +39,7 @@ void TransactionQueryTest::test_ifilter_id_eq() {
     auto trans = base->get_transaction_sack().new_transaction();
 
     // save the transaction
-    trans->begin();
+    trans->start();
     trans->finish(TransactionState::DONE);
 
     // create a new Base to force reading the transaction from disk
@@ -59,7 +59,7 @@ void TransactionQueryTest::test_ifilter_id_eq_parallel_queries() {
     auto trans = base->get_transaction_sack().new_transaction();
 
     // save the transaction
-    trans->begin();
+    trans->start();
     trans->finish(TransactionState::DONE);
 
     // create a new Base to force reading the transaction from disk

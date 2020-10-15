@@ -34,7 +34,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TransactionTest);
 
 static TransactionWeakPtr create_transaction(libdnf::Base & base) {
     auto trans = base.get_transaction_sack().new_transaction();
-    trans->set_dt_begin(1);
+    trans->set_dt_start(1);
     trans->set_dt_end(2);
     trans->set_rpmdb_version_begin("begin");
     trans->set_rpmdb_version_end("end");
@@ -56,7 +56,7 @@ void TransactionTest::test_save_load() {
     auto base = new_base();
 
     auto trans = create_transaction(*base);
-    trans->begin();
+    trans->start();
     trans->finish(TransactionState::DONE);
 
     // load the saved transaction from database and compare values
@@ -66,7 +66,7 @@ void TransactionTest::test_save_load() {
     auto trans2 = q2.get();
 
     CPPUNIT_ASSERT_EQUAL(trans->get_id(), trans2->get_id());
-    CPPUNIT_ASSERT_EQUAL(trans->get_dt_begin(), trans2->get_dt_begin());
+    CPPUNIT_ASSERT_EQUAL(trans->get_dt_start(), trans2->get_dt_start());
     CPPUNIT_ASSERT_EQUAL(trans->get_dt_end(), trans2->get_dt_end());
     CPPUNIT_ASSERT_EQUAL(trans->get_rpmdb_version_begin(), trans2->get_rpmdb_version_begin());
     CPPUNIT_ASSERT_EQUAL(trans->get_rpmdb_version_end(), trans2->get_rpmdb_version_end());
@@ -81,10 +81,9 @@ void TransactionTest::test_save_load() {
 void TransactionTest::test_second_start_raises() {
     auto base = new_base();
     auto trans = base->get_transaction_sack().new_transaction();
-    trans->begin();
+    trans->start();
     // 2nd begin must throw an exception
-    CPPUNIT_ASSERT_THROW(trans->begin(), std::runtime_error);
-
+    CPPUNIT_ASSERT_THROW(trans->start(), std::runtime_error);
 }
 
 
@@ -93,7 +92,7 @@ void TransactionTest::test_save_with_specified_id_raises() {
     auto trans = base->get_transaction_sack().new_transaction();
     trans->set_id(1);
     // it is not allowed to save a transaction with arbitrary ID
-    CPPUNIT_ASSERT_THROW(trans->begin(), std::runtime_error);
+    CPPUNIT_ASSERT_THROW(trans->start(), std::runtime_error);
 }
 
 
@@ -101,10 +100,10 @@ void TransactionTest::test_update() {
     auto base = new_base();
 
     auto trans = create_transaction(*base);
-    trans->begin();
+    trans->start();
 
     // modify the values after the initial save
-    trans->set_dt_begin(12);
+    trans->set_dt_start(12);
     trans->set_dt_end(22);
     trans->set_rpmdb_version_begin("begin_2");
     trans->set_rpmdb_version_end("end_2");
@@ -122,7 +121,7 @@ void TransactionTest::test_update() {
 
     // check if the values saved during trans->finish() match
     CPPUNIT_ASSERT_EQUAL(trans->get_id(), trans2->get_id());
-    CPPUNIT_ASSERT_EQUAL(trans->get_dt_begin(), trans2->get_dt_begin());
+    CPPUNIT_ASSERT_EQUAL(trans->get_dt_start(), trans2->get_dt_start());
     CPPUNIT_ASSERT_EQUAL(trans->get_dt_end(), trans2->get_dt_end());
     CPPUNIT_ASSERT_EQUAL(trans->get_rpmdb_version_begin(), trans2->get_rpmdb_version_begin());
     CPPUNIT_ASSERT_EQUAL(trans->get_rpmdb_version_end(), trans2->get_rpmdb_version_end());
@@ -154,12 +153,12 @@ void TransactionTest::test_compare() {
     // equal id and dt_begin
     first->set_id(1);
     second->set_id(1);
-    first->set_dt_begin(1);
-    second->set_dt_begin(1);
+    first->set_dt_start(1);
+    second->set_dt_start(1);
     CPPUNIT_ASSERT(*first == *second);
 
     // equal id, compare by dt_begin
-    second->set_dt_begin(2);
+    second->set_dt_start(2);
     CPPUNIT_ASSERT(*first > *second);
     CPPUNIT_ASSERT(*second < *first);
 }

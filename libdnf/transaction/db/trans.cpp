@@ -56,7 +56,7 @@ bool trans_select(libdnf::utils::SQLite3::Query & query, int64_t transaction_id,
 
     if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         trans.set_id(query.get<int>("id"));
-        trans.set_dt_begin(query.get<int64_t>("dt_begin"));
+        trans.set_dt_start(query.get<int64_t>("dt_begin"));
         trans.set_dt_end(query.get<int64_t>("dt_end"));
         trans.set_rpmdb_version_begin(query.get<std::string>("rpmdb_version_begin"));
         trans.set_rpmdb_version_end(query.get<std::string>("rpmdb_version_end"));
@@ -98,7 +98,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_insert_new_query(libdnf
 
 void trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans) {
     query.bindv(
-        trans.get_dt_begin(),
+        trans.get_dt_start(),
         trans.get_dt_end(),
         trans.get_rpmdb_version_begin(),
         trans.get_rpmdb_version_end(),
@@ -146,7 +146,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_update_new_query(libdnf
 void trans_update(libdnf::utils::SQLite3::Statement & query, const Transaction & trans) {
     query.bindv(
         // SET key=value
-        trans.get_dt_begin(),
+        trans.get_dt_start(),
         trans.get_dt_end(),
         trans.get_rpmdb_version_begin(),
         trans.get_rpmdb_version_end(),

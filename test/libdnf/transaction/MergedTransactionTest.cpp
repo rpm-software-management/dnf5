@@ -65,12 +65,12 @@ void
 MergedTransactionTest::testMerge()
 {
     auto first = initTransFirst(*conn);
-    first->begin();
+    first->start();
     first->add_console_output_line(1, "Foo");
     first->finish(TransactionState::DONE);
 
     auto second = initTransSecond(*conn);
-    second->begin();
+    second->start();
     second->add_console_output_line(1, "Bar");
     second->finish(TransactionState::ERROR);
 
@@ -154,11 +154,11 @@ prepareMergedTransaction(libdnf::utils::SQLite3 & conn,
     }
 
     first->addItem(firstRPM, "base", actionFirst, TransactionItemReason::USER);
-    first->begin();
+    first->start();
     first->finish(TransactionState::DONE);
 
     second->addItem(secondRPM, "base", actionSecond, TransactionItemReason::USER);
-    second->begin();
+    second->start();
     second->finish(TransactionState::DONE);
 
     auto merged = std::make_shared< MergedTransaction >(*first);

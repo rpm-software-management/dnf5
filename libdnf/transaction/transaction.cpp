@@ -59,23 +59,23 @@ Transaction::Transaction(TransactionSack & sack) : sack{sack} {}
 
 
 bool Transaction::operator==(const Transaction & other) const {
-    return get_id() == other.get_id() && get_dt_begin() == other.get_dt_begin();
+    return get_id() == other.get_id() && get_dt_start() == other.get_dt_start();
 }
 
 
 bool Transaction::operator<(const Transaction & other) const {
-    return get_id() > other.get_id() || get_dt_begin() > other.get_dt_begin();
+    return get_id() > other.get_id() || get_dt_start() > other.get_dt_start();
 }
 
 
 bool Transaction::operator>(const Transaction & other) const {
-    return get_id() < other.get_id() || get_dt_begin() < other.get_dt_begin();
+    return get_id() < other.get_id() || get_dt_start() < other.get_dt_start();
 }
 
 
-void Transaction::begin() {
+void Transaction::start() {
     if (id != 0) {
-        throw std::runtime_error(_("Transaction has already began!"));
+        throw std::runtime_error(_("Transaction has already started!"));
     }
 
     auto conn = transaction_db_connect(sack.base);

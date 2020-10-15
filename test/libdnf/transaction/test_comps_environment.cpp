@@ -73,7 +73,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(1LU, trans->get_comps_environments().size());
 
     // save the transaction with all transaction items to the database
-    trans->begin();
+    trans->start();
     trans->finish(TransactionState::DONE);
 
     // create a new Base to force reading the transaction from disk
