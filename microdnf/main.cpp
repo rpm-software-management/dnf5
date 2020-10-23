@@ -118,6 +118,20 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     assume_no->link_value(&config.assumeno());
     microdnf->register_named_arg(assume_no);
 
+    auto comment = ctx.arg_parser.add_new_named_arg("comment");
+    comment->set_long_name("comment");
+    comment->set_has_value(true);
+    comment->set_arg_value_help("COMMENT");
+    comment->set_short_description("add a comment to transaction");
+    comment->set_description("Adds a comment to the action. If a transaction takes place, the comment is stored in it.");
+    comment->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            ctx.set_comment(value);
+            return true;
+        });
+    microdnf->register_named_arg(comment);
+
     ctx.arg_parser.set_root_command(microdnf);
 
     for (auto & command : ctx.commands) {
