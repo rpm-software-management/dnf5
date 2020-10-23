@@ -87,12 +87,22 @@ void CmdRemove::run(Context & ctx) {
         return;
     }
 
+    libdnf::rpm::Transaction rpm_transaction(ctx.base);
+    auto db_transaction = new_db_transaction(ctx);
     std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
-    libdnf::rpm::Transaction ts(ctx.base);
-    prepare_transaction(goal, ts, transaction_items);
 
-    std::cout << std::endl;
-    run_transaction(ts);
+    fill_transactions(goal, db_transaction, rpm_transaction, transaction_items);
+
+    auto time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->start();
+
+    run_transaction(rpm_transaction);
+
+    time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->finish(libdnf::transaction::TransactionState::DONE);
+
 }
 
 }  // namespace microdnf

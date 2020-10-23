@@ -93,7 +93,12 @@ void download_packages(libdnf::Goal & goal, const char * dest_dir);
 
 void run_transaction(libdnf::rpm::Transaction & transaction);
 
-void prepare_transaction(libdnf::Goal & goal, libdnf::rpm::Transaction & ts, std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items);
+/// Creates, initializes and returns new database transaction.
+libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx);
+
+/// Fills transactions by packages from goal.
+// TODO(jrohel): Temporary code. Will be rewritten (depends on software database code) and moved to libdnf::cli later.
+void fill_transactions(libdnf::Goal & goal, libdnf::transaction::TransactionWeakPtr & transaction, libdnf::rpm::Transaction & rpm_ts, std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items);
 
 }  // namespace microdnf
 
