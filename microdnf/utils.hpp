@@ -21,6 +21,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MICRODNF_UTILS_HPP
 
 #include <libdnf/base/goal.hpp>
+#include <sys/types.h>
 
 #include <filesystem>
 #include <string>
@@ -29,6 +30,11 @@ namespace microdnf {
 
 /// Returns "true" if program runs with effective user ID = 0
 bool am_i_root() noexcept;
+
+/// Gets the login uid, if available.
+/// The getuid() is returned instead if there was a problem.
+/// The value is cached.
+uid_t get_login_uid() noexcept;
 
 namespace xdg {
 
