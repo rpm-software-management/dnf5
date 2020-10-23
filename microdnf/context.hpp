@@ -25,6 +25,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/base/base.hpp>
 #include <libdnf-cli/argument_parser.hpp>
 #include <libdnf/rpm/transaction.hpp>
+#include <libdnf/utils/span.hpp>
 
 #include <memory>
 #include <utility>
@@ -49,9 +50,18 @@ public:
     Command * selected_command{nullptr};
     libdnf::cli::ArgumentParser arg_parser;
 
+    /// Gets program arguments.
+    libdnf::Span<const char * const> get_prg_arguments() const { return prg_args; }
+
+    /// Stores reference to program arguments.
+    void set_prg_arguments(size_t argc, const char * const * argv) { prg_args = {argv, argc}; }
+
 private:
     /// Updates the repository metadata cache and load it into rpm::RepoSack.
     void load_rpm_repo(libdnf::rpm::Repo & repo);
+
+    /// Refers to program arguments.
+    libdnf::Span<const char * const> prg_args;
 };
 
 class RpmTransactionItem : public libdnf::rpm::TransactionItem {

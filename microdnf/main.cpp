@@ -147,6 +147,8 @@ int main(int argc, char * argv[]) {
 
     log_router.info("Microdnf start");
 
+    context.set_prg_arguments(static_cast<size_t>(argc), argv);
+
     // Register commands
     context.commands.push_back(std::make_unique<microdnf::CmdInstall>());
     context.commands.push_back(std::make_unique<microdnf::CmdDownload>());
