@@ -65,6 +65,7 @@ private:
     ::Transaction * libsolv_transaction{nullptr};
 
     bool allow_downgrade{true};
+    bool allow_vendor_change{true};
     bool force_best{false};
     bool ignore_weak_deps{false};
     bool remove_solver_weak{false};
@@ -76,6 +77,7 @@ inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
     : pool(src.pool)
     , staging(src.staging)
     , allow_downgrade(src.allow_downgrade)
+    , allow_vendor_change(src.allow_vendor_change)
     , force_best(src.force_best)
     , ignore_weak_deps(src.ignore_weak_deps)
     , remove_solver_weak(src.remove_solver_weak) {}

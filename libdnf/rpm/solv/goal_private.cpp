@@ -52,8 +52,6 @@ void init_solver(Pool * pool, Solver ** solver) {
 
     *solver = solver_create(pool);
 
-    /* no vendor locking */
-    solver_set_flag(*solver, SOLVER_FLAG_ALLOW_VENDORCHANGE, 1);
     /* don't erase packages that are no longer in repo during distupgrade */
     solver_set_flag(*solver, SOLVER_FLAG_KEEP_ORPHANS, 1);
     /* no arch change for forcebest */
@@ -143,6 +141,12 @@ bool GoalPrivate::resolve() {
     if (allow_downgrade) {
         solver_set_flag(libsolv_solver, SOLVER_FLAG_ALLOW_DOWNGRADE, 1);
     }
+
+    // Set up vendor locking modes
+    // TODO: Wire up the configuration option to this...
+    int vendor_change = allow_vendor_change ? 1 : 0;
+    solver_set_flag(libsolv_solver, SOLVER_FLAG_ALLOW_VENDORCHANGE, vendor_change);
+    solver_set_flag(libsolv_solver, SOLVER_FLAG_DUP_ALLOW_VENDORCHANGE, vendor_change);
 
     if (solver_solve(libsolv_solver, &job.get_queue())) {
         return true;
