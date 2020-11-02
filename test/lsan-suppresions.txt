@@ -1,3 +1,0 @@
-leak:libperl.so*
-leak:libpython*.so*
-leak:libruby.so*

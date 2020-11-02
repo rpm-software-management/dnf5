@@ -82,8 +82,6 @@ if(WITH_SANITIZERS)
     message(WARNING "Building with sanitizers enabled!")
     add_compile_options(-fsanitize=address -fsanitize=undefined -fsanitize=leak)
     link_libraries(asan ubsan)
-    # find installed libasan.so.* in the list and use it in LD_PRELOAD when running python tests
-    find_library(ASAN_LIBRARIES libasan.so.5 libasan.so.6 libasan.so.7 libasan.so.8 REQUIRED)
 endif()
 
 

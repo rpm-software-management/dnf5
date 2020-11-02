@@ -7,9 +7,14 @@ message("Building tests")
 
 
 if(WITH_SANITIZERS)
-    set(ASAN_LD_PRELOAD "LD_PRELOAD=${ASAN_LIBRARIES}")
-    set(ASAN_OPTIONS "ASAN_OPTIONS=detect_odr_violation=0")
-    set(LSAN_OPTIONS "LSAN_OPTIONS=suppressions=${CMAKE_CURRENT_SOURCE_DIR}/lsan-suppresions.txt")
+    # This fixes the "ASan runtime does not come first in initial library
+    # list" message. Note the better solution should be to use
+    # LD_PRELOAD=`ls /lib64/libasan.so.?`. With the solution used here the
+    # sanitizer library is loaded when the DSO linked against it is loaded. For
+    # any calls up to that point the sanitizers aren't active. While hackish,
+    # this is convenient because e.g. python is causing some leaks during
+    # module loading which this works around.
+    set(ASAN_OPTIONS "ASAN_OPTIONS=verify_asan_link_order=0")
 endif()
 
 
