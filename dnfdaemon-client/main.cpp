@@ -19,7 +19,6 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/repolist/repolist.hpp"
 #include "context.hpp"
-#include "utils.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <fcntl.h>

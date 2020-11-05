@@ -93,10 +93,10 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
 class RepoDbus {
 public:
     RepoDbus(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
-    std::string get_id() { return rawdata["id"]; }
-    std::string get_name() { return rawdata["name"]; }
-    bool is_enabled() { return rawdata["enabled"]; }
-    uint64_t get_size() { return rawdata["repo_size"]; }
+    std::string get_id() const { return rawdata.at("id"); }
+    std::string get_name() const { return rawdata.at("name"); }
+    bool is_enabled() const { return rawdata.at("enabled"); }
+    uint64_t get_size() const { return rawdata.at("repo_size"); }
 
 private:
     dnfdaemon::KeyValueMap rawdata;
@@ -137,7 +137,7 @@ void CmdRepolist::run(Context & ctx) {
     dnfdaemon::KeyValueMap options = {};
     options["enable_disable"] = enable_disable_option->get_value();
     std::vector<std::string> patterns_to_show;
-    if (patterns_to_show_options->size() > 0) {
+    if (!patterns_to_show_options->empty()) {
         patterns_to_show.reserve(patterns_to_show_options->size());
         for (auto & pattern : *patterns_to_show_options) {
             patterns_to_show.emplace_back(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value());

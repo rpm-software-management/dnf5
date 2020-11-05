@@ -94,7 +94,7 @@ void Repo::list(sdbus::MethodCall call) {
             for (auto & repo : repos_query.get_data()) {
                 dnfdaemon::KeyValueMap out_repo;
                 out_repo.emplace(std::make_pair("id", repo->get_id()));
-                out_repo.emplace(std::make_pair("name", repo->get_config()->name().get_value()));
+                out_repo.emplace(std::make_pair("name", repo->get_config().name().get_value()));
                 out_repo.emplace(std::make_pair("enabled", repo->is_enabled()));
                 // TODO(mblaha): add all other repository attributes
                 if (command == "repoinfo") {

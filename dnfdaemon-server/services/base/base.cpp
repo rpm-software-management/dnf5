@@ -97,7 +97,7 @@ void Base::read_all_repos(sdbus::MethodCall call) {
                     repo->load();
                     solv_sack.load_repo(*repo.get(), flags);
                 } catch (const std::runtime_error & ex) {
-                    if (!repo->get_config()->skip_if_unavailable().get_value()) {
+                    if (!repo->get_config().skip_if_unavailable().get_value()) {
                         retval = false;
                         break;
                     }

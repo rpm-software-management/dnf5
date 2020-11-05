@@ -66,9 +66,7 @@ void ThreadsManager::join_threads(const bool only_finished) {
 
     for (auto thread = to_be_joined.begin(); thread < to_be_joined.end(); ++thread) {
         // join the thread and remove it from registry
-        if (thread->joinable()) {
-            thread->join();
-        }
+        thread->join();
     }
 }
 

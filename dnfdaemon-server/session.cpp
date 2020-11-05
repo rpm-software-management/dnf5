@@ -68,10 +68,10 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     auto system_cache_dir = base->get_config().system_cachedir().get_value();
     base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, system_cache_dir);
     // set variables
-    auto & variables = base->get_variables();
-    variables["arch"] = "x86_64";
-    variables["basearch"] = "x86_64";
-    variables["releasever"] = "32";
+    base->get_vars().load(
+        base->get_config().installroot().get_value(),
+        base->get_config().varsdir().get_value()
+    );
 
     // load repo configuration
     auto & rpm_repo_sack = base->get_rpm_repo_sack();
