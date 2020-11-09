@@ -1785,6 +1785,10 @@ SolvQuery & SolvQuery::ifilter_supplements(libdnf::sack::QueryCmp cmp_type, cons
 SolvQuery & SolvQuery::ifilter_installed() {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     auto * installed_repo = pool->installed;
+    if (installed_repo == nullptr) {
+        p_impl->query_result.clear();
+        return *this;
+    }
     for (PackageId candidate_id : p_impl->query_result) {
         Solvable * solvable = solv::get_solvable(pool, candidate_id);
         if (solvable->repo != installed_repo) {
@@ -1797,6 +1801,9 @@ SolvQuery & SolvQuery::ifilter_installed() {
 SolvQuery & SolvQuery::ifilter_available() {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     auto * installed_repo = pool->installed;
+    if (installed_repo == nullptr) {
+        return *this;
+    }
     for (PackageId candidate_id : p_impl->query_result) {
         Solvable * solvable = solv::get_solvable(pool, candidate_id);
         if (solvable->repo == installed_repo) {
@@ -1809,8 +1816,7 @@ SolvQuery & SolvQuery::ifilter_available() {
 SolvQuery & SolvQuery::ifilter_upgrades() {
     Pool * pool = p_impl->sack->pImpl->get_pool();
     auto * installed_repo = pool->installed;
-
-    if (pool->installed == nullptr) {
+    if (installed_repo == nullptr) {
         p_impl->query_result.clear();
         return *this;
     }
