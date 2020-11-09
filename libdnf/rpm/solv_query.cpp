@@ -1789,12 +1789,14 @@ SolvQuery & SolvQuery::ifilter_installed() {
         p_impl->query_result.clear();
         return *this;
     }
+    solv::SolvMap filter_result(p_impl->sack->pImpl->get_nsolvables());
     for (PackageId candidate_id : p_impl->query_result) {
         Solvable * solvable = solv::get_solvable(pool, candidate_id);
-        if (solvable->repo != installed_repo) {
-            p_impl->query_result.remove_unsafe(candidate_id);
+        if (solvable->repo == installed_repo) {
+            filter_result.add_unsafe(candidate_id);
         }
     }
+    p_impl->query_result &= filter_result;
     return *this;
 }
 
