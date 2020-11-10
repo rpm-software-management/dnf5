@@ -1790,10 +1790,16 @@ SolvQuery & SolvQuery::ifilter_installed() {
         return *this;
     }
     solv::SolvMap filter_result(p_impl->sack->pImpl->get_nsolvables());
-    for (PackageId candidate_id : p_impl->query_result) {
-        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+    auto it = p_impl->query_result.begin();
+    auto end = p_impl->query_result.end();
+    for (it.jump(PackageId(installed_repo->start)); it != end; ++it) {
+        Solvable * solvable = solv::get_solvable(pool, *it);
         if (solvable->repo == installed_repo) {
-            filter_result.add_unsafe(candidate_id);
+            filter_result.add_unsafe(*it);
+            continue;
+        }
+        if ((*it).id >= installed_repo->end) {
+            break;
         }
     }
     p_impl->query_result &= filter_result;
@@ -1806,10 +1812,16 @@ SolvQuery & SolvQuery::ifilter_available() {
     if (installed_repo == nullptr) {
         return *this;
     }
-    for (PackageId candidate_id : p_impl->query_result) {
-        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+    auto it = p_impl->query_result.begin();
+    auto end = p_impl->query_result.end();
+    for (it.jump(PackageId(installed_repo->start)); it != end; ++it) {
+        Solvable * solvable = solv::get_solvable(pool, *it);
         if (solvable->repo == installed_repo) {
-            p_impl->query_result.remove_unsafe(candidate_id);
+            p_impl->query_result.remove_unsafe(*it);
+            continue;
+        }
+        if ((*it).id >= installed_repo->end) {
+            break;
         }
     }
     return *this;
