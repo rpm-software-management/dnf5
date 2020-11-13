@@ -44,7 +44,7 @@ uint32_t Package::get_epoch_int() const {
 
 
 std::string Package::to_string() const {
-    return libdnf::rpm::to_nevra_string(*this);
+    return libdnf::rpm::to_full_nevra_string(*this);
 }
 
 

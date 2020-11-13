@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../utils.hpp"
 
+#include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/solv_query.hpp"
 
 #include <vector>
@@ -73,8 +74,8 @@ void RpmPackageTest::test_get_name() {
 
 
 void RpmPackageTest::test_get_epoch() {
-    CPPUNIT_ASSERT_EQUAL(0lu, get_pkg("CQRlib-1.1.1-4.fc29.x86_64").get_epoch());
-    CPPUNIT_ASSERT_EQUAL(1lu, get_pkg("nodejs-1:5.12.1-1.fc29.x86_64").get_epoch());
+    CPPUNIT_ASSERT_EQUAL(std::string("0"), get_pkg("CQRlib-1.1.1-4.fc29.x86_64").get_epoch());
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), get_pkg("nodejs-1:5.12.1-1.fc29.x86_64").get_epoch());
 }
 
 
@@ -353,4 +354,18 @@ void RpmPackageTest::test_get_media_number() {
 void RpmPackageTest::test_get_rpmdbid() {
     // TODO zeros everywhere
     CPPUNIT_ASSERT_EQUAL(0llu, get_pkg("CQRlib-1.1.1-4.fc29.x86_64").get_rpmdbid());
+}
+
+
+void RpmPackageTest::test_nevra_to_string() {
+    // test that to_nevra_string() template function works
+    auto pkg = get_pkg("CQRlib-1.1.1-4.fc29.x86_64");
+    CPPUNIT_ASSERT_EQUAL(std::string("CQRlib-1.1.1-4.fc29.x86_64"), libdnf::rpm::to_nevra_string(pkg));
+}
+
+
+void RpmPackageTest::test_full_nevra_to_string() {
+    // test that to_full_nevra_string() template function works
+    auto pkg = get_pkg("CQRlib-1.1.1-4.fc29.x86_64");
+    CPPUNIT_ASSERT_EQUAL(std::string("CQRlib-0:1.1.1-4.fc29.x86_64"), libdnf::rpm::to_full_nevra_string(pkg));
 }

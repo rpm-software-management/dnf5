@@ -32,7 +32,7 @@ inline static std::string cstring2string(const char * input) {
 
 namespace libdnf::rpm {
 
-const char * Package::get_name_cstring() const noexcept {
+const char * Package::get_name_cstring() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_name(pool, id);
 }
@@ -42,37 +42,37 @@ std::string Package::get_name() const {
     return cstring2string(solv::get_name(pool, id));
 }
 
-const char * Package::get_epoch_cstring() {
+const char * Package::get_epoch_cstring() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_epoch_cstring(pool, id);
 }
 
-unsigned long Package::get_epoch() {
+std::string Package::get_epoch() const {
     Pool * pool = sack->p_impl->pool;
-    return solv::get_epoch(pool, id);
+    return solv::get_epoch_cstring(pool, id);
 }
 
-const char * Package::get_version_cstring() noexcept {
+const char * Package::get_version_cstring() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_version(pool, id);
 }
 
-std::string Package::get_version() {
+std::string Package::get_version() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_version(pool, id));
 }
 
-const char * Package::get_release_cstring() noexcept {
+const char * Package::get_release_cstring() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_release(pool, id);
 }
 
-std::string Package::get_release() {
+std::string Package::get_release() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_release(pool, id));
 }
 
-const char * Package::get_arch_cstring() const noexcept {
+const char * Package::get_arch_cstring() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_arch(pool, id);
 }
@@ -82,7 +82,7 @@ std::string Package::get_arch() const {
     return cstring2string(solv::get_arch(pool, id));
 }
 
-const char * Package::get_evr_cstring() const noexcept {
+const char * Package::get_evr_cstring() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_evr(pool, id);
 }
@@ -92,47 +92,47 @@ std::string Package::get_evr() const {
     return cstring2string(solv::get_evr(pool, id));
 }
 
-std::string Package::get_nevra() {
+std::string Package::get_nevra() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_nevra(pool, id));
 }
 
-std::string Package::get_full_nevra() {
+std::string Package::get_full_nevra() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_full_nevra(pool, id));
 }
 
-std::string Package::get_group() {
+std::string Package::get_group() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_group(pool, id));
 }
 
-unsigned long long Package::get_size() noexcept {
+unsigned long long Package::get_size() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_size(pool, id);
 }
 
-unsigned long long Package::get_download_size() noexcept {
+unsigned long long Package::get_download_size() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_download_size(pool, id);
 }
 
-unsigned long long Package::get_install_size() noexcept {
+unsigned long long Package::get_install_size() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_install_size(pool, id);
 }
 
-std::string Package::get_license() {
+std::string Package::get_license() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_license(pool, id));
 }
 
-std::string Package::get_sourcerpm() {
+std::string Package::get_sourcerpm() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_sourcerpm(pool, id));
 }
 
-unsigned long long Package::get_build_time() noexcept {
+unsigned long long Package::get_build_time() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_build_time(pool, id);
 }
@@ -143,32 +143,32 @@ unsigned long long Package::get_build_time() noexcept {
 //    return cstring2string(solv::get_build_host(pool, id));
 //}
 
-std::string Package::get_packager() {
+std::string Package::get_packager() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_packager(pool, id));
 }
 
-std::string Package::get_vendor() {
+std::string Package::get_vendor() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_vendor(pool, id));
 }
 
-std::string Package::get_url() {
+std::string Package::get_url() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_url(pool, id));
 }
 
-std::string Package::get_summary() {
+std::string Package::get_summary() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_summary(pool, id));
 }
 
-std::string Package::get_description() {
+std::string Package::get_description() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_description(pool, id));
 }
 
-std::vector<std::string> Package::get_files() {
+std::vector<std::string> Package::get_files() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_files(pool, id);
 }
@@ -250,12 +250,12 @@ ReldepList Package::get_regular_requires() const {
     return list;
 }
 
-std::string Package::get_baseurl() {
+std::string Package::get_baseurl() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_baseurl(pool, id));
 }
 
-std::string Package::get_location() {
+std::string Package::get_location() const {
     Pool * pool = sack->p_impl->pool;
     return cstring2string(solv::get_location(pool, id));
 }
@@ -270,32 +270,32 @@ bool Package::is_installed() const {
     return solv::is_installed(pool, solv::get_solvable(pool, id));
 }
 
-unsigned long long Package::get_hdr_end() noexcept {
+unsigned long long Package::get_hdr_end() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_hdr_end(pool, id);
 }
 
-unsigned long long Package::get_install_time() noexcept {
+unsigned long long Package::get_install_time() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_install_time(pool, id);
 }
 
-unsigned long long Package::get_media_number() noexcept {
+unsigned long long Package::get_media_number() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_media_number(pool, id);
 }
 
-unsigned long long Package::get_rpmdbid() const noexcept {
+unsigned long long Package::get_rpmdbid() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_rpmdbid(pool, id);
 }
 
-Repo * Package::get_repo() const noexcept {
+Repo * Package::get_repo() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_repo(pool, id);
 }
 
-Checksum Package::get_checksum() {
+Checksum Package::get_checksum() const {
     Pool * pool = sack->p_impl->pool;
 
     Solvable * solvable = solv::get_solvable(pool, id);
@@ -307,7 +307,7 @@ Checksum Package::get_checksum() {
     return checksum;
 }
 
-Checksum Package::get_hdr_checksum() {
+Checksum Package::get_hdr_checksum() const {
     Pool * pool = sack->p_impl->pool;
 
     Solvable * solvable = solv::get_solvable(pool, id);

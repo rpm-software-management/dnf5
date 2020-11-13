@@ -41,6 +41,10 @@ namespace libdnf::rpm {
 class PackageSetIterator;
 
 
+// IMPORTANT: Package methods MUST NOT be 'noexcept'
+// because accessing deleted sack throws an exception.
+
+
 /// @replaces libdnf/hy-package.h:struct:DnfPackage
 /// @replaces dnf:dnf/package.py:class:Package
 class Package {
@@ -59,17 +63,17 @@ public:
     /// @replaces dnf:dnf/package.py:attribute:Package.e
     /// @replaces dnf:dnf/package.py:attribute:Package.epoch
     /// @replaces libdnf/hy-package.h:function:dnf_package_get_epoch(DnfPackage *pkg);
-    unsigned long get_epoch();
+    std::string get_epoch() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.v
     /// @replaces dnf:dnf/package.py:attribute:Package.version
     /// @replaces libdnf/hy-package.h:function:dnf_package_get_version(DnfPackage *pkg);
-    std::string get_version();
+    std::string get_version() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.r
     /// @replaces dnf:dnf/package.py:attribute:Package.release
     /// @replaces libdnf/hy-package.h:function:dnf_package_get_release(DnfPackage *pkg);
-    std::string get_release();
+    std::string get_release() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.a
     /// @replaces dnf:dnf/package.py:attribute:Package.arch
@@ -82,68 +86,68 @@ public:
 
     /// Reurn nevra withou epoch when epoch is 0
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_nevra(DnfPackage * pkg)
-    std::string get_nevra();
+    std::string get_nevra() const;
 
     /// Reurn always nevra with epoch
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_nevra(DnfPackage * pkg)
-    std::string get_full_nevra();
+    std::string get_full_nevra() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.group
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_group(DnfPackage * pkg)
-    std::string get_group();
+    std::string get_group() const;
 
     /// If package is installed, return get_install_size(). Return get_download_size() otherwise.
     /// @replaces dnf:dnf/package.py:attribute:Package.size
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_size(DnfPackage * pkg)
-    unsigned long long get_size() noexcept;
+    unsigned long long get_size() const;
 
     /// Return size of an RPM package: <size package="..."/>
     /// @replaces dnf:dnf/package.py:attribute:Package.downloadsize
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_downloadsize(DnfPackage * pkg)
-    unsigned long long get_download_size() noexcept;
+    unsigned long long get_download_size() const;
 
     /// Return size of an RPM package installed on a system: <size installed="..."/>
     /// @replaces dnf:dnf/package.py:attribute:Package.installsize
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_installsize(DnfPackage * pkg)
-    unsigned long long get_install_size() noexcept;
+    unsigned long long get_install_size() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.license
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_license(DnfPackage * pkg)
-    std::string get_license();
+    std::string get_license() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.sourcerpm
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_sourcerpm(DnfPackage * pkg)
-    std::string get_sourcerpm();
+    std::string get_sourcerpm() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.buildtime
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_buildtime(DnfPackage * pkg)
-    unsigned long long get_build_time() noexcept;
+    unsigned long long get_build_time() const;
 
     // TODO not supported by libsolv: https://github.com/openSUSE/libsolv/issues/400
     //std::string get_build_host();
 
     /// @replaces dnf:dnf/package.py:attribute:Package.packager
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_packager(DnfPackage * pkg)
-    std::string get_packager();
+    std::string get_packager() const;
 
-    std::string get_vendor();
+    std::string get_vendor() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.url
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_url(DnfPackage * pkg)
-    std::string get_url();
+    std::string get_url() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.summary
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_summary(DnfPackage * pkg)
-    std::string get_summary();
+    std::string get_summary() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.description
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_description(DnfPackage * pkg)
-    std::string get_description();
+    std::string get_description() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.files
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_files(DnfPackage * pkg)
     /// TODO(dmach): files, directories, info about ghost etc. - existing implementation returns incomplete data
-    std::vector<std::string> get_files();
+    std::vector<std::string> get_files() const;
 
     // DEPENDENCIES
 
@@ -197,12 +201,12 @@ public:
 
     /// @replaces dnf:dnf/package.py:attribute:Package.baseurl
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_baseurl(DnfPackage * pkg)
-    std::string get_baseurl();
+    std::string get_baseurl() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.location
     /// @replaces dnf:dnf/package.py:attribute:Package.relativepath
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_location(DnfPackage * pkg)
-    std::string get_location();
+    std::string get_location() const;
 
     /// Returns package location (file path) in the filesystem.
     /// For packages in remote repo returns where the package will be/has been downloaded.
@@ -211,11 +215,11 @@ public:
 
     /// @replaces dnf:dnf/package.py:attribute:Package.chksum
     /// @replaces libdnf:libdnf/hy-package-private.hpp:function:dnf_package_get_chksum(DnfPackage *pkg, int *type)
-    Checksum get_checksum();
+    Checksum get_checksum() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.hdr_chksum
     /// @replaces libdnf:libdnf/hy-package-private.hpp:function:dnf_package_get_hdr_chksum(DnfPackage *pkg, int *type)
-    Checksum get_hdr_checksum();
+    Checksum get_hdr_checksum() const;
 
     /// TODO get_changelogs - requires changelog
     /// @replaces dnf:dnf/package.py:attribute:Package.changelogs
@@ -243,23 +247,23 @@ public:
 
     /// @replaces dnf:dnf/package.py:attribute:Package.hdr_end
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_hdr_end(DnfPackage * pkg)
-    unsigned long long get_hdr_end() noexcept;
+    unsigned long long get_hdr_end() const;
 
     /// @replaces dnf:dnf/package.py:attribute:Package.installtime
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_installtime(DnfPackage * pkg)
-    unsigned long long get_install_time() noexcept;
+    unsigned long long get_install_time() const;
 
     /// @brief Media number for the package
     ///
     /// @replaces dnf:dnf/package.py:attribute:Package.medianr
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_medianr(DnfPackage * pkg)
-    unsigned long long get_media_number() noexcept;
+    unsigned long long get_media_number() const;
 
     /// @brief The rpmdb ID for the package
     ///
     /// @replaces dnf:dnf/package.py:attribute:Package.rpmdbid
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_rpmdbid(DnfPackage * pkg)
-    unsigned long long get_rpmdbid() const noexcept;
+    unsigned long long get_rpmdbid() const;
 
     /// TODO get_repo - requires Repo
     /// @replaces dnf:dnf/package.py:attribute:Package.repo
@@ -267,27 +271,27 @@ public:
     /// @replaces dnf:dnf/package.py:attribute:Package.reponame
     /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_repo(DnfPackage * pkg)
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_reponame(DnfPackage * pkg)
-    Repo * get_repo() const noexcept;
+    Repo * get_repo() const;
 
     // TODO(dmach): getBugUrl() not possible due to lack of support in libsolv and metadata?
 
 protected:
     /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
     Package(SolvSack * sack, PackageId id);
-    const char * get_name_cstring() const noexcept;
+    const char * get_name_cstring() const;
 
     /// @return const char* !! Return temporal values !!
-    const char * get_epoch_cstring();
+    const char * get_epoch_cstring() const;
 
     /// @return const char* !! Return temporal values !!
-    const char * get_version_cstring() noexcept;
+    const char * get_version_cstring() const;
 
     /// @return const char* !! Return temporal values !!
-    const char * get_release_cstring() noexcept;
+    const char * get_release_cstring() const;
 
-    const char * get_arch_cstring() const noexcept;
+    const char * get_arch_cstring() const;
 
-    const char * get_evr_cstring() const noexcept;
+    const char * get_evr_cstring() const;
 
 private:
     friend PackageSetIterator;

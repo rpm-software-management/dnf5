@@ -41,6 +41,10 @@ void NevraTest::test_nevra() {
         CPPUNIT_ASSERT(nevra.get_arch() == "x86_64");
     }
 
+    // test that to_nevra_string() and to_full_nevra_string() template functions work
+    CPPUNIT_ASSERT_EQUAL(std::string("four-of-fish-8:3.6.9-11.fc100.x86_64"), to_nevra_string(nevra));
+    CPPUNIT_ASSERT_EQUAL(std::string("four-of-fish-8:3.6.9-11.fc100.x86_64"), to_full_nevra_string(nevra));
+
     {
         CPPUNIT_ASSERT(nevra.parse("four-of-fish-3.6.9-11.fc100.x86_64", libdnf::rpm::Nevra::Form::NEVRA));
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
@@ -87,7 +91,7 @@ void NevraTest::test_nevra() {
         CPPUNIT_ASSERT(!nevra.parse("four-of(fish.i686)", libdnf::rpm::Nevra::Form::NA));
     }
 
-    // Test for correct parsin with glob in epoch
+    // Test parsing NEVRA with glob in epoch
     {
         CPPUNIT_ASSERT(nevra.parse("four-of-fish-[01]:3.6.9-11.fc100.x86_64", libdnf::rpm::Nevra::Form::NEVRA));
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
@@ -97,7 +101,7 @@ void NevraTest::test_nevra() {
         CPPUNIT_ASSERT(nevra.get_arch() == "x86_64");
     }
 
-    // Test for correct parsin with glob in epoch
+    // Test parsing NEVRA with glob in epoch
     {
         CPPUNIT_ASSERT(nevra.parse("four-of-fish-?:3.6.9-11.fc100.x86_64", libdnf::rpm::Nevra::Form::NEVRA));
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");

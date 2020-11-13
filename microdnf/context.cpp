@@ -689,11 +689,7 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx) {
 }
 
 static void set_trans_pkg(libdnf::rpm::Package & package, libdnf::transaction::Package & trans_pkg, libdnf::transaction::TransactionItemAction action) {
-        trans_pkg.set_name(package.get_name());
-        trans_pkg.set_epoch(std::to_string(package.get_epoch()));
-        trans_pkg.set_version(package.get_version());
-        trans_pkg.set_release(package.get_release());
-        trans_pkg.set_arch(package.get_arch());
+        libdnf::rpm::copy_nevra_attributes(package, trans_pkg);
         trans_pkg.set_repoid(package.get_repo()->get_id());
         trans_pkg.set_action(action);
         //TODO(jrohel): set actual reason

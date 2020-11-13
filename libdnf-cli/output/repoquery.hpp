@@ -43,9 +43,8 @@ static struct libscols_table * create_package_info_table(Package & package) {
 
     add_line_into_package_info_table(table, "Name", package.get_name().c_str());
     auto epoch = package.get_epoch();
-    if (epoch != 0) {
-        auto str_epoch = std::to_string(epoch);
-        add_line_into_package_info_table(table, "Epoch", str_epoch.c_str());
+    if (epoch != "0") {
+        add_line_into_package_info_table(table, "Epoch", package.get_epoch().c_str());
     }
     add_line_into_package_info_table(table, "Version", package.get_version().c_str());
     add_line_into_package_info_table(table, "Release", package.get_release().c_str());

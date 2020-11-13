@@ -75,6 +75,9 @@ class RpmPackageTest : public RepoFixture {
     CPPUNIT_TEST(test_get_install_time);
     CPPUNIT_TEST(test_get_media_number);
     CPPUNIT_TEST(test_get_rpmdbid);
+
+    CPPUNIT_TEST(test_nevra_to_string);
+    CPPUNIT_TEST(test_full_nevra_to_string);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -126,6 +129,9 @@ public:
     void test_get_install_time();
     void test_get_media_number();
     void test_get_rpmdbid();
+
+    void test_nevra_to_string();
+    void test_full_nevra_to_string();
 };
 
 
