@@ -1802,7 +1802,9 @@ SolvQuery & SolvQuery::ifilter_installed() {
             break;
         }
     }
-    p_impl->query_result &= filter_result;
+    // TODO(jrohel): The optimization replaces the original query_result buffer. Is it OK?
+    // Or we need to use a slower version "p_impl->query_result &= filter_result;"
+    p_impl->query_result = std::move(filter_result);
     return *this;
 }
 
