@@ -158,7 +158,6 @@ void RpmPackageSetTest::test_difference() {
 
 void RpmPackageSetTest::test_iterator() {
     std::vector<libdnf::rpm::Package> expected;
-    std::vector<libdnf::rpm::Package> result;
 
     for (int i = 0; i < 16; i++) {
         TestPackage pkg(sack, libdnf::rpm::PackageId(i));
@@ -166,20 +165,43 @@ void RpmPackageSetTest::test_iterator() {
     }
 
     // check if begin() points to the first package
-    auto beg = set1->begin();
-    CPPUNIT_ASSERT((*beg).get_id().id == 0);
+    auto it1 = set1->begin();
+    CPPUNIT_ASSERT_EQUAL((*it1).get_id().id, 0);
 
-    // test if end() points to package with id == -2
-    auto end = set1->end();
-    CPPUNIT_ASSERT((*end).get_id().id == -2);
+    // test pre-increment operator
+    auto it2 = ++it1;
+    CPPUNIT_ASSERT_EQUAL((*it1).get_id().id, 1);
+    CPPUNIT_ASSERT_EQUAL((*it2).get_id().id, 1);
 
-    // test if increasing an iterator moves to the second package
-    ++beg;
-    CPPUNIT_ASSERT((*beg).get_id().id == 1);
+    // test post-increment operator
+    auto it3 = it2++;
+    CPPUNIT_ASSERT_EQUAL((*it2).get_id().id, 2);
+    CPPUNIT_ASSERT_EQUAL((*it3).get_id().id, 1);
 
-    // test iterating the whole package set
-    for (auto it = set1->begin(); it != set1->end(); it++) {
-        result.push_back((*it));
+    // test begin()
+    it1.begin();
+    CPPUNIT_ASSERT_EQUAL((*it1).get_id().id, 0);
+    CPPUNIT_ASSERT(it1 == set1->begin());
+
+    // test end()
+    it1.end();
+    CPPUNIT_ASSERT(it1 == set1->end());
+
+    // test loop with pre-increment operator
+    {
+        std::vector<libdnf::rpm::Package> result;
+        for(auto it = set1->begin(), end = set1->end(); it != end; ++it) {
+            result.push_back(*it);
+        }
+        CPPUNIT_ASSERT(result == expected);
     }
-    CPPUNIT_ASSERT(result == expected);
+
+    // test loop with post-increment operator
+    {
+        std::vector<libdnf::rpm::Package> result;
+        for(auto it = set1->begin(), end = set1->end(); it != end; it++) {
+            result.push_back(*it);
+        }
+        CPPUNIT_ASSERT(result == expected);
+    }
 }

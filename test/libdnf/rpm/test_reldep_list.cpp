@@ -117,7 +117,6 @@ void ReldepListTest::test_iterator() {
     libdnf::rpm::Reldep c(sack, "(labirinto unless labirinto_c)");
     libdnf::rpm::Reldep d(sack, "labirinto.txt");
     std::vector<libdnf::rpm::Reldep> expected;
-    std::vector<libdnf::rpm::Reldep> result;
     libdnf::rpm::ReldepList list(sack);
 
     expected.push_back(a);
@@ -130,22 +129,45 @@ void ReldepListTest::test_iterator() {
     list.add(d);
 
     // check if begin() points to the first Reldep
-    auto beg = list.begin();
-    CPPUNIT_ASSERT((*beg) == a);
+    auto it1 = list.begin();
+    CPPUNIT_ASSERT(*it1 == a);
 
-    // test if increasing an iterator moves to the second Reldep
-    ++beg;
-    CPPUNIT_ASSERT(*beg == b);
+    // test pre-increment operator
+    auto it2 = ++it1;
+    CPPUNIT_ASSERT(*it1 == b);
+    CPPUNIT_ASSERT(*it2 == b);
 
-    // test if end() points to Reldep with id == -2
-    auto end = list.end();
-    CPPUNIT_ASSERT((*end).get_id().id == -2);
+    // test post-increment operator
+    auto it3 = it2++;
+    CPPUNIT_ASSERT(*it2 == c);
+    CPPUNIT_ASSERT(*it3 == b);
 
-    // test iterating the whole Reldep list
-    for (auto it = list.begin(); it != list.end(); it++) {
-        result.push_back((*it));
+    // test begin()
+    it3.begin();
+    CPPUNIT_ASSERT(*it3 == a);
+    CPPUNIT_ASSERT(it3 == list.begin());
+
+    // test end()
+    it3.end();
+    CPPUNIT_ASSERT(it3 == list.end());
+
+    // test loop with pre-increment operator
+    {
+        std::vector<libdnf::rpm::Reldep> result;
+        for(auto it = list.begin(), end = list.end(); it !=end; ++it) {
+            result.push_back(*it);
+        }
+        CPPUNIT_ASSERT(result == expected);
     }
-    CPPUNIT_ASSERT(result == expected);
+
+    // test loop with post-increment operator
+    {
+        std::vector<libdnf::rpm::Reldep> result;
+        for(auto it = list.begin(), end = list.end(); it != end; it++) {
+            result.push_back(*it);
+        }
+        CPPUNIT_ASSERT(result == expected);
+    }
 }
 
 // add_reldep_with_glob uses libsolvs Dataiterator which needs the actual packages
