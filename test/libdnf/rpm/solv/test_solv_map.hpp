@@ -43,6 +43,7 @@ class SolvMapTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_difference);
     CPPUNIT_TEST(test_iterator_empty);
     CPPUNIT_TEST(test_iterator_full);
+    CPPUNIT_TEST(test_iterator_sparse);
     #endif
 
     #ifdef WITH_PERFORMANCE_TESTS
@@ -69,6 +70,7 @@ public:
 
     void test_iterator_empty();
     void test_iterator_full();
+    void test_iterator_sparse();
 
     void test_iterator_performance_empty();
     void test_iterator_performance_full();

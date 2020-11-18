@@ -167,15 +167,63 @@ void SolvMapTest::test_iterator_full() {
         libdnf::rpm::PackageId(15)
     };
     std::vector<libdnf::rpm::PackageId> result;
-    
+
     libdnf::rpm::solv::SolvMap map(16);
     for (int i = 0; i < 16; i++) {
         map.add(libdnf::rpm::PackageId(i));
     }
-    for(auto it = map.begin(); it != map.end(); it++) {
-        result.push_back(*it);
+    for(auto package_id : map) {
+        result.push_back(package_id);
     }
     CPPUNIT_ASSERT(result == expected);
+}
+
+
+void SolvMapTest::test_iterator_sparse() {
+    std::vector<libdnf::rpm::PackageId> expected = {
+        libdnf::rpm::PackageId(4),
+        libdnf::rpm::PackageId(6),
+        libdnf::rpm::PackageId(10),
+        libdnf::rpm::PackageId(11),
+        libdnf::rpm::PackageId(12),
+    };
+
+    libdnf::rpm::solv::SolvMap map(16);
+    for (auto it : expected) {
+        map.add(it);
+    }
+
+    // test begin
+    auto it1 = map.begin();
+    CPPUNIT_ASSERT_EQUAL((*it1).id, 4);
+
+    // test pre-increment operator
+    auto it2 = ++it1;
+    CPPUNIT_ASSERT_EQUAL((*it1).id, 6);
+    CPPUNIT_ASSERT_EQUAL((*it2).id, 6);
+
+    // test post-increment operator
+    auto it3 = it2++;
+    CPPUNIT_ASSERT_EQUAL((*it2).id, 10);
+    CPPUNIT_ASSERT_EQUAL((*it3).id, 6);
+
+    // test loop with pre-increment operator
+    {
+        std::vector<libdnf::rpm::PackageId> result;
+        for(auto it = map.begin(), end = map.end(); it !=end; ++it) {
+            result.push_back(*it);
+        }
+        CPPUNIT_ASSERT(result == expected);
+    }
+
+    // test loop with post-increment operator
+    {
+        std::vector<libdnf::rpm::PackageId> result;
+        for(auto it = map.begin(), end = map.end(); it != end; it++) {
+            result.push_back(*it);
+        }
+        CPPUNIT_ASSERT(result == expected);
+    }
 }
 
 
