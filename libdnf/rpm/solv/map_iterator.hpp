@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <solv/bitmap.h>
 #include <solv/pooltypes.h>
 
+#include <cstddef>
 #include <iterator>
 
 
@@ -38,25 +39,25 @@ class SolvMap;
 
 class SolvMapIterator {
 public:
-    explicit SolvMapIterator(const Map * map);
-    SolvMapIterator(const SolvMapIterator & other) = default;
+    explicit SolvMapIterator(const Map * map) noexcept;
+    SolvMapIterator(const SolvMapIterator & other) noexcept = default;
 
     using iterator_category = std::forward_iterator_tag;
-    using difference_type = PackageId;
+    using difference_type = std::ptrdiff_t;
     using value_type = PackageId;
     using pointer = void;
-    using reference = void;
+    using reference = PackageId;
 
-    PackageId operator*() const { return current_value; }
+    PackageId operator*() const noexcept { return current_value; }
 
-    SolvMapIterator & operator++();
-    SolvMapIterator operator++(int);
+    SolvMapIterator & operator++() noexcept;
+    SolvMapIterator operator++(int) noexcept;
 
-    bool operator==(const SolvMapIterator & other) const { return current_value == other.current_value; }
-    bool operator!=(const SolvMapIterator & other) const { return current_value != other.current_value; }
+    bool operator==(const SolvMapIterator & other) const noexcept { return current_value == other.current_value; }
+    bool operator!=(const SolvMapIterator & other) const noexcept { return current_value != other.current_value; }
 
-    void begin();
-    void end() { current_value.id = END; }
+    void begin() noexcept;
+    void end() noexcept { current_value.id = END; }
 
 protected:
     const Map * get_map() const noexcept { return map; }
@@ -79,19 +80,19 @@ private:
 };
 
 
-inline SolvMapIterator::SolvMapIterator(const Map * map) : map{map} {
+inline SolvMapIterator::SolvMapIterator(const Map * map) noexcept : map{map} {
     map_current = map->map;
     map_end = map_current + map->size;
-    current_value.id = BEGIN;
-    ++(*this);
-}
-
-inline void SolvMapIterator::begin() {
     current_value.id = BEGIN;
     ++*this;
 }
 
-inline SolvMapIterator & SolvMapIterator::operator++() {
+inline void SolvMapIterator::begin() noexcept {
+    current_value.id = BEGIN;
+    ++*this;
+}
+
+inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
     if (current_value.id >= 0) {
         // skip (previous / 8) bytes
         //current += previous >> 3;
@@ -142,7 +143,7 @@ inline SolvMapIterator & SolvMapIterator::operator++() {
     return *this;
 }
 
-inline SolvMapIterator SolvMapIterator::operator++(int) {
+inline SolvMapIterator SolvMapIterator::operator++(int) noexcept {
     SolvMapIterator it(*this);
     ++*this;
     return it;
