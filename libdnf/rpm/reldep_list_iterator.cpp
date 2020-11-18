@@ -52,14 +52,15 @@ Reldep ReldepListIterator::operator*() {
 
 
 ReldepListIterator & ReldepListIterator::operator++() {
-    ++(*pImpl);
+    ++*pImpl;
     return *this;
 }
 
 
 ReldepListIterator ReldepListIterator::operator++(int) {
-    ++(*pImpl);
-    return *this;
+    ReldepListIterator it(*this);
+    ++*pImpl;
+    return it;
 }
 
 

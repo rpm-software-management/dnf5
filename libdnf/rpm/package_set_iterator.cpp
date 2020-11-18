@@ -52,14 +52,15 @@ Package PackageSetIterator::operator*() {
 
 
 PackageSetIterator & PackageSetIterator::operator++() {
-    ++(*pImpl);
+    ++*pImpl;
     return *this;
 }
 
 
 PackageSetIterator PackageSetIterator::operator++(int) {
-    ++(*pImpl);
-    return *this;
+    PackageSetIterator it(*this);
+    ++*pImpl;
+    return it;
 }
 
 
