@@ -50,7 +50,7 @@ public:
     PackageId operator*() const { return current_value; }
 
     SolvMapIterator & operator++();
-    SolvMapIterator operator++(int) { return ++(*this); }
+    SolvMapIterator operator++(int);
 
     bool operator==(const SolvMapIterator & other) const { return current_value == other.current_value; }
     bool operator!=(const SolvMapIterator & other) const { return current_value != other.current_value; }
@@ -140,6 +140,12 @@ inline SolvMapIterator & SolvMapIterator::operator++() {
     // not found
     current_value.id = END;
     return *this;
+}
+
+inline SolvMapIterator SolvMapIterator::operator++(int) {
+    SolvMapIterator it(*this);
+    ++*this;
+    return it;
 }
 
 
