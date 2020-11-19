@@ -18,10 +18,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/rpm/package_set_iterator.hpp"
-
-#include "libdnf/rpm/package_set.hpp"
-#include "libdnf/rpm/package_set_impl.hpp"
 #include "libdnf/rpm/package_set_iterator_impl.hpp"
 
 
@@ -36,18 +32,16 @@ PackageSetIterator::~PackageSetIterator() {}
 
 void PackageSetIterator::begin() {
     pImpl->begin();
-    pImpl->current_value.id = PackageId(*(*pImpl));
 }
 
 
 void PackageSetIterator::end() {
     pImpl->end();
-    pImpl->current_value.id = PackageId(*(*pImpl));
 }
 
 
 Package PackageSetIterator::operator*() {
-    return pImpl->current_value;
+    return {pImpl->package_set.get_sack(), **pImpl};
 }
 
 
@@ -65,12 +59,12 @@ PackageSetIterator PackageSetIterator::operator++(int) {
 
 
 bool PackageSetIterator::operator==(const PackageSetIterator & other) const {
-    return pImpl->current_value == other.pImpl->current_value;
+    return *pImpl == *other.pImpl;
 }
 
 
 bool PackageSetIterator::operator!=(const PackageSetIterator & other) const {
-    return pImpl->current_value != other.pImpl->current_value;
+    return *pImpl != *other.pImpl;
 }
 
 

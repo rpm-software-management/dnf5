@@ -18,10 +18,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/rpm/reldep_list_iterator.hpp"
-
-#include "libdnf/rpm/reldep_list.hpp"
-#include "libdnf/rpm/reldep_list_impl.hpp"
 #include "libdnf/rpm/reldep_list_iterator_impl.hpp"
 
 
@@ -36,18 +32,16 @@ ReldepListIterator::~ReldepListIterator() {}
 
 void ReldepListIterator::begin() {
     pImpl->begin();
-    pImpl->current_value.id = ReldepId(*(*pImpl));
 }
 
 
 void ReldepListIterator::end() {
     pImpl->end();
-    pImpl->current_value.id = ReldepId(*(*pImpl));
 }
 
 
 Reldep ReldepListIterator::operator*() {
-    return pImpl->current_value;
+    return {pImpl->reldep_list.get_sack(), ReldepId(**pImpl)};
 }
 
 
@@ -65,12 +59,12 @@ ReldepListIterator ReldepListIterator::operator++(int) {
 
 
 bool ReldepListIterator::operator==(const ReldepListIterator & other) const {
-    return pImpl->current_value == other.pImpl->current_value;
+    return *pImpl == *other.pImpl;
 }
 
 
 bool ReldepListIterator::operator!=(const ReldepListIterator & other) const {
-    return pImpl->current_value != other.pImpl->current_value;
+    return *pImpl != *other.pImpl;
 }
 
 

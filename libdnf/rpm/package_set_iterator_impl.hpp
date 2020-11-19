@@ -22,16 +22,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_PACKAGE_SET_ITERATOR_IMPL_HPP
 
 
-#include "libdnf/rpm/package_set.hpp"
 #include "libdnf/rpm/package_set_impl.hpp"
 #include "libdnf/rpm/package_set_iterator.hpp"
-#include "libdnf/rpm/solv/solv_map.hpp"
 
 
 namespace libdnf::rpm {
 
 
-class PackageSetIterator::Impl : public libdnf::rpm::solv::SolvMap::iterator {
+class PackageSetIterator::Impl : public solv::SolvMap::iterator {
 public:
     Impl(const PackageSet & package_set);
     Impl(const PackageSetIterator::Impl & package_set_iterator_impl) = default;
@@ -41,19 +39,15 @@ public:
 private:
     friend PackageSetIterator;
     const PackageSet & package_set;
-    Package current_value;
 };
 
 
 inline PackageSetIterator::Impl::Impl(const PackageSet & package_set)
-    : libdnf::rpm::solv::SolvMap::iterator(package_set.pImpl->get_map())
-    , package_set{package_set}
-    , current_value{package_set.get_sack(), PackageId(-1)} {}
+    : solv::SolvMap::iterator(package_set.pImpl->get_map())
+    , package_set{package_set} {}
 
 inline PackageSetIterator::Impl & PackageSetIterator::Impl::operator++() {
-    // construct and store package based on Id obtained from the underlying iterator
-    libdnf::rpm::solv::SolvMap::iterator::operator++();
-    current_value.id = PackageId(libdnf::rpm::solv::SolvMap::iterator::operator*());
+    solv::SolvMap::iterator::operator++();
     return *this;
 }
 
