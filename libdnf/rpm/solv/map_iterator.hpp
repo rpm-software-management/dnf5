@@ -59,6 +59,9 @@ public:
     void begin() noexcept;
     void end() noexcept;
 
+    /// Sets iterator to the first contained package in the range <id, end>.
+    void jump(PackageId id) noexcept;
+
 protected:
     const Map * get_map() const noexcept { return map; }
 
@@ -150,6 +153,28 @@ inline SolvMapIterator SolvMapIterator::operator++(int) noexcept {
     SolvMapIterator it(*this);
     ++*this;
     return it;
+}
+
+inline void SolvMapIterator::jump(PackageId id) noexcept {
+    if (id.id < 0) {
+        begin();
+        return;
+    }
+
+    const unsigned char * current = map->map + (id.id >> 3);
+
+    if (current >= map_end) {
+        end();
+        return;
+    }
+
+    current_value = id;
+    map_current = current;
+
+    // If the element with requested id does not exist in the map, it moves to the next.
+    if (!(*current & (1 << (id.id & 7)))) {
+        ++*this;
+    }
 }
 
 
