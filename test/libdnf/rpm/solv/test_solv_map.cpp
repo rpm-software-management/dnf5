@@ -236,6 +236,34 @@ void SolvMapTest::test_iterator_sparse() {
         }
         CPPUNIT_ASSERT(result == expected);
     }
+
+    // test jump to existing package
+    it1.jump(libdnf::rpm::PackageId(11));
+    CPPUNIT_ASSERT_EQUAL((*it1).id, 11);
+
+    // test jump behind last existing package
+    it1.jump(libdnf::rpm::PackageId(14));
+    CPPUNIT_ASSERT(it1 == map.end());
+
+    // test jump to existing package
+    it1.jump(libdnf::rpm::PackageId(6));
+    CPPUNIT_ASSERT_EQUAL((*it1).id, 6);
+
+    // test jump to non-existing package, moves to the next existing
+    it1.jump(libdnf::rpm::PackageId(7));
+    CPPUNIT_ASSERT_EQUAL((*it1).id, 10);
+
+    // test jump behind map
+    it1.jump(libdnf::rpm::PackageId(240));
+    CPPUNIT_ASSERT(it1 == map.end());
+
+    // test jump to negative id, sets to begin
+    it1.jump(libdnf::rpm::PackageId(-240));
+    CPPUNIT_ASSERT_EQUAL((*it1).id, 4);
+
+    // test increment after jump to negative id
+    ++it1;
+    CPPUNIT_ASSERT_EQUAL((*it1).id, 6);
 }
 
 
