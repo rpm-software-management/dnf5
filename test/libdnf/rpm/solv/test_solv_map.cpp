@@ -207,6 +207,18 @@ void SolvMapTest::test_iterator_sparse() {
     CPPUNIT_ASSERT_EQUAL((*it2).id, 10);
     CPPUNIT_ASSERT_EQUAL((*it3).id, 6);
 
+    // test move back to begin
+    it2.begin();
+    CPPUNIT_ASSERT_EQUAL((*it2).id, 4);
+
+    // test increment after begin
+    ++it2;
+    CPPUNIT_ASSERT_EQUAL((*it2).id, 6);
+
+    // test end
+    it2.end();
+    CPPUNIT_ASSERT(it2 == map.end());
+
     // test loop with pre-increment operator
     {
         std::vector<libdnf::rpm::PackageId> result;
