@@ -57,7 +57,7 @@ public:
     bool operator!=(const SolvMapIterator & other) const noexcept { return current_value != other.current_value; }
 
     void begin() noexcept;
-    void end() noexcept { current_value.id = END; }
+    void end() noexcept;
 
 protected:
     const Map * get_map() const noexcept { return map; }
@@ -70,7 +70,7 @@ private:
     const Map * map;
 
     // current address in the map
-    unsigned char * map_current;
+    const unsigned char * map_current;
 
     // the last address in the map
     const unsigned char * map_end;
@@ -80,16 +80,19 @@ private:
 };
 
 
-inline SolvMapIterator::SolvMapIterator(const Map * map) noexcept : map{map} {
-    map_current = map->map;
-    map_end = map_current + map->size;
-    current_value.id = BEGIN;
-    ++*this;
+inline SolvMapIterator::SolvMapIterator(const Map * map) noexcept : map{map}, map_end{map->map + map->size} {
+    begin();
 }
 
 inline void SolvMapIterator::begin() noexcept {
     current_value.id = BEGIN;
+    map_current = map->map;
     ++*this;
+}
+
+inline void SolvMapIterator::end() noexcept {
+    current_value.id = END;
+    map_current = map_end;
 }
 
 inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
