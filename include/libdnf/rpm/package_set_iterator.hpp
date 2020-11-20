@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package.hpp"
 
+#include <cstddef>
 #include <iterator>
 #include <memory>
 
@@ -41,10 +42,10 @@ public:
     ~PackageSetIterator();
 
     using iterator_category = std::forward_iterator_tag;
-    using difference_type = int;
+    using difference_type = std::ptrdiff_t;
     using value_type = Package;
     using pointer = void;
-    using reference = void;
+    using reference = Package;
 
     Package operator*();
 

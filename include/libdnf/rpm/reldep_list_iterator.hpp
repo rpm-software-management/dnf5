@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "reldep.hpp"
 
+#include <cstddef>
 #include <iterator>
 #include <memory>
 
@@ -41,10 +42,10 @@ public:
     ~ReldepListIterator();
 
     using iterator_category = std::forward_iterator_tag;
-    using difference_type = int;
+    using difference_type = std::ptrdiff_t;
     using value_type = Reldep;
     using pointer = void;
-    using reference = void;
+    using reference = Reldep;
 
     Reldep operator*();
 
