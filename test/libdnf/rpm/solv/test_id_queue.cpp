@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../../../../libdnf/rpm/solv/id_queue.hpp"
 
+#include <iterator>
 
 CPPUNIT_TEST_SUITE_REGISTRATION(IdQueueTest);
 
@@ -108,17 +109,63 @@ void IdQueueTest::test_iterator_empty() {
 }
 
 void IdQueueTest::test_iterator_full() {
-    std::vector<Id> expected = {0, 1, 2, 3, 4};
-    std::vector<Id> result;
+    std::vector<Id> expected = {5, 6, 8, 10, 14};
     libdnf::rpm::solv::IdQueue queue;
-    queue.push_back(0, 1);
-    queue.push_back(2, 3);
-    queue.push_back(4);
+    queue.push_back(5, 6);
+    queue.push_back(8, 10);
+    queue.push_back(14);
 
-    for (auto it = queue.begin(); it != queue.end(); it++) {
-        result.push_back(*it);
+    // test begin
+    auto it1 = queue.begin();
+    CPPUNIT_ASSERT_EQUAL(*it1, 5);
+
+    // test pre-increment operator
+    auto it2 = ++it1;
+    CPPUNIT_ASSERT_EQUAL(*it1, 6);
+    CPPUNIT_ASSERT_EQUAL(*it2, 6);
+
+    // test post-increment operator
+    auto it3 = it2++;
+    CPPUNIT_ASSERT_EQUAL(*it2, 8);
+    CPPUNIT_ASSERT_EQUAL(*it3, 6);
+
+    // test move back to the begin
+    it2.begin();
+    CPPUNIT_ASSERT_EQUAL(*it2, 5);
+    CPPUNIT_ASSERT(it2 == queue.begin());
+
+    // test increment after begin
+    ++it2;
+    CPPUNIT_ASSERT_EQUAL(*it2, 6);
+
+    auto it4 = std::next(it2);
+    CPPUNIT_ASSERT_EQUAL(*it2, 6);
+    CPPUNIT_ASSERT_EQUAL(*it4, 8);
+
+    std::advance(it4, 2);
+    CPPUNIT_ASSERT_EQUAL(*it4, 14);
+
+    // test move to the end
+    it2.end();
+    CPPUNIT_ASSERT(it2 == queue.end());
+
+    // test loop with pre-increment operator
+    {
+        std::vector<Id> result;
+        for (auto it = queue.begin(), end = queue.end(); it != end; ++it) {
+            result.push_back(*it);
+        }
+        CPPUNIT_ASSERT(result == expected);
     }
-    CPPUNIT_ASSERT(result == expected);
+
+    // test loop with post-increment operator
+    {
+        std::vector<Id> result;
+        for (auto it = queue.begin(), end = queue.end(); it != end; it++) {
+            result.push_back(*it);
+        }
+        CPPUNIT_ASSERT(result == expected);
+    }
 }
 
 void IdQueueTest::test_iterator_performance() {
