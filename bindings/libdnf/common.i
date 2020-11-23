@@ -71,7 +71,11 @@ namespace std {
 #if defined(SWIGPYTHON)
 %pythoncode %{
 class Iterator:
-    def __init__(self, begin, end):
+    def __init__(self, container, begin, end):
+        # Store a reference to the iterated container to prevent the Python
+        # gargabe collector from freeing the container from memory.
+        self.container = container
+
         self.cur = begin
         self.end = end
 
@@ -92,7 +96,7 @@ class Iterator:
 #if defined(SWIGPYTHON)
 %pythoncode %{
 def ClassName##__iter__(self):
-    return libdnf.common.Iterator(self.begin(), self.end())
+    return libdnf.common.Iterator(self, self.begin(), self.end())
 ClassName.__iter__ = ClassName##__iter__
 del ClassName##__iter__
 %}
