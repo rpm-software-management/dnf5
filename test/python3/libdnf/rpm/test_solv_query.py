@@ -51,6 +51,65 @@ class TestSolvQuery(unittest.TestCase):
         query = libdnf.rpm.SolvQuery(self.sack)
         self.assertEqual(query.size(), 291)
 
+    def test_iterate_packageset(self):
+        query = libdnf.rpm.SolvQuery(self.sack)
+
+        # Iterates over helping reference "pset".
+        pset = query.get_package_set()
+        prev_id = 0
+        for pkg in pset:
+            id = pkg.get_id().id
+            self.assertGreater(id, prev_id)
+            prev_id = id
+        self.assertLess(prev_id, self.sack.get_nsolvables())
+        self.assertGreaterEqual(prev_id, query.size())
+
+        # Similar to above, but longer notation.
+        pset_iterator = iter(pset)
+        prev_id = 0
+        while True:
+            try:
+                pkg = next(pset_iterator)
+                id = pkg.get_id().id
+                self.assertGreater(id, prev_id)
+                prev_id = id
+            except StopIteration:
+                break
+        self.assertLess(prev_id, self.sack.get_nsolvables())
+        self.assertGreaterEqual(prev_id, query.size())
+
+    def test_iterate_packageset2(self):
+        # Tests the iteration of an unreferenced PackageSet object. The iterator must hold a reference
+        # to the iterated object, otherwise the gargabe collector can remove the object.
+
+        query = libdnf.rpm.SolvQuery(self.sack)
+
+        # Iterates directly over "get_package_set()" result. No helping reference.
+        prev_id = 0
+        for pkg in query.get_package_set():
+            id = pkg.get_id().id
+            self.assertGreater(id, prev_id)
+            prev_id = id
+        self.assertLess(prev_id, self.sack.get_nsolvables())
+        self.assertGreaterEqual(prev_id, query.size())
+
+        # Another test. The iterator is created from the "pset" reference, but the reference
+        # is removed (set to "None") before starting the iteration.
+        pset = query.get_package_set()
+        pset_iterator = iter(pset)
+        pset = None
+        prev_id = 0
+        while True:
+            try:
+                pkg = next(pset_iterator)
+                id = pkg.get_id().id
+                self.assertGreater(id, prev_id)
+                prev_id = id
+            except StopIteration:
+                break
+        self.assertLess(prev_id, self.sack.get_nsolvables())
+        self.assertGreaterEqual(prev_id, query.size())
+
     def test_ifilter_name(self):
 
         nevras = {"CQRlib-1.1.1-4.fc29.src", "CQRlib-1.1.1-4.fc29.x86_64"}
@@ -74,6 +133,5 @@ class TestSolvQuery(unittest.TestCase):
         names2 = ["CQ?lib"]
         query2.ifilter_name(libdnf.common.QueryCmp_GLOB, names2)
         self.assertEqual(query2.size(), 2)
-        pset2 = query2.get_package_set()
-        for pkg in pset2:
+        for pkg in query2.get_package_set():
             self.assertTrue(pkg.get_nevra() in nevras)
