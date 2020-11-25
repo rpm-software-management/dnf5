@@ -154,6 +154,9 @@ public:
     /// Create WeakPtr to SolvSack
     SolvSackWeakPtr get_weak_ptr();
 
+    /// Returns number of solvables in pool.
+    int get_nsolvables() const noexcept;
+
 private:
     friend libdnf::Goal;
     friend Package;

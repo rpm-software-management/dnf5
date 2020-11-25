@@ -640,6 +640,10 @@ SolvSackWeakPtr SolvSack::get_weak_ptr() {
     return SolvSackWeakPtr(this, &pImpl->data_guard);
 }
 
+int SolvSack::get_nsolvables() const noexcept {
+    return pImpl->get_nsolvables();
+};
+
 // TODO(jrohel): we want to change directory for solv(x) cache (into repo metadata directory?)
 std::string SolvSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {
     std::filesystem::path cachedir = base->get_config().cachedir().get_value();

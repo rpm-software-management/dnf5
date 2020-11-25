@@ -91,7 +91,7 @@ public:
     Pool * get_pool() { return pool; };
 
     /// Return number of solvables in pool
-    int get_nsolvables() { return pool->nsolvables; };
+    int get_nsolvables() const noexcept { return pool->nsolvables; };
 
     /// Return SolvMap with all package solvables
     solv::SolvMap & get_solvables();
