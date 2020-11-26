@@ -72,16 +72,16 @@ public:
     /// Return the underlying libsolv Map
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.getMap()
-    const Map * get_map() const;
+    const Map * get_map() const noexcept;
 
     /// Return the number of solvables in the SolvMap (number of 1s in the bitmap).
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.size()
     std::size_t size() const noexcept;
 
-    bool empty() const;
+    bool empty() const noexcept;
 
-    void clear();
+    void clear() noexcept;
 
     // ITEM OPERATIONS
 
@@ -89,50 +89,52 @@ public:
     void add(PackageId package_id);
 
     /// Faster, but unsafe version of add() method that is doesn't check bitmap range
-    void add_unsafe(PackageId package_id);
+    void add_unsafe(PackageId package_id) noexcept;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(Id id)
-    bool contains(PackageId package_id) const;
+    bool contains(PackageId package_id) const noexcept;
 
     /// Faster, but unsafe version of contains() method that is doesn't check bitmap range
-    bool contains_unsafe(PackageId package_id) const;
+    bool contains_unsafe(PackageId package_id) const noexcept;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.remove(Id id)
     void remove(PackageId package_id);
 
     /// Faster, but unsafe version of remove() method that is doesn't check bitmap range
-    void remove_unsafe(PackageId package_id);
+    void remove_unsafe(PackageId package_id) noexcept;
 
     // SET OPERATIONS - Map
 
     /// Union operator
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator+=(const Map * other)
-    SolvMap & operator|=(const Map * other);
+    SolvMap & operator|=(const Map * other) noexcept;
 
     /// Difference operator
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator-=(const Map * other)
-    SolvMap & operator-=(const Map * other);
+    SolvMap & operator-=(const Map * other) noexcept;
 
     /// Intersection operator
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator/=(const Map * other)
-    SolvMap & operator&=(const Map * other);
+    SolvMap & operator&=(const Map * other) noexcept;
 
     // SET OPERATIONS - SolvMap
 
     /// Union operator
-    SolvMap & operator|=(const SolvMap & other);
+    SolvMap & operator|=(const SolvMap & other) noexcept;
 
     /// Difference operator
-    SolvMap & operator-=(const SolvMap & other);
+    SolvMap & operator-=(const SolvMap & other) noexcept;
 
     /// Intersection operator
-    SolvMap & operator&=(const SolvMap & other);
+    SolvMap & operator&=(const SolvMap & other) noexcept;
 
-    SolvMap & operator=(const SolvMap & other);
+    SolvMap & operator=(const SolvMap & other) noexcept;
     SolvMap & operator=(SolvMap && other) noexcept;
+
+    void swap(SolvMap & other) noexcept;
 
 protected:
     /// Check if `id` is in bitmap range.
@@ -196,7 +198,7 @@ inline void SolvMap::add(PackageId package_id) {
 }
 
 
-inline bool SolvMap::contains(PackageId package_id) const {
+inline bool SolvMap::contains(PackageId package_id) const noexcept {
     if (package_id.id < 0 || package_id.id >= (map.size << 3)) {
         // if Id is outside bitmap range, then bitmap doesn't contain it
         return false;
@@ -211,7 +213,7 @@ inline void SolvMap::remove(PackageId package_id) {
 }
 
 
-inline void SolvMap::add_unsafe(PackageId package_id) {
+inline void SolvMap::add_unsafe(PackageId package_id) noexcept {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
     MAPSET(&map, package_id.id);
@@ -219,12 +221,12 @@ inline void SolvMap::add_unsafe(PackageId package_id) {
 }
 
 
-inline bool SolvMap::contains_unsafe(PackageId package_id) const {
+inline bool SolvMap::contains_unsafe(PackageId package_id) const noexcept {
     return MAPTST(&map, package_id.id);
 }
 
 
-inline void SolvMap::remove_unsafe(PackageId package_id) {
+inline void SolvMap::remove_unsafe(PackageId package_id) noexcept {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
     MAPCLR(&map, package_id.id);
@@ -232,12 +234,12 @@ inline void SolvMap::remove_unsafe(PackageId package_id) {
 }
 
 
-inline const Map * SolvMap::get_map() const {
+inline const Map * SolvMap::get_map() const noexcept {
     return &map;
 }
 
 
-inline bool SolvMap::empty() const {
+inline bool SolvMap::empty() const noexcept {
     const unsigned char * byte = map.map;
     const unsigned char * end = byte + map.size;
 
@@ -267,47 +269,47 @@ inline std::size_t SolvMap::size() const noexcept {
 }
 
 
-inline void SolvMap::clear() {
+inline void SolvMap::clear() noexcept {
     map_empty(&map);
 }
 
 
-inline SolvMap & SolvMap::operator|=(const Map * other) {
+inline SolvMap & SolvMap::operator|=(const Map * other) noexcept {
     map_or(&map, const_cast<Map *>(other));
     return *this;
 }
 
 
-inline SolvMap & SolvMap::operator|=(const SolvMap & other) {
+inline SolvMap & SolvMap::operator|=(const SolvMap & other) noexcept {
     *this |= other.get_map();
     return *this;
 }
 
 
-inline SolvMap & SolvMap::operator-=(const Map * other) {
+inline SolvMap & SolvMap::operator-=(const Map * other) noexcept {
     map_subtract(&map, const_cast<Map *>(other));
     return *this;
 }
 
 
-inline SolvMap & SolvMap::operator-=(const SolvMap & other) {
+inline SolvMap & SolvMap::operator-=(const SolvMap & other) noexcept {
     *this -= other.get_map();
     return *this;
 }
 
 
-inline SolvMap & SolvMap::operator&=(const Map * other) {
+inline SolvMap & SolvMap::operator&=(const Map * other) noexcept {
     map_and(&map, other);
     return *this;
 }
 
 
-inline SolvMap & SolvMap::operator&=(const SolvMap & other) {
+inline SolvMap & SolvMap::operator&=(const SolvMap & other) noexcept {
     *this &= other.get_map();
     return *this;
 }
 
-inline SolvMap & SolvMap::operator=(const SolvMap & other) {
+inline SolvMap & SolvMap::operator=(const SolvMap & other) noexcept {
     map_free(&map);
     map_init_clone(&map, &other.map);
     return *this;
@@ -317,6 +319,11 @@ inline SolvMap & SolvMap::operator=(SolvMap && other) noexcept {
     std::swap(map, other.map);
     return *this;
 }
+
+inline void SolvMap::swap(SolvMap & other) noexcept {
+    std::swap(map, other.map);
+}
+
 
 }  // namespace libdnf::rpm::solv
 
