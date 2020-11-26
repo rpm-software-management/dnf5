@@ -77,27 +77,30 @@ PackageSet & PackageSet::operator&=(const PackageSet & other) {
 }
 
 
-void PackageSet::clear() {
+void PackageSet::clear() noexcept {
     pImpl->clear();
 }
 
 
-bool PackageSet::empty() {
+bool PackageSet::empty() const noexcept {
     return pImpl->empty();
 }
 
 
-std::size_t PackageSet::size() const {
+std::size_t PackageSet::size() const noexcept {
     return pImpl->size();
 }
 
+void PackageSet::swap(PackageSet & other) noexcept {
+    pImpl.swap(other.pImpl);
+}
 
 void PackageSet::add(const Package & pkg) {
     pImpl->add(pkg.get_id());
 }
 
 
-bool PackageSet::contains(const Package & pkg) const {
+bool PackageSet::contains(const Package & pkg) const noexcept {
     return pImpl->contains(pkg.get_id());
 }
 

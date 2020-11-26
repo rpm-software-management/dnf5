@@ -70,17 +70,17 @@ public:
     PackageSet & operator&=(const PackageSet & other);
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.clear()
-    void clear();
+    void clear() noexcept;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.empty()
-    bool empty();
+    bool empty() const noexcept;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.set(DnfPackage * pkg)
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_add(DnfPackageSet * pset, DnfPackage * pkg)
     void add(const Package & pkg);
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(DnfPackage * pkg)
-    bool contains(const Package & pkg) const;
+    bool contains(const Package & pkg) const noexcept;
 
     void remove(const Package & pkg);
 
@@ -89,7 +89,9 @@ public:
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.size()
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_count(DnfPackageSet * pset)
-    size_t size() const;
+    size_t size() const noexcept;
+
+    void swap(PackageSet & other) noexcept;
 
 private:
     friend PackageSetIterator;
