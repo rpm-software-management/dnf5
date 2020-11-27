@@ -28,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/utils/exception.hpp"
 
-#include <memory>
 #include <string>
 #include <vector>
 
@@ -116,7 +115,8 @@ public:
     ///
     /// @replaces libdnf/sack/query.hpp:method:Query.runSet()
     /// @replaces libdnf/sack/query.hpp:method:Query.run()
-    PackageSet get_package_set() const;
+    PackageSet & get_package_set();
+    const PackageSet & get_package_set() const;
 
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB, IEXACT, NOT_IEXACT, ICONTAINS, NOT_ICONTAINS, IGLOB, NOT_IGLOB, CONTAINS, NOT_CONTAINS.
     ///
@@ -374,10 +374,12 @@ public:
         bool with_src,
         const std::vector<libdnf::rpm::Nevra::Form> & forms);
 
+    void swap(SolvQuery & other) noexcept;
+
 private:
     friend libdnf::Goal;
     class Impl;
-    std::unique_ptr<Impl> p_impl;
+    PackageSet pkg_set;
 };
 
 

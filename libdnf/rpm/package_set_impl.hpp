@@ -56,6 +56,7 @@ public:
 
 private:
     friend PackageSet;
+    friend SolvQuery;
     SolvSackWeakPtr sack;
 };
 

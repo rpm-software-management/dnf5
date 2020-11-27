@@ -25,12 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/solv_map.hpp"
 
 extern "C" {
-#include <solv/chksum.h>
-#include <solv/evr.h>
-#include <solv/repo.h>
-#include <solv/selection.h>
 #include <solv/solvable.h>
-#include <solv/solver.h>
 }
 
 namespace libdnf::rpm {
@@ -38,40 +33,33 @@ namespace libdnf::rpm {
 
 class SolvQuery::Impl {
 public:
-    Impl(SolvSack * sack, InitFlags flags);
-    Impl(const SolvQuery::Impl & src) = default;
-    Impl(const SolvQuery::Impl && src) = delete;
-    ~Impl() = default;
-
-    SolvQuery::Impl & operator=(const SolvQuery::Impl & src);
-    SolvQuery::Impl & operator=(SolvQuery::Impl && src) noexcept;
-
-    void filter_provides(
+    static void filter_provides(
         Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result);
-    void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
-    void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
-    void filter_reldep(Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
+    static void filter_reldep(
+        PackageSet & pkg_set,
+        Id libsolv_key,
+        libdnf::sack::QueryCmp cmp_type,
+        const std::vector<std::string> & patterns);
+    static void filter_reldep(
+        PackageSet & pkg_set, Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list);
+    static void filter_reldep(
+        PackageSet & pkg_set, Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set);
 
     /// @param cmp_glob performance optimization - it must be in synchronization with cmp_type
-    void filter_nevra(
+    static void filter_nevra(
+        PackageSet & pkg_set,
         const Nevra & pattern,
         bool cmp_glob,
         libdnf::sack::QueryCmp cmp_type,
         solv::SolvMap & filter_result,
         bool with_src);
-    void filter_nevra(
-        Pool * pool,
-        const std::vector<Solvable *> sorted_solvables,
+    static void filter_nevra(
+        PackageSet & pkg_set,
+        const std::vector<Solvable *> & sorted_solvables,
         const std::string & pattern,
         bool cmp_glob,
         libdnf::sack::QueryCmp cmp_type,
         solv::SolvMap & filter_result);
-
-private:
-    friend class SolvQuery;
-    friend libdnf::Goal;
-    SolvSackWeakPtr sack;
-    solv::SolvMap query_result;
 };
 
 
