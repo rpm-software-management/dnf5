@@ -57,7 +57,7 @@ public:
     explicit SolvMap(int size);
 
     /// Clone from an existing Map
-    explicit SolvMap(const Map * other);
+    explicit SolvMap(const Map * map);
 
     /// Copy constructor: clone from an existing SolvMap
     SolvMap(const SolvMap & other);
@@ -66,6 +66,9 @@ public:
     SolvMap(SolvMap && other) noexcept;
 
     ~SolvMap();
+
+    SolvMap & operator=(const SolvMap & other) noexcept;
+    SolvMap & operator=(SolvMap && other) noexcept;
 
     // GENERIC OPERATIONS
 
@@ -131,9 +134,6 @@ public:
     /// Intersection operator
     SolvMap & operator&=(const SolvMap & other) noexcept;
 
-    SolvMap & operator=(const SolvMap & other) noexcept;
-    SolvMap & operator=(SolvMap && other) noexcept;
-
     void swap(SolvMap & other) noexcept;
 
 protected:
@@ -142,7 +142,7 @@ protected:
     void check_id_in_bitmap_range(PackageId package_id) const;
 
 private:
-    friend class libdnf::rpm::SolvSack;
+    friend class rpm::SolvSack;
     Map map;
 };
 
@@ -152,24 +152,42 @@ inline SolvMap::SolvMap(int size) {
 }
 
 
-inline SolvMap::SolvMap(const Map * other) {
-    map_init_clone(&map, other);
+inline SolvMap::SolvMap(const Map * map) {
+    map_init_clone(&this->map, map);
 }
-
 
 inline SolvMap::SolvMap(const SolvMap & other) : SolvMap(other.get_map()) {}
 
 inline SolvMap::SolvMap(SolvMap && other) noexcept {
-    map.size = other.map.size;
-    map.map = other.map.map;
-    other.map.size = 0;
+    map = other.map;
     other.map.map = nullptr;
+    other.map.size = 0;
 }
 
 inline SolvMap::~SolvMap() {
     map_free(&map);
 }
 
+inline SolvMap & SolvMap::operator=(const SolvMap & other) noexcept {
+    if (this != &other) {
+        if (map.size == other.map.size) {
+            memcpy(map.map, other.map.map, static_cast<size_t>(map.size));
+        } else {
+            map_free(&map);
+            map_init_clone(&map, &other.map);
+        }
+    }
+    return *this;
+}
+
+inline SolvMap & SolvMap::operator=(SolvMap && other) noexcept {
+    if (this != &other) {
+        map = other.map;
+        other.map.map = nullptr;
+        other.map.size = 0;
+    }
+    return *this;
+}
 
 inline void SolvMap::check_id_in_bitmap_range(PackageId package_id) const {
     // map.size is in bytes, << 3 multiplies the number with 8 and gives size in bits
@@ -306,17 +324,6 @@ inline SolvMap & SolvMap::operator&=(const Map * other) noexcept {
 
 inline SolvMap & SolvMap::operator&=(const SolvMap & other) noexcept {
     *this &= other.get_map();
-    return *this;
-}
-
-inline SolvMap & SolvMap::operator=(const SolvMap & other) noexcept {
-    map_free(&map);
-    map_init_clone(&map, &other.map);
-    return *this;
-}
-
-inline SolvMap & SolvMap::operator=(SolvMap && other) noexcept {
-    std::swap(map, other.map);
     return *this;
 }
 
