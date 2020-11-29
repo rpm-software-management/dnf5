@@ -34,8 +34,7 @@ namespace {
 void add_obseletes(const libdnf::rpm::SolvQuery & base_query, libdnf::rpm::PackageSet & data) {
     libdnf::rpm::SolvQuery obsoletes_query(base_query);
     obsoletes_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, data);
-    // TODO(jmracek) Replace obsoletes_query.get_package_set(); by more effective approach
-    data |= obsoletes_query.get_package_set();
+    data |= obsoletes_query;
 }
 
 }  // namespace
@@ -115,7 +114,7 @@ void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool str
 
 void Goal::add_rpm_install(const libdnf::rpm::SolvQuery & query, bool strict) {
     libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *query.pkg_set.pImpl) {
+    for (auto package_id : *query.pImpl) {
         ids.push_back(package_id.id);
     }
     p_impl->install_rpm_ids.push_back(std::make_pair(std::move(ids), strict));
@@ -137,7 +136,7 @@ void Goal::add_rpm_remove(const libdnf::rpm::PackageSet & package_set) {
 }
 
 void Goal::add_rpm_remove(const libdnf::rpm::SolvQuery & query) {
-    for (auto package_id : *query.pkg_set.pImpl) {
+    for (auto package_id : *query.pImpl) {
         p_impl->remove_rpm_ids.push_back(package_id.id);
     }
 }
@@ -162,7 +161,7 @@ void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set) {
 
 void Goal::add_rpm_upgrade(const libdnf::rpm::SolvQuery & query) {
     libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *query.pkg_set.pImpl) {
+    for (auto package_id : *query.pImpl) {
         ids.push_back(package_id.id);
     }
     p_impl->upgrade_rpm_ids.push_back(std::move(ids));
@@ -235,7 +234,7 @@ void Goal::Impl::add_install_to_goal() {
                 has_just_name) {
                 if (!repo_ids.empty()) {
                     query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, repo_ids);
-                    query.pkg_set |= installed.pkg_set;
+                    query |= installed;
                     if (query.empty()) {
                         if (strict) {
                             rpm_error.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND_IN_REPOSITORIES, spec));
@@ -251,22 +250,22 @@ void Goal::Impl::add_install_to_goal() {
 
                 // keep only installed that has a partner in available
                 std::unordered_set<Id> names;
-                for (auto package_id : *available.pkg_set.pImpl) {
+                for (auto package_id : *available.pImpl) {
                     Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
                     names.insert(solvable->name);
                 }
-                for (auto package_id : *installed.pkg_set.pImpl) {
+                for (auto package_id : *installed.pImpl) {
                     Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
                     auto name_iterator = names.find(solvable->name);
                     if (name_iterator == names.end()) {
-                        installed.pkg_set.pImpl->remove_unsafe(package_id);
+                        installed.pImpl->remove_unsafe(package_id);
                     }
                 }
                 // TODO(jmracek): if reports: self._report_installed(installed)
                 // TODO(jmracek) Replace by union query operator
-                available.pkg_set |= installed.pkg_set;
+                available |= installed;
                 tmp_solvables.clear();
-                for (auto package_id : *available.pkg_set.pImpl) {
+                for (auto package_id : *available.pImpl) {
                     Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
                     tmp_solvables.push_back(solvable);
                 }
@@ -303,12 +302,12 @@ void Goal::Impl::add_install_to_goal() {
                 if (add_obsoletes) {
                     libdnf::rpm::SolvQuery obsoletes_query(base_query);
                     // TODO(jmracek) Replace obsoletes_query.get_package_set(); by more effective approach
-                    obsoletes_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, query.get_package_set());
-                    query.pkg_set |= obsoletes_query.pkg_set;
+                    obsoletes_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, query);
+                    query |= obsoletes_query;
                 }
                 if (!repo_ids.empty()) {
                     query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, repo_ids);
-                    query.pkg_set |= installed.pkg_set;
+                    query |= installed;
                     if (query.empty()) {
                         // TODO(jmracek) no solution for the spec => mark result - not in repository what if installed?
                         continue;
@@ -316,7 +315,7 @@ void Goal::Impl::add_install_to_goal() {
                 }
                 // TODO(jmracek) if reports:
                 // base._report_already_installed(installed_query)
-                solv_map_to_id_queue(tmp_queue, *query.pkg_set.pImpl);
+                solv_map_to_id_queue(tmp_queue, *query.pImpl);
                 rpm_goal.add_install(tmp_queue, strict);
             }
         } else {
@@ -373,7 +372,7 @@ void Goal::Impl::add_remove_to_goal() {
                 continue;
             }
         }
-        rpm_goal.add_remove(*query.pkg_set.pImpl, remove_dependencies);
+        rpm_goal.add_remove(*query.pImpl, remove_dependencies);
     }
     rpm_goal.add_remove(remove_rpm_ids, remove_dependencies);
 }
@@ -402,16 +401,15 @@ void Goal::Impl::add_upgrades_to_goal() {
         if (add_obsoletes) {
             libdnf::rpm::SolvQuery obsoletes_query(base_query);
             obsoletes_query.ifilter_available();
-            // TODO(jmracek) Replace obsoletes_query.get_package_set(); by more effective approach
             // TODO(jmracek) use upgrades + installed when the filter will be available libdnf::rpm::SolvQuery what_obsoletes(query);
             // what_obsoletes.ifilter_upgrades()
-            obsoletes_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, query.get_package_set());
+            obsoletes_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, query);
             // obsoletes = self.sack.query().available().filterm(obsoletes=installed_query.union(q.upgrades()))
-            query.pkg_set |= obsoletes_query.pkg_set;
+            query |= obsoletes_query;
         }
         if (!repo_ids.empty()) {
             query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, repo_ids);
-            query.pkg_set |= installed.pkg_set;
+            query |= installed;
             if (query.empty()) {
                 // TODO(jmracek) no solution for the spec => mark result - not in repository what if installed?
                 continue;
@@ -420,7 +418,7 @@ void Goal::Impl::add_upgrades_to_goal() {
         // TODO(jmracek) Apply security filters
         // TODO(jmracek) q = q.available().union(installed_query.latest())
         // Required for a correct upgrade of installonly packages
-        solv_map_to_id_queue(tmp_queue, *query.pkg_set.pImpl);
+        solv_map_to_id_queue(tmp_queue, *query.pImpl);
         rpm_goal.add_upgrade(tmp_queue);
 
 

@@ -44,7 +44,7 @@ namespace libdnf::rpm {
 /// @replaces libdnf/hy-query.h:struct:HyQuery
 /// @replaces libdnf/sack/query.hpp:struct:Query
 /// @replaces hawkey:hawkey/__init__.py:class:Query
-class SolvQuery {
+class SolvQuery : public PackageSet {
 public:
     enum class InitFlags {
         APPLY_EXCLUDES = 0,
@@ -73,12 +73,12 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
     explicit SolvQuery(SolvSack * sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
-    SolvQuery(const SolvQuery & src);
+    SolvQuery(const SolvQuery & src) = default;
     SolvQuery(SolvQuery && src) noexcept = default;
-    ~SolvQuery();
+    ~SolvQuery() = default;
 
-    SolvQuery & operator=(const SolvQuery & src);
-    SolvQuery & operator=(SolvQuery && src) noexcept;
+    SolvQuery & operator=(const SolvQuery & src) = default;
+    SolvQuery & operator=(SolvQuery && src) noexcept = default;
 
     /// Union operator
     SolvQuery & operator|=(const SolvQuery & other);
@@ -355,14 +355,6 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_DOWNGRADABLE
     SolvQuery & ifilter_downgradable();
 
-    /// Return the number of packages in the SolvQuery.
-    ///
-    /// @replaces libdnf/sack/query.hpp:method:Query.size()
-    std::size_t size() const noexcept;
-
-    /// @replaces libdnf/sack/query.hpp:method:Query.empty()
-    bool empty() const noexcept;
-
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     /// @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf::rpm::Nevra> resolve_pkg_spec(
@@ -379,7 +371,6 @@ public:
 private:
     friend libdnf::Goal;
     class Impl;
-    PackageSet pkg_set;
 };
 
 
