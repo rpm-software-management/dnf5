@@ -144,6 +144,9 @@ public:
     // TODO(jrohel): Want we to allow copying invalid WeakPtr?
     WeakPtr & operator=(const WeakPtr & src) {
         if (guard == src.guard) {
+            if (this == &src) {
+                return *this;
+            }
             if constexpr (ptr_owner) {
                 delete ptr;
                 ptr = src.ptr ? new TPtr(*src.ptr) : nullptr;
@@ -172,6 +175,9 @@ public:
     template <typename T = TPtr, typename std::enable_if<sizeof(T) && ptr_owner, int>::type = 0>
     WeakPtr & operator=(WeakPtr && src) {
         if (guard == src.guard) {
+            if (this == &src) {
+                return *this;
+            }
             if (src.is_valid()) {
                 src.guard->unregister_ptr(&src);
             }
