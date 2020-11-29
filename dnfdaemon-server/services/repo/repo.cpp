@@ -49,8 +49,8 @@ uint64_t repo_size(libdnf::rpm::SolvSack & sack, const libdnf::WeakPtr<libdnf::r
     uint64_t size = 0;
     libdnf::rpm::SolvQuery query(&sack);
     std::vector<std::string> reponames = {repo->get_id()};
-    auto pkgset = query.ifilter_repoid(libdnf::sack::QueryCmp::EQ, reponames).get_package_set();
-    for (auto pkg : pkgset) {
+    query.ifilter_repoid(libdnf::sack::QueryCmp::EQ, reponames);
+    for (auto pkg : query) {
         size += pkg.get_download_size();
     }
     return size;

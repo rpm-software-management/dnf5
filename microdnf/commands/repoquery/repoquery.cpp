@@ -135,7 +135,7 @@ void CmdRepoquery::run(Context & ctx) {
     for (auto & pattern : *patterns_to_show_options) {
         libdnf::rpm::SolvQuery solv_query(full_solv_query);
         solv_query.resolve_pkg_spec(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), true, true, true, true, true, {});
-        result_pset |= solv_query.get_package_set();
+        result_pset |= solv_query;
     }
 
     if (info_option->get_value()) {

@@ -83,7 +83,7 @@ void CmdDownload::run(Context & ctx) {
         libdnf::rpm::SolvQuery solv_query(full_solv_query);
         solv_query.resolve_pkg_spec(
             dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), true, true, true, true, true, {});
-        result_pset |= solv_query.get_package_set();
+        result_pset |= solv_query;
     }
 
     std::vector<libdnf::rpm::Package> download_pkgs;
