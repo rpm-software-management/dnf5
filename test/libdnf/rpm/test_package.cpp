@@ -45,7 +45,7 @@ libdnf::rpm::Package RpmPackageTest::get_pkg(const std::string &nevra) {
         1lu,
         query.size()
     );
-    return *query.get_package_set().begin();
+    return *query.begin();
 }
 
 

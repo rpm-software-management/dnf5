@@ -66,10 +66,8 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
     my $names = ["CQRlib"];
     $query->ifilter_name($libdnf::common::QueryCmp_EQ, $names);
     is($query->size(), 2);
-    my $pset = $query->get_package_set();
-    is($pset->size(), 2);
-    my $it = $pset->begin();
-    my $e = $pset->end();
+    my $it = $query->begin();
+    my $e = $query->end();
     my %nevras_map = map { $_ => 1 } @nevras;
     while ($it != $e) {
         ok(exists($nevras_map{$it->value()->get_nevra()}));
@@ -83,9 +81,8 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
     my $names2 = ["CQ?lib"];
     $query2->ifilter_name($libdnf::common::QueryCmp_GLOB, $names2);
     is($query2->size(), 2);
-    my $pset2 = $query2->get_package_set();
-    my $it = $pset2->begin();
-    my $e = $pset2->end();
+    my $it = $query2->begin();
+    my $e = $query2->end();
     my %nevras_map = map { $_ => 1 } @nevras;
     while ($it != $e) {
         ok(exists($nevras_map{$it->value()->get_nevra()}));

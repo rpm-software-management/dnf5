@@ -62,8 +62,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     std::vector<std::string> names{"CQRlib"};
     query.ifilter_name(libdnf::sack::QueryCmp::EQ, names);
     CPPUNIT_ASSERT_EQUAL(2lu, query.size());
-    auto pset = query.get_package_set();
-    for (auto pkg : pset) {
+    for (auto pkg : query) {
         CPPUNIT_ASSERT(nevras.find(pkg.get_nevra()) != nevras.end());
     }
 
@@ -72,8 +71,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     std::vector<std::string> names2{"CQ?lib"};
     query2.ifilter_name(libdnf::sack::QueryCmp::GLOB, names2);
     CPPUNIT_ASSERT_EQUAL(2lu, query2.size());
-    auto pset2 = query2.get_package_set();
-    for (auto pkg : pset2) {
+    for (auto pkg : query2) {
         CPPUNIT_ASSERT(nevras.find(pkg.get_nevra()) != nevras.end());
     }
 
@@ -82,8 +80,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     libdnf::rpm::SolvQuery query3(sack);
     query3.ifilter_name(libdnf::sack::QueryCmp::EQ, names).ifilter_arch(libdnf::sack::QueryCmp::EQ, arches);
     CPPUNIT_ASSERT_EQUAL(1lu, query3.size());
-    auto pset3 = query3.get_package_set();
-    for (auto pkg : pset3) {
+    for (auto pkg : query3) {
         CPPUNIT_ASSERT(pkg.get_nevra() == "CQRlib-1.1.1-4.fc29.src");
     }
 
@@ -97,8 +94,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     std::vector<std::string> names_icase{"cqrlib"};
     query5.ifilter_name(libdnf::sack::QueryCmp::IEXACT, names_icase);
     CPPUNIT_ASSERT_EQUAL(2lu, query5.size());
-    auto pset4 = query5.get_package_set();
-    for (auto pkg : pset4) {
+    for (auto pkg : query5) {
         CPPUNIT_ASSERT(nevras.find(pkg.get_nevra()) != nevras.end());
     }
     query5.ifilter_name(libdnf::sack::QueryCmp::EQ, names_icase);
@@ -109,8 +105,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     std::vector<std::string> names_glob_icase{"cq?lib"};
     query6.ifilter_name(libdnf::sack::QueryCmp::IGLOB, names_glob_icase);
     CPPUNIT_ASSERT_EQUAL(2lu, query6.size());
-    auto pset5 = query6.get_package_set();
-    for (auto pkg : pset5) {
+    for (auto pkg : query6) {
         CPPUNIT_ASSERT(nevras.find(pkg.get_nevra()) != nevras.end());
     }
     query6.ifilter_name(libdnf::sack::QueryCmp::GLOB, names_glob_icase);
@@ -121,8 +116,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     std::vector<std::string> names_contains{"QRli"};
     query7.ifilter_name(libdnf::sack::QueryCmp::CONTAINS, names_contains);
     CPPUNIT_ASSERT_EQUAL(4lu, query7.size());
-    auto pset6 = query7.get_package_set();
-    for (auto pkg : pset6) {
+    for (auto pkg : query7) {
         CPPUNIT_ASSERT(nevras_contains.find(pkg.get_nevra()) != nevras_contains.end());
     }
 
@@ -131,8 +125,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     std::vector<std::string> names_icontains{"qRli"};
     query8.ifilter_name(libdnf::sack::QueryCmp::ICONTAINS, names_icontains);
     CPPUNIT_ASSERT_EQUAL(4lu, query8.size());
-    auto pset7 = query8.get_package_set();
-    for (auto pkg : pset7) {
+    for (auto pkg : query8) {
         CPPUNIT_ASSERT(nevras_contains.find(pkg.get_nevra()) != nevras_contains.end());
     }
     query8.ifilter_name(libdnf::sack::QueryCmp::CONTAINS, names_icontains);
@@ -147,8 +140,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     std::vector<std::string> names3{"CQRlib", "nodejs"};
     query9.ifilter_name(libdnf::sack::QueryCmp::EQ, names3);
     CPPUNIT_ASSERT_EQUAL(4lu, query9.size());
-    auto pset8 = query9.get_package_set();
-    for (auto pkg : pset8) {
+    for (auto pkg : query9) {
         CPPUNIT_ASSERT(full_nevras.find(pkg.get_full_nevra()) != full_nevras.end());
     }
 }
@@ -162,8 +154,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         std::vector<std::string> nevras_without_0_epoch{"CQRlib-1.1.1-4.fc29.src", "CQRlib-1.1.1-4.fc29.x86_64"};
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_without_0_epoch);
         CPPUNIT_ASSERT_EQUAL(2lu, query.size());
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
         }
     }
@@ -174,8 +165,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         std::vector<std::string> nevras_with_0_epoch{"CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64"};
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_with_0_epoch);
         CPPUNIT_ASSERT_EQUAL(2lu, query.size());
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
         }
     }
@@ -186,8 +176,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         std::vector<std::string> nevras_without_0_epoch{"CQRlib-1.1.1-4.fc29.src"};
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_without_0_epoch);
         CPPUNIT_ASSERT_EQUAL(1lu, query.size());
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT(pkg.get_full_nevra() == "CQRlib-0:1.1.1-4.fc29.src");
         }
     }
@@ -198,8 +187,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         std::vector<std::string> nevras_with_0_epoch{"CQRlib-0:1.1.1-4.fc29.src"};
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras_with_0_epoch);
         CPPUNIT_ASSERT_EQUAL(1lu, query.size());
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT(pkg.get_full_nevra() == "CQRlib-0:1.1.1-4.fc29.src");
         }
     }
@@ -238,8 +226,7 @@ void RpmSolvQueryTest::test_ifilter_version() {
         std::vector<std::string> version{"1.1.1"};
         query.ifilter_version(libdnf::sack::QueryCmp::EQ, version);
         CPPUNIT_ASSERT(query.size() == 2);
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
         }
     }
@@ -254,8 +241,7 @@ void RpmSolvQueryTest::test_ifilter_release() {
         std::vector<std::string> release{"4.fc29"};
         query.ifilter_release(libdnf::sack::QueryCmp::EQ, release);
         CPPUNIT_ASSERT(query.size() == 5);
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
         }
     }
@@ -268,8 +254,7 @@ void RpmSolvQueryTest::test_ifilter_provides() {
         std::vector<std::string> provides{"glibc-langpack-hr"};
         query.ifilter_provides(libdnf::sack::QueryCmp::EQ, provides);
         CPPUNIT_ASSERT_EQUAL(1lu, query.size());
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT(pkg.get_full_nevra() == "glibc-langpack-hr-0:2.28-9.fc29.x86_64");
         }
     }
@@ -290,8 +275,7 @@ void RpmSolvQueryTest::test_ifilter_requires() {
         std::vector<std::string> requires {"wget"};
         query.ifilter_requires(libdnf::sack::QueryCmp::EQ, requires);
         CPPUNIT_ASSERT_EQUAL(1lu, query.size());
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT(pkg.get_full_nevra() == "abcde-0:2.9.2-1.fc29.noarch");
         }
     }
@@ -312,8 +296,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("wget.x86_64", false, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
         }
     }
@@ -324,8 +307,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("Wget.x86_64", true, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
         }
     }
@@ -336,8 +318,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("wget > 1", false, true, true, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
         }
     }
@@ -347,8 +328,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("wge?-?:1.1?.5-?.fc29.x8?_64", false, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
         }
     }
@@ -364,8 +344,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("wGe?-?:1.1?.5-?.fc29.x8?_64", true, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
         }
     }
@@ -375,8 +354,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("wgeT-0:1.19.5-5.Fc29.X86_64", true, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(query.size(), 1lu);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        auto pset = query.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query) {
             CPPUNIT_ASSERT_EQUAL(pkg.get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
         }
     }
@@ -400,8 +378,7 @@ void RpmSolvQueryTest::test_update() {
         query1.update(query2);
 
         CPPUNIT_ASSERT_EQUAL(4lu, query1.size());
-        auto pset = query1.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query1) {
             CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
         }
     }
@@ -424,8 +401,7 @@ void RpmSolvQueryTest::test_intersection() {
         query1.intersection(query2);
 
         CPPUNIT_ASSERT_EQUAL(2lu, query1.size());
-        auto pset = query1.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query1) {
             CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
         }
     }
@@ -448,8 +424,7 @@ void RpmSolvQueryTest::test_difference() {
         query1.difference(query2);
 
         CPPUNIT_ASSERT_EQUAL(3lu, query1.size());
-        auto pset = query1.get_package_set();
-        for (auto pkg : pset) {
+        for (auto pkg : query1) {
             CPPUNIT_ASSERT(nevras.find(pkg.get_full_nevra()) != nevras.end());
         }
     }

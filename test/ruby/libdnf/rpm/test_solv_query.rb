@@ -69,10 +69,8 @@ class TestSimpleNumber < Test::Unit::TestCase
         names = ["CQRlib"]
         query.ifilter_name(Common::QueryCmp_EQ, names)
         assert_equal(query.size(), 2)
-        pset = query.get_package_set()
-        assert_equal(pset.size(), 2)
-        it = pset.begin()
-        e = pset.end()
+        it = query.begin()
+        e = query.end()
         while it != e
             assert(nevras.include?(it.value.get_nevra))
             it.next()
@@ -83,9 +81,8 @@ class TestSimpleNumber < Test::Unit::TestCase
         names2 = ["CQ?lib"]
         query2.ifilter_name(Common::QueryCmp_GLOB, names2)
         assert_equal(query2.size(), 2)
-        pset2 = query2.get_package_set()
-        it = pset2.begin()
-        e = pset2.end()
+        it = query2.begin()
+        e = query2.end()
         while it != e
             assert(nevras.include?(it.value.get_nevra))
             it.next()

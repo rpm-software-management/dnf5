@@ -51,13 +51,12 @@ class TestSolvQuery(unittest.TestCase):
         query = libdnf.rpm.SolvQuery(self.sack)
         self.assertEqual(query.size(), 291)
 
-    def test_iterate_packageset(self):
+    def test_iterate_solv_query(self):
         query = libdnf.rpm.SolvQuery(self.sack)
 
-        # Iterates over helping reference "pset".
-        pset = query.get_package_set()
+        # Iterates over reference "query".
         prev_id = 0
-        for pkg in pset:
+        for pkg in query:
             id = pkg.get_id().id
             self.assertGreater(id, prev_id)
             prev_id = id
@@ -65,11 +64,11 @@ class TestSolvQuery(unittest.TestCase):
         self.assertGreaterEqual(prev_id, query.size())
 
         # Similar to above, but longer notation.
-        pset_iterator = iter(pset)
+        query_iterator = iter(query)
         prev_id = 0
         while True:
             try:
-                pkg = next(pset_iterator)
+                pkg = next(query_iterator)
                 id = pkg.get_id().id
                 self.assertGreater(id, prev_id)
                 prev_id = id
@@ -78,37 +77,35 @@ class TestSolvQuery(unittest.TestCase):
         self.assertLess(prev_id, self.sack.get_nsolvables())
         self.assertGreaterEqual(prev_id, query.size())
 
-    def test_iterate_packageset2(self):
-        # Tests the iteration of an unreferenced PackageSet object. The iterator must hold a reference
+    def test_iterate_solv_query2(self):
+        # Tests the iteration of an unreferenced SolvQuery object. The iterator must hold a reference
         # to the iterated object, otherwise the gargabe collector can remove the object.
 
-        query = libdnf.rpm.SolvQuery(self.sack)
-
-        # Iterates directly over "get_package_set()" result. No helping reference.
+        # Iterates directly over "libdnf.rpm.SolvQuery(self.sack)" result. No helping reference.
         prev_id = 0
-        for pkg in query.get_package_set():
+        for pkg in libdnf.rpm.SolvQuery(self.sack):
             id = pkg.get_id().id
             self.assertGreater(id, prev_id)
             prev_id = id
         self.assertLess(prev_id, self.sack.get_nsolvables())
-        self.assertGreaterEqual(prev_id, query.size())
+        self.assertGreaterEqual(prev_id, libdnf.rpm.SolvQuery(self.sack).size())
 
-        # Another test. The iterator is created from the "pset" reference, but the reference
+        # Another test. The iterator is created from the "query" reference, but the reference
         # is removed (set to "None") before starting the iteration.
-        pset = query.get_package_set()
-        pset_iterator = iter(pset)
-        pset = None
+        query = libdnf.rpm.SolvQuery(self.sack)
+        query_iterator = iter(query)
+        query = None
         prev_id = 0
         while True:
             try:
-                pkg = next(pset_iterator)
+                pkg = next(query_iterator)
                 id = pkg.get_id().id
                 self.assertGreater(id, prev_id)
                 prev_id = id
             except StopIteration:
                 break
         self.assertLess(prev_id, self.sack.get_nsolvables())
-        self.assertGreaterEqual(prev_id, query.size())
+        self.assertGreaterEqual(prev_id, libdnf.rpm.SolvQuery(self.sack).size())
 
     def test_ifilter_name(self):
 
@@ -123,9 +120,7 @@ class TestSolvQuery(unittest.TestCase):
         names = ["CQRlib"]
         query.ifilter_name(libdnf.common.QueryCmp_EQ, names)
         self.assertEqual(query.size(), 2)
-        pset = query.get_package_set()
-        self.assertEqual(pset.size(), 2)
-        for pkg in pset:
+        for pkg in query:
             self.assertTrue(pkg.get_nevra() in nevras)
 
         # Test QueryCmp::GLOB
@@ -133,5 +128,5 @@ class TestSolvQuery(unittest.TestCase):
         names2 = ["CQ?lib"]
         query2.ifilter_name(libdnf.common.QueryCmp_GLOB, names2)
         self.assertEqual(query2.size(), 2)
-        for pkg in query2.get_package_set():
+        for pkg in query2:
             self.assertTrue(pkg.get_nevra() in nevras)
