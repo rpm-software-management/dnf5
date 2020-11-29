@@ -33,10 +33,10 @@ namespace libdnf::rpm {
 PackageSet::PackageSet(SolvSack * sack) : pImpl(new Impl(sack)) {}
 
 
-PackageSet::PackageSet(const PackageSet & other) : pImpl(new Impl(other)) {}
+PackageSet::PackageSet(const PackageSet & other) : pImpl(new Impl(*other.pImpl)) {}
 
 
-PackageSet::PackageSet(PackageSet && other) noexcept : pImpl(std::move(other.pImpl)) {}
+PackageSet::PackageSet(PackageSet && other) noexcept : pImpl(new Impl(std::move(*other.pImpl))) {}
 
 
 PackageSet::PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map) : pImpl(new Impl(sack, solv_map)) {}
@@ -44,6 +44,15 @@ PackageSet::PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map) :
 
 PackageSet::~PackageSet() = default;
 
+PackageSet & PackageSet::operator=(const PackageSet & other) {
+    *pImpl = *other.pImpl;
+    return *this;
+}
+
+PackageSet & PackageSet::operator=(PackageSet && other) {
+    *pImpl = std::move(*other.pImpl);
+    return *this;
+}
 
 PackageSet::iterator PackageSet::begin() const {
     PackageSet::iterator it(*this);

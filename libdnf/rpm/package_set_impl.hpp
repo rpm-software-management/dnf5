@@ -43,11 +43,14 @@ public:
     /// Clone from an existing map
     explicit Impl(SolvSack * sack, solv::SolvMap & solv_map);
 
-    /// Clone from an existing PackageSet
-    explicit Impl(const PackageSet & other);
-
     /// Copy constructor: clone from an existing PackageSet::Impl
     Impl(const Impl & other);
+
+    /// Move constructor: clone from an existing PackageSet::Impl
+    Impl(Impl && other);
+
+    Impl & operator=(const Impl & other);
+    Impl & operator=(Impl && other);
 
     SolvSack * get_sack() const { return sack.get(); }
 
@@ -61,19 +64,29 @@ inline PackageSet::Impl::Impl(SolvSack * sack)
     : solv::SolvMap::SolvMap(sack->pImpl->pool->nsolvables)
     , sack(sack->get_weak_ptr()) {}
 
-
 inline PackageSet::Impl::Impl(SolvSack * sack, solv::SolvMap & solv_map)
     : solv::SolvMap::SolvMap(solv_map)
     , sack(sack->get_weak_ptr()) {}
 
-
-inline PackageSet::Impl::Impl(const PackageSet & other) : Impl(*other.pImpl) {}
-
-
-inline PackageSet::Impl::Impl(const PackageSet::Impl & other)
+inline PackageSet::Impl::Impl(const Impl & other)
     : solv::SolvMap::SolvMap(other.get_map())
-    , sack(other.get_sack()->get_weak_ptr()) {}
+    , sack(other.sack) {}
 
+inline PackageSet::Impl::Impl(Impl && other)
+    : solv::SolvMap::SolvMap(std::move(other.get_map()))
+    , sack(std::move(other.sack)) {}
+
+inline PackageSet::Impl & PackageSet::Impl::operator=(const Impl & other) {
+    solv::SolvMap::operator=(other);
+    sack = other.sack;
+    return *this;
+}
+
+inline PackageSet::Impl & PackageSet::Impl::operator=(Impl && other) {
+    solv::SolvMap::operator=(std::move(other));
+    sack = std::move(other.sack);
+    return *this;
+}
 
 }  // namespace libdnf::rpm
 

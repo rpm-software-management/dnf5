@@ -56,6 +56,9 @@ public:
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_free(DnfPackageSet * pset)
     ~PackageSet();
 
+    PackageSet & operator=(const PackageSet & src);
+    PackageSet & operator=(PackageSet && src);
+
     using iterator = PackageSetIterator;
     iterator begin() const;
     iterator end() const;
