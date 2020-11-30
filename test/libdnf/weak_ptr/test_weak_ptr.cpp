@@ -227,10 +227,20 @@ void WeakPtrTest::test_weak_ptr_is_owner() {
     CPPUNIT_ASSERT(*item1_weak_ptr->remote_data == "sack1_item1");
     CPPUNIT_ASSERT(*item3_weak_ptr->remote_data == "sack1_item1");
 
+    // test copy self-assignment operator =
+    item3_weak_ptr = item3_weak_ptr;
+    CPPUNIT_ASSERT_EQUAL(sack1->data_guard.size(), static_cast<std::size_t>(4));
+    CPPUNIT_ASSERT(*item3_weak_ptr->remote_data == "sack1_item1");
+
     // test move assignment operator =
     item4_weak_ptr = std::move(item2_weak_ptr);
     CPPUNIT_ASSERT_EQUAL(sack1->data_guard.size(), static_cast<std::size_t>(4));
     CPPUNIT_ASSERT_THROW(*item2_weak_ptr->remote_data == "sack1_item2", Sack::DataItemWeakPtr::InvalidPtr);
+    CPPUNIT_ASSERT(*item4_weak_ptr->remote_data == "sack1_item2");
+
+    // test move self-assignment operator =
+    item4_weak_ptr = std::move(item4_weak_ptr);
+    CPPUNIT_ASSERT_EQUAL(sack1->data_guard.size(), static_cast<std::size_t>(4));
     CPPUNIT_ASSERT(*item4_weak_ptr->remote_data == "sack1_item2");
 
     // test operator ==
