@@ -51,6 +51,8 @@ public:
 
     Impl & operator=(const Impl & other);
     Impl & operator=(Impl && other);
+    Impl & operator=(const solv::SolvMap & map);
+    Impl & operator=(solv::SolvMap && map);
 
     SolvSack * get_sack() const { return sack.get(); }
 
@@ -86,6 +88,16 @@ inline PackageSet::Impl & PackageSet::Impl::operator=(const Impl & other) {
 inline PackageSet::Impl & PackageSet::Impl::operator=(Impl && other) {
     solv::SolvMap::operator=(std::move(other));
     sack = std::move(other.sack);
+    return *this;
+}
+
+inline PackageSet::Impl & PackageSet::Impl::operator=(const solv::SolvMap & map) {
+    solv::SolvMap::operator=(map);
+    return *this;
+}
+
+inline PackageSet::Impl & PackageSet::Impl::operator=(solv::SolvMap && map) {
+    solv::SolvMap::operator=(std::move(map));
     return *this;
 }
 
