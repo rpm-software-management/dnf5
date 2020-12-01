@@ -23,22 +23,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(QueryTest);
 
-class Item {
+class QueryItem {
 public:
     bool enabled;
     int id;
     std::string name;
 
-    bool operator==(const Item & other) const noexcept {
+    bool operator==(const QueryItem & other) const noexcept {
         return enabled == other.enabled && id == other.id && name == other.name;
     }
-    bool operator<(const Item & other) const noexcept { return id < other.id; }
+    bool operator<(const QueryItem & other) const noexcept { return id < other.id; }
 };
 
-// Simple query implementation based on libdnf::sack::Query that works on the Item instances and implements 3 filters.
-class TestQuery : public libdnf::sack::Query<Item> {
+// Simple query implementation based on libdnf::sack::Query that works on the QueryItem instances and implements 3 filters.
+class TestQuery : public libdnf::sack::Query<QueryItem> {
 public:
-    using Query<Item>::Query;
+    using Query<QueryItem>::Query;
 
     TestQuery & ifilter_enabled(bool enabled);
     TestQuery & ifilter_id(libdnf::sack::QueryCmp cmp, int64_t id);
@@ -46,9 +46,9 @@ public:
 
 private:
     struct F {
-        static bool enabled(const Item & obj) { return obj.enabled; }
-        static int64_t id(const Item & obj) { return obj.id; }
-        static std::string name(const Item & obj) { return obj.name; }
+        static bool enabled(const QueryItem & obj) { return obj.enabled; }
+        static int64_t id(const QueryItem & obj) { return obj.id; }
+        static std::string name(const QueryItem & obj) { return obj.name; }
     };
 };
 
@@ -75,7 +75,7 @@ void QueryTest::tearDown() {}
 
 
 void QueryTest::test_query_basics() {
-    TestQuery q(libdnf::Set<Item>{{true, 4, "item4"}, {false, 6, "item6"}, {true, 10, "item10"}});
+    TestQuery q(libdnf::Set<QueryItem>{{true, 4, "item4"}, {false, 6, "item6"}, {true, 10, "item10"}});
     CPPUNIT_ASSERT_EQUAL(q.size(), static_cast<size_t>(3));
 
     auto q1 = q;
@@ -84,22 +84,22 @@ void QueryTest::test_query_basics() {
     // test ifilter_enabled()
     q1.ifilter_enabled(true);
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(2));
-    CPPUNIT_ASSERT((q1 == libdnf::Set<Item>{{true, 4, "item4"}, {true, 10, "item10"}}));
+    CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{true, 4, "item4"}, {true, 10, "item10"}}));
 
     // test ifilter_name()
     q1.ifilter_name(libdnf::sack::QueryCmp::EQ, "item10");
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(1));
-    CPPUNIT_ASSERT((q1 == libdnf::Set<Item>{{true, 10, "item10"}}));
+    CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{true, 10, "item10"}}));
 
     // test ifilter_id()
     q1 = q;
     q1.ifilter_id(libdnf::sack::QueryCmp::GTE, 6);
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(2));
-    CPPUNIT_ASSERT((q1 == libdnf::Set<Item>{{false, 6, "item6"}, {true, 10, "item10"}}));
+    CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{false, 6, "item6"}, {true, 10, "item10"}}));
 
     // test chaining of filter calling
     q1 = q;
     q1.ifilter_name(libdnf::sack::QueryCmp::GLOB, "item?").ifilter_enabled(false);
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(1));
-    CPPUNIT_ASSERT((q1 == libdnf::Set<Item>{{false, 6, "item6"}}));
+    CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{false, 6, "item6"}}));
 }
