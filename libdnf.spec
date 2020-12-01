@@ -1,10 +1,10 @@
-Name:           libdnf
-Version:        1.0.0
+Name:           libdnf5
+Version:        5.0.0
 Release:        1%{?dist}
 Summary:        Package management library
 License:        LGPLv2.1+
 URL:            https://github.com/rpm-software-management/libdnf
-Source0:        %{url}/archive/%{version}/%{name}-%{version}.tar.gz
+Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 
 
 # ========== build options ==========
@@ -118,15 +118,16 @@ Library for working with a terminal in a command-line package manager.
 
 # ========== libdnf-devel ==========
 
-%package devel
+%package -n libdnf5-devel
 Summary:        Development files for libdnf
-Requires:       libdnf%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libsolv-devel%{?_isa} >= %{libsolv_version}
+Conflicts:      libdnf-devel < 5
 
-%description devel
+%description -n libdnf5-devel
 Development files for libdnf.
 
-%files devel
+%files -n libdnf5-devel
 %{_includedir}/libdnf/
 %{_libdir}/libdnf.so
 %{_libdir}/pkgconfig/libdnf.pc
@@ -155,10 +156,11 @@ Development files for libdnf-cli.
 
 %if %{with perl5}
 %package -n perl5-libdnf
-Summary:        Perl 5 for the libdnf library.
+Summary:        Perl 5 bindings for the libdnf library.
 Provides:       perl(libdnf) = %{version}-%{release}
-Requires:       libdnf%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 BuildRequires:  perl-devel
+BuildRequires:  perl-macros
 BuildRequires:  swig >= %{swig_version}
 %if ! %{with tests_disabled}
 BuildRequires:  perl(strict)
@@ -181,10 +183,11 @@ Perl 5 bindings for the libdnf library.
 
 %if %{with perl5} && %{with libdnf_cli}
 %package -n perl5-libdnf-cli
-Summary:        Perl 5 for the libdnf-cli library.
+Summary:        Perl 5 bindings for the libdnf-cli library.
 Provides:       perl(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 BuildRequires:  perl-devel
+BuildRequires:  perl-macros
 BuildRequires:  swig >= %{swig_version}
 %if ! %{with tests_disabled}
 BuildRequires:  perl(strict)
@@ -206,18 +209,18 @@ Perl 5 bindings for the libdnf-cli library.
 # ========== python3-libdnf ==========
 
 %if %{with python3}
-%package -n python3-libdnf
+%package -n python3-libdnf5
 %{?python_provide:%python_provide python3-libdnf}
 Summary:        Python 3 bindings for the libdnf library.
-Requires:       libdnf%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 BuildRequires:  python3-devel
 BuildRequires:  swig >= %{swig_version}
 
-%description -n python3-libdnf
+%description -n python3-libdnf5
 Python 3 bindings for the libdnf library.
 
-%files -n python3-libdnf
-%{python3_sitearch}/libdnf/
+%files -n python3-libdnf5
+%{python3_sitearch}/libdnf5/
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -249,7 +252,7 @@ Python 3 bindings for the libdnf-cli library.
 %package -n ruby-libdnf
 Summary:        Ruby bindings for the libdnf library.
 Provides:       ruby(libdnf) = %{version}-%{release}
-Requires:       libdnf%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
 BuildRequires:  pkgconfig(ruby)
 BuildRequires:  swig >= %{swig_version}
@@ -296,7 +299,7 @@ Ruby bindings for the libdnf-cli library.
 %package -n dnfdaemon-client
 Summary:        Command-line interface for dnfdaemon-server
 License:        GPLv2+
-Requires:       libdnf%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 
 %description -n dnfdaemon-client
@@ -316,7 +319,7 @@ Command-line interface for dnfdaemon-server
 %package -n dnfdaemon-server
 Summary:        Package management service with a DBus interface
 License:        GPLv2+
-Requires:       libdnf%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
@@ -332,7 +335,7 @@ Package management service with a DBus interface
 
 %files -n dnfdaemon-server
 %{_bindir}/dnfdaemon-server
-%{_unitdir}/dnfdaemon.service
+%{_unitdir}/dnfdaemon-server.service
 %{_sysconfdir}/dbus-1/system.d/org.rpm.dnf.v0.conf
 %{_datadir}/dbus-1/system-services/org.rpm.dnf.v0.service
 %{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy
@@ -345,28 +348,30 @@ Package management service with a DBus interface
 # ========== microdnf ==========
 
 %if %{with microdnf}
-%package -n microdnf
-Summary:        Package management service with a DBus interface
+%package -n microdnf5
+Summary:        Command-line package manager
 License:        GPLv2+
-Requires:       libdnf%{?_isa} = %{version}-%{release}
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 
-%description -n microdnf
-Package management service with a DBus interface
+%description -n microdnf5
+Microdnf is a command-line package manager that automates the process of installing,
+upgrading, configuring, and removing computer programs in a consistent manner.
+It supports RPM packages, modulemd modules, and comps groups & environments.
 
-%files -n microdnf
-%{_bindir}/microdnf
+%files -n microdnf5
+%{_bindir}/microdnf5
 %license COPYING.md
 %license gpl-2.0.txt
-%{_mandir}/man8/microdnf.8.gz
+%{_mandir}/man8/microdnf5.8.gz
 %endif
 
 
 # ========== unpack, build, check & install ==========
 
 %prep
-%autosetup -p1
+%autosetup -p1 -n libdnf-%{version}
 
 
 %build
@@ -393,11 +398,11 @@ Package management service with a DBus interface
     \
     -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF} \
     -DWITH_TESTS=%{?with_tests:ON}%{!?with_tests:OFF} \
-    -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF}
+    -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
     -DWITH_DNFDAEMON_TESTS=%{?with_dnfdaemon_tests:ON}%{!?with_dnfdaemon_tests:OFF}
-%make_build
+%cmake_build
 %if %{with man}
-    make doc-man
+    %cmake_build --target doc-man
 %endif
 
 
@@ -408,7 +413,14 @@ Package management service with a DBus interface
 
 
 %install
-%make_install
+%cmake_install
+
+# HACK: temporarily rename libdnf to ensure parallel installability with old libdnf
+mv $RPM_BUILD_ROOT/%{python3_sitearch}/libdnf $RPM_BUILD_ROOT/%{python3_sitearch}/libdnf5
+
+# HACK: temporarily rename microdnf to ensure parallel installability with old microdnf
+mv $RPM_BUILD_ROOT/%{_bindir}/microdnf $RPM_BUILD_ROOT/%{_bindir}/microdnf5
+mv $RPM_BUILD_ROOT/%{_mandir}/man8/microdnf.8 $RPM_BUILD_ROOT/%{_mandir}/man8/microdnf5.8
 
 
 #find_lang {name}
