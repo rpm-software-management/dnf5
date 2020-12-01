@@ -212,9 +212,6 @@ int main(int argc, char * argv[]) {
     // read and execute access. If not, chdir to /
     auto fd = open(".", O_RDONLY);
     if (fd == -1) {
-        char errBuf[1024];
-        auto errCode = errno;
-        strerror_r(errCode, errBuf, sizeof(errBuf));
         log_router.warning("No read/execute access in current directory, moving to /");
         chdir("/");
     } else {
