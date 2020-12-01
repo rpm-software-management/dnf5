@@ -67,6 +67,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 # warnings
 add_compile_options(-Wall -Wextra -Werror)
 add_compile_options(-Wcast-align -Wformat-nonliteral -Wmissing-format-attribute -Wredundant-decls -Wsign-compare -Wtype-limits -Wuninitialized -Wwrite-strings)
+add_compile_options(-Werror=unused-result -Wodr)
+
 # not sure about the conversion warnings being errors; review later
 add_compile_options(-Wconversion)
 
