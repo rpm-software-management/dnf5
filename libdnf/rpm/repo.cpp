@@ -751,7 +751,11 @@ static std::vector<Key> rawkey2infos(int fd, Logger & logger) {
 
     // set GPG home dir
     char tmpdir[] = "/tmp/tmpdir.XXXXXX";
-    mkdtemp(tmpdir);
+    char * dir = mkdtemp(tmpdir);
+    if (!dir) {
+        throw std::runtime_error("mkdtemp failed");
+    }
+
     std::unique_ptr<char, std::function<void(char *)>> tmp_dir_remover{
         tmpdir, [](char * tmpdir) { std::filesystem::remove_all(tmpdir); }};
     gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, tmpdir);
@@ -1176,7 +1180,10 @@ void Repo::Impl::add_countme_flag(LrHandle * handle) {
 bool Repo::Impl::is_metalink_in_sync() {
     auto & logger = base->get_logger();
     char tmpdir[] = "/tmp/tmpdir.XXXXXX";
-    mkdtemp(tmpdir);
+    char * dir = mkdtemp(tmpdir);
+    if (!dir) {
+        throw std::runtime_error("mkdtemp failed");
+    }
 
     std::unique_ptr<char, std::function<void(char *)>> tmp_dir_remover{
         tmpdir, [](char * tmpdir) { std::filesystem::remove_all(tmpdir); }};
@@ -1245,7 +1252,10 @@ bool Repo::Impl::is_repomd_in_sync() {
     auto & logger = base->get_logger();
     LrYumRepo * yum_repo;
     char tmpdir[] = "/tmp/tmpdir.XXXXXX";
-    mkdtemp(tmpdir);
+    char * dir = mkdtemp(tmpdir);
+    if (!dir) {
+        throw std::runtime_error("mkdtemp failed");
+    }
 
     std::unique_ptr<char, std::function<void(char *)>> tmp_dir_remover{
         tmpdir, [](char * tmpdir) { std::filesystem::remove_all(tmpdir); }};
