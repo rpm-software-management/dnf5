@@ -213,7 +213,7 @@ int main(int argc, char * argv[]) {
     auto fd = open(".", O_RDONLY);
     if (fd == -1) {
         log_router.warning("No read/execute access in current directory, moving to /");
-        chdir("/");
+        std::filesystem::current_path("/");
     } else {
         close(fd);
     }
