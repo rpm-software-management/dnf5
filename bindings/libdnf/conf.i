@@ -1,7 +1,7 @@
-%module conf
+%module(package="libdnf") conf
 
 #if defined(SWIGPYTHON)
-%import(module="libdnf.common") "common.i"
+%import "common.i"
 #elif defined(SWIGRUBY)
 %import(module="libdnf/common") "common.i"
 #elif defined(SWIGPERL)

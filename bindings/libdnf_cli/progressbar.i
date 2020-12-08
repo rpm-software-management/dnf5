@@ -1,4 +1,4 @@
-%module progressbar
+%module(package="libdnf_cli") progressbar
 
 
 %include <exception.i>

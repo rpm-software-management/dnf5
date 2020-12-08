@@ -1,15 +1,15 @@
-%module base
+%module(package="libdnf") base
 
 
 %include <exception.i>
 %include <std_common.i>
 
 #if defined(SWIGPYTHON)
-%import(module="libdnf.common") "common.i"
-%import(module="libdnf.conf") "conf.i"
-%import(module="libdnf.logger") "logger.i"
-%import(module="libdnf.rpm") "rpm.i"
-%import(module="libdnf.transaction") "transaction.i"
+%import "common.i"
+%import "conf.i"
+%import "logger.i"
+%import "rpm.i"
+%import "transaction.i"
 #elif defined(SWIGRUBY)
 %import(module="libdnf/common") "common.i"
 %import(module="libdnf/conf") "conf.i"

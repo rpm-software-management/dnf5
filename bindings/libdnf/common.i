@@ -1,4 +1,4 @@
-%module common
+%module(package="libdnf") common
 
 #define SWIGWORDSIZE64
 

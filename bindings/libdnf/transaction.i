@@ -1,10 +1,10 @@
-%module transaction
+%module(package="libdnf") transaction
 
 %include <exception.i>
 %include <std_string.i>
 
 #if defined(SWIGPYTHON)
-%import(module="libdnf.common") "common.i"
+%import "common.i"
 #elif defined(SWIGRUBY)
 %import(module="libdnf/common") "common.i"
 #elif defined(SWIGPERL)

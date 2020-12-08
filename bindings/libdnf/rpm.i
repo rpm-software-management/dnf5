@@ -1,11 +1,11 @@
-%module rpm
+%module(package="libdnf") rpm
 
 %include <exception.i>
 %include <std_string.i>
 
 #if defined(SWIGPYTHON)
-%import(module="libdnf.common") "common.i"
-%import(module="libdnf.conf") "conf.i"
+%import "common.i"
+%import "conf.i"
 #elif defined(SWIGRUBY)
 %import(module="libdnf/common") "common.i"
 %import(module="libdnf/conf") "conf.i"
