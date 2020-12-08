@@ -4,7 +4,7 @@ set(DBUS_SERVICES_DIR /usr/share/dbus-1/system-services)
 set(DBUS_CONFIG_DIR ${SYSCONFDIR}/dbus-1/system.d)
 
 install (
-    FILES "dnfdaemon.service"
+    FILES "dnfdaemon-server.service"
     DESTINATION ${SYSTEMD_UNIT_DIR}
 )
 
