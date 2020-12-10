@@ -205,7 +205,7 @@ inline bool name_compare_icase_lower_id(const std::pair<Id, Solvable *> first, I
 }  //  namespace
 
 
-SolvQuery::SolvQuery(SolvSack * sack, InitFlags flags) : PackageSet(sack) {
+SolvQuery::SolvQuery(SolvSack * sack, InitFlags flags) : PackageSet(sack), init_flags(flags) {
     switch (flags) {
         case InitFlags::EMPTY:
             break;

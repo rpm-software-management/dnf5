@@ -348,6 +348,7 @@ public:
 private:
     friend libdnf::Goal;
     class Impl;
+    InitFlags init_flags;
 };
 
 
