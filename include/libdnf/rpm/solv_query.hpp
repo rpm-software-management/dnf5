@@ -61,13 +61,6 @@ public:
         const char * get_description() const noexcept override { return "SolvQuery exception"; }
     };
 
-    struct UsedDifferentSack : public RuntimeError {
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::SolvQuery"; }
-        const char * get_name() const noexcept override { return "UsedDifferentSack"; }
-        const char * get_description() const noexcept override { return "SolvQuery exception"; }
-    };
-
     /// @replaces libdnf/hy-query.h:function:hy_query_create(DnfSack *sack);
     /// @replaces libdnf/hy-query.h:function:hy_query_create_flags(DnfSack *sack, int flags);
     /// @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)
@@ -79,15 +72,6 @@ public:
 
     SolvQuery & operator=(const SolvQuery & src) = default;
     SolvQuery & operator=(SolvQuery && src) noexcept = default;
-
-    /// Union operator
-    SolvQuery & operator|=(const SolvQuery & other);
-
-    /// Intersection operator
-    SolvQuery & operator&=(const SolvQuery & other);
-
-    /// Difference operator
-    SolvQuery & operator-=(const SolvQuery & other);
 
     /// update == union
     /// Unites query with other query (aka logical or)

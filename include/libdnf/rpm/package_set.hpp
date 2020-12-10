@@ -45,6 +45,13 @@ class Transaction;
 /// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
 class PackageSet {
 public:
+    struct UsedDifferentSack : public RuntimeError {
+        using RuntimeError::RuntimeError;
+        const char * get_domain_name() const noexcept override { return "libdnf::rpm::PackageSet"; }
+        const char * get_name() const noexcept override { return "UsedDifferentSack"; }
+        const char * get_description() const noexcept override { return "PackageSet exception"; }
+    };
+
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
     explicit PackageSet(SolvSack * sack);
 

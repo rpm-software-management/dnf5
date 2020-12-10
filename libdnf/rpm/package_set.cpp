@@ -69,18 +69,30 @@ PackageSet::iterator PackageSet::end() const {
 
 
 PackageSet & PackageSet::operator|=(const PackageSet & other) {
+    if (pImpl->sack != other.pImpl->sack) {
+        throw UsedDifferentSack(
+            "Cannot perform the action with PackageSet instances initialized with different SolvSacks");
+    }
     *pImpl |= *other.pImpl;
     return *this;
 }
 
 
 PackageSet & PackageSet::operator-=(const PackageSet & other) {
+    if (pImpl->sack != other.pImpl->sack) {
+        throw UsedDifferentSack(
+            "Cannot perform the action with PackageSet instances initialized with different SolvSacks");
+    }
     *pImpl -= *other.pImpl;
     return *this;
 }
 
 
 PackageSet & PackageSet::operator&=(const PackageSet & other) {
+    if (pImpl->sack != other.pImpl->sack) {
+        throw UsedDifferentSack(
+            "Cannot perform the action with PackageSet instances initialized with different SolvSacks");
+    }
     *pImpl &= *other.pImpl;
     return *this;
 }

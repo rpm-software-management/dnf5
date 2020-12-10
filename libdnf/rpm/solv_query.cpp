@@ -219,33 +219,6 @@ SolvQuery::SolvQuery(SolvSack * sack, InitFlags flags) : PackageSet(sack) {
     }
 }
 
-SolvQuery & SolvQuery::operator|=(const SolvQuery & other) {
-    if (pImpl->sack != other.pImpl->sack) {
-        throw UsedDifferentSack(
-            "Cannot perform the action with SolvQuery instances initialized with different SolvSacks");
-    }
-    *pImpl |= *other.pImpl;
-    return *this;
-}
-
-SolvQuery & SolvQuery::operator&=(const SolvQuery & other) {
-    if (pImpl->sack != other.pImpl->sack) {
-        throw UsedDifferentSack(
-            "Cannot perform the action with SolvQuery instances initialized with different SolvSacks");
-    }
-    *pImpl &= *other.pImpl;
-    return *this;
-}
-
-SolvQuery & SolvQuery::operator-=(const SolvQuery & other) {
-    if (pImpl->sack != other.pImpl->sack) {
-        throw UsedDifferentSack(
-            "Cannot perform the action with SolvQuery instances initialized with different SolvSacks");
-    }
-    *pImpl -= *other.pImpl;
-    return *this;
-}
-
 template <const char * (*c_string_getter_fnc)(Pool * pool, libdnf::rpm::PackageId)>
 inline static void filter_glob_internal(
     Pool * pool,
