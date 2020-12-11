@@ -223,9 +223,9 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
 // PackageSet
 // Goal::listUnneeded()
 // {
-//     PackageSet pset(pImpl->sack);
+//     PackageSet pset(p_impl->sack);
 //     IdQueue queue;
-//     Solver *solv = pImpl->solv;
+//     Solver *solv = p_impl->solv;
 //
 //     solver_get_unneeded(solv, queue.getQueue(), 0);
 //     queue2pset(queue, &pset);
@@ -235,9 +235,9 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
 // PackageSet
 // Goal::listSuggested()
 // {
-//     PackageSet pset(pImpl->sack);
+//     PackageSet pset(p_impl->sack);
 //     IdQueue queue;
-//     Solver *solv = pImpl->solv;
+//     Solver *solv = p_impl->solv;
 //
 //     solver_get_recommendations(solv, NULL, queue.getQueue(), 0);
 //     queue2pset(queue, &pset);

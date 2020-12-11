@@ -43,7 +43,7 @@ private:
 
 
 inline PackageSetIterator::Impl::Impl(const PackageSet & package_set)
-    : solv::SolvMap::iterator(package_set.pImpl->get_map())
+    : solv::SolvMap::iterator(package_set.p_impl->get_map())
     , package_set{package_set} {}
 
 inline PackageSetIterator::Impl & PackageSetIterator::Impl::operator++() {

@@ -24,47 +24,47 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 
 
-ReldepListIterator::ReldepListIterator(const ReldepList & reldep_list) : pImpl(new Impl(reldep_list)) {}
+ReldepListIterator::ReldepListIterator(const ReldepList & reldep_list) : p_impl(new Impl(reldep_list)) {}
 
-ReldepListIterator::ReldepListIterator(const ReldepListIterator & other) : pImpl(new Impl(*other.pImpl)) {}
+ReldepListIterator::ReldepListIterator(const ReldepListIterator & other) : p_impl(new Impl(*other.p_impl)) {}
 
 ReldepListIterator::~ReldepListIterator() {}
 
 void ReldepListIterator::begin() {
-    pImpl->begin();
+    p_impl->begin();
 }
 
 
 void ReldepListIterator::end() {
-    pImpl->end();
+    p_impl->end();
 }
 
 
 Reldep ReldepListIterator::operator*() {
-    return {pImpl->reldep_list.get_sack(), ReldepId(**pImpl)};
+    return {p_impl->reldep_list.get_sack(), ReldepId(**p_impl)};
 }
 
 
 ReldepListIterator & ReldepListIterator::operator++() {
-    ++*pImpl;
+    ++*p_impl;
     return *this;
 }
 
 
 ReldepListIterator ReldepListIterator::operator++(int) {
     ReldepListIterator it(*this);
-    ++*pImpl;
+    ++*p_impl;
     return it;
 }
 
 
 bool ReldepListIterator::operator==(const ReldepListIterator & other) const {
-    return *pImpl == *other.pImpl;
+    return *p_impl == *other.p_impl;
 }
 
 
 bool ReldepListIterator::operator!=(const ReldepListIterator & other) const {
-    return *pImpl != *other.pImpl;
+    return *p_impl != *other.p_impl;
 }
 
 

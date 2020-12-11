@@ -80,7 +80,7 @@ Goal::Goal(Base * base) : p_impl(new Impl(base)) {}
 
 Goal::Impl::Impl(Base * base)
     : base(base)
-    , rpm_goal(rpm::solv::GoalPrivate(base->get_rpm_solv_sack().pImpl->get_pool())) {}
+    , rpm_goal(rpm::solv::GoalPrivate(base->get_rpm_solv_sack().p_impl->get_pool())) {}
 
 Goal::~Goal() = default;
 
@@ -106,7 +106,7 @@ void Goal::add_rpm_install(const libdnf::rpm::Package & rpm_package, bool strict
 
 void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool strict) {
     libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *package_set.pImpl) {
+    for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id.id);
     }
     p_impl->install_rpm_ids.push_back(std::make_pair(std::move(ids), strict));
@@ -114,7 +114,7 @@ void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool str
 
 void Goal::add_rpm_install(const libdnf::rpm::SolvQuery & query, bool strict) {
     libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *query.pImpl) {
+    for (auto package_id : *query.p_impl) {
         ids.push_back(package_id.id);
     }
     p_impl->install_rpm_ids.push_back(std::make_pair(std::move(ids), strict));
@@ -130,13 +130,13 @@ void Goal::add_rpm_remove(const libdnf::rpm::Package & rpm_package) {
 }
 
 void Goal::add_rpm_remove(const libdnf::rpm::PackageSet & package_set) {
-    for (auto package_id : *package_set.pImpl) {
+    for (auto package_id : *package_set.p_impl) {
         p_impl->remove_rpm_ids.push_back(package_id.id);
     }
 }
 
 void Goal::add_rpm_remove(const libdnf::rpm::SolvQuery & query) {
-    for (auto package_id : *query.pImpl) {
+    for (auto package_id : *query.p_impl) {
         p_impl->remove_rpm_ids.push_back(package_id.id);
     }
 }
@@ -153,7 +153,7 @@ void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package) {
 
 void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set) {
     libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *package_set.pImpl) {
+    for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id.id);
     }
     p_impl->upgrade_rpm_ids.push_back(std::move(ids));
@@ -161,7 +161,7 @@ void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set) {
 
 void Goal::add_rpm_upgrade(const libdnf::rpm::SolvQuery & query) {
     libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *query.pImpl) {
+    for (auto package_id : *query.p_impl) {
         ids.push_back(package_id.id);
     }
     p_impl->upgrade_rpm_ids.push_back(std::move(ids));
@@ -169,7 +169,7 @@ void Goal::add_rpm_upgrade(const libdnf::rpm::SolvQuery & query) {
 
 void Goal::Impl::add_install_to_goal() {
     auto & sack = base->get_rpm_solv_sack();
-    Pool * pool = sack.pImpl->get_pool();
+    Pool * pool = sack.p_impl->get_pool();
 
     auto multilib_policy = base->get_config().multilib_policy().get_value();
     auto obsoletes = base->get_config().obsoletes().get_value();
@@ -250,22 +250,22 @@ void Goal::Impl::add_install_to_goal() {
 
                 // keep only installed that has a partner in available
                 std::unordered_set<Id> names;
-                for (auto package_id : *available.pImpl) {
+                for (auto package_id : *available.p_impl) {
                     Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
                     names.insert(solvable->name);
                 }
-                for (auto package_id : *installed.pImpl) {
+                for (auto package_id : *installed.p_impl) {
                     Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
                     auto name_iterator = names.find(solvable->name);
                     if (name_iterator == names.end()) {
-                        installed.pImpl->remove_unsafe(package_id);
+                        installed.p_impl->remove_unsafe(package_id);
                     }
                 }
                 // TODO(jmracek): if reports: self._report_installed(installed)
                 // TODO(jmracek) Replace by union query operator
                 available |= installed;
                 tmp_solvables.clear();
-                for (auto package_id : *available.pImpl) {
+                for (auto package_id : *available.p_impl) {
                     Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
                     tmp_solvables.push_back(solvable);
                 }
@@ -275,28 +275,28 @@ void Goal::Impl::add_install_to_goal() {
                     auto * first = tmp_solvables[0];
                     current_name = first->name;
                     // TODO(jmracek) Allow to skip creation of libdnf::rpm::PackageId
-                    selected.pImpl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, first)));
+                    selected.p_impl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, first)));
                 }
                 std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
 
                 for (auto * solvable : tmp_solvables) {
                     if (solvable->name == current_name) {
-                        selected.pImpl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, solvable)));
+                        selected.p_impl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, solvable)));
                         continue;
                     }
                     if (add_obsoletes) {
                         add_obseletes(base_query, selected);
                     }
-                    solv_map_to_id_queue(tmp_queue, static_cast<libdnf::rpm::solv::SolvMap>(*selected.pImpl));
+                    solv_map_to_id_queue(tmp_queue, static_cast<libdnf::rpm::solv::SolvMap>(*selected.p_impl));
                     rpm_goal.add_install(tmp_queue, strict);
                     selected.clear();
-                    selected.pImpl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, solvable)));
+                    selected.p_impl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, solvable)));
                     current_name = solvable->name;
                 }
                 if (add_obsoletes) {
                     add_obseletes(base_query, selected);
                 }
-                solv_map_to_id_queue(tmp_queue, static_cast<libdnf::rpm::solv::SolvMap>(*selected.pImpl));
+                solv_map_to_id_queue(tmp_queue, static_cast<libdnf::rpm::solv::SolvMap>(*selected.p_impl));
                 rpm_goal.add_install(tmp_queue, strict);
             } else {
                 if (add_obsoletes) {
@@ -315,7 +315,7 @@ void Goal::Impl::add_install_to_goal() {
                 }
                 // TODO(jmracek) if reports:
                 // base._report_already_installed(installed_query)
-                solv_map_to_id_queue(tmp_queue, *query.pImpl);
+                solv_map_to_id_queue(tmp_queue, *query.p_impl);
                 rpm_goal.add_install(tmp_queue, strict);
             }
         } else {
@@ -372,7 +372,7 @@ void Goal::Impl::add_remove_to_goal() {
                 continue;
             }
         }
-        rpm_goal.add_remove(*query.pImpl, remove_dependencies);
+        rpm_goal.add_remove(*query.p_impl, remove_dependencies);
     }
     rpm_goal.add_remove(remove_rpm_ids, remove_dependencies);
 }
@@ -418,7 +418,7 @@ void Goal::Impl::add_upgrades_to_goal() {
         // TODO(jmracek) Apply security filters
         // TODO(jmracek) q = q.available().union(installed_query.latest())
         // Required for a correct upgrade of installonly packages
-        solv_map_to_id_queue(tmp_queue, *query.pImpl);
+        solv_map_to_id_queue(tmp_queue, *query.p_impl);
         rpm_goal.add_upgrade(tmp_queue);
 
 
@@ -474,13 +474,13 @@ void Goal::Impl::add_upgrades_to_goal() {
 
 bool Goal::resolve() {
     auto & sack = p_impl->base->get_rpm_solv_sack();
-    Pool * pool = sack.pImpl->get_pool();
+    Pool * pool = sack.p_impl->get_pool();
     // TODO(jmracek) Move pool settings in base
     pool_setdisttype(pool, DISTTYPE_RPM);
     // TODO(jmracek) Move pool settings in base and replace it with a Substitotion class arch value
     pool_setarch(pool, "x86_64");
 
-    sack.pImpl->make_provides_ready();
+    sack.p_impl->make_provides_ready();
     // TODO(jmracek) Apply modules first
     // TODO(jmracek) Apply comps second or later
     // TODO(jmracek) Reset rpm_goal, setup rpm-goal flags according to conf, (allow downgrade), obsoletes, vendor, ...

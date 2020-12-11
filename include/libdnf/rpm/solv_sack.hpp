@@ -168,7 +168,7 @@ private:
     friend libdnf::Swdb;
     friend solv::SolvPrivate;
     class Impl;
-    std::unique_ptr<Impl> pImpl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 inline constexpr SolvSack::LoadRepoFlags operator|(SolvSack::LoadRepoFlags lhs, SolvSack::LoadRepoFlags rhs) {

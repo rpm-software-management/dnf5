@@ -30,27 +30,27 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 
 
-PackageSet::PackageSet(SolvSack * sack) : pImpl(new Impl(sack)) {}
+PackageSet::PackageSet(SolvSack * sack) : p_impl(new Impl(sack)) {}
 
 
-PackageSet::PackageSet(const PackageSet & other) : pImpl(new Impl(*other.pImpl)) {}
+PackageSet::PackageSet(const PackageSet & other) : p_impl(new Impl(*other.p_impl)) {}
 
 
-PackageSet::PackageSet(PackageSet && other) noexcept : pImpl(new Impl(std::move(*other.pImpl))) {}
+PackageSet::PackageSet(PackageSet && other) noexcept : p_impl(new Impl(std::move(*other.p_impl))) {}
 
 
-PackageSet::PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map) : pImpl(new Impl(sack, solv_map)) {}
+PackageSet::PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map) : p_impl(new Impl(sack, solv_map)) {}
 
 
 PackageSet::~PackageSet() = default;
 
 PackageSet & PackageSet::operator=(const PackageSet & other) {
-    *pImpl = *other.pImpl;
+    *p_impl = *other.p_impl;
     return *this;
 }
 
 PackageSet & PackageSet::operator=(PackageSet && other) {
-    *pImpl = std::move(*other.pImpl);
+    *p_impl = std::move(*other.p_impl);
     return *this;
 }
 
@@ -69,70 +69,70 @@ PackageSet::iterator PackageSet::end() const {
 
 
 PackageSet & PackageSet::operator|=(const PackageSet & other) {
-    if (pImpl->sack != other.pImpl->sack) {
+    if (p_impl->sack != other.p_impl->sack) {
         throw UsedDifferentSack(
             "Cannot perform the action with PackageSet instances initialized with different SolvSacks");
     }
-    *pImpl |= *other.pImpl;
+    *p_impl |= *other.p_impl;
     return *this;
 }
 
 
 PackageSet & PackageSet::operator-=(const PackageSet & other) {
-    if (pImpl->sack != other.pImpl->sack) {
+    if (p_impl->sack != other.p_impl->sack) {
         throw UsedDifferentSack(
             "Cannot perform the action with PackageSet instances initialized with different SolvSacks");
     }
-    *pImpl -= *other.pImpl;
+    *p_impl -= *other.p_impl;
     return *this;
 }
 
 
 PackageSet & PackageSet::operator&=(const PackageSet & other) {
-    if (pImpl->sack != other.pImpl->sack) {
+    if (p_impl->sack != other.p_impl->sack) {
         throw UsedDifferentSack(
             "Cannot perform the action with PackageSet instances initialized with different SolvSacks");
     }
-    *pImpl &= *other.pImpl;
+    *p_impl &= *other.p_impl;
     return *this;
 }
 
 
 void PackageSet::clear() noexcept {
-    pImpl->clear();
+    p_impl->clear();
 }
 
 
 bool PackageSet::empty() const noexcept {
-    return pImpl->empty();
+    return p_impl->empty();
 }
 
 
 std::size_t PackageSet::size() const noexcept {
-    return pImpl->size();
+    return p_impl->size();
 }
 
 void PackageSet::swap(PackageSet & other) noexcept {
-    pImpl.swap(other.pImpl);
+    p_impl.swap(other.p_impl);
 }
 
 void PackageSet::add(const Package & pkg) {
-    pImpl->add(pkg.get_id());
+    p_impl->add(pkg.get_id());
 }
 
 
 bool PackageSet::contains(const Package & pkg) const noexcept {
-    return pImpl->contains(pkg.get_id());
+    return p_impl->contains(pkg.get_id());
 }
 
 
 void PackageSet::remove(const Package & pkg) {
-    pImpl->remove(pkg.get_id());
+    p_impl->remove(pkg.get_id());
 }
 
 
 SolvSack * PackageSet::get_sack() const {
-    return pImpl->get_sack();
+    return p_impl->get_sack();
 }
 
 

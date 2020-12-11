@@ -34,20 +34,20 @@ extern "C" {
 
 namespace libdnf::rpm {
 
-ReldepList::ReldepList(const ReldepList & src) : pImpl(new Impl(*src.pImpl)) {}
+ReldepList::ReldepList(const ReldepList & src) : p_impl(new Impl(*src.p_impl)) {}
 
-ReldepList::ReldepList(ReldepList && src) noexcept : pImpl(std::move(src.pImpl)) {}
+ReldepList::ReldepList(ReldepList && src) noexcept : p_impl(std::move(src.p_impl)) {}
 
-ReldepList::ReldepList(SolvSack * sack) : pImpl(new Impl(sack)) {}
+ReldepList::ReldepList(SolvSack * sack) : p_impl(new Impl(sack)) {}
 
 ReldepList::~ReldepList() = default;
 
 ReldepId ReldepList::get_id(int index) const noexcept {
-    return ReldepId(pImpl->queue[index]);
+    return ReldepId(p_impl->queue[index]);
 }
 
 ReldepList & ReldepList::operator=(ReldepList && src) noexcept {
-    pImpl.swap(src.pImpl);
+    p_impl.swap(src.p_impl);
     return *this;
 }
 
@@ -55,8 +55,8 @@ bool ReldepList::operator!=(const ReldepList & other) const noexcept {
     return !(*this == other);
 }
 bool ReldepList::operator==(const ReldepList & other) const noexcept {
-    auto & this_queue = pImpl->queue;
-    auto & other_queue = other.pImpl->queue;
+    auto & this_queue = p_impl->queue;
+    auto & other_queue = other.p_impl->queue;
     auto this_count = this_queue.size();
     if (this_count != other_queue.size())
         return false;
@@ -67,21 +67,21 @@ bool ReldepList::operator==(const ReldepList & other) const noexcept {
         }
     }
 
-    return pImpl->sack->pImpl->pool == other.pImpl->sack->pImpl->pool;
+    return p_impl->sack->p_impl->pool == other.p_impl->sack->p_impl->pool;
 }
 
 ReldepList & ReldepList::operator=(const ReldepList & src) {
-    pImpl->queue = src.pImpl->queue;
-    pImpl->sack = src.pImpl->sack;
+    p_impl->queue = src.p_impl->queue;
+    p_impl->sack = src.p_impl->sack;
     return *this;
 }
 
 void ReldepList::add(Reldep & reldep) {
-    pImpl->queue.push_back(reldep.id.id);
+    p_impl->queue.push_back(reldep.id.id);
 }
 
 void ReldepList::add(ReldepId id) {
-    pImpl->queue.push_back(id.id);
+    p_impl->queue.push_back(id.id);
 }
 
 bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
@@ -89,8 +89,8 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
     if (!dep_splitter.parse(reldep_str))
         return false;
 
-    auto * sack = pImpl->sack.get();
-    Pool * pool = sack->pImpl->pool;
+    auto * sack = p_impl->sack.get();
+    Pool * pool = sack->p_impl->pool;
 
     Dataiterator di;
     dataiterator_init(&di, pool, 0, 0, 0, dep_splitter.get_name_cstr(), SEARCH_STRING | SEARCH_GLOB);
@@ -119,7 +119,7 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
 
 bool ReldepList::add_reldep(const std::string & reldep_str) {
     try {
-        ReldepId id = Reldep::get_reldep_id(pImpl->sack.get(), reldep_str);
+        ReldepId id = Reldep::get_reldep_id(p_impl->sack.get(), reldep_str);
         add(id);
         return true;
         // TODO(jmracek) Make catch error more specific
@@ -129,16 +129,16 @@ bool ReldepList::add_reldep(const std::string & reldep_str) {
 }
 
 void ReldepList::append(ReldepList & source) {
-    pImpl->queue.append(source.pImpl->queue);
+    p_impl->queue.append(source.p_impl->queue);
 }
 
 Reldep ReldepList::get(int index) const noexcept {
-    ReldepId id(pImpl->queue[index]);
-    return Reldep(pImpl->sack.get(), id);
+    ReldepId id(p_impl->queue[index]);
+    return Reldep(p_impl->sack.get(), id);
 }
 
 int ReldepList::size() const noexcept {
-    return pImpl->queue.size();
+    return p_impl->queue.size();
 }
 
 ReldepList::iterator ReldepList::begin() const {
@@ -153,7 +153,7 @@ ReldepList::iterator ReldepList::end() const {
 }
 
 SolvSack * ReldepList::get_sack() const {
-    return pImpl->get_sack();
+    return p_impl->get_sack();
 }
 
 }  // namespace libdnf::rpm

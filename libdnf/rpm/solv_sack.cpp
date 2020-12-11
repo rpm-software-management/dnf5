@@ -561,16 +561,16 @@ void SolvSack::load_repo(Repo & repo, LoadRepoFlags flags) {
     if (repo_impl->type != Repo::Type::AVAILABLE) {
         throw LogicError("SolvSack::load_repo(): User can load only \"available\" repository");
     }
-    pImpl->load_available_repo(repo, flags);
+    p_impl->load_available_repo(repo, flags);
 }
 
 void SolvSack::create_system_repo(bool build_cache) {
-    if (pImpl->system_repo) {
+    if (p_impl->system_repo) {
         throw LogicError("SolvSack::create_system_repo(): System repo already exists");
     }
-    pImpl->system_repo = std::make_unique<Repo>(SYSTEM_REPO_NAME, *pImpl->base, Repo::Type::SYSTEM);
-    pImpl->system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
-    pImpl->load_system_repo();
+    p_impl->system_repo = std::make_unique<Repo>(SYSTEM_REPO_NAME, *p_impl->base, Repo::Type::SYSTEM);
+    p_impl->system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
+    p_impl->load_system_repo();
 }
 
 Repo & SolvSack::Impl::get_cmdline_repo() {
@@ -587,11 +587,11 @@ Repo & SolvSack::Impl::get_cmdline_repo() {
 }
 
 Package SolvSack::add_cmdline_package(const std::string & fn, bool add_with_hdrid) {
-    auto & repo = pImpl->get_cmdline_repo();
+    auto & repo = p_impl->get_cmdline_repo();
     auto new_id = repo.p_impl->add_rpm_package(fn, add_with_hdrid);
 
-    pImpl->provides_ready = false;
-    pImpl->considered_uptodate = false;
+    p_impl->provides_ready = false;
+    p_impl->considered_uptodate = false;
     return Package(this, PackageId(new_id));
 }
 
@@ -611,16 +611,16 @@ Repo & SolvSack::Impl::get_system_repo(bool build_cache) {
 }
 
 Package SolvSack::add_system_package(const std::string & fn, bool add_with_hdrid, bool build_cache) {
-    auto & repo = pImpl->get_system_repo(build_cache);
+    auto & repo = p_impl->get_system_repo(build_cache);
     auto new_id = repo.p_impl->add_rpm_package(fn, add_with_hdrid);
 
-    pImpl->provides_ready = false;
-    pImpl->considered_uptodate = false;
+    p_impl->provides_ready = false;
+    p_impl->considered_uptodate = false;
     return Package(this, PackageId(new_id));
 }
 
 void SolvSack::dump_debugdata(const std::string & dir) {
-    Solver * solver = solver_create(pImpl->pool);
+    Solver * solver = solver_create(p_impl->pool);
 
     try {
         std::filesystem::create_directory(dir);
@@ -637,11 +637,11 @@ void SolvSack::dump_debugdata(const std::string & dir) {
 }
 
 SolvSackWeakPtr SolvSack::get_weak_ptr() {
-    return SolvSackWeakPtr(this, &pImpl->data_guard);
+    return SolvSackWeakPtr(this, &p_impl->data_guard);
 }
 
 int SolvSack::get_nsolvables() const noexcept {
-    return pImpl->get_nsolvables();
+    return p_impl->get_nsolvables();
 };
 
 // TODO(jrohel): we want to change directory for solv(x) cache (into repo metadata directory?)
@@ -657,7 +657,7 @@ std::string SolvSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, 
     return fn;
 }
 
-SolvSack::SolvSack(Base & base) : pImpl{new Impl(base)} {}
+SolvSack::SolvSack(Base & base) : p_impl{new Impl(base)} {}
 
 SolvSack::~SolvSack() = default;
 

@@ -111,7 +111,7 @@ private:
     friend libdnf::Swdb;
     PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map);
     class Impl;
-    std::unique_ptr<Impl> pImpl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 

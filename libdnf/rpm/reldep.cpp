@@ -48,16 +48,16 @@ Reldep::Reldep(SolvSack * sack, const std::string & reldep_string) : sack(sack->
 Reldep::Reldep(Reldep && reldep) : sack(std::move(reldep.sack)), id(std::move(reldep.id)) {}
 
 const char * Reldep::get_name() const {
-    return pool_id2str(sack->pImpl->pool, id.id);
+    return pool_id2str(sack->p_impl->pool, id.id);
 }
 const char * Reldep::get_relation() const {
-    return pool_id2rel(sack->pImpl->pool, id.id);
+    return pool_id2rel(sack->p_impl->pool, id.id);
 }
 const char * Reldep::get_version() const {
-    return pool_id2evr(sack->pImpl->pool, id.id);
+    return pool_id2evr(sack->p_impl->pool, id.id);
 }
 std::string Reldep::to_string() {
-    auto * cstring = pool_dep2str(sack->pImpl->pool, id.id);
+    auto * cstring = pool_dep2str(sack->p_impl->pool, id.id);
     return cstring ? std::string(cstring) : std::string();
 }
 
@@ -68,7 +68,7 @@ ReldepId Reldep::get_reldep_id(SolvSack * sack, const char * name, const char * 
         static_cast<int>(Reldep::CmpType::LT) == REL_LT, "Reldep::ComparisonType::LT is not identical to solv/REL_LT");
     static_assert(
         static_cast<int>(Reldep::CmpType::GT) == REL_GT, "Reldep::ComparisonType::GT is not identical to solv/REL_GT");
-    Pool * pool = sack->pImpl->pool;
+    Pool * pool = sack->p_impl->pool;
     Id id = pool_str2id(pool, name, 1);
 
     if (version) {
@@ -81,7 +81,7 @@ ReldepId Reldep::get_reldep_id(SolvSack * sack, const char * name, const char * 
 ReldepId Reldep::get_reldep_id(SolvSack * sack, const std::string & reldep_str) {
     if (reldep_str[0] == '(') {
         // Rich dependency
-        Pool * pool = sack->pImpl->pool;
+        Pool * pool = sack->p_impl->pool;
         Id id = pool_parserpmrichdep(pool, reldep_str.c_str());
         // TODO(jmracek) Replace runtime_error. Do we need to throw an error?
         if (id == 0) {

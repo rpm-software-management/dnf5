@@ -104,7 +104,7 @@ private:
     friend ReldepListIterator;
     friend Package;
     class Impl;
-    std::unique_ptr<Impl> pImpl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 

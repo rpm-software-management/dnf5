@@ -62,7 +62,7 @@ private:
 
 
 inline PackageSet::Impl::Impl(SolvSack * sack)
-    : solv::SolvMap::SolvMap(sack->pImpl->pool->nsolvables)
+    : solv::SolvMap::SolvMap(sack->p_impl->pool->nsolvables)
     , sack(sack->get_weak_ptr()) {}
 
 inline PackageSet::Impl::Impl(SolvSack * sack, solv::SolvMap & solv_map)

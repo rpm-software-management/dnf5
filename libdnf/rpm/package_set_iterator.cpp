@@ -24,47 +24,47 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 
 
-PackageSetIterator::PackageSetIterator(const PackageSet & package_set) : pImpl{new Impl(package_set)} {}
+PackageSetIterator::PackageSetIterator(const PackageSet & package_set) : p_impl{new Impl(package_set)} {}
 
-PackageSetIterator::PackageSetIterator(const PackageSetIterator & other) : pImpl{new Impl(*other.pImpl)} {}
+PackageSetIterator::PackageSetIterator(const PackageSetIterator & other) : p_impl{new Impl(*other.p_impl)} {}
 
 PackageSetIterator::~PackageSetIterator() {}
 
 void PackageSetIterator::begin() {
-    pImpl->begin();
+    p_impl->begin();
 }
 
 
 void PackageSetIterator::end() {
-    pImpl->end();
+    p_impl->end();
 }
 
 
 Package PackageSetIterator::operator*() {
-    return {pImpl->package_set.get_sack(), **pImpl};
+    return {p_impl->package_set.get_sack(), **p_impl};
 }
 
 
 PackageSetIterator & PackageSetIterator::operator++() {
-    ++*pImpl;
+    ++*p_impl;
     return *this;
 }
 
 
 PackageSetIterator PackageSetIterator::operator++(int) {
     PackageSetIterator it(*this);
-    ++*pImpl;
+    ++*p_impl;
     return it;
 }
 
 
 bool PackageSetIterator::operator==(const PackageSetIterator & other) const {
-    return *pImpl == *other.pImpl;
+    return *p_impl == *other.p_impl;
 }
 
 
 bool PackageSetIterator::operator!=(const PackageSetIterator & other) const {
-    return *pImpl != *other.pImpl;
+    return *p_impl != *other.p_impl;
 }
 
 
