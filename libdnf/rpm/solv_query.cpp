@@ -246,14 +246,6 @@ SolvQuery & SolvQuery::operator-=(const SolvQuery & other) {
     return *this;
 }
 
-PackageSet & SolvQuery::get_package_set() {
-    return *this;
-}
-
-const PackageSet & SolvQuery::get_package_set() const {
-    return *this;
-}
-
 template <const char * (*c_string_getter_fnc)(Pool * pool, libdnf::rpm::PackageId)>
 inline static void filter_glob_internal(
     Pool * pool,
