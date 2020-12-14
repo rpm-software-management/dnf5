@@ -112,14 +112,6 @@ void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool str
     p_impl->install_rpm_ids.push_back(std::make_pair(std::move(ids), strict));
 }
 
-void Goal::add_rpm_install(const libdnf::rpm::SolvQuery & query, bool strict) {
-    libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *query.p_impl) {
-        ids.push_back(package_id.id);
-    }
-    p_impl->install_rpm_ids.push_back(std::make_pair(std::move(ids), strict));
-}
-
 void Goal::add_rpm_remove(
     const std::string & spec, const std::string & repo_id, const std::vector<libdnf::rpm::Nevra::Form> & forms) {
     p_impl->remove_rpm_specs.push_back(std::make_tuple(spec, repo_id, forms));
@@ -131,12 +123,6 @@ void Goal::add_rpm_remove(const libdnf::rpm::Package & rpm_package) {
 
 void Goal::add_rpm_remove(const libdnf::rpm::PackageSet & package_set) {
     for (auto package_id : *package_set.p_impl) {
-        p_impl->remove_rpm_ids.push_back(package_id.id);
-    }
-}
-
-void Goal::add_rpm_remove(const libdnf::rpm::SolvQuery & query) {
-    for (auto package_id : *query.p_impl) {
         p_impl->remove_rpm_ids.push_back(package_id.id);
     }
 }
@@ -154,14 +140,6 @@ void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package) {
 void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set) {
     libdnf::rpm::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
-        ids.push_back(package_id.id);
-    }
-    p_impl->upgrade_rpm_ids.push_back(std::move(ids));
-}
-
-void Goal::add_rpm_upgrade(const libdnf::rpm::SolvQuery & query) {
-    libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *query.p_impl) {
         ids.push_back(package_id.id);
     }
     p_impl->upgrade_rpm_ids.push_back(std::move(ids));

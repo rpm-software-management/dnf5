@@ -48,16 +48,13 @@ public:
         const std::vector<libdnf::rpm::Nevra::Form> & forms);
     void add_rpm_install(const libdnf::rpm::Package & rpm_package, bool strict);
     void add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool strict);
-    void add_rpm_install(const libdnf::rpm::SolvQuery & query, bool strict);
     void add_rpm_remove(
         const std::string & spec, const std::string & repo_id, const std::vector<libdnf::rpm::Nevra::Form> & forms);
     void add_rpm_remove(const libdnf::rpm::Package & rpm_package);
     void add_rpm_remove(const libdnf::rpm::PackageSet & package_set);
-    void add_rpm_remove(const libdnf::rpm::SolvQuery & query);
     void add_rpm_upgrade(const std::string & spec, const std::vector<std::string> & repo_ids);
     void add_rpm_upgrade(const libdnf::rpm::Package & rpm_package);
     void add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set);
-    void add_rpm_upgrade(const libdnf::rpm::SolvQuery & query);
 
     bool resolve();
 
