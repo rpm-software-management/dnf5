@@ -64,7 +64,7 @@ static const struct {
                   "alphapca56",
                   nullptr}},
                 {"arm", {"armv5tejl", "armv5tel", "armv5tl", "armv6l", "armv7l", "armv8l", nullptr}},
-                {"armhfp", {"armv7hl", "armv7hnl", "armv8hl", "armv8hnl", "armv8hcnl", nullptr}},
+                {"armhfp", {"armv6hl", "armv7hl", "armv7hnl", "armv8hl", "armv8hnl", "armv8hcnl", nullptr}},
                 {"i386", {"i386", "athlon", "geode", "i386", "i486", "i586", "i686", nullptr}},
                 {"ia64", {"ia64", nullptr}},
                 {"mips", {"mips", nullptr}},
