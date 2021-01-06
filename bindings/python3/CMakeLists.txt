@@ -6,9 +6,8 @@ endif()
 message("Building bindings for python3")
 
 
-find_package(Python3 REQUIRED)
-find_package(PythonLibs REQUIRED)
-include_directories(${PYTHON_INCLUDE_DIRS})
+find_package(Python3 REQUIRED COMPONENTS Interpreter Development)
+include_directories(${Python3_INCLUDE_DIRS})
 
 
 function(add_python3_module LIBRARY_NAME MODULE_NAME)
@@ -21,7 +20,7 @@ function(add_python3_module LIBRARY_NAME MODULE_NAME)
 
     string(REPLACE "_" "-" C_LIBRARY_NAME ${LIBRARY_NAME})
     swig_link_libraries(${TARGET_NAME} ${C_LIBRARY_NAME})
-    swig_link_libraries(${TARGET_NAME} ${PYTHON_LIBRARIES})
+    swig_link_libraries(${TARGET_NAME} ${Python3_LIBRARIES})
 
     install(TARGETS ${TARGET_NAME} LIBRARY DESTINATION ${Python3_SITEARCH}/${LIBRARY_NAME})
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.py DESTINATION ${Python3_SITEARCH}/${LIBRARY_NAME})
