@@ -81,8 +81,8 @@ void CmdDownload::run(Context & ctx) {
     libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
     for (auto & pattern : *patterns_to_download_options) {
         libdnf::rpm::SolvQuery solv_query(full_solv_query);
-        solv_query.resolve_pkg_spec(
-            dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), true, true, true, true, true, {});
+        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+        solv_query.resolve_pkg_spec(option->get_value(), true, true, true, true, true, {});
         result_pset |= solv_query;
     }
 

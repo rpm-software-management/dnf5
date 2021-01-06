@@ -85,7 +85,8 @@ void CmdUpgrade::run(Context & ctx) {
 
     libdnf::Goal goal(&ctx.base);
     for (auto & pattern : *patterns_to_upgrade_options) {
-        goal.add_rpm_upgrade(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), {});
+        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+        goal.add_rpm_upgrade(option->get_value(), {});
     }
     goal.resolve();
 

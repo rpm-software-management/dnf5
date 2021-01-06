@@ -87,7 +87,8 @@ void CmdInstall::run(Context & ctx) {
 
     libdnf::Goal goal(&ctx.base);
     for (auto & pattern : *patterns_to_install_options) {
-        goal.add_rpm_install(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value(), {}, true, {});
+        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+        goal.add_rpm_install(option->get_value(), {}, true, {});
     }
     goal.resolve();
 

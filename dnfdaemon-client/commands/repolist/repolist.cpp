@@ -140,7 +140,8 @@ void CmdRepolist::run(Context & ctx) {
     if (!patterns_to_show_options->empty()) {
         patterns_to_show.reserve(patterns_to_show_options->size());
         for (auto & pattern : *patterns_to_show_options) {
-            patterns_to_show.emplace_back(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value());
+            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+            patterns_to_show.emplace_back(option->get_value());
         }
     }
     options["patterns_to_show"] = patterns_to_show;
