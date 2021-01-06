@@ -5,7 +5,7 @@ endif()
 set(DNFDAEMON_CLIENT_BIN dnfdaemon-client)
 file(GLOB_RECURSE DNFDAEMON_CLIENT_SOURCES *.cpp)
 
-find_package(sdbus-c++ REQUIRED)
+pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
 
 add_executable(${DNFDAEMON_CLIENT_BIN} ${DNFDAEMON_CLIENT_SOURCES})
 
@@ -14,7 +14,7 @@ target_link_libraries(
     PUBLIC
         libdnf
         libdnf-cli
-        sdbus-c++
+        ${SDBUS_CPP_LIBRARIES}
         pthread
 )
 
