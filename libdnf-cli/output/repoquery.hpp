@@ -42,10 +42,7 @@ static struct libscols_table * create_package_info_table(Package & package) {
     scols_column_set_wrapfunc(cl, scols_wrapnl_chunksize, scols_wrapnl_nextchunk, nullptr);
 
     add_line_into_package_info_table(table, "Name", package.get_name().c_str());
-    auto epoch = package.get_epoch();
-    if (epoch != "0") {
-        add_line_into_package_info_table(table, "Epoch", package.get_epoch().c_str());
-    }
+    add_line_into_package_info_table(table, "Epoch", package.get_epoch().c_str());
     add_line_into_package_info_table(table, "Version", package.get_version().c_str());
     add_line_into_package_info_table(table, "Release", package.get_release().c_str());
     add_line_into_package_info_table(table, "Architecture", package.get_arch().c_str());
