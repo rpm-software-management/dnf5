@@ -20,6 +20,8 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_CLIENT_COMMANDS_COMMAND_HPP
 #define DNFDAEMON_CLIENT_COMMANDS_COMMAND_HPP
 
+#include <dnfdaemon-server/dbus.hpp>
+
 namespace dnfdaemon::client {
 
 class Context;
@@ -27,6 +29,10 @@ class Context;
 class Command {
 public:
     virtual void set_argument_parser(Context &) {}
+    virtual dnfdaemon::KeyValueMap session_config(Context &) {
+        dnfdaemon::KeyValueMap cfg = {};
+        return cfg;
+    }
     virtual void pre_configure(Context &) {}
     virtual void configure(Context &) {}
     virtual void run(Context &) {}

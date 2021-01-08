@@ -135,7 +135,7 @@ int main(int argc, char * argv[]) {
     }
 
     // initialize server session using command line arguments
-    context.init_session();
+    context.init_session(context.selected_command->session_config(context));
 
     // Preconfigure selected command
     context.selected_command->pre_configure(context);

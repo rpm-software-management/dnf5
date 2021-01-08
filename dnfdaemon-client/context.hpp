@@ -47,7 +47,7 @@ public:
     Context(sdbus::IConnection & connection) : connection(connection), repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
 
     /// Initialize dbus connection and server session
-    void init_session();
+    void init_session(dnfdaemon::KeyValueMap cfg);
 
     // initialize repository metadata loading on server side and wait for results
     dnfdaemon::RepoStatus wait_for_repos();

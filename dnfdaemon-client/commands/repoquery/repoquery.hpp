@@ -33,6 +33,7 @@ class CmdRepoquery : public Command {
 public:
     void set_argument_parser(Context & ctx) override;
     void run(Context & ctx) override;
+    dnfdaemon::KeyValueMap session_config(Context &) override;
 
 private:
     libdnf::OptionBool * available_option{nullptr};

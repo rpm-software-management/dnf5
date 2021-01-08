@@ -29,12 +29,10 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnfdaemon::client {
 
 
-void Context::init_session() {
+void Context::init_session(dnfdaemon::KeyValueMap cfg) {
     // open dnfdaemon-server session
     auto session_manager_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, dnfdaemon::DBUS_OBJECT_PATH);
     session_manager_proxy->finishRegistration();
-    // TODO(mblaha): fill the config from command line arguments
-    dnfdaemon::KeyValueMap cfg = {};
     session_manager_proxy->callMethod("open_session").onInterface(dnfdaemon::INTERFACE_SESSION_MANAGER).withArguments(cfg).storeResultsTo(session_object_path);
 
     session_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, session_object_path);

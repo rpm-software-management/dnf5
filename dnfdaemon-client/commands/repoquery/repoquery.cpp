@@ -108,12 +108,17 @@ private:
     dnfdaemon::KeyValueMap rawdata;
 };
 
-void CmdRepoquery::run([[maybe_unused]] Context & ctx) {
-    // prepare options from command line arguments
+dnfdaemon::KeyValueMap CmdRepoquery::session_config(Context &) {
+    dnfdaemon::KeyValueMap cfg = {};
+    cfg["load_system_repo"] = installed_option->get_value();
+    cfg["load_available_repos"] = (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value());
+    return cfg;
+}
+
+void CmdRepoquery::run(Context & ctx) {
+    // query packages
     dnfdaemon::KeyValueMap options = {};
 
-    options["installed"] = installed_option->get_value();
-    options["available"] = (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value());
     std::vector<std::string> patterns_to_show;
     if (patterns_to_show_options->size() > 0) {
         patterns_to_show.reserve(patterns_to_show_options->size());
