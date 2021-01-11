@@ -50,6 +50,17 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     , session_configuration(session_configuration)
     , object_path(object_path) {
 
+
+    // adjust base.config from session_configuration
+    auto & config = base->get_config();
+    std::vector<std::string> config_items {"config_file_path", "installroot", "cachedir", "reposdir", "varsdir"};
+    for (auto & key: config_items) {
+        if (session_configuration.find(key) != session_configuration.end()) {
+            auto value = session_configuration_value<std::string>(key);
+            config.opt_binds().at(key).new_string(libdnf::Option::Priority::RUNTIME, value);
+        }
+    }
+
     // set-up log router for base
     auto & log_router = base->get_logger();
     log_router.add_logger(std::make_unique<StderrLogger>());
@@ -58,12 +69,12 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     base->load_config_from_file();
 
     // set cachedir
-    auto system_cache_dir = base->get_config().system_cachedir().get_value();
-    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, system_cache_dir);
+    auto system_cache_dir = config.system_cachedir().get_value();
+    config.cachedir().set(libdnf::Option::Priority::RUNTIME, system_cache_dir);
     // set variables
     base->get_vars().load(
-        base->get_config().installroot().get_value(),
-        base->get_config().varsdir().get_value()
+        config.installroot().get_value(),
+        config.varsdir().get_value()
     );
 
     // load repo configuration
