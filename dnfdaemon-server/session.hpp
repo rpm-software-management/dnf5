@@ -22,6 +22,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dbus.hpp"
 #include "threads_manager.hpp"
+#include "utils.hpp"
 
 #include <libdnf/base/base.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -53,7 +54,9 @@ public:
     ~Session();
 
     template <typename ItemType>
-    ItemType session_configuration_value(const std::string & key, const ItemType & default_value);
+    ItemType session_configuration_value(const std::string & key, const ItemType & default_value) {
+        return key_value_map_get(session_configuration, key, default_value);
+    }
     std::string get_object_path() { return object_path; };
     sdbus::IConnection & get_connection() { return connection; };
     libdnf::Base * get_base() { return base.get(); };

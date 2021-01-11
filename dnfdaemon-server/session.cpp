@@ -23,7 +23,6 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "services/base/base.hpp"
 #include "services/repo/repo.hpp"
 #include "services/repoconf/repo_conf.hpp"
-#include "utils.hpp"
 
 #include <libdnf/logger/logger.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -44,12 +43,6 @@ void StderrLogger::write(time_t, pid_t, Level, const std::string & message) noex
     } catch (...) {
     }
 }
-
-template <typename ItemType>
-ItemType Session::session_configuration_value(const std::string & key, const ItemType & default_value) {
-    return key_value_map_get(session_configuration, key, default_value);
-}
-
 
 Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session_configuration, std::string object_path)
     : connection(connection)
@@ -96,7 +89,3 @@ Session::~Session() {
     }
     threads_manager.finish();
 }
-
-// explicit instantiation of session_configuration_value template
-template std::string Session::session_configuration_value<std::string>(const std::string &, const std::string &);
-template int Session::session_configuration_value<int>(const std::string &, const int &);
