@@ -56,6 +56,10 @@ uint64_t repo_size(libdnf::rpm::SolvSack & sack, const libdnf::WeakPtr<libdnf::r
     return size;
 }
 
+bool keyval_repo_compare(const dnfdaemon::KeyValueMap & first, const dnfdaemon::KeyValueMap & second) {
+    return key_value_map_get<std::string>(first, "id") < key_value_map_get<std::string>(second, "id");
+}
+
 void Repo::list(sdbus::MethodCall call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
@@ -103,6 +107,7 @@ void Repo::list(sdbus::MethodCall call) {
                 out_repositories.push_back(std::move(out_repo));
             }
 
+            std::sort(out_repositories.begin(), out_repositories.end(), keyval_repo_compare);
             auto reply = call.createReply();
             reply << out_repositories;
             reply.send();
