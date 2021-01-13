@@ -21,7 +21,8 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 %bcond_with    html
 %bcond_without man
 
-%bcond_without go
+# TODO Go bindings fail to build, disable for now
+%bcond_with    go
 %bcond_without perl5
 %bcond_without python3
 %bcond_without ruby
