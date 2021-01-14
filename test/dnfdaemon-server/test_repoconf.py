@@ -42,7 +42,7 @@ class RepoConfTest(unittest.TestCase):
 
     def setUp(self):
         # prepare install root with repository configuration
-        self.installroot = tempfile.mkdtemp(prefix="dnfdaemon-repoconf-test-")
+        self.installroot = tempfile.mkdtemp(prefix="dnfdaemon-test-")
         configure_repo(os.path.join(self.installroot, 'etc/dnf/dnf.conf'), 'main_repo')
         configure_repo(os.path.join(self.installroot, 'etc/yum.repos.d/repo1.repo'), 'repo1')
         configure_repo(os.path.join(self.installroot, 'etc/yum.repos.d/repo2.repo'), 'repo2')
