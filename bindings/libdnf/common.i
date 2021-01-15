@@ -96,7 +96,7 @@ class Iterator:
 #if defined(SWIGPYTHON)
 %pythoncode %{
 def ClassName##__iter__(self):
-    return libdnf.common.Iterator(self, self.begin(), self.end())
+    return common.Iterator(self, self.begin(), self.end())
 ClassName.__iter__ = ClassName##__iter__
 del ClassName##__iter__
 %}
