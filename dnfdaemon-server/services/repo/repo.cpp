@@ -33,16 +33,11 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 void Repo::dbus_register() {
-    dbus_object = sdbus::createObject(session.get_connection(), session.get_object_path());
+    auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPO, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
             this->list(call);
         });
-    dbus_object->finishRegistration();
-}
-
-void Repo::dbus_deregister() {
-    dbus_object->unregister();
 }
 
 uint64_t repo_size(libdnf::rpm::SolvSack & sack, const libdnf::WeakPtr<libdnf::rpm::Repo, false> & repo) {

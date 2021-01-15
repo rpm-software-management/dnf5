@@ -87,7 +87,8 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
 
     // adjust base.config from session_configuration
     auto & config = base->get_config();
-    std::vector<std::string> config_items {"config_file_path", "installroot", "cachedir", "reposdir", "varsdir"};
+    std::vector<std::string> config_items {
+        "config_file_path", "installroot", "cachedir", "reposdir", "varsdir"};
     for (auto & key: config_items) {
         if (session_configuration.find(key) != session_configuration.end()) {
             auto value = session_configuration_value<std::string>(key);
@@ -122,17 +123,16 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     services.emplace_back(std::make_unique<Repo>(*this));
     services.emplace_back(std::make_unique<Rpm>(*this));
 
+    dbus_object = sdbus::createObject(connection, object_path);
     // Register all provided services on d-bus
     for (auto & s : services) {
         s->dbus_register();
     }
+    dbus_object->finishRegistration();
 }
 
 Session::~Session() {
-    // deregister dbus services
-    for (auto & s : services) {
-        s->dbus_deregister();
-    }
+    dbus_object->unregister();
     threads_manager.finish();
 }
 

@@ -98,16 +98,11 @@ dnfdaemon::KeyValueMap package_to_map(libdnf::rpm::Package & libdnf_package, std
 }
 
 void Rpm::dbus_register() {
-    dbus_object = sdbus::createObject(session.get_connection(), session.get_object_path());
+    auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
             this->list(std::move(call));
         });
-    dbus_object->finishRegistration();
-}
-
-void Rpm::dbus_deregister() {
-    dbus_object->unregister();
 }
 
 void Rpm::list(sdbus::MethodCall && call) {

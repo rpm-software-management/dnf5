@@ -28,7 +28,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 void RepoConf::dbus_register() {
-    dbus_object = sdbus::createObject(session.get_connection(), session.get_object_path());
+    auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
             this->list(call);
@@ -45,11 +45,6 @@ void RepoConf::dbus_register() {
         dnfdaemon::INTERFACE_REPOCONF, "disable", "as", "as", [this](sdbus::MethodCall call) -> void {
             this->enable_disable(call, false);
         });
-    dbus_object->finishRegistration();
-}
-
-void RepoConf::dbus_deregister() {
-    dbus_object->unregister();
 }
 
 bool RepoConf::check_authorization(const std::string & actionid, const std::string & sender) {

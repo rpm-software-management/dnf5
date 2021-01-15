@@ -32,18 +32,13 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <thread>
 
 void Base::dbus_register() {
-    dbus_object = sdbus::createObject(session.get_connection(), session.get_object_path());
+    auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_BASE, "read_all_repos", "", "b", [this](sdbus::MethodCall call) -> void {
             this->read_all_repos(call);
         });
     dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START, "s");
     dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END, "s");
-    dbus_object->finishRegistration();
-}
-
-void Base::dbus_deregister() {
-    dbus_object->unregister();
 }
 
 void Base::read_all_repos(sdbus::MethodCall call) {
