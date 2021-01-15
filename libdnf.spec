@@ -409,7 +409,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %check
 %if %{with tests}
-    make ARGS="-V" test
+    %ctest
 %endif
 
 
