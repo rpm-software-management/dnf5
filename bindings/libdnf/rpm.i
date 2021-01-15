@@ -1,19 +1,17 @@
+#if defined(SWIGPYTHON)
 %module(package="libdnf") rpm
+#elif defined(SWIGPERL)
+%module "libdnf::rpm"
+#elif defined(SWIGRUBY)
+%module "libdnf/rpm"
+#endif
 
 %include <exception.i>
 %include <std_string.i>
+%include <std_vector.i>
 
-#if defined(SWIGPYTHON)
 %import "common.i"
 %import "conf.i"
-#elif defined(SWIGRUBY)
-%import(module="libdnf/common") "common.i"
-%import(module="libdnf/conf") "conf.i"
-#elif defined(SWIGPERL)
-%include "std_vector.i"
-%import(module="libdnf::common") "common.i"
-%import(module="libdnf::conf") "conf.i"
-#endif
 
 %{
     #include "libdnf/rpm/checksum.hpp"

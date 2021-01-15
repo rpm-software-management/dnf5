@@ -1,13 +1,14 @@
-%module(package="libdnf") conf
-
 #if defined(SWIGPYTHON)
-%import "common.i"
-#elif defined(SWIGRUBY)
-%import(module="libdnf/common") "common.i"
+%module(package="libdnf") conf
 #elif defined(SWIGPERL)
-%include "std_vector.i"
-%import(module="libdnf::common") "common.i"
+%module "libdnf::conf"
+#elif defined(SWIGRUBY)
+%module "libdnf/conf"
 #endif
+
+%include <std_vector.i>
+
+%import "common.i"
 
 %{
     #include "libdnf/conf/option_child.hpp"

@@ -1,15 +1,15 @@
+#if defined(SWIGPYTHON)
 %module(package="libdnf", directors="1") logger
+#elif defined(SWIGPERL)
+%module(directors="1") "libdnf::logger"
+#elif defined(SWIGRUBY)
+%module(directors="1") "libdnf/logger"
+#endif
 
 %include <exception.i>
 %include <std_string.i>
 
-#if defined(SWIGPYTHON)
 %import "common.i"
-#elif defined(SWIGRUBY)
-%import(module="libdnf/common") "common.i"
-#elif defined(SWIGPERL)
-%import(module="libdnf::common") "common.i"
-#endif
 
 typedef int64_t time_t;
 typedef int32_t pid_t;

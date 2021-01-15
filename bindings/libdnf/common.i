@@ -1,4 +1,10 @@
+#if defined(SWIGPYTHON)
 %module(package="libdnf") common
+#elif defined(SWIGPERL)
+%module "libdnf::common"
+#elif defined(SWIGRUBY)
+%module "libdnf/common"
+#endif
 
 #define SWIGWORDSIZE64
 

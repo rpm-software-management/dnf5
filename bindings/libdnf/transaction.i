@@ -1,16 +1,16 @@
+#if defined(SWIGPYTHON)
 %module(package="libdnf") transaction
+#elif defined(SWIGPERL)
+%module "libdnf::transaction"
+#elif defined(SWIGRUBY)
+%module "libdnf/transaction"
+#endif
 
 %include <exception.i>
 %include <std_string.i>
+%include <std_vector.i>
 
-#if defined(SWIGPYTHON)
 %import "common.i"
-#elif defined(SWIGRUBY)
-%import(module="libdnf/common") "common.i"
-#elif defined(SWIGPERL)
-%include "std_vector.i"
-%import(module="libdnf::common") "common.i"
-#endif
 
 %{
     // enums
