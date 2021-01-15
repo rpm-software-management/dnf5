@@ -118,22 +118,14 @@ void Rpm::list(sdbus::MethodCall && call) {
 
             auto & solv_sack = session.get_base()->get_rpm_solv_sack();
 
-            if (key_value_map_get<bool>(options, "installed", false)) {
-                solv_sack.create_system_repo(false);
-            }
-
-            if (key_value_map_get<bool>(options, "available", true)) {
-                if (!session.read_all_repos(dbus_object)) {
-                    throw std::runtime_error("Cannot load repositories.");
-                }
-            }
+            session.fill_sack();
 
             libdnf::rpm::PackageSet result_pset(&solv_sack);
             libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
             for (auto & pattern : patterns_to_show) {
                 libdnf::rpm::SolvQuery solv_query(full_solv_query);
                 solv_query.resolve_pkg_spec(pattern, true, true, true, true, true, {});
-                result_pset |= solv_query.get_package_set();
+                result_pset |= solv_query;
             }
 
             // create reply from the query

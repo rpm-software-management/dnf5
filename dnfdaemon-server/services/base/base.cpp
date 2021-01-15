@@ -44,7 +44,7 @@ void Base::dbus_register() {
 void Base::read_all_repos(sdbus::MethodCall call) {
     auto worker = std::thread([this, call = std::move(call)]() {
         try {
-            bool retval = session.read_all_repos(dbus_object);
+            bool retval = session.read_all_repos();
             auto reply = call.createReply();
             reply << retval;
             reply.send();

@@ -136,7 +136,20 @@ Session::~Session() {
     threads_manager.finish();
 }
 
-bool Session::read_all_repos(std::unique_ptr<sdbus::IObject> & dbus_object) {
+void Session::fill_sack() {
+    auto & solv_sack = get_base()->get_rpm_solv_sack();
+    if (session_configuration_value<bool>("load_system_repo", true)) {
+        solv_sack.create_system_repo(false);
+    }
+
+    if (session_configuration_value<bool>("load_available_repos", true)) {
+        if (!read_all_repos()) {
+            throw std::runtime_error("Cannot load repositories.");
+        }
+    }
+}
+
+bool Session::read_all_repos() {
     while (repositories_status == dnfdaemon::RepoStatus::PENDING) {
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
@@ -156,7 +169,7 @@ bool Session::read_all_repos(std::unique_ptr<sdbus::IObject> & dbus_object) {
     auto & solv_sack = base->get_rpm_solv_sack();
     bool retval = true;
     for (auto & repo : enabled_repos.get_data()) {
-        repo->set_callbacks(std::make_unique<DbusRepoCB>(dbus_object.get()));
+        repo->set_callbacks(std::make_unique<DbusRepoCB>(get_dbus_object()));
         try {
             repo->load();
             solv_sack.load_repo(*repo.get(), flags);

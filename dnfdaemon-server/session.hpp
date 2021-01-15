@@ -60,14 +60,14 @@ public:
         return key_value_map_get<ItemType>(session_configuration, key);
     }
 
-
     std::string get_object_path() { return object_path; };
     sdbus::IConnection & get_connection() { return connection; };
     libdnf::Base * get_base() { return base.get(); };
     ThreadsManager & get_threads_manager() { return threads_manager; };
     sdbus::IObject * get_dbus_object() { return dbus_object.get(); };
 
-    bool read_all_repos(std::unique_ptr<sdbus::IObject> & dbus_object);
+    void fill_sack();
+    bool read_all_repos();
 
 private:
     sdbus::IConnection & connection;
