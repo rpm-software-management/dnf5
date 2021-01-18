@@ -22,14 +22,15 @@ DNFDAEMON_OBJECT_PATH = '/' + DNFDAEMON_BUS_NAME.replace('.', '/')
 
 IFACE_SESSION_MANAGER = '{}.SessionManager'.format(DNFDAEMON_BUS_NAME)
 IFACE_REPO = '{}.rpm.Repo'.format(DNFDAEMON_BUS_NAME)
+IFACE_RPM = '{}.rpm.Rpm'.format(DNFDAEMON_BUS_NAME)
+
 
 def create_reposdir(reposdir):
     REPO_TEMPLATE = '''[{reponame}]
 name=Repository {reponame}
-baseurl=file:///{repopath}/{reponame}
+baseurl=file:///{repopath}
 enabled=1
 '''
-
     data_path = os.path.abspath(
         os.path.join(os.path.dirname(__file__), 'test_data/repos/'))
 
