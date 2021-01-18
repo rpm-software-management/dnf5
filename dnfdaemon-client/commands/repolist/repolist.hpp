@@ -37,7 +37,7 @@ public:
 
 private:
     libdnf::OptionEnum<std::string> * enable_disable_option{nullptr};
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_show_options{nullptr};
+    std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
     const std::string command;
 };
 

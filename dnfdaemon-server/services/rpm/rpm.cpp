@@ -111,26 +111,31 @@ void Rpm::list(sdbus::MethodCall && call) {
             // read options from dbus call
             dnfdaemon::KeyValueMap options;
             call >> options;
-            // patterns to search
-            std::vector<std::string> default_patterns{};
-            std::vector<std::string> patterns_to_show =
-                key_value_map_get<std::vector<std::string>>(options, "patterns_to_show", std::move(default_patterns));
-
-            auto & solv_sack = session.get_base()->get_rpm_solv_sack();
 
             session.fill_sack();
+            auto & solv_sack = session.get_base()->get_rpm_solv_sack();
+
+            // patterns to search
+            std::vector<std::string> default_patterns{};
+            std::vector<std::string> patterns =
+                key_value_map_get<std::vector<std::string>>(options, "patterns", std::move(default_patterns));
 
             libdnf::rpm::PackageSet result_pset(&solv_sack);
             libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
-            for (auto & pattern : patterns_to_show) {
-                libdnf::rpm::SolvQuery solv_query(full_solv_query);
-                solv_query.resolve_pkg_spec(pattern, true, true, true, true, true, {});
-                result_pset |= solv_query;
+            if (patterns.size() > 0) {
+                for (auto & pattern : patterns) {
+                    libdnf::rpm::SolvQuery solv_query(full_solv_query);
+                    solv_query.resolve_pkg_spec(pattern, true, true, true, true, true, {});
+                    result_pset |= solv_query;
+                }
+            } else {
+                result_pset = full_solv_query;
             }
 
             // create reply from the query
             dnfdaemon::KeyValueMapList out_packages;
-            std::vector<std::string> package_attrs = key_value_map_get<std::vector<std::string>>(options, "package_attrs");
+            std::vector<std::string> default_attrs {};
+            std::vector<std::string> package_attrs = key_value_map_get<std::vector<std::string>>(options, "package_attrs", default_attrs);
             for (auto pkg : result_pset) {
                 out_packages.push_back(package_to_map(pkg, package_attrs));
             }

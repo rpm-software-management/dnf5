@@ -63,8 +63,8 @@ void Repo::list(sdbus::MethodCall call) {
             // read options from dbus call
             std::string enable_disable = key_value_map_get<std::string>(options, "enable_disable", "enabled");
             std::vector<std::string> default_patterns{};
-            std::vector<std::string> patterns_to_show =
-                key_value_map_get<std::vector<std::string>>(options, "patterns_to_show", std::move(default_patterns));
+            std::vector<std::string> patterns =
+                key_value_map_get<std::vector<std::string>>(options, "patterns", std::move(default_patterns));
             std::string command = key_value_map_get<std::string>(options, "command", "repolist");
 
             // repoinfo command needs repositories loaded into sack
@@ -82,10 +82,10 @@ void Repo::list(sdbus::MethodCall call) {
                 repos_query.ifilter_enabled(false);
             }
 
-            if (patterns_to_show.size() > 0) {
+            if (patterns.size() > 0) {
                 auto query_names = repos_query;
-                repos_query.ifilter_id(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
-                repos_query |= query_names.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
+                repos_query.ifilter_id(libdnf::sack::QueryCmp::IGLOB, patterns);
+                repos_query |= query_names.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns);
             }
 
             // create reply from the query

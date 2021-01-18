@@ -52,12 +52,12 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
     disabled->set_const_value("disabled");
     disabled->link_value(enable_disable_option);
 
-    patterns_to_show_options = ctx.arg_parser.add_new_values();
+    patterns_options = ctx.arg_parser.add_new_values();
     auto repos = ctx.arg_parser.add_new_positional_arg(
         "repos_to_show",
         libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED,
         ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns_to_show_options);
+        patterns_options);
     repos->set_short_description("List of repos to show");
 
     auto conflict_args =
@@ -136,15 +136,15 @@ void CmdRepolist::run(Context & ctx) {
     // prepare options from command line arguments
     dnfdaemon::KeyValueMap options = {};
     options["enable_disable"] = enable_disable_option->get_value();
-    std::vector<std::string> patterns_to_show;
-    if (!patterns_to_show_options->empty()) {
-        patterns_to_show.reserve(patterns_to_show_options->size());
-        for (auto & pattern : *patterns_to_show_options) {
+    std::vector<std::string> patterns;
+    if (!patterns_options->empty()) {
+        patterns.reserve(patterns_options->size());
+        for (auto & pattern : *patterns_options) {
             auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-            patterns_to_show.emplace_back(option->get_value());
+            patterns.emplace_back(option->get_value());
         }
     }
-    options["patterns_to_show"] = patterns_to_show;
+    options["patterns"] = patterns;
 
     options["command"] = command;
 

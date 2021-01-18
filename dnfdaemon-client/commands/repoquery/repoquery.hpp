@@ -40,7 +40,7 @@ private:
     libdnf::OptionBool * installed_option{nullptr};
     libdnf::OptionBool * info_option{nullptr};
     libdnf::OptionBool * nevra_option{nullptr};
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_show_options{nullptr};
+    std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
 };
 
 }  // namespace dnfdaemon::client

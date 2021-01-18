@@ -68,7 +68,7 @@ class RepoTest(unittest.TestCase):
     def test_list_repos_spec(self):
         # get list of specified repositories
         self.assertEqual(
-            self.iface_repo.list({"patterns_to_show": ['repo-a']}),
+            self.iface_repo.list({"patterns": ['repo-a']}),
             dbus.Array([
                 dbus.Dictionary({
                     dbus.String('name'): dbus.String('Repository repo-a', variant_level=1),

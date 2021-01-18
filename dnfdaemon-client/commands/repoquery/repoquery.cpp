@@ -61,12 +61,12 @@ void CmdRepoquery::set_argument_parser(Context & ctx) {
     info->set_const_value("true");
     info->link_value(info_option);
 
-    patterns_to_show_options = ctx.arg_parser.add_new_values();
+    patterns_options = ctx.arg_parser.add_new_values();
     auto keys = ctx.arg_parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,
         ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns_to_show_options);
+        patterns_options);
     keys->set_short_description("List of keys to match");
 
     auto repoquery = ctx.arg_parser.add_new_command("repoquery");
@@ -119,14 +119,14 @@ void CmdRepoquery::run(Context & ctx) {
     // query packages
     dnfdaemon::KeyValueMap options = {};
 
-    std::vector<std::string> patterns_to_show;
-    if (patterns_to_show_options->size() > 0) {
-        patterns_to_show.reserve(patterns_to_show_options->size());
-        for (auto & pattern : *patterns_to_show_options) {
-            patterns_to_show.emplace_back(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value());
+    std::vector<std::string> patterns;
+    if (patterns_options->size() > 0) {
+        patterns.reserve(patterns_options->size());
+        for (auto & pattern : *patterns_options) {
+            patterns.emplace_back(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value());
         }
     }
-    options["patterns_to_show"] = patterns_to_show;
+    options["patterns"] = patterns;
     if (info_option->get_value()) {
         options.insert(std::pair<std::string, std::vector<std::string>>
             ("package_attrs",
