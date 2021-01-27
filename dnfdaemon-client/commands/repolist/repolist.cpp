@@ -26,6 +26,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <libsmartcols/libsmartcols.h>
 
 #include <iostream>
+#include <numeric>
 
 namespace dnfdaemon::client {
 
@@ -90,13 +91,59 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
     ctx.arg_parser.get_root_command()->register_command(repolist);
 }
 
+/// Joins vector of strings to a single string using given separator
+/// ["a", "b", "c"] -> "a b c"
+std::string join(const std::vector<std::string> & str_list, const std::string & separator) {
+    return std::accumulate(
+        str_list.begin(), str_list.end(), std::string(),
+        [&](const std::string & a, const std::string & b) -> std::string {
+            return a + (a.length() > 0 ? separator : "") + b;
+        });
+}
+
+/// Joins vector of string pairs to a single string. Pairs are joined using
+/// field_separator, records using record_separator
+/// [("a", "1"), ("b", "2")] -> "a: 1, b: 2"
+std::string join_pairs(const std::vector<std::pair<std::string, std::string>> & pair_list, const std::string & field_separator, const std::string & record_separator) {
+    std::vector<std::string> records {};
+    for (auto & pair: pair_list) {
+        records.emplace_back(pair.first + field_separator + pair.second);
+    }
+    return join(records, record_separator);
+}
+
 class RepoDbus {
 public:
     RepoDbus(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
     std::string get_id() const { return rawdata.at("id"); }
     std::string get_name() const { return rawdata.at("name"); }
     bool is_enabled() const { return rawdata.at("enabled"); }
-    uint64_t get_size() const { return rawdata.at("repo_size"); }
+    uint64_t get_size() const { return rawdata.at("size"); }
+    std::string get_revision() const { return rawdata.at("revision"); }
+    std::vector<std::string> get_content_tags() const { return rawdata.at("content_tags"); }
+    std::vector<std::pair<std::string, std::string>> get_distro_tags() const {
+        // sdbus::Variant cannot handle vector<pair<string,string>> so values are
+        // serialized to vector<string>.
+        // convert [tag1, val1, tag2, val2,...] back to [(tag1, val1), (tag2, val2),...]
+        std::vector<std::pair<std::string, std::string>> dt {};
+        std::vector<std::string> tags_raw = rawdata.at("distro_tags");
+        if (!tags_raw.empty()) {
+            for(size_t i = 0; i < (tags_raw.size() - 1); i+=2){
+                dt.emplace_back(tags_raw[i], tags_raw[i + 1]);
+            }
+        }
+        return dt;
+    }
+    int get_max_timestamp() const { return rawdata.at("updated"); }
+    uint64_t get_pkgs() const { return rawdata.at("pkgs"); }
+    uint64_t get_available_pkgs() const { return rawdata.at("available_pkgs"); }
+    std::string get_metalink() const { return rawdata.at("metalink"); }
+    std::string get_mirrorlist() const { return rawdata.at("mirrorlist"); }
+    std::vector<std::string> get_baseurl() const { return rawdata.at("baseurl"); }
+    int get_metadata_expire() const { return rawdata.at("metadata_expire"); }
+    std::vector<std::string> get_excludepkgs() const { return rawdata.at("excludepkgs"); }
+    std::vector<std::string> get_includepkgs() const { return rawdata.at("includepkgs"); }
+    std::string get_repofile() const { return rawdata.at("repofile"); }
 
 private:
     dnfdaemon::KeyValueMap rawdata;
@@ -138,6 +185,7 @@ void CmdRepolist::run(Context & ctx) {
     options["enable_disable"] = enable_disable_option->get_value();
     std::vector<std::string> patterns;
     if (!patterns_options->empty()) {
+        options["enable_disable"] = "all";
         patterns.reserve(patterns_options->size());
         for (auto & pattern : *patterns_options) {
             auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
@@ -146,14 +194,15 @@ void CmdRepolist::run(Context & ctx) {
     }
     options["patterns"] = patterns;
 
-    options["command"] = command;
-
+    std::vector<std::string> attrs {"id", "name", "enabled"};
     if (command == "repoinfo") {
-        // load repositories
-        if (ctx.wait_for_repos() == dnfdaemon::RepoStatus::ERROR) {
-            throw std::runtime_error("Failed to load repositories");
-        };
+        std::vector<std::string> repoinfo_attrs {
+            "size", "revision", "content_tags", "distro_tags", "updated",
+            "pkgs", "available_pkgs", "metalink", "mirrorlist", "baseurl",
+            "metadata_expire", "excludepkgs", "includepkgs", "repofile"};
+        attrs.insert(attrs.end(), repoinfo_attrs.begin(), repoinfo_attrs.end());
     }
+    options["repo_attrs"] = attrs;
 
     // call list() method on repo interface via dbus
     dnfdaemon::KeyValueMapList repositories;
@@ -181,8 +230,23 @@ void CmdRepolist::run(Context & ctx) {
         // TODO(mblaha): output using smartcols
         for (auto & raw_repo : repositories) {
             RepoDbus repo(raw_repo);
-            std::cout << "REPO: " << repo.get_id() << std::endl;
-            std::cout << "size: " << repo.get_size() << std::endl;
+            std::cout << "Repo-id: " << repo.get_id() << std::endl;
+            std::cout << "Repo-name: " << repo.get_name() << std::endl;
+            std::cout << "Repo-status: " << repo.is_enabled() << std::endl;
+            std::cout << "Repo-revision: " << repo.get_revision() << std::endl;
+            std::cout << "Repo-tags: " << join(repo.get_content_tags(), ", ") << std::endl;
+            std::cout << "Repo-distro-tags: " << join_pairs(repo.get_distro_tags(), ": ", "\n") << std::endl;
+            std::cout << "Repo-updated: " << repo.get_max_timestamp() << std::endl;
+            std::cout << "Repo-pkgs: " << repo.get_pkgs() << std::endl;
+            std::cout << "Repo-available-pkgs: " << repo.get_available_pkgs() << std::endl;
+            std::cout << "Repo-size: " << repo.get_size() << std::endl;
+            std::cout << "Repo-metalink: " << repo.get_metalink() << std::endl;
+            std::cout << "Repo-mirrors: " << repo.get_mirrorlist() << std::endl;
+            std::cout << "Repo-baseurl: " << join(repo.get_baseurl(), "\n") << std::endl;
+            std::cout << "Repo-expire: " << repo.get_metadata_expire() << std::endl;
+            std::cout << "Repo-exclude: " << join(repo.get_excludepkgs(), ", ") << std::endl;
+            std::cout << "Repo-include: " << join(repo.get_includepkgs(), ", ") << std::endl;
+            std::cout << "Repo-filename: " << repo.get_repofile() << std::endl;
         }
     }
 }

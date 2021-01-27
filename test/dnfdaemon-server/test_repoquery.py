@@ -61,19 +61,19 @@ class RepoTest(unittest.TestCase):
             dbus.Array([
                 dbus.Dictionary({
                     dbus.String('full_nevra'): dbus.String('one-0:1-1.noarch', variant_level=1),
-                    dbus.String('repo'): dbus.String('repo1', variant_level=1)},
+                    dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
                     dbus.String('full_nevra'): dbus.String('one-0:1-1.src', variant_level=1),
-                    dbus.String('repo'): dbus.String('repo1', variant_level=1)},
+                    dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
                     dbus.String('full_nevra'): dbus.String('two-0:2-2.noarch', variant_level=1),
-                    dbus.String('repo'): dbus.String('repo2', variant_level=1)},
+                    dbus.String('repo'): dbus.String('rpm-repo2', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
                     dbus.String('full_nevra'): dbus.String('two-0:2-2.src', variant_level=1),
-                    dbus.String('repo'): dbus.String('repo2', variant_level=1)},
+                    dbus.String('repo'): dbus.String('rpm-repo2', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 ],
                 signature=dbus.Signature('a{sv}'))
@@ -94,11 +94,11 @@ class RepoTest(unittest.TestCase):
             dbus.Array([
                 dbus.Dictionary({
                     dbus.String('full_nevra'): dbus.String('one-0:1-1.noarch', variant_level=1),
-                    dbus.String('repo'): dbus.String('repo1', variant_level=1)},
+                    dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
                     dbus.String('full_nevra'): dbus.String('one-0:1-1.src', variant_level=1),
-                    dbus.String('repo'): dbus.String('repo1', variant_level=1)},
+                    dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
             ],
             signature=dbus.Signature('a{sv}'))
