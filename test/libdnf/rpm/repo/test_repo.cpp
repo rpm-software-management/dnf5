@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -60,13 +60,14 @@ void RepoTest::test_repo_basics() {
     libdnf::rpm::SolvSack sack(base);
 
     // Creates system repository and loads it into rpm::SolvSack.
-    sack.create_system_repo(false);
+    // TODO(dmach): commented the next line because it loads the system repo from host; fix it to load the repo from the installroot
+    // sack.create_system_repo(false);
 
     // Creates new repositories in the repo_sack
-    auto repo = repo_sack.new_repo("dnf-ci-fedora");
+    auto repo = repo_sack.new_repo("repomd-repo1");
 
-    // Tunes repositotory configuration (baseurl is mandatory)
-    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/";
+    // Tunes repository configuration (baseurl is mandatory)
+    std::filesystem::path repo_path = PROJECT_BINARY_DIR "/test/libdnf/rpm/repos-repomd/repomd-repo1/";
     repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path.native());
 
     // Loads repository into rpm::Repo.

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -37,7 +37,7 @@ public:
 
 void RpmPackageSetTest::setUp() {
     RepoFixture::setUp();
-    add_repo("dnf-ci-fedora");
+    add_repo_solv("solv-24pkgs");
 
     // set1 contains packages 0 - 15
     set1 = std::make_unique<libdnf::rpm::PackageSet>(sack);

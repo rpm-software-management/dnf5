@@ -27,16 +27,17 @@ class RepoTest(unittest.TestCase):
 
     def setUp(self):
         self.installroot = tempfile.mkdtemp(prefix="dnfdaemon-test-")
-        reposdir = os.path.join(self.installroot, 'etc/yum.repos.d')
-
-        # generate .repo files
-        support.create_reposdir(reposdir)
+        self.reposdir = os.path.join(support.PROJECT_BINARY_DIR, "test/data/repos-rpm-conf.d")
 
         self.bus = dbus.SystemBus()
         self.iface_session = dbus.Interface(
             self.bus.get_object(support.DNFDAEMON_BUS_NAME, support.DNFDAEMON_OBJECT_PATH),
             dbus_interface=support.IFACE_SESSION_MANAGER)
-        self.session = self.iface_session.open_session(dict(reposdir=reposdir))
+        self.session = self.iface_session.open_session({
+            "installroot": self.installroot,
+            "cachedir": os.path.join(self.installroot, "var/cache/dnf"),
+            "reposdir": self.reposdir,
+        })
         self.iface_repo = dbus.Interface(
             self.bus.get_object(support.DNFDAEMON_BUS_NAME, self.session),
             dbus_interface=support.IFACE_REPO)
@@ -51,14 +52,14 @@ class RepoTest(unittest.TestCase):
             self.iface_repo.list({}),
             dbus.Array([
                 dbus.Dictionary({
-                    dbus.String('name'): dbus.String('Repository repo-a', variant_level=1),
+                    dbus.String('name'): dbus.String('Repository 1', variant_level=1),
                     dbus.String('enabled'): dbus.Boolean(True, variant_level=1),
-                    dbus.String('id'): dbus.String('repo-a', variant_level=1)},
+                    dbus.String('id'): dbus.String('repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
-                    dbus.String('name'): dbus.String('Repository repo-b', variant_level=1),
+                    dbus.String('name'): dbus.String('Repository 2', variant_level=1),
                     dbus.String('enabled'): dbus.Boolean(True, variant_level=1),
-                    dbus.String('id'): dbus.String('repo-b', variant_level=1)},
+                    dbus.String('id'): dbus.String('repo2', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 ],
                 signature=dbus.Signature('a{sv}'))
@@ -68,12 +69,12 @@ class RepoTest(unittest.TestCase):
     def test_list_repos_spec(self):
         # get list of specified repositories
         self.assertEqual(
-            self.iface_repo.list({"patterns": ['repo-a']}),
+            self.iface_repo.list({"patterns": ['repo1']}),
             dbus.Array([
                 dbus.Dictionary({
-                    dbus.String('name'): dbus.String('Repository repo-a', variant_level=1),
+                    dbus.String('name'): dbus.String('Repository 1', variant_level=1),
                     dbus.String('enabled'): dbus.Boolean(True, variant_level=1),
-                    dbus.String('id'): dbus.String('repo-a', variant_level=1)},
+                    dbus.String('id'): dbus.String('repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 ],
                 signature=dbus.Signature('a{sv}'))

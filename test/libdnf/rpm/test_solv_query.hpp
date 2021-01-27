@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -38,6 +38,7 @@ class RpmSolvQueryTest : public RepoFixture {
     CPPUNIT_TEST(test_ifilter_release);
     CPPUNIT_TEST(test_ifilter_provides);
     CPPUNIT_TEST(test_ifilter_requires);
+    CPPUNIT_TEST(test_ifilter_chain);
     CPPUNIT_TEST(test_resolve_pkg_spec);
     CPPUNIT_TEST(test_update);
     CPPUNIT_TEST(test_intersection);
@@ -59,6 +60,7 @@ public:
     void test_ifilter_release();
     void test_ifilter_provides();
     void test_ifilter_requires();
+    void test_ifilter_chain();
     void test_resolve_pkg_spec();
     void test_update();
     void test_intersection();

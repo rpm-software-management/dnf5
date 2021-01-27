@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<otherdata xmlns="http://linux.duke.edu/metadata/other" packages="2">
+
+<package pkgid="ec57b154a186fdc1f71976fc0fde97d51c744bc88d222828b4cfa42e3b1f855b" name="pkg" arch="x86_64">
+  <version epoch="0" ver="1.2" rel="3"/>
+</package>
+
+<package pkgid="caa857c48130b4fdea3f7fa498da4324ae2ac00c8900d71c0eef0a90457636bd" name="pkg-libs" arch="x86_64">
+  <version epoch="1" ver="1.3" rel="4"/>
+</package>
+
+</otherdata>

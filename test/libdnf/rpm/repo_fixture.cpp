@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -29,13 +29,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 static std::map<std::string, std::unique_ptr<libdnf::utils::TempDir>> cache_dirs;
 
 
-void RepoFixture::add_repo(const std::string & name) {
-    // Creates new repository in the repo_sack
-    auto repo = repo_sack->new_repo(name);
+void RepoFixture::add_repo_repomd(const std::string & repoid) {
+    auto repo = repo_sack->new_repo(repoid);
 
     // Sets the repo baseurl
-    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/";
-    repo_path /= name;
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
+    repo_path /= repoid;
     repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path.native());
 
     // Loads repository into rpm::Repo.
@@ -49,6 +48,14 @@ void RepoFixture::add_repo(const std::string & name) {
         libdnf::rpm::SolvSack::LoadRepoFlags::USE_UPDATEINFO
     );
 }
+
+
+void RepoFixture::add_repo_solv(const std::string & repoid) {
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-solv";
+    repo_path /= repoid + ".repo";
+    repo_sack->new_repo_from_libsolv_testcase(repoid.c_str(), repo_path.native());
+}
+
 
 void RepoFixture::setUp() {
     temp = std::make_unique<libdnf::utils::TempDir>(

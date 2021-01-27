@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -17,12 +17,23 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "utils.hpp"
+
 
 std::vector<std::string> to_vector(const libdnf::rpm::ReldepList & rdl) {
     std::vector<std::string> res;
     for (int i = 0; i < rdl.size(); ++i) {
         res.emplace_back(rdl.get(i).to_string());
+    }
+    return res;
+}
+
+
+std::vector<std::string> to_vector(const libdnf::rpm::PackageSet & pset) {
+    std::vector<std::string> res;
+    for (auto pkg : pset) {
+        res.emplace_back(pkg.get_full_nevra());
     }
     return res;
 }

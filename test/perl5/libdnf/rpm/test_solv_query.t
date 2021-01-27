@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Red Hat, Inc.
+# Copyright (C) 2020-2021 Red Hat, Inc.
 #
 # This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 #
@@ -17,10 +17,12 @@
 
 use strict;
 use warnings;
-use Test::More;
+no if $] >= 5.010, warnings => qw(experimental::smartmatch);
 
+use Test::More;
 use Cwd qw(cwd);
 use File::Spec::Functions 'catfile';
+
 
 use libdnf::base;
 
@@ -34,10 +36,10 @@ my $repo_sack = new libdnf::rpm::RepoSack($base);
 my $sack = new libdnf::rpm::SolvSack($base);
 
 # Creates new repositories in the repo_sack
-my $repo = $repo_sack->new_repo("dnf-ci-fedora");
+my $repo = $repo_sack->new_repo("repomd-repo1");
 
-# Tunes repositotory configuration (baseurl is mandatory)
-my $repo_path = catfile(cwd, "../../../test/libdnf/rpm/repos-data/dnf-ci-fedora/");
+# Tunes repository configuration (baseurl is mandatory)
+my $repo_path = catfile(cwd, "../../../test/data/repos-repomd/repomd-repo1/");
 my $baseurl = "file://" . $repo_path;
 my $repo_cfg = $repo->get_config();
 $repo_cfg->baseurl()->set($libdnf::conf::Option::Priority_RUNTIME, $baseurl);
@@ -51,7 +53,7 @@ $sack->load_repo($repo->get(), $libdnf::rpm::SolvSack::LoadRepoFlags_NONE);
 #test_size()
 {
     my $query = new libdnf::rpm::SolvQuery($sack);
-    is($query->size(), 291);
+    is($query->size(), 3);
 }
 
 my @nevras = ("CQRlib-1.1.1-4.fc29.src", "CQRlib-1.1.1-4.fc29.x86_64");
@@ -63,31 +65,38 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 # Test QueryCmp::EQ
 {
     my $query = new libdnf::rpm::SolvQuery($sack);
-    my $names = ["CQRlib"];
-    $query->ifilter_name($libdnf::common::QueryCmp_EQ, $names);
-    is($query->size(), 2);
+    $query->ifilter_name($libdnf::common::QueryCmp_EQ, ["pkg"]);
+    is($query->size(), 1);
+
+    my @expected = ("pkg-1.2-3.x86_64");
+    my @actual = ();
+    # TODO(dmach): implement iteration over query
     my $it = $query->begin();
     my $e = $query->end();
-    my %nevras_map = map { $_ => 1 } @nevras;
     while ($it != $e) {
-        ok(exists($nevras_map{$it->value()->get_nevra()}));
+        push @actual, $it->value()->get_nevra();
         $it->next();
     }
+    ok(@actual ~~ @expected);
 }
 
 # Test QueryCmp::GLOB
 {
-    my $query2 = new libdnf::rpm::SolvQuery($sack);
-    my $names2 = ["CQ?lib"];
-    $query2->ifilter_name($libdnf::common::QueryCmp_GLOB, $names2);
-    is($query2->size(), 2);
-    my $it = $query2->begin();
-    my $e = $query2->end();
-    my %nevras_map = map { $_ => 1 } @nevras;
+    my $query = new libdnf::rpm::SolvQuery($sack);
+    $query->ifilter_name($libdnf::common::QueryCmp_GLOB, ["pk*"]);
+    is($query->size(), 2);
+
+    my @expected = ("pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64");
+    my @actual = ();
+    # TODO(dmach): implement iteration over query
+    my $it = $query->begin();
+    my $e = $query->end();
     while ($it != $e) {
-        ok(exists($nevras_map{$it->value()->get_nevra()}));
+        #ok(exists($nevras_map{$it->value()->get_nevra()}));
+        push @actual, $it->value()->get_nevra();
         $it->next();
     }
+    ok(@actual ~~ @expected);
 }
 
 done_testing();

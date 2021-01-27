@@ -18,6 +18,9 @@ if(WITH_SANITIZERS)
 endif()
 
 
+# build test data
+add_subdirectory(data)
+
 # libdnf
 add_subdirectory(libdnf)
 

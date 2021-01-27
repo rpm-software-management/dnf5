@@ -1,0 +1,29 @@
+=Ver: 3.0
+
+# 24 packages with different releases
+# just enough to fill 3 bytes in bitmap
+
+=Pkg: pkg 1 1 noarch
+=Pkg: pkg 1 2 noarch
+=Pkg: pkg 1 3 noarch
+=Pkg: pkg 1 4 noarch
+=Pkg: pkg 1 5 noarch
+=Pkg: pkg 1 6 noarch
+=Pkg: pkg 1 7 noarch
+=Pkg: pkg 1 8 noarch
+=Pkg: pkg 1 9 noarch
+=Pkg: pkg 1 10 noarch
+=Pkg: pkg 1 11 noarch
+=Pkg: pkg 1 12 noarch
+=Pkg: pkg 1 13 noarch
+=Pkg: pkg 1 14 noarch
+=Pkg: pkg 1 15 noarch
+=Pkg: pkg 1 16 noarch
+=Pkg: pkg 1 17 noarch
+=Pkg: pkg 1 18 noarch
+=Pkg: pkg 1 19 noarch
+=Pkg: pkg 1 20 noarch
+=Pkg: pkg 1 21 noarch
+=Pkg: pkg 1 22 noarch
+=Pkg: pkg 1 23 noarch
+=Pkg: pkg 1 24 noarch

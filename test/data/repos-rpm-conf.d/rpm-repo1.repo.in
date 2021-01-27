@@ -1,0 +1,5 @@
+[rpm-repo1]
+name=Repository 1
+baseurl=file://@PROJECT_BINARY_DIR@/test/data/repos-rpm/rpm-repo1
+enabled=1
+gpgcheck=0

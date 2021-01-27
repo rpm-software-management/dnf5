@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -62,8 +62,11 @@ namespace CPPUNIT_NS {
 }
 
 
-/// Converts ReldepList to a vector of strings for easy assertions.
+/// Convert ReldepList to a vector of strings for easy assertions.
 std::vector<std::string> to_vector(const libdnf::rpm::ReldepList & rdl);
+
+/// Convert PackageSet to a vector of strings for easy assertions.
+std::vector<std::string> to_vector(const libdnf::rpm::PackageSet & pset);
 
 
 #endif  // TEST_LIBDNF_UTILS_HPP

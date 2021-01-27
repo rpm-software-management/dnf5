@@ -1,6 +1,6 @@
 
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -172,11 +172,11 @@ void ReldepListTest::test_iterator() {
 
 // add_reldep_with_glob uses libsolvs Dataiterator which needs the actual packages
 void ReldepListTest::test_add_reldep_with_glob() {
-    add_repo("dnf-ci-fedora");
+    add_repo_solv("solv-repo1");
 
     libdnf::rpm::ReldepList list(sack);
-    list.add_reldep_with_glob("dwm*");
+    list.add_reldep_with_glob("pkg*");
 
-    const std::vector<std::string> expected = {"dwm-6.1-1.fc29.spec", "dwm", "dwm", "dwm(x86-64)", "dwm(x86-64)"};
+    const std::vector<std::string> expected = {"pkg", "pkg-libs", "pkg.conf", "pkg.conf.d", "pkg-libs"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(list));
 }

@@ -1,0 +1,12 @@
+Normally the repodata is generated from rpms, but we don't have those here,
+so we need to maintain the repodata XMLs by hand. The repomd.xml file contains
+checksums of the other XMLs and these checksums must always correspond with the
+files on disk. Run update-checksums.py to update the checksums any time you make
+any changes.
+
+Records in filelists.xml and other.xml are mapped to primary.xml via the pkgid
+key. Normally it's a sha256 checksum of the indexed RPM. Since the RPM file
+is not available we need to generate a unique pkgid, for example:
+
+    $ uuidgen | sha256sum | cut -d ' ' -f 1
+    ec57b154a186fdc1f71976fc0fde97d51c744bc88d222828b4cfa42e3b1f855b

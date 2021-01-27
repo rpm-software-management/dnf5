@@ -79,6 +79,10 @@ BuildRequires:  python3dist(sphinx)
 BuildRequires:  python3dist(sphinx-rtd-theme)
 %endif
 
+%if %{with tests}
+BuildRequires:  rpm-build
+%endif
+
 %if %{with sanitizers}
 # compiler-rt is required by sanitizers in clang
 BuildRequires:  compiler-rt

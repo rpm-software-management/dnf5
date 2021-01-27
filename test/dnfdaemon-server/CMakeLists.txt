@@ -10,4 +10,7 @@ add_test(
     WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
 )
 
-set_property(TEST test_dnfdaemon_server PROPERTY ENVIRONMENT "${ASAN_OPTIONS}")
+set_property(TEST test_dnfdaemon_server PROPERTY ENVIRONMENT
+    "${ASAN_OPTIONS}"
+    "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}"
+)

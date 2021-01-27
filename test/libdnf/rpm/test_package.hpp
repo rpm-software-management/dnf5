@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -76,8 +76,8 @@ class RpmPackageTest : public RepoFixture {
     CPPUNIT_TEST(test_get_media_number);
     CPPUNIT_TEST(test_get_rpmdbid);
 
-    CPPUNIT_TEST(test_nevra_to_string);
-    CPPUNIT_TEST(test_full_nevra_to_string);
+    CPPUNIT_TEST(test_to_nevra_string);
+    CPPUNIT_TEST(test_to_full_nevra_string);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -130,8 +130,8 @@ public:
     void test_get_media_number();
     void test_get_rpmdbid();
 
-    void test_nevra_to_string();
-    void test_full_nevra_to_string();
+    void test_to_nevra_string();
+    void test_to_full_nevra_string();
 };
 
 

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -19,21 +19,58 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/repo_sack.hpp"
 
+#include "repo_impl.hpp"
+
 #include "libdnf/base/base.hpp"
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/option_bool.hpp"
+#include "libdnf/rpm/solv_sack_impl.hpp"
+#include "libdnf/utils/exception.hpp"
 
 #include <fmt/format.h>
 
+extern "C" {
+#include <solv/repo.h>
+#include <solv/solv_xfopen.h>
+#include <solv/testcase.h>
+}
+
+#include <cerrno>
 #include <filesystem>
 
+using LibsolvRepo = ::Repo;
+
+
 namespace libdnf::rpm {
+
 
 RepoWeakPtr RepoSack::new_repo(const std::string & id) {
     // TODO(jrohel): Test repo exists
     auto repo = std::make_unique<Repo>(id, *base, Repo::Type::AVAILABLE);
     return add_item_with_return(std::move(repo));
 }
+
+// Deleter for std::unique_ptr<LibsolvRepo>
+static void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
+    repo_free(libsolv_repo, 1);
+}
+
+
+RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path) {
+    std::unique_ptr<std::FILE, decltype(&std::fclose)> testcase_file(solv_xfopen(path.c_str(), "r"), &std::fclose);
+    if (!testcase_file) {
+        throw SystemError(EIO, "Unable to open libsolv testcase file", path);
+    }
+
+    auto repo = new_repo(repoid);
+    Pool * pool = base->get_rpm_solv_sack().p_impl->get_pool();
+    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, repoid.c_str()), &libsolv_repo_free);
+    testcase_add_testtags(libsolv_repo.get(), testcase_file.get(), 0);
+    repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
+
+    return repo;
+}
+
 
 void RepoSack::new_repos_from_file(const std::string & path) {
     auto & logger = base->get_logger();

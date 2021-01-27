@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<metadata xmlns="http://linux.duke.edu/metadata/common" xmlns:rpm="http://linux.duke.edu/metadata/rpm" packages="1">
+
+<package type="rpm">
+  <name>pkg</name>
+  <arch>x86_64</arch>
+  <version epoch="0" ver="1.2" rel="3"/>
+  <checksum type="sha256" pkgid="YES">ec57b154a186fdc1f71976fc0fde97d51c744bc88d222828b4cfa42e3b1f855b</checksum>
+  <summary>Summary</summary>
+  <description>Description</description>
+  <packager>Packager</packager>
+  <url>http://example.com/</url>
+  <time file="123" build="456"/>
+  <size package="111" installed="222" archive="333"/>
+  <location href="pkg-1.2-3.x86_64.rpm"/>
+  <format>
+    <rpm:license>License</rpm:license>
+    <rpm:vendor>Vendor</rpm:vendor>
+    <rpm:group>Group</rpm:group>
+    <rpm:buildhost>Buildhost</rpm:buildhost>
+    <rpm:sourcerpm>pkg-1.2-3.src.rpm</rpm:sourcerpm>
+    <rpm:header-range start="11" end="22"/>
+  </format>
+</package>
+
+<package type="rpm">
+  <name>pkg-libs</name>
+  <arch>x86_64</arch>
+  <version epoch="1" ver="1.3" rel="4"/>
+  <checksum type="sha256" pkgid="YES">caa857c48130b4fdea3f7fa498da4324ae2ac00c8900d71c0eef0a90457636bd</checksum>
+  <summary>Summary</summary>
+  <description>Description</description>
+  <packager>Packager</packager>
+  <url>http://example.com/</url>
+  <time file="123" build="456"/>
+  <size package="111" installed="222" archive="333"/>
+  <location href="pkg-libs-1.3-4.x86_64.rpm"/>
+  <format>
+    <rpm:license>License</rpm:license>
+    <rpm:vendor>Vendor</rpm:vendor>
+    <rpm:group>Group</rpm:group>
+    <rpm:buildhost>Buildhost</rpm:buildhost>
+    <rpm:sourcerpm>pkg-1.3-4.src.rpm</rpm:sourcerpm>
+    <rpm:header-range start="11" end="22"/>
+  </format>
+</package>
+
+<package type="rpm">
+  <name>unresolvable</name>
+  <arch>noarch</arch>
+  <version epoch="1" ver="2" rel="3"/>
+  <checksum type="sha256" pkgid="YES">acedd07199eae0111f1306b8b5d794a3358568feb0ccf0fd39bd8d815fd78ece</checksum>
+  <summary>Summary</summary>
+  <description>Description</description>
+  <packager>Packager</packager>
+  <url>http://example.com/</url>
+  <time file="123" build="456"/>
+  <size package="111" installed="222" archive="333"/>
+  <location xml:base="http://example.com/" href="unresolvable-2-3.x86_64.rpm"/>
+  <format>
+    <rpm:license>License</rpm:license>
+    <rpm:vendor>Vendor</rpm:vendor>
+    <rpm:group>Group</rpm:group>
+    <rpm:buildhost>Buildhost</rpm:buildhost>
+    <rpm:sourcerpm>unresolvable-2-3.src.rpm</rpm:sourcerpm>
+    <rpm:header-range start="11" end="22"/>
+    <rpm:provides>
+      <rpm:entry name="prv" flags="EQ" epoch="1" ver="2" rel="3"/>
+    </rpm:provides>
+    <rpm:requires>
+      <rpm:entry name="req" flags="EQ" epoch="1" ver="2" rel="3"/>
+      <rpm:entry name="prereq" pre="1"/>
+    </rpm:requires>
+    <rpm:conflicts>
+      <rpm:entry name="con" flags="LT" epoch="1" ver="2"/>
+    </rpm:conflicts>
+    <rpm:obsoletes>
+      <rpm:entry name="obs" flags="LT" epoch="1" ver="2"/>
+    </rpm:obsoletes>
+    <rpm:recommends>
+      <rpm:entry name="rec"/>
+    </rpm:recommends>
+    <rpm:supplements>
+      <rpm:entry name="sup"/>
+    </rpm:supplements>
+    <rpm:suggests>
+      <rpm:entry name="sug"/>
+    </rpm:suggests>
+    <rpm:enhances>
+      <rpm:entry name="enh"/>
+    </rpm:enhances>
+  </format>
+</package>
+
+</metadata>

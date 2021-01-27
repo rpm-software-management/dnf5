@@ -27,17 +27,19 @@ class RepoTest(unittest.TestCase):
 
     def setUp(self):
         self.installroot = tempfile.mkdtemp(prefix="dnfdaemon-test-")
-        reposdir = os.path.join(self.installroot, 'etc/yum.repos.d')
-
-        # generate .repo files
-        support.create_reposdir(reposdir)
+        self.reposdir = os.path.join(support.PROJECT_BINARY_DIR, "test/data/repos-rpm-conf.d")
 
         self.bus = dbus.SystemBus()
         self.iface_session = dbus.Interface(
             self.bus.get_object(support.DNFDAEMON_BUS_NAME, support.DNFDAEMON_OBJECT_PATH),
             dbus_interface=support.IFACE_SESSION_MANAGER)
-        self.session = self.iface_session.open_session(
-            dict(reposdir=reposdir, load_system_repo=False, load_available_repos=True))
+        self.session = self.iface_session.open_session({
+            "installroot": self.installroot,
+            "cachedir": os.path.join(self.installroot, "var/cache/dnf"),
+            "reposdir": self.reposdir,
+            "load_system_repo": False,
+            "load_available_repos": True,
+        })
         self.iface_rpm = dbus.Interface(
             self.bus.get_object(support.DNFDAEMON_BUS_NAME, self.session),
             dbus_interface=support.IFACE_RPM)
@@ -58,12 +60,20 @@ class RepoTest(unittest.TestCase):
             pkglist,
             dbus.Array([
                 dbus.Dictionary({
-                    dbus.String('full_nevra'): dbus.String('pkg-a-0:1.0.1-0.x86_64', variant_level=1),
-                    dbus.String('repo'): dbus.String('repo-a', variant_level=1)},
+                    dbus.String('full_nevra'): dbus.String('one-0:1-1.noarch', variant_level=1),
+                    dbus.String('repo'): dbus.String('repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
-                    dbus.String('full_nevra'): dbus.String('another-package-0:1.0.1-0.x86_64', variant_level=1),
-                    dbus.String('repo'): dbus.String('repo-b', variant_level=1)},
+                    dbus.String('full_nevra'): dbus.String('one-0:1-1.src', variant_level=1),
+                    dbus.String('repo'): dbus.String('repo1', variant_level=1)},
+                    signature=dbus.Signature('sv')),
+                dbus.Dictionary({
+                    dbus.String('full_nevra'): dbus.String('two-0:2-2.noarch', variant_level=1),
+                    dbus.String('repo'): dbus.String('repo2', variant_level=1)},
+                    signature=dbus.Signature('sv')),
+                dbus.Dictionary({
+                    dbus.String('full_nevra'): dbus.String('two-0:2-2.src', variant_level=1),
+                    dbus.String('repo'): dbus.String('repo2', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 ],
                 signature=dbus.Signature('a{sv}'))
@@ -73,7 +83,7 @@ class RepoTest(unittest.TestCase):
         # get list of all available packages
         pkglist = self.iface_rpm.list({
             "package_attrs": ["full_nevra", "repo"],
-            "patterns":["pkg-a"]})
+            "patterns":["one"]})
         # id of package depends on order of the repos in the sack which varies
         # between runs so we can't rely on the value
         for pkg in pkglist:
@@ -83,9 +93,13 @@ class RepoTest(unittest.TestCase):
             pkglist,
             dbus.Array([
                 dbus.Dictionary({
-                    dbus.String('full_nevra'): dbus.String('pkg-a-0:1.0.1-0.x86_64', variant_level=1),
-                    dbus.String('repo'): dbus.String('repo-a', variant_level=1)},
+                    dbus.String('full_nevra'): dbus.String('one-0:1-1.noarch', variant_level=1),
+                    dbus.String('repo'): dbus.String('repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
-                ],
-                signature=dbus.Signature('a{sv}'))
+                dbus.Dictionary({
+                    dbus.String('full_nevra'): dbus.String('one-0:1-1.src', variant_level=1),
+                    dbus.String('repo'): dbus.String('repo1', variant_level=1)},
+                    signature=dbus.Signature('sv')),
+            ],
+            signature=dbus.Signature('a{sv}'))
         )

@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Red Hat, Inc.
+# Copyright (C) 2020-2021 Red Hat, Inc.
 #
 # This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 #
@@ -38,10 +38,10 @@ class TestRepo(unittest.TestCase):
         solv_sack.create_system_repo(False)
 
         # Creates new repositories in the repo_sack
-        repo = repo_sack.new_repo("dnf-ci-fedora")
+        repo = repo_sack.new_repo("repomd-repo1")
 
-        # Tunes repositotory configuration (baseurl is mandatory)
-        repo_path = os.path.join(cwd, "../../../test/libdnf/rpm/repos-data/dnf-ci-fedora/")
+        # Tunes repository configuration (baseurl is mandatory)
+        repo_path = os.path.join(cwd, "../../../test/data/repos-repomd/repomd-repo1/")
         baseurl = "file://" + repo_path
         repo_cfg = repo.get_config()
         repo_cfg.baseurl().set(libdnf.conf.Option.Priority_RUNTIME, baseurl)

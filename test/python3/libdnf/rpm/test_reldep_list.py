@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Red Hat, Inc.
+# Copyright (C) 2020-2021 Red Hat, Inc.
 #
 # This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 #
@@ -33,10 +33,10 @@ class TestReldepList(unittest.TestCase):
         self.sack = libdnf.rpm.SolvSack(self.base)
 
         # Creates new repositories in the repo_sack
-        repo = self.repo_sack.new_repo("dnf-ci-fedora")
+        repo = self.repo_sack.new_repo("repomd-repo1")
 
-        # Tunes repositotory configuration (baseurl is mandatory)
-        repo_path = os.path.join(cwd, "../../../test/libdnf/rpm/repos-data/dnf-ci-fedora/")
+        # Tunes repository configuration (baseurl is mandatory)
+        repo_path = os.path.join(cwd, "../../../test/data/repos-repomd/repomd-repo1/")
         baseurl = "file://" + repo_path
         repo_cfg = repo.get_config()
         repo_cfg.baseurl().set(libdnf.conf.Option.Priority_RUNTIME, baseurl)
@@ -86,7 +86,7 @@ class TestReldepList(unittest.TestCase):
         self.assertEqual(list1, list2)
 
         list1.add(a)
-        self.assertNotEquals(list1, list2)
+        self.assertNotEqual(list1, list2)
 
         list2.add(a)
         list1.add(b)
@@ -152,8 +152,9 @@ class TestReldepList(unittest.TestCase):
     # add_reldep_with_glob uses libsolvs Dataiterator which needs the actual packages
     def test_add_reldep_with_glob(self):
         list1 = libdnf.rpm.ReldepList(self.sack)
-        list1.add_reldep_with_glob("dwm*")
+        list1.add_reldep_with_glob("pkg*")
 
-        expected = ["dwm-6.1-1.fc29.spec", "dwm", "dwm", "dwm(x86-64)", "dwm(x86-64)"]
+        expected = ["pkg", "pkg.conf", "pkg.conf.d", "pkg-libs"]
+        # TODO(dmach): implement __str__()
         result = [reldep.to_string() for reldep in list1]
         self.assertEqual(expected, result)

@@ -17,33 +17,12 @@
 
 import os
 
+# the following settings come from cmake and are passed as ENVIRONMENT variables in CMakeLists.txt
+PROJECT_BINARY_DIR = os.environ["PROJECT_BINARY_DIR"]
+
 DNFDAEMON_BUS_NAME = 'org.rpm.dnf.v0'
 DNFDAEMON_OBJECT_PATH = '/' + DNFDAEMON_BUS_NAME.replace('.', '/')
 
 IFACE_SESSION_MANAGER = '{}.SessionManager'.format(DNFDAEMON_BUS_NAME)
 IFACE_REPO = '{}.rpm.Repo'.format(DNFDAEMON_BUS_NAME)
 IFACE_RPM = '{}.rpm.Rpm'.format(DNFDAEMON_BUS_NAME)
-
-
-def create_reposdir(reposdir):
-    REPO_TEMPLATE = '''[{reponame}]
-name=Repository {reponame}
-baseurl=file:///{repopath}
-enabled=1
-'''
-    data_path = os.path.abspath(
-        os.path.join(os.path.dirname(__file__), 'test_data/repos/'))
-
-    def configure_repo(config_file, reponame):
-        repopath = os.path.join(data_path, reponame)
-        os.makedirs(os.path.dirname(config_file), exist_ok=True)
-        with open(config_file, 'a') as f:
-            f.write(REPO_TEMPLATE.format(reponame=reponame, repopath=repopath))
-
-    os.makedirs(reposdir, exist_ok=True)
-    for repo_dir in os.scandir(data_path):
-        if not repo_dir.is_dir():
-            continue
-        configure_repo(
-            os.path.join(reposdir, '{}.repo'.format(repo_dir.name)),
-            repo_dir.name)

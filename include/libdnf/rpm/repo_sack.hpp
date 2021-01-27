@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -58,6 +58,9 @@ public:
     /// The created repositories are added into RepoSack.
     /// The files in the directories are read in alphabetical order.
     void new_repos_from_dirs();
+
+    /// Create a new repository from a libsolv testcase file
+    RepoWeakPtr new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path);
 
 private:
     //TODO(jrohel): Make public?

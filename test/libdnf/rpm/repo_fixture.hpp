@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -37,7 +37,8 @@ public:
     void dump_debugdata();
 
 protected:
-    void add_repo(const std::string & name);
+    void add_repo_repomd(const std::string & repoid);
+    void add_repo_solv(const std::string & repoid);
 
     std::unique_ptr<libdnf::Base> base;
     libdnf::rpm::RepoSack * repo_sack;

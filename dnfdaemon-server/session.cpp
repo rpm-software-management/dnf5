@@ -84,7 +84,6 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     , session_configuration(session_configuration)
     , object_path(object_path) {
 
-
     // adjust base.config from session_configuration
     auto & config = base->get_config();
     std::vector<std::string> config_items {
@@ -105,7 +104,7 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
 
     // set cachedir
     auto system_cache_dir = config.system_cachedir().get_value();
-    config.cachedir().set(libdnf::Option::Priority::RUNTIME, system_cache_dir);
+    config.cachedir().set(libdnf::Option::Priority::DEFAULT, system_cache_dir);
     // set variables
     base->get_vars().load(
         config.installroot().get_value(),

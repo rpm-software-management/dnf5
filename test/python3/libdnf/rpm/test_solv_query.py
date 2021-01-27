@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Red Hat, Inc.
+# Copyright (C) 2020-2021 Red Hat, Inc.
 #
 # This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 #
@@ -33,10 +33,10 @@ class TestSolvQuery(unittest.TestCase):
         self.sack = libdnf.rpm.SolvSack(self.base)
 
         # Creates new repositories in the repo_sack
-        repo = self.repo_sack.new_repo("dnf-ci-fedora")
+        repo = self.repo_sack.new_repo("repomd-repo1")
 
-        # Tunes repositotory configuration (baseurl is mandatory)
-        repo_path = os.path.join(cwd, "../../../test/libdnf/rpm/repos-data/dnf-ci-fedora/")
+        # Tunes repository configuration (baseurl is mandatory)
+        repo_path = os.path.join(cwd, "../../../test/data/repos-repomd/repomd-repo1/")
         baseurl = "file://" + repo_path
         repo_cfg = repo.get_config()
         repo_cfg.baseurl().set(libdnf.conf.Option.Priority_RUNTIME, baseurl)
@@ -49,7 +49,7 @@ class TestSolvQuery(unittest.TestCase):
 
     def test_size(self):
         query = libdnf.rpm.SolvQuery(self.sack)
-        self.assertEqual(query.size(), 291)
+        self.assertEqual(query.size(), 3)
 
     def test_iterate_solv_query(self):
         query = libdnf.rpm.SolvQuery(self.sack)
@@ -108,25 +108,18 @@ class TestSolvQuery(unittest.TestCase):
         self.assertGreaterEqual(prev_id, libdnf.rpm.SolvQuery(self.sack).size())
 
     def test_ifilter_name(self):
-
-        nevras = {"CQRlib-1.1.1-4.fc29.src", "CQRlib-1.1.1-4.fc29.x86_64"}
-        nevras_contains = {"CQRlib-1.1.1-4.fc29.src", "CQRlib-1.1.1-4.fc29.x86_64",
-                           "CQRlib-devel-1.1.2-16.fc29.src", "CQRlib-devel-1.1.2-16.fc29.x86_64"}
-        full_nevras = {"CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
-                       "nodejs-1:5.12.1-1.fc29.src", "nodejs-1:5.12.1-1.fc29.x86_64"}
-
         # Test QueryCmp::EQ
         query = libdnf.rpm.SolvQuery(self.sack)
-        names = ["CQRlib"]
-        query.ifilter_name(libdnf.common.QueryCmp_EQ, names)
-        self.assertEqual(query.size(), 2)
-        for pkg in query:
-            self.assertTrue(pkg.get_nevra() in nevras)
+        query.ifilter_name(libdnf.common.QueryCmp_EQ, ["pkg"])
+        self.assertEqual(query.size(), 1)
+        # TODO(dmach): implement __str__()
+        self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64"])
+
+        # ---
 
         # Test QueryCmp::GLOB
-        query2 = libdnf.rpm.SolvQuery(self.sack)
-        names2 = ["CQ?lib"]
-        query2.ifilter_name(libdnf.common.QueryCmp_GLOB, names2)
-        self.assertEqual(query2.size(), 2)
-        for pkg in query2:
-            self.assertTrue(pkg.get_nevra() in nevras)
+        query = libdnf.rpm.SolvQuery(self.sack)
+        query.ifilter_name(libdnf.common.QueryCmp_GLOB, ["pk*"])
+        self.assertEqual(query.size(), 2)
+        # TODO(dmach): implement __str__()
+        self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])
