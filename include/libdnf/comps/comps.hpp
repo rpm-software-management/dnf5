@@ -41,7 +41,7 @@ public:
 
     //void load_installed();
     // Load comps from given file into the pool
-    //void load_from_file(const std::string & path, const char * reponame);
+    void load_from_file(const std::string & path, const char * reponame);
     GroupSack & get_group_sack() { return group_sack; }
 
 private:
