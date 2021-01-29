@@ -45,7 +45,7 @@ public:
     ~GroupSack();
 
     // Create new query with newly composed groups (using only solvables from currently enabled repositories)
-    //GroupQuery new_query();
+    GroupQuery new_query();
 
     /// Create WeakPtr to GroupSack
     GroupSackWeakPtr get_weak_ptr();
