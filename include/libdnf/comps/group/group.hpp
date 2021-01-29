@@ -61,42 +61,44 @@ public:
     void add_group_id(GroupId group_id) { group_ids.push_back(group_id); }
 
     /// Get group id
-    //std::string get_groupid() const;
+    std::string get_groupid() const;
 
     /// Get group name
-    //std::string get_name() const;
+    std::string get_name() const;
 
     /// Get group description
-    //std::string get_description() const;
+    std::string get_description() const;
 
     /// Get translated name of a group based on current locales.
     /// If a translation is not found, return untranslated name.
     ///
     /// @replaces dnf:dnf/comps.py:attribute:Group.ui_name
-    //std::string get_translated_name(const char * lang) const;
+    std::string get_translated_name(const char * lang) const;
+    std::string get_translated_name() const;
 
     /// Get translated description of a group based on current locales.
     /// If a translation is not found, return untranslated description.
     ///
     /// @replaces dnf:dnf/comps.py:attribute:Group.ui_description
-    //std::string get_translated_description(const char * lang) const;
+    std::string get_translated_description(const char * lang) const;
+    std::string get_translated_description() const;
 
     /// Get group order
-    //std::string get_order() const;
+    std::string get_order() const;
 
     /// Get group langonly
-    //std::string get_langonly() const;
+    std::string get_langonly() const;
 
     /// Determine if group is visible to the users
     ///
     /// @replaces dnf:dnf/comps.py:attribute:Group.visible
-    //bool get_uservisible() const;
+    bool get_uservisible() const;
 
     /// Determine if group is installed by default
-    //bool get_default() const;
+    bool get_default() const;
 
     /// @replaces dnf:dnf/comps.py:method:Group.packages_iter(self)
-    //std::vector<Package> get_packages();
+    std::vector<Package> get_packages();
 
     /// @replaces dnf:dnf/comps.py:attribute:Group.conditional_packages
     /// @replaces dnf:dnf/comps.py:attribute:Group.default_packages
@@ -104,16 +106,16 @@ public:
     /// @replaces dnf:dnf/comps.py:attribute:Group.optional_packages
     //std::vector<Package> get_packages(bool mandatory_groups, bool optional_groups) const;
 
-    //std::set<std::string> get_repos() const;
+    std::set<std::string> get_repos() const;
 
     /// Determine if group is installed
     /// If it belongs to the @System repo, return true
-    //bool get_installed() const;
+    bool get_installed() const;
 
     /// Merge a comps Group with another one
     Group & operator+=(const Group & rhs);
 
-    //bool operator<(const Group & rhs) const { return this->get_groupid() < rhs.get_groupid(); };
+    bool operator<(const Group & rhs) const { return this->get_groupid() < rhs.get_groupid(); };
 
 protected:
     explicit Group(GroupQuery * query);

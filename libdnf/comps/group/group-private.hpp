@@ -37,6 +37,11 @@ void add_solvable_id(Group & group, Id solvable_id);
 void add_solvable_ids(Group & group, std::vector<Id> solvable_ids);
 
 
+// Search solvables that correspond to the group_ids for given key
+// Return first non-empty string
+std::string lookup_str(Pool * pool, std::vector<GroupId> group_ids, Id key);
+
+
 }  // namespace libdnf::comps
 
 #endif  // LIBDNF_COMPS_GROUP_GROUP_PRIVATE_HPP

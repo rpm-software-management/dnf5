@@ -42,6 +42,12 @@ public:
     explicit GroupQuery(const GroupQuery & query);
     ~GroupQuery();
 
+    GroupQuery & ifilter_groupid(sack::QueryCmp cmp, const std::string & pattern);
+    GroupQuery & ifilter_groupid(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
+    GroupQuery & ifilter_uservisible(bool value);
+    GroupQuery & ifilter_default(bool value);
+    GroupQuery & ifilter_installed(bool value);
+
     /// Create WeakPtr to GroupQuery
     GroupQueryWeakPtr get_weak_ptr();
 
@@ -50,6 +56,13 @@ protected:
     GroupQuery(GroupQuery && query);
 
 private:
+    struct F {
+        static std::string groupid(const Group & obj) { return obj.get_groupid(); }
+        static bool is_uservisible(const Group & obj) { return obj.get_uservisible(); }
+        static bool is_default(const Group & obj) { return obj.get_default(); }
+        static bool is_installed(const Group & obj) { return obj.get_installed(); }
+    };
+
     GroupSackWeakPtr sack;
 
     class Impl;
@@ -58,6 +71,36 @@ private:
     friend Group;
     friend GroupSack;
 };
+
+
+inline GroupQuery & GroupQuery::ifilter_groupid(sack::QueryCmp cmp, const std::string & pattern) {
+    ifilter(F::groupid, cmp, pattern);
+    return *this;
+}
+
+
+inline GroupQuery & GroupQuery::ifilter_groupid(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
+    ifilter(F::groupid, cmp, patterns);
+    return *this;
+}
+
+
+inline GroupQuery & GroupQuery::ifilter_default(bool value) {
+    ifilter(F::is_default, sack::QueryCmp::EQ, value);
+    return *this;
+}
+
+
+inline GroupQuery & GroupQuery::ifilter_uservisible(bool value) {
+    ifilter(F::is_uservisible, sack::QueryCmp::EQ, value);
+    return *this;
+}
+
+
+inline GroupQuery & GroupQuery::ifilter_installed(bool value) {
+    ifilter(F::is_installed, sack::QueryCmp::EQ, value);
+    return *this;
+}
 
 
 }  // namespace libdnf::comps
