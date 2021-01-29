@@ -670,7 +670,9 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx) {
     auto & transaction_sack = ctx.base.get_transaction_sack();
     auto transaction = transaction_sack.new_transaction();
     transaction->set_user_id(get_login_uid());
-    transaction->set_comment(ctx.get_comment());
+    if (auto comment = ctx.get_comment()) {
+        transaction->set_comment(comment);
+    }
     transaction->set_releasever(ctx.base.get_vars().get_values().at("releasever"));
     auto arguments = ctx.get_prg_arguments();
     std::string cmd_line;
