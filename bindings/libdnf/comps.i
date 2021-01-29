@@ -22,7 +22,7 @@
 
 #define CV __perl_CV
 
-// %template(SackQueryGroup) libdnf::sack::Query<libdnf::comps::Group>;
+%template(SackQueryGroup) libdnf::sack::Query<libdnf::comps::Group>;
 
 %include "libdnf/comps/group/package.hpp"
 %include "libdnf/comps/group/group.hpp"
