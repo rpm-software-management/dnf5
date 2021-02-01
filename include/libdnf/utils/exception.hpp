@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -24,7 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <system_error>
 
+
 namespace libdnf {
+
 
 /// Base class of libdnf exceptions. Each exception define at least domain_name, name, and description.
 /// These information can be used to serialize exception into a string.
@@ -75,26 +77,47 @@ public:
 /// Wraps the error code originated from the operating system.
 class SystemError : public RuntimeError {
 public:
-    SystemError(int code, const std::string & what) : RuntimeError(what), error_code(code) {}
-    SystemError(int code, const char * what) : RuntimeError(what), error_code(code) {}
+    SystemError(int error_code, const std::string & what) : RuntimeError(what), error_code{error_code} {}
+    SystemError(int error_code, const char * what) : RuntimeError(what), error_code{error_code} {}
+    SystemError(int error_code, const std::string & what, const std::string & path) : RuntimeError(what), error_code{error_code}, path{path} {}
     const char * get_domain_name() const noexcept override { return "system"; }
     const char * get_name() const noexcept override { return "SystemError"; }
     const char * get_description() const noexcept override { return "System error"; }
+    int get_error_code() const noexcept { return error_code; }
+    const std::string & get_path() const noexcept { return path; }
     const char * what() const noexcept override {
         try {
+            // example: "General RuntimeError exception: [Errno 1] "
             str_what = get_description();
-            str_what +=
-                ": " + std::system_category().default_error_condition(error_code).message() + ": " + get_message();
+            str_what += ": [Errno ";
+            str_what += std::to_string(get_error_code());
+
+            // example: "Operation not permitted"
+            str_what += std::system_category().default_error_condition(error_code).message();
+
+            // example: ": Unable to install package"
+            if (runtime_error::what()) {
+                str_what += ": ";
+                str_what += runtime_error::what();
+            }
+
+            // example: ": /path/to/file"
+            if (!path.empty()) {
+                str_what += ": ";
+                str_what += get_path();
+            }
+
             return str_what.c_str();
         } catch (...) {
             return Exception::what();
         }
     }
-    int get_code() const noexcept { return error_code; }
 
 private:
-    int error_code;
+    const int error_code;
+    const std::string path;
 };
+
 
 }  // namespace libdnf
 
