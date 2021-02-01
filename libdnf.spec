@@ -80,7 +80,7 @@ BuildRequires:  pkgconfig(libsolvext) >= %{libsolv_version}
 %if %{with modulemd}
 BuildRequires:  pkgconfig(modulemd-2.0) >= %{libmodulemd_version}
 %endif
-BuildRequires:  pkgconfig(rpm) >= 4.11.0
+BuildRequires:  pkgconfig(rpm) >= 4.17.0
 BuildRequires:  pkgconfig(sqlite3)
 %if %{with zchunk}
 BuildRequires:  pkgconfig(zck) >= %{zchunk_version}

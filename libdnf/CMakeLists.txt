@@ -48,7 +48,7 @@ pkg_check_modules(LIBSOLVEXT REQUIRED libsolvext>=0.7.7)
 list(APPEND LIBDNF_PC_REQUIRES_PRIVATE "${LIBSOLVEXT_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBSOLVEXT_LIBRARIES})
 
-pkg_check_modules(RPM REQUIRED rpm>=4.11.0)
+pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
 list(APPEND LIBDNF_PC_REQUIRES "${RPM_MODULE_NAME}")
 target_link_libraries(libdnf ${RPM_LIBRARIES})
 
