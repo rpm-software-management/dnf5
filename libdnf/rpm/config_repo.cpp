@@ -28,14 +28,14 @@ namespace libdnf::rpm {
 class ConfigRepo::Impl {
     friend class ConfigRepo;
 
-    Impl(Config & owner, ConfigMain & master_config);
+    Impl(Config & owner, ConfigMain & main_config);
 
     Config & owner;
-    ConfigMain & master_config;
+    ConfigMain & main_config;
 
     OptionString name{""};
-    OptionChild<OptionBool> enabled{master_config.enabled()};
-    OptionChild<OptionString> basecachedir{master_config.cachedir()};
+    OptionChild<OptionBool> enabled{main_config.enabled()};
+    OptionChild<OptionString> basecachedir{main_config.cachedir()};
     OptionStringList baseurl{std::vector<std::string>{}};
     OptionString mirrorlist{nullptr};
     OptionString metalink{nullptr};
@@ -44,43 +44,43 @@ class ConfigRepo::Impl {
     OptionStringList gpgkey{std::vector<std::string>{}};
     OptionStringList excludepkgs{std::vector<std::string>{}};
     OptionStringList includepkgs{std::vector<std::string>{}};
-    OptionChild<OptionBool> fastestmirror{master_config.fastestmirror()};
-    OptionChild<OptionString> proxy{master_config.proxy()};
-    OptionChild<OptionString> proxy_username{master_config.proxy_username()};
-    OptionChild<OptionString> proxy_password{master_config.proxy_password()};
-    OptionChild<OptionEnum<std::string>> proxy_auth_method{master_config.proxy_auth_method()};
-    OptionChild<OptionString> username{master_config.username()};
-    OptionChild<OptionString> password{master_config.password()};
-    OptionChild<OptionStringList> protected_packages{master_config.protected_packages()};
-    OptionChild<OptionBool> gpgcheck{master_config.gpgcheck()};
-    OptionChild<OptionBool> repo_gpgcheck{master_config.repo_gpgcheck()};
-    OptionChild<OptionBool> enablegroups{master_config.enablegroups()};
-    OptionChild<OptionNumber<std::uint32_t>> retries{master_config.retries()};
-    OptionChild<OptionNumber<std::uint32_t>> bandwidth{master_config.bandwidth()};
-    OptionChild<OptionNumber<std::uint32_t>> minrate{master_config.minrate()};
-    OptionChild<OptionEnum<std::string>> ip_resolve{master_config.ip_resolve()};
-    OptionChild<OptionNumber<float>> throttle{master_config.throttle()};
-    OptionChild<OptionSeconds> timeout{master_config.timeout()};
-    OptionChild<OptionNumber<std::uint32_t>> max_parallel_downloads{master_config.max_parallel_downloads()};
-    OptionChild<OptionSeconds> metadata_expire{master_config.metadata_expire()};
+    OptionChild<OptionBool> fastestmirror{main_config.fastestmirror()};
+    OptionChild<OptionString> proxy{main_config.proxy()};
+    OptionChild<OptionString> proxy_username{main_config.proxy_username()};
+    OptionChild<OptionString> proxy_password{main_config.proxy_password()};
+    OptionChild<OptionEnum<std::string>> proxy_auth_method{main_config.proxy_auth_method()};
+    OptionChild<OptionString> username{main_config.username()};
+    OptionChild<OptionString> password{main_config.password()};
+    OptionChild<OptionStringList> protected_packages{main_config.protected_packages()};
+    OptionChild<OptionBool> gpgcheck{main_config.gpgcheck()};
+    OptionChild<OptionBool> repo_gpgcheck{main_config.repo_gpgcheck()};
+    OptionChild<OptionBool> enablegroups{main_config.enablegroups()};
+    OptionChild<OptionNumber<std::uint32_t>> retries{main_config.retries()};
+    OptionChild<OptionNumber<std::uint32_t>> bandwidth{main_config.bandwidth()};
+    OptionChild<OptionNumber<std::uint32_t>> minrate{main_config.minrate()};
+    OptionChild<OptionEnum<std::string>> ip_resolve{main_config.ip_resolve()};
+    OptionChild<OptionNumber<float>> throttle{main_config.throttle()};
+    OptionChild<OptionSeconds> timeout{main_config.timeout()};
+    OptionChild<OptionNumber<std::uint32_t>> max_parallel_downloads{main_config.max_parallel_downloads()};
+    OptionChild<OptionSeconds> metadata_expire{main_config.metadata_expire()};
     OptionNumber<std::int32_t> cost{1000};
     OptionNumber<std::int32_t> priority{99};
     OptionBool module_hotfixes{false};
-    OptionChild<OptionString> sslcacert{master_config.sslcacert()};
-    OptionChild<OptionBool> sslverify{master_config.sslverify()};
-    OptionChild<OptionString> sslclientcert{master_config.sslclientcert()};
-    OptionChild<OptionString> sslclientkey{master_config.sslclientkey()};
-    OptionChild<OptionBool> deltarpm{master_config.deltarpm()};
-    OptionChild<OptionNumber<std::uint32_t>> deltarpm_percentage{master_config.deltarpm_percentage()};
-    OptionChild<OptionBool> skip_if_unavailable{master_config.skip_if_unavailable()};
+    OptionChild<OptionString> sslcacert{main_config.sslcacert()};
+    OptionChild<OptionBool> sslverify{main_config.sslverify()};
+    OptionChild<OptionString> sslclientcert{main_config.sslclientcert()};
+    OptionChild<OptionString> sslclientkey{main_config.sslclientkey()};
+    OptionChild<OptionBool> deltarpm{main_config.deltarpm()};
+    OptionChild<OptionNumber<std::uint32_t>> deltarpm_percentage{main_config.deltarpm_percentage()};
+    OptionChild<OptionBool> skip_if_unavailable{main_config.skip_if_unavailable()};
     OptionString enabled_metadata{""};
-    OptionChild<OptionString> user_agent{master_config.user_agent()};
-    OptionChild<OptionBool> countme{master_config.countme()};
+    OptionChild<OptionString> user_agent{main_config.user_agent()};
+    OptionChild<OptionBool> countme{main_config.countme()};
     OptionEnum<std::string> failovermethod{"priority", {"priority", "roundrobin"}};
     OptionBool build_cache{true};
 };
 
-ConfigRepo::Impl::Impl(Config & owner, ConfigMain & master_config) : owner(owner), master_config(master_config) {
+ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config) : owner(owner), main_config(main_config) {
     owner.opt_binds().add("name", name);
     owner.opt_binds().add("enabled", enabled);
     owner.opt_binds().add("cachedir", basecachedir);
@@ -170,15 +170,15 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & master_config) : owner(owner
     owner.opt_binds().add("build_cache", build_cache);
 }
 
-ConfigRepo::ConfigRepo(ConfigMain & master_config) : p_impl(new Impl(*this, master_config)) {}
+ConfigRepo::ConfigRepo(ConfigMain & main_config) : p_impl(new Impl(*this, main_config)) {}
 ConfigRepo::~ConfigRepo() = default;
 ConfigRepo::ConfigRepo(ConfigRepo && src) : p_impl(std::move(src.p_impl)) {}
 
-ConfigMain & ConfigRepo::get_master_config() {
-    return p_impl->master_config;
+ConfigMain & ConfigRepo::get_main_config() {
+    return p_impl->main_config;
 }
-const ConfigMain & ConfigRepo::get_master_config() const {
-    return p_impl->master_config;
+const ConfigMain & ConfigRepo::get_main_config() const {
+    return p_impl->main_config;
 }
 
 OptionString & ConfigRepo::name() {

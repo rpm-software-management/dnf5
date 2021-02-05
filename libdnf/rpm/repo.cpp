@@ -238,7 +238,7 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
     auto & logger = base->get_logger();
     static const std::string empty;
     std::string lookup_metadata_type = metadata_type;
-    if (config.get_master_config().zchunk().get_value()) {
+    if (config.get_main_config().zchunk().get_value()) {
         if (!ends_with(metadata_type, "_zck")) {
             lookup_metadata_type = metadata_type + "_zck";
         }
@@ -546,7 +546,7 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_local() {
     handle_set_opt(h.get(), LRO_LOCAL, 1L);
 #ifdef LRO_SUPPORTS_CACHEDIR
     /* If zchunk is enabled, set librepo cache dir */
-    if (config.get_master_config().zchunk().get_value()) {
+    if (config.get_main_config().zchunk().get_value()) {
         handle_set_opt(h.get(), LRO_CACHEDIR, config.basecachedir().get_value().c_str());
     }
 #endif
@@ -642,7 +642,7 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
 
 #ifdef LRO_SUPPORTS_CACHEDIR
     // If zchunk is enabled, set librepo cache dir
-    if (config.get_master_config().zchunk().get_value()) {
+    if (config.get_main_config().zchunk().get_value()) {
         handle_set_opt(h.get(), LRO_CACHEDIR, config.basecachedir().get_value().c_str());
     }
 #endif
@@ -1406,7 +1406,7 @@ std::string Repo::Impl::get_cachedir() const {
 }
 
 std::string Repo::Impl::get_persistdir() const {
-    auto persdir(config.get_master_config().persistdir().get_value());
+    auto persdir(config.get_main_config().persistdir().get_value());
     if (persdir.back() != '/')
         persdir.push_back('/');
     std::string result = persdir + "repos/" + get_hash();
@@ -1482,7 +1482,7 @@ bool Repo::fresh() {
 void Repo::Impl::reset_metadata_expired() {
     if (expired || config.metadata_expire().get_value() == -1)
         return;
-    if (config.get_master_config().check_config_file_age().get_value() && !repo_file_path.empty() &&
+    if (config.get_main_config().check_config_file_age().get_value() && !repo_file_path.empty() &&
         mtime(repo_file_path.c_str()) > mtime(get_metadata_path(MD_FILENAME_PRIMARY).c_str()))
         expired = true;
     else

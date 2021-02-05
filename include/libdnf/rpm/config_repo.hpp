@@ -30,12 +30,12 @@ namespace libdnf::rpm {
 /// Holds repo configuration options. Default values of some options are inherited from ConfigMain.
 class ConfigRepo : public Config<Option::Priority::REPOCONFIG> {
 public:
-    explicit ConfigRepo(ConfigMain & master_config);
+    explicit ConfigRepo(ConfigMain & main_config);
     ~ConfigRepo();
     ConfigRepo(ConfigRepo && src);
 
-    ConfigMain & get_master_config();
-    const ConfigMain & get_master_config() const;
+    ConfigMain & get_main_config();
+    const ConfigMain & get_main_config() const;
 
     OptionString & name();
     const OptionString & name() const;
