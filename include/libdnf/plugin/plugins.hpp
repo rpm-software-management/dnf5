@@ -61,6 +61,7 @@ public:
     explicit PluginLibrary(const std::string & library_path);
     ~PluginLibrary();
 
+#ifndef SWIG
 private:
     using TGetApiVersionFunc = decltype(&libdnf_plugin_get_api_version);
     using TGetNameFunc = decltype(&libdnf_plugin_get_name);
@@ -73,6 +74,7 @@ private:
     TNewInstanceFunc new_instance{nullptr};
     TDeleteInstanceFunc delete_instance{nullptr};
     utils::Library library;
+#endif
 };
 
 
