@@ -37,6 +37,17 @@ namespace libdnf {
 /// :class:`.Base` instances are stateful objects owning various data.
 class Base {
 public:
+    /// Sets the pointer to the locked instance "Base" to "this" instance. Blocks if the pointer is already set.
+    /// Pointer to a locked "Base" instance can be obtained using "get_locked_base()".
+    void lock();
+
+    /// Resets the pointer to a locked "Base" instance to "nullptr".
+    /// Throws an exception if another or no instance is locked.
+    void unlock();
+
+    /// Returns a pointer to a locked "Base" instance or "nullptr" if no instance is locked.
+    static Base * get_locked_base() noexcept;
+
     /// Loads main configuration from file defined by the current configuration.
     void load_config_from_file();
 

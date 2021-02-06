@@ -25,10 +25,35 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 
 #include <algorithm>
+#include <atomic>
 #include <filesystem>
+#include <mutex>
 #include <vector>
 
 namespace libdnf {
+
+static std::atomic<Base *> locked_base{nullptr};
+static std::mutex locked_base_mutex;
+
+void Base::lock() {
+    locked_base_mutex.lock();
+    locked_base = this;
+}
+
+void Base::unlock() {
+    if (!locked_base) {
+        throw std::logic_error("Base::unlock() called on unlocked \"Base\" instance.");
+    }
+    if (locked_base != this) {
+        throw std::logic_error("Called Base::unlock(). But the lock is not owned by this \"Base\" instance.");
+    }
+    locked_base = nullptr;
+    locked_base_mutex.unlock();
+}
+
+Base * Base::get_locked_base() noexcept {
+    return locked_base;
+}
 
 void Base::load_config_from_file(const std::string & path) {
     ConfigParser parser;
