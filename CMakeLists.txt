@@ -21,6 +21,7 @@ endif()
 option(WITH_DNFDAEMON_CLIENT "Build command-line interface for dnfdaemon" ON)
 option(WITH_DNFDAEMON_SERVER "Build package management service with a DBus interface" ON)
 option(WITH_LIBDNF_CLI "Build library for working with a terminal in a command-line package manager" ON)
+option(WITH_LIBDNF_PLUGINS "Build libdnf plugins" ON)
 option(WITH_MICRODNF "Build microdnf command-line package manager" ON)
 
 # build options - features
@@ -95,6 +96,7 @@ include_directories("${PROJECT_SOURCE_DIR}")
 add_subdirectory("include")
 add_subdirectory("libdnf")
 add_subdirectory("libdnf-cli")
+add_subdirectory("libdnf-plugins")
 add_subdirectory("doc")
 add_subdirectory("bindings")
 
