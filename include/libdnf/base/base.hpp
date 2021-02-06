@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/solv_sack.hpp"
 #include "libdnf/conf/vars.hpp"
 #include "libdnf/transaction/sack.hpp"
+#include "libdnf/plugin/plugins.hpp"
 
 #include <map>
 
@@ -60,6 +61,10 @@ public:
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     Vars & get_vars() { return vars; }
 
+    void add_plugin(plugin::IPlugin & iplugin_instance);
+    void load_plugins();
+    plugin::Plugins & get_plugins() { return plugins; }
+
 private:
     //TODO(jrohel): Make public?
     /// Loads main configuration from file defined by path.
@@ -81,8 +86,8 @@ private:
     rpm::SolvSack rpm_solv_sack{*this};
     transaction::TransactionSack transaction_sack{*this};
     Vars vars;
+    plugin::Plugins plugins{*this};
 };
-
 
 }  // namespace libdnf
 

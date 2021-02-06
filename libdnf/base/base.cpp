@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <atomic>
+#include <cstdlib>
 #include <filesystem>
 #include <mutex>
 #include <vector>
@@ -81,6 +82,16 @@ void Base::load_config_from_dir(const std::string & dir_path) {
 
 void Base::load_config_from_dir() {
     load_config_from_dir(libdnf::CONF_DIRECTORY);
+}
+
+void Base::add_plugin(plugin::IPlugin & iplugin_instance) {
+    plugins.register_plugin(std::make_unique<plugin::Plugin>(iplugin_instance));
+}
+
+void Base::load_plugins() {
+    if (const char * plugin_dir = std::getenv("LIBDNF_PLUGIN_DIR")) {
+        plugins.load_plugins(plugin_dir);
+    }
 }
 
 }  // namespace libdnf

@@ -11,6 +11,7 @@
 
 %import "common.i"
 %import "conf.i"
+%import "plugin.i"
 %import "logger.i"
 %import "rpm.i"
 %import "transaction.i"
