@@ -163,6 +163,10 @@ int main(int argc, char * argv[]) {
 
     context.set_prg_arguments(static_cast<size_t>(argc), argv);
 
+    context.base.load_plugins();
+    auto & plugins = context.base.get_plugins();
+    plugins.init();
+
     // Register commands
     context.commands.push_back(std::make_unique<microdnf::CmdInstall>());
     context.commands.push_back(std::make_unique<microdnf::CmdDownload>());
@@ -257,6 +261,7 @@ int main(int argc, char * argv[]) {
 
     //configure_plugins
     //configure_from_options(context);
+    plugins.hook(libdnf::plugin::HookId::LOAD_CONFIG_FROM_FILE);
 
     // Configure selected command
     context.selected_command->configure(context);
