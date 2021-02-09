@@ -43,15 +43,21 @@ class RepoConfTest(unittest.TestCase):
     def setUp(self):
         # prepare install root with repository configuration
         self.installroot = tempfile.mkdtemp(prefix="dnfdaemon-test-")
-        configure_repo(os.path.join(self.installroot, 'etc/dnf/dnf.conf'), 'main_repo')
-        configure_repo(os.path.join(self.installroot, 'etc/yum.repos.d/repo1.repo'), 'repo1')
-        configure_repo(os.path.join(self.installroot, 'etc/yum.repos.d/repo2.repo'), 'repo2')
+        config_file_path = os.path.join(self.installroot, 'etc/dnf/dnf.conf')
+        reposdir = os.path.join(self.installroot, 'etc/yum.repos.d')
+        configure_repo(config_file_path, 'main_repo')
+        configure_repo(os.path.join(reposdir, 'repo1.repo'), 'repo1')
+        configure_repo(os.path.join(reposdir, 'repo2.repo'), 'repo2')
         # get the session for the installroot
         self.bus = dbus.SystemBus()
         self.iface_session = dbus.Interface(
             self.bus.get_object(support.DNFDAEMON_BUS_NAME, support.DNFDAEMON_OBJECT_PATH),
             dbus_interface=support.IFACE_SESSION_MANAGER)
-        self.session = self.iface_session.open_session({"installroot": self.installroot})
+        self.session = self.iface_session.open_session({
+            "installroot": self.installroot,
+            "config_file_path": config_file_path,
+            "reposdir": reposdir,
+            })
         self.iface_repoconf = dbus.Interface(
             self.bus.get_object(support.DNFDAEMON_BUS_NAME, self.session),
             dbus_interface=IFACE_REPOCONF)

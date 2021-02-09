@@ -47,19 +47,16 @@ public:
     libdnf::ConfigParser * find_parser(const std::string & file_path);
 
 private:
-    std::unique_ptr<libdnf::ConfigMain> cfg_main;
     // repoid: repoinfo
     std::map<std::string, std::unique_ptr<RepoInfo>> repos;
     // repo_config_file_path: parser
     std::map<std::string, std::unique_ptr<libdnf::ConfigParser>> config_parsers;
     std::map<std::string, std::string> substitutions;
-    std::string install_root;
     Session & session;
 
     void read_repos(const libdnf::ConfigParser * repo_parser, const std::string & file_path);
     void read_main_config();
     void read_repo_configs();
-    std::string prepend_install_root(const std::string & path);
 };
 
 
