@@ -13,6 +13,7 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 %bcond_without dnfdaemon_server
 %bcond_without libdnf_cli
 %bcond_without microdnf
+%bcond_without python_plugins_loader
 
 %bcond_without comps
 %bcond_without modulemd
@@ -294,6 +295,25 @@ Ruby bindings for the libdnf-cli library.
 %endif
 
 
+# ========== libdnf-plugin-python-plugins-loader ==========
+
+%if %{with python_plugins_loader}
+%package -n python3-libdnf-python-plugins-loader
+Summary:        Libdnf plugin that allows loading Python plugins
+License:        LGPLv2.1+
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       python3-libdnf5%{?_isa} = %{version}-%{release}
+
+%description -n python3-libdnf-python-plugins-loader
+Libdnf plugin that allows loading Python plugins
+
+%files -n python3-libdnf-python-plugins-loader
+%{_libdir}/libdnf-plugins/python_plugins_loader.*
+%{python3_sitelib}/libdnf_plugins/
+%{python3_sitelib}/libdnf_plugins/README
+%endif
+
+
 # ========== dnfdaemon-client ==========
 
 %if %{with dnfdaemon_client}
@@ -384,6 +404,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
     -DWITH_DNFDAEMON_SERVER=%{?with_dnfdaemon_server:ON}%{!?with_dnfdaemon_server:OFF} \
     -DWITH_LIBDNF_CLI=%{?with_libdnf_cli:ON}%{!?with_libdnf_cli:OFF} \
     -DWITH_MICRODNF=%{?with_microdnf:ON}%{!?with_microdnf:OFF} \
+    -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
     \
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
     -DWITH_MODULEMD=%{?with_modulemd:ON}%{!?with_modulemd:OFF} \

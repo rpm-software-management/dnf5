@@ -21,8 +21,8 @@ endif()
 option(WITH_DNFDAEMON_CLIENT "Build command-line interface for dnfdaemon" ON)
 option(WITH_DNFDAEMON_SERVER "Build package management service with a DBus interface" ON)
 option(WITH_LIBDNF_CLI "Build library for working with a terminal in a command-line package manager" ON)
-option(WITH_LIBDNF_PLUGINS "Build libdnf plugins" ON)
 option(WITH_MICRODNF "Build microdnf command-line package manager" ON)
+option(WITH_PYTHON_PLUGINS_LOADER "Build a special libdnf plugin that loads Python plugins. Requires WITH_PYTHON3=ON." ON)
 
 # build options - features
 option(WITH_COMPS "Build with comps groups and environments support" ON)
