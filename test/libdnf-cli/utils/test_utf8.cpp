@@ -30,7 +30,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(UTF8Test);
 
 void UTF8Test::setUp() {
     // wide characters do not work at all until we set locales in the code
-    setlocale(LC_ALL, "");
+    setlocale(LC_ALL, "C.UTF-8");
 
     hello_world_en = "Hello world!";
     hello_world_cs = "Ahoj světe!";
