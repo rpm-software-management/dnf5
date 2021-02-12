@@ -123,7 +123,8 @@ void CmdRepoquery::run(Context & ctx) {
     if (patterns_options->size() > 0) {
         patterns.reserve(patterns_options->size());
         for (auto & pattern : *patterns_options) {
-            patterns.emplace_back(dynamic_cast<libdnf::OptionString *>(pattern.get())->get_value());
+            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+            patterns.emplace_back(option->get_value());
         }
     }
     options["patterns"] = patterns;
