@@ -1,0 +1,43 @@
+---
+name: DNF 5 CI
+on: pull_request_target
+
+jobs:
+  integration-tests:
+    name: Package Build
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:latest
+    steps:
+      - name: Check out ci-dnf-stack
+        uses: actions/checkout@v2
+        with:
+          repository: rpm-software-management/ci-dnf-stack
+
+      - name: Setup CI
+        id: setup-ci
+        uses: ./.github/actions/setup-ci
+        with:
+          copr-user: ${{secrets.COPR_USER}}
+          copr-api-token: ${{secrets.COPR_API_TOKEN}}
+
+      - name: Check out sources
+        uses: actions/checkout@v2
+        with:
+          path: gits/${{github.event.pull_request.head.repo.name}}
+          ref: ${{github.event.pull_request.head.sha}}  # check out the PR HEAD
+          fetch-depth: 0
+
+      - name: Rebase the pull request on target branch
+        run: |
+          pushd gits/${{github.event.pull_request.head.repo.name}}
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+          echo "Rebasing \"`git log --oneline -1`\" on ${{github.event.pull_request.base.ref}}: \"`git log --oneline -1 origin/${{github.event.pull_request.base.ref}}`\""
+          git rebase origin/${{github.event.pull_request.base.ref}}
+          popd
+
+      - name: Build in Copr
+        run: |
+          PROJECT_NAME="CI-libdnf5-pr${{github.event.pull_request.number}}"
+          rpm-gitoverlay --gitdir=gits build-overlay -s overlays/dnf5-unstable rpm copr --owner "${{steps.setup-ci.outputs.copr-user}}" --project "$PROJECT_NAME" --chroot fedora-33-x86_64 --delete-project-after-days=7
