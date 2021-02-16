@@ -51,6 +51,7 @@ public:
     void add_install_to_goal();
     void add_remove_to_goal();
     void add_upgrades_to_goal();
+    void add_rpms_to_goal();
 
 private:
     friend class Goal;
@@ -61,11 +62,8 @@ private:
     std::vector<std::tuple<std::string, std::string, std::vector<libdnf::rpm::Nevra::Form>>> remove_rpm_specs;
     /// <std::string spec, std::vector<std::string> repo_ids>
     std::vector<std::pair<std::string, std::vector<std::string>>> upgrade_rpm_specs;
-    libdnf::rpm::solv::IdQueue remove_rpm_ids;
-    /// <rpm Ids, bool strict>
-    std::vector<std::pair<libdnf::rpm::solv::IdQueue, bool>> install_rpm_ids;
-    /// <rpm Ids>
-    std::vector<libdnf::rpm::solv::IdQueue> upgrade_rpm_ids;
+    /// <libdnf::Goal::Action, rpm Ids, bool strict>
+    std::vector<std::tuple<Action, libdnf::rpm::solv::IdQueue, bool>> rpm_ids;
 
     // Report data
 
@@ -101,7 +99,7 @@ void Goal::add_rpm_install(
 void Goal::add_rpm_install(const libdnf::rpm::Package & rpm_package, bool strict) {
     libdnf::rpm::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
-    p_impl->install_rpm_ids.push_back(std::make_pair(std::move(ids), strict));
+    p_impl->rpm_ids.push_back(std::make_tuple(Action::INSTALL, std::move(ids), strict));
 }
 
 void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool strict) {
@@ -109,7 +107,21 @@ void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool str
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id.id);
     }
-    p_impl->install_rpm_ids.push_back(std::make_pair(std::move(ids), strict));
+    p_impl->rpm_ids.push_back(std::make_tuple(Action::INSTALL, std::move(ids), strict));
+}
+
+void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::Package & rpm_package, bool strict) {
+    libdnf::rpm::solv::IdQueue ids;
+    ids.push_back(rpm_package.get_id().id);
+    p_impl->rpm_ids.push_back(std::make_tuple(Action::INSTALL_OR_REINSTALL, std::move(ids), strict));
+}
+
+void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::PackageSet & package_set, bool strict) {
+    libdnf::rpm::solv::IdQueue ids;
+    for (auto package_id : *package_set.p_impl) {
+        ids.push_back(package_id.id);
+    }
+    p_impl->rpm_ids.push_back(std::make_tuple(Action::INSTALL_OR_REINSTALL, std::move(ids), strict));
 }
 
 void Goal::add_rpm_remove(
@@ -118,13 +130,17 @@ void Goal::add_rpm_remove(
 }
 
 void Goal::add_rpm_remove(const libdnf::rpm::Package & rpm_package) {
-    p_impl->remove_rpm_ids.push_back(rpm_package.get_id().id);
+    libdnf::rpm::solv::IdQueue ids;
+    ids.push_back(rpm_package.get_id().id);
+    p_impl->rpm_ids.push_back(std::make_tuple(Action::REMOVE, std::move(ids), false));
 }
 
 void Goal::add_rpm_remove(const libdnf::rpm::PackageSet & package_set) {
+    libdnf::rpm::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
-        p_impl->remove_rpm_ids.push_back(package_id.id);
+        ids.push_back(package_id.id);
     }
+    p_impl->rpm_ids.push_back(std::make_tuple(Action::REMOVE, std::move(ids), false));
 }
 
 void Goal::add_rpm_upgrade(const std::string & spec, const std::vector<std::string> & repo_ids) {
@@ -134,7 +150,7 @@ void Goal::add_rpm_upgrade(const std::string & spec, const std::vector<std::stri
 void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package) {
     libdnf::rpm::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
-    p_impl->upgrade_rpm_ids.push_back(std::move(ids));
+    p_impl->rpm_ids.push_back(std::make_tuple(Action::UPGRADE, std::move(ids), false));
 }
 
 void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set) {
@@ -142,7 +158,7 @@ void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set) {
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id.id);
     }
-    p_impl->upgrade_rpm_ids.push_back(std::move(ids));
+    p_impl->rpm_ids.push_back(std::make_tuple(Action::UPGRADE, std::move(ids), false));
 }
 
 void Goal::Impl::add_install_to_goal() {
@@ -315,8 +331,41 @@ void Goal::Impl::add_install_to_goal() {
 
         //         return 0
     }
-    for (auto & [ids, strict] : install_rpm_ids) {
-        rpm_goal.add_install(ids, strict);
+}
+
+void Goal::Impl::add_rpms_to_goal() {
+    bool remove_dependencies = base->get_config().clean_requirements_on_remove().get_value();
+    auto & sack = base->get_rpm_solv_sack();
+    Pool * pool = sack.p_impl->get_pool();
+    libdnf::rpm::SolvQuery installed(&sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
+    installed.ifilter_installed();
+    for (auto & [action, ids, strict] : rpm_ids) {
+        switch (action) {
+            case Action::INSTALL: {
+                //  report aready installed packages with the same NEVRA
+                //  include installed packages with the same NEVRA into transaction to prevent reinstall
+                std::vector<std::string> nevras;
+                for (auto id : ids) {
+                    nevras.push_back(rpm::solv::get_nevra(pool, rpm::PackageId(id)));
+                }
+                libdnf::rpm::SolvQuery query(installed);
+                query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, nevras);
+                for (auto package_id : *query.p_impl) {
+                    //  TODO(jmracek)  report already installed nevra
+                    ids.push_back(package_id.id);
+                }
+                rpm_goal.add_install(ids, strict);
+            } break;
+            case Action::INSTALL_OR_REINSTALL:
+                rpm_goal.add_install(ids, strict);
+                break;
+            case Action::UPGRADE:
+                rpm_goal.add_upgrade(ids);
+                break;
+            case Action::REMOVE:
+                rpm_goal.add_remove(ids, remove_dependencies);
+                break;
+        }
     }
 }
 
@@ -352,7 +401,6 @@ void Goal::Impl::add_remove_to_goal() {
         }
         rpm_goal.add_remove(*query.p_impl, remove_dependencies);
     }
-    rpm_goal.add_remove(remove_rpm_ids, remove_dependencies);
 }
 
 void Goal::Impl::add_upgrades_to_goal() {
@@ -444,10 +492,6 @@ void Goal::Impl::add_upgrades_to_goal() {
         //             self._goal.upgrade(select=sltr)
         //         return 1
     }
-
-    for (auto & ids : upgrade_rpm_ids) {
-        rpm_goal.add_upgrade(ids);
-    }
 }
 
 bool Goal::resolve() {
@@ -465,6 +509,7 @@ bool Goal::resolve() {
     p_impl->add_install_to_goal();
     p_impl->add_remove_to_goal();
     p_impl->add_upgrades_to_goal();
+    p_impl->add_rpms_to_goal();
 
     return p_impl->rpm_goal.resolve();
 }

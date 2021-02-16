@@ -36,7 +36,7 @@ class Goal {
 public:
     /// NOT_FOUND - _('No match for argument: %s')
     enum class Problem { NOT_FOUND, EXCLUDED, ONLY_SRC, NOT_FOUND_IN_REPOSITORIES };
-    enum class Action { INSTALL, UPGRADE, REMOVE };
+    enum class Action { INSTALL, INSTALL_OR_REINSTALL, UPGRADE, REMOVE };
 
     explicit Goal(Base * base);
     ~Goal();
@@ -46,8 +46,12 @@ public:
         const std::vector<std::string> & repo_ids,
         bool strict,
         const std::vector<libdnf::rpm::Nevra::Form> & forms);
+    /// Prevent reinstallation by adding of already installed packages with the same NEVRA
     void add_rpm_install(const libdnf::rpm::Package & rpm_package, bool strict);
+    /// Prevent reinstallation by adding of already installed packages with the same NEVRA
     void add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool strict);
+    void add_rpm_install_or_reinstall(const libdnf::rpm::Package & rpm_package, bool strict);
+    void add_rpm_install_or_reinstall(const libdnf::rpm::PackageSet & package_set, bool strict);
     void add_rpm_remove(
         const std::string & spec, const std::string & repo_id, const std::vector<libdnf::rpm::Nevra::Form> & forms);
     void add_rpm_remove(const libdnf::rpm::Package & rpm_package);
