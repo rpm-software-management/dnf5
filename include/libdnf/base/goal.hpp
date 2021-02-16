@@ -34,6 +34,15 @@ namespace libdnf {
 
 class Goal {
 public:
+    struct UsedDifferentSack : public LogicError {
+        using LogicError::LogicError;
+        UsedDifferentSack() : LogicError(
+            "Cannot perform the action with Goal instances initialized with different SolvSacks") {};
+        const char * get_domain_name() const noexcept override { return "libdnf::Goal"; }
+        const char * get_name() const noexcept override { return "UsedDifferentSack"; }
+        const char * get_description() const noexcept override { return "Goal exception"; }
+    };
+
     /// NOT_FOUND - _('No match for argument: %s')
     enum class Problem { NOT_FOUND, EXCLUDED, ONLY_SRC, NOT_FOUND_IN_REPOSITORIES };
     enum class Action { INSTALL, INSTALL_OR_REINSTALL, UPGRADE, REMOVE };

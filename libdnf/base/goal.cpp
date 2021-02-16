@@ -97,12 +97,18 @@ void Goal::add_rpm_install(
 }
 
 void Goal::add_rpm_install(const libdnf::rpm::Package & rpm_package, bool strict) {
+    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
     libdnf::rpm::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
     p_impl->rpm_ids.push_back(std::make_tuple(Action::INSTALL, std::move(ids), strict));
 }
 
 void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool strict) {
+    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
     libdnf::rpm::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id.id);
@@ -111,12 +117,18 @@ void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool str
 }
 
 void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::Package & rpm_package, bool strict) {
+    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
     libdnf::rpm::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
     p_impl->rpm_ids.push_back(std::make_tuple(Action::INSTALL_OR_REINSTALL, std::move(ids), strict));
 }
 
 void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::PackageSet & package_set, bool strict) {
+    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
     libdnf::rpm::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id.id);
@@ -130,12 +142,18 @@ void Goal::add_rpm_remove(
 }
 
 void Goal::add_rpm_remove(const libdnf::rpm::Package & rpm_package) {
+    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
     libdnf::rpm::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
     p_impl->rpm_ids.push_back(std::make_tuple(Action::REMOVE, std::move(ids), false));
 }
 
 void Goal::add_rpm_remove(const libdnf::rpm::PackageSet & package_set) {
+    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
     libdnf::rpm::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id.id);
@@ -148,12 +166,18 @@ void Goal::add_rpm_upgrade(const std::string & spec, const std::vector<std::stri
 }
 
 void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package) {
+    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
     libdnf::rpm::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
     p_impl->rpm_ids.push_back(std::make_tuple(Action::UPGRADE, std::move(ids), false));
 }
 
 void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set) {
+    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
     libdnf::rpm::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id.id);
