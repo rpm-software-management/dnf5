@@ -95,3 +95,52 @@ void BaseGoalTest::test_remove() {
     CPPUNIT_ASSERT_EQUAL(remove_set[0].get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
     CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
 }
+
+void BaseGoalTest::test_install_pkg() {
+    std::filesystem::path rpm_path =
+        PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/x86_64/wget-1.19.5-5.fc29.x86_64.rpm";
+    sack->add_system_package(rpm_path, false, false);
+    libdnf::Goal goal(base.get());
+    libdnf::rpm::SolvQuery query(&(base->get_rpm_solv_sack()));
+    query.ifilter_available().ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"wget-1.19.5-5.fc29.x86_64"});
+    CPPUNIT_ASSERT_EQUAL(1lu, query.size());
+    goal.add_rpm_install(query, true);
+    goal.resolve();
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
+
+void BaseGoalTest::test_install_or_reinstall() {
+    std::filesystem::path rpm_path =
+        PROJECT_SOURCE_DIR "/test/libdnf/rpm/repos-data/dnf-ci-fedora/x86_64/wget-1.19.5-5.fc29.x86_64.rpm";
+    sack->add_system_package(rpm_path, false, false);
+    libdnf::Goal goal(base.get());
+    libdnf::rpm::SolvQuery query(&(base->get_rpm_solv_sack()));
+    query.ifilter_available().ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"wget-1.19.5-5.fc29.x86_64"});
+    CPPUNIT_ASSERT_EQUAL(1lu, query.size());
+    goal.add_rpm_install_or_reinstall(query, true);
+    goal.resolve();
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
+    CPPUNIT_ASSERT_EQUAL(1lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(reinstall_set[0].get_full_nevra(), std::string("wget-0:1.19.5-5.fc29.x86_64"));
+    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
