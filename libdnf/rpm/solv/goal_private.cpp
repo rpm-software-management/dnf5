@@ -244,5 +244,12 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
 //     return pset;
 // }
 
+size_t GoalPrivate::count_solver_problems()
+{
+    if (!libsolv_solver) {
+        throw UnresolvedGoal();
+    }
+    return solver_problem_count(libsolv_solver);
+}
 
 }  // namespace libdnf::rpm::solv

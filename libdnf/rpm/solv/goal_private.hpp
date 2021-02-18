@@ -31,6 +31,13 @@ namespace libdnf::rpm::solv {
 
 class GoalPrivate {
 public:
+    struct UnresolvedGoal : public LogicError {
+        UnresolvedGoal() : LogicError("Operation cannot be performed because goal was not resolved"){};
+        const char * get_domain_name() const noexcept override { return "libdnf::rpm::solv::GoalPrivate"; }
+        const char * get_name() const noexcept override { return "UnresolvedGoal"; }
+        const char * get_description() const noexcept override { return "GoalPrivate exception"; }
+    };
+
     explicit GoalPrivate(Pool * pool);
     explicit GoalPrivate(const GoalPrivate & src);
     ~GoalPrivate();
@@ -52,6 +59,8 @@ public:
     /// @dir Requires full path that exists
     void write_debugdata(const std::string & dir);
 
+    ///  Return count of problems detected by solver
+    size_t count_solver_problems();
 
     // TODO(jmracek)
     //     PackageSet listUnneeded();
