@@ -71,7 +71,7 @@ libdnf::rpm::solv::SolvMap list_results(
     /* no transaction */
     if (!transaction) {
         if (!solver) {
-            throw std::runtime_error("no solv in the goal");
+            throw libdnf::rpm::solv::GoalPrivate::UnresolvedGoal();
         }  // TODO else if (removalOfProtected && removalOfProtected->size()) {
         //    throw Goal::Error(_("no solution, cannot remove protected package"),
         //                                  DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
@@ -196,8 +196,7 @@ SolvMap GoalPrivate::list_obsoleted() {
 
 void GoalPrivate::write_debugdata(const std::string & dir) {
     if (!libsolv_solver) {
-        throw std::runtime_error("no solver set");
-        // TODO throw Goal::Error(_("no solver set"), DNF_ERROR_INTERNAL_ERROR);
+        throw UnresolvedGoal();
     }
     int flags = TESTCASE_RESULT_TRANSACTION | TESTCASE_RESULT_PROBLEMS;
     // TODO(jmracek) add support of relative path and create required dirs and parents
