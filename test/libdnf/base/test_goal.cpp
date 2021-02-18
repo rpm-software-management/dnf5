@@ -35,7 +35,7 @@ void BaseGoalTest::setUp() {
 void BaseGoalTest::test_install() {
     libdnf::Goal goal(base.get());
     goal.add_rpm_install("pkg", {}, true, {});
-    goal.resolve();
+    goal.resolve(false);
     auto install_set = goal.list_rpm_installs();
     auto reinstall_set = goal.list_rpm_reinstalls();
     auto upgrade_set = goal.list_rpm_upgrades();
@@ -57,7 +57,7 @@ void BaseGoalTest::test_install_from_cmdline() {
         PROJECT_BINARY_DIR "/test/data/cmdline-rpms/noarch/cmdline-1.2-3.noarch.rpm";
     auto cmd_pkg = sack->add_cmdline_package(rpm_path, false);
     goal.add_rpm_install(cmd_pkg, true);
-    goal.resolve();
+    goal.resolve(false);
     auto install_set = goal.list_rpm_installs();
     auto reinstall_set = goal.list_rpm_reinstalls();
     auto upgrade_set = goal.list_rpm_upgrades();
@@ -80,7 +80,7 @@ void BaseGoalTest::test_remove() {
     sack->add_system_package(rpm_path, false, false);
     libdnf::Goal goal(base.get());
     goal.add_rpm_remove("cmdline", {}, {});
-    goal.resolve();
+    goal.resolve(false);
     auto install_set = goal.list_rpm_installs();
     auto reinstall_set = goal.list_rpm_reinstalls();
     auto upgrade_set = goal.list_rpm_upgrades();
@@ -105,7 +105,7 @@ void BaseGoalTest::test_install_pkg() {
     query.ifilter_available().ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"wget-1.19.5-5.fc29.x86_64"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
     goal.add_rpm_install(query, true);
-    goal.resolve();
+    goal.resolve(false);
     auto install_set = goal.list_rpm_installs();
     auto reinstall_set = goal.list_rpm_reinstalls();
     auto upgrade_set = goal.list_rpm_upgrades();
@@ -129,7 +129,7 @@ void BaseGoalTest::test_install_or_reinstall() {
     query.ifilter_available().ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"wget-1.19.5-5.fc29.x86_64"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
     goal.add_rpm_install_or_reinstall(query, true);
-    goal.resolve();
+    goal.resolve(false);
     auto install_set = goal.list_rpm_installs();
     auto reinstall_set = goal.list_rpm_reinstalls();
     auto upgrade_set = goal.list_rpm_upgrades();

@@ -72,6 +72,12 @@ public:
     ///  Return count of problems detected by solver
     size_t count_solver_problems();
 
+    void set_allow_downgrade(bool value) { allow_downgrade=value; }
+    void set_allow_erasing(bool value) { allow_erasing=value; }
+    void set_allow_vendor_change(bool value) { allow_vendor_change=value; }
+    void set_force_best(bool value) { force_best=value; }
+    void set_install_weak_deps(bool value) { install_weak_deps=value; }
+    void set_remove_solver_weak(bool value) { remove_solver_weak=value; }
     // TODO(jmracek)
     //     PackageSet listUnneeded();
     //     PackageSet listSuggested();
@@ -87,9 +93,10 @@ private:
     PackageId protected_running_kernel;
 
     bool allow_downgrade{true};
+    bool allow_erasing{false};
     bool allow_vendor_change{true};
     bool force_best{false};
-    bool ignore_weak_deps{false};
+    bool install_weak_deps{true};
     bool remove_solver_weak{false};
 };
 
@@ -99,9 +106,10 @@ inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
     : pool(src.pool)
     , staging(src.staging)
     , allow_downgrade(src.allow_downgrade)
+    , allow_erasing(src.allow_erasing)
     , allow_vendor_change(src.allow_vendor_change)
     , force_best(src.force_best)
-    , ignore_weak_deps(src.ignore_weak_deps)
+    , install_weak_deps(src.install_weak_deps)
     , remove_solver_weak(src.remove_solver_weak) {}
 
 inline GoalPrivate::~GoalPrivate() {

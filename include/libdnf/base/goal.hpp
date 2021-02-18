@@ -69,7 +69,7 @@ public:
     void add_rpm_upgrade(const libdnf::rpm::Package & rpm_package);
     void add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set);
 
-    bool resolve();
+    bool resolve(bool allow_erasing);
 
     std::vector<libdnf::rpm::Package> list_rpm_installs();
     std::vector<libdnf::rpm::Package> list_rpm_reinstalls();

@@ -77,7 +77,7 @@ void CmdRemove::run(Context & ctx) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal.add_rpm_remove(option->get_value(), {}, {});
     }
-    goal.resolve();
+    goal.resolve(false);
 
     if (!print_goal(goal)) {
         return;

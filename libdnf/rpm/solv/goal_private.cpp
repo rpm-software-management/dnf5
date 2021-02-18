@@ -134,13 +134,11 @@ bool GoalPrivate::resolve() {
         }
     }
 
-    if (ignore_weak_deps) {
-        solver_set_flag(libsolv_solver, SOLVER_FLAG_IGNORE_RECOMMENDED, 1);
-    }
+    int ignore_weak_deps = install_weak_deps ? 0 : 1;
+    solver_set_flag(libsolv_solver, SOLVER_FLAG_IGNORE_RECOMMENDED, ignore_weak_deps);
 
-    if (allow_downgrade) {
-        solver_set_flag(libsolv_solver, SOLVER_FLAG_ALLOW_DOWNGRADE, 1);
-    }
+    int downgrade = allow_downgrade ? 1 : 0;
+    solver_set_flag(libsolv_solver, SOLVER_FLAG_ALLOW_DOWNGRADE, downgrade);
 
     // Set up vendor locking modes
     // TODO: Wire up the configuration option to this...
