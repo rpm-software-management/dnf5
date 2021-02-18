@@ -59,6 +59,16 @@ public:
     /// @dir Requires full path that exists
     void write_debugdata(const std::string & dir);
 
+    /// Set running kernel that mus be not removed
+    void set_protect_running_kernel(PackageId value);
+
+    /// Add Ids of protected packages
+    void add_protected_packages(const SolvMap & map);
+    /// Set Ids of protected packages
+    void set_protected_packages(const SolvMap & map);
+    /// Reset all protected packages
+    void reset_protected_packages();
+
     ///  Return count of problems detected by solver
     size_t count_solver_problems();
 
@@ -72,6 +82,9 @@ private:
     IdQueue staging;
     ::Solver * libsolv_solver{nullptr};
     ::Transaction * libsolv_transaction{nullptr};
+
+    std::unique_ptr<SolvMap> protected_packages;
+    PackageId protected_running_kernel;
 
     bool allow_downgrade{true};
     bool allow_vendor_change{true};

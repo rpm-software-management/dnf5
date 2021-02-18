@@ -534,6 +534,15 @@ bool Goal::resolve() {
     p_impl->add_remove_to_goal();
     p_impl->add_upgrades_to_goal();
     p_impl->add_rpms_to_goal();
+    
+    // Add protected packages
+    {
+        auto & cfg_main = p_impl->base->get_config();
+        auto protected_packages = cfg_main.protected_packages().get_value();
+        rpm::SolvQuery protected_query(&sack, rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
+        protected_query.ifilter_name(sack::QueryCmp::EQ, protected_packages);
+        p_impl->rpm_goal.add_protected_packages(*protected_query.p_impl);
+    }
 
     return p_impl->rpm_goal.resolve();
 }

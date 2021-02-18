@@ -251,4 +251,28 @@ size_t GoalPrivate::count_solver_problems()
     return solver_problem_count(libsolv_solver);
 }
 
+void GoalPrivate::set_protect_running_kernel(PackageId value)
+{
+    protected_running_kernel = value;
+}
+
+void GoalPrivate::add_protected_packages(const SolvMap & map)
+{
+    if (!protected_packages) {
+        protected_packages.reset(new SolvMap(map));
+    } else {
+        *protected_packages |= map;
+    }
+}
+
+void GoalPrivate::set_protected_packages(const SolvMap & map)
+{
+    protected_packages.reset(new SolvMap(map));
+}
+
+void GoalPrivate::reset_protected_packages()
+{
+    protected_packages.reset();
+}
+
 }  // namespace libdnf::rpm::solv
