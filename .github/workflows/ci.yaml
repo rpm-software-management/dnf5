@@ -39,5 +39,6 @@ jobs:
 
       - name: Build in Copr
         run: |
+          CHROOTS="fedora-33-x86_64, fedora-34-x86_64, fedora-rawhide-x86_64"
           PROJECT_NAME="CI-libdnf5-pr${{github.event.pull_request.number}}"
-          rpm-gitoverlay --gitdir=gits build-overlay -s overlays/dnf5-unstable rpm copr --owner "${{steps.setup-ci.outputs.copr-user}}" --project "$PROJECT_NAME" --chroot fedora-33-x86_64 --delete-project-after-days=7
+          rpm-gitoverlay --gitdir=gits build-overlay -s overlays/dnf5-unstable rpm copr --owner "${{steps.setup-ci.outputs.copr-user}}" --project "$PROJECT_NAME" --chroots "$CHROOTS" --delete-project-after-days=7
