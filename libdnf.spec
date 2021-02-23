@@ -81,6 +81,7 @@ BuildRequires:  python3dist(sphinx-rtd-theme)
 
 %if %{with tests}
 BuildRequires:  rpm-build
+BuildRequires:  createrepo_c
 %endif
 
 %if %{with sanitizers}
