@@ -193,6 +193,33 @@ inline static void result_get_info(LrResult * result, LrResultInfoOption option,
     }
 }
 
+
+// Map string from config option proxy_auth_method to librepo LrAuth value
+static constexpr struct {
+    const char * name;
+    LrAuth code;
+} PROXYAUTHMETHODS[] = {{"none", LR_AUTH_NONE},
+                        {"basic", LR_AUTH_BASIC},
+                        {"digest", LR_AUTH_DIGEST},
+                        {"negotiate", LR_AUTH_NEGOTIATE},
+                        {"ntlm", LR_AUTH_NTLM},
+                        {"digest_ie", LR_AUTH_DIGEST_IE},
+                        {"ntlm_wb", LR_AUTH_NTLM_WB},
+                        {"any", LR_AUTH_ANY}};
+
+static LrAuth string_to_proxy_auth_methods(const std::string & proxy_auth_method_str) noexcept
+{
+    auto proxy_auth_methods = LR_AUTH_ANY;
+    for (auto & auth : PROXYAUTHMETHODS) {
+        if (proxy_auth_method_str == auth.name) {
+            proxy_auth_methods = auth.code;
+            break;
+        }
+    }
+    return proxy_auth_methods;
+}
+
+
 // Callback stuff
 void RepoCB::start([[maybe_unused]] const char * what) {}
 int RepoCB::progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) {
@@ -213,19 +240,6 @@ bool RepoCB::repokey_import(
     return true;
 }
 
-
-// Map string from config option proxy_auth_method to librepo LrAuth value
-static constexpr struct {
-    const char * name;
-    LrAuth code;
-} PROXYAUTHMETHODS[] = {{"none", LR_AUTH_NONE},
-                        {"basic", LR_AUTH_BASIC},
-                        {"digest", LR_AUTH_DIGEST},
-                        {"negotiate", LR_AUTH_NEGOTIATE},
-                        {"ntlm", LR_AUTH_NTLM},
-                        {"digest_ie", LR_AUTH_DIGEST_IE},
-                        {"ntlm_wb", LR_AUTH_NTLM_WB},
-                        {"any", LR_AUTH_ANY}};
 
 bool Repo::Impl::ends_with(const std::string & str, const std::string & ending) {
     if (str.length() >= ending.length()) {
@@ -674,16 +688,9 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
         handle_set_opt(h.get(), LRO_PROXY, config.proxy().get_value().c_str());
     }
 
-    //set proxy authorization method
-    auto proxy_auth_method_str = config.proxy_auth_method().get_value();
-    auto proxy_auth_method = LR_AUTH_ANY;
-    for (auto & auth : PROXYAUTHMETHODS) {
-        if (proxy_auth_method_str == auth.name) {
-            proxy_auth_method = auth.code;
-            break;
-        }
-    }
-    handle_set_opt(h.get(), LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_method));
+    // set proxy authorization methods
+    auto proxy_auth_methods = string_to_proxy_auth_methods(config.proxy_auth_method().get_value());
+    handle_set_opt(h.get(), LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_methods));
 
     if (!config.proxy_username().empty()) {
         userpwd = config.proxy_username().get_value();
@@ -1741,16 +1748,9 @@ static LrHandle * new_handle(ConfigMain * config) {
         if (!config->proxy().empty() && !config->proxy().get_value().empty())
             handle_set_opt(h, LRO_PROXY, config->proxy().get_value().c_str());
 
-        //set proxy authorization method
-        auto proxy_auth_method_str = config->proxy_auth_method().get_value();
-        auto proxy_auth_method = LR_AUTH_ANY;
-        for (auto & auth : PROXYAUTHMETHODS) {
-            if (proxy_auth_method_str == auth.name) {
-                proxy_auth_method = auth.code;
-                break;
-            }
-        }
-        handle_set_opt(h, LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_method));
+        // set proxy authorization methods
+        auto proxy_auth_methods = string_to_proxy_auth_methods(config->proxy_auth_method().get_value());
+        handle_set_opt(h, LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_methods));
 
         if (!config->proxy_username().empty()) {
             auto userpwd = config->proxy_username().get_value();
