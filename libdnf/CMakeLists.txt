@@ -66,7 +66,7 @@ PKG_CHECK_MODULES(GPGME gpgme REQUIRED)
 list(APPEND LIBDNF_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
 target_link_libraries(libdnf ${GPGME_LIBRARIES})
 
-pkg_check_modules(LIBREPO REQUIRED librepo)
+pkg_check_modules(LIBREPO REQUIRED librepo>=1.13.0)
 list(APPEND LIBDNF_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBREPO_LIBRARIES})
 

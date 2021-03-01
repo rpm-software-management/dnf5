@@ -719,6 +719,20 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
     handle_set_opt(h.get(), LRO_SSLVERIFYHOST, sslverify);
     handle_set_opt(h.get(), LRO_SSLVERIFYPEER, sslverify);
 
+    // setup proxy ssl stuff
+    if (!config.proxy_sslcacert().get_value().empty()) {
+        handle_set_opt(h.get(), LRO_PROXY_SSLCACERT, config.proxy_sslcacert().get_value().c_str());
+    }
+    if (!config.proxy_sslclientcert().get_value().empty()) {
+        handle_set_opt(h.get(), LRO_PROXY_SSLCLIENTCERT, config.proxy_sslclientcert().get_value().c_str());
+    }
+    if (!config.proxy_sslclientkey().get_value().empty()) {
+        handle_set_opt(h.get(), LRO_PROXY_SSLCLIENTKEY, config.proxy_sslclientkey().get_value().c_str());
+    }
+    long proxy_sslverify = config.proxy_sslverify().get_value() ? 1L : 0L;
+    handle_set_opt(h.get(), LRO_PROXY_SSLVERIFYHOST, proxy_sslverify);
+    handle_set_opt(h.get(), LRO_PROXY_SSLVERIFYPEER, proxy_sslverify);
+
     return h;
 }
 
@@ -1789,6 +1803,20 @@ static LrHandle * new_handle(ConfigMain * config) {
         auto sslverify = config->sslverify().get_value() ? 1L : 0L;
         handle_set_opt(h, LRO_SSLVERIFYHOST, sslverify);
         handle_set_opt(h, LRO_SSLVERIFYPEER, sslverify);
+
+        // setup proxy ssl stuff
+        if (!config->proxy_sslcacert().get_value().empty()) {
+            handle_set_opt(h, LRO_PROXY_SSLCACERT, config->proxy_sslcacert().get_value().c_str());
+        }
+        if (!config->proxy_sslclientcert().get_value().empty()) {
+            handle_set_opt(h, LRO_PROXY_SSLCLIENTCERT, config->proxy_sslclientcert().get_value().c_str());
+        }
+        if (!config->proxy_sslclientkey().get_value().empty()) {
+            handle_set_opt(h, LRO_PROXY_SSLCLIENTKEY, config->proxy_sslclientkey().get_value().c_str());
+        }
+        long proxy_sslverify = config->proxy_sslverify().get_value() ? 1L : 0L;
+        handle_set_opt(h, LRO_PROXY_SSLVERIFYHOST, proxy_sslverify);
+        handle_set_opt(h, LRO_PROXY_SSLVERIFYPEER, proxy_sslverify);
     }
     handle_set_opt(h, LRO_USERAGENT, user_agent);
     return h;
