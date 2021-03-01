@@ -111,6 +111,14 @@ public:
     const OptionChild<OptionString> & sslclientcert() const;
     OptionChild<OptionString> & sslclientkey();
     const OptionChild<OptionString> & sslclientkey() const;
+    OptionChild<OptionString> & proxy_sslcacert();
+    const OptionChild<OptionString> & proxy_sslcacert() const;
+    OptionChild<OptionBool> & proxy_sslverify();
+    const OptionChild<OptionBool> & proxy_sslverify() const;
+    OptionChild<OptionString> & proxy_sslclientcert();
+    const OptionChild<OptionString> & proxy_sslclientcert() const;
+    OptionChild<OptionString> & proxy_sslclientkey();
+    const OptionChild<OptionString> & proxy_sslclientkey() const;
     OptionChild<OptionBool> & deltarpm();
     const OptionChild<OptionBool> & deltarpm() const;
     OptionChild<OptionNumber<std::uint32_t>> & deltarpm_percentage();

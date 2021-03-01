@@ -252,6 +252,14 @@ public:
     const OptionString & sslclientcert() const;
     OptionString & sslclientkey();
     const OptionString & sslclientkey() const;
+    OptionString & proxy_sslcacert();
+    const OptionString & proxy_sslcacert() const;
+    OptionBool & proxy_sslverify();
+    const OptionBool & proxy_sslverify() const;
+    OptionString & proxy_sslclientcert();
+    const OptionString & proxy_sslclientcert() const;
+    OptionString & proxy_sslclientkey();
+    const OptionString & proxy_sslclientkey() const;
     OptionBool & deltarpm();
     const OptionBool & deltarpm() const;
     OptionNumber<std::uint32_t> & deltarpm_percentage();

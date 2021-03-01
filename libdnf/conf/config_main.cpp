@@ -343,6 +343,10 @@ class ConfigMain::Impl {
     OptionBool sslverify{true};
     OptionString sslclientcert{""};
     OptionString sslclientkey{""};
+    OptionString proxy_sslcacert{""};
+    OptionBool proxy_sslverify{true};
+    OptionString proxy_sslclientcert{""};
+    OptionString proxy_sslclientkey{""};
     OptionBool deltarpm{true};
     OptionNumber<std::uint32_t> deltarpm_percentage{75};
     OptionBool skip_if_unavailable{false};
@@ -504,6 +508,10 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("sslverify", sslverify);
     owner.opt_binds().add("sslclientcert", sslclientcert);
     owner.opt_binds().add("sslclientkey", sslclientkey);
+    owner.opt_binds().add("proxy_sslcacert", proxy_sslcacert);
+    owner.opt_binds().add("proxy_sslverify", proxy_sslverify);
+    owner.opt_binds().add("proxy_sslclientcert", proxy_sslclientcert);
+    owner.opt_binds().add("proxy_sslclientkey", proxy_sslclientkey);
     owner.opt_binds().add("deltarpm", deltarpm);
     owner.opt_binds().add("deltarpm_percentage", deltarpm_percentage);
     owner.opt_binds().add("skip_if_unavailable", skip_if_unavailable);
@@ -1223,6 +1231,38 @@ OptionString & ConfigMain::sslclientkey() {
 }
 const OptionString & ConfigMain::sslclientkey() const {
     return p_impl->sslclientkey;
+}
+
+OptionString & ConfigMain::proxy_sslcacert() {
+    return p_impl->proxy_sslcacert;
+}
+
+const OptionString & ConfigMain::proxy_sslcacert() const {
+    return p_impl->proxy_sslcacert;
+}
+
+OptionBool & ConfigMain::proxy_sslverify() {
+    return p_impl->proxy_sslverify;
+}
+
+const OptionBool & ConfigMain::proxy_sslverify() const {
+    return p_impl->proxy_sslverify;
+}
+
+OptionString & ConfigMain::proxy_sslclientcert() {
+    return p_impl->proxy_sslclientcert;
+}
+
+const OptionString & ConfigMain::proxy_sslclientcert() const {
+    return p_impl->proxy_sslclientcert;
+}
+
+OptionString & ConfigMain::proxy_sslclientkey() {
+    return p_impl->proxy_sslclientkey;
+}
+
+const OptionString & ConfigMain::proxy_sslclientkey() const {
+    return p_impl->proxy_sslclientkey;
 }
 
 OptionBool & ConfigMain::deltarpm() {

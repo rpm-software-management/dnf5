@@ -70,6 +70,10 @@ class ConfigRepo::Impl {
     OptionChild<OptionBool> sslverify{main_config.sslverify()};
     OptionChild<OptionString> sslclientcert{main_config.sslclientcert()};
     OptionChild<OptionString> sslclientkey{main_config.sslclientkey()};
+    OptionChild<OptionString> proxy_sslcacert{main_config.proxy_sslcacert()};
+    OptionChild<OptionBool> proxy_sslverify{main_config.proxy_sslverify()};
+    OptionChild<OptionString> proxy_sslclientcert{main_config.proxy_sslclientcert()};
+    OptionChild<OptionString> proxy_sslclientkey{main_config.proxy_sslclientkey()};
     OptionChild<OptionBool> deltarpm{main_config.deltarpm()};
     OptionChild<OptionNumber<std::uint32_t>> deltarpm_percentage{main_config.deltarpm_percentage()};
     OptionChild<OptionBool> skip_if_unavailable{main_config.skip_if_unavailable()};
@@ -161,6 +165,10 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config) : owner(owner),
     owner.opt_binds().add("sslverify", sslverify);
     owner.opt_binds().add("sslclientcert", sslclientcert);
     owner.opt_binds().add("sslclientkey", sslclientkey);
+    owner.opt_binds().add("proxy_sslcacert", proxy_sslcacert);
+    owner.opt_binds().add("proxy_sslverify", proxy_sslverify);
+    owner.opt_binds().add("proxy_sslclientcert", proxy_sslclientcert);
+    owner.opt_binds().add("proxy_sslclientkey", proxy_sslclientkey);
     owner.opt_binds().add("deltarpm", deltarpm);
     owner.opt_binds().add("deltarpm_percentage", deltarpm_percentage);
     owner.opt_binds().add("skip_if_unavailable", skip_if_unavailable);
@@ -437,6 +445,38 @@ OptionChild<OptionString> & ConfigRepo::sslclientkey() {
 }
 const OptionChild<OptionString> & ConfigRepo::sslclientkey() const {
     return p_impl->sslclientkey;
+}
+
+OptionChild<OptionString> & ConfigRepo::proxy_sslcacert() {
+    return p_impl->proxy_sslcacert;
+}
+
+const OptionChild<OptionString> & ConfigRepo::proxy_sslcacert() const {
+    return p_impl->proxy_sslcacert;
+}
+
+OptionChild<OptionBool> & ConfigRepo::proxy_sslverify() {
+    return p_impl->proxy_sslverify;
+}
+
+const OptionChild<OptionBool> & ConfigRepo::proxy_sslverify() const {
+    return p_impl->proxy_sslverify;
+}
+
+OptionChild<OptionString> & ConfigRepo::proxy_sslclientcert() {
+    return p_impl->proxy_sslclientcert;
+}
+
+const OptionChild<OptionString> & ConfigRepo::proxy_sslclientcert() const {
+    return p_impl->proxy_sslclientcert;
+}
+
+OptionChild<OptionString> & ConfigRepo::proxy_sslclientkey() {
+    return p_impl->proxy_sslclientkey;
+}
+
+const OptionChild<OptionString> & ConfigRepo::proxy_sslclientkey() const {
+    return p_impl->proxy_sslclientkey;
 }
 
 OptionChild<OptionBool> & ConfigRepo::deltarpm() {
