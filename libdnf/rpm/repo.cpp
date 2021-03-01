@@ -1775,6 +1775,17 @@ static LrHandle * new_handle(ConfigMain * config) {
             }
         }
 
+        // setup ssl stuff
+        if (!config->sslcacert().get_value().empty()) {
+            handle_set_opt(h, LRO_SSLCACERT, config->sslcacert().get_value().c_str());
+        }
+        if (!config->sslclientcert().get_value().empty()) {
+            handle_set_opt(h, LRO_SSLCLIENTCERT, config->sslclientcert().get_value().c_str());
+        }
+        if (!config->sslclientkey().get_value().empty()) {
+            handle_set_opt(h, LRO_SSLCLIENTKEY, config->sslclientkey().get_value().c_str());
+        }
+
         auto sslverify = config->sslverify().get_value() ? 1L : 0L;
         handle_set_opt(h, LRO_SSLVERIFYHOST, sslverify);
         handle_set_opt(h, LRO_SSLVERIFYPEER, sslverify);
