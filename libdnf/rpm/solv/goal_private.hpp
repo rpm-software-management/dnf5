@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "id_queue.hpp"
 #include "solv_map.hpp"
 
+#include "libdnf/utils/utils.hpp"
+
 #include "libdnf/rpm/solv_sack.hpp"
 
 #include <solv/solver.h>
@@ -37,31 +39,6 @@ public:
         const char * get_name() const noexcept override { return "UnresolvedGoal"; }
         const char * get_description() const noexcept override { return "GoalPrivate exception"; }
     };
-    enum class ProblemRules {
-        RULE_DISTUPGRADE=1,
-        RULE_INFARCH, RULE_UPDATE,
-        RULE_JOB, RULE_JOB_UNSUPPORTED,
-        RULE_JOB_NOTHING_PROVIDES_DEP,
-        RULE_JOB_UNKNOWN_PACKAGE,
-        RULE_JOB_PROVIDED_BY_SYSTEM,
-        RULE_PKG,
-        RULE_BEST_1,
-        RULE_BEST_2,
-        RULE_PKG_NOT_INSTALLABLE_1,
-        RULE_PKG_NOT_INSTALLABLE_2,
-        RULE_PKG_NOT_INSTALLABLE_3,
-        RULE_PKG_NOT_INSTALLABLE_4,
-        RULE_PKG_NOTHING_PROVIDES_DEP,
-        RULE_PKG_SAME_NAME,
-        RULE_PKG_CONFLICTS,
-        RULE_PKG_OBSOLETES,
-        RULE_PKG_INSTALLED_OBSOLETES,
-        RULE_PKG_IMPLICIT_OBSOLETES,
-        RULE_PKG_REQUIRES,
-        RULE_PKG_SELF_CONFLICT,
-        RULE_YUMOBS,
-        RULE_UNKNOWN
-};
 
     explicit GoalPrivate(Pool * pool);
     explicit GoalPrivate(const GoalPrivate & src);
@@ -100,6 +77,7 @@ public:
     ///  Return all solver problems
     ///  Results are not formated, translated, and deduplucated
     ///  Throw UnresolvedGoal when Goal is not resolved
+    ///  Return std::vector<std::tuple<ProblemRules, Id source, Id dep, Id target, std::string Description for unknown rule>>>
     std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> get_problems();
 
     void set_allow_downgrade(bool value) { allow_downgrade=value; }

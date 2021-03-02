@@ -249,7 +249,7 @@ size_t GoalPrivate::count_solver_problems()
     return solver_problem_count(libsolv_solver);
 }
 
-std::vector<std::vector<std::tuple<GoalPrivate::ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems()
+std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems()
 {
     if (!libsolv_solver) {
         throw UnresolvedGoal();

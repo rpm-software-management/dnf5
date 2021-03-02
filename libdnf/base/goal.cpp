@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal.hpp"
 
+#include "../libdnf/utils/bgettext/bgettext-lib.h"
+
 #include "../rpm/package_set_impl.hpp"
 #include "../rpm/solv/goal_private.hpp"
 #include "../rpm/solv/id_queue.hpp"
@@ -28,6 +30,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/solv_query.hpp"
 
+#include <fmt/format.h>
+
+#include <map>
 
 namespace {
 
@@ -37,11 +42,73 @@ void add_obseletes(const libdnf::rpm::SolvQuery & base_query, libdnf::rpm::Packa
     data |= obsoletes_query;
 }
 
+
 }  // namespace
 
 
 namespace libdnf {
 
+namespace {
+
+
+// TODO(jmracek) Translation must be done later. After setting the locale.
+static const std::map<ProblemRules, const char *> PKG_PROBLEMS_DICT = {
+    {ProblemRules::RULE_DISTUPGRADE, _("{} does not belong to a distupgrade repository")},
+    {ProblemRules::RULE_INFARCH, _("{} has inferior architecture")},
+    {ProblemRules::RULE_UPDATE, _("problem with installed package ")},
+    {ProblemRules::RULE_JOB, _("conflicting requests")},
+    {ProblemRules::RULE_JOB_UNSUPPORTED, _("unsupported request")},
+    {ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP, _("nothing provides requested {}")},
+    {ProblemRules::RULE_JOB_UNKNOWN_PACKAGE, _("package {} does not exist")},
+    {ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM, _("{} is provided by the system")},
+    {ProblemRules::RULE_PKG, _("some dependency problem")},
+    {ProblemRules::RULE_BEST_1, _("cannot install the best update candidate for package {}")},
+    {ProblemRules::RULE_BEST_2, _("cannot install the best candidate for the job")},
+    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_1, _("package {} is filtered out by modular filtering")},
+    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_2, _("package {} does not have a compatible architecture")},
+    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_3, _("package {} is not installable")},
+    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_4, _("package {} is filtered out by exclude filtering")},
+    {ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP, _("nothing provides {0} needed by {1}")},
+    {ProblemRules::RULE_PKG_SAME_NAME, _("cannot install both {0} and {1}")},
+    {ProblemRules::RULE_PKG_CONFLICTS, _("package {0} conflicts with {1} provided by {2}")},
+    {ProblemRules::RULE_PKG_OBSOLETES, _("package {0} obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_PKG_INSTALLED_OBSOLETES, _("installed package {0} obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES, _("package {0} implicitly obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_PKG_REQUIRES, _("package {1} requires {0}, but none of the providers can be installed")},
+    {ProblemRules::RULE_PKG_SELF_CONFLICT, _("package {1} conflicts with {0} provided by itself")},
+    {ProblemRules::RULE_YUMOBS, _("both package {0} and {2} obsolete {1}")}
+};
+
+bool is_unique(const std::vector<std::pair<ProblemRules, std::vector<std::string>>> origin, ProblemRules rule, const std::vector<std::string> elements) {
+    for (auto const & element : origin) {
+        if (element.first == rule && element.second == elements) {
+            return false;
+        }
+    }
+    return true;
+}
+
+bool is_unique(const std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> problems, const std::vector<std::pair<ProblemRules, std::vector<std::string>>> new_element) {
+    auto new_element_size = new_element.size();
+    for (auto const & element : problems) {
+        if (element.size() != new_element_size) {
+            continue;
+        }
+        for (auto & [rule, strings] : element) {
+            if (is_unique(new_element, rule, strings)) {
+                continue;
+            }
+        }
+        return false;
+    }
+    return true;
+}
+
+inline static std::string cstring2string(const char * input) {
+    return input ? std::string(input) : std::string();
+}
+
+}
 
 class Goal::Impl {
 public:
@@ -551,6 +618,132 @@ bool Goal::resolve(bool allow_erasing) {
     }
 
     return p_impl->rpm_goal.resolve();
+}
+
+std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vector<std::string>> raw) {
+    switch (raw.first) {
+        case ProblemRules::RULE_DISTUPGRADE:
+        case ProblemRules::RULE_INFARCH:
+        case ProblemRules::RULE_UPDATE:
+        case ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP:
+        case ProblemRules::RULE_JOB_UNKNOWN_PACKAGE:
+        case ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM:
+        case ProblemRules::RULE_BEST_1:
+        case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
+        case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
+        case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
+        case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
+            if (raw.second.size() != 1) {
+                throw std::invalid_argument("Incorrect number of elements for a problem rule");
+            }
+            return fmt::format(PKG_PROBLEMS_DICT.at(raw.first), raw.second[0]);
+        case ProblemRules::RULE_JOB:
+        case ProblemRules::RULE_JOB_UNSUPPORTED:
+        case ProblemRules::RULE_PKG:
+        case ProblemRules::RULE_BEST_2:
+            if (raw.second.size() != 0) {
+                throw std::invalid_argument("Incorrect number of elements for a problem rule");
+            }
+            return PKG_PROBLEMS_DICT.at(raw.first);
+        case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
+        case ProblemRules::RULE_PKG_REQUIRES:
+        case ProblemRules::RULE_PKG_SELF_CONFLICT:
+        case ProblemRules::RULE_PKG_SAME_NAME:
+            if (raw.second.size() != 2) {
+                throw std::invalid_argument("Incorrect number of elements for a problem rule");
+            }
+            return fmt::format(PKG_PROBLEMS_DICT.at(raw.first), raw.second[0], raw.second[1]);
+        case ProblemRules::RULE_PKG_CONFLICTS:
+        case ProblemRules::RULE_PKG_OBSOLETES:
+        case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
+        case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
+        case ProblemRules::RULE_YUMOBS:
+            if (raw.second.size() != 3) {
+                throw std::invalid_argument("Incorrect number of elements for a problem rule");
+            }
+            return fmt::format(PKG_PROBLEMS_DICT.at(raw.first), raw.second[0], raw.second[1], raw.second[2]);
+        case ProblemRules::RULE_UNKNOWN:
+            if (raw.second.size() != 0) {
+                throw std::invalid_argument("Incorrect number of elements for a problem rule");
+            }
+            return raw.second[0];
+    }
+    return {};
+}
+
+std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> Goal::describe_all_solver_problems() {
+    auto & sack = p_impl->base->get_rpm_solv_sack();
+    Pool * pool = sack.p_impl->get_pool();
+
+    auto solver_problems = p_impl->rpm_goal.get_problems();
+    std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> output;
+    for (auto & problem : solver_problems) {
+        std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
+
+        for (auto & [rule, source, dep, target, description] : problem) {
+            std::vector<std::string> elements;
+            ProblemRules tmp_rule = rule;
+            switch (rule) {
+                case ProblemRules::RULE_DISTUPGRADE:
+                case ProblemRules::RULE_INFARCH:
+                case ProblemRules::RULE_UPDATE:
+                case ProblemRules::RULE_BEST_1:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
+                    elements.push_back(pool_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_JOB:
+                case ProblemRules::RULE_JOB_UNSUPPORTED:
+                case ProblemRules::RULE_PKG:
+                case ProblemRules::RULE_BEST_2:
+                    break;
+                case ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_JOB_UNKNOWN_PACKAGE:
+                case ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM:
+                     elements.push_back(pool_dep2str(pool, dep));
+                     break;
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
+                case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
+                    if (false) {
+                         // TODO (jmracek) (modularExclude && modularExclude->has(source))
+                    } else {
+                        tmp_rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_4;
+                    }
+                    elements.push_back(pool_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
+                case ProblemRules::RULE_PKG_REQUIRES:
+                case ProblemRules::RULE_PKG_SELF_CONFLICT:
+                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(pool_solvid2str(pool, source));
+                    break;
+                case ProblemRules::RULE_PKG_SAME_NAME:
+                    elements.push_back(pool_solvid2str(pool, source));
+                    elements.push_back(pool_solvid2str(pool, target));
+                    std::sort(elements.begin(), elements.end());
+                    break;
+                case ProblemRules::RULE_PKG_CONFLICTS:
+                case ProblemRules::RULE_PKG_OBSOLETES:
+                case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
+                case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
+                case ProblemRules::RULE_YUMOBS:
+                    elements.push_back(pool_solvid2str(pool, source));
+                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(pool_solvid2str(pool, target));
+                    break;
+                case ProblemRules::RULE_UNKNOWN:
+                    elements.push_back(description);
+                    break;
+            }
+            if (is_unique(problem_output, tmp_rule, elements)) {
+                problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
+            }
+        }
+        if (is_unique(output, problem_output)) {
+            output.push_back(std::move(problem_output));
+        }
+    }
+    return output;
 }
 
 std::vector<libdnf::rpm::Package> Goal::list_rpm_installs() {

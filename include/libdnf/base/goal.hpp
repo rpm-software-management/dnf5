@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package.hpp"
 
+#include "libdnf/utils/utils.hpp"
+
 #include <memory>
 #include <tuple>
 #include <vector>
@@ -70,6 +72,13 @@ public:
     void add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set);
 
     bool resolve(bool allow_erasing);
+
+    /// Can be use to format elements from describe_all_solver_problems();
+    static std::string format_problem(const std::pair<libdnf::ProblemRules, std::vector<std::string>>);
+
+    /// @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
+    /// @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
+    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> describe_all_solver_problems();
 
     std::vector<libdnf::rpm::Package> list_rpm_installs();
     std::vector<libdnf::rpm::Package> list_rpm_reinstalls();
