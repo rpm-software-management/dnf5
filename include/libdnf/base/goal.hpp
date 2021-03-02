@@ -80,6 +80,10 @@ public:
     /// @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
     std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> describe_all_solver_problems();
 
+    /// Concentrate all problems into a string (solver, protected packages, ...)
+    /// @replaces libdnf/Goal.formatAllProblemRules(const std::vector<std::vector<std::string>> & problems);
+    std::string get_formated_all_problems();
+
     std::vector<libdnf::rpm::Package> list_rpm_installs();
     std::vector<libdnf::rpm::Package> list_rpm_reinstalls();
     std::vector<libdnf::rpm::Package> list_rpm_upgrades();

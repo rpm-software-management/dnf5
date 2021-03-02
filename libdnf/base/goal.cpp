@@ -108,6 +108,19 @@ inline static std::string cstring2string(const char * input) {
     return input ? std::string(input) : std::string();
 }
 
+std::string string_join(const std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>> & src, const std::string & delim)
+{
+    if (src.empty()) {
+        return {};
+    }
+    std::string output(Goal::format_problem(*src.begin()));
+    for (auto iter = std::next(src.begin()); iter != src.end(); ++iter) {
+        output.append(delim);
+        output.append(Goal::format_problem(*iter));
+    }
+    return output;
+}
+
 }
 
 class Goal::Impl {
@@ -742,6 +755,33 @@ std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>
         if (is_unique(output, problem_output)) {
             output.push_back(std::move(problem_output));
         }
+    }
+    return output;
+}
+
+std::string Goal::get_formated_all_problems() {
+    // TODO(jmracek) add problems with protected packages
+    auto problems = describe_all_solver_problems();
+    if (problems.empty()) {
+        return {};
+    }
+    std::string output;
+    if (problems.size() == 1) {
+        output.append(_("Problem: "));
+        output.append(string_join(*problems.begin(), "\n  - "));
+        return output;
+    }
+    const char * problem_prefix = _("Problem {}: ");
+
+    output.append(fmt::format(problem_prefix, 1));
+    output.append(string_join(*problems.begin(), "\n  - "));
+
+    int index = 2;
+    for (auto iter = std::next(problems.begin()); iter != problems.end(); ++iter) {
+        output.append("\n ");
+        output.append(fmt::format(problem_prefix, index));
+        output.append(string_join(*iter, "\n  - "));
+        ++index;
     }
     return output;
 }
