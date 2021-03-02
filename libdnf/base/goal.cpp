@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/goal.hpp"
 
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
-
 #include "../rpm/package_set_impl.hpp"
 #include "../rpm/solv/goal_private.hpp"
 #include "../rpm/solv/id_queue.hpp"
@@ -76,10 +75,12 @@ static const std::map<ProblemRules, const char *> PKG_PROBLEMS_DICT = {
     {ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES, _("package {0} implicitly obsoletes {1} provided by {2}")},
     {ProblemRules::RULE_PKG_REQUIRES, _("package {1} requires {0}, but none of the providers can be installed")},
     {ProblemRules::RULE_PKG_SELF_CONFLICT, _("package {1} conflicts with {0} provided by itself")},
-    {ProblemRules::RULE_YUMOBS, _("both package {0} and {2} obsolete {1}")}
-};
+    {ProblemRules::RULE_YUMOBS, _("both package {0} and {2} obsolete {1}")}};
 
-bool is_unique(const std::vector<std::pair<ProblemRules, std::vector<std::string>>> origin, ProblemRules rule, const std::vector<std::string> elements) {
+bool is_unique(
+    const std::vector<std::pair<ProblemRules, std::vector<std::string>>> origin,
+    ProblemRules rule,
+    const std::vector<std::string> elements) {
     for (auto const & element : origin) {
         if (element.first == rule && element.second == elements) {
             return false;
@@ -88,7 +89,9 @@ bool is_unique(const std::vector<std::pair<ProblemRules, std::vector<std::string
     return true;
 }
 
-bool is_unique(const std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> problems, const std::vector<std::pair<ProblemRules, std::vector<std::string>>> new_element) {
+bool is_unique(
+    const std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> problems,
+    const std::vector<std::pair<ProblemRules, std::vector<std::string>>> new_element) {
     auto new_element_size = new_element.size();
     for (auto const & element : problems) {
         if (element.size() != new_element_size) {
@@ -108,8 +111,8 @@ inline static std::string cstring2string(const char * input) {
     return input ? std::string(input) : std::string();
 }
 
-std::string string_join(const std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>> & src, const std::string & delim)
-{
+std::string string_join(
+    const std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>> & src, const std::string & delim) {
     if (src.empty()) {
         return {};
     }
@@ -121,7 +124,7 @@ std::string string_join(const std::vector<std::pair<libdnf::ProblemRules, std::v
     return output;
 }
 
-}
+}  // namespace
 
 class Goal::Impl {
 public:
@@ -290,28 +293,35 @@ void Goal::Impl::add_install_to_goal() {
         auto nevra_pair = query.resolve_pkg_spec(spec, false, true, with_provides, with_filenames, false, forms);
         if (!nevra_pair.first) {
             libdnf::rpm::SolvQuery q(&sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
-            auto nevra_pair_reports = query.resolve_pkg_spec(spec, false, true, with_provides, with_filenames, true, forms);
+            auto nevra_pair_reports =
+                query.resolve_pkg_spec(spec, false, true, with_provides, with_filenames, true, forms);
             if (!nevra_pair_reports.first) {
                 // RPM was not excluded or there is no related srpm
                 if (strict) {
-                    rpm_error.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND, spec));
+                    rpm_error.emplace_back(
+                        std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND, spec));
                 } else {
-                    rpm_warning.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND, spec));
+                    rpm_warning.emplace_back(
+                        std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND, spec));
                 }
             } else {
                 q.ifilter_repoid(libdnf::sack::QueryCmp::NEQ, {"src"});
                 if (q.empty()) {
                     if (strict) {
-                        rpm_error.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::ONLY_SRC, spec));
+                        rpm_error.emplace_back(
+                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::ONLY_SRC, spec));
                     } else {
-                        rpm_warning.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::ONLY_SRC, spec));
+                        rpm_warning.emplace_back(
+                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::ONLY_SRC, spec));
                     }
                 } else {
                     // TODO(jmracek) make difference between regular excludes and modular excludes
                     if (strict) {
-                        rpm_error.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::EXCLUDED, spec));
+                        rpm_error.emplace_back(
+                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::EXCLUDED, spec));
                     } else {
-                        rpm_warning.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::EXCLUDED, spec));
+                        rpm_warning.emplace_back(
+                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::EXCLUDED, spec));
                     }
                 }
             }
@@ -335,9 +345,11 @@ void Goal::Impl::add_install_to_goal() {
                     query |= installed;
                     if (query.empty()) {
                         if (strict) {
-                            rpm_error.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND_IN_REPOSITORIES, spec));
+                            rpm_error.emplace_back(std::make_tuple(
+                                libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND_IN_REPOSITORIES, spec));
                         } else {
-                            rpm_warning.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND_IN_REPOSITORIES, spec));
+                            rpm_warning.emplace_back(std::make_tuple(
+                                libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND_IN_REPOSITORIES, spec));
                         }
                         // TODO(jmracek) store repositories
                         continue;
@@ -621,7 +633,7 @@ bool Goal::resolve(bool allow_erasing) {
     p_impl->rpm_goal.set_allow_erasing(allow_erasing);
     p_impl->rpm_goal.set_force_best(cfg_main.best().get_value());
     p_impl->rpm_goal.set_install_weak_deps(cfg_main.install_weak_deps().get_value());
-    
+
     // Add protected packages
     {
         auto protected_packages = cfg_main.protected_packages().get_value();
@@ -684,7 +696,8 @@ std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vect
     return {};
 }
 
-std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> Goal::describe_all_solver_problems() {
+std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>>
+Goal::describe_all_solver_problems() {
     auto & sack = p_impl->base->get_rpm_solv_sack();
     Pool * pool = sack.p_impl->get_pool();
 
@@ -713,12 +726,12 @@ std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>
                 case ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP:
                 case ProblemRules::RULE_JOB_UNKNOWN_PACKAGE:
                 case ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM:
-                     elements.push_back(pool_dep2str(pool, dep));
-                     break;
+                    elements.push_back(pool_dep2str(pool, dep));
+                    break;
                 case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
                 case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
                     if (false) {
-                         // TODO (jmracek) (modularExclude && modularExclude->has(source))
+                        // TODO (jmracek) (modularExclude && modularExclude->has(source))
                     } else {
                         tmp_rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_4;
                     }

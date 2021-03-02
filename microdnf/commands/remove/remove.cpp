@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -50,10 +50,10 @@ void CmdRemove::set_argument_parser(Context & ctx) {
     remove->set_named_args_help_header("Optional arguments:");
     remove->set_positional_args_help_header("Positional arguments:");
     remove->set_parse_hook_func([this, &ctx](
-                                [[maybe_unused]] ArgumentParser::Argument * arg,
-                                [[maybe_unused]] const char * option,
-                                [[maybe_unused]] int argc,
-                                [[maybe_unused]] const char * const argv[]) {
+                                    [[maybe_unused]] ArgumentParser::Argument * arg,
+                                    [[maybe_unused]] const char * option,
+                                    [[maybe_unused]] int argc,
+                                    [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
     });
@@ -106,7 +106,6 @@ void CmdRemove::run(Context & ctx) {
     time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
     db_transaction->finish(libdnf::transaction::TransactionState::DONE);
-
 }
 
 }  // namespace microdnf

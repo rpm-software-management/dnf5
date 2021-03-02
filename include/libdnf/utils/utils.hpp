@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -28,29 +28,31 @@ namespace libdnf {
 bool have_files_same_content_noexcept(const char * file_path1, const char * file_path2) noexcept;
 
 enum class ProblemRules {
-        RULE_DISTUPGRADE=1,
-        RULE_INFARCH, RULE_UPDATE,
-        RULE_JOB, RULE_JOB_UNSUPPORTED,
-        RULE_JOB_NOTHING_PROVIDES_DEP,
-        RULE_JOB_UNKNOWN_PACKAGE,
-        RULE_JOB_PROVIDED_BY_SYSTEM,
-        RULE_PKG,
-        RULE_BEST_1,
-        RULE_BEST_2,
-        RULE_PKG_NOT_INSTALLABLE_1,
-        RULE_PKG_NOT_INSTALLABLE_2,
-        RULE_PKG_NOT_INSTALLABLE_3,
-        RULE_PKG_NOT_INSTALLABLE_4,
-        RULE_PKG_NOTHING_PROVIDES_DEP,
-        RULE_PKG_SAME_NAME,
-        RULE_PKG_CONFLICTS,
-        RULE_PKG_OBSOLETES,
-        RULE_PKG_INSTALLED_OBSOLETES,
-        RULE_PKG_IMPLICIT_OBSOLETES,
-        RULE_PKG_REQUIRES,
-        RULE_PKG_SELF_CONFLICT,
-        RULE_YUMOBS,
-        RULE_UNKNOWN
+    RULE_DISTUPGRADE = 1,
+    RULE_INFARCH,
+    RULE_UPDATE,
+    RULE_JOB,
+    RULE_JOB_UNSUPPORTED,
+    RULE_JOB_NOTHING_PROVIDES_DEP,
+    RULE_JOB_UNKNOWN_PACKAGE,
+    RULE_JOB_PROVIDED_BY_SYSTEM,
+    RULE_PKG,
+    RULE_BEST_1,
+    RULE_BEST_2,
+    RULE_PKG_NOT_INSTALLABLE_1,
+    RULE_PKG_NOT_INSTALLABLE_2,
+    RULE_PKG_NOT_INSTALLABLE_3,
+    RULE_PKG_NOT_INSTALLABLE_4,
+    RULE_PKG_NOTHING_PROVIDES_DEP,
+    RULE_PKG_SAME_NAME,
+    RULE_PKG_CONFLICTS,
+    RULE_PKG_OBSOLETES,
+    RULE_PKG_INSTALLED_OBSOLETES,
+    RULE_PKG_IMPLICIT_OBSOLETES,
+    RULE_PKG_REQUIRES,
+    RULE_PKG_SELF_CONFLICT,
+    RULE_YUMOBS,
+    RULE_UNKNOWN
 };
 
 }  // namespace libdnf

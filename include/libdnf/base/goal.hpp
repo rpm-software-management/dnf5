@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -24,12 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package.hpp"
-
 #include "libdnf/utils/utils.hpp"
 
-#include <memory>
-#include <tuple>
-#include <vector>
 
 namespace libdnf {
 
@@ -38,8 +34,8 @@ class Goal {
 public:
     struct UsedDifferentSack : public LogicError {
         using LogicError::LogicError;
-        UsedDifferentSack() : LogicError(
-            "Cannot perform the action with Goal instances initialized with different SolvSacks") {};
+        UsedDifferentSack()
+            : LogicError("Cannot perform the action with Goal instances initialized with different SolvSacks"){};
         const char * get_domain_name() const noexcept override { return "libdnf::Goal"; }
         const char * get_name() const noexcept override { return "UsedDifferentSack"; }
         const char * get_description() const noexcept override { return "Goal exception"; }

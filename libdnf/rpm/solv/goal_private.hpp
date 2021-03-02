@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -23,9 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "id_queue.hpp"
 #include "solv_map.hpp"
 
-#include "libdnf/utils/utils.hpp"
-
 #include "libdnf/rpm/solv_sack.hpp"
+#include "libdnf/utils/utils.hpp"
 
 #include <solv/solver.h>
 
@@ -80,12 +79,12 @@ public:
     ///  Return std::vector<std::tuple<ProblemRules, Id source, Id dep, Id target, std::string Description for unknown rule>>>
     std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> get_problems();
 
-    void set_allow_downgrade(bool value) { allow_downgrade=value; }
-    void set_allow_erasing(bool value) { allow_erasing=value; }
-    void set_allow_vendor_change(bool value) { allow_vendor_change=value; }
-    void set_force_best(bool value) { force_best=value; }
-    void set_install_weak_deps(bool value) { install_weak_deps=value; }
-    void set_remove_solver_weak(bool value) { remove_solver_weak=value; }
+    void set_allow_downgrade(bool value) { allow_downgrade = value; }
+    void set_allow_erasing(bool value) { allow_erasing = value; }
+    void set_allow_vendor_change(bool value) { allow_vendor_change = value; }
+    void set_force_best(bool value) { force_best = value; }
+    void set_install_weak_deps(bool value) { install_weak_deps = value; }
+    void set_remove_solver_weak(bool value) { remove_solver_weak = value; }
     // TODO(jmracek)
     //     PackageSet listUnneeded();
     //     PackageSet listSuggested();

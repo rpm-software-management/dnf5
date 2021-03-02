@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -30,8 +30,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -40,7 +40,6 @@ namespace microdnf {
 using namespace libdnf::cli;
 
 void CmdInstall::set_argument_parser(Context & ctx) {
-
     patterns_to_install_options = ctx.arg_parser.add_new_values();
     auto keys = ctx.arg_parser.add_new_positional_arg(
         "keys_to_match",
@@ -55,10 +54,10 @@ void CmdInstall::set_argument_parser(Context & ctx) {
     install->set_named_args_help_header("Optional arguments:");
     install->set_positional_args_help_header("Positional arguments:");
     install->set_parse_hook_func([this, &ctx](
-                                [[maybe_unused]] ArgumentParser::Argument * arg,
-                                [[maybe_unused]] const char * option,
-                                [[maybe_unused]] int argc,
-                                [[maybe_unused]] const char * const argv[]) {
+                                     [[maybe_unused]] ArgumentParser::Argument * arg,
+                                     [[maybe_unused]] const char * option,
+                                     [[maybe_unused]] int argc,
+                                     [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
     });

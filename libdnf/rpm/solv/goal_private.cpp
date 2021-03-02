@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -198,23 +198,23 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
     }
     int flags = TESTCASE_RESULT_TRANSACTION | TESTCASE_RESULT_PROBLEMS;
     // TODO(jmracek) add support of relative path and create required dirs and parents
-//     g_autofree char * absdir = abspath(dir);
-//     if (!absdir) {
-//         std::string msg = tfm::format(_("failed to make %s absolute"), dir);
-//         throw Goal::Error(msg, DNF_ERROR_FILE_INVALID);
-//     }
-//     makeDirPath(dir);
-//     g_debug("writing solver debugdata to %s", absdir);
+    //     g_autofree char * absdir = abspath(dir);
+    //     if (!absdir) {
+    //         std::string msg = tfm::format(_("failed to make %s absolute"), dir);
+    //         throw Goal::Error(msg, DNF_ERROR_FILE_INVALID);
+    //     }
+    //     makeDirPath(dir);
+    //     g_debug("writing solver debugdata to %s", absdir);
     auto ret = ::testcase_write(libsolv_solver, dir.c_str(), flags, NULL, NULL);
 
     if (!ret) {
         // TODO(jmracek) replace error with Goal Error
         throw std::runtime_error("failed writing debugdata");
     }
-//         std::string msg = tfm::format(_("failed writing debugdata to %1$s: %2$s"),
-//                                       absdir, strerror(errno));
-//         throw Goal::Error(msg, DNF_ERROR_FILE_INVALID);
-//     }
+    //         std::string msg = tfm::format(_("failed writing debugdata to %1$s: %2$s"),
+    //                                       absdir, strerror(errno));
+    //         throw Goal::Error(msg, DNF_ERROR_FILE_INVALID);
+    //     }
 }
 
 // PackageSet
@@ -241,16 +241,14 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
 //     return pset;
 // }
 
-size_t GoalPrivate::count_solver_problems()
-{
+size_t GoalPrivate::count_solver_problems() {
     if (!libsolv_solver) {
         throw UnresolvedGoal();
     }
     return solver_problem_count(libsolv_solver);
 }
 
-std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems()
-{
+std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems() {
     if (!libsolv_solver) {
         throw UnresolvedGoal();
     }
@@ -270,7 +268,7 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
         for (int j = 0; j < problem_queue.size(); ++j) {
             Id rid = problem_queue[j];
             if (solver_allruleinfos(libsolv_solver, rid, &descriptions_queue.get_queue())) {
-                for (int ir = 0; ir < descriptions_queue.size(); ir+=4) {
+                for (int ir = 0; ir < descriptions_queue.size(); ir += 4) {
                     SolverRuleinfo type = static_cast<SolverRuleinfo>(descriptions_queue[ir]);
                     Id source = descriptions_queue[ir + 1];
                     Id target = descriptions_queue[ir + 2];
@@ -319,11 +317,8 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
                                 rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_1;
                                 break;
                             }
-                            if (solvable->arch
-                                && solvable->arch != ARCH_SRC
-                                && solvable->arch != ARCH_NOSRC
-                                && pool->id2arch
-                                && (solvable->arch > pool->lastarch || !pool->id2arch[solvable->arch])) {
+                            if (solvable->arch && solvable->arch != ARCH_SRC && solvable->arch != ARCH_NOSRC &&
+                                pool->id2arch && (solvable->arch > pool->lastarch || !pool->id2arch[solvable->arch])) {
                                 rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_2;
                                 break;
                             }
@@ -371,13 +366,11 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
     return problems;
 }
 
-void GoalPrivate::set_protect_running_kernel(PackageId value)
-{
+void GoalPrivate::set_protect_running_kernel(PackageId value) {
     protected_running_kernel = value;
 }
 
-void GoalPrivate::add_protected_packages(const SolvMap & map)
-{
+void GoalPrivate::add_protected_packages(const SolvMap & map) {
     if (!protected_packages) {
         protected_packages.reset(new SolvMap(map));
     } else {
@@ -385,16 +378,13 @@ void GoalPrivate::add_protected_packages(const SolvMap & map)
     }
 }
 
-void GoalPrivate::set_protected_packages(const SolvMap & map)
-{
+void GoalPrivate::set_protected_packages(const SolvMap & map) {
     protected_packages.reset(new SolvMap(map));
 }
 
-void GoalPrivate::reset_protected_packages()
-{
+void GoalPrivate::reset_protected_packages() {
     protected_packages.reset();
 }
-
 
 
 }  // namespace libdnf::rpm::solv

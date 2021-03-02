@@ -53,8 +53,7 @@ void BaseGoalTest::test_install() {
 
 void BaseGoalTest::test_install_from_cmdline() {
     libdnf::Goal goal(base.get());
-    std::filesystem::path rpm_path =
-        PROJECT_BINARY_DIR "/test/data/cmdline-rpms/noarch/cmdline-1.2-3.noarch.rpm";
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/noarch/cmdline-1.2-3.noarch.rpm";
     auto cmd_pkg = sack->add_cmdline_package(rpm_path, false);
     goal.add_rpm_install(cmd_pkg, true);
     goal.resolve(false);
@@ -75,8 +74,7 @@ void BaseGoalTest::test_install_from_cmdline() {
 }
 
 void BaseGoalTest::test_remove() {
-    std::filesystem::path rpm_path =
-        PROJECT_BINARY_DIR "/test/data/cmdline-rpms/noarch/cmdline-1.2-3.noarch.rpm";
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/noarch/cmdline-1.2-3.noarch.rpm";
     sack->add_system_package(rpm_path, false, false);
     libdnf::Goal goal(base.get());
     goal.add_rpm_remove("cmdline", {}, {});

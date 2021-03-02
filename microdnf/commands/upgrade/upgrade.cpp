@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -18,9 +18,9 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "upgrade.hpp"
-#include "../../utils.hpp"
 
 #include "../../context.hpp"
+#include "../../utils.hpp"
 
 #include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
@@ -29,8 +29,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -53,10 +53,10 @@ void CmdUpgrade::set_argument_parser(Context & ctx) {
     upgrade->set_named_args_help_header("Optional arguments:");
     upgrade->set_positional_args_help_header("Positional arguments:");
     upgrade->set_parse_hook_func([this, &ctx](
-                                [[maybe_unused]] ArgumentParser::Argument * arg,
-                                [[maybe_unused]] const char * option,
-                                [[maybe_unused]] int argc,
-                                [[maybe_unused]] const char * const argv[]) {
+                                     [[maybe_unused]] ArgumentParser::Argument * arg,
+                                     [[maybe_unused]] const char * option,
+                                     [[maybe_unused]] int argc,
+                                     [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
     });
