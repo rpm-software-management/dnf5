@@ -88,7 +88,10 @@ void CmdUpgrade::run(Context & ctx) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal.add_rpm_upgrade(option->get_value(), {});
     }
-    goal.resolve(false);
+    if (goal.resolve(false)) {
+        std::cout << goal.get_formated_all_problems() << std::endl;
+        return;
+    }
 
     if (!print_goal(goal)) {
         return;
