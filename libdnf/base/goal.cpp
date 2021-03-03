@@ -610,7 +610,8 @@ void Goal::Impl::add_upgrades_to_goal() {
     }
 }
 
-bool Goal::resolve(bool allow_erasing) {
+Goal::Problem Goal::resolve(bool allow_erasing)
+{
     auto & sack = p_impl->base->get_rpm_solv_sack();
     Pool * pool = sack.p_impl->get_pool();
     // TODO(jmracek) Move pool settings in base
@@ -641,8 +642,10 @@ bool Goal::resolve(bool allow_erasing) {
         protected_query.ifilter_name(sack::QueryCmp::EQ, protected_packages);
         p_impl->rpm_goal.add_protected_packages(*protected_query.p_impl);
     }
-
-    return p_impl->rpm_goal.resolve();
+    if (p_impl->rpm_goal.resolve()) {
+        return Problem::SOLVER_ERROR;
+    }
+    return Problem::NO_PROBLEM;
 }
 
 std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vector<std::string>> raw) {

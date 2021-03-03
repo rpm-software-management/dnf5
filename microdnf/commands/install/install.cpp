@@ -89,7 +89,7 @@ void CmdInstall::run(Context & ctx) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal.add_rpm_install(option->get_value(), {}, true, {});
     }
-    if (goal.resolve(false)) {
+    if (goal.resolve(false) != libdnf::Goal::Problem::NO_PROBLEM) {
         std::cout << goal.get_formated_all_problems() << std::endl;
         return;
     }
