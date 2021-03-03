@@ -33,7 +33,6 @@ namespace libdnf {
 class Goal {
 public:
     struct UsedDifferentSack : public LogicError {
-        using LogicError::LogicError;
         UsedDifferentSack()
             : LogicError("Cannot perform the action with Goal instances initialized with different SolvSacks"){};
         const char * get_domain_name() const noexcept override { return "libdnf::Goal"; }
