@@ -65,7 +65,7 @@ static void print_repolist_table(Query query, bool with_status, int c) {
             table,
             with_status,
             repo->get_id().c_str(),
-            repo->get_config().name().get_value().c_str(),
+            repo->get_name().c_str(), //repo->get_config().name().get_value().c_str(),
             repo->is_enabled());
     }
     auto cl = scols_table_get_column(table, c);

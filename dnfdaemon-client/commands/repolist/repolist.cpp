@@ -149,6 +149,20 @@ private:
     dnfdaemon::KeyValueMap rawdata;
 };
 
+class QueryRepoDbus {
+public:
+    QueryRepoDbus(dnfdaemon::KeyValueMapList & repositories) {
+        for (auto raw_repo : repositories) {
+            queryrepo.push_back(std::make_unique<RepoDbus>(raw_repo));
+        }
+    }
+
+    const std::vector< std::unique_ptr<RepoDbus> > & get_data() const { return queryrepo; }
+
+private:
+    std::vector< std::unique_ptr<RepoDbus> > queryrepo;
+};
+
 void CmdRepolist::run(Context & ctx) {
     // prepare options from command line arguments
     dnfdaemon::KeyValueMap options = {};
@@ -184,19 +198,9 @@ void CmdRepolist::run(Context & ctx) {
     if (command == "repolist") {
         // print the output table
         bool with_status = enable_disable_option->get_value() == "all";
-        auto table = libdnf::cli::output::create_repolist_table(with_status);
-
-        for (auto & raw_repo : repositories) {
-            RepoDbus repo(raw_repo);
-            libdnf::cli::output::add_line_into_repolist_table(
-                table, with_status, repo.get_id().c_str(),
-                repo.get_name().c_str(), repo.is_enabled());
-        }
-
-        auto cl = scols_table_get_column(table, libdnf::cli::output::COL_REPO_ID);
-        scols_sort_table(table, cl);
-        scols_print_table(table);
-        scols_unref_table(table);
+        libdnf::cli::output::print_repolist_table(
+            QueryRepoDbus(repositories), with_status,
+            libdnf::cli::output::COL_REPO_ID);
     } else {
         // repoinfo command
         // TODO(mblaha): output using smartcols
