@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::cli::output {
 
+// repository list table columns
 enum { COL_REPO_ID, COL_REPO_NAME, COL_REPO_STATUS };
 
 static struct libscols_table * create_repolist_table(bool with_status) {
