@@ -297,6 +297,9 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getCacheDir()
     std::string get_cachedir() const;
 
+    /// Gets name of repository
+    /// Alias
+    std::string get_name() { return this->get_config().name().get_value(); };
     /// Sets repository configuration file path
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setRepoFilePath(const std::string & path)
     void set_repo_file_path(const std::string & path);
