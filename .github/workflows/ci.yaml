@@ -6,8 +6,7 @@ jobs:
   integration-tests:
     name: Package Build
     runs-on: ubuntu-latest
-    container:
-      image: fedora:latest
+    container: ghcr.io/rpm-software-management/dnf-ci-host
     steps:
       - name: Check out ci-dnf-stack
         uses: actions/checkout@v2
