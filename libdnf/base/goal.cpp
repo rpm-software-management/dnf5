@@ -52,30 +52,30 @@ namespace {
 
 // TODO(jmracek) Translation must be done later. After setting the locale.
 static const std::map<ProblemRules, const char *> PKG_PROBLEMS_DICT = {
-    {ProblemRules::RULE_DISTUPGRADE, _("{} does not belong to a distupgrade repository")},
-    {ProblemRules::RULE_INFARCH, _("{} has inferior architecture")},
-    {ProblemRules::RULE_UPDATE, _("problem with installed package ")},
-    {ProblemRules::RULE_JOB, _("conflicting requests")},
-    {ProblemRules::RULE_JOB_UNSUPPORTED, _("unsupported request")},
-    {ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP, _("nothing provides requested {}")},
-    {ProblemRules::RULE_JOB_UNKNOWN_PACKAGE, _("package {} does not exist")},
-    {ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM, _("{} is provided by the system")},
-    {ProblemRules::RULE_PKG, _("some dependency problem")},
-    {ProblemRules::RULE_BEST_1, _("cannot install the best update candidate for package {}")},
-    {ProblemRules::RULE_BEST_2, _("cannot install the best candidate for the job")},
-    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_1, _("package {} is filtered out by modular filtering")},
-    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_2, _("package {} does not have a compatible architecture")},
-    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_3, _("package {} is not installable")},
-    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_4, _("package {} is filtered out by exclude filtering")},
-    {ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP, _("nothing provides {0} needed by {1}")},
-    {ProblemRules::RULE_PKG_SAME_NAME, _("cannot install both {0} and {1}")},
-    {ProblemRules::RULE_PKG_CONFLICTS, _("package {0} conflicts with {1} provided by {2}")},
-    {ProblemRules::RULE_PKG_OBSOLETES, _("package {0} obsoletes {1} provided by {2}")},
-    {ProblemRules::RULE_PKG_INSTALLED_OBSOLETES, _("installed package {0} obsoletes {1} provided by {2}")},
-    {ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES, _("package {0} implicitly obsoletes {1} provided by {2}")},
-    {ProblemRules::RULE_PKG_REQUIRES, _("package {1} requires {0}, but none of the providers can be installed")},
-    {ProblemRules::RULE_PKG_SELF_CONFLICT, _("package {1} conflicts with {0} provided by itself")},
-    {ProblemRules::RULE_YUMOBS, _("both package {0} and {2} obsolete {1}")}};
+    {ProblemRules::RULE_DISTUPGRADE, M_("{} does not belong to a distupgrade repository")},
+    {ProblemRules::RULE_INFARCH, M_("{} has inferior architecture")},
+    {ProblemRules::RULE_UPDATE, M_("problem with installed package ")},
+    {ProblemRules::RULE_JOB, M_("conflicting requests")},
+    {ProblemRules::RULE_JOB_UNSUPPORTED, M_("unsupported request")},
+    {ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP, M_("nothing provides requested {}")},
+    {ProblemRules::RULE_JOB_UNKNOWN_PACKAGE, M_("package {} does not exist")},
+    {ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM, M_("{} is provided by the system")},
+    {ProblemRules::RULE_PKG, M_("some dependency problem")},
+    {ProblemRules::RULE_BEST_1, M_("cannot install the best update candidate for package {}")},
+    {ProblemRules::RULE_BEST_2, M_("cannot install the best candidate for the job")},
+    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_1, M_("package {} is filtered out by modular filtering")},
+    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_2, M_("package {} does not have a compatible architecture")},
+    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_3, M_("package {} is not installable")},
+    {ProblemRules::RULE_PKG_NOT_INSTALLABLE_4, M_("package {} is filtered out by exclude filtering")},
+    {ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP, M_("nothing provides {0} needed by {1}")},
+    {ProblemRules::RULE_PKG_SAME_NAME, M_("cannot install both {0} and {1}")},
+    {ProblemRules::RULE_PKG_CONFLICTS, M_("package {0} conflicts with {1} provided by {2}")},
+    {ProblemRules::RULE_PKG_OBSOLETES, M_("package {0} obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_PKG_INSTALLED_OBSOLETES, M_("installed package {0} obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES, M_("package {0} implicitly obsoletes {1} provided by {2}")},
+    {ProblemRules::RULE_PKG_REQUIRES, M_("package {1} requires {0}, but none of the providers can be installed")},
+    {ProblemRules::RULE_PKG_SELF_CONFLICT, M_("package {1} conflicts with {0} provided by itself")},
+    {ProblemRules::RULE_YUMOBS, M_("both package {0} and {2} obsolete {1}")}};
 
 bool is_unique(
     const std::vector<std::pair<ProblemRules, std::vector<std::string>>> origin,
@@ -664,7 +664,7 @@ std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vect
             if (raw.second.size() != 1) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
-            return fmt::format(PKG_PROBLEMS_DICT.at(raw.first), raw.second[0]);
+            return fmt::format(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0]);
         case ProblemRules::RULE_JOB:
         case ProblemRules::RULE_JOB_UNSUPPORTED:
         case ProblemRules::RULE_PKG:
@@ -672,7 +672,7 @@ std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vect
             if (raw.second.size() != 0) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
-            return PKG_PROBLEMS_DICT.at(raw.first);
+            return TM_(PKG_PROBLEMS_DICT.at(raw.first), 1);
         case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
         case ProblemRules::RULE_PKG_REQUIRES:
         case ProblemRules::RULE_PKG_SELF_CONFLICT:
@@ -680,7 +680,7 @@ std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vect
             if (raw.second.size() != 2) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
-            return fmt::format(PKG_PROBLEMS_DICT.at(raw.first), raw.second[0], raw.second[1]);
+            return fmt::format(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0], raw.second[1]);
         case ProblemRules::RULE_PKG_CONFLICTS:
         case ProblemRules::RULE_PKG_OBSOLETES:
         case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
@@ -689,7 +689,7 @@ std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vect
             if (raw.second.size() != 3) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
-            return fmt::format(PKG_PROBLEMS_DICT.at(raw.first), raw.second[0], raw.second[1], raw.second[2]);
+            return fmt::format(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0], raw.second[1], raw.second[2]);
         case ProblemRules::RULE_UNKNOWN:
             if (raw.second.size() != 0) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
