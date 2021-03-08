@@ -62,11 +62,29 @@ namespace CPPUNIT_NS {
 }
 
 
+// CPPUNIT_ASSERT_EQUAL support for libdnf::rpm::Package
+namespace CPPUNIT_NS {
+    template <>
+    struct assertion_traits<libdnf::rpm::Package> {
+        inline static bool equal(const libdnf::rpm::Package & left, const libdnf::rpm::Package & right) {
+            return left == right;
+        }
+
+        inline static std::string toString(const libdnf::rpm::Package & pkg) {
+            return std::to_string(pkg.get_id().id);
+        }
+    };
+}
+
+
 /// Convert ReldepList to a vector of strings for easy assertions.
 std::vector<std::string> to_vector(const libdnf::rpm::ReldepList & rdl);
 
 /// Convert PackageSet to a vector of strings for easy assertions.
 std::vector<std::string> to_vector(const libdnf::rpm::PackageSet & pset);
+
+/// Convert vector<Package> to a vector of strings for easy assertions.
+std::vector<std::string> to_vector(const std::vector<libdnf::rpm::Package> & pkg_list);
 
 
 #endif  // TEST_LIBDNF_UTILS_HPP

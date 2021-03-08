@@ -32,7 +32,7 @@ class BaseGoalTest : public RepoFixture {
 
 #ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_install);
-    CPPUNIT_TEST(test_install_pkg);
+    CPPUNIT_TEST(test_install_installed_pkg);
     CPPUNIT_TEST(test_install_or_reinstall);
     CPPUNIT_TEST(test_install_from_cmdline);
     CPPUNIT_TEST(test_remove);
@@ -47,7 +47,7 @@ public:
     void setUp() override;
 
     void test_install();
-    void test_install_pkg();
+    void test_install_installed_pkg();
     void test_install_or_reinstall();
     void test_install_from_cmdline();
     void test_remove();

@@ -50,6 +50,27 @@ void RepoFixture::add_repo_repomd(const std::string & repoid) {
 }
 
 
+void RepoFixture::add_repo_rpm(const std::string & repoid) {
+    auto repo = repo_sack->new_repo(repoid);
+
+    // Sets the repo baseurl
+    std::filesystem::path repo_path = PROJECT_BINARY_DIR "/test/data/repos-rpm";
+    repo_path /= repoid;
+    repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path.native());
+
+    // Loads repository into rpm::Repo.
+    repo->load();
+
+    // Loads rpm::Repo into rpm::SolvSack
+    sack->load_repo(*repo.get(),
+        libdnf::rpm::SolvSack::LoadRepoFlags::USE_FILELISTS |
+        libdnf::rpm::SolvSack::LoadRepoFlags::USE_OTHER |
+        libdnf::rpm::SolvSack::LoadRepoFlags::USE_PRESTO |
+        libdnf::rpm::SolvSack::LoadRepoFlags::USE_UPDATEINFO
+    );
+}
+
+
 void RepoFixture::add_repo_solv(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-solv";
     repo_path /= repoid + ".repo";

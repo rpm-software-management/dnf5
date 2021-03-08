@@ -37,3 +37,12 @@ std::vector<std::string> to_vector(const libdnf::rpm::PackageSet & pset) {
     }
     return res;
 }
+
+
+std::vector<std::string> to_vector(const std::vector<libdnf::rpm::Package> & pkg_list) {
+    std::vector<std::string> result;
+    for (auto & pkg : pkg_list) {
+        result.emplace_back(pkg.get_full_nevra());
+    }
+    return result;
+}

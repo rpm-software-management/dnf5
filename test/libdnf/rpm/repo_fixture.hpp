@@ -38,6 +38,7 @@ public:
 
 protected:
     void add_repo_repomd(const std::string & repoid);
+    void add_repo_rpm(const std::string & repoid);
     void add_repo_solv(const std::string & repoid);
 
     std::unique_ptr<libdnf::Base> base;
