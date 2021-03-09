@@ -35,17 +35,6 @@ extern "C" {
 
 #include <vector>
 
-constexpr const char * SOLVABLE_NAME_ADVISORY_PREFIX = "patch:";
-constexpr size_t SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH = std::char_traits<char>::length(SOLVABLE_NAME_ADVISORY_PREFIX);
-
-inline bool is_package(const Pool * pool, Id solvable_id) {
-    Solvable * solvable = pool_id2solvable(pool, solvable_id);
-    const char * solvable_name = pool_id2str(pool, solvable->name);
-    if (!solvable_name) {
-        return true;
-    }
-    return strncmp(solvable_name, SOLVABLE_NAME_ADVISORY_PREFIX, SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH) != 0;
-}
 
 static inline bool nevra_solvable_cmp_key(const Solvable * first, const Solvable * second) {
     if (first->name != second->name) {
@@ -239,7 +228,7 @@ inline solv::SolvMap & SolvSack::Impl::get_solvables() {
 
     // loop over all package solvables
     FOR_POOL_SOLVABLES(solvable_id) {
-        if (is_package(pool, solvable_id)) {
+        if (utils::is_package(pool, solvable_id)) {
             cached_solvables.add_unsafe(PackageId(solvable_id));
         }
     }

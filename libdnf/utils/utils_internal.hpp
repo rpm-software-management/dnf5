@@ -32,9 +32,20 @@ extern "C" {
 
 namespace libdnf::utils {
 
+constexpr const char * SOLVABLE_NAME_ADVISORY_PREFIX = "patch:";
+constexpr size_t SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH = std::char_traits<char>::length(SOLVABLE_NAME_ADVISORY_PREFIX);
 
 inline bool is_glob_pattern(const char * pattern) {
     return strpbrk(pattern, "*[?") != nullptr;
+}
+
+inline bool is_package(const Pool * pool, Id solvable_id) {
+    Solvable * solvable = pool_id2solvable(pool, solvable_id);
+    const char * solvable_name = pool_id2str(pool, solvable->name);
+    if (!solvable_name) {
+        return true;
+    }
+    return strncmp(solvable_name, SOLVABLE_NAME_ADVISORY_PREFIX, SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH) != 0;
 }
 
 /// @brief Test if pattern is file path
