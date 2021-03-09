@@ -72,6 +72,10 @@ public:
 
     // GENERIC OPERATIONS
 
+    void grow(int size) { map_grow(&map, size); };
+
+    void set_all() { map_setall(&map); };
+
     /// Return the underlying libsolv Map
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.getMap()
