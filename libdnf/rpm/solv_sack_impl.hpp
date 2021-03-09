@@ -104,6 +104,10 @@ public:
 
     void make_provides_ready();
 
+    PackageId get_running_kernel() const noexcept { return running_kernel; };
+
+    void set_running_kernel(PackageId kernel) { running_kernel = kernel; };
+
 private:
     /// Loads system repository into SolvSack
     /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
@@ -151,6 +155,7 @@ private:
     int cached_sorted_icase_solvables_size{0};
     solv::SolvMap cached_solvables{0};
     int cached_solvables_size{0};
+    PackageId running_kernel;
 
     friend SolvSack;
     friend Package;

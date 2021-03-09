@@ -95,6 +95,7 @@ public:
     std::vector<libdnf::rpm::Package> list_rpm_obsoleted();
 
 private:
+    rpm::PackageId get_running_kernel_internal();
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

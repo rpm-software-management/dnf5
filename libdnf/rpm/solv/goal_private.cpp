@@ -28,14 +28,14 @@ extern "C" {
 namespace {
 
 
-void allow_uninstall_all_but_protected(Pool * pool, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::SolvMap * protected_packages, Id protected_kernel) {
+void allow_uninstall_all_but_protected(Pool * pool, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::SolvMap * protected_packages, libdnf::rpm::PackageId protected_kernel) {
     libdnf::rpm::solv::SolvMap protected_pkgs(pool->nsolvables);
     protected_pkgs.set_all();
     if (protected_packages) {
         protected_pkgs -= *protected_packages;
     }
-    if (protected_kernel) {
-        protected_pkgs.remove(libdnf::rpm::PackageId(protected_kernel));
+    if (protected_kernel.id > 0) {
+        protected_pkgs.remove_unsafe(protected_kernel);
     }
     if (pool->considered) {
         protected_pkgs &= pool->considered;
@@ -49,7 +49,7 @@ void allow_uninstall_all_but_protected(Pool * pool, libdnf::rpm::solv::IdQueue &
     }
 }
 
-void construct_job(Pool * pool, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::IdQueue & install_only, bool force_best, bool allow_erasing, const libdnf::rpm::solv::SolvMap * protected_packages, Id protected_kernel) {
+void construct_job(Pool * pool, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::IdQueue & install_only, bool force_best, bool allow_erasing, const libdnf::rpm::solv::SolvMap * protected_packages, libdnf::rpm::PackageId protected_kernel) {
     auto elements = job.data();
     // apply forcebest
     if (force_best) {
@@ -272,7 +272,7 @@ namespace libdnf::rpm::solv {
 
 bool GoalPrivate::resolve() {
     IdQueue job(staging);
-    construct_job(pool, job, installonly, force_best, allow_erasing, protected_packages.get(), protected_running_kernel.id);
+    construct_job(pool, job, installonly, force_best, allow_erasing, protected_packages.get(), protected_running_kernel);
 
     /* apply the excludes */
     //dnf_sack_recompute_considered(sack);
@@ -312,7 +312,7 @@ bool GoalPrivate::resolve() {
     // either allow solutions callback or installonlies, both at the same time are not supported
     if (limit_installonly_packages(libsolv_solver, job, installonly, installonly_limit, 0)) {
         // allow erasing non-installonly packages that depend on a kernel about to be erased
-        allow_uninstall_all_but_protected(pool, job, protected_packages.get(), protected_running_kernel.id);
+        allow_uninstall_all_but_protected(pool, job, protected_packages.get(), protected_running_kernel);
         if (solver_solve(libsolv_solver, &job.get_queue())) {
             return true;
         }

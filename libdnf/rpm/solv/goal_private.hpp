@@ -72,6 +72,7 @@ public:
     void set_protected_packages(const SolvMap & map);
     /// Reset all protected packages
     void reset_protected_packages();
+    void set_protected_running_kernel(PackageId kernel) { protected_running_kernel = kernel; };
 
     ///  Return count of problems detected by solver
     size_t count_solver_problems();
