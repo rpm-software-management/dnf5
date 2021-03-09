@@ -43,6 +43,8 @@ public:
     explicit GoalPrivate(const GoalPrivate & src);
     ~GoalPrivate();
 
+    void set_installonly(const std::vector<std::string> & installonly_names);
+
     void add_install(IdQueue & queue, bool strict);
     void add_remove(const IdQueue & queue, bool clean_deps);
     void add_remove(const SolvMap & solv_map, bool clean_deps);
@@ -93,6 +95,7 @@ public:
 private:
     Pool * pool;
     IdQueue staging;
+    IdQueue installonly;
     ::Solver * libsolv_solver{nullptr};
     ::Transaction * libsolv_transaction{nullptr};
 
@@ -125,6 +128,12 @@ inline GoalPrivate::~GoalPrivate() {
     }
     if (libsolv_transaction) {
         transaction_free(libsolv_transaction);
+    }
+}
+
+inline void GoalPrivate::set_installonly(const std::vector<std::string> & installonly_names) {
+    for (auto & name : installonly_names) {
+        queue_pushunique(&installonly.get_queue(), pool_str2id(pool, name.c_str(), 1));
     }
 }
 

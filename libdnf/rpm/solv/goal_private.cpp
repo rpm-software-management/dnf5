@@ -26,18 +26,19 @@ extern "C" {
 namespace {
 
 
-void construct_job(libdnf::rpm::solv::IdQueue & job, bool force_best) {
+void construct_job(libdnf::rpm::solv::IdQueue & job, libdnf::rpm::solv::IdQueue & install_only, bool force_best) {
     auto elements = job.data();
     // apply forcebest
-    if (force_best)
+    if (force_best) {
         for (int i = 0; i < job.size(); i += 2) {
             elements[i] |= SOLVER_FORCEBEST;
         }
+    }
 
-    /* turn off implicit obsoletes for installonly packages */
-    //     for (int i = 0; i < (int) dnf_sack_get_installonly(sack)->count; i++)
-    //         job->pushBack(SOLVER_MULTIVERSION|SOLVER_SOLVABLE_PROVIDES,
-    //             dnf_sack_get_installonly(sack)->elements[i]);
+    // turn off implicit obsoletes for installonly packages
+    for (int i = 0; i < install_only.size(); ++i) {
+        job.push_back(SOLVER_MULTIVERSION|SOLVER_SOLVABLE_PROVIDES, install_only[i]);
+    }
 
     // allowUninstallAllButProtected(job->getQueue(), flags);
 
@@ -111,8 +112,7 @@ namespace libdnf::rpm::solv {
 
 bool GoalPrivate::resolve() {
     IdQueue job(staging);
-    construct_job(job, force_best);
-
+    construct_job(job, installonly, force_best);
 
     /* apply the excludes */
     //dnf_sack_recompute_considered(sack);
