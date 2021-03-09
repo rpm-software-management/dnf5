@@ -44,6 +44,7 @@ public:
     ~GoalPrivate();
 
     void set_installonly(const std::vector<std::string> & installonly_names);
+    void set_installonly_limit(unsigned int limit) { installonly_limit = limit; };
 
     void add_install(IdQueue & queue, bool strict);
     void add_remove(const IdQueue & queue, bool clean_deps);
@@ -96,6 +97,8 @@ private:
     Pool * pool;
     IdQueue staging;
     IdQueue installonly;
+    unsigned int installonly_limit{0};
+
     ::Solver * libsolv_solver{nullptr};
     ::Transaction * libsolv_transaction{nullptr};
 

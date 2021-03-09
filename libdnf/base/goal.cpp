@@ -647,6 +647,7 @@ Goal::Problem Goal::resolve(bool allow_erasing)
     {
         auto & installonly_packages = cfg_main.installonlypkgs().get_value();
         p_impl->rpm_goal.set_installonly(installonly_packages);
+        p_impl->rpm_goal.set_installonly_limit(cfg_main.installonly_limit().get_value());
     }
 
     if (p_impl->rpm_goal.resolve()) {

@@ -18,15 +18,38 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "goal_private.hpp"
+#include "../../utils/utils_internal.hpp"
 
 extern "C" {
+#include <solv/evr.h>
 #include <solv/testcase.h>
 }
 
 namespace {
 
 
-void construct_job(libdnf::rpm::solv::IdQueue & job, libdnf::rpm::solv::IdQueue & install_only, bool force_best) {
+void allow_uninstall_all_but_protected(Pool * pool, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::SolvMap * protected_packages, Id protected_kernel) {
+    libdnf::rpm::solv::SolvMap protected_pkgs(pool->nsolvables);
+    protected_pkgs.set_all();
+    if (protected_packages) {
+        protected_pkgs -= *protected_packages;
+    }
+    if (protected_kernel) {
+        protected_pkgs.remove(libdnf::rpm::PackageId(protected_kernel));
+    }
+    if (pool->considered) {
+        protected_pkgs &= pool->considered;
+    }
+
+    for (Id id = 1; id < pool->nsolvables; ++id) {
+        Solvable *s = pool_id2solvable(pool, id);
+        if (pool->installed == s->repo && protected_pkgs.contains_unsafe(libdnf::rpm::PackageId(id)))    {
+            job.push_back(SOLVER_ALLOWUNINSTALL|SOLVER_SOLVABLE, id);
+        }
+    }
+}
+
+void construct_job(Pool * pool, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::IdQueue & install_only, bool force_best, bool allow_erasing, const libdnf::rpm::solv::SolvMap * protected_packages, Id protected_kernel) {
     auto elements = job.data();
     // apply forcebest
     if (force_best) {
@@ -40,7 +63,9 @@ void construct_job(libdnf::rpm::solv::IdQueue & job, libdnf::rpm::solv::IdQueue 
         job.push_back(SOLVER_MULTIVERSION|SOLVER_SOLVABLE_PROVIDES, install_only[i]);
     }
 
-    // allowUninstallAllButProtected(job->getQueue(), flags);
+    if (allow_erasing) {
+        allow_uninstall_all_but_protected(pool, job, protected_packages, protected_kernel);
+    }
 
     //     if (flags & DNF_VERIFY)
     //         job->pushBack(SOLVER_VERIFY|SOLVER_SOLVABLE_ALL, 0);
@@ -104,6 +129,141 @@ libdnf::rpm::solv::SolvMap list_results(
     return result_ids;
 }
 
+
+struct InstallonliesSortCallback {
+    Pool * pool;
+    Id running_kernel;
+};
+
+
+/// @brief return false when does not depend on anything from b
+bool can_depend_on(Pool *pool, Solvable *sa, Id b)
+{
+    libdnf::rpm::solv::IdQueue requires;
+
+    solvable_lookup_idarray(sa, SOLVABLE_REQUIRES, &requires.get_queue());
+    for (int i = 0; i < requires.size(); ++i) {
+        Id req_dep = requires[i];
+        Id p, pp;
+
+        FOR_PROVIDES(p, pp, req_dep)
+            if (p == b)
+                return true;
+    }
+
+    return false;
+}
+
+static void
+same_name_subqueue(Pool *pool, Queue * in, Queue * out)
+{
+    Id el = queue_pop(in);
+    Id name = pool_id2solvable(pool, el)->name;
+    queue_empty(out);
+    queue_push(out, el);
+    while (in->count &&
+           pool_id2solvable(pool, in->elements[in->count - 1])->name == name)
+        // reverses the order so packages are sorted by descending version
+        queue_push(out, queue_pop(in));
+}
+
+int sort_packages(const void *ap, const void *bp, void *s_cb)
+{
+    Id a = *(Id*)ap;
+    Id b = *(Id*)bp;
+    Pool *pool = ((struct InstallonliesSortCallback*) s_cb)->pool;
+    Id kernel = ((struct InstallonliesSortCallback*) s_cb)->running_kernel;
+    Solvable *sa = pool_id2solvable(pool, a);
+    Solvable *sb = pool_id2solvable(pool, b);
+
+    // if the names are different sort them differently, particular order does not matter as long as it's consistent.
+    int name_diff = sa->name - sb->name;
+    if (name_diff)
+        return name_diff;
+
+    // same name, if one is/depends on the running kernel put it last
+
+    // move available packages to end of the list
+    if (pool->installed != sa->repo)
+        return 1;
+
+    if (pool->installed != sb->repo)
+        return -1;
+
+    if (kernel >= 0) {
+        if (a == kernel || can_depend_on(pool, sa, kernel))
+            return 1;
+        if (b == kernel || can_depend_on(pool, sb, kernel))
+            return -1;
+        // if package has same evr as kernel try them to keep (kernel-devel packages)
+        Solvable * kernelSolvable = pool_id2solvable(pool, kernel);
+        if (sa->evr == kernelSolvable->evr) {
+            return 1;
+        }
+        if (sb->evr == kernelSolvable->evr) {
+            return -1;
+        }
+    }
+    return pool_evrcmp(pool, sa->evr, sb->evr, EVRCMP_COMPARE);
+}
+
+bool limit_installonly_packages(Solver * solv, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::IdQueue & installonly, unsigned int installonly_limit,  Id running_kernel) {
+    if (installonly_limit == 0) {
+        return 0;
+    }
+
+    Pool * pool = solv->pool;
+    bool reresolve = false;
+
+    for (int i = 0; i < installonly.size(); ++i) {
+        Id p, pp;
+        libdnf::rpm::solv::IdQueue q;
+        libdnf::rpm::solv::IdQueue installing;
+        FOR_PROVIDES(p, pp, installonly[i]) {
+            // TODO(jmracek)  Replase the test by cached data from sack.p_impl->get_solvables()
+            if (!libdnf::utils::is_package(pool, p)) {
+                continue;
+            }
+            if (solver_get_decisionlevel(solv, p) > 0) {
+                q.push_back(p);
+            }
+        }
+        if (q.size() <= (int) installonly_limit) {
+            continue;
+        }
+        for (int k = 0; k < q.size(); ++k) {
+            Id id  = q[k];
+            Solvable * s = pool_id2solvable(pool, id);
+            if (pool->installed != s->repo) {
+                installing.push_back(id);
+                break;
+            }
+        }
+        if (!installing.size()) {
+            continue;
+        }
+
+        struct InstallonliesSortCallback s_cb = {pool, running_kernel};
+        solv_sort(q.data(), static_cast<size_t>(q.size()), sizeof(q[0]), sort_packages, &s_cb);
+        libdnf::rpm::solv::IdQueue same_names;
+        while (q.size() > 0) {
+            same_name_subqueue(pool, &q.get_queue(), &same_names.get_queue());
+            if (same_names.size() <= (int) installonly_limit)
+                continue;
+            reresolve = true;
+            for (int j = 0; j < same_names.size(); ++j) {
+                Id id  = same_names[j];
+                Id action = SOLVER_ERASE;
+                if (j < (int) installonly_limit)
+                    action = SOLVER_INSTALL;
+                job.push_back(action | SOLVER_SOLVABLE, id);
+            }
+        }
+    }
+    return reresolve;
+}
+
+
 }  // namespace
 
 
@@ -112,7 +272,7 @@ namespace libdnf::rpm::solv {
 
 bool GoalPrivate::resolve() {
     IdQueue job(staging);
-    construct_job(job, installonly, force_best);
+    construct_job(pool, job, installonly, force_best, allow_erasing, protected_packages.get(), protected_running_kernel.id);
 
     /* apply the excludes */
     //dnf_sack_recompute_considered(sack);
@@ -141,7 +301,6 @@ bool GoalPrivate::resolve() {
     solver_set_flag(libsolv_solver, SOLVER_FLAG_ALLOW_DOWNGRADE, downgrade);
 
     // Set up vendor locking modes
-    // TODO: Wire up the configuration option to this...
     int vendor_change = allow_vendor_change ? 1 : 0;
     solver_set_flag(libsolv_solver, SOLVER_FLAG_ALLOW_VENDORCHANGE, vendor_change);
     solver_set_flag(libsolv_solver, SOLVER_FLAG_DUP_ALLOW_VENDORCHANGE, vendor_change);
@@ -149,15 +308,15 @@ bool GoalPrivate::resolve() {
     if (solver_solve(libsolv_solver, &job.get_queue())) {
         return true;
     }
-    //     either allow solutions callback or installonlies, both at the same time
-    //     are not supported
-    //     if (limitInstallonlyPackages(solv, job)) {
-    //         allow erasing non-installonly packages that depend on a kernel about
-    //         to be erased
-    //         allowUninstallAllButProtected(job, DNF_ALLOW_UNINSTALL);
-    //         if (solver_solve(libsolv_solver, &job.get_queue()))
-    //             return true;
-    //     }
+
+    // either allow solutions callback or installonlies, both at the same time are not supported
+    if (limit_installonly_packages(libsolv_solver, job, installonly, installonly_limit, 0)) {
+        // allow erasing non-installonly packages that depend on a kernel about to be erased
+        allow_uninstall_all_but_protected(pool, job, protected_packages.get(), protected_running_kernel.id);
+        if (solver_solve(libsolv_solver, &job.get_queue())) {
+            return true;
+        }
+    }
 
     libsolv_transaction = solver_create_transaction(libsolv_solver);
 
