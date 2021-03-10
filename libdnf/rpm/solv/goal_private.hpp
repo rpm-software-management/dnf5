@@ -104,6 +104,7 @@ private:
     ::Transaction * libsolv_transaction{nullptr};
 
     std::unique_ptr<SolvMap> protected_packages;
+    std::unique_ptr<SolvMap> removal_of_protected;
     PackageId protected_running_kernel;
 
     bool allow_downgrade{true};
@@ -112,6 +113,9 @@ private:
     bool force_best{false};
     bool install_weak_deps{true};
     bool remove_solver_weak{false};
+
+    /// Return true when protected packages including kernel is in removal or obsoleted list
+    bool protected_in_removals();
 };
 
 inline GoalPrivate::GoalPrivate(Pool * pool) : pool(pool) {}

@@ -320,10 +320,7 @@ bool GoalPrivate::resolve() {
 
     libsolv_transaction = solver_create_transaction(libsolv_solver);
 
-    //     if (protectedInRemovals())
-    //         return true;
-
-    return false;
+    return protected_in_removals();
 }
 
 SolvMap GoalPrivate::list_installs() {
@@ -523,6 +520,38 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
         problems.push_back(std::move(problem));
     }
     return problems;
+}
+
+bool GoalPrivate::protected_in_removals() {
+    bool ret = false;
+    if ((!protected_packages || protected_packages->empty()) && protected_running_kernel.id <= 0) {
+        removal_of_protected.reset();
+        return ret;
+    }
+    auto pkg_remove_list = list_removes();
+    pkg_remove_list |= list_obsoleted();
+    if (pkg_remove_list.empty()) {
+        removal_of_protected.reset();
+        return ret;
+    }
+
+    libdnf::rpm::solv::SolvMap protected_pkgs(pool->nsolvables);
+    if (protected_packages) {
+        protected_pkgs |= *protected_packages;
+    }
+    if (protected_running_kernel.id > 0) {
+        protected_pkgs.add_unsafe(protected_running_kernel);
+    }
+
+    removal_of_protected.reset(new SolvMap(std::move(pkg_remove_list)));
+    for (auto pkg_id : *removal_of_protected) {
+        if (protected_pkgs.contains(pkg_id)) {
+            ret = true;
+        } else {
+            removal_of_protected->remove_unsafe(pkg_id);
+        }
+    }
+    return ret;
 }
 
 void GoalPrivate::set_protect_running_kernel(PackageId value) {
