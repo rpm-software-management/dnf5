@@ -270,7 +270,7 @@ bool limit_installonly_packages(Solver * solv, libdnf::rpm::solv::IdQueue & job,
 namespace libdnf::rpm::solv {
 
 
-bool GoalPrivate::resolve() {
+libdnf::GoalProblem GoalPrivate::resolve() {
     IdQueue job(staging);
     construct_job(pool, job, installonly, force_best, allow_erasing, protected_packages.get(), protected_running_kernel);
 
@@ -306,7 +306,7 @@ bool GoalPrivate::resolve() {
     solver_set_flag(libsolv_solver, SOLVER_FLAG_DUP_ALLOW_VENDORCHANGE, vendor_change);
 
     if (solver_solve(libsolv_solver, &job.get_queue())) {
-        return true;
+        return libdnf::GoalProblem::SOLVER_ERROR;
     }
 
     // either allow solutions callback or installonlies, both at the same time are not supported
@@ -314,7 +314,7 @@ bool GoalPrivate::resolve() {
         // allow erasing non-installonly packages that depend on a kernel about to be erased
         allow_uninstall_all_but_protected(pool, job, protected_packages.get(), protected_running_kernel);
         if (solver_solve(libsolv_solver, &job.get_queue())) {
-            return true;
+            return libdnf::GoalProblem::SOLVER_ERROR;
         }
     }
 
@@ -522,8 +522,8 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
     return problems;
 }
 
-bool GoalPrivate::protected_in_removals() {
-    bool ret = false;
+libdnf::GoalProblem GoalPrivate::protected_in_removals() {
+    libdnf::GoalProblem ret = libdnf::GoalProblem::NO_PROBLEM;
     if ((!protected_packages || protected_packages->empty()) && protected_running_kernel.id <= 0) {
         removal_of_protected.reset();
         return ret;
@@ -546,7 +546,7 @@ bool GoalPrivate::protected_in_removals() {
     removal_of_protected.reset(new SolvMap(std::move(pkg_remove_list)));
     for (auto pkg_id : *removal_of_protected) {
         if (protected_pkgs.contains(pkg_id)) {
-            ret = true;
+            ret = libdnf::GoalProblem::REMOVAL_OF_PROTECTED;
         } else {
             removal_of_protected->remove_unsafe(pkg_id);
         }

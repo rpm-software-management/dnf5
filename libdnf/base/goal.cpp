@@ -668,10 +668,7 @@ libdnf::GoalProblem Goal::resolve(bool allow_erasing)
         p_impl->rpm_goal.set_installonly_limit(cfg_main.installonly_limit().get_value());
     }
 
-    if (p_impl->rpm_goal.resolve()) {
-        return GoalProblem::SOLVER_ERROR;
-    }
-    return GoalProblem::NO_PROBLEM;
+    return p_impl->rpm_goal.resolve();
 }
 
 std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vector<std::string>> raw) {

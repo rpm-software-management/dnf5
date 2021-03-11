@@ -51,7 +51,7 @@ public:
     void add_remove(const SolvMap & solv_map, bool clean_deps);
     void add_upgrade(IdQueue & queue);
 
-    bool resolve();
+    libdnf::GoalProblem resolve();
 
     SolvMap list_installs();
     SolvMap list_reinstalls();
@@ -114,8 +114,8 @@ private:
     bool install_weak_deps{true};
     bool remove_solver_weak{false};
 
-    /// Return true when protected packages including kernel is in removal or obsoleted list
-    bool protected_in_removals();
+    /// Return libdnf::GoalProblem::NO_PROBLEM when no problems in protected
+    libdnf::GoalProblem protected_in_removals();
 };
 
 inline GoalPrivate::GoalPrivate(Pool * pool) : pool(pool) {}
