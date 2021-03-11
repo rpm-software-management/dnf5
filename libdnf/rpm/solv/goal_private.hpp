@@ -63,9 +63,15 @@ public:
     /// @dir Requires full path that exists
     void write_debugdata(const std::string & dir);
 
+    /// Get protected running kernel
+    /// PackageId.id == 0 => not set
+    /// PackageId.id == -1 => cannot be detected
+    PackageId get_protect_running_kernel() { return protected_running_kernel; };
     /// Set running kernel that mus be not removed
-    void set_protect_running_kernel(PackageId value);
+    void set_protect_running_kernel(PackageId value) { protected_running_kernel = value; };
 
+    // Get protected_packages. Running kernel is not included
+    const SolvMap * get_protected_packages() { return protected_packages.get(); };
     /// Add Ids of protected packages
     void add_protected_packages(const SolvMap & map);
     /// Set Ids of protected packages
@@ -82,6 +88,7 @@ public:
     ///  Throw UnresolvedGoal when Goal is not resolved
     ///  Return std::vector<std::tuple<ProblemRules, Id source, Id dep, Id target, std::string Description for unknown rule>>>
     std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> get_problems();
+    const SolvMap * get_removal_of_protected() { return removal_of_protected.get(); };
 
     void set_allow_downgrade(bool value) { allow_downgrade = value; }
     void set_allow_erasing(bool value) { allow_erasing = value; }

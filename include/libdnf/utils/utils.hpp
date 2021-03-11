@@ -55,7 +55,9 @@ enum class ProblemRules {
     RULE_PKG_REQUIRES,
     RULE_PKG_SELF_CONFLICT,
     RULE_YUMOBS,
-    RULE_UNKNOWN
+    RULE_UNKNOWN,
+    RULE_PKG_REMOVAL_OF_PROTECTED,
+    RULE_PKG_REMOVAL_OF_RUNNING_KERNEL
 };
 
 enum class GoalProblem : uint32_t {

@@ -554,10 +554,6 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
     return ret;
 }
 
-void GoalPrivate::set_protect_running_kernel(PackageId value) {
-    protected_running_kernel = value;
-}
-
 void GoalPrivate::add_protected_packages(const SolvMap & map) {
     if (!protected_packages) {
         protected_packages.reset(new SolvMap(map));

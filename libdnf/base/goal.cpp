@@ -29,9 +29,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/solv_query.hpp"
 
-#include <sys/utsname.h>
-
 #include <fmt/format.h>
+#include <sys/utsname.h>
 
 #include <map>
 
@@ -43,8 +42,7 @@ void add_obseletes(const libdnf::rpm::SolvQuery & base_query, libdnf::rpm::Packa
     data |= obsoletes_query;
 }
 
-static libdnf::rpm::SolvQuery running_kernel_check_path(libdnf::rpm::SolvSack & sack, const std::string & fn)
-{
+static libdnf::rpm::SolvQuery running_kernel_check_path(libdnf::rpm::SolvSack & sack, const std::string & fn) {
     if (access(fn.c_str(), F_OK)) {
         // TODO(jmracek) Report g_debug("running_kernel_check_path(): no matching file: %s.", fn);
     }
@@ -90,12 +88,18 @@ static const std::map<ProblemRules, const char *> PKG_PROBLEMS_DICT = {
     {ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES, M_("package {0} implicitly obsoletes {1} provided by {2}")},
     {ProblemRules::RULE_PKG_REQUIRES, M_("package {1} requires {0}, but none of the providers can be installed")},
     {ProblemRules::RULE_PKG_SELF_CONFLICT, M_("package {1} conflicts with {0} provided by itself")},
-    {ProblemRules::RULE_YUMOBS, M_("both package {0} and {2} obsolete {1}")}};
+    {ProblemRules::RULE_YUMOBS, M_("both package {0} and {2} obsolete {1}")},
+    {ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED,
+     M_("The operation would result in removing"
+        " the following protected packages: {}")},
+    {ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL,
+     M_("The operation would result in removing"
+        " of running kernel: {}")}};
 
 bool is_unique(
-    const std::vector<std::pair<ProblemRules, std::vector<std::string>>> origin,
+    const std::vector<std::pair<ProblemRules, std::vector<std::string>>> & origin,
     ProblemRules rule,
-    const std::vector<std::string> elements) {
+    const std::vector<std::string> & elements) {
     for (auto const & element : origin) {
         if (element.first == rule && element.second == elements) {
             return false;
@@ -105,19 +109,23 @@ bool is_unique(
 }
 
 bool is_unique(
-    const std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> problems,
-    const std::vector<std::pair<ProblemRules, std::vector<std::string>>> new_element) {
+    const std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> & problems,
+    const std::vector<std::pair<ProblemRules, std::vector<std::string>>> & new_element) {
     auto new_element_size = new_element.size();
     for (auto const & element : problems) {
         if (element.size() != new_element_size) {
             continue;
         }
+        bool identical = true;
         for (auto & [rule, strings] : element) {
             if (is_unique(new_element, rule, strings)) {
-                continue;
+                identical = false;
+                break;
             }
         }
-        return false;
+        if (identical) {
+            return false;
+        }
     }
     return true;
 }
@@ -150,6 +158,9 @@ public:
     void add_remove_to_goal();
     void add_upgrades_to_goal();
     void add_rpms_to_goal();
+
+    std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
+        const rpm::solv::IdQueue & broken_installed);
 
 private:
     friend class Goal;
@@ -625,8 +636,69 @@ void Goal::Impl::add_upgrades_to_goal() {
     }
 }
 
-libdnf::GoalProblem Goal::resolve(bool allow_erasing)
-{
+
+std::vector<std::pair<ProblemRules, std::vector<std::string>>> Goal::Impl::get_removal_of_protected(
+    const rpm::solv::IdQueue & broken_installed) {
+    auto & sack = base->get_rpm_solv_sack();
+    Pool * pool = sack.p_impl->get_pool();
+
+    auto protected_running_kernel = rpm_goal.get_protect_running_kernel();
+    std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
+
+    std::set<std::string> names;
+    auto removal_of_protected = rpm_goal.get_removal_of_protected();
+    if (removal_of_protected && !removal_of_protected->empty()) {
+        for (auto protected_id : *removal_of_protected) {
+            if (protected_id == protected_running_kernel) {
+                std::vector<std::string> elements;
+                elements.emplace_back(rpm::solv::get_full_nevra(pool, protected_id));
+                if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
+                    problem_output.push_back(
+                        std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, std::move(elements)));
+                }
+                continue;
+            }
+            names.emplace(rpm::solv::get_name(pool, protected_id));
+        }
+        if (!names.empty()) {
+            std::vector<std::string> names_vector(names.begin(), names.end());
+            if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, names_vector)) {
+                problem_output.push_back(
+                    std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, std::move(names_vector)));
+            }
+        }
+        return problem_output;
+    }
+    auto protected_packages = rpm_goal.get_protected_packages();
+
+    if ((!protected_packages || protected_packages->empty()) && protected_running_kernel.id <= 0) {
+        return problem_output;
+    }
+
+    for (auto broken : broken_installed) {
+        rpm::PackageId broken_id(broken);
+        if (broken_id == protected_running_kernel) {
+            std::vector<std::string> elements;
+            elements.emplace_back(rpm::solv::get_full_nevra(pool, broken_id));
+            if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
+                problem_output.push_back(
+                    std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, std::move(elements)));
+            }
+        } else if (protected_packages && protected_packages->contains_unsafe(broken_id)) {
+            names.emplace(rpm::solv::get_name(pool, broken_id));
+        }
+    }
+    if (!names.empty()) {
+        std::vector<std::string> names_vector(names.begin(), names.end());
+        if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, names_vector)) {
+            problem_output.push_back(
+                std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED, std::move(names_vector)));
+        }
+    }
+    return problem_output;
+}
+
+libdnf::GoalProblem Goal::resolve(bool allow_erasing) {
     auto & sack = p_impl->base->get_rpm_solv_sack();
     Pool * pool = sack.p_impl->get_pool();
     // TODO(jmracek) Move pool settings in base
@@ -718,6 +790,13 @@ std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vect
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
             return raw.second[0];
+        case ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED:
+        case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
+            auto elements = std::accumulate(
+                std::next(raw.second.begin()), raw.second.end(), raw.second[0], [](std::string a, std::string b) {
+                    return a + ", " + b;
+                });
+            return fmt::format(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), elements);
     }
     return {};
 }
@@ -726,6 +805,9 @@ std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>
 Goal::describe_all_solver_problems() {
     auto & sack = p_impl->base->get_rpm_solv_sack();
     Pool * pool = sack.p_impl->get_pool();
+
+    // Required to discover of problems related to protected packages
+    rpm::solv::IdQueue broken_installed;
 
     auto solver_problems = p_impl->rpm_goal.get_problems();
     std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> output;
@@ -763,9 +845,15 @@ Goal::describe_all_solver_problems() {
                     }
                     elements.push_back(pool_solvid2str(pool, source));
                     break;
+                case ProblemRules::RULE_PKG_SELF_CONFLICT:
+                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(pool_solvid2str(pool, source));
+                    break;
                 case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
                 case ProblemRules::RULE_PKG_REQUIRES:
-                case ProblemRules::RULE_PKG_SELF_CONFLICT:
+                    if (pool->installed == pool_id2solvable(pool, source)->repo) {
+                        broken_installed.push_back(source);
+                    }
                     elements.push_back(pool_dep2str(pool, dep));
                     elements.push_back(pool_solvid2str(pool, source));
                     break;
@@ -786,6 +874,10 @@ Goal::describe_all_solver_problems() {
                 case ProblemRules::RULE_UNKNOWN:
                     elements.push_back(description);
                     break;
+                case ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED:
+                case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
+                    // Rules are not generated by libsolv
+                    break;
             }
             if (is_unique(problem_output, tmp_rule, elements)) {
                 problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
@@ -793,6 +885,12 @@ Goal::describe_all_solver_problems() {
         }
         if (is_unique(output, problem_output)) {
             output.push_back(std::move(problem_output));
+        }
+    }
+    auto problem_protected = p_impl->get_removal_of_protected(broken_installed);
+    if (!problem_protected.empty()) {
+        if (is_unique(output, problem_protected)) {
+            output.insert(output.begin(), std::move(problem_protected));
         }
     }
     return output;
