@@ -20,6 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_UTILS_HPP
 #define LIBDNF_UTILS_UTILS_HPP
 
+#include <cstdint>
+#include <type_traits>
+
 namespace libdnf {
 
 /// Compares content of two files.
@@ -54,6 +57,36 @@ enum class ProblemRules {
     RULE_YUMOBS,
     RULE_UNKNOWN
 };
+
+enum class GoalProblem : uint32_t {
+    NO_PROBLEM = 0,
+    SOLVER_ERROR = (1 << 0),
+    REMOVAL_OF_PROTECTED = (1 << 1),
+    NOT_FOUND = (1 << 2),
+    EXCLUDED = (1 << 3),
+    ONLY_SRC = (1 << 4),
+    NOT_FOUND_IN_REPOSITORIES = (1 << 5)
+};
+
+inline GoalProblem operator|(GoalProblem lhs, GoalProblem rhs) {
+    return static_cast<GoalProblem>(
+        static_cast<std::underlying_type<GoalProblem>::type>(lhs) |
+        static_cast<std::underlying_type<GoalProblem>::type>(rhs));
+}
+
+inline GoalProblem operator|=(GoalProblem & lhs, GoalProblem rhs) {
+    lhs = static_cast<GoalProblem>(
+        static_cast<std::underlying_type<GoalProblem>::type>(lhs) |
+        static_cast<std::underlying_type<GoalProblem>::type>(rhs));
+    return lhs;
+}
+
+inline GoalProblem operator&(GoalProblem lhs, GoalProblem rhs) {
+    return static_cast<GoalProblem>(
+        static_cast<std::underlying_type<GoalProblem>::type>(lhs) &
+        static_cast<std::underlying_type<GoalProblem>::type>(rhs));
+}
+
 
 }  // namespace libdnf
 

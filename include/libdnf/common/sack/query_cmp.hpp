@@ -79,6 +79,7 @@ inline QueryCmp operator&(QueryCmp lhs, QueryCmp rhs) {
         static_cast<std::underlying_type<QueryCmp>::type>(rhs));
 }
 
+// TODO(jmracek) Change the strance operator
 inline QueryCmp operator-(QueryCmp lhs, QueryCmp rhs) {
     return static_cast<QueryCmp>(
         static_cast<std::underlying_type<QueryCmp>::type>(lhs) -

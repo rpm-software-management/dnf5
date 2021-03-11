@@ -165,9 +165,9 @@ private:
 
     // Report data
 
-    std::vector<std::tuple<libdnf::Goal::Action, libdnf::Goal::Problem, std::string>> rpm_info;
-    std::vector<std::tuple<libdnf::Goal::Action, libdnf::Goal::Problem, std::string>> rpm_warning;
-    std::vector<std::tuple<libdnf::Goal::Action, libdnf::Goal::Problem, std::string>> rpm_error;
+    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, std::string>> rpm_info;
+    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, std::string>> rpm_warning;
+    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, std::string>> rpm_error;
 
     rpm::solv::GoalPrivate rpm_goal;
 };
@@ -314,29 +314,29 @@ void Goal::Impl::add_install_to_goal() {
                 // RPM was not excluded or there is no related srpm
                 if (strict) {
                     rpm_error.emplace_back(
-                        std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND, spec));
+                        std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND, spec));
                 } else {
                     rpm_warning.emplace_back(
-                        std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND, spec));
+                        std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND, spec));
                 }
             } else {
                 q.ifilter_repoid(libdnf::sack::QueryCmp::NEQ, {"src"});
                 if (q.empty()) {
                     if (strict) {
                         rpm_error.emplace_back(
-                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::ONLY_SRC, spec));
+                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::ONLY_SRC, spec));
                     } else {
                         rpm_warning.emplace_back(
-                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::ONLY_SRC, spec));
+                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::ONLY_SRC, spec));
                     }
                 } else {
                     // TODO(jmracek) make difference between regular excludes and modular excludes
                     if (strict) {
                         rpm_error.emplace_back(
-                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::EXCLUDED, spec));
+                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::EXCLUDED, spec));
                     } else {
                         rpm_warning.emplace_back(
-                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::EXCLUDED, spec));
+                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::EXCLUDED, spec));
                     }
                 }
             }
@@ -361,10 +361,10 @@ void Goal::Impl::add_install_to_goal() {
                     if (query.empty()) {
                         if (strict) {
                             rpm_error.emplace_back(std::make_tuple(
-                                libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND_IN_REPOSITORIES, spec));
+                                libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, spec));
                         } else {
                             rpm_warning.emplace_back(std::make_tuple(
-                                libdnf::Goal::Action::INSTALL, libdnf::Goal::Problem::NOT_FOUND_IN_REPOSITORIES, spec));
+                                libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, spec));
                         }
                         // TODO(jmracek) store repositories
                         continue;
@@ -625,7 +625,7 @@ void Goal::Impl::add_upgrades_to_goal() {
     }
 }
 
-Goal::Problem Goal::resolve(bool allow_erasing)
+libdnf::GoalProblem Goal::resolve(bool allow_erasing)
 {
     auto & sack = p_impl->base->get_rpm_solv_sack();
     Pool * pool = sack.p_impl->get_pool();
@@ -669,9 +669,9 @@ Goal::Problem Goal::resolve(bool allow_erasing)
     }
 
     if (p_impl->rpm_goal.resolve()) {
-        return Problem::SOLVER_ERROR;
+        return GoalProblem::SOLVER_ERROR;
     }
-    return Problem::NO_PROBLEM;
+    return GoalProblem::NO_PROBLEM;
 }
 
 std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vector<std::string>> raw) {

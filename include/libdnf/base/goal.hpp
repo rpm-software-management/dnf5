@@ -40,16 +40,6 @@ public:
         const char * get_description() const noexcept override { return "Goal exception"; }
     };
 
-    /// NOT_FOUND - _('No match for argument: %s')
-    enum class Problem {
-        NO_PROBLEM,
-        SOLVER_ERROR,
-        REMOVAL_OF_PROTECTED,
-        NOT_FOUND,
-        EXCLUDED,
-        ONLY_SRC,
-        NOT_FOUND_IN_REPOSITORIES
-    };
     enum class Action { INSTALL, INSTALL_OR_REINSTALL, UPGRADE, REMOVE };
 
     explicit Goal(Base * base);
@@ -74,7 +64,7 @@ public:
     void add_rpm_upgrade(const libdnf::rpm::Package & rpm_package);
     void add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set);
 
-    Goal::Problem resolve(bool allow_erasing);
+    libdnf::GoalProblem resolve(bool allow_erasing);
 
     /// Can be use to format elements from describe_all_solver_problems();
     static std::string format_problem(const std::pair<libdnf::ProblemRules, std::vector<std::string>>);
