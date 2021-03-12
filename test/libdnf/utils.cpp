@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 
-std::vector<std::string> to_vector(const libdnf::rpm::ReldepList & rdl) {
+std::vector<std::string> to_vector_string(const libdnf::rpm::ReldepList & rdl) {
     std::vector<std::string> res;
     for (int i = 0; i < rdl.size(); ++i) {
         res.emplace_back(rdl.get(i).to_string());
@@ -30,7 +30,7 @@ std::vector<std::string> to_vector(const libdnf::rpm::ReldepList & rdl) {
 }
 
 
-std::vector<std::string> to_vector(const libdnf::rpm::PackageSet & pset) {
+std::vector<std::string> to_vector_string(const libdnf::rpm::PackageSet & pset) {
     std::vector<std::string> res;
     for (auto pkg : pset) {
         res.emplace_back(pkg.get_full_nevra());
@@ -39,7 +39,7 @@ std::vector<std::string> to_vector(const libdnf::rpm::PackageSet & pset) {
 }
 
 
-std::vector<std::string> to_vector(const std::vector<libdnf::rpm::Package> & pkg_list) {
+std::vector<std::string> to_vector_string(const std::vector<libdnf::rpm::Package> & pkg_list) {
     std::vector<std::string> result;
     for (auto & pkg : pkg_list) {
         result.emplace_back(pkg.get_full_nevra());

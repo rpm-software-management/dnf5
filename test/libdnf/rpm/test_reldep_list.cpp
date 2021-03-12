@@ -178,5 +178,5 @@ void ReldepListTest::test_add_reldep_with_glob() {
     list.add_reldep_with_glob("pkg*");
 
     const std::vector<std::string> expected = {"pkg", "pkg-libs", "pkg.conf", "pkg.conf.d", "pkg-libs"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(list));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(list));
 }

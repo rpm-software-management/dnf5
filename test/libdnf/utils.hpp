@@ -78,13 +78,13 @@ namespace CPPUNIT_NS {
 
 
 /// Convert ReldepList to a vector of strings for easy assertions.
-std::vector<std::string> to_vector(const libdnf::rpm::ReldepList & rdl);
+std::vector<std::string> to_vector_string(const libdnf::rpm::ReldepList & rdl);
 
 /// Convert PackageSet to a vector of strings for easy assertions.
-std::vector<std::string> to_vector(const libdnf::rpm::PackageSet & pset);
+std::vector<std::string> to_vector_string(const libdnf::rpm::PackageSet & pset);
 
 /// Convert vector<Package> to a vector of strings for easy assertions.
-std::vector<std::string> to_vector(const std::vector<libdnf::rpm::Package> & pkg_list);
+std::vector<std::string> to_vector_string(const std::vector<libdnf::rpm::Package> & pkg_list);
 
 
 #endif  // TEST_LIBDNF_UTILS_HPP

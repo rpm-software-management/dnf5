@@ -81,7 +81,7 @@ void BaseGoalTest::test_install_from_cmdline() {
 
     // check if we're getting an expected NEVRA
     std::vector<std::string> expected = {"one-0:1-1.noarch"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(install_set));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(install_set));
 
     // also check that the installed package is identical to the command-line package
     CPPUNIT_ASSERT_EQUAL(cmdline_pkg, install_set[0]);
@@ -127,7 +127,7 @@ void BaseGoalTest::test_install_installed_pkg() {
     query.ifilter_available().ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"cmdline-0:1.2-3.noarch"});
 
     std::vector<std::string> expected = {"cmdline-0:1.2-3.noarch"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
 
     libdnf::Goal goal(base.get());
     goal.add_rpm_install(query, true);

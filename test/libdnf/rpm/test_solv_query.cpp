@@ -57,7 +57,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query1.ifilter_name(libdnf::sack::QueryCmp::EQ, {"pkg"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 
     // ---
 
@@ -66,7 +66,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query2.ifilter_name(libdnf::sack::QueryCmp::GLOB, {"pkg*"});
 
     expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
 
     // ---
 
@@ -75,7 +75,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query3.ifilter_name(libdnf::sack::QueryCmp::GLOB, {"p?g"});
 
     expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query3));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query3));
 
     // ---
 
@@ -84,7 +84,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query4.ifilter_name(libdnf::sack::QueryCmp::NEQ, {"pkg"});
 
     expected = {"pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query4));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query4));
 
     // ---
 
@@ -93,7 +93,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query5.ifilter_name(libdnf::sack::QueryCmp::IEXACT, {"Pkg"});
 
     expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query5));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query5));
 
     // ---
 
@@ -103,7 +103,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query6.ifilter_name(libdnf::sack::QueryCmp::IGLOB, {"P?g"});
 
     expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query6));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query6));
 
     // ---
 
@@ -112,7 +112,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query7.ifilter_name(libdnf::sack::QueryCmp::CONTAINS, {"kg-l"});
 
     expected = {"pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query7));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query7));
 
     // ---
 
@@ -121,7 +121,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query8.ifilter_name(libdnf::sack::QueryCmp::ICONTAINS, {"kG-l"});
 
     expected = {"pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query8));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query8));
 
     // ---
 
@@ -138,7 +138,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
     query9.ifilter_name(libdnf::sack::QueryCmp::EQ, {"pkg", "pkg-libs"});
 
     expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query9));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query9));
 }
 
 
@@ -148,7 +148,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"pkg-1.2-3.src", "pkg-1.2-3.x86_64"});
         std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -156,7 +156,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"});
         std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -164,7 +164,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"pkg-1.2-3.src"});
         std::vector<std::string> expected = {"pkg-0:1.2-3.src"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -172,7 +172,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"pkg-0:1.2-3.src"});
         std::vector<std::string> expected = {"pkg-0:1.2-3.src"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -180,7 +180,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"pkg-0:1.2-unknown.src", "pkg-0:1.2-unknown1.x86_64"});
         std::vector<std::string> expected = {};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -189,7 +189,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"pkg-0:1.2-unknown2.x86_64"});
         CPPUNIT_ASSERT_EQUAL(0LU, query.size());
         std::vector<std::string> expected = {};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -197,7 +197,7 @@ void RpmSolvQueryTest::test_ifilter_nevra() {
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"pkg-libs-1.2-4.x86_64"});
         std::vector<std::string> expected = {};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 }
 
@@ -208,7 +208,7 @@ void RpmSolvQueryTest::test_ifilter_version() {
     query1.ifilter_version(libdnf::sack::QueryCmp::EQ, {"1.2"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 
     // ---
 
@@ -217,7 +217,7 @@ void RpmSolvQueryTest::test_ifilter_version() {
     query2.ifilter_version(libdnf::sack::QueryCmp::NEQ, {"1.2"});
 
     expected = {"pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
 }
 
 
@@ -227,7 +227,7 @@ void RpmSolvQueryTest::test_ifilter_release() {
     query1.ifilter_release(libdnf::sack::QueryCmp::EQ, {"3"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 
     // ---
 
@@ -236,7 +236,7 @@ void RpmSolvQueryTest::test_ifilter_release() {
     query2.ifilter_release(libdnf::sack::QueryCmp::NEQ, {"3"});
 
     expected = {"pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
 }
 
 
@@ -246,7 +246,7 @@ void RpmSolvQueryTest::test_ifilter_provides() {
     query1.ifilter_provides(libdnf::sack::QueryCmp::EQ, {"libpkg.so.0()(64bit)"});
 
     std::vector<std::string> expected = {"pkg-libs-1:1.2-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 
     // ---
 
@@ -255,7 +255,7 @@ void RpmSolvQueryTest::test_ifilter_provides() {
     query2.ifilter_provides(libdnf::sack::QueryCmp::NEQ, {"libpkg.so.0()(64bit)"});
 
     expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
 }
 
 
@@ -265,7 +265,7 @@ void RpmSolvQueryTest::test_ifilter_requires() {
     query1.ifilter_requires(libdnf::sack::QueryCmp::EQ, {"pkg-libs"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 
     // ---
 
@@ -274,7 +274,7 @@ void RpmSolvQueryTest::test_ifilter_requires() {
     query2.ifilter_requires(libdnf::sack::QueryCmp::NEQ, {"pkg-libs"});
 
     expected = {"pkg-0:1.2-3.src", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
 }
 
 
@@ -290,7 +290,7 @@ void RpmSolvQueryTest::test_ifilter_chain() {
         .ifilter_requires(libdnf::sack::QueryCmp::NEQ, {"foo"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
 }
 
 
@@ -301,7 +301,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("pkg.x86_64", false, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -310,7 +310,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("Pkg.x86_64", true, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -319,7 +319,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("pkg >= 1", false, true, true, false, true, {});
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -328,7 +328,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("pk?-?:1.?-?.x8?_64", false, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -337,7 +337,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", false, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(return_value.first, false);
         std::vector<std::string> expected = {};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -346,7 +346,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", true, true, false, false, true, {});
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 
     {
@@ -354,7 +354,7 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
         libdnf::rpm::SolvQuery query(sack);
         auto return_value = query.resolve_pkg_spec("Pkg-0:1.2-3.X86_64", true, true, false, false, true, {});
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
-        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
 }
 
@@ -373,7 +373,7 @@ void RpmSolvQueryTest::test_update() {
 
     // check the resulting NEVRAs
     std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 }
 
 
@@ -393,7 +393,7 @@ void RpmSolvQueryTest::test_intersection() {
 
     // check the resulting NEVRAs
     std::vector<std::string> expected = {"pkg-libs-0:1.2-3.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 }
 
 
@@ -414,5 +414,5 @@ void RpmSolvQueryTest::test_difference() {
 
     // check the resulting NEVRAs
     std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 }

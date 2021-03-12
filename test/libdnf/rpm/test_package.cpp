@@ -185,35 +185,35 @@ void RpmPackageTest::test_get_files() {
 void RpmPackageTest::test_get_provides() {
     const auto actual = get_pkg("pkg-1.2-3.x86_64").get_provides();
     const std::vector<std::string> expected = {"pkg = 1.2-3"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(actual));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(actual));
 }
 
 
 void RpmPackageTest::test_get_requires() {
     const auto actual = get_pkg("unresolvable-1:2-3.noarch").get_requires();
     const std::vector<std::string> expected = {"req = 1:2-3", "prereq"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(actual));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(actual));
 }
 
 
 void RpmPackageTest::test_get_requires_pre() {
     const auto actual = get_pkg("unresolvable-1:2-3.noarch").get_requires_pre();
     const std::vector<std::string> expected = {"prereq"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(actual));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(actual));
 }
 
 
 void RpmPackageTest::test_get_conflicts() {
     const auto actual = get_pkg("unresolvable-1:2-3.noarch").get_conflicts();
     const std::vector<std::string> expected = {"con < 1:2"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(actual));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(actual));
 }
 
 
 void RpmPackageTest::test_get_obsoletes() {
     const auto actual = get_pkg("unresolvable-1:2-3.noarch").get_obsoletes();
     const std::vector<std::string> expected = {"obs < 1:2"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(actual));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(actual));
 }
 
 
@@ -222,21 +222,21 @@ void RpmPackageTest::test_get_prereq_ignoreinst() {
     // TODO requires the package to be installed
     //const std::vector<std::string> expected = {"test-requires-pre"};
     const std::vector<std::string> expected = {};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(actual));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(actual));
 }
 
 
 void RpmPackageTest::test_get_regular_requires() {
     const auto actual = get_pkg("unresolvable-1:2-3.noarch").get_regular_requires();
     const std::vector<std::string> expected = {"req = 1:2-3"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(actual));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(actual));
 }
 
 
 void RpmPackageTest::test_get_recommends() {
     const auto actual = get_pkg("unresolvable-1:2-3.noarch").get_recommends();
     const std::vector<std::string> expected = {"rec"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(actual));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(actual));
 }
 
 
@@ -244,14 +244,14 @@ void RpmPackageTest::test_get_suggests() {
     const auto suggests = get_pkg("unresolvable-1:2-3.noarch").get_suggests();
     const std::vector<std::string> expected = {"sug"};
 
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(suggests));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(suggests));
 }
 
 
 void RpmPackageTest::test_get_enhances() {
     const auto enhances = get_pkg("unresolvable-1:2-3.noarch").get_enhances();
     const std::vector<std::string> expected = {"enh"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(enhances));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(enhances));
 }
 
 
@@ -259,7 +259,7 @@ void RpmPackageTest::test_get_supplements() {
     const auto supplements = get_pkg("unresolvable-1:2-3.noarch").get_supplements();
     const std::vector<std::string> expected = {"sup"};
 
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector(supplements));
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(supplements));
 }
 
 
