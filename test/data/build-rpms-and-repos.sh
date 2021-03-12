@@ -30,16 +30,19 @@ function build_rpms() {
     # use a temporary topdir to avoid writing to user's rpmbuild directory
     RPMBUILD_TOPDIR=$(mktemp -d)
 
+    # Note: _build_name_fmt requires escaped %% for use in headerSprintf()
     rpmbuild -ba \
         --define="_topdir ${RPMBUILD_TOPDIR}" \
-        --define="_srcrpmdir ${TARGET_DIR}/src" \
+        --define="_srcrpmdir ${TARGET_DIR}" \
         --define="_rpmdir ${TARGET_DIR}" \
+        --define="_build_name_fmt %%{NAME}-%%{VERSION}-%%{RELEASE}.%%{ARCH}.rpm" \
         --define="_source_payload w1.gzdio" \
         --define="_binary_payload w1.gzdio" \
         "${SPEC}"
 
     rm -rf "${RPMBUILD_TOPDIR}"
 }
+
 
 
 # build cmdline-rpms/*.rpm

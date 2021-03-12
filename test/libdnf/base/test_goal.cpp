@@ -63,7 +63,7 @@ void BaseGoalTest::test_install_from_cmdline() {
     add_repo_rpm("rpm-repo1");
 
     // add 'one-0:1-1.noarch' package from the command-line
-    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/repos-rpm/rpm-repo1/noarch/one-1-1.noarch.rpm";
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/repos-rpm/rpm-repo1/one-1-1.noarch.rpm";
     auto cmdline_pkg = sack->add_cmdline_package(rpm_path, false);
 
     // install the command-line package
@@ -94,7 +94,7 @@ void BaseGoalTest::test_install_from_cmdline() {
 }
 
 void BaseGoalTest::test_remove() {
-    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/noarch/cmdline-1.2-3.noarch.rpm";
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     sack->add_system_package(rpm_path, false, false);
     libdnf::Goal goal(base.get());
     goal.add_rpm_remove("cmdline", {}, {});
@@ -115,7 +115,7 @@ void BaseGoalTest::test_remove() {
 }
 
 void BaseGoalTest::test_install_installed_pkg() {
-    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/noarch/cmdline-1.2-3.noarch.rpm";
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
 
     // add the package to the @System repo so it appears installed
     sack->add_system_package(rpm_path, false, false);
@@ -150,7 +150,7 @@ void BaseGoalTest::test_install_installed_pkg() {
 }
 
 void BaseGoalTest::test_install_or_reinstall() {
-    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/noarch/cmdline-1.2-3.noarch.rpm";
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
 
     // add the package to the @System repo so it appears installed
     sack->add_system_package(rpm_path, false, false);
