@@ -91,6 +91,7 @@ public:
             str_what = get_description();
             str_what += ": [Errno ";
             str_what += std::to_string(get_error_code());
+            str_what += "] ";
 
             // example: "Operation not permitted"
             str_what += std::system_category().default_error_condition(error_code).message();
