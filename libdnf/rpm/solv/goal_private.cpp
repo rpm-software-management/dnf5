@@ -18,6 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "goal_private.hpp"
+
 #include "../../utils/utils_internal.hpp"
 
 extern "C" {
@@ -28,7 +29,11 @@ extern "C" {
 namespace {
 
 
-void allow_uninstall_all_but_protected(Pool * pool, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::SolvMap * protected_packages, libdnf::rpm::PackageId protected_kernel) {
+void allow_uninstall_all_but_protected(
+    Pool * pool,
+    libdnf::rpm::solv::IdQueue & job,
+    const libdnf::rpm::solv::SolvMap * protected_packages,
+    libdnf::rpm::PackageId protected_kernel) {
     libdnf::rpm::solv::SolvMap protected_pkgs(pool->nsolvables);
     protected_pkgs.set_all();
     if (protected_packages) {
@@ -42,14 +47,21 @@ void allow_uninstall_all_but_protected(Pool * pool, libdnf::rpm::solv::IdQueue &
     }
 
     for (Id id = 1; id < pool->nsolvables; ++id) {
-        Solvable *s = pool_id2solvable(pool, id);
-        if (pool->installed == s->repo && protected_pkgs.contains_unsafe(libdnf::rpm::PackageId(id)))    {
-            job.push_back(SOLVER_ALLOWUNINSTALL|SOLVER_SOLVABLE, id);
+        Solvable * s = pool_id2solvable(pool, id);
+        if (pool->installed == s->repo && protected_pkgs.contains_unsafe(libdnf::rpm::PackageId(id))) {
+            job.push_back(SOLVER_ALLOWUNINSTALL | SOLVER_SOLVABLE, id);
         }
     }
 }
 
-void construct_job(Pool * pool, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::IdQueue & install_only, bool force_best, bool allow_erasing, const libdnf::rpm::solv::SolvMap * protected_packages, libdnf::rpm::PackageId protected_kernel) {
+void construct_job(
+    Pool * pool,
+    libdnf::rpm::solv::IdQueue & job,
+    const libdnf::rpm::solv::IdQueue & install_only,
+    bool force_best,
+    bool allow_erasing,
+    const libdnf::rpm::solv::SolvMap * protected_packages,
+    libdnf::rpm::PackageId protected_kernel) {
     auto elements = job.data();
     // apply forcebest
     if (force_best) {
@@ -60,7 +72,7 @@ void construct_job(Pool * pool, libdnf::rpm::solv::IdQueue & job, const libdnf::
 
     // turn off implicit obsoletes for installonly packages
     for (int i = 0; i < install_only.size(); ++i) {
-        job.push_back(SOLVER_MULTIVERSION|SOLVER_SOLVABLE_PROVIDES, install_only[i]);
+        job.push_back(SOLVER_MULTIVERSION | SOLVER_SOLVABLE_PROVIDES, install_only[i]);
     }
 
     if (allow_erasing) {
@@ -137,8 +149,7 @@ struct InstallonliesSortCallback {
 
 
 /// @brief return false when does not depend on anything from b
-bool can_depend_on(Pool *pool, Solvable *sa, Id b)
-{
+bool can_depend_on(Pool * pool, Solvable * sa, Id b) {
     libdnf::rpm::solv::IdQueue requires;
 
     solvable_lookup_idarray(sa, SOLVABLE_REQUIRES, &requires.get_queue());
@@ -147,34 +158,30 @@ bool can_depend_on(Pool *pool, Solvable *sa, Id b)
         Id p, pp;
 
         FOR_PROVIDES(p, pp, req_dep)
-            if (p == b)
-                return true;
+        if (p == b)
+            return true;
     }
 
     return false;
 }
 
-static void
-same_name_subqueue(Pool *pool, Queue * in, Queue * out)
-{
+static void same_name_subqueue(Pool * pool, Queue * in, Queue * out) {
     Id el = queue_pop(in);
     Id name = pool_id2solvable(pool, el)->name;
     queue_empty(out);
     queue_push(out, el);
-    while (in->count &&
-           pool_id2solvable(pool, in->elements[in->count - 1])->name == name)
+    while (in->count && pool_id2solvable(pool, in->elements[in->count - 1])->name == name)
         // reverses the order so packages are sorted by descending version
         queue_push(out, queue_pop(in));
 }
 
-int sort_packages(const void *ap, const void *bp, void *s_cb)
-{
-    Id a = *(Id*)ap;
-    Id b = *(Id*)bp;
-    Pool *pool = ((struct InstallonliesSortCallback*) s_cb)->pool;
-    Id kernel = ((struct InstallonliesSortCallback*) s_cb)->running_kernel;
-    Solvable *sa = pool_id2solvable(pool, a);
-    Solvable *sb = pool_id2solvable(pool, b);
+int sort_packages(const void * ap, const void * bp, void * s_cb) {
+    Id a = *(Id *)ap;
+    Id b = *(Id *)bp;
+    Pool * pool = ((struct InstallonliesSortCallback *)s_cb)->pool;
+    Id kernel = ((struct InstallonliesSortCallback *)s_cb)->running_kernel;
+    Solvable * sa = pool_id2solvable(pool, a);
+    Solvable * sb = pool_id2solvable(pool, b);
 
     // if the names are different sort them differently, particular order does not matter as long as it's consistent.
     int name_diff = sa->name - sb->name;
@@ -207,7 +214,12 @@ int sort_packages(const void *ap, const void *bp, void *s_cb)
     return pool_evrcmp(pool, sa->evr, sb->evr, EVRCMP_COMPARE);
 }
 
-bool limit_installonly_packages(Solver * solv, libdnf::rpm::solv::IdQueue & job, const libdnf::rpm::solv::IdQueue & installonly, unsigned int installonly_limit,  Id running_kernel) {
+bool limit_installonly_packages(
+    Solver * solv,
+    libdnf::rpm::solv::IdQueue & job,
+    const libdnf::rpm::solv::IdQueue & installonly,
+    unsigned int installonly_limit,
+    Id running_kernel) {
     if (installonly_limit == 0) {
         return 0;
     }
@@ -228,11 +240,11 @@ bool limit_installonly_packages(Solver * solv, libdnf::rpm::solv::IdQueue & job,
                 q.push_back(p);
             }
         }
-        if (q.size() <= (int) installonly_limit) {
+        if (q.size() <= (int)installonly_limit) {
             continue;
         }
         for (int k = 0; k < q.size(); ++k) {
-            Id id  = q[k];
+            Id id = q[k];
             Solvable * s = pool_id2solvable(pool, id);
             if (pool->installed != s->repo) {
                 installing.push_back(id);
@@ -248,13 +260,13 @@ bool limit_installonly_packages(Solver * solv, libdnf::rpm::solv::IdQueue & job,
         libdnf::rpm::solv::IdQueue same_names;
         while (q.size() > 0) {
             same_name_subqueue(pool, &q.get_queue(), &same_names.get_queue());
-            if (same_names.size() <= (int) installonly_limit)
+            if (same_names.size() <= (int)installonly_limit)
                 continue;
             reresolve = true;
             for (int j = 0; j < same_names.size(); ++j) {
-                Id id  = same_names[j];
+                Id id = same_names[j];
                 Id action = SOLVER_ERASE;
-                if (j < (int) installonly_limit)
+                if (j < (int)installonly_limit)
                     action = SOLVER_INSTALL;
                 job.push_back(action | SOLVER_SOLVABLE, id);
             }
@@ -272,7 +284,8 @@ namespace libdnf::rpm::solv {
 
 libdnf::GoalProblem GoalPrivate::resolve() {
     IdQueue job(staging);
-    construct_job(pool, job, installonly, force_best, allow_erasing, protected_packages.get(), protected_running_kernel);
+    construct_job(
+        pool, job, installonly, force_best, allow_erasing, protected_packages.get(), protected_running_kernel);
 
     /* apply the excludes */
     //dnf_sack_recompute_considered(sack);
