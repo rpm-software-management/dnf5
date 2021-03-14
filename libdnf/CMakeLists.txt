@@ -14,6 +14,8 @@ add_library(libdnf SHARED ${LIBDNF_SOURCES})
 set(DNF_SO_VERSION 3)
 set_target_properties(libdnf PROPERTIES OUTPUT_NAME "dnf")
 set_target_properties(libdnf PROPERTIES SOVERSION ${DNF_SO_VERSION})
+# required to have dlopen symbol
+target_link_libraries(libdnf ${CMAKE_DL_LIBS})
 # required by clang
 target_link_libraries(libdnf stdc++)
 
