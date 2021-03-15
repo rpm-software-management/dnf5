@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include <stdexcept>
-#include <system_error>
 
 
 namespace libdnf {
@@ -46,15 +45,8 @@ public:
     /// Returns the original unformatted message passed to the exception.
     const char * get_message() const noexcept { return runtime_error::what(); }
 
-    /// Returns "clever" message. Description and messages in one string.
-    const char * what() const noexcept override {
-        try {
-            str_what = std::string(get_description()) + ": " + runtime_error::what();
-            return str_what.c_str();
-        } catch (...) {
-            return runtime_error::what();
-        }
-    }
+    /// Returns explanatory message. All informations formatted to string.
+    const char * what() const noexcept override;
 
 protected:
     mutable std::string str_what;
@@ -77,48 +69,22 @@ public:
 /// Wraps the error code originated from the operating system.
 class SystemError : public RuntimeError {
 public:
-    SystemError(int error_code, const std::string & what) : RuntimeError(what), error_code{error_code} {}
-    SystemError(int error_code, const char * what) : RuntimeError(what), error_code{error_code} {}
-    SystemError(int error_code, const std::string & what, const std::string & path) : RuntimeError(what), error_code{error_code}, path{path} {}
-    const char * get_domain_name() const noexcept override { return "system"; }
-    const char * get_name() const noexcept override { return "SystemError"; }
-    const char * get_description() const noexcept override { return "System error"; }
+    SystemError(int error_code, const std::string & what);
+    SystemError(int error_code, const char * what);
+    const char * get_domain_name() const noexcept override { return "SystemError"; }
+    const char * get_name() const noexcept override { return name; }
+    const char * get_description() const noexcept override;
+
+    /// Returns original error code
     int get_error_code() const noexcept { return error_code; }
-    const std::string & get_path() const noexcept { return path; }
-    const char * what() const noexcept override {
-        try {
-            // example: "General RuntimeError exception: [Errno 1] "
-            str_what = get_description();
-            str_what += ": [Errno ";
-            str_what += std::to_string(get_error_code());
-            str_what += "] ";
-
-            // example: "Operation not permitted"
-            str_what += std::system_category().default_error_condition(error_code).message();
-
-            // example: ": Unable to install package"
-            if (runtime_error::what()) {
-                str_what += ": ";
-                str_what += runtime_error::what();
-            }
-
-            // example: ": /path/to/file"
-            if (!path.empty()) {
-                str_what += ": ";
-                str_what += get_path();
-            }
-
-            return str_what.c_str();
-        } catch (...) {
-            return Exception::what();
-        }
-    }
 
 private:
-    const int error_code;
-    const std::string path;
+    static constexpr const char * NAME_PREFIX = "Errno_";
+    static constexpr std::size_t NAME_PREFIX_LEN = std::char_traits<char>::length(NAME_PREFIX);
+    int error_code;
+    char name[NAME_PREFIX_LEN + 10];
+    mutable std::string description;
 };
-
 
 }  // namespace libdnf
 

@@ -59,7 +59,11 @@ static void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
 RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path) {
     std::unique_ptr<std::FILE, decltype(&std::fclose)> testcase_file(solv_xfopen(path.c_str(), "r"), &std::fclose);
     if (!testcase_file) {
-        throw SystemError(EIO, "Unable to open libsolv testcase file", path);
+        try {
+            throw SystemError(errno ? errno : EIO, path);
+        } catch (...) {
+            std::throw_with_nested(RuntimeError("Unable to open libsolv testcase file"));
+        }
     }
 
     auto repo = new_repo(repoid);
