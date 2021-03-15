@@ -86,6 +86,10 @@ private:
     mutable std::string description;
 };
 
+/// Formats the explanatory string of an exception.
+/// If the exception is nested, recurses to format the explanatory of the exception it holds.
+std::string format(const std::exception & e, std::size_t level = 0);
+
 }  // namespace libdnf
 
 #endif

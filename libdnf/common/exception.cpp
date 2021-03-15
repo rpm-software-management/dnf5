@@ -65,5 +65,16 @@ const char * SystemError::get_description() const noexcept {
     return description.c_str();
 }
 
+std::string format(const std::exception & e, std::size_t level) {
+    std::string ret(std::string(level, ' ') + e.what() + '\n');
+    try {
+        std::rethrow_if_nested(e);
+    } catch (const std::exception & e) {
+        ret += format(e, level + 1);
+    } catch (...) {
+    }
+
+    return ret;
+}
 
 }  // namespace libdnf
