@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<updates>
+    <update from="dnf-testing@redhat.com" status="stable" type="security" version="1">
+        <id>DNF-2019-1</id>
+        <title>bugfix_A-1.0-1</title>
+        <release>Fedora 29</release>
+        <issued date="2019-02-22 15:30:01" />
+        <severity>moderate</severity>
+        <references>
+            <reference href="https://foobar/foobarupdate_2" id="1111" type="cve" title="CVE-2999"/>
+        </references>
+        <description>testing advisory 2019</description>
+        <pkglist>
+            <collection short="F29">
+                <name>Fedora 29</name>
+                <module name="perl-DBI" stream="master" version="2" context="2a" arch="x86_64"/>
+                <module name="ethereum" stream="2.0" version="2" context="3b" arch="x86_64"/>
+                <package name="pkg" version="1.2" release="3" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>pkg-1.2-3.x86_64.rpm</filename>
+                </package>
+                <package name="filesystem" version="3.9" release="2.fc29" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>filesystem-3.9-2.fc29.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="bugfix" version="1">
+        <id>DNF-2020-1</id>
+        <title>bugfix_B-2.0-1</title>
+        <release>Fedora 29</release>
+        <issued date="2012-02-22 15:30:02" />
+        <severity>critical</severity>
+        <references>
+            <reference href="https://foobar/foobarupdate_2" id="2222" type="bugzilla" title="222"/>
+            <reference href="https://foobar/foobarupdate_2" id="3333" type="cve" title="CVE-2999"/>
+        </references>
+        <description>testing advisory 2020</description>
+        <pkglist>
+            <collection short="foo">
+                <name>Foolishness</name>
+                <module name="perl-DBI" stream="master" version="2" context="2b" arch="x86_64"/>
+                <package name="wget" version="1.19.5" release="5.fc29" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>wget-1.19.5-5.fc29.x86_64.rpm</filename>
+                </package>
+                <package name="yum" version="3.4.3" release="0" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>yum-3.4.3-0.x86_64.rpm</filename>
+                </package>
+            </collection>
+            <collection short="bar">
+                <name>Genius</name>
+                <module name="perl" stream="master" version="1" context="1c" arch="x86_64"/>
+                <package name="bitcoin" version="2.5" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>bitcoin-2.5-1.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="enhancement" version="1">
+        <id>PKG-NEWER</id>
+        <title>newer-version</title>
+        <release>Fedora 29</release>
+        <issued date="2012-02-22 15:30:02" />
+        <severity>low</severity>
+        <description>testing advisory with newer package</description>
+        <pkglist>
+            <collection short="newer">
+                <name>Newer pkg</name>
+                <package name="pkg" version="4.0" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>pkg-4.0-1.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+    <update from="dnf-testing@redhat.com" status="stable" type="bugfix" version="1">
+        <id>PKG-OLDER</id>
+        <title>older-version</title>
+        <release>Fedora 29</release>
+        <issued date="2012-02-22 15:30:02" />
+        <severity>low</severity>
+        <description>testing advisory with older package</description>
+        <pkglist>
+            <collection short="older">
+                <name>Older pkg</name>
+                <package name="pkg" version="0.1" release="1" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
+                    <filename>pkg-0.1-1.x86_64.rpm</filename>
+                </package>
+            </collection>
+        </pkglist>
+    </update>
+</updates>

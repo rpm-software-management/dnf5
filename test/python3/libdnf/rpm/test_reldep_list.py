@@ -160,7 +160,7 @@ class TestReldepList(unittest.TestCase):
         list1 = libdnf.rpm.ReldepList(self.sack)
         list1.add_reldep_with_glob("pkg*")
 
-        expected = ["pkg", "pkg.conf", "pkg.conf.d", "pkg-libs"]
+        expected = ["pkg", "pkg.conf", "pkg.conf.d", "pkg-libs", "pkg", "pkg", "pkg", "pkg", "pkg", "pkg"]
         # TODO(dmach): implement __str__()
         result = [reldep.to_string() for reldep in list1]
         self.assertEqual(expected, result)
