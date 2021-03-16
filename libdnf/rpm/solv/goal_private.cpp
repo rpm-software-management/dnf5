@@ -228,7 +228,8 @@ bool limit_installonly_packages(
     bool reresolve = false;
 
     for (int i = 0; i < installonly.size(); ++i) {
-        Id p, pp;
+        Id p;
+        Id pp;
         libdnf::rpm::solv::IdQueue q;
         libdnf::rpm::solv::IdQueue installing;
         FOR_PROVIDES(p, pp, installonly[i]) {
@@ -240,7 +241,7 @@ bool limit_installonly_packages(
                 q.push_back(p);
             }
         }
-        if (q.size() <= (int)installonly_limit) {
+        if (q.size() <= static_cast<int>(installonly_limit)) {
             continue;
         }
         for (int k = 0; k < q.size(); ++k) {
@@ -260,14 +261,16 @@ bool limit_installonly_packages(
         libdnf::rpm::solv::IdQueue same_names;
         while (q.size() > 0) {
             same_name_subqueue(pool, &q.get_queue(), &same_names.get_queue());
-            if (same_names.size() <= (int)installonly_limit)
+            if (same_names.size() <= static_cast<int>(installonly_limit)) {
                 continue;
+            }
             reresolve = true;
             for (int j = 0; j < same_names.size(); ++j) {
                 Id id = same_names[j];
                 Id action = SOLVER_ERASE;
-                if (j < (int)installonly_limit)
+                if (j < static_cast<int>(installonly_limit)) {
                     action = SOLVER_INSTALL;
+                }
                 job.push_back(action | SOLVER_SOLVABLE, id);
             }
         }
