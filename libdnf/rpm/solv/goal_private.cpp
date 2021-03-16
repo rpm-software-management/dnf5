@@ -34,21 +34,21 @@ void allow_uninstall_all_but_protected(
     libdnf::rpm::solv::IdQueue & job,
     const libdnf::rpm::solv::SolvMap * protected_packages,
     libdnf::rpm::PackageId protected_kernel) {
-    libdnf::rpm::solv::SolvMap protected_pkgs(pool->nsolvables);
-    protected_pkgs.set_all();
+    libdnf::rpm::solv::SolvMap not_protected_pkgs(pool->nsolvables);
+    not_protected_pkgs.set_all();
     if (protected_packages) {
-        protected_pkgs -= *protected_packages;
+        not_protected_pkgs -= *protected_packages;
     }
     if (protected_kernel.id > 0) {
-        protected_pkgs.remove_unsafe(protected_kernel);
+        not_protected_pkgs.remove_unsafe(protected_kernel);
     }
     if (pool->considered) {
-        protected_pkgs &= pool->considered;
+        not_protected_pkgs &= pool->considered;
     }
 
     for (Id id = 1; id < pool->nsolvables; ++id) {
         Solvable * s = pool_id2solvable(pool, id);
-        if (pool->installed == s->repo && protected_pkgs.contains_unsafe(libdnf::rpm::PackageId(id))) {
+        if (pool->installed == s->repo && not_protected_pkgs.contains_unsafe(libdnf::rpm::PackageId(id))) {
             job.push_back(SOLVER_ALLOWUNINSTALL | SOLVER_SOLVABLE, id);
         }
     }
