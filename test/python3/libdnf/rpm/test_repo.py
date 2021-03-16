@@ -16,11 +16,12 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
+import tempfile
+import shutil
+import os
 
 import libdnf.base
 import libdnf.logger
-
-import os
 
 
 class TestRepo(unittest.TestCase):
@@ -28,8 +29,8 @@ class TestRepo(unittest.TestCase):
         base = libdnf.base.Base()
 
         # Sets path to cache directory.
-        cwd = os.getcwd()
-        base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, cwd)
+        tmpdir = tempfile.mkdtemp(prefix="libdnf-python3-")
+        base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, tmpdir)
 
         repo_sack = libdnf.rpm.RepoSack(base)
         solv_sack = libdnf.rpm.SolvSack(base)
@@ -41,7 +42,7 @@ class TestRepo(unittest.TestCase):
         repo = repo_sack.new_repo("repomd-repo1")
 
         # Tunes repository configuration (baseurl is mandatory)
-        repo_path = os.path.join(cwd, "../../../test/data/repos-repomd/repomd-repo1/")
+        repo_path = os.path.join(os.getcwd(), "../../../test/data/repos-repomd/repomd-repo1/")
         baseurl = "file://" + repo_path
         repo_cfg = repo.get_config()
         repo_cfg.baseurl().set(libdnf.conf.Option.Priority_RUNTIME, baseurl)
@@ -53,3 +54,6 @@ class TestRepo(unittest.TestCase):
         SolvSack = libdnf.rpm.SolvSack
         solv_sack.load_repo(repo.get(), SolvSack.LoadRepoFlags_USE_PRESTO | SolvSack.LoadRepoFlags_USE_UPDATEINFO |
                             SolvSack.LoadRepoFlags_USE_OTHER)
+
+        # Remove the cache directory.
+        shutil.rmtree(tmpdir)

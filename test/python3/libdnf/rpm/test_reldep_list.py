@@ -16,6 +16,8 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
+import tempfile
+import shutil
 import os
 
 import libdnf
@@ -26,8 +28,8 @@ class TestReldepList(unittest.TestCase):
         self.base = libdnf.base.Base()
 
         # Sets path to cache directory.
-        cwd = os.getcwd()
-        self.base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, cwd)
+        self.tmpdir = tempfile.mkdtemp(prefix="libdnf-python3-")
+        self.base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, self.tmpdir)
 
         self.repo_sack = libdnf.rpm.RepoSack(self.base)
         self.sack = libdnf.rpm.SolvSack(self.base)
@@ -36,7 +38,7 @@ class TestReldepList(unittest.TestCase):
         repo = self.repo_sack.new_repo("repomd-repo1")
 
         # Tunes repository configuration (baseurl is mandatory)
-        repo_path = os.path.join(cwd, "../../../test/data/repos-repomd/repomd-repo1/")
+        repo_path = os.path.join(os.getcwd(), "../../../test/data/repos-repomd/repomd-repo1/")
         baseurl = "file://" + repo_path
         repo_cfg = repo.get_config()
         repo_cfg.baseurl().set(libdnf.conf.Option.Priority_RUNTIME, baseurl)
@@ -50,6 +52,10 @@ class TestReldepList(unittest.TestCase):
                             libdnf.rpm.SolvSack.LoadRepoFlags_USE_OTHER |
                             libdnf.rpm.SolvSack.LoadRepoFlags_USE_PRESTO |
                             libdnf.rpm.SolvSack.LoadRepoFlags_USE_UPDATEINFO)
+
+    def tearDown(self):
+        # Remove the cache directory.
+        shutil.rmtree(self.tmpdir)
 
     def test_add(self):
         a = libdnf.rpm.Reldep(self.sack, "python3-labirinto = 4.2.0")

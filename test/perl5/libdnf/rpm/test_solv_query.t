@@ -21,6 +21,7 @@ no if $] >= 5.010, warnings => qw(experimental::smartmatch);
 
 use Test::More;
 use Cwd qw(cwd);
+use File::Temp qw(tempdir);
 use File::Spec::Functions 'catfile';
 
 
@@ -29,8 +30,8 @@ use libdnf::base;
 my $base = new libdnf::base::Base();
 
 # Sets path to cache directory.
-my $cwd = cwd;
-$base->get_config()->cachedir()->set($libdnf::conf::Option::Priority_RUNTIME, $cwd);
+my $tmpdir = tempdir("libdnf-perl5-XXXX", TMPDIR => 1, CLEANUP => 1);
+$base->get_config()->cachedir()->set($libdnf::conf::Option::Priority_RUNTIME, $tmpdir);
 
 my $repo_sack = new libdnf::rpm::RepoSack($base);
 my $sack = new libdnf::rpm::SolvSack($base);

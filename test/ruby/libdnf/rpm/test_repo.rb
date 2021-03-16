@@ -16,6 +16,7 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 require 'test/unit'
+require 'tmpdir'
 include Test::Unit::Assertions
 
 require 'libdnf/base'
@@ -25,8 +26,8 @@ class TestRepo < Test::Unit::TestCase
         base = Base::Base.new()
 
         # Sets path to cache directory.
-        cwd = Dir.getwd()
-        base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, cwd)
+        tmpdir = Dir.mktmpdir("libdnf-ruby-")
+        base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, tmpdir)
 
         repo_sack = Rpm::RepoSack.new(base)
         solv_sack = Rpm::SolvSack.new(base)
@@ -38,7 +39,7 @@ class TestRepo < Test::Unit::TestCase
         repo = repo_sack.new_repo("repomd-repo1")
 
         # Tunes repository configuration (baseurl is mandatory)
-        repo_path = File.join(cwd, '../../../test/data/repos-repomd/repomd-repo1/')
+        repo_path = File.join(Dir.getwd(), '../../../test/data/repos-repomd/repomd-repo1/')
         baseurl = 'file://' + repo_path
         repo_cfg = repo.get_config()
         repo_cfg.baseurl().set(Conf::Option::Priority_RUNTIME, baseurl)
@@ -49,5 +50,8 @@ class TestRepo < Test::Unit::TestCase
         # Loads rpm::Repo into rpm::SolvSack
         solv_sack.load_repo(repo.get(), Rpm::SolvSack::LoadRepoFlags_USE_PRESTO |
                             Rpm::SolvSack::LoadRepoFlags_USE_UPDATEINFO | Rpm::SolvSack::LoadRepoFlags_USE_OTHER)
+
+        # Remove the cache directory.
+        FileUtils.remove_entry(tmpdir)
     end
 end

@@ -16,6 +16,7 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 require 'test/unit'
+require 'tmpdir'
 include Test::Unit::Assertions
 
 require 'libdnf/base'
@@ -26,8 +27,8 @@ class TestSimpleNumber < Test::Unit::TestCase
         @base = Base::Base.new()
 
         # Sets path to cache directory.
-        cwd = Dir.getwd()
-        @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, cwd)
+        @tmpdir = Dir.mktmpdir("libdnf-ruby-")
+        @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, @tmpdir)
 
         @repo_sack = Rpm::RepoSack.new(@base)
         @sack = Rpm::SolvSack.new(@base)
@@ -36,7 +37,7 @@ class TestSimpleNumber < Test::Unit::TestCase
         @repo = @repo_sack.new_repo('repomd-repo1')
 
         # Tunes repository configuration (baseurl is mandatory)
-        repo_path = File.join(cwd, '../../../test/data/repos-repomd/repomd-repo1/')
+        repo_path = File.join(Dir.getwd(), '../../../test/data/repos-repomd/repomd-repo1/')
         baseurl = 'file://' + repo_path
         repo_cfg = @repo.get_config()
         repo_cfg.baseurl().set(Conf::Option::Priority_RUNTIME, baseurl)
@@ -49,7 +50,8 @@ class TestSimpleNumber < Test::Unit::TestCase
     end
 
     def teardown()
-        ## Nothing really
+        # Remove the cache directory.
+        FileUtils.remove_entry(@tmpdir)
     end
 
     def test_size()
