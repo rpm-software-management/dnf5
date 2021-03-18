@@ -270,9 +270,12 @@ class ConfigMain::Impl {
     OptionBool downloadonly{false};  // runtime only option
     OptionBool ignorearch{false};
     OptionString module_platform_id{nullptr};
+    OptionBool module_stream_switch{false};
+    OptionBool module_obsoletes{false};
 
     OptionString user_agent{"libdnf"};  // TODO(jrohel): getUserAgent()
     OptionBool countme{false};
+    OptionBool protect_running_kernel{true};
 
     // Repo main config
 
@@ -430,8 +433,11 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("comment", comment);
     owner.opt_binds().add("ignorearch", ignorearch);
     owner.opt_binds().add("module_platform_id", module_platform_id);
+    owner.opt_binds().add("module_stream_switch", module_stream_switch);
+    owner.opt_binds().add("module_obsoletes", module_obsoletes);
     owner.opt_binds().add("user_agent", user_agent);
     owner.opt_binds().add("countme", countme);
+    owner.opt_binds().add("protect_running_kernel", protect_running_kernel);
 
     // Repo main config
 
@@ -991,6 +997,22 @@ const OptionString & ConfigMain::module_platform_id() const {
     return p_impl->module_platform_id;
 }
 
+OptionBool & ConfigMain::module_stream_switch() {
+    return p_impl->module_stream_switch;
+}
+
+const OptionBool & ConfigMain::module_stream_switch() const {
+    return p_impl->module_stream_switch;
+}
+
+OptionBool & ConfigMain::module_obsoletes() {
+    return p_impl->module_obsoletes;
+}
+
+const OptionBool & ConfigMain::module_obsoletes() const {
+    return p_impl->module_obsoletes;
+}
+
 OptionString & ConfigMain::user_agent() {
     return p_impl->user_agent;
 }
@@ -1003,6 +1025,14 @@ OptionBool & ConfigMain::countme() {
 }
 const OptionBool & ConfigMain::countme() const {
     return p_impl->countme;
+}
+
+OptionBool & ConfigMain::protect_running_kernel() {
+    return p_impl->protect_running_kernel;
+}
+
+const OptionBool & ConfigMain::protect_running_kernel() const {
+    return p_impl->protect_running_kernel;
 }
 
 // Repo main config

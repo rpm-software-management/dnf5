@@ -186,10 +186,16 @@ public:
 
     OptionString & module_platform_id();
     const OptionString & module_platform_id() const;
+    OptionBool & module_stream_switch();
+    const OptionBool & module_stream_switch() const;
+    OptionBool & module_obsoletes();
+    const OptionBool & module_obsoletes() const;
     OptionString & user_agent();
     const OptionString & user_agent() const;
     OptionBool & countme();
     const OptionBool & countme() const;
+    OptionBool & protect_running_kernel();
+    const OptionBool & protect_running_kernel() const;
 
     // Repo main config
     OptionNumber<std::uint32_t> & retries();
