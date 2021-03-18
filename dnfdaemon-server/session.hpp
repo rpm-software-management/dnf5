@@ -25,6 +25,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <libdnf/base/base.hpp>
+#include <libdnf/base/goal.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <atomic>
@@ -65,6 +66,7 @@ public:
     libdnf::Base * get_base() { return base.get(); };
     ThreadsManager & get_threads_manager() { return threads_manager; };
     sdbus::IObject * get_dbus_object() { return dbus_object.get(); };
+    libdnf::Goal & get_goal() { return goal; };
 
     bool check_authorization(const std::string & actionid, const std::string & sender);
     void fill_sack();
@@ -73,6 +75,7 @@ public:
 private:
     sdbus::IConnection & connection;
     std::unique_ptr<libdnf::Base> base;
+    libdnf::Goal goal;
     dnfdaemon::KeyValueMap session_configuration;
     std::string object_path;
     std::vector<std::unique_ptr<IDbusSessionService>> services{};
