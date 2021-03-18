@@ -39,7 +39,6 @@ private:
     void list(sdbus::MethodCall call);
     void get(sdbus::MethodCall call);
     void enable_disable(sdbus::MethodCall call, const bool & enable);
-    bool check_authorization(const std::string & actionid, const std::string & sender);
 
     dnfdaemon::KeyValueMapList repo_list(const std::vector<std::string> & ids);
     std::vector<std::string> enable_disable_repos(const std::vector<std::string> & ids, const bool enable);

@@ -47,35 +47,6 @@ void RepoConf::dbus_register() {
         });
 }
 
-bool RepoConf::check_authorization(const std::string & actionid, const std::string & sender) {
-    // create proxy for PolicyKit1 object
-    const std::string destination_name = "org.freedesktop.PolicyKit1";
-    const std::string object_path = "/org/freedesktop/PolicyKit1/Authority";
-    const std::string interface_name = "org.freedesktop.PolicyKit1.Authority";
-    auto polkit_proxy = sdbus::createProxy(session.get_connection(), destination_name, object_path);
-    polkit_proxy->finishRegistration();
-
-    // call CheckAuthorization method
-    sdbus::Struct<bool, bool, std::map<std::string, std::string>> auth_result;
-    sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sender}}};
-    std::map<std::string, std::string> details{};
-    uint flags = 0;
-    std::string cancelation_id = "";
-    polkit_proxy->callMethod("CheckAuthorization")
-        .onInterface(interface_name)
-        .withArguments(subject, actionid, details, flags, cancelation_id)
-        .storeResultsTo(auth_result);
-
-    // get results
-    bool res_is_authorized = std::get<0>(auth_result);
-    /*
-    bool res_is_challenge = std::get<1>(auth_result);
-    std::map<std::string, std::string> res_details = std::get<2>(auth_result);
-    */
-
-    return res_is_authorized;
-}
-
 dnfdaemon::KeyValueMapList RepoConf::repo_list(const std::vector<std::string> & ids) {
     Configuration cfg(session);
     cfg.read_configuration();
@@ -185,7 +156,7 @@ void RepoConf::enable_disable(sdbus::MethodCall call, const bool & enable) {
     auto worker = std::thread(
         [this, enable = std::move(enable), sender = std::move(sender), ids = std::move(ids), call = std::move(call)]() {
             try {
-                auto is_authorized = check_authorization(dnfdaemon::POLKIT_REPOCONF_WRITE, sender);
+                auto is_authorized = session.check_authorization(dnfdaemon::POLKIT_REPOCONF_WRITE, sender);
                 if (!is_authorized) {
                     throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Not authorized.");
                 }

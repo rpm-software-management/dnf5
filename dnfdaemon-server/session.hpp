@@ -66,6 +66,7 @@ public:
     ThreadsManager & get_threads_manager() { return threads_manager; };
     sdbus::IObject * get_dbus_object() { return dbus_object.get(); };
 
+    bool check_authorization(const std::string & actionid, const std::string & sender);
     void fill_sack();
     bool read_all_repos();
 

@@ -182,3 +182,32 @@ bool Session::read_all_repos() {
     repositories_status = retval ? dnfdaemon::RepoStatus::READY : dnfdaemon::RepoStatus::ERROR;
     return retval;
 }
+
+bool Session::check_authorization(const std::string & actionid, const std::string & sender) {
+    // create proxy for PolicyKit1 object
+    const std::string destination_name = "org.freedesktop.PolicyKit1";
+    const std::string object_path = "/org/freedesktop/PolicyKit1/Authority";
+    const std::string interface_name = "org.freedesktop.PolicyKit1.Authority";
+    auto polkit_proxy = sdbus::createProxy(connection, destination_name, object_path);
+    polkit_proxy->finishRegistration();
+
+    // call CheckAuthorization method
+    sdbus::Struct<bool, bool, std::map<std::string, std::string>> auth_result;
+    sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sender}}};
+    std::map<std::string, std::string> details{};
+    uint flags = 0;
+    std::string cancelation_id = "";
+    polkit_proxy->callMethod("CheckAuthorization")
+        .onInterface(interface_name)
+        .withArguments(subject, actionid, details, flags, cancelation_id)
+        .storeResultsTo(auth_result);
+
+    // get results
+    bool res_is_authorized = std::get<0>(auth_result);
+    /*
+    bool res_is_challenge = std::get<1>(auth_result);
+    std::map<std::string, std::string> res_details = std::get<2>(auth_result);
+    */
+
+    return res_is_authorized;
+}
