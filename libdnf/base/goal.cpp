@@ -722,8 +722,9 @@ libdnf::GoalProblem Goal::resolve(bool allow_erasing) {
     p_impl->rpm_goal.set_force_best(cfg_main.best().get_value());
     p_impl->rpm_goal.set_install_weak_deps(cfg_main.install_weak_deps().get_value());
 
-    // TODO if(cfg_main.protect_running_kernel().get_value() {
-    p_impl->rpm_goal.set_protected_running_kernel(get_running_kernel_internal());
+    if (cfg_main.protect_running_kernel().get_value()) {
+        p_impl->rpm_goal.set_protected_running_kernel(get_running_kernel_internal());
+    }
 
     // Add protected packages
     {
