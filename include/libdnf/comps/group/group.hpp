@@ -104,7 +104,7 @@ public:
     /// @replaces dnf:dnf/comps.py:attribute:Group.default_packages
     /// @replaces dnf:dnf/comps.py:attribute:Group.mandatory_packages
     /// @replaces dnf:dnf/comps.py:attribute:Group.optional_packages
-    //std::vector<Package> get_packages(bool mandatory_groups, bool optional_groups) const;
+    std::vector<Package> get_packages_of_type(PackageType type);
 
     std::set<std::string> get_repos() const;
 

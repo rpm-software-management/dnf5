@@ -203,6 +203,17 @@ std::vector<Package> Group::get_packages() {
 }
 
 
+std::vector<Package> Group::get_packages_of_type(PackageType type) {
+    std::vector<Package> packages_ot_type;
+    for (auto package : get_packages()) {
+        if (package.get_type() == type) {
+            packages_ot_type.push_back(package);
+        }
+    }
+    return packages_ot_type;
+}
+
+
 std::set<std::string> Group::get_repos() const {
     std::set<std::string> result;
     Pool * pool = query->sack->comps.p_impl->get_pool();
