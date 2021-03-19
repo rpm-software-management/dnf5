@@ -59,6 +59,7 @@ public:
     void select_command(Command * cmd) { selected_command = cmd; }
 
     std::vector<std::pair<std::string, std::string>> setopts;
+    bool verbose = false;
     std::vector<std::unique_ptr<Command>> commands;
     Command * selected_command{nullptr};
     libdnf::cli::ArgumentParser arg_parser;

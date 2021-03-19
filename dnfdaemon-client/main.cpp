@@ -58,6 +58,22 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     });
     dnfdaemon_client->register_named_arg(help);
 
+    // set ctx.verbose = true
+    auto verbose = ctx.arg_parser.add_new_named_arg("verbose");
+    verbose->set_short_name('v');
+    verbose->set_long_name("verbose");
+    verbose->set_short_description("increase output verbosity");
+
+    verbose->set_parse_hook_func([&ctx](
+                                  [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
+                                  [[maybe_unused]] const char * option,
+                                  [[maybe_unused]] const char * value) {
+        ctx.verbose = true;
+        return true;
+    });
+
+    dnfdaemon_client->register_named_arg(verbose);
+
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);

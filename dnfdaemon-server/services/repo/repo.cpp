@@ -54,7 +54,11 @@ enum class RepoAttribute {
     updated,
     pkgs,
     available_pkgs, // number of not excluded packages
-    size
+    size,
+
+    proxy,
+    proxy_username,
+    proxy_password,
 };
 
 std::vector<RepoAttribute> metadata_required_attributes {
@@ -85,7 +89,11 @@ const static std::map<std::string, RepoAttribute> repo_attributes {
     {"updated", RepoAttribute::updated},
     {"pkgs", RepoAttribute::pkgs},
     {"available_pkgs", RepoAttribute::available_pkgs},
-    {"size", RepoAttribute::size}
+    {"size", RepoAttribute::size},
+
+    {"proxy", RepoAttribute::proxy},
+    {"proxy_username", RepoAttribute::proxy_username},
+    {"proxy_password", RepoAttribute::proxy_password},
 };
 
 // converts Repo object to dbus map
@@ -181,6 +189,19 @@ dnfdaemon::KeyValueMap repo_to_map(libdnf::Base & base, const libdnf::WeakPtr<li
             case RepoAttribute::repofile:
                 dbus_repo.emplace(attr, libdnf_repo->get_repo_file_path());
                 break;
+
+            // proxy
+            case RepoAttribute::proxy:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().proxy().get_value());
+                break;
+            case RepoAttribute::proxy_username:
+//                dbus_repo.emplace(attr, libdnf_repo->get_config().proxy_username().get_value());
+                dbus_repo.emplace(attr, "user foo");
+                break;
+            case RepoAttribute::proxy_password:
+                dbus_repo.emplace(attr, libdnf_repo->get_config().proxy_password().get_value());
+                break;
+
         }
     }
     return dbus_repo;

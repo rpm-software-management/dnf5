@@ -24,6 +24,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <libdnf/conf/option_string.hpp>
+#include <libdnf-cli/output/repo_info.hpp>
 
 #include <iostream>
 #include <numeric>
@@ -203,26 +204,13 @@ void CmdRepolist::run(Context & ctx) {
             libdnf::cli::output::COL_REPO_ID);
     } else {
         // repoinfo command
-        // TODO(mblaha): output using smartcols
+
         for (auto & raw_repo : repositories) {
             RepoDbus repo(raw_repo);
-            std::cout << "Repo-id: " << repo.get_id() << std::endl;
-            std::cout << "Repo-name: " << repo.get_name() << std::endl;
-            std::cout << "Repo-status: " << repo.is_enabled() << std::endl;
-            std::cout << "Repo-revision: " << repo.get_revision() << std::endl;
-            std::cout << "Repo-tags: " << join(repo.get_content_tags(), ", ") << std::endl;
-            std::cout << "Repo-distro-tags: " << join_pairs(repo.get_distro_tags(), ": ", "\n") << std::endl;
-            std::cout << "Repo-updated: " << repo.get_max_timestamp() << std::endl;
-            std::cout << "Repo-pkgs: " << repo.get_pkgs() << std::endl;
-            std::cout << "Repo-available-pkgs: " << repo.get_available_pkgs() << std::endl;
-            std::cout << "Repo-size: " << repo.get_size() << std::endl;
-            std::cout << "Repo-metalink: " << repo.get_metalink() << std::endl;
-            std::cout << "Repo-mirrors: " << repo.get_mirrorlist() << std::endl;
-            std::cout << "Repo-baseurl: " << join(repo.get_baseurl(), "\n") << std::endl;
-            std::cout << "Repo-expire: " << repo.get_metadata_expire() << std::endl;
-            std::cout << "Repo-exclude: " << join(repo.get_excludepkgs(), ", ") << std::endl;
-            std::cout << "Repo-include: " << join(repo.get_includepkgs(), ", ") << std::endl;
-            std::cout << "Repo-filename: " << repo.get_repofile() << std::endl;
+            auto repo_info = libdnf::cli::output::RepoInfo();
+            repo_info.add_repo(repo, ctx.verbose, ctx.verbose);
+            repo_info.print();
+            std::cout << std::endl;
         }
     }
 }
