@@ -19,6 +19,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
+#include "commands/groupinfo/groupinfo.hpp"
+#include "commands/grouplist/grouplist.hpp"
 #include "commands/install/install.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
@@ -216,6 +218,8 @@ int main(int argc, char * argv[]) {
     context.commands.push_back(std::make_unique<microdnf::CmdInstall>());
     context.commands.push_back(std::make_unique<microdnf::CmdDownload>());
     context.commands.push_back(std::make_unique<microdnf::CmdDowngrade>());
+    context.commands.push_back(std::make_unique<microdnf::CmdGroupinfo>());
+    context.commands.push_back(std::make_unique<microdnf::CmdGrouplist>());
     context.commands.push_back(std::make_unique<microdnf::CmdReinstall>());
     context.commands.push_back(std::make_unique<microdnf::CmdRemove>());
     context.commands.push_back(std::make_unique<microdnf::CmdRepolist>());

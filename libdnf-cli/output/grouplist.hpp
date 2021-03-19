@@ -1,0 +1,80 @@
+/*
+Copyright (C) 2021 Red Hat, Inc.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+
+#ifndef LIBDNF_CLI_OUTPUT_GROUPLIST_HPP
+#define LIBDNF_CLI_OUTPUT_GROUPLIST_HPP
+
+#include "libdnf-cli/utils/tty.hpp"
+
+#include <libsmartcols/libsmartcols.h>
+
+namespace libdnf::cli::output {
+
+
+// group list table columns
+enum { COL_GROUP_ID, COL_GROUP_NAME, COL_INSTALLED };
+
+
+static struct libscols_table * create_grouplist_table() {
+    struct libscols_table * table = scols_new_table();
+    if (isatty(1)) {
+        scols_table_enable_colors(table, 1);
+        scols_table_enable_maxout(table, 1);
+    }
+    struct libscols_column * cl = scols_table_new_column(table, "group id", 0.4, 0);
+    scols_column_set_cmpfunc(cl, scols_cmpstr_cells, NULL);
+    scols_table_new_column(table, "group name", 0.5, SCOLS_FL_TRUNC);
+    scols_table_new_column(table, "installed", 0.1, SCOLS_FL_RIGHT);
+    return table;
+}
+
+
+static void add_line_into_grouplist_table(
+    struct libscols_table * table, const char * id, const char * name, bool installed) {
+    struct libscols_line * ln = scols_table_new_line(table, NULL);
+    scols_line_set_data(ln, COL_GROUP_ID, id);
+    scols_line_set_data(ln, COL_GROUP_NAME, name);
+    scols_line_set_data(ln, COL_INSTALLED, installed ? "yes" : "no");
+    if (installed) {
+        struct libscols_cell * cl = scols_line_get_cell(ln, COL_INSTALLED);
+        scols_cell_set_color(cl, "green");
+    }
+}
+
+
+void print_grouplist_table(const std::set<libdnf::comps::Group> & group_list) {
+    struct libscols_table * table = create_grouplist_table();
+    for (auto group: group_list) {
+        add_line_into_grouplist_table(
+            table,
+            group.get_groupid().c_str(),
+            group.get_name().c_str(),
+            group.get_installed());
+    }
+    auto cl = scols_table_get_column(table, COL_GROUP_ID);
+    scols_sort_table(table, cl);
+    scols_print_table(table);
+    scols_unref_table(table);
+}
+
+
+}  // namespace libdnf::cli::output
+
+#endif  // LIBDNF_CLI_OUTPUT_REPOLIST_HPP
