@@ -20,33 +20,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "common.hpp"
 
+#include "libdnf-cli/utils/units.hpp"
+
 #include <fmt/format.h>
 
 
 namespace libdnf::cli::progressbar {
 
 
-static const char * const SIZE_UNITS[] = {
-    "B",
-    "KiB",
-    "MiB",
-    "GiB",
-    "TiB",
-    "PiB",
-    "EiB",
-    "ZiB",
-    "YiB",
-};
-
-
 std::string format_size(int64_t num) {
-    auto i = static_cast<float>(num);
-    int index = 0;
-    while (i > 999) {
-        i /= 1024;
-        index++;
-    }
-    return fmt::format("{0:5.1f} {1:>3s}", i, SIZE_UNITS[index]);
+    auto result = libdnf::cli::utils::units::format_size(num);
+    // add leading spaces up to 9 characters
+    // to make sure that the formatted size has always the same length in the progressbar
+    result.insert(0, 9 - result.size(), ' ');
+    return result;
 }
 
 
