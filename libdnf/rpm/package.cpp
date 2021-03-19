@@ -295,6 +295,10 @@ Repo * Package::get_repo() const {
     return solv::get_repo(pool, id);
 }
 
+std::string Package::get_repo_id() const {
+    return get_repo()->get_id();
+}
+
 Checksum Package::get_checksum() const {
     Pool * pool = sack->p_impl->pool;
 

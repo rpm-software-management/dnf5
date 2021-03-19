@@ -273,6 +273,7 @@ public:
     /// @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_reponame(DnfPackage * pkg)
     Repo * get_repo() const;
 
+    std::string get_repo_id() const;
     // TODO(dmach): getBugUrl() not possible due to lack of support in libsolv and metadata?
 
 protected:

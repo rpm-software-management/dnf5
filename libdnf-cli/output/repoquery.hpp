@@ -49,7 +49,7 @@ static struct libscols_table * create_package_info_table(Package & package) {
     auto size = package.get_size();
     add_line_into_package_info_table(table, "Size", std::to_string(size).c_str());
     add_line_into_package_info_table(table, "Source", package.get_sourcerpm().c_str());
-    add_line_into_package_info_table(table, "Repository", package.get_repo()->get_id().c_str());
+    add_line_into_package_info_table(table, "Repository", package.get_repo_id().c_str());
     // TODO(jrohel): support for "From repo" add_line_into_package_info_table(table, "From repo", ...);
     add_line_into_package_info_table(table, "Summary", package.get_summary().c_str());
     add_line_into_package_info_table(table, "URL", package.get_url().c_str());

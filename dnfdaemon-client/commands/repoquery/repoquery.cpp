@@ -28,6 +28,8 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/solv_query.hpp>
 #include <fmt/format.h>
 
+#include "libdnf-cli/output/repoquery.hpp"
+
 #include <iostream>
 
 namespace dnfdaemon::client {
@@ -96,13 +98,20 @@ public:
     explicit PackageDbus(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
     int get_id() { return rawdata.at("id"); }
     std::string get_name() const { return rawdata.at("name"); }
-    unsigned long get_epoch() const { return rawdata.at("epoch"); }
+    std::string get_epoch() const { return rawdata.at("epoch"); }
     std::string get_version() const { return rawdata.at("version"); }
     std::string get_release() const { return rawdata.at("release"); }
     std::string get_arch() const { return rawdata.at("arch"); }
-    std::string get_repo() const { return rawdata.at("repo"); }
+    std::string get_repo_id() const { return rawdata.at("repo"); }
     std::string get_nevra() const { return rawdata.at("nevra"); }
     std::string get_full_nevra() const { return rawdata.at("full_nevra"); }
+    // TODO implement functions
+    int get_size() const { return -1; }
+    std::string get_sourcerpm() const { return std::string(); }
+    std::string get_summary() const { return std::string(); }
+    std::string get_url() const { return std::string(); }
+    std::string get_license() const { return std::string(); }
+    std::string get_description() const { return std::string(); }
 
 private:
     dnfdaemon::KeyValueMap rawdata;
@@ -151,12 +160,7 @@ void CmdRepoquery::run(Context & ctx) {
         PackageDbus package(raw_package);
         if (info_option->get_value()) {
             // TODO(mblaha) use smartcols for this output
-            std::cout << "Name: " << package.get_name() << std::endl;
-            std::cout << "Epoch: " << package.get_epoch() << std::endl;
-            std::cout << "Version: " << package.get_version() << std::endl;
-            std::cout << "Release: " << package.get_release() << std::endl;
-            std::cout << "Architecture: " << package.get_arch() << std::endl;
-            std::cout << "Repository: " << package.get_repo() << std::endl;
+            libdnf::cli::output::print_package_info_table(package);
             if (num_packages) {
                 std::cout << std::endl;
             }
