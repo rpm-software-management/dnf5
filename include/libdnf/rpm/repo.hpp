@@ -123,10 +123,7 @@ public:
     /// @param conf   configuration to use
     /// @param base   reference to Base instance
     /// @param type   type of repo
-    Repo(
-        const std::string & id,
-        Base & base,
-        Repo::Type type = Repo::Type::AVAILABLE);
+    Repo(const std::string & id, Base & base, Repo::Type type = Repo::Type::AVAILABLE);
 
     Repo & operator=(Repo && repo) = delete;
 
@@ -202,10 +199,26 @@ public:
     /// TODO(jrohel): Remove it? It is only shortcut for get_config()->cost()->get_value()
     int get_cost() const;
 
+    /// @brief Set repo cost in RepoConf and in Libsolv repo if attached. Values are only updated when Option::Priority
+    /// of stored value is equal or lower.
+    ///
+    /// @version 1.0.0
+    /// @param value Cost value
+    /// @param priority Optional argument
+    void set_cost(int value, Option::Priority priority = Option::Priority::RUNTIME);
+
     /// Returns repository priority
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getPriority()
     /// TODO(jrohel): Remove it? It is only shortcut for get_config()->cost()->get_value()
     int get_priority() const;
+
+    /// @brief Set repo priority in RepoConf and in Libsolv repo if attached. Values are only updated when
+    /// Option::Priority of stored value is equal or lower.
+    ///
+    /// @version 1.0.0
+    /// @param value Priority value
+    /// @param priority Optional argument
+    void set_priority(int value, Option::Priority priority = Option::Priority::RUNTIME);
 
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getRevision()
     const std::string & get_revision() const;

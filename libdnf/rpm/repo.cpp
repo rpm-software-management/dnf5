@@ -479,8 +479,22 @@ void Repo::set_load_metadata_other(bool value) {
 int Repo::get_cost() const {
     return p_impl->config.cost().get_value();
 }
+void Repo::set_cost(int value, Option::Priority priority) {
+    auto & conf_cost = p_impl->config.cost();
+    conf_cost.set(priority, value);
+    if (p_impl->libsolv_repo_ext.repo != nullptr) {
+        p_impl->libsolv_repo_ext.repo->subpriority = -conf_cost.get_value();
+    }
+}
 int Repo::get_priority() const {
     return p_impl->config.priority().get_value();
+}
+void Repo::set_priority(int value, Option::Priority priority) {
+    auto & conf_priority = p_impl->config.priority();
+    conf_priority.set(priority, value);
+    if (p_impl->libsolv_repo_ext.repo != nullptr) {
+        p_impl->libsolv_repo_ext.repo->priority = -conf_priority.get_value();
+    }
 }
 int64_t Repo::get_age() const {
     return p_impl->get_age();
