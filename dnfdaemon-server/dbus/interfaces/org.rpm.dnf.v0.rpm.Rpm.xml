@@ -1,0 +1,137 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<!--
+Copyright (C) 2021 Red Hat, Inc.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<node>
+<!-- org.rpm.dnf.v0.rpm.Rpm:
+   @short_description: Interface to RPM packages
+-->
+<interface name="org.rpm.dnf.v0.rpm.Rpm">
+    <!--
+        list:
+        @options: an array of key/value pairs
+        @data: array of returned packages with requested attributes
+
+        Get list of packages that match to given filters.
+
+        Following options are supported:
+
+        <variablelist>
+          <varlistentry>
+            <term>patterns: list of strings</term>
+            <listitem><para>
+              any package with nevra matching to any of patterns is returned
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>package_attrs: list of strings</term>
+            <listitem><para>
+              list of package attributes that are returned
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+
+        Unknown options are ignored.
+    -->
+    <method name="list">
+        <arg name="options" type="a{sv}" direction="in"/>
+        <arg name="data" type="aa{sv}" direction="out"/>
+    </method>
+
+    <!--
+        install:
+        @specs: an array of package specifications to be installed on the system
+        @options: an array of key/value pairs to modify install behavior
+
+        Marks packages specified by @specs for installation.
+
+        Following @options are supported:
+
+        <variablelist>
+          <varlistentry>
+            <term>repo_ids: list of strings</term>
+            <listitem><para>
+            Identifiers of the repos from which the packages could be installed.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>strict: boolean, default true</term>
+            <listitem><para>
+            Indicates whether existing but non-installable packages should
+            be skipped (false) or cause transaction resolving fail (true).
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+
+        Unknown options are ignored.
+    -->
+    <method name="install">
+        <arg name="specs" type="as" direction="in" />
+        <arg name="options" type="a{sv}" direction="in" />
+    </method>
+
+    <!--
+        resolve:
+        @options: an array of key/value pairs to modify dependency resolving
+        @result: array of (action, n, e, v, r, a, repoid) tuples where action is one of libdnf::transaction::TransactionItemAction enum
+
+        Resolve the transaction.
+
+        Following @options are supported:
+        <variablelist>
+          <varlistentry>
+            <term>allow_erasing: boolean, default false</term>
+            <listitem><para>
+            Whether removal of installed package is allowed to resolve the
+            transaction.
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+        Unknown options are ignored.
+    -->
+    <method name="resolve">
+        <arg name="options" type="a{sv}" direction="in" />
+        <arg name="result" type="a(ussssss)" direction="out" />
+    </method>
+
+    <!--
+        do_transaction:
+        @options: an array of key/value pairs to modify transaction running
+
+        Perform the resolved transaction.
+
+        Following @options are supported:
+        <variablelist>
+          <varlistentry>
+            <term>comment: string</term>
+            <listitem><para>
+            Adds a comment to a transaction.
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+        Unknown options are ignored.
+    -->
+    <method name="do_transaction">
+    </method>
+
+</interface>
+
+</node>

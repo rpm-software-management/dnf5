@@ -1,0 +1,109 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<!--
+Copyright (C) 2021 Red Hat, Inc.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<node>
+<!-- org.rpm.dnf.v0.SessionManager:
+   @short_description: Interface to dnfdaemon sessions management
+-->
+<interface name="org.rpm.dnf.v0.SessionManager">
+    <!--
+        open_session:
+        @configuration: session configuration - an array of key/value pairs
+        @path: object path to created Session object
+
+        Opens a new session.
+
+        Following configuration options are supported:
+
+        <variablelist>
+          <varlistentry>
+            <term>load_system_repo: bool, default true</term>
+            <listitem><para>
+                If true information about currently installed packages is loaded.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>load_available_repos: bool, default true</term>
+                If true information about packages available in enabled repositories is loaded.
+            <listitem><para>
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>config_file_path: path</term>
+            <listitem><para>
+                Override path to main configuration file (/etc/dnf/dnf.conf)
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>installroot: path</term>
+            <listitem><para>
+                Set the install root.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>cachedir: path</term>
+            <listitem><para>
+                Override location of the cache.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>reposdir: path</term>
+            <listitem><para>
+                Override location of repository configuration files (/etc/yum.repos.d/)
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>varsdir: string</term>
+            <listitem><para>
+                Override location of variables definition files (/etc/dnf/vars/)
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>releasever: string</term>
+            <listitem><para>
+                Override releasever variable used for substitutions in repository configurations.
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+
+        Unknown options are ignored.
+    -->
+    <method name="open_session">
+        <arg name="options" type="a{sv}" direction="in"/>
+        <arg name="path" type="o" direction="out"/>
+    </method>
+
+    <!--
+        close_session:
+        @path: object path of session to close
+        @result: bool whether the requested session was successfully closed
+
+        Close session on given object path.
+    -->
+    <method name="close_session">
+        <arg name="path" type="o" direction="in" />
+        <arg name="result" type="b" direction="out" />
+    </method>
+
+</interface>
+
+</node>
