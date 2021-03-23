@@ -302,6 +302,13 @@ void RpmSolvQueryTest::test_ifilter_release() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
 }
 
+void RpmSolvQueryTest::test_ifilter_priority() {
+    add_repo_solv("solv-24pkgs");
+    add_repo_solv("solv-repo1");
+    libdnf::rpm::SolvQuery query1(sack);
+    query1.ifilter_priority();
+    /// TODO(jmracek) Run test with repository with a different priority and check result
+}
 
 void RpmSolvQueryTest::test_ifilter_provides() {
     // packages with Provides == "libpkg.so.0()(64bit)"

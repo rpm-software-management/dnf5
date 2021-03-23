@@ -37,6 +37,7 @@ class RpmSolvQueryTest : public RepoFixture {
     CPPUNIT_TEST(test_ifilter_nevra);
     CPPUNIT_TEST(test_ifilter_version);
     CPPUNIT_TEST(test_ifilter_release);
+    CPPUNIT_TEST(test_ifilter_priority);
     CPPUNIT_TEST(test_ifilter_provides);
     CPPUNIT_TEST(test_ifilter_requires);
     CPPUNIT_TEST(test_ifilter_chain);
@@ -61,6 +62,7 @@ public:
     void test_ifilter_version();
     void test_ifilter_release();
     void test_ifilter_provides();
+    void test_ifilter_priority();
     void test_ifilter_requires();
     void test_ifilter_chain();
     void test_resolve_pkg_spec();

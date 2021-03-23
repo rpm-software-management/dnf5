@@ -2007,6 +2007,49 @@ SolvQuery & SolvQuery::ifilter_latest(int limit) {
     return *this;
 }
 
+static inline bool priority_solvable_cmp_key(const Solvable * first, const Solvable * second) {
+    if (first->name != second->name) {
+        return first->name < second->name;
+    }
+    if (first->arch != second->arch) {
+        return first->arch < second->arch;
+    }
+    return first->repo->priority > second->repo->priority;
+}
+
+SolvQuery & SolvQuery::ifilter_priority() {
+    SolvSack * sack = get_sack();
+    Pool * pool = sack->p_impl->get_pool();
+
+    std::vector<Solvable *> sorted_priority;
+    for (PackageId candidate_id : *p_impl) {
+        solv::get_solvable(pool, candidate_id);
+        Solvable * considered = solv::get_solvable(pool, candidate_id);
+        if (solv::is_installed(pool, considered)) {
+            continue;
+        }
+        p_impl->remove_unsafe(candidate_id);
+        sorted_priority.push_back(considered);
+    }
+    std::sort(sorted_priority.begin(), sorted_priority.end(), priority_solvable_cmp_key);
+
+    Id name = 0;
+    Id arch = 0;
+    int priority = 0;
+    for (Solvable * candidate : sorted_priority) {
+        if (candidate->name == name && candidate->arch == arch) {
+            if (candidate->repo->priority == priority) {
+                p_impl->add_unsafe(PackageId(pool_solvable2id(pool, candidate)));
+            }
+        } else {
+            name = candidate->name;
+            arch = candidate->arch;
+            priority = candidate->repo->priority;
+            p_impl->add_unsafe(PackageId(pool_solvable2id(pool, candidate)));
+        }
+    }
+    return *this;
+}
 
 std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
     const std::string & pkg_spec,
