@@ -42,6 +42,12 @@ public:
 
     const std::map<std::string, std::string> & get_values() const { return values; }
 
+    /// @brief Set particular variable to a value
+    ///
+    /// @param name Name of the variable
+    /// @param value Value to be stored in variable
+    void set_value(const std::string & name, const std::string & value) { values[name] = value; }
+
     /// @brief Loads DNF vars from the environment and the passed directories.
     ///
     /// Environment variables are loaded first, then the directories are loaded
