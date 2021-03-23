@@ -51,6 +51,59 @@ void RpmSolvQueryTest::test_size() {
     CPPUNIT_ASSERT_EQUAL(5LU, query.size());
 }
 
+void RpmSolvQueryTest::test_ifilter_latest() {
+    add_repo_solv("solv-24pkgs");
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+    // also add 2 time the same package
+    sack->add_cmdline_package(rpm_path, false);
+    sack->add_cmdline_package(rpm_path, false);
+
+    {
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_latest(1);
+        std::vector<std::string> expected = {
+            "pkg-0:1.2-3.src",
+            "pkg-0:1.2-3.x86_64",
+            "pkg-libs-1:1.3-4.x86_64",
+            "pkg-0:1-24.noarch",
+            "cmdline-0:1.2-3.noarch",
+            "cmdline-0:1.2-3.noarch"};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+    {
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_latest(2);
+        std::vector<std::string> expected = {
+            "pkg-0:1.2-3.src",
+            "pkg-0:1.2-3.x86_64",
+            "pkg-libs-1:1.2-4.x86_64",
+            "pkg-libs-1:1.3-4.x86_64",
+            "pkg-0:1-23.noarch",
+            "pkg-0:1-24.noarch",
+            "cmdline-0:1.2-3.noarch",
+            "cmdline-0:1.2-3.noarch"};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+    {
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_latest(-1);
+        std::vector<std::string> expected = {
+            "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-0:1-1.noarch",  "pkg-0:1-2.noarch",
+            "pkg-0:1-3.noarch",        "pkg-0:1-4.noarch",        "pkg-0:1-5.noarch",  "pkg-0:1-6.noarch",
+            "pkg-0:1-7.noarch",        "pkg-0:1-8.noarch",        "pkg-0:1-9.noarch",  "pkg-0:1-10.noarch",
+            "pkg-0:1-11.noarch",       "pkg-0:1-12.noarch",       "pkg-0:1-13.noarch", "pkg-0:1-14.noarch",
+            "pkg-0:1-15.noarch",       "pkg-0:1-16.noarch",       "pkg-0:1-17.noarch", "pkg-0:1-18.noarch",
+            "pkg-0:1-19.noarch",       "pkg-0:1-20.noarch",       "pkg-0:1-21.noarch", "pkg-0:1-22.noarch",
+            "pkg-0:1-23.noarch"};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+    {
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_latest(-23);
+        std::vector<std::string> expected = {"pkg-0:1-1.noarch"};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+}
 
 void RpmSolvQueryTest::test_ifilter_name() {
     // packages with Name == "pkg"

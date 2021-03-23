@@ -332,6 +332,16 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_DOWNGRADABLE
     SolvQuery & ifilter_downgradable();
 
+    /// @brief Keep number of latest versions of packages. When negative limit is used it removes a number of latest versions.
+    ///
+    /// @version 1.0.0
+    /// @param limit Default value is 1
+    /// @returns Self
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_LATEST
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_LATEST_PER_ARCH
+    SolvQuery & ifilter_latest(int limit = 1);
+
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     /// @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf::rpm::Nevra> resolve_pkg_spec(

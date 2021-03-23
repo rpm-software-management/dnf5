@@ -1918,6 +1918,96 @@ SolvQuery & SolvQuery::ifilter_downgradable() {
     return *this;
 }
 
+
+/// @brief Add packages from given block into a map
+///
+/// @param pool: Package pool
+/// @param result: SolvMap of query results complying the filter
+/// @param samename: Queue containing the block
+/// @param start_block: Start of the block
+/// @param stop_block: End of the block
+/// @param latest: Number of first packages in the block to add into the map.
+///                If negative, it's number of first packages in the block to exclude.
+static void add_latest_to_map(
+    const Pool * pool, solv::SolvMap & result, solv::IdQueue & samename, int start_block, int stop_block, int latest) {
+    int version_counter = 0;
+    Solvable * solv_previous_element = pool_id2solvable(pool, samename[start_block]);
+    Id id_previous_evr = solv_previous_element->evr;
+    for (int pos = start_block; pos < stop_block; ++pos) {
+        Id id_element = samename[pos];
+        Solvable * solv_element = pool_id2solvable(pool, id_element);
+        Id id_current_evr = solv_element->evr;
+        if (id_previous_evr != id_current_evr) {
+            version_counter += 1;
+            id_previous_evr = id_current_evr;
+        }
+        if (latest > 0) {
+            if (!(version_counter < latest)) {
+                return;
+            }
+        } else {
+            if (version_counter < -latest) {
+                continue;
+            }
+        }
+        result.add_unsafe(PackageId(id_element));
+    }
+}
+
+static int filter_latest_sortcmp_byarch(const void * ap, const void * bp, void * dp) {
+    auto pool = static_cast<Pool *>(dp);
+    Solvable * sa = pool->solvables + *(Id *)ap;
+    Solvable * sb = pool->solvables + *(Id *)bp;
+    int r;
+    r = sa->name - sb->name;
+    if (r)
+        return r;
+    r = sa->arch - sb->arch;
+    if (r)
+        return r;
+    r = pool_evrcmp(pool, sb->evr, sa->evr, EVRCMP_COMPARE);
+    if (r)
+        return r;
+    return *(Id *)ap - *(Id *)bp;
+}
+
+SolvQuery & SolvQuery::ifilter_latest(int limit) {
+    SolvSack * sack = get_sack();
+    Pool * pool = sack->p_impl->get_pool();
+
+    solv::IdQueue samename;
+    for (PackageId candidate_id : *p_impl) {
+        samename.push_back(candidate_id.id);
+    }
+    solv_sort(samename.data(), static_cast<size_t>(samename.size()), sizeof(Id), filter_latest_sortcmp_byarch, pool);
+
+    p_impl->clear();
+    // Create blocks per name, arch
+    Solvable * highest = nullptr;
+    int start_block = -1;
+    int i;
+    for (i = 0; i < samename.size(); ++i) {
+        Solvable * considered = pool_id2solvable(pool, samename[i]);
+        if (!highest || highest->name != considered->name || highest->arch != considered->arch) {
+            /* start of a new block */
+            if (start_block == -1) {
+                highest = considered;
+                start_block = i;
+                continue;
+            }
+            add_latest_to_map(pool, *p_impl, samename, start_block, i, limit);
+            highest = considered;
+            start_block = i;
+        }
+    }
+    if (start_block != -1) {  // Add last block to the map
+        add_latest_to_map(pool, *p_impl, samename, start_block, i, limit);
+    }
+
+    return *this;
+}
+
+
 std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
     const std::string & pkg_spec,
     bool icase,
