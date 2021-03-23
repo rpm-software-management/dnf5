@@ -24,10 +24,12 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <libdnf-cli/argument_parser.hpp>
+#include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/rpm/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
+#include <iostream>
 #include <memory>
 #include <utility>
 #include <vector>
@@ -42,12 +44,28 @@ namespace dnfdaemon::client {
 
 constexpr const char * VERSION = "0.1.0";
 
+class RepoCB {
+public:
+    explicit RepoCB(sdbus::IProxy * proxy, std::string session_object_path);
+
+    void start(sdbus::Signal & signal);
+    void end(sdbus::Signal & signal);
+    void progress(sdbus::Signal & signal);
+private:
+    std::string session_object_path;
+    libdnf::cli::progressbar::DownloadProgressBar progress_bar{-1, ""};
+    std::size_t msg_lines{0};
+    void print_progress_bar();
+    bool signature_valid(sdbus::Signal & signal);
+};
+
+
 class Context {
 public:
     Context(sdbus::IConnection & connection) : connection(connection), repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
 
     /// Initialize dbus connection and server session
-    void init_session(dnfdaemon::KeyValueMap cfg);
+    void init_session();
 
     // initialize repository metadata loading on server side and wait for results
     dnfdaemon::RepoStatus wait_for_repos();
@@ -72,6 +90,7 @@ private:
     sdbus::IConnection & connection;
     sdbus::ObjectPath session_object_path;
     dnfdaemon::RepoStatus repositories_status;
+    std::unique_ptr<RepoCB> repocb;
 };
 
 }  // namespace dnfdaemon::client

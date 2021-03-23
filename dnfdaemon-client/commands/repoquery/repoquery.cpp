@@ -108,7 +108,7 @@ private:
     dnfdaemon::KeyValueMap rawdata;
 };
 
-dnfdaemon::KeyValueMap CmdRepoquery::session_config(Context &) {
+dnfdaemon::KeyValueMap CmdRepoquery::session_config([[maybe_unused]] Context & ctx) {
     dnfdaemon::KeyValueMap cfg = {};
     cfg["load_system_repo"] = installed_option->get_value();
     cfg["load_available_repos"] = (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value());

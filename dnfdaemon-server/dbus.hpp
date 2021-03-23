@@ -57,6 +57,7 @@ const char * const INTERFACE_SESSION_MANAGER = "org.rpm.dnf.v0.SessionManager";
 
 // signals
 const char * const SIGNAL_REPO_LOAD_START = "repo_load_start";
+const char * const SIGNAL_REPO_LOAD_PROGRESS = "repo_load_progress";
 const char * const SIGNAL_REPO_LOAD_END = "repo_load_end";
 
 // polkit actions
