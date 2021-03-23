@@ -17,28 +17,24 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DNFDAEMON_SERVER_SERVICES_RPM_RPM_HPP
-#define DNFDAEMON_SERVER_SERVICES_RPM_RPM_HPP
+#ifndef DNFDAEMON_SERVER_SERVICES_RPM_TRANSACTION_HPP
+#define DNFDAEMON_SERVER_SERVICES_RPM_TRANSACTION_HPP
 
-#include "dnfdaemon-server/session.hpp"
-
+#include <libdnf/rpm/transaction.hpp>
+#include <libdnf/rpm/package.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>
-#include <vector>
 
-class Rpm : public IDbusSessionService {
+class RpmTransactionItem : public libdnf::rpm::TransactionItem {
 public:
-    using IDbusSessionService::IDbusSessionService;
-    ~Rpm() = default;
-    void dbus_register();
-    void dbus_deregister();
+    enum class Actions { INSTALL, ERASE, UPGRADE, DOWNGRADE, REINSTALL };
+
+    RpmTransactionItem(libdnf::rpm::Package pkg, Actions action) : TransactionItem(pkg), action(action) {}
+    Actions get_action() const noexcept { return action; }
 
 private:
-    void list(sdbus::MethodCall && call);
-    void install(sdbus::MethodCall && call);
-    void resolve(sdbus::MethodCall && call);
-    void do_transaction(sdbus::MethodCall && call);
+    Actions action;
 };
 
 #endif

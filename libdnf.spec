@@ -364,6 +364,7 @@ Package management service with a DBus interface
 %{_unitdir}/dnfdaemon-server.service
 %{_sysconfdir}/dbus-1/system.d/org.rpm.dnf.v0.conf
 %{_datadir}/dbus-1/system-services/org.rpm.dnf.v0.service
+%{_datadir}/dbus-1/interfaces/org.rpm.dnf.v0.*.xml
 %{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy
 %license COPYING.md
 %license gpl-2.0.txt

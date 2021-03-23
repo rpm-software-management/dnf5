@@ -32,6 +32,15 @@ using KeyValueMap = std::map<std::string, sdbus::Variant>;
 using KeyValueMapList = std::vector<KeyValueMap>;
 enum class RepoStatus { NOT_READY, PENDING, READY, ERROR };
 
+using DbusTransactionItem = sdbus::Struct<
+    unsigned int, // action
+    std::string,  // name
+    std::string,  // epoch
+    std::string,  // version
+    std::string,  // release
+    std::string,  // arch
+    std::string   // repoid
+    >;
 
 
 // constants
@@ -52,10 +61,13 @@ const char * const SIGNAL_REPO_LOAD_END = "repo_load_end";
 
 // polkit actions
 const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.RepoConf.write";
+const char * const POLKIT_EXECUTE_RPM_TRANSACTION = "org.rpm.dnf.v0.rpm.execute_transaction";
 
 // errors
 const char * const ERROR = "org.rpm.dnf.v0.Error";
 const char * const ERROR_REPOCONF = "org.rpm.dnf.v0.rpm.RepoConf.Error";
+const char * const ERROR_RESOLVE = "org.rpm.dnf.v0.rpm.Rpm.ResolveError";
+const char * const ERROR_TRANSACTION = "org.rpm.dnf.v0.rpm.Rpm.TransactionError";
 
 }  // namespace dnfdaemon
 
