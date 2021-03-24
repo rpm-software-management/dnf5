@@ -198,17 +198,17 @@ inline static void result_get_info(LrResult * result, LrResultInfoOption option,
 static constexpr struct {
     const char * name;
     LrAuth code;
-} PROXYAUTHMETHODS[] = {{"none", LR_AUTH_NONE},
-                        {"basic", LR_AUTH_BASIC},
-                        {"digest", LR_AUTH_DIGEST},
-                        {"negotiate", LR_AUTH_NEGOTIATE},
-                        {"ntlm", LR_AUTH_NTLM},
-                        {"digest_ie", LR_AUTH_DIGEST_IE},
-                        {"ntlm_wb", LR_AUTH_NTLM_WB},
-                        {"any", LR_AUTH_ANY}};
+} PROXYAUTHMETHODS[] = {
+    {"none", LR_AUTH_NONE},
+    {"basic", LR_AUTH_BASIC},
+    {"digest", LR_AUTH_DIGEST},
+    {"negotiate", LR_AUTH_NEGOTIATE},
+    {"ntlm", LR_AUTH_NTLM},
+    {"digest_ie", LR_AUTH_DIGEST_IE},
+    {"ntlm_wb", LR_AUTH_NTLM_WB},
+    {"any", LR_AUTH_ANY}};
 
-static LrAuth string_to_proxy_auth_methods(const std::string & proxy_auth_method_str) noexcept
-{
+static LrAuth string_to_proxy_auth_methods(const std::string & proxy_auth_method_str) noexcept {
     auto proxy_auth_methods = LR_AUTH_ANY;
     for (auto & auth : PROXYAUTHMETHODS) {
         if (proxy_auth_method_str == auth.name) {
@@ -527,11 +527,12 @@ std::string Repo::get_metadata_path(const std::string & metadata_type) {
 
 std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_base() {
     std::unique_ptr<LrHandle> h(lr_handle_init());
-    std::vector<const char *> dlist = {MD_FILENAME_PRIMARY,
-                                       MD_FILENAME_FILELISTS,
-                                       MD_FILENAME_PRESTODELTA,
-                                       MD_FILENAME_GROUP_GZ,
-                                       MD_FILENAME_UPDATEINFO};
+    std::vector<const char *> dlist = {
+        MD_FILENAME_PRIMARY,
+        MD_FILENAME_FILELISTS,
+        MD_FILENAME_PRESTODELTA,
+        MD_FILENAME_GROUP_GZ,
+        MD_FILENAME_UPDATEINFO};
 
 #ifdef MODULEMD
     dlist.push_back(MD_FILENAME_MODULES);
@@ -997,7 +998,7 @@ std::unique_ptr<LrResult> Repo::Impl::lr_handle_perform(
         if (callbacks && progressFunc)
             callbacks->start(
                 !config.name().get_value().empty() ? config.name().get_value().c_str()
-                    : (!id.empty() ? id.c_str() : "unknown"));
+                                                   : (!id.empty() ? id.c_str() : "unknown"));
 
         GError * err_p{nullptr};
         result.reset(lr_result_init());
@@ -1464,7 +1465,7 @@ void Repo::Impl::download_url(const char * url, int fd) {
     if (callbacks)
         callbacks->start(
             !config.name().get_value().empty() ? config.name().get_value().c_str()
-                : (!id.empty() ? id.c_str() : "unknown"));
+                                               : (!id.empty() ? id.c_str() : "unknown"));
 
     GError * err_p{nullptr};
     lr_download_url(get_cached_handle(), url, fd, &err_p);
