@@ -78,12 +78,13 @@ void StderrLogger::write(time_t, pid_t, Level, const std::string & message) noex
     }
 }
 
-Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session_configuration, std::string object_path)
+Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session_configuration, std::string object_path, std::string sender)
     : connection(connection)
     , base(std::make_unique<libdnf::Base>())
     , goal(base.get())
     , session_configuration(session_configuration)
-    , object_path(object_path) {
+    , object_path(object_path)
+    , sender(sender) {
 
     // adjust base.config from session_configuration
     auto & config = base->get_config();

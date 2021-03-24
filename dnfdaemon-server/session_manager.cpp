@@ -109,7 +109,7 @@ void SessionManager::open_session(sdbus::MethodCall call) {
         {
             std::lock_guard<std::mutex> lock(sessions_mutex);
             sessions[std::move(sender)].emplace(
-                sessionid, std::make_unique<Session>(connection, std::move(configuration), sessionid));
+                sessionid, std::make_unique<Session>(connection, std::move(configuration), sessionid, sender));
         }
 
         auto reply = call.createReply();

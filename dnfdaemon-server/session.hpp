@@ -49,7 +49,7 @@ protected:
 
 class Session {
 public:
-    Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session_configuration, std::string object_path);
+    Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session_configuration, std::string object_path, std::string sender);
     ~Session();
 
     template <typename ItemType>
@@ -67,6 +67,7 @@ public:
     ThreadsManager & get_threads_manager() { return threads_manager; };
     sdbus::IObject * get_dbus_object() { return dbus_object.get(); };
     libdnf::Goal & get_goal() { return goal; };
+    std::string get_sender() const { return sender; };
 
     bool check_authorization(const std::string & actionid, const std::string & sender);
     void fill_sack();
@@ -82,6 +83,7 @@ private:
     ThreadsManager threads_manager;
     std::atomic<dnfdaemon::RepoStatus> repositories_status{dnfdaemon::RepoStatus::NOT_READY};
     std::unique_ptr<sdbus::IObject> dbus_object;
+    std::string sender;
 };
 
 #endif
