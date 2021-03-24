@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_solv_query.hpp"
 
+#include "test/libdnf/utils.hpp"
+
 #include "libdnf/rpm/package_set.hpp"
 #include "libdnf/rpm/solv_query.hpp"
-#include "test/libdnf/utils.hpp"
 
 #include <filesystem>
 #include <set>
@@ -65,7 +66,12 @@ void RpmSolvQueryTest::test_ifilter_name() {
     libdnf::rpm::SolvQuery query2(sack);
     query2.ifilter_name(libdnf::sack::QueryCmp::GLOB, {"pkg*"});
 
-    expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
+    expected = {
+        "pkg-0:1.2-3.src",
+        "pkg-0:1.2-3.x86_64",
+        "pkg-libs-0:1.2-3.x86_64",
+        "pkg-libs-1:1.2-4.x86_64",
+        "pkg-libs-1:1.3-4.x86_64"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
 
     // ---
@@ -127,9 +133,7 @@ void RpmSolvQueryTest::test_ifilter_name() {
 
     // unsupported comparison type (operator)
     CPPUNIT_ASSERT_THROW(
-        query8.ifilter_name(libdnf::sack::QueryCmp::GT, {"pkg"}),
-        libdnf::rpm::SolvQuery::NotSupportedCmpType
-    );
+        query8.ifilter_name(libdnf::sack::QueryCmp::GT, {"pkg"}), libdnf::rpm::SolvQuery::NotSupportedCmpType);
 
     // ---
 
@@ -137,7 +141,12 @@ void RpmSolvQueryTest::test_ifilter_name() {
     libdnf::rpm::SolvQuery query9(sack);
     query9.ifilter_name(libdnf::sack::QueryCmp::EQ, {"pkg", "pkg-libs"});
 
-    expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
+    expected = {
+        "pkg-0:1.2-3.src",
+        "pkg-0:1.2-3.x86_64",
+        "pkg-libs-0:1.2-3.x86_64",
+        "pkg-libs-1:1.2-4.x86_64",
+        "pkg-libs-1:1.3-4.x86_64"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query9));
 }
 
@@ -207,7 +216,8 @@ void RpmSolvQueryTest::test_ifilter_version() {
     libdnf::rpm::SolvQuery query1(sack);
     query1.ifilter_version(libdnf::sack::QueryCmp::EQ, {"1.2"});
 
-    std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64"};
+    std::vector<std::string> expected = {
+        "pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 
     // ---
@@ -280,13 +290,12 @@ void RpmSolvQueryTest::test_ifilter_requires() {
 
 void RpmSolvQueryTest::test_ifilter_chain() {
     libdnf::rpm::SolvQuery query(sack);
-    query \
-        .ifilter_name(libdnf::sack::QueryCmp::EQ, {"pkg"}) \
-        .ifilter_epoch(libdnf::sack::QueryCmp::EQ, {"0"}) \
-        .ifilter_version(libdnf::sack::QueryCmp::EQ, {"1.2"}) \
-        .ifilter_release(libdnf::sack::QueryCmp::EQ, {"3"}) \
-        .ifilter_arch(libdnf::sack::QueryCmp::EQ, {"x86_64"}) \
-        .ifilter_provides(libdnf::sack::QueryCmp::NEQ, {"foo"}) \
+    query.ifilter_name(libdnf::sack::QueryCmp::EQ, {"pkg"})
+        .ifilter_epoch(libdnf::sack::QueryCmp::EQ, {"0"})
+        .ifilter_version(libdnf::sack::QueryCmp::EQ, {"1.2"})
+        .ifilter_release(libdnf::sack::QueryCmp::EQ, {"3"})
+        .ifilter_arch(libdnf::sack::QueryCmp::EQ, {"x86_64"})
+        .ifilter_provides(libdnf::sack::QueryCmp::NEQ, {"foo"})
         .ifilter_requires(libdnf::sack::QueryCmp::NEQ, {"foo"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
@@ -372,7 +381,12 @@ void RpmSolvQueryTest::test_update() {
     CPPUNIT_ASSERT_EQUAL(5LU, query1.size());
 
     // check the resulting NEVRAs
-    std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
+    std::vector<std::string> expected = {
+        "pkg-0:1.2-3.src",
+        "pkg-0:1.2-3.x86_64",
+        "pkg-libs-0:1.2-3.x86_64",
+        "pkg-libs-1:1.2-4.x86_64",
+        "pkg-libs-1:1.3-4.x86_64"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 }
 
