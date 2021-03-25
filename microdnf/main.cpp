@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "commands/advisory/advisory.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
 #include "commands/groupinfo/groupinfo.hpp"
@@ -225,6 +226,7 @@ int main(int argc, char * argv[]) {
     context.commands.push_back(std::make_unique<microdnf::CmdRepolist>());
     context.commands.push_back(std::make_unique<microdnf::CmdRepoquery>());
     context.commands.push_back(std::make_unique<microdnf::CmdUpgrade>());
+    context.commands.push_back(std::make_unique<microdnf::CmdAdvisory>());
 
     // Parse command line arguments
     bool help_printed = microdnf::parse_args(context, argc, argv);
