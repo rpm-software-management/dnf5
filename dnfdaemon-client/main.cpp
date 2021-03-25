@@ -19,6 +19,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
+#include "commands/install/install.hpp"
 #include "context.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
@@ -45,6 +46,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     dnfdaemon_client->set_description("Dnfdaemon-client is a program for maintaining packages.");
     dnfdaemon_client->set_commands_help_header("List of commands:");
     dnfdaemon_client->set_named_args_help_header("Global arguments:");
+
     auto help = ctx.arg_parser.add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
@@ -63,16 +65,24 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     verbose->set_short_name('v');
     verbose->set_long_name("verbose");
     verbose->set_short_description("increase output verbosity");
-
-    verbose->set_parse_hook_func([&ctx](
-                                  [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
-                                  [[maybe_unused]] const char * option,
-                                  [[maybe_unused]] const char * value) {
-        ctx.verbose = true;
-        return true;
-    });
-
+    verbose->set_const_value("true");
+    verbose->link_value(ctx.verbose.get());
     dnfdaemon_client->register_named_arg(verbose);
+
+    auto assume_yes = ctx.arg_parser.add_new_named_arg("assumeyes");
+    assume_yes->set_long_name("assumeyes");
+    assume_yes->set_short_name('y');
+    assume_yes->set_short_description("automatically answer yes for all questions");
+    assume_yes->set_const_value("true");
+    assume_yes->link_value(ctx.assume_yes.get());
+    dnfdaemon_client->register_named_arg(assume_yes);
+
+    auto assume_no = ctx.arg_parser.add_new_named_arg("assumeno");
+    assume_no->set_long_name("assumeno");
+    assume_no->set_short_description("automatically answer no for all questions");
+    assume_no->set_const_value("true");
+    assume_no->link_value(ctx.assume_no.get());
+    dnfdaemon_client->register_named_arg(assume_no);
 
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
@@ -138,6 +148,7 @@ int main(int argc, char * argv[]) {
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repoinfo"));
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repolist"));
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepoquery>());
+    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdInstall>());
 
     // Parse command line arguments
     bool help_printed = dnfdaemon::client::parse_args(context, argc, argv);
@@ -151,7 +162,7 @@ int main(int argc, char * argv[]) {
     }
 
     // initialize server session using command line arguments
-    context.init_session(context.selected_command);
+    context.init_session();
 
     // Preconfigure selected command
     context.selected_command->pre_configure(context);

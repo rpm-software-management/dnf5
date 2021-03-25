@@ -26,6 +26,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/argument_parser.hpp>
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf/base/base.hpp>
+#include <libdnf/conf/config.hpp>
 #include <libdnf/rpm/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -77,12 +78,16 @@ public:
     void select_command(Command * cmd) { selected_command = cmd; }
 
     std::vector<std::pair<std::string, std::string>> setopts;
-    bool verbose = false;
     std::vector<std::unique_ptr<Command>> commands;
     Command * selected_command{nullptr};
     libdnf::cli::ArgumentParser arg_parser;
     /// proxy to dnfdaemon session
     std::unique_ptr<sdbus::IProxy> session_proxy;
+
+    // global command line arguments
+    std::unique_ptr<libdnf::OptionBool> verbose = std::make_unique<libdnf::OptionBool>(false);
+    std::unique_ptr<libdnf::OptionBool> assume_yes = std::make_unique<libdnf::OptionBool>(false);
+    std::unique_ptr<libdnf::OptionBool> assume_no = std::make_unique<libdnf::OptionBool>(false);
 
 private:
     /// system d-bus connection
@@ -92,6 +97,9 @@ private:
     dnfdaemon::RepoStatus repositories_status;
     std::unique_ptr<RepoCB> repocb;
 };
+
+/// Asks the user for confirmation. The default answer is taken from the commandline options
+bool userconfirm(Context & ctx);
 
 }  // namespace dnfdaemon::client
 

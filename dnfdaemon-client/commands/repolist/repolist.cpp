@@ -208,7 +208,7 @@ void CmdRepolist::run(Context & ctx) {
         for (auto & raw_repo : repositories) {
             RepoDbus repo(raw_repo);
             auto repo_info = libdnf::cli::output::RepoInfo();
-            repo_info.add_repo(repo, ctx.verbose, ctx.verbose);
+            repo_info.add_repo(repo, ctx.verbose->get_value(), ctx.verbose->get_value());
             repo_info.print();
             std::cout << std::endl;
         }
