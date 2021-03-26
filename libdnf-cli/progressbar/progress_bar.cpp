@@ -40,7 +40,11 @@ void ProgressBar::set_ticks(int64_t value) {
     if (total_ticks >= 0) {
         new_ticks = std::min(new_ticks, total_ticks);
     }
-    current_speed_window_ticks += new_ticks - ticks;
+    if (new_ticks >= ticks) {
+        current_speed_window_ticks += new_ticks - ticks;
+    } else {
+        current_speed_window_ticks = 0;
+    }
     ticks = new_ticks;
 }
 
