@@ -32,6 +32,27 @@ ProgressBar::ProgressBar(int64_t total_ticks, const std::string & description)
     , description{description} {}
 
 
+void ProgressBar::reset() {
+    ticks = 0;
+    total_ticks = 0;
+    number = 0;
+    total = 0;
+    description = "";
+    messages.clear();
+    state = ProgressBarState::READY;
+    percent_done = 0;
+    elapsed_seconds = 0;
+    remaining_seconds = 0;
+    average_speed = 0;
+    auto_finish = true;
+    begin = std::chrono::system_clock::from_time_t(0);
+    end = std::chrono::system_clock::from_time_t(0);
+    current_speed_window_start = std::chrono::system_clock::now();
+    current_speed = 0;
+    current_speed_window_ticks = 0;
+}
+
+
 void ProgressBar::set_ticks(int64_t value) {
     if (is_finished()) {
         return;

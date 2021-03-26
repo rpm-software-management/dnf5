@@ -55,6 +55,8 @@ public:
     explicit ProgressBar(int64_t total_ticks, const std::string & description);
     virtual ~ProgressBar() = default;
 
+    void reset();
+
     // ticks
     int64_t get_ticks() const noexcept { return ticks; }
     void set_ticks(int64_t value);
