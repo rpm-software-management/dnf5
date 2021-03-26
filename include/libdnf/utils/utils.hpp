@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_UTILS_HPP
 #define LIBDNF_UTILS_UTILS_HPP
 
+#include "libdnf/conf/config_main.hpp"
+
 #include <cstdint>
 #include <type_traits>
 
@@ -70,6 +72,20 @@ enum class GoalProblem : uint32_t {
     NOT_FOUND_IN_REPOSITORIES = (1 << 5)
 };
 
+enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
+
+struct GoalSettings {
+public:
+    GoalSettings() = default;
+    bool get_strict(libdnf::ConfigMain & cfg_main);
+    bool get_best(libdnf::ConfigMain & cfg_main);
+    bool get_clean_requirements_on_remove(libdnf::ConfigMain & cfg_main);
+
+    GoalSetting strict{GoalSetting::AUTO};
+    GoalSetting best{GoalSetting::AUTO};
+    GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
+};
+
 inline GoalProblem operator|(GoalProblem lhs, GoalProblem rhs) {
     return static_cast<GoalProblem>(
         static_cast<std::underlying_type<GoalProblem>::type>(lhs) |
@@ -87,6 +103,54 @@ inline GoalProblem operator&(GoalProblem lhs, GoalProblem rhs) {
     return static_cast<GoalProblem>(
         static_cast<std::underlying_type<GoalProblem>::type>(lhs) &
         static_cast<std::underlying_type<GoalProblem>::type>(rhs));
+}
+
+inline bool GoalSettings::get_strict(libdnf::ConfigMain & cfg_main) {
+    bool ret;
+    switch (strict) {
+        case GoalSetting::AUTO:
+            ret = cfg_main.strict().get_value();
+            break;
+        case GoalSetting::SET_TRUE:
+            ret = true;
+            break;
+        case GoalSetting::SET_FALSE:
+            ret = false;
+            break;
+    }
+    return ret;
+}
+
+inline bool GoalSettings::get_best(libdnf::ConfigMain & cfg_main) {
+    bool ret;
+    switch (best) {
+        case GoalSetting::AUTO:
+            ret = cfg_main.best().get_value();
+            break;
+        case GoalSetting::SET_TRUE:
+            ret = true;
+            break;
+        case GoalSetting::SET_FALSE:
+            ret = false;
+            break;
+    }
+    return ret;
+}
+
+inline bool GoalSettings::get_clean_requirements_on_remove(libdnf::ConfigMain & cfg_main) {
+    bool ret;
+    switch (clean_requirements_on_remove) {
+        case GoalSetting::AUTO:
+            ret = cfg_main.clean_requirements_on_remove().get_value();
+            break;
+        case GoalSetting::SET_TRUE:
+            ret = true;
+            break;
+        case GoalSetting::SET_FALSE:
+            ret = false;
+            break;
+    }
+    return ret;
 }
 
 

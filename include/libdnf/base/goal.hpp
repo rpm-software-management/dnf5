@@ -48,21 +48,35 @@ public:
     void add_rpm_install(
         const std::string & spec,
         const std::vector<std::string> & repo_ids,
-        bool strict,
-        const std::vector<libdnf::rpm::Nevra::Form> & forms);
+        const std::vector<libdnf::rpm::Nevra::Form> & forms,
+        libdnf::GoalSettings settings = libdnf::GoalSettings());
     /// Prevent reinstallation by adding of already installed packages with the same NEVRA
-    void add_rpm_install(const libdnf::rpm::Package & rpm_package, bool strict);
+    void add_rpm_install(
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
     /// Prevent reinstallation by adding of already installed packages with the same NEVRA
-    void add_rpm_install(const libdnf::rpm::PackageSet & package_set, bool strict);
-    void add_rpm_install_or_reinstall(const libdnf::rpm::Package & rpm_package, bool strict);
-    void add_rpm_install_or_reinstall(const libdnf::rpm::PackageSet & package_set, bool strict);
+    void add_rpm_install(
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_install_or_reinstall(
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_install_or_reinstall(
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_remove(
-        const std::string & spec, const std::string & repo_id, const std::vector<libdnf::rpm::Nevra::Form> & forms);
-    void add_rpm_remove(const libdnf::rpm::Package & rpm_package);
-    void add_rpm_remove(const libdnf::rpm::PackageSet & package_set);
-    void add_rpm_upgrade(const std::string & spec, const std::vector<std::string> & repo_ids);
-    void add_rpm_upgrade(const libdnf::rpm::Package & rpm_package);
-    void add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set);
+        const std::string & spec,
+        const std::string & repo_id,
+        const std::vector<libdnf::rpm::Nevra::Form> & forms,
+        libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_remove(
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_remove(
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_upgrade(
+        const std::string & spec,
+        const std::vector<std::string> & repo_ids,
+        libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_upgrade(
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_upgrade(
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
 
     libdnf::GoalProblem resolve(bool allow_erasing);
 

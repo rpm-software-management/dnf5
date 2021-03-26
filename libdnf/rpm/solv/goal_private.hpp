@@ -46,10 +46,10 @@ public:
     void set_installonly(const std::vector<std::string> & installonly_names);
     void set_installonly_limit(unsigned int limit) { installonly_limit = limit; };
 
-    void add_install(IdQueue & queue, bool strict);
+    void add_install(IdQueue & queue, bool strict, bool best);
     void add_remove(const IdQueue & queue, bool clean_deps);
     void add_remove(const SolvMap & solv_map, bool clean_deps);
-    void add_upgrade(IdQueue & queue);
+    void add_upgrade(IdQueue & queue, bool best, bool clean_deps);
 
     libdnf::GoalProblem resolve();
 
@@ -93,7 +93,6 @@ public:
     void set_allow_downgrade(bool value) { allow_downgrade = value; }
     void set_allow_erasing(bool value) { allow_erasing = value; }
     void set_allow_vendor_change(bool value) { allow_vendor_change = value; }
-    void set_force_best(bool value) { force_best = value; }
     void set_install_weak_deps(bool value) { install_weak_deps = value; }
     void set_remove_solver_weak(bool value) { remove_solver_weak = value; }
     // TODO(jmracek)
@@ -117,7 +116,6 @@ private:
     bool allow_downgrade{true};
     bool allow_erasing{false};
     bool allow_vendor_change{true};
-    bool force_best{false};
     bool install_weak_deps{true};
     bool remove_solver_weak{false};
 
@@ -133,7 +131,6 @@ inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
     , allow_downgrade(src.allow_downgrade)
     , allow_erasing(src.allow_erasing)
     , allow_vendor_change(src.allow_vendor_change)
-    , force_best(src.force_best)
     , install_weak_deps(src.install_weak_deps)
     , remove_solver_weak(src.remove_solver_weak) {}
 
@@ -152,11 +149,13 @@ inline void GoalPrivate::set_installonly(const std::vector<std::string> & instal
     }
 }
 
-inline void GoalPrivate::add_install(IdQueue & queue, bool strict) {
+inline void GoalPrivate::add_install(IdQueue & queue, bool strict, bool best) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
     staging.push_back(
-        SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK), what);
+        SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
+            (best ? SOLVER_FORCEBEST : 0),
+        what);
 }
 
 inline void GoalPrivate::add_remove(const IdQueue & queue, bool clean_deps) {
@@ -173,10 +172,13 @@ inline void GoalPrivate::add_remove(const SolvMap & solv_map, bool clean_deps) {
     }
 }
 
-inline void GoalPrivate::add_upgrade(IdQueue & queue) {
+inline void GoalPrivate::add_upgrade(IdQueue & queue, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
-    staging.push_back(SOLVER_UPDATE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR, what);
+    staging.push_back(
+        SOLVER_UPDATE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (best ? SOLVER_FORCEBEST : 0) |
+            (clean_deps ? SOLVER_CLEANDEPS : 0),
+        what);
 }
 
 }  // namespace libdnf::rpm::solv

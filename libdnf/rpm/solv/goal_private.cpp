@@ -58,18 +58,9 @@ void construct_job(
     Pool * pool,
     libdnf::rpm::solv::IdQueue & job,
     const libdnf::rpm::solv::IdQueue & install_only,
-    bool force_best,
     bool allow_erasing,
     const libdnf::rpm::solv::SolvMap * protected_packages,
     libdnf::rpm::PackageId protected_kernel) {
-    auto elements = job.data();
-    // apply forcebest
-    if (force_best) {
-        for (int i = 0; i < job.size(); i += 2) {
-            elements[i] |= SOLVER_FORCEBEST;
-        }
-    }
-
     // turn off implicit obsoletes for installonly packages
     for (int i = 0; i < install_only.size(); ++i) {
         job.push_back(SOLVER_MULTIVERSION | SOLVER_SOLVABLE_PROVIDES, install_only[i]);
@@ -287,8 +278,7 @@ namespace libdnf::rpm::solv {
 
 libdnf::GoalProblem GoalPrivate::resolve() {
     IdQueue job(staging);
-    construct_job(
-        pool, job, installonly, force_best, allow_erasing, protected_packages.get(), protected_running_kernel);
+    construct_job(pool, job, installonly, allow_erasing, protected_packages.get(), protected_running_kernel);
 
     /* apply the excludes */
     //dnf_sack_recompute_considered(sack);

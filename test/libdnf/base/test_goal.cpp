@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_goal.hpp"
 
-#include "libdnf/base/goal.hpp"
 #include "test/libdnf/utils.hpp"
+
+#include "libdnf/base/goal.hpp"
 
 #include <libdnf/rpm/solv_query.hpp>
 
@@ -35,7 +36,7 @@ void BaseGoalTest::setUp() {
 
 void BaseGoalTest::test_install() {
     libdnf::Goal goal(base.get());
-    goal.add_rpm_install("pkg", {}, true, {});
+    goal.add_rpm_install("pkg", {}, {});
     goal.resolve(false);
     auto install_set = goal.list_rpm_installs();
     auto reinstall_set = goal.list_rpm_reinstalls();
@@ -68,7 +69,7 @@ void BaseGoalTest::test_install_from_cmdline() {
 
     // install the command-line package
     libdnf::Goal goal(base.get());
-    goal.add_rpm_install(cmdline_pkg, true);
+    goal.add_rpm_install(cmdline_pkg);
 
     // resolve the goal and read results
     goal.resolve(false);
@@ -130,7 +131,7 @@ void BaseGoalTest::test_install_installed_pkg() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
 
     libdnf::Goal goal(base.get());
-    goal.add_rpm_install(query, true);
+    goal.add_rpm_install(query);
 
     goal.resolve(false);
     auto install_set = goal.list_rpm_installs();
@@ -162,7 +163,7 @@ void BaseGoalTest::test_install_or_reinstall() {
     libdnf::rpm::SolvQuery query(&(base->get_rpm_solv_sack()));
     query.ifilter_available().ifilter_nevra(libdnf::sack::QueryCmp::EQ, {"cmdline-0:1.2-3.noarch"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
-    goal.add_rpm_install_or_reinstall(query, true);
+    goal.add_rpm_install_or_reinstall(query);
     goal.resolve(false);
     auto install_set = goal.list_rpm_installs();
     auto reinstall_set = goal.list_rpm_reinstalls();
