@@ -311,6 +311,12 @@ void Goal::add_rpm_upgrade(
         std::make_tuple(spec, repo_ids, settings.get_best(p_impl->base->get_config()), clean_requirements_on_remove));
 }
 
+void Goal::add_rpm_upgrade(libdnf::GoalSettings settings) {
+    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+    p_impl->rpm_ids.push_back(
+        std::make_tuple(Action::UPGRADE_ALL, libdnf::rpm::solv::IdQueue(), false, settings.get_best(p_impl->base->get_config()), clean_requirements_on_remove));
+}
+
 void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings) {
     if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
         throw UsedDifferentSack();
@@ -552,6 +558,15 @@ void Goal::Impl::add_rpms_to_goal() {
             case Action::UPGRADE:
                 rpm_goal.add_upgrade(ids, best, clean_requirements_on_remove);
                 break;
+            case Action::UPGRADE_ALL: {
+                libdnf::rpm::SolvQuery query(&sack);
+                libdnf::rpm::solv::IdQueue upgrade_ids;
+                for (auto package_id : *query.p_impl) {
+                    //  TODO(jmracek)  report already installed nevra
+                    upgrade_ids.push_back(package_id.id);
+                }
+                rpm_goal.add_upgrade(upgrade_ids, best, clean_requirements_on_remove);
+            } break;
             case Action::REMOVE:
                 rpm_goal.add_remove(ids, clean_requirements_on_remove);
                 break;

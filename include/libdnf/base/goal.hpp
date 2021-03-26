@@ -40,7 +40,7 @@ public:
         const char * get_description() const noexcept override { return "Goal exception"; }
     };
 
-    enum class Action { INSTALL, INSTALL_OR_REINSTALL, UPGRADE, REMOVE };
+    enum class Action { INSTALL, INSTALL_OR_REINSTALL, UPGRADE, UPGRADE_ALL, REMOVE };
 
     explicit Goal(Base * base);
     ~Goal();
@@ -73,6 +73,7 @@ public:
         const std::string & spec,
         const std::vector<std::string> & repo_ids,
         libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_upgrade(libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_upgrade(
         const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_upgrade(
