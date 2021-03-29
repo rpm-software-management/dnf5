@@ -377,6 +377,68 @@ void RpmSolvQueryTest::test_ifilter_requires() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
 }
 
+void RpmSolvQueryTest::test_ifilter_advisories() {
+    // Run setUp again to have a clean sack (without solv-repo1)
+    RepoFixture::setUp();
+    add_repo_repomd("repomd-repo1");
+    auto & advisory_sack = base->get_rpm_advisory_sack();
+
+    {
+        // Test QueryCmp::EQ with equal advisory pkg
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("DNF-2019-1");
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);
+        std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+
+    {
+        // Test QueryCmp::GT with older advisory pkg
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("PKG-OLDER");
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::GT);
+        std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+
+    {
+        // Test QueryCmp::LTE with older advisory pkg
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("PKG-OLDER");
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::LTE);
+        std::vector<std::string> expected = {};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+
+    {
+        // Test QueryCmp::LT with newer advisory pkg
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("PKG-NEWER");
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::LT);
+        std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+
+    {
+        // Test QueryCmp::GTE with newer advisory pkg
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("PKG-NEWER");
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::GTE);
+        std::vector<std::string> expected = {};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+
+    {
+        // Test QueryCmp::EQ with older and newer advisory pkg
+        libdnf::advisory::AdvisoryQuery adv_query =
+            advisory_sack.new_query().ifilter_name("PKG-*", libdnf::sack::QueryCmp::IGLOB);
+        ;
+        libdnf::rpm::SolvQuery query(sack);
+        query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);
+        std::vector<std::string> expected = {};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    }
+}
 
 void RpmSolvQueryTest::test_ifilter_chain() {
     libdnf::rpm::SolvQuery query(sack);

@@ -21,6 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/package_private.hpp"
 #include "solv_query_impl.hpp"
 
+#include "libdnf/advisory/advisory_package_private.hpp"
+#include "libdnf/advisory/advisory_query.hpp"
+
 extern "C" {
 #include <solv/evr.h>
 #include <solv/selection.h>
@@ -1813,6 +1816,75 @@ SolvQuery & SolvQuery::ifilter_supplements(const std::vector<std::string> & patt
 
 SolvQuery & SolvQuery::ifilter_supplements(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, package_set);
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_advisories(
+    const libdnf::advisory::AdvisoryQuery & advisory_query, libdnf::sack::QueryCmp cmp_type) {
+    SolvSack * sack = get_sack();
+    Pool * pool = sack->p_impl->get_pool();
+
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
+    std::vector<libdnf::advisory::AdvisoryPackage> adv_pkgs = advisory_query.get_sorted_advisory_packages();
+    auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
+
+    switch (cmp_type) {
+        case libdnf::sack::QueryCmp::EQ: {
+            // Special faster case for EQ (we can compare whole NEVRA in std::lower_bound)
+            for (auto & adv_pkg : adv_pkgs) {
+                auto low = std::lower_bound(
+                    sorted_solvables.begin(),
+                    sorted_solvables.end(),
+                    *(adv_pkg.p_impl.get()),
+                    libdnf::advisory::AdvisoryPackage::Impl::nevra_compare_lower_solvable);
+                while (low != sorted_solvables.end() && (*low)->name == adv_pkg.p_impl.get()->get_name_id() &&
+                       (*low)->arch == adv_pkg.p_impl.get()->get_arch_id() &&
+                       (*low)->evr == adv_pkg.p_impl.get()->get_evr_id()) {
+                    filter_result.add_unsafe(pool_solvable2id(pool, *low));
+                    ++low;
+                }
+            }
+        } break;
+        case libdnf::sack::QueryCmp::GTE:
+        case libdnf::sack::QueryCmp::LTE:
+        case libdnf::sack::QueryCmp::LT:
+        case libdnf::sack::QueryCmp::GT: {
+            for (auto & adv_pkg : adv_pkgs) {
+                auto low = std::lower_bound(
+                    sorted_solvables.begin(),
+                    sorted_solvables.end(),
+                    *(adv_pkg.p_impl.get()),
+                    libdnf::advisory::AdvisoryPackage::Impl::name_arch_compare_lower_solvable);
+                while (low != sorted_solvables.end() && (*low)->name == adv_pkg.p_impl.get()->get_name_id() &&
+                       (*low)->arch == adv_pkg.p_impl.get()->get_arch_id()) {
+                    int libsolv_cmp =
+                        pool_evrcmp(pool, (*low)->evr, adv_pkg.p_impl.get()->get_evr_id(), EVRCMP_COMPARE);
+                    if (((libsolv_cmp > 0) && ((cmp_type & sack::QueryCmp::GT) == sack::QueryCmp::GT)) ||
+                        ((libsolv_cmp < 0) && ((cmp_type & sack::QueryCmp::LT) == sack::QueryCmp::LT)) ||
+                        ((libsolv_cmp == 0) && ((cmp_type & sack::QueryCmp::EQ) == sack::QueryCmp::EQ))) {
+                        filter_result.add_unsafe(solv::get_package_id(pool, *low));
+                    }
+                    ++low;
+                }
+            }
+        } break;
+        default:
+            throw NotSupportedCmpType("Unsupported CmpType");
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        *p_impl -= filter_result;
+    } else {
+        *p_impl &= filter_result;
+    }
+
     return *this;
 }
 

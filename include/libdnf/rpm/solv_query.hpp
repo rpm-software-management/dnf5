@@ -367,6 +367,13 @@ public:
     SolvQuery & ifilter_supplements(
         const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
+    /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GT, GTE, LT, LTE
+    ///
+    /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const DnfPackageSet *pset) - cmp_type = HY_PKG_ADVISORY/_BUG/_CVE/_SEVERITY/_TYPE
+    SolvQuery & ifilter_advisories(
+        const libdnf::advisory::AdvisoryQuery & advisory_query,
+        libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+
     SolvQuery & ifilter_installed();
 
     SolvQuery & ifilter_available();
