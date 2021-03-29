@@ -50,6 +50,7 @@ public:
     void add_remove(const IdQueue & queue, bool clean_deps);
     void add_remove(const SolvMap & solv_map, bool clean_deps);
     void add_upgrade(IdQueue & queue, bool best, bool clean_deps);
+    void add_distro_sync(IdQueue & queue, bool strict, bool best, bool clean_deps);
 
     libdnf::GoalProblem resolve();
 
@@ -178,6 +179,15 @@ inline void GoalPrivate::add_upgrade(IdQueue & queue, bool best, bool clean_deps
     staging.push_back(
         SOLVER_UPDATE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (best ? SOLVER_FORCEBEST : 0) |
             (clean_deps ? SOLVER_CLEANDEPS : 0),
+        what);
+}
+
+inline void GoalPrivate::add_distro_sync(IdQueue & queue, bool strict, bool best, bool clean_deps) {
+    // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
+    Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
+    staging.push_back(
+        SOLVER_DISTUPGRADE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
+            (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
         what);
 }
 

@@ -156,7 +156,7 @@ public:
 
     void add_install_to_goal();
     void add_remove_to_goal();
-    void add_upgrades_to_goal();
+    void add_upgrades_distrosync_to_goal();
     void add_rpms_to_goal();
 
     std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
@@ -171,8 +171,9 @@ private:
         install_rpm_specs;
     /// <std::string spec, std::string repo_id, std::vector<libdnf::rpm::Nevra::Form> forms, bool clean_requirements_on_remove>
     std::vector<std::tuple<std::string, std::string, std::vector<libdnf::rpm::Nevra::Form>, bool>> remove_rpm_specs;
-    /// <std::string spec, std::vector<std::string> repo_ids, bool best, bool clean_requirements_on_remove>
-    std::vector<std::tuple<std::string, std::vector<std::string>, bool, bool>> upgrade_rpm_specs;
+    /// <libdnf::Goal::Action action, std::string spec, std::vector<std::string> repo_ids, bool strict, bool best, bool clean_requirements_on_remove>
+    std::vector<std::tuple<Action, std::string, std::vector<std::string>, bool, bool, bool>>
+        upgrade_distro_sync_rpm_specs;
     /// <libdnf::Goal::Action, rpm Ids, bool strict, bool best, bool clean_requirements_on_remove>
     std::vector<std::tuple<Action, libdnf::rpm::solv::IdQueue, bool, bool, bool>> rpm_ids;
 
@@ -307,14 +308,23 @@ void Goal::add_rpm_remove(const libdnf::rpm::PackageSet & package_set, libdnf::G
 void Goal::add_rpm_upgrade(
     const std::string & spec, const std::vector<std::string> & repo_ids, libdnf::GoalSettings settings) {
     bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    p_impl->upgrade_rpm_specs.push_back(
-        std::make_tuple(spec, repo_ids, settings.get_best(p_impl->base->get_config()), clean_requirements_on_remove));
+    p_impl->upgrade_distro_sync_rpm_specs.push_back(std::make_tuple(
+        Action::UPGRADE,
+        spec,
+        repo_ids,
+        false,
+        settings.get_best(p_impl->base->get_config()),
+        clean_requirements_on_remove));
 }
 
 void Goal::add_rpm_upgrade(libdnf::GoalSettings settings) {
     bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    p_impl->rpm_ids.push_back(
-        std::make_tuple(Action::UPGRADE_ALL, libdnf::rpm::solv::IdQueue(), false, settings.get_best(p_impl->base->get_config()), clean_requirements_on_remove));
+    p_impl->rpm_ids.push_back(std::make_tuple(
+        Action::UPGRADE_ALL,
+        libdnf::rpm::solv::IdQueue(),
+        false,
+        settings.get_best(p_impl->base->get_config()),
+        clean_requirements_on_remove));
 }
 
 void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings) {
@@ -346,6 +356,64 @@ void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set, libdnf::
         std::move(ids),
         false,
         settings.get_best(p_impl->base->get_config()),
+        clean_requirements_on_remove));
+}
+
+void Goal::add_rpm_distro_sync(
+    const std::string & spec, const std::vector<std::string> & repo_ids, libdnf::GoalSettings settings) {
+    auto & cfg_main = p_impl->base->get_config();
+    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+    p_impl->upgrade_distro_sync_rpm_specs.push_back(std::make_tuple(
+        Action::DISTRO_SYNC,
+        spec,
+        repo_ids,
+        settings.get_strict(cfg_main),
+        settings.get_best(cfg_main),
+        clean_requirements_on_remove));
+}
+
+void Goal::add_rpm_distro_sync(libdnf::GoalSettings settings) {
+    auto & cfg_main = p_impl->base->get_config();
+    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+    p_impl->rpm_ids.push_back(std::make_tuple(
+        Action::DISTRO_SYNC_ALL,
+        libdnf::rpm::solv::IdQueue(),
+        settings.get_strict(cfg_main),
+        settings.get_best(cfg_main),
+        clean_requirements_on_remove));
+}
+
+void Goal::add_rpm_distro_sync(const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings) {
+    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
+    libdnf::rpm::solv::IdQueue ids;
+    ids.push_back(rpm_package.get_id().id);
+    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+    auto & cfg_main = p_impl->base->get_config();
+    p_impl->rpm_ids.push_back(std::make_tuple(
+        Action::DISTRO_SYNC,
+        std::move(ids),
+        settings.get_strict(cfg_main),
+        settings.get_best(p_impl->base->get_config()),
+        clean_requirements_on_remove));
+}
+
+void Goal::add_rpm_distro_sync(const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings) {
+    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
+        throw UsedDifferentSack();
+    }
+    libdnf::rpm::solv::IdQueue ids;
+    for (auto package_id : *package_set.p_impl) {
+        ids.push_back(package_id.id);
+    }
+    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+    auto & cfg_main = p_impl->base->get_config();
+    p_impl->rpm_ids.push_back(std::make_tuple(
+        Action::DISTRO_SYNC,
+        std::move(ids),
+        settings.get_strict(cfg_main),
+        settings.get_best(cfg_main),
         clean_requirements_on_remove));
 }
 
@@ -567,6 +635,18 @@ void Goal::Impl::add_rpms_to_goal() {
                 }
                 rpm_goal.add_upgrade(upgrade_ids, best, clean_requirements_on_remove);
             } break;
+            case Action::DISTRO_SYNC:
+                rpm_goal.add_upgrade(ids, best, clean_requirements_on_remove);
+                break;
+            case Action::DISTRO_SYNC_ALL: {
+                libdnf::rpm::SolvQuery query(&sack);
+                libdnf::rpm::solv::IdQueue upgrade_ids;
+                for (auto package_id : *query.p_impl) {
+                    //  TODO(jmracek)  report already installed nevra
+                    upgrade_ids.push_back(package_id.id);
+                }
+                rpm_goal.add_upgrade(upgrade_ids, best, clean_requirements_on_remove);
+            } break;
             case Action::REMOVE:
                 rpm_goal.add_remove(ids, clean_requirements_on_remove);
                 break;
@@ -607,12 +687,12 @@ void Goal::Impl::add_remove_to_goal() {
     }
 }
 
-void Goal::Impl::add_upgrades_to_goal() {
+void Goal::Impl::add_upgrades_distrosync_to_goal() {
     auto & sack = base->get_rpm_solv_sack();
     libdnf::rpm::SolvQuery base_query(&sack);
     auto obsoletes = base->get_config().obsoletes().get_value();
     libdnf::rpm::solv::IdQueue tmp_queue;
-    for (auto & [spec, repo_ids, best, clean_requirements_on_remove] : upgrade_rpm_specs) {
+    for (auto & [action, spec, repo_ids, strict, best, clean_requirements_on_remove] : upgrade_distro_sync_rpm_specs) {
         libdnf::rpm::SolvQuery query(base_query);
         auto nevra_pair = query.resolve_pkg_spec(spec, false, true, true, true, false, {});
         if (!nevra_pair.first) {
@@ -649,7 +729,16 @@ void Goal::Impl::add_upgrades_to_goal() {
         // TODO(jmracek) q = q.available().union(installed_query.latest())
         // Required for a correct upgrade of installonly packages
         solv_map_to_id_queue(tmp_queue, *query.p_impl);
-        rpm_goal.add_upgrade(tmp_queue, best, clean_requirements_on_remove);
+        switch (action) {
+            case Action::UPGRADE:
+                rpm_goal.add_upgrade(tmp_queue, best, clean_requirements_on_remove);
+                break;
+            case Action::DISTRO_SYNC:
+                rpm_goal.add_distro_sync(tmp_queue, strict, best, clean_requirements_on_remove);
+                break;
+            default:
+                throw std::invalid_argument("Unsupported action");
+        }
 
 
         //         subj = dnf.subject.Subject(pkg_spec)
@@ -774,7 +863,7 @@ libdnf::GoalProblem Goal::resolve(bool allow_erasing) {
     // TODO(jmracek) Reset rpm_goal, setup rpm-goal flags according to conf, (allow downgrade), obsoletes, vendor, ...
     p_impl->add_install_to_goal();
     p_impl->add_remove_to_goal();
-    p_impl->add_upgrades_to_goal();
+    p_impl->add_upgrades_distrosync_to_goal();
     p_impl->add_rpms_to_goal();
 
     auto & cfg_main = p_impl->base->get_config();

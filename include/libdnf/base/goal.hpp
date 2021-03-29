@@ -40,7 +40,7 @@ public:
         const char * get_description() const noexcept override { return "Goal exception"; }
     };
 
-    enum class Action { INSTALL, INSTALL_OR_REINSTALL, UPGRADE, UPGRADE_ALL, REMOVE };
+    enum class Action { INSTALL, INSTALL_OR_REINSTALL, UPGRADE, UPGRADE_ALL, DISTRO_SYNC, DISTRO_SYNC_ALL, REMOVE };
 
     explicit Goal(Base * base);
     ~Goal();
@@ -77,6 +77,15 @@ public:
     void add_rpm_upgrade(
         const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_upgrade(
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_distro_sync(
+        const std::string & spec,
+        const std::vector<std::string> & repo_ids,
+        libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_distro_sync(libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_distro_sync(
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
+    void add_rpm_distro_sync(
         const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
 
     libdnf::GoalProblem resolve(bool allow_erasing);
