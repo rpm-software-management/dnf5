@@ -159,6 +159,12 @@ public:
     void add_upgrades_distrosync_to_goal();
     void add_rpms_to_goal();
 
+    void report_not_found(libdnf::Goal::Action action, bool strict, const std::string & pkg_spec,
+        bool with_nevra,
+        bool with_provides,
+        bool with_filenames,
+        const std::vector<libdnf::rpm::Nevra::Form> & forms);
+
     std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
         const rpm::solv::IdQueue & broken_installed);
 
@@ -177,11 +183,8 @@ private:
     /// <libdnf::Goal::Action, rpm Ids, bool strict, bool best, bool clean_requirements_on_remove>
     std::vector<std::tuple<Action, libdnf::rpm::solv::IdQueue, bool, bool, bool>> rpm_ids;
 
-    // Report data
-
-    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, std::string>> rpm_info;
-    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, std::string>> rpm_warning;
-    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, std::string>> rpm_error;
+    /// <libdnf::Goal::Action, libdnf::GoalProblem, bool strict, std::string spec>
+    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, bool, std::string>> rpm_goal_reports;
 
     rpm::solv::GoalPrivate rpm_goal;
 };
@@ -441,39 +444,7 @@ void Goal::Impl::add_install_to_goal() {
         }
         auto nevra_pair = query.resolve_pkg_spec(spec, false, true, with_provides, with_filenames, false, forms);
         if (!nevra_pair.first) {
-            libdnf::rpm::SolvQuery q(&sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
-            auto nevra_pair_reports =
-                query.resolve_pkg_spec(spec, false, true, with_provides, with_filenames, true, forms);
-            if (!nevra_pair_reports.first) {
-                // RPM was not excluded or there is no related srpm
-                if (strict) {
-                    rpm_error.emplace_back(
-                        std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND, spec));
-                } else {
-                    rpm_warning.emplace_back(
-                        std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND, spec));
-                }
-            } else {
-                q.ifilter_repoid(libdnf::sack::QueryCmp::NEQ, {"src"});
-                if (q.empty()) {
-                    if (strict) {
-                        rpm_error.emplace_back(
-                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::ONLY_SRC, spec));
-                    } else {
-                        rpm_warning.emplace_back(
-                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::ONLY_SRC, spec));
-                    }
-                } else {
-                    // TODO(jmracek) make difference between regular excludes and modular excludes
-                    if (strict) {
-                        rpm_error.emplace_back(
-                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::EXCLUDED, spec));
-                    } else {
-                        rpm_warning.emplace_back(
-                            std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::EXCLUDED, spec));
-                    }
-                }
-            }
+            report_not_found(libdnf::Goal::Action::INSTALL, strict, spec, true, with_provides, with_filenames, forms);
             continue;
         }
         bool has_just_name = nevra_pair.second.has_just_name();
@@ -493,13 +464,7 @@ void Goal::Impl::add_install_to_goal() {
                     query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, repo_ids);
                     query |= installed;
                     if (query.empty()) {
-                        if (strict) {
-                            rpm_error.emplace_back(std::make_tuple(
-                                libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, spec));
-                        } else {
-                            rpm_warning.emplace_back(std::make_tuple(
-                                libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, spec));
-                        }
+                        rpm_goal_reports.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, strict, spec));
                         // TODO(jmracek) store repositories
                         continue;
                     }
@@ -598,6 +563,29 @@ void Goal::Impl::add_install_to_goal() {
     }
 }
 
+void Goal::Impl::report_not_found(libdnf::Goal::Action action, bool strict, const std::string & pkg_spec,
+        bool with_nevra,
+        bool with_provides,
+        bool with_filenames,
+        const std::vector<libdnf::rpm::Nevra::Form> & forms) {
+    auto & sack = base->get_rpm_solv_sack();
+    libdnf::rpm::SolvQuery query(&sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
+    auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, false, with_nevra, with_provides, with_filenames, true, forms);
+    if (!nevra_pair_reports.first) {
+        // RPM was not excluded or there is no related srpm
+        rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_FOUND, strict, pkg_spec));
+        // TODO(jmracek) - report hints (icase, alternative providers)
+    } else {
+        query.ifilter_repoid(libdnf::sack::QueryCmp::NEQ, {"src"});
+        if (query.empty()) {
+            rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::ONLY_SRC, strict, pkg_spec));
+        } else {
+            // TODO(jmracek) make difference between regular excludes and modular excludes
+            rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::EXCLUDED, strict, pkg_spec));
+        }
+    }
+}
+
 void Goal::Impl::add_rpms_to_goal() {
     auto & sack = base->get_rpm_solv_sack();
     Pool * pool = sack.p_impl->get_pool();
@@ -672,7 +660,7 @@ void Goal::Impl::add_remove_to_goal() {
         }
         auto nevra_pair = query.resolve_pkg_spec(spec, false, true, with_provides, with_filenames, false, forms);
         if (!nevra_pair.first) {
-            // TODO(jmracek) no solution for the spec => mark result
+            report_not_found(libdnf::Goal::Action::REMOVE, false, spec, true, with_provides, with_filenames, forms);
             continue;
         }
 
@@ -696,8 +684,7 @@ void Goal::Impl::add_upgrades_distrosync_to_goal() {
         libdnf::rpm::SolvQuery query(base_query);
         auto nevra_pair = query.resolve_pkg_spec(spec, false, true, true, true, false, {});
         if (!nevra_pair.first) {
-            // TODO(jmracek) no solution for the spec => mark result
-            // dnf.exceptions.MarkingError(_('No match for argument: %s') % pkg_spec, pkg_spec)
+            report_not_found(action, strict, spec, true, true, true, {});
             continue;
         }
         // TODO(jmracek) Report when package is not installed
