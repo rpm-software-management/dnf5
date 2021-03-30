@@ -180,11 +180,11 @@ std::string Vars::substitute(const std::string & text) const {
             bracket = false;
         }
         auto it = std::find_if_not(
-            res.begin() + variable, res.end(), [](char c) { return std::isalnum(c) != 0 || c == '_'; });
+            res.begin() + static_cast<long>(variable), res.end(), [](char c) { return std::isalnum(c) != 0 || c == '_'; });
         if (bracket && it == res.end()) {
             break;
         }
-        auto past_variable = std::distance(res.begin(), it);
+        auto past_variable = static_cast<unsigned long>(std::distance(res.begin(), it));
         if (bracket && *it != '}') {
             start = res.find_first_of('$', past_variable);
             continue;
