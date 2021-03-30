@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of dnfdaemon-client: https://github.com/rpm-software-management/libdnf/
 
@@ -20,11 +20,11 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_CLIENT_CONTEXT_HPP
 #define DNFDAEMON_CLIENT_CONTEXT_HPP
 
+#include "callbacks.hpp"
 #include "commands/command.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <libdnf-cli/argument_parser.hpp>
-#include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/conf/config.hpp>
 #include <libdnf/rpm/repo.hpp>
@@ -44,23 +44,6 @@ using RepoSet = Set<RepoWeakPtr>;
 namespace dnfdaemon::client {
 
 constexpr const char * VERSION = "0.1.0";
-
-class RepoCB {
-public:
-    explicit RepoCB(sdbus::IProxy * proxy, std::string session_object_path);
-
-    void start(sdbus::Signal & signal);
-    void end(sdbus::Signal & signal);
-    void progress(sdbus::Signal & signal);
-
-private:
-    std::string session_object_path;
-    libdnf::cli::progressbar::DownloadProgressBar progress_bar{-1, ""};
-    std::size_t msg_lines{0};
-    void print_progress_bar();
-    bool signature_valid(sdbus::Signal & signal);
-};
-
 
 class Context {
 public:

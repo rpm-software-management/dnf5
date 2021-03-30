@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of dnfdaemon-client: https://github.com/rpm-software-management/libdnf/
 
@@ -20,7 +20,6 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
-#include <libdnf-cli/utils/tty.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -29,85 +28,15 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-
-RepoCB::RepoCB(sdbus::IProxy * proxy, std::string session_object_path) : session_object_path(session_object_path) {
-    // register signal handlers
-    proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START,
-        [this](sdbus::Signal & signal) -> void {
-            this->start(signal);
-        });
-    proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END,
-        [this](sdbus::Signal & signal) -> void {
-            this->end(signal);
-        });
-    proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS,
-        [this](sdbus::Signal & signal) -> void {
-            this->progress(signal);
-        });
-}
-
-void RepoCB::print_progress_bar() {
-    if (libdnf::cli::utils::tty::is_interactive()) {
-        std::cout << libdnf::cli::utils::tty::clear_line;
-        for (std::size_t i = 0; i < msg_lines; i++) {
-            std::cout << libdnf::cli::utils::tty::cursor_up << libdnf::cli::utils::tty::clear_line;
-        }
-        std::cout << "\r";
-    }
-    std::cout << progress_bar << std::flush;
-    msg_lines = progress_bar.get_messages().size();
-}
-
-void RepoCB::start(sdbus::Signal & signal) {
-    if (signature_valid(signal)) {
-        std::string what;
-        signal >> what;
-        progress_bar.reset();
-        progress_bar.set_description(what);
-        progress_bar.set_auto_finish(false);
-        progress_bar.start();
-    }
-}
-
-void RepoCB::end([[maybe_unused]] sdbus::Signal & signal) {
-    if (signature_valid(signal)) {
-        progress_bar.set_ticks(progress_bar.get_total_ticks());
-        progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
-        print_progress_bar();
-        std::cout << std::endl;
-    }
-}
-
-void RepoCB::progress(sdbus::Signal & signal) {
-    if (signature_valid(signal)) {
-        double downloaded;
-        double total_to_download;
-        signal >> downloaded;
-        signal >> total_to_download;
-        progress_bar.set_total_ticks(static_cast<int64_t>(total_to_download));
-        progress_bar.set_ticks(static_cast<int64_t>(downloaded));
-        print_progress_bar();
-    }
-}
-
-bool RepoCB::signature_valid(sdbus::Signal & signal) {
-    // check that signal is emited by the correct session object
-    std::string object_path;
-    signal >> object_path;
-    return object_path == session_object_path;
-}
-
-
-
 void Context::init_session() {
     // open dnfdaemon-server session
     auto cfg = selected_command->session_config(*this);
     auto session_manager_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, dnfdaemon::DBUS_OBJECT_PATH);
     session_manager_proxy->finishRegistration();
-    session_manager_proxy->callMethod("open_session").onInterface(dnfdaemon::INTERFACE_SESSION_MANAGER).withArguments(cfg).storeResultsTo(session_object_path);
+    session_manager_proxy->callMethod("open_session")
+        .onInterface(dnfdaemon::INTERFACE_SESSION_MANAGER)
+        .withArguments(cfg)
+        .storeResultsTo(session_object_path);
 
     session_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, session_object_path);
     // repository load callbacks
@@ -127,7 +56,7 @@ void Context::on_repositories_ready(const bool & result) {
 
 dnfdaemon::RepoStatus Context::wait_for_repos() {
     if (repositories_status == dnfdaemon::RepoStatus::NOT_READY) {
-        auto callback = [this](const sdbus::Error* error, const bool & result) {
+        auto callback = [this](const sdbus::Error * error, const bool & result) {
             if (error == nullptr) {
                 // No error
                 this->on_repositories_ready(result);
