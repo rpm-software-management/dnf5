@@ -29,6 +29,77 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 std::chrono::time_point<std::chrono::steady_clock> DbusCallback::prev_print_time = std::chrono::steady_clock::now();
 
+
+DbusPackageCB::DbusPackageCB(Session & session, const std::string & nevra) : session(session), nevra(nevra) {
+    dbus_object = session.get_dbus_object();
+    try {
+        auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_START);
+        add_signature(signal);
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+int DbusPackageCB::end(TransferStatus status, const char * msg) {
+    try {
+        // Due to is_time_to_print() timeout it is possible that progress signal was not
+        // emitted with correct downloaded / total_to_download value - especially for small packages.
+        // Emit the progress signal at least once signalling that 100% of the package was downloaded.
+        if (status == TransferStatus::SUCCESSFUL) {
+            auto signal =
+                dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
+            add_signature(signal);
+            signal << total;
+            signal << total;
+            dbus_object->emitSignal(signal);
+        }
+        auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_END);
+        add_signature(signal);
+        signal << static_cast<int>(status);
+        signal << msg;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+    return 0;
+}
+
+int DbusPackageCB::progress(double total_to_download, double downloaded) {
+    total = total_to_download;
+    try {
+        if (is_time_to_print()) {
+            auto signal =
+                dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
+            add_signature(signal);
+            signal << downloaded;
+            signal << total_to_download;
+            dbus_object->emitSignal(signal);
+        }
+    } catch (...) {
+    }
+    return 0;
+}
+
+int DbusPackageCB::mirror_failure(const char * msg, const char * url) {
+    try {
+        auto signal =
+            dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE);
+        add_signature(signal);
+        signal << msg;
+        signal << url;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+    return 0;
+}
+
+void DbusPackageCB::add_signature(sdbus::Signal & signal) {
+    // TODO(mblaha): uncomment once setDestination is available in sdbus-cpp
+    //signal.setDestination(session->get_sender());
+    signal << session.get_object_path();
+    signal << nevra;
+}
+
+
 DbusRepoCB::DbusRepoCB(Session * session) : session(session) {
     dbus_object = session->get_dbus_object();
 };

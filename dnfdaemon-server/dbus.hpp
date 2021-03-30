@@ -60,6 +60,11 @@ const char * const SIGNAL_REPO_LOAD_START = "repo_load_start";
 const char * const SIGNAL_REPO_LOAD_PROGRESS = "repo_load_progress";
 const char * const SIGNAL_REPO_LOAD_END = "repo_load_end";
 
+const char * const SIGNAL_PACKAGE_DOWNLOAD_START = "package_download_start";
+const char * const SIGNAL_PACKAGE_DOWNLOAD_PROGRESS = "package_download_progress";
+const char * const SIGNAL_PACKAGE_DOWNLOAD_END = "package_download_end";
+const char * const SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE = "package_download_mirror_failure";
+
 // polkit actions
 const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.RepoConf.write";
 const char * const POLKIT_EXECUTE_RPM_TRANSACTION = "org.rpm.dnf.v0.rpm.execute_transaction";

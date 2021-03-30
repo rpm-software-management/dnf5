@@ -40,6 +40,23 @@ protected:
         }
         return false;
     }
+    double total = 0;
+};
+
+class DbusPackageCB : public libdnf::rpm::PackageTargetCB, public DbusCallback {
+public:
+    DbusPackageCB(Session & session, const std::string & nevra);
+
+    int end(TransferStatus status, const char * msg) override;
+    int progress(double total_to_download, double downloaded) override;
+    int mirror_failure(const char * msg, const char * url) override;
+
+private:
+    Session & session;
+    sdbus::IObject * dbus_object;
+    std::string nevra;
+
+    void add_signature(sdbus::Signal & signal);
 };
 
 class DbusRepoCB : public libdnf::rpm::RepoCB, public DbusCallback {

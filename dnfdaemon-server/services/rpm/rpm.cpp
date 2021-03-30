@@ -20,12 +20,12 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm.hpp"
 #include "transaction.hpp"
 
+#include "dnfdaemon-server/callbacks.hpp"
 #include "dnfdaemon-server/dbus.hpp"
 #include "dnfdaemon-server/utils.hpp"
 
 #include <fmt/format.h>
 #include <libdnf/rpm/package_set.hpp>
-#include <libdnf/rpm/repo.hpp>
 #include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <libdnf/transaction/transaction_item.hpp>
@@ -326,15 +326,17 @@ void fill_transactions(
 
 // TODO (mblaha) shared download_packages with microdnf / libdnf
 // TODO (mblaha) callbacks to report the status
-void download_packages(libdnf::Goal & goal) {
-    auto download_pkgs = goal.list_rpm_installs();
+void download_packages(Session & session, libdnf::Goal & goal) {
+    auto install_pkgs = goal.list_rpm_installs();
     auto reinstalls_pkgs = goal.list_rpm_reinstalls();
     auto upgrades_pkgs = goal.list_rpm_upgrades();
     auto downgrades_pkgs = goal.list_rpm_downgrades();
     std::vector<libdnf::rpm::PackageTarget *> targets;
     std::vector<std::unique_ptr<libdnf::rpm::PackageTarget>> targets_guard;
+    std::vector<std::unique_ptr<DbusPackageCB>> pkg_download_callbacks_guard;
     std::string destination;
 
+    std::vector<libdnf::rpm::Package> download_pkgs = install_pkgs;
     download_pkgs.insert(download_pkgs.end(), reinstalls_pkgs.begin(), reinstalls_pkgs.end());
     download_pkgs.insert(download_pkgs.end(), upgrades_pkgs.begin(), upgrades_pkgs.end());
     download_pkgs.insert(download_pkgs.end(), downgrades_pkgs.begin(), downgrades_pkgs.end());
@@ -343,6 +345,11 @@ void download_packages(libdnf::Goal & goal) {
         auto checksum = package.get_checksum();
         destination = std::filesystem::path(repo->get_cachedir()) / "packages";
         std::filesystem::create_directory(destination);
+
+        auto pkg_download_cb = std::make_unique<DbusPackageCB>(session, package.get_full_nevra());
+        auto pkg_download_cb_ptr = pkg_download_cb.get();
+        pkg_download_callbacks_guard.push_back(std::move(pkg_download_cb));
+
         auto pkg_target = std::make_unique<libdnf::rpm::PackageTarget>(
             repo,
             package.get_location().c_str(),
@@ -354,7 +361,7 @@ void download_packages(libdnf::Goal & goal) {
             true,
             0,
             0,
-            nullptr);
+            pkg_download_cb_ptr);
         targets.push_back(pkg_target.get());
         targets_guard.push_back(std::move(pkg_target));
     }
@@ -383,7 +390,7 @@ void Rpm::do_transaction(sdbus::MethodCall && call) {
                 auto base = session.get_base();
                 auto & goal = session.get_goal();
 
-                download_packages(goal);
+                download_packages(session, goal);
 
                 libdnf::rpm::Transaction rpm_transaction(*base);
                 auto db_transaction = new_db_transaction(base, comment);
