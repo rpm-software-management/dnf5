@@ -98,7 +98,10 @@ public:
         }
 
         void bind(int pos, std::uint32_t val) {
-            auto result = sqlite3_bind_int(stmt, pos, val);
+            // SQLite doesn't support storing unsigned ints, for 32 bit unsigned bind,
+            // we can just use the 64 bit version, it all converts to a single
+            // signed INTEGER type in the DB
+            auto result = sqlite3_bind_int64(stmt, pos, static_cast<int64_t>(val));
             if (result != SQLITE_OK)
                 throw Error(*this, result, "Unsigned integer bind failed");
         }
@@ -225,7 +228,9 @@ public:
 
         int get(int idx, Identity<int> /*unused*/) { return sqlite3_column_int(stmt, idx); }
 
-        uint32_t get(int idx, Identity<uint32_t> /*unused*/) { return sqlite3_column_int(stmt, idx); }
+        uint32_t get(int idx, Identity<uint32_t> /*unused*/) {
+            return static_cast<uint32_t>(sqlite3_column_int64(stmt, idx));
+        }
 
         int64_t get(int idx, Identity<int64_t> /*unused*/) { return sqlite3_column_int64(stmt, idx); }
 
