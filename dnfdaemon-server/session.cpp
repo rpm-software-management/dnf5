@@ -120,19 +120,21 @@ void StderrLogger::write(time_t, pid_t, Level, const std::string & message) noex
     }
 }
 
-Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session_configuration, std::string object_path, std::string sender)
+Session::Session(
+    sdbus::IConnection & connection,
+    dnfdaemon::KeyValueMap session_configuration,
+    std::string object_path,
+    std::string sender)
     : connection(connection)
     , base(std::make_unique<libdnf::Base>())
     , goal(base.get())
     , session_configuration(session_configuration)
     , object_path(object_path)
     , sender(sender) {
-
     // adjust base.config from session_configuration
     auto & config = base->get_config();
-    std::vector<std::string> config_items {
-        "config_file_path", "installroot", "cachedir", "reposdir", "varsdir"};
-    for (auto & key: config_items) {
+    std::vector<std::string> config_items{"config_file_path", "installroot", "cachedir", "reposdir", "varsdir"};
+    for (auto & key : config_items) {
         if (session_configuration.find(key) != session_configuration.end()) {
             auto value = session_configuration_value<std::string>(key);
             config.opt_binds().at(key).new_string(libdnf::Option::Priority::RUNTIME, value);
@@ -150,10 +152,7 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     auto system_cache_dir = config.system_cachedir().get_value();
     config.cachedir().set(libdnf::Option::Priority::DEFAULT, system_cache_dir);
     // set variables
-    base->get_vars().load(
-        config.installroot().get_value(),
-        config.varsdir().get_value()
-    );
+    base->get_vars().load(config.installroot().get_value(), config.varsdir().get_value());
     if (session_configuration.find("releasever") != session_configuration.end()) {
         auto releasever = session_configuration_value<std::string>("releasever");
         base->get_vars().set("releasever", releasever);
@@ -208,8 +207,7 @@ bool Session::read_all_repos() {
     repositories_status = dnfdaemon::RepoStatus::PENDING;
     // TODO(mblaha): get flags from session configuration
     using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
-    auto flags =
-        LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
+    auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     //auto & logger = base->get_logger();
     auto & rpm_repo_sack = base->get_rpm_repo_sack();
     auto enabled_repos = rpm_repo_sack.new_query().ifilter_enabled(true);
