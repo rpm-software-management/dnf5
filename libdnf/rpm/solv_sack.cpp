@@ -53,7 +53,8 @@ namespace {
 // Names of special repositories
 constexpr const char * SYSTEM_REPO_NAME = "@System";
 constexpr const char * CMDLINE_REPO_NAME = "@commandline";
-constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
+// TODO lukash: unused, remove?
+//constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
 
 // Extensions of solv file names
 constexpr const char * SOLV_EXT_FILENAMES = "-filenames";
