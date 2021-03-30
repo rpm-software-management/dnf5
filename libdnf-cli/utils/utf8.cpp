@@ -96,7 +96,8 @@ std::size_t width(const std::string & str) {
         }
 
         // increase string width
-        result += wcwidth(wide_char);
+        // TODO lukash: handle wcwidth returning -1: unprintable character?
+        result += static_cast<std::size_t>(wcwidth(wide_char));
 
         // move the input string pointer by number of bytes read into the wide_char
         ptr += bytes;
@@ -141,7 +142,7 @@ std::string substr_length(const std::string & str, std::string::size_type pos, s
             continue;
         }
 
-        result.append(ptr, bytes);
+        result.append(ptr, static_cast<std::size_t>(bytes));
 
         // move the input string pointer by number of bytes read into the wide_char
         ptr += bytes;
@@ -195,13 +196,14 @@ std::string substr_width(const std::string & str, std::string::size_type pos, st
 
         // increase string width
         if (wid != std::string::npos) {
-            std::size_t char_width = wcwidth(wide_char);
+            // TODO lukash: handle wcwidth returning -1: unprintable character?
+            std::size_t char_width = static_cast<std::size_t>(wcwidth(wide_char));
             if (char_width > wid) {
                 break;
             }
             wid -= char_width;
         }
-        result.append(ptr, bytes);
+        result.append(ptr, static_cast<std::size_t>(bytes));
 
         // move the input string pointer by number of bytes read into the wide_char
         ptr += bytes;
