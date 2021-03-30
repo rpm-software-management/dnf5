@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "base.hpp"
 
-#include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/utils/utils.hpp"
 
@@ -47,8 +46,6 @@ public:
     void add_module_enable(const std::string & spec);
     void add_rpm_install(
         const std::string & spec,
-        const std::vector<std::string> & repo_ids,
-        const std::vector<libdnf::rpm::Nevra::Form> & forms,
         libdnf::GoalSettings settings = libdnf::GoalSettings());
     /// Prevent reinstallation by adding of already installed packages with the same NEVRA
     void add_rpm_install(
@@ -62,8 +59,6 @@ public:
         const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_remove(
         const std::string & spec,
-        const std::string & repo_id,
-        const std::vector<libdnf::rpm::Nevra::Form> & forms,
         libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_remove(
         const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
@@ -71,7 +66,6 @@ public:
         const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_upgrade(
         const std::string & spec,
-        const std::vector<std::string> & repo_ids,
         libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_upgrade(libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_upgrade(
@@ -80,7 +74,6 @@ public:
         const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_distro_sync(
         const std::string & spec,
-        const std::vector<std::string> & repo_ids,
         libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_distro_sync(libdnf::GoalSettings settings = libdnf::GoalSettings());
     void add_rpm_distro_sync(

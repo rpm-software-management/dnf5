@@ -21,11 +21,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_UTILS_UTILS_HPP
 
 #include "libdnf/conf/config_main.hpp"
+#include "libdnf/rpm/nevra.hpp"
 
 #include <cstdint>
 #include <type_traits>
 
 namespace libdnf {
+
+// forward declarations
+class Goal;
 
 /// Compares content of two files.
 /// Returns "true" if files have the same content.
@@ -77,17 +81,25 @@ enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
 struct GoalSettings {
 public:
     GoalSettings() = default;
-    bool get_strict(libdnf::ConfigMain & cfg_main);
-    bool get_best(libdnf::ConfigMain & cfg_main);
-    bool get_clean_requirements_on_remove(libdnf::ConfigMain & cfg_main);
 
     bool with_nevra{true};
     bool with_provides{true};
     bool with_filenames{true};
+    bool report_hint{true};
     GoalSetting strict{GoalSetting::AUTO};
     GoalSetting best{GoalSetting::AUTO};
     GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
+    std::vector<std::string> from_repo_ids;
+    std::vector<std::string> to_repo_ids;
+    std::vector<libdnf::rpm::Nevra::Form> forms;
+
+private:
+    friend class Goal;
+    bool get_strict(const libdnf::ConfigMain & cfg_main) const;
+    bool get_best(const libdnf::ConfigMain & cfg_main) const;
+    bool get_clean_requirements_on_remove(const libdnf::ConfigMain & cfg_main) const;
 };
+
 
 inline GoalProblem operator|(GoalProblem lhs, GoalProblem rhs) {
     return static_cast<GoalProblem>(
@@ -108,7 +120,7 @@ inline GoalProblem operator&(GoalProblem lhs, GoalProblem rhs) {
         static_cast<std::underlying_type<GoalProblem>::type>(rhs));
 }
 
-inline bool GoalSettings::get_strict(libdnf::ConfigMain & cfg_main) {
+inline bool GoalSettings::get_strict(const libdnf::ConfigMain & cfg_main) const {
     bool ret;
     switch (strict) {
         case GoalSetting::AUTO:
@@ -124,7 +136,7 @@ inline bool GoalSettings::get_strict(libdnf::ConfigMain & cfg_main) {
     return ret;
 }
 
-inline bool GoalSettings::get_best(libdnf::ConfigMain & cfg_main) {
+inline bool GoalSettings::get_best(const libdnf::ConfigMain & cfg_main) const {
     bool ret;
     switch (best) {
         case GoalSetting::AUTO:
@@ -140,7 +152,7 @@ inline bool GoalSettings::get_best(libdnf::ConfigMain & cfg_main) {
     return ret;
 }
 
-inline bool GoalSettings::get_clean_requirements_on_remove(libdnf::ConfigMain & cfg_main) {
+inline bool GoalSettings::get_clean_requirements_on_remove(const libdnf::ConfigMain & cfg_main) const {
     bool ret;
     switch (clean_requirements_on_remove) {
         case GoalSetting::AUTO:

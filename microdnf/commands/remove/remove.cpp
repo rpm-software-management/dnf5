@@ -75,7 +75,7 @@ void CmdRemove::run(Context & ctx) {
     libdnf::Goal goal(&ctx.base);
     for (auto & pattern : *patterns_to_remove_options) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        goal.add_rpm_remove(option->get_value(), {}, {});
+        goal.add_rpm_remove(option->get_value());
     }
     if (goal.resolve(true) != libdnf::GoalProblem::NO_PROBLEM) {
         std::cout << goal.get_formated_all_problems() << std::endl;

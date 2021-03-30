@@ -154,16 +154,16 @@ public:
     Impl(Base * base);
     ~Impl();
 
-    void add_install_to_goal();
-    void add_remove_to_goal();
-    void add_upgrades_distrosync_to_goal();
+    void add_rpm_ids(libdnf::Goal::Action action, const libdnf::rpm::Package & rpm_package, const libdnf::GoalSettings & settings);
+    void add_rpm_ids(libdnf::Goal::Action action, const libdnf::rpm::PackageSet & package_set, const libdnf::GoalSettings & settings);
+
+    void add_specs_to_goal();
+    void add_install_to_goal(const std::string & spec, const libdnf::GoalSettings & settings);
+    void add_remove_to_goal(const std::string & spec, const libdnf::GoalSettings & settings);
+    void add_upgrades_distrosync_to_goal(Action action, const std::string & spec, const libdnf::GoalSettings & settings);
     void add_rpms_to_goal();
 
-    void report_not_found(libdnf::Goal::Action action, bool strict, const std::string & pkg_spec,
-        bool with_nevra,
-        bool with_provides,
-        bool with_filenames,
-        const std::vector<libdnf::rpm::Nevra::Form> & forms);
+    void report_not_found(libdnf::Goal::Action action, const std::string & pkg_spec, const libdnf::GoalSettings & settings);
 
     std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
         const rpm::solv::IdQueue & broken_installed);
@@ -172,19 +172,13 @@ private:
     friend class Goal;
     Base * base;
     std::vector<std::string> module_enable_specs;
-    /// <std::string spec, std::vector<std::string> repo_ids, bool strict, bool best, std::vector<libdnf::rpm::Nevra::Form> forms
-    std::vector<std::tuple<std::string, std::vector<std::string>, bool, bool, std::vector<libdnf::rpm::Nevra::Form>>>
-        install_rpm_specs;
-    /// <std::string spec, std::string repo_id, std::vector<libdnf::rpm::Nevra::Form> forms, bool clean_requirements_on_remove>
-    std::vector<std::tuple<std::string, std::string, std::vector<libdnf::rpm::Nevra::Form>, bool>> remove_rpm_specs;
-    /// <libdnf::Goal::Action action, std::string spec, std::vector<std::string> repo_ids, bool strict, bool best, bool clean_requirements_on_remove>
-    std::vector<std::tuple<Action, std::string, std::vector<std::string>, bool, bool, bool>>
-        upgrade_distro_sync_rpm_specs;
-    /// <libdnf::Goal::Action, rpm Ids, bool strict, bool best, bool clean_requirements_on_remove>
-    std::vector<std::tuple<Action, libdnf::rpm::solv::IdQueue, bool, bool, bool>> rpm_ids;
+    /// <libdnf::Goal::Action, std::string pkg_spec, libdnf::GoalSettings settings>
+    std::vector<std::tuple<libdnf::Goal::Action, std::string, libdnf::GoalSettings>> rpm_specs;
+    /// <libdnf::Goal::Action, rpm Ids, libdnf::GoalSettings settings>
+    std::vector<std::tuple<Action, libdnf::rpm::solv::IdQueue, libdnf::GoalSettings>> rpm_ids;
 
-    /// <libdnf::Goal::Action, libdnf::GoalProblem, bool strict, std::string spec>
-    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, bool, std::string>> rpm_goal_reports;
+    /// <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalSettings settings, std::string spec>
+    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalSettings, std::string>> rpm_goal_reports;
 
     rpm::solv::GoalPrivate rpm_goal;
 };
@@ -203,385 +197,275 @@ void Goal::add_module_enable(const std::string & spec) {
     p_impl->module_enable_specs.push_back(spec);
 }
 
-void Goal::add_rpm_install(
-    const std::string & spec,
-    const std::vector<std::string> & repo_ids,
-    const std::vector<libdnf::rpm::Nevra::Form> & forms,
-    libdnf::GoalSettings settings) {
-    auto & cfg_main = p_impl->base->get_config();
-    p_impl->install_rpm_specs.push_back(
-        std::make_tuple(spec, repo_ids, settings.get_strict(cfg_main), settings.get_best(cfg_main), forms));
+void Goal::add_rpm_install(const std::string & spec, libdnf::GoalSettings settings) {
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::INSTALL, spec, settings));
 }
 
 void Goal::add_rpm_install(const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings) {
-    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
-        throw UsedDifferentSack();
-    }
-    auto & cfg_main = p_impl->base->get_config();
-    libdnf::rpm::solv::IdQueue ids;
-    ids.push_back(rpm_package.get_id().id);
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::INSTALL, std::move(ids), settings.get_strict(cfg_main), settings.get_best(cfg_main), false));
+    p_impl->add_rpm_ids(Action::INSTALL, rpm_package, settings);
 }
 
 void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings) {
-    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
-        throw UsedDifferentSack();
-    }
-    libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *package_set.p_impl) {
-        ids.push_back(package_id.id);
-    }
-    auto & cfg_main = p_impl->base->get_config();
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::INSTALL, std::move(ids), settings.get_strict(cfg_main), settings.get_best(cfg_main), false));
+    p_impl->add_rpm_ids(Action::INSTALL, package_set, settings);
 }
 
 void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings) {
-    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
-        throw UsedDifferentSack();
-    }
-    auto & cfg_main = p_impl->base->get_config();
-    libdnf::rpm::solv::IdQueue ids;
-    ids.push_back(rpm_package.get_id().id);
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::INSTALL_OR_REINSTALL,
-        std::move(ids),
-        settings.get_strict(cfg_main),
-        settings.get_best(cfg_main),
-        false));
+    p_impl->add_rpm_ids(Action::INSTALL_OR_REINSTALL, rpm_package, settings);
 }
 
 void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings) {
-    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
-        throw UsedDifferentSack();
-    }
-    libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *package_set.p_impl) {
-        ids.push_back(package_id.id);
-    }
-    auto & cfg_main = p_impl->base->get_config();
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::INSTALL_OR_REINSTALL,
-        std::move(ids),
-        settings.get_strict(cfg_main),
-        settings.get_best(cfg_main),
-        false));
+    p_impl->add_rpm_ids(Action::INSTALL_OR_REINSTALL, package_set, settings);
 }
 
-void Goal::add_rpm_remove(
-    const std::string & spec,
-    const std::string & repo_id,
-    const std::vector<libdnf::rpm::Nevra::Form> & forms,
-    libdnf::GoalSettings settings) {
-    p_impl->remove_rpm_specs.push_back(
-        std::make_tuple(spec, repo_id, forms, settings.get_clean_requirements_on_remove(p_impl->base->get_config())));
+void Goal::add_rpm_remove(const std::string & spec, libdnf::GoalSettings settings) {
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::REMOVE, spec, std::move(settings)));
 }
 
 void Goal::add_rpm_remove(const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings) {
-    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
-        throw UsedDifferentSack();
-    }
-    libdnf::rpm::solv::IdQueue ids;
-    ids.push_back(rpm_package.get_id().id);
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::REMOVE,
-        std::move(ids),
-        false,
-        false,
-        settings.get_clean_requirements_on_remove(p_impl->base->get_config())));
+    p_impl->add_rpm_ids(Action::REMOVE, rpm_package, settings);
 }
 
 void Goal::add_rpm_remove(const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings) {
-    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
-        throw UsedDifferentSack();
-    }
-    libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *package_set.p_impl) {
-        ids.push_back(package_id.id);
-    }
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::REMOVE,
-        std::move(ids),
-        false,
-        false,
-        settings.get_clean_requirements_on_remove(p_impl->base->get_config())));
+    p_impl->add_rpm_ids(Action::REMOVE, package_set, settings);
 }
 
-void Goal::add_rpm_upgrade(
-    const std::string & spec, const std::vector<std::string> & repo_ids, libdnf::GoalSettings settings) {
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    p_impl->upgrade_distro_sync_rpm_specs.push_back(std::make_tuple(
-        Action::UPGRADE,
-        spec,
-        repo_ids,
-        false,
-        settings.get_best(p_impl->base->get_config()),
-        clean_requirements_on_remove));
+void Goal::add_rpm_upgrade(const std::string & spec, libdnf::GoalSettings settings) {
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::UPGRADE, spec, std::move(settings)));
 }
 
 void Goal::add_rpm_upgrade(libdnf::GoalSettings settings) {
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::UPGRADE_ALL,
-        libdnf::rpm::solv::IdQueue(),
-        false,
-        settings.get_best(p_impl->base->get_config()),
-        clean_requirements_on_remove));
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::UPGRADE_ALL, std::string(), std::move(settings)));
 }
 
 void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings) {
-    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
-        throw UsedDifferentSack();
-    }
-    libdnf::rpm::solv::IdQueue ids;
-    ids.push_back(rpm_package.get_id().id);
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::UPGRADE,
-        std::move(ids),
-        false,
-        settings.get_best(p_impl->base->get_config()),
-        clean_requirements_on_remove));
+    p_impl->add_rpm_ids(Action::UPGRADE, rpm_package, settings);
 }
 
 void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings) {
-    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
-        throw UsedDifferentSack();
-    }
-    libdnf::rpm::solv::IdQueue ids;
-    for (auto package_id : *package_set.p_impl) {
-        ids.push_back(package_id.id);
-    }
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::UPGRADE,
-        std::move(ids),
-        false,
-        settings.get_best(p_impl->base->get_config()),
-        clean_requirements_on_remove));
+    p_impl->add_rpm_ids(Action::UPGRADE, package_set, settings);
 }
 
-void Goal::add_rpm_distro_sync(
-    const std::string & spec, const std::vector<std::string> & repo_ids, libdnf::GoalSettings settings) {
-    auto & cfg_main = p_impl->base->get_config();
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    p_impl->upgrade_distro_sync_rpm_specs.push_back(std::make_tuple(
-        Action::DISTRO_SYNC,
-        spec,
-        repo_ids,
-        settings.get_strict(cfg_main),
-        settings.get_best(cfg_main),
-        clean_requirements_on_remove));
+void Goal::add_rpm_distro_sync(const std::string & spec, libdnf::GoalSettings settings) {
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::DISTRO_SYNC, spec, std::move(settings)));
 }
 
 void Goal::add_rpm_distro_sync(libdnf::GoalSettings settings) {
-    auto & cfg_main = p_impl->base->get_config();
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::DISTRO_SYNC_ALL,
-        libdnf::rpm::solv::IdQueue(),
-        settings.get_strict(cfg_main),
-        settings.get_best(cfg_main),
-        clean_requirements_on_remove));
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::DISTRO_SYNC_ALL, std::string(), std::move(settings)));
 }
 
 void Goal::add_rpm_distro_sync(const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings) {
-    if (rpm_package.sack.get() != &p_impl->base->get_rpm_solv_sack()) {
+    p_impl->add_rpm_ids(Action::DISTRO_SYNC, rpm_package, settings);
+}
+
+void Goal::add_rpm_distro_sync(const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings) {
+    p_impl->add_rpm_ids(Action::DISTRO_SYNC, package_set, settings);
+}
+
+void Goal::Impl::add_rpm_ids(libdnf::Goal::Action action, const libdnf::rpm::Package & rpm_package, const libdnf::GoalSettings & settings) {
+    if (rpm_package.sack.get() != &base->get_rpm_solv_sack()) {
         throw UsedDifferentSack();
     }
     libdnf::rpm::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    auto & cfg_main = p_impl->base->get_config();
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::DISTRO_SYNC,
-        std::move(ids),
-        settings.get_strict(cfg_main),
-        settings.get_best(p_impl->base->get_config()),
-        clean_requirements_on_remove));
+    rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
 }
 
-void Goal::add_rpm_distro_sync(const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings) {
-    if (package_set.get_sack() != &p_impl->base->get_rpm_solv_sack()) {
+void Goal::Impl::add_rpm_ids(libdnf::Goal::Action action, const libdnf::rpm::PackageSet & package_set, const libdnf::GoalSettings & settings) {
+    if (package_set.get_sack() != &base->get_rpm_solv_sack()) {
         throw UsedDifferentSack();
     }
     libdnf::rpm::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id.id);
     }
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-    auto & cfg_main = p_impl->base->get_config();
-    p_impl->rpm_ids.push_back(std::make_tuple(
-        Action::DISTRO_SYNC,
-        std::move(ids),
-        settings.get_strict(cfg_main),
-        settings.get_best(cfg_main),
-        clean_requirements_on_remove));
+    rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
 }
 
-void Goal::Impl::add_install_to_goal() {
+void Goal::Impl::add_specs_to_goal() {
+    auto & sack = base->get_rpm_solv_sack();
+    auto & cfg_main = base->get_config();
+    for (auto & [action, spec, settings] : rpm_specs) {
+        switch (action) {
+            case Action::INSTALL:
+                add_install_to_goal(spec, settings);
+                break;
+            case Action::REMOVE:
+                add_remove_to_goal(spec, settings);
+                break;
+            case Action::DISTRO_SYNC:
+            case Action::UPGRADE:
+                add_upgrades_distrosync_to_goal(action, spec, settings);
+                break;
+            case Action::UPGRADE_ALL: {
+                libdnf::rpm::SolvQuery query(&sack);
+                libdnf::rpm::solv::IdQueue upgrade_ids;
+                for (auto package_id : *query.p_impl) {
+                    upgrade_ids.push_back(package_id.id);
+                }
+                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+                rpm_goal.add_upgrade(upgrade_ids, settings.get_best(cfg_main), clean_requirements_on_remove);
+            } break;
+            case Action::DISTRO_SYNC_ALL: {
+                libdnf::rpm::SolvQuery query(&sack);
+                libdnf::rpm::solv::IdQueue upgrade_ids;
+                for (auto package_id : *query.p_impl) {
+                    upgrade_ids.push_back(package_id.id);
+                }
+                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+                rpm_goal.add_distro_sync(upgrade_ids, settings.get_strict(cfg_main), settings.get_best(cfg_main), clean_requirements_on_remove);
+            } break;
+            default:
+                throw std::invalid_argument("Unsupported action");
+        }
+    }
+}
+
+void Goal::Impl::add_install_to_goal(const std::string & spec, const libdnf::GoalSettings & settings) {
     auto & sack = base->get_rpm_solv_sack();
     Pool * pool = sack.p_impl->get_pool();
 
-    auto multilib_policy = base->get_config().multilib_policy().get_value();
-    auto obsoletes = base->get_config().obsoletes().get_value();
+    auto & cfg_main = base->get_config();
+    auto multilib_policy = cfg_main.multilib_policy().get_value();
+    auto obsoletes = cfg_main.obsoletes().get_value();
     libdnf::rpm::solv::IdQueue tmp_queue;
     std::vector<Solvable *> tmp_solvables;
     libdnf::rpm::SolvQuery base_query(&sack);
     libdnf::rpm::PackageSet selected(&sack);
-    for (auto & [spec, repo_ids, strict, best, forms] : install_rpm_specs) {
-        libdnf::rpm::SolvQuery query(base_query);
-        bool with_provides;
-        bool with_filenames;
-        // When forms provided search only for NEVRA
-        if (forms.empty()) {
-            with_provides = true;
-            with_filenames = true;
-        } else {
-            with_provides = false;
-            with_filenames = false;
-        }
-        auto nevra_pair = query.resolve_pkg_spec(spec, false, true, with_provides, with_filenames, false, forms);
-        if (!nevra_pair.first) {
-            report_not_found(libdnf::Goal::Action::INSTALL, strict, spec, true, with_provides, with_filenames, forms);
-            continue;
-        }
-        bool has_just_name = nevra_pair.second.has_just_name();
-        bool add_obsoletes = obsoletes && has_just_name;
+    libdnf::rpm::SolvQuery query(base_query);
+    auto nevra_pair = query.resolve_pkg_spec(spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, false, settings.forms);
+    if (!nevra_pair.first) {
+        report_not_found(libdnf::Goal::Action::INSTALL, spec, settings);
+        return;
+    }
+    bool has_just_name = nevra_pair.second.has_just_name();
+    bool add_obsoletes = obsoletes && has_just_name;
 
-        libdnf::rpm::SolvQuery installed(query);
-        installed.ifilter_installed();
+    libdnf::rpm::SolvQuery installed(query);
+    installed.ifilter_installed();
 
-        // TODO(jmracek) if reports:
-        // base._report_already_installed(installed_query)
-        if (multilib_policy == "all") {
-            // TODO(jmracek) Implement "all" logic
-        } else if (multilib_policy == "best") {
-            if (!libdnf::utils::is_file_pattern(spec) && libdnf::utils::is_glob_pattern(spec.c_str()) &&
-                has_just_name) {
-                if (!repo_ids.empty()) {
-                    query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, repo_ids);
-                    query |= installed;
-                    if (query.empty()) {
-                        rpm_goal_reports.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, strict, spec));
-                        // TODO(jmracek) store repositories
-                        continue;
-                    }
+    // TODO(jmracek) if reports:
+    // base._report_already_installed(installed_query)
+    if (multilib_policy == "all") {
+        // TODO(jmracek) Implement "all" logic
+    } else if (multilib_policy == "best") {
+        if (!libdnf::utils::is_file_pattern(spec) && libdnf::utils::is_glob_pattern(spec.c_str()) &&
+            has_just_name) {
+            if (!settings.to_repo_ids.empty()) {
+                query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, settings.to_repo_ids);
+                query |= installed;
+                if (query.empty()) {
+                    rpm_goal_reports.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec));
+                    return;
                 }
-                libdnf::rpm::SolvQuery available(query);
-                available.ifilter_available();
+            }
+            libdnf::rpm::SolvQuery available(query);
+            available.ifilter_available();
 
-                // keep only installed that has a partner in available
-                std::unordered_set<Id> names;
-                for (auto package_id : *available.p_impl) {
-                    Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
-                    names.insert(solvable->name);
+            // keep only installed that has a partner in available
+            std::unordered_set<Id> names;
+            for (auto package_id : *available.p_impl) {
+                Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
+                names.insert(solvable->name);
+            }
+            for (auto package_id : *installed.p_impl) {
+                Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
+                auto name_iterator = names.find(solvable->name);
+                if (name_iterator == names.end()) {
+                    installed.p_impl->remove_unsafe(package_id);
                 }
-                for (auto package_id : *installed.p_impl) {
-                    Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
-                    auto name_iterator = names.find(solvable->name);
-                    if (name_iterator == names.end()) {
-                        installed.p_impl->remove_unsafe(package_id);
-                    }
-                }
-                // TODO(jmracek): if reports: self._report_installed(installed)
-                // TODO(jmracek) Replace by union query operator
-                available |= installed;
-                tmp_solvables.clear();
-                for (auto package_id : *available.p_impl) {
-                    Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
-                    tmp_solvables.push_back(solvable);
-                }
-                Id current_name = 0;
-                selected.clear();
-                {
-                    auto * first = tmp_solvables[0];
-                    current_name = first->name;
-                    // TODO(jmracek) Allow to skip creation of libdnf::rpm::PackageId
-                    selected.p_impl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, first)));
-                }
-                std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
+            }
+            // TODO(jmracek): if reports: self._report_installed(installed)
+            // TODO(jmracek) Replace by union query operator
+            available |= installed;
+            tmp_solvables.clear();
+            for (auto package_id : *available.p_impl) {
+                Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, package_id);
+                tmp_solvables.push_back(solvable);
+            }
+            Id current_name = 0;
+            selected.clear();
+            {
+                auto * first = tmp_solvables[0];
+                current_name = first->name;
+                // TODO(jmracek) Allow to skip creation of libdnf::rpm::PackageId
+                selected.p_impl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, first)));
+            }
+            std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
 
-                for (auto * solvable : tmp_solvables) {
-                    if (solvable->name == current_name) {
-                        selected.p_impl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, solvable)));
-                        continue;
-                    }
-                    if (add_obsoletes) {
-                        add_obseletes(base_query, selected);
-                    }
-                    solv_map_to_id_queue(tmp_queue, static_cast<libdnf::rpm::solv::SolvMap>(*selected.p_impl));
-                    rpm_goal.add_install(tmp_queue, strict, best);
-                    selected.clear();
+            for (auto * solvable : tmp_solvables) {
+                if (solvable->name == current_name) {
                     selected.p_impl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, solvable)));
-                    current_name = solvable->name;
+                    continue;
                 }
                 if (add_obsoletes) {
                     add_obseletes(base_query, selected);
                 }
                 solv_map_to_id_queue(tmp_queue, static_cast<libdnf::rpm::solv::SolvMap>(*selected.p_impl));
-                rpm_goal.add_install(tmp_queue, strict, best);
-            } else {
-                if (add_obsoletes) {
-                    libdnf::rpm::SolvQuery obsoletes_query(base_query);
-                    // TODO(jmracek) Replace obsoletes_query.get_package_set(); by more effective approach
-                    obsoletes_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, query);
-                    query |= obsoletes_query;
-                }
-                if (!repo_ids.empty()) {
-                    query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, repo_ids);
-                    query |= installed;
-                    if (query.empty()) {
-                        // TODO(jmracek) no solution for the spec => mark result - not in repository what if installed?
-                        continue;
-                    }
-                }
-                // TODO(jmracek) if reports:
-                // base._report_already_installed(installed_query)
-                solv_map_to_id_queue(tmp_queue, *query.p_impl);
-                rpm_goal.add_install(tmp_queue, strict, best);
+                rpm_goal.add_install(tmp_queue, settings.get_strict(cfg_main), settings.get_best(cfg_main));
+                selected.clear();
+                selected.p_impl->add_unsafe(libdnf::rpm::PackageId(pool_solvable2id(pool, solvable)));
+                current_name = solvable->name;
             }
+            if (add_obsoletes) {
+                add_obseletes(base_query, selected);
+            }
+            solv_map_to_id_queue(tmp_queue, static_cast<libdnf::rpm::solv::SolvMap>(*selected.p_impl));
+            rpm_goal.add_install(tmp_queue, settings.get_strict(cfg_main), settings.get_best(cfg_main));
         } else {
-            // TODO(jmracek) raise an exception
+            if (add_obsoletes) {
+                libdnf::rpm::SolvQuery obsoletes_query(base_query);
+                // TODO(jmracek) Replace obsoletes_query.get_package_set(); by more effective approach
+                obsoletes_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, query);
+                query |= obsoletes_query;
+            }
+            if (!settings.to_repo_ids.empty()) {
+                query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, settings.to_repo_ids);
+                query |= installed;
+                if (query.empty()) {
+                    // TODO(jmracek) no solution for the spec => mark result - not in repository what if installed?
+                    return;
+                }
+            }
+            // TODO(jmracek) if reports:
+            // base._report_already_installed(installed_query)
+            solv_map_to_id_queue(tmp_queue, *query.p_impl);
+            rpm_goal.add_install(tmp_queue, settings.get_strict(cfg_main), settings.get_best(cfg_main));
         }
-
-        //             subj = dnf.subject.Subject(pkg_spec)
-        //         solution = subj.get_best_solution(self.sack, forms=forms, with_src=False)
-        //
-        //         if self.conf.multilib_policy == "all" or subj._is_arch_specified(solution):
-        //             q = solution['query']
-        //             if reponame is not None:
-        //                 q.filterm(reponame=reponame)
-        //             if not q:
-        //                 self._raise_package_not_found_error(pkg_spec, forms, reponame)
-        //             return self._install_multiarch(q, reponame=reponame, strict=strict)
-        //
-        //         elif self.conf.multilib_policy == "best":
-
-        //         return 0
+    } else {
+        // TODO(jmracek) raise an exception
     }
+
+    //             subj = dnf.subject.Subject(pkg_spec)
+    //         solution = subj.get_best_solution(self.sack, forms=forms, with_src=False)
+    //
+    //         if self.conf.multilib_policy == "all" or subj._is_arch_specified(solution):
+    //             q = solution['query']
+    //             if reponame is not None:
+    //                 q.filterm(reponame=reponame)
+    //             if not q:
+    //                 self._raise_package_not_found_error(pkg_spec, forms, reponame)
+    //             return self._install_multiarch(q, reponame=reponame, strict=strict)
+    //
+    //         elif self.conf.multilib_policy == "best":
+
+    //         return 0
 }
 
-void Goal::Impl::report_not_found(libdnf::Goal::Action action, bool strict, const std::string & pkg_spec,
-        bool with_nevra,
-        bool with_provides,
-        bool with_filenames,
-        const std::vector<libdnf::rpm::Nevra::Form> & forms) {
+void Goal::Impl::report_not_found(libdnf::Goal::Action action, const std::string & pkg_spec, const libdnf::GoalSettings & settings) {
     auto & sack = base->get_rpm_solv_sack();
     libdnf::rpm::SolvQuery query(&sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
-    auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, false, with_nevra, with_provides, with_filenames, true, forms);
+    auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, true, settings.forms);
     if (!nevra_pair_reports.first) {
         // RPM was not excluded or there is no related srpm
-        rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_FOUND, strict, pkg_spec));
+        rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_FOUND, settings, pkg_spec));
         // TODO(jmracek) - report hints (icase, alternative providers)
     } else {
         query.ifilter_repoid(libdnf::sack::QueryCmp::NEQ, {"src"});
         if (query.empty()) {
-            rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::ONLY_SRC, strict, pkg_spec));
+            rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::ONLY_SRC, settings, pkg_spec));
         } else {
             // TODO(jmracek) make difference between regular excludes and modular excludes
-            rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::EXCLUDED, strict, pkg_spec));
+            rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::EXCLUDED, settings, pkg_spec));
         }
     }
 }
@@ -589,9 +473,11 @@ void Goal::Impl::report_not_found(libdnf::Goal::Action action, bool strict, cons
 void Goal::Impl::add_rpms_to_goal() {
     auto & sack = base->get_rpm_solv_sack();
     Pool * pool = sack.p_impl->get_pool();
+    auto & cfg_main = base->get_config();
+
     libdnf::rpm::SolvQuery installed(&sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
     installed.ifilter_installed();
-    for (auto & [action, ids, strict, best, clean_requirements_on_remove] : rpm_ids) {
+    for (auto & [action, ids, settings] : rpm_ids) {
         switch (action) {
             case Action::INSTALL: {
                 //  report aready installed packages with the same NEVRA
@@ -606,172 +492,146 @@ void Goal::Impl::add_rpms_to_goal() {
                     //  TODO(jmracek)  report already installed nevra
                     ids.push_back(package_id.id);
                 }
-                rpm_goal.add_install(ids, strict, best);
+                rpm_goal.add_install(ids, settings.get_strict(cfg_main), settings.get_best(cfg_main));
             } break;
             case Action::INSTALL_OR_REINSTALL:
-                rpm_goal.add_install(ids, strict, best);
+                rpm_goal.add_install(ids, settings.get_strict(cfg_main), settings.get_best(cfg_main));
                 break;
-            case Action::UPGRADE:
-                rpm_goal.add_upgrade(ids, best, clean_requirements_on_remove);
-                break;
-            case Action::UPGRADE_ALL: {
-                libdnf::rpm::SolvQuery query(&sack);
-                libdnf::rpm::solv::IdQueue upgrade_ids;
-                for (auto package_id : *query.p_impl) {
-                    //  TODO(jmracek)  report already installed nevra
-                    upgrade_ids.push_back(package_id.id);
-                }
-                rpm_goal.add_upgrade(upgrade_ids, best, clean_requirements_on_remove);
+            case Action::UPGRADE: {
+                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+                rpm_goal.add_upgrade(ids, settings.get_best(cfg_main), clean_requirements_on_remove);
             } break;
-            case Action::DISTRO_SYNC:
-                rpm_goal.add_upgrade(ids, best, clean_requirements_on_remove);
-                break;
-            case Action::DISTRO_SYNC_ALL: {
-                libdnf::rpm::SolvQuery query(&sack);
-                libdnf::rpm::solv::IdQueue upgrade_ids;
-                for (auto package_id : *query.p_impl) {
-                    //  TODO(jmracek)  report already installed nevra
-                    upgrade_ids.push_back(package_id.id);
-                }
-                rpm_goal.add_upgrade(upgrade_ids, best, clean_requirements_on_remove);
+            case Action::DISTRO_SYNC: {
+                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+                rpm_goal.add_upgrade(ids, settings.get_best(cfg_main), clean_requirements_on_remove);
             } break;
             case Action::REMOVE:
-                rpm_goal.add_remove(ids, clean_requirements_on_remove);
-                break;
-        }
-    }
-}
-
-void Goal::Impl::add_remove_to_goal() {
-    auto & sack = base->get_rpm_solv_sack();
-    libdnf::rpm::SolvQuery base_query(&sack);
-    base_query.ifilter_installed();
-    for (auto & [spec, repo_id, forms, clean_requirements_on_remove] : remove_rpm_specs) {
-        libdnf::rpm::SolvQuery query(base_query);
-        bool with_provides;
-        bool with_filenames;
-        // When forms provided search only for NEVRA
-        if (forms.empty()) {
-            with_provides = true;
-            with_filenames = true;
-        } else {
-            with_provides = false;
-            with_filenames = false;
-        }
-        auto nevra_pair = query.resolve_pkg_spec(spec, false, true, with_provides, with_filenames, false, forms);
-        if (!nevra_pair.first) {
-            report_not_found(libdnf::Goal::Action::REMOVE, false, spec, true, with_provides, with_filenames, forms);
-            continue;
-        }
-
-        if (!repo_id.empty()) {
-            // TODO(jmracek) keep only packages installed from repo_id -requires swdb
-            if (query.empty()) {
-                // TODO(jmracek) no solution for the spec => mark result - not in repository
-                continue;
-            }
-        }
-        rpm_goal.add_remove(*query.p_impl, clean_requirements_on_remove);
-    }
-}
-
-void Goal::Impl::add_upgrades_distrosync_to_goal() {
-    auto & sack = base->get_rpm_solv_sack();
-    libdnf::rpm::SolvQuery base_query(&sack);
-    auto obsoletes = base->get_config().obsoletes().get_value();
-    libdnf::rpm::solv::IdQueue tmp_queue;
-    for (auto & [action, spec, repo_ids, strict, best, clean_requirements_on_remove] : upgrade_distro_sync_rpm_specs) {
-        libdnf::rpm::SolvQuery query(base_query);
-        auto nevra_pair = query.resolve_pkg_spec(spec, false, true, true, true, false, {});
-        if (!nevra_pair.first) {
-            report_not_found(action, strict, spec, true, true, true, {});
-            continue;
-        }
-        // TODO(jmracek) Report when package is not installed
-        // _('Package %s available, but not installed.')
-        // _('Package %s available, but installed for different architecture.')
-
-        bool add_obsoletes = obsoletes && nevra_pair.second.has_just_name();
-        libdnf::rpm::SolvQuery installed(query);
-        installed.ifilter_installed();
-        // TODO(jmracek) Apply latest filters on installed (or later)
-        if (add_obsoletes) {
-            libdnf::rpm::SolvQuery obsoletes_query(base_query);
-            obsoletes_query.ifilter_available();
-            // TODO(jmracek) use upgrades + installed when the filter will be available libdnf::rpm::SolvQuery what_obsoletes(query);
-            // what_obsoletes.ifilter_upgrades()
-            obsoletes_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, query);
-            // obsoletes = self.sack.query().available().filterm(obsoletes=installed_query.union(q.upgrades()))
-            query |= obsoletes_query;
-        }
-        if (!repo_ids.empty()) {
-            query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, repo_ids);
-            query |= installed;
-            if (query.empty()) {
-                // TODO(jmracek) no solution for the spec => mark result - not in repository what if installed?
-                continue;
-            }
-        }
-        // TODO(jmracek) Apply security filters
-        // TODO(jmracek) q = q.available().union(installed_query.latest())
-        // Required for a correct upgrade of installonly packages
-        solv_map_to_id_queue(tmp_queue, *query.p_impl);
-        switch (action) {
-            case Action::UPGRADE:
-                rpm_goal.add_upgrade(tmp_queue, best, clean_requirements_on_remove);
-                break;
-            case Action::DISTRO_SYNC:
-                rpm_goal.add_distro_sync(tmp_queue, strict, best, clean_requirements_on_remove);
+                rpm_goal.add_remove(ids, settings.get_clean_requirements_on_remove(cfg_main));
                 break;
             default:
                 throw std::invalid_argument("Unsupported action");
         }
-
-
-        //         subj = dnf.subject.Subject(pkg_spec)
-        //         solution = subj.get_best_solution(self.sack)
-        //         q = solution["query"]
-        //         if q:
-        //             wildcard = dnf.util.is_glob_pattern(pkg_spec)
-        //             # wildcard shouldn't print not installed packages
-        //             # only solution with nevra.name provide packages with same name
-        //             if not wildcard and solution['nevra'] and solution['nevra'].name:
-        //                 installed = self.sack.query().installed()
-        //                 pkg_name = solution['nevra'].name
-        //                 installed.filterm(name=pkg_name).apply()
-        //                 if not installed:
-        //                     msg = _('Package %s available, but not installed.')
-        //                     logger.warning(msg, pkg_name)
-        //                     raise dnf.exceptions.PackagesNotInstalledError(
-        //                         _('No match for argument: %s') % pkg_spec, pkg_spec)
-        //                 if solution['nevra'].arch and not dnf.util.is_glob_pattern(solution['nevra'].arch):
-        //                     if not installed.filter(arch=solution['nevra'].arch):
-        //                         msg = _('Package %s available, but installed for different architecture.')
-        //                         logger.warning(msg, "{}.{}".format(pkg_name, solution['nevra'].arch))
-        //             obsoletes = self.conf.obsoletes and solution['nevra']
-        //                         and solution['nevra'].has_just_name()
-        //             return self._upgrade_internal(q, obsoletes, reponame, pkg_spec)
-        //         raise dnf.exceptions.MarkingError(_('No match for argument: %s') % pkg_spec, pkg_spec)
-
-        //     def _upgrade_internal(self, query, obsoletes, reponame, pkg_spec=None):
-        //         installed_all = self.sack.query().installed()
-        //         q = query.intersection(self.sack.query().filterm(name=[pkg.name for pkg in installed_all]))
-        //         installed_query = q.installed()
-        //         if obsoletes:
-        //             obsoletes = self.sack.query().available().filterm(
-        //                 obsoletes=installed_query.union(q.upgrades()))
-        //             # add obsoletes into transaction
-        //             q = q.union(obsoletes)
-        //         if reponame is not None:
-        //             q.filterm(reponame=reponame)
-        //         q = self._merge_update_filters(q, pkg_spec=pkg_spec)
-        //         if q:
-        //             q = q.available().union(installed_query.latest())
-        //             sltr = dnf.selector.Selector(self.sack)
-        //             sltr.set(pkg=q)
-        //             self._goal.upgrade(select=sltr)
-        //         return 1
     }
+}
+
+void Goal::Impl::add_remove_to_goal(const std::string & spec, const libdnf::GoalSettings & settings) {
+    auto & sack = base->get_rpm_solv_sack();
+    libdnf::rpm::SolvQuery base_query(&sack);
+    base_query.ifilter_installed();
+    libdnf::rpm::SolvQuery query(base_query);
+
+    auto nevra_pair = query.resolve_pkg_spec(spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, false, settings.forms);
+    if (!nevra_pair.first) {
+        report_not_found(libdnf::Goal::Action::REMOVE, spec, settings);
+        return;
+    }
+
+    if (!settings.to_repo_ids.empty()) {
+        // TODO(jmracek) keep only packages installed from repo_id -requires swdb
+        if (query.empty()) {
+            // TODO(jmracek) no solution for the spec => mark result - not in repository
+            return;
+        }
+    }
+    rpm_goal.add_remove(*query.p_impl, settings.get_clean_requirements_on_remove(base->get_config()));
+}
+
+void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::string & spec, const libdnf::GoalSettings & settings) {
+    auto & sack = base->get_rpm_solv_sack();
+    libdnf::rpm::SolvQuery base_query(&sack);
+    auto obsoletes = base->get_config().obsoletes().get_value();
+    libdnf::rpm::solv::IdQueue tmp_queue;
+    libdnf::rpm::SolvQuery query(base_query);
+    auto nevra_pair = query.resolve_pkg_spec(spec, false, true, true, true, false, {});
+    if (!nevra_pair.first) {
+        report_not_found(action, spec, settings);
+        return;
+    }
+    // TODO(jmracek) Report when package is not installed
+    // _('Package %s available, but not installed.')
+    // _('Package %s available, but installed for different architecture.')
+
+    bool add_obsoletes = obsoletes && nevra_pair.second.has_just_name();
+    libdnf::rpm::SolvQuery installed(query);
+    installed.ifilter_installed();
+    // TODO(jmracek) Apply latest filters on installed (or later)
+    if (add_obsoletes) {
+        libdnf::rpm::SolvQuery obsoletes_query(base_query);
+        obsoletes_query.ifilter_available();
+        // TODO(jmracek) use upgrades + installed when the filter will be available libdnf::rpm::SolvQuery what_obsoletes(query);
+        // what_obsoletes.ifilter_upgrades()
+        obsoletes_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, query);
+        // obsoletes = self.sack.query().available().filterm(obsoletes=installed_query.union(q.upgrades()))
+        query |= obsoletes_query;
+    }
+    if (!settings.to_repo_ids.empty()) {
+        query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, settings.to_repo_ids);
+        query |= installed;
+        if (query.empty()) {
+            // TODO(jmracek) no solution for the spec => mark result - not in repository what if installed?
+            return;
+        }
+    }
+    // TODO(jmracek) Apply security filters
+    // TODO(jmracek) q = q.available().union(installed_query.latest())
+    // Required for a correct upgrade of installonly packages
+    solv_map_to_id_queue(tmp_queue, *query.p_impl);
+    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+    switch (action) {
+        case Action::UPGRADE:
+            rpm_goal.add_upgrade(tmp_queue, settings.get_best(base->get_config()), clean_requirements_on_remove);
+            break;
+        case Action::DISTRO_SYNC:
+            rpm_goal.add_distro_sync(tmp_queue, settings.get_strict(base->get_config()), settings.get_best(base->get_config()), clean_requirements_on_remove);
+            break;
+        default:
+            throw std::invalid_argument("Unsupported action");
+    }
+
+
+    //         subj = dnf.subject.Subject(pkg_spec)
+    //         solution = subj.get_best_solution(self.sack)
+    //         q = solution["query"]
+    //         if q:
+    //             wildcard = dnf.util.is_glob_pattern(pkg_spec)
+    //             # wildcard shouldn't print not installed packages
+    //             # only solution with nevra.name provide packages with same name
+    //             if not wildcard and solution['nevra'] and solution['nevra'].name:
+    //                 installed = self.sack.query().installed()
+    //                 pkg_name = solution['nevra'].name
+    //                 installed.filterm(name=pkg_name).apply()
+    //                 if not installed:
+    //                     msg = _('Package %s available, but not installed.')
+    //                     logger.warning(msg, pkg_name)
+    //                     raise dnf.exceptions.PackagesNotInstalledError(
+    //                         _('No match for argument: %s') % pkg_spec, pkg_spec)
+    //                 if solution['nevra'].arch and not dnf.util.is_glob_pattern(solution['nevra'].arch):
+    //                     if not installed.filter(arch=solution['nevra'].arch):
+    //                         msg = _('Package %s available, but installed for different architecture.')
+    //                         logger.warning(msg, "{}.{}".format(pkg_name, solution['nevra'].arch))
+    //             obsoletes = self.conf.obsoletes and solution['nevra']
+    //                         and solution['nevra'].has_just_name()
+    //             return self._upgrade_internal(q, obsoletes, reponame, pkg_spec)
+    //         raise dnf.exceptions.MarkingError(_('No match for argument: %s') % pkg_spec, pkg_spec)
+
+    //     def _upgrade_internal(self, query, obsoletes, reponame, pkg_spec=None):
+    //         installed_all = self.sack.query().installed()
+    //         q = query.intersection(self.sack.query().filterm(name=[pkg.name for pkg in installed_all]))
+    //         installed_query = q.installed()
+    //         if obsoletes:
+    //             obsoletes = self.sack.query().available().filterm(
+    //                 obsoletes=installed_query.union(q.upgrades()))
+    //             # add obsoletes into transaction
+    //             q = q.union(obsoletes)
+    //         if reponame is not None:
+    //             q.filterm(reponame=reponame)
+    //         q = self._merge_update_filters(q, pkg_spec=pkg_spec)
+    //         if q:
+    //             q = q.available().union(installed_query.latest())
+    //             sltr = dnf.selector.Selector(self.sack)
+    //             sltr.set(pkg=q)
+    //             self._goal.upgrade(select=sltr)
+    //         return 1
 }
 
 
@@ -848,9 +708,7 @@ libdnf::GoalProblem Goal::resolve(bool allow_erasing) {
     // TODO(jmracek) Apply modules first
     // TODO(jmracek) Apply comps second or later
     // TODO(jmracek) Reset rpm_goal, setup rpm-goal flags according to conf, (allow downgrade), obsoletes, vendor, ...
-    p_impl->add_install_to_goal();
-    p_impl->add_remove_to_goal();
-    p_impl->add_upgrades_distrosync_to_goal();
+    p_impl->add_specs_to_goal();
     p_impl->add_rpms_to_goal();
 
     auto & cfg_main = p_impl->base->get_config();
