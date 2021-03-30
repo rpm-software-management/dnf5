@@ -101,12 +101,12 @@ inline void pool_split_evr(Pool * pool, const char * evr_c, char ** epoch, char 
     *release = r;
 }
 
-static inline unsigned long long lookup_num(Solvable * solvable, unsigned type) {
+static inline unsigned long long lookup_num(Solvable * solvable, Id type) {
     SolvPrivate::internalize_libsolv_repo(solvable->repo);
     return solvable_lookup_num(solvable, type, 0);
 }
 
-static inline const char * lookup_cstring(Solvable * solvable, unsigned type) {
+static inline const char * lookup_cstring(Solvable * solvable, Id type) {
     SolvPrivate::internalize_libsolv_repo(solvable->repo);
     return solvable_lookup_str(solvable, type);
 }
