@@ -91,7 +91,7 @@ void RepoSack::new_repos_from_file(const std::string & path) {
             section));
 
         auto bad_char_idx = Repo::verify_id(repo_id);
-        if (bad_char_idx >= 0) {
+        if (bad_char_idx != std::string::npos) {
             auto msg = fmt::format(
                 R"**(Bad id for repo "{}" section "{}", char = {} at pos {})**",
                 repo_id,

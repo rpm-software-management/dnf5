@@ -385,7 +385,7 @@ Repo::Impl::~Impl() {
 Repo::Repo(const std::string & id, Base & base, Repo::Type type) {
     if (type == Type::AVAILABLE) {
         auto idx = verify_id(id);
-        if (idx >= 0) {
+        if (idx != std::string::npos) {
             std::string msg = fmt::format(_("Bad id for repo: {}, byte = {} {}"), id, id[idx], idx);
             throw RuntimeError(msg);
         }
@@ -399,9 +399,8 @@ void Repo::set_callbacks(std::unique_ptr<RepoCB> && callbacks) {
     p_impl->callbacks = std::move(callbacks);
 }
 
-int Repo::verify_id(const std::string & repo_id) {
-    auto idx = repo_id.find_first_not_of(REPOID_CHARS);
-    return idx == repo_id.npos ? -1 : static_cast<int>(idx);
+std::string::size_type Repo::verify_id(const std::string & repo_id) {
+    return repo_id.find_first_not_of(REPOID_CHARS);
 }
 
 void Repo::verify() const {

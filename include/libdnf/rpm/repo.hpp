@@ -114,9 +114,9 @@ public:
 
     /// Verify repo ID
     /// @param id repo ID to verify
-    /// @return   index of the first invalid character in the repo ID (if present) or -1
+    /// @return   index of the first invalid character in the repo ID (if present) or std::string::npos
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.verifyId(const std::string & id)
-    static int verify_id(const std::string & repo_id);
+    static std::string::size_type verify_id(const std::string & repo_id);
 
     /// Construct the Repo object
     /// @param id     repo ID to use
