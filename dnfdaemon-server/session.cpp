@@ -19,6 +19,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "session.hpp"
 
+#include "callbacks.hpp"
 #include "dbus.hpp"
 #include "services/base/base.hpp"
 #include "services/repo/repo.hpp"
@@ -32,80 +33,6 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <chrono>
 #include <iostream>
 #include <string>
-
-class DbusRepoCB : public libdnf::rpm::RepoCB {
-public:
-    DbusRepoCB(Session * session) : session(session) {
-        dbus_object = session->get_dbus_object();
-    };
-    void start(const char * what) override {
-        try {
-            auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START);
-            add_signature(signal);
-            signal << what;
-            dbus_object->emitSignal(signal);
-        } catch (...) {
-        }
-    }
-
-    void end() override {
-        try {
-            auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END);
-            add_signature(signal);
-            dbus_object->emitSignal(signal);
-        } catch (...) {
-        }
-    }
-
-    int progress(double total_to_download, double downloaded) override {
-        try {
-            if (is_time_to_print()) {
-                auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
-                add_signature(signal);
-                signal << downloaded;
-                signal << total_to_download;
-                dbus_object->emitSignal(signal);
-            }
-        } catch (...) {
-        }
-        return 0;
-    }
-
-    // TODO(mblaha): how to ask the user for confirmation?
-    bool repokey_import(
-        [[maybe_unused]] const std::string & id,
-        [[maybe_unused]] const std::string & user_id,
-        [[maybe_unused]] const std::string & fingerprint,
-        [[maybe_unused]] const std::string & url,
-        [[maybe_unused]] long int timestamp) override {
-        return false;
-    }
-
-private:
-    Session * session;
-    sdbus::IObject * dbus_object;
-
-    void add_signature(sdbus::Signal & signal) {
-        // TODO(mblaha): uncomment once setDestination is available in sdbus-cpp
-        //signal.setDestination(session->get_sender());
-        signal << session->get_object_path();
-    }
-
-    static bool is_time_to_print() {
-        auto now = std::chrono::steady_clock::now();
-        auto delta = now - prev_print_time;
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-        if (ms > 400) {
-            prev_print_time = now;
-            return true;
-        }
-        return false;
-    }
-    static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
-};
-
-std::chrono::time_point<std::chrono::steady_clock> DbusRepoCB::prev_print_time = std::chrono::steady_clock::now();
-
 
 class StderrLogger : public libdnf::Logger {
 public:
@@ -224,6 +151,10 @@ bool Session::read_all_repos() {
                 break;
             }
         }
+        // reset callbacks - otherwise progress callback is called later on during
+        // packages download when internal mirrorlist in librepo is prepared.
+        // (lr_download_packages() -> lr_handle_prepare_internal_mirrorlist())
+        repo->set_callbacks(nullptr);
     }
     repositories_status = retval ? dnfdaemon::RepoStatus::READY : dnfdaemon::RepoStatus::ERROR;
     return retval;
