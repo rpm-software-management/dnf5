@@ -81,6 +81,9 @@ public:
     bool get_best(libdnf::ConfigMain & cfg_main);
     bool get_clean_requirements_on_remove(libdnf::ConfigMain & cfg_main);
 
+    bool with_nevra{true};
+    bool with_provides{true};
+    bool with_filenames{true};
     GoalSetting strict{GoalSetting::AUTO};
     GoalSetting best{GoalSetting::AUTO};
     GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
