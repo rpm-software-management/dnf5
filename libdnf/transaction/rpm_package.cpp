@@ -39,7 +39,7 @@ uint32_t Package::get_epoch_int() const {
     if (get_epoch().empty()) {
         return 0;
     }
-    return std::stoi(get_epoch());
+    return static_cast<uint32_t>(std::stoi(get_epoch()));
 }
 
 
@@ -126,10 +126,9 @@ TransactionItemReason Package::resolveTransactionItemReason(
 bool Package::operator<(const Package & other) const {
     // TODO(dmach): replace the whole function with a different implementation, preferably an existing code
     // compare epochs
-    int32_t epoch_diff = other.get_epoch_int() - get_epoch_int();
-    if (epoch_diff > 0) {
+    if (get_epoch_int() < other.get_epoch_int()) {
         return true;
-    } else if (epoch_diff < 0) {
+    } else if (get_epoch_int() > other.get_epoch_int()) {
         return false;
     }
 
