@@ -30,7 +30,6 @@ class ConfigRepo::Impl {
 
     Impl(Config & owner, ConfigMain & main_config);
 
-    Config & owner;
     ConfigMain & main_config;
 
     OptionString name{""};
@@ -84,7 +83,7 @@ class ConfigRepo::Impl {
     OptionBool build_cache{true};
 };
 
-ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config) : owner(owner), main_config(main_config) {
+ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config) : main_config(main_config) {
     owner.opt_binds().add("name", name);
     owner.opt_binds().add("enabled", enabled);
     owner.opt_binds().add("cachedir", basecachedir);
