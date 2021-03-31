@@ -24,12 +24,21 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
+#include <string>
 
 class Session;
 
 class DbusCallback {
+public:
+    explicit DbusCallback(Session & session);
+    virtual ~DbusCallback() = default;
+
 protected:
     static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
+    Session & session;
+    sdbus::IObject * dbus_object;
+
+    virtual sdbus::Signal create_signal(std::string interface, std::string signal_name);
     static bool is_time_to_print() {
         auto now = std::chrono::steady_clock::now();
         auto delta = now - prev_print_time;
@@ -40,28 +49,28 @@ protected:
         }
         return false;
     }
-    double total = 0;
 };
 
 class DbusPackageCB : public libdnf::rpm::PackageTargetCB, public DbusCallback {
 public:
-    DbusPackageCB(Session & session, const std::string & nevra);
+    explicit DbusPackageCB(Session & session, const std::string & nevra);
+    virtual ~DbusPackageCB() = default;
 
     int end(TransferStatus status, const char * msg) override;
     int progress(double total_to_download, double downloaded) override;
     int mirror_failure(const char * msg, const char * url) override;
 
 private:
-    Session & session;
-    sdbus::IObject * dbus_object;
     std::string nevra;
+    double total = 0;
 
-    void add_signature(sdbus::Signal & signal);
+    sdbus::Signal create_signal(std::string interface, std::string signal_name) override;
 };
 
 class DbusRepoCB : public libdnf::rpm::RepoCB, public DbusCallback {
 public:
-    DbusRepoCB(Session * session);
+    explicit DbusRepoCB(Session & session) : DbusCallback(session) {}
+    virtual ~DbusRepoCB() = default;
 
     void start(const char * what) override;
     void end() override;
@@ -78,10 +87,7 @@ public:
     }
 
 private:
-    Session * session;
-    sdbus::IObject * dbus_object;
-
-    void add_signature(sdbus::Signal & signal);
+    double total = 0;
 };
 
 #endif

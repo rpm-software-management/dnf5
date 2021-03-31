@@ -26,15 +26,26 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <iostream>
+#include <string>
+
+DbusCallback::DbusCallback(Session & session) : session(session) {
+    dbus_object = session.get_dbus_object();
+}
+
+sdbus::Signal DbusCallback::create_signal(std::string interface, std::string  signal_name) {
+    auto signal = dbus_object->createSignal(interface, signal_name);
+    // TODO(mblaha): uncomment once setDestination is available in sdbus-cpp
+    //signal.setDestination(session->get_sender());
+    signal << session.get_object_path();
+    return signal;
+}
 
 std::chrono::time_point<std::chrono::steady_clock> DbusCallback::prev_print_time = std::chrono::steady_clock::now();
 
 
-DbusPackageCB::DbusPackageCB(Session & session, const std::string & nevra) : session(session), nevra(nevra) {
-    dbus_object = session.get_dbus_object();
+DbusPackageCB::DbusPackageCB(Session & session, const std::string & nevra) : DbusCallback(session), nevra(nevra) {
     try {
-        auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_START);
-        add_signature(signal);
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_START);
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
@@ -47,14 +58,12 @@ int DbusPackageCB::end(TransferStatus status, const char * msg) {
         // Emit the progress signal at least once signalling that 100% of the package was downloaded.
         if (status == TransferStatus::SUCCESSFUL) {
             auto signal =
-                dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
-            add_signature(signal);
+                create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
             signal << total;
             signal << total;
             dbus_object->emitSignal(signal);
         }
-        auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_END);
-        add_signature(signal);
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_END);
         signal << static_cast<int>(status);
         signal << msg;
         dbus_object->emitSignal(signal);
@@ -68,8 +77,7 @@ int DbusPackageCB::progress(double total_to_download, double downloaded) {
     try {
         if (is_time_to_print()) {
             auto signal =
-                dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
-            add_signature(signal);
+                create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
             signal << downloaded;
             signal << total_to_download;
             dbus_object->emitSignal(signal);
@@ -82,8 +90,7 @@ int DbusPackageCB::progress(double total_to_download, double downloaded) {
 int DbusPackageCB::mirror_failure(const char * msg, const char * url) {
     try {
         auto signal =
-            dbus_object->createSignal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE);
-        add_signature(signal);
+            create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE);
         signal << msg;
         signal << url;
         dbus_object->emitSignal(signal);
@@ -92,22 +99,16 @@ int DbusPackageCB::mirror_failure(const char * msg, const char * url) {
     return 0;
 }
 
-void DbusPackageCB::add_signature(sdbus::Signal & signal) {
-    // TODO(mblaha): uncomment once setDestination is available in sdbus-cpp
-    //signal.setDestination(session->get_sender());
-    signal << session.get_object_path();
+sdbus::Signal DbusPackageCB::create_signal(std::string interface, std::string  signal_name) {
+    auto signal = DbusCallback::create_signal(interface, signal_name);
     signal << nevra;
+    return signal;
 }
 
 
-DbusRepoCB::DbusRepoCB(Session * session) : session(session) {
-    dbus_object = session->get_dbus_object();
-};
-
 void DbusRepoCB::start(const char * what) {
     try {
-        auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START);
-        add_signature(signal);
+        auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START);
         signal << what;
         dbus_object->emitSignal(signal);
     } catch (...) {
@@ -116,18 +117,25 @@ void DbusRepoCB::start(const char * what) {
 
 void DbusRepoCB::end() {
     try {
-        auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END);
-        add_signature(signal);
-        dbus_object->emitSignal(signal);
+        {
+            auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
+            signal << total;
+            signal << total;
+            dbus_object->emitSignal(signal);
+        }
+        {
+            auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END);
+            dbus_object->emitSignal(signal);
+        }
     } catch (...) {
     }
 }
 
 int DbusRepoCB::progress(double total_to_download, double downloaded) {
+    total = total_to_download;
     try {
         if (is_time_to_print()) {
-            auto signal = dbus_object->createSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
-            add_signature(signal);
+            auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
             signal << downloaded;
             signal << total_to_download;
             dbus_object->emitSignal(signal);
@@ -135,10 +143,4 @@ int DbusRepoCB::progress(double total_to_download, double downloaded) {
     } catch (...) {
     }
     return 0;
-}
-
-void DbusRepoCB::add_signature(sdbus::Signal & signal) {
-    // TODO(mblaha): uncomment once setDestination is available in sdbus-cpp
-    //signal.setDestination(session->get_sender());
-    signal << session->get_object_path();
 }

@@ -141,7 +141,7 @@ bool Session::read_all_repos() {
     auto & solv_sack = base->get_rpm_solv_sack();
     bool retval = true;
     for (auto & repo : enabled_repos.get_data()) {
-        repo->set_callbacks(std::make_unique<DbusRepoCB>(this));
+        repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
         try {
             repo->load();
             solv_sack.load_repo(*repo.get(), flags);
