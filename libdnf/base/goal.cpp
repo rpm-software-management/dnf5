@@ -547,9 +547,28 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::strin
         report_not_found(action, spec, settings);
         return;
     }
-    // TODO(jmracek) Report when package is not installed
-    // _('Package %s available, but not installed.')
-    // _('Package %s available, but installed for different architecture.')
+    // Report when package is not installed
+    if (!libdnf::utils::is_glob_pattern(spec.c_str()) && !nevra_pair.second.get_name().empty()) {
+        // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
+        libdnf::rpm::SolvQuery all_installed(&sack);
+        all_installed.ifilter_installed();
+        bool obsoleters = false;
+        if (obsoletes) {
+            libdnf::rpm::SolvQuery obsoleters_query(query);
+            obsoleters_query.ifilter_obsoletes(libdnf::sack::QueryCmp::EQ, all_installed);
+            if (obsoleters_query.empty()) {
+                obsoleters = true;
+            }
+        }
+        if (!obsoleters) {
+            all_installed.ifilter_name(libdnf::sack::QueryCmp::EQ, {nevra_pair.second.get_name()});
+            if (all_installed.empty()) {
+                rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_INSTALLED, settings, spec));
+            } else if (all_installed.ifilter_arch(libdnf::sack::QueryCmp::EQ, {nevra_pair.second.get_name()}).empty()) {
+                rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec));
+            }
+        }
+    }
 
     bool add_obsoletes = obsoletes && nevra_pair.second.has_just_name();
     libdnf::rpm::SolvQuery installed(query);
@@ -568,10 +587,11 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::strin
         query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, settings.to_repo_ids);
         query |= installed;
         if (query.empty()) {
-            // TODO(jmracek) no solution for the spec => mark result - not in repository what if installed?
+            rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec));
             return;
         }
     }
+
     // TODO(jmracek) Apply security filters
     // TODO(jmracek) q = q.available().union(installed_query.latest())
     // Required for a correct upgrade of installonly packages
@@ -587,51 +607,6 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::strin
         default:
             throw std::invalid_argument("Unsupported action");
     }
-
-
-    //         subj = dnf.subject.Subject(pkg_spec)
-    //         solution = subj.get_best_solution(self.sack)
-    //         q = solution["query"]
-    //         if q:
-    //             wildcard = dnf.util.is_glob_pattern(pkg_spec)
-    //             # wildcard shouldn't print not installed packages
-    //             # only solution with nevra.name provide packages with same name
-    //             if not wildcard and solution['nevra'] and solution['nevra'].name:
-    //                 installed = self.sack.query().installed()
-    //                 pkg_name = solution['nevra'].name
-    //                 installed.filterm(name=pkg_name).apply()
-    //                 if not installed:
-    //                     msg = _('Package %s available, but not installed.')
-    //                     logger.warning(msg, pkg_name)
-    //                     raise dnf.exceptions.PackagesNotInstalledError(
-    //                         _('No match for argument: %s') % pkg_spec, pkg_spec)
-    //                 if solution['nevra'].arch and not dnf.util.is_glob_pattern(solution['nevra'].arch):
-    //                     if not installed.filter(arch=solution['nevra'].arch):
-    //                         msg = _('Package %s available, but installed for different architecture.')
-    //                         logger.warning(msg, "{}.{}".format(pkg_name, solution['nevra'].arch))
-    //             obsoletes = self.conf.obsoletes and solution['nevra']
-    //                         and solution['nevra'].has_just_name()
-    //             return self._upgrade_internal(q, obsoletes, reponame, pkg_spec)
-    //         raise dnf.exceptions.MarkingError(_('No match for argument: %s') % pkg_spec, pkg_spec)
-
-    //     def _upgrade_internal(self, query, obsoletes, reponame, pkg_spec=None):
-    //         installed_all = self.sack.query().installed()
-    //         q = query.intersection(self.sack.query().filterm(name=[pkg.name for pkg in installed_all]))
-    //         installed_query = q.installed()
-    //         if obsoletes:
-    //             obsoletes = self.sack.query().available().filterm(
-    //                 obsoletes=installed_query.union(q.upgrades()))
-    //             # add obsoletes into transaction
-    //             q = q.union(obsoletes)
-    //         if reponame is not None:
-    //             q.filterm(reponame=reponame)
-    //         q = self._merge_update_filters(q, pkg_spec=pkg_spec)
-    //         if q:
-    //             q = q.available().union(installed_query.latest())
-    //             sltr = dnf.selector.Selector(self.sack)
-    //             sltr.set(pkg=q)
-    //             self._goal.upgrade(select=sltr)
-    //         return 1
 }
 
 

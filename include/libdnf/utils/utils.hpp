@@ -73,7 +73,9 @@ enum class GoalProblem : uint32_t {
     NOT_FOUND = (1 << 2),
     EXCLUDED = (1 << 3),
     ONLY_SRC = (1 << 4),
-    NOT_FOUND_IN_REPOSITORIES = (1 << 5)
+    NOT_FOUND_IN_REPOSITORIES = (1 << 5),
+    NOT_INSTALLED = (1 << 6),
+    NOT_INSTALLED_FOR_ARCHITECTURE = (1 << 7)
 };
 
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
