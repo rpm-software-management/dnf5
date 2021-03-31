@@ -29,6 +29,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <libdnf/transaction/transaction_item.hpp>
+#include "libdnf/utils/utils.hpp"
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
@@ -398,14 +399,19 @@ void Rpm::install(sdbus::MethodCall && call) {
             // read options from dbus call
             dnfdaemon::KeyValueMap options;
             call >> options;
+            // TODO(jmracek) Set libdnf::GoalSetting::Auto when a specific setting is not requested by the client
             bool strict = key_value_map_get<bool>(options, "strict", true);
+            auto strict_enum = strict ? libdnf::GoalSetting::SET_TRUE : libdnf::GoalSetting::SET_FALSE;
             std::vector<std::string> repo_ids =
                 key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
             // fill the goal
             auto & goal = session.get_goal();
+            libdnf::GoalSettings setting;
+            setting.strict = strict_enum;
+            setting.to_repo_ids = repo_ids;
             for (const auto & spec : specs) {
-                goal.add_rpm_install(spec, repo_ids, strict, {});
+                goal.add_rpm_install(spec, setting);
             }
 
             auto reply = call.createReply();
