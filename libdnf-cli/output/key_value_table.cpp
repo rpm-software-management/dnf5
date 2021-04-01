@@ -69,10 +69,15 @@ void KeyValueTable::print() {
 }
 
 
-struct libscols_line * KeyValueTable::add_line(const char * key, const std::string & value, const char * color, struct libscols_line * parent) {
+struct libscols_line * KeyValueTable::add_line(
+    const char * key,
+    const char * value,
+    const char * color,
+    struct libscols_line * parent
+) {
     struct libscols_line * ln = scols_table_new_line(tb, parent);
     scols_line_set_data(ln, 0, key);
-    scols_line_set_data(ln, 1, value.c_str());
+    scols_line_set_data(ln, 1, value);
 
     if (color && strcmp(color, "") != 0) {
         auto cell_value = scols_line_get_cell(ln, 1);
@@ -83,12 +88,22 @@ struct libscols_line * KeyValueTable::add_line(const char * key, const std::stri
 }
 
 
-struct libscols_line * KeyValueTable::add_line(const char * key, int64_t value, const char * color, struct libscols_line * parent) {
-    return add_line(key, std::to_string(value), color, parent);
+struct libscols_line * KeyValueTable::add_line(
+    const char * key,
+    const std::string & value,
+    const char * color,
+    struct libscols_line * parent
+) {
+    return add_line(key, value.c_str(), color, parent);
 }
 
 
-struct libscols_line * KeyValueTable::add_line(const char * key, const std::vector<std::string> & value, const char * color, struct libscols_line * parent) {
+struct libscols_line * KeyValueTable::add_line(
+    const char * key,
+    const std::vector<std::string> & value,
+    const char * color,
+    struct libscols_line * parent
+) {
     return add_line(key, join(value, " "), color, parent);
 }
 
