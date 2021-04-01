@@ -7,9 +7,11 @@ file(GLOB_RECURSE TEST_LIBDNF_SOURCES *.cpp)
 
 add_executable(run_tests ${TEST_LIBDNF_SOURCES})
 
-# unused comparisons and values are frequently used in CPPUNIT_ASSERT_THROW
+# Disable warnings for operations used intentionally to test how the case is handled
 target_compile_options(run_tests PRIVATE "-Wno-unused-comparison")
 target_compile_options(run_tests PRIVATE "-Wno-unused-value")
+target_compile_options(run_tests PRIVATE "-Wno-self-assign-overloaded")
+target_compile_options(run_tests PRIVATE "-Wno-self-move")
 
 target_link_directories(run_tests PUBLIC ${CMAKE_BINARY_DIR}/libdnf)
 target_link_libraries(run_tests stdc++ libdnf cppunit)

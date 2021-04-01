@@ -25,17 +25,20 @@ set(SWIG_COMPILE_OPTIONS
     -Wno-conversion
     -Wno-deprecated-copy
     -Wno-deprecated-declarations
-    -Wno-maybe-uninitialized
     -Wno-missing-declarations
     -Wno-missing-field-initializers
     -Wno-sign-compare
+    -Wno-sometimes-uninitialized
     -Wno-strict-aliasing
     -Wno-unused-function
     -Wno-unused-parameter
 )
 
 if(NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS} -Wno-catch-value)
+    set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
+        -Wno-catch-value
+        -Wno-maybe-uninitialized
+    )
 endif()
 
 

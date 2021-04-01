@@ -18,6 +18,8 @@ separate_arguments(PERL_CFLAGS)
 
 # remove options unused by clang
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    list(REMOVE_ITEM PERL_CFLAGS -flto=auto)
+    list(REMOVE_ITEM PERL_CFLAGS -ffat-lto-objects)
     list(REMOVE_ITEM PERL_CFLAGS -fstack-clash-protection)
     list(REMOVE_ITEM PERL_CFLAGS -specs=/usr/lib/rpm/redhat/redhat-hardened-cc1)
     list(REMOVE_ITEM PERL_CFLAGS -specs=/usr/lib/rpm/redhat/redhat-annobin-cc1)
