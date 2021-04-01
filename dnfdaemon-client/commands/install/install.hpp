@@ -35,7 +35,6 @@ public:
 private:
     libdnf::OptionBool * strict_option{nullptr};
     libdnf::OptionBool * allow_erasing_option{nullptr};
-    std::vector<std::unique_ptr<libdnf::Option>> * repo_ids_options{nullptr};
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
 };
 
