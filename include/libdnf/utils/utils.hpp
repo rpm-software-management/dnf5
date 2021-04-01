@@ -80,9 +80,9 @@ enum class GoalProblem : uint32_t {
 
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
 
-struct GoalSettings {
+struct GoalJobSettings {
 public:
-    GoalSettings() = default;
+    GoalJobSettings() = default;
 
     bool with_nevra{true};
     bool with_provides{true};
@@ -122,7 +122,7 @@ inline GoalProblem operator&(GoalProblem lhs, GoalProblem rhs) {
         static_cast<std::underlying_type<GoalProblem>::type>(rhs));
 }
 
-inline bool GoalSettings::get_strict(const libdnf::ConfigMain & cfg_main) const {
+inline bool GoalJobSettings::get_strict(const libdnf::ConfigMain & cfg_main) const {
     bool ret;
     switch (strict) {
         case GoalSetting::AUTO:
@@ -138,7 +138,7 @@ inline bool GoalSettings::get_strict(const libdnf::ConfigMain & cfg_main) const 
     return ret;
 }
 
-inline bool GoalSettings::get_best(const libdnf::ConfigMain & cfg_main) const {
+inline bool GoalJobSettings::get_best(const libdnf::ConfigMain & cfg_main) const {
     bool ret;
     switch (best) {
         case GoalSetting::AUTO:
@@ -154,7 +154,7 @@ inline bool GoalSettings::get_best(const libdnf::ConfigMain & cfg_main) const {
     return ret;
 }
 
-inline bool GoalSettings::get_clean_requirements_on_remove(const libdnf::ConfigMain & cfg_main) const {
+inline bool GoalJobSettings::get_clean_requirements_on_remove(const libdnf::ConfigMain & cfg_main) const {
     bool ret;
     switch (clean_requirements_on_remove) {
         case GoalSetting::AUTO:

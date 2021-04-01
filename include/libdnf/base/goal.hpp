@@ -46,40 +46,40 @@ public:
     void add_module_enable(const std::string & spec);
     void add_rpm_install(
         const std::string & spec,
-        libdnf::GoalSettings settings = libdnf::GoalSettings());
+        libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     /// Prevent reinstallation by adding of already installed packages with the same NEVRA
     void add_rpm_install(
-        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     /// Prevent reinstallation by adding of already installed packages with the same NEVRA
     void add_rpm_install(
-        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_install_or_reinstall(
-        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_install_or_reinstall(
-        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_remove(
         const std::string & spec,
-        libdnf::GoalSettings settings = libdnf::GoalSettings());
+        libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_remove(
-        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_remove(
-        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_upgrade(
         const std::string & spec,
-        libdnf::GoalSettings settings = libdnf::GoalSettings());
-    void add_rpm_upgrade(libdnf::GoalSettings settings = libdnf::GoalSettings());
+        libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
+    void add_rpm_upgrade(libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_upgrade(
-        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_upgrade(
-        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_distro_sync(
         const std::string & spec,
-        libdnf::GoalSettings settings = libdnf::GoalSettings());
-    void add_rpm_distro_sync(libdnf::GoalSettings settings = libdnf::GoalSettings());
+        libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
+    void add_rpm_distro_sync(libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_distro_sync(
-        const libdnf::rpm::Package & rpm_package, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
     void add_rpm_distro_sync(
-        const libdnf::rpm::PackageSet & package_set, libdnf::GoalSettings settings = libdnf::GoalSettings());
+        const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings = libdnf::GoalJobSettings());
 
     libdnf::GoalProblem resolve(bool allow_erasing);
 

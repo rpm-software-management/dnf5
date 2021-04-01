@@ -407,7 +407,7 @@ void Rpm::install(sdbus::MethodCall && call) {
 
             // fill the goal
             auto & goal = session.get_goal();
-            libdnf::GoalSettings setting;
+            libdnf::GoalJobSettings setting;
             setting.strict = strict_enum;
             setting.to_repo_ids = repo_ids;
             for (const auto & spec : specs) {
