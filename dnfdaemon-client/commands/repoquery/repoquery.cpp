@@ -150,7 +150,7 @@ void CmdRepoquery::run(Context & ctx) {
     dnfdaemon::KeyValueMapList packages;
     ctx.session_proxy->callMethod("list")
         .onInterface(dnfdaemon::INTERFACE_RPM)
-        .withTimeout(-1)
+        .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(options)
         .storeResultsTo(packages);
 

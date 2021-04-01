@@ -137,7 +137,10 @@ dnfdaemon::RepoStatus Context::wait_for_repos() {
             }
         };
         repositories_status = dnfdaemon::RepoStatus::PENDING;
-        session_proxy->callMethodAsync("read_all_repos").onInterface(dnfdaemon::INTERFACE_BASE).withTimeout(-1).uponReplyInvoke(callback);
+        session_proxy->callMethodAsync("read_all_repos")
+            .onInterface(dnfdaemon::INTERFACE_BASE)
+            .withTimeout(static_cast<uint64_t>(-1))
+            .uponReplyInvoke(callback);
     }
     while (repositories_status == dnfdaemon::RepoStatus::PENDING) {
         sleep(1);

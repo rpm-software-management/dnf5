@@ -98,7 +98,7 @@ void CmdInstall::run(Context & ctx) {
 
     ctx.session_proxy->callMethod("install")
         .onInterface(dnfdaemon::INTERFACE_RPM)
-        .withTimeout(-1)
+        .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(patterns, options);
 
     // resolve the transaction
@@ -107,7 +107,7 @@ void CmdInstall::run(Context & ctx) {
     std::vector<dnfdaemon::DbusTransactionItem> transaction;
     ctx.session_proxy->callMethod("resolve")
         .onInterface(dnfdaemon::INTERFACE_RPM)
-        .withTimeout(-1)
+        .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(options)
         .storeResultsTo(transaction);
     if (transaction.empty()) {
@@ -136,7 +136,7 @@ void CmdInstall::run(Context & ctx) {
     options.clear();
     ctx.session_proxy->callMethod("do_transaction")
         .onInterface(dnfdaemon::INTERFACE_RPM)
-        .withTimeout(-1)
+        .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(options);
 }
 
