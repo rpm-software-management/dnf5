@@ -154,16 +154,24 @@ public:
     Impl(Base * base);
     ~Impl();
 
-    void add_rpm_ids(libdnf::Goal::Action action, const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings);
-    void add_rpm_ids(libdnf::Goal::Action action, const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings);
+    void add_rpm_ids(
+        libdnf::Goal::Action action,
+        const libdnf::rpm::Package & rpm_package,
+        const libdnf::GoalJobSettings & settings);
+    void add_rpm_ids(
+        libdnf::Goal::Action action,
+        const libdnf::rpm::PackageSet & package_set,
+        const libdnf::GoalJobSettings & settings);
 
     void add_specs_to_goal();
     void add_install_to_goal(const std::string & spec, const libdnf::GoalJobSettings & settings);
     void add_remove_to_goal(const std::string & spec, const libdnf::GoalJobSettings & settings);
-    void add_upgrades_distrosync_to_goal(Action action, const std::string & spec, const libdnf::GoalJobSettings & settings);
+    void add_upgrades_distrosync_to_goal(
+        Action action, const std::string & spec, const libdnf::GoalJobSettings & settings);
     void add_rpms_to_goal();
 
-    void report_not_found(libdnf::Goal::Action action, const std::string & pkg_spec, const libdnf::GoalJobSettings & settings);
+    void report_not_found(
+        libdnf::Goal::Action action, const std::string & pkg_spec, const libdnf::GoalJobSettings & settings);
 
     std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
         const rpm::solv::IdQueue & broken_installed);
@@ -178,7 +186,8 @@ private:
     std::vector<std::tuple<Action, libdnf::rpm::solv::IdQueue, libdnf::GoalJobSettings>> rpm_ids;
 
     /// <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalSettings settings, std::string spec>
-    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings, std::string>> rpm_goal_reports;
+    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings, std::string>>
+        rpm_goal_reports;
 
     rpm::solv::GoalPrivate rpm_goal;
 };
@@ -197,71 +206,74 @@ void Goal::add_module_enable(const std::string & spec) {
     p_impl->module_enable_specs.push_back(spec);
 }
 
-void Goal::add_rpm_install(const std::string & spec, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_install(const std::string & spec, const libdnf::GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(Action::INSTALL, spec, settings));
 }
 
-void Goal::add_rpm_install(const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_install(const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::INSTALL, rpm_package, settings);
 }
 
-void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_install(const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::INSTALL, package_set, settings);
 }
 
-void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_install_or_reinstall(
+    const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::INSTALL_OR_REINSTALL, rpm_package, settings);
 }
 
-void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_install_or_reinstall(
+    const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::INSTALL_OR_REINSTALL, package_set, settings);
 }
 
-void Goal::add_rpm_remove(const std::string & spec, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_remove(const std::string & spec, const libdnf::GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(Action::REMOVE, spec, std::move(settings)));
 }
 
-void Goal::add_rpm_remove(const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_remove(const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::REMOVE, rpm_package, settings);
 }
 
-void Goal::add_rpm_remove(const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_remove(const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::REMOVE, package_set, settings);
 }
 
-void Goal::add_rpm_upgrade(const std::string & spec, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_upgrade(const std::string & spec, const libdnf::GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(Action::UPGRADE, spec, std::move(settings)));
 }
 
-void Goal::add_rpm_upgrade(libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_upgrade(const libdnf::GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(Action::UPGRADE_ALL, std::string(), std::move(settings)));
 }
 
-void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::UPGRADE, rpm_package, settings);
 }
 
-void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::UPGRADE, package_set, settings);
 }
 
-void Goal::add_rpm_distro_sync(const std::string & spec, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_distro_sync(const std::string & spec, const libdnf::GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(Action::DISTRO_SYNC, spec, std::move(settings)));
 }
 
-void Goal::add_rpm_distro_sync(libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_distro_sync(const libdnf::GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(Action::DISTRO_SYNC_ALL, std::string(), std::move(settings)));
 }
 
-void Goal::add_rpm_distro_sync(const libdnf::rpm::Package & rpm_package, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_distro_sync(const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::DISTRO_SYNC, rpm_package, settings);
 }
 
-void Goal::add_rpm_distro_sync(const libdnf::rpm::PackageSet & package_set, libdnf::GoalJobSettings settings) {
+void Goal::add_rpm_distro_sync(const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::DISTRO_SYNC, package_set, settings);
 }
 
-void Goal::Impl::add_rpm_ids(libdnf::Goal::Action action, const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings) {
+void Goal::Impl::add_rpm_ids(
+    libdnf::Goal::Action action, const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings) {
     if (rpm_package.sack.get() != &base->get_rpm_solv_sack()) {
         throw UsedDifferentSack();
     }
@@ -270,7 +282,10 @@ void Goal::Impl::add_rpm_ids(libdnf::Goal::Action action, const libdnf::rpm::Pac
     rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
 }
 
-void Goal::Impl::add_rpm_ids(libdnf::Goal::Action action, const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings) {
+void Goal::Impl::add_rpm_ids(
+    libdnf::Goal::Action action,
+    const libdnf::rpm::PackageSet & package_set,
+    const libdnf::GoalJobSettings & settings) {
     if (package_set.get_sack() != &base->get_rpm_solv_sack()) {
         throw UsedDifferentSack();
     }
@@ -302,7 +317,7 @@ void Goal::Impl::add_specs_to_goal() {
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id.id);
                 }
-                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
                 rpm_goal.add_upgrade(upgrade_ids, settings.get_best(cfg_main), clean_requirements_on_remove);
             } break;
             case Action::DISTRO_SYNC_ALL: {
@@ -311,8 +326,12 @@ void Goal::Impl::add_specs_to_goal() {
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id.id);
                 }
-                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
-                rpm_goal.add_distro_sync(upgrade_ids, settings.get_strict(cfg_main), settings.get_best(cfg_main), clean_requirements_on_remove);
+                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
+                rpm_goal.add_distro_sync(
+                    upgrade_ids,
+                    settings.get_strict(cfg_main),
+                    settings.get_best(cfg_main),
+                    clean_requirements_on_remove);
             } break;
             default:
                 throw std::invalid_argument("Unsupported action");
@@ -332,7 +351,8 @@ void Goal::Impl::add_install_to_goal(const std::string & spec, const libdnf::Goa
     libdnf::rpm::SolvQuery base_query(&sack);
     libdnf::rpm::PackageSet selected(&sack);
     libdnf::rpm::SolvQuery query(base_query);
-    auto nevra_pair = query.resolve_pkg_spec(spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, false, settings.forms);
+    auto nevra_pair = query.resolve_pkg_spec(
+        spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, false, settings.forms);
     if (!nevra_pair.first) {
         report_not_found(libdnf::Goal::Action::INSTALL, spec, settings);
         return;
@@ -348,13 +368,13 @@ void Goal::Impl::add_install_to_goal(const std::string & spec, const libdnf::Goa
     if (multilib_policy == "all") {
         // TODO(jmracek) Implement "all" logic
     } else if (multilib_policy == "best") {
-        if (!libdnf::utils::is_file_pattern(spec) && libdnf::utils::is_glob_pattern(spec.c_str()) &&
-            has_just_name) {
+        if (!libdnf::utils::is_file_pattern(spec) && libdnf::utils::is_glob_pattern(spec.c_str()) && has_just_name) {
             if (!settings.to_repo_ids.empty()) {
                 query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, settings.to_repo_ids);
                 query |= installed;
                 if (query.empty()) {
-                    rpm_goal_reports.emplace_back(std::make_tuple(libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec));
+                    rpm_goal_reports.emplace_back(std::make_tuple(
+                        libdnf::Goal::Action::INSTALL, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec));
                     return;
                 }
             }
@@ -451,10 +471,12 @@ void Goal::Impl::add_install_to_goal(const std::string & spec, const libdnf::Goa
     //         return 0
 }
 
-void Goal::Impl::report_not_found(libdnf::Goal::Action action, const std::string & pkg_spec, const libdnf::GoalJobSettings & settings) {
+void Goal::Impl::report_not_found(
+    libdnf::Goal::Action action, const std::string & pkg_spec, const libdnf::GoalJobSettings & settings) {
     auto & sack = base->get_rpm_solv_sack();
     libdnf::rpm::SolvQuery query(&sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
-    auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, true, settings.forms);
+    auto nevra_pair_reports = query.resolve_pkg_spec(
+        pkg_spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, true, settings.forms);
     if (!nevra_pair_reports.first) {
         // RPM was not excluded or there is no related srpm
         rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_FOUND, settings, pkg_spec));
@@ -498,11 +520,11 @@ void Goal::Impl::add_rpms_to_goal() {
                 rpm_goal.add_install(ids, settings.get_strict(cfg_main), settings.get_best(cfg_main));
                 break;
             case Action::UPGRADE: {
-                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
                 rpm_goal.add_upgrade(ids, settings.get_best(cfg_main), clean_requirements_on_remove);
             } break;
             case Action::DISTRO_SYNC: {
-                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
                 rpm_goal.add_upgrade(ids, settings.get_best(cfg_main), clean_requirements_on_remove);
             } break;
             case Action::REMOVE:
@@ -520,7 +542,8 @@ void Goal::Impl::add_remove_to_goal(const std::string & spec, const libdnf::Goal
     base_query.ifilter_installed();
     libdnf::rpm::SolvQuery query(base_query);
 
-    auto nevra_pair = query.resolve_pkg_spec(spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, false, settings.forms);
+    auto nevra_pair = query.resolve_pkg_spec(
+        spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, false, settings.forms);
     if (!nevra_pair.first) {
         report_not_found(libdnf::Goal::Action::REMOVE, spec, settings);
         return;
@@ -536,7 +559,8 @@ void Goal::Impl::add_remove_to_goal(const std::string & spec, const libdnf::Goal
     rpm_goal.add_remove(*query.p_impl, settings.get_clean_requirements_on_remove(base->get_config()));
 }
 
-void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::string & spec, const libdnf::GoalJobSettings & settings) {
+void Goal::Impl::add_upgrades_distrosync_to_goal(
+    Action action, const std::string & spec, const libdnf::GoalJobSettings & settings) {
     auto & sack = base->get_rpm_solv_sack();
     libdnf::rpm::SolvQuery base_query(&sack);
     auto obsoletes = base->get_config().obsoletes().get_value();
@@ -563,9 +587,11 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::strin
         if (!obsoleters) {
             all_installed.ifilter_name(libdnf::sack::QueryCmp::EQ, {nevra_pair.second.get_name()});
             if (all_installed.empty()) {
-                rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_INSTALLED, settings, spec));
+                rpm_goal_reports.emplace_back(
+                    std::make_tuple(action, libdnf::GoalProblem::NOT_INSTALLED, settings, spec));
             } else if (all_installed.ifilter_arch(libdnf::sack::QueryCmp::EQ, {nevra_pair.second.get_name()}).empty()) {
-                rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec));
+                rpm_goal_reports.emplace_back(
+                    std::make_tuple(action, libdnf::GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec));
             }
         }
     }
@@ -587,7 +613,8 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::strin
         query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, settings.to_repo_ids);
         query |= installed;
         if (query.empty()) {
-            rpm_goal_reports.emplace_back(std::make_tuple(action, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec));
+            rpm_goal_reports.emplace_back(
+                std::make_tuple(action, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec));
             return;
         }
     }
@@ -596,13 +623,17 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::strin
     // TODO(jmracek) q = q.available().union(installed_query.latest())
     // Required for a correct upgrade of installonly packages
     solv_map_to_id_queue(tmp_queue, *query.p_impl);
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE ? true : false;
+    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
     switch (action) {
         case Action::UPGRADE:
             rpm_goal.add_upgrade(tmp_queue, settings.get_best(base->get_config()), clean_requirements_on_remove);
             break;
         case Action::DISTRO_SYNC:
-            rpm_goal.add_distro_sync(tmp_queue, settings.get_strict(base->get_config()), settings.get_best(base->get_config()), clean_requirements_on_remove);
+            rpm_goal.add_distro_sync(
+                tmp_queue,
+                settings.get_strict(base->get_config()),
+                settings.get_best(base->get_config()),
+                clean_requirements_on_remove);
             break;
         default:
             throw std::invalid_argument("Unsupported action");
