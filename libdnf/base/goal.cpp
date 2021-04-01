@@ -382,7 +382,10 @@ libdnf::GoalProblem Goal::Impl::add_install_to_goal(
     if (multilib_policy == "all") {
         // TODO(jmracek) Implement "all" logic
     } else if (multilib_policy == "best") {
-        if (!libdnf::utils::is_file_pattern(spec) && libdnf::utils::is_glob_pattern(spec.c_str()) && has_just_name) {
+        if ((!libdnf::utils::is_file_pattern(spec) && libdnf::utils::is_glob_pattern(spec.c_str())) ||
+            (nevra_pair.second.get_name().empty() &&
+             (!nevra_pair.second.get_epoch().empty() || !nevra_pair.second.get_version().empty() ||
+              !nevra_pair.second.get_release().empty() || !nevra_pair.second.get_arch().empty()))) {
             if (!settings.to_repo_ids.empty()) {
                 query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, settings.to_repo_ids);
                 query |= installed;
