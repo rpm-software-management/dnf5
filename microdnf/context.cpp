@@ -309,8 +309,8 @@ public:
     PkgDownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
         : multi_progress_bar(&mp_bar)
         , what(what) {
-        progress_bar = new libdnf::cli::progressbar::DownloadProgressBar(-1, what);
-        multi_progress_bar->add_bar(progress_bar);
+        progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, what);
+        multi_progress_bar->add_bar(progress_bar.get());
     }
 
     int end(TransferStatus status, const char * msg) override {
@@ -375,7 +375,7 @@ private:
     static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
 
     libdnf::cli::progressbar::MultiProgressBar * multi_progress_bar;
-    libdnf::cli::progressbar::DownloadProgressBar * progress_bar;
+    std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar> progress_bar;
     std::string what;
 };
 
@@ -626,11 +626,12 @@ private:
             active_progress_bar->get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
             active_progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
         }
-        auto progress_bar = new libdnf::cli::progressbar::DownloadProgressBar(static_cast<int64_t>(total), descr);
-        multi_progress_bar.add_bar(progress_bar);
+        auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), descr);
+        multi_progress_bar.add_bar(progress_bar.get());
         progress_bar->set_auto_finish(false);
         progress_bar->start();
-        active_progress_bar = progress_bar;
+        active_progress_bar = progress_bar.get();
+        download_progress_bars.push_back(std::move(progress_bar));
     }
 
     static bool is_time_to_print() {
@@ -649,6 +650,7 @@ private:
 
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
+    std::vector<std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar>> download_progress_bars {};
 };
 
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();

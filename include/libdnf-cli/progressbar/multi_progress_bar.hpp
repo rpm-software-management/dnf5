@@ -26,7 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "progress_bar.hpp"
 
 #include <iostream>
-#include <mutex>
 #include <vector>
 
 
@@ -49,7 +48,6 @@ private:
     std::vector<ProgressBar *> bars_done;
     DownloadProgressBar total;
     std::size_t printed_lines = 0;
-    std::mutex mtx;
 };
 
 

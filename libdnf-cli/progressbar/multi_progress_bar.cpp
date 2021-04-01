@@ -43,10 +43,6 @@ MultiProgressBar::MultiProgressBar() : total(0, "Total") {
 
 
 MultiProgressBar::~MultiProgressBar() {
-    std::lock_guard<std::mutex> lck(mtx);
-    for (auto & i : bars_all) {
-        delete i;
-    }
     if (tty::is_interactive()) {
         std::cout << tty::cursor_show;
     }
