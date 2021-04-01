@@ -58,7 +58,7 @@ static void add_line_into_repolist_table(
 }
 
 template <class Query>
-static void print_repolist_table(Query query, bool with_status, int c) {
+static void print_repolist_table(Query query, bool with_status, size_t sort_column) {
     auto table = create_repolist_table(with_status);
     for (auto & repo : query.get_data()) {
         add_line_into_repolist_table(
@@ -68,7 +68,7 @@ static void print_repolist_table(Query query, bool with_status, int c) {
             repo->get_name().c_str(), //repo->get_config().name().get_value().c_str(),
             repo->is_enabled());
     }
-    auto cl = scols_table_get_column(table, c);
+    auto cl = scols_table_get_column(table, sort_column);
     scols_sort_table(table, cl);
 
     scols_print_table(table);
