@@ -88,7 +88,15 @@ public:
     libdnf::GoalProblem resolve(bool allow_erasing);
 
     /// Can be use to format elements from describe_all_solver_problems();
-    static std::string format_problem(const std::pair<libdnf::ProblemRules, std::vector<std::string>>);
+    static std::string format_problem(const std::pair<libdnf::ProblemRules, std::vector<std::string>> & raw);
+    /// Can be use to format elements from get_resolve_log();
+    static std::string format_rpm_log(
+        Action action, libdnf::GoalProblem problem, const libdnf::GoalJobSettings & settings, const std::string & spec);
+
+    /// @returns <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalSettings settings, std::string spec>.
+    /// Returs information about resolvement of Goal except problemes related to solver
+    const std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings, std::string>> &
+    get_resolve_log();
 
     /// @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
     /// @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
