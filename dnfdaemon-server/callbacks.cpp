@@ -18,9 +18,9 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "callbacks.hpp"
-
-#include "dnfdaemon-server/dbus.hpp"
+#include "dbus.hpp"
 #include "session.hpp"
+#include "transaction.hpp"
 
 #include <libdnf/rpm/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -143,4 +143,181 @@ int DbusRepoCB::progress(double total_to_download, double downloaded) {
     } catch (...) {
     }
     return 0;
+}
+
+
+sdbus::Signal DbusTransactionCB::create_signal_pkg(
+    std::string interface, std::string signal_name, const libdnf::rpm::RpmHeader & header) {
+    auto signal = create_signal(interface, signal_name);
+    signal << header.get_full_nevra();
+    return signal;
+}
+
+
+void DbusTransactionCB::install_start(
+    const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header, uint64_t total) {
+    try {
+        int action;
+        if (auto trans_item = static_cast<const dnfdaemon::RpmTransactionItem *>(item)) {
+            action = static_cast<int>(trans_item->get_action());
+        } else {
+            action = static_cast<int>(dnfdaemon::RpmTransactionItem::Actions::CLEANUP);
+        }
+        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, header);
+        signal << action;
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::install_progress(
+    const libdnf::rpm::TransactionItem * /*item*/,
+    const libdnf::rpm::RpmHeader & header,
+    uint64_t amount,
+    uint64_t total) {
+    try {
+        if (is_time_to_print()) {
+            auto signal =
+                create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS, header);
+            signal << amount;
+            signal << total;
+            dbus_object->emitSignal(signal);
+        }
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::install_stop(
+    const libdnf::rpm::TransactionItem * /*item*/,
+    const libdnf::rpm::RpmHeader & header,
+    uint64_t /*amount*/,
+    uint64_t total) {
+    try {
+        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP, header);
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+
+void DbusTransactionCB::script_start(
+    const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & header, uint64_t tag) {
+    try {
+        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, header);
+        signal << tag;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::script_stop(
+    const libdnf::rpm::TransactionItem * /*item*/,
+    const libdnf::rpm::RpmHeader & header,
+    uint64_t tag,
+    uint64_t return_code) {
+    try {
+        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, header);
+        signal << tag;
+        signal << return_code;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::elem_progress(
+    const libdnf::rpm::TransactionItem * /*item*/,
+    const libdnf::rpm::RpmHeader & header,
+    uint64_t amount,
+    uint64_t total) {
+    try {
+        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ELEM_PROGRESS, header);
+        signal << amount;
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::script_error(
+    const libdnf::rpm::TransactionItem * /*item*/,
+    const libdnf::rpm::RpmHeader & header,
+    uint64_t tag,
+    uint64_t return_code) {
+    try {
+        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, header);
+        signal << tag;
+        signal << return_code;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+
+void DbusTransactionCB::transaction_start(uint64_t total) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_START);
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::transaction_progress(uint64_t amount, uint64_t total) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_PROGRESS);
+        signal << amount;
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::transaction_stop(uint64_t total) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_TRANSACTION_STOP);
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+
+void DbusTransactionCB::verify_start(uint64_t total) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START);
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::verify_progress(uint64_t amount, uint64_t total) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_PROGRESS);
+        signal << amount;
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+void DbusTransactionCB::verify_stop(uint64_t total) {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_STOP);
+        signal << total;
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}
+
+
+void DbusTransactionCB::unpack_error(
+    const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & header) {
+    try {
+        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_UNPACK_ERROR, header);
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
 }

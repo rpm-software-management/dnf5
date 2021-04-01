@@ -21,6 +21,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #define DNFDAEMON_SERVER_CALLBACKS_HPP
 
 #include <libdnf/rpm/repo.hpp>
+#include <libdnf/rpm/transaction.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
@@ -88,6 +89,83 @@ public:
 
 private:
     double total = 0;
+};
+
+
+class DbusTransactionCB : public libdnf::rpm::TransactionCB, public DbusCallback {
+public:
+    explicit DbusTransactionCB(Session & session) : DbusCallback(session) {}
+    virtual ~DbusTransactionCB() = default;
+
+    // transaction preparation
+    void transaction_start(uint64_t total) override;
+    void transaction_progress(uint64_t amount, uint64_t total) override;
+    void transaction_stop(uint64_t total) override;
+
+    // install a package
+    void install_start(
+        const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header, uint64_t) override;
+    void install_progress(
+        const libdnf::rpm::TransactionItem * item,
+        const libdnf::rpm::RpmHeader & header,
+        uint64_t amount,
+        uint64_t total) override;
+    void install_stop(
+        const libdnf::rpm::TransactionItem * item,
+        const libdnf::rpm::RpmHeader & header,
+        uint64_t amount,
+        uint64_t total) override;
+
+    // uninstall a package (the same messages as for install are used)
+    void uninstall_start(
+        const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header, uint64_t total) override {
+        install_start(item, header, total);
+    }
+    void uninstall_progress(
+        const libdnf::rpm::TransactionItem * item,
+        const libdnf::rpm::RpmHeader & header,
+        uint64_t amount,
+        uint64_t total) override {
+        install_progress(item, header, amount, total);
+    }
+    void uninstall_stop(
+        const libdnf::rpm::TransactionItem * item,
+        const libdnf::rpm::RpmHeader & header,
+        uint64_t amount,
+        uint64_t total) override {
+        install_stop(item, header, amount, total);
+    }
+
+    void script_start(
+        const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header, uint64_t tag) override;
+    void script_stop(
+        const libdnf::rpm::TransactionItem * item,
+        const libdnf::rpm::RpmHeader & header,
+        uint64_t tag,
+        uint64_t return_code) override;
+    void script_error(
+        const libdnf::rpm::TransactionItem * item,
+        const libdnf::rpm::RpmHeader & header,
+        uint64_t tag,
+        uint64_t return_code) override;
+
+    void elem_progress(
+        const libdnf::rpm::TransactionItem * item,
+        const libdnf::rpm::RpmHeader & header,
+        uint64_t amount,
+        uint64_t total) override;
+
+    void verify_start(uint64_t total) override;
+    void verify_progress(uint64_t amount, uint64_t total) override;
+    void verify_stop(uint64_t total) override;
+
+    void unpack_error(const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header) override;
+    void cpio_error(
+        const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & /*header*/) override{};
+
+private:
+    sdbus::Signal create_signal_pkg(
+        std::string interface, std::string signal_name, const libdnf::rpm::RpmHeader & header);
 };
 
 #endif

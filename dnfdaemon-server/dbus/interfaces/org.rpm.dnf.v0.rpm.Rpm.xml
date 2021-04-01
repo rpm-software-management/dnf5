@@ -169,8 +169,126 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Unknown options are ignored.
     -->
     <method name="do_transaction">
+        <arg name="options" type="a{sv}" direction="in" />
     </method>
 
+
+    <!--
+        transaction_action_start:
+        @nevra: full NEVRA of the package
+        @action: one of the dnfdaemon::RpmTransactionItem::Actions enum
+        @total: total to process
+
+        Processing of the item has started.
+    -->
+    <signal name="transaction_action_start">
+        <arg name="nevra" type="s" />
+        <arg name="action" type="u" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_action_progress:
+        @nevra: full NEVRA of the package
+        @amount: amount already processed
+        @total: total to process
+
+        Progress in processing of the package.
+    -->
+    <signal name="transaction_action_progress">
+        <arg name="nevra" type="s" />
+        <arg name="amount" type="t" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_action_stop:
+        @nevra: full NEVRA of the package
+        @total: total processed
+
+        Processing of the item has finished.
+    -->
+    <signal name="transaction_action_stop">
+        <arg name="nevra" type="s" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_script_start:
+        @nevra: full NEVRA of the package script belongs to
+
+        The scriptlet has started.
+    -->
+    <signal name="transaction_script_start">
+        <arg name="nevra" type="s" />
+    </signal>
+
+    <!--
+        transaction_script_stop:
+        @nevra: full NEVRA of the package script belongs to
+        @return_code: return value of the script
+
+        The scriptlet has successfully finished.
+    -->
+    <signal name="transaction_script_stop">
+        <arg name="nevra" type="s" />
+        <arg name="return_code" type="t" />
+    </signal>
+
+    <!--
+        transaction_script_error:
+        @nevra: full NEVRA of the package script belongs to
+        @return_code: return value of the script
+
+        The scriptlet has finished with an error.
+    -->
+    <signal name="transaction_script_error">
+        <arg name="nevra" type="s" />
+        <arg name="return_code" type="t" />
+    </signal>
+
+    <!--
+        transaction_verify_start:
+        @total: total to process
+
+        Package files verification has started.
+    -->
+    <signal name="transaction_verify_start">
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_verify_progress:
+        @nevra: full NEVRA of the package
+        @amount: amount already processed
+        @total: total to process
+
+        Progress in processing of the package.
+    -->
+    <signal name="transaction_verify_progress">
+        <arg name="amount" type="t" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_verify_stop:
+        @nevra: full NEVRA of the package
+
+        Package files verification has finished.
+    -->
+    <signal name="transaction_verify_stop">
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        transaction_unpack_error:
+        @nevra: full NEVRA of the package
+
+        Error while unpacking the package.
+    -->
+    <signal name="transaction_unpack_error">
+        <arg name="nevra" type="s" />
+    </signal>
 </interface>
 
 </node>

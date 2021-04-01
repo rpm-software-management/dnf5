@@ -65,6 +65,21 @@ const char * const SIGNAL_PACKAGE_DOWNLOAD_PROGRESS = "package_download_progress
 const char * const SIGNAL_PACKAGE_DOWNLOAD_END = "package_download_end";
 const char * const SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE = "package_download_mirror_failure";
 
+const char * const SIGNAL_TRANSACTION_TRANSACTION_START = "transaction_transaction_start";
+const char * const SIGNAL_TRANSACTION_TRANSACTION_PROGRESS = "transaction_transaction_progress";
+const char * const SIGNAL_TRANSACTION_TRANSACTION_STOP = "transaction_transaction_stop";
+const char * const SIGNAL_TRANSACTION_VERIFY_START = "transaction_verify_start";
+const char * const SIGNAL_TRANSACTION_VERIFY_PROGRESS = "transaction_verify_progress";
+const char * const SIGNAL_TRANSACTION_VERIFY_STOP = "transaction_verify_stop";
+const char * const SIGNAL_TRANSACTION_ACTION_START = "transaction_action_start";
+const char * const SIGNAL_TRANSACTION_ACTION_PROGRESS = "transaction_action_progress";
+const char * const SIGNAL_TRANSACTION_ACTION_STOP = "transaction_action_stop";
+const char * const SIGNAL_TRANSACTION_SCRIPT_START = "transaction_script_start";
+const char * const SIGNAL_TRANSACTION_SCRIPT_STOP = "transaction_script_stop";
+const char * const SIGNAL_TRANSACTION_SCRIPT_ERROR = "transaction_script_error";
+const char * const SIGNAL_TRANSACTION_UNPACK_ERROR = "transaction_unpack_error";
+const char * const SIGNAL_TRANSACTION_ELEM_PROGRESS = "transaction_elem_progress";
+
 // polkit actions
 const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.RepoConf.write";
 const char * const POLKIT_EXECUTE_RPM_TRANSACTION = "org.rpm.dnf.v0.rpm.execute_transaction";
