@@ -107,7 +107,7 @@ void RepoInfo::add_repo(const Repo & repo, bool verbose, bool show_sack_data) {
         add_line("Available packages", repo.get_available_pkgs(), nullptr, group_repodata);
         add_line("Total packages", repo.get_pkgs(), nullptr, group_repodata);
 
-        std::string size = libdnf::cli::utils::units::format_size(repo.get_size());
+        std::string size = libdnf::cli::utils::units::format_size(static_cast<int64_t>(repo.get_size()));
         add_line("Size", size, nullptr, group_repodata);
 
         add_line("Content tags", repo.get_content_tags(), nullptr, group_repodata);
