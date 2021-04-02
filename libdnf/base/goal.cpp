@@ -172,7 +172,12 @@ public:
     void add_rpms_to_goal();
 
     void add_rpm_goal_report(
-        Action action, GoalProblem problem, const GoalJobSettings & settings, const std::string & spec, bool strict);
+        Action action,
+        GoalProblem problem,
+        const GoalJobSettings & settings,
+        const std::string & spec,
+        const std::set<std::string> & additional_data,
+        bool strict);
     GoalProblem report_not_found(
         libdnf::Goal::Action action,
         const std::string & pkg_spec,
@@ -191,8 +196,13 @@ private:
     /// <libdnf::Goal::Action, rpm Ids, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<Action, libdnf::rpm::solv::IdQueue, libdnf::GoalJobSettings>> rpm_ids;
 
-    /// <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec>
-    std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings, std::string>>
+    /// <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
+    std::vector<std::tuple<
+        libdnf::Goal::Action,
+        libdnf::GoalProblem,
+        libdnf::GoalJobSettings,
+        std::string,
+        std::set<std::string>>>
         rpm_goal_reports;
 
     rpm::solv::GoalPrivate rpm_goal;
@@ -395,6 +405,7 @@ libdnf::GoalProblem Goal::Impl::add_install_to_goal(
                         libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                         settings,
                         spec,
+                        {},
                         strict);
                     return libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES;
                 }
@@ -469,6 +480,7 @@ libdnf::GoalProblem Goal::Impl::add_install_to_goal(
                         libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                         settings,
                         spec,
+                        {},
                         strict);
                     return libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES;
                 }
@@ -511,17 +523,40 @@ GoalProblem Goal::Impl::report_not_found(
         pkg_spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, true, settings.forms);
     if (!nevra_pair_reports.first) {
         // RPM was not excluded or there is no related srpm
-        add_rpm_goal_report(action, libdnf::GoalProblem::NOT_FOUND, settings, pkg_spec, strict);
+        add_rpm_goal_report(action, libdnf::GoalProblem::NOT_FOUND, settings, pkg_spec, {}, strict);
+        if (settings.report_hint) {
+            libdnf::rpm::SolvQuery hints(&sack);
+            if (action == Action::REMOVE) {
+                hints.ifilter_installed();
+            }
+            libdnf::rpm::SolvQuery icase(hints);
+            auto nevra_pair_icase =
+                icase.resolve_pkg_spec(pkg_spec, true, settings.with_nevra, false, false, false, settings.forms);
+            if (nevra_pair_icase.first) {
+                add_rpm_goal_report(
+                    action, libdnf::GoalProblem::HINT_ICASE, settings, pkg_spec, {(*icase.begin()).get_name()}, false);
+            }
+            libdnf::rpm::SolvQuery alternatives(hints);
+            std::string alternatives_provide = fmt::format("alternative-for({})", pkg_spec);
+            alternatives.ifilter_provides(libdnf::sack::QueryCmp::EQ, {alternatives_provide});
+            if (!alternatives.empty()) {
+                std::set<std::string> hints;
+                for (auto pkg : alternatives) {
+                    hints.emplace(pkg.get_name());
+                }
+                add_rpm_goal_report(action, libdnf::GoalProblem::HINT_ALTERNATIVES, settings, pkg_spec, hints, false);
+            }
+        }
         // TODO(jmracek) - report hints (icase, alternative providers)
         return libdnf::GoalProblem::NOT_FOUND;
     }
     query.ifilter_repoid(libdnf::sack::QueryCmp::NEQ, {"src", "nosrc"});
     if (query.empty()) {
-        add_rpm_goal_report(action, libdnf::GoalProblem::ONLY_SRC, settings, pkg_spec, strict);
+        add_rpm_goal_report(action, libdnf::GoalProblem::ONLY_SRC, settings, pkg_spec, {}, strict);
         return libdnf::GoalProblem::ONLY_SRC;
     }
     // TODO(jmracek) make difference between regular excludes and modular excludes
-    add_rpm_goal_report(action, libdnf::GoalProblem::EXCLUDED, settings, pkg_spec, strict);
+    add_rpm_goal_report(action, libdnf::GoalProblem::EXCLUDED, settings, pkg_spec, {}, strict);
     return libdnf::GoalProblem::EXCLUDED;
 }
 
@@ -570,15 +605,20 @@ void Goal::Impl::add_rpms_to_goal() {
 }
 
 void Goal::Impl::add_rpm_goal_report(
-    Action action, GoalProblem problem, const GoalJobSettings & settings, const std::string & spec, bool strict) {
+    Action action,
+    GoalProblem problem,
+    const GoalJobSettings & settings,
+    const std::string & spec,
+    const std::set<std::string> & additional_data,
+    bool strict) {
     // TODO(jmracek) Use a logger properly and change a way how to report to terminal
-    std::cout << Goal::format_rpm_log(action, problem, settings, spec) << std::endl;
-    rpm_goal_reports.emplace_back(std::make_tuple(action, problem, settings, spec));
+    std::cout << Goal::format_rpm_log(action, problem, settings, spec, additional_data) << std::endl;
+    rpm_goal_reports.emplace_back(std::make_tuple(action, problem, settings, spec, additional_data));
     auto & logger = base->get_logger();
     if (strict) {
-        logger.error(Goal::format_rpm_log(action, problem, settings, spec));
+        logger.error(Goal::format_rpm_log(action, problem, settings, spec, additional_data));
     } else {
-        logger.warning(Goal::format_rpm_log(action, problem, settings, spec));
+        logger.warning(Goal::format_rpm_log(action, problem, settings, spec, additional_data));
     }
 }
 
@@ -634,9 +674,10 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(
         if (!obsoleters) {
             all_installed.ifilter_name(libdnf::sack::QueryCmp::EQ, {nevra_pair.second.get_name()});
             if (all_installed.empty()) {
-                add_rpm_goal_report(action, libdnf::GoalProblem::NOT_INSTALLED, settings, spec, false);
+                add_rpm_goal_report(action, libdnf::GoalProblem::NOT_INSTALLED, settings, spec, {}, false);
             } else if (all_installed.ifilter_arch(libdnf::sack::QueryCmp::EQ, {nevra_pair.second.get_name()}).empty()) {
-                add_rpm_goal_report(action, libdnf::GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec, false);
+                add_rpm_goal_report(
+                    action, libdnf::GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec, {}, false);
             }
         }
     }
@@ -658,7 +699,7 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(
         query.ifilter_repoid(libdnf::sack::QueryCmp::GLOB, settings.to_repo_ids);
         query |= installed;
         if (query.empty()) {
-            add_rpm_goal_report(action, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, false);
+            add_rpm_goal_report(action, libdnf::GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, false);
             return;
         }
     }
@@ -790,7 +831,9 @@ libdnf::GoalProblem Goal::resolve(bool allow_erasing) {
     return ret;
 }
 
-const std::vector<std::tuple<libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings, std::string>> &
+const std::vector<
+    std::
+        tuple<libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings, std::string, std::set<std::string>>> &
 Goal::get_resolve_log() {
     return p_impl->rpm_goal_reports;
 }
@@ -851,7 +894,11 @@ std::string Goal::format_problem(const std::pair<libdnf::ProblemRules, std::vect
 }
 
 std::string Goal::format_rpm_log(
-    Action action, libdnf::GoalProblem problem, const libdnf::GoalJobSettings & settings, const std::string & spec) {
+    Action action,
+    libdnf::GoalProblem problem,
+    const libdnf::GoalJobSettings & settings,
+    const std::string & spec,
+    const std::set<std::string> & additional_data) {
     std::string ret;
     switch (problem) {
         // TODO(jmracek) Improve messages => Each message can contain also an action
@@ -874,6 +921,12 @@ std::string Goal::format_rpm_log(
             return ret.append(fmt::format(_("Argument '{}' matches only source packages."), spec));
         case GoalProblem::EXCLUDED:
             return ret.append(fmt::format(_("Argument '{}' matches only excluded packages."), spec));
+        case GoalProblem::HINT_ICASE:
+            return ret.append(fmt::format(_("  * Maybe you meant: {}"), spec));
+        case GoalProblem::HINT_ALTERNATIVES: {
+            auto elements = utils::string::join(additional_data, ", ");
+            return ret.append(fmt::format(_("There are following alternatives for '{0}': {1}"), spec, elements));
+        }
         case GoalProblem::NO_PROBLEM:
         case GoalProblem::REMOVAL_OF_PROTECTED:
         case GoalProblem::SOLVER_ERROR:
