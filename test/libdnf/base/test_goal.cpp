@@ -150,6 +150,130 @@ void BaseGoalTest::test_install_installed_pkg() {
     CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
 }
 
+void BaseGoalTest::test_upgrade() {
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+
+    // add the package to the @System repo so it appears installed
+    sack->add_system_package(rpm_path, false, false);
+
+    add_repo_solv("solv-upgrade");
+
+    libdnf::rpm::SolvQuery query(&(base->get_rpm_solv_sack()));
+
+    libdnf::Goal goal(base.get());
+    goal.add_rpm_upgrade("cmdline");
+
+    goal.resolve(false);
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+
+    // the package is installed already, install_set is empty
+    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(1lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(upgrade_set[0].get_full_nevra(), std::string("cmdline-0:1.2-4.noarch"));
+    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
+
+void BaseGoalTest::test_upgrade_all() {
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+
+    // add the package to the @System repo so it appears installed
+    sack->add_system_package(rpm_path, false, false);
+
+    add_repo_solv("solv-upgrade");
+
+    libdnf::rpm::SolvQuery query(&(base->get_rpm_solv_sack()));
+
+    libdnf::Goal goal(base.get());
+    goal.add_rpm_upgrade();
+
+    goal.resolve(false);
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+
+    // the package is installed already, install_set is empty
+    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(1lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(upgrade_set[0].get_full_nevra(), std::string("cmdline-0:1.2-4.noarch"));
+    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
+
+void BaseGoalTest::test_distrosync() {
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+
+    // add the package to the @System repo so it appears installed
+    sack->add_system_package(rpm_path, false, false);
+
+    add_repo_solv("solv-distrosync");
+
+    libdnf::rpm::SolvQuery query(&(base->get_rpm_solv_sack()));
+
+    libdnf::Goal goal(base.get());
+    goal.add_rpm_distro_sync("cmdline");
+
+    goal.resolve(false);
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+
+    // the package is installed already, install_set is empty
+    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(1lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(downgrade_set[0].get_full_nevra(), std::string("cmdline-0:1.2-1.noarch"));
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
+
+void BaseGoalTest::test_distrosync_all() {
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+
+    // add the package to the @System repo so it appears installed
+    sack->add_system_package(rpm_path, false, false);
+
+    add_repo_solv("solv-distrosync");
+
+    libdnf::rpm::SolvQuery query(&(base->get_rpm_solv_sack()));
+
+    libdnf::Goal goal(base.get());
+    goal.add_rpm_distro_sync();
+
+    goal.resolve(false);
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+
+    // the package is installed already, install_set is empty
+    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(1lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(downgrade_set[0].get_full_nevra(), std::string("cmdline-0:1.2-1.noarch"));
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
+
 void BaseGoalTest::test_install_or_reinstall() {
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
 
