@@ -84,6 +84,7 @@ private:
     dnfdaemon::RepoStatus repositories_status;
     std::unique_ptr<RepoCB> repocb;
     std::unique_ptr<PackageDownloadCB> package_download_cb;
+    std::unique_ptr<TransactionCB> transaction_cb;
 };
 
 /// Asks the user for confirmation. The default answer is taken from the commandline options

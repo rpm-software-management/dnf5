@@ -42,6 +42,7 @@ void Context::init_session() {
     // register progress bars callbacks
     repocb = std::make_unique<RepoCB>(session_proxy.get(), session_object_path);
     package_download_cb = std::make_unique<PackageDownloadCB>(session_proxy.get(), session_object_path);
+    transaction_cb = std::make_unique<TransactionCB>(session_proxy.get(), session_object_path);
     session_proxy->finishRegistration();
 }
 
