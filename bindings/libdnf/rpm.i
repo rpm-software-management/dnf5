@@ -17,6 +17,7 @@
     #include "libdnf/rpm/checksum.hpp"
     #include "libdnf/conf/config_main.hpp"
     #include "libdnf/rpm/config_repo.hpp"
+    #include "libdnf/rpm/nevra.hpp"
     #include "libdnf/rpm/package.hpp"
     #include "libdnf/rpm/package_set.hpp"
     #include "libdnf/rpm/package_set_iterator.hpp"
@@ -33,6 +34,7 @@
 #define CV __perl_CV
 
 %include "libdnf/rpm/checksum.hpp"
+%include "libdnf/rpm/nevra.hpp"
 %include "libdnf/rpm/solv_sack.hpp"
 %include "libdnf/rpm/reldep.hpp"
 

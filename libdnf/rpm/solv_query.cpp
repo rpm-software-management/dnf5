@@ -33,6 +33,7 @@ namespace libdnf::rpm {
 
 namespace {
 
+
 inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_pattern, const char * candidate) {
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ: {
@@ -2063,7 +2064,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
     Pool * pool = sack->p_impl->get_pool();
     solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
     if (with_nevra) {
-        const std::vector<Nevra::Form> & test_forms = forms.empty() ? Nevra::PKG_SPEC_FORMS : forms;
+        const std::vector<Nevra::Form> & test_forms = forms.empty() ? Nevra::get_default_pkg_spec_forms() : forms;
         Nevra nevra_obj;
         for (auto form : test_forms) {
             if (nevra_obj.parse(pkg_spec, form)) {

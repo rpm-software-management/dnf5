@@ -40,6 +40,13 @@ static const std::regex NEVRA_FORM_REGEX[]{
 };
 // clang-format on
 
+static const std::vector<Nevra::Form> PKG_SPEC_FORMS{
+    Nevra::Form::NEVRA, Nevra::Form::NA, Nevra::Form::NAME, Nevra::Form::NEVR, Nevra::Form::NEV};
+
+const std::vector<Nevra::Form> & Nevra::get_default_pkg_spec_forms() {
+    return PKG_SPEC_FORMS;
+}
+
 bool Nevra::parse(const std::string & nevra_str, Form form) {
     enum { NAME = 1, EPOCH = 3, VERSION = 4, RELEASE = 5, ARCH = 6, _LAST_ };
 

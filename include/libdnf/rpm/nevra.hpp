@@ -31,8 +31,8 @@ struct Nevra {
 public:
     enum class Form { NEVRA = 1, NEVR = 2, NEV = 3, NA = 4, NAME = 5 };
 
-    /// The forms and their order determine pkg_spec matching
-    static const std::vector<Form> PKG_SPEC_FORMS;
+    /// The default forms and their order determine pkg_spec matching
+    static const std::vector<Form> & get_default_pkg_spec_forms();
 
     Nevra() = default;
     Nevra(const Nevra & src) = default;
@@ -69,9 +69,6 @@ public:
     void set_release(std::string && release);
     void set_arch(std::string && arch);
 
-    std::string get_evr() const;
-
-    // TODO(jmracek) Shall ve ass get_evr method?
     // TODO(jmracek) Add comperators ==
 
     /// @replaces hawkey:hawkey/__init__.py:method:Nevra.has_just_name()
@@ -84,9 +81,6 @@ private:
     std::string release;
     std::string arch;
 };
-
-inline const std::vector<Nevra::Form> Nevra::PKG_SPEC_FORMS(
-    {Nevra::Form::NEVRA, Nevra::Form::NA, Nevra::Form::NAME, Nevra::Form::NEVR, Nevra::Form::NEV});
 
 inline const std::string & Nevra::get_name() const noexcept {
     return name;
@@ -158,7 +152,9 @@ inline std::string to_full_nevra_string(const T & obj) {
     }
     // reserve() & append() is about 25% faster than string concatenation
     std::string result;
-    result.reserve(4 + obj.get_name().size() + epoch.size() + obj.get_version().size() + obj.get_release().size() + obj.get_arch().size());
+    result.reserve(
+        4 + obj.get_name().size() + epoch.size() + obj.get_version().size() + obj.get_release().size() +
+        obj.get_arch().size());
     result.append(obj.get_name());
     result.append("-");
     result.append(epoch);
@@ -179,7 +175,8 @@ inline std::string to_nevra_string(const T & obj) {
     if (epoch.empty() || epoch == "0") {
         // reserve() & append() is about 25% faster than string concatenation
         std::string result;
-        result.reserve(3 + obj.get_name().size() + obj.get_version().size() + obj.get_release().size() + obj.get_arch().size());
+        result.reserve(
+            3 + obj.get_name().size() + obj.get_version().size() + obj.get_release().size() + obj.get_arch().size());
         result.append(obj.get_name());
         result.append("-");
         result.append(obj.get_version());
