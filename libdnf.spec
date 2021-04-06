@@ -28,11 +28,15 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 %bcond_without python3
 %bcond_without ruby
 
+%bcond_with    clang
 %bcond_with    sanitizers
 %bcond_without tests
 %bcond_with    performance_tests
 %bcond_with    dnfdaemon_tests
 
+%if %{with clang}
+    %global toolchain clang
+%endif
 
 # ========== versions of dependencies ==========
 
@@ -47,8 +51,12 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 
 BuildRequires:  cmake
 BuildRequires:  doxygen
-BuildRequires:  gcc-c++
 BuildRequires:  gettext
+%if %{with clang}
+BuildRequires:  clang
+%else
+BuildRequires:  gcc-c++
+%endif
 
 BuildRequires:  pkgconfig(check)
 %if ! %{with tests_disabled}
