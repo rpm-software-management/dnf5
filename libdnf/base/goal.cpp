@@ -372,7 +372,13 @@ libdnf::GoalProblem Goal::Impl::add_install_to_goal(
     libdnf::rpm::PackageSet selected(&sack);
     libdnf::rpm::SolvQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(
-        spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, false, settings.forms);
+        spec,
+        settings.icase,
+        settings.with_nevra,
+        settings.with_provides,
+        settings.with_filenames,
+        false,
+        settings.forms);
     if (!nevra_pair.first) {
         auto problem = report_not_found(libdnf::Goal::Action::INSTALL, spec, settings, strict);
         if (strict) {
@@ -520,7 +526,13 @@ GoalProblem Goal::Impl::report_not_found(
         query.ifilter_installed();
     }
     auto nevra_pair_reports = query.resolve_pkg_spec(
-        pkg_spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, true, settings.forms);
+        pkg_spec,
+        settings.icase,
+        settings.with_nevra,
+        settings.with_provides,
+        settings.with_filenames,
+        true,
+        settings.forms);
     if (!nevra_pair_reports.first) {
         // RPM was not excluded or there is no related srpm
         add_rpm_goal_report(action, libdnf::GoalProblem::NOT_FOUND, settings, pkg_spec, {}, strict);
@@ -529,12 +541,19 @@ GoalProblem Goal::Impl::report_not_found(
             if (action == Action::REMOVE) {
                 hints.ifilter_installed();
             }
-            libdnf::rpm::SolvQuery icase(hints);
-            auto nevra_pair_icase =
-                icase.resolve_pkg_spec(pkg_spec, true, settings.with_nevra, false, false, false, settings.forms);
-            if (nevra_pair_icase.first) {
-                add_rpm_goal_report(
-                    action, libdnf::GoalProblem::HINT_ICASE, settings, pkg_spec, {(*icase.begin()).get_name()}, false);
+            if (!settings.icase) {
+                rpm::SolvQuery icase(hints);
+                auto nevra_pair_icase =
+                    icase.resolve_pkg_spec(pkg_spec, true, settings.with_nevra, false, false, false, settings.forms);
+                if (nevra_pair_icase.first) {
+                    add_rpm_goal_report(
+                        action,
+                        GoalProblem::HINT_ICASE,
+                        settings,
+                        pkg_spec,
+                        {(*icase.begin()).get_name()},
+                        false);
+                }
             }
             libdnf::rpm::SolvQuery alternatives(hints);
             std::string alternatives_provide = fmt::format("alternative-for({})", pkg_spec);
@@ -629,7 +648,13 @@ void Goal::Impl::add_remove_to_goal(const std::string & spec, const libdnf::Goal
     libdnf::rpm::SolvQuery query(base_query);
 
     auto nevra_pair = query.resolve_pkg_spec(
-        spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, false, settings.forms);
+        spec,
+        settings.icase,
+        settings.with_nevra,
+        settings.with_provides,
+        settings.with_filenames,
+        false,
+        settings.forms);
     if (!nevra_pair.first) {
         report_not_found(libdnf::Goal::Action::REMOVE, spec, settings, false);
         return;
@@ -653,7 +678,13 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(
     libdnf::rpm::solv::IdQueue tmp_queue;
     libdnf::rpm::SolvQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(
-        spec, false, settings.with_nevra, settings.with_provides, settings.with_filenames, false, settings.forms);
+        spec,
+        settings.icase,
+        settings.with_nevra,
+        settings.with_provides,
+        settings.with_filenames,
+        false,
+        settings.forms);
     if (!nevra_pair.first) {
         report_not_found(action, spec, settings, false);
         return;

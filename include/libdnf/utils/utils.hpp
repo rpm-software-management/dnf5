@@ -89,6 +89,7 @@ public:
     bool with_nevra{true};
     bool with_provides{true};
     bool with_filenames{true};
+    bool icase{false};
     bool report_hint{true};
     GoalSetting strict{GoalSetting::AUTO};
     GoalSetting best{GoalSetting::AUTO};
