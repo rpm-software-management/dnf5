@@ -79,6 +79,7 @@ const char * const SIGNAL_TRANSACTION_SCRIPT_STOP = "transaction_script_stop";
 const char * const SIGNAL_TRANSACTION_SCRIPT_ERROR = "transaction_script_error";
 const char * const SIGNAL_TRANSACTION_UNPACK_ERROR = "transaction_unpack_error";
 const char * const SIGNAL_TRANSACTION_ELEM_PROGRESS = "transaction_elem_progress";
+const char * const SIGNAL_TRANSACTION_FINISHED = "transaction_finished";
 
 // polkit actions
 const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.RepoConf.write";

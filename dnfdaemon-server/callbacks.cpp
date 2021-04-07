@@ -321,3 +321,11 @@ void DbusTransactionCB::unpack_error(
     } catch (...) {
     }
 }
+
+void DbusTransactionCB::finish() {
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_FINISHED);
+        dbus_object->emitSignal(signal);
+    } catch (...) {
+    }
+}

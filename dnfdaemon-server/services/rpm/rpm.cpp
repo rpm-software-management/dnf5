@@ -403,6 +403,8 @@ void Rpm::do_transaction(sdbus::MethodCall && call) {
                 DbusTransactionCB callback(session);
                 rpm_transaction.register_cb(&callback);
                 auto rpm_result = rpm_transaction.run();
+                callback.finish();
+                rpm_transaction.register_cb(nullptr);
                 if (rpm_result != 0) {
                     throw sdbus::Error(
                         dnfdaemon::ERROR_TRANSACTION, fmt::format("rpm transaction failed with code {}.", rpm_result));

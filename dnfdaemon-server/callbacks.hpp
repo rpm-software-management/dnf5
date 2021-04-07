@@ -163,6 +163,9 @@ public:
     void cpio_error(
         const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & /*header*/) override{};
 
+    // whole rpm transaction is finished
+    void finish();
+
 private:
     sdbus::Signal create_signal_pkg(
         std::string interface, std::string signal_name, const libdnf::rpm::RpmHeader & header);
