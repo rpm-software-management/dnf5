@@ -21,13 +21,23 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <libdnf-cli/utils/tty.hpp>
+#include <libdnf/rpm/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>
 
 namespace dnfdaemon::client {
 
-RepoCB::RepoCB(sdbus::IProxy * proxy, std::string session_object_path) : session_object_path(session_object_path) {
+
+bool DbusCallback::signature_valid(sdbus::Signal & signal) {
+    // check that signal is emited by the correct session object
+    std::string object_path;
+    signal >> object_path;
+    return object_path == session_object_path;
+}
+
+
+RepoCB::RepoCB(sdbus::IProxy * proxy, std::string session_object_path) : DbusCallback(proxy, session_object_path) {
     // register signal handlers
     proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START, [this](sdbus::Signal & signal) -> void {
@@ -42,6 +52,7 @@ RepoCB::RepoCB(sdbus::IProxy * proxy, std::string session_object_path) : session
             this->progress(signal);
         });
 }
+
 
 void RepoCB::print_progress_bar() {
     if (libdnf::cli::utils::tty::is_interactive()) {
@@ -66,7 +77,7 @@ void RepoCB::start(sdbus::Signal & signal) {
     }
 }
 
-void RepoCB::end([[maybe_unused]] sdbus::Signal & signal) {
+void RepoCB::end(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
         progress_bar.set_ticks(progress_bar.get_total_ticks());
         progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
@@ -87,11 +98,111 @@ void RepoCB::progress(sdbus::Signal & signal) {
     }
 }
 
-bool RepoCB::signature_valid(sdbus::Signal & signal) {
-    // check that signal is emited by the correct session object
-    std::string object_path;
-    signal >> object_path;
-    return object_path == session_object_path;
+
+PackageDownloadCB::PackageDownloadCB(sdbus::IProxy * proxy, std::string session_object_path)
+    : DbusCallback(proxy, session_object_path) {
+    // register signal handlers
+    proxy->registerSignalHandler(
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_START, [this](sdbus::Signal & signal) -> void {
+            this->start(signal);
+        });
+    proxy->registerSignalHandler(
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_END, [this](sdbus::Signal & signal) -> void {
+            this->end(signal);
+        });
+    proxy->registerSignalHandler(
+        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS, [this](sdbus::Signal & signal) -> void {
+            this->progress(signal);
+        });
+    proxy->registerSignalHandler(
+        dnfdaemon::INTERFACE_RPM,
+        dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE,
+        [this](sdbus::Signal & signal) -> void { this->mirror_failure(signal); });
 }
 
+
+void PackageDownloadCB::start(sdbus::Signal & signal) {
+    if (signature_valid(signal)) {
+        std::string nevra;
+        signal >> nevra;
+        auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, nevra);
+        multi_progress_bar.add_bar(progress_bar.get());
+        package_bars.emplace(nevra, std::move(progress_bar));
+    }
+}
+
+void PackageDownloadCB::end(sdbus::Signal & signal) {
+    if (signature_valid(signal)) {
+        std::string nevra;
+        signal >> nevra;
+        auto progress_bar = find_progress_bar(nevra);
+        if (progress_bar == nullptr) {
+            return;
+        }
+        int status_i;
+        signal >> status_i;
+        std::string msg;
+        signal >> msg;
+        using namespace libdnf::rpm;
+        auto status = static_cast<PackageTargetCB::TransferStatus>(status_i);
+        switch (status) {
+            case PackageTargetCB::TransferStatus::SUCCESSFUL:
+                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+                break;
+            case PackageTargetCB::TransferStatus::ALREADYEXISTS:
+                // skipping the download -> downloading 0 bytes
+                progress_bar->set_ticks(0);
+                progress_bar->set_total_ticks(0);
+                progress_bar->add_message(libdnf::cli::progressbar::MessageType::SUCCESS, msg);
+                progress_bar->start();
+                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+                break;
+            case PackageTargetCB::TransferStatus::ERROR:
+                progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg);
+                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
+                break;
+        }
+        multi_progress_bar.print();
+    }
+}
+
+void PackageDownloadCB::progress(sdbus::Signal & signal) {
+    if (signature_valid(signal)) {
+        std::string nevra;
+        signal >> nevra;
+        auto progress_bar = find_progress_bar(nevra);
+        if (progress_bar == nullptr) {
+            return;
+        }
+        double downloaded;
+        double total_to_download;
+        signal >> downloaded;
+        signal >> total_to_download;
+        if (total_to_download > 0) {
+            progress_bar->set_total_ticks(static_cast<int64_t>(total_to_download));
+        }
+        if (progress_bar->get_state() == libdnf::cli::progressbar::ProgressBarState::READY) {
+            progress_bar->start();
+        }
+        progress_bar->set_ticks(static_cast<int64_t>(downloaded));
+        multi_progress_bar.print();
+    }
+}
+
+void PackageDownloadCB::mirror_failure(sdbus::Signal & signal) {
+    if (signature_valid(signal)) {
+        std::string nevra;
+        signal >> nevra;
+        auto progress_bar = find_progress_bar(nevra);
+        if (progress_bar == nullptr) {
+            return;
+        }
+        std::string msg;
+        std::string url;
+        signal >> msg;
+        signal >> url;
+        progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg + " - " + url);
+        multi_progress_bar.print();
+    }
+}
 }  // namespace dnfdaemon::client

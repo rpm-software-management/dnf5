@@ -21,26 +21,66 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #define DNFDAEMON_CLIENT_CALLBACKS_HPP
 
 #include <libdnf-cli/progressbar/download_progress_bar.hpp>
+#include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>
 
 namespace dnfdaemon::client {
 
-class RepoCB {
+class DbusCallback {
+public:
+    explicit DbusCallback(sdbus::IProxy * proxy, std::string session_object_path)
+        : session_object_path(session_object_path)
+        , proxy(proxy){};
+    virtual ~DbusCallback() = default;
+
+protected:
+    std::string session_object_path;
+    sdbus::IProxy * proxy;
+
+    bool signature_valid(sdbus::Signal & signal);
+};
+
+
+class RepoCB final : public DbusCallback {
 public:
     explicit RepoCB(sdbus::IProxy * proxy, std::string session_object_path);
+    virtual ~RepoCB() = default;
 
     void start(sdbus::Signal & signal);
     void end(sdbus::Signal & signal);
     void progress(sdbus::Signal & signal);
 
 private:
-    std::string session_object_path;
     libdnf::cli::progressbar::DownloadProgressBar progress_bar{-1, ""};
     std::size_t msg_lines{0};
     void print_progress_bar();
-    bool signature_valid(sdbus::Signal & signal);
+};
+
+
+class PackageDownloadCB final : public DbusCallback {
+public:
+    explicit PackageDownloadCB(sdbus::IProxy * proxy, std::string session_object_path);
+    virtual ~PackageDownloadCB() = default;
+
+    void start(sdbus::Signal & signal);
+    void end(sdbus::Signal & signal);
+    void progress(sdbus::Signal & signal);
+    void mirror_failure(sdbus::Signal & signal);
+
+private:
+    libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
+    // map {package nevra: progressbar}
+    std::map<std::string, std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar>> package_bars;
+
+    libdnf::cli::progressbar::DownloadProgressBar * find_progress_bar(std::string nevra) {
+        if (package_bars.find(nevra) != package_bars.end()) {
+            return package_bars.at(nevra).get();
+        } else {
+            return nullptr;
+        }
+    }
 };
 
 }  // namespace dnfdaemon::client
