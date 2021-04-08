@@ -89,6 +89,31 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        upgrade:
+        @specs: an array of package specifications to be upgraded on the system
+        @options: an array of key/value pairs to modify upgraded behavior
+
+        Marks packages specified by @specs for upgrade.
+
+        Following @options are supported:
+
+        <variablelist>
+          <varlistentry>
+            <term>repo_ids: list of strings</term>
+            <listitem><para>
+            Identifiers of the repos from which the packages could be upgraded.
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+
+        Unknown options are ignored.
+    -->
+    <method name="upgrade">
+        <arg name="specs" type="as" direction="in" />
+        <arg name="options" type="a{sv}" direction="in" />
+    </method>
+
+    <!--
         resolve:
         @options: an array of key/value pairs to modify dependency resolving
         @result: array of (action, n, e, v, r, a, repoid) tuples where action is one of libdnf::transaction::TransactionItemAction enum

@@ -113,6 +113,10 @@ void Rpm::dbus_register() {
             this->install(std::move(call));
         });
     dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_RPM, "upgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+            this->upgrade(std::move(call));
+        });
+    dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "resolve", "a{sv}", "a(ussssss)", [this](sdbus::MethodCall call) -> void {
             this->resolve(std::move(call));
         });
@@ -412,6 +416,36 @@ void Rpm::install(sdbus::MethodCall && call) {
             setting.to_repo_ids = repo_ids;
             for (const auto & spec : specs) {
                 goal.add_rpm_install(spec, setting);
+            }
+
+            auto reply = call.createReply();
+            reply.send();
+        } catch (std::exception & ex) {
+            DNFDAEMON_ERROR_REPLY(call, ex);
+        }
+        session.get_threads_manager().current_thread_finished();
+    }, std::move(call));
+    session.get_threads_manager().register_thread(std::move(worker));
+}
+
+void Rpm::upgrade(sdbus::MethodCall && call) {
+    auto worker = std::thread([this](sdbus::MethodCall call) {
+        try {
+            std::vector<std::string> specs;
+            call >> specs;
+
+            // read options from dbus call
+            dnfdaemon::KeyValueMap options;
+            call >> options;
+            std::vector<std::string> repo_ids =
+                key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+
+            // fill the goal
+            auto & goal = session.get_goal();
+            libdnf::GoalJobSettings setting;
+            setting.to_repo_ids = repo_ids;
+            for (const auto & spec : specs) {
+                goal.add_rpm_upgrade(spec, setting);
             }
 
             auto reply = call.createReply();
