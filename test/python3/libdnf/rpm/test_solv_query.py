@@ -116,7 +116,7 @@ class TestSolvQuery(unittest.TestCase):
     def test_ifilter_name(self):
         # Test QueryCmp::EQ
         query = libdnf.rpm.SolvQuery(self.sack)
-        query.ifilter_name(libdnf.common.QueryCmp_EQ, ["pkg"])
+        query.ifilter_name(["pkg"])
         self.assertEqual(query.size(), 1)
         # TODO(dmach): implement __str__()
         self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64"])
@@ -125,7 +125,7 @@ class TestSolvQuery(unittest.TestCase):
 
         # Test QueryCmp::GLOB
         query = libdnf.rpm.SolvQuery(self.sack)
-        query.ifilter_name(libdnf.common.QueryCmp_GLOB, ["pk*"])
+        query.ifilter_name(["pk*"], libdnf.common.QueryCmp_GLOB)
         self.assertEqual(query.size(), 2)
         # TODO(dmach): implement __str__()
         self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])

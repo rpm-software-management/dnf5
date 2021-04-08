@@ -117,7 +117,7 @@ dnfdaemon::KeyValueMap repo_to_map(libdnf::Base & base, const libdnf::WeakPtr<li
                     uint64_t size = 0;
                     libdnf::rpm::SolvQuery query(&solv_sack);
                     std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                    query.ifilter_repoid(libdnf::sack::QueryCmp::EQ, reponames);
+                    query.ifilter_repoid(reponames);
                     for (auto pkg : query) {
                         size += pkg.get_download_size();
                     }
@@ -149,7 +149,7 @@ dnfdaemon::KeyValueMap repo_to_map(libdnf::Base & base, const libdnf::WeakPtr<li
                     auto & solv_sack = base.get_rpm_solv_sack();
                     libdnf::rpm::SolvQuery query(&solv_sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
                     std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                    query.ifilter_repoid(libdnf::sack::QueryCmp::EQ, reponames);
+                    query.ifilter_repoid(reponames);
                     dbus_repo.emplace(attr, query.size());
                 }
                 break;
@@ -158,7 +158,7 @@ dnfdaemon::KeyValueMap repo_to_map(libdnf::Base & base, const libdnf::WeakPtr<li
                     auto & solv_sack = base.get_rpm_solv_sack();
                     libdnf::rpm::SolvQuery query(&solv_sack);
                     std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                    query.ifilter_repoid(libdnf::sack::QueryCmp::EQ, reponames);
+                    query.ifilter_repoid(reponames);
                     dbus_repo.emplace(attr, query.size());
                 }
                 break;

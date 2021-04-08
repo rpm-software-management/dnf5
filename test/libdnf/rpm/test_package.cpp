@@ -39,7 +39,7 @@ void RpmPackageTest::setUp() {
 
 libdnf::rpm::Package RpmPackageTest::get_pkg(const std::string &nevra) {
     libdnf::rpm::SolvQuery query(sack);
-    query.ifilter_nevra(libdnf::sack::QueryCmp::EQ, {nevra});
+    query.ifilter_nevra({nevra});
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
         "get_pkg(\"" + nevra + "\"): no package or more than one package found.",
         1lu,

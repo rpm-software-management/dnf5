@@ -62,7 +62,7 @@ class TestSimpleNumber < Test::Unit::TestCase
     def test_ifilter_name()
         # Test QueryCmp::EQ
         query = Rpm::SolvQuery.new(@sack)
-        query.ifilter_name(Common::QueryCmp_EQ, ["pkg"])
+        query.ifilter_name(["pkg"])
         assert_equal(1, query.size())
 
         # TODO(dmach): implement each() so the query can be easily iterated or converted to an array
@@ -79,7 +79,7 @@ class TestSimpleNumber < Test::Unit::TestCase
 
         # Test QueryCmp::GLOB
         query = Rpm::SolvQuery.new(@sack)
-        query.ifilter_name(Common::QueryCmp_GLOB, ["pk*"])
+        query.ifilter_name(["pk*"], Common::QueryCmp_GLOB)
         assert_equal(2, query.size())
 
         # TODO(dmach): implement each() so the query can be easily iterated or converted to an array
