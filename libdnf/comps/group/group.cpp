@@ -4,16 +4,19 @@
 #include <libdnf/comps/group/sack.hpp>
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/comps_impl.hpp>
+#include <libdnf/utils/xml.hpp>
 
 extern "C" {
 #include <solv/knownid.h>
 #include <solv/pool.h>
 #include <solv/repo.h>
 #include <solv/solvable.h>
+#include <solv/dataiterator.h>
 }
 
 #include <string>
 #include <iostream>
+#include <libxml/tree.h>
 
 
 namespace libdnf::comps {
@@ -230,5 +233,88 @@ bool Group::get_installed() const {
     return repos.find("@System") != repos.end();
 }
 
+
+void Group::dump(const std::string & path) {
+    // Create doc with root node "comps"
+    xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
+    xmlNodePtr node_comps = xmlNewNode(NULL, BAD_CAST "comps");
+    xmlDocSetRootElement(doc, node_comps);
+
+    // Create "group" node
+    xmlNodePtr node_group = xmlNewNode(NULL, BAD_CAST "group");
+    xmlAddChild(node_comps, node_group);
+
+    // Add id, name, description, default, uservisible, display_order, langonly
+    utils::xml::add_subnode_with_text(node_group, "id", get_groupid());
+    utils::xml::add_subnode_with_text(node_group, "name", get_name());
+    utils::xml::add_subnode_with_text(node_group, "description", get_description());
+    utils::xml::add_subnode_with_text(node_group, "default", get_default() ? "true" : "false");
+    utils::xml::add_subnode_with_text(node_group, "uservisible", get_uservisible() ? "true" : "false");
+    utils::xml::add_subnode_with_text(node_group, "display_order", get_order());
+    utils::xml::add_subnode_with_text(node_group, "langonly", get_langonly());
+
+    // Add translations
+    std::set<std::string> name_langs;
+    std::set<std::string> description_langs;
+    std::string summary_prefix = "solvable:summary:";
+    std::string description_prefix = "solvable:description:";
+    std::string keyname;
+    std::string lang;
+    xmlNodePtr node;
+    Pool * pool = query->sack->comps.p_impl->get_pool();
+    for (auto group_id : group_ids) {
+        Dataiterator di;
+        dataiterator_init(&di, pool, 0, group_id.id, 0, 0, 0);
+        // Iterate over all data in the group solvable
+        while (dataiterator_step(&di) != 0) {
+            // If the content is NULL, skip
+            if (!di.kv.str) {
+                continue;
+            }
+            keyname = pool_id2str(pool, di.key->name);
+            // If keyname starts with "solvable:summary:", it's a name translation
+            if (keyname.rfind(summary_prefix, 0) == 0) {
+                lang = keyname.substr(summary_prefix.length());
+                // Add the lang into the set
+                // If it's succesful (wasn't already present), create an XML node for this translation
+                if(name_langs.insert(lang).second) {
+                    node = utils::xml::add_subnode_with_text(node_group, "name", std::string(di.kv.str));
+                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                }
+            }
+            // If keyname starts with "solvable:description:", it's a description translation
+            else if (keyname.rfind(description_prefix, 0) == 0) {
+                lang = keyname.substr(description_prefix.length());
+                // Add the lang into the set
+                // If it's succesful (wasn't already present), create an XML node for this translation
+                if(description_langs.insert(lang).second) {
+                    node = utils::xml::add_subnode_with_text(node_group, "description", std::string(di.kv.str));
+                    xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
+                }
+            }
+        }
+        dataiterator_free(&di);
+    }
+
+    // Add packagelist
+    xmlNodePtr node_packagelist = xmlNewNode(NULL, BAD_CAST "packagelist");
+    xmlAddChild(node_group, node_packagelist);
+    for (auto pkg: get_packages()) {
+        // Create an XML node for this package
+        node = utils::xml::add_subnode_with_text(node_packagelist, "packagereq", pkg.get_name());
+        xmlNewProp(node, BAD_CAST "type", BAD_CAST pkg.get_type_string().c_str());
+        if (pkg.get_type() == PackageType::CONDITIONAL) {
+            xmlNewProp(node, BAD_CAST "requires", BAD_CAST pkg.get_condition().c_str());
+        }
+    }
+
+    // Save the document
+    if (xmlSaveFile(path.c_str(), doc) == -1) {
+        throw std::runtime_error("failed to save xml document for comps");
+    }
+
+    // Memory free
+    xmlFreeDoc(doc);
+}
 
 }  // namespace libdnf::comps

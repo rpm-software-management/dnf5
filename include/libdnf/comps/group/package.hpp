@@ -46,6 +46,20 @@ public:
     PackageType get_type() const { return type; }
     void set_type(PackageType & value) { type = value; }
 
+    std::string get_type_string() const { 
+        switch (type) {
+            case PackageType::MANDATORY:
+                return "mandatory";
+            case PackageType::DEFAULT:
+                return "default";
+            case PackageType::OPTIONAL:
+                return "optional";
+            case PackageType::CONDITIONAL:
+                return "conditional";
+        }
+        return "";
+    }
+
     std::string get_condition() const { return condition; }
     void set_condition(const std::string & value) { condition = value; }
 

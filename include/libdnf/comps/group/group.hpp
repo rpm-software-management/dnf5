@@ -117,6 +117,8 @@ public:
 
     bool operator<(const Group & rhs) const { return this->get_groupid() < rhs.get_groupid(); };
 
+    void dump(const std::string & path);
+
 protected:
     explicit Group(GroupQuery * query);
 
