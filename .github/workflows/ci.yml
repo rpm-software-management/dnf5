@@ -7,6 +7,10 @@ jobs:
     name: Package Build
     runs-on: ubuntu-latest
     container: ghcr.io/rpm-software-management/dnf-ci-host
+    strategy:
+      fail-fast: false  # don't fail all matrix jobs if one of them fails
+      matrix:
+        compiler: ['', clang]  # gcc is the default
     steps:
       - name: Check out ci-dnf-stack
         uses: actions/checkout@v2
@@ -40,4 +44,7 @@ jobs:
         run: |
           CHROOTS="fedora-33-x86_64, fedora-34-x86_64, fedora-rawhide-x86_64"
           PROJECT_NAME="CI-libdnf5-pr${{github.event.pull_request.number}}"
-          rpm-gitoverlay --gitdir=gits build-overlay -s overlays/dnf5-unstable rpm copr --owner "${{steps.setup-ci.outputs.copr-user}}" --project "$PROJECT_NAME" --chroots "$CHROOTS" --delete-project-after-days=7
+          if [[ -n "${{matrix.compiler}}" ]]; then
+            PROJECT_NAME+="-${{matrix.compiler}}"
+          fi
+          rpm-gitoverlay --gitdir=gits build-overlay -s overlays/dnf5-unstable rpm --with "${{matrix.compiler}}" copr --owner "${{steps.setup-ci.outputs.copr-user}}" --project "$PROJECT_NAME" --chroots "$CHROOTS" --delete-project-after-days=7
