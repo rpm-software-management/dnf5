@@ -20,6 +20,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/install/install.hpp"
+#include "commands/upgrade/upgrade.hpp"
 #include "context.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
@@ -156,6 +157,7 @@ int main(int argc, char * argv[]) {
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repolist"));
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepoquery>());
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdInstall>());
+    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdUpgrade>());
 
     // Parse command line arguments
     bool help_printed = dnfdaemon::client::parse_args(context, argc, argv);
