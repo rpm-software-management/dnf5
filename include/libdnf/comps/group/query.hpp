@@ -44,6 +44,8 @@ public:
 
     GroupQuery & ifilter_groupid(sack::QueryCmp cmp, const std::string & pattern);
     GroupQuery & ifilter_groupid(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
+    GroupQuery & ifilter_name(sack::QueryCmp cmp, const std::string & pattern);
+    GroupQuery & ifilter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
     GroupQuery & ifilter_uservisible(bool value);
     GroupQuery & ifilter_default(bool value);
     GroupQuery & ifilter_installed(bool value);
@@ -58,6 +60,7 @@ protected:
 private:
     struct F {
         static std::string groupid(const Group & obj) { return obj.get_groupid(); }
+        static std::string name(const Group & obj) { return obj.get_name(); }
         static bool is_uservisible(const Group & obj) { return obj.get_uservisible(); }
         static bool is_default(const Group & obj) { return obj.get_default(); }
         static bool is_installed(const Group & obj) { return obj.get_installed(); }
@@ -81,6 +84,18 @@ inline GroupQuery & GroupQuery::ifilter_groupid(sack::QueryCmp cmp, const std::s
 
 inline GroupQuery & GroupQuery::ifilter_groupid(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
     ifilter(F::groupid, cmp, patterns);
+    return *this;
+}
+
+
+inline GroupQuery & GroupQuery::ifilter_name(sack::QueryCmp cmp, const std::string & pattern) {
+    ifilter(F::name, cmp, pattern);
+    return *this;
+}
+
+
+inline GroupQuery & GroupQuery::ifilter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
+    ifilter(F::name, cmp, patterns);
     return *this;
 }
 
