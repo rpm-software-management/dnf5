@@ -84,6 +84,13 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     assume_no->link_value(ctx.assume_no.get());
     dnfdaemon_client->register_named_arg(assume_no);
 
+    auto allow_erasing = ctx.arg_parser.add_new_named_arg("allow_erasing");
+    allow_erasing->set_long_name("allowerasing");
+    allow_erasing->set_short_description("installed package can be removed to resolve the transaction");
+    allow_erasing->set_const_value("true");
+    allow_erasing->link_value(ctx.allow_erasing.get());
+    dnfdaemon_client->register_named_arg(allow_erasing);
+
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);

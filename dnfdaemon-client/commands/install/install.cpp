@@ -57,15 +57,6 @@ void CmdInstall::set_argument_parser(Context & ctx) {
     strict->link_value(strict_option);
     install->register_named_arg(strict);
 
-    allow_erasing_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
-    auto allow_erasing = ctx.arg_parser.add_new_named_arg("allow_erasing");
-    allow_erasing->set_long_name("allowerasing");
-    allow_erasing->set_short_description("installed package can be removed to resolve the transaction");
-    allow_erasing->set_const_value("true");
-    allow_erasing->link_value(allow_erasing_option);
-    install->register_named_arg(allow_erasing);
-
     patterns_options = ctx.arg_parser.add_new_values();
     auto keys = ctx.arg_parser.add_new_positional_arg(
         "keys_to_match",
@@ -103,7 +94,7 @@ void CmdInstall::run(Context & ctx) {
 
     // resolve the transaction
     options.clear();
-    options["allow_erasing"] = allow_erasing_option->get_value();
+    options["allow_erasing"] = ctx.allow_erasing->get_value();
     std::vector<dnfdaemon::DbusTransactionItem> transaction;
     ctx.session_proxy->callMethod("resolve")
         .onInterface(dnfdaemon::INTERFACE_RPM)
