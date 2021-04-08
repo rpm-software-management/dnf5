@@ -126,51 +126,39 @@ inline GoalProblem operator&(GoalProblem lhs, GoalProblem rhs) {
 }
 
 inline bool GoalJobSettings::get_strict(const libdnf::ConfigMain & cfg_main) const {
-    bool ret;
     switch (strict) {
         case GoalSetting::AUTO:
-            ret = cfg_main.strict().get_value();
-            break;
+            return cfg_main.strict().get_value();
         case GoalSetting::SET_TRUE:
-            ret = true;
-            break;
+            return true;
         case GoalSetting::SET_FALSE:
-            ret = false;
-            break;
+        default:
+            return false;
     }
-    return ret;
 }
 
 inline bool GoalJobSettings::get_best(const libdnf::ConfigMain & cfg_main) const {
-    bool ret;
     switch (best) {
         case GoalSetting::AUTO:
-            ret = cfg_main.best().get_value();
-            break;
+            return cfg_main.best().get_value();
         case GoalSetting::SET_TRUE:
-            ret = true;
-            break;
+            return true;
         case GoalSetting::SET_FALSE:
-            ret = false;
-            break;
+        default:
+            return false;
     }
-    return ret;
 }
 
 inline bool GoalJobSettings::get_clean_requirements_on_remove(const libdnf::ConfigMain & cfg_main) const {
-    bool ret;
     switch (clean_requirements_on_remove) {
         case GoalSetting::AUTO:
-            ret = cfg_main.clean_requirements_on_remove().get_value();
-            break;
+            return cfg_main.clean_requirements_on_remove().get_value();
         case GoalSetting::SET_TRUE:
-            ret = true;
-            break;
+            return true;
         case GoalSetting::SET_FALSE:
-            ret = false;
-            break;
+        default:
+            return false;
     }
-    return ret;
 }
 
 
