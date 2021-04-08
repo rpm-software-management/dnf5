@@ -53,7 +53,7 @@ enum class RepoAttribute {
     distro_tags,
     updated,
     pkgs,
-    available_pkgs, // number of not excluded packages
+    available_pkgs,  // number of not excluded packages
     size,
 
     proxy,
@@ -61,18 +61,17 @@ enum class RepoAttribute {
     proxy_password,
 };
 
-std::vector<RepoAttribute> metadata_required_attributes {
+std::vector<RepoAttribute> metadata_required_attributes{
     RepoAttribute::revision,
     RepoAttribute::content_tags,
     RepoAttribute::distro_tags,
     RepoAttribute::updated,
     RepoAttribute::pkgs,
     RepoAttribute::available_pkgs,
-    RepoAttribute::size
-};
+    RepoAttribute::size};
 
 // map string package attribute name to actual attribute
-const static std::map<std::string, RepoAttribute> repo_attributes {
+const static std::map<std::string, RepoAttribute> repo_attributes{
     {"id", RepoAttribute::id},
     {"name", RepoAttribute::name},
     {"enabled", RepoAttribute::enabled},
@@ -97,7 +96,10 @@ const static std::map<std::string, RepoAttribute> repo_attributes {
 };
 
 // converts Repo object to dbus map
-dnfdaemon::KeyValueMap repo_to_map(libdnf::Base & base, const libdnf::WeakPtr<libdnf::rpm::Repo, false> libdnf_repo, std::vector<std::string> & attributes) {
+dnfdaemon::KeyValueMap repo_to_map(
+    libdnf::Base & base,
+    const libdnf::WeakPtr<libdnf::rpm::Repo, false> libdnf_repo,
+    std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_repo;
     // attributes required by client
     for (auto & attr : attributes) {
@@ -111,69 +113,57 @@ dnfdaemon::KeyValueMap repo_to_map(libdnf::Base & base, const libdnf::WeakPtr<li
             case RepoAttribute::enabled:
                 dbus_repo.emplace(attr, libdnf_repo->is_enabled());
                 break;
-            case RepoAttribute::size:
-                {
-                    auto & solv_sack = base.get_rpm_solv_sack();
-                    uint64_t size = 0;
-                    libdnf::rpm::SolvQuery query(&solv_sack);
-                    std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                    query.ifilter_repoid(reponames);
-                    for (auto pkg : query) {
-                        size += pkg.get_download_size();
-                    }
-                    dbus_repo.emplace(attr, size);
+            case RepoAttribute::size: {
+                auto & solv_sack = base.get_rpm_solv_sack();
+                uint64_t size = 0;
+                libdnf::rpm::SolvQuery query(&solv_sack);
+                std::vector<std::string> reponames = {libdnf_repo->get_id()};
+                query.ifilter_repoid(reponames);
+                for (auto pkg : query) {
+                    size += pkg.get_download_size();
                 }
-                break;
+                dbus_repo.emplace(attr, size);
+            } break;
             case RepoAttribute::revision:
                 dbus_repo.emplace(attr, libdnf_repo->get_revision());
                 break;
             case RepoAttribute::content_tags:
                 dbus_repo.emplace(attr, libdnf_repo->get_content_tags());
                 break;
-            case RepoAttribute::distro_tags:
-                {
-                    // sdbus::Variant cannot accomodate a std::pair
-                    std::vector<std::string> distro_tags {};
-                    for (auto & dt: libdnf_repo->get_distro_tags()) {
-                        distro_tags.emplace_back(dt.first);
-                        distro_tags.emplace_back(dt.second);
-                    }
-                    dbus_repo.emplace(attr, distro_tags);
+            case RepoAttribute::distro_tags: {
+                // sdbus::Variant cannot accomodate a std::pair
+                std::vector<std::string> distro_tags{};
+                for (auto & dt : libdnf_repo->get_distro_tags()) {
+                    distro_tags.emplace_back(dt.first);
+                    distro_tags.emplace_back(dt.second);
                 }
-                break;
+                dbus_repo.emplace(attr, distro_tags);
+            } break;
             case RepoAttribute::updated:
                 dbus_repo.emplace(attr, libdnf_repo->get_max_timestamp());
                 break;
-            case RepoAttribute::pkgs:
-                {
-                    auto & solv_sack = base.get_rpm_solv_sack();
-                    libdnf::rpm::SolvQuery query(&solv_sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
-                    std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                    query.ifilter_repoid(reponames);
-                    dbus_repo.emplace(attr, query.size());
-                }
-                break;
-            case RepoAttribute::available_pkgs:
-                {
-                    auto & solv_sack = base.get_rpm_solv_sack();
-                    libdnf::rpm::SolvQuery query(&solv_sack);
-                    std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                    query.ifilter_repoid(reponames);
-                    dbus_repo.emplace(attr, query.size());
-                }
-                break;
-            case RepoAttribute::metalink:
-                {
-                    auto opt = libdnf_repo->get_config().metalink();
-                    dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
-                }
-                break;
-            case RepoAttribute::mirrorlist:
-                {
-                    auto opt = libdnf_repo->get_config().mirrorlist();
-                    dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
-                }
-                break;
+            case RepoAttribute::pkgs: {
+                auto & solv_sack = base.get_rpm_solv_sack();
+                libdnf::rpm::SolvQuery query(&solv_sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
+                std::vector<std::string> reponames = {libdnf_repo->get_id()};
+                query.ifilter_repoid(reponames);
+                dbus_repo.emplace(attr, query.size());
+            } break;
+            case RepoAttribute::available_pkgs: {
+                auto & solv_sack = base.get_rpm_solv_sack();
+                libdnf::rpm::SolvQuery query(&solv_sack);
+                std::vector<std::string> reponames = {libdnf_repo->get_id()};
+                query.ifilter_repoid(reponames);
+                dbus_repo.emplace(attr, query.size());
+            } break;
+            case RepoAttribute::metalink: {
+                auto opt = libdnf_repo->get_config().metalink();
+                dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
+            } break;
+            case RepoAttribute::mirrorlist: {
+                auto opt = libdnf_repo->get_config().mirrorlist();
+                dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
+            } break;
             case RepoAttribute::baseurl:
                 dbus_repo.emplace(attr, libdnf_repo->get_config().baseurl().get_value());
                 break;
@@ -195,13 +185,12 @@ dnfdaemon::KeyValueMap repo_to_map(libdnf::Base & base, const libdnf::WeakPtr<li
                 dbus_repo.emplace(attr, libdnf_repo->get_config().proxy().get_value());
                 break;
             case RepoAttribute::proxy_username:
-//                dbus_repo.emplace(attr, libdnf_repo->get_config().proxy_username().get_value());
+                //                dbus_repo.emplace(attr, libdnf_repo->get_config().proxy_username().get_value());
                 dbus_repo.emplace(attr, "user foo");
                 break;
             case RepoAttribute::proxy_password:
                 dbus_repo.emplace(attr, libdnf_repo->get_config().proxy_password().get_value());
                 break;
-
         }
     }
     return dbus_repo;
@@ -224,21 +213,25 @@ void Repo::list(sdbus::MethodCall call) {
     call >> options;
     auto worker = std::thread([this, options = std::move(options), call = std::move(call)]() {
         try {
-            const std::vector<std::string> empty_list {};
+            const std::vector<std::string> empty_list{};
 
             // read options from dbus call
             std::string enable_disable = key_value_map_get<std::string>(options, "enable_disable", "enabled");
             std::vector<std::string> patterns =
                 key_value_map_get<std::vector<std::string>>(options, "patterns", empty_list);
             // check demanded attributes
-            std::vector<std::string> repo_attrs = key_value_map_get<std::vector<std::string>>(options, "repo_attrs", empty_list);
+            std::vector<std::string> repo_attrs =
+                key_value_map_get<std::vector<std::string>>(options, "repo_attrs", empty_list);
             bool fill_sack_needed = false;
             for (auto & attr_str : repo_attrs) {
                 if (repo_attributes.count(attr_str) == 0) {
                     throw std::runtime_error(fmt::format("Repo attribute '{}' not supported", attr_str));
                 }
                 if (!fill_sack_needed) {
-                    fill_sack_needed = std::find(metadata_required_attributes.begin(), metadata_required_attributes.end(), repo_attributes.at(attr_str)) != metadata_required_attributes.end();
+                    fill_sack_needed = std::find(
+                                           metadata_required_attributes.begin(),
+                                           metadata_required_attributes.end(),
+                                           repo_attributes.at(attr_str)) != metadata_required_attributes.end();
                 }
             }
             // always return repoid

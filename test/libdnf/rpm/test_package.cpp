@@ -37,14 +37,11 @@ void RpmPackageTest::setUp() {
 }
 
 
-libdnf::rpm::Package RpmPackageTest::get_pkg(const std::string &nevra) {
+libdnf::rpm::Package RpmPackageTest::get_pkg(const std::string & nevra) {
     libdnf::rpm::SolvQuery query(sack);
     query.ifilter_nevra({nevra});
     CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "get_pkg(\"" + nevra + "\"): no package or more than one package found.",
-        1lu,
-        query.size()
-    );
+        "get_pkg(\"" + nevra + "\"): no package or more than one package found.", 1lu, query.size());
     return *query.begin();
 }
 
@@ -177,7 +174,10 @@ void RpmPackageTest::test_get_description() {
 
 void RpmPackageTest::test_get_files() {
     const auto files = get_pkg("pkg-1.2-3.x86_64").get_files();
-    const std::vector<std::string> expected = {"/etc/pkg.conf", "/etc/pkg.conf.d",};
+    const std::vector<std::string> expected = {
+        "/etc/pkg.conf",
+        "/etc/pkg.conf.d",
+    };
     CPPUNIT_ASSERT_EQUAL(expected, files);
 }
 
@@ -277,8 +277,7 @@ void RpmPackageTest::test_get_location() {
 void RpmPackageTest::test_get_checksum() {
     CPPUNIT_ASSERT_EQUAL(
         std::string("ec57b154a186fdc1f71976fc0fde97d51c744bc88d222828b4cfa42e3b1f855b"),
-        get_pkg("pkg-1.2-3.x86_64").get_checksum().get_checksum()
-    );
+        get_pkg("pkg-1.2-3.x86_64").get_checksum().get_checksum());
 }
 
 
