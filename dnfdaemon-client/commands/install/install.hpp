@@ -27,7 +27,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-class CmdInstall : public Command {
+class CmdInstall : public TransactionCommand {
 public:
     void set_argument_parser(Context & ctx) override;
     void run(Context & ctx) override;

@@ -92,43 +92,7 @@ void CmdInstall::run(Context & ctx) {
         .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(patterns, options);
 
-    // resolve the transaction
-    options.clear();
-    options["allow_erasing"] = ctx.allow_erasing->get_value();
-    std::vector<dnfdaemon::DbusTransactionItem> transaction;
-    ctx.session_proxy->callMethod("resolve")
-        .onInterface(dnfdaemon::INTERFACE_RPM)
-        .withTimeout(static_cast<uint64_t>(-1))
-        .withArguments(options)
-        .storeResultsTo(transaction);
-    if (transaction.empty()) {
-        std::cout << "Nothing to do." << std::endl;
-        return;
-    }
-
-    // print the transaction to the user and ask for confirmation
-    // TODO(mblaha): print decent transaction table using smartcols
-    for (auto & ti : transaction) {
-        libdnf::transaction::TransactionItemAction action =
-            static_cast<libdnf::transaction::TransactionItemAction>(std::get<0>(ti));
-        std::cout << "Action: " << libdnf::transaction::TransactionItemAction_get_name(action) << std::endl;
-        std::cout << "Name: " << std::get<1>(ti) << std::endl;
-        std::cout << "Arch: " << std::get<5>(ti) << std::endl;
-        std::cout << "EVR: " << std::get<2>(ti) << ":" << std::get<3>(ti) << "-" << std::get<4>(ti) << std::endl;
-        std::cout << "Repo: " << std::get<6>(ti) << std::endl;
-    }
-
-    if (!userconfirm(ctx)) {
-        std::cout << "Operation aborted." << std::endl;
-        return;
-    }
-
-    // do the transaction
-    options.clear();
-    ctx.session_proxy->callMethod("do_transaction")
-        .onInterface(dnfdaemon::INTERFACE_RPM)
-        .withTimeout(static_cast<uint64_t>(-1))
-        .withArguments(options);
+    run_transaction(ctx);
 }
 
 }  // namespace dnfdaemon::client

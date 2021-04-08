@@ -39,6 +39,13 @@ public:
     virtual ~Command() = default;
 };
 
+class TransactionCommand : public Command {
+public:
+    void print_transaction(std::vector<dnfdaemon::DbusTransactionItem> transaction);
+    void run_transaction(Context & ctx);
+};
+
+
 }  // namespace dnfdaemon::client
 
 #endif

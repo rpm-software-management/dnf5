@@ -24,6 +24,6 @@ namespace dnfdaemon::client {
 
 bool am_i_root() noexcept;
 
-}
+}  // namespace dnfdaemon::client
 
 #endif
