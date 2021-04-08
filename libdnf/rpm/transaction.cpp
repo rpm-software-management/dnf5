@@ -57,7 +57,7 @@ std::string RpmHeader::get_version() const {
 }
 
 std::string RpmHeader::get_release() const {
-    return headerGetString(static_cast<Header>(header), RPMTAG_VERSION);
+    return headerGetString(static_cast<Header>(header), RPMTAG_RELEASE);
 }
 
 std::string RpmHeader::get_arch() const {
