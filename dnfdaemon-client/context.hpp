@@ -52,6 +52,7 @@ public:
     void start(sdbus::Signal & signal);
     void end(sdbus::Signal & signal);
     void progress(sdbus::Signal & signal);
+
 private:
     std::string session_object_path;
     libdnf::cli::progressbar::DownloadProgressBar progress_bar{-1, ""};
@@ -63,7 +64,9 @@ private:
 
 class Context {
 public:
-    Context(sdbus::IConnection & connection) : connection(connection), repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
+    Context(sdbus::IConnection & connection)
+        : connection(connection)
+        , repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
 
     /// Initialize dbus connection and server session
     void init_session();

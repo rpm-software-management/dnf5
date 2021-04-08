@@ -17,9 +17,9 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "commands/install/install.hpp"
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
-#include "commands/install/install.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "context.hpp"
 
