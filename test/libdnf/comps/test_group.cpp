@@ -231,3 +231,45 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_condition(), core.get_packages()[i].get_condition());
     }
 }
+
+
+void CompsGroupTest::test_dump_and_load() {
+    std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
+    const char * reponame = "repo";
+    libdnf::comps::Comps comps(*base.get());
+
+    comps.load_from_file(data_path / "standard.xml", reponame);
+    auto q_standard = comps.get_group_sack().new_query();
+    q_standard.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "standard");
+    auto standard = q_standard.get();
+    
+    auto dumped_standard_path = std::filesystem::temp_directory_path() / "dumped-standard.xml";
+    standard.dump(dumped_standard_path);
+    libdnf::comps::Comps comps2(*base.get());
+    comps2.load_from_file(dumped_standard_path, reponame);
+
+    auto q_dumped_standard = comps2.get_group_sack().new_query();
+    q_dumped_standard.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "standard");
+    auto dumped_standard = q_dumped_standard.get();
+
+    CPPUNIT_ASSERT_EQUAL(std::string("standard"), dumped_standard.get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Standard"), dumped_standard.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("標準"), dumped_standard.get_translated_name("ja"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Common set of utilities that extend the minimal installation."), dumped_standard.get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("最小限のインストールを拡張するユーティリティの共通セット"), dumped_standard.get_translated_description("ja"));
+    CPPUNIT_ASSERT_EQUAL(std::string("1"), dumped_standard.get_order());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), dumped_standard.get_langonly());
+    CPPUNIT_ASSERT_EQUAL(false, dumped_standard.get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(false, dumped_standard.get_default());
+    CPPUNIT_ASSERT_EQUAL(false, dumped_standard.get_installed());
+    CPPUNIT_ASSERT_EQUAL(3lu, dumped_standard.get_packages().size());
+    std::vector<libdnf::comps::Package> exp_pkgs_standard;
+    exp_pkgs_standard.push_back(libdnf::comps::Package("cryptsetup", libdnf::comps::PackageType::MANDATORY, ""));
+    exp_pkgs_standard.push_back(libdnf::comps::Package("chrony", libdnf::comps::PackageType::CONDITIONAL, "gnome-control-center"));
+    exp_pkgs_standard.push_back(libdnf::comps::Package("conditional", libdnf::comps::PackageType::CONDITIONAL, "nonexistent"));
+    for (unsigned i = 0; i < exp_pkgs_standard.size(); i++) {
+        CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_name(), dumped_standard.get_packages()[i].get_name());
+        CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_type(), dumped_standard.get_packages()[i].get_type());
+        CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_condition(), dumped_standard.get_packages()[i].get_condition());
+    }
+}

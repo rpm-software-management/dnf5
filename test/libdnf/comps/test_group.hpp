@@ -35,6 +35,7 @@ class CompsGroupTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_merge);
     CPPUNIT_TEST(test_merge_with_empty);
     CPPUNIT_TEST(test_merge_empty_with_nonempty);
+    CPPUNIT_TEST(test_dump_and_load);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -46,6 +47,7 @@ public:
     void test_merge();
     void test_merge_with_empty();
     void test_merge_empty_with_nonempty();
+    void test_dump_and_load();
 
 protected:
     std::unique_ptr<libdnf::Base> base;
