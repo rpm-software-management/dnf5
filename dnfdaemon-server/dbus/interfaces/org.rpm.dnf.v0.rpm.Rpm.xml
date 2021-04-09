@@ -61,7 +61,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         @specs: an array of package specifications to be installed on the system
         @options: an array of key/value pairs to modify install behavior
 
-        Marks packages specified by @specs for installation.
+        Mark packages specified by @specs for installation.
 
         Following @options are supported:
 
@@ -91,9 +91,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <!--
         upgrade:
         @specs: an array of package specifications to be upgraded on the system
-        @options: an array of key/value pairs to modify upgraded behavior
+        @options: an array of key/value pairs to modify upgrade behavior
 
-        Marks packages specified by @specs for upgrade.
+        Mark packages specified by @specs for upgrade.
 
         Following @options are supported:
 
@@ -109,6 +109,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Unknown options are ignored.
     -->
     <method name="upgrade">
+        <arg name="specs" type="as" direction="in" />
+        <arg name="options" type="a{sv}" direction="in" />
+    </method>
+
+    <!--
+        remove:
+        @specs: an array of package specifications to be removed on the system
+        @options: an array of key/value pairs to modify remove behavior
+
+        Mark packages specified by @specs for removal.
+
+        Unknown options are ignored.
+    -->
+    <method name="remove">
         <arg name="specs" type="as" direction="in" />
         <arg name="options" type="a{sv}" direction="in" />
     </method>
