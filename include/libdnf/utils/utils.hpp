@@ -132,9 +132,9 @@ inline bool GoalJobSettings::get_strict(const libdnf::ConfigMain & cfg_main) con
         case GoalSetting::SET_TRUE:
             return true;
         case GoalSetting::SET_FALSE:
-        default:
             return false;
     }
+    throw LogicError("Invalid 'best' value in GoalJobSettings");
 }
 
 inline bool GoalJobSettings::get_best(const libdnf::ConfigMain & cfg_main) const {
@@ -144,9 +144,9 @@ inline bool GoalJobSettings::get_best(const libdnf::ConfigMain & cfg_main) const
         case GoalSetting::SET_TRUE:
             return true;
         case GoalSetting::SET_FALSE:
-        default:
             return false;
     }
+    throw LogicError("Invalid 'strict' value in GoalJobSettings");
 }
 
 inline bool GoalJobSettings::get_clean_requirements_on_remove(const libdnf::ConfigMain & cfg_main) const {
@@ -156,9 +156,9 @@ inline bool GoalJobSettings::get_clean_requirements_on_remove(const libdnf::Conf
         case GoalSetting::SET_TRUE:
             return true;
         case GoalSetting::SET_FALSE:
-        default:
             return false;
     }
+    throw LogicError("Invalid 'clean_requirements_on_remove' value in GoalJobSettings");
 }
 
 
