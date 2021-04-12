@@ -155,9 +155,9 @@ public:
     void add_rpm_ids(Goal::Action action, const rpm::PackageSet & package_set, const GoalJobSettings & settings);
 
     GoalProblem add_specs_to_goal();
-    GoalProblem add_install_to_goal(const std::string & spec, const GoalJobSettings & settings);
-    void add_remove_to_goal(const std::string & spec, const GoalJobSettings & settings);
-    void add_upgrades_distrosync_to_goal(Action action, const std::string & spec, const GoalJobSettings & settings);
+    GoalProblem add_install_to_goal(const std::string & spec, GoalJobSettings & settings);
+    void add_remove_to_goal(const std::string & spec, GoalJobSettings & settings);
+    void add_upgrades_distrosync_to_goal(Action action, const std::string & spec, GoalJobSettings & settings);
     void add_rpms_to_goal();
 
     void add_rpm_goal_report(
@@ -310,8 +310,8 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id.id);
                 }
-                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
-                rpm_goal.add_upgrade(upgrade_ids, settings.get_best(cfg_main), clean_requirements_on_remove);
+                rpm_goal.add_upgrade(
+                    upgrade_ids, settings.resolve_best(cfg_main), settings.resolve_clean_requirements_on_remove());
             } break;
             case Action::DISTRO_SYNC_ALL: {
                 rpm::SolvQuery query(&sack);
@@ -319,12 +319,11 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id.id);
                 }
-                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
                 rpm_goal.add_distro_sync(
                     upgrade_ids,
-                    settings.get_strict(cfg_main),
-                    settings.get_best(cfg_main),
-                    clean_requirements_on_remove);
+                    settings.resolve_strict(cfg_main),
+                    settings.resolve_best(cfg_main),
+                    settings.resolve_clean_requirements_on_remove());
             } break;
             default:
                 throw std::invalid_argument("Unsupported action");
@@ -333,11 +332,12 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
     return ret;
 }
 
-GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, const GoalJobSettings & settings) {
+GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSettings & settings) {
     auto & sack = base->get_rpm_solv_sack();
     Pool * pool = sack.p_impl->get_pool();
     auto & cfg_main = base->get_config();
-    bool strict = settings.get_strict(cfg_main);
+    bool strict = settings.resolve_strict(cfg_main);
+    bool best = settings.resolve_best(cfg_main);
 
     auto multilib_policy = cfg_main.multilib_policy().get_value();
     auto obsoletes = cfg_main.obsoletes().get_value();
@@ -429,7 +429,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, const Goal
                     add_obseletes(base_query, selected);
                 }
                 solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
-                rpm_goal.add_install(tmp_queue, strict, settings.get_best(cfg_main));
+                rpm_goal.add_install(tmp_queue, strict, best);
                 selected.clear();
                 selected.p_impl->add_unsafe(rpm::PackageId(pool_solvable2id(pool, solvable)));
                 current_name = solvable->name;
@@ -438,7 +438,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, const Goal
                 add_obseletes(base_query, selected);
             }
             solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
-            rpm_goal.add_install(tmp_queue, strict, settings.get_best(cfg_main));
+            rpm_goal.add_install(tmp_queue, strict, best);
             return GoalProblem::NO_PROBLEM;
         } else {
             if (add_obsoletes) {
@@ -459,7 +459,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, const Goal
             // TODO(jmracek) if reports:
             // base._report_already_installed(installed_query)
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
-            rpm_goal.add_install(tmp_queue, strict, settings.get_best(cfg_main));
+            rpm_goal.add_install(tmp_queue, strict, best);
             return GoalProblem::NO_PROBLEM;
         }
     } else {
@@ -561,21 +561,21 @@ void Goal::Impl::add_rpms_to_goal() {
                     //  TODO(jmracek)  report already installed nevra
                     ids.push_back(package_id.id);
                 }
-                rpm_goal.add_install(ids, settings.get_strict(cfg_main), settings.get_best(cfg_main));
+                rpm_goal.add_install(ids, settings.resolve_strict(cfg_main), settings.resolve_best(cfg_main));
             } break;
             case Action::INSTALL_OR_REINSTALL:
-                rpm_goal.add_install(ids, settings.get_strict(cfg_main), settings.get_best(cfg_main));
+                rpm_goal.add_install(ids, settings.resolve_strict(cfg_main), settings.resolve_best(cfg_main));
                 break;
             case Action::UPGRADE: {
-                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
-                rpm_goal.add_upgrade(ids, settings.get_best(cfg_main), clean_requirements_on_remove);
+                rpm_goal.add_upgrade(
+                    ids, settings.resolve_best(cfg_main), settings.resolve_clean_requirements_on_remove());
             } break;
             case Action::DISTRO_SYNC: {
-                bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
-                rpm_goal.add_upgrade(ids, settings.get_best(cfg_main), clean_requirements_on_remove);
+                rpm_goal.add_upgrade(
+                    ids, settings.resolve_best(cfg_main), settings.resolve_clean_requirements_on_remove());
             } break;
             case Action::REMOVE:
-                rpm_goal.add_remove(ids, settings.get_clean_requirements_on_remove(cfg_main));
+                rpm_goal.add_remove(ids, settings.resolve_clean_requirements_on_remove(cfg_main));
                 break;
             default:
                 throw std::invalid_argument("Unsupported action");
@@ -601,7 +601,8 @@ void Goal::Impl::add_rpm_goal_report(
     }
 }
 
-void Goal::Impl::add_remove_to_goal(const std::string & spec, const GoalJobSettings & settings) {
+void Goal::Impl::add_remove_to_goal(const std::string & spec, GoalJobSettings & settings) {
+    bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove(base->get_config());
     auto & sack = base->get_rpm_solv_sack();
     rpm::SolvQuery base_query(&sack);
     base_query.ifilter_installed();
@@ -627,11 +628,15 @@ void Goal::Impl::add_remove_to_goal(const std::string & spec, const GoalJobSetti
             return;
         }
     }
-    rpm_goal.add_remove(*query.p_impl, settings.get_clean_requirements_on_remove(base->get_config()));
+    rpm_goal.add_remove(*query.p_impl, clean_requirements_on_remove);
 }
 
-void Goal::Impl::add_upgrades_distrosync_to_goal(
-    Action action, const std::string & spec, const GoalJobSettings & settings) {
+void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::string & spec, GoalJobSettings & settings) {
+    // Get values before the first report to set in GoalJobSettings used values
+    bool best = settings.resolve_best(base->get_config());
+    bool strict = action == Action::UPGRADE ? false : settings.resolve_strict(base->get_config());
+    bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+
     auto & sack = base->get_rpm_solv_sack();
     rpm::SolvQuery base_query(&sack);
     auto obsoletes = base->get_config().obsoletes().get_value();
@@ -698,17 +703,12 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(
     // TODO(jmracek) q = q.available().union(installed_query.latest())
     // Required for a correct upgrade of installonly packages
     solv_map_to_id_queue(tmp_queue, *query.p_impl);
-    bool clean_requirements_on_remove = settings.clean_requirements_on_remove == GoalSetting::SET_TRUE;
     switch (action) {
         case Action::UPGRADE:
-            rpm_goal.add_upgrade(tmp_queue, settings.get_best(base->get_config()), clean_requirements_on_remove);
+            rpm_goal.add_upgrade(tmp_queue, best, clean_requirements_on_remove);
             break;
         case Action::DISTRO_SYNC:
-            rpm_goal.add_distro_sync(
-                tmp_queue,
-                settings.get_strict(base->get_config()),
-                settings.get_best(base->get_config()),
-                clean_requirements_on_remove);
+            rpm_goal.add_distro_sync(tmp_queue, strict, best, clean_requirements_on_remove);
             break;
         default:
             throw std::invalid_argument("Unsupported action");

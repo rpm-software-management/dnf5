@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test/libdnf/utils.hpp"
 
 #include "libdnf/base/goal.hpp"
+#include "libdnf/utils/utils.hpp"
 
 #include <libdnf/rpm/solv_query.hpp>
 
@@ -51,6 +52,36 @@ void BaseGoalTest::test_install() {
     CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
+
+void BaseGoalTest::test_install_not_available() {
+    libdnf::Goal goal(base.get());
+    base->get_config().strict().set(libdnf::Option::Priority::RUNTIME, false);
+    base->get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
+    goal.add_rpm_install("not_available");
+    goal.resolve(false);
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+
+    auto & log = goal.get_resolve_log();
+    CPPUNIT_ASSERT_EQUAL(1lu, log.size());
+    auto & [action, problem, settings, spec, additional_data] = *log.begin();
+    CPPUNIT_ASSERT_EQUAL(libdnf::Goal::Action::INSTALL, action);
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
+    CPPUNIT_ASSERT_EQUAL(std::string("not_available"), spec);
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, settings.get_used_clean_requirements_on_remove());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, settings.get_used_best());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, settings.get_used_strict());
 }
 
 void BaseGoalTest::test_install_from_cmdline() {
@@ -113,6 +144,37 @@ void BaseGoalTest::test_remove() {
     CPPUNIT_ASSERT_EQUAL(1lu, remove_set.size());
     CPPUNIT_ASSERT_EQUAL(remove_set[0].get_full_nevra(), std::string("cmdline-0:1.2-3.noarch"));
     CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
+
+void BaseGoalTest::test_remove_not_installed() {
+    base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+    sack->add_system_package(rpm_path, false, false);
+    libdnf::Goal goal(base.get());
+    goal.add_rpm_remove("not_installed");
+    goal.resolve(false);
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+
+    auto & log = goal.get_resolve_log();
+    CPPUNIT_ASSERT_EQUAL(1lu, log.size());
+    auto & [action, problem, settings, spec, additional_data] = *log.begin();
+    CPPUNIT_ASSERT_EQUAL(libdnf::Goal::Action::REMOVE, action);
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
+    CPPUNIT_ASSERT_EQUAL(std::string("not_installed"), spec);
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, settings.get_used_clean_requirements_on_remove());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, settings.get_used_best());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, settings.get_used_strict());
 }
 
 void BaseGoalTest::test_install_installed_pkg() {
@@ -179,6 +241,48 @@ void BaseGoalTest::test_upgrade() {
     CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
+
+void BaseGoalTest::test_upgrade_not_available() {
+    base->get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
+    base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+
+    // add the package to the @System repo so it appears installed
+    sack->add_system_package(rpm_path, false, false);
+
+    add_repo_solv("solv-upgrade");
+
+    libdnf::rpm::SolvQuery query(&(base->get_rpm_solv_sack()));
+
+    libdnf::Goal goal(base.get());
+    goal.add_rpm_upgrade("not_available");
+
+    goal.resolve(false);
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+
+    // the package is installed already, install_set is empty
+    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+
+    auto & log = goal.get_resolve_log();
+    CPPUNIT_ASSERT_EQUAL(1lu, log.size());
+    auto & [action, problem, settings, spec, additional_data] = *log.begin();
+    CPPUNIT_ASSERT_EQUAL(libdnf::Goal::Action::UPGRADE, action);
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
+    CPPUNIT_ASSERT_EQUAL(std::string("not_available"), spec);
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, settings.get_used_clean_requirements_on_remove());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, settings.get_used_best());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, settings.get_used_strict());
 }
 
 void BaseGoalTest::test_upgrade_all() {
