@@ -1,15 +1,31 @@
 libdnf
 ======
 
-* Libdnf is a package management library.
-* It's a backed of [DNF](https://github.com/rpm-software-management/dnf) package manager.
-* Supported content types are:
+Libdnf is a package management library.
+It was originally written to support the [DNF](https://github.com/rpm-software-management/dnf/)
+package manager and grew up into a versatile library.
+Now you can use it for building custom tools that load repositories,
+query packages, resolve dependencies and install packages.
 
+It is powered with [libsolv](https://github.com/openSUSE/libsolv/), wrapping it with an easy to use programming interface.
+
+* Libdnf supports working with the following artifacts:
+
+  * RPM repositories (repomd)
   * RPM packages
-  * repomd repositories
-  * modulemd modules
-  * comps - categories, environments and groups
-  * updateinfo
+  * Comps groups
+  * Comps environments
+  * Advisories (updateinfo, errata)
+  * Modules (modulemd)
+
+Libdnf interfaces with several programming languages with the following support:
+
+ * C++ - fully supported
+ * Python 3 - fully supported
+ * Perl 5 - best effort
+ * Ruby - best effort
+ * Go - doesn't work, looking for contributors
+ * C - not implemented, doesn't seem to be a priority for any of our existing API users
 
 
 :warning: **The current (dnf-5-devel) branch is subject of a major rewrite. The API/ABI is currently unstable** :warning:
@@ -42,7 +58,7 @@ Contributing
 Writing patches
 ---------------
 
-* Please follow the [coding style](CODING_STYLE.md)
+* Please follow the [coding style](doc/contributing/coding_style.rst)
 * When a patch is ready, submit a pull request
 * It is a good practice to write documentation and unit tests as part of the patches
 

@@ -32,6 +32,9 @@ endif()
 # libdnf-cli
 add_subdirectory(libdnf-cli)
 
+# tutorial
+add_subdirectory(tutorial)
+
 # bindings
 add_subdirectory(go)
 add_subdirectory(perl5)
