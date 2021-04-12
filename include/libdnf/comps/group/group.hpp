@@ -115,7 +115,9 @@ public:
     /// Merge a comps Group with another one
     Group & operator+=(const Group & rhs);
 
-    bool operator<(const Group & rhs) const { return this->get_groupid() < rhs.get_groupid(); };
+    bool operator<(const Group & rhs) const {
+        return get_groupid() < rhs.get_groupid() or (get_installed() and !rhs.get_installed());
+    }
 
     void dump(const std::string & path);
 

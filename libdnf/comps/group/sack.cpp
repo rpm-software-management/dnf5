@@ -59,6 +59,11 @@ GroupQuery GroupSack::new_query() {
         // Map groupids with list of corresponding solvable_ids
         // TODO(pkratoch): Sort solvable_ids for each groupid according to something (repo priority / repo id / ?)
         groupid = solvable_name.substr(delimiter_position, std::string::npos);
+        if (strcmp(pool_id2solvable(pool, solvable_id)->repo->name, "@System")) {
+            groupid.append("_available");
+        } else {
+            groupid.append("_installed");
+        }
         if (group_map.find(groupid) == group_map.end()) {
             std::vector<Id> solvable_ids;
             group_map.emplace(groupid, solvable_ids);
