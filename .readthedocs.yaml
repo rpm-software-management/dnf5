@@ -1,0 +1,15 @@
+version: 2
+
+python:
+  version: 3
+  install:
+    - requirements: doc/requirements.txt
+    # the 'setuptools' method calls doc/setup.py that configures files and runs doxygen
+    # the 'pip' method doesn't work this way
+    - method: setuptools
+      path: doc
+
+sphinx:
+  builder: html
+  configuration: doc/conf.py
+  fail_on_warning: false
