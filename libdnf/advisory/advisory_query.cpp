@@ -330,7 +330,7 @@ AdvisoryQuery & AdvisoryQuery::ifilter_packages(const libdnf::rpm::PackageSet & 
         case libdnf::sack::QueryCmp::LTE: {
             for (libdnf::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
                  package++) {
-                Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, (*package).get_id());
+                Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, (*package).get_id().id);
                 auto low =
                     std::lower_bound(adv_pkgs.begin(), adv_pkgs.end(), *package, AdvisoryPackage::Impl::name_arch_compare_lower_id);
                 while (low != adv_pkgs.end() && low->p_impl.get()->get_name_id() == solvable->name &&
@@ -339,7 +339,7 @@ AdvisoryQuery & AdvisoryQuery::ifilter_packages(const libdnf::rpm::PackageSet & 
                     if (((libsolv_cmp > 0) && ((cmp_type & sack::QueryCmp::GT) == sack::QueryCmp::GT)) ||
                         ((libsolv_cmp < 0) && ((cmp_type & sack::QueryCmp::LT) == sack::QueryCmp::LT)) ||
                         ((libsolv_cmp == 0) && ((cmp_type & sack::QueryCmp::EQ) == sack::QueryCmp::EQ))) {
-                        filter_result.add_unsafe(libdnf::rpm::PackageId((*low).get_advisory_id()));
+                        filter_result.add_unsafe((*low).get_advisory_id().id);
                     }
                     ++low;
                 }
@@ -377,7 +377,7 @@ std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
         case libdnf::sack::QueryCmp::LTE: {
             for (libdnf::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
                  package++) {
-                Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, (*package).get_id());
+                Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, (*package).get_id().id);
                 auto low =
                     std::lower_bound(adv_pkgs.begin(), adv_pkgs.end(), *package, AdvisoryPackage::Impl::name_arch_compare_lower_id);
                 while (low != adv_pkgs.end() && low->p_impl.get()->get_name_id() == solvable->name &&

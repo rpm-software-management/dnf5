@@ -293,7 +293,7 @@ void Goal::Impl::add_rpm_ids(
     }
     rpm::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
-        ids.push_back(package_id.id);
+        ids.push_back(package_id);
     }
     rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
 }
@@ -319,7 +319,7 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
                 rpm::SolvQuery query(&sack);
                 rpm::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
-                    upgrade_ids.push_back(package_id.id);
+                    upgrade_ids.push_back(package_id);
                 }
                 rpm_goal.add_upgrade(
                     upgrade_ids, settings.resolve_best(cfg_main), settings.resolve_clean_requirements_on_remove());
@@ -328,7 +328,7 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
                 rpm::SolvQuery query(&sack);
                 rpm::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
-                    upgrade_ids.push_back(package_id.id);
+                    upgrade_ids.push_back(package_id);
                 }
                 rpm_goal.add_distro_sync(
                     upgrade_ids,
@@ -429,14 +429,13 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             {
                 auto * first = tmp_solvables[0];
                 current_name = first->name;
-                // TODO(jmracek) Allow to skip creation of libdnf::rpm::PackageId
-                selected.p_impl->add_unsafe(rpm::PackageId(pool_solvable2id(pool, first)));
+                selected.p_impl->add_unsafe(pool_solvable2id(pool, first));
             }
             std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
 
             for (auto * solvable : tmp_solvables) {
                 if (solvable->name == current_name) {
-                    selected.p_impl->add_unsafe(rpm::PackageId(pool_solvable2id(pool, solvable)));
+                    selected.p_impl->add_unsafe(pool_solvable2id(pool, solvable));
                     continue;
                 }
                 if (add_obsoletes) {
@@ -445,7 +444,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
                 rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
                 selected.clear();
-                selected.p_impl->add_unsafe(rpm::PackageId(pool_solvable2id(pool, solvable)));
+                selected.p_impl->add_unsafe(pool_solvable2id(pool, solvable));
                 current_name = solvable->name;
             }
             if (add_obsoletes) {
@@ -567,13 +566,13 @@ void Goal::Impl::add_rpms_to_goal() {
                 //  include installed packages with the same NEVRA into transaction to prevent reinstall
                 std::vector<std::string> nevras;
                 for (auto id : ids) {
-                    nevras.push_back(rpm::solv::get_nevra(pool, rpm::PackageId(id)));
+                    nevras.push_back(rpm::solv::get_nevra(pool, id));
                 }
                 rpm::SolvQuery query(installed);
                 query.ifilter_nevra(nevras);
                 for (auto package_id : *query.p_impl) {
                     //  TODO(jmracek)  report already installed nevra
-                    ids.push_back(package_id.id);
+                    ids.push_back(package_id);
                 }
                 rpm_goal.add_install(
                     ids,
@@ -796,7 +795,7 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> Goal::Impl::get_r
     auto removal_of_protected = rpm_goal.get_removal_of_protected();
     if (removal_of_protected && !removal_of_protected->empty()) {
         for (auto protected_id : *removal_of_protected) {
-            if (protected_id == protected_running_kernel) {
+            if (protected_id == protected_running_kernel.id) {
                 std::vector<std::string> elements;
                 elements.emplace_back(rpm::solv::get_full_nevra(pool, protected_id));
                 if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
@@ -823,16 +822,15 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> Goal::Impl::get_r
     }
 
     for (auto broken : broken_installed) {
-        rpm::PackageId broken_id(broken);
-        if (broken_id == protected_running_kernel) {
+        if (broken == protected_running_kernel.id) {
             std::vector<std::string> elements;
-            elements.emplace_back(rpm::solv::get_full_nevra(pool, broken_id));
+            elements.emplace_back(rpm::solv::get_full_nevra(pool, broken));
             if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
                 problem_output.push_back(
                     std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, std::move(elements)));
             }
-        } else if (protected_packages && protected_packages->contains_unsafe(broken_id)) {
-            names.emplace(rpm::solv::get_name(pool, broken_id));
+        } else if (protected_packages && protected_packages->contains_unsafe(broken)) {
+            names.emplace(rpm::solv::get_name(pool, broken));
         }
     }
     if (!names.empty()) {
@@ -1124,7 +1122,7 @@ std::vector<rpm::Package> Goal::list_rpm_installs() {
     std::vector<rpm::Package> result;
     auto * sack = &p_impl->base->get_rpm_solv_sack();
     for (auto package_id : p_impl->rpm_goal.list_installs()) {
-        result.emplace_back(rpm::Package(sack, package_id));
+        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
     }
     return result;
 }
@@ -1133,7 +1131,7 @@ std::vector<rpm::Package> Goal::list_rpm_reinstalls() {
     std::vector<rpm::Package> result;
     auto * sack = &p_impl->base->get_rpm_solv_sack();
     for (auto package_id : p_impl->rpm_goal.list_reinstalls()) {
-        result.emplace_back(rpm::Package(sack, package_id));
+        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
     }
     return result;
 }
@@ -1142,7 +1140,7 @@ std::vector<rpm::Package> Goal::list_rpm_upgrades() {
     std::vector<rpm::Package> result;
     auto * sack = &p_impl->base->get_rpm_solv_sack();
     for (auto package_id : p_impl->rpm_goal.list_upgrades()) {
-        result.emplace_back(rpm::Package(sack, package_id));
+        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
     }
     return result;
 }
@@ -1151,7 +1149,7 @@ std::vector<rpm::Package> Goal::list_rpm_downgrades() {
     std::vector<rpm::Package> result;
     auto * sack = &p_impl->base->get_rpm_solv_sack();
     for (auto package_id : p_impl->rpm_goal.list_downgrades()) {
-        result.emplace_back(rpm::Package(sack, package_id));
+        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
     }
     return result;
 }
@@ -1160,7 +1158,7 @@ std::vector<rpm::Package> Goal::list_rpm_removes() {
     std::vector<rpm::Package> result;
     auto * sack = &p_impl->base->get_rpm_solv_sack();
     for (auto package_id : p_impl->rpm_goal.list_removes()) {
-        result.emplace_back(rpm::Package(sack, package_id));
+        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
     }
     return result;
 }
@@ -1169,7 +1167,7 @@ std::vector<rpm::Package> Goal::list_rpm_obsoleted() {
     std::vector<rpm::Package> result;
     auto * sack = &p_impl->base->get_rpm_solv_sack();
     for (auto package_id : p_impl->rpm_goal.list_obsoleted()) {
-        result.emplace_back(rpm::Package(sack, package_id));
+        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
     }
     return result;
 }
@@ -1207,7 +1205,7 @@ rpm::PackageId Goal::get_running_kernel_internal() {
         kernel.id = -1;
     } else {
         // TODO(mracek) g_debug("running_kernel(): %s.", id2nevra(pool, kernel_id));
-        kernel = *query.p_impl->begin();
+        kernel = libdnf::rpm::PackageId(*query.p_impl->begin());
     }
     sack.p_impl->set_running_kernel(kernel);
     return kernel;

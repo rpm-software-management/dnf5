@@ -43,13 +43,13 @@ namespace libdnf::rpm::solv {
 
 constexpr const char * BASE_EPOCH = "0";
 
-inline Solvable * get_solvable(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline Solvable * get_solvable(Pool * pool, Id package_id) noexcept {
     // Check that libsolv Id is identical with internal structure of PackageId
     static_assert(
         std::is_same<decltype(PackageId::id), ::Id>::value,
         "libdnf PackageId::id type differs from libsolv internal Id type");
 
-    return pool_id2solvable(pool, package_id.id);
+    return pool_id2solvable(pool, package_id);
 }
 
 inline libdnf::rpm::PackageId get_package_id(Pool * pool, Solvable * solvable) {
@@ -126,16 +126,16 @@ static inline void reldeps_for(Solvable * solvable, IdQueue & queue, Id type) {
     solvable_lookup_deparray(solvable, solv_type, &queue.get_queue(), marker);
 }
 
-inline const char * get_name(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_name(Pool * pool, Id package_id) noexcept {
     return pool_id2str(pool, get_solvable(pool, package_id)->name);
 }
 
-inline const char * get_evr(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_evr(Pool * pool, Id package_id) noexcept {
     return pool_id2str(pool, get_solvable(pool, package_id)->evr);
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_epoch_cstring(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_epoch_cstring(Pool * pool, Id package_id) noexcept {
     char * e;
     char * v;
     char * r;
@@ -146,7 +146,7 @@ inline const char * get_epoch_cstring(Pool * pool, libdnf::rpm::PackageId packag
     return BASE_EPOCH;
 }
 
-inline unsigned long get_epoch(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline unsigned long get_epoch(Pool * pool, Id package_id) noexcept {
     char * e;
     char * v;
     char * r;
@@ -162,7 +162,7 @@ inline unsigned long get_epoch(Pool * pool, libdnf::rpm::PackageId package_id) n
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_version(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_version(Pool * pool, Id package_id) noexcept {
     char * e;
     char * v;
     char * r;
@@ -171,7 +171,7 @@ inline const char * get_version(Pool * pool, libdnf::rpm::PackageId package_id) 
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_release(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_release(Pool * pool, Id package_id) noexcept {
     char * e;
     char * v;
     char * r;
@@ -179,20 +179,20 @@ inline const char * get_release(Pool * pool, libdnf::rpm::PackageId package_id) 
     return r;
 }
 
-inline const char * get_arch(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_arch(Pool * pool, Id package_id) noexcept {
     return pool_id2str(pool, get_solvable(pool, package_id)->arch);
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_nevra(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_nevra(Pool * pool, Id package_id) noexcept {
     return pool_solvable2str(pool, get_solvable(pool, package_id));
 }
 
 /// @return const char* !! Return temporal value !!
-const char * get_full_nevra(Pool * pool, libdnf::rpm::PackageId package_id);
+const char * get_full_nevra(Pool * pool, Id package_id);
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_group(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_group(Pool * pool, Id package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_GROUP);
 }
 
@@ -200,16 +200,16 @@ inline bool is_installed(Pool * pool, Solvable * solvable) {
     return solvable->repo == pool->installed;
 }
 
-inline unsigned long long get_download_size(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline unsigned long long get_download_size(Pool * pool, Id package_id) noexcept {
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_DOWNLOADSIZE);
 }
 
-inline unsigned long long get_install_size(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline unsigned long long get_install_size(Pool * pool, Id package_id) noexcept {
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_INSTALLSIZE);
 }
 
 /// If package is installed, return get_install_size(). Return get_download_size() otherwise.
-inline unsigned long long get_size(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline unsigned long long get_size(Pool * pool, Id package_id) noexcept {
     Solvable * solvable = get_solvable(pool, package_id);
     if (is_installed(pool, solvable)) {
         return get_install_size(pool, package_id);
@@ -218,60 +218,60 @@ inline unsigned long long get_size(Pool * pool, libdnf::rpm::PackageId package_i
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_license(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_license(Pool * pool, Id package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_LICENSE);
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_sourcerpm(Pool * pool, libdnf::rpm::PackageId package_id) {
+inline const char * get_sourcerpm(Pool * pool, Id package_id) {
     Solvable * solvable = get_solvable(pool, package_id);
     SolvPrivate::internalize_libsolv_repo(solvable->repo);
     return solvable_lookup_sourcepkg(solvable);
 }
 
-inline unsigned long long get_build_time(Pool * pool, libdnf::rpm::PackageId package_id) {
+inline unsigned long long get_build_time(Pool * pool, Id package_id) {
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_BUILDTIME);
 }
 
 // TODO not supported by libsolv: https://github.com/openSUSE/libsolv/issues/400
 /// @return const char* !! Return temporal value !!
-//inline const char * get_build_host(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+//inline const char * get_build_host(Pool * pool, Id package_id) noexcept {
 //    return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_BUILDHOST);
 //}
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_packager(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_packager(Pool * pool, Id package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_PACKAGER);
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_vendor(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_vendor(Pool * pool, Id package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_VENDOR);
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_url(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_url(Pool * pool, Id package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_URL);
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_summary(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_summary(Pool * pool, Id package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_SUMMARY);
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_description(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_description(Pool * pool, Id package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_DESCRIPTION);
 }
 
-inline std::vector<std::string> get_files(Pool * pool, libdnf::rpm::PackageId package_id) {
+inline std::vector<std::string> get_files(Pool * pool, Id package_id) {
     Solvable * solvable = get_solvable(pool, package_id);
     Dataiterator di;
     std::vector<std::string> ret;
 
     SolvPrivate::internalize_libsolv_repo(solvable->repo);
     dataiterator_init(
-        &di, pool, solvable->repo, package_id.id, SOLVABLE_FILELIST, nullptr, SEARCH_FILES | SEARCH_COMPLETE_FILELIST);
+        &di, pool, solvable->repo, package_id, SOLVABLE_FILELIST, nullptr, SEARCH_FILES | SEARCH_COMPLETE_FILELIST);
     while (dataiterator_step(&di) != 0) {
         ret.emplace_back(di.kv.str);
     }
@@ -279,84 +279,84 @@ inline std::vector<std::string> get_files(Pool * pool, libdnf::rpm::PackageId pa
     return ret;
 }
 
-inline void get_provides(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_provides(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_PROVIDES);
 }
 
-inline void get_requires(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_requires(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_REQUIRES);
     IdQueue tmp_queue;
     reldeps_for(get_solvable(pool, package_id), tmp_queue, SOLVABLE_PREREQMARKER);
     queue.append(tmp_queue);
 }
 
-inline void get_requires_pre(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_requires_pre(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_PREREQMARKER);
 }
 
-inline void get_conflicts(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_conflicts(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_CONFLICTS);
 }
 
-inline void get_obsoletes(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_obsoletes(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_OBSOLETES);
 }
 
-inline void get_recommends(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_recommends(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_RECOMMENDS);
 }
 
-inline void get_suggests(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_suggests(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_SUGGESTS);
 }
 
-inline void get_enhances(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_enhances(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_ENHANCES);
 }
 
-inline void get_supplements(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_supplements(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_SUPPLEMENTS);
 }
 
-inline void get_prereq_ignoreinst(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_prereq_ignoreinst(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_PREREQ_IGNOREINST);
 }
 
-inline void get_regular_requires(Pool * pool, libdnf::rpm::PackageId package_id, IdQueue & queue) noexcept {
+inline void get_regular_requires(Pool * pool, Id package_id, IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_REQUIRES);
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_baseurl(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_baseurl(Pool * pool, Id package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_MEDIABASE);
 }
 
 /// @return const char* !! Return temporal value !!
-inline const char * get_location(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline const char * get_location(Pool * pool, Id package_id) noexcept {
     auto solvable = get_solvable(pool, package_id);
     SolvPrivate::internalize_libsolv_repo(solvable->repo);
     return solvable_lookup_location(solvable, nullptr);
 }
 
-std::string get_local_filepath(Pool * pool, libdnf::rpm::PackageId package_id);
+std::string get_local_filepath(Pool * pool, Id package_id);
 
-inline unsigned long long get_hdr_end(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline unsigned long long get_hdr_end(Pool * pool, Id package_id) noexcept {
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_HEADEREND);
 }
 
-inline unsigned long long get_install_time(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline unsigned long long get_install_time(Pool * pool, Id package_id) noexcept {
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_INSTALLTIME);
 }
 
-inline unsigned long long get_media_number(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline unsigned long long get_media_number(Pool * pool, Id package_id) noexcept {
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_MEDIANR);
 }
 
-inline unsigned long long get_rpmdbid(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline unsigned long long get_rpmdbid(Pool * pool, Id package_id) noexcept {
     return lookup_num(get_solvable(pool, package_id), RPM_RPMDBID);
 }
 
-inline Repo * get_repo(Pool * pool, libdnf::rpm::PackageId package_id) noexcept {
+inline Repo * get_repo(Pool * pool, Id package_id) noexcept {
     auto solvable = get_solvable(pool, package_id);
     return static_cast<Repo *>(solvable->repo->appdata);
 }

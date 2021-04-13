@@ -93,22 +93,22 @@ public:
     // ITEM OPERATIONS
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.set(Id id)
-    void add(PackageId package_id);
+    void add(Id id);
 
     /// Faster, but unsafe version of add() method that is doesn't check bitmap range
-    void add_unsafe(PackageId package_id) noexcept;
+    void add_unsafe(Id id) noexcept;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(Id id)
-    bool contains(PackageId package_id) const noexcept;
+    bool contains(Id id) const noexcept;
 
     /// Faster, but unsafe version of contains() method that is doesn't check bitmap range
-    bool contains_unsafe(PackageId package_id) const noexcept;
+    bool contains_unsafe(Id id) const noexcept;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.remove(Id id)
-    void remove(PackageId package_id);
+    void remove(Id id);
 
     /// Faster, but unsafe version of remove() method that is doesn't check bitmap range
-    void remove_unsafe(PackageId package_id) noexcept;
+    void remove_unsafe(Id id) noexcept;
 
     // SET OPERATIONS - Map
 
@@ -143,7 +143,7 @@ public:
 protected:
     /// Check if `id` is in bitmap range.
     /// Throws std::out_of_range
-    void check_id_in_bitmap_range(PackageId package_id) const;
+    void check_id_in_bitmap_range(Id id) const;
 
 private:
     friend class rpm::SolvSack;
@@ -193,9 +193,9 @@ inline SolvMap & SolvMap::operator=(SolvMap && other) noexcept {
     return *this;
 }
 
-inline void SolvMap::check_id_in_bitmap_range(PackageId package_id) const {
+inline void SolvMap::check_id_in_bitmap_range(Id id) const {
     // map.size is in bytes, << 3 multiplies the number with 8 and gives size in bits
-    if (package_id.id < 0 || package_id.id >= (map.size << 3)) {
+    if (id < 0 || id >= (map.size << 3)) {
         throw std::out_of_range("Id is out of bitmap range");
     }
 }
@@ -214,44 +214,44 @@ inline SolvMap::iterator SolvMap::end() const {
 }
 
 
-inline void SolvMap::add(PackageId package_id) {
-    check_id_in_bitmap_range(package_id);
-    add_unsafe(package_id);
+inline void SolvMap::add(Id id) {
+    check_id_in_bitmap_range(id);
+    add_unsafe(id);
 }
 
 
-inline bool SolvMap::contains(PackageId package_id) const noexcept {
-    if (package_id.id < 0 || package_id.id >= (map.size << 3)) {
+inline bool SolvMap::contains(Id id) const noexcept {
+    if (id < 0 || id >= (map.size << 3)) {
         // if Id is outside bitmap range, then bitmap doesn't contain it
         return false;
     }
-    return contains_unsafe(package_id);
+    return contains_unsafe(id);
 }
 
 
-inline void SolvMap::remove(PackageId package_id) {
-    check_id_in_bitmap_range(package_id);
-    remove_unsafe(package_id);
+inline void SolvMap::remove(Id id) {
+    check_id_in_bitmap_range(id);
+    remove_unsafe(id);
 }
 
 
-inline void SolvMap::add_unsafe(PackageId package_id) noexcept {
+inline void SolvMap::add_unsafe(Id id) noexcept {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
-    MAPSET(&map, package_id.id);
+    MAPSET(&map, id);
 #pragma GCC diagnostic pop
 }
 
 
-inline bool SolvMap::contains_unsafe(PackageId package_id) const noexcept {
-    return MAPTST(&map, package_id.id);
+inline bool SolvMap::contains_unsafe(Id id) const noexcept {
+    return MAPTST(&map, id);
 }
 
 
-inline void SolvMap::remove_unsafe(PackageId package_id) noexcept {
+inline void SolvMap::remove_unsafe(Id id) noexcept {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
-    MAPCLR(&map, package_id.id);
+    MAPCLR(&map, id);
 #pragma GCC diagnostic pop
 }
 

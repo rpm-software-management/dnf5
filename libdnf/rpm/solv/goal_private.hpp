@@ -200,7 +200,7 @@ inline void GoalPrivate::add_remove(const IdQueue & queue, bool clean_deps) {
 inline void GoalPrivate::add_remove(const SolvMap & solv_map, bool clean_deps) {
     Id flags = SOLVER_SOLVABLE | SOLVER_ERASE | (clean_deps ? SOLVER_CLEANDEPS : 0);
     for (auto what : solv_map) {
-        staging.push_back(flags, what.id);
+        staging.push_back(flags, what);
     }
 }
 

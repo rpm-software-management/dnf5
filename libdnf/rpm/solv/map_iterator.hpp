@@ -44,11 +44,11 @@ public:
 
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
-    using value_type = PackageId;
+    using value_type = Id;
     using pointer = void;
-    using reference = PackageId;
+    using reference = Id;
 
-    PackageId operator*() const noexcept { return current_value; }
+    Id operator*() const noexcept { return current_value; }
 
     SolvMapIterator & operator++() noexcept;
     SolvMapIterator operator++(int) noexcept;
@@ -60,7 +60,7 @@ public:
     void end() noexcept;
 
     /// Sets iterator to the first contained package in the range <id, end>.
-    void jump(PackageId id) noexcept;
+    void jump(Id id) noexcept;
 
 protected:
     const Map * get_map() const noexcept { return map; }
@@ -79,7 +79,7 @@ private:
     const unsigned char * map_end;
 
     // value of the iterator
-    PackageId current_value;
+    Id current_value;
 };
 
 
@@ -88,18 +88,18 @@ inline SolvMapIterator::SolvMapIterator(const Map * map) noexcept : map{map}, ma
 }
 
 inline void SolvMapIterator::begin() noexcept {
-    current_value.id = BEGIN;
+    current_value = BEGIN;
     map_current = map->map;
     ++*this;
 }
 
 inline void SolvMapIterator::end() noexcept {
-    current_value.id = END;
+    current_value = END;
     map_current = map_end;
 }
 
 inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
-    if (current_value.id >= 0) {
+    if (current_value >= 0) {
         // skip (previous / 8) bytes
         //current += previous >> 3;
 
@@ -109,15 +109,15 @@ inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
         // reset previously seen bits to 0
-        byte >>= (current_value.id & 7) + 1;
+        byte >>= (current_value & 7) + 1;
 #pragma GCC diagnostic pop
 
-        auto bit = ffs(byte << ((current_value.id & 7) + 1));
+        auto bit = ffs(byte << ((current_value & 7) + 1));
         if (bit) {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
             // return (current byte * 8) + bit position - 1
-            current_value.id = ((map_current - map->map) << 3) + bit - 1;
+            current_value = ((map_current - map->map) << 3) + bit - 1;
 #pragma GCC diagnostic pop
             return *this;
         }
@@ -139,13 +139,13 @@ inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
 #pragma GCC diagnostic ignored "-Wconversion"
         // now we have a byte that has at least one bit set
         // return (current byte * 8) + bit position - 1
-        current_value.id = ((map_current - map->map) << 3) + ffs(*map_current) - 1;
+        current_value = ((map_current - map->map) << 3) + ffs(*map_current) - 1;
 #pragma GCC diagnostic pop
         return *this;
     }
 
     // not found
-    current_value.id = END;
+    current_value = END;
     return *this;
 }
 
@@ -155,13 +155,13 @@ inline SolvMapIterator SolvMapIterator::operator++(int) noexcept {
     return it;
 }
 
-inline void SolvMapIterator::jump(PackageId id) noexcept {
-    if (id.id < 0) {
+inline void SolvMapIterator::jump(Id id) noexcept {
+    if (id < 0) {
         begin();
         return;
     }
 
-    const unsigned char * current = map->map + (id.id >> 3);
+    const unsigned char * current = map->map + (id >> 3);
 
     if (current >= map_end) {
         end();
@@ -172,7 +172,7 @@ inline void SolvMapIterator::jump(PackageId id) noexcept {
     map_current = current;
 
     // If the element with requested id does not exist in the map, it moves to the next.
-    if (!(*current & (1 << (id.id & 7)))) {
+    if (!(*current & (1 << (id & 7)))) {
         ++*this;
     }
 }

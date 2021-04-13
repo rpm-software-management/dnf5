@@ -28,14 +28,14 @@ CPPUNIT_TEST_SUITE_REGISTRATION(SolvMapTest);
 
 void SolvMapTest::setUp() {
     map1 = new libdnf::rpm::solv::SolvMap(32);
-    map1->add(libdnf::rpm::PackageId(0));
-    map1->add(libdnf::rpm::PackageId(2));
-    map1->add(libdnf::rpm::PackageId(28));
-    map1->add(libdnf::rpm::PackageId(30));
+    map1->add(0);
+    map1->add(2);
+    map1->add(28);
+    map1->add(30);
 
     map2 = new libdnf::rpm::solv::SolvMap(32);
-    map2->add(libdnf::rpm::PackageId(0));
-    map2->add(libdnf::rpm::PackageId(1));
+    map2->add(0);
+    map2->add(1);
 }
 
 
@@ -49,50 +49,50 @@ void SolvMapTest::test_add() {
     // test if the maps created in the constructor
     // have the correct bits set
 
-    CPPUNIT_ASSERT(map1->contains(libdnf::rpm::PackageId(0)) == true);
-    CPPUNIT_ASSERT(map1->contains(libdnf::rpm::PackageId(1)) == false);
-    CPPUNIT_ASSERT(map1->contains(libdnf::rpm::PackageId(2)) == true);
+    CPPUNIT_ASSERT(map1->contains(0) == true);
+    CPPUNIT_ASSERT(map1->contains(1) == false);
+    CPPUNIT_ASSERT(map1->contains(2) == true);
 
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(0)) == true);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(1)) == true);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(2)) == false);
+    CPPUNIT_ASSERT(map2->contains(0) == true);
+    CPPUNIT_ASSERT(map2->contains(1) == true);
+    CPPUNIT_ASSERT(map2->contains(2) == false);
 
     // add an item that is in the map already
-    map1->add(libdnf::rpm::PackageId(0));
-    CPPUNIT_ASSERT(map1->contains(libdnf::rpm::PackageId(0)) == true);
+    map1->add(0);
+    CPPUNIT_ASSERT(map1->contains(0) == true);
 
     // test invalid ranges
-    CPPUNIT_ASSERT_THROW(map1->add(libdnf::rpm::PackageId(-1)), std::out_of_range);
-    CPPUNIT_ASSERT_THROW(map1->add(libdnf::rpm::PackageId(33)), std::out_of_range);
+    CPPUNIT_ASSERT_THROW(map1->add(-1), std::out_of_range);
+    CPPUNIT_ASSERT_THROW(map1->add(33), std::out_of_range);
 }
 
 
 void SolvMapTest::test_contains() {
-    CPPUNIT_ASSERT(map1->contains(libdnf::rpm::PackageId(0)) == true);
-    CPPUNIT_ASSERT(map1->contains(libdnf::rpm::PackageId(1)) == false);
+    CPPUNIT_ASSERT(map1->contains(0) == true);
+    CPPUNIT_ASSERT(map1->contains(1) == false);
 
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(0)) == true);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(1)) == true);
+    CPPUNIT_ASSERT(map2->contains(0) == true);
+    CPPUNIT_ASSERT(map2->contains(1) == true);
 
     // test invalid ranges
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(-1)) == false);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(33)) == false);
+    CPPUNIT_ASSERT(map2->contains(-1) == false);
+    CPPUNIT_ASSERT(map2->contains(33) == false);
 }
 
 
 void SolvMapTest::test_remove() {
     // remove an item that is in the map
-    CPPUNIT_ASSERT(map1->contains(libdnf::rpm::PackageId(0)) == true);
-    map1->remove(libdnf::rpm::PackageId(0));
-    CPPUNIT_ASSERT(map1->contains(libdnf::rpm::PackageId(0)) == false);
+    CPPUNIT_ASSERT(map1->contains(0) == true);
+    map1->remove(0);
+    CPPUNIT_ASSERT(map1->contains(0) == false);
 
     // remove an item that is not in the map
-    map1->remove(libdnf::rpm::PackageId(0));
-    CPPUNIT_ASSERT(map1->contains(libdnf::rpm::PackageId(1)) == false);
+    map1->remove(0);
+    CPPUNIT_ASSERT(map1->contains(1) == false);
 
     // test invalid ranges
-    CPPUNIT_ASSERT_THROW(map1->remove(libdnf::rpm::PackageId(-1)), std::out_of_range);
-    CPPUNIT_ASSERT_THROW(map1->remove(libdnf::rpm::PackageId(33)), std::out_of_range);
+    CPPUNIT_ASSERT_THROW(map1->remove(-1), std::out_of_range);
+    CPPUNIT_ASSERT_THROW(map1->remove(33), std::out_of_range);
 }
 
 
@@ -101,46 +101,45 @@ void SolvMapTest::test_map_allocation_range() {
     libdnf::rpm::solv::SolvMap map(25);
 
     // setting bit 31 works
-    map.add(libdnf::rpm::PackageId(31));
+    map.add(31);
 
     // setting bit 32 does not work (we're indexing from 0)
-    CPPUNIT_ASSERT_THROW(map1->add(libdnf::rpm::PackageId(32)), std::out_of_range);
+    CPPUNIT_ASSERT_THROW(map1->add(32), std::out_of_range);
 }
 
 
 void SolvMapTest::test_union() {
     *map2 |= *map1;
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(0)) == true);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(1)) == true);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(2)) == true);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(3)) == false);
+    CPPUNIT_ASSERT(map2->contains(0) == true);
+    CPPUNIT_ASSERT(map2->contains(1) == true);
+    CPPUNIT_ASSERT(map2->contains(2) == true);
+    CPPUNIT_ASSERT(map2->contains(3) == false);
 }
 
 
 void SolvMapTest::test_intersection() {
     *map2 &= *map1;
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(0)) == true);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(1)) == false);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(2)) == false);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(3)) == false);
+    CPPUNIT_ASSERT(map2->contains(0) == true);
+    CPPUNIT_ASSERT(map2->contains(1) == false);
+    CPPUNIT_ASSERT(map2->contains(2) == false);
+    CPPUNIT_ASSERT(map2->contains(3) == false);
 }
 
 
 void SolvMapTest::test_difference() {
     *map2 -= *map1;
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(0)) == false);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(1)) == true);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(2)) == false);
-    CPPUNIT_ASSERT(map2->contains(libdnf::rpm::PackageId(3)) == false);
+    CPPUNIT_ASSERT(map2->contains(0) == false);
+    CPPUNIT_ASSERT(map2->contains(1) == true);
+    CPPUNIT_ASSERT(map2->contains(2) == false);
+    CPPUNIT_ASSERT(map2->contains(3) == false);
 }
 
 
-
 void SolvMapTest::test_iterator_empty() {
-    std::vector<libdnf::rpm::PackageId> expected = {};
-    std::vector<libdnf::rpm::PackageId> result;
+    std::vector<Id> expected = {};
+    std::vector<Id> result;
     libdnf::rpm::solv::SolvMap map(16);
-    for(auto it = map.begin(); it != map.end(); it++) {
+    for (auto it = map.begin(); it != map.end(); it++) {
         result.push_back(*it);
     }
     CPPUNIT_ASSERT(result == expected);
@@ -148,31 +147,13 @@ void SolvMapTest::test_iterator_empty() {
 
 
 void SolvMapTest::test_iterator_full() {
-    std::vector<libdnf::rpm::PackageId> expected = {
-        libdnf::rpm::PackageId(0),
-        libdnf::rpm::PackageId(1),
-        libdnf::rpm::PackageId(2),
-        libdnf::rpm::PackageId(3),
-        libdnf::rpm::PackageId(4),
-        libdnf::rpm::PackageId(5),
-        libdnf::rpm::PackageId(6),
-        libdnf::rpm::PackageId(7),
-        libdnf::rpm::PackageId(8),
-        libdnf::rpm::PackageId(9),
-        libdnf::rpm::PackageId(10),
-        libdnf::rpm::PackageId(11),
-        libdnf::rpm::PackageId(12),
-        libdnf::rpm::PackageId(13),
-        libdnf::rpm::PackageId(14),
-        libdnf::rpm::PackageId(15)
-    };
-    std::vector<libdnf::rpm::PackageId> result;
-
+    std::vector<Id> expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
+    std::vector<Id> result;
     libdnf::rpm::solv::SolvMap map(16);
     for (int i = 0; i < 16; i++) {
-        map.add(libdnf::rpm::PackageId(i));
+        map.add(i);
     }
-    for(auto package_id : map) {
+    for (auto package_id : map) {
         result.push_back(package_id);
     }
     CPPUNIT_ASSERT(result == expected);
@@ -180,13 +161,7 @@ void SolvMapTest::test_iterator_full() {
 
 
 void SolvMapTest::test_iterator_sparse() {
-    std::vector<libdnf::rpm::PackageId> expected = {
-        libdnf::rpm::PackageId(4),
-        libdnf::rpm::PackageId(6),
-        libdnf::rpm::PackageId(10),
-        libdnf::rpm::PackageId(11),
-        libdnf::rpm::PackageId(12),
-    };
+    std::vector<Id> expected = {4, 6, 10, 11, 12};
 
     libdnf::rpm::solv::SolvMap map(16);
     for (auto it : expected) {
@@ -195,25 +170,25 @@ void SolvMapTest::test_iterator_sparse() {
 
     // test begin
     auto it1 = map.begin();
-    CPPUNIT_ASSERT_EQUAL((*it1).id, 4);
+    CPPUNIT_ASSERT_EQUAL(*it1, 4);
 
     // test pre-increment operator
     auto it2 = ++it1;
-    CPPUNIT_ASSERT_EQUAL((*it1).id, 6);
-    CPPUNIT_ASSERT_EQUAL((*it2).id, 6);
+    CPPUNIT_ASSERT_EQUAL(*it1, 6);
+    CPPUNIT_ASSERT_EQUAL(*it2, 6);
 
     // test post-increment operator
     auto it3 = it2++;
-    CPPUNIT_ASSERT_EQUAL((*it2).id, 10);
-    CPPUNIT_ASSERT_EQUAL((*it3).id, 6);
+    CPPUNIT_ASSERT_EQUAL(*it2, 10);
+    CPPUNIT_ASSERT_EQUAL(*it3, 6);
 
     // test move back to begin
     it2.begin();
-    CPPUNIT_ASSERT_EQUAL((*it2).id, 4);
+    CPPUNIT_ASSERT_EQUAL(*it2, 4);
 
     // test increment after begin
     ++it2;
-    CPPUNIT_ASSERT_EQUAL((*it2).id, 6);
+    CPPUNIT_ASSERT_EQUAL(*it2, 6);
 
     // test end
     it2.end();
@@ -221,8 +196,8 @@ void SolvMapTest::test_iterator_sparse() {
 
     // test loop with pre-increment operator
     {
-        std::vector<libdnf::rpm::PackageId> result;
-        for(auto it = map.begin(), end = map.end(); it !=end; ++it) {
+        std::vector<Id> result;
+        for (auto it = map.begin(), end = map.end(); it != end; ++it) {
             result.push_back(*it);
         }
         CPPUNIT_ASSERT(result == expected);
@@ -230,40 +205,40 @@ void SolvMapTest::test_iterator_sparse() {
 
     // test loop with post-increment operator
     {
-        std::vector<libdnf::rpm::PackageId> result;
-        for(auto it = map.begin(), end = map.end(); it != end; it++) {
+        std::vector<Id> result;
+        for (auto it = map.begin(), end = map.end(); it != end; it++) {
             result.push_back(*it);
         }
         CPPUNIT_ASSERT(result == expected);
     }
 
     // test jump to existing package
-    it1.jump(libdnf::rpm::PackageId(11));
-    CPPUNIT_ASSERT_EQUAL((*it1).id, 11);
+    it1.jump(11);
+    CPPUNIT_ASSERT_EQUAL(*it1, 11);
 
     // test jump behind last existing package
-    it1.jump(libdnf::rpm::PackageId(14));
+    it1.jump(14);
     CPPUNIT_ASSERT(it1 == map.end());
 
     // test jump to existing package
-    it1.jump(libdnf::rpm::PackageId(6));
-    CPPUNIT_ASSERT_EQUAL((*it1).id, 6);
+    it1.jump(6);
+    CPPUNIT_ASSERT_EQUAL(*it1, 6);
 
     // test jump to non-existing package, moves to the next existing
-    it1.jump(libdnf::rpm::PackageId(7));
-    CPPUNIT_ASSERT_EQUAL((*it1).id, 10);
+    it1.jump(7);
+    CPPUNIT_ASSERT_EQUAL(*it1, 10);
 
     // test jump behind map
-    it1.jump(libdnf::rpm::PackageId(240));
+    it1.jump(240);
     CPPUNIT_ASSERT(it1 == map.end());
 
     // test jump to negative id, sets to begin
-    it1.jump(libdnf::rpm::PackageId(-240));
-    CPPUNIT_ASSERT_EQUAL((*it1).id, 4);
+    it1.jump(-240);
+    CPPUNIT_ASSERT_EQUAL(*it1, 4);
 
     // test increment after jump to negative id
     ++it1;
-    CPPUNIT_ASSERT_EQUAL((*it1).id, 6);
+    CPPUNIT_ASSERT_EQUAL(*it1, 6);
 }
 
 
@@ -273,8 +248,8 @@ void SolvMapTest::test_iterator_performance_empty() {
     libdnf::rpm::solv::SolvMap map(max);
 
     for (int i = 0; i < 500; i++) {
-        std::vector<libdnf::rpm::PackageId> result;
-        for(auto it = map.begin(); it != map.end(); it++) {
+        std::vector<Id> result;
+        for (auto it = map.begin(); it != map.end(); it++) {
             result.push_back(*it);
         }
     }
@@ -288,8 +263,8 @@ void SolvMapTest::test_iterator_performance_full() {
     memset(map.get_map()->map, 255, static_cast<std::size_t>(map.get_map()->size));
 
     for (int i = 0; i < 500; i++) {
-        std::vector<libdnf::rpm::PackageId> result;
-        for(auto it = map.begin(); it != map.end(); it++) {
+        std::vector<Id> result;
+        for (auto it = map.begin(); it != map.end(); it++) {
             result.push_back(*it);
         }
     }
@@ -303,8 +278,8 @@ void SolvMapTest::test_iterator_performance_4bits() {
     memset(map.get_map()->map, 15, static_cast<std::size_t>(map.get_map()->size));
 
     for (int i = 0; i < 500; i++) {
-        std::vector<libdnf::rpm::PackageId> result;
-        for(auto it = map.begin(); it != map.end(); it++) {
+        std::vector<Id> result;
+        for (auto it = map.begin(); it != map.end(); it++) {
             result.push_back(*it);
         }
     }

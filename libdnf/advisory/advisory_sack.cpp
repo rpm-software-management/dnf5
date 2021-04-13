@@ -60,7 +60,7 @@ void AdvisorySack::load_advisories_from_solvsack() {
     // multiple times.
     dataiterator_prepend_keyname(&di, UPDATE_COLLECTION);
     while (dataiterator_step(&di)) {
-        data_map.add(libdnf::advisory::AdvisoryId(di.solvid));
+        data_map.add(di.solvid);
         dataiterator_skip_solvable(&di);
     }
     dataiterator_free(&di);

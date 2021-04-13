@@ -58,7 +58,7 @@ inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_p
 
 bool is_valid_candidate(
     Pool * pool,
-    libdnf::rpm::PackageId candidate_id,
+    Id candidate_id,
     Id src,
     bool test_epoch,
     bool test_version,
@@ -231,14 +231,14 @@ SolvQuery::SolvQuery(SolvSack * sack, InitFlags flags) : PackageSet(sack), init_
     }
 }
 
-template <const char * (*c_string_getter_fnc)(Pool * pool, libdnf::rpm::PackageId)>
+template <const char * (*c_string_getter_fnc)(Pool * pool, Id)>
 inline static void filter_glob_internal(
     Pool * pool,
     const char * c_pattern,
     const solv::SolvMap & candidates,
     solv::SolvMap & filter_result,
     int fnm_flags) {
-    for (PackageId candidate_id : candidates) {
+    for (Id candidate_id : candidates) {
         const char * candidate_c_string = c_string_getter_fnc(pool, candidate_id);
         if (fnmatch(c_pattern, candidate_c_string, fnm_flags) == 0) {
             filter_result.add_unsafe(candidate_id);
@@ -277,7 +277,7 @@ SolvQuery & SolvQuery::ifilter_name(const std::vector<std::string> & patterns, l
                 auto low =
                     std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
                 while (low != sorted_solvables.end() && (*low)->name == name_id) {
-                    filter_result.add_unsafe(solv::get_package_id(pool, *low));
+                    filter_result.add_unsafe(pool_solvable2id(pool, *low));
                     ++low;
                 }
             } break;
@@ -293,12 +293,12 @@ SolvQuery & SolvQuery::ifilter_name(const std::vector<std::string> & patterns, l
                     icase_name,
                     name_compare_icase_lower_id);
                 while (low != sorted_icase_solvables.end() && (*low).first == icase_name) {
-                    filter_result.add_unsafe(solv::get_package_id(pool, (*low).second));
+                    filter_result.add_unsafe(pool_solvable2id(pool, (*low).second));
                     ++low;
                 }
             } break;
             case libdnf::sack::QueryCmp::ICONTAINS: {
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     const char * name = solv::get_name(pool, candidate_id);
                     if (strcasestr(name, c_pattern) != nullptr) {
                         filter_result.add_unsafe(candidate_id);
@@ -309,7 +309,7 @@ SolvQuery & SolvQuery::ifilter_name(const std::vector<std::string> & patterns, l
                 filter_glob_internal<solv::get_name>(pool, c_pattern, *p_impl, filter_result, FNM_CASEFOLD);
                 break;
             case libdnf::sack::QueryCmp::CONTAINS: {
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     const char * name = solv::get_name(pool, candidate_id);
                     if (strstr(name, c_pattern) != nullptr) {
                         filter_result.add_unsafe(candidate_id);
@@ -347,11 +347,11 @@ SolvQuery & SolvQuery::ifilter_name(const PackageSet & package_set, libdnf::sack
     }
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
-    for (PackageId candidate_id : *package_set.p_impl) {
+    for (Id candidate_id : *package_set.p_impl) {
         Id name_id = solv::get_solvable(pool, candidate_id)->name;
         auto low = std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
         while (low != sorted_solvables.end() && (*low)->name == name_id) {
-            filter_result.add_unsafe(solv::get_package_id(pool, *low));
+            filter_result.add_unsafe(pool_solvable2id(pool, *low));
             ++low;
         }
     }
@@ -380,7 +380,7 @@ SolvQuery & SolvQuery::ifilter_name_arch(const PackageSet & package_set, libdnf:
 
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
-    for (PackageId candidate_id : *package_set.p_impl) {
+    for (Id candidate_id : *package_set.p_impl) {
         Solvable * solvable = solv::get_solvable(pool, candidate_id);
         auto low = std::lower_bound(
             sorted_solvables.begin(), sorted_solvables.end(), solvable, name_arch_compare_lower_solvable);
@@ -425,8 +425,8 @@ inline static void filter_evr_internal(
     solv::SolvMap filter_result(static_cast<int>(pool->nsolvables));
     for (auto & pattern : patterns) {
         const char * pattern_c_str = pattern.c_str();
-        for (PackageId candidate_id : query_result) {
-            Solvable * solvable = solv::get_solvable(pool, candidate_id);
+        for (Id candidate_id : query_result) {
+            Solvable * solvable = pool_id2solvable(pool, candidate_id);
             int cmp = pool_evrcmp_str(pool, pool_id2str(pool, solvable->evr), pattern_c_str, EVRCMP_COMPARE);
             if (cmp_fnc(cmp)) {
                 filter_result.add_unsafe(candidate_id);
@@ -487,8 +487,8 @@ SolvQuery & SolvQuery::ifilter_arch(const std::vector<std::string> & patterns, l
                 if (match_arch_id == 0) {
                     continue;
                 }
-                for (PackageId candidate_id : *p_impl) {
-                    Solvable * solvable = solv::get_solvable(pool, candidate_id);
+                for (Id candidate_id : *p_impl) {
+                    Solvable * solvable = pool_id2solvable(pool, candidate_id);
                     if (solvable->arch == match_arch_id) {
                         filter_result.add_unsafe(candidate_id);
                     }
@@ -622,7 +622,7 @@ inline static void filter_nevra_internal(
     while (low != sorted_solvables.end() && (*low)->name == nevra_id.name && (*low)->arch == nevra_id.arch) {
         int cmp = pool_evrcmp_str(pool, pool_id2str(pool, (*low)->evr), nevra_id.evr_str.c_str(), EVRCMP_COMPARE);
         if (cmp_fnc(cmp)) {
-            filter_result.add_unsafe(solv::get_package_id(pool, *low));
+            filter_result.add_unsafe(pool_solvable2id(pool, *low));
         }
         ++low;
     }
@@ -683,7 +683,7 @@ template <bool (*cmp_fnc)(int value_to_cmp)>
 inline static void filter_version_internal(
     Pool * pool, const char * c_pattern, solv::SolvMap & candidates, solv::SolvMap & filter_result) {
     char * formated_c_pattern = solv_dupjoin(c_pattern, "-0", nullptr);
-    for (PackageId candidate_id : candidates) {
+    for (Id candidate_id : candidates) {
         const char * version = solv::get_version(pool, candidate_id);
         char * vr = pool_tmpjoin(pool, version, "-0", nullptr);
         int cmp = pool_evrcmp_str(pool, vr, formated_c_pattern, EVRCMP_COMPARE);
@@ -751,7 +751,7 @@ template <bool (*cmp_fnc)(int value_to_cmp)>
 inline static void filter_release_internal(
     Pool * pool, const char * c_pattern, solv::SolvMap & candidates, solv::SolvMap & filter_result) {
     char * formated_c_pattern = solv_dupjoin("0-", c_pattern, nullptr);
-    for (PackageId candidate_id : candidates) {
+    for (Id candidate_id : candidates) {
         const char * release = solv::get_release(pool, candidate_id);
         char * vr = pool_tmpjoin(pool, "0-", release, nullptr);
         int cmp = pool_evrcmp_str(pool, vr, formated_c_pattern, EVRCMP_COMPARE);
@@ -861,8 +861,8 @@ SolvQuery & SolvQuery::ifilter_repoid(const std::vector<std::string> & patterns,
                 throw NotSupportedCmpType("Used unsupported CmpType");
         }
     }
-    for (PackageId candidate_id : *p_impl) {
-        auto * solvable = solv::get_solvable(pool, candidate_id);
+    for (Id candidate_id : *p_impl) {
+        auto * solvable = pool_id2solvable(pool, candidate_id);
         if (solvable->repo && repo_ids[solvable->repo->repoid]) {
             filter_result.add_unsafe(candidate_id);
         }
@@ -899,8 +899,8 @@ SolvQuery & SolvQuery::ifilter_sourcerpm(const std::vector<std::string> & patter
         }
         switch (tmp_cmp_type) {
             case libdnf::sack::QueryCmp::EQ:
-                for (PackageId candidate_id : *p_impl) {
-                    auto * solvable = solv::get_solvable(pool, candidate_id);
+                for (Id candidate_id : *p_impl) {
+                    auto * solvable = pool_id2solvable(pool, candidate_id);
                     const char * name = solvable_lookup_str(solvable, SOLVABLE_SOURCENAME);
                     if (name == nullptr) {
                         name = pool_id2str(pool, solvable->name);
@@ -917,7 +917,7 @@ SolvQuery & SolvQuery::ifilter_sourcerpm(const std::vector<std::string> & patter
                 }
                 break;
             case libdnf::sack::QueryCmp::GLOB:
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     auto * sourcerpm = solv::get_sourcerpm(pool, candidate_id);
                     if (sourcerpm && (fnmatch(c_pattern, sourcerpm, 0) == 0)) {
                         filter_result.add_unsafe(candidate_id);
@@ -953,7 +953,7 @@ SolvQuery & SolvQuery::ifilter_epoch(const std::vector<unsigned long> & patterns
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ:
             for (auto & pattern : patterns) {
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     auto candidate_epoch = solv::get_epoch(pool, candidate_id);
                     if (candidate_epoch == pattern) {
                         filter_result.add_unsafe(candidate_id);
@@ -963,7 +963,7 @@ SolvQuery & SolvQuery::ifilter_epoch(const std::vector<unsigned long> & patterns
             break;
         case libdnf::sack::QueryCmp::GT:
             for (auto & pattern : patterns) {
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     auto candidate_epoch = solv::get_epoch(pool, candidate_id);
                     if (candidate_epoch > pattern) {
                         filter_result.add_unsafe(candidate_id);
@@ -973,7 +973,7 @@ SolvQuery & SolvQuery::ifilter_epoch(const std::vector<unsigned long> & patterns
             break;
         case libdnf::sack::QueryCmp::LT:
             for (auto & pattern : patterns) {
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     auto candidate_epoch = solv::get_epoch(pool, candidate_id);
                     if (candidate_epoch < pattern) {
                         filter_result.add_unsafe(candidate_id);
@@ -983,7 +983,7 @@ SolvQuery & SolvQuery::ifilter_epoch(const std::vector<unsigned long> & patterns
             break;
         case libdnf::sack::QueryCmp::GTE:
             for (auto & pattern : patterns) {
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     auto candidate_epoch = solv::get_epoch(pool, candidate_id);
                     if (candidate_epoch >= pattern) {
                         filter_result.add_unsafe(candidate_id);
@@ -993,7 +993,7 @@ SolvQuery & SolvQuery::ifilter_epoch(const std::vector<unsigned long> & patterns
             break;
         case libdnf::sack::QueryCmp::LTE:
             for (auto & pattern : patterns) {
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     auto candidate_epoch = solv::get_epoch(pool, candidate_id);
                     if (candidate_epoch <= pattern) {
                         filter_result.add_unsafe(candidate_id);
@@ -1038,7 +1038,7 @@ SolvQuery & SolvQuery::ifilter_epoch(const std::vector<std::string> & patterns, 
 
         switch (tmp_cmp_type) {
             case libdnf::sack::QueryCmp::EQ:
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
                     if (strcmp(candidate_epoch, c_pattern) == 0) {
                         filter_result.add_unsafe(candidate_id);
@@ -1046,7 +1046,7 @@ SolvQuery & SolvQuery::ifilter_epoch(const std::vector<std::string> & patterns, 
                 }
                 break;
             case libdnf::sack::QueryCmp::GLOB:
-                for (PackageId candidate_id : *p_impl) {
+                for (Id candidate_id : *p_impl) {
                     auto candidate_epoch = solv::get_epoch_cstring(pool, candidate_id);
                     if (fnmatch(c_pattern, candidate_epoch, 0) == 0) {
                         filter_result.add_unsafe(candidate_id);
@@ -1077,8 +1077,8 @@ static void filter_dataiterator(
     const char * c_pattern) {
     Dataiterator di;
 
-    for (PackageId candidate_id : candidates) {
-        dataiterator_init(&di, pool, nullptr, candidate_id.id, keyname, c_pattern, flags);
+    for (Id candidate_id : candidates) {
+        dataiterator_init(&di, pool, nullptr, candidate_id, keyname, c_pattern, flags);
         while (dataiterator_step(&di) != 0) {
             filter_result.add_unsafe(candidate_id);
             break;
@@ -1192,8 +1192,8 @@ SolvQuery & SolvQuery::ifilter_location(const std::vector<std::string> & pattern
         case libdnf::sack::QueryCmp::EQ: {
             for (auto & pattern : patterns) {
                 const char * c_pattern = pattern.c_str();
-                for (PackageId candidate_id : *p_impl) {
-                    Solvable * solvable = solv::get_solvable(pool, candidate_id);
+                for (Id candidate_id : *p_impl) {
+                    Solvable * solvable = pool_id2solvable(pool, candidate_id);
                     const char * location = solvable_get_location(solvable, NULL);
                     if (location && strcmp(c_pattern, location) == 0) {
                         filter_result.add_unsafe(candidate_id);
@@ -1299,7 +1299,7 @@ void SolvQuery::Impl::filter_provides(
             auto reldep_list_size = reldep_list.size();
             for (int index = 0; index < reldep_list_size; ++index) {
                 Id reldep_id = reldep_list.get_id(index).id;
-                FOR_PROVIDES(p, pp, reldep_id) { filter_result.add_unsafe(PackageId(p)); }
+                FOR_PROVIDES(p, pp, reldep_id) { filter_result.add_unsafe(p); }
             }
             break;
         }
@@ -1349,7 +1349,7 @@ void SolvQuery::Impl::filter_reldep(
 
     solv::IdQueue rco;
 
-    for (PackageId candidate_id : *pkg_set.p_impl) {
+    for (Id candidate_id : *pkg_set.p_impl) {
         Solvable * solvable = solv::get_solvable(pool, candidate_id);
         auto reldep_list_size = reldep_list.size();
         for (int index = 0; index < reldep_list_size; ++index) {
@@ -1411,14 +1411,14 @@ void SolvQuery::Impl::filter_reldep(
 
         int flags = 0;
         flags |= SELECTION_FILTER | SELECTION_WITH_ALL;
-        selection_make_matchsolvable(pool, &out.get_queue(), package_id.id, flags, libsolv_key, 0);
+        selection_make_matchsolvable(pool, &out.get_queue(), package_id, flags, libsolv_key, 0);
 
         // Queue from selection_make_matchsolvable is a selection, which means
         // it conntains pairs <flags, Id>, flags refers to how was the Id
         // matched, that is not important here, so skip it and iterate just
         // over the Ids.
         for (int j = 1; j < out.size(); j += 2) {
-            filter_result.add_unsafe(PackageId(out[j]));
+            filter_result.add_unsafe(out[j]);
         }
     }
 
@@ -1483,7 +1483,7 @@ void SolvQuery::Impl::filter_nevra(
                 auto low =
                     std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
                 while (low != sorted_solvables.end() && (*low)->name == name_id) {
-                    auto candidate_id = solv::get_package_id(pool, *low);
+                    Id candidate_id = pool_solvable2id(pool, *low);
                     if (!is_valid_candidate(
                             pool,
                             candidate_id,
@@ -1519,7 +1519,7 @@ void SolvQuery::Impl::filter_nevra(
                     icase_name,
                     name_compare_icase_lower_id);
                 while (low != sorted_icase_solvables.end() && (*low).first == icase_name) {
-                    auto candidate_id = solv::get_package_id(pool, (*low).second);
+                    auto candidate_id = pool_solvable2id(pool, (*low).second);
                     if (!is_valid_candidate(
                             pool,
                             candidate_id,
@@ -1546,7 +1546,7 @@ void SolvQuery::Impl::filter_nevra(
             case libdnf::sack::QueryCmp::GLOB:
             case libdnf::sack::QueryCmp::IGLOB: {
                 int fnmatch_flags = name_cmp_type == libdnf::sack::QueryCmp::IGLOB ? FNM_CASEFOLD : 0;
-                for (PackageId candidate_id : *pkg_set.p_impl) {
+                for (Id candidate_id : *pkg_set.p_impl) {
                     const char * candidate_name = solv::get_name(pool, candidate_id);
                     if (!all_names && fnmatch(name_c_pattern, candidate_name, fnmatch_flags) != 0) {
                         continue;
@@ -1577,7 +1577,7 @@ void SolvQuery::Impl::filter_nevra(
                 throw NotSupportedCmpType("Unsupported CmpType");
         }
     } else if (!epoch.empty() || !version.empty() || !release.empty() || !arch.empty()) {
-        for (PackageId candidate_id : *pkg_set.p_impl) {
+        for (Id candidate_id : *pkg_set.p_impl) {
             if (!is_valid_candidate(
                     pool,
                     candidate_id,
@@ -1627,7 +1627,7 @@ void SolvQuery::Impl::filter_nevra(
                 std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), nevra_id, nevra_compare_lower_id);
             while (low != sorted_solvables.end() && (*low)->name == nevra_id.name && (*low)->arch == nevra_id.arch &&
                    (*low)->evr == nevra_id.evr) {
-                filter_result.add_unsafe(solv::get_package_id(pool, *low));
+                filter_result.add_unsafe(pool_solvable2id(pool, *low));
                 ++low;
             }
         } break;
@@ -1650,7 +1650,7 @@ void SolvQuery::Impl::filter_nevra(
             filter_glob_internal<solv::get_nevra>(pool, c_pattern, *pkg_set.p_impl, filter_result, FNM_CASEFOLD);
             break;
         case libdnf::sack::QueryCmp::IEXACT: {
-            for (PackageId candidate_id : *pkg_set.p_impl) {
+            for (Id candidate_id : *pkg_set.p_impl) {
                 const char * nevra = solv::get_nevra(pool, candidate_id);
                 if (strcasecmp(nevra, c_pattern) == 0) {
                     filter_result.add_unsafe(candidate_id);
@@ -1735,7 +1735,7 @@ SolvQuery & SolvQuery::ifilter_obsoletes(const PackageSet & package_set, libdnf:
             Id rr;
 
             FOR_PROVIDES(r, rr, *r_id) {
-                if (!target.contains(PackageId(r))) {
+                if (!target.contains(r)) {
                     continue;
                 }
                 assert(r != SYSTEMSOLVABLE);
@@ -1743,7 +1743,7 @@ SolvQuery & SolvQuery::ifilter_obsoletes(const PackageSet & package_set, libdnf:
                 if (obsprovides == 0 && pool_match_nevr(pool, so, *r_id) == 0) {
                     continue; /* only matching pkg names */
                 }
-                filter_result.add_unsafe(PackageId(package_id));
+                filter_result.add_unsafe(package_id);
                 break;
             }
         }
@@ -1868,7 +1868,7 @@ SolvQuery & SolvQuery::ifilter_advisories(
                     if (((libsolv_cmp > 0) && ((cmp_type & sack::QueryCmp::GT) == sack::QueryCmp::GT)) ||
                         ((libsolv_cmp < 0) && ((cmp_type & sack::QueryCmp::LT) == sack::QueryCmp::LT)) ||
                         ((libsolv_cmp == 0) && ((cmp_type & sack::QueryCmp::EQ) == sack::QueryCmp::EQ))) {
-                        filter_result.add_unsafe(solv::get_package_id(pool, *low));
+                        filter_result.add_unsafe(pool_solvable2id(pool, *low));
                     }
                     ++low;
                 }
@@ -1899,13 +1899,13 @@ SolvQuery & SolvQuery::ifilter_installed() {
     solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
     auto it = p_impl->begin();
     auto end = p_impl->end();
-    for (it.jump(PackageId(installed_repo->start)); it != end; ++it) {
+    for (it.jump(installed_repo->start); it != end; ++it) {
         Solvable * solvable = solv::get_solvable(pool, *it);
         if (solvable->repo == installed_repo) {
             filter_result.add_unsafe(*it);
             continue;
         }
-        if ((*it).id >= installed_repo->end) {
+        if (*it >= installed_repo->end) {
             break;
         }
     }
@@ -1923,13 +1923,13 @@ SolvQuery & SolvQuery::ifilter_available() {
     }
     auto it = p_impl->begin();
     auto end = p_impl->end();
-    for (it.jump(PackageId(installed_repo->start)); it != end; ++it) {
+    for (it.jump(installed_repo->start); it != end; ++it) {
         Solvable * solvable = solv::get_solvable(pool, *it);
         if (solvable->repo == installed_repo) {
             p_impl->remove_unsafe(*it);
             continue;
         }
-        if ((*it).id >= installed_repo->end) {
+        if (*it >= installed_repo->end) {
             break;
         }
     }
@@ -1947,8 +1947,8 @@ SolvQuery & SolvQuery::ifilter_upgrades() {
 
     sack->p_impl->make_provides_ready();
 
-    for (PackageId candidate_id : *p_impl) {
-        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+    for (Id candidate_id : *p_impl) {
+        Solvable * solvable = pool_id2solvable(pool, candidate_id);
         if (solvable->repo == installed_repo) {
             p_impl->remove_unsafe(candidate_id);
             continue;
@@ -1973,8 +1973,8 @@ SolvQuery & SolvQuery::ifilter_downgrades() {
 
     sack->p_impl->make_provides_ready();
 
-    for (PackageId candidate_id : *p_impl) {
-        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+    for (Id candidate_id : *p_impl) {
+        Solvable * solvable = pool_id2solvable(pool, candidate_id);
         if (solvable->repo == installed_repo) {
             p_impl->remove_unsafe(candidate_id);
             continue;
@@ -2018,7 +2018,7 @@ SolvQuery & SolvQuery::ifilter_upgradable() {
         }
         Id what = what_upgrades(pool, solvable);
         if (what != 0) {
-            filter_result.add_unsafe(PackageId(what));
+            filter_result.add_unsafe(what);
         }
     }
     *p_impl &= filter_result;
@@ -2057,7 +2057,7 @@ SolvQuery & SolvQuery::ifilter_downgradable() {
         }
         Id what = what_downgrades(pool, solvable);
         if (what != 0) {
-            filter_result.add_unsafe(PackageId(what));
+            filter_result.add_unsafe(what);
         }
     }
     *p_impl &= filter_result;
@@ -2097,7 +2097,7 @@ static void add_latest_to_map(
                 continue;
             }
         }
-        result.add_unsafe(PackageId(id_element));
+        result.add_unsafe(id_element);
     }
 }
 
@@ -2123,8 +2123,8 @@ SolvQuery & SolvQuery::ifilter_latest(int limit) {
     Pool * pool = sack->p_impl->get_pool();
 
     solv::IdQueue samename;
-    for (PackageId candidate_id : *p_impl) {
-        samename.push_back(candidate_id.id);
+    for (Id candidate_id : *p_impl) {
+        samename.push_back(candidate_id);
     }
     solv_sort(samename.data(), static_cast<size_t>(samename.size()), sizeof(Id), filter_latest_sortcmp_byarch, pool);
 
@@ -2169,9 +2169,8 @@ SolvQuery & SolvQuery::ifilter_priority() {
     Pool * pool = sack->p_impl->get_pool();
 
     std::vector<Solvable *> sorted_priority;
-    for (PackageId candidate_id : *p_impl) {
-        solv::get_solvable(pool, candidate_id);
-        Solvable * considered = solv::get_solvable(pool, candidate_id);
+    for (Id candidate_id : *p_impl) {
+        Solvable * considered = pool_id2solvable(pool, candidate_id);
         if (solv::is_installed(pool, considered)) {
             continue;
         }
@@ -2186,13 +2185,13 @@ SolvQuery & SolvQuery::ifilter_priority() {
     for (Solvable * candidate : sorted_priority) {
         if (candidate->name == name && candidate->arch == arch) {
             if (candidate->repo->priority == priority) {
-                p_impl->add_unsafe(PackageId(pool_solvable2id(pool, candidate)));
+                p_impl->add_unsafe(pool_solvable2id(pool, candidate));
             }
         } else {
             name = candidate->name;
             arch = candidate->arch;
             priority = candidate->repo->priority;
-            p_impl->add_unsafe(PackageId(pool_solvable2id(pool, candidate)));
+            p_impl->add_unsafe(pool_solvable2id(pool, candidate));
         }
     }
     return *this;

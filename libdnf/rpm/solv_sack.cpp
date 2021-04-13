@@ -123,15 +123,15 @@ static void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
 bool is_superset(const solv::IdQueue & q1, const solv::IdQueue * q2, solv::SolvMap & map) {
     int cnt = 0;
     for (int i = 0; i < q2->size(); i++) {
-        map.add_unsafe(PackageId((*q2)[i]));
+        map.add_unsafe((*q2)[i]);
     }
     for (int i = 0; i < q1.size(); i++) {
-        if (map.contains_unsafe(PackageId(q1[i]))) {
+        if (map.contains_unsafe(q1[i])) {
             cnt++;
         }
     }
     for (int i = 0; i < q2->size(); i++) {
-        map.remove_unsafe(PackageId((*q2)[i]));
+        map.remove_unsafe((*q2)[i]);
     }
     return cnt == q2->size();
 }

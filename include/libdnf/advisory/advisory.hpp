@@ -30,7 +30,18 @@ namespace libdnf::advisory {
 class AdvisoryCollection;
 class AdvisoryReference;
 
-typedef libdnf::rpm::PackageId AdvisoryId;
+struct AdvisoryId {
+public:
+    AdvisoryId() = default;
+    explicit AdvisoryId(int id);
+
+    bool operator==(const AdvisoryId & other) const noexcept { return id == other.id; };
+    bool operator!=(const AdvisoryId & other) const noexcept { return id != other.id; };
+
+    int id{0};
+};
+
+inline AdvisoryId::AdvisoryId(int id) : id(id) {}
 
 //TODO(amatej): consider defining these as individual numbers, not as bits in int.
 //              This allows us faster iteration, but all public APIs should accept

@@ -41,7 +41,7 @@ void PackageSetIterator::end() {
 
 
 Package PackageSetIterator::operator*() {
-    return {p_impl->package_set.get_sack(), **p_impl};
+    return {p_impl->package_set.get_sack(), libdnf::rpm::PackageId(**p_impl)};
 }
 
 

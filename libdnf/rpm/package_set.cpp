@@ -23,8 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_set_impl.hpp"
 
 #include "libdnf/rpm/package_set_iterator.hpp"
-#include "libdnf/rpm/solv_sack.hpp"
 #include "libdnf/rpm/solv/solv_map.hpp"
+#include "libdnf/rpm/solv_sack.hpp"
 
 
 namespace libdnf::rpm {
@@ -112,22 +112,24 @@ std::size_t PackageSet::size() const noexcept {
     return p_impl->size();
 }
 
+
 void PackageSet::swap(PackageSet & other) noexcept {
     p_impl.swap(other.p_impl);
 }
 
+
 void PackageSet::add(const Package & pkg) {
-    p_impl->add(pkg.get_id());
+    p_impl->add(pkg.get_id().id);
 }
 
 
 bool PackageSet::contains(const Package & pkg) const noexcept {
-    return p_impl->contains(pkg.get_id());
+    return p_impl->contains(pkg.get_id().id);
 }
 
 
 void PackageSet::remove(const Package & pkg) {
-    p_impl->remove(pkg.get_id());
+    p_impl->remove(pkg.get_id().id);
 }
 
 

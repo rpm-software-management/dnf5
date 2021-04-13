@@ -40,7 +40,7 @@ void allow_uninstall_all_but_protected(
         not_protected_pkgs -= *protected_packages;
     }
     if (protected_kernel.id > 0) {
-        not_protected_pkgs.remove_unsafe(protected_kernel);
+        not_protected_pkgs.remove_unsafe(protected_kernel.id);
     }
     if (pool->considered) {
         not_protected_pkgs &= pool->considered;
@@ -48,7 +48,7 @@ void allow_uninstall_all_but_protected(
 
     for (Id id = 1; id < pool->nsolvables; ++id) {
         Solvable * s = pool_id2solvable(pool, id);
-        if (pool->installed == s->repo && not_protected_pkgs.contains_unsafe(libdnf::rpm::PackageId(id))) {
+        if (pool->installed == s->repo && not_protected_pkgs.contains_unsafe(id)) {
             job.push_back(SOLVER_ALLOWUNINSTALL | SOLVER_SOLVABLE, id);
         }
     }
@@ -126,7 +126,7 @@ libdnf::rpm::solv::SolvMap list_results(
         }
 
         if (type == type_filter1 || (type_filter2 && type == type_filter2)) {
-            result_ids.add(libdnf::rpm::PackageId(p));
+            result_ids.add(p);
         }
     }
     return result_ids;
@@ -546,7 +546,7 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
         protected_pkgs |= *protected_packages;
     }
     if (protected_running_kernel.id > 0) {
-        protected_pkgs.add_unsafe(protected_running_kernel);
+        protected_pkgs.add_unsafe(protected_running_kernel.id);
     }
 
     removal_of_protected.reset(new SolvMap(std::move(pkg_remove_list)));

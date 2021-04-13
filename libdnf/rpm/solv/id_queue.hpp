@@ -176,7 +176,7 @@ inline IdQueue::iterator IdQueue::end() const {
 void inline solv_map_to_id_queue(IdQueue & ids, const SolvMap & src) {
     ids.clear();
     for (auto solv_id : src) {
-        ids.push_back(solv_id.id);
+        ids.push_back(solv_id);
     }
 }
 

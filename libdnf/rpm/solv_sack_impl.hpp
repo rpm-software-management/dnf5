@@ -190,8 +190,8 @@ inline std::vector<Solvable *> & SolvSack::Impl::get_sorted_solvables() {
     auto & solvables_map = get_solvables();
     cached_sorted_solvables.clear();
     cached_sorted_solvables.reserve(static_cast<size_t>(nsolvables));
-    for (PackageId id : solvables_map) {
-        cached_sorted_solvables.push_back(pool_id2solvable(pool, id.id));
+    for (Id id : solvables_map) {
+        cached_sorted_solvables.push_back(pool_id2solvable(pool, id));
     }
     std::sort(cached_sorted_solvables.begin(), cached_sorted_solvables.end(), nevra_solvable_cmp_key);
     cached_sorted_solvables_size = nsolvables;
@@ -233,7 +233,7 @@ inline solv::SolvMap & SolvSack::Impl::get_solvables() {
     // loop over all package solvables
     FOR_POOL_SOLVABLES(solvable_id) {
         if (utils::is_package(pool, solvable_id)) {
-            cached_solvables.add_unsafe(PackageId(solvable_id));
+            cached_solvables.add_unsafe(solvable_id);
         }
     }
     return cached_solvables;
