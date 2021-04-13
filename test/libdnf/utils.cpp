@@ -46,3 +46,12 @@ std::vector<std::string> to_vector_string(const std::vector<libdnf::rpm::Package
     }
     return result;
 }
+
+
+std::vector<std::string> to_vector_name_string(const libdnf::advisory::AdvisoryQuery & advisory_query) {
+    std::vector<std::string> result;
+    for (auto & adv : advisory_query.get_advisories()) {
+        result.emplace_back(adv.get_name());
+    }
+    return result;
+}
