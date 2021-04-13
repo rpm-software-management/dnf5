@@ -329,6 +329,7 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
                 throw std::invalid_argument("Unsupported action");
         }
     }
+    rpm_specs.clear();
     return ret;
 }
 
@@ -581,6 +582,7 @@ void Goal::Impl::add_rpms_to_goal() {
                 throw std::invalid_argument("Unsupported action");
         }
     }
+    rpm_ids.clear();
 }
 
 void Goal::Impl::add_rpm_goal_report(
