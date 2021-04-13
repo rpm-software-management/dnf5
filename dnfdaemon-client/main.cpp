@@ -185,7 +185,7 @@ int main(int argc, char * argv[]) {
     try {
         context.selected_command->run(context);
     } catch (std::exception & ex) {
-        //log_router.error(fmt::format("Command returned error: {}", ex.what()));
+        std::cerr << fmt::format("Command returned error: {}", ex.what()) << std::endl;
     }
 
     //log_router.info("Dnfdaemon-client end");
