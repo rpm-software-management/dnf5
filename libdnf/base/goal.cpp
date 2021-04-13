@@ -621,10 +621,10 @@ void Goal::Impl::add_remove_to_goal(const std::string & spec, GoalJobSettings & 
         return;
     }
 
-    if (!settings.to_repo_ids.empty()) {
+    if (!settings.from_repo_ids.empty()) {
         // TODO(jmracek) keep only packages installed from repo_id -requires swdb
         if (query.empty()) {
-            // TODO(jmracek) no solution for the spec => mark result - not in repository
+            // TODO(jmracek) no solution for the spec => mark result - not from repository
             return;
         }
     }
