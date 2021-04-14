@@ -163,7 +163,7 @@ static std::optional<std::string> detect_release(const std::string & install_roo
 std::string Vars::substitute(const std::string & text) const {
     std::string res = text;
 
-    if (values.empty()) {
+    if (variables.empty()) {
         return res;
     }
 
@@ -192,13 +192,14 @@ std::string Vars::substitute(const std::string & text) const {
             start = res.find_first_of('$', past_variable);
             continue;
         }
-        auto subst = values.find(res.substr(variable, past_variable - variable));
-        if (subst != values.end()) {
+        auto subst = variables.find(res.substr(variable, past_variable - variable));
+        if (subst != variables.end()) {
             if (bracket) {
                 ++past_variable;
             }
-            res.replace(start, past_variable - start, subst->second);
-            start = res.find_first_of('$', start + subst->second.length());
+            auto & subst_str = subst->second.value;
+            res.replace(start, past_variable - start, subst_str);
+            start = res.find_first_of('$', start + subst_str.length());
         } else {
             start = res.find_first_of('$', past_variable);
         }
@@ -207,23 +208,71 @@ std::string Vars::substitute(const std::string & text) const {
     return res;
 }
 
-void Vars::load(const std::string & installroot, const std::vector<std::string> & directories) {
-    detect_vars(installroot);
+void Vars::set(const std::string & name, const std::string & value, Priority prio) {
+    auto it = variables.find(name);
+    if (it != variables.end()) {
+        if (it->second.priority > prio) {
+            return;
+        }
+        it->second.value = value;
+        it->second.priority = prio;
+        return;
+    }
+    variables.insert({name, {value, prio}});
+}
 
+void Vars::load(const std::string & installroot, const std::vector<std::string> & directories) {
     load_from_env();
 
     for (const auto & dir : directories) {
         load_from_dir(std::filesystem::path(installroot) / dir);
     }
+
+    detect_vars(installroot);
 }
 
 void Vars::detect_vars(const std::string & installroot) {
-    const char * arch = detect_arch();
-    values["arch"] = arch ? arch : "";
-    const char * base_arch = get_base_arch(arch);
-    values["basearch"] = base_arch ? base_arch : "";
-    auto release = detect_release(installroot);
-    values["releasever"] = release ? *release : "";
+    auto it = variables.find("arch");
+    if (it == variables.end()) {
+        const char * arch = detect_arch();
+        if (arch) {
+            variables.insert({"arch", {arch, Priority::AUTO}});
+        }
+    } else if (it->second.priority <= Priority::AUTO) {
+        const char * arch = detect_arch();
+        if (arch) {
+            it->second.value = arch;
+            it->second.priority = Priority::AUTO;
+        }
+    }
+
+    it = variables.find("basearch");
+    if (it == variables.end()) {
+        const char * base_arch = get_base_arch(variables["arch"].value.c_str());
+        if (base_arch) {
+            variables.insert({"basearch", {base_arch, Priority::AUTO}});
+        }
+    } else if (it->second.priority <= Priority::AUTO) {
+        const char * base_arch = get_base_arch(variables["arch"].value.c_str());
+        if (base_arch) {
+            it->second.value = base_arch;
+            it->second.priority = Priority::AUTO;
+        }
+    }
+
+    it = variables.find("releasever");
+    if (it == variables.end()) {
+        auto release = detect_release(installroot);
+        if (release) {
+            variables.insert({"releasever", {*release, Priority::AUTO}});
+        }
+    } else if (it->second.priority <= Priority::AUTO) {
+        auto release = detect_release(installroot);
+        if (release) {
+            it->second.value = *release;
+            it->second.priority = Priority::AUTO;
+        }
+    }
 }
 
 static void dir_close(DIR * d) {
@@ -254,7 +303,7 @@ void Vars::load_from_dir(const std::string & directory) {
                 // log.warning()
                 continue;
             }
-            values[dname] = std::move(line);
+            set(dname, line, Priority::VARSDIR);
         }
     }
 }
@@ -270,12 +319,12 @@ void Vars::load_from_env() {
             auto eql_idx = eql_ptr - var;
             if (eql_idx == 4 && strncmp("DNF", var, 3) == 0 && isdigit(var[3]) != 0) {
                 // DNF[0-9]
-                values[std::string(var, static_cast<size_t>(eql_idx))] = eql_ptr + 1;
+                set(std::string(var, static_cast<size_t>(eql_idx)), eql_ptr + 1, Priority::ENVIRONMENT);
             } else if (
                 // DNF_VAR_[A-Za-z0-9_]+ , DNF_VAR_ prefix is cut off
                 eql_idx > 8 && strncmp("DNF_VAR_", var, 8) == 0 &&
                 static_cast<int>(strspn(var + 8, ASCII_LETTERS DIGITS "_")) == eql_idx - 8) {
-                values[std::string(var + 8, static_cast<size_t>(eql_idx - 8))] = eql_ptr + 1;
+                set(std::string(var + 8, static_cast<size_t>(eql_idx - 8)), eql_ptr + 1, Priority::ENVIRONMENT);
             }
         }
     }

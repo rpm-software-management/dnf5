@@ -156,7 +156,7 @@ Session::Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session
     );
     if (session_configuration.find("releasever") != session_configuration.end()) {
         auto releasever = session_configuration_value<std::string>("releasever");
-        base->get_vars().set_value("releasever", releasever);
+        base->get_vars().set("releasever", releasever);
     }
 
     // load repo configuration

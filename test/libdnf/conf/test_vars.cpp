@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -42,16 +42,28 @@ void VarsTest::test_vars_multiple_dirs() {
 }
 
 void VarsTest::test_vars_env() {
+    // Setting environment variables.
+    // Environment variables have higher priority than variables from files.
     setenv("DNF0", "foo0", 1);
     setenv("DNF1", "foo1", 1);
     setenv("DNF9", "foo9", 1);
     setenv("DNF_VAR_var1", "testvar1", 1);
     setenv("DNF_VAR_var41", "testvar2", 1);
 
+    // Load all variables.
     vars.load("/", {PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
 
+    // Cleaning up environment variables (necessary in case other tests share the environment)
+    unsetenv("DNF0");
+    unsetenv("DNF1");
+    unsetenv("DNF9");
+    unsetenv("DNF_VAR_var1");
+    unsetenv("DNF_VAR_var41");
+
+    // The variables var1 and var2 are defined in the files.
+    // However, var1 was also an environment variable. The environment has a higher priority.
     CPPUNIT_ASSERT_EQUAL(
-        std::string("foo0-foo1-foo9-value123-testvar2"),
-        vars.substitute("${DNF0}-${DNF1}-${DNF9}-${var1}-${var41}")
+        std::string("foo0-foo1-foo9-testvar1-testvar2-456"),
+        vars.substitute("${DNF0}-${DNF1}-${DNF9}-${var1}-${var41}-${var2}")
     );
 }

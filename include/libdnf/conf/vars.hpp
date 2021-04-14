@@ -34,19 +34,51 @@ namespace libdnf {
 /// of directories.
 struct Vars {
 public:
+    enum class Priority {
+        DEFAULT = 10,
+        AUTO = 20,
+        VARSDIR = 30,
+        PLUGIN = 40,
+        ENVIRONMENT = 50,
+        COMMANDLINE = 60,
+        RUNTIME = 70
+    };
+
+    struct Variable {
+        std::string value;
+        Priority priority;
+    };
+
     /// @brief Substitute DNF vars in the input text.
     ///
     /// @param text The text for substitution
     /// @return The substituted text
     std::string substitute(const std::string & text) const;
 
-    const std::map<std::string, std::string> & get_values() const { return values; }
+    const std::map<std::string, Variable> & get_variables() const { return variables; }
 
     /// @brief Set particular variable to a value
     ///
     /// @param name Name of the variable
     /// @param value Value to be stored in variable
-    void set_value(const std::string & name, const std::string & value) { values[name] = value; }
+    /// @param prio Source/Priority of the value
+    void set(const std::string & name, const std::string & value, Priority prio = Priority::RUNTIME);
+
+    /// @brief Checks if there is an variable with name equivalent to name in the container.
+    ///
+    /// @param name Name of the variable
+    /// @return true if there is such an element, otherwise false
+    bool contains(const std::string & name) const { return variables.find(name) != variables.end(); }
+
+    /// @brief Get value of particular variable.
+    ///
+    /// @param name Name of the variable
+    const std::string & get_value(const std::string & name) const { return variables.at(name).value; }
+
+    /// @brief Get particular variable.
+    ///
+    /// @param name Name of the variable
+    const Variable & get(const std::string & name) const { return variables.at(name); }
 
     /// @brief Loads DNF vars from the environment and the passed directories.
     ///
@@ -79,8 +111,9 @@ private:
     /// "DNF_VAR_[A-Za-z0-9_]+" patterns. The "DNF_VAR_" prefix is cut off.
     void load_from_env();
 
-    std::map<std::string, std::string> values;
+    std::map<std::string, Variable> variables;
 };
+
 
 }  // namespace libdnf
 
