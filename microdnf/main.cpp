@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -63,6 +63,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
         return true;});
     microdnf->register_named_arg(help);
 
+    // --setopt argument support
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);
@@ -71,15 +72,13 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     setopt->set_description(R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
               <option>.  Values  for configuration options like excludepkgs, includepkgs, installonlypkgs and tsflags are appended to the original value,
               they do not override it. However, specifying an empty value (e.g. --setopt=tsflags=) will clear the option.)**");
-
-    // --setopt option support
     setopt->set_parse_hook_func([&ctx](
                                [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                [[maybe_unused]] const char * option,
                                const char * value) {
         auto val = strchr(value+1, '=');
         if (!val) {
-            throw std::runtime_error(std::string("setopt: Badly formated argument value") + value);
+            throw std::runtime_error(fmt::format("setopt: Badly formated argument value \"{}\"", value));
         }
         auto key = std::string(value, val);
         auto dot_pos = key.rfind('.');
@@ -100,6 +99,25 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
         }
         return true;});
     microdnf->register_named_arg(setopt);
+
+    // --setvar argument support
+    auto setvar = ctx.arg_parser.add_new_named_arg("setvar");
+    setvar->set_long_name("setvar");
+    setvar->set_has_value(true);
+    setvar->set_arg_value_help("NAME=VALUE");
+    setvar->set_short_description("set arbitrary variable");
+    setvar->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            auto val = strchr(value + 1, '=');
+            if (!val) {
+                throw std::runtime_error(fmt::format("setvar: Badly formated argument value \"{}\"", value));
+            }
+            auto name = std::string(value, val);
+            ctx.base.get_vars().set(name, val + 1, libdnf::Vars::Priority::COMMANDLINE);
+            return true;
+        });
+    microdnf->register_named_arg(setvar);
 
     auto & config = ctx.base.get_config();
 
