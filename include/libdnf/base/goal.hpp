@@ -122,6 +122,8 @@ public:
     std::vector<libdnf::rpm::Package> list_rpm_removes();
     std::vector<libdnf::rpm::Package> list_rpm_obsoleted();
 
+    void reset();
+
 private:
     rpm::PackageId get_running_kernel_internal();
     class Impl;

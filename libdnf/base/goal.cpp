@@ -1139,4 +1139,12 @@ rpm::PackageId Goal::get_running_kernel_internal() {
     return kernel;
 }
 
+void Goal::reset() {
+    p_impl->module_enable_specs.clear();
+    p_impl->rpm_specs.clear();
+    p_impl->rpm_ids.clear();
+    p_impl->rpm_goal_reports.clear();
+    p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base->get_rpm_solv_sack().p_impl->get_pool());
+}
+
 }  // namespace libdnf
