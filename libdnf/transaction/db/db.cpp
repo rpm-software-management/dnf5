@@ -77,8 +77,12 @@ std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & ba
     std::string db_path;
 
     // use db_path based on persistdir
-    auto persistdir = base.get_config().persistdir().get_value();
-    std::filesystem::path path(persistdir);
+    auto & config = base.get_config();
+    // TODO(jrohel): Lock "installroot" after read its value
+    std::filesystem::path path(config.installroot().get_value());
+    std::filesystem::path persistdir(config.persistdir().get_value());
+    path /= persistdir.relative_path();
+    std::filesystem::create_directories(path);
     path /= "history.sqlite";
     db_path = path.native();
 
