@@ -43,9 +43,10 @@ sdbus::Signal DbusCallback::create_signal(std::string interface, std::string  si
 std::chrono::time_point<std::chrono::steady_clock> DbusCallback::prev_print_time = std::chrono::steady_clock::now();
 
 
-DbusPackageCB::DbusPackageCB(Session & session, const std::string & nevra) : DbusCallback(session), nevra(nevra) {
+DbusPackageCB::DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg) : DbusCallback(session), pkg_id(pkg.get_id().id) {
     try {
         auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_START);
+        signal << pkg.get_full_nevra();
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
@@ -101,7 +102,7 @@ int DbusPackageCB::mirror_failure(const char * msg, const char * url) {
 
 sdbus::Signal DbusPackageCB::create_signal(std::string interface, std::string  signal_name) {
     auto signal = DbusCallback::create_signal(interface, signal_name);
-    signal << nevra;
+    signal << pkg_id;
     return signal;
 }
 

@@ -124,19 +124,21 @@ PackageDownloadCB::PackageDownloadCB(sdbus::IProxy * proxy, std::string session_
 
 void PackageDownloadCB::start(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
+        int pkg_id;
         std::string nevra;
+        signal >> pkg_id;
         signal >> nevra;
         auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, nevra);
         multi_progress_bar.add_bar(progress_bar.get());
-        package_bars.emplace(nevra, std::move(progress_bar));
+        package_bars.emplace(pkg_id, std::move(progress_bar));
     }
 }
 
 void PackageDownloadCB::end(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
-        std::string nevra;
-        signal >> nevra;
-        auto progress_bar = find_progress_bar(nevra);
+        int pkg_id;
+        signal >> pkg_id;
+        auto progress_bar = find_progress_bar(pkg_id);
         if (progress_bar == nullptr) {
             return;
         }
@@ -169,9 +171,9 @@ void PackageDownloadCB::end(sdbus::Signal & signal) {
 
 void PackageDownloadCB::progress(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
-        std::string nevra;
-        signal >> nevra;
-        auto progress_bar = find_progress_bar(nevra);
+        int pkg_id;
+        signal >> pkg_id;
+        auto progress_bar = find_progress_bar(pkg_id);
         if (progress_bar == nullptr) {
             return;
         }
@@ -192,9 +194,9 @@ void PackageDownloadCB::progress(sdbus::Signal & signal) {
 
 void PackageDownloadCB::mirror_failure(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
-        std::string nevra;
-        signal >> nevra;
-        auto progress_bar = find_progress_bar(nevra);
+        int pkg_id;
+        signal >> pkg_id;
+        auto progress_bar = find_progress_bar(pkg_id);
         if (progress_bar == nullptr) {
             return;
         }

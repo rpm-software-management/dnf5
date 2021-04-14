@@ -346,7 +346,7 @@ void download_packages(Session & session, libdnf::Goal & goal) {
         destination = std::filesystem::path(repo->get_cachedir()) / "packages";
         std::filesystem::create_directory(destination);
 
-        auto pkg_download_cb = std::make_unique<DbusPackageCB>(session, package.get_full_nevra());
+        auto pkg_download_cb = std::make_unique<DbusPackageCB>(session, package);
         auto pkg_download_cb_ptr = pkg_download_cb.get();
         pkg_download_callbacks_guard.push_back(std::move(pkg_download_cb));
 

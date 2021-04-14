@@ -54,7 +54,7 @@ protected:
 
 class DbusPackageCB : public libdnf::rpm::PackageTargetCB, public DbusCallback {
 public:
-    explicit DbusPackageCB(Session & session, const std::string & nevra);
+    explicit DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg);
     virtual ~DbusPackageCB() = default;
 
     int end(TransferStatus status, const char * msg) override;
@@ -62,7 +62,7 @@ public:
     int mirror_failure(const char * msg, const char * url) override;
 
 private:
-    std::string nevra;
+    int pkg_id;
     double total = 0;
 
     sdbus::Signal create_signal(std::string interface, std::string signal_name) override;

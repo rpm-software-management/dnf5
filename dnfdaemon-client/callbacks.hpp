@@ -71,12 +71,12 @@ public:
 
 private:
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
-    // map {package nevra: progressbar}
-    std::map<std::string, std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar>> package_bars;
+    // map {package id: progressbar}
+    std::map<int, std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar>> package_bars;
 
-    libdnf::cli::progressbar::DownloadProgressBar * find_progress_bar(std::string nevra) {
-        if (package_bars.find(nevra) != package_bars.end()) {
-            return package_bars.at(nevra).get();
+    libdnf::cli::progressbar::DownloadProgressBar * find_progress_bar(const int pkg_id) {
+        if (package_bars.find(pkg_id) != package_bars.end()) {
+            return package_bars.at(pkg_id).get();
         } else {
             return nullptr;
         }
