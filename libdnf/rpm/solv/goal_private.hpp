@@ -43,6 +43,8 @@ public:
     explicit GoalPrivate(const GoalPrivate & src);
     ~GoalPrivate();
 
+    GoalPrivate & operator=(const GoalPrivate & src);
+
     void set_installonly(const std::vector<std::string> & installonly_names);
     void set_installonly_limit(unsigned int limit) { installonly_limit = limit; };
 
@@ -129,6 +131,10 @@ inline GoalPrivate::GoalPrivate(Pool * pool) : pool(pool) {}
 inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
     : pool(src.pool)
     , staging(src.staging)
+    , installonly(src.installonly)
+    , installonly_limit(src.installonly_limit)
+    , protected_packages(new SolvMap(*src.protected_packages))
+    , protected_running_kernel(src.protected_running_kernel)
     , allow_downgrade(src.allow_downgrade)
     , allow_erasing(src.allow_erasing)
     , allow_vendor_change(src.allow_vendor_change)
@@ -142,6 +148,31 @@ inline GoalPrivate::~GoalPrivate() {
     if (libsolv_transaction) {
         transaction_free(libsolv_transaction);
     }
+}
+
+inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
+    if (this != &src) {
+        pool = src.pool;
+        staging = src.staging;
+        installonly = src.installonly;
+        installonly_limit = src.installonly_limit;
+        if (libsolv_solver != nullptr) {
+            solver_free(libsolv_solver);
+            libsolv_solver = nullptr;
+        }
+        if (libsolv_transaction != nullptr) {
+            transaction_free(libsolv_transaction);
+            libsolv_transaction = nullptr;
+        }
+        protected_packages.reset(new SolvMap(*src.protected_packages));
+        protected_running_kernel = src.protected_running_kernel;
+        allow_downgrade = src.allow_downgrade;
+        allow_erasing = src.allow_erasing;
+        allow_vendor_change = src.allow_vendor_change;
+        install_weak_deps = src.install_weak_deps;
+        remove_solver_weak = src.remove_solver_weak;
+    }
+    return *this;
 }
 
 inline void GoalPrivate::set_installonly(const std::vector<std::string> & installonly_names) {
