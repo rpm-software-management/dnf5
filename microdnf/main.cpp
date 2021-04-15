@@ -150,6 +150,27 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
         });
     microdnf->register_named_arg(comment);
 
+    auto installroot = ctx.arg_parser.add_new_named_arg("installroot");
+    installroot->set_long_name("installroot");
+    installroot->set_has_value(true);
+    installroot->set_arg_value_help("ABSOLUTE_PATH");
+    installroot->set_short_description("set install root");
+    installroot->link_value(&config.installroot());
+    microdnf->register_named_arg(installroot);
+
+    auto releasever = ctx.arg_parser.add_new_named_arg("releasever");
+    releasever->set_long_name("releasever");
+    releasever->set_has_value(true);
+    releasever->set_arg_value_help("RELEASEVER");
+    releasever->set_short_description("override the value of $releasever in config and repo files");
+    releasever->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            ctx.base.get_vars().set("releasever", value);
+            return true;
+        });
+    microdnf->register_named_arg(releasever);
+
     ctx.arg_parser.set_root_command(microdnf);
 
     for (auto & command : ctx.commands) {
