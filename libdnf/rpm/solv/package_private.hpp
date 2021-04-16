@@ -200,7 +200,7 @@ inline bool is_installed(Pool * pool, Solvable * solvable) {
     return solvable->repo == pool->installed;
 }
 
-inline unsigned long long get_download_size(Pool * pool, Id package_id) noexcept {
+inline unsigned long long get_package_size(Pool * pool, Id package_id) noexcept {
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_DOWNLOADSIZE);
 }
 
@@ -214,7 +214,7 @@ inline unsigned long long get_size(Pool * pool, Id package_id) noexcept {
     if (is_installed(pool, solvable)) {
         return get_install_size(pool, package_id);
     }
-    return get_download_size(pool, package_id);
+    return get_package_size(pool, package_id);
 }
 
 /// @return const char* !! Return temporal value !!
@@ -338,7 +338,7 @@ inline const char * get_location(Pool * pool, Id package_id) noexcept {
     return solvable_lookup_location(solvable, nullptr);
 }
 
-std::string get_local_filepath(Pool * pool, Id package_id);
+std::string get_package_path(Pool * pool, Id package_id);
 
 inline unsigned long long get_hdr_end(Pool * pool, Id package_id) noexcept {
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_HEADEREND);

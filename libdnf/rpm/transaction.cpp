@@ -364,7 +364,7 @@ public:
     /// Add package to be reinstalled to transaction set.
     /// @param item  item to be reinstalled
     void reinstall(TransactionItem & item) {
-        auto file_path = item.get_pkg().get_local_filepath();
+        auto file_path = item.get_pkg().get_package_path();
         auto * header = read_pkg_header(file_path);
         auto rc = rpmtsAddReinstallElement(ts, header, &item);
         if (rc != 0) {
@@ -479,7 +479,7 @@ private:
     /// @param item  item to be erased
     /// @param upgrade  operation: true - upgrade, false - install
     void install_or_upgrade(TransactionItem & item, bool upgrade) {
-        auto file_path = item.get_pkg().get_local_filepath();
+        auto file_path = item.get_pkg().get_package_path();
         auto * header = read_pkg_header(file_path);
         auto rc = rpmtsAddInstallElement(ts, header, &item, upgrade ? 1 : 0, nullptr);
         if (rc != 0) {
@@ -529,7 +529,7 @@ private:
                 cb.install_start(item, RpmHeader(hdr), total);
                 break;
             case RPMCALLBACK_INST_OPEN_FILE: {
-                auto file_path = item->get_pkg().get_local_filepath();
+                auto file_path = item->get_pkg().get_package_path();
                 if (file_path.empty()) {
                     return nullptr;
                 }

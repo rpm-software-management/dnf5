@@ -409,7 +409,7 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
             destination.c_str(),
             static_cast<int>(checksum.get_type()),
             checksum.get_checksum().c_str(),
-            static_cast<int64_t>(package.get_download_size()),
+            static_cast<int64_t>(package.get_package_size()),
             package.get_baseurl().empty() ? nullptr : package.get_baseurl().c_str(),
             true,
             0,

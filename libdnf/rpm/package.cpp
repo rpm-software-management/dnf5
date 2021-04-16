@@ -112,9 +112,9 @@ unsigned long long Package::get_size() const {
     return solv::get_size(pool, id.id);
 }
 
-unsigned long long Package::get_download_size() const {
+unsigned long long Package::get_package_size() const {
     Pool * pool = sack->p_impl->pool;
-    return solv::get_download_size(pool, id.id);
+    return solv::get_package_size(pool, id.id);
 }
 
 unsigned long long Package::get_install_size() const {
@@ -260,9 +260,9 @@ std::string Package::get_location() const {
     return cstring2string(solv::get_location(pool, id.id));
 }
 
-std::string Package::get_local_filepath() const {
+std::string Package::get_package_path() const {
     Pool * pool = sack->p_impl->pool;
-    return solv::get_local_filepath(pool, id.id);
+    return solv::get_package_path(pool, id.id);
 }
 
 bool Package::is_installed() const {

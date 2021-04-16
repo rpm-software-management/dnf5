@@ -70,7 +70,7 @@ const char * get_full_nevra(Pool * pool, Id package_id) {
 }
 
 //TODO(jrohel): What about local repositories? The original code in DNF4 uses baseurl+get_location(pool, package_id).
-std::string get_local_filepath(Pool * pool, Id package_id) {
+std::string get_package_path(Pool * pool, Id package_id) {
     auto solvable = get_solvable(pool, package_id);
     if (auto repo = static_cast<Repo *>(solvable->repo->appdata)) {
         auto dir = std::filesystem::path(repo->get_cachedir()) / "packages";
