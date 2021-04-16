@@ -15,6 +15,8 @@ A typical docstring contains the following:
 * @note - note text (optional)
 * @warning - warning text (optional)
 
+We highlight identifiers with ```backticks```.
+
 
 Example::
 
@@ -22,8 +24,28 @@ Example::
     ///
     /// @param text             Input text.
     /// @param delimiter        A delimiter we're using to split the text.
-    /// @param max_items        Limit number of splits to produce a vector containing up to ``max_items`` items.
+    /// @param max_items        Limit number of splits to produce a vector containing up to `max_items` items.
     /// @return Splitted text.
+    ///         A continuation line for the return value description.
     /// @exception std::out_of_range    Value of the `max_items` argument is out of expected range.
-    /// @since 1.0
+    /// @since 5.0
     std::vector<std::string> split(std::string text, std::string delimiter, int max_items);
+
+
+We also reference DNF 4 and libdnf 0.x API classes, methods, attributes or functions that the subject of the documentation replaces
+by using @replaces command followed with a description of the replaced entity:
+
+  * <project>:<path>:class:<ClassName>
+  * <project>:<path>:method:<ClassName>.<method_name>(args)
+  * <project>:<path>:attribute:<ClassName>.<attribute_name>
+  * <project>:<path>:function:<function_name>
+
+We keep these in regular comments rather than docstrings to avoid spamming the rendered docs.
+
+Example::
+
+    /// <docstring>
+    //
+    // @replaces dnf:dnf/package.py:attribute:Package.name
+    // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_name(DnfPackage *pkg);
+    std::string get_name() const;
