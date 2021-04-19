@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstring>
 #include <filesystem>
 #include <fstream>
+#include <optional>
 #include <memory>
 
 #define ASCII_LOWERCASE "abcdefghijklmnopqrstuvwxyz"
@@ -114,45 +115,47 @@ static constexpr const char * DISTROVERPKGS[] = {"system-release(releasever)",
                                                  "redhat-release",
                                                  "suse-release"};
 
-static std::string detect_arch() {
+static const char * detect_arch() {
     init_lib_rpm();
-    const char * value;
+    const char * value{nullptr};
+    // Can it return nullptr?
     rpmGetArchInfo(&value, nullptr);
     return value;
 }
 
-static std::string detect_release(const std::string & install_root_path) {
+static std::optional<std::string> detect_release(const std::string & install_root_path) {
     init_lib_rpm();
-    std::string release_ver;
+    std::optional<std::string> release_ver;
 
-    bool found_in_rpmdb{false};
     auto ts = rpmtsCreate();
     rpmtsSetRootDir(ts, install_root_path.c_str());
     for (auto distroverpkg : DISTROVERPKGS) {
         auto mi = rpmtsInitIterator(ts, RPMTAG_PROVIDENAME, distroverpkg, 0);
-        while (auto hdr = rpmdbNextIterator(mi)) {
-            auto version = headerGetString(hdr, RPMTAG_VERSION);
+        if (auto hdr = rpmdbNextIterator(mi)) {
+            const char * version = headerGetString(hdr, RPMTAG_VERSION);
             rpmds ds = rpmdsNew(hdr, RPMTAG_PROVIDENAME, 0);
             while (rpmdsNext(ds) >= 0) {
                 if (std::strcmp(rpmdsN(ds), distroverpkg) == 0 && rpmdsFlags(ds) == RPMSENSE_EQUAL) {
-                    version = rpmdsEVR(ds);
+                    const char * evr = rpmdsEVR(ds);
+                    if (evr && evr[0] != '\0') {
+                        version = evr;
+                        break;
+                    }
                 }
             }
-            release_ver = version;
-            found_in_rpmdb = true;
+            if (version) {
+                // Is the result of rpmdsEVR(ds) valid after rpmdsFree(ds)? Make a copy to be sure.
+                release_ver = version;
+            }
             rpmdsFree(ds);
-            break;
         }
         rpmdbFreeIterator(mi);
-        if (found_in_rpmdb) {
+        if (release_ver) {
             break;
         }
     }
     rpmtsFree(ts);
-    if (found_in_rpmdb) {
-        return release_ver;
-    }
-    return "";
+    return release_ver;
 }
 
 // ==================================================================
@@ -215,10 +218,12 @@ void Vars::load(const std::string & installroot, const std::vector<std::string> 
 }
 
 void Vars::detect_vars(const std::string & installroot) {
-    auto arch = detect_arch();
-    values["arch"] = arch;
-    values["basearch"] = get_base_arch(arch.c_str());
-    values["releasever"] = detect_release(installroot);
+    const char * arch = detect_arch();
+    values["arch"] = arch ? arch : "";
+    const char * base_arch = get_base_arch(arch);
+    values["basearch"] = base_arch ? base_arch : "";
+    auto release = detect_release(installroot);
+    values["releasever"] = release ? *release : "";
 }
 
 static void dir_close(DIR * d) {
