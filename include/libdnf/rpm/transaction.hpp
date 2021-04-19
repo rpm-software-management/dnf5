@@ -21,9 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_TRANSACTION_HPP
 #define LIBDNF_RPM_TRANSACTION_HPP
 
+#include "libdnf/common/exception.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/rpm/package.hpp"
-#include "libdnf/utils/exception.hpp"
-#include "libdnf/utils/weak_ptr.hpp"
 
 #include <memory>
 

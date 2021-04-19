@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_weak_ptr.hpp"
 
-#include "libdnf/utils/weak_ptr.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 
 #include <memory>
 #include <string>

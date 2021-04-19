@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_UTILS_SQLITE3_SQLITE3_HPP
 
 
-#include "libdnf/utils/exception.hpp"
+#include "libdnf/common/exception.hpp"
 
 #include <sqlite3.h>
 

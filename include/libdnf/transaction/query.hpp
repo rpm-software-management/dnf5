@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction.hpp"
 
 #include "libdnf/common/sack/query.hpp"
-#include "libdnf/utils/weak_ptr.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 
 #include <mutex>
 #include <vector>

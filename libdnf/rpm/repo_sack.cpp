@@ -22,10 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_impl.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/common/exception.hpp"
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/option_bool.hpp"
 #include "libdnf/rpm/solv_sack_impl.hpp"
-#include "libdnf/utils/exception.hpp"
 
 #include <fmt/format.h>
 

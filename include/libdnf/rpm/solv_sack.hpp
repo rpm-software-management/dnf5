@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_SACK_HPP
 #define LIBDNF_RPM_SOLV_SACK_HPP
 
-#include "libdnf/utils/exception.hpp"
-#include "libdnf/utils/weak_ptr.hpp"
+#include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/common/exception.hpp"
 
 #include <memory>
 

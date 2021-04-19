@@ -25,8 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_set.hpp"
 #include "solv_sack.hpp"
 
+#include "libdnf/common/exception.hpp"
 #include "libdnf/common/sack/query_cmp.hpp"
-#include "libdnf/utils/exception.hpp"
 
 #include <string>
 #include <vector>

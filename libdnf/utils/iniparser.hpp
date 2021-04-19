@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_INIPARSER_HPP
 #define LIBDNF_UTILS_INIPARSER_HPP
 
-#include "exception.hpp"
+#include "libdnf/common/exception.hpp"
 
 #include <fstream>
 #include <memory>

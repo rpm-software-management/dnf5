@@ -25,8 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "match_string.hpp"
 #include "query_cmp.hpp"
 
-#include "libdnf/utils/exception.hpp"
-#include "libdnf/utils/set.hpp"
+#include "libdnf/common/exception.hpp"
+#include "libdnf/common/set.hpp"
 
 #include <cstdint>
 #include <map>

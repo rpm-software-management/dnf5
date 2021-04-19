@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/sack/match_int64.hpp"
 
-#include "libdnf/utils/exception.hpp"
+#include "libdnf/common/exception.hpp"
 
 #include <stdexcept>
 

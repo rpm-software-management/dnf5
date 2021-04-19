@@ -111,18 +111,16 @@ del ClassName##__iter__
 
 
 %{
-    #include "libdnf/utils/set.hpp"
-    #include "libdnf/utils/weak_ptr.hpp"
     #include "libdnf/common/sack/query.hpp"
     #include "libdnf/common/sack/query_cmp.hpp"
     #include "libdnf/common/sack/sack.hpp"
     #include "libdnf/common/sack/match_int64.hpp"
     #include "libdnf/common/sack/match_string.hpp"
+    #include "libdnf/common/set.hpp"
+    #include "libdnf/common/weak_ptr.hpp"
 %}
 
 %ignore libdnf::Set::Set;
-%include "libdnf/utils/set.hpp"
-%include "libdnf/utils/weak_ptr.hpp"
 %ignore libdnf::sack::operator|(QueryCmp lhs, QueryCmp rhs);
 %ignore libdnf::sack::operator&(QueryCmp lhs, QueryCmp rhs);
 %include "libdnf/common/sack/query_cmp.hpp"
@@ -130,9 +128,11 @@ del ClassName##__iter__
 %include "libdnf/common/sack/sack.hpp"
 %include "libdnf/common/sack/match_int64.hpp"
 %include "libdnf/common/sack/match_string.hpp"
+%include "libdnf/common/set.hpp"
+%include "libdnf/common/weak_ptr.hpp"
 
 %{
-    #include "libdnf/utils/preserve_order_map.hpp"
+    #include "libdnf/common/preserve_order_map.hpp"
 %}
 
 #if defined(SWIGPYTHON) || defined(SWIGRUBY)
@@ -211,7 +211,7 @@ del ClassName##__iter__
 %rename("empty?") libdnf::PreserveOrderMap::empty;
 %rename("include?") libdnf::PreserveOrderMap::__contains__ const;
 #endif
-%include "libdnf/utils/preserve_order_map.hpp"
+%include "libdnf/common/preserve_order_map.hpp"
 
 %template(PreserveOrderMapStringString) libdnf::PreserveOrderMap<std::string, std::string>;
 %template(PreserveOrderMapStringPreserveOrderMapStringString) libdnf::PreserveOrderMap<std::string, libdnf::PreserveOrderMap<std::string, std::string>>;

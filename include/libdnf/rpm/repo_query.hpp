@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/sack/query.hpp"
 #include "libdnf/rpm/repo.hpp"
-#include "libdnf/utils/weak_ptr.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 
 namespace libdnf::rpm {
 

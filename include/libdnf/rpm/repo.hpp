@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "config_repo.hpp"
 
-#include "libdnf/utils/exception.hpp"
+#include "libdnf/common/exception.hpp"
 
 #include <memory>
 

@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CONF_CONFIG_PARSER_HPP
 #define LIBDNF_CONF_CONFIG_PARSER_HPP
 
-#include "libdnf/utils/exception.hpp"
-#include "libdnf/utils/preserve_order_map.hpp"
+#include "libdnf/common/exception.hpp"
+#include "libdnf/common/preserve_order_map.hpp"
 
 #include <istream>
 #include <map>
