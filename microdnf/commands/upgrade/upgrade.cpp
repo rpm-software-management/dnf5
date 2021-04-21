@@ -20,7 +20,6 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "upgrade.hpp"
 
 #include "../../context.hpp"
-#include "../../utils.hpp"
 
 #include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
@@ -32,6 +31,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 #include <iostream>
 
+#include "libdnf-cli/output/transaction_table.hpp"
 namespace fs = std::filesystem;
 
 namespace microdnf {
@@ -40,6 +40,7 @@ using namespace libdnf::cli;
 
 void CmdUpgrade::set_argument_parser(Context & ctx) {
     patterns_to_upgrade_options = ctx.arg_parser.add_new_values();
+
     auto keys = ctx.arg_parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,

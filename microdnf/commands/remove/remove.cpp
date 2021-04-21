@@ -20,7 +20,6 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "remove.hpp"
 
 #include "../../context.hpp"
-#include "../../utils.hpp"
 
 #include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
@@ -30,6 +29,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/transaction.hpp>
 
 #include <iostream>
+
+#include "libdnf-cli/output/transaction_table.hpp"
 
 namespace microdnf {
 

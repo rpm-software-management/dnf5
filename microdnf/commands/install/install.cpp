@@ -20,7 +20,6 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "install.hpp"
 
 #include "../../context.hpp"
-#include "../../utils.hpp"
 
 #include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
@@ -32,6 +31,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 #include <iostream>
+
+#include "libdnf-cli/output/transaction_table.hpp"
 
 namespace fs = std::filesystem;
 
