@@ -45,7 +45,9 @@ enum class PackageAttribute {
     release,
     arch,
     repo,
-    size,
+    is_installed,
+    install_size,
+    package_size,
 
     nevra,
     full_nevra
@@ -59,7 +61,9 @@ const static std::map<std::string, PackageAttribute> package_attributes{
     {"release", PackageAttribute::release},
     {"arch", PackageAttribute::arch},
     {"repo", PackageAttribute::repo},
-    {"size", PackageAttribute::size},
+    {"is_installed", PackageAttribute::is_installed},
+    {"install_size", PackageAttribute::install_size},
+    {"package_size", PackageAttribute::package_size},
     {"nevra", PackageAttribute::nevra},
     {"full_nevra", PackageAttribute::full_nevra}};
 
@@ -92,8 +96,14 @@ dnfdaemon::KeyValueMap package_to_map(
             case PackageAttribute::repo:
                 dbus_package.emplace(attr, libdnf_package.get_repo()->get_id());
                 break;
-            case PackageAttribute::size:
-                dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_size()));
+            case PackageAttribute::is_installed:
+                dbus_package.emplace(attr, libdnf_package.is_installed());
+                break;
+            case PackageAttribute::install_size:
+                dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_install_size()));
+                break;
+            case PackageAttribute::package_size:
+                dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_package_size()));
                 break;
             case PackageAttribute::nevra:
                 dbus_package.emplace(attr, libdnf_package.get_nevra());

@@ -46,8 +46,10 @@ static struct libscols_table * create_package_info_table(Package & package) {
     add_line_into_package_info_table(table, "Version", package.get_version().c_str());
     add_line_into_package_info_table(table, "Release", package.get_release().c_str());
     add_line_into_package_info_table(table, "Architecture", package.get_arch().c_str());
-    auto size = package.get_size();
-    add_line_into_package_info_table(table, "Size", std::to_string(size).c_str());
+    add_line_into_package_info_table(table, "Install size", std::to_string(package.get_install_size()).c_str());
+    if (!package.is_installed()) {
+        add_line_into_package_info_table(table, "Package size", std::to_string(package.get_package_size()).c_str());
+    }
     add_line_into_package_info_table(table, "Source", package.get_sourcerpm().c_str());
     add_line_into_package_info_table(table, "Repository", package.get_repo_id().c_str());
     // TODO(jrohel): support for "From repo" add_line_into_package_info_table(table, "From repo", ...);

@@ -118,14 +118,6 @@ public:
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_group(DnfPackage * pkg)
     std::string get_group() const;
 
-    /// @return If package is installed, return get_install_size(). Return get_package_size() otherwise.
-    /// @since 5.0
-    //
-    // TODO(dmach): drop and use get_install_size()/get_package_size() instead?
-    // @replaces dnf:dnf/package.py:attribute:Package.size
-    // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_size(DnfPackage * pkg)
-    unsigned long long get_size() const;
-
     /// @return File size of the RPM package.
     /// @since 5.0
     //

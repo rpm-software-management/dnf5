@@ -107,11 +107,6 @@ std::string Package::get_group() const {
     return cstring2string(solv::get_group(pool, id.id));
 }
 
-unsigned long long Package::get_size() const {
-    Pool * pool = sack->p_impl->pool;
-    return solv::get_size(pool, id.id);
-}
-
 unsigned long long Package::get_package_size() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_package_size(pool, id.id);

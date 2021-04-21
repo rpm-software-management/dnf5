@@ -42,7 +42,6 @@ class RpmPackageTest : public RepoFixture {
     CPPUNIT_TEST(test_get_nevra);
     CPPUNIT_TEST(test_get_full_nevra);
     CPPUNIT_TEST(test_get_group);
-    CPPUNIT_TEST(test_get_size);
     CPPUNIT_TEST(test_get_package_size);
     CPPUNIT_TEST(test_get_install_size);
     CPPUNIT_TEST(test_get_license);
@@ -96,7 +95,6 @@ public:
     void test_get_nevra();
     void test_get_full_nevra();
     void test_get_group();
-    void test_get_size();
     void test_get_package_size();
     void test_get_install_size();
     void test_get_license();

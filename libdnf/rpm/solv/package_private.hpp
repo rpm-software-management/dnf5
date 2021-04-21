@@ -208,15 +208,6 @@ inline unsigned long long get_install_size(Pool * pool, Id package_id) noexcept 
     return lookup_num(get_solvable(pool, package_id), SOLVABLE_INSTALLSIZE);
 }
 
-/// If package is installed, return get_install_size(). Return get_download_size() otherwise.
-inline unsigned long long get_size(Pool * pool, Id package_id) noexcept {
-    Solvable * solvable = get_solvable(pool, package_id);
-    if (is_installed(pool, solvable)) {
-        return get_install_size(pool, package_id);
-    }
-    return get_package_size(pool, package_id);
-}
-
 /// @return const char* !! Return temporal value !!
 inline const char * get_license(Pool * pool, Id package_id) noexcept {
     return lookup_cstring(get_solvable(pool, package_id), SOLVABLE_LICENSE);

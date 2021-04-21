@@ -8,6 +8,13 @@ Package::get_epoch()
 --------------------
 The return type was changed from `unsigned long` to `std::string`.
 
+
+DNF: Package.size, libdnf: dnf_package_get_size()
+-------------------------------------------------
+The return value was ambiguous, returning either package or install size.
+Use Package::get_package_size() and Package::get_install_size() instead.
+
+
 dnf_sack_set_installonly, dnf_sack_get_installonly, dnf_sack_set_installonly_limit, dnf_sack_get_installonly_limit
 ------------------------------------------------------------------------------------------------------------------
 Function were dropped as unneeded. Installonly packages are taken directly from main Conf in Base.
