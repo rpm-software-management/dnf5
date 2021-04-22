@@ -77,7 +77,8 @@ enum class GoalProblem : uint32_t {
     NOT_INSTALLED = (1 << 6),
     NOT_INSTALLED_FOR_ARCHITECTURE = (1 << 7),
     HINT_ICASE = (1 << 8),
-    HINT_ALTERNATIVES = (1 << 9)
+    HINT_ALTERNATIVES = (1 << 9),
+    INSLALLED_LOWEST_VERSION = (1 << 10)
 };
 
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
@@ -112,6 +113,12 @@ private:
     /// @exception libdnf::LogicError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_strict(const libdnf::ConfigMain & cfg_main);
+    /// Resolve strict value and store the result as the value used. When GoalSetting::auto it returns false
+    ///
+    /// @return Resolved value.
+    /// @exception libdnf::LogicError When a different value already stored
+    /// @since 1.0
+    bool resolve_strict();
     /// Resolve best value and store the result as the value used.
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
@@ -182,6 +189,17 @@ inline bool GoalJobSettings::resolve_strict(const libdnf::ConfigMain & cfg_main)
     return resolved == GoalUsedSetting::USED_TRUE;
 }
 
+inline bool GoalJobSettings::resolve_strict() {
+    bool strict_bool = strict == GoalSetting::SET_TRUE;
+    auto resolved = strict_bool ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
+    if (used_strict != GoalUsedSetting::UNUSED && resolved != used_strict) {
+        throw LogicError("Used value for 'used_strict' already set");
+    }
+    used_strict = resolved;
+
+    return strict_bool;
+}
+
 inline bool GoalJobSettings::resolve_best(const libdnf::ConfigMain & cfg_main) {
     auto resolved = GoalUsedSetting::UNUSED;
     switch (best) {
@@ -224,7 +242,9 @@ inline bool GoalJobSettings::resolve_clean_requirements_on_remove(const libdnf::
         throw LogicError("Invalid 'clean_requirements_on_remove' value in GoalJobSettings");
     }
     if (used_clean_requirements_on_remove != GoalUsedSetting::UNUSED && resolved != used_clean_requirements_on_remove) {
-        throw LogicError("GoalJobSettings::resolve_clean_requirements_on_remove: 'clean_requirements_on_remove' is already set to a different value");
+        throw LogicError(
+            "GoalJobSettings::resolve_clean_requirements_on_remove: 'clean_requirements_on_remove' is already set to a "
+            "different value");
     }
     used_clean_requirements_on_remove = resolved;
     return resolved == GoalUsedSetting::USED_TRUE;
@@ -234,7 +254,9 @@ inline bool GoalJobSettings::resolve_clean_requirements_on_remove() {
     bool on_remove = clean_requirements_on_remove == GoalSetting::SET_TRUE;
     auto resolved = on_remove ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
     if (used_clean_requirements_on_remove != GoalUsedSetting::UNUSED && resolved != used_clean_requirements_on_remove) {
-        throw LogicError("GoalJobSettings::resolve_clean_requirements_on_remove: 'clean_requirements_on_remove' is already set to a different value");
+        throw LogicError(
+            "GoalJobSettings::resolve_clean_requirements_on_remove: 'clean_requirements_on_remove' is already set to a "
+            "different value");
     }
     used_clean_requirements_on_remove = resolved;
 

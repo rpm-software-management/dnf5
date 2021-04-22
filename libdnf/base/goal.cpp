@@ -63,6 +63,12 @@ namespace libdnf {
 
 namespace {
 
+inline bool name_arch_compare_lower_solvable(const Solvable * first, const Solvable * second) {
+    if (first->name != second->name) {
+        return first->name < second->name;
+    }
+    return first->arch < second->arch;
+}
 
 // TODO(jmracek) Translation must be done later. After setting the locale.
 static const std::map<ProblemRules, const char *> PKG_PROBLEMS_DICT = {
@@ -157,7 +163,7 @@ public:
     GoalProblem add_specs_to_goal();
     GoalProblem add_install_to_goal(const std::string & spec, GoalJobSettings & settings);
     void add_remove_to_goal(const std::string & spec, GoalJobSettings & settings);
-    void add_upgrades_distrosync_to_goal(Action action, const std::string & spec, GoalJobSettings & settings);
+    void add_up_down_distrosync_to_goal(Action action, const std::string & spec, GoalJobSettings & settings);
     void add_rpms_to_goal();
 
     void add_rpm_goal_report(
@@ -251,6 +257,10 @@ void Goal::add_rpm_upgrade(const rpm::PackageSet & package_set, const GoalJobSet
     p_impl->add_rpm_ids(Action::UPGRADE, package_set, settings);
 }
 
+void Goal::add_rpm_downgrade(const std::string & spec, const GoalJobSettings & settings) {
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::DOWNGRADE, spec, settings));
+}
+
 void Goal::add_rpm_distro_sync(const std::string & spec, const GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(Action::DISTRO_SYNC, spec, settings));
 }
@@ -301,8 +311,9 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
                 add_remove_to_goal(spec, settings);
                 break;
             case Action::DISTRO_SYNC:
+            case Action::DOWNGRADE:
             case Action::UPGRADE:
-                add_upgrades_distrosync_to_goal(action, spec, settings);
+                add_up_down_distrosync_to_goal(action, spec, settings);
                 break;
             case Action::UPGRADE_ALL: {
                 rpm::SolvQuery query(&sack);
@@ -325,8 +336,9 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
                     settings.resolve_best(cfg_main),
                     settings.resolve_clean_requirements_on_remove());
             } break;
-            default:
-                throw std::invalid_argument("Unsupported action");
+            case Action::INSTALL_OR_REINSTALL: {
+                throw LogicError("Unsupported action \"INSTALL_OR_REINSTALL\"");
+            }
         }
     }
     rpm_specs.clear();
@@ -642,7 +654,7 @@ void Goal::Impl::add_remove_to_goal(const std::string & spec, GoalJobSettings & 
     rpm_goal.add_remove(*query.p_impl, clean_requirements_on_remove);
 }
 
-void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::string & spec, GoalJobSettings & settings) {
+void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string & spec, GoalJobSettings & settings) {
     // Get values before the first report to set in GoalJobSettings used values
     bool best = settings.resolve_best(base->get_config());
     bool strict = action == Action::UPGRADE ? false : settings.resolve_strict(base->get_config());
@@ -670,19 +682,25 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::strin
     all_installed.ifilter_installed();
     // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
     bool obsoleters = false;
-    if (obsoletes) {
+    if (obsoletes && action != Action::DOWNGRADE) {
         rpm::SolvQuery obsoleters_query(query);
         obsoleters_query.ifilter_obsoletes(all_installed);
         if (!obsoleters_query.empty()) {
             obsoleters = true;
         }
     }
+    rpm::SolvQuery relevant_installed_na(all_installed);
     if (!obsoleters) {
-        all_installed.ifilter_name(query);
-        if (all_installed.empty()) {
-            add_rpm_goal_report(action, GoalProblem::NOT_INSTALLED, settings, spec, {}, false);
-        } else if (all_installed.ifilter_name_arch(query).empty()) {
-            add_rpm_goal_report(action, GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec, {}, false);
+        relevant_installed_na.ifilter_name_arch(query);
+        if (relevant_installed_na.empty()) {
+            rpm::SolvQuery relevant_installed_n(all_installed);
+            relevant_installed_n.ifilter_name(query);
+            if (relevant_installed_n.empty()) {
+                add_rpm_goal_report(action, GoalProblem::NOT_INSTALLED, settings, spec, {}, false);
+            } else {
+                add_rpm_goal_report(action, GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec, {}, false);
+            }
+            return;
         }
     }
 
@@ -711,19 +729,61 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::strin
     // TODO(jmracek) Apply security filters
     // TODO(jmracek) q = q.available().union(installed_query.latest())
     // Required for a correct upgrade of installonly packages
-    solv_map_to_id_queue(tmp_queue, *query.p_impl);
     switch (action) {
         case Action::UPGRADE:
+            solv_map_to_id_queue(tmp_queue, *query.p_impl);
             rpm_goal.add_upgrade(tmp_queue, best, clean_requirements_on_remove);
             break;
         case Action::DISTRO_SYNC:
+            solv_map_to_id_queue(tmp_queue, *query.p_impl);
             rpm_goal.add_distro_sync(tmp_queue, strict, best, clean_requirements_on_remove);
             break;
+        case Action::DOWNGRADE: {
+            query.ifilter_available().ifilter_downgrades();
+            Pool * pool = sack.p_impl->get_pool();
+            std::vector<Solvable *> tmp_solvables;
+            for (auto pkg_id : *query.p_impl) {
+                tmp_solvables.push_back(rpm::solv::get_solvable(pool, pkg_id));
+            }
+            std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
+            std::map<Id, std::vector<Id>> name_arches;
+            // Make for each name arch only one downgrade job
+            for (auto installed_id : *relevant_installed_na.p_impl) {
+                Solvable * solvable = rpm::solv::get_solvable(pool, installed_id);
+                auto & arches = name_arches[solvable->name];
+                bool unique = true;
+                for (Id arch : arches) {
+                    if (arch == solvable->arch) {
+                        unique = false;
+                        break;
+                    }
+                }
+                if (unique) {
+                    arches.push_back(solvable->arch);
+                    tmp_queue.clear();
+                    auto low = std::lower_bound(
+                        tmp_solvables.begin(), tmp_solvables.end(), solvable, name_arch_compare_lower_solvable);
+                    while (low != tmp_solvables.end() && (*low)->name == solvable->name &&
+                           (*low)->arch == solvable->arch) {
+                        tmp_queue.push_back(pool_solvable2id(pool, (*low)));
+                        ++low;
+                    }
+                    if (tmp_queue.empty()) {
+                        std::string name_arch(rpm::solv::get_name(pool, installed_id));
+                        name_arch.append(".");
+                        name_arch.append(rpm::solv::get_arch(pool, installed_id));
+                        add_rpm_goal_report(
+                            action, GoalProblem::INSLALLED_LOWEST_VERSION, settings, spec, {name_arch}, false);
+                    } else {
+                        rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
+                    }
+                }
+            }
+        } break;
         default:
             throw std::invalid_argument("Unsupported action");
     }
 }
-
 
 std::vector<std::pair<ProblemRules, std::vector<std::string>>> Goal::Impl::get_removal_of_protected(
     const rpm::solv::IdQueue & broken_installed) {
@@ -923,6 +983,14 @@ std::string Goal::format_rpm_log(
         case GoalProblem::HINT_ALTERNATIVES: {
             auto elements = utils::string::join(additional_data, ", ");
             return ret.append(fmt::format(_("There are following alternatives for '{0}': {1}"), spec, elements));
+        }
+        case GoalProblem::INSLALLED_LOWEST_VERSION: {
+            if (additional_data.size() != 1) {
+                throw std::invalid_argument("Incorrect number of elements for INSLALLED_LOWEST_VERSION");
+            }
+            return ret.append(fmt::format(
+                _("Package \"{}\" of lowest version already installed, cannot downgrade it."),
+                *additional_data.begin()));
         }
         case GoalProblem::NO_PROBLEM:
         case GoalProblem::REMOVAL_OF_PROTECTED:

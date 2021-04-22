@@ -39,7 +39,16 @@ public:
         const char * get_description() const noexcept override { return "Goal exception"; }
     };
 
-    enum class Action { INSTALL, INSTALL_OR_REINSTALL, UPGRADE, UPGRADE_ALL, DISTRO_SYNC, DISTRO_SYNC_ALL, REMOVE };
+    enum class Action {
+        INSTALL,
+        INSTALL_OR_REINSTALL,
+        UPGRADE,
+        UPGRADE_ALL,
+        DISTRO_SYNC,
+        DISTRO_SYNC_ALL,
+        DOWNGRADE,
+        REMOVE
+    };
 
     explicit Goal(Base * base);
     ~Goal();
@@ -76,6 +85,8 @@ public:
     void add_rpm_upgrade(const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings);
     void add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set);
     void add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings);
+    void add_rpm_downgrade(const std::string & spec);
+    void add_rpm_downgrade(const std::string & spec, const libdnf::GoalJobSettings & settings);
     void add_rpm_distro_sync(const std::string & spec);
     void add_rpm_distro_sync(const std::string & spec, const libdnf::GoalJobSettings & settings);
     void add_rpm_distro_sync();
@@ -188,6 +199,11 @@ inline void Goal::add_rpm_upgrade(const libdnf::rpm::Package & rpm_package) {
 inline void Goal::add_rpm_upgrade(const libdnf::rpm::PackageSet & package_set) {
     const libdnf::GoalJobSettings settings;
     add_rpm_upgrade(package_set, settings);
+}
+
+inline void Goal::add_rpm_downgrade(const std::string & spec) {
+    const libdnf::GoalJobSettings settings;
+    add_rpm_downgrade(spec, settings);
 }
 
 inline void Goal::add_rpm_distro_sync() {
