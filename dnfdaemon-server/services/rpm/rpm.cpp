@@ -120,7 +120,7 @@ void Rpm::dbus_register() {
             this->remove(std::move(call));
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_RPM, "resolve", "a{sv}", "a(ussssss)", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_RPM, "resolve", "a{sv}", "a(usssssst)", [this](sdbus::MethodCall call) -> void {
             this->resolve(std::move(call));
         });
     dbus_object->registerMethod(
@@ -191,7 +191,8 @@ void packages_to_transaction(
             p.get_version(),
             p.get_release(),
             p.get_arch(),
-            p.get_repo()->get_id()));
+            p.get_repo()->get_id(),
+            p.get_size()));
     }
 }
 

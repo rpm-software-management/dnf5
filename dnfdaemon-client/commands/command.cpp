@@ -36,26 +36,14 @@ namespace dnfdaemon::client {
 
 class DbusPackageWrapper {
 
-/*
-using DbusTransactionItem = sdbus::Struct<
-   unsigned int, // action
-   std::string,  // name
-   std::string,  // epoch
-   std::string,  // version
-   std::string,  // release
-   std::string,  // arch
-   std::string   // repoid
-   >;
-*/
-
 public:
     DbusPackageWrapper(dnfdaemon::DbusTransactionItem transactionitem) {
         ti = transactionitem;
     }
 
-    int get_size() { return -1; }
-    std::string get_full_nevra() { return std::get<2>(ti) + ":" + std::get<3>(ti) + "-" + std::get<4>(ti); }
-    std::string get_repo_id() { return std::get<6>(ti); }
+    uint64_t get_size() const { return std::get<7>(ti); }
+    std::string get_full_nevra() const { return full_nevra; }
+    std::string get_repo_id() const { return std::get<6>(ti); }
 
 private:
     dnfdaemon::DbusTransactionItem ti;
