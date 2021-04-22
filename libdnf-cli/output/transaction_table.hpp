@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -25,12 +25,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libsmartcols/libsmartcols.h>
 #include <vector>
 
+#include "../../libdnf-cli/utils/units.hpp"
+
 //static struct libscols_table * create_transaction_table(bool with_status) {}
 
 //static void add_line_into_transaction_table() {}
 
 //template <class Query>
 //static void print_transaction_table(Query query, bool with_status) {}
+
+namespace libdnf::cli::output {
 
 // transaction det
 enum { COL_NEVRA, COL_REPO, COL_SIZE };
@@ -41,8 +45,8 @@ static void add_transaction_packages(struct libscols_table *tb, struct libscols_
     for (auto & pkg : pkgs) {
         struct libscols_line *ln = scols_table_new_line(tb, parent);
         scols_line_set_data(ln, COL_NEVRA, pkg.get_full_nevra().c_str());
-        scols_line_set_data(ln, COL_REPO, pkg.get_repo()->get_id().c_str());
-        scols_line_set_data(ln, COL_SIZE, std::to_string(pkg.get_size()).c_str());
+        scols_line_set_data(ln, COL_REPO, pkg.get_repo_id().c_str());
+        scols_line_set_data(ln, COL_SIZE, libdnf::cli::utils::units::format_size(pkg.get_size()).c_str());
     }
 }
 
@@ -53,10 +57,10 @@ bool print_goal(Goal & goal) {
     auto upgrades_pkgs = goal.list_rpm_upgrades();
     auto downgrades_pkgs = goal.list_rpm_downgrades();
     auto removes_pkgs = goal.list_rpm_removes();
-    auto obsoleded_pkgs = goal.list_rpm_obsoleted();
+    auto obsoleted_pkgs = goal.list_rpm_obsoleted();
 
     if (installs_pkgs.empty() && reinstalls_pkgs.empty() && upgrades_pkgs.empty() &&
-        downgrades_pkgs.empty() && removes_pkgs.empty() && obsoleded_pkgs.empty()) {
+        downgrades_pkgs.empty() && removes_pkgs.empty() && obsoleted_pkgs.empty()) {
         std::cout << "Nothing to do." << std::endl;
         return false;
     }
@@ -109,15 +113,29 @@ bool print_goal(Goal & goal) {
     scols_unref_table(tb);
 
     std::cout << "Transaction Summary:\n";
-    std::cout << fmt::format(" {:15} {:4} packages\n", "Installing:", installs_pkgs.size());
-    std::cout << fmt::format(" {:15} {:4} packages\n", "Reinstalling:", reinstalls_pkgs.size());
-    std::cout << fmt::format(" {:15} {:4} packages\n", "Upgrading:", upgrades_pkgs.size());
-    std::cout << fmt::format(" {:15} {:4} packages\n", "Obsoleting:", obsoleded_pkgs.size());
-    std::cout << fmt::format(" {:15} {:4} packages\n", "Removing:", removes_pkgs.size());
-    std::cout << fmt::format(" {:15} {:4} packages\n", "Downgrading:", downgrades_pkgs.size());
+    if (!installs_pkgs.empty()) {
+        std::cout << fmt::format(" {:15} {:4} packages\n", "Installing:", installs_pkgs.size());
+    }
+    if (!reinstalls_pkgs.empty()) {
+        std::cout << fmt::format(" {:15} {:4} packages\n", "Reinstalling:", reinstalls_pkgs.size());
+    }
+    if (!upgrades_pkgs.empty()) {
+        std::cout << fmt::format(" {:15} {:4} packages\n", "Upgrading:", upgrades_pkgs.size());
+    }
+    if (!obsoleted_pkgs.empty()) {
+        std::cout << fmt::format(" {:15} {:4} packages\n", "Obsoleting:", obsoleted_pkgs.size());
+    }
+    if (!removes_pkgs.empty()) {
+        std::cout << fmt::format(" {:15} {:4} packages\n", "Removing:", removes_pkgs.size());
+    }
+    if (!downgrades_pkgs.empty()) {
+        std::cout << fmt::format(" {:15} {:4} packages\n", "Downgrading:", downgrades_pkgs.size());
+    }
     std::cout << std::endl;
 
     return true;
 }
+
+}  // namespace libdnf::cli::output
 
 #endif  // LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP

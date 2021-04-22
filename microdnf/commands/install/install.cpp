@@ -95,7 +95,7 @@ void CmdInstall::run(Context & ctx) {
         return;
     }
 
-    if (!print_goal(goal)) {
+    if (!libdnf::cli::output::print_goal(goal)) {
         return;
     }
 

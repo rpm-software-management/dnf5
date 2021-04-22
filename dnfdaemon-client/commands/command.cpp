@@ -28,20 +28,97 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <vector>
 
+#include "libdnf-cli/output/transaction_table.hpp"
+
+using namespace libdnf::transaction;
+
 namespace dnfdaemon::client {
 
-void TransactionCommand::print_transaction(std::vector<dnfdaemon::DbusTransactionItem> transaction) {
-    // TODO(mblaha): print decent transaction table using smartcols
-    for (auto & ti : transaction) {
-        libdnf::transaction::TransactionItemAction action =
-            static_cast<libdnf::transaction::TransactionItemAction>(std::get<0>(ti));
-        std::cout << "Action: " << libdnf::transaction::TransactionItemAction_get_name(action) << std::endl;
-        std::cout << "Name: " << std::get<1>(ti) << std::endl;
-        std::cout << "Arch: " << std::get<5>(ti) << std::endl;
-        std::cout << "EVR: " << std::get<2>(ti) << ":" << std::get<3>(ti) << "-" << std::get<4>(ti) << std::endl;
-        std::cout << "Repo: " << std::get<6>(ti) << std::endl;
+class DbusPackageWrapper {
+
+/*
+using DbusTransactionItem = sdbus::Struct<
+   unsigned int, // action
+   std::string,  // name
+   std::string,  // epoch
+   std::string,  // version
+   std::string,  // release
+   std::string,  // arch
+   std::string   // repoid
+   >;
+*/
+
+public:
+    DbusPackageWrapper(dnfdaemon::DbusTransactionItem transactionitem) {
+        ti = transactionitem;
     }
-}
+
+    int get_size() { return -1; }
+    std::string get_full_nevra() { return std::get<2>(ti) + ":" + std::get<3>(ti) + "-" + std::get<4>(ti); }
+    std::string get_repo_id() { return std::get<6>(ti); }
+
+private:
+    dnfdaemon::DbusTransactionItem ti;
+};
+
+class DbusGoalWrapper {
+public:
+    DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> transaction) {
+        for(auto & ti : transaction) {
+            libdnf::transaction::TransactionItemAction action =
+                static_cast<libdnf::transaction::TransactionItemAction>(std::get<0>(ti));
+            switch(action) {
+                case TransactionItemAction::INSTALL: {
+                    rpm_installs.push_back(DbusPackageWrapper(ti));
+                    break;
+                }
+                case TransactionItemAction::DOWNGRADE: {
+                    rpm_downgrades.push_back(DbusPackageWrapper(ti));
+                    break;
+                }
+                case TransactionItemAction::OBSOLETE: {
+                    rpm_obsoletes.push_back(DbusPackageWrapper(ti));
+                    break;
+                }
+                case TransactionItemAction::UPGRADE: {
+                    rpm_upgrades.push_back(DbusPackageWrapper(ti));
+                    break;
+                }
+                case TransactionItemAction::REMOVE: {
+                    rpm_removes.push_back(DbusPackageWrapper(ti));
+                    break;
+                }
+                case TransactionItemAction::REINSTALL: {
+                    rpm_reinstalls.push_back(DbusPackageWrapper(ti));
+                    break;
+                }
+                case TransactionItemAction::DOWNGRADED:
+                case TransactionItemAction::OBSOLETED:
+                case TransactionItemAction::UPGRADED:
+                case TransactionItemAction::REINSTALLED:
+                case TransactionItemAction::REASON_CHANGE: {
+                    // TODO (nsella) Implement case
+                    break;
+                }
+            }
+        }
+    }
+
+    std::vector<DbusPackageWrapper> list_rpm_installs() { return rpm_installs; };
+    std::vector<DbusPackageWrapper> list_rpm_reinstalls() { return rpm_reinstalls; };
+    std::vector<DbusPackageWrapper> list_rpm_upgrades() { return rpm_upgrades; };
+    std::vector<DbusPackageWrapper> list_rpm_downgrades() { return rpm_downgrades; };
+    std::vector<DbusPackageWrapper> list_rpm_removes() { return rpm_removes; };
+    std::vector<DbusPackageWrapper> list_rpm_obsoleted() { return rpm_obsoletes; };
+
+private:
+    std::vector<DbusPackageWrapper> rpm_installs;
+    std::vector<DbusPackageWrapper> rpm_reinstalls;
+    std::vector<DbusPackageWrapper> rpm_upgrades;
+    std::vector<DbusPackageWrapper> rpm_downgrades;
+    std::vector<DbusPackageWrapper> rpm_removes;
+    std::vector<DbusPackageWrapper> rpm_obsoletes;
+};
 
 void TransactionCommand::run_transaction(Context & ctx) {
     dnfdaemon::KeyValueMap options = {};
@@ -60,7 +137,9 @@ void TransactionCommand::run_transaction(Context & ctx) {
     }
 
     // print the transaction to the user and ask for confirmation
-    print_transaction(transaction);
+    //print_transaction(transaction);
+    DbusGoalWrapper dbus_goal_wrapper(transaction);
+    libdnf::cli::output::print_goal(dbus_goal_wrapper);
 
     if (!userconfirm(ctx)) {
         std::cout << "Operation aborted." << std::endl;
