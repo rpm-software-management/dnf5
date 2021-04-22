@@ -20,14 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TEST_REPO_REPO_HPP
 #define LIBDNF_TEST_REPO_REPO_HPP
 
+#include "../../testcase_fixture.hpp"
 
 #include "libdnf/utils/temp.hpp"
 
-#include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class RepoTest : public CppUnit::TestCase {
+class RepoTest : public TestCaseFixture {
     CPPUNIT_TEST_SUITE(RepoTest);
     CPPUNIT_TEST(test_repo_basics);
     CPPUNIT_TEST_SUITE_END();

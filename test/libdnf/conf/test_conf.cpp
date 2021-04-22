@@ -30,6 +30,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ConfTest);
 using namespace libdnf;
 
 void ConfTest::setUp() {
+    TestCaseFixture::setUp();
     ConfigParser parser;
     parser.read(PROJECT_SOURCE_DIR "/test/libdnf/conf/data/main.conf");
     config.load_from_parser(parser, "main", vars, logger);

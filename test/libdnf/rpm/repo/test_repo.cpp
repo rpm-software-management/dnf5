@@ -31,12 +31,14 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RepoTest);
 
 
 void RepoTest::setUp() {
+    TestCaseFixture::setUp();
     temp = new libdnf::utils::TempDir("libdnf_unittest_", {"installroot", "cache"});
 }
 
 
 void RepoTest::tearDown() {
     delete temp;
+    TestCaseFixture::tearDown();
 }
 
 

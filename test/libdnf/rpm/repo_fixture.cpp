@@ -79,6 +79,8 @@ void RepoFixture::add_repo_solv(const std::string & repoid) {
 
 
 void RepoFixture::setUp() {
+    TestCaseFixture::setUp();
+
     temp = std::make_unique<libdnf::utils::TempDir>(
         "libdnf_unittest_",
         std::vector<std::string>{"installroot"}

@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_CONF_CONF_HPP
 #define TEST_LIBDNF_CONF_CONF_HPP
 
+#include "../testcase_fixture.hpp"
 
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/conf/vars.hpp"
@@ -29,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class ConfTest : public CppUnit::TestCase {
+class ConfTest : public TestCaseFixture {
     CPPUNIT_TEST_SUITE(ConfTest);
     CPPUNIT_TEST(test_config_main);
     CPPUNIT_TEST(test_config_repo);

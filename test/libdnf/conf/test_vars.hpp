@@ -21,13 +21,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_CONF_VARS_HPP
 #define TEST_LIBDNF_CONF_VARS_HPP
 
+#include "../testcase_fixture.hpp"
 
 #include "libdnf/conf/vars.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class VarsTest : public CppUnit::TestCase {
+class VarsTest : public TestCaseFixture {
     CPPUNIT_TEST_SUITE(VarsTest);
     CPPUNIT_TEST(test_vars);
     CPPUNIT_TEST(test_vars_multiple_dirs);

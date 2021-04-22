@@ -53,13 +53,6 @@ void VarsTest::test_vars_env() {
     // Load all variables.
     vars.load("/", {PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
 
-    // Cleaning up environment variables (necessary in case other tests share the environment)
-    unsetenv("DNF0");
-    unsetenv("DNF1");
-    unsetenv("DNF9");
-    unsetenv("DNF_VAR_var1");
-    unsetenv("DNF_VAR_var41");
-
     // The variables var1 and var2 are defined in the files.
     // However, var1 was also an environment variable. The environment has a higher priority.
     CPPUNIT_ASSERT_EQUAL(

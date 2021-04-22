@@ -21,18 +21,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_REPO_FIXTURE_HPP
 #define TEST_LIBDNF_REPO_FIXTURE_HPP
 
+#include "../testcase_fixture.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/repo_sack.hpp"
 #include "libdnf/rpm/solv_sack.hpp"
 #include "libdnf/utils/temp.hpp"
 
-#include <cppunit/TestCase.h>
 
-
-class RepoFixture : public CppUnit::TestCase {
+class RepoFixture : public TestCaseFixture {
 public:
-    virtual void setUp() override;
+    void setUp() override;
 
     void dump_debugdata();
 
