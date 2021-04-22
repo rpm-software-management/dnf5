@@ -25,6 +25,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnfdaemon-server/dbus.hpp>
 #include <libdnf/transaction/transaction_item_action.hpp>
 
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -39,6 +40,10 @@ class DbusPackageWrapper {
 public:
     DbusPackageWrapper(dnfdaemon::DbusTransactionItem transactionitem) {
         ti = transactionitem;
+        full_nevra = std::get<1>(ti) + "-"
+            + std::get<3>(ti) + "-"
+            + std::get<4>(ti) + "."
+            + std::get<5>(ti);
     }
 
     uint64_t get_size() const { return std::get<7>(ti); }
@@ -47,6 +52,7 @@ public:
 
 private:
     dnfdaemon::DbusTransactionItem ti;
+    std::string full_nevra;
 };
 
 class DbusGoalWrapper {
@@ -92,12 +98,12 @@ public:
         }
     }
 
-    std::vector<DbusPackageWrapper> list_rpm_installs() { return rpm_installs; };
-    std::vector<DbusPackageWrapper> list_rpm_reinstalls() { return rpm_reinstalls; };
-    std::vector<DbusPackageWrapper> list_rpm_upgrades() { return rpm_upgrades; };
-    std::vector<DbusPackageWrapper> list_rpm_downgrades() { return rpm_downgrades; };
-    std::vector<DbusPackageWrapper> list_rpm_removes() { return rpm_removes; };
-    std::vector<DbusPackageWrapper> list_rpm_obsoleted() { return rpm_obsoletes; };
+    std::vector<DbusPackageWrapper> list_rpm_installs() const { return rpm_installs; };
+    std::vector<DbusPackageWrapper> list_rpm_reinstalls() const { return rpm_reinstalls; };
+    std::vector<DbusPackageWrapper> list_rpm_upgrades() const { return rpm_upgrades; };
+    std::vector<DbusPackageWrapper> list_rpm_downgrades() const { return rpm_downgrades; };
+    std::vector<DbusPackageWrapper> list_rpm_removes() const { return rpm_removes; };
+    std::vector<DbusPackageWrapper> list_rpm_obsoleted() const { return rpm_obsoletes; };
 
 private:
     std::vector<DbusPackageWrapper> rpm_installs;

@@ -40,8 +40,17 @@ namespace libdnf::cli::output {
 enum { COL_NEVRA, COL_REPO, COL_SIZE };
 
 template <class Package>
-static void add_transaction_packages(struct libscols_table *tb, struct libscols_line *parent, std::vector<Package> & pkgs) {
-    // TODO(jrohel): Print relations with obsoleted packages, sorting
+void sort_pkgs_list(std::vector<Package> & list) {
+    sort(list.begin( ), list.end( ),
+            [ ]( const Package & lhs, const Package & rhs ) {
+        return lhs.get_full_nevra() < rhs.get_full_nevra();
+    });
+}
+
+template <class Package>
+static void add_line_into_transaction_table(struct libscols_table *tb, struct libscols_line *parent, std::vector<Package> & pkgs) {
+    // TODO(jrohel): Print relations with obsoleted packages
+    sort_pkgs_list(pkgs);
     for (auto & pkg : pkgs) {
         struct libscols_line *ln = scols_table_new_line(tb, parent);
         scols_line_set_data(ln, COL_NEVRA, pkg.get_full_nevra().c_str());
