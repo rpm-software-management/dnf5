@@ -224,7 +224,7 @@ void Goal::add_rpm_install_or_reinstall(const rpm::PackageSet & package_set, con
 }
 
 void Goal::add_rpm_remove(const std::string & spec, const GoalJobSettings & settings) {
-    p_impl->rpm_specs.push_back(std::make_tuple(Action::REMOVE, spec, std::move(settings)));
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::REMOVE, spec, settings));
 }
 
 void Goal::add_rpm_remove(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
@@ -236,11 +236,11 @@ void Goal::add_rpm_remove(const rpm::PackageSet & package_set, const GoalJobSett
 }
 
 void Goal::add_rpm_upgrade(const std::string & spec, const GoalJobSettings & settings) {
-    p_impl->rpm_specs.push_back(std::make_tuple(Action::UPGRADE, spec, std::move(settings)));
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::UPGRADE, spec, settings));
 }
 
 void Goal::add_rpm_upgrade(const GoalJobSettings & settings) {
-    p_impl->rpm_specs.push_back(std::make_tuple(Action::UPGRADE_ALL, std::string(), std::move(settings)));
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::UPGRADE_ALL, std::string(), settings));
 }
 
 void Goal::add_rpm_upgrade(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
@@ -252,11 +252,11 @@ void Goal::add_rpm_upgrade(const rpm::PackageSet & package_set, const GoalJobSet
 }
 
 void Goal::add_rpm_distro_sync(const std::string & spec, const GoalJobSettings & settings) {
-    p_impl->rpm_specs.push_back(std::make_tuple(Action::DISTRO_SYNC, spec, std::move(settings)));
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::DISTRO_SYNC, spec, settings));
 }
 
 void Goal::add_rpm_distro_sync(const GoalJobSettings & settings) {
-    p_impl->rpm_specs.push_back(std::make_tuple(Action::DISTRO_SYNC_ALL, std::string(), std::move(settings)));
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::DISTRO_SYNC_ALL, std::string(), settings));
 }
 
 void Goal::add_rpm_distro_sync(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
