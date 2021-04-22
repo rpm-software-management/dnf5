@@ -30,6 +30,8 @@ install(TARGETS libdnf LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
 # link libraries and set pkg-config requires
 
+find_package(toml11 REQUIRED)
+
 pkg_check_modules(LIBFMT REQUIRED fmt)
 list(APPEND LIBDNF_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBFMT_LIBRARIES})

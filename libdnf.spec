@@ -62,6 +62,7 @@ BuildRequires:  clang
 BuildRequires:  gcc-c++
 %endif
 
+BuildRequires:  toml11-devel
 BuildRequires:  pkgconfig(check)
 %if %{with tests}
 BuildRequires:  pkgconfig(cppunit)
