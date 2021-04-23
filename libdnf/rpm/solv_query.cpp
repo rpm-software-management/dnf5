@@ -203,6 +203,18 @@ inline bool name_compare_icase_lower_id(const std::pair<Id, Solvable *> first, I
     return first.first < id_name;
 }
 
+static inline bool name_compare_lower_solvable(const Solvable * first, const Solvable * second) {
+    return first->name < second->name;
+}
+
+static inline bool name_arch_compare_lower_solvable(const Solvable * first, const Solvable * second) {
+    if (first->name != second->name) {
+        return first->name < second->name;
+    }
+    return first->arch < second->arch;
+}
+
+
 }  //  namespace
 
 
@@ -315,6 +327,72 @@ SolvQuery & SolvQuery::ifilter_name(const std::vector<std::string> & patterns, l
 
     // Apply filter results to query
     if (cmp_not) {
+        *p_impl -= filter_result;
+    } else {
+        *p_impl &= filter_result;
+    }
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_name(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+    if (cmp_type != sack::QueryCmp::EQ && cmp_type != sack::QueryCmp::NEQ) {
+        throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
+    }
+    SolvSack * sack = get_sack();
+    Pool * pool = sack->p_impl->get_pool();
+    solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
+
+    if (sack != package_set.p_impl->sack.get()) {
+        throw UsedDifferentSack(
+            "Cannot perform the action with PackageSet instances initialized with different SolvSacks");
+    }
+    auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
+
+    for (PackageId candidate_id : *package_set.p_impl) {
+        Id name_id = solv::get_solvable(pool, candidate_id)->name;
+        auto low = std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
+        while (low != sorted_solvables.end() && (*low)->name == name_id) {
+            filter_result.add_unsafe(solv::get_package_id(pool, *low));
+            ++low;
+        }
+    }
+
+    // Apply filter results to query
+    if (cmp_type == sack::QueryCmp::NEQ) {
+        *p_impl -= filter_result;
+    } else {
+        *p_impl &= filter_result;
+    }
+    return *this;
+}
+
+SolvQuery & SolvQuery::ifilter_name_arch(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+    if (cmp_type != sack::QueryCmp::EQ && cmp_type != sack::QueryCmp::NEQ) {
+        throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
+    }
+    SolvSack * sack = get_sack();
+    Pool * pool = sack->p_impl->get_pool();
+    solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
+
+    if (sack != package_set.p_impl->sack.get()) {
+        throw UsedDifferentSack(
+            "Cannot perform the action with PackageSet instances initialized with different SolvSacks");
+    }
+
+    auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
+
+    for (PackageId candidate_id : *package_set.p_impl) {
+        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+        auto low = std::lower_bound(
+            sorted_solvables.begin(), sorted_solvables.end(), solvable, name_arch_compare_lower_solvable);
+        while (low != sorted_solvables.end() && (*low)->name == solvable->name && (*low)->arch == solvable->arch) {
+            filter_result.add_unsafe(candidate_id);
+            ++low;
+        }
+    }
+
+    // Apply filter results to query
+    if (cmp_type == sack::QueryCmp::NEQ) {
         *p_impl -= filter_result;
     } else {
         *p_impl &= filter_result;

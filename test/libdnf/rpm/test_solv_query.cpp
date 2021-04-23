@@ -203,6 +203,36 @@ void RpmSolvQueryTest::test_ifilter_name() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query9));
 }
 
+void RpmSolvQueryTest::test_ifilter_name_packgset() {
+    // packages with Name == "pkg"
+    libdnf::rpm::SolvQuery query1(sack);
+    query1.ifilter_name({"pkg"});
+    query1.ifilter_arch({"src"});
+
+    std::vector<std::string> expected = {"pkg-0:1.2-3.src"};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
+
+    libdnf::rpm::SolvQuery query2(sack);
+    query2.ifilter_name(query1);
+
+    std::vector<std::string> expected2 = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
+    CPPUNIT_ASSERT_EQUAL(expected2, to_vector_string(query2));
+}
+
+void RpmSolvQueryTest::test_ifilter_name_arch() {
+    // packages with Name == "pkg"
+    libdnf::rpm::SolvQuery query1(sack);
+    query1.ifilter_name({"pkg"});
+    query1.ifilter_arch({"src"});
+
+    std::vector<std::string> expected = {"pkg-0:1.2-3.src"};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
+
+    libdnf::rpm::SolvQuery query2(sack);
+    query2.ifilter_name_arch(query1);
+
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
+}
 
 void RpmSolvQueryTest::test_ifilter_nevra() {
     {
