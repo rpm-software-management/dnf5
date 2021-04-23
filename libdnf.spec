@@ -120,6 +120,7 @@ Package management library
 %package -n libdnf-cli
 Summary:        Library for working with a terminal in a command-line package manager
 BuildRequires:  pkgconfig(smartcols)
+Requires:       %{name}%{?_isa} = %{version}-%{release}
 
 %description -n libdnf-cli
 Library for working with a terminal in a command-line package manager.

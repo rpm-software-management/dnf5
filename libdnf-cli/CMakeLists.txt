@@ -26,6 +26,8 @@ install(TARGETS libdnf-cli LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
 # link libraries and set pkg-config requires
 
+target_link_libraries(libdnf-cli libdnf)
+
 pkg_check_modules(LIBFMT REQUIRED fmt)
 list(APPEND LIBDNF_CLI_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
 target_link_libraries(libdnf-cli ${LIBFMT_LIBRARIES})
