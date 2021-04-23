@@ -27,16 +27,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../../libdnf-cli/utils/units.hpp"
 
-//static struct libscols_table * create_transaction_table(bool with_status) {}
-
-//static void add_line_into_transaction_table() {}
-
-//template <class Query>
-//static void print_transaction_table(Query query, bool with_status) {}
 
 namespace libdnf::cli::output {
 
-// transaction det
+
 enum { COL_NEVRA, COL_REPO, COL_SIZE };
 
 template <class Package>
@@ -60,7 +54,9 @@ static void add_line_into_transaction_table(struct libscols_table *tb, struct li
 }
 
 template <class Goal>
-bool print_goal(Goal & goal) {
+bool print_transaction_table(Goal & goal) {
+    // TODO (nsella) split function into create/print if possible
+    //static struct libscols_table * create_transaction_table(bool with_status) {}
     auto installs_pkgs = goal.list_rpm_installs();
     auto reinstalls_pkgs = goal.list_rpm_reinstalls();
     auto upgrades_pkgs = goal.list_rpm_upgrades();
@@ -90,31 +86,31 @@ bool print_goal(Goal & goal) {
     if (!installs_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Installing:");
-        add_transaction_packages(tb, ln, installs_pkgs);
+        add_line_into_transaction_table(tb, ln, installs_pkgs);
     }
 
     if (!reinstalls_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Reinstalling:");
-        add_transaction_packages(tb, ln, reinstalls_pkgs);
+        add_line_into_transaction_table(tb, ln, reinstalls_pkgs);
     }
 
     if (!upgrades_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Upgrading:");
-        add_transaction_packages(tb, ln, upgrades_pkgs);
+        add_line_into_transaction_table(tb, ln, upgrades_pkgs);
     }
 
     if (!removes_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Removing:");
-        add_transaction_packages(tb, ln, removes_pkgs);
+        add_line_into_transaction_table(tb, ln, removes_pkgs);
     }
 
     if (!downgrades_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Downgrading:");
-        add_transaction_packages(tb, ln, downgrades_pkgs);
+        add_line_into_transaction_table(tb, ln, downgrades_pkgs);
     }
 
     scols_print_table(tb);

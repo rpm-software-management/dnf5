@@ -131,9 +131,8 @@ void TransactionCommand::run_transaction(Context & ctx) {
     }
 
     // print the transaction to the user and ask for confirmation
-    //print_transaction(transaction);
     DbusGoalWrapper dbus_goal_wrapper(transaction);
-    libdnf::cli::output::print_goal(dbus_goal_wrapper);
+    libdnf::cli::output::print_transaction_table(dbus_goal_wrapper);
 
     if (!userconfirm(ctx)) {
         std::cout << "Operation aborted." << std::endl;

@@ -83,7 +83,7 @@ void CmdRemove::run(Context & ctx) {
         return;
     }
 
-    if (!libdnf::cli::output::print_goal(goal)) {
+    if (!libdnf::cli::output::print_transaction_table(goal)) {
         return;
     }
 
