@@ -657,25 +657,23 @@ void Goal::Impl::add_upgrades_distrosync_to_goal(Action action, const std::strin
         return;
     }
     // Report when package is not installed
-    if (!utils::is_glob_pattern(spec.c_str()) && !nevra_pair.second.get_name().empty()) {
-        // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
-        rpm::SolvQuery all_installed(&sack);
-        all_installed.ifilter_installed();
-        bool obsoleters = false;
-        if (obsoletes) {
-            rpm::SolvQuery obsoleters_query(query);
-            obsoleters_query.ifilter_obsoletes(all_installed);
-            if (!obsoleters_query.empty()) {
-                obsoleters = true;
-            }
+    rpm::SolvQuery all_installed(&sack, rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
+    all_installed.ifilter_installed();
+    // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
+    bool obsoleters = false;
+    if (obsoletes) {
+        rpm::SolvQuery obsoleters_query(query);
+        obsoleters_query.ifilter_obsoletes(all_installed);
+        if (!obsoleters_query.empty()) {
+            obsoleters = true;
         }
-        if (!obsoleters) {
-            all_installed.ifilter_name({nevra_pair.second.get_name()});
-            if (all_installed.empty()) {
-                add_rpm_goal_report(action, GoalProblem::NOT_INSTALLED, settings, spec, {}, false);
-            } else if (all_installed.ifilter_arch({nevra_pair.second.get_name()}).empty()) {
-                add_rpm_goal_report(action, GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec, {}, false);
-            }
+    }
+    if (!obsoleters) {
+        all_installed.ifilter_name(query);
+        if (all_installed.empty()) {
+            add_rpm_goal_report(action, GoalProblem::NOT_INSTALLED, settings, spec, {}, false);
+        } else if (all_installed.ifilter_name_arch(query).empty()) {
+            add_rpm_goal_report(action, GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec, {}, false);
         }
     }
 
