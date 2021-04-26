@@ -339,6 +339,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
     auto & cfg_main = base->get_config();
     bool strict = settings.resolve_strict(cfg_main);
     bool best = settings.resolve_best(cfg_main);
+    bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
 
     auto multilib_policy = cfg_main.multilib_policy().get_value();
     auto obsoletes = cfg_main.obsoletes().get_value();
@@ -430,7 +431,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                     add_obseletes(base_query, selected);
                 }
                 solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
-                rpm_goal.add_install(tmp_queue, strict, best);
+                rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
                 selected.clear();
                 selected.p_impl->add_unsafe(rpm::PackageId(pool_solvable2id(pool, solvable)));
                 current_name = solvable->name;
@@ -439,7 +440,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 add_obseletes(base_query, selected);
             }
             solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
-            rpm_goal.add_install(tmp_queue, strict, best);
+            rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
             return GoalProblem::NO_PROBLEM;
         } else {
             if (add_obsoletes) {
@@ -460,7 +461,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             // TODO(jmracek) if reports:
             // base._report_already_installed(installed_query)
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
-            rpm_goal.add_install(tmp_queue, strict, best);
+            rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
             return GoalProblem::NO_PROBLEM;
         }
     } else {
@@ -562,10 +563,18 @@ void Goal::Impl::add_rpms_to_goal() {
                     //  TODO(jmracek)  report already installed nevra
                     ids.push_back(package_id.id);
                 }
-                rpm_goal.add_install(ids, settings.resolve_strict(cfg_main), settings.resolve_best(cfg_main));
+                rpm_goal.add_install(
+                    ids,
+                    settings.resolve_strict(cfg_main),
+                    settings.resolve_best(cfg_main),
+                    settings.resolve_clean_requirements_on_remove());
             } break;
             case Action::INSTALL_OR_REINSTALL:
-                rpm_goal.add_install(ids, settings.resolve_strict(cfg_main), settings.resolve_best(cfg_main));
+                rpm_goal.add_install(
+                    ids,
+                    settings.resolve_strict(cfg_main),
+                    settings.resolve_best(cfg_main),
+                    settings.resolve_clean_requirements_on_remove());
                 break;
             case Action::UPGRADE: {
                 rpm_goal.add_upgrade(

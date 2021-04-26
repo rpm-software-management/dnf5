@@ -58,6 +58,7 @@ void BaseGoalTest::test_install_not_available() {
     libdnf::Goal goal(base.get());
     base->get_config().strict().set(libdnf::Option::Priority::RUNTIME, false);
     base->get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
+    base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
     goal.add_rpm_install("not_available");
     goal.resolve(false);
     auto install_set = goal.list_rpm_installs();
@@ -79,7 +80,7 @@ void BaseGoalTest::test_install_not_available() {
     CPPUNIT_ASSERT_EQUAL(libdnf::Goal::Action::INSTALL, action);
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
     CPPUNIT_ASSERT_EQUAL(std::string("not_available"), spec);
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, settings.get_used_clean_requirements_on_remove());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, settings.get_used_clean_requirements_on_remove());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, settings.get_used_best());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, settings.get_used_strict());
 }
