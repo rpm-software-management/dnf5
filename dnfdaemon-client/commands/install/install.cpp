@@ -50,13 +50,13 @@ void CmdInstall::set_argument_parser(Context & ctx) {
     });
     ctx.arg_parser.get_root_command()->register_command(install);
 
-    strict_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
     auto strict = ctx.arg_parser.add_new_named_arg("strict");
     strict->set_long_name("strict");
-    strict->set_short_description("available but non-installable packages cannot be skipped");
-    strict->set_const_value("true");
-    strict->link_value(strict_option);
+    strict->set_short_description(
+        "Broken or unavailable packages cause the transaction to fail (yes) or will be skipped (no).");
+    strict->set_has_value(true);
+    strict->set_arg_value_help("<yes|no>");
+    strict->link_value(&strict_option);
     install->register_named_arg(strict);
 
     patterns_options = ctx.arg_parser.add_new_values();
@@ -87,7 +87,10 @@ void CmdInstall::run(Context & ctx) {
     }
 
     dnfdaemon::KeyValueMap options = {};
-    options["strict"] = strict_option->get_value();
+    // pass the `strict` value to the server only when explicitly set by command line option
+    if (strict_option.get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+        options["strict"] = strict_option.get_value();
+    }
 
     ctx.session_proxy->callMethod("install")
         .onInterface(dnfdaemon::INTERFACE_RPM)

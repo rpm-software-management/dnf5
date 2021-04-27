@@ -33,7 +33,7 @@ public:
     void run(Context & ctx) override;
 
 private:
-    libdnf::OptionBool * strict_option{nullptr};
+    libdnf::OptionBool strict_option{false};
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
 };
 

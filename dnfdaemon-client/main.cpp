@@ -18,10 +18,10 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "commands/install/install.hpp"
+#include "commands/remove/remove.hpp"
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/upgrade/upgrade.hpp"
-#include "commands/remove/remove.hpp"
 #include "context.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
