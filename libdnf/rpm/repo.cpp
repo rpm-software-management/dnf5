@@ -812,7 +812,7 @@ static std::vector<Key> rawkey2infos(int fd, Logger & logger) {
 
         // _extract_signing_subkey
         auto subkey = key->subkeys;
-        while (subkey && !key->subkeys->can_sign) {
+        while (subkey && !subkey->can_sign) {
             subkey = subkey->next;
         }
         if (subkey)
