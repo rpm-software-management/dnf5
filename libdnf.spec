@@ -20,7 +20,11 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 %bcond_without zchunk
 
 %bcond_with    html
+%if 0%{?rhel} == 8
+%bcond_with    man
+%else
 %bcond_without man
+%endif
 
 # TODO Go bindings fail to build, disable for now
 %bcond_with    go
@@ -43,7 +47,7 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 %global libmodulemd_version 2.5.0
 %global librepo_version 1.13.0
 %global libsolv_version 0.7.7
-%global swig_version 3.0.12
+%global swig_version 4
 %global zchunk_version 0.9.11
 
 
@@ -63,7 +67,7 @@ BuildRequires:  pkgconfig(check)
 BuildRequires:  pkgconfig(cppunit)
 %endif
 BuildRequires:  pkgconfig(fmt)
-BuildRequires:  pkgconfig(gpgme)
+BuildRequires:  (pkgconfig(gpgme) or gpgme-devel)
 BuildRequires:  pkgconfig(json-c)
 %if %{with comps}
 BuildRequires:  pkgconfig(libcomps)

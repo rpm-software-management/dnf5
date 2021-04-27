@@ -16,8 +16,13 @@ set_target_properties(libdnf PROPERTIES OUTPUT_NAME "dnf")
 set_target_properties(libdnf PROPERTIES SOVERSION ${DNF_SO_VERSION})
 # required to have dlopen symbol
 target_link_libraries(libdnf ${CMAKE_DL_LIBS})
+
 # required by clang
 target_link_libraries(libdnf stdc++)
+
+# link stdc++fs to make experimental std::filesystem available on gcc 8:
+# https://gcc.gnu.org/onlinedocs/libstdc++/manual/using.html
+target_link_libraries(libdnf stdc++fs)
 
 # install libdnf.so
 install(TARGETS libdnf LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
@@ -62,8 +67,13 @@ include_directories(${GLIB2_INCLUDE_DIRS})
 target_link_libraries(libdnf ${GLIB2_LIBRARIES})
 
 # GPGME
-PKG_CHECK_MODULES(GPGME gpgme REQUIRED)
-list(APPEND LIBDNF_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
+pkg_check_modules(GPGME gpgme)
+if(NOT GPGME_FOUND)
+    # gpgme.pc is not available on RHEL 8 / CentOS Stream 8
+    set(GPGME_MODULE_NAME gpgme)
+    set(GPGME_LIBRARIES gpgme)
+endif()
+list(APPEND LIBDNF_PC_REQUIRES "${GPGME_MODULE_NAME}")
 target_link_libraries(libdnf ${GPGME_LIBRARIES})
 
 pkg_check_modules(LIBREPO REQUIRED librepo>=1.13.0)
