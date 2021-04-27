@@ -56,6 +56,10 @@ void CmdRemove::set_argument_parser(Context & ctx) {
         patterns_options);
     keys->set_short_description("List of packages to remove");
     remove->register_positional_arg(keys);
+
+    // run remove command allways with allow_erasing on
+    ctx.allow_erasing->set(libdnf::Option::Priority::RUNTIME, true);
+
 }
 
 void CmdRemove::run(Context & ctx) {
