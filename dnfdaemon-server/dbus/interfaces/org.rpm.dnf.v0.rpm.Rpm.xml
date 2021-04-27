@@ -38,13 +38,43 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
           <varlistentry>
             <term>patterns: list of strings</term>
             <listitem><para>
-              any package with nevra matching to any of patterns is returned
+              any package matching to any of patterns is returned
             </para></listitem>
           </varlistentry>
           <varlistentry>
             <term>package_attrs: list of strings</term>
             <listitem><para>
               list of package attributes that are returned
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>with_nevra: bool (default true)</term>
+            <listitem><para>
+              match patterns against available packages NEVRAs
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>with_provides: bool (default true)</term>
+            <listitem><para>
+              match patterns against available packages provides
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>with_filenames: bool (default true)</term>
+            <listitem><para>
+              match patterns against names of the files in available packages
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>with_src: bool (default true)</term>
+            <listitem><para>
+              include source rpms into the results
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>icase: bool (default true)</term>
+            <listitem><para>
+              ignore case while matching patterns
             </para></listitem>
           </varlistentry>
         </variablelist>

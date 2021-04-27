@@ -144,13 +144,20 @@ void Rpm::list(sdbus::MethodCall && call) {
                 std::vector<std::string> default_patterns{};
                 std::vector<std::string> patterns =
                     key_value_map_get<std::vector<std::string>>(options, "patterns", std::move(default_patterns));
+                // packages matching flags
+                bool icase = key_value_map_get<bool>(options, "icase", true);
+                bool with_nevra = key_value_map_get<bool>(options, "with_nevra", true);
+                bool with_provides = key_value_map_get<bool>(options, "with_provides", true);
+                bool with_filenames = key_value_map_get<bool>(options, "with_filenames", true);
+                bool with_src = key_value_map_get<bool>(options, "with_src", true);
 
                 libdnf::rpm::PackageSet result_pset(&solv_sack);
                 libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
                 if (patterns.size() > 0) {
                     for (auto & pattern : patterns) {
                         libdnf::rpm::SolvQuery solv_query(full_solv_query);
-                        solv_query.resolve_pkg_spec(pattern, true, true, true, true, true, {});
+                        solv_query.resolve_pkg_spec(
+                            pattern, icase, with_nevra, with_provides, with_filenames, with_src, {});
                         result_pset |= solv_query;
                     }
                 } else {
