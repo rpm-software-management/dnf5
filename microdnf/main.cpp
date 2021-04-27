@@ -17,8 +17,9 @@ You should have received a copy of the GNU General Public License
 along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "commands/install/install.hpp"
+#include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
+#include "commands/install/install.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
 #include "commands/repolist/repolist.hpp"
@@ -56,11 +57,12 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     help->set_short_name('h');
     help->set_short_description("Print help");
     help->set_parse_hook_func([microdnf](
-                               [[maybe_unused]] ArgumentParser::NamedArg * arg,
-                               [[maybe_unused]] const char * option,
-                               [[maybe_unused]] const char * value) {
+                                  [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                  [[maybe_unused]] const char * option,
+                                  [[maybe_unused]] const char * value) {
         microdnf->help();
-        return true;});
+        return true;
+    });
     microdnf->register_named_arg(help);
 
     // --setopt argument support
@@ -69,14 +71,15 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     setopt->set_has_value(true);
     setopt->set_arg_value_help("KEY=VALUE");
     setopt->set_short_description("set arbitrary config and repo options");
-    setopt->set_description(R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
+    setopt->set_description(
+        R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
               <option>.  Values  for configuration options like excludepkgs, includepkgs, installonlypkgs and tsflags are appended to the original value,
               they do not override it. However, specifying an empty value (e.g. --setopt=tsflags=) will clear the option.)**");
     setopt->set_parse_hook_func([&ctx](
-                               [[maybe_unused]] ArgumentParser::NamedArg * arg,
-                               [[maybe_unused]] const char * option,
-                               const char * value) {
-        auto val = strchr(value+1, '=');
+                                    [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                    [[maybe_unused]] const char * option,
+                                    const char * value) {
+        auto val = strchr(value + 1, '=');
         if (!val) {
             throw std::runtime_error(fmt::format("setopt: Badly formated argument value \"{}\"", value));
         }
@@ -84,20 +87,22 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
         auto dot_pos = key.rfind('.');
         if (dot_pos != std::string::npos) {
             if (dot_pos == key.size() - 1) {
-                throw std::runtime_error(std::string("setopt: Badly formated argument value: Last key character cannot be '.': ") + value);
+                throw std::runtime_error(
+                    std::string("setopt: Badly formated argument value: Last key character cannot be '.': ") + value);
             }
             // Store repository option to vector. Use it later when repositories configuration will be loaded.
-            ctx.setopts.emplace_back(key, val+1);
+            ctx.setopts.emplace_back(key, val + 1);
         } else {
             // Apply global option immediately.
             auto & conf = ctx.base.get_config();
             try {
-                conf.opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, val+1);
+                conf.opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, val + 1);
             } catch (const std::exception & ex) {
                 throw std::runtime_error(std::string("setopt: \"") + value + "\": " + ex.what());
             }
         }
-        return true;});
+        return true;
+    });
     microdnf->register_named_arg(setopt);
 
     // --setvar argument support
@@ -141,7 +146,8 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     comment->set_has_value(true);
     comment->set_arg_value_help("COMMENT");
     comment->set_short_description("add a comment to transaction");
-    comment->set_description("Adds a comment to the action. If a transaction takes place, the comment is stored in it.");
+    comment->set_description(
+        "Adds a comment to the action. If a transaction takes place, the comment is stored in it.");
     comment->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -209,6 +215,7 @@ int main(int argc, char * argv[]) {
     // Register commands
     context.commands.push_back(std::make_unique<microdnf::CmdInstall>());
     context.commands.push_back(std::make_unique<microdnf::CmdDownload>());
+    context.commands.push_back(std::make_unique<microdnf::CmdDowngrade>());
     context.commands.push_back(std::make_unique<microdnf::CmdReinstall>());
     context.commands.push_back(std::make_unique<microdnf::CmdRemove>());
     context.commands.push_back(std::make_unique<microdnf::CmdRepolist>());
@@ -268,10 +275,7 @@ int main(int argc, char * argv[]) {
     log_router.swap_logger(logger, 0);
     dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
 
-    base.get_vars().load(
-        base.get_config().installroot().get_value(),
-        base.get_config().varsdir().get_value()
-    );
+    base.get_vars().load(base.get_config().installroot().get_value(), base.get_config().varsdir().get_value());
 
     // Preconfigure selected command
     context.selected_command->pre_configure(context);
@@ -287,14 +291,13 @@ int main(int argc, char * argv[]) {
         auto last_dot_pos = setopt.first.rfind('.');
         auto repo_pattern = setopt.first.substr(0, last_dot_pos);
         auto query = rpm_repo_sack.new_query().ifilter_id(libdnf::sack::QueryCmp::GLOB, repo_pattern);
-        auto key = setopt.first.substr(last_dot_pos+1);
+        auto key = setopt.first.substr(last_dot_pos + 1);
         for (auto & repo : query.get_data()) {
             try {
                 repo->get_config().opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, setopt.second);
             } catch (const std::exception & ex) {
                 std::cout << "setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what() << std::endl;
             }
-
         }
     }
 
