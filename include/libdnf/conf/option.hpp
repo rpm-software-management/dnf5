@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -62,6 +62,15 @@ public:
         const char * get_description() const noexcept override { return "Invalid value"; }
     };
 
+    /// Exception that is thrown when a write to a locked option is detected.
+    class WriteLocked : public LogicError {
+    public:
+        using LogicError::LogicError;
+        const char * get_domain_name() const noexcept override { return "libdnf::Option"; }
+        const char * get_name() const noexcept override { return "WriteLocked"; }
+        const char * get_description() const noexcept override { return "Attempt to write to a locked option"; }
+    };
+
     explicit Option(Priority priority = Priority::EMPTY);
     Option(const Option & src) = default;
     virtual ~Option() = default;
@@ -87,11 +96,24 @@ public:
     /// @replaces libdnf:conf/Option.hpp:method:Option.empty()
     virtual bool empty() const noexcept;
 
+    /// Locks the option.
+    /// The locked option is read-only. Its value cannot be changed.
+    ///
+    /// @since 1.0
+    void lock() noexcept;
+
+    /// Checks if the option is locked.
+    ///
+    /// @return 'true' if the option is locked
+    /// @since 1.0
+    bool is_locked() const noexcept;
+
 protected:
     void set_priority(Priority priority);
 
 private:
     Priority priority;
+    bool locked{false};
 };
 
 inline Option::Option(Priority priority) : priority(priority) {}
@@ -106,6 +128,14 @@ inline bool Option::empty() const noexcept {
 
 inline void Option::set_priority(Priority priority) {
     this->priority = priority;
+}
+
+inline void Option::lock() noexcept {
+    locked = true;
+}
+
+inline bool Option::is_locked() const noexcept {
+    return locked;
 }
 
 }  // namespace libdnf

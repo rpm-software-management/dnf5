@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -92,6 +92,9 @@ T OptionEnum<T>::from_string(const std::string & value) const {
 
 template <typename T>
 void OptionEnum<T>::set(Priority priority, ValueType value) {
+    if (is_locked()) {
+        throw WriteLocked("set()");
+    }
     if (priority >= this->priority) {
         test(value);
         this->value = value;
@@ -159,6 +162,9 @@ std::string OptionEnum<std::string>::from_string(const std::string & value) cons
 }
 
 void OptionEnum<std::string>::set(Priority priority, const std::string & value) {
+    if (is_locked()) {
+        throw WriteLocked("set()");
+    }
     auto val = from_string(value);
     if (priority >= get_priority()) {
         test(val);

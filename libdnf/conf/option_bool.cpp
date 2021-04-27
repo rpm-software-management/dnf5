@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -33,6 +33,9 @@ OptionBool::OptionBool(const OptionBool & src) : Option(src), default_value(src.
 }
 
 OptionBool & OptionBool::operator=(const OptionBool & src) {
+    if (is_locked()) {
+        throw WriteLocked("operator=");
+    }
     if (this == &src) {
         return *this;
     }
@@ -81,6 +84,9 @@ bool OptionBool::from_string(const std::string & value) const {
 }
 
 void OptionBool::set(Priority priority, bool value) {
+    if (is_locked()) {
+        throw WriteLocked("set()");
+    }
     if (priority >= get_priority()) {
         this->value = value;
         set_priority(priority);

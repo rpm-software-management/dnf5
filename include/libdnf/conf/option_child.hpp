@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -139,6 +139,9 @@ inline Option::Priority OptionChild<ParentOptionType, Enable>::get_priority() co
 template <class ParentOptionType, class Enable>
 inline void OptionChild<ParentOptionType, Enable>::set(
     Priority priority, const typename ParentOptionType::ValueType & value) {
+    if (is_locked()) {
+        throw WriteLocked("set()");
+    }
     if (priority >= Option::get_priority()) {
         parent->test(value);
         set_priority(priority);
@@ -148,9 +151,7 @@ inline void OptionChild<ParentOptionType, Enable>::set(
 
 template <class ParentOptionType, class Enable>
 inline void OptionChild<ParentOptionType, Enable>::set(Priority priority, const std::string & value) {
-    if (priority >= Option::get_priority()) {
-        set(priority, parent->from_string(value));
-    }
+    set(priority, parent->from_string(value));
 }
 
 template <class ParentOptionType, class Enable>
@@ -204,6 +205,9 @@ inline void OptionChild<
     ParentOptionType,
     typename std::enable_if<std::is_same<typename ParentOptionType::ValueType, std::string>::value>::type>::
     set(Priority priority, const std::string & value) {
+    if (is_locked()) {
+        throw WriteLocked("set()");
+    }
     auto val = parent->from_string(value);
     if (priority >= Option::get_priority()) {
         parent->test(val);

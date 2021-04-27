@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -86,6 +86,9 @@ void OptionPath::test(const std::string & value) const {
 }
 
 void OptionPath::set(Priority priority, const std::string & value) {
+    if (is_locked()) {
+        throw WriteLocked("set()");
+    }
     if (priority >= get_priority()) {
         OptionString::test(value);
         auto val = remove_file_prot(value);

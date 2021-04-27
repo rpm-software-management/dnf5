@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -88,6 +88,9 @@ OptionStringList::ValueType OptionStringList::from_string(const std::string & va
 }
 
 void OptionStringList::set(Priority priority, const ValueType & value) {
+    if (is_locked()) {
+        throw WriteLocked("set()");
+    }
     if (priority >= get_priority()) {
         test(value);
         this->value = value;

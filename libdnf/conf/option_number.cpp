@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -89,6 +89,9 @@ T OptionNumber<T>::from_string(const std::string & value) const {
 
 template <typename T>
 void OptionNumber<T>::set(Priority priority, ValueType value) {
+    if (is_locked()) {
+        throw WriteLocked("set()");
+    }
     if (priority >= get_priority()) {
         test(value);
         this->value = value;
