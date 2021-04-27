@@ -1,0 +1,11 @@
+=Ver: 3.0
+
+=Pkg: cmdline 1.2 4 src
+
+=Pkg: cmdline 1.2 4 noarch
+=Prv: cmdline = 1.2-4
+
+=Pkg: cmdline 1.2 1 src
+
+=Pkg: cmdline 1.2 1 noarch
+=Prv: cmdline = 1.2-1

@@ -41,6 +41,7 @@ class BaseGoalTest : public RepoFixture {
     CPPUNIT_TEST(test_upgrade);
     CPPUNIT_TEST(test_upgrade_not_available);
     CPPUNIT_TEST(test_upgrade_all);
+    CPPUNIT_TEST(test_downgrade);
     CPPUNIT_TEST(test_distrosync);
     CPPUNIT_TEST(test_distrosync_all);
 #endif
@@ -63,6 +64,7 @@ public:
     void test_upgrade();
     void test_upgrade_not_available();
     void test_upgrade_all();
+    void test_downgrade();
     void test_distrosync();
     void test_distrosync_all();
 };
