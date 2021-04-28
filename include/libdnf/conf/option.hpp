@@ -99,8 +99,9 @@ public:
     /// Locks the option.
     /// The locked option is read-only. Its value cannot be changed.
     ///
+    /// @param first_comment The comment will be saved when lock() is first called
     /// @since 1.0
-    void lock() noexcept;
+    void lock(const std::string & first_comment);
 
     /// Checks if the option is locked.
     ///
@@ -110,10 +111,12 @@ public:
 
 protected:
     void set_priority(Priority priority);
+    const std::string & get_lock_comment() const noexcept;
 
 private:
     Priority priority;
     bool locked{false};
+    std::string lock_comment;
 };
 
 inline Option::Option(Priority priority) : priority(priority) {}
@@ -130,12 +133,19 @@ inline void Option::set_priority(Priority priority) {
     this->priority = priority;
 }
 
-inline void Option::lock() noexcept {
-    locked = true;
+inline void Option::lock(const std::string & first_comment) {
+    if (!locked) {
+        lock_comment = first_comment;
+        locked = true;
+    }
 }
 
 inline bool Option::is_locked() const noexcept {
     return locked;
+}
+
+inline const std::string & Option::get_lock_comment() const noexcept {
+    return lock_comment;
 }
 
 }  // namespace libdnf
