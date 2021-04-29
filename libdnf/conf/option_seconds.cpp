@@ -26,7 +26,7 @@ OptionSeconds::OptionSeconds(ValueType default_value, ValueType min, ValueType m
 
 OptionSeconds::OptionSeconds(ValueType default_value, ValueType min) : OptionNumber(default_value, min) {}
 
-OptionSeconds::OptionSeconds(ValueType default_value) : OptionNumber(default_value) {}
+OptionSeconds::OptionSeconds(ValueType default_value) : OptionNumber(default_value, -1) {}
 
 OptionSeconds::ValueType OptionSeconds::from_string(const std::string & value) const {
     constexpr int seconds_in_minute = 60;
