@@ -37,7 +37,7 @@ void TransactionCommand::run_transaction(Context & ctx) {
     dnfdaemon::KeyValueMap options = {};
 
     // resolve the transaction
-    options["allow_erasing"] = ctx.allow_erasing->get_value();
+    options["allow_erasing"] = ctx.allow_erasing.get_value();
     std::vector<dnfdaemon::DbusTransactionItem> transaction;
     ctx.session_proxy->callMethod("resolve")
         .onInterface(dnfdaemon::INTERFACE_RPM)

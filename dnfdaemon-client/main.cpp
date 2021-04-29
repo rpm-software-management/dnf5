@@ -68,7 +68,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     verbose->set_long_name("verbose");
     verbose->set_short_description("increase output verbosity");
     verbose->set_const_value("true");
-    verbose->link_value(ctx.verbose.get());
+    verbose->link_value(&ctx.verbose);
     dnfdaemon_client->register_named_arg(verbose);
 
     auto assume_yes = ctx.arg_parser.add_new_named_arg("assumeyes");
@@ -76,21 +76,21 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     assume_yes->set_short_name('y');
     assume_yes->set_short_description("automatically answer yes for all questions");
     assume_yes->set_const_value("true");
-    assume_yes->link_value(ctx.assume_yes.get());
+    assume_yes->link_value(&ctx.assume_yes);
     dnfdaemon_client->register_named_arg(assume_yes);
 
     auto assume_no = ctx.arg_parser.add_new_named_arg("assumeno");
     assume_no->set_long_name("assumeno");
     assume_no->set_short_description("automatically answer no for all questions");
     assume_no->set_const_value("true");
-    assume_no->link_value(ctx.assume_no.get());
+    assume_no->link_value(&ctx.assume_no);
     dnfdaemon_client->register_named_arg(assume_no);
 
     auto allow_erasing = ctx.arg_parser.add_new_named_arg("allow_erasing");
     allow_erasing->set_long_name("allowerasing");
     allow_erasing->set_short_description("installed package can be removed to resolve the transaction");
     allow_erasing->set_const_value("true");
-    allow_erasing->link_value(ctx.allow_erasing.get());
+    allow_erasing->link_value(&ctx.allow_erasing);
     dnfdaemon_client->register_named_arg(allow_erasing);
 
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");

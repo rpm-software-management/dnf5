@@ -71,10 +71,10 @@ public:
     std::unique_ptr<sdbus::IProxy> session_proxy;
 
     // global command line arguments
-    std::unique_ptr<libdnf::OptionBool> verbose = std::make_unique<libdnf::OptionBool>(false);
-    std::unique_ptr<libdnf::OptionBool> assume_yes = std::make_unique<libdnf::OptionBool>(false);
-    std::unique_ptr<libdnf::OptionBool> assume_no = std::make_unique<libdnf::OptionBool>(false);
-    std::unique_ptr<libdnf::OptionBool> allow_erasing = std::make_unique<libdnf::OptionBool>(false);
+    libdnf::OptionBool verbose{false};
+    libdnf::OptionBool assume_yes{false};
+    libdnf::OptionBool assume_no{false};
+    libdnf::OptionBool allow_erasing{false};
 
 private:
     /// system d-bus connection
