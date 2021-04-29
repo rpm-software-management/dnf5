@@ -78,7 +78,7 @@ std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & ba
 
     // use db_path based on persistdir
     auto & config = base.get_config();
-    // TODO(jrohel): Lock "installroot" after read its value
+    config.installroot().lock("installroot locked by transaction_db_connect");
     std::filesystem::path path(config.installroot().get_value());
     std::filesystem::path persistdir(config.persistdir().get_value());
     path /= persistdir.relative_path();

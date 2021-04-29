@@ -451,7 +451,7 @@ bool SolvSack::Impl::load_system_repo() {
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, id), &libsolv_repo_free);
 
     logger.debug("load_system_repo(): fetching rpmdb");
-    // TODO(jrohel): Lock "installroot" after read its value
+    base->get_config().installroot().lock("installroot locked by load_system_repo");
     pool_set_rootdir(pool, base->get_config().installroot().get_value().c_str());
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
     int rc = repo_add_rpmdb(libsolv_repo.get(), nullptr, flagsrpm);
