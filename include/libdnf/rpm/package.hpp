@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "checksum.hpp"
 #include "reldep_list.hpp"
+#include "repo_query.hpp"
 #include "solv_sack.hpp"
 
 #include <string>
@@ -391,7 +392,7 @@ public:
     //
     // @replaces dnf:dnf/package.py:attribute:Package.repo
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_repo(DnfPackage * pkg)
-    Repo * get_repo() const;
+    libdnf::rpm::RepoWeakPtr get_repo() const;
 
     /// @return Id of the repository the package belongs to.
     /// @since 5.0

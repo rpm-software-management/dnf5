@@ -285,13 +285,14 @@ unsigned long long Package::get_rpmdbid() const {
     return solv::get_rpmdbid(pool, id.id);
 }
 
-Repo * Package::get_repo() const {
+libdnf::rpm::RepoWeakPtr Package::get_repo() const {
     Pool * pool = sack->p_impl->pool;
-    return solv::get_repo(pool, id.id);
+    return solv::get_repo(pool, id.id)->get_weak_ptr();
 }
 
 std::string Package::get_repo_id() const {
-    return get_repo()->get_id();
+    Pool * pool = sack->p_impl->pool;
+    return solv::get_repo(pool, id.id)->get_id();
 }
 
 Checksum Package::get_checksum() const {

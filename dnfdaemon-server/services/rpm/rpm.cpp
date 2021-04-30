@@ -94,7 +94,7 @@ dnfdaemon::KeyValueMap package_to_map(
                 dbus_package.emplace(attr, libdnf_package.get_arch());
                 break;
             case PackageAttribute::repo:
-                dbus_package.emplace(attr, libdnf_package.get_repo()->get_id());
+                dbus_package.emplace(attr, libdnf_package.get_repo_id());
                 break;
             case PackageAttribute::is_installed:
                 dbus_package.emplace(attr, libdnf_package.is_installed());
@@ -261,7 +261,7 @@ static void set_trans_pkg(
     libdnf::transaction::Package & trans_pkg,
     libdnf::transaction::TransactionItemAction action) {
     libdnf::rpm::copy_nevra_attributes(package, trans_pkg);
-    trans_pkg.set_repoid(package.get_repo()->get_id());
+    trans_pkg.set_repoid(package.get_repo_id());
     trans_pkg.set_action(action);
     //TODO(jrohel): set actual reason
     trans_pkg.set_reason(libdnf::transaction::TransactionItemReason::UNKNOWN);
@@ -345,7 +345,7 @@ void download_packages(Session & session, libdnf::Goal & goal) {
     download_pkgs.insert(download_pkgs.end(), upgrades_pkgs.begin(), upgrades_pkgs.end());
     download_pkgs.insert(download_pkgs.end(), downgrades_pkgs.begin(), downgrades_pkgs.end());
     for (auto package : download_pkgs) {
-        auto repo = package.get_repo();
+        auto repo = package.get_repo().get();
         auto checksum = package.get_checksum();
         destination = std::filesystem::path(repo->get_cachedir()) / "packages";
         std::filesystem::create_directory(destination);

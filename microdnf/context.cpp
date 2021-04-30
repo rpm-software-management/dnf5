@@ -392,7 +392,7 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
         destination = dest_dir;
     }
     for (auto package : packages) {
-        auto repo = package.get_repo();
+        auto repo = package.get_repo().get();
         auto checksum = package.get_checksum();
         if (!dest_dir) {
             destination = std::filesystem::path(repo->get_cachedir()) / "packages";
@@ -694,7 +694,7 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx) {
 
 static void set_trans_pkg(libdnf::rpm::Package & package, libdnf::transaction::Package & trans_pkg, libdnf::transaction::TransactionItemAction action) {
         libdnf::rpm::copy_nevra_attributes(package, trans_pkg);
-        trans_pkg.set_repoid(package.get_repo()->get_id());
+        trans_pkg.set_repoid(package.get_repo_id());
         trans_pkg.set_action(action);
         //TODO(jrohel): set actual reason
         trans_pkg.set_reason(libdnf::transaction::TransactionItemReason::UNKNOWN);

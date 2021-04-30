@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "config_repo.hpp"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 
 #include <memory>
 
@@ -36,6 +37,8 @@ class Base;
 
 namespace libdnf::rpm {
 
+class Repo;
+using RepoWeakPtr = WeakPtr<Repo, false>;
 class SolvSack;
 
 class LrException : public RuntimeError {
@@ -356,6 +359,8 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
     void set_substitutions(const std::map<std::string, std::string> & substitutions);
 
+    RepoWeakPtr get_weak_ptr();
+
     ~Repo();
 
 private:
@@ -364,7 +369,12 @@ private:
     friend class SolvSack;
     friend struct PackageTarget;
     std::unique_ptr<Impl> p_impl;
+    WeakPtrGuard<Repo, false> data_guard;
 };
+
+
+inline RepoWeakPtr Repo::get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
+
 
 struct Downloader {
 public:
