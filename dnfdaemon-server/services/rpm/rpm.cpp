@@ -61,7 +61,8 @@ const static std::map<std::string, PackageAttribute> package_attributes{
     {"nevra", PackageAttribute::nevra},
     {"full_nevra", PackageAttribute::full_nevra}};
 
-dnfdaemon::KeyValueMap package_to_map(libdnf::rpm::Package & libdnf_package, std::vector<std::string> & attributes) {
+dnfdaemon::KeyValueMap package_to_map(
+    const libdnf::rpm::Package & libdnf_package, std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_package;
     // add package id by default
     dbus_package.emplace(std::make_pair("id", libdnf_package.get_id().id));
@@ -119,7 +120,7 @@ void Rpm::dbus_register() {
             this->remove(std::move(call));
         });
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_RPM, "resolve", "a{sv}", "a(usssssst)", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_RPM, "resolve", "a{sv}", "a(ua{sv})", [this](sdbus::MethodCall call) -> void {
             this->resolve(std::move(call));
         });
     dbus_object->registerMethod(
@@ -189,16 +190,9 @@ void packages_to_transaction(
     std::vector<dnfdaemon::DbusTransactionItem> & result,
     const libdnf::transaction::TransactionItemAction action,
     const std::vector<libdnf::rpm::Package> & packages) {
+    std::vector<std::string> attr{"name", "epoch", "version", "release", "arch", "repo", "size"};
     for (auto & p : packages) {
-        result.push_back(dnfdaemon::DbusTransactionItem(
-            static_cast<unsigned int>(action),
-            p.get_name(),
-            p.get_epoch(),
-            p.get_version(),
-            p.get_release(),
-            p.get_arch(),
-            p.get_repo()->get_id(),
-            p.get_size()));
+        result.push_back(dnfdaemon::DbusTransactionItem(static_cast<unsigned int>(action), package_to_map(p, attr)));
     }
 }
 

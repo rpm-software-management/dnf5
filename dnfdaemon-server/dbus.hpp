@@ -33,15 +33,8 @@ using KeyValueMapList = std::vector<KeyValueMap>;
 enum class RepoStatus { NOT_READY, PENDING, READY, ERROR };
 
 using DbusTransactionItem = sdbus::Struct<
-    unsigned int, // action
-    std::string,  // name
-    std::string,  // epoch
-    std::string,  // version
-    std::string,  // release
-    std::string,  // arch
-    std::string,  // repoid
-    uint64_t      // size
-    >;
+    unsigned int,  //action
+    KeyValueMap>;
 
 
 // constants

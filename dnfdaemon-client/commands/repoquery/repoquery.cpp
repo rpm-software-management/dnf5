@@ -20,15 +20,16 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include "repoquery.hpp"
 
 #include "../../context.hpp"
+#include "../../wrappers/dbus_package_wrapper.hpp"
+
+#include "libdnf-cli/output/repoquery.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
+#include <fmt/format.h>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/solv_query.hpp>
-#include <fmt/format.h>
-
-#include "libdnf-cli/output/repoquery.hpp"
 
 #include <iostream>
 
@@ -77,10 +78,10 @@ void CmdRepoquery::set_argument_parser(Context & ctx) {
     repoquery->set_named_args_help_header("Optional arguments:");
     repoquery->set_positional_args_help_header("Positional arguments:");
     repoquery->set_parse_hook_func([this, &ctx](
-                                [[maybe_unused]] ArgumentParser::Argument * arg,
-                                [[maybe_unused]] const char * option,
-                                [[maybe_unused]] int argc,
-                                [[maybe_unused]] const char * const argv[]) {
+                                       [[maybe_unused]] ArgumentParser::Argument * arg,
+                                       [[maybe_unused]] const char * option,
+                                       [[maybe_unused]] int argc,
+                                       [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
     });
@@ -93,34 +94,11 @@ void CmdRepoquery::set_argument_parser(Context & ctx) {
     ctx.arg_parser.get_root_command()->register_command(repoquery);
 }
 
-class PackageDbus {
-public:
-    explicit PackageDbus(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
-    int get_id() { return rawdata.at("id"); }
-    std::string get_name() const { return rawdata.at("name"); }
-    std::string get_epoch() const { return rawdata.at("epoch"); }
-    std::string get_version() const { return rawdata.at("version"); }
-    std::string get_release() const { return rawdata.at("release"); }
-    std::string get_arch() const { return rawdata.at("arch"); }
-    std::string get_repo_id() const { return rawdata.at("repo"); }
-    std::string get_nevra() const { return rawdata.at("nevra"); }
-    std::string get_full_nevra() const { return rawdata.at("full_nevra"); }
-    // TODO implement functions
-    int get_size() const { return -1; }
-    std::string get_sourcerpm() const { return std::string(); }
-    std::string get_summary() const { return std::string(); }
-    std::string get_url() const { return std::string(); }
-    std::string get_license() const { return std::string(); }
-    std::string get_description() const { return std::string(); }
-
-private:
-    dnfdaemon::KeyValueMap rawdata;
-};
-
 dnfdaemon::KeyValueMap CmdRepoquery::session_config([[maybe_unused]] Context & ctx) {
     dnfdaemon::KeyValueMap cfg = {};
     cfg["load_system_repo"] = installed_option->get_value();
-    cfg["load_available_repos"] = (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value());
+    cfg["load_available_repos"] =
+        (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value());
     return cfg;
 }
 
@@ -138,13 +116,10 @@ void CmdRepoquery::run(Context & ctx) {
     }
     options["patterns"] = patterns;
     if (info_option->get_value()) {
-        options.insert(std::pair<std::string, std::vector<std::string>>
-            ("package_attrs",
-            {"name", "epoch", "version", "release", "arch", "repo"}));
+        options.insert(std::pair<std::string, std::vector<std::string>>(
+            "package_attrs", {"name", "epoch", "version", "release", "arch", "repo"}));
     } else {
-        options.insert(std::pair<std::string, std::vector<std::string>>
-            ("package_attrs",
-            {"full_nevra"}));
+        options.insert(std::pair<std::string, std::vector<std::string>>("package_attrs", {"full_nevra"}));
     }
 
     dnfdaemon::KeyValueMapList packages;
@@ -157,7 +132,7 @@ void CmdRepoquery::run(Context & ctx) {
     auto num_packages = packages.size();
     for (auto & raw_package : packages) {
         --num_packages;
-        PackageDbus package(raw_package);
+        DbusPackageWrapper package(raw_package);
         if (info_option->get_value()) {
             // TODO(mblaha) use smartcols for this output
             libdnf::cli::output::print_package_info_table(package);

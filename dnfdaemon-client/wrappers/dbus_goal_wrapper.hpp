@@ -20,11 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_CLIENT_WRAPPERS_DBUS_GOAL_WRAPPER_HPP
 #define DNFDAEMON_CLIENT_WRAPPERS_DBUS_GOAL_WRAPPER_HPP
 
-#include <vector>
+#include "dbus_package_wrapper.hpp"
 
 #include <libdnf/transaction/transaction_item_action.hpp>
 
-#include "dbus_package_wrapper.hpp"
+#include <vector>
 
 using namespace libdnf::transaction;
 

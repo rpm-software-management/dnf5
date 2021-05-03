@@ -20,27 +20,38 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_CLIENT_WRAPPER_DBUS_PACKAGE_WRAPPER_HPP
 #define DNFDAEMON_CLIENT_WRAPPER_DBUS_PACKAGE_WRAPPER_HPP
 
-#include <vector>
-
 #include <dnfdaemon-server/dbus.hpp>
 #include <libdnf/transaction/transaction_item_action.hpp>
+
+#include <vector>
 
 using namespace libdnf::transaction;
 
 namespace dnfdaemon::client {
 
 class DbusPackageWrapper {
-
 public:
-    DbusPackageWrapper(dnfdaemon::DbusTransactionItem transactionitem);
+    explicit DbusPackageWrapper(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
 
-    uint64_t get_size() const { return std::get<7>(ti); }
-    std::string get_full_nevra() const { return full_nevra; }
-    std::string get_repo_id() const { return std::get<6>(ti); }
+    int get_id() { return rawdata.at("id"); }
+    std::string get_name() const { return rawdata.at("name"); }
+    std::string get_epoch() const { return rawdata.at("epoch"); }
+    std::string get_version() const { return rawdata.at("version"); }
+    std::string get_release() const { return rawdata.at("release"); }
+    std::string get_arch() const { return rawdata.at("arch"); }
+    std::string get_repo_id() const { return rawdata.at("repo"); }
+    std::string get_nevra() const { return rawdata.at("nevra"); }
+    std::string get_full_nevra() const { return rawdata.at("full_nevra"); }
+    // TODO implement functions
+    int get_size() const { return -1; }
+    std::string get_sourcerpm() const { return std::string(); }
+    std::string get_summary() const { return std::string(); }
+    std::string get_url() const { return std::string(); }
+    std::string get_license() const { return std::string(); }
+    std::string get_description() const { return std::string(); }
 
 private:
-    dnfdaemon::DbusTransactionItem ti;
-    std::string full_nevra;
+    dnfdaemon::KeyValueMap rawdata;
 };
 
 }  // namespace dnfdaemon::client

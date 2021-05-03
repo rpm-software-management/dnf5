@@ -22,32 +22,33 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnfdaemon::client {
 
 DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> transaction) {
-    for(auto & ti : transaction) {
+    for (auto & ti : transaction) {
         libdnf::transaction::TransactionItemAction action =
             static_cast<libdnf::transaction::TransactionItemAction>(std::get<0>(ti));
-        switch(action) {
+        dnfdaemon::KeyValueMap keyval = std::get<1>(ti);
+        switch (action) {
             case TransactionItemAction::INSTALL: {
-                rpm_installs.push_back(DbusPackageWrapper(ti));
+                rpm_installs.push_back(DbusPackageWrapper(keyval));
                 break;
             }
             case TransactionItemAction::DOWNGRADE: {
-                rpm_downgrades.push_back(DbusPackageWrapper(ti));
+                rpm_downgrades.push_back(DbusPackageWrapper(keyval));
                 break;
             }
             case TransactionItemAction::OBSOLETE: {
-                rpm_obsoletes.push_back(DbusPackageWrapper(ti));
+                rpm_obsoletes.push_back(DbusPackageWrapper(keyval));
                 break;
             }
             case TransactionItemAction::UPGRADE: {
-                rpm_upgrades.push_back(DbusPackageWrapper(ti));
+                rpm_upgrades.push_back(DbusPackageWrapper(keyval));
                 break;
             }
             case TransactionItemAction::REMOVE: {
-                rpm_removes.push_back(DbusPackageWrapper(ti));
+                rpm_removes.push_back(DbusPackageWrapper(keyval));
                 break;
             }
             case TransactionItemAction::REINSTALL: {
-                rpm_reinstalls.push_back(DbusPackageWrapper(ti));
+                rpm_reinstalls.push_back(DbusPackageWrapper(keyval));
                 break;
             }
             case TransactionItemAction::DOWNGRADED:
