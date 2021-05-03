@@ -20,7 +20,6 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "downgrade.hpp"
 
 #include "../../context.hpp"
-#include "../../utils.hpp"
 
 #include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
@@ -32,6 +31,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 #include <iostream>
+
+#include "libdnf-cli/output/transaction_table.hpp"
 
 namespace fs = std::filesystem;
 
@@ -94,7 +95,7 @@ void CmdDowngrade::run(Context & ctx) {
         return;
     }
 
-    if (!print_goal(goal)) {
+    if (!libdnf::cli::output::print_transaction_table(goal)) {
         return;
     }
 
