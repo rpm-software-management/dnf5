@@ -49,7 +49,7 @@ static void add_line_into_transaction_table(struct libscols_table *tb, struct li
         struct libscols_line *ln = scols_table_new_line(tb, parent);
         scols_line_set_data(ln, COL_NEVRA, pkg.get_full_nevra().c_str());
         scols_line_set_data(ln, COL_REPO, pkg.get_repo_id().c_str());
-        scols_line_set_data(ln, COL_SIZE, libdnf::cli::utils::units::format_size(pkg.get_size()).c_str());
+        scols_line_set_data(ln, COL_SIZE, libdnf::cli::utils::units::format_size(static_cast<int64_t>(pkg.get_size())).c_str());
     }
 }
 
