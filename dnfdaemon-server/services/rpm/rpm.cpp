@@ -282,7 +282,8 @@ void fill_transactions(
     libdnf::rpm::Transaction & rpm_ts,
     std::vector<std::unique_ptr<dnfdaemon::RpmTransactionItem>> & transaction_items) {
     for (auto & package : goal.list_rpm_removes()) {
-        auto item = std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::ERASE);
+        auto item =
+            std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::ERASE);
         auto item_ptr = item.get();
         transaction_items.push_back(std::move(item));
         auto & trans_pkg = transaction->new_package();
@@ -290,7 +291,8 @@ void fill_transactions(
         rpm_ts.erase(*item_ptr);
     }
     for (auto & package : goal.list_rpm_obsoleted()) {
-        auto item = std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::ERASE);
+        auto item =
+            std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::ERASE);
         auto item_ptr = item.get();
         transaction_items.push_back(std::move(item));
         auto & trans_pkg = transaction->new_package();
@@ -298,7 +300,8 @@ void fill_transactions(
         rpm_ts.erase(*item_ptr);
     }
     for (auto & package : goal.list_rpm_installs()) {
-        auto item = std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::INSTALL);
+        auto item =
+            std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::INSTALL);
         auto item_ptr = item.get();
         transaction_items.push_back(std::move(item));
         auto & trans_pkg = transaction->new_package();
@@ -306,7 +309,8 @@ void fill_transactions(
         rpm_ts.install(*item_ptr);
     }
     for (auto & package : goal.list_rpm_reinstalls()) {
-        auto item = std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::REINSTALL);
+        auto item =
+            std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::REINSTALL);
         auto item_ptr = item.get();
         transaction_items.push_back(std::move(item));
         auto & trans_pkg = transaction->new_package();
@@ -314,7 +318,8 @@ void fill_transactions(
         rpm_ts.reinstall(*item_ptr);
     }
     for (auto & package : goal.list_rpm_upgrades()) {
-        auto item = std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::UPGRADE);
+        auto item =
+            std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::UPGRADE);
         auto item_ptr = item.get();
         transaction_items.push_back(std::move(item));
         auto & trans_pkg = transaction->new_package();
@@ -322,7 +327,8 @@ void fill_transactions(
         rpm_ts.upgrade(*item_ptr);
     }
     for (auto & package : goal.list_rpm_downgrades()) {
-        auto item = std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::DOWNGRADE);
+        auto item =
+            std::make_unique<dnfdaemon::RpmTransactionItem>(package, dnfdaemon::RpmTransactionItem::Actions::DOWNGRADE);
         auto item_ptr = item.get();
         transaction_items.push_back(std::move(item));
         auto & trans_pkg = transaction->new_package();

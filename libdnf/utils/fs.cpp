@@ -1,12 +1,11 @@
-#include <sys/stat.h>
-
-#include <filesystem>
-
 #include "fs.hpp"
 
-#include <cstring>
 #include <fcntl.h>
+#include <sys/stat.h>
 #include <unistd.h>
+
+#include <cstring>
+#include <filesystem>
 
 namespace libdnf::utils::fs {
 
