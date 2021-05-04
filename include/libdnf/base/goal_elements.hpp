@@ -5,7 +5,7 @@ This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
 Libdnf is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 2 of the License, or
+the Free Software Foundation, either version 2.1 of the License, or
 (at your option) any later version.
 
 Libdnf is distributed in the hope that it will be useful,
@@ -17,24 +17,21 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_UTILS_HPP
-#define LIBDNF_UTILS_UTILS_HPP
+#ifndef LIBDNF_BASE_GOAL_ELEMENTS_HPP
+#define LIBDNF_BASE_GOAL_ELEMENTS_HPP
+
 
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/rpm/nevra.hpp"
 
 #include <cstdint>
-#include <type_traits>
+
 
 namespace libdnf {
 
 // forward declarations
 class Goal;
 
-/// Compares content of two files.
-/// Returns "true" if files have the same content.
-/// If content differs or error occurred (file doesn't exist, not readable, ...) returns "false".
-bool have_files_same_content_noexcept(const char * file_path1, const char * file_path2) noexcept;
 
 enum class ProblemRules {
     RULE_DISTUPGRADE = 1,
@@ -266,4 +263,5 @@ inline bool GoalJobSettings::resolve_clean_requirements_on_remove() {
 
 }  // namespace libdnf
 
-#endif
+
+#endif  // LIBDNF_BASE_GOAL_ELEMENTS_HPP

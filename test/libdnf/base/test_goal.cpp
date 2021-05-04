@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test/libdnf/utils.hpp"
 
 #include "libdnf/base/goal.hpp"
-#include "libdnf/utils/utils.hpp"
 
 #include <libdnf/rpm/solv_query.hpp>
 

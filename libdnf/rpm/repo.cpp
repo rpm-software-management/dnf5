@@ -29,10 +29,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
+#include "../libdnf/utils/fs.hpp"
 #include "repo_impl.hpp"
 
 #include "libdnf/logger/logger.hpp"
-#include "libdnf/utils/utils.hpp"
 
 extern "C" {
 #include <solv/repo_rpmdb.h>
@@ -1303,7 +1303,7 @@ bool Repo::Impl::is_repomd_in_sync() {
     auto r = lr_handle_perform(h.get(), tmpdir, config.repo_gpgcheck().get_value());
     result_get_info(r.get(), LRR_YUM_REPO, &yum_repo);
 
-    auto same = have_files_same_content_noexcept(repomd_fn.c_str(), yum_repo->repomd);
+    auto same = utils::fs::have_files_same_content_noexcept(repomd_fn.c_str(), yum_repo->repomd);
     if (same)
         logger.debug(fmt::format(_("reviving: '{}' can be revived - repomd matches."), id));
     else

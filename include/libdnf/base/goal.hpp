@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "base.hpp"
 
 #include "libdnf/rpm/package.hpp"
-#include "libdnf/utils/utils.hpp"
+#include "libdnf/base/goal_elements.hpp"
 
 
 namespace libdnf {

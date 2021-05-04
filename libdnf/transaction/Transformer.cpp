@@ -42,8 +42,6 @@
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 #include "libdnf/utils/fs.hpp"
 #include "libdnf/utils/string.hpp"
-//#include "../utils/filesystem.hpp"
-//#include "../utils/utils.hpp"
 
 #include "rpm_package.hpp"
 #include "Swdb.hpp"
