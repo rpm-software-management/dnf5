@@ -181,6 +181,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     microdnf->register_named_arg(releasever);
 
     ctx.arg_parser.set_root_command(microdnf);
+    ctx.arg_parser.set_inherit_named_args(true);
 
     for (auto & command : ctx.commands) {
         command->set_argument_parser(ctx);
