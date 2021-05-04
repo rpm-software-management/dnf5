@@ -203,10 +203,6 @@ inline bool name_compare_icase_lower_id(const std::pair<Id, Solvable *> first, I
     return first.first < id_name;
 }
 
-static inline bool name_compare_lower_solvable(const Solvable * first, const Solvable * second) {
-    return first->name < second->name;
-}
-
 static inline bool name_arch_compare_lower_solvable(const Solvable * first, const Solvable * second) {
     if (first->name != second->name) {
         return first->name < second->name;
