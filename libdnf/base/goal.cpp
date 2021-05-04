@@ -627,9 +627,8 @@ void Goal::Impl::add_rpm_goal_report(
 void Goal::Impl::add_remove_to_goal(const std::string & spec, GoalJobSettings & settings) {
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove(base->get_config());
     auto & sack = base->get_rpm_solv_sack();
-    rpm::SolvQuery base_query(&sack);
-    base_query.ifilter_installed();
-    rpm::SolvQuery query(base_query);
+    rpm::SolvQuery query(&sack);
+    query.ifilter_installed();
 
     auto nevra_pair = query.resolve_pkg_spec(
         spec,
