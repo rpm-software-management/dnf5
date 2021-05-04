@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020 Red Hat, Inc.
+Copyright (C) 2019-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -350,7 +350,6 @@ public:
         using ParseHookFunc = std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])>;
 
         /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
-        /// Returns number of consumed arguments from the input.
         void parse(const char * option, int argc, const char * const argv[]);
 
         /// Registers (sub)command to the command.
@@ -413,6 +412,13 @@ public:
         const std::string & get_positional_args_help_header() const noexcept { return positional_args_help_header; }
 
     private:
+        /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
+        void parse(
+            const char * option,
+            int argc,
+            const char * const argv[],
+            const std::vector<NamedArg *> * additional_named_args);
+
         friend class ArgumentParser;
 
         Command(ArgumentParser & owner, const std::string & id) : Argument(owner, id) {}
@@ -479,6 +485,15 @@ public:
     /// Reset parse count in all arguments.
     void reset_parse_count();
 
+    /// Enables/disables the inheritance of named arguments for the parser.
+    /// If the parser does not find a named argument definition during subcommand processing and
+    /// named arguments inheritance is enabled, parser searches the named arguments of the parent commands.
+    /// @param enable  true - enable parent argument inheritance, false - disable
+    void set_inherit_named_args(bool enable) noexcept { inherit_named_args = enable; }
+
+    /// Returns true if the inheritance of named arguments is enabled for the parser.
+    bool get_inherit_named_args() const noexcept { return inherit_named_args; }
+
 private:
     std::vector<std::unique_ptr<Command>> cmds;
     std::vector<std::unique_ptr<NamedArg>> named_args;
@@ -487,6 +502,7 @@ private:
     std::vector<std::unique_ptr<libdnf::Option>> values_init;
     std::vector<std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>>> values;
     Command * root_command{nullptr};
+    bool inherit_named_args{false};
 };
 
 }  // namespace libdnf::cli

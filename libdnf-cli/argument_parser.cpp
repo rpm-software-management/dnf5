@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020 Red Hat, Inc.
+Copyright (C) 2019-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -18,6 +18,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "libdnf-cli/argument_parser.hpp"
+
 #include "libdnf-cli/output/argument_parser.hpp"
 
 #include <fmt/format.h>
@@ -258,6 +259,23 @@ ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(cons
 }
 
 void ArgumentParser::Command::parse(const char * option, int argc, const char * const argv[]) {
+    if (owner.inherit_named_args) {
+        const std::vector<NamedArg *> additional_named_args;
+        parse(option, argc, argv, &additional_named_args);
+    } else {
+        parse(option, argc, argv, nullptr);
+    }
+}
+
+void ArgumentParser::Command::parse(
+    const char * option, int argc, const char * const argv[], const std::vector<NamedArg *> * additional_named_args) {
+    std::vector<NamedArg *> extended_named_args;
+    if (additional_named_args) {
+        extended_named_args.reserve(named_args.size() + additional_named_args->size());
+        extended_named_args.insert(extended_named_args.begin(), named_args.begin(), named_args.end());
+        extended_named_args.insert(
+            extended_named_args.end(), additional_named_args->begin(), additional_named_args->end());
+    }
     size_t used_positional_arguments = 0;
     int short_option_idx = 0;
     for (int i = 1; i < argc;) {
@@ -269,7 +287,7 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
                 ++tmp;
             }
             const auto * assign_ptr = strchr(tmp, '=');
-            for (auto * opt : named_args) {
+            for (auto * opt : (additional_named_args ? extended_named_args : named_args)) {
                 if (long_option) {
                     if (!opt->get_long_name().empty() &&
                         (assign_ptr ? std::string(tmp).compare(
@@ -302,7 +320,7 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
                         auto msg = fmt::format("command \"{}\": {}", option, conflict);
                         throw Conflict(msg);
                     }
-                    cmd->parse(argv[i], argc - i, &argv[i]);
+                    cmd->parse(argv[i], argc - i, &argv[i], additional_named_args ? &extended_named_args : nullptr);
                     i = argc;
                     used = true;
                     break;
