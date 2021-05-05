@@ -494,6 +494,15 @@ public:
     /// Returns true if the inheritance of named arguments is enabled for the parser.
     bool get_inherit_named_args() const noexcept { return inherit_named_args; }
 
+    /// Gets a list of all commands stored in the argument parser.
+    const std::vector<std::unique_ptr<Command>> & get_commands() const noexcept { return cmds; }
+
+    /// Gets a list of all named arguments stored in the argument parser.
+    const std::vector<std::unique_ptr<NamedArg>> & get_named_args() const noexcept { return named_args; }
+
+    /// Gets a list of all positional argument stored in the argument parser.
+    const std::vector<std::unique_ptr<PositionalArg>> & get_positional_args() const noexcept { return pos_args; }
+
 private:
     std::vector<std::unique_ptr<Command>> cmds;
     std::vector<std::unique_ptr<NamedArg>> named_args;
