@@ -158,6 +158,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        downgrade:
+        @specs: an array of package specifications to be downgraded on the system
+        @options: an array of key/value pairs to modify downgrade behavior
+
+        Mark packages specified by @specs for downgrade.
+
+        Following @options are supported:
+
+        Unknown options are ignored.
+    -->
+    <method name="downgrade">
+        <arg name="specs" type="as" direction="in" />
+        <arg name="options" type="a{sv}" direction="in" />
+    </method>
+
+    <!--
         resolve:
         @options: an array of key/value pairs to modify dependency resolving
         @result: array of (action, n, e, v, r, a, repoid) tuples where action is one of libdnf::transaction::TransactionItemAction enum

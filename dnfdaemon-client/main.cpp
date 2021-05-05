@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "commands/downgrade/downgrade.hpp"
 #include "commands/install/install.hpp"
 #include "commands/remove/remove.hpp"
 #include "commands/repolist/repolist.hpp"
@@ -157,6 +158,7 @@ int main(int argc, char * argv[]) {
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repoinfo"));
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repolist"));
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepoquery>());
+    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdDowngrade>());
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdInstall>());
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdUpgrade>());
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRemove>());

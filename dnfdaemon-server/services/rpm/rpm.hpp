@@ -39,6 +39,7 @@ private:
     void install(sdbus::MethodCall && call);
     void upgrade(sdbus::MethodCall && call);
     void remove(sdbus::MethodCall && call);
+    void downgrade(sdbus::MethodCall && call);
     void resolve(sdbus::MethodCall && call);
     void do_transaction(sdbus::MethodCall && call);
 };

@@ -104,6 +104,10 @@ dnfdaemon::KeyValueMap package_to_map(
 void Rpm::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_RPM, "downgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+            this->downgrade(std::move(call));
+        });
+    dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
             this->list(std::move(call));
         });
@@ -422,6 +426,38 @@ void Rpm::do_transaction(sdbus::MethodCall && call) {
                 db_transaction->finish(libdnf::transaction::TransactionState::DONE);
 
                 // TODO(mblaha): clean up downloaded packages after successfull transaction
+
+                auto reply = call.createReply();
+                reply.send();
+            } catch (std::exception & ex) {
+                DNFDAEMON_ERROR_REPLY(call, ex);
+            }
+            session.get_threads_manager().current_thread_finished();
+        },
+        std::move(call));
+    session.get_threads_manager().register_thread(std::move(worker));
+}
+
+void Rpm::downgrade(sdbus::MethodCall && call) {
+    auto worker = std::thread(
+        [this](sdbus::MethodCall call) {
+            try {
+                std::vector<std::string> specs;
+                call >> specs;
+
+                // read options from dbus call
+                dnfdaemon::KeyValueMap options;
+                call >> options;
+                std::vector<std::string> repo_ids =
+                    key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+
+                // fill the goal
+                auto & goal = session.get_goal();
+                libdnf::GoalJobSettings setting;
+                setting.to_repo_ids = repo_ids;
+                for (const auto & spec : specs) {
+                    goal.add_rpm_downgrade(spec, setting);
+                }
 
                 auto reply = call.createReply();
                 reply.send();
