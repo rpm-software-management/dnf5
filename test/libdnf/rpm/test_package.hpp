@@ -24,8 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../repo_fixture.hpp"
 
-#include "libdnf/rpm/package.hpp"
-
 #include <cppunit/extensions/HelperMacros.h>
 
 
@@ -81,8 +79,6 @@ class RpmPackageTest : public RepoFixture {
 
 public:
     void setUp() override;
-
-    libdnf::rpm::Package get_pkg(const std::string & nevra);
 
     void test_equality();
     void test_get_id();

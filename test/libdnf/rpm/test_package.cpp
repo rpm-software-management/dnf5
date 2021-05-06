@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../utils.hpp"
 
 #include "libdnf/rpm/nevra.hpp"
-#include "libdnf/rpm/package_query.hpp"
 
 #include <vector>
 
@@ -34,15 +33,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RpmPackageTest);
 void RpmPackageTest::setUp() {
     RepoFixture::setUp();
     add_repo_repomd("repomd-repo1");
-}
-
-
-libdnf::rpm::Package RpmPackageTest::get_pkg(const std::string & nevra) {
-    libdnf::rpm::PackageQuery query(*base);
-    query.filter_nevra({nevra});
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "get_pkg(\"" + nevra + "\"): no package or more than one package found.", 1lu, query.size());
-    return *query.begin();
 }
 
 

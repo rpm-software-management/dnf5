@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "testcase_fixture.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/rpm/package.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/utils/temp.hpp"
@@ -39,6 +40,8 @@ protected:
     void add_repo_repomd(const std::string & repoid);
     void add_repo_rpm(const std::string & repoid);
     void add_repo_solv(const std::string & repoid);
+
+    libdnf::rpm::Package get_pkg(const std::string & nevra);
 
     std::unique_ptr<libdnf::Base> base;
     libdnf::repo::RepoSackWeakPtr repo_sack;

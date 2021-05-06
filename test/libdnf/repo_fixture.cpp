@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_fixture.hpp"
 
+#include "libdnf/rpm/package_query.hpp"
+
 #include <filesystem>
 #include <map>
 
@@ -75,6 +77,15 @@ void RepoFixture::add_repo_solv(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-solv";
     repo_path /= repoid + ".repo";
     repo_sack->new_repo_from_libsolv_testcase(repoid.c_str(), repo_path.native());
+}
+
+
+libdnf::rpm::Package RepoFixture::get_pkg(const std::string & nevra) {
+    libdnf::rpm::PackageQuery query(*base);
+    query.filter_nevra({nevra});
+    CPPUNIT_ASSERT_EQUAL_MESSAGE(
+        "get_pkg(\"" + nevra + "\"): no package or more than one package found.", 1lu, query.size());
+    return *query.begin();
 }
 
 
