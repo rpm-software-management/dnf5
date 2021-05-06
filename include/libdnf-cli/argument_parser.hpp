@@ -494,6 +494,37 @@ public:
     /// Returns true if the inheritance of named arguments is enabled for the parser.
     bool get_inherit_named_args() const noexcept { return inherit_named_args; }
 
+    /// Returns (sub)command with given ID path.
+    /// The root command ID must be omitted. It is added automatically.
+    /// @param id_path  command ID path, e.g. "module.list"; "" - returns root_command
+    /// @exception ArgumentParser::LogicError  if root command is not set
+    /// @exception ArgumentParser::Command::CommandNotFound  if command is not found.
+    Command & get_command(const std::string & id_path);
+
+    /// Returns named argument with given full ID path.
+    /// The root command ID must be omitted. It is added automatically.
+    /// If the named argument is not found in the path and search in the parent command is enabled,
+    /// it will be searched in the parent command. E.g. "installroot" is global option -> instead
+    /// of "repoquery.installroot" returns "installroot".
+    /// @param id_path  named argument ID path, e.g. "installroot", "repoquery.installed"
+    /// @param search_in_parent  true - enable search in parrent command, false - disable
+    /// @exception ArgumentParser::LogicError  if root command is not set
+    /// @exception ArgumentParser::Command::CommandNotFound  if command is not found.
+    /// @exception ArgumentParser::Command::PositionalArgNotFound  if argument is not found.
+    NamedArg & get_named_arg(const std::string & id_path, bool search_in_parent);
+
+    /// Returns positional argument with given full ID path.
+    /// The root command ID must be omitted. It is added automatically.
+    /// If the positional argument is not found in the path and search in the parent command is enabled,
+    /// it will be searched in the parent command. E.g. "installroot" is global option -> instead
+    /// of "repoquery.installroot" returns "installroot".
+    /// @param id_path  positional argument ID path, e.g. "repoquery.keys"
+    /// @param search_in_parent  true - enable search in parrent command, false - disable
+    /// @exception ArgumentParser::LogicError  if root command is not set
+    /// @exception ArgumentParser::Command::CommandNotFound  if command is not found.
+    /// @exception ArgumentParser::Command::NamedArgNotFound  if argument is not found.
+    PositionalArg & get_positional_arg(const std::string & id_path, bool search_in_parent);
+
     /// Gets a list of all commands stored in the argument parser.
     const std::vector<std::unique_ptr<Command>> & get_commands() const noexcept { return cmds; }
 

@@ -231,29 +231,33 @@ void ArgumentParser::Command::register_positional_arg(PositionalArg * arg) {
     pos_args.push_back(arg);
 }
 
-ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string & id) const {
-    for (auto * item : cmds) {
+template <class Arg>
+static Arg * find_arg(const std::vector<Arg *> & args, const std::string & id) {
+    for (auto * item : args) {
         if (item->get_id() == id) {
-            return *item;
+            return item;
         }
+    }
+    return nullptr;
+}
+
+ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string & id) const {
+    if (auto ret = find_arg(cmds, id)) {
+        return *ret;
     }
     throw CommandNotFound(id);
 }
 
 ArgumentParser::NamedArg & ArgumentParser::Command::get_named_arg(const std::string & id) const {
-    for (auto * item : named_args) {
-        if (item->get_id() == id) {
-            return *item;
-        }
+    if (auto ret = find_arg(named_args, id)) {
+        return *ret;
     }
     throw NamedArgNotFound(id);
 }
 
 ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(const std::string & id) const {
-    for (auto * item : pos_args) {
-        if (item->get_id() == id) {
-            return *item;
-        }
+    if (auto ret = find_arg(pos_args, id)) {
+        return *ret;
     }
     throw PositionalArgNotFound(id);
 }
@@ -496,6 +500,75 @@ void ArgumentParser::reset_parse_count() {
     for (auto & i : cmds) {
         i->reset_parse_count();
     }
+}
+
+ArgumentParser::Command & ArgumentParser::get_command(const std::string & id_path) {
+    if (!root_command) {
+        throw LogicError("root command is not set");
+    }
+    auto * cmd = root_command;
+    if (id_path.empty()) {
+        return *cmd;
+    }
+    std::string::size_type start_pos = 0;
+    auto dot_pos = id_path.find('.');
+    while (dot_pos != id_path.npos) {
+        cmd = &cmd->get_command(std::string(id_path, start_pos, dot_pos - start_pos));
+        start_pos = dot_pos + 1;
+        dot_pos = id_path.find('.', start_pos);
+    }
+    cmd = &cmd->get_command(std::string(id_path, start_pos));
+    return *cmd;
+}
+
+template <class Arg>
+static const std::vector<Arg *> & get_command_args(ArgumentParser::Command & command) {
+    if constexpr (std::is_same<Arg, ArgumentParser::NamedArg>::value) {
+        return command.get_named_args();
+    }
+    if constexpr (std::is_same<Arg, ArgumentParser::PositionalArg>::value) {
+        return command.get_positional_args();
+    }
+}
+
+template <class Arg>
+static Arg * get_arg(ArgumentParser::Command * root_command, const std::string & id_path, bool search_in_parent) {
+    if (!root_command) {
+        throw ArgumentParser::LogicError("root command is not set");
+    }
+    auto * cmd = root_command;
+    std::string::size_type start_pos = 0;
+    auto dot_pos = id_path.find('.');
+    auto arg_id_name = dot_pos == id_path.npos ? id_path : std::string(id_path, id_path.rfind('.') + 1);
+    Arg * ret = nullptr;
+    while (dot_pos != id_path.npos) {
+        if (search_in_parent) {
+            if (auto tmp = find_arg(get_command_args<Arg>(*cmd), arg_id_name)) {
+                ret = tmp;
+            }
+        }
+        cmd = &cmd->get_command(std::string(id_path, start_pos, dot_pos - start_pos));
+        start_pos = dot_pos + 1;
+        dot_pos = id_path.find('.', start_pos);
+    }
+    if (auto tmp = find_arg(get_command_args<Arg>(*cmd), arg_id_name)) {
+        ret = tmp;
+    }
+    return ret;
+}
+
+ArgumentParser::NamedArg & ArgumentParser::get_named_arg(const std::string & id_path, bool search_in_parent) {
+    if (auto ret = get_arg<ArgumentParser::NamedArg>(root_command, id_path, search_in_parent)) {
+        return *ret;
+    }
+    throw ArgumentParser::Command::NamedArgNotFound(id_path);
+}
+
+ArgumentParser::PositionalArg & ArgumentParser::get_positional_arg(const std::string & id_path, bool search_in_parent) {
+    if (auto ret = get_arg<ArgumentParser::PositionalArg>(root_command, id_path, search_in_parent)) {
+        return *ret;
+    }
+    throw ArgumentParser::Command::PositionalArgNotFound(id_path);
 }
 
 }  // namespace libdnf::cli
