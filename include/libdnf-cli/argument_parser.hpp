@@ -71,6 +71,15 @@ public:
 
     class Argument {
     public:
+        /// Exception is generated when the Argument `id` contains not allowed '.' character.
+        class InvalidId : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Argument"; }
+            const char * get_name() const noexcept override { return "InvalidId"; }
+            const char * get_description() const noexcept override { return "Invalid id"; }
+        };
+
         Argument(const Argument &) = delete;
         Argument(Argument &&) = delete;
         Argument & operator=(const Argument &) = delete;
@@ -112,7 +121,7 @@ public:
     private:
         friend class ArgumentParser;
 
-        Argument(ArgumentParser & owner, std::string id) : owner(owner), id(std::move(id)) {}
+        Argument(ArgumentParser & owner, std::string id);
         static std::string get_conflict_arg_msg(const Argument * conflict_arg);
         ArgumentParser & get_owner() const noexcept { return owner; }
 

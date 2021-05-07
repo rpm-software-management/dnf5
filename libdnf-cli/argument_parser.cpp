@@ -29,6 +29,13 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::cli {
 
+ArgumentParser::Argument::Argument(ArgumentParser & owner, std::string id) : owner(owner) {
+    if (id.find('.') != id.npos) {
+        throw InvalidId(id);
+    }
+    this->id = std::move(id);
+}
+
 ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() const noexcept {
     if (conflict_args) {
         for (auto * arg : *conflict_args) {
