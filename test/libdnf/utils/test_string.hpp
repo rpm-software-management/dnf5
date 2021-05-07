@@ -30,6 +30,9 @@ class UtilsStringTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(UtilsStringTest);
     CPPUNIT_TEST(test_starts_with);
     CPPUNIT_TEST(test_ends_with);
+    CPPUNIT_TEST(test_join);
+    CPPUNIT_TEST(test_split);
+    CPPUNIT_TEST(test_rsplit);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -38,6 +41,9 @@ public:
 
     void test_starts_with();
     void test_ends_with();
+    void test_join();
+    void test_split();
+    void test_rsplit();
 
 private:
 };
