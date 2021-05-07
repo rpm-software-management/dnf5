@@ -91,6 +91,13 @@ std::string Package::get_full_nevra() const {
     return get_pool(base).get_full_nevra(id.id);
 }
 
+std::string Package::get_na() const {
+    std::string res = get_name();
+    res.append(".");
+    res.append(get_arch());
+    return res;
+}
+
 std::string Package::get_group() const {
     return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_GROUP));
 }
