@@ -459,7 +459,8 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
     {
         // test Name.Arch
         libdnf::rpm::SolvQuery query(sack);
-        auto return_value = query.resolve_pkg_spec("pkg.x86_64", false, true, false, false, true, {});
+        libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
+        auto return_value = query.resolve_pkg_spec("pkg.x86_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -468,7 +469,8 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
     {
         // Test NA icase
         libdnf::rpm::SolvQuery query(sack);
-        auto return_value = query.resolve_pkg_spec("Pkg.x86_64", true, true, false, false, true, {});
+        libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
+        auto return_value = query.resolve_pkg_spec("Pkg.x86_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -477,7 +479,8 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
     {
         // Test a provide
         libdnf::rpm::SolvQuery query(sack);
-        auto return_value = query.resolve_pkg_spec("pkg >= 1", false, true, true, false, true, {});
+        libdnf::ResolveSpecSettings settings{.with_filenames = false};
+        auto return_value = query.resolve_pkg_spec("pkg >= 1", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -486,7 +489,8 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
     {
         // Test NEVRA glob
         libdnf::rpm::SolvQuery query(sack);
-        auto return_value = query.resolve_pkg_spec("pk?-?:1.?-?.x8?_64", false, true, false, false, true, {});
+        libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
+        auto return_value = query.resolve_pkg_spec("pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -495,7 +499,8 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
     {
         // Test NEVRA glob - icase == false, nothing found
         libdnf::rpm::SolvQuery query(sack);
-        auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", false, true, false, false, true, {});
+        libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
+        auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, false);
         std::vector<std::string> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -504,7 +509,8 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
     {
         // Test NEVRA glob - icase == true
         libdnf::rpm::SolvQuery query(sack);
-        auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", true, true, false, false, true, {});
+        libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
+        auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -513,7 +519,8 @@ void RpmSolvQueryTest::test_resolve_pkg_spec() {
     {
         // Test NEVRA icase
         libdnf::rpm::SolvQuery query(sack);
-        auto return_value = query.resolve_pkg_spec("Pkg-0:1.2-3.X86_64", true, true, false, false, true, {});
+        libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
+        auto return_value = query.resolve_pkg_spec("Pkg-0:1.2-3.X86_64", settings, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }

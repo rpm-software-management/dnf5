@@ -2198,18 +2198,13 @@ SolvQuery & SolvQuery::ifilter_priority() {
 }
 
 std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
-    const std::string & pkg_spec,
-    bool icase,
-    bool with_nevra,
-    bool with_provides,
-    bool with_filenames,
-    bool with_src,
-    const std::vector<libdnf::rpm::Nevra::Form> & forms) {
+    const std::string & pkg_spec, const ResolveSpecSettings & settings, bool with_src) {
     SolvSack * sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
     solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
-    if (with_nevra) {
-        const std::vector<Nevra::Form> & test_forms = forms.empty() ? Nevra::get_default_pkg_spec_forms() : forms;
+    if (settings.with_nevra) {
+        const std::vector<Nevra::Form> & test_forms =
+            settings.nevra_forms.empty() ? Nevra::get_default_pkg_spec_forms() : settings.nevra_forms;
         Nevra nevra_obj;
         for (auto form : test_forms) {
             if (nevra_obj.parse(pkg_spec, form)) {
@@ -2217,7 +2212,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
                     *this,
                     nevra_obj,
                     true,
-                    icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB,
+                    settings.ignore_case ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB,
                     filter_result,
                     with_src);
                 filter_result &= *p_impl;
@@ -2228,14 +2223,14 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
                 }
             }
         }
-        if (forms.empty()) {
+        if (settings.nevra_forms.empty()) {
             auto & sorted_solvables = get_sack()->p_impl->get_sorted_solvables();
             Impl::filter_nevra(
                 *this,
                 sorted_solvables,
                 pkg_spec,
                 true,
-                icase ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB,
+                settings.ignore_case ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB,
                 filter_result);
             filter_result &= *p_impl;
             if (!filter_result.empty()) {
@@ -2244,7 +2239,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
             }
         }
     }
-    if (with_provides) {
+    if (settings.with_provides) {
         ReldepList reldep_list(sack);
         str2reldep_internal(reldep_list, libdnf::sack::QueryCmp::GLOB, true, pkg_spec);
         sack->p_impl->make_provides_ready();
@@ -2255,7 +2250,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
             return {true, libdnf::rpm::Nevra()};
         }
     }
-    if (with_filenames && libdnf::utils::is_file_pattern(pkg_spec)) {
+    if (settings.with_filenames && libdnf::utils::is_file_pattern(pkg_spec)) {
         filter_dataiterator(
             pool,
             SOLVABLE_FILELIST,

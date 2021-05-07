@@ -27,8 +27,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -86,7 +86,7 @@ void CmdReinstall::run(Context & ctx) {
     for (auto & pattern : *patterns_to_reinstall_options) {
         libdnf::rpm::SolvQuery solv_query(full_solv_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        solv_query.resolve_pkg_spec(option->get_value(), true, true, true, true, true, {});
+        solv_query.resolve_pkg_spec(option->get_value(), {}, true);
         result_pset |= solv_query;
     }
 

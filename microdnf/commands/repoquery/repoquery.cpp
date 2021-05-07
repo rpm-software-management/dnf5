@@ -21,12 +21,12 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../../context.hpp"
 
+#include "libdnf-cli/output/repoquery.hpp"
+
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/solv_query.hpp>
-
-#include "libdnf-cli/output/repoquery.hpp"
 
 #include <iostream>
 
@@ -135,7 +135,8 @@ void CmdRepoquery::run(Context & ctx) {
     for (auto & pattern : *patterns_to_show_options) {
         libdnf::rpm::SolvQuery solv_query(full_solv_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        solv_query.resolve_pkg_spec(option->get_value(), true, true, true, true, true, {});
+        libdnf::ResolveSpecSettings settings{.ignore_case = true};
+        solv_query.resolve_pkg_spec(option->get_value(), settings, true);
         result_pset |= solv_query;
     }
 

@@ -165,8 +165,12 @@ void Rpm::list(sdbus::MethodCall && call) {
                 if (patterns.size() > 0) {
                     for (auto & pattern : patterns) {
                         libdnf::rpm::SolvQuery solv_query(full_solv_query);
-                        solv_query.resolve_pkg_spec(
-                            pattern, icase, with_nevra, with_provides, with_filenames, with_src, {});
+                        libdnf::ResolveSpecSettings settings{
+                            .ignore_case = icase,
+                            .with_nevra = with_nevra,
+                            .with_provides = with_provides,
+                            .with_filenames = with_filenames};
+                        solv_query.resolve_pkg_spec(pattern, settings, with_src);
                         result_pset |= solv_query;
                     }
                 } else {

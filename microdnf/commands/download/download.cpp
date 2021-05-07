@@ -82,7 +82,7 @@ void CmdDownload::run(Context & ctx) {
     for (auto & pattern : *patterns_to_download_options) {
         libdnf::rpm::SolvQuery solv_query(full_solv_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        solv_query.resolve_pkg_spec(option->get_value(), true, true, true, true, true, {});
+        solv_query.resolve_pkg_spec(option->get_value(), {}, true);
         result_pset |= solv_query;
     }
 

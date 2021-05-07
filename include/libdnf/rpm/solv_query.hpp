@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_set.hpp"
 #include "solv_sack.hpp"
 
+#include "libdnf/base/goal_elements.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/sack/query_cmp.hpp"
 
@@ -413,13 +414,7 @@ public:
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     /// @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf::rpm::Nevra> resolve_pkg_spec(
-        const std::string & pkg_spec,
-        bool icase,
-        bool with_nevra,
-        bool with_provides,
-        bool with_filenames,
-        bool with_src,
-        const std::vector<libdnf::rpm::Nevra::Form> & forms);
+        const std::string & pkg_spec, const libdnf::ResolveSpecSettings & settings, bool with_src);
 
     void swap(SolvQuery & other) noexcept;
 

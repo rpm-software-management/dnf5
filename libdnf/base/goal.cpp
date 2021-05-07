@@ -360,14 +360,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
     rpm::SolvQuery base_query(&sack);
     rpm::PackageSet selected(&sack);
     rpm::SolvQuery query(base_query);
-    auto nevra_pair = query.resolve_pkg_spec(
-        spec,
-        settings.icase,
-        settings.with_nevra,
-        settings.with_provides,
-        settings.with_filenames,
-        false,
-        settings.forms);
+    auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
         auto problem = report_not_found(Goal::Action::INSTALL, spec, settings, strict);
         if (strict) {
@@ -503,14 +496,7 @@ GoalProblem Goal::Impl::report_not_found(
     if (action == Action::REMOVE) {
         query.ifilter_installed();
     }
-    auto nevra_pair_reports = query.resolve_pkg_spec(
-        pkg_spec,
-        settings.icase,
-        settings.with_nevra,
-        settings.with_provides,
-        settings.with_filenames,
-        true,
-        settings.forms);
+    auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, settings, true);
     if (!nevra_pair_reports.first) {
         // RPM was not excluded or there is no related srpm
         add_rpm_goal_report(action, GoalProblem::NOT_FOUND, settings, pkg_spec, {}, strict);
@@ -519,10 +505,13 @@ GoalProblem Goal::Impl::report_not_found(
             if (action == Action::REMOVE) {
                 hints.ifilter_installed();
             }
-            if (!settings.icase) {
+            if (!settings.ignore_case && settings.with_nevra) {
                 rpm::SolvQuery icase(hints);
-                auto nevra_pair_icase =
-                    icase.resolve_pkg_spec(pkg_spec, true, settings.with_nevra, false, false, false, settings.forms);
+                ResolveSpecSettings settings_copy = settings;
+                settings_copy.ignore_case = true;
+                settings_copy.with_provides = false;
+                settings_copy.with_filenames = false;
+                auto nevra_pair_icase = icase.resolve_pkg_spec(pkg_spec, settings_copy, false);
                 if (nevra_pair_icase.first) {
                     add_rpm_goal_report(
                         action, GoalProblem::HINT_ICASE, settings, pkg_spec, {(*icase.begin()).get_name()}, false);
@@ -629,14 +618,7 @@ void Goal::Impl::add_remove_to_goal(const std::string & spec, GoalJobSettings & 
     rpm::SolvQuery query(&sack);
     query.ifilter_installed();
 
-    auto nevra_pair = query.resolve_pkg_spec(
-        spec,
-        settings.icase,
-        settings.with_nevra,
-        settings.with_provides,
-        settings.with_filenames,
-        false,
-        settings.forms);
+    auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
         report_not_found(Goal::Action::REMOVE, spec, settings, false);
         return;
@@ -663,14 +645,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
     auto obsoletes = base->get_config().obsoletes().get_value();
     rpm::solv::IdQueue tmp_queue;
     rpm::SolvQuery query(base_query);
-    auto nevra_pair = query.resolve_pkg_spec(
-        spec,
-        settings.icase,
-        settings.with_nevra,
-        settings.with_provides,
-        settings.with_filenames,
-        false,
-        settings.forms);
+    auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
         report_not_found(action, spec, settings, false);
         return;

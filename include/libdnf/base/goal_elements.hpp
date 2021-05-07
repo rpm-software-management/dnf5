@@ -81,25 +81,27 @@ enum class GoalProblem : uint32_t {
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
 enum class GoalUsedSetting { UNUSED, USED_TRUE, USED_FALSE };
 
-struct GoalJobSettings {
+struct ResolveSpecSettings {
 public:
-    GoalJobSettings() = default;
+    bool ignore_case{false};
+    bool with_nevra{true};
+    bool with_provides{true};
+    bool with_filenames{true};
+    std::vector<libdnf::rpm::Nevra::Form> nevra_forms{};
+};
 
+struct GoalJobSettings : public ResolveSpecSettings {
+public:
     GoalUsedSetting get_used_strict() const { return used_strict; };
     GoalUsedSetting get_used_best() const { return used_best; };
     GoalUsedSetting get_used_clean_requirements_on_remove() const { return used_clean_requirements_on_remove; };
 
-    bool with_nevra{true};
-    bool with_provides{true};
-    bool with_filenames{true};
-    bool icase{false};
     bool report_hint{true};
     GoalSetting strict{GoalSetting::AUTO};
     GoalSetting best{GoalSetting::AUTO};
     GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
     std::vector<std::string> from_repo_ids;
     std::vector<std::string> to_repo_ids;
-    std::vector<libdnf::rpm::Nevra::Form> forms;
 
 private:
     friend class Goal;
