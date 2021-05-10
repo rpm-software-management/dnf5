@@ -47,6 +47,201 @@ const std::vector<Nevra::Form> & Nevra::get_default_pkg_spec_forms() {
     return PKG_SPEC_FORMS;
 }
 
+std::vector<Nevra> Nevra::parse_all(const std::string & nevra_str, const std::vector<Form> & forms) {
+    std::vector<Nevra> result;
+    const char * evr_delim = nullptr;
+    const char * epoch_delim = nullptr;
+    const char * release_delim = nullptr;
+    const char * arch_delim = nullptr;
+    const char * end;
+
+    // parse nevra
+    const char * nevra_pattern = nevra_str.c_str();
+    for (end = nevra_pattern; *end != '\0'; ++end) {
+        if (*end == '-') {
+            evr_delim = release_delim;
+            release_delim = end;
+        } else if (*end == '.') {
+            arch_delim = end;
+        } else if (*end == ':') {
+            // ':' can be only once in nevra
+            if (epoch_delim != nullptr) {
+                return result;
+            }
+            epoch_delim = end;
+        } else if (*end == '(' || *end == '/' || *end == '=' || *end == '<' || *end == '>' || *end == ' ') {
+            return result;
+        }
+    }
+    for (auto form : forms) {
+        Nevra nevra;
+        switch (form) {
+            case Form::NEVRA: {
+                if (evr_delim == nullptr || release_delim == nullptr || arch_delim == nullptr) {
+                    continue;
+                }
+                const char * evr_delim_for_nevra = evr_delim;
+                const char * release_delim_for_nevra = release_delim;
+                const char * arch_delim_for_nevra = arch_delim;
+
+                // test name presence
+                if (evr_delim_for_nevra == nevra_pattern) {
+                    continue;
+                }
+
+                nevra.name.assign(nevra_pattern, evr_delim_for_nevra);
+                ++evr_delim_for_nevra;
+
+                // test presence of epoch (optional)
+                if (epoch_delim != nullptr) {
+                    // test that ':' was in range of evr. ':' sign is only allowed in evr as an epoch deliminator
+                    if (epoch_delim - evr_delim_for_nevra < 1 || release_delim_for_nevra - epoch_delim < 2) {
+                        continue;
+                    }
+                    nevra.epoch.assign(evr_delim_for_nevra, epoch_delim);
+                    evr_delim_for_nevra = epoch_delim + 1;
+                }
+
+                // test presence of version
+                if (release_delim_for_nevra - evr_delim_for_nevra < 1) {
+                    continue;
+                }
+                nevra.version.assign(evr_delim_for_nevra, release_delim_for_nevra);
+                ++release_delim_for_nevra;
+
+                // test presence of release
+                if (arch_delim_for_nevra - release_delim_for_nevra < 1) {
+                    continue;
+                }
+                nevra.release.assign(release_delim_for_nevra, arch_delim_for_nevra);
+                ++arch_delim_for_nevra;
+
+                // test presence of arch
+                if (end - arch_delim_for_nevra < 1) {
+                    continue;
+                }
+                nevra.arch.assign(arch_delim_for_nevra);
+
+                result.push_back(std::move(nevra));
+            } break;
+            case Form::NEVR: {
+                if (evr_delim == nullptr || release_delim == nullptr) {
+                    continue;
+                }
+                const char * evr_delim_for_nevr = evr_delim;
+                const char * release_delim_for_nevr = release_delim;
+
+                // test name presence
+                if (evr_delim_for_nevr == nevra_pattern) {
+                    continue;
+                }
+
+                nevra.name.assign(nevra_pattern, evr_delim_for_nevr);
+                ++evr_delim_for_nevr;
+
+                // test presence of epoch (optional)
+                if (epoch_delim != nullptr) {
+                    // test that ':' was in range of evr. ':' sign is only allowed in evr as an epoch deliminator
+                    if (epoch_delim - evr_delim_for_nevr < 1 || release_delim_for_nevr - epoch_delim < 2) {
+                        continue;
+                    }
+                    nevra.epoch.assign(evr_delim_for_nevr, epoch_delim);
+                    evr_delim_for_nevr = epoch_delim + 1;
+                }
+
+                // test presence of version
+                if (release_delim_for_nevr - evr_delim_for_nevr < 1) {
+                    continue;
+                }
+                nevra.version.assign(evr_delim_for_nevr, release_delim_for_nevr);
+                ++release_delim_for_nevr;
+
+                // test presence of release
+                if (end - release_delim_for_nevr < 1) {
+                    continue;
+                }
+                nevra.release.assign(release_delim_for_nevr);
+
+                result.push_back(std::move(nevra));
+            } break;
+            case Form::NEV: {
+                if (evr_delim == nullptr) {
+                    continue;
+                }
+                const char * evr_delim_for_nev = release_delim == nullptr ? evr_delim : release_delim;
+
+                // test name presence
+                if (evr_delim_for_nev == nevra_pattern) {
+                    continue;
+                }
+
+                nevra.name.assign(nevra_pattern, evr_delim_for_nev);
+                ++evr_delim_for_nev;
+
+                // test presence of epoch (optional)
+                if (epoch_delim != nullptr) {
+                    // test that ':' was in range of evr. ':' sign is only allowed in evr as an epoch deliminator
+                    if (epoch_delim - evr_delim_for_nev < 1 || end - epoch_delim < 2) {
+                        continue;
+                    }
+                    nevra.epoch.assign(evr_delim_for_nev, epoch_delim);
+                    evr_delim_for_nev = epoch_delim + 1;
+                }
+
+                // test presence of version
+                if (end - evr_delim_for_nev < 1) {
+                    continue;
+                }
+                nevra.version.assign(evr_delim_for_nev);
+
+                result.push_back(std::move(nevra));
+            } break;
+            case Form::NA: {
+                if (arch_delim == nullptr) {
+                    continue;
+                }
+                const char * arch_delim_for_nev = arch_delim;
+
+                // test name presence
+                if (arch_delim_for_nev == nevra_pattern) {
+                    continue;
+                }
+
+                nevra.name.assign(nevra_pattern, arch_delim_for_nev);
+                ++arch_delim_for_nev;
+
+                // test arch for absence of '-'
+                if (evr_delim != nullptr) {
+                    const char * evr_delim_for_na = release_delim == nullptr ? evr_delim : release_delim;
+                    if (arch_delim_for_nev < evr_delim_for_na) {
+                        continue;
+                    }
+                }
+
+                // test arch presence
+                if (end - arch_delim_for_nev < 1) {
+                    continue;
+                }
+                nevra.arch.assign(arch_delim_for_nev);
+
+                result.push_back(std::move(nevra));
+            } break;
+            case Form::NAME:
+                // test name presence
+                if (end == nevra_pattern) {
+                    continue;
+                }
+
+                nevra.name.assign(nevra_pattern);
+
+                result.push_back(std::move(nevra));
+                break;
+        }
+    }
+    return result;
+}
+
+
 bool Nevra::parse(const std::string & nevra_str, Form form) {
     enum { NAME = 1, EPOCH = 3, VERSION = 4, RELEASE = 5, ARCH = 6, _LAST_ };
 

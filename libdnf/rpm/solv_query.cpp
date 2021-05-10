@@ -2205,22 +2205,20 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
     if (settings.with_nevra) {
         const std::vector<Nevra::Form> & test_forms =
             settings.nevra_forms.empty() ? Nevra::get_default_pkg_spec_forms() : settings.nevra_forms;
-        Nevra nevra_obj;
-        for (auto form : test_forms) {
-            if (nevra_obj.parse(pkg_spec, form)) {
-                Impl::filter_nevra(
-                    *this,
-                    nevra_obj,
-                    true,
-                    settings.ignore_case ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB,
-                    filter_result,
-                    with_src);
-                filter_result &= *p_impl;
-                if (!filter_result.empty()) {
-                    // Apply filter results to query
-                    *p_impl &= filter_result;
-                    return {true, libdnf::rpm::Nevra(std::move(nevra_obj))};
-                }
+        auto nevras = rpm::Nevra::parse_all(pkg_spec, test_forms);
+        for (auto & nevra_obj : nevras) {
+            Impl::filter_nevra(
+                *this,
+                nevra_obj,
+                true,
+                settings.ignore_case ? libdnf::sack::QueryCmp::IGLOB : libdnf::sack::QueryCmp::GLOB,
+                filter_result,
+                with_src);
+            filter_result &= *p_impl;
+            if (!filter_result.empty()) {
+                // Apply filter results to query
+                *p_impl &= filter_result;
+                return {true, libdnf::rpm::Nevra(nevra_obj)};
             }
         }
         if (settings.nevra_forms.empty()) {

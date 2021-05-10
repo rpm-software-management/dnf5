@@ -33,6 +33,8 @@ public:
 
     /// The default forms and their order determine pkg_spec matching
     static const std::vector<Form> & get_default_pkg_spec_forms();
+    static std::vector<Nevra> parse_all(const std::string & nevra_str);
+    static std::vector<Nevra> parse_all(const std::string & nevra_str, const std::vector<Form> & forms);
 
     Nevra() = default;
     Nevra(const Nevra & src) = default;
@@ -81,6 +83,10 @@ private:
     std::string release;
     std::string arch;
 };
+
+inline std::vector<Nevra> Nevra::parse_all(const std::string & nevra_str) {
+    return parse_all(nevra_str, get_default_pkg_spec_forms());
+}
 
 inline const std::string & Nevra::get_name() const noexcept {
     return name;
