@@ -20,6 +20,8 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include "repolist.hpp"
 
 #include "../../context.hpp"
+#include "../../wrappers/dbus_repo_wrapper.hpp"
+#include "../../wrappers/dbus_query_repo_wrapper.hpp"
 #include "libdnf-cli/output/repolist.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
@@ -113,57 +115,6 @@ std::string join_pairs(const std::vector<std::pair<std::string, std::string>> & 
     return join(records, record_separator);
 }
 
-class RepoDbus {
-public:
-    RepoDbus(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata){};
-    std::string get_id() const { return rawdata.at("id"); }
-    std::string get_name() const { return rawdata.at("name"); }
-    bool is_enabled() const { return rawdata.at("enabled"); }
-    uint64_t get_size() const { return rawdata.at("size"); }
-    std::string get_revision() const { return rawdata.at("revision"); }
-    std::vector<std::string> get_content_tags() const { return rawdata.at("content_tags"); }
-    std::vector<std::pair<std::string, std::string>> get_distro_tags() const {
-        // sdbus::Variant cannot handle vector<pair<string,string>> so values are
-        // serialized to vector<string>.
-        // convert [tag1, val1, tag2, val2,...] back to [(tag1, val1), (tag2, val2),...]
-        std::vector<std::pair<std::string, std::string>> dt {};
-        std::vector<std::string> tags_raw = rawdata.at("distro_tags");
-        if (!tags_raw.empty()) {
-            for(size_t i = 0; i < (tags_raw.size() - 1); i+=2){
-                dt.emplace_back(tags_raw[i], tags_raw[i + 1]);
-            }
-        }
-        return dt;
-    }
-    int get_max_timestamp() const { return rawdata.at("updated"); }
-    uint64_t get_pkgs() const { return rawdata.at("pkgs"); }
-    uint64_t get_available_pkgs() const { return rawdata.at("available_pkgs"); }
-    std::string get_metalink() const { return rawdata.at("metalink"); }
-    std::string get_mirrorlist() const { return rawdata.at("mirrorlist"); }
-    std::vector<std::string> get_baseurl() const { return rawdata.at("baseurl"); }
-    int get_metadata_expire() const { return rawdata.at("metadata_expire"); }
-    std::vector<std::string> get_excludepkgs() const { return rawdata.at("excludepkgs"); }
-    std::vector<std::string> get_includepkgs() const { return rawdata.at("includepkgs"); }
-    std::string get_repofile() const { return rawdata.at("repofile"); }
-
-private:
-    dnfdaemon::KeyValueMap rawdata;
-};
-
-class QueryRepoDbus {
-public:
-    QueryRepoDbus(dnfdaemon::KeyValueMapList & repositories) {
-        for (auto raw_repo : repositories) {
-            queryrepo.push_back(std::make_unique<RepoDbus>(raw_repo));
-        }
-    }
-
-    const std::vector< std::unique_ptr<RepoDbus> > & get_data() const { return queryrepo; }
-
-private:
-    std::vector< std::unique_ptr<RepoDbus> > queryrepo;
-};
-
 void CmdRepolist::run(Context & ctx) {
     // prepare options from command line arguments
     dnfdaemon::KeyValueMap options = {};
@@ -200,13 +151,13 @@ void CmdRepolist::run(Context & ctx) {
         // print the output table
         bool with_status = enable_disable_option->get_value() == "all";
         libdnf::cli::output::print_repolist_table(
-            QueryRepoDbus(repositories), with_status,
+            DbusQueryRepoWrapper(repositories), with_status,
             libdnf::cli::output::COL_REPO_ID);
     } else {
         // repoinfo command
 
         for (auto & raw_repo : repositories) {
-            RepoDbus repo(raw_repo);
+            DbusRepoWrapper repo(raw_repo);
             auto repo_info = libdnf::cli::output::RepoInfo();
             repo_info.add_repo(repo, ctx.verbose.get_value(), ctx.verbose.get_value());
             repo_info.print();
