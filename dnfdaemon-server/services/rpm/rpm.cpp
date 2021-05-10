@@ -45,6 +45,7 @@ enum class PackageAttribute {
     release,
     arch,
     repo,
+    size,
 
     nevra,
     full_nevra
@@ -58,6 +59,7 @@ const static std::map<std::string, PackageAttribute> package_attributes{
     {"release", PackageAttribute::release},
     {"arch", PackageAttribute::arch},
     {"repo", PackageAttribute::repo},
+    {"size", PackageAttribute::size},
     {"nevra", PackageAttribute::nevra},
     {"full_nevra", PackageAttribute::full_nevra}};
 
@@ -89,6 +91,9 @@ dnfdaemon::KeyValueMap package_to_map(
                 break;
             case PackageAttribute::repo:
                 dbus_package.emplace(attr, libdnf_package.get_repo()->get_id());
+                break;
+            case PackageAttribute::size:
+                dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_size()));
                 break;
             case PackageAttribute::nevra:
                 dbus_package.emplace(attr, libdnf_package.get_nevra());
@@ -194,7 +199,7 @@ void packages_to_transaction(
     std::vector<dnfdaemon::DbusTransactionItem> & result,
     const libdnf::transaction::TransactionItemAction action,
     const std::vector<libdnf::rpm::Package> & packages) {
-    std::vector<std::string> attr{"name", "epoch", "version", "release", "arch", "repo", "size"};
+    std::vector<std::string> attr{"name", "epoch", "version", "release", "arch", "repo", "size", "full_nevra"};
     for (auto & p : packages) {
         result.push_back(dnfdaemon::DbusTransactionItem(static_cast<unsigned int>(action), package_to_map(p, attr)));
     }

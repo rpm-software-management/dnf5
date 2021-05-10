@@ -42,7 +42,7 @@ public:
     std::string get_repo_id() const { return rawdata.at("repo"); }
     std::string get_nevra() const { return rawdata.at("nevra"); }
     std::string get_full_nevra() const { return rawdata.at("full_nevra"); }
-    int get_size() const { return rawdata.at("size"); }
+    uint64_t get_size() const { return rawdata.at("size"); }
     std::string get_sourcerpm() const { return rawdata.at("sourcerpm"); }
     std::string get_summary() const { return rawdata.at("summary"); }
     std::string get_url() const { return rawdata.at("url"); }
