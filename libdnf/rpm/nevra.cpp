@@ -63,14 +63,15 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 if (evr_delim == nullptr || release_delim == nullptr || arch_delim == nullptr) {
                     continue;
                 }
+
+                // test name presence
+                if (evr_delim == nevra_pattern) {
+                    continue;
+                }
+
                 const char * evr_delim_for_nevra = evr_delim;
                 const char * release_delim_for_nevra = release_delim;
                 const char * arch_delim_for_nevra = arch_delim;
-
-                // test name presence
-                if (evr_delim_for_nevra == nevra_pattern) {
-                    continue;
-                }
 
                 nevra.name.assign(nevra_pattern, evr_delim_for_nevra);
                 ++evr_delim_for_nevra;
@@ -111,13 +112,14 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 if (evr_delim == nullptr || release_delim == nullptr) {
                     continue;
                 }
-                const char * evr_delim_for_nevr = evr_delim;
-                const char * release_delim_for_nevr = release_delim;
 
                 // test name presence
-                if (evr_delim_for_nevr == nevra_pattern) {
+                if (evr_delim == nevra_pattern) {
                     continue;
                 }
+
+                const char * evr_delim_for_nevr = evr_delim;
+                const char * release_delim_for_nevr = release_delim;
 
                 nevra.name.assign(nevra_pattern, evr_delim_for_nevr);
                 ++evr_delim_for_nevr;
@@ -151,12 +153,13 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 if (evr_delim == nullptr) {
                     continue;
                 }
-                const char * evr_delim_for_nev = release_delim == nullptr ? evr_delim : release_delim;
 
                 // test name presence
-                if (evr_delim_for_nev == nevra_pattern) {
+                if (evr_delim == nevra_pattern) {
                     continue;
                 }
+
+                const char * evr_delim_for_nev = release_delim == nullptr ? evr_delim : release_delim;
 
                 nevra.name.assign(nevra_pattern, evr_delim_for_nev);
                 ++evr_delim_for_nev;
@@ -188,12 +191,12 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                     continue;
                 }
 
-                const char * arch_delim_for_nev = arch_delim;
-
                 // test name presence
-                if (arch_delim_for_nev == nevra_pattern) {
+                if (arch_delim == nevra_pattern) {
                     continue;
                 }
+
+                const char * arch_delim_for_nev = arch_delim;
 
                 nevra.name.assign(nevra_pattern, arch_delim_for_nev);
                 ++arch_delim_for_nev;
