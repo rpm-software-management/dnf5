@@ -2205,7 +2205,7 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
     if (settings.with_nevra) {
         const std::vector<Nevra::Form> & test_forms =
             settings.nevra_forms.empty() ? Nevra::get_default_pkg_spec_forms() : settings.nevra_forms;
-        auto nevras = rpm::Nevra::parse_all(pkg_spec, test_forms);
+        auto nevras = rpm::Nevra::parse(pkg_spec, test_forms);
         for (auto & nevra_obj : nevras) {
             Impl::filter_nevra(
                 *this,

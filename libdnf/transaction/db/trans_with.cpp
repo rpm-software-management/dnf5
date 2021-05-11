@@ -106,10 +106,10 @@ void save_transaction_runtime_packages(libdnf::utils::SQLite3 & conn, Transactio
 
 
     for (auto & ti : trans.get_runtime_packages()) {
-        libdnf::rpm::Nevra nevra;
-        nevra.parse(ti, libdnf::rpm::Nevra::Form::NEVRA);
+        auto nevras = rpm::Nevra::parse(ti, {libdnf::rpm::Nevra::Form::NEVRA});
+        // TODO(jmracek) What about to create a constructor of Package that will accept NEVRA string
         Package rpm(trans);
-        libdnf::rpm::copy_nevra_attributes(nevra, rpm);
+        libdnf::rpm::copy_nevra_attributes(*nevras.begin(), rpm);
         auto pk = rpm_select_pk(*query_rpm_select_pk, rpm);
         if (pk == 0) {
             pk = item_insert(*query_item_insert);

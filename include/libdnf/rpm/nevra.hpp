@@ -33,15 +33,16 @@ public:
 
     /// The default forms and their order determine pkg_spec matching
     static const std::vector<Form> & get_default_pkg_spec_forms();
-    static std::vector<Nevra> parse_all(const std::string & nevra_str);
-    static std::vector<Nevra> parse_all(const std::string & nevra_str, const std::vector<Form> & forms);
+    /// Parse string into Nevra struct
+    static std::vector<Nevra> parse(const std::string & nevra_str);
+    static std::vector<Nevra> parse(const std::string & nevra_str, const std::vector<Form> & forms);
 
     Nevra() = default;
     Nevra(const Nevra & src) = default;
     Nevra(Nevra && src) = default;
 
     /// Returns false when parsing failed and stored data are in inconsistance state.
-    bool parse(const std::string & nevra_str, Form form);
+
     void clear() noexcept;
 
     /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.name
@@ -84,8 +85,8 @@ private:
     std::string arch;
 };
 
-inline std::vector<Nevra> Nevra::parse_all(const std::string & nevra_str) {
-    return parse_all(nevra_str, get_default_pkg_spec_forms());
+inline std::vector<Nevra> Nevra::parse(const std::string & nevra_str) {
+    return parse(nevra_str, get_default_pkg_spec_forms());
 }
 
 inline const std::string & Nevra::get_name() const noexcept {
