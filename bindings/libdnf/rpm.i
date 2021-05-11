@@ -35,6 +35,9 @@
 
 %include "libdnf/rpm/checksum.hpp"
 %include "libdnf/rpm/nevra.hpp"
+
+%template(VectorNevra) std::vector<libdnf::rpm::Nevra>;
+
 %include "libdnf/rpm/solv_sack.hpp"
 %include "libdnf/rpm/reldep.hpp"
 

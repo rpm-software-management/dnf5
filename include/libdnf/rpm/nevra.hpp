@@ -40,6 +40,7 @@ public:
     Nevra() = default;
     Nevra(const Nevra & src) = default;
     Nevra(Nevra && src) = default;
+    Nevra & operator=(const Nevra & other) = default;
 
     /// Returns false when parsing failed and stored data are in inconsistance state.
 
