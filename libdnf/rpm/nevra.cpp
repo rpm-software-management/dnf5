@@ -183,6 +183,11 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 if (arch_delim == nullptr) {
                     continue;
                 }
+                // test: NA cannot contain ':'
+                if (epoch_delim != nullptr) {
+                    continue;
+                }
+
                 const char * arch_delim_for_nev = arch_delim;
 
                 // test name presence
@@ -210,6 +215,11 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 result.push_back(std::move(nevra));
             } break;
             case Form::NAME:
+                // test: Name cannot contain ':'
+                if (epoch_delim != nullptr) {
+                    continue;
+                }
+
                 // test name presence
                 if (end == nevra_pattern) {
                     continue;
