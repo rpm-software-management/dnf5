@@ -24,6 +24,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "threads_manager.hpp"
 #include "utils.hpp"
 
+#include <fmt/format.h>
 #include <libdnf/base/base.hpp>
 #include <libdnf/base/goal.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -49,7 +50,11 @@ protected:
 
 class Session {
 public:
-    Session(sdbus::IConnection & connection, dnfdaemon::KeyValueMap session_configuration, std::string object_path, std::string sender);
+    Session(
+        sdbus::IConnection & connection,
+        dnfdaemon::KeyValueMap session_configuration,
+        std::string object_path,
+        std::string sender);
     ~Session();
 
     template <typename ItemType>
@@ -72,6 +77,28 @@ public:
     bool check_authorization(const std::string & actionid, const std::string & sender);
     void fill_sack();
     bool read_all_repos();
+
+    template <class S>
+    void run_in_thread(S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &&), sdbus::MethodCall && call) {
+        auto worker = std::thread(
+            [&method, &service, this](sdbus::MethodCall call) {
+                try {
+                    auto reply = (service.*method)(std::move(call));
+                    reply.send();
+                } catch (std::exception & ex) {
+                    auto reply = call.createErrorReply({dnfdaemon::ERROR, ex.what()});
+                    try {
+                        reply.send();
+                    } catch (const std::exception & e) {
+                        auto & logger = base->get_logger();
+                        logger.error(fmt::format("Error sending d-bus error reply: {}", e.what()));
+                    }
+                }
+                threads_manager.current_thread_finished();
+            },
+            std::move(call));
+        threads_manager.register_thread(std::move(worker));
+    }
 
 private:
     sdbus::IConnection & connection;
