@@ -104,7 +104,8 @@ private:
     /// @param cmpType p_cmpType: ComparisonType, and their combinations
     /// @return DependencyId
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char *name, const char *version, int cmpType)
-    static ReldepId get_reldep_id(SolvSack * sack, const char * name, const char * version, CmpType cmp_type);
+    static ReldepId get_reldep_id(
+        SolvSack * sack, const char * name, const char * version, CmpType cmp_type, int create = 1);
 
     /// @brief Returns Id of reldep or raises std::runtime_error if parsing fails
     ///
@@ -112,7 +113,7 @@ private:
     /// @param reldepStr p_reldepStr: const Char* of reldep
     /// @return DependencyId
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
-    static ReldepId get_reldep_id(SolvSack * sack, const std::string & reldep_str);
+    static ReldepId get_reldep_id(SolvSack * sack, const std::string & reldep_str, int create = 1);
 
     SolvSackWeakPtr sack;
     ReldepId id;

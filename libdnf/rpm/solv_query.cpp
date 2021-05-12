@@ -1240,7 +1240,7 @@ SolvQuery & SolvQuery::ifilter_provides(const ReldepList & reldep_list, libdnf::
 }
 
 /// Provide libdnf::sack::QueryCmp without NOT flag
-static void str2reldep_internal(
+void SolvQuery::Impl::str2reldep_internal(
     ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern) {
     libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
     const char * c_pattern = pattern.c_str();
@@ -1251,7 +1251,7 @@ static void str2reldep_internal(
 
     switch (tmp_cmp_type) {
         case libdnf::sack::QueryCmp::EQ:
-            reldep_list.add_reldep(pattern);
+            reldep_list.add_reldep(pattern, 0);
             break;
         case libdnf::sack::QueryCmp::GLOB:
             reldep_list.add_reldep_with_glob(pattern);
@@ -1263,7 +1263,7 @@ static void str2reldep_internal(
 }
 
 /// Provide libdnf::sack::QueryCmp without NOT flag
-static void str2reldep_internal(
+void SolvQuery::Impl::str2reldep_internal(
     ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
 
@@ -1281,7 +1281,7 @@ SolvQuery & SolvQuery::ifilter_provides(const std::vector<std::string> & pattern
 
     ReldepList reldep_list(get_sack());
 
-    str2reldep_internal(reldep_list, cmp_type, patterns);
+    Impl::str2reldep_internal(reldep_list, cmp_type, patterns);
 
     if (cmp_not) {
         return ifilter_provides(reldep_list, libdnf::sack::QueryCmp::NEQ);
@@ -2239,13 +2239,15 @@ std::pair<bool, libdnf::rpm::Nevra> SolvQuery::resolve_pkg_spec(
     }
     if (settings.with_provides) {
         ReldepList reldep_list(sack);
-        str2reldep_internal(reldep_list, libdnf::sack::QueryCmp::GLOB, true, pkg_spec);
-        sack->p_impl->make_provides_ready();
-        Impl::filter_provides(pool, libdnf::sack::QueryCmp::EQ, reldep_list, filter_result);
-        filter_result &= *p_impl;
-        if (!filter_result.empty()) {
-            *p_impl &= filter_result;
-            return {true, libdnf::rpm::Nevra()};
+        Impl::str2reldep_internal(reldep_list, libdnf::sack::QueryCmp::GLOB, true, pkg_spec);
+        if (reldep_list.size() != 0) {
+            sack->p_impl->make_provides_ready();
+            Impl::filter_provides(pool, libdnf::sack::QueryCmp::EQ, reldep_list, filter_result);
+            filter_result &= *p_impl;
+            if (!filter_result.empty()) {
+                *p_impl &= filter_result;
+                return {true, libdnf::rpm::Nevra()};
+            }
         }
     }
     if (settings.with_filenames && libdnf::utils::is_file_pattern(pkg_spec)) {

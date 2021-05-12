@@ -105,21 +105,19 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
             case SOLVABLE_SUPPLEMENTS:
             case SOLVABLE_ENHANCES:
             case SOLVABLE_FILELIST:
-                add(Reldep::get_reldep_id(
-                    sack,
-                    di.kv.str,
-                    dep_splitter.get_evr_cstr(),
-                    dep_splitter.get_cmp_type()
-                ));
+                add(Reldep::get_reldep_id(sack, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type()));
         }
     }
     dataiterator_free(&di);
     return true;
 }
 
-bool ReldepList::add_reldep(const std::string & reldep_str) {
+bool ReldepList::add_reldep(const std::string & reldep_str, int create) {
     try {
-        ReldepId id = Reldep::get_reldep_id(p_impl->sack.get(), reldep_str);
+        ReldepId id = Reldep::get_reldep_id(p_impl->sack.get(), reldep_str, create);
+        if (id.id == 0) {
+            return false;
+        }
         add(id);
         return true;
         // TODO(jmracek) Make catch error more specific

@@ -31,6 +31,7 @@ namespace libdnf::rpm {
 // forward declarations
 class Package;
 class ReldepListIterator;
+class SolvQuery;
 
 /// @replaces libdnf/dnf-reldep-list.h:struct:DnfReldepList
 /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:struct:DependencyContainer
@@ -103,9 +104,25 @@ public:
 private:
     friend ReldepListIterator;
     friend Package;
+    friend SolvQuery;
+
+    /// @brief Adds a reldep from Char*. It does not support globs.
+    ///
+    /// @param reldep_str p_reldep_str: Char*
+    /// @param create p_create: int 0 or 1 allowed. When 0 it will not create reldep for unknown name
+    /// @return bool false if parsing or reldep creation fails
+    ///
+    /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:addReldep(const char *reldepStr)
+    bool add_reldep(const std::string & reldep_str, int create);
+
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };
+
+
+inline bool ReldepList::add_reldep(const std::string & reldep_str) {
+    return add_reldep(reldep_str, 1);
+}
 
 
 }  // namespace libdnf::rpm

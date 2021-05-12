@@ -61,7 +61,7 @@ std::string Reldep::to_string() {
     return cstring ? std::string(cstring) : std::string();
 }
 
-ReldepId Reldep::get_reldep_id(SolvSack * sack, const char * name, const char * version, CmpType cmp_type) {
+ReldepId Reldep::get_reldep_id(SolvSack * sack, const char * name, const char * version, CmpType cmp_type, int create) {
     static_assert(
         static_cast<int>(Reldep::CmpType::EQ) == REL_EQ, "Reldep::ComparisonType::EQ is not identical to solv/REL_EQ");
     static_assert(
@@ -69,7 +69,10 @@ ReldepId Reldep::get_reldep_id(SolvSack * sack, const char * name, const char * 
     static_assert(
         static_cast<int>(Reldep::CmpType::GT) == REL_GT, "Reldep::ComparisonType::GT is not identical to solv/REL_GT");
     Pool * pool = sack->p_impl->pool;
-    Id id = pool_str2id(pool, name, 1);
+    Id id = pool_str2id(pool, name, create);
+    if (id == 0) {
+        return ReldepId();
+    }
 
     if (version) {
         Id evr_id = pool_str2id(pool, version, 1);
@@ -78,7 +81,7 @@ ReldepId Reldep::get_reldep_id(SolvSack * sack, const char * name, const char * 
     return ReldepId(id);
 }
 
-ReldepId Reldep::get_reldep_id(SolvSack * sack, const std::string & reldep_str) {
+ReldepId Reldep::get_reldep_id(SolvSack * sack, const std::string & reldep_str, int create) {
     if (reldep_str[0] == '(') {
         // Rich dependency
         Pool * pool = sack->p_impl->pool;
@@ -94,7 +97,8 @@ ReldepId Reldep::get_reldep_id(SolvSack * sack, const std::string & reldep_str) 
     if (!dep_splitter.parse(reldep_str)) {
         throw std::runtime_error("Cannot parse a dependency string");
     }
-    return get_reldep_id(sack, dep_splitter.get_name_cstr(), dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type());
+    return get_reldep_id(
+        sack, dep_splitter.get_name_cstr(), dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type(), create);
 }
 
 }  // namespace libdnf::rpm

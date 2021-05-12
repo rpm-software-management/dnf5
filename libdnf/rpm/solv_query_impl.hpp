@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_QUERY_IMPL_HPP
 #define LIBDNF_RPM_SOLV_QUERY_IMPL_HPP
 
-#include "libdnf/rpm/solv_query.hpp"
-
 #include "solv/solv_map.hpp"
+
+#include "libdnf/rpm/solv_query.hpp"
 
 extern "C" {
 #include <solv/solvable.h>
@@ -60,6 +60,12 @@ public:
         bool cmp_glob,
         libdnf::sack::QueryCmp cmp_type,
         solv::SolvMap & filter_result);
+    /// Provide libdnf::sack::QueryCmp without NOT flag
+    static void str2reldep_internal(
+        ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern);
+    /// Provide libdnf::sack::QueryCmp without NOT flag
+    static void str2reldep_internal(
+        ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
 };
 
 
