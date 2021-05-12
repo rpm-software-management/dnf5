@@ -32,9 +32,9 @@ const std::vector<Nevra::Form> & Nevra::get_default_pkg_spec_forms() {
 
 std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector<Form> & forms) {
     std::vector<Nevra> result;
-    const char * evr_delim = nullptr;
+    const char * before_last_delim = nullptr;
     const char * epoch_delim = nullptr;
-    const char * release_delim = nullptr;
+    const char * last_delim = nullptr;
     const char * arch_delim = nullptr;
     const char * end;
 
@@ -42,8 +42,8 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
     const char * nevra_pattern = nevra_str.c_str();
     for (end = nevra_pattern; *end != '\0'; ++end) {
         if (*end == '-') {
-            evr_delim = release_delim;
-            release_delim = end;
+            before_last_delim = last_delim;
+            last_delim = end;
         } else if (*end == '.') {
             arch_delim = end;
         } else if (*end == ':') {
@@ -60,17 +60,17 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
         Nevra nevra;
         switch (form) {
             case Form::NEVRA: {
-                if (evr_delim == nullptr || release_delim == nullptr || arch_delim == nullptr) {
+                if (before_last_delim == nullptr || last_delim == nullptr || arch_delim == nullptr) {
                     continue;
                 }
 
                 // test name presence
-                if (evr_delim == nevra_pattern) {
+                if (before_last_delim == nevra_pattern) {
                     continue;
                 }
 
-                const char * evr_delim_for_nevra = evr_delim;
-                const char * release_delim_for_nevra = release_delim;
+                const char * evr_delim_for_nevra = before_last_delim;
+                const char * release_delim_for_nevra = last_delim;
                 const char * arch_delim_for_nevra = arch_delim;
 
                 nevra.name.assign(nevra_pattern, evr_delim_for_nevra);
@@ -109,17 +109,17 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 result.push_back(std::move(nevra));
             } break;
             case Form::NEVR: {
-                if (evr_delim == nullptr || release_delim == nullptr) {
+                if (before_last_delim == nullptr || last_delim == nullptr) {
                     continue;
                 }
 
                 // test name presence
-                if (evr_delim == nevra_pattern) {
+                if (before_last_delim == nevra_pattern) {
                     continue;
                 }
 
-                const char * evr_delim_for_nevr = evr_delim;
-                const char * release_delim_for_nevr = release_delim;
+                const char * evr_delim_for_nevr = before_last_delim;
+                const char * release_delim_for_nevr = last_delim;
 
                 nevra.name.assign(nevra_pattern, evr_delim_for_nevr);
                 ++evr_delim_for_nevr;
@@ -150,16 +150,16 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                 result.push_back(std::move(nevra));
             } break;
             case Form::NEV: {
-                if (evr_delim == nullptr) {
+                if (last_delim == nullptr) {
                     continue;
                 }
 
                 // test name presence
-                if (evr_delim == nevra_pattern) {
+                if (before_last_delim == nevra_pattern) {
                     continue;
                 }
 
-                const char * evr_delim_for_nev = release_delim == nullptr ? evr_delim : release_delim;
+                const char * evr_delim_for_nev = last_delim;
 
                 nevra.name.assign(nevra_pattern, evr_delim_for_nev);
                 ++evr_delim_for_nev;
@@ -196,24 +196,18 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
                     continue;
                 }
 
-                const char * arch_delim_for_nev = arch_delim;
-
-                nevra.name.assign(nevra_pattern, arch_delim_for_nev);
-                ++arch_delim_for_nev;
-
                 // test arch for absence of '-'
-                if (evr_delim != nullptr) {
-                    const char * evr_delim_for_na = release_delim == nullptr ? evr_delim : release_delim;
-                    if (arch_delim_for_nev < evr_delim_for_na) {
-                        continue;
-                    }
+                if (last_delim != nullptr && last_delim > arch_delim) {
+                    continue;
                 }
 
                 // test arch presence
-                if (end - arch_delim_for_nev < 1) {
+                if (end - arch_delim == 1) {
                     continue;
                 }
-                nevra.arch.assign(arch_delim_for_nev);
+
+                nevra.name.assign(nevra_pattern, arch_delim);
+                nevra.arch.assign(arch_delim + 1);
 
                 result.push_back(std::move(nevra));
             } break;

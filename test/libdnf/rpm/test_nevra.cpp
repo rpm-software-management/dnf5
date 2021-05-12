@@ -71,6 +71,29 @@ void NevraTest::test_nevra() {
     }
 
     {
+        auto nevras = libdnf::rpm::Nevra::parse("fish-8:3.6.9", {libdnf::rpm::Nevra::Form::NEV});
+        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        auto & nevra = *nevras.begin();
+        CPPUNIT_ASSERT_EQUAL(std::string("fish"), nevra.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("8"), nevra.get_epoch());
+        CPPUNIT_ASSERT_EQUAL(std::string("3.6.9"), nevra.get_version());
+        CPPUNIT_ASSERT_EQUAL(std::string(""), nevra.get_release());
+        CPPUNIT_ASSERT_EQUAL(std::string(""), nevra.get_arch());
+    }
+
+    {
+        auto nevras = libdnf::rpm::Nevra::parse("fish-3.6.9", {libdnf::rpm::Nevra::Form::NEV});
+        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        auto & nevra = *nevras.begin();
+        CPPUNIT_ASSERT_EQUAL(std::string("fish"), nevra.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string(""), nevra.get_epoch());
+        CPPUNIT_ASSERT_EQUAL(std::string("3.6.9"), nevra.get_version());
+        CPPUNIT_ASSERT_EQUAL(std::string(""), nevra.get_release());
+        CPPUNIT_ASSERT_EQUAL(std::string(""), nevra.get_arch());
+    }
+
+
+    {
         auto nevras = libdnf::rpm::Nevra::parse("four-of-fish-3.6.9.i686", {libdnf::rpm::Nevra::Form::NA});
         CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
         auto & nevra = *nevras.begin();
@@ -79,6 +102,21 @@ void NevraTest::test_nevra() {
         CPPUNIT_ASSERT(nevra.get_version() == "");
         CPPUNIT_ASSERT(nevra.get_release() == "");
         CPPUNIT_ASSERT(nevra.get_arch() == "i686");
+    }
+
+    {
+        auto nevras = libdnf::rpm::Nevra::parse("name.ar-ch", {libdnf::rpm::Nevra::Form::NA});
+        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+    }
+
+    {
+        auto nevras = libdnf::rpm::Nevra::parse("name.-arch", {libdnf::rpm::Nevra::Form::NA});
+        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+    }
+
+    {
+        auto nevras = libdnf::rpm::Nevra::parse("name.", {libdnf::rpm::Nevra::Form::NA});
+        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
     }
 
     {
