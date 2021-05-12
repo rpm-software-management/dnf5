@@ -55,6 +55,16 @@ static inline bool is_file_pattern(const std::string & pattern) {
     return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
 }
 
+inline std::string to_lowercase(const std::string & source) {
+    auto length = source.size();
+    std::string result;
+    result.reserve(length);
+    for (unsigned index = 0; index < length; ++index) {
+        result += static_cast<char>(tolower(source[index]));
+    }
+    return result;
+}
+
 inline Id id_to_lowercase_id(Pool * pool, const char * name_cstring, int create) {
     int name_length = static_cast<int>(strlen(name_cstring));
     auto tmp_name_cstring = pool_alloctmpspace(pool, name_length);

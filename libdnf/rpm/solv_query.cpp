@@ -1543,15 +1543,44 @@ void SolvQuery::Impl::filter_nevra(
                     ++low;
                 }
             } break;
-            case libdnf::sack::QueryCmp::GLOB:
-            case libdnf::sack::QueryCmp::IGLOB: {
-                int fnmatch_flags = name_cmp_type == libdnf::sack::QueryCmp::IGLOB ? FNM_CASEFOLD : 0;
+            case libdnf::sack::QueryCmp::GLOB: {
                 for (Id candidate_id : *pkg_set.p_impl) {
                     const char * candidate_name = solv::get_name(pool, candidate_id);
-                    if (!all_names && fnmatch(name_c_pattern, candidate_name, fnmatch_flags) != 0) {
+                    if (!all_names && fnmatch(name_c_pattern, candidate_name, 0) != 0) {
                         continue;
                     }
 
+                    if (!is_valid_candidate(
+                            pool,
+                            candidate_id,
+                            src,
+                            test_epoch,
+                            test_version,
+                            test_release,
+                            test_arch,
+                            epoch_c_pattern,
+                            version_c_pattern,
+                            release_c_pattern,
+                            arch_c_pattern,
+                            epoch_cmp_type,
+                            version_cmp_type,
+                            release_cmp_type,
+                            arch_cmp_type)) {
+                        continue;
+                    }
+                    filter_result.add_unsafe(candidate_id);
+                }
+            } break;
+            case libdnf::sack::QueryCmp::IGLOB: {
+                auto & sorted_icase_solvables = sack->p_impl->get_sorted_icase_solvables();
+                auto icase_name = libdnf::utils::to_lowercase(name);
+                auto icase_name_cstring = icase_name.c_str();
+                for (auto const & [name_id, solvable] : sorted_icase_solvables) {
+                    auto candidate_name = pool_id2str(pool, name_id);
+                    if (!all_names && fnmatch(icase_name_cstring, candidate_name, 0) != 0) {
+                        continue;
+                    }
+                    Id candidate_id = pool_solvable2id(pool, solvable);
                     if (!is_valid_candidate(
                             pool,
                             candidate_id,
