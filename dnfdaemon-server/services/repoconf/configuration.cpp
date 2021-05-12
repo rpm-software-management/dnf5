@@ -44,12 +44,7 @@ void Configuration::read_main_config() {
         std::unique_ptr<libdnf::ConfigParser> main_parser(new libdnf::ConfigParser);
 
         main_parser->read(main_config_path);
-        cfg_main.load_from_parser(
-            *main_parser,
-            "main",
-            base->get_vars(),
-            base->get_logger()
-        );
+        cfg_main.load_from_parser(*main_parser, "main", base->get_vars(), base->get_logger());
 
         base->get_vars().load(cfg_main.installroot().get_value(), cfg_main.varsdir().get_value());
 
@@ -72,12 +67,7 @@ void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const s
             auto section = cfg_parser_data_iter.first;
             std::unique_ptr<libdnf::rpm::ConfigRepo> cfg_repo(new libdnf::rpm::ConfigRepo(cfg_main));
 
-            cfg_repo->load_from_parser(
-                *repo_parser,
-                section,
-                base->get_vars(),
-                base->get_logger()
-            );
+            cfg_repo->load_from_parser(*repo_parser, section, base->get_vars(), base->get_logger());
             // save configured repo
             std::unique_ptr<RepoInfo> repoinfo(new RepoInfo());
             repoinfo->file_path = std::string(file_path);

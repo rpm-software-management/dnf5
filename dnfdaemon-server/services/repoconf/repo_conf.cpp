@@ -31,19 +31,19 @@ void RepoConf::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            this->list(call);
+            session.run_in_thread(*this, &RepoConf::list, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "get", "s", "a{sv}", [this](sdbus::MethodCall call) -> void {
-            this->get(call);
+            session.run_in_thread(*this, &RepoConf::get, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "enable", "as", "as", [this](sdbus::MethodCall call) -> void {
-            this->enable_disable(call, true);
+            session.run_in_thread(*this, &RepoConf::enable, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "disable", "as", "as", [this](sdbus::MethodCall call) -> void {
-            this->enable_disable(call, false);
+            session.run_in_thread(*this, &RepoConf::disable, std::move(call));
         });
 }
 
@@ -75,49 +75,32 @@ dnfdaemon::KeyValueMapList RepoConf::repo_list(const std::vector<std::string> & 
     return out;
 }
 
-void RepoConf::list(sdbus::MethodCall call) {
+sdbus::MethodReply RepoConf::list(sdbus::MethodCall && call) {
     dnfdaemon::KeyValueMap options;
     std::vector<std::string> default_ids{};
     call >> options;
     std::vector<std::string> ids = key_value_map_get<std::vector<std::string>>(options, "ids", default_ids);
+    auto out = repo_list(std::move(ids));
+    auto reply = call.createReply();
+    reply << out;
 
-    auto worker = std::thread([this, ids = std::move(ids), call = std::move(call)]() {
-        try {
-            auto out = repo_list(std::move(ids));
-            auto reply = call.createReply();
-            reply << out;
-            reply.send();
-        } catch (std::exception & ex) {
-            DNFDAEMON_ERROR_REPLY(call, ex);
-        }
-        session.get_threads_manager().current_thread_finished();
-    });
-    session.get_threads_manager().register_thread(std::move(worker));
+    return reply;
 }
 
-void RepoConf::get(sdbus::MethodCall call) {
+sdbus::MethodReply RepoConf::get(sdbus::MethodCall && call) {
     std::string id;
     call >> id;
     auto ids = std::vector<std::string>{std::move(id)};
-
-    auto worker = std::thread([this, ids = std::move(ids), call = std::move(call)]() {
-        try {
-            auto lst = repo_list(ids);
-            if (lst.empty()) {
-                throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Repository not found");
-            } else if (lst.size() > 1) {
-                throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Multiple repositories found");
-            } else {
-                auto reply = call.createReply();
-                reply << lst[0];
-                reply.send();
-            }
-        } catch (std::exception & ex) {
-            DNFDAEMON_ERROR_REPLY(call, ex);
-        }
-        session.get_threads_manager().current_thread_finished();
-    });
-    session.get_threads_manager().register_thread(std::move(worker));
+    auto lst = repo_list(ids);
+    if (lst.empty()) {
+        throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Repository not found");
+    } else if (lst.size() > 1) {
+        throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Multiple repositories found");
+    } else {
+        auto reply = call.createReply();
+        reply << lst[0];
+        return reply;
+    }
 }
 
 std::vector<std::string> RepoConf::enable_disable_repos(const std::vector<std::string> & ids, const bool enable) {
@@ -149,24 +132,15 @@ std::vector<std::string> RepoConf::enable_disable_repos(const std::vector<std::s
     return out;
 }
 
-void RepoConf::enable_disable(sdbus::MethodCall call, const bool & enable) {
+sdbus::MethodReply RepoConf::enable_disable(sdbus::MethodCall && call, const bool & enable) {
     auto sender = call.getSender();
     std::vector<std::string> ids;
     call >> ids;
-    auto worker = std::thread(
-        [this, enable = std::move(enable), sender = std::move(sender), ids = std::move(ids), call = std::move(call)]() {
-            try {
-                auto is_authorized = session.check_authorization(dnfdaemon::POLKIT_REPOCONF_WRITE, sender);
-                if (!is_authorized) {
-                    throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Not authorized.");
-                }
-                auto reply = call.createReply();
-                reply << enable_disable_repos(ids, enable);
-                reply.send();
-            } catch (std::exception & ex) {
-                DNFDAEMON_ERROR_REPLY(call, ex);
-            }
-            session.get_threads_manager().current_thread_finished();
-        });
-    session.get_threads_manager().register_thread(std::move(worker));
+    auto is_authorized = session.check_authorization(dnfdaemon::POLKIT_REPOCONF_WRITE, sender);
+    if (!is_authorized) {
+        throw sdbus::Error(dnfdaemon::ERROR_REPOCONF, "Not authorized.");
+    }
+    auto reply = call.createReply();
+    reply << enable_disable_repos(ids, enable);
+    return reply;
 }
