@@ -110,92 +110,82 @@ void Rpm::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "downgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            this->downgrade(std::move(call));
+            session.run_in_thread(*this, &Rpm::downgrade, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            this->list(std::move(call));
+            session.run_in_thread(*this, &Rpm::list, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "install", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            this->install(std::move(call));
+            session.run_in_thread(*this, &Rpm::install, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "upgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            this->upgrade(std::move(call));
+            session.run_in_thread(*this, &Rpm::upgrade, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "remove", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            this->remove(std::move(call));
+            session.run_in_thread(*this, &Rpm::remove, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "resolve", "a{sv}", "a(ua{sv})", [this](sdbus::MethodCall call) -> void {
-            this->resolve(std::move(call));
+            session.run_in_thread(*this, &Rpm::resolve, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "do_transaction", "a{sv}", "", [this](sdbus::MethodCall call) -> void {
-            this->do_transaction(std::move(call));
+            session.run_in_thread(*this, &Rpm::do_transaction, std::move(call));
         });
 }
 
-void Rpm::list(sdbus::MethodCall && call) {
-    auto worker = std::thread(
-        [this](sdbus::MethodCall call) {
-            try {
-                // read options from dbus call
-                dnfdaemon::KeyValueMap options;
-                call >> options;
+sdbus::MethodReply Rpm::list(sdbus::MethodCall && call) {
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
 
-                session.fill_sack();
-                auto & solv_sack = session.get_base()->get_rpm_solv_sack();
+    session.fill_sack();
+    auto & solv_sack = session.get_base()->get_rpm_solv_sack();
 
-                // patterns to search
-                std::vector<std::string> default_patterns{};
-                std::vector<std::string> patterns =
-                    key_value_map_get<std::vector<std::string>>(options, "patterns", std::move(default_patterns));
-                // packages matching flags
-                bool icase = key_value_map_get<bool>(options, "icase", true);
-                bool with_nevra = key_value_map_get<bool>(options, "with_nevra", true);
-                bool with_provides = key_value_map_get<bool>(options, "with_provides", true);
-                bool with_filenames = key_value_map_get<bool>(options, "with_filenames", true);
-                bool with_src = key_value_map_get<bool>(options, "with_src", true);
+    // patterns to search
+    std::vector<std::string> default_patterns{};
+    std::vector<std::string> patterns =
+        key_value_map_get<std::vector<std::string>>(options, "patterns", std::move(default_patterns));
+    // packages matching flags
+    bool icase = key_value_map_get<bool>(options, "icase", true);
+    bool with_nevra = key_value_map_get<bool>(options, "with_nevra", true);
+    bool with_provides = key_value_map_get<bool>(options, "with_provides", true);
+    bool with_filenames = key_value_map_get<bool>(options, "with_filenames", true);
+    bool with_src = key_value_map_get<bool>(options, "with_src", true);
 
-                libdnf::rpm::PackageSet result_pset(&solv_sack);
-                libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
-                if (patterns.size() > 0) {
-                    for (auto & pattern : patterns) {
-                        libdnf::rpm::SolvQuery solv_query(full_solv_query);
-                        libdnf::ResolveSpecSettings settings{
-                            .ignore_case = icase,
-                            .with_nevra = with_nevra,
-                            .with_provides = with_provides,
-                            .with_filenames = with_filenames};
-                        solv_query.resolve_pkg_spec(pattern, settings, with_src);
-                        result_pset |= solv_query;
-                    }
-                } else {
-                    result_pset = full_solv_query;
-                }
+    libdnf::rpm::PackageSet result_pset(&solv_sack);
+    libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
+    if (patterns.size() > 0) {
+        for (auto & pattern : patterns) {
+            libdnf::rpm::SolvQuery solv_query(full_solv_query);
+            libdnf::ResolveSpecSettings settings{
+                .ignore_case = icase,
+                .with_nevra = with_nevra,
+                .with_provides = with_provides,
+                .with_filenames = with_filenames};
+            solv_query.resolve_pkg_spec(pattern, settings, with_src);
+            result_pset |= solv_query;
+        }
+    } else {
+        result_pset = full_solv_query;
+    }
 
-                // create reply from the query
-                dnfdaemon::KeyValueMapList out_packages;
-                std::vector<std::string> default_attrs{};
-                std::vector<std::string> package_attrs =
-                    key_value_map_get<std::vector<std::string>>(options, "package_attrs", default_attrs);
-                for (auto pkg : result_pset) {
-                    out_packages.push_back(package_to_map(pkg, package_attrs));
-                }
+    // create reply from the query
+    dnfdaemon::KeyValueMapList out_packages;
+    std::vector<std::string> default_attrs{};
+    std::vector<std::string> package_attrs =
+        key_value_map_get<std::vector<std::string>>(options, "package_attrs", default_attrs);
+    for (auto pkg : result_pset) {
+        out_packages.push_back(package_to_map(pkg, package_attrs));
+    }
 
-                auto reply = call.createReply();
-                reply << out_packages;
-                reply.send();
-            } catch (std::exception & ex) {
-                DNFDAEMON_ERROR_REPLY(call, ex);
-            }
-            session.get_threads_manager().current_thread_finished();
-        },
-        std::move(call));
-    session.get_threads_manager().register_thread(std::move(worker));
+    auto reply = call.createReply();
+    reply << out_packages;
+    return reply;
 }
 
 
@@ -209,47 +199,31 @@ void packages_to_transaction(
     }
 }
 
-void Rpm::resolve(sdbus::MethodCall && call) {
-    auto worker = std::thread(
-        [this](sdbus::MethodCall call) {
-            try {
-                // read options from dbus call
-                dnfdaemon::KeyValueMap options;
-                call >> options;
-                bool allow_erasing = key_value_map_get<bool>(options, "allow_erasing", false);
+sdbus::MethodReply Rpm::resolve(sdbus::MethodCall && call) {
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    bool allow_erasing = key_value_map_get<bool>(options, "allow_erasing", false);
 
-                session.fill_sack();
+    session.fill_sack();
 
-                auto & goal = session.get_goal();
-                if (goal.resolve(allow_erasing) != libdnf::GoalProblem::NO_PROBLEM) {
-                    throw sdbus::Error(dnfdaemon::ERROR_RESOLVE, goal.get_formated_all_problems());
-                }
+    auto & goal = session.get_goal();
+    if (goal.resolve(allow_erasing) != libdnf::GoalProblem::NO_PROBLEM) {
+        throw sdbus::Error(dnfdaemon::ERROR_RESOLVE, goal.get_formated_all_problems());
+    }
 
-                // convert resolved goal to a list of (reason, n, e, v, r, a, repoid) structures
-                std::vector<dnfdaemon::DbusTransactionItem> result{};
-                packages_to_transaction(
-                    result, libdnf::transaction::TransactionItemAction::INSTALL, goal.list_rpm_installs());
-                packages_to_transaction(
-                    result, libdnf::transaction::TransactionItemAction::REINSTALL, goal.list_rpm_reinstalls());
-                packages_to_transaction(
-                    result, libdnf::transaction::TransactionItemAction::UPGRADE, goal.list_rpm_upgrades());
-                packages_to_transaction(
-                    result, libdnf::transaction::TransactionItemAction::DOWNGRADE, goal.list_rpm_downgrades());
-                packages_to_transaction(
-                    result, libdnf::transaction::TransactionItemAction::REMOVE, goal.list_rpm_removes());
-                packages_to_transaction(
-                    result, libdnf::transaction::TransactionItemAction::OBSOLETE, goal.list_rpm_obsoleted());
+    // convert resolved goal to a list of (reason, n, e, v, r, a, repoid) structures
+    std::vector<dnfdaemon::DbusTransactionItem> result{};
+    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::INSTALL, goal.list_rpm_installs());
+    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::REINSTALL, goal.list_rpm_reinstalls());
+    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::UPGRADE, goal.list_rpm_upgrades());
+    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::DOWNGRADE, goal.list_rpm_downgrades());
+    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::REMOVE, goal.list_rpm_removes());
+    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::OBSOLETE, goal.list_rpm_obsoleted());
 
-                auto reply = call.createReply();
-                reply << result;
-                reply.send();
-            } catch (std::exception & ex) {
-                DNFDAEMON_ERROR_REPLY(call, ex);
-            }
-            session.get_threads_manager().current_thread_finished();
-        },
-        std::move(call));
-    session.get_threads_manager().register_thread(std::move(worker));
+    auto reply = call.createReply();
+    reply << result;
+    return reply;
 }
 
 libdnf::transaction::TransactionWeakPtr new_db_transaction(libdnf::Base * base, const std::string & comment) {
@@ -388,195 +362,142 @@ void download_packages(Session & session, libdnf::Goal & goal) {
     libdnf::rpm::PackageTarget::download_packages(targets, true);
 }
 
-void Rpm::do_transaction(sdbus::MethodCall && call) {
-    auto worker = std::thread(
-        [this](sdbus::MethodCall call) {
-            try {
-                if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
-                    throw std::runtime_error("Not authorized");
-                }
+sdbus::MethodReply Rpm::do_transaction(sdbus::MethodCall && call) {
+    if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
+        throw std::runtime_error("Not authorized");
+    }
 
-                // read options from dbus call
-                dnfdaemon::KeyValueMap options;
-                call >> options;
-                std::string comment = key_value_map_get<std::string>(options, "comment", "");
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    std::string comment = key_value_map_get<std::string>(options, "comment", "");
 
-                // TODO(mblaha): ensure that system repo is not loaded twice
-                //session.fill_sack();
+    // TODO(mblaha): ensure that system repo is not loaded twice
+    //session.fill_sack();
 
-                auto base = session.get_base();
-                auto & goal = session.get_goal();
+    auto base = session.get_base();
+    auto & goal = session.get_goal();
 
-                download_packages(session, goal);
+    download_packages(session, goal);
 
-                libdnf::rpm::Transaction rpm_transaction(*base);
-                auto db_transaction = new_db_transaction(base, comment);
+    libdnf::rpm::Transaction rpm_transaction(*base);
+    auto db_transaction = new_db_transaction(base, comment);
 
-                std::vector<std::unique_ptr<dnfdaemon::RpmTransactionItem>> transaction_items;
+    std::vector<std::unique_ptr<dnfdaemon::RpmTransactionItem>> transaction_items;
 
-                fill_transactions(goal, db_transaction, rpm_transaction, transaction_items);
+    fill_transactions(goal, db_transaction, rpm_transaction, transaction_items);
 
-                auto time = std::chrono::system_clock::now().time_since_epoch();
-                db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
-                db_transaction->start();
+    auto time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->start();
 
-                DbusTransactionCB callback(session);
-                rpm_transaction.register_cb(&callback);
-                auto rpm_result = rpm_transaction.run();
-                callback.finish();
-                rpm_transaction.register_cb(nullptr);
-                if (rpm_result != 0) {
-                    throw sdbus::Error(
-                        dnfdaemon::ERROR_TRANSACTION, fmt::format("rpm transaction failed with code {}.", rpm_result));
-                }
+    DbusTransactionCB callback(session);
+    rpm_transaction.register_cb(&callback);
+    auto rpm_result = rpm_transaction.run();
+    callback.finish();
+    rpm_transaction.register_cb(nullptr);
+    if (rpm_result != 0) {
+        throw sdbus::Error(
+            dnfdaemon::ERROR_TRANSACTION, fmt::format("rpm transaction failed with code {}.", rpm_result));
+    }
 
-                time = std::chrono::system_clock::now().time_since_epoch();
-                db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
-                db_transaction->finish(libdnf::transaction::TransactionState::DONE);
+    time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->finish(libdnf::transaction::TransactionState::DONE);
 
-                // TODO(mblaha): clean up downloaded packages after successfull transaction
+    // TODO(mblaha): clean up downloaded packages after successfull transaction
 
-                auto reply = call.createReply();
-                reply.send();
-            } catch (std::exception & ex) {
-                DNFDAEMON_ERROR_REPLY(call, ex);
-            }
-            session.get_threads_manager().current_thread_finished();
-        },
-        std::move(call));
-    session.get_threads_manager().register_thread(std::move(worker));
+    auto reply = call.createReply();
+    return reply;
 }
 
-void Rpm::downgrade(sdbus::MethodCall && call) {
-    auto worker = std::thread(
-        [this](sdbus::MethodCall call) {
-            try {
-                std::vector<std::string> specs;
-                call >> specs;
+sdbus::MethodReply Rpm::downgrade(sdbus::MethodCall && call) {
+    std::vector<std::string> specs;
+    call >> specs;
 
-                // read options from dbus call
-                dnfdaemon::KeyValueMap options;
-                call >> options;
-                std::vector<std::string> repo_ids =
-                    key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    std::vector<std::string> repo_ids = key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
-                // fill the goal
-                auto & goal = session.get_goal();
-                libdnf::GoalJobSettings setting;
-                setting.to_repo_ids = repo_ids;
-                for (const auto & spec : specs) {
-                    goal.add_rpm_downgrade(spec, setting);
-                }
+    // fill the goal
+    auto & goal = session.get_goal();
+    libdnf::GoalJobSettings setting;
+    setting.to_repo_ids = repo_ids;
+    for (const auto & spec : specs) {
+        goal.add_rpm_downgrade(spec, setting);
+    }
 
-                auto reply = call.createReply();
-                reply.send();
-            } catch (std::exception & ex) {
-                DNFDAEMON_ERROR_REPLY(call, ex);
-            }
-            session.get_threads_manager().current_thread_finished();
-        },
-        std::move(call));
-    session.get_threads_manager().register_thread(std::move(worker));
+    auto reply = call.createReply();
+    return reply;
 }
 
-void Rpm::install(sdbus::MethodCall && call) {
-    auto worker = std::thread(
-        [this](sdbus::MethodCall call) {
-            try {
-                std::vector<std::string> specs;
-                call >> specs;
+sdbus::MethodReply Rpm::install(sdbus::MethodCall && call) {
+    std::vector<std::string> specs;
+    call >> specs;
 
-                // read options from dbus call
-                dnfdaemon::KeyValueMap options;
-                call >> options;
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
 
-                libdnf::GoalSetting strict;
-                if (options.find("strict") != options.end()) {
-                    strict = key_value_map_get<bool>(options, "strict") ? libdnf::GoalSetting::SET_TRUE
-                                                                        : libdnf::GoalSetting::SET_FALSE;
-                } else {
-                    strict = libdnf::GoalSetting::AUTO;
-                }
-                std::vector<std::string> repo_ids =
-                    key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+    libdnf::GoalSetting strict;
+    if (options.find("strict") != options.end()) {
+        strict =
+            key_value_map_get<bool>(options, "strict") ? libdnf::GoalSetting::SET_TRUE : libdnf::GoalSetting::SET_FALSE;
+    } else {
+        strict = libdnf::GoalSetting::AUTO;
+    }
+    std::vector<std::string> repo_ids = key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
-                // fill the goal
-                auto & goal = session.get_goal();
-                libdnf::GoalJobSettings setting;
-                setting.strict = strict;
-                setting.to_repo_ids = repo_ids;
-                for (const auto & spec : specs) {
-                    goal.add_rpm_install(spec, setting);
-                }
+    // fill the goal
+    auto & goal = session.get_goal();
+    libdnf::GoalJobSettings setting;
+    setting.strict = strict;
+    setting.to_repo_ids = repo_ids;
+    for (const auto & spec : specs) {
+        goal.add_rpm_install(spec, setting);
+    }
 
-                auto reply = call.createReply();
-                reply.send();
-            } catch (std::exception & ex) {
-                DNFDAEMON_ERROR_REPLY(call, ex);
-            }
-            session.get_threads_manager().current_thread_finished();
-        },
-        std::move(call));
-    session.get_threads_manager().register_thread(std::move(worker));
+    auto reply = call.createReply();
+    return reply;
 }
 
-void Rpm::upgrade(sdbus::MethodCall && call) {
-    auto worker = std::thread(
-        [this](sdbus::MethodCall call) {
-            try {
-                std::vector<std::string> specs;
-                call >> specs;
+sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall && call) {
+    std::vector<std::string> specs;
+    call >> specs;
 
-                // read options from dbus call
-                dnfdaemon::KeyValueMap options;
-                call >> options;
-                std::vector<std::string> repo_ids =
-                    key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    std::vector<std::string> repo_ids = key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
 
-                // fill the goal
-                auto & goal = session.get_goal();
-                libdnf::GoalJobSettings setting;
-                setting.to_repo_ids = repo_ids;
-                for (const auto & spec : specs) {
-                    goal.add_rpm_upgrade(spec, setting);
-                }
+    // fill the goal
+    auto & goal = session.get_goal();
+    libdnf::GoalJobSettings setting;
+    setting.to_repo_ids = repo_ids;
+    for (const auto & spec : specs) {
+        goal.add_rpm_upgrade(spec, setting);
+    }
 
-                auto reply = call.createReply();
-                reply.send();
-            } catch (std::exception & ex) {
-                DNFDAEMON_ERROR_REPLY(call, ex);
-            }
-            session.get_threads_manager().current_thread_finished();
-        },
-        std::move(call));
-    session.get_threads_manager().register_thread(std::move(worker));
+    auto reply = call.createReply();
+    return reply;
 }
 
-void Rpm::remove(sdbus::MethodCall && call) {
-    auto worker = std::thread(
-        [this](sdbus::MethodCall call) {
-            try {
-                std::vector<std::string> specs;
-                call >> specs;
+sdbus::MethodReply Rpm::remove(sdbus::MethodCall && call) {
+    std::vector<std::string> specs;
+    call >> specs;
 
-                // read options from dbus call
-                dnfdaemon::KeyValueMap options;
-                call >> options;
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
 
-                // fill the goal
-                auto & goal = session.get_goal();
-                libdnf::GoalJobSettings setting;
-                for (const auto & spec : specs) {
-                    goal.add_rpm_remove(spec, setting);
-                }
+    // fill the goal
+    auto & goal = session.get_goal();
+    libdnf::GoalJobSettings setting;
+    for (const auto & spec : specs) {
+        goal.add_rpm_remove(spec, setting);
+    }
 
-                auto reply = call.createReply();
-                reply.send();
-            } catch (std::exception & ex) {
-                DNFDAEMON_ERROR_REPLY(call, ex);
-            }
-            session.get_threads_manager().current_thread_finished();
-        },
-        std::move(call));
-    session.get_threads_manager().register_thread(std::move(worker));
+    auto reply = call.createReply();
+    return reply;
 }

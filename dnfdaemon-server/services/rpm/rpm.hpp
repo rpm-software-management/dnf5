@@ -35,13 +35,13 @@ public:
     void dbus_deregister();
 
 private:
-    void list(sdbus::MethodCall && call);
-    void install(sdbus::MethodCall && call);
-    void upgrade(sdbus::MethodCall && call);
-    void remove(sdbus::MethodCall && call);
-    void downgrade(sdbus::MethodCall && call);
-    void resolve(sdbus::MethodCall && call);
-    void do_transaction(sdbus::MethodCall && call);
+    sdbus::MethodReply list(sdbus::MethodCall && call);
+    sdbus::MethodReply install(sdbus::MethodCall && call);
+    sdbus::MethodReply upgrade(sdbus::MethodCall && call);
+    sdbus::MethodReply remove(sdbus::MethodCall && call);
+    sdbus::MethodReply downgrade(sdbus::MethodCall && call);
+    sdbus::MethodReply resolve(sdbus::MethodCall && call);
+    sdbus::MethodReply do_transaction(sdbus::MethodCall && call);
 };
 
 #endif
