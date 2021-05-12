@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_NEVRA_HPP
 #define LIBDNF_RPM_NEVRA_HPP
 
+#include "libdnf/common/exception.hpp"
+
 #include <string>
 #include <vector>
 
@@ -31,9 +33,20 @@ struct Nevra {
 public:
     enum class Form { NEVRA = 1, NEVR = 2, NEV = 3, NA = 4, NAME = 5 };
 
+    struct IncorrectNevraString : public RuntimeError {
+        using RuntimeError::RuntimeError;
+        const char * get_domain_name() const noexcept override { return "libdnf::rpm::Nevra"; }
+        const char * get_name() const noexcept override { return "IncorrectNevraString"; }
+        const char * get_description() const noexcept override { return "Nevra exception"; }
+    };
+
     /// The default forms and their order determine pkg_spec matching
     static const std::vector<Form> & get_default_pkg_spec_forms();
     /// Parse string into Nevra struct
+    /// @param - string to parse
+    /// @return - Vector with parsed Nevra
+    /// @exception - IncorrectNevraString
+    /// @since - 1.0.0
     static std::vector<Nevra> parse(const std::string & nevra_str);
     static std::vector<Nevra> parse(const std::string & nevra_str, const std::vector<Form> & forms);
 

@@ -100,8 +100,9 @@ void NevraTest::test_nevra() {
 
     // When parsing fails return false - not allowed characters '()'
     {
-        auto nevras = libdnf::rpm::Nevra::parse("four-of(fish.i686)", {libdnf::rpm::Nevra::Form::NA});
-        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+        CPPUNIT_ASSERT_THROW(
+            libdnf::rpm::Nevra::parse("four-of(fish.i686)", {libdnf::rpm::Nevra::Form::NA}),
+            libdnf::rpm::Nevra::IncorrectNevraString);
     }
 
     // Test parsing NEVRA with glob in epoch

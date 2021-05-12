@@ -49,11 +49,11 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
         } else if (*end == ':') {
             // ':' can be only once in nevra
             if (epoch_delim != nullptr) {
-                return result;
+                throw IncorrectNevraString("String contains ':' multiple times");
             }
             epoch_delim = end;
         } else if (*end == '(' || *end == '/' || *end == '=' || *end == '<' || *end == '>' || *end == ' ') {
-            return result;
+            throw IncorrectNevraString("String contains not allowed character from set: '(', '/', '=', '<', '>', ' '");
         }
     }
     for (auto form : forms) {
