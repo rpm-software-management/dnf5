@@ -135,7 +135,7 @@ void CmdRepoquery::run(Context & ctx) {
     for (auto & pattern : *patterns_to_show_options) {
         libdnf::rpm::SolvQuery solv_query(full_solv_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        libdnf::ResolveSpecSettings settings{.ignore_case = true};
+        libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides=false};
         solv_query.resolve_pkg_spec(option->get_value(), settings, true);
         result_pset |= solv_query;
     }

@@ -46,6 +46,20 @@ void NevraTest::test_nevra() {
         CPPUNIT_ASSERT_EQUAL(std::string("four-of-fish-8:3.6.9-11.fc100.x86_64"), to_full_nevra_string(nevra));
     }
 
+    // cannot parse due to ':' in name
+    {
+        auto nevras =
+            libdnf::rpm::Nevra::parse("four-of-f:ish-3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
+        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+    }
+
+    // cannot parse due to ':' presence twice
+    {
+        CPPUNIT_ASSERT_THROW(
+            libdnf::rpm::Nevra::parse("four-of-fish-8:9:3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA}),
+            libdnf::rpm::Nevra::IncorrectNevraString);
+    }
+
 
     {
         auto nevras =
@@ -133,6 +147,12 @@ void NevraTest::test_nevra() {
     // When parsing fails return false
     {
         auto nevras = libdnf::rpm::Nevra::parse("four-of-fish", {libdnf::rpm::Nevra::Form::NA});
+        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+    }
+
+    // When parsing fails return false => '-' after '.'
+    {
+        auto nevras = libdnf::rpm::Nevra::parse("four-o.f-fish", {libdnf::rpm::Nevra::Form::NA});
         CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
     }
 
