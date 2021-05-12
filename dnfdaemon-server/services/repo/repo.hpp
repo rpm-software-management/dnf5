@@ -35,7 +35,7 @@ public:
     void dbus_deregister();
 
 private:
-    void list(sdbus::MethodCall call);
+    sdbus::MethodReply list(sdbus::MethodCall && call);
 };
 
 #endif

@@ -204,74 +204,65 @@ void Repo::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPO, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            this->list(call);
+            session.run_in_thread(*this, &Repo::list, std::move(call));
         });
 }
 
-void Repo::list(sdbus::MethodCall call) {
+sdbus::MethodReply Repo::list(sdbus::MethodCall && call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
-    auto worker = std::thread([this, options = std::move(options), call = std::move(call)]() {
-        try {
-            const std::vector<std::string> empty_list{};
+    const std::vector<std::string> empty_list{};
 
-            // read options from dbus call
-            std::string enable_disable = key_value_map_get<std::string>(options, "enable_disable", "enabled");
-            std::vector<std::string> patterns =
-                key_value_map_get<std::vector<std::string>>(options, "patterns", empty_list);
-            // check demanded attributes
-            std::vector<std::string> repo_attrs =
-                key_value_map_get<std::vector<std::string>>(options, "repo_attrs", empty_list);
-            bool fill_sack_needed = false;
-            for (auto & attr_str : repo_attrs) {
-                if (repo_attributes.count(attr_str) == 0) {
-                    throw std::runtime_error(fmt::format("Repo attribute '{}' not supported", attr_str));
-                }
-                if (!fill_sack_needed) {
-                    fill_sack_needed = std::find(
-                                           metadata_required_attributes.begin(),
-                                           metadata_required_attributes.end(),
-                                           repo_attributes.at(attr_str)) != metadata_required_attributes.end();
-                }
-            }
-            // always return repoid
-            repo_attrs.push_back("id");
-            if (fill_sack_needed) {
-                session.fill_sack();
-            }
-
-            // prepare repository query filtered by options
-            auto base = session.get_base();
-            auto & rpm_repo_sack = base->get_rpm_repo_sack();
-            auto repos_query = rpm_repo_sack.new_query();
-
-            if (enable_disable == "enabled") {
-                repos_query.ifilter_enabled(true);
-            } else if (enable_disable == "disabled") {
-                repos_query.ifilter_enabled(false);
-            }
-
-            if (patterns.size() > 0) {
-                auto query_names = repos_query;
-                repos_query.ifilter_id(libdnf::sack::QueryCmp::IGLOB, patterns);
-                repos_query |= query_names.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns);
-            }
-
-            // create reply from the query
-            dnfdaemon::KeyValueMapList out_repositories;
-
-            for (auto & repo : repos_query.get_data()) {
-                out_repositories.push_back(repo_to_map(*base, repo, repo_attrs));
-            }
-
-            std::sort(out_repositories.begin(), out_repositories.end(), keyval_repo_compare);
-            auto reply = call.createReply();
-            reply << out_repositories;
-            reply.send();
-        } catch (std::exception & ex) {
-            DNFDAEMON_ERROR_REPLY(call, ex);
+    // read options from dbus call
+    std::string enable_disable = key_value_map_get<std::string>(options, "enable_disable", "enabled");
+    std::vector<std::string> patterns = key_value_map_get<std::vector<std::string>>(options, "patterns", empty_list);
+    // check demanded attributes
+    std::vector<std::string> repo_attrs =
+        key_value_map_get<std::vector<std::string>>(options, "repo_attrs", empty_list);
+    bool fill_sack_needed = false;
+    for (auto & attr_str : repo_attrs) {
+        if (repo_attributes.count(attr_str) == 0) {
+            throw std::runtime_error(fmt::format("Repo attribute '{}' not supported", attr_str));
         }
-        session.get_threads_manager().current_thread_finished();
-    });
-    session.get_threads_manager().register_thread(std::move(worker));
+        if (!fill_sack_needed) {
+            fill_sack_needed = std::find(
+                                   metadata_required_attributes.begin(),
+                                   metadata_required_attributes.end(),
+                                   repo_attributes.at(attr_str)) != metadata_required_attributes.end();
+        }
+    }
+    // always return repoid
+    repo_attrs.push_back("id");
+    if (fill_sack_needed) {
+        session.fill_sack();
+    }
+
+    // prepare repository query filtered by options
+    auto base = session.get_base();
+    auto & rpm_repo_sack = base->get_rpm_repo_sack();
+    auto repos_query = rpm_repo_sack.new_query();
+
+    if (enable_disable == "enabled") {
+        repos_query.ifilter_enabled(true);
+    } else if (enable_disable == "disabled") {
+        repos_query.ifilter_enabled(false);
+    }
+
+    if (patterns.size() > 0) {
+        auto query_names = repos_query;
+        repos_query.ifilter_id(libdnf::sack::QueryCmp::IGLOB, patterns);
+        repos_query |= query_names.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns);
+    }
+
+    // create reply from the query
+    dnfdaemon::KeyValueMapList out_repositories;
+
+    for (auto & repo : repos_query.get_data()) {
+        out_repositories.push_back(repo_to_map(*base, repo, repo_attrs));
+    }
+
+    std::sort(out_repositories.begin(), out_repositories.end(), keyval_repo_compare);
+    auto reply = call.createReply();
+    reply << out_repositories;
+    return reply;
 }
