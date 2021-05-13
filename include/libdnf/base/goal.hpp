@@ -42,6 +42,7 @@ public:
     enum class Action {
         INSTALL,
         INSTALL_OR_REINSTALL,
+        REINSTALL,
         UPGRADE,
         UPGRADE_ALL,
         DISTRO_SYNC,
@@ -71,6 +72,9 @@ public:
     void add_rpm_install_or_reinstall(const libdnf::rpm::PackageSet & package_set);
     void add_rpm_install_or_reinstall(
         const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings);
+    void add_rpm_reinstall(const std::string & spec);
+    void add_rpm_reinstall(const std::string & spec, const libdnf::GoalJobSettings & settings);
+    // TODO(jmracek) Do we want to add reinstall or remove?
     void add_rpm_remove(const std::string & spec);
     void add_rpm_remove(const std::string & spec, const libdnf::GoalJobSettings & settings);
     void add_rpm_remove(const libdnf::rpm::Package & rpm_package);
@@ -164,6 +168,11 @@ inline void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::Package & rpm_
 inline void Goal::add_rpm_install_or_reinstall(const libdnf::rpm::PackageSet & package_set) {
     const libdnf::GoalJobSettings settings;
     add_rpm_install_or_reinstall(package_set, settings);
+}
+
+inline void Goal::add_rpm_reinstall(const std::string & spec) {
+    const libdnf::GoalJobSettings settings;
+    add_rpm_reinstall(spec, settings);
 }
 
 inline void Goal::add_rpm_remove(const std::string & spec) {

@@ -162,6 +162,7 @@ public:
 
     GoalProblem add_specs_to_goal();
     GoalProblem add_install_to_goal(const std::string & spec, GoalJobSettings & settings);
+    GoalProblem add_reinstall_to_goal(const std::string & spec, GoalJobSettings & settings);
     void add_remove_to_goal(const std::string & spec, GoalJobSettings & settings);
     void add_up_down_distrosync_to_goal(Action action, const std::string & spec, GoalJobSettings & settings);
     void add_rpms_to_goal();
@@ -227,6 +228,10 @@ void Goal::add_rpm_install_or_reinstall(const rpm::Package & rpm_package, const 
 
 void Goal::add_rpm_install_or_reinstall(const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
     p_impl->add_rpm_ids(Action::INSTALL_OR_REINSTALL, package_set, settings);
+}
+
+void Goal::add_rpm_reinstall(const std::string & spec, const GoalJobSettings & settings) {
+    p_impl->rpm_specs.push_back(std::make_tuple(Action::REINSTALL, spec, settings));
 }
 
 void Goal::add_rpm_remove(const std::string & spec, const GoalJobSettings & settings) {
@@ -306,6 +311,9 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
         switch (action) {
             case Action::INSTALL:
                 ret |= add_install_to_goal(spec, settings);
+                break;
+            case Action::REINSTALL:
+                ret |= add_reinstall_to_goal(spec, settings);
                 break;
             case Action::REMOVE:
                 add_remove_to_goal(spec, settings);
@@ -486,6 +494,103 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
     //         elif self.conf.multilib_policy == "best":
 
     //         return 0
+    return GoalProblem::NO_PROBLEM;
+}
+
+GoalProblem Goal::Impl::add_reinstall_to_goal(const std::string & spec, GoalJobSettings & settings) {
+    // Resolve all settings before the first report => they will be storred in settings
+    auto & cfg_main = base->get_config();
+    bool strict = settings.resolve_strict(cfg_main);
+    bool best = settings.resolve_best(cfg_main);
+    bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+    auto sack = base->get_rpm_solv_sack();
+    rpm::SolvQuery query(sack);
+    auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
+    if (!nevra_pair.first) {
+        return report_not_found(Goal::Action::REINSTALL, spec, settings, strict);
+    }
+
+    // Report when package is not installed
+    rpm::SolvQuery query_installed(query);
+    query_installed.ifilter_installed();
+    if (query_installed.empty()) {
+        add_rpm_goal_report(Goal::Action::REINSTALL, GoalProblem::NOT_INSTALLED, settings, spec, {}, strict);
+        return strict ? GoalProblem::NOT_INSTALLED : GoalProblem::NO_PROBLEM;
+    }
+
+    // keep only available packages
+    query -= query_installed;
+    if (query.empty()) {
+        add_rpm_goal_report(Goal::Action::REINSTALL, GoalProblem::NOT_AVAILABLE, settings, spec, {}, strict);
+        return strict ? GoalProblem::NOT_AVAILABLE : GoalProblem::NO_PROBLEM;
+    }
+
+    // keeps only available packages that are installed with same NEVRA
+    rpm::SolvQuery relevant_available(query);
+    relevant_available.ifilter_nevra(query_installed);
+    if (relevant_available.empty()) {
+        rpm::SolvQuery relevant_available_na(query);
+        relevant_available_na.ifilter_name_arch(query_installed);
+        if (!relevant_available_na.empty()) {
+            add_rpm_goal_report(
+                Goal::Action::REINSTALL, GoalProblem::INSTALLED_IN_DIFFERENT_VERSION, settings, spec, {}, strict);
+            return strict ? GoalProblem::INSTALLED_IN_DIFFERENT_VERSION : GoalProblem::NO_PROBLEM;
+        } else {
+            rpm::SolvQuery relevant_available_n(query);
+            relevant_available_n.ifilter_name(query_installed);
+            if (relevant_available_n.empty()) {
+                add_rpm_goal_report(Goal::Action::REINSTALL, GoalProblem::NOT_INSTALLED, settings, spec, {}, strict);
+                return strict ? GoalProblem::NOT_INSTALLED : GoalProblem::NO_PROBLEM;
+            } else {
+                add_rpm_goal_report(
+                    Goal::Action::REINSTALL, GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec, {}, strict);
+                return strict ? GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE : GoalProblem::NO_PROBLEM;
+            }
+        }
+    }
+
+    // TODO(jmracek) Implement fitering from_repo_ids
+
+    if (!settings.to_repo_ids.empty()) {
+        relevant_available.ifilter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
+        if (relevant_available.empty()) {
+            add_rpm_goal_report(
+                Goal::Action::REINSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
+            return strict ? GoalProblem::NOT_FOUND_IN_REPOSITORIES : GoalProblem::NO_PROBLEM;
+        }
+    }
+
+    Id current_name = 0;
+    Id current_arch = 0;
+    std::vector<Solvable *> tmp_solvables;
+    Pool * pool = sack->p_impl->get_pool();
+
+    for (auto package_id : *relevant_available.p_impl) {
+        tmp_solvables.push_back(rpm::solv::get_solvable(pool, package_id));
+    }
+    std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
+
+    rpm::solv::IdQueue tmp_queue;
+
+    {
+        auto * first = (*tmp_solvables.begin());
+        current_name = first->name;
+        current_arch = first->arch;
+        tmp_queue.push_back(pool_solvable2id(pool, first));
+    }
+
+    for (auto iter = std::next(tmp_solvables.begin()); iter != tmp_solvables.end(); ++iter) {
+        if ((*iter)->name == current_name && (*iter)->arch == current_arch) {
+            tmp_queue.push_back(pool_solvable2id(pool, (*iter)));
+            continue;
+        }
+        rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
+        tmp_queue.clear();
+        tmp_queue.push_back(pool_solvable2id(pool, (*iter)));
+        current_name = (*iter)->name;
+        current_arch = (*iter)->arch;
+    }
+    rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
     return GoalProblem::NO_PROBLEM;
 }
 
@@ -969,6 +1074,17 @@ std::string Goal::format_rpm_log(
                 _("Package \"{}\" of lowest version already installed, cannot downgrade it."),
                 *additional_data.begin()));
         }
+        case GoalProblem::INSTALLED_IN_DIFFERENT_VERSION:
+            if (action == Action::REINSTALL) {
+                return ret.append(fmt::format(
+                    _("Packages for argument '{}' installed and available, but in a different version => cannot "
+                      "reinstall"),
+                    spec));
+            }
+            return ret.append(fmt::format(
+                _("Packages for argument '{}' installed and available, but in a different version."), spec));
+        case GoalProblem::NOT_AVAILABLE:
+            return ret.append(fmt::format(_("Packages for argument '{}' installed, but not available."), spec));
         case GoalProblem::NO_PROBLEM:
         case GoalProblem::REMOVAL_OF_PROTECTED:
         case GoalProblem::SOLVER_ERROR:
