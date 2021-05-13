@@ -140,6 +140,10 @@ public:
     SolvQuery & ifilter_nevra(
         const libdnf::rpm::Nevra & pattern, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
+    /// cmp_type can be only libdnf::sack::QueryCmp::EQ, NEQ.
+    SolvQuery & ifilter_nevra(
+        const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GT, GTE, LT, LTE, GLOB, NOT_GLOB.
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_VERSION

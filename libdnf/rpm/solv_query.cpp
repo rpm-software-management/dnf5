@@ -679,6 +679,41 @@ SolvQuery & SolvQuery::ifilter_nevra(const libdnf::rpm::Nevra & pattern, libdnf:
     return *this;
 }
 
+SolvQuery & SolvQuery::ifilter_nevra(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+    if (cmp_type != sack::QueryCmp::EQ && cmp_type != sack::QueryCmp::NEQ) {
+        throw SolvQuery::NotSupportedCmpType("Used unsupported CmpType");
+    }
+    SolvSack * sack = get_sack();
+    Pool * pool = sack->p_impl->get_pool();
+    solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
+
+    if (sack != package_set.p_impl->sack.get()) {
+        throw UsedDifferentSack(
+            "Cannot perform the action with PackageSet instances initialized with different SolvSacks");
+    }
+
+    auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
+
+    for (Id pattern_id : *package_set.p_impl) {
+        Solvable * pattern_solvable = solv::get_solvable(pool, pattern_id);
+        auto low = std::lower_bound(
+            sorted_solvables.begin(), sorted_solvables.end(), pattern_solvable, nevra_solvable_cmp_key);
+        while (low != sorted_solvables.end() && (*low)->name == pattern_solvable->name &&
+               (*low)->arch == pattern_solvable->arch && (*low)->evr == pattern_solvable->evr) {
+            filter_result.add_unsafe(pool_solvable2id(pool, *low));
+            ++low;
+        }
+    }
+
+    // Apply filter results to query
+    if (cmp_type == sack::QueryCmp::NEQ) {
+        *p_impl -= filter_result;
+    } else {
+        *p_impl &= filter_result;
+    }
+    return *this;
+}
+
 template <bool (*cmp_fnc)(int value_to_cmp)>
 inline static void filter_version_internal(
     Pool * pool, const char * c_pattern, solv::SolvMap & candidates, solv::SolvMap & filter_result) {
