@@ -87,12 +87,4 @@ const char * const ERROR_TRANSACTION = "org.rpm.dnf.v0.rpm.Rpm.TransactionError"
 
 }  // namespace dnfdaemon
 
-#define DNFDAEMON_ERROR_REPLY(_CALL, _EXCEPTION)                                     \
-    auto _reply = (_CALL).createErrorReply({dnfdaemon::ERROR, (_EXCEPTION).what()}); \
-    try {                                                                            \
-        _reply.send();                                                               \
-    } catch (...) {                                                                  \
-    }                                                                                \
-    /**/
-
 #endif
