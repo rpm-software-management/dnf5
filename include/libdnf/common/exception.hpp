@@ -86,6 +86,13 @@ private:
     mutable std::string description;
 };
 
+class InvalidPointer : public Exception {
+public:
+    using Exception::Exception;
+    const char * get_name() const noexcept override { return "InvalidPointer"; }
+    const char * get_description() const noexcept override { return "Invalid pointer"; }
+};
+
 /// Formats the explanatory string of an exception.
 /// If the exception is nested, recurses to format the explanatory of the exception it holds.
 std::string format(const std::exception & e, std::size_t level = 0);

@@ -88,9 +88,9 @@ public:
     using TWeakPtrGuard = WeakPtrGuard<TPtr, ptr_owner>;
 
     /// Exception generated when the managed object is not valid.
-    class InvalidPtr : public RuntimeError {
+    class InvalidPtr : public InvalidPointer {
     public:
-        using RuntimeError::RuntimeError;
+        using InvalidPointer::InvalidPointer;
         const char * get_domain_name() const noexcept override { return "libdnf::WeakPtr"; }
         const char * get_name() const noexcept override { return "InvalidPtr"; }
         const char * get_description() const noexcept override { return "Invalid pointer"; }
