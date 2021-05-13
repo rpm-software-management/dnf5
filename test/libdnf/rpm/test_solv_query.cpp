@@ -256,6 +256,28 @@ void RpmSolvQueryTest::test_ifilter_name_arch() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
 }
 
+void RpmSolvQueryTest::test_ifilter_name_arch2() {
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+    sack->add_system_package(rpm_path, false, false);
+    sack->add_cmdline_package(rpm_path, false);
+
+    libdnf::rpm::SolvQuery query1(sack);
+    query1.ifilter_name({"cmdline"});
+    std::vector<std::string> expected1 = {"cmdline-0:1.2-3.noarch", "cmdline-0:1.2-3.noarch"};
+    CPPUNIT_ASSERT_EQUAL(expected1, to_vector_string(query1));
+    query1.ifilter_installed();
+
+    std::vector<std::string> expected = {"cmdline-0:1.2-3.noarch"};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
+    CPPUNIT_ASSERT_EQUAL(1lu, query1.size());
+
+    libdnf::rpm::SolvQuery query2(sack);
+    query2.ifilter_name_arch(query1);
+
+    CPPUNIT_ASSERT_EQUAL(2lu, query2.size());
+    CPPUNIT_ASSERT_EQUAL(expected1, to_vector_string(query2));
+}
+
 void RpmSolvQueryTest::test_ifilter_nevra() {
     {
         // Test QueryCmp::EQ - argument without 0 epoch - two elements

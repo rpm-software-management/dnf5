@@ -347,10 +347,11 @@ SolvQuery & SolvQuery::ifilter_name(const PackageSet & package_set, libdnf::sack
     }
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
-    for (Id candidate_id : *package_set.p_impl) {
-        Id name_id = solv::get_solvable(pool, candidate_id)->name;
-        auto low = std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), name_id, name_compare_lower_id);
-        while (low != sorted_solvables.end() && (*low)->name == name_id) {
+    for (Id pattern_id : *package_set.p_impl) {
+        Id pattern_name_id = solv::get_solvable(pool, pattern_id)->name;
+        auto low =
+            std::lower_bound(sorted_solvables.begin(), sorted_solvables.end(), pattern_name_id, name_compare_lower_id);
+        while (low != sorted_solvables.end() && (*low)->name == pattern_name_id) {
             filter_result.add_unsafe(pool_solvable2id(pool, *low));
             ++low;
         }
@@ -380,12 +381,13 @@ SolvQuery & SolvQuery::ifilter_name_arch(const PackageSet & package_set, libdnf:
 
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
-    for (Id candidate_id : *package_set.p_impl) {
-        Solvable * solvable = solv::get_solvable(pool, candidate_id);
+    for (Id pattern_id : *package_set.p_impl) {
+        Solvable * pattern_solvable = solv::get_solvable(pool, pattern_id);
         auto low = std::lower_bound(
-            sorted_solvables.begin(), sorted_solvables.end(), solvable, name_arch_compare_lower_solvable);
-        while (low != sorted_solvables.end() && (*low)->name == solvable->name && (*low)->arch == solvable->arch) {
-            filter_result.add_unsafe(candidate_id);
+            sorted_solvables.begin(), sorted_solvables.end(), pattern_solvable, name_arch_compare_lower_solvable);
+        while (low != sorted_solvables.end() && (*low)->name == pattern_solvable->name &&
+               (*low)->arch == pattern_solvable->arch) {
+            filter_result.add_unsafe(pool_solvable2id(pool, *low));
             ++low;
         }
     }
