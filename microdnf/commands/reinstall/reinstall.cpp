@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -21,11 +21,14 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../../context.hpp"
 
+#include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
+
+#include "libdnf-cli/output/transaction_table.hpp"
 
 #include <filesystem>
 #include <iostream>
@@ -71,7 +74,7 @@ void CmdReinstall::run(Context & ctx) {
 
     // To search in the system repository (installed packages)
     // Creates system repository in the repo_sack and loads it into rpm::SolvSack.
-    //solv_sack.create_system_repo(false);
+    solv_sack->create_system_repo(false);
 
     // To search in available repositories (available packages)
     auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
@@ -79,35 +82,40 @@ void CmdReinstall::run(Context & ctx) {
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     ctx.load_rpm_repos(enabled_repos, flags);
 
-    std::cout << std::endl;
-
-    libdnf::rpm::PackageSet result_pset(solv_sack);
-    libdnf::rpm::SolvQuery full_solv_query(solv_sack);
+    libdnf::Goal goal(&ctx.base);
     for (auto & pattern : *patterns_to_reinstall_options) {
-        libdnf::rpm::SolvQuery solv_query(full_solv_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        solv_query.resolve_pkg_spec(option->get_value(), {}, true);
-        result_pset |= solv_query;
+        goal.add_rpm_reinstall(option->get_value());
+    }
+    if (goal.resolve(true) != libdnf::GoalProblem::NO_PROBLEM) {
+        std::cout << goal.get_formated_all_problems() << std::endl;
+        return;
     }
 
-    std::vector<libdnf::rpm::Package> download_pkgs;
-    download_pkgs.reserve(result_pset.size());
-    for (auto package : result_pset) {
-        download_pkgs.push_back(std::move(package));
+    if (!libdnf::cli::output::print_transaction_table(goal)) {
+        return;
     }
-    download_packages(download_pkgs, nullptr);
 
+    if (!userconfirm(ctx.base.get_config())) {
+        std::cout << "Operation aborted." << std::endl;
+        return;
+    }
+
+    libdnf::rpm::Transaction rpm_transaction(ctx.base);
+    auto db_transaction = new_db_transaction(ctx);
     std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
-    auto ts = libdnf::rpm::Transaction(ctx.base);
-    for (auto package : result_pset) {
-        // auto item = std::make_unique<libdnf::rpm::Transaction::Item>(package);
-        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::REINSTALL);
-        auto item_ptr = item.get();
-        transaction_items.push_back(std::move(item));
-        ts.reinstall(*item_ptr);
-    }
-    std::cout << std::endl;
-    run_transaction(ts);
+
+    fill_transactions(goal, db_transaction, rpm_transaction, transaction_items);
+
+    auto time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->start();
+
+    run_transaction(rpm_transaction);
+
+    time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->finish(libdnf::transaction::TransactionState::DONE);
 }
 
 }  // namespace microdnf
