@@ -236,6 +236,7 @@ inline solv::SolvMap & SolvSack::Impl::get_solvables() {
             cached_solvables.add_unsafe(solvable_id);
         }
     }
+    cached_solvables_size = nsolvables;
     return cached_solvables;
 }
 
