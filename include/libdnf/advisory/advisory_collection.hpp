@@ -66,7 +66,7 @@ private:
     friend AdvisoryPackage;
     friend AdvisoryModule;
 
-    AdvisoryCollection(libdnf::rpm::SolvSack & sack, AdvisoryId advisory, int index);
+    AdvisoryCollection(const libdnf::rpm::SolvSackWeakPtr & sack, AdvisoryId advisory, int index);
 
     //TODO(amatej): Hide into an Impl?
     /// Get all AdvisoryPackages stored in this AdvisoryCollection

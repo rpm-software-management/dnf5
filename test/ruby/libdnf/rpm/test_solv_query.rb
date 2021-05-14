@@ -31,7 +31,7 @@ class TestSimpleNumber < Test::Unit::TestCase
         @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, @tmpdir)
 
         @repo_sack = Rpm::RepoSack.new(@base)
-        @sack = Rpm::SolvSack.new(@base)
+        @sack = @base.get_rpm_solv_sack()
 
         # Creates new repositories in the repo_sack
         @repo = @repo_sack.new_repo('repomd-repo1')

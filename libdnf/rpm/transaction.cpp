@@ -509,7 +509,7 @@ private:
         void * rc = nullptr;
         auto * cb_info = static_cast<CallbackInfo *>(data);
         auto * transaction = cb_info->transaction;
-        auto & log = transaction->base->get_logger();
+        auto & log = *transaction->base->get_logger();
         auto & cb = *cb_info->cb;
         auto * hdr = const_cast<headerToken_s *>(static_cast<const headerToken_s *>(hd));
         const auto * item = static_cast<const TransactionItem *>(pkg_key);

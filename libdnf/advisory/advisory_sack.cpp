@@ -30,18 +30,18 @@ AdvisorySack::AdvisorySack(libdnf::Base & base) : data_map(0), base(&base) {}
 AdvisorySack::~AdvisorySack() = default;
 
 AdvisoryQuery AdvisorySack::new_query() {
-    auto & solv_sack = base->get_rpm_solv_sack();
+    auto solv_sack = base->get_rpm_solv_sack();
 
-    if (cached_solvables_size != solv_sack.p_impl->get_nsolvables()) {
+    if (cached_solvables_size != solv_sack->p_impl->get_nsolvables()) {
         load_advisories_from_solvsack();
     }
 
-    return AdvisoryQuery(this);
+    return AdvisoryQuery(this->get_weak_ptr());
 };
 
 void AdvisorySack::load_advisories_from_solvsack() {
-    auto & solv_sack = base->get_rpm_solv_sack();
-    Pool * pool = solv_sack.p_impl->get_pool();
+    auto solv_sack = base->get_rpm_solv_sack();
+    Pool * pool = solv_sack->p_impl->get_pool();
 
     data_map = libdnf::rpm::solv::SolvMap(pool->nsolvables);
 

@@ -6,9 +6,20 @@
 %module "libdnf/conf"
 #endif
 
+%include <exception.i>
 %include <std_vector.i>
 
 %import "common.i"
+
+%exception {
+    try {
+        $action
+    } catch (const libdnf::InvalidPointer & e) {
+        SWIG_exception(SWIG_NullReferenceError, e.what());
+    } catch (const libdnf::RuntimeError & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+}
 
 %{
     #include "libdnf/conf/option_child.hpp"

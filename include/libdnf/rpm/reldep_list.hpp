@@ -44,7 +44,7 @@ public:
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_new(DnfSack *sack)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:DependencyContainer(DnfSack *sack)
-    explicit ReldepList(SolvSack * sack);
+    explicit ReldepList(const SolvSackWeakPtr & sack);
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_free(DnfReldepList *reldep_list)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:~DependencyContainer()

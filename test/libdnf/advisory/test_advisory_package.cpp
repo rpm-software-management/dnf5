@@ -33,7 +33,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AdvisoryAdvisoryPackageTest, "AdvisoryAdvi
 void AdvisoryAdvisoryPackageTest::setUp() {
     RepoFixture::setUp();
     RepoFixture::add_repo_repomd("repomd-repo1");
-    auto advisory = base->get_rpm_advisory_sack().new_query().ifilter_name("DNF-2019-1").get_advisories()[0];
+    auto advisory = base->get_rpm_advisory_sack()->new_query().ifilter_name("DNF-2019-1").get_advisories()[0];
     std::vector<libdnf::advisory::AdvisoryCollection> collections = advisory.get_collections();
     packages = collections[0].get_packages();
 }

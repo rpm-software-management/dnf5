@@ -67,18 +67,18 @@ void CmdDownload::set_argument_parser(Context & ctx) {
 void CmdDownload::configure([[maybe_unused]] Context & ctx) {}
 
 void CmdDownload::run(Context & ctx) {
-    auto & solv_sack = ctx.base.get_rpm_solv_sack();
+    auto solv_sack = ctx.base.get_rpm_solv_sack();
 
     // To search in available repositories (available packages)
-    auto enabled_repos = ctx.base.get_rpm_repo_sack().new_query().ifilter_enabled(true);
+    auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
     using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     ctx.load_rpm_repos(enabled_repos, flags);
 
     std::cout << std::endl;
 
-    libdnf::rpm::PackageSet result_pset(&solv_sack);
-    libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
+    libdnf::rpm::PackageSet result_pset(solv_sack);
+    libdnf::rpm::SolvQuery full_solv_query(solv_sack);
     for (auto & pattern : *patterns_to_download_options) {
         libdnf::rpm::SolvQuery solv_query(full_solv_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());

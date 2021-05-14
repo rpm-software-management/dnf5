@@ -45,7 +45,7 @@ public:
     /// @param sack p_sack:...
     /// @param dependency p_dependency:...
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, const std::string & dependency)
-    Reldep(SolvSack * sack, const std::string & reldep_string);
+    Reldep(const SolvSackWeakPtr & sack, const std::string & reldep_string);
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
     Reldep(const Reldep & reldep) = default;

@@ -278,7 +278,7 @@ public:
 
 protected:
     /// @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
-    Package(SolvSack * sack, PackageId id);
+    Package(const SolvSackWeakPtr & sack, PackageId id);
     const char * get_name_cstring() const;
 
     /// @return const char* !! Return temporal values !!
@@ -302,7 +302,7 @@ private:
     PackageId id;
 };
 
-inline Package::Package(SolvSack * sack, PackageId id) : sack(sack->get_weak_ptr()), id(id) {}
+inline Package::Package(const SolvSackWeakPtr & sack, PackageId id) : sack(sack), id(id) {}
 
 inline bool Package::operator==(const Package & other) const noexcept {
     return id == other.id && sack == other.sack;

@@ -59,7 +59,7 @@ Base * Base::get_locked_base() noexcept {
 void Base::load_config_from_file(const std::string & path) {
     ConfigParser parser;
     parser.read(path);
-    config.load_from_parser(parser, "main", vars, get_logger());
+    config.load_from_parser(parser, "main", vars, *get_logger());
 }
 
 void Base::load_config_from_file() {

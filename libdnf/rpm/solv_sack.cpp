@@ -139,7 +139,7 @@ bool is_superset(const solv::IdQueue & q1, const solv::IdQueue * q2, solv::SolvM
 }  // end of anonymous namespace
 
 void SolvSack::Impl::write_main(LibsolvRepoExt & libsolv_repo_ext, bool switchtosolv) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     LibsolvRepo * libsolv_repo = libsolv_repo_ext.repo;
     const char * name = libsolv_repo->name;
     const char * chksum = pool_bin2hex(pool, libsolv_repo_ext.checksum, solv_chksum_len(CHKSUM_TYPE));
@@ -203,7 +203,7 @@ static int write_ext_updateinfo_filter(LibsolvRepo * repo, Repokey * key, void *
 
 void SolvSack::Impl::write_ext(
     LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     auto libsolv_repo = libsolv_repo_ext.repo;
     const char * repo_id = libsolv_repo->name;
 
@@ -265,7 +265,7 @@ void SolvSack::Impl::write_ext(
 
 void SolvSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQueue & addedfileprovides_inst) {
     int i;
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
 
     solv::SolvMap providedids(pool->ss.nstrings);
 
@@ -320,7 +320,7 @@ SolvSack::Impl::RepodataState SolvSack::Impl::load_repo_main(Repo & repo) {
         throw Exception("repo md file name is empty");
     }
 
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     auto id = repo.get_id().c_str();
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, id), &libsolv_repo_free);
     const char * fn_repomd = repo_impl->repomd_fn.c_str();
@@ -368,7 +368,7 @@ SolvSack::Impl::RepodataState SolvSack::Impl::load_repo_main(Repo & repo) {
 SolvSack::Impl::RepodataInfo SolvSack::Impl::load_repo_ext(
     Repo & repo, const char * suffix, const char * which_filename, int flags, bool (*cb)(LibsolvRepo *, FILE *)) {
     RepodataInfo info;
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     auto repo_impl = repo.p_impl.get();
     auto libsolv_repo = repo_impl->libsolv_repo_ext.repo;
     const char * repo_id = libsolv_repo->name;
@@ -444,7 +444,7 @@ void SolvSack::Impl::make_provides_ready() {
 }
 
 bool SolvSack::Impl::load_system_repo() {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     auto repo_impl = system_repo->p_impl.get();
     auto id = system_repo->get_id().c_str();
 
@@ -479,7 +479,7 @@ bool SolvSack::Impl::load_system_repo() {
 }
 
 void SolvSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     auto repo_impl = repo.p_impl.get();
 
     bool build_cache = repo.get_config().build_cache().get_value();
@@ -595,7 +595,7 @@ Package SolvSack::add_cmdline_package(const std::string & fn, bool add_with_hdri
 
     p_impl->provides_ready = false;
     p_impl->considered_uptodate = false;
-    return Package(this, PackageId(new_id));
+    return Package(this->get_weak_ptr(), PackageId(new_id));
 }
 
 Repo & SolvSack::Impl::get_system_repo(bool build_cache) {
@@ -619,7 +619,7 @@ Package SolvSack::add_system_package(const std::string & fn, bool add_with_hdrid
 
     p_impl->provides_ready = false;
     p_impl->considered_uptodate = false;
-    return Package(this, PackageId(new_id));
+    return Package(this->get_weak_ptr(), PackageId(new_id));
 }
 
 void SolvSack::dump_debugdata(const std::string & dir) {

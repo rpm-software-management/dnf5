@@ -51,7 +51,7 @@ Plugins::~Plugins() {
 }
 
 void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     auto * iplugin = plugin->get_iplugin();
     plugins.emplace_back(std::move(plugin));
     auto name = iplugin->get_name();
@@ -65,7 +65,7 @@ void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
 }
 
 void Plugins::load_plugin(const std::string & file_path) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     logger.debug(fmt::format(_("Loading plugin file=\"{}\""), file_path));
     auto plugin = std::make_unique<PluginLibrary>(file_path);
     auto * iplugin = plugin->get_iplugin();
@@ -81,7 +81,7 @@ void Plugins::load_plugin(const std::string & file_path) {
 }
 
 void Plugins::load_plugins(const std::string & dir_path) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     if (dir_path.empty())
         throw std::runtime_error(_("Plugins::loadPlugins() dirPath cannot be empty"));
 

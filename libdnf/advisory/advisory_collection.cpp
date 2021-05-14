@@ -26,8 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-AdvisoryCollection::AdvisoryCollection(libdnf::rpm::SolvSack & sack, AdvisoryId advisory, int index)
-    : sack(sack.get_weak_ptr())
+AdvisoryCollection::AdvisoryCollection(const libdnf::rpm::SolvSackWeakPtr & sack, AdvisoryId advisory, int index)
+    : sack(sack)
     , advisory(advisory)
     , index(index) {}
 
@@ -113,7 +113,7 @@ AdvisoryId AdvisoryCollection::get_advisory_id() const {
 }
 
 Advisory AdvisoryCollection::get_advisory() const {
-    return Advisory(*sack, advisory);
+    return Advisory(sack, advisory);
 }
 
 }  // namespace libdnf::advisory

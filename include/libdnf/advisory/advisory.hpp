@@ -97,10 +97,10 @@ class Advisory {
 public:
     /// Construct the Advisory object
     ///
-    /// @param sack   Reference to libdnf::rpm::SolvSack instance which holds are the data.
+    /// @param sack   WeakPtr to libdnf::rpm::SolvSack instance which holds the data.
     /// @param id     AdvisoryId into libsolv pool.
     /// @return New Advisory instance.
-    Advisory(libdnf::rpm::SolvSack & sack, AdvisoryId id);
+    Advisory(const libdnf::rpm::SolvSackWeakPtr & sack, AdvisoryId id);
 
     /// Destroy the Advisory object
     ~Advisory();

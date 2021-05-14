@@ -30,8 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 
 
-PackageSet::PackageSet(SolvSack * sack) : p_impl(new Impl(sack)) {}
-
+PackageSet::PackageSet(const SolvSackWeakPtr & sack) : p_impl(new Impl(sack)) {}
 
 PackageSet::PackageSet(const PackageSet & other) : p_impl(new Impl(*other.p_impl)) {}
 
@@ -39,7 +38,7 @@ PackageSet::PackageSet(const PackageSet & other) : p_impl(new Impl(*other.p_impl
 PackageSet::PackageSet(PackageSet && other) noexcept : p_impl(new Impl(std::move(*other.p_impl))) {}
 
 
-PackageSet::PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map) : p_impl(new Impl(sack, solv_map)) {}
+PackageSet::PackageSet(const SolvSackWeakPtr & sack, libdnf::rpm::solv::SolvMap & solv_map) : p_impl(new Impl(sack, solv_map)) {}
 
 
 PackageSet::~PackageSet() = default;
@@ -133,7 +132,7 @@ void PackageSet::remove(const Package & pkg) {
 }
 
 
-SolvSack * PackageSet::get_sack() const {
+SolvSackWeakPtr PackageSet::get_sack() const {
     return p_impl->get_sack();
 }
 

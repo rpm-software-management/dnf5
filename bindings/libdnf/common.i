@@ -18,12 +18,19 @@
 %include <std_string.i>
 %include <std_vector.i>
 
+%{
+    #include "libdnf/common/weak_ptr.hpp"
+%}
+%include "libdnf/common/weak_ptr.hpp"
+
 // Cant use %include <catch_error.i> here, SWIG includes each file only once,
 // but the exception handler actually doesnt get registered when this file is
 // %imported (as opposed to %included).
 %exception {
     try {
         $action
+    } catch (const libdnf::InvalidPointer & e) {
+        SWIG_exception(SWIG_NullReferenceError, e.what());
     } catch (const std::out_of_range & e) {
         SWIG_exception(SWIG_IndexError, e.what());
     } catch (const std::exception & e) {
@@ -117,7 +124,6 @@ del ClassName##__iter__
     #include "libdnf/common/sack/match_int64.hpp"
     #include "libdnf/common/sack/match_string.hpp"
     #include "libdnf/common/set.hpp"
-    #include "libdnf/common/weak_ptr.hpp"
 %}
 
 %ignore libdnf::Set::Set;
@@ -129,7 +135,6 @@ del ClassName##__iter__
 %include "libdnf/common/sack/match_int64.hpp"
 %include "libdnf/common/sack/match_string.hpp"
 %include "libdnf/common/set.hpp"
-%include "libdnf/common/weak_ptr.hpp"
 
 %{
     #include "libdnf/common/preserve_order_map.hpp"

@@ -36,7 +36,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RpmSolvQueryTest);
 // make constructor public so we can create Package instances in the tests
 class TestPackage : public libdnf::rpm::Package {
 public:
-    TestPackage(libdnf::rpm::SolvSack * sack, libdnf::rpm::PackageId id) : libdnf::rpm::Package(sack, id) {}
+    TestPackage(const libdnf::rpm::SolvSackWeakPtr & sack, libdnf::rpm::PackageId id) : libdnf::rpm::Package(sack, id) {}
 };
 
 
@@ -425,11 +425,11 @@ void RpmSolvQueryTest::test_ifilter_advisories() {
     // Run setUp again to have a clean sack (without solv-repo1)
     RepoFixture::setUp();
     add_repo_repomd("repomd-repo1");
-    auto & advisory_sack = base->get_rpm_advisory_sack();
+    auto advisory_sack = base->get_rpm_advisory_sack();
 
     {
         // Test QueryCmp::EQ with equal advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("DNF-2019-1");
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().ifilter_name("DNF-2019-1");
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
@@ -438,7 +438,7 @@ void RpmSolvQueryTest::test_ifilter_advisories() {
 
     {
         // Test QueryCmp::GT with older advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("PKG-OLDER");
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().ifilter_name("PKG-OLDER");
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::GT);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
@@ -447,7 +447,7 @@ void RpmSolvQueryTest::test_ifilter_advisories() {
 
     {
         // Test QueryCmp::LTE with older advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("PKG-OLDER");
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().ifilter_name("PKG-OLDER");
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::LTE);
         std::vector<std::string> expected = {};
@@ -456,7 +456,7 @@ void RpmSolvQueryTest::test_ifilter_advisories() {
 
     {
         // Test QueryCmp::LT with newer advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("PKG-NEWER");
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().ifilter_name("PKG-NEWER");
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::LT);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
@@ -465,7 +465,7 @@ void RpmSolvQueryTest::test_ifilter_advisories() {
 
     {
         // Test QueryCmp::GTE with newer advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack.new_query().ifilter_name("PKG-NEWER");
+        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().ifilter_name("PKG-NEWER");
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::GTE);
         std::vector<std::string> expected = {};
@@ -475,7 +475,7 @@ void RpmSolvQueryTest::test_ifilter_advisories() {
     {
         // Test QueryCmp::EQ with older and newer advisory pkg
         libdnf::advisory::AdvisoryQuery adv_query =
-            advisory_sack.new_query().ifilter_name("PKG-*", libdnf::sack::QueryCmp::IGLOB);
+            advisory_sack->new_query().ifilter_name("PKG-*", libdnf::sack::QueryCmp::IGLOB);
         ;
         libdnf::rpm::SolvQuery query(sack);
         query.ifilter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);

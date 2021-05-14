@@ -66,7 +66,7 @@ public:
     /// @replaces libdnf/hy-query.h:function:hy_query_create_flags(DnfSack *sack, int flags);
     /// @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
-    explicit SolvQuery(SolvSack * sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
+    explicit SolvQuery(const SolvSackWeakPtr & sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
     SolvQuery(const SolvQuery & src) = default;
     SolvQuery(SolvQuery && src) noexcept = default;
     ~SolvQuery() = default;

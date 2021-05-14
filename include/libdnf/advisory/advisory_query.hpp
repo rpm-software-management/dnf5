@@ -30,9 +30,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
+using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
+
 class AdvisoryQuery {
 public:
-    explicit AdvisoryQuery(AdvisorySack * sack);
+    explicit AdvisoryQuery(const AdvisorySackWeakPtr & sack);
     AdvisoryQuery(const AdvisoryQuery & src);
     AdvisoryQuery(AdvisoryQuery && src);
     ~AdvisoryQuery();
@@ -93,7 +95,7 @@ public:
     std::vector<AdvisoryPackage> get_sorted_advisory_packages(bool only_applicable = false) const;
 
 private:
-    AdvisorySack * advisory_sack;
+    AdvisorySackWeakPtr advisory_sack;
 
     class Impl;
     std::unique_ptr<Impl> p_impl;

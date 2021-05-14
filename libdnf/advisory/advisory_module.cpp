@@ -69,10 +69,10 @@ AdvisoryId AdvisoryModule::get_advisory_id() const {
     return p_impl->advisory;
 }
 Advisory AdvisoryModule::get_advisory() const {
-    return Advisory(*(p_impl->sack), p_impl->advisory);
+    return Advisory(p_impl->sack, p_impl->advisory);
 }
 AdvisoryCollection AdvisoryModule::get_advisory_collection() const {
-    return AdvisoryCollection(*(p_impl->sack), p_impl->advisory, p_impl->owner_collection_index);
+    return AdvisoryCollection(p_impl->sack, p_impl->advisory, p_impl->owner_collection_index);
 }
 
 // AdvisoryModule::Impl

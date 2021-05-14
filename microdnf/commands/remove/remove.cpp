@@ -67,7 +67,7 @@ void CmdRemove::set_argument_parser(Context & ctx) {
 void CmdRemove::configure([[maybe_unused]] Context & ctx) {}
 
 void CmdRemove::run(Context & ctx) {
-    auto & solv_sack = ctx.base.get_rpm_solv_sack();
+    auto & solv_sack = *ctx.base.get_rpm_solv_sack();
 
     // To search in the system repository (installed packages)
     // Creates system repository in the repo_sack and loads it into rpm::SolvSack.

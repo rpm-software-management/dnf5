@@ -41,8 +41,8 @@ Reldep::Reldep(SolvSack * sack, const char * name, const char * version, CmpType
     id = get_reldep_id(sack, name, version, cmp_type);
 }
 
-Reldep::Reldep(SolvSack * sack, const std::string & reldep_string) : sack(sack->get_weak_ptr()) {
-    id = get_reldep_id(sack, reldep_string);
+Reldep::Reldep(const SolvSackWeakPtr & sack, const std::string & reldep_string) : sack(sack) {
+    id = get_reldep_id(sack.get(), reldep_string);
 }
 
 Reldep::Reldep(Reldep && reldep) : sack(std::move(reldep.sack)), id(std::move(reldep.id)) {}

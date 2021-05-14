@@ -46,8 +46,8 @@ inline const char * get_str_from_pool(Id keyname, Id advisory, Pool * pool, int 
     return str;
 }
 
-AdvisoryReference::AdvisoryReference(libdnf::rpm::SolvSack & sack, AdvisoryId advisory, int index)
-    : sack(sack.get_weak_ptr())
+AdvisoryReference::AdvisoryReference(const libdnf::rpm::SolvSackWeakPtr & sack, AdvisoryId advisory, int index)
+    : sack(sack)
     , advisory(advisory)
     , index(index) {}
 

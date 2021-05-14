@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_BASE_HPP
 
 #include "libdnf/advisory/advisory_sack.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/comps/comps.hpp"
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/conf/vars.hpp"
@@ -34,6 +35,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+using LogRouterWeakPtr = WeakPtr<LogRouter, false>;
+using VarsWeakPtr = WeakPtr<Vars, false>;
 
 /// Instances of :class:`libdnf::Base` are the central point of functionality supplied by libdnf.
 /// An application will typically create a single instance of this class which it will keep for the run-time needed to accomplish its packaging tasks.
@@ -55,15 +58,16 @@ public:
     void load_config_from_file();
 
     ConfigMain & get_config() { return config; }
-    LogRouter & get_logger() { return log_router; }
-    rpm::RepoSack & get_rpm_repo_sack() { return rpm_repo_sack; }
-    rpm::SolvSack & get_rpm_solv_sack() { return rpm_solv_sack; }
-    transaction::TransactionSack & get_transaction_sack() { return transaction_sack; }
-    libdnf::comps::Comps & get_comps() { return comps; }
-    libdnf::advisory::AdvisorySack & get_rpm_advisory_sack() { return rpm_advisory_sack; }
+    LogRouterWeakPtr get_logger() { return LogRouterWeakPtr(&log_router, &log_router_gurad); }
+    rpm::RepoSackWeakPtr get_rpm_repo_sack() { return rpm_repo_sack.get_weak_ptr(); }
+    rpm::SolvSackWeakPtr get_rpm_solv_sack() { return rpm_solv_sack.get_weak_ptr(); }
+
+    transaction::TransactionSackWeakPtr get_transaction_sack() { return transaction_sack.get_weak_ptr(); }
+    libdnf::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
+    libdnf::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
-    Vars & get_vars() { return vars; }
+    VarsWeakPtr get_vars() { return VarsWeakPtr(&vars, &vars_gurad); }
 
     void add_plugin(plugin::IPlugin & iplugin_instance);
     void load_plugins();
@@ -94,6 +98,9 @@ private:
     plugin::Plugins plugins{*this};
     libdnf::advisory::AdvisorySack rpm_advisory_sack{*this};
     std::map<std::string, std::string> variables;
+
+    WeakPtrGuard<LogRouter, false> log_router_gurad;
+    WeakPtrGuard<Vars, false> vars_gurad;
 };
 
 }  // namespace libdnf

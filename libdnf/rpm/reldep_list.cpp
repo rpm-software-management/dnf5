@@ -38,7 +38,7 @@ ReldepList::ReldepList(const ReldepList & src) : p_impl(new Impl(*src.p_impl)) {
 
 ReldepList::ReldepList(ReldepList && src) noexcept : p_impl(std::move(src.p_impl)) {}
 
-ReldepList::ReldepList(SolvSack * sack) : p_impl(new Impl(sack)) {}
+ReldepList::ReldepList(const SolvSackWeakPtr & sack) : p_impl(new Impl(sack)) {}
 
 ReldepList::~ReldepList() = default;
 

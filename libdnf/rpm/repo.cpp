@@ -249,7 +249,7 @@ bool Repo::Impl::ends_with(const std::string & str, const std::string & ending) 
 }
 
 const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_type) const {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     static const std::string empty;
     std::string lookup_metadata_type = metadata_type;
     if (config.get_main_config().zchunk().get_value()) {
@@ -891,7 +891,7 @@ static std::vector<std::string> keyids_from_pubring(const std::string & gpg_dir,
 
 // download key from URL
 std::vector<Key> Repo::Impl::retrieve(const std::string & url) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     char tmp_key_file[] = "/tmp/repokey.XXXXXX";
     auto fd = mkstemp(tmp_key_file);
     if (fd == -1) {
@@ -945,7 +945,7 @@ static void ensure_socket_dir_exists(Logger & logger) {
 }
 
 void Repo::Impl::import_repo_keys() {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
 
     auto gpg_dir = get_cachedir() + "/pubring";
     auto known_keys = keyids_from_pubring(gpg_dir, logger);
@@ -1132,7 +1132,7 @@ bool Repo::Impl::try_load_cache() {
 /// than the last counting event (which could facilitate tracking across
 /// multiple such events).
 void Repo::Impl::add_countme_flag(LrHandle * handle) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
 
     // Bail out if not counting or not running as root (since the persistdir is
     // only root-writable)
@@ -1213,7 +1213,7 @@ void Repo::Impl::add_countme_flag(LrHandle * handle) {
 
 // Use metalink to check whether our metadata are still current.
 bool Repo::Impl::is_metalink_in_sync() {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     char tmpdir[] = "/tmp/tmpdir.XXXXXX";
     char * dir = mkdtemp(tmpdir);
     if (!dir) {
@@ -1284,7 +1284,7 @@ bool Repo::Impl::is_metalink_in_sync() {
 
 // Use repomd to check whether our metadata are still current.
 bool Repo::Impl::is_repomd_in_sync() {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     LrYumRepo * yum_repo;
     char tmpdir[] = "/tmp/tmpdir.XXXXXX";
     char * dir = mkdtemp(tmpdir);
@@ -1372,7 +1372,7 @@ void Repo::Impl::download_metadata(const std::string & destdir) {
 }
 
 bool Repo::Impl::load() {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     try {
         if (!get_metadata_path(MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
             reset_metadata_expired();

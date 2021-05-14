@@ -49,7 +49,7 @@ void RepoTest::test_repo_basics() {
     libdnf::Base base;
 
     // Sets logging file.
-    auto & log_router = base.get_logger();
+    auto & log_router = *base.get_logger();
     log_router.add_logger(std::make_unique<libdnf::StreamLogger>(std::make_unique<std::ofstream>("repo.log")));
 
     // set installroot to a temp directory

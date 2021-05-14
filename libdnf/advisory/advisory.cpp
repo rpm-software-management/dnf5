@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-Advisory::Advisory(libdnf::rpm::SolvSack & sack, AdvisoryId id) : id(id), sack(sack.get_weak_ptr()) {}
+Advisory::Advisory(const libdnf::rpm::SolvSackWeakPtr & sack, AdvisoryId id) : id(id), sack(sack) {}
 
 std::string Advisory::get_name() const {
     const char * name;
@@ -128,7 +128,7 @@ std::vector<AdvisoryReference> Advisory::get_references(AdvisoryReferenceType re
              (strcmp(current_type, "bugzilla") == 0)) ||
             ((ref_type & AdvisoryReferenceType::VENDOR) == AdvisoryReferenceType::VENDOR &&
              (strcmp(current_type, "vendor") == 0))) {
-            output.emplace_back(AdvisoryReference(*sack, id, index));
+            output.emplace_back(AdvisoryReference(sack, id, index));
         }
     }
 
@@ -146,7 +146,7 @@ std::vector<AdvisoryCollection> Advisory::get_collections() const {
 
     for (int index = 0; dataiterator_step(&di); index++) {
         dataiterator_setpos(&di);
-        output.emplace_back(AdvisoryCollection(*sack, id, index));
+        output.emplace_back(AdvisoryCollection(sack, id, index));
     }
 
     dataiterator_free(&di);

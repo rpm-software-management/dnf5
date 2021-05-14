@@ -70,6 +70,7 @@ void Comps::load_from_file(const std::string & path, const char * reponame) {
     fclose(xml_doc);
 }
 
+CompsWeakPtr Comps::get_weak_ptr() { return CompsWeakPtr(this, &p_impl->data_guard); }
 
 }  // namespace libdnf::comps
 

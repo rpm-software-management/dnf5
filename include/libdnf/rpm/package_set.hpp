@@ -53,7 +53,7 @@ public:
     };
 
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
-    explicit PackageSet(SolvSack * sack);
+    explicit PackageSet(const SolvSackWeakPtr & sack);
 
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_clone(DnfPackageSet * pset)
     PackageSet(const PackageSet & pset);
@@ -95,7 +95,7 @@ public:
     void remove(const Package & pkg);
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.getSack()
-    SolvSack * get_sack() const;
+    SolvSackWeakPtr get_sack() const;
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.size()
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_count(DnfPackageSet * pset)
@@ -109,7 +109,7 @@ private:
     friend Transaction;
     friend libdnf::Goal;
     friend libdnf::Swdb;
-    PackageSet(SolvSack * sack, libdnf::rpm::solv::SolvMap & solv_map);
+    PackageSet(const SolvSackWeakPtr & sack, libdnf::rpm::solv::SolvMap & solv_map);
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

@@ -239,7 +239,7 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
 
 
 void PythonPluginLoader::load_plugins_from_dir(const fs::path & dir_path) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
 
     if (dir_path.empty())
         throw std::runtime_error("PythonPluginLoader::load_from_dir() dir_path cannot be empty");

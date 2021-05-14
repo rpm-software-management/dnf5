@@ -32,7 +32,7 @@ class TestReldepList(unittest.TestCase):
         self.base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, self.tmpdir)
 
         self.repo_sack = libdnf.rpm.RepoSack(self.base)
-        self.sack = libdnf.rpm.SolvSack(self.base)
+        self.sack = self.base.get_rpm_solv_sack()
 
         # Creates new repositories in the repo_sack
         repo = self.repo_sack.new_repo("repomd-repo1")

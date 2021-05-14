@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_query.hpp"
 
 #include "libdnf/common/sack/sack.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/logger/logger.hpp"
 
 namespace libdnf {
@@ -33,6 +34,10 @@ class Base;
 }  // namespace libdnf
 
 namespace libdnf::rpm {
+
+class RepoSack;
+
+using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
 class RepoSack : public sack::Sack<Repo, RepoQuery> {
 public:
@@ -62,7 +67,11 @@ public:
     /// Create a new repository from a libsolv testcase file
     RepoWeakPtr new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path);
 
+    RepoSackWeakPtr get_weak_ptr();
+
 private:
+    WeakPtrGuard<RepoSack, false> data_guard;
+
     //TODO(jrohel): Make public?
     /// Creates new repositories according to the configuration in the files with ".repo" extension in the directory
     /// defined by dir_path.
@@ -72,6 +81,8 @@ private:
 
     Base * base;
 };
+
+inline RepoSackWeakPtr RepoSack::get_weak_ptr() { return RepoSackWeakPtr(this, &data_guard); }
 
 }  // namespace libdnf::rpm
 

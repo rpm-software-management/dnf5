@@ -171,7 +171,7 @@ std::chrono::time_point<std::chrono::steady_clock> MicrodnfRepoCB::prev_print_ti
 
 void Context::load_rpm_repo(libdnf::rpm::Repo & repo) {
     //repo->set_substitutions(variables);
-    auto & logger = base.get_logger();
+    auto & logger = *base.get_logger();
     auto callback = std::make_unique<microdnf::MicrodnfRepoCB>(base.get_config());
     auto callback_ptr = callback.get();
     repo.set_callbacks(std::move(callback));
@@ -203,7 +203,7 @@ void Context::load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::SolvSa
     // This thread loads prepared repositories into solvable sack
     std::thread thread_sack_loader([&]() {
         try {
-            auto & solv_sack = base.get_rpm_solv_sack();
+            auto & solv_sack = *base.get_rpm_solv_sack();
             while (true) {
                 std::unique_lock<std::mutex> lock(prepared_repos_mutex);
                 while (prepared_repos.size() <= num_repos_loaded_to_solv_sack) {
@@ -669,13 +669,13 @@ void run_transaction(libdnf::rpm::Transaction & transaction) {
 }
 
 libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx) {
-    auto & transaction_sack = ctx.base.get_transaction_sack();
-    auto transaction = transaction_sack.new_transaction();
+    auto transaction_sack = ctx.base.get_transaction_sack();
+    auto transaction = transaction_sack->new_transaction();
     transaction->set_user_id(get_login_uid());
     if (auto comment = ctx.get_comment()) {
         transaction->set_comment(comment);
     }
-    transaction->set_releasever(ctx.base.get_vars().get_value("releasever"));
+    transaction->set_releasever(ctx.base.get_vars()->get_value("releasever"));
     auto arguments = ctx.get_prg_arguments();
     std::string cmd_line;
     for (size_t i = 0; i < arguments.size(); ++i) {

@@ -64,7 +64,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     auto base = new_base();
 
     // create a new empty transaction
-    auto trans = base->get_transaction_sack().new_transaction();
+    auto trans = base->get_transaction_sack()->new_transaction();
 
     // create an environment in the transaction
     create_comps_environment(trans);
@@ -80,7 +80,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     auto base2 = new_base();
 
     // get the written transaction
-    auto q2 = base2->get_transaction_sack().new_query();
+    auto q2 = base2->get_transaction_sack()->new_query();
     q2.ifilter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
     auto trans2 = q2.get();
 

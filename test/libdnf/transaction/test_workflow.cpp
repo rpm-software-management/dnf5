@@ -36,7 +36,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     auto base = new_base();
 
     // create an empty Transaction object
-    auto trans = base->get_transaction_sack().new_transaction();
+    auto trans = base->get_transaction_sack()->new_transaction();
     CPPUNIT_ASSERT_EQUAL(TransactionState::UNKNOWN, trans->get_state());
 
     // set packages used to perform the transaction

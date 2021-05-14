@@ -112,17 +112,17 @@ void CmdRepoquery::set_argument_parser(Context & ctx) {
 void CmdRepoquery::configure([[maybe_unused]] Context & ctx) {}
 
 void CmdRepoquery::run(Context & ctx) {
-    auto & solv_sack = ctx.base.get_rpm_solv_sack();
+    auto solv_sack = ctx.base.get_rpm_solv_sack();
 
     // To search in the system repository (installed packages)
     if (installed_option->get_value()) {
         // Creates system repository in the repo_sack and loads it into rpm::SolvSack.
-        solv_sack.create_system_repo(false);
+        solv_sack->create_system_repo(false);
     }
 
     // To search in available repositories (available packages)
     if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
-        auto enabled_repos = ctx.base.get_rpm_repo_sack().new_query().ifilter_enabled(true);
+        auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
         using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
         auto flags =
             LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
@@ -130,8 +130,8 @@ void CmdRepoquery::run(Context & ctx) {
         std::cout << std::endl;
     }
 
-    libdnf::rpm::PackageSet result_pset(&solv_sack);
-    libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
+    libdnf::rpm::PackageSet result_pset(solv_sack);
+    libdnf::rpm::SolvQuery full_solv_query(solv_sack);
     for (auto & pattern : *patterns_to_show_options) {
         libdnf::rpm::SolvQuery solv_query(full_solv_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());

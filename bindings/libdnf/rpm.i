@@ -13,7 +13,20 @@
 %import "common.i"
 %import "conf.i"
 
+%exception {
+    try {
+        $action
+    } catch (const libdnf::InvalidPointer & e) {
+        SWIG_exception(SWIG_NullReferenceError, e.what());
+    } catch (const libdnf::RuntimeError & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+}
+
 %{
+
+    #include "libdnf/advisory/advisory_module.hpp"
+    #include "libdnf/advisory/advisory_query.hpp"
     #include "libdnf/rpm/checksum.hpp"
     #include "libdnf/conf/config_main.hpp"
     #include "libdnf/rpm/config_repo.hpp"
@@ -39,6 +52,14 @@
 %template(VectorNevra) std::vector<libdnf::rpm::Nevra>;
 
 %include "libdnf/rpm/solv_sack.hpp"
+%template(SolvSackWeakPtr) libdnf::WeakPtr<libdnf::rpm::SolvSack, false>;
+
+
+%ignore libdnf::advisory::AdvisorySack::new_query();
+%include "libdnf/advisory/advisory_sack.hpp"
+%template(AdvisorySackWeakPtr) libdnf::WeakPtr<libdnf::advisory::AdvisorySack, false>;
+
+
 %include "libdnf/rpm/reldep.hpp"
 
 %rename(next) libdnf::rpm::ReldepListIterator::operator++();
@@ -65,6 +86,7 @@
 %include "libdnf/rpm/repo_query.hpp"
 %template(SackRepoRepoQuery) libdnf::sack::Sack<libdnf::rpm::Repo, libdnf::rpm::RepoQuery>;
 %include "libdnf/rpm/repo_sack.hpp"
+%template(RepoSackWeakPtr) libdnf::WeakPtr<libdnf::rpm::RepoSack, false>;
 
 add_iterator(PackageSet)
 add_iterator(ReldepList)

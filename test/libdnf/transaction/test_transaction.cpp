@@ -33,7 +33,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TransactionTest);
 
 
 static TransactionWeakPtr create_transaction(libdnf::Base & base) {
-    auto trans = base.get_transaction_sack().new_transaction();
+    auto trans = base.get_transaction_sack()->new_transaction();
     trans->set_dt_start(1);
     trans->set_dt_end(2);
     trans->set_rpmdb_version_begin("begin");
@@ -61,7 +61,7 @@ void TransactionTest::test_save_load() {
 
     // load the saved transaction from database and compare values
     auto base2 = new_base();
-    auto q2 = base2->get_transaction_sack().new_query();
+    auto q2 = base2->get_transaction_sack()->new_query();
     q2.ifilter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
     auto trans2 = q2.get();
 
@@ -80,7 +80,7 @@ void TransactionTest::test_save_load() {
 
 void TransactionTest::test_second_start_raises() {
     auto base = new_base();
-    auto trans = base->get_transaction_sack().new_transaction();
+    auto trans = base->get_transaction_sack()->new_transaction();
     trans->start();
     // 2nd begin must throw an exception
     CPPUNIT_ASSERT_THROW(trans->start(), std::runtime_error);
@@ -89,7 +89,7 @@ void TransactionTest::test_second_start_raises() {
 
 void TransactionTest::test_save_with_specified_id_raises() {
     auto base = new_base();
-    auto trans = base->get_transaction_sack().new_transaction();
+    auto trans = base->get_transaction_sack()->new_transaction();
     trans->set_id(1);
     // it is not allowed to save a transaction with arbitrary ID
     CPPUNIT_ASSERT_THROW(trans->start(), std::runtime_error);
@@ -115,7 +115,7 @@ void TransactionTest::test_update() {
 
     // load the transction from the database
     auto base2 = new_base();
-    auto q2 = base2->get_transaction_sack().new_query();
+    auto q2 = base2->get_transaction_sack()->new_query();
     q2.ifilter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
     auto trans2 = q2.get();
 
@@ -137,8 +137,9 @@ void TransactionTest::test_compare() {
     auto base = new_base();
 
     // test operator ==, > and <
-    auto first = base->get_transaction_sack().new_transaction();
-    auto second = base->get_transaction_sack().new_transaction();
+    auto transaction_sack = base->get_transaction_sack();
+    auto first = transaction_sack->new_transaction();
+    auto second = transaction_sack->new_transaction();
 
     // equal id
     first->set_id(1);

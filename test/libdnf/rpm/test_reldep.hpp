@@ -46,7 +46,7 @@ public:
 
 private:
     std::unique_ptr<libdnf::Base> base;
-    std::unique_ptr<libdnf::rpm::SolvSack> sack;
+    libdnf::rpm::SolvSackWeakPtr sack;
 };
 
 #endif  // TEST_LIBDNF_RPM_RELDEP_HPP

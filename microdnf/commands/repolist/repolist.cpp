@@ -122,7 +122,7 @@ void CmdRepolist::run(Context & ctx) {
         }
     }
 
-    auto query = ctx.base.get_rpm_repo_sack().new_query();
+    auto query = ctx.base.get_rpm_repo_sack()->new_query();
     if (enable_disable_option->get_value() == "enabled") {
         query.ifilter_enabled(true);
     } else if (enable_disable_option->get_value() == "disabled") {

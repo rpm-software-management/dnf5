@@ -69,7 +69,7 @@ Session::Session(
     }
 
     // set-up log router for base
-    auto & log_router = base->get_logger();
+    auto & log_router = *base->get_logger();
     log_router.add_logger(std::make_unique<StderrLogger>());
 
     // load configuration
@@ -79,16 +79,16 @@ Session::Session(
     auto system_cache_dir = config.system_cachedir().get_value();
     config.cachedir().set(libdnf::Option::Priority::DEFAULT, system_cache_dir);
     // set variables
-    base->get_vars().load(config.installroot().get_value(), config.varsdir().get_value());
+    base->get_vars()->load(config.installroot().get_value(), config.varsdir().get_value());
     if (session_configuration.find("releasever") != session_configuration.end()) {
         auto releasever = session_configuration_value<std::string>("releasever");
-        base->get_vars().set("releasever", releasever);
+        base->get_vars()->set("releasever", releasever);
     }
 
     // load repo configuration
-    auto & rpm_repo_sack = base->get_rpm_repo_sack();
-    rpm_repo_sack.new_repos_from_file();
-    rpm_repo_sack.new_repos_from_dirs();
+    auto rpm_repo_sack = base->get_rpm_repo_sack();
+    rpm_repo_sack->new_repos_from_file();
+    rpm_repo_sack->new_repos_from_dirs();
 
     // instantiate all services provided by the daemon
     services.emplace_back(std::make_unique<Base>(*this));
@@ -110,7 +110,7 @@ Session::~Session() {
 }
 
 void Session::fill_sack() {
-    auto & solv_sack = get_base()->get_rpm_solv_sack();
+    auto & solv_sack = *get_base()->get_rpm_solv_sack();
     if (session_configuration_value<bool>("load_system_repo", true)) {
         solv_sack.create_system_repo(false);
     }
@@ -136,9 +136,9 @@ bool Session::read_all_repos() {
     using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     //auto & logger = base->get_logger();
-    auto & rpm_repo_sack = base->get_rpm_repo_sack();
-    auto enabled_repos = rpm_repo_sack.new_query().ifilter_enabled(true);
-    auto & solv_sack = base->get_rpm_solv_sack();
+    auto rpm_repo_sack = base->get_rpm_repo_sack();
+    auto enabled_repos = rpm_repo_sack->new_query().ifilter_enabled(true);
+    auto & solv_sack = *base->get_rpm_solv_sack();
     bool retval = true;
     for (auto & repo : enabled_repos.get_data()) {
         repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));

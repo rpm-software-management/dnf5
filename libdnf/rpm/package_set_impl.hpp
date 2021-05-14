@@ -38,10 +38,13 @@ namespace libdnf::rpm {
 class PackageSet::Impl : public solv::SolvMap {
 public:
     /// Initialize with an empty map
-    explicit Impl(SolvSack * sack);
+    //explicit Impl(SolvSack * sack);
+
+    /// Initialize with an empty map
+    explicit Impl(const SolvSackWeakPtr & sack);
 
     /// Clone from an existing map
-    explicit Impl(SolvSack * sack, solv::SolvMap & solv_map);
+    explicit Impl(const SolvSackWeakPtr & sack, solv::SolvMap & solv_map);
 
     /// Copy constructor: clone from an existing PackageSet::Impl
     Impl(const Impl & other);
@@ -54,7 +57,7 @@ public:
     Impl & operator=(const solv::SolvMap & map);
     Impl & operator=(solv::SolvMap && map);
 
-    SolvSack * get_sack() const { return sack.get(); }
+    SolvSackWeakPtr get_sack() const { return sack; }
 
 private:
     friend PackageSet;
@@ -63,13 +66,13 @@ private:
 };
 
 
-inline PackageSet::Impl::Impl(SolvSack * sack)
+inline PackageSet::Impl::Impl(const SolvSackWeakPtr & sack)
     : solv::SolvMap::SolvMap(sack->p_impl->pool->nsolvables)
-    , sack(sack->get_weak_ptr()) {}
+    , sack(sack) {}
 
-inline PackageSet::Impl::Impl(SolvSack * sack, solv::SolvMap & solv_map)
+inline PackageSet::Impl::Impl(const SolvSackWeakPtr & sack, solv::SolvMap & solv_map)
     : solv::SolvMap::SolvMap(solv_map)
-    , sack(sack->get_weak_ptr()) {}
+    , sack(sack) {}
 
 inline PackageSet::Impl::Impl(const Impl & other)
     : solv::SolvMap::SolvMap(other.get_map())

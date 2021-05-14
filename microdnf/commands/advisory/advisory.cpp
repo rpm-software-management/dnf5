@@ -170,13 +170,13 @@ void CmdAdvisory::run(Context & ctx) {
         }
     }
 
-    auto & solv_sack = ctx.base.get_rpm_solv_sack();
-    solv_sack.create_system_repo(false);
-    auto enabled_repos = ctx.base.get_rpm_repo_sack().new_query().ifilter_enabled(true);
+    auto solv_sack = ctx.base.get_rpm_solv_sack();
+    solv_sack->create_system_repo(false);
+    auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
     using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
     ctx.load_rpm_repos(enabled_repos, LoadFlags::USE_UPDATEINFO);
 
-    libdnf::rpm::SolvQuery solv_query(&solv_sack);
+    libdnf::rpm::SolvQuery solv_query(solv_sack);
     using QueryCmp = libdnf::sack::QueryCmp;
     if (patterns_to_show.size() > 0) {
         solv_query.ifilter_name(patterns_to_show, QueryCmp::IGLOB);
@@ -185,7 +185,7 @@ void CmdAdvisory::run(Context & ctx) {
     //DATA IS PREPARED
 
     //TODO(amatej): create advisory_query with filters on advisories prensent (if we want to limit by severity, reference..)
-    auto advisory_query = ctx.base.get_rpm_advisory_sack().new_query();
+    auto advisory_query = ctx.base.get_rpm_advisory_sack()->new_query();
     if (with_cve_option->get_value()) {
         advisory_query.ifilter_CVE("*", QueryCmp::IGLOB);
     }

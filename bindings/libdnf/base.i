@@ -17,10 +17,15 @@
 %import "transaction.i"
 
 %{
+    #include "libdnf/logger/memory_buffer_logger.hpp"
     #include "libdnf/base/base.hpp"
     #include "libdnf/base/goal.hpp"
 %}
 
 #define CV __perl_CV
+
+%template(LogRouterWeakPtr) libdnf::WeakPtr<libdnf::LogRouter, false>;
+%template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
+
 %include "libdnf/base/base.hpp"
 %include "libdnf/base/goal.hpp"

@@ -48,6 +48,7 @@
 // sack and query
 %include "libdnf/transaction/query.hpp"
 %include "libdnf/transaction/sack.hpp"
+%template(TransactionSackWeakPtr) libdnf::WeakPtr<libdnf::transaction::TransactionSack, false>;
 
 // transaction
 %include "libdnf/transaction/transaction.hpp"

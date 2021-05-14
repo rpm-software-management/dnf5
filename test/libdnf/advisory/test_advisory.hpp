@@ -54,7 +54,7 @@ public:
     void test_get_collections();
 
 private:
-    libdnf::advisory::AdvisorySack * advisory_sack;
+    libdnf::advisory::AdvisorySackWeakPtr advisory_sack;
     std::vector<libdnf::advisory::Advisory> advisories;
     libdnf::advisory::Advisory * advisory;
 };

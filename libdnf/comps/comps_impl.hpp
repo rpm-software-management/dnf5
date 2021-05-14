@@ -39,6 +39,9 @@ public:
     Pool * get_pool() { return pool; }
 
 private:
+    friend class Comps;
+
+    WeakPtrGuard<Comps, false> data_guard;
     Pool * pool;
 };
 

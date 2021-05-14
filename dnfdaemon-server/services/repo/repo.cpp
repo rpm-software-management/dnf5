@@ -114,9 +114,9 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->is_enabled());
                 break;
             case RepoAttribute::size: {
-                auto & solv_sack = base.get_rpm_solv_sack();
+                auto solv_sack = base.get_rpm_solv_sack();
                 uint64_t size = 0;
-                libdnf::rpm::SolvQuery query(&solv_sack);
+                libdnf::rpm::SolvQuery query(solv_sack);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.ifilter_repoid(reponames);
                 for (auto pkg : query) {
@@ -143,15 +143,15 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->get_max_timestamp());
                 break;
             case RepoAttribute::pkgs: {
-                auto & solv_sack = base.get_rpm_solv_sack();
-                libdnf::rpm::SolvQuery query(&solv_sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
+                auto solv_sack = base.get_rpm_solv_sack();
+                libdnf::rpm::SolvQuery query(solv_sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.ifilter_repoid(reponames);
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::available_pkgs: {
-                auto & solv_sack = base.get_rpm_solv_sack();
-                libdnf::rpm::SolvQuery query(&solv_sack);
+                auto solv_sack = base.get_rpm_solv_sack();
+                libdnf::rpm::SolvQuery query(solv_sack);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.ifilter_repoid(reponames);
                 dbus_repo.emplace(attr, query.size());
@@ -239,8 +239,8 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall && call) {
 
     // prepare repository query filtered by options
     auto base = session.get_base();
-    auto & rpm_repo_sack = base->get_rpm_repo_sack();
-    auto repos_query = rpm_repo_sack.new_query();
+    auto rpm_repo_sack = base->get_rpm_repo_sack();
+    auto repos_query = rpm_repo_sack->new_query();
 
     if (enable_disable == "enabled") {
         repos_query.ifilter_enabled(true);

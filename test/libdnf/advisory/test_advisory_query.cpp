@@ -35,7 +35,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(AdvisoryAdvisoryQueryTest);
 void AdvisoryAdvisoryQueryTest::setUp() {
     RepoFixture::setUp();
     RepoFixture::add_repo_repomd("repomd-repo1");
-    advisory_sack = &(base->get_rpm_advisory_sack());
+    advisory_sack = base->get_rpm_advisory_sack();
 }
 
 void AdvisoryAdvisoryQueryTest::test_size() {

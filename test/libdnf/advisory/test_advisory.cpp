@@ -36,7 +36,7 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AdvisoryAdvisoryTest, "AdvisoryAdvisoryTes
 void AdvisoryAdvisoryTest::setUp() {
     RepoFixture::setUp();
     RepoFixture::add_repo_repomd("repomd-repo1");
-    advisory_sack = &(base->get_rpm_advisory_sack());
+    advisory_sack = base->get_rpm_advisory_sack();
     libdnf::advisory::AdvisoryQuery q =
         advisory_sack->new_query().ifilter_type(libdnf::advisory::Advisory::Type::SECURITY);
     advisories = q.get_advisories();

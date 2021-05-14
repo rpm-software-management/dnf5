@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMPS_COMPS_HPP
 #define LIBDNF_COMPS_COMPS_HPP
 
+#include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/comps/group/sack.hpp"
 
 #include <memory>
@@ -33,6 +34,7 @@ class Base;
 
 namespace libdnf::comps {
 
+using CompsWeakPtr = libdnf::WeakPtr<Comps, false>;
 
 class Comps {
 public:
@@ -43,6 +45,8 @@ public:
     // Load comps from given file into the pool
     void load_from_file(const std::string & path, const char * reponame);
     GroupSack & get_group_sack() { return group_sack; }
+
+    CompsWeakPtr get_weak_ptr();
 
 private:
     libdnf::Base & base;

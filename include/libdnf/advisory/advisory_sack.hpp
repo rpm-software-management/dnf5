@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_query.hpp"
 
+#include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/rpm/solv/solv_map.hpp"
 
 namespace libdnf {
@@ -29,6 +30,10 @@ class Base;
 }
 
 namespace libdnf::advisory {
+
+//class AsdvisorySack;
+
+using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 
 class AdvisorySack {
 public:
@@ -40,8 +45,12 @@ public:
     /// @return new AdvisoryQuery.
     AdvisoryQuery new_query();
 
+    AdvisorySackWeakPtr get_weak_ptr();
+
 private:
     friend AdvisoryQuery;
+
+    WeakPtrGuard<AdvisorySack, false> data_guard;
 
     /// Load all advisories present in SolvSack from base. This method is
     /// called automatically when creating a new query and the cached number
@@ -54,6 +63,8 @@ private:
 
     libdnf::Base * base;
 };
+
+inline AdvisorySackWeakPtr AdvisorySack::get_weak_ptr() { return AdvisorySackWeakPtr(this, &data_guard); }
 
 }  // namespace libdnf::advisory
 

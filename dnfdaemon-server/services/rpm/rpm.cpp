@@ -144,7 +144,7 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall && call) {
     call >> options;
 
     session.fill_sack();
-    auto & solv_sack = session.get_base()->get_rpm_solv_sack();
+    auto solv_sack = session.get_base()->get_rpm_solv_sack();
 
     // patterns to search
     std::vector<std::string> default_patterns{};
@@ -157,8 +157,8 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall && call) {
     bool with_filenames = key_value_map_get<bool>(options, "with_filenames", true);
     bool with_src = key_value_map_get<bool>(options, "with_src", true);
 
-    libdnf::rpm::PackageSet result_pset(&solv_sack);
-    libdnf::rpm::SolvQuery full_solv_query(&solv_sack);
+    libdnf::rpm::PackageSet result_pset(solv_sack);
+    libdnf::rpm::SolvQuery full_solv_query(solv_sack);
     if (patterns.size() > 0) {
         for (auto & pattern : patterns) {
             libdnf::rpm::SolvQuery solv_query(full_solv_query);
@@ -227,15 +227,15 @@ sdbus::MethodReply Rpm::resolve(sdbus::MethodCall && call) {
 }
 
 libdnf::transaction::TransactionWeakPtr new_db_transaction(libdnf::Base * base, const std::string & comment) {
-    auto & transaction_sack = base->get_transaction_sack();
-    auto transaction = transaction_sack.new_transaction();
+    auto transaction_sack = base->get_transaction_sack();
+    auto transaction = transaction_sack->new_transaction();
     // TODO(mblaha): user id
     //transaction->set_user_id(get_login_uid());
     if (!comment.empty()) {
         transaction->set_comment(comment);
     }
     // TODO(jrohel): What if the "releasever" variable is not set?
-    transaction->set_releasever(base->get_vars().get_value("releasever"));
+    transaction->set_releasever(base->get_vars()->get_value("releasever"));
 
     // TODO (mblaha): command line for the transaction?
     //transaction->set_cmdline(cmd_line);

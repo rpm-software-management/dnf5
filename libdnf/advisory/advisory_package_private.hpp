@@ -57,7 +57,7 @@ public:
     /// @param first        First AdvisoryPackage to compare.
     /// @param second       Secondf AdvisoryPackage to compare.
     /// @return True if first AdvisoryPackage has smaller NEVRA, False otherwise.
-    inline static bool nevra_compare_lower_id(const AdvisoryPackage & first, const AdvisoryPackage & second) {
+    static bool nevra_compare_lower_id(const AdvisoryPackage & first, const AdvisoryPackage & second) {
         if (first.p_impl->name != second.p_impl->name)
             return first.p_impl->name < second.p_impl->name;
         if (first.p_impl->arch != second.p_impl->arch)
@@ -71,7 +71,7 @@ public:
     /// @param adv_pkg      AdvisoryPackage to compare.
     /// @param pkg          libdnf::rpm::Package to compare.
     /// @return True if AdvisoryPackage has smaller name or architecture than libdnf::rpm::package, False otherwise.
-    inline static bool name_arch_compare_lower_id(const AdvisoryPackage & adv_pkg, const rpm::Package & pkg) {
+    static bool name_arch_compare_lower_id(const AdvisoryPackage & adv_pkg, const rpm::Package & pkg) {
         Pool * pool = adv_pkg.p_impl->sack->p_impl->get_pool();
         Solvable * s = libdnf::rpm::solv::get_solvable(pool, pkg.get_id().id);
 
@@ -86,7 +86,7 @@ public:
     /// @param solvable     Solvable to compare
     /// @param adv_pkg      AdvisoryPackage::Impl to compare.
     /// @return True if Solvable has smaller name or architecture than AdvisoryPackage::Impl, False otherwise.
-    inline static bool name_arch_compare_lower_solvable(const Solvable * solvable, const AdvisoryPackage::Impl & adv_pkg) {
+    static bool name_arch_compare_lower_solvable(const Solvable * solvable, const AdvisoryPackage::Impl & adv_pkg) {
         if (solvable->name != adv_pkg.name) {
             return solvable->name < adv_pkg.name;
         }
@@ -99,7 +99,7 @@ public:
     /// @param solvable     Solvable to compare
     /// @param adv_pkg      AdvisoryPackage::Impl to compare.
     /// @return True if Solvable has smaller nevra than AdvisoryPackage::Impl, False otherwise.
-    inline static bool nevra_compare_lower_solvable(const Solvable * solvable, const AdvisoryPackage::Impl & adv_pkg) {
+    static bool nevra_compare_lower_solvable(const Solvable * solvable, const AdvisoryPackage::Impl & adv_pkg) {
         if (solvable->name != adv_pkg.name) {
             return solvable->name < adv_pkg.name;
         }
@@ -113,7 +113,7 @@ private:
     friend class AdvisoryCollection;
     friend AdvisoryPackage;
 
-    explicit Impl(
+    Impl(
         libdnf::rpm::SolvSack & sack,
         AdvisoryId advisory,
         int owner_collection_index,

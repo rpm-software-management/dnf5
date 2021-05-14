@@ -31,7 +31,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RpmPackageSetTest);
 // make constructor public so we can create Package instances in the tests
 class TestPackage : public libdnf::rpm::Package {
 public:
-    TestPackage(libdnf::rpm::SolvSack * sack, libdnf::rpm::PackageId id) : libdnf::rpm::Package(sack, id) {}
+    TestPackage(const libdnf::rpm::SolvSackWeakPtr & sack, libdnf::rpm::PackageId id) : libdnf::rpm::Package(sack, id) {}
 };
 
 

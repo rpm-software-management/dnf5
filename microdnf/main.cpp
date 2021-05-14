@@ -124,7 +124,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
                 throw std::runtime_error(fmt::format("setvar: Badly formated argument value \"{}\"", value));
             }
             auto name = std::string(value, val);
-            ctx.base.get_vars().set(name, val + 1, libdnf::Vars::Priority::COMMANDLINE);
+            ctx.base.get_vars()->set(name, val + 1, libdnf::Vars::Priority::COMMANDLINE);
             return true;
         });
     microdnf->register_named_arg(setvar);
@@ -177,7 +177,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     releasever->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            ctx.base.get_vars().set("releasever", value);
+            ctx.base.get_vars()->set("releasever", value);
             return true;
         });
     microdnf->register_named_arg(releasever);
@@ -203,7 +203,7 @@ int main(int argc, char * argv[]) {
     microdnf::Context context;
     libdnf::Base & base = context.base;
 
-    auto & log_router = base.get_logger();
+    auto & log_router = *base.get_logger();
 
     // Add circular memory buffer logger
     const std::size_t max_log_items_to_keep = 10000;
@@ -284,22 +284,22 @@ int main(int argc, char * argv[]) {
     log_router.swap_logger(logger, 0);
     dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
 
-    base.get_vars().load(base.get_config().installroot().get_value(), base.get_config().varsdir().get_value());
+    base.get_vars()->load(base.get_config().installroot().get_value(), base.get_config().varsdir().get_value());
 
     // Preconfigure selected command
     context.selected_command->pre_configure(context);
     //pre_configure_plugins
 
     // create rpm repositories according configuration files
-    auto & rpm_repo_sack = base.get_rpm_repo_sack();
-    rpm_repo_sack.new_repos_from_file();
-    rpm_repo_sack.new_repos_from_dirs();
+    auto rpm_repo_sack = base.get_rpm_repo_sack();
+    rpm_repo_sack->new_repos_from_file();
+    rpm_repo_sack->new_repos_from_dirs();
 
     // apply repository setopts
     for (const auto & setopt : context.setopts) {
         auto last_dot_pos = setopt.first.rfind('.');
         auto repo_pattern = setopt.first.substr(0, last_dot_pos);
-        auto query = rpm_repo_sack.new_query().ifilter_id(libdnf::sack::QueryCmp::GLOB, repo_pattern);
+        auto query = rpm_repo_sack->new_query().ifilter_id(libdnf::sack::QueryCmp::GLOB, repo_pattern);
         auto key = setopt.first.substr(last_dot_pos + 1);
         for (auto & repo : query.get_data()) {
             try {

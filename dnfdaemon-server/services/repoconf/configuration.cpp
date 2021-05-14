@@ -34,7 +34,7 @@ void Configuration::read_configuration() {
 }
 
 void Configuration::read_main_config() {
-    auto & logger = session.get_base()->get_logger();
+    auto & logger = *session.get_base()->get_logger();
     auto base = session.get_base();
     auto & cfg_main = base->get_config();
     auto main_config_path = cfg_main.config_file_path().get_value();
@@ -44,9 +44,9 @@ void Configuration::read_main_config() {
         std::unique_ptr<libdnf::ConfigParser> main_parser(new libdnf::ConfigParser);
 
         main_parser->read(main_config_path);
-        cfg_main.load_from_parser(*main_parser, "main", base->get_vars(), base->get_logger());
+        cfg_main.load_from_parser(*main_parser, "main", *base->get_vars(), *base->get_logger());
 
-        base->get_vars().load(cfg_main.installroot().get_value(), cfg_main.varsdir().get_value());
+        base->get_vars()->load(cfg_main.installroot().get_value(), cfg_main.varsdir().get_value());
 
         // read repos possibly configured in the main config file
         read_repos(main_parser.get(), main_config_path);
@@ -67,7 +67,8 @@ void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const s
             auto section = cfg_parser_data_iter.first;
             std::unique_ptr<libdnf::rpm::ConfigRepo> cfg_repo(new libdnf::rpm::ConfigRepo(cfg_main));
 
-            cfg_repo->load_from_parser(*repo_parser, section, base->get_vars(), base->get_logger());
+            cfg_repo->load_from_parser(*repo_parser, section, *base->get_vars(), *base->get_logger());
+
             // save configured repo
             std::unique_ptr<RepoInfo> repoinfo(new RepoInfo());
             repoinfo->file_path = std::string(file_path);
@@ -79,7 +80,7 @@ void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const s
 
 void Configuration::read_repo_configs() {
     auto base = session.get_base();
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     auto & cfg_main = base->get_config();
     for (const auto & repos_dir : cfg_main.reposdir().get_value()) {
         // use canonical to resolve symlinks in repos_dir

@@ -30,8 +30,8 @@ namespace libdnf::rpm {
 class ReldepList::Impl {
 public:
     Impl(const ReldepList::Impl & src) = default;
-    Impl(SolvSack * sack) : sack(sack->get_weak_ptr()) {}
-    Impl(SolvSack * sack, libdnf::rpm::solv::IdQueue queue_src) : sack(sack->get_weak_ptr()), queue(queue_src) {}
+    Impl(const SolvSackWeakPtr & sack) : sack(sack) {}
+    Impl(const SolvSackWeakPtr & sack, libdnf::rpm::solv::IdQueue queue_src) : sack(sack), queue(queue_src) {}
     ~Impl() = default;
 
     SolvSack * get_sack() const { return sack.get(); }

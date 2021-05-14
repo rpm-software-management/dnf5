@@ -55,7 +55,7 @@ public:
     void test_get_sorted_advisory_packages();
 
 private:
-    libdnf::advisory::AdvisorySack * advisory_sack;
+    libdnf::advisory::AdvisorySackWeakPtr advisory_sack;
 };
 
 

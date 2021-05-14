@@ -70,14 +70,14 @@ void CmdUpgrade::set_argument_parser(Context & ctx) {
 void CmdUpgrade::configure([[maybe_unused]] Context & ctx) {}
 
 void CmdUpgrade::run(Context & ctx) {
-    auto & solv_sack = ctx.base.get_rpm_solv_sack();
+    auto & solv_sack = *ctx.base.get_rpm_solv_sack();
 
     // To search in the system repository (installed packages)
     // Creates system repository in the repo_sack and loads it into rpm::SolvSack.
     solv_sack.create_system_repo(false);
 
     // To search in available repositories (available packages)
-    auto enabled_repos = ctx.base.get_rpm_repo_sack().new_query().ifilter_enabled(true);
+    auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
     using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     ctx.load_rpm_repos(enabled_repos, flags);

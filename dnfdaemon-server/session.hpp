@@ -90,7 +90,7 @@ public:
                     try {
                         reply.send();
                     } catch (const std::exception & e) {
-                        auto & logger = base->get_logger();
+                        auto & logger = *base->get_logger();
                         logger.error(fmt::format("Error sending d-bus error reply: {}", e.what()));
                     }
                 }

@@ -67,7 +67,7 @@ RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid,
     }
 
     auto repo = new_repo(repoid);
-    Pool * pool = base->get_rpm_solv_sack().p_impl->get_pool();
+    Pool * pool = base->get_rpm_solv_sack()->p_impl->get_pool();
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, repoid.c_str()), &libsolv_repo_free);
     testcase_add_testtags(libsolv_repo.get(), testcase_file.get(), 0);
     repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
@@ -77,7 +77,7 @@ RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid,
 
 
 void RepoSack::new_repos_from_file(const std::string & path) {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     ConfigParser parser;
     parser.read(path);
     const auto & cfg_parser_data = parser.get_data();
@@ -86,7 +86,7 @@ void RepoSack::new_repos_from_file(const std::string & path) {
         if (section == "main") {
             continue;
         }
-        auto repo_id = base->get_vars().substitute(section);
+        auto repo_id = base->get_vars()->substitute(section);
 
         logger.debug(fmt::format(
             R"**(Start of loading configuration of repository "{}" from file "{}" section "{}")**",
@@ -107,7 +107,7 @@ void RepoSack::new_repos_from_file(const std::string & path) {
 
         auto repo = new_repo(repo_id);
         auto & repo_cfg = repo->get_config();
-        repo_cfg.load_from_parser(parser, section, base->get_vars(), base->get_logger());
+        repo_cfg.load_from_parser(parser, section, *base->get_vars(), *base->get_logger());
         logger.trace(fmt::format(R"**(Loading configuration of repository "{}" from file "{}" done)**", repo_id, path));
 
         if (repo_cfg.name().get_priority() == Option::Priority::DEFAULT) {
@@ -138,7 +138,7 @@ void RepoSack::new_repos_from_dir(const std::string & dir_path) {
 }
 
 void RepoSack::new_repos_from_dirs() {
-    auto & logger = base->get_logger();
+    auto & logger = *base->get_logger();
     for (auto & dir : base->get_config().reposdir().get_value()) {
         try {
             new_repos_from_dir(dir);
