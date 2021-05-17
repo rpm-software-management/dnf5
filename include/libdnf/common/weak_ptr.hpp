@@ -96,12 +96,11 @@ public:
         const char * get_description() const noexcept override { return "Invalid pointer"; }
     };
 
+    WeakPtr() : ptr(nullptr), guard(nullptr) { }
+
     WeakPtr(TPtr * ptr, TWeakPtrGuard * guard) : ptr(ptr), guard(guard) {
-        if (!ptr) {
-            throw InvalidPtr("Creating null WeakPtr is not allowed");
-        }
-        if (!guard) {
-            throw InvalidPtr("Creating WeakPtr without guard is not allowed");
+        if (ptr && !guard) {
+            throw InvalidPtr("Creating a non-null WeakPtr without a guard is not allowed");
         }
         guard->register_ptr(this);
     }
