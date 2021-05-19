@@ -63,7 +63,7 @@ BuildRequires:  gcc-c++
 %endif
 
 BuildRequires:  pkgconfig(check)
-%if ! %{with tests_disabled}
+%if %{with tests}
 BuildRequires:  pkgconfig(cppunit)
 %endif
 BuildRequires:  pkgconfig(fmt)
@@ -182,7 +182,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 BuildRequires:  perl-devel
 BuildRequires:  perl-macros
 BuildRequires:  swig >= %{swig_version}
-%if ! %{with tests_disabled}
+%if %{with tests}
 BuildRequires:  perl(strict)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
@@ -209,7 +209,7 @@ Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 BuildRequires:  perl-devel
 BuildRequires:  perl-macros
 BuildRequires:  swig >= %{swig_version}
-%if ! %{with tests_disabled}
+%if %{with tests}
 BuildRequires:  perl(strict)
 BuildRequires:  perl(Test::More)
 BuildRequires:  perl(warnings)
@@ -276,7 +276,7 @@ Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
 BuildRequires:  pkgconfig(ruby)
 BuildRequires:  swig >= %{swig_version}
-%if ! %{with tests_disabled}
+%if %{with tests}
 BuildRequires:  rubygem-test-unit
 %endif
 
@@ -299,7 +299,7 @@ Provides:       ruby(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 BuildRequires:  pkgconfig(ruby)
 BuildRequires:  swig >= %{swig_version}
-%if ! %{with tests_disabled}
+%if %{with tests}
 BuildRequires:  rubygem-test-unit
 %endif
 
