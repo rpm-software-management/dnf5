@@ -185,6 +185,7 @@ BuildRequires:  swig >= %{swig_version}
 %if %{with tests}
 BuildRequires:  perl(strict)
 BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(warnings)
 %endif
 
@@ -212,6 +213,7 @@ BuildRequires:  swig >= %{swig_version}
 %if %{with tests}
 BuildRequires:  perl(strict)
 BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(warnings)
 %endif
 
