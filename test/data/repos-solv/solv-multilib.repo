@@ -1,0 +1,17 @@
+=Ver: 3.0
+
+=Pkg: multilib 1.2 4 src
+
+=Pkg: multilib 1.2 4 x86_64
+=Prv: multilib = 1.2-4
+
+=Pkg: multilib 1.2 4 i686
+=Prv: multilib = 1.2-4
+
+=Pkg: multilib 1.2 1 src
+
+=Pkg: multilib 1.2 1 x86_64
+=Prv: multilib = 1.2-1
+
+=Pkg: multilib 1.2 1 i686
+=Prv: multilib = 1.2-1

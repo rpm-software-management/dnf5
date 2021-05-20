@@ -37,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace {
 
-void add_obseletes(const libdnf::rpm::PackageQuery & base_query, libdnf::rpm::PackageSet & data) {
+void add_obsoletes_to_data(const libdnf::rpm::PackageQuery & base_query, libdnf::rpm::PackageSet & data) {
     libdnf::rpm::PackageQuery obsoletes_query(base_query);
     obsoletes_query.ifilter_obsoletes(data);
     data |= obsoletes_query;
@@ -362,7 +362,6 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
 
     auto multilib_policy = cfg_main.multilib_policy().get_value();
-    auto obsoletes = cfg_main.obsoletes().get_value();
     rpm::solv::IdQueue tmp_queue;
     std::vector<Solvable *> tmp_solvables;
     rpm::PackageQuery base_query(sack);
@@ -378,15 +377,87 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
         }
     }
     bool has_just_name = nevra_pair.second.has_just_name();
-    bool add_obsoletes = obsoletes && has_just_name;
+    bool add_obsoletes = cfg_main.obsoletes().get_value() && has_just_name;
 
     rpm::PackageQuery installed(query);
     installed.ifilter_installed();
 
     // TODO(jmracek) if reports:
     // base._report_already_installed(installed_query)
-    if (multilib_policy == "all") {
-        // TODO(jmracek) Implement "all" logic
+    if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
+        if (!settings.to_repo_ids.empty()) {
+            query.ifilter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
+            query |= installed;
+            if (query.empty()) {
+                add_rpm_goal_report(
+                    Goal::Action::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
+                return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
+            }
+        }
+        /// <name, <arch, std::vector<pkg Solvables>>>
+        std::unordered_map<Id, std::unordered_map<Id, std::vector<Solvable *>>> na_map;
+
+        for (auto package_id : *query.p_impl) {
+            Solvable * solvable = rpm::solv::get_solvable(pool, package_id);
+            na_map[solvable->name][solvable->arch].push_back(solvable);
+        }
+
+        rpm::PackageSet selected(sack);
+        rpm::PackageSet selected_noarch(sack);
+        for (auto & name_iter : na_map) {
+            if (name_iter.second.size() == 1) {
+                selected.clear();
+                for (auto * solvable : name_iter.second.begin()->second) {
+                    selected.p_impl->add(pool_solvable2id(pool, solvable));
+                }
+                if (add_obsoletes) {
+                    add_obsoletes_to_data(base_query, selected);
+                }
+                solv_map_to_id_queue(tmp_queue, *selected.p_impl);
+                rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
+            } else {
+                // when multiple architectures -> add noarch solvables into each architecture solvable set
+                auto noarch = name_iter.second.find(ARCH_NOARCH);
+                if (noarch != name_iter.second.end()) {
+                    selected_noarch.clear();
+                    for (auto * solvable : noarch->second) {
+                        selected_noarch.p_impl->add(pool_solvable2id(pool, solvable));
+                    }
+                    if (add_obsoletes) {
+                        add_obsoletes_to_data(base_query, selected_noarch);
+                    }
+                    for (auto & arch_iter : name_iter.second) {
+                        if (arch_iter.first == ARCH_NOARCH) {
+                            continue;
+                        }
+                        selected.clear();
+                        for (auto * solvable : arch_iter.second) {
+                            selected.p_impl->add(pool_solvable2id(pool, solvable));
+                        }
+                        if (add_obsoletes) {
+                            add_obsoletes_to_data(base_query, selected);
+                        }
+                        selected |= selected_noarch;
+                        solv_map_to_id_queue(tmp_queue, *selected.p_impl);
+                        rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
+                    }
+                } else {
+                    for (auto & arch_iter : name_iter.second) {
+                        selected.clear();
+                        for (auto * solvable : arch_iter.second) {
+                            selected.p_impl->add(pool_solvable2id(pool, solvable));
+                        }
+                        if (add_obsoletes) {
+                            add_obsoletes_to_data(base_query, selected);
+                        }
+                        solv_map_to_id_queue(tmp_queue, *selected.p_impl);
+                        rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
+                    }
+                }
+            }
+        }
+        // TODO(jmracek) Report already installed
+        // TODO(jmracek) Implement all logic for modules and comps groups
     } else if (multilib_policy == "best") {
         if ((!utils::is_file_pattern(spec) && utils::is_glob_pattern(spec.c_str())) ||
             (nevra_pair.second.get_name().empty() &&
@@ -440,7 +511,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                     continue;
                 }
                 if (add_obsoletes) {
-                    add_obseletes(base_query, selected);
+                    add_obsoletes_to_data(base_query, selected);
                 }
                 solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
                 rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
@@ -449,17 +520,14 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 current_name = solvable->name;
             }
             if (add_obsoletes) {
-                add_obseletes(base_query, selected);
+                add_obsoletes_to_data(base_query, selected);
             }
             solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
             rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
             return GoalProblem::NO_PROBLEM;
         } else {
             if (add_obsoletes) {
-                rpm::PackageQuery obsoletes_query(base_query);
-                // TODO(jmracek) Replace obsoletes_query.get_package_set(); by more effective approach
-                obsoletes_query.ifilter_obsoletes(query);
-                query |= obsoletes_query;
+                add_obsoletes_to_data(base_query, query);
             }
             if (!settings.to_repo_ids.empty()) {
                 query.ifilter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);

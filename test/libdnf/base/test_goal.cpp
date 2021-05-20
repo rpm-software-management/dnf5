@@ -125,6 +125,34 @@ void BaseGoalTest::test_install_from_cmdline() {
     CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
 }
 
+void BaseGoalTest::test_install_multilib_all() {
+    add_repo_solv("solv-multilib");
+    base->get_config().multilib_policy().set(libdnf::Option::Priority::RUNTIME, "all");
+
+    // install the command-line package
+    libdnf::Goal goal(base.get());
+    goal.add_rpm_install("multilib");
+
+    // resolve the goal and read results
+    goal.resolve(false);
+    auto install_set = goal.list_rpm_installs();
+    auto reinstall_set = goal.list_rpm_reinstalls();
+    auto upgrade_set = goal.list_rpm_upgrades();
+    auto downgrade_set = goal.list_rpm_downgrades();
+    auto remove_set = goal.list_rpm_removes();
+    auto obsoleted_set = goal.list_rpm_obsoleted();
+
+    CPPUNIT_ASSERT_EQUAL(2lu, install_set.size());
+    // check if we're getting an expected NEVRA
+    std::vector<std::string> expected = {"multilib-0:1.2-4.x86_64", "multilib-0:1.2-4.i686"};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(install_set));
+    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
+    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+}
+
 void BaseGoalTest::test_reinstall() {
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
 
