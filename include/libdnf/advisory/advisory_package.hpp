@@ -78,7 +78,7 @@ public:
 private:
     friend class AdvisoryCollection;
     friend class AdvisoryQuery;
-    friend class libdnf::rpm::SolvQuery;
+    friend class libdnf::rpm::PackageQuery;
 
     class Impl;
     AdvisoryPackage(Impl * private_pkg);

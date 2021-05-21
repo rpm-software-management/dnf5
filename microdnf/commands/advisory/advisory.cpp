@@ -22,7 +22,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../../context.hpp"
 
 #include <libdnf/conf/option_string.hpp>
-#include <libdnf/rpm/solv_query.hpp>
+#include <libdnf/rpm/package_query.hpp>
 
 //TODO(amatej): just for test output -> remove
 #include <iostream>
@@ -170,16 +170,16 @@ void CmdAdvisory::run(Context & ctx) {
         }
     }
 
-    auto solv_sack = ctx.base.get_rpm_solv_sack();
-    solv_sack->create_system_repo(false);
+    auto package_sack = ctx.base.get_rpm_package_sack();
+    package_sack->create_system_repo(false);
     auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
-    using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
+    using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     ctx.load_rpm_repos(enabled_repos, LoadFlags::USE_UPDATEINFO);
 
-    libdnf::rpm::SolvQuery solv_query(solv_sack);
+    libdnf::rpm::PackageQuery package_query(package_sack);
     using QueryCmp = libdnf::sack::QueryCmp;
     if (patterns_to_show.size() > 0) {
-        solv_query.ifilter_name(patterns_to_show, QueryCmp::IGLOB);
+        package_query.ifilter_name(patterns_to_show, QueryCmp::IGLOB);
     }
 
     //DATA IS PREPARED
@@ -198,19 +198,19 @@ void CmdAdvisory::run(Context & ctx) {
     std::vector<libdnf::advisory::AdvisoryPackage> result_pkgs;
 
     if (availability_option->get_value() == "installed") {
-        auto installed_solv_query = solv_query.ifilter_installed();
-        result_pkgs = advisory_query.get_advisory_packages(installed_solv_query, QueryCmp::LTE);
+        auto installed_package_query = package_query.ifilter_installed();
+        result_pkgs = advisory_query.get_advisory_packages(installed_package_query, QueryCmp::LTE);
     } else if (availability_option->get_value() == "available") {
         //TODO(amatej): filter for latest and add kernel..
-        auto installed_solv_query = solv_query.ifilter_installed();
-        result_pkgs = advisory_query.get_advisory_packages(installed_solv_query, QueryCmp::GT);
+        auto installed_package_query = package_query.ifilter_installed();
+        result_pkgs = advisory_query.get_advisory_packages(installed_package_query, QueryCmp::GT);
     } else if (availability_option->get_value() == "all") {
-        auto installed_solv_query = solv_query.ifilter_installed();
+        auto installed_package_query = package_query.ifilter_installed();
         result_pkgs =
-            advisory_query.get_advisory_packages(installed_solv_query, QueryCmp::LT | QueryCmp::EQ | QueryCmp::GT);
+            advisory_query.get_advisory_packages(installed_package_query, QueryCmp::LT | QueryCmp::EQ | QueryCmp::GT);
     } else if (availability_option->get_value() == "updates") {
-        //auto upgradable_solv_query = solv_query.ifilter_upgradable().ifilter_nevra(keys, QueryCmp::GT);
-        //result_pkgs = advisory_query.get_advisory_packages(upgradable_solv_query, QueryCmp::LT | QueryCmp::EQ | QueryCmp::GT);
+        //auto upgradable_package_query = package_query.ifilter_upgradable().ifilter_nevra(keys, QueryCmp::GT);
+        //result_pkgs = advisory_query.get_advisory_packages(upgradable_package_query, QueryCmp::LT | QueryCmp::EQ | QueryCmp::GT);
     }
 
     //TODO(amatej): output code move to libdnf-cli
@@ -219,7 +219,7 @@ void CmdAdvisory::run(Context & ctx) {
         //if (adv == advisories_map.end()) {
         //    //std::cout << pkg.get_name() << std::endl << std::flush;
         std::cout
-            << libdnf::advisory::Advisory(solv_sack, libdnf::advisory::AdvisoryId(pkg.get_advisory_id())).get_name()
+            << libdnf::advisory::Advisory(package_sack, libdnf::advisory::AdvisoryId(pkg.get_advisory_id())).get_name()
             << " - " << pkg.get_name() << "-" << pkg.get_evr() << "." << pkg.get_arch() << std::endl;
         //} else {
         //    //std::cout << pkg.get_nevra() << " : " << advisories_map.find(pkg.get_name() + "-" + pkg.get_arch())->second.get()->get_name() << std::endl;

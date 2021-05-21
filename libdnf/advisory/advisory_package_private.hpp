@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_ADVISORY_ADVISORY_PACKAGE_PRIVATE_HPP
 
 #include "libdnf/advisory/advisory_package.hpp"
+#include "libdnf/rpm/package_sack_impl.hpp"
 #include "libdnf/rpm/solv/package_private.hpp"
-#include "libdnf/rpm/solv_sack_impl.hpp"
 
 #include <solv/pooltypes.h>
 #include <solv/solvable.h>
@@ -114,7 +114,7 @@ private:
     friend AdvisoryPackage;
 
     Impl(
-        libdnf::rpm::SolvSack & sack,
+        libdnf::rpm::PackageSack & sack,
         AdvisoryId advisory,
         int owner_collection_index,
         Id name,
@@ -129,7 +129,7 @@ private:
     Id evr;
     Id arch;
     const char * filename;
-    libdnf::rpm::SolvSackWeakPtr sack;
+    libdnf::rpm::PackageSackWeakPtr sack;
 };
 
 }  // namespace libdnf::advisory

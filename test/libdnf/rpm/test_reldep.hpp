@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TEST_RELDEP_HPP
 
 #include "libdnf/base/base.hpp"
-#include "libdnf/rpm/solv_sack.hpp"
+#include "libdnf/rpm/package_sack.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -46,7 +46,7 @@ public:
 
 private:
     std::unique_ptr<libdnf::Base> base;
-    libdnf::rpm::SolvSackWeakPtr sack;
+    libdnf::rpm::PackageSackWeakPtr sack;
 };
 
 #endif  // TEST_LIBDNF_RPM_RELDEP_HPP

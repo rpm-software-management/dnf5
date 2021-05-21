@@ -2,5 +2,5 @@ PackageQuery
 ============
 
 
-.. doxygenclass:: libdnf::rpm::SolvQuery
+.. doxygenclass:: libdnf::rpm::PackageQuery
     :members:

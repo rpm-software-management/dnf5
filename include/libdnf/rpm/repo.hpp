@@ -39,7 +39,7 @@ namespace libdnf::rpm {
 
 class Repo;
 using RepoWeakPtr = WeakPtr<Repo, false>;
-class SolvSack;
+class PackageSack;
 
 class LrException : public RuntimeError {
 public:
@@ -366,7 +366,7 @@ public:
 private:
     class Impl;
     friend class RepoSack;
-    friend class SolvSack;
+    friend class PackageSack;
     friend struct PackageTarget;
     std::unique_ptr<Impl> p_impl;
     WeakPtrGuard<Repo, false> data_guard;

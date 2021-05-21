@@ -19,9 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/reldep_list.hpp"
 
+#include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
 #include "solv/reldep_parser.hpp"
-#include "solv_sack_impl.hpp"
 
 #include "libdnf/rpm/reldep.hpp"
 
@@ -38,7 +38,7 @@ ReldepList::ReldepList(const ReldepList & src) : p_impl(new Impl(*src.p_impl)) {
 
 ReldepList::ReldepList(ReldepList && src) noexcept : p_impl(std::move(src.p_impl)) {}
 
-ReldepList::ReldepList(const SolvSackWeakPtr & sack) : p_impl(new Impl(sack)) {}
+ReldepList::ReldepList(const PackageSackWeakPtr & sack) : p_impl(new Impl(sack)) {}
 
 ReldepList::~ReldepList() = default;
 
@@ -150,7 +150,7 @@ ReldepList::iterator ReldepList::end() const {
     return it;
 }
 
-SolvSack * ReldepList::get_sack() const {
+PackageSack * ReldepList::get_sack() const {
     return p_impl->get_sack();
 }
 

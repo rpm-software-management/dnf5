@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_SOLV_SACK_IMPL_HPP
-#define LIBDNF_RPM_SOLV_SACK_IMPL_HPP
+#ifndef LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
+#define LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
 
 #include "../utils/utils_internal.hpp"
 #include "repo_impl.hpp"
@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package.hpp"
-#include "libdnf/rpm/solv_sack.hpp"
+#include "libdnf/rpm/package_sack.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -64,7 +64,7 @@ namespace libdnf::rpm {
 class PackageSet;
 
 
-class SolvSack::Impl {
+class PackageSack::Impl {
 public:
     enum class RepodataType { FILENAMES, PRESTO, UPDATEINFO, OTHER };
     enum class RepodataState { NEW, LOADED_FETCH, LOADED_CACHE };
@@ -109,11 +109,11 @@ public:
     void set_running_kernel(PackageId kernel) { running_kernel = kernel; };
 
 private:
-    /// Loads system repository into SolvSack
+    /// Loads system repository into PackageSack
     /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
     bool load_system_repo();
 
-    /// Loads available repository into SolvSack
+    /// Loads available repository into PackageSack
     void load_available_repo(Repo & repo, LoadRepoFlags flags);
 
     /// Loads main metadata (solvables) from available repo.
@@ -146,7 +146,7 @@ private:
     std::unique_ptr<Repo> system_repo;
     std::unique_ptr<Repo> cmdline_repo;
 
-    WeakPtrGuard<SolvSack, false> data_guard;
+    WeakPtrGuard<PackageSack, false> data_guard;
 
     std::vector<Solvable *> cached_sorted_solvables;
     int cached_sorted_solvables_size{0};
@@ -157,7 +157,7 @@ private:
     int cached_solvables_size{0};
     PackageId running_kernel;
 
-    friend SolvSack;
+    friend PackageSack;
     friend Package;
     friend PackageSet;
     friend Reldep;
@@ -166,12 +166,12 @@ private:
 };
 
 
-inline SolvSack::Impl::Impl(Base & base) : base(&base) {
+inline PackageSack::Impl::Impl(Base & base) : base(&base) {
     pool = pool_create();
 }
 
 
-inline SolvSack::Impl::~Impl() {
+inline PackageSack::Impl::~Impl() {
     Id repo_id;
     LibsolvRepo * r;
     FOR_REPOS(repo_id, r) {
@@ -182,7 +182,7 @@ inline SolvSack::Impl::~Impl() {
     pool_free(pool);
 }
 
-inline std::vector<Solvable *> & SolvSack::Impl::get_sorted_solvables() {
+inline std::vector<Solvable *> & PackageSack::Impl::get_sorted_solvables() {
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_sorted_solvables_size) {
         return cached_sorted_solvables;
@@ -198,7 +198,7 @@ inline std::vector<Solvable *> & SolvSack::Impl::get_sorted_solvables() {
     return cached_sorted_solvables;
 }
 
-inline std::vector<std::pair<Id, Solvable *>> & SolvSack::Impl::get_sorted_icase_solvables() {
+inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_icase_solvables() {
     Pool * pool = get_pool();
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_sorted_icase_solvables_size) {
@@ -217,7 +217,7 @@ inline std::vector<std::pair<Id, Solvable *>> & SolvSack::Impl::get_sorted_icase
     return cached_sorted_icase_solvables;
 }
 
-inline solv::SolvMap & SolvSack::Impl::get_solvables() {
+inline solv::SolvMap & PackageSack::Impl::get_solvables() {
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_solvables_size) {
         return cached_solvables;
@@ -243,4 +243,4 @@ inline solv::SolvMap & SolvSack::Impl::get_solvables() {
 }  // namespace libdnf::rpm
 
 
-#endif  // LIBDNF_RPM_SOLV_SACK_IMPL_HPP
+#endif  // LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP

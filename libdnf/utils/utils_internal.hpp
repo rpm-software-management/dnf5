@@ -29,6 +29,7 @@ extern "C" {
 #include <ctype.h>
 
 #include <cstring>
+#include <string>
 
 
 namespace libdnf::utils {

@@ -36,7 +36,7 @@
 //#include "../utils/filesystem.hpp"
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
 
-#include "libdnf/rpm/solv_sack_impl.hpp"
+#include "libdnf/rpm/package_sack_impl.hpp"
 
 #include "rpm_package.hpp"
 #include "Swdb.hpp"

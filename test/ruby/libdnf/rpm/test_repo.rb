@@ -30,10 +30,10 @@ class TestRepo < Test::Unit::TestCase
         base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, tmpdir)
 
         repo_sack = Rpm::RepoSack.new(base)
-        solv_sack = Rpm::SolvSack.new(base)
+        package_sack = Rpm::PackageSack.new(base)
 
-        # Creates system repository and loads it into rpm::SolvSack.
-        solv_sack.create_system_repo(false)
+        # Creates system repository and loads it into rpm::PackageSack.
+        package_sack.create_system_repo(false)
 
         # Creates new repositories in the repo_sack
         repo = repo_sack.new_repo("repomd-repo1")
@@ -47,9 +47,9 @@ class TestRepo < Test::Unit::TestCase
         # Loads repository into rpm::Repo.
         repo.load()
 
-        # Loads rpm::Repo into rpm::SolvSack
-        solv_sack.load_repo(repo.get(), Rpm::SolvSack::LoadRepoFlags_USE_PRESTO |
-                            Rpm::SolvSack::LoadRepoFlags_USE_UPDATEINFO | Rpm::SolvSack::LoadRepoFlags_USE_OTHER)
+        # Loads rpm::Repo into rpm::PackageSack
+        package_sack.load_repo(repo.get(), Rpm::PackageSack::LoadRepoFlags_USE_PRESTO |
+                            Rpm::PackageSack::LoadRepoFlags_USE_UPDATEINFO | Rpm::PackageSack::LoadRepoFlags_USE_OTHER)
 
         # Remove the cache directory.
         FileUtils.remove_entry(tmpdir)

@@ -28,8 +28,8 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
+#include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
-#include <libdnf/rpm/solv_query.hpp>
 
 #include <iostream>
 

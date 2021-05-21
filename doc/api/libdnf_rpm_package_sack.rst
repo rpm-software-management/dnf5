@@ -2,5 +2,5 @@ PackageSack
 ===========
 
 
-.. doxygenclass:: libdnf::rpm::SolvSack
+.. doxygenclass:: libdnf::rpm::PackageSack
     :members:

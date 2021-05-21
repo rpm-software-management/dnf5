@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/package.hpp"
 
+#include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
 #include "solv/package_private.hpp"
-#include "solv_sack_impl.hpp"
 
 
 inline static std::string cstring2string(const char * input) {

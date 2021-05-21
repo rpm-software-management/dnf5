@@ -34,7 +34,7 @@ use libdnf::base;
     my $loger = $base->get_logger();
     my $config = $base->get_config();
     my $repo_sack = $base->get_rpm_repo_sack();
-    my $solv_sack = $base->get_rpm_solv_sack();
+    my $package_sack = $base->get_rpm_package_sack();
 }
 
 {

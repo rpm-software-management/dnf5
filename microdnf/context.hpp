@@ -22,8 +22,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "commands/command.hpp"
 
-#include <libdnf/base/base.hpp>
 #include <libdnf-cli/argument_parser.hpp>
+#include <libdnf/base/base.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <libdnf/utils/span.hpp>
 
@@ -38,8 +38,8 @@ constexpr const char * VERSION = "0.1.0";
 class Context {
 public:
     /// Updates the repositories metadata cache.
-    /// Loads the updated metadata into rpm::RepoSack and into rpm::SolvSack.
-    void load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::SolvSack::LoadRepoFlags flags);
+    /// Loads the updated metadata into rpm::RepoSack and into rpm::PackageSack.
+    void load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags);
 
     /// Select commend to execute
     void select_command(Command * cmd) { selected_command = cmd; }

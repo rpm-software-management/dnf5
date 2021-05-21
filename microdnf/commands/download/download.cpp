@@ -23,8 +23,8 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
+#include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
-#include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
 #include <filesystem>
@@ -67,23 +67,23 @@ void CmdDownload::set_argument_parser(Context & ctx) {
 void CmdDownload::configure([[maybe_unused]] Context & ctx) {}
 
 void CmdDownload::run(Context & ctx) {
-    auto solv_sack = ctx.base.get_rpm_solv_sack();
+    auto package_sack = ctx.base.get_rpm_package_sack();
 
     // To search in available repositories (available packages)
     auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
-    using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
+    using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     ctx.load_rpm_repos(enabled_repos, flags);
 
     std::cout << std::endl;
 
-    libdnf::rpm::PackageSet result_pset(solv_sack);
-    libdnf::rpm::SolvQuery full_solv_query(solv_sack);
+    libdnf::rpm::PackageSet result_pset(package_sack);
+    libdnf::rpm::PackageQuery full_package_query(package_sack);
     for (auto & pattern : *patterns_to_download_options) {
-        libdnf::rpm::SolvQuery solv_query(full_solv_query);
+        libdnf::rpm::PackageQuery package_query(full_package_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        solv_query.resolve_pkg_spec(option->get_value(), {}, true);
-        result_pset |= solv_query;
+        package_query.resolve_pkg_spec(option->get_value(), {}, true);
+        result_pset |= package_query;
     }
 
     std::vector<libdnf::rpm::Package> download_pkgs;

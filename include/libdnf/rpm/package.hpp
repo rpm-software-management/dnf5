@@ -22,9 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_PACKAGE_HPP
 
 #include "checksum.hpp"
+#include "package_sack.hpp"
 #include "reldep_list.hpp"
 #include "repo_query.hpp"
-#include "solv_sack.hpp"
 
 #include <string>
 #include <vector>
@@ -407,7 +407,7 @@ public:
 
 protected:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
-    Package(const SolvSackWeakPtr & sack, PackageId id);
+    Package(const PackageSackWeakPtr & sack, PackageId id);
 
     /// @return RPM package Name as a `const char *`.
     /// @since 5.0
@@ -441,15 +441,15 @@ protected:
 
 private:
     friend class PackageSetIterator;
-    friend class SolvSack;
+    friend class PackageSack;
     friend class libdnf::Goal;
 
-    SolvSackWeakPtr sack;
+    PackageSackWeakPtr sack;
     PackageId id;
 };
 
 
-inline Package::Package(const SolvSackWeakPtr & sack, PackageId id) : sack(sack), id(id) {}
+inline Package::Package(const PackageSackWeakPtr & sack, PackageId id) : sack(sack), id(id) {}
 
 
 inline bool Package::operator==(const Package & other) const noexcept {

@@ -22,10 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../libdnf/rpm/solv/package_private.hpp"
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
+#include "package_sack_impl.hpp"
 #include "package_set_impl.hpp"
 #include "repo_impl.hpp"
 #include "solv/id_queue.hpp"
-#include "solv_sack_impl.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>

@@ -40,12 +40,12 @@ void RepoFixture::add_repo_repomd(const std::string & repoid) {
     // Loads repository into rpm::Repo.
     repo->load();
 
-    // Loads rpm::Repo into rpm::SolvSack
+    // Loads rpm::Repo into rpm::PackageSack
     sack->load_repo(*repo.get(),
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_FILELISTS |
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_OTHER |
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_PRESTO |
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_UPDATEINFO
+        libdnf::rpm::PackageSack::LoadRepoFlags::USE_FILELISTS |
+        libdnf::rpm::PackageSack::LoadRepoFlags::USE_OTHER |
+        libdnf::rpm::PackageSack::LoadRepoFlags::USE_PRESTO |
+        libdnf::rpm::PackageSack::LoadRepoFlags::USE_UPDATEINFO
     );
 }
 
@@ -61,12 +61,12 @@ void RepoFixture::add_repo_rpm(const std::string & repoid) {
     // Loads repository into rpm::Repo.
     repo->load();
 
-    // Loads rpm::Repo into rpm::SolvSack
+    // Loads rpm::Repo into rpm::PackageSack
     sack->load_repo(*repo.get(),
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_FILELISTS |
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_OTHER |
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_PRESTO |
-        libdnf::rpm::SolvSack::LoadRepoFlags::USE_UPDATEINFO
+        libdnf::rpm::PackageSack::LoadRepoFlags::USE_FILELISTS |
+        libdnf::rpm::PackageSack::LoadRepoFlags::USE_OTHER |
+        libdnf::rpm::PackageSack::LoadRepoFlags::USE_PRESTO |
+        libdnf::rpm::PackageSack::LoadRepoFlags::USE_UPDATEINFO
     );
 }
 
@@ -99,7 +99,7 @@ void RepoFixture::setUp() {
     base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dirs.at(class_name)->get_path());
 
     repo_sack = base->get_rpm_repo_sack();
-    sack = base->get_rpm_solv_sack();
+    sack = base->get_rpm_package_sack();
 }
 
 void RepoFixture::dump_debugdata() {

@@ -32,7 +32,7 @@ class TestReldepList(unittest.TestCase):
         self.base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, self.tmpdir)
 
         self.repo_sack = libdnf.rpm.RepoSack(self.base)
-        self.sack = self.base.get_rpm_solv_sack()
+        self.sack = self.base.get_rpm_package_sack()
 
         # Creates new repositories in the repo_sack
         repo = self.repo_sack.new_repo("repomd-repo1")
@@ -46,12 +46,12 @@ class TestReldepList(unittest.TestCase):
         # Loads repository into rpm::Repo.
         repo.load()
 
-        # Loads rpm::Repo into rpm::SolvSack
-        clsSolvSack = libdnf.rpm.SolvSack
-        self.sack.load_repo(repo.get(), libdnf.rpm.SolvSack.LoadRepoFlags_USE_FILELISTS |
-                            libdnf.rpm.SolvSack.LoadRepoFlags_USE_OTHER |
-                            libdnf.rpm.SolvSack.LoadRepoFlags_USE_PRESTO |
-                            libdnf.rpm.SolvSack.LoadRepoFlags_USE_UPDATEINFO)
+        # Loads rpm::Repo into rpm::PackageSack
+        clsPackageSack = libdnf.rpm.PackageSack
+        self.sack.load_repo(repo.get(), libdnf.rpm.PackageSack.LoadRepoFlags_USE_FILELISTS |
+                            libdnf.rpm.PackageSack.LoadRepoFlags_USE_OTHER |
+                            libdnf.rpm.PackageSack.LoadRepoFlags_USE_PRESTO |
+                            libdnf.rpm.PackageSack.LoadRepoFlags_USE_UPDATEINFO)
 
     def tearDown(self):
         # Remove the cache directory.

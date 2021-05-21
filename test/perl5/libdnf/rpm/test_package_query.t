@@ -34,7 +34,7 @@ my $tmpdir = tempdir("libdnf-perl5-XXXX", TMPDIR => 1, CLEANUP => 1);
 $base->get_config()->cachedir()->set($libdnf::conf::Option::Priority_RUNTIME, $tmpdir);
 
 my $repo_sack = new libdnf::rpm::RepoSack($base);
-my $sack = $base->get_rpm_solv_sack();
+my $sack = $base->get_rpm_package_sack();
 
 # Creates new repositories in the repo_sack
 my $repo = $repo_sack->new_repo("repomd-repo1");
@@ -48,12 +48,12 @@ $repo_cfg->baseurl()->set($libdnf::conf::Option::Priority_RUNTIME, $baseurl);
 # Loads repository into rpm::Repo.
 $repo->load();
 
-# Loads rpm::Repo into rpm::SolvSack
-$sack->load_repo($repo->get(), $libdnf::rpm::SolvSack::LoadRepoFlags_NONE);
+# Loads rpm::Repo into rpm::PackageSack
+$sack->load_repo($repo->get(), $libdnf::rpm::PackageSack::LoadRepoFlags_NONE);
 
 #test_size()
 {
-    my $query = new libdnf::rpm::SolvQuery($sack);
+    my $query = new libdnf::rpm::PackageQuery($sack);
     is($query->size(), 3);
 }
 
@@ -65,7 +65,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 
 # Test QueryCmp::EQ
 {
-    my $query = new libdnf::rpm::SolvQuery($sack);
+    my $query = new libdnf::rpm::PackageQuery($sack);
     $query->ifilter_name(["pkg"]);
     is($query->size(), 1);
 
@@ -83,7 +83,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 
 # Test QueryCmp::GLOB
 {
-    my $query = new libdnf::rpm::SolvQuery($sack);
+    my $query = new libdnf::rpm::PackageQuery($sack);
     $query->ifilter_name(["pk*"], $libdnf::common::QueryCmp_GLOB);
     is($query->size(), 2);
 

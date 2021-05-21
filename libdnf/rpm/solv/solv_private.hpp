@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_SOLV_SOLV_PRIVATE_HPP
 
 
+#include "../package_sack_impl.hpp"
 #include "../repo_impl.hpp"
-#include "../solv_sack_impl.hpp"
 
 namespace libdnf::rpm::solv {
 
@@ -34,7 +34,7 @@ private:
 };
 
 inline void SolvPrivate::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
-    SolvSack::Impl::internalize_libsolv_repo(libsolv_repo);
+    PackageSack::Impl::internalize_libsolv_repo(libsolv_repo);
 }
 
 }  // namespace libdnf::rpm::solv

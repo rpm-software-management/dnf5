@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_module.hpp"
 
 #include "libdnf/advisory/advisory_module_private.hpp"
-#include "libdnf/rpm/solv_sack_impl.hpp"
+#include "libdnf/rpm/package_sack_impl.hpp"
 
 
 namespace libdnf::advisory {
@@ -77,7 +77,7 @@ AdvisoryCollection AdvisoryModule::get_advisory_collection() const {
 
 // AdvisoryModule::Impl
 AdvisoryModule::Impl::Impl(
-    libdnf::rpm::SolvSack & sack,
+    libdnf::rpm::PackageSack & sack,
     AdvisoryId advisory,
     int owner_collection_index,
     Id name,

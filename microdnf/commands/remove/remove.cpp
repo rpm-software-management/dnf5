@@ -21,16 +21,16 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../../context.hpp"
 
+#include "libdnf-cli/output/transaction_table.hpp"
+
 #include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
+#include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
-#include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
 #include <iostream>
-
-#include "libdnf-cli/output/transaction_table.hpp"
 
 namespace microdnf {
 
@@ -67,11 +67,11 @@ void CmdRemove::set_argument_parser(Context & ctx) {
 void CmdRemove::configure([[maybe_unused]] Context & ctx) {}
 
 void CmdRemove::run(Context & ctx) {
-    auto & solv_sack = *ctx.base.get_rpm_solv_sack();
+    auto & package_sack = *ctx.base.get_rpm_package_sack();
 
     // To search in the system repository (installed packages)
-    // Creates system repository in the repo_sack and loads it into rpm::SolvSack.
-    solv_sack.create_system_repo(false);
+    // Creates system repository in the repo_sack and loads it into rpm::PackageSack.
+    package_sack.create_system_repo(false);
 
     libdnf::Goal goal(&ctx.base);
     for (auto & pattern : *patterns_to_remove_options) {

@@ -17,12 +17,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_SOLV_QUERY_IMPL_HPP
-#define LIBDNF_RPM_SOLV_QUERY_IMPL_HPP
+#ifndef LIBDNF_RPM_PACKAGE_QUERY_IMPL_HPP
+#define LIBDNF_RPM_PACKAGE_QUERY_IMPL_HPP
 
 #include "solv/solv_map.hpp"
 
-#include "libdnf/rpm/solv_query.hpp"
+#include "libdnf/rpm/package_query.hpp"
 
 extern "C" {
 #include <solv/solvable.h>
@@ -31,7 +31,7 @@ extern "C" {
 namespace libdnf::rpm {
 
 
-class SolvQuery::Impl {
+class PackageQuery::Impl {
 public:
     static void filter_provides(
         Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result);
@@ -71,4 +71,4 @@ public:
 
 }  // namespace libdnf::rpm
 
-#endif  // LIBDNF_RPM_SOLV_QUERY_IMPL_HPP
+#endif  // LIBDNF_RPM_PACKAGE_QUERY_IMPL_HPP

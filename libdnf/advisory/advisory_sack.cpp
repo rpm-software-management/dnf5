@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_sack.hpp"
 
-#include "libdnf/rpm/solv_sack_impl.hpp"
+#include "libdnf/rpm/package_sack_impl.hpp"
 
 #include <solv/dataiterator.h>
 
@@ -30,18 +30,18 @@ AdvisorySack::AdvisorySack(libdnf::Base & base) : data_map(0), base(&base) {}
 AdvisorySack::~AdvisorySack() = default;
 
 AdvisoryQuery AdvisorySack::new_query() {
-    auto solv_sack = base->get_rpm_solv_sack();
+    auto package_sack = base->get_rpm_package_sack();
 
-    if (cached_solvables_size != solv_sack->p_impl->get_nsolvables()) {
-        load_advisories_from_solvsack();
+    if (cached_solvables_size != package_sack->p_impl->get_nsolvables()) {
+        load_advisories_from_package_sack();
     }
 
     return AdvisoryQuery(this->get_weak_ptr());
 };
 
-void AdvisorySack::load_advisories_from_solvsack() {
-    auto solv_sack = base->get_rpm_solv_sack();
-    Pool * pool = solv_sack->p_impl->get_pool();
+void AdvisorySack::load_advisories_from_package_sack() {
+    auto package_sack = base->get_rpm_package_sack();
+    Pool * pool = package_sack->p_impl->get_pool();
 
     data_map = libdnf::rpm::solv::SolvMap(pool->nsolvables);
 

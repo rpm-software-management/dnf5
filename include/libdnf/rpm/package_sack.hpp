@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_SOLV_SACK_HPP
-#define LIBDNF_RPM_SOLV_SACK_HPP
+#ifndef LIBDNF_RPM_PACKAGE_SACK_HPP
+#define LIBDNF_RPM_PACKAGE_SACK_HPP
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
@@ -91,27 +91,27 @@ class Package;
 class Reldep;
 class ReldepList;
 class Repo;
-class SolvQuery;
+class PackageQuery;
 class Transaction;
 
-class SolvSack;
+class PackageSack;
 
-using SolvSackWeakPtr = WeakPtr<SolvSack, false>;
+using PackageSackWeakPtr = WeakPtr<PackageSack, false>;
 
-class SolvSack {
+class PackageSack {
 public:
     class Exception : public RuntimeError {
     public:
         using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::SolvSack"; }
+        const char * get_domain_name() const noexcept override { return "libdnf::rpm::PackageSack"; }
         const char * get_name() const noexcept override { return "Exception"; }
-        const char * get_description() const noexcept override { return "rpm::SolvSack exception"; }
+        const char * get_description() const noexcept override { return "rpm::PackageSack exception"; }
     };
 
     class NoCapability : public Exception {
     public:
         using Exception::Exception;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::SolvSack"; }
+        const char * get_domain_name() const noexcept override { return "libdnf::rpm::PackageSack"; }
         const char * get_name() const noexcept override { return "NoCapability"; }
         const char * get_description() const noexcept override {
             return "repository does not provide required metadata type";
@@ -132,14 +132,14 @@ public:
         USE_OTHER = 1 << 4,
     };
 
-    explicit SolvSack(Base & base);
-    ~SolvSack();
+    explicit PackageSack(Base & base);
+    ~PackageSack();
 
     //TODO(jrohel): Provide/use configuration options for flags?
-    /// Loads rpm::Repo into SolvSack.
+    /// Loads rpm::Repo into PackageSack.
     void load_repo(Repo & repo, LoadRepoFlags flags);
 
-    /// Creates system repository and loads it into SolvSack. Only one system repository can be in SolvSack.
+    /// Creates system repository and loads it into PackageSack. Only one system repository can be in PackageSack.
     void create_system_repo(bool build_cache = false);
 
     /// Adds the given .rpm file to the command line repo.
@@ -163,8 +163,8 @@ public:
     // TODO (lhrazky): There's an overlap with dumping the debugdata on the Goal class
     void dump_debugdata(const std::string & dir);
 
-    /// Create WeakPtr to SolvSack
-    SolvSackWeakPtr get_weak_ptr();
+    /// Create WeakPtr to PackageSack
+    PackageSackWeakPtr get_weak_ptr();
 
     /// Returns number of solvables in pool.
     int get_nsolvables() const noexcept;
@@ -176,7 +176,7 @@ private:
     friend Reldep;
     friend ReldepList;
     friend class RepoSack;
-    friend SolvQuery;
+    friend PackageQuery;
     friend Transaction;
     friend libdnf::Swdb;
     friend solv::SolvPrivate;
@@ -191,22 +191,22 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-inline constexpr SolvSack::LoadRepoFlags operator|(SolvSack::LoadRepoFlags lhs, SolvSack::LoadRepoFlags rhs) {
-    return static_cast<SolvSack::LoadRepoFlags>(
-        static_cast<std::underlying_type_t<SolvSack::LoadRepoFlags>>(lhs) |
-        static_cast<std::underlying_type_t<SolvSack::LoadRepoFlags>>(rhs));
+inline constexpr PackageSack::LoadRepoFlags operator|(PackageSack::LoadRepoFlags lhs, PackageSack::LoadRepoFlags rhs) {
+    return static_cast<PackageSack::LoadRepoFlags>(
+        static_cast<std::underlying_type_t<PackageSack::LoadRepoFlags>>(lhs) |
+        static_cast<std::underlying_type_t<PackageSack::LoadRepoFlags>>(rhs));
 }
 
-inline constexpr SolvSack::LoadRepoFlags operator&(SolvSack::LoadRepoFlags lhs, SolvSack::LoadRepoFlags rhs) {
-    return static_cast<SolvSack::LoadRepoFlags>(
-        static_cast<std::underlying_type_t<SolvSack::LoadRepoFlags>>(lhs) &
-        static_cast<std::underlying_type_t<SolvSack::LoadRepoFlags>>(rhs));
+inline constexpr PackageSack::LoadRepoFlags operator&(PackageSack::LoadRepoFlags lhs, PackageSack::LoadRepoFlags rhs) {
+    return static_cast<PackageSack::LoadRepoFlags>(
+        static_cast<std::underlying_type_t<PackageSack::LoadRepoFlags>>(lhs) &
+        static_cast<std::underlying_type_t<PackageSack::LoadRepoFlags>>(rhs));
 }
 
-inline constexpr bool any(SolvSack::LoadRepoFlags flags) {
-    return static_cast<typename std::underlying_type<SolvSack::LoadRepoFlags>::type>(flags) != 0;
+inline constexpr bool any(PackageSack::LoadRepoFlags flags) {
+    return static_cast<typename std::underlying_type<PackageSack::LoadRepoFlags>::type>(flags) != 0;
 }
 
 }  // namespace libdnf::rpm
 
-#endif  // LIBDNF_RPM_SOLV_SACK_HPP
+#endif  // LIBDNF_RPM_PACKAGE_SACK_HPP

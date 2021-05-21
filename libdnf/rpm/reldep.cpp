@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/reldep.hpp"
 
+#include "package_sack_impl.hpp"
 #include "solv/reldep_parser.hpp"
-#include "solv_sack_impl.hpp"
 
 // workaround, libsolv lacks 'extern "C"' in its header file
 extern "C" {
@@ -34,14 +34,14 @@ extern "C" {
 namespace libdnf::rpm {
 
 
-Reldep::Reldep(SolvSack * sack, ReldepId dependency_id) : sack(sack->get_weak_ptr()), id(dependency_id) {}
+Reldep::Reldep(PackageSack * sack, ReldepId dependency_id) : sack(sack->get_weak_ptr()), id(dependency_id) {}
 
-Reldep::Reldep(SolvSack * sack, const char * name, const char * version, CmpType cmp_type)
+Reldep::Reldep(PackageSack * sack, const char * name, const char * version, CmpType cmp_type)
     : sack(sack->get_weak_ptr()) {
     id = get_reldep_id(sack, name, version, cmp_type);
 }
 
-Reldep::Reldep(const SolvSackWeakPtr & sack, const std::string & reldep_string) : sack(sack) {
+Reldep::Reldep(const PackageSackWeakPtr & sack, const std::string & reldep_string) : sack(sack) {
     id = get_reldep_id(sack.get(), reldep_string);
 }
 
@@ -61,7 +61,7 @@ std::string Reldep::to_string() {
     return cstring ? std::string(cstring) : std::string();
 }
 
-ReldepId Reldep::get_reldep_id(SolvSack * sack, const char * name, const char * version, CmpType cmp_type, int create) {
+ReldepId Reldep::get_reldep_id(PackageSack * sack, const char * name, const char * version, CmpType cmp_type, int create) {
     static_assert(
         static_cast<int>(Reldep::CmpType::EQ) == REL_EQ, "Reldep::ComparisonType::EQ is not identical to solv/REL_EQ");
     static_assert(
@@ -81,7 +81,7 @@ ReldepId Reldep::get_reldep_id(SolvSack * sack, const char * name, const char * 
     return ReldepId(id);
 }
 
-ReldepId Reldep::get_reldep_id(SolvSack * sack, const std::string & reldep_str, int create) {
+ReldepId Reldep::get_reldep_id(PackageSack * sack, const std::string & reldep_str, int create) {
     if (reldep_str[0] == '(') {
         // Rich dependency
         Pool * pool = sack->p_impl->pool;

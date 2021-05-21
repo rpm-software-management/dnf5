@@ -19,12 +19,12 @@ repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);
 repo->load();
 
 // create a reference to the Base's rpm_sack for better code readability
-auto & rpm_sack = *base.get_rpm_solv_sack();
+auto & rpm_sack = *base.get_rpm_package_sack();
 
 // load cached repodata to rpm sack (xml files are converted to solv/solvx at this point)
 rpm_sack.load_repo(*repo.get(),
-    libdnf::rpm::SolvSack::LoadRepoFlags::USE_FILELISTS |
-    libdnf::rpm::SolvSack::LoadRepoFlags::USE_OTHER |
-    libdnf::rpm::SolvSack::LoadRepoFlags::USE_PRESTO |
-    libdnf::rpm::SolvSack::LoadRepoFlags::USE_UPDATEINFO
+    libdnf::rpm::PackageSack::LoadRepoFlags::USE_FILELISTS |
+    libdnf::rpm::PackageSack::LoadRepoFlags::USE_OTHER |
+    libdnf::rpm::PackageSack::LoadRepoFlags::USE_PRESTO |
+    libdnf::rpm::PackageSack::LoadRepoFlags::USE_UPDATEINFO
 );

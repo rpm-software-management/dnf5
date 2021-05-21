@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_HPP
 #define LIBDNF_ADVISORY_ADVISORY_HPP
 
-#include <libdnf/rpm/solv_sack.hpp>
+#include <libdnf/rpm/package_sack.hpp>
 
 #include <vector>
 
@@ -97,10 +97,10 @@ class Advisory {
 public:
     /// Construct the Advisory object
     ///
-    /// @param sack   WeakPtr to libdnf::rpm::SolvSack instance which holds the data.
+    /// @param sack   WeakPtr to libdnf::rpm::PackageSack instance which holds the data.
     /// @param id     AdvisoryId into libsolv pool.
     /// @return New Advisory instance.
-    Advisory(const libdnf::rpm::SolvSackWeakPtr & sack, AdvisoryId id);
+    Advisory(const libdnf::rpm::PackageSackWeakPtr & sack, AdvisoryId id);
 
     /// Destroy the Advisory object
     ~Advisory();
@@ -158,7 +158,7 @@ public:
 
 private:
     AdvisoryId id;
-    libdnf::rpm::SolvSackWeakPtr sack;
+    libdnf::rpm::PackageSackWeakPtr sack;
 };
 
 

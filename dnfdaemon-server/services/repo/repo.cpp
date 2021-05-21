@@ -23,9 +23,9 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnfdaemon-server/utils.hpp"
 
 #include <fmt/format.h>
+#include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/repo.hpp>
-#include <libdnf/rpm/solv_query.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
@@ -114,9 +114,9 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->is_enabled());
                 break;
             case RepoAttribute::size: {
-                auto solv_sack = base.get_rpm_solv_sack();
+                auto package_sack = base.get_rpm_package_sack();
                 uint64_t size = 0;
-                libdnf::rpm::SolvQuery query(solv_sack);
+                libdnf::rpm::PackageQuery query(package_sack);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.ifilter_repoid(reponames);
                 for (auto pkg : query) {
@@ -143,15 +143,15 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->get_max_timestamp());
                 break;
             case RepoAttribute::pkgs: {
-                auto solv_sack = base.get_rpm_solv_sack();
-                libdnf::rpm::SolvQuery query(solv_sack, libdnf::rpm::SolvQuery::InitFlags::IGNORE_EXCLUDES);
+                auto package_sack = base.get_rpm_package_sack();
+                libdnf::rpm::PackageQuery query(package_sack, libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.ifilter_repoid(reponames);
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::available_pkgs: {
-                auto solv_sack = base.get_rpm_solv_sack();
-                libdnf::rpm::SolvQuery query(solv_sack);
+                auto package_sack = base.get_rpm_package_sack();
+                libdnf::rpm::PackageQuery query(package_sack);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.ifilter_repoid(reponames);
                 dbus_repo.emplace(attr, query.size());

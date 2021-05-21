@@ -26,7 +26,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ReldepTest);
 
 void ReldepTest::setUp() {
     base = std::make_unique<libdnf::Base>();
-    sack = base->get_rpm_solv_sack();
+    sack = base->get_rpm_package_sack();
 }
 
 

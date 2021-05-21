@@ -25,8 +25,8 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnfdaemon-server/utils.hpp"
 
 #include <fmt/format.h>
+#include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
-#include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <libdnf/transaction/transaction_item.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -154,7 +154,7 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall && call) {
     call >> options;
 
     session.fill_sack();
-    auto solv_sack = session.get_base()->get_rpm_solv_sack();
+    auto package_sack = session.get_base()->get_rpm_package_sack();
 
     // patterns to search
     std::vector<std::string> default_patterns{};
@@ -167,21 +167,21 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall && call) {
     bool with_filenames = key_value_map_get<bool>(options, "with_filenames", true);
     bool with_src = key_value_map_get<bool>(options, "with_src", true);
 
-    libdnf::rpm::PackageSet result_pset(solv_sack);
-    libdnf::rpm::SolvQuery full_solv_query(solv_sack);
+    libdnf::rpm::PackageSet result_pset(package_sack);
+    libdnf::rpm::PackageQuery full_package_query(package_sack);
     if (patterns.size() > 0) {
         for (auto & pattern : patterns) {
-            libdnf::rpm::SolvQuery solv_query(full_solv_query);
+            libdnf::rpm::PackageQuery package_query(full_package_query);
             libdnf::ResolveSpecSettings settings{
                 .ignore_case = icase,
                 .with_nevra = with_nevra,
                 .with_provides = with_provides,
                 .with_filenames = with_filenames};
-            solv_query.resolve_pkg_spec(pattern, settings, with_src);
-            result_pset |= solv_query;
+            package_query.resolve_pkg_spec(pattern, settings, with_src);
+            result_pset |= package_query;
         }
     } else {
-        result_pset = full_solv_query;
+        result_pset = full_package_query;
     }
 
     // create reply from the query

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv_map.hpp"
 
 #include "libdnf/base/goal_elements.hpp"
-#include "libdnf/rpm/solv_sack.hpp"
+#include "libdnf/rpm/package_sack.hpp"
 
 #include <solv/solver.h>
 

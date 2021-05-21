@@ -27,8 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/vars.hpp"
 #include "libdnf/logger/log_router.hpp"
 #include "libdnf/plugin/plugins.hpp"
+#include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/rpm/repo_sack.hpp"
-#include "libdnf/rpm/solv_sack.hpp"
 #include "libdnf/transaction/sack.hpp"
 
 #include <map>
@@ -60,7 +60,7 @@ public:
     ConfigMain & get_config() { return config; }
     LogRouterWeakPtr get_logger() { return LogRouterWeakPtr(&log_router, &log_router_gurad); }
     rpm::RepoSackWeakPtr get_rpm_repo_sack() { return rpm_repo_sack.get_weak_ptr(); }
-    rpm::SolvSackWeakPtr get_rpm_solv_sack() { return rpm_solv_sack.get_weak_ptr(); }
+    rpm::PackageSackWeakPtr get_rpm_package_sack() { return rpm_package_sack.get_weak_ptr(); }
 
     transaction::TransactionSackWeakPtr get_transaction_sack() { return transaction_sack.get_weak_ptr(); }
     libdnf::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
@@ -91,7 +91,7 @@ private:
     ConfigMain config;
     LogRouter log_router;
     rpm::RepoSack rpm_repo_sack{*this};
-    rpm::SolvSack rpm_solv_sack{*this};
+    rpm::PackageSack rpm_package_sack{*this};
     transaction::TransactionSack transaction_sack{*this};
     comps::Comps comps{*this};
     Vars vars;

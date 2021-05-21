@@ -52,10 +52,10 @@ private:
 
     WeakPtrGuard<AdvisorySack, false> data_guard;
 
-    /// Load all advisories present in SolvSack from base. This method is
+    /// Load all advisories present in PackageSack from base. This method is
     /// called automatically when creating a new query and the cached number
     /// of solvables doesn't match the current number in solv sacks pool.
-    void load_advisories_from_solvsack();
+    void load_advisories_from_package_sack();
 
     libdnf::rpm::solv::SolvMap data_map;
 

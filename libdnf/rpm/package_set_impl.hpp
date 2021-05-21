@@ -29,7 +29,7 @@ extern "C" {
 #include <solv/pool.h>
 }
 
-#include "solv_sack_impl.hpp"
+#include "package_sack_impl.hpp"
 
 
 namespace libdnf::rpm {
@@ -38,13 +38,13 @@ namespace libdnf::rpm {
 class PackageSet::Impl : public solv::SolvMap {
 public:
     /// Initialize with an empty map
-    //explicit Impl(SolvSack * sack);
+    //explicit Impl(PackageSack * sack);
 
     /// Initialize with an empty map
-    explicit Impl(const SolvSackWeakPtr & sack);
+    explicit Impl(const PackageSackWeakPtr & sack);
 
     /// Clone from an existing map
-    explicit Impl(const SolvSackWeakPtr & sack, solv::SolvMap & solv_map);
+    explicit Impl(const PackageSackWeakPtr & sack, solv::SolvMap & solv_map);
 
     /// Copy constructor: clone from an existing PackageSet::Impl
     Impl(const Impl & other);
@@ -57,20 +57,20 @@ public:
     Impl & operator=(const solv::SolvMap & map);
     Impl & operator=(solv::SolvMap && map);
 
-    SolvSackWeakPtr get_sack() const { return sack; }
+    PackageSackWeakPtr get_sack() const { return sack; }
 
 private:
     friend PackageSet;
-    friend SolvQuery;
-    SolvSackWeakPtr sack;
+    friend PackageQuery;
+    PackageSackWeakPtr sack;
 };
 
 
-inline PackageSet::Impl::Impl(const SolvSackWeakPtr & sack)
+inline PackageSet::Impl::Impl(const PackageSackWeakPtr & sack)
     : solv::SolvMap::SolvMap(sack->p_impl->pool->nsolvables)
     , sack(sack) {}
 
-inline PackageSet::Impl::Impl(const SolvSackWeakPtr & sack, solv::SolvMap & solv_map)
+inline PackageSet::Impl::Impl(const PackageSackWeakPtr & sack, solv::SolvMap & solv_map)
     : solv::SolvMap::SolvMap(solv_map)
     , sack(sack) {}
 

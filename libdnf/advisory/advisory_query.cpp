@@ -21,9 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_package_private.hpp"
 #include "libdnf/advisory/advisory_query_private.hpp"
+#include "libdnf/rpm/package_sack_impl.hpp"
 #include "libdnf/rpm/package_set.hpp"
 #include "libdnf/rpm/solv/package_private.hpp"
-#include "libdnf/rpm/solv_sack_impl.hpp"
 #include "libdnf/utils/utils_internal.hpp"
 
 #include <solv/evr.h>
@@ -62,9 +62,9 @@ AdvisoryQuery & AdvisoryQuery::ifilter_name(const std::string & pattern, sack::Q
 }
 
 AdvisoryQuery & AdvisoryQuery::ifilter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
-    auto & solv_sack = *advisory_sack->base->get_rpm_solv_sack();
-    Pool * pool = solv_sack.p_impl->get_pool();
-    libdnf::rpm::solv::SolvMap filter_result(solv_sack.p_impl->get_nsolvables());
+    auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
+    Pool * pool = package_sack.p_impl->get_pool();
+    libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -138,9 +138,9 @@ AdvisoryQuery & AdvisoryQuery::ifilter_type(const Advisory::Type type, sack::Que
 
 //TODO(amatej): Add a wrapper that accepts vector of string types, eg: "security", "bugfix" not enums
 AdvisoryQuery & AdvisoryQuery::ifilter_type(const std::vector<AdvisoryType> & types, sack::QueryCmp cmp_type) {
-    auto & solv_sack = *advisory_sack->base->get_rpm_solv_sack();
-    Pool * pool = solv_sack.p_impl->get_pool();
-    libdnf::rpm::solv::SolvMap filter_result(solv_sack.p_impl->get_nsolvables());
+    auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
+    Pool * pool = package_sack.p_impl->get_pool();
+    libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -185,8 +185,8 @@ AdvisoryQuery & AdvisoryQuery::ifilter_type(const std::vector<AdvisoryType> & ty
 
 AdvisoryQuery & AdvisoryQuery::ifilter_reference(
     const std::vector<std::string> & reference_id, std::vector<AdvisoryReferenceType> types, sack::QueryCmp cmp_type) {
-    auto solv_sack = advisory_sack->base->get_rpm_solv_sack();
-    libdnf::rpm::solv::SolvMap filter_result(solv_sack->p_impl->get_nsolvables());
+    auto package_sack = advisory_sack->base->get_rpm_package_sack();
+    libdnf::rpm::solv::SolvMap filter_result(package_sack->p_impl->get_nsolvables());
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -215,7 +215,7 @@ AdvisoryQuery & AdvisoryQuery::ifilter_reference(
                 for (Id candidate_id : p_impl->data_map) {
                     //TODO(amatej): replace this with solv::advisroy_private (just like for package)
                     //              So that we don't duplicate code and don't have to create Advisory object (big overhead, has weak pointer)
-                    Advisory a = Advisory(solv_sack, AdvisoryId(candidate_id));
+                    Advisory a = Advisory(package_sack, AdvisoryId(candidate_id));
                     for (const auto & cve : a.get_references(ored_types_together)) {
                         if (cve.get_id() == pattern) {
                             filter_result.add_unsafe(candidate_id);
@@ -225,7 +225,7 @@ AdvisoryQuery & AdvisoryQuery::ifilter_reference(
             } break;
             case libdnf::sack::QueryCmp::GLOB: {
                 for (Id candidate_id : p_impl->data_map) {
-                    Advisory a = Advisory(solv_sack, AdvisoryId(candidate_id));
+                    Advisory a = Advisory(package_sack, AdvisoryId(candidate_id));
                     for (const auto & cve : a.get_references(ored_types_together)) {
                         if (fnmatch(c_pattern, cve.get_id().c_str(), 0) == 0) {
                             filter_result.add_unsafe(candidate_id);
@@ -272,9 +272,9 @@ AdvisoryQuery & AdvisoryQuery::ifilter_severity(const std::string & pattern, sac
     return *this;
 }
 AdvisoryQuery & AdvisoryQuery::ifilter_severity(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
-    auto & solv_sack = *advisory_sack->base->get_rpm_solv_sack();
-    Pool * pool = solv_sack.p_impl->get_pool();
-    libdnf::rpm::solv::SolvMap filter_result(solv_sack.p_impl->get_nsolvables());
+    auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
+    Pool * pool = package_sack.p_impl->get_pool();
+    libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -310,9 +310,9 @@ AdvisoryQuery & AdvisoryQuery::ifilter_severity(const std::vector<std::string> &
 
 //TODO(amatej): this might not be needed and could be possibly removed
 AdvisoryQuery & AdvisoryQuery::ifilter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
-    auto & solv_sack = *advisory_sack->base->get_rpm_solv_sack();
-    Pool * pool = solv_sack.p_impl->get_pool();
-    libdnf::rpm::solv::SolvMap filter_result(solv_sack.p_impl->get_nsolvables());
+    auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
+    Pool * pool = package_sack.p_impl->get_pool();
+    libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
     std::vector<AdvisoryPackage> adv_pkgs = get_sorted_advisory_packages();
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
@@ -365,8 +365,8 @@ std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
     std::vector<AdvisoryPackage> adv_pkgs = get_sorted_advisory_packages();
     std::vector<AdvisoryPackage> after_filter;
 
-    auto solv_sack = package_set.get_sack();
-    Pool * pool = solv_sack->p_impl->get_pool();
+    auto package_sack = package_set.get_sack();
+    Pool * pool = package_sack->p_impl->get_pool();
 
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ:
@@ -405,7 +405,7 @@ std::vector<Advisory> AdvisoryQuery::get_advisories() const {
     std::vector<Advisory> out;
     for (Id candidate_id : p_impl->data_map) {
         out.emplace_back(
-            Advisory(advisory_sack->base->get_rpm_solv_sack(), libdnf::advisory::AdvisoryId(candidate_id)));
+            Advisory(advisory_sack->base->get_rpm_package_sack(), libdnf::advisory::AdvisoryId(candidate_id)));
     }
 
     return out;
@@ -414,7 +414,7 @@ std::vector<Advisory> AdvisoryQuery::get_advisories() const {
 std::vector<AdvisoryPackage> AdvisoryQuery::get_sorted_advisory_packages(bool only_applicable) const {
     std::vector<AdvisoryPackage> out;
     for (Id candidate_id : p_impl->data_map) {
-        Advisory advisory = Advisory(advisory_sack->base->get_rpm_solv_sack(), AdvisoryId(candidate_id));
+        Advisory advisory = Advisory(advisory_sack->base->get_rpm_package_sack(), AdvisoryId(candidate_id));
         auto collections = advisory.get_collections();
         for (auto & collection : collections) {
             if (only_applicable && !collection.is_applicable()) {

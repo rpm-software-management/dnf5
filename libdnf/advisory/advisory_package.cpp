@@ -77,7 +77,7 @@ AdvisoryCollection AdvisoryPackage::get_advisory_collection() const {
 
 // AdvisoryPackage::Impl
 AdvisoryPackage::Impl::Impl(
-    libdnf::rpm::SolvSack & sack,
+    libdnf::rpm::PackageSack & sack,
     AdvisoryId advisory,
     int owner_collection_index,
     Id name,

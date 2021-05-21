@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_RPM_SOLV_QUERY_HPP
-#define TEST_LIBDNF_RPM_SOLV_QUERY_HPP
+#ifndef TEST_LIBDNF_RPM_PACKAGE_QUERY_HPP
+#define TEST_LIBDNF_RPM_PACKAGE_QUERY_HPP
 
 
 #include "repo_fixture.hpp"
@@ -27,8 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class RpmSolvQueryTest : public RepoFixture {
-    CPPUNIT_TEST_SUITE(RpmSolvQueryTest);
+class RpmPackageQueryTest : public RepoFixture {
+    CPPUNIT_TEST_SUITE(RpmPackageQueryTest);
 
 #ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_size);
@@ -80,11 +80,11 @@ public:
     void test_intersection();
     void test_difference();
     // TODO(jmracek) Add tests when system repo will be available
-    // SolvQuery & ifilter_upgrades();
-    // SolvQuery & ifilter_downgrades();
-    // SolvQuery & ifilter_upgradable();
-    // SolvQuery & ifilter_downgradable();
+    // PackageQuery & ifilter_upgrades();
+    // PackageQuery & ifilter_downgrades();
+    // PackageQuery & ifilter_upgradable();
+    // PackageQuery & ifilter_downgradable();
 };
 
 
-#endif  // TEST_LIBDNF_RPM_SOLV_QUERY_HPP
+#endif  // TEST_LIBDNF_RPM_PACKAGE_QUERY_HPP

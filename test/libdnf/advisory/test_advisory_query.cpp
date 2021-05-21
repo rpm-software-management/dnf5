@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test/libdnf/utils.hpp"
 
+#include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/package_set.hpp"
-#include "libdnf/rpm/solv_query.hpp"
 
 #include <filesystem>
 #include <set>
@@ -82,7 +82,7 @@ void AdvisoryAdvisoryQueryTest::test_ifilter_type() {
 
 void AdvisoryAdvisoryQueryTest::test_ifilter_packages() {
     // Tests ifilter_packages method
-    libdnf::rpm::SolvQuery pkg_query(sack);
+    libdnf::rpm::PackageQuery pkg_query(sack);
 
     libdnf::advisory::AdvisoryQuery adv_query =
         advisory_sack->new_query().ifilter_packages(pkg_query, libdnf::sack::QueryCmp::GT);

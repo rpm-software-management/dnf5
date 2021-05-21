@@ -21,18 +21,18 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../../context.hpp"
 
+#include "libdnf-cli/output/transaction_table.hpp"
+
 #include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
+#include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/repo.hpp>
-#include <libdnf/rpm/solv_query.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
 #include <filesystem>
 #include <iostream>
-
-#include "libdnf-cli/output/transaction_table.hpp"
 
 namespace fs = std::filesystem;
 
@@ -71,15 +71,15 @@ void CmdInstall::set_argument_parser(Context & ctx) {
 void CmdInstall::configure([[maybe_unused]] Context & ctx) {}
 
 void CmdInstall::run(Context & ctx) {
-    auto & solv_sack = *ctx.base.get_rpm_solv_sack();
+    auto & package_sack = *ctx.base.get_rpm_package_sack();
 
     // To search in the system repository (installed packages)
-    // Creates system repository in the repo_sack and loads it into rpm::SolvSack.
-    solv_sack.create_system_repo(false);
+    // Creates system repository in the repo_sack and loads it into rpm::PackageSack.
+    package_sack.create_system_repo(false);
 
     // To search in available repositories (available packages)
     auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
-    using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
+    using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     ctx.load_rpm_repos(enabled_repos, flags);
 

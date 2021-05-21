@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/logger/stream_logger.hpp"
+#include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/rpm/repo_sack.hpp"
-#include "libdnf/rpm/solv_sack.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -42,7 +42,7 @@ void RepoTest::tearDown() {
 }
 
 
-using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
+using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
 
 
 void RepoTest::test_repo_basics() {
@@ -59,9 +59,9 @@ void RepoTest::test_repo_basics() {
     base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
 
     libdnf::rpm::RepoSack repo_sack(base);
-    libdnf::rpm::SolvSack sack(base);
+    libdnf::rpm::PackageSack sack(base);
 
-    // Creates system repository and loads it into rpm::SolvSack.
+    // Creates system repository and loads it into rpm::PackageSack.
     // TODO(dmach): commented the next line because it loads the system repo from host; fix it to load the repo from the installroot
     // sack.create_system_repo(false);
 
@@ -79,7 +79,7 @@ void RepoTest::test_repo_basics() {
         log_router.error(ex.what());
     }
 
-    // Loads rpm::Repo into rpm::SolvSack
+    // Loads rpm::Repo into rpm::PackageSack
     try {
         sack.load_repo(
             *repo.get(),

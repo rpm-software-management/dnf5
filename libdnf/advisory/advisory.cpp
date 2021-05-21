@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_collection.hpp"
 #include "libdnf/advisory/advisory_reference.hpp"
 #include "libdnf/common/exception.hpp"
-#include "libdnf/rpm/solv_sack_impl.hpp"
+#include "libdnf/rpm/package_sack_impl.hpp"
 #include "libdnf/utils/utils_internal.hpp"
 
 #include <fmt/format.h>
@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-Advisory::Advisory(const libdnf::rpm::SolvSackWeakPtr & sack, AdvisoryId id) : id(id), sack(sack) {}
+Advisory::Advisory(const libdnf::rpm::PackageSackWeakPtr & sack, AdvisoryId id) : id(id), sack(sack) {}
 
 std::string Advisory::get_name() const {
     const char * name;

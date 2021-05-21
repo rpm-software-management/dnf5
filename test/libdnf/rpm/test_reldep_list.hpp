@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_fixture.hpp"
 
 #include "libdnf/base/base.hpp"
-#include "libdnf/rpm/solv_sack.hpp"
+#include "libdnf/rpm/package_sack.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

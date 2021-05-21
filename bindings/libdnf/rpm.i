@@ -32,6 +32,8 @@
     #include "libdnf/rpm/config_repo.hpp"
     #include "libdnf/rpm/nevra.hpp"
     #include "libdnf/rpm/package.hpp"
+    #include "libdnf/rpm/package_query.hpp"
+    #include "libdnf/rpm/package_sack.hpp"
     #include "libdnf/rpm/package_set.hpp"
     #include "libdnf/rpm/package_set_iterator.hpp"
     #include "libdnf/rpm/reldep.hpp"
@@ -40,8 +42,6 @@
     #include "libdnf/rpm/repo.hpp"
     #include "libdnf/rpm/repo_query.hpp"
     #include "libdnf/rpm/repo_sack.hpp"
-    #include "libdnf/rpm/solv_query.hpp"
-    #include "libdnf/rpm/solv_sack.hpp"
 %}
 
 #define CV __perl_CV
@@ -51,8 +51,8 @@
 
 %template(VectorNevra) std::vector<libdnf::rpm::Nevra>;
 
-%include "libdnf/rpm/solv_sack.hpp"
-%template(SolvSackWeakPtr) libdnf::WeakPtr<libdnf::rpm::SolvSack, false>;
+%include "libdnf/rpm/package_sack.hpp"
+%template(PackageSackWeakPtr) libdnf::WeakPtr<libdnf::rpm::PackageSack, false>;
 
 
 %ignore libdnf::advisory::AdvisorySack::new_query();
@@ -73,8 +73,8 @@
 %include "libdnf/rpm/package_set_iterator.hpp"
 %include "libdnf/rpm/package_set.hpp"
 
-%ignore libdnf::rpm::SolvQuery::SolvQuery(SolvQuery && src);
-%include "libdnf/rpm/solv_query.hpp"
+%ignore libdnf::rpm::PackageQuery::PackageQuery(PackageQuery && src);
+%include "libdnf/rpm/package_query.hpp"
 
 %include "libdnf/rpm/config_repo.hpp"
 %include "libdnf/rpm/repo.hpp"

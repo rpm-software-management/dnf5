@@ -23,7 +23,7 @@ import os
 import libdnf
 
 
-class TestSolvQuery(unittest.TestCase):
+class TestPackageQuery(unittest.TestCase):
     def setUp(self):
         self.base = libdnf.base.Base()
 
@@ -32,7 +32,7 @@ class TestSolvQuery(unittest.TestCase):
         self.base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, self.tmpdir)
 
         self.repo_sack = libdnf.rpm.RepoSack(self.base)
-        self.sack = self.base.get_rpm_solv_sack()
+        self.sack = self.base.get_rpm_package_sack()
 
         # Creates new repositories in the repo_sack
         repo = self.repo_sack.new_repo("repomd-repo1")
@@ -46,19 +46,19 @@ class TestSolvQuery(unittest.TestCase):
         # Loads repository into rpm::Repo.
         repo.load()
 
-        # Loads rpm::Repo into rpm::SolvSack
-        self.sack.load_repo(repo.get(), libdnf.rpm.SolvSack.LoadRepoFlags_NONE)
+        # Loads rpm::Repo into rpm::PackageSack
+        self.sack.load_repo(repo.get(), libdnf.rpm.PackageSack.LoadRepoFlags_NONE)
 
     def tearDown(self):
         # Remove the cache directory.
         shutil.rmtree(self.tmpdir)
 
     def test_size(self):
-        query = libdnf.rpm.SolvQuery(self.sack)
+        query = libdnf.rpm.PackageQuery(self.sack)
         self.assertEqual(query.size(), 3)
 
-    def test_iterate_solv_query(self):
-        query = libdnf.rpm.SolvQuery(self.sack)
+    def test_iterate_package_query(self):
+        query = libdnf.rpm.PackageQuery(self.sack)
 
         # Iterates over reference "query".
         prev_id = 0
@@ -83,22 +83,22 @@ class TestSolvQuery(unittest.TestCase):
         self.assertLess(prev_id, self.sack.get_nsolvables())
         self.assertGreaterEqual(prev_id, query.size())
 
-    def test_iterate_solv_query2(self):
-        # Tests the iteration of an unreferenced SolvQuery object. The iterator must hold a reference
+    def test_iterate_package_query2(self):
+        # Tests the iteration of an unreferenced PackageQuery object. The iterator must hold a reference
         # to the iterated object, otherwise the gargabe collector can remove the object.
 
-        # Iterates directly over "libdnf.rpm.SolvQuery(self.sack)" result. No helping reference.
+        # Iterates directly over "libdnf.rpm.PackageQuery(self.sack)" result. No helping reference.
         prev_id = 0
-        for pkg in libdnf.rpm.SolvQuery(self.sack):
+        for pkg in libdnf.rpm.PackageQuery(self.sack):
             id = pkg.get_id().id
             self.assertGreater(id, prev_id)
             prev_id = id
         self.assertLess(prev_id, self.sack.get_nsolvables())
-        self.assertGreaterEqual(prev_id, libdnf.rpm.SolvQuery(self.sack).size())
+        self.assertGreaterEqual(prev_id, libdnf.rpm.PackageQuery(self.sack).size())
 
         # Another test. The iterator is created from the "query" reference, but the reference
         # is removed (set to "None") before starting the iteration.
-        query = libdnf.rpm.SolvQuery(self.sack)
+        query = libdnf.rpm.PackageQuery(self.sack)
         query_iterator = iter(query)
         query = None
         prev_id = 0
@@ -111,11 +111,11 @@ class TestSolvQuery(unittest.TestCase):
             except StopIteration:
                 break
         self.assertLess(prev_id, self.sack.get_nsolvables())
-        self.assertGreaterEqual(prev_id, libdnf.rpm.SolvQuery(self.sack).size())
+        self.assertGreaterEqual(prev_id, libdnf.rpm.PackageQuery(self.sack).size())
 
     def test_ifilter_name(self):
         # Test QueryCmp::EQ
-        query = libdnf.rpm.SolvQuery(self.sack)
+        query = libdnf.rpm.PackageQuery(self.sack)
         query.ifilter_name(["pkg"])
         self.assertEqual(query.size(), 1)
         # TODO(dmach): implement __str__()
@@ -124,7 +124,7 @@ class TestSolvQuery(unittest.TestCase):
         # ---
 
         # Test QueryCmp::GLOB
-        query = libdnf.rpm.SolvQuery(self.sack)
+        query = libdnf.rpm.PackageQuery(self.sack)
         query.ifilter_name(["pk*"], libdnf.common.QueryCmp_GLOB)
         self.assertEqual(query.size(), 2)
         # TODO(dmach): implement __str__()

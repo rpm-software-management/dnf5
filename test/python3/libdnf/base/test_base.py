@@ -26,7 +26,7 @@ class TestBase(unittest.TestCase):
         loger = base.get_logger()
         config = base.get_config()
         repo_sack = base.get_rpm_repo_sack()
-        solv_sack = base.get_rpm_solv_sack()
+        package_sack = base.get_rpm_package_sack()
 
     def test_weak_ptr(self):
         # Creates a new Base object

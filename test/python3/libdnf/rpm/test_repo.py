@@ -33,10 +33,10 @@ class TestRepo(unittest.TestCase):
         base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, tmpdir)
 
         repo_sack = libdnf.rpm.RepoSack(base)
-        solv_sack = libdnf.rpm.SolvSack(base)
+        package_sack = libdnf.rpm.PackageSack(base)
 
-        # Creates system repository and loads it into rpm::SolvSack.
-        solv_sack.create_system_repo(False)
+        # Creates system repository and loads it into rpm::PackageSack.
+        package_sack.create_system_repo(False)
 
         # Creates new repositories in the repo_sack
         repo = repo_sack.new_repo("repomd-repo1")
@@ -50,10 +50,10 @@ class TestRepo(unittest.TestCase):
         # Loads repository into rpm::Repo.
         repo.load()
 
-        # Loads rpm::Repo into rpm::SolvSack
-        SolvSack = libdnf.rpm.SolvSack
-        solv_sack.load_repo(repo.get(), SolvSack.LoadRepoFlags_USE_PRESTO | SolvSack.LoadRepoFlags_USE_UPDATEINFO |
-                            SolvSack.LoadRepoFlags_USE_OTHER)
+        # Loads rpm::Repo into rpm::PackageSack
+        PackageSack = libdnf.rpm.PackageSack
+        package_sack.load_repo(repo.get(), PackageSack.LoadRepoFlags_USE_PRESTO | PackageSack.LoadRepoFlags_USE_UPDATEINFO |
+                            PackageSack.LoadRepoFlags_USE_OTHER)
 
         # Remove the cache directory.
         shutil.rmtree(tmpdir)

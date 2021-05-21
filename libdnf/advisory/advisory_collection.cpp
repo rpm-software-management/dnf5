@@ -22,11 +22,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_module_private.hpp"
 #include "libdnf/advisory/advisory_package_private.hpp"
-#include "libdnf/rpm/solv_sack_impl.hpp"
+#include "libdnf/rpm/package_sack_impl.hpp"
 
 namespace libdnf::advisory {
 
-AdvisoryCollection::AdvisoryCollection(const libdnf::rpm::SolvSackWeakPtr & sack, AdvisoryId advisory, int index)
+AdvisoryCollection::AdvisoryCollection(const libdnf::rpm::PackageSackWeakPtr & sack, AdvisoryId advisory, int index)
     : sack(sack)
     , advisory(advisory)
     , index(index) {}

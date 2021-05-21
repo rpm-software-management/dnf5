@@ -110,9 +110,9 @@ Session::~Session() {
 }
 
 void Session::fill_sack() {
-    auto & solv_sack = *get_base()->get_rpm_solv_sack();
+    auto & package_sack = *get_base()->get_rpm_package_sack();
     if (session_configuration_value<bool>("load_system_repo", true)) {
-        solv_sack.create_system_repo(false);
+        package_sack.create_system_repo(false);
     }
 
     if (session_configuration_value<bool>("load_available_repos", true)) {
@@ -133,18 +133,18 @@ bool Session::read_all_repos() {
     }
     repositories_status = dnfdaemon::RepoStatus::PENDING;
     // TODO(mblaha): get flags from session configuration
-    using LoadFlags = libdnf::rpm::SolvSack::LoadRepoFlags;
+    using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     //auto & logger = base->get_logger();
     auto rpm_repo_sack = base->get_rpm_repo_sack();
     auto enabled_repos = rpm_repo_sack->new_query().ifilter_enabled(true);
-    auto & solv_sack = *base->get_rpm_solv_sack();
+    auto & package_sack = *base->get_rpm_package_sack();
     bool retval = true;
     for (auto & repo : enabled_repos.get_data()) {
         repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
         try {
             repo->load();
-            solv_sack.load_repo(*repo.get(), flags);
+            package_sack.load_repo(*repo.get(), flags);
         } catch (const std::runtime_error & ex) {
             if (!repo->get_config().skip_if_unavailable().get_value()) {
                 retval = false;

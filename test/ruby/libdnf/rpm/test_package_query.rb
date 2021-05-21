@@ -31,7 +31,7 @@ class TestSimpleNumber < Test::Unit::TestCase
         @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, @tmpdir)
 
         @repo_sack = Rpm::RepoSack.new(@base)
-        @sack = @base.get_rpm_solv_sack()
+        @sack = @base.get_rpm_package_sack()
 
         # Creates new repositories in the repo_sack
         @repo = @repo_sack.new_repo('repomd-repo1')
@@ -45,8 +45,8 @@ class TestSimpleNumber < Test::Unit::TestCase
         # Loads repository into rpm::Repo.
         @repo.load()
 
-        # Loads rpm::Repo into rpm::SolvSack
-        @sack.load_repo(@repo.get(), Rpm::SolvSack::LoadRepoFlags_NONE)
+        # Loads rpm::Repo into rpm::PackageSack
+        @sack.load_repo(@repo.get(), Rpm::PackageSack::LoadRepoFlags_NONE)
     end
 
     def teardown()
@@ -55,13 +55,13 @@ class TestSimpleNumber < Test::Unit::TestCase
     end
 
     def test_size()
-        query = Rpm::SolvQuery.new(@sack)
+        query = Rpm::PackageQuery.new(@sack)
         assert_equal(3, query.size(), 'Number of items in the newly created query')
     end
 
     def test_ifilter_name()
         # Test QueryCmp::EQ
-        query = Rpm::SolvQuery.new(@sack)
+        query = Rpm::PackageQuery.new(@sack)
         query.ifilter_name(["pkg"])
         assert_equal(1, query.size())
 
@@ -78,7 +78,7 @@ class TestSimpleNumber < Test::Unit::TestCase
         # ---
 
         # Test QueryCmp::GLOB
-        query = Rpm::SolvQuery.new(@sack)
+        query = Rpm::PackageQuery.new(@sack)
         query.ifilter_name(["pk*"], Common::QueryCmp_GLOB)
         assert_equal(2, query.size())
 

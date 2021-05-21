@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
-class SolvSack;
+class PackageSack;
 
 }  // namespace libdnf::rpm
 
@@ -146,7 +146,7 @@ protected:
     void check_id_in_bitmap_range(Id id) const;
 
 private:
-    friend class rpm::SolvSack;
+    friend class rpm::PackageSack;
     Map map;
 };
 

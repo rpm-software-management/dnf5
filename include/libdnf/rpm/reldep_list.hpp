@@ -31,7 +31,7 @@ namespace libdnf::rpm {
 // forward declarations
 class Package;
 class ReldepListIterator;
-class SolvQuery;
+class PackageQuery;
 
 /// @replaces libdnf/dnf-reldep-list.h:struct:DnfReldepList
 /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:struct:DependencyContainer
@@ -44,7 +44,7 @@ public:
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_new(DnfSack *sack)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:DependencyContainer(DnfSack *sack)
-    explicit ReldepList(const SolvSackWeakPtr & sack);
+    explicit ReldepList(const PackageSackWeakPtr & sack);
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_free(DnfReldepList *reldep_list)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:~DependencyContainer()
@@ -99,12 +99,12 @@ public:
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:count()
     int size() const noexcept;
 
-    SolvSack * get_sack() const;
+    PackageSack * get_sack() const;
 
 private:
     friend ReldepListIterator;
     friend Package;
-    friend SolvQuery;
+    friend PackageQuery;
 
     /// @brief Adds a reldep from Char*. It does not support globs.
     ///

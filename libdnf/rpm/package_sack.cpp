@@ -19,9 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
+#include "package_sack_impl.hpp"
 #include "repo_impl.hpp"
 #include "solv/id_queue.hpp"
-#include "solv_sack_impl.hpp"
 
 #include "libdnf/rpm/repo.hpp"
 
@@ -138,7 +138,7 @@ bool is_superset(const solv::IdQueue & q1, const solv::IdQueue * q2, solv::SolvM
 
 }  // end of anonymous namespace
 
-void SolvSack::Impl::write_main(LibsolvRepoExt & libsolv_repo_ext, bool switchtosolv) {
+void PackageSack::Impl::write_main(LibsolvRepoExt & libsolv_repo_ext, bool switchtosolv) {
     auto & logger = *base->get_logger();
     LibsolvRepo * libsolv_repo = libsolv_repo_ext.repo;
     const char * name = libsolv_repo->name;
@@ -201,7 +201,7 @@ static int write_ext_updateinfo_filter(LibsolvRepo * repo, Repokey * key, void *
     return repo_write_stdkeyfilter(repo, key, nullptr);
 }
 
-void SolvSack::Impl::write_ext(
+void PackageSack::Impl::write_ext(
     LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix) {
     auto & logger = *base->get_logger();
     auto libsolv_repo = libsolv_repo_ext.repo;
@@ -263,7 +263,7 @@ void SolvSack::Impl::write_ext(
     }
 }
 
-void SolvSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQueue & addedfileprovides_inst) {
+void PackageSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQueue & addedfileprovides_inst) {
     int i;
     auto & logger = *base->get_logger();
 
@@ -313,7 +313,7 @@ void SolvSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQu
     }
 }
 
-SolvSack::Impl::RepodataState SolvSack::Impl::load_repo_main(Repo & repo) {
+PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(Repo & repo) {
     RepodataState data_state = RepodataState::NEW;
     auto repo_impl = repo.p_impl.get();
     if (repo_impl->repomd_fn.empty()) {
@@ -365,7 +365,7 @@ SolvSack::Impl::RepodataState SolvSack::Impl::load_repo_main(Repo & repo) {
     return data_state;
 }
 
-SolvSack::Impl::RepodataInfo SolvSack::Impl::load_repo_ext(
+PackageSack::Impl::RepodataInfo PackageSack::Impl::load_repo_ext(
     Repo & repo, const char * suffix, const char * which_filename, int flags, bool (*cb)(LibsolvRepo *, FILE *)) {
     RepodataInfo info;
     auto & logger = *base->get_logger();
@@ -412,14 +412,14 @@ SolvSack::Impl::RepodataInfo SolvSack::Impl::load_repo_ext(
     return info;
 }
 
-void SolvSack::Impl::internalize_libsolv_repos() {
+void PackageSack::Impl::internalize_libsolv_repos() {
     int i;
     LibsolvRepo * libsolv_repo;
 
     FOR_REPOS(i, libsolv_repo) { internalize_libsolv_repo(libsolv_repo); }
 }
 
-void SolvSack::Impl::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
+void PackageSack::Impl::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
     if (auto repo = static_cast<Repo *>(libsolv_repo->appdata)) {
         repo->p_impl->libsolv_repo_ext.internalize();
     } else {
@@ -428,7 +428,7 @@ void SolvSack::Impl::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
     }
 }
 
-void SolvSack::Impl::make_provides_ready() {
+void PackageSack::Impl::make_provides_ready() {
     if (provides_ready) {
         return;
     }
@@ -443,7 +443,7 @@ void SolvSack::Impl::make_provides_ready() {
     provides_ready = true;
 }
 
-bool SolvSack::Impl::load_system_repo() {
+bool PackageSack::Impl::load_system_repo() {
     auto & logger = *base->get_logger();
     auto repo_impl = system_repo->p_impl.get();
     auto id = system_repo->get_id().c_str();
@@ -478,7 +478,7 @@ bool SolvSack::Impl::load_system_repo() {
     return true;
 }
 
-void SolvSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
+void PackageSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
     auto & logger = *base->get_logger();
     auto repo_impl = repo.p_impl.get();
 
@@ -559,24 +559,24 @@ void SolvSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
 }
 
 
-void SolvSack::load_repo(Repo & repo, LoadRepoFlags flags) {
+void PackageSack::load_repo(Repo & repo, LoadRepoFlags flags) {
     auto repo_impl = repo.p_impl.get();
     if (repo_impl->type != Repo::Type::AVAILABLE) {
-        throw LogicError("SolvSack::load_repo(): User can load only \"available\" repository");
+        throw LogicError("PackageSack::load_repo(): User can load only \"available\" repository");
     }
     p_impl->load_available_repo(repo, flags);
 }
 
-void SolvSack::create_system_repo(bool build_cache) {
+void PackageSack::create_system_repo(bool build_cache) {
     if (p_impl->system_repo) {
-        throw LogicError("SolvSack::create_system_repo(): System repo already exists");
+        throw LogicError("PackageSack::create_system_repo(): System repo already exists");
     }
     p_impl->system_repo = std::make_unique<Repo>(SYSTEM_REPO_NAME, *p_impl->base, Repo::Type::SYSTEM);
     p_impl->system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
     p_impl->load_system_repo();
 }
 
-Repo & SolvSack::Impl::get_cmdline_repo() {
+Repo & PackageSack::Impl::get_cmdline_repo() {
     if (cmdline_repo) {
         return *cmdline_repo.get();
     }
@@ -589,7 +589,7 @@ Repo & SolvSack::Impl::get_cmdline_repo() {
     return *cmdline_repo.get();
 }
 
-Package SolvSack::add_cmdline_package(const std::string & fn, bool add_with_hdrid) {
+Package PackageSack::add_cmdline_package(const std::string & fn, bool add_with_hdrid) {
     auto & repo = p_impl->get_cmdline_repo();
     auto new_id = repo.p_impl->add_rpm_package(fn, add_with_hdrid);
 
@@ -598,7 +598,7 @@ Package SolvSack::add_cmdline_package(const std::string & fn, bool add_with_hdri
     return Package(this->get_weak_ptr(), PackageId(new_id));
 }
 
-Repo & SolvSack::Impl::get_system_repo(bool build_cache) {
+Repo & PackageSack::Impl::get_system_repo(bool build_cache) {
     if (system_repo) {
         return *system_repo.get();
     }
@@ -613,7 +613,7 @@ Repo & SolvSack::Impl::get_system_repo(bool build_cache) {
     return *system_repo.get();
 }
 
-Package SolvSack::add_system_package(const std::string & fn, bool add_with_hdrid, bool build_cache) {
+Package PackageSack::add_system_package(const std::string & fn, bool add_with_hdrid, bool build_cache) {
     auto & repo = p_impl->get_system_repo(build_cache);
     auto new_id = repo.p_impl->add_rpm_package(fn, add_with_hdrid);
 
@@ -622,7 +622,7 @@ Package SolvSack::add_system_package(const std::string & fn, bool add_with_hdrid
     return Package(this->get_weak_ptr(), PackageId(new_id));
 }
 
-void SolvSack::dump_debugdata(const std::string & dir) {
+void PackageSack::dump_debugdata(const std::string & dir) {
     Solver * solver = solver_create(p_impl->pool);
 
     try {
@@ -639,16 +639,16 @@ void SolvSack::dump_debugdata(const std::string & dir) {
     solver_free(solver);
 }
 
-SolvSackWeakPtr SolvSack::get_weak_ptr() {
-    return SolvSackWeakPtr(this, &p_impl->data_guard);
+PackageSackWeakPtr PackageSack::get_weak_ptr() {
+    return PackageSackWeakPtr(this, &p_impl->data_guard);
 }
 
-int SolvSack::get_nsolvables() const noexcept {
+int PackageSack::get_nsolvables() const noexcept {
     return p_impl->get_nsolvables();
 };
 
 // TODO(jrohel): we want to change directory for solv(x) cache (into repo metadata directory?)
-std::string SolvSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {
+std::string PackageSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {
     std::filesystem::path cachedir = base->get_config().cachedir().get_value();
     auto fn = cachedir / repoid;
     if (ext) {
@@ -660,8 +660,8 @@ std::string SolvSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, 
     return fn;
 }
 
-SolvSack::SolvSack(Base & base) : p_impl{new Impl(base)} {}
+PackageSack::PackageSack(Base & base) : p_impl{new Impl(base)} {}
 
-SolvSack::~SolvSack() = default;
+PackageSack::~PackageSack() = default;
 
 }  // namespace libdnf::rpm

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_reference.hpp"
 
 #include "libdnf/logger/logger.hpp"
-#include "libdnf/rpm/solv_sack_impl.hpp"
+#include "libdnf/rpm/package_sack_impl.hpp"
 
 #include <solv/chksum.h>
 #include <solv/repo.h>
@@ -46,7 +46,7 @@ inline const char * get_str_from_pool(Id keyname, Id advisory, Pool * pool, int 
     return str;
 }
 
-AdvisoryReference::AdvisoryReference(const libdnf::rpm::SolvSackWeakPtr & sack, AdvisoryId advisory, int index)
+AdvisoryReference::AdvisoryReference(const libdnf::rpm::PackageSackWeakPtr & sack, AdvisoryId advisory, int index)
     : sack(sack)
     , advisory(advisory)
     , index(index) {}

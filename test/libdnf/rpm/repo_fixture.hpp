@@ -24,8 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../testcase_fixture.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/rpm/repo_sack.hpp"
-#include "libdnf/rpm/solv_sack.hpp"
 #include "libdnf/utils/temp.hpp"
 
 
@@ -42,7 +42,7 @@ protected:
 
     std::unique_ptr<libdnf::Base> base;
     libdnf::rpm::RepoSackWeakPtr repo_sack;
-    libdnf::rpm::SolvSackWeakPtr sack;
+    libdnf::rpm::PackageSackWeakPtr sack;
     std::unique_ptr<libdnf::utils::TempDir> temp;
 };
 

@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/option_bool.hpp"
-#include "libdnf/rpm/solv_sack_impl.hpp"
+#include "libdnf/rpm/package_sack_impl.hpp"
 
 #include <fmt/format.h>
 
@@ -67,7 +67,7 @@ RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid,
     }
 
     auto repo = new_repo(repoid);
-    Pool * pool = base->get_rpm_solv_sack()->p_impl->get_pool();
+    Pool * pool = base->get_rpm_package_sack()->p_impl->get_pool();
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, repoid.c_str()), &libsolv_repo_free);
     testcase_add_testtags(libsolv_repo.get(), testcase_file.get(), 0);
     repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
