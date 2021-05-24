@@ -963,12 +963,7 @@ GoalProblem Goal::resolve(bool allow_erasing) {
         p_impl->rpm_goal.set_installonly(installonly_packages);
         p_impl->rpm_goal.set_installonly_limit(cfg_main.installonly_limit().get_value());
     }
-//    libdnf::rpm::PackageQuery package_query(&sack);
-//    package_query.ifilter_name({"dnf-utils"});
-//    printf("HAHAHAHAHAHAHAHAHAHAHA\n")
-//    pool->ignored_weaks = package_query.p_impl->get_map();
     ret |= p_impl->rpm_goal.resolve();
-//    pool->ignored_weaks = nullptr;
     return ret;
 }
 
