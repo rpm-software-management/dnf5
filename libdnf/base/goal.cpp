@@ -363,9 +363,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
 
     auto multilib_policy = cfg_main.multilib_policy().get_value();
     rpm::solv::IdQueue tmp_queue;
-    std::vector<Solvable *> tmp_solvables;
     rpm::PackageQuery base_query(sack);
-    rpm::PackageSet selected(sack);
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
@@ -491,23 +489,23 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             // TODO(jmracek): if reports: self._report_installed(installed)
             // TODO(jmracek) Replace by union query operator
             available |= installed;
-            tmp_solvables.clear();
+            std::vector<Solvable *> tmp_solvables;
             for (auto package_id : *available.p_impl) {
                 Solvable * solvable = rpm::solv::get_solvable(pool, package_id);
                 tmp_solvables.push_back(solvable);
             }
             Id current_name = 0;
-            selected.clear();
+            rpm::PackageSet selected(sack);
+            std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
             {
                 auto * first = tmp_solvables[0];
                 current_name = first->name;
                 selected.p_impl->add_unsafe(pool_solvable2id(pool, first));
             }
-            std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
 
-            for (auto * solvable : tmp_solvables) {
-                if (solvable->name == current_name) {
-                    selected.p_impl->add_unsafe(pool_solvable2id(pool, solvable));
+            for (auto iter = std::next(tmp_solvables.begin()); iter != tmp_solvables.end(); ++iter) {
+                if ((*iter)->name == current_name) {
+                    selected.p_impl->add_unsafe(pool_solvable2id(pool, (*iter)));
                     continue;
                 }
                 if (add_obsoletes) {
@@ -516,8 +514,8 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
                 rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
                 selected.clear();
-                selected.p_impl->add_unsafe(pool_solvable2id(pool, solvable));
-                current_name = solvable->name;
+                selected.p_impl->add_unsafe(pool_solvable2id(pool, (*iter)));
+                current_name = (*iter)->name;
             }
             if (add_obsoletes) {
                 add_obsoletes_to_data(base_query, selected);
