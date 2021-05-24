@@ -379,9 +379,16 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
 
     rpm::PackageQuery installed(query);
     installed.ifilter_installed();
+    for (auto package_id : *installed.p_impl) {
+        add_rpm_goal_report(
+            Goal::Action::INSTALL,
+            GoalProblem::ALREADY_INSLALLED,
+            settings,
+            spec,
+            {rpm::solv::get_nevra(pool, package_id)},
+            false);
+    }
 
-    // TODO(jmracek) if reports:
-    // base._report_already_installed(installed_query)
     if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
         if (!settings.to_repo_ids.empty()) {
             query.ifilter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
@@ -454,7 +461,6 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 }
             }
         }
-        // TODO(jmracek) Report already installed
         // TODO(jmracek) Implement all logic for modules and comps groups
     } else if (multilib_policy == "best") {
         if ((!utils::is_file_pattern(spec) && utils::is_glob_pattern(spec.c_str())) ||
@@ -1150,6 +1156,11 @@ std::string Goal::format_rpm_log(
         case GoalProblem::REMOVAL_OF_PROTECTED:
         case GoalProblem::SOLVER_ERROR:
             throw std::invalid_argument("Unsupported elements for a goal problem");
+        case GoalProblem::ALREADY_INSLALLED:
+            if (additional_data.size() != 1) {
+                throw std::invalid_argument("Incorrect number of elements for ALREADY_INSLALLED");
+            }
+            return ret.append(fmt::format(_("Package \"{}\" is already installed."), *additional_data.begin()));
     }
     return ret;
 }
