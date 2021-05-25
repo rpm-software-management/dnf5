@@ -203,7 +203,8 @@ void packages_to_transaction(
     std::vector<dnfdaemon::DbusTransactionItem> & result,
     const libdnf::transaction::TransactionItemAction action,
     const std::vector<libdnf::rpm::Package> & packages) {
-    std::vector<std::string> attr{"name", "epoch", "version", "release", "arch", "repo", "size", "full_nevra"};
+    std::vector<std::string> attr{
+        "name", "epoch", "version", "release", "arch", "repo", "package_size", "install_size", "full_nevra"};
     for (auto & p : packages) {
         result.push_back(dnfdaemon::DbusTransactionItem(static_cast<unsigned int>(action), package_to_map(p, attr)));
     }

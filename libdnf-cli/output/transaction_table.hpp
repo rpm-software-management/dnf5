@@ -42,14 +42,16 @@ void sort_pkgs_list(std::vector<Package> & list) {
 }
 
 template <class Package>
-static void add_line_into_transaction_table(struct libscols_table *tb, struct libscols_line *parent, std::vector<Package> & pkgs) {
+static void add_line_into_transaction_table(
+    struct libscols_table *tb, struct libscols_line *parent, std::vector<Package> & pkgs, bool removal) {
     // TODO(jrohel): Print relations with obsoleted packages
     sort_pkgs_list(pkgs);
     for (auto & pkg : pkgs) {
         struct libscols_line *ln = scols_table_new_line(tb, parent);
         scols_line_set_data(ln, COL_NEVRA, pkg.get_full_nevra().c_str());
         scols_line_set_data(ln, COL_REPO, pkg.get_repo_id().c_str());
-        scols_line_set_data(ln, COL_SIZE, libdnf::cli::utils::units::format_size(static_cast<int64_t>(pkg.get_package_size())).c_str());
+        uint64_t size = removal ? pkg.get_install_size() : pkg.get_package_size();
+        scols_line_set_data(ln, COL_SIZE, libdnf::cli::utils::units::format_size(static_cast<int64_t>(size)).c_str());
     }
 }
 
@@ -86,31 +88,31 @@ bool print_transaction_table(Goal & goal) {
     if (!installs_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Installing:");
-        add_line_into_transaction_table(tb, ln, installs_pkgs);
+        add_line_into_transaction_table(tb, ln, installs_pkgs, false);
     }
 
     if (!reinstalls_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Reinstalling:");
-        add_line_into_transaction_table(tb, ln, reinstalls_pkgs);
+        add_line_into_transaction_table(tb, ln, reinstalls_pkgs, false);
     }
 
     if (!upgrades_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Upgrading:");
-        add_line_into_transaction_table(tb, ln, upgrades_pkgs);
+        add_line_into_transaction_table(tb, ln, upgrades_pkgs, false);
     }
 
     if (!removes_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Removing:");
-        add_line_into_transaction_table(tb, ln, removes_pkgs);
+        add_line_into_transaction_table(tb, ln, removes_pkgs, true);
     }
 
     if (!downgrades_pkgs.empty()) {
         ln = scols_table_new_line(tb, NULL);
         scols_line_set_data(ln, COL_NEVRA, "Downgrading:");
-        add_line_into_transaction_table(tb, ln, downgrades_pkgs);
+        add_line_into_transaction_table(tb, ln, downgrades_pkgs, false);
     }
 
     scols_print_table(tb);
