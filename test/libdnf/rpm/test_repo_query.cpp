@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -61,7 +61,7 @@ void RepoQueryTest::test_query_basics() {
     CPPUNIT_ASSERT((repo_query == libdnf::Set{repo1, repo2_updates}));
 
     // Tests filter_id method
-    auto repo_query1 = repo_sack.new_query().filter_id(libdnf::sack::QueryCmp::GLOB, "*updates");
+    auto repo_query1 = repo_sack.new_query().filter_id("*updates", libdnf::sack::QueryCmp::GLOB);
     CPPUNIT_ASSERT((repo_query1 == libdnf::Set{repo1_updates, repo2_updates}));
 
     // Tests filter_local method

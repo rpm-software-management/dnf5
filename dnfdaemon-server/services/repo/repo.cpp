@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of dnfdaemon-server: https://github.com/rpm-software-management/libdnf/
 
@@ -250,8 +250,8 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall && call) {
 
     if (patterns.size() > 0) {
         auto query_names = repos_query;
-        repos_query.filter_id(libdnf::sack::QueryCmp::IGLOB, patterns);
-        repos_query |= query_names.filter_name(libdnf::sack::QueryCmp::IGLOB, patterns);
+        repos_query.filter_id(patterns, libdnf::sack::QueryCmp::IGLOB);
+        repos_query |= query_names.filter_name(patterns, libdnf::sack::QueryCmp::IGLOB);
     }
 
     // create reply from the query

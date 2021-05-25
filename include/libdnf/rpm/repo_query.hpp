@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_REPO_QUERY_HPP
 
 #include "libdnf/common/sack/query.hpp"
-#include "libdnf/rpm/repo.hpp"
 #include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/rpm/repo.hpp"
 
 namespace libdnf::rpm {
 
@@ -37,11 +37,11 @@ public:
 #endif
     RepoQuery & filter_enabled(bool enabled);
     RepoQuery & filter_expired(bool expired);
-    RepoQuery & filter_id(sack::QueryCmp cmp, const std::string & pattern);
-    RepoQuery & filter_id(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
+    RepoQuery & filter_id(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    RepoQuery & filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
     RepoQuery & filter_local(bool local);
-    RepoQuery & filter_name(sack::QueryCmp cmp, const std::string & pattern);
-    RepoQuery & filter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
+    RepoQuery & filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    RepoQuery & filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
 private:
     struct F {
@@ -63,12 +63,12 @@ inline RepoQuery & RepoQuery::filter_expired(bool expired) {
     return *this;
 }
 
-inline RepoQuery & RepoQuery::filter_id(sack::QueryCmp cmp, const std::string & pattern) {
+inline RepoQuery & RepoQuery::filter_id(const std::string & pattern, sack::QueryCmp cmp) {
     filter(F::id, cmp, pattern);
     return *this;
 }
 
-inline RepoQuery & RepoQuery::filter_id(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
+inline RepoQuery & RepoQuery::filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
     filter(F::id, cmp, patterns);
     return *this;
 }
@@ -78,12 +78,12 @@ inline RepoQuery & RepoQuery::filter_local(bool local) {
     return *this;
 }
 
-inline RepoQuery & RepoQuery::filter_name(sack::QueryCmp cmp, const std::string & pattern) {
+inline RepoQuery & RepoQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
     filter(F::name, cmp, pattern);
     return *this;
 }
 
-inline RepoQuery & RepoQuery::filter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
+inline RepoQuery & RepoQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
     filter(F::name, cmp, patterns);
     return *this;
 }

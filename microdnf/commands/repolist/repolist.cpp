@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020 Red Hat, Inc.
+Copyright (C) 2019-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -131,8 +131,8 @@ void CmdRepolist::run(Context & ctx) {
 
     if (patterns_to_show.size() > 0) {
         auto query_names = query;
-        query.filter_id(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
-        query |= query_names.filter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
+        query.filter_id(patterns_to_show, libdnf::sack::QueryCmp::IGLOB);
+        query |= query_names.filter_name(patterns_to_show, libdnf::sack::QueryCmp::IGLOB);
     }
 
     bool with_status = enable_disable_option->get_value() == "all";
