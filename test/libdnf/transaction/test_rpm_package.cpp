@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017-2020 Red Hat, Inc.
+Copyright (C) 2017-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -67,7 +67,7 @@ void TransactionRpmPackageTest::test_save_load() {
 
     // get the written transaction
     auto q2 = base2->get_transaction_sack()->new_query();
-    q2.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q2.filter_id(trans->get_id());
     auto trans2 = q2.get();
 
     // check that there's exactly 10 packages

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017-2020 Red Hat, Inc.
+Copyright (C) 2017-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -47,7 +47,7 @@ void TransactionQueryTest::test_filter_id_eq() {
 
     // get the written transaction
     auto q2 = base2->get_transaction_sack()->new_query();
-    q2.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q2.filter_id(trans->get_id());
     auto trans2 = q2.get();
 }
 
@@ -74,13 +74,13 @@ void TransactionQueryTest::test_filter_id_eq_parallel_queries() {
     auto q2 = transaction_sack2->new_query();
     auto q3 = transaction_sack2->new_query();
 
-    q2.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q2.filter_id(trans->get_id());
     auto trans2 = q2.get();
 
     // one item loaded into the sack
     CPPUNIT_ASSERT_EQUAL(1LU, transaction_sack2->get_data().size());
 
-    q3.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q3.filter_id(trans->get_id());
     auto trans3 = q3.get();
 
     // query reused the existing item in the sack

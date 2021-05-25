@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -40,7 +40,7 @@ namespace libdnf::transaction {
 TransactionQuery::TransactionQuery(TransactionSack & sack) : sack{&sack} {}
 
 
-TransactionQuery & TransactionQuery::filter_id(sack::QueryCmp cmp, const std::vector<int64_t> & patterns) {
+TransactionQuery & TransactionQuery::filter_id(const std::vector<int64_t> & patterns, sack::QueryCmp cmp) {
     switch (cmp) {
         case libdnf::sack::QueryCmp::EQ:
             // currently only EQ operator is supported
@@ -122,9 +122,9 @@ TransactionQuery & TransactionQuery::filter_id(sack::QueryCmp cmp, const std::ve
 }
 
 
-TransactionQuery & TransactionQuery::filter_id(sack::QueryCmp cmp, int64_t pattern) {
+TransactionQuery & TransactionQuery::filter_id(int64_t pattern, sack::QueryCmp cmp) {
     std::vector<int64_t> patterns{pattern};
-    return filter_id(cmp, patterns);
+    return filter_id(patterns, cmp);
 }
 
 
