@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_COMPS_GROUP_QUERY_HPP
 
 #include "libdnf/common/sack/query.hpp"
-#include "libdnf/comps/group/group.hpp"
 #include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/comps/group/group.hpp"
 
 #include <memory>
 
@@ -42,10 +42,12 @@ public:
     explicit GroupQuery(const GroupQuery & query);
     ~GroupQuery();
 
-    GroupQuery & filter_groupid(sack::QueryCmp cmp, const std::string & pattern);
-    GroupQuery & filter_groupid(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
-    GroupQuery & filter_name(sack::QueryCmp cmp, const std::string & pattern);
-    GroupQuery & filter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
+    GroupQuery & filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    GroupQuery & filter_groupid(
+        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    GroupQuery & filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    GroupQuery & filter_name(
+        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
     GroupQuery & filter_uservisible(bool value);
     GroupQuery & filter_default(bool value);
     GroupQuery & filter_installed(bool value);
@@ -76,25 +78,25 @@ private:
 };
 
 
-inline GroupQuery & GroupQuery::filter_groupid(sack::QueryCmp cmp, const std::string & pattern) {
+inline GroupQuery & GroupQuery::filter_groupid(const std::string & pattern, sack::QueryCmp cmp) {
     filter(F::groupid, cmp, pattern);
     return *this;
 }
 
 
-inline GroupQuery & GroupQuery::filter_groupid(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
+inline GroupQuery & GroupQuery::filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
     filter(F::groupid, cmp, patterns);
     return *this;
 }
 
 
-inline GroupQuery & GroupQuery::filter_name(sack::QueryCmp cmp, const std::string & pattern) {
+inline GroupQuery & GroupQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
     filter(F::name, cmp, pattern);
     return *this;
 }
 
 
-inline GroupQuery & GroupQuery::filter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
+inline GroupQuery & GroupQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
     filter(F::name, cmp, patterns);
     return *this;
 }

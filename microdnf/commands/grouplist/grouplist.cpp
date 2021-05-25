@@ -126,8 +126,8 @@ void CmdGrouplist::run([[maybe_unused]] Context & ctx) {
     // Filter by patterns if given
     if (patterns_to_show.size() > 0) {
         auto query_names = libdnf::comps::GroupQuery(query);
-        query.filter_groupid(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
-        query |= query_names.filter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
+        query.filter_groupid(patterns_to_show, libdnf::sack::QueryCmp::IGLOB);
+        query |= query_names.filter_name(patterns_to_show, libdnf::sack::QueryCmp::IGLOB);
     } else if (not hidden_option->get_value()) {
         // Filter uservisible only if patterns are not given
         query.filter_uservisible(true);
