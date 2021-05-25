@@ -24,8 +24,6 @@
 
 #include <cstdio>
 #include <filesystem>
-#include <solv/bitmap.h>
-#include <solv/solvable.h>
 
 //#include "../hy-query-private.hpp"
 //#include "../hy-subject.h"

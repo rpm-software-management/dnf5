@@ -27,7 +27,6 @@
 
 #include <map>
 #include <memory>
-#include <solv/pooltypes.h>
 #include <sys/stat.h>
 #include <vector>
 
