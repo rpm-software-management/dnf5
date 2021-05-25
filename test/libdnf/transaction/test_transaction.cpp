@@ -62,7 +62,7 @@ void TransactionTest::test_save_load() {
     // load the saved transaction from database and compare values
     auto base2 = new_base();
     auto q2 = base2->get_transaction_sack()->new_query();
-    q2.ifilter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q2.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
     auto trans2 = q2.get();
 
     CPPUNIT_ASSERT_EQUAL(trans->get_id(), trans2->get_id());
@@ -116,7 +116,7 @@ void TransactionTest::test_update() {
     // load the transction from the database
     auto base2 = new_base();
     auto q2 = base2->get_transaction_sack()->new_query();
-    q2.ifilter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q2.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
     auto trans2 = q2.get();
 
     // check if the values saved during trans->finish() match

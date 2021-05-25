@@ -61,20 +61,20 @@ public:
     explicit Query(const Set<T> & src_set) : Set<T>::Set(src_set) {}
     explicit Query(Set<T> && src_set) : Set<T>::Set(std::move(src_set)) {}
 
-    void ifilter(std::string (*getter)(const T &), QueryCmp cmp, const std::string & pattern);
-    void ifilter(std::vector<std::string> (*getter)(const T &), QueryCmp cmp, const std::string & pattern);
-    void ifilter(std::string (*getter)(const T &), QueryCmp cmp, const std::vector<std::string> & patterns);
-    void ifilter(
+    void filter(std::string (*getter)(const T &), QueryCmp cmp, const std::string & pattern);
+    void filter(std::vector<std::string> (*getter)(const T &), QueryCmp cmp, const std::string & pattern);
+    void filter(std::string (*getter)(const T &), QueryCmp cmp, const std::vector<std::string> & patterns);
+    void filter(
         std::vector<std::string> (*getter)(const T &), QueryCmp cmp, const std::vector<std::string> & patterns);
 
-    void ifilter(int64_t (*getter)(const T &), QueryCmp cmp, int64_t pattern);
-    void ifilter(std::vector<int64_t> (*getter)(const T &), QueryCmp cmp, int64_t pattern);
-    void ifilter(int64_t (*getter)(const T &), QueryCmp cmp, const std::vector<int64_t> & patterns);
-    void ifilter(std::vector<int64_t> (*getter)(const T &), QueryCmp cmp, const std::vector<int64_t> & patterns);
+    void filter(int64_t (*getter)(const T &), QueryCmp cmp, int64_t pattern);
+    void filter(std::vector<int64_t> (*getter)(const T &), QueryCmp cmp, int64_t pattern);
+    void filter(int64_t (*getter)(const T &), QueryCmp cmp, const std::vector<int64_t> & patterns);
+    void filter(std::vector<int64_t> (*getter)(const T &), QueryCmp cmp, const std::vector<int64_t> & patterns);
 
-    void ifilter(bool (*getter)(const T &), QueryCmp cmp, bool pattern);
+    void filter(bool (*getter)(const T &), QueryCmp cmp, bool pattern);
 
-    void ifilter(char * (*getter)(const T &), QueryCmp cmp, const std::string & pattern);
+    void filter(char * (*getter)(const T &), QueryCmp cmp, const std::string & pattern);
 
     /// Get a single object. Raise an exception if none or multiple objects match the query.
     const T & get() const {
@@ -94,7 +94,7 @@ public:
 
 
 template <typename T>
-inline void Query<T>::ifilter(Query<T>::FilterFunctionString * getter, QueryCmp cmp, const std::string & pattern) {
+inline void Query<T>::filter(Query<T>::FilterFunctionString * getter, QueryCmp cmp, const std::string & pattern) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto value = getter(*it);
         if (match_string(value, cmp, pattern)) {
@@ -108,7 +108,7 @@ inline void Query<T>::ifilter(Query<T>::FilterFunctionString * getter, QueryCmp 
 
 
 template <typename T>
-inline void Query<T>::ifilter(
+inline void Query<T>::filter(
     Query<T>::FilterFunctionVectorString * getter, QueryCmp cmp, const std::string & pattern) {
 
     for (auto it = get_data().begin(); it != get_data().end();) {
@@ -122,7 +122,7 @@ inline void Query<T>::ifilter(
 }
 
 template <typename T>
-inline void Query<T>::ifilter(
+inline void Query<T>::filter(
     Query<T>::FilterFunctionString * getter, QueryCmp cmp, const std::vector<std::string> & patterns) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto value = getter(*it);
@@ -135,7 +135,7 @@ inline void Query<T>::ifilter(
 }
 
 template <typename T>
-inline void Query<T>::ifilter(
+inline void Query<T>::filter(
     Query<T>::FilterFunctionVectorString * getter, QueryCmp cmp, const std::vector<std::string> & patterns) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto values = getter(*it);
@@ -148,7 +148,7 @@ inline void Query<T>::ifilter(
 }
 
 template <typename T>
-inline void Query<T>::ifilter(FilterFunctionInt64 * getter, QueryCmp cmp, int64_t pattern) {
+inline void Query<T>::filter(FilterFunctionInt64 * getter, QueryCmp cmp, int64_t pattern) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto value = getter(*it);
         if (match_int64(value, cmp, pattern)) {
@@ -160,7 +160,7 @@ inline void Query<T>::ifilter(FilterFunctionInt64 * getter, QueryCmp cmp, int64_
 }
 
 template <typename T>
-inline void Query<T>::ifilter(FilterFunctionVectorInt64 * getter, QueryCmp cmp, int64_t pattern) {
+inline void Query<T>::filter(FilterFunctionVectorInt64 * getter, QueryCmp cmp, int64_t pattern) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto values = getter(*it);
         if (match_int64(values, cmp, pattern)) {
@@ -172,7 +172,7 @@ inline void Query<T>::ifilter(FilterFunctionVectorInt64 * getter, QueryCmp cmp, 
 }
 
 template <typename T>
-inline void Query<T>::ifilter(FilterFunctionInt64 * getter, QueryCmp cmp, const std::vector<int64_t> & patterns) {
+inline void Query<T>::filter(FilterFunctionInt64 * getter, QueryCmp cmp, const std::vector<int64_t> & patterns) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto value = getter(*it);
         if (match_int64(value, cmp, patterns)) {
@@ -184,7 +184,7 @@ inline void Query<T>::ifilter(FilterFunctionInt64 * getter, QueryCmp cmp, const 
 }
 
 template <typename T>
-inline void Query<T>::ifilter(FilterFunctionVectorInt64 * getter, QueryCmp cmp, const std::vector<int64_t> & patterns) {
+inline void Query<T>::filter(FilterFunctionVectorInt64 * getter, QueryCmp cmp, const std::vector<int64_t> & patterns) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto values = getter(*it);
         if (match_int64(values, cmp, patterns)) {
@@ -197,7 +197,7 @@ inline void Query<T>::ifilter(FilterFunctionVectorInt64 * getter, QueryCmp cmp, 
 
 // TODO: other cmp
 template <typename T>
-inline void Query<T>::ifilter(Query<T>::FilterFunctionBool * getter, QueryCmp cmp, bool pattern) {
+inline void Query<T>::filter(Query<T>::FilterFunctionBool * getter, QueryCmp cmp, bool pattern) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto value = getter(*it);
         if (cmp == QueryCmp::EQ && value == pattern) {
@@ -209,7 +209,7 @@ inline void Query<T>::ifilter(Query<T>::FilterFunctionBool * getter, QueryCmp cm
 }
 
 template <typename T>
-inline void Query<T>::ifilter(Query<T>::FilterFunctionCString * getter, QueryCmp cmp, const std::string & pattern) {
+inline void Query<T>::filter(Query<T>::FilterFunctionCString * getter, QueryCmp cmp, const std::string & pattern) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto value = getter(*it);
         if (match_string(value, cmp, pattern)) {

@@ -245,7 +245,7 @@ void BaseGoalTest::test_install_installed_pkg() {
     sack->add_cmdline_package(rpm_path, false);
 
     libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
-    query.ifilter_available().ifilter_nevra({"cmdline-0:1.2-3.noarch"});
+    query.filter_available().filter_nevra({"cmdline-0:1.2-3.noarch"});
 
     std::vector<std::string> expected = {"cmdline-0:1.2-3.noarch"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -478,7 +478,7 @@ void BaseGoalTest::test_install_or_reinstall() {
 
     libdnf::Goal goal(base.get());
     libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
-    query.ifilter_available().ifilter_nevra({"cmdline-0:1.2-3.noarch"});
+    query.filter_available().filter_nevra({"cmdline-0:1.2-3.noarch"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
     goal.add_rpm_install_or_reinstall(query);
     goal.resolve(false);

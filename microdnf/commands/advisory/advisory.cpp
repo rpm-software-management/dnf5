@@ -172,14 +172,14 @@ void CmdAdvisory::run(Context & ctx) {
 
     auto package_sack = ctx.base.get_rpm_package_sack();
     package_sack->create_system_repo(false);
-    auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
+    auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().filter_enabled(true);
     using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     ctx.load_rpm_repos(enabled_repos, LoadFlags::USE_UPDATEINFO);
 
     libdnf::rpm::PackageQuery package_query(package_sack);
     using QueryCmp = libdnf::sack::QueryCmp;
     if (patterns_to_show.size() > 0) {
-        package_query.ifilter_name(patterns_to_show, QueryCmp::IGLOB);
+        package_query.filter_name(patterns_to_show, QueryCmp::IGLOB);
     }
 
     //DATA IS PREPARED
@@ -187,29 +187,29 @@ void CmdAdvisory::run(Context & ctx) {
     //TODO(amatej): create advisory_query with filters on advisories prensent (if we want to limit by severity, reference..)
     auto advisory_query = ctx.base.get_rpm_advisory_sack()->new_query();
     if (with_cve_option->get_value()) {
-        advisory_query.ifilter_CVE("*", QueryCmp::IGLOB);
+        advisory_query.filter_CVE("*", QueryCmp::IGLOB);
     }
     if (with_bz_option->get_value()) {
-        advisory_query.ifilter_bug("*", QueryCmp::IGLOB);
+        advisory_query.filter_bug("*", QueryCmp::IGLOB);
     }
-    //advisory_query.ifilter_name(QueryCmp::IGLOB, input_name);
-    //advisory_query.ifilter_severity(QueryCmp::EQ, input_severity);
+    //advisory_query.filter_name(QueryCmp::IGLOB, input_name);
+    //advisory_query.filter_severity(QueryCmp::EQ, input_severity);
 
     std::vector<libdnf::advisory::AdvisoryPackage> result_pkgs;
 
     if (availability_option->get_value() == "installed") {
-        auto installed_package_query = package_query.ifilter_installed();
+        auto installed_package_query = package_query.filter_installed();
         result_pkgs = advisory_query.get_advisory_packages(installed_package_query, QueryCmp::LTE);
     } else if (availability_option->get_value() == "available") {
         //TODO(amatej): filter for latest and add kernel..
-        auto installed_package_query = package_query.ifilter_installed();
+        auto installed_package_query = package_query.filter_installed();
         result_pkgs = advisory_query.get_advisory_packages(installed_package_query, QueryCmp::GT);
     } else if (availability_option->get_value() == "all") {
-        auto installed_package_query = package_query.ifilter_installed();
+        auto installed_package_query = package_query.filter_installed();
         result_pkgs =
             advisory_query.get_advisory_packages(installed_package_query, QueryCmp::LT | QueryCmp::EQ | QueryCmp::GT);
     } else if (availability_option->get_value() == "updates") {
-        //auto upgradable_package_query = package_query.ifilter_upgradable().ifilter_nevra(keys, QueryCmp::GT);
+        //auto upgradable_package_query = package_query.filter_upgradable().filter_nevra(keys, QueryCmp::GT);
         //result_pkgs = advisory_query.get_advisory_packages(upgradable_package_query, QueryCmp::LT | QueryCmp::EQ | QueryCmp::GT);
     }
 

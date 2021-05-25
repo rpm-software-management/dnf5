@@ -113,10 +113,10 @@ class TestPackageQuery(unittest.TestCase):
         self.assertLess(prev_id, self.sack.get_nsolvables())
         self.assertGreaterEqual(prev_id, libdnf.rpm.PackageQuery(self.sack).size())
 
-    def test_ifilter_name(self):
+    def test_filter_name(self):
         # Test QueryCmp::EQ
         query = libdnf.rpm.PackageQuery(self.sack)
-        query.ifilter_name(["pkg"])
+        query.filter_name(["pkg"])
         self.assertEqual(query.size(), 1)
         # TODO(dmach): implement __str__()
         self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64"])
@@ -125,7 +125,7 @@ class TestPackageQuery(unittest.TestCase):
 
         # Test QueryCmp::GLOB
         query = libdnf.rpm.PackageQuery(self.sack)
-        query.ifilter_name(["pk*"], libdnf.common.QueryCmp_GLOB)
+        query.filter_name(["pk*"], libdnf.common.QueryCmp_GLOB)
         self.assertEqual(query.size(), 2)
         # TODO(dmach): implement __str__()
         self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])

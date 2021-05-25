@@ -53,28 +53,28 @@ public:
     ///
     /// @param pattern      Pattern used when matching agains advisory names.
     /// @param cmp_type     What comparator to use with pattern, allows: EQ, GLOB, IGLOB.
-    AdvisoryQuery & ifilter_name(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
-    AdvisoryQuery & ifilter_name(
+    AdvisoryQuery & filter_name(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    AdvisoryQuery & filter_name(
         const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    AdvisoryQuery & ifilter_type(const Advisory::Type type, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
-    AdvisoryQuery & ifilter_type(
+    AdvisoryQuery & filter_type(const Advisory::Type type, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    AdvisoryQuery & filter_type(
         const std::vector<Advisory::Type> & types, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    AdvisoryQuery & ifilter_reference(
+    AdvisoryQuery & filter_reference(
         const std::vector<std::string> & reference_id,
         std::vector<AdvisoryReferenceType> types,
         sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
     //TODO(amatej): What about other reference fitlers (title, url?) - do we want them?
-    AdvisoryQuery & ifilter_CVE(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
-    AdvisoryQuery & ifilter_CVE(
+    AdvisoryQuery & filter_CVE(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    AdvisoryQuery & filter_CVE(
         const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
-    AdvisoryQuery & ifilter_bug(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
-    AdvisoryQuery & ifilter_bug(
+    AdvisoryQuery & filter_bug(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    AdvisoryQuery & filter_bug(
         const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    AdvisoryQuery & ifilter_severity(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
-    AdvisoryQuery & ifilter_severity(
+    AdvisoryQuery & filter_severity(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    AdvisoryQuery & filter_severity(
         const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
     //TODO(amatej): this might not be needed and could be possibly removed
@@ -83,7 +83,7 @@ public:
     /// @param package_set  libdnf::rpm::PackageSet used when filtering.
     /// @param cmp_type     Condition to fulfill with packages.
     /// @return This AdvisoryQuery with applied filter.
-    AdvisoryQuery & ifilter_packages(
+    AdvisoryQuery & filter_packages(
         const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
     std::vector<AdvisoryPackage> get_advisory_packages(

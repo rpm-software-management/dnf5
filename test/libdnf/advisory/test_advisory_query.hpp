@@ -32,12 +32,12 @@ class AdvisoryAdvisoryQueryTest : public RepoFixture {
     CPPUNIT_TEST_SUITE(AdvisoryAdvisoryQueryTest);
 
     CPPUNIT_TEST(test_size);
-    CPPUNIT_TEST(test_ifilter_name);
-    CPPUNIT_TEST(test_ifilter_type);
-    CPPUNIT_TEST(test_ifilter_packages);
-    CPPUNIT_TEST(test_ifilter_cve);
-    CPPUNIT_TEST(test_ifilter_bug);
-    CPPUNIT_TEST(test_ifilter_severity);
+    CPPUNIT_TEST(test_filter_name);
+    CPPUNIT_TEST(test_filter_type);
+    CPPUNIT_TEST(test_filter_packages);
+    CPPUNIT_TEST(test_filter_cve);
+    CPPUNIT_TEST(test_filter_bug);
+    CPPUNIT_TEST(test_filter_severity);
     CPPUNIT_TEST(test_get_sorted_advisory_packages);
 
     CPPUNIT_TEST_SUITE_END();
@@ -46,12 +46,12 @@ public:
     void setUp() override;
 
     void test_size();
-    void test_ifilter_name();
-    void test_ifilter_type();
-    void test_ifilter_packages();
-    void test_ifilter_cve();
-    void test_ifilter_bug();
-    void test_ifilter_severity();
+    void test_filter_name();
+    void test_filter_type();
+    void test_filter_packages();
+    void test_filter_cve();
+    void test_filter_bug();
+    void test_filter_severity();
     void test_get_sorted_advisory_packages();
 
 private:

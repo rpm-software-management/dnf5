@@ -128,17 +128,17 @@ void CmdGroupinfo::run([[maybe_unused]] Context & ctx) {
     // Filter by patterns if given
     if (patterns_to_show.size() > 0) {
         auto query_names = libdnf::comps::GroupQuery(query);
-        query.ifilter_groupid(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
-        query |= query_names.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
+        query.filter_groupid(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
+        query |= query_names.filter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
     } else if (not hidden_option->get_value()) {
         // Filter uservisible only if patterns are not given
-        query.ifilter_uservisible(true);
+        query.filter_uservisible(true);
     }
 
     std::set<libdnf::comps::Group> group_list;
 
     auto query_installed = libdnf::comps::GroupQuery(query);
-    query_installed.ifilter_installed(true);
+    query_installed.filter_installed(true);
 
     // --installed -> filter installed groups
     if (installed_option->get_value()) {
@@ -153,7 +153,7 @@ void CmdGroupinfo::run([[maybe_unused]] Context & ctx) {
         }
         // --available / all -> add available not-installed groups into the list
         auto query_available = libdnf::comps::GroupQuery(query);
-        query_available.ifilter_installed(false);
+        query_available.filter_installed(false);
         std::set<std::string> installed_groupids;
         for (auto group: query_installed.list()) {
             installed_groupids.insert(group.get_groupid());

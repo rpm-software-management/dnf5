@@ -55,13 +55,13 @@ AdvisoryQuery & AdvisoryQuery::operator=(AdvisoryQuery && src) noexcept {
     return *this;
 }
 
-AdvisoryQuery & AdvisoryQuery::ifilter_name(const std::string & pattern, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp_type) {
     const std::vector<std::string> patterns = {pattern};
-    ifilter_name(patterns, cmp_type);
+    filter_name(patterns, cmp_type);
     return *this;
 }
 
-AdvisoryQuery & AdvisoryQuery::ifilter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
     auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
     Pool * pool = package_sack.p_impl->get_pool();
     libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
@@ -130,14 +130,14 @@ AdvisoryQuery & AdvisoryQuery::ifilter_name(const std::vector<std::string> & pat
 }
 
 //TODO(amatej): Add a wrapper that accepts string type, eg: "security" not enum
-AdvisoryQuery & AdvisoryQuery::ifilter_type(const Advisory::Type type, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_type(const Advisory::Type type, sack::QueryCmp cmp_type) {
     const std::vector<Advisory::Type> types = {type};
-    ifilter_type(types, cmp_type);
+    filter_type(types, cmp_type);
     return *this;
 }
 
 //TODO(amatej): Add a wrapper that accepts vector of string types, eg: "security", "bugfix" not enums
-AdvisoryQuery & AdvisoryQuery::ifilter_type(const std::vector<AdvisoryType> & types, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_type(const std::vector<AdvisoryType> & types, sack::QueryCmp cmp_type) {
     auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
     Pool * pool = package_sack.p_impl->get_pool();
     libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
@@ -183,7 +183,7 @@ AdvisoryQuery & AdvisoryQuery::ifilter_type(const std::vector<AdvisoryType> & ty
     return *this;
 }
 
-AdvisoryQuery & AdvisoryQuery::ifilter_reference(
+AdvisoryQuery & AdvisoryQuery::filter_reference(
     const std::vector<std::string> & reference_id, std::vector<AdvisoryReferenceType> types, sack::QueryCmp cmp_type) {
     auto package_sack = advisory_sack->base->get_rpm_package_sack();
     libdnf::rpm::solv::SolvMap filter_result(package_sack->p_impl->get_nsolvables());
@@ -246,32 +246,32 @@ AdvisoryQuery & AdvisoryQuery::ifilter_reference(
     }
     return *this;
 }
-AdvisoryQuery & AdvisoryQuery::ifilter_CVE(const std::string & pattern, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_CVE(const std::string & pattern, sack::QueryCmp cmp_type) {
     const std::vector<std::string> patterns = {pattern};
-    ifilter_reference(patterns, {AdvisoryReferenceType::CVE}, cmp_type);
+    filter_reference(patterns, {AdvisoryReferenceType::CVE}, cmp_type);
     return *this;
 }
-AdvisoryQuery & AdvisoryQuery::ifilter_CVE(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
-    ifilter_reference(patterns, {AdvisoryReferenceType::CVE}, cmp_type);
+AdvisoryQuery & AdvisoryQuery::filter_CVE(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
+    filter_reference(patterns, {AdvisoryReferenceType::CVE}, cmp_type);
     return *this;
 }
 
-AdvisoryQuery & AdvisoryQuery::ifilter_bug(const std::string & pattern, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_bug(const std::string & pattern, sack::QueryCmp cmp_type) {
     const std::vector<std::string> patterns = {pattern};
-    ifilter_reference(patterns, {AdvisoryReferenceType::BUGZILLA}, cmp_type);
+    filter_reference(patterns, {AdvisoryReferenceType::BUGZILLA}, cmp_type);
     return *this;
 }
-AdvisoryQuery & AdvisoryQuery::ifilter_bug(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
-    ifilter_reference(patterns, {AdvisoryReferenceType::BUGZILLA}, cmp_type);
+AdvisoryQuery & AdvisoryQuery::filter_bug(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
+    filter_reference(patterns, {AdvisoryReferenceType::BUGZILLA}, cmp_type);
     return *this;
 }
 
-AdvisoryQuery & AdvisoryQuery::ifilter_severity(const std::string & pattern, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_severity(const std::string & pattern, sack::QueryCmp cmp_type) {
     const std::vector<std::string> patterns = {pattern};
-    ifilter_severity(patterns, cmp_type);
+    filter_severity(patterns, cmp_type);
     return *this;
 }
-AdvisoryQuery & AdvisoryQuery::ifilter_severity(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_severity(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
     auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
     Pool * pool = package_sack.p_impl->get_pool();
     libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
@@ -309,7 +309,7 @@ AdvisoryQuery & AdvisoryQuery::ifilter_severity(const std::vector<std::string> &
 }
 
 //TODO(amatej): this might not be needed and could be possibly removed
-AdvisoryQuery & AdvisoryQuery::ifilter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
     auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
     Pool * pool = package_sack.p_impl->get_pool();
     libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());

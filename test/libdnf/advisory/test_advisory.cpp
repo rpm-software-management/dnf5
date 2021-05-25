@@ -38,7 +38,7 @@ void AdvisoryAdvisoryTest::setUp() {
     RepoFixture::add_repo_repomd("repomd-repo1");
     advisory_sack = base->get_rpm_advisory_sack();
     libdnf::advisory::AdvisoryQuery q =
-        advisory_sack->new_query().ifilter_type(libdnf::advisory::Advisory::Type::SECURITY);
+        advisory_sack->new_query().filter_type(libdnf::advisory::Advisory::Type::SECURITY);
     advisories = q.get_advisories();
     advisory = &(advisories[0]);
 }
@@ -91,7 +91,7 @@ void AdvisoryAdvisoryTest::test_get_collections() {
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), mods[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("ethereum"), mods[1].get_name());
 
-    auto adv_vec = advisory_sack->new_query().ifilter_name("DNF-2020-1").get_advisories();
+    auto adv_vec = advisory_sack->new_query().filter_name("DNF-2020-1").get_advisories();
     CPPUNIT_ASSERT_EQUAL(1lu, adv_vec.size());
     libdnf::advisory::Advisory * advisory2 = &(adv_vec[0]);
     colls = advisory2->get_collections();

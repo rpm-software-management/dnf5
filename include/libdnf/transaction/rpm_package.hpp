@@ -97,7 +97,7 @@ public:
     void set_arch(const std::string & value) { arch = value; }
 
     /*
-    // TODO(dmach): Implement TransactionSack.new_filter().ifilter_package_pattern()
+    // TODO(dmach): Implement TransactionSack.new_filter().filter_package_pattern()
     static std::vector<int64_t> searchTransactions(
         libdnf::utils::SQLite3 & conn, const std::vector<std::string> & patterns);
 

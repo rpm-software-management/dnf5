@@ -39,7 +39,7 @@ namespace {
 
 void add_obsoletes_to_data(const libdnf::rpm::PackageQuery & base_query, libdnf::rpm::PackageSet & data) {
     libdnf::rpm::PackageQuery obsoletes_query(base_query);
-    obsoletes_query.ifilter_obsoletes(data);
+    obsoletes_query.filter_obsoletes(data);
     data |= obsoletes_query;
 }
 
@@ -50,8 +50,8 @@ static libdnf::rpm::PackageQuery running_kernel_check_path(libdnf::rpm::PackageS
     libdnf::rpm::PackageQuery q(sack.get_weak_ptr(), libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
 
     // Do we really need it? dnf_sack_make_provides_ready(sack);
-    q.ifilter_installed();
-    q.ifilter_file({fn});
+    q.filter_installed();
+    q.filter_file({fn});
     return q;
 }
 
@@ -378,7 +378,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
     bool add_obsoletes = cfg_main.obsoletes().get_value() && has_just_name;
 
     rpm::PackageQuery installed(query);
-    installed.ifilter_installed();
+    installed.filter_installed();
     for (auto package_id : *installed.p_impl) {
         add_rpm_goal_report(
             Goal::Action::INSTALL,
@@ -391,7 +391,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
 
     if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
         if (!settings.to_repo_ids.empty()) {
-            query.ifilter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
+            query.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
             query |= installed;
             if (query.empty()) {
                 add_rpm_goal_report(
@@ -468,7 +468,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
              (!nevra_pair.second.get_epoch().empty() || !nevra_pair.second.get_version().empty() ||
               !nevra_pair.second.get_release().empty() || !nevra_pair.second.get_arch().empty()))) {
             if (!settings.to_repo_ids.empty()) {
-                query.ifilter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
+                query.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
                 query |= installed;
                 if (query.empty()) {
                     add_rpm_goal_report(
@@ -477,7 +477,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 }
             }
             rpm::PackageQuery available(query);
-            available.ifilter_available();
+            available.filter_available();
 
             // keep only installed that has a partner in available
             std::unordered_set<Id> names;
@@ -534,7 +534,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 add_obsoletes_to_data(base_query, query);
             }
             if (!settings.to_repo_ids.empty()) {
-                query.ifilter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
+                query.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
                 query |= installed;
                 if (query.empty()) {
                     add_rpm_goal_report(
@@ -584,7 +584,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(const std::string & spec, GoalJobS
 
     // Report when package is not installed
     rpm::PackageQuery query_installed(query);
-    query_installed.ifilter_installed();
+    query_installed.filter_installed();
     if (query_installed.empty()) {
         add_rpm_goal_report(Goal::Action::REINSTALL, GoalProblem::NOT_INSTALLED, settings, spec, {}, strict);
         return strict ? GoalProblem::NOT_INSTALLED : GoalProblem::NO_PROBLEM;
@@ -599,17 +599,17 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(const std::string & spec, GoalJobS
 
     // keeps only available packages that are installed with same NEVRA
     rpm::PackageQuery relevant_available(query);
-    relevant_available.ifilter_nevra(query_installed);
+    relevant_available.filter_nevra(query_installed);
     if (relevant_available.empty()) {
         rpm::PackageQuery relevant_available_na(query);
-        relevant_available_na.ifilter_name_arch(query_installed);
+        relevant_available_na.filter_name_arch(query_installed);
         if (!relevant_available_na.empty()) {
             add_rpm_goal_report(
                 Goal::Action::REINSTALL, GoalProblem::INSTALLED_IN_DIFFERENT_VERSION, settings, spec, {}, strict);
             return strict ? GoalProblem::INSTALLED_IN_DIFFERENT_VERSION : GoalProblem::NO_PROBLEM;
         } else {
             rpm::PackageQuery relevant_available_n(query);
-            relevant_available_n.ifilter_name(query_installed);
+            relevant_available_n.filter_name(query_installed);
             if (relevant_available_n.empty()) {
                 add_rpm_goal_report(Goal::Action::REINSTALL, GoalProblem::NOT_INSTALLED, settings, spec, {}, strict);
                 return strict ? GoalProblem::NOT_INSTALLED : GoalProblem::NO_PROBLEM;
@@ -624,7 +624,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(const std::string & spec, GoalJobS
     // TODO(jmracek) Implement fitering from_repo_ids
 
     if (!settings.to_repo_ids.empty()) {
-        relevant_available.ifilter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
+        relevant_available.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
         if (relevant_available.empty()) {
             add_rpm_goal_report(
                 Goal::Action::REINSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
@@ -671,7 +671,7 @@ GoalProblem Goal::Impl::report_not_found(
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery query(sack, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
     if (action == Action::REMOVE) {
-        query.ifilter_installed();
+        query.filter_installed();
     }
     auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, settings, true);
     if (!nevra_pair_reports.first) {
@@ -680,7 +680,7 @@ GoalProblem Goal::Impl::report_not_found(
         if (settings.report_hint) {
             rpm::PackageQuery hints(sack);
             if (action == Action::REMOVE) {
-                hints.ifilter_installed();
+                hints.filter_installed();
             }
             if (!settings.ignore_case && settings.with_nevra) {
                 rpm::PackageQuery icase(hints);
@@ -696,7 +696,7 @@ GoalProblem Goal::Impl::report_not_found(
             }
             rpm::PackageQuery alternatives(hints);
             std::string alternatives_provide = fmt::format("alternative-for({})", pkg_spec);
-            alternatives.ifilter_provides({alternatives_provide});
+            alternatives.filter_provides({alternatives_provide});
             if (!alternatives.empty()) {
                 std::set<std::string> hints;
                 for (auto pkg : alternatives) {
@@ -708,7 +708,7 @@ GoalProblem Goal::Impl::report_not_found(
         // TODO(jmracek) - report hints (icase, alternative providers)
         return GoalProblem::NOT_FOUND;
     }
-    query.ifilter_repoid({"src", "nosrc"}, sack::QueryCmp::NEQ);
+    query.filter_repoid({"src", "nosrc"}, sack::QueryCmp::NEQ);
     if (query.empty()) {
         add_rpm_goal_report(action, GoalProblem::ONLY_SRC, settings, pkg_spec, {}, strict);
         return GoalProblem::ONLY_SRC;
@@ -724,7 +724,7 @@ void Goal::Impl::add_rpms_to_goal() {
     auto & cfg_main = base->get_config();
 
     rpm::PackageQuery installed(sack, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
-    installed.ifilter_installed();
+    installed.filter_installed();
     for (auto & [action, ids, settings] : rpm_ids) {
         switch (action) {
             case Action::INSTALL: {
@@ -735,7 +735,7 @@ void Goal::Impl::add_rpms_to_goal() {
                     nevras.push_back(rpm::solv::get_nevra(pool, id));
                 }
                 rpm::PackageQuery query(installed);
-                query.ifilter_nevra(nevras);
+                query.filter_nevra(nevras);
                 for (auto package_id : *query.p_impl) {
                     //  TODO(jmracek)  report already installed nevra
                     ids.push_back(package_id);
@@ -793,7 +793,7 @@ void Goal::Impl::add_remove_to_goal(const std::string & spec, GoalJobSettings & 
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove(base->get_config());
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery query(sack);
-    query.ifilter_installed();
+    query.filter_installed();
 
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
@@ -829,22 +829,22 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
     }
     // Report when package is not installed
     rpm::PackageQuery all_installed(sack, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
-    all_installed.ifilter_installed();
+    all_installed.filter_installed();
     // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
     bool obsoleters = false;
     if (obsoletes && action != Action::DOWNGRADE) {
         rpm::PackageQuery obsoleters_query(query);
-        obsoleters_query.ifilter_obsoletes(all_installed);
+        obsoleters_query.filter_obsoletes(all_installed);
         if (!obsoleters_query.empty()) {
             obsoleters = true;
         }
     }
     rpm::PackageQuery relevant_installed_na(all_installed);
     if (!obsoleters) {
-        relevant_installed_na.ifilter_name_arch(query);
+        relevant_installed_na.filter_name_arch(query);
         if (relevant_installed_na.empty()) {
             rpm::PackageQuery relevant_installed_n(all_installed);
-            relevant_installed_n.ifilter_name(query);
+            relevant_installed_n.filter_name(query);
             if (relevant_installed_n.empty()) {
                 add_rpm_goal_report(action, GoalProblem::NOT_INSTALLED, settings, spec, {}, false);
             } else {
@@ -856,19 +856,19 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
 
     bool add_obsoletes = obsoletes && nevra_pair.second.has_just_name();
     rpm::PackageQuery installed(query);
-    installed.ifilter_installed();
+    installed.filter_installed();
     // TODO(jmracek) Apply latest filters on installed (or later)
     if (add_obsoletes) {
         rpm::PackageQuery obsoletes_query(base_query);
-        obsoletes_query.ifilter_available();
+        obsoletes_query.filter_available();
         // TODO(jmracek) use upgrades + installed when the filter will be available rpm::PackageQuery what_obsoletes(query);
-        // what_obsoletes.ifilter_upgrades()
-        obsoletes_query.ifilter_obsoletes(query);
+        // what_obsoletes.filter_upgrades()
+        obsoletes_query.filter_obsoletes(query);
         // obsoletes = self.sack.query().available().filterm(obsoletes=installed_query.union(q.upgrades()))
         query |= obsoletes_query;
     }
     if (!settings.to_repo_ids.empty()) {
-        query.ifilter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
+        query.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
         query |= installed;
         if (query.empty()) {
             add_rpm_goal_report(action, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, false);
@@ -889,7 +889,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
             rpm_goal.add_distro_sync(tmp_queue, strict, best, clean_requirements_on_remove);
             break;
         case Action::DOWNGRADE: {
-            query.ifilter_available().ifilter_downgrades();
+            query.filter_available().filter_downgrades();
             Pool * pool = sack->p_impl->get_pool();
             std::vector<Solvable *> tmp_solvables;
             for (auto pkg_id : *query.p_impl) {
@@ -1025,7 +1025,7 @@ GoalProblem Goal::resolve(bool allow_erasing) {
     {
         auto & protected_packages = cfg_main.protected_packages().get_value();
         rpm::PackageQuery protected_query(sack, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
-        protected_query.ifilter_name(protected_packages);
+        protected_query.filter_name(protected_packages);
         p_impl->rpm_goal.add_protected_packages(*protected_query.p_impl);
     }
 

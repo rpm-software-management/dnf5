@@ -32,7 +32,7 @@ using namespace libdnf::transaction;
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionQueryTest);
 
 
-void TransactionQueryTest::test_ifilter_id_eq() {
+void TransactionQueryTest::test_filter_id_eq() {
     auto base = new_base();
 
     // create a new empty transaction
@@ -47,12 +47,12 @@ void TransactionQueryTest::test_ifilter_id_eq() {
 
     // get the written transaction
     auto q2 = base2->get_transaction_sack()->new_query();
-    q2.ifilter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q2.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
     auto trans2 = q2.get();
 }
 
 
-void TransactionQueryTest::test_ifilter_id_eq_parallel_queries() {
+void TransactionQueryTest::test_filter_id_eq_parallel_queries() {
     auto base = new_base();
     auto transaction_sack = base->get_transaction_sack();
 
@@ -74,13 +74,13 @@ void TransactionQueryTest::test_ifilter_id_eq_parallel_queries() {
     auto q2 = transaction_sack2->new_query();
     auto q3 = transaction_sack2->new_query();
 
-    q2.ifilter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q2.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
     auto trans2 = q2.get();
 
     // one item loaded into the sack
     CPPUNIT_ASSERT_EQUAL(1LU, transaction_sack2->get_data().size());
 
-    q3.ifilter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q3.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
     auto trans3 = q3.get();
 
     // query reused the existing item in the sack

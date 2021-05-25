@@ -70,7 +70,7 @@ void CmdDownload::run(Context & ctx) {
     auto package_sack = ctx.base.get_rpm_package_sack();
 
     // To search in available repositories (available packages)
-    auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().ifilter_enabled(true);
+    auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().filter_enabled(true);
     using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     ctx.load_rpm_repos(enabled_repos, flags);

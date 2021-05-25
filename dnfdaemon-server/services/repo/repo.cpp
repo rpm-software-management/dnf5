@@ -118,7 +118,7 @@ dnfdaemon::KeyValueMap repo_to_map(
                 uint64_t size = 0;
                 libdnf::rpm::PackageQuery query(package_sack);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                query.ifilter_repoid(reponames);
+                query.filter_repoid(reponames);
                 for (auto pkg : query) {
                     size += pkg.get_package_size();
                 }
@@ -146,14 +146,14 @@ dnfdaemon::KeyValueMap repo_to_map(
                 auto package_sack = base.get_rpm_package_sack();
                 libdnf::rpm::PackageQuery query(package_sack, libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                query.ifilter_repoid(reponames);
+                query.filter_repoid(reponames);
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::available_pkgs: {
                 auto package_sack = base.get_rpm_package_sack();
                 libdnf::rpm::PackageQuery query(package_sack);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                query.ifilter_repoid(reponames);
+                query.filter_repoid(reponames);
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::metalink: {
@@ -243,15 +243,15 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall && call) {
     auto repos_query = rpm_repo_sack->new_query();
 
     if (enable_disable == "enabled") {
-        repos_query.ifilter_enabled(true);
+        repos_query.filter_enabled(true);
     } else if (enable_disable == "disabled") {
-        repos_query.ifilter_enabled(false);
+        repos_query.filter_enabled(false);
     }
 
     if (patterns.size() > 0) {
         auto query_names = repos_query;
-        repos_query.ifilter_id(libdnf::sack::QueryCmp::IGLOB, patterns);
-        repos_query |= query_names.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns);
+        repos_query.filter_id(libdnf::sack::QueryCmp::IGLOB, patterns);
+        repos_query |= query_names.filter_name(libdnf::sack::QueryCmp::IGLOB, patterns);
     }
 
     // create reply from the query

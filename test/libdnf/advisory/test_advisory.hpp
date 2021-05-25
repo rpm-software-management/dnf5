@@ -48,7 +48,7 @@ public:
     void test_get_type();
     void test_get_type_cstring();
     void test_get_severity();
-    //void test_ifilter_package();
+    //void test_filter_package();
 
     void test_get_references();
     void test_get_collections();

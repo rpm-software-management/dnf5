@@ -56,15 +56,15 @@ void RepoQueryTest::test_query_basics() {
     CPPUNIT_ASSERT_EQUAL(repo_query.size(), static_cast<size_t>(4));
     CPPUNIT_ASSERT((repo_query == libdnf::Set{repo1, repo2, repo1_updates, repo2_updates}));
 
-    // Tests ifilter_enabled method
-    repo_query.ifilter_enabled(true);
+    // Tests filter_enabled method
+    repo_query.filter_enabled(true);
     CPPUNIT_ASSERT((repo_query == libdnf::Set{repo1, repo2_updates}));
 
-    // Tests ifilter_id method
-    auto repo_query1 = repo_sack.new_query().ifilter_id(libdnf::sack::QueryCmp::GLOB, "*updates");
+    // Tests filter_id method
+    auto repo_query1 = repo_sack.new_query().filter_id(libdnf::sack::QueryCmp::GLOB, "*updates");
     CPPUNIT_ASSERT((repo_query1 == libdnf::Set{repo1_updates, repo2_updates}));
 
-    // Tests ifilter_local method
-    repo_query1 = repo_sack.new_query().ifilter_local(false);
+    // Tests filter_local method
+    repo_query1 = repo_sack.new_query().filter_local(false);
     CPPUNIT_ASSERT((repo_query1 == libdnf::Set{repo2, repo1_updates, repo2_updates}));
 }

@@ -49,15 +49,15 @@ public:
     TransactionQuery(TransactionSack & sack);
 
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.dbSelect(int64_t transaction_id)
-    TransactionQuery & ifilter_id(sack::QueryCmp cmp, int64_t pattern);
-    TransactionQuery & ifilter_id(sack::QueryCmp cmp, const std::vector<int64_t> & pattern);
+    TransactionQuery & filter_id(sack::QueryCmp cmp, int64_t pattern);
+    TransactionQuery & filter_id(sack::QueryCmp cmp, const std::vector<int64_t> & pattern);
 
 private:
     friend TransactionSack;
     TransactionSack * sack = nullptr;
 
-    // Load Transaction objects during first ifilter call.
-    // The following ifilter calls only modify the previously created set of Transactions.
+    // Load Transaction objects during first filter call.
+    // The following filter calls only modify the previously created set of Transactions.
     bool initialized = false;
 
     struct F {

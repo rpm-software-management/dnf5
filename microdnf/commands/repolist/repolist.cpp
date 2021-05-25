@@ -124,15 +124,15 @@ void CmdRepolist::run(Context & ctx) {
 
     auto query = ctx.base.get_rpm_repo_sack()->new_query();
     if (enable_disable_option->get_value() == "enabled") {
-        query.ifilter_enabled(true);
+        query.filter_enabled(true);
     } else if (enable_disable_option->get_value() == "disabled") {
-        query.ifilter_enabled(false);
+        query.filter_enabled(false);
     }
 
     if (patterns_to_show.size() > 0) {
         auto query_names = query;
-        query.ifilter_id(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
-        query |= query_names.ifilter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
+        query.filter_id(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
+        query |= query_names.filter_name(libdnf::sack::QueryCmp::IGLOB, patterns_to_show);
     }
 
     bool with_status = enable_disable_option->get_value() == "all";

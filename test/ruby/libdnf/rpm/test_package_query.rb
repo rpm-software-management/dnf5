@@ -59,10 +59,10 @@ class TestSimpleNumber < Test::Unit::TestCase
         assert_equal(3, query.size(), 'Number of items in the newly created query')
     end
 
-    def test_ifilter_name()
+    def test_filter_name()
         # Test QueryCmp::EQ
         query = Rpm::PackageQuery.new(@sack)
-        query.ifilter_name(["pkg"])
+        query.filter_name(["pkg"])
         assert_equal(1, query.size())
 
         # TODO(dmach): implement each() so the query can be easily iterated or converted to an array
@@ -79,7 +79,7 @@ class TestSimpleNumber < Test::Unit::TestCase
 
         # Test QueryCmp::GLOB
         query = Rpm::PackageQuery.new(@sack)
-        query.ifilter_name(["pk*"], Common::QueryCmp_GLOB)
+        query.filter_name(["pk*"], Common::QueryCmp_GLOB)
         assert_equal(2, query.size())
 
         # TODO(dmach): implement each() so the query can be easily iterated or converted to an array

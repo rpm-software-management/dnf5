@@ -49,8 +49,8 @@ void CompsGroupTest::test_load() {
 
     comps.load_from_file(data_path / "core.xml", reponame);
     auto q_core = comps.get_group_sack().new_query();
-    q_core.ifilter_installed(false);
-    q_core.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "core");
+    q_core.filter_installed(false);
+    q_core.filter_groupid(libdnf::sack::QueryCmp::EQ, "core");
     auto core = q_core.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
     CPPUNIT_ASSERT_EQUAL(std::string("Core"), core.get_name());
@@ -77,8 +77,8 @@ void CompsGroupTest::test_load() {
 
     comps.load_from_file(data_path / "standard.xml", reponame);
     auto q_standard = comps.get_group_sack().new_query();
-    q_standard.ifilter_installed(false);
-    q_standard.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "standard");
+    q_standard.filter_installed(false);
+    q_standard.filter_groupid(libdnf::sack::QueryCmp::EQ, "standard");
     auto standard = q_standard.get();
     CPPUNIT_ASSERT_EQUAL(std::string("standard"), standard.get_groupid());
     CPPUNIT_ASSERT_EQUAL(std::string("Standard"), standard.get_name());
@@ -110,7 +110,7 @@ void CompsGroupTest::test_load_defaults() {
 
     comps.load_from_file(data_path / "core-empty.xml", reponame);
     auto q_core_empty = comps.get_group_sack().new_query();
-    q_core_empty.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "core");
+    q_core_empty.filter_groupid(libdnf::sack::QueryCmp::EQ, "core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
     CPPUNIT_ASSERT_EQUAL(std::string(""), core_empty.get_name());
@@ -137,7 +137,7 @@ void CompsGroupTest::test_merge() {
     comps.load_from_file(data_path / "core-v2.xml", reponame);
 
     auto q_core2 = comps.get_group_sack().new_query();
-    q_core2.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "core");
+    q_core2.filter_groupid(libdnf::sack::QueryCmp::EQ, "core");
     auto core2 = q_core2.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core2.get_groupid());
     CPPUNIT_ASSERT_EQUAL(std::string("Core v2"), core2.get_name());
@@ -176,7 +176,7 @@ void CompsGroupTest::test_merge_with_empty() {
     comps.load_from_file(data_path / "core-empty.xml", reponame);
 
     auto q_core_empty = comps.get_group_sack().new_query();
-    q_core_empty.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "core");
+    q_core_empty.filter_groupid(libdnf::sack::QueryCmp::EQ, "core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
     CPPUNIT_ASSERT_EQUAL(std::string("Core"), core_empty.get_name());
@@ -206,7 +206,7 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
     comps.load_from_file(data_path / "core.xml", reponame);
 
     auto q_core = comps.get_group_sack().new_query();
-    q_core.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "core");
+    q_core.filter_groupid(libdnf::sack::QueryCmp::EQ, "core");
     auto core = q_core.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
     CPPUNIT_ASSERT_EQUAL(std::string("Core"), core.get_name());
@@ -240,7 +240,7 @@ void CompsGroupTest::test_dump_and_load() {
 
     comps.load_from_file(data_path / "standard.xml", reponame);
     auto q_standard = comps.get_group_sack().new_query();
-    q_standard.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "standard");
+    q_standard.filter_groupid(libdnf::sack::QueryCmp::EQ, "standard");
     auto standard = q_standard.get();
     
     auto dumped_standard_path = std::filesystem::temp_directory_path() / "dumped-standard.xml";
@@ -249,7 +249,7 @@ void CompsGroupTest::test_dump_and_load() {
     comps2.load_from_file(dumped_standard_path, reponame);
 
     auto q_dumped_standard = comps2.get_group_sack().new_query();
-    q_dumped_standard.ifilter_groupid(libdnf::sack::QueryCmp::EQ, "standard");
+    q_dumped_standard.filter_groupid(libdnf::sack::QueryCmp::EQ, "standard");
     auto dumped_standard = q_dumped_standard.get();
 
     CPPUNIT_ASSERT_EQUAL(std::string("standard"), dumped_standard.get_groupid());

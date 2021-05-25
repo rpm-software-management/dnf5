@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 // TransactionSack and TransactionQuery are different than any other similar objects.
 // TransactionSack is loaded lazily any time a TransactionQuery retrieves a Transaction from the database.
 // The filters should make a query to the database and return a list of matching transction IDs
-// and the IDs should be passed  to ifilter_id() to load the Transaction objects.
+// and the IDs should be passed  to filter_id() to load the Transaction objects.
 
 
 #include "libdnf/transaction/query.hpp"
@@ -40,7 +40,7 @@ namespace libdnf::transaction {
 TransactionQuery::TransactionQuery(TransactionSack & sack) : sack{&sack} {}
 
 
-TransactionQuery & TransactionQuery::ifilter_id(sack::QueryCmp cmp, const std::vector<int64_t> & patterns) {
+TransactionQuery & TransactionQuery::filter_id(sack::QueryCmp cmp, const std::vector<int64_t> & patterns) {
     switch (cmp) {
         case libdnf::sack::QueryCmp::EQ:
             // currently only EQ operator is supported
@@ -117,14 +117,14 @@ TransactionQuery & TransactionQuery::ifilter_id(sack::QueryCmp cmp, const std::v
         initialized = true;
     }
 
-    ifilter(F::id, cmp, patterns);
+    filter(F::id, cmp, patterns);
     return *this;
 }
 
 
-TransactionQuery & TransactionQuery::ifilter_id(sack::QueryCmp cmp, int64_t pattern) {
+TransactionQuery & TransactionQuery::filter_id(sack::QueryCmp cmp, int64_t pattern) {
     std::vector<int64_t> patterns{pattern};
-    return ifilter_id(cmp, patterns);
+    return filter_id(cmp, patterns);
 }
 
 

@@ -246,7 +246,7 @@ inline static void filter_glob_internal(
     }
 }
 
-PackageQuery & PackageQuery::ifilter_name(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_name(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
     solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
@@ -333,7 +333,7 @@ PackageQuery & PackageQuery::ifilter_name(const std::vector<std::string> & patte
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_name(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_name(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     if (cmp_type != sack::QueryCmp::EQ && cmp_type != sack::QueryCmp::NEQ) {
         throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
     }
@@ -366,7 +366,7 @@ PackageQuery & PackageQuery::ifilter_name(const PackageSet & package_set, libdnf
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_name_arch(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_name_arch(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     if (cmp_type != sack::QueryCmp::EQ && cmp_type != sack::QueryCmp::NEQ) {
         throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
     }
@@ -439,7 +439,7 @@ inline static void filter_evr_internal(
     query_result &= filter_result;
 }
 
-PackageQuery & PackageQuery::ifilter_evr(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_evr(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Pool * pool = p_impl->sack->p_impl->get_pool();
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::GT:
@@ -463,7 +463,7 @@ PackageQuery & PackageQuery::ifilter_evr(const std::vector<std::string> & patter
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_arch(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_arch(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
     solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
@@ -630,7 +630,7 @@ inline static void filter_nevra_internal(
     }
 }
 
-PackageQuery & PackageQuery::ifilter_nevra(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_nevra(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -658,7 +658,7 @@ PackageQuery & PackageQuery::ifilter_nevra(const std::vector<std::string> & patt
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_nevra(const libdnf::rpm::Nevra & pattern, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_nevra(const libdnf::rpm::Nevra & pattern, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -681,7 +681,7 @@ PackageQuery & PackageQuery::ifilter_nevra(const libdnf::rpm::Nevra & pattern, l
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_nevra(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_nevra(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     if (cmp_type != sack::QueryCmp::EQ && cmp_type != sack::QueryCmp::NEQ) {
         throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
     }
@@ -731,7 +731,7 @@ inline static void filter_version_internal(
     solv_free(formated_c_pattern);
 }
 
-PackageQuery & PackageQuery::ifilter_version(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_version(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -799,7 +799,7 @@ inline static void filter_release_internal(
     solv_free(formated_c_pattern);
 }
 
-PackageQuery & PackageQuery::ifilter_release(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_release(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -852,7 +852,7 @@ PackageQuery & PackageQuery::ifilter_release(const std::vector<std::string> & pa
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_repoid(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_repoid(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -915,7 +915,7 @@ PackageQuery & PackageQuery::ifilter_repoid(const std::vector<std::string> & pat
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_sourcerpm(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_sourcerpm(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -976,7 +976,7 @@ PackageQuery & PackageQuery::ifilter_sourcerpm(const std::vector<std::string> & 
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_epoch(const std::vector<unsigned long> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_epoch(const std::vector<unsigned long> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -1052,7 +1052,7 @@ PackageQuery & PackageQuery::ifilter_epoch(const std::vector<unsigned long> & pa
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_epoch(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_epoch(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -1182,7 +1182,7 @@ static void filter_dataiterator_internal(
     }
 }
 
-PackageQuery & PackageQuery::ifilter_file(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_file(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Pool * pool = get_sack()->p_impl->get_pool();
 
     filter_dataiterator_internal(pool, SOLVABLE_FILELIST, *p_impl, cmp_type, patterns);
@@ -1190,7 +1190,7 @@ PackageQuery & PackageQuery::ifilter_file(const std::vector<std::string> & patte
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_description(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_description(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Pool * pool = get_sack()->p_impl->get_pool();
 
     filter_dataiterator_internal(pool, SOLVABLE_DESCRIPTION, *p_impl, cmp_type, patterns);
@@ -1198,7 +1198,7 @@ PackageQuery & PackageQuery::ifilter_description(const std::vector<std::string> 
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_summary(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_summary(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Pool * pool = get_sack()->p_impl->get_pool();
 
     filter_dataiterator_internal(pool, SOLVABLE_SUMMARY, *p_impl, cmp_type, patterns);
@@ -1206,7 +1206,7 @@ PackageQuery & PackageQuery::ifilter_summary(const std::vector<std::string> & pa
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_url(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_url(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Pool * pool = get_sack()->p_impl->get_pool();
 
     filter_dataiterator_internal(pool, SOLVABLE_URL, *p_impl, cmp_type, patterns);
@@ -1214,7 +1214,7 @@ PackageQuery & PackageQuery::ifilter_url(const std::vector<std::string> & patter
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_location(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_location(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -1252,7 +1252,7 @@ PackageQuery & PackageQuery::ifilter_location(const std::vector<std::string> & p
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_provides(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_provides(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -1309,7 +1309,7 @@ void PackageQuery::Impl::str2reldep_internal(
     }
 }
 
-PackageQuery & PackageQuery::ifilter_provides(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_provides(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective
@@ -1321,9 +1321,9 @@ PackageQuery & PackageQuery::ifilter_provides(const std::vector<std::string> & p
     Impl::str2reldep_internal(reldep_list, cmp_type, patterns);
 
     if (cmp_not) {
-        return ifilter_provides(reldep_list, libdnf::sack::QueryCmp::NEQ);
+        return filter_provides(reldep_list, libdnf::sack::QueryCmp::NEQ);
     } else {
-        return ifilter_provides(reldep_list, libdnf::sack::QueryCmp::EQ);
+        return filter_provides(reldep_list, libdnf::sack::QueryCmp::EQ);
     }
 }
 
@@ -1728,48 +1728,48 @@ void PackageQuery::Impl::filter_nevra(
     }
 }
 
-PackageQuery & PackageQuery::ifilter_conflicts(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_conflicts(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, reldep_list);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_conflicts(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_conflicts(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, patterns);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_conflicts(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_conflicts(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, package_set);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_enhances(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_enhances(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_ENHANCES, cmp_type, reldep_list);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_enhances(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_enhances(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_ENHANCES, cmp_type, patterns);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_enhances(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_enhances(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_ENHANCES, cmp_type, package_set);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_obsoletes(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_obsoletes(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_OBSOLETES, cmp_type, reldep_list);
 
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_obsoletes(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_obsoletes(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_OBSOLETES, cmp_type, patterns);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_obsoletes(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_obsoletes(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not;
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ:
@@ -1825,67 +1825,67 @@ PackageQuery & PackageQuery::ifilter_obsoletes(const PackageSet & package_set, l
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_recommends(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_recommends(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_RECOMMENDS, cmp_type, reldep_list);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_recommends(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_recommends(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_RECOMMENDS, cmp_type, patterns);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_recommends(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_recommends(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_RECOMMENDS, cmp_type, package_set);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_requires(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_requires(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_REQUIRES, cmp_type, reldep_list);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_requires(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_requires(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_REQUIRES, cmp_type, patterns);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_requires(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_requires(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_REQUIRES, cmp_type, package_set);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_suggests(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_suggests(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_SUGGESTS, cmp_type, reldep_list);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_suggests(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_suggests(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_SUGGESTS, cmp_type, patterns);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_suggests(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_suggests(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_SUGGESTS, cmp_type, package_set);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_supplements(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_supplements(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, reldep_list);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_supplements(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_supplements(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, patterns);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_supplements(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_supplements(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     Impl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, package_set);
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_advisories(
+PackageQuery & PackageQuery::filter_advisories(
     const libdnf::advisory::AdvisoryQuery & advisory_query, libdnf::sack::QueryCmp cmp_type) {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
@@ -1954,7 +1954,7 @@ PackageQuery & PackageQuery::ifilter_advisories(
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_installed() {
+PackageQuery & PackageQuery::filter_installed() {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
     auto * installed_repo = pool->installed;
@@ -1981,7 +1981,7 @@ PackageQuery & PackageQuery::ifilter_installed() {
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_available() {
+PackageQuery & PackageQuery::filter_available() {
     Pool * pool = p_impl->sack->p_impl->get_pool();
     auto * installed_repo = pool->installed;
     if (installed_repo == nullptr) {
@@ -2002,7 +2002,7 @@ PackageQuery & PackageQuery::ifilter_available() {
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_upgrades() {
+PackageQuery & PackageQuery::filter_upgrades() {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
     auto * installed_repo = pool->installed;
@@ -2027,7 +2027,7 @@ PackageQuery & PackageQuery::ifilter_upgrades() {
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_downgrades() {
+PackageQuery & PackageQuery::filter_downgrades() {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
     auto * installed_repo = pool->installed;
@@ -2053,7 +2053,7 @@ PackageQuery & PackageQuery::ifilter_downgrades() {
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_upgradable() {
+PackageQuery & PackageQuery::filter_upgradable() {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
     auto * installed_repo = pool->installed;
@@ -2092,7 +2092,7 @@ PackageQuery & PackageQuery::ifilter_upgradable() {
     return *this;
 }
 
-PackageQuery & PackageQuery::ifilter_downgradable() {
+PackageQuery & PackageQuery::filter_downgradable() {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
     auto * installed_repo = pool->installed;
@@ -2184,7 +2184,7 @@ static int filter_latest_sortcmp_byarch(const void * ap, const void * bp, void *
     return *(Id *)ap - *(Id *)bp;
 }
 
-PackageQuery & PackageQuery::ifilter_latest(int limit) {
+PackageQuery & PackageQuery::filter_latest(int limit) {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
 
@@ -2230,7 +2230,7 @@ static inline bool priority_solvable_cmp_key(const Solvable * first, const Solva
     return first->repo->priority > second->repo->priority;
 }
 
-PackageQuery & PackageQuery::ifilter_priority() {
+PackageQuery & PackageQuery::filter_priority() {
     auto sack = get_sack();
     Pool * pool = sack->p_impl->get_pool();
 

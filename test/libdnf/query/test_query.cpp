@@ -40,9 +40,9 @@ class TestQuery : public libdnf::sack::Query<QueryItem> {
 public:
     using Query<QueryItem>::Query;
 
-    TestQuery & ifilter_enabled(bool enabled);
-    TestQuery & ifilter_id(libdnf::sack::QueryCmp cmp, int64_t id);
-    TestQuery & ifilter_name(libdnf::sack::QueryCmp cmp, const std::string & name);
+    TestQuery & filter_enabled(bool enabled);
+    TestQuery & filter_id(libdnf::sack::QueryCmp cmp, int64_t id);
+    TestQuery & filter_name(libdnf::sack::QueryCmp cmp, const std::string & name);
 
 private:
     struct F {
@@ -52,18 +52,18 @@ private:
     };
 };
 
-TestQuery & TestQuery::ifilter_enabled(bool enabled) {
-    ifilter(F::enabled, libdnf::sack::QueryCmp::EQ, enabled);
+TestQuery & TestQuery::filter_enabled(bool enabled) {
+    filter(F::enabled, libdnf::sack::QueryCmp::EQ, enabled);
     return *this;
 }
 
-TestQuery & TestQuery::ifilter_id(libdnf::sack::QueryCmp cmp, int64_t id) {
-    ifilter(F::id, cmp, id);
+TestQuery & TestQuery::filter_id(libdnf::sack::QueryCmp cmp, int64_t id) {
+    filter(F::id, cmp, id);
     return *this;
 }
 
-TestQuery & TestQuery::ifilter_name(libdnf::sack::QueryCmp cmp, const std::string & name) {
-    ifilter(F::name, cmp, name);
+TestQuery & TestQuery::filter_name(libdnf::sack::QueryCmp cmp, const std::string & name) {
+    filter(F::name, cmp, name);
     return *this;
 }
 
@@ -81,25 +81,25 @@ void QueryTest::test_query_basics() {
     auto q1 = q;
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(3));
 
-    // test ifilter_enabled()
-    q1.ifilter_enabled(true);
+    // test filter_enabled()
+    q1.filter_enabled(true);
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(2));
     CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{true, 4, "item4"}, {true, 10, "item10"}}));
 
-    // test ifilter_name()
-    q1.ifilter_name(libdnf::sack::QueryCmp::EQ, "item10");
+    // test filter_name()
+    q1.filter_name(libdnf::sack::QueryCmp::EQ, "item10");
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(1));
     CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{true, 10, "item10"}}));
 
-    // test ifilter_id()
+    // test filter_id()
     q1 = q;
-    q1.ifilter_id(libdnf::sack::QueryCmp::GTE, 6);
+    q1.filter_id(libdnf::sack::QueryCmp::GTE, 6);
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(2));
     CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{false, 6, "item6"}, {true, 10, "item10"}}));
 
     // test chaining of filter calling
     q1 = q;
-    q1.ifilter_name(libdnf::sack::QueryCmp::GLOB, "item?").ifilter_enabled(false);
+    q1.filter_name(libdnf::sack::QueryCmp::GLOB, "item?").filter_enabled(false);
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(1));
     CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{false, 6, "item6"}}));
 }

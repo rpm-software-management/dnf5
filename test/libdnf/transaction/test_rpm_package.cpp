@@ -67,7 +67,7 @@ void TransactionRpmPackageTest::test_save_load() {
 
     // get the written transaction
     auto q2 = base2->get_transaction_sack()->new_query();
-    q2.ifilter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
+    q2.filter_id(libdnf::sack::QueryCmp::EXACT, trans->get_id());
     auto trans2 = q2.get();
 
     // check that there's exactly 10 packages

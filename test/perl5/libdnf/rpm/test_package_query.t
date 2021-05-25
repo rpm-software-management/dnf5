@@ -66,7 +66,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 # Test QueryCmp::EQ
 {
     my $query = new libdnf::rpm::PackageQuery($sack);
-    $query->ifilter_name(["pkg"]);
+    $query->filter_name(["pkg"]);
     is($query->size(), 1);
 
     my @expected = ("pkg-1.2-3.x86_64");
@@ -84,7 +84,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 # Test QueryCmp::GLOB
 {
     my $query = new libdnf::rpm::PackageQuery($sack);
-    $query->ifilter_name(["pk*"], $libdnf::common::QueryCmp_GLOB);
+    $query->filter_name(["pk*"], $libdnf::common::QueryCmp_GLOB);
     is($query->size(), 2);
 
     my @expected = ("pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64");

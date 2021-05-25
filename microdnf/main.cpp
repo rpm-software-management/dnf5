@@ -299,7 +299,7 @@ int main(int argc, char * argv[]) {
     for (const auto & setopt : context.setopts) {
         auto last_dot_pos = setopt.first.rfind('.');
         auto repo_pattern = setopt.first.substr(0, last_dot_pos);
-        auto query = rpm_repo_sack->new_query().ifilter_id(libdnf::sack::QueryCmp::GLOB, repo_pattern);
+        auto query = rpm_repo_sack->new_query().filter_id(libdnf::sack::QueryCmp::GLOB, repo_pattern);
         auto key = setopt.first.substr(last_dot_pos + 1);
         for (auto & repo : query.get_data()) {
             try {

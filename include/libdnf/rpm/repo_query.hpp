@@ -35,13 +35,13 @@ public:
 #ifndef SWIG
     using Query<RepoWeakPtr>::Query;
 #endif
-    RepoQuery & ifilter_enabled(bool enabled);
-    RepoQuery & ifilter_expired(bool expired);
-    RepoQuery & ifilter_id(sack::QueryCmp cmp, const std::string & pattern);
-    RepoQuery & ifilter_id(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
-    RepoQuery & ifilter_local(bool local);
-    RepoQuery & ifilter_name(sack::QueryCmp cmp, const std::string & pattern);
-    RepoQuery & ifilter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
+    RepoQuery & filter_enabled(bool enabled);
+    RepoQuery & filter_expired(bool expired);
+    RepoQuery & filter_id(sack::QueryCmp cmp, const std::string & pattern);
+    RepoQuery & filter_id(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
+    RepoQuery & filter_local(bool local);
+    RepoQuery & filter_name(sack::QueryCmp cmp, const std::string & pattern);
+    RepoQuery & filter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns);
 
 private:
     struct F {
@@ -53,38 +53,38 @@ private:
     };
 };
 
-inline RepoQuery & RepoQuery::ifilter_enabled(bool enabled) {
-    ifilter(F::enabled, sack::QueryCmp::EQ, enabled);
+inline RepoQuery & RepoQuery::filter_enabled(bool enabled) {
+    filter(F::enabled, sack::QueryCmp::EQ, enabled);
     return *this;
 }
 
-inline RepoQuery & RepoQuery::ifilter_expired(bool expired) {
-    ifilter(F::expired, sack::QueryCmp::EQ, expired);
+inline RepoQuery & RepoQuery::filter_expired(bool expired) {
+    filter(F::expired, sack::QueryCmp::EQ, expired);
     return *this;
 }
 
-inline RepoQuery & RepoQuery::ifilter_id(sack::QueryCmp cmp, const std::string & pattern) {
-    ifilter(F::id, cmp, pattern);
+inline RepoQuery & RepoQuery::filter_id(sack::QueryCmp cmp, const std::string & pattern) {
+    filter(F::id, cmp, pattern);
     return *this;
 }
 
-inline RepoQuery & RepoQuery::ifilter_id(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
-    ifilter(F::id, cmp, patterns);
+inline RepoQuery & RepoQuery::filter_id(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
+    filter(F::id, cmp, patterns);
     return *this;
 }
 
-inline RepoQuery & RepoQuery::ifilter_local(bool local) {
-    ifilter(F::local, sack::QueryCmp::EQ, local);
+inline RepoQuery & RepoQuery::filter_local(bool local) {
+    filter(F::local, sack::QueryCmp::EQ, local);
     return *this;
 }
 
-inline RepoQuery & RepoQuery::ifilter_name(sack::QueryCmp cmp, const std::string & pattern) {
-    ifilter(F::name, cmp, pattern);
+inline RepoQuery & RepoQuery::filter_name(sack::QueryCmp cmp, const std::string & pattern) {
+    filter(F::name, cmp, pattern);
     return *this;
 }
 
-inline RepoQuery & RepoQuery::ifilter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
-    ifilter(F::name, cmp, patterns);
+inline RepoQuery & RepoQuery::filter_name(sack::QueryCmp cmp, const std::vector<std::string> & patterns) {
+    filter(F::name, cmp, patterns);
     return *this;
 }
 
