@@ -675,7 +675,10 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx) {
     if (auto comment = ctx.get_comment()) {
         transaction->set_comment(comment);
     }
-    transaction->set_releasever(ctx.base.get_vars()->get_value("releasever"));
+    auto vars = ctx.base.get_vars();
+    if (vars->contains("releasever")) {
+        transaction->set_releasever(vars->get_value("releasever"));
+    }
     auto arguments = ctx.get_prg_arguments();
     std::string cmd_line;
     for (size_t i = 0; i < arguments.size(); ++i) {

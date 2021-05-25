@@ -244,8 +244,10 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(libdnf::Base * base, 
     if (!comment.empty()) {
         transaction->set_comment(comment);
     }
-    // TODO(jrohel): What if the "releasever" variable is not set?
-    transaction->set_releasever(base->get_vars()->get_value("releasever"));
+    auto vars = base->get_vars();
+    if (vars->contains("releasever")) {
+        transaction->set_releasever(base->get_vars()->get_value("releasever"));
+    }
 
     // TODO (mblaha): command line for the transaction?
     //transaction->set_cmdline(cmd_line);
