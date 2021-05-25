@@ -79,43 +79,43 @@ private:
 
 
 inline GroupQuery & GroupQuery::filter_groupid(const std::string & pattern, sack::QueryCmp cmp) {
-    filter(F::groupid, cmp, pattern);
+    filter(F::groupid, pattern, cmp);
     return *this;
 }
 
 
 inline GroupQuery & GroupQuery::filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
-    filter(F::groupid, cmp, patterns);
+    filter(F::groupid, patterns, cmp);
     return *this;
 }
 
 
 inline GroupQuery & GroupQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
-    filter(F::name, cmp, pattern);
+    filter(F::name, pattern, cmp);
     return *this;
 }
 
 
 inline GroupQuery & GroupQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
-    filter(F::name, cmp, patterns);
+    filter(F::name, patterns, cmp);
     return *this;
 }
 
 
 inline GroupQuery & GroupQuery::filter_default(bool value) {
-    filter(F::is_default, sack::QueryCmp::EQ, value);
+    filter(F::is_default, value, sack::QueryCmp::EQ);
     return *this;
 }
 
 
 inline GroupQuery & GroupQuery::filter_uservisible(bool value) {
-    filter(F::is_uservisible, sack::QueryCmp::EQ, value);
+    filter(F::is_uservisible, value, sack::QueryCmp::EQ);
     return *this;
 }
 
 
 inline GroupQuery & GroupQuery::filter_installed(bool value) {
-    filter(F::is_installed, sack::QueryCmp::EQ, value);
+    filter(F::is_installed, value, sack::QueryCmp::EQ);
     return *this;
 }
 

@@ -54,37 +54,37 @@ private:
 };
 
 inline RepoQuery & RepoQuery::filter_enabled(bool enabled) {
-    filter(F::enabled, sack::QueryCmp::EQ, enabled);
+    filter(F::enabled, enabled, sack::QueryCmp::EQ);
     return *this;
 }
 
 inline RepoQuery & RepoQuery::filter_expired(bool expired) {
-    filter(F::expired, sack::QueryCmp::EQ, expired);
+    filter(F::expired, expired, sack::QueryCmp::EQ);
     return *this;
 }
 
 inline RepoQuery & RepoQuery::filter_id(const std::string & pattern, sack::QueryCmp cmp) {
-    filter(F::id, cmp, pattern);
+    filter(F::id, pattern, cmp);
     return *this;
 }
 
 inline RepoQuery & RepoQuery::filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
-    filter(F::id, cmp, patterns);
+    filter(F::id, patterns, cmp);
     return *this;
 }
 
 inline RepoQuery & RepoQuery::filter_local(bool local) {
-    filter(F::local, sack::QueryCmp::EQ, local);
+    filter(F::local, local, sack::QueryCmp::EQ);
     return *this;
 }
 
 inline RepoQuery & RepoQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
-    filter(F::name, cmp, pattern);
+    filter(F::name, pattern, cmp);
     return *this;
 }
 
 inline RepoQuery & RepoQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
-    filter(F::name, cmp, patterns);
+    filter(F::name, patterns, cmp);
     return *this;
 }
 

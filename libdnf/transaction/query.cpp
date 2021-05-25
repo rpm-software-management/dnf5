@@ -117,7 +117,7 @@ TransactionQuery & TransactionQuery::filter_id(const std::vector<int64_t> & patt
         initialized = true;
     }
 
-    filter(F::id, cmp, patterns);
+    filter(F::id, patterns, cmp);
     return *this;
 }
 

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -41,8 +41,8 @@ public:
     using Query<QueryItem>::Query;
 
     TestQuery & filter_enabled(bool enabled);
-    TestQuery & filter_id(libdnf::sack::QueryCmp cmp, int64_t id);
-    TestQuery & filter_name(libdnf::sack::QueryCmp cmp, const std::string & name);
+    TestQuery & filter_id(int64_t id, libdnf::sack::QueryCmp cmp);
+    TestQuery & filter_name(const std::string & name, libdnf::sack::QueryCmp cmp);
 
 private:
     struct F {
@@ -53,17 +53,17 @@ private:
 };
 
 TestQuery & TestQuery::filter_enabled(bool enabled) {
-    filter(F::enabled, libdnf::sack::QueryCmp::EQ, enabled);
+    filter(F::enabled, enabled, libdnf::sack::QueryCmp::EQ);
     return *this;
 }
 
-TestQuery & TestQuery::filter_id(libdnf::sack::QueryCmp cmp, int64_t id) {
-    filter(F::id, cmp, id);
+TestQuery & TestQuery::filter_id(int64_t id, libdnf::sack::QueryCmp cmp) {
+    filter(F::id, id, cmp);
     return *this;
 }
 
-TestQuery & TestQuery::filter_name(libdnf::sack::QueryCmp cmp, const std::string & name) {
-    filter(F::name, cmp, name);
+TestQuery & TestQuery::filter_name(const std::string & name, libdnf::sack::QueryCmp cmp) {
+    filter(F::name, name, cmp);
     return *this;
 }
 
@@ -87,19 +87,19 @@ void QueryTest::test_query_basics() {
     CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{true, 4, "item4"}, {true, 10, "item10"}}));
 
     // test filter_name()
-    q1.filter_name(libdnf::sack::QueryCmp::EQ, "item10");
+    q1.filter_name("item10", libdnf::sack::QueryCmp::EQ);
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(1));
     CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{true, 10, "item10"}}));
 
     // test filter_id()
     q1 = q;
-    q1.filter_id(libdnf::sack::QueryCmp::GTE, 6);
+    q1.filter_id(6, libdnf::sack::QueryCmp::GTE);
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(2));
     CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{false, 6, "item6"}, {true, 10, "item10"}}));
 
     // test chaining of filter calling
     q1 = q;
-    q1.filter_name(libdnf::sack::QueryCmp::GLOB, "item?").filter_enabled(false);
+    q1.filter_name("item?", libdnf::sack::QueryCmp::GLOB).filter_enabled(false);
     CPPUNIT_ASSERT_EQUAL(q1.size(), static_cast<size_t>(1));
     CPPUNIT_ASSERT((q1 == libdnf::Set<QueryItem>{{false, 6, "item6"}}));
 }
