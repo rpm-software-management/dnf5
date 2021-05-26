@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2021 Red Hat, Inc.
 
 This file is part of dnfdaemon-server: https://github.com/rpm-software-management/libdnf/
 
@@ -17,26 +17,23 @@ You should have received a copy of the GNU General Public License
 along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DNFDAEMON_SERVER_SERVICES_RPM_RPM_HPP
-#define DNFDAEMON_SERVER_SERVICES_RPM_RPM_HPP
+#ifndef DNFDAEMON_SERVER_SERVICES_GOAL_GOAL_HPP
+#define DNFDAEMON_SERVER_SERVICES_GOAL_GOAL_HPP
 
 #include "dnfdaemon-server/session.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
 
-class Rpm : public IDbusSessionService {
+class Goal : public IDbusSessionService {
 public:
     using IDbusSessionService::IDbusSessionService;
-    ~Rpm() = default;
+    ~Goal() = default;
     void dbus_register();
     void dbus_deregister();
 
 private:
-    sdbus::MethodReply list(sdbus::MethodCall && call);
-    sdbus::MethodReply install(sdbus::MethodCall && call);
-    sdbus::MethodReply upgrade(sdbus::MethodCall && call);
-    sdbus::MethodReply remove(sdbus::MethodCall && call);
-    sdbus::MethodReply downgrade(sdbus::MethodCall && call);
+    sdbus::MethodReply resolve(sdbus::MethodCall && call);
+    sdbus::MethodReply do_transaction(sdbus::MethodCall && call);
 };
 
 #endif

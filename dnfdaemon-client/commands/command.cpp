@@ -40,7 +40,7 @@ void TransactionCommand::run_transaction(Context & ctx) {
     options["allow_erasing"] = ctx.allow_erasing.get_value();
     std::vector<dnfdaemon::DbusTransactionItem> transaction;
     ctx.session_proxy->callMethod("resolve")
-        .onInterface(dnfdaemon::INTERFACE_RPM)
+        .onInterface(dnfdaemon::INTERFACE_GOAL)
         .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(options)
         .storeResultsTo(transaction);
@@ -61,7 +61,7 @@ void TransactionCommand::run_transaction(Context & ctx) {
     // do the transaction
     options.clear();
     ctx.session_proxy->callMethod("do_transaction")
-        .onInterface(dnfdaemon::INTERFACE_RPM)
+        .onInterface(dnfdaemon::INTERFACE_GOAL)
         .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(options);
 }
