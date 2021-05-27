@@ -42,6 +42,14 @@ class RepoTest(support.InstallrootCase):
                     dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
+                    dbus.String('full_nevra'): dbus.String('one-0:2-1.noarch', variant_level=1),
+                    dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
+                    signature=dbus.Signature('sv')),
+                dbus.Dictionary({
+                    dbus.String('full_nevra'): dbus.String('one-0:2-1.src', variant_level=1),
+                    dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
+                    signature=dbus.Signature('sv')),
+                dbus.Dictionary({
                     dbus.String('full_nevra'): dbus.String('two-0:2-2.noarch', variant_level=1),
                     dbus.String('repo'): dbus.String('rpm-repo2', variant_level=1)},
                     signature=dbus.Signature('sv')),
@@ -72,6 +80,14 @@ class RepoTest(support.InstallrootCase):
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
                     dbus.String('full_nevra'): dbus.String('one-0:1-1.src', variant_level=1),
+                    dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
+                    signature=dbus.Signature('sv')),
+                dbus.Dictionary({
+                    dbus.String('full_nevra'): dbus.String('one-0:2-1.noarch', variant_level=1),
+                    dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
+                    signature=dbus.Signature('sv')),
+                dbus.Dictionary({
+                    dbus.String('full_nevra'): dbus.String('one-0:2-1.src', variant_level=1),
                     dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
             ],
