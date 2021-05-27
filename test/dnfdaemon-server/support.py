@@ -1,4 +1,4 @@
-# Copyright (C) 2020 Red Hat, Inc.
+# Copyright (C) 2020-2021 Red Hat, Inc.
 # 
 # This file is part of dnfdaemon-server: https://github.com/rpm-software-management/libdnf/
 # 
@@ -15,7 +15,11 @@
 # You should have received a copy of the GNU General Public License
 # along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
+import dbus
 import os
+import shutil
+import tempfile
+import unittest
 
 # the following settings come from cmake and are passed as ENVIRONMENT variables in CMakeLists.txt
 PROJECT_BINARY_DIR = os.environ["PROJECT_BINARY_DIR"]
@@ -25,4 +29,46 @@ DNFDAEMON_OBJECT_PATH = '/' + DNFDAEMON_BUS_NAME.replace('.', '/')
 
 IFACE_SESSION_MANAGER = '{}.SessionManager'.format(DNFDAEMON_BUS_NAME)
 IFACE_REPO = '{}.rpm.Repo'.format(DNFDAEMON_BUS_NAME)
+IFACE_REPOCONF = '{}.rpm.RepoConf'.format(DNFDAEMON_BUS_NAME)
 IFACE_RPM = '{}.rpm.Rpm'.format(DNFDAEMON_BUS_NAME)
+IFACE_GOAL = '{}.Goal'.format(DNFDAEMON_BUS_NAME)
+
+
+
+class InstallrootCase(unittest.TestCase):
+
+    def setUp(self):
+        super(InstallrootCase, self).setUp()
+        self.maxDiff = None
+
+        self.installroot = tempfile.mkdtemp(prefix="dnfdaemon-test-")
+        self.reposdir = os.path.join(PROJECT_BINARY_DIR, "test/data/repos-rpm-conf.d")
+        self.config_file_path = os.path.join(self.installroot, 'etc/dnf/dnf.conf')
+        os.makedirs(os.path.dirname(self.config_file_path), exist_ok=True)
+        with open(self.config_file_path, 'w') as f:
+            f.write('')
+
+        self.bus = dbus.SystemBus()
+        self.iface_session = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, DNFDAEMON_OBJECT_PATH),
+            dbus_interface=IFACE_SESSION_MANAGER)
+        self.session = self.iface_session.open_session({
+            "config_file_path": self.config_file_path,
+            "installroot": self.installroot,
+            "cachedir": os.path.join(self.installroot, "var/cache/dnf"),
+            "reposdir": self.reposdir,
+        })
+        self.iface_repo = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+            dbus_interface=IFACE_REPO)
+        self.iface_rpm = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+            dbus_interface=IFACE_RPM)
+        self.iface_goal = dbus.Interface(
+            self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
+            dbus_interface=IFACE_GOAL)
+
+
+    def tearDown(self):
+        self.iface_session.close_session(self.session)
+        shutil.rmtree(self.installroot)

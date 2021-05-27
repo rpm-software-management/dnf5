@@ -17,34 +17,10 @@
 
 import dbus
 import os
-import shutil
-import tempfile
-import unittest
 
 import support
 
-class RepoTest(unittest.TestCase):
-
-    def setUp(self):
-        self.installroot = tempfile.mkdtemp(prefix="dnfdaemon-test-")
-        self.reposdir = os.path.join(support.PROJECT_BINARY_DIR, "test/data/repos-rpm-conf.d")
-
-        self.bus = dbus.SystemBus()
-        self.iface_session = dbus.Interface(
-            self.bus.get_object(support.DNFDAEMON_BUS_NAME, support.DNFDAEMON_OBJECT_PATH),
-            dbus_interface=support.IFACE_SESSION_MANAGER)
-        self.session = self.iface_session.open_session({
-            "installroot": self.installroot,
-            "cachedir": os.path.join(self.installroot, "var/cache/dnf"),
-            "reposdir": self.reposdir,
-        })
-        self.iface_repo = dbus.Interface(
-            self.bus.get_object(support.DNFDAEMON_BUS_NAME, self.session),
-            dbus_interface=support.IFACE_REPO)
-
-    def tearDown(self):
-        self.iface_session.close_session(self.session)
-        shutil.rmtree(self.installroot)
+class RepoTest(support.InstallrootCase):
 
     def test_list_repos(self):
         # get list of all repositories
