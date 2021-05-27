@@ -1,17 +1,17 @@
 # Copyright (C) 2020 Red Hat, Inc.
-# 
+#
 # This file is part of dnfdaemon-server: https://github.com/rpm-software-management/libdnf/
-# 
+#
 # Dnfdaemon-server is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 2 of the License, or
 # (at your option) any later version.
-# 
+#
 # Dnfdaemon-server is distributed in the hope that it will be useful,
 # but WITHOUT ANY WARRANTY; without even the implied warranty of
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 # GNU General Public License for more details.
-# 
+#
 # You should have received a copy of the GNU General Public License
 # along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 
@@ -23,7 +23,6 @@ import unittest
 
 import support
 
-IFACE_REPOCONF = '{}.rpm.RepoConf'.format(support.DNFDAEMON_BUS_NAME)
 
 REPO_TEMPLATE = '''[{reponame}]
 name=Repository {reponame}
@@ -38,38 +37,18 @@ def configure_repo(config_file, reponame):
         f.write(REPO_TEMPLATE.format(reponame=reponame))
 
 
-class RepoConfTest(unittest.TestCase):
+class RepoConfTest(support.InstallrootCase):
 
     def setUp(self):
-        # prepare install root with repository configuration
-        self.installroot = tempfile.mkdtemp(prefix="dnfdaemon-test-")
-        config_file_path = os.path.join(self.installroot, 'etc/dnf/dnf.conf')
-        reposdir = os.path.join(self.installroot, 'etc/yum.repos.d')
-        configure_repo(config_file_path, 'main_repo')
-        configure_repo(os.path.join(reposdir, 'repo1.repo'), 'repo1')
-        configure_repo(os.path.join(reposdir, 'repo2.repo'), 'repo2')
-        # get the session for the installroot
-        self.bus = dbus.SystemBus()
-        self.iface_session = dbus.Interface(
-            self.bus.get_object(support.DNFDAEMON_BUS_NAME, support.DNFDAEMON_OBJECT_PATH),
-            dbus_interface=support.IFACE_SESSION_MANAGER)
-        self.session = self.iface_session.open_session({
-            "installroot": self.installroot,
-            "config_file_path": config_file_path,
-            "reposdir": reposdir,
-            })
+        super(RepoConfTest, self).setUp()
+        configure_repo(self.config_file_path, 'main_repo')
         self.iface_repoconf = dbus.Interface(
             self.bus.get_object(support.DNFDAEMON_BUS_NAME, self.session),
-            dbus_interface=IFACE_REPOCONF)
-             
-
-    def tearDown(self):
-        self.iface_session.close_session(self.session)
-        shutil.rmtree(self.installroot)
+            dbus_interface=support.IFACE_REPOCONF)
 
     def test_list_repositories(self):
         # get list of all repositories
-        self.assertEqual(
+        self.assertCountEqual(
             self.iface_repoconf.list({}),
             dbus.Array([
                 dbus.Dictionary({
@@ -79,34 +58,46 @@ class RepoConfTest(unittest.TestCase):
                     dbus.String('repoid'): dbus.String('main_repo', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
-                    dbus.String('baseurl'): dbus.String('http://example.com/repo1', variant_level=1),
+                    dbus.String('baseurl'): dbus.String('file://{}'.format(
+                        os.path.join(support.PROJECT_BINARY_DIR,
+                                     'test/data/repos-rpm/rpm-repo1')), variant_level=1),
                     dbus.String('enabled'): dbus.String('1', variant_level=1),
-                    dbus.String('name'): dbus.String('Repository repo1', variant_level=1),
-                    dbus.String('repoid'): dbus.String('repo1', variant_level=1)},
+                    dbus.String('gpgcheck'): dbus.String('0', variant_level=1),
+                    dbus.String('name'): dbus.String('Repository 1', variant_level=1),
+                    dbus.String('repoid'): dbus.String('rpm-repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
-                    dbus.String('baseurl'): dbus.String('http://example.com/repo2', variant_level=1),
+                    dbus.String('baseurl'): dbus.String('file://{}'.format(
+                        os.path.join(support.PROJECT_BINARY_DIR,
+                                     'test/data/repos-rpm/rpm-repo2')), variant_level=1),
                     dbus.String('enabled'): dbus.String('1', variant_level=1),
-                    dbus.String('name'): dbus.String('Repository repo2', variant_level=1),
-                    dbus.String('repoid'): dbus.String('repo2', variant_level=1)},
+                    dbus.String('gpgcheck'): dbus.String('0', variant_level=1),
+                    dbus.String('name'): dbus.String('Repository 2', variant_level=1),
+                    dbus.String('repoid'): dbus.String('rpm-repo2', variant_level=1)},
                     signature=dbus.Signature('sv'))
                 ], signature=dbus.Signature('a{sv}'))
         )
         # filter several repositories
         self.assertEqual(
-            self.iface_repoconf.list({'ids': ['repo1', 'repo2']}),
+            self.iface_repoconf.list({'ids': ['rpm-repo1', 'rpm-repo2']}),
             dbus.Array([
                 dbus.Dictionary({
-                    dbus.String('baseurl'): dbus.String('http://example.com/repo1', variant_level=1),
+                    dbus.String('baseurl'): dbus.String('file://{}'.format(
+                        os.path.join(support.PROJECT_BINARY_DIR,
+                                     'test/data/repos-rpm/rpm-repo1')), variant_level=1),
                     dbus.String('enabled'): dbus.String('1', variant_level=1),
-                    dbus.String('name'): dbus.String('Repository repo1', variant_level=1),
-                    dbus.String('repoid'): dbus.String('repo1', variant_level=1)},
+                    dbus.String('gpgcheck'): dbus.String('0', variant_level=1),
+                    dbus.String('name'): dbus.String('Repository 1', variant_level=1),
+                    dbus.String('repoid'): dbus.String('rpm-repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
                 dbus.Dictionary({
-                    dbus.String('baseurl'): dbus.String('http://example.com/repo2', variant_level=1),
+                    dbus.String('baseurl'): dbus.String('file://{}'.format(
+                        os.path.join(support.PROJECT_BINARY_DIR,
+                                     'test/data/repos-rpm/rpm-repo2')), variant_level=1),
                     dbus.String('enabled'): dbus.String('1', variant_level=1),
-                    dbus.String('name'): dbus.String('Repository repo2', variant_level=1),
-                    dbus.String('repoid'): dbus.String('repo2', variant_level=1)},
+                    dbus.String('gpgcheck'): dbus.String('0', variant_level=1),
+                    dbus.String('name'): dbus.String('Repository 2', variant_level=1),
+                    dbus.String('repoid'): dbus.String('rpm-repo2', variant_level=1)},
                     signature=dbus.Signature('sv'))
                 ], signature=dbus.Signature('a{sv}'))
         )
