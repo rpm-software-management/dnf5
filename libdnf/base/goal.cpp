@@ -392,12 +392,12 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
     if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
         if (!settings.to_repo_ids.empty()) {
             query.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
-            query |= installed;
             if (query.empty()) {
                 add_rpm_goal_report(
                     Goal::Action::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
                 return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
             }
+            query |= installed;
         }
         /// <name, <arch, std::vector<pkg Solvables>>>
         std::unordered_map<Id, std::unordered_map<Id, std::vector<Solvable *>>> na_map;
@@ -469,12 +469,12 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
               !nevra_pair.second.get_release().empty() || !nevra_pair.second.get_arch().empty()))) {
             if (!settings.to_repo_ids.empty()) {
                 query.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
-                query |= installed;
                 if (query.empty()) {
                     add_rpm_goal_report(
                         Goal::Action::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
                     return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
                 }
+                query |= installed;
             }
             rpm::PackageQuery available(query);
             available.filter_available();
@@ -535,12 +535,12 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             }
             if (!settings.to_repo_ids.empty()) {
                 query.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
-                query |= installed;
                 if (query.empty()) {
                     add_rpm_goal_report(
                         Goal::Action::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
                     return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
                 }
+                query |= installed;
             }
             // TODO(jmracek) if reports:
             // base._report_already_installed(installed_query)
@@ -869,11 +869,11 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
     }
     if (!settings.to_repo_ids.empty()) {
         query.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
-        query |= installed;
         if (query.empty()) {
             add_rpm_goal_report(action, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, false);
             return;
         }
+        query |= installed;
     }
 
     // TODO(jmracek) Apply security filters
