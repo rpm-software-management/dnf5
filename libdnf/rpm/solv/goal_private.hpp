@@ -209,7 +209,7 @@ inline void GoalPrivate::add_upgrade(IdQueue & queue, bool best, bool clean_deps
     Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
     staging.push_back(
         SOLVER_UPDATE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (best ? SOLVER_FORCEBEST : 0) |
-            (clean_deps ? SOLVER_CLEANDEPS : 0),
+            (clean_deps ? SOLVER_CLEANDEPS : 0) | SOLVER_TARGETED,
         what);
 }
 
