@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_PACKAGE_PRIVATE_HPP
 
 
-#include "id_queue.hpp"
+#include "libdnf/solv/id_queue.hpp"
 #include "solv_private.hpp"
 
 #include "libdnf/rpm/package.hpp"
@@ -111,7 +111,7 @@ static inline const char * lookup_cstring(Solvable * solvable, Id type) {
     return solvable_lookup_str(solvable, type);
 }
 
-static inline void reldeps_for(Solvable * solvable, IdQueue & queue, Id type) {
+static inline void reldeps_for(Solvable * solvable, libdnf::solv::IdQueue & queue, Id type) {
     Id marker = -1;
     Id solv_type = type;
 
@@ -270,50 +270,50 @@ inline std::vector<std::string> get_files(Pool * pool, Id package_id) {
     return ret;
 }
 
-inline void get_provides(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_provides(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_PROVIDES);
 }
 
-inline void get_requires(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_requires(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_REQUIRES);
-    IdQueue tmp_queue;
+    libdnf::solv::IdQueue tmp_queue;
     reldeps_for(get_solvable(pool, package_id), tmp_queue, SOLVABLE_PREREQMARKER);
     queue.append(tmp_queue);
 }
 
-inline void get_requires_pre(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_requires_pre(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_PREREQMARKER);
 }
 
-inline void get_conflicts(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_conflicts(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_CONFLICTS);
 }
 
-inline void get_obsoletes(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_obsoletes(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_OBSOLETES);
 }
 
-inline void get_recommends(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_recommends(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_RECOMMENDS);
 }
 
-inline void get_suggests(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_suggests(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_SUGGESTS);
 }
 
-inline void get_enhances(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_enhances(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_ENHANCES);
 }
 
-inline void get_supplements(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_supplements(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_SUPPLEMENTS);
 }
 
-inline void get_prereq_ignoreinst(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_prereq_ignoreinst(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_PREREQ_IGNOREINST);
 }
 
-inline void get_regular_requires(Pool * pool, Id package_id, IdQueue & queue) noexcept {
+inline void get_regular_requires(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_REQUIRES);
 }
 

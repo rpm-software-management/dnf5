@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_GOAL_PRIVATE_HPP
 #define LIBDNF_RPM_SOLV_GOAL_PRIVATE_HPP
 
-#include "id_queue.hpp"
-#include "solv_map.hpp"
+#include "libdnf/solv/id_queue.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/rpm/package_sack.hpp"
@@ -48,20 +48,20 @@ public:
     void set_installonly(const std::vector<std::string> & installonly_names);
     void set_installonly_limit(unsigned int limit) { installonly_limit = limit; };
 
-    void add_install(IdQueue & queue, bool strict, bool best, bool clean_deps);
-    void add_remove(const IdQueue & queue, bool clean_deps);
-    void add_remove(const SolvMap & solv_map, bool clean_deps);
-    void add_upgrade(IdQueue & queue, bool best, bool clean_deps);
-    void add_distro_sync(IdQueue & queue, bool strict, bool best, bool clean_deps);
+    void add_install(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps);
+    void add_remove(const libdnf::solv::IdQueue & queue, bool clean_deps);
+    void add_remove(const libdnf::solv::SolvMap & solv_map, bool clean_deps);
+    void add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps);
+    void add_distro_sync(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps);
 
     libdnf::GoalProblem resolve();
 
-    SolvMap list_installs();
-    SolvMap list_reinstalls();
-    SolvMap list_upgrades();
-    SolvMap list_downgrades();
-    SolvMap list_removes();
-    SolvMap list_obsoleted();
+    libdnf::solv::SolvMap list_installs();
+    libdnf::solv::SolvMap list_reinstalls();
+    libdnf::solv::SolvMap list_upgrades();
+    libdnf::solv::SolvMap list_downgrades();
+    libdnf::solv::SolvMap list_removes();
+    libdnf::solv::SolvMap list_obsoleted();
 
     /// @dir Requires full path that exists
     void write_debugdata(const std::string & dir);
@@ -74,11 +74,11 @@ public:
     void set_protect_running_kernel(PackageId value) { protected_running_kernel = value; };
 
     // Get protected_packages. Running kernel is not included
-    const SolvMap * get_protected_packages() { return protected_packages.get(); };
+    const libdnf::solv::SolvMap * get_protected_packages() { return protected_packages.get(); };
     /// Add Ids of protected packages
-    void add_protected_packages(const SolvMap & map);
+    void add_protected_packages(const libdnf::solv::SolvMap & map);
     /// Set Ids of protected packages
-    void set_protected_packages(const SolvMap & map);
+    void set_protected_packages(const libdnf::solv::SolvMap & map);
     /// Reset all protected packages
     void reset_protected_packages();
     void set_protected_running_kernel(PackageId kernel) { protected_running_kernel = kernel; };
@@ -91,7 +91,7 @@ public:
     ///  Throw UnresolvedGoal when Goal is not resolved
     ///  Return std::vector<std::tuple<ProblemRules, Id source, Id dep, Id target, std::string Description for unknown rule>>>
     std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> get_problems();
-    const SolvMap * get_removal_of_protected() { return removal_of_protected.get(); };
+    const libdnf::solv::SolvMap * get_removal_of_protected() { return removal_of_protected.get(); };
 
     void set_allow_downgrade(bool value) { allow_downgrade = value; }
     void set_allow_erasing(bool value) { allow_erasing = value; }
@@ -105,15 +105,15 @@ public:
 
 private:
     Pool * pool;
-    IdQueue staging;
-    IdQueue installonly;
+    libdnf::solv::IdQueue staging;
+    libdnf::solv::IdQueue installonly;
     unsigned int installonly_limit{0};
 
     ::Solver * libsolv_solver{nullptr};
     ::Transaction * libsolv_transaction{nullptr};
 
-    std::unique_ptr<SolvMap> protected_packages;
-    std::unique_ptr<SolvMap> removal_of_protected;
+    std::unique_ptr<libdnf::solv::SolvMap> protected_packages;
+    std::unique_ptr<libdnf::solv::SolvMap> removal_of_protected;
     PackageId protected_running_kernel;
 
     bool allow_downgrade{true};
@@ -133,7 +133,7 @@ inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
     , staging(src.staging)
     , installonly(src.installonly)
     , installonly_limit(src.installonly_limit)
-    , protected_packages(new SolvMap(*src.protected_packages))
+    , protected_packages(new libdnf::solv::SolvMap(*src.protected_packages))
     , protected_running_kernel(src.protected_running_kernel)
     , allow_downgrade(src.allow_downgrade)
     , allow_erasing(src.allow_erasing)
@@ -164,7 +164,7 @@ inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
             transaction_free(libsolv_transaction);
             libsolv_transaction = nullptr;
         }
-        protected_packages.reset(new SolvMap(*src.protected_packages));
+        protected_packages.reset(new libdnf::solv::SolvMap(*src.protected_packages));
         protected_running_kernel = src.protected_running_kernel;
         allow_downgrade = src.allow_downgrade;
         allow_erasing = src.allow_erasing;
@@ -181,7 +181,7 @@ inline void GoalPrivate::set_installonly(const std::vector<std::string> & instal
     }
 }
 
-inline void GoalPrivate::add_install(IdQueue & queue, bool strict, bool best, bool clean_deps) {
+inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
     staging.push_back(
@@ -190,21 +190,21 @@ inline void GoalPrivate::add_install(IdQueue & queue, bool strict, bool best, bo
         what);
 }
 
-inline void GoalPrivate::add_remove(const IdQueue & queue, bool clean_deps) {
+inline void GoalPrivate::add_remove(const libdnf::solv::IdQueue & queue, bool clean_deps) {
     Id flags = SOLVER_SOLVABLE | SOLVER_ERASE | (clean_deps ? SOLVER_CLEANDEPS : 0);
     for (Id what : queue) {
         staging.push_back(flags, what);
     }
 }
 
-inline void GoalPrivate::add_remove(const SolvMap & solv_map, bool clean_deps) {
+inline void GoalPrivate::add_remove(const libdnf::solv::SolvMap & solv_map, bool clean_deps) {
     Id flags = SOLVER_SOLVABLE | SOLVER_ERASE | (clean_deps ? SOLVER_CLEANDEPS : 0);
     for (auto what : solv_map) {
         staging.push_back(flags, what);
     }
 }
 
-inline void GoalPrivate::add_upgrade(IdQueue & queue, bool best, bool clean_deps) {
+inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
     staging.push_back(
@@ -213,7 +213,7 @@ inline void GoalPrivate::add_upgrade(IdQueue & queue, bool best, bool clean_deps
         what);
 }
 
-inline void GoalPrivate::add_distro_sync(IdQueue & queue, bool strict, bool best, bool clean_deps) {
+inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
     staging.push_back(

@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
-#include "solv/reldep_parser.hpp"
+#include "libdnf/solv/reldep_parser.hpp"
 
 #include "libdnf/rpm/reldep.hpp"
 
@@ -85,7 +85,7 @@ void ReldepList::add(ReldepId id) {
 }
 
 bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
-    solv::ReldepParser dep_splitter;
+    libdnf::solv::ReldepParser dep_splitter;
     if (!dep_splitter.parse(reldep_str))
         return false;
 

@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory_query.hpp"
 
 #include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/rpm/solv/solv_map.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 namespace libdnf {
 class Base;
@@ -56,7 +56,7 @@ private:
     /// of solvables doesn't match the current number in solv sacks pool.
     void load_advisories_from_package_sack();
 
-    libdnf::rpm::solv::SolvMap data_map{0};
+    libdnf::solv::SolvMap data_map{0};
 
     int cached_solvables_size{0};
 

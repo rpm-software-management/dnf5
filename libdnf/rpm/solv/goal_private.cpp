@@ -31,10 +31,10 @@ namespace {
 
 void allow_uninstall_all_but_protected(
     Pool * pool,
-    libdnf::rpm::solv::IdQueue & job,
-    const libdnf::rpm::solv::SolvMap * protected_packages,
+    libdnf::solv::IdQueue & job,
+    const libdnf::solv::SolvMap * protected_packages,
     libdnf::rpm::PackageId protected_kernel) {
-    libdnf::rpm::solv::SolvMap not_protected_pkgs(pool->nsolvables);
+    libdnf::solv::SolvMap not_protected_pkgs(pool->nsolvables);
     not_protected_pkgs.set_all();
     if (protected_packages) {
         not_protected_pkgs -= *protected_packages;
@@ -56,10 +56,10 @@ void allow_uninstall_all_but_protected(
 
 void construct_job(
     Pool * pool,
-    libdnf::rpm::solv::IdQueue & job,
-    const libdnf::rpm::solv::IdQueue & install_only,
+    libdnf::solv::IdQueue & job,
+    const libdnf::solv::IdQueue & install_only,
     bool allow_erasing,
-    const libdnf::rpm::solv::SolvMap * protected_packages,
+    const libdnf::solv::SolvMap * protected_packages,
     libdnf::rpm::PackageId protected_kernel) {
     // turn off implicit obsoletes for installonly packages
     for (int i = 0; i < install_only.size(); ++i) {
@@ -95,7 +95,7 @@ void init_solver(Pool * pool, Solver ** solver) {
 #endif
 }
 
-libdnf::rpm::solv::SolvMap list_results(
+libdnf::solv::SolvMap list_results(
     Pool * pool, Transaction * transaction, Solver * solver, Id type_filter1, Id type_filter2) {
     /* no transaction */
     if (!transaction) {
@@ -108,7 +108,7 @@ libdnf::rpm::solv::SolvMap list_results(
         throw std::runtime_error("no solution possible");
     }
 
-    libdnf::rpm::solv::SolvMap result_ids(pool->nsolvables);
+    libdnf::solv::SolvMap result_ids(pool->nsolvables);
     const int common_mode = SOLVER_TRANSACTION_SHOW_OBSOLETES | SOLVER_TRANSACTION_CHANGE_IS_REINSTALL;
 
     for (int i = 0; i < transaction->steps.count; ++i) {
@@ -141,7 +141,7 @@ struct InstallonliesSortCallback {
 
 /// @brief return false when does not depend on anything from b
 bool can_depend_on(Pool * pool, Solvable * sa, Id b) {
-    libdnf::rpm::solv::IdQueue requires;
+    libdnf::solv::IdQueue requires;
 
     solvable_lookup_idarray(sa, SOLVABLE_REQUIRES, &requires.get_queue());
     for (int i = 0; i < requires.size(); ++i) {
@@ -207,8 +207,8 @@ int sort_packages(const void * ap, const void * bp, void * s_cb) {
 
 bool limit_installonly_packages(
     Solver * solv,
-    libdnf::rpm::solv::IdQueue & job,
-    const libdnf::rpm::solv::IdQueue & installonly,
+    libdnf::solv::IdQueue & job,
+    const libdnf::solv::IdQueue & installonly,
     unsigned int installonly_limit,
     Id running_kernel) {
     if (installonly_limit == 0) {
@@ -221,8 +221,8 @@ bool limit_installonly_packages(
     for (int i = 0; i < installonly.size(); ++i) {
         Id p;
         Id pp;
-        libdnf::rpm::solv::IdQueue q;
-        libdnf::rpm::solv::IdQueue installing;
+        libdnf::solv::IdQueue q;
+        libdnf::solv::IdQueue installing;
         FOR_PROVIDES(p, pp, installonly[i]) {
             // TODO(jmracek)  Replase the test by cached data from sack.p_impl->get_solvables()
             if (!libdnf::utils::is_package(pool, p)) {
@@ -249,7 +249,7 @@ bool limit_installonly_packages(
 
         struct InstallonliesSortCallback s_cb = {pool, running_kernel};
         solv_sort(q.data(), static_cast<size_t>(q.size()), sizeof(q[0]), sort_packages, &s_cb);
-        libdnf::rpm::solv::IdQueue same_names;
+        libdnf::solv::IdQueue same_names;
         while (q.size() > 0) {
             same_name_subqueue(pool, &q.get_queue(), &same_names.get_queue());
             if (same_names.size() <= static_cast<int>(installonly_limit)) {
@@ -277,7 +277,7 @@ namespace libdnf::rpm::solv {
 
 
 libdnf::GoalProblem GoalPrivate::resolve() {
-    IdQueue job(staging);
+    libdnf::solv::IdQueue job(staging);
     construct_job(pool, job, installonly, allow_erasing, protected_packages.get(), protected_running_kernel);
 
     /* apply the excludes */
@@ -329,28 +329,28 @@ libdnf::GoalProblem GoalPrivate::resolve() {
     return protected_in_removals();
 }
 
-SolvMap GoalPrivate::list_installs() {
+libdnf::solv::SolvMap GoalPrivate::list_installs() {
     return list_results(
         pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_INSTALL, SOLVER_TRANSACTION_OBSOLETES);
 }
 
-SolvMap GoalPrivate::list_reinstalls() {
+libdnf::solv::SolvMap GoalPrivate::list_reinstalls() {
     return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_REINSTALL, 0);
 }
 
-SolvMap GoalPrivate::list_upgrades() {
+libdnf::solv::SolvMap GoalPrivate::list_upgrades() {
     return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_UPGRADE, 0);
 }
 
-SolvMap GoalPrivate::list_downgrades() {
+libdnf::solv::SolvMap GoalPrivate::list_downgrades() {
     return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_DOWNGRADE, 0);
 }
 
-SolvMap GoalPrivate::list_removes() {
+libdnf::solv::SolvMap GoalPrivate::list_removes() {
     return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_ERASE, 0);
 }
 
-SolvMap GoalPrivate::list_obsoleted() {
+libdnf::solv::SolvMap GoalPrivate::list_obsoleted() {
     return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_OBSOLETED, 0);
 }
 
@@ -383,7 +383,7 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
 // Goal::listUnneeded()
 // {
 //     PackageSet pset(p_impl->sack);
-//     IdQueue queue;
+//     libdnf::solv::IdQueue queue;
 //     Solver *solv = p_impl->solv;
 //
 //     solver_get_unneeded(solv, queue.getQueue(), 0);
@@ -395,7 +395,7 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
 // Goal::listSuggested()
 // {
 //     PackageSet pset(p_impl->sack);
-//     IdQueue queue;
+//     libdnf::solv::IdQueue queue;
 //     Solver *solv = p_impl->solv;
 //
 //     solver_get_recommendations(solv, NULL, queue.getQueue(), 0);
@@ -421,8 +421,8 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
     // std::tuple<ProblemRules, Id source, Id dep, Id target, std::string>>
     std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> problems;
 
-    IdQueue problem_queue;
-    IdQueue descriptions_queue;
+    libdnf::solv::IdQueue problem_queue;
+    libdnf::solv::IdQueue descriptions_queue;
     // libsolv counts problem from 1
     for (int i = 1; i <= count_problems; ++i) {
         solver_findallproblemrules(libsolv_solver, i, &problem_queue.get_queue());
@@ -541,7 +541,7 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
         return ret;
     }
 
-    libdnf::rpm::solv::SolvMap protected_pkgs(pool->nsolvables);
+    libdnf::solv::SolvMap protected_pkgs(pool->nsolvables);
     if (protected_packages) {
         protected_pkgs |= *protected_packages;
     }
@@ -549,7 +549,7 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
         protected_pkgs.add_unsafe(protected_running_kernel.id);
     }
 
-    removal_of_protected.reset(new SolvMap(std::move(pkg_remove_list)));
+    removal_of_protected.reset(new libdnf::solv::SolvMap(std::move(pkg_remove_list)));
     for (auto pkg_id : *removal_of_protected) {
         if (protected_pkgs.contains(pkg_id)) {
             ret = libdnf::GoalProblem::REMOVAL_OF_PROTECTED;
@@ -560,16 +560,16 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
     return ret;
 }
 
-void GoalPrivate::add_protected_packages(const SolvMap & map) {
+void GoalPrivate::add_protected_packages(const libdnf::solv::SolvMap & map) {
     if (!protected_packages) {
-        protected_packages.reset(new SolvMap(map));
+        protected_packages.reset(new libdnf::solv::SolvMap(map));
     } else {
         *protected_packages |= map;
     }
 }
 
-void GoalPrivate::set_protected_packages(const SolvMap & map) {
-    protected_packages.reset(new SolvMap(map));
+void GoalPrivate::set_protected_packages(const libdnf::solv::SolvMap & map) {
+    protected_packages.reset(new libdnf::solv::SolvMap(map));
 }
 
 void GoalPrivate::reset_protected_packages() {

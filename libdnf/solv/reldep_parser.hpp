@@ -17,15 +17,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_SOLV_RELDEP_PARSER_HPP
-#define LIBDNF_RPM_SOLV_RELDEP_PARSER_HPP
+#ifndef LIBDNF_SOLV_RELDEP_PARSER_HPP
+#define LIBDNF_SOLV_RELDEP_PARSER_HPP
 
 #include "libdnf/rpm/reldep.hpp"
 
 #include <string>
 
 
-namespace libdnf::rpm::solv {
+namespace libdnf::solv {
 
 struct ReldepParser {
 public:
@@ -68,6 +68,6 @@ inline const char * ReldepParser::get_evr_cstr() const noexcept {
     return evr.empty() ? nullptr : evr.c_str();
 }
 
-}  // namespace libdnf::rpm::solv
+}  // namespace libdnf::solv
 
-#endif  // LIBDNF_RPM_SOLV_RELDEP_PARSER_HPP
+#endif  // LIBDNF_SOLV_RELDEP_PARSER_HPP

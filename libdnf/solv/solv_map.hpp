@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_SOLV_MAP_HPP
-#define LIBDNF_RPM_SOLV_MAP_HPP
+#ifndef LIBDNF_SOLV_MAP_HPP
+#define LIBDNF_SOLV_MAP_HPP
 
 
 #include "map_iterator.hpp"
@@ -33,7 +33,7 @@ class PackageSack;
 
 }  // namespace libdnf::rpm
 
-namespace libdnf::rpm::solv {
+namespace libdnf::solv {
 
 
 // clang-format off
@@ -336,7 +336,7 @@ inline void SolvMap::swap(SolvMap & other) noexcept {
 }
 
 
-}  // namespace libdnf::rpm::solv
+}  // namespace libdnf::solv
 
 
-#endif  // LIBDNF_RPM_SOLV_MAP_HPP
+#endif  // LIBDNF_SOLV_MAP_HPP

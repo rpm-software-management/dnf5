@@ -21,7 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "package_sack_impl.hpp"
 #include "../repo/repo_impl.hpp"
-#include "solv/id_queue.hpp"
+#include "libdnf/solv/id_queue.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 extern "C" {
 #include <solv/chksum.h>
@@ -118,7 +119,7 @@ static void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
 // only works if there are no duplicates both in q1 and q2
 // the map parameter must point to an empty map that can hold all ids
 // (it is also returned empty)
-bool is_superset(const solv::IdQueue & q1, const solv::IdQueue * q2, solv::SolvMap & map) {
+bool is_superset(const libdnf::solv::IdQueue & q1, const libdnf::solv::IdQueue * q2, libdnf::solv::SolvMap & map) {
     int cnt = 0;
     for (int i = 0; i < q2->size(); i++) {
         map.add_unsafe((*q2)[i]);
@@ -261,13 +262,13 @@ void PackageSack::Impl::write_ext(
     }
 }
 
-void PackageSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQueue & addedfileprovides_inst) {
+void PackageSack::Impl::rewrite_repos(libdnf::solv::IdQueue & addedfileprovides, libdnf::solv::IdQueue & addedfileprovides_inst) {
     int i;
     auto & logger = *base->get_logger();
 
-    solv::SolvMap providedids(pool->ss.nstrings);
+    libdnf::solv::SolvMap providedids(pool->ss.nstrings);
 
-    solv::IdQueue fileprovidesq;
+    libdnf::solv::IdQueue fileprovidesq;
 
     LibsolvRepo * libsolv_repo;
     FOR_REPOS(i, libsolv_repo) {
@@ -283,7 +284,7 @@ void PackageSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::I
             continue;
         }
         // now check if the repo already contains all of our file provides
-        solv::IdQueue * addedq = libsolv_repo == pool->installed ? &addedfileprovides_inst : &addedfileprovides;
+        libdnf::solv::IdQueue * addedq = libsolv_repo == pool->installed ? &addedfileprovides_inst : &addedfileprovides;
         if (addedq->size() == 0) {
             continue;
         }
@@ -431,8 +432,8 @@ void PackageSack::Impl::make_provides_ready() {
         return;
     }
     internalize_libsolv_repos();
-    solv::IdQueue addedfileprovides;
-    solv::IdQueue addedfileprovides_inst;
+    libdnf::solv::IdQueue addedfileprovides;
+    libdnf::solv::IdQueue addedfileprovides_inst;
     pool_addfileprovides_queue(pool, &addedfileprovides.get_queue(), &addedfileprovides_inst.get_queue());
     if (!addedfileprovides.empty() || !addedfileprovides_inst.empty()) {
         rewrite_repos(addedfileprovides, addedfileprovides_inst);

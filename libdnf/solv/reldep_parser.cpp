@@ -22,34 +22,34 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <regex>
 #include <string>
 
-namespace libdnf::rpm::solv {
+namespace libdnf::solv {
 
 static const std::regex RELDEP_REGEX("^(\\S*)\\s*(\\S*)?\\s*(\\S*)$");
 
-static bool set_cmp_type(Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length) {
+static bool set_cmp_type(libdnf::rpm::Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length) {
     if (length == 2) {
         // The second character must be '='
         if (cmp_type_string[1] != '=') {
             return false;
         }
         if (cmp_type_string[0] == '<') {
-            *cmp_type = Reldep::CmpType::LTE;
+            *cmp_type = libdnf::rpm::Reldep::CmpType::LTE;
             return true;
         } else if (cmp_type_string[0] == '>') {
-            *cmp_type = Reldep::CmpType::GTE;
+            *cmp_type = libdnf::rpm::Reldep::CmpType::GTE;
             return true;
         } else {
             return false;
         }
     } else if (length == 1) {
         if (cmp_type_string[0] == '>') {
-            *cmp_type = Reldep::CmpType::GT;
+            *cmp_type = libdnf::rpm::Reldep::CmpType::GT;
             return true;
         } else if (cmp_type_string[0] == '<') {
-            *cmp_type = Reldep::CmpType::LT;
+            *cmp_type = libdnf::rpm::Reldep::CmpType::LT;
             return true;
         } else if (cmp_type_string[0] == '=') {
-            *cmp_type = Reldep::CmpType::EQ;
+            *cmp_type = libdnf::rpm::Reldep::CmpType::EQ;
             return true;
         } else {
             return false;
@@ -86,4 +86,4 @@ bool ReldepParser::parse(const std::string & reldep_str) {
     }
 }
 
-}  // namespace libdnf::rpm::solv
+}  // namespace libdnf::solv

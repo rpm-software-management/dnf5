@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_PACKAGE_QUERY_IMPL_HPP
 #define LIBDNF_RPM_PACKAGE_QUERY_IMPL_HPP
 
-#include "solv/solv_map.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 #include "libdnf/rpm/package_query.hpp"
 
@@ -34,7 +34,7 @@ namespace libdnf::rpm {
 class PackageQuery::Impl {
 public:
     static void filter_provides(
-        Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, solv::SolvMap & filter_result);
+        Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, libdnf::solv::SolvMap & filter_result);
     static void filter_reldep(
         PackageSet & pkg_set,
         Id libsolv_key,
@@ -51,7 +51,7 @@ public:
         const Nevra & pattern,
         bool cmp_glob,
         libdnf::sack::QueryCmp cmp_type,
-        solv::SolvMap & filter_result,
+        libdnf::solv::SolvMap & filter_result,
         bool with_src);
     static void filter_nevra(
         PackageSet & pkg_set,
@@ -59,7 +59,7 @@ public:
         const std::string & pattern,
         bool cmp_glob,
         libdnf::sack::QueryCmp cmp_type,
-        solv::SolvMap & filter_result);
+        libdnf::solv::SolvMap & filter_result);
     /// Provide libdnf::sack::QueryCmp without NOT flag
     static void str2reldep_internal(
         ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern);

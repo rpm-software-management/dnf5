@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_SOLV_MAP_ITERATOR_HPP
-#define LIBDNF_RPM_SOLV_MAP_ITERATOR_HPP
+#ifndef LIBDNF_SOLV_MAP_ITERATOR_HPP
+#define LIBDNF_SOLV_MAP_ITERATOR_HPP
 
 #include "libdnf/rpm/package_sack.hpp"
 
@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iterator>
 
 
-namespace libdnf::rpm::solv {
+namespace libdnf::solv {
 
 
 class SolvMap;
@@ -178,7 +178,7 @@ inline void SolvMapIterator::jump(Id id) noexcept {
 }
 
 
-}  // namespace libdnf::rpm::solv
+}  // namespace libdnf::solv
 
 
-#endif  // LIBDNF_RPM_SOLV_MAP_ITERATOR_HPP
+#endif  // LIBDNF_SOLV_MAP_ITERATOR_HPP

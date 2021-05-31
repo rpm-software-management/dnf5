@@ -25,7 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_sack_impl.hpp"
 #include "package_set_impl.hpp"
 #include "../repo/repo_impl.hpp"
-#include "solv/id_queue.hpp"
 
 #include "libdnf/transaction/transaction_item_action.hpp"
 

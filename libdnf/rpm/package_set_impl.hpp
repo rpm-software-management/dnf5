@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/rpm/package_set.hpp"
-#include "libdnf/rpm/solv/solv_map.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -35,7 +35,7 @@ extern "C" {
 namespace libdnf::rpm {
 
 
-class PackageSet::Impl : public solv::SolvMap {
+class PackageSet::Impl : public libdnf::solv::SolvMap {
 public:
     /// Initialize with an empty map
     //explicit Impl(PackageSack * sack);
@@ -44,7 +44,7 @@ public:
     explicit Impl(const PackageSackWeakPtr & sack);
 
     /// Clone from an existing map
-    explicit Impl(const PackageSackWeakPtr & sack, solv::SolvMap & solv_map);
+    explicit Impl(const PackageSackWeakPtr & sack, libdnf::solv::SolvMap & solv_map);
 
     /// Copy constructor: clone from an existing PackageSet::Impl
     Impl(const Impl & other);
@@ -54,8 +54,8 @@ public:
 
     Impl & operator=(const Impl & other);
     Impl & operator=(Impl && other);
-    Impl & operator=(const solv::SolvMap & map);
-    Impl & operator=(solv::SolvMap && map);
+    Impl & operator=(const libdnf::solv::SolvMap & map);
+    Impl & operator=(libdnf::solv::SolvMap && map);
 
     PackageSackWeakPtr get_sack() const { return sack; }
 
@@ -67,40 +67,40 @@ private:
 
 
 inline PackageSet::Impl::Impl(const PackageSackWeakPtr & sack)
-    : solv::SolvMap::SolvMap(sack->p_impl->pool->nsolvables)
+    : libdnf::solv::SolvMap::SolvMap(sack->p_impl->pool->nsolvables)
     , sack(sack) {}
 
-inline PackageSet::Impl::Impl(const PackageSackWeakPtr & sack, solv::SolvMap & solv_map)
-    : solv::SolvMap::SolvMap(solv_map)
+inline PackageSet::Impl::Impl(const PackageSackWeakPtr & sack, libdnf::solv::SolvMap & solv_map)
+    : libdnf::solv::SolvMap::SolvMap(solv_map)
     , sack(sack) {}
 
 inline PackageSet::Impl::Impl(const Impl & other)
-    : solv::SolvMap::SolvMap(other.get_map())
+    : libdnf::solv::SolvMap::SolvMap(other.get_map())
     , sack(other.sack) {}
 
 inline PackageSet::Impl::Impl(Impl && other)
-    : solv::SolvMap::SolvMap(std::move(other.get_map()))
+    : libdnf::solv::SolvMap::SolvMap(std::move(other.get_map()))
     , sack(std::move(other.sack)) {}
 
 inline PackageSet::Impl & PackageSet::Impl::operator=(const Impl & other) {
-    solv::SolvMap::operator=(other);
+    libdnf::solv::SolvMap::operator=(other);
     sack = other.sack;
     return *this;
 }
 
 inline PackageSet::Impl & PackageSet::Impl::operator=(Impl && other) {
-    solv::SolvMap::operator=(std::move(other));
+    libdnf::solv::SolvMap::operator=(std::move(other));
     sack = std::move(other.sack);
     return *this;
 }
 
-inline PackageSet::Impl & PackageSet::Impl::operator=(const solv::SolvMap & map) {
-    solv::SolvMap::operator=(map);
+inline PackageSet::Impl & PackageSet::Impl::operator=(const libdnf::solv::SolvMap & map) {
+    libdnf::solv::SolvMap::operator=(map);
     return *this;
 }
 
-inline PackageSet::Impl & PackageSet::Impl::operator=(solv::SolvMap && map) {
-    solv::SolvMap::operator=(std::move(map));
+inline PackageSet::Impl & PackageSet::Impl::operator=(libdnf::solv::SolvMap && map) {
+    libdnf::solv::SolvMap::operator=(std::move(map));
     return *this;
 }
 

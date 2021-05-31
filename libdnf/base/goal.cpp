@@ -19,11 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal.hpp"
 
+#include "libdnf/solv/id_queue.hpp"
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "../rpm/package_sack_impl.hpp"
 #include "../rpm/package_set_impl.hpp"
 #include "../rpm/solv/goal_private.hpp"
-#include "../rpm/solv/id_queue.hpp"
 #include "../rpm/solv/package_private.hpp"
 #include "../utils/string.hpp"
 #include "../utils/utils_internal.hpp"
@@ -178,7 +178,7 @@ public:
         Goal::Action action, const std::string & pkg_spec, const GoalJobSettings & settings, bool strict);
 
     std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
-        const rpm::solv::IdQueue & broken_installed);
+        const libdnf::solv::IdQueue & broken_installed);
 
 private:
     friend class Goal;
@@ -187,7 +187,7 @@ private:
     /// <libdnf::Goal::Action, std::string pkg_spec, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<Goal::Action, std::string, GoalJobSettings>> rpm_specs;
     /// <libdnf::Goal::Action, rpm Ids, libdnf::GoalJobSettings settings>
-    std::vector<std::tuple<Action, rpm::solv::IdQueue, GoalJobSettings>> rpm_ids;
+    std::vector<std::tuple<Action, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
 
     /// <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
     std::vector<std::tuple<Goal::Action, GoalProblem, GoalJobSettings, std::string, std::set<std::string>>>
@@ -286,7 +286,7 @@ void Goal::Impl::add_rpm_ids(Goal::Action action, const rpm::Package & rpm_packa
     if (rpm_package.sack != base->get_rpm_package_sack()) {
         throw UsedDifferentSack();
     }
-    rpm::solv::IdQueue ids;
+    libdnf::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
     rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
 }
@@ -296,7 +296,7 @@ void Goal::Impl::add_rpm_ids(
     if (package_set.get_sack() != base->get_rpm_package_sack()) {
         throw UsedDifferentSack();
     }
-    rpm::solv::IdQueue ids;
+    libdnf::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id);
     }
@@ -325,7 +325,7 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
                 break;
             case Action::UPGRADE_ALL: {
                 rpm::PackageQuery query(sack);
-                rpm::solv::IdQueue upgrade_ids;
+                libdnf::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id);
                 }
@@ -334,7 +334,7 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
             } break;
             case Action::DISTRO_SYNC_ALL: {
                 rpm::PackageQuery query(sack);
-                rpm::solv::IdQueue upgrade_ids;
+                libdnf::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id);
                 }
@@ -362,7 +362,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
 
     auto multilib_policy = cfg_main.multilib_policy().get_value();
-    rpm::solv::IdQueue tmp_queue;
+    libdnf::solv::IdQueue tmp_queue;
     rpm::PackageQuery base_query(sack);
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
@@ -515,7 +515,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 if (add_obsoletes) {
                     add_obsoletes_to_data(base_query, selected);
                 }
-                solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
+                solv_map_to_id_queue(tmp_queue, static_cast<libdnf::solv::SolvMap>(*selected.p_impl));
                 rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
                 selected.clear();
                 selected.p_impl->add_unsafe(pool_solvable2id(pool, (*iter)));
@@ -524,7 +524,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             if (add_obsoletes) {
                 add_obsoletes_to_data(base_query, selected);
             }
-            solv_map_to_id_queue(tmp_queue, static_cast<rpm::solv::SolvMap>(*selected.p_impl));
+            solv_map_to_id_queue(tmp_queue, static_cast<libdnf::solv::SolvMap>(*selected.p_impl));
             rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
             return GoalProblem::NO_PROBLEM;
         } else {
@@ -624,7 +624,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(const std::string & spec, GoalJobS
     }
     std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
 
-    rpm::solv::IdQueue tmp_queue;
+    libdnf::solv::IdQueue tmp_queue;
 
     {
         auto * first = (*tmp_solvables.begin());
@@ -807,7 +807,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery base_query(sack);
     auto obsoletes = base->get_config().obsoletes().get_value();
-    rpm::solv::IdQueue tmp_queue;
+    libdnf::solv::IdQueue tmp_queue;
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
@@ -935,7 +935,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
 }
 
 std::vector<std::pair<ProblemRules, std::vector<std::string>>> Goal::Impl::get_removal_of_protected(
-    const rpm::solv::IdQueue & broken_installed) {
+    const libdnf::solv::IdQueue & broken_installed) {
     auto & sack = *base->get_rpm_package_sack();
     Pool * pool = sack.p_impl->get_pool();
 
@@ -1169,7 +1169,7 @@ std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> Goal
     Pool * pool = sack.p_impl->get_pool();
 
     // Required to discover of problems related to protected packages
-    rpm::solv::IdQueue broken_installed;
+    libdnf::solv::IdQueue broken_installed;
 
     auto solver_problems = p_impl->rpm_goal.get_problems();
     std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> output;

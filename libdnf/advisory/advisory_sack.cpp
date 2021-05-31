@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_sack.hpp"
 
 #include "libdnf/rpm/package_sack_impl.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 #include <solv/dataiterator.h>
 
@@ -38,7 +39,7 @@ void AdvisorySack::load_advisories_from_package_sack() {
 
     Pool * pool = package_sack->p_impl->get_pool();
 
-    data_map = libdnf::rpm::solv::SolvMap(pool->nsolvables);
+    data_map = libdnf::solv::SolvMap(pool->nsolvables);
 
     Dataiterator di;
 

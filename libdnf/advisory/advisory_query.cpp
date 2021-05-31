@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_sack_impl.hpp"
 #include "libdnf/rpm/package_set.hpp"
 #include "libdnf/rpm/solv/package_private.hpp"
+#include "libdnf/solv/solv_map.hpp"
 #include "libdnf/utils/utils_internal.hpp"
 
 #include <solv/evr.h>
@@ -72,7 +73,7 @@ AdvisoryQuery & AdvisoryQuery::filter_name(const std::string & pattern, sack::Qu
 AdvisoryQuery & AdvisoryQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
     auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
     Pool * pool = package_sack.p_impl->get_pool();
-    libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
+    libdnf::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -148,7 +149,7 @@ AdvisoryQuery & AdvisoryQuery::filter_type(const Advisory::Type type, sack::Quer
 AdvisoryQuery & AdvisoryQuery::filter_type(const std::vector<AdvisoryType> & types, sack::QueryCmp cmp_type) {
     auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
     Pool * pool = package_sack.p_impl->get_pool();
-    libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
+    libdnf::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -194,7 +195,7 @@ AdvisoryQuery & AdvisoryQuery::filter_type(const std::vector<AdvisoryType> & typ
 AdvisoryQuery & AdvisoryQuery::filter_reference(
     const std::vector<std::string> & reference_id, std::vector<AdvisoryReferenceType> types, sack::QueryCmp cmp_type) {
     auto package_sack = advisory_sack->base->get_rpm_package_sack();
-    libdnf::rpm::solv::SolvMap filter_result(package_sack->p_impl->get_nsolvables());
+    libdnf::solv::SolvMap filter_result(package_sack->p_impl->get_nsolvables());
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -282,7 +283,7 @@ AdvisoryQuery & AdvisoryQuery::filter_severity(const std::string & pattern, sack
 AdvisoryQuery & AdvisoryQuery::filter_severity(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
     auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
     Pool * pool = package_sack.p_impl->get_pool();
-    libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
+    libdnf::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -320,7 +321,7 @@ AdvisoryQuery & AdvisoryQuery::filter_severity(const std::vector<std::string> & 
 AdvisoryQuery & AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
     auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
     Pool * pool = package_sack.p_impl->get_pool();
-    libdnf::rpm::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
+    libdnf::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
     std::vector<AdvisoryPackage> adv_pkgs = get_sorted_advisory_packages();
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;

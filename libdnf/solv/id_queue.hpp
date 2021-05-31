@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_RPM_SOLV_ID_QUEUE_HPP
-#define LIBDNF_RPM_SOLV_ID_QUEUE_HPP
+#ifndef LIBDNF_SOLV_ID_QUEUE_HPP
+#define LIBDNF_SOLV_ID_QUEUE_HPP
 
 #include "queue_iterator.hpp"
 #include "solv_map.hpp"
@@ -29,7 +29,7 @@ extern "C" {
 #include <solv/queue.h>
 }
 
-namespace libdnf::rpm::solv {
+namespace libdnf::solv {
 
 
 struct IdQueue {
@@ -180,6 +180,6 @@ void inline solv_map_to_id_queue(IdQueue & ids, const SolvMap & src) {
     }
 }
 
-}  // namespace libdnf::rpm::solv
+}  // namespace libdnf::solv
 
-#endif  // LIBDNF_RPM_SOLV_ID_QUEUE_HPP
+#endif  // LIBDNF_SOLV_ID_QUEUE_HPP

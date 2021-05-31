@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../utils/utils_internal.hpp"
 #include "../repo/repo_impl.hpp"
-#include "solv/id_queue.hpp"
-#include "solv/solv_map.hpp"
+#include "libdnf/solv/id_queue.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package.hpp"
@@ -83,7 +83,7 @@ public:
     int get_nsolvables() const noexcept { return pool->nsolvables; };
 
     /// Return SolvMap with all package solvables
-    solv::SolvMap & get_solvables();
+    libdnf::solv::SolvMap & get_solvables();
 
     /// Return sorted list of all package solvables
     std::vector<Solvable *> & get_sorted_solvables();
@@ -138,7 +138,7 @@ private:
     void write_ext(
         repo::LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix);
 
-    void rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQueue & addedfileprovides_inst);
+    void rewrite_repos(libdnf::solv::IdQueue & addedfileprovides, libdnf::solv::IdQueue & addedfileprovides_inst);
 
     /// Constructs libsolv repository cache filename for given repository id and optional extension.
     std::string give_repo_solv_cache_fn(const std::string & repoid, const char * ext = nullptr);
@@ -158,7 +158,7 @@ private:
     /// pair<id_of_lowercase_name, Solvable *>
     std::vector<std::pair<Id, Solvable *>> cached_sorted_icase_solvables;
     int cached_sorted_icase_solvables_size{0};
-    solv::SolvMap cached_solvables{0};
+    libdnf::solv::SolvMap cached_solvables{0};
     int cached_solvables_size{0};
     PackageId running_kernel;
 
@@ -222,14 +222,14 @@ inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_ic
     return cached_sorted_icase_solvables;
 }
 
-inline solv::SolvMap & PackageSack::Impl::get_solvables() {
+inline libdnf::solv::SolvMap & PackageSack::Impl::get_solvables() {
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_solvables_size) {
         return cached_solvables;
     }
     // map.size is in bytes, << 3 multiplies the number with 8 and gives size in bits
     if (static_cast<int>(nsolvables) > (cached_solvables.map.size << 3)) {
-        cached_solvables = solv::SolvMap(static_cast<int>(nsolvables));
+        cached_solvables = libdnf::solv::SolvMap(static_cast<int>(nsolvables));
     } else {
         cached_solvables.clear();
     }

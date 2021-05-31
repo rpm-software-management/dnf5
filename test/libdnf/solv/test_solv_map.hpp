@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_SOLV_MAP_HPP
 
 
-#include "libdnf/rpm/solv/solv_map.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 #include <solv/pool.h>
 
@@ -77,8 +77,8 @@ public:
     void test_iterator_performance_4bits();
 
 private:
-    libdnf::rpm::solv::SolvMap * map1;
-    libdnf::rpm::solv::SolvMap * map2;
+    libdnf::solv::SolvMap * map1;
+    libdnf::solv::SolvMap * map2;
 };
 
 

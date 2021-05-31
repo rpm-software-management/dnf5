@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/rpm/package_set_iterator.hpp"
-#include "libdnf/rpm/solv/solv_map.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 
 namespace libdnf::rpm {
@@ -38,7 +38,7 @@ PackageSet::PackageSet(const PackageSet & other) : p_impl(new Impl(*other.p_impl
 PackageSet::PackageSet(PackageSet && other) noexcept : p_impl(new Impl(std::move(*other.p_impl))) {}
 
 
-PackageSet::PackageSet(const PackageSackWeakPtr & sack, libdnf::rpm::solv::SolvMap & solv_map) : p_impl(new Impl(sack, solv_map)) {}
+PackageSet::PackageSet(const PackageSackWeakPtr & sack, libdnf::solv::SolvMap & solv_map) : p_impl(new Impl(sack, solv_map)) {}
 
 
 PackageSet::~PackageSet() = default;

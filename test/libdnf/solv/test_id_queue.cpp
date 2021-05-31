@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_id_queue.hpp"
 
-#include "../../../../libdnf/rpm/solv/id_queue.hpp"
+#include "libdnf/solv/id_queue.hpp"
 
 #include <iterator>
 
@@ -35,7 +35,7 @@ void IdQueueTest::tearDown() {}
 
 // Test push_back(), operator[], size(), and clear()
 void IdQueueTest::test_push_back() {
-    libdnf::rpm::solv::IdQueue id_queue;
+    libdnf::solv::IdQueue id_queue;
     CPPUNIT_ASSERT(id_queue.size() == 0);
 
     id_queue.push_back(4);
@@ -59,10 +59,10 @@ void IdQueueTest::test_push_back() {
 
 /// Test operators, copy and move constructors
 void IdQueueTest::test_operators() {
-    libdnf::rpm::solv::IdQueue id_queue_same1;
-    libdnf::rpm::solv::IdQueue id_queue_same2;
-    libdnf::rpm::solv::IdQueue id_queue_different3;
-    libdnf::rpm::solv::IdQueue id_queue_different4;
+    libdnf::solv::IdQueue id_queue_same1;
+    libdnf::solv::IdQueue id_queue_same2;
+    libdnf::solv::IdQueue id_queue_different3;
+    libdnf::solv::IdQueue id_queue_different4;
     id_queue_same1.push_back(3, 2);
     id_queue_same2.push_back(3, 2);
     id_queue_different3.push_back(2, 5);
@@ -100,7 +100,7 @@ void IdQueueTest::test_operators() {
 void IdQueueTest::test_iterator_empty() {
     std::vector<Id> expected = {};
     std::vector<Id> result;
-    libdnf::rpm::solv::IdQueue queue;
+    libdnf::solv::IdQueue queue;
 
     for (auto it = queue.begin(); it != queue.end(); it++) {
         result.push_back(*it);
@@ -110,7 +110,7 @@ void IdQueueTest::test_iterator_empty() {
 
 void IdQueueTest::test_iterator_full() {
     std::vector<Id> expected = {5, 6, 8, 10, 14};
-    libdnf::rpm::solv::IdQueue queue;
+    libdnf::solv::IdQueue queue;
     queue.push_back(5, 6);
     queue.push_back(8, 10);
     queue.push_back(14);
@@ -170,7 +170,7 @@ void IdQueueTest::test_iterator_full() {
 
 void IdQueueTest::test_iterator_performance() {
     constexpr int max = 1000000;
-    libdnf::rpm::solv::IdQueue queue;
+    libdnf::solv::IdQueue queue;
     for (int i = 0; i < max; i++) {
         queue.push_back(i);
     }

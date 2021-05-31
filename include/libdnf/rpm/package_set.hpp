@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-namespace libdnf::rpm::solv {
+namespace libdnf::solv {
 
 class SolvMap;
 
@@ -109,7 +109,7 @@ private:
     friend Transaction;
     friend libdnf::Goal;
     friend libdnf::Swdb;
-    PackageSet(const PackageSackWeakPtr & sack, libdnf::rpm::solv::SolvMap & solv_map);
+    PackageSet(const PackageSackWeakPtr & sack, libdnf::solv::SolvMap & solv_map);
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

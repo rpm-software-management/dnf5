@@ -27,13 +27,13 @@ CPPUNIT_TEST_SUITE_REGISTRATION(SolvMapTest);
 
 
 void SolvMapTest::setUp() {
-    map1 = new libdnf::rpm::solv::SolvMap(32);
+    map1 = new libdnf::solv::SolvMap(32);
     map1->add(0);
     map1->add(2);
     map1->add(28);
     map1->add(30);
 
-    map2 = new libdnf::rpm::solv::SolvMap(32);
+    map2 = new libdnf::solv::SolvMap(32);
     map2->add(0);
     map2->add(1);
 }
@@ -98,7 +98,7 @@ void SolvMapTest::test_remove() {
 
 void SolvMapTest::test_map_allocation_range() {
     // allocate map for 25 bits, but in fact map for 4 bytes (32 bits) is allocated
-    libdnf::rpm::solv::SolvMap map(25);
+    libdnf::solv::SolvMap map(25);
 
     // setting bit 31 works
     map.add(31);
@@ -138,7 +138,7 @@ void SolvMapTest::test_difference() {
 void SolvMapTest::test_iterator_empty() {
     std::vector<Id> expected = {};
     std::vector<Id> result;
-    libdnf::rpm::solv::SolvMap map(16);
+    libdnf::solv::SolvMap map(16);
     for (auto it = map.begin(); it != map.end(); it++) {
         result.push_back(*it);
     }
@@ -149,7 +149,7 @@ void SolvMapTest::test_iterator_empty() {
 void SolvMapTest::test_iterator_full() {
     std::vector<Id> expected = {0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15};
     std::vector<Id> result;
-    libdnf::rpm::solv::SolvMap map(16);
+    libdnf::solv::SolvMap map(16);
     for (int i = 0; i < 16; i++) {
         map.add(i);
     }
@@ -163,7 +163,7 @@ void SolvMapTest::test_iterator_full() {
 void SolvMapTest::test_iterator_sparse() {
     std::vector<Id> expected = {4, 6, 10, 11, 12};
 
-    libdnf::rpm::solv::SolvMap map(16);
+    libdnf::solv::SolvMap map(16);
     for (auto it : expected) {
         map.add(it);
     }
@@ -245,7 +245,7 @@ void SolvMapTest::test_iterator_sparse() {
 void SolvMapTest::test_iterator_performance_empty() {
     // initialize a map filed with zeros
     constexpr int max = 1000000;
-    libdnf::rpm::solv::SolvMap map(max);
+    libdnf::solv::SolvMap map(max);
 
     for (int i = 0; i < 500; i++) {
         std::vector<Id> result;
@@ -259,7 +259,7 @@ void SolvMapTest::test_iterator_performance_empty() {
 void SolvMapTest::test_iterator_performance_full() {
     // initialize a map filed with ones
     constexpr int max = 1000000;
-    libdnf::rpm::solv::SolvMap map(max);
+    libdnf::solv::SolvMap map(max);
     memset(map.get_map()->map, 255, static_cast<std::size_t>(map.get_map()->size));
 
     for (int i = 0; i < 500; i++) {
@@ -274,7 +274,7 @@ void SolvMapTest::test_iterator_performance_full() {
 void SolvMapTest::test_iterator_performance_4bits() {
     // initialize a map filed with 00001111 bytes
     constexpr int max = 1000000;
-    libdnf::rpm::solv::SolvMap map(max);
+    libdnf::solv::SolvMap map(max);
     memset(map.get_map()->map, 15, static_cast<std::size_t>(map.get_map()->size));
 
     for (int i = 0; i < 500; i++) {

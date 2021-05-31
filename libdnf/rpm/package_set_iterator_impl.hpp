@@ -24,12 +24,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/package_set_impl.hpp"
 #include "libdnf/rpm/package_set_iterator.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 
 namespace libdnf::rpm {
 
 
-class PackageSetIterator::Impl : public solv::SolvMap::iterator {
+class PackageSetIterator::Impl : public libdnf::solv::SolvMap::iterator {
 public:
     Impl(const PackageSet & package_set);
     Impl(const PackageSetIterator::Impl & package_set_iterator_impl) = default;
@@ -43,11 +44,11 @@ private:
 
 
 inline PackageSetIterator::Impl::Impl(const PackageSet & package_set)
-    : solv::SolvMap::iterator(package_set.p_impl->get_map())
+    : libdnf::solv::SolvMap::iterator(package_set.p_impl->get_map())
     , package_set{package_set} {}
 
 inline PackageSetIterator::Impl & PackageSetIterator::Impl::operator++() {
-    solv::SolvMap::iterator::operator++();
+    libdnf::solv::SolvMap::iterator::operator++();
     return *this;
 }
 

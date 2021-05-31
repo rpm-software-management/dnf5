@@ -18,15 +18,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_RPM_SOLV_QUEUE_ITERATOR_HPP
-#define LIBDNF_RPM_SOLV_QUEUE_ITERATOR_HPP
+#ifndef LIBDNF_SOLV_QUEUE_ITERATOR_HPP
+#define LIBDNF_SOLV_QUEUE_ITERATOR_HPP
 
 #include <solv/queue.h>
 
 #include <cstddef>
 #include <iterator>
 
-namespace libdnf::rpm::solv {
+namespace libdnf::solv {
 
 class IdQueueIterator {
 public:
@@ -73,6 +73,6 @@ inline IdQueueIterator IdQueueIterator::operator++(int) noexcept {
     return ret;
 }
 
-}  // namespace libdnf::rpm::solv
+}  // namespace libdnf::solv
 
-#endif  // LIBDNF_RPM_SOLV_QUEUE_ITERATOR_HPP
+#endif  // LIBDNF_SOLV_QUEUE_ITERATOR_HPP

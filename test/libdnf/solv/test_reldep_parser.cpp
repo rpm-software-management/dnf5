@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "test_reldep_parser.hpp"
-#include "../../../../libdnf/rpm/solv/reldep_parser.hpp"
+#include "libdnf/solv/reldep_parser.hpp"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ReldepParserTest);
 
@@ -35,7 +35,7 @@ void
 ReldepParserTest::test_parser()
 {
     std::string reldep_str("dnf = 34.66.7-67.4");
-    libdnf::rpm::solv::ReldepParser dep_parser;
+    libdnf::solv::ReldepParser dep_parser;
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf = 34.66.7-67.4'", dep_parser.parse(reldep_str));
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf = 34.66.7-67.4'", dep_parser.get_name() == "dnf");
     CPPUNIT_ASSERT_MESSAGE("Parse 'dnf = 34.66.7-67.4'",

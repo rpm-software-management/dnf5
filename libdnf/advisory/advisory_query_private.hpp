@@ -22,19 +22,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory.hpp"
 #include "libdnf/advisory/advisory_query.hpp"
-#include "libdnf/rpm/solv/solv_map.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 namespace libdnf::advisory {
 
 //TODO(amatej): only temprary class to hide solv_map from advisory_query.hpp,
 //              should be replaced most likely by AdvisorySet?
 class AdvisoryQuery::Impl {
-    Impl(const libdnf::rpm::solv::SolvMap & m) : data_map(m){};
+    Impl(const libdnf::solv::SolvMap & m) : data_map(m){};
 
 private:
     friend AdvisoryQuery;
 
-    libdnf::rpm::solv::SolvMap data_map;
+    libdnf::solv::SolvMap data_map;
 };
 
 }  // namespace libdnf::advisory

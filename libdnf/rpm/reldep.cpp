@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/reldep.hpp"
 
 #include "package_sack_impl.hpp"
-#include "solv/reldep_parser.hpp"
+#include "libdnf/solv/reldep_parser.hpp"
 
 // workaround, libsolv lacks 'extern "C"' in its header file
 extern "C" {
@@ -93,7 +93,7 @@ ReldepId Reldep::get_reldep_id(PackageSack * sack, const std::string & reldep_st
         return ReldepId(id);
     }
 
-    solv::ReldepParser dep_splitter;
+    libdnf::solv::ReldepParser dep_splitter;
     if (!dep_splitter.parse(reldep_str)) {
         throw std::runtime_error("Cannot parse a dependency string");
     }
