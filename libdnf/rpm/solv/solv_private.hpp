@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017-2020 Red Hat, Inc.
+Copyright (C) 2017-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -28,12 +28,12 @@ namespace libdnf::rpm::solv {
 
 class SolvPrivate {
 public:
-    static void internalize_libsolv_repo(LibsolvRepo * libsolv_repo);
+    static void internalize_libsolv_repo(repo::LibsolvRepo * libsolv_repo);
 
 private:
 };
 
-inline void SolvPrivate::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
+inline void SolvPrivate::internalize_libsolv_repo(repo::LibsolvRepo * libsolv_repo) {
     PackageSack::Impl::internalize_libsolv_repo(libsolv_repo);
 }
 

@@ -33,7 +33,7 @@ void RepoQueryTest::tearDown() {}
 
 void RepoQueryTest::test_query_basics() {
     libdnf::Base base;
-    libdnf::rpm::RepoSack repo_sack(base);
+    libdnf::repo::RepoSack repo_sack(base);
 
     // Creates new repositories in the repo_sack
     auto repo1 = repo_sack.new_repo("repo1");

@@ -46,6 +46,13 @@ class AdvisoryReference;
 
 }  // namespace libdnf::advisory
 
+namespace libdnf::repo {
+
+class Repo;
+class RepoSack;
+
+}
+
 namespace libdnf::rpm::solv {
 
 class SolvPrivate;
@@ -90,7 +97,6 @@ inline ReldepId::ReldepId(int id) : id(id) {}
 class Package;
 class Reldep;
 class ReldepList;
-class Repo;
 class PackageQuery;
 class Transaction;
 
@@ -137,7 +143,7 @@ public:
 
     //TODO(jrohel): Provide/use configuration options for flags?
     /// Loads rpm::Repo into PackageSack.
-    void load_repo(Repo & repo, LoadRepoFlags flags);
+    void load_repo(repo::Repo & repo, LoadRepoFlags flags);
 
     /// Creates system repository and loads it into PackageSack. Only one system repository can be in PackageSack.
     void create_system_repo(bool build_cache = false);
@@ -175,7 +181,7 @@ private:
     friend PackageSet;
     friend Reldep;
     friend ReldepList;
-    friend class RepoSack;
+    friend class repo::RepoSack;
     friend PackageQuery;
     friend Transaction;
     friend libdnf::Swdb;

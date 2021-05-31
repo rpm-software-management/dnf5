@@ -41,7 +41,7 @@ extern "C" {
 using LibsolvRepo = ::Repo;
 
 
-namespace libdnf::rpm {
+namespace libdnf::repo {
 
 
 RepoWeakPtr RepoSack::new_repo(const std::string & id) {
@@ -148,4 +148,4 @@ void RepoSack::new_repos_from_dirs() {
     }
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::repo

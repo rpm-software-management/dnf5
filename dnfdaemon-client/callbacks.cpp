@@ -146,7 +146,7 @@ void PackageDownloadCB::end(sdbus::Signal & signal) {
         signal >> status_i;
         std::string msg;
         signal >> msg;
-        using namespace libdnf::rpm;
+        using namespace libdnf::repo;
         auto status = static_cast<PackageTargetCB::TransferStatus>(status_i);
         switch (status) {
             case PackageTargetCB::TransferStatus::SUCCESSFUL:

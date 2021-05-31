@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2019-2020 Red Hat, Inc.
+Copyright (C) 2019-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -39,7 +39,7 @@ class Context {
 public:
     /// Updates the repositories metadata cache.
     /// Loads the updated metadata into rpm::RepoSack and into rpm::PackageSack.
-    void load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags);
+    void load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags);
 
     /// Select commend to execute
     void select_command(Command * cmd) { selected_command = cmd; }
@@ -64,7 +64,7 @@ public:
 
 private:
     /// Updates the repository metadata cache and load it into rpm::RepoSack.
-    void load_rpm_repo(libdnf::rpm::Repo & repo);
+    void load_rpm_repo(libdnf::repo::Repo & repo);
 
     /// Refers to program arguments.
     libdnf::Span<const char * const> prg_args;

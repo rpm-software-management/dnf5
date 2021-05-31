@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/const.hpp"
 
-namespace libdnf::rpm {
+namespace libdnf::repo {
 
 class ConfigRepo::Impl {
     friend class ConfigRepo;
@@ -534,4 +534,4 @@ const OptionBool & ConfigRepo::build_cache() const {
     return p_impl->build_cache;
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::repo

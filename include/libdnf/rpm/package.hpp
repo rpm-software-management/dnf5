@@ -392,7 +392,7 @@ public:
     //
     // @replaces dnf:dnf/package.py:attribute:Package.repo
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_repo(DnfPackage * pkg)
-    libdnf::rpm::RepoWeakPtr get_repo() const;
+    libdnf::repo::RepoWeakPtr get_repo() const;
 
     /// @return Id of the repository the package belongs to.
     /// @since 5.0

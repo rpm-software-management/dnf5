@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -72,7 +72,7 @@ const char * get_full_nevra(Pool * pool, Id package_id) {
 //TODO(jrohel): What about local repositories? The original code in DNF4 uses baseurl+get_location(pool, package_id).
 std::string get_package_path(Pool * pool, Id package_id) {
     auto solvable = get_solvable(pool, package_id);
-    if (auto repo = static_cast<Repo *>(solvable->repo->appdata)) {
+    if (auto repo = static_cast<repo::Repo *>(solvable->repo->appdata)) {
         auto dir = std::filesystem::path(repo->get_cachedir()) / "packages";
         return dir / std::filesystem::path(get_location(pool, package_id)).filename();
     } else {

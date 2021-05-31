@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of microdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -18,6 +18,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "context.hpp"
+
 #include "utils.hpp"
 
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
@@ -68,7 +69,7 @@ bool userconfirm(libdnf::ConfigMain & config) {
     }
 }
 
-class MicrodnfRepoCB : public libdnf::rpm::RepoCB {
+class MicrodnfRepoCB : public libdnf::repo::RepoCB {
 public:
     explicit MicrodnfRepoCB(libdnf::ConfigMain & config) : config(&config) {}
 
@@ -169,7 +170,7 @@ private:
 
 std::chrono::time_point<std::chrono::steady_clock> MicrodnfRepoCB::prev_print_time = std::chrono::steady_clock::now();
 
-void Context::load_rpm_repo(libdnf::rpm::Repo & repo) {
+void Context::load_rpm_repo(libdnf::repo::Repo & repo) {
     //repo->set_substitutions(variables);
     auto & logger = *base.get_logger();
     auto callback = std::make_unique<microdnf::MicrodnfRepoCB>(base.get_config());
@@ -188,15 +189,15 @@ void Context::load_rpm_repo(libdnf::rpm::Repo & repo) {
 }
 
 // Multithreaded. Main thread prepares (updates) repositories metadata. Second thread loads them to solvable sack.
-void Context::load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags) {
+void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags) {
     std::atomic<bool> except{false};  // set to true if an exception occurred
     std::exception_ptr except_ptr;    // for pass exception from thread_sack_loader to main thread,
                                       // a default-constructed std::exception_ptr is a null pointer
 
-    std::vector<libdnf::rpm::Repo *> prepared_repos;  // array of repositories prepared to load into solv sack
-    std::mutex prepared_repos_mutex;                  // mutex for the array
-    std::condition_variable signal_prepared_repo;     // signals that next item is added into array
-    std::size_t num_repos_loaded_to_package_sack{0};     // number of repositories already loaded into solv sack
+    std::vector<libdnf::repo::Repo *> prepared_repos;  // array of repositories prepared to load into solv sack
+    std::mutex prepared_repos_mutex;                   // mutex for the array
+    std::condition_variable signal_prepared_repo;      // signals that next item is added into array
+    std::size_t num_repos_loaded_to_package_sack{0};   // number of repositories already loaded into solv sack
 
     prepared_repos.reserve(repos.size() + 1);  // optimization: preallocate memory to avoid realocations, +1 stop tag
 
@@ -304,7 +305,7 @@ void Context::load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::Packag
 //     }
 // }
 
-class PkgDownloadCB : public libdnf::rpm::PackageTargetCB {
+class PkgDownloadCB : public libdnf::repo::PackageTargetCB {
 public:
     PkgDownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
         : multi_progress_bar(&mp_bar)
@@ -384,8 +385,8 @@ std::chrono::time_point<std::chrono::steady_clock> PkgDownloadCB::prev_print_tim
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     std::vector<std::unique_ptr<PkgDownloadCB>> pkg_download_callbacks_guard;
-    std::vector<std::unique_ptr<libdnf::rpm::PackageTarget>> targets_guard;
-    std::vector<libdnf::rpm::PackageTarget *> targets;
+    std::vector<std::unique_ptr<libdnf::repo::PackageTarget>> targets_guard;
+    std::vector<libdnf::repo::PackageTarget *> targets;
 
     std::string destination;
     if (dest_dir) {
@@ -403,7 +404,7 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
         auto pkg_download_cb_ptr = pkg_download_cb.get();
         pkg_download_callbacks_guard.push_back(std::move(pkg_download_cb));
 
-        auto pkg_target = std::make_unique<libdnf::rpm::PackageTarget>(
+        auto pkg_target = std::make_unique<libdnf::repo::PackageTarget>(
             repo,
             package.get_location().c_str(),
             destination.c_str(),
@@ -421,7 +422,7 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
 
     std::cout << "Downloading Packages:" << std::endl;
     try {
-        libdnf::rpm::PackageTarget::download_packages(targets, true);
+        libdnf::repo::PackageTarget::download_packages(targets, true);
     } catch (const std::runtime_error & ex) {
         std::cout << "Exception: " << ex.what() << std::endl;
     }
@@ -626,7 +627,8 @@ private:
             active_progress_bar->get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
             active_progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
         }
-        auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), descr);
+        auto progress_bar =
+            std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), descr);
         multi_progress_bar.add_bar(progress_bar.get());
         progress_bar->set_auto_finish(false);
         progress_bar->start();
@@ -650,7 +652,7 @@ private:
 
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
-    std::vector<std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar>> download_progress_bars {};
+    std::vector<std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar>> download_progress_bars{};
 };
 
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();
@@ -695,15 +697,22 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx) {
     return transaction;
 }
 
-static void set_trans_pkg(libdnf::rpm::Package & package, libdnf::transaction::Package & trans_pkg, libdnf::transaction::TransactionItemAction action) {
-        libdnf::rpm::copy_nevra_attributes(package, trans_pkg);
-        trans_pkg.set_repoid(package.get_repo_id());
-        trans_pkg.set_action(action);
-        //TODO(jrohel): set actual reason
-        trans_pkg.set_reason(libdnf::transaction::TransactionItemReason::UNKNOWN);
+static void set_trans_pkg(
+    libdnf::rpm::Package & package,
+    libdnf::transaction::Package & trans_pkg,
+    libdnf::transaction::TransactionItemAction action) {
+    libdnf::rpm::copy_nevra_attributes(package, trans_pkg);
+    trans_pkg.set_repoid(package.get_repo_id());
+    trans_pkg.set_action(action);
+    //TODO(jrohel): set actual reason
+    trans_pkg.set_reason(libdnf::transaction::TransactionItemReason::UNKNOWN);
 }
 
-void fill_transactions(libdnf::Goal & goal, libdnf::transaction::TransactionWeakPtr & transaction,  libdnf::rpm::Transaction & rpm_ts, std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items) {
+void fill_transactions(
+    libdnf::Goal & goal,
+    libdnf::transaction::TransactionWeakPtr & transaction,
+    libdnf::rpm::Transaction & rpm_ts,
+    std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items) {
     for (auto & package : goal.list_rpm_removes()) {
         auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::ERASE);
         auto item_ptr = item.get();

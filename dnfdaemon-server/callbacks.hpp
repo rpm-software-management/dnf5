@@ -52,7 +52,7 @@ protected:
     }
 };
 
-class DbusPackageCB : public libdnf::rpm::PackageTargetCB, public DbusCallback {
+class DbusPackageCB : public libdnf::repo::PackageTargetCB, public DbusCallback {
 public:
     explicit DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg);
     virtual ~DbusPackageCB() = default;
@@ -68,7 +68,7 @@ private:
     sdbus::Signal create_signal(std::string interface, std::string signal_name) override;
 };
 
-class DbusRepoCB : public libdnf::rpm::RepoCB, public DbusCallback {
+class DbusRepoCB : public libdnf::repo::RepoCB, public DbusCallback {
 public:
     explicit DbusRepoCB(Session & session) : DbusCallback(session) {}
     virtual ~DbusRepoCB() = default;

@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 
-namespace libdnf::rpm {
+namespace libdnf::repo {
 
 /// Holds repo configuration options. Default values of some options are inherited from ConfigMain.
 class ConfigRepo : public Config<Option::Priority::REPOCONFIG> {
@@ -146,6 +146,6 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::repo
 
 #endif

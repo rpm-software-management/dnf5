@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -285,7 +285,7 @@ unsigned long long Package::get_rpmdbid() const {
     return solv::get_rpmdbid(pool, id.id);
 }
 
-libdnf::rpm::RepoWeakPtr Package::get_repo() const {
+libdnf::repo::RepoWeakPtr Package::get_repo() const {
     Pool * pool = sack->p_impl->pool;
     return solv::get_repo(pool, id.id)->get_weak_ptr();
 }

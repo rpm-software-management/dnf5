@@ -41,7 +41,7 @@ protected:
     void add_repo_solv(const std::string & repoid);
 
     std::unique_ptr<libdnf::Base> base;
-    libdnf::rpm::RepoSackWeakPtr repo_sack;
+    libdnf::repo::RepoSackWeakPtr repo_sack;
     libdnf::rpm::PackageSackWeakPtr sack;
     std::unique_ptr<libdnf::utils::TempDir> temp;
 };

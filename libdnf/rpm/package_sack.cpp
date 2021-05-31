@@ -138,7 +138,7 @@ bool is_superset(const solv::IdQueue & q1, const solv::IdQueue * q2, solv::SolvM
 
 }  // end of anonymous namespace
 
-void PackageSack::Impl::write_main(LibsolvRepoExt & libsolv_repo_ext, bool switchtosolv) {
+void PackageSack::Impl::write_main(repo::LibsolvRepoExt & libsolv_repo_ext, bool switchtosolv) {
     auto & logger = *base->get_logger();
     LibsolvRepo * libsolv_repo = libsolv_repo_ext.repo;
     const char * name = libsolv_repo->name;
@@ -202,7 +202,7 @@ static int write_ext_updateinfo_filter(LibsolvRepo * repo, Repokey * key, void *
 }
 
 void PackageSack::Impl::write_ext(
-    LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix) {
+    repo::LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix) {
     auto & logger = *base->get_logger();
     auto libsolv_repo = libsolv_repo_ext.repo;
     const char * repo_id = libsolv_repo->name;
@@ -273,7 +273,7 @@ void PackageSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::I
 
     LibsolvRepo * libsolv_repo;
     FOR_REPOS(i, libsolv_repo) {
-        auto repo = static_cast<Repo *>(libsolv_repo->appdata);
+        auto repo = static_cast<repo::Repo *>(libsolv_repo->appdata);
         if (!repo) {
             continue;
         }
@@ -313,7 +313,7 @@ void PackageSack::Impl::rewrite_repos(solv::IdQueue & addedfileprovides, solv::I
     }
 }
 
-PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(Repo & repo) {
+PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & repo) {
     RepodataState data_state = RepodataState::NEW;
     auto repo_impl = repo.p_impl.get();
     if (repo_impl->repomd_fn.empty()) {
@@ -341,7 +341,7 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(Repo & repo) 
         }
         data_state = RepodataState::LOADED_CACHE;
     } else {
-        auto primary = repo.get_metadata_path(Repo::Impl::MD_FILENAME_PRIMARY);
+        auto primary = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_PRIMARY);
         if (primary.empty()) {
             // It could happen when repomd file has no "primary" data or they are in unsupported
             // format like zchunk
@@ -366,7 +366,7 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(Repo & repo) 
 }
 
 PackageSack::Impl::RepodataInfo PackageSack::Impl::load_repo_ext(
-    Repo & repo, const char * suffix, const char * which_filename, int flags, bool (*cb)(LibsolvRepo *, FILE *)) {
+    repo::Repo & repo, const char * suffix, const char * which_filename, int flags, bool (*cb)(LibsolvRepo *, FILE *)) {
     RepodataInfo info;
     auto & logger = *base->get_logger();
     auto repo_impl = repo.p_impl.get();
@@ -420,7 +420,7 @@ void PackageSack::Impl::internalize_libsolv_repos() {
 }
 
 void PackageSack::Impl::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
-    if (auto repo = static_cast<Repo *>(libsolv_repo->appdata)) {
+    if (auto repo = static_cast<repo::Repo *>(libsolv_repo->appdata)) {
         repo->p_impl->libsolv_repo_ext.internalize();
     } else {
         // TODO(jrohel): Do we allow existence of libsolv repo without appdata set?
@@ -478,7 +478,7 @@ bool PackageSack::Impl::load_system_repo() {
     return true;
 }
 
-void PackageSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
+void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags flags) {
     auto & logger = *base->get_logger();
     auto repo_impl = repo.p_impl.get();
 
@@ -496,7 +496,7 @@ void PackageSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
             auto repodata_info = load_repo_ext(
                 repo,
                 SOLV_EXT_FILENAMES,
-                Repo::Impl::MD_FILENAME_FILELISTS,
+                repo::Repo::Impl::MD_FILENAME_FILELISTS,
                 REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL,
                 [](LibsolvRepo * repo, FILE * fp) {
                     return repo_add_rpmmd(repo, fp, "FL", REPO_EXTEND_SOLVABLES) == 0;
@@ -514,7 +514,7 @@ void PackageSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
             auto repodata_info = load_repo_ext(
                 repo,
                 SOLV_EXT_OTHER,
-                Repo::Impl::MD_FILENAME_OTHER,
+                repo::Repo::Impl::MD_FILENAME_OTHER,
                 REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL,
                 [](LibsolvRepo * repo, FILE * fp) { return repo_add_rpmmd(repo, fp, 0, REPO_EXTEND_SOLVABLES) == 0; });
             if (repodata_info.state == RepodataState::LOADED_FETCH && build_cache) {
@@ -529,7 +529,7 @@ void PackageSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
             auto repodata_info = load_repo_ext(
                 repo,
                 SOLV_EXT_PRESTO,
-                Repo::Impl::MD_FILENAME_PRESTODELTA,
+                repo::Repo::Impl::MD_FILENAME_PRESTODELTA,
                 REPO_EXTEND_SOLVABLES,
                 [](LibsolvRepo * repo, FILE * fp) { return repo_add_deltainfoxml(repo, fp, 0) == 0; });
             if (repodata_info.state == RepodataState::LOADED_FETCH && build_cache) {
@@ -545,9 +545,11 @@ void PackageSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
         try {
             // the updateinfo is not a real extension flags = 0
             auto repodata_info = load_repo_ext(
-                repo, SOLV_EXT_UPDATEINFO, Repo::Impl::MD_FILENAME_UPDATEINFO, 0, [](LibsolvRepo * repo, FILE * fp) {
-                    return repo_add_updateinfoxml(repo, fp, 0) == 0;
-                });
+                repo,
+                SOLV_EXT_UPDATEINFO,
+                repo::Repo::Impl::MD_FILENAME_UPDATEINFO,
+                0,
+                [](LibsolvRepo * repo, FILE * fp) { return repo_add_updateinfoxml(repo, fp, 0) == 0; });
             if (repodata_info.state == RepodataState::LOADED_FETCH && build_cache) {
                 write_ext(repo_impl->libsolv_repo_ext, repodata_info.id, RepodataType::UPDATEINFO, SOLV_EXT_UPDATEINFO);
             }
@@ -559,9 +561,9 @@ void PackageSack::Impl::load_available_repo(Repo & repo, LoadRepoFlags flags) {
 }
 
 
-void PackageSack::load_repo(Repo & repo, LoadRepoFlags flags) {
+void PackageSack::load_repo(repo::Repo & repo, LoadRepoFlags flags) {
     auto repo_impl = repo.p_impl.get();
-    if (repo_impl->type != Repo::Type::AVAILABLE) {
+    if (repo_impl->type != repo::Repo::Type::AVAILABLE) {
         throw LogicError("PackageSack::load_repo(): User can load only \"available\" repository");
     }
     p_impl->load_available_repo(repo, flags);
@@ -571,16 +573,16 @@ void PackageSack::create_system_repo(bool build_cache) {
     if (p_impl->system_repo) {
         throw LogicError("PackageSack::create_system_repo(): System repo already exists");
     }
-    p_impl->system_repo = std::make_unique<Repo>(SYSTEM_REPO_NAME, *p_impl->base, Repo::Type::SYSTEM);
+    p_impl->system_repo = std::make_unique<repo::Repo>(SYSTEM_REPO_NAME, *p_impl->base, repo::Repo::Type::SYSTEM);
     p_impl->system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
     p_impl->load_system_repo();
 }
 
-Repo & PackageSack::Impl::get_cmdline_repo() {
+repo::Repo & PackageSack::Impl::get_cmdline_repo() {
     if (cmdline_repo) {
         return *cmdline_repo.get();
     }
-    cmdline_repo = std::make_unique<Repo>(CMDLINE_REPO_NAME, *base, Repo::Type::SYSTEM);
+    cmdline_repo = std::make_unique<repo::Repo>(CMDLINE_REPO_NAME, *base, repo::Repo::Type::SYSTEM);
     cmdline_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, false);
 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
@@ -598,12 +600,12 @@ Package PackageSack::add_cmdline_package(const std::string & fn, bool add_with_h
     return Package(this->get_weak_ptr(), PackageId(new_id));
 }
 
-Repo & PackageSack::Impl::get_system_repo(bool build_cache) {
+repo::Repo & PackageSack::Impl::get_system_repo(bool build_cache) {
     if (system_repo) {
         return *system_repo.get();
     }
 
-    system_repo = std::make_unique<Repo>(SYSTEM_REPO_NAME, *base, Repo::Type::SYSTEM);
+    system_repo = std::make_unique<repo::Repo>(SYSTEM_REPO_NAME, *base, repo::Repo::Type::SYSTEM);
     system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(

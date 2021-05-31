@@ -79,14 +79,14 @@
 %include "libdnf/rpm/config_repo.hpp"
 %include "libdnf/rpm/repo.hpp"
 
-%template(RepoWeakPtr) libdnf::WeakPtr<libdnf::rpm::Repo, false>;
-%template(SetRepoWeakPtr) libdnf::Set<libdnf::rpm::RepoWeakPtr>;
-%template(SackQueryRepoWeakPtr) libdnf::sack::Query<libdnf::rpm::RepoWeakPtr>;
+%template(RepoWeakPtr) libdnf::WeakPtr<libdnf::repo::Repo, false>;
+%template(SetRepoWeakPtr) libdnf::Set<libdnf::repo::RepoWeakPtr>;
+%template(SackQueryRepoWeakPtr) libdnf::sack::Query<libdnf::repo::RepoWeakPtr>;
 
 %include "libdnf/rpm/repo_query.hpp"
-%template(SackRepoRepoQuery) libdnf::sack::Sack<libdnf::rpm::Repo, libdnf::rpm::RepoQuery>;
+%template(SackRepoRepoQuery) libdnf::sack::Sack<libdnf::repo::Repo, libdnf::repo::RepoQuery>;
 %include "libdnf/rpm/repo_sack.hpp"
-%template(RepoSackWeakPtr) libdnf::WeakPtr<libdnf::rpm::RepoSack, false>;
+%template(RepoSackWeakPtr) libdnf::WeakPtr<libdnf::repo::RepoSack, false>;
 
 add_iterator(PackageSet)
 add_iterator(ReldepList)

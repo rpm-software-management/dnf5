@@ -36,10 +36,10 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 // TODO(mblaha) remove after microdnf is merged
-namespace libdnf::rpm {
+namespace libdnf::repo {
 using RepoWeakPtr = WeakPtr<Repo, false>;
 using RepoSet = Set<RepoWeakPtr>;
-}  // namespace libdnf::rpm
+}  // namespace libdnf::repo
 
 namespace dnfdaemon::client {
 

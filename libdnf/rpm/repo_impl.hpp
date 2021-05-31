@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -52,7 +52,7 @@ struct default_delete<LrHandle> {
 
 }  // namespace std
 
-namespace libdnf::rpm {
+namespace libdnf::repo {
 
 using LibsolvRepo = ::Repo;
 
@@ -215,6 +215,6 @@ public:
     LibsolvRepoExt libsolv_repo_ext;
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::repo
 
 #endif  // LIBDNF_RPM_REPO_IMPL_HPP

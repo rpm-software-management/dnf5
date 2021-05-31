@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2018-2020 Red Hat, Inc.
+Copyright (C) 2018-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -136,7 +136,7 @@ struct default_delete<std::remove_pointer<gpgme_ctx_t>::type> {
 
 }  // namespace std
 
-namespace libdnf::rpm {
+namespace libdnf::repo {
 
 class LrExceptionWithSourceUrl : public LrException {
 public:
@@ -2166,4 +2166,4 @@ void LibrepoLog::remove_all_handlers() {
     lr_log_datas.clear();
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::repo

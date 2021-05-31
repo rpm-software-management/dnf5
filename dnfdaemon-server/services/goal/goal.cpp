@@ -186,8 +186,8 @@ void download_packages(Session & session, libdnf::Goal & goal) {
     auto reinstalls_pkgs = goal.list_rpm_reinstalls();
     auto upgrades_pkgs = goal.list_rpm_upgrades();
     auto downgrades_pkgs = goal.list_rpm_downgrades();
-    std::vector<libdnf::rpm::PackageTarget *> targets;
-    std::vector<std::unique_ptr<libdnf::rpm::PackageTarget>> targets_guard;
+    std::vector<libdnf::repo::PackageTarget *> targets;
+    std::vector<std::unique_ptr<libdnf::repo::PackageTarget>> targets_guard;
     std::vector<std::unique_ptr<DbusPackageCB>> pkg_download_callbacks_guard;
     std::string destination;
 
@@ -205,7 +205,7 @@ void download_packages(Session & session, libdnf::Goal & goal) {
         auto pkg_download_cb_ptr = pkg_download_cb.get();
         pkg_download_callbacks_guard.push_back(std::move(pkg_download_cb));
 
-        auto pkg_target = std::make_unique<libdnf::rpm::PackageTarget>(
+        auto pkg_target = std::make_unique<libdnf::repo::PackageTarget>(
             repo,
             package.get_location().c_str(),
             destination.c_str(),
@@ -220,7 +220,7 @@ void download_packages(Session & session, libdnf::Goal & goal) {
         targets.push_back(pkg_target.get());
         targets_guard.push_back(std::move(pkg_target));
     }
-    libdnf::rpm::PackageTarget::download_packages(targets, true);
+    libdnf::repo::PackageTarget::download_packages(targets, true);
 }
 
 sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall && call) {

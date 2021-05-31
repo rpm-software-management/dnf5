@@ -98,7 +98,7 @@ const static std::map<std::string, RepoAttribute> repo_attributes{
 // converts Repo object to dbus map
 dnfdaemon::KeyValueMap repo_to_map(
     libdnf::Base & base,
-    const libdnf::WeakPtr<libdnf::rpm::Repo, false> libdnf_repo,
+    const libdnf::WeakPtr<libdnf::repo::Repo, false> libdnf_repo,
     std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_repo;
     // attributes required by client

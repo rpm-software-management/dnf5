@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -59,7 +59,7 @@ public:
 
     ConfigMain & get_config() { return config; }
     LogRouterWeakPtr get_logger() { return LogRouterWeakPtr(&log_router, &log_router_gurad); }
-    rpm::RepoSackWeakPtr get_rpm_repo_sack() { return rpm_repo_sack.get_weak_ptr(); }
+    repo::RepoSackWeakPtr get_rpm_repo_sack() { return rpm_repo_sack.get_weak_ptr(); }
     rpm::PackageSackWeakPtr get_rpm_package_sack() { return rpm_package_sack.get_weak_ptr(); }
 
     transaction::TransactionSackWeakPtr get_transaction_sack() { return transaction_sack.get_weak_ptr(); }
@@ -90,7 +90,7 @@ private:
 
     ConfigMain config;
     LogRouter log_router;
-    rpm::RepoSack rpm_repo_sack{*this};
+    repo::RepoSack rpm_repo_sack{*this};
     rpm::PackageSack rpm_package_sack{*this};
     transaction::TransactionSack transaction_sack{*this};
     comps::Comps comps{*this};

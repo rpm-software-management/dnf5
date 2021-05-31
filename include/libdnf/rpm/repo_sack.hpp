@@ -33,7 +33,7 @@ class Base;
 
 }  // namespace libdnf
 
-namespace libdnf::rpm {
+namespace libdnf::repo {
 
 class RepoSack;
 
@@ -84,6 +84,6 @@ private:
 
 inline RepoSackWeakPtr RepoSack::get_weak_ptr() { return RepoSackWeakPtr(this, &data_guard); }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::repo
 
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2020 Red Hat, Inc.
+ * Copyright (C) 2020-2021 Red Hat, Inc.
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -65,7 +65,7 @@ void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const s
         if (cfg_parser_data_iter.first != "main") {
             // each section other than [main] is considered a repository
             auto section = cfg_parser_data_iter.first;
-            std::unique_ptr<libdnf::rpm::ConfigRepo> cfg_repo(new libdnf::rpm::ConfigRepo(cfg_main));
+            std::unique_ptr<libdnf::repo::ConfigRepo> cfg_repo(new libdnf::repo::ConfigRepo(cfg_main));
 
             cfg_repo->load_from_parser(*repo_parser, section, *base->get_vars(), *base->get_logger());
 

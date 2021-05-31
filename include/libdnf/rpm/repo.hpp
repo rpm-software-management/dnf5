@@ -37,9 +37,14 @@ class Base;
 
 namespace libdnf::rpm {
 
+class PackageSack;
+
+}
+
+namespace libdnf::repo {
+
 class Repo;
 using RepoWeakPtr = WeakPtr<Repo, false>;
-class PackageSack;
 
 class LrException : public RuntimeError {
 public:
@@ -366,7 +371,7 @@ public:
 private:
     class Impl;
     friend class RepoSack;
-    friend class PackageSack;
+    friend class rpm::PackageSack;
     friend struct PackageTarget;
     std::unique_ptr<Impl> p_impl;
     WeakPtrGuard<Repo, false> data_guard;
@@ -472,6 +477,6 @@ public:
     static void remove_all_handlers();
 };
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::repo
 
 #endif

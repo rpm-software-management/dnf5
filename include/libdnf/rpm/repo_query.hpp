@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/rpm/repo.hpp"
 
-namespace libdnf::rpm {
+namespace libdnf::repo {
 
 /// Weak pointer to rpm repository. RepoWeakPtr does not own the repository (ptr_owner = false).
 /// Repositories are owned by RepoSack.
@@ -88,6 +88,6 @@ inline RepoQuery & RepoQuery::filter_name(const std::vector<std::string> & patte
     return *this;
 }
 
-}  // namespace libdnf::rpm
+}  // namespace libdnf::repo
 
 #endif

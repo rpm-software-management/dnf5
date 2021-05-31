@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -89,18 +89,18 @@ public:
     std::vector<Solvable *> & get_sorted_solvables();
 
     /// Create if not already created and return cmdline_repo
-    Repo & get_cmdline_repo();
+    repo::Repo & get_cmdline_repo();
 
     /// Create if not already created an empty system repository and return system_repo
     /// After creation of the repo method create_system_repo() will not work => exception
-    Repo & get_system_repo(bool build_cache);
+    repo::Repo & get_system_repo(bool build_cache);
 
     /// Return sorted list of all package solvables in format pair<id_of_lowercase_name, Solvable *>
     std::vector<std::pair<Id, Solvable *>> & get_sorted_icase_solvables();
 
     void internalize_libsolv_repos();
 
-    static void internalize_libsolv_repo(LibsolvRepo * libsolv_repo);
+    static void internalize_libsolv_repo(repo::LibsolvRepo * libsolv_repo);
 
     void make_provides_ready();
 
@@ -114,24 +114,29 @@ private:
     bool load_system_repo();
 
     /// Loads available repository into PackageSack
-    void load_available_repo(Repo & repo, LoadRepoFlags flags);
+    void load_available_repo(repo::Repo & repo, LoadRepoFlags flags);
 
     /// Loads main metadata (solvables) from available repo.
     /// @replaces libdnf/dnf-sack.cpp:method:load_yum_repo()
-    RepodataState load_repo_main(Repo & repo);
+    RepodataState load_repo_main(repo::Repo & repo);
 
     /// Loads additional metadata (filelist, others, ...) from available repo.
     /// @replaces libdnf/dnf-sack.cpp:method:load_ext()
     RepodataInfo load_repo_ext(
-        Repo & repo, const char * suffix, const char * which_filename, int flags, bool (*cb)(LibsolvRepo *, FILE *));
+        repo::Repo & repo,
+        const char * suffix,
+        const char * which_filename,
+        int flags,
+        bool (*cb)(repo::LibsolvRepo *, FILE *));
 
     /// Writes solv file with main libsolv repodata.
     /// @replaces libdnf/dnf-sack.cpp:method:write_main()
-    void write_main(LibsolvRepoExt & repo, bool switchtosolv);
+    void write_main(repo::LibsolvRepoExt & repo, bool switchtosolv);
 
     /// Writes solvx file with extended libsolv repodata.
     /// @replaces libdnf/dnf-sack.cpp:method:write_ext()
-    void write_ext(LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix);
+    void write_ext(
+        repo::LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix);
 
     void rewrite_repos(solv::IdQueue & addedfileprovides, solv::IdQueue & addedfileprovides_inst);
 
@@ -143,8 +148,8 @@ private:
 
     Base * base;
     Pool * pool;
-    std::unique_ptr<Repo> system_repo;
-    std::unique_ptr<Repo> cmdline_repo;
+    std::unique_ptr<repo::Repo> system_repo;
+    std::unique_ptr<repo::Repo> cmdline_repo;
 
     WeakPtrGuard<PackageSack, false> data_guard;
 
@@ -173,9 +178,9 @@ inline PackageSack::Impl::Impl(Base & base) : base(&base) {
 
 inline PackageSack::Impl::~Impl() {
     Id repo_id;
-    LibsolvRepo * r;
+    repo::LibsolvRepo * r;
     FOR_REPOS(repo_id, r) {
-        if (auto repo = static_cast<Repo *>(r->appdata)) {
+        if (auto repo = static_cast<repo::Repo *>(r->appdata)) {
             repo->p_impl->detach_libsolv_repo();
         }
     }
