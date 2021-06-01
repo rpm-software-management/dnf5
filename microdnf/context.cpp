@@ -759,7 +759,7 @@ void fill_transactions(
         transaction_items.push_back(std::move(item));
         auto & trans_pkg = transaction->new_package();
         set_trans_pkg(package, trans_pkg, libdnf::transaction::TransactionItemAction::DOWNGRADE);
-        rpm_ts.upgrade(*item_ptr);
+        rpm_ts.downgrade(*item_ptr);
     }
 }
 

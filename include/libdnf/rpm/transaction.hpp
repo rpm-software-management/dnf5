@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -259,6 +259,12 @@ public:
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be upgraded
     void upgrade(TransactionItem & item);
+
+    /// Add package to be downgraded to transaction set.
+    /// The transaction set is checked for duplicate package names.
+    /// If found, the package with the "newest" EVR will be replaced.
+    /// @param item  item to be downgraded
+    void downgrade(TransactionItem & item);
 
     /// Add package to be reinstalled to transaction set.
     /// @param item  item to be reinstalled

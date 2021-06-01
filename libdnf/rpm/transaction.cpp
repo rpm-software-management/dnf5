@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -26,6 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_set_impl.hpp"
 #include "../repo/repo_impl.hpp"
 #include "solv/id_queue.hpp"
+
+#include "libdnf/transaction/transaction_item_action.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>
@@ -353,13 +355,21 @@ public:
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be installed
-    void install(TransactionItem & item) { install_or_upgrade(item, false); }
+    void install(TransactionItem & item) { install_up_down(item, libdnf::transaction::TransactionItemAction::INSTALL); }
 
     /// Add package to be upgraded to transaction set.
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be upgraded
-    void upgrade(TransactionItem & item) { install_or_upgrade(item, true); }
+    void upgrade(TransactionItem & item) { install_up_down(item, libdnf::transaction::TransactionItemAction::UPGRADE); }
+
+    /// Add package to be upgraded to transaction set.
+    /// The transaction set is checked for duplicate package names.
+    /// If found, the package with the "newest" EVR will be replaced.
+    /// @param item  item to be upgraded
+    void downgrade(TransactionItem & item) {
+        install_up_down(item, libdnf::transaction::TransactionItemAction::DOWNGRADE);
+    }
 
     /// Add package to be reinstalled to transaction set.
     /// @param item  item to be reinstalled
@@ -430,6 +440,9 @@ public:
     /// @return		0 on success, -1 on error, >0 with newProbs set
     int run() {
         rpmprobFilterFlags ignore_set = RPMPROB_FILTER_NONE;
+        if (downgrade_requested) {
+            ignore_set |= RPMPROB_FILTER_OLDPACKAGE;
+        }
         if (cb_info.cb) {
             rpmtsSetNotifyCallback(ts, ts_callback, &cb_info);
         }
@@ -437,6 +450,7 @@ public:
         if (cb_info.cb) {
             rpmtsSetNotifyCallback(ts, nullptr, nullptr);
         }
+
         return rc;
     }
 
@@ -472,23 +486,15 @@ private:
     CallbackInfo cb_info{nullptr, this};
     FD_t fd_in_cb{nullptr};  // file descriptor used by transaction in callback (install/reinstall package)
     std::map<unsigned int, TransactionItem *> items{};
+    bool downgrade_requested{false};
 
     /// Add package to be installed to transaction set.
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
     /// @param item  item to be erased
-    /// @param upgrade  operation: true - upgrade, false - install
-    void install_or_upgrade(TransactionItem & item, bool upgrade) {
-        auto file_path = item.get_pkg().get_package_path();
-        auto * header = read_pkg_header(file_path);
-        auto rc = rpmtsAddInstallElement(ts, header, &item, upgrade ? 1 : 0, nullptr);
-        if (rc != 0) {
-            std::string msg = "Can't ";
-            msg += upgrade ? "upgrade" : "install";
-            msg += " package \"" + file_path + "\"";
-            throw Exception(msg);
-        }
-    }
+    /// @param action  one of TransactionItemAction::UPGRADE,
+    ///     TransactionItemAction::DOWNGRADE, TransactionItemAction::INSTALL
+    void install_up_down(TransactionItem & item, libdnf::transaction::TransactionItemAction action);
 
     /// Function triggered by rpmtsNotify()
     ///
@@ -649,6 +655,29 @@ Transaction::Transaction(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
 
 Transaction::Transaction(Base & base) : Transaction(base.get_weak_ptr()) {}
 
+void Transaction::Impl::install_up_down(TransactionItem & item, libdnf::transaction::TransactionItemAction action) {
+    std::string msg_action;
+    bool upgrade{true};
+    if (action == libdnf::transaction::TransactionItemAction::UPGRADE) {
+        msg_action = "upgrade";
+    } else if (action == libdnf::transaction::TransactionItemAction::DOWNGRADE) {
+        downgrade_requested = true;
+        msg_action = "downgrade";
+    } else if (action == libdnf::transaction::TransactionItemAction::INSTALL) {
+        upgrade = false;
+        msg_action = "install";
+    } else {
+        throw LogicError("Unsupported action");
+    }
+    auto file_path = item.get_pkg().get_package_path();
+    auto * header = read_pkg_header(file_path);
+    auto rc = rpmtsAddInstallElement(ts, header, &item, upgrade ? 1 : 0, nullptr);
+    if (rc != 0) {
+        std::string msg = "Can't " + msg_action + " package \"" + file_path + "\"";
+        throw Exception(msg);
+    }
+}
+
 Transaction::~Transaction() = default;
 
 void Transaction::set_root_dir(const char * root_dir) {
@@ -705,6 +734,10 @@ void Transaction::install(TransactionItem & item) {
 
 void Transaction::upgrade(TransactionItem & item) {
     p_impl->upgrade(item);
+}
+
+void Transaction::downgrade(TransactionItem & item) {
+    p_impl->downgrade(item);
 }
 
 void Transaction::reinstall(TransactionItem & item) {
