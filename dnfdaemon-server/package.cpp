@@ -37,16 +37,17 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"full_nevra", PackageAttribute::full_nevra}};
 
 dnfdaemon::KeyValueMap package_to_map(
-    const libdnf::rpm::Package & libdnf_package, std::vector<std::string> & attributes) {
+    const libdnf::rpm::Package & libdnf_package, const std::vector<std::string> & attributes) {
     dnfdaemon::KeyValueMap dbus_package;
     // add package id by default
     dbus_package.emplace(std::make_pair("id", libdnf_package.get_id().id));
     // attributes required by client
     for (auto & attr : attributes) {
-        if (package_attributes.count(attr) == 0) {
+        auto it = package_attributes.find(attr);
+        if (it == package_attributes.end()) {
             throw std::runtime_error(fmt::format("Package attribute '{}' not supported", attr));
         }
-        switch (package_attributes.at(attr)) {
+        switch (it->second) {
             case PackageAttribute::name:
                 dbus_package.emplace(attr, libdnf_package.get_name());
                 break;
