@@ -28,13 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iterator>
 
 
-namespace libdnf::rpm {
-
-class PackageSack;
-
-}  // namespace libdnf::rpm
-
-
 namespace libdnf::solv {
 
 // clang-format off
@@ -158,6 +151,9 @@ public:
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.size()
     std::size_t size() const noexcept;
 
+    /// @return the size allocated for the map in memory (in number of items, not bytes).
+    int allocated_size() const noexcept { return map.size << 3; }
+
     bool empty() const noexcept;
 
     void clear() noexcept { map_empty(&map); }
@@ -242,7 +238,6 @@ protected:
     void check_id_in_bitmap_range(Id id) const;
 
 private:
-    friend class rpm::PackageSack;
     Map map;
 };
 
@@ -346,15 +341,14 @@ inline SolvMap & SolvMap::operator=(SolvMap && other) noexcept {
 
 
 inline void SolvMap::check_id_in_bitmap_range(Id id) const {
-    // map.size is in bytes, << 3 multiplies the number with 8 and gives size in bits
-    if (id < 0 || id >= (map.size << 3)) {
+    if (id < 0 || id >= allocated_size()) {
         throw std::out_of_range("Id is out of bitmap range");
     }
 }
 
 
 inline bool SolvMap::contains(Id id) const noexcept {
-    if (id < 0 || id >= (map.size << 3)) {
+    if (id < 0 || id >= allocated_size()) {
         // if Id is outside bitmap range, then bitmap doesn't contain it
         return false;
     }

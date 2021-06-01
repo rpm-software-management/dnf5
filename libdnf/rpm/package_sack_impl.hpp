@@ -227,9 +227,8 @@ inline libdnf::solv::SolvMap & PackageSack::Impl::get_solvables() {
     if (nsolvables == cached_solvables_size) {
         return cached_solvables;
     }
-    // map.size is in bytes, << 3 multiplies the number with 8 and gives size in bits
-    if (static_cast<int>(nsolvables) > (cached_solvables.map.size << 3)) {
-        cached_solvables = libdnf::solv::SolvMap(static_cast<int>(nsolvables));
+    if (nsolvables > cached_solvables.allocated_size()) {
+        cached_solvables = libdnf::solv::SolvMap(nsolvables);
     } else {
         cached_solvables.clear();
     }
