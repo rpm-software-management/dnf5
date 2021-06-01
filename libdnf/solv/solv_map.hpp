@@ -27,14 +27,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <solv/bitmap.h>
 #include <solv/pooltypes.h>
 
+
 namespace libdnf::rpm {
 
 class PackageSack;
 
 }  // namespace libdnf::rpm
 
-namespace libdnf::solv {
 
+namespace libdnf::solv {
 
 // clang-format off
 // see http://graphics.stanford.edu/~seander/bithacks.html#CountBitsSetTable
@@ -50,22 +51,32 @@ static const unsigned char BIT_COUNT_LOOKUP[256] = {
 class SolvMap {
 public:
     using iterator = SolvMapIterator;
-    iterator begin() const;
-    iterator end() const;
+
+    iterator begin() const { return iterator(&map); }
+
+    iterator end() const {
+        iterator it(&map);
+        it.end();
+        return it;
+    }
 
     /// Initialize an empty Map of given size
-    explicit SolvMap(int size);
+    explicit SolvMap(int size) { map_init(&map, size); }
 
     /// Clone from an existing Map
-    explicit SolvMap(const Map * map);
+    explicit SolvMap(const Map * map) { map_init_clone(&this->map, map); }
 
     /// Copy constructor: clone from an existing SolvMap
-    SolvMap(const SolvMap & other);
+    SolvMap(const SolvMap & other) : SolvMap(other.get_map()) {}
 
     /// Move constructor
-    SolvMap(SolvMap && other) noexcept;
+    SolvMap(SolvMap && other) noexcept {
+        map = other.map;
+        other.map.map = nullptr;
+        other.map.size = 0;
+    }
 
-    ~SolvMap();
+    ~SolvMap() { map_free(&map); }
 
     SolvMap & operator=(const SolvMap & other) noexcept;
     SolvMap & operator=(SolvMap && other) noexcept;
@@ -79,7 +90,7 @@ public:
     /// Return the underlying libsolv Map
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.getMap()
-    const Map * get_map() const noexcept;
+    const Map * get_map() const noexcept { return &map; }
 
     /// Return the number of solvables in the SolvMap (number of 1s in the bitmap).
     ///
@@ -88,12 +99,15 @@ public:
 
     bool empty() const noexcept;
 
-    void clear() noexcept;
+    void clear() noexcept { map_empty(&map); }
 
     // ITEM OPERATIONS
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.set(Id id)
-    void add(Id id);
+    void add(Id id) {
+        check_id_in_bitmap_range(id);
+        add_unsafe(id);
+    }
 
     /// Faster, but unsafe version of add() method that is doesn't check bitmap range
     void add_unsafe(Id id) noexcept;
@@ -102,10 +116,13 @@ public:
     bool contains(Id id) const noexcept;
 
     /// Faster, but unsafe version of contains() method that is doesn't check bitmap range
-    bool contains_unsafe(Id id) const noexcept;
+    bool contains_unsafe(Id id) const noexcept { return MAPTST(&map, id); }
 
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.remove(Id id)
-    void remove(Id id);
+    void remove(Id id) {
+        check_id_in_bitmap_range(id);
+        remove_unsafe(id);
+    }
 
     /// Faster, but unsafe version of remove() method that is doesn't check bitmap range
     void remove_unsafe(Id id) noexcept;
@@ -115,30 +132,48 @@ public:
     /// Union operator
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator+=(const Map * other)
-    SolvMap & operator|=(const Map * other) noexcept;
+    SolvMap & operator|=(const Map * other) noexcept {
+        map_or(&map, const_cast<Map *>(other));
+        return *this;
+    }
 
     /// Difference operator
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator-=(const Map * other)
-    SolvMap & operator-=(const Map * other) noexcept;
+    SolvMap & operator-=(const Map * other) noexcept {
+        map_subtract(&map, const_cast<Map *>(other));
+        return *this;
+    }
 
     /// Intersection operator
     ///
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator/=(const Map * other)
-    SolvMap & operator&=(const Map * other) noexcept;
+    SolvMap & operator&=(const Map * other) noexcept {
+        map_and(&map, other);
+        return *this;
+    }
 
     // SET OPERATIONS - SolvMap
 
     /// Union operator
-    SolvMap & operator|=(const SolvMap & other) noexcept;
+    SolvMap & operator|=(const SolvMap & other) noexcept {
+        *this |= other.get_map();
+        return *this;
+    }
 
     /// Difference operator
-    SolvMap & operator-=(const SolvMap & other) noexcept;
+    SolvMap & operator-=(const SolvMap & other) noexcept {
+        *this -= other.get_map();
+        return *this;
+    }
 
     /// Intersection operator
-    SolvMap & operator&=(const SolvMap & other) noexcept;
+    SolvMap & operator&=(const SolvMap & other) noexcept {
+        *this &= other.get_map();
+        return *this;
+    }
 
-    void swap(SolvMap & other) noexcept;
+    void swap(SolvMap & other) noexcept { std::swap(map, other.map); }
 
 protected:
     /// Check if `id` is in bitmap range.
@@ -150,27 +185,6 @@ private:
     Map map;
 };
 
-
-inline SolvMap::SolvMap(int size) {
-    map_init(&map, size);
-}
-
-
-inline SolvMap::SolvMap(const Map * map) {
-    map_init_clone(&this->map, map);
-}
-
-inline SolvMap::SolvMap(const SolvMap & other) : SolvMap(other.get_map()) {}
-
-inline SolvMap::SolvMap(SolvMap && other) noexcept {
-    map = other.map;
-    other.map.map = nullptr;
-    other.map.size = 0;
-}
-
-inline SolvMap::~SolvMap() {
-    map_free(&map);
-}
 
 inline SolvMap & SolvMap::operator=(const SolvMap & other) noexcept {
     if (this != &other) {
@@ -184,6 +198,7 @@ inline SolvMap & SolvMap::operator=(const SolvMap & other) noexcept {
     return *this;
 }
 
+
 inline SolvMap & SolvMap::operator=(SolvMap && other) noexcept {
     if (this != &other) {
         map = other.map;
@@ -193,30 +208,12 @@ inline SolvMap & SolvMap::operator=(SolvMap && other) noexcept {
     return *this;
 }
 
+
 inline void SolvMap::check_id_in_bitmap_range(Id id) const {
     // map.size is in bytes, << 3 multiplies the number with 8 and gives size in bits
     if (id < 0 || id >= (map.size << 3)) {
         throw std::out_of_range("Id is out of bitmap range");
     }
-}
-
-
-inline SolvMap::iterator SolvMap::begin() const {
-    iterator it(&map);
-    return it;
-}
-
-
-inline SolvMap::iterator SolvMap::end() const {
-    iterator it(&map);
-    it.end();
-    return it;
-}
-
-
-inline void SolvMap::add(Id id) {
-    check_id_in_bitmap_range(id);
-    add_unsafe(id);
 }
 
 
@@ -229,12 +226,6 @@ inline bool SolvMap::contains(Id id) const noexcept {
 }
 
 
-inline void SolvMap::remove(Id id) {
-    check_id_in_bitmap_range(id);
-    remove_unsafe(id);
-}
-
-
 inline void SolvMap::add_unsafe(Id id) noexcept {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
@@ -243,21 +234,11 @@ inline void SolvMap::add_unsafe(Id id) noexcept {
 }
 
 
-inline bool SolvMap::contains_unsafe(Id id) const noexcept {
-    return MAPTST(&map, id);
-}
-
-
 inline void SolvMap::remove_unsafe(Id id) noexcept {
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wconversion"
     MAPCLR(&map, id);
 #pragma GCC diagnostic pop
-}
-
-
-inline const Map * SolvMap::get_map() const noexcept {
-    return &map;
 }
 
 
@@ -290,53 +271,6 @@ inline std::size_t SolvMap::size() const noexcept {
     return result;
 }
 
-
-inline void SolvMap::clear() noexcept {
-    map_empty(&map);
-}
-
-
-inline SolvMap & SolvMap::operator|=(const Map * other) noexcept {
-    map_or(&map, const_cast<Map *>(other));
-    return *this;
-}
-
-
-inline SolvMap & SolvMap::operator|=(const SolvMap & other) noexcept {
-    *this |= other.get_map();
-    return *this;
-}
-
-
-inline SolvMap & SolvMap::operator-=(const Map * other) noexcept {
-    map_subtract(&map, const_cast<Map *>(other));
-    return *this;
-}
-
-
-inline SolvMap & SolvMap::operator-=(const SolvMap & other) noexcept {
-    *this -= other.get_map();
-    return *this;
-}
-
-
-inline SolvMap & SolvMap::operator&=(const Map * other) noexcept {
-    map_and(&map, other);
-    return *this;
-}
-
-
-inline SolvMap & SolvMap::operator&=(const SolvMap & other) noexcept {
-    *this &= other.get_map();
-    return *this;
-}
-
-inline void SolvMap::swap(SolvMap & other) noexcept {
-    std::swap(map, other.map);
-}
-
-
 }  // namespace libdnf::solv
-
 
 #endif  // LIBDNF_SOLV_MAP_HPP

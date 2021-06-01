@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <regex>
 #include <string>
 
+
 namespace libdnf::solv {
 
 static const std::regex RELDEP_REGEX("^(\\S*)\\s*(\\S*)?\\s*(\\S*)$");
@@ -57,6 +58,7 @@ static bool set_cmp_type(libdnf::rpm::Reldep::CmpType * cmp_type, std::string cm
     }
     return false;
 }
+
 
 bool ReldepParser::parse(const std::string & reldep_str) {
     enum { NAME = 1, CMP_TYPE = 2, EVR = 3 };

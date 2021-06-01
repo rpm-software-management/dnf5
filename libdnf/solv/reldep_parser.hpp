@@ -35,38 +35,22 @@ public:
     /// @param reldepStr p_reldepStr: std::string & that represent reldep
     /// @return bool - true if parsing was succesful
     bool parse(const std::string & reldep_str);
-    const std::string & get_name() const noexcept;
-    const char * get_name_cstr() const noexcept;
-    const std::string & get_evr() const noexcept;
-    const char * get_evr_cstr() const noexcept;
-    libdnf::rpm::Reldep::CmpType get_cmp_type() const noexcept;
+
+    const std::string & get_name() const noexcept { return name; }
+
+    const char * get_name_cstr() const noexcept { return name.empty() ? nullptr : name.c_str(); }
+
+    const std::string & get_evr() const noexcept { return evr; }
+
+    const char * get_evr_cstr() const noexcept { return evr.empty() ? nullptr : evr.c_str(); }
+
+    libdnf::rpm::Reldep::CmpType get_cmp_type() const noexcept { return cmp_type; }
 
 private:
     std::string name;
     std::string evr;
     libdnf::rpm::Reldep::CmpType cmp_type{libdnf::rpm::Reldep::CmpType::NONE};
 };
-
-
-inline const std::string & ReldepParser::get_name() const noexcept {
-    return name;
-}
-
-inline const std::string & ReldepParser::get_evr() const noexcept {
-    return evr;
-}
-
-inline libdnf::rpm::Reldep::CmpType ReldepParser::get_cmp_type() const noexcept {
-    return cmp_type;
-}
-
-inline const char * ReldepParser::get_name_cstr() const noexcept {
-    return name.empty() ? nullptr : name.c_str();
-}
-
-inline const char * ReldepParser::get_evr_cstr() const noexcept {
-    return evr.empty() ? nullptr : evr.c_str();
-}
 
 }  // namespace libdnf::solv
 

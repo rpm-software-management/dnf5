@@ -33,13 +33,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::solv {
 
-
 class SolvMap;
-
 
 class SolvMapIterator {
 public:
-    explicit SolvMapIterator(const Map * map) noexcept;
+    explicit SolvMapIterator(const Map * map) noexcept : map{map}, map_end{map->map + map->size} { begin(); }
+
     SolvMapIterator(const SolvMapIterator & other) noexcept = default;
 
     using iterator_category = std::forward_iterator_tag;
@@ -51,13 +50,27 @@ public:
     Id operator*() const noexcept { return current_value; }
 
     SolvMapIterator & operator++() noexcept;
-    SolvMapIterator operator++(int) noexcept;
+
+    SolvMapIterator operator++(int) noexcept {
+        SolvMapIterator it(*this);
+        ++*this;
+        return it;
+    }
 
     bool operator==(const SolvMapIterator & other) const noexcept { return current_value == other.current_value; }
+
     bool operator!=(const SolvMapIterator & other) const noexcept { return current_value != other.current_value; }
 
-    void begin() noexcept;
-    void end() noexcept;
+    void begin() noexcept {
+        current_value = BEGIN;
+        map_current = map->map;
+        ++*this;
+    }
+
+    void end() noexcept {
+        current_value = END;
+        map_current = map_end;
+    }
 
     /// Sets iterator to the first contained package in the range <id, end>.
     void jump(Id id) noexcept;
@@ -82,21 +95,6 @@ private:
     Id current_value;
 };
 
-
-inline SolvMapIterator::SolvMapIterator(const Map * map) noexcept : map{map}, map_end{map->map + map->size} {
-    begin();
-}
-
-inline void SolvMapIterator::begin() noexcept {
-    current_value = BEGIN;
-    map_current = map->map;
-    ++*this;
-}
-
-inline void SolvMapIterator::end() noexcept {
-    current_value = END;
-    map_current = map_end;
-}
 
 inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
     if (current_value >= 0) {
@@ -149,11 +147,6 @@ inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
     return *this;
 }
 
-inline SolvMapIterator SolvMapIterator::operator++(int) noexcept {
-    SolvMapIterator it(*this);
-    ++*this;
-    return it;
-}
 
 inline void SolvMapIterator::jump(Id id) noexcept {
     if (id < 0) {
@@ -177,8 +170,6 @@ inline void SolvMapIterator::jump(Id id) noexcept {
     }
 }
 
-
 }  // namespace libdnf::solv
-
 
 #endif  // LIBDNF_SOLV_MAP_ITERATOR_HPP

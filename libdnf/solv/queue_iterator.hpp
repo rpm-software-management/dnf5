@@ -26,11 +26,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstddef>
 #include <iterator>
 
+
 namespace libdnf::solv {
 
 class IdQueueIterator {
 public:
-    explicit IdQueueIterator(const Queue * queue) noexcept;
+    explicit IdQueueIterator(const Queue * queue) noexcept : queue{queue} { begin(); }
+
     IdQueueIterator(const IdQueueIterator & other) noexcept = default;
 
     using iterator_category = std::forward_iterator_tag;
@@ -41,13 +43,23 @@ public:
 
     Id operator*() const noexcept { return queue->elements[current_index]; }
 
-    IdQueueIterator & operator++() noexcept;
-    IdQueueIterator operator++(int) noexcept;
+    IdQueueIterator & operator++() noexcept {
+        ++current_index;
+        return *this;
+    }
+
+    IdQueueIterator operator++(int) noexcept {
+        IdQueueIterator ret(*this);
+        ++*this;
+        return ret;
+    }
 
     bool operator==(const IdQueueIterator & other) const noexcept { return current_index == other.current_index; }
+
     bool operator!=(const IdQueueIterator & other) const noexcept { return current_index != other.current_index; }
 
     void begin() noexcept { current_index = 0; }
+
     void end() noexcept { current_index = queue->count; }
 
 protected:
@@ -57,21 +69,6 @@ private:
     const Queue * queue;
     int current_index;
 };
-
-inline IdQueueIterator::IdQueueIterator(const Queue * queue) noexcept : queue{queue} {
-    begin();
-}
-
-inline IdQueueIterator & IdQueueIterator::operator++() noexcept {
-    ++current_index;
-    return *this;
-}
-
-inline IdQueueIterator IdQueueIterator::operator++(int) noexcept {
-    IdQueueIterator ret(*this);
-    ++*this;
-    return ret;
-}
 
 }  // namespace libdnf::solv
 
