@@ -43,7 +43,7 @@ public:
     using pointer = void;
     using reference = Id;
 
-    Id operator*() const noexcept { return queue->elements[current_index]; }
+    Id & operator*() const noexcept { return queue->elements[current_index]; }
 
     IdQueueIterator & operator++() noexcept {
         ++current_index;
@@ -119,15 +119,13 @@ public:
         return *this;
     }
 
-    Id operator[](int index) const { return queue.elements[index]; }
+    Id & operator[](int index) const { return queue.elements[index]; }
 
     void push_back(Id id) { queue_push(&queue, id); }
 
     /// @brief Add two Ids into queue.
     /// It is used by libsolv jobs when one Id represents what to perform and the second one on witch elements
     void push_back(Id id1, Id id2) { queue_push2(&queue, id1, id2); }
-
-    int * data() const noexcept { return queue.elements; }
 
     Queue & get_queue() noexcept { return queue; }
 
@@ -139,11 +137,11 @@ public:
 
     void clear() noexcept { queue_empty(&queue); }
 
-    void append(const IdQueue & src) { queue_insertn(&queue, size(), src.size(), src.data()); }
+    void append(const IdQueue & src) { queue_insertn(&queue, size(), src.size(), src.queue.elements); }
 
     void reserve(int n) { queue_prealloc(&queue, n); }
 
-    void sort(int (* cmp)(const void * a, const void * b, void * data), void * data_p);
+    void sort(int (* cmp)(const void * a, const void * b, void * data), void * data);
 
 private:
     Queue queue;

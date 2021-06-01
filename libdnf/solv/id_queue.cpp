@@ -27,8 +27,8 @@ extern "C" {
 
 namespace libdnf::solv {
 
-void IdQueue::sort(int (* cmp)(const void * a, const void * b, void * data), void * data_p) {
-    solv_sort(data(), static_cast<size_t>(size()), sizeof(Id), cmp, data_p);
+void IdQueue::sort(int (* cmp)(const void * a, const void * b, void * data), void * data) {
+    solv_sort(queue.elements, static_cast<size_t>(size()), sizeof(Id), cmp, data);
 }
 
 }  // namespace libdnf::solv

@@ -297,9 +297,8 @@ libdnf::GoalProblem GoalPrivate::resolve() {
 
     // Removal of SOLVER_WEAK to allow report errors
     if (remove_solver_weak) {
-        auto elements = job.data();
         for (int i = 0; i < job.size(); i += 2) {
-            elements[i] &= ~SOLVER_WEAK;
+            job[i] &= ~SOLVER_WEAK;
         }
     }
 
