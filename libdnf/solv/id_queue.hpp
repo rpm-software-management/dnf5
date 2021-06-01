@@ -143,6 +143,8 @@ public:
 
     void reserve(int n) { queue_prealloc(&queue, n); }
 
+    void sort(int (* cmp)(const void * a, const void * b, void * data), void * data_p);
+
 private:
     Queue queue;
 };

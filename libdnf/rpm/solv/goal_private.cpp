@@ -133,12 +133,6 @@ libdnf::solv::SolvMap list_results(
 }
 
 
-struct InstallonliesSortCallback {
-    Pool * pool;
-    Id running_kernel;
-};
-
-
 /// @brief return false when does not depend on anything from b
 bool can_depend_on(Pool * pool, Solvable * sa, Id b) {
     libdnf::solv::IdQueue requires;
@@ -166,11 +160,18 @@ static void same_name_subqueue(Pool * pool, Queue * in, Queue * out) {
         queue_push(out, queue_pop(in));
 }
 
-int sort_packages(const void * ap, const void * bp, void * s_cb) {
+
+struct InstallonlyCmpData {
+    Pool * pool;
+    Id running_kernel;
+};
+
+
+int installonly_cmp(const void * ap, const void * bp, void * s_cb) {
     Id a = *(Id *)ap;
     Id b = *(Id *)bp;
-    Pool * pool = ((struct InstallonliesSortCallback *)s_cb)->pool;
-    Id kernel = ((struct InstallonliesSortCallback *)s_cb)->running_kernel;
+    Pool * pool = ((struct InstallonlyCmpData *)s_cb)->pool;
+    Id kernel = ((struct InstallonlyCmpData *)s_cb)->running_kernel;
     Solvable * sa = pool_id2solvable(pool, a);
     Solvable * sb = pool_id2solvable(pool, b);
 
@@ -204,6 +205,7 @@ int sort_packages(const void * ap, const void * bp, void * s_cb) {
     }
     return pool_evrcmp(pool, sa->evr, sb->evr, EVRCMP_COMPARE);
 }
+
 
 bool limit_installonly_packages(
     Solver * solv,
@@ -247,8 +249,9 @@ bool limit_installonly_packages(
             continue;
         }
 
-        struct InstallonliesSortCallback s_cb = {pool, running_kernel};
-        solv_sort(q.data(), static_cast<size_t>(q.size()), sizeof(q[0]), sort_packages, &s_cb);
+        InstallonlyCmpData installonly_cmp_data{pool, running_kernel};
+        q.sort(&installonly_cmp, &installonly_cmp_data);
+
         libdnf::solv::IdQueue same_names;
         while (q.size() > 0) {
             same_name_subqueue(pool, &q.get_queue(), &same_names.get_queue());

@@ -2172,7 +2172,7 @@ static void add_latest_to_map(
     }
 }
 
-static int filter_latest_sortcmp_byarch(const void * ap, const void * bp, void * dp) {
+static int latest_cmp(const void * ap, const void * bp, void * dp) {
     auto pool = static_cast<Pool *>(dp);
     Solvable * sa = pool->solvables + *(Id *)ap;
     Solvable * sb = pool->solvables + *(Id *)bp;
@@ -2197,7 +2197,7 @@ PackageQuery & PackageQuery::filter_latest(int limit) {
     for (Id candidate_id : *p_impl) {
         samename.push_back(candidate_id);
     }
-    solv_sort(samename.data(), static_cast<size_t>(samename.size()), sizeof(Id), filter_latest_sortcmp_byarch, pool);
+    samename.sort(latest_cmp, pool);
 
     p_impl->clear();
     // Create blocks per name, arch
