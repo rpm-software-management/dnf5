@@ -625,8 +625,7 @@ private:
                 cb.verify_stop(total);
                 break;
             case RPMCALLBACK_UNKNOWN:
-                std::cout << "RPMCALLBACK_UNKNOWN" << std::endl;
-                break;
+                log.warning("Unknown RPM Transaction callback type: RPMCALLBACK_UNKNOWN");
         }
 
         return rc;

@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_SOLV_ID_QUEUE_HPP
 #define LIBDNF_SOLV_ID_QUEUE_HPP
 
-#include "queue_iterator.hpp"
 #include "solv_map.hpp"
 
 #include <utility>
@@ -31,6 +30,48 @@ extern "C" {
 
 
 namespace libdnf::solv {
+
+class IdQueueIterator {
+public:
+    explicit IdQueueIterator(const Queue * queue) noexcept : queue{queue} { begin(); }
+
+    IdQueueIterator(const IdQueueIterator & other) noexcept = default;
+
+    using iterator_category = std::forward_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = Id;
+    using pointer = void;
+    using reference = Id;
+
+    Id operator*() const noexcept { return queue->elements[current_index]; }
+
+    IdQueueIterator & operator++() noexcept {
+        ++current_index;
+        return *this;
+    }
+
+    IdQueueIterator operator++(int) noexcept {
+        IdQueueIterator ret(*this);
+        ++*this;
+        return ret;
+    }
+
+    bool operator==(const IdQueueIterator & other) const noexcept { return current_index == other.current_index; }
+
+    bool operator!=(const IdQueueIterator & other) const noexcept { return current_index != other.current_index; }
+
+    void begin() noexcept { current_index = 0; }
+
+    void end() noexcept { current_index = queue->count; }
+
+protected:
+    const Queue * get_queue() const noexcept { return queue; }
+
+private:
+    const Queue * queue;
+    int current_index;
+};
+
 
 struct IdQueue {
 public:

@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 #include <sys/utsname.h>
 
+#include <iostream>
 #include <map>
 
 namespace {

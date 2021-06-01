@@ -41,6 +41,7 @@ extern "C" {
 
 #include <fmt/format.h>
 
+#include <cassert>
 #include <filesystem>
 
 

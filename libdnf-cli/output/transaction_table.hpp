@@ -21,11 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 #define LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 
+#include "../../libdnf-cli/utils/units.hpp"
+
 #include <fmt/format.h>
 #include <libsmartcols/libsmartcols.h>
-#include <vector>
 
-#include "../../libdnf-cli/utils/units.hpp"
+#include <iostream>
+#include <vector>
 
 
 namespace libdnf::cli::output {
