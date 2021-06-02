@@ -24,12 +24,9 @@
 }
 
 %{
-
     #include "libdnf/advisory/advisory_module.hpp"
     #include "libdnf/advisory/advisory_query.hpp"
     #include "libdnf/rpm/checksum.hpp"
-    #include "libdnf/conf/config_main.hpp"
-    #include "libdnf/repo/config_repo.hpp"
     #include "libdnf/rpm/nevra.hpp"
     #include "libdnf/rpm/package.hpp"
     #include "libdnf/rpm/package_query.hpp"
@@ -39,9 +36,6 @@
     #include "libdnf/rpm/reldep.hpp"
     #include "libdnf/rpm/reldep_list.hpp"
     #include "libdnf/rpm/reldep_list_iterator.hpp"
-    #include "libdnf/repo/repo.hpp"
-    #include "libdnf/repo/repo_query.hpp"
-    #include "libdnf/repo/repo_sack.hpp"
 %}
 
 #define CV __perl_CV
@@ -75,18 +69,6 @@
 
 %ignore libdnf::rpm::PackageQuery::PackageQuery(PackageQuery && src);
 %include "libdnf/rpm/package_query.hpp"
-
-%include "libdnf/repo/config_repo.hpp"
-%include "libdnf/repo/repo.hpp"
-
-%template(RepoWeakPtr) libdnf::WeakPtr<libdnf::repo::Repo, false>;
-%template(SetRepoWeakPtr) libdnf::Set<libdnf::repo::RepoWeakPtr>;
-%template(SackQueryRepoWeakPtr) libdnf::sack::Query<libdnf::repo::RepoWeakPtr>;
-
-%include "libdnf/repo/repo_query.hpp"
-%template(SackRepoRepoQuery) libdnf::sack::Sack<libdnf::repo::Repo, libdnf::repo::RepoQuery>;
-%include "libdnf/repo/repo_sack.hpp"
-%template(RepoSackWeakPtr) libdnf::WeakPtr<libdnf::repo::RepoSack, false>;
 
 add_iterator(PackageSet)
 add_iterator(ReldepList)

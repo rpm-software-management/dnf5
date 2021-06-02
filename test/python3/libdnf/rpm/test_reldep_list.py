@@ -31,7 +31,7 @@ class TestReldepList(unittest.TestCase):
         self.tmpdir = tempfile.mkdtemp(prefix="libdnf-python3-")
         self.base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, self.tmpdir)
 
-        self.repo_sack = libdnf.rpm.RepoSack(self.base)
+        self.repo_sack = libdnf.repo.RepoSack(self.base)
         self.sack = self.base.get_rpm_package_sack()
 
         # Creates new repositories in the repo_sack

@@ -13,6 +13,7 @@
 %import "conf.i"
 %import "plugin.i"
 %import "logger.i"
+%import "repo.i"
 %import "rpm.i"
 %import "transaction.i"
 

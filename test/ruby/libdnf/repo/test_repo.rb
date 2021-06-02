@@ -15,45 +15,43 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-import unittest
-import tempfile
-import shutil
-import os
+require 'test/unit'
+require 'tmpdir'
+include Test::Unit::Assertions
 
-import libdnf.base
-import libdnf.logger
+require 'libdnf/base'
 
-
-class TestRepo(unittest.TestCase):
-    def test_repo(self):
-        base = libdnf.base.Base()
+class TestRepo < Test::Unit::TestCase
+    def test_repo()
+        base = Base::Base.new()
 
         # Sets path to cache directory.
-        tmpdir = tempfile.mkdtemp(prefix="libdnf-python3-")
-        base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, tmpdir)
+        tmpdir = Dir.mktmpdir("libdnf-ruby-")
+        base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, tmpdir)
 
-        repo_sack = libdnf.rpm.RepoSack(base)
-        package_sack = libdnf.rpm.PackageSack(base)
+        repo_sack = Repo::RepoSack.new(base)
+        package_sack = Rpm::PackageSack.new(base)
 
         # Creates system repository and loads it into rpm::PackageSack.
-        package_sack.create_system_repo(False)
+        package_sack.create_system_repo(false)
 
         # Creates new repositories in the repo_sack
         repo = repo_sack.new_repo("repomd-repo1")
 
         # Tunes repository configuration (baseurl is mandatory)
-        repo_path = os.path.join(os.getcwd(), "../../../test/data/repos-repomd/repomd-repo1/")
-        baseurl = "file://" + repo_path
+        repo_path = File.join(Dir.getwd(), '../../../test/data/repos-repomd/repomd-repo1/')
+        baseurl = 'file://' + repo_path
         repo_cfg = repo.get_config()
-        repo_cfg.baseurl().set(libdnf.conf.Option.Priority_RUNTIME, baseurl)
+        repo_cfg.baseurl().set(Conf::Option::Priority_RUNTIME, baseurl)
 
         # Loads repository into rpm::Repo.
         repo.load()
 
         # Loads rpm::Repo into rpm::PackageSack
-        PackageSack = libdnf.rpm.PackageSack
-        package_sack.load_repo(repo.get(), PackageSack.LoadRepoFlags_USE_PRESTO | PackageSack.LoadRepoFlags_USE_UPDATEINFO |
-                            PackageSack.LoadRepoFlags_USE_OTHER)
+        package_sack.load_repo(repo.get(), Rpm::PackageSack::LoadRepoFlags_USE_PRESTO |
+                            Rpm::PackageSack::LoadRepoFlags_USE_UPDATEINFO | Rpm::PackageSack::LoadRepoFlags_USE_OTHER)
 
         # Remove the cache directory.
-        shutil.rmtree(tmpdir)
+        FileUtils.remove_entry(tmpdir)
+    end
+end

@@ -30,7 +30,7 @@ class TestSimpleNumber < Test::Unit::TestCase
         @tmpdir = Dir.mktmpdir("libdnf-ruby-")
         @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, @tmpdir)
 
-        @repo_sack = Rpm::RepoSack.new(@base)
+        @repo_sack = Repo::RepoSack.new(@base)
         @sack = @base.get_rpm_package_sack()
 
         # Creates new repositories in the repo_sack
