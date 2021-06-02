@@ -179,7 +179,7 @@ AllowAllParametersOfDeclarationOnNextLine: true
 #     member0(0), member1(2)
 #
 AllowAllConstructorInitializersOnNextLine: false
-BreakConstructorInitializers: BeforeComma
+BreakConstructorInitializers: BeforeColon
 
 
 # Align consecutive C/C++ preprocessor macros.
