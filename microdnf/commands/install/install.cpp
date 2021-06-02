@@ -77,7 +77,8 @@ void CmdInstall::run(Context & ctx) {
     package_sack.create_system_repo(false);
 
     // To search in available repositories (available packages)
-    auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().filter_enabled(true);
+    libdnf::repo::RepoQuery enabled_repos(ctx.base.get_rpm_repo_sack());
+    enabled_repos.filter_enabled(true);
     using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     ctx.load_rpm_repos(enabled_repos, flags);

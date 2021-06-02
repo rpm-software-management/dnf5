@@ -44,9 +44,6 @@ class GroupSack : public libdnf::sack::Sack<Group, GroupQuery> {
 public:
     ~GroupSack();
 
-    // Create new query with newly composed groups (using only solvables from currently enabled repositories)
-    GroupQuery new_query();
-
     /// Create WeakPtr to GroupSack
     GroupSackWeakPtr get_weak_ptr();
 

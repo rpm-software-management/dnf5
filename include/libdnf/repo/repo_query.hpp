@@ -30,11 +30,18 @@ namespace libdnf::repo {
 /// Repositories are owned by RepoSack.
 using RepoWeakPtr = WeakPtr<Repo, false>;
 
+class RepoSack;
+
+using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
+
 class RepoQuery : public libdnf::sack::Query<RepoWeakPtr> {
 public:
 #ifndef SWIG
     using Query<RepoWeakPtr>::Query;
 #endif
+
+    explicit RepoQuery(const RepoSackWeakPtr & sack);
+
     RepoQuery & filter_enabled(bool enabled);
     RepoQuery & filter_expired(bool expired);
     RepoQuery & filter_id(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);

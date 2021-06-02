@@ -122,7 +122,8 @@ void CmdRepoquery::run(Context & ctx) {
 
     // To search in available repositories (available packages)
     if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
-        auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().filter_enabled(true);
+        libdnf::repo::RepoQuery enabled_repos(ctx.base.get_rpm_repo_sack());
+        enabled_repos.filter_enabled(true);
         using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
         auto flags =
             LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;

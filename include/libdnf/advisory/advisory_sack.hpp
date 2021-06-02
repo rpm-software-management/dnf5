@@ -40,11 +40,6 @@ public:
     explicit AdvisorySack(libdnf::Base & base);
     ~AdvisorySack();
 
-    /// Create new AdvisoryQuery on advisories loaded in this AdvisorySack
-    ///
-    /// @return new AdvisoryQuery.
-    AdvisoryQuery new_query();
-
     AdvisorySackWeakPtr get_weak_ptr();
 
 private:
@@ -57,7 +52,7 @@ private:
     /// of solvables doesn't match the current number in solv sacks pool.
     void load_advisories_from_package_sack();
 
-    libdnf::rpm::solv::SolvMap data_map;
+    libdnf::rpm::solv::SolvMap data_map{0};
 
     int cached_solvables_size{0};
 

@@ -44,7 +44,7 @@ public:
     void load_installed();
     // Load comps from given file into the pool
     void load_from_file(const std::string & path, const char * reponame);
-    GroupSack & get_group_sack() { return group_sack; }
+    GroupSackWeakPtr get_group_sack() { return group_sack.get_weak_ptr(); }
 
     CompsWeakPtr get_weak_ptr();
 

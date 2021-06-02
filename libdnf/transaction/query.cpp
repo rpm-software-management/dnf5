@@ -37,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-TransactionQuery::TransactionQuery(TransactionSack & sack) : sack{&sack} {}
+TransactionQuery::TransactionQuery(const TransactionSackWeakPtr & sack) : sack{sack} {}
 
 
 TransactionQuery & TransactionQuery::filter_id(const std::vector<int64_t> & patterns, sack::QueryCmp cmp) {

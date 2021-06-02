@@ -36,17 +36,19 @@ namespace libdnf::transaction {
 
 class TransactionSack;
 
+using TransactionSackWeakPtr = libdnf::WeakPtr<TransactionSack, false>;
 
 /// Weak pointer to Transaction. TransactionWeakPtr does not own it (ptr_owner = false).
 /// Transaction objects are owned by TransactionSack.
 using TransactionWeakPtr = libdnf::WeakPtr<Transaction, false>;
 
-
 class TransactionQuery : public libdnf::sack::Query<TransactionWeakPtr> {
 public:
     using libdnf::sack::Query<TransactionWeakPtr>::Query;
 
-    TransactionQuery(TransactionSack & sack);
+    // create an *empty* query
+    // the content is lazily loaded/cached while running the queries
+    explicit TransactionQuery(const TransactionSackWeakPtr & sack);
 
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.dbSelect(int64_t transaction_id)
     TransactionQuery & filter_id(int64_t pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
@@ -54,7 +56,7 @@ public:
 
 private:
     friend TransactionSack;
-    TransactionSack * sack = nullptr;
+    TransactionSackWeakPtr sack;
 
     // Load Transaction objects during first filter call.
     // The following filter calls only modify the previously created set of Transactions.

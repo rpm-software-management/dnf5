@@ -121,7 +121,7 @@ void CmdGrouplist::run([[maybe_unused]] Context & ctx) {
     comps.load_from_file(data_path / "core.xml", reponame);
     comps.load_from_file(data_path / "standard.xml", reponame);
 
-    libdnf::comps::GroupQuery query = comps.get_group_sack().new_query();
+    libdnf::comps::GroupQuery query(comps.get_group_sack());
 
     // Filter by patterns if given
     if (patterns_to_show.size() > 0) {

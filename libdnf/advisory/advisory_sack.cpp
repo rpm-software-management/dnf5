@@ -25,22 +25,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-AdvisorySack::AdvisorySack(libdnf::Base & base) : data_map(0), base(&base) {}
+AdvisorySack::AdvisorySack(libdnf::Base & base) : base(&base) {}
 
 AdvisorySack::~AdvisorySack() = default;
 
-AdvisoryQuery AdvisorySack::new_query() {
-    auto package_sack = base->get_rpm_package_sack();
-
-    if (cached_solvables_size != package_sack->p_impl->get_nsolvables()) {
-        load_advisories_from_package_sack();
-    }
-
-    return AdvisoryQuery(this->get_weak_ptr());
-};
-
 void AdvisorySack::load_advisories_from_package_sack() {
     auto package_sack = base->get_rpm_package_sack();
+
+    if (cached_solvables_size == package_sack->p_impl->get_nsolvables()) {
+        return;
+    }
+
     Pool * pool = package_sack->p_impl->get_pool();
 
     data_map = libdnf::rpm::solv::SolvMap(pool->nsolvables);

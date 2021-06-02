@@ -70,6 +70,8 @@ public:
     RepoSackWeakPtr get_weak_ptr();
 
 private:
+    friend class RepoQuery;
+
     WeakPtrGuard<RepoSack, false> data_guard;
 
     //TODO(jrohel): Make public?

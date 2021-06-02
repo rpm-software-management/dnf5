@@ -139,7 +139,8 @@ bool Session::read_all_repos() {
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     //auto & logger = base->get_logger();
     auto rpm_repo_sack = base->get_rpm_repo_sack();
-    auto enabled_repos = rpm_repo_sack->new_query().filter_enabled(true);
+    libdnf::repo::RepoQuery enabled_repos(rpm_repo_sack);
+    enabled_repos.filter_enabled(true);
     auto & package_sack = *base->get_rpm_package_sack();
     bool retval = true;
     for (auto & repo : enabled_repos.get_data()) {

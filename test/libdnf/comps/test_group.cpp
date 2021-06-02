@@ -48,7 +48,7 @@ void CompsGroupTest::test_load() {
     libdnf::comps::Comps comps(*base.get());
 
     comps.load_from_file(data_path / "core.xml", reponame);
-    auto q_core = comps.get_group_sack().new_query();
+    libdnf::comps::GroupQuery q_core(comps.get_group_sack());
     q_core.filter_installed(false);
     q_core.filter_groupid("core");
     auto core = q_core.get();
@@ -76,7 +76,7 @@ void CompsGroupTest::test_load() {
     }
 
     comps.load_from_file(data_path / "standard.xml", reponame);
-    auto q_standard = comps.get_group_sack().new_query();
+    libdnf::comps::GroupQuery q_standard(comps.get_group_sack());
     q_standard.filter_installed(false);
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
@@ -109,7 +109,7 @@ void CompsGroupTest::test_load_defaults() {
     libdnf::comps::Comps comps(*base.get());
 
     comps.load_from_file(data_path / "core-empty.xml", reponame);
-    auto q_core_empty = comps.get_group_sack().new_query();
+    libdnf::comps::GroupQuery q_core_empty(comps.get_group_sack());
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
@@ -136,7 +136,7 @@ void CompsGroupTest::test_merge() {
     // load another definiton of the core group that changes all attributes
     comps.load_from_file(data_path / "core-v2.xml", reponame);
 
-    auto q_core2 = comps.get_group_sack().new_query();
+    libdnf::comps::GroupQuery q_core2(comps.get_group_sack());
     q_core2.filter_groupid("core");
     auto core2 = q_core2.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core2.get_groupid());
@@ -175,7 +175,7 @@ void CompsGroupTest::test_merge_with_empty() {
     // load another definiton of the core group that has all attributes empty
     comps.load_from_file(data_path / "core-empty.xml", reponame);
 
-    auto q_core_empty = comps.get_group_sack().new_query();
+    libdnf::comps::GroupQuery q_core_empty(comps.get_group_sack());
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
@@ -205,7 +205,7 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
     // load another definiton of the core group that has all attributes filled
     comps.load_from_file(data_path / "core.xml", reponame);
 
-    auto q_core = comps.get_group_sack().new_query();
+    libdnf::comps::GroupQuery q_core(comps.get_group_sack());
     q_core.filter_groupid("core");
     auto core = q_core.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
@@ -239,7 +239,7 @@ void CompsGroupTest::test_dump_and_load() {
     libdnf::comps::Comps comps(*base.get());
 
     comps.load_from_file(data_path / "standard.xml", reponame);
-    auto q_standard = comps.get_group_sack().new_query();
+    libdnf::comps::GroupQuery q_standard(comps.get_group_sack());
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
 
@@ -248,7 +248,7 @@ void CompsGroupTest::test_dump_and_load() {
     libdnf::comps::Comps comps2(*base.get());
     comps2.load_from_file(dumped_standard_path, reponame);
 
-    auto q_dumped_standard = comps2.get_group_sack().new_query();
+    libdnf::comps::GroupQuery q_dumped_standard(comps.get_group_sack());
     q_dumped_standard.filter_groupid("standard");
     auto dumped_standard = q_dumped_standard.get();
 

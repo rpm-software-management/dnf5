@@ -33,7 +33,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-AdvisoryQuery::AdvisoryQuery(const AdvisorySackWeakPtr & sack) : advisory_sack(sack), p_impl{new Impl(sack->data_map)} {};
+AdvisoryQuery::AdvisoryQuery(const AdvisorySackWeakPtr & sack) : advisory_sack(sack) {
+    sack->load_advisories_from_package_sack();
+    p_impl.reset(new Impl(sack->data_map));
+};
 
 AdvisoryQuery::~AdvisoryQuery() = default;
 AdvisoryQuery::AdvisoryQuery(const AdvisoryQuery & src)

@@ -172,7 +172,9 @@ void CmdAdvisory::run(Context & ctx) {
 
     auto package_sack = ctx.base.get_rpm_package_sack();
     package_sack->create_system_repo(false);
-    auto enabled_repos = ctx.base.get_rpm_repo_sack()->new_query().filter_enabled(true);
+    libdnf::repo::RepoQuery enabled_repos(ctx.base.get_rpm_repo_sack());
+    enabled_repos.filter_enabled(true);
+
     using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     ctx.load_rpm_repos(enabled_repos, LoadFlags::USE_UPDATEINFO);
 
@@ -185,7 +187,7 @@ void CmdAdvisory::run(Context & ctx) {
     //DATA IS PREPARED
 
     //TODO(amatej): create advisory_query with filters on advisories prensent (if we want to limit by severity, reference..)
-    auto advisory_query = ctx.base.get_rpm_advisory_sack()->new_query();
+    auto advisory_query = libdnf::advisory::AdvisoryQuery(ctx.base.get_rpm_advisory_sack());
     if (with_cve_option->get_value()) {
         advisory_query.filter_CVE("*", QueryCmp::IGLOB);
     }

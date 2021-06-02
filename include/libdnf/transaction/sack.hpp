@@ -54,8 +54,6 @@ public:
     explicit TransactionSack(libdnf::Base & base);
     ~TransactionSack();
 
-    TransactionQuery new_query();
-
     /// Create a new Transaction object, store it in the sack and return a weak pointer to it.
     /// The Transaction object is owned by the TransactionSack.
     TransactionWeakPtr new_transaction();

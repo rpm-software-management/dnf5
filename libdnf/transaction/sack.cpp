@@ -32,15 +32,6 @@ TransactionSack::TransactionSack(libdnf::Base & base) : base{base} {}
 TransactionSack::~TransactionSack() = default;
 
 
-TransactionQuery TransactionSack::new_query() {
-    // create an *empty* query
-    // the content is lazily loaded/cached while running the queries
-    TransactionQuery q;
-    q.sack = this;
-    return q;
-}
-
-
 TransactionWeakPtr TransactionSack::new_transaction() {
     return add_item_with_return(std::make_unique<Transaction>(*this));
 }

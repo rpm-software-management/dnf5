@@ -429,7 +429,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::EQ with equal advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().filter_name("DNF-2019-1");
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("DNF-2019-1");
         libdnf::rpm::PackageQuery query(sack);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
@@ -438,7 +438,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::GT with older advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().filter_name("PKG-OLDER");
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-OLDER");
         libdnf::rpm::PackageQuery query(sack);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::GT);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
@@ -447,7 +447,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::LTE with older advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().filter_name("PKG-OLDER");
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-OLDER");
         libdnf::rpm::PackageQuery query(sack);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::LTE);
         std::vector<std::string> expected = {};
@@ -456,7 +456,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::LT with newer advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().filter_name("PKG-NEWER");
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-NEWER");
         libdnf::rpm::PackageQuery query(sack);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::LT);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
@@ -465,7 +465,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::GTE with newer advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = advisory_sack->new_query().filter_name("PKG-NEWER");
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-NEWER");
         libdnf::rpm::PackageQuery query(sack);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::GTE);
         std::vector<std::string> expected = {};
@@ -475,7 +475,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
     {
         // Test QueryCmp::EQ with older and newer advisory pkg
         libdnf::advisory::AdvisoryQuery adv_query =
-            advisory_sack->new_query().filter_name("PKG-*", libdnf::sack::QueryCmp::IGLOB);
+            libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-*", libdnf::sack::QueryCmp::IGLOB);
         ;
         libdnf::rpm::PackageQuery query(sack);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);

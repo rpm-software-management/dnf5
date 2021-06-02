@@ -46,7 +46,7 @@ void TransactionQueryTest::test_filter_id_eq() {
     auto base2 = new_base();
 
     // get the written transaction
-    auto q2 = base2->get_transaction_sack()->new_query();
+    libdnf::transaction::TransactionQuery q2(base2->get_transaction_sack());
     q2.filter_id(trans->get_id());
     auto trans2 = q2.get();
 }
@@ -71,8 +71,8 @@ void TransactionQueryTest::test_filter_id_eq_parallel_queries() {
     CPPUNIT_ASSERT_EQUAL(0LU, transaction_sack2->get_data().size());
 
     // create 2 queries that are empty, none of them loaded any transaction yet
-    auto q2 = transaction_sack2->new_query();
-    auto q3 = transaction_sack2->new_query();
+    libdnf::transaction::TransactionQuery q2(transaction_sack2);
+    libdnf::transaction::TransactionQuery q3(transaction_sack2);
 
     q2.filter_id(trans->get_id());
     auto trans2 = q2.get();

@@ -34,6 +34,7 @@ void RepoQueryTest::tearDown() {}
 void RepoQueryTest::test_query_basics() {
     libdnf::Base base;
     libdnf::repo::RepoSack repo_sack(base);
+    auto repo_sack_weak_ptr = repo_sack.get_weak_ptr();
 
     // Creates new repositories in the repo_sack
     auto repo1 = repo_sack.new_repo("repo1");
@@ -52,7 +53,7 @@ void RepoQueryTest::test_query_basics() {
     repo2_updates->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "https://host/path/to/repo2_updates");
 
     // Creates new query on the repo_sack
-    auto repo_query = repo_sack.new_query();
+    libdnf::repo::RepoQuery repo_query(repo_sack_weak_ptr);
     CPPUNIT_ASSERT_EQUAL(repo_query.size(), static_cast<size_t>(4));
     CPPUNIT_ASSERT((repo_query == libdnf::Set{repo1, repo2, repo1_updates, repo2_updates}));
 
@@ -61,10 +62,12 @@ void RepoQueryTest::test_query_basics() {
     CPPUNIT_ASSERT((repo_query == libdnf::Set{repo1, repo2_updates}));
 
     // Tests filter_id method
-    auto repo_query1 = repo_sack.new_query().filter_id("*updates", libdnf::sack::QueryCmp::GLOB);
+    libdnf::repo::RepoQuery repo_query1(repo_sack_weak_ptr);
+    repo_query1.filter_id("*updates", libdnf::sack::QueryCmp::GLOB);
     CPPUNIT_ASSERT((repo_query1 == libdnf::Set{repo1_updates, repo2_updates}));
 
     // Tests filter_local method
-    repo_query1 = repo_sack.new_query().filter_local(false);
-    CPPUNIT_ASSERT((repo_query1 == libdnf::Set{repo2, repo1_updates, repo2_updates}));
+    libdnf::repo::RepoQuery repo_query2(repo_sack_weak_ptr);
+    repo_query2.filter_local(false);
+    CPPUNIT_ASSERT((repo_query2 == libdnf::Set{repo2, repo1_updates, repo2_updates}));
 }

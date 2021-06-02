@@ -17,27 +17,17 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_ADVISORY_ADVISORY_QUERY_PRIVATE_HPP
-#define LIBDNF_ADVISORY_ADVISORY_QUERY_PRIVATE_HPP
-
-#include "libdnf/advisory/advisory.hpp"
-#include "libdnf/advisory/advisory_query.hpp"
-#include "libdnf/rpm/solv/solv_map.hpp"
-
-namespace libdnf::advisory {
-
-//TODO(amatej): only temprary class to hide solv_map from advisory_query.hpp,
-//              should be replaced most likely by AdvisorySet?
-class AdvisoryQuery::Impl {
-    Impl(const libdnf::rpm::solv::SolvMap & m) : data_map(m){};
-
-private:
-    friend AdvisoryQuery;
-
-    libdnf::rpm::solv::SolvMap data_map;
-};
-
-}  // namespace libdnf::advisory
+#include "libdnf/repo/repo_query.hpp"
+#include "libdnf/repo/repo_sack.hpp"
 
 
-#endif  // LIBDNF_ADVISORY_ADVISORY_QUERY_PRIVATE_HPP
+namespace libdnf::repo {
+
+RepoQuery::RepoQuery(const RepoSackWeakPtr & sack) {
+    // add all repos
+    for (auto & it : sack->get_data()) {
+        add(RepoSack::DataItemWeakPtr(it.get(), &sack->get_data_guard()));
+    }
+}
+
+}  // namespace libdnf::repo

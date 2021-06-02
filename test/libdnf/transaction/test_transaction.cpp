@@ -61,7 +61,7 @@ void TransactionTest::test_save_load() {
 
     // load the saved transaction from database and compare values
     auto base2 = new_base();
-    auto q2 = base2->get_transaction_sack()->new_query();
+    libdnf::transaction::TransactionQuery q2(base2->get_transaction_sack());
     q2.filter_id(trans->get_id());
     auto trans2 = q2.get();
 
@@ -115,7 +115,7 @@ void TransactionTest::test_update() {
 
     // load the transction from the database
     auto base2 = new_base();
-    auto q2 = base2->get_transaction_sack()->new_query();
+    libdnf::transaction::TransactionQuery q2(base2->get_transaction_sack());
     q2.filter_id(trans->get_id());
     auto trans2 = q2.get();
 

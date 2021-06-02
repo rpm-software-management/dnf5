@@ -19,7 +19,7 @@
 import os
 import unittest
 
-import libdnf.comps
+import libdnf
 
 
 class TestGroup(unittest.TestCase):
@@ -29,5 +29,5 @@ class TestGroup(unittest.TestCase):
         reponame = "repo"
         data_path = os.path.join(os.getcwd(), "../../../test/libdnf/comps/data/core.xml")
         comps.load_from_file(data_path, reponame)
-        q_core = comps.get_group_sack().new_query()
+        q_core = libdnf.comps.GroupQuery(comps.get_group_sack())
         core = q_core.get()

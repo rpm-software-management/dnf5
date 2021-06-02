@@ -80,7 +80,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     auto base2 = new_base();
 
     // get the written transaction
-    auto q2 = base2->get_transaction_sack()->new_query();
+    libdnf::transaction::TransactionQuery q2(base2->get_transaction_sack());
     q2.filter_id(trans->get_id());
     auto trans2 = q2.get();
 
