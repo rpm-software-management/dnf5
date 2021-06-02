@@ -244,25 +244,16 @@ private:
 
 inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
     if (current_value >= 0) {
-        // skip (previous / 8) bytes
-        //current += previous >> 3;
-
         // make a copy of byte with the previous match to avoid changing the map
         unsigned char byte = *map_current;
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
         // reset previously seen bits to 0
         byte >>= (current_value & 7) + 1;
-#pragma GCC diagnostic pop
 
         auto bit = ffs(byte << ((current_value & 7) + 1));
         if (bit) {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
             // return (current byte * 8) + bit position - 1
-            current_value = ((map_current - map->map) << 3) + bit - 1;
-#pragma GCC diagnostic pop
+            current_value = (static_cast<int>(map_current - map->map) << 3) + bit - 1;
             return *this;
         }
 
@@ -279,12 +270,9 @@ inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
             continue;
         }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
         // now we have a byte that has at least one bit set
         // return (current byte * 8) + bit position - 1
-        current_value = ((map_current - map->map) << 3) + ffs(*map_current) - 1;
-#pragma GCC diagnostic pop
+        current_value = (static_cast<int>(map_current - map->map) << 3) + ffs(*map_current) - 1;
         return *this;
     }
 
