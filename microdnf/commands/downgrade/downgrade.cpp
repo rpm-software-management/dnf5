@@ -48,12 +48,12 @@ void CmdDowngrade::set_argument_parser(Context & ctx) {
         patterns_to_downgrade_options);
     keys->set_short_description("List of keys to match");
 
-    auto downgarde = ctx.arg_parser.add_new_command("downgrade");
-    downgarde->set_short_description("Downgarde a package or packages on your system");
-    downgarde->set_description("");
-    downgarde->set_named_args_help_header("Optional arguments:");
-    downgarde->set_positional_args_help_header("Positional arguments:");
-    downgarde->set_parse_hook_func([this, &ctx](
+    auto downgrade = ctx.arg_parser.add_new_command("downgrade");
+    downgrade->set_short_description("Downgrade a package or packages on your system");
+    downgrade->set_description("");
+    downgrade->set_named_args_help_header("Optional arguments:");
+    downgrade->set_positional_args_help_header("Positional arguments:");
+    downgrade->set_parse_hook_func([this, &ctx](
                                        [[maybe_unused]] ArgumentParser::Argument * arg,
                                        [[maybe_unused]] const char * option,
                                        [[maybe_unused]] int argc,
@@ -62,9 +62,9 @@ void CmdDowngrade::set_argument_parser(Context & ctx) {
         return true;
     });
 
-    downgarde->register_positional_arg(keys);
+    downgrade->register_positional_arg(keys);
 
-    ctx.arg_parser.get_root_command()->register_command(downgarde);
+    ctx.arg_parser.get_root_command()->register_command(downgrade);
 }
 
 void CmdDowngrade::configure([[maybe_unused]] Context & ctx) {}
