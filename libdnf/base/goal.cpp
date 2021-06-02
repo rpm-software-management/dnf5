@@ -724,7 +724,6 @@ void Goal::Impl::add_rpms_to_goal() {
     for (auto & [action, ids, settings] : rpm_ids) {
         switch (action) {
             case Action::INSTALL: {
-                //  report aready installed packages with the same NEVRA
                 //  include installed packages with the same NEVRA into transaction to prevent reinstall
                 std::vector<std::string> nevras;
                 for (auto id : ids) {
@@ -732,8 +731,15 @@ void Goal::Impl::add_rpms_to_goal() {
                 }
                 rpm::PackageQuery query(installed);
                 query.filter_nevra(nevras);
+                //  report aready installed packages with the same NEVRA
                 for (auto package_id : *query.p_impl) {
-                    //  TODO(jmracek)  report already installed nevra
+                    add_rpm_goal_report(
+                        Goal::Action::INSTALL,
+                        GoalProblem::ALREADY_INSLALLED,
+                        settings,
+                        {},
+                        {rpm::solv::get_nevra(pool, package_id)},
+                        false);
                     ids.push_back(package_id);
                 }
                 rpm_goal.add_install(
