@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_ADVISORY_ADVISORY_HPP
 
 
-#include "../rpm/repo_fixture.hpp"
+#include "../repo_fixture.hpp"
 
 #include "libdnf/advisory/advisory_collection.hpp"
 #include "libdnf/advisory/advisory_sack.hpp"

@@ -22,7 +22,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnfdaemon-server/dbus.hpp>
 #include <dnfdaemon-server/transaction.hpp>
 #include <libdnf-cli/utils/tty.hpp>
-#include <libdnf/rpm/repo.hpp>
+#include <libdnf/repo/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>

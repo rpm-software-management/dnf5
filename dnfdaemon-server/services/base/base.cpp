@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2020 Red Hat, Inc.
+Copyright (C) 2020-2021 Red Hat, Inc.
 
 This file is part of dnfdaemon-server: https://github.com/rpm-software-management/libdnf/
 
@@ -23,7 +23,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnfdaemon-server/utils.hpp"
 
 #include <fmt/format.h>
-#include <libdnf/rpm/repo.hpp>
+#include <libdnf/repo/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 #include <unistd.h>
 

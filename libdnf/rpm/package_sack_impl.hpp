@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
 
 #include "../utils/utils_internal.hpp"
-#include "repo_impl.hpp"
+#include "../repo/repo_impl.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
 

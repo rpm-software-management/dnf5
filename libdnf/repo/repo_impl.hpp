@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_REPO_IMPL_HPP
 
 #include "libdnf/base/base.hpp"
-#include "libdnf/rpm/repo.hpp"
+#include "libdnf/repo/repo.hpp"
 
 #include <gpgme.h>
 #include <librepo/librepo.h>

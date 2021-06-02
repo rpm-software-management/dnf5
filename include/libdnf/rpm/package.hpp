@@ -24,7 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "checksum.hpp"
 #include "package_sack.hpp"
 #include "reldep_list.hpp"
-#include "repo_query.hpp"
+
+#include "libdnf/repo/repo_query.hpp"
 
 #include <string>
 #include <vector>

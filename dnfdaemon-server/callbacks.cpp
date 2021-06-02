@@ -22,7 +22,6 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "session.hpp"
 #include "transaction.hpp"
 
-#include <libdnf/rpm/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <iostream>

@@ -21,11 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_REPO_FIXTURE_HPP
 #define TEST_LIBDNF_REPO_FIXTURE_HPP
 
-#include "../testcase_fixture.hpp"
+#include "testcase_fixture.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package_sack.hpp"
-#include "libdnf/rpm/repo_sack.hpp"
+#include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/utils/temp.hpp"
 
 

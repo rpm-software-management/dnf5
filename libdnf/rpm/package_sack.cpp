@@ -20,10 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "package_sack_impl.hpp"
-#include "repo_impl.hpp"
+#include "../repo/repo_impl.hpp"
 #include "solv/id_queue.hpp"
-
-#include "libdnf/rpm/repo.hpp"
 
 extern "C" {
 #include <solv/chksum.h>

@@ -20,7 +20,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_SERVER_CALLBACKS_HPP
 #define DNFDAEMON_SERVER_CALLBACKS_HPP
 
-#include <libdnf/rpm/repo.hpp>
+#include <libdnf/repo/repo.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 

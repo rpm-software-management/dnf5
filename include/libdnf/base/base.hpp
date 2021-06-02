@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/logger/log_router.hpp"
 #include "libdnf/plugin/plugins.hpp"
 #include "libdnf/rpm/package_sack.hpp"
-#include "libdnf/rpm/repo_sack.hpp"
+#include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/transaction/sack.hpp"
 
 #include <map>

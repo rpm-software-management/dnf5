@@ -25,7 +25,7 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
-#include <libdnf/rpm/repo.hpp>
+#include <libdnf/repo/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>

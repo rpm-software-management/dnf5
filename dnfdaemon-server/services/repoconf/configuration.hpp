@@ -24,7 +24,7 @@
 
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/conf/config_parser.hpp"
-#include "libdnf/rpm/config_repo.hpp"
+#include "libdnf/repo/config_repo.hpp"
 
 #include <map>
 #include <memory>

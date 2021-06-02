@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_repo_query.hpp"
 
 #include "libdnf/base/base.hpp"
-#include "libdnf/rpm/repo_sack.hpp"
+#include "libdnf/repo/repo_sack.hpp"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RepoQueryTest);
 

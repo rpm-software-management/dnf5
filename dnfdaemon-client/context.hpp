@@ -27,7 +27,7 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/argument_parser.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/conf/config.hpp>
-#include <libdnf/rpm/repo.hpp>
+#include <libdnf/repo/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <iostream>
