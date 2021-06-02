@@ -492,8 +492,6 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                     installed.p_impl->remove_unsafe(package_id);
                 }
             }
-            // TODO(jmracek): if reports: self._report_installed(installed)
-            // TODO(jmracek) Replace by union query operator
             available |= installed;
             std::vector<Solvable *> tmp_solvables;
             for (auto package_id : *available.p_impl) {
@@ -542,8 +540,6 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 }
                 query |= installed;
             }
-            // TODO(jmracek) if reports:
-            // base._report_already_installed(installed_query)
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
             rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
             return GoalProblem::NO_PROBLEM;
