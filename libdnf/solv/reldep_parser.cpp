@@ -60,10 +60,10 @@ static bool set_cmp_type(libdnf::rpm::Reldep::CmpType * cmp_type, std::string cm
 }
 
 
-bool ReldepParser::parse(const std::string & reldep_str) {
+bool ReldepParser::parse(const std::string & reldep) {
     enum { NAME = 1, CMP_TYPE = 2, EVR = 3 };
     std::smatch match;
-    if (!std::regex_match(reldep_str, match, RELDEP_REGEX)) {
+    if (!std::regex_match(reldep, match, RELDEP_REGEX)) {
         return false;
     } else {
         std::ssub_match cmp_type_sub_match = match[CMP_TYPE];

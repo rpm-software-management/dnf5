@@ -33,17 +33,19 @@ namespace libdnf::solv {
 
 class IdQueueIterator {
 public:
-    explicit IdQueueIterator(const Queue * queue) noexcept : queue{queue} { begin(); }
-
-    IdQueueIterator(const IdQueueIterator & other) noexcept = default;
-
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
     using value_type = Id;
     using pointer = void;
     using reference = Id;
 
-    Id & operator*() const noexcept { return queue->elements[current_index]; }
+    explicit IdQueueIterator(const Queue * queue) noexcept : queue{queue} { begin(); }
+
+    IdQueueIterator(const IdQueueIterator & other) noexcept = default;
+
+    Id & operator*() noexcept { return queue->elements[current_index]; }
+
+    Id operator*() const noexcept { return queue->elements[current_index]; }
 
     IdQueueIterator & operator++() noexcept {
         ++current_index;
@@ -77,14 +79,6 @@ struct IdQueue {
 public:
     using iterator = IdQueueIterator;
 
-    iterator begin() const { return iterator(&queue); }
-
-    iterator end() const {
-        iterator it(&queue);
-        it.end();
-        return it;
-    }
-
     IdQueue() { queue_init(&queue); }
 
     IdQueue(const IdQueue & src) { queue_init_clone(&queue, &src.queue); }
@@ -98,10 +92,6 @@ public:
 
     ~IdQueue() { queue_free(&queue); }
 
-    bool operator==(const IdQueue & other) const;
-
-    bool operator!=(const IdQueue & other) const { return !(*this == other); }
-
     IdQueue & operator=(const IdQueue & src);
 
     IdQueue & operator=(IdQueue && src) noexcept {
@@ -109,38 +99,55 @@ public:
         return *this;
     }
 
+    iterator begin() const { return iterator(&queue); }
+
+    iterator end() const {
+        iterator it(&queue);
+        it.end();
+        return it;
+    }
+
+    bool operator==(const IdQueue & other) const;
+
+    bool operator!=(const IdQueue & other) const { return !(*this == other); }
+
     IdQueue & operator+=(const IdQueue & src) {
-        append(src);
+        queue_insertn(&queue, size(), src.size(), src.queue.elements);
         return *this;
     }
 
-    IdQueue & operator+=(Id id) {
-        push_back(id);
-        return *this;
-    }
+    Id & operator[](int index) { return queue.elements[index]; }
 
-    Id & operator[](int index) const { return queue.elements[index]; }
+    Id operator[](int index) const { return queue.elements[index]; }
 
     void push_back(Id id) { queue_push(&queue, id); }
 
-    /// @brief Add two Ids into queue.
-    /// It is used by libsolv jobs when one Id represents what to perform and the second one on witch elements
+    /// Adds two Ids into the queue.
+    /// Used in libsolv jobs which work with pairs (operation, item).
     void push_back(Id id1, Id id2) { queue_push2(&queue, id1, id2); }
 
     Queue & get_queue() noexcept { return queue; }
 
     const Queue & get_queue() const noexcept { return queue; }
 
+    /// @return Whether the queue is empty.
     bool empty() const noexcept { return queue.count == 0; };
 
+    /// @return The number of items in the queue.
     int size() const noexcept { return queue.count; }
 
+    /// Clears the queue.
     void clear() noexcept { queue_empty(&queue); }
 
-    void append(const IdQueue & src) { queue_insertn(&queue, size(), src.size(), src.queue.elements); }
-
+    /// Allocates space for `n` more Ids in the queue (the resulting size is `size() + n`).
     void reserve(int n) { queue_prealloc(&queue, n); }
 
+    /// Sorts the queue using comparator `cmp`. The comparator should return 0
+    /// if the elements are the same, -1 if `a` sorts before `b` and 1 if `b`
+    /// sorts before `a`.
+    /// @param cmp The comparator function. `a` and `b` are pointers to `Id`s
+    ///            to compare, `data` is the `data` pointer passed to this method.
+    /// @param data Any data required for the comparison, the pointer will be passed to `cmp`.
     void sort(int (* cmp)(const void * a, const void * b, void * data), void * data);
 
 private:
@@ -167,7 +174,7 @@ inline IdQueue & IdQueue::operator=(const IdQueue & src) {
         return *this;
     }
     queue_empty(&queue);
-    append(src);
+    *this += src;
     return *this;
 }
 

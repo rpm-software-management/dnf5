@@ -29,12 +29,12 @@ namespace libdnf::solv {
 
 struct ReldepParser {
 public:
-    /// @brief Parse realdep std::string into thee elements (name, evr, and comparison type), and transforms into libdnf::rpm::Reldep::ComparisonType.
-    /// If parsing is not succesfull, the object contains a garbage.
+    /// Parses `reldep` into three elements: name, evr, and comparison type.
+    /// If parsing is not succesful, the object contains garbage (tm).
     ///
-    /// @param reldepStr p_reldepStr: std::string & that represent reldep
-    /// @return bool - true if parsing was succesful
-    bool parse(const std::string & reldep_str);
+    /// @param reldep The reldep string to parse.
+    /// @return `true` if parsing was succesful.
+    bool parse(const std::string & reldep);
 
     const std::string & get_name() const noexcept { return name; }
 

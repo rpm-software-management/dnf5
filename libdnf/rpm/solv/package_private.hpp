@@ -278,7 +278,7 @@ inline void get_requires(Pool * pool, Id package_id, libdnf::solv::IdQueue & que
     reldeps_for(get_solvable(pool, package_id), queue, SOLVABLE_REQUIRES);
     libdnf::solv::IdQueue tmp_queue;
     reldeps_for(get_solvable(pool, package_id), tmp_queue, SOLVABLE_PREREQMARKER);
-    queue.append(tmp_queue);
+    queue += tmp_queue;
 }
 
 inline void get_requires_pre(Pool * pool, Id package_id, libdnf::solv::IdQueue & queue) noexcept {

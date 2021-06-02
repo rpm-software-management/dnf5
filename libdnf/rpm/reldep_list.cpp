@@ -127,7 +127,7 @@ bool ReldepList::add_reldep(const std::string & reldep_str, int create) {
 }
 
 void ReldepList::append(ReldepList & source) {
-    p_impl->queue.append(source.p_impl->queue);
+    p_impl->queue += source.p_impl->queue;
 }
 
 Reldep ReldepList::get(int index) const noexcept {
