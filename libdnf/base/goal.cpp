@@ -841,18 +841,27 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
         }
     }
 
-    bool add_obsoletes = obsoletes && nevra_pair.second.has_just_name();
+    bool add_obsoletes = obsoletes && nevra_pair.second.has_just_name() && action != Action::DOWNGRADE;
     rpm::PackageQuery installed(query);
     installed.filter_installed();
     // TODO(jmracek) Apply latest filters on installed (or later)
     if (add_obsoletes) {
-        rpm::PackageQuery obsoletes_query(base_query);
-        obsoletes_query.filter_available();
-        // TODO(jmracek) use upgrades + installed when the filter will be available rpm::PackageQuery what_obsoletes(query);
-        // what_obsoletes.filter_upgrades()
-        obsoletes_query.filter_obsoletes(query);
-        // obsoletes = self.sack.query().available().filterm(obsoletes=installed_query.union(q.upgrades()))
-        query |= obsoletes_query;
+        // Obsoletes are not added to downgrade set
+        if (action == Action::UPGRADE) {
+            // Do not add obsoleters of packages that are not upgrades. Such packages can be confusing for the solver.
+            rpm::PackageQuery obsoletes_query(base_query);
+            obsoletes_query.filter_available();
+            rpm::PackageQuery to_obsolete_query(query);
+            to_obsolete_query.filter_upgrades();
+            to_obsolete_query |= installed;
+            obsoletes_query.filter_obsoletes(to_obsolete_query);
+            query |= obsoletes_query;
+        } else if (action == Action::DISTRO_SYNC) {
+            rpm::PackageQuery obsoletes_query(base_query);
+            obsoletes_query.filter_available();
+            obsoletes_query.filter_obsoletes(query);
+            query |= obsoletes_query;
+        }
     }
     if (!settings.to_repo_ids.empty()) {
         query.filter_repoid(settings.to_repo_ids, sack::QueryCmp::GLOB);
