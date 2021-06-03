@@ -873,10 +873,13 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
     }
 
     // TODO(jmracek) Apply security filters
-    // TODO(jmracek) q = q.available().union(installed_query.latest())
-    // Required for a correct upgrade of installonly packages
     switch (action) {
         case Action::UPGRADE:
+            // For a correct upgrade of installonly packages keep only the latest installed packages
+            // Otherwise it will also install not the latest installonly packages
+            query.filter_available();
+            installed.filter_latest();
+            query |= installed;
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
             rpm_goal.add_upgrade(tmp_queue, best, clean_requirements_on_remove);
             break;
