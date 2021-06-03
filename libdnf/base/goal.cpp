@@ -548,20 +548,6 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
         throw LogicError("Incorrect configuration value for multilib_policy");
     }
 
-    //             subj = dnf.subject.Subject(pkg_spec)
-    //         solution = subj.get_best_solution(self.sack, forms=forms, with_src=False)
-    //
-    //         if self.conf.multilib_policy == "all" or subj._is_arch_specified(solution):
-    //             q = solution['query']
-    //             if reponame is not None:
-    //                 q.filterm(reponame=reponame)
-    //             if not q:
-    //                 self._raise_package_not_found_error(pkg_spec, forms, reponame)
-    //             return self._install_multiarch(q, reponame=reponame, strict=strict)
-    //
-    //         elif self.conf.multilib_policy == "best":
-
-    //         return 0
     return GoalProblem::NO_PROBLEM;
 }
 
@@ -701,7 +687,6 @@ GoalProblem Goal::Impl::report_not_found(
                 add_rpm_goal_report(action, GoalProblem::HINT_ALTERNATIVES, settings, pkg_spec, hints, false);
             }
         }
-        // TODO(jmracek) - report hints (icase, alternative providers)
         return GoalProblem::NOT_FOUND;
     }
     query.filter_repoid({"src", "nosrc"}, sack::QueryCmp::NEQ);
