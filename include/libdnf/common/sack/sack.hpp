@@ -50,8 +50,6 @@ public:
     bool get_use_includes() const noexcept { return use_includes; }
     void set_use_includes(bool value) { use_includes = value; }
 
-    QueryT new_query();
-
 protected:
     Sack() = default;
     DataItemWeakPtr add_item_with_return(std::unique_ptr<T> && item);
@@ -66,26 +64,6 @@ private:
     bool use_includes = false;
     std::vector<std::unique_ptr<T>> data;  // Owns the data set. Objects get deleted when the Sack is deleted.
 };
-
-template <typename T, typename QueryT>
-QueryT Sack<T, QueryT>::new_query() {
-    QueryT result;
-
-    if (this->get_use_includes()) {
-        // if includes are used, add only includes to the query
-        result = QueryT(includes);
-    } else {
-        // else add all items
-        for (auto & it : this->get_data()) {
-            result.add(DataItemWeakPtr(it.get(), &data_guard));
-        }
-    }
-
-    // apply excludes
-    result -= excludes;
-
-    return result;
-}
 
 template <typename T, typename QueryT>
 typename Sack<T, QueryT>::DataItemWeakPtr Sack<T, QueryT>::add_item_with_return(std::unique_ptr<T> && item) {
