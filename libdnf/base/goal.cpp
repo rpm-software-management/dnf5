@@ -1259,7 +1259,6 @@ std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> Goal
 }
 
 std::string Goal::get_formated_all_problems() {
-    // TODO(jmracek) add problems with protected packages
     auto problems = describe_all_solver_problems();
     if (problems.empty()) {
         return {};
