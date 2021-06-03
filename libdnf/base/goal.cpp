@@ -545,7 +545,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             return GoalProblem::NO_PROBLEM;
         }
     } else {
-        // TODO(jmracek) raise an exception
+        throw LogicError("Incorrect configuration value for multilib_policy");
     }
 
     //             subj = dnf.subject.Subject(pkg_spec)
