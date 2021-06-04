@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
 
 }  // namespace libdnf
 
@@ -187,6 +188,7 @@ public:
     using rpm_tid_t = uint32_t;
 
     explicit Transaction(Base & base);
+    explicit Transaction(const BaseWeakPtr & base);
     Transaction(const Transaction &) = delete;
     Transaction(Transaction &&) = delete;
     ~Transaction();

@@ -226,8 +226,8 @@ int RpmProblemSet::size() noexcept {
 
 class Transaction::Impl {
 public:
-    explicit Impl(Base & base);
-    Impl(Base & base, rpmVSFlags vsflags);
+    explicit Impl(const BaseWeakPtr & base);
+    Impl(const BaseWeakPtr & base, rpmVSFlags vsflags);
     Impl(const Impl &) = delete;
     Impl(Impl &&) = delete;
     ~Impl();
@@ -466,7 +466,7 @@ private:
         Impl * transaction;
     };
 
-    Base * base;
+    BaseWeakPtr base;
     rpmts ts;
     FD_t script_fd{nullptr};
     CallbackInfo cb_info{nullptr, this};
@@ -629,14 +629,14 @@ private:
 };
 
 
-Transaction::Impl::Impl(Base & base, rpmVSFlags vsflags) : base(&base) {
+Transaction::Impl::Impl(const BaseWeakPtr & base, rpmVSFlags vsflags) : base(base) {
     ts = rpmtsCreate();
-    auto & config = base.get_config();
+    auto & config = base->get_config();
     set_root_dir(config.installroot().get_value().c_str());
     set_signature_verify_flags(vsflags);
 }
 
-Transaction::Impl::Impl(Base & base) : Impl(base, static_cast<rpmVSFlags>(rpmExpandNumeric("%{?__vsflags}"))) {}
+Transaction::Impl::Impl(const BaseWeakPtr & base) : Impl(base, static_cast<rpmVSFlags>(rpmExpandNumeric("%{?__vsflags}"))) {}
 
 Transaction::Impl::~Impl() {
     rpmtsFree(ts);
@@ -645,7 +645,9 @@ Transaction::Impl::~Impl() {
     }
 }
 
-Transaction::Transaction(Base & base) : p_impl(new Impl(base)) {}
+Transaction::Transaction(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
+
+Transaction::Transaction(Base & base) : Transaction(base.get_weak_ptr()) {}
 
 Transaction::~Transaction() = default;
 
