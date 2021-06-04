@@ -35,6 +35,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
+
 using LogRouterWeakPtr = WeakPtr<LogRouter, false>;
 using VarsWeakPtr = WeakPtr<Vars, false>;
 
@@ -73,7 +76,11 @@ public:
     void load_plugins();
     plugin::Plugins & get_plugins() { return plugins; }
 
+    BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
+
 private:
+    WeakPtrGuard<Base, false> base_guard;
+
     //TODO(jrohel): Make public?
     /// Loads main configuration from file defined by path.
     void load_config_from_file(const std::string & path);

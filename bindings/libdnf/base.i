@@ -25,6 +25,7 @@
 
 #define CV __perl_CV
 
+%template(BaseWeakPtr) libdnf::WeakPtr<libdnf::Base, false>;
 %template(LogRouterWeakPtr) libdnf::WeakPtr<libdnf::LogRouter, false>;
 %template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
 
