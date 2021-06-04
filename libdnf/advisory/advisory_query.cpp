@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_package_private.hpp"
 #include "libdnf/advisory/advisory_query_private.hpp"
+#include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package_sack_impl.hpp"
 #include "libdnf/rpm/package_set.hpp"
 #include "libdnf/rpm/solv/package_private.hpp"
@@ -37,6 +38,10 @@ AdvisoryQuery::AdvisoryQuery(const AdvisorySackWeakPtr & sack) : advisory_sack(s
     sack->load_advisories_from_package_sack();
     p_impl.reset(new Impl(sack->data_map));
 };
+
+AdvisoryQuery::AdvisoryQuery(const BaseWeakPtr & base) : advisory_sack(base->get_rpm_advisory_sack()) {}
+
+AdvisoryQuery::AdvisoryQuery(Base & base) : advisory_sack(base.get_rpm_advisory_sack()) {}
 
 AdvisoryQuery::~AdvisoryQuery() = default;
 AdvisoryQuery::AdvisoryQuery(const AdvisoryQuery & src)

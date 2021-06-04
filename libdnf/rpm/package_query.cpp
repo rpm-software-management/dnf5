@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_package_private.hpp"
 #include "libdnf/advisory/advisory_query.hpp"
+#include "libdnf/base/base.hpp"
 
 extern "C" {
 #include <solv/evr.h>
@@ -230,6 +231,10 @@ PackageQuery::PackageQuery(const PackageSackWeakPtr & sack, InitFlags flags) : P
             break;
     }
 }
+
+PackageQuery::PackageQuery(const BaseWeakPtr & base, InitFlags flags) : PackageQuery(base->get_rpm_package_sack(), flags) {}
+
+PackageQuery::PackageQuery(Base & base, InitFlags flags) : PackageQuery(base.get_rpm_package_sack(), flags) {}
 
 template <const char * (*c_string_getter_fnc)(Pool * pool, Id)>
 inline static void filter_glob_internal(

@@ -30,6 +30,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <mutex>
 #include <vector>
 
+namespace libdnf {
+
+class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
+
+}  // namespace libdnf
+
 
 namespace libdnf::transaction {
 
@@ -49,6 +56,8 @@ public:
     // create an *empty* query
     // the content is lazily loaded/cached while running the queries
     explicit TransactionQuery(const TransactionSackWeakPtr & sack);
+    explicit TransactionQuery(const BaseWeakPtr & base);
+    explicit TransactionQuery(Base & base);
 
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.dbSelect(int64_t transaction_id)
     TransactionQuery & filter_id(int64_t pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);

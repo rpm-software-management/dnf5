@@ -1,3 +1,4 @@
+#include "libdnf/base/base.hpp"
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/comps/group/query_impl.hpp"
 #include "libdnf/comps/group/group-private.hpp"
@@ -65,6 +66,9 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack)
     }
 }
 
+GroupQuery::GroupQuery(const BaseWeakPtr & base): GroupQuery(base->get_comps()->get_group_sack()) {}
+
+GroupQuery::GroupQuery(Base & base): GroupQuery(base.get_comps()->get_group_sack()) {}
 
 GroupQuery::GroupQuery(const GroupQuery & query)
     : Query(query)

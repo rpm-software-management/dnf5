@@ -17,6 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo_query.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 
@@ -29,5 +30,9 @@ RepoQuery::RepoQuery(const RepoSackWeakPtr & sack) {
         add(RepoSack::DataItemWeakPtr(it.get(), &sack->get_data_guard()));
     }
 }
+
+RepoQuery::RepoQuery(const BaseWeakPtr & base) : RepoQuery(base->get_rpm_repo_sack()) {}
+
+RepoQuery::RepoQuery(Base & base) : RepoQuery(base.get_rpm_repo_sack()) {}
 
 }  // namespace libdnf::repo

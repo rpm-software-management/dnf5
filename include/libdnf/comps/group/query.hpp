@@ -27,6 +27,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 
+namespace libdnf {
+
+class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
+
+}  // namespace libdnf
+
+
 namespace libdnf::comps {
 
 
@@ -41,6 +49,8 @@ class GroupQuery : public libdnf::sack::Query<Group> {
 public:
     // Create new query with newly composed groups (using only solvables from currently enabled repositories)
     explicit GroupQuery(const GroupSackWeakPtr & sack);
+    explicit GroupQuery(const BaseWeakPtr & base);
+    explicit GroupQuery(Base & base);
 
     GroupQuery(const GroupQuery & query);
     ~GroupQuery();

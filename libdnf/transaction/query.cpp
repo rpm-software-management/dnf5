@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/transaction/query.hpp"
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/sack.hpp"
 
@@ -39,6 +40,9 @@ namespace libdnf::transaction {
 
 TransactionQuery::TransactionQuery(const TransactionSackWeakPtr & sack) : sack{sack} {}
 
+TransactionQuery::TransactionQuery(const BaseWeakPtr & base) : sack{base->get_transaction_sack()} {}
+
+TransactionQuery::TransactionQuery(Base & base) : sack{base.get_transaction_sack()} {}
 
 TransactionQuery & TransactionQuery::filter_id(const std::vector<int64_t> & patterns, sack::QueryCmp cmp) {
     switch (cmp) {

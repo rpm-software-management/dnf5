@@ -35,7 +35,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+class Base;
 class Goal;
+using BaseWeakPtr = WeakPtr<Base, false>;
 
 }  // namespace libdnf
 
@@ -67,6 +69,8 @@ public:
     /// @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
     explicit PackageQuery(const PackageSackWeakPtr & sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
+    explicit PackageQuery(const BaseWeakPtr & base, InitFlags flags = InitFlags::APPLY_EXCLUDES);
+    explicit PackageQuery(Base & base, InitFlags flags = InitFlags::APPLY_EXCLUDES);
     PackageQuery(const PackageQuery & src) = default;
     PackageQuery(PackageQuery && src) noexcept = default;
     ~PackageQuery() = default;

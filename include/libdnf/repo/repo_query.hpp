@@ -24,6 +24,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/repo/repo.hpp"
 
+namespace libdnf {
+
+class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
+
+}  // namespace libdnf
+
 namespace libdnf::repo {
 
 /// Weak pointer to rpm repository. RepoWeakPtr does not own the repository (ptr_owner = false).
@@ -41,6 +48,8 @@ public:
 #endif
 
     explicit RepoQuery(const RepoSackWeakPtr & sack);
+    explicit RepoQuery(const BaseWeakPtr & base);
+    explicit RepoQuery(Base & base);
 
     RepoQuery & filter_enabled(bool enabled);
     RepoQuery & filter_expired(bool expired);

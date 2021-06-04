@@ -28,6 +28,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/rpm/package.hpp"
 
+namespace libdnf {
+
+class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
+
+}  // namespace libdnf
+
 namespace libdnf::advisory {
 
 using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
@@ -35,6 +42,8 @@ using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 class AdvisoryQuery {
 public:
     explicit AdvisoryQuery(const AdvisorySackWeakPtr & sack);
+    explicit AdvisoryQuery(const BaseWeakPtr & base);
+    explicit AdvisoryQuery(Base & base);
     AdvisoryQuery(const AdvisoryQuery & src);
     AdvisoryQuery(AdvisoryQuery && src);
     ~AdvisoryQuery();
