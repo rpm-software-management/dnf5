@@ -749,4 +749,8 @@ void Transaction::set_script_out_file(const std::string & file_path) {
     p_impl->set_script_fd(script_fd);
 }
 
+BaseWeakPtr Transaction::get_base() const {
+    return p_impl->base;
+}
+
 }  // namespace libdnf::rpm

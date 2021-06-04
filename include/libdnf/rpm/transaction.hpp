@@ -302,6 +302,10 @@ public:
     /// @param file_path  new file path
     void set_script_out_file(const std::string & file_path);
 
+    /// @return A `Base` object to which the transaction belongs.
+    /// @since 5.0
+    BaseWeakPtr get_base() const;
+
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;
