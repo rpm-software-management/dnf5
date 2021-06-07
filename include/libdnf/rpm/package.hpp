@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "reldep_list.hpp"
 
 #include "libdnf/repo/repo_query.hpp"
+#include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <string>
 #include <vector>
@@ -405,6 +406,14 @@ public:
     std::string get_repo_id() const;
 
     // TODO(dmach): getBugUrl() not possible due to lack of support in libsolv and metadata?
+
+    /// @return Resolved reason why a package was installed.
+    ///         A package can be installed due to multiple reasons, only the most significant is returned.
+    /// @since 5.0
+    //
+    // TODO(dmach): return actual value from data in PackageSack
+    // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
+    libdnf::transaction::TransactionItemReason get_reason() const { return libdnf::transaction::TransactionItemReason::UNKNOWN; }
 
 protected:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)

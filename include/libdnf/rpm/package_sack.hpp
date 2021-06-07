@@ -23,8 +23,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/transaction/transaction_item_reason.hpp"
 
+#include <map>
 #include <memory>
+#include <string>
+
 
 namespace libdnf {
 
@@ -175,6 +179,11 @@ public:
     /// Returns number of solvables in pool.
     int get_nsolvables() const noexcept;
 
+    /// @return Map of resolved reasons why packages were installed: ``{(name, arch) -> reason}``.
+    ///         A package can be installed due to multiple reasons, only the most significant is returned.
+    /// @since 5.0
+    const std::map<std::pair<std::string, std::string>, libdnf::transaction::TransactionItemReason> & get_reasons() const { return reasons; }
+
 private:
     friend libdnf::Goal;
     friend Package;
@@ -195,6 +204,7 @@ private:
     friend libdnf::advisory::AdvisoryReference;
     class Impl;
     std::unique_ptr<Impl> p_impl;
+    std::map<std::pair<std::string, std::string>, libdnf::transaction::TransactionItemReason> reasons;
 };
 
 inline constexpr PackageSack::LoadRepoFlags operator|(PackageSack::LoadRepoFlags lhs, PackageSack::LoadRepoFlags rhs) {

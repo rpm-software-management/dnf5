@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/comps/group/package.hpp"
 #include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <set>
 #include <string>
@@ -111,6 +112,14 @@ public:
     /// Determine if group is installed
     /// If it belongs to the @System repo, return true
     bool get_installed() const;
+
+    /// @return Resolved reason why a group was installed.
+    ///         A group can be installed due to multiple reasons, only the most significant is returned.
+    /// @since 5.0
+    //
+    // TODO(dmach): return actual value from data in GroupSack
+    // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
+    libdnf::transaction::TransactionItemReason get_reason() const { return libdnf::transaction::TransactionItemReason::UNKNOWN; }
 
     /// Merge a comps Group with another one
     Group & operator+=(const Group & rhs);

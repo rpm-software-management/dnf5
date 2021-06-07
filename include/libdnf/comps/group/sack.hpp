@@ -23,8 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/sack/sack.hpp"
 #include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/transaction/transaction_item_reason.hpp"
 
+#include <map>
 #include <memory>
+#include <string>
 
 
 namespace libdnf::comps {
@@ -47,6 +50,8 @@ public:
     /// Create WeakPtr to GroupSack
     GroupSackWeakPtr get_weak_ptr();
 
+    const std::map<std::string, libdnf::transaction::TransactionItemReason> & get_reasons() const { return reasons; }
+
 protected:
     explicit GroupSack(Comps & comps);
 
@@ -55,6 +60,11 @@ private:
 
     class Impl;
     std::unique_ptr<Impl> p_impl;
+
+    /// @return Map of resolved reasons why groups were installed: ``{group_id -> reason}``.
+    ///         A group can be installed due to multiple reasons, only the most significant is returned.
+    /// @since 5.0
+    std::map<std::string, libdnf::transaction::TransactionItemReason> reasons;
 
     friend Comps;
     friend GroupQuery;
