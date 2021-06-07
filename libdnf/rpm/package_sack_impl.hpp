@@ -151,7 +151,7 @@ private:
     std::unique_ptr<repo::Repo> system_repo;
     std::unique_ptr<repo::Repo> cmdline_repo;
 
-    WeakPtrGuard<PackageSack, false> data_guard;
+    WeakPtrGuard<PackageSack, false> sack_guard;
 
     std::vector<Solvable *> cached_sorted_solvables;
     int cached_sorted_solvables_size{0};

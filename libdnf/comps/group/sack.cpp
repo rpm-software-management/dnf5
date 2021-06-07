@@ -20,7 +20,7 @@ namespace libdnf::comps {
 
 
 GroupSackWeakPtr GroupSack::get_weak_ptr() {
-    return GroupSackWeakPtr(this, &p_impl->data_guard);
+    return GroupSackWeakPtr(this, &p_impl->sack_guard);
 }
 
 

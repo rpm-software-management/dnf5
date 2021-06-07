@@ -67,12 +67,12 @@ public:
     /// Create a new repository from a libsolv testcase file
     RepoWeakPtr new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path);
 
-    RepoSackWeakPtr get_weak_ptr();
+    RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
 
 private:
     friend class RepoQuery;
 
-    WeakPtrGuard<RepoSack, false> data_guard;
+    WeakPtrGuard<RepoSack, false> sack_guard;
 
     //TODO(jrohel): Make public?
     /// Creates new repositories according to the configuration in the files with ".repo" extension in the directory
@@ -83,8 +83,6 @@ private:
 
     Base * base;
 };
-
-inline RepoSackWeakPtr RepoSack::get_weak_ptr() { return RepoSackWeakPtr(this, &data_guard); }
 
 }  // namespace libdnf::repo
 

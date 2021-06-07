@@ -40,12 +40,12 @@ public:
     explicit AdvisorySack(libdnf::Base & base);
     ~AdvisorySack();
 
-    AdvisorySackWeakPtr get_weak_ptr();
+    AdvisorySackWeakPtr get_weak_ptr() { return AdvisorySackWeakPtr(this, &sack_guard); }
 
 private:
     friend AdvisoryQuery;
 
-    WeakPtrGuard<AdvisorySack, false> data_guard;
+    WeakPtrGuard<AdvisorySack, false> sack_guard;
 
     /// Load all advisories present in PackageSack from base. This method is
     /// called automatically when creating a new query and the cached number
@@ -58,8 +58,6 @@ private:
 
     libdnf::Base * base;
 };
-
-inline AdvisorySackWeakPtr AdvisorySack::get_weak_ptr() { return AdvisorySackWeakPtr(this, &data_guard); }
 
 }  // namespace libdnf::advisory
 

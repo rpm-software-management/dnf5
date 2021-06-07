@@ -640,7 +640,7 @@ void PackageSack::dump_debugdata(const std::string & dir) {
 }
 
 PackageSackWeakPtr PackageSack::get_weak_ptr() {
-    return PackageSackWeakPtr(this, &p_impl->data_guard);
+    return PackageSackWeakPtr(this, &p_impl->sack_guard);
 }
 
 int PackageSack::get_nsolvables() const noexcept {

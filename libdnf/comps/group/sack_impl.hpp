@@ -32,7 +32,7 @@ public:
     ~Impl();
 
 private:
-    WeakPtrGuard<GroupSack, false> data_guard;
+    WeakPtrGuard<GroupSack, false> sack_guard;
 
     friend GroupSack;
 };

@@ -60,20 +60,18 @@ public:
 
     using libdnf::sack::Sack<Transaction>::get_data;
 
-    TransactionSackWeakPtr get_weak_ptr();
+    TransactionSackWeakPtr get_weak_ptr() { return TransactionSackWeakPtr(this, &sack_guard); }
 
 private:
     friend class Transaction;
     friend class TransactionQuery;
     libdnf::Base & base;
 
-    WeakPtrGuard<TransactionSack, false> data_guard;
+    WeakPtrGuard<TransactionSack, false> sack_guard;
 
     // Lazy adding new items to the sack needs to be thread-safe to avoid adding duplicates.
     std::mutex mtx;
 };
-
-inline TransactionSackWeakPtr TransactionSack::get_weak_ptr() { return TransactionSackWeakPtr(this, &data_guard); }
 
 }  // namespace libdnf::transaction
 
