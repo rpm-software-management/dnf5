@@ -49,7 +49,7 @@ using TransactionSackWeakPtr = libdnf::WeakPtr<TransactionSack, false>;
 
 /// TransactionSack holds Transaction objects.
 /// Unlike in other sacks, the data is loaded on-demand.
-class TransactionSack : public libdnf::sack::Sack<Transaction, TransactionQuery> {
+class TransactionSack : public libdnf::sack::Sack<Transaction> {
 public:
     explicit TransactionSack(libdnf::Base & base);
     ~TransactionSack();
@@ -58,7 +58,7 @@ public:
     /// The Transaction object is owned by the TransactionSack.
     TransactionWeakPtr new_transaction();
 
-    using libdnf::sack::Sack<Transaction, TransactionQuery>::get_data;
+    using libdnf::sack::Sack<Transaction>::get_data;
 
     TransactionSackWeakPtr get_weak_ptr();
 

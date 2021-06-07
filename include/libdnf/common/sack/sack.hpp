@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::sack {
 
 
-template <typename T, typename QueryT>
+template <typename T>
 class Sack {
 public:
     using DataItemWeakPtr = WeakPtr<T, false>;
@@ -65,15 +65,15 @@ private:
     std::vector<std::unique_ptr<T>> data;  // Owns the data set. Objects get deleted when the Sack is deleted.
 };
 
-template <typename T, typename QueryT>
-typename Sack<T, QueryT>::DataItemWeakPtr Sack<T, QueryT>::add_item_with_return(std::unique_ptr<T> && item) {
+template <typename T>
+typename Sack<T>::DataItemWeakPtr Sack<T>::add_item_with_return(std::unique_ptr<T> && item) {
     auto ret = DataItemWeakPtr(item.get(), &data_guard);
     data.push_back(std::move(item));
     return ret;
 }
 
-template <typename T, typename QueryT>
-void Sack<T, QueryT>::add_item(std::unique_ptr<T> && item) {
+template <typename T>
+void Sack<T>::add_item(std::unique_ptr<T> && item) {
     data.push_back(std::move(item));
 }
 

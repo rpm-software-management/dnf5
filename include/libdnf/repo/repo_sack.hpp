@@ -39,7 +39,7 @@ class RepoSack;
 
 using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
-class RepoSack : public sack::Sack<Repo, RepoQuery> {
+class RepoSack : public sack::Sack<Repo> {
 public:
     explicit RepoSack(Base & base) : base(&base) {}
 

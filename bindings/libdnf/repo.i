@@ -40,6 +40,6 @@
 %template(SackQueryRepoWeakPtr) libdnf::sack::Query<libdnf::repo::RepoWeakPtr>;
 
 %include "libdnf/repo/repo_query.hpp"
-%template(SackRepoRepoQuery) libdnf::sack::Sack<libdnf::repo::Repo, libdnf::repo::RepoQuery>;
+%template(SackRepoRepoQuery) libdnf::sack::Sack<libdnf::repo::Repo>;
 %include "libdnf/repo/repo_sack.hpp"
 %template(RepoSackWeakPtr) libdnf::WeakPtr<libdnf::repo::RepoSack, false>;

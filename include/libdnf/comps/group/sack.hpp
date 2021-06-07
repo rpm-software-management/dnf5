@@ -40,7 +40,7 @@ class GroupSack;
 using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
 
 
-class GroupSack : public libdnf::sack::Sack<Group, GroupQuery> {
+class GroupSack : public libdnf::sack::Sack<Group> {
 public:
     ~GroupSack();
 
