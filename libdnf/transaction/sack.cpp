@@ -36,5 +36,8 @@ TransactionWeakPtr TransactionSack::new_transaction() {
     return add_item_with_return(std::make_unique<Transaction>(*this));
 }
 
+BaseWeakPtr TransactionSack::get_base() const {
+    return base.get_weak_ptr();
+}
 
 }  // namespace libdnf::transaction

@@ -1385,4 +1385,8 @@ void Goal::reset() {
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base->get_rpm_package_sack()->p_impl->get_pool());
 }
 
+BaseWeakPtr Goal::get_base() const {
+    return p_impl->base->get_weak_ptr();
+}
+
 }  // namespace libdnf

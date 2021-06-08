@@ -63,4 +63,8 @@ void AdvisorySack::load_advisories_from_package_sack() {
     cached_solvables_size = pool->nsolvables;
 }
 
+BaseWeakPtr AdvisorySack::get_base() const {
+    return base->get_weak_ptr();
+}
+
 }  // namespace libdnf::advisory

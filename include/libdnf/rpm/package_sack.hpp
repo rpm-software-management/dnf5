@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
 class Goal;
 class Swdb;
 
@@ -175,6 +176,10 @@ public:
 
     /// Create WeakPtr to PackageSack
     PackageSackWeakPtr get_weak_ptr();
+
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.0
+    BaseWeakPtr get_base() const;
 
     /// Returns number of solvables in pool.
     int get_nsolvables() const noexcept;

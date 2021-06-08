@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
 
 }  // namespace libdnf
 
@@ -68,6 +69,10 @@ public:
     RepoWeakPtr new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path);
 
     RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
+
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.0
+    BaseWeakPtr get_base() const;
 
 private:
     friend class RepoQuery;

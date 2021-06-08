@@ -32,7 +32,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf {
+
 class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
+
 }
 
 
@@ -61,6 +64,10 @@ public:
     using libdnf::sack::Sack<Transaction>::get_data;
 
     TransactionSackWeakPtr get_weak_ptr() { return TransactionSackWeakPtr(this, &sack_guard); }
+
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.0
+    BaseWeakPtr get_base() const;
 
 private:
     friend class Transaction;

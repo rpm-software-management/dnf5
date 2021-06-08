@@ -643,6 +643,10 @@ PackageSackWeakPtr PackageSack::get_weak_ptr() {
     return PackageSackWeakPtr(this, &p_impl->sack_guard);
 }
 
+BaseWeakPtr PackageSack::get_base() const {
+    return p_impl->base->get_weak_ptr();
+}
+
 int PackageSack::get_nsolvables() const noexcept {
     return p_impl->get_nsolvables();
 };

@@ -148,4 +148,8 @@ void RepoSack::new_repos_from_dirs() {
     }
 }
 
+BaseWeakPtr RepoSack::get_base() const {
+    return base->get_weak_ptr();
+}
+
 }  // namespace libdnf::repo

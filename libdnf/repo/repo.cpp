@@ -1632,6 +1632,10 @@ std::vector<std::string> Repo::get_mirrors() const {
     return mirrors;
 }
 
+BaseWeakPtr Repo::get_base() const {
+    return p_impl->base->get_weak_ptr();
+}
+
 Id Repo::Impl::add_rpm_package(const std::string & fn, bool add_with_hdrid) {
     auto c_fn = fn.c_str();
     is_readable_rpm(c_fn);

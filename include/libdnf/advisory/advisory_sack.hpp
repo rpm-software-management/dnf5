@@ -27,12 +27,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
 }
 
 namespace libdnf::advisory {
 
-//class AsdvisorySack;
-
+class AsdvisorySack;
 using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 
 class AdvisorySack {
@@ -41,6 +41,10 @@ public:
     ~AdvisorySack();
 
     AdvisorySackWeakPtr get_weak_ptr() { return AdvisorySackWeakPtr(this, &sack_guard); }
+
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.0
+    BaseWeakPtr get_base() const;
 
 private:
     friend AdvisoryQuery;

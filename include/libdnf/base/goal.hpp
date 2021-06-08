@@ -139,6 +139,10 @@ public:
 
     void reset();
 
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.0
+    BaseWeakPtr get_base() const;
+
 private:
     rpm::PackageId get_running_kernel_internal();
     class Impl;

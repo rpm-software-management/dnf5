@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 class Base;
+using BaseWeakPtr = WeakPtr<Base, false>;
 
 }  // namespace libdnf
 
@@ -365,6 +366,10 @@ public:
     void set_substitutions(const std::map<std::string, std::string> & substitutions);
 
     RepoWeakPtr get_weak_ptr();
+
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.0
+    BaseWeakPtr get_base() const;
 
     ~Repo();
 
