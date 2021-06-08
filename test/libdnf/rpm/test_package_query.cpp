@@ -633,3 +633,13 @@ void RpmPackageQueryTest::test_difference() {
     std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 }
+
+
+void RpmPackageQueryTest::test_filter_latest_performance() {
+    add_repo_solv("solv-humongous");
+
+    for (int i = 0; i < 10000; ++i) {
+        libdnf::rpm::PackageQuery query(sack);
+        query.filter_latest();
+    }
+}

@@ -53,6 +53,7 @@ class RpmPackageQueryTest : public RepoFixture {
 #endif
 
 #ifdef WITH_PERFORMANCE_TESTS
+    CPPUNIT_TEST(test_filter_latest_performance);
 #endif
 
     CPPUNIT_TEST_SUITE_END();
@@ -79,6 +80,9 @@ public:
     void test_update();
     void test_intersection();
     void test_difference();
+
+    void test_filter_latest_performance();
+
     // TODO(jmracek) Add tests when system repo will be available
     // PackageQuery & filter_upgrades();
     // PackageQuery & filter_downgrades();
