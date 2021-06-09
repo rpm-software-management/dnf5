@@ -148,9 +148,13 @@ public:
     /// @param cmp The comparator function. `a` and `b` are pointers to `Id`s
     ///            to compare, `data` is the `data` pointer passed to this method.
     /// @param data Any data required for the comparison, the pointer will be passed to `cmp`.
-    void sort(int (* cmp)(const void * a, const void * b, void * data), void * data);
+    template <typename TData>
+    void sort(int (*cmp)(const Id * a, const Id * b, TData * data), TData * data) {
+        sort((int (*)(const void * a, const void * b, void * data))cmp, (void *)data);
+    }
 
 private:
+    void sort(int (*cmp)(const void * a, const void * b, void * data), void * data);
     Queue queue;
 };
 

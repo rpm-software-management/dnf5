@@ -167,11 +167,11 @@ struct InstallonlyCmpData {
 };
 
 
-int installonly_cmp(const void * ap, const void * bp, void * s_cb) {
-    Id a = *(Id *)ap;
-    Id b = *(Id *)bp;
-    Pool * pool = ((struct InstallonlyCmpData *)s_cb)->pool;
-    Id kernel = ((struct InstallonlyCmpData *)s_cb)->running_kernel;
+int installonly_cmp(const Id * ap, const Id * bp, const InstallonlyCmpData * s_cb) {
+    Id a = *ap;
+    Id b = *bp;
+    Pool * pool = s_cb->pool;
+    Id kernel = s_cb->running_kernel;
     Solvable * sa = pool_id2solvable(pool, a);
     Solvable * sb = pool_id2solvable(pool, b);
 
@@ -249,7 +249,7 @@ bool limit_installonly_packages(
             continue;
         }
 
-        InstallonlyCmpData installonly_cmp_data{pool, running_kernel};
+        const InstallonlyCmpData installonly_cmp_data{pool, running_kernel};
         q.sort(&installonly_cmp, &installonly_cmp_data);
 
         libdnf::solv::IdQueue same_names;

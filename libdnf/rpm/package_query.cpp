@@ -2172,10 +2172,9 @@ static void add_latest_to_map(
     }
 }
 
-static int latest_cmp(const void * ap, const void * bp, void * dp) {
-    auto pool = static_cast<Pool *>(dp);
-    Solvable * sa = pool->solvables + *(Id *)ap;
-    Solvable * sb = pool->solvables + *(Id *)bp;
+static int latest_cmp(const Id * ap, const Id * bp, const Pool * pool) {
+    Solvable * sa = pool->solvables + *ap;
+    Solvable * sb = pool->solvables + *bp;
     int r;
     r = sa->name - sb->name;
     if (r)
@@ -2186,12 +2185,12 @@ static int latest_cmp(const void * ap, const void * bp, void * dp) {
     r = pool_evrcmp(pool, sb->evr, sa->evr, EVRCMP_COMPARE);
     if (r)
         return r;
-    return *(Id *)ap - *(Id *)bp;
+    return *ap - *bp;
 }
 
 PackageQuery & PackageQuery::filter_latest(int limit) {
     auto sack = get_sack();
-    Pool * pool = sack->p_impl->get_pool();
+    const Pool * pool = sack->p_impl->get_pool();
 
     libdnf::solv::IdQueue samename;
     for (Id candidate_id : *p_impl) {
