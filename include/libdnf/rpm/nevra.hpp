@@ -60,31 +60,31 @@ public:
     void clear() noexcept;
 
     /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.name
-    const std::string & get_name() const noexcept;
+    const std::string & get_name() const noexcept { return name; }
 
     /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.epoch
-    const std::string & get_epoch() const noexcept;
+    const std::string & get_epoch() const noexcept { return epoch; }
 
     /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.version
-    const std::string & get_version() const noexcept;
+    const std::string & get_version() const noexcept { return version; }
 
     /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.release
-    const std::string & get_release() const noexcept;
+    const std::string & get_release() const noexcept { return release; }
 
     /// @replaces hawkey:hawkey/__init__.py:attribute:Nevra.arch
-    const std::string & get_arch() const noexcept;
+    const std::string & get_arch() const noexcept { return arch; }
 
-    void set_name(const std::string & name);
-    void set_epoch(const std::string & epoch);
-    void set_version(const std::string & version);
-    void set_release(const std::string & release);
-    void set_arch(const std::string & arch);
+    void set_name(const std::string & value) { name = value; }
+    void set_epoch(const std::string & value) { epoch = value; }
+    void set_version(const std::string & value) { version = value; }
+    void set_release(const std::string & value) { release = value; }
+    void set_arch(const std::string & value) { arch = value; }
 
-    void set_name(std::string && name);
-    void set_epoch(std::string && epoch);
-    void set_version(std::string && version);
-    void set_release(std::string && release);
-    void set_arch(std::string && arch);
+    void set_name(const std::string && value) { name = std::move(value); }
+    void set_epoch(const std::string && value) { epoch = std::move(value); }
+    void set_version(const std::string && value) { version = std::move(value); }
+    void set_release(const std::string && value) { release = std::move(value); }
+    void set_arch(const std::string && value) { arch = std::move(value); }
 
     // TODO(jmracek) Add comperators ==
 
@@ -99,68 +99,9 @@ private:
     std::string arch;
 };
 
+
 inline std::vector<Nevra> Nevra::parse(const std::string & nevra_str) {
     return parse(nevra_str, get_default_pkg_spec_forms());
-}
-
-inline const std::string & Nevra::get_name() const noexcept {
-    return name;
-}
-
-inline const std::string & Nevra::get_epoch() const noexcept {
-    return epoch;
-}
-
-inline const std::string & Nevra::get_version() const noexcept {
-    return version;
-}
-
-inline const std::string & Nevra::get_release() const noexcept {
-    return release;
-}
-
-inline const std::string & Nevra::get_arch() const noexcept {
-    return arch;
-}
-
-inline void Nevra::set_name(const std::string & name) {
-    this->name = name;
-}
-
-inline void Nevra::set_epoch(const std::string & epoch) {
-    this->epoch = epoch;
-}
-
-inline void Nevra::set_version(const std::string & version) {
-    this->version = version;
-}
-
-inline void Nevra::set_release(const std::string & release) {
-    this->release = release;
-}
-
-inline void Nevra::set_arch(const std::string & arch) {
-    this->arch = arch;
-}
-
-inline void Nevra::set_name(std::string && name) {
-    this->name = std::move(name);
-}
-
-inline void Nevra::set_epoch(std::string && epoch) {
-    this->epoch = std::move(epoch);
-}
-
-inline void Nevra::set_version(std::string && version) {
-    this->version = std::move(version);
-}
-
-inline void Nevra::set_release(std::string && release) {
-    this->release = std::move(release);
-}
-
-inline void Nevra::set_arch(std::string && arch) {
-    this->arch = std::move(arch);
 }
 
 
