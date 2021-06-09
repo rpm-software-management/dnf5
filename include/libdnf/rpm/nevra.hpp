@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 
+#include <sstream>
 #include <string>
 #include <vector>
 
@@ -54,6 +55,12 @@ public:
     Nevra(const Nevra & src) = default;
     Nevra(Nevra && src) = default;
     Nevra & operator=(const Nevra & other) = default;
+
+    /// @return `true` if all Nevra attributes (`name`, `epoch`, `version`, `release` and `arch`) match.
+    bool operator==(const Nevra & other) const;
+
+    // NOTE: required by cppunit asserts
+    friend std::ostringstream & operator<<(std::ostringstream & out, const Nevra & nevra);
 
     /// Returns false when parsing failed and stored data are in inconsistance state.
 

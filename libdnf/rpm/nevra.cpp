@@ -245,4 +245,19 @@ bool Nevra::has_just_name() const {
 }
 
 
+bool Nevra::operator==(const Nevra & other) const {
+    return name == other.name
+        && epoch == other.epoch
+        && version == other.version
+        && release == other.release
+        && arch == other.arch;
+}
+
+
+std::ostringstream & operator<<(std::ostringstream & out, const Nevra & nevra) {
+    out << to_full_nevra_string(nevra);
+    return out;
+}
+
+
 }  // namespace libdnf::rpm
