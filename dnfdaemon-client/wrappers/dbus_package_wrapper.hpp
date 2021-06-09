@@ -42,6 +42,7 @@ public:
     std::string get_repo_id() const { return rawdata.at("repo"); }
     std::string get_nevra() const { return rawdata.at("nevra"); }
     std::string get_full_nevra() const { return rawdata.at("full_nevra"); }
+    std::string get_evr() const { return rawdata.at("evr"); }
     bool is_installed() const { return rawdata.at("is_installed"); }
     uint64_t get_install_size() const { return rawdata.at("install_size"); }
     uint64_t get_package_size() const { return rawdata.at("package_size"); }

@@ -41,6 +41,7 @@ enum class PackageAttribute {
     install_size,
     package_size,
 
+    evr,
     nevra,
     full_nevra
 };

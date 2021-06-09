@@ -33,6 +33,7 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"is_installed", PackageAttribute::is_installed},
     {"install_size", PackageAttribute::install_size},
     {"package_size", PackageAttribute::package_size},
+    {"evr", PackageAttribute::evr},
     {"nevra", PackageAttribute::nevra},
     {"full_nevra", PackageAttribute::full_nevra}};
 
@@ -74,6 +75,9 @@ dnfdaemon::KeyValueMap package_to_map(
                 break;
             case PackageAttribute::package_size:
                 dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_package_size()));
+                break;
+            case PackageAttribute::evr:
+                dbus_package.emplace(attr, libdnf_package.get_evr());
                 break;
             case PackageAttribute::nevra:
                 dbus_package.emplace(attr, libdnf_package.get_nevra());
