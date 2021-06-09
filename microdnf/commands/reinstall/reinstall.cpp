@@ -102,6 +102,8 @@ void CmdReinstall::run(Context & ctx) {
         return;
     }
 
+    download_packages(goal, nullptr);
+
     libdnf::rpm::Transaction rpm_transaction(ctx.base);
     auto db_transaction = new_db_transaction(ctx);
     std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
