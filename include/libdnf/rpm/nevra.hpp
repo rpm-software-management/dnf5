@@ -170,6 +170,68 @@ inline void copy_nevra_attributes(const F & from, T & to) {
 }
 
 
+/// Compare alpha and numeric segments of two versions.
+int rpmvercmp(const char * lhs, const char * rhs);
+
+
+/// Compare two objects by their Name, Epoch:Version-Release and Arch.
+/// @return `true` if `lhs` < `rhs`. Return `false` otherwise.
+template <typename T>
+bool cmp_nevra(const T & lhs, const T & rhs) {
+    // compare by name
+    int r = lhs.get_name().compare(rhs.get_name());
+    if (r < 0) {
+        return true;
+    } else if (r > 0) {
+        return false;
+    }
+
+    // names and equal, compare by evr using rpm's rpmvercmp()
+    r = rpmvercmp(lhs.get_evr().c_str(), rhs.get_evr().c_str());
+    if (r < 0) {
+        return true;
+    } else if (r > 0) {
+        return false;
+    }
+
+    // names and evrs are equal, compare by arch
+    r = lhs.get_arch().compare(rhs.get_arch());
+    if (r < 0) {
+        return true;
+    }
+    return false;
+};
+
+
+/// Compare two objects by their Name, Arch and Epoch:Version-Release.
+/// @return `true` if `lhs` < `rhs`. Return `false` otherwise.
+template <typename T>
+bool cmp_naevr(const T & lhs, const T & rhs) {
+    // compare by name
+    int r = lhs.get_name().compare(rhs.get_name());
+    if (r < 0) {
+        return true;
+    } else if (r > 0) {
+        return false;
+    }
+
+    // names are equal, compare by arch
+    r = lhs.get_arch().compare(rhs.get_arch());
+    if (r < 0) {
+        return true;
+    } else if (r > 0) {
+        return false;
+    }
+
+    // names and arches are equal, compare by evr using rpm's rpmvercmp()
+    r = rpmvercmp(lhs.get_evr().c_str(), rhs.get_evr().c_str());
+    if (r < 0) {
+        return true;
+    }
+    return false;
+};
+
+
 }  // namespace libdnf::rpm
 
 #endif  // LIBDNF_RPM_NEVRA_HPP

@@ -28,6 +28,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class NevraTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(NevraTest);
     CPPUNIT_TEST(test_nevra);
+    CPPUNIT_TEST(test_cmp_nevra);
+    CPPUNIT_TEST(test_cmp_naevr);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -35,6 +37,8 @@ public:
     void tearDown() override;
 
     void test_nevra();
+    void test_cmp_nevra();
+    void test_cmp_naevr();
 };
 
 #endif

@@ -17,7 +17,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "libdnf/rpm/nevra.hpp"
+
+#include <rpm/rpmver.h>
 
 
 namespace libdnf::rpm {
@@ -257,6 +260,11 @@ bool Nevra::operator==(const Nevra & other) const {
 std::ostringstream & operator<<(std::ostringstream & out, const Nevra & nevra) {
     out << to_full_nevra_string(nevra);
     return out;
+}
+
+
+int rpmvercmp(const char * lhs, const char * rhs) {
+    return ::rpmvercmp(lhs, rhs);
 }
 
 
