@@ -179,7 +179,7 @@ void Context::load_rpm_repo(libdnf::repo::Repo & repo) {
     try {
         repo.load();
     } catch (const std::runtime_error & ex) {
-        //std::cout << ex.what() << std::endl;
+        std::cout << ex.what() << std::endl;
         logger.warning(ex.what());
         callback_ptr->add_message(libdnf::cli::progressbar::MessageType::ERROR, ex.what());
         callback_ptr->end_line();

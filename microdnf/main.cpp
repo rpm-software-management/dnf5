@@ -322,6 +322,7 @@ int main(int argc, char * argv[]) {
     try {
         context.selected_command->run(context);
     } catch (std::exception & ex) {
+        std::cout << ex.what() << std::endl;
         log_router.error(fmt::format("Command returned error: {}", ex.what()));
     }
 
