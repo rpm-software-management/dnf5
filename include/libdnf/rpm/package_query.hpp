@@ -68,7 +68,6 @@ public:
     /// @replaces libdnf/hy-query.h:function:hy_query_create_flags(DnfSack *sack, int flags);
     /// @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
-    explicit PackageQuery(const PackageSackWeakPtr & sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
     explicit PackageQuery(const BaseWeakPtr & base, InitFlags flags = InitFlags::APPLY_EXCLUDES);
     explicit PackageQuery(Base & base, InitFlags flags = InitFlags::APPLY_EXCLUDES);
     PackageQuery(const PackageQuery & src) = default;
@@ -427,6 +426,8 @@ public:
     void swap(PackageQuery & other) noexcept;
 
 private:
+    explicit PackageQuery(const PackageSackWeakPtr & sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
+
     friend libdnf::Goal;
     class Impl;
     InitFlags init_flags;

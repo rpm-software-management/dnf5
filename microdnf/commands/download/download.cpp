@@ -79,7 +79,7 @@ void CmdDownload::run(Context & ctx) {
     std::cout << std::endl;
 
     libdnf::rpm::PackageSet result_pset(package_sack);
-    libdnf::rpm::PackageQuery full_package_query(package_sack);
+    libdnf::rpm::PackageQuery full_package_query(ctx.base);
     for (auto & pattern : *patterns_to_download_options) {
         libdnf::rpm::PackageQuery package_query(full_package_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());

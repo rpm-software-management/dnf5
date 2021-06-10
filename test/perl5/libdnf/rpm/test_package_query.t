@@ -53,7 +53,7 @@ $sack->load_repo($repo->get(), $libdnf::rpm::PackageSack::LoadRepoFlags_NONE);
 
 #test_size()
 {
-    my $query = new libdnf::rpm::PackageQuery($sack);
+    my $query = new libdnf::rpm::PackageQuery($base);
     is($query->size(), 3);
 }
 
@@ -65,7 +65,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 
 # Test QueryCmp::EQ
 {
-    my $query = new libdnf::rpm::PackageQuery($sack);
+    my $query = new libdnf::rpm::PackageQuery($base);
     $query->filter_name(["pkg"]);
     is($query->size(), 1);
 
@@ -83,7 +83,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 
 # Test QueryCmp::GLOB
 {
-    my $query = new libdnf::rpm::PackageQuery($sack);
+    my $query = new libdnf::rpm::PackageQuery($base);
     $query->filter_name(["pk*"], $libdnf::common::QueryCmp_GLOB);
     is($query->size(), 2);
 

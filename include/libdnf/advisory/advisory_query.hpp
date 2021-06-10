@@ -41,7 +41,6 @@ using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 
 class AdvisoryQuery {
 public:
-    explicit AdvisoryQuery(const AdvisorySackWeakPtr & sack);
     explicit AdvisoryQuery(const BaseWeakPtr & base);
     explicit AdvisoryQuery(Base & base);
     AdvisoryQuery(const AdvisoryQuery & src);
@@ -104,6 +103,8 @@ public:
     std::vector<AdvisoryPackage> get_sorted_advisory_packages(bool only_applicable = false) const;
 
 private:
+    explicit AdvisoryQuery(const AdvisorySackWeakPtr & sack);
+
     AdvisorySackWeakPtr advisory_sack;
 
     class Impl;

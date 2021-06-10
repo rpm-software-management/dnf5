@@ -244,7 +244,7 @@ void BaseGoalTest::test_install_installed_pkg() {
     // also add it to the @Commandline repo to make it available for install
     sack->add_cmdline_package(rpm_path, false);
 
-    libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
+    libdnf::rpm::PackageQuery query(*base);
     query.filter_available().filter_nevra({"cmdline-0:1.2-3.noarch"});
 
     std::vector<std::string> expected = {"cmdline-0:1.2-3.noarch"};
@@ -278,7 +278,7 @@ void BaseGoalTest::test_upgrade() {
 
     add_repo_solv("solv-upgrade");
 
-    libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
+    libdnf::rpm::PackageQuery query(*base);
 
     libdnf::Goal goal(base.get());
     goal.add_rpm_upgrade("cmdline");
@@ -311,7 +311,7 @@ void BaseGoalTest::test_upgrade_not_available() {
 
     add_repo_solv("solv-upgrade");
 
-    libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
+    libdnf::rpm::PackageQuery query(*base);
 
     libdnf::Goal goal(base.get());
     goal.add_rpm_upgrade("not_available");
@@ -351,7 +351,7 @@ void BaseGoalTest::test_upgrade_all() {
 
     add_repo_solv("solv-upgrade");
 
-    libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
+    libdnf::rpm::PackageQuery query(*base);
 
     libdnf::Goal goal(base.get());
     goal.add_rpm_upgrade();
@@ -382,7 +382,7 @@ void BaseGoalTest::test_downgrade() {
 
     add_repo_solv("solv-downgrade");
 
-    libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
+    libdnf::rpm::PackageQuery query(*base);
 
     libdnf::Goal goal(base.get());
     goal.add_rpm_downgrade("cmdline");
@@ -413,7 +413,7 @@ void BaseGoalTest::test_distrosync() {
 
     add_repo_solv("solv-distrosync");
 
-    libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
+    libdnf::rpm::PackageQuery query(*base);
 
     libdnf::Goal goal(base.get());
     goal.add_rpm_distro_sync("cmdline");
@@ -444,7 +444,7 @@ void BaseGoalTest::test_distrosync_all() {
 
     add_repo_solv("solv-distrosync");
 
-    libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
+    libdnf::rpm::PackageQuery query(*base);
 
     libdnf::Goal goal(base.get());
     goal.add_rpm_distro_sync();
@@ -477,7 +477,7 @@ void BaseGoalTest::test_install_or_reinstall() {
     sack->add_cmdline_package(rpm_path, false);
 
     libdnf::Goal goal(base.get());
-    libdnf::rpm::PackageQuery query(base->get_rpm_package_sack());
+    libdnf::rpm::PackageQuery query(*base);
     query.filter_available().filter_nevra({"cmdline-0:1.2-3.noarch"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
     goal.add_rpm_install_or_reinstall(query);

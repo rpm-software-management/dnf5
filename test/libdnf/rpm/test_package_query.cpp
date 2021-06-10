@@ -47,7 +47,7 @@ void RpmPackageQueryTest::setUp() {
 
 
 void RpmPackageQueryTest::test_size() {
-    libdnf::rpm::PackageQuery query(sack);
+    libdnf::rpm::PackageQuery query(*base);
     CPPUNIT_ASSERT_EQUAL(5LU, query.size());
 }
 
@@ -59,7 +59,7 @@ void RpmPackageQueryTest::test_filter_latest() {
     sack->add_cmdline_package(rpm_path, false);
 
     {
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_latest(1);
         std::vector<std::string> expected = {
             "pkg-0:1.2-3.src",
@@ -71,7 +71,7 @@ void RpmPackageQueryTest::test_filter_latest() {
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
     {
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_latest(2);
         std::vector<std::string> expected = {
             "pkg-0:1.2-3.src",
@@ -85,7 +85,7 @@ void RpmPackageQueryTest::test_filter_latest() {
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
     {
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_latest(-1);
         std::vector<std::string> expected = {
             "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-0:1-1.noarch",  "pkg-0:1-2.noarch",
@@ -98,7 +98,7 @@ void RpmPackageQueryTest::test_filter_latest() {
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
     {
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_latest(-23);
         std::vector<std::string> expected = {"pkg-0:1-1.noarch"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -107,7 +107,7 @@ void RpmPackageQueryTest::test_filter_latest() {
 
 void RpmPackageQueryTest::test_filter_name() {
     // packages with Name == "pkg"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_name({"pkg"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
@@ -116,7 +116,7 @@ void RpmPackageQueryTest::test_filter_name() {
     // ---
 
     // packages with Name matching "pkg*" glob
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_name({"pkg*"}, libdnf::sack::QueryCmp::GLOB);
 
     expected = {
@@ -130,7 +130,7 @@ void RpmPackageQueryTest::test_filter_name() {
     // ---
 
     // packages with Name matching "p?g" glob
-    libdnf::rpm::PackageQuery query3(sack);
+    libdnf::rpm::PackageQuery query3(*base);
     query3.filter_name({"p?g"}, libdnf::sack::QueryCmp::GLOB);
 
     expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
@@ -139,7 +139,7 @@ void RpmPackageQueryTest::test_filter_name() {
     // ---
 
     // packages with Name != "pkg"
-    libdnf::rpm::PackageQuery query4(sack);
+    libdnf::rpm::PackageQuery query4(*base);
     query4.filter_name({"pkg"}, libdnf::sack::QueryCmp::NEQ);
 
     expected = {"pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
@@ -148,7 +148,7 @@ void RpmPackageQueryTest::test_filter_name() {
     // ---
 
     // packages with Name == "Pkg" - case insensitive match
-    libdnf::rpm::PackageQuery query5(sack);
+    libdnf::rpm::PackageQuery query5(*base);
     query5.filter_name({"Pkg"}, libdnf::sack::QueryCmp::IEXACT);
 
     expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
@@ -157,7 +157,7 @@ void RpmPackageQueryTest::test_filter_name() {
     // ---
 
     // packages with Name matching "P?g" glob - case insensitive match
-    libdnf::rpm::PackageQuery query6(sack);
+    libdnf::rpm::PackageQuery query6(*base);
     std::vector<std::string> names_glob_icase{"cq?lib"};
     query6.filter_name({"P?g"}, libdnf::sack::QueryCmp::IGLOB);
 
@@ -167,7 +167,7 @@ void RpmPackageQueryTest::test_filter_name() {
     // ---
 
     // packages with Name that contain "kg-l"
-    libdnf::rpm::PackageQuery query7(sack);
+    libdnf::rpm::PackageQuery query7(*base);
     query7.filter_name({"kg-l"}, libdnf::sack::QueryCmp::CONTAINS);
 
     expected = {"pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
@@ -176,7 +176,7 @@ void RpmPackageQueryTest::test_filter_name() {
     // ---
 
     // packages with Name that contain "kG-l" - case insensitive match
-    libdnf::rpm::PackageQuery query8(sack);
+    libdnf::rpm::PackageQuery query8(*base);
     query8.filter_name({"kG-l"}, libdnf::sack::QueryCmp::ICONTAINS);
 
     expected = {"pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
@@ -191,7 +191,7 @@ void RpmPackageQueryTest::test_filter_name() {
     // ---
 
     // packages with Name "pkg" or "pkg-libs" - two patterns matched in one expression
-    libdnf::rpm::PackageQuery query9(sack);
+    libdnf::rpm::PackageQuery query9(*base);
     query9.filter_name({"pkg", "pkg-libs"});
 
     expected = {
@@ -205,14 +205,14 @@ void RpmPackageQueryTest::test_filter_name() {
 
 void RpmPackageQueryTest::test_filter_name_packgset() {
     // packages with Name == "pkg"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_name({"pkg"});
     query1.filter_arch({"src"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.src"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_name(query1);
 
     std::vector<std::string> expected2 = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
@@ -224,7 +224,7 @@ void RpmPackageQueryTest::test_filter_nevra_packgset() {
     sack->add_system_package(rpm_path, false, false);
     sack->add_cmdline_package(rpm_path, false);
 
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_name({"cmdline"});
     std::vector<std::string> expected1 = {"cmdline-0:1.2-3.noarch", "cmdline-0:1.2-3.noarch"};
     CPPUNIT_ASSERT_EQUAL(expected1, to_vector_string(query1));
@@ -234,7 +234,7 @@ void RpmPackageQueryTest::test_filter_nevra_packgset() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
     CPPUNIT_ASSERT_EQUAL(1lu, query1.size());
 
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_nevra(query1);
 
     CPPUNIT_ASSERT_EQUAL(2lu, query2.size());
@@ -243,14 +243,14 @@ void RpmPackageQueryTest::test_filter_nevra_packgset() {
 
 void RpmPackageQueryTest::test_filter_name_arch() {
     // packages with Name == "pkg"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_name({"pkg"});
     query1.filter_arch({"src"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.src"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
 
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_name_arch(query1);
 
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query2));
@@ -261,7 +261,7 @@ void RpmPackageQueryTest::test_filter_name_arch2() {
     sack->add_system_package(rpm_path, false, false);
     sack->add_cmdline_package(rpm_path, false);
 
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_name({"cmdline"});
     std::vector<std::string> expected1 = {"cmdline-0:1.2-3.noarch", "cmdline-0:1.2-3.noarch"};
     CPPUNIT_ASSERT_EQUAL(expected1, to_vector_string(query1));
@@ -271,7 +271,7 @@ void RpmPackageQueryTest::test_filter_name_arch2() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query1));
     CPPUNIT_ASSERT_EQUAL(1lu, query1.size());
 
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_name_arch(query1);
 
     CPPUNIT_ASSERT_EQUAL(2lu, query2.size());
@@ -281,7 +281,7 @@ void RpmPackageQueryTest::test_filter_name_arch2() {
 void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument without 0 epoch - two elements
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_nevra({"pkg-1.2-3.src", "pkg-1.2-3.x86_64"});
         std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -289,7 +289,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
 
     {
         // Test QueryCmp::EQ - argument without 0 epoch - two elements
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_nevra({"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"});
         std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -297,7 +297,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
 
     {
         // Test QueryCmp::EQ - argument without 0 epoch - single argument
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_nevra({"pkg-1.2-3.src"});
         std::vector<std::string> expected = {"pkg-0:1.2-3.src"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -305,7 +305,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
 
     {
         // Test QueryCmp::EQ - argument with 0 epoch - single argument
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_nevra({"pkg-0:1.2-3.src"});
         std::vector<std::string> expected = {"pkg-0:1.2-3.src"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -313,7 +313,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
 
     {
         // Test QueryCmp::EQ - argument with unknown release - two elements
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_nevra({"pkg-0:1.2-unknown.src", "pkg-0:1.2-unknown1.x86_64"});
         std::vector<std::string> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -321,7 +321,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
 
     {
         // Test QueryCmp::EQ - argument with unknown version - single argument
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_nevra({"pkg-0:1.2-unknown2.x86_64"});
         CPPUNIT_ASSERT_EQUAL(0LU, query.size());
         std::vector<std::string> expected = {};
@@ -330,7 +330,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
 
     {
         // Test QueryCmp::EQ - argument without epoch, but package with epoch - single argument
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_nevra({"pkg-libs-1.2-4.x86_64"});
         std::vector<std::string> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -340,7 +340,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
 
 void RpmPackageQueryTest::test_filter_version() {
     // packages with version == "1.2"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_version({"1.2"});
 
     std::vector<std::string> expected = {
@@ -350,7 +350,7 @@ void RpmPackageQueryTest::test_filter_version() {
     // ---
 
     // packages with version != "1.2"
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_version({"1.2"}, libdnf::sack::QueryCmp::NEQ);
 
     expected = {"pkg-libs-1:1.3-4.x86_64"};
@@ -360,7 +360,7 @@ void RpmPackageQueryTest::test_filter_version() {
 
 void RpmPackageQueryTest::test_filter_release() {
     // packages with release == "3"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_release({"3"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64"};
@@ -369,7 +369,7 @@ void RpmPackageQueryTest::test_filter_release() {
     // ---
 
     // packages with Release != "3"
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_release({"3"}, libdnf::sack::QueryCmp::NEQ);
 
     expected = {"pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
@@ -379,14 +379,14 @@ void RpmPackageQueryTest::test_filter_release() {
 void RpmPackageQueryTest::test_filter_priority() {
     add_repo_solv("solv-24pkgs");
     add_repo_solv("solv-repo1");
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_priority();
     /// TODO(jmracek) Run test with repository with a different priority and check result
 }
 
 void RpmPackageQueryTest::test_filter_provides() {
     // packages with Provides == "libpkg.so.0()(64bit)"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_provides({"libpkg.so.0()(64bit)"});
 
     std::vector<std::string> expected = {"pkg-libs-1:1.2-4.x86_64"};
@@ -395,7 +395,7 @@ void RpmPackageQueryTest::test_filter_provides() {
     // ---
 
     // packages without Provides == "libpkg.so.0()(64bit)"
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_provides({"libpkg.so.0()(64bit)"}, libdnf::sack::QueryCmp::NEQ);
 
     expected = {"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"};
@@ -405,7 +405,7 @@ void RpmPackageQueryTest::test_filter_provides() {
 
 void RpmPackageQueryTest::test_filter_requires() {
     // packages with Requires == "pkg-libs"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_requires({"pkg-libs"});
 
     std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
@@ -414,7 +414,7 @@ void RpmPackageQueryTest::test_filter_requires() {
     // ---
 
     // packages without Requires == "pkg-libs"
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_requires({"pkg-libs"}, libdnf::sack::QueryCmp::NEQ);
 
     expected = {"pkg-0:1.2-3.src", "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-libs-1:1.3-4.x86_64"};
@@ -425,12 +425,11 @@ void RpmPackageQueryTest::test_filter_advisories() {
     // Run setUp again to have a clean sack (without solv-repo1)
     RepoFixture::setUp();
     add_repo_repomd("repomd-repo1");
-    auto advisory_sack = base->get_rpm_advisory_sack();
 
     {
         // Test QueryCmp::EQ with equal advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("DNF-2019-1");
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(*base).filter_name("DNF-2019-1");
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -438,8 +437,8 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::GT with older advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-OLDER");
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(*base).filter_name("PKG-OLDER");
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::GT);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -447,8 +446,8 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::LTE with older advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-OLDER");
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(*base).filter_name("PKG-OLDER");
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::LTE);
         std::vector<std::string> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -456,8 +455,8 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::LT with newer advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-NEWER");
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(*base).filter_name("PKG-NEWER");
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::LT);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -465,8 +464,8 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::GTE with newer advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-NEWER");
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(*base).filter_name("PKG-NEWER");
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::GTE);
         std::vector<std::string> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -475,9 +474,9 @@ void RpmPackageQueryTest::test_filter_advisories() {
     {
         // Test QueryCmp::EQ with older and newer advisory pkg
         libdnf::advisory::AdvisoryQuery adv_query =
-            libdnf::advisory::AdvisoryQuery(advisory_sack).filter_name("PKG-*", libdnf::sack::QueryCmp::IGLOB);
+            libdnf::advisory::AdvisoryQuery(*base).filter_name("PKG-*", libdnf::sack::QueryCmp::IGLOB);
         ;
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);
         std::vector<std::string> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
@@ -485,7 +484,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
 }
 
 void RpmPackageQueryTest::test_filter_chain() {
-    libdnf::rpm::PackageQuery query(sack);
+    libdnf::rpm::PackageQuery query(*base);
     query.filter_name({"pkg"})
         .filter_epoch({"0"})
         .filter_version({"1.2"})
@@ -502,7 +501,7 @@ void RpmPackageQueryTest::test_filter_chain() {
 void RpmPackageQueryTest::test_resolve_pkg_spec() {
     {
         // test Name.Arch
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
         auto return_value = query.resolve_pkg_spec("pkg.x86_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
@@ -512,7 +511,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
 
     {
         // Test NA icase
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
         auto return_value = query.resolve_pkg_spec("Pkg.x86_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
@@ -522,7 +521,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
 
     {
         // Test a provide
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         libdnf::ResolveSpecSettings settings{.with_filenames = false};
         auto return_value = query.resolve_pkg_spec("pkg >= 1", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
@@ -532,7 +531,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
 
     {
         // Test NEVRA glob
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
         auto return_value = query.resolve_pkg_spec("pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
@@ -542,7 +541,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
 
     {
         // Test NEVRA glob - icase == false, nothing found
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
         auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, false);
@@ -552,7 +551,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
 
     {
         // Test NEVRA glob - icase == true
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
         auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
@@ -562,7 +561,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
 
     {
         // Test NEVRA icase
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
         auto return_value = query.resolve_pkg_spec("Pkg-0:1.2-3.X86_64", settings, true);
         std::vector<std::string> expected = {"pkg-0:1.2-3.x86_64"};
@@ -573,10 +572,10 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
 
 void RpmPackageQueryTest::test_update() {
     // packages with Release == "3"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_release({"3"});
 
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_name({"pkg-libs"});
     CPPUNIT_ASSERT_EQUAL(3LU, query2.size());
 
@@ -596,12 +595,12 @@ void RpmPackageQueryTest::test_update() {
 
 void RpmPackageQueryTest::test_intersection() {
     // packages with Release == "3"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_release({"3"});
     CPPUNIT_ASSERT_EQUAL(3LU, query1.size());
 
     // packages with Name == "pkg-libs"
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_name({"pkg-libs"});
     CPPUNIT_ASSERT_EQUAL(3LU, query2.size());
 
@@ -616,12 +615,12 @@ void RpmPackageQueryTest::test_intersection() {
 
 void RpmPackageQueryTest::test_difference() {
     // packages with Release == "3"
-    libdnf::rpm::PackageQuery query1(sack);
+    libdnf::rpm::PackageQuery query1(*base);
     query1.filter_release({"3"});
     CPPUNIT_ASSERT_EQUAL(3LU, query1.size());
 
     // packages with Release == "3" and name == "pkg-libs"
-    libdnf::rpm::PackageQuery query2(sack);
+    libdnf::rpm::PackageQuery query2(*base);
     query2.filter_release({"3"});
     query2.filter_name({"pkg-libs"});
     CPPUNIT_ASSERT_EQUAL(1LU, query2.size());
@@ -639,7 +638,7 @@ void RpmPackageQueryTest::test_filter_latest_performance() {
     add_repo_solv("solv-humongous");
 
     for (int i = 0; i < 10000; ++i) {
-        libdnf::rpm::PackageQuery query(sack);
+        libdnf::rpm::PackageQuery query(*base);
         query.filter_latest();
     }
 }

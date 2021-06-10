@@ -55,7 +55,6 @@ public:
 
     // create an *empty* query
     // the content is lazily loaded/cached while running the queries
-    explicit TransactionQuery(const TransactionSackWeakPtr & sack);
     explicit TransactionQuery(const BaseWeakPtr & base);
     explicit TransactionQuery(Base & base);
 
@@ -64,6 +63,8 @@ public:
     TransactionQuery & filter_id(const std::vector<int64_t> & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
 private:
+    explicit TransactionQuery(const TransactionSackWeakPtr & sack);
+
     friend TransactionSack;
     TransactionSackWeakPtr sack;
 

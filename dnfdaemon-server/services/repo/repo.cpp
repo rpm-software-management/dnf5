@@ -114,9 +114,8 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->is_enabled());
                 break;
             case RepoAttribute::size: {
-                auto package_sack = base.get_rpm_package_sack();
                 uint64_t size = 0;
-                libdnf::rpm::PackageQuery query(package_sack);
+                libdnf::rpm::PackageQuery query(base);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repoid(reponames);
                 for (auto pkg : query) {
@@ -143,15 +142,13 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->get_max_timestamp());
                 break;
             case RepoAttribute::pkgs: {
-                auto package_sack = base.get_rpm_package_sack();
-                libdnf::rpm::PackageQuery query(package_sack, libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+                libdnf::rpm::PackageQuery query(base, libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repoid(reponames);
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::available_pkgs: {
-                auto package_sack = base.get_rpm_package_sack();
-                libdnf::rpm::PackageQuery query(package_sack);
+                libdnf::rpm::PackageQuery query(base);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repoid(reponames);
                 dbus_repo.emplace(attr, query.size());

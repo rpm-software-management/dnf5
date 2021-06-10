@@ -60,7 +60,8 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall && call) {
     call >> options;
 
     session.fill_sack();
-    auto package_sack = session.get_base()->get_rpm_package_sack();
+    auto base = session.get_base();
+    auto package_sack = base->get_rpm_package_sack();
 
     // patterns to search
     std::vector<std::string> default_patterns{};
@@ -74,7 +75,7 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall && call) {
     bool with_src = key_value_map_get<bool>(options, "with_src", true);
 
     libdnf::rpm::PackageSet result_pset(package_sack);
-    libdnf::rpm::PackageQuery full_package_query(package_sack);
+    libdnf::rpm::PackageQuery full_package_query(*base);
     if (patterns.size() > 0) {
         for (auto & pattern : patterns) {
             libdnf::rpm::PackageQuery package_query(full_package_query);

@@ -178,7 +178,7 @@ void CmdAdvisory::run(Context & ctx) {
     using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     ctx.load_rpm_repos(enabled_repos, LoadFlags::USE_UPDATEINFO);
 
-    libdnf::rpm::PackageQuery package_query(package_sack);
+    libdnf::rpm::PackageQuery package_query(ctx.base);
     using QueryCmp = libdnf::sack::QueryCmp;
     if (patterns_to_show.size() > 0) {
         package_query.filter_name(patterns_to_show, QueryCmp::IGLOB);
@@ -187,7 +187,7 @@ void CmdAdvisory::run(Context & ctx) {
     //DATA IS PREPARED
 
     //TODO(amatej): create advisory_query with filters on advisories prensent (if we want to limit by severity, reference..)
-    auto advisory_query = libdnf::advisory::AdvisoryQuery(ctx.base.get_rpm_advisory_sack());
+    auto advisory_query = libdnf::advisory::AdvisoryQuery(ctx.base);
     if (with_cve_option->get_value()) {
         advisory_query.filter_CVE("*", QueryCmp::IGLOB);
     }

@@ -53,9 +53,6 @@ public:
     void test_filter_bug();
     void test_filter_severity();
     void test_get_sorted_advisory_packages();
-
-private:
-    libdnf::advisory::AdvisorySackWeakPtr advisory_sack;
 };
 
 

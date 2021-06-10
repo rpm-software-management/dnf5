@@ -55,13 +55,13 @@ class TestSimpleNumber < Test::Unit::TestCase
     end
 
     def test_size()
-        query = Rpm::PackageQuery.new(@sack)
+        query = Rpm::PackageQuery.new(@base)
         assert_equal(3, query.size(), 'Number of items in the newly created query')
     end
 
     def test_filter_name()
         # Test QueryCmp::EQ
-        query = Rpm::PackageQuery.new(@sack)
+        query = Rpm::PackageQuery.new(@base)
         query.filter_name(["pkg"])
         assert_equal(1, query.size())
 
@@ -78,7 +78,7 @@ class TestSimpleNumber < Test::Unit::TestCase
         # ---
 
         # Test QueryCmp::GLOB
-        query = Rpm::PackageQuery.new(@sack)
+        query = Rpm::PackageQuery.new(@base)
         query.filter_name(["pk*"], Common::QueryCmp_GLOB)
         assert_equal(2, query.size())
 

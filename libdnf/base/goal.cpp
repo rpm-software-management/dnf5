@@ -44,11 +44,11 @@ void add_obsoletes_to_data(const libdnf::rpm::PackageQuery & base_query, libdnf:
     data |= obsoletes_query;
 }
 
-static libdnf::rpm::PackageQuery running_kernel_check_path(libdnf::rpm::PackageSack & sack, const std::string & fn) {
+static libdnf::rpm::PackageQuery running_kernel_check_path(const libdnf::BaseWeakPtr & base, const std::string & fn) {
     if (access(fn.c_str(), F_OK)) {
         // TODO(jmracek) Report g_debug("running_kernel_check_path(): no matching file: %s.", fn);
     }
-    libdnf::rpm::PackageQuery q(sack.get_weak_ptr(), libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+    libdnf::rpm::PackageQuery q(base, libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
 
     // Do we really need it? dnf_sack_make_provides_ready(sack);
     q.filter_installed();
@@ -1340,6 +1340,7 @@ std::vector<rpm::Package> Goal::list_rpm_obsoleted() {
 }
 
 rpm::PackageId Goal::get_running_kernel_internal() {
+    auto base = p_impl->base->get_weak_ptr();
     auto & sack = *p_impl->base->get_rpm_package_sack();
     auto kernel = sack.p_impl->get_running_kernel();
     if (kernel.id != 0) {
@@ -1358,13 +1359,13 @@ rpm::PackageId Goal::get_running_kernel_internal() {
     std::string fn("/boot/vmlinuz-");
     auto un_release = un.release;
     fn.append(un_release);
-    auto query = running_kernel_check_path(sack, fn);
+    auto query = running_kernel_check_path(base, fn);
 
     if (query.empty()) {
         fn.clear();
         fn.append("/lib/modules/");
         fn.append(un_release);
-        query = running_kernel_check_path(sack, fn);
+        query = running_kernel_check_path(base, fn);
     }
 
     if (query.empty()) {
