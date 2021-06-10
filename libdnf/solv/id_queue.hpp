@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 extern "C" {
 #include <solv/queue.h>
+#include <solv/util.h>
 }
 
 
@@ -149,12 +150,9 @@ public:
     ///            to compare, `data` is the `data` pointer passed to this method.
     /// @param data Any data required for the comparison, the pointer will be passed to `cmp`.
     template <typename TData>
-    void sort(int (*cmp)(const Id * a, const Id * b, TData * data), TData * data) {
-        sort((int (*)(const void * a, const void * b, void * data))cmp, (void *)data);
-    }
+    void sort(int (*cmp)(const Id * a, const Id * b, TData * data), TData * data);
 
 private:
-    void sort(int (*cmp)(const void * a, const void * b, void * data), void * data);
     Queue queue;
 };
 
@@ -188,6 +186,16 @@ void inline solv_map_to_id_queue(IdQueue & ids, const SolvMap & src) {
     for (auto solv_id : src) {
         ids.push_back(solv_id);
     }
+}
+
+template <typename TData>
+inline void IdQueue::sort(int (*cmp)(const Id * a, const Id * b, TData * data), TData * data) {
+    solv_sort(
+        queue.elements,
+        static_cast<size_t>(size()),
+        sizeof(Id),
+        (int (*)(const void * a, const void * b, void * data))cmp,
+        (void *)data);
 }
 
 }  // namespace libdnf::solv
