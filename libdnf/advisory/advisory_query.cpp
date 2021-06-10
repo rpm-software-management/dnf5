@@ -40,9 +40,9 @@ AdvisoryQuery::AdvisoryQuery(const AdvisorySackWeakPtr & sack) : advisory_sack(s
     p_impl.reset(new Impl(sack->data_map));
 };
 
-AdvisoryQuery::AdvisoryQuery(const BaseWeakPtr & base) : advisory_sack(base->get_rpm_advisory_sack()) {}
+AdvisoryQuery::AdvisoryQuery(const BaseWeakPtr & base) : AdvisoryQuery(base->get_rpm_advisory_sack()) {}
 
-AdvisoryQuery::AdvisoryQuery(Base & base) : advisory_sack(base.get_rpm_advisory_sack()) {}
+AdvisoryQuery::AdvisoryQuery(Base & base) : AdvisoryQuery(base.get_rpm_advisory_sack()) {}
 
 AdvisoryQuery::~AdvisoryQuery() = default;
 AdvisoryQuery::AdvisoryQuery(const AdvisoryQuery & src)
