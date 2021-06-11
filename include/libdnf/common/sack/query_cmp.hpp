@@ -17,6 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #ifndef LIBDNF_COMMON_SACK_QUERY_CMP_HPP
 #define LIBDNF_COMMON_SACK_QUERY_CMP_HPP
 
@@ -28,41 +29,99 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::sack {
 
 
-// https://docs.djangoproject.com/en/3.0/ref/models/querysets/#field-lookups
+/// Match operators used in filter methods of the Query objects.
+//
+// This was inspired by Django's lookups: https://docs.djangoproject.com/en/3.0/ref/models/querysets/#field-lookups
+// Read and follow their documentation prior making any changes. We want to remain consistent with them.
 enum class QueryCmp : uint32_t {
     // MODIFIERS
-    NOT = (1 << 0),    // negation
-    ICASE = (1 << 1),  // case-insensitive match
+
+    /// Negation modifier. Must be used with a match.
+    NOT = (1 << 0),
+
+    /// Case-insensitive modifier. Must be used with a match.
+    ICASE = (1 << 1),
 
     // NULL
-    ISNULL = (1 << 7),  // value is NULL/None
+
+    /// Value is NULL/None.
+    ISNULL = (1 << 7),
 
     // NUMBERS
-    EQ = (1 << 8),     // equal; identical meaning to EXACT
-    NEQ = (NOT | EQ),  // not equal
-    GT = (1 << 9),     // greater than
-    GTE = (GT | EQ),   // greater than or equal to
-    LT = (1 << 10),    // less than
-    LTE = (LT | EQ),   // less than or equal to
+
+    /// Equal. The same as `EXACT`. Applicable to numbers.
+    EQ = (1 << 8),
+
+    /// Not equal. The same as `NOT_EXACT`. Applicable to numbers.
+    NEQ = (NOT | EQ),
+
+    /// Greater than. Applicable to numbers.
+    GT = (1 << 9),
+
+    /// Greater than or equal to. Applicable to numbers.
+    GTE = (GT | EQ),
+
+    /// Less than. Applicable to numbers.
+    LT = (1 << 10),
+
+    /// Less than or equal to. Applicable to numbers.
+    LTE = (LT | EQ),
 
     // STRINGS
-    EXACT = (EQ),                        // case-sensitive exact match
-    IEXACT = (ICASE | EXACT),            // case-insensitive exact match
-    NOT_IEXACT = (NOT | IEXACT),         // not case-insensitive exact match
-    CONTAINS = (1 << 16),                // case-sensitive containment test
-    NOT_CONTAINS = (NOT | CONTAINS),     // not case-sensitive containment test
-    ICONTAINS = (ICASE | CONTAINS),      // case-insensitive containment test
-    NOT_ICONTAINS = (NOT | ICONTAINS),   // not case-insensitive containment test
-    STARTSWITH = (1 << 17),              // case-sensitive starts-with
-    ISTARTSWITH = (ICASE | STARTSWITH),  // case-insensitive starts-with
-    ENDSWITH = (1 << 18),                // case-sensitive ends-with
-    IENDSWITH = (ICASE | ENDSWITH),      // case-insensitive ends-with
-    REGEX = (1 << 19),                   // case-sensitive regular expression match.
-    IREGEX = (ICASE | REGEX),            // case-insensitive regular expression match.
-    GLOB = (1 << 20),                    // case-sensitive glob match
-    NOT_GLOB = (NOT | GLOB),               // not case-sensitive glob match
-    IGLOB = (ICASE | GLOB),              // case-insensitive glob match
-    NOT_IGLOB = (NOT | IGLOB),           // not case-insensitive glob match
+
+    /// Case-sensitive exact match. The same as `EQ`. Applicable to strings.
+    EXACT = (EQ),
+
+    /// Negative case-sensitive exact match. The same as `NEQ`. Applicable to strings.
+    NOT_EXACT = (NOT | EQ),
+
+    /// Case-insensitive exact match. Applicable to strings.
+    IEXACT = (ICASE | EXACT),
+
+    /// Negative case-insensitive exact match. Applicable to strings.
+    NOT_IEXACT = (NOT | IEXACT),
+
+    /// Case-sensitive containment match. Applicable to strings.
+    CONTAINS = (1 << 16),
+
+    /// Negative case-sensitive containment match. Applicable to strings.
+    NOT_CONTAINS = (NOT | CONTAINS),
+
+    /// Case-insensitive containment match. Applicable to strings.
+    ICONTAINS = (ICASE | CONTAINS),
+
+    /// Negative case-insensitive containment match. Applicable to strings.
+    NOT_ICONTAINS = (NOT | ICONTAINS),
+
+    /// Case-sensitive starts-with match. Applicable to strings.
+    STARTSWITH = (1 << 17),
+
+    /// Case-insensitive starts-with match. Applicable to strings.
+    ISTARTSWITH = (ICASE | STARTSWITH),
+
+    /// Case-sensitive ends-with match. Applicable to strings.
+    ENDSWITH = (1 << 18),
+
+    /// Case-insensitive ends-with match. Applicable to strings.
+    IENDSWITH = (ICASE | ENDSWITH),
+
+    /// Case-sensitive regular expression match. Applicable to strings.
+    REGEX = (1 << 19),
+
+    /// Case-insensitive regular expression match. Applicable to strings.
+    IREGEX = (ICASE | REGEX),
+
+    /// Case-sensitive glob match. Applicable to strings.
+    GLOB = (1 << 20),
+
+    /// Negative case-sensitive glob match. Applicable to strings.
+    NOT_GLOB = (NOT | GLOB),
+
+    /// Case-insensitive glob match. Applicable to strings.
+    IGLOB = (ICASE | GLOB),
+
+    /// Negative case-insensitive glob match. Applicable to strings.
+    NOT_IGLOB = (NOT | IGLOB),
 };
 
 
@@ -79,14 +138,15 @@ inline QueryCmp operator&(QueryCmp lhs, QueryCmp rhs) {
         static_cast<std::underlying_type<QueryCmp>::type>(rhs));
 }
 
-// TODO(jmracek) Change the strance operator
+
 inline QueryCmp operator-(QueryCmp lhs, QueryCmp rhs) {
     return static_cast<QueryCmp>(
         static_cast<std::underlying_type<QueryCmp>::type>(lhs) -
         static_cast<std::underlying_type<QueryCmp>::type>(rhs));
 }
 
+
 }  // namespace libdnf::sack
 
 
-#endif
+#endif  // LIBDNF_COMMON_SACK_QUERY_CMP_HPP
