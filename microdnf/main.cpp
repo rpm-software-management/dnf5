@@ -291,15 +291,15 @@ int main(int argc, char * argv[]) {
     //pre_configure_plugins
 
     // create rpm repositories according configuration files
-    auto rpm_repo_sack = base.get_rpm_repo_sack();
-    rpm_repo_sack->new_repos_from_file();
-    rpm_repo_sack->new_repos_from_dirs();
+    auto repo_sack = base.get_repo_sack();
+    repo_sack->new_repos_from_file();
+    repo_sack->new_repos_from_dirs();
 
     // apply repository setopts
     for (const auto & setopt : context.setopts) {
         auto last_dot_pos = setopt.first.rfind('.');
         auto repo_pattern = setopt.first.substr(0, last_dot_pos);
-        libdnf::repo::RepoQuery query(rpm_repo_sack);
+        libdnf::repo::RepoQuery query(base);
         query.filter_id(repo_pattern, libdnf::sack::QueryCmp::GLOB);
         auto key = setopt.first.substr(last_dot_pos + 1);
         for (auto & repo : query.get_data()) {

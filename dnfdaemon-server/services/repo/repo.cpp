@@ -239,8 +239,7 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall && call) {
 
     // prepare repository query filtered by options
     auto base = session.get_base();
-    auto rpm_repo_sack = base->get_rpm_repo_sack();
-    libdnf::repo::RepoQuery repos_query(rpm_repo_sack);
+    libdnf::repo::RepoQuery repos_query(*base);
 
     if (enable_disable == "enabled") {
         repos_query.filter_enabled(true);

@@ -172,7 +172,7 @@ void CmdAdvisory::run(Context & ctx) {
 
     auto package_sack = ctx.base.get_rpm_package_sack();
     package_sack->create_system_repo(false);
-    libdnf::repo::RepoQuery enabled_repos(ctx.base.get_rpm_repo_sack());
+    libdnf::repo::RepoQuery enabled_repos(ctx.base);
     enabled_repos.filter_enabled(true);
 
     using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;

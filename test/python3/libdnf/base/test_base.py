@@ -25,7 +25,7 @@ class TestBase(unittest.TestCase):
         base = libdnf.base.Base()
         loger = base.get_logger()
         config = base.get_config()
-        repo_sack = base.get_rpm_repo_sack()
+        repo_sack = base.get_repo_sack()
         package_sack = base.get_rpm_package_sack()
 
     def test_weak_ptr(self):

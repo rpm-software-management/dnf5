@@ -87,9 +87,9 @@ Session::Session(
     }
 
     // load repo configuration
-    auto rpm_repo_sack = base->get_rpm_repo_sack();
-    rpm_repo_sack->new_repos_from_file();
-    rpm_repo_sack->new_repos_from_dirs();
+    auto repo_sack = base->get_repo_sack();
+    repo_sack->new_repos_from_file();
+    repo_sack->new_repos_from_dirs();
 
     // instantiate all services provided by the daemon
     services.emplace_back(std::make_unique<Base>(*this));
@@ -138,8 +138,7 @@ bool Session::read_all_repos() {
     using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     //auto & logger = base->get_logger();
-    auto rpm_repo_sack = base->get_rpm_repo_sack();
-    libdnf::repo::RepoQuery enabled_repos(rpm_repo_sack);
+    libdnf::repo::RepoQuery enabled_repos(*base);
     enabled_repos.filter_enabled(true);
     auto & package_sack = *base->get_rpm_package_sack();
     bool retval = true;

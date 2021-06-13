@@ -98,7 +98,7 @@ void RepoFixture::setUp() {
     }
     base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dirs.at(class_name)->get_path());
 
-    repo_sack = base->get_rpm_repo_sack();
+    repo_sack = base->get_repo_sack();
     sack = base->get_rpm_package_sack();
 }
 

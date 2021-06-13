@@ -1,5 +1,5 @@
 // create a reference to the Base's repo_sack for better code readability
-auto repo_sack = base.get_rpm_repo_sack();
+auto repo_sack = base.get_repo_sack();
 
 // create a new repo with a given repoid
 // the repo is a weak pointer to an object owned by the repo_sack

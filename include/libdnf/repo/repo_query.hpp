@@ -58,11 +58,6 @@ public:
 
     /// Create a new RepoQuery instance.
     ///
-    /// @param sack     A weak pointer to RepoSack
-    explicit RepoQuery(const RepoSackWeakPtr & sack);
-
-    /// Create a new RepoQuery instance.
-    ///
     /// @param base     A weak pointer to Base
     explicit RepoQuery(const BaseWeakPtr & base);
 

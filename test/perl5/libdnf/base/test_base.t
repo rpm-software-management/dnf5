@@ -33,7 +33,7 @@ use libdnf::base;
     # Attempts to call some methods from Base object
     my $loger = $base->get_logger();
     my $config = $base->get_config();
-    my $repo_sack = $base->get_rpm_repo_sack();
+    my $repo_sack = $base->get_repo_sack();
     my $package_sack = $base->get_rpm_package_sack();
 }
 

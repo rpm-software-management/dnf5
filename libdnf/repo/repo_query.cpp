@@ -36,18 +36,16 @@ struct Get {
 };
 
 
-RepoQuery::RepoQuery(const RepoSackWeakPtr & sack) {
-    // add all repos
+RepoQuery::RepoQuery(const BaseWeakPtr & base) : RepoQuery(*base) {}
+
+
+RepoQuery::RepoQuery(Base & base) {
+    // copy all repos from RepoSack to the this object
+    auto sack = base.get_repo_sack();
     for (auto & it : sack->get_data()) {
         add(RepoSack::DataItemWeakPtr(it.get(), &sack->get_data_guard()));
     }
 }
-
-
-RepoQuery::RepoQuery(const BaseWeakPtr & base) : RepoQuery(base->get_rpm_repo_sack()) {}
-
-
-RepoQuery::RepoQuery(Base & base) : RepoQuery(base.get_rpm_repo_sack()) {}
 
 
 RepoQuery & RepoQuery::filter_enabled(bool enabled) {

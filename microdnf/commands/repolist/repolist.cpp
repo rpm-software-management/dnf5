@@ -122,7 +122,7 @@ void CmdRepolist::run(Context & ctx) {
         }
     }
 
-    libdnf::repo::RepoQuery query(ctx.base.get_rpm_repo_sack());
+    libdnf::repo::RepoQuery query(ctx.base);
     if (enable_disable_option->get_value() == "enabled") {
         query.filter_enabled(true);
     } else if (enable_disable_option->get_value() == "disabled") {
