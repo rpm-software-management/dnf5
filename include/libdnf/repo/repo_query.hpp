@@ -116,58 +116,7 @@ public:
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
     RepoQuery & filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
-
-private:
-    struct F {
-        static bool enabled(const RepoWeakPtr & obj) { return obj->is_enabled(); }
-        static bool expired(const RepoWeakPtr & obj) { return obj->is_expired(); }
-        static bool local(const RepoWeakPtr & obj) { return obj->is_local(); }
-        static std::string id(const RepoWeakPtr & obj) { return obj->get_id(); }
-        static std::string name(const RepoWeakPtr & obj) { return obj->get_config().name().get_value(); }
-    };
 };
-
-
-inline RepoQuery & RepoQuery::filter_enabled(bool enabled) {
-    filter(F::enabled, enabled, sack::QueryCmp::EQ);
-    return *this;
-}
-
-
-inline RepoQuery & RepoQuery::filter_expired(bool expired) {
-    filter(F::expired, expired, sack::QueryCmp::EQ);
-    return *this;
-}
-
-
-inline RepoQuery & RepoQuery::filter_id(const std::string & pattern, sack::QueryCmp cmp) {
-    filter(F::id, pattern, cmp);
-    return *this;
-}
-
-
-inline RepoQuery & RepoQuery::filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
-    filter(F::id, patterns, cmp);
-    return *this;
-}
-
-
-inline RepoQuery & RepoQuery::filter_local(bool local) {
-    filter(F::local, local, sack::QueryCmp::EQ);
-    return *this;
-}
-
-
-inline RepoQuery & RepoQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
-    filter(F::name, pattern, cmp);
-    return *this;
-}
-
-
-inline RepoQuery & RepoQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
-    filter(F::name, patterns, cmp);
-    return *this;
-}
 
 
 }  // namespace libdnf::repo

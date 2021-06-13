@@ -17,12 +17,24 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo_query.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 
 
 namespace libdnf::repo {
+
+
+// Getter callbacks that return attribute values from an object. Used in query filters.
+struct Get {
+    static bool enabled(const RepoWeakPtr & obj) { return obj->is_enabled(); }
+    static bool expired(const RepoWeakPtr & obj) { return obj->is_expired(); }
+    static bool local(const RepoWeakPtr & obj) { return obj->is_local(); }
+    static std::string id(const RepoWeakPtr & obj) { return obj->get_id(); }
+    static std::string name(const RepoWeakPtr & obj) { return obj->get_config().name().get_value(); }
+};
+
 
 RepoQuery::RepoQuery(const RepoSackWeakPtr & sack) {
     // add all repos
@@ -31,8 +43,53 @@ RepoQuery::RepoQuery(const RepoSackWeakPtr & sack) {
     }
 }
 
+
 RepoQuery::RepoQuery(const BaseWeakPtr & base) : RepoQuery(base->get_rpm_repo_sack()) {}
 
+
 RepoQuery::RepoQuery(Base & base) : RepoQuery(base.get_rpm_repo_sack()) {}
+
+
+RepoQuery & RepoQuery::filter_enabled(bool enabled) {
+    filter(Get::enabled, enabled, sack::QueryCmp::EQ);
+    return *this;
+}
+
+
+RepoQuery & RepoQuery::filter_expired(bool expired) {
+    filter(Get::expired, expired, sack::QueryCmp::EQ);
+    return *this;
+}
+
+
+RepoQuery & RepoQuery::filter_id(const std::string & pattern, sack::QueryCmp cmp) {
+    filter(Get::id, pattern, cmp);
+    return *this;
+}
+
+
+RepoQuery & RepoQuery::filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
+    filter(Get::id, patterns, cmp);
+    return *this;
+}
+
+
+RepoQuery & RepoQuery::filter_local(bool local) {
+    filter(Get::local, local, sack::QueryCmp::EQ);
+    return *this;
+}
+
+
+RepoQuery & RepoQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
+    filter(Get::name, pattern, cmp);
+    return *this;
+}
+
+
+RepoQuery & RepoQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
+    filter(Get::name, patterns, cmp);
+    return *this;
+}
+
 
 }  // namespace libdnf::repo
