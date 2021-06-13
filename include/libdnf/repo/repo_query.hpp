@@ -28,22 +28,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf {
-
 class Base;
 using BaseWeakPtr = WeakPtr<Base, false>;
+}
 
-}  // namespace libdnf
+namespace libdnf::repo {
+class RepoSack;
+using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
+}
 
 
 namespace libdnf::repo {
 
+
 /// Weak pointer to rpm repository. RepoWeakPtr does not own the repository (ptr_owner = false).
 /// Repositories are owned by RepoSack.
 using RepoWeakPtr = WeakPtr<Repo, false>;
-
-class RepoSack;
-
-using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
 
 class RepoQuery : public libdnf::sack::Query<RepoWeakPtr> {
