@@ -39,7 +39,7 @@ struct Get {
 RepoQuery::RepoQuery(const BaseWeakPtr & base) : RepoQuery(*base) {}
 
 
-RepoQuery::RepoQuery(Base & base) {
+RepoQuery::RepoQuery(Base & base) : base{base.get_weak_ptr()} {
     // copy all repos from RepoSack to the this object
     auto sack = base.get_repo_sack();
     for (auto & it : sack->get_data()) {

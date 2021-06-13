@@ -66,6 +66,10 @@ public:
     /// @param base     Reference to Base
     explicit RepoQuery(Base & base);
 
+    /// @return Weak pointer to the Base object.
+    /// @since 5.0
+    BaseWeakPtr get_base() { return base; }
+
     /// Filter repos by their `enabled` state.
     ///
     /// @param enabled  A boolean value the filter is matched against.
@@ -111,6 +115,9 @@ public:
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
     RepoQuery & filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+
+private:
+    BaseWeakPtr base;
 };
 
 
