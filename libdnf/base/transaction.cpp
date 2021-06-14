@@ -17,7 +17,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "libdnf/base/transaction.hpp"
 
 #include <solv/transaction.h>
@@ -41,6 +40,7 @@ private:
 
     BaseWeakPtr base;
     ::Transaction * libsolv_transaction{nullptr};
+    libdnf::GoalProblem problems = GoalProblem::NO_PROBLEM;
 
     std::vector<TransactionPackageItem> packages;
 };
@@ -65,5 +65,10 @@ Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
 const std::vector<TransactionPackageItem> & Transaction::get_packages() const noexcept {
     return p_impl->packages;
 }
+
+GoalProblem Transaction::get_problems() {
+    return p_impl->problems;
+}
+
 
 }  // namespace libdnf::base

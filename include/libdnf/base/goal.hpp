@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "base.hpp"
 
 #include "libdnf/base/goal_elements.hpp"
+#include "libdnf/base/transaction.hpp"
 #include "libdnf/rpm/package.hpp"
 
 
@@ -101,7 +102,7 @@ public:
     void add_rpm_distro_sync(const libdnf::rpm::PackageSet & package_set);
     void add_rpm_distro_sync(const libdnf::rpm::PackageSet & package_set, const libdnf::GoalJobSettings & settings);
 
-    libdnf::GoalProblem resolve(bool allow_erasing);
+    base::Transaction resolve(bool allow_erasing);
 
     /// Can be use to format elements from describe_all_solver_problems();
     static std::string format_problem(const std::pair<libdnf::ProblemRules, std::vector<std::string>> & raw);

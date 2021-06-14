@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_TRANSACTION_HPP
 #define LIBDNF_BASE_TRANSACTION_HPP
 
+#include "libdnf/base/goal_elements.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/transaction/transaction_item_action.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
@@ -30,9 +31,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+
+class Base;
 class Goal;
+using BaseWeakPtr = WeakPtr<Base, false>;
+
 
 }  // namespace libdnf
+
 
 namespace libdnf::base {
 
@@ -95,6 +101,7 @@ public:
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
     const std::vector<TransactionPackageItem> & get_packages() const noexcept;
 
+    libdnf::GoalProblem get_problems();
 
 private:
     friend class libdnf::Goal;

@@ -90,7 +90,8 @@ void CmdDowngrade::run(Context & ctx) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal.add_rpm_downgrade(option->get_value());
     }
-    if (goal.resolve(false) != libdnf::GoalProblem::NO_PROBLEM) {
+    auto transaction = goal.resolve(false);
+    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
         std::cout << goal.get_formated_all_problems() << std::endl;
         return;
     }

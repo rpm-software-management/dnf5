@@ -996,7 +996,7 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> Goal::Impl::get_r
     return problem_output;
 }
 
-GoalProblem Goal::resolve(bool allow_erasing) {
+base::Transaction Goal::resolve(bool allow_erasing) {
     auto sack = p_impl->base->get_rpm_package_sack();
     Pool * pool = sack->p_impl->get_pool();
     // TODO(jmracek) Move pool settings in base
@@ -1037,7 +1037,9 @@ GoalProblem Goal::resolve(bool allow_erasing) {
         p_impl->rpm_goal.set_installonly_limit(cfg_main.installonly_limit().get_value());
     }
     ret |= p_impl->rpm_goal.resolve();
-    return ret;
+    base::Transaction output(p_impl->base);
+
+    return output;
 }
 
 const std::vector<std::tuple<Goal::Action, GoalProblem, GoalJobSettings, std::string, std::set<std::string>>> &

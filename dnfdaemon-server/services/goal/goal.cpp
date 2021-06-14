@@ -67,7 +67,8 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall && call) {
     session.fill_sack();
 
     auto & goal = session.get_goal();
-    if (goal.resolve(allow_erasing) != libdnf::GoalProblem::NO_PROBLEM) {
+    auto transaction = goal.resolve(allow_erasing);
+    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
         throw sdbus::Error(dnfdaemon::ERROR_RESOLVE, goal.get_formated_all_problems());
     }
 

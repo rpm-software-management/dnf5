@@ -88,7 +88,8 @@ void CmdReinstall::run(Context & ctx) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal.add_rpm_reinstall(option->get_value());
     }
-    if (goal.resolve(true) != libdnf::GoalProblem::NO_PROBLEM) {
+    auto transaction = goal.resolve(true);
+    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
         std::cout << goal.get_formated_all_problems() << std::endl;
         return;
     }

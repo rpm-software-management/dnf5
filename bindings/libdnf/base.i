@@ -20,6 +20,7 @@
 %{
     #include "libdnf/logger/memory_buffer_logger.hpp"
     #include "libdnf/base/base.hpp"
+    #include "libdnf/base/transaction.hpp"
     #include "libdnf/base/goal.hpp"
 %}
 
@@ -30,4 +31,5 @@
 %template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
 
 %include "libdnf/base/base.hpp"
+%include "libdnf/base/transaction.hpp"
 %include "libdnf/base/goal.hpp"
