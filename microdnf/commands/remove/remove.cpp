@@ -73,7 +73,7 @@ void CmdRemove::run(Context & ctx) {
     // Creates system repository in the repo_sack and loads it into rpm::PackageSack.
     package_sack.create_system_repo(false);
 
-    libdnf::Goal goal(&ctx.base);
+    libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_remove_options) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal.add_rpm_remove(option->get_value());

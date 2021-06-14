@@ -59,7 +59,7 @@ Session::Session(
     std::string sender)
     : connection(connection)
     , base(std::make_unique<libdnf::Base>())
-    , goal(base.get())
+    , goal(*base)
     , session_configuration(session_configuration)
     , object_path(object_path)
     , sender(sender) {

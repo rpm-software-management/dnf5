@@ -85,7 +85,7 @@ void CmdDowngrade::run(Context & ctx) {
 
     std::cout << std::endl;
 
-    libdnf::Goal goal(&ctx.base);
+    libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_downgrade_options) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal.add_rpm_downgrade(option->get_value());

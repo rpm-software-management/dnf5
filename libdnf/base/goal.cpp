@@ -155,7 +155,7 @@ std::string string_join(
 
 class Goal::Impl {
 public:
-    Impl(Base * base);
+    Impl(const BaseWeakPtr & base);
     ~Impl();
 
     void add_rpm_ids(Goal::Action action, const rpm::Package & rpm_package, const GoalJobSettings & settings);
@@ -183,7 +183,7 @@ public:
 
 private:
     friend class Goal;
-    Base * base;
+    BaseWeakPtr base;
     std::vector<std::string> module_enable_specs;
     /// <libdnf::Goal::Action, std::string pkg_spec, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<Goal::Action, std::string, GoalJobSettings>> rpm_specs;
@@ -197,9 +197,10 @@ private:
     rpm::solv::GoalPrivate rpm_goal;
 };
 
-Goal::Goal(Base * base) : p_impl(new Impl(base)) {}
+Goal::Goal(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
+Goal::Goal(Base & base) : p_impl(new Impl(base.get_weak_ptr())) {}
 
-Goal::Impl::Impl(Base * base)
+Goal::Impl::Impl(const BaseWeakPtr & base)
     : base(base)
     , rpm_goal(rpm::solv::GoalPrivate(base->get_rpm_package_sack()->p_impl->get_pool())) {}
 

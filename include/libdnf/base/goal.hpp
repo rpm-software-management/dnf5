@@ -51,7 +51,8 @@ public:
         REMOVE
     };
 
-    explicit Goal(Base * base);
+    explicit Goal(const BaseWeakPtr & base);
+    explicit Goal(Base & base);
     ~Goal();
     void add_module_enable(const std::string & spec);
     /// Prevent reinstallation by adding of already installed packages with the same NEVRA

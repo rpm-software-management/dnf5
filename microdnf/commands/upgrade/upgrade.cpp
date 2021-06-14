@@ -85,7 +85,7 @@ void CmdUpgrade::run(Context & ctx) {
 
     std::cout << std::endl;
 
-    libdnf::Goal goal(&ctx.base);
+    libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_upgrade_options) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal.add_rpm_upgrade(option->get_value(), {});

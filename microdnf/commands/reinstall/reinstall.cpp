@@ -83,7 +83,7 @@ void CmdReinstall::run(Context & ctx) {
     auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     ctx.load_rpm_repos(enabled_repos, flags);
 
-    libdnf::Goal goal(&ctx.base);
+    libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_reinstall_options) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal.add_rpm_reinstall(option->get_value());
