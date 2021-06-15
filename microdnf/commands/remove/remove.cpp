@@ -84,7 +84,7 @@ void CmdRemove::run(Context & ctx) {
         return;
     }
 
-    if (!libdnf::cli::output::print_transaction_table(goal)) {
+    if (!libdnf::cli::output::print_transaction_table(transaction)) {
         return;
     }
 
@@ -97,7 +97,7 @@ void CmdRemove::run(Context & ctx) {
     auto db_transaction = new_db_transaction(ctx);
     std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
 
-    fill_transactions(goal, db_transaction, rpm_transaction, transaction_items);
+    fill_transactions(transaction, db_transaction, rpm_transaction, transaction_items);
 
     auto time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());

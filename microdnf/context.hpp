@@ -89,7 +89,7 @@ bool userconfirm(libdnf::ConfigMain & config);
 
 /// Downoad packages to destdir. If destdir == nullptr, packages are downloaded to the cache.
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir);
-void download_packages(libdnf::Goal & goal, const char * dest_dir);
+void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir);
 
 void run_transaction(libdnf::rpm::Transaction & transaction);
 
@@ -98,7 +98,11 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx);
 
 /// Fills transactions by packages from goal.
 // TODO(jrohel): Temporary code. Will be rewritten (depends on software database code) and moved to libdnf::cli later.
-void fill_transactions(libdnf::Goal & goal, libdnf::transaction::TransactionWeakPtr & transaction, libdnf::rpm::Transaction & rpm_ts, std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items);
+void fill_transactions(
+    libdnf::base::Transaction & goal,
+    libdnf::transaction::TransactionWeakPtr & transaction,
+    libdnf::rpm::Transaction & rpm_ts,
+    std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items);
 
 }  // namespace microdnf
 

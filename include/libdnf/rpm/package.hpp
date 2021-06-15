@@ -38,6 +38,13 @@ class Goal;
 
 }  // namespace libdnf
 
+namespace libdnf::base {
+
+class Transaction;
+
+}  // namespace libdnf::base
+
+
 namespace libdnf::rpm {
 
 
@@ -413,7 +420,9 @@ public:
     //
     // TODO(dmach): return actual value from data in PackageSack
     // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
-    libdnf::transaction::TransactionItemReason get_reason() const { return libdnf::transaction::TransactionItemReason::UNKNOWN; }
+    libdnf::transaction::TransactionItemReason get_reason() const {
+        return libdnf::transaction::TransactionItemReason::UNKNOWN;
+    }
 
 protected:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
@@ -453,6 +462,7 @@ private:
     friend class PackageSetIterator;
     friend class PackageSack;
     friend class libdnf::Goal;
+    friend class libdnf::base::Transaction;
 
     PackageSackWeakPtr sack;
     PackageId id;

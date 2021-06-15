@@ -103,6 +103,13 @@ public:
 
     libdnf::GoalProblem get_problems();
 
+    std::vector<libdnf::rpm::Package> list_rpm_installs();
+    std::vector<libdnf::rpm::Package> list_rpm_reinstalls();
+    std::vector<libdnf::rpm::Package> list_rpm_upgrades();
+    std::vector<libdnf::rpm::Package> list_rpm_downgrades();
+    std::vector<libdnf::rpm::Package> list_rpm_removes();
+    std::vector<libdnf::rpm::Package> list_rpm_obsoleted();
+
 private:
     friend class libdnf::Goal;
 

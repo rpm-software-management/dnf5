@@ -37,13 +37,13 @@ void BaseGoalTest::setUp() {
 void BaseGoalTest::test_install() {
     libdnf::Goal goal(*base);
     goal.add_rpm_install("pkg");
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
     CPPUNIT_ASSERT_EQUAL(1lu, install_set.size());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg-0:1.2-3.x86_64"), install_set[0].get_full_nevra());
     CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
@@ -59,13 +59,13 @@ void BaseGoalTest::test_install_not_available() {
     base->get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
     base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
     goal.add_rpm_install("not_available");
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
@@ -103,13 +103,13 @@ void BaseGoalTest::test_install_from_cmdline() {
     goal.add_rpm_install(cmdline_pkg);
 
     // resolve the goal and read results
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     // check if we're getting an expected NEVRA
     std::vector<std::string> expected = {"one-0:1-1.noarch"};
@@ -134,17 +134,17 @@ void BaseGoalTest::test_install_multilib_all() {
     goal.add_rpm_install("multilib");
 
     // resolve the goal and read results
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     CPPUNIT_ASSERT_EQUAL(2lu, install_set.size());
     // check if we're getting an expected NEVRA
-    std::vector<std::string> expected = {"multilib-0:1.2-4.x86_64", "multilib-0:1.2-4.i686"};
+    std::vector<std::string> expected = {"multilib-0:1.2-4.i686", "multilib-0:1.2-4.x86_64"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(install_set));
     CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
@@ -165,13 +165,13 @@ void BaseGoalTest::test_reinstall() {
     libdnf::Goal goal(*base);
     goal.add_rpm_reinstall("cmdline");
 
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     // the package is installed already, install_set is empty
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
@@ -188,13 +188,13 @@ void BaseGoalTest::test_remove() {
     sack->add_system_package(rpm_path, false, false);
     libdnf::Goal goal(*base);
     goal.add_rpm_remove("cmdline");
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
@@ -210,13 +210,13 @@ void BaseGoalTest::test_remove_not_installed() {
     sack->add_system_package(rpm_path, false, false);
     libdnf::Goal goal(*base);
     goal.add_rpm_remove("not_installed");
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
     CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
@@ -253,13 +253,13 @@ void BaseGoalTest::test_install_installed_pkg() {
     libdnf::Goal goal(*base);
     goal.add_rpm_install(query);
 
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     // the package is installed already, install_set is empty
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
@@ -283,13 +283,13 @@ void BaseGoalTest::test_upgrade() {
     libdnf::Goal goal(*base);
     goal.add_rpm_upgrade("cmdline");
 
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     // the package is installed already, install_set is empty
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
@@ -316,13 +316,13 @@ void BaseGoalTest::test_upgrade_not_available() {
     libdnf::Goal goal(*base);
     goal.add_rpm_upgrade("not_available");
 
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     // the package is installed already, install_set is empty
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
@@ -356,13 +356,13 @@ void BaseGoalTest::test_upgrade_all() {
     libdnf::Goal goal(*base);
     goal.add_rpm_upgrade();
 
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     // the package is installed already, install_set is empty
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
@@ -387,13 +387,13 @@ void BaseGoalTest::test_downgrade() {
     libdnf::Goal goal(*base);
     goal.add_rpm_downgrade("cmdline");
 
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     // the package is installed already, install_set is empty
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
@@ -418,13 +418,13 @@ void BaseGoalTest::test_distrosync() {
     libdnf::Goal goal(*base);
     goal.add_rpm_distro_sync("cmdline");
 
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     // the package is installed already, install_set is empty
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
@@ -449,13 +449,13 @@ void BaseGoalTest::test_distrosync_all() {
     libdnf::Goal goal(*base);
     goal.add_rpm_distro_sync();
 
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
     // the package is installed already, install_set is empty
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
@@ -481,13 +481,13 @@ void BaseGoalTest::test_install_or_reinstall() {
     query.filter_available().filter_nevra({"cmdline-0:1.2-3.noarch"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
     goal.add_rpm_install_or_reinstall(query);
-    goal.resolve(false);
-    auto install_set = goal.list_rpm_installs();
-    auto reinstall_set = goal.list_rpm_reinstalls();
-    auto upgrade_set = goal.list_rpm_upgrades();
-    auto downgrade_set = goal.list_rpm_downgrades();
-    auto remove_set = goal.list_rpm_removes();
-    auto obsoleted_set = goal.list_rpm_obsoleted();
+    auto transaction = goal.resolve(false);
+    auto install_set = transaction.list_rpm_installs();
+    auto reinstall_set = transaction.list_rpm_reinstalls();
+    auto upgrade_set = transaction.list_rpm_upgrades();
+    auto downgrade_set = transaction.list_rpm_downgrades();
+    auto remove_set = transaction.list_rpm_removes();
+    auto obsoleted_set = transaction.list_rpm_obsoleted();
     CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
     CPPUNIT_ASSERT_EQUAL(1lu, reinstall_set.size());
     CPPUNIT_ASSERT_EQUAL(reinstall_set[0].get_full_nevra(), std::string("cmdline-0:1.2-3.noarch"));

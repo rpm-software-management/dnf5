@@ -89,12 +89,13 @@ void CmdReinstall::run(Context & ctx) {
         goal.add_rpm_reinstall(option->get_value());
     }
     auto transaction = goal.resolve(true);
+
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
         std::cout << goal.get_formated_all_problems() << std::endl;
         return;
     }
 
-    if (!libdnf::cli::output::print_transaction_table(goal)) {
+    if (!libdnf::cli::output::print_transaction_table(transaction)) {
         return;
     }
 
@@ -103,13 +104,13 @@ void CmdReinstall::run(Context & ctx) {
         return;
     }
 
-    download_packages(goal, nullptr);
+    download_packages(transaction, nullptr);
 
     libdnf::rpm::Transaction rpm_transaction(ctx.base);
     auto db_transaction = new_db_transaction(ctx);
     std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
 
-    fill_transactions(goal, db_transaction, rpm_transaction, transaction_items);
+    fill_transactions(transaction, db_transaction, rpm_transaction, transaction_items);
 
     auto time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());

@@ -20,11 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_SOLV_GOAL_PRIVATE_HPP
 #define LIBDNF_RPM_SOLV_GOAL_PRIVATE_HPP
 
-#include "libdnf/solv/id_queue.hpp"
-#include "libdnf/solv/solv_map.hpp"
-
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/rpm/package_sack.hpp"
+#include "libdnf/solv/id_queue.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 #include <solv/solver.h>
 
@@ -101,6 +100,7 @@ public:
     // TODO(jmracek)
     //     PackageSet listUnneeded();
     //     PackageSet listSuggested();
+    ::Transaction * get_transaction() { return libsolv_transaction; }
 
 
 private:
@@ -129,17 +129,17 @@ private:
 inline GoalPrivate::GoalPrivate(Pool * pool) : pool(pool) {}
 
 inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
-    : pool(src.pool)
-    , staging(src.staging)
-    , installonly(src.installonly)
-    , installonly_limit(src.installonly_limit)
-    , protected_packages(new libdnf::solv::SolvMap(*src.protected_packages))
-    , protected_running_kernel(src.protected_running_kernel)
-    , allow_downgrade(src.allow_downgrade)
-    , allow_erasing(src.allow_erasing)
-    , allow_vendor_change(src.allow_vendor_change)
-    , install_weak_deps(src.install_weak_deps)
-    , remove_solver_weak(src.remove_solver_weak) {}
+    : pool(src.pool),
+      staging(src.staging),
+      installonly(src.installonly),
+      installonly_limit(src.installonly_limit),
+      protected_packages(new libdnf::solv::SolvMap(*src.protected_packages)),
+      protected_running_kernel(src.protected_running_kernel),
+      allow_downgrade(src.allow_downgrade),
+      allow_erasing(src.allow_erasing),
+      allow_vendor_change(src.allow_vendor_change),
+      install_weak_deps(src.install_weak_deps),
+      remove_solver_weak(src.remove_solver_weak) {}
 
 inline GoalPrivate::~GoalPrivate() {
     if (libsolv_solver) {

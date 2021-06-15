@@ -132,13 +132,6 @@ public:
     /// @replaces libdnf/Goal.formatAllProblemRules(const std::vector<std::vector<std::string>> & problems);
     std::string get_formated_all_problems();
 
-    std::vector<libdnf::rpm::Package> list_rpm_installs();
-    std::vector<libdnf::rpm::Package> list_rpm_reinstalls();
-    std::vector<libdnf::rpm::Package> list_rpm_upgrades();
-    std::vector<libdnf::rpm::Package> list_rpm_downgrades();
-    std::vector<libdnf::rpm::Package> list_rpm_removes();
-    std::vector<libdnf::rpm::Package> list_rpm_obsoleted();
-
     void reset();
 
     /// @return The `Base` object to which this object belongs.

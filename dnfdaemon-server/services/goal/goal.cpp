@@ -71,15 +71,21 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall && call) {
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
         throw sdbus::Error(dnfdaemon::ERROR_RESOLVE, goal.get_formated_all_problems());
     }
+    session.set_transaction(transaction);
 
     // convert resolved goal to a list of (reason, n, e, v, r, a, repoid) structures
     std::vector<dnfdaemon::DbusTransactionItem> result{};
-    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::INSTALL, goal.list_rpm_installs());
-    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::REINSTALL, goal.list_rpm_reinstalls());
-    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::UPGRADE, goal.list_rpm_upgrades());
-    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::DOWNGRADE, goal.list_rpm_downgrades());
-    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::REMOVE, goal.list_rpm_removes());
-    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::OBSOLETE, goal.list_rpm_obsoleted());
+    packages_to_transaction(
+        result, libdnf::transaction::TransactionItemAction::INSTALL, transaction.list_rpm_installs());
+    packages_to_transaction(
+        result, libdnf::transaction::TransactionItemAction::REINSTALL, transaction.list_rpm_reinstalls());
+    packages_to_transaction(
+        result, libdnf::transaction::TransactionItemAction::UPGRADE, transaction.list_rpm_upgrades());
+    packages_to_transaction(
+        result, libdnf::transaction::TransactionItemAction::DOWNGRADE, transaction.list_rpm_downgrades());
+    packages_to_transaction(result, libdnf::transaction::TransactionItemAction::REMOVE, transaction.list_rpm_removes());
+    packages_to_transaction(
+        result, libdnf::transaction::TransactionItemAction::OBSOLETE, transaction.list_rpm_obsoleted());
 
     auto reply = call.createReply();
     reply << result;
@@ -120,7 +126,7 @@ static void set_trans_pkg(
 }
 
 void fill_transactions(
-    libdnf::Goal & goal,
+    libdnf::base::Transaction & goal,
     libdnf::transaction::TransactionWeakPtr & transaction,
     libdnf::rpm::Transaction & rpm_ts,
     std::vector<std::unique_ptr<dnfdaemon::RpmTransactionItem>> & transaction_items) {
@@ -182,11 +188,11 @@ void fill_transactions(
 
 // TODO (mblaha) shared download_packages with microdnf / libdnf
 // TODO (mblaha) callbacks to report the status
-void download_packages(Session & session, libdnf::Goal & goal) {
-    auto install_pkgs = goal.list_rpm_installs();
-    auto reinstalls_pkgs = goal.list_rpm_reinstalls();
-    auto upgrades_pkgs = goal.list_rpm_upgrades();
-    auto downgrades_pkgs = goal.list_rpm_downgrades();
+void download_packages(Session & session, libdnf::base::Transaction & transaction) {
+    auto install_pkgs = transaction.list_rpm_installs();
+    auto reinstalls_pkgs = transaction.list_rpm_reinstalls();
+    auto upgrades_pkgs = transaction.list_rpm_upgrades();
+    auto downgrades_pkgs = transaction.list_rpm_downgrades();
     std::vector<libdnf::repo::PackageTarget *> targets;
     std::vector<std::unique_ptr<libdnf::repo::PackageTarget>> targets_guard;
     std::vector<std::unique_ptr<DbusPackageCB>> pkg_download_callbacks_guard;
@@ -238,16 +244,16 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall && call) {
     //session.fill_sack();
 
     auto base = session.get_base();
-    auto & goal = session.get_goal();
+    auto * transaction = session.get_transaction();
 
-    download_packages(session, goal);
+    download_packages(session, *transaction);
 
     libdnf::rpm::Transaction rpm_transaction(*base);
     auto db_transaction = new_db_transaction(base, comment);
 
     std::vector<std::unique_ptr<dnfdaemon::RpmTransactionItem>> transaction_items;
 
-    fill_transactions(goal, db_transaction, rpm_transaction, transaction_items);
+    fill_transactions(*transaction, db_transaction, rpm_transaction, transaction_items);
 
     auto time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());

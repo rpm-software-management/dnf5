@@ -72,6 +72,10 @@ public:
     ThreadsManager & get_threads_manager() { return threads_manager; };
     sdbus::IObject * get_dbus_object() { return dbus_object.get(); };
     libdnf::Goal & get_goal() { return goal; };
+    libdnf::base::Transaction * get_transaction() { return transaction.get(); };
+    void set_transaction(const libdnf::base::Transaction & src) {
+        transaction.reset(new libdnf::base::Transaction(src));
+    };
     std::string get_sender() const { return sender; };
 
     bool check_authorization(const std::string & actionid, const std::string & sender);
@@ -104,6 +108,7 @@ private:
     sdbus::IConnection & connection;
     std::unique_ptr<libdnf::Base> base;
     libdnf::Goal goal;
+    std::unique_ptr<libdnf::base::Transaction> transaction{nullptr};
     dnfdaemon::KeyValueMap session_configuration;
     std::string object_path;
     std::vector<std::unique_ptr<IDbusSessionService>> services{};

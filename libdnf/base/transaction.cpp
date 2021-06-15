@@ -17,33 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/base/transaction.hpp"
 
-#include <solv/transaction.h>
+#include "transaction_impl.hpp"
+
+#include "libdnf/base/base.hpp"
+
 
 namespace libdnf::base {
-
-
-class Transaction::Impl {
-public:
-    Impl(const BaseWeakPtr & base) : base(base) {}
-    Impl(const Impl & src)
-        : base(src.base),
-          libsolv_transaction(src.libsolv_transaction ? transaction_create_clone(src.libsolv_transaction) : nullptr),
-          packages(src.packages) {}
-    ~Impl();
-
-    Impl & operator=(const Impl & other);
-
-private:
-    friend Transaction;
-
-    BaseWeakPtr base;
-    ::Transaction * libsolv_transaction{nullptr};
-    libdnf::GoalProblem problems = GoalProblem::NO_PROBLEM;
-
-    std::vector<TransactionPackageItem> packages;
-};
 
 Transaction::Transaction(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
 Transaction::Transaction(const Transaction & transaction) : p_impl(new Impl(*transaction.p_impl)) {}
@@ -68,6 +48,62 @@ const std::vector<TransactionPackageItem> & Transaction::get_packages() const no
 
 GoalProblem Transaction::get_problems() {
     return p_impl->problems;
+}
+
+std::vector<rpm::Package> Transaction::Impl::list_results(Id type_filter1, Id type_filter2) {
+    /* no transaction */
+    if (!libsolv_transaction) {
+        throw std::runtime_error("no solution possible");
+    }
+
+    auto sack = base->get_rpm_package_sack();
+
+    std::vector<rpm::Package> result;
+    const int common_mode = SOLVER_TRANSACTION_SHOW_OBSOLETES | SOLVER_TRANSACTION_CHANGE_IS_REINSTALL;
+
+    for (int i = 0; i < libsolv_transaction->steps.count; ++i) {
+        Id p = libsolv_transaction->steps.elements[i];
+        Id type;
+
+        switch (type_filter1) {
+            case SOLVER_TRANSACTION_OBSOLETED:
+                type = transaction_type(libsolv_transaction, p, common_mode);
+                break;
+            default:
+                type = transaction_type(
+                    libsolv_transaction, p, common_mode | SOLVER_TRANSACTION_SHOW_ACTIVE | SOLVER_TRANSACTION_SHOW_ALL);
+                break;
+        }
+
+        if (type == type_filter1 || (type_filter2 && type == type_filter2)) {
+            result.emplace_back(rpm::Package(sack, rpm::PackageId(p)));
+        }
+    }
+    return result;
+}
+
+std::vector<rpm::Package> Transaction::list_rpm_installs() {
+    return p_impl->list_results(SOLVER_TRANSACTION_INSTALL, SOLVER_TRANSACTION_OBSOLETES);
+}
+
+std::vector<rpm::Package> Transaction::list_rpm_reinstalls() {
+    return p_impl->list_results(SOLVER_TRANSACTION_REINSTALL, 0);
+}
+
+std::vector<rpm::Package> Transaction::list_rpm_upgrades() {
+    return p_impl->list_results(SOLVER_TRANSACTION_UPGRADE, 0);
+}
+
+std::vector<rpm::Package> Transaction::list_rpm_downgrades() {
+    return p_impl->list_results(SOLVER_TRANSACTION_DOWNGRADE, 0);
+}
+
+std::vector<rpm::Package> Transaction::list_rpm_removes() {
+    return p_impl->list_results(SOLVER_TRANSACTION_ERASE, 0);
+}
+
+std::vector<rpm::Package> Transaction::list_rpm_obsoleted() {
+    return p_impl->list_results(SOLVER_TRANSACTION_OBSOLETED, 0);
 }
 
 

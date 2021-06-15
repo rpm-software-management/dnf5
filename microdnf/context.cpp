@@ -314,8 +314,8 @@ namespace {
 class PkgDownloadCB : public libdnf::repo::PackageTargetCB {
 public:
     PkgDownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
-        : multi_progress_bar(&mp_bar)
-        , what(what) {
+        : multi_progress_bar(&mp_bar),
+          what(what) {
         progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, what);
         multi_progress_bar->add_bar(progress_bar.get());
     }
@@ -440,13 +440,13 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
     // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
 }
 
-void download_packages(libdnf::Goal & goal, const char * dest_dir) {
-    auto installs_pkgs = goal.list_rpm_installs();
-    auto reinstalls_pkgs = goal.list_rpm_reinstalls();
-    auto upgrades_pkgs = goal.list_rpm_upgrades();
-    auto downgrades_pkgs = goal.list_rpm_downgrades();
-    auto removes_pkgs = goal.list_rpm_removes();
-    auto obsoleded_pkgs = goal.list_rpm_obsoleted();
+void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir) {
+    auto installs_pkgs = transaction.list_rpm_installs();
+    auto reinstalls_pkgs = transaction.list_rpm_reinstalls();
+    auto upgrades_pkgs = transaction.list_rpm_upgrades();
+    auto downgrades_pkgs = transaction.list_rpm_downgrades();
+    auto removes_pkgs = transaction.list_rpm_removes();
+    auto obsoleded_pkgs = transaction.list_rpm_obsoleted();
 
     std::vector<libdnf::rpm::Package> download_pkgs = installs_pkgs;
     download_pkgs.insert(download_pkgs.end(), reinstalls_pkgs.begin(), reinstalls_pkgs.end());
@@ -721,7 +721,7 @@ static void set_trans_pkg(
 }
 
 void fill_transactions(
-    libdnf::Goal & goal,
+    libdnf::base::Transaction & goal,
     libdnf::transaction::TransactionWeakPtr & transaction,
     libdnf::rpm::Transaction & rpm_ts,
     std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items) {

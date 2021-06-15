@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../rpm/solv/package_private.hpp"
 #include "../utils/string.hpp"
 #include "../utils/utils_internal.hpp"
+#include "transaction_impl.hpp"
 
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/solv/id_queue.hpp"
@@ -1038,7 +1039,7 @@ base::Transaction Goal::resolve(bool allow_erasing) {
     }
     ret |= p_impl->rpm_goal.resolve();
     base::Transaction output(p_impl->base);
-
+    output.p_impl->set_transaction(p_impl->rpm_goal.get_transaction());
     return output;
 }
 
@@ -1286,60 +1287,6 @@ std::string Goal::get_formated_all_problems() {
         ++index;
     }
     return output;
-}
-
-std::vector<rpm::Package> Goal::list_rpm_installs() {
-    std::vector<rpm::Package> result;
-    auto sack = p_impl->base->get_rpm_package_sack();
-    for (auto package_id : p_impl->rpm_goal.list_installs()) {
-        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
-    }
-    return result;
-}
-
-std::vector<rpm::Package> Goal::list_rpm_reinstalls() {
-    std::vector<rpm::Package> result;
-    auto sack = p_impl->base->get_rpm_package_sack();
-    for (auto package_id : p_impl->rpm_goal.list_reinstalls()) {
-        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
-    }
-    return result;
-}
-
-std::vector<rpm::Package> Goal::list_rpm_upgrades() {
-    std::vector<rpm::Package> result;
-    auto sack = p_impl->base->get_rpm_package_sack();
-    for (auto package_id : p_impl->rpm_goal.list_upgrades()) {
-        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
-    }
-    return result;
-}
-
-std::vector<rpm::Package> Goal::list_rpm_downgrades() {
-    std::vector<rpm::Package> result;
-    auto sack = p_impl->base->get_rpm_package_sack();
-    for (auto package_id : p_impl->rpm_goal.list_downgrades()) {
-        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
-    }
-    return result;
-}
-
-std::vector<rpm::Package> Goal::list_rpm_removes() {
-    std::vector<rpm::Package> result;
-    auto sack = p_impl->base->get_rpm_package_sack();
-    for (auto package_id : p_impl->rpm_goal.list_removes()) {
-        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
-    }
-    return result;
-}
-
-std::vector<rpm::Package> Goal::list_rpm_obsoleted() {
-    std::vector<rpm::Package> result;
-    auto sack = p_impl->base->get_rpm_package_sack();
-    for (auto package_id : p_impl->rpm_goal.list_obsoleted()) {
-        result.emplace_back(rpm::Package(sack, libdnf::rpm::PackageId(package_id)));
-    }
-    return result;
 }
 
 rpm::PackageId Goal::get_running_kernel_internal() {
