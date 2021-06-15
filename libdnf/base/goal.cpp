@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal.hpp"
 
-#include "libdnf/solv/id_queue.hpp"
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "../rpm/package_sack_impl.hpp"
 #include "../rpm/package_set_impl.hpp"
@@ -29,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../utils/utils_internal.hpp"
 
 #include "libdnf/rpm/package_query.hpp"
+#include "libdnf/solv/id_queue.hpp"
 
 #include <fmt/format.h>
 #include <sys/utsname.h>
@@ -201,8 +201,8 @@ Goal::Goal(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
 Goal::Goal(Base & base) : p_impl(new Impl(base.get_weak_ptr())) {}
 
 Goal::Impl::Impl(const BaseWeakPtr & base)
-    : base(base)
-    , rpm_goal(rpm::solv::GoalPrivate(base->get_rpm_package_sack()->p_impl->get_pool())) {}
+    : base(base),
+      rpm_goal(rpm::solv::GoalPrivate(base->get_rpm_package_sack()->p_impl->get_pool())) {}
 
 Goal::~Goal() = default;
 

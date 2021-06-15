@@ -54,10 +54,10 @@ void CmdReinstall::set_argument_parser(Context & ctx) {
     reinstall->set_named_args_help_header("Optional arguments:");
     reinstall->set_positional_args_help_header("Positional arguments:");
     reinstall->set_parse_hook_func([this, &ctx](
-                                [[maybe_unused]] ArgumentParser::Argument * arg,
-                                [[maybe_unused]] const char * option,
-                                [[maybe_unused]] int argc,
-                                [[maybe_unused]] const char * const argv[]) {
+                                       [[maybe_unused]] ArgumentParser::Argument * arg,
+                                       [[maybe_unused]] const char * option,
+                                       [[maybe_unused]] int argc,
+                                       [[maybe_unused]] const char * const argv[]) {
         ctx.select_command(this);
         return true;
     });

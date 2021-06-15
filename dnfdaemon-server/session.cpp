@@ -22,10 +22,10 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "callbacks.hpp"
 #include "dbus.hpp"
 #include "services/base/base.hpp"
+#include "services/goal/goal.hpp"
 #include "services/repo/repo.hpp"
 #include "services/repoconf/repo_conf.hpp"
 #include "services/rpm/rpm.hpp"
-#include "services/goal/goal.hpp"
 #include "utils.hpp"
 
 #include <libdnf/logger/logger.hpp>
@@ -57,12 +57,12 @@ Session::Session(
     dnfdaemon::KeyValueMap session_configuration,
     std::string object_path,
     std::string sender)
-    : connection(connection)
-    , base(std::make_unique<libdnf::Base>())
-    , goal(*base)
-    , session_configuration(session_configuration)
-    , object_path(object_path)
-    , sender(sender) {
+    : connection(connection),
+      base(std::make_unique<libdnf::Base>()),
+      goal(*base),
+      session_configuration(session_configuration),
+      object_path(object_path),
+      sender(sender) {
     // adjust base.config from session_configuration
     auto & config = base->get_config();
     std::vector<std::string> config_items{"config_file_path", "installroot", "cachedir", "reposdir", "varsdir"};
