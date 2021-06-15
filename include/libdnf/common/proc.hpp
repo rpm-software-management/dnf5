@@ -26,8 +26,11 @@ namespace libdnf {
 
 constexpr uid_t INVALID_UID = static_cast<uid_t>(-1);
 
-/// Read the login uid from the "/proc/self/loginuid".
-uid_t read_login_uid_from_proc() noexcept;
+/// Read the process owner login uid from the "/proc/<pid>/loginuid".
+/// @param pid process id
+/// @return libdnf::INVALID_UID if fails, login uid otherwise
+/// @since 5.0
+uid_t read_login_uid_from_proc(pid_t pid) noexcept;
 
 }  // namespace libdnf
 

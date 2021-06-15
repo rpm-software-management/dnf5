@@ -31,7 +31,7 @@ bool am_i_root() noexcept {
 uid_t get_login_uid() noexcept {
     static uid_t cached_uid = libdnf::INVALID_UID;
     if (cached_uid == libdnf::INVALID_UID) {
-        cached_uid = libdnf::read_login_uid_from_proc();
+        cached_uid = libdnf::read_login_uid_from_proc(getpid());
         if (cached_uid == libdnf::INVALID_UID) {
             cached_uid = getuid();
         }
