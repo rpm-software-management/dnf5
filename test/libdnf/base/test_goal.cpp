@@ -31,10 +31,11 @@ CPPUNIT_TEST_SUITE_REGISTRATION(BaseGoalTest);
 
 void BaseGoalTest::setUp() {
     RepoFixture::setUp();
-    add_repo_repomd("repomd-repo1");
 }
 
 void BaseGoalTest::test_install() {
+    add_repo_repomd("repomd-repo1");
+
     libdnf::Goal goal(*base);
     goal.add_rpm_install("pkg");
     auto transaction = goal.resolve(false);
@@ -54,6 +55,8 @@ void BaseGoalTest::test_install() {
 }
 
 void BaseGoalTest::test_install_not_available() {
+    add_repo_repomd("repomd-repo1");
+
     libdnf::Goal goal(*base);
     base->get_config().strict().set(libdnf::Option::Priority::RUNTIME, false);
     base->get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
@@ -154,6 +157,8 @@ void BaseGoalTest::test_install_multilib_all() {
 }
 
 void BaseGoalTest::test_reinstall() {
+    add_repo_repomd("repomd-repo1");
+
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
 
     // add the package to the @System repo so it appears as installed
@@ -184,6 +189,8 @@ void BaseGoalTest::test_reinstall() {
 }
 
 void BaseGoalTest::test_remove() {
+    add_repo_repomd("repomd-repo1");
+
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     sack->add_system_package(rpm_path, false, false);
     libdnf::Goal goal(*base);
@@ -205,6 +212,8 @@ void BaseGoalTest::test_remove() {
 }
 
 void BaseGoalTest::test_remove_not_installed() {
+    add_repo_repomd("repomd-repo1");
+
     base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     sack->add_system_package(rpm_path, false, false);
@@ -271,6 +280,8 @@ void BaseGoalTest::test_install_installed_pkg() {
 }
 
 void BaseGoalTest::test_upgrade() {
+    add_repo_repomd("repomd-repo1");
+
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
 
     // add the package to the @System repo so it appears installed
@@ -302,6 +313,8 @@ void BaseGoalTest::test_upgrade() {
 }
 
 void BaseGoalTest::test_upgrade_not_available() {
+    add_repo_repomd("repomd-repo1");
+
     base->get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
     base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
