@@ -59,6 +59,7 @@ public:
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_identical(DnfPackage * pkg)
     bool operator==(const Package & other) const noexcept;
     bool operator!=(const Package & other) const noexcept;
+    bool operator<(const Package & other) const noexcept { return id < other.id; }
 
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_id(DnfPackage * pkg)
     PackageId get_id() const noexcept { return id; };

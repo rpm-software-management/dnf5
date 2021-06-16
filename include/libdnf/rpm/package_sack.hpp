@@ -78,6 +78,8 @@ public:
 
     bool operator==(const PackageId & other) const noexcept { return id == other.id; };
     bool operator!=(const PackageId & other) const noexcept { return id != other.id; };
+    bool operator<(const PackageId & other) const noexcept { return id < other.id; };
+
 
     int id{0};
 };
