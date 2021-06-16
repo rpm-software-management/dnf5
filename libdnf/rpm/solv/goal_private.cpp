@@ -95,8 +95,7 @@ void init_solver(Pool * pool, Solver ** solver) {
 #endif
 }
 
-libdnf::solv::SolvMap list_results(
-    Pool * pool, Transaction * transaction, Solver * solver, Id type_filter1, Id type_filter2) {
+libdnf::solv::IdQueue list_results(Transaction * transaction, Solver * solver, Id type_filter1, Id type_filter2) {
     /* no transaction */
     if (!transaction) {
         if (!solver) {
@@ -108,7 +107,7 @@ libdnf::solv::SolvMap list_results(
         throw std::runtime_error("no solution possible");
     }
 
-    libdnf::solv::SolvMap result_ids(pool->nsolvables);
+    libdnf::solv::IdQueue result_ids;
     const int common_mode = SOLVER_TRANSACTION_SHOW_OBSOLETES | SOLVER_TRANSACTION_CHANGE_IS_REINSTALL;
 
     for (int i = 0; i < transaction->steps.count; ++i) {
@@ -126,7 +125,7 @@ libdnf::solv::SolvMap list_results(
         }
 
         if (type == type_filter1 || (type_filter2 && type == type_filter2)) {
-            result_ids.add(p);
+            result_ids.push_back(p);
         }
     }
     return result_ids;
@@ -370,29 +369,28 @@ libdnf::GoalProblem GoalPrivate::resolve() {
     return protected_in_removals();
 }
 
-libdnf::solv::SolvMap GoalPrivate::list_installs() {
-    return list_results(
-        pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_INSTALL, SOLVER_TRANSACTION_OBSOLETES);
+libdnf::solv::IdQueue GoalPrivate::list_installs() {
+    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_INSTALL, SOLVER_TRANSACTION_OBSOLETES);
 }
 
-libdnf::solv::SolvMap GoalPrivate::list_reinstalls() {
-    return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_REINSTALL, 0);
+libdnf::solv::IdQueue GoalPrivate::list_reinstalls() {
+    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_REINSTALL, 0);
 }
 
-libdnf::solv::SolvMap GoalPrivate::list_upgrades() {
-    return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_UPGRADE, 0);
+libdnf::solv::IdQueue GoalPrivate::list_upgrades() {
+    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_UPGRADE, 0);
 }
 
-libdnf::solv::SolvMap GoalPrivate::list_downgrades() {
-    return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_DOWNGRADE, 0);
+libdnf::solv::IdQueue GoalPrivate::list_downgrades() {
+    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_DOWNGRADE, 0);
 }
 
-libdnf::solv::SolvMap GoalPrivate::list_removes() {
-    return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_ERASE, 0);
+libdnf::solv::IdQueue GoalPrivate::list_removes() {
+    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_ERASE, 0);
 }
 
-libdnf::solv::SolvMap GoalPrivate::list_obsoleted() {
-    return list_results(pool, libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_OBSOLETED, 0);
+libdnf::solv::IdQueue GoalPrivate::list_obsoleted() {
+    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_OBSOLETED, 0);
 }
 
 void GoalPrivate::write_debugdata(const std::string & dir) {
@@ -575,11 +573,19 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
         removal_of_protected.reset();
         return ret;
     }
-    auto pkg_remove_list = list_removes();
-    pkg_remove_list |= list_obsoleted();
-    if (pkg_remove_list.empty()) {
+    auto removes = list_removes();
+    auto obsoleted = list_obsoleted();
+    if (removes.empty() && obsoleted.empty()) {
         removal_of_protected.reset();
         return ret;
+    }
+
+    libdnf::solv::SolvMap pkg_remove_list(pool->nsolvables);
+    for (auto index = 0; index < removes.size(); ++ index) {
+        pkg_remove_list.add_unsafe(removes[index]);
+    }
+    for (auto index = 0; index < obsoleted.size(); ++ index) {
+        pkg_remove_list.add_unsafe(obsoleted[index]);
     }
 
     libdnf::solv::SolvMap protected_pkgs(pool->nsolvables);

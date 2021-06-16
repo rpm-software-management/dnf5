@@ -56,12 +56,12 @@ public:
 
     libdnf::GoalProblem resolve();
 
-    libdnf::solv::SolvMap list_installs();
-    libdnf::solv::SolvMap list_reinstalls();
-    libdnf::solv::SolvMap list_upgrades();
-    libdnf::solv::SolvMap list_downgrades();
-    libdnf::solv::SolvMap list_removes();
-    libdnf::solv::SolvMap list_obsoleted();
+    libdnf::solv::IdQueue list_installs();
+    libdnf::solv::IdQueue list_reinstalls();
+    libdnf::solv::IdQueue list_upgrades();
+    libdnf::solv::IdQueue list_downgrades();
+    libdnf::solv::IdQueue list_removes();
+    libdnf::solv::IdQueue list_obsoleted();
 
     /// @dir Requires full path that exists
     void write_debugdata(const std::string & dir);
