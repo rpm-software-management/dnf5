@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/solv/id_queue.hpp"
 #include "libdnf/solv/solv_map.hpp"
+#include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <solv/solver.h>
 
@@ -100,6 +101,10 @@ public:
     // TODO(jmracek)
     //     PackageSet listUnneeded();
     //     PackageSet listSuggested();
+    transaction::TransactionItemReason get_reason(Id id);
+    /// Returns IDs sorted by name, evr, arch of given id to bring the "same name" obsoleters (i.e. upgraders) to front
+    libdnf::solv::IdQueue list_obsoleted_by_package(Id id);
+
     ::Transaction * get_transaction() { return libsolv_transaction; }
 
 

@@ -166,6 +166,10 @@ struct InstallonlyCmpData {
     Id running_kernel;
 };
 
+struct ObsoleteCmpData {
+    Pool * pool;
+    Id obsolete;
+};
 
 int installonly_cmp(const Id * ap, const Id * bp, const InstallonlyCmpData * s_cb) {
     Id a = *ap;
@@ -206,6 +210,41 @@ int installonly_cmp(const Id * ap, const Id * bp, const InstallonlyCmpData * s_c
     return pool_evrcmp(pool, sa->evr, sb->evr, EVRCMP_COMPARE);
 }
 
+int obsq_cmp(const Id * ap, const Id * bp, const ObsoleteCmpData * s_cb) {
+    Pool * pool = s_cb->pool;
+
+    if (*ap == *bp) {
+        return 0;
+    }
+
+    Solvable * to_compare_solvable = pool_id2solvable(pool, s_cb->obsolete);
+    Solvable * ap_solvable = pool_id2solvable(pool, *ap);
+    Solvable * obs = pool->solvables + *bp;
+    if (ap_solvable->name != obs->name) {
+        // bring "same name" obsoleters (i.e. upgraders) to front
+        if (ap_solvable->name == to_compare_solvable->name) {
+            return -1;
+        }
+        if (obs->name == to_compare_solvable->name) {
+            return 1;
+        }
+        return strcmp(pool_id2str(pool, ap_solvable->name), pool_id2str(pool, obs->name));
+    }
+    int r = pool_evrcmp(pool, ap_solvable->evr, obs->evr, EVRCMP_COMPARE);
+    if (r) {
+        return -r;	/* highest version first */
+    }
+    if (ap_solvable->arch != obs->arch) {
+        /* bring same arch to front */
+        if (ap_solvable->arch == to_compare_solvable->arch) {
+            return -1;
+        }
+        if (obs->arch == to_compare_solvable->arch) {
+            return 1;
+        }
+    }
+    return *ap - *bp;
+}
 
 bool limit_installonly_packages(
     Solver * solv,
@@ -578,5 +617,42 @@ void GoalPrivate::reset_protected_packages() {
     protected_packages.reset();
 }
 
+transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
+    //solver_get_recommendations
+    if (!libsolv_solver)
+        throw UnresolvedGoal();
+    Id info;
+    int reason = solver_describe_decision(libsolv_solver, id, &info);
+
+    if ((reason == SOLVER_REASON_UNIT_RULE ||
+         reason == SOLVER_REASON_RESOLVE_JOB) &&
+        (solver_ruleclass(libsolv_solver, info) == SOLVER_RULE_JOB ||
+         solver_ruleclass(libsolv_solver, info) == SOLVER_RULE_BEST))
+        return transaction::TransactionItemReason::USER;
+    if (reason == SOLVER_REASON_CLEANDEPS_ERASE)
+        return transaction::TransactionItemReason::CLEAN;
+    if (reason == SOLVER_REASON_WEAKDEP)
+        return transaction::TransactionItemReason::WEAK_DEPENDENCY;
+    libdnf::solv::IdQueue cleanDepsQueue;
+    solver_get_cleandeps(libsolv_solver, &cleanDepsQueue.get_queue());
+    for (int i = 0; i < cleanDepsQueue.size(); ++i) {
+        if (cleanDepsQueue[i] == id) {
+            return transaction::TransactionItemReason::CLEAN;
+        }
+    }
+    return transaction::TransactionItemReason::DEPENDENCY;
+}
+
+libdnf::solv::IdQueue GoalPrivate::list_obsoleted_by_package(Id id)
+{
+    if (!libsolv_transaction) {
+        throw std::runtime_error("no solution possible");
+    }
+    libdnf::solv::IdQueue obsoletes;
+    transaction_all_obs_pkgs(libsolv_transaction, id, &obsoletes.get_queue());
+    const ObsoleteCmpData obsoete_cmp_data{pool, id};
+    obsoletes.sort(&obsq_cmp, &obsoete_cmp_data);
+    return obsoletes;
+}
 
 }  // namespace libdnf::rpm::solv
