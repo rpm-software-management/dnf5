@@ -32,6 +32,8 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
+namespace {
+
 // repository attributes available to be retrieved
 // based on `dnf repolist` command
 enum class RepoAttribute {
@@ -196,6 +198,8 @@ dnfdaemon::KeyValueMap repo_to_map(
 bool keyval_repo_compare(const dnfdaemon::KeyValueMap & first, const dnfdaemon::KeyValueMap & second) {
     return key_value_map_get<std::string>(first, "id") < key_value_map_get<std::string>(second, "id");
 }
+
+}  // namespace
 
 void Repo::dbus_register() {
     auto dbus_object = session.get_dbus_object();

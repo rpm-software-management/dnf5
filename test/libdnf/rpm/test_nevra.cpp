@@ -193,6 +193,8 @@ void NevraTest::test_nevra() {
 }
 
 
+namespace {
+
 class TestPackage : public libdnf::rpm::Nevra {
 public:
     explicit TestPackage(const char * nevra_str) {
@@ -208,6 +210,8 @@ public:
         return get_epoch() + ":" + get_version() + "-" + get_release();
     }
 };
+
+}  // namespace
 
 
 void NevraTest::test_cmp_nevra() {

@@ -35,6 +35,8 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
+namespace {
+
 class StderrLogger : public libdnf::Logger {
 public:
     explicit StderrLogger() {}
@@ -47,6 +49,8 @@ void StderrLogger::write(time_t, pid_t, Level, const std::string & message) noex
     } catch (...) {
     }
 }
+
+}  // namespace
 
 Session::Session(
     sdbus::IConnection & connection,

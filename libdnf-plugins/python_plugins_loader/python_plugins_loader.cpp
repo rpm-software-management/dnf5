@@ -29,6 +29,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 using namespace libdnf::plugin;
 namespace fs = std::filesystem;
 
+namespace {
+
 constexpr const char * PLUGIN_NAME = "python_plugin_loader";
 constexpr Version PLUGIN_VERSION{0, 1, 0};
 constexpr const char * PLUGIN_DESCRIPTION = "Plugin for loading Python plugins.";
@@ -176,6 +178,8 @@ static void fetch_python_error_to_exception(const char * msg) {
     auto pycomp_str = PycompString(objectsRepresentation.get());
     throw std::runtime_error(msg + pycomp_str.get_string());
 }
+
+}  // namespace
 
 /// Load Python plugin from path
 void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {

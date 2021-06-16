@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(QueryTest);
 
+namespace {
+
 class QueryItem {
 public:
     bool enabled;
@@ -66,6 +68,8 @@ TestQuery & TestQuery::filter_name(const std::string & name, libdnf::sack::Query
     filter(F::name, name, cmp);
     return *this;
 }
+
+}  // namespace
 
 
 void QueryTest::setUp() {}

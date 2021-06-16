@@ -34,6 +34,9 @@ void IniparserTest::tearDown() {}
 
 
 using ItemType = libdnf::IniParser::ItemType;
+
+namespace {
+
 struct Item {
     ItemType type;
     const char * section;
@@ -41,6 +44,8 @@ struct Item {
     const char * value;
     const char * raw;
 };
+
+}  // namespace
 
 void IniparserTest::test_iniparser() {
 

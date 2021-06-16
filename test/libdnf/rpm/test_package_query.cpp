@@ -33,11 +33,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(RpmPackageQueryTest);
 
 
+namespace {
+
 // make constructor public so we can create Package instances in the tests
 class TestPackage : public libdnf::rpm::Package {
 public:
     TestPackage(const libdnf::rpm::PackageSackWeakPtr & sack, libdnf::rpm::PackageId id) : libdnf::rpm::Package(sack, id) {}
 };
+
+}  // namespace
 
 
 void RpmPackageQueryTest::setUp() {

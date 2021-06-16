@@ -69,6 +69,8 @@ bool userconfirm(libdnf::ConfigMain & config) {
     }
 }
 
+namespace {
+
 class MicrodnfRepoCB : public libdnf::repo::RepoCB {
 public:
     explicit MicrodnfRepoCB(libdnf::ConfigMain & config) : config(&config) {}
@@ -169,6 +171,8 @@ private:
 };
 
 std::chrono::time_point<std::chrono::steady_clock> MicrodnfRepoCB::prev_print_time = std::chrono::steady_clock::now();
+
+}  // namespace
 
 void Context::load_rpm_repo(libdnf::repo::Repo & repo) {
     //repo->set_substitutions(variables);
@@ -305,6 +309,8 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
 //     }
 // }
 
+namespace {
+
 class PkgDownloadCB : public libdnf::repo::PackageTargetCB {
 public:
     PkgDownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
@@ -382,6 +388,8 @@ private:
 
 std::chrono::time_point<std::chrono::steady_clock> PkgDownloadCB::prev_print_time = std::chrono::steady_clock::now();
 
+}  // namespace
+
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     std::vector<std::unique_ptr<PkgDownloadCB>> pkg_download_callbacks_guard;
@@ -446,6 +454,8 @@ void download_packages(libdnf::Goal & goal, const char * dest_dir) {
     download_pkgs.insert(download_pkgs.end(), downgrades_pkgs.begin(), downgrades_pkgs.end());
     download_packages(download_pkgs, dest_dir);
 }
+
+namespace {
 
 class RpmTransCB : public libdnf::rpm::TransactionCB {
 public:
@@ -656,6 +666,8 @@ private:
 };
 
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();
+
+}  // namespace
 
 void run_transaction(libdnf::rpm::Transaction & transaction) {
     std::cout << "Running transaction:" << std::endl;

@@ -519,6 +519,8 @@ PackageQuery & PackageQuery::filter_arch(const std::vector<std::string> & patter
     return *this;
 }
 
+namespace {
+
 struct NevraID {
     NevraID() : name(0), arch(0), evr(0){};
     NevraID(const NevraID & src) = default;
@@ -634,6 +636,8 @@ inline static void filter_nevra_internal(
         ++low;
     }
 }
+
+}  // namespace
 
 PackageQuery & PackageQuery::filter_nevra(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
