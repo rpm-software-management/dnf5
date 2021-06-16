@@ -83,12 +83,24 @@ private:
 
 class TransactionPackageItem : public rpm::Package, public TransactionItem {
 public:
+    /// Get package replaced by transaction item or nullptr when nothing is replaced
+    const std::vector<rpm::Package> & get_replace() const noexcept { return replace; }
+
+    /// Get obsoleted package by transaction item
+    const std::vector<rpm::Package> & get_obsoletes() const noexcept { return obsoletes; }
+
+    /// Get packages that replace the package (Used for packages removed from system - REMOVE, UPGRADED, ...)
+    const std::vector<rpm::Package> & get_replaced_by() const noexcept { return replaced_by; }
 private:
     friend class Transaction;
 
     TransactionPackageItem(libdnf::rpm::Package pkg, Action action, Reason reason)
         : rpm::Package(pkg),
           TransactionItem(action, reason) {}
+
+    std::vector<rpm::Package> obsoletes;
+    std::vector<rpm::Package> replace;
+    std::vector<rpm::Package> replaced_by;
 };
 
 class Transaction {
