@@ -106,5 +106,197 @@ std::vector<rpm::Package> Transaction::list_rpm_obsoleted() {
     return p_impl->list_results(SOLVER_TRANSACTION_OBSOLETED, 0);
 }
 
+void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
+    auto transaction = goal.get_transaction();
+    libsolv_transaction = transaction ? transaction_create_clone(transaction) : nullptr;
+    if (!libsolv_transaction) {
+        return;
+    }
+    auto sack = base->get_rpm_package_sack();
+
+    // std::map<obsoleted, obsoleted_by>
+    std::map<Id, std::vector<Id>> obsoletes;
+
+    auto list_downgrades = goal.list_downgrades();
+    for (auto index = 0; index < list_downgrades.size(); ++index) {
+        Id id = list_downgrades[index];
+        auto obs = goal.list_obsoleted_by_package(id);
+        if (obs.empty()) {
+            throw RuntimeError("No obsoletes for downgrade");
+        }
+        rpm::Package new_package(sack, rpm::PackageId(id));
+        auto reason = new_package.get_reason();
+        TransactionPackageItem item(new_package, TransactionPackageItem::Action::DOWNGRADE, reason);
+        item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[0])));
+        for (int index = 1; index < obs.size(); ++index) {
+            item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[index])));
+            obsoletes[obs[index]].push_back(id);
+        }
+        packages.emplace_back(std::move(item));
+
+        TransactionPackageItem old_item(
+            rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackageItem::Action::DOWNGRADED, reason);
+        packages.emplace_back(std::move(old_item));
+    }
+    auto list_reinstalls = goal.list_reinstalls();
+    for (auto index = 0; index < list_reinstalls.size(); ++index) {
+        Id id = list_reinstalls[index];
+        auto obs = goal.list_obsoleted_by_package(id);
+        if (obs.empty()) {
+            throw RuntimeError("No obsoletes for reinstall");
+        }
+        rpm::Package new_package(sack, rpm::PackageId(id));
+        auto reason = new_package.get_reason();
+        TransactionPackageItem item(new_package, TransactionPackageItem::Action::REINSTALL, reason);
+        item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[0])));
+        for (int index = 1; index < obs.size(); ++index) {
+            item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[index])));
+            obsoletes[obs[index]].push_back(id);
+        }
+        packages.emplace_back(std::move(item));
+
+        TransactionPackageItem old_item(
+            rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackageItem::Action::REINSTALLED, reason);
+        packages.emplace_back(std::move(old_item));
+    }
+    auto list_installs = goal.list_installs();
+    for (auto index = 0; index < list_installs.size(); ++index) {
+        Id id = list_installs[index];
+        auto obs = goal.list_obsoleted_by_package(id);
+        auto reason = goal.get_reason(id);
+        TransactionPackageItem item(rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REINSTALL, reason);
+        for (int index = 1; index < obs.size(); ++index) {
+            item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[index])));
+            obsoletes[obs[index]].push_back(id);
+        }
+        // TODO(jmracek) Missing a lot of conditions
+        packages.emplace_back(std::move(item));
+    }
+    auto list_upgrades = goal.list_upgrades();
+    for (auto index = 0; index < list_upgrades.size(); ++index) {
+        Id id = list_upgrades[index];
+        auto obs = goal.list_obsoleted_by_package(id);
+        if (obs.empty()) {
+            throw RuntimeError("No obsoletes for reinstall");
+        }
+        rpm::Package new_package(sack, rpm::PackageId(id));
+        auto reason = new_package.get_reason();
+        TransactionPackageItem item(new_package, TransactionPackageItem::Action::UPGRADE, reason);
+        item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[0])));
+        for (int index = 1; index < obs.size(); ++index) {
+            item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[index])));
+            obsoletes[obs[index]].push_back(id);
+        }
+        packages.emplace_back(std::move(item));
+
+        TransactionPackageItem old_item(
+            rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackageItem::Action::UPGRADED, reason);
+        packages.emplace_back(std::move(old_item));
+    }
+    auto list_removes = goal.list_removes();
+    for (auto index = 0; index < list_removes.size(); ++index) {
+        Id id = list_removes[index];
+        rpm::Package new_package(sack, rpm::PackageId(id));
+        auto reason = goal.get_reason(id);
+        TransactionPackageItem item(rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REMOVE, reason);
+        packages.emplace_back(std::move(item));
+        // TODO(jmracek) Missing a lot of conditions
+    }
+    // TODO(jmracek) add handling of obsoletes
+}
+
+
+//     def _goal2transaction(self, goal):
+//         ts = self.history.rpm
+//         all_obsoleted = set(goal.list_obsoleted())
+//         installonly_query = self._get_installonly_query()
+//         installonly_query.apply()
+//         installonly_query_installed = installonly_query.installed().apply()
+//
+//         for pkg in goal.list_downgrades():
+//             obs = goal.obsoleted_by_package(pkg)
+//             downgraded = obs[0]
+//             self._ds_callback.pkg_added(downgraded, 'dd')
+//             self._ds_callback.pkg_added(pkg, 'd')
+//             ts.add_downgrade(pkg, downgraded, obs[1:])
+//         for pkg in goal.list_reinstalls():
+//             self._ds_callback.pkg_added(pkg, 'r')
+//             obs = goal.obsoleted_by_package(pkg)
+//             nevra_pkg = str(pkg)
+//             # reinstall could obsolete multiple packages with the same NEVRA or different NEVRA
+//             # Set the package with the same NEVRA as reinstalled
+//             obsoletes = []
+//             for obs_pkg in obs:
+//                 if str(obs_pkg) == nevra_pkg:
+//                     obsoletes.insert(0, obs_pkg)
+//                 else:
+//                     obsoletes.append(obs_pkg)
+//             reinstalled = obsoletes[0]
+//             ts.add_reinstall(pkg, reinstalled, obsoletes[1:])
+//         for pkg in goal.list_installs():
+//             self._ds_callback.pkg_added(pkg, 'i')
+//             obs = goal.obsoleted_by_package(pkg)
+//             # Skip obsoleted packages that are not part of all_obsoleted,
+//             # they are handled as upgrades/downgrades.
+//             # Also keep RPMs with the same name - they're not always in all_obsoleted.
+//             obs = [i for i in obs if i in all_obsoleted or i.name == pkg.name]
+//
+//             reason = goal.get_reason(pkg)
+//
+//             #  Inherit reason if package is installonly an package with same name is installed
+//             #  Use the same logic like upgrade
+//             #  Upgrade of installonly packages result in install or install and remove step
+//             if pkg in installonly_query and installonly_query_installed.filter(name=pkg.name):
+//                 reason = ts.get_reason(pkg)
+//
+//             # inherit the best reason from obsoleted packages
+//             for obsolete in obs:
+//                 reason_obsolete = ts.get_reason(obsolete)
+//                 if libdnf.transaction.TransactionItemReasonCompare(reason, reason_obsolete) == -1:
+//                     reason = reason_obsolete
+//
+//             ts.add_install(pkg, obs, reason)
+//             cb = lambda pkg: self._ds_callback.pkg_added(pkg, 'od')
+//             dnf.util.mapall(cb, obs)
+//         for pkg in goal.list_upgrades():
+//             obs = goal.obsoleted_by_package(pkg)
+//             upgraded = None
+//             for i in obs:
+//                 # try to find a package with matching name as the upgrade
+//                 if i.name == pkg.name:
+//                     upgraded = i
+//                     break
+//             if upgraded is None:
+//                 # no matching name -> pick the first one
+//                 upgraded = obs.pop(0)
+//             else:
+//                 obs.remove(upgraded)
+//             # Skip obsoleted packages that are not part of all_obsoleted,
+//             # they are handled as upgrades/downgrades.
+//             # Also keep RPMs with the same name - they're not always in all_obsoleted.
+//             obs = [i for i in obs if i in all_obsoleted or i.name == pkg.name]
+//
+//             cb = lambda pkg: self._ds_callback.pkg_added(pkg, 'od')
+//             dnf.util.mapall(cb, obs)
+//             if pkg in installonly_query:
+//                 ts.add_install(pkg, obs)
+//             else:
+//                 ts.add_upgrade(pkg, upgraded, obs)
+//                 self._ds_callback.pkg_added(upgraded, 'ud')
+//             self._ds_callback.pkg_added(pkg, 'u')
+//         erasures = goal.list_erasures()
+//         if erasures:
+//             remaining_installed_query = self.sack.query(flags=hawkey.IGNORE_EXCLUDES).installed()
+//             remaining_installed_query.filterm(pkg__neq=erasures)
+//             for pkg in erasures:
+//                 if remaining_installed_query.filter(name=pkg.name):
+//                     remaining = remaining_installed_query[0]
+//                     ts.get_reason(remaining)
+//                     self.history.set_reason(remaining, ts.get_reason(remaining))
+//                 self._ds_callback.pkg_added(pkg, 'e')
+//                 reason = goal.get_reason(pkg)
+//                 ts.add_erase(pkg, reason)
+//         return ts
+
 
 }  // namespace libdnf::base

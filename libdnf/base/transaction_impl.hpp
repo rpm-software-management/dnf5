@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/base/transaction.hpp"
+#include "../rpm/solv/goal_private.hpp"
 
 #include <solv/transaction.h>
 
@@ -42,9 +43,7 @@ public:
 
     std::vector<rpm::Package> list_results(Id type_filter1, Id type_filter2);
 
-    void set_transaction(::Transaction * transaction) {
-        libsolv_transaction = transaction ? transaction_create_clone(transaction) : nullptr;
-    };
+    void set_transaction(rpm::solv::GoalPrivate & goal);
 
 private:
     friend Transaction;
