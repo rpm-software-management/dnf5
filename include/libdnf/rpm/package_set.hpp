@@ -73,6 +73,28 @@ public:
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator/=(const libdnf::PackageSet & other)
     PackageSet & operator&=(const PackageSet & other);
 
+    /// update == union
+    /// Unites query with other query (aka logical or)
+    /// Result of the other query is added to result of this query
+    /// Throw UsedDifferentSack exceptin when other has a different PackageSack from this
+    /// @replaces libdnf/hy-query.h:function:hy_query_union(HyQuery q, HyQuery other)
+    /// @replaces libdnf/sack/query.hpp:method:queryUnion(Query & other)
+    void update(const PackageSet & other) { *this |= other; }
+
+    /// Intersects query with other query (aka logical and)
+    /// Keep only common packages for both queries in this query
+    /// Throw UsedDifferentSack exceptin when other has a different PackageSack from this
+    /// @replaces libdnf/hy-query.h:function:hy_query_intersection(HyQuery q, HyQuery other)
+    /// @replaces libdnf/sack/query.hpp:method:queryIntersection(Query & other)
+    void intersection(const PackageSet & other) { *this &= other; }
+
+    /// Computes difference between query and other query (aka q and not other)
+    /// Keep only packages in this query that are absent in other query
+    /// Throw UsedDifferentSack exceptin when other has a different PackageSack from this
+    /// @replaces libdnf/hy-query.h:function:hy_query_difference(HyQuery q, HyQuery other)
+    /// @replaces libdnf/sack/query.hpp:method:queryDifference(Query & other)
+    void difference(const PackageSet & other) { *this -= other; }
+
     /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.clear()
     void clear() noexcept;
 

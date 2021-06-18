@@ -76,28 +76,6 @@ public:
     PackageQuery & operator=(const PackageQuery & src) = default;
     PackageQuery & operator=(PackageQuery && src) noexcept = default;
 
-    /// update == union
-    /// Unites query with other query (aka logical or)
-    /// Result of the other query is added to result of this query
-    /// Throw UsedDifferentSack exceptin when other has a different PackageSack from this
-    /// @replaces libdnf/hy-query.h:function:hy_query_union(HyQuery q, HyQuery other)
-    /// @replaces libdnf/sack/query.hpp:method:queryUnion(Query & other)
-    void update(const PackageQuery & other) { *this |= other; }
-
-    /// Intersects query with other query (aka logical and)
-    /// Keep only common packages for both queries in this query
-    /// Throw UsedDifferentSack exceptin when other has a different PackageSack from this
-    /// @replaces libdnf/hy-query.h:function:hy_query_intersection(HyQuery q, HyQuery other)
-    /// @replaces libdnf/sack/query.hpp:method:queryIntersection(Query & other)
-    void intersection(const PackageQuery & other) { *this &= other; }
-
-    /// Computes difference between query and other query (aka q and not other)
-    /// Keep only packages in this query that are absent in other query
-    /// Throw UsedDifferentSack exceptin when other has a different PackageSack from this
-    /// @replaces libdnf/hy-query.h:function:hy_query_difference(HyQuery q, HyQuery other)
-    /// @replaces libdnf/sack/query.hpp:method:queryDifference(Query & other)
-    void difference(const PackageQuery & other) { *this -= other; }
-
     /// cmp_type could be only libdnf::sack::QueryCmp::EQ, NEQ, GLOB, NOT_GLOB, IEXACT, NOT_IEXACT, ICONTAINS, NOT_ICONTAINS, IGLOB, NOT_IGLOB, CONTAINS, NOT_CONTAINS.
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, const char *match) - cmp_type = HY_PKG_NAME
