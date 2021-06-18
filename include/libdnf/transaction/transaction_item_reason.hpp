@@ -32,7 +32,7 @@ enum class TransactionItemReason : int {
     UNKNOWN = 0,
     DEPENDENCY = 1,
     USER = 2,
-    CLEAN = 3,  // hawkey compatibility
+    CLEAN = 3,
     WEAK_DEPENDENCY = 4,
     GROUP = 5
 };
