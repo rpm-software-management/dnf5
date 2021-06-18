@@ -25,6 +25,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package.hpp"
 #include "package_set_iterator.hpp"
 
+#include "libdnf/common/exception.hpp"
+
+#include <cstddef>
 #include <memory>
 
 
@@ -39,6 +42,7 @@ namespace libdnf::rpm {
 /// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
 class PackageSet {
 public:
+    // TODO(dmach): move to common/exception.hpp, share across multiple sets/queries
     struct UsedDifferentSack : public RuntimeError {
         using RuntimeError::RuntimeError;
         const char * get_domain_name() const noexcept override { return "libdnf::rpm::PackageSet"; }
@@ -64,57 +68,88 @@ public:
     iterator begin() const;
     iterator end() const;
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator+=(const libdnf::PackageSet & other)
+    // @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator+=(const libdnf::PackageSet & other)
     PackageSet & operator|=(const PackageSet & other);
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator-=(const libdnf::PackageSet & other)
+    // @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator-=(const libdnf::PackageSet & other)
     PackageSet & operator-=(const PackageSet & other);
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator/=(const libdnf::PackageSet & other)
+    // @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator/=(const libdnf::PackageSet & other)
     PackageSet & operator&=(const PackageSet & other);
 
-    /// update == union
-    /// Unites query with other query (aka logical or)
-    /// Result of the other query is added to result of this query
-    /// Throw UsedDifferentSack exceptin when other has a different PackageSack from this
-    /// @replaces libdnf/hy-query.h:function:hy_query_union(HyQuery q, HyQuery other)
-    /// @replaces libdnf/sack/query.hpp:method:queryUnion(Query & other)
+    /// Set union: elements that are in the current set or in the `other` set.
+    ///
+    /// @param other The set to unify with.
+    /// @exception UsedDifferentSack When the sets entering the operation do not share the same PackageSack.
+    /// @since 5.0
+    //
+    // @replaces libdnf/hy-query.h:function:hy_query_union(HyQuery q, HyQuery other)
+    // @replaces libdnf/sack/query.hpp:method:queryUnion(Query & other)
     void update(const PackageSet & other) { *this |= other; }
 
-    /// Intersects query with other query (aka logical and)
-    /// Keep only common packages for both queries in this query
-    /// Throw UsedDifferentSack exceptin when other has a different PackageSack from this
-    /// @replaces libdnf/hy-query.h:function:hy_query_intersection(HyQuery q, HyQuery other)
-    /// @replaces libdnf/sack/query.hpp:method:queryIntersection(Query & other)
+    /// Set intersection: elements in the current set that are also in the `other` set.
+    ///
+    /// @param other The set to intersect with.
+    /// @exception UsedDifferentSack When the sets entering the operation do not share the same PackageSack.
+    /// @since 5.0
+    //
+    // @replaces libdnf/hy-query.h:function:hy_query_intersection(HyQuery q, HyQuery other)
+    // @replaces libdnf/sack/query.hpp:method:queryIntersection(Query & other)
     void intersection(const PackageSet & other) { *this &= other; }
 
-    /// Computes difference between query and other query (aka q and not other)
-    /// Keep only packages in this query that are absent in other query
-    /// Throw UsedDifferentSack exceptin when other has a different PackageSack from this
-    /// @replaces libdnf/hy-query.h:function:hy_query_difference(HyQuery q, HyQuery other)
-    /// @replaces libdnf/sack/query.hpp:method:queryDifference(Query & other)
+    /// Set difference: elements in the current set that are not in the `other` set.
+    ///
+    /// @param other The set to check for differences in.
+    /// @exception UsedDifferentSack When the sets entering the operation do not share the same PackageSack.
+    /// @since 5.0
+    //
+    // @replaces libdnf/hy-query.h:function:hy_query_difference(HyQuery q, HyQuery other)
+    // @replaces libdnf/sack/query.hpp:method:queryDifference(Query & other)
     void difference(const PackageSet & other) { *this -= other; }
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.clear()
+    /// Remove all packages from the set.
+    ///
+    /// @since 5.0
+    //
+    // @replaces libdnf:sack/packageset.hpp:method:PackageSet.clear()
     void clear() noexcept;
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.empty()
+    /// @return `true` if the set is empty, `false` otherwise.
+    /// @since 5.0
+    //
+    // @replaces libdnf:sack/packageset.hpp:method:PackageSet.empty()
     bool empty() const noexcept;
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.set(DnfPackage * pkg)
-    /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_add(DnfPackageSet * pset, DnfPackage * pkg)
+    /// Add `pkg` to the set.
+    ///
+    /// @param pkg Package to be added to the set.
+    /// @since 5.0
+    //
+    // @replaces libdnf:sack/packageset.hpp:method:PackageSet.set(DnfPackage * pkg)
+    // @replaces libdnf:hy-packageset.h:function:dnf_packageset_add(DnfPackageSet * pset, DnfPackage * pkg)
     void add(const Package & pkg);
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(DnfPackage * pkg)
+    /// @return `true` if a package is in the set, `false` otherwise.
+    /// @param pkg Package that is tested for presence.
+    /// @since 5.0
+    //
+    // @replaces libdnf:sack/packageset.hpp:method:PackageSet.has(DnfPackage * pkg)
     bool contains(const Package & pkg) const noexcept;
 
+    /// Remove `pkg` from the set.
+    ///
+    /// @param pkg Package to be removed from the set.
+    /// @since 5.0
     void remove(const Package & pkg);
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.getSack()
+    // TODO(dmach): replace with get_base()?
+    // @replaces libdnf:sack/packageset.hpp:method:PackageSet.getSack()
     PackageSackWeakPtr get_sack() const;
 
-    /// @replaces libdnf:sack/packageset.hpp:method:PackageSet.size()
-    /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_count(DnfPackageSet * pset)
+    /// @return Number of elements in the set.
+    //
+    // @replaces libdnf:sack/packageset.hpp:method:PackageSet.size()
+    // @replaces libdnf:hy-packageset.h:function:dnf_packageset_count(DnfPackageSet * pset)
     size_t size() const noexcept;
 
     void swap(PackageSet & other) noexcept;
