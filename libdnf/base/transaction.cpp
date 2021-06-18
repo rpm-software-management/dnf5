@@ -127,10 +127,10 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         rpm::Package new_package(sack, rpm::PackageId(id));
         auto reason = new_package.get_reason();
         TransactionPackageItem item(new_package, TransactionPackageItem::Action::DOWNGRADE, reason);
-        item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[0])));
-        for (int index = 1; index < obs.size(); ++index) {
-            item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[index])));
-            obsoletes[obs[index]].push_back(id);
+        item.replace.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
+        for (int i = 1; i < obs.size(); ++i) {
+            item.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(obs[i])));
+            obsoletes[obs[i]].push_back(id);
         }
         packages.emplace_back(std::move(item));
 
@@ -148,10 +148,10 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         rpm::Package new_package(sack, rpm::PackageId(id));
         auto reason = new_package.get_reason();
         TransactionPackageItem item(new_package, TransactionPackageItem::Action::REINSTALL, reason);
-        item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[0])));
-        for (int index = 1; index < obs.size(); ++index) {
-            item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[index])));
-            obsoletes[obs[index]].push_back(id);
+        item.replace.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
+        for (int i = 1; i < obs.size(); ++i) {
+            item.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(obs[i])));
+            obsoletes[obs[i]].push_back(id);
         }
         packages.emplace_back(std::move(item));
 
@@ -164,10 +164,11 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         Id id = list_installs[index];
         auto obs = goal.list_obsoleted_by_package(id);
         auto reason = goal.get_reason(id);
-        TransactionPackageItem item(rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REINSTALL, reason);
-        for (int index = 1; index < obs.size(); ++index) {
-            item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[index])));
-            obsoletes[obs[index]].push_back(id);
+        TransactionPackageItem item(
+            rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REINSTALL, reason);
+        for (int i = 0; i < obs.size(); ++i) {
+            item.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(obs[i])));
+            obsoletes[obs[i]].push_back(id);
         }
         // TODO(jmracek) Missing a lot of conditions
         packages.emplace_back(std::move(item));
@@ -182,10 +183,10 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         rpm::Package new_package(sack, rpm::PackageId(id));
         auto reason = new_package.get_reason();
         TransactionPackageItem item(new_package, TransactionPackageItem::Action::UPGRADE, reason);
-        item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[0])));
-        for (int index = 1; index < obs.size(); ++index) {
-            item.replace.emplace_back(rpm::Package(sack, rpm::PackageId(obs[index])));
-            obsoletes[obs[index]].push_back(id);
+        item.replace.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
+        for (int i = 1; i < obs.size(); ++i) {
+            item.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(obs[i])));
+            obsoletes[obs[i]].push_back(id);
         }
         packages.emplace_back(std::move(item));
 
@@ -198,7 +199,8 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         Id id = list_removes[index];
         rpm::Package new_package(sack, rpm::PackageId(id));
         auto reason = goal.get_reason(id);
-        TransactionPackageItem item(rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REMOVE, reason);
+        TransactionPackageItem item(
+            rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REMOVE, reason);
         packages.emplace_back(std::move(item));
         // TODO(jmracek) Missing a lot of conditions
     }
