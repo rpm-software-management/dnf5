@@ -204,7 +204,16 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         packages.emplace_back(std::move(item));
         // TODO(jmracek) Missing a lot of conditions
     }
-    // TODO(jmracek) add handling of obsoletes
+
+    // Add obsoleted packages
+    for (const auto & [obsoleted_id, obsoleted_by_ids] : obsoletes) {
+        rpm::Package obsoleted(sack, rpm::PackageId(obsoleted_id));
+        auto reason = goal.get_reason(obsoleted_id);
+        TransactionPackageItem tsi(obsoleted, TransactionPackageItem::Action::OBSOLETED, reason);
+        for (auto id : obsoleted_by_ids) {
+            tsi.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(id)));
+        }
+    }
 }
 
 
