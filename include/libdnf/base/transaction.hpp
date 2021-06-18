@@ -74,6 +74,7 @@ public:
     State get_state() const noexcept { return state; }
 
 private:
+    friend class TransactionPackageItem;
     void set_state(State value) noexcept { state = value; }
 
     Action action;
@@ -83,6 +84,11 @@ private:
 
 class TransactionPackageItem : public rpm::Package, public TransactionItem {
 public:
+    /// Get reason of the action associated with the transaction item in the transaction
+    ///
+    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
+    Reason get_reason() const noexcept { return reason; }
+
     /// Get package replaced by transaction item or nullptr when nothing is replaced
     const std::vector<rpm::Package> & get_replace() const noexcept { return replace; }
 
