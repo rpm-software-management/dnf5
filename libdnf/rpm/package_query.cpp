@@ -861,7 +861,7 @@ PackageQuery & PackageQuery::filter_release(const std::vector<std::string> & pat
     return *this;
 }
 
-PackageQuery & PackageQuery::filter_repoid(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
+PackageQuery & PackageQuery::filter_repo_id(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
         // Removal of NOT CmpType makes following comparissons easier and effective

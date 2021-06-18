@@ -119,7 +119,7 @@ dnfdaemon::KeyValueMap repo_to_map(
                 uint64_t size = 0;
                 libdnf::rpm::PackageQuery query(base);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                query.filter_repoid(reponames);
+                query.filter_repo_id(reponames);
                 for (auto pkg : query) {
                     size += pkg.get_package_size();
                 }
@@ -146,13 +146,13 @@ dnfdaemon::KeyValueMap repo_to_map(
             case RepoAttribute::pkgs: {
                 libdnf::rpm::PackageQuery query(base, libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                query.filter_repoid(reponames);
+                query.filter_repo_id(reponames);
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::available_pkgs: {
                 libdnf::rpm::PackageQuery query(base);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
-                query.filter_repoid(reponames);
+                query.filter_repo_id(reponames);
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::metalink: {

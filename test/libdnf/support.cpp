@@ -88,7 +88,7 @@ libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, bool ins
 libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, const char * repo) {
     libdnf::rpm::PackageQuery query(*base);
     query.filter_nevra({nevra});
-    query.filter_repoid({repo});
+    query.filter_repo_id({repo});
     return first_query_pkg(query, nevra + " (repo: " + repo + ")");
 }
 
