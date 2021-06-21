@@ -129,9 +129,15 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         TransactionPackageItem item(new_package, TransactionPackageItem::Action::DOWNGRADE, reason);
         item.replace.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
         for (int i = 1; i < obs.size(); ++i) {
-            item.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(obs[i])));
+            rpm::Package obsoleted(sack, rpm::PackageId(obs[i]));
+            auto obs_reson = obsoleted.get_reason();
+            if (obs_reson > reason) {
+                reason = obs_reson;
+            }
+            item.obsoletes.emplace_back(std::move(obsoleted));
             obsoletes[obs[i]].push_back(id);
         }
+        item.set_reason(reason);
         packages.emplace_back(std::move(item));
 
         TransactionPackageItem old_item(
@@ -150,9 +156,15 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         TransactionPackageItem item(new_package, TransactionPackageItem::Action::REINSTALL, reason);
         item.replace.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
         for (int i = 1; i < obs.size(); ++i) {
-            item.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(obs[i])));
+            rpm::Package obsoleted(sack, rpm::PackageId(obs[i]));
+            auto obs_reson = obsoleted.get_reason();
+            if (obs_reson > reason) {
+                reason = obs_reson;
+            }
+            item.obsoletes.emplace_back(std::move(obsoleted));
             obsoletes[obs[i]].push_back(id);
         }
+        item.set_reason(reason);
         packages.emplace_back(std::move(item));
 
         TransactionPackageItem old_item(
@@ -167,9 +179,15 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         TransactionPackageItem item(
             rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REINSTALL, reason);
         for (int i = 0; i < obs.size(); ++i) {
-            item.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(obs[i])));
+            rpm::Package obsoleted(sack, rpm::PackageId(obs[i]));
+            auto obs_reson = obsoleted.get_reason();
+            if (obs_reson > reason) {
+                reason = obs_reson;
+            }
+            item.obsoletes.emplace_back(std::move(obsoleted));
             obsoletes[obs[i]].push_back(id);
         }
+        item.set_reason(reason);
         // TODO(jmracek) Missing a lot of conditions
         packages.emplace_back(std::move(item));
     }
@@ -185,9 +203,15 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         TransactionPackageItem item(new_package, TransactionPackageItem::Action::UPGRADE, reason);
         item.replace.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
         for (int i = 1; i < obs.size(); ++i) {
-            item.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(obs[i])));
+            rpm::Package obsoleted(sack, rpm::PackageId(obs[i]));
+            auto obs_reson = obsoleted.get_reason();
+            if (obs_reson > reason) {
+                reason = obs_reson;
+            }
+            item.obsoletes.emplace_back(std::move(obsoleted));
             obsoletes[obs[i]].push_back(id);
         }
+        item.set_reason(reason);
         packages.emplace_back(std::move(item));
 
         TransactionPackageItem old_item(
