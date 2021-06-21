@@ -64,6 +64,11 @@ class SolvPrivate;
 
 }  // namespace libdnf::rpm::solv
 
+namespace libdnf::base {
+
+class Transaction;
+
+}  // namespace libdnf::base
 
 namespace libdnf::rpm {
 
@@ -209,6 +214,7 @@ private:
     friend libdnf::advisory::AdvisoryPackage;
     friend libdnf::advisory::AdvisoryModule;
     friend libdnf::advisory::AdvisoryReference;
+    friend libdnf::base::Transaction;
     class Impl;
     std::unique_ptr<Impl> p_impl;
     std::map<std::pair<std::string, std::string>, libdnf::transaction::TransactionItemReason> reasons;

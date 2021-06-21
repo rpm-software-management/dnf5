@@ -107,6 +107,7 @@ private:
     friend PackageSetIterator;
     friend PackageQuery;
     friend Transaction;
+    friend class libdnf::base::Transaction;
     friend libdnf::Goal;
     friend libdnf::Swdb;
     PackageSet(const PackageSackWeakPtr & sack, libdnf::solv::SolvMap & solv_map);

@@ -21,6 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_impl.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/rpm/package_query.hpp"
+#include "libdnf/rpm/package_set_impl.hpp"
+#include "libdnf/rpm/solv/package_private.hpp"
 
 
 namespace libdnf::base {
@@ -113,6 +116,12 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         return;
     }
     auto sack = base->get_rpm_package_sack();
+    Pool * pool = sack->p_impl->get_pool();
+
+    rpm::PackageQuery installonly_query(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+    installonly_query.filter_provides(base->get_config().installonlypkgs().get_value());
+    rpm::PackageQuery installed_installonly_query(installonly_query);
+    installed_installonly_query.filter_installed();
 
     // std::map<obsoleted, obsoleted_by>
     std::map<Id, std::vector<Id>> obsoletes;
@@ -176,8 +185,22 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         Id id = list_installs[index];
         auto obs = goal.list_obsoleted_by_package(id);
         auto reason = goal.get_reason(id);
+
         TransactionPackageItem item(
             rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REINSTALL, reason);
+
+        //  Inherit the reason if package is installonly an package with the same name is installed
+        //  Use the same logic like upgrade
+        //  Upgrade of installonly packages result in install or install and remove step
+        if (installonly_query.p_impl->contains(id)) {
+            rpm::PackageQuery query(installed_installonly_query);
+            query.filter_name({rpm::solv::get_name(pool, id)});
+            if (!query.empty()) {
+                rpm::Package & package_item = item;
+                // Use Package implementation of get_reason()
+                reason = package_item.get_reason();
+            }
+        }
         for (int i = 0; i < obs.size(); ++i) {
             rpm::Package obsoleted(sack, rpm::PackageId(obs[i]));
             auto obs_reson = obsoleted.get_reason();
@@ -188,7 +211,6 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
             obsoletes[obs[i]].push_back(id);
         }
         item.set_reason(reason);
-        // TODO(jmracek) Missing a lot of conditions
         packages.emplace_back(std::move(item));
     }
     auto list_upgrades = goal.list_upgrades();
