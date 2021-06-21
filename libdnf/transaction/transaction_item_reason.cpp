@@ -42,12 +42,14 @@ std::string TransactionItemReason_to_string(TransactionItemReason reason) {
     return "";
 }
 
-
+// TransactionItemReason::UNKNOWN will have higher value than TransactionItemReason::DEPENDENCY
+// Important for autoremove to prevent unwanted removal
+// https://bugzilla.redhat.com/show_bug.cgi?id=1921063
 static TransactionItemReason order[] = {
-    TransactionItemReason::UNKNOWN,
     TransactionItemReason::CLEAN,
     TransactionItemReason::WEAK_DEPENDENCY,
     TransactionItemReason::DEPENDENCY,
+    TransactionItemReason::UNKNOWN,
     TransactionItemReason::GROUP,
     TransactionItemReason::USER,
 };

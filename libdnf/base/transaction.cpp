@@ -241,14 +241,33 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         packages.emplace_back(std::move(old_item));
     }
     auto list_removes = goal.list_removes();
-    for (auto index = 0; index < list_removes.size(); ++index) {
-        Id id = list_removes[index];
-        rpm::Package new_package(sack, rpm::PackageId(id));
-        auto reason = goal.get_reason(id);
-        TransactionPackageItem item(
-            rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REMOVE, reason);
-        packages.emplace_back(std::move(item));
-        // TODO(jmracek) Missing a lot of conditions
+    if (!list_removes.empty()) {
+        rpm::PackageQuery remaining_installed(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+        remaining_installed.filter_installed();
+        for (auto index = 0; index < list_removes.size(); ++index) {
+            remaining_installed.p_impl->remove(list_removes[index]);
+        }
+        rpm::PackageSet tmp_set(base->get_rpm_package_sack());
+
+        // https://bugzilla.redhat.com/show_bug.cgi?id=1921063
+        // To keep a reason of installonly pkgs in DB for remove step it requires TSI with reason change
+        for (auto index = 0; index < list_removes.size(); ++index) {
+            Id id = list_removes[index];
+            rpm::Package rm_package(sack, rpm::PackageId(id));
+            tmp_set.add(rm_package);
+            rpm::PackageQuery remaining_na(remaining_installed);
+            remaining_na.filter_name_arch(tmp_set);
+            if (!remaining_na.empty()) {
+                auto keep_reason = (*remaining_na.begin()).get_reason();
+                TransactionPackageItem keep_reason_item(
+                    *remaining_na.begin(), TransactionPackageItem::Action::REASON_CHANGE, keep_reason);
+                packages.emplace_back(std::move(keep_reason_item));
+            }
+            tmp_set.clear();
+            auto reason = goal.get_reason(id);
+            TransactionPackageItem item(rm_package, TransactionPackageItem::Action::REMOVE, reason);
+            packages.emplace_back(std::move(item));
+        }
     }
 
     // Add obsoleted packages
@@ -261,99 +280,6 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         }
     }
 }
-
-
-//     def _goal2transaction(self, goal):
-//         ts = self.history.rpm
-//         all_obsoleted = set(goal.list_obsoleted())
-//         installonly_query = self._get_installonly_query()
-//         installonly_query.apply()
-//         installonly_query_installed = installonly_query.installed().apply()
-//
-//         for pkg in goal.list_downgrades():
-//             obs = goal.obsoleted_by_package(pkg)
-//             downgraded = obs[0]
-//             self._ds_callback.pkg_added(downgraded, 'dd')
-//             self._ds_callback.pkg_added(pkg, 'd')
-//             ts.add_downgrade(pkg, downgraded, obs[1:])
-//         for pkg in goal.list_reinstalls():
-//             self._ds_callback.pkg_added(pkg, 'r')
-//             obs = goal.obsoleted_by_package(pkg)
-//             nevra_pkg = str(pkg)
-//             # reinstall could obsolete multiple packages with the same NEVRA or different NEVRA
-//             # Set the package with the same NEVRA as reinstalled
-//             obsoletes = []
-//             for obs_pkg in obs:
-//                 if str(obs_pkg) == nevra_pkg:
-//                     obsoletes.insert(0, obs_pkg)
-//                 else:
-//                     obsoletes.append(obs_pkg)
-//             reinstalled = obsoletes[0]
-//             ts.add_reinstall(pkg, reinstalled, obsoletes[1:])
-//         for pkg in goal.list_installs():
-//             self._ds_callback.pkg_added(pkg, 'i')
-//             obs = goal.obsoleted_by_package(pkg)
-//             # Skip obsoleted packages that are not part of all_obsoleted,
-//             # they are handled as upgrades/downgrades.
-//             # Also keep RPMs with the same name - they're not always in all_obsoleted.
-//             obs = [i for i in obs if i in all_obsoleted or i.name == pkg.name]
-//
-//             reason = goal.get_reason(pkg)
-//
-//             #  Inherit reason if package is installonly an package with same name is installed
-//             #  Use the same logic like upgrade
-//             #  Upgrade of installonly packages result in install or install and remove step
-//             if pkg in installonly_query and installonly_query_installed.filter(name=pkg.name):
-//                 reason = ts.get_reason(pkg)
-//
-//             # inherit the best reason from obsoleted packages
-//             for obsolete in obs:
-//                 reason_obsolete = ts.get_reason(obsolete)
-//                 if libdnf.transaction.TransactionItemReasonCompare(reason, reason_obsolete) == -1:
-//                     reason = reason_obsolete
-//
-//             ts.add_install(pkg, obs, reason)
-//             cb = lambda pkg: self._ds_callback.pkg_added(pkg, 'od')
-//             dnf.util.mapall(cb, obs)
-//         for pkg in goal.list_upgrades():
-//             obs = goal.obsoleted_by_package(pkg)
-//             upgraded = None
-//             for i in obs:
-//                 # try to find a package with matching name as the upgrade
-//                 if i.name == pkg.name:
-//                     upgraded = i
-//                     break
-//             if upgraded is None:
-//                 # no matching name -> pick the first one
-//                 upgraded = obs.pop(0)
-//             else:
-//                 obs.remove(upgraded)
-//             # Skip obsoleted packages that are not part of all_obsoleted,
-//             # they are handled as upgrades/downgrades.
-//             # Also keep RPMs with the same name - they're not always in all_obsoleted.
-//             obs = [i for i in obs if i in all_obsoleted or i.name == pkg.name]
-//
-//             cb = lambda pkg: self._ds_callback.pkg_added(pkg, 'od')
-//             dnf.util.mapall(cb, obs)
-//             if pkg in installonly_query:
-//                 ts.add_install(pkg, obs)
-//             else:
-//                 ts.add_upgrade(pkg, upgraded, obs)
-//                 self._ds_callback.pkg_added(upgraded, 'ud')
-//             self._ds_callback.pkg_added(pkg, 'u')
-//         erasures = goal.list_erasures()
-//         if erasures:
-//             remaining_installed_query = self.sack.query(flags=hawkey.IGNORE_EXCLUDES).installed()
-//             remaining_installed_query.filterm(pkg__neq=erasures)
-//             for pkg in erasures:
-//                 if remaining_installed_query.filter(name=pkg.name):
-//                     remaining = remaining_installed_query[0]
-//                     ts.get_reason(remaining)
-//                     self.history.set_reason(remaining, ts.get_reason(remaining))
-//                 self._ds_callback.pkg_added(pkg, 'e')
-//                 reason = goal.get_reason(pkg)
-//                 ts.add_erase(pkg, reason)
-//         return ts
 
 
 }  // namespace libdnf::base
