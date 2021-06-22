@@ -32,82 +32,73 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-
 class Base;
-class Goal;
 using BaseWeakPtr = WeakPtr<Base, false>;
-
 
 }  // namespace libdnf
 
 
 namespace libdnf::base {
 
-class Transaction;
-
-class TransactionItem {
+class TransactionPackage {
 public:
     using Action = transaction::TransactionItemAction;
     using Reason = transaction::TransactionItemReason;
     using State = transaction::TransactionItemState;
     using Type = transaction::TransactionItemType;
 
-    TransactionItem(Action action, Reason reason) : action(action), reason(reason) {}
+    /// @return the underlying package.
+    libdnf::rpm::Package get_package() { return package; }
 
-    /// Get action associated with the transaction item in the transaction
-    ///
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
+    /// @return the action being preformed on the transaction package.
+    //
+    // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
     Action get_action() const noexcept { return action; }
 
-    /// Get reason of the action associated with the transaction item in the transaction
-    ///
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
-    Reason get_reason() const noexcept { return reason; }
-
-    /// Set reason of the action associated with the transaction item in the transaction
-    ///
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setReason(libdnf::TransactionItemReason value)
-    void set_reason(Reason value) { reason = value; }
-
-    /// Get transaction item state
-    ///
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getState()
+    /// @return the state of the package in the transaction.
+    //
+    // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getState()
     State get_state() const noexcept { return state; }
 
-private:
-    friend class TransactionPackageItem;
-    void set_state(State value) noexcept { state = value; }
-
-    Action action;
-    Reason reason;
-    State state{State::UNKNOWN};
-};
-
-class TransactionPackageItem : public rpm::Package, public TransactionItem {
-public:
-    /// Get reason of the action associated with the transaction item in the transaction
-    ///
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
+    /// @return the reason of the action being performed on the transaction package.
+    //
+    // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
     Reason get_reason() const noexcept { return reason; }
 
-    /// Get package replaced by transaction item or nullptr when nothing is replaced
-    const rpm::Package * get_replace() const noexcept { return replace.has_value() ? &*replace : nullptr; }
+    /// Set the reason of the action being performed on the transaction package.
+    ///
+    /// @param reason The reason to set.
+    //
+    // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setReason(libdnf::TransactionItemReason value)
+    void set_reason(Reason reason) { this->reason = reason; }
 
-    /// Get obsoleted package by transaction item
+    /// @return the package replaced by this transaction package or nullptr when nothing is replaced.
+    const std::optional<rpm::Package> & get_replaces() const noexcept { return replaces; }
+
+    /// @return packages obsoleted by this transaction package.
     const std::vector<rpm::Package> & get_obsoletes() const noexcept { return obsoletes; }
 
-    /// Get packages that replace the package (Used for packages removed from system - REMOVE, UPGRADED, ...)
+    /// @return packages that replace this transaction package (for transaction
+    /// packages that are leaving the system).
     const std::vector<rpm::Package> & get_replaced_by() const noexcept { return replaced_by; }
 
 private:
     friend class Transaction;
 
-    TransactionPackageItem(libdnf::rpm::Package pkg, Action action, Reason reason)
-        : rpm::Package(pkg),
-          TransactionItem(action, reason) {}
+    TransactionPackage(const libdnf::rpm::Package & pkg, Action action, Reason reason)
+        : package(pkg),
+          action(action),
+          reason(reason) {}
+
+    void set_state(State value) noexcept { state = value; }
+
+    libdnf::rpm::Package package;
+    Action action;
+    Reason reason;
+    State state{State::UNKNOWN};
 
     std::vector<rpm::Package> obsoletes;
-    std::optional<rpm::Package> replace;
+    std::optional<rpm::Package> replaces;
     std::vector<rpm::Package> replaced_by;
 };
 
@@ -116,10 +107,10 @@ public:
     Transaction(const Transaction & transaction);
     ~Transaction();
 
-    /// Return all rpm packages associated with the transaction
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
-    const std::vector<TransactionPackageItem> & get_packages() const noexcept;
+    /// @return all transaction packages belonging to the transaction.
+    //
+    // @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
+    const std::vector<TransactionPackage> & get_packages() const noexcept;
 
     libdnf::GoalProblem get_problems();
 

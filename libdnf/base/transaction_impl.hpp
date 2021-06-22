@@ -52,7 +52,7 @@ private:
     ::Transaction * libsolv_transaction{nullptr};
     libdnf::GoalProblem problems{GoalProblem::NO_PROBLEM};
 
-    std::vector<TransactionPackageItem> packages;
+    std::vector<TransactionPackage> packages;
 };
 
 

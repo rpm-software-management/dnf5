@@ -45,7 +45,7 @@ Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     return *this;
 }
 
-const std::vector<TransactionPackageItem> & Transaction::get_packages() const noexcept {
+const std::vector<TransactionPackage> & Transaction::get_packages() const noexcept {
     return p_impl->packages;
 }
 
@@ -136,23 +136,23 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         }
         rpm::Package new_package(sack, rpm::PackageId(id));
         auto reason = new_package.get_reason();
-        TransactionPackageItem item(new_package, TransactionPackageItem::Action::DOWNGRADE, reason);
-        item.replace.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
+        TransactionPackage tspkg(new_package, TransactionPackage::Action::DOWNGRADE, reason);
+        tspkg.replaces.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
         for (int i = 1; i < obs.size(); ++i) {
             rpm::Package obsoleted(sack, rpm::PackageId(obs[i]));
             auto obs_reson = obsoleted.get_reason();
             if (obs_reson > reason) {
                 reason = obs_reson;
             }
-            item.obsoletes.emplace_back(std::move(obsoleted));
+            tspkg.obsoletes.emplace_back(std::move(obsoleted));
             obsoletes[obs[i]].push_back(id);
         }
-        item.set_reason(reason);
-        packages.emplace_back(std::move(item));
+        tspkg.set_reason(reason);
+        packages.emplace_back(std::move(tspkg));
 
-        TransactionPackageItem old_item(
-            rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackageItem::Action::DOWNGRADED, reason);
-        packages.emplace_back(std::move(old_item));
+        TransactionPackage old_tspkg(
+            rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackage::Action::DOWNGRADED, reason);
+        packages.emplace_back(std::move(old_tspkg));
     }
     auto list_reinstalls = solved_goal.list_reinstalls();
     for (auto index = 0; index < list_reinstalls.size(); ++index) {
@@ -163,23 +163,23 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         }
         rpm::Package new_package(sack, rpm::PackageId(id));
         auto reason = new_package.get_reason();
-        TransactionPackageItem item(new_package, TransactionPackageItem::Action::REINSTALL, reason);
-        item.replace.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
+        TransactionPackage tspkg(new_package, TransactionPackage::Action::REINSTALL, reason);
+        tspkg.replaces.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
         for (int i = 1; i < obs.size(); ++i) {
             rpm::Package obsoleted(sack, rpm::PackageId(obs[i]));
             auto obs_reson = obsoleted.get_reason();
             if (obs_reson > reason) {
                 reason = obs_reson;
             }
-            item.obsoletes.emplace_back(std::move(obsoleted));
+            tspkg.obsoletes.emplace_back(std::move(obsoleted));
             obsoletes[obs[i]].push_back(id);
         }
-        item.set_reason(reason);
-        packages.emplace_back(std::move(item));
+        tspkg.set_reason(reason);
+        packages.emplace_back(std::move(tspkg));
 
-        TransactionPackageItem old_item(
-            rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackageItem::Action::REINSTALLED, reason);
-        packages.emplace_back(std::move(old_item));
+        TransactionPackage old_tspkg(
+            rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackage::Action::REINSTALLED, reason);
+        packages.emplace_back(std::move(old_tspkg));
     }
     auto list_installs = solved_goal.list_installs();
     for (auto index = 0; index < list_installs.size(); ++index) {
@@ -187,8 +187,8 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         auto obs = solved_goal.list_obsoleted_by_package(id);
         auto reason = solved_goal.get_reason(id);
 
-        TransactionPackageItem item(
-            rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REINSTALL, reason);
+        TransactionPackage tspkg(
+            rpm::Package(sack, rpm::PackageId(id)), TransactionPackage::Action::REINSTALL, reason);
 
         //  Inherit the reason if package is installonly an package with the same name is installed
         //  Use the same logic like upgrade
@@ -197,9 +197,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
             rpm::PackageQuery query(installed_installonly_query);
             query.filter_name({rpm::solv::get_name(pool, id)});
             if (!query.empty()) {
-                rpm::Package & package_item = item;
-                // Use Package implementation of get_reason()
-                reason = package_item.get_reason();
+                reason = tspkg.get_package().get_reason();
             }
         }
         for (int i = 0; i < obs.size(); ++i) {
@@ -208,11 +206,11 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
             if (obs_reson > reason) {
                 reason = obs_reson;
             }
-            item.obsoletes.emplace_back(std::move(obsoleted));
+            tspkg.obsoletes.emplace_back(std::move(obsoleted));
             obsoletes[obs[i]].push_back(id);
         }
-        item.set_reason(reason);
-        packages.emplace_back(std::move(item));
+        tspkg.set_reason(reason);
+        packages.emplace_back(std::move(tspkg));
     }
     auto list_upgrades = solved_goal.list_upgrades();
     for (auto index = 0; index < list_upgrades.size(); ++index) {
@@ -223,23 +221,23 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         }
         rpm::Package new_package(sack, rpm::PackageId(id));
         auto reason = new_package.get_reason();
-        TransactionPackageItem item(new_package, TransactionPackageItem::Action::UPGRADE, reason);
-        item.replace.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
+        TransactionPackage tspkg(new_package, TransactionPackage::Action::UPGRADE, reason);
+        tspkg.replaces.emplace(rpm::Package(sack, rpm::PackageId(obs[0])));
         for (int i = 1; i < obs.size(); ++i) {
             rpm::Package obsoleted(sack, rpm::PackageId(obs[i]));
             auto obs_reson = obsoleted.get_reason();
             if (obs_reson > reason) {
                 reason = obs_reson;
             }
-            item.obsoletes.emplace_back(std::move(obsoleted));
+            tspkg.obsoletes.emplace_back(std::move(obsoleted));
             obsoletes[obs[i]].push_back(id);
         }
-        item.set_reason(reason);
-        packages.emplace_back(std::move(item));
+        tspkg.set_reason(reason);
+        packages.emplace_back(std::move(tspkg));
 
-        TransactionPackageItem old_item(
-            rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackageItem::Action::UPGRADED, reason);
-        packages.emplace_back(std::move(old_item));
+        TransactionPackage old_tspkg(
+            rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackage::Action::UPGRADED, reason);
+        packages.emplace_back(std::move(old_tspkg));
     }
     auto list_removes = solved_goal.list_removes();
     if (!list_removes.empty()) {
@@ -260,14 +258,14 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
             remaining_na.filter_name_arch(tmp_set);
             if (!remaining_na.empty()) {
                 auto keep_reason = (*remaining_na.begin()).get_reason();
-                TransactionPackageItem keep_reason_item(
-                    *remaining_na.begin(), TransactionPackageItem::Action::REASON_CHANGE, keep_reason);
-                packages.emplace_back(std::move(keep_reason_item));
+                TransactionPackage keep_reason_tspkg(
+                    *remaining_na.begin(), TransactionPackage::Action::REASON_CHANGE, keep_reason);
+                packages.emplace_back(std::move(keep_reason_tspkg));
             }
             tmp_set.clear();
             auto reason = solved_goal.get_reason(id);
-            TransactionPackageItem item(rm_package, TransactionPackageItem::Action::REMOVE, reason);
-            packages.emplace_back(std::move(item));
+            TransactionPackage tspkg(rm_package, TransactionPackage::Action::REMOVE, reason);
+            packages.emplace_back(std::move(tspkg));
         }
     }
 
@@ -275,7 +273,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     for (const auto & [obsoleted_id, obsoleted_by_ids] : obsoletes) {
         rpm::Package obsoleted(sack, rpm::PackageId(obsoleted_id));
         auto reason = solved_goal.get_reason(obsoleted_id);
-        TransactionPackageItem tsi(obsoleted, TransactionPackageItem::Action::OBSOLETED, reason);
+        TransactionPackage tsi(obsoleted, TransactionPackage::Action::OBSOLETED, reason);
         for (auto id : obsoleted_by_ids) {
             tsi.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(id)));
         }
