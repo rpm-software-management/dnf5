@@ -109,8 +109,9 @@ std::vector<rpm::Package> Transaction::list_rpm_obsoleted() {
     return p_impl->list_results(SOLVER_TRANSACTION_OBSOLETED, 0);
 }
 
-void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
-    auto transaction = goal.get_transaction();
+void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems) {
+    this->problems = problems;
+    auto transaction = solved_goal.get_transaction();
     libsolv_transaction = transaction ? transaction_create_clone(transaction) : nullptr;
     if (!libsolv_transaction) {
         return;
@@ -126,10 +127,10 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
     // std::map<obsoleted, obsoleted_by>
     std::map<Id, std::vector<Id>> obsoletes;
 
-    auto list_downgrades = goal.list_downgrades();
+    auto list_downgrades = solved_goal.list_downgrades();
     for (auto index = 0; index < list_downgrades.size(); ++index) {
         Id id = list_downgrades[index];
-        auto obs = goal.list_obsoleted_by_package(id);
+        auto obs = solved_goal.list_obsoleted_by_package(id);
         if (obs.empty()) {
             throw RuntimeError("No obsoletes for downgrade");
         }
@@ -153,10 +154,10 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
             rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackageItem::Action::DOWNGRADED, reason);
         packages.emplace_back(std::move(old_item));
     }
-    auto list_reinstalls = goal.list_reinstalls();
+    auto list_reinstalls = solved_goal.list_reinstalls();
     for (auto index = 0; index < list_reinstalls.size(); ++index) {
         Id id = list_reinstalls[index];
-        auto obs = goal.list_obsoleted_by_package(id);
+        auto obs = solved_goal.list_obsoleted_by_package(id);
         if (obs.empty()) {
             throw RuntimeError("No obsoletes for reinstall");
         }
@@ -180,11 +181,11 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
             rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackageItem::Action::REINSTALLED, reason);
         packages.emplace_back(std::move(old_item));
     }
-    auto list_installs = goal.list_installs();
+    auto list_installs = solved_goal.list_installs();
     for (auto index = 0; index < list_installs.size(); ++index) {
         Id id = list_installs[index];
-        auto obs = goal.list_obsoleted_by_package(id);
-        auto reason = goal.get_reason(id);
+        auto obs = solved_goal.list_obsoleted_by_package(id);
+        auto reason = solved_goal.get_reason(id);
 
         TransactionPackageItem item(
             rpm::Package(sack, rpm::PackageId(id)), TransactionPackageItem::Action::REINSTALL, reason);
@@ -213,10 +214,10 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
         item.set_reason(reason);
         packages.emplace_back(std::move(item));
     }
-    auto list_upgrades = goal.list_upgrades();
+    auto list_upgrades = solved_goal.list_upgrades();
     for (auto index = 0; index < list_upgrades.size(); ++index) {
         Id id = list_upgrades[index];
-        auto obs = goal.list_obsoleted_by_package(id);
+        auto obs = solved_goal.list_obsoleted_by_package(id);
         if (obs.empty()) {
             throw RuntimeError("No obsoletes for reinstall");
         }
@@ -240,7 +241,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
             rpm::Package(sack, rpm::PackageId(obs[0])), TransactionPackageItem::Action::UPGRADED, reason);
         packages.emplace_back(std::move(old_item));
     }
-    auto list_removes = goal.list_removes();
+    auto list_removes = solved_goal.list_removes();
     if (!list_removes.empty()) {
         rpm::PackageQuery remaining_installed(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
         remaining_installed.filter_installed();
@@ -264,7 +265,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
                 packages.emplace_back(std::move(keep_reason_item));
             }
             tmp_set.clear();
-            auto reason = goal.get_reason(id);
+            auto reason = solved_goal.get_reason(id);
             TransactionPackageItem item(rm_package, TransactionPackageItem::Action::REMOVE, reason);
             packages.emplace_back(std::move(item));
         }
@@ -273,7 +274,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & goal) {
     // Add obsoleted packages
     for (const auto & [obsoleted_id, obsoleted_by_ids] : obsoletes) {
         rpm::Package obsoleted(sack, rpm::PackageId(obsoleted_id));
-        auto reason = goal.get_reason(obsoleted_id);
+        auto reason = solved_goal.get_reason(obsoleted_id);
         TransactionPackageItem tsi(obsoleted, TransactionPackageItem::Action::OBSOLETED, reason);
         for (auto id : obsoleted_by_ids) {
             tsi.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(id)));

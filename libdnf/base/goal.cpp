@@ -1039,7 +1039,7 @@ base::Transaction Goal::resolve(bool allow_erasing) {
     }
     ret |= p_impl->rpm_goal.resolve();
     base::Transaction output(p_impl->base);
-    output.p_impl->set_transaction(p_impl->rpm_goal);
+    output.p_impl->set_transaction(p_impl->rpm_goal, ret);
     return output;
 }
 
