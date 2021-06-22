@@ -80,7 +80,7 @@ private:
 
     Action action;
     Reason reason;
-    State state = State::UNKNOWN;
+    State state{State::UNKNOWN};
 };
 
 class TransactionPackageItem : public rpm::Package, public TransactionItem {

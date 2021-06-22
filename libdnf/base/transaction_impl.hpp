@@ -50,7 +50,7 @@ private:
 
     BaseWeakPtr base;
     ::Transaction * libsolv_transaction{nullptr};
-    libdnf::GoalProblem problems = GoalProblem::NO_PROBLEM;
+    libdnf::GoalProblem problems{GoalProblem::NO_PROBLEM};
 
     std::vector<TransactionPackageItem> packages;
 };
