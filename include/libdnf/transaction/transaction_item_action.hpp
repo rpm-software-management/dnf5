@@ -35,6 +35,7 @@ enum class TransactionItemAction : int {
     INSTALL = 1,        // a new package that was installed on the system
     DOWNGRADE = 2,      // an older package version that replaced previously installed version
     DOWNGRADED = 3,     // an original package version that was replaced
+    // TODO(jmracek) OBSOLETE action is not used in DNF-4 and DNF-5. What about to remove it?
     OBSOLETE = 4,       //
     OBSOLETED = 5,      //
     UPGRADE = 6,        //
