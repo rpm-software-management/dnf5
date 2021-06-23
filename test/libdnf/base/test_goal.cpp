@@ -29,6 +29,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BaseGoalTest);
 
+
+namespace {
+
+using namespace libdnf::transaction;
+
+// make constructor public so we can create Package instances in the tests
+class TransactionPackage : public libdnf::base::TransactionPackage {
+public:
+    TransactionPackage(const libdnf::rpm::Package & pkg, Action action, Reason reason, State state)
+    : libdnf::base::TransactionPackage(pkg, action, reason) {
+        this->state = state;
+    }
+};
+
+}  // namespace
+
+
 void BaseGoalTest::setUp() {
     RepoFixture::setUp();
 }
@@ -39,19 +56,16 @@ void BaseGoalTest::test_install() {
     libdnf::Goal goal(*base);
     goal.add_rpm_install("pkg");
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
-    CPPUNIT_ASSERT_EQUAL(1lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("pkg-0:1.2-3.x86_64"), install_set[0].get_full_nevra());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("pkg-0:1.2-3.x86_64"),
+            TransactionItemAction::INSTALL,
+            TransactionItemReason::USER,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_install_not_available() {
@@ -63,18 +77,8 @@ void BaseGoalTest::test_install_not_available() {
     base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
     goal.add_rpm_install("not_available");
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+
+    CPPUNIT_ASSERT(transaction.get_packages().empty());
 
     auto & log = goal.get_resolve_log();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
@@ -107,25 +111,16 @@ void BaseGoalTest::test_install_from_cmdline() {
 
     // resolve the goal and read results
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    // check if we're getting an expected NEVRA
-    std::vector<std::string> expected = {"one-0:1-1.noarch"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(install_set));
-
-    // also check that the installed package is identical to the command-line package
-    CPPUNIT_ASSERT_EQUAL(cmdline_pkg, install_set[0]);
-
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("one-0:1-1.noarch", "@commandline"),
+            TransactionItemAction::INSTALL,
+            TransactionItemReason::USER,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_install_multilib_all() {
@@ -138,22 +133,22 @@ void BaseGoalTest::test_install_multilib_all() {
 
     // resolve the goal and read results
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    CPPUNIT_ASSERT_EQUAL(2lu, install_set.size());
-    // check if we're getting an expected NEVRA
-    std::vector<std::string> expected = {"multilib-0:1.2-4.i686", "multilib-0:1.2-4.x86_64"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(install_set));
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("multilib-0:1.2-4.i686"),
+            TransactionItemAction::INSTALL,
+            TransactionItemReason::USER,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("multilib-0:1.2-4.x86_64"),
+            TransactionItemAction::INSTALL,
+            TransactionItemReason::USER,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_reinstall() {
@@ -171,21 +166,22 @@ void BaseGoalTest::test_reinstall() {
     goal.add_rpm_reinstall("cmdline");
 
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    // the package is installed already, install_set is empty
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(1lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(reinstall_set[0].get_full_nevra(), std::string("cmdline-0:1.2-3.noarch"));
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch"),
+            TransactionItemAction::REINSTALL,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch", true),
+            TransactionItemAction::REINSTALLED,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_remove() {
@@ -196,19 +192,16 @@ void BaseGoalTest::test_remove() {
     libdnf::Goal goal(*base);
     goal.add_rpm_remove("cmdline");
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(1lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(remove_set[0].get_full_nevra(), std::string("cmdline-0:1.2-3.noarch"));
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch", true),
+            TransactionItemAction::REMOVE,
+            TransactionItemReason::USER,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_remove_not_installed() {
@@ -220,18 +213,8 @@ void BaseGoalTest::test_remove_not_installed() {
     libdnf::Goal goal(*base);
     goal.add_rpm_remove("not_installed");
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+
+    CPPUNIT_ASSERT(transaction.get_packages().empty());
 
     auto & log = goal.get_resolve_log();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
@@ -263,20 +246,8 @@ void BaseGoalTest::test_install_installed_pkg() {
     goal.add_rpm_install(query);
 
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    // the package is installed already, install_set is empty
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    CPPUNIT_ASSERT(transaction.get_packages().empty());
 }
 
 void BaseGoalTest::test_upgrade() {
@@ -295,21 +266,22 @@ void BaseGoalTest::test_upgrade() {
     goal.add_rpm_upgrade("cmdline");
 
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    // the package is installed already, install_set is empty
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(1lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(upgrade_set[0].get_full_nevra(), std::string("cmdline-0:1.2-4.noarch"));
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-4.noarch"),
+            TransactionItemAction::UPGRADE,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch", true),
+            TransactionItemAction::UPGRADED,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_upgrade_not_available() {
@@ -330,20 +302,8 @@ void BaseGoalTest::test_upgrade_not_available() {
     goal.add_rpm_upgrade("not_available");
 
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    // the package is installed already, install_set is empty
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    CPPUNIT_ASSERT(transaction.get_packages().empty());
 
     auto & log = goal.get_resolve_log();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
@@ -370,21 +330,22 @@ void BaseGoalTest::test_upgrade_all() {
     goal.add_rpm_upgrade();
 
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    // the package is installed already, install_set is empty
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(1lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(upgrade_set[0].get_full_nevra(), std::string("cmdline-0:1.2-4.noarch"));
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-4.noarch"),
+            TransactionItemAction::UPGRADE,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch", true),
+            TransactionItemAction::UPGRADED,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_downgrade() {
@@ -401,21 +362,22 @@ void BaseGoalTest::test_downgrade() {
     goal.add_rpm_downgrade("cmdline");
 
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    // the package is installed already, install_set is empty
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(1lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(downgrade_set[0].get_full_nevra(), std::string("cmdline-0:1.2-1.noarch"));
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-1.noarch"),
+            TransactionItemAction::DOWNGRADE,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch", true),
+            TransactionItemAction::DOWNGRADED,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_distrosync() {
@@ -432,21 +394,22 @@ void BaseGoalTest::test_distrosync() {
     goal.add_rpm_distro_sync("cmdline");
 
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    // the package is installed already, install_set is empty
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(1lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(downgrade_set[0].get_full_nevra(), std::string("cmdline-0:1.2-1.noarch"));
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-1.noarch"),
+            TransactionItemAction::DOWNGRADE,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch", true),
+            TransactionItemAction::DOWNGRADED,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_distrosync_all() {
@@ -463,21 +426,22 @@ void BaseGoalTest::test_distrosync_all() {
     goal.add_rpm_distro_sync();
 
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
 
-    // the package is installed already, install_set is empty
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(1lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(downgrade_set[0].get_full_nevra(), std::string("cmdline-0:1.2-1.noarch"));
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-1.noarch"),
+            TransactionItemAction::DOWNGRADE,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch", true),
+            TransactionItemAction::DOWNGRADED,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }
 
 void BaseGoalTest::test_install_or_reinstall() {
@@ -495,17 +459,20 @@ void BaseGoalTest::test_install_or_reinstall() {
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
     goal.add_rpm_install_or_reinstall(query);
     auto transaction = goal.resolve(false);
-    auto install_set = transaction.list_rpm_installs();
-    auto reinstall_set = transaction.list_rpm_reinstalls();
-    auto upgrade_set = transaction.list_rpm_upgrades();
-    auto downgrade_set = transaction.list_rpm_downgrades();
-    auto remove_set = transaction.list_rpm_removes();
-    auto obsoleted_set = transaction.list_rpm_obsoleted();
-    CPPUNIT_ASSERT_EQUAL(0lu, install_set.size());
-    CPPUNIT_ASSERT_EQUAL(1lu, reinstall_set.size());
-    CPPUNIT_ASSERT_EQUAL(reinstall_set[0].get_full_nevra(), std::string("cmdline-0:1.2-3.noarch"));
-    CPPUNIT_ASSERT_EQUAL(0lu, upgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, downgrade_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, remove_set.size());
-    CPPUNIT_ASSERT_EQUAL(0lu, obsoleted_set.size());
+
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch"),
+            TransactionItemAction::REINSTALL,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("cmdline-0:1.2-3.noarch", true),
+            TransactionItemAction::REINSTALLED,
+            TransactionItemReason::UNKNOWN,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
 }

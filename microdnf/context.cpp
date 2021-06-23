@@ -30,6 +30,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <atomic>
 #include <condition_variable>
 #include <filesystem>
+#include <fmt/format.h>
 #include <iostream>
 #include <mutex>
 #include <string>
@@ -309,6 +310,34 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
 //     }
 // }
 
+RpmTransactionItem::RpmTransactionItem(const libdnf::base::TransactionPackage & tspkg)
+    : TransactionItem(tspkg.get_package()) {
+    switch (tspkg.get_action()) {
+        case libdnf::transaction::TransactionItemAction::INSTALL:
+            action = Actions::INSTALL;
+            break;
+        case libdnf::transaction::TransactionItemAction::UPGRADE:
+            action = Actions::UPGRADE;
+            break;
+        case libdnf::transaction::TransactionItemAction::DOWNGRADE:
+            action = Actions::DOWNGRADE;
+            break;
+        case libdnf::transaction::TransactionItemAction::REINSTALL:
+            action = Actions::REINSTALL;
+            break;
+        case libdnf::transaction::TransactionItemAction::REMOVE:
+        case libdnf::transaction::TransactionItemAction::OBSOLETED:
+            action = Actions::ERASE;
+            break;
+        case libdnf::transaction::TransactionItemAction::REINSTALLED:
+        case libdnf::transaction::TransactionItemAction::UPGRADED:
+        case libdnf::transaction::TransactionItemAction::DOWNGRADED:
+        case libdnf::transaction::TransactionItemAction::OBSOLETE:
+        case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+            throw libdnf::LogicError(fmt::format("Unexpected action in RpmTransactionItem: {}", tspkg.get_action()));
+    }
+}
+
 namespace {
 
 class PkgDownloadCB : public libdnf::repo::PackageTargetCB {
@@ -441,18 +470,17 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
 }
 
 void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir) {
-    auto installs_pkgs = transaction.list_rpm_installs();
-    auto reinstalls_pkgs = transaction.list_rpm_reinstalls();
-    auto upgrades_pkgs = transaction.list_rpm_upgrades();
-    auto downgrades_pkgs = transaction.list_rpm_downgrades();
-    auto removes_pkgs = transaction.list_rpm_removes();
-    auto obsoleded_pkgs = transaction.list_rpm_obsoleted();
+    std::vector<libdnf::rpm::Package> downloads;
+    for (auto & tspkg : transaction.get_packages()) {
+        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL || \
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL || \
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE || \
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADE) {
+            downloads.push_back(tspkg.get_package());
+        }
+    }
 
-    std::vector<libdnf::rpm::Package> download_pkgs = installs_pkgs;
-    download_pkgs.insert(download_pkgs.end(), reinstalls_pkgs.begin(), reinstalls_pkgs.end());
-    download_pkgs.insert(download_pkgs.end(), upgrades_pkgs.begin(), upgrades_pkgs.end());
-    download_pkgs.insert(download_pkgs.end(), downgrades_pkgs.begin(), downgrades_pkgs.end());
-    download_packages(download_pkgs, dest_dir);
+    download_packages(downloads, dest_dir);
 }
 
 namespace {
@@ -707,72 +735,6 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx) {
     //transaction->add_runtime_package("microdnf");
 
     return transaction;
-}
-
-static void set_trans_pkg(
-    libdnf::rpm::Package & package,
-    libdnf::transaction::Package & trans_pkg,
-    libdnf::transaction::TransactionItemAction action) {
-    libdnf::rpm::copy_nevra_attributes(package, trans_pkg);
-    trans_pkg.set_repoid(package.get_repo_id());
-    trans_pkg.set_action(action);
-    //TODO(jrohel): set actual reason
-    trans_pkg.set_reason(libdnf::transaction::TransactionItemReason::UNKNOWN);
-}
-
-void fill_transactions(
-    libdnf::base::Transaction & goal,
-    libdnf::transaction::TransactionWeakPtr & transaction,
-    libdnf::rpm::Transaction & rpm_ts,
-    std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items) {
-    for (auto & package : goal.list_rpm_removes()) {
-        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::ERASE);
-        auto item_ptr = item.get();
-        transaction_items.push_back(std::move(item));
-        auto & trans_pkg = transaction->new_package();
-        set_trans_pkg(package, trans_pkg, libdnf::transaction::TransactionItemAction::REMOVE);
-        rpm_ts.erase(*item_ptr);
-    }
-    for (auto & package : goal.list_rpm_obsoleted()) {
-        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::ERASE);
-        auto item_ptr = item.get();
-        transaction_items.push_back(std::move(item));
-        auto & trans_pkg = transaction->new_package();
-        set_trans_pkg(package, trans_pkg, libdnf::transaction::TransactionItemAction::OBSOLETED);
-        rpm_ts.erase(*item_ptr);
-    }
-    for (auto & package : goal.list_rpm_installs()) {
-        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::INSTALL);
-        auto item_ptr = item.get();
-        transaction_items.push_back(std::move(item));
-        auto & trans_pkg = transaction->new_package();
-        set_trans_pkg(package, trans_pkg, libdnf::transaction::TransactionItemAction::INSTALL);
-        rpm_ts.install(*item_ptr);
-    }
-    for (auto & package : goal.list_rpm_reinstalls()) {
-        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::REINSTALL);
-        auto item_ptr = item.get();
-        transaction_items.push_back(std::move(item));
-        auto & trans_pkg = transaction->new_package();
-        set_trans_pkg(package, trans_pkg, libdnf::transaction::TransactionItemAction::REINSTALL);
-        rpm_ts.reinstall(*item_ptr);
-    }
-    for (auto & package : goal.list_rpm_upgrades()) {
-        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::UPGRADE);
-        auto item_ptr = item.get();
-        transaction_items.push_back(std::move(item));
-        auto & trans_pkg = transaction->new_package();
-        set_trans_pkg(package, trans_pkg, libdnf::transaction::TransactionItemAction::UPGRADE);
-        rpm_ts.upgrade(*item_ptr);
-    }
-    for (auto & package : goal.list_rpm_downgrades()) {
-        auto item = std::make_unique<RpmTransactionItem>(package, RpmTransactionItem::Actions::DOWNGRADE);
-        auto item_ptr = item.get();
-        transaction_items.push_back(std::move(item));
-        auto & trans_pkg = transaction->new_package();
-        set_trans_pkg(package, trans_pkg, libdnf::transaction::TransactionItemAction::DOWNGRADE);
-        rpm_ts.downgrade(*item_ptr);
-    }
 }
 
 }  // namespace microdnf

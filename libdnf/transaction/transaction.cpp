@@ -166,4 +166,16 @@ Package & Transaction::new_package() {
 }
 
 
+void Transaction::fill_transaction_packages(
+    const std::vector<libdnf::base::TransactionPackage> & transaction_packages) {
+    for (auto & tspkg : transaction_packages) {
+        auto & new_pkg = new_package();
+        libdnf::rpm::copy_nevra_attributes(tspkg.get_package(), new_pkg);
+        new_pkg.set_repoid(tspkg.get_package().get_repo_id());
+        new_pkg.set_action(tspkg.get_action());
+        new_pkg.set_reason(tspkg.get_reason());
+    }
+}
+
+
 }  // namespace libdnf::transaction

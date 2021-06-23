@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_TRANSACTION_HPP
 #define LIBDNF_RPM_TRANSACTION_HPP
 
+#include "libdnf/base/transaction_package.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/rpm/package.hpp"
@@ -273,6 +274,53 @@ public:
     /// Add package to be erased to transaction set.
     /// @param item  item to be erased
     void erase(TransactionItem & item);
+
+    /// Fill the RPM transaction from transaction packages.
+    /// @param transcation_packages The transaction packages to add.
+    /// @param rpm_transcation_items_out A vector of RPM transaction items of type T which will be filled up.
+    ///                                  TODO(lukash) temporary, needs more code moving around to simplify.
+    template<typename T>
+    void fill_transaction(
+        const std::vector<libdnf::base::TransactionPackage> & transaction_packages,
+        std::vector<std::unique_ptr<T>> & rpm_transaction_items_out) {
+        for (auto & tspkg : transaction_packages) {
+            // The rpm_transaction_items_out argument is a reference to a
+            // vector in which to store the new transaction items that are
+            // being created. They are stored in unique_ptrs so that we can
+            // then pull the raw pointers from them and pass these to RPM. RPM
+            // stores the pointers and passes them into the transaction
+            // callbacks. The lambda therefore creates a new unique_ptr, stores
+            // it into the output vector, and returns the raw pointer, which is
+            // then passed to RPM.
+            auto fiddle_the_ptr = [&rpm_transaction_items_out](const libdnf::base::TransactionPackage & tspkg) {
+                auto item = std::make_unique<T>(tspkg);
+                auto item_ptr = item.get();
+                rpm_transaction_items_out.push_back(std::move(item));
+                return item_ptr;
+            };
+
+            switch (tspkg.get_action()) {
+                case libdnf::transaction::TransactionItemAction::INSTALL:
+                    install(*fiddle_the_ptr(tspkg));
+                    break;
+                case libdnf::transaction::TransactionItemAction::REINSTALL:
+                    reinstall(*fiddle_the_ptr(tspkg));
+                    break;
+                case libdnf::transaction::TransactionItemAction::UPGRADE:
+                    upgrade(*fiddle_the_ptr(tspkg));
+                    break;
+                case libdnf::transaction::TransactionItemAction::DOWNGRADE:
+                    downgrade(*fiddle_the_ptr(tspkg));
+                    break;
+                case libdnf::transaction::TransactionItemAction::REMOVE:
+                case libdnf::transaction::TransactionItemAction::OBSOLETED:
+                    erase(*fiddle_the_ptr(tspkg));
+                    break;
+                default:
+                    ; // TODO(lukash) handle the other cases
+            }
+        }
+    }
 
     /// Perform a dependency check on the transaction set.
     /// After headers have been added to a transaction set,

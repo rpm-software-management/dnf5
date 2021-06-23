@@ -45,7 +45,7 @@ class DowngradeTest(support.InstallrootCase):
             resolved,
             dbus.Array([
                 dbus.Struct((
-                    dbus.UInt32(2),   # action
+                    dbus.UInt32(2),   # action downgrade
                     dbus.Dictionary({ # package
                         dbus.String('evr'): dbus.String('1-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
@@ -56,6 +56,20 @@ class DowngradeTest(support.InstallrootCase):
                         dbus.String('package_size'): dbus.UInt64(6030, variant_level=1),
                         dbus.String('install_size'): dbus.UInt64(0, variant_level=1),
                         dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1),
+                        }, signature=dbus.Signature('sv'))),
+                    signature=None),
+                dbus.Struct((
+                    dbus.UInt32(3),   # action downgraded
+                    dbus.Dictionary({ # package
+                        dbus.String('evr'): dbus.String('2-1', variant_level=1),
+                        dbus.String('name'): dbus.String('one', variant_level=1),
+                        dbus.String('epoch'): dbus.String('0', variant_level=1),
+                        dbus.String('version'): dbus.String('2', variant_level=1),
+                        dbus.String('release'): dbus.String('1', variant_level=1),
+                        dbus.String('arch'): dbus.String('noarch', variant_level=1),
+                        dbus.String('package_size'): dbus.UInt64(0, variant_level=1),
+                        dbus.String('install_size'): dbus.UInt64(0, variant_level=1),
+                        dbus.String('repo'): dbus.String('@System', variant_level=1),
                         }, signature=dbus.Signature('sv'))),
                     signature=None)
                 ], signature=dbus.Signature('(ua{sv})'))

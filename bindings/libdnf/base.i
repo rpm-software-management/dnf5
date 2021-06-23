@@ -21,6 +21,7 @@
     #include "libdnf/logger/memory_buffer_logger.hpp"
     #include "libdnf/base/base.hpp"
     #include "libdnf/base/transaction.hpp"
+    #include "libdnf/base/transaction_package.hpp"
     #include "libdnf/base/goal.hpp"
 %}
 
@@ -32,4 +33,5 @@
 
 %include "libdnf/base/base.hpp"
 %include "libdnf/base/transaction.hpp"
+%include "libdnf/base/transaction_package.hpp"
 %include "libdnf/base/goal.hpp"

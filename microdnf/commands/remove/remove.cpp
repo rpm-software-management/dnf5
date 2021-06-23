@@ -94,10 +94,11 @@ void CmdRemove::run(Context & ctx) {
     }
 
     libdnf::rpm::Transaction rpm_transaction(ctx.base);
-    auto db_transaction = new_db_transaction(ctx);
     std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
+    rpm_transaction.fill_transaction<RpmTransactionItem>(transaction.get_packages(), transaction_items);
 
-    fill_transactions(transaction, db_transaction, rpm_transaction, transaction_items);
+    auto db_transaction = new_db_transaction(ctx);
+    db_transaction->fill_transaction_packages(transaction.get_packages());
 
     auto time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());

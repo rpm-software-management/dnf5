@@ -26,6 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "comps_group.hpp"
 #include "rpm_package.hpp"
 
+#include "libdnf/base/transaction_package.hpp"
+
 #include <memory>
 #include <set>
 #include <string>
@@ -235,6 +237,9 @@ public:
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
     Package & new_package();
+
+    /// Fill the transaction packages.
+    void fill_transaction_packages(const std::vector<libdnf::base::TransactionPackage> & transaction_packages);
 
 protected:
     friend Transformer;

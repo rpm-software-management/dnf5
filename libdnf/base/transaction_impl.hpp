@@ -41,8 +41,6 @@ public:
 
     Impl & operator=(const Impl & other);
 
-    std::vector<rpm::Package> list_results(Id type_filter1, Id type_filter2);
-
     void set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems);
 
 private:

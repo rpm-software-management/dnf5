@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2017-2020 Red Hat, Inc.
+Copyright (C) 2021 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -18,27 +18,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
-#define LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
-
-
-#include <string>
+#include "libdnf/transaction/transaction_item_state.hpp"
 
 
 namespace libdnf::transaction {
 
 
-enum class TransactionItemState : int {
-    UNKNOWN = 0,  // default state, must be changed before save
-    DONE = 1,
-    ERROR = 2
-};
-
-
-std::string TransactionItemState_to_string(TransactionItemState state);
+std::string TransactionItemState_to_string(TransactionItemState state) {
+    switch (state) {
+        case TransactionItemState::UNKNOWN:
+            return "unknown";
+        case TransactionItemState::DONE:
+            return "done";
+        case TransactionItemState::ERROR:
+            return "error";
+    }
+    return "";
+}
 
 
 }  // namespace libdnf::transaction
-
-
-#endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP

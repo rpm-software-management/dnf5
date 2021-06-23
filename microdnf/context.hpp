@@ -24,6 +24,7 @@ along with microdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf-cli/argument_parser.hpp>
 #include <libdnf/base/base.hpp>
+#include <libdnf/base/transaction.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <libdnf/utils/span.hpp>
 
@@ -77,7 +78,7 @@ class RpmTransactionItem : public libdnf::rpm::TransactionItem {
 public:
     enum class Actions { INSTALL, ERASE, UPGRADE, DOWNGRADE, REINSTALL };
 
-    RpmTransactionItem(libdnf::rpm::Package pkg, Actions action) : TransactionItem(pkg), action(action) {}
+    RpmTransactionItem(const libdnf::base::TransactionPackage & tspkg);
     Actions get_action() const noexcept { return action; }
 
 private:
@@ -96,13 +97,6 @@ void run_transaction(libdnf::rpm::Transaction & transaction);
 /// Creates, initializes and returns new database transaction.
 libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx);
 
-/// Fills transactions by packages from goal.
-// TODO(jrohel): Temporary code. Will be rewritten (depends on software database code) and moved to libdnf::cli later.
-void fill_transactions(
-    libdnf::base::Transaction & goal,
-    libdnf::transaction::TransactionWeakPtr & transaction,
-    libdnf::rpm::Transaction & rpm_ts,
-    std::vector<std::unique_ptr<RpmTransactionItem>> & transaction_items);
 
 }  // namespace microdnf
 

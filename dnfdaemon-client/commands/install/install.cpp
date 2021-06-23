@@ -30,8 +30,6 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <memory>
 
-#include "libdnf-cli/output/transaction_table.hpp"
-
 namespace dnfdaemon::client {
 
 void CmdInstall::set_argument_parser(Context & ctx) {

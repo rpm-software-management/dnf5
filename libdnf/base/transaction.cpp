@@ -45,68 +45,12 @@ Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     return *this;
 }
 
-const std::vector<TransactionPackage> & Transaction::get_packages() const noexcept {
-    return p_impl->packages;
-}
-
 GoalProblem Transaction::get_problems() {
     return p_impl->problems;
 }
 
-std::vector<rpm::Package> Transaction::Impl::list_results(Id type_filter1, Id type_filter2) {
-    /* no transaction */
-    if (!libsolv_transaction) {
-        throw std::runtime_error("no solution possible");
-    }
-
-    auto sack = base->get_rpm_package_sack();
-
-    std::vector<rpm::Package> result;
-    const int common_mode = SOLVER_TRANSACTION_SHOW_OBSOLETES | SOLVER_TRANSACTION_CHANGE_IS_REINSTALL;
-
-    for (int i = 0; i < libsolv_transaction->steps.count; ++i) {
-        Id p = libsolv_transaction->steps.elements[i];
-        Id type;
-
-        switch (type_filter1) {
-            case SOLVER_TRANSACTION_OBSOLETED:
-                type = transaction_type(libsolv_transaction, p, common_mode);
-                break;
-            default:
-                type = transaction_type(
-                    libsolv_transaction, p, common_mode | SOLVER_TRANSACTION_SHOW_ACTIVE | SOLVER_TRANSACTION_SHOW_ALL);
-                break;
-        }
-
-        if (type == type_filter1 || (type_filter2 && type == type_filter2)) {
-            result.emplace_back(rpm::Package(sack, rpm::PackageId(p)));
-        }
-    }
-    return result;
-}
-
-std::vector<rpm::Package> Transaction::list_rpm_installs() {
-    return p_impl->list_results(SOLVER_TRANSACTION_INSTALL, SOLVER_TRANSACTION_OBSOLETES);
-}
-
-std::vector<rpm::Package> Transaction::list_rpm_reinstalls() {
-    return p_impl->list_results(SOLVER_TRANSACTION_REINSTALL, 0);
-}
-
-std::vector<rpm::Package> Transaction::list_rpm_upgrades() {
-    return p_impl->list_results(SOLVER_TRANSACTION_UPGRADE, 0);
-}
-
-std::vector<rpm::Package> Transaction::list_rpm_downgrades() {
-    return p_impl->list_results(SOLVER_TRANSACTION_DOWNGRADE, 0);
-}
-
-std::vector<rpm::Package> Transaction::list_rpm_removes() {
-    return p_impl->list_results(SOLVER_TRANSACTION_ERASE, 0);
-}
-
-std::vector<rpm::Package> Transaction::list_rpm_obsoleted() {
-    return p_impl->list_results(SOLVER_TRANSACTION_OBSOLETED, 0);
+std::vector<TransactionPackage> Transaction::get_packages() {
+    return p_impl->packages;
 }
 
 void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems) {
@@ -188,7 +132,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         auto reason = solved_goal.get_reason(id);
 
         TransactionPackage tspkg(
-            rpm::Package(sack, rpm::PackageId(id)), TransactionPackage::Action::REINSTALL, reason);
+            rpm::Package(sack, rpm::PackageId(id)), TransactionPackage::Action::INSTALL, reason);
 
         //  Inherit the reason if package is installonly an package with the same name is installed
         //  Use the same logic like upgrade

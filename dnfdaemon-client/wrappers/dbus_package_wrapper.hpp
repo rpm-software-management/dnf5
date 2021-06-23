@@ -21,11 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNFDAEMON_CLIENT_WRAPPER_DBUS_PACKAGE_WRAPPER_HPP
 
 #include <dnfdaemon-server/dbus.hpp>
-#include <libdnf/transaction/transaction_item_action.hpp>
 
 #include <vector>
 
-using namespace libdnf::transaction;
 
 namespace dnfdaemon::client {
 
