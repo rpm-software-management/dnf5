@@ -40,7 +40,7 @@ class InstallTest(support.InstallrootCase):
                     dbus.Dictionary({ # package
                         dbus.String('arch'): dbus.String('noarch', variant_level=1),
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
-                        dbus.String('full_nevra'): dbus.String('one-0:2-1.noarch', variant_level=1),
+                        dbus.String('evr'): dbus.String('2-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
                         dbus.String('package_size'): dbus.UInt64(6030, variant_level=1),
                         dbus.String('install_size'): dbus.UInt64(0, variant_level=1),

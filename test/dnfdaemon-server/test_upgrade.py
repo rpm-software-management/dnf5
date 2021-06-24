@@ -47,7 +47,7 @@ class UpgradeTest(support.InstallrootCase):
                 dbus.Struct((
                     dbus.UInt32(6),   # action
                     dbus.Dictionary({ # package
-                        dbus.String('full_nevra'): dbus.String('one-0:2-1.noarch', variant_level=1),
+                        dbus.String('evr'): dbus.String('2-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
                         dbus.String('version'): dbus.String('2', variant_level=1),

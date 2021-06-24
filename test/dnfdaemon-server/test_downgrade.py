@@ -47,7 +47,7 @@ class DowngradeTest(support.InstallrootCase):
                 dbus.Struct((
                     dbus.UInt32(2),   # action
                     dbus.Dictionary({ # package
-                        dbus.String('full_nevra'): dbus.String('one-0:1-1.noarch', variant_level=1),
+                        dbus.String('evr'): dbus.String('1-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
                         dbus.String('version'): dbus.String('1', variant_level=1),
