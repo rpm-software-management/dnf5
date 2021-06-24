@@ -94,6 +94,21 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     allow_erasing->link_value(&ctx.allow_erasing);
     dnfdaemon_client->register_named_arg(allow_erasing);
 
+    auto installroot = ctx.arg_parser.add_new_named_arg("installroot");
+    installroot->set_long_name("installroot");
+    installroot->set_has_value(true);
+    installroot->set_arg_value_help("absolute path");
+    installroot->set_short_description("set install root");
+    installroot->link_value(&ctx.installroot);
+    dnfdaemon_client->register_named_arg(installroot);
+
+    auto releasever = ctx.arg_parser.add_new_named_arg("releasever");
+    releasever->set_long_name("releasever");
+    releasever->set_has_value(true);
+    releasever->set_short_description("override the $releasever variable value");
+    releasever->link_value(&ctx.releasever);
+    dnfdaemon_client->register_named_arg(releasever);
+
     auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);

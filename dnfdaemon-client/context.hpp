@@ -63,7 +63,6 @@ public:
     /// Select command to execute
     void select_command(Command * cmd) { selected_command = cmd; }
 
-    std::vector<std::pair<std::string, std::string>> setopts;
     std::vector<std::unique_ptr<Command>> commands;
     Command * selected_command{nullptr};
     libdnf::cli::ArgumentParser arg_parser;
@@ -71,10 +70,13 @@ public:
     std::unique_ptr<sdbus::IProxy> session_proxy;
 
     // global command line arguments
+    std::vector<std::pair<std::string, std::string>> setopts;
     libdnf::OptionBool verbose{false};
     libdnf::OptionBool assume_yes{false};
     libdnf::OptionBool assume_no{false};
     libdnf::OptionBool allow_erasing{false};
+    libdnf::OptionString installroot{"/"};
+    libdnf::OptionString releasever{""};
 
 private:
     /// system d-bus connection

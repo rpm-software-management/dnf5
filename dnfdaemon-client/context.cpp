@@ -20,10 +20,12 @@ along with dnfdaemon-client.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
+#include <dnfdaemon-server/utils.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <iostream>
+#include <filesystem>
 #include <string>
 
 namespace dnfdaemon::client {
@@ -33,6 +35,22 @@ void Context::init_session() {
     auto cfg = selected_command->session_config(*this);
     auto session_manager_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, dnfdaemon::DBUS_OBJECT_PATH);
     session_manager_proxy->finishRegistration();
+
+    // set up the install root end setopts
+    std::map<std::string, std::string> empty_options{};
+    auto config = key_value_map_get<std::map<std::string, std::string>>(cfg, "config", empty_options);
+    std::filesystem::path ir{installroot.get_value()};
+    config["installroot"] = ir.string();
+    config["cachedir"] = (ir / "var/cache/dnf").string();
+    for (auto & opt: setopts) {
+        config[opt.first] = opt.second;
+    }
+    cfg["config"] = config;
+
+    if (!releasever.get_value().empty()) {
+        cfg["releasever"] = releasever.get_value();
+    }
+
     session_manager_proxy->callMethod("open_session")
         .onInterface(dnfdaemon::INTERFACE_SESSION_MANAGER)
         .withArguments(cfg)
