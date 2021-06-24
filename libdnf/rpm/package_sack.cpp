@@ -478,6 +478,32 @@ bool PackageSack::Impl::load_system_repo() {
     return true;
 }
 
+bool PackageSack::Impl::load_extra_system_repo(const std::string & rootdir) {
+    auto & logger = *base->get_logger();
+    auto & libsolv_repo_ext = system_repo->p_impl.get()->libsolv_repo_ext;
+    LibsolvRepo * libsolv_repo = libsolv_repo_ext.repo;
+
+    logger.debug("load_extra_system_repo(): fetching rpmdb");
+    pool_set_rootdir(pool, rootdir.c_str());
+    int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
+    int rc = repo_add_rpmdb(libsolv_repo, nullptr, flagsrpm);
+    //reset rootdir to main one
+    pool_set_rootdir(pool, base->get_config().installroot().get_value().c_str());
+    if (rc != 0) {
+        logger.warning(fmt::format(_("load_extra_system_repo(): failed loading RPMDB: {}"), pool_errstr(pool)));
+        return false;
+    }
+
+    libsolv_repo_ext.main_nsolvables = libsolv_repo_ext.repo->nsolvables;
+    libsolv_repo_ext.main_nrepodata = libsolv_repo_ext.repo->nrepodata;
+    libsolv_repo_ext.main_end = libsolv_repo_ext.repo->end;
+
+    provides_ready = false;
+    considered_uptodate = false;
+
+    return true;
+}
+
 void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags flags) {
     auto & logger = *base->get_logger();
     auto repo_impl = repo.p_impl.get();
@@ -576,6 +602,13 @@ void PackageSack::create_system_repo(bool build_cache) {
     p_impl->system_repo = std::make_unique<repo::Repo>(SYSTEM_REPO_NAME, *p_impl->base, repo::Repo::Type::SYSTEM);
     p_impl->system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
     p_impl->load_system_repo();
+}
+
+void PackageSack::append_extra_system_repo(const std::string & rootdir) {
+    if (!p_impl->system_repo) {
+        throw LogicError("PackageSack::append_extra_system_repo(): System repo does not exist");
+    }
+    p_impl->load_extra_system_repo(rootdir);
 }
 
 repo::Repo & PackageSack::Impl::get_cmdline_repo() {

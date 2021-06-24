@@ -122,6 +122,9 @@ public:
     /// Creates system repository and loads it into PackageSack. Only one system repository can be in PackageSack.
     void create_system_repo(bool build_cache = false);
 
+    /// Append a rpm database into system repository
+    void append_extra_system_repo(const std::string & rootdir);
+
     /// Adds the given .rpm file to the command line repo.
     /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
     /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
