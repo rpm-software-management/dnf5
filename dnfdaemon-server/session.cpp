@@ -63,19 +63,26 @@ Session::Session(
       session_configuration(session_configuration),
       object_path(object_path),
       sender(sender) {
-    // adjust base.config from session_configuration
+    // set-up log router for base
+    auto & logger = *base->get_logger();
+    logger.add_logger(std::make_unique<StderrLogger>());
+
     auto & config = base->get_config();
-    std::vector<std::string> config_items{"config_file_path", "installroot", "cachedir", "reposdir", "varsdir"};
-    for (auto & key : config_items) {
-        if (session_configuration.find(key) != session_configuration.end()) {
-            auto value = session_configuration_value<std::string>(key);
-            config.opt_binds().at(key).new_string(libdnf::Option::Priority::RUNTIME, value);
+
+    // adjust base.config from session_configuration config overrides
+    std::map<std::string, std::string> default_overrides{};
+    auto conf_overrides = session_configuration_value<std::map<std::string, std::string>>("config", default_overrides);
+    auto opt_binds = config.opt_binds();
+    for (auto & opt : conf_overrides) {
+        auto key = opt.first;
+        auto value = opt.second;
+        auto bind = opt_binds.find(key);
+        if (bind != opt_binds.end()) {
+            bind->second.new_string(libdnf::Option::Priority::RUNTIME, value);
+        } else {
+            logger.warning(fmt::format("Unknown config option: {}", key));
         }
     }
-
-    // set-up log router for base
-    auto & log_router = *base->get_logger();
-    log_router.add_logger(std::make_unique<StderrLogger>());
 
     // load configuration
     base->load_config_from_file();

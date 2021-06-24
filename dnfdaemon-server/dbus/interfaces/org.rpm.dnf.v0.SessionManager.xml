@@ -48,33 +48,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
             </para></listitem>
           </varlistentry>
           <varlistentry>
-            <term>config_file_path: path</term>
+            <term>config: map {string: string}</term>
             <listitem><para>
-                Override path to main configuration file (/etc/dnf/dnf.conf)
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>installroot: path</term>
-            <listitem><para>
-                Set the install root.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>cachedir: path</term>
-            <listitem><para>
-                Override location of the cache.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>reposdir: path</term>
-            <listitem><para>
-                Override location of repository configuration files (/etc/yum.repos.d/)
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>varsdir: string</term>
-            <listitem><para>
-                Override location of variables definition files (/etc/dnf/vars/)
+                Override configuration options.
             </para></listitem>
           </varlistentry>
           <varlistentry>
