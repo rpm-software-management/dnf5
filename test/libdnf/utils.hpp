@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_set.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
+#include <fmt/format.h>
 
 #include <iterator>
 #include <vector>
@@ -89,5 +90,26 @@ std::vector<std::string> to_vector_string(const std::vector<libdnf::rpm::Package
 
 /// Convert AdvisoryQuery to a vector of strings of their names for easy assertions.
 std::vector<std::string> to_vector_name_string(const libdnf::advisory::AdvisoryQuery & advisory_query);
+
+
+inline std::string pkg_info(const libdnf::rpm::Package & pkg) {
+    return fmt::format(
+        "{} (id: {} repo: {} {})",
+        pkg.get_full_nevra(),
+        pkg.get_id().id,
+        pkg.get_repo_id(),
+        pkg.is_installed() ? "installed" : "available");
+}
+
+template<class T>
+std::string list_pkg_infos(const T & pkgs) {
+    std::string result;
+
+    for (const auto & pkg : pkgs) {
+        result += "\n    " + pkg_info(pkg);
+    }
+
+    return result;
+}
 
 #endif  // TEST_LIBDNF_UTILS_HPP

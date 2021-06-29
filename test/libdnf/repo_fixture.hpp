@@ -41,12 +41,19 @@ protected:
     void add_repo_rpm(const std::string & repoid);
     void add_repo_solv(const std::string & repoid);
 
-    libdnf::rpm::Package get_pkg(const std::string & nevra);
+    libdnf::rpm::Package get_pkg(const std::string & nevra, bool installed = false);
+    libdnf::rpm::Package get_pkg(const std::string & nevra, const char * repo);
+    libdnf::rpm::Package get_pkg(const std::string & nevra, const std::string & repo) {
+        return get_pkg(nevra, repo.c_str());
+    }
 
     std::unique_ptr<libdnf::Base> base;
     libdnf::repo::RepoSackWeakPtr repo_sack;
     libdnf::rpm::PackageSackWeakPtr sack;
     std::unique_ptr<libdnf::utils::TempDir> temp;
+
+private:
+    libdnf::rpm::Package first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what);
 };
 
 

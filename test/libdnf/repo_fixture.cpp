@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/package_query.hpp"
 
+#include "utils.hpp"
+
 #include <filesystem>
 #include <map>
 
@@ -80,11 +82,34 @@ void RepoFixture::add_repo_solv(const std::string & repoid) {
 }
 
 
-libdnf::rpm::Package RepoFixture::get_pkg(const std::string & nevra) {
+libdnf::rpm::Package RepoFixture::get_pkg(const std::string & nevra, bool installed) {
     libdnf::rpm::PackageQuery query(*base);
     query.filter_nevra({nevra});
-    CPPUNIT_ASSERT_EQUAL_MESSAGE(
-        "get_pkg(\"" + nevra + "\"): no package or more than one package found.", 1lu, query.size());
+    if (installed) {
+        query.filter_installed();
+    } else {
+        query.filter_available();
+    }
+    return first_query_pkg(query, nevra + " (" + (installed ? "installed" : "available") + ")");
+}
+
+
+libdnf::rpm::Package RepoFixture::get_pkg(const std::string & nevra, const char * repo) {
+    libdnf::rpm::PackageQuery query(*base);
+    query.filter_nevra({nevra});
+    query.filter_repoid({repo});
+    return first_query_pkg(query, nevra + " (repo: " + repo + ")");
+}
+
+
+libdnf::rpm::Package RepoFixture::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
+    if (query.empty()) {
+        CPPUNIT_FAIL("No package \"" + what + "\" found. All sack packages:" + \
+            list_pkg_infos(libdnf::rpm::PackageQuery(*base)));
+    } else if (query.size() > 1) {
+        CPPUNIT_FAIL("More than one package matching \"" + what + "\" found:" + list_pkg_infos(query));
+    }
+
     return *query.begin();
 }
 
