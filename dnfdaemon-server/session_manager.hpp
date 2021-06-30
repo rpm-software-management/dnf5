@@ -35,6 +35,8 @@ public:
     SessionManager(sdbus::IConnection & connection, const std::string & object_path);
     ~SessionManager();
 
+    ThreadsManager & get_threads_manager() { return threads_manager; };
+
 private:
     std::string object_path;
     sdbus::IConnection & connection;
@@ -47,8 +49,8 @@ private:
     std::map<std::string, std::map<std::string, std::unique_ptr<Session>>> sessions;
 
     void dbus_register();
-    void open_session(sdbus::MethodCall call);
-    void close_session(sdbus::MethodCall call);
+    sdbus::MethodReply open_session(sdbus::MethodCall && call);
+    sdbus::MethodReply close_session(sdbus::MethodCall && call);
     void on_name_owner_changed(sdbus::Signal & signal);
 };
 

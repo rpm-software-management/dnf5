@@ -31,8 +31,8 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include <thread>
 
 SessionManager::SessionManager(sdbus::IConnection & connection, const std::string & object_path)
-    : object_path(object_path)
-    , connection(connection) {
+    : object_path(object_path),
+      connection(connection) {
     dbus_register();
 }
 
@@ -45,11 +45,11 @@ void SessionManager::dbus_register() {
     dbus_object = sdbus::createObject(connection, object_path);
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_SESSION_MANAGER, "open_session", "a{sv}", "o", [this](sdbus::MethodCall call) -> void {
-            this->open_session(std::move(call));
+            threads_manager.run_in_thread(*this, &SessionManager::open_session, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_SESSION_MANAGER, "close_session", "o", "b", [this](sdbus::MethodCall call) -> void {
-            this->close_session(std::move(call));
+            threads_manager.run_in_thread(*this, &SessionManager::close_session, std::move(call));
         });
     dbus_object->finishRegistration();
 
@@ -82,7 +82,7 @@ void SessionManager::on_name_owner_changed(sdbus::Signal & signal) {
     std::string new_owner;
     signal >> name >> old_owner >> new_owner;
     if (new_owner.empty() && sessions.count(old_owner) > 0) {
-        auto worker = std::thread([this, old_owner=std::move(old_owner)]() {
+        auto worker = std::thread([this, old_owner = std::move(old_owner)]() {
             std::map<std::string, std::map<std::string, std::unique_ptr<Session>>> to_be_erased;
             {
                 std::lock_guard<std::mutex> lock(sessions_mutex);
@@ -97,51 +97,43 @@ void SessionManager::on_name_owner_changed(sdbus::Signal & signal) {
     }
 }
 
-void SessionManager::open_session(sdbus::MethodCall call) {
+sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall && call) {
     auto sender = call.getSender();
     dnfdaemon::KeyValueMap configuration;
     call >> configuration;
 
-    auto worker = std::thread([this,sender=std::move(sender),configuration=std::move(configuration),call=std::move(call)]() {
-        // generate UUID-like session id
-        const std::string sessionid = object_path + "/" + gen_session_id();
-        // store newly created session
-        {
-            std::lock_guard<std::mutex> lock(sessions_mutex);
-            sessions[std::move(sender)].emplace(
-                sessionid, std::make_unique<Session>(connection, std::move(configuration), sessionid, sender));
-        }
+    // generate UUID-like session id
+    const std::string sessionid = object_path + "/" + gen_session_id();
+    // store newly created session
+    {
+        std::lock_guard<std::mutex> lock(sessions_mutex);
+        sessions[std::move(sender)].emplace(
+            sessionid, std::make_unique<Session>(connection, std::move(configuration), sessionid, sender));
+    }
 
-        auto reply = call.createReply();
-        reply << sdbus::ObjectPath{sessionid};
-        reply.send();
-        threads_manager.current_thread_finished();
-    });
-    threads_manager.register_thread(std::move(worker));
+    auto reply = call.createReply();
+    reply << sdbus::ObjectPath{sessionid};
+    return reply;
 }
 
 
-void SessionManager::close_session(sdbus::MethodCall call) {
+sdbus::MethodReply SessionManager::close_session(sdbus::MethodCall && call) {
     auto sender = call.getSender();
     sdbus::ObjectPath session_id;
     call >> session_id;
 
-    auto worker = std::thread([this,sender=std::move(sender),session_id=std::move(session_id),call=std::move(call)]() {
-        bool retval = false;
-        // find sessions created by the same sender
-        auto sender_it = sessions.find(sender);
-        if (sender_it != sessions.end()) {
-            std::lock_guard<std::mutex> lock(sessions_mutex);
-            // delete session with given session_id
-            if (sender_it->second.erase(session_id) > 0) {
-                retval = true;
-            }
+    bool retval = false;
+    // find sessions created by the same sender
+    auto sender_it = sessions.find(sender);
+    if (sender_it != sessions.end()) {
+        std::lock_guard<std::mutex> lock(sessions_mutex);
+        // delete session with given session_id
+        if (sender_it->second.erase(session_id) > 0) {
+            retval = true;
         }
+    }
 
-        auto reply = call.createReply();
-        reply << retval;
-        reply.send();
-        threads_manager.current_thread_finished();
-    });
-    threads_manager.register_thread(std::move(worker));
+    auto reply = call.createReply();
+    reply << retval;
+    return reply;
 }

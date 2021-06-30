@@ -33,7 +33,9 @@ ThreadsManager::ThreadsManager() {
     });
 }
 
-ThreadsManager::~ThreadsManager() {}
+ThreadsManager::~ThreadsManager() {
+    finish();
+}
 
 void ThreadsManager::register_thread(std::thread && thread) {
     std::lock_guard<std::mutex> lock(running_threads_mutex);
