@@ -20,11 +20,16 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_SERVER_THREADS_MANAGER_HPP
 #define DNFDAEMON_SERVER_THREADS_MANAGER_HPP
 
+#include "dbus.hpp"
+
+#include <fmt/format.h>
+#include <sdbus-c++/sdbus-c++.h>
+
 #include <atomic>
+#include <iostream>
 #include <mutex>
 #include <thread>
 #include <vector>
-
 
 class ThreadsManager {
 public:
@@ -35,6 +40,27 @@ public:
     void current_thread_finished() { mark_thread_finished(std::this_thread::get_id()); };
     void join_threads(const bool only_finished);
     void finish();
+
+    template <class S>
+    void run_in_thread(S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &&), sdbus::MethodCall && call) {
+        auto worker = std::thread(
+            [&method, &service, this](sdbus::MethodCall call) {
+                try {
+                    auto reply = (service.*method)(std::move(call));
+                    reply.send();
+                } catch (std::exception & ex) {
+                    auto reply = call.createErrorReply({dnfdaemon::ERROR, ex.what()});
+                    try {
+                        reply.send();
+                    } catch (const std::exception & e) {
+                        std::cerr << fmt::format("Error sending d-bus error reply: {}", e.what()) << std::endl;
+                    }
+                }
+                current_thread_finished();
+            },
+            std::move(call));
+        register_thread(std::move(worker));
+    }
 
 private:
     std::mutex running_threads_mutex;

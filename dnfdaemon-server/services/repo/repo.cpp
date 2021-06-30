@@ -23,9 +23,9 @@ along with dnfdaemon-server.  If not, see <https://www.gnu.org/licenses/>.
 #include "dnfdaemon-server/utils.hpp"
 
 #include <fmt/format.h>
+#include <libdnf/repo/repo.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
-#include <libdnf/repo/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
@@ -205,7 +205,7 @@ void Repo::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPO, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            session.run_in_thread(*this, &Repo::list, std::move(call));
+            session.get_threads_manager().run_in_thread(*this, &Repo::list, std::move(call));
         });
 }
 

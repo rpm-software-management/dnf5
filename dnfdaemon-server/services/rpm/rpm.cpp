@@ -34,23 +34,23 @@ void Rpm::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "downgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.run_in_thread(*this, &Rpm::downgrade, std::move(call));
+            session.get_threads_manager().run_in_thread(*this, &Rpm::downgrade, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            session.run_in_thread(*this, &Rpm::list, std::move(call));
+            session.get_threads_manager().run_in_thread(*this, &Rpm::list, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "install", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.run_in_thread(*this, &Rpm::install, std::move(call));
+            session.get_threads_manager().run_in_thread(*this, &Rpm::install, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "upgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.run_in_thread(*this, &Rpm::upgrade, std::move(call));
+            session.get_threads_manager().run_in_thread(*this, &Rpm::upgrade, std::move(call));
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "remove", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.run_in_thread(*this, &Rpm::remove, std::move(call));
+            session.get_threads_manager().run_in_thread(*this, &Rpm::remove, std::move(call));
         });
 }
 
