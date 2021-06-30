@@ -72,5 +72,4 @@ class InstallrootCase(unittest.TestCase):
 
 
     def tearDown(self):
-        self.iface_session.close_session(self.session)
         shutil.rmtree(self.installroot)
