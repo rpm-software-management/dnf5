@@ -63,41 +63,79 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
     throw libdnf::LogicError(fmt::format("Unexpected action in print_transaction_table: {}", action));
 }
 
-static void print_action_header(libdnf::transaction::TransactionItemAction action, struct libscols_line * ln) {
-    switch (action) {
-        case libdnf::transaction::TransactionItemAction::INSTALL:
-            scols_line_set_data(ln, COL_NAME, "Installing:");
-            break;
-        case libdnf::transaction::TransactionItemAction::REINSTALL:
-            scols_line_set_data(ln, COL_NAME, "Reinstalling:");
-            break;
-        case libdnf::transaction::TransactionItemAction::UPGRADE:
-            scols_line_set_data(ln, COL_NAME, "Upgrading:");
-            break;
-        case libdnf::transaction::TransactionItemAction::DOWNGRADE:
-            scols_line_set_data(ln, COL_NAME, "Downgrading:");
-            break;
-        case libdnf::transaction::TransactionItemAction::REMOVE:
-            scols_line_set_data(ln, COL_NAME, "Removing:");
-            break;
-        case libdnf::transaction::TransactionItemAction::REINSTALLED:
-        case libdnf::transaction::TransactionItemAction::UPGRADED:
-        case libdnf::transaction::TransactionItemAction::DOWNGRADED:
-        case libdnf::transaction::TransactionItemAction::OBSOLETE:
-        case libdnf::transaction::TransactionItemAction::OBSOLETED:
-        case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-            throw libdnf::LogicError(fmt::format("Unexpected action in print_transaction_table: {}", action));
-    }
-}
 
-template<class TransactionPackage>
-static bool transaction_package_cmp(const TransactionPackage & tspkg1, const TransactionPackage & tspkg2) {
-    if (tspkg1.get_action() != tspkg2.get_action()) {
-        return tspkg1.get_action() > tspkg2.get_action();
+class ActionHeaderPrinter {
+public:
+    ActionHeaderPrinter(struct libscols_table * table) : table(table) {}
+
+    // TODO(lukash) to bring more sanity into the templated functions here, it
+    // would be better if the Transaction template type of
+    // print_transaction_table() was required to have a TransactionItem type
+    // defined inside, so that the ActionHeaderPrinter class could be templated
+    // instad of this method, and we could do (in print_transaction_table(),
+    // where this class is instantiated):
+    // ActionHeaderPrinter<Transaction::TransactionItem> action_header_printer(...);
+    template<class T>
+    struct libscols_line * print(const T & tspkg) {
+        if (current_action != tspkg.get_action() || current_reason != tspkg.get_reason()) {
+            current_header_line = scols_table_new_line(table, NULL);
+            std::string text;
+
+            switch (tspkg.get_action()) {
+                case libdnf::transaction::TransactionItemAction::INSTALL:
+                    text = "Installing";
+                    if (tspkg.get_reason() == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+                        text += " dependencies";
+                    } else if (tspkg.get_reason() == libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY) {
+                        text += " weak dependencies";
+                    }
+                    break;
+                case libdnf::transaction::TransactionItemAction::REINSTALL:
+                    text = "Reinstalling";
+                    break;
+                case libdnf::transaction::TransactionItemAction::UPGRADE:
+                    text = "Upgrading";
+                    break;
+                case libdnf::transaction::TransactionItemAction::DOWNGRADE:
+                    text = "Downgrading";
+                    break;
+                case libdnf::transaction::TransactionItemAction::REMOVE:
+                    text = "Removing";
+                    if (tspkg.get_reason() == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+                        text += " dependent packages";
+                    } else if (tspkg.get_reason() == libdnf::transaction::TransactionItemReason::CLEAN) {
+                        text += " unused dependencies";
+                    }
+                    break;
+                case libdnf::transaction::TransactionItemAction::REINSTALLED:
+                case libdnf::transaction::TransactionItemAction::UPGRADED:
+                case libdnf::transaction::TransactionItemAction::DOWNGRADED:
+                case libdnf::transaction::TransactionItemAction::OBSOLETE:
+                case libdnf::transaction::TransactionItemAction::OBSOLETED:
+                case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+                    throw libdnf::LogicError(
+                        fmt::format("Unexpected action in print_transaction_table: {}", tspkg.get_action()));
+            }
+
+            text += ":";
+
+            scols_line_set_data(current_header_line, COL_NAME, text.c_str());
+
+            current_action = tspkg.get_action();
+            current_reason = tspkg.get_reason();
+        }
+
+        return current_header_line;
     }
 
-    return libdnf::rpm::cmp_naevr(tspkg1.get_package(), tspkg2.get_package());
-}
+private:
+    struct libscols_table * table = nullptr;
+    struct libscols_line * current_header_line = nullptr;
+    // TODO(lukash) better default value?
+    libdnf::transaction::TransactionItemAction current_action = libdnf::transaction::TransactionItemAction::REASON_CHANGE;
+    libdnf::transaction::TransactionItemReason current_reason = libdnf::transaction::TransactionItemReason::UNKNOWN;
+};
+
 
 class TransactionSummary {
 public:
@@ -162,6 +200,21 @@ private:
     int obsoleted = 0;
 };
 
+
+template<class TransactionPackage>
+static bool transaction_package_cmp(const TransactionPackage & tspkg1, const TransactionPackage & tspkg2) {
+    if (tspkg1.get_action() != tspkg2.get_action()) {
+        return tspkg1.get_action() > tspkg2.get_action();
+    }
+
+    if (tspkg1.get_reason() != tspkg2.get_reason()) {
+        return tspkg1.get_reason() > tspkg2.get_reason();
+    }
+
+    return libdnf::rpm::cmp_naevr(tspkg1.get_package(), tspkg2.get_package());
+}
+
+
 template <class Transaction>
 bool print_transaction_table(Transaction & transaction) {
     // TODO (nsella) split function into create/print if possible
@@ -212,8 +265,8 @@ bool print_transaction_table(Transaction & transaction) {
     std::sort(tspkgs.begin(), tspkgs.end(), transaction_package_cmp<decltype(*tspkgs.begin())>);
 
     struct libscols_line * header_ln = nullptr;
-    auto previous_action = libdnf::transaction::TransactionItemAction::REASON_CHANGE;  // TODO(lukash) a better default?
     TransactionSummary ts_summary;
+    ActionHeaderPrinter action_header_printer(tb);
 
     for (auto & tspkg : tspkgs) {
         // TODO(lukash) maybe these shouldn't come here at all
@@ -228,11 +281,7 @@ bool print_transaction_table(Transaction & transaction) {
 
         auto pkg = tspkg.get_package();
 
-        if (previous_action != tspkg.get_action()) {
-            header_ln = scols_table_new_line(tb, NULL);
-            print_action_header(tspkg.get_action(), header_ln);
-            previous_action = tspkg.get_action();
-        }
+        header_ln = action_header_printer.print(tspkg);
 
         struct libscols_line *ln = scols_table_new_line(tb, header_ln);
         scols_line_set_data(ln, COL_NAME, pkg.get_name().c_str());
