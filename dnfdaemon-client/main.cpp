@@ -97,9 +97,18 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     auto installroot = ctx.arg_parser.add_new_named_arg("installroot");
     installroot->set_long_name("installroot");
     installroot->set_has_value(true);
-    installroot->set_arg_value_help("absolute path");
+    installroot->set_arg_value_help("<absolute path>");
     installroot->set_short_description("set install root");
     installroot->link_value(&ctx.installroot);
+    installroot->set_parse_hook_func([](
+                                    libdnf::cli::ArgumentParser::NamedArg * arg,
+                                    [[maybe_unused]] const char * option,
+                                    const char * value) {
+        if (value[0] != '/') {
+            throw std::runtime_error(fmt::format("--{}: Absolute path must be used.", arg->get_long_name()));
+        }
+        return true;
+    });
     dnfdaemon_client->register_named_arg(installroot);
 
     auto releasever = ctx.arg_parser.add_new_named_arg("releasever");
