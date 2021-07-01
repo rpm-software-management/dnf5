@@ -62,6 +62,26 @@ public:
         register_thread(std::move(worker));
     }
 
+    template <class S>
+    void handle_signal(S & service, void (S::*method)(sdbus::Signal &&), sdbus::Signal && signal) {
+        auto worker = std::thread(
+            [&method, &service, this](sdbus::Signal signal) {
+                try {
+                    (service.*method)(std::move(signal));
+                } catch (std::exception & ex) {
+                    std::cerr << fmt::format(
+                                     "Error handling signal {}:{}: {}",
+                                     signal.getInterfaceName(),
+                                     signal.getMemberName(),
+                                     ex.what())
+                              << std::endl;
+                }
+                current_thread_finished();
+            },
+            std::move(signal));
+        register_thread(std::move(worker));
+    }
+
 private:
     std::mutex running_threads_mutex;
     // flag whether to break the finished threads collector infinite loop

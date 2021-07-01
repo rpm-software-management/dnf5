@@ -51,7 +51,7 @@ private:
     void dbus_register();
     sdbus::MethodReply open_session(sdbus::MethodCall && call);
     sdbus::MethodReply close_session(sdbus::MethodCall && call);
-    void on_name_owner_changed(sdbus::Signal & signal);
+    void on_name_owner_changed(sdbus::Signal && signal);
 };
 
 #endif

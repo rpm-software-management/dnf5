@@ -56,8 +56,8 @@ void SessionManager::dbus_register() {
     // register signal handler for NameOwnerChanged
     name_changed_proxy = sdbus::createProxy(connection, "org.freedesktop.DBus", "/org/freedesktop/DBus");
     name_changed_proxy->registerSignalHandler(
-        "org.freedesktop.DBus", "NameOwnerChanged", [this](sdbus::Signal & signal) -> void {
-            this->on_name_owner_changed(signal);
+        "org.freedesktop.DBus", "NameOwnerChanged", [this](sdbus::Signal signal) -> void {
+            threads_manager.handle_signal(*this, &SessionManager::on_name_owner_changed, std::move(signal));
         });
     name_changed_proxy->finishRegistration();
 }
@@ -76,24 +76,20 @@ std::string gen_session_id() {
 }
 
 
-void SessionManager::on_name_owner_changed(sdbus::Signal & signal) {
+void SessionManager::on_name_owner_changed(sdbus::Signal && signal) {
     std::string name;
     std::string old_owner;
     std::string new_owner;
     signal >> name >> old_owner >> new_owner;
     if (new_owner.empty() && sessions.count(old_owner) > 0) {
-        auto worker = std::thread([this, old_owner = std::move(old_owner)]() {
-            std::map<std::string, std::map<std::string, std::unique_ptr<Session>>> to_be_erased;
-            {
-                std::lock_guard<std::mutex> lock(sessions_mutex);
-                // the sender name disappeared from the dbus, erase all its sessions
-                to_be_erased[old_owner] = std::move(sessions.at(old_owner));
-                sessions.erase(old_owner);
-            }
-            to_be_erased.erase(old_owner);
-            threads_manager.current_thread_finished();
-        });
-        threads_manager.register_thread(std::move(worker));
+        std::map<std::string, std::map<std::string, std::unique_ptr<Session>>> to_be_erased;
+        {
+            std::lock_guard<std::mutex> lock(sessions_mutex);
+            // the sender name disappeared from the dbus, erase all its sessions
+            to_be_erased[old_owner] = std::move(sessions.at(old_owner));
+            sessions.erase(old_owner);
+        }
+        to_be_erased.erase(old_owner);
     }
 }
 
