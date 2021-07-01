@@ -42,7 +42,7 @@ public:
     void finish();
 
     template <class S>
-    void run_in_thread(S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &&), sdbus::MethodCall && call) {
+    void handle_method(S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &&), sdbus::MethodCall && call) {
         auto worker = std::thread(
             [&method, &service, this](sdbus::MethodCall call) {
                 try {

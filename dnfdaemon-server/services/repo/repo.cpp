@@ -205,7 +205,7 @@ void Repo::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPO, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().run_in_thread(*this, &Repo::list, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Repo::list, std::move(call));
         });
 }
 
