@@ -131,7 +131,7 @@ public:
     }
 
     void print() {
-        std::cout << "Transaction Summary:\n";
+        std::cout << "\nTransaction Summary:\n";
         if (installs != 0) {
             std::cout << fmt::format(" {:15} {:4} packages\n", "Installing:", installs);
         }
