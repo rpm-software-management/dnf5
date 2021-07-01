@@ -199,7 +199,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
 
 }  // namespace microdnf
 
-int main(int argc, char * argv[]) {
+int main(int argc, char * argv[]) try {
     microdnf::Context context;
     libdnf::Base & base = context.base;
 
@@ -329,4 +329,6 @@ int main(int argc, char * argv[]) {
     log_router.info("Microdnf end");
 
     return 0;
+} catch (const libdnf::RuntimeError & e) {
+    std::cerr << e.what() << std::endl;
 }
