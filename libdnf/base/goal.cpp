@@ -881,7 +881,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
             // For a correct upgrade of installonly packages keep only the latest installed packages
             // Otherwise it will also install not the latest installonly packages
             query.filter_available();
-            installed.filter_latest();
+            installed.filter_latest_evr();
             query |= installed;
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
             rpm_goal.add_upgrade(tmp_queue, best, clean_requirements_on_remove);

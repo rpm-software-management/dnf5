@@ -55,7 +55,7 @@ void RpmPackageQueryTest::test_size() {
     CPPUNIT_ASSERT_EQUAL(5LU, query.size());
 }
 
-void RpmPackageQueryTest::test_filter_latest() {
+void RpmPackageQueryTest::test_filter_latest_evr() {
     add_repo_solv("solv-24pkgs");
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     // also add 2 time the same package
@@ -64,7 +64,7 @@ void RpmPackageQueryTest::test_filter_latest() {
 
     {
         libdnf::rpm::PackageQuery query(*base);
-        query.filter_latest(1);
+        query.filter_latest_evr(1);
         std::vector<std::string> expected = {
             "pkg-0:1.2-3.src",
             "pkg-0:1.2-3.x86_64",
@@ -76,7 +76,7 @@ void RpmPackageQueryTest::test_filter_latest() {
     }
     {
         libdnf::rpm::PackageQuery query(*base);
-        query.filter_latest(2);
+        query.filter_latest_evr(2);
         std::vector<std::string> expected = {
             "pkg-0:1.2-3.src",
             "pkg-0:1.2-3.x86_64",
@@ -90,7 +90,7 @@ void RpmPackageQueryTest::test_filter_latest() {
     }
     {
         libdnf::rpm::PackageQuery query(*base);
-        query.filter_latest(-1);
+        query.filter_latest_evr(-1);
         std::vector<std::string> expected = {
             "pkg-libs-0:1.2-3.x86_64", "pkg-libs-1:1.2-4.x86_64", "pkg-0:1-1.noarch",  "pkg-0:1-2.noarch",
             "pkg-0:1-3.noarch",        "pkg-0:1-4.noarch",        "pkg-0:1-5.noarch",  "pkg-0:1-6.noarch",
@@ -103,7 +103,7 @@ void RpmPackageQueryTest::test_filter_latest() {
     }
     {
         libdnf::rpm::PackageQuery query(*base);
-        query.filter_latest(-23);
+        query.filter_latest_evr(-23);
         std::vector<std::string> expected = {"pkg-0:1-1.noarch"};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
     }
@@ -638,11 +638,11 @@ void RpmPackageQueryTest::test_difference() {
 }
 
 
-void RpmPackageQueryTest::test_filter_latest_performance() {
+void RpmPackageQueryTest::test_filter_latest_evr_performance() {
     add_repo_solv("solv-humongous");
 
     for (int i = 0; i < 10000; ++i) {
         libdnf::rpm::PackageQuery query(*base);
-        query.filter_latest();
+        query.filter_latest_evr();
     }
 }

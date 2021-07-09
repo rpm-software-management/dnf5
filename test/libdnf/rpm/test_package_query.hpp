@@ -32,7 +32,7 @@ class RpmPackageQueryTest : public LibdnfTestCase {
 
 #ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_size);
-    CPPUNIT_TEST(test_filter_latest);
+    CPPUNIT_TEST(test_filter_latest_evr);
     CPPUNIT_TEST(test_filter_name);
     CPPUNIT_TEST(test_filter_name_packgset);
     CPPUNIT_TEST(test_filter_nevra_packgset);
@@ -53,7 +53,7 @@ class RpmPackageQueryTest : public LibdnfTestCase {
 #endif
 
 #ifdef WITH_PERFORMANCE_TESTS
-    CPPUNIT_TEST(test_filter_latest_performance);
+    CPPUNIT_TEST(test_filter_latest_evr_performance);
 #endif
 
     CPPUNIT_TEST_SUITE_END();
@@ -62,7 +62,7 @@ public:
     void setUp() override;
 
     void test_size();
-    void test_filter_latest();
+    void test_filter_latest_evr();
     void test_filter_name();
     void test_filter_name_packgset();
     void test_filter_nevra_packgset();
@@ -81,7 +81,7 @@ public:
     void test_intersection();
     void test_difference();
 
-    void test_filter_latest_performance();
+    void test_filter_latest_evr_performance();
 
     // TODO(jmracek) Add tests when system repo will be available
     // PackageQuery & filter_upgrades();

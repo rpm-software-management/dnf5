@@ -383,7 +383,7 @@ public:
     ///
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_LATEST
     /// @replaces libdnf/sack/query.hpp:method:addFilter(int keyname, int cmp_type, int match) - cmp_type = HY_PKG_LATEST_PER_ARCH
-    PackageQuery & filter_latest(int limit = 1);
+    PackageQuery & filter_latest_evr(int limit = 1);
 
     /// @brief Keep all installed packages and available packages from repo with lower priority
     ///

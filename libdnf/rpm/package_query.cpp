@@ -2192,7 +2192,7 @@ static int latest_cmp(const Id * ap, const Id * bp, const Pool * pool) {
     return *ap - *bp;
 }
 
-PackageQuery & PackageQuery::filter_latest(int limit) {
+PackageQuery & PackageQuery::filter_latest_evr(int limit) {
     auto sack = get_sack();
     const Pool * pool = sack->p_impl->get_pool();
 
