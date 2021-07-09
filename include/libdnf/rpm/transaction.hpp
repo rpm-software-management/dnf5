@@ -50,6 +50,12 @@ private:
 /// Class for access RPM header
 class RpmHeader {
 public:
+    RpmHeader(const RpmHeader & src);
+    RpmHeader(RpmHeader && src);
+    ~RpmHeader();
+    RpmHeader & operator=(const RpmHeader & src);
+    RpmHeader & operator=(RpmHeader && src);
+
     std::string get_name() const;
     uint64_t get_epoch() const noexcept;
     std::string get_version() const;
@@ -62,7 +68,7 @@ public:
 
 private:
     friend class Transaction;
-    explicit RpmHeader(void * hdr) : header(hdr) {}
+    explicit RpmHeader(void * hdr);
     void * header;
 };
 
