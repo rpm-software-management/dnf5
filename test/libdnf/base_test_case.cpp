@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 #include "utils/string.hpp"
 
+#include "libdnf/comps/environment/environment.hpp"
+#include "libdnf/comps/environment/query.hpp"
 #include "libdnf/comps/group/group.hpp"
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/rpm/nevra.hpp"
@@ -85,6 +87,29 @@ libdnf::advisory::Advisory BaseTestCase::get_advisory(const std::string & name) 
         CPPUNIT_FAIL(sformat("No advisory \"{}\" found. All pool advisories:{}", name, to_string(advisories)));
     } else if (found.size() > 1) {
         CPPUNIT_FAIL(sformat("More than one advisory matching \"{}\" found:{}", name, to_string(advisories)));
+    }
+
+    return *found.begin();
+}
+
+
+libdnf::comps::Environment BaseTestCase::get_environment(const std::string & environmentid, bool installed) {
+    // This is used for testing queries as well, hence we don't use the EnvironmentQuery facility for filtering
+    libdnf::Set<libdnf::comps::Environment> environments = libdnf::comps::EnvironmentQuery(base);
+
+    std::set<libdnf::comps::Environment> found;
+    for (auto environment : environments) {
+        if (environment.get_environmentid() == environmentid && environment.get_installed() == installed) {
+            found.insert(environment);
+        }
+    }
+
+    if (found.empty()) {
+        CPPUNIT_FAIL(
+            sformat("No environment \"{}\" found. All pool environments:{}", environmentid, to_string(environments)));
+    } else if (found.size() > 1) {
+        CPPUNIT_FAIL(
+            sformat("More than one environment matching \"{}\" found:{}", environmentid, to_string(environments)));
     }
 
     return *found.begin();

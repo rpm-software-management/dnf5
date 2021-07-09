@@ -20,6 +20,9 @@
     #include "libdnf/comps/group/group.hpp"
     #include "libdnf/comps/group/query.hpp"
     #include "libdnf/comps/group/sack.hpp"
+    #include "libdnf/comps/environment/environment.hpp"
+    #include "libdnf/comps/environment/query.hpp"
+    #include "libdnf/comps/environment/sack.hpp"
     #include "libdnf/comps/comps.hpp"
     #include "libdnf/repo/repo.hpp"
 %}
@@ -27,11 +30,15 @@
 #define CV __perl_CV
 
 %template(SackQueryGroup) libdnf::sack::Query<libdnf::comps::Group>;
+%template(SackQueryEnvironment) libdnf::sack::Query<libdnf::comps::Environment>;
 
 %include "libdnf/comps/group/package.hpp"
 %include "libdnf/comps/group/group.hpp"
 %include "libdnf/comps/group/query.hpp"
 %include "libdnf/comps/group/sack.hpp"
+%include "libdnf/comps/environment/environment.hpp"
+%include "libdnf/comps/environment/query.hpp"
+%include "libdnf/comps/environment/sack.hpp"
 %include "libdnf/comps/comps.hpp"
 
 %template(CompsWeakPtr) libdnf::WeakPtr<libdnf::comps::Comps, false>;

@@ -1,0 +1,103 @@
+/*
+Copyright Contributors to the libdnf project.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+
+#include "test_environment_query.hpp"
+
+#include "utils.hpp"
+
+#include "libdnf/comps/environment/query.hpp"
+
+
+CPPUNIT_TEST_SUITE_REGISTRATION(CompsEnvironmentQueryTest);
+
+
+using namespace libdnf::comps;
+
+
+void CompsEnvironmentQueryTest::setUp() {
+    BaseTestCase::setUp();
+    add_repo_repomd("repomd-comps-core-environment");
+    add_repo_repomd("repomd-comps-custom-environment");
+    add_repo_repomd("repomd-comps-minimal-environment");
+    add_repo_repomd("repomd-comps-minimal-environment-empty");
+    add_repo_repomd("repomd-comps-minimal-environment-v2");
+}
+
+
+void CompsEnvironmentQueryTest::test_query_all() {
+    EnvironmentQuery q_environments(base);
+    std::vector<Environment> expected = {
+        get_environment("core"), get_environment("custom-environment"), get_environment("minimal-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
+}
+
+
+void CompsEnvironmentQueryTest::test_query_filter_environmentid() {
+    // Filter envitonments with id equal to "core"
+    EnvironmentQuery q_environments(base);
+    q_environments.filter_environmentid("core");
+    std::vector<Environment> expected = {get_environment("core")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
+
+    // Filter envitonments with id containing "environment"
+    q_environments = EnvironmentQuery(base);
+    q_environments.filter_environmentid("environment", libdnf::sack::QueryCmp::CONTAINS);
+    expected = {get_environment("custom-environment"), get_environment("minimal-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
+
+    // Filter envitonments with id matching glob "*environment"
+    q_environments = EnvironmentQuery(base);
+    q_environments.filter_environmentid("*environment", libdnf::sack::QueryCmp::GLOB);
+    expected = {get_environment("custom-environment"), get_environment("minimal-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
+
+    // Filter envitonments with id equal to "custom-environment" or "core"
+    q_environments = EnvironmentQuery(base);
+    q_environments.filter_environmentid(std::vector<std::string>{"custom-environment", "core"});
+    expected = {get_environment("core"), get_environment("custom-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
+}
+
+
+void CompsEnvironmentQueryTest::test_query_filter_name() {
+    // Filter envitonments with name equal to "Core Environment"
+    EnvironmentQuery q_environments(base);
+    q_environments.filter_name("Core Environment");
+    std::vector<Environment> expected = {get_environment("core")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
+
+    // Filter envitonments with name containing "Environment"
+    q_environments = EnvironmentQuery(base);
+    q_environments.filter_name("Custom", libdnf::sack::QueryCmp::CONTAINS);
+    expected = {get_environment("custom-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
+
+    // Filter envitonments with name matching glob "*Environment"
+    q_environments = EnvironmentQuery(base);
+    q_environments.filter_name("Custom*", libdnf::sack::QueryCmp::GLOB);
+    expected = {get_environment("custom-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
+
+    // Filter envitonments with name equal to "Custom Environment" or "Core Environment"
+    q_environments = EnvironmentQuery(base);
+    q_environments.filter_name(std::vector<std::string>{"Custom Operating System", "Core Environment"});
+    expected = {get_environment("core"), get_environment("custom-environment")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_environments));
+}

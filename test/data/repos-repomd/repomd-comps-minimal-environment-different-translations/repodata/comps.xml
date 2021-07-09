@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<comps>
+  <environment>
+    <id>minimal-environment</id>
+    <name>Minimal Install</name>
+    <description>Basic functionality.</description>
+    <display_order>3</display_order>
+    <name xml:lang="fi">Vähimmäisasennus</name>
+    <description xml:lang="fi">Perustoiminnot.</description>
+    <grouplist>
+      <groupid>core</groupid>
+    </grouplist>
+    <optionlist>
+      <groupid>guest-agents</groupid>
+      <groupid>standard</groupid>
+    </optionlist>
+  </environment>
+</comps>

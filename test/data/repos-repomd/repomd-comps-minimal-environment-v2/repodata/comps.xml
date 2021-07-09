@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<comps>
+  <environment>
+    <id>minimal-environment</id>
+    <name>Minimal Install v2</name>
+    <description>Basic functionality v2.</description>
+    <display_order>4</display_order>
+    <name xml:lang="cs">Minimální instalace v2</name>
+    <name xml:lang="de">Minimale Installation v2</name>
+    <name xml:lang="ja">最小限のインストール v2</name>
+    <description xml:lang="cs">Základní funkcionalita v2.</description>
+    <description xml:lang="de">Grundlegende Funktionalität v2.</description>
+    <description xml:lang="ja">基本的な機能です。v2</description>
+    <grouplist>
+      <groupid>core</groupid>
+    </grouplist>
+    <optionlist>
+      <groupid>guest-agents</groupid>
+      <groupid>standard</groupid>
+    </optionlist>
+  </environment>
+</comps>

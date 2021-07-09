@@ -53,6 +53,8 @@ public:
 
     libdnf::advisory::Advisory get_advisory(const std::string & name);
 
+    libdnf::comps::Environment get_environment(const std::string & environmentid, bool installed = false);
+
     libdnf::comps::Group get_group(const std::string & groupid, bool installed = false);
 
     libdnf::rpm::Package get_pkg(const std::string & nevra, bool installed = false);

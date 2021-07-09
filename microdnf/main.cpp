@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
+#include "commands/environment/environment.hpp"
 #include "commands/group/group.hpp"
 #include "commands/history/history.hpp"
 #include "commands/install/install.hpp"
@@ -101,6 +102,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     subcommands_group->set_header("Subcommands:");
     cmd.register_group(subcommands_group);
     register_subcommand(std::make_unique<GroupCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<EnvironmentCommand>(*this), subcommands_group);
     register_subcommand(std::make_unique<ModuleCommand>(*this), subcommands_group);
     register_subcommand(std::make_unique<HistoryCommand>(*this), subcommands_group);
     register_subcommand(std::make_unique<RepoCommand>(*this), subcommands_group);

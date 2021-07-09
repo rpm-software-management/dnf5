@@ -17,27 +17,25 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_XML_HPP
-#define LIBDNF_UTILS_XML_HPP
+#include "libdnf/comps/environment/sack.hpp"
 
-#include "libdnf/common/exception.hpp"
-
-#include <libxml/tree.h>
-
-#include <string>
+#include "libdnf/comps/comps.hpp"
+#include "libdnf/comps/environment/environment.hpp"
+#include "libdnf/comps/environment/query.hpp"
 
 
-namespace libdnf::utils::xml {
-
-struct XMLSaveError : public Error {
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::utils"; }
-    const char * get_name() const noexcept override { return "XMLSaveError"; }
-};
+namespace libdnf::comps {
 
 
-xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text);
+EnvironmentSackWeakPtr EnvironmentSack::get_weak_ptr() {
+    return EnvironmentSackWeakPtr(this, &sack_guard);
+}
 
-}  // namespace libdnf::utils::xml
 
-#endif  // LIBDNF_UTILS_XML_HPP
+EnvironmentSack::EnvironmentSack(Comps & comps) : comps{comps} {}
+
+
+EnvironmentSack::~EnvironmentSack() = default;
+
+
+}  // namespace libdnf::comps

@@ -17,10 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_XML_HPP
-#define LIBDNF_UTILS_XML_HPP
 
-#include "libdnf/common/exception.hpp"
+#include "xml.hpp"
 
 #include <libxml/tree.h>
 
@@ -29,15 +27,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::utils::xml {
 
-struct XMLSaveError : public Error {
-    using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::utils"; }
-    const char * get_name() const noexcept override { return "XMLSaveError"; }
-};
 
+xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text) {
+    xmlNodePtr node = xmlNewNode(NULL, BAD_CAST child_name.c_str());
+    xmlAddChild(parent, node);
+    xmlAddChild(node, xmlNewText(BAD_CAST child_text.c_str()));
+    return node;
+}
 
-xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text);
 
 }  // namespace libdnf::utils::xml
-
-#endif  // LIBDNF_UTILS_XML_HPP

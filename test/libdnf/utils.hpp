@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_set.hpp"
 #include "libdnf/base/transaction.hpp"
+#include "libdnf/comps/environment/environment.hpp"
+#include "libdnf/comps/environment/query.hpp"
 #include "libdnf/comps/group/group.hpp"
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/rpm/package_query.hpp"
@@ -89,6 +91,38 @@ struct assertion_traits<libdnf::advisory::AdvisorySet> {
 
         for (const auto & advisory : advisories) {
             result += "\n    " + assertion_traits<libdnf::advisory::Advisory>::toString(advisory);
+        }
+
+        return result;
+    }
+};
+
+template <>
+struct assertion_traits<libdnf::comps::Environment> {
+    inline static bool equal(const libdnf::comps::Environment & left, const libdnf::comps::Environment & right) {
+        return left == right;
+    }
+
+    inline static std::string toString(const libdnf::comps::Environment & environment) {
+        std::string repos;
+        for (const auto & repo : environment.get_repos()) {
+            if (!repos.empty()) {
+                repos += ", ";
+            }
+            repos += repo;
+        }
+
+        return libdnf::utils::sformat("{} (repos: {})", environment.get_environmentid(), repos);
+    }
+};
+
+template <>
+struct assertion_traits<libdnf::Set<libdnf::comps::Environment>> {
+    inline static std::string toString(const libdnf::Set<libdnf::comps::Environment> & environments) {
+        std::string result;
+
+        for (const auto & environment : environments) {
+            result += "\n    " + assertion_traits<libdnf::comps::Environment>::toString(environment);
         }
 
         return result;
@@ -189,6 +223,7 @@ struct assertion_traits<libdnf::base::TransactionPackage> {
 
 
 std::vector<libdnf::advisory::Advisory> to_vector(const libdnf::advisory::AdvisorySet & advisory_set);
+std::vector<libdnf::comps::Environment> to_vector(const libdnf::Set<libdnf::comps::Environment> & environment_set);
 std::vector<libdnf::comps::Group> to_vector(const libdnf::Set<libdnf::comps::Group> & group_set);
 std::vector<libdnf::rpm::Reldep> to_vector(const libdnf::rpm::ReldepList & reldep_list);
 std::vector<libdnf::rpm::Package> to_vector(const libdnf::rpm::PackageSet & package_set);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<comps>
+  <environment>
+    <id>custom-environment</id>
+    <name>Custom Operating System</name>
+    <description>Basic building block for a custom RHEL system.</description>
+    <display_order>99</display_order>
+    <name xml:lang="de">Grundbaustein für ein kundenspezifisches RHEL-System.</name>
+    <name xml:lang="ja">カスタムオペレーティングシステム</name>
+    <description xml:lang="de">Grundlegende Funktionalität.</description>
+    <description xml:lang="ja">カスタム RHEL システム用のベーシックビルディングブロック</description>
+    <grouplist>
+      <groupid>core</groupid>
+    </grouplist>
+    <optionlist>
+      <groupid>guest-agents</groupid>
+      <groupid>standard</groupid>
+    </optionlist>
+  </environment>
+</comps>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps
+  PUBLIC '-//Red Hat, Inc.//DTD Comps info//EN'
+  'comps.dtd'>
+<comps>
+  <environment>
+    <id>core</id>
+    <name>Core Environment</name>
+    <description>Environment with the same id as an existing group.</description>
+    <description xml:lang="ee">Fake environment description translation</description>
+    <display_order>5</display_order>
+    <grouplist>
+      <groupid>standard</groupid>
+    </grouplist>
+  </environment>
+</comps>

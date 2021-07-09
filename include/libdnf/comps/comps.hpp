@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_COMPS_COMPS_HPP
 
 #include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/comps/environment/sack.hpp"
 #include "libdnf/comps/group/sack.hpp"
 #include "libdnf/repo/repo.hpp"
 
@@ -42,6 +43,7 @@ public:
     ~Comps();
 
     GroupSackWeakPtr get_group_sack() { return group_sack.get_weak_ptr(); }
+    EnvironmentSackWeakPtr get_environment_sack() { return environment_sack.get_weak_ptr(); }
 
     CompsWeakPtr get_weak_ptr();
 
@@ -50,11 +52,15 @@ public:
 private:
     libdnf::Base & base;
     GroupSack group_sack{*this};
+    EnvironmentSack environment_sack{*this};
     WeakPtrGuard<Comps, false> data_guard;
 
     friend class Group;
     friend class GroupQuery;
     friend class GroupSack;
+    friend class Environment;
+    friend class EnvironmentSack;
+    friend class EnvironmentQuery;
 };
 
 }  // namespace libdnf::comps
