@@ -374,6 +374,7 @@ public:
         auto file_path = item.get_pkg().get_package_path();
         auto * header = read_pkg_header(file_path);
         auto rc = rpmtsAddReinstallElement(ts, header, &item);
+        headerFree(header);
         if (rc != 0) {
             std::string msg = "Can't reinstall package \"" + file_path + "\"";
             throw Exception(msg);
@@ -668,6 +669,7 @@ void Transaction::Impl::install_up_down(TransactionItem & item, libdnf::transact
     auto file_path = item.get_pkg().get_package_path();
     auto * header = read_pkg_header(file_path);
     auto rc = rpmtsAddInstallElement(ts, header, &item, upgrade ? 1 : 0, nullptr);
+    headerFree(header);
     if (rc != 0) {
         std::string msg = "Can't " + msg_action + " package \"" + file_path + "\"";
         throw Exception(msg);
