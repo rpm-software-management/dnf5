@@ -58,7 +58,11 @@ protected:
         return get_pkg(nevra, repo.c_str());
     }
 
+    libdnf::rpm::Package add_system_pkg(const std::string & relative_path);
+    libdnf::rpm::Package add_cmdline_pkg(const std::string & relative_path);
+
     libdnf::Base base;
+
     libdnf::repo::RepoSackWeakPtr repo_sack;
     libdnf::rpm::PackageSackWeakPtr sack;
     std::unique_ptr<libdnf::utils::TempDir> temp;

@@ -1,6 +1,6 @@
 =Ver: 3.0
 
-=Pkg: cmdline 1.2 1 src
+=Pkg: one 1 1 src
 
-=Pkg: cmdline 1.2 1 noarch
-=Prv: cmdline = 1.2-1
+=Pkg: one 1 1 noarch
+=Prv: one = 1-1

@@ -93,6 +93,16 @@ libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, const ch
 }
 
 
+libdnf::rpm::Package LibdnfTestCase::add_system_pkg(const std::string & relative_path) {
+    return sack->add_system_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false, false);
+}
+
+
+libdnf::rpm::Package LibdnfTestCase::add_cmdline_pkg(const std::string & relative_path) {
+    return sack->add_cmdline_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
+}
+
+
 libdnf::rpm::Package LibdnfTestCase::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
     if (query.empty()) {
         CPPUNIT_FAIL("No package \"" + what + "\" found. All sack packages:" + \
