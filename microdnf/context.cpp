@@ -310,6 +310,58 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
 //     }
 // }
 
+
+void Context::download_and_run(libdnf::base::Transaction & transaction) {
+    download_packages(transaction, nullptr);
+
+    std::cout << std::endl;
+
+    libdnf::rpm::Transaction rpm_transaction(base);
+    std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
+    rpm_transaction.fill_transaction<RpmTransactionItem>(transaction.get_packages(), transaction_items);
+
+    auto db_transaction = new_db_transaction();
+    db_transaction->fill_transaction_packages(transaction.get_packages());
+
+    auto time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->start();
+
+    run_transaction(rpm_transaction);
+
+    time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->finish(libdnf::transaction::TransactionState::DONE);
+}
+
+
+libdnf::transaction::TransactionWeakPtr Context::new_db_transaction() {
+    auto transaction_sack = base.get_transaction_sack();
+    auto transaction = transaction_sack->new_transaction();
+    transaction->set_user_id(get_login_uid());
+    if (comment != nullptr) {
+        transaction->set_comment(comment);
+    }
+    auto vars = base.get_vars();
+    if (vars->contains("releasever")) {
+        transaction->set_releasever(vars->get_value("releasever"));
+    }
+    std::string cmd_line;
+    for (size_t i = 0; i < prg_args.size(); ++i) {
+        if (i > 0) {
+            cmd_line += " ";
+        }
+        cmd_line += prg_args[i];
+    }
+    transaction->set_cmdline(cmd_line);
+
+    // TODO(jrohel): nevra of running microdnf?
+    //transaction->add_runtime_package("microdnf");
+
+    return transaction;
+}
+
+
 RpmTransactionItem::RpmTransactionItem(const libdnf::base::TransactionPackage & tspkg)
     : TransactionItem(tspkg.get_package()) {
     switch (tspkg.get_action()) {
@@ -708,33 +760,6 @@ void run_transaction(libdnf::rpm::Transaction & transaction) {
         transaction.register_cb(nullptr);
     }
     std::cout << std::endl;
-}
-
-libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx) {
-    auto transaction_sack = ctx.base.get_transaction_sack();
-    auto transaction = transaction_sack->new_transaction();
-    transaction->set_user_id(get_login_uid());
-    if (auto comment = ctx.get_comment()) {
-        transaction->set_comment(comment);
-    }
-    auto vars = ctx.base.get_vars();
-    if (vars->contains("releasever")) {
-        transaction->set_releasever(vars->get_value("releasever"));
-    }
-    auto arguments = ctx.get_prg_arguments();
-    std::string cmd_line;
-    for (size_t i = 0; i < arguments.size(); ++i) {
-        if (i > 0) {
-            cmd_line += " ";
-        }
-        cmd_line += arguments[i];
-    }
-    transaction->set_cmdline(cmd_line);
-
-    // TODO(jrohel): nevra of running microdnf?
-    //transaction->add_runtime_package("microdnf");
-
-    return transaction;
 }
 
 }  // namespace microdnf

@@ -106,22 +106,7 @@ void RemoveCommand::run() {
         return;
     }
 
-    libdnf::rpm::Transaction rpm_transaction(ctx.base);
-    std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
-    rpm_transaction.fill_transaction<RpmTransactionItem>(transaction.get_packages(), transaction_items);
-
-    auto db_transaction = new_db_transaction(ctx);
-    db_transaction->fill_transaction_packages(transaction.get_packages());
-
-    auto time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
-    db_transaction->start();
-
-    run_transaction(rpm_transaction);
-
-    time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
-    db_transaction->finish(libdnf::transaction::TransactionState::DONE);
+    ctx.download_and_run(transaction);
 }
 
 

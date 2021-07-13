@@ -57,9 +57,16 @@ public:
     /// Stores pointer to user comment.
     void set_comment(const char * comment) noexcept { this->comment = comment; }
 
+    /// Downloads transaction packages, creates the history DB transaction and
+    /// rpm transaction and runs it.
+    void download_and_run(libdnf::base::Transaction & transaction);
+
 private:
     /// Updates the repository metadata cache and load it into rpm::RepoSack.
     void load_rpm_repo(libdnf::repo::Repo & repo);
+
+    /// Creates, initializes and returns new database transaction.
+    libdnf::transaction::TransactionWeakPtr new_db_transaction();
 
     /// Refers to program arguments.
     libdnf::Span<const char * const> prg_args;
@@ -87,9 +94,6 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
 void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir);
 
 void run_transaction(libdnf::rpm::Transaction & transaction);
-
-/// Creates, initializes and returns new database transaction.
-libdnf::transaction::TransactionWeakPtr new_db_transaction(Context & ctx);
 
 
 }  // namespace microdnf
