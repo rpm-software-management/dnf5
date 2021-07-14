@@ -710,7 +710,10 @@ std::string PackageSack::Impl::give_repo_solv_cache_fn(const std::string & repoi
     return fn;
 }
 
-PackageSack::PackageSack(const BaseWeakPtr & base) : p_impl{new Impl(base)} {}
+PackageSack::PackageSack(const BaseWeakPtr & base)
+  : p_impl{new Impl(base)},
+    system_state(base->get_config().installroot().get_value())
+{}
 
 PackageSack::PackageSack(libdnf::Base & base) : PackageSack(base.get_weak_ptr()) {}
 

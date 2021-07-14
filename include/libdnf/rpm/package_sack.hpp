@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/system/state.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <map>
@@ -157,13 +158,9 @@ public:
     /// Returns number of solvables in pool.
     int get_nsolvables() const noexcept;
 
-    /// @return Map of resolved reasons why packages were installed: ``{(name, arch) -> reason}``.
-    ///         A package can be installed due to multiple reasons, only the most significant is returned.
+    /// @return The system state object.
     /// @since 5.0
-    const std::map<std::pair<std::string, std::string>, libdnf::transaction::TransactionItemReason> & get_reasons()
-        const {
-        return reasons;
-    }
+    libdnf::system::State & get_system_state() { return system_state; }
 
 private:
     friend libdnf::Goal;
@@ -184,9 +181,11 @@ private:
     friend libdnf::advisory::AdvisoryModule;
     friend libdnf::advisory::AdvisoryReference;
     friend libdnf::base::Transaction;
+
     class Impl;
     std::unique_ptr<Impl> p_impl;
-    std::map<std::pair<std::string, std::string>, libdnf::transaction::TransactionItemReason> reasons;
+
+    libdnf::system::State system_state;
 };
 
 inline constexpr PackageSack::LoadRepoFlags operator|(PackageSack::LoadRepoFlags lhs, PackageSack::LoadRepoFlags rhs) {

@@ -289,6 +289,15 @@ std::string Package::get_repo_id() const {
     return get_pool(base).get_repo(id.id)->get_id();
 }
 
+libdnf::transaction::TransactionItemReason Package::get_reason() const {
+    if (!is_installed()) {
+        // TODO(lukash) Right now this breaks getting reasons in Transaction::Impl::set_transaction
+        //throw LogicError("Package " + get_nevra() + " is not installed.");
+    }
+
+    return base->get_rpm_package_sack()->get_system_state().get_reason(get_na());
+}
+
 Checksum Package::get_checksum() const {
     Solvable * solvable = get_pool(base).id2solvable(id.id);
     int type;

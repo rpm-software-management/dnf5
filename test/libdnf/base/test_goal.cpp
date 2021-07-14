@@ -140,7 +140,7 @@ void BaseGoalTest::test_install_multilib_all() {
 
 void BaseGoalTest::test_reinstall() {
     add_repo_rpm("rpm-repo1");
-    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::Goal goal(base);
     goal.add_rpm_reinstall("one");
@@ -151,13 +151,39 @@ void BaseGoalTest::test_reinstall() {
         TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         ),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REINSTALLED,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+}
+
+void BaseGoalTest::test_reinstall_user() {
+    add_repo_rpm("rpm-repo1");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::USER);
+
+    libdnf::Goal goal(base);
+    goal.add_rpm_reinstall("one");
+
+    auto transaction = goal.resolve(false);
+
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("one-0:1-1.noarch"),
+            TransactionItemAction::REINSTALL,
+            TransactionItemReason::USER,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("one-0:1-1.noarch", true),
+            TransactionItemAction::REINSTALLED,
+            TransactionItemReason::USER,
             TransactionItemState::UNKNOWN
         )
     };
@@ -166,7 +192,7 @@ void BaseGoalTest::test_reinstall() {
 
 void BaseGoalTest::test_remove() {
     add_repo_rpm("rpm-repo1");
-    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::Goal goal(base);
     goal.add_rpm_remove("one");
@@ -205,7 +231,7 @@ void BaseGoalTest::test_remove_not_installed() {
 
 void BaseGoalTest::test_install_installed_pkg() {
     add_repo_rpm("rpm-repo1");
-    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::rpm::PackageQuery query(base);
     query.filter_available().filter_nevra({"one-0:1-1.noarch"});
@@ -223,7 +249,7 @@ void BaseGoalTest::test_install_installed_pkg() {
 
 void BaseGoalTest::test_upgrade() {
     add_repo_rpm("rpm-repo1");
-    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::rpm::PackageQuery query(base);
 
@@ -236,13 +262,13 @@ void BaseGoalTest::test_upgrade() {
         TransactionPackage(
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         ),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::UPGRADED,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         )
     };
@@ -275,7 +301,7 @@ void BaseGoalTest::test_upgrade_not_available() {
 
 void BaseGoalTest::test_upgrade_all() {
     add_repo_rpm("rpm-repo1");
-    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::rpm::PackageQuery query(base);
 
@@ -288,13 +314,41 @@ void BaseGoalTest::test_upgrade_all() {
         TransactionPackage(
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         ),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::UPGRADED,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+}
+
+void BaseGoalTest::test_upgrade_user() {
+    add_repo_rpm("rpm-repo1");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::USER);
+
+    libdnf::rpm::PackageQuery query(base);
+
+    libdnf::Goal goal(base);
+    goal.add_rpm_upgrade("one");
+
+    auto transaction = goal.resolve(false);
+
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("one-0:2-1.noarch"),
+            TransactionItemAction::UPGRADE,
+            TransactionItemReason::USER,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("one-0:1-1.noarch", true),
+            TransactionItemAction::UPGRADED,
+            TransactionItemReason::USER,
             TransactionItemState::UNKNOWN
         )
     };
@@ -303,7 +357,7 @@ void BaseGoalTest::test_upgrade_all() {
 
 void BaseGoalTest::test_downgrade() {
     add_repo_rpm("rpm-repo1");
-    add_system_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm");
+    add_system_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::rpm::PackageQuery query(base);
 
@@ -316,13 +370,41 @@ void BaseGoalTest::test_downgrade() {
         TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         ),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::DOWNGRADED,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::UNKNOWN
+        )
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+}
+
+void BaseGoalTest::test_downgrade_user() {
+    add_repo_rpm("rpm-repo1");
+    add_system_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm", TransactionItemReason::USER);
+
+    libdnf::rpm::PackageQuery query(base);
+
+    libdnf::Goal goal(base);
+    goal.add_rpm_downgrade("one");
+
+    auto transaction = goal.resolve(false);
+
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("one-0:1-1.noarch"),
+            TransactionItemAction::DOWNGRADE,
+            TransactionItemReason::USER,
+            TransactionItemState::UNKNOWN
+        ),
+        TransactionPackage(
+            get_pkg("one-0:2-1.noarch", true),
+            TransactionItemAction::DOWNGRADED,
+            TransactionItemReason::USER,
             TransactionItemState::UNKNOWN
         )
     };
@@ -331,7 +413,7 @@ void BaseGoalTest::test_downgrade() {
 
 void BaseGoalTest::test_distrosync() {
     add_repo_solv("solv-distrosync");
-    add_system_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm");
+    add_system_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::rpm::PackageQuery query(base);
 
@@ -344,13 +426,13 @@ void BaseGoalTest::test_distrosync() {
         TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         ),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::DOWNGRADED,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         )
     };
@@ -359,7 +441,7 @@ void BaseGoalTest::test_distrosync() {
 
 void BaseGoalTest::test_distrosync_all() {
     add_repo_solv("solv-distrosync");
-    add_system_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm");
+    add_system_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::rpm::PackageQuery query(base);
 
@@ -372,13 +454,13 @@ void BaseGoalTest::test_distrosync_all() {
         TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         ),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::DOWNGRADED,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         )
     };
@@ -387,7 +469,7 @@ void BaseGoalTest::test_distrosync_all() {
 
 void BaseGoalTest::test_install_or_reinstall() {
     add_repo_rpm("rpm-repo1");
-    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::Goal goal(base);
     libdnf::rpm::PackageQuery query(base);
@@ -400,13 +482,13 @@ void BaseGoalTest::test_install_or_reinstall() {
         TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         ),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REINSTALLED,
-            TransactionItemReason::UNKNOWN,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN
         )
     };

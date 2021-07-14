@@ -329,6 +329,13 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
 
     run_transaction(rpm_transaction);
 
+    auto & system_state = base.get_rpm_package_sack()->get_system_state();
+    for (const auto & tspkg : transaction.get_packages()) {
+        system_state.set_reason(tspkg.get_package().get_na(), tspkg.get_reason());
+    }
+
+    system_state.save();
+
     time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
     db_transaction->finish(libdnf::transaction::TransactionState::DONE);
