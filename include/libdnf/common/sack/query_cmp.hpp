@@ -17,17 +17,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_COMMON_SACK_QUERY_CMP_HPP
 #define LIBDNF_COMMON_SACK_QUERY_CMP_HPP
-
 
 #include <cstdint>
 #include <type_traits>
 
 
 namespace libdnf::sack {
-
 
 /// Match operators used in filter methods of the Query objects.
 //
@@ -145,8 +142,6 @@ inline QueryCmp operator-(QueryCmp lhs, QueryCmp rhs) {
         static_cast<std::underlying_type<QueryCmp>::type>(rhs));
 }
 
-
 }  // namespace libdnf::sack
-
 
 #endif  // LIBDNF_COMMON_SACK_QUERY_CMP_HPP

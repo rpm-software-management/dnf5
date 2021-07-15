@@ -17,14 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_HPP
-
 
 #include "comps_environment.hpp"
 #include "comps_group.hpp"
 #include "rpm_package.hpp"
+#include "transaction_item.hpp"
 
 #include "libdnf/base/transaction_package.hpp"
 
@@ -32,16 +31,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <string>
 
+
 namespace libdnf::transaction {
+
 class Transaction;
 typedef std::shared_ptr<Transaction> TransactionPtr;
-}  // namespace libdnf::transaction
 
-#include "transaction_item.hpp"
+}  // namespace libdnf::transaction
 
 
 namespace libdnf::transaction {
-
 
 class Item;
 class Transformer;
@@ -268,8 +267,6 @@ private:
     TransactionSack & sack;
 };
 
-
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_HPP

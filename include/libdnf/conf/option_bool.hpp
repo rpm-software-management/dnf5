@@ -20,12 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CONF_OPTION_BOOL_HPP
 #define LIBDNF_CONF_OPTION_BOOL_HPP
 
-
 #include "option.hpp"
 
 #include <array>
 #include <memory>
 #include <vector>
+
 
 namespace libdnf {
 

@@ -17,7 +17,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_COMPS_GROUP_GROUP_HPP
 #define LIBDNF_COMPS_GROUP_GROUP_HPP
 
@@ -31,7 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::comps {
-
 
 struct GroupId {
 public:
@@ -146,8 +144,6 @@ private:
     friend class GroupQuery;
 };
 
-
 }  // namespace libdnf::comps
-
 
 #endif  // LIBDNF_COMPS_GROUP_GROUP_HPP

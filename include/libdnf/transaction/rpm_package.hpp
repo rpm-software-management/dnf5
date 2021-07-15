@@ -17,10 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_RPM_PACKAGE_HPP
 #define LIBDNF_TRANSACTION_RPM_PACKAGE_HPP
-
 
 #include "transaction_item.hpp"
 #include "transaction_item_reason.hpp"
@@ -30,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::transaction {
-
 
 class Transaction;
 
@@ -121,8 +118,6 @@ private:
     std::string arch;
 };
 
-
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_RPM_PACKAGE_HPP

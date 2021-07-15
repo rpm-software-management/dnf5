@@ -21,6 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_PACKAGE_SACK_HPP
 #define LIBDNF_RPM_PACKAGE_SACK_HPP
 
+#include "package.hpp"
+#include "package_set.hpp"
+#include "reldep.hpp"
+
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
@@ -56,7 +60,7 @@ namespace libdnf::repo {
 class Repo;
 class RepoSack;
 
-}
+}  // namespace libdnf::repo
 
 namespace libdnf::rpm::solv {
 
@@ -72,48 +76,7 @@ class Transaction;
 
 namespace libdnf::rpm {
 
-
-class PackageSet;
-
-
-struct PackageId {
-public:
-    PackageId() = default;
-    explicit PackageId(int id);
-
-    bool operator==(const PackageId & other) const noexcept { return id == other.id; };
-    bool operator!=(const PackageId & other) const noexcept { return id != other.id; };
-    bool operator<(const PackageId & other) const noexcept { return id < other.id; };
-
-
-    int id{0};
-};
-
-struct ReldepId {
-public:
-    ReldepId() = default;
-    explicit ReldepId(int id);
-
-    bool operator==(const ReldepId & other) const noexcept { return id == other.id; };
-    bool operator!=(const ReldepId & other) const noexcept { return id != other.id; };
-
-    int id{0};
-};
-
-inline PackageId::PackageId(int id) : id(id) {}
-
-inline ReldepId::ReldepId(int id) : id(id) {}
-
-
-// forward declarations
-class Package;
-class Reldep;
-class ReldepList;
-class PackageQuery;
-class Transaction;
-
 class PackageSack;
-
 using PackageSackWeakPtr = WeakPtr<PackageSack, false>;
 
 class PackageSack {
@@ -168,7 +131,7 @@ public:
     /// @replaces libdnf/dnf_sack.h:function:dnf_sack_add_cmdline_package(DnfSack *sack, const char *fn)
     /// @replaces libdnf/dnf_sack.h:function:dnf_sack_add_cmdline_package_nochecksum(DnfSack *sack, const char *fn)
     /// @replaces hawkey:hawkey/Sack:method:add_cmdline_package()
-    Package add_cmdline_package(const std::string & fn, bool add_with_hdrid);
+    libdnf::rpm::Package add_cmdline_package(const std::string & fn, bool add_with_hdrid);
 
     // TODO(jmracek) The method is highly experimental, what about to move it somewhere else?
     /// Adds the given .rpm file to the system repo. The function is mostly for testing purpose (not only for unittests)
@@ -176,7 +139,7 @@ public:
     /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
     /// When RPM is not accesible or corrupted it raises libdnf::RuntimeError
     /// Return added new Package
-    Package add_system_package(const std::string & fn, bool add_with_hdrid, bool build_cache);
+    libdnf::rpm::Package add_system_package(const std::string & fn, bool add_with_hdrid, bool build_cache);
 
     // TODO (lhrazky): There's an overlap with dumping the debugdata on the Goal class
     void dump_debugdata(const std::string & dir);
@@ -194,17 +157,20 @@ public:
     /// @return Map of resolved reasons why packages were installed: ``{(name, arch) -> reason}``.
     ///         A package can be installed due to multiple reasons, only the most significant is returned.
     /// @since 5.0
-    const std::map<std::pair<std::string, std::string>, libdnf::transaction::TransactionItemReason> & get_reasons() const { return reasons; }
+    const std::map<std::pair<std::string, std::string>, libdnf::transaction::TransactionItemReason> & get_reasons()
+        const {
+        return reasons;
+    }
 
 private:
     friend libdnf::Goal;
     friend Package;
     friend PackageSet;
     friend Reldep;
-    friend ReldepList;
+    friend class ReldepList;
     friend class repo::RepoSack;
-    friend PackageQuery;
-    friend Transaction;
+    friend class PackageQuery;
+    friend class Transaction;
     friend libdnf::Swdb;
     friend solv::SolvPrivate;
     friend libdnf::advisory::Advisory;

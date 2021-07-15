@@ -31,11 +31,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <utility>
 
+
 namespace libdnf {
 
 /**
 * @class ConfigParser
-* 
+*
 * @brief Class for parsing dnf/yum .ini configuration files.
 *
 * ConfigParser is used for parsing files.

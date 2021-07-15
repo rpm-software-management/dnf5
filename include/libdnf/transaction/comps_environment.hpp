@@ -17,10 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_COMPS_ENVIRONMENT_HPP
 #define LIBDNF_TRANSACTION_COMPS_ENVIRONMENT_HPP
-
 
 #include "comps_group.hpp"
 
@@ -29,7 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::transaction {
-
 
 class CompsEnvironmentGroup;
 class Transction;
@@ -173,8 +170,6 @@ private:
     CompsEnvironment & environment;
 };
 
-
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_COMPS_ENVIRONMENT_HPP

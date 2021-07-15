@@ -20,14 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_LOGGER_LOG_ROUTER_HPP
 #define LIBDNF_LOGGER_LOG_ROUTER_HPP
 
-
 #include "logger.hpp"
 
 #include <memory>
 #include <vector>
 
-namespace libdnf {
 
+namespace libdnf {
 
 /// LogRouter is an implementation of logging class that forwards incoming logging messages to several other loggers.
 /// Loggers can be addressed via index. Index is serial number of the logger starting from zero.
@@ -55,7 +54,6 @@ public:
 private:
     std::vector<std::unique_ptr<Logger>> loggers;
 };
-
 
 }  // namespace libdnf
 

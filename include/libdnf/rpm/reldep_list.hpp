@@ -26,12 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 
-namespace libdnf::rpm {
 
-// forward declarations
-class Package;
-class ReldepListIterator;
-class PackageQuery;
+namespace libdnf::rpm {
 
 /// @replaces libdnf/dnf-reldep-list.h:struct:DnfReldepList
 /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:struct:DependencyContainer
@@ -103,8 +99,9 @@ public:
 
 private:
     friend ReldepListIterator;
-    friend Package;
-    friend PackageQuery;
+
+    friend class Package;
+    friend class PackageQuery;
 
     /// @brief Adds a reldep from Char*. It does not support globs.
     ///
@@ -123,7 +120,6 @@ private:
 inline bool ReldepList::add_reldep(const std::string & reldep_str) {
     return add_reldep(reldep_str, 1);
 }
-
 
 }  // namespace libdnf::rpm
 

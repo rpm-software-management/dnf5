@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+
 namespace libdnf::plugin {
 
 class Plugin {

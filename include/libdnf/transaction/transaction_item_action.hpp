@@ -17,16 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_ITEM_ACTION_HPP
 #define LIBDNF_TRANSACTION_ITEM_ACTION_HPP
-
 
 #include <string>
 
 
 namespace libdnf::transaction {
-
 
 // Any time you add a new action, change functions that resolve reasons,
 // because removed items (RPMs) must be excluded from reason resolution:
@@ -51,7 +48,6 @@ std::string TransactionItemAction_get_name(TransactionItemAction action);
 std::string TransactionItemAction_get_short(TransactionItemAction action);
 bool TransactionItemAction_is_forward_action(TransactionItemAction action);
 bool TransactionItemAction_is_backward_action(TransactionItemAction action);
-
 
 }  // namespace libdnf::transaction
 

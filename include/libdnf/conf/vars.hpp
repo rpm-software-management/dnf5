@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+
 namespace libdnf {
 
 /// @class Vars
@@ -113,7 +114,6 @@ private:
 
     std::map<std::string, Variable> variables;
 };
-
 
 }  // namespace libdnf
 

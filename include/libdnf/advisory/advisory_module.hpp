@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_MODULE_HPP
 #define LIBDNF_ADVISORY_ADVISORY_MODULE_HPP
 
-#include "libdnf/advisory/advisory.hpp"
+#include "advisory.hpp"
 
 #include <memory>
 

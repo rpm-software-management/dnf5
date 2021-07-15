@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <functional>
 
+
 namespace libdnf {
 
 /// Option that stores numerical value. The type of value is template parameter.

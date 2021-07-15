@@ -20,15 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_LOGGER_LOGGER_HPP
 #define LIBDNF_LOGGER_LOGGER_HPP
 
-
 #include <unistd.h>
 
 #include <array>
 #include <ctime>
 #include <string>
 
-namespace libdnf {
 
+namespace libdnf {
 
 /// Logger is an abstract interface used for logging.
 /// An implementation (inherited class) can call callbacks, log the messages to memory, file, or somewhere else.
@@ -83,7 +82,6 @@ private:
         "CRITICAL", "ERROR", "WARNING", "NOTICE", "INFO", "DEBUG", "TRACE"};
 #endif
 };
-
 
 }  // namespace libdnf
 

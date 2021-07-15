@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iterator>
 #include <type_traits>
 
+
 namespace libdnf {
 
 inline constexpr std::size_t DYNAMIC_EXTENT = static_cast<std::size_t>(-1);

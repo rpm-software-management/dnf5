@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "package.hpp"
-#include "package_sack.hpp"
 #include "package_set_iterator.hpp"
 
 #include <memory>
@@ -36,11 +35,6 @@ class SolvMap;
 }  // namespace libdnf::rpm::solv
 
 namespace libdnf::rpm {
-
-class PackageSetIterator;
-class PackageQuery;
-class Transaction;
-
 
 /// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
 class PackageSet {
@@ -105,18 +99,15 @@ public:
 
 private:
     friend PackageSetIterator;
-    friend PackageQuery;
-    friend Transaction;
+    friend class PackageQuery;
+    friend class Transaction;
     friend class libdnf::base::Transaction;
     friend libdnf::Goal;
-    friend libdnf::Swdb;
     PackageSet(const PackageSackWeakPtr & sack, libdnf::solv::SolvMap & solv_map);
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };
 
-
 }  // namespace libdnf::rpm
-
 
 #endif  // LIBDNF_RPM_PACKAGE_SET_HPP

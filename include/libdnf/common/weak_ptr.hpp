@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <unordered_set>
 
+
 namespace libdnf {
 
 template <typename TPtr, bool ptr_owner>

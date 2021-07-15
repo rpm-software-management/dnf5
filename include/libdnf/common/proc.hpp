@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <sys/types.h>
 
+
 namespace libdnf {
 
 constexpr uid_t INVALID_UID = static_cast<uid_t>(-1);

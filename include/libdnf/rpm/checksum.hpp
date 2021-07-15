@@ -17,16 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_RPM_CHECKSUM_HPP
 #define LIBDNF_RPM_CHECKSUM_HPP
 
 #include <string>
 
-namespace libdnf::rpm {
 
-// forward declarations
-class Package;
+namespace libdnf::rpm {
 
 /// Class contains checksum and checksum type
 class Checksum {
@@ -56,7 +53,6 @@ inline Checksum::Checksum(const char * checksum, int libsolv_type) : libsolv_typ
         this->checksum = checksum;
     }
 }
-
 
 }  // namespace libdnf::rpm
 

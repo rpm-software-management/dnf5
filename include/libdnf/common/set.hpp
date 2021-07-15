@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <set>
 
+
 namespace libdnf {
 
 /// Set represents set of objects (e.g. repositories, or groups)

@@ -17,7 +17,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_COMPS_GROUP_SACK_HPP
 #define LIBDNF_COMPS_GROUP_SACK_HPP
 
@@ -32,12 +31,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::comps {
 
-
 class Comps;
-
 class Group;
-
-class GroupQuery;
 
 class GroupSack;
 using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
@@ -67,12 +62,11 @@ private:
     std::map<std::string, libdnf::transaction::TransactionItemReason> reasons;
 
     friend Comps;
-    friend GroupQuery;
     friend Group;
+
+    friend class GroupQuery;
 };
 
-
 }  // namespace libdnf::comps
-
 
 #endif  // LIBDNF_COMPS_GROUP_SACK_HPP

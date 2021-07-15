@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
+
 namespace libdnf {
 
 /// Option class is an abstract class. Parent of all options. Options are used to store a configuration.

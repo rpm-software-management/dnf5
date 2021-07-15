@@ -20,14 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_LOGGER_MEMORY_BUFFER_LOGGER_HPP
 #define LIBDNF_LOGGER_MEMORY_BUFFER_LOGGER_HPP
 
-
 #include "logger.hpp"
 
 #include <mutex>
 #include <vector>
 
-namespace libdnf {
 
+namespace libdnf {
 
 /// MemoryBufferLogger is an implementation of logging class that stores incoming logging messages into memory buffer.
 /// It is usually used as temporary logger until a final logger is not configured.
@@ -53,7 +52,6 @@ private:
     std::size_t first_item_idx;
     std::vector<Item> items;
 };
-
 
 }  // namespace libdnf
 

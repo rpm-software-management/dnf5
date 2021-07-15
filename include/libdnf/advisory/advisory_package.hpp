@@ -26,6 +26,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <vector>
 
 
+namespace libdnf::rpm {
+
+class PackageQuery;
+
+}
+
 namespace libdnf::advisory {
 
 class AdvisoryPackage {

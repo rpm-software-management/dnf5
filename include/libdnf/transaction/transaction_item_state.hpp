@@ -17,16 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
-
 
 #include <string>
 
 
 namespace libdnf::transaction {
-
 
 enum class TransactionItemState : int {
     UNKNOWN = 0,  // default state, must be changed before save
@@ -37,8 +34,6 @@ enum class TransactionItemState : int {
 
 std::string TransactionItemState_to_string(TransactionItemState state);
 
-
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP

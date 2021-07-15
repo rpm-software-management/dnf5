@@ -17,10 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_QUERY_HPP
 #define LIBDNF_TRANSACTION_QUERY_HPP
-
 
 #include "transaction.hpp"
 
@@ -29,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <mutex>
 #include <vector>
+
 
 namespace libdnf {
 
@@ -39,7 +38,6 @@ using BaseWeakPtr = WeakPtr<Base, false>;
 
 
 namespace libdnf::transaction {
-
 
 class TransactionSack;
 
@@ -77,8 +75,6 @@ private:
     };
 };
 
-
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_QUERY_HPP

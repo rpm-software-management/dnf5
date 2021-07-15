@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 
+
 namespace libdnf::utils {
 
 class Library {

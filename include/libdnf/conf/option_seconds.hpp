@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "option_number.hpp"
 
+
 namespace libdnf {
 
 /// Option that stores an integer value of seconds.

@@ -17,10 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_COMPS_GROUP_HPP
 #define LIBDNF_TRANSACTION_COMPS_GROUP_HPP
-
 
 #include "transaction_item.hpp"
 
@@ -29,7 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::transaction {
-
 
 class CompsGroupPackage;
 class Transaction;
@@ -191,8 +188,6 @@ private:
     CompsGroup & group;
 };
 
-
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_COMPS_GROUP_HPP

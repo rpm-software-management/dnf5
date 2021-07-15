@@ -17,10 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_ITEM_HPP
-
 
 #include "transaction_item_action.hpp"
 #include "transaction_item_reason.hpp"
@@ -31,7 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::transaction {
-
 
 class Transaction;
 
@@ -155,8 +152,6 @@ protected:
     // std::vector< TransactionItemPtr > replacedBy;
 };
 
-
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_HPP

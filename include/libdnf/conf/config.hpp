@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "vars.hpp"
 #include "../logger/logger.hpp"
 
+
 namespace libdnf {
 
 /// Base class for configurations objects

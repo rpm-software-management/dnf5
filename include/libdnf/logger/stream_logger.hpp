@@ -20,15 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_LOGGER_STREAM_LOGGER_HPP
 #define LIBDNF_LOGGER_STREAM_LOGGER_HPP
 
-
 #include "logger.hpp"
 
 #include <memory>
 #include <mutex>
 #include <ostream>
 
-namespace libdnf {
 
+namespace libdnf {
 
 /// StreamLogger is an implementation of logging class that writes messages into a stream.
 class StreamLogger : public Logger {
@@ -40,7 +39,6 @@ private:
     mutable std::mutex stream_mutex;
     std::unique_ptr<std::ostream> log_stream;
 };
-
 
 }  // namespace libdnf
 

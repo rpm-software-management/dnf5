@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 
+
 namespace libdnf {
 
 /// Holds global configuration

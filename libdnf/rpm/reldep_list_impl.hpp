@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/solv/id_queue.hpp"
 
+
 namespace libdnf::rpm {
 
 class ReldepList::Impl {
@@ -39,7 +40,7 @@ public:
 
 private:
     friend class ReldepList;
-    friend Package;
+    friend class Package;
     PackageSackWeakPtr sack;
     libdnf::solv::IdQueue queue;
 };

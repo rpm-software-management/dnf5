@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "option_string.hpp"
 
+
 namespace libdnf {
 
 /// Option that stores file/directory path.

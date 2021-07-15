@@ -17,7 +17,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_COMPS_GROUP_QUERY_HPP
 #define LIBDNF_COMPS_GROUP_QUERY_HPP
 
@@ -26,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/group.hpp"
 
 #include <memory>
+
 
 namespace libdnf {
 
@@ -130,7 +130,6 @@ inline GroupQuery & GroupQuery::filter_installed(bool value) {
     filter(F::is_installed, value, sack::QueryCmp::EQ);
     return *this;
 }
-
 
 }  // namespace libdnf::comps
 

@@ -20,12 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_EXCEPTION_HPP
 #define LIBDNF_UTILS_EXCEPTION_HPP
 
-
 #include <stdexcept>
 
 
 namespace libdnf {
-
 
 /// Base class of libdnf exceptions. Each exception define at least domain_name, name, and description.
 /// These information can be used to serialize exception into a string.

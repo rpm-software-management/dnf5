@@ -25,15 +25,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/solv/solv_map.hpp"
 
+
 namespace libdnf {
+
 class Base;
 using BaseWeakPtr = WeakPtr<Base, false>;
+
 }
+
 
 namespace libdnf::advisory {
 
 class AsdvisorySack;
 using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
+
 
 class AdvisorySack {
 public:

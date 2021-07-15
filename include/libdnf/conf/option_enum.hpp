@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <functional>
 #include <vector>
 
+
 namespace libdnf {
 
 /// Option that stores value from enumeration. The type of value is template parameter.

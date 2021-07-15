@@ -26,8 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <vector>
 
-namespace libdnf::sack {
 
+namespace libdnf::sack {
 
 template <typename T>
 class Sack {

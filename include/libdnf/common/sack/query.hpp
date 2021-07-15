@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMMON_SACK_QUERY_HPP
 #define LIBDNF_COMMON_SACK_QUERY_HPP
 
-
 #include "match_int64.hpp"
 #include "match_string.hpp"
 #include "query_cmp.hpp"
@@ -36,7 +35,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::sack {
-
 
 /// Query is a Set with filtering capabilities.
 template <typename T>
@@ -220,8 +218,6 @@ inline void Query<T>::filter(Query<T>::FilterFunctionCString * getter, const std
     }
 }
 
-
 }  // namespace libdnf::sack
-
 
 #endif

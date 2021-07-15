@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RELDEP_HPP
 #define LIBDNF_RPM_RELDEP_HPP
 
-#include "package_sack.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 
 #include <memory>
 #include <string>
@@ -29,7 +29,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
-class ReldepListIterator;
+class PackageSack;
+using PackageSackWeakPtr = WeakPtr<PackageSack, false>;
+
+struct ReldepId {
+public:
+    ReldepId() = default;
+    explicit ReldepId(int id) : id(id) {}
+
+    bool operator==(const ReldepId & other) const noexcept { return id == other.id; };
+    bool operator!=(const ReldepId & other) const noexcept { return id != other.id; };
+
+    int id{0};
+};
 
 /// @brief Represent a relational dependency from libsolv
 ///
@@ -83,8 +95,8 @@ protected:
     Reldep(PackageSack * sack, ReldepId dependency_id);
 
 private:
-    friend ReldepList;
-    friend ReldepListIterator;
+    friend class ReldepList;
+    friend class ReldepListIterator;
 
     /// @brief Creates a reldep from name, version, and comparison type.
     ///

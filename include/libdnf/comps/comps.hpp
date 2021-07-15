@@ -17,7 +17,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_COMPS_COMPS_HPP
 #define LIBDNF_COMPS_COMPS_HPP
 
@@ -28,7 +27,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf {
+
 class Base;
+
 }
 
 
@@ -55,13 +56,11 @@ private:
     class Impl;
     std::unique_ptr<Impl> p_impl;
 
-    friend GroupSack;
-    friend GroupQuery;
-    friend Group;
+    friend class Group;
+    friend class GroupQuery;
+    friend class GroupSack;
 };
 
-
 }  // namespace libdnf::comps
-
 
 #endif  // LIBDNF_COMPS_COMPS_HPP

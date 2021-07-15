@@ -17,10 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_UTILS_TEMP_HPP
 #define LIBDNF_UTILS_TEMP_HPP
-
 
 #include <filesystem>
 #include <vector>
@@ -28,7 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::utils {
-
 
 /// Object that creates and holds a temp directory.
 /// The directory gets removed when the object is deleted.
@@ -45,8 +42,6 @@ private:
     std::filesystem::path path;
 };
 
-
 }  // namespace libdnf::utils
-
 
 #endif  // LIBDNF_UTILS_TEMP_HPP

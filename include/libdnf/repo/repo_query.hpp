@@ -17,10 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_REPO_REPO_QUERY_HPP
 #define LIBDNF_REPO_REPO_QUERY_HPP
-
 
 #include "libdnf/common/sack/query.hpp"
 #include "libdnf/common/sack/query_cmp.hpp"
@@ -32,18 +30,21 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf {
+
 class Base;
 using BaseWeakPtr = WeakPtr<Base, false>;
+
 }
 
 namespace libdnf::repo {
+
 class RepoSack;
 using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
+
 }
 
 
 namespace libdnf::repo {
-
 
 /// Weak pointer to rpm repository. RepoWeakPtr does not own the repository (ptr_owner = false).
 /// Repositories are owned by RepoSack.
@@ -120,8 +121,6 @@ private:
     BaseWeakPtr base;
 };
 
-
 }  // namespace libdnf::repo
-
 
 #endif  // LIBDNF_REPO_REPO_QUERY_HPP

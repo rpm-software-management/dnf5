@@ -29,7 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-
 class Goal {
 public:
     struct UsedDifferentSack : public LogicError {

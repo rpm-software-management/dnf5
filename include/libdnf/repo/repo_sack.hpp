@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/logger/logger.hpp"
 
+
 namespace libdnf {
 
 class Base;
@@ -34,11 +35,12 @@ using BaseWeakPtr = WeakPtr<Base, false>;
 
 }  // namespace libdnf
 
+
 namespace libdnf::repo {
 
 class RepoSack;
-
 using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
+
 
 class RepoSack : public sack::Sack<Repo> {
 public:

@@ -17,10 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_SACK_HPP
 #define LIBDNF_TRANSACTION_SACK_HPP
-
 
 #include "query.hpp"
 #include "transaction.hpp"
@@ -38,9 +36,7 @@ using BaseWeakPtr = WeakPtr<Base, false>;
 
 }
 
-
 namespace libdnf::transaction {
-
 
 /// Weak pointer to Transaction. It doesn't own the object (ptr_owner = false).
 /// Transactions are owned by TransactionSack.
@@ -81,6 +77,5 @@ private:
 };
 
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_SACK_HPP

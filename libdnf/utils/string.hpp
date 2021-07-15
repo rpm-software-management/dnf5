@@ -17,17 +17,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_UTILS_STRING_HPP
 #define LIBDNF_UTILS_STRING_HPP
-
 
 #include <algorithm>
 #include <string>
 
 
 namespace libdnf::utils::string {
-
 
 /// Determine if a string starts with a pattern
 inline bool starts_with(const std::string & value, const std::string & pattern) {
@@ -82,8 +79,6 @@ std::vector<std::string> rsplit(const std::string & str, const std::string & del
 std::vector<std::string> split(
     const std::string & str, const std::string & delimiter, std::size_t limit = std::string::npos);
 
-
 }  // namespace libdnf::utils::string
-
 
 #endif  // LIBDNF_UTILS_STRING_HPP

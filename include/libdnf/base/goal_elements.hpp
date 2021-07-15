@@ -29,10 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-// forward declarations
-class Goal;
-
-
 enum class ProblemRules {
     RULE_DISTUPGRADE = 1,
     RULE_INFARCH,

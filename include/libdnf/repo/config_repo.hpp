@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <memory>
 
+
 namespace libdnf::repo {
 
 /// Holds repo configuration options. Default values of some options are inherited from ConfigMain.

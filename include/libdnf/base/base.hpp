@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <map>
 
+
 namespace libdnf {
 
 class Base;

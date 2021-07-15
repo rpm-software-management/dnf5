@@ -20,11 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CONF_OPTION_BINDS_HPP
 #define LIBDNF_CONF_OPTION_BINDS_HPP
 
-
 #include "option.hpp"
 
 #include <functional>
 #include <map>
+
 
 namespace libdnf {
 

@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <stdexcept>
 #include <vector>
 
+
 namespace libdnf {
 
 /// PreserveOrderMap is an associative container that contains key-value pairs with unique unique keys.

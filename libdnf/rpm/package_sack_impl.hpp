@@ -20,14 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
 #define LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
 
-#include "../utils/utils_internal.hpp"
-#include "../repo/repo_impl.hpp"
+#include "libdnf/base/base.hpp"
+#include "libdnf/repo/repo_impl.hpp"
+#include "libdnf/rpm/package.hpp"
 #include "libdnf/solv/id_queue.hpp"
 #include "libdnf/solv/solv_map.hpp"
-
-#include "libdnf/base/base.hpp"
-#include "libdnf/rpm/package.hpp"
-#include "libdnf/rpm/package_sack.hpp"
+#include "libdnf/utils/utils_internal.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -59,10 +57,6 @@ static inline bool nevra_solvable_cmp_icase_key(
 }
 
 namespace libdnf::rpm {
-
-
-class PackageSet;
-
 
 class PackageSack::Impl {
 public:
@@ -167,7 +161,8 @@ private:
     friend PackageSet;
     friend Reldep;
     friend ReldepList;
-    friend Transaction;
+
+    friend class Transaction;
 };
 
 

@@ -17,16 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
-
 
 #include <string>
 
 
 namespace libdnf::transaction {
-
 
 enum class TransactionItemReason : int {
     UNKNOWN = 0,
@@ -54,8 +51,6 @@ bool operator<=(TransactionItemReason lhs, TransactionItemReason rhs);
 bool operator>(TransactionItemReason lhs, TransactionItemReason rhs);
 bool operator>=(TransactionItemReason lhs, TransactionItemReason rhs);
 
-
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_REASON_HPP

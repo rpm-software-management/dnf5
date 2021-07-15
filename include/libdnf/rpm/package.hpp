@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_PACKAGE_HPP
 
 #include "checksum.hpp"
-#include "package_sack.hpp"
 #include "reldep_list.hpp"
 
 #include "libdnf/repo/repo_query.hpp"
@@ -38,6 +37,7 @@ class Goal;
 
 }  // namespace libdnf
 
+
 namespace libdnf::base {
 
 class Transaction;
@@ -47,10 +47,21 @@ class Transaction;
 
 namespace libdnf::rpm {
 
+struct PackageId {
+public:
+    PackageId() = default;
+    explicit PackageId(int id) : id(id) {}
+
+    bool operator==(const PackageId & other) const noexcept { return id == other.id; };
+    bool operator!=(const PackageId & other) const noexcept { return id != other.id; };
+    bool operator<(const PackageId & other) const noexcept { return id < other.id; };
+
+
+    int id{0};
+};
 
 // IMPORTANT: Package methods MUST NOT be 'noexcept'
 // because accessing deleted sack throws an exception.
-
 
 // @replaces libdnf:libdnf/hy-package.h:struct:DnfPackage
 // @replaces dnf:dnf/package.py:class:Package
@@ -482,8 +493,6 @@ inline bool Package::operator!=(const Package & other) const noexcept {
     return id != other.id || sack != other.sack;
 }
 
-
 }  // namespace libdnf::rpm
-
 
 #endif  // LIBDNF_RPM_PACKAGE_HPP

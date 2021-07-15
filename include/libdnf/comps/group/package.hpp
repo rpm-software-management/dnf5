@@ -17,16 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_COMPS_GROUP_PACKAGE_HPP
 #define LIBDNF_COMPS_GROUP_PACKAGE_HPP
-
 
 #include <string>
 
 
 namespace libdnf::comps {
-
 
 enum class PackageType {MANDATORY, DEFAULT, OPTIONAL, CONDITIONAL};
 
@@ -70,12 +67,6 @@ private:
     std::string condition;
 };
 
-
 }  // namespace libdnf::comps
-
-
-
-//dnf:dnf/comps.py:attribute:Package.option_type
-
 
 #endif

@@ -27,13 +27,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-class AdvisoryCollection;
 class AdvisoryReference;
 
 struct AdvisoryId {
 public:
     AdvisoryId() = default;
-    explicit AdvisoryId(int id);
+    explicit AdvisoryId(int id) : id(id) {}
 
     bool operator==(const AdvisoryId & other) const noexcept { return id == other.id; };
     bool operator!=(const AdvisoryId & other) const noexcept { return id != other.id; };
@@ -41,7 +40,6 @@ public:
     int id{0};
 };
 
-inline AdvisoryId::AdvisoryId(int id) : id(id) {}
 
 //TODO(amatej): consider defining these as individual numbers, not as bits in int.
 //              This allows us faster iteration, but all public APIs should accept
@@ -160,7 +158,6 @@ private:
     AdvisoryId id;
     libdnf::rpm::PackageSackWeakPtr sack;
 };
-
 
 }  // namespace libdnf::advisory
 

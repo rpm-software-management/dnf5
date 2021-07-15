@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RELDEP_LIST_ITERATOR_HPP
 #define LIBDNF_RPM_RELDEP_LIST_ITERATOR_HPP
 
-
 #include "reldep.hpp"
 
 #include <cstddef>
@@ -30,7 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::rpm {
-
 
 class ReldepList;
 
@@ -63,8 +61,6 @@ private:
     std::unique_ptr<Impl> p_impl;
 };
 
-
 }  // namespace libdnf::rpm
-
 
 #endif  // LIBDNF_RPM_RELDEP_LIST_ITERATOR_HPP

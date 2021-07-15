@@ -17,13 +17,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_TYPE_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_ITEM_TYPE_HPP
 
 
 namespace libdnf::transaction {
-
 
 enum class TransactionItemType : int {
     UNKNOWN = 0,  // default type, must be changed before save
@@ -32,8 +30,6 @@ enum class TransactionItemType : int {
     ENVIRONMENT = 3
 };
 
-
 }  // namespace libdnf::transaction
-
 
 #endif  // LIBDNF_TRANSACTION_TRANSACTION_ITEM_TYPE_HPP

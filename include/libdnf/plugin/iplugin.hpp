@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdint>
 
+
 namespace libdnf {
 
 class Base;

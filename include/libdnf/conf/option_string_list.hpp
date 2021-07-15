@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <vector>
 
+
 namespace libdnf {
 
 /// Option that stores list of strings.

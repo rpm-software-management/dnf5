@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+
 namespace libdnf::rpm {
 
 /// @replaces hawkey:hawkey/__init__.py:class:Nevra
@@ -230,7 +231,6 @@ bool cmp_naevr(const T & lhs, const T & rhs) {
     }
     return false;
 };
-
 
 }  // namespace libdnf::rpm
 

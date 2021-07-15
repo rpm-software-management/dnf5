@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "option.hpp"
 
+
 namespace libdnf {
 
 /// Option that links option to another option. It uses default value and parameters from linked option.
