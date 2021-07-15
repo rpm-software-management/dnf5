@@ -23,18 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "query.hpp"
 #include "transaction.hpp"
 
+#include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/sack/sack.hpp"
+#include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/transaction/db/db.hpp"
 
 #include <mutex>
 
-
-namespace libdnf {
-
-class Base;
-using BaseWeakPtr = WeakPtr<Base, false>;
-
-}
 
 namespace libdnf::transaction {
 
@@ -63,7 +58,7 @@ public:
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    BaseWeakPtr get_base() const;
+    libdnf::BaseWeakPtr get_base() const;
 
 private:
     friend class Transaction;

@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_sack.hpp"
 #include "package_set.hpp"
 
+#include "libdnf/base/base_weak.hpp"
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/sack/query_cmp.hpp"
@@ -35,9 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-class Base;
 class Goal;
-using BaseWeakPtr = WeakPtr<Base, false>;
 
 }  // namespace libdnf
 
@@ -68,8 +67,8 @@ public:
     /// @replaces libdnf/hy-query.h:function:hy_query_create_flags(DnfSack *sack, int flags);
     /// @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_free(DnfReldep *reldep)
-    explicit PackageQuery(const BaseWeakPtr & base, InitFlags flags = InitFlags::APPLY_EXCLUDES);
-    explicit PackageQuery(Base & base, InitFlags flags = InitFlags::APPLY_EXCLUDES);
+    explicit PackageQuery(const libdnf::BaseWeakPtr & base, InitFlags flags = InitFlags::APPLY_EXCLUDES);
+    explicit PackageQuery(libdnf::Base & base, InitFlags flags = InitFlags::APPLY_EXCLUDES);
     PackageQuery(const PackageQuery & src) = default;
     PackageQuery(PackageQuery && src) noexcept = default;
     ~PackageQuery() = default;

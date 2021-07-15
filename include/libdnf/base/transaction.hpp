@@ -21,18 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_TRANSACTION_HPP
 #define LIBDNF_BASE_TRANSACTION_HPP
 
+#include "libdnf/base/base_weak.hpp"
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/base/transaction_package.hpp"
 
 #include <optional>
-
-
-namespace libdnf {
-
-class Base;
-using BaseWeakPtr = WeakPtr<Base, false>;
-
-}  // namespace libdnf
 
 
 namespace libdnf::base {
@@ -50,7 +43,7 @@ public:
 private:
     friend class libdnf::Goal;
 
-    Transaction(const BaseWeakPtr & base);
+    Transaction(const libdnf::BaseWeakPtr & base);
 
     class Impl;
     std::unique_ptr<Impl> p_impl;

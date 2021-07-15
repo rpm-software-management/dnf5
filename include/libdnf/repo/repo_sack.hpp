@@ -23,17 +23,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo.hpp"
 #include "repo_query.hpp"
 
+#include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/sack/sack.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/logger/logger.hpp"
-
-
-namespace libdnf {
-
-class Base;
-using BaseWeakPtr = WeakPtr<Base, false>;
-
-}  // namespace libdnf
 
 
 namespace libdnf::repo {
@@ -44,7 +37,7 @@ using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
 class RepoSack : public sack::Sack<Repo> {
 public:
-    explicit RepoSack(Base & base) : base(&base) {}
+    explicit RepoSack(libdnf::Base & base) : base(&base) {}
 
     /// Creates new repository and add it into RepoSack
     RepoWeakPtr new_repo(const std::string & id);
@@ -74,7 +67,7 @@ public:
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    BaseWeakPtr get_base() const;
+    libdnf::BaseWeakPtr get_base() const;
 
 private:
     friend class RepoQuery;

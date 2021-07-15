@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_BASE_HPP
 
 #include "libdnf/advisory/advisory_sack.hpp"
+#include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/comps/comps.hpp"
 #include "libdnf/conf/config_main.hpp"
@@ -35,9 +36,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf {
-
-class Base;
-using BaseWeakPtr = WeakPtr<Base, false>;
 
 using LogRouterWeakPtr = WeakPtr<LogRouter, false>;
 using VarsWeakPtr = WeakPtr<Vars, false>;
@@ -77,7 +75,7 @@ public:
     void load_plugins();
     plugin::Plugins & get_plugins() { return plugins; }
 
-    BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
+    libdnf::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
 private:
     WeakPtrGuard<Base, false> base_guard;

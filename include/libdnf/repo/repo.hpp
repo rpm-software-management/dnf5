@@ -24,18 +24,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "config_repo.hpp"
 
+#include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 
 #include <memory>
-
-
-namespace libdnf {
-
-class Base;
-using BaseWeakPtr = WeakPtr<Base, false>;
-
-}  // namespace libdnf
 
 
 namespace libdnf::rpm {
@@ -135,7 +128,7 @@ public:
     /// @param conf   configuration to use
     /// @param base   reference to Base instance
     /// @param type   type of repo
-    Repo(const std::string & id, Base & base, Repo::Type type = Repo::Type::AVAILABLE);
+    Repo(const std::string & id, libdnf::Base & base, Repo::Type type = Repo::Type::AVAILABLE);
 
     Repo & operator=(Repo && repo) = delete;
 
@@ -372,7 +365,7 @@ public:
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    BaseWeakPtr get_base() const;
+    libdnf::BaseWeakPtr get_base() const;
 
     ~Repo();
 

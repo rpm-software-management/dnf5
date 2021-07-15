@@ -51,8 +51,8 @@ public:
         REMOVE
     };
 
-    explicit Goal(const BaseWeakPtr & base);
-    explicit Goal(Base & base);
+    explicit Goal(const libdnf::BaseWeakPtr & base);
+    explicit Goal(libdnf::Base & base);
     ~Goal();
     void add_module_enable(const std::string & spec);
     /// Prevent reinstallation by adding of already installed packages with the same NEVRA
@@ -135,7 +135,7 @@ public:
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    BaseWeakPtr get_base() const;
+    libdnf::BaseWeakPtr get_base() const;
 
 private:
     rpm::PackageId get_running_kernel_internal();

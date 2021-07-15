@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_set.hpp"
 #include "reldep.hpp"
 
+#include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
@@ -36,8 +37,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-class Base;
-using BaseWeakPtr = WeakPtr<Base, false>;
 class Goal;
 class Swdb;
 
@@ -113,7 +112,7 @@ public:
         USE_OTHER = 1 << 4,
     };
 
-    explicit PackageSack(Base & base);
+    explicit PackageSack(libdnf::Base & base);
     ~PackageSack();
 
     //TODO(jrohel): Provide/use configuration options for flags?
@@ -149,7 +148,7 @@ public:
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
-    BaseWeakPtr get_base() const;
+    libdnf::BaseWeakPtr get_base() const;
 
     /// Returns number of solvables in pool.
     int get_nsolvables() const noexcept;
