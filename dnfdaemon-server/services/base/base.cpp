@@ -35,14 +35,14 @@ void Base::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_BASE, "read_all_repos", "", "b", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Base::read_all_repos, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Base::read_all_repos, call);
         });
     dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START, "ss");
     dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS, "suu");
     dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END, "s");
 }
 
-sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall && call) {
+sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall & call) {
     bool retval = session.read_all_repos();
     auto reply = call.createReply();
     reply << retval;

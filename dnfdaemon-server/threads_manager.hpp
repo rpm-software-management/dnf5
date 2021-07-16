@@ -42,11 +42,11 @@ public:
     void finish();
 
     template <class S>
-    void handle_method(S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &&), sdbus::MethodCall && call) {
+    void handle_method(S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &), sdbus::MethodCall & call) {
         auto worker = std::thread(
-            [&method, &service, this](sdbus::MethodCall call) {
+            [this](S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &), sdbus::MethodCall call) {
                 try {
-                    auto reply = (service.*method)(std::move(call));
+                    auto reply = (service.*method)(call);
                     reply.send();
                 } catch (std::exception & ex) {
                     auto reply = call.createErrorReply({dnfdaemon::ERROR, ex.what()});
@@ -58,16 +58,16 @@ public:
                 }
                 current_thread_finished();
             },
-            std::move(call));
+            std::ref(service), method, call);
         register_thread(std::move(worker));
     }
 
     template <class S>
-    void handle_signal(S & service, void (S::*method)(sdbus::Signal &&), sdbus::Signal && signal) {
+    void handle_signal(S & service, void (S::*method)(sdbus::Signal &), sdbus::Signal & signal) {
         auto worker = std::thread(
-            [&method, &service, this](sdbus::Signal signal) {
+            [this](S & service, void (S::*method)(sdbus::Signal &), sdbus::Signal signal) {
                 try {
-                    (service.*method)(std::move(signal));
+                    (service.*method)(signal);
                 } catch (std::exception & ex) {
                     std::cerr << fmt::format(
                                      "Error handling signal {}:{}: {}",
@@ -78,7 +78,7 @@ public:
                 }
                 current_thread_finished();
             },
-            std::move(signal));
+            std::ref(service), method, signal);
         register_thread(std::move(worker));
     }
 

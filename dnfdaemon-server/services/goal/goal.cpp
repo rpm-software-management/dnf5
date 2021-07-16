@@ -39,15 +39,15 @@ void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(ua{sv})", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Goal::resolve, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Goal::resolve, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_GOAL, "do_transaction", "a{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Goal::do_transaction, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Goal::do_transaction, call);
         });
 }
 
-sdbus::MethodReply Goal::resolve(sdbus::MethodCall && call) {
+sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
@@ -146,7 +146,7 @@ void download_packages(Session & session, libdnf::base::Transaction & transactio
     libdnf::repo::PackageTarget::download_packages(targets, true);
 }
 
-sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall && call) {
+sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
         throw std::runtime_error("Not authorized");
     }

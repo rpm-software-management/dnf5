@@ -45,11 +45,11 @@ void SessionManager::dbus_register() {
     dbus_object = sdbus::createObject(connection, object_path);
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_SESSION_MANAGER, "open_session", "a{sv}", "o", [this](sdbus::MethodCall call) -> void {
-            threads_manager.handle_method(*this, &SessionManager::open_session, std::move(call));
+            threads_manager.handle_method(*this, &SessionManager::open_session, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_SESSION_MANAGER, "close_session", "o", "b", [this](sdbus::MethodCall call) -> void {
-            threads_manager.handle_method(*this, &SessionManager::close_session, std::move(call));
+            threads_manager.handle_method(*this, &SessionManager::close_session, call);
         });
     dbus_object->finishRegistration();
 
@@ -57,7 +57,7 @@ void SessionManager::dbus_register() {
     name_changed_proxy = sdbus::createProxy(connection, "org.freedesktop.DBus", "/org/freedesktop/DBus");
     name_changed_proxy->registerSignalHandler(
         "org.freedesktop.DBus", "NameOwnerChanged", [this](sdbus::Signal signal) -> void {
-            threads_manager.handle_signal(*this, &SessionManager::on_name_owner_changed, std::move(signal));
+            threads_manager.handle_signal(*this, &SessionManager::on_name_owner_changed, signal);
         });
     name_changed_proxy->finishRegistration();
 }
@@ -76,7 +76,7 @@ std::string gen_session_id() {
 }
 
 
-void SessionManager::on_name_owner_changed(sdbus::Signal && signal) {
+void SessionManager::on_name_owner_changed(sdbus::Signal & signal) {
     std::string name;
     std::string old_owner;
     std::string new_owner;
@@ -93,7 +93,7 @@ void SessionManager::on_name_owner_changed(sdbus::Signal && signal) {
     }
 }
 
-sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall && call) {
+sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall & call) {
     auto sender = call.getSender();
     dnfdaemon::KeyValueMap configuration;
     call >> configuration;
@@ -113,7 +113,7 @@ sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall && call) {
 }
 
 
-sdbus::MethodReply SessionManager::close_session(sdbus::MethodCall && call) {
+sdbus::MethodReply SessionManager::close_session(sdbus::MethodCall & call) {
     auto sender = call.getSender();
     sdbus::ObjectPath session_id;
     call >> session_id;

@@ -205,11 +205,11 @@ void Repo::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPO, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Repo::list, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Repo::list, call);
         });
 }
 
-sdbus::MethodReply Repo::list(sdbus::MethodCall && call) {
+sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     call >> options;
     const std::vector<std::string> empty_list{};

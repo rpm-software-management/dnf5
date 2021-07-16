@@ -32,8 +32,8 @@ public:
     void dbus_deregister();
 
 private:
-    sdbus::MethodReply resolve(sdbus::MethodCall && call);
-    sdbus::MethodReply do_transaction(sdbus::MethodCall && call);
+    sdbus::MethodReply resolve(sdbus::MethodCall & call);
+    sdbus::MethodReply do_transaction(sdbus::MethodCall & call);
 };
 
 #endif

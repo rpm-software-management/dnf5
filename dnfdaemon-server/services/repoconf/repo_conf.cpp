@@ -31,19 +31,19 @@ void RepoConf::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &RepoConf::list, std::move(call));
+            session.get_threads_manager().handle_method(*this, &RepoConf::list, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "get", "s", "a{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &RepoConf::get, std::move(call));
+            session.get_threads_manager().handle_method(*this, &RepoConf::get, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "enable", "as", "as", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &RepoConf::enable, std::move(call));
+            session.get_threads_manager().handle_method(*this, &RepoConf::enable, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "disable", "as", "as", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &RepoConf::disable, std::move(call));
+            session.get_threads_manager().handle_method(*this, &RepoConf::disable, call);
         });
 }
 
@@ -75,7 +75,7 @@ dnfdaemon::KeyValueMapList RepoConf::repo_list(const std::vector<std::string> & 
     return out;
 }
 
-sdbus::MethodReply RepoConf::list(sdbus::MethodCall && call) {
+sdbus::MethodReply RepoConf::list(sdbus::MethodCall & call) {
     dnfdaemon::KeyValueMap options;
     std::vector<std::string> default_ids{};
     call >> options;
@@ -87,7 +87,7 @@ sdbus::MethodReply RepoConf::list(sdbus::MethodCall && call) {
     return reply;
 }
 
-sdbus::MethodReply RepoConf::get(sdbus::MethodCall && call) {
+sdbus::MethodReply RepoConf::get(sdbus::MethodCall & call) {
     std::string id;
     call >> id;
     auto ids = std::vector<std::string>{std::move(id)};

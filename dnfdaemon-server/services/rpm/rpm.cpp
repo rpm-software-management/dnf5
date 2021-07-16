@@ -34,31 +34,31 @@ void Rpm::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "downgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::downgrade, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Rpm::downgrade, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::list, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Rpm::list, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "install", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::install, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Rpm::install, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "upgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::upgrade, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Rpm::upgrade, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "reinstall", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::reinstall, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Rpm::reinstall, call);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "remove", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::remove, std::move(call));
+            session.get_threads_manager().handle_method(*this, &Rpm::remove, call);
         });
 }
 
-sdbus::MethodReply Rpm::list(sdbus::MethodCall && call) {
+sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
@@ -109,7 +109,7 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall && call) {
     return reply;
 }
 
-sdbus::MethodReply Rpm::downgrade(sdbus::MethodCall && call) {
+sdbus::MethodReply Rpm::downgrade(sdbus::MethodCall & call) {
     std::vector<std::string> specs;
     call >> specs;
 
@@ -130,7 +130,7 @@ sdbus::MethodReply Rpm::downgrade(sdbus::MethodCall && call) {
     return reply;
 }
 
-sdbus::MethodReply Rpm::install(sdbus::MethodCall && call) {
+sdbus::MethodReply Rpm::install(sdbus::MethodCall & call) {
     std::vector<std::string> specs;
     call >> specs;
 
@@ -160,7 +160,7 @@ sdbus::MethodReply Rpm::install(sdbus::MethodCall && call) {
     return reply;
 }
 
-sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall && call) {
+sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall & call) {
     std::vector<std::string> specs;
     call >> specs;
 
@@ -181,7 +181,7 @@ sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall && call) {
     return reply;
 }
 
-sdbus::MethodReply Rpm::reinstall(sdbus::MethodCall && call) {
+sdbus::MethodReply Rpm::reinstall(sdbus::MethodCall & call) {
     std::vector<std::string> specs;
     call >> specs;
 
@@ -202,7 +202,7 @@ sdbus::MethodReply Rpm::reinstall(sdbus::MethodCall && call) {
     return reply;
 }
 
-sdbus::MethodReply Rpm::remove(sdbus::MethodCall && call) {
+sdbus::MethodReply Rpm::remove(sdbus::MethodCall & call) {
     std::vector<std::string> specs;
     call >> specs;
 

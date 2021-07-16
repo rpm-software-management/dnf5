@@ -49,9 +49,9 @@ private:
     std::map<std::string, std::map<std::string, std::unique_ptr<Session>>> sessions;
 
     void dbus_register();
-    sdbus::MethodReply open_session(sdbus::MethodCall && call);
-    sdbus::MethodReply close_session(sdbus::MethodCall && call);
-    void on_name_owner_changed(sdbus::Signal && signal);
+    sdbus::MethodReply open_session(sdbus::MethodCall & call);
+    sdbus::MethodReply close_session(sdbus::MethodCall & call);
+    void on_name_owner_changed(sdbus::Signal & signal);
 };
 
 #endif
