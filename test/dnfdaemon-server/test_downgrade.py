@@ -40,6 +40,7 @@ class DowngradeTest(support.InstallrootCase):
         # between runs so we can't rely on the value
         for action, pkg in resolved:
             pkg.pop('id')
+            pkg.pop('package_size')
 
         self.assertCountEqual(
             resolved,
@@ -53,7 +54,6 @@ class DowngradeTest(support.InstallrootCase):
                         dbus.String('version'): dbus.String('1', variant_level=1),
                         dbus.String('release'): dbus.String('1', variant_level=1),
                         dbus.String('arch'): dbus.String('noarch', variant_level=1),
-                        dbus.String('package_size'): dbus.UInt64(6030, variant_level=1),
                         dbus.String('install_size'): dbus.UInt64(0, variant_level=1),
                         dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1),
                         }, signature=dbus.Signature('sv'))),
@@ -67,7 +67,6 @@ class DowngradeTest(support.InstallrootCase):
                         dbus.String('version'): dbus.String('2', variant_level=1),
                         dbus.String('release'): dbus.String('1', variant_level=1),
                         dbus.String('arch'): dbus.String('noarch', variant_level=1),
-                        dbus.String('package_size'): dbus.UInt64(0, variant_level=1),
                         dbus.String('install_size'): dbus.UInt64(0, variant_level=1),
                         dbus.String('repo'): dbus.String('@System', variant_level=1),
                         }, signature=dbus.Signature('sv'))),

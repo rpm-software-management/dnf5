@@ -31,6 +31,7 @@ class InstallTest(support.InstallrootCase):
         # between runs so we can't rely on the value
         for action, pkg in resolved:
             pkg.pop('id')
+            pkg.pop('package_size')
 
         self.assertCountEqual(
             resolved,
@@ -42,7 +43,6 @@ class InstallTest(support.InstallrootCase):
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
                         dbus.String('evr'): dbus.String('2-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
-                        dbus.String('package_size'): dbus.UInt64(6030, variant_level=1),
                         dbus.String('install_size'): dbus.UInt64(0, variant_level=1),
                         dbus.String('release'): dbus.String('1', variant_level=1),
                         dbus.String('repo'): dbus.String('rpm-repo1', variant_level=1),
