@@ -37,6 +37,7 @@ private:
     sdbus::MethodReply upgrade(sdbus::MethodCall && call);
     sdbus::MethodReply remove(sdbus::MethodCall && call);
     sdbus::MethodReply downgrade(sdbus::MethodCall && call);
+    sdbus::MethodReply reinstall(sdbus::MethodCall && call);
 };
 
 #endif

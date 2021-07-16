@@ -174,6 +174,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        reinstall:
+        @specs: an array of package specifications to be reinstalled on the system
+        @options: an array of key/value pairs to modify reinstall behavior
+
+        Mark packages specified by @specs for reinstall.
+
+        Following @options are supported:
+
+        Unknown options are ignored.
+    -->
+    <method name="reinstall">
+        <arg name="specs" type="as" direction="in" />
+        <arg name="options" type="a{sv}" direction="in" />
+    </method>
+
+    <!--
         resolve:
         @options: an array of key/value pairs to modify dependency resolving
         @result: array of (action, n, e, v, r, a, repoid) tuples where action is one of libdnf::transaction::TransactionItemAction enum

@@ -49,6 +49,10 @@ void Rpm::dbus_register() {
             session.get_threads_manager().handle_method(*this, &Rpm::upgrade, std::move(call));
         });
     dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_RPM, "reinstall", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Rpm::reinstall, std::move(call));
+        });
+    dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "remove", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::remove, std::move(call));
         });
@@ -171,6 +175,27 @@ sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall && call) {
     setting.to_repo_ids = repo_ids;
     for (const auto & spec : specs) {
         goal.add_rpm_upgrade(spec, setting);
+    }
+
+    auto reply = call.createReply();
+    return reply;
+}
+
+sdbus::MethodReply Rpm::reinstall(sdbus::MethodCall && call) {
+    std::vector<std::string> specs;
+    call >> specs;
+
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+    std::vector<std::string> repo_ids = key_value_map_get<std::vector<std::string>>(options, "repo_ids", {});
+
+    // fill the goal
+    auto & goal = session.get_goal();
+    libdnf::GoalJobSettings setting;
+    setting.to_repo_ids = repo_ids;
+    for (const auto & spec : specs) {
+        goal.add_rpm_reinstall(spec, setting);
     }
 
     auto reply = call.createReply();
