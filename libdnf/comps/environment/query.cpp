@@ -54,7 +54,6 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
             continue;
         }
         // SOLVABLE_NAME is in a form "type:id"; include only solvables of type "environment"
-        // TODO(pkratoch): Test this works
         solvable_name = pool.lookup_str(solvable_id, SOLVABLE_NAME);
         auto delimiter_position = solvable_name.find(":");
         if (solvable_name.substr(0, delimiter_position) != "environment") {

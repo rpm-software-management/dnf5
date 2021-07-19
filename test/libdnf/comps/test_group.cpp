@@ -256,3 +256,21 @@ void CompsGroupTest::test_dump() {
 
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
+
+
+void CompsGroupTest::test_solvables() {
+    add_repo_repomd("repomd-comps-minimal-environment");
+    add_repo_repomd("repomd-comps-core");
+    add_repo_repomd("repomd-comps-core-environment");
+    add_repo_repomd("repomd-comps-standard");
+
+    libdnf::comps::GroupQuery q_groups(base);
+    auto groups = q_groups.list();
+    CPPUNIT_ASSERT_EQUAL(2lu, groups.size());
+
+    // Check that group core is only based on the group solvables
+    // There is an environment with id core that has a translation for lang "ee", but it shouldn't be used for the group with id core.
+    q_groups.filter_groupid("core");
+    auto core = q_groups.get();
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core.get_translated_description("ee"));
+}

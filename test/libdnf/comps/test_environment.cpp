@@ -167,3 +167,22 @@ void CompsEnvironmentTest::test_dump() {
 
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
+
+
+void CompsEnvironmentTest::test_solvables() {
+    add_repo_repomd("repomd-comps-minimal-environment");
+    add_repo_repomd("repomd-comps-core");
+    add_repo_repomd("repomd-comps-core-environment");
+    add_repo_repomd("repomd-comps-standard");
+
+    EnvironmentQuery q_environments(base);
+    auto environments = q_environments.list();
+    CPPUNIT_ASSERT_EQUAL(2lu, environments.size());
+
+    // Check that environment core is only based on the environment solvables
+    // There is a group with id core that has a translation for lang "de", but it shouldn't be used for the environment with id core.
+    q_environments.filter_environmentid("core");
+    auto core = q_environments.get();
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("Environment with the same id as an existing group."), core.get_translated_description("de"));
+}
