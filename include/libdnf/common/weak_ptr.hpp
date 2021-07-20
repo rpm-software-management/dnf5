@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "exception.hpp"
 
+#include <mutex>
 #include <unordered_set>
 
 
@@ -34,6 +35,9 @@ struct WeakPtr;
 /// WeakPtrGuard is a resource guard. WeakPtr instances register itself to the resource guard.
 /// And the resource guard invalidates the registered WeakPtrs when the resource is unusable
 /// (eg. its dependecny was released).
+/// Note on thread safety:
+/// Destroying the WeakPtrGuard while simultaneously using its WeakPtrs in another thread is not safe
+/// and can still trigger a race condition.
 template <typename TPtr, bool weak_ptr_is_owner>
 struct WeakPtrGuard {
 public:
@@ -41,29 +45,27 @@ public:
 
     WeakPtrGuard() = default;
     WeakPtrGuard(const WeakPtrGuard &) = delete;
-    WeakPtrGuard(WeakPtrGuard && src) noexcept : registered_weak_ptrs(std::move(src.registered_weak_ptrs)) {
-        for (auto it : registered_weak_ptrs) {
-            it->guard = this;
-        }
-    }
+    WeakPtrGuard(WeakPtrGuard && src) noexcept = delete;
     ~WeakPtrGuard() { clear(); }
 
     WeakPtrGuard & operator=(const WeakPtrGuard & src) = delete;
-    WeakPtrGuard & operator=(WeakPtrGuard && src) noexcept {
-        registered_weak_ptrs = std::move(src.registered_weak_ptrs);
-        for (auto it : registered_weak_ptrs) {
-            it->guard = this;
-        }
-    }
+    WeakPtrGuard & operator=(WeakPtrGuard && src) noexcept = delete;
 
     /// Returns true if the guard is empty, false otherwise.
-    bool empty() const noexcept { return registered_weak_ptrs.empty(); }
+    bool empty() const noexcept {
+        std::lock_guard<std::mutex> guard(registered_weak_ptrs_mutex);
+        return registered_weak_ptrs.empty();
+    }
 
     /// Returns the number of registered weak pointers.
-    size_t size() const noexcept { return registered_weak_ptrs.size(); }
+    size_t size() const noexcept {
+        std::lock_guard<std::mutex> guard(registered_weak_ptrs_mutex);
+        return registered_weak_ptrs.size();
+    }
 
     /// Deregisters and invalidates all registered weak pointers. After this call, size() returns zero.
     void clear() noexcept {
+        std::lock_guard<std::mutex> guard(registered_weak_ptrs_mutex);
         for (auto it : registered_weak_ptrs) {
             it->invalidate_guard();
         }
@@ -72,9 +74,16 @@ public:
 
 private:
     friend TWeakPtr;
-    void register_ptr(TWeakPtr * weak_ptr) { registered_weak_ptrs.insert(weak_ptr); }
-    void unregister_ptr(TWeakPtr * weak_ptr) noexcept { registered_weak_ptrs.erase(weak_ptr); }
+    void register_ptr(TWeakPtr * weak_ptr) {
+        std::lock_guard<std::mutex> guard(registered_weak_ptrs_mutex);
+        registered_weak_ptrs.insert(weak_ptr);
+    }
+    void unregister_ptr(TWeakPtr * weak_ptr) noexcept {
+        std::lock_guard<std::mutex> guard(registered_weak_ptrs_mutex);
+        registered_weak_ptrs.erase(weak_ptr);
+    }
     std::unordered_set<TWeakPtr *> registered_weak_ptrs;
+    mutable std::mutex registered_weak_ptrs_mutex;
 };
 
 
@@ -82,7 +91,8 @@ private:
 /// WeakPtr pointer can be owner of the resource. However, the resource itself may depend on another resource.
 /// WeakPtr registers/unregisters itself at the guard of resource. And the resource guard invalidates
 /// the registered WeakPtrs when the resource is unusable (eg. its dependecny was released).
-// TODO(jrohel): We want thread-safety. Locking isn't for free. Idea is locking in more upper level. Future.
+/// Note on thread safety:
+/// It is safe to create, access and destroy WeakPtrs in multiple threads simultaneously.
 template <typename TPtr, bool ptr_owner>
 struct WeakPtr {
 public:
