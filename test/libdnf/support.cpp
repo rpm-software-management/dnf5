@@ -33,18 +33,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 static std::map<std::string, std::unique_ptr<libdnf::utils::TempDir>> cache_dirs;
 
 
-void LibdnfTestCase::add_repo_repomd(const std::string & repoid) {
+void LibdnfTestCase::add_repo(const std::string & repoid, const std::string & repo_path) {
     auto repo = repo_sack->new_repo(repoid);
 
-    // Sets the repo baseurl
-    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
-    repo_path /= repoid;
-    repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path.native());
+    // set the repo baseurl
+    repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path);
 
-    // Loads repository into rpm::Repo.
+    // load repository into rpm::Repo
     repo->load();
 
-    // Loads rpm::Repo into rpm::PackageSack
+    // load repo content into rpm::PackageSack
     sack->load_repo(*repo.get(),
         libdnf::rpm::PackageSack::LoadRepoFlags::USE_FILELISTS |
         libdnf::rpm::PackageSack::LoadRepoFlags::USE_OTHER |
@@ -54,24 +52,17 @@ void LibdnfTestCase::add_repo_repomd(const std::string & repoid) {
 }
 
 
-void LibdnfTestCase::add_repo_rpm(const std::string & repoid) {
-    auto repo = repo_sack->new_repo(repoid);
+void LibdnfTestCase::add_repo_repomd(const std::string & repoid) {
+    std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
+    repo_path /= repoid;
+    add_repo(repoid, repo_path);
+}
 
-    // Sets the repo baseurl
+
+void LibdnfTestCase::add_repo_rpm(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_BINARY_DIR "/test/data/repos-rpm";
     repo_path /= repoid;
-    repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path.native());
-
-    // Loads repository into rpm::Repo.
-    repo->load();
-
-    // Loads rpm::Repo into rpm::PackageSack
-    sack->load_repo(*repo.get(),
-        libdnf::rpm::PackageSack::LoadRepoFlags::USE_FILELISTS |
-        libdnf::rpm::PackageSack::LoadRepoFlags::USE_OTHER |
-        libdnf::rpm::PackageSack::LoadRepoFlags::USE_PRESTO |
-        libdnf::rpm::PackageSack::LoadRepoFlags::USE_UPDATEINFO
-    );
+    add_repo(repoid, repo_path);
 }
 
 

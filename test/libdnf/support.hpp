@@ -29,6 +29,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/utils/temp.hpp"
 
+#include <string>
+
 
 class LibdnfTestCase : public TestCaseFixture {
 public:
@@ -37,8 +39,17 @@ public:
     void dump_debugdata();
 
 protected:
+    // Add (load) a repo from `repo_path`.
+    // It's also a shared code for add_repo_repomd() and add_repo_rpm().
+    void add_repo(const std::string & repoid, const std::string & repo_path);
+
+    // Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-repomd/<repoid>/repodata
     void add_repo_repomd(const std::string & repoid);
+
+    // Add (load) a repo from PROJECT_BINARY_DIR/test/data/repos-rpm/<repoid>/repodata
     void add_repo_rpm(const std::string & repoid);
+
+    // Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-solv/<repoid>.repo
     void add_repo_solv(const std::string & repoid);
 
     libdnf::rpm::Package get_pkg(const std::string & nevra, bool installed = false);
