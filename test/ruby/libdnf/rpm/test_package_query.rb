@@ -15,43 +15,17 @@
 # You should have received a copy of the GNU Lesser General Public License
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
-require 'test/unit'
-require 'tmpdir'
-include Test::Unit::Assertions
 
 require 'libdnf/base'
 
-class TestSimpleNumber < Test::Unit::TestCase
+require 'support'
+
+
+class TestSimpleNumber < LibdnfTestCase
 
     def setup()
-        @base = Base::Base.new()
-
-        # Sets path to cache directory.
-        @tmpdir = Dir.mktmpdir("libdnf-ruby-")
-        @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, @tmpdir)
-
-        @repo_sack = Repo::RepoSack.new(@base)
-        @sack = @base.get_rpm_package_sack()
-
-        # Creates new repositories in the repo_sack
-        @repo = @repo_sack.new_repo('repomd-repo1')
-
-        # Tunes repository configuration (baseurl is mandatory)
-        repo_path = File.join(Dir.getwd(), '../../../test/data/repos-repomd/repomd-repo1/')
-        baseurl = 'file://' + repo_path
-        repo_cfg = @repo.get_config()
-        repo_cfg.baseurl().set(Conf::Option::Priority_RUNTIME, baseurl)
-
-        # Loads repository into rpm::Repo.
-        @repo.load()
-
-        # Loads rpm::Repo into rpm::PackageSack
-        @sack.load_repo(@repo.get(), Rpm::PackageSack::LoadRepoFlags_NONE)
-    end
-
-    def teardown()
-        # Remove the cache directory.
-        FileUtils.remove_entry(@tmpdir)
+        super
+        add_repo_repomd("repomd-repo1")
     end
 
     def test_size()
