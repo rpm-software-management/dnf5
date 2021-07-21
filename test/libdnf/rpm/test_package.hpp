@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class RpmPackageTest : public RepoFixture {
+class RpmPackageTest : public LibdnfTestCase {
     CPPUNIT_TEST_SUITE(RpmPackageTest);
     CPPUNIT_TEST(test_equality);
     CPPUNIT_TEST(test_get_id);

@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-class RpmPackageSetTest : public RepoFixture {
+class RpmPackageSetTest : public LibdnfTestCase {
     CPPUNIT_TEST_SUITE(RpmPackageSetTest);
 
 #ifndef WITH_PERFORMANCE_TESTS

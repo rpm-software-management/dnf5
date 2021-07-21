@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class BaseGoalTest : public RepoFixture {
+class BaseGoalTest : public LibdnfTestCase {
     CPPUNIT_TEST_SUITE(BaseGoalTest);
 
 #ifndef WITH_PERFORMANCE_TESTS

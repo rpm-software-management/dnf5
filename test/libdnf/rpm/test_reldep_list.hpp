@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class ReldepListTest : public RepoFixture {
+class ReldepListTest : public LibdnfTestCase {
     CPPUNIT_TEST_SUITE(ReldepListTest);
     CPPUNIT_TEST(test_get);
     CPPUNIT_TEST(test_add);

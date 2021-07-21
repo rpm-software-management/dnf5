@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 static std::map<std::string, std::unique_ptr<libdnf::utils::TempDir>> cache_dirs;
 
 
-void RepoFixture::add_repo_repomd(const std::string & repoid) {
+void LibdnfTestCase::add_repo_repomd(const std::string & repoid) {
     auto repo = repo_sack->new_repo(repoid);
 
     // Sets the repo baseurl
@@ -54,7 +54,7 @@ void RepoFixture::add_repo_repomd(const std::string & repoid) {
 }
 
 
-void RepoFixture::add_repo_rpm(const std::string & repoid) {
+void LibdnfTestCase::add_repo_rpm(const std::string & repoid) {
     auto repo = repo_sack->new_repo(repoid);
 
     // Sets the repo baseurl
@@ -75,14 +75,14 @@ void RepoFixture::add_repo_rpm(const std::string & repoid) {
 }
 
 
-void RepoFixture::add_repo_solv(const std::string & repoid) {
+void LibdnfTestCase::add_repo_solv(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-solv";
     repo_path /= repoid + ".repo";
     repo_sack->new_repo_from_libsolv_testcase(repoid.c_str(), repo_path.native());
 }
 
 
-libdnf::rpm::Package RepoFixture::get_pkg(const std::string & nevra, bool installed) {
+libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, bool installed) {
     libdnf::rpm::PackageQuery query(*base);
     query.filter_nevra({nevra});
     if (installed) {
@@ -94,7 +94,7 @@ libdnf::rpm::Package RepoFixture::get_pkg(const std::string & nevra, bool instal
 }
 
 
-libdnf::rpm::Package RepoFixture::get_pkg(const std::string & nevra, const char * repo) {
+libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, const char * repo) {
     libdnf::rpm::PackageQuery query(*base);
     query.filter_nevra({nevra});
     query.filter_repoid({repo});
@@ -102,7 +102,7 @@ libdnf::rpm::Package RepoFixture::get_pkg(const std::string & nevra, const char 
 }
 
 
-libdnf::rpm::Package RepoFixture::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
+libdnf::rpm::Package LibdnfTestCase::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
     if (query.empty()) {
         CPPUNIT_FAIL("No package \"" + what + "\" found. All sack packages:" + \
             list_pkg_infos(libdnf::rpm::PackageQuery(*base)));
@@ -114,7 +114,7 @@ libdnf::rpm::Package RepoFixture::first_query_pkg(libdnf::rpm::PackageQuery & qu
 }
 
 
-void RepoFixture::setUp() {
+void LibdnfTestCase::setUp() {
     TestCaseFixture::setUp();
 
     temp = std::make_unique<libdnf::utils::TempDir>(
@@ -138,6 +138,6 @@ void RepoFixture::setUp() {
     sack = base->get_rpm_package_sack();
 }
 
-void RepoFixture::dump_debugdata() {
+void LibdnfTestCase::dump_debugdata() {
     sack->dump_debugdata("debugdata");
 }

@@ -45,7 +45,7 @@ public:
 
 
 void RpmPackageQueryTest::setUp() {
-    RepoFixture::setUp();
+    LibdnfTestCase::setUp();
     add_repo_solv("solv-repo1");
 }
 
@@ -427,7 +427,7 @@ void RpmPackageQueryTest::test_filter_requires() {
 
 void RpmPackageQueryTest::test_filter_advisories() {
     // Run setUp again to have a clean sack (without solv-repo1)
-    RepoFixture::setUp();
+    LibdnfTestCase::setUp();
     add_repo_repomd("repomd-repo1");
 
     {

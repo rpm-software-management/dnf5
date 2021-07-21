@@ -34,8 +34,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(AdvisoryAdvisoryTest);
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AdvisoryAdvisoryTest, "AdvisoryAdvisoryTest_suite");
 
 void AdvisoryAdvisoryTest::setUp() {
-    RepoFixture::setUp();
-    RepoFixture::add_repo_repomd("repomd-repo1");
+    LibdnfTestCase::setUp();
+    LibdnfTestCase::add_repo_repomd("repomd-repo1");
     libdnf::advisory::AdvisoryQuery q =
         libdnf::advisory::AdvisoryQuery(*base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
     advisories = q.get_advisories();

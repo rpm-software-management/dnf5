@@ -31,8 +31,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(AdvisoryAdvisoryModuleTest);
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AdvisoryAdvisoryModuleTest, "AdvisoryAdvisoryModuleTest_suite");
 
 void AdvisoryAdvisoryModuleTest::setUp() {
-    RepoFixture::setUp();
-    RepoFixture::add_repo_repomd("repomd-repo1");
+    LibdnfTestCase::setUp();
+    LibdnfTestCase::add_repo_repomd("repomd-repo1");
     auto advisory = libdnf::advisory::AdvisoryQuery(*base).filter_name("DNF-2019-1").get_advisories()[0];
     std::vector<libdnf::advisory::AdvisoryCollection> collections = advisory.get_collections();
     modules = collections[0].get_modules();

@@ -47,7 +47,7 @@ public:
 
 
 void BaseGoalTest::setUp() {
-    RepoFixture::setUp();
+    LibdnfTestCase::setUp();
 }
 
 void BaseGoalTest::test_install() {

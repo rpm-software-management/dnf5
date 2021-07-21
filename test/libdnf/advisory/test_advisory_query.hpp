@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cppunit/extensions/HelperMacros.h>
 
-class AdvisoryAdvisoryQueryTest : public RepoFixture {
+class AdvisoryAdvisoryQueryTest : public LibdnfTestCase {
     CPPUNIT_TEST_SUITE(AdvisoryAdvisoryQueryTest);
 
     CPPUNIT_TEST(test_size);

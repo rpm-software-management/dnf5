@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/utils/temp.hpp"
 
 
-class RepoFixture : public TestCaseFixture {
+class LibdnfTestCase : public TestCaseFixture {
 public:
     void setUp() override;
 
