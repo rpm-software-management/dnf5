@@ -39,15 +39,6 @@ std::vector<std::string> to_vector_string(const libdnf::rpm::PackageSet & pset) 
 }
 
 
-std::vector<std::string> to_vector_string(const std::vector<libdnf::rpm::Package> & pkg_list) {
-    std::vector<std::string> result;
-    for (auto & pkg : pkg_list) {
-        result.emplace_back(pkg.get_full_nevra());
-    }
-    return result;
-}
-
-
 std::vector<std::string> to_vector_name_string(const libdnf::advisory::AdvisorySet & aset) {
     std::vector<std::string> result;
     for (auto adv : aset) {

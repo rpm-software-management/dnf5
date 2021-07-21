@@ -30,6 +30,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <map>
 
 
+using libdnf::utils::sformat;
+
+
 libdnf::repo::RepoWeakPtr BaseTestCase::add_repo(const std::string & repoid, const std::string & repo_path, bool load) {
     auto repo = repo_sack->create_repo(repoid);
 
@@ -110,9 +113,9 @@ libdnf::rpm::Package BaseTestCase::add_cmdline_pkg(const std::string & relative_
 libdnf::rpm::Package BaseTestCase::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
     if (query.empty()) {
         CPPUNIT_FAIL(
-            "No package \"" + what + "\" found. All sack packages:" + list_pkg_infos(libdnf::rpm::PackageQuery(base)));
+            sformat("No package \"{}\" found. All sack packages:{}", what, to_string(libdnf::rpm::PackageQuery(base))));
     } else if (query.size() > 1) {
-        CPPUNIT_FAIL("More than one package matching \"" + what + "\" found:" + list_pkg_infos(query));
+        CPPUNIT_FAIL(sformat("More than one package matching \"{}\" found:{}", what, to_string(query)));
     }
 
     return *query.begin();
