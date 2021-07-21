@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_BASE_GOAL_HPP
 
 
-#include "../repo_fixture.hpp"
+#include "../support.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

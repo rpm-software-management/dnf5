@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "repo_fixture.hpp"
+#include "support.hpp"
 
 #include "libdnf/rpm/package_query.hpp"
 

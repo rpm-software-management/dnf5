@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_RPM_RELDEP_LIST_HPP
 #define TEST_LIBDNF_RPM_RELDEP_LIST_HPP
 
-#include "../repo_fixture.hpp"
+#include "../support.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package_sack.hpp"

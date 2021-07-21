@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_REPO_FIXTURE_HPP
-#define TEST_LIBDNF_REPO_FIXTURE_HPP
+#ifndef TEST_LIBDNF_SUPPORT_HPP
+#define TEST_LIBDNF_SUPPORT_HPP
 
 #include "testcase_fixture.hpp"
 
@@ -57,4 +57,4 @@ private:
 };
 
 
-#endif  // TEST_LIBDNF_REPO_FIXTURE_HPP
+#endif  // TEST_LIBDNF_SUPPORT_HPP
