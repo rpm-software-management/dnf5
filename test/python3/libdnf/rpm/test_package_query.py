@@ -22,36 +22,13 @@ import os
 
 import libdnf
 
+import support
 
-class TestPackageQuery(unittest.TestCase):
+
+class TestPackageQuery(support.LibdnfTestCase):
     def setUp(self):
-        self.base = libdnf.base.Base()
-
-        # Sets path to cache directory.
-        self.tmpdir = tempfile.mkdtemp(prefix="libdnf-python3-")
-        self.base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, self.tmpdir)
-
-        self.repo_sack = libdnf.repo.RepoSack(self.base)
-        self.sack = self.base.get_rpm_package_sack()
-
-        # Creates new repositories in the repo_sack
-        repo = self.repo_sack.new_repo("repomd-repo1")
-
-        # Tunes repository configuration (baseurl is mandatory)
-        repo_path = os.path.join(os.getcwd(), "../../../test/data/repos-repomd/repomd-repo1/")
-        baseurl = "file://" + repo_path
-        repo_cfg = repo.get_config()
-        repo_cfg.baseurl().set(libdnf.conf.Option.Priority_RUNTIME, baseurl)
-
-        # Loads repository into rpm::Repo.
-        repo.load()
-
-        # Loads rpm::Repo into rpm::PackageSack
-        self.sack.load_repo(repo.get(), libdnf.rpm.PackageSack.LoadRepoFlags_NONE)
-
-    def tearDown(self):
-        # Remove the cache directory.
-        shutil.rmtree(self.tmpdir)
+        super().setUp()
+        self.add_repo_repomd("repomd-repo1")
 
     def test_size(self):
         query = libdnf.rpm.PackageQuery(self.base)
