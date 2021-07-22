@@ -57,7 +57,7 @@ const char * Reldep::get_relation() const {
 const char * Reldep::get_version() const {
     return get_pool(base).id2evr(id.id);
 }
-std::string Reldep::to_string() {
+std::string Reldep::to_string() const {
     auto * cstring = get_pool(base).dep2str(id.id);
     return cstring ? std::string(cstring) : std::string();
 }

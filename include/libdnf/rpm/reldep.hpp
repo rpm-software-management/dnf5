@@ -81,7 +81,7 @@ public:
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:toString()
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
-    std::string to_string();
+    std::string to_string() const;
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getId()
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_to_string(DnfReldep *reldep)
