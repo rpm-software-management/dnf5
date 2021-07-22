@@ -45,20 +45,39 @@ public:
     void handle_method(S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &), sdbus::MethodCall & call) {
         auto worker = std::thread(
             [this](S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &), sdbus::MethodCall call) {
+                sdbus::MethodReply reply;
                 try {
-                    auto reply = (service.*method)(call);
+                    reply = (service.*method)(call);
+                } catch (const sdbus::Error & ex) {
+                    reply = call.createErrorReply(ex);
+                } catch (const std::exception & ex) {
+                    reply = call.createErrorReply({dnfdaemon::ERROR, ex.what()});
+                } catch (...) {
+                    reply = call.createErrorReply({dnfdaemon::ERROR, "Unknown exception caught"});
+                }
+                bool success = false;
+                std::string error_msg;
+                try {
                     reply.send();
-                } catch (std::exception & ex) {
-                    auto reply = call.createErrorReply({dnfdaemon::ERROR, ex.what()});
-                    try {
-                        reply.send();
-                    } catch (const std::exception & e) {
-                        std::cerr << fmt::format("Error sending d-bus error reply: {}", e.what()) << std::endl;
-                    }
+                    success = true;
+                } catch (const std::exception & e) {
+                    error_msg = e.what();
+                } catch (...) {
+                    error_msg = "Unknown exception caught";
+                }
+                if (!success) {
+                    std::cerr << fmt::format(
+                                     "Error sending D-Bus reply to {}:{}() call: {}",
+                                     call.getInterfaceName(),
+                                     call.getMemberName(),
+                                     error_msg)
+                              << std::endl;
                 }
                 current_thread_finished();
             },
-            std::ref(service), method, call);
+            std::ref(service),
+            method,
+            call);
         register_thread(std::move(worker));
     }
 
@@ -66,19 +85,29 @@ public:
     void handle_signal(S & service, void (S::*method)(sdbus::Signal &), sdbus::Signal & signal) {
         auto worker = std::thread(
             [this](S & service, void (S::*method)(sdbus::Signal &), sdbus::Signal signal) {
+                bool success = false;
+                std::string error_msg;
                 try {
                     (service.*method)(signal);
-                } catch (std::exception & ex) {
+                    success = true;
+                } catch (const std::exception & ex) {
+                    error_msg = ex.what();
+                } catch (...) {
+                    error_msg = "Unknown exception caught";
+                }
+                if (!success) {
                     std::cerr << fmt::format(
                                      "Error handling signal {}:{}: {}",
                                      signal.getInterfaceName(),
                                      signal.getMemberName(),
-                                     ex.what())
+                                     error_msg)
                               << std::endl;
                 }
                 current_thread_finished();
             },
-            std::ref(service), method, signal);
+            std::ref(service),
+            method,
+            signal);
         register_thread(std::move(worker));
     }
 
