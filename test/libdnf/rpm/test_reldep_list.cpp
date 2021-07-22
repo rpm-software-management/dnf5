@@ -24,6 +24,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/reldep_list.hpp"
 
+
+using libdnf::rpm::Reldep;
+
+
 CPPUNIT_TEST_SUITE_REGISTRATION(ReldepListTest);
 
 
@@ -176,6 +180,12 @@ void ReldepListTest::test_add_reldep_with_glob() {
     libdnf::rpm::ReldepList list(base);
     list.add_reldep_with_glob("pkg*");
 
-    const std::vector<std::string> expected = {"pkg", "pkg-libs", "pkg.conf", "pkg.conf.d", "pkg-libs"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(list));
+    const std::vector<Reldep> expected = {
+        Reldep(base, "pkg"),
+        Reldep(base, "pkg-libs"),
+        Reldep(base, "pkg.conf"),
+        Reldep(base, "pkg.conf.d"),
+        Reldep(base, "pkg-libs"),
+    };
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(list));
 }

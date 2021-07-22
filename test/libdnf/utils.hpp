@@ -99,6 +99,17 @@ struct assertion_traits<libdnf::rpm::PackageQuery> {
 };
 
 template <>
+struct assertion_traits<libdnf::rpm::Reldep> {
+    inline static bool equal(const libdnf::rpm::Reldep & left, const libdnf::rpm::Reldep & right) {
+        return left == right;
+    }
+
+    inline static std::string toString(const libdnf::rpm::Reldep & reldep) {
+        return libdnf::utils::sformat("{} (id: {})", reldep.to_string(), reldep.get_id().id);
+    }
+};
+
+template <>
 struct assertion_traits<libdnf::base::TransactionPackage> {
     inline static bool equal(
         const libdnf::base::TransactionPackage & left, const libdnf::base::TransactionPackage & right) {
@@ -119,8 +130,7 @@ struct assertion_traits<libdnf::base::TransactionPackage> {
 }  // namespace CPPUNIT_NS
 
 
-/// Convert ReldepList to a vector of strings for easy assertions.
-std::vector<std::string> to_vector_string(const libdnf::rpm::ReldepList & rdl);
+std::vector<libdnf::rpm::Reldep> to_vector(const libdnf::rpm::ReldepList & reldep_list);
 
 /// Convert PackageSet to a vector of strings for easy assertions.
 std::vector<std::string> to_vector_string(const libdnf::rpm::PackageSet & pset);

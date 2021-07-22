@@ -21,10 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 
-std::vector<std::string> to_vector_string(const libdnf::rpm::ReldepList & rdl) {
-    std::vector<std::string> res;
-    for (int i = 0; i < rdl.size(); ++i) {
-        res.emplace_back(rdl.get(i).to_string());
+std::vector<libdnf::rpm::Reldep> to_vector(const libdnf::rpm::ReldepList & reldep_list) {
+    std::vector<libdnf::rpm::Reldep> res;
+    for (const auto & reldep : reldep_list) {
+        res.push_back(reldep);
     }
     return res;
 }
