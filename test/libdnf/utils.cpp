@@ -30,10 +30,10 @@ std::vector<libdnf::rpm::Reldep> to_vector(const libdnf::rpm::ReldepList & relde
 }
 
 
-std::vector<std::string> to_vector_string(const libdnf::rpm::PackageSet & pset) {
-    std::vector<std::string> res;
-    for (auto pkg : pset) {
-        res.emplace_back(pkg.get_full_nevra());
+std::vector<libdnf::rpm::Package> to_vector(const libdnf::rpm::PackageSet & package_set) {
+    std::vector<libdnf::rpm::Package> res;
+    for (const auto & pkg : package_set) {
+        res.push_back(pkg);
     }
     return res;
 }

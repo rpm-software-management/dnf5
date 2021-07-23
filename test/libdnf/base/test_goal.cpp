@@ -220,8 +220,8 @@ void BaseGoalTest::test_install_installed_pkg() {
     libdnf::rpm::PackageQuery query(base);
     query.filter_available().filter_nevra({"one-0:1-1.noarch"});
 
-    std::vector<std::string> expected = {"one-0:1-1.noarch"};
-    CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
+    std::vector<libdnf::rpm::Package> expected = {get_pkg("one-0:1-1.noarch")};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
 
     libdnf::Goal goal(base);
     goal.add_rpm_install(query);

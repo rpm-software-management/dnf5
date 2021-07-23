@@ -131,9 +131,7 @@ struct assertion_traits<libdnf::base::TransactionPackage> {
 
 
 std::vector<libdnf::rpm::Reldep> to_vector(const libdnf::rpm::ReldepList & reldep_list);
-
-/// Convert PackageSet to a vector of strings for easy assertions.
-std::vector<std::string> to_vector_string(const libdnf::rpm::PackageSet & pset);
+std::vector<libdnf::rpm::Package> to_vector(const libdnf::rpm::PackageSet & package_set);
 
 /// Convert AdvisoryQuery to a vector of strings of their names for easy assertions.
 std::vector<std::string> to_vector_name_string(const libdnf::advisory::AdvisorySet & aset);

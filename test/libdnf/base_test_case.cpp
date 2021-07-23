@@ -88,6 +88,24 @@ libdnf::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, const char
 }
 
 
+libdnf::rpm::Package BaseTestCase::get_pkg_i(const std::string & nevra, size_t index) {
+    libdnf::rpm::PackageQuery query(base);
+    query.filter_nevra({nevra});
+
+    if (query.size() <= index) {
+        CPPUNIT_FAIL(
+            sformat("Package index {} out of bounds for \"{}\", query packages:{}", index, nevra, to_string(query)));
+    }
+
+    auto it = query.begin();
+    while (index-- > 0) {
+        ++it;
+    }
+
+    return *it;
+}
+
+
 libdnf::rpm::Package BaseTestCase::add_system_pkg(
     const std::string & relative_path, libdnf::transaction::TransactionItemReason reason) {
     if (reason != libdnf::transaction::TransactionItemReason::UNKNOWN) {

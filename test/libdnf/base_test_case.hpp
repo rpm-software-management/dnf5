@@ -56,6 +56,7 @@ public:
     libdnf::rpm::Package get_pkg(const std::string & nevra, const std::string & repo) {
         return get_pkg(nevra, repo.c_str());
     }
+    libdnf::rpm::Package get_pkg_i(const std::string & nevra, size_t index);
 
     libdnf::rpm::Package add_system_pkg(
         const std::string & relative_path,
