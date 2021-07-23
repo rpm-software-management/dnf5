@@ -18,7 +18,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'libdnf'
-copyright = '2020-2021 Red Hat, Inc.'
+copyright = 'Contributors to the libdnf project.'
 author = 'RPM Software Management <rpm-ecosystem@lists.rpm.org>'
 
 AUTHORS=['See AUTHORS.md in libdnf source distribution.']

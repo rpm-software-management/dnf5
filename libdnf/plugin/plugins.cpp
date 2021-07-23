@@ -1,5 +1,5 @@
 /*
-Copyright (C) 2021 Red Hat, Inc.
+Copyright Contributors to the libdnf project.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
