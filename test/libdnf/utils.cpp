@@ -39,10 +39,10 @@ std::vector<libdnf::rpm::Package> to_vector(const libdnf::rpm::PackageSet & pack
 }
 
 
-std::vector<std::string> to_vector_name_string(const libdnf::advisory::AdvisorySet & aset) {
-    std::vector<std::string> result;
-    for (auto adv : aset) {
-        result.emplace_back(adv.get_name());
+std::vector<libdnf::advisory::Advisory> to_vector(const libdnf::advisory::AdvisorySet & advisory_set) {
+    std::vector<libdnf::advisory::Advisory> res;
+    for (const auto & advisory : advisory_set) {
+        res.push_back(advisory);
     }
-    return result;
+    return res;
 }

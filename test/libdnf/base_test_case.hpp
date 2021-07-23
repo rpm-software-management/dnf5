@@ -51,6 +51,8 @@ public:
     // Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-solv/<repoid>.repo
     libdnf::repo::RepoWeakPtr add_repo_solv(const std::string & repoid);
 
+    libdnf::advisory::Advisory get_advisory(const std::string & name);
+
     libdnf::rpm::Package get_pkg(const std::string & nevra, bool installed = false);
     libdnf::rpm::Package get_pkg(const std::string & nevra, const char * repo);
     libdnf::rpm::Package get_pkg(const std::string & nevra, const std::string & repo) {

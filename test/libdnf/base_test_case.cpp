@@ -68,6 +68,27 @@ libdnf::repo::RepoWeakPtr BaseTestCase::add_repo_solv(const std::string & repoid
 }
 
 
+libdnf::advisory::Advisory BaseTestCase::get_advisory(const std::string & name) {
+    // This is used for testing queries as well, hence we don't use the AdvisoryQuery facility for filtering
+    libdnf::advisory::AdvisorySet advisories = libdnf::advisory::AdvisoryQuery(base);
+
+    libdnf::advisory::AdvisorySet found(base);
+    for (auto advisory : advisories) {
+        if (advisory.get_name() == name) {
+            found.add(advisory);
+        }
+    }
+
+    if (found.empty()) {
+        CPPUNIT_FAIL(sformat("No advisory \"{}\" found. All pool advisories:{}", name, to_string(advisories)));
+    } else if (found.size() > 1) {
+        CPPUNIT_FAIL(sformat("More than one advisory matching \"{}\" found:{}", name, to_string(advisories)));
+    }
+
+    return *found.begin();
+}
+
+
 libdnf::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, bool installed) {
     libdnf::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});

@@ -70,6 +70,30 @@ struct assertion_traits<C<T>> {
 };
 
 template <>
+struct assertion_traits<libdnf::advisory::Advisory> {
+    inline static bool equal(const libdnf::advisory::Advisory & left, const libdnf::advisory::Advisory & right) {
+        return left == right;
+    }
+
+    inline static std::string toString(const libdnf::advisory::Advisory & advisory) {
+        return libdnf::utils::sformat("{} (id: {})", advisory.get_name(), advisory.get_id().id);
+    }
+};
+
+template <>
+struct assertion_traits<libdnf::advisory::AdvisorySet> {
+    inline static std::string toString(const libdnf::advisory::AdvisorySet & advisories) {
+        std::string result;
+
+        for (const auto & advisory : advisories) {
+            result += "\n    " + assertion_traits<libdnf::advisory::Advisory>::toString(advisory);
+        }
+
+        return result;
+    }
+};
+
+template <>
 struct assertion_traits<libdnf::rpm::Package> {
     inline static bool equal(const libdnf::rpm::Package & left, const libdnf::rpm::Package & right) {
         return left == right;
@@ -130,10 +154,8 @@ struct assertion_traits<libdnf::base::TransactionPackage> {
 }  // namespace CPPUNIT_NS
 
 
+std::vector<libdnf::advisory::Advisory> to_vector(const libdnf::advisory::AdvisorySet & advisory_set);
 std::vector<libdnf::rpm::Reldep> to_vector(const libdnf::rpm::ReldepList & reldep_list);
 std::vector<libdnf::rpm::Package> to_vector(const libdnf::rpm::PackageSet & package_set);
-
-/// Convert AdvisoryQuery to a vector of strings of their names for easy assertions.
-std::vector<std::string> to_vector_name_string(const libdnf::advisory::AdvisorySet & aset);
 
 #endif  // TEST_LIBDNF_UTILS_HPP
