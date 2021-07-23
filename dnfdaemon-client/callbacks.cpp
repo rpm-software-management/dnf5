@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "callbacks.hpp"
 
+#include "context.hpp"
+
 #include <dnfdaemon-server/dbus.hpp>
 #include <dnfdaemon-server/transaction.hpp>
 #include <libdnf-cli/tty.hpp>
@@ -34,12 +36,13 @@ bool DbusCallback::signature_valid(sdbus::Signal & signal) {
     // check that signal is emited by the correct session object
     std::string object_path;
     signal >> object_path;
-    return object_path == session_object_path;
+    return object_path == context.get_session_object_path();
 }
 
 
-RepoCB::RepoCB(sdbus::IProxy * proxy, std::string session_object_path) : DbusCallback(proxy, session_object_path) {
+RepoCB::RepoCB(Context & context) : DbusCallback(context) {
     // register signal handlers
+    auto proxy = context.session_proxy.get();
     proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START, [this](sdbus::Signal & signal) -> void {
             this->start(signal);
@@ -100,9 +103,9 @@ void RepoCB::progress(sdbus::Signal & signal) {
 }
 
 
-PackageDownloadCB::PackageDownloadCB(sdbus::IProxy * proxy, std::string session_object_path)
-    : DbusCallback(proxy, session_object_path) {
+PackageDownloadCB::PackageDownloadCB(Context & context) : DbusCallback(context) {
     // register signal handlers
+    auto proxy = context.session_proxy.get();
     proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_START, [this](sdbus::Signal & signal) -> void {
             this->start(signal);
@@ -210,9 +213,9 @@ void PackageDownloadCB::mirror_failure(sdbus::Signal & signal) {
 }
 
 
-TransactionCB::TransactionCB(sdbus::IProxy * proxy, std::string session_object_path)
-    : DbusCallback(proxy, session_object_path) {
+TransactionCB::TransactionCB(Context & context) : DbusCallback(context) {
     // register signal handlers
+    auto proxy = context.session_proxy.get();
     proxy->registerSignalHandler(
         dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_VERIFY_START, [this](sdbus::Signal & signal) -> void {
             this->verify_start(signal);

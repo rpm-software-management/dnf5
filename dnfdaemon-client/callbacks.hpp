@@ -28,16 +28,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
+class Context;
+
 class DbusCallback {
 public:
-    explicit DbusCallback(sdbus::IProxy * proxy, std::string session_object_path)
-        : session_object_path(session_object_path),
-          proxy(proxy){};
+    explicit DbusCallback(Context & context) : context(context){};
     virtual ~DbusCallback() = default;
 
 protected:
-    std::string session_object_path;
-    sdbus::IProxy * proxy;
+    Context & context;
 
     bool signature_valid(sdbus::Signal & signal);
 };
@@ -45,7 +44,7 @@ protected:
 
 class RepoCB final : public DbusCallback {
 public:
-    explicit RepoCB(sdbus::IProxy * proxy, std::string session_object_path);
+    explicit RepoCB(Context & context);
     virtual ~RepoCB() = default;
 
     void start(sdbus::Signal & signal);
@@ -61,7 +60,7 @@ private:
 
 class PackageDownloadCB final : public DbusCallback {
 public:
-    explicit PackageDownloadCB(sdbus::IProxy * proxy, std::string session_object_path);
+    explicit PackageDownloadCB(Context & context);
     virtual ~PackageDownloadCB() = default;
 
     void start(sdbus::Signal & signal);
@@ -86,7 +85,7 @@ private:
 
 class TransactionCB final : public DbusCallback {
 public:
-    explicit TransactionCB(sdbus::IProxy * proxy, std::string session_object_path);
+    explicit TransactionCB(Context & context);
     virtual ~TransactionCB() = default;
 
     void verify_start(sdbus::Signal & signal);

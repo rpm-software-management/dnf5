@@ -47,6 +47,7 @@ public:
 
     /// Initialize dbus connection and server session
     void init_session(sdbus::IConnection & connection);
+    sdbus::ObjectPath & get_session_object_path() { return session_object_path; };
 
     // initialize repository metadata loading on server side and wait for results
     dnfdaemon::RepoStatus wait_for_repos();
@@ -67,8 +68,6 @@ public:
     libdnf::OptionString releasever{""};
 
 private:
-    /// system d-bus connection
-    //std::unique_ptr<sdbus::IConnection> connection;
     sdbus::ObjectPath session_object_path;
     dnfdaemon::RepoStatus repositories_status;
     std::unique_ptr<RepoCB> repocb;

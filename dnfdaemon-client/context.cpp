@@ -60,9 +60,9 @@ void Context::init_session(sdbus::IConnection & connection) {
 
     session_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, session_object_path);
     // register progress bars callbacks
-    repocb = std::make_unique<RepoCB>(session_proxy.get(), session_object_path);
-    package_download_cb = std::make_unique<PackageDownloadCB>(session_proxy.get(), session_object_path);
-    transaction_cb = std::make_unique<TransactionCB>(session_proxy.get(), session_object_path);
+    repocb = std::make_unique<RepoCB>(*this);
+    package_download_cb = std::make_unique<PackageDownloadCB>(*this);
+    transaction_cb = std::make_unique<TransactionCB>(*this);
     session_proxy->finishRegistration();
 }
 
