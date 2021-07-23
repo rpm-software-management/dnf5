@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "callbacks.hpp"
 
 #include "context.hpp"
+#include "utils.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <dnfdaemon-server/transaction.hpp>
@@ -55,6 +56,10 @@ RepoCB::RepoCB(Context & context) : DbusCallback(context) {
         dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS, [this](sdbus::Signal & signal) -> void {
             this->progress(signal);
         });
+    proxy->registerSignalHandler(
+        dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST, [this](sdbus::Signal & signal) -> void {
+            this->key_import(signal);
+        });
 }
 
 
@@ -74,9 +79,9 @@ void RepoCB::start(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
         std::string what;
         signal >> what;
-        progress_bar.reset();
         progress_bar.set_description(what);
         progress_bar.set_auto_finish(false);
+        progress_bar.set_total_ticks(0);
         progress_bar.start();
     }
 }
@@ -84,7 +89,9 @@ void RepoCB::start(sdbus::Signal & signal) {
 void RepoCB::end(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
         progress_bar.set_ticks(progress_bar.get_total_ticks());
-        progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+        if (progress_bar.get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
+            progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+        }
         print_progress_bar();
         std::cout << std::endl;
     }
@@ -98,6 +105,37 @@ void RepoCB::progress(sdbus::Signal & signal) {
         signal >> total_to_download;
         progress_bar.set_total_ticks(static_cast<int64_t>(total_to_download));
         progress_bar.set_ticks(static_cast<int64_t>(downloaded));
+        print_progress_bar();
+    }
+}
+
+void RepoCB::key_import(sdbus::Signal & signal) {
+    if (signature_valid(signal)) {
+        std::string key_id;
+        std::string user_id;
+        std::string fingerprint;
+        std::string url;
+        signal >> key_id >> user_id >> fingerprint >> url;
+        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, "Importing GPG key: " + key_id);
+        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, " Userid     : " + user_id);
+        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, " Fingerprint: " + fingerprint);
+        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, " From       : " + url);
+        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, "");
+        print_progress_bar();
+
+        // ask user for the key import confirmation
+        auto confirmed = userconfirm(context);
+
+        // signal the confirmation back to the server
+        try {
+            context.session_proxy->callMethod("confirm_key")
+                .onInterface(dnfdaemon::INTERFACE_REPO)
+                .withTimeout(static_cast<uint64_t>(-1))
+                .withArguments(key_id, confirmed);
+        } catch (const sdbus::Error & ex) {
+            progress_bar.add_message(libdnf::cli::progressbar::MessageType::ERROR, ex.what());
+            progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
+        }
         print_progress_bar();
     }
 }

@@ -20,9 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_CLIENT_UTILS_HPP
 #define DNFDAEMON_CLIENT_UTILS_HPP
 
+#include "context.hpp"
+
 namespace dnfdaemon::client {
 
 bool am_i_root() noexcept;
+/// Asks the user for confirmation. The default answer is taken from the commandline options
+bool userconfirm(Context & ctx);
 
 }  // namespace dnfdaemon::client
 

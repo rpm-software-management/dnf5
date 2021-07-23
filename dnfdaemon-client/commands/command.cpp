@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 #include "dnfdaemon-server/dbus.hpp"
 #include "dnfdaemon-server/utils.hpp"
+#include "utils.hpp"
 #include "wrappers/dbus_goal_wrapper.hpp"
 #include "wrappers/dbus_package_wrapper.hpp"
 

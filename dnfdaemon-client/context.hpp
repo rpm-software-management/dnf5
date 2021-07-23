@@ -75,9 +75,6 @@ private:
     std::unique_ptr<TransactionCB> transaction_cb;
 };
 
-/// Asks the user for confirmation. The default answer is taken from the commandline options
-bool userconfirm(Context & ctx);
-
 }  // namespace dnfdaemon::client
 
 #endif

@@ -21,10 +21,40 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <unistd.h>
 
+#include <iostream>
+
 namespace dnfdaemon::client {
 
 bool am_i_root() noexcept {
     return geteuid() == 0;
+}
+
+// TODO(mblaha): enhance (see dnf4's userconfirm implementation), move to libdnf-cli
+bool userconfirm(Context & ctx) {
+    // "assumeno" takes precedence over "assumeyes"
+    if (ctx.assume_no.get_value()) {
+        return false;
+    }
+    if (ctx.assume_yes.get_value()) {
+        return true;
+    }
+    std::string msg = "Is this ok [y/N]: ";
+    while (true) {
+        std::cout << msg;
+
+        std::string choice;
+        std::getline(std::cin, choice);
+
+        if (choice.empty()) {
+            return false;
+        }
+        if (choice == "y" || choice == "Y") {
+            return true;
+        }
+        if (choice == "n" || choice == "N") {
+            return false;
+        }
+    }
 }
 
 }  // namespace dnfdaemon::client
