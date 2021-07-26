@@ -38,7 +38,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(ua{sv})", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(ua{sv})a{sv}", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Goal::resolve, call);
         });
     dbus_object->registerMethod(
@@ -57,9 +57,6 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 
     auto & goal = session.get_goal();
     auto transaction = goal.resolve(allow_erasing);
-    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
-        throw sdbus::Error(dnfdaemon::ERROR_RESOLVE, transaction.all_package_solver_problems_to_string());
-    }
     session.set_transaction(transaction);
 
     std::vector<std::string> attr{
@@ -74,6 +71,29 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 
     auto reply = call.createReply();
     reply << result;
+
+    dnfdaemon::KeyValueMapList goal_resolve_log_list;
+
+    for (const auto & log : transaction.get_resolve_logs()) {
+        dnfdaemon::KeyValueMap goal_resolve_log_item;
+        goal_resolve_log_item["action"] = static_cast<uint32_t>(std::get<0>(log));
+        goal_resolve_log_item["problem"] = static_cast<uint32_t>(std::get<1>(log));
+        // TODO(nsella) better use of KeyValueMap with GoalJobSettings
+        dnfdaemon::KeyValueMap goal_job_settings;
+        goal_job_settings.emplace(std::make_pair("to_repo_ids", std::get<2>(log).to_repo_ids));
+        goal_resolve_log_item["goal_job_settings"] = goal_job_settings;
+        goal_resolve_log_item["report"] = std::get<3>(log); // string
+        goal_resolve_log_item["report_list"] = std::vector<std::string>{std::get<4>(log).begin(), std::get<4>(log).end()};
+        goal_resolve_log_list.push_back(goal_resolve_log_item);
+    }
+
+    dnfdaemon::KeyValueMap goal_resolve_results;
+    goal_resolve_results["transaction_problems"] = static_cast<uint32_t>(transaction.get_problems());
+    goal_resolve_results["transaction_solver_problems"] = transaction.all_package_solver_problems_to_string();
+    goal_resolve_results["goal_problems"] = goal_resolve_log_list;
+
+    reply << goal_resolve_results;
+
     return reply;
 }
 
