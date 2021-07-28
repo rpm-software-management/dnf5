@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <atomic>
+#include <condition_variable>
 #include <memory>
 #include <mutex>
 #include <string>
@@ -81,6 +82,8 @@ public:
     void fill_sack();
     bool read_all_repos();
     std::optional<std::string> session_locale;
+    void confirm_key(const std::string & key_id, const bool confirmed);
+    bool wait_for_key_confirmation(const std::string & key_id, sdbus::Signal & signal);
 
 private:
     sdbus::IConnection & connection;
@@ -94,6 +97,11 @@ private:
     std::atomic<dnfdaemon::RepoStatus> repositories_status{dnfdaemon::RepoStatus::NOT_READY};
     std::unique_ptr<sdbus::IObject> dbus_object;
     std::string sender;
+    // repository key import confirmation
+    enum class KeyConfirmationStatus { PENDING, CONFIRMED, REJECTED };
+    std::mutex key_import_mutex;
+    std::condition_variable key_import_condition;
+    std::map<std::string, KeyConfirmationStatus> key_import_status{};  // map key_id: confirmation status
 };
 
 #endif

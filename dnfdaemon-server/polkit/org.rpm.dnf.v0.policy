@@ -11,7 +11,7 @@
     <message>Writing changes to repository configuration file requires authentication.</message>
     <defaults>
         <allow_any>auth_admin</allow_any>
-        <allow_inactive>no</allow_inactive>
+        <allow_inactive>auth_admin</allow_inactive>
         <allow_active>auth_admin_keep</allow_active>
     </defaults>
   </action>
@@ -21,8 +21,18 @@
     <message>Authentication is required to execute a rpm transaction.</message>
     <defaults>
         <allow_any>auth_admin</allow_any>
-        <allow_inactive>no</allow_inactive>
+        <allow_inactive>auth_admin</allow_inactive>
         <allow_active>auth_admin_keep</allow_active>
+    </defaults>
+  </action>
+
+  <action id="org.rpm.dnf.v0.rpm.Repo.confirm_key">
+    <description>Repository key import confirmation</description>
+    <message>Authentication is required to confirm repository key import.</message>
+    <defaults>
+        <allow_any>auth_admin</allow_any>
+        <allow_inactive>auth_admin</allow_inactive>
+        <allow_active>auth_admin</allow_active>
     </defaults>
   </action>
 </policyconfig>

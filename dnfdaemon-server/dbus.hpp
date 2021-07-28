@@ -58,6 +58,7 @@ const char * const INTERFACE_SESSION_MANAGER = "org.rpm.dnf.v0.SessionManager";
 const char * const SIGNAL_REPO_LOAD_START = "repo_load_start";
 const char * const SIGNAL_REPO_LOAD_PROGRESS = "repo_load_progress";
 const char * const SIGNAL_REPO_LOAD_END = "repo_load_end";
+const char * const SIGNAL_REPO_KEY_IMPORT_REQUEST = "repo_key_import_request";
 
 const char * const SIGNAL_PACKAGE_DOWNLOAD_START = "package_download_start";
 const char * const SIGNAL_PACKAGE_DOWNLOAD_PROGRESS = "package_download_progress";
@@ -83,6 +84,7 @@ const char * const SIGNAL_TRANSACTION_FINISHED = "transaction_finished";
 // polkit actions
 const char * const POLKIT_REPOCONF_WRITE = "org.rpm.dnf.v0.rpm.RepoConf.write";
 const char * const POLKIT_EXECUTE_RPM_TRANSACTION = "org.rpm.dnf.v0.rpm.execute_transaction";
+const char * const POLKIT_CONFIRM_KEY_IMPORT = "org.rpm.dnf.v0.rpm.Repo.confirm_key";
 
 // errors
 const char * const ERROR = "org.rpm.dnf.v0.Error";

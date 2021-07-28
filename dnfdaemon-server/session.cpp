@@ -107,6 +107,42 @@ Session::~Session() {
     threads_manager.finish();
 }
 
+void Session::confirm_key(const std::string & key_id, const bool confirmed) {
+    std::lock_guard<std::mutex> lock(key_import_mutex);
+    auto status_it = key_import_status.find(key_id);
+    // ignore replies which were not requested
+    if (status_it != key_import_status.end()) {
+        // ignore confirmations that has been already answered
+        if (status_it->second == KeyConfirmationStatus::PENDING) {
+            key_import_status[key_id] = confirmed ? KeyConfirmationStatus::CONFIRMED : KeyConfirmationStatus::REJECTED;
+            key_import_condition.notify_all();
+        }
+    }
+}
+
+bool Session::wait_for_key_confirmation(const std::string & key_id, sdbus::Signal & request_signal) {
+    std::unique_lock<std::mutex> key_import_lock(key_import_mutex);
+    if (key_import_status.find(key_id) == key_import_status.end()) {
+        // signal client that repository key import confirmation is required
+        key_import_status[key_id] = KeyConfirmationStatus::PENDING;
+        dbus_object->emitSignal(request_signal);
+    }
+
+    // wait for a confirmation for <timeout>
+    auto timeout = std::chrono::minutes(5);
+    auto wait = key_import_condition.wait_for(key_import_lock, timeout, [this, &key_id]() {
+        return key_import_status.at(key_id) != KeyConfirmationStatus::PENDING;
+    });
+    if (!wait) {
+        key_import_lock.unlock();
+        throw sdbus::Error(dnfdaemon::ERROR, "Timeout while waiting for the repository key import confirmation.");
+    }
+    auto confirmation = key_import_status.at(key_id);
+    key_import_lock.unlock();
+
+    return confirmation == KeyConfirmationStatus::CONFIRMED;
+}
+
 void Session::fill_sack() {
     if (session_configuration_value<bool>("load_system_repo", true)) {
         get_base()->get_repo_sack()->get_system_repo()->load();

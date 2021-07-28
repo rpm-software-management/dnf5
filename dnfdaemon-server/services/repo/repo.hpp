@@ -36,6 +36,7 @@ public:
 
 private:
     sdbus::MethodReply list(sdbus::MethodCall & call);
+    sdbus::MethodReply confirm_key(sdbus::MethodCall & call);
 };
 
 #endif

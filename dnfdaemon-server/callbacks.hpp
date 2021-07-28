@@ -78,15 +78,12 @@ public:
     void end(const char * error_message) override;
     int progress(double total_to_download, double downloaded) override;
 
-    // TODO(mblaha): how to ask the user for confirmation?
     bool repokey_import(
-        [[maybe_unused]] const std::string & id,
-        [[maybe_unused]] const std::string & user_id,
-        [[maybe_unused]] const std::string & fingerprint,
-        [[maybe_unused]] const std::string & url,
-        [[maybe_unused]] long int timestamp) override {
-        return false;
-    }
+        const std::string & id,
+        const std::string & user_id,
+        const std::string & fingerprint,
+        const std::string & url,
+        long int timestamp) override;
 
 private:
     double total = 0;

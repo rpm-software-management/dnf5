@@ -207,6 +207,23 @@ void Repo::dbus_register() {
         dnfdaemon::INTERFACE_REPO, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Repo::list, call, session.session_locale);
         });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_REPO, "confirm_key", "sb", "", [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Repo::confirm_key, call);
+        });
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST, "ossssx");
+}
+
+sdbus::MethodReply Repo::confirm_key(sdbus::MethodCall & call) {
+    std::string key_id;
+    bool confirmed;
+    call >> key_id >> confirmed;
+    if (!session.check_authorization(dnfdaemon::POLKIT_CONFIRM_KEY_IMPORT, call.getSender())) {
+        session.confirm_key(key_id, false);
+        throw std::runtime_error("Not authorized");
+    }
+    session.confirm_key(key_id, confirmed);
+    return call.createReply();
 }
 
 sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {

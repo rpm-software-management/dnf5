@@ -146,6 +146,24 @@ int DbusRepoCB::progress(double total_to_download, double downloaded) {
     return 0;
 }
 
+bool DbusRepoCB::repokey_import(
+    const std::string & id,
+    const std::string & user_id,
+    const std::string & fingerprint,
+    const std::string & url,
+    long int timestamp) {
+    bool confirmed;
+    try {
+        auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST);
+        signal << id << user_id << fingerprint << url << timestamp;
+        // wait for client's confirmation
+        confirmed = session.wait_for_key_confirmation(id, signal);
+    } catch (...) {
+        confirmed = false;
+    }
+    return confirmed;
+}
+
 
 sdbus::Signal DbusTransactionCB::create_signal_pkg(
     std::string interface, std::string signal_name, const std::string & nevra) {
