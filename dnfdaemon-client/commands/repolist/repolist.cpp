@@ -131,6 +131,7 @@ void RepolistCommand::run() {
     dnfdaemon::KeyValueMapList repositories;
     ctx.session_proxy->callMethod("list")
         .onInterface(dnfdaemon::INTERFACE_REPO)
+        .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(options)
         .storeResultsTo(repositories);
 
