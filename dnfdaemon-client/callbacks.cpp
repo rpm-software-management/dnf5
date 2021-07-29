@@ -45,15 +45,15 @@ RepoCB::RepoCB(Context & context) : DbusCallback(context) {
     // register signal handlers
     auto proxy = context.session_proxy.get();
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_START, [this](sdbus::Signal & signal) -> void {
             this->start(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_END, [this](sdbus::Signal & signal) -> void {
             this->end(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS, [this](sdbus::Signal & signal) -> void {
             this->progress(signal);
         });
     proxy->registerSignalHandler(

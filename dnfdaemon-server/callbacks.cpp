@@ -108,7 +108,7 @@ sdbus::Signal DbusPackageCB::create_signal(std::string interface, std::string si
 
 void DbusRepoCB::start(const char * what) {
     try {
-        auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_START);
+        auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_START);
         signal << what;
         dbus_object->emitSignal(signal);
     } catch (...) {
@@ -119,13 +119,13 @@ void DbusRepoCB::end([[maybe_unused]] const char * error_message) {
     // TODO(lukash) forward the error message to the client?
     try {
         {
-            auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
+            auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
             signal << total;
             signal << total;
             dbus_object->emitSignal(signal);
         }
         {
-            auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_END);
+            auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_END);
             dbus_object->emitSignal(signal);
         }
     } catch (...) {
@@ -136,7 +136,7 @@ int DbusRepoCB::progress(double total_to_download, double downloaded) {
     total = total_to_download;
     try {
         if (is_time_to_print()) {
-            auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
+            auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
             signal << downloaded;
             signal << total_to_download;
             dbus_object->emitSignal(signal);
