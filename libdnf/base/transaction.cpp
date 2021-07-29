@@ -217,10 +217,11 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     for (const auto & [obsoleted_id, obsoleted_by_ids] : obsoletes) {
         rpm::Package obsoleted(sack, rpm::PackageId(obsoleted_id));
         auto reason = solved_goal.get_reason(obsoleted_id);
-        TransactionPackage tsi(obsoleted, TransactionPackage::Action::OBSOLETED, reason);
+        TransactionPackage tspkg(obsoleted, TransactionPackage::Action::OBSOLETED, reason);
         for (auto id : obsoleted_by_ids) {
-            tsi.obsoletes.emplace_back(rpm::Package(sack, rpm::PackageId(id)));
+            tspkg.replaced_by.emplace_back(rpm::Package(sack, rpm::PackageId(id)));
         }
+        packages.emplace_back(std::move(tspkg));
     }
 }
 
