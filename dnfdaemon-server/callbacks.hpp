@@ -86,7 +86,7 @@ public:
         long int timestamp) override;
 
 private:
-    double total = 0;
+    uint64_t total = 0;
 };
 
 

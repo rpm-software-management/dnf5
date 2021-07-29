@@ -211,10 +211,10 @@ void Repo::dbus_register() {
         dnfdaemon::INTERFACE_REPO, "confirm_key", "sb", "", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Repo::confirm_key, call);
         });
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_START, "ss");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS, "suu");
-    dbus_object->registerSignal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_END, "s");
     dbus_object->registerSignal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST, "ossssx");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_START, "os");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS, "ott");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_END, "o");
 }
 
 sdbus::MethodReply Repo::confirm_key(sdbus::MethodCall & call) {

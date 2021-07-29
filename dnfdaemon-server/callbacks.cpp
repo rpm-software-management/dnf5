@@ -133,12 +133,12 @@ void DbusRepoCB::end([[maybe_unused]] const char * error_message) {
 }
 
 int DbusRepoCB::progress(double total_to_download, double downloaded) {
-    total = total_to_download;
+    total = static_cast<uint64_t>(total_to_download);
     try {
         if (is_time_to_print()) {
             auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
-            signal << downloaded;
-            signal << total_to_download;
+            signal << static_cast<uint64_t>(downloaded);
+            signal << static_cast<uint64_t>(total_to_download);
             dbus_object->emitSignal(signal);
         }
     } catch (...) {

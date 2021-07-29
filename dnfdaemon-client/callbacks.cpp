@@ -99,8 +99,8 @@ void RepoCB::end(sdbus::Signal & signal) {
 
 void RepoCB::progress(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
-        double downloaded;
-        double total_to_download;
+        uint64_t downloaded;
+        uint64_t total_to_download;
         signal >> downloaded;
         signal >> total_to_download;
         progress_bar.set_total_ticks(static_cast<int64_t>(total_to_download));
