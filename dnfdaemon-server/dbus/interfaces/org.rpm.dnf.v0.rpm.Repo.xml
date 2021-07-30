@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 <node>
 <!-- org.rpm.dnf.v0.rpm.Repo:
-   @short_description: Interface to repositories
+   @short_description: Interface to RPM repositories
 -->
 <interface name="org.rpm.dnf.v0.rpm.Repo">
     <!--
@@ -47,6 +47,74 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="options" type="a{sv}" direction="in"/>
         <arg name="data" type="aa{sv}" direction="out"/>
     </method>
+
+    <!--
+        confirm_key:
+        @key_id: id of the key in question
+        @confirmed: whether the key import is confirmed by user
+
+        Get list of repositories that match to given filters.
+    -->
+    <method name="confirm_key">
+        <arg name="key_id" type="s" direction="in"/>
+        <arg name="confirmed" type="b" direction="in"/>
+    </method>
+
+    <!--
+        repo_load_start:
+        @session_object_path: object path of the dnfdaemon session
+        @repository_name: the name of repository
+
+        Repository metadata loading has started.
+    -->
+    <signal name="repo_load_start">
+        <arg name="session_object_path" type="o" />
+        <arg name="repository_name" type="s" />
+    </signal>
+
+    <!--
+        repo_load_progress:
+        @session_object_path: object path of the dnfdaemon session
+        @downloaded: bytes already downloaded
+        @total: total bytes to download
+
+        Progress in repository metadata downloading.
+    -->
+    <signal name="repo_load_progress">
+        <arg name="session_object_path" type="o" />
+        <arg name="downloaded" type="t" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        repo_load_end:
+        @session_object_path: object path of the dnfdaemon session
+
+        Repository metadata loading has ended.
+    -->
+    <signal name="repo_load_end">
+        <arg name="session_object_path" type="o" />
+    </signal>
+
+    <!--
+        repo_key_import_request:
+        @session_object_path: object path of the dnfdaemon session
+        @key_id: GPG key id
+        @user_id: User id
+        @key_fingerprint: Fingerprint of the GPG key
+        @key_url: URL of the GPG key
+        @timestamp: timestamp when the key was created
+
+        Request for repository key import confirmation.
+    -->
+    <signal name="repo_key_import_request">
+        <arg name="session_object_path" type="o" />
+        <arg name="key_id" type="s" />
+        <arg name="user_id" type="s" />
+        <arg name="key_fingerprint" type="s" />
+        <arg name="key_url" type="s" />
+        <arg name="timestamp" type="x" />
+    </signal>
 
 </interface>
 
