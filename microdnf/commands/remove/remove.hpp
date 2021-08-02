@@ -32,7 +32,6 @@ namespace microdnf {
 class CmdRemove : public Command {
 public:
     void set_argument_parser(Context & ctx) override;
-    void configure(Context & ctx) override;
     void run(Context & ctx) override;
 
 private:

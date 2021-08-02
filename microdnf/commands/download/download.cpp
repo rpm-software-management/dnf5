@@ -64,8 +64,6 @@ void CmdDownload::set_argument_parser(Context & ctx) {
     ctx.arg_parser.get_root_command()->register_command(download);
 }
 
-void CmdDownload::configure([[maybe_unused]] Context & ctx) {}
-
 void CmdDownload::run(Context & ctx) {
     // To search in available repositories (available packages)
     libdnf::repo::RepoQuery enabled_repos(ctx.base);

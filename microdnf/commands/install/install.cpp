@@ -67,8 +67,6 @@ void CmdInstall::set_argument_parser(Context & ctx) {
     ctx.arg_parser.get_root_command()->register_command(install);
 }
 
-void CmdInstall::configure([[maybe_unused]] Context & ctx) {}
-
 void CmdInstall::run(Context & ctx) {
     auto & package_sack = *ctx.base.get_rpm_package_sack();
 

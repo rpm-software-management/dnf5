@@ -277,10 +277,6 @@ int main(int argc, char * argv[]) try {
 
     base.get_vars()->load(base.get_config().installroot().get_value(), base.get_config().varsdir().get_value());
 
-    // Preconfigure selected command
-    context.selected_command->pre_configure(context);
-    //pre_configure_plugins
-
     // create rpm repositories according configuration files
     auto repo_sack = base.get_repo_sack();
     repo_sack->new_repos_from_file();
@@ -305,9 +301,6 @@ int main(int argc, char * argv[]) try {
     //configure_plugins
     //configure_from_options(context);
     plugins.hook(libdnf::plugin::HookId::LOAD_CONFIG_FROM_FILE);
-
-    // Configure selected command
-    context.selected_command->configure(context);
 
     // Run selected command
     try {

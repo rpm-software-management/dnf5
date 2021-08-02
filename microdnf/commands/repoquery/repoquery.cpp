@@ -109,8 +109,6 @@ void CmdRepoquery::set_argument_parser(Context & ctx) {
     ctx.arg_parser.get_root_command()->register_command(repoquery);
 }
 
-void CmdRepoquery::configure([[maybe_unused]] Context & ctx) {}
-
 void CmdRepoquery::run(Context & ctx) {
     auto package_sack = ctx.base.get_rpm_package_sack();
 

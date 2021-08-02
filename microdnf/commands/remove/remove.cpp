@@ -64,8 +64,6 @@ void CmdRemove::set_argument_parser(Context & ctx) {
     ctx.arg_parser.get_root_command()->register_command(remove);
 }
 
-void CmdRemove::configure([[maybe_unused]] Context & ctx) {}
-
 void CmdRemove::run(Context & ctx) {
     auto & package_sack = *ctx.base.get_rpm_package_sack();
 

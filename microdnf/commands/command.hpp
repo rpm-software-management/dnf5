@@ -27,8 +27,6 @@ class Context;
 class Command {
 public:
     virtual void set_argument_parser(Context &) {}
-    virtual void pre_configure(Context &) {}
-    virtual void configure(Context &) {}
     virtual void run(Context &) {}
     virtual ~Command() = default;
 };
