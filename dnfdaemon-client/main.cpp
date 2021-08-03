@@ -201,8 +201,13 @@ int main(int argc, char * argv[]) {
     }
 
     // initialize server session using command line arguments
-    context.init_session();
-
+    try {
+        context.init_session();
+    } catch(sdbus::Error & ex) {
+        std::cerr << ex.getMessage() << std::endl
+                  << "Is dnfdaemon-server active?" << std::endl;
+        return 1;
+    }
     // Preconfigure selected command
     context.selected_command->pre_configure(context);
 
