@@ -440,36 +440,6 @@ protected:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
     Package(const PackageSackWeakPtr & sack, PackageId id);
 
-    /// @return RPM package Name as a `const char *`.
-    /// @since 5.0
-    /// @warning The value points to the underlying sack and shares its life-cycle.
-    const char * get_name_cstring() const;
-
-    /// @return RPM package Epoch as a `const char *`.
-    /// @since 5.0
-    /// @warning The value points to the underlying sack and shares its life-cycle.
-    const char * get_epoch_cstring() const;
-
-    /// @return RPM package Version as a `const char *`.
-    /// @since 5.0
-    /// @warning The value points to the underlying sack and shares its life-cycle.
-    const char * get_version_cstring() const;
-
-    /// @return RPM package Release as a `const char *`.
-    /// @since 5.0
-    /// @warning The value points to the underlying sack and shares its life-cycle.
-    const char * get_release_cstring() const;
-
-    /// @return RPM package Arch as a `const char *`.
-    /// @since 5.0
-    /// @warning The value points to the underlying sack and shares its life-cycle.
-    const char * get_arch_cstring() const;
-
-    /// @return RPM package EVR (Epoch:Version-Release) as a `const char *`. If the epoch is 0, it is omitted from the output.
-    /// @since 5.0
-    /// @warning The value points to the underlying sack and shares its life-cycle.
-    const char * get_evr_cstring() const;
-
 private:
     friend class PackageSetIterator;
     friend class PackageSack;

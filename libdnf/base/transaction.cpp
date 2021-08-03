@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/package_set_impl.hpp"
-#include "libdnf/rpm/solv/package_private.hpp"
+#include "libdnf/solv/pool.hpp"
 
 
 namespace libdnf::base {
@@ -61,7 +61,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         return;
     }
     auto sack = base->get_rpm_package_sack();
-    Pool * pool = sack->p_impl->get_pool();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
 
     rpm::PackageQuery installonly_query(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
     installonly_query.filter_provides(base->get_config().installonlypkgs().get_value());
@@ -139,7 +139,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         //  Upgrade of installonly packages result in install or install and remove step
         if (installonly_query.p_impl->contains(id)) {
             rpm::PackageQuery query(installed_installonly_query);
-            query.filter_name({rpm::solv::get_name(pool, id)});
+            query.filter_name({pool.get_name(id)});
             if (!query.empty()) {
                 reason = tspkg.get_package().get_reason();
             }

@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/transaction.hpp"
 
-#include "../libdnf/rpm/solv/package_private.hpp"
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "package_sack_impl.hpp"
 #include "package_set_impl.hpp"

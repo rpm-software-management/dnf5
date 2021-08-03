@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "goal_private.hpp"
 
-#include "../../utils/utils_internal.hpp"
+#include "libdnf/solv/pool.hpp"
 
 extern "C" {
 #include <solv/evr.h>
@@ -149,12 +149,12 @@ bool can_depend_on(Pool * pool, Solvable * sa, Id b) {
     return false;
 }
 
-static void same_name_subqueue(Pool * pool, Queue * in, Queue * out) {
+static void same_name_subqueue(libdnf::solv::Pool & pool, Queue * in, Queue * out) {
     Id el = queue_pop(in);
-    Id name = pool_id2solvable(pool, el)->name;
+    Id name = pool.id2solvable(el)->name;
     queue_empty(out);
     queue_push(out, el);
-    while (in->count && pool_id2solvable(pool, in->elements[in->count - 1])->name == name)
+    while (in->count && pool.id2solvable(in->elements[in->count - 1])->name == name)
         // reverses the order so packages are sorted by descending version
         queue_push(out, queue_pop(in));
 }
@@ -255,7 +255,8 @@ bool limit_installonly_packages(
         return 0;
     }
 
-    Pool * pool = solv->pool;
+    ::Pool * pool = solv->pool;
+    libdnf::solv::Pool spool(pool);
     bool reresolve = false;
 
     for (int i = 0; i < installonly.size(); ++i) {
@@ -265,7 +266,7 @@ bool limit_installonly_packages(
         libdnf::solv::IdQueue installing;
         FOR_PROVIDES(p, pp, installonly[i]) {
             // TODO(jmracek)  Replase the test by cached data from sack.p_impl->get_solvables()
-            if (!libdnf::utils::is_package(pool, p)) {
+            if (!spool.is_package(p)) {
                 continue;
             }
             if (solver_get_decisionlevel(solv, p) > 0) {
@@ -277,8 +278,8 @@ bool limit_installonly_packages(
         }
         for (int k = 0; k < q.size(); ++k) {
             Id id = q[k];
-            Solvable * s = pool_id2solvable(pool, id);
-            if (pool->installed != s->repo) {
+            Solvable * s = spool.id2solvable(id);
+            if (spool->installed != s->repo) {
                 installing.push_back(id);
                 break;
             }
@@ -292,7 +293,7 @@ bool limit_installonly_packages(
 
         libdnf::solv::IdQueue same_names;
         while (q.size() > 0) {
-            same_name_subqueue(pool, &q.get_queue(), &same_names.get_queue());
+            same_name_subqueue(spool, &q.get_queue(), &same_names.get_queue());
             if (same_names.size() <= static_cast<int>(installonly_limit)) {
                 continue;
             }

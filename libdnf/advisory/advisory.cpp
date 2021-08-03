@@ -23,10 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_reference.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/package_sack_impl.hpp"
-#include "libdnf/utils/utils_internal.hpp"
+#include "libdnf/solv/pool.hpp"
 
 #include <fmt/format.h>
-#include <solv/pool.h>
 
 namespace libdnf::advisory {
 
@@ -34,28 +33,28 @@ Advisory::Advisory(const libdnf::rpm::PackageSackWeakPtr & sack, AdvisoryId id) 
 
 std::string Advisory::get_name() const {
     const char * name;
-    Pool * pool = sack->p_impl->get_pool();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
 
-    name = pool_lookup_str(pool, id.id, SOLVABLE_NAME);
+    name = pool.lookup_str(id.id, SOLVABLE_NAME);
 
     if (strncmp(
-            libdnf::utils::SOLVABLE_NAME_ADVISORY_PREFIX, name, libdnf::utils::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH) !=
+            libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX, name, libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH) !=
         0) {
         auto msg = fmt::format(
             R"**(Bad libsolv id for advisory "{}", solvable name "{}" doesn't have advisory prefix "{}")**",
             id.id,
             name,
-            libdnf::utils::SOLVABLE_NAME_ADVISORY_PREFIX);
+            libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX);
         throw RuntimeError(msg);
     }
 
-    return std::string(name + libdnf::utils::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH);
+    return std::string(name + libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH);
 }
 
 Advisory::Type Advisory::get_type() const {
     const char * type;
-    Pool * pool = sack->p_impl->get_pool();
-    type = pool_lookup_str(pool, id.id, SOLVABLE_PATCHCATEGORY);
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
+    type = pool.lookup_str(id.id, SOLVABLE_PATCHCATEGORY);
 
     if (type == NULL) {
         return Advisory::Type::UNKNOWN;
@@ -77,8 +76,8 @@ Advisory::Type Advisory::get_type() const {
 }
 
 const char * Advisory::get_type_cstring() const {
-    Pool * pool = sack->p_impl->get_pool();
-    return pool_lookup_str(pool, id.id, SOLVABLE_PATCHCATEGORY);
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
+    return pool.lookup_str(id.id, SOLVABLE_PATCHCATEGORY);
 }
 
 const char * Advisory::advisory_type_to_cstring(Type type) {
@@ -97,12 +96,12 @@ const char * Advisory::advisory_type_to_cstring(Type type) {
 }
 
 std::string Advisory::get_severity() const {
-    Pool * pool = sack->p_impl->get_pool();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
 
     //TODO(amatej): should we call SolvPrivate::internalize_libsolv_repo(solvable->repo);
-    //              before pool_lookup_str?
+    //              before pool.lookup_str?
     //              If so do this just once in solv::advisroy_private
-    const char * severity = pool_lookup_str(pool, id.id, UPDATE_SEVERITY);
+    const char * severity = pool.lookup_str(id.id, UPDATE_SEVERITY);
     return severity ? std::string(severity) : std::string();
 }
 
@@ -111,16 +110,16 @@ AdvisoryId Advisory::get_id() const {
 }
 
 std::vector<AdvisoryReference> Advisory::get_references(AdvisoryReferenceType ref_type) const {
-    Pool * pool = sack->p_impl->get_pool();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
 
     std::vector<AdvisoryReference> output;
 
     Dataiterator di;
-    dataiterator_init(&di, pool, 0, id.id, UPDATE_REFERENCE, 0, 0);
+    dataiterator_init(&di, *pool, 0, id.id, UPDATE_REFERENCE, 0, 0);
 
     for (int index = 0; dataiterator_step(&di); index++) {
         dataiterator_setpos(&di);
-        const char * current_type = pool_lookup_str(pool, SOLVID_POS, UPDATE_REFERENCE_TYPE);
+        const char * current_type = pool.lookup_str(SOLVID_POS, UPDATE_REFERENCE_TYPE);
 
         if (((ref_type & AdvisoryReferenceType::CVE) == AdvisoryReferenceType::CVE &&
              (strcmp(current_type, "cve") == 0)) ||
@@ -137,12 +136,12 @@ std::vector<AdvisoryReference> Advisory::get_references(AdvisoryReferenceType re
 }
 
 std::vector<AdvisoryCollection> Advisory::get_collections() const {
-    Pool * pool = sack->p_impl->get_pool();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
 
     std::vector<AdvisoryCollection> output;
 
     Dataiterator di;
-    dataiterator_init(&di, pool, 0, id.id, UPDATE_COLLECTIONLIST, 0, 0);
+    dataiterator_init(&di, *pool, 0, id.id, UPDATE_COLLECTIONLIST, 0, 0);
 
     for (int index = 0; dataiterator_step(&di); index++) {
         dataiterator_setpos(&di);

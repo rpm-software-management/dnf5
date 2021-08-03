@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package_sack_impl.hpp"
 #include "libdnf/rpm/package_set.hpp"
-#include "libdnf/rpm/solv/package_private.hpp"
+#include "libdnf/solv/pool.hpp"
 #include "libdnf/solv/solv_map.hpp"
 #include "libdnf/utils/utils_internal.hpp"
 
@@ -93,7 +93,7 @@ AdvisoryQuery & AdvisoryQuery::filter_name(const std::vector<std::string> & patt
 
         switch (tmp_cmp_type) {
             case libdnf::sack::QueryCmp::EQ: {
-                std::string prefixed_name = std::string(libdnf::utils::SOLVABLE_NAME_ADVISORY_PREFIX) + pattern;
+                std::string prefixed_name = std::string(libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX) + pattern;
                 Id name_id = pool_str2id(pool, prefixed_name.c_str(), 0);
                 for (Id candidate_id : p_impl->data_map) {
                     Id candidate_name = pool_lookup_id(pool, candidate_id, SOLVABLE_NAME);
@@ -105,7 +105,7 @@ AdvisoryQuery & AdvisoryQuery::filter_name(const std::vector<std::string> & patt
             case libdnf::sack::QueryCmp::GLOB: {
                 for (Id candidate_id : p_impl->data_map) {
                     const char * candidate_name = pool_lookup_str(pool, candidate_id, SOLVABLE_NAME);
-                    if (fnmatch(c_pattern, candidate_name + libdnf::utils::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH, 0) ==
+                    if (fnmatch(c_pattern, candidate_name + libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH, 0) ==
                         0) {
                         filter_result.add_unsafe(candidate_id);
                     }
@@ -117,7 +117,7 @@ AdvisoryQuery & AdvisoryQuery::filter_name(const std::vector<std::string> & patt
                     const char * candidate_name = pool_lookup_str(pool, candidate_id, SOLVABLE_NAME);
                     if (fnmatch(
                             c_pattern,
-                            candidate_name + libdnf::utils::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH,
+                            candidate_name + libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH,
                             FNM_CASEFOLD) == 0) {
                         filter_result.add_unsafe(candidate_id);
                     }
@@ -320,7 +320,7 @@ AdvisoryQuery & AdvisoryQuery::filter_severity(const std::vector<std::string> & 
 //TODO(amatej): this might not be needed and could be possibly removed
 AdvisoryQuery & AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
     auto & package_sack = *advisory_sack->base->get_rpm_package_sack();
-    Pool * pool = package_sack.p_impl->get_pool();
+    libdnf::solv::Pool pool(package_sack.p_impl->get_pool());
     libdnf::solv::SolvMap filter_result(package_sack.p_impl->get_nsolvables());
     std::vector<AdvisoryPackage> adv_pkgs = get_sorted_advisory_packages();
 
@@ -339,12 +339,12 @@ AdvisoryQuery & AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & p
         case libdnf::sack::QueryCmp::LTE: {
             for (libdnf::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
                  package++) {
-                Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, (*package).get_id().id);
+                Solvable * solvable = pool.id2solvable((*package).get_id().id);
                 auto low =
                     std::lower_bound(adv_pkgs.begin(), adv_pkgs.end(), *package, AdvisoryPackage::Impl::name_arch_compare_lower_id);
                 while (low != adv_pkgs.end() && low->p_impl.get()->get_name_id() == solvable->name &&
                        low->p_impl.get()->get_arch_id() == solvable->arch) {
-                    int libsolv_cmp = pool_evrcmp(pool, low->p_impl.get()->get_evr_id(), solvable->evr, EVRCMP_COMPARE);
+                    int libsolv_cmp = pool.evrcmp(low->p_impl.get()->get_evr_id(), solvable->evr, EVRCMP_COMPARE);
                     if (((libsolv_cmp > 0) && ((cmp_type & sack::QueryCmp::GT) == sack::QueryCmp::GT)) ||
                         ((libsolv_cmp < 0) && ((cmp_type & sack::QueryCmp::LT) == sack::QueryCmp::LT)) ||
                         ((libsolv_cmp == 0) && ((cmp_type & sack::QueryCmp::EQ) == sack::QueryCmp::EQ))) {
@@ -375,7 +375,7 @@ std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
     std::vector<AdvisoryPackage> after_filter;
 
     auto package_sack = package_set.get_sack();
-    Pool * pool = package_sack->p_impl->get_pool();
+    libdnf::solv::Pool pool(package_sack->p_impl->get_pool());
 
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ:
@@ -386,12 +386,12 @@ std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
         case libdnf::sack::QueryCmp::LTE: {
             for (libdnf::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
                  package++) {
-                Solvable * solvable = libdnf::rpm::solv::get_solvable(pool, (*package).get_id().id);
+                Solvable * solvable = pool.id2solvable((*package).get_id().id);
                 auto low =
                     std::lower_bound(adv_pkgs.begin(), adv_pkgs.end(), *package, AdvisoryPackage::Impl::name_arch_compare_lower_id);
                 while (low != adv_pkgs.end() && low->p_impl.get()->get_name_id() == solvable->name &&
                        low->p_impl.get()->get_arch_id() == solvable->arch) {
-                    int libsolv_cmp = pool_evrcmp(pool, low->p_impl.get()->get_evr_id(), solvable->evr, EVRCMP_COMPARE);
+                    int libsolv_cmp = pool.evrcmp(low->p_impl.get()->get_evr_id(), solvable->evr, EVRCMP_COMPARE);
                     if (((libsolv_cmp > 0) && ((cmp_type & sack::QueryCmp::GT) == sack::QueryCmp::GT)) ||
                         ((libsolv_cmp < 0) && ((cmp_type & sack::QueryCmp::LT) == sack::QueryCmp::LT)) ||
                         ((libsolv_cmp == 0) && ((cmp_type & sack::QueryCmp::EQ) == sack::QueryCmp::EQ))) {

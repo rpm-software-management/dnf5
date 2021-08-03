@@ -23,9 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../rpm/package_sack_impl.hpp"
 #include "../rpm/package_set_impl.hpp"
 #include "../rpm/solv/goal_private.hpp"
-#include "../rpm/solv/package_private.hpp"
 #include "../utils/string.hpp"
 #include "../utils/utils_internal.hpp"
+#include "libdnf/solv/pool.hpp"
 #include "transaction_impl.hpp"
 
 #include "libdnf/rpm/package_query.hpp"
@@ -358,7 +358,7 @@ GoalProblem Goal::Impl::add_specs_to_goal() {
 
 GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSettings & settings) {
     auto sack = base->get_rpm_package_sack();
-    Pool * pool = sack->p_impl->get_pool();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
     auto & cfg_main = base->get_config();
     bool strict = settings.resolve_strict(cfg_main);
     bool best = settings.resolve_best(cfg_main);
@@ -388,7 +388,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             GoalProblem::ALREADY_INSLALLED,
             settings,
             spec,
-            {rpm::solv::get_nevra(pool, package_id)},
+            {pool.get_nevra(package_id)},
             false);
     }
 
@@ -406,7 +406,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
         std::unordered_map<Id, std::unordered_map<Id, std::vector<Solvable *>>> na_map;
 
         for (auto package_id : *query.p_impl) {
-            Solvable * solvable = rpm::solv::get_solvable(pool, package_id);
+            Solvable * solvable = pool.id2solvable(package_id);
             na_map[solvable->name][solvable->arch].push_back(solvable);
         }
 
@@ -416,7 +416,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             if (name_iter.second.size() == 1) {
                 selected.clear();
                 for (auto * solvable : name_iter.second.begin()->second) {
-                    selected.p_impl->add(pool_solvable2id(pool, solvable));
+                    selected.p_impl->add(pool.solvable2id(solvable));
                 }
                 if (add_obsoletes) {
                     add_obsoletes_to_data(base_query, selected);
@@ -429,7 +429,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 if (noarch != name_iter.second.end()) {
                     selected_noarch.clear();
                     for (auto * solvable : noarch->second) {
-                        selected_noarch.p_impl->add(pool_solvable2id(pool, solvable));
+                        selected_noarch.p_impl->add(pool.solvable2id(solvable));
                     }
                     if (add_obsoletes) {
                         add_obsoletes_to_data(base_query, selected_noarch);
@@ -440,7 +440,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                         }
                         selected.clear();
                         for (auto * solvable : arch_iter.second) {
-                            selected.p_impl->add(pool_solvable2id(pool, solvable));
+                            selected.p_impl->add(pool.solvable2id(solvable));
                         }
                         if (add_obsoletes) {
                             add_obsoletes_to_data(base_query, selected);
@@ -453,7 +453,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                     for (auto & arch_iter : name_iter.second) {
                         selected.clear();
                         for (auto * solvable : arch_iter.second) {
-                            selected.p_impl->add(pool_solvable2id(pool, solvable));
+                            selected.p_impl->add(pool.solvable2id(solvable));
                         }
                         if (add_obsoletes) {
                             add_obsoletes_to_data(base_query, selected);
@@ -485,11 +485,11 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             // keep only installed that has a partner in available
             std::unordered_set<Id> names;
             for (auto package_id : *available.p_impl) {
-                Solvable * solvable = rpm::solv::get_solvable(pool, package_id);
+                Solvable * solvable = pool.id2solvable(package_id);
                 names.insert(solvable->name);
             }
             for (auto package_id : *installed.p_impl) {
-                Solvable * solvable = rpm::solv::get_solvable(pool, package_id);
+                Solvable * solvable = pool.id2solvable(package_id);
                 auto name_iterator = names.find(solvable->name);
                 if (name_iterator == names.end()) {
                     installed.p_impl->remove_unsafe(package_id);
@@ -498,7 +498,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             available |= installed;
             std::vector<Solvable *> tmp_solvables;
             for (auto package_id : *available.p_impl) {
-                Solvable * solvable = rpm::solv::get_solvable(pool, package_id);
+                Solvable * solvable = pool.id2solvable(package_id);
                 tmp_solvables.push_back(solvable);
             }
             Id current_name = 0;
@@ -507,12 +507,12 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
             {
                 auto * first = tmp_solvables[0];
                 current_name = first->name;
-                selected.p_impl->add_unsafe(pool_solvable2id(pool, first));
+                selected.p_impl->add_unsafe(pool.solvable2id(first));
             }
 
             for (auto iter = std::next(tmp_solvables.begin()); iter != tmp_solvables.end(); ++iter) {
                 if ((*iter)->name == current_name) {
-                    selected.p_impl->add_unsafe(pool_solvable2id(pool, (*iter)));
+                    selected.p_impl->add_unsafe(pool.solvable2id(*iter));
                     continue;
                 }
                 if (add_obsoletes) {
@@ -521,7 +521,7 @@ GoalProblem Goal::Impl::add_install_to_goal(const std::string & spec, GoalJobSet
                 solv_map_to_id_queue(tmp_queue, static_cast<libdnf::solv::SolvMap>(*selected.p_impl));
                 rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
                 selected.clear();
-                selected.p_impl->add_unsafe(pool_solvable2id(pool, (*iter)));
+                selected.p_impl->add_unsafe(pool.solvable2id(*iter));
                 current_name = (*iter)->name;
             }
             if (add_obsoletes) {
@@ -620,10 +620,10 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(const std::string & spec, GoalJobS
     Id current_name = 0;
     Id current_arch = 0;
     std::vector<Solvable *> tmp_solvables;
-    Pool * pool = sack->p_impl->get_pool();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
 
     for (auto package_id : *relevant_available.p_impl) {
-        tmp_solvables.push_back(rpm::solv::get_solvable(pool, package_id));
+        tmp_solvables.push_back(pool.id2solvable(package_id));
     }
     std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
 
@@ -633,17 +633,17 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(const std::string & spec, GoalJobS
         auto * first = (*tmp_solvables.begin());
         current_name = first->name;
         current_arch = first->arch;
-        tmp_queue.push_back(pool_solvable2id(pool, first));
+        tmp_queue.push_back(pool.solvable2id(first));
     }
 
     for (auto iter = std::next(tmp_solvables.begin()); iter != tmp_solvables.end(); ++iter) {
         if ((*iter)->name == current_name && (*iter)->arch == current_arch) {
-            tmp_queue.push_back(pool_solvable2id(pool, (*iter)));
+            tmp_queue.push_back(pool.solvable2id(*iter));
             continue;
         }
         rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
         tmp_queue.clear();
-        tmp_queue.push_back(pool_solvable2id(pool, (*iter)));
+        tmp_queue.push_back(pool.solvable2id(*iter));
         current_name = (*iter)->name;
         current_arch = (*iter)->arch;
     }
@@ -704,7 +704,7 @@ GoalProblem Goal::Impl::report_not_found(
 
 void Goal::Impl::add_rpms_to_goal() {
     auto sack = base->get_rpm_package_sack();
-    Pool * pool = sack->p_impl->get_pool();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
     auto & cfg_main = base->get_config();
 
     rpm::PackageQuery installed(sack, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
@@ -715,7 +715,7 @@ void Goal::Impl::add_rpms_to_goal() {
                 //  include installed packages with the same NEVRA into transaction to prevent reinstall
                 std::vector<std::string> nevras;
                 for (auto id : ids) {
-                    nevras.push_back(rpm::solv::get_nevra(pool, id));
+                    nevras.push_back(pool.get_nevra(id));
                 }
                 rpm::PackageQuery query(installed);
                 query.filter_nevra(nevras);
@@ -726,7 +726,7 @@ void Goal::Impl::add_rpms_to_goal() {
                         GoalProblem::ALREADY_INSLALLED,
                         settings,
                         {},
-                        {rpm::solv::get_nevra(pool, package_id)},
+                        {pool.get_nevra(package_id)},
                         false);
                     ids.push_back(package_id);
                 }
@@ -892,16 +892,16 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
             break;
         case Action::DOWNGRADE: {
             query.filter_available().filter_downgrades();
-            Pool * pool = sack->p_impl->get_pool();
+            libdnf::solv::Pool pool(sack->p_impl->get_pool());
             std::vector<Solvable *> tmp_solvables;
             for (auto pkg_id : *query.p_impl) {
-                tmp_solvables.push_back(rpm::solv::get_solvable(pool, pkg_id));
+                tmp_solvables.push_back(pool.id2solvable(pkg_id));
             }
             std::sort(tmp_solvables.begin(), tmp_solvables.end(), nevra_solvable_cmp_key);
             std::map<Id, std::vector<Id>> name_arches;
             // Make for each name arch only one downgrade job
             for (auto installed_id : *relevant_installed_na.p_impl) {
-                Solvable * solvable = rpm::solv::get_solvable(pool, installed_id);
+                Solvable * solvable = pool.id2solvable(installed_id);
                 auto & arches = name_arches[solvable->name];
                 bool unique = true;
                 for (Id arch : arches) {
@@ -917,13 +917,13 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
                         tmp_solvables.begin(), tmp_solvables.end(), solvable, name_arch_compare_lower_solvable);
                     while (low != tmp_solvables.end() && (*low)->name == solvable->name &&
                            (*low)->arch == solvable->arch) {
-                        tmp_queue.push_back(pool_solvable2id(pool, (*low)));
+                        tmp_queue.push_back(pool.solvable2id(*low));
                         ++low;
                     }
                     if (tmp_queue.empty()) {
-                        std::string name_arch(rpm::solv::get_name(pool, installed_id));
+                        std::string name_arch(pool.get_name(installed_id));
                         name_arch.append(".");
-                        name_arch.append(rpm::solv::get_arch(pool, installed_id));
+                        name_arch.append(pool.get_arch(installed_id));
                         add_rpm_goal_report(
                             action, GoalProblem::INSLALLED_LOWEST_VERSION, settings, spec, {name_arch}, false);
                     } else {
@@ -939,8 +939,8 @@ void Goal::Impl::add_up_down_distrosync_to_goal(Action action, const std::string
 
 std::vector<std::pair<ProblemRules, std::vector<std::string>>> Goal::Impl::get_removal_of_protected(
     const libdnf::solv::IdQueue & broken_installed) {
-    auto & sack = *base->get_rpm_package_sack();
-    Pool * pool = sack.p_impl->get_pool();
+    auto sack = base->get_rpm_package_sack();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
 
     auto protected_running_kernel = rpm_goal.get_protect_running_kernel();
     std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
@@ -951,14 +951,14 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> Goal::Impl::get_r
         for (auto protected_id : *removal_of_protected) {
             if (protected_id == protected_running_kernel.id) {
                 std::vector<std::string> elements;
-                elements.emplace_back(rpm::solv::get_full_nevra(pool, protected_id));
+                elements.emplace_back(pool.get_full_nevra(protected_id));
                 if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
                     problem_output.push_back(
                         std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, std::move(elements)));
                 }
                 continue;
             }
-            names.emplace(rpm::solv::get_name(pool, protected_id));
+            names.emplace(pool.get_name(protected_id));
         }
         if (!names.empty()) {
             std::vector<std::string> names_vector(names.begin(), names.end());
@@ -978,13 +978,13 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> Goal::Impl::get_r
     for (auto broken : broken_installed) {
         if (broken == protected_running_kernel.id) {
             std::vector<std::string> elements;
-            elements.emplace_back(rpm::solv::get_full_nevra(pool, broken));
+            elements.emplace_back(pool.get_full_nevra(broken));
             if (is_unique(problem_output, ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, elements)) {
                 problem_output.push_back(
                     std::make_pair(ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL, std::move(elements)));
             }
         } else if (protected_packages && protected_packages->contains_unsafe(broken)) {
-            names.emplace(rpm::solv::get_name(pool, broken));
+            names.emplace(pool.get_name(broken));
         }
     }
     if (!names.empty()) {
@@ -1170,8 +1170,8 @@ std::string Goal::format_rpm_log(
 }
 
 std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> Goal::describe_all_solver_problems() {
-    auto & sack = *p_impl->base->get_rpm_package_sack();
-    Pool * pool = sack.p_impl->get_pool();
+    auto sack = p_impl->base->get_rpm_package_sack();
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
 
     // Required to discover of problems related to protected packages
     libdnf::solv::IdQueue broken_installed;
@@ -1191,7 +1191,7 @@ std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> Goal
                 case ProblemRules::RULE_BEST_1:
                 case ProblemRules::RULE_PKG_NOT_INSTALLABLE_2:
                 case ProblemRules::RULE_PKG_NOT_INSTALLABLE_3:
-                    elements.push_back(pool_solvid2str(pool, source));
+                    elements.push_back(pool.solvid2str(source));
                     break;
                 case ProblemRules::RULE_JOB:
                 case ProblemRules::RULE_JOB_UNSUPPORTED:
@@ -1201,7 +1201,7 @@ std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> Goal
                 case ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP:
                 case ProblemRules::RULE_JOB_UNKNOWN_PACKAGE:
                 case ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM:
-                    elements.push_back(pool_dep2str(pool, dep));
+                    elements.push_back(pool.dep2str(dep));
                     break;
                 case ProblemRules::RULE_PKG_NOT_INSTALLABLE_1:
                 case ProblemRules::RULE_PKG_NOT_INSTALLABLE_4:
@@ -1210,23 +1210,23 @@ std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> Goal
                     } else {
                         tmp_rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_4;
                     }
-                    elements.push_back(pool_solvid2str(pool, source));
+                    elements.push_back(pool.solvid2str(source));
                     break;
                 case ProblemRules::RULE_PKG_SELF_CONFLICT:
-                    elements.push_back(pool_dep2str(pool, dep));
-                    elements.push_back(pool_solvid2str(pool, source));
+                    elements.push_back(pool.dep2str(dep));
+                    elements.push_back(pool.solvid2str(source));
                     break;
                 case ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP:
                 case ProblemRules::RULE_PKG_REQUIRES:
-                    if (pool->installed == pool_id2solvable(pool, source)->repo) {
+                    if (pool.is_installed(source)) {
                         broken_installed.push_back(source);
                     }
-                    elements.push_back(pool_dep2str(pool, dep));
-                    elements.push_back(pool_solvid2str(pool, source));
+                    elements.push_back(pool.dep2str(dep));
+                    elements.push_back(pool.solvid2str(source));
                     break;
                 case ProblemRules::RULE_PKG_SAME_NAME:
-                    elements.push_back(pool_solvid2str(pool, source));
-                    elements.push_back(pool_solvid2str(pool, target));
+                    elements.push_back(pool.solvid2str(source));
+                    elements.push_back(pool.solvid2str(target));
                     std::sort(elements.begin(), elements.end());
                     break;
                 case ProblemRules::RULE_PKG_CONFLICTS:
@@ -1234,9 +1234,9 @@ std::vector<std::vector<std::pair<ProblemRules, std::vector<std::string>>>> Goal
                 case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
                 case ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES:
                 case ProblemRules::RULE_YUMOBS:
-                    elements.push_back(pool_solvid2str(pool, source));
-                    elements.push_back(pool_dep2str(pool, dep));
-                    elements.push_back(pool_solvid2str(pool, target));
+                    elements.push_back(pool.solvid2str(source));
+                    elements.push_back(pool.dep2str(dep));
+                    elements.push_back(pool.solvid2str(target));
                     break;
                 case ProblemRules::RULE_UNKNOWN:
                     elements.push_back(description);

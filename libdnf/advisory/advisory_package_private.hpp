@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_package.hpp"
 #include "libdnf/rpm/package_sack_impl.hpp"
-#include "libdnf/rpm/solv/package_private.hpp"
+#include "libdnf/solv/pool.hpp"
 
 #include <solv/pooltypes.h>
 #include <solv/solvable.h>
@@ -72,8 +72,8 @@ public:
     /// @param pkg          libdnf::rpm::Package to compare.
     /// @return True if AdvisoryPackage has smaller name or architecture than libdnf::rpm::package, False otherwise.
     static bool name_arch_compare_lower_id(const AdvisoryPackage & adv_pkg, const rpm::Package & pkg) {
-        Pool * pool = adv_pkg.p_impl->sack->p_impl->get_pool();
-        Solvable * s = libdnf::rpm::solv::get_solvable(pool, pkg.get_id().id);
+        libdnf::solv::Pool pool(adv_pkg.p_impl->sack->p_impl->get_pool());
+        Solvable * s = pool.id2solvable(pkg.get_id().id);
 
         if (adv_pkg.p_impl->name != s->name)
             return adv_pkg.p_impl->name < s->name;

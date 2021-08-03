@@ -24,8 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/repo_impl.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/solv/id_queue.hpp"
+#include "libdnf/solv/pool.hpp"
 #include "libdnf/solv/solv_map.hpp"
-#include "libdnf/utils/utils_internal.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -202,7 +202,7 @@ inline std::vector<Solvable *> & PackageSack::Impl::get_sorted_solvables() {
 }
 
 inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_icase_solvables() {
-    Pool * pool = get_pool();
+    libdnf::solv::Pool spool(pool);
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_sorted_icase_solvables_size) {
         return cached_sorted_icase_solvables;
@@ -211,7 +211,7 @@ inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_ic
     Id icase_name = 0;
     for (auto * solvable : get_sorted_solvables()) {
         if (solvable->name != name) {
-            icase_name = libdnf::utils::id_to_lowercase_id(pool, solvable->name, 1);
+            icase_name = spool.id_to_lowercase_id(solvable->name, 1);
         }
         cached_sorted_icase_solvables.emplace_back(std::make_pair(icase_name, solvable));
     }
@@ -221,6 +221,8 @@ inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_ic
 }
 
 inline libdnf::solv::SolvMap & PackageSack::Impl::get_solvables() {
+    libdnf::solv::Pool spool(pool);
+
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_solvables_size) {
         return cached_solvables;
@@ -234,7 +236,7 @@ inline libdnf::solv::SolvMap & PackageSack::Impl::get_solvables() {
 
     // loop over all package solvables
     FOR_POOL_SOLVABLES(solvable_id) {
-        if (utils::is_package(pool, solvable_id)) {
+        if (spool.is_package(solvable_id)) {
             cached_solvables.add_unsafe(solvable_id);
         }
     }

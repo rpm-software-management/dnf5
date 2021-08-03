@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/logger/logger.hpp"
 #include "libdnf/rpm/nevra.hpp"
-#include "libdnf/rpm/solv/package_private.hpp"
 
 #include <solv/chksum.h>
 #include <solv/repo.h>
@@ -139,12 +138,8 @@ std::string AdvisoryPackage::Impl::get_name() const {
 }
 
 std::string AdvisoryPackage::Impl::get_version() const {
-    Pool * pool = sack->p_impl->get_pool();
-    char * e;
-    char * v;
-    char * r;
-    libdnf::rpm::solv::pool_split_evr(pool, pool_id2str(pool, evr), &e, &v, &r);
-    return std::string(v);
+    libdnf::solv::Pool pool(sack->p_impl->get_pool());
+    return pool.split_evr(pool.id2str(evr)).v;
 }
 
 std::string AdvisoryPackage::Impl::get_evr() const {
