@@ -91,7 +91,7 @@ void CmdUpgrade::run(Context & ctx) {
     } else {
         for (auto & pattern : *patterns_to_upgrade_options) {
             auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-            goal.add_rpm_upgrade(option->get_value(), {});
+            goal.add_rpm_upgrade(option->get_value());
         }
     }
     auto transaction = goal.resolve(false);
