@@ -219,6 +219,7 @@ int main(int argc, char * argv[]) {
         context.selected_command->run(context);
     } catch (std::exception & ex) {
         std::cerr << fmt::format("Command returned error: {}", ex.what()) << std::endl;
+        return 1;
     }
 
     //log_router.info("Dnfdaemon-client end");
