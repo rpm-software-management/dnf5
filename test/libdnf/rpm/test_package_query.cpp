@@ -646,3 +646,13 @@ void RpmPackageQueryTest::test_filter_latest_evr_performance() {
         query.filter_latest_evr();
     }
 }
+
+
+void RpmPackageQueryTest::test_filter_provides_performance() {
+    add_repo_solv("solv-humongous");
+
+    for (int i = 0; i < 100000; ++i) {
+        libdnf::rpm::PackageQuery query(*base);
+        query.filter_provides({"prv-all"});
+    }
+}

@@ -54,6 +54,7 @@ class RpmPackageQueryTest : public LibdnfTestCase {
 
 #ifdef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_filter_latest_evr_performance);
+    CPPUNIT_TEST(test_filter_provides_performance);
 #endif
 
     CPPUNIT_TEST_SUITE_END();
@@ -82,6 +83,7 @@ public:
     void test_difference();
 
     void test_filter_latest_evr_performance();
+    void test_filter_provides_performance();
 
     // TODO(jmracek) Add tests when system repo will be available
     // PackageQuery & filter_upgrades();
