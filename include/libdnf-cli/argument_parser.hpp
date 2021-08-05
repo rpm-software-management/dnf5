@@ -436,9 +436,9 @@ public:
         std::vector<NamedArg *> named_args;
         std::vector<PositionalArg *> pos_args;
         ParseHookFunc parse_hook;
-        std::string commands_help_header;
-        std::string named_args_help_header;
-        std::string positional_args_help_header;
+        std::string commands_help_header = "Commands:";
+        std::string named_args_help_header = "Options:";
+        std::string positional_args_help_header = "Arguments:";
     };
 
     /// Constructs a new command and stores it to the argument parser.

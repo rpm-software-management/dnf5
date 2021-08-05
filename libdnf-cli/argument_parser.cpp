@@ -374,7 +374,7 @@ void ArgumentParser::Command::help() const noexcept {
         print = true;
     }
 
-    if (!commands_help_header.empty()) {
+    if (!commands_help_header.empty() && !cmds.empty()) {
         auto * table = libdnf::cli::output::create_help_table(commands_help_header);
         auto * out = libdnf::cli::output::get_stream(table);
         if (print) {
@@ -382,13 +382,13 @@ void ArgumentParser::Command::help() const noexcept {
         }
         fputs((commands_help_header + '\n').c_str(), out);
         for (const auto * arg : cmds) {
-            libdnf::cli::output::add_line_into_help_table(table, arg->get_id(), arg->get_short_description());
+            libdnf::cli::output::add_line_into_help_table(table, "  " + arg->get_id(), arg->get_short_description());
         }
         libdnf::cli::output::print_and_unref_help_table(table);
         print = true;
     }
 
-    if (!named_args_help_header.empty()) {
+    if (!named_args_help_header.empty() && !named_args.empty()) {
         auto * table = libdnf::cli::output::create_help_table(named_args_help_header);
         auto * out = libdnf::cli::output::get_stream(table);
         if (print) {
@@ -418,7 +418,7 @@ void ArgumentParser::Command::help() const noexcept {
         print = true;
     }
 
-    if (!positional_args_help_header.empty()) {
+    if (!positional_args_help_header.empty() && !pos_args.empty()) {
         auto * table = libdnf::cli::output::create_help_table(named_args_help_header);
         auto * out = scols_table_get_stream(table);
         if (print) {
