@@ -34,8 +34,8 @@ static struct libscols_table * create_help_table(const std::string & name) {
     scols_table_set_column_separator(table, "  ");
 
     scols_table_enable_colors(table, 1);
-    scols_table_new_column(table, "argument", 5, 0);
-    scols_table_new_column(table, "descr", 0.5, SCOLS_FL_WRAP);
+    scols_table_new_column(table, "argument", 30, 0);
+    scols_table_new_column(table, "descr", 40, SCOLS_FL_WRAP);
     return table;
 }
 
