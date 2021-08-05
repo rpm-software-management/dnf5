@@ -173,8 +173,12 @@ sdbus::MethodReply Rpm::upgrade(sdbus::MethodCall & call) {
     auto & goal = session.get_goal();
     libdnf::GoalJobSettings setting;
     setting.to_repo_ids = repo_ids;
-    for (const auto & spec : specs) {
-        goal.add_rpm_upgrade(spec, setting);
+    if (specs.empty()) {
+        goal.add_rpm_upgrade(setting);
+    } else {
+        for (const auto & spec : specs) {
+            goal.add_rpm_upgrade(spec, setting);
+        }
     }
 
     auto reply = call.createReply();
