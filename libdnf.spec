@@ -342,6 +342,7 @@ Summary:        Command-line interface for dnfdaemon-server
 License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
+Requires:       dnfdaemon-server
 
 %description -n dnfdaemon-client
 Command-line interface for dnfdaemon-server
