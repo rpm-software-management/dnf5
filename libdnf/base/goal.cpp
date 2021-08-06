@@ -748,8 +748,11 @@ void Goal::Impl::add_rpms_to_goal() {
                     ids, settings.resolve_best(cfg_main), settings.resolve_clean_requirements_on_remove());
             } break;
             case Action::DISTRO_SYNC: {
-                rpm_goal.add_upgrade(
-                    ids, settings.resolve_best(cfg_main), settings.resolve_clean_requirements_on_remove());
+                rpm_goal.add_distro_sync(
+                    ids,
+                    settings.resolve_strict(cfg_main),
+                    settings.resolve_best(cfg_main),
+                    settings.resolve_clean_requirements_on_remove());
             } break;
             case Action::REMOVE:
                 rpm_goal.add_remove(ids, settings.resolve_clean_requirements_on_remove(cfg_main));
