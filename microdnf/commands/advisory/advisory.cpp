@@ -135,7 +135,7 @@ AdvisoryCommand::AdvisoryCommand(Command & parent) : Command(parent, "advisory")
     with_bz->set_const_value("false");
     with_bz->link_value(with_bz_option);
 
-    cmd.set_short_description("display information about update advisories");
+    cmd.set_short_description("Manage advisories");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");

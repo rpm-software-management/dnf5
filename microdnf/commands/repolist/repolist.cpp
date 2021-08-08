@@ -75,7 +75,7 @@ RepolistCommand::RepolistCommand(Command & parent) : Command(parent, "repolist")
     enabled->set_conflict_arguments(conflict_args);
     disabled->set_conflict_arguments(conflict_args);
 
-    cmd.set_short_description("display the configured software repositories");
+    cmd.set_short_description("List defined repositories");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");
@@ -94,7 +94,7 @@ RepolistCommand::RepolistCommand(Command & parent) : Command(parent, "repolist")
     cmd.register_positional_arg(repos);
 
     auto repoinfo = parser.add_new_command("repoinfo");
-    repoinfo->set_short_description("display the configured software repositories");
+    repoinfo->set_short_description("Print detais about defined repositories");
     repoinfo->set_description("");
     repoinfo->set_named_args_help_header("Optional arguments:");
     repoinfo->set_positional_args_help_header("Positional arguments:");

@@ -85,7 +85,7 @@ GrouplistCommand::GrouplistCommand(Command & parent) : Command(parent, "grouplis
     available->set_conflict_arguments(conflict_args);
     installed->set_conflict_arguments(conflict_args);
 
-    cmd.set_short_description("display groups");
+    cmd.set_short_description("List comps groups");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");

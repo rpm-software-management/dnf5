@@ -54,7 +54,7 @@ DownloadCommand::DownloadCommand(Command & parent) : Command(parent, "download")
         patterns_to_download_options);
     keys->set_short_description("List of keys to match");
 
-    cmd.set_short_description("download packages to current directory");
+    cmd.set_short_description("Download software to the current directory");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");

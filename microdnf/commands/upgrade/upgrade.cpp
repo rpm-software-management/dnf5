@@ -58,7 +58,7 @@ UpgradeCommand::UpgradeCommand(Command & parent) : Command(parent, "upgrade") {
         patterns_to_upgrade_options);
     keys->set_short_description("List of keys to match");
 
-    cmd.set_short_description("upgrade a package or packages on your system");
+    cmd.set_short_description("Upgrade software");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");

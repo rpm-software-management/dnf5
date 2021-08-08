@@ -57,7 +57,7 @@ ReinstallCommand::ReinstallCommand(Command & parent) : Command(parent, "reinstal
         patterns_to_reinstall_options);
     keys->set_short_description("List of keys to match");
 
-    cmd.set_short_description("reinstall a package or packages");
+    cmd.set_short_description("Reinstall software");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");

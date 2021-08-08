@@ -95,7 +95,7 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquer
     info->set_conflict_arguments(conflict_args);
     nevra->set_conflict_arguments(conflict_args);
 
-    cmd.set_short_description("search for packages matching keyword");
+    cmd.set_short_description("Search for packages matching various criteria");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");

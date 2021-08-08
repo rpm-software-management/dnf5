@@ -57,7 +57,7 @@ DowngradeCommand::DowngradeCommand(Command & parent) : Command(parent, "downgrad
         patterns_to_downgrade_options);
     keys->set_short_description("List of keys to match");
 
-    cmd.set_short_description("Downgrade a package or packages on your system");
+    cmd.set_short_description("Downgrade software");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");

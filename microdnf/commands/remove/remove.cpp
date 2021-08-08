@@ -53,7 +53,7 @@ RemoveCommand::RemoveCommand(Command & parent) : Command(parent, "remove") {
         patterns_to_remove_options);
     keys->set_short_description("List of keys to match");
 
-    cmd.set_short_description("remove a package or packages from your system");
+    cmd.set_short_description("Remove (uninstall) software");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");

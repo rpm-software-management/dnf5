@@ -57,7 +57,7 @@ InstallCommand::InstallCommand(Command & parent) : Command(parent, "install") {
         patterns_to_install_options);
     keys->set_short_description("List of keys to match");
 
-    cmd.set_short_description("install a package or packages on your system");
+    cmd.set_short_description("Install software");
     cmd.set_description("");
     cmd.set_named_args_help_header("Optional arguments:");
     cmd.set_positional_args_help_header("Positional arguments:");
