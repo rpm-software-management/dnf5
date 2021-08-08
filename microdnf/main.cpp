@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "commands/advisory/advisory.hpp"
+#include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
 #include "commands/groupinfo/groupinfo.hpp"
@@ -69,6 +70,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     cmd.set_named_args_help_header("Global options:");
 
     register_subcommand(std::make_unique<AdvisoryCommand>(*this));
+    register_subcommand(std::make_unique<DistroSyncCommand>(*this));
     register_subcommand(std::make_unique<DownloadCommand>(*this));
     register_subcommand(std::make_unique<DowngradeCommand>(*this));
     register_subcommand(std::make_unique<GroupinfoCommand>(*this));
