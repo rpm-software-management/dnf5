@@ -136,9 +136,6 @@ AdvisoryCommand::AdvisoryCommand(Command & parent) : Command(parent, "advisory")
     with_bz->link_value(with_bz_option);
 
     cmd.set_short_description("Manage advisories");
-    cmd.set_description("");
-    cmd.set_named_args_help_header("Optional arguments:");
-    cmd.set_positional_args_help_header("Positional arguments:");
     cmd.set_parse_hook_func([this, &ctx](
                                [[maybe_unused]] ArgumentParser::Argument * arg,
                                [[maybe_unused]] const char * option,

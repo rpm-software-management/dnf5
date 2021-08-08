@@ -58,9 +58,6 @@ ReinstallCommand::ReinstallCommand(Command & parent) : Command(parent, "reinstal
     keys->set_short_description("List of keys to match");
 
     cmd.set_short_description("Reinstall software");
-    cmd.set_description("");
-    cmd.set_named_args_help_header("Optional arguments:");
-    cmd.set_positional_args_help_header("Positional arguments:");
     cmd.set_parse_hook_func([this, &ctx](
                                        [[maybe_unused]] ArgumentParser::Argument * arg,
                                        [[maybe_unused]] const char * option,
