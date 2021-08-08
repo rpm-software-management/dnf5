@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/remove/remove.hpp"
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
+#include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
 #include "commands/upgrade/upgrade.hpp"
 
@@ -81,6 +82,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     register_subcommand(std::make_unique<RemoveCommand>(*this));
     register_subcommand(std::make_unique<RepolistCommand>(*this));
     register_subcommand(std::make_unique<RepoqueryCommand>(*this));
+    register_subcommand(std::make_unique<SearchCommand>(*this));
     register_subcommand(std::make_unique<SwapCommand>(*this));
     register_subcommand(std::make_unique<UpgradeCommand>(*this));
 }
