@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "groupinfo.hpp"
 
 #include "../../context.hpp"
@@ -36,73 +37,76 @@ namespace microdnf {
 
 
 using namespace libdnf::cli;
-void CmdGroupinfo::set_argument_parser(Context & ctx) {
+
+
+GroupinfoCommand::GroupinfoCommand(Command & parent) : Command(parent, "groupinfo") {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
     available_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
     installed_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
     hidden_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
-    auto available = ctx.arg_parser.add_new_named_arg("available");
+    auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
     available->set_short_description("show only available groups");
     available->set_const_value("true");
     available->link_value(available_option);
 
-    auto installed = ctx.arg_parser.add_new_named_arg("installed");
+    auto installed = parser.add_new_named_arg("installed");
     installed->set_long_name("installed");
     installed->set_short_description("show only installed groups");
     installed->set_const_value("true");
     installed->link_value(installed_option);
 
-    auto hidden = ctx.arg_parser.add_new_named_arg("hidden");
+    auto hidden = parser.add_new_named_arg("hidden");
     hidden->set_long_name("hidden");
     hidden->set_short_description("show also hidden groups");
     hidden->set_const_value("true");
     hidden->link_value(hidden_option);
 
-    patterns_to_show_options = ctx.arg_parser.add_new_values();
-    auto keys = ctx.arg_parser.add_new_positional_arg(
+    patterns_to_show_options = parser.add_new_values();
+    auto keys = parser.add_new_positional_arg(
         "groups_to_show",
         ArgumentParser::PositionalArg::UNLIMITED,
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_show_options);
     keys->set_short_description("List of groups to show");
 
     auto conflict_args =
-        ctx.arg_parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
             new std::vector<ArgumentParser::Argument *>{available, installed}));
 
     available->set_conflict_arguments(conflict_args);
     installed->set_conflict_arguments(conflict_args);
 
-    auto groupinfo = ctx.arg_parser.add_new_command("groupinfo");
-    groupinfo->set_short_description("display groups");
-    groupinfo->set_description("");
-    groupinfo->set_named_args_help_header("Optional arguments:");
-    groupinfo->set_positional_args_help_header("Positional arguments:");
-    groupinfo->set_parse_hook_func([this, &ctx](
+    cmd.set_short_description("display groups");
+    cmd.set_description("");
+    cmd.set_named_args_help_header("Optional arguments:");
+    cmd.set_positional_args_help_header("Positional arguments:");
+    cmd.set_parse_hook_func([this, &ctx](
                                 [[maybe_unused]] ArgumentParser::Argument * arg,
                                 [[maybe_unused]] const char * option,
                                 [[maybe_unused]] int argc,
                                 [[maybe_unused]] const char * const argv[]) {
-        ctx.select_command(this);
+        ctx.set_selected_command(this);
         return true;
     });
 
-    groupinfo->register_named_arg(available);
-    groupinfo->register_named_arg(installed);
-    groupinfo->register_named_arg(hidden);
-    groupinfo->register_positional_arg(keys);
-
-    ctx.arg_parser.get_root_command()->register_command(groupinfo);
+    cmd.register_named_arg(available);
+    cmd.register_named_arg(installed);
+    cmd.register_named_arg(hidden);
+    cmd.register_positional_arg(keys);
 }
 
 
-void CmdGroupinfo::run([[maybe_unused]] Context & ctx) {
+void GroupinfoCommand::run() {
     std::vector<std::string> patterns_to_show;
     if (patterns_to_show_options->size() > 0) {
         patterns_to_show.reserve(patterns_to_show_options->size());
@@ -170,5 +174,6 @@ void CmdGroupinfo::run([[maybe_unused]] Context & ctx) {
         std::cout << '\n';
     }
 }
+
 
 }  // namespace microdnf

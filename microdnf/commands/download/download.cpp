@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "download.hpp"
 
 #include "../../context.hpp"
@@ -30,41 +31,50 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 #include <iostream>
 
+
 namespace fs = std::filesystem;
+
 
 namespace microdnf {
 
+
 using namespace libdnf::cli;
 
-void CmdDownload::set_argument_parser(Context & ctx) {
-    patterns_to_download_options = ctx.arg_parser.add_new_values();
-    auto keys = ctx.arg_parser.add_new_positional_arg(
+
+DownloadCommand::DownloadCommand(Command & parent) : Command(parent, "download") {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
+    patterns_to_download_options = parser.add_new_values();
+    auto keys = parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_download_options);
     keys->set_short_description("List of keys to match");
 
-    auto download = ctx.arg_parser.add_new_command("download");
-    download->set_short_description("download packages to current directory");
-    download->set_description("");
-    download->set_named_args_help_header("Optional arguments:");
-    download->set_positional_args_help_header("Positional arguments:");
-    download->set_parse_hook_func([this, &ctx](
+    cmd.set_short_description("download packages to current directory");
+    cmd.set_description("");
+    cmd.set_named_args_help_header("Optional arguments:");
+    cmd.set_positional_args_help_header("Positional arguments:");
+    cmd.set_parse_hook_func([this, &ctx](
                                [[maybe_unused]] ArgumentParser::Argument * arg,
                                [[maybe_unused]] const char * option,
                                [[maybe_unused]] int argc,
                                [[maybe_unused]] const char * const argv[]) {
-        ctx.select_command(this);
+        ctx.set_selected_command(this);
         return true;
     });
 
-    download->register_positional_arg(keys);
-
-    ctx.arg_parser.get_root_command()->register_command(download);
+    cmd.register_positional_arg(keys);
 }
 
-void CmdDownload::run(Context & ctx) {
+
+void DownloadCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto package_sack = ctx.base.get_rpm_package_sack();
+
     // To search in available repositories (available packages)
     libdnf::repo::RepoQuery enabled_repos(ctx.base);
     enabled_repos.filter_enabled(true);
@@ -90,5 +100,6 @@ void CmdDownload::run(Context & ctx) {
     }
     download_packages(download_pkgs, ".");
 }
+
 
 }  // namespace microdnf

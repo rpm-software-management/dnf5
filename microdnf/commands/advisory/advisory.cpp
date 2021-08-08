@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "advisory.hpp"
 
 #include "../../context.hpp"
@@ -27,34 +28,41 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 //TODO(amatej): just for test output -> remove
 #include <iostream>
 
+
 namespace microdnf {
+
 
 using namespace libdnf::cli;
 
-void CmdAdvisory::set_argument_parser(Context & ctx) {
+
+AdvisoryCommand::AdvisoryCommand(Command & parent) : Command(parent, "advisory") {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
     availability_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(
+        parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(
             new libdnf::OptionEnum<std::string>("available", {"all", "available", "installed", "updates"}))));
 
-    auto all = ctx.arg_parser.add_new_named_arg("all");
+    auto all = parser.add_new_named_arg("all");
     all->set_long_name("all");
     all->set_short_description("show advisories about any version of installed packages");
     all->set_const_value("all");
     all->link_value(availability_option);
 
-    auto available = ctx.arg_parser.add_new_named_arg("available");
+    auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
     available->set_short_description("show advisories about newer versions of installed packages (default)");
     available->set_const_value("available");
     available->link_value(availability_option);
 
-    auto installed = ctx.arg_parser.add_new_named_arg("installed");
+    auto installed = parser.add_new_named_arg("installed");
     installed->set_long_name("installed");
     installed->set_short_description("show advisories about equal and older versions of installed packages");
     installed->set_const_value("installed");
     installed->link_value(availability_option);
 
-    auto updates = ctx.arg_parser.add_new_named_arg("updates");
+    auto updates = parser.add_new_named_arg("updates");
     updates->set_long_name("updates");
     updates->set_short_description(
         "show advisories about newer versions of installed packages for which a newer version is available");
@@ -62,7 +70,7 @@ void CmdAdvisory::set_argument_parser(Context & ctx) {
     updates->link_value(availability_option);
 
     auto conflict_args =
-        ctx.arg_parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
             new std::vector<ArgumentParser::Argument *>{all, available, installed, updates}));
 
     all->set_conflict_arguments(conflict_args);
@@ -71,38 +79,38 @@ void CmdAdvisory::set_argument_parser(Context & ctx) {
     updates->set_conflict_arguments(conflict_args);
 
 
-    patterns_to_show_options = ctx.arg_parser.add_new_values();
-    auto specs = ctx.arg_parser.add_new_positional_arg(
+    patterns_to_show_options = parser.add_new_values();
+    auto specs = parser.add_new_positional_arg(
         "specs_to_show",
         ArgumentParser::PositionalArg::UNLIMITED,
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_show_options);
     specs->set_short_description("List of specs to use when searching for advisory");
 
 
     output_type_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(
+        parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(
             new libdnf::OptionEnum<std::string>("summary", {"summary", "list", "info"}))));
 
-    auto summary = ctx.arg_parser.add_new_named_arg("summary");
+    auto summary = parser.add_new_named_arg("summary");
     summary->set_long_name("summary");
     summary->set_short_description("show just counts of advisory types (default)");
     summary->set_const_value("summary");
     summary->link_value(output_type_option);
 
-    auto list = ctx.arg_parser.add_new_named_arg("list");
+    auto list = parser.add_new_named_arg("list");
     list->set_long_name("list");
     list->set_short_description("show list of advisories");
     list->set_const_value("list");
     list->link_value(output_type_option);
 
-    auto info = ctx.arg_parser.add_new_named_arg("info");
+    auto info = parser.add_new_named_arg("info");
     info->set_long_name("info");
     info->set_short_description("show detailed information about advisories");
     info->set_const_value("info");
     info->link_value(output_type_option);
 
-    conflict_args = ctx.arg_parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+    conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
         new std::vector<ArgumentParser::Argument *>{summary, list, info}));
 
     summary->set_conflict_arguments(conflict_args);
@@ -111,8 +119,8 @@ void CmdAdvisory::set_argument_parser(Context & ctx) {
 
 
     with_cve_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
-    auto with_cve = ctx.arg_parser.add_new_named_arg("with_cve");
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    auto with_cve = parser.add_new_named_arg("with_cve");
     with_cve->set_long_name("with_cve");
     with_cve->set_short_description("show only advisories with CVE reference");
     with_cve->set_const_value("false");
@@ -120,47 +128,45 @@ void CmdAdvisory::set_argument_parser(Context & ctx) {
 
 
     with_bz_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
-    auto with_bz = ctx.arg_parser.add_new_named_arg("with_bz");
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    auto with_bz = parser.add_new_named_arg("with_bz");
     with_bz->set_long_name("with_bz");
     with_bz->set_short_description("show only advisories with bugzilla reference");
     with_bz->set_const_value("false");
     with_bz->link_value(with_bz_option);
 
-
-    auto advisory = ctx.arg_parser.add_new_command("advisory");
-    advisory->set_short_description("display information about update advisories");
-    advisory->set_description("");
-    advisory->set_named_args_help_header("Optional arguments:");
-    advisory->set_positional_args_help_header("Positional arguments:");
-    advisory->set_parse_hook_func([this, &ctx](
+    cmd.set_short_description("display information about update advisories");
+    cmd.set_description("");
+    cmd.set_named_args_help_header("Optional arguments:");
+    cmd.set_positional_args_help_header("Positional arguments:");
+    cmd.set_parse_hook_func([this, &ctx](
                                [[maybe_unused]] ArgumentParser::Argument * arg,
                                [[maybe_unused]] const char * option,
                                [[maybe_unused]] int argc,
                                [[maybe_unused]] const char * const argv[]) {
-        ctx.select_command(this);
+        ctx.set_selected_command(this);
         return true;
     });
 
-    advisory->register_named_arg(all);
-    advisory->register_named_arg(available);
-    advisory->register_named_arg(installed);
-    advisory->register_named_arg(updates);
+    cmd.register_named_arg(all);
+    cmd.register_named_arg(available);
+    cmd.register_named_arg(installed);
+    cmd.register_named_arg(updates);
 
-    advisory->register_named_arg(summary);
-    advisory->register_named_arg(list);
-    advisory->register_named_arg(info);
+    cmd.register_named_arg(summary);
+    cmd.register_named_arg(list);
+    cmd.register_named_arg(info);
 
-    advisory->register_named_arg(with_cve);
-    advisory->register_named_arg(with_bz);
+    cmd.register_named_arg(with_cve);
+    cmd.register_named_arg(with_bz);
 
-    advisory->register_positional_arg(specs);
-
-
-    ctx.arg_parser.get_root_command()->register_command(advisory);
+    cmd.register_positional_arg(specs);
 }
 
-void CmdAdvisory::run(Context & ctx) {
+
+void AdvisoryCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
+
     std::vector<std::string> patterns_to_show;
     if (patterns_to_show_options->size() > 0) {
         patterns_to_show.reserve(patterns_to_show_options->size());
@@ -230,5 +236,6 @@ void CmdAdvisory::run(Context & ctx) {
         //}
     }
 }
+
 
 }  // namespace microdnf

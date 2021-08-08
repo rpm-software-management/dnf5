@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "upgrade.hpp"
 
 #include "../../context.hpp"
@@ -32,42 +33,50 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 #include <iostream>
+
+
 namespace fs = std::filesystem;
+
 
 namespace microdnf {
 
+
 using namespace libdnf::cli;
 
-void CmdUpgrade::set_argument_parser(Context & ctx) {
-    patterns_to_upgrade_options = ctx.arg_parser.add_new_values();
 
-    auto keys = ctx.arg_parser.add_new_positional_arg(
+UpgradeCommand::UpgradeCommand(Command & parent) : Command(parent, "upgrade") {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
+    patterns_to_upgrade_options = parser.add_new_values();
+
+    auto keys = parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_upgrade_options);
     keys->set_short_description("List of keys to match");
 
-    auto upgrade = ctx.arg_parser.add_new_command("upgrade");
-    upgrade->set_short_description("upgrade a package or packages on your system");
-    upgrade->set_description("");
-    upgrade->set_named_args_help_header("Optional arguments:");
-    upgrade->set_positional_args_help_header("Positional arguments:");
-    upgrade->set_parse_hook_func([this, &ctx](
+    cmd.set_short_description("upgrade a package or packages on your system");
+    cmd.set_description("");
+    cmd.set_named_args_help_header("Optional arguments:");
+    cmd.set_positional_args_help_header("Positional arguments:");
+    cmd.set_parse_hook_func([this, &ctx](
                                      [[maybe_unused]] ArgumentParser::Argument * arg,
                                      [[maybe_unused]] const char * option,
                                      [[maybe_unused]] int argc,
                                      [[maybe_unused]] const char * const argv[]) {
-        ctx.select_command(this);
+        ctx.set_selected_command(this);
         return true;
     });
 
-    upgrade->register_positional_arg(keys);
-
-    ctx.arg_parser.get_root_command()->register_command(upgrade);
+    cmd.register_positional_arg(keys);
 }
 
-void CmdUpgrade::run(Context & ctx) {
+
+void UpgradeCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
     auto & package_sack = *ctx.base.get_rpm_package_sack();
 
     // To search in the system repository (installed packages)
@@ -128,5 +137,6 @@ void CmdUpgrade::run(Context & ctx) {
     db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
     db_transaction->finish(libdnf::transaction::TransactionState::DONE);
 }
+
 
 }  // namespace microdnf

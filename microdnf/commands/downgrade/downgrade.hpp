@@ -17,27 +17,33 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #ifndef MICRODNF_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 #define MICRODNF_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 
-#include "../command.hpp"
+
+#include <libdnf-cli/session.hpp>
 
 #include <libdnf/conf/option_bool.hpp>
 
 #include <memory>
 #include <vector>
 
+
 namespace microdnf {
 
-class CmdDowngrade : public Command {
+
+class DowngradeCommand : public libdnf::cli::session::Command {
 public:
-    void set_argument_parser(Context & ctx) override;
-    void run(Context & ctx) override;
+    explicit DowngradeCommand(Command & parent);
+    void run() override;
 
 private:
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_downgrade_options{nullptr};
 };
 
+
 }  // namespace microdnf
 
-#endif
+
+#endif  // MICRODNF_COMMANDS_DOWNGRADE_DOWNGRADE_HPP

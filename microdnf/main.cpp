@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "commands/advisory/advisory.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
@@ -28,10 +29,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/upgrade/upgrade.hpp"
+
 #include "context.hpp"
 #include "utils.hpp"
 
 #include "libdnf/utils/xdg.hpp"
+#include <libdnf-cli/session.hpp>
 
 #include <fcntl.h>
 #include <fmt/format.h>
@@ -51,20 +54,50 @@ namespace microdnf {
 
 using namespace libdnf::cli;
 
+
+class RootCommand : public libdnf::cli::session::Command {
+public:
+    explicit RootCommand(libdnf::cli::session::Session & session);
+    void run() override;
+};
+
+
+inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Command(session, "microdnf") {
+    auto & cmd = *get_argument_parser_command();
+    cmd.set_short_description("Utility for packages maintaining");
+    cmd.set_description("Microdnf is a program for maintaining packages.");
+    cmd.set_named_args_help_header("Global options:");
+
+    register_subcommand(std::make_unique<AdvisoryCommand>(*this));
+    register_subcommand(std::make_unique<DownloadCommand>(*this));
+    register_subcommand(std::make_unique<DowngradeCommand>(*this));
+    register_subcommand(std::make_unique<GroupinfoCommand>(*this));
+    register_subcommand(std::make_unique<GrouplistCommand>(*this));
+    register_subcommand(std::make_unique<InstallCommand>(*this));
+    register_subcommand(std::make_unique<ReinstallCommand>(*this));
+    register_subcommand(std::make_unique<RemoveCommand>(*this));
+    register_subcommand(std::make_unique<RepolistCommand>(*this));
+    register_subcommand(std::make_unique<RepoqueryCommand>(*this));
+    register_subcommand(std::make_unique<UpgradeCommand>(*this));
+}
+
+inline void RootCommand::run() {
+    get_argument_parser_command()->help();
+}
+
+
 static bool parse_args(Context & ctx, int argc, char * argv[]) {
-    auto microdnf = ctx.arg_parser.add_new_command("microdnf");
-    microdnf->set_short_description("Utility for packages maintaining");
-    microdnf->set_description("Microdnf is a program for maintaining packages.");
-    microdnf->set_commands_help_header("List of commands:");
-    microdnf->set_named_args_help_header("Global arguments:");
-    auto help = ctx.arg_parser.add_new_named_arg("help");
+    ctx.set_root_command(std::make_unique<RootCommand>(ctx));
+    auto microdnf = ctx.get_root_command()->get_argument_parser_command();
+
+    auto help = ctx.get_argument_parser().add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
     help->set_short_description("Print help");
     microdnf->register_named_arg(help);
 
     // --setopt argument support
-    auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
+    auto setopt = ctx.get_argument_parser().add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);
     setopt->set_arg_value_help("KEY=VALUE");
@@ -104,7 +137,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     microdnf->register_named_arg(setopt);
 
     // --setvar argument support
-    auto setvar = ctx.arg_parser.add_new_named_arg("setvar");
+    auto setvar = ctx.get_argument_parser().add_new_named_arg("setvar");
     setvar->set_long_name("setvar");
     setvar->set_has_value(true);
     setvar->set_arg_value_help("NAME=VALUE");
@@ -124,7 +157,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
 
     auto & config = ctx.base.get_config();
 
-    auto assume_yes = ctx.arg_parser.add_new_named_arg("assumeyes");
+    auto assume_yes = ctx.get_argument_parser().add_new_named_arg("assumeyes");
     assume_yes->set_long_name("assumeyes");
     assume_yes->set_short_name('y');
     assume_yes->set_short_description("automatically answer yes for all questions");
@@ -132,14 +165,14 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     assume_yes->link_value(&config.assumeyes());
     microdnf->register_named_arg(assume_yes);
 
-    auto assume_no = ctx.arg_parser.add_new_named_arg("assumeno");
+    auto assume_no = ctx.get_argument_parser().add_new_named_arg("assumeno");
     assume_no->set_long_name("assumeno");
     assume_no->set_short_description("automatically answer no for all questions");
     assume_no->set_const_value("true");
     assume_no->link_value(&config.assumeno());
     microdnf->register_named_arg(assume_no);
 
-    auto comment = ctx.arg_parser.add_new_named_arg("comment");
+    auto comment = ctx.get_argument_parser().add_new_named_arg("comment");
     comment->set_long_name("comment");
     comment->set_has_value(true);
     comment->set_arg_value_help("COMMENT");
@@ -154,7 +187,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
         });
     microdnf->register_named_arg(comment);
 
-    auto installroot = ctx.arg_parser.add_new_named_arg("installroot");
+    auto installroot = ctx.get_argument_parser().add_new_named_arg("installroot");
     installroot->set_long_name("installroot");
     installroot->set_has_value(true);
     installroot->set_arg_value_help("ABSOLUTE_PATH");
@@ -162,7 +195,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     installroot->link_value(&config.installroot());
     microdnf->register_named_arg(installroot);
 
-    auto releasever = ctx.arg_parser.add_new_named_arg("releasever");
+    auto releasever = ctx.get_argument_parser().add_new_named_arg("releasever");
     releasever->set_long_name("releasever");
     releasever->set_has_value(true);
     releasever->set_arg_value_help("RELEASEVER");
@@ -175,15 +208,10 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
         });
     microdnf->register_named_arg(releasever);
 
-    ctx.arg_parser.set_root_command(microdnf);
-    ctx.arg_parser.set_inherit_named_args(true);
-
-    for (auto & command : ctx.commands) {
-        command->set_argument_parser(ctx);
-    }
+    ctx.get_argument_parser().set_inherit_named_args(true);
 
     try {
-        ctx.arg_parser.parse(argc, argv);
+        ctx.get_argument_parser().parse(argc, argv);
     } catch (const std::exception & ex) {
         std::cout << ex.what() << std::endl;
     }
@@ -211,25 +239,12 @@ int main(int argc, char * argv[]) try {
     auto & plugins = context.base.get_plugins();
     plugins.init();
 
-    // Register commands
-    context.commands.push_back(std::make_unique<microdnf::CmdInstall>());
-    context.commands.push_back(std::make_unique<microdnf::CmdDownload>());
-    context.commands.push_back(std::make_unique<microdnf::CmdDowngrade>());
-    context.commands.push_back(std::make_unique<microdnf::CmdGroupinfo>());
-    context.commands.push_back(std::make_unique<microdnf::CmdGrouplist>());
-    context.commands.push_back(std::make_unique<microdnf::CmdReinstall>());
-    context.commands.push_back(std::make_unique<microdnf::CmdRemove>());
-    context.commands.push_back(std::make_unique<microdnf::CmdRepolist>());
-    context.commands.push_back(std::make_unique<microdnf::CmdRepoquery>());
-    context.commands.push_back(std::make_unique<microdnf::CmdUpgrade>());
-    context.commands.push_back(std::make_unique<microdnf::CmdAdvisory>());
-
     // Parse command line arguments
     auto print_help = microdnf::parse_args(context, argc, argv);
 
     // print help of the selected command if --help was used
     if (print_help) {
-        context.arg_parser.get_selected_command()->help();
+        context.get_argument_parser().get_selected_command()->help();
         return 0;
     }
 
@@ -302,9 +317,15 @@ int main(int argc, char * argv[]) try {
     //configure_from_options(context);
     plugins.hook(libdnf::plugin::HookId::LOAD_CONFIG_FROM_FILE);
 
+    // TODO(dmach): argparser should error out on unselected command
+    if (!context.get_selected_command()) {
+        context.get_argument_parser().get_selected_command()->help();
+        return 1;
+    }
+
     // Run selected command
     try {
-        context.selected_command->run(context);
+        context.get_selected_command()->run();
     } catch (std::exception & ex) {
         std::cout << ex.what() << std::endl;
         log_router.error(fmt::format("Command returned error: {}", ex.what()));

@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "repoquery.hpp"
 
 #include "../../context.hpp"
@@ -30,86 +31,93 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <iostream>
 
+
 namespace microdnf {
 
+
 using namespace libdnf::cli;
-void CmdRepoquery::set_argument_parser(Context & ctx) {
+
+
+RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquery") {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
     available_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
 
     installed_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
     info_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
     nevra_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
 
-    auto available = ctx.arg_parser.add_new_named_arg("available");
+    auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
     available->set_short_description("display available packages (default)");
     available->set_const_value("true");
     available->link_value(available_option);
 
-    auto installed = ctx.arg_parser.add_new_named_arg("installed");
+    auto installed = parser.add_new_named_arg("installed");
     installed->set_long_name("installed");
     installed->set_short_description("display installed packages");
     installed->set_const_value("true");
     installed->link_value(installed_option);
 
-    auto info = ctx.arg_parser.add_new_named_arg("info");
+    auto info = parser.add_new_named_arg("info");
     info->set_long_name("info");
     info->set_short_description("show detailed information about the packages");
     info->set_const_value("true");
     info->link_value(info_option);
 
-    auto nevra = ctx.arg_parser.add_new_named_arg("nevra");
+    auto nevra = parser.add_new_named_arg("nevra");
     nevra->set_long_name("nevra");
     nevra->set_short_description(
         "use name-epoch:version-release.architecture format for displaying packages (default)");
     nevra->set_const_value("true");
     nevra->link_value(nevra_option);
 
-    patterns_to_show_options = ctx.arg_parser.add_new_values();
-    auto keys = ctx.arg_parser.add_new_positional_arg(
+    patterns_to_show_options = parser.add_new_values();
+    auto keys = parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_show_options);
     keys->set_short_description("List of keys to match");
 
     auto conflict_args =
-        ctx.arg_parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
             new std::vector<ArgumentParser::Argument *>{info, nevra}));
 
     info->set_conflict_arguments(conflict_args);
     nevra->set_conflict_arguments(conflict_args);
 
-    auto repoquery = ctx.arg_parser.add_new_command("repoquery");
-    repoquery->set_short_description("search for packages matching keyword");
-    repoquery->set_description("");
-    repoquery->set_named_args_help_header("Optional arguments:");
-    repoquery->set_positional_args_help_header("Positional arguments:");
-    repoquery->set_parse_hook_func([this, &ctx](
+    cmd.set_short_description("search for packages matching keyword");
+    cmd.set_description("");
+    cmd.set_named_args_help_header("Optional arguments:");
+    cmd.set_positional_args_help_header("Positional arguments:");
+    cmd.set_parse_hook_func([this, &ctx](
                                 [[maybe_unused]] ArgumentParser::Argument * arg,
                                 [[maybe_unused]] const char * option,
                                 [[maybe_unused]] int argc,
                                 [[maybe_unused]] const char * const argv[]) {
-        ctx.select_command(this);
+        ctx.set_selected_command(this);
         return true;
     });
 
-    repoquery->register_named_arg(available);
-    repoquery->register_named_arg(installed);
-    repoquery->register_named_arg(info);
-    repoquery->register_named_arg(nevra);
-    repoquery->register_positional_arg(keys);
-
-    ctx.arg_parser.get_root_command()->register_command(repoquery);
+    cmd.register_named_arg(available);
+    cmd.register_named_arg(installed);
+    cmd.register_named_arg(info);
+    cmd.register_named_arg(nevra);
+    cmd.register_positional_arg(keys);
 }
 
-void CmdRepoquery::run(Context & ctx) {
+
+void RepoqueryCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
     auto package_sack = ctx.base.get_rpm_package_sack();
 
     // To search in the system repository (installed packages)
@@ -150,5 +158,6 @@ void CmdRepoquery::run(Context & ctx) {
         }
     }
 }
+
 
 }  // namespace microdnf

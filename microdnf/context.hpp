@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef MICRODNF_CONTEXT_HPP
 #define MICRODNF_CONTEXT_HPP
 
-#include "commands/command.hpp"
 
 #include <libdnf-cli/argument_parser.hpp>
+#include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/base/transaction.hpp>
 #include <libdnf/rpm/transaction.hpp>
@@ -36,20 +36,14 @@ namespace microdnf {
 
 constexpr const char * VERSION = "0.1.0";
 
-class Context {
+class Context : public libdnf::cli::session::Session {
 public:
     /// Updates the repositories metadata cache.
     /// Loads the updated metadata into rpm::RepoSack and into rpm::PackageSack.
     void load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags);
 
-    /// Select commend to execute
-    void select_command(Command * cmd) { selected_command = cmd; }
-
     libdnf::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
-    std::vector<std::unique_ptr<Command>> commands;
-    Command * selected_command{nullptr};
-    libdnf::cli::ArgumentParser arg_parser;
 
     /// Gets program arguments.
     libdnf::Span<const char * const> get_prg_arguments() const { return prg_args; }

@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "repolist.hpp"
 
 #include "../../context.hpp"
@@ -24,71 +25,75 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/conf/option_string.hpp>
 #include "libdnf-cli/output/repolist.hpp"
 
+
 namespace microdnf {
+
 
 using namespace libdnf::cli;
 
-void CmdRepolist::set_argument_parser(Context & ctx) {
+
+RepolistCommand::RepolistCommand(Command & parent) : Command(parent, "repolist") {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
     enable_disable_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(
+        parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(
             new libdnf::OptionEnum<std::string>("enabled", {"all", "enabled", "disabled"}))));
 
-    auto all = ctx.arg_parser.add_new_named_arg("all");
+    auto all = parser.add_new_named_arg("all");
     all->set_long_name("all");
     all->set_short_description("show all repos");
     all->set_const_value("all");
     all->link_value(enable_disable_option);
 
-    auto enabled = ctx.arg_parser.add_new_named_arg("enabled");
+    auto enabled = parser.add_new_named_arg("enabled");
     enabled->set_long_name("enabled");
     enabled->set_short_description("show enabled repos (default)");
     enabled->set_const_value("enabled");
     enabled->link_value(enable_disable_option);
 
-    auto disabled = ctx.arg_parser.add_new_named_arg("disabled");
+    auto disabled = parser.add_new_named_arg("disabled");
     disabled->set_long_name("disabled");
     disabled->set_short_description("show disabled repos");
     disabled->set_const_value("disabled");
     disabled->link_value(enable_disable_option);
 
-    patterns_to_show_options = ctx.arg_parser.add_new_values();
-    auto repos = ctx.arg_parser.add_new_positional_arg(
+    patterns_to_show_options = parser.add_new_values();
+    auto repos = parser.add_new_positional_arg(
         "repos_to_show",
         ArgumentParser::PositionalArg::UNLIMITED,
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_show_options);
     repos->set_short_description("List of repos to show");
 
     auto conflict_args =
-        ctx.arg_parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
             new std::vector<ArgumentParser::Argument *>{all, enabled, disabled}));
 
     all->set_conflict_arguments(conflict_args);
     enabled->set_conflict_arguments(conflict_args);
     disabled->set_conflict_arguments(conflict_args);
 
-    auto repolist = ctx.arg_parser.add_new_command("repolist");
-    repolist->set_short_description("display the configured software repositories");
-    repolist->set_description("");
-    repolist->set_named_args_help_header("Optional arguments:");
-    repolist->set_positional_args_help_header("Positional arguments:");
-    repolist->set_parse_hook_func([this, &ctx](
+    cmd.set_short_description("display the configured software repositories");
+    cmd.set_description("");
+    cmd.set_named_args_help_header("Optional arguments:");
+    cmd.set_positional_args_help_header("Positional arguments:");
+    cmd.set_parse_hook_func([this, &ctx](
                                [[maybe_unused]] ArgumentParser::Argument * arg,
                                [[maybe_unused]] const char * option,
                                [[maybe_unused]] int argc,
                                [[maybe_unused]] const char * const argv[]) {
-        ctx.select_command(this);
+        ctx.set_selected_command(this);
         return true;
     });
 
-    repolist->register_named_arg(all);
-    repolist->register_named_arg(enabled);
-    repolist->register_named_arg(disabled);
-    repolist->register_positional_arg(repos);
+    cmd.register_named_arg(all);
+    cmd.register_named_arg(enabled);
+    cmd.register_named_arg(disabled);
+    cmd.register_positional_arg(repos);
 
-    ctx.arg_parser.get_root_command()->register_command(repolist);
-
-    auto repoinfo = ctx.arg_parser.add_new_command("repoinfo");
+    auto repoinfo = parser.add_new_command("repoinfo");
     repoinfo->set_short_description("display the configured software repositories");
     repoinfo->set_description("");
     repoinfo->set_named_args_help_header("Optional arguments:");
@@ -100,7 +105,7 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
                                [[maybe_unused]] const char * const argv[]) {
         // TODO(jrohel): implement repoinfo
         throw std::logic_error("Not implemented");
-        ctx.select_command(this);
+        ctx.set_selected_command(this);
         return true;
     });
 
@@ -109,10 +114,13 @@ void CmdRepolist::set_argument_parser(Context & ctx) {
     repoinfo->register_named_arg(disabled);
     repoinfo->register_positional_arg(repos);
 
-    ctx.arg_parser.get_root_command()->register_command(repoinfo);
+    parser.get_root_command()->register_command(repoinfo);
 }
 
-void CmdRepolist::run(Context & ctx) {
+
+void RepolistCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
+
     std::vector<std::string> patterns_to_show;
     if (patterns_to_show_options->size() > 0) {
         patterns_to_show.reserve(patterns_to_show_options->size());
@@ -142,5 +150,6 @@ void CmdRepolist::run(Context & ctx) {
             with_status,
             libdnf::cli::output::COL_REPO_ID);
 }
+
 
 }  // namespace microdnf

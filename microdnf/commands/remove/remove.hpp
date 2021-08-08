@@ -17,27 +17,33 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #ifndef MICRODNF_COMMANDS_REMOVE_REMOVE_HPP
 #define MICRODNF_COMMANDS_REMOVE_REMOVE_HPP
 
-#include "../command.hpp"
+
+#include <libdnf-cli/session.hpp>
 
 #include <libdnf/conf/option_bool.hpp>
 
 #include <memory>
 #include <vector>
 
+
 namespace microdnf {
 
-class CmdRemove : public Command {
+
+class RemoveCommand : public libdnf::cli::session::Command {
 public:
-    void set_argument_parser(Context & ctx) override;
-    void run(Context & ctx) override;
+    explicit RemoveCommand(Command & parent);
+    void run() override;
 
 private:
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_remove_options{nullptr};
 };
 
+
 }  // namespace microdnf
 
-#endif
+
+#endif  // MICRODNF_COMMANDS_REMOVE_REMOVE_HPP
