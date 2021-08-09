@@ -38,7 +38,9 @@ ReldepList::ReldepList(const ReldepList & src) : p_impl(new Impl(*src.p_impl)) {
 
 ReldepList::ReldepList(ReldepList && src) noexcept : p_impl(std::move(src.p_impl)) {}
 
-ReldepList::ReldepList(const PackageSackWeakPtr & sack) : p_impl(new Impl(sack)) {}
+ReldepList::ReldepList(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
+
+ReldepList::ReldepList(libdnf::Base & base) : ReldepList(base.get_weak_ptr()) {}
 
 ReldepList::~ReldepList() = default;
 
@@ -67,12 +69,12 @@ bool ReldepList::operator==(const ReldepList & other) const noexcept {
         }
     }
 
-    return p_impl->sack->p_impl->pool == other.p_impl->sack->p_impl->pool;
+    return *get_pool(p_impl->base) == *get_pool(other.p_impl->base);
 }
 
 ReldepList & ReldepList::operator=(const ReldepList & src) {
     p_impl->queue = src.p_impl->queue;
-    p_impl->sack = src.p_impl->sack;
+    p_impl->base = src.p_impl->base;
     return *this;
 }
 
@@ -89,11 +91,8 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
     if (!dep_splitter.parse(reldep_str))
         return false;
 
-    auto * sack = p_impl->sack.get();
-    Pool * pool = sack->p_impl->pool;
-
     Dataiterator di;
-    dataiterator_init(&di, pool, 0, 0, 0, dep_splitter.get_name_cstr(), SEARCH_STRING | SEARCH_GLOB);
+    dataiterator_init(&di, *get_pool(p_impl->base), 0, 0, 0, dep_splitter.get_name_cstr(), SEARCH_STRING | SEARCH_GLOB);
     while (dataiterator_step(&di)) {
         switch (di.key->name) {
             case SOLVABLE_PROVIDES:
@@ -105,7 +104,7 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
             case SOLVABLE_SUPPLEMENTS:
             case SOLVABLE_ENHANCES:
             case SOLVABLE_FILELIST:
-                add(Reldep::get_reldep_id(sack, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type()));
+                add(Reldep::get_reldep_id(p_impl->base, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type()));
         }
     }
     dataiterator_free(&di);
@@ -114,7 +113,7 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
 
 bool ReldepList::add_reldep(const std::string & reldep_str, int create) {
     try {
-        ReldepId id = Reldep::get_reldep_id(p_impl->sack.get(), reldep_str, create);
+        ReldepId id = Reldep::get_reldep_id(p_impl->base, reldep_str, create);
         if (id.id == 0) {
             return false;
         }
@@ -132,7 +131,7 @@ void ReldepList::append(ReldepList & source) {
 
 Reldep ReldepList::get(int index) const noexcept {
     ReldepId id(p_impl->queue[index]);
-    return Reldep(p_impl->sack.get(), id);
+    return Reldep(p_impl->base, id);
 }
 
 int ReldepList::size() const noexcept {
@@ -150,8 +149,8 @@ ReldepList::iterator ReldepList::end() const {
     return it;
 }
 
-PackageSack * ReldepList::get_sack() const {
-    return p_impl->get_sack();
+BaseWeakPtr ReldepList::get_base() const {
+    return p_impl->get_base();
 }
 
 }  // namespace libdnf::rpm

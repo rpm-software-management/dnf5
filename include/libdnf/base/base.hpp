@@ -40,11 +40,22 @@ namespace libdnf {
 using LogRouterWeakPtr = WeakPtr<LogRouter, false>;
 using VarsWeakPtr = WeakPtr<Vars, false>;
 
+namespace solv {
+
+class Pool;
+
+}
+
+solv::Pool & get_pool(const libdnf::BaseWeakPtr & base);
+
 /// Instances of :class:`libdnf::Base` are the central point of functionality supplied by libdnf.
 /// An application will typically create a single instance of this class which it will keep for the run-time needed to accomplish its packaging tasks.
 /// :class:`.Base` instances are stateful objects owning various data.
 class Base {
 public:
+    Base();
+    ~Base();
+
     /// Sets the pointer to the locked instance "Base" to "this" instance. Blocks if the pointer is already set.
     /// Pointer to a locked "Base" instance can be obtained using "get_locked_base()".
     void lock();
@@ -78,6 +89,8 @@ public:
     libdnf::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
 private:
+    friend solv::Pool& get_pool(const libdnf::BaseWeakPtr & base);
+
     WeakPtrGuard<Base, false> base_guard;
 
     //TODO(jrohel): Make public?
@@ -94,15 +107,16 @@ private:
     /// The files in the directory are read in alphabetical order.
     void load_config_from_dir();
 
+    std::unique_ptr<solv::Pool> pool;
     ConfigMain config;
     LogRouter log_router;
-    repo::RepoSack repo_sack{*this};
-    rpm::PackageSack rpm_package_sack{*this};
+    repo::RepoSack repo_sack;
+    rpm::PackageSack rpm_package_sack;
     transaction::TransactionSack transaction_sack{*this};
     comps::Comps comps{*this};
     Vars vars;
     plugin::Plugins plugins{*this};
-    libdnf::advisory::AdvisorySack rpm_advisory_sack{*this};
+    libdnf::advisory::AdvisorySack rpm_advisory_sack;
     std::map<std::string, std::string> variables;
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;

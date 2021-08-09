@@ -35,7 +35,7 @@ using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 
 class AdvisorySack {
 public:
-    explicit AdvisorySack(libdnf::Base & base);
+    explicit AdvisorySack(const libdnf::BaseWeakPtr & base);
     ~AdvisorySack();
 
     AdvisorySackWeakPtr get_weak_ptr() { return AdvisorySackWeakPtr(this, &sack_guard); }
@@ -47,18 +47,18 @@ public:
 private:
     friend AdvisoryQuery;
 
-    WeakPtrGuard<AdvisorySack, false> sack_guard;
-
     /// Load all advisories present in PackageSack from base. This method is
     /// called automatically when creating a new query and the cached number
     /// of solvables doesn't match the current number in solv sacks pool.
-    void load_advisories_from_package_sack();
+    void load_advisories();
+
+    libdnf::BaseWeakPtr base;
+
+    WeakPtrGuard<AdvisorySack, false> sack_guard;
 
     libdnf::solv::SolvMap data_map{0};
 
     int cached_solvables_size{0};
-
-    libdnf::Base * base;
 };
 
 }  // namespace libdnf::advisory

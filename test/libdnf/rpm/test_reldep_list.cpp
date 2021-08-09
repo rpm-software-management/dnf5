@@ -28,10 +28,10 @@ CPPUNIT_TEST_SUITE_REGISTRATION(ReldepListTest);
 
 
 void ReldepListTest::test_get() {
-    libdnf::rpm::ReldepList list1(sack);
-    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
-    libdnf::rpm::Reldep c(sack, "(labirinto unless labirinto_c)");
+    libdnf::rpm::ReldepList list1(base);
+    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
+    libdnf::rpm::Reldep c(base, "(labirinto unless labirinto_c)");
 
     list1.add(a);
     list1.add(b);
@@ -44,9 +44,9 @@ void ReldepListTest::test_get() {
 
 
 void ReldepListTest::test_add() {
-    libdnf::rpm::ReldepList list1(sack);
-    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
+    libdnf::rpm::ReldepList list1(base);
+    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
 
     list1.add(a);
     list1.add(b.get_id());
@@ -56,11 +56,11 @@ void ReldepListTest::test_add() {
 
 
 void ReldepListTest::test_size() {
-    libdnf::rpm::ReldepList list1(sack);
+    libdnf::rpm::ReldepList list1(base);
     CPPUNIT_ASSERT(list1.size() == 0);
 
-    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
+    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
     list1.add(a);
     list1.add(b);
     CPPUNIT_ASSERT(list1.size() == 2);
@@ -68,10 +68,10 @@ void ReldepListTest::test_size() {
 
 
 void ReldepListTest::test_compare() {
-    libdnf::rpm::ReldepList list1(sack);
-    libdnf::rpm::ReldepList list2(sack);
-    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
+    libdnf::rpm::ReldepList list1(base);
+    libdnf::rpm::ReldepList list2(base);
+    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
 
     CPPUNIT_ASSERT(list1 == list2);
 
@@ -86,18 +86,18 @@ void ReldepListTest::test_compare() {
 
 
 void ReldepListTest::test_append() {
-    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
-    libdnf::rpm::Reldep c(sack, "(labirinto unless labirinto_c)");
-    libdnf::rpm::Reldep d(sack, "labirinto.txt");
+    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
+    libdnf::rpm::Reldep c(base, "(labirinto unless labirinto_c)");
+    libdnf::rpm::Reldep d(base, "labirinto.txt");
 
-    libdnf::rpm::ReldepList list1(sack);
+    libdnf::rpm::ReldepList list1(base);
     list1.add(a);
     list1.add(b);
     list1.add_reldep("delgado > 1.2");
 
 
-    libdnf::rpm::ReldepList list2(sack);
+    libdnf::rpm::ReldepList list2(base);
     list2.add(c);
     list2.add(d);
 
@@ -111,12 +111,12 @@ void ReldepListTest::test_append() {
 }
 
 void ReldepListTest::test_iterator() {
-    libdnf::rpm::Reldep a(sack, "python3-labirinto = 4.2.0");
-    libdnf::rpm::Reldep b(sack, "(lab-list if labirinto.txt)");
-    libdnf::rpm::Reldep c(sack, "(labirinto unless labirinto_c)");
-    libdnf::rpm::Reldep d(sack, "labirinto.txt");
+    libdnf::rpm::Reldep a(base, "python3-labirinto = 4.2.0");
+    libdnf::rpm::Reldep b(base, "(lab-list if labirinto.txt)");
+    libdnf::rpm::Reldep c(base, "(labirinto unless labirinto_c)");
+    libdnf::rpm::Reldep d(base, "labirinto.txt");
     std::vector<libdnf::rpm::Reldep> expected;
-    libdnf::rpm::ReldepList list(sack);
+    libdnf::rpm::ReldepList list(base);
 
     expected.push_back(a);
     list.add(a);
@@ -173,7 +173,7 @@ void ReldepListTest::test_iterator() {
 void ReldepListTest::test_add_reldep_with_glob() {
     add_repo_solv("solv-repo1");
 
-    libdnf::rpm::ReldepList list(sack);
+    libdnf::rpm::ReldepList list(base);
     list.add_reldep_with_glob("pkg*");
 
     const std::vector<std::string> expected = {"pkg", "pkg-libs", "pkg.conf", "pkg.conf.d", "pkg-libs"};

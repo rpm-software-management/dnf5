@@ -72,7 +72,7 @@ public:
     /// @param pkg          libdnf::rpm::Package to compare.
     /// @return True if AdvisoryPackage has smaller name or architecture than libdnf::rpm::package, False otherwise.
     static bool name_arch_compare_lower_id(const AdvisoryPackage & adv_pkg, const rpm::Package & pkg) {
-        libdnf::solv::Pool pool(adv_pkg.p_impl->sack->p_impl->get_pool());
+        const auto & pool = get_pool(adv_pkg.p_impl->base);
         Solvable * s = pool.id2solvable(pkg.get_id().id);
 
         if (adv_pkg.p_impl->name != s->name)
@@ -114,7 +114,7 @@ private:
     friend AdvisoryPackage;
 
     Impl(
-        libdnf::rpm::PackageSack & sack,
+        const libdnf::BaseWeakPtr & base,
         AdvisoryId advisory,
         int owner_collection_index,
         Id name,
@@ -129,7 +129,7 @@ private:
     Id evr;
     Id arch;
     const char * filename;
-    libdnf::rpm::PackageSackWeakPtr sack;
+    libdnf::BaseWeakPtr base;
 };
 
 }  // namespace libdnf::advisory

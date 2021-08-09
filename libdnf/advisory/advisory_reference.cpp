@@ -28,36 +28,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-inline const char * get_str_from_pool(Id keyname, Id advisory, Pool * pool, int index) {
-    Dataiterator di;
-    const char * str = NULL;
-    int count = 0;
-
-    dataiterator_init(&di, pool, 0, advisory, UPDATE_REFERENCE, 0, 0);
-    while (dataiterator_step(&di)) {
-        dataiterator_setpos(&di);
-        if (count++ == index) {
-            str = pool_lookup_str(pool, SOLVID_POS, keyname);
-            break;
-        }
-    }
-    dataiterator_free(&di);
-
-    return str;
-}
-
-AdvisoryReference::AdvisoryReference(const libdnf::rpm::PackageSackWeakPtr & sack, AdvisoryId advisory, int index)
-    : sack(sack)
+AdvisoryReference::AdvisoryReference(const libdnf::BaseWeakPtr & base, AdvisoryId advisory, int index)
+    : base(base)
     , advisory(advisory)
     , index(index) {}
 
 std::string AdvisoryReference::get_id() const {
-    Pool * pool = sack->p_impl->get_pool();
-    return std::string(get_str_from_pool(UPDATE_REFERENCE_ID, advisory.id, pool, index));
+    return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_ID, advisory.id, index));
 }
 AdvisoryReference::Type AdvisoryReference::get_type() const {
-    Pool * pool = sack->p_impl->get_pool();
-    const char * type = get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, pool, index);
+    const char * type = get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index);
 
     if (type == NULL)
         return Type::UNKNOWN;
@@ -70,12 +50,10 @@ AdvisoryReference::Type AdvisoryReference::get_type() const {
     return Type::UNKNOWN;
 }
 std::string AdvisoryReference::get_title() const {
-    Pool * pool = sack->p_impl->get_pool();
-    return std::string(get_str_from_pool(UPDATE_REFERENCE_TITLE, advisory.id, pool, index));
+    return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TITLE, advisory.id, index));
 }
 std::string AdvisoryReference::get_url() const {
-    Pool * pool = sack->p_impl->get_pool();
-    return std::string(get_str_from_pool(UPDATE_REFERENCE_HREF, advisory.id, pool, index));
+    return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_HREF, advisory.id, index));
 }
 
 }  // namespace libdnf::advisory

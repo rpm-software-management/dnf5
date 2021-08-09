@@ -31,17 +31,18 @@ namespace libdnf::rpm {
 class ReldepList::Impl {
 public:
     Impl(const ReldepList::Impl & src) = default;
-    Impl(const PackageSackWeakPtr & sack) : sack(sack) {}
-    Impl(const PackageSackWeakPtr & sack, libdnf::solv::IdQueue queue_src) : sack(sack), queue(queue_src) {}
+    Impl(const BaseWeakPtr & base) : base(base) {}
+    Impl(const BaseWeakPtr & base, libdnf::solv::IdQueue queue_src) : base(base), queue(queue_src) {}
     ~Impl() = default;
 
-    PackageSack * get_sack() const { return sack.get(); }
+    BaseWeakPtr get_base() const { return base; }
     libdnf::solv::IdQueue & get_idqueue() { return queue; }
 
 private:
     friend class ReldepList;
     friend class Package;
-    PackageSackWeakPtr sack;
+
+    BaseWeakPtr base;
     libdnf::solv::IdQueue queue;
 };
 

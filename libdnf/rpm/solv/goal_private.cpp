@@ -161,22 +161,22 @@ static void same_name_subqueue(libdnf::solv::Pool & pool, Queue * in, Queue * ou
 
 
 struct InstallonlyCmpData {
-    Pool * pool;
+    libdnf::solv::Pool & pool;
     Id running_kernel;
 };
 
 struct ObsoleteCmpData {
-    Pool * pool;
+    libdnf::solv::Pool & pool;
     Id obsolete;
 };
 
 int installonly_cmp(const Id * ap, const Id * bp, const InstallonlyCmpData * s_cb) {
     Id a = *ap;
     Id b = *bp;
-    Pool * pool = s_cb->pool;
+    auto & pool = s_cb->pool;
     Id kernel = s_cb->running_kernel;
-    Solvable * sa = pool_id2solvable(pool, a);
-    Solvable * sb = pool_id2solvable(pool, b);
+    Solvable * sa = pool.id2solvable(a);
+    Solvable * sb = pool.id2solvable(b);
 
     // if the names are different sort them differently, particular order does not matter as long as it's consistent.
     int name_diff = sa->name - sb->name;
@@ -193,12 +193,12 @@ int installonly_cmp(const Id * ap, const Id * bp, const InstallonlyCmpData * s_c
         return -1;
 
     if (kernel >= 0) {
-        if (a == kernel || can_depend_on(pool, sa, kernel))
+        if (a == kernel || can_depend_on(*pool, sa, kernel))
             return 1;
-        if (b == kernel || can_depend_on(pool, sb, kernel))
+        if (b == kernel || can_depend_on(*pool, sb, kernel))
             return -1;
         // if package has same evr as kernel try them to keep (kernel-devel packages)
-        Solvable * kernelSolvable = pool_id2solvable(pool, kernel);
+        Solvable * kernelSolvable = pool.id2solvable(kernel);
         if (sa->evr == kernelSolvable->evr) {
             return 1;
         }
@@ -206,19 +206,19 @@ int installonly_cmp(const Id * ap, const Id * bp, const InstallonlyCmpData * s_c
             return -1;
         }
     }
-    return pool_evrcmp(pool, sa->evr, sb->evr, EVRCMP_COMPARE);
+    return pool.evrcmp(sa->evr, sb->evr, EVRCMP_COMPARE);
 }
 
 int obsq_cmp(const Id * ap, const Id * bp, const ObsoleteCmpData * s_cb) {
-    Pool * pool = s_cb->pool;
+    auto & pool = s_cb->pool;
 
     if (*ap == *bp) {
         return 0;
     }
 
-    Solvable * to_compare_solvable = pool_id2solvable(pool, s_cb->obsolete);
-    Solvable * ap_solvable = pool_id2solvable(pool, *ap);
-    Solvable * obs = pool->solvables + *bp;
+    Solvable * to_compare_solvable = pool.id2solvable(s_cb->obsolete);
+    Solvable * ap_solvable = pool.id2solvable(*ap);
+    Solvable * obs = pool.id2solvable(*bp);
     if (ap_solvable->name != obs->name) {
         // bring "same name" obsoleters (i.e. upgraders) to front
         if (ap_solvable->name == to_compare_solvable->name) {
@@ -227,9 +227,9 @@ int obsq_cmp(const Id * ap, const Id * bp, const ObsoleteCmpData * s_cb) {
         if (obs->name == to_compare_solvable->name) {
             return 1;
         }
-        return strcmp(pool_id2str(pool, ap_solvable->name), pool_id2str(pool, obs->name));
+        return strcmp(pool.id2str(ap_solvable->name), pool.id2str(obs->name));
     }
-    int r = pool_evrcmp(pool, ap_solvable->evr, obs->evr, EVRCMP_COMPARE);
+    int r = pool.evrcmp(ap_solvable->evr, obs->evr, EVRCMP_COMPARE);
     if (r) {
         return -r;	/* highest version first */
     }
@@ -245,18 +245,20 @@ int obsq_cmp(const Id * ap, const Id * bp, const ObsoleteCmpData * s_cb) {
     return *ap - *bp;
 }
 
-bool limit_installonly_packages(
-    Solver * solv,
-    libdnf::solv::IdQueue & job,
-    const libdnf::solv::IdQueue & installonly,
-    unsigned int installonly_limit,
-    Id running_kernel) {
+
+}  // namespace
+
+
+namespace libdnf::rpm::solv {
+
+
+bool GoalPrivate::limit_installonly_packages(libdnf::solv::IdQueue & job, Id running_kernel) {
     if (installonly_limit == 0) {
         return 0;
     }
 
-    ::Pool * pool = solv->pool;
-    libdnf::solv::Pool spool(pool);
+    auto & spool = get_pool(base);
+    ::Pool * pool = *spool;
     bool reresolve = false;
 
     for (int i = 0; i < installonly.size(); ++i) {
@@ -269,7 +271,7 @@ bool limit_installonly_packages(
             if (!spool.is_package(p)) {
                 continue;
             }
-            if (solver_get_decisionlevel(solv, p) > 0) {
+            if (solver_get_decisionlevel(libsolv_solver, p) > 0) {
                 q.push_back(p);
             }
         }
@@ -288,7 +290,7 @@ bool limit_installonly_packages(
             continue;
         }
 
-        const InstallonlyCmpData installonly_cmp_data{pool, running_kernel};
+        const InstallonlyCmpData installonly_cmp_data{spool, running_kernel};
         q.sort(&installonly_cmp, &installonly_cmp_data);
 
         libdnf::solv::IdQueue same_names;
@@ -312,15 +314,10 @@ bool limit_installonly_packages(
 }
 
 
-}  // namespace
-
-
-namespace libdnf::rpm::solv {
-
-
 libdnf::GoalProblem GoalPrivate::resolve() {
+    auto & pool = get_pool(base);
     libdnf::solv::IdQueue job(staging);
-    construct_job(pool, job, installonly, allow_erasing, protected_packages.get(), protected_running_kernel);
+    construct_job(*pool, job, installonly, allow_erasing, protected_packages.get(), protected_running_kernel);
 
     /* apply the excludes */
     //dnf_sack_recompute_considered(sack);
@@ -332,7 +329,7 @@ libdnf::GoalProblem GoalPrivate::resolve() {
         libsolv_transaction = NULL;
     }
 
-    init_solver(pool, &libsolv_solver);
+    init_solver(*pool, &libsolv_solver);
 
     // Removal of SOLVER_WEAK to allow report errors
     if (remove_solver_weak) {
@@ -357,9 +354,9 @@ libdnf::GoalProblem GoalPrivate::resolve() {
     }
 
     // either allow solutions callback or installonlies, both at the same time are not supported
-    if (limit_installonly_packages(libsolv_solver, job, installonly, installonly_limit, 0)) {
+    if (limit_installonly_packages(job, 0)) {
         // allow erasing non-installonly packages that depend on a kernel about to be erased
-        allow_uninstall_all_but_protected(pool, job, protected_packages.get(), protected_running_kernel);
+        allow_uninstall_all_but_protected(*pool, job, protected_packages.get(), protected_running_kernel);
         if (solver_solve(libsolv_solver, &job.get_queue())) {
             return libdnf::GoalProblem::SOLVER_ERROR;
         }
@@ -451,6 +448,8 @@ size_t GoalPrivate::count_solver_problems() {
 }
 
 std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems() {
+    auto & pool = get_pool(base);
+
     if (!libsolv_solver) {
         throw UnresolvedGoal();
     }
@@ -513,8 +512,8 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
                             rule = ProblemRules::RULE_BEST_2;
                             break;
                         case SOLVER_RULE_PKG_NOT_INSTALLABLE: {
-                            Solvable * solvable = pool_id2solvable(pool, source);
-                            if (pool_disabled_solvable(pool, solvable)) {
+                            Solvable * solvable = pool.id2solvable(source);
+                            if (pool_disabled_solvable(*pool, solvable)) {
                                 // TODO(jmracek) RULE_PKG_NOT_INSTALLABLE_4 not handled
                                 rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_1;
                                 break;
@@ -580,6 +579,8 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
         removal_of_protected.reset();
         return ret;
     }
+
+    auto & pool = get_pool(base);
 
     libdnf::solv::SolvMap pkg_remove_list(pool->nsolvables);
     for (auto index = 0; index < removes.size(); ++ index) {
@@ -657,7 +658,7 @@ libdnf::solv::IdQueue GoalPrivate::list_obsoleted_by_package(Id id)
     }
     libdnf::solv::IdQueue obsoletes;
     transaction_all_obs_pkgs(libsolv_transaction, id, &obsoletes.get_queue());
-    const ObsoleteCmpData obsoete_cmp_data{pool, id};
+    const ObsoleteCmpData obsoete_cmp_data{get_pool(base), id};
     obsoletes.sort(&obsq_cmp, &obsoete_cmp_data);
     return obsoletes;
 }

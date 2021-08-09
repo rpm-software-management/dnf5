@@ -31,6 +31,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
+namespace libdnf::solv {
+
+class Pool;
+
+}
+
+
 namespace libdnf::rpm {
 
 class PackageSack;
@@ -374,6 +381,7 @@ private:
     friend class RepoSack;
     friend class rpm::PackageSack;
     friend struct PackageTarget;
+    friend class solv::Pool;
     std::unique_ptr<Impl> p_impl;
     WeakPtrGuard<Repo, false> data_guard;
 };

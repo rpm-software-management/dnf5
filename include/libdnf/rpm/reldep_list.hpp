@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "reldep.hpp"
 #include "reldep_list_iterator.hpp"
+#include "libdnf/base/base_weak.hpp"
 
 #include <memory>
 
@@ -40,7 +41,8 @@ public:
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_new(DnfSack *sack)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:DependencyContainer(DnfSack *sack)
-    explicit ReldepList(const PackageSackWeakPtr & sack);
+    explicit ReldepList(const libdnf::BaseWeakPtr & base);
+    explicit ReldepList(libdnf::Base & base);
 
     /// @replaces libdnf/dnf-reldep-list.h:function:dnf_reldep_list_free(DnfReldepList *reldep_list)
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:~DependencyContainer()
@@ -95,7 +97,7 @@ public:
     /// @replaces libdnf/repo/solvable/DependencyContainer.hpp:method:count()
     int size() const noexcept;
 
-    PackageSack * get_sack() const;
+    libdnf::BaseWeakPtr get_base() const;
 
 private:
     friend ReldepListIterator;

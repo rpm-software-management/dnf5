@@ -221,7 +221,7 @@ void CmdAdvisory::run(Context & ctx) {
         //if (adv == advisories_map.end()) {
         //    //std::cout << pkg.get_name() << std::endl << std::flush;
         std::cout
-            << libdnf::advisory::Advisory(package_sack, libdnf::advisory::AdvisoryId(pkg.get_advisory_id())).get_name()
+            << libdnf::advisory::Advisory(ctx.base, libdnf::advisory::AdvisoryId(pkg.get_advisory_id())).get_name()
             << " - " << pkg.get_name() << "-" << pkg.get_evr() << "." << pkg.get_arch() << std::endl;
         //} else {
         //    //std::cout << pkg.get_nevra() << " : " << advisories_map.find(pkg.get_name() + "-" + pkg.get_arch())->second.get()->get_name() << std::endl;

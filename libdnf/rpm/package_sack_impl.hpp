@@ -67,14 +67,10 @@ public:
         Id id;
     };
 
-    explicit Impl(Base & base);
-    ~Impl();
-
-    /// Return libsolv Pool
-    Pool * get_pool() { return pool; };
+    explicit Impl(const BaseWeakPtr & base) : base(base) {}
 
     /// Return number of solvables in pool
-    int get_nsolvables() const noexcept { return pool->nsolvables; };
+    int get_nsolvables() const noexcept { return get_pool(base)->nsolvables; };
 
     /// Return SolvMap with all package solvables
     libdnf::solv::SolvMap & get_solvables();
@@ -143,8 +139,7 @@ private:
     bool considered_uptodate{true};
     bool provides_ready{false};
 
-    Base * base;
-    Pool * pool;
+    BaseWeakPtr base;
     std::unique_ptr<repo::Repo> system_repo;
     std::unique_ptr<repo::Repo> cmdline_repo;
 
@@ -168,23 +163,6 @@ private:
     friend class Transaction;
 };
 
-
-inline PackageSack::Impl::Impl(Base & base) : base(&base) {
-    pool = pool_create();
-}
-
-
-inline PackageSack::Impl::~Impl() {
-    Id repo_id;
-    repo::LibsolvRepo * r;
-    FOR_REPOS(repo_id, r) {
-        if (auto repo = static_cast<repo::Repo *>(r->appdata)) {
-            repo->p_impl->detach_libsolv_repo();
-        }
-    }
-    pool_free(pool);
-}
-
 inline std::vector<Solvable *> & PackageSack::Impl::get_sorted_solvables() {
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_sorted_solvables_size) {
@@ -193,8 +171,9 @@ inline std::vector<Solvable *> & PackageSack::Impl::get_sorted_solvables() {
     auto & solvables_map = get_solvables();
     cached_sorted_solvables.clear();
     cached_sorted_solvables.reserve(static_cast<size_t>(nsolvables));
+    auto & pool = get_pool(base);
     for (Id id : solvables_map) {
-        cached_sorted_solvables.push_back(pool_id2solvable(pool, id));
+        cached_sorted_solvables.push_back(pool.id2solvable(id));
     }
     std::sort(cached_sorted_solvables.begin(), cached_sorted_solvables.end(), nevra_solvable_cmp_key);
     cached_sorted_solvables_size = nsolvables;
@@ -202,7 +181,7 @@ inline std::vector<Solvable *> & PackageSack::Impl::get_sorted_solvables() {
 }
 
 inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_icase_solvables() {
-    libdnf::solv::Pool spool(pool);
+    auto & pool = get_pool(base);
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_sorted_icase_solvables_size) {
         return cached_sorted_icase_solvables;
@@ -211,7 +190,7 @@ inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_ic
     Id icase_name = 0;
     for (auto * solvable : get_sorted_solvables()) {
         if (solvable->name != name) {
-            icase_name = spool.id_to_lowercase_id(solvable->name, 1);
+            icase_name = pool.id_to_lowercase_id(solvable->name, 1);
         }
         cached_sorted_icase_solvables.emplace_back(std::make_pair(icase_name, solvable));
     }
@@ -221,7 +200,8 @@ inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_ic
 }
 
 inline libdnf::solv::SolvMap & PackageSack::Impl::get_solvables() {
-    libdnf::solv::Pool spool(pool);
+    auto & spool = get_pool(base);
+    ::Pool * pool = *spool;
 
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_solvables_size) {

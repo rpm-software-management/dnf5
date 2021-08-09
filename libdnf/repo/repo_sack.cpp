@@ -44,6 +44,9 @@ using LibsolvRepo = ::Repo;
 namespace libdnf::repo {
 
 
+RepoSack::RepoSack(libdnf::Base & base) : RepoSack(base.get_weak_ptr()) {}
+
+
 RepoWeakPtr RepoSack::new_repo(const std::string & id) {
     // TODO(jrohel): Test repo exists
     auto repo = std::make_unique<Repo>(id, *base, Repo::Type::AVAILABLE);
@@ -67,8 +70,9 @@ RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid,
     }
 
     auto repo = new_repo(repoid);
-    Pool * pool = base->get_rpm_package_sack()->p_impl->get_pool();
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, repoid.c_str()), &libsolv_repo_free);
+    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
+        repo_create(*get_pool(base), repoid.c_str()), &libsolv_repo_free);
+
     testcase_add_testtags(libsolv_repo.get(), testcase_file.get(), 0);
     repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
 
@@ -149,7 +153,7 @@ void RepoSack::new_repos_from_dirs() {
 }
 
 BaseWeakPtr RepoSack::get_base() const {
-    return base->get_weak_ptr();
+    return base;
 }
 
 }  // namespace libdnf::repo

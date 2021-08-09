@@ -98,7 +98,8 @@ public:
     /// @param sack   WeakPtr to libdnf::rpm::PackageSack instance which holds the data.
     /// @param id     AdvisoryId into libsolv pool.
     /// @return New Advisory instance.
-    Advisory(const libdnf::rpm::PackageSackWeakPtr & sack, AdvisoryId id);
+    Advisory(const libdnf::BaseWeakPtr & base, AdvisoryId id);
+    Advisory(libdnf::Base & base, AdvisoryId id);
 
     /// Destroy the Advisory object
     ~Advisory();
@@ -155,8 +156,9 @@ public:
     static const char * advisory_type_to_cstring(Type type);
 
 private:
+    libdnf::BaseWeakPtr base;
+
     AdvisoryId id;
-    libdnf::rpm::PackageSackWeakPtr sack;
 };
 
 }  // namespace libdnf::advisory

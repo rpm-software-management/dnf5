@@ -66,7 +66,7 @@ private:
     friend AdvisoryPackage;
     friend AdvisoryModule;
 
-    AdvisoryCollection(const libdnf::rpm::PackageSackWeakPtr & sack, AdvisoryId advisory, int index);
+    AdvisoryCollection(const libdnf::BaseWeakPtr & base, AdvisoryId advisory, int index);
 
     //TODO(amatej): Hide into an Impl?
     /// Get all AdvisoryPackages stored in this AdvisoryCollection
@@ -85,7 +85,8 @@ private:
     ///                         them when collecting AdvisoryModules from multiple collections.
     void get_modules(std::vector<AdvisoryModule> & output);
 
-    libdnf::rpm::PackageSackWeakPtr sack;
+    libdnf::BaseWeakPtr base;
+
     AdvisoryId advisory;
 
     /// AdvisoryCollections don't have their own Id, therefore store it's index in its Advisory (just like AdvisoryReference)

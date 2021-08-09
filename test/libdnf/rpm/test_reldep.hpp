@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TEST_RELDEP_HPP
 
 #include "libdnf/base/base.hpp"
-#include "libdnf/rpm/package_sack.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -36,16 +35,13 @@ class ReldepTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp() override;
-
     void test_short_reldep();
     void test_full_reldep();
     void test_rich_reldep();
     void test_invalid_reldep();
 
 private:
-    std::unique_ptr<libdnf::Base> base;
-    libdnf::rpm::PackageSackWeakPtr sack;
+    libdnf::Base base;
 };
 
 #endif  // TEST_LIBDNF_RPM_RELDEP_HPP

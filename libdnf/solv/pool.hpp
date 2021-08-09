@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "id_queue.hpp"
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
 
 #include <cassert>
@@ -71,10 +72,14 @@ private:
 
 class Pool {
 public:
-    Pool(::Pool * pool) : pool(pool) {}
+    Pool() {
+        pool = pool_create();
+    }
 
     Pool(const Pool & pool) = delete;
     Pool & operator=(const Pool & pool) = delete;
+
+    ~Pool();
 
     int get_nsolvables() const { return pool->nsolvables; }
 
@@ -249,5 +254,13 @@ private:
 };
 
 }  // namespace libdnf::solv
+
+namespace libdnf {
+
+inline solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) {
+    return *base->pool;
+}
+
+}
 
 #endif  // LIBDNF_SOLV_POOL_HPP

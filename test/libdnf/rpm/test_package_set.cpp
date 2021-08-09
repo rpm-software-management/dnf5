@@ -33,7 +33,7 @@ namespace {
 // make constructor public so we can create Package instances in the tests
 class TestPackage : public libdnf::rpm::Package {
 public:
-    TestPackage(const libdnf::rpm::PackageSackWeakPtr & sack, libdnf::rpm::PackageId id) : libdnf::rpm::Package(sack, id) {}
+    TestPackage(libdnf::Base & base, libdnf::rpm::PackageId id) : libdnf::rpm::Package(base.get_weak_ptr(), id) {}
 };
 
 }  // namespace
@@ -44,26 +44,26 @@ void RpmPackageSetTest::setUp() {
     add_repo_solv("solv-24pkgs");
 
     // set1 contains packages 0 - 15
-    set1 = std::make_unique<libdnf::rpm::PackageSet>(sack);
+    set1 = std::make_unique<libdnf::rpm::PackageSet>(base);
     for (int i = 0; i < 16; i++) {
-        TestPackage pkg(sack, libdnf::rpm::PackageId(i));
+        TestPackage pkg(base, libdnf::rpm::PackageId(i));
         set1->add(pkg);
     }
 
     // set2 contains packages 8, 24
-    set2 = std::make_unique<libdnf::rpm::PackageSet>(sack);
+    set2 = std::make_unique<libdnf::rpm::PackageSet>(base);
 
-    TestPackage pkg8(sack, libdnf::rpm::PackageId(8));
+    TestPackage pkg8(base, libdnf::rpm::PackageId(8));
     set2->add(pkg8);
 
-    TestPackage pkg24(sack, libdnf::rpm::PackageId(24));
+    TestPackage pkg24(base, libdnf::rpm::PackageId(24));
     set2->add(pkg24);
 }
 
 
 void RpmPackageSetTest::test_add() {
     // add a Package that does not exist in a PackageSet
-    TestPackage pkg(sack, libdnf::rpm::PackageId(24));
+    TestPackage pkg(base, libdnf::rpm::PackageId(24));
     CPPUNIT_ASSERT(set1->contains(pkg) == false);
     set1->add(pkg);
     CPPUNIT_ASSERT(set1->contains(pkg) == true);
@@ -76,22 +76,22 @@ void RpmPackageSetTest::test_add() {
 
 void RpmPackageSetTest::test_contains() {
     // PackageSet contains a Package
-    TestPackage pkg0(sack, libdnf::rpm::PackageId(0));
+    TestPackage pkg0(base, libdnf::rpm::PackageId(0));
     CPPUNIT_ASSERT(set1->contains(pkg0) == true);
 
     // PackageSet does not contain a Package
-    TestPackage pkg16(sack, libdnf::rpm::PackageId(16));
+    TestPackage pkg16(base, libdnf::rpm::PackageId(16));
     CPPUNIT_ASSERT(set1->contains(pkg16) == false);
 
     // PackageSet does not contain a Package does is out of range of underlying bitmap
-    TestPackage pkg123(sack, libdnf::rpm::PackageId(123));
+    TestPackage pkg123(base, libdnf::rpm::PackageId(123));
     CPPUNIT_ASSERT(set1->contains(pkg123) == false);
 }
 
 
 void RpmPackageSetTest::test_remove() {
     // remove a Package that exists in a PackageSet
-    TestPackage pkg0(sack, libdnf::rpm::PackageId(0));
+    TestPackage pkg0(base, libdnf::rpm::PackageId(0));
 
     CPPUNIT_ASSERT(set1->contains(pkg0) == true);
     set1->remove(pkg0);
@@ -109,10 +109,10 @@ void RpmPackageSetTest::test_union() {
 
     // expected packages: 0-15, 24
     for (int i = 0; i < 16; i++) {
-        TestPackage pkg(sack, libdnf::rpm::PackageId(i));
+        TestPackage pkg(base, libdnf::rpm::PackageId(i));
         expected.push_back(pkg);
     }
-    TestPackage pkg24(sack, libdnf::rpm::PackageId(24));
+    TestPackage pkg24(base, libdnf::rpm::PackageId(24));
     expected.push_back(pkg24);
 
     *set1 |= *set2;
@@ -128,7 +128,7 @@ void RpmPackageSetTest::test_intersection() {
     std::vector<libdnf::rpm::Package> result;
 
     // expected packages: 8
-    TestPackage pkg8(sack, libdnf::rpm::PackageId(8));
+    TestPackage pkg8(base, libdnf::rpm::PackageId(8));
     expected.push_back(pkg8);
 
     *set1 &= *set2;
@@ -148,7 +148,7 @@ void RpmPackageSetTest::test_difference() {
         if (i == 8) {
             continue;
         }
-        TestPackage pkg(sack, libdnf::rpm::PackageId(i));
+        TestPackage pkg(base, libdnf::rpm::PackageId(i));
         expected.push_back(pkg);
     }
 
@@ -164,7 +164,7 @@ void RpmPackageSetTest::test_iterator() {
     std::vector<libdnf::rpm::Package> expected;
 
     for (int i = 0; i < 16; i++) {
-        TestPackage pkg(sack, libdnf::rpm::PackageId(i));
+        TestPackage pkg(base, libdnf::rpm::PackageId(i));
         expected.push_back(pkg);
     }
 

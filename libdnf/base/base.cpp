@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/const.hpp"
+#include "libdnf/solv/pool.hpp"
 
 #include <fmt/format.h>
 
@@ -35,6 +36,15 @@ namespace libdnf {
 
 static std::atomic<Base *> locked_base{nullptr};
 static std::mutex locked_base_mutex;
+
+Base::Base()
+  : pool(std::make_unique<libdnf::solv::Pool>()),
+    repo_sack(get_weak_ptr()),
+    rpm_package_sack(get_weak_ptr()),
+    rpm_advisory_sack(get_weak_ptr())
+{}
+
+Base::~Base() = default;
 
 void Base::lock() {
     locked_base_mutex.lock();

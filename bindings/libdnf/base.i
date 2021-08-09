@@ -31,6 +31,8 @@
 %template(LogRouterWeakPtr) libdnf::WeakPtr<libdnf::LogRouter, false>;
 %template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
 
+%ignore libdnf::get_pool;
+
 %include "libdnf/base/base.hpp"
 %include "libdnf/base/transaction.hpp"
 %include "libdnf/base/transaction_package.hpp"

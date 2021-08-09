@@ -615,8 +615,6 @@ public:
     void swap(PackageQuery & other) noexcept;
 
 private:
-    explicit PackageQuery(const PackageSackWeakPtr & sack, InitFlags flags = InitFlags::APPLY_EXCLUDES);
-
     friend libdnf::Goal;
     class Impl;
     InitFlags init_flags;

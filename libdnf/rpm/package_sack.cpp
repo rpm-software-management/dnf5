@@ -142,7 +142,7 @@ void PackageSack::Impl::write_main(repo::LibsolvRepoExt & libsolv_repo_ext, bool
     auto & logger = *base->get_logger();
     LibsolvRepo * libsolv_repo = libsolv_repo_ext.repo;
     const char * name = libsolv_repo->name;
-    const char * chksum = pool_bin2hex(pool, libsolv_repo_ext.checksum, solv_chksum_len(CHKSUM_TYPE));
+    const char * chksum = pool_bin2hex(*get_pool(base), libsolv_repo_ext.checksum, solv_chksum_len(CHKSUM_TYPE));
     auto fn = give_repo_solv_cache_fn(name, NULL);
     auto tmp_fn_templ = fn + ".XXXXXX";
     int tmp_fd = mkstemp(tmp_fn_templ.data());
@@ -267,6 +267,7 @@ void PackageSack::Impl::rewrite_repos(libdnf::solv::IdQueue & addedfileprovides,
     int i;
     auto & logger = *base->get_logger();
 
+    auto & pool = get_pool(base);
     libdnf::solv::SolvMap providedids(pool->ss.nstrings);
 
     libdnf::solv::IdQueue fileprovidesq;
@@ -322,7 +323,9 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & 
 
     auto & logger = *base->get_logger();
     auto id = repo.get_id().c_str();
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, id), &libsolv_repo_free);
+    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
+        repo_create(*get_pool(base), id), &libsolv_repo_free);
+
     const char * fn_repomd = repo_impl->repomd_fn.c_str();
     auto fn_cache = give_repo_solv_cache_fn(id, nullptr);
 
@@ -415,6 +418,7 @@ PackageSack::Impl::RepodataInfo PackageSack::Impl::load_repo_ext(
 void PackageSack::Impl::internalize_libsolv_repos() {
     int i;
     LibsolvRepo * libsolv_repo;
+    ::Pool * pool = *get_pool(base);
 
     FOR_REPOS(i, libsolv_repo) { internalize_libsolv_repo(libsolv_repo); }
 }
@@ -432,14 +436,17 @@ void PackageSack::Impl::make_provides_ready() {
     if (provides_ready) {
         return;
     }
+
+    auto & pool = get_pool(base);
+
     internalize_libsolv_repos();
     libdnf::solv::IdQueue addedfileprovides;
     libdnf::solv::IdQueue addedfileprovides_inst;
-    pool_addfileprovides_queue(pool, &addedfileprovides.get_queue(), &addedfileprovides_inst.get_queue());
+    pool_addfileprovides_queue(*pool, &addedfileprovides.get_queue(), &addedfileprovides_inst.get_queue());
     if (!addedfileprovides.empty() || !addedfileprovides_inst.empty()) {
         rewrite_repos(addedfileprovides, addedfileprovides_inst);
     }
-    pool_createwhatprovides(pool);
+    pool_createwhatprovides(*pool);
     provides_ready = true;
 }
 
@@ -447,17 +454,18 @@ bool PackageSack::Impl::load_system_repo() {
     auto & logger = *base->get_logger();
     auto repo_impl = system_repo->p_impl.get();
     auto id = system_repo->get_id().c_str();
+    auto & pool = get_pool(base);
 
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(pool, id), &libsolv_repo_free);
+    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(*pool, id), &libsolv_repo_free);
 
     logger.debug("load_system_repo(): fetching rpmdb");
     base->get_config().installroot().lock("installroot locked by load_system_repo");
-    pool_set_rootdir(pool, base->get_config().installroot().get_value().c_str());
+    pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
     int rc = repo_add_rpmdb(libsolv_repo.get(), nullptr, flagsrpm);
     if (rc != 0) {
         // g_set_error(error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("failed loading RPMDB"));
-        logger.warning(fmt::format(_("load_system_repo(): failed loading RPMDB: {}"), pool_errstr(pool)));
+        logger.warning(fmt::format(_("load_system_repo(): failed loading RPMDB: {}"), pool_errstr(*pool)));
         return false;
     }
 
@@ -465,7 +473,7 @@ bool PackageSack::Impl::load_system_repo() {
 
     auto libsolv_repo_ext = repo_impl->libsolv_repo_ext;
 
-    pool_set_installed(pool, libsolv_repo_ext.repo);
+    pool_set_installed(*pool, libsolv_repo_ext.repo);
 
     // TODO(jrohel): Probably not needed for system repository. For consistency with available repositories?
     libsolv_repo_ext.main_nsolvables = libsolv_repo_ext.repo->nsolvables;
@@ -482,15 +490,16 @@ bool PackageSack::Impl::load_extra_system_repo(const std::string & rootdir) {
     auto & logger = *base->get_logger();
     auto & libsolv_repo_ext = system_repo->p_impl.get()->libsolv_repo_ext;
     LibsolvRepo * libsolv_repo = libsolv_repo_ext.repo;
+    auto & pool = get_pool(base);
 
     logger.debug("load_extra_system_repo(): fetching rpmdb");
-    pool_set_rootdir(pool, rootdir.c_str());
+    pool_set_rootdir(*pool, rootdir.c_str());
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
     int rc = repo_add_rpmdb(libsolv_repo, nullptr, flagsrpm);
     //reset rootdir to main one
-    pool_set_rootdir(pool, base->get_config().installroot().get_value().c_str());
+    pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
     if (rc != 0) {
-        logger.warning(fmt::format(_("load_extra_system_repo(): failed loading RPMDB: {}"), pool_errstr(pool)));
+        logger.warning(fmt::format(_("load_extra_system_repo(): failed loading RPMDB: {}"), pool_errstr(*pool)));
         return false;
     }
 
@@ -615,11 +624,12 @@ repo::Repo & PackageSack::Impl::get_cmdline_repo() {
     if (cmdline_repo) {
         return *cmdline_repo.get();
     }
+
     cmdline_repo = std::make_unique<repo::Repo>(CMDLINE_REPO_NAME, *base, repo::Repo::Type::SYSTEM);
     cmdline_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, false);
 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
-        repo_create(pool, CMDLINE_REPO_NAME), &libsolv_repo_free);
+        repo_create(*get_pool(base), CMDLINE_REPO_NAME), &libsolv_repo_free);
     cmdline_repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
     return *cmdline_repo.get();
 }
@@ -630,21 +640,22 @@ Package PackageSack::add_cmdline_package(const std::string & fn, bool add_with_h
 
     p_impl->provides_ready = false;
     p_impl->considered_uptodate = false;
-    return Package(this->get_weak_ptr(), PackageId(new_id));
+    return Package(p_impl->base, PackageId(new_id));
 }
 
 repo::Repo & PackageSack::Impl::get_system_repo(bool build_cache) {
     if (system_repo) {
         return *system_repo.get();
     }
+    auto & pool = get_pool(base);
 
     system_repo = std::make_unique<repo::Repo>(SYSTEM_REPO_NAME, *base, repo::Repo::Type::SYSTEM);
     system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
-        repo_create(pool, SYSTEM_REPO_NAME), &libsolv_repo_free);
+        repo_create(*pool, SYSTEM_REPO_NAME), &libsolv_repo_free);
     system_repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
-    pool_set_installed(pool, system_repo->p_impl->libsolv_repo_ext.repo);
+    pool_set_installed(*pool, system_repo->p_impl->libsolv_repo_ext.repo);
     return *system_repo.get();
 }
 
@@ -654,11 +665,11 @@ Package PackageSack::add_system_package(const std::string & fn, bool add_with_hd
 
     p_impl->provides_ready = false;
     p_impl->considered_uptodate = false;
-    return Package(this->get_weak_ptr(), PackageId(new_id));
+    return Package(p_impl->base, PackageId(new_id));
 }
 
 void PackageSack::dump_debugdata(const std::string & dir) {
-    Solver * solver = solver_create(p_impl->pool);
+    Solver * solver = solver_create(*get_pool(p_impl->base));
 
     try {
         std::filesystem::create_directory(dir);
@@ -699,7 +710,9 @@ std::string PackageSack::Impl::give_repo_solv_cache_fn(const std::string & repoi
     return fn;
 }
 
-PackageSack::PackageSack(Base & base) : p_impl{new Impl(base)} {}
+PackageSack::PackageSack(const BaseWeakPtr & base) : p_impl{new Impl(base)} {}
+
+PackageSack::PackageSack(libdnf::Base & base) : PackageSack(base.get_weak_ptr()) {}
 
 PackageSack::~PackageSack() = default;
 

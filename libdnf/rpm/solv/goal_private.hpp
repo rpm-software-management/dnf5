@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/solv/id_queue.hpp"
+#include "libdnf/solv/pool.hpp"
 #include "libdnf/solv/solv_map.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
@@ -39,7 +40,7 @@ public:
         const char * get_description() const noexcept override { return "GoalPrivate exception"; }
     };
 
-    explicit GoalPrivate(Pool * pool);
+    explicit GoalPrivate(const BaseWeakPtr & base) : base(base) {}
     explicit GoalPrivate(const GoalPrivate & src);
     ~GoalPrivate();
 
@@ -109,7 +110,10 @@ public:
 
 
 private:
-    Pool * pool;
+    bool limit_installonly_packages(libdnf::solv::IdQueue & job, Id running_kernel);
+
+    BaseWeakPtr base;
+
     libdnf::solv::IdQueue staging;
     libdnf::solv::IdQueue installonly;
     unsigned int installonly_limit{0};
@@ -131,10 +135,8 @@ private:
     libdnf::GoalProblem protected_in_removals();
 };
 
-inline GoalPrivate::GoalPrivate(Pool * pool) : pool(pool) {}
-
 inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
-    : pool(src.pool),
+    : base(src.base),
       staging(src.staging),
       installonly(src.installonly),
       installonly_limit(src.installonly_limit),
@@ -157,7 +159,7 @@ inline GoalPrivate::~GoalPrivate() {
 
 inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
     if (this != &src) {
-        pool = src.pool;
+        base = src.base;
         staging = src.staging;
         installonly = src.installonly;
         installonly_limit = src.installonly_limit;
@@ -181,14 +183,15 @@ inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
 }
 
 inline void GoalPrivate::set_installonly(const std::vector<std::string> & installonly_names) {
+    auto & pool = get_pool(base);
     for (auto & name : installonly_names) {
-        queue_pushunique(&installonly.get_queue(), pool_str2id(pool, name.c_str(), 1));
+        queue_pushunique(&installonly.get_queue(), pool.str2id(name.c_str(), 1));
     }
 }
 
 inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
-    Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
+    Id what = get_pool(base).queuetowhatprovides(queue);
     staging.push_back(
         SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
@@ -211,7 +214,7 @@ inline void GoalPrivate::add_remove(const libdnf::solv::SolvMap & solv_map, bool
 
 inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
-    Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
+    Id what = get_pool(base).queuetowhatprovides(queue);
     staging.push_back(
         SOLVER_UPDATE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (best ? SOLVER_FORCEBEST : 0) |
             (clean_deps ? SOLVER_CLEANDEPS : 0) | SOLVER_TARGETED,
@@ -220,7 +223,7 @@ inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, b
 
 inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
-    Id what = pool_queuetowhatprovides(pool, &queue.get_queue());
+    Id what = get_pool(base).queuetowhatprovides(queue);
     staging.push_back(
         SOLVER_DISTUPGRADE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),

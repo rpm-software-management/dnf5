@@ -51,7 +51,8 @@ public:
     };
 
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
-    explicit PackageSet(const PackageSackWeakPtr & sack);
+    explicit PackageSet(const libdnf::BaseWeakPtr & base);
+    explicit PackageSet(libdnf::Base & base);
 
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_clone(DnfPackageSet * pset)
     PackageSet(const PackageSet & pset);
@@ -142,9 +143,8 @@ public:
     /// @since 5.0
     void remove(const Package & pkg);
 
-    // TODO(dmach): replace with get_base()?
     // @replaces libdnf:sack/packageset.hpp:method:PackageSet.getSack()
-    PackageSackWeakPtr get_sack() const;
+    libdnf::BaseWeakPtr get_base() const;
 
     /// @return Number of elements in the set.
     //
@@ -160,7 +160,7 @@ private:
     friend class Transaction;
     friend class libdnf::base::Transaction;
     friend libdnf::Goal;
-    PackageSet(const PackageSackWeakPtr & sack, libdnf::solv::SolvMap & solv_map);
+    PackageSet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map);
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

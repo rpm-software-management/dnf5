@@ -37,7 +37,8 @@ using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
 class RepoSack : public sack::Sack<Repo> {
 public:
-    explicit RepoSack(libdnf::Base & base) : base(&base) {}
+    explicit RepoSack(const libdnf::BaseWeakPtr & base) : base(base) {}
+    explicit RepoSack(libdnf::Base & base);
 
     /// Creates new repository and add it into RepoSack
     RepoWeakPtr new_repo(const std::string & id);
@@ -81,7 +82,7 @@ private:
     /// The files in the directory are read in alphabetical order.
     void new_repos_from_dir(const std::string & dir_path);
 
-    Base * base;
+    BaseWeakPtr base;
 };
 
 }  // namespace libdnf::repo

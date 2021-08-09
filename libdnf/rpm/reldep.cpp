@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/reldep.hpp"
 
-#include "package_sack_impl.hpp"
+#include "libdnf/solv/pool.hpp"
 #include "libdnf/solv/reldep_parser.hpp"
 
 // workaround, libsolv lacks 'extern "C"' in its header file
@@ -34,58 +34,58 @@ extern "C" {
 namespace libdnf::rpm {
 
 
-Reldep::Reldep(PackageSack * sack, ReldepId dependency_id) : sack(sack->get_weak_ptr()), id(dependency_id) {}
+Reldep::Reldep(const BaseWeakPtr & base, ReldepId dependency_id) : base(base), id(dependency_id) {}
 
-Reldep::Reldep(PackageSack * sack, const char * name, const char * version, CmpType cmp_type)
-    : sack(sack->get_weak_ptr()) {
-    id = get_reldep_id(sack, name, version, cmp_type);
+Reldep::Reldep(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type) : base(base) {
+    id = get_reldep_id(base, name, version, cmp_type);
 }
 
-Reldep::Reldep(const PackageSackWeakPtr & sack, const std::string & reldep_string) : sack(sack) {
-    id = get_reldep_id(sack.get(), reldep_string);
+Reldep::Reldep(const BaseWeakPtr & base, const std::string & reldep_string) : base(base) {
+    id = get_reldep_id(base, reldep_string);
 }
 
-Reldep::Reldep(Reldep && reldep) : sack(std::move(reldep.sack)), id(std::move(reldep.id)) {}
+Reldep::Reldep(libdnf::Base & base, const std::string & reldep_string) : Reldep(base.get_weak_ptr(), reldep_string) {}
+
+Reldep::Reldep(Reldep && reldep) : base(std::move(reldep.base)), id(std::move(reldep.id)) {}
 
 const char * Reldep::get_name() const {
-    return pool_id2str(sack->p_impl->pool, id.id);
+    return get_pool(base).id2str(id.id);
 }
 const char * Reldep::get_relation() const {
-    return pool_id2rel(sack->p_impl->pool, id.id);
+    return get_pool(base).id2rel(id.id);
 }
 const char * Reldep::get_version() const {
-    return pool_id2evr(sack->p_impl->pool, id.id);
+    return get_pool(base).id2evr(id.id);
 }
 std::string Reldep::to_string() {
-    auto * cstring = pool_dep2str(sack->p_impl->pool, id.id);
+    auto * cstring = get_pool(base).dep2str(id.id);
     return cstring ? std::string(cstring) : std::string();
 }
 
-ReldepId Reldep::get_reldep_id(PackageSack * sack, const char * name, const char * version, CmpType cmp_type, int create) {
+ReldepId Reldep::get_reldep_id(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type, int create) {
     static_assert(
         static_cast<int>(Reldep::CmpType::EQ) == REL_EQ, "Reldep::ComparisonType::EQ is not identical to solv/REL_EQ");
     static_assert(
         static_cast<int>(Reldep::CmpType::LT) == REL_LT, "Reldep::ComparisonType::LT is not identical to solv/REL_LT");
     static_assert(
         static_cast<int>(Reldep::CmpType::GT) == REL_GT, "Reldep::ComparisonType::GT is not identical to solv/REL_GT");
-    Pool * pool = sack->p_impl->pool;
-    Id id = pool_str2id(pool, name, create);
+    auto & pool = get_pool(base);
+    Id id = pool.str2id(name, create);
     if (id == 0) {
         return ReldepId();
     }
 
     if (version) {
-        Id evr_id = pool_str2id(pool, version, 1);
-        id = pool_rel2id(pool, id, evr_id, static_cast<int>(cmp_type), 1);
+        Id evr_id = pool.str2id(version, 1);
+        id = pool.rel2id(id, evr_id, static_cast<int>(cmp_type), true);
     }
     return ReldepId(id);
 }
 
-ReldepId Reldep::get_reldep_id(PackageSack * sack, const std::string & reldep_str, int create) {
+ReldepId Reldep::get_reldep_id(const BaseWeakPtr & base, const std::string & reldep_str, int create) {
     if (reldep_str[0] == '(') {
         // Rich dependency
-        Pool * pool = sack->p_impl->pool;
-        Id id = pool_parserpmrichdep(pool, reldep_str.c_str());
+        Id id = pool_parserpmrichdep(*get_pool(base), reldep_str.c_str());
         // TODO(jmracek) Replace runtime_error. Do we need to throw an error?
         if (id == 0) {
             throw std::runtime_error("Cannot parse a dependency string");
@@ -98,7 +98,7 @@ ReldepId Reldep::get_reldep_id(PackageSack * sack, const std::string & reldep_st
         throw std::runtime_error("Cannot parse a dependency string");
     }
     return get_reldep_id(
-        sack, dep_splitter.get_name_cstr(), dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type(), create);
+        base, dep_splitter.get_name_cstr(), dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type(), create);
 }
 
 }  // namespace libdnf::rpm

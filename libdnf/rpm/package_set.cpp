@@ -30,7 +30,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::rpm {
 
 
-PackageSet::PackageSet(const PackageSackWeakPtr & sack) : p_impl(new Impl(sack)) {}
+PackageSet::PackageSet(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
+
+PackageSet::PackageSet(libdnf::Base & base) : PackageSet(base.get_weak_ptr()) {}
 
 PackageSet::PackageSet(const PackageSet & other) : p_impl(new Impl(*other.p_impl)) {}
 
@@ -38,7 +40,7 @@ PackageSet::PackageSet(const PackageSet & other) : p_impl(new Impl(*other.p_impl
 PackageSet::PackageSet(PackageSet && other) noexcept : p_impl(new Impl(std::move(*other.p_impl))) {}
 
 
-PackageSet::PackageSet(const PackageSackWeakPtr & sack, libdnf::solv::SolvMap & solv_map) : p_impl(new Impl(sack, solv_map)) {}
+PackageSet::PackageSet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map) : p_impl(new Impl(base, solv_map)) {}
 
 
 PackageSet::~PackageSet() = default;
@@ -68,9 +70,9 @@ PackageSet::iterator PackageSet::end() const {
 
 
 PackageSet & PackageSet::operator|=(const PackageSet & other) {
-    if (p_impl->sack != other.p_impl->sack) {
+    if (p_impl->base != other.p_impl->base) {
         throw UsedDifferentSack(
-            "Cannot perform the action with PackageSet instances initialized with different PackageSacks");
+            "Cannot perform the action with PackageSet instances initialized with different Base");
     }
     *p_impl |= *other.p_impl;
     return *this;
@@ -78,9 +80,9 @@ PackageSet & PackageSet::operator|=(const PackageSet & other) {
 
 
 PackageSet & PackageSet::operator-=(const PackageSet & other) {
-    if (p_impl->sack != other.p_impl->sack) {
+    if (p_impl->base != other.p_impl->base) {
         throw UsedDifferentSack(
-            "Cannot perform the action with PackageSet instances initialized with different PackageSacks");
+            "Cannot perform the action with PackageSet instances initialized with different Base");
     }
     *p_impl -= *other.p_impl;
     return *this;
@@ -88,9 +90,9 @@ PackageSet & PackageSet::operator-=(const PackageSet & other) {
 
 
 PackageSet & PackageSet::operator&=(const PackageSet & other) {
-    if (p_impl->sack != other.p_impl->sack) {
+    if (p_impl->base != other.p_impl->base) {
         throw UsedDifferentSack(
-            "Cannot perform the action with PackageSet instances initialized with different PackageSacks");
+            "Cannot perform the action with PackageSet instances initialized with different Base");
     }
     *p_impl &= *other.p_impl;
     return *this;
@@ -132,8 +134,8 @@ void PackageSet::remove(const Package & pkg) {
 }
 
 
-PackageSackWeakPtr PackageSet::get_sack() const {
-    return p_impl->get_sack();
+BaseWeakPtr PackageSet::get_base() const {
+    return p_impl->base;
 }
 
 

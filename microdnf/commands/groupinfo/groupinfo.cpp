@@ -114,8 +114,8 @@ void CmdGroupinfo::run([[maybe_unused]] Context & ctx) {
 
     // Load group sack
     // TODO(pkratoch): use comps from base and real repositories
-    std::unique_ptr<libdnf::Base> base = std::make_unique<libdnf::Base>();
-    libdnf::comps::Comps comps(*base.get());
+    libdnf::Base base;
+    libdnf::comps::Comps comps(base);
     comps.load_installed();
     std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
     const char * reponame = "repo";

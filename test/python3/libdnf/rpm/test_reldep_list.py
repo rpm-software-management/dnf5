@@ -31,10 +31,10 @@ class TestReldepList(support.LibdnfTestCase):
         self.add_repo_repomd("repomd-repo1")
 
     def test_add(self):
-        a = libdnf.rpm.Reldep(self.sack, "python3-labirinto = 4.2.0")
-        b = libdnf.rpm.Reldep(self.sack, "(lab-list if labirinto.txt)")
+        a = libdnf.rpm.Reldep(self.base, "python3-labirinto = 4.2.0")
+        b = libdnf.rpm.Reldep(self.base, "(lab-list if labirinto.txt)")
 
-        list1 = libdnf.rpm.ReldepList(self.sack)
+        list1 = libdnf.rpm.ReldepList(self.base)
         self.assertEqual(list1.size(), 0)
         list1.add(a)
         # TODO(jrohel): Shall we have add() with ReldepId as a part of public API?
@@ -43,11 +43,11 @@ class TestReldepList(support.LibdnfTestCase):
         self.assertEqual(list1.size(), 3)
 
     def test_get(self):
-        a = libdnf.rpm.Reldep(self.sack, "python3-labirinto = 4.2.0")
-        b = libdnf.rpm.Reldep(self.sack, "(lab-list if labirinto.txt)")
-        c = libdnf.rpm.Reldep(self.sack, "(labirinto unless labirinto_c)")
+        a = libdnf.rpm.Reldep(self.base, "python3-labirinto = 4.2.0")
+        b = libdnf.rpm.Reldep(self.base, "(lab-list if labirinto.txt)")
+        c = libdnf.rpm.Reldep(self.base, "(labirinto unless labirinto_c)")
 
-        list1 = libdnf.rpm.ReldepList(self.sack)
+        list1 = libdnf.rpm.ReldepList(self.base)
         list1.add(a)
         list1.add(b)
         list1.add(c)
@@ -57,11 +57,11 @@ class TestReldepList(support.LibdnfTestCase):
         self.assertEqual(list1.get_id(2).id, c.get_id().id)
 
     def test_compare(self):
-        a = libdnf.rpm.Reldep(self.sack, "python3-labirinto = 4.2.0")
-        b = libdnf.rpm.Reldep(self.sack, "(lab-list if labirinto.txt)")
+        a = libdnf.rpm.Reldep(self.base, "python3-labirinto = 4.2.0")
+        b = libdnf.rpm.Reldep(self.base, "(lab-list if labirinto.txt)")
 
-        list1 = libdnf.rpm.ReldepList(self.sack)
-        list2 = libdnf.rpm.ReldepList(self.sack)
+        list1 = libdnf.rpm.ReldepList(self.base)
+        list2 = libdnf.rpm.ReldepList(self.base)
         self.assertEqual(list1, list2)
 
         list1.add(a)
@@ -73,17 +73,17 @@ class TestReldepList(support.LibdnfTestCase):
         self.assertEqual(list1, list2)
 
     def test_append(self):
-        a = libdnf.rpm.Reldep(self.sack, "python3-labirinto = 4.2.0")
-        b = libdnf.rpm.Reldep(self.sack, "(lab-list if labirinto.txt)")
-        c = libdnf.rpm.Reldep(self.sack, "(labirinto unless labirinto_c)")
-        d = libdnf.rpm.Reldep(self.sack, "labirinto.txt")
+        a = libdnf.rpm.Reldep(self.base, "python3-labirinto = 4.2.0")
+        b = libdnf.rpm.Reldep(self.base, "(lab-list if labirinto.txt)")
+        c = libdnf.rpm.Reldep(self.base, "(labirinto unless labirinto_c)")
+        d = libdnf.rpm.Reldep(self.base, "labirinto.txt")
 
-        list1 = libdnf.rpm.ReldepList(self.sack)
+        list1 = libdnf.rpm.ReldepList(self.base)
         list1.add(a)
         list1.add(b)
         list1.add_reldep("delgado > 1.2")
 
-        list2 = libdnf.rpm.ReldepList(self.sack)
+        list2 = libdnf.rpm.ReldepList(self.base)
         list2.add(c)
         list2.add(d)
 
@@ -96,13 +96,13 @@ class TestReldepList(support.LibdnfTestCase):
         self.assertEqual(list1.get(4), d)
 
     def test_iterator(self):
-        a = libdnf.rpm.Reldep(self.sack, "python3-labirinto = 4.2.0")
-        b = libdnf.rpm.Reldep(self.sack, "(lab-list if labirinto.txt)")
-        c = libdnf.rpm.Reldep(self.sack, "(labirinto unless labirinto_c)")
-        d = libdnf.rpm.Reldep(self.sack, "labirinto.txt")
+        a = libdnf.rpm.Reldep(self.base, "python3-labirinto = 4.2.0")
+        b = libdnf.rpm.Reldep(self.base, "(lab-list if labirinto.txt)")
+        c = libdnf.rpm.Reldep(self.base, "(labirinto unless labirinto_c)")
+        d = libdnf.rpm.Reldep(self.base, "labirinto.txt")
         expect = [a, b, c, d]
 
-        list1 = libdnf.rpm.ReldepList(self.sack)
+        list1 = libdnf.rpm.ReldepList(self.base)
         for reldep in expect:
             list1.add(reldep)
 
@@ -130,7 +130,7 @@ class TestReldepList(support.LibdnfTestCase):
 
     # add_reldep_with_glob uses libsolvs Dataiterator which needs the actual packages
     def test_add_reldep_with_glob(self):
-        list1 = libdnf.rpm.ReldepList(self.sack)
+        list1 = libdnf.rpm.ReldepList(self.base)
         list1.add_reldep_with_glob("pkg*")
 
         expected = ["pkg", "pkg.conf", "pkg.conf.d", "pkg-libs", "pkg", "pkg", "pkg", "pkg", "pkg", "pkg"]

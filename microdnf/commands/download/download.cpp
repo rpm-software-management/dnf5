@@ -67,8 +67,6 @@ void CmdDownload::set_argument_parser(Context & ctx) {
 void CmdDownload::configure([[maybe_unused]] Context & ctx) {}
 
 void CmdDownload::run(Context & ctx) {
-    auto package_sack = ctx.base.get_rpm_package_sack();
-
     // To search in available repositories (available packages)
     libdnf::repo::RepoQuery enabled_repos(ctx.base);
     enabled_repos.filter_enabled(true);
@@ -78,7 +76,7 @@ void CmdDownload::run(Context & ctx) {
 
     std::cout << std::endl;
 
-    libdnf::rpm::PackageSet result_pset(package_sack);
+    libdnf::rpm::PackageSet result_pset(ctx.base);
     libdnf::rpm::PackageQuery full_package_query(ctx.base);
     for (auto & pattern : *patterns_to_download_options) {
         libdnf::rpm::PackageQuery package_query(full_package_query);

@@ -70,6 +70,18 @@ TempEvr::~TempEvr() {
 }
 
 
+Pool::~Pool() {
+    Id repo_id;
+    repo::LibsolvRepo * r;
+    FOR_REPOS(repo_id, r) {
+        if (auto repo = static_cast<repo::Repo *>(r->appdata)) {
+            repo->p_impl->detach_libsolv_repo();
+        }
+    }
+    pool_free(pool);
+}
+
+
 const char * Pool::get_str_from_pool(Id keyname, Id advisory, int index) const {
     Dataiterator di;
     const char * str = NULL;

@@ -438,7 +438,7 @@ public:
 
 protected:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
-    Package(const PackageSackWeakPtr & sack, PackageId id);
+    Package(const BaseWeakPtr & base, PackageId id);
 
 private:
     friend class PackageSetIterator;
@@ -446,21 +446,21 @@ private:
     friend class libdnf::Goal;
     friend class libdnf::base::Transaction;
 
-    PackageSackWeakPtr sack;
+    BaseWeakPtr base;
     PackageId id;
 };
 
 
-inline Package::Package(const PackageSackWeakPtr & sack, PackageId id) : sack(sack), id(id) {}
+inline Package::Package(const BaseWeakPtr & base, PackageId id) : base(base), id(id) {}
 
 
 inline bool Package::operator==(const Package & other) const noexcept {
-    return id == other.id && sack == other.sack;
+    return id == other.id && base == other.base;
 }
 
 
 inline bool Package::operator!=(const Package & other) const noexcept {
-    return id != other.id || sack != other.sack;
+    return id != other.id || base != other.base;
 }
 
 }  // namespace libdnf::rpm

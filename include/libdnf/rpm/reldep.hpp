@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_RELDEP_HPP
 #define LIBDNF_RPM_RELDEP_HPP
 
-#include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/base/base_weak.hpp"
 
 #include <memory>
 #include <string>
@@ -28,9 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::rpm {
-
-class PackageSack;
-using PackageSackWeakPtr = WeakPtr<PackageSack, false>;
 
 struct ReldepId {
 public:
@@ -57,7 +54,8 @@ public:
     /// @param sack p_sack:...
     /// @param dependency p_dependency:...
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, const std::string & dependency)
-    Reldep(const PackageSackWeakPtr & sack, const std::string & reldep_string);
+    Reldep(const libdnf::BaseWeakPtr & base, const std::string & reldep_string);
+    Reldep(libdnf::Base & base, const std::string & reldep_string);
 
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(const Dependency & dependency);
     Reldep(const Reldep & reldep) = default;
@@ -92,7 +90,7 @@ public:
 protected:
     /// @brief Creates a reldep from Id
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:Dependency(Sack * sack, Id id)
-    Reldep(PackageSack * sack, ReldepId dependency_id);
+    Reldep(const BaseWeakPtr & base, ReldepId dependency_id);
 
 private:
     friend class ReldepList;
@@ -100,43 +98,43 @@ private:
 
     /// @brief Creates a reldep from name, version, and comparison type.
     ///
-    /// @param sack p_sack: PackageSack*
+    /// @param base: The Base
     /// @param name p_name: Required
     /// @param version p_version: Can be also NULL
     /// @param cmpType p_cmpType: ComparisonType, and their combinations
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:get_id()
     /// @replaces libdnf/dnf-reldep.h:function:dnf_reldep_new(DnfSack *sack, const char *name, int cmp_type, const char *evr)
-    Reldep(PackageSack * sack, const char * name, const char * version, CmpType cmp_type);
+    Reldep(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type);
 
     /// @brief Returns Id of reldep
     ///
-    /// @param sack p_sack: PackageSack*
+    /// @param base: The Base
     /// @param name p_name: Required
     /// @param version p_version: Can be also NULL
     /// @param cmpType p_cmpType: ComparisonType, and their combinations
     /// @return DependencyId
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char *name, const char *version, int cmpType)
     static ReldepId get_reldep_id(
-        PackageSack * sack, const char * name, const char * version, CmpType cmp_type, int create = 1);
+        const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type, int create = 1);
 
     /// @brief Returns Id of reldep or raises std::runtime_error if parsing fails
     ///
-    /// @param sack p_sack:DnfSack
+    /// @param base: The Base
     /// @param reldepStr p_reldepStr: const Char* of reldep
     /// @return DependencyId
     /// @replaces libdnf/repo/solvable/Dependency.hpp:method:getReldepId(DnfSack *sack, const char * reldepStr)
-    static ReldepId get_reldep_id(PackageSack * sack, const std::string & reldep_str, int create = 1);
+    static ReldepId get_reldep_id(const BaseWeakPtr & base, const std::string & reldep_str, int create = 1);
 
-    PackageSackWeakPtr sack;
+    BaseWeakPtr base;
     ReldepId id;
 };
 
 inline bool Reldep::operator==(const Reldep & other) const noexcept {
-    return id == other.id && sack == other.sack;
+    return id == other.id && base == other.base;
 }
 
 inline bool Reldep::operator!=(const Reldep & other) const noexcept {
-    return id != other.id || sack != other.sack;
+    return id != other.id || base != other.base;
 }
 
 }  // namespace libdnf::rpm

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_module.hpp"
 
 #include "libdnf/advisory/advisory_module_private.hpp"
-#include "libdnf/rpm/package_sack_impl.hpp"
+#include "libdnf/solv/pool.hpp"
 
 
 namespace libdnf::advisory {
@@ -45,39 +45,34 @@ AdvisoryModule & AdvisoryModule::operator=(AdvisoryModule && src) noexcept {
 
 
 std::string AdvisoryModule::get_name() const {
-    Pool * pool = p_impl->sack->p_impl->get_pool();
-    return pool_id2str(pool, p_impl->name);
+    return get_pool(p_impl->base).id2str(p_impl->name);
 }
 
 std::string AdvisoryModule::get_stream() const {
-    Pool * pool = p_impl->sack->p_impl->get_pool();
-    return pool_id2str(pool, p_impl->stream);
+    return get_pool(p_impl->base).id2str(p_impl->stream);
 }
 std::string AdvisoryModule::get_version() const {
-    Pool * pool = p_impl->sack->p_impl->get_pool();
-    return pool_id2str(pool, p_impl->version);
+    return get_pool(p_impl->base).id2str(p_impl->version);
 }
 std::string AdvisoryModule::get_context() const {
-    Pool * pool = p_impl->sack->p_impl->get_pool();
-    return pool_id2str(pool, p_impl->context);
+    return get_pool(p_impl->base).id2str(p_impl->context);
 }
 std::string AdvisoryModule::get_arch() const {
-    Pool * pool = p_impl->sack->p_impl->get_pool();
-    return pool_id2str(pool, p_impl->arch);
+    return get_pool(p_impl->base).id2str(p_impl->arch);
 }
 AdvisoryId AdvisoryModule::get_advisory_id() const {
     return p_impl->advisory;
 }
 Advisory AdvisoryModule::get_advisory() const {
-    return Advisory(p_impl->sack, p_impl->advisory);
+    return Advisory(p_impl->base, p_impl->advisory);
 }
 AdvisoryCollection AdvisoryModule::get_advisory_collection() const {
-    return AdvisoryCollection(p_impl->sack, p_impl->advisory, p_impl->owner_collection_index);
+    return AdvisoryCollection(p_impl->base, p_impl->advisory, p_impl->owner_collection_index);
 }
 
 // AdvisoryModule::Impl
 AdvisoryModule::Impl::Impl(
-    libdnf::rpm::PackageSack & sack,
+    const libdnf::BaseWeakPtr & base,
     AdvisoryId advisory,
     int owner_collection_index,
     Id name,
@@ -85,7 +80,7 @@ AdvisoryModule::Impl::Impl(
     Id version,
     Id context,
     Id arch)
-    : sack(sack.get_weak_ptr())
+    : base(base)
     , advisory(advisory)
     , owner_collection_index(owner_collection_index)
     , name(name)
@@ -95,7 +90,7 @@ AdvisoryModule::Impl::Impl(
     , arch(arch) {}
 
 AdvisoryModule::Impl::Impl(const Impl & other)
-    : sack(other.sack)
+    : base(other.base)
     , advisory(other.advisory)
     , owner_collection_index(other.owner_collection_index)
     , name(other.name)
@@ -105,7 +100,7 @@ AdvisoryModule::Impl::Impl(const Impl & other)
     , arch(other.arch) {}
 
 AdvisoryModule::Impl::Impl(Impl && other)
-    : sack(std::move(other.sack))
+    : base(std::move(other.base))
     , advisory(std::move(other.advisory))
     , owner_collection_index(other.owner_collection_index)
     , name(std::move(other.name))
@@ -115,7 +110,7 @@ AdvisoryModule::Impl::Impl(Impl && other)
     , arch(std::move(other.arch)) {}
 
 AdvisoryModule::Impl & AdvisoryModule::Impl::operator=(const Impl & other) {
-    sack = other.sack;
+    base = other.base;
     advisory = other.advisory;
     owner_collection_index = other.owner_collection_index;
     name = other.name;
@@ -127,7 +122,7 @@ AdvisoryModule::Impl & AdvisoryModule::Impl::operator=(const Impl & other) {
 }
 
 AdvisoryModule::Impl & AdvisoryModule::Impl::operator=(Impl && other) {
-    sack = std::move(other.sack);
+    base = std::move(other.base);
     advisory = std::move(other.advisory);
     owner_collection_index = std::move(other.owner_collection_index);
     name = std::move(other.name);

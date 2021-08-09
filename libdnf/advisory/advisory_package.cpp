@@ -68,15 +68,15 @@ AdvisoryId AdvisoryPackage::get_advisory_id() const {
     return p_impl->get_advisory_id();
 }
 Advisory AdvisoryPackage::get_advisory() const {
-    return Advisory(p_impl->sack, p_impl->get_advisory_id());
+    return Advisory(p_impl->base, p_impl->get_advisory_id());
 }
 AdvisoryCollection AdvisoryPackage::get_advisory_collection() const {
-    return AdvisoryCollection(p_impl->sack, p_impl->get_advisory_id(), p_impl->owner_collection_index);
+    return AdvisoryCollection(p_impl->base, p_impl->get_advisory_id(), p_impl->owner_collection_index);
 }
 
 // AdvisoryPackage::Impl
 AdvisoryPackage::Impl::Impl(
-    libdnf::rpm::PackageSack & sack,
+    const libdnf::BaseWeakPtr & base,
     AdvisoryId advisory,
     int owner_collection_index,
     Id name,
@@ -89,7 +89,7 @@ AdvisoryPackage::Impl::Impl(
     , evr(evr)
     , arch(arch)
     , filename(filename)
-    , sack(sack.get_weak_ptr()) {}
+    , base(base) {}
 
 AdvisoryPackage::Impl::Impl(const Impl & other)
     : advisory(other.advisory)
@@ -98,7 +98,7 @@ AdvisoryPackage::Impl::Impl(const Impl & other)
     , evr(other.evr)
     , arch(other.arch)
     , filename(other.filename)
-    , sack(other.sack) {}
+    , base(other.base) {}
 
 AdvisoryPackage::Impl::Impl(Impl && other)
     : advisory(std::move(other.advisory))
@@ -107,7 +107,7 @@ AdvisoryPackage::Impl::Impl(Impl && other)
     , evr(std::move(other.evr))
     , arch(std::move(other.arch))
     , filename(std::move(other.filename))
-    , sack(std::move(other.sack)) {}
+    , base(std::move(other.base)) {}
 
 AdvisoryPackage::Impl & AdvisoryPackage::Impl::operator=(const Impl & other) {
     advisory = other.advisory;
@@ -116,7 +116,7 @@ AdvisoryPackage::Impl & AdvisoryPackage::Impl::operator=(const Impl & other) {
     evr = other.evr;
     arch = other.arch;
     filename = other.filename;
-    sack = other.sack;
+    base = other.base;
     return *this;
 }
 
@@ -127,29 +127,26 @@ AdvisoryPackage::Impl & AdvisoryPackage::Impl::operator=(Impl && other) {
     evr = std::move(other.evr);
     arch = std::move(other.arch);
     filename = std::move(other.filename);
-    sack = std::move(other.sack);
+    base = std::move(other.base);
     return *this;
 }
 
 
 std::string AdvisoryPackage::Impl::get_name() const {
-    Pool * pool = sack->p_impl->get_pool();
-    return pool_id2str(pool, name);
+    return get_pool(base).id2str(name);
 }
 
 std::string AdvisoryPackage::Impl::get_version() const {
-    libdnf::solv::Pool pool(sack->p_impl->get_pool());
+    auto & pool = get_pool(base);
     return pool.split_evr(pool.id2str(evr)).v;
 }
 
 std::string AdvisoryPackage::Impl::get_evr() const {
-    Pool * pool = sack->p_impl->get_pool();
-    return pool_id2str(pool, evr);
+    return get_pool(base).id2str(evr);
 }
 
 std::string AdvisoryPackage::Impl::get_arch() const {
-    Pool * pool = sack->p_impl->get_pool();
-    return pool_id2str(pool, arch);
+    return get_pool(base).id2str(arch);
 }
 
 }  // namespace libdnf::advisory

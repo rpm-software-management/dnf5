@@ -19,31 +19,29 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_sack.hpp"
 
-#include "libdnf/rpm/package_sack_impl.hpp"
+#include "libdnf/solv/pool.hpp"
 #include "libdnf/solv/solv_map.hpp"
 
 #include <solv/dataiterator.h>
 
 namespace libdnf::advisory {
 
-AdvisorySack::AdvisorySack(libdnf::Base & base) : base(&base) {}
+AdvisorySack::AdvisorySack(const libdnf::BaseWeakPtr & base) : base(base) {}
 
 AdvisorySack::~AdvisorySack() = default;
 
-void AdvisorySack::load_advisories_from_package_sack() {
-    auto package_sack = base->get_rpm_package_sack();
+void AdvisorySack::load_advisories() {
+    auto & pool = get_pool(base);
 
-    if (cached_solvables_size == package_sack->p_impl->get_nsolvables()) {
+    if (cached_solvables_size == pool.get_nsolvables()) {
         return;
     }
 
-    Pool * pool = package_sack->p_impl->get_pool();
-
-    data_map = libdnf::solv::SolvMap(pool->nsolvables);
+    data_map = libdnf::solv::SolvMap(pool.get_nsolvables());
 
     Dataiterator di;
 
-    dataiterator_init(&di, pool, 0, 0, 0, 0, 0);
+    dataiterator_init(&di, *pool, 0, 0, 0, 0, 0);
 
     // - We want only advisories that have at least one package in them.
     // - Advisories have their own Ids but advisory packages don't.
@@ -61,7 +59,7 @@ void AdvisorySack::load_advisories_from_package_sack() {
     }
     dataiterator_free(&di);
 
-    cached_solvables_size = pool->nsolvables;
+    cached_solvables_size = pool.get_nsolvables();
 }
 
 BaseWeakPtr AdvisorySack::get_base() const {

@@ -131,7 +131,7 @@ void CmdRepoquery::run(Context & ctx) {
         std::cout << std::endl;
     }
 
-    libdnf::rpm::PackageSet result_pset(package_sack);
+    libdnf::rpm::PackageSet result_pset(ctx.base);
     libdnf::rpm::PackageQuery full_package_query(ctx.base);
     for (auto & pattern : *patterns_to_show_options) {
         libdnf::rpm::PackageQuery package_query(full_package_query);

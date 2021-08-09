@@ -41,7 +41,7 @@ void ReldepListIterator::end() {
 
 
 Reldep ReldepListIterator::operator*() {
-    return {p_impl->reldep_list.get_sack(), ReldepId(**p_impl)};
+    return {p_impl->reldep_list.get_base(), ReldepId(**p_impl)};
 }
 
 

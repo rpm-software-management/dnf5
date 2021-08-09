@@ -45,7 +45,7 @@ private:
     friend AdvisoryModule;
 
     explicit Impl(
-        libdnf::rpm::PackageSack & sack,
+        const libdnf::BaseWeakPtr & base,
         AdvisoryId advisory,
         int owner_collection_index,
         Id name,
@@ -54,7 +54,7 @@ private:
         Id context,
         Id arch);
 
-    libdnf::rpm::PackageSackWeakPtr sack;
+    libdnf::BaseWeakPtr base;
     AdvisoryId advisory;
     int owner_collection_index;
 

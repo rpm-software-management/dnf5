@@ -112,6 +112,7 @@ public:
         USE_OTHER = 1 << 4,
     };
 
+    explicit PackageSack(const libdnf::BaseWeakPtr & base);
     explicit PackageSack(libdnf::Base & base);
     ~PackageSack();
 

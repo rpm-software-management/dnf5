@@ -65,7 +65,6 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
 
     session.fill_sack();
     auto base = session.get_base();
-    auto package_sack = base->get_rpm_package_sack();
 
     // patterns to search
     std::vector<std::string> default_patterns{};
@@ -78,7 +77,7 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     bool with_filenames = key_value_map_get<bool>(options, "with_filenames", true);
     bool with_src = key_value_map_get<bool>(options, "with_src", true);
 
-    libdnf::rpm::PackageSet result_pset(package_sack);
+    libdnf::rpm::PackageSet result_pset(*base);
     libdnf::rpm::PackageQuery full_package_query(*base);
     if (patterns.size() > 0) {
         for (auto & pattern : patterns) {
