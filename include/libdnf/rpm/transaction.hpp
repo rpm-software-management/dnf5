@@ -75,28 +75,21 @@ class TransactionCB {
 public:
     virtual ~TransactionCB() = default;
 
-    virtual void install_progress(
-        const TransactionItem * item, const RpmHeader & header, uint64_t amount, uint64_t total) {}
-    virtual void install_start(const TransactionItem * item, const RpmHeader & header, uint64_t total) {}
-    virtual void install_stop(const TransactionItem * item, const RpmHeader & header, uint64_t amount, uint64_t total) {
-    }
+    virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
+    virtual void install_start(const TransactionItem & item, uint64_t total) {}
+    virtual void install_stop(const TransactionItem & item, uint64_t amount, uint64_t total) {}
     virtual void transaction_progress(uint64_t amount, uint64_t total) {}
     virtual void transaction_start(uint64_t total) {}
     virtual void transaction_stop(uint64_t total) {}
-    virtual void uninstall_progress(
-        const TransactionItem * item, const RpmHeader & header, uint64_t amount, uint64_t total) {}
-    virtual void uninstall_start(const TransactionItem * item, const RpmHeader & header, uint64_t total) {}
-    virtual void uninstall_stop(
-        const TransactionItem * item, const RpmHeader & header, uint64_t amount, uint64_t total) {}
-    virtual void unpack_error(const TransactionItem * item, const RpmHeader & header) {}
-    virtual void cpio_error(const TransactionItem * item, const RpmHeader & header) {}
-    virtual void script_error(
-        const TransactionItem * item, const RpmHeader & header, uint64_t tag, uint64_t return_code) {}
-    virtual void script_start(const TransactionItem * item, const RpmHeader & header, uint64_t tag) {}
-    virtual void script_stop(
-        const TransactionItem * item, const RpmHeader & header, uint64_t tag, uint64_t return_code) {}
-    virtual void elem_progress(
-        const TransactionItem * item, const RpmHeader & header, uint64_t amount, uint64_t total) {}
+    virtual void uninstall_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
+    virtual void uninstall_start(const TransactionItem & item, uint64_t total) {}
+    virtual void uninstall_stop(const TransactionItem & item, uint64_t amount, uint64_t total) {}
+    virtual void unpack_error(const TransactionItem & item) {}
+    virtual void cpio_error(const TransactionItem & item) {}
+    virtual void script_error(const TransactionItem * item, Nevra nevra, uint64_t tag, uint64_t return_code) {}
+    virtual void script_start(const TransactionItem * item, Nevra nevra, uint64_t tag) {}
+    virtual void script_stop(const TransactionItem * item, Nevra nevra, uint64_t tag, uint64_t return_code) {}
+    virtual void elem_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
     virtual void verify_progress(uint64_t amount, uint64_t total) {}
     virtual void verify_start(uint64_t total) {}
     virtual void verify_stop(uint64_t total) {}

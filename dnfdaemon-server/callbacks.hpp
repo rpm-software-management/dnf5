@@ -103,72 +103,48 @@ public:
     void transaction_stop(uint64_t total) override;
 
     // install a package
-    void install_start(
-        const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header, uint64_t) override;
-    void install_progress(
-        const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
-        uint64_t amount,
-        uint64_t total) override;
-    void install_stop(
-        const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
-        uint64_t amount,
-        uint64_t total) override;
+    void install_start(const libdnf::rpm::TransactionItem & item, uint64_t)
+    override;
+    void install_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
+    void install_stop(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
 
     // uninstall a package (the same messages as for install are used)
-    void uninstall_start(
-        const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header, uint64_t total) override {
-        install_start(item, header, total);
+    void uninstall_start(const libdnf::rpm::TransactionItem & item, uint64_t total) override {
+        install_start(item, total);
     }
-    void uninstall_progress(
-        const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
-        uint64_t amount,
-        uint64_t total) override {
-        install_progress(item, header, amount, total);
+    void uninstall_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override {
+        install_progress(item, amount, total);
     }
-    void uninstall_stop(
-        const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
-        uint64_t amount,
-        uint64_t total) override {
-        install_stop(item, header, amount, total);
+    void uninstall_stop(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override {
+        install_stop(item, amount, total);
     }
 
-    void script_start(
-        const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header, uint64_t tag) override;
+    void script_start(const libdnf::rpm::TransactionItem * item, libdnf::rpm::Nevra nevra, uint64_t tag) override;
     void script_stop(
         const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
+        libdnf::rpm::Nevra nevra,
         uint64_t tag,
         uint64_t return_code) override;
     void script_error(
         const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
+        libdnf::rpm::Nevra nevra,
         uint64_t tag,
         uint64_t return_code) override;
 
-    void elem_progress(
-        const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
-        uint64_t amount,
-        uint64_t total) override;
+    void elem_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
 
     void verify_start(uint64_t total) override;
     void verify_progress(uint64_t amount, uint64_t total) override;
     void verify_stop(uint64_t total) override;
 
-    void unpack_error(const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header) override;
-    void cpio_error(
-        const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & /*header*/) override{};
+    void unpack_error(const libdnf::rpm::TransactionItem & item) override;
+    void cpio_error(const libdnf::rpm::TransactionItem & /*item*/) override{};
 
     // whole rpm transaction is finished
     void finish();
 
 private:
-    sdbus::Signal create_signal_pkg(
-        std::string interface, std::string signal_name, const libdnf::rpm::RpmHeader & header);
+    sdbus::Signal create_signal_pkg(std::string interface, std::string signal_name, const std::string & nevra);
 };
 
 #endif

@@ -575,8 +575,7 @@ public:
     }
 
     void install_progress(
-        [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
-        [[maybe_unused]] const libdnf::rpm::RpmHeader & header,
+        [[maybe_unused]] const libdnf::rpm::TransactionItem & item,
         uint64_t amount,
         [[maybe_unused]] uint64_t total) override {
         active_progress_bar->set_ticks(static_cast<int64_t>(amount));
@@ -585,44 +584,38 @@ public:
         }
     }
 
-    void install_start(
-        [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
-        uint64_t total) override {
+    void install_start(const libdnf::rpm::TransactionItem & item, uint64_t total) override {
         const char * msg{nullptr};
-        if (item) {
-            switch (item->get_action()) {
-                case libdnf::transaction::TransactionItemAction::UPGRADE:
-                    msg = "Upgrading ";
-                    break;
-                case libdnf::transaction::TransactionItemAction::DOWNGRADE:
-                    msg = "Downgrading ";
-                    break;
-                case libdnf::transaction::TransactionItemAction::REINSTALL:
-                    msg = "Reinstalling ";
-                    break;
-                case libdnf::transaction::TransactionItemAction::INSTALL:
-                case libdnf::transaction::TransactionItemAction::REMOVE:
-                case libdnf::transaction::TransactionItemAction::REPLACED:
-                    break;
-                case libdnf::transaction::TransactionItemAction::REINSTALLED:
-                case libdnf::transaction::TransactionItemAction::UPGRADED:
-                case libdnf::transaction::TransactionItemAction::DOWNGRADED:
-                case libdnf::transaction::TransactionItemAction::OBSOLETE:
-                case libdnf::transaction::TransactionItemAction::OBSOLETED:
-                case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-                    throw libdnf::AssertionError("Unexpected action in TransactionPackage: {}", item->get_action());
-            }
+        switch (item.get_action()) {
+            case libdnf::transaction::TransactionItemAction::UPGRADE:
+                msg = "Upgrading ";
+                break;
+            case libdnf::transaction::TransactionItemAction::DOWNGRADE:
+                msg = "Downgrading ";
+                break;
+            case libdnf::transaction::TransactionItemAction::REINSTALL:
+                msg = "Reinstalling ";
+                break;
+            case libdnf::transaction::TransactionItemAction::INSTALL:
+            case libdnf::transaction::TransactionItemAction::REMOVE:
+            case libdnf::transaction::TransactionItemAction::REPLACED:
+                break;
+            case libdnf::transaction::TransactionItemAction::REINSTALLED:
+            case libdnf::transaction::TransactionItemAction::UPGRADED:
+            case libdnf::transaction::TransactionItemAction::DOWNGRADED:
+            case libdnf::transaction::TransactionItemAction::OBSOLETE:
+            case libdnf::transaction::TransactionItemAction::OBSOLETED:
+            case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+                throw libdnf::AssertionError("Unexpected action in TransactionPackage: {}", item.get_action());
         }
         if (!msg) {
             msg = "Installing ";
         }
-        new_progress_bar(static_cast<int64_t>(total), msg + header.get_full_nevra());
+        new_progress_bar(static_cast<int64_t>(total), msg + item.get_package().get_full_nevra());
     }
 
     void install_stop(
-        [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
-        [[maybe_unused]] const libdnf::rpm::RpmHeader & header,
+        [[maybe_unused]] const libdnf::rpm::TransactionItem & item,
         [[maybe_unused]] uint64_t amount,
         [[maybe_unused]] uint64_t total) override {
         multi_progress_bar.print();
@@ -645,8 +638,7 @@ public:
     }
 
     void uninstall_progress(
-        [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
-        [[maybe_unused]] const libdnf::rpm::RpmHeader & header,
+        [[maybe_unused]] const libdnf::rpm::TransactionItem & item,
         uint64_t amount,
         [[maybe_unused]] uint64_t total) override {
         active_progress_bar->set_ticks(static_cast<int64_t>(amount));
@@ -655,76 +647,72 @@ public:
         }
     }
 
-    void uninstall_start(
-        [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
-        uint64_t total) override {
+    void uninstall_start(const libdnf::rpm::TransactionItem & item, uint64_t total) override {
         const char * msg{nullptr};
-        if (item) {
-            if (item->get_action() == libdnf::transaction::TransactionItemAction::REMOVE || item->get_action() == libdnf::transaction::TransactionItemAction::REPLACED) {
-                msg = "Erasing ";
-            }
+        if (item.get_action() == libdnf::transaction::TransactionItemAction::REMOVE ||
+            item.get_action() == libdnf::transaction::TransactionItemAction::REPLACED) {
+            msg = "Erasing ";
         }
         if (!msg) {
             msg = "Cleanup ";
         }
-        new_progress_bar(static_cast<int64_t>(total), msg + header.get_full_nevra());
+        new_progress_bar(static_cast<int64_t>(total), msg + item.get_package().get_full_nevra());
     }
 
     void uninstall_stop(
-        [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
-        [[maybe_unused]] const libdnf::rpm::RpmHeader & header,
+        [[maybe_unused]] const libdnf::rpm::TransactionItem & item,
         [[maybe_unused]] uint64_t amount,
         [[maybe_unused]] uint64_t total) override {
         multi_progress_bar.print();
     }
 
-    void unpack_error(const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & header) override {
+
+    void unpack_error(const libdnf::rpm::TransactionItem & item) override {
         active_progress_bar->add_message(
-            libdnf::cli::progressbar::MessageType::ERROR, "Unpack errro: " + header.get_full_nevra());
+            libdnf::cli::progressbar::MessageType::ERROR, "Unpack errro: " + item.get_package().get_full_nevra());
         active_progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
         multi_progress_bar.print();
     }
 
-    void cpio_error(const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & header) override {
+    void cpio_error(const libdnf::rpm::TransactionItem & item) override {
         active_progress_bar->add_message(
-            libdnf::cli::progressbar::MessageType::ERROR, "Cpio error: " + header.get_full_nevra());
+            libdnf::cli::progressbar::MessageType::ERROR, "Cpio error: " + item.get_package().get_full_nevra());
         active_progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
         multi_progress_bar.print();
     }
 
     void script_error(
         [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
+        libdnf::rpm::Nevra nevra,
         [[maybe_unused]] uint64_t tag,
-        [[maybe_unused]] uint64_t return_code) override {
+        uint64_t return_code) override {
         active_progress_bar->add_message(
-            libdnf::cli::progressbar::MessageType::ERROR, "Error in scriptlet: " + header.get_full_nevra());
+            libdnf::cli::progressbar::MessageType::ERROR,
+            fmt::format("Error in scriptlet: {} return code {}", to_full_nevra_string(nevra), return_code));
         multi_progress_bar.print();
     }
 
     void script_start(
-        const libdnf::rpm::TransactionItem * /*item*/,
-        const libdnf::rpm::RpmHeader & header,
+        [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
+        libdnf::rpm::Nevra nevra,
         [[maybe_unused]] uint64_t tag) override {
         active_progress_bar->add_message(
-            libdnf::cli::progressbar::MessageType::INFO, "Running scriptlet: " + header.get_full_nevra());
+            libdnf::cli::progressbar::MessageType::INFO, "Running scriptlet: " + to_full_nevra_string(nevra));
         multi_progress_bar.print();
     }
 
     void script_stop(
         [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
-        const libdnf::rpm::RpmHeader & header,
+        libdnf::rpm::Nevra nevra,
         [[maybe_unused]] uint64_t tag,
         [[maybe_unused]] uint64_t return_code) override {
         active_progress_bar->add_message(
-            libdnf::cli::progressbar::MessageType::INFO, "Stop scriptlet: " + header.get_full_nevra());
+            libdnf::cli::progressbar::MessageType::INFO, "Stop scriptlet: " + to_full_nevra_string(nevra));
         multi_progress_bar.print();
     }
 
     void elem_progress(
-        [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
-        [[maybe_unused]] const libdnf::rpm::RpmHeader & header,
+        [[maybe_unused]] const libdnf::rpm::TransactionItem & item,
         [[maybe_unused]] uint64_t amount,
         [[maybe_unused]] uint64_t total) override {
         //std::cout << "Element progress: " << header.get_full_nevra() << " " << amount << '/' << total << std::endl;

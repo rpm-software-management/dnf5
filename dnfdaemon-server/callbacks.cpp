@@ -147,23 +147,19 @@ int DbusRepoCB::progress(double total_to_download, double downloaded) {
 
 
 sdbus::Signal DbusTransactionCB::create_signal_pkg(
-    std::string interface, std::string signal_name, const libdnf::rpm::RpmHeader & header) {
+    std::string interface, std::string signal_name, const std::string & nevra) {
     auto signal = create_signal(interface, signal_name);
-    signal << header.get_full_nevra();
+    signal << nevra;
     return signal;
 }
 
 
-void DbusTransactionCB::install_start(
-    const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header, uint64_t total) {
+void DbusTransactionCB::install_start(const libdnf::rpm::TransactionItem & item, uint64_t total) {
     try {
         dnfdaemon::RpmTransactionItemActions action;
-        if (item) {
-            action = dnfdaemon::transaction_package_to_action(*item);
-        } else {
-            action = dnfdaemon::RpmTransactionItemActions::CLEANUP;
-        }
-        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, header);
+        action = dnfdaemon::transaction_package_to_action(item);
+        auto signal = create_signal_pkg(
+            dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, item.get_package().get_full_nevra());
         signal << static_cast<int>(action);
         signal << total;
         dbus_object->emitSignal(signal);
@@ -171,15 +167,13 @@ void DbusTransactionCB::install_start(
     }
 }
 
-void DbusTransactionCB::install_progress(
-    const libdnf::rpm::TransactionItem * /*item*/,
-    const libdnf::rpm::RpmHeader & header,
-    uint64_t amount,
-    uint64_t total) {
+void DbusTransactionCB::install_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) {
     try {
         if (is_time_to_print()) {
-            auto signal =
-                create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS, header);
+            auto signal = create_signal_pkg(
+                dnfdaemon::INTERFACE_RPM,
+                dnfdaemon::SIGNAL_TRANSACTION_ACTION_PROGRESS,
+                item.get_package().get_full_nevra());
             signal << amount;
             signal << total;
             dbus_object->emitSignal(signal);
@@ -188,13 +182,10 @@ void DbusTransactionCB::install_progress(
     }
 }
 
-void DbusTransactionCB::install_stop(
-    const libdnf::rpm::TransactionItem * /*item*/,
-    const libdnf::rpm::RpmHeader & header,
-    uint64_t /*amount*/,
-    uint64_t total) {
+void DbusTransactionCB::install_stop(const libdnf::rpm::TransactionItem & item, uint64_t /*amount*/, uint64_t total) {
     try {
-        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP, header);
+        auto signal = create_signal_pkg(
+            dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_STOP, item.get_package().get_full_nevra());
         signal << total;
         dbus_object->emitSignal(signal);
     } catch (...) {
@@ -203,9 +194,10 @@ void DbusTransactionCB::install_stop(
 
 
 void DbusTransactionCB::script_start(
-    const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & header, uint64_t tag) {
+    const libdnf::rpm::TransactionItem * /*item*/, libdnf::rpm::Nevra nevra, uint64_t tag) {
     try {
-        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, header);
+        auto signal = create_signal_pkg(
+            dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, to_full_nevra_string(nevra));
         signal << tag;
         dbus_object->emitSignal(signal);
     } catch (...) {
@@ -213,12 +205,10 @@ void DbusTransactionCB::script_start(
 }
 
 void DbusTransactionCB::script_stop(
-    const libdnf::rpm::TransactionItem * /*item*/,
-    const libdnf::rpm::RpmHeader & header,
-    uint64_t tag,
-    uint64_t return_code) {
+    const libdnf::rpm::TransactionItem * /*item*/, libdnf::rpm::Nevra nevra, uint64_t tag, uint64_t return_code) {
     try {
-        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, header);
+        auto signal = create_signal_pkg(
+            dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, to_full_nevra_string(nevra));
         signal << tag;
         signal << return_code;
         dbus_object->emitSignal(signal);
@@ -226,13 +216,12 @@ void DbusTransactionCB::script_stop(
     }
 }
 
-void DbusTransactionCB::elem_progress(
-    const libdnf::rpm::TransactionItem * /*item*/,
-    const libdnf::rpm::RpmHeader & header,
-    uint64_t amount,
-    uint64_t total) {
+void DbusTransactionCB::elem_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) {
     try {
-        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ELEM_PROGRESS, header);
+        auto signal = create_signal_pkg(
+            dnfdaemon::INTERFACE_RPM,
+            dnfdaemon::SIGNAL_TRANSACTION_ELEM_PROGRESS,
+            item.get_package().get_full_nevra());
         signal << amount;
         signal << total;
         dbus_object->emitSignal(signal);
@@ -241,12 +230,10 @@ void DbusTransactionCB::elem_progress(
 }
 
 void DbusTransactionCB::script_error(
-    const libdnf::rpm::TransactionItem * /*item*/,
-    const libdnf::rpm::RpmHeader & header,
-    uint64_t tag,
-    uint64_t return_code) {
+    const libdnf::rpm::TransactionItem * /*item*/, libdnf::rpm::Nevra nevra, uint64_t tag, uint64_t return_code) {
     try {
-        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, header);
+        auto signal = create_signal_pkg(
+            dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, to_full_nevra_string(nevra));
         signal << tag;
         signal << return_code;
         dbus_object->emitSignal(signal);
@@ -313,10 +300,10 @@ void DbusTransactionCB::verify_stop(uint64_t total) {
 }
 
 
-void DbusTransactionCB::unpack_error(
-    const libdnf::rpm::TransactionItem * /*item*/, const libdnf::rpm::RpmHeader & header) {
+void DbusTransactionCB::unpack_error(const libdnf::rpm::TransactionItem & item) {
     try {
-        auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_UNPACK_ERROR, header);
+        auto signal = create_signal_pkg(
+            dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_UNPACK_ERROR, item.get_package().get_full_nevra());
         dbus_object->emitSignal(signal);
     } catch (...) {
     }

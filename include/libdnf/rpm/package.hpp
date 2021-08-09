@@ -47,6 +47,8 @@ class Transaction;
 
 namespace libdnf::rpm {
 
+class Transaction;
+
 struct PackageId {
 public:
     PackageId() = default;
@@ -447,6 +449,7 @@ private:
     friend class PackageSack;
     friend class libdnf::Goal;
     friend class libdnf::base::Transaction;
+    friend class libdnf::rpm::Transaction;
 
     // TODO(jrohel): Assumes unique `rpmdbid`. Support for opening more rpm databases at once?
     Package(const BaseWeakPtr & base, unsigned long long rpmdbid);

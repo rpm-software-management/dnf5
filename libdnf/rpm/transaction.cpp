@@ -569,6 +569,17 @@ private:
     ///     TransactionItemAction::DOWNGRADE, TransactionItemAction::INSTALL
     void install_up_down(TransactionItem & item, libdnf::transaction::TransactionItemAction action);
 
+    static Nevra trans_element_to_nevra(rpmte te) {
+        Nevra nevra;
+        nevra.set_name(rpmteN(te));
+        const char * epoch = rpmteE(te);
+        nevra.set_epoch(epoch ? epoch : "0");
+        nevra.set_version(rpmteV(te));
+        nevra.set_release(rpmteR(te));
+        nevra.set_arch(rpmteA(te));
+        return nevra;
+    };
+
     /// Function triggered by rpmtsNotifyChange()
     ///
     /// On explicit install/erase add events, "other" is NULL, on implicit
@@ -649,18 +660,20 @@ private:
         auto & log = *transaction->base->get_logger();
         auto & cb = *cb_info->cb;
         auto * trans_element = static_cast<rpmte>(const_cast<void *>(te));
-        auto * hdr = trans_element ? rpmteHeader(trans_element) : nullptr;
         auto * item = trans_element ? static_cast<TransactionItem *>(rpmteUserdata(trans_element)) : nullptr;
 
         switch (what) {
             case RPMCALLBACK_INST_PROGRESS:
-                cb.install_progress(item, RpmHeader(hdr), amount, total);
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                cb.install_progress(*item, amount, total);
                 break;
             case RPMCALLBACK_INST_START:
                 // Install? Maybe upgrade/downgrade/...obsolete?
-                cb.install_start(item, RpmHeader(hdr), total);
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                cb.install_start(*item, total);
                 break;
             case RPMCALLBACK_INST_OPEN_FILE: {
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
                 auto file_path = item->get_package().get_package_path();
                 if (file_path.empty()) {
                     return nullptr;
@@ -684,13 +697,16 @@ private:
                 cb.transaction_stop(total);
                 break;
             case RPMCALLBACK_UNINST_PROGRESS:
-                cb.uninstall_progress(item, RpmHeader(hdr), amount, total);
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                cb.uninstall_progress(*item, amount, total);
                 break;
             case RPMCALLBACK_UNINST_START:
-                cb.uninstall_start(item, RpmHeader(hdr), total);
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                cb.uninstall_start(*item, total);
                 break;
             case RPMCALLBACK_UNINST_STOP:
-                cb.uninstall_stop(item, RpmHeader(hdr), amount, total);
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                cb.uninstall_stop(*item, amount, total);
                 break;
             case RPMCALLBACK_REPACKAGE_PROGRESS:  // obsolete, unused
             case RPMCALLBACK_REPACKAGE_START:     // obsolete, unused
@@ -698,16 +714,18 @@ private:
                 log.info("Warning: got RPMCALLBACK_REPACKAGE_* obsolete callback");
                 break;
             case RPMCALLBACK_UNPACK_ERROR:
-                cb.unpack_error(item, RpmHeader(hdr));
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                cb.unpack_error(*item);
                 break;
             case RPMCALLBACK_CPIO_ERROR:
                 // Not found usage in librpm.
-                cb.cpio_error(item, RpmHeader(hdr));
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                cb.cpio_error(*item);
                 break;
             case RPMCALLBACK_SCRIPT_ERROR:
                 // amount is script tag
                 // total is return code - if (!RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_OK
-                cb.script_error(item, RpmHeader(hdr), amount, total);
+                cb.script_error(item, trans_element_to_nevra(trans_element), amount, total);
                 break;
             case RPMCALLBACK_SCRIPT_START:
                 // amount is script tag
@@ -729,18 +747,20 @@ private:
                 //   RPMTAG_TRANSFILETRIGGERSCRIPTS; "%transfiletriggerin";
                 //   RPMTAG_TRANSFILETRIGGERSCRIPTS; "%transfiletriggerun";
                 //   RPMTAG_TRANSFILETRIGGERSCRIPTS; "%transfiletriggerpostun";
-                cb.script_start(item, RpmHeader(hdr), amount);
+                cb.script_start(item, trans_element_to_nevra(trans_element), amount);
                 break;
             case RPMCALLBACK_SCRIPT_STOP:
                 // amount is script tag
                 // total is return code - if (error && !RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_NOTFOUND
-                cb.script_stop(item, RpmHeader(hdr), amount, total);
+                cb.script_stop(item, trans_element_to_nevra(trans_element), amount, total);
                 break;
             case RPMCALLBACK_INST_STOP:
-                cb.install_stop(item, RpmHeader(hdr), amount, total);
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                cb.install_stop(*item, amount, total);
                 break;
             case RPMCALLBACK_ELEM_PROGRESS:
-                cb.elem_progress(item, RpmHeader(hdr), amount, total);
+                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                cb.elem_progress(*item, amount, total);
                 break;
             case RPMCALLBACK_VERIFY_PROGRESS:
                 cb.verify_progress(amount, total);
