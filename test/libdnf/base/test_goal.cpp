@@ -53,7 +53,7 @@ void BaseGoalTest::setUp() {
 void BaseGoalTest::test_install() {
     add_repo_repomd("repomd-repo1");
 
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_install("pkg");
     auto transaction = goal.resolve(false);
 
@@ -71,10 +71,10 @@ void BaseGoalTest::test_install() {
 void BaseGoalTest::test_install_not_available() {
     add_repo_repomd("repomd-repo1");
 
-    libdnf::Goal goal(*base);
-    base->get_config().strict().set(libdnf::Option::Priority::RUNTIME, false);
-    base->get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
-    base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
+    libdnf::Goal goal(base);
+    base.get_config().strict().set(libdnf::Option::Priority::RUNTIME, false);
+    base.get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
+    base.get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
     goal.add_rpm_install("not_available");
     auto transaction = goal.resolve(false);
 
@@ -106,7 +106,7 @@ void BaseGoalTest::test_install_from_cmdline() {
     auto cmdline_pkg = sack->add_cmdline_package(rpm_path, false);
 
     // install the command-line package
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_install(cmdline_pkg);
 
     // resolve the goal and read results
@@ -125,10 +125,10 @@ void BaseGoalTest::test_install_from_cmdline() {
 
 void BaseGoalTest::test_install_multilib_all() {
     add_repo_solv("solv-multilib");
-    base->get_config().multilib_policy().set(libdnf::Option::Priority::RUNTIME, "all");
+    base.get_config().multilib_policy().set(libdnf::Option::Priority::RUNTIME, "all");
 
     // install the command-line package
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_install("multilib");
 
     // resolve the goal and read results
@@ -162,7 +162,7 @@ void BaseGoalTest::test_reinstall() {
     // also add it to the @Commandline repo to make it available for reinstall
     sack->add_cmdline_package(rpm_path, false);
 
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_reinstall("cmdline");
 
     auto transaction = goal.resolve(false);
@@ -189,7 +189,7 @@ void BaseGoalTest::test_remove() {
 
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     sack->add_system_package(rpm_path, false, false);
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_remove("cmdline");
     auto transaction = goal.resolve(false);
 
@@ -207,10 +207,10 @@ void BaseGoalTest::test_remove() {
 void BaseGoalTest::test_remove_not_installed() {
     add_repo_repomd("repomd-repo1");
 
-    base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
+    base.get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     sack->add_system_package(rpm_path, false, false);
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_remove("not_installed");
     auto transaction = goal.resolve(false);
 
@@ -236,13 +236,13 @@ void BaseGoalTest::test_install_installed_pkg() {
     // also add it to the @Commandline repo to make it available for install
     sack->add_cmdline_package(rpm_path, false);
 
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::rpm::PackageQuery query(base);
     query.filter_available().filter_nevra({"cmdline-0:1.2-3.noarch"});
 
     std::vector<std::string> expected = {"cmdline-0:1.2-3.noarch"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_string(query));
 
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_install(query);
 
     auto transaction = goal.resolve(false);
@@ -260,9 +260,9 @@ void BaseGoalTest::test_upgrade() {
 
     add_repo_solv("solv-upgrade");
 
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::rpm::PackageQuery query(base);
 
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_upgrade("cmdline");
 
     auto transaction = goal.resolve(false);
@@ -287,8 +287,8 @@ void BaseGoalTest::test_upgrade() {
 void BaseGoalTest::test_upgrade_not_available() {
     add_repo_repomd("repomd-repo1");
 
-    base->get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
-    base->get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
+    base.get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
+    base.get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
 
     // add the package to the @System repo so it appears installed
@@ -296,9 +296,9 @@ void BaseGoalTest::test_upgrade_not_available() {
 
     add_repo_solv("solv-upgrade");
 
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::rpm::PackageQuery query(base);
 
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_upgrade("not_available");
 
     auto transaction = goal.resolve(false);
@@ -324,9 +324,9 @@ void BaseGoalTest::test_upgrade_all() {
 
     add_repo_solv("solv-upgrade");
 
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::rpm::PackageQuery query(base);
 
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_upgrade();
 
     auto transaction = goal.resolve(false);
@@ -356,9 +356,9 @@ void BaseGoalTest::test_downgrade() {
 
     add_repo_solv("solv-downgrade");
 
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::rpm::PackageQuery query(base);
 
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_downgrade("cmdline");
 
     auto transaction = goal.resolve(false);
@@ -388,9 +388,9 @@ void BaseGoalTest::test_distrosync() {
 
     add_repo_solv("solv-distrosync");
 
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::rpm::PackageQuery query(base);
 
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_distro_sync("cmdline");
 
     auto transaction = goal.resolve(false);
@@ -420,9 +420,9 @@ void BaseGoalTest::test_distrosync_all() {
 
     add_repo_solv("solv-distrosync");
 
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::rpm::PackageQuery query(base);
 
-    libdnf::Goal goal(*base);
+    libdnf::Goal goal(base);
     goal.add_rpm_distro_sync();
 
     auto transaction = goal.resolve(false);
@@ -453,8 +453,8 @@ void BaseGoalTest::test_install_or_reinstall() {
     // also add it to the @Commandline repo to make it available for reinstall
     sack->add_cmdline_package(rpm_path, false);
 
-    libdnf::Goal goal(*base);
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::Goal goal(base);
+    libdnf::rpm::PackageQuery query(base);
     query.filter_available().filter_nevra({"cmdline-0:1.2-3.noarch"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
     goal.add_rpm_install_or_reinstall(query);

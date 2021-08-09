@@ -74,7 +74,7 @@ void LibdnfTestCase::add_repo_solv(const std::string & repoid) {
 
 
 libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, bool installed) {
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});
     if (installed) {
         query.filter_installed();
@@ -86,7 +86,7 @@ libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, bool ins
 
 
 libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, const char * repo) {
-    libdnf::rpm::PackageQuery query(*base);
+    libdnf::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});
     query.filter_repo_id({repo});
     return first_query_pkg(query, nevra + " (repo: " + repo + ")");
@@ -96,7 +96,7 @@ libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, const ch
 libdnf::rpm::Package LibdnfTestCase::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
     if (query.empty()) {
         CPPUNIT_FAIL("No package \"" + what + "\" found. All sack packages:" + \
-            list_pkg_infos(libdnf::rpm::PackageQuery(*base)));
+            list_pkg_infos(libdnf::rpm::PackageQuery(base)));
     } else if (query.size() > 1) {
         CPPUNIT_FAIL("More than one package matching \"" + what + "\" found:" + list_pkg_infos(query));
     }
@@ -112,10 +112,9 @@ void LibdnfTestCase::setUp() {
         "libdnf_unittest_",
         std::vector<std::string>{"installroot"}
     );
-    base = std::make_unique<libdnf::Base>();
 
     // set installroot to a temp directory
-    base->get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
+    base.get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
 
     // use the shared cache dir (see cache_dirs comment for more details)
     auto class_name = typeid(*this).name();
@@ -123,10 +122,10 @@ void LibdnfTestCase::setUp() {
     if (it == cache_dirs.end()) {
         cache_dirs.insert({class_name, std::make_unique<libdnf::utils::TempDir>("libdnf_unittest_")});
     }
-    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dirs.at(class_name)->get_path());
+    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dirs.at(class_name)->get_path());
 
-    repo_sack = base->get_repo_sack();
-    sack = base->get_rpm_package_sack();
+    repo_sack = base.get_repo_sack();
+    sack = base.get_rpm_package_sack();
 }
 
 void LibdnfTestCase::dump_debugdata() {

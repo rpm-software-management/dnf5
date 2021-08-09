@@ -37,7 +37,7 @@ void AdvisoryAdvisoryTest::setUp() {
     LibdnfTestCase::setUp();
     LibdnfTestCase::add_repo_repomd("repomd-repo1");
     libdnf::advisory::AdvisoryQuery q =
-        libdnf::advisory::AdvisoryQuery(*base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
     advisories = q.get_advisories();
     advisory = &(advisories[0]);
 }
@@ -90,7 +90,7 @@ void AdvisoryAdvisoryTest::test_get_collections() {
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), mods[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("ethereum"), mods[1].get_name());
 
-    auto adv_vec = libdnf::advisory::AdvisoryQuery(*base).filter_name("DNF-2020-1").get_advisories();
+    auto adv_vec = libdnf::advisory::AdvisoryQuery(base).filter_name("DNF-2020-1").get_advisories();
     CPPUNIT_ASSERT_EQUAL(1lu, adv_vec.size());
     libdnf::advisory::Advisory * advisory2 = &(adv_vec[0]);
     colls = advisory2->get_collections();

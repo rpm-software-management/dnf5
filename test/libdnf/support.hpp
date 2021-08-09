@@ -58,7 +58,7 @@ protected:
         return get_pkg(nevra, repo.c_str());
     }
 
-    std::unique_ptr<libdnf::Base> base;
+    libdnf::Base base;
     libdnf::repo::RepoSackWeakPtr repo_sack;
     libdnf::rpm::PackageSackWeakPtr sack;
     std::unique_ptr<libdnf::utils::TempDir> temp;
