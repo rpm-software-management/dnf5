@@ -448,6 +448,9 @@ private:
     friend class libdnf::Goal;
     friend class libdnf::base::Transaction;
 
+    // TODO(jrohel): Assumes unique `rpmdbid`. Support for opening more rpm databases at once?
+    Package(const BaseWeakPtr & base, unsigned long long rpmdbid);
+
     BaseWeakPtr base;
     PackageId id;
 };

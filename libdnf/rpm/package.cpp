@@ -316,4 +316,20 @@ Checksum Package::get_hdr_checksum() const {
     return checksum;
 }
 
+Package::Package(const BaseWeakPtr & base, unsigned long long rpmdbid) : base(base) {
+    Pool * pool = *get_pool(base);
+    auto * installed_repo = pool->installed;
+
+    libdnf_assert(installed_repo, "Installed repo not loaded");
+
+    for (auto candidate_id = installed_repo->start; candidate_id < installed_repo->end; ++candidate_id) {
+        if (rpmdbid == repo_lookup_num(installed_repo, candidate_id, RPM_RPMDBID, 0)) {
+            id.id = candidate_id;
+            return;
+        }
+    }
+
+    throw Exception("Package with rpmdbid was not found");
+}
+
 }  // namespace libdnf::rpm
