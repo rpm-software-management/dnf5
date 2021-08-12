@@ -163,7 +163,19 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
 }  // namespace dnfdaemon::client
 
 int main(int argc, char * argv[]) {
-    auto connection = sdbus::createSystemBusConnection();
+    std::unique_ptr<sdbus::IConnection> connection;
+
+    try{
+        connection = sdbus::createSystemBusConnection();
+    } catch (const sdbus::Error & ex) {
+        std::cerr << ex.getMessage() << std::endl;
+        std::cerr << "Is D-Bus daemon running?" << std::endl;
+        return 1;
+    } catch (...) {
+        std::cerr << "Unknown error caught" << std::endl;
+        return 1;
+    }
+
     connection->enterEventLoopAsync();
 
     dnfdaemon::client::Context context(*connection);
