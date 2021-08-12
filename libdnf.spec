@@ -365,7 +365,9 @@ License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
+%{?systemd_requires}
 BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
+BuildRequires:  systemd-rpm-macros
 %if %{with dnfdaemon_tests}
 BuildRequires:  dbus-daemon
 BuildRequires:  polkit
@@ -375,6 +377,15 @@ BuildRequires:  python3dist(dbus-python)
 
 %description -n dnfdaemon-server
 Package management service with a DBus interface
+
+%post -n dnfdaemon-server
+%systemd_post dnfdaemon-server.service
+
+%preun -n dnfdaemon-server
+%systemd_preun dnfdaemon-server.service
+
+%postun -n dnfdaemon-server
+%systemd_postun_with_restart dnfdaemon-server.service
 
 %files -n dnfdaemon-server
 %{_bindir}/dnfdaemon-server
