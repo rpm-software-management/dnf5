@@ -61,13 +61,6 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     help->set_long_name("help");
     help->set_short_name('h');
     help->set_short_description("Print help");
-    help->set_parse_hook_func([microdnf](
-                                  [[maybe_unused]] ArgumentParser::NamedArg * arg,
-                                  [[maybe_unused]] const char * option,
-                                  [[maybe_unused]] const char * value) {
-        microdnf->help();
-        return true;
-    });
     microdnf->register_named_arg(help);
 
     // --setopt argument support
@@ -232,14 +225,12 @@ int main(int argc, char * argv[]) try {
     context.commands.push_back(std::make_unique<microdnf::CmdAdvisory>());
 
     // Parse command line arguments
-    bool help_printed = microdnf::parse_args(context, argc, argv);
-    if (!context.selected_command) {
-        if (help_printed) {
-            return 0;
-        } else {
-            context.arg_parser.get_root_command()->help();
-            return 1;
-        }
+    auto print_help = microdnf::parse_args(context, argc, argv);
+
+    // print help of the selected command if --help was used
+    if (print_help) {
+        context.arg_parser.get_selected_command()->help();
+        return 0;
     }
 
     // Load main configuration

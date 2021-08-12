@@ -55,13 +55,6 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     help->set_long_name("help");
     help->set_short_name('h');
     help->set_short_description("Print help");
-    help->set_parse_hook_func([dnfdaemon_client](
-                                  [[maybe_unused]] libdnf::cli::ArgumentParser::NamedArg * arg,
-                                  [[maybe_unused]] const char * option,
-                                  [[maybe_unused]] const char * value) {
-        dnfdaemon_client->help();
-        return true;
-    });
     dnfdaemon_client->register_named_arg(help);
 
     // set ctx.verbose = true
@@ -190,14 +183,12 @@ int main(int argc, char * argv[]) {
     context.commands.push_back(std::make_unique<dnfdaemon::client::CmdReinstall>());
 
     // Parse command line arguments
-    bool help_printed = dnfdaemon::client::parse_args(context, argc, argv);
-    if (!context.selected_command) {
-        if (help_printed) {
-            return 0;
-        } else {
-            context.arg_parser.get_root_command()->help();
-            return 1;
-        }
+    bool print_help = dnfdaemon::client::parse_args(context, argc, argv);
+
+    // print help of the selected command if --help was used
+    if (print_help) {
+        context.arg_parser.get_selected_command()->help();
+        return 0;
     }
 
     // initialize server session using command line arguments
