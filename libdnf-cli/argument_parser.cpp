@@ -331,6 +331,8 @@ void ArgumentParser::Command::parse(
                         auto msg = fmt::format("command \"{}\": {}", option, conflict);
                         throw Conflict(msg);
                     }
+                    // the last subcommand wins
+                    owner.selected_command = cmd;
                     cmd->parse(argv[i], argc - i, &argv[i], additional_named_args ? &extended_named_args : nullptr);
                     i = argc;
                     used = true;
@@ -494,6 +496,8 @@ void ArgumentParser::parse(int argc, const char * const argv[]) {
     if (!root_command) {
         throw LogicError("root command is not set");
     }
+    // mark root command as selected; overwrite with a subcommand in Command::parse()
+    selected_command = root_command;
     root_command->parse(argv[0], argc, argv);
 }
 

@@ -487,6 +487,10 @@ public:
     /// This is the top-level command in the command hierarchy. It can contain named and positional arguments and subcommands.
     Command * get_root_command() noexcept { return root_command; }
 
+    /// Get the selected command.
+    /// Needed for printing help, bash completion etc.
+    Command * get_selected_command() noexcept { return selected_command; }
+
     /// Parses input. The parser from the "root" command is called.
     /// The "LogicError" exception is thrown when the "root" command is not set.
     void parse(int argc, const char * const argv[]);
@@ -551,6 +555,7 @@ private:
     std::vector<std::unique_ptr<libdnf::Option>> values_init;
     std::vector<std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>>> values;
     Command * root_command{nullptr};
+    Command * selected_command{nullptr};
     bool inherit_named_args{false};
 };
 
