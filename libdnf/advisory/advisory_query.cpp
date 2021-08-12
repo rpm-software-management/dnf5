@@ -42,13 +42,7 @@ AdvisoryQuery::AdvisoryQuery(const BaseWeakPtr & base) : base(base) {
 
 AdvisoryQuery::AdvisoryQuery(Base & base) : AdvisoryQuery(base.get_weak_ptr()) {}
 
-AdvisoryQuery::~AdvisoryQuery() = default;
-
 AdvisoryQuery::AdvisoryQuery(const AdvisoryQuery & src) : base(src.base), p_impl(new Impl(*src.p_impl)) {}
-
-AdvisoryQuery::AdvisoryQuery(AdvisoryQuery && src)
-    : base(std::move(src.base)),
-      p_impl(new Impl(std::move(*src.p_impl))) {}
 
 AdvisoryQuery & AdvisoryQuery::operator=(const AdvisoryQuery & src) {
     base = src.base;
@@ -56,11 +50,8 @@ AdvisoryQuery & AdvisoryQuery::operator=(const AdvisoryQuery & src) {
     return *this;
 }
 
-AdvisoryQuery & AdvisoryQuery::operator=(AdvisoryQuery && src) noexcept {
-    base = std::move(src.base);
-    p_impl.swap(src.p_impl);
-    return *this;
-}
+AdvisoryQuery::~AdvisoryQuery() = default;
+
 
 AdvisoryQuery & AdvisoryQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp_type) {
     const std::vector<std::string> patterns = {pattern};

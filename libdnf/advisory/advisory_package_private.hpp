@@ -34,14 +34,6 @@ namespace libdnf::advisory {
 //              up with libsolv ints (Ids) in a public header.
 class AdvisoryPackage::Impl {
 public:
-    /// Copy constructor: clone from an existing AdvisoryPackage::Impl
-    Impl(const Impl & other);
-    /// Move constructor: clone from an existing AdvisoryPackage::Impl
-    Impl(Impl && other);
-
-    Impl & operator=(const Impl & other);
-    Impl & operator=(Impl && other);
-
     std::string get_name() const;
     std::string get_version() const;
     std::string get_evr() const;

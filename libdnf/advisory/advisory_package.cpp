@@ -34,20 +34,14 @@ namespace libdnf::advisory {
 // AdvisoryPackage
 AdvisoryPackage::AdvisoryPackage(AdvisoryPackage::Impl * private_pkg) : p_impl(private_pkg) {}
 
-AdvisoryPackage::~AdvisoryPackage() = default;
-
 AdvisoryPackage::AdvisoryPackage(const AdvisoryPackage & src) : p_impl(new Impl(*src.p_impl)) {}
-AdvisoryPackage::AdvisoryPackage(AdvisoryPackage && src) : p_impl(new Impl(std::move(*src.p_impl))) {}
 
 AdvisoryPackage & AdvisoryPackage::operator=(const AdvisoryPackage & src) {
     *p_impl = *src.p_impl;
     return *this;
 }
 
-AdvisoryPackage & AdvisoryPackage::operator=(AdvisoryPackage && src) noexcept {
-    p_impl.swap(src.p_impl);
-    return *this;
-}
+AdvisoryPackage::~AdvisoryPackage() = default;
 
 
 std::string AdvisoryPackage::get_name() const {
@@ -90,47 +84,6 @@ AdvisoryPackage::Impl::Impl(
     , arch(arch)
     , filename(filename)
     , base(base) {}
-
-AdvisoryPackage::Impl::Impl(const Impl & other)
-    : advisory(other.advisory)
-    , owner_collection_index(other.owner_collection_index)
-    , name(other.name)
-    , evr(other.evr)
-    , arch(other.arch)
-    , filename(other.filename)
-    , base(other.base) {}
-
-AdvisoryPackage::Impl::Impl(Impl && other)
-    : advisory(std::move(other.advisory))
-    , owner_collection_index(other.owner_collection_index)
-    , name(std::move(other.name))
-    , evr(std::move(other.evr))
-    , arch(std::move(other.arch))
-    , filename(std::move(other.filename))
-    , base(std::move(other.base)) {}
-
-AdvisoryPackage::Impl & AdvisoryPackage::Impl::operator=(const Impl & other) {
-    advisory = other.advisory;
-    owner_collection_index = other.owner_collection_index;
-    name = other.name;
-    evr = other.evr;
-    arch = other.arch;
-    filename = other.filename;
-    base = other.base;
-    return *this;
-}
-
-AdvisoryPackage::Impl & AdvisoryPackage::Impl::operator=(Impl && other) {
-    advisory = std::move(other.advisory);
-    owner_collection_index = std::move(other.owner_collection_index);
-    name = std::move(other.name);
-    evr = std::move(other.evr);
-    arch = std::move(other.arch);
-    filename = std::move(other.filename);
-    base = std::move(other.base);
-    return *this;
-}
-
 
 std::string AdvisoryPackage::Impl::get_name() const {
     return get_pool(base).id2str(name);

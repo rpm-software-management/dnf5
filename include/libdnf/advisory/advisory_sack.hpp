@@ -36,7 +36,6 @@ using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 class AdvisorySack {
 public:
     explicit AdvisorySack(const libdnf::BaseWeakPtr & base);
-    ~AdvisorySack();
 
     AdvisorySackWeakPtr get_weak_ptr() { return AdvisorySackWeakPtr(this, &sack_guard); }
 

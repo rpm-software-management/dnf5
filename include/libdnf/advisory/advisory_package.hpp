@@ -37,10 +37,11 @@ namespace libdnf::advisory {
 class AdvisoryPackage {
 public:
     AdvisoryPackage(const AdvisoryPackage & src);
-    AdvisoryPackage(AdvisoryPackage && src);
-
     AdvisoryPackage & operator=(const AdvisoryPackage & src);
-    AdvisoryPackage & operator=(AdvisoryPackage && src) noexcept;
+
+    AdvisoryPackage(AdvisoryPackage && src) = default;
+    AdvisoryPackage & operator=(AdvisoryPackage && src) = default;
+
     ~AdvisoryPackage();
 
     /// Get name of this AdvisoryPackage.

@@ -29,10 +29,11 @@ namespace libdnf::advisory {
 class AdvisoryModule {
 public:
     AdvisoryModule(const AdvisoryModule & src);
-    AdvisoryModule(AdvisoryModule && src);
-
     AdvisoryModule & operator=(const AdvisoryModule & src);
-    AdvisoryModule & operator=(AdvisoryModule && src) noexcept;
+
+    AdvisoryModule(AdvisoryModule && src) = default;
+    AdvisoryModule & operator=(AdvisoryModule && src) = default;
+
     ~AdvisoryModule();
 
     /// Get name of this AdvisoryModule.

@@ -37,12 +37,14 @@ class AdvisoryQuery {
 public:
     explicit AdvisoryQuery(const BaseWeakPtr & base);
     explicit AdvisoryQuery(Base & base);
-    AdvisoryQuery(const AdvisoryQuery & src);
-    AdvisoryQuery(AdvisoryQuery && src);
-    ~AdvisoryQuery();
 
+    AdvisoryQuery(const AdvisoryQuery & src);
     AdvisoryQuery & operator=(const AdvisoryQuery & src);
-    AdvisoryQuery & operator=(AdvisoryQuery && src) noexcept;
+
+    AdvisoryQuery(AdvisoryQuery && src) = default;
+    AdvisoryQuery & operator=(AdvisoryQuery && src) = default;
+
+    ~AdvisoryQuery();
 
     struct NotSupportedCmpType : public RuntimeError {
         using RuntimeError::RuntimeError;

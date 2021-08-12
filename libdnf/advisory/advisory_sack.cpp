@@ -28,8 +28,6 @@ namespace libdnf::advisory {
 
 AdvisorySack::AdvisorySack(const libdnf::BaseWeakPtr & base) : base(base) {}
 
-AdvisorySack::~AdvisorySack() = default;
-
 void AdvisorySack::load_advisories() {
     auto & pool = get_pool(base);
 

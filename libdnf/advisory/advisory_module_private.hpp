@@ -31,15 +31,6 @@ namespace libdnf::advisory {
 //              AdvisoryModules (less classes, less overhead), but we would end
 //              up with libsolv ints (Ids) in a public header.
 class AdvisoryModule::Impl {
-public:
-    /// Copy constructor: clone from an existing AdvisoryModule::Impl
-    Impl(const Impl & other);
-    /// Move constructor: clone from an existing AdvisoryModule::Impl
-    Impl(Impl && other);
-
-    Impl & operator=(const Impl & other);
-    Impl & operator=(Impl && other);
-
 private:
     friend class AdvisoryCollection;
     friend AdvisoryModule;
