@@ -171,9 +171,6 @@ int main(int argc, char * argv[]) {
         std::cerr << ex.getMessage() << std::endl;
         std::cerr << "Is D-Bus daemon running?" << std::endl;
         return 1;
-    } catch (...) {
-        std::cerr << "Unknown error caught" << std::endl;
-        return 1;
     }
 
     connection->enterEventLoopAsync();
