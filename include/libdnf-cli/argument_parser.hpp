@@ -69,6 +69,47 @@ public:
         const char * get_description() const noexcept override { return "Unknown argument"; }
     };
 
+    class Argument;
+
+    class Group {
+    public:
+        /// Exception is thrown when a an argument with the same ID is already registered.
+        class ArgumentIdExists : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Group"; }
+            const char * get_name() const noexcept override { return "ArgumentIdExists"; }
+            const char * get_description() const noexcept override {
+                return "An argument with the same ID is already registered";
+            }
+        };
+
+        /// Sets group header.
+        void set_header(std::string header) noexcept { this->header = std::move(header); }
+
+        /// Gets group id.
+        const std::string & get_id() const noexcept { return id; }
+
+        /// Gets group header.
+        const std::string & get_header() const noexcept { return header; }
+
+        /// Registers an argument to the group.
+        /// An exception is thrown when an argument with the same ID is already registered.
+        void register_argument(Argument * arg);
+
+        /// Gets a list of registered arguments.
+        const std::vector<Argument *> & get_arguments() const noexcept { return arguments; }
+
+    private:
+        friend class ArgumentParser;
+
+        Group(const std::string & id) : id(id) {}
+
+        std::string id;
+        std::string header;
+        std::vector<Argument *> arguments;
+    };
+
     class Argument {
     public:
         /// Exception is generated when the Argument `id` contains not allowed '.' character.
@@ -356,6 +397,17 @@ public:
             }
         };
 
+        /// Exception is thrown when a group with the same ID is already registered.
+        class GroupIdExists : public Exception {
+        public:
+            using Exception::Exception;
+            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
+            const char * get_name() const noexcept override { return "GroupIdExists"; }
+            const char * get_description() const noexcept override {
+                return "Group with the same ID is already registered";
+            }
+        };
+
         using ParseHookFunc = std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])>;
 
         /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
@@ -372,6 +424,8 @@ public:
         /// Registers positional argument to the command.
         /// An exception is thrown when a positional argument with the same ID is already registered.
         void register_positional_arg(PositionalArg * arg);
+
+        void register_group(Group * grp);
 
         /// Gets a list of registered commands.
         const std::vector<Command *> & get_commands() const noexcept { return cmds; }
@@ -435,6 +489,7 @@ public:
         std::vector<Command *> cmds;
         std::vector<NamedArg *> named_args;
         std::vector<PositionalArg *> pos_args;
+        std::vector<Group *> groups;
         ParseHookFunc parse_hook;
         std::string commands_help_header = "Commands:";
         std::string named_args_help_header = "Options:";
@@ -461,6 +516,10 @@ public:
         int nargs,
         libdnf::Option * init_value,
         std::vector<std::unique_ptr<libdnf::Option>> * values);
+
+    /// Constructs a new group and stores it to the argument parser.
+    /// Returns a pointer to the newly created group.
+    Group * add_new_group(const std::string & id);
 
     /// Moves a list of conflicting argument to the parser.
     /// Returns a pointer to the list.
@@ -551,6 +610,7 @@ private:
     std::vector<std::unique_ptr<Command>> cmds;
     std::vector<std::unique_ptr<NamedArg>> named_args;
     std::vector<std::unique_ptr<PositionalArg>> pos_args;
+    std::vector<std::unique_ptr<Group>> groups;
     std::vector<std::unique_ptr<std::vector<Argument *>>> conflict_args_groups;
     std::vector<std::unique_ptr<libdnf::Option>> values_init;
     std::vector<std::unique_ptr<std::vector<std::unique_ptr<libdnf::Option>>>> values;
