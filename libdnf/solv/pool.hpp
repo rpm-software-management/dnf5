@@ -135,6 +135,10 @@ public:
         return pool_lookup_str(pool, id, keyname);
     }
 
+    bool lookup_void(Id id, Id keyname) const {
+        return pool_lookup_void(pool, id, keyname);
+    }
+
     const char * get_str_from_pool(Id keyname, Id advisory, int index) const;
 
     Id queuetowhatprovides(IdQueue & queue) const {

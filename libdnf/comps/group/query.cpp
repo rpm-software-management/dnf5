@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/group-private.hpp"
 #include "libdnf/comps/group/sack.hpp"
 #include "libdnf/comps/comps.hpp"
-#include "libdnf/comps/comps_impl.hpp"
+#include <libdnf/solv/pool.hpp>
 
 extern "C" {
 #include <solv/pool.h>
@@ -42,7 +42,9 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack)
     , sack(sack)
     , p_impl{new Impl()}
 {
-    Pool * pool = sack->comps.p_impl->get_pool();
+    libdnf::solv::Pool & spool = get_pool(sack->comps.get_base());
+    Pool * pool = *spool;
+
     std::map<std::string, std::vector<Id>> group_map;
     Id solvable_id;
     std::string solvable_name;
@@ -52,12 +54,12 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack)
     FOR_POOL_SOLVABLES(solvable_id) {
         // Do not include solvables from disabled repositories
         // TODO(pkratoch): Test this works
-        if (pool_id2solvable(pool, solvable_id)->repo->disabled) {
+        if (spool.id2solvable(solvable_id)->repo->disabled) {
             continue;
         }
         // SOLVABLE_NAME is in a form "type:id"; include only solvables of type "group"
         // TODO(pkratoch): Test this works
-        solvable_name = pool_lookup_str(pool, solvable_id, SOLVABLE_NAME);
+        solvable_name = spool.lookup_str(solvable_id, SOLVABLE_NAME);
         auto delimiter_position = solvable_name.find(":");
         if (solvable_name.substr(0, delimiter_position) != "group") {
             continue;
@@ -65,7 +67,7 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack)
         // Map groupids with list of corresponding solvable_ids
         // TODO(pkratoch): Sort solvable_ids for each groupid according to something (repo priority / repo id / ?)
         groupid = solvable_name.substr(delimiter_position, std::string::npos);
-        if (strcmp(pool_id2solvable(pool, solvable_id)->repo->name, "@System")) {
+        if (strcmp(spool.id2solvable(solvable_id)->repo->name, "@System")) {
             groupid.append("_available");
         } else {
             groupid.append("_installed");

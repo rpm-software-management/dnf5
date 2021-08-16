@@ -49,12 +49,12 @@ public:
 
     CompsWeakPtr get_weak_ptr();
 
+    libdnf::BaseWeakPtr get_base() const;
+
 private:
     libdnf::Base & base;
     GroupSack group_sack{*this};
-
-    class Impl;
-    std::unique_ptr<Impl> p_impl;
+    WeakPtrGuard<Comps, false> data_guard;
 
     friend class Group;
     friend class GroupQuery;

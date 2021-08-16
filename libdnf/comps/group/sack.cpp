@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/group-private.hpp"
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/comps/comps.hpp"
-#include "libdnf/comps/comps_impl.hpp"
 
 extern "C" {
 #include <solv/knownid.h>

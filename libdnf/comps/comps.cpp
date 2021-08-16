@@ -17,8 +17,9 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <libdnf/base/base.hpp>
 #include <libdnf/comps/comps.hpp>
-#include <libdnf/comps/comps_impl.hpp>
+#include <libdnf/solv/pool.hpp>
 
 extern "C" {
 #include <solv/pool.h>
@@ -32,7 +33,7 @@ extern "C" {
 namespace libdnf::comps {
 
 
-Comps::Comps(libdnf::Base & base) : base{base}, p_impl{new Impl()} {}
+Comps::Comps(libdnf::Base & base) : base{base} {}
 
 
 Comps::~Comps() {}
@@ -43,7 +44,8 @@ void Comps::load_installed() {
     std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
     std::string mock_path = data_path / "core.xml";
 
-    Pool * pool = p_impl->get_pool();
+    libdnf::solv::Pool & spool = get_pool(get_base());
+    Pool * pool = *spool;
     Repo * repo = 0;
     Id repoid;
     // Search for repo named @System
@@ -66,7 +68,8 @@ void Comps::load_installed() {
 
 
 void Comps::load_from_file(const std::string & path, const char * reponame) {
-    Pool * pool = p_impl->get_pool();
+    libdnf::solv::Pool & spool = get_pool(get_base());
+    Pool * pool = *spool;
     Repo * repo = 0;
     Repo * tmp_repo = 0;
     Id repoid;
@@ -89,7 +92,14 @@ void Comps::load_from_file(const std::string & path, const char * reponame) {
     fclose(xml_doc);
 }
 
-CompsWeakPtr Comps::get_weak_ptr() { return CompsWeakPtr(this, &p_impl->data_guard); }
+
+CompsWeakPtr Comps::get_weak_ptr() { return CompsWeakPtr(this, &data_guard); }
+
+
+BaseWeakPtr Comps::get_base() const {
+    return base.get_weak_ptr();
+}
+
 
 }  // namespace libdnf::comps
 

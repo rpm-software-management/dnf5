@@ -17,12 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include <libdnf/base/base.hpp>
 #include <libdnf/comps/group/package.hpp>
 #include <libdnf/comps/group/group.hpp>
 #include <libdnf/comps/group/query.hpp>
 #include <libdnf/comps/group/sack.hpp>
 #include <libdnf/comps/comps.hpp>
-#include <libdnf/comps/comps_impl.hpp>
+#include <libdnf/solv/pool.hpp>
 #include <libdnf/utils/xml.hpp>
 
 extern "C" {
@@ -65,10 +66,11 @@ Group & Group::operator+=(const Group & rhs) {
 }
 
 
-std::string lookup_str(Pool * pool, std::vector<GroupId> group_ids, Id key) {
+std::string lookup_str(libdnf::solv::Pool & pool, std::vector<GroupId> group_ids, Id key) {
     for (GroupId group_id: group_ids) {
-        if (pool_lookup_str(pool, group_id.id, key)) {
-            return pool_lookup_str(pool, group_id.id, key);
+        auto value = pool.lookup_str(group_id.id, key);
+        if (value) {
+            return value;
         }
     }
     return "";
@@ -76,8 +78,9 @@ std::string lookup_str(Pool * pool, std::vector<GroupId> group_ids, Id key) {
 
 
 std::string Group::get_groupid() const {
-    std::string solvable_name(
-        lookup_str(query->sack->comps.p_impl->get_pool(), group_ids, SOLVABLE_NAME));
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+
+    std::string solvable_name(lookup_str(pool, group_ids, SOLVABLE_NAME));
     if (solvable_name.find(":") == std::string::npos) {
         return "";
     }
@@ -86,18 +89,21 @@ std::string Group::get_groupid() const {
 
 
 std::string Group::get_name() const {
-    return lookup_str(query->sack->comps.p_impl->get_pool(), group_ids, SOLVABLE_SUMMARY);
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    return lookup_str(pool, group_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Group::get_description() const {
-    return lookup_str(query->sack->comps.p_impl->get_pool(), group_ids, SOLVABLE_DESCRIPTION);
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    return lookup_str(pool, group_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Group::get_translated_name(const char * lang) const {
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+
     std::string translation;
-    Pool * pool = query->sack->comps.p_impl->get_pool();
     for (GroupId group_id: group_ids) {
         Solvable * solvable = pool->solvables + group_id.id;
         if (solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1)) {
@@ -114,8 +120,10 @@ std::string Group::get_translated_name(const char * lang) const {
 
 // TODO(pkratoch): Test this
 std::string Group::get_translated_name() const {
+    libdnf::solv::Pool & spool = get_pool(query->sack->comps.get_base());
+    Pool * pool = *spool;
+
     std::string translation;
-    Pool * pool = query->sack->comps.p_impl->get_pool();
     for (GroupId group_id: group_ids) {
         Solvable * solvable = pool->solvables + group_id.id;
         if (solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY)) {
@@ -131,8 +139,10 @@ std::string Group::get_translated_name() const {
 
 
 std::string Group::get_translated_description(const char * lang) const {
+    libdnf::solv::Pool & spool = get_pool(query->sack->comps.get_base());
+    Pool * pool = *spool;
+
     std::string translation;
-    Pool * pool = query->sack->comps.p_impl->get_pool();
     for (GroupId group_id: group_ids) {
         Solvable * solvable = pool->solvables + group_id.id;
         if (solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1)) {
@@ -148,8 +158,10 @@ std::string Group::get_translated_description(const char * lang) const {
 
 
 std::string Group::get_translated_description() const {
+    libdnf::solv::Pool & spool = get_pool(query->sack->comps.get_base());
+    Pool * pool = *spool;
+
     std::string translation;
-    Pool * pool = query->sack->comps.p_impl->get_pool();
     for (GroupId group_id: group_ids) {
         Solvable * solvable = pool->solvables + group_id.id;
         if (solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION)) {
@@ -165,24 +177,26 @@ std::string Group::get_translated_description() const {
 
 
 std::string Group::get_order() const {
-    return lookup_str(query->sack->comps.p_impl->get_pool(), group_ids, SOLVABLE_ORDER);
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    return lookup_str(pool, group_ids, SOLVABLE_ORDER);
 }
 
 
 std::string Group::get_langonly() const {
-    return lookup_str(query->sack->comps.p_impl->get_pool(), group_ids, SOLVABLE_LANGONLY);
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    return lookup_str(pool, group_ids, SOLVABLE_LANGONLY);
 }
 
 
 bool Group::get_uservisible() const {
-    Pool * pool = query->sack->comps.p_impl->get_pool();
-    return pool_lookup_void(pool, group_ids[0].id, SOLVABLE_ISVISIBLE);
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    return pool.lookup_void(group_ids[0].id, SOLVABLE_ISVISIBLE);
 }
 
 
 bool Group::get_default() const {
-    Pool * pool = query->sack->comps.p_impl->get_pool();
-    return pool_lookup_void(pool, group_ids[0].id, SOLVABLE_ISDEFAULT);
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    return pool.lookup_void(group_ids[0].id, SOLVABLE_ISDEFAULT);
 }
 
 
@@ -192,32 +206,34 @@ std::vector<Package> Group::get_packages() {
         return packages;
     }
 
-    Pool * pool = query->sack->comps.p_impl->get_pool();
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    //Pool * pool = *spool;
+
     // Use only the first (highest priority) solvable for package lists
-    Solvable * solvable = pool_id2solvable(pool, group_ids[0].id);
+    Solvable * solvable = pool.id2solvable(group_ids[0].id);
 
     // Load MANDATORY pacakges from solvable->requires
     if (solvable->requires) {
         for (Id * r_id = solvable->repo->idarraydata + solvable->requires; *r_id; ++r_id) {
-            packages.push_back(Package(pool_id2str(pool, *r_id), PackageType::MANDATORY, ""));
+            packages.push_back(Package(pool.id2str(*r_id), PackageType::MANDATORY, ""));
         }
     }
     // Load DEFAULT and CONDITIONAL pacakges from solvable->recommends
     if (solvable->recommends) {
         for (Id * r_id = solvable->repo->idarraydata + solvable->recommends; *r_id; ++r_id) {
-            if (strcmp(pool_id2rel(pool, *r_id), "") == 0) {
-                packages.push_back(Package(pool_id2str(pool, *r_id), PackageType::DEFAULT, ""));
+            if (strcmp(pool.id2rel(*r_id), "") == 0) {
+                packages.push_back(Package(pool.id2str(*r_id), PackageType::DEFAULT, ""));
             }
             else {
-                packages.push_back(Package(pool_id2str(pool, *r_id), PackageType::CONDITIONAL, pool_id2evr(pool, *r_id)));
+                packages.push_back(Package(pool.id2str(*r_id), PackageType::CONDITIONAL, pool.id2evr(*r_id)));
             }
         }
     }
     // Load OPTIONAL pacakges from solvable->suggests
     if (solvable->suggests) {
         for (Id * r_id = solvable->repo->idarraydata + solvable->suggests; *r_id; ++r_id) {
-            if (strcmp(pool_id2rel(pool, *r_id), "") == 0) {
-                packages.push_back(Package(pool_id2str(pool, *r_id), PackageType::OPTIONAL, ""));
+            if (strcmp(pool.id2rel(*r_id), "") == 0) {
+                packages.push_back(Package(pool.id2str(*r_id), PackageType::OPTIONAL, ""));
             }
         }
     }
@@ -237,10 +253,11 @@ std::vector<Package> Group::get_packages_of_type(PackageType type) {
 
 
 std::set<std::string> Group::get_repos() const {
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+
     std::set<std::string> result;
-    Pool * pool = query->sack->comps.p_impl->get_pool();
     for (GroupId group_id: group_ids) {
-        Solvable * solvable = pool_id2solvable(pool, group_id.id);
+        Solvable * solvable = pool.id2solvable(group_id.id);
         result.emplace(solvable->repo->name);
     }
     return result;
@@ -280,17 +297,19 @@ void Group::dump(const std::string & path) {
     std::string keyname;
     std::string lang;
     xmlNodePtr node;
-    Pool * pool = query->sack->comps.p_impl->get_pool();
+
+    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+
     for (auto group_id : group_ids) {
         Dataiterator di;
-        dataiterator_init(&di, pool, 0, group_id.id, 0, 0, 0);
+        dataiterator_init(&di, *pool, 0, group_id.id, 0, 0, 0);
         // Iterate over all data in the group solvable
         while (dataiterator_step(&di) != 0) {
             // If the content is NULL, skip
             if (!di.kv.str) {
                 continue;
             }
-            keyname = pool_id2str(pool, di.key->name);
+            keyname = pool.id2str(di.key->name);
             // If keyname starts with "solvable:summary:", it's a name translation
             if (keyname.rfind(summary_prefix, 0) == 0) {
                 lang = keyname.substr(summary_prefix.length());

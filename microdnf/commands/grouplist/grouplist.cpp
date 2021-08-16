@@ -103,6 +103,8 @@ GrouplistCommand::GrouplistCommand(Command & parent) : Command(parent, "grouplis
 
 
 void GrouplistCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
+
     std::vector<std::string> patterns_to_show;
     if (patterns_to_show_options->size() > 0) {
         patterns_to_show.reserve(patterns_to_show_options->size());
@@ -114,8 +116,7 @@ void GrouplistCommand::run() {
 
     // Load group sack
     // TODO(pkratoch): use comps from base and real repositories
-    std::unique_ptr<libdnf::Base> base = std::make_unique<libdnf::Base>();
-    libdnf::comps::Comps comps(*base.get());
+    libdnf::comps::Comps comps(ctx.base);
     comps.load_installed();
     std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
     const char * reponame = "repo";
