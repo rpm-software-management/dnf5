@@ -146,8 +146,6 @@ bool Session::read_all_repos() {
     }
     repositories_status = dnfdaemon::RepoStatus::PENDING;
     // TODO(mblaha): get flags from session configuration
-    using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
-    auto flags = LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
     //auto & logger = base->get_logger();
     libdnf::repo::RepoQuery enabled_repos(*base);
     enabled_repos.filter_enabled(true);
@@ -157,7 +155,7 @@ bool Session::read_all_repos() {
         repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
         try {
             repo->load();
-            package_sack.load_repo(*repo.get(), flags);
+            package_sack.load_repo(*repo.get());
         } catch (const std::runtime_error & ex) {
             if (!repo->get_config().skip_if_unavailable().get_value()) {
                 retval = false;

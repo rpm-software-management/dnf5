@@ -127,10 +127,7 @@ void RepoqueryCommand::run() {
     if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
         libdnf::repo::RepoQuery enabled_repos(ctx.base);
         enabled_repos.filter_enabled(true);
-        using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
-        auto flags =
-            LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER;
-        ctx.load_rpm_repos(enabled_repos, flags);
+        ctx.load_rpm_repos(enabled_repos);
         std::cout << std::endl;
     }
 

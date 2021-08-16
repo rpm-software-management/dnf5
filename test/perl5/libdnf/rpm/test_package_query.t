@@ -49,7 +49,7 @@ $repo_cfg->baseurl()->set($libdnf::conf::Option::Priority_RUNTIME, $baseurl);
 $repo->load();
 
 # Loads rpm::Repo into rpm::PackageSack
-$sack->load_repo($repo->get(), $libdnf::rpm::PackageSack::LoadRepoFlags_NONE);
+$sack->load_repo($repo->get());
 
 #test_size()
 {

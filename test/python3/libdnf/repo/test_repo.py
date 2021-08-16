@@ -52,8 +52,7 @@ class TestRepo(unittest.TestCase):
 
         # Loads rpm::Repo into rpm::PackageSack
         PackageSack = libdnf.rpm.PackageSack
-        package_sack.load_repo(repo.get(), PackageSack.LoadRepoFlags_USE_PRESTO | PackageSack.LoadRepoFlags_USE_UPDATEINFO |
-                            PackageSack.LoadRepoFlags_USE_OTHER)
+        package_sack.load_repo(repo.get())
 
         # Remove the cache directory.
         shutil.rmtree(tmpdir)

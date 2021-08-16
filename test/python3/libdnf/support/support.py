@@ -55,12 +55,7 @@ class LibdnfTestCase(unittest.TestCase):
         repo.load()
 
         # load repo content into rpm.PackageSack
-        self.sack.load_repo(repo.get(),
-            libdnf.rpm.PackageSack.LoadRepoFlags_USE_FILELISTS |
-            libdnf.rpm.PackageSack.LoadRepoFlags_USE_OTHER |
-            libdnf.rpm.PackageSack.LoadRepoFlags_USE_PRESTO |
-            libdnf.rpm.PackageSack.LoadRepoFlags_USE_UPDATEINFO
-        )
+        self.sack.load_repo(repo.get())
 
     """
     Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-repomd/<repoid>/repodata

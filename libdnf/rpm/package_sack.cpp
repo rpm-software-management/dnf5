@@ -525,7 +525,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
     repo_impl->libsolv_repo_ext.main_nsolvables = repo_impl->libsolv_repo_ext.repo->nsolvables;
     repo_impl->libsolv_repo_ext.main_nrepodata = repo_impl->libsolv_repo_ext.repo->nrepodata;
     repo_impl->libsolv_repo_ext.main_end = repo_impl->libsolv_repo_ext.repo->end;
-    if (any(flags & LoadRepoFlags::USE_FILELISTS)) {
+    if (any(flags & LoadRepoFlags::FILELISTS)) {
         try {
             // do not pollute the main pool with directory component ids flags |= REPO_LOCALPOOL
             auto repodata_info = load_repo_ext(
@@ -543,7 +543,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
             logger.debug(fmt::format("no filelists metadata available for {}", repo_impl->id));
         }
     }
-    if (any(flags & LoadRepoFlags::USE_OTHER)) {
+    if (any(flags & LoadRepoFlags::OTHER)) {
         try {
             // do not pollute the main pool with directory component ids flags |= REPO_LOCALPOOL
             auto repodata_info = load_repo_ext(
@@ -559,7 +559,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
             logger.debug(fmt::format("no other metadata available for {}", repo_impl->id));
         }
     }
-    if (any(flags & LoadRepoFlags::USE_PRESTO)) {
+    if (any(flags & LoadRepoFlags::PRESTO)) {
         try {
             auto repodata_info = load_repo_ext(
                 repo,
@@ -574,9 +574,10 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
             logger.debug(fmt::format("no presto metadata available for {}", repo_impl->id));
         }
     }
+
     // updateinfo must come *after* all other extensions, as it is not a real
     //   extension, but contains a new set of packages
-    if (any(flags & LoadRepoFlags::USE_UPDATEINFO)) {
+    if (any(flags & LoadRepoFlags::UPDATEINFO)) {
         try {
             // the updateinfo is not a real extension flags = 0
             auto repodata_info = load_repo_ext(
@@ -592,6 +593,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
             logger.debug(fmt::format("no updateinfo available for {}", repo_impl->id));
         }
     }
+
     considered_uptodate = false;
 }
 

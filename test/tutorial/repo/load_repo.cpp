@@ -22,9 +22,4 @@ repo->load();
 auto & rpm_sack = *base.get_rpm_package_sack();
 
 // load cached repodata to rpm sack (xml files are converted to solv/solvx at this point)
-rpm_sack.load_repo(*repo.get(),
-    libdnf::rpm::PackageSack::LoadRepoFlags::USE_FILELISTS |
-    libdnf::rpm::PackageSack::LoadRepoFlags::USE_OTHER |
-    libdnf::rpm::PackageSack::LoadRepoFlags::USE_PRESTO |
-    libdnf::rpm::PackageSack::LoadRepoFlags::USE_UPDATEINFO
-);
+rpm_sack.load_repo(*repo.get());

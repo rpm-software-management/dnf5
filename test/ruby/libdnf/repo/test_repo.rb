@@ -48,8 +48,7 @@ class TestRepo < Test::Unit::TestCase
         repo.load()
 
         # Loads rpm::Repo into rpm::PackageSack
-        package_sack.load_repo(repo.get(), Rpm::PackageSack::LoadRepoFlags_USE_PRESTO |
-                            Rpm::PackageSack::LoadRepoFlags_USE_UPDATEINFO | Rpm::PackageSack::LoadRepoFlags_USE_OTHER)
+        package_sack.load_repo(repo.get())
 
         # Remove the cache directory.
         FileUtils.remove_entry(tmpdir)

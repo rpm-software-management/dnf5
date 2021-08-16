@@ -45,12 +45,7 @@ void LibdnfTestCase::add_repo(const std::string & repoid, const std::string & re
     repo->load();
 
     // load repo content into rpm::PackageSack
-    sack->load_repo(*repo.get(),
-        libdnf::rpm::PackageSack::LoadRepoFlags::USE_FILELISTS |
-        libdnf::rpm::PackageSack::LoadRepoFlags::USE_OTHER |
-        libdnf::rpm::PackageSack::LoadRepoFlags::USE_PRESTO |
-        libdnf::rpm::PackageSack::LoadRepoFlags::USE_UPDATEINFO
-    );
+    sack->load_repo(*repo.get());
 }
 
 

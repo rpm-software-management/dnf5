@@ -81,9 +81,7 @@ void RepoTest::test_repo_basics() {
 
     // Loads rpm::Repo into rpm::PackageSack
     try {
-        sack.load_repo(
-            *repo.get(),
-            LoadFlags::USE_FILELISTS | LoadFlags::USE_PRESTO | LoadFlags::USE_UPDATEINFO | LoadFlags::USE_OTHER);
+        sack.load_repo(*repo.get());
     } catch (const std::exception & ex) {
         log_router.error(ex.what());
     }

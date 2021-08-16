@@ -179,7 +179,7 @@ void AdvisoryCommand::run() {
     enabled_repos.filter_enabled(true);
 
     using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
-    ctx.load_rpm_repos(enabled_repos, LoadFlags::USE_UPDATEINFO);
+    ctx.load_rpm_repos(enabled_repos, LoadFlags::UPDATEINFO);
 
     libdnf::rpm::PackageQuery package_query(ctx.base);
     using QueryCmp = libdnf::sack::QueryCmp;
