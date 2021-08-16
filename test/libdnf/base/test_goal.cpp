@@ -80,10 +80,10 @@ void BaseGoalTest::test_install_not_available() {
 
     CPPUNIT_ASSERT(transaction.get_packages().empty());
 
-    auto & log = goal.get_resolve_log();
+    auto & log = transaction.get_resolve_logs();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
     auto & [action, problem, settings, spec, additional_data] = *log.begin();
-    CPPUNIT_ASSERT_EQUAL(libdnf::Goal::Action::INSTALL, action);
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::INSTALL, action);
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
     CPPUNIT_ASSERT_EQUAL(std::string("not_available"), spec);
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, settings.get_used_clean_requirements_on_remove());
@@ -218,10 +218,10 @@ void BaseGoalTest::test_remove_not_installed() {
 
     CPPUNIT_ASSERT(transaction.get_packages().empty());
 
-    auto & log = goal.get_resolve_log();
+    auto & log = transaction.get_resolve_logs();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
     auto & [action, problem, settings, spec, additional_data] = *log.begin();
-    CPPUNIT_ASSERT_EQUAL(libdnf::Goal::Action::REMOVE, action);
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::REMOVE, action);
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
     CPPUNIT_ASSERT_EQUAL(std::string("not_installed"), spec);
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, settings.get_used_clean_requirements_on_remove());
@@ -288,10 +288,10 @@ void BaseGoalTest::test_upgrade_not_available() {
 
     CPPUNIT_ASSERT(transaction.get_packages().empty());
 
-    auto & log = goal.get_resolve_log();
+    auto & log = transaction.get_resolve_logs();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
     auto & [action, problem, settings, spec, additional_data] = *log.begin();
-    CPPUNIT_ASSERT_EQUAL(libdnf::Goal::Action::UPGRADE, action);
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::UPGRADE, action);
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
     CPPUNIT_ASSERT_EQUAL(std::string("not_available"), spec);
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, settings.get_used_clean_requirements_on_remove());

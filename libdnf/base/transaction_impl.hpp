@@ -21,8 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_TRANSACTION_IMPL_HPP
 
 
-#include "libdnf/base/transaction.hpp"
 #include "../rpm/solv/goal_private.hpp"
+
+#include "libdnf/base/transaction.hpp"
 
 #include <solv/transaction.h>
 
@@ -43,14 +44,29 @@ public:
 
     void set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems);
 
+    GoalProblem report_not_found(
+        GoalAction action, const std::string & pkg_spec, const GoalJobSettings & settings, bool strict);
+    void add_resolve_log(
+        GoalAction action,
+        GoalProblem problem,
+        const GoalJobSettings & settings,
+        const std::string & spec,
+        const std::set<std::string> & additional_data,
+        bool strict);
+
 private:
     friend Transaction;
+    friend class libdnf::Goal;
 
     BaseWeakPtr base;
     ::Transaction * libsolv_transaction{nullptr};
     libdnf::GoalProblem problems{GoalProblem::NO_PROBLEM};
 
     std::vector<TransactionPackage> packages;
+
+    /// <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
+    std::vector<std::tuple<GoalAction, GoalProblem, GoalJobSettings, std::string, std::set<std::string>>>
+        resolve_logs;
 };
 
 

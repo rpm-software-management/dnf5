@@ -37,8 +37,26 @@ public:
 
     libdnf::GoalProblem get_problems();
 
+    /// @returns <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalSettings settings, std::string spec>.
+    /// Returs information about resolvement of Goal except problemes related to solver
+    const std::vector<std::tuple<
+        libdnf::GoalAction,
+        libdnf::GoalProblem,
+        libdnf::GoalJobSettings,
+        std::string,
+        std::set<std::string>>> &
+    get_resolve_logs();
+
     /// @return the transaction packages.
     std::vector<libdnf::base::TransactionPackage> get_packages();
+
+    /// Convert an element from resolve log to string;
+    static std::string format_resolve_log(
+        libdnf::GoalAction action,
+        libdnf::GoalProblem problem,
+        const libdnf::GoalJobSettings & settings,
+        const std::string & spec,
+        const std::set<std::string> & additional_data);
 
 private:
     friend class libdnf::Goal;

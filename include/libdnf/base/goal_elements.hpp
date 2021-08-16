@@ -77,6 +77,18 @@ enum class GoalProblem : uint32_t {
     ALREADY_INSLALLED = (1 << 13)
 };
 
+enum class GoalAction {
+    INSTALL,
+    INSTALL_OR_REINSTALL,
+    REINSTALL,
+    UPGRADE,
+    UPGRADE_ALL,
+    DISTRO_SYNC,
+    DISTRO_SYNC_ALL,
+    DOWNGRADE,
+    REMOVE
+};
+
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
 enum class GoalUsedSetting { UNUSED, USED_TRUE, USED_FALSE };
 

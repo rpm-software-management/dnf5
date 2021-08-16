@@ -24,6 +24,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/package_set_impl.hpp"
 #include "libdnf/solv/pool.hpp"
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "libdnf/utils/string.hpp"
+
+#include <fmt/format.h>
+
+#include <iostream>
 
 
 namespace libdnf::base {
@@ -51,6 +57,147 @@ GoalProblem Transaction::get_problems() {
 
 std::vector<TransactionPackage> Transaction::get_packages() {
     return p_impl->packages;
+}
+
+GoalProblem Transaction::Impl::report_not_found(
+    GoalAction action, const std::string & pkg_spec, const GoalJobSettings & settings, bool strict) {
+    auto sack = base->get_rpm_package_sack();
+    rpm::PackageQuery query(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+    if (action == GoalAction::REMOVE) {
+        query.filter_installed();
+    }
+    auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, settings, true);
+    if (!nevra_pair_reports.first) {
+        // RPM was not excluded or there is no related srpm
+        add_resolve_log(action, GoalProblem::NOT_FOUND, settings, pkg_spec, {}, strict);
+        if (settings.report_hint) {
+            rpm::PackageQuery hints(base);
+            if (action == GoalAction::REMOVE) {
+                hints.filter_installed();
+            }
+            if (!settings.ignore_case && settings.with_nevra) {
+                rpm::PackageQuery icase(hints);
+                ResolveSpecSettings settings_copy = settings;
+                settings_copy.ignore_case = true;
+                settings_copy.with_provides = false;
+                settings_copy.with_filenames = false;
+                auto nevra_pair_icase = icase.resolve_pkg_spec(pkg_spec, settings_copy, false);
+                if (nevra_pair_icase.first) {
+                    add_resolve_log(
+                        action, GoalProblem::HINT_ICASE, settings, pkg_spec, {(*icase.begin()).get_name()}, false);
+                }
+            }
+            rpm::PackageQuery alternatives(hints);
+            std::string alternatives_provide = fmt::format("alternative-for({})", pkg_spec);
+            alternatives.filter_provides({alternatives_provide});
+            if (!alternatives.empty()) {
+                std::set<std::string> hints;
+                for (auto pkg : alternatives) {
+                    hints.emplace(pkg.get_name());
+                }
+                add_resolve_log(action, GoalProblem::HINT_ALTERNATIVES, settings, pkg_spec, hints, false);
+            }
+        }
+        return GoalProblem::NOT_FOUND;
+    }
+    query.filter_repo_id({"src", "nosrc"}, sack::QueryCmp::NEQ);
+    if (query.empty()) {
+        add_resolve_log(action, GoalProblem::ONLY_SRC, settings, pkg_spec, {}, strict);
+        return GoalProblem::ONLY_SRC;
+    }
+    // TODO(jmracek) make difference between regular excludes and modular excludes
+    add_resolve_log(action, GoalProblem::EXCLUDED, settings, pkg_spec, {}, strict);
+    return GoalProblem::EXCLUDED;
+}
+
+void Transaction::Impl::add_resolve_log(
+    GoalAction action,
+    GoalProblem problem,
+    const GoalJobSettings & settings,
+    const std::string & spec,
+    const std::set<std::string> & additional_data,
+    bool strict) {
+    // TODO(jmracek) Use a logger properly and change a way how to report to terminal
+    std::cout << Transaction::format_resolve_log(action, problem, settings, spec, additional_data) << std::endl;
+    resolve_logs.emplace_back(std::make_tuple(action, problem, settings, spec, additional_data));
+    auto & logger = *base->get_logger();
+    if (strict) {
+        logger.error(Transaction::format_resolve_log(action, problem, settings, spec, additional_data));
+    } else {
+        logger.warning(Transaction::format_resolve_log(action, problem, settings, spec, additional_data));
+    }
+}
+
+std::string Transaction::format_resolve_log(
+    GoalAction action,
+    GoalProblem problem,
+    const GoalJobSettings & settings,
+    const std::string & spec,
+    const std::set<std::string> & additional_data) {
+    std::string ret;
+    switch (problem) {
+        // TODO(jmracek) Improve messages => Each message can contain also an action
+        case GoalProblem::NOT_FOUND:
+            if (action == GoalAction::REMOVE) {
+                return ret.append(fmt::format(_("No packages to remove for argument: {}"), spec));
+            }
+            return ret.append(fmt::format(_("No match for argument: {}"), spec));
+        case GoalProblem::NOT_FOUND_IN_REPOSITORIES:
+            return ret.append(fmt::format(
+                _("No match for argument '{0}' in repositories '{1}'"),
+                spec,
+                utils::string::join(settings.to_repo_ids, ", ")));
+        case GoalProblem::NOT_INSTALLED:
+            return ret.append(fmt::format(_("Packages for argument '{}' available, but not installed."), spec));
+        case GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE:
+            return ret.append(fmt::format(
+                _("Packages for argument '{}' available, but installed for a different architecture."), spec));
+        case GoalProblem::ONLY_SRC:
+            return ret.append(fmt::format(_("Argument '{}' matches only source packages."), spec));
+        case GoalProblem::EXCLUDED:
+            return ret.append(fmt::format(_("Argument '{}' matches only excluded packages."), spec));
+        case GoalProblem::HINT_ICASE:
+            return ret.append(fmt::format(_("  * Maybe you meant: {}"), spec));
+        case GoalProblem::HINT_ALTERNATIVES: {
+            auto elements = utils::string::join(additional_data, ", ");
+            return ret.append(fmt::format(_("There are following alternatives for '{0}': {1}"), spec, elements));
+        }
+        case GoalProblem::INSLALLED_LOWEST_VERSION: {
+            if (additional_data.size() != 1) {
+                throw std::invalid_argument("Incorrect number of elements for INSLALLED_LOWEST_VERSION");
+            }
+            return ret.append(fmt::format(
+                _("Package \"{}\" of lowest version already installed, cannot downgrade it."),
+                *additional_data.begin()));
+        }
+        case GoalProblem::INSTALLED_IN_DIFFERENT_VERSION:
+            if (action == GoalAction::REINSTALL) {
+                return ret.append(fmt::format(
+                    _("Packages for argument '{}' installed and available, but in a different version => cannot "
+                      "reinstall"),
+                    spec));
+            }
+            return ret.append(fmt::format(
+                _("Packages for argument '{}' installed and available, but in a different version."), spec));
+        case GoalProblem::NOT_AVAILABLE:
+            return ret.append(fmt::format(_("Packages for argument '{}' installed, but not available."), spec));
+        case GoalProblem::NO_PROBLEM:
+        case GoalProblem::REMOVAL_OF_PROTECTED:
+        case GoalProblem::SOLVER_ERROR:
+            throw std::invalid_argument("Unsupported elements for a goal problem");
+        case GoalProblem::ALREADY_INSLALLED:
+            if (additional_data.size() != 1) {
+                throw std::invalid_argument("Incorrect number of elements for ALREADY_INSLALLED");
+            }
+            return ret.append(fmt::format(_("Package \"{}\" is already installed."), *additional_data.begin()));
+    }
+    return ret;
+}
+
+const std::vector<
+    std::tuple<libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalJobSettings, std::string, std::set<std::string>>> &
+Transaction::get_resolve_logs() {
+    return p_impl->resolve_logs;
 }
 
 void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems) {
@@ -130,8 +277,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         auto obs = solved_goal.list_obsoleted_by_package(id);
         auto reason = solved_goal.get_reason(id);
 
-        TransactionPackage tspkg(
-            rpm::Package(base, rpm::PackageId(id)), TransactionPackage::Action::INSTALL, reason);
+        TransactionPackage tspkg(rpm::Package(base, rpm::PackageId(id)), TransactionPackage::Action::INSTALL, reason);
 
         //  Inherit the reason if package is installonly an package with the same name is installed
         //  Use the same logic like upgrade
