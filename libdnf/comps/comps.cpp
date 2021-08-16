@@ -20,15 +20,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/base/base.hpp>
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/solv/pool.hpp>
+#include "libdnf/repo/repo_impl.hpp"
 
 extern "C" {
 #include <solv/pool.h>
 #include <solv/repo.h>
 #include <solv/repo_comps.h>
+#include <solv/solv_xfopen.h>
 }
 
 #include <filesystem>
-#include <iostream>
+
 
 namespace libdnf::comps {
 
@@ -67,6 +69,7 @@ void Comps::load_installed() {
 }
 
 
+// TODO(dmach): remove; refactor tests accordingly
 void Comps::load_from_file(const std::string & path, const char * reponame) {
     libdnf::solv::Pool & spool = get_pool(get_base());
     Pool * pool = *spool;
@@ -89,6 +92,15 @@ void Comps::load_from_file(const std::string & path, const char * reponame) {
     // Load comps from the file
     // TODO(pkratoch): libsolv doesn't support environments yet
     repo_add_comps(repo, xml_doc, 0);
+    fclose(xml_doc);
+}
+
+
+void Comps::load_from_file(repo::Repo & repo, const std::string & path) {
+    Repo * solv_repo = repo.p_impl->libsolv_repo_ext.repo;
+    // TODO(pkratoch): libsolv doesn't support environments yet
+    FILE * xml_doc = solv_xfopen(path.c_str(), "r");
+    repo_add_comps(solv_repo, xml_doc, 0);
     fclose(xml_doc);
 }
 

@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #include <solv/chksum.h>
 #include <solv/repo.h>
+#include <solv/repo_comps.h>
 #include <solv/repo_deltainfoxml.h>
 #include <solv/repo_repomdxml.h>
 #include <solv/repo_rpmdb.h>
@@ -593,6 +594,17 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
             logger.debug(fmt::format("no updateinfo available for {}", repo_impl->id));
         }
     }
+
+    if (any(flags & LoadRepoFlags::COMPS)) {
+        auto path = repo_impl->get_metadata_path(repo::Repo::Impl::MD_FILENAME_GROUP_GZ);
+        if (path.empty()) {
+            path = repo_impl->get_metadata_path(repo::Repo::Impl::MD_FILENAME_GROUP);
+        }
+        if (!path.empty()) {
+            base->get_comps()->load_from_file(repo, path);
+        }
+    }
+
 
     considered_uptodate = false;
 }

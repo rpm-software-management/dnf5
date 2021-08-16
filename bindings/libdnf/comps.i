@@ -11,6 +11,7 @@
 %include <std_vector.i>
 
 %import "common.i"
+%import "repo.i"
 
 %{
     #include "libdnf/comps/group/package.hpp"
@@ -18,6 +19,7 @@
     #include "libdnf/comps/group/query.hpp"
     #include "libdnf/comps/group/sack.hpp"
     #include "libdnf/comps/comps.hpp"
+    #include "libdnf/repo/repo.hpp"
 %}
 
 #define CV __perl_CV
@@ -29,3 +31,5 @@
 %include "libdnf/comps/group/query.hpp"
 %include "libdnf/comps/group/sack.hpp"
 %include "libdnf/comps/comps.hpp"
+
+%template(CompsWeakPtr) libdnf::WeakPtr<libdnf::comps::Comps, false>;

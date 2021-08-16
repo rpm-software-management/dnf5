@@ -114,16 +114,14 @@ void GrouplistCommand::run() {
         }
     }
 
-    // Load group sack
-    // TODO(pkratoch): use comps from base and real repositories
-    libdnf::comps::Comps comps(ctx.base);
-    comps.load_installed();
-    std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    const char * reponame = "repo";
-    comps.load_from_file(data_path / "core.xml", reponame);
-    comps.load_from_file(data_path / "standard.xml", reponame);
+    libdnf::repo::RepoQuery enabled_repos(ctx.base);
+    enabled_repos.filter_enabled(true);
 
-    libdnf::comps::GroupQuery query(comps.get_group_sack());
+    using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
+    auto flags = LoadFlags::COMPS;
+    ctx.load_rpm_repos(enabled_repos, flags);
+
+    libdnf::comps::GroupQuery query(ctx.base.get_comps()->get_group_sack());
 
     // Filter by patterns if given
     if (patterns_to_show.size() > 0) {

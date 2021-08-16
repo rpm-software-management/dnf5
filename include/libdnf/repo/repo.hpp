@@ -31,17 +31,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
+namespace libdnf::comps {
+class Comps;
+}
+
+
 namespace libdnf::solv {
-
 class Pool;
-
 }
 
 
 namespace libdnf::rpm {
-
 class PackageSack;
-
 }
 
 
@@ -380,6 +381,7 @@ private:
     class Impl;
     friend class RepoSack;
     friend class rpm::PackageSack;
+    friend class comps::Comps;
     friend struct PackageTarget;
     friend class solv::Pool;
     std::unique_ptr<Impl> p_impl;
