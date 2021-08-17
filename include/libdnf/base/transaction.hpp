@@ -58,6 +58,22 @@ public:
         const std::string & spec,
         const std::set<std::string> & additional_data);
 
+    /// Provide information about package solver problems in vector. Each problem can be transformed to string by
+    /// package_solver_problem_to_string or all problems to a string by all_package_solver_problems_to_string().
+    ///
+    /// @return Vector with structuralized package solver problems
+    // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
+    // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
+    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_package_solver_problems();
+
+    /// Convert particular package solver problem to a string;
+    static std::string package_solver_problem_to_string(
+        const std::pair<libdnf::ProblemRules, std::vector<std::string>> & raw);
+
+    /// Concentrate all package solver problems into a string (solver, protected packages, ...)
+    // @replaces libdnf/Goal.formatAllProblemRules(const std::vector<std::vector<std::string>> & problems);
+    std::string all_package_solver_problems_to_string();
+
 private:
     friend class libdnf::Goal;
 

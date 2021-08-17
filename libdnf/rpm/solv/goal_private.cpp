@@ -257,7 +257,7 @@ bool GoalPrivate::limit_installonly_packages(libdnf::solv::IdQueue & job, Id run
         return 0;
     }
 
-    auto & spool = get_pool(base);
+    auto & spool = get_pool();
     ::Pool * pool = *spool;
     bool reresolve = false;
 
@@ -315,7 +315,7 @@ bool GoalPrivate::limit_installonly_packages(libdnf::solv::IdQueue & job, Id run
 
 
 libdnf::GoalProblem GoalPrivate::resolve() {
-    auto & pool = get_pool(base);
+    auto & pool = get_pool();
     libdnf::solv::IdQueue job(staging);
     construct_job(*pool, job, installonly, allow_erasing, protected_packages.get(), protected_running_kernel);
 
@@ -448,7 +448,7 @@ size_t GoalPrivate::count_solver_problems() {
 }
 
 std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems() {
-    auto & pool = get_pool(base);
+    auto & pool = get_pool();
 
     if (!libsolv_solver) {
         throw UnresolvedGoal();
@@ -580,7 +580,7 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
         return ret;
     }
 
-    auto & pool = get_pool(base);
+    auto & pool = get_pool();
 
     libdnf::solv::SolvMap pkg_remove_list(pool->nsolvables);
     for (auto index = 0; index < removes.size(); ++ index) {
@@ -658,7 +658,7 @@ libdnf::solv::IdQueue GoalPrivate::list_obsoleted_by_package(Id id)
     }
     libdnf::solv::IdQueue obsoletes;
     transaction_all_obs_pkgs(libsolv_transaction, id, &obsoletes.get_queue());
-    const ObsoleteCmpData obsoete_cmp_data{get_pool(base), id};
+    const ObsoleteCmpData obsoete_cmp_data{get_pool(), id};
     obsoletes.sort(&obsq_cmp, &obsoete_cmp_data);
     return obsoletes;
 }

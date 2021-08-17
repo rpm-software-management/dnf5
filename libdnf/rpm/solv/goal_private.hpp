@@ -108,6 +108,8 @@ public:
 
     ::Transaction * get_transaction() { return libsolv_transaction; }
 
+    libdnf::solv::Pool & get_pool() { return libdnf::get_pool(base); };
+
 
 private:
     bool limit_installonly_packages(libdnf::solv::IdQueue & job, Id running_kernel);
@@ -183,7 +185,7 @@ inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
 }
 
 inline void GoalPrivate::set_installonly(const std::vector<std::string> & installonly_names) {
-    auto & pool = get_pool(base);
+    auto & pool = get_pool();
     for (auto & name : installonly_names) {
         queue_pushunique(&installonly.get_queue(), pool.str2id(name.c_str(), 1));
     }
@@ -191,7 +193,7 @@ inline void GoalPrivate::set_installonly(const std::vector<std::string> & instal
 
 inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
-    Id what = get_pool(base).queuetowhatprovides(queue);
+    Id what = get_pool().queuetowhatprovides(queue);
     staging.push_back(
         SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
@@ -214,7 +216,7 @@ inline void GoalPrivate::add_remove(const libdnf::solv::SolvMap & solv_map, bool
 
 inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
-    Id what = get_pool(base).queuetowhatprovides(queue);
+    Id what = get_pool().queuetowhatprovides(queue);
     staging.push_back(
         SOLVER_UPDATE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (best ? SOLVER_FORCEBEST : 0) |
             (clean_deps ? SOLVER_CLEANDEPS : 0) | SOLVER_TARGETED,
@@ -223,7 +225,7 @@ inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, b
 
 inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
-    Id what = get_pool(base).queuetowhatprovides(queue);
+    Id what = get_pool().queuetowhatprovides(queue);
     staging.push_back(
         SOLVER_DISTUPGRADE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),

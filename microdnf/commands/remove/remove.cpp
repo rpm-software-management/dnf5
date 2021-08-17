@@ -55,10 +55,10 @@ RemoveCommand::RemoveCommand(Command & parent) : Command(parent, "remove") {
 
     cmd.set_short_description("Remove (uninstall) software");
     cmd.set_parse_hook_func([this, &ctx](
-                                    [[maybe_unused]] ArgumentParser::Argument * arg,
-                                    [[maybe_unused]] const char * option,
-                                    [[maybe_unused]] int argc,
-                                    [[maybe_unused]] const char * const argv[]) {
+                                [[maybe_unused]] ArgumentParser::Argument * arg,
+                                [[maybe_unused]] const char * option,
+                                [[maybe_unused]] int argc,
+                                [[maybe_unused]] const char * const argv[]) {
         ctx.set_selected_command(this);
         return true;
     });
@@ -93,7 +93,7 @@ void RemoveCommand::run() {
     }
     auto transaction = goal.resolve(true);
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
-        std::cout << goal.get_formated_all_problems() << std::endl;
+        std::cout << transaction.all_package_solver_problems_to_string() << std::endl;
         return;
     }
 

@@ -58,7 +58,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     auto & goal = session.get_goal();
     auto transaction = goal.resolve(allow_erasing);
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
-        throw sdbus::Error(dnfdaemon::ERROR_RESOLVE, goal.get_formated_all_problems());
+        throw sdbus::Error(dnfdaemon::ERROR_RESOLVE, transaction.all_package_solver_problems_to_string());
     }
     session.set_transaction(transaction);
 
@@ -69,9 +69,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 
     for (auto & tspkg : transaction.get_packages()) {
         result.push_back(dnfdaemon::DbusTransactionItem(
-            static_cast<unsigned int>(tspkg.get_action()),
-            package_to_map(tspkg.get_package(),
-            attr)));
+            static_cast<unsigned int>(tspkg.get_action()), package_to_map(tspkg.get_package(), attr)));
     }
 
     auto reply = call.createReply();
@@ -106,9 +104,9 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(libdnf::Base * base, 
 void download_packages(Session & session, libdnf::base::Transaction & transaction) {
     std::vector<libdnf::rpm::Package> download_pkgs;
     for (auto & tspkg : transaction.get_packages()) {
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL || \
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL || \
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE || \
+        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL ||
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL ||
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE ||
             tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADE) {
             download_pkgs.push_back(tspkg.get_package());
         }
