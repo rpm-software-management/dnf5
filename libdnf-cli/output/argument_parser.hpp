@@ -40,9 +40,9 @@ static struct libscols_table * create_help_table(const std::string & name) {
 }
 
 static void add_line_into_help_table(
-    struct libscols_table * table, const std::string & arg_names, const std::string & descr) {
+    struct libscols_table * table, const std::string & arg_names, const std::string & descr, libscols_line * parent = nullptr) {
     enum { COL_ARG_NAMES, COL_DESCR };
-    struct libscols_line * ln = scols_table_new_line(table, nullptr);
+    struct libscols_line * ln = scols_table_new_line(table, parent);
     scols_line_set_data(ln, COL_ARG_NAMES, arg_names.c_str());
     scols_line_set_data(ln, COL_DESCR, descr.c_str());
 }
