@@ -1318,7 +1318,9 @@ bool Repo::Impl::is_in_sync() {
 }
 
 
-void Repo::Impl::fetch(const std::string & destdir, std::unique_ptr<LrHandle> && h) {
+void Repo::Impl::download_metadata(const std::string & destdir) {
+    std::unique_ptr<LrHandle> h(lr_handle_init_remote(nullptr));
+
     auto repodir = destdir + "/" + METADATA_RELATIVE_DIR;
     if (g_mkdir_with_parents(destdir.c_str(), 0755) == -1) {
         const char * err_txt = strerror(errno);
@@ -1365,12 +1367,6 @@ void Repo::Impl::fetch(const std::string & destdir, std::unique_ptr<LrHandle> &&
     }
 }
 
-void Repo::Impl::download_metadata(const std::string & destdir) {
-    std::unique_ptr<LrHandle> h(lr_handle_init_remote(nullptr));
-    handle_set_opt(h.get(), LRO_YUMDLIST, LR_RPMMD_FULL);
-    fetch(destdir, std::move(h));
-}
-
 bool Repo::Impl::load() {
     auto & logger = *base->get_logger();
     try {
@@ -1395,7 +1391,7 @@ bool Repo::Impl::load() {
 
         logger.debug(fmt::format(_("repo: downloading from remote: {}"), id));
         const auto cache_dir = get_cachedir();
-        fetch(cache_dir, lr_handle_init_remote(nullptr));
+        download_metadata(cache_dir);
         timestamp = -1;
         load_cache();
     } catch (const LrExceptionWithSourceUrl & e) {

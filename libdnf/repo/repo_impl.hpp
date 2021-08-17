@@ -127,9 +127,8 @@ public:
     bool load();
     void load_cache();
     bool try_load_cache();
-    void download_metadata(const std::string & destdir);
     bool is_in_sync();
-    void fetch(const std::string & destdir, std::unique_ptr<LrHandle> && h);
+    void download_metadata(const std::string & destdir);
     std::string get_cachedir() const;
     std::string get_persistdir() const;
     int64_t get_age() const;
