@@ -39,14 +39,16 @@ std::string AdvisoryReference::get_id() const {
 AdvisoryReference::Type AdvisoryReference::get_type() const {
     const char * type = get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index);
 
-    if (type == NULL)
+    if (type == nullptr) {
         return Type::UNKNOWN;
-    if (!g_strcmp0(type, "bugzilla"))
+    } else if (!strcmp(type, "bugzilla")) {
         return Type::BUGZILLA;
-    if (!g_strcmp0(type, "cve"))
+    } else if (!strcmp(type, "cve")) {
         return Type::CVE;
-    if (!g_strcmp0(type, "vendor"))
+    } else if (!strcmp(type, "vendor")) {
         return Type::VENDOR;
+    }
+
     return Type::UNKNOWN;
 }
 std::string AdvisoryReference::get_title() const {
