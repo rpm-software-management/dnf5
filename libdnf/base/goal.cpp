@@ -263,7 +263,6 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             }
         }
     }
-    rpm_specs.clear();
     return ret;
 }
 
@@ -621,7 +620,6 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 throw std::invalid_argument("Unsupported action");
         }
     }
-    rpm_ids.clear();
 }
 
 
@@ -787,6 +785,8 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
 }
 
 base::Transaction Goal::resolve(bool allow_erasing) {
+    p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
+
     auto sack = p_impl->base->get_rpm_package_sack();
     base::Transaction transaction(p_impl->base);
     auto & pool = get_pool(p_impl->base);

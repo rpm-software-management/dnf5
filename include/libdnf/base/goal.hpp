@@ -230,7 +230,7 @@ public:
         const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
     // TODO(jmracek) Move transaction reports to Transaction class
-    /// Resolve all jobs and return a transaction object
+    /// Resolve all jobs and return a transaction object. Everytime it resolves specs (strings) to packages
     ///
     /// @param allow_erasing    When `true`, allows to remove installed packages to resolve dependency problems
     /// @return transaction object
