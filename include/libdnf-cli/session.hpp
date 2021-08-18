@@ -96,10 +96,7 @@ public:
     /// Register a `subcommand` to the current command.
     /// The command becomes owner of the `subcommand`.
     /// @since 5.0
-    void register_subcommand(std::unique_ptr<Command> subcommand) {
-        this->get_argument_parser_command()->register_command(subcommand->get_argument_parser_command());
-        subcommands.push_back(std::move(subcommand));
-    }
+    void register_subcommand(std::unique_ptr<Command> subcommand, libdnf::cli::ArgumentParser::Group * group = nullptr);
 
 private:
     Session & session;

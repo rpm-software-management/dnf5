@@ -44,5 +44,12 @@ Command::Command(Command & parent, const std::string & name) : session{parent.se
     argument_parser_command = session.get_argument_parser().add_new_command(name);
 }
 
+void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf::cli::ArgumentParser::Group * group) {
+    get_argument_parser_command()->register_command(subcommand->get_argument_parser_command());
+    if (group) {
+        group->register_argument(subcommand->get_argument_parser_command());
+    }
+    subcommands.push_back(std::move(subcommand));
+}
 
 }  // libdnf::cli::session
