@@ -42,30 +42,14 @@ Comps::~Comps() {}
 
 
 void Comps::load_installed() {
-    // TODO(pkratoch): load real installed groups
-    std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    std::string mock_path = data_path / "core.xml";
+    // TODO(dmach): Make @System part of RepoSack?
+    // auto rq = libdnf::repo::RepoQuery(get_base());
+    // rq.filter_id("@System");
+    // auto system_repo = rq.get();
 
-    libdnf::solv::Pool & spool = get_pool(get_base());
-    Pool * pool = *spool;
-    Repo * repo = 0;
-    Id repoid;
-    // Search for repo named @System
-    FOR_REPOS(repoid, repo) {
-        if (!strcasecmp(repo->name, "@System")) {
-            break;
-        }
-    }
-    // If repo named @System doesn't exist, create new repo
-    if (!repo) {
-        repo = repo_create(pool, "@System");
-    }
-
-    FILE * xml_doc = fopen(mock_path.c_str(), "r");
-    // Load comps from the file
-    // TODO(pkratoch): libsolv doesn't support environments yet
-    repo_add_comps(repo, xml_doc, 0);
-    fclose(xml_doc);
+    auto system_repo = get_base()->get_rpm_package_sack()->get_system_repo();
+    // TODO(dmach): use system-state dir
+    load_from_file(*system_repo, "/var/lib/dnf/system-state/comps-installed.xml.zst");
 }
 
 
@@ -97,6 +81,10 @@ void Comps::load_from_file(const std::string & path, const char * reponame) {
 
 
 void Comps::load_from_file(repo::Repo & repo, const std::string & path) {
+    if (!std::filesystem::exists(path)) {
+        return;
+    }
+
     Repo * solv_repo = repo.p_impl->libsolv_repo_ext.repo;
     // TODO(pkratoch): libsolv doesn't support environments yet
     FILE * xml_doc = solv_xfopen(path.c_str(), "r");

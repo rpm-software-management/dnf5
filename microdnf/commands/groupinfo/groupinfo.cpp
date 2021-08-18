@@ -106,6 +106,8 @@ GroupinfoCommand::GroupinfoCommand(Command & parent) : Command(parent, "groupinf
 void GroupinfoCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
+    ctx.base.get_rpm_package_sack()->create_system_repo(false);
+
     std::vector<std::string> patterns_to_show;
     if (patterns_to_show_options->size() > 0) {
         patterns_to_show.reserve(patterns_to_show_options->size());
@@ -117,6 +119,8 @@ void GroupinfoCommand::run() {
 
     libdnf::repo::RepoQuery enabled_repos(ctx.base);
     enabled_repos.filter_enabled(true);
+
+    ctx.base.get_comps()->load_installed();
 
     using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
     auto flags = LoadFlags::COMPS;
