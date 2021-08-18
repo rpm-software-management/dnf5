@@ -627,6 +627,12 @@ void PackageSack::create_system_repo(bool build_cache) {
     p_impl->load_system_repo();
 }
 
+
+libdnf::repo::RepoWeakPtr PackageSack::get_system_repo() const {
+    return p_impl->system_repo->get_weak_ptr();
+}
+
+
 void PackageSack::append_extra_system_repo(const std::string & rootdir) {
     if (!p_impl->system_repo) {
         throw LogicError("PackageSack::append_extra_system_repo(): System repo does not exist");

@@ -59,6 +59,7 @@ namespace libdnf::repo {
 
 class Repo;
 class RepoSack;
+using RepoWeakPtr = WeakPtr<Repo, false>;
 
 }  // namespace libdnf::repo
 
@@ -122,6 +123,9 @@ public:
 
     /// Creates system repository and loads it into PackageSack. Only one system repository can be in PackageSack.
     void create_system_repo(bool build_cache = false);
+
+    /// @return system repo
+    libdnf::repo::RepoWeakPtr get_system_repo() const;
 
     /// Append a rpm database into system repository
     void append_extra_system_repo(const std::string & rootdir);
