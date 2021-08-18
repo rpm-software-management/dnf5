@@ -41,9 +41,12 @@ public:
     };
 
     explicit GoalPrivate(const BaseWeakPtr & base) : base(base) {}
+
+    /// Copy only inputs but not results from resolve()
     explicit GoalPrivate(const GoalPrivate & src);
     ~GoalPrivate();
 
+    /// Copy only inputs but not results from resolve()
     GoalPrivate & operator=(const GoalPrivate & src);
 
     void set_installonly(const std::vector<std::string> & installonly_names);
@@ -125,7 +128,7 @@ private:
 
     std::unique_ptr<libdnf::solv::SolvMap> protected_packages;
     std::unique_ptr<libdnf::solv::SolvMap> removal_of_protected;
-    PackageId protected_running_kernel;
+    PackageId protected_running_kernel{0};
 
     bool allow_downgrade{true};
     bool allow_erasing{false};
@@ -142,13 +145,17 @@ inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
       staging(src.staging),
       installonly(src.installonly),
       installonly_limit(src.installonly_limit),
-      protected_packages(new libdnf::solv::SolvMap(*src.protected_packages)),
       protected_running_kernel(src.protected_running_kernel),
       allow_downgrade(src.allow_downgrade),
       allow_erasing(src.allow_erasing),
       allow_vendor_change(src.allow_vendor_change),
       install_weak_deps(src.install_weak_deps),
-      remove_solver_weak(src.remove_solver_weak) {}
+      remove_solver_weak(src.remove_solver_weak) {
+
+        if (src.protected_packages) {
+            protected_packages.reset(new libdnf::solv::SolvMap(*src.protected_packages));
+        }
+    }
 
 inline GoalPrivate::~GoalPrivate() {
     if (libsolv_solver) {
@@ -173,7 +180,8 @@ inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
             transaction_free(libsolv_transaction);
             libsolv_transaction = nullptr;
         }
-        protected_packages.reset(new libdnf::solv::SolvMap(*src.protected_packages));
+        protected_packages.reset(src.protected_packages ? new libdnf::solv::SolvMap(*src.protected_packages) : nullptr);
+        removal_of_protected.reset();
         protected_running_kernel = src.protected_running_kernel;
         allow_downgrade = src.allow_downgrade;
         allow_erasing = src.allow_erasing;
