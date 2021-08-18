@@ -162,9 +162,7 @@ void GroupinfoCommand::run() {
             installed_groupids.insert(group.get_groupid());
         }
         for (auto group: query_available.list()) {
-            if (installed_groupids.find(group.get_groupid()) == installed_groupids.end()) {
-                group_list.emplace(group);
-            }
+            group_list.emplace(group);
         }
     }
 
