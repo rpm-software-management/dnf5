@@ -80,8 +80,8 @@ public:
     Impl(const BaseWeakPtr & base);
     ~Impl();
 
-    void add_rpm_ids(Goal::Action action, const rpm::Package & rpm_package, const GoalJobSettings & settings);
-    void add_rpm_ids(Goal::Action action, const rpm::PackageSet & package_set, const GoalJobSettings & settings);
+    void add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings);
+    void add_rpm_ids(GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings);
 
     GoalProblem add_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_install_to_goal(
@@ -100,10 +100,10 @@ private:
     /// <libdnf::Goal::Action, std::string pkg_spec, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_specs;
     /// <libdnf::Goal::Action, rpm Ids, libdnf::GoalJobSettings settings>
-    std::vector<std::tuple<Action, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
+    std::vector<std::tuple<GoalAction, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
 
     /// <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
-    std::vector<std::tuple<Goal::Action, GoalProblem, GoalJobSettings, std::string, std::set<std::string>>>
+    std::vector<std::tuple<GoalAction, GoalProblem, GoalJobSettings, std::string, std::set<std::string>>>
         rpm_goal_reports;
 
     rpm::solv::GoalPrivate rpm_goal;
@@ -127,19 +127,19 @@ void Goal::add_rpm_install(const std::string & spec, const GoalJobSettings & set
 }
 
 void Goal::add_rpm_install(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::INSTALL, rpm_package, settings);
+    p_impl->add_rpm_ids(GoalAction::INSTALL, rpm_package, settings);
 }
 
 void Goal::add_rpm_install(const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::INSTALL, package_set, settings);
+    p_impl->add_rpm_ids(GoalAction::INSTALL, package_set, settings);
 }
 
 void Goal::add_rpm_install_or_reinstall(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::INSTALL_OR_REINSTALL, rpm_package, settings);
+    p_impl->add_rpm_ids(GoalAction::INSTALL_OR_REINSTALL, rpm_package, settings);
 }
 
 void Goal::add_rpm_install_or_reinstall(const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::INSTALL_OR_REINSTALL, package_set, settings);
+    p_impl->add_rpm_ids(GoalAction::INSTALL_OR_REINSTALL, package_set, settings);
 }
 
 void Goal::add_rpm_reinstall(const std::string & spec, const GoalJobSettings & settings) {
@@ -151,11 +151,11 @@ void Goal::add_rpm_remove(const std::string & spec, const GoalJobSettings & sett
 }
 
 void Goal::add_rpm_remove(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::REMOVE, rpm_package, settings);
+    p_impl->add_rpm_ids(GoalAction::REMOVE, rpm_package, settings);
 }
 
 void Goal::add_rpm_remove(const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::REMOVE, package_set, settings);
+    p_impl->add_rpm_ids(GoalAction::REMOVE, package_set, settings);
 }
 
 void Goal::add_rpm_upgrade(const std::string & spec, const GoalJobSettings & settings) {
@@ -167,11 +167,11 @@ void Goal::add_rpm_upgrade(const GoalJobSettings & settings) {
 }
 
 void Goal::add_rpm_upgrade(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::UPGRADE, rpm_package, settings);
+    p_impl->add_rpm_ids(GoalAction::UPGRADE, rpm_package, settings);
 }
 
 void Goal::add_rpm_upgrade(const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::UPGRADE, package_set, settings);
+    p_impl->add_rpm_ids(GoalAction::UPGRADE, package_set, settings);
 }
 
 void Goal::add_rpm_downgrade(const std::string & spec, const GoalJobSettings & settings) {
@@ -187,14 +187,14 @@ void Goal::add_rpm_distro_sync(const GoalJobSettings & settings) {
 }
 
 void Goal::add_rpm_distro_sync(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::DISTRO_SYNC, rpm_package, settings);
+    p_impl->add_rpm_ids(GoalAction::DISTRO_SYNC, rpm_package, settings);
 }
 
 void Goal::add_rpm_distro_sync(const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(Action::DISTRO_SYNC, package_set, settings);
+    p_impl->add_rpm_ids(GoalAction::DISTRO_SYNC, package_set, settings);
 }
 
-void Goal::Impl::add_rpm_ids(Goal::Action action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
+void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
     if (rpm_package.base != base) {
         // TODO(lukash) consolidate different sack/base errors
         throw UsedDifferentSack();
@@ -205,7 +205,7 @@ void Goal::Impl::add_rpm_ids(Goal::Action action, const rpm::Package & rpm_packa
 }
 
 void Goal::Impl::add_rpm_ids(
-    Goal::Action action, const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
+    GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
     if (package_set.get_base() != base) {
         // TODO(lukash) consolidate different sack/base errors
         throw UsedDifferentSack();
@@ -570,7 +570,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
     installed.filter_installed();
     for (auto & [action, ids, settings] : rpm_ids) {
         switch (action) {
-            case Action::INSTALL: {
+            case GoalAction::INSTALL: {
                 //  include installed packages with the same NEVRA into transaction to prevent reinstall
                 std::vector<std::string> nevras;
                 for (auto id : ids) {
@@ -595,25 +595,25 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                     settings.resolve_best(cfg_main),
                     settings.resolve_clean_requirements_on_remove());
             } break;
-            case Action::INSTALL_OR_REINSTALL:
+            case GoalAction::INSTALL_OR_REINSTALL:
                 rpm_goal.add_install(
                     ids,
                     settings.resolve_strict(cfg_main),
                     settings.resolve_best(cfg_main),
                     settings.resolve_clean_requirements_on_remove());
                 break;
-            case Action::UPGRADE: {
+            case GoalAction::UPGRADE: {
                 rpm_goal.add_upgrade(
                     ids, settings.resolve_best(cfg_main), settings.resolve_clean_requirements_on_remove());
             } break;
-            case Action::DISTRO_SYNC: {
+            case GoalAction::DISTRO_SYNC: {
                 rpm_goal.add_distro_sync(
                     ids,
                     settings.resolve_strict(cfg_main),
                     settings.resolve_best(cfg_main),
                     settings.resolve_clean_requirements_on_remove());
             } break;
-            case Action::REMOVE:
+            case GoalAction::REMOVE:
                 rpm_goal.add_remove(ids, settings.resolve_clean_requirements_on_remove(cfg_main));
                 break;
             default:

@@ -39,18 +39,6 @@ public:
         const char * get_description() const noexcept override { return "Goal exception"; }
     };
 
-    enum class Action {
-        INSTALL,
-        INSTALL_OR_REINSTALL,
-        REINSTALL,
-        UPGRADE,
-        UPGRADE_ALL,
-        DISTRO_SYNC,
-        DISTRO_SYNC_ALL,
-        DOWNGRADE,
-        REMOVE
-    };
-
     explicit Goal(const libdnf::BaseWeakPtr & base);
     explicit Goal(libdnf::Base & base);
     ~Goal();
