@@ -382,7 +382,7 @@ private:
     friend class RepoSack;
     friend class rpm::PackageSack;
     friend class comps::Comps;
-    friend struct PackageTarget;
+    friend class PackageDownloader;
     friend class solv::Pool;
     std::unique_ptr<Impl> p_impl;
     WeakPtrGuard<Repo, false> data_guard;
@@ -395,83 +395,6 @@ inline RepoWeakPtr Repo::get_weak_ptr() { return RepoWeakPtr(this, &data_guard);
 struct Downloader {
 public:
     static void download_url(ConfigMain * cfg, const char * url, int fd);
-};
-
-/// Base class for PackageTarget callbacks
-/// User implements PackageTarget callbacks by inheriting this class and overriding its methods.
-class PackageTargetCB {
-public:
-    // Transfer status codes
-    enum class TransferStatus { SUCCESSFUL, ALREADYEXISTS, ERROR };
-
-    virtual int end(TransferStatus status, const char * msg);
-    virtual int progress(double total_to_download, double downloaded);
-    virtual int mirror_failure(const char * msg, const char * url);
-    virtual ~PackageTargetCB() = default;
-};
-
-/// Wraps librepo PackageTarget
-struct PackageTarget {
-public:
-    // Enum of supported checksum types.
-    // NOTE! This enum guarantee to be sorted by "hash quality"
-    // TODO(jrohel): Use the same enum/checksum utilities on all places.
-    enum class ChecksumType {
-        UNKNOWN,
-        MD5,     //    The most weakest hash
-        SHA1,    //  |
-        SHA224,  //  |
-        SHA256,  //  |
-        SHA384,  // \|/
-        SHA512,  //    The most secure hash
-    };
-
-    /// TODO(jrohel): Use the same checksum utilities on all places.
-    /// @replaces libdnf:repo/Repo.hpp:method:PacketTarget.checksumType(const std::string & name)
-    static ChecksumType checksum_type(const std::string & name);
-
-    /// @replaces libdnf:repo/Repo.hpp:method:PacketTarget.downloadPackages(std::vector<PackageTarget *> & targets, bool failFast)
-    static void download_packages(std::vector<PackageTarget *> & targets, bool fail_fast);
-
-    PackageTarget(
-        Repo * repo,
-        const char * relative_url,
-        const char * dest,
-        int chks_type,
-        const char * chksum,
-        int64_t expected_size,
-        const char * base_url,
-        bool resume,
-        int64_t byte_range_start,
-        int64_t byte_range_end,
-        PackageTargetCB * callbacks);
-    PackageTarget(
-        ConfigMain * cfg,
-        const char * relative_url,
-        const char * dest,
-        int chks_type,
-        const char * chksum,
-        int64_t expected_size,
-        const char * base_url,
-        bool resume,
-        int64_t byte_range_start,
-        int64_t byte_range_end,
-        PackageTargetCB * callbacks,
-        const char * http_headers[] = nullptr);
-    ~PackageTarget();
-
-    /// Returns a pointer to the registered class that implements callback methods (download state).
-    /// @replaces libdnf:repo/Repo.hpp:method:PackageTarget.getCallbacks()
-    PackageTargetCB * get_callbacks();
-
-    /// Returns last error message
-    /// TODO(jrohel): Do we want the method?
-    /// @replaces libdnf:repo/Repo.hpp:method:PackageTarget.getErr()
-    const char * get_err();
-
-private:
-    class Impl;
-    std::unique_ptr<Impl> p_impl;
 };
 
 /// Logger for librepo

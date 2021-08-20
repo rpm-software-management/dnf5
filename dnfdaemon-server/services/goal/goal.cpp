@@ -122,46 +122,21 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(libdnf::Base * base, 
 // TODO (mblaha) shared download_packages with microdnf / libdnf
 // TODO (mblaha) callbacks to report the status
 void download_packages(Session & session, libdnf::base::Transaction & transaction) {
-    std::vector<libdnf::rpm::Package> download_pkgs;
+    libdnf::repo::PackageDownloader downloader;
+
+    std::vector<std::unique_ptr<DbusPackageCB>> download_callbacks;
+
     for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE ||
+        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL || \
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL || \
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE || \
             tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADE) {
-            download_pkgs.push_back(tspkg.get_package());
+            download_callbacks.push_back(std::make_unique<DbusPackageCB>(session, tspkg.get_package()));
+            downloader.add(tspkg.get_package(), download_callbacks.back().get());
         }
     }
 
-    std::vector<libdnf::repo::PackageTarget *> targets;
-    std::vector<std::unique_ptr<libdnf::repo::PackageTarget>> targets_guard;
-    std::vector<std::unique_ptr<DbusPackageCB>> pkg_download_callbacks_guard;
-
-    for (auto package : download_pkgs) {
-        auto repo = package.get_repo().get();
-        auto checksum = package.get_checksum();
-        std::string destination = std::filesystem::path(repo->get_cachedir()) / "packages";
-        std::filesystem::create_directory(destination);
-
-        auto pkg_download_cb = std::make_unique<DbusPackageCB>(session, package);
-        auto pkg_download_cb_ptr = pkg_download_cb.get();
-        pkg_download_callbacks_guard.push_back(std::move(pkg_download_cb));
-
-        auto pkg_target = std::make_unique<libdnf::repo::PackageTarget>(
-            repo,
-            package.get_location().c_str(),
-            destination.c_str(),
-            static_cast<int>(checksum.get_type()),
-            checksum.get_checksum().c_str(),
-            static_cast<int64_t>(package.get_package_size()),
-            package.get_baseurl().empty() ? nullptr : package.get_baseurl().c_str(),
-            true,
-            0,
-            0,
-            pkg_download_cb_ptr);
-        targets.push_back(pkg_target.get());
-        targets_guard.push_back(std::move(pkg_target));
-    }
-    libdnf::repo::PackageTarget::download_packages(targets, true);
+    downloader.download(true, true);
 }
 
 sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {

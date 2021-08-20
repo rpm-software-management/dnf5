@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf-cli/utils/tty.hpp>
 #include <libdnf/base/goal.hpp>
+#include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/transaction.hpp>
 
@@ -370,7 +371,7 @@ libdnf::transaction::TransactionWeakPtr Context::new_db_transaction() {
 
 namespace {
 
-class PkgDownloadCB : public libdnf::repo::PackageTargetCB {
+class PkgDownloadCB : public libdnf::repo::PackageDownloadCallbacks {
 public:
     PkgDownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
         : multi_progress_bar(&mp_bar),
@@ -451,45 +452,22 @@ std::chrono::time_point<std::chrono::steady_clock> PkgDownloadCB::prev_print_tim
 
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
-    std::vector<std::unique_ptr<PkgDownloadCB>> pkg_download_callbacks_guard;
-    std::vector<std::unique_ptr<libdnf::repo::PackageTarget>> targets_guard;
-    std::vector<libdnf::repo::PackageTarget *> targets;
+    libdnf::repo::PackageDownloader downloader;
+    std::vector<std::unique_ptr<PkgDownloadCB>> download_callbacks;
 
-    std::string destination;
-    if (dest_dir) {
-        destination = dest_dir;
-    }
-    for (auto package : packages) {
-        auto repo = package.get_repo().get();
-        auto checksum = package.get_checksum();
-        if (!dest_dir) {
-            destination = std::filesystem::path(repo->get_cachedir()) / "packages";
-            std::filesystem::create_directory(destination);
+    for (auto & package : packages) {
+        download_callbacks.push_back(std::make_unique<PkgDownloadCB>(multi_progress_bar, package.get_full_nevra()));
+
+        if (dest_dir != nullptr) {
+            downloader.add(package, dest_dir, download_callbacks.back().get());
+        } else {
+            downloader.add(package, download_callbacks.back().get());
         }
-
-        auto pkg_download_cb = std::make_unique<PkgDownloadCB>(multi_progress_bar, package.get_full_nevra());
-        auto pkg_download_cb_ptr = pkg_download_cb.get();
-        pkg_download_callbacks_guard.push_back(std::move(pkg_download_cb));
-
-        auto pkg_target = std::make_unique<libdnf::repo::PackageTarget>(
-            repo,
-            package.get_location().c_str(),
-            destination.c_str(),
-            static_cast<int>(checksum.get_type()),
-            checksum.get_checksum().c_str(),
-            static_cast<int64_t>(package.get_package_size()),
-            package.get_baseurl().empty() ? nullptr : package.get_baseurl().c_str(),
-            true,
-            0,
-            0,
-            pkg_download_cb_ptr);
-        targets.push_back(pkg_target.get());
-        targets_guard.push_back(std::move(pkg_target));
     }
 
     std::cout << "Downloading Packages:" << std::endl;
     try {
-        libdnf::repo::PackageTarget::download_packages(targets, true);
+        downloader.download(true, true);
     } catch (const std::runtime_error & ex) {
         std::cout << "Exception: " << ex.what() << std::endl;
     }

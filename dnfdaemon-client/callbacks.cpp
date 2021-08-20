@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnfdaemon-server/dbus.hpp>
 #include <dnfdaemon-server/transaction.hpp>
 #include <libdnf-cli/utils/tty.hpp>
-#include <libdnf/repo/repo.hpp>
+#include <libdnf/repo/package_downloader.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>
@@ -147,12 +147,12 @@ void PackageDownloadCB::end(sdbus::Signal & signal) {
         std::string msg;
         signal >> msg;
         using namespace libdnf::repo;
-        auto status = static_cast<PackageTargetCB::TransferStatus>(status_i);
+        auto status = static_cast<PackageDownloadCallbacks::TransferStatus>(status_i);
         switch (status) {
-            case PackageTargetCB::TransferStatus::SUCCESSFUL:
+            case PackageDownloadCallbacks::TransferStatus::SUCCESSFUL:
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
-            case PackageTargetCB::TransferStatus::ALREADYEXISTS:
+            case PackageDownloadCallbacks::TransferStatus::ALREADYEXISTS:
                 // skipping the download -> downloading 0 bytes
                 progress_bar->set_ticks(0);
                 progress_bar->set_total_ticks(0);
@@ -160,7 +160,7 @@ void PackageDownloadCB::end(sdbus::Signal & signal) {
                 progress_bar->start();
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
-            case PackageTargetCB::TransferStatus::ERROR:
+            case PackageDownloadCallbacks::TransferStatus::ERROR:
                 progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg);
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
                 break;

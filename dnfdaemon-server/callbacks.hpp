@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_SERVER_CALLBACKS_HPP
 #define DNFDAEMON_SERVER_CALLBACKS_HPP
 
-#include <libdnf/repo/repo.hpp>
+#include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -52,7 +52,7 @@ protected:
     }
 };
 
-class DbusPackageCB : public libdnf::repo::PackageTargetCB, public DbusCallback {
+class DbusPackageCB : public libdnf::repo::PackageDownloadCallbacks, public DbusCallback {
 public:
     explicit DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg);
     virtual ~DbusPackageCB() = default;
