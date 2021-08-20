@@ -81,6 +81,7 @@ jobs:
         uses: ./.github/actions/copr-build
         with:
           copr-user: ${{steps.setup-ci.outputs.copr-user}}
+          chroot: fedora-35-x86_64
 
   integration-tests:
     name: DNF Integration Tests
@@ -104,3 +105,4 @@ jobs:
         with:
           package-urls: ${{needs.copr-build.outputs.package-urls}}
           extra-run-args: --tags dnf5 --command microdnf5
+          base-image: fedora:35
