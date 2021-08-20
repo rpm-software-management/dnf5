@@ -36,15 +36,7 @@ class RpmProblemSet;
 
 
 /// Class represents one item in transaction set.
-class TransactionItem {
-public:
-    explicit TransactionItem(Package pkg) : pkg(std::move(pkg)) {}
-    const Package & get_pkg() const noexcept { return pkg; }
-    Package & get_pkg() noexcept { return pkg; }
-
-private:
-    Package pkg;
-};
+using TransactionItem = base::TransactionPackage;
 
 
 /// Class for access RPM header

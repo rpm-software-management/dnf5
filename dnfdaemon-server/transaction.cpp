@@ -24,33 +24,28 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon {
 
-RpmTransactionItem::RpmTransactionItem(const libdnf::base::TransactionPackage & tspkg)
-    : TransactionItem(tspkg.get_package()) {
+RpmTransactionItemActions transaction_package_to_action(const libdnf::base::TransactionPackage & tspkg) {
     switch (tspkg.get_action()) {
-        case libdnf::transaction::TransactionItemAction::INSTALL:
-            action = Actions::INSTALL;
-            break;
+        case libdnf::base::TransactionPackage::Action::INSTALL:
+            return RpmTransactionItemActions::INSTALL;
         case libdnf::transaction::TransactionItemAction::UPGRADE:
-            action = Actions::UPGRADE;
-            break;
-        case libdnf::transaction::TransactionItemAction::DOWNGRADE:
-            action = Actions::DOWNGRADE;
-            break;
-        case libdnf::transaction::TransactionItemAction::REINSTALL:
-            action = Actions::REINSTALL;
-            break;
-        case libdnf::transaction::TransactionItemAction::REMOVE:
-        case libdnf::transaction::TransactionItemAction::OBSOLETED:
-            action = Actions::ERASE;
-            break;
-        case libdnf::transaction::TransactionItemAction::REINSTALLED:
-        case libdnf::transaction::TransactionItemAction::UPGRADED:
-        case libdnf::transaction::TransactionItemAction::DOWNGRADED:
-        case libdnf::transaction::TransactionItemAction::OBSOLETE:
-        case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+            return RpmTransactionItemActions::UPGRADE;
+        case libdnf::base::TransactionPackage::Action::DOWNGRADE:
+            return RpmTransactionItemActions::DOWNGRADE;
+        case libdnf::base::TransactionPackage::Action::REINSTALL:
+            return RpmTransactionItemActions::REINSTALL;
+        case libdnf::base::TransactionPackage::Action::REMOVE:
+        case libdnf::base::TransactionPackage::Action::OBSOLETED:
+            return RpmTransactionItemActions::ERASE;
+        case libdnf::base::TransactionPackage::Action::REINSTALLED:
+        case libdnf::base::TransactionPackage::Action::UPGRADED:
+        case libdnf::base::TransactionPackage::Action::DOWNGRADED:
+        case libdnf::base::TransactionPackage::Action::OBSOLETE:
+        case libdnf::base::TransactionPackage::Action::REASON_CHANGE:
             // TODO(lukash) handle cases
             throw libdnf::LogicError(fmt::format("Unexpected action in RpmTransactionItem: {}", tspkg.get_action()));
     }
+    throw libdnf::LogicError(fmt::format("Unknown action in RpmTransactionItem: {}", tspkg.get_action()));
 }
 
 }  // namespace dnfdaemon

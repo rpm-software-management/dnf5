@@ -28,16 +28,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon {
 
-class RpmTransactionItem : public libdnf::rpm::TransactionItem {
-public:
-    enum class Actions { INSTALL, ERASE, UPGRADE, DOWNGRADE, REINSTALL, CLEANUP };
+enum class RpmTransactionItemActions { INSTALL, ERASE, UPGRADE, DOWNGRADE, REINSTALL, CLEANUP };
 
-    RpmTransactionItem(const libdnf::base::TransactionPackage & tspkg);
-    Actions get_action() const noexcept { return action; }
-
-private:
-    Actions action;
-};
+RpmTransactionItemActions transaction_package_to_action(const libdnf::base::TransactionPackage & tspkg);
 
 }  // namespace dnfdaemon
 

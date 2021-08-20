@@ -317,8 +317,8 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
     std::cout << std::endl;
 
     libdnf::rpm::Transaction rpm_transaction(base);
-    std::vector<std::unique_ptr<RpmTransactionItem>> transaction_items;
-    rpm_transaction.fill_transaction<RpmTransactionItem>(transaction.get_packages(), transaction_items);
+    std::vector<std::unique_ptr<libdnf::base::TransactionPackage>> transaction_items;
+    rpm_transaction.fill_transaction<libdnf::base::TransactionPackage>(transaction.get_packages(), transaction_items);
 
     auto db_transaction = new_db_transaction();
     db_transaction->fill_transaction_packages(transaction.get_packages());
@@ -368,34 +368,6 @@ libdnf::transaction::TransactionWeakPtr Context::new_db_transaction() {
     return transaction;
 }
 
-
-RpmTransactionItem::RpmTransactionItem(const libdnf::base::TransactionPackage & tspkg)
-    : TransactionItem(tspkg.get_package()) {
-    switch (tspkg.get_action()) {
-        case libdnf::transaction::TransactionItemAction::INSTALL:
-            action = Actions::INSTALL;
-            break;
-        case libdnf::transaction::TransactionItemAction::UPGRADE:
-            action = Actions::UPGRADE;
-            break;
-        case libdnf::transaction::TransactionItemAction::DOWNGRADE:
-            action = Actions::DOWNGRADE;
-            break;
-        case libdnf::transaction::TransactionItemAction::REINSTALL:
-            action = Actions::REINSTALL;
-            break;
-        case libdnf::transaction::TransactionItemAction::REMOVE:
-        case libdnf::transaction::TransactionItemAction::OBSOLETED:
-            action = Actions::ERASE;
-            break;
-        case libdnf::transaction::TransactionItemAction::REINSTALLED:
-        case libdnf::transaction::TransactionItemAction::UPGRADED:
-        case libdnf::transaction::TransactionItemAction::DOWNGRADED:
-        case libdnf::transaction::TransactionItemAction::OBSOLETE:
-        case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-            throw libdnf::LogicError(fmt::format("Unexpected action in RpmTransactionItem: {}", tspkg.get_action()));
-    }
-}
 
 namespace {
 
@@ -570,20 +542,27 @@ public:
         const libdnf::rpm::RpmHeader & header,
         uint64_t total) override {
         const char * msg{nullptr};
-        if (auto trans_item = static_cast<const RpmTransactionItem *>(item)) {
-            switch (trans_item->get_action()) {
-                case RpmTransactionItem::Actions::UPGRADE:
+        if (item) {
+            switch (item->get_action()) {
+                case libdnf::transaction::TransactionItemAction::UPGRADE:
                     msg = "Upgrading ";
                     break;
-                case RpmTransactionItem::Actions::DOWNGRADE:
+                case libdnf::transaction::TransactionItemAction::DOWNGRADE:
                     msg = "Downgrading ";
                     break;
-                case RpmTransactionItem::Actions::REINSTALL:
+                case libdnf::transaction::TransactionItemAction::REINSTALL:
                     msg = "Reinstalling ";
                     break;
-                case RpmTransactionItem::Actions::INSTALL:
-                case RpmTransactionItem::Actions::ERASE:
+                case libdnf::transaction::TransactionItemAction::INSTALL:
+                case libdnf::transaction::TransactionItemAction::REMOVE:
+                case libdnf::transaction::TransactionItemAction::OBSOLETED:
                     break;
+                case libdnf::transaction::TransactionItemAction::REINSTALLED:
+                case libdnf::transaction::TransactionItemAction::UPGRADED:
+                case libdnf::transaction::TransactionItemAction::DOWNGRADED:
+                case libdnf::transaction::TransactionItemAction::OBSOLETE:
+                case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+                    throw libdnf::LogicError(fmt::format("Unexpected action in TransactionPackage: {}", item->get_action()));
             }
         }
         if (!msg) {
@@ -632,8 +611,8 @@ public:
         const libdnf::rpm::RpmHeader & header,
         uint64_t total) override {
         const char * msg{nullptr};
-        if (auto trans_item = static_cast<const RpmTransactionItem *>(item)) {
-            if (trans_item->get_action() == RpmTransactionItem::Actions::ERASE) {
+        if (item) {
+            if (item->get_action() == libdnf::transaction::TransactionItemAction::REMOVE || item->get_action() == libdnf::transaction::TransactionItemAction::OBSOLETED) {
                 msg = "Erasing ";
             }
         }

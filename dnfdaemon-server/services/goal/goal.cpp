@@ -163,8 +163,8 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     download_packages(session, *transaction);
 
     libdnf::rpm::Transaction rpm_transaction(*base);
-    std::vector<std::unique_ptr<dnfdaemon::RpmTransactionItem>> transaction_items;
-    rpm_transaction.fill_transaction<dnfdaemon::RpmTransactionItem>(transaction->get_packages(), transaction_items);
+    std::vector<std::unique_ptr<libdnf::base::TransactionPackage>> transaction_items;
+    rpm_transaction.fill_transaction<libdnf::base::TransactionPackage>(transaction->get_packages(), transaction_items);
 
     auto db_transaction = new_db_transaction(base, comment);
     db_transaction->fill_transaction_packages(transaction->get_packages());

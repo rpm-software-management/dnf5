@@ -400,7 +400,7 @@ public:
     /// Add package to be reinstalled to transaction set.
     /// @param item  item to be reinstalled
     void reinstall(TransactionItem & item) {
-        auto file_path = item.get_pkg().get_package_path();
+        auto file_path = item.get_package().get_package_path();
         auto * header = read_pkg_header(file_path);
         auto rc = rpmtsAddReinstallElement(ts, header, &item);
         headerFree(header);
@@ -413,7 +413,7 @@ public:
     /// Add package to be erased to transaction set.
     /// @param item  item to be erased
     void erase(TransactionItem & item) {
-        auto rpmdb_id = static_cast<unsigned int>(item.get_pkg().get_rpmdbid());
+        auto rpmdb_id = static_cast<unsigned int>(item.get_package().get_rpmdbid());
         auto * header = get_header(rpmdb_id);
         int unused = -1;
         int rc = rpmtsAddEraseElement(ts, header, unused);
@@ -562,7 +562,7 @@ private:
                 cb.install_start(item, RpmHeader(hdr), total);
                 break;
             case RPMCALLBACK_INST_OPEN_FILE: {
-                auto file_path = item->get_pkg().get_package_path();
+                auto file_path = item->get_package().get_package_path();
                 if (file_path.empty()) {
                     return nullptr;
                 }
@@ -695,7 +695,7 @@ void Transaction::Impl::install_up_down(TransactionItem & item, libdnf::transact
     } else {
         throw LogicError("Unsupported action");
     }
-    auto file_path = item.get_pkg().get_package_path();
+    auto file_path = item.get_package().get_package_path();
     auto * header = read_pkg_header(file_path);
     auto rc = rpmtsAddInstallElement(ts, header, &item, upgrade ? 1 : 0, nullptr);
     headerFree(header);

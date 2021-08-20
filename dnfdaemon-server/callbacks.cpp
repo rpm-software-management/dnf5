@@ -157,14 +157,14 @@ sdbus::Signal DbusTransactionCB::create_signal_pkg(
 void DbusTransactionCB::install_start(
     const libdnf::rpm::TransactionItem * item, const libdnf::rpm::RpmHeader & header, uint64_t total) {
     try {
-        int action;
-        if (auto trans_item = static_cast<const dnfdaemon::RpmTransactionItem *>(item)) {
-            action = static_cast<int>(trans_item->get_action());
+        dnfdaemon::RpmTransactionItemActions action;
+        if (item) {
+            action = dnfdaemon::transaction_package_to_action(*item);
         } else {
-            action = static_cast<int>(dnfdaemon::RpmTransactionItem::Actions::CLEANUP);
+            action = dnfdaemon::RpmTransactionItemActions::CLEANUP;
         }
         auto signal = create_signal_pkg(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_ACTION_START, header);
-        signal << action;
+        signal << static_cast<int>(action);
         signal << total;
         dbus_object->emitSignal(signal);
     } catch (...) {

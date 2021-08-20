@@ -341,25 +341,25 @@ void TransactionCB::action_start(sdbus::Signal & signal) {
         signal >> nevra;
         signal >> action_i;
         signal >> total;
-        auto action = static_cast<dnfdaemon::RpmTransactionItem::Actions>(action_i);
+        auto action = static_cast<dnfdaemon::RpmTransactionItemActions>(action_i);
         std::string msg;
         switch (action) {
-            case dnfdaemon::RpmTransactionItem::Actions::INSTALL:
+            case dnfdaemon::RpmTransactionItemActions::INSTALL:
                 msg = "Installing";
                 break;
-            case dnfdaemon::RpmTransactionItem::Actions::ERASE:
+            case dnfdaemon::RpmTransactionItemActions::ERASE:
                 msg = "Erasing";
                 break;
-            case dnfdaemon::RpmTransactionItem::Actions::DOWNGRADE:
+            case dnfdaemon::RpmTransactionItemActions::DOWNGRADE:
                 msg = "Downgrading";
                 break;
-            case dnfdaemon::RpmTransactionItem::Actions::UPGRADE:
+            case dnfdaemon::RpmTransactionItemActions::UPGRADE:
                 msg = "Upgrading";
                 break;
-            case dnfdaemon::RpmTransactionItem::Actions::REINSTALL:
+            case dnfdaemon::RpmTransactionItemActions::REINSTALL:
                 msg = "Reinstalling";
                 break;
-            case dnfdaemon::RpmTransactionItem::Actions::CLEANUP:
+            case dnfdaemon::RpmTransactionItemActions::CLEANUP:
                 msg = "Cleanup";
                 break;
         }
