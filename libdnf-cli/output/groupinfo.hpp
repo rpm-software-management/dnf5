@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CLI_OUTPUT_GROUPINFO_HPP
 
 #include "libdnf-cli/utils/tty.hpp"
+#include <libdnf/utils/string.hpp>
 
 #include <libsmartcols/libsmartcols.h>
 #include <libdnf/comps/group/package.hpp>
@@ -51,11 +52,43 @@ static void add_line_into_groupinfo_table(
 }
 
 
+static void add_packages(struct libscols_table * table, libdnf::comps::Group & group, libdnf::comps::PackageType pkg_type, const char * pkg_type_desc) {
+    std::set<std::string> packages;
+
+    // we don't mind iterating through all packages in every add_packages() call,
+    // because performance is not an issue here
+    for (auto & package : group.get_packages()) {
+        if (package.get_type() == pkg_type) {
+            packages.emplace(package.get_name());
+        }
+    }
+
+    if (packages.empty()) {
+        // don't even print the package type description
+        return;
+    }
+
+    struct libscols_line * ln = scols_table_new_line(table, NULL);
+    scols_line_set_data(ln, 0, pkg_type_desc);
+
+    auto it = packages.begin();
+    // put the first package at the same line as description
+    scols_line_set_data(ln, 1, it->c_str());
+    it++;
+
+    // put the remaining packages on separate lines
+    for (; it != packages.end(); it++) {
+        struct libscols_line * pkg_ln = scols_table_new_line(table, ln);
+        scols_line_set_data(pkg_ln, 1, it->c_str());
+    }
+}
+
+
 static struct libscols_table * create_groupinfo_table(libdnf::comps::Group & group) {
     struct libscols_table * table = scols_new_table();
     scols_table_enable_noheadings(table, 1);
     scols_table_set_column_separator(table, " : ");
-    scols_table_new_column(table, "key", 5, SCOLS_FL_TREE);
+    scols_table_new_column(table, "key", 20, SCOLS_FL_TREE);
     struct libscols_column * cl = scols_table_new_column(table, "value", 10, SCOLS_FL_WRAP);
     scols_column_set_safechars(cl, "\n");
     scols_column_set_wrapfunc(cl, scols_wrapnl_chunksize, scols_wrapnl_nextchunk, nullptr);
@@ -68,56 +101,19 @@ static struct libscols_table * create_groupinfo_table(libdnf::comps::Group & gro
     scols_symbols_set_vertical(sy, "");
     scols_table_set_symbols(table, sy);
 
-    add_line_into_groupinfo_table(table, "Group id", group.get_groupid().c_str(), "bold");
+    add_line_into_groupinfo_table(table, "Id", group.get_groupid().c_str(), "bold");
     add_line_into_groupinfo_table(table, "Name", group.get_name().c_str());
     add_line_into_groupinfo_table(table, "Description", group.get_description().c_str());
+    add_line_into_groupinfo_table(table, "Installed", group.get_installed() ? "yes" : "no");
     add_line_into_groupinfo_table(table, "Order", group.get_order().c_str());
     add_line_into_groupinfo_table(table, "Langonly", group.get_langonly().c_str());
-    add_line_into_groupinfo_table(table, "Uservisible", group.get_uservisible() ? "True" : "False");
-    add_line_into_groupinfo_table(table, "Installed", group.get_installed() ? "True" : "False");
-    
-    auto repos = group.get_repos();
-    std::string joint_repolist = "";
-    for (auto repo : repos) {
-        if (joint_repolist != "") {
-            joint_repolist.append(", ");
-        }
-        joint_repolist.append(repo);
-    }
-    add_line_into_groupinfo_table(table, "Repositories", joint_repolist.c_str());
+    add_line_into_groupinfo_table(table, "Uservisible", group.get_uservisible() ? "yes" : "no");
+    add_line_into_groupinfo_table(table, "Repositories", libdnf::utils::string::join(group.get_repos(), ", ").c_str());
 
-    struct libscols_line * ln_mandatory = scols_table_new_line(table, NULL);
-    scols_line_set_data(ln_mandatory, 0, "Mandatory packages");
-
-    struct libscols_line * ln_default = scols_table_new_line(table, NULL);
-    scols_line_set_data(ln_default, 0, "Default packages");
-
-    struct libscols_line * ln_optional = scols_table_new_line(table, NULL);
-    scols_line_set_data(ln_optional, 0, "Optional packages");
-
-    struct libscols_line * ln_conditional = scols_table_new_line(table, NULL);
-    scols_line_set_data(ln_conditional, 0, "Conditional packages");
-
-    for (auto package : group.get_packages()) {
-        struct libscols_line * parent = NULL;
-        switch (package.get_type()) {
-            case libdnf::comps::PackageType::MANDATORY:
-                parent = ln_mandatory;
-                break;
-            case libdnf::comps::PackageType::DEFAULT:
-                parent = ln_default;
-                break;
-            case libdnf::comps::PackageType::OPTIONAL:
-                parent = ln_optional;
-                break;
-            case libdnf::comps::PackageType::CONDITIONAL:
-                parent = ln_conditional;
-                break;
-        }
-
-        struct libscols_line * ln = scols_table_new_line(table, parent);
-        scols_line_set_data(ln, 0, package.get_name().c_str());
-    }
+    add_packages(table, group, libdnf::comps::PackageType::MANDATORY, "Mandatory packages");
+    add_packages(table, group, libdnf::comps::PackageType::DEFAULT, "Default packages");
+    add_packages(table, group, libdnf::comps::PackageType::OPTIONAL, "Optional packages");
+    add_packages(table, group, libdnf::comps::PackageType::CONDITIONAL, "Conditional packages");
 
     return table;
 }
