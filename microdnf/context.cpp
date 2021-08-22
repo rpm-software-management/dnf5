@@ -317,8 +317,7 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
     std::cout << std::endl;
 
     libdnf::rpm::Transaction rpm_transaction(base);
-    std::vector<std::unique_ptr<libdnf::base::TransactionPackage>> transaction_items;
-    rpm_transaction.fill_transaction<libdnf::base::TransactionPackage>(transaction.get_transaction_packages(), transaction_items);
+    rpm_transaction.fill(transaction);
 
     auto db_transaction = new_db_transaction();
     db_transaction->fill_transaction_packages(transaction.get_transaction_packages());

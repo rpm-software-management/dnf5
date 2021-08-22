@@ -18,6 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#include "libdnf/base/transaction.hpp"
 #include "libdnf/rpm/transaction.hpp"
 
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
@@ -427,6 +428,34 @@ public:
         }
     };
 
+    /// Fill the RPM transaction from transaction packages.
+    /// @param transcation_packages The transaction packages to add.
+    void fill(std::vector<base::TransactionPackage> && transaction_packages) {
+        transaction_items = std::move(transaction_packages);
+        for (auto & tspkg : transaction_items) {
+            switch (tspkg.get_action()) {
+                case libdnf::transaction::TransactionItemAction::INSTALL:
+                    install(tspkg);
+                    break;
+                case libdnf::transaction::TransactionItemAction::REINSTALL:
+                    reinstall(tspkg);
+                    break;
+                case libdnf::transaction::TransactionItemAction::UPGRADE:
+                    upgrade(tspkg);
+                    break;
+                case libdnf::transaction::TransactionItemAction::DOWNGRADE:
+                    downgrade(tspkg);
+                    break;
+                case libdnf::transaction::TransactionItemAction::REMOVE:
+                case libdnf::transaction::TransactionItemAction::OBSOLETED:
+                    erase(tspkg);
+                    break;
+                default:
+                    ; // TODO(lukash) handle the other cases
+            }
+        }
+    }
+
     // Set transaction notify callback.
     void register_cb(TransactionCB * cb) { cb_info.cb = cb; }
 
@@ -514,6 +543,7 @@ private:
     FD_t fd_in_cb{nullptr};  // file descriptor used by transaction in callback (install/reinstall package)
     std::map<unsigned int, TransactionItem *> items{};
     bool downgrade_requested{false};
+    std::vector<TransactionItem> transaction_items;
 
     /// Add package to be installed to transaction set.
     /// The transaction set is checked for duplicate package names.
@@ -773,6 +803,10 @@ void Transaction::reinstall(TransactionItem & item) {
 
 void Transaction::erase(TransactionItem & item) {
     p_impl->erase(item);
+}
+
+void Transaction::fill(const base::Transaction & transaction) {
+    p_impl->fill(transaction.get_transaction_packages());
 }
 
 bool Transaction::check() {
