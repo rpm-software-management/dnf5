@@ -284,32 +284,6 @@ public:
     // Set transaction notify callback.
     void register_cb(TransactionCB * cb);
 
-    /// Add package to be installed to transaction set.
-    /// The transaction set is checked for duplicate package names.
-    /// If found, the package with the "newest" EVR will be replaced.
-    /// @param item  item to be installed
-    void install(TransactionItem & item);
-
-    /// Add package to be upgraded to transaction set.
-    /// The transaction set is checked for duplicate package names.
-    /// If found, the package with the "newest" EVR will be replaced.
-    /// @param item  item to be upgraded
-    void upgrade(TransactionItem & item);
-
-    /// Add package to be downgraded to transaction set.
-    /// The transaction set is checked for duplicate package names.
-    /// If found, the package with the "newest" EVR will be replaced.
-    /// @param item  item to be downgraded
-    void downgrade(TransactionItem & item);
-
-    /// Add package to be reinstalled to transaction set.
-    /// @param item  item to be reinstalled
-    void reinstall(TransactionItem & item);
-
-    /// Add package to be erased to transaction set.
-    /// @param item  item to be erased
-    void erase(TransactionItem & item);
-
     /// Fill the RPM transaction from base::Transaction.
     /// @param transcation The base::Transaction object.
     void fill(const base::Transaction & transaction);

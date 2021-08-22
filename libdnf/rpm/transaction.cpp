@@ -785,26 +785,6 @@ void Transaction::register_cb(TransactionCB * cb) {
     p_impl->register_cb(cb);
 }
 
-void Transaction::install(TransactionItem & item) {
-    p_impl->install(item);
-}
-
-void Transaction::upgrade(TransactionItem & item) {
-    p_impl->upgrade(item);
-}
-
-void Transaction::downgrade(TransactionItem & item) {
-    p_impl->downgrade(item);
-}
-
-void Transaction::reinstall(TransactionItem & item) {
-    p_impl->reinstall(item);
-}
-
-void Transaction::erase(TransactionItem & item) {
-    p_impl->erase(item);
-}
-
 void Transaction::fill(const base::Transaction & transaction) {
     p_impl->fill(transaction.get_transaction_packages());
 }
