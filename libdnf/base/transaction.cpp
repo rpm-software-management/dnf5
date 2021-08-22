@@ -207,7 +207,7 @@ GoalProblem Transaction::get_problems() {
     return p_impl->problems;
 }
 
-std::vector<TransactionPackage> Transaction::get_packages() {
+std::vector<TransactionPackage> Transaction::get_transaction_packages() const {
     return p_impl->packages;
 }
 

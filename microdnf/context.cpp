@@ -318,10 +318,10 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
 
     libdnf::rpm::Transaction rpm_transaction(base);
     std::vector<std::unique_ptr<libdnf::base::TransactionPackage>> transaction_items;
-    rpm_transaction.fill_transaction<libdnf::base::TransactionPackage>(transaction.get_packages(), transaction_items);
+    rpm_transaction.fill_transaction<libdnf::base::TransactionPackage>(transaction.get_transaction_packages(), transaction_items);
 
     auto db_transaction = new_db_transaction();
-    db_transaction->fill_transaction_packages(transaction.get_packages());
+    db_transaction->fill_transaction_packages(transaction.get_transaction_packages());
 
     auto time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
@@ -330,7 +330,7 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
     run_transaction(rpm_transaction);
 
     auto & system_state = base.get_rpm_package_sack()->get_system_state();
-    for (const auto & tspkg : transaction.get_packages()) {
+    for (const auto & tspkg : transaction.get_transaction_packages()) {
         system_state.set_reason(tspkg.get_package().get_na(), tspkg.get_reason());
     }
 
@@ -502,7 +502,7 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
 
 void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir) {
     std::vector<libdnf::rpm::Package> downloads;
-    for (auto & tspkg : transaction.get_packages()) {
+    for (auto & tspkg : transaction.get_transaction_packages()) {
         if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL || \
             tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL || \
             tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE || \

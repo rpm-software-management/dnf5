@@ -23,7 +23,7 @@ namespace dnfdaemon::client {
 
 DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> transaction) {
     for (auto & ti : transaction) {
-        packages.push_back(DbusTransactionPackageWrapper(ti));
+        transaction_packages.push_back(DbusTransactionPackageWrapper(ti));
     }
 }
 

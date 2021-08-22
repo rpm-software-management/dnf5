@@ -219,7 +219,7 @@ template <class Transaction>
 bool print_transaction_table(Transaction & transaction) {
     // TODO (nsella) split function into create/print if possible
     //static struct libscols_table * create_transaction_table(bool with_status) {}
-    auto tspkgs = transaction.get_packages();
+    auto tspkgs = transaction.get_transaction_packages();
 
     if (tspkgs.empty()) {
         std::cout << "Nothing to do." << std::endl;

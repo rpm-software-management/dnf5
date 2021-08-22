@@ -67,7 +67,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 
     std::vector<dnfdaemon::DbusTransactionItem> result;
 
-    for (auto & tspkg : transaction.get_packages()) {
+    for (auto & tspkg : transaction.get_transaction_packages()) {
         result.push_back(dnfdaemon::DbusTransactionItem(
             static_cast<unsigned int>(tspkg.get_action()), package_to_map(tspkg.get_package(), attr)));
     }
@@ -103,7 +103,7 @@ libdnf::transaction::TransactionWeakPtr new_db_transaction(libdnf::Base * base, 
 // TODO (mblaha) callbacks to report the status
 void download_packages(Session & session, libdnf::base::Transaction & transaction) {
     std::vector<libdnf::rpm::Package> download_pkgs;
-    for (auto & tspkg : transaction.get_packages()) {
+    for (auto & tspkg : transaction.get_transaction_packages()) {
         if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL ||
             tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL ||
             tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE ||
@@ -164,10 +164,10 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
 
     libdnf::rpm::Transaction rpm_transaction(*base);
     std::vector<std::unique_ptr<libdnf::base::TransactionPackage>> transaction_items;
-    rpm_transaction.fill_transaction<libdnf::base::TransactionPackage>(transaction->get_packages(), transaction_items);
+    rpm_transaction.fill_transaction<libdnf::base::TransactionPackage>(transaction->get_transaction_packages(), transaction_items);
 
     auto db_transaction = new_db_transaction(base, comment);
-    db_transaction->fill_transaction_packages(transaction->get_packages());
+    db_transaction->fill_transaction_packages(transaction->get_transaction_packages());
 
     auto time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());

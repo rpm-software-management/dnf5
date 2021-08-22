@@ -65,7 +65,7 @@ void BaseGoalTest::test_install() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_install_not_available() {
@@ -78,7 +78,7 @@ void BaseGoalTest::test_install_not_available() {
     goal.add_rpm_install("not_available");
     auto transaction = goal.resolve(false);
 
-    CPPUNIT_ASSERT(transaction.get_packages().empty());
+    CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
     auto & log = transaction.get_resolve_logs();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
@@ -109,7 +109,7 @@ void BaseGoalTest::test_install_from_cmdline() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_install_multilib_all() {
@@ -135,7 +135,7 @@ void BaseGoalTest::test_install_multilib_all() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_reinstall() {
@@ -161,7 +161,7 @@ void BaseGoalTest::test_reinstall() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_reinstall_user() {
@@ -187,7 +187,7 @@ void BaseGoalTest::test_reinstall_user() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_remove() {
@@ -206,7 +206,7 @@ void BaseGoalTest::test_remove() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_remove_not_installed() {
@@ -216,7 +216,7 @@ void BaseGoalTest::test_remove_not_installed() {
     goal.add_rpm_remove("not_installed");
     auto transaction = goal.resolve(false);
 
-    CPPUNIT_ASSERT(transaction.get_packages().empty());
+    CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
     auto & log = transaction.get_resolve_logs();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
@@ -244,7 +244,7 @@ void BaseGoalTest::test_install_installed_pkg() {
 
     auto transaction = goal.resolve(false);
 
-    CPPUNIT_ASSERT(transaction.get_packages().empty());
+    CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 }
 
 void BaseGoalTest::test_upgrade() {
@@ -272,7 +272,7 @@ void BaseGoalTest::test_upgrade() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_upgrade_not_available() {
@@ -286,7 +286,7 @@ void BaseGoalTest::test_upgrade_not_available() {
 
     auto transaction = goal.resolve(false);
 
-    CPPUNIT_ASSERT(transaction.get_packages().empty());
+    CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
     auto & log = transaction.get_resolve_logs();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
@@ -324,7 +324,7 @@ void BaseGoalTest::test_upgrade_all() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_upgrade_user() {
@@ -352,7 +352,7 @@ void BaseGoalTest::test_upgrade_user() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_downgrade() {
@@ -380,7 +380,7 @@ void BaseGoalTest::test_downgrade() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_downgrade_user() {
@@ -408,7 +408,7 @@ void BaseGoalTest::test_downgrade_user() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_distrosync() {
@@ -436,7 +436,7 @@ void BaseGoalTest::test_distrosync() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_distrosync_all() {
@@ -464,7 +464,7 @@ void BaseGoalTest::test_distrosync_all() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
 void BaseGoalTest::test_install_or_reinstall() {
@@ -492,5 +492,5 @@ void BaseGoalTest::test_install_or_reinstall() {
             TransactionItemState::UNKNOWN
         )
     };
-    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_packages());
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }

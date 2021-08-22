@@ -48,7 +48,8 @@ public:
     get_resolve_logs();
 
     /// @return the transaction packages.
-    std::vector<libdnf::base::TransactionPackage> get_packages();
+    // TODO(jrohel): Return reference instead of copy?
+    std::vector<libdnf::base::TransactionPackage> get_transaction_packages() const;
 
     /// Convert an element from resolve log to string;
     static std::string format_resolve_log(

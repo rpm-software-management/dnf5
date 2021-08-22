@@ -34,10 +34,10 @@ class DbusGoalWrapper {
 public:
     DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem>);
 
-    std::vector<DbusTransactionPackageWrapper> get_packages() const { return packages; };
+    std::vector<DbusTransactionPackageWrapper> get_transaction_packages() const { return transaction_packages; };
 
 private:
-    std::vector<DbusTransactionPackageWrapper> packages;
+    std::vector<DbusTransactionPackageWrapper> transaction_packages;
 };
 
 }  // namespace dnfdaemon::client
