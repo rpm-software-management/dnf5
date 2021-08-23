@@ -51,6 +51,16 @@ UpgradeCommand::UpgradeCommand(Command & parent) : Command(parent, "upgrade") {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Upgrade software");
 
+    minimal = dynamic_cast<libdnf::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+    auto minimal_opt = parser.add_new_named_arg("minimal");
+    minimal_opt->set_long_name("minimal");
+    // TODO(dmach): Explain how this relates to options such as --security, --enhacement etc.
+    minimal_opt->set_short_description("Upgrade packages only to the lowest versions of packages that fix the problems affecting the system.");
+    minimal_opt->set_const_value("true");
+    minimal_opt->link_value(minimal);
+    cmd.register_named_arg(minimal_opt);
+
     patterns_to_upgrade_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
         "keys_to_match",

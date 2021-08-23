@@ -29,3 +29,8 @@ Combine `query.filter_priority()` with `query.filter_latest_evr()` or another fi
 Query::filter() - HY_PKG_LATEST
 -------------------------------
 The filter was replaced with `filter_latest_evr()` which has the same behavior as `HY_PKG_LATEST_PER_ARCH`
+
+
+Changes on the command line
+---------------------------
+dnf upgrade-minimal -> dnf upgrade --minimal

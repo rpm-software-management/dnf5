@@ -40,6 +40,7 @@ public:
 
 private:
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_upgrade_options{nullptr};
+    libdnf::OptionBool * minimal{nullptr};
 };
 
 
