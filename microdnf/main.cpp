@@ -71,28 +71,30 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     cmd.set_description("Microdnf is a program for maintaining packages.");
     cmd.set_named_args_help_header("Global options:");
 
-    auto * software_management_group_cmds = session.get_argument_parser().add_new_group("software_management_cmds");
-    software_management_group_cmds->set_header("Software Management Commands:");
-    cmd.register_group(software_management_group_cmds);
+    // software management commands
+    auto * software_management_commands_group = session.get_argument_parser().add_new_group("software_management_commands");
+    software_management_commands_group->set_header("Software Management Commands:");
+    cmd.register_group(software_management_commands_group);
+    register_subcommand(std::make_unique<InstallCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<UpgradeCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<RemoveCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<DistroSyncCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<SwapCommand>(*this), software_management_commands_group);
 
-    auto * query_group_cmds = session.get_argument_parser().add_new_group("query_cmds");
-    query_group_cmds->set_header("Query Commands:");
-    cmd.register_group(query_group_cmds);
+    // query commands
+    auto * query_commands_group = session.get_argument_parser().add_new_group("query_commands");
+    query_commands_group->set_header("Query Commands:");
+    cmd.register_group(query_commands_group);
+    register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<SearchCommand>(*this), query_commands_group);
 
     register_subcommand(std::make_unique<AdvisoryCommand>(*this));
-    register_subcommand(std::make_unique<DistroSyncCommand>(*this));
     register_subcommand(std::make_unique<DownloadCommand>(*this));
-    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_group_cmds);
     register_subcommand(std::make_unique<GroupinfoCommand>(*this));
     register_subcommand(std::make_unique<GrouplistCommand>(*this));
-    register_subcommand(std::make_unique<InstallCommand>(*this), software_management_group_cmds);
-    register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_group_cmds);
-    register_subcommand(std::make_unique<RemoveCommand>(*this), software_management_group_cmds);
     register_subcommand(std::make_unique<RepolistCommand>(*this));
-    register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_group_cmds);
-    register_subcommand(std::make_unique<SearchCommand>(*this), query_group_cmds);
-    register_subcommand(std::make_unique<SwapCommand>(*this), software_management_group_cmds);
-    register_subcommand(std::make_unique<UpgradeCommand>(*this), software_management_group_cmds);
 }
 
 inline void RootCommand::run() {
