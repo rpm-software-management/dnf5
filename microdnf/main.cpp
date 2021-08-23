@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/grouplist/grouplist.hpp"
 #include "commands/history/history.hpp"
 #include "commands/install/install.hpp"
+#include "commands/module/module.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
 #include "commands/repolist/repolist.hpp"
@@ -94,6 +95,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     auto * subcommands_group = session.get_argument_parser().add_new_group("subcommands");
     subcommands_group->set_header("Subcommands:");
     cmd.register_group(subcommands_group);
+    register_subcommand(std::make_unique<ModuleCommand>(*this), subcommands_group);
     register_subcommand(std::make_unique<HistoryCommand>(*this), subcommands_group);
 
     register_subcommand(std::make_unique<AdvisoryCommand>(*this));
