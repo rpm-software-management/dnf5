@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/download/download.hpp"
 #include "commands/groupinfo/groupinfo.hpp"
 #include "commands/grouplist/grouplist.hpp"
+#include "commands/history/history.hpp"
 #include "commands/install/install.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
@@ -89,6 +90,11 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     cmd.register_group(query_commands_group);
     register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
     register_subcommand(std::make_unique<SearchCommand>(*this), query_commands_group);
+
+    auto * subcommands_group = session.get_argument_parser().add_new_group("subcommands");
+    subcommands_group->set_header("Subcommands:");
+    cmd.register_group(subcommands_group);
+    register_subcommand(std::make_unique<HistoryCommand>(*this), subcommands_group);
 
     register_subcommand(std::make_unique<AdvisoryCommand>(*this));
     register_subcommand(std::make_unique<DownloadCommand>(*this));
