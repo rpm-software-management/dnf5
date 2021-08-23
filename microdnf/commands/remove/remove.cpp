@@ -43,7 +43,9 @@ using namespace libdnf::cli;
 RemoveCommand::RemoveCommand(Command & parent) : Command(parent, "remove") {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
+
     auto & cmd = *get_argument_parser_command();
+    cmd.set_short_description("Remove (uninstall) software");
 
     patterns_to_remove_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
@@ -52,17 +54,6 @@ RemoveCommand::RemoveCommand(Command & parent) : Command(parent, "remove") {
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_remove_options);
     keys->set_short_description("List of keys to match");
-
-    cmd.set_short_description("Remove (uninstall) software");
-    cmd.set_parse_hook_func([this, &ctx](
-                                [[maybe_unused]] ArgumentParser::Argument * arg,
-                                [[maybe_unused]] const char * option,
-                                [[maybe_unused]] int argc,
-                                [[maybe_unused]] const char * const argv[]) {
-        ctx.set_selected_command(this);
-        return true;
-    });
-
     cmd.register_positional_arg(keys);
 
     // TODO(dmach): implement the option; should work as `dnf autoremove`

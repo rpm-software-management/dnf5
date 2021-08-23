@@ -41,7 +41,9 @@ using namespace libdnf::cli;
 GrouplistCommand::GrouplistCommand(Command & parent) : Command(parent, "grouplist") {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
+
     auto & cmd = *get_argument_parser_command();
+    cmd.set_short_description("List comps groups");
 
     available_option = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
@@ -84,16 +86,6 @@ GrouplistCommand::GrouplistCommand(Command & parent) : Command(parent, "grouplis
 
     available->set_conflict_arguments(conflict_args);
     installed->set_conflict_arguments(conflict_args);
-
-    cmd.set_short_description("List comps groups");
-    cmd.set_parse_hook_func([this, &ctx](
-                                [[maybe_unused]] ArgumentParser::Argument * arg,
-                                [[maybe_unused]] const char * option,
-                                [[maybe_unused]] int argc,
-                                [[maybe_unused]] const char * const argv[]) {
-        ctx.set_selected_command(this);
-        return true;
-    });
 
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);

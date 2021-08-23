@@ -37,17 +37,9 @@ using namespace libdnf::cli;
 SwapCommand::SwapCommand(Command & parent) : Command(parent, "swap") {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
-    auto & cmd = *get_argument_parser_command();
 
+    auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Remove software and install another in one transaction");
-    cmd.set_parse_hook_func([this, &ctx](
-                                     [[maybe_unused]] ArgumentParser::Argument * arg,
-                                     [[maybe_unused]] const char * option,
-                                     [[maybe_unused]] int argc,
-                                     [[maybe_unused]] const char * const argv[]) {
-        ctx.set_selected_command(this);
-        return true;
-    });
 
     patterns = parser.add_new_values();
     auto patterns_arg = parser.add_new_positional_arg(

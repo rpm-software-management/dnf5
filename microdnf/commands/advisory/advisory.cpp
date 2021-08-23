@@ -38,7 +38,9 @@ using namespace libdnf::cli;
 AdvisoryCommand::AdvisoryCommand(Command & parent) : Command(parent, "advisory") {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
+
     auto & cmd = *get_argument_parser_command();
+    cmd.set_short_description("Manage advisories");
 
     availability_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(
@@ -134,16 +136,6 @@ AdvisoryCommand::AdvisoryCommand(Command & parent) : Command(parent, "advisory")
     with_bz->set_short_description("show only advisories with bugzilla reference");
     with_bz->set_const_value("false");
     with_bz->link_value(with_bz_option);
-
-    cmd.set_short_description("Manage advisories");
-    cmd.set_parse_hook_func([this, &ctx](
-                               [[maybe_unused]] ArgumentParser::Argument * arg,
-                               [[maybe_unused]] const char * option,
-                               [[maybe_unused]] int argc,
-                               [[maybe_unused]] const char * const argv[]) {
-        ctx.set_selected_command(this);
-        return true;
-    });
 
     cmd.register_named_arg(all);
     cmd.register_named_arg(available);

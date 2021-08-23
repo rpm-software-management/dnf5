@@ -47,27 +47,17 @@ using namespace libdnf::cli;
 UpgradeCommand::UpgradeCommand(Command & parent) : Command(parent, "upgrade") {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
+
     auto & cmd = *get_argument_parser_command();
+    cmd.set_short_description("Upgrade software");
 
     patterns_to_upgrade_options = parser.add_new_values();
-
     auto keys = parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_upgrade_options);
     keys->set_short_description("List of keys to match");
-
-    cmd.set_short_description("Upgrade software");
-    cmd.set_parse_hook_func([this, &ctx](
-                                [[maybe_unused]] ArgumentParser::Argument * arg,
-                                [[maybe_unused]] const char * option,
-                                [[maybe_unused]] int argc,
-                                [[maybe_unused]] const char * const argv[]) {
-        ctx.set_selected_command(this);
-        return true;
-    });
-
     cmd.register_positional_arg(keys);
 }
 

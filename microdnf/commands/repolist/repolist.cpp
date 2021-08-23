@@ -76,14 +76,6 @@ RepolistCommand::RepolistCommand(Command & parent) : Command(parent, "repolist")
     disabled->set_conflict_arguments(conflict_args);
 
     cmd.set_short_description("List defined repositories");
-    cmd.set_parse_hook_func([this, &ctx](
-                               [[maybe_unused]] ArgumentParser::Argument * arg,
-                               [[maybe_unused]] const char * option,
-                               [[maybe_unused]] int argc,
-                               [[maybe_unused]] const char * const argv[]) {
-        ctx.set_selected_command(this);
-        return true;
-    });
 
     cmd.register_named_arg(all);
     cmd.register_named_arg(enabled);
