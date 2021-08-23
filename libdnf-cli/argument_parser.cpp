@@ -440,16 +440,25 @@ void ArgumentParser::Command::help() const noexcept {
             }
         }
 
-        // Processing ungrouped commands.
-        if (print) {
-            scols_table_new_line(table, nullptr);
+        // gather commands that don't belong to any group
+        std::vector<Command *> ungrouped_commands;
+        for (auto * cmd : cmds) {
+            if (args_used_in_groups.count(cmd) == 0) {
+                ungrouped_commands.push_back(cmd);
+            }
         }
-        struct libscols_line * header = scols_table_new_line(table, nullptr);
-        scols_line_set_data(header, 0, commands_help_header.c_str());
-        for (auto * arg : cmds) {
-            if (args_used_in_groups.count(arg) == 0) {
+
+        // print the commands that don't belong to any group
+        // avoid printing `commands_help_header` if the list is empty
+        if (!ungrouped_commands.empty()) {
+            if (print) {
+                scols_table_new_line(table, nullptr);
+            }
+            struct libscols_line * header = scols_table_new_line(table, nullptr);
+            scols_line_set_data(header, 0, commands_help_header.c_str());
+            for (auto * cmd : ungrouped_commands) {
                 libdnf::cli::output::add_line_into_help_table(
-                    table, "  " + arg->get_id(), arg->get_short_description(), header);
+                    table, "  " + cmd->get_id(), cmd->get_short_description(), header);
             }
         }
 
