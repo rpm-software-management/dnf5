@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef MICRODNF_COMMANDS_GROUPINFO_GROUPINFO_HPP
-#define MICRODNF_COMMANDS_GROUPINFO_GROUPINFO_HPP
+#ifndef MICRODNF_COMMANDS_GROUP_GROUP_INFO_HPP
+#define MICRODNF_COMMANDS_GROUP_GROUP_INFO_HPP
 
 
 #include <libdnf-cli/session.hpp>
@@ -33,9 +33,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace microdnf {
 
 
-class GroupinfoCommand : public libdnf::cli::session::Command {
+class GroupInfoCommand : public libdnf::cli::session::Command {
 public:
-    explicit GroupinfoCommand(Command & parent);
+    explicit GroupInfoCommand(Command & parent);
     void run() override;
 
 private:
@@ -49,4 +49,4 @@ private:
 }  // namespace microdnf
 
 
-#endif  // MICRODNF_COMMANDS_GROUPINFO_GROUPINFO_HPP
+#endif  // MICRODNF_COMMANDS_GROUP_GROUP_INFO_HPP

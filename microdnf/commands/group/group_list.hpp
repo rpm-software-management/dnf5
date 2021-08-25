@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef MICRODNF_COMMANDS_GROUPLIST_GROUPLIST_HPP
-#define MICRODNF_COMMANDS_GROUPLIST_GROUPLIST_HPP
+#ifndef MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
+#define MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
 
 
 #include <libdnf-cli/session.hpp>
@@ -33,9 +33,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace microdnf {
 
 
-class GrouplistCommand : public libdnf::cli::session::Command {
+class GroupListCommand : public libdnf::cli::session::Command {
 public:
-    explicit GrouplistCommand(Command & parent);
+    explicit GroupListCommand(Command & parent);
     void run() override;
 
 private:
@@ -49,4 +49,4 @@ private:
 }  // namespace microdnf
 
 
-#endif  // MICRODNF_COMMANDS_GROUPLIST_GROUPLIST_HPP
+#endif  // MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP

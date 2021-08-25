@@ -22,8 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
-#include "commands/groupinfo/groupinfo.hpp"
-#include "commands/grouplist/grouplist.hpp"
+#include "commands/group/group.hpp"
 #include "commands/history/history.hpp"
 #include "commands/install/install.hpp"
 #include "commands/module/module.hpp"
@@ -95,13 +94,12 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     auto * subcommands_group = session.get_argument_parser().add_new_group("subcommands");
     subcommands_group->set_header("Subcommands:");
     cmd.register_group(subcommands_group);
+    register_subcommand(std::make_unique<GroupCommand>(*this), subcommands_group);
     register_subcommand(std::make_unique<ModuleCommand>(*this), subcommands_group);
     register_subcommand(std::make_unique<HistoryCommand>(*this), subcommands_group);
 
     register_subcommand(std::make_unique<AdvisoryCommand>(*this));
     register_subcommand(std::make_unique<DownloadCommand>(*this));
-    register_subcommand(std::make_unique<GroupinfoCommand>(*this));
-    register_subcommand(std::make_unique<GrouplistCommand>(*this));
     register_subcommand(std::make_unique<RepolistCommand>(*this));
 }
 

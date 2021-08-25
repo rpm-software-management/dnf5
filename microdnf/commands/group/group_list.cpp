@@ -18,15 +18,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "groupinfo.hpp"
+#include "group_list.hpp"
 
 #include "../../context.hpp"
 
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/group/group.hpp>
 #include <libdnf/comps/group/query.hpp>
-#include <libdnf/conf/option_string.hpp>
-#include "libdnf-cli/output/groupinfo.hpp"
+#include "libdnf-cli/output/grouplist.hpp"
 
 #include <filesystem>
 #include <fstream>
@@ -39,12 +38,12 @@ namespace microdnf {
 using namespace libdnf::cli;
 
 
-GroupinfoCommand::GroupinfoCommand(Command & parent) : Command(parent, "groupinfo") {
+GroupListCommand::GroupListCommand(Command & parent) : Command(parent, "list") {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Print details about comps groups");
+    cmd.set_short_description("List comps groups");
 
     available_option = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
@@ -95,7 +94,7 @@ GroupinfoCommand::GroupinfoCommand(Command & parent) : Command(parent, "groupinf
 }
 
 
-void GroupinfoCommand::run() {
+void GroupListCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
     ctx.base.get_rpm_package_sack()->create_system_repo(false);
@@ -158,10 +157,7 @@ void GroupinfoCommand::run() {
         }
     }
 
-    for (auto group : group_list) {
-        libdnf::cli::output::print_groupinfo_table(group);
-        std::cout << '\n';
-    }
+    libdnf::cli::output::print_grouplist_table(group_list);
 }
 
 
