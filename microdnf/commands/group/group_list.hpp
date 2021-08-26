@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
 
 
+#include "arguments.hpp"
+
 #include <libdnf-cli/session.hpp>
 
 #include <libdnf/conf/option_bool.hpp>
@@ -38,11 +40,10 @@ public:
     explicit GroupListCommand(Command & parent);
     void run() override;
 
-private:
-    libdnf::OptionBool * available_option{nullptr};
-    libdnf::OptionBool * installed_option{nullptr};
-    libdnf::OptionBool * hidden_option{nullptr};
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_show_options{nullptr};
+    std::unique_ptr<GroupAvailableOption> available{nullptr};
+    std::unique_ptr<GroupInstalledOption> installed{nullptr};
+    std::unique_ptr<GroupHiddenOption> hidden{nullptr};
+    std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
 };
 
 
