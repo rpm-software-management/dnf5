@@ -4,6 +4,9 @@ endif()
 
 find_package(Threads)
 
+# set gettext domain for translations
+add_definitions(-DGETTEXT_DOMAIN=\"microdnf\")
+
 # use any sources found under the current directory
 file(GLOB_RECURSE MICRODNF_SOURCES *.cpp)
 
