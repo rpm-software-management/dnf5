@@ -68,4 +68,59 @@ void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf::c
 }
 
 
+BoolOption::BoolOption(
+    libdnf::cli::session::Command & command,
+    const std::string & long_name,
+    char short_name,
+    const std::string & desc,
+    bool default_value) {
+    auto & parser = command.get_session().get_argument_parser();
+    conf =
+        dynamic_cast<libdnf::OptionBool *>(parser.add_init_value(std::make_unique<libdnf::OptionBool>(default_value)));
+    arg = parser.add_new_named_arg(long_name);
+
+    if (!long_name.empty()) {
+        arg->set_long_name(long_name);
+    }
+
+    if (short_name) {
+        arg->set_short_name(short_name);
+    }
+
+    arg->set_short_description(desc);
+    arg->set_const_value(default_value ? "false" : "true");
+    arg->link_value(conf);
+
+    command.get_argument_parser_command()->register_named_arg(arg);
+}
+
+
+StringArgumentList::StringArgumentList(
+    libdnf::cli::session::Command & command, const std::string & name, const std::string & desc) {
+    auto & parser = command.get_session().get_argument_parser();
+
+    conf = parser.add_new_values();
+    arg = parser.add_new_positional_arg(
+        name,
+        ArgumentParser::PositionalArg::UNLIMITED,
+        parser.add_init_value(std::make_unique<libdnf::OptionString>(nullptr)),
+        conf);
+    arg->set_short_description(desc);
+
+    command.get_argument_parser_command()->register_positional_arg(arg);
+}
+
+
+std::vector<std::string> StringArgumentList::get_value() const {
+    std::vector<std::string> result;
+
+    for (auto & opt : *conf) {
+        auto string_opt = dynamic_cast<libdnf::OptionString *>(opt.get());
+        result.emplace_back(string_opt->get_value());
+    }
+
+    return result;
+}
+
+
 }  // namespace libdnf::cli::session

@@ -24,6 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "argument_parser.hpp"
 
+#include <libdnf/conf/option_bool.hpp>
+#include <libdnf/conf/option_string.hpp>
+
 
 namespace libdnf::cli::session {
 
@@ -103,6 +106,38 @@ private:
     Command * parent_command = nullptr;
     libdnf::cli::ArgumentParser::Command * argument_parser_command;
     std::vector<std::unique_ptr<Command>> subcommands;
+};
+
+
+class Option {
+};
+
+
+class BoolOption : public Option {
+public:
+    explicit BoolOption(libdnf::cli::session::Command & command, const std::string & long_name, char short_name, const std::string & desc, bool default_value);
+
+    /// @return Parsed value.
+    /// @since 5.0
+    bool get_value() const { return conf->get_value(); }
+
+protected:
+    libdnf::OptionBool * conf{nullptr};
+    libdnf::cli::ArgumentParser::NamedArg * arg{nullptr};
+};
+
+
+class StringArgumentList : public Option {
+public:
+    explicit StringArgumentList(libdnf::cli::session::Command & command, const std::string & name, const std::string & desc);
+
+    /// @return Parsed value.
+    /// @since 5.0
+    std::vector<std::string> get_value() const;
+
+protected:
+    std::vector<std::unique_ptr<libdnf::Option>> * conf{nullptr};
+    libdnf::cli::ArgumentParser::PositionalArg * arg{nullptr};
 };
 
 
