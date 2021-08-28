@@ -486,6 +486,7 @@ public:
 
         Command(ArgumentParser & owner, const std::string & id) : Argument(owner, id) {}
 
+        Command * parent{nullptr};
         std::vector<Command *> cmds;
         std::vector<NamedArg *> named_args;
         std::vector<PositionalArg *> pos_args;

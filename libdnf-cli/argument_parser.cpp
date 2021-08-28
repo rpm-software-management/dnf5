@@ -17,9 +17,11 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+
 #include "libdnf-cli/argument_parser.hpp"
 
 #include "libdnf-cli/output/argument_parser.hpp"
+#include "libdnf-cli/utils/tty.hpp"
 
 #include <fmt/format.h>
 
@@ -227,6 +229,7 @@ void ArgumentParser::Command::register_command(Command * cmd) {
             throw CommandIdExists(cmd->id);
         }
     }
+    cmd->parent = this;
     cmds.push_back(cmd);
 }
 
@@ -409,6 +412,29 @@ void ArgumentParser::Command::help() const noexcept {
 
     // Arguments used in groups are not printed as ungrouped.
     std::set<Argument *> args_used_in_groups;
+
+    // generate usage
+    // start with the current command name
+    std::string usage = get_id();
+
+    if (cmds.empty()) {
+        // leaf command
+        usage += " [GLOBAL OPTIONS] [OPTIONS] [ARGUMENTS]";
+    } else {
+        // command that has subcommands
+        usage += " <COMMAND> [--help] ...";
+    }
+
+    // prepend parent commands
+    Command * cmd = parent;
+    while (cmd) {
+        usage = cmd->get_id() + " " + usage;
+        cmd = cmd->parent;
+    }
+
+    // print usage
+    std::cout << libdnf::cli::utils::tty::bold << "Usage:" << libdnf::cli::utils::tty::reset << "\n";
+    std::cout << "  " << usage << "\n\n";
 
     if (!description.empty()) {
         std::cout << description << '\n';
