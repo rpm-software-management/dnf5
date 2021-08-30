@@ -66,7 +66,7 @@ private:
 
     std::vector<TransactionPackage> packages;
 
-    /// <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
+    /// <libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
     std::vector<std::tuple<GoalAction, GoalProblem, GoalJobSettings, std::string, std::set<std::string>>> resolve_logs;
 
     std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> package_solver_problems;

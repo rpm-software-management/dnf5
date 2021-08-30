@@ -37,7 +37,7 @@ public:
 
     libdnf::GoalProblem get_problems();
 
-    /// @returns <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalSettings settings, std::string spec>.
+    /// @returns <libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalSettings settings, std::string spec>.
     /// Returs information about resolvement of Goal except problemes related to solver
     const std::vector<std::tuple<
         libdnf::GoalAction,

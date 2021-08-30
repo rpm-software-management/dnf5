@@ -97,12 +97,12 @@ private:
     friend class Goal;
     BaseWeakPtr base;
     std::vector<std::string> module_enable_specs;
-    /// <libdnf::Goal::Action, std::string pkg_spec, libdnf::GoalJobSettings settings>
+    /// <libdnf::GoalAction, std::string pkg_spec, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_specs;
-    /// <libdnf::Goal::Action, rpm Ids, libdnf::GoalJobSettings settings>
+    /// <libdnf::GoalAction, rpm Ids, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
 
-    /// <libdnf::Goal::Action, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
+    /// <libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
     std::vector<std::tuple<GoalAction, GoalProblem, GoalJobSettings, std::string, std::set<std::string>>>
         rpm_goal_reports;
 
