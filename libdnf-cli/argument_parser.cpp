@@ -21,7 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf-cli/argument_parser.hpp"
 
 #include "libdnf-cli/output/argument_parser.hpp"
-#include "libdnf-cli/utils/tty.hpp"
+
+#include <libdnf/utils/bgettext/bgettext-lib.h>
+#include <libdnf/utils/string.hpp>
 
 #include <fmt/format.h>
 
@@ -407,11 +409,7 @@ static std::string get_named_arg_names(const ArgumentParser::NamedArg * arg) {
 }
 
 void ArgumentParser::Command::help() const noexcept {
-    bool print = false;
-    std::cout.flags(std::ios::left);
-
-    // Arguments used in groups are not printed as ungrouped.
-    std::set<Argument *> args_used_in_groups;
+    libdnf::cli::output::Usage usage_output;
 
     // generate usage
     // start with the current command name
@@ -425,7 +423,7 @@ void ArgumentParser::Command::help() const noexcept {
         usage += " <COMMAND> [--help] ...";
     }
 
-    // prepend parent commands
+    // prepend parent commands to usage
     Command * cmd = parent;
     while (cmd) {
         usage = cmd->get_id() + " " + usage;
@@ -433,35 +431,40 @@ void ArgumentParser::Command::help() const noexcept {
     }
 
     // print usage
-    std::cout << libdnf::cli::utils::tty::bold << "Usage:" << libdnf::cli::utils::tty::reset << "\n";
-    std::cout << "  " << usage << "\n\n";
-
-    if (!description.empty()) {
-        std::cout << description << '\n';
-        print = true;
+    auto * usage_header = usage_output.add_header(_("Usage:"));
+    for (auto & line : libdnf::utils::string::split(usage, "\n")) {
+        usage_output.add_line(line, usage_header);
     }
 
-    if (!commands_help_header.empty() && !cmds.empty()) {
-        auto * table = libdnf::cli::output::create_help_table(commands_help_header);
+    // print description
+    if (!description.empty()) {
+        usage_output.add_newline();
+        auto * desc_header = usage_output.add_header(_("Description:"));
+        for (auto & line : libdnf::utils::string::split(description, "\n")) {
+            usage_output.add_line(line, desc_header);
+        }
+    }
 
+    libdnf::cli::output::Help help;
+
+    // Arguments used in groups are not printed as ungrouped.
+    std::set<Argument *> args_used_in_groups;
+
+    if (!commands_help_header.empty() && !cmds.empty()) {
         const std::set<Argument *> cmds_set(cmds.begin(), cmds.end());
 
         // Processing commands in groups.
         for (auto * grp : groups) {
+            // we'll initialize the header line later when the first line with an argument is added
             struct libscols_line * header{nullptr};
             for (auto * arg : grp->get_arguments()) {
                 if (dynamic_cast<Command *>(arg) && cmds_set.count(arg) > 0) {
                     if (!header) {
-                        if (print) {
-                            scols_table_new_line(table, nullptr);
-                        }
-                        header = scols_table_new_line(table, nullptr);
-                        scols_line_set_data(header, 0, grp->get_header().c_str());
-                        print = true;
+                        help.add_newline();
+                        header = help.add_header(grp->get_header());
                     }
+                    help.add_line(arg->get_id(), arg->get_short_description(), header);
                     args_used_in_groups.insert(arg);
-                    libdnf::cli::output::add_line_into_help_table(
-                        table, "  " + arg->get_id(), arg->get_short_description(), header);
                 }
             }
         }
@@ -477,98 +480,71 @@ void ArgumentParser::Command::help() const noexcept {
         // print the commands that don't belong to any group
         // avoid printing `commands_help_header` if the list is empty
         if (!ungrouped_commands.empty()) {
-            if (print) {
-                scols_table_new_line(table, nullptr);
-            }
-            struct libscols_line * header = scols_table_new_line(table, nullptr);
-            scols_line_set_data(header, 0, commands_help_header.c_str());
-            for (auto * cmd : ungrouped_commands) {
-                libdnf::cli::output::add_line_into_help_table(
-                    table, "  " + cmd->get_id(), cmd->get_short_description(), header);
+            help.add_newline();
+            struct libscols_line * header = help.add_header(commands_help_header);
+            for (auto * arg : ungrouped_commands) {
+                help.add_line(arg->get_id(), arg->get_short_description(), header);
             }
         }
-
-        libdnf::cli::output::print_and_unref_help_table(table);
-        print = true;
     }
 
     if (!named_args_help_header.empty() && !named_args.empty()) {
-        auto * table = libdnf::cli::output::create_help_table(named_args_help_header);
-
         const std::set<Argument *> named_args_set(named_args.begin(), named_args.end());
 
         // Processing named arguments in groups.
         for (auto * grp : groups) {
+            // we'll initialize the header line later when the first line with an argument is added
             struct libscols_line * header{nullptr};
             for (auto * arg : grp->get_arguments()) {
                 auto * named_arg = dynamic_cast<NamedArg *>(arg);
                 if (named_arg && named_args_set.count(arg) > 0) {
                     if (!header) {
-                        if (print) {
-                            scols_table_new_line(table, nullptr);
-                        }
-                        header = scols_table_new_line(table, nullptr);
-                        scols_line_set_data(header, 0, grp->get_header().c_str());
-                        print = true;
+                        help.add_newline();
+                        header = help.add_header(grp->get_header());
                     }
+                    help.add_line(get_named_arg_names(named_arg), arg->get_short_description(), header);
                     args_used_in_groups.insert(arg);
-                    libdnf::cli::output::add_line_into_help_table(
-                        table, "  " + get_named_arg_names(named_arg), arg->get_short_description(), header);
                 }
             }
         }
 
-        // Processing ungrouped name arguments.
-        if (print) {
-            scols_table_new_line(table, nullptr);
-        }
-        struct libscols_line * header = scols_table_new_line(table, nullptr);
-        scols_line_set_data(header, 0, named_args_help_header.c_str());
+        // Processing ungrouped named arguments.
+        help.add_newline();
+        struct libscols_line * header = help.add_header(named_args_help_header);
         for (const auto * arg : named_args) {
-            libdnf::cli::output::add_line_into_help_table(
-                table, "  " + get_named_arg_names(arg), arg->get_short_description(), header);
+            help.add_line(get_named_arg_names(arg), arg->get_short_description(), header);
         }
-
-        libdnf::cli::output::print_and_unref_help_table(table);
-        print = true;
     }
 
     if (!positional_args_help_header.empty() && !pos_args.empty()) {
-        auto * table = libdnf::cli::output::create_help_table(named_args_help_header);
-
         const std::set<Argument *> pos_args_set(pos_args.begin(), pos_args.end());
 
         // Processing positional arguments in groups.
         for (auto * grp : groups) {
+            // we'll initialize the header line later when the first line with an argument is added
             struct libscols_line * header{nullptr};
             for (auto * arg : grp->get_arguments()) {
                 if (dynamic_cast<PositionalArg *>(arg) && pos_args_set.count(arg) > 0) {
                     if (!header) {
-                        if (print) {
-                            scols_table_new_line(table, nullptr);
-                        }
-                        header = scols_table_new_line(table, nullptr);
-                        scols_line_set_data(header, 0, grp->get_header().c_str());
-                        print = true;
+                        help.add_newline();
+                        header = help.add_header(grp->get_header());
                     }
+                    help.add_line(arg->get_id(), arg->get_short_description(), header);
                     args_used_in_groups.insert(arg);
-                    libdnf::cli::output::add_line_into_help_table(
-                        table, "  " + arg->get_id(), arg->get_short_description(), header);
                 }
             }
         }
 
         // Processing ungrouped positional arguments.
-        if (print) {
-            scols_table_new_line(table, nullptr);
-        }
-        struct libscols_line * header = scols_table_new_line(table, nullptr);
-        scols_line_set_data(header, 0, positional_args_help_header.c_str());
+        help.add_newline();
+        struct libscols_line * header = help.add_header(positional_args_help_header);
         for (const auto * arg : pos_args) {
-            libdnf::cli::output::add_line_into_help_table(table, "  " + arg->get_id(), arg->get_short_description());
+            help.add_line(arg->get_id(), arg->get_short_description(), header);
         }
-        libdnf::cli::output::print_and_unref_help_table(table);
     }
+
+    usage_output.print();
+    help.print();
 }
 
 ArgumentParser::Command * ArgumentParser::add_new_command(const std::string & id) {

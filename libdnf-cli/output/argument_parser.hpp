@@ -21,41 +21,89 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_ARGUMENT_PARSER_HPP
 #define LIBDNF_CLI_OUTPUT_ARGUMENT_PARSER_HPP
 
+
+#include <libdnf-cli/utils/tty.hpp>
+
 #include <libsmartcols/libsmartcols.h>
 
 #include <string>
 
+
 namespace libdnf::cli::output {
 
-static struct libscols_table * create_help_table(const std::string & name) {
-    struct libscols_table * table = scols_new_table();
-    scols_table_set_name(table, name.c_str());
-    scols_table_enable_noheadings(table, 1);
-    scols_table_set_column_separator(table, "  ");
 
-    scols_table_enable_colors(table, 1);
-    scols_table_new_column(table, "argument", 30, 0);
-    scols_table_new_column(table, "descr", 40, SCOLS_FL_WRAP);
-    return table;
-}
+// Usage requires a different class to Help (which extends Usage by adding a new column)
+// because we want usage text to span across both Help's columns.
+// This is a workaround for smartcols not being able to merge cells.
+class Usage {
+public:
+    explicit Usage() {
+        table = scols_new_table();
+        scols_table_enable_noheadings(table, 1);
+        if (libdnf::cli::utils::tty::is_interactive()) {
+            scols_table_enable_colors(table, 1);
+        }
 
-static void add_line_into_help_table(
-    struct libscols_table * table, const std::string & arg_names, const std::string & descr, libscols_line * parent = nullptr) {
-    enum { COL_ARG_NAMES, COL_DESCR };
-    struct libscols_line * ln = scols_table_new_line(table, parent);
-    scols_line_set_data(ln, COL_ARG_NAMES, arg_names.c_str());
-    scols_line_set_data(ln, COL_DESCR, descr.c_str());
-}
+        struct libscols_symbols * sb = scols_new_symbols();
+        scols_symbols_set_branch(sb, "  ");
+        scols_symbols_set_right(sb, "  ");
+        scols_symbols_set_vertical(sb, "  ");
+        scols_table_set_symbols(table, sb);
 
-void print_and_unref_help_table(struct libscols_table * table) {
-    scols_print_table(table);
-    scols_unref_table(table);
-}
+        scols_table_set_column_separator(table, "  ");
+        scols_table_new_column(table, "arg", 30, SCOLS_FL_TREE | SCOLS_FL_WRAP);
+    }
 
-FILE * get_stream(struct libscols_table * table) {
-    return scols_table_get_stream(table);
-}
+    ~Usage() {
+        scols_unref_table(table);
+    }
+
+    libscols_line * add_header(const std::string & text) {
+        struct libscols_line * ln = scols_table_new_line(table, nullptr);
+        scols_line_set_data(ln, COL_ARG, text.c_str());
+        scols_line_set_color(ln, "bold");
+        return ln;
+    }
+
+    void add_line(const std::string & text, libscols_line * parent = nullptr) {
+        struct libscols_line * ln = scols_table_new_line(table, parent);
+        scols_line_set_data(ln, COL_ARG, text.c_str());
+    }
+
+    void add_newline() {
+        scols_table_new_line(table, nullptr);
+    }
+
+    void print() {
+        scols_print_table(table);
+    }
+
+    libscols_table * get_table() const noexcept { return table; }
+
+protected:
+    static constexpr int COL_ARG = 0;
+    struct libscols_table * table;
+};
+
+
+class Help : public Usage {
+public:
+    explicit Help() : Usage::Usage() {
+        scols_table_new_column(table, "desc", 40, SCOLS_FL_WRAP);
+    }
+
+    void add_line(const std::string & arg, const std::string & desc, libscols_line * parent = nullptr) {
+        struct libscols_line * ln = scols_table_new_line(table, parent);
+        scols_line_set_data(ln, COL_ARG, arg.c_str());
+        scols_line_set_data(ln, COL_DESC, desc.c_str());
+    }
+
+protected:
+    static constexpr int COL_DESC = 1;
+};
+
 
 }  // namespace libdnf::cli::output
+
 
 #endif  // LIBDNF_CLI_OUTPUT_ARGUMENT_PARSER_HPP
