@@ -33,6 +33,7 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "repo_impl.hpp"
 
 #include "libdnf/logger/logger.hpp"
+#include "libdnf/utils/temp.hpp"
 
 extern "C" {
 #include <solv/repo_rpmdb.h>
@@ -784,16 +785,9 @@ static std::vector<Key> rawkey2infos(int fd, Logger & logger) {
     gpgme_new(&ctx);
     std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> context(ctx);
 
-    // set GPG home dir
-    char tmpdir[] = "/tmp/tmpdir.XXXXXX";
-    char * dir = mkdtemp(tmpdir);
-    if (!dir) {
-        throw std::runtime_error("mkdtemp failed");
-    }
+    libdnf::utils::TempDir tmpdir("tmpdir.");
 
-    std::unique_ptr<char, std::function<void(char *)>> tmp_dir_remover{
-        tmpdir, [](char * tmpdir) { std::filesystem::remove_all(tmpdir); }};
-    gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, tmpdir);
+    gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, tmpdir.get_path().c_str());
     if (gpg_err != GPG_ERR_NO_ERROR) {
         auto msg = fmt::format(_("{}: gpgme_ctx_set_engine_info(): {}"), __func__, gpgme_strerror(gpg_err));
         logger.debug(msg);
@@ -1214,19 +1208,13 @@ void Repo::Impl::add_countme_flag(LrHandle * handle) {
 // Use metalink to check whether our metadata are still current.
 bool Repo::Impl::is_metalink_in_sync() {
     auto & logger = *base->get_logger();
-    char tmpdir[] = "/tmp/tmpdir.XXXXXX";
-    char * dir = mkdtemp(tmpdir);
-    if (!dir) {
-        throw std::runtime_error("mkdtemp failed");
-    }
 
-    std::unique_ptr<char, std::function<void(char *)>> tmp_dir_remover{
-        tmpdir, [](char * tmpdir) { std::filesystem::remove_all(tmpdir); }};
+    libdnf::utils::TempDir tmpdir("tmpdir.");
 
-    std::unique_ptr<LrHandle> h(lr_handle_init_remote(tmpdir));
+    std::unique_ptr<LrHandle> h(lr_handle_init_remote(tmpdir.get_path().c_str()));
 
     handle_set_opt(h.get(), LRO_FETCHMIRRORS, 1L);
-    auto r = lr_handle_perform(h.get(), tmpdir, false);
+    auto r = lr_handle_perform(h.get(), tmpdir.get_path().c_str(), false);
     LrMetalink * metalink;
     handle_get_info(h.get(), LRI_METALINK, &metalink);
     if (!metalink) {
@@ -1286,21 +1274,15 @@ bool Repo::Impl::is_metalink_in_sync() {
 bool Repo::Impl::is_repomd_in_sync() {
     auto & logger = *base->get_logger();
     LrYumRepo * yum_repo;
-    char tmpdir[] = "/tmp/tmpdir.XXXXXX";
-    char * dir = mkdtemp(tmpdir);
-    if (!dir) {
-        throw std::runtime_error("mkdtemp failed");
-    }
 
-    std::unique_ptr<char, std::function<void(char *)>> tmp_dir_remover{
-        tmpdir, [](char * tmpdir) { std::filesystem::remove_all(tmpdir); }};
+    libdnf::utils::TempDir tmpdir("tmpdir.");
 
     const char * dlist[] = LR_YUM_REPOMDONLY;
 
-    std::unique_ptr<LrHandle> h(lr_handle_init_remote(tmpdir));
+    std::unique_ptr<LrHandle> h(lr_handle_init_remote(tmpdir.get_path().c_str()));
 
     handle_set_opt(h.get(), LRO_YUMDLIST, dlist);
-    auto r = lr_handle_perform(h.get(), tmpdir, config.repo_gpgcheck().get_value());
+    auto r = lr_handle_perform(h.get(), tmpdir.get_path().c_str(), config.repo_gpgcheck().get_value());
     result_get_info(r.get(), LRR_YUM_REPO, &yum_repo);
 
     auto same = utils::fs::have_files_same_content_noexcept(repomd_fn.c_str(), yum_repo->repomd);
@@ -1319,25 +1301,19 @@ bool Repo::Impl::is_in_sync() {
 
 
 void Repo::Impl::download_metadata(const std::string & destdir) {
-    std::unique_ptr<LrHandle> h(lr_handle_init_remote(nullptr));
-
     auto repodir = destdir + "/" + METADATA_RELATIVE_DIR;
     if (g_mkdir_with_parents(destdir.c_str(), 0755) == -1) {
         const char * err_txt = strerror(errno);
         throw RuntimeError(fmt::format(_("Cannot create repo destination directory \"{}\": {}"), destdir, err_txt));
     }
-    auto tmpdir = destdir + "/tmpdir.XXXXXX";
-    if (!mkdtemp(&tmpdir.front())) {
-        const char * err_txt = strerror(errno);
-        throw RuntimeError(
-            fmt::format(_("Cannot create repo temporary directory \"{}\": {}"), tmpdir.c_str(), err_txt));
-    }
-    std::unique_ptr<char, std::function<void(char *)>> tmp_dir_remover{
-        &tmpdir.front(), [](char * tmpdir) { std::filesystem::remove_all(tmpdir); }};
-    auto tmprepodir = tmpdir + "/" + METADATA_RELATIVE_DIR;
 
-    handle_set_opt(h.get(), LRO_DESTDIR, tmpdir.c_str());
-    auto r = lr_handle_perform(h.get(), tmpdir, config.repo_gpgcheck().get_value());
+    libdnf::utils::TempDir tmpdir(destdir, "tmpdir.");
+
+    auto tmprepodir = tmpdir.get_path() / METADATA_RELATIVE_DIR;
+
+    std::unique_ptr<LrHandle> h(lr_handle_init_remote(tmpdir.get_path().c_str()));
+
+    auto r = lr_handle_perform(h.get(), tmpdir.get_path(), config.repo_gpgcheck().get_value());
 
     std::filesystem::remove_all(repodir);
     if (g_mkdir_with_parents(repodir.c_str(), 0755) == -1) {
@@ -1345,7 +1321,7 @@ void Repo::Impl::download_metadata(const std::string & destdir) {
         throw RuntimeError(fmt::format(_("Cannot create directory \"{}\": {}"), repodir, err_txt));
     }
     // move all downloaded object from tmpdir to destdir
-    if (auto * dir = opendir(tmpdir.c_str())) {
+    if (auto * dir = opendir(tmpdir.get_path().c_str())) {
         std::unique_ptr<DIR, std::function<void(DIR *)>> tmp_dir_remover{dir, [](DIR * dir) { closedir(dir); }};
 
         while (auto ent = readdir(dir)) {
@@ -1355,12 +1331,12 @@ void Repo::Impl::download_metadata(const std::string & destdir) {
             }
             auto target_element = destdir + "/" + el_name;
             std::filesystem::remove_all(target_element);
-            auto tempElement = tmpdir + "/" + el_name;
+            auto tempElement = tmpdir.get_path() / el_name;
             try {
                 move_recursive(tempElement.c_str(), target_element.c_str());
             } catch (const std::filesystem::filesystem_error & ex) {
                 std::string err_txt = fmt::format(
-                    _("Cannot rename directory \"{}\" to \"{}\": {}"), tempElement, target_element, ex.what());
+                    _("Cannot rename directory \"{}\" to \"{}\": {}"), tempElement.string(), target_element, ex.what());
                 throw RuntimeError(err_txt);
             }
         }

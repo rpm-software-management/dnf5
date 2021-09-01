@@ -31,15 +31,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::utils {
 
 
-TempDir::TempDir(const std::string & prefix) {
-    auto temp = std::filesystem::temp_directory_path();
+TempDir::TempDir(const std::string & prefix) : TempDir(std::filesystem::temp_directory_path(), prefix) {}
 
-    temp /= prefix + "XXXXXX";
-    const char * temp_path = mkdtemp(const_cast<char *>(temp.native().c_str()));
+
+TempDir::TempDir(const std::string & destdir, const std::string & prefix) {
+    std::filesystem::path dir = destdir;
+    dir /= prefix + "XXXXXX";
+
+    const char * temp_path = mkdtemp(const_cast<char *>(dir.native().c_str()));
     if (temp_path == nullptr) {
         // TODO(lukash) use a specific exception class
         throw RuntimeError(
-            fmt::format(_("Cannot create temporary directory \"{}\": {}"), temp.native().c_str(), strerror(errno)));
+            fmt::format(_("Cannot create temporary directory \"{}\": {}"), dir.native().c_str(), strerror(errno)));
     }
     path = temp_path;
 }
