@@ -47,7 +47,7 @@ jobs:
           if [[ -n "${{matrix.compiler}}" ]]; then
             PROJECT_NAME+="-${{matrix.compiler}}"
           fi
-          rpm-gitoverlay --gitdir=gits build-overlay -s overlays/dnf5-unstable rpm --with "${{matrix.compiler}}" copr --owner "${{steps.setup-ci.outputs.copr-user}}" --project "$PROJECT_NAME" --chroots "$CHROOTS" --delete-project-after-days=7
+          rpm-gitoverlay --gitdir=gits build-overlay -s overlays/dnf5-unstable rpm --with "${{matrix.compiler}}" copr --owner "${{steps.setup-ci.outputs.copr-user}}" --project "$PROJECT_NAME" --chroots "$CHROOTS" --delete-project-after-days=7 --additional-repos="copr://rpmsoftwaremanagement/dnf-nightly"
 
   copr-build:
     name: Copr Build
