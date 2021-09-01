@@ -20,6 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "temp.hpp"
 
+#include "libdnf/common/exception.hpp"
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+
+#include <fmt/format.h>
+
 #include <cstdlib>
 
 
@@ -27,30 +32,25 @@ namespace libdnf::utils {
 
 
 TempDir::TempDir(const std::string & prefix) {
-    // get path to the system temp directory
     auto temp = std::filesystem::temp_directory_path();
 
-    // append /<prefix>XXXXXX as requested in mkdtemp(3)
     temp /= prefix + "XXXXXX";
-    path = mkdtemp(const_cast<char *>(temp.native().c_str()));
-}
-
-
-TempDir::TempDir(const std::string & prefix, const std::vector<std::string> & subdirs)
-    : TempDir(prefix) {
-    for (auto & subdir : subdirs) {
-        std::filesystem::create_directory(path / subdir);
+    const char * temp_path = mkdtemp(const_cast<char *>(temp.native().c_str()));
+    if (temp_path == nullptr) {
+        // TODO(lukash) use a specific exception class
+        throw RuntimeError(
+            fmt::format(_("Cannot create temporary directory \"{}\": {}"), temp.native().c_str(), strerror(errno)));
     }
+    path = temp_path;
 }
 
 
 TempDir::~TempDir() {
-    // remove the temp directory and all its content
     try {
         std::filesystem::remove_all(path);
     } catch (std::filesystem::filesystem_error &) {
         // catch an exception that shouldn't be raised in a destructor
-        // we should consider logging or printing the exception
+        // TODO(lukash) consider logging or printing the exception
     }
 }
 

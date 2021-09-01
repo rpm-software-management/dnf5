@@ -32,9 +32,10 @@ namespace libdnf::utils {
 class TempDir {
 public:
     explicit TempDir(const std::string & prefix);
-    // create a temp directory with specified subdirs
-    explicit TempDir(const std::string & prefix, const std::vector<std::string> & subdirs);
+
     TempDir(const TempDir &) = delete;
+    TempDir & operator=(const TempDir &) = delete;
+
     ~TempDir();
     const std::filesystem::path & get_path() const noexcept { return path; }
 

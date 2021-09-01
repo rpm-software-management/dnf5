@@ -32,7 +32,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RepoTest);
 
 void RepoTest::setUp() {
     TestCaseFixture::setUp();
-    temp = new libdnf::utils::TempDir("libdnf_unittest_", {"installroot", "cache"});
+    temp = new libdnf::utils::TempDir("libdnf_unittest_");
+    std::filesystem::create_directory(temp->get_path() / "installroot");
+    std::filesystem::create_directory(temp->get_path() / "cache");
 }
 
 
