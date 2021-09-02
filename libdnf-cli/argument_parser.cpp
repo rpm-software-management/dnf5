@@ -508,11 +508,22 @@ void ArgumentParser::Command::help() const noexcept {
             }
         }
 
-        // Processing ungrouped named arguments.
-        help.add_newline();
-        struct libscols_line * header = help.add_header(named_args_help_header);
-        for (const auto * arg : named_args) {
-            help.add_line(get_named_arg_names(arg), arg->get_short_description(), header);
+        // gather named args that don't belong to any group
+        std::vector<NamedArg *> ungrouped_named_args;
+        for (auto * arg : named_args) {
+            if (args_used_in_groups.count(static_cast<NamedArg *>(arg)) == 0) {
+                ungrouped_named_args.push_back(arg);
+            }
+        }
+
+        // print the named args that don't belong to any group
+        // avoid printing `named_args_help_header` if the list is empty
+        if (!ungrouped_named_args.empty()) {
+            help.add_newline();
+            struct libscols_line * header = help.add_header(named_args_help_header);
+            for (const auto * arg : ungrouped_named_args) {
+                help.add_line(get_named_arg_names(arg), arg->get_short_description(), header);
+            }
         }
     }
 
