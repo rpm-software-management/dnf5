@@ -1,0 +1,100 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<!--
+Copyright Contributors to the libdnf project.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2.1 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<node>
+<!-- org.rpm.dnf.v0.Goal:
+   @short_description: Interface to Goal
+-->
+<interface name="org.rpm.dnf.v0.Goal">
+    <!--
+        resolve:
+        @options: an array of key/value pairs to modify dependency resolving
+        @transaction: array of (action, n, e, v, r, a, repoid) tuples where action is one of libdnf::transaction::TransactionItemAction enum
+        @resolve_results: problems detected during transaction resolving
+
+        Resolve the transaction.
+
+        Following @options are supported:
+        <variablelist>
+          <varlistentry>
+            <term>allow_erasing: boolean, default false</term>
+            <listitem><para>
+            Whether removal of installed package is allowed to resolve the
+            transaction.
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+        Unknown options are ignored.
+
+        Following @resolve_results are returned:
+        <variablelist>
+          <varlistentry>
+            <term>transaction_problems: libdnf::GoalProblem</term>
+            <listitem><para>
+                Overall result of the resolving.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>transaction_solver_problems: string</term>
+            <listitem><para>
+                Problems found by the solver.
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>goal_problems: string</term>
+            <listitem><para>
+                Problems of goal resolution other then those from the solver.
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+
+    -->
+    <method name="resolve">
+        <arg name="options" type="a{sv}" direction="in" />
+        <arg name="transaction" type="a(ussssss)" direction="out" />
+        <arg name="problems" type="a{sv}" direction="out" />
+    </method>
+
+    <!--
+        do_transaction:
+        @options: an array of key/value pairs to modify transaction running
+
+        Perform the resolved transaction.
+
+        Following @options are supported:
+        <variablelist>
+          <varlistentry>
+            <term>comment: string</term>
+            <listitem><para>
+            Adds a comment to a transaction.
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+        Unknown options are ignored.
+    -->
+    <method name="do_transaction">
+        <arg name="options" type="a{sv}" direction="in" />
+    </method>
+
+</interface>
+
+</node>

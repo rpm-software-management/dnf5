@@ -2,7 +2,7 @@
 "http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
 
 <!--
-+Copyright Contributors to the libdnf project.
+Copyright Contributors to the libdnf project.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
@@ -188,52 +188,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         <arg name="specs" type="as" direction="in" />
         <arg name="options" type="a{sv}" direction="in" />
     </method>
-
-    <!--
-        resolve:
-        @options: an array of key/value pairs to modify dependency resolving
-        @result: array of (action, n, e, v, r, a, repoid) tuples where action is one of libdnf::transaction::TransactionItemAction enum
-
-        Resolve the transaction.
-
-        Following @options are supported:
-        <variablelist>
-          <varlistentry>
-            <term>allow_erasing: boolean, default false</term>
-            <listitem><para>
-            Whether removal of installed package is allowed to resolve the
-            transaction.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
-        Unknown options are ignored.
-    -->
-    <method name="resolve">
-        <arg name="options" type="a{sv}" direction="in" />
-        <arg name="result" type="a(ussssss)" direction="out" />
-    </method>
-
-    <!--
-        do_transaction:
-        @options: an array of key/value pairs to modify transaction running
-
-        Perform the resolved transaction.
-
-        Following @options are supported:
-        <variablelist>
-          <varlistentry>
-            <term>comment: string</term>
-            <listitem><para>
-            Adds a comment to a transaction.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
-        Unknown options are ignored.
-    -->
-    <method name="do_transaction">
-        <arg name="options" type="a{sv}" direction="in" />
-    </method>
-
 
     <!--
         transaction_action_start:
