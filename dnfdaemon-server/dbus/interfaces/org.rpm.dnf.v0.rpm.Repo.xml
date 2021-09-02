@@ -1,0 +1,67 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<!--
+Copyright Contributors to the libdnf project.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2.1 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<node>
+<!-- org.rpm.dnf.v0.rpm.Repo:
+   @short_description: Interface to repositories
+-->
+<interface name="org.rpm.dnf.v0.rpm.Repo">
+    <!--
+        list:
+        @options: an array of key/value pairs
+        @data: array of returned repositories with requested attributes
+
+        Get list of repositories that match to given filters.
+
+        Following options are supported:
+
+        <variablelist>
+          <varlistentry>
+            <term>patterns: list of strings</term>
+            <listitem><para>
+              any repository with id matching to any of patterns is returned
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>repo_attrs: list of strings</term>
+            <listitem><para>
+              list of repository attributes that are returned
+            </para></listitem>
+          </varlistentry>
+          <varlistentry>
+            <term>enable_disable: string (default "enabled")</term>
+            <listitem><para>
+              When set to "enabled" or "disabled", only enabled / disabled repositories are listed. Any other value means all repositories are returned.
+            </para></listitem>
+          </varlistentry>
+        </variablelist>
+
+        Unknown options are ignored.
+    -->
+    <method name="list">
+        <arg name="options" type="a{sv}" direction="in"/>
+        <arg name="data" type="aa{sv}" direction="out"/>
+    </method>
+
+</interface>
+
+</node>
