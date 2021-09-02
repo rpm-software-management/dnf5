@@ -24,8 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define RECOGNIZED_CHKSUMS \
     { "sha512", "sha256" }
 
-#define USER_AGENT "libdnf"
-
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
@@ -192,32 +190,6 @@ inline static void result_get_info(LrResult * result, LrResultInfoOption option,
     if (!lr_result_getinfo(result, &err_p, option, value)) {
         throw_exception(std::unique_ptr<GError>(err_p));
     }
-}
-
-
-// Map string from config option proxy_auth_method to librepo LrAuth value
-static constexpr struct {
-    const char * name;
-    LrAuth code;
-} PROXYAUTHMETHODS[] = {
-    {"none", LR_AUTH_NONE},
-    {"basic", LR_AUTH_BASIC},
-    {"digest", LR_AUTH_DIGEST},
-    {"negotiate", LR_AUTH_NEGOTIATE},
-    {"ntlm", LR_AUTH_NTLM},
-    {"digest_ie", LR_AUTH_DIGEST_IE},
-    {"ntlm_wb", LR_AUTH_NTLM_WB},
-    {"any", LR_AUTH_ANY}};
-
-static LrAuth string_to_proxy_auth_methods(const std::string & proxy_auth_method_str) noexcept {
-    auto proxy_auth_methods = LR_AUTH_ANY;
-    for (auto & auth : PROXYAUTHMETHODS) {
-        if (proxy_auth_method_str == auth.name) {
-            proxy_auth_methods = auth.code;
-            break;
-        }
-    }
-    return proxy_auth_methods;
 }
 
 
@@ -525,8 +497,95 @@ std::string Repo::get_metadata_path(const std::string & metadata_type) {
     return p_impl->get_metadata_path(metadata_type);
 }
 
-std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_base() {
-    std::unique_ptr<LrHandle> h(lr_handle_init());
+// Map string from config option proxy_auth_method to librepo LrAuth value
+static constexpr struct {
+    const char * name;
+    LrAuth code;
+} PROXYAUTHMETHODS[] = {
+    {"none", LR_AUTH_NONE},
+    {"basic", LR_AUTH_BASIC},
+    {"digest", LR_AUTH_DIGEST},
+    {"negotiate", LR_AUTH_NEGOTIATE},
+    {"ntlm", LR_AUTH_NTLM},
+    {"digest_ie", LR_AUTH_DIGEST_IE},
+    {"ntlm_wb", LR_AUTH_NTLM_WB},
+    {"any", LR_AUTH_ANY}};
+
+template<typename C>
+static std::unique_ptr<LrHandle> new_remote_handle(const C & config) {
+    std::unique_ptr<LrHandle> handle(lr_handle_init());
+    LrHandle * h = handle.get();
+
+    handle_set_opt(h, LRO_USERAGENT, config.user_agent().get_value().c_str());
+
+    auto minrate = config.minrate().get_value();
+    auto maxspeed = config.throttle().get_value();
+    if (maxspeed > 0 && maxspeed <= 1) {
+        maxspeed *= static_cast<float>(config.bandwidth().get_value());
+    }
+    if (maxspeed != 0 && maxspeed < static_cast<float>(minrate)) {
+        // TODO(lukash) throw a proper error class
+        throw RuntimeError(
+            _("Maximum download speed is lower than minimum. "
+              "Please change configuration of minrate or throttle"));
+    }
+    handle_set_opt(h, LRO_LOWSPEEDLIMIT, static_cast<int64_t>(minrate));
+    handle_set_opt(h, LRO_MAXSPEED, static_cast<int64_t>(maxspeed));
+
+    if (!config.proxy().empty() && !config.proxy().get_value().empty()) {
+        handle_set_opt(h, LRO_PROXY, config.proxy().get_value().c_str());
+    }
+
+    const std::string proxy_auth_method_str = config.proxy_auth_method().get_value();
+    auto proxy_auth_method = LR_AUTH_ANY;
+    for (auto & auth : PROXYAUTHMETHODS) {
+        if (proxy_auth_method_str == auth.name) {
+            proxy_auth_method = auth.code;
+            break;
+        }
+    }
+    handle_set_opt(h, LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_method));
+
+    if (!config.proxy_username().empty()) {
+        auto userpwd = config.proxy_username().get_value();
+        if (!userpwd.empty()) {
+            userpwd = format_user_pass_string(userpwd, config.proxy_password().get_value(), true);
+            handle_set_opt(h, LRO_PROXYUSERPWD, userpwd.c_str());
+        }
+    }
+
+    // SSL setup
+    if (!config.sslcacert().get_value().empty()) {
+        handle_set_opt(h, LRO_SSLCACERT, config.sslcacert().get_value().c_str());
+    }
+    if (!config.sslclientcert().get_value().empty()) {
+        handle_set_opt(h, LRO_SSLCLIENTCERT, config.sslclientcert().get_value().c_str());
+    }
+    if (!config.sslclientkey().get_value().empty()) {
+        handle_set_opt(h, LRO_SSLCLIENTKEY, config.sslclientkey().get_value().c_str());
+    }
+    long sslverify = config.sslverify().get_value() ? 1L : 0L;
+    handle_set_opt(h, LRO_SSLVERIFYHOST, sslverify);
+    handle_set_opt(h, LRO_SSLVERIFYPEER, sslverify);
+
+    // proxy SSL setup
+    if (!config.proxy_sslcacert().get_value().empty()) {
+        handle_set_opt(h, LRO_PROXY_SSLCACERT, config.proxy_sslcacert().get_value().c_str());
+    }
+    if (!config.proxy_sslclientcert().get_value().empty()) {
+        handle_set_opt(h, LRO_PROXY_SSLCLIENTCERT, config.proxy_sslclientcert().get_value().c_str());
+    }
+    if (!config.proxy_sslclientkey().get_value().empty()) {
+        handle_set_opt(h, LRO_PROXY_SSLCLIENTKEY, config.proxy_sslclientkey().get_value().c_str());
+    }
+    long proxy_sslverify = config.proxy_sslverify().get_value() ? 1L : 0L;
+    handle_set_opt(h, LRO_PROXY_SSLVERIFYHOST, proxy_sslverify);
+    handle_set_opt(h, LRO_PROXY_SSLVERIFYPEER, proxy_sslverify);
+
+    return handle;
+}
+
+void Repo::Impl::common_handle_setup(std::unique_ptr<LrHandle> & h) {
     std::vector<const char *> dlist = {
         MD_FILENAME_PRIMARY,
         MD_FILENAME_FILELISTS,
@@ -546,7 +605,6 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_base() {
     dlist.push_back(nullptr);
     handle_set_opt(h.get(), LRO_PRESERVETIME, static_cast<long>(preserve_remote_time));
     handle_set_opt(h.get(), LRO_REPOTYPE, LR_YUMREPO);
-    handle_set_opt(h.get(), LRO_USERAGENT, config.user_agent().get_value().c_str());
     handle_set_opt(h.get(), LRO_YUMDLIST, dlist.data());
     handle_set_opt(h.get(), LRO_INTERRUPTIBLE, 1L);
     handle_set_opt(h.get(), LRO_GPGCHECK, config.repo_gpgcheck().get_value());
@@ -556,12 +614,11 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_base() {
     LrUrlVars * vars = nullptr;
     vars = lr_urlvars_set(vars, MD_FILENAME_GROUP_GZ, MD_FILENAME_GROUP);
     handle_set_opt(h.get(), LRO_YUMSLIST, vars);
-
-    return h;
 }
 
 std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_local() {
-    std::unique_ptr<LrHandle> h(lr_handle_init_base());
+    std::unique_ptr<LrHandle> h(lr_handle_init());
+    common_handle_setup(h);
 
     LrUrlVars * vars = nullptr;
     for (const auto & item : substitutions) {
@@ -583,7 +640,9 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_local() {
 }
 
 std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir, bool mirror_setup) {
-    std::unique_ptr<LrHandle> h(lr_handle_init_base());
+    std::unique_ptr<LrHandle> h(new_remote_handle(config));
+    common_handle_setup(h);
+
     handle_set_opt(h.get(), LRO_HTTPHEADER, http_headers.get());
 
     LrUrlVars * vars = nullptr;
@@ -653,17 +712,6 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
         handle_set_opt(h.get(), LRO_USERPWD, userpwd.c_str());
     }
 
-    // setup ssl stuff
-    if (!config.sslcacert().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_SSLCACERT, config.sslcacert().get_value().c_str());
-    }
-    if (!config.sslclientcert().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_SSLCLIENTCERT, config.sslclientcert().get_value().c_str());
-    }
-    if (!config.sslclientkey().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_SSLCLIENTKEY, config.sslclientkey().get_value().c_str());
-    }
-
     handle_set_opt(h.get(), LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
     handle_set_opt(h.get(), LRO_PROGRESSDATA, callbacks.get());
     handle_set_opt(h.get(), LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
@@ -676,20 +724,6 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
     }
 #endif
 
-    auto minrate = config.minrate().get_value();
-    handle_set_opt(h.get(), LRO_LOWSPEEDLIMIT, static_cast<long>(minrate));
-
-    auto maxspeed = config.throttle().get_value();
-    if (maxspeed > 0 && maxspeed <= 1) {
-        maxspeed *= static_cast<float>(config.bandwidth().get_value());
-    }
-    if (maxspeed != 0 && maxspeed < static_cast<float>(minrate)) {
-        throw RuntimeError(
-            _("Maximum download speed is lower than minimum. "
-              "Please change configuration of minrate or throttle"));
-    }
-    handle_set_opt(h.get(), LRO_MAXSPEED, static_cast<int64_t>(maxspeed));
-
     long timeout = config.timeout().get_value();
     if (timeout > 0) {
         handle_set_opt(h.get(), LRO_CONNECTTIMEOUT, timeout);
@@ -698,40 +732,6 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
         handle_set_opt(h.get(), LRO_CONNECTTIMEOUT, LRO_CONNECTTIMEOUT_DEFAULT);
         handle_set_opt(h.get(), LRO_LOWSPEEDTIME, LRO_LOWSPEEDTIME_DEFAULT);
     }
-
-    if (!config.proxy().empty() && !config.proxy().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_PROXY, config.proxy().get_value().c_str());
-    }
-
-    // set proxy authorization methods
-    auto proxy_auth_methods = string_to_proxy_auth_methods(config.proxy_auth_method().get_value());
-    handle_set_opt(h.get(), LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_methods));
-
-    if (!config.proxy_username().empty()) {
-        userpwd = config.proxy_username().get_value();
-        if (!userpwd.empty()) {
-            userpwd = format_user_pass_string(userpwd, config.proxy_password().get_value(), true);
-            handle_set_opt(h.get(), LRO_PROXYUSERPWD, userpwd.c_str());
-        }
-    }
-
-    auto sslverify = config.sslverify().get_value() ? 1L : 0L;
-    handle_set_opt(h.get(), LRO_SSLVERIFYHOST, sslverify);
-    handle_set_opt(h.get(), LRO_SSLVERIFYPEER, sslverify);
-
-    // setup proxy ssl stuff
-    if (!config.proxy_sslcacert().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_PROXY_SSLCACERT, config.proxy_sslcacert().get_value().c_str());
-    }
-    if (!config.proxy_sslclientcert().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_PROXY_SSLCLIENTCERT, config.proxy_sslclientcert().get_value().c_str());
-    }
-    if (!config.proxy_sslclientkey().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_PROXY_SSLCLIENTKEY, config.proxy_sslclientkey().get_value().c_str());
-    }
-    long proxy_sslverify = config.proxy_sslverify().get_value() ? 1L : 0L;
-    handle_set_opt(h.get(), LRO_PROXY_SSLVERIFYHOST, proxy_sslverify);
-    handle_set_opt(h.get(), LRO_PROXY_SSLVERIFYPEER, proxy_sslverify);
 
     return h;
 }
@@ -1729,74 +1729,6 @@ int PackageTarget::Impl::mirror_failure_cb(void * data, const char * msg, const 
     return cb_object->mirror_failure(msg, url);
 }
 
-
-static LrHandle * new_handle(ConfigMain * config) {
-    LrHandle * h = ::lr_handle_init();
-    const char * user_agent = USER_AGENT;
-    // see dnf.repo.Repo._handle_new_remote() how to pass
-    if (config) {
-        user_agent = config->user_agent().get_value().c_str();
-        auto minrate = config->minrate().get_value();
-        handle_set_opt(h, LRO_LOWSPEEDLIMIT, static_cast<long>(minrate));
-
-        auto maxspeed = config->throttle().get_value();
-        if (maxspeed > 0 && maxspeed <= 1) {
-            maxspeed *= static_cast<float>(config->bandwidth().get_value());
-        }
-        if (maxspeed != 0 && maxspeed < static_cast<float>(minrate))
-            throw RuntimeError(
-                _("Maximum download speed is lower than minimum. "
-                  "Please change configuration of minrate or throttle"));
-        handle_set_opt(h, LRO_MAXSPEED, static_cast<int64_t>(maxspeed));
-
-        if (!config->proxy().empty() && !config->proxy().get_value().empty())
-            handle_set_opt(h, LRO_PROXY, config->proxy().get_value().c_str());
-
-        // set proxy authorization methods
-        auto proxy_auth_methods = string_to_proxy_auth_methods(config->proxy_auth_method().get_value());
-        handle_set_opt(h, LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_methods));
-
-        if (!config->proxy_username().empty()) {
-            auto userpwd = config->proxy_username().get_value();
-            if (!userpwd.empty()) {
-                userpwd = format_user_pass_string(userpwd, config->proxy_password().get_value(), true);
-                handle_set_opt(h, LRO_PROXYUSERPWD, userpwd.c_str());
-            }
-        }
-
-        // setup ssl stuff
-        if (!config->sslcacert().get_value().empty()) {
-            handle_set_opt(h, LRO_SSLCACERT, config->sslcacert().get_value().c_str());
-        }
-        if (!config->sslclientcert().get_value().empty()) {
-            handle_set_opt(h, LRO_SSLCLIENTCERT, config->sslclientcert().get_value().c_str());
-        }
-        if (!config->sslclientkey().get_value().empty()) {
-            handle_set_opt(h, LRO_SSLCLIENTKEY, config->sslclientkey().get_value().c_str());
-        }
-
-        auto sslverify = config->sslverify().get_value() ? 1L : 0L;
-        handle_set_opt(h, LRO_SSLVERIFYHOST, sslverify);
-        handle_set_opt(h, LRO_SSLVERIFYPEER, sslverify);
-
-        // setup proxy ssl stuff
-        if (!config->proxy_sslcacert().get_value().empty()) {
-            handle_set_opt(h, LRO_PROXY_SSLCACERT, config->proxy_sslcacert().get_value().c_str());
-        }
-        if (!config->proxy_sslclientcert().get_value().empty()) {
-            handle_set_opt(h, LRO_PROXY_SSLCLIENTCERT, config->proxy_sslclientcert().get_value().c_str());
-        }
-        if (!config->proxy_sslclientkey().get_value().empty()) {
-            handle_set_opt(h, LRO_PROXY_SSLCLIENTKEY, config->proxy_sslclientkey().get_value().c_str());
-        }
-        long proxy_sslverify = config->proxy_sslverify().get_value() ? 1L : 0L;
-        handle_set_opt(h, LRO_PROXY_SSLVERIFYHOST, proxy_sslverify);
-        handle_set_opt(h, LRO_PROXY_SSLVERIFYPEER, proxy_sslverify);
-    }
-    handle_set_opt(h, LRO_USERAGENT, user_agent);
-    return h;
-}
-
 PackageTarget::ChecksumType PackageTarget::checksum_type(const std::string & name) {
     return static_cast<ChecksumType>(lr_checksum_type(name.c_str()));
 }
@@ -1862,8 +1794,8 @@ PackageTarget::Impl::Impl(
     int64_t byte_range_end,
     PackageTargetCB * callbacks,
     const char * http_headers[])
-    : callbacks(callbacks) {
-    lrHandle.reset(new_handle(cfg));
+    : callbacks(callbacks),
+      lrHandle(new_remote_handle(*cfg)) {
     handle_set_opt(lrHandle.get(), LRO_HTTPHEADER, http_headers);
     handle_set_opt(lrHandle.get(), LRO_REPOTYPE, LR_YUMREPO);
     init(
@@ -1986,7 +1918,7 @@ const char * PackageTarget::get_err() {
 }
 
 void Downloader::download_url(ConfigMain * cfg, const char * url, int fd) {
-    std::unique_ptr<LrHandle> lr_handle(new_handle(cfg));
+    std::unique_ptr<LrHandle> lr_handle(new_remote_handle(*cfg));
     GError * err_p{nullptr};
     lr_download_url(lr_handle.get(), url, fd, &err_p);
     std::unique_ptr<GError> err(err_p);

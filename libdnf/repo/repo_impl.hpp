@@ -141,7 +141,7 @@ public:
     const char * const * get_http_headers() const;
     const std::string & get_metadata_path(const std::string & metadata_type) const;
 
-    std::unique_ptr<LrHandle> lr_handle_init_base();
+    void common_handle_setup(std::unique_ptr<LrHandle> & h);
     std::unique_ptr<LrHandle> lr_handle_init_local();
     std::unique_ptr<LrHandle> lr_handle_init_remote(const char * destdir, bool mirror_setup = true);
 
