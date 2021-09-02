@@ -31,6 +31,7 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "repo_impl.hpp"
 
 #include "libdnf/logger/logger.hpp"
+#include "libdnf/utils/string.hpp"
 #include "libdnf/utils/temp.hpp"
 
 extern "C" {
@@ -987,38 +988,40 @@ std::unique_ptr<LrResult> Repo::Impl::lr_handle_perform(
     bool ret;
     bool bad_gpg = false;
     do {
-        if (callbacks && progressFunc)
+        if (callbacks && progressFunc) {
             callbacks->start(
                 !config.name().get_value().empty() ? config.name().get_value().c_str()
                                                    : (!id.empty() ? id.c_str() : "unknown"));
+        }
 
         GError * err_p{nullptr};
         result.reset(lr_result_init());
         ret = ::lr_handle_perform(handle, result.get(), &err_p);
+
         std::unique_ptr<GError> err(err_p);
 
-        if (callbacks && progressFunc)
+        if (callbacks && progressFunc) {
             callbacks->end();
-
-        if (ret || bad_gpg || err_p->code != LRE_BADGPG) {
-            if (!ret) {
-                std::string source;
-                if (config.metalink().empty() || (source = config.metalink().get_value()).empty()) {
-                    if (config.mirrorlist().empty() || (source = config.mirrorlist().get_value()).empty()) {
-                        bool first = true;
-                        for (const auto & url : config.baseurl().get_value()) {
-                            if (first)
-                                first = false;
-                            else
-                                source += ", ";
-                            source += url;
-                        }
-                    }
-                }
-                throw LrExceptionWithSourceUrl(err->code, err->message, source);
-            }
-            break;
         }
+
+        if (ret) {
+            break;  // finished successfully
+        }
+
+        if (bad_gpg || err_p->code != LRE_BADGPG) {
+            std::string sources;
+
+            if (!config.metalink().empty() && !config.metalink().get_value().empty()) {
+                sources = config.metalink().get_value();
+            } else if (!config.mirrorlist().empty() && !config.mirrorlist().get_value().empty()) {
+                sources = config.mirrorlist().get_value();
+            } else {
+                sources = libdnf::utils::string::join(config.baseurl().get_value(), ", ");
+            }
+
+            throw LrExceptionWithSourceUrl(err->code, err->message, sources);
+        }
+
         bad_gpg = true;
         import_repo_keys();
         std::filesystem::remove_all(dest_directory + "/" + METADATA_RELATIVE_DIR);
