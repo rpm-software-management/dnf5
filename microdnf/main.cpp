@@ -18,6 +18,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#include "commands/aliases/autoremove.hpp"
+#include "commands/aliases/groupinfo.hpp"
+#include "commands/aliases/grouplist.hpp"
+#include "commands/aliases/upgrade_minimal.hpp"
+
 #include "commands/advisory/advisory.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
@@ -101,6 +106,16 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     register_subcommand(std::make_unique<AdvisoryCommand>(*this));
     register_subcommand(std::make_unique<DownloadCommand>(*this));
     register_subcommand(std::make_unique<RepolistCommand>(*this));
+
+    // aliases
+    auto * aliases_group = session.get_argument_parser().add_new_group("aliases");
+    aliases_group->set_header("Compatibility Aliases:");
+    cmd.register_group(aliases_group);
+    register_subcommand(std::make_unique<AutoremoveAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<GroupinfoAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<GrouplistAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<UpgradeMinimalAlias>(*this), aliases_group);
+
 }
 
 inline void RootCommand::run() {

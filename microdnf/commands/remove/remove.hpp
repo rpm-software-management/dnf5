@@ -38,9 +38,12 @@ public:
     explicit RemoveCommand(Command & parent);
     void run() override;
 
-private:
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_remove_options{nullptr};
     libdnf::OptionBool * unneeded{nullptr};
+
+protected:
+    // to be used by an alias command only
+    explicit RemoveCommand(Command & parent, const std::string & name);
 };
 
 

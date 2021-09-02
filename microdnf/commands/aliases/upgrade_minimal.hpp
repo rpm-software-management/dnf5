@@ -18,40 +18,30 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
-#define MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
+#ifndef MICRODNF_COMMANDS_ALIASES_UPGRADE_MINIMAL_HPP
+#define MICRODNF_COMMANDS_ALIASES_UPGRADE_MINIMAL_HPP
 
 
-#include "arguments.hpp"
-
-#include <libdnf-cli/session.hpp>
-
-#include <libdnf/conf/option_bool.hpp>
-
-#include <memory>
-#include <vector>
+#include "../upgrade/upgrade.hpp"
 
 
 namespace microdnf {
 
 
-class GroupListCommand : public libdnf::cli::session::Command {
+class UpgradeMinimalAlias : public UpgradeCommand {
 public:
-    explicit GroupListCommand(Command & parent);
-    void run() override;
+    explicit UpgradeMinimalAlias(Command & parent) : UpgradeCommand(parent, "upgrade-minimal") {
+        auto & cmd = *get_argument_parser_command();
+        cmd.set_short_description("Alias to `upgrade --minimal`");
 
-    std::unique_ptr<GroupAvailableOption> available{nullptr};
-    std::unique_ptr<GroupInstalledOption> installed{nullptr};
-    std::unique_ptr<GroupHiddenOption> hidden{nullptr};
-    std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
-
-protected:
-    // to be used by an alias command only
-    explicit GroupListCommand(Command & parent, const std::string & name);
+        // set the default value of the --minimal option to `true`
+        auto minimal = dynamic_cast<libdnf::OptionBool *>(this->minimal);
+        minimal->set(libdnf::Option::Priority::DEFAULT, true);
+    }
 };
 
 
 }  // namespace microdnf
 
 
-#endif  // MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
+#endif  // MICRODNF_COMMANDS_ALIASES_UPGRADE_MINIMAL_HPP

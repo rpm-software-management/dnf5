@@ -18,40 +18,30 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
-#define MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
+#ifndef MICRODNF_COMMANDS_ALIASES_AUTOREMOVE_HPP
+#define MICRODNF_COMMANDS_ALIASES_AUTOREMOVE_HPP
 
 
-#include "arguments.hpp"
-
-#include <libdnf-cli/session.hpp>
-
-#include <libdnf/conf/option_bool.hpp>
-
-#include <memory>
-#include <vector>
+#include "../remove/remove.hpp"
 
 
 namespace microdnf {
 
 
-class GroupListCommand : public libdnf::cli::session::Command {
+class AutoremoveAlias : public RemoveCommand {
 public:
-    explicit GroupListCommand(Command & parent);
-    void run() override;
+    explicit AutoremoveAlias(Command & parent) : RemoveCommand(parent, "autoremove") {
+        auto & cmd = *get_argument_parser_command();
+        cmd.set_short_description("Alias to `remove --unneeded`");
 
-    std::unique_ptr<GroupAvailableOption> available{nullptr};
-    std::unique_ptr<GroupInstalledOption> installed{nullptr};
-    std::unique_ptr<GroupHiddenOption> hidden{nullptr};
-    std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
-
-protected:
-    // to be used by an alias command only
-    explicit GroupListCommand(Command & parent, const std::string & name);
+        // set the default value of the --unneeded option to `true`
+        auto unneeded = dynamic_cast<libdnf::OptionBool *>(this->unneeded);
+        unneeded->set(libdnf::Option::Priority::DEFAULT, true);
+    }
 };
 
 
 }  // namespace microdnf
 
 
-#endif  // MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
+#endif  // MICRODNF_COMMANDS_ALIASES_AUTOREMOVE_HPP

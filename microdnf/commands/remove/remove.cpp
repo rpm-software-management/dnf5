@@ -40,7 +40,10 @@ namespace microdnf {
 using namespace libdnf::cli;
 
 
-RemoveCommand::RemoveCommand(Command & parent) : Command(parent, "remove") {
+RemoveCommand::RemoveCommand(Command & parent) : RemoveCommand(parent, "remove") {}
+
+
+RemoveCommand::RemoveCommand(Command & parent, const std::string & name) : Command(parent, name) {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
 

@@ -41,6 +41,10 @@ public:
     std::unique_ptr<GroupInstalledOption> installed{nullptr};
     std::unique_ptr<GroupHiddenOption> hidden{nullptr};
     std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
+
+protected:
+    // to be used by an alias command only
+    explicit GroupInfoCommand(Command & parent, const std::string & name);
 };
 
 

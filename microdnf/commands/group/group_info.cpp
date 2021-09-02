@@ -39,7 +39,10 @@ namespace microdnf {
 using namespace libdnf::cli;
 
 
-GroupInfoCommand::GroupInfoCommand(Command & parent) : Command(parent, "info") {
+GroupInfoCommand::GroupInfoCommand(Command & parent) : GroupInfoCommand(parent, "info") {}
+
+
+GroupInfoCommand::GroupInfoCommand(Command & parent, const std::string & name) : Command(parent, name) {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Print details about comps groups");
 

@@ -44,7 +44,10 @@ namespace microdnf {
 using namespace libdnf::cli;
 
 
-UpgradeCommand::UpgradeCommand(Command & parent) : Command(parent, "upgrade") {
+UpgradeCommand::UpgradeCommand(Command & parent) : UpgradeCommand(parent, "upgrade") {}
+
+
+UpgradeCommand::UpgradeCommand(Command & parent, const std::string & name) : Command(parent, name) {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
 

@@ -38,7 +38,10 @@ namespace microdnf {
 using namespace libdnf::cli;
 
 
-GroupListCommand::GroupListCommand(Command & parent) : Command(parent, "list") {
+GroupListCommand::GroupListCommand(Command & parent) : GroupListCommand(parent, "list") {}
+
+
+GroupListCommand::GroupListCommand(Command & parent, const std::string & name) : Command(parent, name) {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("List comps groups");
 

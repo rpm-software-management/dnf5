@@ -18,40 +18,26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
-#define MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
+#ifndef MICRODNF_COMMANDS_ALIASES_GROUPLIST_HPP
+#define MICRODNF_COMMANDS_ALIASES_GROUPLIST_HPP
 
 
-#include "arguments.hpp"
-
-#include <libdnf-cli/session.hpp>
-
-#include <libdnf/conf/option_bool.hpp>
-
-#include <memory>
-#include <vector>
+#include "../group/group_list.hpp"
 
 
 namespace microdnf {
 
 
-class GroupListCommand : public libdnf::cli::session::Command {
+class GrouplistAlias : public GroupListCommand {
 public:
-    explicit GroupListCommand(Command & parent);
-    void run() override;
-
-    std::unique_ptr<GroupAvailableOption> available{nullptr};
-    std::unique_ptr<GroupInstalledOption> installed{nullptr};
-    std::unique_ptr<GroupHiddenOption> hidden{nullptr};
-    std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
-
-protected:
-    // to be used by an alias command only
-    explicit GroupListCommand(Command & parent, const std::string & name);
+    explicit GrouplistAlias(Command & parent) : GroupListCommand(parent, "grouplist") {
+        auto & cmd = *get_argument_parser_command();
+        cmd.set_short_description("Alias to `group list`");
+    }
 };
 
 
 }  // namespace microdnf
 
 
-#endif  // MICRODNF_COMMANDS_GROUP_GROUP_LIST_HPP
+#endif  // MICRODNF_COMMANDS_ALIASES_GROUPLIST_HPP
