@@ -611,31 +611,34 @@ void Repo::Impl::common_handle_setup(std::unique_ptr<LrHandle> & h) {
     handle_set_opt(h.get(), LRO_MAXMIRRORTRIES, static_cast<long>(max_mirror_tries));
     handle_set_opt(h.get(), LRO_MAXPARALLELDOWNLOADS, config.max_parallel_downloads().get_value());
 
-    LrUrlVars * vars = nullptr;
-    vars = lr_urlvars_set(vars, MD_FILENAME_GROUP_GZ, MD_FILENAME_GROUP);
-    handle_set_opt(h.get(), LRO_YUMSLIST, vars);
+    LrUrlVars * repomd_substs = nullptr;
+    repomd_substs = lr_urlvars_set(repomd_substs, MD_FILENAME_GROUP_GZ, MD_FILENAME_GROUP);
+    handle_set_opt(h.get(), LRO_YUMSLIST, repomd_substs);
+
+    LrUrlVars * substs = nullptr;
+    for (const auto & item : substitutions) {
+        substs = lr_urlvars_set(substs, item.first.c_str(), item.second.c_str());
+    }
+    handle_set_opt(h.get(), LRO_VARSUB, substs);
+
+#ifdef LRO_SUPPORTS_CACHEDIR
+    // If zchunk is enabled, set librepo cache dir
+    if (config.get_main_config().zchunk().get_value()) {
+        handle_set_opt(h.get(), LRO_CACHEDIR, config.basecachedir().get_value().c_str());
+    }
+#endif
 }
 
 std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_local() {
     std::unique_ptr<LrHandle> h(lr_handle_init());
     common_handle_setup(h);
 
-    LrUrlVars * vars = nullptr;
-    for (const auto & item : substitutions) {
-        vars = lr_urlvars_set(vars, item.first.c_str(), item.second.c_str());
-    }
-    handle_set_opt(h.get(), LRO_VARSUB, vars);
     auto cachedir = get_cachedir();
     handle_set_opt(h.get(), LRO_DESTDIR, cachedir.c_str());
     const char * urls[] = {cachedir.c_str(), nullptr};
     handle_set_opt(h.get(), LRO_URLS, urls);
     handle_set_opt(h.get(), LRO_LOCAL, 1L);
-#ifdef LRO_SUPPORTS_CACHEDIR
-    /* If zchunk is enabled, set librepo cache dir */
-    if (config.get_main_config().zchunk().get_value()) {
-        handle_set_opt(h.get(), LRO_CACHEDIR, config.basecachedir().get_value().c_str());
-    }
-#endif
+
     return h;
 }
 
@@ -644,12 +647,6 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
     common_handle_setup(h);
 
     handle_set_opt(h.get(), LRO_HTTPHEADER, http_headers.get());
-
-    LrUrlVars * vars = nullptr;
-    for (const auto & item : substitutions) {
-        vars = lr_urlvars_set(vars, item.first.c_str(), item.second.c_str());
-    }
-    handle_set_opt(h.get(), LRO_VARSUB, vars);
 
     handle_set_opt(h.get(), LRO_DESTDIR, destdir);
 
@@ -668,8 +665,6 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
         source = Source::MIRRORLIST;
     }
     if (source != Source::NONE) {
-        handle_set_opt(h.get(), LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
-        handle_set_opt(h.get(), LRO_PROGRESSDATA, callbacks.get());
         if (mirror_setup) {
             if (source == Source::METALINK) {
                 handle_set_opt(h.get(), LRO_METALINKURL, tmp.c_str());
@@ -680,7 +675,9 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
                 if (tmp.find("metalink") != tmp.npos)
                     handle_set_opt(h.get(), LRO_METALINKURL, tmp.c_str());
             }
+
             handle_set_opt(h.get(), LRO_FASTESTMIRROR, config.fastestmirror().get_value() ? 1L : 0L);
+
             auto fastest_mirror_cache_dir = config.basecachedir().get_value();
             if (fastest_mirror_cache_dir.back() != '/') {
                 fastest_mirror_cache_dir.push_back('/');
@@ -692,7 +689,6 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
             handle_set_opt(h.get(), LRO_URLS, mirrors);
         }
     } else if (!config.baseurl().get_value().empty()) {
-        handle_set_opt(h.get(), LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
         size_t len = config.baseurl().get_value().size();
         const char * urls[len + 1];
         for (size_t idx = 0; idx < len; ++idx) {
@@ -716,13 +712,7 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
     handle_set_opt(h.get(), LRO_PROGRESSDATA, callbacks.get());
     handle_set_opt(h.get(), LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
     handle_set_opt(h.get(), LRO_FASTESTMIRRORDATA, callbacks.get());
-
-#ifdef LRO_SUPPORTS_CACHEDIR
-    // If zchunk is enabled, set librepo cache dir
-    if (config.get_main_config().zchunk().get_value()) {
-        handle_set_opt(h.get(), LRO_CACHEDIR, config.basecachedir().get_value().c_str());
-    }
-#endif
+    handle_set_opt(h.get(), LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
 
     long timeout = config.timeout().get_value();
     if (timeout > 0) {
