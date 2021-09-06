@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/output/argument_parser.hpp"
 
-#include <libdnf/utils/bgettext/bgettext-lib.h>
-#include <libdnf/utils/string.hpp>
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "libdnf/utils/string.hpp"
 
 #include <fmt/format.h>
 

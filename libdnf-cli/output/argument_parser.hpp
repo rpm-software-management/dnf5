@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CLI_OUTPUT_ARGUMENT_PARSER_HPP
 
 
-#include <libdnf-cli/utils/tty.hpp>
+#include "libdnf-cli/utils/tty.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 
@@ -88,7 +88,7 @@ protected:
 
 class Help : public Usage {
 public:
-    explicit Help() : Usage::Usage() {
+    explicit Help() {
         scols_table_new_column(table, "desc", 40, SCOLS_FL_WRAP);
     }
 
