@@ -302,6 +302,69 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
     }
 }
 
+// Prints a completed argument `arg` or a table with suggestions and help to complete
+// if there is more than one solution.
+static void print_complete(
+    ArgumentParser::Command * cmd, const char * arg, std::vector<ArgumentParser::NamedArg *> named_args) {
+
+    // Using the Help class to print the completion suggestions, as it prints a table of two columns
+    // which is also what we need here.
+    libdnf::cli::output::Help help;
+    std::string last;
+
+    // Search for matching commands.
+    if (arg[0] == '\0' || arg[0] != '-') {
+        for (const auto * opt : cmd->get_commands()) {
+            auto & name = opt->get_id();
+            if (name.compare(0, strlen(arg), arg) == 0) {
+                help.add_line(name, '(' + opt->get_short_description() + ')', nullptr);
+                last = name + ' ';
+            }
+        }
+    }
+
+    // Search for matching named arguments.
+    if (arg[0] == '-') {
+        for (const auto * opt : named_args) {
+            if ((arg[1] == '\0' && opt->get_short_name() != '\0') ||
+                (arg[1] == opt->get_short_name() && arg[2] == '\0')) {
+                std::string name = std::string("-") + opt->get_short_name();
+                std::string extended_name = name;
+                if (opt->get_has_value()) {
+                    extended_name += opt->get_arg_value_help().empty() ? "VALUE" : opt->get_arg_value_help();
+                }
+                help.add_line(extended_name, '(' + opt->get_short_description() + ')', nullptr);
+                last = name;
+                if (!opt->get_has_value()) {
+                    last += ' ';
+                }
+            }
+            if (!opt->get_long_name().empty()) {
+                std::string name = "--" + opt->get_long_name();
+                std::string extended_name = name;
+                if (opt->get_has_value()) {
+                    name += '=';
+                    extended_name += '=' + (opt->get_arg_value_help().empty() ? "VALUE" : opt->get_arg_value_help());
+                }
+                if (name.compare(0, strlen(arg), arg) == 0) {
+                    help.add_line(extended_name, '(' + opt->get_short_description() + ')', nullptr);
+                    last = name;
+                    if (!opt->get_has_value()) {
+                        last += ' ';
+                    }
+                }
+            }
+        }
+    }
+
+    // Prints a completed argument or a table with suggestions and help to complete if there is more than one solution.
+    if (scols_table_get_nlines(help.get_table()) > 1) {
+        help.print();
+    } else if (!last.empty() && last != arg) {
+        std::cout << last << std::endl;
+    }
+}
+
 void ArgumentParser::Command::parse(
     const char * option, int argc, const char * const argv[], const std::vector<NamedArg *> * additional_named_args) {
     std::vector<NamedArg *> extended_named_args;
@@ -314,6 +377,14 @@ void ArgumentParser::Command::parse(
     size_t used_positional_arguments = 0;
     int short_option_idx = 0;
     for (int i = 1; i < argc;) {
+        if (owner.complete_arg_ptr) {
+            if (argv + i > owner.complete_arg_ptr) {
+                return;
+            } else if (argv + i == owner.complete_arg_ptr) {
+                print_complete(this, argv[i], additional_named_args ? extended_named_args : named_args);
+                return;
+            }
+        }
         bool used = false;
         const auto * tmp = argv[i];
         if (*tmp == '-') {
@@ -360,6 +431,10 @@ void ArgumentParser::Command::parse(
                     cmd->parse(argv[i], argc - i, &argv[i], additional_named_args ? &extended_named_args : nullptr);
                     i = argc;
                     used = true;
+                    // The subcommand processed the completion of the argument. There is no need to continue parsing.
+                    if (owner.complete_arg_ptr) {
+                        return;
+                    }
                     break;
                 }
             }
@@ -713,6 +788,17 @@ ArgumentParser::PositionalArg & ArgumentParser::get_positional_arg(const std::st
         return *ret;
     }
     throw ArgumentParser::Command::PositionalArgNotFound(id_path);
+}
+
+void ArgumentParser::complete(int argc, const char * const argv[], int complete_arg_idx) {
+    if (complete_arg_idx < 1 || complete_arg_idx >= argc) {
+        return;
+    }
+    complete_arg_ptr = argv + complete_arg_idx;
+    try {
+        parse(argc, argv);
+    } catch (...) {
+    }
 }
 
 }  // namespace libdnf::cli

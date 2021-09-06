@@ -607,6 +607,10 @@ public:
     /// Gets a list of all positional argument stored in the argument parser.
     const std::vector<std::unique_ptr<PositionalArg>> & get_positional_args() const noexcept { return pos_args; }
 
+    /// Prints the completed argument from the `complete_arg_idx` position in the argv array. In case of more than one
+    /// potential completion matches, prints a table with the potential matches along with their short help descriptions.
+    void complete(int argc, const char * const argv[], int complete_arg_idx);
+
 private:
     std::vector<std::unique_ptr<Command>> cmds;
     std::vector<std::unique_ptr<NamedArg>> named_args;
@@ -618,6 +622,7 @@ private:
     Command * root_command{nullptr};
     Command * selected_command{nullptr};
     bool inherit_named_args{false};
+    const char * const * complete_arg_ptr{nullptr};
 };
 
 }  // namespace libdnf::cli
