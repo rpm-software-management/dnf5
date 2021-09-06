@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "callbacks.hpp"
 #include "dbus.hpp"
 #include "services/base/base.hpp"
+#include "services/comps/group.hpp"
 #include "services/goal/goal.hpp"
 #include "services/repo/repo.hpp"
 #include "services/repoconf/repo_conf.hpp"
@@ -108,6 +109,7 @@ Session::Session(
     services.emplace_back(std::make_unique<Repo>(*this));
     services.emplace_back(std::make_unique<Rpm>(*this));
     services.emplace_back(std::make_unique<Goal>(*this));
+    services.emplace_back(std::make_unique<Group>(*this));
 
     dbus_object = sdbus::createObject(connection, object_path);
     // Register all provided services on d-bus
