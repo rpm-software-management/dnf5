@@ -123,7 +123,7 @@ inline void RootCommand::run() {
 }
 
 
-static bool parse_args(Context & ctx, int argc, char * argv[]) {
+static void set_commandline_args(Context & ctx) {
     ctx.set_root_command(std::make_unique<RootCommand>(ctx));
     auto microdnf = ctx.get_root_command()->get_argument_parser_command();
 
@@ -246,13 +246,16 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     microdnf->register_named_arg(releasever);
 
     ctx.get_argument_parser().set_inherit_named_args(true);
+}
 
+static bool parse_commandline_args(Context & ctx, int argc, char * argv[]) {
     try {
         ctx.get_argument_parser().parse(argc, argv);
     } catch (const std::exception & ex) {
         std::cout << ex.what() << std::endl;
     }
-    return help->get_parse_count() > 0;
+    auto & help = ctx.get_argument_parser().get_named_arg("help", false);
+    return help.get_parse_count() > 0;
 }
 
 }  // namespace microdnf
@@ -276,8 +279,21 @@ int main(int argc, char * argv[]) try {
     auto & plugins = context.base.get_plugins();
     plugins.init();
 
+    // Set commandline arguments
+    microdnf::set_commandline_args(context);
+
+    // Argument completion handler
+    // If the argument at position 1 is "--complete=<index>", this is a request to complete the argument
+    // at position <index>.
+    // The first two arguments are not subject to completion (skip them). The original arguments of the program
+    // (including the program name) start from position 2.
+    if (argc >= 2 && strncmp(argv[1], "--complete=", 11) == 0) {
+        context.get_argument_parser().complete(argc - 2, argv + 2, std::stoi(argv[1] + 11));
+        return 0;
+    }
+
     // Parse command line arguments
-    auto print_help = microdnf::parse_args(context, argc, argv);
+    auto print_help = microdnf::parse_commandline_args(context, argc, argv);
 
     // print help of the selected command if --help was used
     if (print_help) {
