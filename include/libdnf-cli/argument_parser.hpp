@@ -199,6 +199,7 @@ public:
         };
 
         using ParseHookFunc = std::function<bool(PositionalArg * arg, int argc, const char * const argv[])>;
+        using CompleteHookFunc = std::function<std::vector<std::string>(const char * arg_to_complete)>;
 
         /// Gets the number of values required by this argument on the command line.
         /// May return special values: OPTIONAL, UNLIMITED, UNLIMITED_BUT_ONE
@@ -218,6 +219,9 @@ public:
 
         /// Sets the user function for parsing the argument.
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
+
+        /// Sets the user function to complete the argument.
+        void set_complete_hook_func(CompleteHookFunc && func) { complete_hook = std::move(func); }
 
     private:
         friend class ArgumentParser;
@@ -240,6 +244,7 @@ public:
         std::vector<std::unique_ptr<libdnf::Option>> * values;
         bool store_value{true};
         ParseHookFunc parse_hook;
+        CompleteHookFunc complete_hook;
     };
 
     class NamedArg : public Argument {
@@ -492,6 +497,8 @@ public:
         friend class ArgumentParser;
 
         Command(ArgumentParser & owner, const std::string & id) : Argument(owner, id) {}
+
+        void print_complete(const char * arg, std::vector<ArgumentParser::NamedArg *> named_args, size_t used_positional_arguments);
 
         Command * parent{nullptr};
         std::vector<Command *> cmds;

@@ -123,6 +123,30 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
         auto msg = fmt::format("positional argument \"{}\": {}", option, conflict);
         throw Conflict(msg);
     }
+    if (owner.complete_arg_ptr) {
+        int usable_argc = 1;
+        while (usable_argc < argc && *argv[usable_argc] != '-') {
+            ++usable_argc;
+        }
+        auto count = static_cast<size_t>(nvals > 0 ? nvals : (nvals == OPTIONAL ? 1 : usable_argc));
+        for (size_t i = 0; i < count; ++i) {
+            if (owner.complete_arg_ptr == argv + i) {
+                if (complete_hook) {
+                    auto result = complete_hook(argv[i]);
+                    if (result.size() == 1) {
+                        if (result[0] != option) {
+                            std::cout << result[0] + ' ' << std::endl;
+                        }
+                    } else {
+                        for (const auto & line : result) {
+                            std::cout << line << std::endl;
+                        }
+                    }
+                }
+                return static_cast<int>(count);
+            }
+        }
+    }
     if (argc < nvals) {
         throw FewValues(this->id);
     }
@@ -304,8 +328,8 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
 
 // Prints a completed argument `arg` or a table with suggestions and help to complete
 // if there is more than one solution.
-static void print_complete(
-    ArgumentParser::Command * cmd, const char * arg, std::vector<ArgumentParser::NamedArg *> named_args) {
+void ArgumentParser::Command::print_complete(
+    const char * arg, std::vector<ArgumentParser::NamedArg *> named_args, size_t used_positional_arguments) {
 
     // Using the Help class to print the completion suggestions, as it prints a table of two columns
     // which is also what we need here.
@@ -314,11 +338,27 @@ static void print_complete(
 
     // Search for matching commands.
     if (arg[0] == '\0' || arg[0] != '-') {
-        for (const auto * opt : cmd->get_commands()) {
+        for (const auto * opt : get_commands()) {
             auto & name = opt->get_id();
             if (name.compare(0, strlen(arg), arg) == 0) {
                 help.add_line(name, '(' + opt->get_short_description() + ')', nullptr);
                 last = name + ' ';
+            }
+        }
+        if (last.empty() && used_positional_arguments < get_positional_args().size()) {
+            auto pos_arg = get_positional_args()[used_positional_arguments];
+            if (pos_arg->complete_hook) {
+                auto result = pos_arg->complete_hook(arg);
+                if (result.size() == 1) {
+                    if (result[0] == arg) {
+                        return;
+                    }
+                    std::cout << result[0] + ' ' << std::endl;
+                    return;
+                }
+                for (const auto & line : result) {
+                    std::cout << line << std::endl;
+                }
             }
         }
     }
@@ -381,7 +421,7 @@ void ArgumentParser::Command::parse(
             if (argv + i > owner.complete_arg_ptr) {
                 return;
             } else if (argv + i == owner.complete_arg_ptr) {
-                print_complete(this, argv[i], additional_named_args ? extended_named_args : named_args);
+                print_complete(argv[i], additional_named_args ? extended_named_args : named_args, used_positional_arguments);
                 return;
             }
         }
