@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/utils/tty.hpp>
 #include <libdnf/base/goal.hpp>
 #include <libdnf/repo/package_downloader.hpp>
+#include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <libdnf/utils/xdg.hpp>
@@ -794,6 +795,45 @@ void run_transaction(libdnf::rpm::Transaction & transaction) {
         transaction.register_cb(nullptr);
     }
     std::cout << std::endl;
+}
+
+std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string & pattern, bool nevra_for_same_name) {
+    ctx.base.get_config().assumeno().set(libdnf::Option::Priority::RUNTIME, true);
+    ctx.set_quiet(true);
+
+    ctx.base.load_config_from_file();
+    ctx.set_cache_dir();
+
+    auto package_sack = ctx.base.get_rpm_package_sack();
+    package_sack->create_system_repo(false);
+
+    std::set<std::string> result_set;
+    {
+        libdnf::rpm::PackageQuery matched_pkgs_query(ctx.base);
+        matched_pkgs_query.resolve_pkg_spec(
+            pattern + '*', {.ignore_case = false, .with_provides = false, .with_filenames = false}, true);
+
+        for (const auto & package : matched_pkgs_query) {
+            auto [it, inserted] = result_set.insert(package.get_name());
+
+            // Package name was already present - not inserted. There are multiple packages with the same name.
+            // If requested, removes the name and inserts a full nevra for these packages.
+            if (nevra_for_same_name && !inserted) {
+                result_set.erase(it);
+                libdnf::rpm::PackageQuery name_query(matched_pkgs_query);
+                name_query.filter_name({package.get_name()});
+                for (const auto & pkg : name_query) {
+                    result_set.insert(pkg.get_full_nevra());
+                    matched_pkgs_query.remove(pkg);
+                }
+            }
+        }
+    }
+
+    std::vector<std::string> result;
+    result.reserve(result_set.size());
+    std::move(result_set.begin(), result_set.end(), std::back_inserter(result));
+    return result;
 }
 
 }  // namespace microdnf

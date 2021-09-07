@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/utils/span.hpp>
 
 #include <memory>
+#include <string>
 #include <utility>
 #include <vector>
 
@@ -109,6 +110,9 @@ void download_packages(libdnf::base::Transaction & transaction, const char * des
 
 void run_transaction(libdnf::rpm::Transaction & transaction);
 
+/// Returns the names of matching installed packages.
+/// If `nevra_for_same_name` is true, it returns a full nevra for packages with the same name.
+std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string & pattern, bool nevra_for_same_name);
 
 }  // namespace microdnf
 
