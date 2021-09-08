@@ -74,15 +74,7 @@ class DowngradeTest(support.InstallrootCase):
                 ], signature=dbus.Signature('(ua{sv})'))
             )
 
-        self.assertDictEqual(
-            errors,
-            dbus.Dictionary({
-                dbus.String('transaction_problems'): dbus.UInt32(0, variant_level=1),
-                dbus.String('transaction_solver_problems'): dbus.String('', variant_level=1),
-                dbus.String('goal_problems'): dbus.Array([
-                    ], signature=dbus.Signature('a{sv}', variant_level=1))
-                }, signature=dbus.Signature('sv'))
-        )
+        self.assertResolveErrorsEmpty(errors)
 
         self.iface_goal.do_transaction(dbus.Dictionary({}, signature='sv'))
 
