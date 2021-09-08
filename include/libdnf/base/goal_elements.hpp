@@ -71,10 +71,10 @@ enum class GoalProblem : uint32_t {
     NOT_INSTALLED_FOR_ARCHITECTURE = (1 << 7),
     HINT_ICASE = (1 << 8),
     HINT_ALTERNATIVES = (1 << 9),
-    INSLALLED_LOWEST_VERSION = (1 << 10),
+    INSTALLED_LOWEST_VERSION = (1 << 10),
     INSTALLED_IN_DIFFERENT_VERSION = (1 << 11),
     NOT_AVAILABLE = (1 << 12),
-    ALREADY_INSLALLED = (1 << 13)
+    ALREADY_INSTALLED = (1 << 13)
 };
 
 enum class GoalAction {

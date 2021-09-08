@@ -295,7 +295,7 @@ GoalProblem Goal::Impl::add_install_to_goal(
     installed.filter_installed();
     for (auto package_id : *installed.p_impl) {
         transaction.p_impl->add_resolve_log(
-            GoalAction::INSTALL, GoalProblem::ALREADY_INSLALLED, settings, spec, {pool.get_nevra(package_id)}, false);
+            GoalAction::INSTALL, GoalProblem::ALREADY_INSTALLED, settings, spec, {pool.get_nevra(package_id)}, false);
     }
 
     if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
@@ -582,7 +582,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 for (auto package_id : *query.p_impl) {
                     transaction.p_impl->add_resolve_log(
                         GoalAction::INSTALL,
-                        GoalProblem::ALREADY_INSLALLED,
+                        GoalProblem::ALREADY_INSTALLED,
                         settings,
                         {},
                         {pool.get_nevra(package_id)},
@@ -772,7 +772,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                         name_arch.append(".");
                         name_arch.append(pool.get_arch(installed_id));
                         transaction.p_impl->add_resolve_log(
-                            action, GoalProblem::INSLALLED_LOWEST_VERSION, settings, spec, {name_arch}, false);
+                            action, GoalProblem::INSTALLED_LOWEST_VERSION, settings, spec, {name_arch}, false);
                     } else {
                         rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
                     }

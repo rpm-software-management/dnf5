@@ -314,9 +314,9 @@ std::string Transaction::format_resolve_log(
             auto elements = utils::string::join(additional_data, ", ");
             return ret.append(fmt::format(_("There are following alternatives for '{0}': {1}"), spec, elements));
         }
-        case GoalProblem::INSLALLED_LOWEST_VERSION: {
+        case GoalProblem::INSTALLED_LOWEST_VERSION: {
             if (additional_data.size() != 1) {
-                throw std::invalid_argument("Incorrect number of elements for INSLALLED_LOWEST_VERSION");
+                throw std::invalid_argument("Incorrect number of elements for INSTALLED_LOWEST_VERSION");
             }
             return ret.append(fmt::format(
                 _("Package \"{}\" of lowest version already installed, cannot downgrade it."),
@@ -337,9 +337,9 @@ std::string Transaction::format_resolve_log(
         case GoalProblem::REMOVAL_OF_PROTECTED:
         case GoalProblem::SOLVER_ERROR:
             throw std::invalid_argument("Unsupported elements for a goal problem");
-        case GoalProblem::ALREADY_INSLALLED:
+        case GoalProblem::ALREADY_INSTALLED:
             if (additional_data.size() != 1) {
-                throw std::invalid_argument("Incorrect number of elements for ALREADY_INSLALLED");
+                throw std::invalid_argument("Incorrect number of elements for ALREADY_INSTALLED");
             }
             return ret.append(fmt::format(_("Package \"{}\" is already installed."), *additional_data.begin()));
     }
