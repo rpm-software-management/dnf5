@@ -44,13 +44,13 @@ class RepoGpgme {
 public:
     RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config);
 
-    void import_key(int fd, const std::string & url);
-
-private:
-    friend class Repo;
+    void set_callbacks(RepoCallbacks * callbacks) { this->callbacks = callbacks; }
 
     std::string get_keyring_dir() { return config.get_cachedir() + "/pubring"; }
 
+    void import_key(int fd, const std::string & url);
+
+private:
     BaseWeakPtr base;
     const ConfigRepo & config;
     std::vector<std::string> known_keys;

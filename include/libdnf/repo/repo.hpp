@@ -52,18 +52,6 @@ namespace libdnf::repo {
 class Repo;
 using RepoWeakPtr = WeakPtr<Repo, false>;
 
-class LrException : public RuntimeError {
-public:
-    LrException(int code, const char * msg) : RuntimeError(msg), code(code) {}
-    LrException(int code, const std::string & msg) : RuntimeError(msg), code(code) {}
-    const char * get_domain_name() const noexcept override { return "librepo"; }
-    const char * get_name() const noexcept override { return "LrException"; }
-    const char * get_description() const noexcept override { return "Librepo exception"; }
-    int get_code() const noexcept { return code; }
-
-private:
-    int code;
-};
 
 /// RPM repository
 /// Represents a repository used to download packages.
@@ -277,9 +265,12 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getMetadataLocations()
     const std::vector<std::pair<std::string, std::string>> get_metadata_locations() const;
 
-    /// Gets path to repository cache directory
+    /// Gets path to the repository cache directory
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getCacheDir()
     std::string get_cachedir() const;
+
+    /// Gets path to the repository persistent directory
+    std::string get_persistdir() const;
 
     /// Gets name of repository
     /// Alias
@@ -305,16 +296,14 @@ public:
     void download_url(const char * url, int fd);
 
     /// Set http headers.
-    /// Example:
-    /// {"User-Agent: Agent007", "MyMagicHeader: I'm here", nullptr}
-    /// @param headers nullptr terminated array of C strings
+    /// @param headers A vector of full headers ("header: value")
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setHttpHeaders(const char * headers[])
-    void set_http_headers(const char * headers[]);
+    void set_http_headers(const std::vector<std::string> & headers);
 
-    /// Get array of added/changed/removed http headers.
-    /// @return nullptr terminated array of C strings
+    /// Get http headers.
+    /// @return A vector of full headers ("header: value")
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getHttpHeaders()
-    const char * const * get_http_headers() const;
+    std::vector<std::string> get_http_headers() const;
 
     /// Returns mirrorlist associated with the repository.
     /// Mirrors on this list are mirrors parsed from mirrorlist/metalink specified by LRO_MIRRORLIST or
@@ -327,7 +316,7 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
     void set_substitutions(const std::map<std::string, std::string> & substitutions);
 
-    RepoWeakPtr get_weak_ptr();
+    RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
@@ -346,14 +335,6 @@ private:
     WeakPtrGuard<Repo, false> data_guard;
 };
 
-
-inline RepoWeakPtr Repo::get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
-
-
-struct Downloader {
-public:
-    static void download_url(ConfigMain * cfg, const char * url, int fd);
-};
 
 /// Logger for librepo
 /// TODO(jrohel): Rewrite to use global logger (LogRouter)

@@ -17,13 +17,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#define METADATA_RELATIVE_DIR "repodata"
-#define PACKAGES_RELATIVE_DIR "packages"
-#define METALINK_FILENAME     "metalink.xml"
-#define MIRRORLIST_FILENAME   "mirrorlist"
-#define RECOGNIZED_CHKSUMS \
-    { "sha512", "sha256" }
-
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
@@ -41,11 +34,11 @@ extern "C" {
 #include <fcntl.h>
 #include <fmt/format.h>
 #include <glib.h>
-#include <librepo/librepo.h>
 #include <solv/chksum.h>
 #include <solv/repo.h>
 #include <solv/util.h>
 #include <sys/stat.h>
+#include <sys/time.h>
 #include <sys/types.h>
 #include <unistd.h>
 #include <utime.h>
@@ -63,37 +56,16 @@ extern "C" {
 #include <iostream>
 #include <list>
 #include <map>
-#include <random>
 #include <set>
 #include <sstream>
 #include <system_error>
 #include <type_traits>
 
-//
-// COUNTME CONSTANTS
-//
-// width of the sliding time window (in seconds)
-const int COUNTME_WINDOW = 7 * 24 * 60 * 60;  // 1 week
-// starting point of the sliding time window relative to the UNIX epoch
-// allows for aligning the window with a specific weekday
-const int COUNTME_OFFSET = 345600;  // Monday (1970-01-05 00:00:00 UTC)
-// estimated number of metalink requests sent over the window
-// used to generate the probability distribution of counting events
-const int COUNTME_BUDGET = 4;  // metadata_expire defaults to 2 days
-// cookie file name
-const std::string COUNTME_COOKIE = "countme";
-// cookie file format version
-const int COUNTME_VERSION = 0;
-// longevity buckets that we report in the flag
-// example: {A, B, C} defines 4 buckets [0, A), [A, B), [B, C), [C, infinity)
-// where each letter represents a window step (starting from 0)
-const std::array<const int, 3> COUNTME_BUCKETS = {{2, 5, 25}};
 
-namespace libdnf {
-namespace {
+namespace libdnf::repo {
 
-/// Throw libdnf::RuntimeError when problem detected
-void is_readable_rpm(const char * fn) {
+/// TODO(lukash) Throw a proper exception
+static void is_readable_rpm(const char * fn) {
     if (access(fn, R_OK) != 0) {
         const char * err_txt = strerror(errno);
         throw RuntimeError(fmt::format(_("Failed to access RPM: \"{}\": {}"), fn, err_txt));
@@ -107,84 +79,10 @@ void is_readable_rpm(const char * fn) {
 }
 
 
-}  // namespace
-}  // namespace libdnf
-
-
-namespace std {
-
-template <>
-struct default_delete<GError> {
-    void operator()(GError * ptr) noexcept { g_error_free(ptr); }
-};
-
-template <>
-struct default_delete<LrResult> {
-    void operator()(LrResult * ptr) noexcept { lr_result_free(ptr); }
-};
-
-template <>
-struct default_delete<LrPackageTarget> {
-    void operator()(LrPackageTarget * ptr) noexcept { lr_packagetarget_free(ptr); }
-};
-
-}  // namespace std
-
-namespace libdnf::repo {
-
-class LrExceptionWithSourceUrl : public LrException {
-public:
-    LrExceptionWithSourceUrl(int code, const std::string & msg, std::string source_url)
-        : LrException(code, msg)
-        , source_url(std::move(source_url)) {}
-    const std::string & get_source_url() const { return source_url; }
-
-private:
-    std::string source_url;
-};
-
-/// Recursive renames/moves file/directory.
-/// Implements copy and remove fallback.
-static void move_recursive(const std::string & src, const std::string & dest) {
-    try {
-        std::filesystem::rename(src, dest);
-    } catch (const std::filesystem::filesystem_error & ex) {
-        std::filesystem::copy(src, dest, std::filesystem::copy_options::recursive);
-        std::filesystem::remove_all(src);
-    }
-}
-
 static int64_t mtime(const char * filename) {
     struct stat st;
     stat(filename, &st);
     return st.st_mtime;
-}
-
-static void throw_exception(std::unique_ptr<GError> && err) {
-    throw LrException(err->code, err->message);
-}
-
-template <typename T>
-inline static void handle_set_opt(LrHandle * handle, LrHandleOption option, T value) {
-    GError * err_p{nullptr};
-    if (!lr_handle_setopt(handle, &err_p, option, value)) {
-        throw_exception(std::unique_ptr<GError>(err_p));
-    }
-}
-
-inline static void handle_get_info(LrHandle * handle, LrHandleInfoOption option, void * value) {
-    GError * err_p{nullptr};
-    if (!lr_handle_getinfo(handle, &err_p, option, value)) {
-        throw_exception(std::unique_ptr<GError>(err_p));
-    }
-}
-
-template <typename T>
-inline static void result_get_info(LrResult * result, LrResultInfoOption option, T value) {
-    GError * err_p{nullptr};
-    if (!lr_result_getinfo(result, &err_p, option, value)) {
-        throw_exception(std::unique_ptr<GError>(err_p));
-    }
 }
 
 
@@ -215,115 +113,18 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
     return ret;
 }
 
-int Repo::Impl::progress_cb(void * data, double total_to_download, double downloaded) {
-    if (!data) {
-        return 0;
-    }
-    auto cb_object = static_cast<RepoCallbacks *>(data);
-    return cb_object->progress(total_to_download, downloaded);
-}
-
-void Repo::Impl::fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr) {
-    if (!data) {
-        return;
-    }
-    auto cb_object = static_cast<RepoCallbacks *>(data);
-    const char * msg;
-    std::string msg_string;
-    if (ptr) {
-        switch (stage) {
-            case LR_FMSTAGE_CACHELOADING:
-            case LR_FMSTAGE_CACHELOADINGSTATUS:
-            case LR_FMSTAGE_STATUS:
-                msg = static_cast<const char *>(ptr);
-                break;
-            case LR_FMSTAGE_DETECTION:
-                msg_string = std::to_string(*(static_cast<long *>(ptr)));
-                msg = msg_string.c_str();
-                break;
-            default:
-                msg = nullptr;
-        }
-    } else {
-        msg = nullptr;
-    }
-    cb_object->fastest_mirror(static_cast<RepoCallbacks::FastestMirrorStage>(stage), msg);
-}
-
-int Repo::Impl::mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata) {
-    if (!data) {
-        return 0;
-    }
-    auto cb_object = static_cast<RepoCallbacks *>(data);
-    return cb_object->handle_mirror_failure(msg, url, metadata);
-};
-
-
-/// Converts the given input string to a URL encoded string
-/// All input characters that are not a-z, A-Z, 0-9, '-', '.', '_' or '~' are converted
-/// to their "URL escaped" version (%NN where NN is a two-digit hexadecimal number).
-/// @param src String to encode
-/// @return URL encoded string
-static std::string url_encode(const std::string & src) {
-    auto no_encode = [](char ch) { return isalnum(ch) != 0 || ch == '-' || ch == '.' || ch == '_' || ch == '~'; };
-
-    // compute length of encoded string
-    auto len = src.length();
-    for (auto ch : src) {
-        if (!no_encode(ch)) {
-            len += 2;
-        }
-    }
-
-    // encode the input string
-    std::string encoded;
-    encoded.reserve(len);
-    for (auto ch : src) {
-        if (no_encode(ch)) {
-            encoded.push_back(ch);
-        } else {
-            encoded.push_back('%');
-            int hex;
-            hex = static_cast<unsigned char>(ch) >> 4;
-            hex += hex <= 9 ? '0' : 'a' - 10;
-            encoded.push_back(static_cast<char>(hex));
-            hex = static_cast<unsigned char>(ch) & 0x0F;
-            hex += hex <= 9 ? '0' : 'a' - 10;
-            encoded.push_back(static_cast<char>(hex));
-        }
-    }
-
-    return encoded;
-}
-
-/// Format user password string
-/// Returns user and password in user:password form. If quote is True,
-/// special characters in user and password are URL encoded.
-/// @param user Username
-/// @param passwd Password
-/// @param encode If quote is True, special characters in user and password are URL encoded.
-/// @return User and password in user:password form
-static std::string format_user_pass_string(const std::string & user, const std::string & passwd, bool encode) {
-    if (encode) {
-        return url_encode(user) + ":" + url_encode(passwd);
-    } else {
-        return user + ":" + passwd;
-    }
-}
 
 Repo::Impl::Impl(Repo & owner, std::string id, Type type, Base & base)
     : type(type)
     , config(base.get_config(), id)
     , timestamp(-1)
-    , load_metadata_other(false)
     , sync_strategy(SyncStrategy::TRY_CACHE)
     , owner(&owner)
     , base(&base)
     , expired(false)
-    , gpgme(base.get_weak_ptr(), config) {}
+    , downloader(base.get_weak_ptr(), config) {}
 
 Repo::Impl::~Impl() {
-    g_strfreev(mirrors);
     if (libsolv_repo_ext.repo) {
         libsolv_repo_ext.repo->appdata = nullptr;
     }
@@ -343,8 +144,7 @@ Repo::Repo(const std::string & id, Base & base, Repo::Type type) {
 Repo::~Repo() = default;
 
 void Repo::set_callbacks(std::unique_ptr<RepoCallbacks> && callbacks) {
-    p_impl->callbacks = std::move(callbacks);
-    p_impl->gpgme.callbacks = p_impl->callbacks.get();
+    p_impl->downloader.set_callbacks(std::move(callbacks));
 }
 
 std::string::size_type Repo::verify_id(const std::string & repo_id) {
@@ -409,7 +209,7 @@ void Repo::load_cache() {
     p_impl->load_cache();
 }
 void Repo::download_metadata(const std::string & destdir) {
-    p_impl->download_metadata(destdir);
+    p_impl->downloader.download_metadata(destdir);
 }
 bool Repo::get_use_includes() const {
     return p_impl->use_includes;
@@ -418,10 +218,10 @@ void Repo::set_use_includes(bool enabled) {
     p_impl->use_includes = enabled;
 }
 bool Repo::get_load_metadata_other() const {
-    return p_impl->load_metadata_other;
+    return p_impl->downloader.load_metadata_other;
 }
 void Repo::set_load_metadata_other(bool value) {
-    p_impl->load_metadata_other = value;
+    p_impl->downloader.load_metadata_other = value;
 }
 int Repo::get_cost() const {
     return p_impl->config.cost().get_value();
@@ -457,389 +257,36 @@ int Repo::get_expires_in() const {
 }
 
 void Repo::set_substitutions(const std::map<std::string, std::string> & substitutions) {
-    p_impl->substitutions = substitutions;
+    p_impl->downloader.substitutions = substitutions;
 }
 
 void Repo::add_metadata_type_to_download(const std::string & metadata_type) {
-    p_impl->additional_metadata.insert(metadata_type);
+    p_impl->downloader.additional_metadata.insert(metadata_type);
 }
 
 void Repo::remove_metadata_type_from_download(const std::string & metadata_type) {
-    p_impl->additional_metadata.erase(metadata_type);
+    p_impl->downloader.additional_metadata.erase(metadata_type);
 }
 
 std::string Repo::get_metadata_path(const std::string & metadata_type) {
     return p_impl->get_metadata_path(metadata_type);
 }
 
-// Map string from config option proxy_auth_method to librepo LrAuth value
-static constexpr struct {
-    const char * name;
-    LrAuth code;
-} PROXYAUTHMETHODS[] = {
-    {"none", LR_AUTH_NONE},
-    {"basic", LR_AUTH_BASIC},
-    {"digest", LR_AUTH_DIGEST},
-    {"negotiate", LR_AUTH_NEGOTIATE},
-    {"ntlm", LR_AUTH_NTLM},
-    {"digest_ie", LR_AUTH_DIGEST_IE},
-    {"ntlm_wb", LR_AUTH_NTLM_WB},
-    {"any", LR_AUTH_ANY}};
-
-template<typename C>
-static std::unique_ptr<LrHandle> new_remote_handle(const C & config) {
-    std::unique_ptr<LrHandle> handle(lr_handle_init());
-    LrHandle * h = handle.get();
-
-    handle_set_opt(h, LRO_USERAGENT, config.user_agent().get_value().c_str());
-
-    auto minrate = config.minrate().get_value();
-    auto maxspeed = config.throttle().get_value();
-    if (maxspeed > 0 && maxspeed <= 1) {
-        maxspeed *= static_cast<float>(config.bandwidth().get_value());
-    }
-    if (maxspeed != 0 && maxspeed < static_cast<float>(minrate)) {
-        // TODO(lukash) throw a proper error class
-        throw RuntimeError(
-            _("Maximum download speed is lower than minimum. "
-              "Please change configuration of minrate or throttle"));
-    }
-    handle_set_opt(h, LRO_LOWSPEEDLIMIT, static_cast<int64_t>(minrate));
-    handle_set_opt(h, LRO_MAXSPEED, static_cast<int64_t>(maxspeed));
-
-    long timeout = config.timeout().get_value();
-    if (timeout > 0) {
-        handle_set_opt(h, LRO_CONNECTTIMEOUT, timeout);
-        handle_set_opt(h, LRO_LOWSPEEDTIME, timeout);
-    }
-
-    auto & ip_resolve = config.ip_resolve().get_value();
-    if (ip_resolve == "ipv4") {
-        handle_set_opt(h, LRO_IPRESOLVE, LR_IPRESOLVE_V4);
-    } else if (ip_resolve == "ipv6") {
-        handle_set_opt(h, LRO_IPRESOLVE, LR_IPRESOLVE_V6);
-    }
-
-    auto userpwd = config.username().get_value();
-    if (!userpwd.empty()) {
-        // TODO Use URL encoded form, needs support in librepo
-        userpwd = format_user_pass_string(userpwd, config.password().get_value(), false);
-        handle_set_opt(h, LRO_USERPWD, userpwd.c_str());
-    }
-
-    if (!config.sslcacert().get_value().empty()) {
-        handle_set_opt(h, LRO_SSLCACERT, config.sslcacert().get_value().c_str());
-    }
-    if (!config.sslclientcert().get_value().empty()) {
-        handle_set_opt(h, LRO_SSLCLIENTCERT, config.sslclientcert().get_value().c_str());
-    }
-    if (!config.sslclientkey().get_value().empty()) {
-        handle_set_opt(h, LRO_SSLCLIENTKEY, config.sslclientkey().get_value().c_str());
-    }
-    long sslverify = config.sslverify().get_value() ? 1L : 0L;
-    handle_set_opt(h, LRO_SSLVERIFYHOST, sslverify);
-    handle_set_opt(h, LRO_SSLVERIFYPEER, sslverify);
-
-    // === proxy setup ===
-    if (!config.proxy().empty() && !config.proxy().get_value().empty()) {
-        handle_set_opt(h, LRO_PROXY, config.proxy().get_value().c_str());
-    }
-
-    const std::string proxy_auth_method_str = config.proxy_auth_method().get_value();
-    auto proxy_auth_method = LR_AUTH_ANY;
-    for (auto & auth : PROXYAUTHMETHODS) {
-        if (proxy_auth_method_str == auth.name) {
-            proxy_auth_method = auth.code;
-            break;
-        }
-    }
-    handle_set_opt(h, LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_method));
-
-    if (!config.proxy_username().empty()) {
-        auto userpwd = config.proxy_username().get_value();
-        if (!userpwd.empty()) {
-            userpwd = format_user_pass_string(userpwd, config.proxy_password().get_value(), true);
-            handle_set_opt(h, LRO_PROXYUSERPWD, userpwd.c_str());
-        }
-    }
-
-    if (!config.proxy_sslcacert().get_value().empty()) {
-        handle_set_opt(h, LRO_PROXY_SSLCACERT, config.proxy_sslcacert().get_value().c_str());
-    }
-    if (!config.proxy_sslclientcert().get_value().empty()) {
-        handle_set_opt(h, LRO_PROXY_SSLCLIENTCERT, config.proxy_sslclientcert().get_value().c_str());
-    }
-    if (!config.proxy_sslclientkey().get_value().empty()) {
-        handle_set_opt(h, LRO_PROXY_SSLCLIENTKEY, config.proxy_sslclientkey().get_value().c_str());
-    }
-    long proxy_sslverify = config.proxy_sslverify().get_value() ? 1L : 0L;
-    handle_set_opt(h, LRO_PROXY_SSLVERIFYHOST, proxy_sslverify);
-    handle_set_opt(h, LRO_PROXY_SSLVERIFYPEER, proxy_sslverify);
-
-    return handle;
-}
-
-void Repo::Impl::common_handle_setup(std::unique_ptr<LrHandle> & h) {
-    std::vector<const char *> dlist = {
-        MD_FILENAME_PRIMARY,
-        MD_FILENAME_FILELISTS,
-        MD_FILENAME_PRESTODELTA,
-        MD_FILENAME_GROUP_GZ,
-        MD_FILENAME_UPDATEINFO};
-
-#ifdef MODULEMD
-    dlist.push_back(MD_FILENAME_MODULES);
-#endif
-    if (load_metadata_other) {
-        dlist.push_back(MD_FILENAME_OTHER);
-    }
-    for (auto & item : additional_metadata) {
-        dlist.push_back(item.c_str());
-    }
-    dlist.push_back(nullptr);
-    handle_set_opt(h.get(), LRO_PRESERVETIME, static_cast<long>(preserve_remote_time));
-    handle_set_opt(h.get(), LRO_REPOTYPE, LR_YUMREPO);
-    handle_set_opt(h.get(), LRO_YUMDLIST, dlist.data());
-    handle_set_opt(h.get(), LRO_INTERRUPTIBLE, 1L);
-    handle_set_opt(h.get(), LRO_GPGCHECK, config.repo_gpgcheck().get_value());
-    handle_set_opt(h.get(), LRO_MAXMIRRORTRIES, static_cast<long>(max_mirror_tries));
-    handle_set_opt(h.get(), LRO_MAXPARALLELDOWNLOADS, config.max_parallel_downloads().get_value());
-
-    LrUrlVars * repomd_substs = nullptr;
-    repomd_substs = lr_urlvars_set(repomd_substs, MD_FILENAME_GROUP_GZ, MD_FILENAME_GROUP);
-    handle_set_opt(h.get(), LRO_YUMSLIST, repomd_substs);
-
-    LrUrlVars * substs = nullptr;
-    for (const auto & item : substitutions) {
-        substs = lr_urlvars_set(substs, item.first.c_str(), item.second.c_str());
-    }
-    handle_set_opt(h.get(), LRO_VARSUB, substs);
-
-#ifdef LRO_SUPPORTS_CACHEDIR
-    // If zchunk is enabled, set librepo cache dir
-    if (config.get_main_config().zchunk().get_value()) {
-        handle_set_opt(h.get(), LRO_CACHEDIR, config.basecachedir().get_value().c_str());
-    }
-#endif
-}
-
-std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_local() {
-    std::unique_ptr<LrHandle> h(lr_handle_init());
-    common_handle_setup(h);
-
-    auto cachedir = config.get_cachedir();
-    handle_set_opt(h.get(), LRO_DESTDIR, cachedir.c_str());
-    const char * urls[] = {cachedir.c_str(), nullptr};
-    handle_set_opt(h.get(), LRO_URLS, urls);
-    handle_set_opt(h.get(), LRO_LOCAL, 1L);
-
-    return h;
-}
-
-std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir, bool mirror_setup) {
-    std::unique_ptr<LrHandle> h(new_remote_handle(config));
-    common_handle_setup(h);
-
-    handle_set_opt(h.get(), LRO_HTTPHEADER, http_headers.get());
-
-    handle_set_opt(h.get(), LRO_DESTDIR, destdir);
-
-    enum class Source { NONE, METALINK, MIRRORLIST } source{Source::NONE};
-    std::string tmp;
-    if (!config.metalink().empty() && !(tmp = config.metalink().get_value()).empty()) {
-        source = Source::METALINK;
-    } else if (!config.mirrorlist().empty() && !(tmp = config.mirrorlist().get_value()).empty()) {
-        source = Source::MIRRORLIST;
-    }
-    if (source != Source::NONE) {
-        if (mirror_setup) {
-            if (source == Source::METALINK) {
-                handle_set_opt(h.get(), LRO_METALINKURL, tmp.c_str());
-            } else {
-                handle_set_opt(h.get(), LRO_MIRRORLISTURL, tmp.c_str());
-                // YUM-DNF compatibility hack. YUM guessed by content of keyword "metalink" if
-                // mirrorlist is really mirrorlist or metalink)
-                if (tmp.find("metalink") != tmp.npos)
-                    handle_set_opt(h.get(), LRO_METALINKURL, tmp.c_str());
-            }
-
-            handle_set_opt(h.get(), LRO_FASTESTMIRROR, config.fastestmirror().get_value() ? 1L : 0L);
-
-            auto fastest_mirror_cache_dir = config.basecachedir().get_value();
-            if (fastest_mirror_cache_dir.back() != '/') {
-                fastest_mirror_cache_dir.push_back('/');
-            }
-            fastest_mirror_cache_dir += "fastestmirror.cache";
-            handle_set_opt(h.get(), LRO_FASTESTMIRRORCACHE, fastest_mirror_cache_dir.c_str());
-        } else {
-            // use already resolved mirror list
-            handle_set_opt(h.get(), LRO_URLS, mirrors);
-        }
-    } else if (!config.baseurl().get_value().empty()) {
-        size_t len = config.baseurl().get_value().size();
-        const char * urls[len + 1];
-        for (size_t idx = 0; idx < len; ++idx) {
-            urls[idx] = config.baseurl().get_value()[idx].c_str();
-        }
-        urls[len] = nullptr;
-        handle_set_opt(h.get(), LRO_URLS, urls);
-    } else {
-        throw RuntimeError(fmt::format(_("Cannot find a valid baseurl for repo: {}"), config.get_id()));
-    }
-
-    handle_set_opt(h.get(), LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
-    handle_set_opt(h.get(), LRO_PROGRESSDATA, callbacks.get());
-    handle_set_opt(h.get(), LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
-    handle_set_opt(h.get(), LRO_FASTESTMIRRORDATA, callbacks.get());
-    handle_set_opt(h.get(), LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
-
-    return h;
-}
-
-void Repo::Impl::import_repo_keys() {
-    auto & logger = *base->get_logger();
-
-    for (const auto & gpgkey_url : config.gpgkey().get_value()) {
-        char tmp_key_file[] = "/tmp/repokey.XXXXXX";
-        auto fd = mkstemp(tmp_key_file);
-        if (fd == -1) {
-            auto msg = fmt::format(
-                "Error creating temporary file \"{}\": {}", tmp_key_file, std::system_category().message(errno));
-            logger.debug(msg);
-            throw LrException(LRE_GPGERROR, msg);
-        }
-        unlink(tmp_key_file);
-        std::unique_ptr<int, std::function<void(int *)>> tmp_file_closer{&fd, [](int * fd) { close(*fd); }};
-
-        try {
-            download_url(gpgkey_url.c_str(), fd);
-        } catch (const LrExceptionWithSourceUrl & e) {
-            auto msg = fmt::format(_("Failed to retrieve GPG key for repo '{}': {}"), config.get_id(), e.what());
-            throw RuntimeError(msg);
-        }
-        lseek(fd, SEEK_SET, 0);
-
-        gpgme.import_key(fd, gpgkey_url);
-    }
-}
-
-std::unique_ptr<LrResult> Repo::Impl::lr_handle_perform(
-    LrHandle * handle, const std::string & dest_directory, bool set_gpg_home_dir) {
-    if (set_gpg_home_dir) {
-        auto pubringdir = config.get_cachedir() + "/pubring";
-        handle_set_opt(handle, LRO_GNUPGHOMEDIR, pubringdir.c_str());
-    }
-
-    // Start and end is called only if progress callback is set in handle.
-    LrProgressCb progressFunc;
-    handle_get_info(handle, LRI_PROGRESSCB, &progressFunc);
-
-    add_countme_flag(handle);
-
-    std::unique_ptr<LrResult> result;
-    bool ret;
-    bool bad_gpg = false;
-    do {
-        if (callbacks && progressFunc) {
-            callbacks->start(
-                !config.name().get_value().empty() ? config.name().get_value().c_str()
-                                                   : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"));
-        }
-
-        GError * err_p{nullptr};
-        result.reset(lr_result_init());
-        ret = ::lr_handle_perform(handle, result.get(), &err_p);
-
-        std::unique_ptr<GError> err(err_p);
-
-        if (callbacks && progressFunc) {
-            callbacks->end();
-        }
-
-        if (ret) {
-            break;  // finished successfully
-        }
-
-        if (bad_gpg || err_p->code != LRE_BADGPG) {
-            std::string sources;
-
-            if (!config.metalink().empty() && !config.metalink().get_value().empty()) {
-                sources = config.metalink().get_value();
-            } else if (!config.mirrorlist().empty() && !config.mirrorlist().get_value().empty()) {
-                sources = config.mirrorlist().get_value();
-            } else {
-                sources = libdnf::utils::string::join(config.baseurl().get_value(), ", ");
-            }
-
-            throw LrExceptionWithSourceUrl(err->code, err->message, sources);
-        }
-
-        bad_gpg = true;
-        import_repo_keys();
-        std::filesystem::remove_all(dest_directory + "/" + METADATA_RELATIVE_DIR);
-    } while (true);
-
-    return result;
-}
 
 void Repo::Impl::load_cache() {
-    std::unique_ptr<LrHandle> h(lr_handle_init_local());
-    std::unique_ptr<LrResult> r;
+    downloader.load_local();
 
-    // Fetch data
-    r = lr_handle_perform(h.get(), config.get_cachedir(), config.repo_gpgcheck().get_value());
-
-    char ** mirrors;
-    LrYumRepo * yum_repo;
-    LrYumRepoMd * yum_repomd;
-    handle_get_info(h.get(), LRI_MIRRORS, &mirrors);
-    result_get_info(r.get(), LRR_YUM_REPO, &yum_repo);
-    result_get_info(r.get(), LRR_YUM_REPOMD, &yum_repomd);
-
-    // Populate repo
-    repomd_fn = yum_repo->repomd;
-    metadata_paths.clear();
-    for (auto * elem = yum_repo->paths; elem; elem = g_slist_next(elem)) {
-        if (elem->data) {
-            auto yumrepopath = static_cast<LrYumRepoPath *>(elem->data);
-            metadata_paths.emplace(yumrepopath->type, yumrepopath->path);
-        }
-    }
-
-    content_tags.clear();
-    for (auto elem = yum_repomd->content_tags; elem; elem = g_slist_next(elem)) {
-        if (elem->data)
-            content_tags.emplace_back(static_cast<const char *>(elem->data));
-    }
-
-    distro_tags.clear();
-    for (auto elem = yum_repomd->distro_tags; elem; elem = g_slist_next(elem)) {
-        if (elem->data) {
-            auto distro_tag = static_cast<LrYumDistroTag *>(elem->data);
-            if (distro_tag->tag)
-                distro_tags.emplace_back(distro_tag->cpeid, distro_tag->tag);
-        }
-    }
-
-    metadata_locations.clear();
-    for (auto elem = yum_repomd->records; elem; elem = g_slist_next(elem)) {
-        if (elem->data) {
-            auto rec = static_cast<LrYumRepoMdRecord *>(elem->data);
-            metadata_locations.emplace_back(rec->type, rec->location_href);
-        }
-    }
-
-    if (auto c_revision = yum_repomd->revision) {
-        revision = c_revision;
-    }
-    max_timestamp = static_cast<int>(lr_yum_repomd_get_highest_timestamp(yum_repomd, nullptr));
+    revision = downloader.get_revision();
+    max_timestamp = downloader.get_max_timestamp();
+    metadata_paths = downloader.get_metadata_paths();
+    content_tags = downloader.get_content_tags();
+    distro_tags = downloader.get_distro_tags();
+    metadata_locations = downloader.get_metadata_locations();
 
     // Load timestamp unless explicitly expired
     if (timestamp != 0) {
         timestamp = mtime(get_metadata_path(MD_FILENAME_PRIMARY).c_str());
     }
-    g_strfreev(this->mirrors);
-    this->mirrors = mirrors;
 }
 
 bool Repo::Impl::try_load_cache() {
@@ -851,248 +298,11 @@ bool Repo::Impl::try_load_cache() {
     return true;
 }
 
-/// The countme flag will be added once (and only once) in every position of
-/// a sliding time window (COUNTME_WINDOW) that starts at COUNTME_OFFSET and
-/// moves along the time axis, by one length at a time, in such a way that
-/// the current point in time always stays within:
-///
-/// UNIX epoch                    now
-/// |                             |
-/// |---*-----|-----|-----|-----[-*---]---> time
-///     |                       ~~~~~~~
-///     COUNTME_OFFSET          COUNTME_WINDOW
-///
-/// This is to align the time window with an absolute point in time rather
-/// than the last counting event (which could facilitate tracking across
-/// multiple such events).
-void Repo::Impl::add_countme_flag(LrHandle * handle) {
-    auto & logger = *base->get_logger();
-
-    // Bail out if not counting or not running as root (since the persistdir is
-    // only root-writable)
-    if (!config.countme().get_value() || getuid() != 0)
-        return;
-
-    // Bail out if not a remote handle
-    long local;
-    handle_get_info(handle, LRI_LOCAL, &local);
-    if (local)
-        return;
-
-    // Bail out if no metalink or mirrorlist is defined
-    auto & metalink = config.metalink();
-    auto & mirrorlist = config.mirrorlist();
-    if ((metalink.empty() || metalink.get_value().empty()) && (mirrorlist.empty() || mirrorlist.get_value().empty()))
-        return;
-
-    // Load the cookie
-    std::string persistdir = config.get_persistdir();
-    std::string fname = persistdir + "/" + COUNTME_COOKIE;
-
-    if (!std::filesystem::is_directory(persistdir)) {
-        try {
-            std::filesystem::create_directories(persistdir);
-        } catch (std::exception & e) {
-            // TODO(lukash) throw proper exception
-            throw RuntimeError(
-                fmt::format(_("Cannot create repository persistent directory \"{}\": {}"), persistdir, e.what()));
-        }
-    }
-
-    int ver = COUNTME_VERSION;    // file format version (for future use)
-    time_t epoch = 0;             // position of first-ever counted window
-    time_t win = COUNTME_OFFSET;  // position of last counted window
-    int budget = -1;              // budget for this window (-1 = generate)
-    std::ifstream(fname) >> ver >> epoch >> win >> budget;
-
-    // Bail out if the window has not advanced since
-    time_t now = time(nullptr);
-    time_t delta = now - win;
-    if (delta < COUNTME_WINDOW) {
-        logger.debug(fmt::format("countme: no event for {}: window already counted", config.get_id()));
-        return;
-    }
-
-    // Evenly distribute the probability of the counting event over the first N
-    // requests in this window (where N = COUNTME_BUDGET), by defining a random
-    // "budget" of ordinary requests that we first have to spend.  This ensures
-    // that no particular request is special and thus no privacy loss is
-    // incurred by adding the flag within N requests.
-    if (budget < 0) {
-        std::random_device rd;
-        std::default_random_engine gen(rd());
-        std::uniform_int_distribution<int> dist(1, COUNTME_BUDGET);
-        budget = dist(gen);
-    }
-    budget--;
-    if (!budget) {
-        // Budget exhausted, counting!
-
-        // Compute the position of this window
-        win = now - (delta % COUNTME_WINDOW);
-        if (!epoch)
-            epoch = win;
-        // Window step (0 at epoch)
-        int64_t step = (win - epoch) / COUNTME_WINDOW;
-
-        // Compute the bucket we are in
-        uint32_t i;
-        for (i = 0; i < COUNTME_BUCKETS.size(); ++i)
-            if (step < COUNTME_BUCKETS[i])
-                break;
-        uint32_t bucket = i + 1;  // Buckets are indexed from 1
-
-        // Set the flag
-        std::string flag = "countme=" + std::to_string(bucket);
-        handle_set_opt(handle, LRO_ONETIMEFLAG, flag.c_str());
-        logger.debug(fmt::format("countme: event triggered for {}: bucket {}", config.get_id(), bucket));
-
-        // Request a new budget
-        budget = -1;
-    } else {
-        logger.debug(fmt::format("countme: no event for {}: budget to spend: {}", config.get_id(), budget));
-    }
-
-    // Save the cookie
-    std::ofstream(fname) << COUNTME_VERSION << " " << epoch << " " << win << " " << budget;
-}
-
-// Use metalink to check whether our metadata are still current.
-bool Repo::Impl::is_metalink_in_sync() {
-    auto & logger = *base->get_logger();
-
-    libdnf::utils::TempDir tmpdir("tmpdir.");
-
-    std::unique_ptr<LrHandle> h(lr_handle_init_remote(tmpdir.get_path().c_str()));
-
-    handle_set_opt(h.get(), LRO_FETCHMIRRORS, 1L);
-    auto r = lr_handle_perform(h.get(), tmpdir.get_path().c_str(), false);
-    LrMetalink * metalink;
-    handle_get_info(h.get(), LRI_METALINK, &metalink);
-    if (!metalink) {
-        logger.debug(fmt::format(_("reviving: repo '{}' skipped, no metalink."), config.get_id()));
-        return false;
-    }
-
-    // check all recognized hashes
-    auto chksum_free = [](Chksum * ptr) { solv_chksum_free(ptr, nullptr); };
-    struct hashInfo {
-        const LrMetalinkHash * lr_metalink_hash;
-        std::unique_ptr<Chksum, decltype(chksum_free)> chksum;
-    };
-    std::vector<hashInfo> hashes;
-    for (auto hash = metalink->hashes; hash; hash = hash->next) {
-        auto lr_metalink_hash = static_cast<const LrMetalinkHash *>(hash->data);
-        for (auto algorithm : RECOGNIZED_CHKSUMS) {
-            if (strcmp(lr_metalink_hash->type, algorithm) == 0)
-                hashes.push_back({lr_metalink_hash, {nullptr, chksum_free}});
-        }
-    }
-    if (hashes.empty()) {
-        logger.debug(fmt::format(_("reviving: repo '{}' skipped, no usable hash."), config.get_id()));
-        return false;
-    }
-
-    for (auto & hash : hashes) {
-        auto chk_type = solv_chksum_str2type(hash.lr_metalink_hash->type);
-        hash.chksum.reset(solv_chksum_create(chk_type));
-    }
-
-    std::ifstream repomd(repomd_fn, std::ifstream::binary);
-    char buf[4096];
-    int readed;
-    while ((readed = static_cast<int>(repomd.readsome(buf, sizeof(buf)))) > 0) {
-        for (auto & hash : hashes)
-            solv_chksum_add(hash.chksum.get(), buf, readed);
-    }
-
-    for (auto & hash : hashes) {
-        int chksumLen;
-        auto chksum = solv_chksum_get(hash.chksum.get(), &chksumLen);
-        char chksumHex[chksumLen * 2 + 1];
-        solv_bin2hex(chksum, chksumLen, chksumHex);
-        if (strcmp(chksumHex, hash.lr_metalink_hash->value) != 0) {
-            logger.debug(
-                fmt::format(_("reviving: failed for '{}', mismatched {} sum."), config.get_id(), hash.lr_metalink_hash->type));
-            return false;
-        }
-    }
-
-    logger.debug(fmt::format(_("reviving: '{}' can be revived - metalink checksums match."), config.get_id()));
-    return true;
-}
-
-// Use repomd to check whether our metadata are still current.
-bool Repo::Impl::is_repomd_in_sync() {
-    auto & logger = *base->get_logger();
-    LrYumRepo * yum_repo;
-
-    libdnf::utils::TempDir tmpdir("tmpdir.");
-
-    const char * dlist[] = LR_YUM_REPOMDONLY;
-
-    std::unique_ptr<LrHandle> h(lr_handle_init_remote(tmpdir.get_path().c_str()));
-
-    handle_set_opt(h.get(), LRO_YUMDLIST, dlist);
-    auto r = lr_handle_perform(h.get(), tmpdir.get_path().c_str(), config.repo_gpgcheck().get_value());
-    result_get_info(r.get(), LRR_YUM_REPO, &yum_repo);
-
-    auto same = utils::fs::have_files_same_content_noexcept(repomd_fn.c_str(), yum_repo->repomd);
-    if (same)
-        logger.debug(fmt::format(_("reviving: '{}' can be revived - repomd matches."), config.get_id()));
-    else
-        logger.debug(fmt::format(_("reviving: failed for '{}', mismatched repomd."), config.get_id()));
-    return same;
-}
-
 bool Repo::Impl::is_in_sync() {
-    if (!config.metalink().empty() && !config.metalink().get_value().empty())
-        return is_metalink_in_sync();
-    return is_repomd_in_sync();
-}
-
-
-void Repo::Impl::download_metadata(const std::string & destdir) {
-    auto repodir = destdir + "/" + METADATA_RELATIVE_DIR;
-    if (g_mkdir_with_parents(destdir.c_str(), 0755) == -1) {
-        const char * err_txt = strerror(errno);
-        throw RuntimeError(fmt::format(_("Cannot create repo destination directory \"{}\": {}"), destdir, err_txt));
+    if (!config.metalink().empty() && !config.metalink().get_value().empty()) {
+        return downloader.is_metalink_in_sync();
     }
-
-    libdnf::utils::TempDir tmpdir(destdir, "tmpdir.");
-
-    auto tmprepodir = tmpdir.get_path() / METADATA_RELATIVE_DIR;
-
-    std::unique_ptr<LrHandle> h(lr_handle_init_remote(tmpdir.get_path().c_str()));
-
-    auto r = lr_handle_perform(h.get(), tmpdir.get_path(), config.repo_gpgcheck().get_value());
-
-    std::filesystem::remove_all(repodir);
-    if (g_mkdir_with_parents(repodir.c_str(), 0755) == -1) {
-        const char * err_txt = strerror(errno);
-        throw RuntimeError(fmt::format(_("Cannot create directory \"{}\": {}"), repodir, err_txt));
-    }
-    // move all downloaded object from tmpdir to destdir
-    if (auto * dir = opendir(tmpdir.get_path().c_str())) {
-        std::unique_ptr<DIR, std::function<void(DIR *)>> tmp_dir_remover{dir, [](DIR * dir) { closedir(dir); }};
-
-        while (auto ent = readdir(dir)) {
-            auto el_name = ent->d_name;
-            if (el_name[0] == '.' && (el_name[1] == '\0' || (el_name[1] == '.' && el_name[2] == '\0'))) {
-                continue;
-            }
-            auto target_element = destdir + "/" + el_name;
-            std::filesystem::remove_all(target_element);
-            auto tempElement = tmpdir.get_path() / el_name;
-            try {
-                move_recursive(tempElement.c_str(), target_element.c_str());
-            } catch (const std::filesystem::filesystem_error & ex) {
-                std::string err_txt = fmt::format(
-                    _("Cannot rename directory \"{}\" to \"{}\": {}"), tempElement.string(), target_element, ex.what());
-                throw RuntimeError(err_txt);
-            }
-        }
-    }
+    return downloader.is_repomd_in_sync();
 }
 
 bool Repo::Impl::load() {
@@ -1118,11 +328,10 @@ bool Repo::Impl::load() {
         }
 
         logger.debug(fmt::format(_("repo: downloading from remote: {}"), config.get_id()));
-        const auto cache_dir = config.get_cachedir();
-        download_metadata(cache_dir);
+        downloader.download_metadata(config.get_cachedir());
         timestamp = -1;
         load_cache();
-    } catch (const LrExceptionWithSourceUrl & e) {
+    } catch (const libdnf::RuntimeError & e) {
         auto msg = fmt::format(_("Failed to download metadata for repo '{}': {}"), config.get_id(), e.what());
         throw RuntimeError(msg);
     }
@@ -1152,42 +361,6 @@ int Repo::Impl::get_expires_in() const {
     return config.metadata_expire().get_value() - static_cast<int>(get_age());
 }
 
-void Repo::Impl::download_url(const char * url, int fd) {
-    if (callbacks)
-        callbacks->start(
-            !config.name().get_value().empty() ? config.name().get_value().c_str()
-                                               : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"));
-
-    GError * err_p{nullptr};
-    lr_download_url(get_cached_handle(), url, fd, &err_p);
-    std::unique_ptr<GError> err(err_p);
-
-    if (callbacks)
-        callbacks->end();
-
-    if (err)
-        throw LrExceptionWithSourceUrl(err->code, err->message, url);
-}
-
-void Repo::Impl::set_http_headers(const char * headers[]) {
-    if (!headers) {
-        http_headers.reset();
-        return;
-    }
-    size_t headers_count = 0;
-    while (headers[headers_count])
-        ++headers_count;
-    http_headers.reset(new char * [headers_count + 1] {});
-    for (size_t i = 0; i < headers_count; ++i) {
-        http_headers[i] = new char[strlen(headers[i]) + 1];
-        strcpy(http_headers[i], headers[i]);
-    }
-}
-
-const char * const * Repo::Impl::get_http_headers() const {
-    return http_headers.get();
-}
-
 bool Repo::fresh() {
     return p_impl->timestamp >= 0;
 }
@@ -1202,15 +375,6 @@ void Repo::Impl::reset_metadata_expired() {
         expired = get_age() > config.metadata_expire().get_value();
 }
 
-
-/// Returns a librepo handle, set as per the repo options.
-/// Note that destdir is None, and the handle is cached.
-LrHandle * Repo::Impl::get_cached_handle() {
-    if (!handle)
-        handle = lr_handle_init_remote(nullptr);
-    handle_set_opt(handle.get(), LRO_HTTPHEADER, http_headers.get());
-    return handle.get();
-}
 
 void Repo::Impl::attach_libsolv_repo(LibsolvRepo * libsolv_repo) {
     if (this->libsolv_repo_ext.repo) {
@@ -1234,7 +398,7 @@ void Repo::Impl::detach_libsolv_repo() {
 }
 
 void Repo::set_max_mirror_tries(int max_mirror_tries) {
-    p_impl->max_mirror_tries = max_mirror_tries;
+    p_impl->downloader.max_mirror_tries = max_mirror_tries;
 }
 
 int64_t Repo::get_timestamp() const {
@@ -1246,11 +410,11 @@ int Repo::get_max_timestamp() {
 }
 
 void Repo::set_preserve_remote_time(bool preserve_remote_time) {
-    p_impl->preserve_remote_time = preserve_remote_time;
+    p_impl->downloader.preserve_remote_time = preserve_remote_time;
 }
 
 bool Repo::get_preserve_remote_time() const {
-    return p_impl->preserve_remote_time;
+    return p_impl->downloader.preserve_remote_time;
 }
 
 const std::vector<std::string> & Repo::get_content_tags() {
@@ -1267,6 +431,10 @@ const std::vector<std::pair<std::string, std::string>> Repo::get_metadata_locati
 
 std::string Repo::get_cachedir() const {
     return p_impl->config.get_cachedir();
+}
+
+std::string Repo::get_persistdir() const {
+    return p_impl->config.get_persistdir();
 }
 
 const std::string & Repo::get_revision() const {
@@ -1290,24 +458,19 @@ Repo::SyncStrategy Repo::get_sync_strategy() const noexcept {
 }
 
 void Repo::download_url(const char * url, int fd) {
-    p_impl->download_url(url, fd);
+    p_impl->downloader.download_url(url, fd);
 }
 
-void Repo::set_http_headers(const char * headers[]) {
-    p_impl->set_http_headers(headers);
+void Repo::set_http_headers(const std::vector<std::string> & headers) {
+    p_impl->downloader.http_headers = headers;
 }
 
-const char * const * Repo::get_http_headers() const {
-    return p_impl->get_http_headers();
+std::vector<std::string> Repo::get_http_headers() const {
+    return p_impl->downloader.http_headers;
 }
 
 std::vector<std::string> Repo::get_mirrors() const {
-    std::vector<std::string> mirrors;
-    if (p_impl->mirrors) {
-        for (auto mirror = p_impl->mirrors; *mirror; ++mirror)
-            mirrors.emplace_back(*mirror);
-    }
-    return mirrors;
+    return p_impl->downloader.get_mirrors();
 }
 
 BaseWeakPtr Repo::get_base() const {
@@ -1344,16 +507,6 @@ void LibsolvRepoExt::internalize() {
     }
     repo_internalize(repo);
     needs_internalizing = false;
-}
-
-void Downloader::download_url(ConfigMain * cfg, const char * url, int fd) {
-    std::unique_ptr<LrHandle> lr_handle(new_remote_handle(*cfg));
-    GError * err_p{nullptr};
-    lr_download_url(lr_handle.get(), url, fd, &err_p);
-    std::unique_ptr<GError> err(err_p);
-
-    if (err)
-        throw_exception(std::move(err));
 }
 
 // TODO(jrohel): Later with rpm sack work.

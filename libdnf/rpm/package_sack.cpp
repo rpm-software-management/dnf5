@@ -318,7 +318,9 @@ void PackageSack::Impl::rewrite_repos(libdnf::solv::IdQueue & addedfileprovides,
 PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & repo) {
     RepodataState data_state = RepodataState::NEW;
     auto repo_impl = repo.p_impl.get();
-    if (repo_impl->repomd_fn.empty()) {
+
+    std::string repomd_fn = repo_impl->downloader.get_repomd_filename();
+    if (repomd_fn.empty()) {
         throw Exception("repo md file name is empty");
     }
 
@@ -327,12 +329,11 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
         repo_create(*get_pool(base), id.c_str()), &libsolv_repo_free);
 
-    const char * fn_repomd = repo_impl->repomd_fn.c_str();
     auto fn_cache = give_repo_solv_cache_fn(id, nullptr);
 
-    std::unique_ptr<std::FILE, decltype(&close_file)> fp_repomd(fopen(fn_repomd, "rb"), &close_file);
+    std::unique_ptr<std::FILE, decltype(&close_file)> fp_repomd(fopen(repomd_fn.c_str(), "rb"), &close_file);
     if (!fp_repomd) {
-        throw SystemError(errno, fn_repomd);
+        throw SystemError(errno, repomd_fn);
     }
     checksum_fp(repo_impl->libsolv_repo_ext.checksum, fp_repomd.get());
     std::unique_ptr<std::FILE, decltype(&close_file)> fp_cache(fopen(fn_cache.c_str(), "rb"), &close_file);

@@ -126,7 +126,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) {
         std::filesystem::create_directory(it->destination);
 
         auto lr_target = lr_packagetarget_new_v3(
-            it->package.get_repo()->p_impl->get_cached_handle(),
+            it->package.get_repo()->p_impl->downloader.get_cached_handle(),
             it->package.get_location().c_str(),
             it->destination.c_str(),
             static_cast<LrChecksumType>(it->package.get_checksum().get_type()),
@@ -143,7 +143,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) {
             &err);
 
         if (lr_target == nullptr) {
-            // TODO(lukash) the error needs more description of what failed
+            // TODO(lukash) the error needs more description of what failed and throw proper exception class
             std::unique_ptr<GError> err_guard(err);
             throw LrException(err->code, err->message);
         }

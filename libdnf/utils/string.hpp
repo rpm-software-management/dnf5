@@ -26,6 +26,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::utils::string {
 
+inline std::string c_to_str(const char * c_str) {
+    if (c_str == nullptr) {
+        return std::string();
+    }
+    return std::string(c_str);
+}
+
 /// Determine if a string starts with a pattern
 inline bool starts_with(const std::string & value, const std::string & pattern) {
     if (pattern.size() > value.size()) {

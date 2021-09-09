@@ -20,13 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_REPO_IMPL_HPP
 #define LIBDNF_RPM_REPO_IMPL_HPP
 
+#include "repo_downloader.hpp"
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
-#include "libdnf/repo/repo_callbacks.hpp"
-#include "libdnf/repo/repo_gpgme.hpp"
 
 #include <gpgme.h>
-#include <librepo/librepo.h>
 #include <solv/chksum.h>
 #include <solv/repo.h>
 #include <solv/util.h>
@@ -45,42 +43,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #define CHKSUM_BYTES 32
 
-namespace std {
-
-template <>
-struct default_delete<LrHandle> {
-    void operator()(LrHandle * ptr) noexcept { lr_handle_free(ptr); }
-};
-
-}  // namespace std
-
 namespace libdnf::repo {
 
 using LibsolvRepo = ::Repo;
-
-class Key {
-public:
-    Key(gpgme_key_t key, gpgme_subkey_t subkey) {
-        id = subkey->keyid;
-        fingerprint = subkey->fpr;
-        timestamp = subkey->timestamp;
-        userid = key->uids->uid;
-    }
-
-    std::string get_id() const { return id; }
-    std::string get_user_id() const { return userid; }
-    std::string get_fingerprint() const { return fingerprint; }
-    long int get_timestamp() const { return timestamp; }
-
-    std::vector<char> raw_key;
-    std::string url;
-
-private:
-    std::string id;
-    std::string fingerprint;
-    std::string userid;
-    long int timestamp;
-};
 
 // Information about attached libsolv repository
 class LibsolvRepoExt {
@@ -130,25 +95,14 @@ public:
     void load_cache();
     bool try_load_cache();
     bool is_in_sync();
-    void download_metadata(const std::string & destdir);
     int64_t get_age() const;
     void expire();
     bool is_expired() const;
     int get_expires_in() const;
-    void download_url(const char * url, int fd);
-    void add_countme_flag(LrHandle * handle);
-    void set_http_headers(const char * headers[]);
-    const char * const * get_http_headers() const;
     const std::string & get_metadata_path(const std::string & metadata_type) const;
-
-    void common_handle_setup(std::unique_ptr<LrHandle> & h);
-    std::unique_ptr<LrHandle> lr_handle_init_local();
-    std::unique_ptr<LrHandle> lr_handle_init_remote(const char * destdir, bool mirror_setup = true);
 
     void attach_libsolv_repo(LibsolvRepo * libsolv_repo);
     void detach_libsolv_repo();
-
-    LrHandle * get_cached_handle();
 
     /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
     /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
@@ -161,23 +115,16 @@ public:
     Type type;
     ConfigRepo config;
 
-    char ** mirrors{nullptr};
-    int max_mirror_tries{0};  // try them all
+    std::vector<std::string> mirrors;
     // 0 forces expiration on the next call to load(), -1 means undefined value
     int64_t timestamp;
     int max_timestamp{0};
-    bool preserve_remote_time{false};
-    std::string repomd_fn;
-    std::set<std::string> additional_metadata;
     std::string revision;
     std::vector<std::string> content_tags;
     std::vector<std::pair<std::string, std::string>> distro_tags;
     std::vector<std::pair<std::string, std::string>> metadata_locations;
     bool use_includes{false};
-    bool load_metadata_other;
-    std::map<std::string, std::string> substitutions;
 
-    std::unique_ptr<RepoCallbacks> callbacks;
     std::string repo_file_path;
 
     SyncStrategy sync_strategy;
@@ -185,32 +132,15 @@ public:
 
     Repo * owner;
     Base * base;
-    std::unique_ptr<LrResult> lr_handle_perform(
-        LrHandle * handle, const std::string & dest_directory, bool set_gpg__home_dir);
-    bool is_metalink_in_sync();
-    bool is_repomd_in_sync();
     void reset_metadata_expired();
-    void import_repo_keys();
-
-    static int progress_cb(void * data, double total_to_download, double downloaded);
-    static void fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr);
-    static int mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata);
 
     bool expired;
-    std::unique_ptr<LrHandle> handle;
-    std::unique_ptr<char * [], std::function<void(char **)>> http_headers {
-        nullptr, [](char ** ptr) {
-            for (auto item = ptr; *item; ++item)
-                delete[] * item;
-            delete[] ptr;
-        }
-    };
     static bool ends_with(std::string const & str, std::string const & ending);
 
     // Information about attached libsolv repository
     LibsolvRepoExt libsolv_repo_ext;
 
-    RepoGpgme gpgme;
+    RepoDownloader downloader;
 };
 
 }  // namespace libdnf::repo
