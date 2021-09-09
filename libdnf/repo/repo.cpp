@@ -41,7 +41,6 @@ extern "C" {
 #include <fcntl.h>
 #include <fmt/format.h>
 #include <glib.h>
-#include <gpgme.h>
 #include <librepo/librepo.h>
 #include <solv/chksum.h>
 #include <solv/repo.h>
@@ -127,11 +126,6 @@ struct default_delete<LrResult> {
 template <>
 struct default_delete<LrPackageTarget> {
     void operator()(LrPackageTarget * ptr) noexcept { lr_packagetarget_free(ptr); }
-};
-
-template <>
-struct default_delete<std::remove_pointer<gpgme_ctx_t>::type> {
-    void operator()(gpgme_ctx_t ptr) noexcept { gpgme_release(ptr); }
 };
 
 }  // namespace std
@@ -325,7 +319,8 @@ Repo::Impl::Impl(Repo & owner, std::string id, Type type, Base & base)
     , sync_strategy(SyncStrategy::TRY_CACHE)
     , owner(&owner)
     , base(&base)
-    , expired(false) {}
+    , expired(false)
+    , gpgme(base.get_weak_ptr(), config) {}
 
 Repo::Impl::~Impl() {
     g_strfreev(mirrors);
@@ -349,6 +344,7 @@ Repo::~Repo() = default;
 
 void Repo::set_callbacks(std::unique_ptr<RepoCallbacks> && callbacks) {
     p_impl->callbacks = std::move(callbacks);
+    p_impl->gpgme.callbacks = p_impl->callbacks.get();
 }
 
 std::string::size_type Repo::verify_id(const std::string & repo_id) {
@@ -700,252 +696,30 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
     return h;
 }
 
-// TODO(jrohel): - replace gpgme by something else?
-static void gpg_import_key(gpgme_ctx_t context, int key_fd, Logger & logger) {
-    gpg_error_t gpg_err;
-    gpgme_data_t key_data;
-
-    gpg_err = gpgme_data_new_from_fd(&key_data, key_fd);
-    if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_data_new_from_fd(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw LrException(LRE_GPGERROR, msg);
-    }
-
-    gpg_err = gpgme_op_import(context, key_data);
-    gpgme_data_release(key_data);
-    if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_op_import(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw LrException(LRE_GPGERROR, msg);
-    }
-}
-
-static void gpg_import_key(gpgme_ctx_t context, std::vector<char> key, Logger & logger) {
-    gpg_error_t gpg_err;
-    gpgme_data_t key_data;
-
-    gpg_err = gpgme_data_new_from_mem(&key_data, key.data(), key.size(), 0);
-    if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_data_new_from_fd(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw LrException(LRE_GPGERROR, msg);
-    }
-
-    gpg_err = gpgme_op_import(context, key_data);
-    gpgme_data_release(key_data);
-    if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_op_import(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw LrException(LRE_GPGERROR, msg);
-    }
-}
-
-static std::vector<Key> rawkey2infos(int fd, Logger & logger) {
-    gpg_error_t gpg_err;
-
-    std::vector<Key> key_infos;
-    gpgme_ctx_t ctx;
-    gpgme_new(&ctx);
-    std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> context(ctx);
-
-    libdnf::utils::TempDir tmpdir("tmpdir.");
-
-    gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, tmpdir.get_path().c_str());
-    if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_ctx_set_engine_info(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw LrException(LRE_GPGERROR, msg);
-    }
-
-    gpg_import_key(ctx, fd, logger);
-
-    gpgme_key_t key;
-    gpg_err = gpgme_op_keylist_start(ctx, nullptr, 0);
-    while (gpg_err == GPG_ERR_NO_ERROR) {
-        gpg_err = gpgme_op_keylist_next(ctx, &key);
-        if (gpg_err) {
-            break;
-        }
-
-        // _extract_signing_subkey
-        auto subkey = key->subkeys;
-        while (subkey && !subkey->can_sign) {
-            subkey = subkey->next;
-        }
-        if (subkey)
-            key_infos.emplace_back(key, subkey);
-        gpgme_key_release(key);
-    }
-    if (gpg_err_code(gpg_err) != GPG_ERR_EOF) {
-        gpgme_op_keylist_end(ctx);
-        auto msg = fmt::format(_("can not list keys: {}"), gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw LrException(LRE_GPGERROR, msg);
-    }
-    gpgme_set_armor(ctx, 1);
-    for (auto & key_info : key_infos) {
-        gpgme_data_t sink;
-        gpgme_data_new(&sink);
-        gpgme_op_export(ctx, key_info.get_id().c_str(), 0, sink);
-        gpgme_data_rewind(sink);
-
-        char buf[4096];
-        ssize_t readed;
-        do {
-            readed = gpgme_data_read(sink, buf, sizeof(buf));
-            if (readed > 0)
-                key_info.raw_key.insert(key_info.raw_key.end(), buf, buf + sizeof(buf));
-        } while (readed == sizeof(buf));
-    }
-    return key_infos;
-}
-
-static std::vector<std::string> keyids_from_pubring(const std::string & gpg_dir, Logger & logger) {
-    gpg_error_t gpg_err;
-
-    std::vector<std::string> keyids;
-
-    struct stat sb;
-    if (stat(gpg_dir.c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)) {
-        gpgme_ctx_t ctx;
-        gpgme_new(&ctx);
-        std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> context(ctx);
-
-        // set GPG home dir
-        gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, gpg_dir.c_str());
-        if (gpg_err != GPG_ERR_NO_ERROR) {
-            auto msg = fmt::format(_("{}: gpgme_ctx_set_engine_info(): {}"), __func__, gpgme_strerror(gpg_err));
-            logger.debug(msg);
-            throw LrException(LRE_GPGERROR, msg);
-        }
-
-        gpgme_key_t key;
-        gpg_err = gpgme_op_keylist_start(ctx, nullptr, 0);
-        while (gpg_err == GPG_ERR_NO_ERROR) {
-            gpg_err = gpgme_op_keylist_next(ctx, &key);
-            if (gpg_err) {
-                break;
-            }
-
-            // _extract_signing_subkey
-            auto subkey = key->subkeys;
-            while (subkey && !key->subkeys->can_sign) {
-                subkey = subkey->next;
-            }
-            if (subkey)
-                keyids.push_back(subkey->keyid);
-            gpgme_key_release(key);
-        }
-        if (gpg_err_code(gpg_err) != GPG_ERR_EOF) {
-            gpgme_op_keylist_end(ctx);
-            auto msg = fmt::format(_("can not list keys: {}"), gpgme_strerror(gpg_err));
-            logger.debug(msg);
-            throw LrException(LRE_GPGERROR, msg);
-        }
-    }
-    return keyids;
-}
-
-// download key from URL
-std::vector<Key> Repo::Impl::retrieve(const std::string & url) {
-    auto & logger = *base->get_logger();
-    char tmp_key_file[] = "/tmp/repokey.XXXXXX";
-    auto fd = mkstemp(tmp_key_file);
-    if (fd == -1) {
-        auto msg = fmt::format(
-            "Error creating temporary file \"{}\": {}", tmp_key_file, std::system_category().message(errno));
-        logger.debug(msg);
-        throw LrException(LRE_GPGERROR, msg);
-    }
-    unlink(tmp_key_file);
-    std::unique_ptr<int, std::function<void(int *)>> tmp_file_closer{&fd, [](int * fd) { close(*fd); }};
-
-    try {
-        download_url(url.c_str(), fd);
-    } catch (const LrExceptionWithSourceUrl & e) {
-        auto msg = fmt::format(_("Failed to retrieve GPG key for repo '{}': {}"), config.get_id(), e.what());
-        throw RuntimeError(msg);
-    }
-    lseek(fd, SEEK_SET, 0);
-    auto key_infos = rawkey2infos(fd, logger);
-    for (auto & key : key_infos)
-        key.url = url;
-    return key_infos;
-}
-
-/// Creates the '/run/user/$UID' directory if it doesn't exist. If this
-/// directory exists, gpgagent will create its sockets under
-/// '/run/user/$UID/gnupg'.
-///
-/// If this directory doesn't exist, gpgagent will create its sockets in gpg
-/// home directory, which is under '/var/cache/yum/metadata/' and this was
-/// causing trouble with container images, see [1].
-///
-/// Previous solution was to send the agent a "KILLAGENT" message, but that
-/// would cause a race condition with calling gpgme_release(), see [2], [3],
-/// [4].
-///
-/// Since the agent doesn't clean up its sockets properly, by creating this
-/// directory we make sure they are in a place that is not causing trouble with
-/// container images.
-///
-/// [1] https://bugzilla.redhat.com/show_bug.cgi?id=1650266
-/// [2] https://bugzilla.redhat.com/show_bug.cgi?id=1769831
-/// [3] https://github.com/rpm-software-management/microdnf/issues/50
-/// [4] https://bugzilla.redhat.com/show_bug.cgi?id=1781601
-static void ensure_socket_dir_exists(Logger & logger) {
-    std::string dirname = "/run/user/" + std::to_string(getuid());
-    int res = mkdir(dirname.c_str(), 0700);
-    if (res != 0 && errno != EEXIST) {
-        logger.debug(fmt::format("Failed to create directory \"{}\": {} - {}", dirname, errno, strerror(errno)));
-    }
-}
-
 void Repo::Impl::import_repo_keys() {
     auto & logger = *base->get_logger();
 
-    auto gpg_dir = config.get_cachedir() + "/pubring";
-    auto known_keys = keyids_from_pubring(gpg_dir, logger);
-    ensure_socket_dir_exists(logger);
-    for (const auto & gpgkeyUrl : config.gpgkey().get_value()) {
-        auto key_infos = retrieve(gpgkeyUrl);
-        for (auto & key_info : key_infos) {
-            if (std::find(known_keys.begin(), known_keys.end(), key_info.get_id()) != known_keys.end()) {
-                logger.debug(fmt::format(_("repo {}: 0x{} already imported"), config.get_id(), key_info.get_id()));
-                continue;
-            }
-
-            if (callbacks) {
-                if (!callbacks->repokey_import(
-                        key_info.get_id(),
-                        key_info.get_user_id(),
-                        key_info.get_fingerprint(),
-                        key_info.url,
-                        key_info.get_timestamp()))
-                    continue;
-            }
-
-            struct stat sb;
-            if (stat(gpg_dir.c_str(), &sb) != 0 || !S_ISDIR(sb.st_mode))
-                mkdir(gpg_dir.c_str(), 0777);
-
-            gpgme_ctx_t ctx;
-            gpgme_new(&ctx);
-            std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> context(ctx);
-
-            // set GPG home dir
-            auto gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, gpg_dir.c_str());
-            if (gpg_err != GPG_ERR_NO_ERROR) {
-                auto msg = fmt::format(_("{}: gpgme_ctx_set_engine_info(): {}"), __func__, gpgme_strerror(gpg_err));
-                logger.debug(msg);
-                throw LrException(LRE_GPGERROR, msg);
-            }
-
-            gpg_import_key(ctx, key_info.raw_key, logger);
-
-            logger.debug(fmt::format(_("repo {}: imported key 0x{}."), config.get_id(), key_info.get_id()));
+    for (const auto & gpgkey_url : config.gpgkey().get_value()) {
+        char tmp_key_file[] = "/tmp/repokey.XXXXXX";
+        auto fd = mkstemp(tmp_key_file);
+        if (fd == -1) {
+            auto msg = fmt::format(
+                "Error creating temporary file \"{}\": {}", tmp_key_file, std::system_category().message(errno));
+            logger.debug(msg);
+            throw LrException(LRE_GPGERROR, msg);
         }
+        unlink(tmp_key_file);
+        std::unique_ptr<int, std::function<void(int *)>> tmp_file_closer{&fd, [](int * fd) { close(*fd); }};
+
+        try {
+            download_url(gpgkey_url.c_str(), fd);
+        } catch (const LrExceptionWithSourceUrl & e) {
+            auto msg = fmt::format(_("Failed to retrieve GPG key for repo '{}': {}"), config.get_id(), e.what());
+            throw RuntimeError(msg);
+        }
+        lseek(fd, SEEK_SET, 0);
+
+        gpgme.import_key(fd, gpgkey_url);
     }
 }
 

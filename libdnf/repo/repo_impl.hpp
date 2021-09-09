@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
 #include "libdnf/repo/repo_callbacks.hpp"
+#include "libdnf/repo/repo_gpgme.hpp"
 
 #include <gpgme.h>
 #include <librepo/librepo.h>
@@ -189,7 +190,6 @@ public:
     bool is_metalink_in_sync();
     bool is_repomd_in_sync();
     void reset_metadata_expired();
-    std::vector<Key> retrieve(const std::string & url);
     void import_repo_keys();
 
     static int progress_cb(void * data, double total_to_download, double downloaded);
@@ -209,6 +209,8 @@ public:
 
     // Information about attached libsolv repository
     LibsolvRepoExt libsolv_repo_ext;
+
+    RepoGpgme gpgme;
 };
 
 }  // namespace libdnf::repo

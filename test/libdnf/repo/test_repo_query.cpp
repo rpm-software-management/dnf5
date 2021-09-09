@@ -37,6 +37,9 @@ void RepoQueryTest::test_query_basics() {
     //libdnf::repo::RepoSack repo_sack(base);
     //auto repo_sack_weak_ptr = repo_sack.get_weak_ptr();
 
+    // TODO(lukash) repo initialization requires to have the cachedir set; do it differently?
+    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, base.get_config().system_cachedir().get_value());
+
     // Creates new repositories in the repo_sack
     auto repo1 = repo_sack->new_repo("repo1");
     auto repo2 = repo_sack->new_repo("repo2");
