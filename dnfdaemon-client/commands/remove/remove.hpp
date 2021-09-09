@@ -23,14 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../command.hpp"
 
 #include <libdnf/conf/option.hpp>
-#include <libdnf/conf/option_bool.hpp>
 
 namespace dnfdaemon::client {
 
-class CmdRemove : public TransactionCommand {
+class RemoveCommand : public TransactionCommand {
 public:
-    void set_argument_parser(Context & ctx) override;
-    void run(Context & ctx) override;
+    explicit RemoveCommand(Command & parent);
+    void run() override;
 
 private:
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};

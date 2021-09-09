@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../command.hpp"
 
+#include <libdnf-cli/session.hpp>
+#include <libdnf/conf/option.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
 #include <memory>
@@ -29,11 +31,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-class CmdRepoquery : public Command {
+class RepoqueryCommand : public DaemonCommand {
 public:
-    void set_argument_parser(Context & ctx) override;
-    void run(Context & ctx) override;
-    dnfdaemon::KeyValueMap session_config(Context &) override;
+    explicit RepoqueryCommand(Command & parent);
+    void run() override;
+    dnfdaemon::KeyValueMap session_config() override;
 
 private:
     libdnf::OptionBool * available_option{nullptr};

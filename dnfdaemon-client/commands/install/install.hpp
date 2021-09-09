@@ -27,10 +27,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-class CmdInstall : public TransactionCommand {
+class InstallCommand : public TransactionCommand {
 public:
-    void set_argument_parser(Context & ctx) override;
-    void run(Context & ctx) override;
+    explicit InstallCommand(Command & parent);
+    void run() override;
 
 private:
     libdnf::OptionBool strict_option{false};

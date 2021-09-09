@@ -24,15 +24,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/package_set.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
-#include <iostream>
 #include <filesystem>
+#include <iostream>
 #include <string>
 
 namespace dnfdaemon::client {
 
 void Context::init_session() {
     // open dnfdaemon-server session
-    auto cfg = selected_command->session_config(*this);
+    auto cfg = static_cast<DaemonCommand *>(get_selected_command())->session_config();
     auto session_manager_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, dnfdaemon::DBUS_OBJECT_PATH);
     session_manager_proxy->finishRegistration();
 
@@ -42,7 +42,7 @@ void Context::init_session() {
     std::filesystem::path ir{installroot.get_value()};
     config["installroot"] = ir.string();
     config["cachedir"] = (ir / "var/cache/dnf").string();
-    for (auto & opt: setopts) {
+    for (auto & opt : setopts) {
         config[opt.first] = opt.second;
     }
     cfg["config"] = config;

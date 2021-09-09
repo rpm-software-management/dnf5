@@ -21,28 +21,24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNFDAEMON_CLIENT_COMMANDS_COMMAND_HPP
 
 #include <dnfdaemon-server/dbus.hpp>
+#include <libdnf-cli/session.hpp>
+
 
 namespace dnfdaemon::client {
 
-class Context;
-
-class Command {
+class DaemonCommand : public libdnf::cli::session::Command {
 public:
-    virtual void set_argument_parser(Context &) {}
-    virtual dnfdaemon::KeyValueMap session_config(Context &) {
+    explicit DaemonCommand(Command & parent, const std::string & name) : Command(parent, name){};
+    virtual dnfdaemon::KeyValueMap session_config() {
         dnfdaemon::KeyValueMap cfg = {};
         return cfg;
     }
-    virtual void pre_configure(Context &) {}
-    virtual void configure(Context &) {}
-    virtual void run(Context &) {}
-    virtual ~Command() = default;
 };
 
-class TransactionCommand : public Command {
+class TransactionCommand : public DaemonCommand {
 public:
-    void print_transaction(std::vector<dnfdaemon::DbusTransactionItem> transaction);
-    void run_transaction(Context & ctx);
+    explicit TransactionCommand(Command & parent, const std::string & name) : DaemonCommand(parent, name){};
+    void run_transaction();
 };
 
 

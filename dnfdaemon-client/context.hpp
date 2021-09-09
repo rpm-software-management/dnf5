@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <libdnf-cli/argument_parser.hpp>
+#include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/conf/config.hpp>
 #include <libdnf/repo/repo.hpp>
@@ -35,21 +36,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-// TODO(mblaha) remove after microdnf is merged
-namespace libdnf::repo {
-using RepoWeakPtr = WeakPtr<Repo, false>;
-using RepoSet = Set<RepoWeakPtr>;
-}  // namespace libdnf::repo
 
 namespace dnfdaemon::client {
 
 constexpr const char * VERSION = "0.1.0";
 
-class Context {
+class Context : public libdnf::cli::session::Session {
 public:
     Context(sdbus::IConnection & connection)
-        : connection(connection)
-        , repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
+        : connection(connection),
+          repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
 
     /// Initialize dbus connection and server session
     void init_session();
@@ -60,12 +56,6 @@ public:
     // signal handlers
     void on_repositories_ready(const bool & result);
 
-    /// Select command to execute
-    void select_command(Command * cmd) { selected_command = cmd; }
-
-    std::vector<std::unique_ptr<Command>> commands;
-    Command * selected_command{nullptr};
-    libdnf::cli::ArgumentParser arg_parser;
     /// proxy to dnfdaemon session
     std::unique_ptr<sdbus::IProxy> session_proxy;
 

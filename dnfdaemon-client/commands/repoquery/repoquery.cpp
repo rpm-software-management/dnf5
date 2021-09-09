@@ -36,65 +36,56 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
-void CmdRepoquery::set_argument_parser(Context & ctx) {
+
+RepoqueryCommand::RepoqueryCommand(Command & parent) : DaemonCommand(parent, "repoquery") {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
     available_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
 
     installed_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
     info_option = dynamic_cast<libdnf::OptionBool *>(
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
-    auto available = ctx.arg_parser.add_new_named_arg("available");
+    auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
     available->set_short_description("display available packages (default)");
     available->set_const_value("true");
     available->link_value(available_option);
 
-    auto installed = ctx.arg_parser.add_new_named_arg("installed");
+    auto installed = parser.add_new_named_arg("installed");
     installed->set_long_name("installed");
     installed->set_short_description("display installed packages");
     installed->set_const_value("true");
     installed->link_value(installed_option);
 
-    auto info = ctx.arg_parser.add_new_named_arg("info");
+    auto info = parser.add_new_named_arg("info");
     info->set_long_name("info");
     info->set_short_description("show detailed information about the packages");
     info->set_const_value("true");
     info->link_value(info_option);
 
-    patterns_options = ctx.arg_parser.add_new_values();
-    auto keys = ctx.arg_parser.add_new_positional_arg(
+    patterns_options = parser.add_new_values();
+    auto keys = parser.add_new_positional_arg(
         "keys_to_match",
         ArgumentParser::PositionalArg::UNLIMITED,
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_options);
     keys->set_short_description("List of keys to match");
 
-    auto repoquery = ctx.arg_parser.add_new_command("repoquery");
-    repoquery->set_short_description("search for packages matching keyword");
-    repoquery->set_description("");
-    repoquery->set_named_args_help_header("Optional arguments:");
-    repoquery->set_positional_args_help_header("Positional arguments:");
-    repoquery->set_parse_hook_func([this, &ctx](
-                                       [[maybe_unused]] ArgumentParser::Argument * arg,
-                                       [[maybe_unused]] const char * option,
-                                       [[maybe_unused]] int argc,
-                                       [[maybe_unused]] const char * const argv[]) {
-        ctx.select_command(this);
-        return true;
-    });
+    cmd.set_short_description("search for packages matching various criteria");
 
-    repoquery->register_named_arg(available);
-    repoquery->register_named_arg(installed);
-    repoquery->register_named_arg(info);
-    repoquery->register_positional_arg(keys);
-
-    ctx.arg_parser.get_root_command()->register_command(repoquery);
+    cmd.register_named_arg(available);
+    cmd.register_named_arg(installed);
+    cmd.register_named_arg(info);
+    cmd.register_positional_arg(keys);
 }
 
-dnfdaemon::KeyValueMap CmdRepoquery::session_config([[maybe_unused]] Context & ctx) {
+dnfdaemon::KeyValueMap RepoqueryCommand::session_config() {
     dnfdaemon::KeyValueMap cfg = {};
     cfg["load_system_repo"] = installed_option->get_value();
     cfg["load_available_repos"] =
@@ -102,7 +93,9 @@ dnfdaemon::KeyValueMap CmdRepoquery::session_config([[maybe_unused]] Context & c
     return cfg;
 }
 
-void CmdRepoquery::run(Context & ctx) {
+void RepoqueryCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
+
     // query packages
     dnfdaemon::KeyValueMap options = {};
 
@@ -117,7 +110,21 @@ void CmdRepoquery::run(Context & ctx) {
     options["patterns"] = patterns;
     if (info_option->get_value()) {
         options.insert(std::pair<std::string, std::vector<std::string>>(
-            "package_attrs", {"name", "epoch", "version", "release", "arch", "repo"}));
+            "package_attrs",
+            {"name",
+             "epoch",
+             "version",
+             "release",
+             "arch",
+             "repo",
+             "install_size",
+             "package_size",
+             "sourcerpm",
+             "is_installed",
+             "summary",
+             "url",
+             "license",
+             "description"}));
     } else {
         options.insert(std::pair<std::string, std::vector<std::string>>("package_attrs", {"full_nevra"}));
     }

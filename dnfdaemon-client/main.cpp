@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnfdaemon-server/dbus.hpp>
 #include <fcntl.h>
 #include <fmt/format.h>
-#include <libdnf-cli/argument_parser.hpp>
+#include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
 #include <libdnf/logger/stream_logger.hpp>
@@ -40,25 +40,61 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fstream>
 #include <iostream>
 
-namespace fs = std::filesystem;
-
 namespace dnfdaemon::client {
 
-static bool parse_args(Context & ctx, int argc, char * argv[]) {
-    auto dnfdaemon_client = ctx.arg_parser.add_new_command("dnfdaemon_client");
-    dnfdaemon_client->set_short_description("Utility for packages maintaining");
-    dnfdaemon_client->set_description("Dnfdaemon-client is a program for maintaining packages.");
-    dnfdaemon_client->set_commands_help_header("List of commands:");
-    dnfdaemon_client->set_named_args_help_header("Global arguments:");
+using namespace libdnf::cli;
 
-    auto help = ctx.arg_parser.add_new_named_arg("help");
+
+class RootCommand : public session::Command {
+public:
+    explicit RootCommand(session::Session & session);
+    void run() override;
+};
+
+inline RootCommand::RootCommand(session::Session & session) : Command(session, "dnfdaemon-client") {
+    auto & cmd = *get_argument_parser_command();
+    cmd.set_short_description("Utility for packages maintaining");
+    cmd.set_description("Dnfdaemon-client is a program for maintaining packages.");
+    cmd.set_named_args_help_header("Global options:");
+
+    register_subcommand(std::make_unique<RepolistCommand>(*this, "repolist"));
+    register_subcommand(std::make_unique<RepolistCommand>(*this, "repoinfo"));
+
+    // software management commands
+    auto * software_management_commands_group =
+        session.get_argument_parser().add_new_group("software_management_commands");
+    software_management_commands_group->set_header("Software Management Commands:");
+    cmd.register_group(software_management_commands_group);
+    register_subcommand(std::make_unique<InstallCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<RemoveCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<UpgradeCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
+
+    // query commands
+    auto * query_commands_group = session.get_argument_parser().add_new_group("query_commands");
+    query_commands_group->set_header("Query Commands:");
+    cmd.register_group(query_commands_group);
+    register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
+}
+
+inline void RootCommand::run() {
+    get_argument_parser_command()->help();
+}
+
+
+static bool parse_args(Context & ctx, int argc, char * argv[]) {
+    ctx.set_root_command(std::make_unique<RootCommand>(ctx));
+    auto dnfdaemon_client = ctx.get_root_command()->get_argument_parser_command();
+
+    auto help = ctx.get_argument_parser().add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
     help->set_short_description("Print help");
     dnfdaemon_client->register_named_arg(help);
 
     // set ctx.verbose = true
-    auto verbose = ctx.arg_parser.add_new_named_arg("verbose");
+    auto verbose = ctx.get_argument_parser().add_new_named_arg("verbose");
     verbose->set_short_name('v');
     verbose->set_long_name("verbose");
     verbose->set_short_description("increase output verbosity");
@@ -66,7 +102,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     verbose->link_value(&ctx.verbose);
     dnfdaemon_client->register_named_arg(verbose);
 
-    auto assume_yes = ctx.arg_parser.add_new_named_arg("assumeyes");
+    auto assume_yes = ctx.get_argument_parser().add_new_named_arg("assumeyes");
     assume_yes->set_long_name("assumeyes");
     assume_yes->set_short_name('y');
     assume_yes->set_short_description("automatically answer yes for all questions");
@@ -74,45 +110,43 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     assume_yes->link_value(&ctx.assume_yes);
     dnfdaemon_client->register_named_arg(assume_yes);
 
-    auto assume_no = ctx.arg_parser.add_new_named_arg("assumeno");
+    auto assume_no = ctx.get_argument_parser().add_new_named_arg("assumeno");
     assume_no->set_long_name("assumeno");
     assume_no->set_short_description("automatically answer no for all questions");
     assume_no->set_const_value("true");
     assume_no->link_value(&ctx.assume_no);
     dnfdaemon_client->register_named_arg(assume_no);
 
-    auto allow_erasing = ctx.arg_parser.add_new_named_arg("allow_erasing");
+    auto allow_erasing = ctx.get_argument_parser().add_new_named_arg("allow_erasing");
     allow_erasing->set_long_name("allowerasing");
     allow_erasing->set_short_description("installed package can be removed to resolve the transaction");
     allow_erasing->set_const_value("true");
     allow_erasing->link_value(&ctx.allow_erasing);
     dnfdaemon_client->register_named_arg(allow_erasing);
 
-    auto installroot = ctx.arg_parser.add_new_named_arg("installroot");
+    auto installroot = ctx.get_argument_parser().add_new_named_arg("installroot");
     installroot->set_long_name("installroot");
     installroot->set_has_value(true);
     installroot->set_arg_value_help("<absolute path>");
     installroot->set_short_description("set install root");
     installroot->link_value(&ctx.installroot);
-    installroot->set_parse_hook_func([](
-                                    libdnf::cli::ArgumentParser::NamedArg * arg,
-                                    [[maybe_unused]] const char * option,
-                                    const char * value) {
-        if (value[0] != '/') {
-            throw std::runtime_error(fmt::format("--{}: Absolute path must be used.", arg->get_long_name()));
-        }
-        return true;
-    });
+    installroot->set_parse_hook_func(
+        [](libdnf::cli::ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            if (value[0] != '/') {
+                throw std::runtime_error(fmt::format("--{}: Absolute path must be used.", arg->get_long_name()));
+            }
+            return true;
+        });
     dnfdaemon_client->register_named_arg(installroot);
 
-    auto releasever = ctx.arg_parser.add_new_named_arg("releasever");
+    auto releasever = ctx.get_argument_parser().add_new_named_arg("releasever");
     releasever->set_long_name("releasever");
     releasever->set_has_value(true);
     releasever->set_short_description("override the $releasever variable value");
     releasever->link_value(&ctx.releasever);
     dnfdaemon_client->register_named_arg(releasever);
 
-    auto setopt = ctx.arg_parser.add_new_named_arg("setopt");
+    auto setopt = ctx.get_argument_parser().add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);
     setopt->set_arg_value_help("KEY=VALUE");
@@ -145,15 +179,10 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
     });
     dnfdaemon_client->register_named_arg(setopt);
 
-
-    ctx.arg_parser.set_root_command(dnfdaemon_client);
-
-    for (auto & command : ctx.commands) {
-        command->set_argument_parser(ctx);
-    }
+    ctx.get_argument_parser().set_inherit_named_args(true);
 
     try {
-        ctx.arg_parser.parse(argc, argv);
+        ctx.get_argument_parser().parse(argc, argv);
     } catch (const std::exception & ex) {
         std::cout << ex.what() << std::endl;
     }
@@ -165,7 +194,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
 int main(int argc, char * argv[]) {
     std::unique_ptr<sdbus::IConnection> connection;
 
-    try{
+    try {
         connection = sdbus::createSystemBusConnection();
     } catch (const sdbus::Error & ex) {
         std::cerr << ex.getMessage() << std::endl;
@@ -181,42 +210,32 @@ int main(int argc, char * argv[]) {
 
     //log_router.info("Dnfdaemon-client start");
 
-    // Register commands
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repoinfo"));
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepolist>("repolist"));
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRepoquery>());
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdDowngrade>());
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdInstall>());
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdUpgrade>());
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdRemove>());
-    context.commands.push_back(std::make_unique<dnfdaemon::client::CmdReinstall>());
-
     // Parse command line arguments
     bool print_help = dnfdaemon::client::parse_args(context, argc, argv);
 
     // print help of the selected command if --help was used
     if (print_help) {
-        context.arg_parser.get_selected_command()->help();
+        context.get_argument_parser().get_selected_command()->help();
         return 0;
+    }
+
+    if (!context.get_selected_command()) {
+        context.get_argument_parser().get_selected_command()->help();
+        return 1;
     }
 
     // initialize server session using command line arguments
     try {
         context.init_session();
-    } catch(sdbus::Error & ex) {
-        std::cerr << ex.getMessage() << std::endl
-                  << "Is dnfdaemon-server active?" << std::endl;
+    } catch (sdbus::Error & ex) {
+        std::cerr << ex.getMessage() << std::endl << "Is dnfdaemon-server active?" << std::endl;
         return 1;
     }
-    // Preconfigure selected command
-    context.selected_command->pre_configure(context);
 
-    // Configure selected command
-    context.selected_command->configure(context);
 
     // Run selected command
     try {
-        context.selected_command->run(context);
+        context.get_selected_command()->run();
     } catch (std::exception & ex) {
         std::cerr << fmt::format("Command returned error: {}", ex.what()) << std::endl;
         return 1;

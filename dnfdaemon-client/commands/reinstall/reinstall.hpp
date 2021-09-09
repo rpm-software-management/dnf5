@@ -23,14 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../command.hpp"
 
 #include <libdnf/conf/option.hpp>
-#include <libdnf/conf/option_bool.hpp>
 
 namespace dnfdaemon::client {
 
-class CmdReinstall : public TransactionCommand {
+class ReinstallCommand : public TransactionCommand {
 public:
-    void set_argument_parser(Context & ctx) override;
-    void run(Context & ctx) override;
+    explicit ReinstallCommand(Command & parent);
+    void run() override;
 
 private:
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
@@ -39,4 +38,3 @@ private:
 }  // namespace dnfdaemon::client
 
 #endif  // DNFDAEMON_CLIENT_COMMANDS_REINSTALL_REINSTALL_HPP
-

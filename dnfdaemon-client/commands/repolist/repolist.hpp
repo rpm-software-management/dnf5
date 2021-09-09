@@ -22,18 +22,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../command.hpp"
 
+#include <libdnf/conf/option.hpp>
 #include <libdnf/conf/option_enum.hpp>
 
 #include <memory>
+#include <string>
 #include <vector>
 
 namespace dnfdaemon::client {
 
-class CmdRepolist : public Command {
+class RepolistCommand : public DaemonCommand {
 public:
-    CmdRepolist(const char * command) : command(command) {};
-    void set_argument_parser(Context & ctx) override;
-    void run(Context & ctx) override;
+    explicit RepolistCommand(Command & parent, const char * command);
+    void run() override;
 
 private:
     libdnf::OptionEnum<std::string> * enable_disable_option{nullptr};

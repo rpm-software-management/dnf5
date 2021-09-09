@@ -23,8 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../../utils.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
-#include <libdnf-cli/argument_parser.hpp>
-#include <libdnf/conf/option_bool.hpp>
 #include <libdnf/conf/option_string.hpp>
 
 #include <iostream>
@@ -32,33 +30,28 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-void CmdDowngrade::set_argument_parser(Context & ctx) {
-    auto downgrade = ctx.arg_parser.add_new_command("downgrade");
-    downgrade->set_short_description("downgrade packages on the system");
-    downgrade->set_description("");
-    downgrade->set_named_args_help_header("Optional arguments:");
-    downgrade->set_positional_args_help_header("Positional arguments:");
-    downgrade->set_parse_hook_func([this, &ctx](
-                                       [[maybe_unused]] libdnf::cli::ArgumentParser::Argument * arg,
-                                       [[maybe_unused]] const char * option,
-                                       [[maybe_unused]] int argc,
-                                       [[maybe_unused]] const char * const argv[]) {
-        ctx.select_command(this);
-        return true;
-    });
-    ctx.arg_parser.get_root_command()->register_command(downgrade);
+using namespace libdnf::cli;
 
-    patterns_options = ctx.arg_parser.add_new_values();
-    auto keys = ctx.arg_parser.add_new_positional_arg(
+DowngradeCommand::DowngradeCommand(Command & parent) : TransactionCommand(parent, "downgrade") {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
+
+    cmd.set_short_description("downgrade packages on the system");
+
+    patterns_options = parser.add_new_values();
+    auto keys = parser.add_new_positional_arg(
         "keys_to_match",
         libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED,
-        ctx.arg_parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
+        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_options);
     keys->set_short_description("List of packages to downgrade");
-    downgrade->register_positional_arg(keys);
+    cmd.register_positional_arg(keys);
 }
 
-void CmdDowngrade::run(Context & ctx) {
+void DowngradeCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
+
     if (!am_i_root()) {
         std::cout << "This command has to be run with superuser privileges (under the root user on most systems)."
                   << std::endl;
@@ -82,7 +75,7 @@ void CmdDowngrade::run(Context & ctx) {
         .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(patterns, options);
 
-    run_transaction(ctx);
+    run_transaction();
 }
 
 }  // namespace dnfdaemon::client

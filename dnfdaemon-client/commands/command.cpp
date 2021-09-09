@@ -21,22 +21,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../context.hpp"
 #include "../utils.hpp"
-#include "../wrappers/dbus_package_wrapper.hpp"
 #include "../wrappers/dbus_goal_wrapper.hpp"
-
-#include <dnfdaemon-server/dbus.hpp>
+#include "../wrappers/dbus_package_wrapper.hpp"
 #include "dnfdaemon-server/utils.hpp"
 
+#include "libdnf-cli/output/transaction_table.hpp"
+
+#include <dnfdaemon-server/dbus.hpp>
 #include <libdnf/base/goal.hpp>
 
 #include <iostream>
 #include <vector>
 
-#include "libdnf-cli/output/transaction_table.hpp"
-
 namespace dnfdaemon::client {
 
-void TransactionCommand::run_transaction(Context & ctx) {
+void TransactionCommand::run_transaction() {
+    auto & ctx = static_cast<Context &>(get_session());
     dnfdaemon::KeyValueMap options = {};
 
     // resolve the transaction
@@ -51,9 +51,11 @@ void TransactionCommand::run_transaction(Context & ctx) {
 
     // TODO (nsella): handle localization
     if (!key_value_map_get<std::string>(dbus_goal_resolve_results, "transaction_solver_problems").empty()) {
-        std::cout << key_value_map_get<std::string>(dbus_goal_resolve_results, "transaction_solver_problems") << std::endl;
+        std::cout << key_value_map_get<std::string>(dbus_goal_resolve_results, "transaction_solver_problems")
+                  << std::endl;
     }
-    dnfdaemon::KeyValueMapList goal_resolve_log_list = key_value_map_get<dnfdaemon::KeyValueMapList>(dbus_goal_resolve_results, "goal_problems");
+    dnfdaemon::KeyValueMapList goal_resolve_log_list =
+        key_value_map_get<dnfdaemon::KeyValueMapList>(dbus_goal_resolve_results, "goal_problems");
 
     for (const auto & e : goal_resolve_log_list) {
         libdnf::GoalAction action = static_cast<libdnf::GoalAction>(key_value_map_get<uint32_t>(e, "action"));
@@ -62,21 +64,16 @@ void TransactionCommand::run_transaction(Context & ctx) {
         job_settings.to_repo_ids = key_value_map_get<dnfdaemon::KeyValueMap>(e, "goal_job_settings").at("to_repo_ids");
         std::string report = key_value_map_get<std::string>(e, "report");
         std::vector<std::string> report_list = key_value_map_get<std::vector<std::string>>(e, "report_list");
-        std::set<std::string> report_set { report_list.begin(), report_list.end() };
+        std::set<std::string> report_set{report_list.begin(), report_list.end()};
 
-        std::string format_log = libdnf::base::Transaction::format_resolve_log(
-                action,
-                problem,
-                job_settings,
-                report,
-                report_set);
+        std::string format_log =
+            libdnf::base::Transaction::format_resolve_log(action, problem, job_settings, report, report_set);
         if (!format_log.empty()) {
             std::cout << format_log << std::endl;
         }
     }
-    if (static_cast<libdnf::GoalProblem>(
-            key_value_map_get<uint32_t>(dbus_goal_resolve_results, "transaction_problems")
-            ) != libdnf::GoalProblem::NO_PROBLEM) {
+    if (static_cast<libdnf::GoalProblem>(key_value_map_get<uint32_t>(
+            dbus_goal_resolve_results, "transaction_problems")) != libdnf::GoalProblem::NO_PROBLEM) {
         return;
     }
     if (transaction.empty()) {
