@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fmt/format.h>
 
+#include <map>
+
 
 // map string package attribute name to actual attribute
 const std::map<std::string, PackageAttribute> package_attributes{
@@ -33,6 +35,11 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"is_installed", PackageAttribute::is_installed},
     {"install_size", PackageAttribute::install_size},
     {"package_size", PackageAttribute::package_size},
+    {"sourcerpm", PackageAttribute::sourcerpm},
+    {"summary", PackageAttribute::summary},
+    {"url", PackageAttribute::url},
+    {"license", PackageAttribute::license},
+    {"description", PackageAttribute::description},
     {"evr", PackageAttribute::evr},
     {"nevra", PackageAttribute::nevra},
     {"full_nevra", PackageAttribute::full_nevra}};
@@ -76,6 +83,21 @@ dnfdaemon::KeyValueMap package_to_map(
             case PackageAttribute::package_size:
                 dbus_package.emplace(attr, static_cast<uint64_t>(libdnf_package.get_package_size()));
                 break;
+            case PackageAttribute::sourcerpm:
+                dbus_package.emplace(attr, libdnf_package.get_sourcerpm());
+                break;
+            case PackageAttribute::summary:
+                dbus_package.emplace(attr, libdnf_package.get_summary());
+                break;
+            case PackageAttribute::url:
+                dbus_package.emplace(attr, libdnf_package.get_url());
+                break;
+            case PackageAttribute::license:
+                dbus_package.emplace(attr, libdnf_package.get_license());
+                break;
+            case PackageAttribute::description:
+                dbus_package.emplace(attr, libdnf_package.get_description());
+                break;
             case PackageAttribute::evr:
                 dbus_package.emplace(attr, libdnf_package.get_evr());
                 break;
@@ -89,4 +111,3 @@ dnfdaemon::KeyValueMap package_to_map(
     }
     return dbus_package;
 }
-

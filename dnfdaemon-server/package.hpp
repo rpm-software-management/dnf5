@@ -26,7 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string>
 #include <vector>
-#include <map>
 
 // TODO(mblaha): add all other package attributes
 // package attributes available to be retrieved
@@ -40,6 +39,11 @@ enum class PackageAttribute {
     is_installed,
     install_size,
     package_size,
+    sourcerpm,
+    summary,
+    url,
+    license,
+    description,
 
     evr,
     nevra,
