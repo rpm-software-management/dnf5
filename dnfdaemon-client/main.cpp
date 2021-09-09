@@ -18,12 +18,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "commands/downgrade/downgrade.hpp"
+#include "commands/group/group.hpp"
 #include "commands/install/install.hpp"
+#include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
 #include "commands/repolist/repolist.hpp"
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/upgrade/upgrade.hpp"
-#include "commands/reinstall/reinstall.hpp"
 #include "context.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
@@ -76,6 +77,12 @@ inline RootCommand::RootCommand(session::Session & session) : Command(session, "
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
     register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
+
+    // subcommands
+    auto * subcommands_group = session.get_argument_parser().add_new_group("subcommands");
+    subcommands_group->set_header("Subcommands:");
+    cmd.register_group(subcommands_group);
+    register_subcommand(std::make_unique<GroupCommand>(*this), subcommands_group);
 }
 
 inline void RootCommand::run() {
