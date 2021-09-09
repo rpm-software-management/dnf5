@@ -194,27 +194,6 @@ inline static void result_get_info(LrResult * result, LrResultInfoOption option,
 }
 
 
-// Callback stuff
-void RepoCB::start([[maybe_unused]] const char * what) {}
-int RepoCB::progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) {
-    return 0;
-}
-void RepoCB::fastest_mirror([[maybe_unused]] FastestMirrorStage stage, [[maybe_unused]] const char * ptr) {}
-int RepoCB::handle_mirror_failure(
-    [[maybe_unused]] const char * msg, [[maybe_unused]] const char * url, [[maybe_unused]] const char * metadata) {
-    return 0;
-}
-
-bool RepoCB::repokey_import(
-    const std::string & /*id*/,
-    const std::string & /*userId*/,
-    const std::string & /*fingerprint*/,
-    const std::string & /*url*/,
-    long int /*timestamp*/) {
-    return true;
-}
-
-
 bool Repo::Impl::ends_with(const std::string & str, const std::string & ending) {
     if (str.length() >= ending.length()) {
         return (str.compare(str.length() - ending.length(), ending.length(), ending) == 0);
@@ -246,7 +225,7 @@ int Repo::Impl::progress_cb(void * data, double total_to_download, double downlo
     if (!data) {
         return 0;
     }
-    auto cb_object = static_cast<RepoCB *>(data);
+    auto cb_object = static_cast<RepoCallbacks *>(data);
     return cb_object->progress(total_to_download, downloaded);
 }
 
@@ -254,7 +233,7 @@ void Repo::Impl::fastest_mirror_cb(void * data, LrFastestMirrorStages stage, voi
     if (!data) {
         return;
     }
-    auto cb_object = static_cast<RepoCB *>(data);
+    auto cb_object = static_cast<RepoCallbacks *>(data);
     const char * msg;
     std::string msg_string;
     if (ptr) {
@@ -274,14 +253,14 @@ void Repo::Impl::fastest_mirror_cb(void * data, LrFastestMirrorStages stage, voi
     } else {
         msg = nullptr;
     }
-    cb_object->fastest_mirror(static_cast<RepoCB::FastestMirrorStage>(stage), msg);
+    cb_object->fastest_mirror(static_cast<RepoCallbacks::FastestMirrorStage>(stage), msg);
 }
 
 int Repo::Impl::mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata) {
     if (!data) {
         return 0;
     }
-    auto cb_object = static_cast<RepoCB *>(data);
+    auto cb_object = static_cast<RepoCallbacks *>(data);
     return cb_object->handle_mirror_failure(msg, url, metadata);
 };
 
@@ -369,7 +348,7 @@ Repo::Repo(const std::string & id, Base & base, Repo::Type type) {
 
 Repo::~Repo() = default;
 
-void Repo::set_callbacks(std::unique_ptr<RepoCB> && callbacks) {
+void Repo::set_callbacks(std::unique_ptr<RepoCallbacks> && callbacks) {
     p_impl->callbacks = std::move(callbacks);
 }
 

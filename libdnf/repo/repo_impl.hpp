@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
+#include "libdnf/repo/repo_callbacks.hpp"
 
 #include <gpgme.h>
 #include <librepo/librepo.h>
@@ -178,7 +179,7 @@ public:
     bool load_metadata_other;
     std::map<std::string, std::string> substitutions;
 
-    std::unique_ptr<RepoCB> callbacks;
+    std::unique_ptr<RepoCallbacks> callbacks;
     std::string repo_file_path;
 
     SyncStrategy sync_strategy;

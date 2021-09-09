@@ -68,7 +68,7 @@ private:
     sdbus::Signal create_signal(std::string interface, std::string signal_name) override;
 };
 
-class DbusRepoCB : public libdnf::repo::RepoCB, public DbusCallback {
+class DbusRepoCB : public libdnf::repo::RepoCallbacks, public DbusCallback {
 public:
     explicit DbusRepoCB(Session & session) : DbusCallback(session) {}
     virtual ~DbusRepoCB() = default;

@@ -73,7 +73,7 @@ bool userconfirm(libdnf::ConfigMain & config) {
 
 namespace {
 
-class MicrodnfRepoCB : public libdnf::repo::RepoCB {
+class MicrodnfRepoCB : public libdnf::repo::RepoCallbacks {
 public:
     explicit MicrodnfRepoCB(libdnf::ConfigMain & config) : config(&config) {}
 

@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MODULEMD
 
 #include "config_repo.hpp"
+#include "repo_callbacks.hpp"
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
@@ -64,49 +65,6 @@ private:
     int code;
 };
 
-/// Base class for Repo callbacks
-/// User implements repo callbacks by inheriting this class and overriding its methods.
-class RepoCB {
-public:
-    enum class FastestMirrorStage {
-        /// Fastest mirror detection just started. ptr is NULL
-        INIT,
-
-        /// ptr is (char *) pointer to string with path to the cache file. Do not modify or free the string.
-        CACHELOADING,
-
-        /// if cache was loaded successfully, ptr is NULL, otherwise ptr is (char *) string with error message.
-        /// Do not modify or free the string.
-        CACHELOADINGSTATUS,
-
-        /// Detection (pinging) in progress.
-        /// If all data was loaded from cache, this stage is skiped. ptr is pointer to long.
-        /// This is the number of how much mirrors have to be "pinged"
-        DETECTION,
-
-        /// Detection is done, sorting mirrors, updating cache, etc. ptr is NULL
-        FINISHING,
-
-        /// The very last invocation of fastest mirror callback.
-        /// If fastest mirror detection was successful ptr is NULL, otherwise ptr contain (char *) string with error message.
-        /// Do not modify or free the string.
-        STATUS,
-    };
-
-    virtual void start(const char * what);
-    virtual void end() {}
-    virtual int progress(double total_to_download, double downloaded);
-    virtual void fastest_mirror(FastestMirrorStage stage, const char * msg);
-    virtual int handle_mirror_failure(const char * msg, const char * url, const char * metadata);
-    virtual bool repokey_import(
-        const std::string & id,
-        const std::string & user_id,
-        const std::string & fingerprint,
-        const std::string & url,
-        long int timestamp);
-    virtual ~RepoCB() = default;
-};
-
 /// RPM repository
 /// Represents a repository used to download packages.
 /// Remote metadata is cached locally.
@@ -141,8 +99,8 @@ public:
     Repo & operator=(Repo && repo) = delete;
 
     /// Registers a class that implements callback methods (fastest mirror detection, download state, key import).
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setCallbacks(std::unique_ptr<RepoCB> && callbacks)
-    void set_callbacks(std::unique_ptr<RepoCB> && callbacks);
+    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setCallbacks(std::unique_ptr<RepoCallbacks> && callbacks)
+    void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks);
 
     /// Verify repo object configuration
     /// Will throw exception if Repo has no mirror or baseurl set or if Repo type is unsupported.
