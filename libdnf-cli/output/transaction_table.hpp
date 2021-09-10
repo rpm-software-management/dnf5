@@ -162,7 +162,7 @@ public:
                 break;
 
             case libdnf::transaction::TransactionItemAction::REPLACED:
-                obsoleted++;
+                replaced++;
                 break;
             case libdnf::transaction::TransactionItemAction::REINSTALLED:
             case libdnf::transaction::TransactionItemAction::UPGRADED:
@@ -185,8 +185,8 @@ public:
         if (upgrades != 0) {
             std::cout << fmt::format(" {:15} {:4} packages\n", "Upgrading:", upgrades);
         }
-        if (obsoleted != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Obsoleting:", obsoleted);
+        if ( replaced != 0) {
+            std::cout << fmt::format(" {:15} {:4} packages\n", "Replacing:", replaced );
         }
         if (removes != 0) {
             std::cout << fmt::format(" {:15} {:4} packages\n", "Removing:", removes);
@@ -203,7 +203,7 @@ private:
     int upgrades = 0;
     int downgrades = 0;
     int removes = 0;
-    int obsoleted = 0;
+    int replaced = 0;
 };
 
 
