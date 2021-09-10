@@ -58,7 +58,8 @@ static void add_line_into_grouplist_table(
 }
 
 
-void print_grouplist_table(const std::set<libdnf::comps::Group> & group_list) {
+template <class Query>
+void print_grouplist_table(Query & group_list) {
     struct libscols_table * table = create_grouplist_table();
     for (auto group: group_list) {
         add_line_into_grouplist_table(

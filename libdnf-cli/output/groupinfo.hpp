@@ -22,11 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CLI_OUTPUT_GROUPINFO_HPP
 
 #include "libdnf-cli/utils/tty.hpp"
-#include <libdnf/utils/string.hpp>
 
-#include <libsmartcols/libsmartcols.h>
 #include <libdnf/comps/group/package.hpp>
-
+#include <libdnf/utils/string.hpp>
+#include <libsmartcols/libsmartcols.h>
 #include <string.h>
 
 
@@ -46,13 +45,14 @@ static void add_line_into_groupinfo_table(
 }
 
 
-static void add_line_into_groupinfo_table(
-    struct libscols_table * table, const char * key, const char * value) {
+static void add_line_into_groupinfo_table(struct libscols_table * table, const char * key, const char * value) {
     add_line_into_groupinfo_table(table, key, value, "");
 }
 
 
-static void add_packages(struct libscols_table * table, libdnf::comps::Group & group, libdnf::comps::PackageType pkg_type, const char * pkg_type_desc) {
+template <typename GroupType>
+static void add_packages(
+    struct libscols_table * table, GroupType & group, libdnf::comps::PackageType pkg_type, const char * pkg_type_desc) {
     std::set<std::string> packages;
 
     // we don't mind iterating through all packages in every add_packages() call,
@@ -84,7 +84,8 @@ static void add_packages(struct libscols_table * table, libdnf::comps::Group & g
 }
 
 
-static struct libscols_table * create_groupinfo_table(libdnf::comps::Group & group) {
+template <typename GroupType>
+static struct libscols_table * create_groupinfo_table(GroupType & group) {
     struct libscols_table * table = scols_new_table();
     scols_table_enable_noheadings(table, 1);
     scols_table_set_column_separator(table, " : ");
@@ -118,7 +119,8 @@ static struct libscols_table * create_groupinfo_table(libdnf::comps::Group & gro
     return table;
 }
 
-void print_groupinfo_table(libdnf::comps::Group & group) {
+template <typename GroupType>
+void print_groupinfo_table(GroupType & group) {
     struct libscols_table * table = create_groupinfo_table(group);
     scols_print_table(table);
     scols_unref_table(table);
