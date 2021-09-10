@@ -63,11 +63,8 @@ public:
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setReason(libdnf::TransactionItemReason value)
     void set_reason(Reason reason) { this->reason = reason; }
 
-    /// @return the package replaced by this transaction package or nullptr when nothing is replaced.
-    const std::optional<rpm::Package> get_replaces() const noexcept { return replaces; }
-
-    /// @return packages obsoleted by this transaction package.
-    const std::vector<rpm::Package> & get_obsoletes() const noexcept { return obsoletes; }
+    /// @return packages replaced by this transaction package.
+    const std::vector<rpm::Package> get_replaces() const noexcept { return replaces; }
 
     /// @return packages that replace this transaction package (for transaction
     /// packages that are leaving the system).
@@ -88,8 +85,7 @@ public:
     Reason reason;
     State state{State::UNKNOWN};
 
-    std::vector<rpm::Package> obsoletes;
-    std::optional<rpm::Package> replaces;
+    std::vector<rpm::Package> replaces;
     std::vector<rpm::Package> replaced_by;
 };
 

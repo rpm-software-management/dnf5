@@ -147,7 +147,7 @@ void BaseGoalTest::test_reinstall() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
-            TransactionItemAction::REINSTALLED,
+            TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
@@ -170,8 +170,8 @@ void BaseGoalTest::test_reinstall_user() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
-            TransactionItemAction::REINSTALLED,
-            TransactionItemReason::USER,
+            TransactionItemAction::REPLACED,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
@@ -250,7 +250,7 @@ void BaseGoalTest::test_upgrade() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
-            TransactionItemAction::UPGRADED,
+            TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
@@ -300,7 +300,7 @@ void BaseGoalTest::test_upgrade_all() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
-            TransactionItemAction::UPGRADED,
+            TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
@@ -325,8 +325,8 @@ void BaseGoalTest::test_upgrade_user() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
-            TransactionItemAction::UPGRADED,
-            TransactionItemReason::USER,
+            TransactionItemAction::REPLACED,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
@@ -350,7 +350,7 @@ void BaseGoalTest::test_downgrade() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
-            TransactionItemAction::DOWNGRADED,
+            TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
@@ -375,8 +375,8 @@ void BaseGoalTest::test_downgrade_user() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
-            TransactionItemAction::DOWNGRADED,
-            TransactionItemReason::USER,
+            TransactionItemAction::REPLACED,
+            TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
@@ -400,7 +400,7 @@ void BaseGoalTest::test_distrosync() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
-            TransactionItemAction::DOWNGRADED,
+            TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
@@ -425,7 +425,7 @@ void BaseGoalTest::test_distrosync_all() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
-            TransactionItemAction::DOWNGRADED,
+            TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
@@ -450,7 +450,7 @@ void BaseGoalTest::test_install_or_reinstall() {
             TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
-            TransactionItemAction::REINSTALLED,
+            TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());

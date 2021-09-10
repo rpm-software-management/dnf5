@@ -48,6 +48,8 @@ std::string TransactionItemAction_get_name(TransactionItemAction action) {
             return "Reinstalled";
         case TransactionItemAction::REASON_CHANGE:
             return "Reason Change";
+        case TransactionItemAction::REPLACED:
+            return "Replaced";
     }
     return "";
 }
@@ -80,6 +82,8 @@ std::string TransactionItemAction_get_short(TransactionItemAction action) {
         case TransactionItemAction::REASON_CHANGE:
             // TODO(dmach): replace "?" with something better
             return "?";
+        case TransactionItemAction::REPLACED:
+            return "O";
     }
     return "";
 }
@@ -107,6 +111,7 @@ bool TransactionItemAction_is_backward_action(TransactionItemAction action) {
         case TransactionItemAction::OBSOLETED:
         case TransactionItemAction::UPGRADED:
         case TransactionItemAction::REINSTALLED:
+        case TransactionItemAction::REPLACED:
             return true;
         default:
             return false;

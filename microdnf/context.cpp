@@ -532,12 +532,13 @@ public:
                     break;
                 case libdnf::transaction::TransactionItemAction::INSTALL:
                 case libdnf::transaction::TransactionItemAction::REMOVE:
-                case libdnf::transaction::TransactionItemAction::OBSOLETED:
+                case libdnf::transaction::TransactionItemAction::REPLACED:
                     break;
                 case libdnf::transaction::TransactionItemAction::REINSTALLED:
                 case libdnf::transaction::TransactionItemAction::UPGRADED:
                 case libdnf::transaction::TransactionItemAction::DOWNGRADED:
                 case libdnf::transaction::TransactionItemAction::OBSOLETE:
+                case libdnf::transaction::TransactionItemAction::OBSOLETED:
                 case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                     throw libdnf::LogicError(fmt::format("Unexpected action in TransactionPackage: {}", item->get_action()));
             }
@@ -589,7 +590,7 @@ public:
         uint64_t total) override {
         const char * msg{nullptr};
         if (item) {
-            if (item->get_action() == libdnf::transaction::TransactionItemAction::REMOVE || item->get_action() == libdnf::transaction::TransactionItemAction::OBSOLETED) {
+            if (item->get_action() == libdnf::transaction::TransactionItemAction::REMOVE || item->get_action() == libdnf::transaction::TransactionItemAction::REPLACED) {
                 msg = "Erasing ";
             }
         }

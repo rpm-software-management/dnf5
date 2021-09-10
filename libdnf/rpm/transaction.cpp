@@ -447,7 +447,7 @@ public:
                     downgrade(tspkg);
                     break;
                 case libdnf::transaction::TransactionItemAction::REMOVE:
-                case libdnf::transaction::TransactionItemAction::OBSOLETED:
+                case libdnf::transaction::TransactionItemAction::REPLACED:
                     erase(tspkg);
                     break;
                 default:

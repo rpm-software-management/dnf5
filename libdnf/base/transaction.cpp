@@ -389,7 +389,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     installed_installonly_query.filter_installed();
 
     // std::map<obsoleted, obsoleted_by>
-    std::map<Id, std::vector<Id>> obsoletes;
+    std::map<Id, std::vector<Id>> replaced;
 
     auto list_downgrades = solved_goal.list_downgrades();
     for (auto index = 0; index < list_downgrades.size(); ++index) {
@@ -401,22 +401,17 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         rpm::Package new_package(base, rpm::PackageId(id));
         auto reason = new_package.get_reason();
         TransactionPackage tspkg(new_package, TransactionPackage::Action::DOWNGRADE, reason);
-        tspkg.replaces.emplace(rpm::Package(base, rpm::PackageId(obs[0])));
-        for (int i = 1; i < obs.size(); ++i) {
-            rpm::Package obsoleted(base, rpm::PackageId(obs[i]));
-            auto obs_reson = obsoleted.get_reason();
+        for (auto replaced_id : obs) {
+            rpm::Package replaced_pkg(base, rpm::PackageId(replaced_id));
+            auto obs_reson = replaced_pkg.get_reason();
             if (obs_reson > reason) {
                 reason = obs_reson;
             }
-            tspkg.obsoletes.emplace_back(std::move(obsoleted));
-            obsoletes[obs[i]].push_back(id);
+            tspkg.replaces.emplace_back(std::move(replaced_pkg));
+            replaced[replaced_id].push_back(id);
         }
         tspkg.set_reason(reason);
         packages.emplace_back(std::move(tspkg));
-
-        TransactionPackage old_tspkg(
-            rpm::Package(base, rpm::PackageId(obs[0])), TransactionPackage::Action::DOWNGRADED, reason);
-        packages.emplace_back(std::move(old_tspkg));
     }
     auto list_reinstalls = solved_goal.list_reinstalls();
     for (auto index = 0; index < list_reinstalls.size(); ++index) {
@@ -428,22 +423,17 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         rpm::Package new_package(base, rpm::PackageId(id));
         auto reason = new_package.get_reason();
         TransactionPackage tspkg(new_package, TransactionPackage::Action::REINSTALL, reason);
-        tspkg.replaces.emplace(rpm::Package(base, rpm::PackageId(obs[0])));
-        for (int i = 1; i < obs.size(); ++i) {
-            rpm::Package obsoleted(base, rpm::PackageId(obs[i]));
+        for (auto replaced_id : obs) {
+            rpm::Package obsoleted(base, rpm::PackageId(replaced_id));
             auto obs_reson = obsoleted.get_reason();
             if (obs_reson > reason) {
                 reason = obs_reson;
             }
-            tspkg.obsoletes.emplace_back(std::move(obsoleted));
-            obsoletes[obs[i]].push_back(id);
+            tspkg.replaces.emplace_back(std::move(obsoleted));
+            replaced[replaced_id].push_back(id);
         }
         tspkg.set_reason(reason);
         packages.emplace_back(std::move(tspkg));
-
-        TransactionPackage old_tspkg(
-            rpm::Package(base, rpm::PackageId(obs[0])), TransactionPackage::Action::REINSTALLED, reason);
-        packages.emplace_back(std::move(old_tspkg));
     }
     auto list_installs = solved_goal.list_installs();
     for (auto index = 0; index < list_installs.size(); ++index) {
@@ -469,8 +459,8 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
             if (obs_reson > reason) {
                 reason = obs_reson;
             }
-            tspkg.obsoletes.emplace_back(std::move(obsoleted));
-            obsoletes[obs[i]].push_back(id);
+            tspkg.replaces.emplace_back(std::move(obsoleted));
+            replaced[obs[i]].push_back(id);
         }
         tspkg.set_reason(reason);
         packages.emplace_back(std::move(tspkg));
@@ -485,22 +475,17 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         rpm::Package new_package(base, rpm::PackageId(id));
         auto reason = new_package.get_reason();
         TransactionPackage tspkg(new_package, TransactionPackage::Action::UPGRADE, reason);
-        tspkg.replaces.emplace(rpm::Package(base, rpm::PackageId(obs[0])));
-        for (int i = 1; i < obs.size(); ++i) {
-            rpm::Package obsoleted(base, rpm::PackageId(obs[i]));
+        for (auto replaced_id : obs) {
+            rpm::Package obsoleted(base, rpm::PackageId(replaced_id));
             auto obs_reson = obsoleted.get_reason();
             if (obs_reson > reason) {
                 reason = obs_reson;
             }
-            tspkg.obsoletes.emplace_back(std::move(obsoleted));
-            obsoletes[obs[i]].push_back(id);
+            tspkg.replaces.emplace_back(std::move(obsoleted));
+            replaced[replaced_id].push_back(id);
         }
         tspkg.set_reason(reason);
         packages.emplace_back(std::move(tspkg));
-
-        TransactionPackage old_tspkg(
-            rpm::Package(base, rpm::PackageId(obs[0])), TransactionPackage::Action::UPGRADED, reason);
-        packages.emplace_back(std::move(old_tspkg));
     }
     auto list_removes = solved_goal.list_removes();
     if (!list_removes.empty()) {
@@ -532,12 +517,12 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         }
     }
 
-    // Add obsoleted packages
-    for (const auto & [obsoleted_id, obsoleted_by_ids] : obsoletes) {
-        rpm::Package obsoleted(base, rpm::PackageId(obsoleted_id));
-        auto reason = solved_goal.get_reason(obsoleted_id);
-        TransactionPackage tspkg(obsoleted, TransactionPackage::Action::OBSOLETED, reason);
-        for (auto id : obsoleted_by_ids) {
+    // Add replaced packages to transaction
+    for (const auto & [replaced_id, replaced_by_ids] : replaced ) {
+        rpm::Package obsoleted(base, rpm::PackageId( replaced_id ));
+        auto reason = solved_goal.get_reason( replaced_id );
+        TransactionPackage tspkg(obsoleted, TransactionPackage::Action::REPLACED, reason);
+        for (auto id : replaced_by_ids) {
             tspkg.replaced_by.emplace_back(rpm::Package(base, rpm::PackageId(id)));
         }
         packages.emplace_back(std::move(tspkg));

@@ -51,6 +51,8 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
             return "magenta";
         case libdnf::transaction::TransactionItemAction::REMOVE:
             return "red";
+        case libdnf::transaction::TransactionItemAction::REPLACED:
+            return "gray";
         case libdnf::transaction::TransactionItemAction::REINSTALLED:
         case libdnf::transaction::TransactionItemAction::UPGRADED:
         case libdnf::transaction::TransactionItemAction::DOWNGRADED:
@@ -113,6 +115,7 @@ public:
                 case libdnf::transaction::TransactionItemAction::OBSOLETE:
                 case libdnf::transaction::TransactionItemAction::OBSOLETED:
                 case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+                case libdnf::transaction::TransactionItemAction::REPLACED:
                     throw libdnf::LogicError(
                         fmt::format("Unexpected action in print_transaction_table: {}", tspkg.get_action()));
             }
@@ -156,13 +159,15 @@ public:
             case libdnf::transaction::TransactionItemAction::REMOVE:
                 removes++;
                 break;
-            case libdnf::transaction::TransactionItemAction::OBSOLETED:
+
+            case libdnf::transaction::TransactionItemAction::REPLACED:
                 obsoleted++;
                 break;
             case libdnf::transaction::TransactionItemAction::REINSTALLED:
             case libdnf::transaction::TransactionItemAction::UPGRADED:
             case libdnf::transaction::TransactionItemAction::DOWNGRADED:
             case libdnf::transaction::TransactionItemAction::OBSOLETE:
+            case libdnf::transaction::TransactionItemAction::OBSOLETED:
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                 throw libdnf::LogicError(fmt::format("Unexpected action in print_transaction_table: {}", action));
         }
@@ -279,6 +284,11 @@ bool print_transaction_table(Transaction & transaction) {
             continue;
         }
 
+        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REPLACED) {
+            ts_summary.add(tspkg.get_action());
+            continue;
+        }
+
         auto pkg = tspkg.get_package();
 
         header_ln = action_header_printer.print(tspkg);
@@ -294,6 +304,26 @@ bool print_transaction_table(Transaction & transaction) {
         scols_cell_set_color(ce, action_color(tspkg.get_action()));
 
         ts_summary.add(tspkg.get_action());
+        for (auto & replaced : tspkg.get_replaces()) {
+            struct libscols_line * ln_replaced = scols_table_new_line(tb, ln);
+            // TODO(jmracek) Translate it
+            std::string name("replacing ");
+            name.append(replaced.get_name());
+            scols_line_set_data(ln_replaced, COL_NAME, name.c_str());
+            scols_line_set_data(ln_replaced, COL_ARCH, replaced.get_arch().c_str());
+            scols_line_set_data(ln_replaced, COL_EVR, replaced.get_evr().c_str());
+            scols_line_set_data(ln_replaced, COL_REPO, replaced.get_repo_id().c_str());
+            uint64_t size = replaced.get_install_size();
+            scols_line_set_data(
+                ln_replaced, COL_SIZE, libdnf::cli::utils::units::format_size(static_cast<int64_t>(size)).c_str());
+
+            auto replaced_color = action_color(libdnf::transaction::TransactionItemAction::REPLACED);
+            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
+            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);
+            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
+            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
+            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
+        }
     }
 
     scols_print_table(tb);

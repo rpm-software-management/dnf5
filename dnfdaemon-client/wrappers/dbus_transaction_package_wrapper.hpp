@@ -43,6 +43,9 @@ public:
     DbusPackageWrapper get_package() const { return package; }
     libdnf::transaction::TransactionItemAction get_action() const { return action; }
     libdnf::transaction::TransactionItemReason get_reason() const { return reason; }
+    // TODO(jmracek) get_replaces() is only a dummy method. In future it requires a private setter and a way how to get
+    // data from dnf-deamon server
+    const std::vector<DbusPackageWrapper> get_replaces() const noexcept { return {}; }
 
 private:
     DbusPackageWrapper package;
