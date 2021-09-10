@@ -35,7 +35,7 @@ enum class TransactionItemAction : int {
     DOWNGRADE = 2,            // an older package version that replaced previously installed version
     DOWNGRADED = 3,           // Unused, kept for SWDB compatibily, replaced by REPLACED
     OBSOLETE = 4,             // Unused, kept for SWDB compatibily
-    OBSOLETED = 5,            // Unused, kept for SWDB compatibily, replaced by REPLACED
+    OBSOLETED = 5,            // Used only for coloring of an output, cannot be used for transaction package where it is replaced by REPLACED
     UPGRADE = 6,              //
     UPGRADED = 7,             // Unused, kept for SWDB compatibily, replaced by REPLACED
     REMOVE = 8,               // a package that was removed from the system

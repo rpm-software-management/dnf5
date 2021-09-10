@@ -53,11 +53,12 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
             return "red";
         case libdnf::transaction::TransactionItemAction::REPLACED:
             return "gray";
+        case libdnf::transaction::TransactionItemAction::OBSOLETED:
+            return "brown";
         case libdnf::transaction::TransactionItemAction::REINSTALLED:
         case libdnf::transaction::TransactionItemAction::UPGRADED:
         case libdnf::transaction::TransactionItemAction::DOWNGRADED:
         case libdnf::transaction::TransactionItemAction::OBSOLETE:
-        case libdnf::transaction::TransactionItemAction::OBSOLETED:
         case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
             break;
     }
@@ -318,9 +319,18 @@ bool print_transaction_table(Transaction & transaction) {
                 ln_replaced, COL_SIZE, libdnf::cli::utils::units::format_size(static_cast<int64_t>(size)).c_str());
 
             auto replaced_color = action_color(libdnf::transaction::TransactionItemAction::REPLACED);
+            auto obsoleted_color = action_color(libdnf::transaction::TransactionItemAction::OBSOLETED);
             scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);
-            scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
+            if (pkg.get_arch() == replaced.get_arch()) {
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);
+            } else {
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), obsoleted_color);
+            }
+            if (pkg.get_name() == replaced.get_name()) {
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), replaced_color);
+            } else {
+                scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_NAME), obsoleted_color);
+            }
             scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
             scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
         }
