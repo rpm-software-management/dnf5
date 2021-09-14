@@ -323,9 +323,9 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & 
     }
 
     auto & logger = *base->get_logger();
-    auto id = repo.get_id().c_str();
+    auto id = repo.get_id();
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
-        repo_create(*get_pool(base), id), &libsolv_repo_free);
+        repo_create(*get_pool(base), id.c_str()), &libsolv_repo_free);
 
     const char * fn_repomd = repo_impl->repomd_fn.c_str();
     auto fn_cache = give_repo_solv_cache_fn(id, nullptr);
@@ -454,10 +454,10 @@ void PackageSack::Impl::make_provides_ready() {
 bool PackageSack::Impl::load_system_repo() {
     auto & logger = *base->get_logger();
     auto repo_impl = system_repo->p_impl.get();
-    auto id = system_repo->get_id().c_str();
     auto & pool = get_pool(base);
 
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(repo_create(*pool, id), &libsolv_repo_free);
+    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
+        repo_create(*pool, system_repo->get_id().c_str()), &libsolv_repo_free);
 
     logger.debug("load_system_repo(): fetching rpmdb");
     base->get_config().installroot().lock("installroot locked by load_system_repo");
@@ -541,7 +541,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
                 write_ext(repo_impl->libsolv_repo_ext, repodata_info.id, RepodataType::FILENAMES, SOLV_EXT_FILENAMES);
             }
         } catch (const NoCapability & ex) {
-            logger.debug(fmt::format("no filelists metadata available for {}", repo_impl->id));
+            logger.debug(fmt::format("no filelists metadata available for {}", repo.get_id()));
         }
     }
     if (any(flags & LoadRepoFlags::OTHER)) {
@@ -557,7 +557,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
                 write_ext(repo_impl->libsolv_repo_ext, repodata_info.id, RepodataType::OTHER, SOLV_EXT_OTHER);
             }
         } catch (const NoCapability & ex) {
-            logger.debug(fmt::format("no other metadata available for {}", repo_impl->id));
+            logger.debug(fmt::format("no other metadata available for {}", repo.get_id()));
         }
     }
     if (any(flags & LoadRepoFlags::PRESTO)) {
@@ -572,7 +572,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
                 write_ext(repo_impl->libsolv_repo_ext, repodata_info.id, RepodataType::PRESTO, SOLV_EXT_PRESTO);
             }
         } catch (const NoCapability & ex) {
-            logger.debug(fmt::format("no presto metadata available for {}", repo_impl->id));
+            logger.debug(fmt::format("no presto metadata available for {}", repo.get_id()));
         }
     }
 
@@ -591,7 +591,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
                 write_ext(repo_impl->libsolv_repo_ext, repodata_info.id, RepodataType::UPDATEINFO, SOLV_EXT_UPDATEINFO);
             }
         } catch (const NoCapability & ex) {
-            logger.debug(fmt::format("no updateinfo available for {}", repo_impl->id));
+            logger.debug(fmt::format("no updateinfo available for {}", repo.get_id()));
         }
     }
 

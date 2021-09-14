@@ -66,7 +66,8 @@ void Configuration::read_repos(const libdnf::ConfigParser * repo_parser, const s
         if (cfg_parser_data_iter.first != "main") {
             // each section other than [main] is considered a repository
             auto section = cfg_parser_data_iter.first;
-            std::unique_ptr<libdnf::repo::ConfigRepo> cfg_repo(new libdnf::repo::ConfigRepo(cfg_main));
+            // TODO(lukash) normally the repo id is the section with vars substituted, shouldn't be different here
+            std::unique_ptr<libdnf::repo::ConfigRepo> cfg_repo(new libdnf::repo::ConfigRepo(cfg_main, section));
 
             cfg_repo->load_from_parser(*repo_parser, section, *base->get_vars(), *base->get_logger());
 

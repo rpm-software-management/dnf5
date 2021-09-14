@@ -45,7 +45,7 @@ void ConfTest::test_config_main() {
 }
 
 void ConfTest::test_config_repo() {
-    repo::ConfigRepo config_repo(config);
+    repo::ConfigRepo config_repo(config, "test-repo");
     ConfigParser parser;
     parser.read(PROJECT_SOURCE_DIR "/test/libdnf/conf/data/main.conf");
     vars.load("/", {PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});

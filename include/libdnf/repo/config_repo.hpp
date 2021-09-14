@@ -31,12 +31,14 @@ namespace libdnf::repo {
 /// Holds repo configuration options. Default values of some options are inherited from ConfigMain.
 class ConfigRepo : public Config<Option::Priority::REPOCONFIG> {
 public:
-    explicit ConfigRepo(ConfigMain & main_config);
+    ConfigRepo(ConfigMain & main_config, const std::string & id);
     ~ConfigRepo();
     ConfigRepo(ConfigRepo && src);
 
     ConfigMain & get_main_config();
     const ConfigMain & get_main_config() const;
+
+    std::string get_id() const;
 
     OptionString & name();
     const OptionString & name() const;

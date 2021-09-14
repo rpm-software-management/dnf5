@@ -28,9 +28,10 @@ namespace libdnf::repo {
 class ConfigRepo::Impl {
     friend class ConfigRepo;
 
-    Impl(Config & owner, ConfigMain & main_config);
+    Impl(Config & owner, ConfigMain & main_config, const std::string & id);
 
     ConfigMain & main_config;
+    std::string id;
 
     OptionString name{""};
     OptionChild<OptionBool> enabled{main_config.enabled()};
@@ -83,7 +84,8 @@ class ConfigRepo::Impl {
     OptionBool build_cache{true};
 };
 
-ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config) : main_config(main_config) {
+ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::string & id)
+  : main_config(main_config), id(id) {
     owner.opt_binds().add("name", name);
     owner.opt_binds().add("enabled", enabled);
     owner.opt_binds().add("cachedir", basecachedir);
@@ -177,7 +179,7 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config) : main_config(m
     owner.opt_binds().add("build_cache", build_cache);
 }
 
-ConfigRepo::ConfigRepo(ConfigMain & main_config) : p_impl(new Impl(*this, main_config)) {}
+ConfigRepo::ConfigRepo(ConfigMain & main_config, const std::string & id) : p_impl(new Impl(*this, main_config, id)) {}
 ConfigRepo::~ConfigRepo() = default;
 ConfigRepo::ConfigRepo(ConfigRepo && src) : p_impl(std::move(src.p_impl)) {}
 
@@ -186,6 +188,10 @@ ConfigMain & ConfigRepo::get_main_config() {
 }
 const ConfigMain & ConfigRepo::get_main_config() const {
     return p_impl->main_config;
+}
+
+std::string ConfigRepo::get_id() const {
+    return p_impl->id;
 }
 
 OptionString & ConfigRepo::name() {

@@ -216,7 +216,7 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
     }
     auto & ret = (it != metadata_paths.end()) ? it->second : empty;
     if (ret.empty()) {
-        logger.debug(fmt::format("not found \"{}\" for: {}", metadata_type, id));
+        logger.debug(fmt::format("not found \"{}\" for: {}", metadata_type, config.get_id()));
     }
     return ret;
 }
@@ -318,9 +318,8 @@ static std::string format_user_pass_string(const std::string & user, const std::
 }
 
 Repo::Impl::Impl(Repo & owner, std::string id, Type type, Base & base)
-    : id(std::move(id))
-    , type(type)
-    , config(base.get_config())
+    : type(type)
+    , config(base.get_config(), id)
     , timestamp(-1)
     , load_metadata_other(false)
     , sync_strategy(SyncStrategy::TRY_CACHE)
@@ -360,7 +359,7 @@ void Repo::verify() const {
     if (p_impl->config.baseurl().empty() &&
         (p_impl->config.metalink().empty() || p_impl->config.metalink().get_value().empty()) &&
         (p_impl->config.mirrorlist().empty() || p_impl->config.mirrorlist().get_value().empty()))
-        throw RuntimeError(fmt::format(_("Repository {} has no mirror or baseurl set."), p_impl->id));
+        throw RuntimeError(fmt::format(_("Repository {} has no mirror or baseurl set."), p_impl->config.get_id()));
 
     const auto & type = p_impl->config.type().get_value();
     const char * supported_repo_types[]{"rpm-md", "rpm", "repomd", "rpmmd", "yum", "YUM"};
@@ -371,7 +370,7 @@ void Repo::verify() const {
             }
         }
         throw RuntimeError(
-            fmt::format(_("Repository '{}' has unsupported type: 'type={}', skipping."), p_impl->id, type));
+            fmt::format(_("Repository '{}' has unsupported type: 'type={}', skipping."), p_impl->config.get_id(), type));
     }
 }
 
@@ -379,8 +378,8 @@ ConfigRepo & Repo::get_config() noexcept {
     return p_impl->config;
 }
 
-const std::string & Repo::get_id() const noexcept {
-    return p_impl->id;
+std::string Repo::get_id() const noexcept {
+    return p_impl->config.get_id();
 }
 
 void Repo::enable() {
@@ -689,7 +688,7 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_remote(const char * destdir
         urls[len] = nullptr;
         handle_set_opt(h.get(), LRO_URLS, urls);
     } else {
-        throw RuntimeError(fmt::format(_("Cannot find a valid baseurl for repo: {}"), id));
+        throw RuntimeError(fmt::format(_("Cannot find a valid baseurl for repo: {}"), config.get_id()));
     }
 
     handle_set_opt(h.get(), LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
@@ -865,7 +864,7 @@ std::vector<Key> Repo::Impl::retrieve(const std::string & url) {
     try {
         download_url(url.c_str(), fd);
     } catch (const LrExceptionWithSourceUrl & e) {
-        auto msg = fmt::format(_("Failed to retrieve GPG key for repo '{}': {}"), id, e.what());
+        auto msg = fmt::format(_("Failed to retrieve GPG key for repo '{}': {}"), config.get_id(), e.what());
         throw RuntimeError(msg);
     }
     lseek(fd, SEEK_SET, 0);
@@ -913,7 +912,7 @@ void Repo::Impl::import_repo_keys() {
         auto key_infos = retrieve(gpgkeyUrl);
         for (auto & key_info : key_infos) {
             if (std::find(known_keys.begin(), known_keys.end(), key_info.get_id()) != known_keys.end()) {
-                logger.debug(fmt::format(_("repo {}: 0x{} already imported"), id, key_info.get_id()));
+                logger.debug(fmt::format(_("repo {}: 0x{} already imported"), config.get_id(), key_info.get_id()));
                 continue;
             }
 
@@ -945,7 +944,7 @@ void Repo::Impl::import_repo_keys() {
 
             gpg_import_key(ctx, key_info.raw_key, logger);
 
-            logger.debug(fmt::format(_("repo {}: imported key 0x{}."), id, key_info.get_id()));
+            logger.debug(fmt::format(_("repo {}: imported key 0x{}."), config.get_id(), key_info.get_id()));
         }
     }
 }
@@ -970,7 +969,7 @@ std::unique_ptr<LrResult> Repo::Impl::lr_handle_perform(
         if (callbacks && progressFunc) {
             callbacks->start(
                 !config.name().get_value().empty() ? config.name().get_value().c_str()
-                                                   : (!id.empty() ? id.c_str() : "unknown"));
+                                                   : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"));
         }
 
         GError * err_p{nullptr};
@@ -1124,7 +1123,7 @@ void Repo::Impl::add_countme_flag(LrHandle * handle) {
     time_t now = time(nullptr);
     time_t delta = now - win;
     if (delta < COUNTME_WINDOW) {
-        logger.debug(fmt::format("countme: no event for {}: window already counted", id));
+        logger.debug(fmt::format("countme: no event for {}: window already counted", config.get_id()));
         return;
     }
 
@@ -1160,12 +1159,12 @@ void Repo::Impl::add_countme_flag(LrHandle * handle) {
         // Set the flag
         std::string flag = "countme=" + std::to_string(bucket);
         handle_set_opt(handle, LRO_ONETIMEFLAG, flag.c_str());
-        logger.debug(fmt::format("countme: event triggered for {}: bucket {}", id, bucket));
+        logger.debug(fmt::format("countme: event triggered for {}: bucket {}", config.get_id(), bucket));
 
         // Request a new budget
         budget = -1;
     } else {
-        logger.debug(fmt::format("countme: no event for {}: budget to spend: {}", id, budget));
+        logger.debug(fmt::format("countme: no event for {}: budget to spend: {}", config.get_id(), budget));
     }
 
     // Save the cookie
@@ -1185,7 +1184,7 @@ bool Repo::Impl::is_metalink_in_sync() {
     LrMetalink * metalink;
     handle_get_info(h.get(), LRI_METALINK, &metalink);
     if (!metalink) {
-        logger.debug(fmt::format(_("reviving: repo '{}' skipped, no metalink."), id));
+        logger.debug(fmt::format(_("reviving: repo '{}' skipped, no metalink."), config.get_id()));
         return false;
     }
 
@@ -1204,7 +1203,7 @@ bool Repo::Impl::is_metalink_in_sync() {
         }
     }
     if (hashes.empty()) {
-        logger.debug(fmt::format(_("reviving: repo '{}' skipped, no usable hash."), id));
+        logger.debug(fmt::format(_("reviving: repo '{}' skipped, no usable hash."), config.get_id()));
         return false;
     }
 
@@ -1228,12 +1227,12 @@ bool Repo::Impl::is_metalink_in_sync() {
         solv_bin2hex(chksum, chksumLen, chksumHex);
         if (strcmp(chksumHex, hash.lr_metalink_hash->value) != 0) {
             logger.debug(
-                fmt::format(_("reviving: failed for '{}', mismatched {} sum."), id, hash.lr_metalink_hash->type));
+                fmt::format(_("reviving: failed for '{}', mismatched {} sum."), config.get_id(), hash.lr_metalink_hash->type));
             return false;
         }
     }
 
-    logger.debug(fmt::format(_("reviving: '{}' can be revived - metalink checksums match."), id));
+    logger.debug(fmt::format(_("reviving: '{}' can be revived - metalink checksums match."), config.get_id()));
     return true;
 }
 
@@ -1254,9 +1253,9 @@ bool Repo::Impl::is_repomd_in_sync() {
 
     auto same = utils::fs::have_files_same_content_noexcept(repomd_fn.c_str(), yum_repo->repomd);
     if (same)
-        logger.debug(fmt::format(_("reviving: '{}' can be revived - repomd matches."), id));
+        logger.debug(fmt::format(_("reviving: '{}' can be revived - repomd matches."), config.get_id()));
     else
-        logger.debug(fmt::format(_("reviving: failed for '{}', mismatched repomd."), id));
+        logger.debug(fmt::format(_("reviving: failed for '{}', mismatched repomd."), config.get_id()));
     return same;
 }
 
@@ -1316,7 +1315,7 @@ bool Repo::Impl::load() {
         if (!get_metadata_path(MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
             reset_metadata_expired();
             if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
-                logger.debug(fmt::format(_("repo: using cache for: {}"), id));
+                logger.debug(fmt::format(_("repo: using cache for: {}"), config.get_id()));
                 return false;
             }
 
@@ -1328,17 +1327,17 @@ bool Repo::Impl::load() {
             }
         }
         if (sync_strategy == SyncStrategy::ONLY_CACHE) {
-            auto msg = fmt::format(_("Cache-only enabled but no cache for '{}'"), id);
+            auto msg = fmt::format(_("Cache-only enabled but no cache for '{}'"), config.get_id());
             throw RuntimeError(msg);
         }
 
-        logger.debug(fmt::format(_("repo: downloading from remote: {}"), id));
+        logger.debug(fmt::format(_("repo: downloading from remote: {}"), config.get_id()));
         const auto cache_dir = get_cachedir();
         download_metadata(cache_dir);
         timestamp = -1;
         load_cache();
     } catch (const LrExceptionWithSourceUrl & e) {
-        auto msg = fmt::format(_("Failed to download metadata for repo '{}': {}"), id, e.what());
+        auto msg = fmt::format(_("Failed to download metadata for repo '{}': {}"), config.get_id(), e.what());
         throw RuntimeError(msg);
     }
     expired = false;
@@ -1352,7 +1351,7 @@ std::string Repo::Impl::get_hash() const {
             if (!config.baseurl().get_value().empty())
                 tmp = config.baseurl().get_value()[0];
             if (tmp.empty())
-                tmp = id;
+                tmp = config.get_id();
         }
     }
 
@@ -1369,7 +1368,7 @@ std::string Repo::Impl::get_hash() const {
     solv_bin2hex(chksum, USE_CHECKSUM_BYTES, chksum_cstr);
     solv_chksum_free(chksum_obj, nullptr);
 
-    return id + "-" + chksum_cstr;
+    return config.get_id() + "-" + chksum_cstr;
 }
 
 std::string Repo::Impl::get_cachedir() const {
@@ -1417,7 +1416,7 @@ void Repo::Impl::download_url(const char * url, int fd) {
     if (callbacks)
         callbacks->start(
             !config.name().get_value().empty() ? config.name().get_value().c_str()
-                                               : (!id.empty() ? id.c_str() : "unknown"));
+                                               : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"));
 
     GError * err_p{nullptr};
     lr_download_url(get_cached_handle(), url, fd, &err_p);

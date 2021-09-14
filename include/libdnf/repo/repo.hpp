@@ -113,7 +113,7 @@ public:
 
     /// Returns repository id
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getId()
-    const std::string & get_id() const noexcept;
+    std::string get_id() const noexcept;
 
     /// Enable the repository
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.enable()

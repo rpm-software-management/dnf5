@@ -159,7 +159,6 @@ public:
 
 public:
     friend class Repo;
-    std::string id;
     Type type;
     ConfigRepo config;
 
