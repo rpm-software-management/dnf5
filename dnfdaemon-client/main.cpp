@@ -46,13 +46,13 @@ namespace dnfdaemon::client {
 using namespace libdnf::cli;
 
 
-class RootCommand : public session::Command {
+class RootCommand : public dnfdaemon::client::DaemonCommand {
 public:
     explicit RootCommand(session::Session & session);
     void run() override;
 };
 
-inline RootCommand::RootCommand(session::Session & session) : Command(session, "dnfdaemon-client") {
+inline RootCommand::RootCommand(session::Session & session) : dnfdaemon::client::DaemonCommand(session, "dnfdaemon-client") {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Utility for packages maintaining");
     cmd.set_description("Dnfdaemon-client is a program for maintaining packages.");

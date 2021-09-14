@@ -29,6 +29,7 @@ namespace dnfdaemon::client {
 class DaemonCommand : public libdnf::cli::session::Command {
 public:
     explicit DaemonCommand(Command & parent, const std::string & name) : Command(parent, name){};
+    explicit DaemonCommand(libdnf::cli::session::Session & session, const std::string & name) : Command(session, name) {};
     virtual dnfdaemon::KeyValueMap session_config() {
         dnfdaemon::KeyValueMap cfg = {};
         return cfg;
