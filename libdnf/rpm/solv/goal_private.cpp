@@ -231,7 +231,7 @@ int obsq_cmp(const Id * ap, const Id * bp, const ObsoleteCmpData * s_cb) {
     }
     int r = pool.evrcmp(ap_solvable->evr, obs->evr, EVRCMP_COMPARE);
     if (r) {
-        return -r;	/* highest version first */
+        return -r; /* highest version first */
     }
     if (ap_solvable->arch != obs->arch) {
         /* bring same arch to front */
@@ -583,10 +583,10 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
     auto & pool = get_pool();
 
     libdnf::solv::SolvMap pkg_remove_list(pool->nsolvables);
-    for (auto index = 0; index < removes.size(); ++ index) {
+    for (auto index = 0; index < removes.size(); ++index) {
         pkg_remove_list.add_unsafe(removes[index]);
     }
-    for (auto index = 0; index < obsoleted.size(); ++ index) {
+    for (auto index = 0; index < obsoleted.size(); ++index) {
         pkg_remove_list.add_unsafe(obsoleted[index]);
     }
 
@@ -601,7 +601,7 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
     removal_of_protected.reset(new libdnf::solv::SolvMap(std::move(pkg_remove_list)));
     for (auto pkg_id : *removal_of_protected) {
         if (protected_pkgs.contains(pkg_id)) {
-            ret = libdnf::GoalProblem::REMOVAL_OF_PROTECTED;
+            ret = libdnf::GoalProblem::SOLVER_ERROR;
         } else {
             removal_of_protected->remove_unsafe(pkg_id);
         }
@@ -632,8 +632,7 @@ transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
     Id info;
     int reason = solver_describe_decision(libsolv_solver, id, &info);
 
-    if ((reason == SOLVER_REASON_UNIT_RULE ||
-         reason == SOLVER_REASON_RESOLVE_JOB) &&
+    if ((reason == SOLVER_REASON_UNIT_RULE || reason == SOLVER_REASON_RESOLVE_JOB) &&
         (solver_ruleclass(libsolv_solver, info) == SOLVER_RULE_JOB ||
          solver_ruleclass(libsolv_solver, info) == SOLVER_RULE_BEST))
         return transaction::TransactionItemReason::USER;
@@ -651,8 +650,7 @@ transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
     return transaction::TransactionItemReason::DEPENDENCY;
 }
 
-libdnf::solv::IdQueue GoalPrivate::list_obsoleted_by_package(Id id)
-{
+libdnf::solv::IdQueue GoalPrivate::list_obsoleted_by_package(Id id) {
     if (!libsolv_transaction) {
         throw std::runtime_error("no solution possible");
     }

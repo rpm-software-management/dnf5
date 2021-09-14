@@ -334,7 +334,6 @@ std::string Transaction::format_resolve_log(
         case GoalProblem::NOT_AVAILABLE:
             return ret.append(fmt::format(_("Packages for argument '{}' installed, but not available."), spec));
         case GoalProblem::NO_PROBLEM:
-        case GoalProblem::REMOVAL_OF_PROTECTED:
         case GoalProblem::SOLVER_ERROR:
             throw std::invalid_argument("Unsupported elements for a goal problem");
         case GoalProblem::ALREADY_INSTALLED:

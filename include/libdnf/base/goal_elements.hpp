@@ -62,19 +62,18 @@ enum class ProblemRules {
 enum class GoalProblem : uint32_t {
     NO_PROBLEM = 0,
     SOLVER_ERROR = (1 << 0),
-    REMOVAL_OF_PROTECTED = (1 << 1),
-    NOT_FOUND = (1 << 2),
-    EXCLUDED = (1 << 3),
-    ONLY_SRC = (1 << 4),
-    NOT_FOUND_IN_REPOSITORIES = (1 << 5),
-    NOT_INSTALLED = (1 << 6),
-    NOT_INSTALLED_FOR_ARCHITECTURE = (1 << 7),
-    HINT_ICASE = (1 << 8),
-    HINT_ALTERNATIVES = (1 << 9),
-    INSTALLED_LOWEST_VERSION = (1 << 10),
-    INSTALLED_IN_DIFFERENT_VERSION = (1 << 11),
-    NOT_AVAILABLE = (1 << 12),
-    ALREADY_INSTALLED = (1 << 13)
+    NOT_FOUND = (1 << 1),
+    EXCLUDED = (1 << 2),
+    ONLY_SRC = (1 << 3),
+    NOT_FOUND_IN_REPOSITORIES = (1 << 4),
+    NOT_INSTALLED = (1 << 5),
+    NOT_INSTALLED_FOR_ARCHITECTURE = (1 << 6),
+    HINT_ICASE = (1 << 7),
+    HINT_ALTERNATIVES = (1 << 8),
+    INSTALLED_LOWEST_VERSION = (1 << 9),
+    INSTALLED_IN_DIFFERENT_VERSION = (1 << 10),
+    NOT_AVAILABLE = (1 << 11),
+    ALREADY_INSTALLED = (1 << 12)
 };
 
 enum class GoalAction {
