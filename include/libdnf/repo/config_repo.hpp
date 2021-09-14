@@ -144,6 +144,19 @@ public:
     OptionEnum<std::string> & failovermethod();
     const OptionEnum<std::string> & failovermethod() const;
 
+    /// @return A unique ID of the repository, consisting of its id and a hash
+    /// computed from its source URLs (metalink, mirrorlist or baseurl, first
+    /// one set is used in the order listed).
+    std::string get_unique_id() const;
+
+    /// @return The path to the repository's cache directory, where its
+    /// cached metadata are stored.
+    std::string get_cachedir() const;
+
+    /// @return The path to the repository's perisistent directory, where its
+    /// persistent data are stored.
+    std::string get_persistdir() const;
+
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;

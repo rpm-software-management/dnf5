@@ -23,6 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/const.hpp"
 
+#include <solv/chksum.h>
+#include <solv/util.h>
+
+#include <filesystem>
+
 namespace libdnf::repo {
 
 class ConfigRepo::Impl {
@@ -538,6 +543,46 @@ OptionBool & ConfigRepo::build_cache() {
 }
 const OptionBool & ConfigRepo::build_cache() const {
     return p_impl->build_cache;
+}
+
+
+std::string ConfigRepo::get_unique_id() const {
+    std::string tmp;
+    if (metalink().empty() || (tmp = metalink().get_value()).empty()) {
+        if (mirrorlist().empty() || (tmp = mirrorlist().get_value()).empty()) {
+            if (!baseurl().get_value().empty())
+                tmp = baseurl().get_value()[0];
+            if (tmp.empty())
+                tmp = p_impl->id;
+        }
+    }
+
+    auto chksum_obj = solv_chksum_create(REPOKEY_TYPE_SHA256);
+    solv_chksum_add(chksum_obj, tmp.c_str(), static_cast<int>(tmp.length()));
+    int chksum_len;
+    auto chksum = solv_chksum_get(chksum_obj, &chksum_len);
+    static constexpr int USE_CHECKSUM_BYTES = 8;
+    if (chksum_len < USE_CHECKSUM_BYTES) {
+        solv_chksum_free(chksum_obj, nullptr);
+        throw RuntimeError("getCachedir(): Computation of SHA256 failed");
+    }
+    char chksum_cstr[USE_CHECKSUM_BYTES * 2 + 1];
+    solv_bin2hex(chksum, USE_CHECKSUM_BYTES, chksum_cstr);
+    solv_chksum_free(chksum_obj, nullptr);
+
+    return p_impl->id + "-" + chksum_cstr;
+}
+
+
+std::string ConfigRepo::get_cachedir() const {
+    std::filesystem::path repo_dir{basecachedir().get_value()};
+    return repo_dir / get_unique_id();
+}
+
+
+std::string ConfigRepo::get_persistdir() const {
+    std::filesystem::path main_persistdir{get_main_config().persistdir().get_value()};
+    return main_persistdir / "repos" / get_unique_id();
 }
 
 }  // namespace libdnf::repo

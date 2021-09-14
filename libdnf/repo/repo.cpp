@@ -631,7 +631,7 @@ std::unique_ptr<LrHandle> Repo::Impl::lr_handle_init_local() {
     std::unique_ptr<LrHandle> h(lr_handle_init());
     common_handle_setup(h);
 
-    auto cachedir = get_cachedir();
+    auto cachedir = config.get_cachedir();
     handle_set_opt(h.get(), LRO_DESTDIR, cachedir.c_str());
     const char * urls[] = {cachedir.c_str(), nullptr};
     handle_set_opt(h.get(), LRO_URLS, urls);
@@ -905,7 +905,7 @@ static void ensure_socket_dir_exists(Logger & logger) {
 void Repo::Impl::import_repo_keys() {
     auto & logger = *base->get_logger();
 
-    auto gpg_dir = get_cachedir() + "/pubring";
+    auto gpg_dir = config.get_cachedir() + "/pubring";
     auto known_keys = keyids_from_pubring(gpg_dir, logger);
     ensure_socket_dir_exists(logger);
     for (const auto & gpgkeyUrl : config.gpgkey().get_value()) {
@@ -952,7 +952,7 @@ void Repo::Impl::import_repo_keys() {
 std::unique_ptr<LrResult> Repo::Impl::lr_handle_perform(
     LrHandle * handle, const std::string & dest_directory, bool set_gpg_home_dir) {
     if (set_gpg_home_dir) {
-        auto pubringdir = get_cachedir() + "/pubring";
+        auto pubringdir = config.get_cachedir() + "/pubring";
         handle_set_opt(handle, LRO_GNUPGHOMEDIR, pubringdir.c_str());
     }
 
@@ -1013,7 +1013,7 @@ void Repo::Impl::load_cache() {
     std::unique_ptr<LrResult> r;
 
     // Fetch data
-    r = lr_handle_perform(h.get(), get_cachedir(), config.repo_gpgcheck().get_value());
+    r = lr_handle_perform(h.get(), config.get_cachedir(), config.repo_gpgcheck().get_value());
 
     char ** mirrors;
     LrYumRepo * yum_repo;
@@ -1112,7 +1112,19 @@ void Repo::Impl::add_countme_flag(LrHandle * handle) {
         return;
 
     // Load the cookie
-    std::string fname = get_persistdir() + "/" + COUNTME_COOKIE;
+    std::string persistdir = config.get_persistdir();
+    std::string fname = persistdir + "/" + COUNTME_COOKIE;
+
+    if (!std::filesystem::is_directory(persistdir)) {
+        try {
+            std::filesystem::create_directories(persistdir);
+        } catch (std::exception & e) {
+            // TODO(lukash) throw proper exception
+            throw RuntimeError(
+                fmt::format(_("Cannot create repository persistent directory \"{}\": {}"), persistdir, e.what()));
+        }
+    }
+
     int ver = COUNTME_VERSION;    // file format version (for future use)
     time_t epoch = 0;             // position of first-ever counted window
     time_t win = COUNTME_OFFSET;  // position of last counted window
@@ -1332,7 +1344,7 @@ bool Repo::Impl::load() {
         }
 
         logger.debug(fmt::format(_("repo: downloading from remote: {}"), config.get_id()));
-        const auto cache_dir = get_cachedir();
+        const auto cache_dir = config.get_cachedir();
         download_metadata(cache_dir);
         timestamp = -1;
         load_cache();
@@ -1342,52 +1354,6 @@ bool Repo::Impl::load() {
     }
     expired = false;
     return true;
-}
-
-std::string Repo::Impl::get_hash() const {
-    std::string tmp;
-    if (config.metalink().empty() || (tmp = config.metalink().get_value()).empty()) {
-        if (config.mirrorlist().empty() || (tmp = config.mirrorlist().get_value()).empty()) {
-            if (!config.baseurl().get_value().empty())
-                tmp = config.baseurl().get_value()[0];
-            if (tmp.empty())
-                tmp = config.get_id();
-        }
-    }
-
-    auto chksum_obj = solv_chksum_create(REPOKEY_TYPE_SHA256);
-    solv_chksum_add(chksum_obj, tmp.c_str(), static_cast<int>(tmp.length()));
-    int chksum_len;
-    auto chksum = solv_chksum_get(chksum_obj, &chksum_len);
-    static constexpr int USE_CHECKSUM_BYTES = 8;
-    if (chksum_len < USE_CHECKSUM_BYTES) {
-        solv_chksum_free(chksum_obj, nullptr);
-        throw RuntimeError(_("getCachedir(): Computation of SHA256 failed"));
-    }
-    char chksum_cstr[USE_CHECKSUM_BYTES * 2 + 1];
-    solv_bin2hex(chksum, USE_CHECKSUM_BYTES, chksum_cstr);
-    solv_chksum_free(chksum_obj, nullptr);
-
-    return config.get_id() + "-" + chksum_cstr;
-}
-
-std::string Repo::Impl::get_cachedir() const {
-    auto repodir(config.basecachedir().get_value());
-    if (repodir.back() != '/')
-        repodir.push_back('/');
-    return repodir + get_hash();
-}
-
-std::string Repo::Impl::get_persistdir() const {
-    auto persdir(config.get_main_config().persistdir().get_value());
-    if (persdir.back() != '/')
-        persdir.push_back('/');
-    std::string result = persdir + "repos/" + get_hash();
-    if (g_mkdir_with_parents(result.c_str(), 0755) == -1) {
-        const char * err_txt = strerror(errno);
-        throw RuntimeError(fmt::format(_("Cannot create persistdir \"{}\": {}"), result, err_txt));
-    }
-    return result;
 }
 
 int64_t Repo::Impl::get_age() const {
@@ -1525,12 +1491,12 @@ const std::vector<std::pair<std::string, std::string>> Repo::get_metadata_locati
     return p_impl->metadata_locations;
 }
 
-const std::string & Repo::get_revision() const {
-    return p_impl->revision;
+std::string Repo::get_cachedir() const {
+    return p_impl->config.get_cachedir();
 }
 
-std::string Repo::get_cachedir() const {
-    return p_impl->get_cachedir();
+const std::string & Repo::get_revision() const {
+    return p_impl->revision;
 }
 
 void Repo::set_repo_file_path(const std::string & path) {

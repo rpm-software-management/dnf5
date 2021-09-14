@@ -130,8 +130,6 @@ public:
     bool try_load_cache();
     bool is_in_sync();
     void download_metadata(const std::string & destdir);
-    std::string get_cachedir() const;
-    std::string get_persistdir() const;
     int64_t get_age() const;
     void expire();
     bool is_expired() const;
@@ -208,7 +206,6 @@ public:
         }
     };
     static bool ends_with(std::string const & str, std::string const & ending);
-    std::string get_hash() const;
 
     // Information about attached libsolv repository
     LibsolvRepoExt libsolv_repo_ext;
