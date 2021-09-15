@@ -97,6 +97,29 @@ static void ensure_socket_dir_exists(Logger & logger) {
 }
 
 
+static std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> create_context(const std::string & homedir) {
+    gpg_error_t gpg_err;
+    gpgme_ctx_t ctx;
+    gpg_err = gpgme_new(&ctx);
+    if (gpg_err != GPG_ERR_NO_ERROR) {
+        throw GpgError(fmt::format("Error creating gpgme context: {}", gpgme_strerror(gpg_err)));
+    }
+
+    std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> context(ctx);
+
+    // set GPG home dir
+    gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, homedir.c_str());
+    if (gpg_err != GPG_ERR_NO_ERROR) {
+        throw GpgError(fmt::format(
+            "Failed to set gpgme home directory to \"{}\": {}",
+            homedir,
+            gpgme_strerror(gpg_err)));
+    }
+
+    return context;
+}
+
+
 static void gpg_import_key(gpgme_ctx_t context, int key_fd, Logger & logger) {
     gpg_error_t gpg_err;
     gpgme_data_t key_data;
@@ -142,26 +165,17 @@ static void gpg_import_key(gpgme_ctx_t context, std::vector<char> key, Logger & 
 static std::vector<Key> rawkey2infos(int fd, Logger & logger) {
     gpg_error_t gpg_err;
 
-    std::vector<Key> key_infos;
-    gpgme_ctx_t ctx;
-    gpgme_new(&ctx);
-    std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> context(ctx);
-
     libdnf::utils::TempDir tmpdir("tmpdir.");
 
-    gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, tmpdir.get_path().c_str());
-    if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_ctx_set_engine_info(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw GpgError(msg);
-    }
+    auto context = create_context(tmpdir.get_path());
 
-    gpg_import_key(ctx, fd, logger);
+    gpg_import_key(context.get(), fd, logger);
 
+    std::vector<Key> key_infos;
     gpgme_key_t key;
-    gpg_err = gpgme_op_keylist_start(ctx, nullptr, 0);
+    gpg_err = gpgme_op_keylist_start(context.get(), nullptr, 0);
     while (gpg_err == GPG_ERR_NO_ERROR) {
-        gpg_err = gpgme_op_keylist_next(ctx, &key);
+        gpg_err = gpgme_op_keylist_next(context.get(), &key);
         if (gpg_err) {
             break;
         }
@@ -176,16 +190,16 @@ static std::vector<Key> rawkey2infos(int fd, Logger & logger) {
         gpgme_key_release(key);
     }
     if (gpg_err_code(gpg_err) != GPG_ERR_EOF) {
-        gpgme_op_keylist_end(ctx);
+        gpgme_op_keylist_end(context.get());
         auto msg = fmt::format(_("can not list keys: {}"), gpgme_strerror(gpg_err));
         logger.debug(msg);
         throw GpgError(msg);
     }
-    gpgme_set_armor(ctx, 1);
+    gpgme_set_armor(context.get(), 1);
     for (auto & key_info : key_infos) {
         gpgme_data_t sink;
         gpgme_data_new(&sink);
-        gpgme_op_export(ctx, key_info.get_id().c_str(), 0, sink);
+        gpgme_op_export(context.get(), key_info.get_id().c_str(), 0, sink);
         gpgme_data_rewind(sink);
 
         char buf[4096];
@@ -207,24 +221,16 @@ RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base
 
     gpg_error_t gpg_err;
 
+    gpgme_check_version(nullptr);
+
     struct stat sb;
     if (stat(get_keyring_dir().c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)) {
-        gpgme_ctx_t ctx;
-        gpgme_new(&ctx);
-        std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> context(ctx);
-
-        // set GPG home dir
-        gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, get_keyring_dir().c_str());
-        if (gpg_err != GPG_ERR_NO_ERROR) {
-            auto msg = fmt::format(_("{}: gpgme_ctx_set_engine_info(): {}"), __func__, gpgme_strerror(gpg_err));
-            logger.debug(msg);
-            throw GpgError(msg);
-        }
+        auto context = create_context(get_keyring_dir());
 
         gpgme_key_t key;
-        gpg_err = gpgme_op_keylist_start(ctx, nullptr, 0);
+        gpg_err = gpgme_op_keylist_start(context.get(), nullptr, 0);
         while (gpg_err == GPG_ERR_NO_ERROR) {
-            gpg_err = gpgme_op_keylist_next(ctx, &key);
+            gpg_err = gpgme_op_keylist_next(context.get(), &key);
             if (gpg_err) {
                 break;
             }
@@ -241,7 +247,7 @@ RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base
         }
 
         if (gpg_err_code(gpg_err) != GPG_ERR_EOF) {
-            gpgme_op_keylist_end(ctx);
+            gpgme_op_keylist_end(context.get());
             auto msg = fmt::format(_("can not list keys: {}"), gpgme_strerror(gpg_err));
             logger.debug(msg);
             throw GpgError(msg);
@@ -275,19 +281,9 @@ void RepoGpgme::import_key(int fd, const std::string & url) {
         if (stat(get_keyring_dir().c_str(), &sb) != 0 || !S_ISDIR(sb.st_mode))
             mkdir(get_keyring_dir().c_str(), 0777);
 
-        gpgme_ctx_t ctx;
-        gpgme_new(&ctx);
-        std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> context(ctx);
+        auto context = create_context(get_keyring_dir());
 
-        // set GPG home dir
-        auto gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, get_keyring_dir().c_str());
-        if (gpg_err != GPG_ERR_NO_ERROR) {
-            auto msg = fmt::format(_("{}: gpgme_ctx_set_engine_info(): {}"), __func__, gpgme_strerror(gpg_err));
-            logger.debug(msg);
-            throw GpgError(msg);
-        }
-
-        gpg_import_key(ctx, key_info.raw_key, logger);
+        gpg_import_key(context.get(), key_info.raw_key, logger);
 
         logger.debug(fmt::format(_("repo {}: imported key 0x{}."), config.get_id(), key_info.get_id()));
     }
