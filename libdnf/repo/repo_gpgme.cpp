@@ -92,7 +92,7 @@ static void ensure_socket_dir_exists(Logger & logger) {
     std::string dirname = "/run/user/" + std::to_string(getuid());
     int res = mkdir(dirname.c_str(), 0700);
     if (res != 0 && errno != EEXIST) {
-        logger.debug(fmt::format("Failed to create directory \"{}\": {} - {}", dirname, errno, strerror(errno)));
+        logger.debug(fmt::format(_("Failed to create directory \"{}\": {} - {}"), dirname, errno, strerror(errno)));
     }
 }
 
@@ -102,7 +102,7 @@ static std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> create_context(co
     gpgme_ctx_t ctx;
     gpg_err = gpgme_new(&ctx);
     if (gpg_err != GPG_ERR_NO_ERROR) {
-        throw GpgError(fmt::format("Error creating gpgme context: {}", gpgme_strerror(gpg_err)));
+        throw GpgError(fmt::format(_("Error creating gpgme context: {}"), gpgme_strerror(gpg_err)));
     }
 
     std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> context(ctx);
@@ -111,7 +111,7 @@ static std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> create_context(co
     gpg_err = gpgme_ctx_set_engine_info(ctx, GPGME_PROTOCOL_OpenPGP, nullptr, homedir.c_str());
     if (gpg_err != GPG_ERR_NO_ERROR) {
         throw GpgError(fmt::format(
-            "Failed to set gpgme home directory to \"{}\": {}",
+            _("Failed to set gpgme home directory to \"{}\": {}"),
             homedir,
             gpgme_strerror(gpg_err)));
     }
@@ -120,56 +120,48 @@ static std::unique_ptr<std::remove_pointer<gpgme_ctx_t>::type> create_context(co
 }
 
 
-static void gpg_import_key(gpgme_ctx_t context, int key_fd, Logger & logger) {
+static void gpg_import_key(gpgme_ctx_t context, int key_fd) {
     gpg_error_t gpg_err;
     gpgme_data_t key_data;
 
     gpg_err = gpgme_data_new_from_fd(&key_data, key_fd);
     if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_data_new_from_fd(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw GpgError(msg);
+        throw GpgError(fmt::format(_("Failed to create gpgme data from file descriptor: {}"), gpgme_strerror(gpg_err)));
     }
 
     gpg_err = gpgme_op_import(context, key_data);
     gpgme_data_release(key_data);
     if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_op_import(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw GpgError(msg);
+        throw GpgError(fmt::format(_("Failed to import gpgme keys: {}"), gpgme_strerror(gpg_err)));
     }
 }
 
 
-static void gpg_import_key(gpgme_ctx_t context, std::vector<char> key, Logger & logger) {
+static void gpg_import_key(gpgme_ctx_t context, std::vector<char> key) {
     gpg_error_t gpg_err;
     gpgme_data_t key_data;
 
     gpg_err = gpgme_data_new_from_mem(&key_data, key.data(), key.size(), 0);
     if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_data_new_from_fd(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw GpgError(msg);
+        throw GpgError(fmt::format(_("Failed to create gpgme data from a buffer: {}"), gpgme_strerror(gpg_err)));
     }
 
     gpg_err = gpgme_op_import(context, key_data);
     gpgme_data_release(key_data);
     if (gpg_err != GPG_ERR_NO_ERROR) {
-        auto msg = fmt::format(_("{}: gpgme_op_import(): {}"), __func__, gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw GpgError(msg);
+        throw GpgError(fmt::format(_("Failed to import gpgme keys: {}"), gpgme_strerror(gpg_err)));
     }
 }
 
 
-static std::vector<Key> rawkey2infos(int fd, Logger & logger) {
+static std::vector<Key> rawkey2infos(int fd) {
     gpg_error_t gpg_err;
 
     libdnf::utils::TempDir tmpdir("tmpdir.");
 
     auto context = create_context(tmpdir.get_path());
 
-    gpg_import_key(context.get(), fd, logger);
+    gpg_import_key(context.get(), fd);
 
     std::vector<Key> key_infos;
     gpgme_key_t key;
@@ -190,10 +182,7 @@ static std::vector<Key> rawkey2infos(int fd, Logger & logger) {
         gpgme_key_release(key);
     }
     if (gpg_err_code(gpg_err) != GPG_ERR_EOF) {
-        gpgme_op_keylist_end(context.get());
-        auto msg = fmt::format(_("can not list keys: {}"), gpgme_strerror(gpg_err));
-        logger.debug(msg);
-        throw GpgError(msg);
+        throw GpgError(fmt::format(_("Failed to list keys: {}"), gpgme_strerror(gpg_err)));
     }
     gpgme_set_armor(context.get(), 1);
     for (auto & key_info : key_infos) {
@@ -247,10 +236,7 @@ RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base
         }
 
         if (gpg_err_code(gpg_err) != GPG_ERR_EOF) {
-            gpgme_op_keylist_end(context.get());
-            auto msg = fmt::format(_("can not list keys: {}"), gpgme_strerror(gpg_err));
-            logger.debug(msg);
-            throw GpgError(msg);
+            throw GpgError(fmt::format(_("Failed to list keys: {}"), gpgme_strerror(gpg_err)));
         }
     }
 }
@@ -259,11 +245,11 @@ RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base
 void RepoGpgme::import_key(int fd, const std::string & url) {
     auto & logger = *base->get_logger();
 
-    auto key_infos = rawkey2infos(fd, logger);
+    auto key_infos = rawkey2infos(fd);
 
     for (auto & key_info : key_infos) {
         if (std::find(known_keys.begin(), known_keys.end(), key_info.get_id()) != known_keys.end()) {
-            logger.debug(fmt::format(_("repo {}: 0x{} already imported"), config.get_id(), key_info.get_id()));
+            logger.debug(fmt::format(_("Gpg key 0x{} for repository {} already imported."), key_info.get_id(), config.get_id()));
             continue;
         }
 
@@ -283,9 +269,9 @@ void RepoGpgme::import_key(int fd, const std::string & url) {
 
         auto context = create_context(get_keyring_dir());
 
-        gpg_import_key(context.get(), key_info.raw_key, logger);
+        gpg_import_key(context.get(), key_info.raw_key);
 
-        logger.debug(fmt::format(_("repo {}: imported key 0x{}."), config.get_id(), key_info.get_id()));
+        logger.debug(fmt::format(_("Imported gpg key 0x{} for repository {}."), key_info.get_id(), config.get_id()));
     }
 }
 
