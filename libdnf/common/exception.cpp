@@ -44,11 +44,7 @@ const char * Exception::what() const noexcept {
     }
 }
 
-SystemError::SystemError(int error_code, const std::string & what) : RuntimeError(what), error_code{error_code} {
-    char * it = std::copy_n(NAME_PREFIX, NAME_PREFIX_LEN, name);
-    auto res = std::to_chars(it, name + sizeof(name) - 1, get_error_code());
-    *res.ptr = '\0';
-}
+SystemError::SystemError(int error_code, const std::string & what) : SystemError(error_code, what.c_str()) {}
 
 SystemError::SystemError(int error_code, const char * what) : RuntimeError(what), error_code{error_code} {
     char * it = std::copy_n(NAME_PREFIX, NAME_PREFIX_LEN, name);
