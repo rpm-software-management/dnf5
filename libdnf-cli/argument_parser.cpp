@@ -148,7 +148,7 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
     }
     ++parse_count;
     if (parse_hook) {
-        parse_hook(this, usable_argc, argv);
+        parse_hook(this, static_cast<int>(count), argv);
     }
     return static_cast<int>(count);
 }
