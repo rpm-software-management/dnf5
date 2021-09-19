@@ -102,10 +102,6 @@ private:
     /// <libdnf::GoalAction, rpm Ids, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
 
-    /// <libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
-    std::vector<std::tuple<GoalAction, GoalProblem, GoalJobSettings, std::string, std::set<std::string>>>
-        rpm_goal_reports;
-
     rpm::solv::GoalPrivate rpm_goal;
 };
 
