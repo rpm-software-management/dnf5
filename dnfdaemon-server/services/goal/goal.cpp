@@ -76,14 +76,15 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 
     for (const auto & log : transaction.get_resolve_logs()) {
         dnfdaemon::KeyValueMap goal_resolve_log_item;
-        goal_resolve_log_item["action"] = static_cast<uint32_t>(std::get<0>(log));
-        goal_resolve_log_item["problem"] = static_cast<uint32_t>(std::get<1>(log));
+        goal_resolve_log_item["action"] = static_cast<uint32_t>(log.get_action());
+        goal_resolve_log_item["problem"] = static_cast<uint32_t>(log.get_problem());
         // TODO(nsella) better use of KeyValueMap with GoalJobSettings
         dnfdaemon::KeyValueMap goal_job_settings;
-        goal_job_settings.emplace(std::make_pair("to_repo_ids", std::get<2>(log).to_repo_ids));
+        goal_job_settings.emplace(std::make_pair("to_repo_ids", log.get_job_settings()->to_repo_ids));
         goal_resolve_log_item["goal_job_settings"] = goal_job_settings;
-        goal_resolve_log_item["report"] = std::get<3>(log); // string
-        goal_resolve_log_item["report_list"] = std::vector<std::string>{std::get<4>(log).begin(), std::get<4>(log).end()};
+        goal_resolve_log_item["report"] = *log.get_spec();  // string
+        goal_resolve_log_item["report_list"] =
+            std::vector<std::string>{log.get_additional_data()->begin(), log.get_additional_data()->end()};
         goal_resolve_log_list.push_back(goal_resolve_log_item);
     }
 
@@ -127,9 +128,9 @@ void download_packages(Session & session, libdnf::base::Transaction & transactio
     std::vector<std::unique_ptr<DbusPackageCB>> download_callbacks;
 
     for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL || \
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL || \
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE || \
+        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL ||
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL ||
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE ||
             tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADE) {
             download_callbacks.push_back(std::make_unique<DbusPackageCB>(session, tspkg.get_package()));
             downloader.add(tspkg.get_package(), download_callbacks.back().get());

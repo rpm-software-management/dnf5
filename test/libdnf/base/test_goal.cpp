@@ -38,7 +38,7 @@ using namespace libdnf::transaction;
 class TransactionPackage : public libdnf::base::TransactionPackage {
 public:
     TransactionPackage(const libdnf::rpm::Package & pkg, Action action, Reason reason, State state)
-    : libdnf::base::TransactionPackage(pkg, action, reason) {
+        : libdnf::base::TransactionPackage(pkg, action, reason) {
         this->state = state;
     }
 };
@@ -57,14 +57,11 @@ void BaseGoalTest::test_install() {
     goal.add_rpm_install("pkg");
     auto transaction = goal.resolve(false);
 
-    std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
-            get_pkg("pkg-0:1.2-3.x86_64"),
-            TransactionItemAction::INSTALL,
-            TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        )
-    };
+    std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
+        get_pkg("pkg-0:1.2-3.x86_64"),
+        TransactionItemAction::INSTALL,
+        TransactionItemReason::USER,
+        TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -82,13 +79,14 @@ void BaseGoalTest::test_install_not_available() {
 
     auto & log = transaction.get_resolve_logs();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
-    auto & [action, problem, settings, spec, additional_data] = *log.begin();
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::INSTALL, action);
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
-    CPPUNIT_ASSERT_EQUAL(std::string("not_available"), spec);
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, settings.get_used_clean_requirements_on_remove());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, settings.get_used_best());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, settings.get_used_strict());
+    auto & fist_event = *log.begin();
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::INSTALL, fist_event.get_action());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, fist_event.get_problem());
+    CPPUNIT_ASSERT_EQUAL(std::string("not_available"), *fist_event.get_spec());
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf::GoalUsedSetting::USED_FALSE, fist_event.get_job_settings()->get_used_clean_requirements_on_remove());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, fist_event.get_job_settings()->get_used_best());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, fist_event.get_job_settings()->get_used_strict());
 }
 
 void BaseGoalTest::test_install_from_cmdline() {
@@ -101,14 +99,11 @@ void BaseGoalTest::test_install_from_cmdline() {
 
     auto transaction = goal.resolve(false);
 
-    std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
-            get_pkg("one-0:1-1.noarch", "@commandline"),
-            TransactionItemAction::INSTALL,
-            TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        )
-    };
+    std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
+        get_pkg("one-0:1-1.noarch", "@commandline"),
+        TransactionItemAction::INSTALL,
+        TransactionItemReason::USER,
+        TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -126,15 +121,12 @@ void BaseGoalTest::test_install_multilib_all() {
             get_pkg("multilib-0:1.2-4.i686"),
             TransactionItemAction::INSTALL,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("multilib-0:1.2-4.x86_64"),
             TransactionItemAction::INSTALL,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -152,15 +144,12 @@ void BaseGoalTest::test_reinstall() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REINSTALLED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -178,15 +167,12 @@ void BaseGoalTest::test_reinstall_user() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REINSTALLED,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -198,14 +184,11 @@ void BaseGoalTest::test_remove() {
     goal.add_rpm_remove("one");
     auto transaction = goal.resolve(false);
 
-    std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
-            get_pkg("one-0:1-1.noarch", true),
-            TransactionItemAction::REMOVE,
-            TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        )
-    };
+    std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
+        get_pkg("one-0:1-1.noarch", true),
+        TransactionItemAction::REMOVE,
+        TransactionItemReason::USER,
+        TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -220,13 +203,14 @@ void BaseGoalTest::test_remove_not_installed() {
 
     auto & log = transaction.get_resolve_logs();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
-    auto & [action, problem, settings, spec, additional_data] = *log.begin();
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::REMOVE, action);
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
-    CPPUNIT_ASSERT_EQUAL(std::string("not_installed"), spec);
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, settings.get_used_clean_requirements_on_remove());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, settings.get_used_best());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, settings.get_used_strict());
+    auto & first_event = *log.begin();
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::REMOVE, first_event.get_action());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, first_event.get_problem());
+    CPPUNIT_ASSERT_EQUAL(std::string("not_installed"), *first_event.get_spec());
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf::GoalUsedSetting::USED_TRUE, first_event.get_job_settings()->get_used_clean_requirements_on_remove());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_best());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_strict());
 }
 
 void BaseGoalTest::test_install_installed_pkg() {
@@ -263,15 +247,12 @@ void BaseGoalTest::test_upgrade() {
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::UPGRADED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -290,13 +271,14 @@ void BaseGoalTest::test_upgrade_not_available() {
 
     auto & log = transaction.get_resolve_logs();
     CPPUNIT_ASSERT_EQUAL(1lu, log.size());
-    auto & [action, problem, settings, spec, additional_data] = *log.begin();
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::UPGRADE, action);
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, problem);
-    CPPUNIT_ASSERT_EQUAL(std::string("not_available"), spec);
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, settings.get_used_clean_requirements_on_remove());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, settings.get_used_best());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, settings.get_used_strict());
+    auto & first_event = *log.begin();
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::UPGRADE, first_event.get_action());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, first_event.get_problem());
+    CPPUNIT_ASSERT_EQUAL(std::string("not_available"), *first_event.get_spec());
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_clean_requirements_on_remove());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, first_event.get_job_settings()->get_used_best());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_strict());
 }
 
 void BaseGoalTest::test_upgrade_all() {
@@ -315,15 +297,12 @@ void BaseGoalTest::test_upgrade_all() {
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::UPGRADED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -343,15 +322,12 @@ void BaseGoalTest::test_upgrade_user() {
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::UPGRADED,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -371,15 +347,12 @@ void BaseGoalTest::test_downgrade() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::DOWNGRADED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -399,15 +372,12 @@ void BaseGoalTest::test_downgrade_user() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::DOWNGRADED,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -427,15 +397,12 @@ void BaseGoalTest::test_distrosync() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::DOWNGRADED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -455,15 +422,12 @@ void BaseGoalTest::test_distrosync_all() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::DOWNGRADED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -483,14 +447,11 @@ void BaseGoalTest::test_install_or_reinstall() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        ),
+            TransactionItemState::UNKNOWN),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REINSTALLED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN
-        )
-    };
+            TransactionItemState::UNKNOWN)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }

@@ -1,0 +1,73 @@
+/*
+Copyright Contributors to the libdnf project.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2.1 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+
+#ifndef LIBDNF_BASE_LOG_EVENT_HPP
+#define LIBDNF_BASE_LOG_EVENT_HPP
+
+
+#include "libdnf/base/goal_elements.hpp"
+
+#include <optional>
+#include <set>
+
+
+namespace libdnf::base {
+
+
+class LogEvent {
+public:
+    LogEvent(
+        libdnf::GoalAction action,
+        libdnf::GoalProblem problem,
+        const libdnf::GoalJobSettings & settings,
+        const std::string & spec,
+        const std::set<std::string> & additional_data);
+    ~LogEvent() = default;
+
+    libdnf::GoalAction get_action() const { return action; };
+    libdnf::GoalProblem get_problem() const { return problem; };
+    const std::optional<libdnf::GoalJobSettings> & get_job_settings() const { return job_settings; };
+    const std::optional<std::string> & get_spec() const { return spec; };
+    const std::optional<std::set<std::string>> & get_additional_data() const { return additional_data; };
+
+    /// Convert an element from resolve log to string;
+    static std::string to_string(
+        libdnf::GoalAction action,
+        libdnf::GoalProblem problem,
+        const std::optional<libdnf::GoalJobSettings> & settings,
+        const std::optional<std::string> & spec,
+        const std::optional<std::set<std::string>> & additional_data);
+
+    /// Convert an element from resolve log to string;
+    std::string to_string() { return to_string(action, problem, job_settings, spec, additional_data); };
+
+private:
+    friend class Goal;
+
+    libdnf::GoalAction action;
+    libdnf::GoalProblem problem;
+    std::optional<libdnf::GoalJobSettings> job_settings;
+    std::optional<std::string> spec;
+    std::optional<std::set<std::string>> additional_data;
+};
+
+}  // namespace libdnf::base
+
+#endif  // LIBDNF_BASE_LOG_EVENT_HPP

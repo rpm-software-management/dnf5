@@ -271,7 +271,7 @@ void Transaction::Impl::add_resolve_log(
     bool strict) {
     // TODO(jmracek) Use a logger properly and change a way how to report to terminal
     std::cout << Transaction::format_resolve_log(action, problem, settings, spec, additional_data) << std::endl;
-    resolve_logs.emplace_back(std::make_tuple(action, problem, settings, spec, additional_data));
+    resolve_logs.emplace_back(LogEvent(action, problem, settings, spec, additional_data));
     auto & logger = *base->get_logger();
     if (strict) {
         logger.error(Transaction::format_resolve_log(action, problem, settings, spec, additional_data));
@@ -345,9 +345,7 @@ std::string Transaction::format_resolve_log(
     return ret;
 }
 
-const std::vector<
-    std::tuple<libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalJobSettings, std::string, std::set<std::string>>> &
-Transaction::get_resolve_logs() {
+const std::vector<LogEvent> & Transaction::get_resolve_logs() {
     return p_impl->resolve_logs;
 }
 
