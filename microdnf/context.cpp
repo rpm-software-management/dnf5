@@ -76,9 +76,48 @@ bool userconfirm(libdnf::ConfigMain & config) {
 
 namespace {
 
-class MicrodnfRepoCB : public libdnf::repo::RepoCallbacks {
+// The `KeyImportRepoCB` class implements callback only for importing repository key, no progress information.
+class KeyImportRepoCB : public libdnf::repo::RepoCallbacks {
 public:
-    explicit MicrodnfRepoCB(libdnf::ConfigMain & config) : config(&config) {}
+    explicit KeyImportRepoCB(libdnf::ConfigMain & config) : config(&config) {}
+
+    bool repokey_import(
+        const std::string & id,
+        const std::string & user_id,
+        const std::string & fingerprint,
+        const std::string & url,
+        [[maybe_unused]] long int timestamp) override {
+
+        // TODO(jrohel): In case `assumeno`==true, the key is not imported. Is it OK to skip import atempt information message?
+        //               And what about `assumeyes`==true in silent mode? Print key import message or not?
+        if (config->assumeno().get_value()) {
+            return false;
+        }
+
+        auto tmp_id = id.size() > 8 ? id.substr(id.size() - 8) : id;
+        std::cout << "Importing GPG key 0x" << id << ":\n";
+        std::cout << " Userid     : \"" << user_id << "\"\n";
+        std::cout << " Fingerprint: " << fingerprint << "\n";
+        std::cout << " From       : " << url << std::endl;
+
+        return userconfirm(*config);
+    }
+
+    // Quiet empty implementation.
+    virtual void add_message(
+        [[maybe_unused]] libdnf::cli::progressbar::MessageType type, [[maybe_unused]] const std::string & message) {}
+
+    // Quiet empty implementation.
+    virtual void end_line() {}
+
+private:
+    libdnf::ConfigMain * config;
+};
+
+// Full implementation of repository callbacks. Adds progress bars.
+class ProgressAndKeyImportRepoCB : public KeyImportRepoCB {
+public:
+    explicit ProgressAndKeyImportRepoCB(libdnf::ConfigMain & config) : KeyImportRepoCB(config) {}
 
     void start(const char * what) override {
         progress_bar.set_description(what);
@@ -111,33 +150,12 @@ public:
         return 0;
     }
 
-    bool repokey_import(
-        const std::string & id,
-        const std::string & user_id,
-        const std::string & fingerprint,
-        const std::string & url,
-        [[maybe_unused]] long int timestamp) override {
-        auto tmp_id = id.size() > 8 ? id.substr(id.size() - 8) : id;
-        std::cout << "Importing GPG key 0x" << id << ":\n";
-        std::cout << " Userid     : \"" << user_id << "\"\n";
-        std::cout << " Fingerprint: " << fingerprint << "\n";
-        std::cout << " From       : " << url << std::endl;
-
-        if (config->assumeyes().get_value()) {
-            return true;
-        }
-        if (config->assumeno().get_value()) {
-            return false;
-        }
-        return userconfirm(*config);
-    }
-
-    void add_message(libdnf::cli::progressbar::MessageType type, const std::string & message) {
+    void add_message(libdnf::cli::progressbar::MessageType type, const std::string & message) override {
         progress_bar.add_message(type, message);
         print_progress_bar();
     }
 
-    void end_line() {
+    void end_line() override {
         if (progress_bar.get_state() != libdnf::cli::progressbar::ProgressBarState::READY) {
             std::cout << std::endl;
         }
@@ -170,12 +188,12 @@ private:
 
     static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
 
-    libdnf::ConfigMain * config;
     libdnf::cli::progressbar::DownloadProgressBar progress_bar{-1, ""};
     std::size_t msg_lines{0};
 };
 
-std::chrono::time_point<std::chrono::steady_clock> MicrodnfRepoCB::prev_print_time = std::chrono::steady_clock::now();
+std::chrono::time_point<std::chrono::steady_clock> ProgressAndKeyImportRepoCB::prev_print_time =
+    std::chrono::steady_clock::now();
 
 }  // namespace
 
@@ -225,19 +243,25 @@ void Context::apply_repository_setopts() {
 void Context::load_rpm_repo(libdnf::repo::Repo & repo) {
     //repo->set_substitutions(variables);
     auto & logger = *base.get_logger();
-    auto callback = std::make_unique<microdnf::MicrodnfRepoCB>(base.get_config());
+    auto callback = get_quiet() ? std::make_unique<microdnf::KeyImportRepoCB>(base.get_config())
+                                : std::make_unique<microdnf::ProgressAndKeyImportRepoCB>(base.get_config());
     auto callback_ptr = callback.get();
     repo.set_callbacks(std::move(callback));
     try {
         repo.load();
     } catch (const std::runtime_error & ex) {
-        std::cout << ex.what() << std::endl;
         logger.warning(ex.what());
         callback_ptr->add_message(libdnf::cli::progressbar::MessageType::ERROR, ex.what());
         callback_ptr->end_line();
         throw;
     }
     callback_ptr->end_line();
+}
+
+void Context::print_info(const char * msg) {
+    if (!quiet) {
+        std::cout << msg << std::endl;
+    }
 }
 
 // Multithreaded. Main thread prepares (updates) repositories metadata. Second thread loads them to solvable sack.
@@ -306,7 +330,7 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
         }
     };
 
-    std::cout << "Updating repositories metadata and load them:" << std::endl;
+    print_info("Updating repositories metadata and load them:");
 
     // Prepares repositories metadata for thread sack loader.
     for (auto & repo : repos.get_data()) {
@@ -330,10 +354,10 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
         }
     }
 
-    std::cout << "Waiting until sack is filled..." << std::endl;
+    print_info("Waiting until sack is filled...");
     finish_sack_loader();
     catch_thread_sack_loader_exceptions();
-    std::cout << "Sack is filled." << std::endl;
+    print_info("Sack is filled.");
 }
 
 // Single thread version.

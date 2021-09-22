@@ -65,6 +65,11 @@ public:
     /// rpm transaction and runs it.
     void download_and_run(libdnf::base::Transaction & transaction);
 
+    /// Set to true to suppresses messages notifying about the current state or actions of microdnf.
+    void set_quiet(bool quiet) { this->quiet = quiet; }
+
+    bool get_quiet() const { return quiet; }
+
 private:
     /// Updates the repository metadata cache and load it into rpm::RepoSack.
     void load_rpm_repo(libdnf::repo::Repo & repo);
@@ -72,11 +77,16 @@ private:
     /// Creates, initializes and returns new database transaction.
     libdnf::transaction::TransactionWeakPtr new_db_transaction();
 
+    /// If quiet mode is not active, it will print `msg` to standard output.
+    void print_info(const char * msg);
+
     /// Refers to program arguments.
     libdnf::Span<const char * const> prg_args;
 
     /// Points to user comment.
     const char * comment{nullptr};
+
+    bool quiet{false};
 };
 
 class RpmTransactionItem : public libdnf::rpm::TransactionItem {

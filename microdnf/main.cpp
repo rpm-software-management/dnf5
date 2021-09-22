@@ -133,6 +133,21 @@ static void set_commandline_args(Context & ctx) {
     help->set_short_description("Print help");
     microdnf->register_named_arg(help);
 
+    auto quiet = ctx.get_argument_parser().add_new_named_arg("quiet");
+    quiet->set_long_name("quiet");
+    quiet->set_short_name('q');
+    quiet->set_short_description(
+        "In combination with a non-interactive command, shows just the relevant content. "
+        "Suppresses messages notifying about the current state or actions of microdnf.");
+    quiet->set_parse_hook_func([&ctx](
+                                   [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                   [[maybe_unused]] const char * option,
+                                   [[maybe_unused]] const char * value) {
+        ctx.set_quiet(true);
+        return true;
+    });
+    microdnf->register_named_arg(quiet);
+
     // --setopt argument support
     auto setopt = ctx.get_argument_parser().add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
