@@ -364,12 +364,12 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
 // Single thread version.
 // TODO keep this and enable conditionally (compiletime or even runtime) or
 // drop when we know the multithreaded implementation is stable
-// void Context::load_rpm_repos(libdnf::rpm::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags) {
+// void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags) {
 //     std::cout << "Updating repositories metadata and load them:" << std::endl;
 //     for (auto & repo : repos.get_data()) {
 //         try {
 //             load_rpm_repo(*repo.get());
-//             auto & package_sack = base.get_rpm_package_sack();
+//             auto & package_sack = *base.get_rpm_package_sack();
 //             // std::cout << "Loading repository \"" << repo->get_config().name().get_value() << "\" into sack." << std::endl;
 //             package_sack.load_repo(*repo.get(), flags);
 //         } catch (const std::runtime_error & ex) {
@@ -827,6 +827,47 @@ std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string &
                     matched_pkgs_query.remove(pkg);
                 }
             }
+        }
+    }
+
+    std::vector<std::string> result;
+    result.reserve(result_set.size());
+    std::move(result_set.begin(), result_set.end(), std::back_inserter(result));
+    return result;
+}
+
+std::vector<std::string> match_available_pkgs(Context & ctx, const std::string & pattern) {
+    ctx.base.get_config().assumeno().set(libdnf::Option::Priority::RUNTIME, true);
+    ctx.set_quiet(true);
+
+    auto & base = ctx.base;
+    base.load_config_from_file();
+    ctx.set_cache_dir();
+    base.get_vars()->load(base.get_config().installroot().get_value(), base.get_config().varsdir().get_value());
+
+    // create rpm repositories according configuration files
+    auto repo_sack = base.get_repo_sack();
+    repo_sack->new_repos_from_file();
+    repo_sack->new_repos_from_dirs();
+
+    ctx.apply_repository_setopts();
+
+    libdnf::repo::RepoQuery enabled_repos(ctx.base);
+    enabled_repos.filter_enabled(true);
+    for (auto & repo : enabled_repos.get_data()) {
+        repo->set_sync_strategy(libdnf::repo::Repo::SyncStrategy::ONLY_CACHE);
+        repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
+    }
+    ctx.load_rpm_repos(enabled_repos, libdnf::rpm::PackageSack::LoadRepoFlags::PRIMARY);
+
+    std::set<std::string> result_set;
+    {
+        libdnf::rpm::PackageQuery matched_pkgs_query(ctx.base);
+        matched_pkgs_query.resolve_pkg_spec(
+            pattern + '*', {.ignore_case = false, .with_provides = false, .with_filenames = false}, true);
+
+        for (const auto & package : matched_pkgs_query) {
+            result_set.insert(package.get_name());
         }
     }
 
