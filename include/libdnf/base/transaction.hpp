@@ -48,14 +48,6 @@ public:
     // TODO(jrohel): Return reference instead of copy?
     std::vector<libdnf::base::TransactionPackage> get_transaction_packages() const;
 
-    /// Convert an element from resolve log to string;
-    static std::string format_resolve_log(
-        libdnf::GoalAction action,
-        libdnf::GoalProblem problem,
-        const libdnf::GoalJobSettings & settings,
-        const std::string & spec,
-        const std::set<std::string> & additional_data);
-
     /// Provide information about package solver problems in vector. Each problem can be transformed to string by
     /// package_solver_problem_to_string or all problems to a string by all_package_solver_problems_to_string().
     ///
