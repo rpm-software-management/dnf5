@@ -42,7 +42,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "context.hpp"
 #include "utils.hpp"
 
-#include "libdnf/utils/xdg.hpp"
 #include <libdnf-cli/exit-codes.hpp>
 #include <libdnf-cli/session.hpp>
 
@@ -307,27 +306,7 @@ int main(int argc, char * argv[]) try {
     // Load main configuration
     base.load_config_from_file();
 
-    // Without "root" effective privileges program switches to user specific directories
-    if (!microdnf::am_i_root()) {
-        auto tmp = fs::temp_directory_path() / "microdnf";
-        if (base.get_config().logdir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
-            auto logdir = tmp / "log";
-            base.get_config().logdir().set(libdnf::Option::Priority::RUNTIME, logdir);
-            fs::create_directories(logdir);
-        }
-        if (base.get_config().cachedir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
-            // Sets path to cache directory.
-            auto cache_dir = libdnf::utils::xdg::get_user_cache_dir() / "microdnf";
-            base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dir);
-        }
-    } else {
-        auto tmp = fs::temp_directory_path() / "microdnf";
-        if (base.get_config().cachedir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
-            // Sets path to cache directory.
-            auto system_cache_dir = base.get_config().system_cachedir().get_value();
-            base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, system_cache_dir);
-        }
-    }
+    context.set_cache_dir();
 
     // Try to open the current directory to see if we have
     // read and execute access. If not, chdir to /
@@ -353,21 +332,7 @@ int main(int argc, char * argv[]) try {
     repo_sack->new_repos_from_file();
     repo_sack->new_repos_from_dirs();
 
-    // apply repository setopts
-    for (const auto & setopt : context.setopts) {
-        auto last_dot_pos = setopt.first.rfind('.');
-        auto repo_pattern = setopt.first.substr(0, last_dot_pos);
-        libdnf::repo::RepoQuery query(base);
-        query.filter_id(repo_pattern, libdnf::sack::QueryCmp::GLOB);
-        auto key = setopt.first.substr(last_dot_pos + 1);
-        for (auto & repo : query.get_data()) {
-            try {
-                repo->get_config().opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, setopt.second);
-            } catch (const std::exception & ex) {
-                std::cout << "setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what() << std::endl;
-            }
-        }
-    }
+    context.apply_repository_setopts();
 
     //configure_plugins
     //configure_from_options(context);

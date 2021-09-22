@@ -38,6 +38,10 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context : public libdnf::cli::session::Session {
 public:
+    void set_cache_dir();
+
+    void apply_repository_setopts();
+
     /// Updates the repositories metadata cache.
     /// Loads the updated metadata into rpm::RepoSack and into rpm::PackageSack.
     void load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags = libdnf::rpm::PackageSack::LoadRepoFlags::ALL);

@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/transaction.hpp>
+#include <libdnf/utils/xdg.hpp>
 
 #include <atomic>
 #include <condition_variable>
@@ -36,6 +37,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <mutex>
 #include <string>
 #include <thread>
+
+namespace fs = std::filesystem;
 
 namespace microdnf {
 
@@ -175,6 +178,49 @@ private:
 std::chrono::time_point<std::chrono::steady_clock> MicrodnfRepoCB::prev_print_time = std::chrono::steady_clock::now();
 
 }  // namespace
+
+// TODO(jrohel): Move set_cache_dir logic into libdnf
+void Context::set_cache_dir() {
+    // Without "root" effective privileges program switches to user specific directories
+    if (!microdnf::am_i_root()) {
+        auto tmp = fs::temp_directory_path() / "microdnf";
+        if (base.get_config().logdir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
+            auto logdir = tmp / "log";
+            base.get_config().logdir().set(libdnf::Option::Priority::RUNTIME, logdir);
+            fs::create_directories(logdir);
+        }
+        if (base.get_config().cachedir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
+            // Sets path to cache directory.
+            auto cache_dir = libdnf::utils::xdg::get_user_cache_dir() / "microdnf";
+            base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dir);
+        }
+    } else {
+        auto tmp = fs::temp_directory_path() / "microdnf";
+        if (base.get_config().cachedir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
+            // Sets path to cache directory.
+            auto system_cache_dir = base.get_config().system_cachedir().get_value();
+            base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, system_cache_dir);
+        }
+    }
+}
+
+// TODO(jrohel): Move logic into lidnf?
+void Context::apply_repository_setopts() {
+    for (const auto & setopt : setopts) {
+        auto last_dot_pos = setopt.first.rfind('.');
+        auto repo_pattern = setopt.first.substr(0, last_dot_pos);
+        libdnf::repo::RepoQuery query(base);
+        query.filter_id(repo_pattern, libdnf::sack::QueryCmp::GLOB);
+        auto key = setopt.first.substr(last_dot_pos + 1);
+        for (auto & repo : query.get_data()) {
+            try {
+                repo->get_config().opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, setopt.second);
+            } catch (const std::exception & ex) {
+                std::cout << "setopt: \"" + setopt.first + "." + setopt.second + "\": " + ex.what() << std::endl;
+            }
+        }
+    }
+}
 
 void Context::load_rpm_repo(libdnf::repo::Repo & repo) {
     //repo->set_substitutions(variables);
