@@ -9,6 +9,8 @@
 %include <exception.i>
 %include <std_vector.i>
 
+%include <shared.i>
+
 %import "common.i"
 
 %exception {

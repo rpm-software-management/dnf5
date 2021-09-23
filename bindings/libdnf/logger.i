@@ -9,6 +9,8 @@
 %include <exception.i>
 %include <std_string.i>
 
+%include <shared.i>
+
 %import "common.i"
 
 typedef int64_t time_t;

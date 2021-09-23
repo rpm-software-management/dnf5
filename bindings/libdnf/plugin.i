@@ -10,6 +10,8 @@
 %include <stdint.i>
 %include <std_common.i>
 
+%include <shared.i>
+
 %{
     #include "libdnf/plugin/iplugin.hpp"
     #include "libdnf/plugin/plugins.hpp"

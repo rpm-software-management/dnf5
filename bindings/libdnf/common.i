@@ -18,6 +18,8 @@
 %include <std_string.i>
 %include <std_vector.i>
 
+%include <shared.i>
+
 %{
     #include "libdnf/common/weak_ptr.hpp"
 %}

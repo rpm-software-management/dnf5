@@ -9,6 +9,8 @@
 %include <exception.i>
 %include <std_common.i>
 
+%include <shared.i>
+
 %import "common.i"
 %import "conf.i"
 %import "plugin.i"
