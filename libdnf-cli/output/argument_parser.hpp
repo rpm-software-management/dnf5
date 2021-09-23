@@ -89,7 +89,8 @@ protected:
 class Help : public Usage {
 public:
     explicit Help() {
-        scols_table_new_column(table, "desc", 40, SCOLS_FL_WRAP);
+        // Sets a small relative width. We prefer to reduce the width of the description before reducing the argument.
+        scols_table_new_column(table, "desc", .1, SCOLS_FL_WRAP);
     }
 
     void add_line(const std::string & arg, const std::string & desc, libscols_line * parent = nullptr) {
