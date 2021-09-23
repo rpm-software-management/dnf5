@@ -99,7 +99,7 @@ class UpgradeTest(support.InstallrootCase):
                 dbus.String('goal_problems'): dbus.Array([
                     dbus.Dictionary({
                         dbus.String('action'): dbus.UInt32(3, variant_level=1),
-                        dbus.String('problem'): dbus.UInt32(32, variant_level=1),
+                        dbus.String('problem'): dbus.UInt32(16, variant_level=1),
                         dbus.String('goal_job_settings'): dbus.Dictionary({
                             dbus.String('to_repo_ids'): dbus.Array([
                                 dbus.String('rpm-repo2')

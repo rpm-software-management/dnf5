@@ -69,12 +69,12 @@ class InstallTest(support.InstallrootCase):
         self.assertDictEqual(
             errors,
             dbus.Dictionary({
-                dbus.String('transaction_problems'): dbus.UInt32(4, variant_level=1),
+                dbus.String('transaction_problems'): dbus.UInt32(2, variant_level=1),
                 dbus.String('transaction_solver_problems'): dbus.String('', variant_level=1),
                 dbus.String('goal_problems'): dbus.Array([
                     dbus.Dictionary({
                         dbus.String('action'): dbus.UInt32(0, variant_level=1),
-                        dbus.String('problem'): dbus.UInt32(4, variant_level=1),
+                        dbus.String('problem'): dbus.UInt32(2, variant_level=1),
                         dbus.String('goal_job_settings'): dbus.Dictionary({
                             dbus.String('to_repo_ids'): dbus.Array([
                                 ], signature=dbus.Signature('s'), variant_level=1)
@@ -109,7 +109,7 @@ class InstallTest(support.InstallrootCase):
                 dbus.String('goal_problems'): dbus.Array([
                     dbus.Dictionary({
                         dbus.String('action'): dbus.UInt32(0, variant_level=1),
-                        dbus.String('problem'): dbus.UInt32(4, variant_level=1),
+                        dbus.String('problem'): dbus.UInt32(2, variant_level=1),
                         dbus.String('goal_job_settings'): dbus.Dictionary({
                             dbus.String('to_repo_ids'): dbus.Array([
                                 ], signature=dbus.Signature('s'), variant_level=1)
@@ -138,12 +138,12 @@ class InstallTest(support.InstallrootCase):
         self.assertDictEqual(
             errors,
             dbus.Dictionary({
-                dbus.String('transaction_problems'): dbus.UInt32(32, variant_level=1),
+                dbus.String('transaction_problems'): dbus.UInt32(16, variant_level=1),
                 dbus.String('transaction_solver_problems'): dbus.String('', variant_level=1),
                 dbus.String('goal_problems'): dbus.Array([
                     dbus.Dictionary({
                         dbus.String('action'): dbus.UInt32(0, variant_level=1),
-                        dbus.String('problem'): dbus.UInt32(32, variant_level=1),
+                        dbus.String('problem'): dbus.UInt32(16, variant_level=1),
                         dbus.String('goal_job_settings'): dbus.Dictionary({
                             dbus.String('to_repo_ids'): dbus.Array([
                                 dbus.String('rpm-repo2', variant_level=1)
