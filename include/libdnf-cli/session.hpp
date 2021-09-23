@@ -77,6 +77,9 @@ public:
     /// @since 5.0
     virtual void run() = 0;
 
+    /// Throw a MissingCommand exception with the command name in it
+    void throw_missing_command() const { throw ArgumentParser::MissingCommand(get_argument_parser_command()->get_id()); }
+
     /// @return Pointer to the Session.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0

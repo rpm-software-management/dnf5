@@ -42,7 +42,7 @@ GroupCommand::GroupCommand(Command & parent) : DaemonCommand(parent, "group") {
 }
 
 void GroupCommand::run() {
-    get_argument_parser_command()->help();
+    throw_missing_command();
 }
 
 }  // namespace dnfdaemon::client

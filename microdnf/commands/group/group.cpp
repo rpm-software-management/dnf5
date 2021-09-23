@@ -48,8 +48,7 @@ GroupCommand::GroupCommand(Command & parent) : Command(parent, "group") {
 
 
 void GroupCommand::run() {
-    auto & cmd = *get_argument_parser_command();
-    cmd.help();
+    throw_missing_command();
 }
 
 

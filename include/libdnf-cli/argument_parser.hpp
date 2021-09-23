@@ -54,6 +54,13 @@ public:
         const char * get_description() const noexcept override { return "Conflicting arguments"; }
     };
 
+    /// Excepion is thrown when no command is found.
+    class MissingCommand : public Exception {
+        using Exception::Exception;
+        const char * get_name() const noexcept override { return "MissingCommand"; }
+        const char * get_description() const noexcept override { return "Command not specified"; }
+    };
+
     /// Exception is thrown when a command requires a positional argument that was not found.
     class MissingPositionalArgument : public Exception {
         using Exception::Exception;

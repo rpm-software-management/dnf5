@@ -69,8 +69,7 @@ HistoryCommand::HistoryCommand(Command & parent) : Command(parent, "history") {
 
 
 void HistoryCommand::run() {
-    auto & cmd = *get_argument_parser_command();
-    cmd.help();
+    throw_missing_command();
 }
 
 

@@ -43,6 +43,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include "libdnf/utils/xdg.hpp"
+#include <libdnf-cli/exit-codes.hpp>
 #include <libdnf-cli/session.hpp>
 
 #include <fcntl.h>
@@ -119,7 +120,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
 }
 
 inline void RootCommand::run() {
-    get_argument_parser_command()->help();
+    throw_missing_command();
 }
 
 
@@ -249,11 +250,7 @@ static void set_commandline_args(Context & ctx) {
 }
 
 static bool parse_commandline_args(Context & ctx, int argc, char * argv[]) {
-    try {
-        ctx.get_argument_parser().parse(argc, argv);
-    } catch (const std::exception & ex) {
-        std::cout << ex.what() << std::endl;
-    }
+    ctx.get_argument_parser().parse(argc, argv);
     auto & help = ctx.get_argument_parser().get_named_arg("help", false);
     return help.get_parse_count() > 0;
 }
@@ -293,12 +290,18 @@ int main(int argc, char * argv[]) try {
     }
 
     // Parse command line arguments
-    auto print_help = microdnf::parse_commandline_args(context, argc, argv);
+    bool print_help;
+    try {
+        print_help = microdnf::parse_commandline_args(context, argc, argv);
+    } catch (const std::exception & ex) {
+        std::cout << ex.what() << std::endl;
+        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+    }
 
     // print help of the selected command if --help was used
     if (print_help) {
         context.get_argument_parser().get_selected_command()->help();
-        return 0;
+        return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
     }
 
     // Load main configuration
@@ -373,20 +376,29 @@ int main(int argc, char * argv[]) try {
     // TODO(dmach): argparser should error out on unselected command
     if (!context.get_selected_command()) {
         context.get_argument_parser().get_selected_command()->help();
-        return 1;
+        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
 
     // Run selected command
     try {
         context.get_selected_command()->run();
+    } catch (libdnf::cli::ArgumentParser::MissingCommand & ex) {
+        // print help if no command is provided
+        std::cout << ex.what() << std::endl;
+        context.get_argument_parser().get_selected_command()->help();
+        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+    } catch (libdnf::cli::ArgumentParser::Exception & ex) {
+        std::cout << ex.what() << std::endl;
+        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (std::exception & ex) {
         std::cout << ex.what() << std::endl;
         log_router.error(fmt::format("Command returned error: {}", ex.what()));
+        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
 
     log_router.info("Microdnf end");
 
-    return 0;
+    return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
 } catch (const libdnf::RuntimeError & e) {
     std::cerr << e.what() << std::endl;
 }

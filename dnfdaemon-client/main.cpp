@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnfdaemon-server/dbus.hpp>
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <libdnf-cli/exit-codes.hpp>
 #include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
@@ -86,7 +87,7 @@ inline RootCommand::RootCommand(session::Session & session) : dnfdaemon::client:
 }
 
 inline void RootCommand::run() {
-    get_argument_parser_command()->help();
+    throw_missing_command();
 }
 
 
@@ -188,11 +189,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
 
     ctx.get_argument_parser().set_inherit_named_args(true);
 
-    try {
-        ctx.get_argument_parser().parse(argc, argv);
-    } catch (const std::exception & ex) {
-        std::cout << ex.what() << std::endl;
-    }
+    ctx.get_argument_parser().parse(argc, argv);
     return help->get_parse_count() > 0;
 }
 
@@ -206,7 +203,7 @@ int main(int argc, char * argv[]) {
     } catch (const sdbus::Error & ex) {
         std::cerr << ex.getMessage() << std::endl;
         std::cerr << "Is D-Bus daemon running?" << std::endl;
-        return 1;
+        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
 
     connection->enterEventLoopAsync();
@@ -218,17 +215,23 @@ int main(int argc, char * argv[]) {
     //log_router.info("Dnfdaemon-client start");
 
     // Parse command line arguments
-    bool print_help = dnfdaemon::client::parse_args(context, argc, argv);
+    bool print_help;
+    try{
+        print_help = dnfdaemon::client::parse_args(context, argc, argv);
+    } catch (std::exception & ex) {
+        std::cout << ex.what() << std::endl;
+        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+    }
 
     // print help of the selected command if --help was used
     if (print_help) {
         context.get_argument_parser().get_selected_command()->help();
-        return 0;
+        return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
     }
 
     if (!context.get_selected_command()) {
         context.get_argument_parser().get_selected_command()->help();
-        return 1;
+        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
 
     // initialize server session using command line arguments
@@ -236,19 +239,27 @@ int main(int argc, char * argv[]) {
         context.init_session();
     } catch (sdbus::Error & ex) {
         std::cerr << ex.getMessage() << std::endl << "Is dnfdaemon-server active?" << std::endl;
-        return 1;
+        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
 
 
     // Run selected command
     try {
         context.get_selected_command()->run();
+    } catch (libdnf::cli::ArgumentParser::MissingCommand & ex) {
+        // print help if no command is provided
+        std::cout << ex.what() << std::endl;
+        context.get_argument_parser().get_selected_command()->help();
+        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+    } catch (libdnf::cli::ArgumentParser::Exception & ex) {
+        std::cout << ex.what() << std::endl;
+        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (std::exception & ex) {
         std::cerr << fmt::format("Command returned error: {}", ex.what()) << std::endl;
-        return 1;
+        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
 
     //log_router.info("Dnfdaemon-client end");
 
-    return 0;
+    return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
 }
