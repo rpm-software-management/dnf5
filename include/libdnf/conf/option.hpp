@@ -63,15 +63,6 @@ public:
         const char * get_description() const noexcept override { return "Invalid value"; }
     };
 
-    /// Exception that is thrown when a write to a locked option is detected.
-    class WriteLocked : public LogicError {
-    public:
-        using LogicError::LogicError;
-        const char * get_domain_name() const noexcept override { return "libdnf::Option"; }
-        const char * get_name() const noexcept override { return "WriteLocked"; }
-        const char * get_description() const noexcept override { return "Attempt to write to a locked option"; }
-    };
-
     explicit Option(Priority priority = Priority::EMPTY);
     Option(const Option & src) = default;
     virtual ~Option() = default;
@@ -110,6 +101,11 @@ public:
     /// @since 1.0
     bool is_locked() const noexcept;
 
+    /// Asserts the option is not locked and throws a `libdnf::AssertionError` in case it is.
+    ///
+    /// @since 1.0
+    void assert_not_locked() const;
+
 protected:
     void set_priority(Priority priority);
     const std::string & get_lock_comment() const noexcept;
@@ -143,6 +139,10 @@ inline void Option::lock(const std::string & first_comment) {
 
 inline bool Option::is_locked() const noexcept {
     return locked;
+}
+
+inline void Option::assert_not_locked() const {
+    libdnf_assert(!locked, "Attempting to write to a locked option: {}", get_lock_comment());
 }
 
 inline const std::string & Option::get_lock_comment() const noexcept {

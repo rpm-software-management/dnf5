@@ -18,6 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#include "libdnf/common/exception.hpp"
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "package_sack_impl.hpp"
 #include "../repo/repo_impl.hpp"
@@ -42,7 +43,6 @@ extern "C" {
 
 #include <fmt/format.h>
 
-#include <cassert>
 #include <filesystem>
 
 
@@ -208,7 +208,7 @@ void PackageSack::Impl::write_ext(
     auto libsolv_repo = libsolv_repo_ext.repo;
     const char * repo_id = libsolv_repo->name;
 
-    assert(repodata_id);
+    libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
     Repodata * data = repo_id2repodata(libsolv_repo, repodata_id);
     auto fn = give_repo_solv_cache_fn(repo_id, suffix);
     auto tmp_fn_templ = fn + ".XXXXXX";
@@ -354,7 +354,11 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & 
             // g_set_error (error, DNF_ERROR, DNF_ERROR_INTERNAL_ERROR, _("loading of MD_FILENAME_PRIMARY has failed."));
         }
         std::unique_ptr<std::FILE, decltype(&close_file)> fp_primary(solv_xfopen(primary.c_str(), "r"), &close_file);
-        assert(fp_primary);
+
+        if (!fp_primary) {
+            // TODO(lukash) proper exception
+            throw RuntimeError(fmt::format("Failed to open repo primary \"{}\": {}", primary, errno));
+        }
 
         logger.debug(std::string("fetching ") + id);
         if (repo_add_repomdxml(libsolv_repo.get(), fp_repomd.get(), 0) ||
@@ -387,7 +391,6 @@ PackageSack::Impl::RepodataInfo PackageSack::Impl::load_repo_ext(
 
     auto fn_cache = give_repo_solv_cache_fn(repo_id, suffix);
     std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(fn_cache.c_str(), "rb"), &close_file);
-    assert(repo_impl->libsolv_repo_ext.checksum);
     if (can_use_repomd_cache(fp.get(), repo_impl->libsolv_repo_ext.checksum)) {
         logger.debug(fmt::format("{}: using cache file: {}", __func__, fn_cache));
         if (repo_add_solv(libsolv_repo, fp.get(), flags) != 0) {
@@ -410,7 +413,7 @@ PackageSack::Impl::RepodataInfo PackageSack::Impl::load_repo_ext(
     auto ok = cb(libsolv_repo, fp.get());
     if (ok) {
         info.state = RepodataState::LOADED_FETCH;
-        assert(previous_last == libsolv_repo->nrepodata - 2);
+        libdnf_assert(previous_last == libsolv_repo->nrepodata - 2, "Repo has not been added through callback");
         info.id = libsolv_repo->nrepodata - 1;
     }
     provides_ready = false;
@@ -613,16 +616,14 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
 
 void PackageSack::load_repo(repo::Repo & repo, LoadRepoFlags flags) {
     auto repo_impl = repo.p_impl.get();
-    if (repo_impl->type != repo::Repo::Type::AVAILABLE) {
-        throw LogicError("PackageSack::load_repo(): User can load only \"available\" repository");
-    }
+    libdnf_assert(repo_impl->type == repo::Repo::Type::AVAILABLE, "Only repositories of type AVAILABLE can be loaded");
+
     p_impl->load_available_repo(repo, flags);
 }
 
 void PackageSack::create_system_repo(bool build_cache) {
-    if (p_impl->system_repo) {
-        throw LogicError("PackageSack::create_system_repo(): System repo already exists");
-    }
+    libdnf_assert(!p_impl->system_repo, "System repo already exists");
+
     p_impl->system_repo = std::make_unique<repo::Repo>(SYSTEM_REPO_NAME, *p_impl->base, repo::Repo::Type::SYSTEM);
     p_impl->system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
     p_impl->load_system_repo();
@@ -635,9 +636,8 @@ libdnf::repo::RepoWeakPtr PackageSack::get_system_repo() const {
 
 
 void PackageSack::append_extra_system_repo(const std::string & rootdir) {
-    if (!p_impl->system_repo) {
-        throw LogicError("PackageSack::append_extra_system_repo(): System repo does not exist");
-    }
+    libdnf_assert(p_impl->system_repo != nullptr, "System repo does not exist");
+
     p_impl->load_extra_system_repo(rootdir);
 }
 

@@ -86,9 +86,8 @@ void OptionPath::test(const std::string & value) const {
 }
 
 void OptionPath::set(Priority priority, const std::string & value) {
-    if (is_locked()) {
-        throw WriteLocked(get_lock_comment());
-    }
+    assert_not_locked();
+
     if (priority >= get_priority()) {
         OptionString::test(value);
         auto val = remove_file_prot(value);

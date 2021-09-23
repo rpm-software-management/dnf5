@@ -611,7 +611,7 @@ public:
                 case libdnf::transaction::TransactionItemAction::OBSOLETE:
                 case libdnf::transaction::TransactionItemAction::OBSOLETED:
                 case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-                    throw libdnf::LogicError(fmt::format("Unexpected action in TransactionPackage: {}", item->get_action()));
+                    throw libdnf::AssertionError("Unexpected action in TransactionPackage: {}", item->get_action());
             }
         }
         if (!msg) {

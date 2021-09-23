@@ -88,9 +88,8 @@ ArgumentParser::PositionalArg::PositionalArg(
     : Argument(owner, id)
     , init_value(nullptr)
     , values(values) {
-    if (!values || values->empty()) {
-        throw LogicError("PositionalArg: \"values\" constructor parameter can't be nullptr or empty vector");
-    }
+    libdnf_assert(values && !values->empty(), "\"values\" constructor parameter can't be nullptr or empty vector");
+
     nvals = static_cast<int>(values->size());
 }
 
@@ -105,15 +104,12 @@ ArgumentParser::PositionalArg::PositionalArg(
     , init_value(init_value)
     , values(values)
     , store_value(values) {
-    if (values && !init_value) {
-        throw LogicError("PositionalArg: \"init_value\" constructor parameter can't be nullptr if \"value\" is set");
-    }
+    libdnf_assert(!values || init_value, "\"init_value\" constructor parameter can't be nullptr if \"value\" is set");
 }
 
 void ArgumentParser::PositionalArg::set_store_value(bool enable) {
-    if (enable && !values) {
-        throw LogicError("PositionalArg::set_store_value(true) was called but storage array \"values\" is not set");
-    }
+    libdnf_assert(!enable || values, "set_store_value(true) was called but storage array \"values\" is not set");
+
     store_value = enable;
 }
 
@@ -741,9 +737,8 @@ std::vector<std::unique_ptr<libdnf::Option>> * ArgumentParser::add_values(
 }
 
 void ArgumentParser::parse(int argc, const char * const argv[]) {
-    if (!root_command) {
-        throw LogicError("root command is not set");
-    }
+    assert_root_command();
+
     // mark root command as selected; overwrite with a subcommand in Command::parse()
     selected_command = root_command;
     root_command->parse(argv[0], argc, argv);
@@ -762,9 +757,8 @@ void ArgumentParser::reset_parse_count() {
 }
 
 ArgumentParser::Command & ArgumentParser::get_command(const std::string & id_path) {
-    if (!root_command) {
-        throw LogicError("root command is not set");
-    }
+    assert_root_command();
+
     auto * cmd = root_command;
     if (id_path.empty()) {
         return *cmd;
@@ -792,9 +786,6 @@ static const std::vector<Arg *> & get_command_args(ArgumentParser::Command & com
 
 template <class Arg>
 static Arg * get_arg(ArgumentParser::Command * root_command, const std::string & id_path, bool search_in_parent) {
-    if (!root_command) {
-        throw ArgumentParser::LogicError("root command is not set");
-    }
     auto * cmd = root_command;
     std::string::size_type start_pos = 0;
     auto dot_pos = id_path.find('.');
@@ -817,6 +808,8 @@ static Arg * get_arg(ArgumentParser::Command * root_command, const std::string &
 }
 
 ArgumentParser::NamedArg & ArgumentParser::get_named_arg(const std::string & id_path, bool search_in_parent) {
+    assert_root_command();
+
     if (auto ret = get_arg<ArgumentParser::NamedArg>(root_command, id_path, search_in_parent)) {
         return *ret;
     }
@@ -824,6 +817,8 @@ ArgumentParser::NamedArg & ArgumentParser::get_named_arg(const std::string & id_
 }
 
 ArgumentParser::PositionalArg & ArgumentParser::get_positional_arg(const std::string & id_path, bool search_in_parent) {
+    assert_root_command();
+
     if (auto ret = get_arg<ArgumentParser::PositionalArg>(root_command, id_path, search_in_parent)) {
         return *ret;
     }
@@ -839,6 +834,11 @@ void ArgumentParser::complete(int argc, const char * const argv[], int complete_
         parse(argc, argv);
     } catch (...) {
     }
+}
+
+
+void ArgumentParser::assert_root_command() {
+    libdnf_assert(root_command != nullptr, "Root command is not set");
 }
 
 }  // namespace libdnf::cli

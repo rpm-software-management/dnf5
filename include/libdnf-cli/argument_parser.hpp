@@ -32,12 +32,6 @@ namespace libdnf::cli {
 
 class ArgumentParser {
 public:
-    /// It reports errors that are a consequence of faulty logic within the program.
-    class LogicError : public libdnf::LogicError {
-        using libdnf::LogicError::LogicError;
-        const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser"; }
-    };
-
     /// Parent for all ArgumentsParser runtime errors.
     class Exception : public RuntimeError {
         using RuntimeError::RuntimeError;
@@ -207,7 +201,7 @@ public:
 
         /// Enables/disables storing parsed values.
         /// Values can be processed / stored in the user parse hook function.
-        /// The "LogicError" exception is thrown when "true" is requested but the storage array "values" is not set.
+        /// The "AssertionError" exception is thrown when "true" is requested but the storage array "values" is not set.
         void set_store_value(bool enable);
 
         /// Returns true if storing the parsed values is enabled.
@@ -566,7 +560,7 @@ public:
     Command * get_selected_command() noexcept { return selected_command; }
 
     /// Parses input. The parser from the "root" command is called.
-    /// The "LogicError" exception is thrown when the "root" command is not set.
+    /// The "AssertionError" exception is thrown when the "root" command is not set.
     void parse(int argc, const char * const argv[]);
 
     /// Reset parse count in all arguments.
@@ -584,7 +578,7 @@ public:
     /// Returns (sub)command with given ID path.
     /// The root command ID must be omitted. It is added automatically.
     /// @param id_path  command ID path, e.g. "module.list"; "" - returns root_command
-    /// @exception ArgumentParser::LogicError  if root command is not set
+    /// @exception AssertionError  if root command is not set
     /// @exception ArgumentParser::Command::CommandNotFound  if command is not found.
     Command & get_command(const std::string & id_path);
 
@@ -595,7 +589,7 @@ public:
     /// of "repoquery.installroot" returns "installroot".
     /// @param id_path  named argument ID path, e.g. "installroot", "repoquery.installed"
     /// @param search_in_parent  true - enable search in parrent command, false - disable
-    /// @exception ArgumentParser::LogicError  if root command is not set
+    /// @exception AssertionError  if root command is not set
     /// @exception ArgumentParser::Command::CommandNotFound  if command is not found.
     /// @exception ArgumentParser::Command::PositionalArgNotFound  if argument is not found.
     NamedArg & get_named_arg(const std::string & id_path, bool search_in_parent);
@@ -607,7 +601,7 @@ public:
     /// of "repoquery.installroot" returns "installroot".
     /// @param id_path  positional argument ID path, e.g. "repoquery.keys"
     /// @param search_in_parent  true - enable search in parrent command, false - disable
-    /// @exception ArgumentParser::LogicError  if root command is not set
+    /// @exception AssertionError  if root command is not set
     /// @exception ArgumentParser::Command::CommandNotFound  if command is not found.
     /// @exception ArgumentParser::Command::NamedArgNotFound  if argument is not found.
     PositionalArg & get_positional_arg(const std::string & id_path, bool search_in_parent);
@@ -626,6 +620,8 @@ public:
     void complete(int argc, const char * const argv[], int complete_arg_idx);
 
 private:
+    void assert_root_command();
+
     std::vector<std::unique_ptr<Command>> cmds;
     std::vector<std::unique_ptr<NamedArg>> named_args;
     std::vector<std::unique_ptr<PositionalArg>> pos_args;

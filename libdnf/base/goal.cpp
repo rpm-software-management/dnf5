@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal.hpp"
 
+#include "libdnf/base/base_private.hpp"
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "../rpm/package_sack_impl.hpp"
 #include "../rpm/package_set_impl.hpp"
@@ -191,10 +192,8 @@ void Goal::add_rpm_distro_sync(const rpm::PackageSet & package_set, const GoalJo
 }
 
 void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    if (rpm_package.base != base) {
-        // TODO(lukash) consolidate different sack/base errors
-        throw UsedDifferentSack();
-    }
+    assert_same_base(base, rpm_package.base);
+
     libdnf::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
     rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
@@ -202,10 +201,8 @@ void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package
 
 void Goal::Impl::add_rpm_ids(
     GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
-    if (package_set.get_base() != base) {
-        // TODO(lukash) consolidate different sack/base errors
-        throw UsedDifferentSack();
-    }
+    assert_same_base(base, package_set.get_base());
+
     libdnf::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {
         ids.push_back(package_id);
@@ -255,7 +252,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                     settings.resolve_clean_requirements_on_remove());
             } break;
             case GoalAction::INSTALL_OR_REINSTALL: {
-                throw LogicError("Unsupported action \"INSTALL_OR_REINSTALL\"");
+                throw AssertionError("Unsupported action \"INSTALL_OR_REINSTALL\"");
             }
         }
     }
@@ -450,7 +447,8 @@ GoalProblem Goal::Impl::add_install_to_goal(
             return GoalProblem::NO_PROBLEM;
         }
     } else {
-        throw LogicError("Incorrect configuration value for multilib_policy");
+        // TODO(lukash) throw a proper exception
+        throw RuntimeError("Incorrect configuration value for multilib_policy: " + multilib_policy);
     }
 
     return GoalProblem::NO_PROBLEM;

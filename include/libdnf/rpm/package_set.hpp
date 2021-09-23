@@ -42,14 +42,6 @@ namespace libdnf::rpm {
 /// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
 class PackageSet {
 public:
-    // TODO(dmach): move to common/exception.hpp, share across multiple sets/queries
-    struct UsedDifferentSack : public RuntimeError {
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::PackageSet"; }
-        const char * get_name() const noexcept override { return "UsedDifferentSack"; }
-        const char * get_description() const noexcept override { return "PackageSet exception"; }
-    };
-
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
     explicit PackageSet(const libdnf::BaseWeakPtr & base);
     explicit PackageSet(libdnf::Base & base);

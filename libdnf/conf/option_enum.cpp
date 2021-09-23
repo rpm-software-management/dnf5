@@ -92,9 +92,8 @@ T OptionEnum<T>::from_string(const std::string & value) const {
 
 template <typename T>
 void OptionEnum<T>::set(Priority priority, ValueType value) {
-    if (is_locked()) {
-        throw WriteLocked(get_lock_comment());
-    }
+    assert_not_locked();
+
     if (priority >= this->priority) {
         test(value);
         this->value = value;
@@ -162,9 +161,8 @@ std::string OptionEnum<std::string>::from_string(const std::string & value) cons
 }
 
 void OptionEnum<std::string>::set(Priority priority, const std::string & value) {
-    if (is_locked()) {
-        throw WriteLocked(get_lock_comment());
-    }
+    assert_not_locked();
+
     auto val = from_string(value);
     if (priority >= get_priority()) {
         test(val);

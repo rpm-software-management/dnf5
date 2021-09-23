@@ -69,9 +69,8 @@ void OptionString::test(const std::string & value) const {
 }
 
 void OptionString::set(Priority priority, const std::string & value) {
-    if (is_locked()) {
-        throw WriteLocked(get_lock_comment());
-    }
+    assert_not_locked();
+
     if (priority >= get_priority()) {
         test(value);
         this->value = value;

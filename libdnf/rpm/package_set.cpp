@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_set_impl.hpp"
 
+#include "libdnf/base/base_private.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/rpm/package_set_iterator.hpp"
 #include "libdnf/solv/solv_map.hpp"
@@ -70,30 +71,24 @@ PackageSet::iterator PackageSet::end() const {
 
 
 PackageSet & PackageSet::operator|=(const PackageSet & other) {
-    if (p_impl->base != other.p_impl->base) {
-        throw UsedDifferentSack(
-            "Cannot perform the action with PackageSet instances initialized with different Base");
-    }
+    assert_same_base(p_impl->base, other.p_impl->base);
+
     *p_impl |= *other.p_impl;
     return *this;
 }
 
 
 PackageSet & PackageSet::operator-=(const PackageSet & other) {
-    if (p_impl->base != other.p_impl->base) {
-        throw UsedDifferentSack(
-            "Cannot perform the action with PackageSet instances initialized with different Base");
-    }
+    assert_same_base(p_impl->base, other.p_impl->base);
+
     *p_impl -= *other.p_impl;
     return *this;
 }
 
 
 PackageSet & PackageSet::operator&=(const PackageSet & other) {
-    if (p_impl->base != other.p_impl->base) {
-        throw UsedDifferentSack(
-            "Cannot perform the action with PackageSet instances initialized with different Base");
-    }
+    assert_same_base(p_impl->base, other.p_impl->base);
+
     *p_impl &= *other.p_impl;
     return *this;
 }

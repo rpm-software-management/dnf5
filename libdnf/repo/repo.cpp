@@ -377,9 +377,7 @@ void Repo::Impl::reset_metadata_expired() {
 
 
 void Repo::Impl::attach_libsolv_repo(LibsolvRepo * libsolv_repo) {
-    if (this->libsolv_repo_ext.repo) {
-        throw LogicError("libdnf::rpm::Repo: Some libsolv repository is already attached.");
-    }
+    libdnf_assert(this->libsolv_repo_ext.repo == nullptr, "A libsolv repository is already attached");
 
     libsolv_repo->appdata = owner;  // The libsolvRepo references back to us.
     libsolv_repo->subpriority = -owner->get_cost();

@@ -95,42 +95,6 @@ void init_solver(Pool * pool, Solver ** solver) {
 #endif
 }
 
-libdnf::solv::IdQueue list_results(Transaction * transaction, Solver * solver, Id type_filter1, Id type_filter2) {
-    /* no transaction */
-    if (!transaction) {
-        if (!solver) {
-            throw libdnf::rpm::solv::GoalPrivate::UnresolvedGoal();
-        }  // TODO else if (removalOfProtected && removalOfProtected->size()) {
-        //    throw Goal::Error(_("no solution, cannot remove protected package"),
-        //                                  DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
-        //}
-        throw std::runtime_error("no solution possible");
-    }
-
-    libdnf::solv::IdQueue result_ids;
-    const int common_mode = SOLVER_TRANSACTION_SHOW_OBSOLETES | SOLVER_TRANSACTION_CHANGE_IS_REINSTALL;
-
-    for (int i = 0; i < transaction->steps.count; ++i) {
-        Id p = transaction->steps.elements[i];
-        Id type;
-
-        switch (type_filter1) {
-            case SOLVER_TRANSACTION_OBSOLETED:
-                type = transaction_type(transaction, p, common_mode);
-                break;
-            default:
-                type = transaction_type(
-                    transaction, p, common_mode | SOLVER_TRANSACTION_SHOW_ACTIVE | SOLVER_TRANSACTION_SHOW_ALL);
-                break;
-        }
-
-        if (type == type_filter1 || (type_filter2 && type == type_filter2)) {
-            result_ids.push_back(p);
-        }
-    }
-    return result_ids;
-}
-
 
 /// @brief return false when does not depend on anything from b
 bool can_depend_on(Pool * pool, Solvable * sa, Id b) {
@@ -314,6 +278,50 @@ bool GoalPrivate::limit_installonly_packages(libdnf::solv::IdQueue & job, Id run
 }
 
 
+libdnf::solv::IdQueue GoalPrivate::list_results(Id type_filter1, Id type_filter2) {
+    /* no transaction */
+    if (!libsolv_transaction) {
+        assert_resolved();
+
+        // TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
+        //    throw Goal::Error(_("no solution, cannot remove protected package"),
+        //                                  DNF_ERROR_REMOVAL_OF_PROTECTED_PKG);
+        //}
+
+        // TODO(lukash) replace with a proper and descriptive exception
+        throw std::runtime_error("no solution possible");
+    }
+
+    libdnf::solv::IdQueue result_ids;
+    const int common_mode = SOLVER_TRANSACTION_SHOW_OBSOLETES | SOLVER_TRANSACTION_CHANGE_IS_REINSTALL;
+
+    for (int i = 0; i < libsolv_transaction->steps.count; ++i) {
+        Id p = libsolv_transaction->steps.elements[i];
+        Id type;
+
+        switch (type_filter1) {
+            case SOLVER_TRANSACTION_OBSOLETED:
+                type = transaction_type(libsolv_transaction, p, common_mode);
+                break;
+            default:
+                type = transaction_type(
+                    libsolv_transaction, p, common_mode | SOLVER_TRANSACTION_SHOW_ACTIVE | SOLVER_TRANSACTION_SHOW_ALL);
+                break;
+        }
+
+        if (type == type_filter1 || (type_filter2 && type == type_filter2)) {
+            result_ids.push_back(p);
+        }
+    }
+    return result_ids;
+}
+
+
+void GoalPrivate::assert_resolved() {
+    libdnf_assert(libsolv_solver != nullptr, "Performing an operation that requires Goal to be resolved");
+}
+
+
 libdnf::GoalProblem GoalPrivate::resolve() {
     auto & pool = get_pool();
     libdnf::solv::IdQueue job(staging);
@@ -368,33 +376,32 @@ libdnf::GoalProblem GoalPrivate::resolve() {
 }
 
 libdnf::solv::IdQueue GoalPrivate::list_installs() {
-    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_INSTALL, SOLVER_TRANSACTION_OBSOLETES);
+    return list_results(SOLVER_TRANSACTION_INSTALL, SOLVER_TRANSACTION_OBSOLETES);
 }
 
 libdnf::solv::IdQueue GoalPrivate::list_reinstalls() {
-    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_REINSTALL, 0);
+    return list_results(SOLVER_TRANSACTION_REINSTALL, 0);
 }
 
 libdnf::solv::IdQueue GoalPrivate::list_upgrades() {
-    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_UPGRADE, 0);
+    return list_results(SOLVER_TRANSACTION_UPGRADE, 0);
 }
 
 libdnf::solv::IdQueue GoalPrivate::list_downgrades() {
-    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_DOWNGRADE, 0);
+    return list_results(SOLVER_TRANSACTION_DOWNGRADE, 0);
 }
 
 libdnf::solv::IdQueue GoalPrivate::list_removes() {
-    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_ERASE, 0);
+    return list_results(SOLVER_TRANSACTION_ERASE, 0);
 }
 
 libdnf::solv::IdQueue GoalPrivate::list_obsoleted() {
-    return list_results(libsolv_transaction, libsolv_solver, SOLVER_TRANSACTION_OBSOLETED, 0);
+    return list_results(SOLVER_TRANSACTION_OBSOLETED, 0);
 }
 
 void GoalPrivate::write_debugdata(const std::string & dir) {
-    if (!libsolv_solver) {
-        throw UnresolvedGoal();
-    }
+    assert_resolved();
+
     int flags = TESTCASE_RESULT_TRANSACTION | TESTCASE_RESULT_PROBLEMS;
     // TODO(jmracek) add support of relative path and create required dirs and parents
     //     g_autofree char * absdir = abspath(dir);
@@ -441,18 +448,16 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
 // }
 
 size_t GoalPrivate::count_solver_problems() {
-    if (!libsolv_solver) {
-        throw UnresolvedGoal();
-    }
+    assert_resolved();
+
     return solver_problem_count(libsolv_solver);
 }
 
 std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems() {
     auto & pool = get_pool();
 
-    if (!libsolv_solver) {
-        throw UnresolvedGoal();
-    }
+    assert_resolved();
+
     auto count_problems = static_cast<int>(count_solver_problems());
     if (count_problems == 0) {
         return {};
@@ -627,8 +632,8 @@ void GoalPrivate::reset_protected_packages() {
 
 transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
     //solver_get_recommendations
-    if (!libsolv_solver)
-        throw UnresolvedGoal();
+    assert_resolved();
+
     Id info;
     int reason = solver_describe_decision(libsolv_solver, id, &info);
 

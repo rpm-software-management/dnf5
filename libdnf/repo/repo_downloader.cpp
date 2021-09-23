@@ -89,18 +89,20 @@ static void result_get_info(LrResult * result, LrResultInfoOption option, T valu
 
 
 static LrYumRepo * get_yum_repo(const std::unique_ptr<LrResult> & lr_result) {
-    if (!lr_result) {
-        throw libdnf::LogicError("Calling get_yum_repo() without lr_result.");
-    }
+    libdnf::libdnf_assert(
+        lr_result != nullptr,
+        "load_local() needs to be called before repository attributes can be accessed");
+
     LrYumRepo * yum_repo;
     result_get_info(lr_result.get(), LRR_YUM_REPO, &yum_repo);
     return yum_repo;
 }
 
 static LrYumRepoMd * get_yum_repomd(const std::unique_ptr<LrResult> & lr_result) {
-    if (!lr_result) {
-        throw libdnf::LogicError("Calling get_yum_repomd() without lr_result.");
-    }
+    libdnf::libdnf_assert(
+        lr_result != nullptr,
+        "load_local() needs to be called before repository attributes can be accessed");
+
     LrYumRepoMd * yum_repomd;
     result_get_info(lr_result.get(), LRR_YUM_REPOMD, &yum_repomd);
     return yum_repomd;

@@ -40,14 +40,6 @@ namespace libdnf::sack {
 template <typename T>
 class Query : public Set<T> {
 public:
-    class UnsupportedOperation : public LogicError {
-    public:
-        using LogicError::LogicError;
-        const char * get_domain_name() const noexcept override { return "libdnf::Query"; }
-        const char * get_name() const noexcept override { return "UnsupportedOperation"; }
-        const char * get_description() const noexcept override { return "Unsupported operator"; }
-    };
-
     using FilterFunctionBool = bool(const T & obj);
     using FilterFunctionCString = char *(const T & obj);
     using FilterFunctionInt64 = int64_t(const T & obj);

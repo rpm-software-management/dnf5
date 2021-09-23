@@ -494,9 +494,7 @@ TransactionPackage Transaction::Impl::make_transaction_package(
     std::map<Id, std::vector<Id>> & replaced) {
     auto obs = solved_goal.list_obsoleted_by_package(id);
 
-    if (obs.empty()) {
-        throw LogicError("No obsoletes for " + TransactionItemAction_get_name(action));
-    }
+    libdnf_assert(!obs.empty(), "No obsoletes for {}", TransactionItemAction_get_name(action));
 
     rpm::Package new_package(base, rpm::PackageId(id));
     auto reason = new_package.get_reason();

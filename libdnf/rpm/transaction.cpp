@@ -474,9 +474,8 @@ public:
     }
 
     rpmdbMatchIterator match_tag(rpmDbiTagVal tag, const char * value) {
-        if (tag == RPMDBI_PACKAGES) {
-            throw libdnf::LogicError("rpm::Transaction::match(): not allowed tag RPMDBI_PACKAGES");
-        }
+        libdnf_assert(tag != RPMDBI_PACKAGES, "Matching rpmdb tag RPMDBI_PACKAGES is not allowed");
+
         return rpmtsInitIterator(ts, tag, value, 0);
     }
 
@@ -723,7 +722,7 @@ void Transaction::Impl::install_up_down(TransactionItem & item, libdnf::transact
         upgrade = false;
         msg_action = "install";
     } else {
-        throw LogicError("Unsupported action");
+        throw AssertionError("Unsupported action: {}", action);
     }
     auto file_path = item.get_package().get_package_path();
     auto * header = read_pkg_header(file_path);

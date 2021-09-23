@@ -63,7 +63,7 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
             break;
     }
 
-    throw libdnf::LogicError(fmt::format("Unexpected action in print_transaction_table: {}", action));
+    throw AssertionError("Unexpected action in print_transaction_table: {}", action);
 }
 
 
@@ -117,8 +117,7 @@ public:
                 case libdnf::transaction::TransactionItemAction::OBSOLETED:
                 case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                 case libdnf::transaction::TransactionItemAction::REPLACED:
-                    throw libdnf::LogicError(
-                        fmt::format("Unexpected action in print_transaction_table: {}", tspkg.get_action()));
+                    throw AssertionError("Unexpected action in print_transaction_table: {}", tspkg.get_action());
             }
 
             text += ":";
@@ -170,7 +169,7 @@ public:
             case libdnf::transaction::TransactionItemAction::OBSOLETE:
             case libdnf::transaction::TransactionItemAction::OBSOLETED:
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-                throw libdnf::LogicError(fmt::format("Unexpected action in print_transaction_table: {}", action));
+                throw AssertionError("Unexpected action in print_transaction_table: {}", action);
         }
     }
 

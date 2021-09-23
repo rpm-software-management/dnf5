@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_package_private.hpp"
 #include "libdnf/advisory/advisory_query.hpp"
 #include "libdnf/base/base.hpp"
+#include "libdnf/base/base_private.hpp"
 #include "libdnf/utils/utils_internal.hpp"
 
 extern "C" {
@@ -143,8 +144,9 @@ Id what_upgrades(libdnf::solv::Pool & spool, Solvable * solvable) {
     Id pp;
     Solvable * updated;
 
-    assert(spool->installed);
-    assert(spool->whatprovides);
+    libdnf_assert(spool->installed != nullptr, "installed repo has not been set for libsolv pool");
+    libdnf_assert(spool->whatprovides != nullptr, "whatprovides have not been created for libsolv pool");
+
     FOR_PROVIDES(p, pp, solvable->name) {
         updated = spool.id2solvable(p);
         if (updated->repo != spool->installed || updated->name != solvable->name) {
@@ -184,8 +186,9 @@ Id what_downgrades(libdnf::solv::Pool & spool, Solvable * solvable) {
     Id pp;
     Solvable * updated;
 
-    assert(spool->installed);
-    assert(spool->whatprovides);
+    libdnf_assert(spool->installed != nullptr, "installed repo has not been set for libsolv pool");
+    libdnf_assert(spool->whatprovides != nullptr, "whatprovides have not been created for libsolv pool");
+
     FOR_PROVIDES(p, pp, solvable->name) {
         updated = spool.id2solvable(p);
         if (updated->repo != spool->installed || updated->name != solvable->name || updated->arch != solvable->arch)
@@ -347,11 +350,8 @@ PackageQuery & PackageQuery::filter_name(const PackageSet & package_set, libdnf:
     auto &  pool = get_pool(p_impl->base);
     libdnf::solv::SolvMap filter_result(sack->get_nsolvables());
 
-    if (package_set.get_base() != p_impl->base) {
-        // TODO(lukash) consolidate different sack/base errors
-        throw UsedDifferentSack(
-            "Cannot perform the action with PackageSet instances initialized with different PackageSacks");
-    }
+    assert_same_base(p_impl->base, package_set.get_base());
+
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
     for (Id pattern_id : *package_set.p_impl) {
@@ -381,11 +381,7 @@ PackageQuery & PackageQuery::filter_name_arch(const PackageSet & package_set, li
     auto &  pool = get_pool(p_impl->base);
     libdnf::solv::SolvMap filter_result(sack->get_nsolvables());
 
-    if (package_set.get_base() != p_impl->base) {
-        // TODO(lukash) consolidate different sack/base errors
-        throw UsedDifferentSack(
-            "Cannot perform the action with PackageSet instances initialized with different PackageSacks");
-    }
+    assert_same_base(p_impl->base, package_set.get_base());
 
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
@@ -700,11 +696,7 @@ PackageQuery & PackageQuery::filter_nevra(const PackageSet & package_set, libdnf
     auto & pool = get_pool(p_impl->base);
     libdnf::solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
 
-    if (package_set.get_base() != p_impl->base) {
-        // TODO(lukash) consolidate different sack/base errors
-        throw UsedDifferentSack(
-            "Cannot perform the action with PackageSet instances initialized with different PackageSacks");
-    }
+    assert_same_base(p_impl->base, package_set.get_base());
 
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
@@ -1803,7 +1795,7 @@ PackageQuery & PackageQuery::filter_obsoletes(const PackageSet & package_set, li
                 if (!target.contains(r)) {
                     continue;
                 }
-                assert(r != SYSTEMSOLVABLE);
+                libdnf_assert(r != SYSTEMSOLVABLE, "Provide is SYSTEMSOLVABLE");
                 Solvable * so = spool.id2solvable(r);
                 if (obsprovides == 0 && pool_match_nevr(pool, so, *r_id) == 0) {
                     continue; /* only matching pkg names */

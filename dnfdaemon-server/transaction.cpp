@@ -44,9 +44,9 @@ RpmTransactionItemActions transaction_package_to_action(const libdnf::base::Tran
         case libdnf::base::TransactionPackage::Action::REASON_CHANGE:
         case libdnf::transaction::TransactionItemAction::OBSOLETED:
             // TODO(lukash) handle cases
-            throw libdnf::LogicError(fmt::format("Unexpected action in RpmTransactionItem: {}", tspkg.get_action()));
+            throw libdnf::AssertionError("Unexpected action in RpmTransactionItem: {}", tspkg.get_action());
     }
-    throw libdnf::LogicError(fmt::format("Unknown action in RpmTransactionItem: {}", tspkg.get_action()));
+    throw libdnf::AssertionError("Unknown action in RpmTransactionItem: {}", tspkg.get_action());
 }
 
 }  // namespace dnfdaemon

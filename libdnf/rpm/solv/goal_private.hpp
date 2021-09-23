@@ -33,13 +33,6 @@ namespace libdnf::rpm::solv {
 
 class GoalPrivate {
 public:
-    struct UnresolvedGoal : public LogicError {
-        UnresolvedGoal() : LogicError("Operation cannot be performed because goal was not resolved"){};
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::solv::GoalPrivate"; }
-        const char * get_name() const noexcept override { return "UnresolvedGoal"; }
-        const char * get_description() const noexcept override { return "GoalPrivate exception"; }
-    };
-
     explicit GoalPrivate(const BaseWeakPtr & base) : base(base) {}
 
     /// Copy only inputs but not results from resolve()
@@ -116,6 +109,10 @@ public:
 
 private:
     bool limit_installonly_packages(libdnf::solv::IdQueue & job, Id running_kernel);
+
+    libdnf::solv::IdQueue list_results(Id type_filter1, Id type_filter2);
+
+    void assert_resolved();
 
     BaseWeakPtr base;
 

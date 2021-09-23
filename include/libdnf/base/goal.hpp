@@ -31,14 +31,6 @@ namespace libdnf {
 
 class Goal {
 public:
-    struct UsedDifferentSack : public LogicError {
-        UsedDifferentSack()
-            : LogicError("Cannot perform the action with Goal instances initialized with different PackageSacks"){};
-        const char * get_domain_name() const noexcept override { return "libdnf::Goal"; }
-        const char * get_name() const noexcept override { return "UsedDifferentSack"; }
-        const char * get_description() const noexcept override { return "Goal exception"; }
-    };
-
     explicit Goal(const libdnf::BaseWeakPtr & base);
     explicit Goal(libdnf::Base & base);
     ~Goal();

@@ -140,9 +140,8 @@ inline Option::Priority OptionChild<ParentOptionType, Enable>::get_priority() co
 template <class ParentOptionType, class Enable>
 inline void OptionChild<ParentOptionType, Enable>::set(
     Priority priority, const typename ParentOptionType::ValueType & value) {
-    if (is_locked()) {
-        throw WriteLocked(get_lock_comment());
-    }
+    assert_not_locked();
+
     if (priority >= Option::get_priority()) {
         parent->test(value);
         set_priority(priority);
@@ -206,9 +205,8 @@ inline void OptionChild<
     ParentOptionType,
     typename std::enable_if<std::is_same<typename ParentOptionType::ValueType, std::string>::value>::type>::
     set(Priority priority, const std::string & value) {
-    if (is_locked()) {
-        throw WriteLocked(get_lock_comment());
-    }
+    assert_not_locked();
+
     auto val = parent->from_string(value);
     if (priority >= Option::get_priority()) {
         parent->test(val);

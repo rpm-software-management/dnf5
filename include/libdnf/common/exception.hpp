@@ -20,10 +20,42 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_EXCEPTION_HPP
 #define LIBDNF_UTILS_EXCEPTION_HPP
 
+#include <fmt/format.h>
+
 #include <stdexcept>
 
 
 namespace libdnf {
+
+/// An AssertionError is a fault in the program logic, it is thrown when an
+/// incorrect sequence of actions has led to an invalid state in which it is
+/// impossible to continue running the program.
+class AssertionError : public std::logic_error {
+public:
+
+    /// A constructor that supports formatting the error message.
+    ///
+    /// @param format The format string for the message.
+    /// @param args The format arguments.
+    template<typename... Ss>
+    AssertionError(const std::string & format, Ss&&... args)
+        : std::logic_error(fmt::format(format, std::forward<Ss>(args)...)) {}
+};
+
+/// An assert function that throws `libdnf::AssertionError` when `condition`
+/// is not met.
+///
+/// @param condition The assertion condition. Throws AssertionError if it's not met.
+/// @param format The format string for the message.
+/// @param args The format arguments.
+/// @exception libdnf::AssertionError Thrown when condition is not met.
+template<typename... Ss>
+void libdnf_assert(bool condition, const std::string & format, Ss&&... args) {
+    if (!condition) {
+        throw AssertionError(format, std::forward<Ss>(args)...);
+    }
+}
+
 
 /// Base class of libdnf exceptions. Each exception define at least domain_name, name, and description.
 /// These information can be used to serialize exception into a string.
@@ -48,13 +80,6 @@ public:
 
 protected:
     mutable std::string str_what;
-};
-
-class LogicError : public Exception {
-public:
-    using Exception::Exception;
-    const char * get_name() const noexcept override { return "LogicError"; }
-    const char * get_description() const noexcept override { return "General LogicError exception"; }
 };
 
 class RuntimeError : public Exception {

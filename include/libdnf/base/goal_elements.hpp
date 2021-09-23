@@ -115,37 +115,41 @@ public:
 
 private:
     friend class Goal;
+
+    // TODO(lukash) fix the documentation of the methods below, "resolve FOO and store
+    // the result" doesn't really describe what is actually going on
+
     /// Resolve strict value and store the result as the value used.
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
     /// @return Resolved value.
-    /// @exception libdnf::LogicError When a different value already stored or when invalid value
+    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_strict(const libdnf::ConfigMain & cfg_main);
     /// Resolve strict value and store the result as the value used. When GoalSetting::auto it returns false
     ///
     /// @return Resolved value.
-    /// @exception libdnf::LogicError When a different value already stored
+    /// @exception libdnf::AssertionError When a different value already stored
     /// @since 1.0
     bool resolve_strict();
     /// Resolve best value and store the result as the value used.
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
     /// @return Resolved value.
-    /// @exception libdnf::LogicError When a different value already stored or when invalid value
+    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_best(const libdnf::ConfigMain & cfg_main);
     /// Resolve clean_requirements_on_remove value and store the result as the value used.
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
     /// @return Resolved value.
-    /// @exception libdnf::LogicError When a different value already stored or when invalid value
+    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_clean_requirements_on_remove(const libdnf::ConfigMain & cfg_main);
     /// Resolve clean_requirements_on_remove value and store the result as the value used.
     ///
     /// @return Resolved value.
-    /// @exception libdnf::LogicError When a different value already stored or when invalid value
+    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
     bool resolve_clean_requirements_on_remove();
 
