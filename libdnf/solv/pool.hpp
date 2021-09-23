@@ -25,7 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
 
-#include <cassert>
 #include <climits>
 #include <memory>
 
@@ -174,16 +173,18 @@ public:
         return split_evr(get_evr(id)).e_def();
     }
 
-    unsigned long get_epoch_num(Id id) const noexcept {
+    unsigned long get_epoch_num(Id id) const {
         const auto evr = split_evr(get_evr(id));
-        char * endptr;
         if (evr.e) {
-            auto converted = std::strtol(evr.e, &endptr, 10);
-            // TODO(lukash) don't do C asserts?
-            assert(converted > 0);
-            assert(converted < LONG_MAX);
-            assert(*endptr == '\0');
-            return static_cast<unsigned long>(converted);
+            char * endptr;
+            unsigned long converted = std::strtoul(evr.e, &endptr, 10);
+
+            if (converted == ULONG_MAX || *endptr != '\0') {
+                // TODO(lukash) throw proper exception class
+                throw RuntimeError(fmt::format("Failed to convert epoch \"{}\" to number", evr.e));
+            }
+
+            return converted;
         }
         return 0;
     }

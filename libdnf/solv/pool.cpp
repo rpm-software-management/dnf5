@@ -52,11 +52,16 @@ TempEvr::TempEvr(const Pool & pool, const char * evr) {
         *e = '\0';
         v = e + 1;
         e = split_evr;
-        for (r = v + 1; *r != '-'; ++r) {
-            assert(*r);
+
+        r = v + 1;
+        while (*r != '-' && *r != '\0') {
+            ++r;
         }
-        *r = '\0';
-        r++;
+
+        if (*r != '\0') {
+            *r = '\0';
+            ++r;
+        }
     }
 }
 
