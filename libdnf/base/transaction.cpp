@@ -388,56 +388,11 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     rpm::PackageQuery installed_installonly_query(installonly_query);
     installed_installonly_query.filter_installed();
 
-    // std::map<obsoleted, obsoleted_by>
+    // std::map<replaced, replaced_by>
     std::map<Id, std::vector<Id>> replaced;
 
-    auto list_downgrades = solved_goal.list_downgrades();
-    for (auto index = 0; index < list_downgrades.size(); ++index) {
-        Id id = list_downgrades[index];
-        auto obs = solved_goal.list_obsoleted_by_package(id);
-        if (obs.empty()) {
-            throw RuntimeError("No obsoletes for downgrade");
-        }
-        rpm::Package new_package(base, rpm::PackageId(id));
-        auto reason = new_package.get_reason();
-        TransactionPackage tspkg(new_package, TransactionPackage::Action::DOWNGRADE, reason);
-        for (auto replaced_id : obs) {
-            rpm::Package replaced_pkg(base, rpm::PackageId(replaced_id));
-            auto obs_reson = replaced_pkg.get_reason();
-            if (obs_reson > reason) {
-                reason = obs_reson;
-            }
-            tspkg.replaces.emplace_back(std::move(replaced_pkg));
-            replaced[replaced_id].push_back(id);
-        }
-        tspkg.set_reason(reason);
-        packages.emplace_back(std::move(tspkg));
-    }
-    auto list_reinstalls = solved_goal.list_reinstalls();
-    for (auto index = 0; index < list_reinstalls.size(); ++index) {
-        Id id = list_reinstalls[index];
-        auto obs = solved_goal.list_obsoleted_by_package(id);
-        if (obs.empty()) {
-            throw RuntimeError("No obsoletes for reinstall");
-        }
-        rpm::Package new_package(base, rpm::PackageId(id));
-        auto reason = new_package.get_reason();
-        TransactionPackage tspkg(new_package, TransactionPackage::Action::REINSTALL, reason);
-        for (auto replaced_id : obs) {
-            rpm::Package obsoleted(base, rpm::PackageId(replaced_id));
-            auto obs_reson = obsoleted.get_reason();
-            if (obs_reson > reason) {
-                reason = obs_reson;
-            }
-            tspkg.replaces.emplace_back(std::move(obsoleted));
-            replaced[replaced_id].push_back(id);
-        }
-        tspkg.set_reason(reason);
-        packages.emplace_back(std::move(tspkg));
-    }
-    auto list_installs = solved_goal.list_installs();
-    for (auto index = 0; index < list_installs.size(); ++index) {
-        Id id = list_installs[index];
+    for (auto id : solved_goal.list_installs()) {
+        // TODO(lukash) use make_transaction_package(), the installonly query makes it awkward
         auto obs = solved_goal.list_obsoleted_by_package(id);
         auto reason = solved_goal.get_reason(id);
 
@@ -465,41 +420,43 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         tspkg.set_reason(reason);
         packages.emplace_back(std::move(tspkg));
     }
-    auto list_upgrades = solved_goal.list_upgrades();
-    for (auto index = 0; index < list_upgrades.size(); ++index) {
-        Id id = list_upgrades[index];
-        auto obs = solved_goal.list_obsoleted_by_package(id);
-        if (obs.empty()) {
-            throw RuntimeError("No obsoletes for reinstall");
-        }
-        rpm::Package new_package(base, rpm::PackageId(id));
-        auto reason = new_package.get_reason();
-        TransactionPackage tspkg(new_package, TransactionPackage::Action::UPGRADE, reason);
-        for (auto replaced_id : obs) {
-            rpm::Package obsoleted(base, rpm::PackageId(replaced_id));
-            auto obs_reson = obsoleted.get_reason();
-            if (obs_reson > reason) {
-                reason = obs_reson;
-            }
-            tspkg.replaces.emplace_back(std::move(obsoleted));
-            replaced[replaced_id].push_back(id);
-        }
-        tspkg.set_reason(reason);
-        packages.emplace_back(std::move(tspkg));
+
+    for (auto id : solved_goal.list_reinstalls()) {
+        packages.emplace_back(make_transaction_package(
+            id,
+            TransactionPackage::Action::REINSTALL,
+            solved_goal,
+            replaced));
     }
+
+    for (auto id : solved_goal.list_upgrades()) {
+        packages.emplace_back(make_transaction_package(
+            id,
+            TransactionPackage::Action::UPGRADE,
+            solved_goal,
+            replaced));
+    }
+
+    for (auto id : solved_goal.list_downgrades()) {
+        packages.emplace_back(make_transaction_package(
+            id,
+            TransactionPackage::Action::DOWNGRADE,
+            solved_goal,
+            replaced));
+    }
+
     auto list_removes = solved_goal.list_removes();
     if (!list_removes.empty()) {
         rpm::PackageQuery remaining_installed(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
         remaining_installed.filter_installed();
-        for (auto index = 0; index < list_removes.size(); ++index) {
-            remaining_installed.p_impl->remove(list_removes[index]);
+        for (auto id : list_removes) {
+            remaining_installed.p_impl->remove(id);
         }
         rpm::PackageSet tmp_set(base);
 
         // https://bugzilla.redhat.com/show_bug.cgi?id=1921063
         // To keep a reason of installonly pkgs in DB for remove step it requires TSI with reason change
-        for (auto index = 0; index < list_removes.size(); ++index) {
-            Id id = list_removes[index];
+        for (auto id : list_removes) {
             rpm::Package rm_package(base, rpm::PackageId(id));
             tmp_set.add(rm_package);
             rpm::PackageQuery remaining_na(remaining_installed);
@@ -518,9 +475,9 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     }
 
     // Add replaced packages to transaction
-    for (const auto & [replaced_id, replaced_by_ids] : replaced ) {
-        rpm::Package obsoleted(base, rpm::PackageId( replaced_id ));
-        auto reason = solved_goal.get_reason( replaced_id );
+    for (const auto & [replaced_id, replaced_by_ids] : replaced) {
+        rpm::Package obsoleted(base, rpm::PackageId(replaced_id));
+        auto reason = solved_goal.get_reason(replaced_id);
         TransactionPackage tspkg(obsoleted, TransactionPackage::Action::REPLACED, reason);
         for (auto id : replaced_by_ids) {
             tspkg.replaced_by.emplace_back(rpm::Package(base, rpm::PackageId(id)));
@@ -528,6 +485,37 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         packages.emplace_back(std::move(tspkg));
     }
 }
+
+
+TransactionPackage Transaction::Impl::make_transaction_package(
+    Id id,
+    TransactionPackage::Action action,
+    rpm::solv::GoalPrivate & solved_goal,
+    std::map<Id, std::vector<Id>> & replaced) {
+    auto obs = solved_goal.list_obsoleted_by_package(id);
+
+    if (obs.empty()) {
+        throw LogicError("No obsoletes for " + TransactionItemAction_get_name(action));
+    }
+
+    rpm::Package new_package(base, rpm::PackageId(id));
+    auto reason = new_package.get_reason();
+    TransactionPackage tspkg(new_package, action, reason);
+
+    for (auto replaced_id : obs) {
+        rpm::Package replaced_pkg(base, rpm::PackageId(replaced_id));
+        auto old_reson = replaced_pkg.get_reason();
+        if (old_reson > reason) {
+            reason = old_reson;
+        }
+        tspkg.replaces.emplace_back(std::move(replaced_pkg));
+        replaced[replaced_id].push_back(id);
+    }
+    tspkg.set_reason(reason);
+
+    return tspkg;
+}
+
 
 void Transaction::Impl::set_solver_problems(rpm::solv::GoalPrivate & solved_goal) {
     auto & pool = get_pool(base);

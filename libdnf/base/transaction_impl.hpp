@@ -44,6 +44,12 @@ public:
 
     void set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems);
 
+    TransactionPackage make_transaction_package(
+        Id id,
+        TransactionPackage::Action action,
+        rpm::solv::GoalPrivate & solved_goal,
+        std::map<Id, std::vector<Id>> & replaced);
+
     void set_solver_problems(rpm::solv::GoalPrivate & solved_goal);
 
     GoalProblem report_not_found(
