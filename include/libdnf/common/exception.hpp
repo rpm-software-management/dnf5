@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 
 #include <stdexcept>
+#include <functional>
 
 #define LIBDNF_LOCATION { __FILE__, __LINE__, __PRETTY_FUNCTION__ }
 
@@ -85,67 +86,93 @@ private:
     mutable std::string str_what;
 };
 
-/// Base class of libdnf exceptions. Each exception define at least domain_name, name, and description.
-/// These information can be used to serialize exception into a string.
-class Exception : public std::runtime_error {
+
+/// Base class for libdnf exceptions. Virtual methods `get_name()` and
+/// `get_domain_name()` should always return the exception's class name and its
+/// namespace (including enclosing class names in case the exception is nested in
+/// other classes) respectively.
+class Error : public std::runtime_error {
 public:
-    using runtime_error::runtime_error;
+    /// A constructor that supports formatting the error message.
+    ///
+    /// @param format The format string for the message.
+    /// @param args The format arguments.
+    template<typename... Ss>
+    Error(const std::string & format, Ss&&... args)
+        : std::runtime_error(format),
+        // stores the format args in the lambda's closure
+        formatter([args...](const char * format) {
+            return fmt::format(format, args...);
+        }) {}
 
-    /// Returns domain name (namespace) of the exception as text.
-    virtual const char * get_domain_name() const noexcept { return "libdnf"; }
+    Error(const Error & e) noexcept;
+    Error & operator=(const Error & e) noexcept;
 
-    /// Returns exception class name as text.
-    virtual const char * get_name() const noexcept { return "Exception"; }
-
-    /// Returns exception class description.
-    virtual const char * get_description() const noexcept { return "General libdnf exception"; }
-
-    /// Returns the original unformatted message passed to the exception.
-    const char * get_message() const noexcept { return runtime_error::what(); }
-
-    /// Returns explanatory message. All informations formatted to string.
     const char * what() const noexcept override;
 
+    /// @return The exception class name.
+    virtual const char * get_name() const noexcept { return "Error"; }
+
+    /// @return The domain name (namespace and enclosing class names) of the exception.
+    virtual const char * get_domain_name() const noexcept { return "libdnf"; }
 protected:
-    mutable std::string str_what;
+    mutable std::string message;
+    std::function<std::string(const char * format)> formatter;
 };
 
-class RuntimeError : public Exception {
-public:
-    using Exception::Exception;
-    const char * get_name() const noexcept override { return "RuntimeError"; }
-    const char * get_description() const noexcept override { return "General RuntimeError exception"; }
-};
 
-/// Wraps the error code originated from the operating system.
-class SystemError : public RuntimeError {
+/// An exception class for system errors represented by the `errno` error code.
+class SystemError : public Error {
 public:
-    SystemError(int error_code, const std::string & what);
-    SystemError(int error_code, const char * what);
-    const char * get_domain_name() const noexcept override { return "SystemError"; }
-    const char * get_name() const noexcept override { return name; }
-    const char * get_description() const noexcept override;
+    /// Constructs the error from the `errno` error code and generates the
+    /// message from the system error description.
+    ///
+    /// @param error_code The `errno` of the error.
+    SystemError(int error_code)
+        : Error("({}) - {}", error_code, std::system_category().default_error_condition(error_code).message()),
+          error_code(error_code) {}
 
-    /// Returns original error code
+    /// Constructs the error from the `errno` error code and a formatted message.
+    /// The formatted message is prepended to the generated system error message.
+    ///
+    /// @param error_code The `errno` of the error.
+    /// @param format The format string for the message.
+    /// @param args The format arguments.
+    template<typename... Ss>
+    SystemError(int error_code, const std::string & format, Ss&&... args)
+        : Error(
+            "{}: ({}) - {}",
+            fmt::format(format, std::forward<Ss>(args)...),
+            error_code,
+            std::system_category().default_error_condition(error_code).message()),
+          error_code(error_code) {}
+
+    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_name() const noexcept override { return "SystemError"; }
+
+    /// @return The error code (`errno`) of the error.
     int get_error_code() const noexcept { return error_code; }
 
+    /// @return The system error message associated with the error code.
+    std::string get_error_message() const;
+
 private:
-    static constexpr const char * NAME_PREFIX = "Errno_";
-    static constexpr std::size_t NAME_PREFIX_LEN = std::char_traits<char>::length(NAME_PREFIX);
     int error_code;
-    char name[NAME_PREFIX_LEN + 10];
-    mutable std::string description;
 };
 
-class InvalidPointer : public Exception {
+
+// TODO(lukash) This class is used throughout the code where more specific exceptions should be thrown.
+// Kept as a reminder to replace all those with the correct exception classes.
+class RuntimeError : public Error {
 public:
-    using Exception::Exception;
-    const char * get_name() const noexcept override { return "InvalidPointer"; }
-    const char * get_description() const noexcept override { return "Invalid pointer"; }
+    using Error::Error;
+    const char * get_name() const noexcept override { return "RuntimeError"; }
+    virtual const char * get_description() const noexcept { return "General RuntimeError exception"; }
 };
 
-/// Formats the explanatory string of an exception.
-/// If the exception is nested, recurses to format the explanatory of the exception it holds.
+
+/// Formats the error message of an exception.
+/// If the exception is nested, recurses to format the message of the exception it holds.
 std::string format(const std::exception & e, std::size_t level = 0);
 
 }  // namespace libdnf

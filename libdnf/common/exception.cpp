@@ -35,6 +35,7 @@ AssertionError::AssertionError(
       condition(assertion),
       location(location) {}
 
+
 const char * AssertionError::what() const noexcept {
     try {
         str_what = location.file_name + std::string(":") + std::to_string(location.source_line) + ": " + location.function_name;
@@ -50,39 +51,11 @@ const char * AssertionError::what() const noexcept {
     }
 }
 
-const char * Exception::what() const noexcept {
-    try {
-        str_what = std::string(get_domain_name()) + "::" + get_name() + ": " + get_description();
 
-        // related data, eg file name
-        const char * what = runtime_error::what();
-        if (what && what[0] != '\0') {
-            str_what += ": ";
-            str_what += what;
-        }
-
-        return str_what.c_str();
-    } catch (...) {
-        return runtime_error::what();
-    }
+std::string SystemError::get_error_message() const {
+    return std::system_category().default_error_condition(error_code).message();
 }
 
-SystemError::SystemError(int error_code, const std::string & what) : SystemError(error_code, what.c_str()) {}
-
-SystemError::SystemError(int error_code, const char * what) : RuntimeError(what), error_code{error_code} {
-    char * it = std::copy_n(NAME_PREFIX, NAME_PREFIX_LEN, name);
-    auto res = std::to_chars(it, name + sizeof(name) - 1, get_error_code());
-    *res.ptr = '\0';
-}
-
-const char * SystemError::get_description() const noexcept {
-    try {
-        description = std::system_category().default_error_condition(error_code).message();
-    } catch (...) {
-        return "Unknown error";
-    }
-    return description.c_str();
-}
 
 std::string format(const std::exception & e, std::size_t level) {
     std::string ret(std::string(level, ' ') + e.what() + '\n');
@@ -94,6 +67,40 @@ std::string format(const std::exception & e, std::size_t level) {
     }
 
     return ret;
+}
+
+
+Error::Error(const Error & e) noexcept : std::runtime_error(e) {
+    operator=(e);
+}
+
+
+Error & Error::operator=(const Error & e) noexcept {
+    this->std::runtime_error::operator=(e);
+
+    try {
+        message = e.message;
+        formatter = e.formatter;
+    } catch (...) {}
+
+    return *this;
+}
+
+
+const char * Error::what() const noexcept {
+    if (!formatter) {
+        // formatter not set means copy constructor or assigment operator failed
+        return std::runtime_error::what();
+    }
+
+    try {
+        if (message.empty()) {
+            message = formatter(std::runtime_error::what());
+        }
+        return message.c_str();
+    } catch (...) {
+        return std::runtime_error::what();
+    }
 }
 
 }  // namespace libdnf

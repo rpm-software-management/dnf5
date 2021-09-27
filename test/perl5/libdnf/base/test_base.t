@@ -59,8 +59,8 @@ use libdnf::base;
     $base = 0;
 
     # Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
-    throws_ok( sub { $vars->get_value('test_variable') }, '/InvalidPtr/', 'detected');
-    throws_ok( sub { $vars2->get_value('test_variable') }, '/InvalidPtr/', 'detected');
+    throws_ok( sub { $vars->get_value('test_variable') }, '/Dereferencing an invalidated WeakPtr/', 'detected');
+    throws_ok( sub { $vars2->get_value('test_variable') }, '/Dereferencing an invalidated WeakPtr/', 'detected');
 }
 
 done_testing()

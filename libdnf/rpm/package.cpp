@@ -330,7 +330,7 @@ Package::Package(const BaseWeakPtr & base, unsigned long long rpmdbid) : base(ba
         }
     }
 
-    throw Exception("Package with rpmdbid was not found");
+    throw RuntimeError("Package with rpmdbid was not found");
 }
 
 }  // namespace libdnf::rpm

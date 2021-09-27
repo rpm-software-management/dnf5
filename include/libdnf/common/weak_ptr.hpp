@@ -87,6 +87,15 @@ private:
 };
 
 
+/// Exception generated when the managed object is not valid.
+class InvalidPointerError : public Error {
+public:
+    InvalidPointerError() : Error("Dereferencing an invalidated WeakPtr") {}
+    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_name() const noexcept override { return "InvalidPointerError"; }
+};
+
+
 /// WeakPtr is a "smart" pointer. It contains a pointer to resource and to guard of resource.
 /// WeakPtr pointer can be owner of the resource. However, the resource itself may depend on another resource.
 /// WeakPtr registers/unregisters itself at the guard of resource. And the resource guard invalidates
@@ -98,21 +107,10 @@ struct WeakPtr {
 public:
     using TWeakPtrGuard = WeakPtrGuard<TPtr, ptr_owner>;
 
-    /// Exception generated when the managed object is not valid.
-    class InvalidPtr : public InvalidPointer {
-    public:
-        using InvalidPointer::InvalidPointer;
-        const char * get_domain_name() const noexcept override { return "libdnf::WeakPtr"; }
-        const char * get_name() const noexcept override { return "InvalidPtr"; }
-        const char * get_description() const noexcept override { return "Invalid pointer"; }
-    };
-
     WeakPtr() : ptr(nullptr), guard(nullptr) { }
 
     WeakPtr(TPtr * ptr, TWeakPtrGuard * guard) : ptr(ptr), guard(guard) {
-        if (ptr && !guard) {
-            throw InvalidPtr("Creating a non-null WeakPtr without a guard is not allowed");
-        }
+        libdnf_assert(guard != nullptr, "When initializing WeakPtr with a pointer, guard cannot be nullptr");
         guard->register_ptr(this);
     }
 
@@ -245,7 +243,7 @@ private:
     void invalidate_guard() noexcept { guard = nullptr; }
     void check() const {
         if (!is_valid()) {
-            throw InvalidPtr("Data guard is invalid");
+            throw InvalidPointerError();  // TODO(lukash) should this be an AssertionError too?
         }
     }
 

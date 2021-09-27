@@ -16,7 +16,7 @@
 %exception {
     try {
         $action
-    } catch (const libdnf::InvalidPointer & e) {
+    } catch (const libdnf::InvalidPointerError & e) {
         SWIG_exception(SWIG_NullReferenceError, e.what());
     } catch (const libdnf::RuntimeError & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
@@ -27,6 +27,7 @@
     #include "libdnf/conf/option_child.hpp"
     #include "libdnf/conf/config_main.hpp"
     #include "libdnf/conf/config_parser.hpp"
+    #include "libdnf/common/weak_ptr.hpp"
 %}
 
 #define CV __perl_CV

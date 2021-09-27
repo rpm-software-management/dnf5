@@ -35,11 +35,20 @@ namespace libdnf::utils {
 
 class SQLite3 {
 public:
-    class Error : public libdnf::Exception {
+    class Error : public libdnf::Error {
     public:
-        explicit Error(const SQLite3 & s, int code, const std::string & msg)
-            : libdnf::Exception("SQLite error on \"" + s.get_path() + "\": " + msg + ": " + s.get_error())
-            , ecode{code} {}
+        using libdnf::Error::Error;
+        const char * get_domain_name() const noexcept override { return "libdnf::utils::SQLite3"; }
+        const char * get_name() const noexcept override { return "Error"; }
+    };
+
+    class SQLError : public Error {
+    public:
+        explicit SQLError(const SQLite3 & s, int code, const std::string & msg)
+            : Error("SQLite error on \"{}\": {}: {}", s.get_path(), msg, s.get_error()),
+              ecode{code} {}
+        const char * get_domain_name() const noexcept override { return "libdnf::utils::SQLite3"; }
+        const char * get_name() const noexcept override { return "SQLError"; }
 
         int code() const noexcept { return ecode; }
         const char * code_str() const noexcept { return sqlite3_errstr(ecode); }
@@ -56,13 +65,15 @@ public:
     class Statement {
     public:
         /// An error class that will log the SQL statement in its constructor.
-        class Error : public SQLite3::Error {
+        class SQLError : public SQLite3::SQLError {
         public:
-            Error(Statement & stmt, int code, const std::string & msg) : SQLite3::Error(stmt.db, code, msg) {
+            SQLError(Statement & stmt, int code, const std::string & msg) : SQLite3::SQLError(stmt.db, code, msg) {
                 // TODO(dmach): replace with a new logger
                 // auto logger(libdnf::Log::getLogger());
                 // logger->debug(std::string("SQL statement being executed: ") + stmt.getExpandedSql());
             }
+            const char * get_domain_name() const noexcept override { return "libdnf::utils::SQLite3::Statement"; }
+            const char * get_name() const noexcept override { return "SQLError"; }
         };
 
         enum class StepResult { DONE, ROW, BUSY };
@@ -73,25 +84,25 @@ public:
         Statement(SQLite3 & db, const char * sql) : db(db) {
             auto result = sqlite3_prepare_v2(db.db, sql, -1, &stmt, nullptr);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Statement failed");
+                throw SQLError(*this, result, "Statement failed");
         };
 
         Statement(SQLite3 & db, const std::string & sql) : db(db) {
             auto result = sqlite3_prepare_v2(db.db, sql.c_str(), static_cast<int>(sql.length()) + 1, &stmt, nullptr);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Statement failed");
+                throw SQLError(*this, result, "Statement failed");
         };
 
         void bind(int pos, int val) {
             auto result = sqlite3_bind_int(stmt, pos, val);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Integer bind failed");
+                throw SQLError(*this, result, "Integer bind failed");
         }
 
         void bind(int pos, std::int64_t val) {
             auto result = sqlite3_bind_int64(stmt, pos, val);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Integer64 bind failed");
+                throw SQLError(*this, result, "Integer64 bind failed");
         }
 
         void bind(int pos, std::uint32_t val) {
@@ -100,43 +111,43 @@ public:
             // signed INTEGER type in the DB
             auto result = sqlite3_bind_int64(stmt, pos, static_cast<int64_t>(val));
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Unsigned integer bind failed");
+                throw SQLError(*this, result, "Unsigned integer bind failed");
         }
 
         void bind(int pos, double val) {
             auto result = sqlite3_bind_double(stmt, pos, val);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Double bind failed");
+                throw SQLError(*this, result, "Double bind failed");
         }
 
         void bind(int pos, bool val) {
             auto result = sqlite3_bind_int(stmt, pos, val ? 1 : 0);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Bool bind failed");
+                throw SQLError(*this, result, "Bool bind failed");
         }
 
         void bind(int pos, const char * val) {
             auto result = sqlite3_bind_text(stmt, pos, val, -1, SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Text bind failed");
+                throw SQLError(*this, result, "Text bind failed");
         }
 
         void bind(int pos, const std::string & val) {
             auto result = sqlite3_bind_text(stmt, pos, val.c_str(), -1, SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Text bind failed");
+                throw SQLError(*this, result, "Text bind failed");
         }
 
         void bind(int pos, const Blob & val) {
             auto result = sqlite3_bind_blob(stmt, pos, val.data, static_cast<int>(val.size), SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Blob bind failed");
+                throw SQLError(*this, result, "Blob bind failed");
         }
 
         void bind(int pos, const std::vector<unsigned char> & val) {
             auto result = sqlite3_bind_blob(stmt, pos, val.data(), static_cast<int>(val.size()), SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
-                throw Error(*this, result, "Blob bind failed");
+                throw SQLError(*this, result, "Blob bind failed");
         }
 
         template <typename... Args>
@@ -157,7 +168,7 @@ public:
                 case SQLITE_BUSY:
                     return StepResult::BUSY;
                 default:
-                    throw Error(*this, result, "Reading a row failed");
+                    throw SQLError(*this, result, "Reading a row failed");
             }
         }
 
@@ -180,9 +191,7 @@ public:
 #else
             expanded_sql = sqlite3_expanded_sql(stmt);
             if (!expanded_sql) {
-                throw libdnf::Exception(
-                    "get_expanded_sql(): insufficient memory or result "
-                    "exceed the maximum SQLite3 string length");
+                throw Error("Insufficient memory or result exceed maximum SQLite3 string length");
             }
             return expanded_sql;
 #endif
@@ -261,7 +270,7 @@ public:
         int get_column_index(const std::string & col_name) {
             auto it = cols_name_to_index.find(col_name);
             if (it == cols_name_to_index.end())
-                throw libdnf::Exception("get() column \"" + col_name + "\" not found");
+                throw Error("Column \"{}\" not found", col_name);
             return it->second;
         }
 
@@ -300,7 +309,7 @@ public:
     void exec(const char * sql) {
         auto result = sqlite3_exec(db, sql, nullptr, nullptr, nullptr);
         if (result != SQLITE_OK) {
-            throw Error(*this, result, "Executing an SQL statement failed");
+            throw SQLError(*this, result, "Executing an SQL statement failed");
         }
     }
 

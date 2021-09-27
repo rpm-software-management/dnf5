@@ -48,7 +48,7 @@ class TestBase(unittest.TestCase):
         base = None
 
         # Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
-        with self.assertRaisesRegex(RuntimeError, '.*InvalidPtr.*'):
+        with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
             vars.get_value("test_variable")
-        with self.assertRaisesRegex(RuntimeError, '.*InvalidPtr.*'):
+        with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
             vars2.get_value("test_variable")

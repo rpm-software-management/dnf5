@@ -18,7 +18,7 @@
 %exception {
     try {
         $action
-    } catch (const libdnf::InvalidPointer & e) {
+    } catch (const libdnf::InvalidPointerError & e) {
         SWIG_exception(SWIG_NullReferenceError, e.what());
     } catch (const libdnf::RuntimeError & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());

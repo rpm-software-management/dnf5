@@ -29,7 +29,7 @@ void SQLite3::open() {
         auto result = sqlite3_open(path.c_str(), &db);
         if (result != SQLITE_OK) {
             sqlite3_close(db);
-            throw Error(*this, result, "Open failed");
+            throw SQLError(*this, result, "Open failed");
         }
 
         // the busy timeout must be set before executing *any* statements
@@ -66,7 +66,7 @@ void SQLite3::close() {
         result = sqlite3_close(db);
     }
     if (result != SQLITE_OK) {
-        throw Error(*this, result, "Close failed");
+        throw SQLError(*this, result, "Close failed");
     }
     db = nullptr;
 }
@@ -78,7 +78,7 @@ void SQLite3::backup(const std::string & output_file) {
     auto result = sqlite3_open(output_file.c_str(), &backup_db);
     if (result != SQLITE_OK) {
         sqlite3_close(backup_db);
-        throw Error(*this, result, "Failed to open backup database: \"" + output_file + "\"");
+        throw SQLError(*this, result, "Failed to open backup database: \"" + output_file + "\"");
     }
 
     sqlite3_backup * backup_handle = sqlite3_backup_init(backup_db, "main", db, "main");
@@ -93,7 +93,7 @@ void SQLite3::backup(const std::string & output_file) {
     sqlite3_close(backup_db);
 
     if (result != SQLITE_OK) {
-        throw Error(*this, result, "Database backup failed");
+        throw SQLError(*this, result, "Database backup failed");
     }
 }
 
@@ -104,7 +104,7 @@ void SQLite3::restore(const std::string & input_file) {
     auto result = sqlite3_open(input_file.c_str(), &backup_db);
     if (result != SQLITE_OK) {
         sqlite3_close(backup_db);
-        throw Error(*this, result, "Failed to open backup database: \"" + input_file + "\"");
+        throw SQLError(*this, result, "Failed to open backup database: \"" + input_file + "\"");
     }
 
     sqlite3_backup * backup_handle = sqlite3_backup_init(db, "main", backup_db, "main");
@@ -119,7 +119,7 @@ void SQLite3::restore(const std::string & input_file) {
     sqlite3_close(backup_db);
 
     if (result != SQLITE_OK) {
-        throw Error(*this, result, "Database restore failed");
+        throw SQLError(*this, result, "Database restore failed");
     }
 }
 
