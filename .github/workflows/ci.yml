@@ -94,6 +94,9 @@ jobs:
         # A workaround for an undeterministic "OCI not found" error, see
         # https://github.com/containers/podman/issues/10321
         - /var/lib/mycontainer:/var/lib/containers
+    strategy:
+      matrix:
+        extra-run-args: [--tags dnf5 --command microdnf5, --tags dnfdaemon --command dnfdaemon-client]
     steps:
       - name: Check out ci-dnf-stack
         uses: actions/checkout@v2
@@ -104,5 +107,5 @@ jobs:
         uses: ./.github/actions/integration-tests
         with:
           package-urls: ${{needs.copr-build.outputs.package-urls}}
-          extra-run-args: --tags dnf5 --command microdnf5
+          extra-run-args: ${{matrix.extra-run-args}}
           base-image: fedora:35
