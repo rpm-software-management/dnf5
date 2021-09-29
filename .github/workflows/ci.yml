@@ -82,6 +82,7 @@ jobs:
         with:
           copr-user: ${{steps.setup-ci.outputs.copr-user}}
           chroot: fedora-35-x86_64
+          overlay: dnf5-ci
 
   integration-tests:
     name: DNF Integration Tests
