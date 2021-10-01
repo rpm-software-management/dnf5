@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "key_value_table.hpp"
 
 #include "libdnf-cli/utils/tty.hpp"
+#include "libdnf/utils/string.hpp"
 
 
 #include <cstring>
@@ -29,15 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 namespace libdnf::cli::output {
-
-
-static std::string join(const std::vector<std::string> & str_list, const std::string & separator) {
-    return std::accumulate(
-        str_list.begin(), str_list.end(), std::string(),
-        [&](const std::string & a, const std::string & b) -> std::string {
-            return a + (a.length() > 0 ? separator : "") + b;
-        });
-}
 
 
 KeyValueTable::KeyValueTable() {
@@ -104,7 +96,7 @@ struct libscols_line * KeyValueTable::add_line(
     const char * color,
     struct libscols_line * parent
 ) {
-    return add_line(key, join(value, " "), color, parent);
+    return add_line(key, libdnf::utils::string::join(value, " "), color, parent);
 }
 
 
