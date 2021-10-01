@@ -89,32 +89,6 @@ RepolistCommand::RepolistCommand(Command & parent, const char * command)
     cmd.register_positional_arg(repos);
 }
 
-/// Joins vector of strings to a single string using given separator
-/// ["a", "b", "c"] -> "a b c"
-std::string join(const std::vector<std::string> & str_list, const std::string & separator) {
-    return std::accumulate(
-        str_list.begin(),
-        str_list.end(),
-        std::string(),
-        [&](const std::string & a, const std::string & b) -> std::string {
-            return a + (a.length() > 0 ? separator : "") + b;
-        });
-}
-
-/// Joins vector of string pairs to a single string. Pairs are joined using
-/// field_separator, records using record_separator
-/// [("a", "1"), ("b", "2")] -> "a: 1, b: 2"
-std::string join_pairs(
-    const std::vector<std::pair<std::string, std::string>> & pair_list,
-    const std::string & field_separator,
-    const std::string & record_separator) {
-    std::vector<std::string> records{};
-    for (auto & pair : pair_list) {
-        records.emplace_back(pair.first + field_separator + pair.second);
-    }
-    return join(records, record_separator);
-}
-
 void RepolistCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
