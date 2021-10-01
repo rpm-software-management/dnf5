@@ -398,6 +398,9 @@ License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
+Recommends:     bash-completion
+BuildRequires:  bash-completion
+BuildRequires:  sed
 
 %description -n microdnf5
 Microdnf is a command-line package manager that automates the process of installing,
@@ -406,6 +409,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %files -n microdnf5
 %{_bindir}/microdnf5
+%dir %{_datadir}/bash-completion/
+%dir %{_datadir}/bash-completion/completions/
+%{_datadir}/bash-completion/completions/microdnf5
 %license COPYING.md
 %license gpl-2.0.txt
 %{_mandir}/man8/microdnf5.8.gz
@@ -466,6 +472,8 @@ mv $RPM_BUILD_ROOT/%{python3_sitearch}/libdnf $RPM_BUILD_ROOT/%{python3_sitearch
 # HACK: temporarily rename microdnf to ensure parallel installability with old microdnf
 mv $RPM_BUILD_ROOT/%{_bindir}/microdnf $RPM_BUILD_ROOT/%{_bindir}/microdnf5
 mv $RPM_BUILD_ROOT/%{_mandir}/man8/microdnf.8 $RPM_BUILD_ROOT/%{_mandir}/man8/microdnf5.8
+mv $RPM_BUILD_ROOT/%{_datadir}/bash-completion/completions/microdnf $RPM_BUILD_ROOT/%{_datadir}/bash-completion/completions/microdnf5
+sed -i 's/microdnf/microdnf5/g' $RPM_BUILD_ROOT/%{_datadir}/bash-completion/completions/microdnf5
 
 
 #find_lang {name}

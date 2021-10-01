@@ -14,3 +14,14 @@ add_executable(microdnf ${MICRODNF_SOURCES})
 
 target_link_libraries(microdnf PUBLIC libdnf libdnf-cli Threads::Threads)
 install(TARGETS microdnf RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+
+find_package(bash-completion)
+if(BASH_COMPLETION_FOUND)
+  message(STATUS "Using bash completion dir ${BASH_COMPLETION_COMPLETIONSDIR}")
+else()
+  set (BASH_COMPLETION_COMPLETIONSDIR "/etc/bash_completion.d")
+  message (STATUS "Using fallback bash completion dir ${BASH_COMPLETION_COMPLETIONSDIR}")
+endif()
+
+install(FILES bash-completion/microdnf DESTINATION ${BASH_COMPLETION_COMPLETIONSDIR})
