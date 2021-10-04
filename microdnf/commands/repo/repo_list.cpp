@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "repolist.hpp"
+#include "repo_list.hpp"
 
 #include "../../context.hpp"
 
@@ -32,7 +32,10 @@ namespace microdnf {
 using namespace libdnf::cli;
 
 
-RepolistCommand::RepolistCommand(Command & parent) : Command(parent, "repolist") {
+RepoListCommand::RepoListCommand(Command & parent) : RepoListCommand(parent, "list") {}
+
+
+RepoListCommand::RepoListCommand(Command & parent, const std::string & name) : Command(parent, name) {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
@@ -82,6 +85,7 @@ RepolistCommand::RepolistCommand(Command & parent) : Command(parent, "repolist")
     cmd.register_named_arg(disabled);
     cmd.register_positional_arg(repos);
 
+    /*
     auto repoinfo = parser.add_new_command("repoinfo");
     repoinfo->set_short_description("Print detais about defined repositories");
     repoinfo->set_parse_hook_func([this, &ctx](
@@ -101,10 +105,11 @@ RepolistCommand::RepolistCommand(Command & parent) : Command(parent, "repolist")
     repoinfo->register_positional_arg(repos);
 
     parser.get_root_command()->register_command(repoinfo);
+    */
 }
 
 
-void RepolistCommand::run() {
+void RepoListCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
     std::vector<std::string> patterns_to_show;

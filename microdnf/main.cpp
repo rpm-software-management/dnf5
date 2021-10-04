@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/aliases/autoremove.hpp"
 #include "commands/aliases/groupinfo.hpp"
 #include "commands/aliases/grouplist.hpp"
+#include "commands/aliases/repolist.hpp"
 #include "commands/aliases/upgrade_minimal.hpp"
 
 #include "commands/advisory/advisory.hpp"
@@ -33,7 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/module/module.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
-#include "commands/repolist/repolist.hpp"
+#include "commands/repo/repo.hpp"
 #include "commands/repoquery/repoquery.hpp"
 #include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
@@ -102,10 +103,10 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     register_subcommand(std::make_unique<GroupCommand>(*this), subcommands_group);
     register_subcommand(std::make_unique<ModuleCommand>(*this), subcommands_group);
     register_subcommand(std::make_unique<HistoryCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<RepoCommand>(*this), subcommands_group);
 
     register_subcommand(std::make_unique<AdvisoryCommand>(*this));
     register_subcommand(std::make_unique<DownloadCommand>(*this));
-    register_subcommand(std::make_unique<RepolistCommand>(*this));
 
     // aliases
     auto * aliases_group = session.get_argument_parser().add_new_group("aliases");
@@ -114,6 +115,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     register_subcommand(std::make_unique<AutoremoveAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<GroupinfoAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<GrouplistAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<RepolistAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<UpgradeMinimalAlias>(*this), aliases_group);
 
 }

@@ -18,33 +18,26 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef MICRODNF_COMMANDS_REPOLIST_REPOLIST_HPP
-#define MICRODNF_COMMANDS_REPOLIST_REPOLIST_HPP
+#ifndef MICRODNF_COMMANDS_ALIASES_REPOLIST_HPP
+#define MICRODNF_COMMANDS_ALIASES_REPOLIST_HPP
 
 
-#include <libdnf-cli/session.hpp>
-
-#include <libdnf/conf/option_enum.hpp>
-
-#include <memory>
-#include <vector>
+#include "../repo/repo_list.hpp"
 
 
 namespace microdnf {
 
 
-class RepolistCommand : public libdnf::cli::session::Command {
+class RepolistAlias : public RepoListCommand {
 public:
-    explicit RepolistCommand(Command & parent);
-    void run() override;
-
-private:
-    libdnf::OptionEnum<std::string> * enable_disable_option{nullptr};
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_show_options{nullptr};
+    explicit RepolistAlias(Command & parent) : RepoListCommand(parent, "repolist") {
+        auto & cmd = *get_argument_parser_command();
+        cmd.set_short_description("Alias to `repo list`");
+    }
 };
 
 
 }  // namespace microdnf
 
 
-#endif  // MICRODNF_COMMANDS_REPOLIST_REPOLIST_HPP
+#endif  // MICRODNF_COMMANDS_ALIASES_REPOLIST_HPP
