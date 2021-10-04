@@ -65,13 +65,13 @@ private:
 };
 
 
-// suppress "unused-parameter" warnings because TransactionCB is a virtual class
+// suppress "unused-parameter" warnings because TransactionCallbacks is a virtual class
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
 /// Base class for Transaction callbacks
 /// User implements Transaction callbacks by inheriting this class and overriding its methods.
-class TransactionCB {
+class TransactionCallbacks {
 public:
 
     /// Scriptlet type
@@ -90,7 +90,7 @@ public:
         TRIGGER_POST_UNINSTALL  // "%triggerpostun"
     };
 
-    virtual ~TransactionCB() = default;
+    virtual ~TransactionCallbacks() = default;
 
     virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
     virtual void install_start(const TransactionItem & item, uint64_t total) {}
@@ -292,7 +292,7 @@ public:
     rpm_tid_t get_id() const;
 
     // Set transaction notify callback.
-    void register_cb(TransactionCB * cb);
+    void register_cb(TransactionCallbacks * cb);
 
     /// Fill the RPM transaction from base::Transaction.
     /// @param transcation The base::Transaction object.

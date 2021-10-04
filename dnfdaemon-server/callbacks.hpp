@@ -92,7 +92,7 @@ private:
 };
 
 
-class DbusTransactionCB : public libdnf::rpm::TransactionCB, public DbusCallback {
+class DbusTransactionCB : public libdnf::rpm::TransactionCallbacks, public DbusCallback {
 public:
     explicit DbusTransactionCB(Session & session) : DbusCallback(session) {}
     virtual ~DbusTransactionCB() = default;
@@ -122,16 +122,16 @@ public:
     void script_start(
         const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        libdnf::rpm::TransactionCB::ScriptType type) override;
+        libdnf::rpm::TransactionCallbacks::ScriptType type) override;
     void script_stop(
         const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        libdnf::rpm::TransactionCB::ScriptType type,
+        libdnf::rpm::TransactionCallbacks::ScriptType type,
         uint64_t return_code) override;
     void script_error(
         const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        libdnf::rpm::TransactionCB::ScriptType type,
+        libdnf::rpm::TransactionCallbacks::ScriptType type,
         uint64_t return_code) override;
 
     void elem_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;

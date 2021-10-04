@@ -470,7 +470,7 @@ public:
     }
 
     // Set transaction notify callback.
-    void register_cb(TransactionCB * cb) { cb_info.cb = cb; }
+    void register_cb(TransactionCallbacks * cb) { cb_info.cb = cb; }
 
     /// Perform dependency resolution on the transaction set.
     /// Any problems found by rpmtsCheck() can be examined by retrieving the problem set with rpmtsProblems(),
@@ -544,7 +544,7 @@ private:
     friend class Transaction;
 
     struct CallbackInfo {
-        TransactionCB * cb;
+        TransactionCallbacks * cb;
         Impl * transaction;
     };
 
@@ -638,30 +638,30 @@ private:
         return 0;
     }
 
-    static TransactionCB::ScriptType rpm_tag_to_script_type(rpmTag_e tag) noexcept {
+    static TransactionCallbacks::ScriptType rpm_tag_to_script_type(rpmTag_e tag) noexcept {
         switch (tag) {
             case RPMTAG_PREIN:
-                return TransactionCB::ScriptType::PRE_INSTALL;
+                return TransactionCallbacks::ScriptType::PRE_INSTALL;
             case RPMTAG_POSTIN:
-                return TransactionCB::ScriptType::POST_INSTALL;
+                return TransactionCallbacks::ScriptType::POST_INSTALL;
             case RPMTAG_PREUN:
-                return TransactionCB::ScriptType::PRE_UNINSTALL;
+                return TransactionCallbacks::ScriptType::PRE_UNINSTALL;
             case RPMTAG_POSTUN:
-                return TransactionCB::ScriptType::POST_UNINSTALL;
+                return TransactionCallbacks::ScriptType::POST_UNINSTALL;
             case RPMTAG_PRETRANS:
-                return TransactionCB::ScriptType::PRE_TRANSACTION;
+                return TransactionCallbacks::ScriptType::PRE_TRANSACTION;
             case RPMTAG_POSTTRANS:
-                return TransactionCB::ScriptType::POST_TRANSACTION;
+                return TransactionCallbacks::ScriptType::POST_TRANSACTION;
             case RPMTAG_TRIGGERPREIN:
-                return TransactionCB::ScriptType::TRIGGER_PRE_INSTALL;
+                return TransactionCallbacks::ScriptType::TRIGGER_PRE_INSTALL;
             case RPMTAG_TRIGGERIN:
-                return TransactionCB::ScriptType::TRIGGER_INSTALL;
+                return TransactionCallbacks::ScriptType::TRIGGER_INSTALL;
             case RPMTAG_TRIGGERUN:
-                return TransactionCB::ScriptType::TRIGGER_UNINSTALL;
+                return TransactionCallbacks::ScriptType::TRIGGER_UNINSTALL;
             case RPMTAG_TRIGGERPOSTUN:
-                return TransactionCB::ScriptType::TRIGGER_POST_UNINSTALL;
+                return TransactionCallbacks::ScriptType::TRIGGER_POST_UNINSTALL;
             default:
-                return TransactionCB::ScriptType::UNKNOWN;
+                return TransactionCallbacks::ScriptType::UNKNOWN;
         }
     }
 
@@ -886,7 +886,7 @@ rpm_tid_t Transaction::get_id() const {
     return p_impl->get_id();
 }
 
-void Transaction::register_cb(TransactionCB * cb) {
+void Transaction::register_cb(TransactionCallbacks * cb) {
     p_impl->register_cb(cb);
 }
 

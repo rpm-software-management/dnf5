@@ -196,7 +196,7 @@ void DbusTransactionCB::install_stop(const libdnf::rpm::TransactionItem & item, 
 void DbusTransactionCB::script_start(
     const libdnf::rpm::TransactionItem * /*item*/,
     libdnf::rpm::Nevra nevra,
-    libdnf::rpm::TransactionCB::ScriptType type) {
+    libdnf::rpm::TransactionCallbacks::ScriptType type) {
     try {
         auto signal = create_signal_pkg(
             dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, to_full_nevra_string(nevra));
@@ -209,7 +209,7 @@ void DbusTransactionCB::script_start(
 void DbusTransactionCB::script_stop(
     const libdnf::rpm::TransactionItem * /*item*/,
     libdnf::rpm::Nevra nevra,
-    libdnf::rpm::TransactionCB::ScriptType type,
+    libdnf::rpm::TransactionCallbacks::ScriptType type,
     uint64_t return_code) {
     try {
         auto signal = create_signal_pkg(
@@ -237,7 +237,7 @@ void DbusTransactionCB::elem_progress(const libdnf::rpm::TransactionItem & item,
 void DbusTransactionCB::script_error(
     const libdnf::rpm::TransactionItem * /*item*/,
     libdnf::rpm::Nevra nevra,
-    libdnf::rpm::TransactionCB::ScriptType type,
+    libdnf::rpm::TransactionCallbacks::ScriptType type,
     uint64_t return_code) {
     try {
         auto signal = create_signal_pkg(

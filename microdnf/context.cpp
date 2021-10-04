@@ -564,7 +564,7 @@ void download_packages(libdnf::base::Transaction & transaction, const char * des
 
 namespace {
 
-class RpmTransCB : public libdnf::rpm::TransactionCB {
+class RpmTransCB : public libdnf::rpm::TransactionCallbacks {
 public:
     static const char * script_type_to_string(ScriptType type) noexcept {
         switch (type) {
@@ -712,7 +712,7 @@ public:
     void script_error(
         [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        libdnf::rpm::TransactionCB::ScriptType type,
+        libdnf::rpm::TransactionCallbacks::ScriptType type,
         uint64_t return_code) override {
         active_progress_bar->add_message(
             libdnf::cli::progressbar::MessageType::ERROR,
@@ -727,7 +727,7 @@ public:
     void script_start(
         [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        libdnf::rpm::TransactionCB::ScriptType type) override {
+        libdnf::rpm::TransactionCallbacks::ScriptType type) override {
         active_progress_bar->add_message(
             libdnf::cli::progressbar::MessageType::INFO,
             fmt::format("Running {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
@@ -737,7 +737,7 @@ public:
     void script_stop(
         [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        libdnf::rpm::TransactionCB::ScriptType type,
+        libdnf::rpm::TransactionCallbacks::ScriptType type,
         [[maybe_unused]] uint64_t return_code) override {
         active_progress_bar->add_message(
             libdnf::cli::progressbar::MessageType::INFO,
