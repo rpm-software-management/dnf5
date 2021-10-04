@@ -32,12 +32,12 @@ namespace libdnf::cli::output {
 class RepoInfo : public KeyValueTable {
 public:
     template <typename Repo>
-    void add_repo(const Repo & repo, bool verbose = false, bool show_sack_data = false);
+    void add_repo(Repo & repo, bool verbose = false, bool show_sack_data = false);
 };
 
 
 template <typename Repo>
-void RepoInfo::add_repo(const Repo & repo, bool verbose, bool show_sack_data) {
+void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
     add_line("Repo ID", repo.get_id(), "bold");
     add_line("Name", repo.get_name());
 
