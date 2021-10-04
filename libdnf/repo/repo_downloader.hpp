@@ -54,19 +54,21 @@ struct default_delete<LrResult> {
 
 namespace libdnf::repo {
 
-class LrException : public RuntimeError {
+class LibrepoError : public Error {
 public:
-    LrException(int code, const char * msg) : RuntimeError(msg), code(code) {}
-    LrException(int code, const std::string & msg) : RuntimeError(msg), code(code) {}
-    const char * get_domain_name() const noexcept override { return "librepo"; }
-    const char * get_name() const noexcept override { return "LrException"; }
-    const char * get_description() const noexcept override { return "Librepo exception"; }
+    LibrepoError(std::unique_ptr<GError> && lr_error);
+    const char * get_domain_name() const noexcept override { return "libdnf::repo"; }
+    const char * get_name() const noexcept override { return "LibrepoError"; }
     int get_code() const noexcept { return code; }
 
 private:
     int code;
 };
 
+
+/// Handles downloading and loading of repository metadata.
+/// @exception RepoDownloadError (public) All public methods should throw this exception,
+///                                       under which a lower-level exception can often be nested.
 class RepoDownloader {
 public:
     // TODO(lukash) deduplicate with Repo::impl
@@ -85,17 +87,16 @@ public:
 
     ~RepoDownloader();
 
+    void download_metadata(const std::string & destdir);
     bool is_metalink_in_sync();
     bool is_repomd_in_sync();
-    void download_metadata(const std::string & destdir);
     void load_local();
 
-    void download_url(const char * url, int fd);
     LrHandle * get_cached_handle();
 
-    std::vector<std::string> get_mirrors() const { return mirrors; }
+    std::vector<std::string> get_mirrors() const noexcept { return mirrors; }
 
-    std::string get_repomd_filename() const { return repomd_filename; }
+    std::string get_repomd_filename() const noexcept { return repomd_filename; }
     std::string get_revision() const;
     int get_max_timestamp() const;
     std::map<std::string, std::string> get_metadata_paths() const;
@@ -103,7 +104,7 @@ public:
     std::vector<std::pair<std::string, std::string>> get_distro_tags() const;
     std::vector<std::pair<std::string, std::string>> get_metadata_locations() const;
 
-    void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks);
+    void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks) noexcept;
 
 private:
     friend class Repo;
@@ -115,6 +116,10 @@ private:
     void apply_http_headers(std::unique_ptr<LrHandle> & handle);
 
     std::unique_ptr<LrResult> perform(LrHandle * handle, const std::string & dest_directory, bool set_gpg_home_dir);
+
+    void download_url(const char * url, int fd);
+
+    std::pair<std::string, std::string> get_source_info() const;
 
     void import_repo_keys();
 

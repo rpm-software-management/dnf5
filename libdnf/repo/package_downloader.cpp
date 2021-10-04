@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/package_downloader.hpp"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/repo/repo_downloader.hpp"
 #include "libdnf/repo/repo_impl.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
@@ -117,7 +118,7 @@ void PackageDownloader::add(
 }
 
 
-void PackageDownloader::download(bool fail_fast, bool resume) {
+void PackageDownloader::download(bool fail_fast, bool resume) try {
     GError * err{nullptr};
     GSList * list{nullptr};
     std::vector<std::unique_ptr<LrPackageTarget>> lr_targets;
@@ -143,9 +144,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) {
             &err);
 
         if (lr_target == nullptr) {
-            // TODO(lukash) the error needs more description of what failed and throw proper exception class
-            std::unique_ptr<GError> err_guard(err);
-            throw LrException(err->code, err->message);
+            throw LibrepoError(std::unique_ptr<GError>(err));
         }
 
         lr_targets.emplace_back(lr_target);
@@ -160,9 +159,10 @@ void PackageDownloader::download(bool fail_fast, bool resume) {
     }
 
     if (!lr_download_packages(list, flags, &err)) {
-        std::unique_ptr<GError> err_guard(err);
-        throw LrException(err->code, err->message);
+        throw LibrepoError(std::unique_ptr<GError>(err));
     }
+} catch (const std::runtime_error & e) {
+    throw_with_nested(PackageDownloadError(_("Failed to download packages")));
 }
 
 }  // namespace libdnf::repo

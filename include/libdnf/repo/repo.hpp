@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/repo/repo_errors.hpp"
 
 #include <memory>
 
@@ -293,7 +294,9 @@ public:
 
     /// Downloads file from URL into given opened file descriptor.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.downloadUrl(const char * url, int fd)
-    void download_url(const char * url, int fd);
+    /// TODO(lukash) fd seems like an inconvenient API for this function, use target path instead?
+    ///              It also needs defining what it means downloading an URL through a particular repo
+    //void download_url(const char * url, int fd);
 
     /// Set http headers.
     /// @param headers A vector of full headers ("header: value")

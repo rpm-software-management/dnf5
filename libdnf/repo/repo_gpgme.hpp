@@ -28,23 +28,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+
 namespace libdnf::repo {
 
-class GpgError : public RuntimeError {
-public:
-    using RuntimeError::RuntimeError;
-
-    const char * get_domain_name() const noexcept override { return "repo"; }
-    const char * get_name() const noexcept override { return "GpgError"; }
-    const char * get_description() const noexcept override { return "Gpg error"; }
-};
-
-
+/// Wraps gpgme in a higher-level interface.
+/// @exception RepoGpgError (public) Thrown on any gpgme-related error.
 class RepoGpgme {
 public:
     RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config);
 
-    void set_callbacks(RepoCallbacks * callbacks) { this->callbacks = callbacks; }
+    void set_callbacks(RepoCallbacks * callbacks) noexcept { this->callbacks = callbacks; }
 
     std::string get_keyring_dir() { return config.get_cachedir() + "/pubring"; }
 

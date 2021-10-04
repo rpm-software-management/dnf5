@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_downloader.hpp"
 
 #include "libdnf/base/base.hpp"
-#include "libdnf/common/exception.hpp"
+#include "libdnf/repo/repo_errors.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 #include "libdnf/utils/fs.hpp"
 #include "libdnf/utils/string.hpp"
@@ -54,10 +54,6 @@ struct default_delete<GError> {
 }  // namespace std
 
 
-static void throw_exception(std::unique_ptr<GError> && err) {
-    throw libdnf::repo::LrException(err->code, err->message);
-}
-
 static void str_vector_to_char_array(const std::vector<std::string> & vec, const char * arr[]) {
     for (size_t i = 0; i < vec.size(); ++i) {
         arr[i] = vec[i].c_str();
@@ -69,14 +65,14 @@ template <typename T>
 static void handle_set_opt(LrHandle * handle, LrHandleOption option, T value) {
     GError * err_p{nullptr};
     if (!lr_handle_setopt(handle, &err_p, option, value)) {
-        throw_exception(std::unique_ptr<GError>(err_p));
+        throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
     }
 }
 
 static void handle_get_info(LrHandle * handle, LrHandleInfoOption option, void * value) {
     GError * err_p{nullptr};
     if (!lr_handle_getinfo(handle, &err_p, option, value)) {
-        throw_exception(std::unique_ptr<GError>(err_p));
+        throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
     }
 }
 
@@ -84,7 +80,7 @@ template <typename T>
 static void result_get_info(LrResult * result, LrResultInfoOption option, T value) {
     GError * err_p{nullptr};
     if (!lr_result_getinfo(result, &err_p, option, value)) {
-        throw_exception(std::unique_ptr<GError>(err_p));
+        throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
     }
 }
 
@@ -248,10 +244,10 @@ static std::unique_ptr<LrHandle> new_remote_handle(const C & config) {
         maxspeed *= static_cast<float>(config.bandwidth().get_value());
     }
     if (maxspeed != 0 && maxspeed < static_cast<float>(minrate)) {
-        // TODO(lukash) throw a proper error class
-        throw libdnf::RuntimeError(
-            _("Maximum download speed is lower than minimum. "
-              "Please change configuration of minrate or throttle"));
+        // TODO(lukash) not the best class for the error, possibly check in config parser?
+        throw libdnf::repo::RepoDownloadError(
+            _("Maximum download speed is lower than minimum, "
+              "please change configuration of minrate or throttle"));
     }
     handle_set_opt(h, LRO_LOWSPEEDLIMIT, static_cast<int64_t>(minrate));
     handle_set_opt(h, LRO_MAXSPEED, static_cast<int64_t>(maxspeed));
@@ -331,16 +327,8 @@ static std::unique_ptr<LrHandle> new_remote_handle(const C & config) {
 
 namespace libdnf::repo {
 
-class LrExceptionWithSourceUrl : public LrException {
-public:
-    LrExceptionWithSourceUrl(int code, const std::string & msg, std::string source_url)
-        : LrException(code, msg)
-        , source_url(std::move(source_url)) {}
-    const std::string & get_source_url() const { return source_url; }
+LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error) : Error(lr_error->message), code(lr_error->code) {}
 
-private:
-    std::string source_url;
-};
 
 RepoDownloader::RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)
   : base(base),
@@ -350,7 +338,7 @@ RepoDownloader::RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRep
 RepoDownloader::~RepoDownloader() = default;
 
 
-void RepoDownloader::download_metadata(const std::string & destdir) {
+void RepoDownloader::download_metadata(const std::string & destdir) try {
     std::filesystem::create_directories(destdir);
     libdnf::utils::TempDir tmpdir(destdir, "tmpdir");
 
@@ -366,11 +354,15 @@ void RepoDownloader::download_metadata(const std::string & destdir) {
 
         move_recursive(tmp_item, target_item);
     }
+} catch (const std::runtime_error & e) {
+    auto src = get_source_info();
+    throw_with_nested(RepoDownloadError(
+        _("Failed to download metadata ({}: \"{}\") for repository \"{}\""), src.first, src.second, config.get_id()));
 }
 
 
 // Use metalink to check whether our metadata are still current.
-bool RepoDownloader::is_metalink_in_sync() {
+bool RepoDownloader::is_metalink_in_sync() try {
     auto & logger = *base->get_logger();
 
     libdnf::utils::TempDir tmpdir("tmpdir");
@@ -432,11 +424,16 @@ bool RepoDownloader::is_metalink_in_sync() {
 
     logger.debug(fmt::format(_("reviving: '{}' can be revived - metalink checksums match."), config.get_id()));
     return true;
+} catch (const std::runtime_error & e) {
+    throw_with_nested(RepoDownloadError(
+        _("Error checking if metalink \"{}\" is in sync for repository \"{}\""),
+        get_source_info().second,
+        config.get_id()));
 }
 
 
 // Use repomd to check whether our metadata are still current.
-bool RepoDownloader::is_repomd_in_sync() {
+bool RepoDownloader::is_repomd_in_sync() try {
     auto & logger = *base->get_logger();
     LrYumRepo * yum_repo;
 
@@ -456,10 +453,17 @@ bool RepoDownloader::is_repomd_in_sync() {
     else
         logger.debug(fmt::format(_("reviving: failed for '{}', mismatched repomd."), config.get_id()));
     return same;
+} catch (const std::runtime_error & e) {
+    auto src = get_source_info();
+    throw_with_nested(RepoDownloadError(
+        _("Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""),
+        src.first,
+        src.second,
+        config.get_id()));
 }
 
 
-void RepoDownloader::load_local() {
+void RepoDownloader::load_local() try {
     std::unique_ptr<LrHandle> h(init_local_handle());
 
     lr_result = perform(h.get(), config.get_cachedir(), config.repo_gpgcheck().get_value());
@@ -479,27 +483,8 @@ void RepoDownloader::load_local() {
     }
 
     g_strfreev(lr_mirrors);
-}
-
-
-void RepoDownloader::download_url(const char * url, int fd) {
-    if (callbacks) {
-        callbacks->start(
-            !config.name().get_value().empty() ? config.name().get_value().c_str()
-                                               : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"));
-    }
-
-    GError * err_p{nullptr};
-    lr_download_url(get_cached_handle(), url, fd, &err_p);
-    std::unique_ptr<GError> err(err_p);
-
-    if (callbacks) {
-        callbacks->end();
-    }
-
-    if (err) {
-        throw LrExceptionWithSourceUrl(err->code, err->message, url);
-    }
+} catch (const std::runtime_error & e) {
+    throw_with_nested(RepoDownloadError(_("Error loading local metadata for repository \"{}\""), config.get_id()));
 }
 
 
@@ -514,16 +499,27 @@ LrHandle * RepoDownloader::get_cached_handle() {
 }
 
 
-std::string RepoDownloader::get_revision() const {
+std::string RepoDownloader::get_revision() const try {
     return libdnf::utils::string::c_to_str(get_yum_repomd(lr_result)->revision);
+} catch (const std::runtime_error & e) {
+    throw_with_nested(RepoDownloadError(_("Error retrieving revision from repository \"{}\""), config.get_id()));
 }
 
 
-int RepoDownloader::get_max_timestamp() const {
-    return static_cast<int>(lr_yum_repomd_get_highest_timestamp(get_yum_repomd(lr_result), nullptr));
+int RepoDownloader::get_max_timestamp() const try {
+    GError * err_p{nullptr};
+    // TODO(lukash) return time_t instead of converting to signed int
+    int res = static_cast<int>(lr_yum_repomd_get_highest_timestamp(get_yum_repomd(lr_result), &err_p));
+    if (err_p != nullptr) {
+        throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
+    }
+    return res;
+} catch (const std::runtime_error & e) {
+    throw_with_nested(
+        RepoDownloadError(_("Error retrieving maximum timestamp from repository \"{}\""), config.get_id()));
 }
 
-std::map<std::string, std::string> RepoDownloader::get_metadata_paths() const {
+std::map<std::string, std::string> RepoDownloader::get_metadata_paths() const try {
     std::map<std::string, std::string> res;
 
     for (auto * elem = get_yum_repo(lr_result)->paths; elem; elem = g_slist_next(elem)) {
@@ -534,9 +530,11 @@ std::map<std::string, std::string> RepoDownloader::get_metadata_paths() const {
     }
 
     return res;
+} catch (const std::runtime_error & e) {
+    throw_with_nested(RepoDownloadError(_("Error retrieving metadata paths from repository \"{}\""), config.get_id()));
 }
 
-std::vector<std::string> RepoDownloader::get_content_tags() const {
+std::vector<std::string> RepoDownloader::get_content_tags() const try {
     std::vector<std::string> res;
 
     for (auto elem = get_yum_repomd(lr_result)->content_tags; elem; elem = g_slist_next(elem)) {
@@ -546,9 +544,11 @@ std::vector<std::string> RepoDownloader::get_content_tags() const {
     }
 
     return res;
+} catch (const std::runtime_error & e) {
+    throw_with_nested(RepoDownloadError(_("Error retrieving content tags from repository \"{}\""), config.get_id()));
 }
 
-std::vector<std::pair<std::string, std::string>> RepoDownloader::get_distro_tags() const {
+std::vector<std::pair<std::string, std::string>> RepoDownloader::get_distro_tags() const try {
     std::vector<std::pair<std::string, std::string>> res;
 
     for (auto elem = get_yum_repomd(lr_result)->distro_tags; elem; elem = g_slist_next(elem)) {
@@ -561,9 +561,11 @@ std::vector<std::pair<std::string, std::string>> RepoDownloader::get_distro_tags
     }
 
     return res;
+} catch (const std::runtime_error & e) {
+    throw_with_nested(RepoDownloadError(_("Error retrieving distro tags from repository \"{}\""), config.get_id()));
 }
 
-std::vector<std::pair<std::string, std::string>> RepoDownloader::get_metadata_locations() const {
+std::vector<std::pair<std::string, std::string>> RepoDownloader::get_metadata_locations() const try {
     std::vector<std::pair<std::string, std::string>> res;
 
     for (auto elem = get_yum_repomd(lr_result)->records; elem; elem = g_slist_next(elem)) {
@@ -574,10 +576,13 @@ std::vector<std::pair<std::string, std::string>> RepoDownloader::get_metadata_lo
     }
 
     return res;
+} catch (const std::runtime_error & e) {
+    throw_with_nested(
+        RepoDownloadError(_("Error retrieving metadata locations from repository \"{}\""), config.get_id()));
 }
 
 
-void RepoDownloader::set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && cbs) {
+void RepoDownloader::set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && cbs) noexcept {
     callbacks = std::move(cbs);
     gpgme.set_callbacks(callbacks.get());
 }
@@ -642,7 +647,8 @@ std::unique_ptr<LrHandle> RepoDownloader::init_remote_handle(const char * destdi
         str_vector_to_char_array(config.baseurl().get_value(), urls);
         handle_set_opt(h.get(), LRO_URLS, urls);
     } else {
-        throw RuntimeError(fmt::format(_("Cannot find a valid baseurl for repo: {}"), config.get_id()));
+        throw RepoDownloadError(
+            _("No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""), config.get_id());
     }
 
     handle_set_opt(h.get(), LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
@@ -764,17 +770,7 @@ std::unique_ptr<LrResult> RepoDownloader::perform(
         }
 
         if (bad_gpg || err_p->code != LRE_BADGPG) {
-            std::string sources;
-
-            if (!config.metalink().empty() && !config.metalink().get_value().empty()) {
-                sources = config.metalink().get_value();
-            } else if (!config.mirrorlist().empty() && !config.mirrorlist().get_value().empty()) {
-                sources = config.mirrorlist().get_value();
-            } else {
-                sources = libdnf::utils::string::join(config.baseurl().get_value(), ", ");
-            }
-
-            throw LrExceptionWithSourceUrl(err->code, err->message, sources);
+            throw LibrepoError(std::move(err));
         }
 
         bad_gpg = true;
@@ -786,18 +782,46 @@ std::unique_ptr<LrResult> RepoDownloader::perform(
 }
 
 
+void RepoDownloader::download_url(const char * url, int fd) {
+    if (callbacks) {
+        callbacks->start(
+            !config.name().get_value().empty() ? config.name().get_value().c_str()
+                                               : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"));
+    }
+
+    GError * err_p{nullptr};
+    lr_download_url(get_cached_handle(), url, fd, &err_p);
+    std::unique_ptr<GError> err(err_p);
+
+    if (callbacks) {
+        callbacks->end();
+    }
+
+    if (err) {
+        // TODO(lukash) does the error from librepo contain the URL or do we need to add it here somehow?
+        throw LibrepoError(std::move(err));
+    }
+}
+
+
+std::pair<std::string, std::string> RepoDownloader::get_source_info() const {
+    if (!config.metalink().empty() && !config.metalink().get_value().empty()) {
+        return {"metalink", config.metalink().get_value()};
+    } else if (!config.mirrorlist().empty() && !config.mirrorlist().get_value().empty()) {
+        return {"mirrorlist", config.mirrorlist().get_value()};
+    } else {
+        return {"baseurl", libdnf::utils::string::join(config.baseurl().get_value(), ", ")};
+    }
+}
+
+
 void RepoDownloader::import_repo_keys() {
     for (const auto & gpgkey_url : config.gpgkey().get_value()) {
         auto tmp_file = libdnf::utils::TempFile("repokey");
 
-        try {
-            download_url(gpgkey_url.c_str(), tmp_file.get_fd());
-        } catch (const LrExceptionWithSourceUrl & e) {
-            auto msg = fmt::format(_("Failed to retrieve GPG key for repo '{}': {}"), config.get_id(), e.what());
-            throw RuntimeError(msg);
-        }
-        lseek(tmp_file.get_fd(), SEEK_SET, 0);
+        download_url(gpgkey_url.c_str(), tmp_file.get_fd());
 
+        lseek(tmp_file.get_fd(), SEEK_SET, 0);
         gpgme.import_key(tmp_file.get_fd(), gpgkey_url);
     }
 }
@@ -857,14 +881,7 @@ void RepoDownloader::add_countme_flag(LrHandle * handle) {
         return;
 
     if (!std::filesystem::is_directory(config.get_persistdir())) {
-        try {
-            std::filesystem::create_directories(config.get_persistdir());
-        } catch (std::exception & e) {
-            // TODO(lukash) throw proper exception
-            throw RuntimeError(
-                fmt::format(_("Cannot create repository persistent directory \"{}\": {}"),
-                config.get_persistdir(), e.what()));
-        }
+        std::filesystem::create_directories(config.get_persistdir());
     }
 
     // Load the cookie
@@ -935,7 +952,7 @@ void RepoDownloader::add_countme_flag(LrHandle * handle) {
 //    std::unique_ptr<GError> err(err_p);
 //
 //    if (err)
-//        throw_exception(std::move(err));
+//        throw LibrepoError(std::move(err));
 //}
 
 }  //namespace libdnf::repo

@@ -65,17 +65,13 @@ extern "C" {
 
 namespace libdnf::repo {
 
-/// TODO(lukash) Throw a proper exception
-static void is_readable_rpm(const char * fn) {
-    if (access(fn, R_OK) != 0) {
-        const char * err_txt = strerror(errno);
-        throw RuntimeError(fmt::format(_("Failed to access RPM: \"{}\": {}"), fn, err_txt));
+static void is_readable_rpm(const std::string & fn) {
+    if (std::filesystem::path(fn).extension() != ".rpm") {
+        throw RepoRpmError(_("Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"), fn);
     }
 
-    auto len = strlen(fn);
-
-    if (len <= 4 || (strcmp(fn + len - 4, ".rpm") != 0)) {
-        throw RuntimeError(fmt::format(_("Failed to read RPM: \"{}\": {}"), fn, "does't have extension \".rpm\""));
+    if (access(fn.c_str(), R_OK) != 0) {
+        throw RepoRpmError(_("Failed to access RPM \"{}\": {}"), fn, strerror(errno));
     }
 }
 
@@ -135,8 +131,7 @@ Repo::Repo(const std::string & id, Base & base, Repo::Type type) {
     if (type == Type::AVAILABLE) {
         auto idx = verify_id(id);
         if (idx != std::string::npos) {
-            std::string msg = fmt::format(_("Bad id for repo: {}, byte = {} {}"), id, id[idx], idx);
-            throw RuntimeError(msg);
+            throw RepoError(_("Invalid repository id \"{}\": unexpected character '{}'"), id, id[idx]);
         }
     }
     p_impl.reset(new Impl(*this, id, type, base));
@@ -155,8 +150,10 @@ std::string::size_type Repo::verify_id(const std::string & repo_id) {
 void Repo::verify() const {
     if (p_impl->config.baseurl().empty() &&
         (p_impl->config.metalink().empty() || p_impl->config.metalink().get_value().empty()) &&
-        (p_impl->config.mirrorlist().empty() || p_impl->config.mirrorlist().get_value().empty()))
-        throw RuntimeError(fmt::format(_("Repository {} has no mirror or baseurl set."), p_impl->config.get_id()));
+        (p_impl->config.mirrorlist().empty() || p_impl->config.mirrorlist().get_value().empty())) {
+        throw RepoError(
+            _("Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."), p_impl->config.get_id());
+    }
 
     const auto & type = p_impl->config.type().get_value();
     const char * supported_repo_types[]{"rpm-md", "rpm", "repomd", "rpmmd", "yum", "YUM"};
@@ -166,8 +163,7 @@ void Repo::verify() const {
                 return;
             }
         }
-        throw RuntimeError(
-            fmt::format(_("Repository '{}' has unsupported type: 'type={}', skipping."), p_impl->config.get_id(), type));
+        throw RepoError(_("Repository \"{}\" has unsupported type \"{}\", skipping."), p_impl->config.get_id(), type);
     }
 }
 
@@ -293,7 +289,7 @@ void Repo::Impl::load_cache() {
 bool Repo::Impl::try_load_cache() {
     try {
         load_cache();
-    } catch (std::exception & ex) {
+    } catch (std::runtime_error &) {
         return false;
     }
     return true;
@@ -308,34 +304,30 @@ bool Repo::Impl::is_in_sync() {
 
 bool Repo::Impl::load() {
     auto & logger = *base->get_logger();
-    try {
-        if (!get_metadata_path(MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
-            reset_metadata_expired();
-            if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
-                logger.debug(fmt::format(_("repo: using cache for: {}"), config.get_id()));
-                return false;
-            }
 
-            if (is_in_sync()) {
-                // the expired metadata still reflect the origin:
-                utimes(get_metadata_path(MD_FILENAME_PRIMARY).c_str(), nullptr);
-                expired = false;
-                return true;
-            }
-        }
-        if (sync_strategy == SyncStrategy::ONLY_CACHE) {
-            auto msg = fmt::format(_("Cache-only enabled but no cache for '{}'"), config.get_id());
-            throw RuntimeError(msg);
+    if (!get_metadata_path(MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
+        reset_metadata_expired();
+        if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
+            logger.debug(fmt::format(_("repo: using cache for: {}"), config.get_id()));
+            return false;
         }
 
-        logger.debug(fmt::format(_("repo: downloading from remote: {}"), config.get_id()));
-        downloader.download_metadata(config.get_cachedir());
-        timestamp = -1;
-        load_cache();
-    } catch (const libdnf::RuntimeError & e) {
-        auto msg = fmt::format(_("Failed to download metadata for repo '{}': {}"), config.get_id(), e.what());
-        throw RuntimeError(msg);
+        if (is_in_sync()) {
+            // the expired metadata still reflect the origin:
+            utimes(get_metadata_path(MD_FILENAME_PRIMARY).c_str(), nullptr);
+            expired = false;
+            return true;
+        }
     }
+    if (sync_strategy == SyncStrategy::ONLY_CACHE) {
+        throw RepoError(_("Cache-only enabled but no cache for repository \"{}\""), config.get_id());
+    }
+
+    logger.debug(fmt::format(_("repo: downloading from remote: {}"), config.get_id()));
+    downloader.download_metadata(config.get_cachedir());
+    timestamp = -1;
+    load_cache();
+
     expired = false;
     return true;
 }
@@ -456,9 +448,9 @@ Repo::SyncStrategy Repo::get_sync_strategy() const noexcept {
     return p_impl->sync_strategy;
 }
 
-void Repo::download_url(const char * url, int fd) {
-    p_impl->downloader.download_url(url, fd);
-}
+//void Repo::download_url(const char * url, int fd) {
+//    p_impl->downloader.download_url(url, fd);
+//}
 
 void Repo::set_http_headers(const std::vector<std::string> & headers) {
     p_impl->downloader.http_headers = headers;
@@ -477,17 +469,16 @@ BaseWeakPtr Repo::get_base() const {
 }
 
 Id Repo::Impl::add_rpm_package(const std::string & fn, bool add_with_hdrid) {
-    auto c_fn = fn.c_str();
-    is_readable_rpm(c_fn);
+    is_readable_rpm(fn);
 
     int flags = REPO_REUSE_REPODATA | REPO_NO_INTERNALIZE;
     if (add_with_hdrid) {
         flags |= RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM;
     }
 
-    Id new_id = repo_add_rpm(libsolv_repo_ext.repo, c_fn, flags);
+    Id new_id = repo_add_rpm(libsolv_repo_ext.repo, fn.c_str(), flags);
     if (new_id == 0) {
-        throw RuntimeError(_("Failed to read RPM: ") + fn);
+        throw RepoRpmError(_("Failed to load RPM \"{}\": {}"), fn, pool_errstr(libsolv_repo_ext.repo->pool));
     }
     libsolv_repo_ext.set_needs_internalizing();
     return new_id;
