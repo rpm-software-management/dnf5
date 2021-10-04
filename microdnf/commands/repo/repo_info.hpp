@@ -18,16 +18,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef MICRODNF_COMMANDS_REPO_REPO_LIST_HPP
-#define MICRODNF_COMMANDS_REPO_REPO_LIST_HPP
+#ifndef MICRODNF_COMMANDS_REPO_REPO_INFO_HPP
+#define MICRODNF_COMMANDS_REPO_REPO_INFO_HPP
 
 
 #include "arguments.hpp"
+#include "repo_list.hpp"
 
 #include <libdnf-cli/session.hpp>
 
 #include <libdnf/conf/option_enum.hpp>
-#include <libdnf/repo/repo_query.hpp>
 
 #include <memory>
 #include <vector>
@@ -36,24 +36,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace microdnf {
 
 
-class RepoListCommand : public libdnf::cli::session::Command {
+class RepoInfoCommand : public RepoListCommand {
 public:
-    explicit RepoListCommand(Command & parent);
-    void run() override;
-    virtual void print(const libdnf::repo::RepoQuery & query, bool with_status);
-
-    std::unique_ptr<RepoAllOption> all{nullptr};
-    std::unique_ptr<RepoEnabledOption> enabled{nullptr};
-    std::unique_ptr<RepoDisabledOption> disabled{nullptr};
-    std::unique_ptr<RepoSpecArguments> repo_specs{nullptr};
+    explicit RepoInfoCommand(Command & parent);
+    void print(const libdnf::repo::RepoQuery & query, [[maybe_unused]] bool with_status) override;
 
 protected:
     // to be used by an alias command only
-    explicit RepoListCommand(Command & parent, const std::string & name);
+    explicit RepoInfoCommand(Command & parent, const std::string & name);
 };
 
 
 }  // namespace microdnf
 
 
-#endif  // MICRODNF_COMMANDS_REPO_REPO_LIST_HPP
+#endif  // MICRODNF_COMMANDS_REPO_REPO_INFO_HPP

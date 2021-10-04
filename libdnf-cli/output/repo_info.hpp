@@ -47,6 +47,8 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
         repo.is_enabled() ? "green" : "red"
     );
 
+    // TODO(dmach): implement in libdnf::repo::Repo
+    /*
     add_line("Priority", "");
     add_line("Cost", "");
     add_line("Type", "");
@@ -61,6 +63,7 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
     add_line("Base URL", repo.get_baseurl(), nullptr, group_urls);
     add_line("Mirrorlist", repo.get_mirrorlist(), nullptr, group_urls);
     add_line("Metalink", repo.get_metalink(), nullptr, group_urls);
+    */
 
     // GPG
     auto group_gpg = add_line("GPG", "", nullptr);
@@ -102,6 +105,8 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
     }
 
     if (show_sack_data) {
+        // TODO(dmach): implement in libdnf::repo::Repo
+        /*
         // the following lines require downloaded repodata loaded into sack
         auto group_repodata = add_line("Repodata info", "", nullptr);
         add_line("Available packages", repo.get_available_pkgs(), nullptr, group_repodata);
@@ -119,6 +124,7 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
         add_line("Distro tags", distro_tags, nullptr, group_repodata);
         add_line("Revision", repo.get_revision(), nullptr, group_repodata);
         add_line("Cache updated", repo.get_max_timestamp(), nullptr, group_repodata);
+        */
     }
 
 /*

@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/aliases/autoremove.hpp"
 #include "commands/aliases/groupinfo.hpp"
 #include "commands/aliases/grouplist.hpp"
+#include "commands/aliases/repoinfo.hpp"
 #include "commands/aliases/repolist.hpp"
 #include "commands/aliases/upgrade_minimal.hpp"
 
@@ -115,6 +116,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     register_subcommand(std::make_unique<AutoremoveAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<GroupinfoAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<GrouplistAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<RepoinfoAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<RepolistAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<UpgradeMinimalAlias>(*this), aliases_group);
 

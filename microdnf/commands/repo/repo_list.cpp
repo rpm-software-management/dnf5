@@ -54,28 +54,6 @@ RepoListCommand::RepoListCommand(Command & parent, const std::string & name) : C
     all->arg->set_conflict_arguments(conflict_args);
     enabled->arg->set_conflict_arguments(conflict_args);
     disabled->arg->set_conflict_arguments(conflict_args);
-
-    /*
-    auto repoinfo = parser.add_new_command("repoinfo");
-    repoinfo->set_short_description("Print detais about defined repositories");
-    repoinfo->set_parse_hook_func([this, &ctx](
-                               [[maybe_unused]] ArgumentParser::Argument * arg,
-                               [[maybe_unused]] const char * option,
-                               [[maybe_unused]] int argc,
-                               [[maybe_unused]] const char * const argv[]) {
-        // TODO(jrohel): implement repoinfo
-        throw std::logic_error("Not implemented");
-        ctx.set_selected_command(this);
-        return true;
-    });
-
-    repoinfo->register_named_arg(all);
-    repoinfo->register_named_arg(enabled);
-    repoinfo->register_named_arg(disabled);
-    repoinfo->register_positional_arg(repos);
-
-    parser.get_root_command()->register_command(repoinfo);
-    */
 }
 
 
@@ -105,6 +83,11 @@ void RepoListCommand::run() {
     // display status because we're printing mix of enabled and disabled repos
     bool with_status = all->get_value();
 
+    print(query, with_status);
+}
+
+
+void RepoListCommand::print(const libdnf::repo::RepoQuery & query, bool with_status) {
     libdnf::cli::output::print_repolist_table(
             query,
             with_status,

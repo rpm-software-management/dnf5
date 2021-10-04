@@ -18,11 +18,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "repo.hpp"
 #include "repo_info.hpp"
-#include "repo_list.hpp"
 
 #include "../../context.hpp"
+
+#include <libdnf/conf/option_string.hpp>
+#include "libdnf-cli/output/repo_info.hpp"
+
+#include <iostream>
 
 
 namespace microdnf {
@@ -31,24 +34,19 @@ namespace microdnf {
 using namespace libdnf::cli;
 
 
-RepoCommand::RepoCommand(Command & parent) : Command(parent, "repo") {
-    auto & ctx = static_cast<Context &>(get_session());
-    auto & parser = ctx.get_argument_parser();
-
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Manage repositories");
-
-    // query commands
-    auto * query_commands_group = parser.add_new_group("repo_query_commands");
-    query_commands_group->set_header("Query Commands:");
-    cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<RepoListCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<RepoInfoCommand>(*this), query_commands_group);
-}
+RepoInfoCommand::RepoInfoCommand(Command & parent) : RepoInfoCommand(parent, "info") {}
 
 
-void RepoCommand::run() {
-    throw_missing_command();
+RepoInfoCommand::RepoInfoCommand(Command & parent, const std::string & name) : RepoListCommand(parent, name) {}
+
+
+void RepoInfoCommand::print(const libdnf::repo::RepoQuery & query, [[maybe_unused]] bool with_status) {
+    for (auto & repo : query.get_data()) {
+        libdnf::cli::output::RepoInfo repo_info;
+        repo_info.add_repo(*repo, false, false);
+        repo_info.print();
+        std::cout << std::endl;
+    }
 }
 
 
