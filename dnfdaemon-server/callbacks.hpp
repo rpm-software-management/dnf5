@@ -119,16 +119,19 @@ public:
         install_stop(item, amount, total);
     }
 
-    void script_start(const libdnf::rpm::TransactionItem * item, libdnf::rpm::Nevra nevra, uint64_t tag) override;
+    void script_start(
+        const libdnf::rpm::TransactionItem * item,
+        libdnf::rpm::Nevra nevra,
+        libdnf::rpm::TransactionCB::ScriptType type) override;
     void script_stop(
         const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        uint64_t tag,
+        libdnf::rpm::TransactionCB::ScriptType type,
         uint64_t return_code) override;
     void script_error(
         const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        uint64_t tag,
+        libdnf::rpm::TransactionCB::ScriptType type,
         uint64_t return_code) override;
 
     void elem_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;

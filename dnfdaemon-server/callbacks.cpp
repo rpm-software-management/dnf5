@@ -194,22 +194,27 @@ void DbusTransactionCB::install_stop(const libdnf::rpm::TransactionItem & item, 
 
 
 void DbusTransactionCB::script_start(
-    const libdnf::rpm::TransactionItem * /*item*/, libdnf::rpm::Nevra nevra, uint64_t tag) {
+    const libdnf::rpm::TransactionItem * /*item*/,
+    libdnf::rpm::Nevra nevra,
+    libdnf::rpm::TransactionCB::ScriptType type) {
     try {
         auto signal = create_signal_pkg(
             dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_START, to_full_nevra_string(nevra));
-        signal << tag;
+        signal << static_cast<int>(type);
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
 }
 
 void DbusTransactionCB::script_stop(
-    const libdnf::rpm::TransactionItem * /*item*/, libdnf::rpm::Nevra nevra, uint64_t tag, uint64_t return_code) {
+    const libdnf::rpm::TransactionItem * /*item*/,
+    libdnf::rpm::Nevra nevra,
+    libdnf::rpm::TransactionCB::ScriptType type,
+    uint64_t return_code) {
     try {
         auto signal = create_signal_pkg(
             dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_STOP, to_full_nevra_string(nevra));
-        signal << tag;
+        signal << static_cast<int>(type);
         signal << return_code;
         dbus_object->emitSignal(signal);
     } catch (...) {
@@ -230,11 +235,14 @@ void DbusTransactionCB::elem_progress(const libdnf::rpm::TransactionItem & item,
 }
 
 void DbusTransactionCB::script_error(
-    const libdnf::rpm::TransactionItem * /*item*/, libdnf::rpm::Nevra nevra, uint64_t tag, uint64_t return_code) {
+    const libdnf::rpm::TransactionItem * /*item*/,
+    libdnf::rpm::Nevra nevra,
+    libdnf::rpm::TransactionCB::ScriptType type,
+    uint64_t return_code) {
     try {
         auto signal = create_signal_pkg(
             dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_TRANSACTION_SCRIPT_ERROR, to_full_nevra_string(nevra));
-        signal << tag;
+        signal << static_cast<int>(type);
         signal << return_code;
         dbus_object->emitSignal(signal);
     } catch (...) {

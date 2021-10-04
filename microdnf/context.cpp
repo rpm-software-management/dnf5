@@ -566,6 +566,34 @@ namespace {
 
 class RpmTransCB : public libdnf::rpm::TransactionCB {
 public:
+    static const char * script_type_to_string(ScriptType type) noexcept {
+        switch (type) {
+            case ScriptType::PRE_INSTALL:
+                return "pre-install";
+            case ScriptType::POST_INSTALL:
+                return "post-install";
+            case ScriptType::PRE_UNINSTALL:
+                return "pre-uninstall";
+            case ScriptType::POST_UNINSTALL:
+                return "post-uninstall";
+            case ScriptType::PRE_TRANSACTION:
+                return "pre-transaction";
+            case ScriptType::POST_TRANSACTION:
+                return "post-transaction";
+            case ScriptType::TRIGGER_PRE_INSTALL:
+                return "trigger-pre-install";
+            case ScriptType::TRIGGER_INSTALL:
+                return "trigger-install";
+            case ScriptType::TRIGGER_UNINSTALL:
+                return "trigger-uninstall";
+            case ScriptType::TRIGGER_POST_UNINSTALL:
+                return "trigger-post-uninstall";
+            case ScriptType::UNKNOWN:
+                return "unknown";
+        }
+        return "unknown";
+    }
+
     ~RpmTransCB() {
         if (active_progress_bar &&
             active_progress_bar->get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
@@ -684,30 +712,36 @@ public:
     void script_error(
         [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        [[maybe_unused]] uint64_t tag,
+        libdnf::rpm::TransactionCB::ScriptType type,
         uint64_t return_code) override {
         active_progress_bar->add_message(
             libdnf::cli::progressbar::MessageType::ERROR,
-            fmt::format("Error in scriptlet: {} return code {}", to_full_nevra_string(nevra), return_code));
+            fmt::format(
+                "Error in {} scriptlet: {} return code {}",
+                script_type_to_string(type),
+                to_full_nevra_string(nevra),
+                return_code));
         multi_progress_bar.print();
     }
 
     void script_start(
         [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        [[maybe_unused]] uint64_t tag) override {
+        libdnf::rpm::TransactionCB::ScriptType type) override {
         active_progress_bar->add_message(
-            libdnf::cli::progressbar::MessageType::INFO, "Running scriptlet: " + to_full_nevra_string(nevra));
+            libdnf::cli::progressbar::MessageType::INFO,
+            fmt::format("Running {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
         multi_progress_bar.print();
     }
 
     void script_stop(
         [[maybe_unused]] const libdnf::rpm::TransactionItem * item,
         libdnf::rpm::Nevra nevra,
-        [[maybe_unused]] uint64_t tag,
+        libdnf::rpm::TransactionCB::ScriptType type,
         [[maybe_unused]] uint64_t return_code) override {
         active_progress_bar->add_message(
-            libdnf::cli::progressbar::MessageType::INFO, "Stop scriptlet: " + to_full_nevra_string(nevra));
+            libdnf::cli::progressbar::MessageType::INFO,
+            fmt::format("Stop {} scriptlet: {}", script_type_to_string(type), to_full_nevra_string(nevra)));
         multi_progress_bar.print();
     }
 

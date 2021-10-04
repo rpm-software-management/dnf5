@@ -73,6 +73,23 @@ private:
 /// User implements Transaction callbacks by inheriting this class and overriding its methods.
 class TransactionCB {
 public:
+
+    /// Scriptlet type
+    // TODO(jrohel): Are all scriptlets types present and correct?
+    enum class ScriptType {
+        UNKNOWN,
+        PRE_INSTALL,            // "%pre"
+        POST_INSTALL,           // "%post"
+        PRE_UNINSTALL,          // "%preun"
+        POST_UNINSTALL,         // "%postun"
+        PRE_TRANSACTION,        // "%pretrans"
+        POST_TRANSACTION,       // "%posttrans"
+        TRIGGER_PRE_INSTALL,    // "%triggerprein"
+        TRIGGER_INSTALL,        // "%triggerin"
+        TRIGGER_UNINSTALL,      // "%triggerun"
+        TRIGGER_POST_UNINSTALL  // "%triggerpostun"
+    };
+
     virtual ~TransactionCB() = default;
 
     virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
@@ -86,9 +103,9 @@ public:
     virtual void uninstall_stop(const TransactionItem & item, uint64_t amount, uint64_t total) {}
     virtual void unpack_error(const TransactionItem & item) {}
     virtual void cpio_error(const TransactionItem & item) {}
-    virtual void script_error(const TransactionItem * item, Nevra nevra, uint64_t tag, uint64_t return_code) {}
-    virtual void script_start(const TransactionItem * item, Nevra nevra, uint64_t tag) {}
-    virtual void script_stop(const TransactionItem * item, Nevra nevra, uint64_t tag, uint64_t return_code) {}
+    virtual void script_error(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code) {}
+    virtual void script_start(const TransactionItem * item, Nevra nevra, ScriptType type) {}
+    virtual void script_stop(const TransactionItem * item, Nevra nevra, ScriptType type, uint64_t return_code) {}
     virtual void elem_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
     virtual void verify_progress(uint64_t amount, uint64_t total) {}
     virtual void verify_start(uint64_t total) {}

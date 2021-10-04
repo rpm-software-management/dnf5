@@ -638,6 +638,33 @@ private:
         return 0;
     }
 
+    static TransactionCB::ScriptType rpm_tag_to_script_type(rpmTag_e tag) noexcept {
+        switch (tag) {
+            case RPMTAG_PREIN:
+                return TransactionCB::ScriptType::PRE_INSTALL;
+            case RPMTAG_POSTIN:
+                return TransactionCB::ScriptType::POST_INSTALL;
+            case RPMTAG_PREUN:
+                return TransactionCB::ScriptType::PRE_UNINSTALL;
+            case RPMTAG_POSTUN:
+                return TransactionCB::ScriptType::POST_UNINSTALL;
+            case RPMTAG_PRETRANS:
+                return TransactionCB::ScriptType::PRE_TRANSACTION;
+            case RPMTAG_POSTTRANS:
+                return TransactionCB::ScriptType::POST_TRANSACTION;
+            case RPMTAG_TRIGGERPREIN:
+                return TransactionCB::ScriptType::TRIGGER_PRE_INSTALL;
+            case RPMTAG_TRIGGERIN:
+                return TransactionCB::ScriptType::TRIGGER_INSTALL;
+            case RPMTAG_TRIGGERUN:
+                return TransactionCB::ScriptType::TRIGGER_UNINSTALL;
+            case RPMTAG_TRIGGERPOSTUN:
+                return TransactionCB::ScriptType::TRIGGER_POST_UNINSTALL;
+            default:
+                return TransactionCB::ScriptType::UNKNOWN;
+        }
+    }
+
     /// Function triggered by rpmtsNotify()
     ///
     /// @param te  related transaction element or NULL
@@ -725,34 +752,16 @@ private:
             case RPMCALLBACK_SCRIPT_ERROR:
                 // amount is script tag
                 // total is return code - if (!RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_OK
-                cb.script_error(item, trans_element_to_nevra(trans_element), amount, total);
+                cb.script_error(item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)), total);
                 break;
             case RPMCALLBACK_SCRIPT_START:
                 // amount is script tag
-                // TODO(jrohel): Define enum
-                //   RPMTAG_PREIN; "%pre";
-                //   RPMTAG_POSTIN; "%post";
-                //   RPMTAG_PREUN; "%preun";
-                //   RPMTAG_POSTUN; "%postun";
-                //   RPMTAG_PRETRANS; "%pretrans";
-                //   RPMTAG_POSTTRANS; "%posttrans";
-                //   RPMTAG_VERIFYSCRIPT; "%verifyscript";
-                //   RPMTAG_TRIGGERSCRIPTS; "%triggerprein";
-                //   RPMTAG_TRIGGERSCRIPTS; "%triggerin";
-                //   RPMTAG_TRIGGERSCRIPTS; "%triggerun";
-                //   RPMTAG_TRIGGERSCRIPTS; "%triggerpostun";
-                //   RPMTAG_FILETRIGGERSCRIPTS; "%filetriggerin";
-                //   RPMTAG_FILETRIGGERSCRIPTS; "%filetriggerun";
-                //   RPMTAG_FILETRIGGERSCRIPTS; "%filetriggerpostun";
-                //   RPMTAG_TRANSFILETRIGGERSCRIPTS; "%transfiletriggerin";
-                //   RPMTAG_TRANSFILETRIGGERSCRIPTS; "%transfiletriggerun";
-                //   RPMTAG_TRANSFILETRIGGERSCRIPTS; "%transfiletriggerpostun";
-                cb.script_start(item, trans_element_to_nevra(trans_element), amount);
+                cb.script_start(item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)));
                 break;
             case RPMCALLBACK_SCRIPT_STOP:
                 // amount is script tag
                 // total is return code - if (error && !RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_NOTFOUND
-                cb.script_stop(item, trans_element_to_nevra(trans_element), amount, total);
+                cb.script_stop(item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)), total);
                 break;
             case RPMCALLBACK_INST_STOP:
                 libdnf_assert(item != nullptr, "TransactionItem is not set");
