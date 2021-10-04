@@ -124,7 +124,8 @@ public:
     /// @since 5.0
     bool get_value() const { return conf->get_value(); }
 
-protected:
+// TODO(dmach): `arg` must be public, because it is used to define conflicting args
+//protected:
     libdnf::OptionBool * conf{nullptr};
     libdnf::cli::ArgumentParser::NamedArg * arg{nullptr};
 };

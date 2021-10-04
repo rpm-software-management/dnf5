@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MICRODNF_COMMANDS_REPO_REPO_LIST_HPP
 
 
+#include "arguments.hpp"
+
 #include <libdnf-cli/session.hpp>
 
 #include <libdnf/conf/option_enum.hpp>
@@ -38,8 +40,10 @@ public:
     explicit RepoListCommand(Command & parent);
     void run() override;
 
-    libdnf::OptionEnum<std::string> * enable_disable_option{nullptr};
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_show_options{nullptr};
+    std::unique_ptr<RepoAllOption> all{nullptr};
+    std::unique_ptr<RepoEnabledOption> enabled{nullptr};
+    std::unique_ptr<RepoDisabledOption> disabled{nullptr};
+    std::unique_ptr<RepoSpecArguments> repo_specs{nullptr};
 
 protected:
     // to be used by an alias command only

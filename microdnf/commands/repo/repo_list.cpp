@@ -38,52 +38,22 @@ RepoListCommand::RepoListCommand(Command & parent) : RepoListCommand(parent, "li
 RepoListCommand::RepoListCommand(Command & parent, const std::string & name) : Command(parent, name) {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
+
     auto & cmd = *get_argument_parser_command();
+    cmd.set_short_description("List defined repositories");
 
-    enable_disable_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionEnum<std::string>>(
-            new libdnf::OptionEnum<std::string>("enabled", {"all", "enabled", "disabled"}))));
-
-    auto all = parser.add_new_named_arg("all");
-    all->set_long_name("all");
-    all->set_short_description("show all repos");
-    all->set_const_value("all");
-    all->link_value(enable_disable_option);
-
-    auto enabled = parser.add_new_named_arg("enabled");
-    enabled->set_long_name("enabled");
-    enabled->set_short_description("show enabled repos (default)");
-    enabled->set_const_value("enabled");
-    enabled->link_value(enable_disable_option);
-
-    auto disabled = parser.add_new_named_arg("disabled");
-    disabled->set_long_name("disabled");
-    disabled->set_short_description("show disabled repos");
-    disabled->set_const_value("disabled");
-    disabled->link_value(enable_disable_option);
-
-    patterns_to_show_options = parser.add_new_values();
-    auto repos = parser.add_new_positional_arg(
-        "repos_to_show",
-        ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns_to_show_options);
-    repos->set_short_description("List of repos to show");
+    all = std::make_unique<RepoAllOption>(*this);
+    enabled = std::make_unique<RepoEnabledOption>(*this);
+    disabled = std::make_unique<RepoDisabledOption>(*this);
+    repo_specs = std::make_unique<RepoSpecArguments>(*this);
 
     auto conflict_args =
         parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{all, enabled, disabled}));
+            new std::vector<ArgumentParser::Argument *>{all->arg, enabled->arg, disabled->arg}));
 
-    all->set_conflict_arguments(conflict_args);
-    enabled->set_conflict_arguments(conflict_args);
-    disabled->set_conflict_arguments(conflict_args);
-
-    cmd.set_short_description("List defined repositories");
-
-    cmd.register_named_arg(all);
-    cmd.register_named_arg(enabled);
-    cmd.register_named_arg(disabled);
-    cmd.register_positional_arg(repos);
+    all->arg->set_conflict_arguments(conflict_args);
+    enabled->arg->set_conflict_arguments(conflict_args);
+    disabled->arg->set_conflict_arguments(conflict_args);
 
     /*
     auto repoinfo = parser.add_new_command("repoinfo");
@@ -112,29 +82,28 @@ RepoListCommand::RepoListCommand(Command & parent, const std::string & name) : C
 void RepoListCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    std::vector<std::string> patterns_to_show;
-    if (patterns_to_show_options->size() > 0) {
-        patterns_to_show.reserve(patterns_to_show_options->size());
-        for (auto & pattern : *patterns_to_show_options) {
-            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-            patterns_to_show.emplace_back(option->get_value());
-        }
-    }
-
     libdnf::repo::RepoQuery query(ctx.base);
-    if (enable_disable_option->get_value() == "enabled") {
-        query.filter_enabled(true);
-    } else if (enable_disable_option->get_value() == "disabled") {
+    if (all->get_value()) {
+        // don't filter anything
+    } else if (disabled->get_value()) {
+        // show only disabled repos
         query.filter_enabled(false);
+    } else {
+        // show only enabled repos
+        query.filter_enabled(true);
     }
 
-    if (patterns_to_show.size() > 0) {
+    auto repo_specs_str = repo_specs->get_value();
+    if (repo_specs_str.size() > 0) {
         auto query_names = query;
-        query.filter_id(patterns_to_show, libdnf::sack::QueryCmp::IGLOB);
-        query |= query_names.filter_name(patterns_to_show, libdnf::sack::QueryCmp::IGLOB);
+        // filter by repo ID
+        query.filter_id(repo_specs_str, libdnf::sack::QueryCmp::IGLOB);
+        // filter by repo Name
+        query |= query_names.filter_name(repo_specs_str, libdnf::sack::QueryCmp::IGLOB);
     }
 
-    bool with_status = enable_disable_option->get_value() == "all";
+    // display status because we're printing mix of enabled and disabled repos
+    bool with_status = all->get_value();
 
     libdnf::cli::output::print_repolist_table(
             query,
