@@ -28,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-//TODO(amatej): add unit tests for AdvisoryReference
 class AdvisoryReference {
 public:
     using Type = AdvisoryReferenceType;
