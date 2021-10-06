@@ -101,6 +101,9 @@ public:
     Advisory(const libdnf::BaseWeakPtr & base, AdvisoryId id);
     Advisory(libdnf::Base & base, AdvisoryId id);
 
+    bool operator==(const Advisory & other) const noexcept;
+    bool operator!=(const Advisory & other) const noexcept;
+
     /// Destroy the Advisory object
     ~Advisory();
 
@@ -160,6 +163,14 @@ private:
 
     AdvisoryId id;
 };
+
+inline bool Advisory::operator==(const Advisory & other) const noexcept {
+    return id == other.id && base == other.base;
+}
+
+inline bool Advisory::operator!=(const Advisory & other) const noexcept {
+    return id != other.id && base != other.base;
+}
 
 }  // namespace libdnf::advisory
 
