@@ -232,6 +232,27 @@ static void set_commandline_args(Context & ctx) {
     assume_no->link_value(&config.assumeno());
     microdnf->register_named_arg(assume_no);
 
+    auto best = ctx.get_argument_parser().add_new_named_arg("best");
+    best->set_long_name("best");
+    best->set_short_description("try the best available package versions in transactions");
+    best->set_const_value("true");
+    best->link_value(&config.best());
+    microdnf->register_named_arg(best);
+
+    auto no_best = ctx.get_argument_parser().add_new_named_arg("no-best");
+    no_best->set_long_name("no-best");
+    no_best->set_short_description("do not limit the transaction to the best candidate");
+    no_best->set_const_value("false");
+    no_best->link_value(&config.best());
+    microdnf->register_named_arg(no_best);
+
+    auto best_conflict_args =
+        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+            new std::vector<ArgumentParser::Argument *>{best, no_best}));
+
+    best->set_conflict_arguments(best_conflict_args);
+    no_best->set_conflict_arguments(best_conflict_args);
+
     auto comment = ctx.get_argument_parser().add_new_named_arg("comment");
     comment->set_long_name("comment");
     comment->set_has_value(true);
