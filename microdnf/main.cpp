@@ -127,11 +127,21 @@ static void set_commandline_args(Context & ctx) {
     ctx.set_root_command(std::make_unique<RootCommand>(ctx));
     auto microdnf = ctx.get_root_command()->get_argument_parser_command();
 
+    auto & config = ctx.base.get_config();
+
     auto help = ctx.get_argument_parser().add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
     help->set_short_description("Print help");
     microdnf->register_named_arg(help);
+
+    auto config_file_path = ctx.get_argument_parser().add_new_named_arg("config");
+    config_file_path->set_long_name("config");
+    config_file_path->set_has_value(true);
+    config_file_path->set_arg_value_help("CONFIG_FILE_PATH");
+    config_file_path->set_short_description("Configuration file location");
+    config_file_path->link_value(&config.config_file_path());
+    microdnf->register_named_arg(config_file_path);
 
     auto quiet = ctx.get_argument_parser().add_new_named_arg("quiet");
     quiet->set_long_name("quiet");
@@ -206,8 +216,6 @@ static void set_commandline_args(Context & ctx) {
             return true;
         });
     microdnf->register_named_arg(setvar);
-
-    auto & config = ctx.base.get_config();
 
     auto assume_yes = ctx.get_argument_parser().add_new_named_arg("assumeyes");
     assume_yes->set_long_name("assumeyes");
