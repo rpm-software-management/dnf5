@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_UTILS_HPP
 #define TEST_LIBDNF_UTILS_HPP
 
-#include "libdnf/advisory/advisory_query.hpp"
+#include "libdnf/advisory/advisory_set.hpp"
 #include "libdnf/base/transaction.hpp"
 #include "libdnf/rpm/package_set.hpp"
 
@@ -109,7 +109,7 @@ std::vector<std::string> to_vector_string(const libdnf::rpm::PackageSet & pset);
 std::vector<std::string> to_vector_string(const std::vector<libdnf::rpm::Package> & pkg_list);
 
 /// Convert AdvisoryQuery to a vector of strings of their names for easy assertions.
-std::vector<std::string> to_vector_name_string(const libdnf::advisory::AdvisoryQuery & advisory_query);
+std::vector<std::string> to_vector_name_string(const libdnf::advisory::AdvisorySet & aset);
 
 
 inline std::string pkg_info(const libdnf::rpm::Package & pkg) {

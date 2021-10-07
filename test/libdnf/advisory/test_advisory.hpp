@@ -52,10 +52,6 @@ public:
 
     void test_get_references();
     void test_get_collections();
-
-private:
-    std::vector<libdnf::advisory::Advisory> advisories;
-    libdnf::advisory::Advisory * advisory;
 };
 
 

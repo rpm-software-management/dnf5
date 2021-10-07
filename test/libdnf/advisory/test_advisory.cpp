@@ -36,35 +36,46 @@ CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AdvisoryAdvisoryTest, "AdvisoryAdvisoryTes
 void AdvisoryAdvisoryTest::setUp() {
     LibdnfTestCase::setUp();
     LibdnfTestCase::add_repo_repomd("repomd-repo1");
-    libdnf::advisory::AdvisoryQuery q =
-        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
-    advisories = q.get_advisories();
-    advisory = &(advisories[0]);
 }
 
 void AdvisoryAdvisoryTest::test_get_name() {
     // Tests get_name method
-    CPPUNIT_ASSERT_EQUAL(advisory->get_name(), std::string("DNF-2019-1"));
+    libdnf::advisory::AdvisoryQuery advisories =
+        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+    libdnf::advisory::Advisory advisory = *advisories.begin();
+    CPPUNIT_ASSERT_EQUAL(advisory.get_name(), std::string("DNF-2019-1"));
 }
 
 void AdvisoryAdvisoryTest::test_get_type() {
     // Tests get_type method
-    CPPUNIT_ASSERT_EQUAL(advisory->get_type(), libdnf::advisory::Advisory::Type::SECURITY);
+    libdnf::advisory::AdvisoryQuery advisories =
+        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+    libdnf::advisory::Advisory advisory = *advisories.begin();
+    CPPUNIT_ASSERT_EQUAL(advisory.get_type(), libdnf::advisory::Advisory::Type::SECURITY);
 }
 
 void AdvisoryAdvisoryTest::test_get_type_cstring() {
     // Tests get_type method
-    CPPUNIT_ASSERT(!strcmp(advisory->get_type_cstring(), "security"));
+    libdnf::advisory::AdvisoryQuery advisories =
+        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+    libdnf::advisory::Advisory advisory = *advisories.begin();
+    CPPUNIT_ASSERT(!strcmp(advisory.get_type_cstring(), "security"));
 }
 
 void AdvisoryAdvisoryTest::test_get_severity() {
     // Tests get_severity method
-    CPPUNIT_ASSERT_EQUAL(advisory->get_severity(), std::string("moderate"));
+    libdnf::advisory::AdvisoryQuery advisories =
+        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+    libdnf::advisory::Advisory advisory = *advisories.begin();
+    CPPUNIT_ASSERT_EQUAL(advisory.get_severity(), std::string("moderate"));
 }
 
 void AdvisoryAdvisoryTest::test_get_references() {
     // Tests get_references method
-    std::vector<libdnf::advisory::AdvisoryReference> refs = advisory->get_references();
+    libdnf::advisory::AdvisoryQuery advisories =
+        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+    libdnf::advisory::Advisory advisory = *advisories.begin();
+    std::vector<libdnf::advisory::AdvisoryReference> refs = advisory.get_references();
     CPPUNIT_ASSERT_EQUAL(1lu, refs.size());
 
     libdnf::advisory::AdvisoryReference r = refs[0];
@@ -76,7 +87,10 @@ void AdvisoryAdvisoryTest::test_get_references() {
 
 void AdvisoryAdvisoryTest::test_get_collections() {
     // Tests get_collections method
-    std::vector<libdnf::advisory::AdvisoryCollection> colls = advisory->get_collections();
+    libdnf::advisory::AdvisoryQuery advisories =
+        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+    libdnf::advisory::Advisory advisory = *advisories.begin();
+    std::vector<libdnf::advisory::AdvisoryCollection> colls = advisory.get_collections();
     CPPUNIT_ASSERT_EQUAL(1lu, colls.size());
 
     libdnf::advisory::AdvisoryCollection c = colls[0];
@@ -90,10 +104,9 @@ void AdvisoryAdvisoryTest::test_get_collections() {
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), mods[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("ethereum"), mods[1].get_name());
 
-    auto adv_vec = libdnf::advisory::AdvisoryQuery(base).filter_name("DNF-2020-1").get_advisories();
-    CPPUNIT_ASSERT_EQUAL(1lu, adv_vec.size());
-    libdnf::advisory::Advisory * advisory2 = &(adv_vec[0]);
-    colls = advisory2->get_collections();
+    auto adv_query = libdnf::advisory::AdvisoryQuery(base).filter_name("DNF-2020-1");
+    CPPUNIT_ASSERT_EQUAL(1lu, adv_query.size());
+    colls = (*adv_query.begin()).get_collections();
     CPPUNIT_ASSERT_EQUAL(2lu, colls.size());
 
     libdnf::advisory::AdvisoryCollection c1 = colls[0];
