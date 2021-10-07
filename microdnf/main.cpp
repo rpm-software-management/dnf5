@@ -257,6 +257,13 @@ static void set_commandline_args(Context & ctx) {
     best->set_conflict_arguments(best_conflict_args);
     no_best->set_conflict_arguments(best_conflict_args);
 
+    auto skip_broken = ctx.get_argument_parser().add_new_named_arg("skip-broken");
+    skip_broken->set_long_name("skip-broken");
+    skip_broken->set_short_description("resolve depsolve problems by skipping packages");
+    skip_broken->set_const_value("false");
+    skip_broken->link_value(&config.strict());
+    microdnf->register_named_arg(skip_broken);
+
     auto comment = ctx.get_argument_parser().add_new_named_arg("comment");
     comment->set_long_name("comment");
     comment->set_has_value(true);
