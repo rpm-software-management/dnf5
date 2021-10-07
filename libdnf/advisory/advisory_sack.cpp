@@ -28,11 +28,11 @@ namespace libdnf::advisory {
 
 AdvisorySack::AdvisorySack(const libdnf::BaseWeakPtr & base) : base(base) {}
 
-void AdvisorySack::load_advisories() {
+libdnf::solv::SolvMap & AdvisorySack::get_solvables() {
     auto & pool = get_pool(base);
 
     if (cached_solvables_size == pool.get_nsolvables()) {
-        return;
+        return data_map;
     }
 
     data_map = libdnf::solv::SolvMap(pool.get_nsolvables());
@@ -58,6 +58,8 @@ void AdvisorySack::load_advisories() {
     dataiterator_free(&di);
 
     cached_solvables_size = pool.get_nsolvables();
+
+    return data_map;
 }
 
 BaseWeakPtr AdvisorySack::get_base() const {

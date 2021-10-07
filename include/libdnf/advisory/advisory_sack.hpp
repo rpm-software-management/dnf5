@@ -49,7 +49,7 @@ private:
     /// Load all advisories present in PackageSack from base. This method is
     /// called automatically when creating a new query and the cached number
     /// of solvables doesn't match the current number in solv sacks pool.
-    void load_advisories();
+    libdnf::solv::SolvMap & get_solvables();
 
     libdnf::BaseWeakPtr base;
 

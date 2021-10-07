@@ -36,7 +36,7 @@ namespace libdnf::advisory {
 
 AdvisoryQuery::AdvisoryQuery(const BaseWeakPtr & base) : base(base) {
     // TODO(lukash) simplify
-    base->get_rpm_advisory_sack()->load_advisories();
+    base->get_rpm_advisory_sack()->get_solvables();
     p_impl.reset(new Impl(base->get_rpm_advisory_sack()->data_map));
 }
 
