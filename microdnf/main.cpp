@@ -264,6 +264,75 @@ static void set_commandline_args(Context & ctx) {
     skip_broken->link_value(&config.strict());
     microdnf->register_named_arg(skip_broken);
 
+    auto enable_repoids = ctx.get_argument_parser().add_new_named_arg("enable-repo");
+    enable_repoids->set_long_name("enable-repo");
+    enable_repoids->set_has_value(true);
+    enable_repoids->set_arg_value_help("REPO_ID,...");
+    enable_repoids->set_short_description(
+        "Enable additional repositories. List option. Supports globs, can be specified multiple times.");
+    enable_repoids->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            // Store the repositories enablement to vector. Use it later when repositories configuration will be loaded.
+            libdnf::OptionStringList repoid_patterns(value);
+            for (auto & repoid_pattern : repoid_patterns.get_value()) {
+                ctx.setopts.emplace_back(repoid_pattern + ".enabled", "1");
+            }
+            return true;
+        });
+    microdnf->register_named_arg(enable_repoids);
+
+    auto disable_repo_ids = ctx.get_argument_parser().add_new_named_arg("disable-repo");
+    disable_repo_ids->set_long_name("disable-repo");
+    disable_repo_ids->set_has_value(true);
+    disable_repo_ids->set_arg_value_help("REPO_ID,...");
+    disable_repo_ids->set_short_description(
+        "Disable repositories. List option. Supports globs, can be specified multiple times.");
+    disable_repo_ids->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            // Store the repositories disablement to vector. Use it later when repositories configuration will be loaded.
+            libdnf::OptionStringList repoid_patterns(value);
+            for (auto & repoid_pattern : repoid_patterns.get_value()) {
+                ctx.setopts.emplace_back(repoid_pattern + ".enabled", "0");
+            }
+            return true;
+        });
+    microdnf->register_named_arg(disable_repo_ids);
+
+    auto repo_ids = ctx.get_argument_parser().add_new_named_arg("repo");
+    repo_ids->set_long_name("repo");
+    repo_ids->set_has_value(true);
+    repo_ids->set_arg_value_help("REPO_ID,...");
+    repo_ids->set_short_description(
+        "Enable just specific repositories. List option. Supports globs, can be specified multiple times.");
+    repo_ids->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            // The first occurrence of the argument first disables all repositories.
+            if (arg->get_parse_count() == 1) {
+                ctx.setopts.emplace_back("*.enabled", "0");
+            }
+            // Store repositories enablemend to vector. Use it later when repositories configuration will be loaded.
+            libdnf::OptionStringList repoid_patterns(value);
+            for (auto & repoid_pattern : repoid_patterns.get_value()) {
+                ctx.setopts.emplace_back(repoid_pattern + ".enabled", "1");
+            }
+            return true;
+        });
+    microdnf->register_named_arg(repo_ids);
+
+    auto ed_repo_conflict_args =
+        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+            new std::vector<ArgumentParser::Argument *>{repo_ids}));
+    enable_repoids->set_conflict_arguments(ed_repo_conflict_args);
+    disable_repo_ids->set_conflict_arguments(ed_repo_conflict_args);
+
+    auto repo_conflict_args =
+        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+            new std::vector<ArgumentParser::Argument *>{enable_repoids, disable_repo_ids}));
+    repo_ids->set_conflict_arguments(repo_conflict_args);
+
     auto comment = ctx.get_argument_parser().add_new_named_arg("comment");
     comment->set_long_name("comment");
     comment->set_has_value(true);
