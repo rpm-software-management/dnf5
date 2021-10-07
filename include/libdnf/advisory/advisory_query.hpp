@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_collection.hpp"
 #include "libdnf/advisory/advisory_package.hpp"
 #include "libdnf/advisory/advisory_reference.hpp"
+#include "libdnf/advisory/advisory_set.hpp"
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/rpm/package.hpp"
@@ -33,13 +34,13 @@ namespace libdnf::advisory {
 
 using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 
-class AdvisoryQuery {
+class AdvisoryQuery : public AdvisorySet {
 public:
     explicit AdvisoryQuery(const BaseWeakPtr & base);
     explicit AdvisoryQuery(Base & base);
 
-    AdvisoryQuery(const AdvisoryQuery & src);
-    AdvisoryQuery & operator=(const AdvisoryQuery & src);
+    AdvisoryQuery(const AdvisoryQuery & src) = default;
+    AdvisoryQuery & operator=(const AdvisoryQuery & src) = default;
 
     AdvisoryQuery(AdvisoryQuery && src) = default;
     AdvisoryQuery & operator=(AdvisoryQuery && src) = default;
@@ -93,8 +94,6 @@ public:
     std::vector<AdvisoryPackage> get_advisory_packages(
         const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    //TODO(amatej): create AdvisorySet (and its iterators), make AdvisoryQuery inherit AdvisorySet? (but its so many objects..)
-    std::vector<Advisory> get_advisories() const;
     //TODO(amatej): This is only used for conveniece it might possibly be a method on AdvisorySet? Or there might be some other way of accessing AdvisoryPackages
     std::vector<AdvisoryPackage> get_sorted_advisory_packages(bool only_applicable = false) const;
 
@@ -102,9 +101,6 @@ private:
     explicit AdvisoryQuery(const AdvisorySackWeakPtr & sack);
 
     BaseWeakPtr base;
-
-    class Impl;
-    std::unique_ptr<Impl> p_impl;
 };
 
 }  // namespace libdnf::advisory
