@@ -333,6 +333,22 @@ static void set_commandline_args(Context & ctx) {
             new std::vector<ArgumentParser::Argument *>{enable_repoids, disable_repo_ids}));
     repo_ids->set_conflict_arguments(repo_conflict_args);
 
+    auto no_gpgchecks = ctx.get_argument_parser().add_new_named_arg("no-gpgchecks");
+    no_gpgchecks->set_long_name("no-gpgchecks");
+    no_gpgchecks->set_short_description("disable gpg signature checking (if RPM policy allows)");
+    no_gpgchecks->set_parse_hook_func([&ctx](
+                                         [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                         [[maybe_unused]] const char * option,
+                                         [[maybe_unused]] const char * value) {
+        ctx.base.get_config().gpgcheck().set(libdnf::Option::Priority::COMMANDLINE, 0);
+        ctx.base.get_config().repo_gpgcheck().set(libdnf::Option::Priority::COMMANDLINE, 0);
+        // Store to vector. Use it later when repositories configuration will be loaded.
+        ctx.setopts.emplace_back("*.gpgcheck", "0");
+        ctx.setopts.emplace_back("*.repo_gpgcheck", "0");
+        return true;
+    });
+    microdnf->register_named_arg(no_gpgchecks);
+
     auto comment = ctx.get_argument_parser().add_new_named_arg("comment");
     comment->set_long_name("comment");
     comment->set_has_value(true);
