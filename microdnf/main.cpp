@@ -349,6 +349,56 @@ static void set_commandline_args(Context & ctx) {
     });
     microdnf->register_named_arg(no_gpgchecks);
 
+    auto no_plugins = ctx.get_argument_parser().add_new_named_arg("no-plugins");
+    no_plugins->set_long_name("no-plugins");
+    no_plugins->set_short_description("disable all plugins");
+    no_plugins->set_const_value("false");
+    no_plugins->link_value(&config.plugins());
+    microdnf->register_named_arg(no_plugins);
+
+    auto enable_plugins_names = ctx.get_argument_parser().add_new_named_arg("enable-plugin");
+    enable_plugins_names->set_long_name("enable-plugin");
+    enable_plugins_names->set_has_value(true);
+    enable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
+    enable_plugins_names->set_short_description("Enable plugins by name. List option. Supports globs, can be specified multiple times.");
+    enable_plugins_names->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            libdnf::OptionStringList plugin_name_patterns(value);
+            for (auto & plugin_name_pattern : plugin_name_patterns.get_value()) {
+                ctx.enable_plugins_patterns.emplace_back(plugin_name_pattern);
+            }
+            return true;
+        });
+    microdnf->register_named_arg(enable_plugins_names);
+
+    auto disable_plugins_names = ctx.get_argument_parser().add_new_named_arg("disable-plugin");
+    disable_plugins_names->set_long_name("disable-plugin");
+    disable_plugins_names->set_has_value(true);
+    disable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
+    disable_plugins_names->set_short_description("Disable plugins by name. List option. Supports globs, can be specified multiple times.");
+    disable_plugins_names->set_parse_hook_func(
+        [&ctx](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            libdnf::OptionStringList plugin_name_patterns(value);
+            for (auto & plugin_name_pattern : plugin_name_patterns.get_value()) {
+                ctx.disable_plugins_patterns.emplace_back(plugin_name_pattern);
+            }
+            return true;
+        });
+    microdnf->register_named_arg(disable_plugins_names);
+
+    auto ed_plugins_names_conflict_args =
+        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+            new std::vector<ArgumentParser::Argument *>{no_plugins}));
+    enable_plugins_names->set_conflict_arguments(ed_plugins_names_conflict_args);
+    disable_plugins_names->set_conflict_arguments(ed_plugins_names_conflict_args);
+
+    auto no_plugins_conflict_args =
+        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+            new std::vector<ArgumentParser::Argument *>{enable_plugins_names, disable_plugins_names}));
+    no_plugins->set_conflict_arguments(no_plugins_conflict_args);
+
     auto comment = ctx.get_argument_parser().add_new_named_arg("comment");
     comment->set_long_name("comment");
     comment->set_has_value(true);

@@ -49,6 +49,8 @@ public:
 
     libdnf::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
+    std::vector<std::string> enable_plugins_patterns;
+    std::vector<std::string> disable_plugins_patterns;
 
     /// Gets program arguments.
     libdnf::Span<const char * const> get_prg_arguments() const { return prg_args; }
