@@ -166,7 +166,7 @@ static void set_commandline_args(Context & ctx) {
     auto setopt = ctx.get_argument_parser().add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);
-    setopt->set_arg_value_help("KEY=VALUE");
+    setopt->set_arg_value_help("[REPO_ID.]OPTION=VALUE");
     setopt->set_short_description("set arbitrary config and repo options");
     setopt->set_description(
         R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
@@ -206,7 +206,7 @@ static void set_commandline_args(Context & ctx) {
     auto setvar = ctx.get_argument_parser().add_new_named_arg("setvar");
     setvar->set_long_name("setvar");
     setvar->set_has_value(true);
-    setvar->set_arg_value_help("NAME=VALUE");
+    setvar->set_arg_value_help("VAR_NAME=VALUE");
     setvar->set_short_description("set arbitrary variable");
     setvar->set_parse_hook_func(
         [&ctx](
