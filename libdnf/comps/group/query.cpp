@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/query.hpp"
 
 #include "group-private.hpp"
-#include "query_impl.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -36,10 +35,11 @@ namespace libdnf::comps {
 
 
 GroupQueryWeakPtr GroupQuery::get_weak_ptr() {
-    return GroupQueryWeakPtr(this, &p_impl->data_guard);
+    return GroupQueryWeakPtr(this, &data_guard);
 }
 
-GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : Query(), sack(sack), p_impl{new Impl()} {
+
+GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : Query(), sack(sack) {
     libdnf::solv::Pool & spool = get_pool(sack->comps.get_base());
     Pool * pool = *spool;
 
@@ -89,7 +89,7 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base) : GroupQuery(base->get_comps()-
 
 GroupQuery::GroupQuery(Base & base) : GroupQuery(base.get_comps()->get_group_sack()) {}
 
-GroupQuery::GroupQuery(const GroupQuery & query) : Query(query), sack(query.sack), p_impl{new Impl()} {}
+GroupQuery::GroupQuery(const GroupQuery & query) : Query(query), sack(query.sack) {}
 
 
 GroupQuery::~GroupQuery() {}

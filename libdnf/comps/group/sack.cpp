@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/sack.hpp"
 
 #include "group-private.hpp"
-#include "sack_impl.hpp"
 
 #include "libdnf/comps/comps.hpp"
 #include "libdnf/comps/group/group.hpp"
@@ -40,11 +39,11 @@ namespace libdnf::comps {
 
 
 GroupSackWeakPtr GroupSack::get_weak_ptr() {
-    return GroupSackWeakPtr(this, &p_impl->sack_guard);
+    return GroupSackWeakPtr(this, &sack_guard);
 }
 
 
-GroupSack::GroupSack(Comps & comps) : Sack(), comps{comps}, p_impl{new Impl()} {}
+GroupSack::GroupSack(Comps & comps) : Sack(), comps{comps} {}
 
 
 GroupSack::~GroupSack() {}

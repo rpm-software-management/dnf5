@@ -25,8 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/comps/group/group.hpp"
 
-#include <memory>
-
 
 namespace libdnf::comps {
 
@@ -75,8 +73,7 @@ private:
 
     GroupSackWeakPtr sack;
 
-    class Impl;
-    std::unique_ptr<Impl> p_impl;
+    WeakPtrGuard<GroupQuery, false> data_guard;
 
     friend Group;
     friend GroupSack;

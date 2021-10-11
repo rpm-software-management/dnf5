@@ -25,7 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <map>
-#include <memory>
 #include <string>
 
 
@@ -53,8 +52,7 @@ protected:
 private:
     Comps & comps;
 
-    class Impl;
-    std::unique_ptr<Impl> p_impl;
+    WeakPtrGuard<GroupSack, false> sack_guard;
 
     /// @return Map of resolved reasons why groups were installed: ``{group_id -> reason}``.
     ///         A group can be installed due to multiple reasons, only the most significant is returned.
