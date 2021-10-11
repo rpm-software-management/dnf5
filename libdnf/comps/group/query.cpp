@@ -23,12 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/comps/comps.hpp"
+#include "libdnf/comps/group/group.hpp"
 #include "libdnf/comps/group/sack.hpp"
 
 extern "C" {
 #include <solv/pool.h>
-#include <solv/repo.h>
 }
+
 
 namespace libdnf::comps {
 
@@ -45,7 +46,7 @@ void add_solvable_ids(Group & group, std::vector<Id> solvable_ids) {
 }
 
 
-GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : Query(), sack(sack) {
+GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : sack(sack) {
     libdnf::solv::Pool & spool = get_pool(sack->comps.get_base());
     Pool * pool = *spool;
 
@@ -98,7 +99,7 @@ GroupQuery::GroupQuery(Base & base) : GroupQuery(base.get_comps()->get_group_sac
 GroupQuery::GroupQuery(const GroupQuery & query) : Query(query), sack(query.sack) {}
 
 
-GroupQuery::~GroupQuery() {}
+GroupQuery::~GroupQuery() = default;
 
 
 }  // namespace libdnf::comps

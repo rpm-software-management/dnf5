@@ -33,7 +33,7 @@ namespace libdnf::comps {
 Comps::Comps(libdnf::Base & base) : base{base} {}
 
 
-Comps::~Comps() {}
+Comps::~Comps() = default;
 
 
 CompsWeakPtr Comps::get_weak_ptr() {

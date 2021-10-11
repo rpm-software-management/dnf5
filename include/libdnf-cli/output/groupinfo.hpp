@@ -130,4 +130,4 @@ void print_groupinfo_table(GroupType & group) {
 
 }  // namespace libdnf::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_REPOLIST_HPP
+#endif  // LIBDNF_CLI_OUTPUT_GROUPINFO_HPP

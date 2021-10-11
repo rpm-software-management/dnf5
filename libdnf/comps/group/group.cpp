@@ -22,30 +22,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 #include "utils/xml.hpp"
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/comps/comps.hpp"
 #include "libdnf/comps/group/package.hpp"
 #include "libdnf/comps/group/query.hpp"
-#include "libdnf/comps/group/sack.hpp"
 
 extern "C" {
 #include <solv/dataiterator.h>
 #include <solv/knownid.h>
 #include <solv/pool.h>
-#include <solv/repo.h>
 #include <solv/solvable.h>
 }
 
 #include <libxml/tree.h>
 
-#include <iostream>
 #include <string>
 
 
 namespace libdnf::comps {
 
 
-Group::~Group() {}
+Group::~Group() = default;
 
 
 Group::Group(GroupQuery * query) : query(query->get_weak_ptr()) {}

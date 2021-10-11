@@ -59,9 +59,6 @@ public:
     /// Create WeakPtr to GroupQuery
     GroupQueryWeakPtr get_weak_ptr();
 
-protected:
-    GroupQuery(GroupQuery && query);
-
 private:
     struct F {
         static std::string groupid(const Group & obj) { return obj.get_groupid(); }
@@ -121,6 +118,8 @@ inline GroupQuery & GroupQuery::filter_installed(bool value) {
     return *this;
 }
 
+
 }  // namespace libdnf::comps
+
 
 #endif  // LIBDNF_COMPS_GROUP_QUERY_HPP

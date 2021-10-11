@@ -31,20 +31,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::comps {
 
+
 struct GroupId {
 public:
     GroupId() = default;
-    explicit GroupId(int id);
+    explicit GroupId(int id) : id(id) {}
 
-    bool operator==(const GroupId & other) const noexcept { return id == other.id; };
-    bool operator!=(const GroupId & other) const noexcept { return id != other.id; };
+    bool operator==(const GroupId & other) const noexcept { return id == other.id; }
+    bool operator!=(const GroupId & other) const noexcept { return id != other.id; }
 
     // Corresponds to solvable id
     int id{0};
 };
-
-
-inline GroupId::GroupId(int id) : id(id) {}
 
 
 class GroupQuery;
@@ -146,6 +144,8 @@ private:
     friend class GroupQuery;
 };
 
+
 }  // namespace libdnf::comps
+
 
 #endif  // LIBDNF_COMPS_GROUP_GROUP_HPP

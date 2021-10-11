@@ -24,8 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/sack.hpp"
 #include "libdnf/repo/repo.hpp"
 
-#include <memory>
-
 
 namespace libdnf {
 

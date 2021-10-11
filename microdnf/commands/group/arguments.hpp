@@ -17,7 +17,6 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef MICRODNF_COMMANDS_GROUP_ARGUMENTS_HPP
 #define MICRODNF_COMMANDS_GROUP_ARGUMENTS_HPP
 

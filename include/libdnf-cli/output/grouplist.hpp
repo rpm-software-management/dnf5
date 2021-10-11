@@ -74,4 +74,4 @@ void print_grouplist_table(Query & group_list) {
 
 }  // namespace libdnf::cli::output
 
-#endif  // LIBDNF_CLI_OUTPUT_REPOLIST_HPP
+#endif  // LIBDNF_CLI_OUTPUT_GROUPLIST_HPP

@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::comps {
 
+
 class Comps;
 class Group;
 
@@ -65,6 +66,8 @@ private:
     friend class GroupQuery;
 };
 
+
 }  // namespace libdnf::comps
+
 
 #endif  // LIBDNF_COMPS_GROUP_SACK_HPP

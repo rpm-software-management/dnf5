@@ -23,13 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/group.hpp"
 #include "libdnf/comps/group/query.hpp"
 
-extern "C" {
-#include <solv/knownid.h>
-#include <solv/pool.h>
-#include <solv/repo.h>
-#include <solv/solvable.h>
-}
-
 #include <map>
 
 
@@ -41,10 +34,10 @@ GroupSackWeakPtr GroupSack::get_weak_ptr() {
 }
 
 
-GroupSack::GroupSack(Comps & comps) : Sack(), comps{comps} {}
+GroupSack::GroupSack(Comps & comps) : comps{comps} {}
 
 
-GroupSack::~GroupSack() {}
+GroupSack::~GroupSack() = default;
 
 
 }  // namespace libdnf::comps
