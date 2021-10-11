@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/comps/group/query.hpp"
 
-#include "group-private.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -36,6 +35,13 @@ namespace libdnf::comps {
 
 GroupQueryWeakPtr GroupQuery::get_weak_ptr() {
     return GroupQueryWeakPtr(this, &data_guard);
+}
+
+
+void add_solvable_ids(Group & group, std::vector<Id> solvable_ids) {
+    for (Id solvable_id : solvable_ids) {
+        group.add_group_id(GroupId(solvable_id));
+    }
 }
 
 

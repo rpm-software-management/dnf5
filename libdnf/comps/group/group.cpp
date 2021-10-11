@@ -51,24 +51,14 @@ Group::~Group() {}
 Group::Group(GroupQuery * query) : query(query->get_weak_ptr()) {}
 
 
-void add_solvable_id(Group & group, Id solvable_id) {
-    group.add_group_id(GroupId(solvable_id));
-}
-
-
-void add_solvable_ids(Group & group, std::vector<Id> solvable_ids) {
-    for (Id solvable_id : solvable_ids) {
-        group.add_group_id(GroupId(solvable_id));
-    }
-}
-
-
 Group & Group::operator+=(const Group & rhs) {
     this->group_ids.insert(this->group_ids.begin(), rhs.group_ids.begin(), rhs.group_ids.end());
     return *this;
 }
 
 
+// Search solvables that correspond to the group_ids for given key
+// Return first non-empty string
 std::string lookup_str(libdnf::solv::Pool & pool, std::vector<GroupId> group_ids, Id key) {
     for (GroupId group_id : group_ids) {
         auto value = pool.lookup_str(group_id.id, key);
