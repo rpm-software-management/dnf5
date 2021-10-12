@@ -282,7 +282,7 @@ bool GoalPrivate::limit_installonly_packages(libdnf::solv::IdQueue & job, Id run
 libdnf::solv::IdQueue GoalPrivate::list_results(Id type_filter1, Id type_filter2) {
     /* no transaction */
     if (!libsolv_transaction) {
-        assert_resolved();
+        libdnf_assert_goal_resolved();
 
         // TODO(jmracek) else if (removalOfProtected && removalOfProtected->size()) {
         //    throw Goal::Error(_("no solution, cannot remove protected package"),
@@ -315,11 +315,6 @@ libdnf::solv::IdQueue GoalPrivate::list_results(Id type_filter1, Id type_filter2
         }
     }
     return result_ids;
-}
-
-
-void GoalPrivate::assert_resolved() {
-    libdnf_assert(libsolv_solver != nullptr, "Performing an operation that requires Goal to be resolved");
 }
 
 
@@ -401,7 +396,7 @@ libdnf::solv::IdQueue GoalPrivate::list_obsoleted() {
 }
 
 void GoalPrivate::write_debugdata(const std::string & dir) {
-    assert_resolved();
+    libdnf_assert_goal_resolved();
 
     int flags = TESTCASE_RESULT_TRANSACTION | TESTCASE_RESULT_PROBLEMS;
     // TODO(jmracek) add support of relative path and create required dirs and parents
@@ -449,7 +444,7 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
 // }
 
 size_t GoalPrivate::count_solver_problems() {
-    assert_resolved();
+    libdnf_assert_goal_resolved();
 
     return solver_problem_count(libsolv_solver);
 }
@@ -457,7 +452,7 @@ size_t GoalPrivate::count_solver_problems() {
 std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems() {
     auto & pool = get_pool();
 
-    assert_resolved();
+    libdnf_assert_goal_resolved();
 
     auto count_problems = static_cast<int>(count_solver_problems());
     if (count_problems == 0) {
@@ -633,7 +628,7 @@ void GoalPrivate::reset_protected_packages() {
 
 transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
     //solver_get_recommendations
-    assert_resolved();
+    libdnf_assert_goal_resolved();
 
     Id info;
     int reason = solver_describe_decision(libsolv_solver, id, &info);

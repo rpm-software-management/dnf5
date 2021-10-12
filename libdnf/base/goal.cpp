@@ -193,7 +193,7 @@ void Goal::add_rpm_distro_sync(const rpm::PackageSet & package_set, const GoalJo
 }
 
 void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    assert_same_base(base, rpm_package.base);
+    libdnf_assert_same_base(base, rpm_package.base);
 
     libdnf::solv::IdQueue ids;
     ids.push_back(rpm_package.get_id().id);
@@ -202,7 +202,7 @@ void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package
 
 void Goal::Impl::add_rpm_ids(
     GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
-    assert_same_base(base, package_set.get_base());
+    libdnf_assert_same_base(base, package_set.get_base());
 
     libdnf::solv::IdQueue ids;
     for (auto package_id : *package_set.p_impl) {

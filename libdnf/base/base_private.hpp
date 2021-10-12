@@ -21,12 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_BASE_PRIVATE_HPP
 
 #include "libdnf/base/base_weak.hpp"
+#include "libdnf/common/exception.hpp"
 
-
-namespace libdnf {
-
-void assert_same_base(const BaseWeakPtr & base_a, const BaseWeakPtr & base_b);
-
-}  // namespace libdnf
+#define libdnf_assert_same_base(base_a, base_b) \
+    libdnf_assert(                          \
+        (base_a) == (base_b), "Performing an operation on two objects instantiated from different Base instances");
 
 #endif

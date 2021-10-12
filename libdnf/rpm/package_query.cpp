@@ -351,7 +351,7 @@ PackageQuery & PackageQuery::filter_name(const PackageSet & package_set, libdnf:
     auto &  pool = get_pool(p_impl->base);
     libdnf::solv::SolvMap filter_result(sack->get_nsolvables());
 
-    assert_same_base(p_impl->base, package_set.get_base());
+    libdnf_assert_same_base(p_impl->base, package_set.get_base());
 
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
@@ -382,7 +382,7 @@ PackageQuery & PackageQuery::filter_name_arch(const PackageSet & package_set, li
     auto &  pool = get_pool(p_impl->base);
     libdnf::solv::SolvMap filter_result(sack->get_nsolvables());
 
-    assert_same_base(p_impl->base, package_set.get_base());
+    libdnf_assert_same_base(p_impl->base, package_set.get_base());
 
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
@@ -697,7 +697,7 @@ PackageQuery & PackageQuery::filter_nevra(const PackageSet & package_set, libdnf
     auto & pool = get_pool(p_impl->base);
     libdnf::solv::SolvMap filter_result(sack->p_impl->get_nsolvables());
 
-    assert_same_base(p_impl->base, package_set.get_base());
+    libdnf_assert_same_base(p_impl->base, package_set.get_base());
 
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 

@@ -71,7 +71,7 @@ PackageSet::iterator PackageSet::end() const {
 
 
 PackageSet & PackageSet::operator|=(const PackageSet & other) {
-    assert_same_base(p_impl->base, other.p_impl->base);
+    libdnf_assert_same_base(p_impl->base, other.p_impl->base);
 
     *p_impl |= *other.p_impl;
     return *this;
@@ -79,7 +79,7 @@ PackageSet & PackageSet::operator|=(const PackageSet & other) {
 
 
 PackageSet & PackageSet::operator-=(const PackageSet & other) {
-    assert_same_base(p_impl->base, other.p_impl->base);
+    libdnf_assert_same_base(p_impl->base, other.p_impl->base);
 
     *p_impl -= *other.p_impl;
     return *this;
@@ -87,7 +87,7 @@ PackageSet & PackageSet::operator-=(const PackageSet & other) {
 
 
 PackageSet & PackageSet::operator&=(const PackageSet & other) {
-    assert_same_base(p_impl->base, other.p_impl->base);
+    libdnf_assert_same_base(p_impl->base, other.p_impl->base);
 
     *p_impl &= *other.p_impl;
     return *this;

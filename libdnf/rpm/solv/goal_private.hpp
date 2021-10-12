@@ -29,6 +29,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <solv/solver.h>
 
+#define libdnf_assert_goal_resolved() \
+    libdnf_assert(libsolv_solver != nullptr, "Performing an operation that requires Goal to be resolved");
+
 namespace libdnf::rpm::solv {
 
 class GoalPrivate {
@@ -111,8 +114,6 @@ private:
     bool limit_installonly_packages(libdnf::solv::IdQueue & job, Id running_kernel);
 
     libdnf::solv::IdQueue list_results(Id type_filter1, Id type_filter2);
-
-    void assert_resolved();
 
     BaseWeakPtr base;
 
