@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/transaction.hpp"
 #include "libdnf/rpm/transaction.hpp"
 
+#include "libdnf/common/exception.hpp"
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "package_set_impl.hpp"
 #include "../repo/repo_impl.hpp"
@@ -630,7 +631,7 @@ private:
                     break;
                 }
                 case RPMTS_EVENT_DEL: {
-                    throw AssertionError(
+                    libdnf_throw_assertion(
                         "Implicitly removed element {} type {} (caused by {})", te_nevra, te_type, trigger_nevra);
                 }
             }
@@ -822,7 +823,7 @@ void Transaction::Impl::install_up_down(TransactionItem & item, libdnf::transact
         upgrade = false;
         msg_action = "install";
     } else {
-        throw AssertionError("Unsupported action: {}", action);
+        libdnf_throw_assertion("Unsupported action: {}", action);
     }
     auto file_path = item.get_package().get_package_path();
     auto * header = read_pkg_header(file_path);

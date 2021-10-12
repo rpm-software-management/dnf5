@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
 
+#include <fmt/format.h>
+
 #include <climits>
 #include <memory>
 

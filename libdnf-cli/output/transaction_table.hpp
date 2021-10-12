@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 #define LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 
+#include "libdnf/common/exception.hpp"
 #include "libdnf-cli/utils/tty.hpp"
 #include "libdnf-cli/utils/units.hpp"
 
@@ -63,7 +64,7 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
             break;
     }
 
-    throw AssertionError("Unexpected action in print_transaction_table: {}", action);
+    libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", action);
 }
 
 
@@ -117,7 +118,7 @@ public:
                 case libdnf::transaction::TransactionItemAction::OBSOLETED:
                 case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                 case libdnf::transaction::TransactionItemAction::REPLACED:
-                    throw AssertionError("Unexpected action in print_transaction_table: {}", tspkg.get_action());
+                    libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", tspkg.get_action());
             }
 
             text += ":";
@@ -169,7 +170,7 @@ public:
             case libdnf::transaction::TransactionItemAction::OBSOLETE:
             case libdnf::transaction::TransactionItemAction::OBSOLETED:
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-                throw AssertionError("Unexpected action in print_transaction_table: {}", action);
+                libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", action);
         }
     }
 

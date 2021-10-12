@@ -27,6 +27,29 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 
+AssertionError::AssertionError(
+    const char * assertion,
+    const SourceLocation & location,
+    const std::string & message)
+    : logic_error(message),
+      condition(assertion),
+      location(location) {}
+
+const char * AssertionError::what() const noexcept {
+    try {
+        str_what = location.file_name + std::string(":") + std::to_string(location.source_line) + ": " + location.function_name;
+        if (condition) {
+            str_what += std::string(": Assertion '") + condition + "' failed: ";
+        } else {
+            str_what += ": Assertion failed: ";
+        }
+        str_what += logic_error::what();
+        return str_what.c_str();
+    } catch (...) {
+        return logic_error::what();
+    }
+}
+
 const char * Exception::what() const noexcept {
     try {
         str_what = std::string(get_domain_name()) + "::" + get_name() + ": " + get_description();

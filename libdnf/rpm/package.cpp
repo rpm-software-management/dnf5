@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package.hpp"
 
 #include "reldep_list_impl.hpp"
+#include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/solv/solv_private.hpp"
 #include "libdnf/solv/pool.hpp"
 

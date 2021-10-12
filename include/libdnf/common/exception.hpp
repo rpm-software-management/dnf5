@@ -24,38 +24,66 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <stdexcept>
 
+#define LIBDNF_LOCATION { __FILE__, __LINE__, __PRETTY_FUNCTION__ }
+
+/// An assert macro that throws `libdnf::AssertionError`.
+///
+/// @param format The format string for the message.
+/// @param ... The format arguments.
+/// @exception libdnf::AssertionError Thrown always.
+#define libdnf_throw_assertion(msg_format, ...) \
+    (throw libdnf::AssertionError(              \
+        nullptr, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
+
+/// An assert macro that throws `libdnf::AssertionError` when `condition` is not met.
+///
+/// @param condition The assertion condition. Throws AssertionError if it's not met.
+/// @param format The format string for the message.
+/// @param ... The format arguments.
+/// @exception libdnf::AssertionError Thrown when condition is not met.
+#define libdnf_assert(condition, msg_format, ...) \
+    (static_cast<bool>(condition)                 \
+         ? void(0)                                \
+         : throw libdnf::AssertionError(          \
+               #condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
+
+/// Indicates the availability of `libdnf_assert` and` libdnf_throw_assertion` macros.
+/// These macros may be removed in the future. E.g. when migrating the asserts implementation
+/// to C++20 `std::source_location`.
+#define LIBDNF_ASSERTION_MACROS 1
 
 namespace libdnf {
+
+/// The source_location structure represents location information in the source code.
+/// Specifically, the file name, line number, and function name.
+struct SourceLocation {
+    const char * file_name;
+    unsigned int source_line;
+    const char * function_name;
+};
 
 /// An AssertionError is a fault in the program logic, it is thrown when an
 /// incorrect sequence of actions has led to an invalid state in which it is
 /// impossible to continue running the program.
 class AssertionError : public std::logic_error {
 public:
+    AssertionError(
+        const char * assertion,
+        const SourceLocation & location,
+        const std::string & message);
 
-    /// A constructor that supports formatting the error message.
-    ///
-    /// @param format The format string for the message.
-    /// @param args The format arguments.
-    template<typename... Ss>
-    AssertionError(const std::string & format, Ss&&... args)
-        : std::logic_error(fmt::format(format, std::forward<Ss>(args)...)) {}
+    const char * what() const noexcept override;
+    const char * assertion() const noexcept { return condition; }
+    const char * file_name() const noexcept { return location.file_name; }
+    unsigned int source_line() const noexcept { return location.source_line; }
+    const char * function_name() const noexcept { return location.function_name; }
+    const char * message() const noexcept { return logic_error::what(); }
+
+private:
+    const char * condition;
+    SourceLocation location;
+    mutable std::string str_what;
 };
-
-/// An assert function that throws `libdnf::AssertionError` when `condition`
-/// is not met.
-///
-/// @param condition The assertion condition. Throws AssertionError if it's not met.
-/// @param format The format string for the message.
-/// @param args The format arguments.
-/// @exception libdnf::AssertionError Thrown when condition is not met.
-template<typename... Ss>
-void libdnf_assert(bool condition, const std::string & format, Ss&&... args) {
-    if (!condition) {
-        throw AssertionError(format, std::forward<Ss>(args)...);
-    }
-}
-
 
 /// Base class of libdnf exceptions. Each exception define at least domain_name, name, and description.
 /// These information can be used to serialize exception into a string.

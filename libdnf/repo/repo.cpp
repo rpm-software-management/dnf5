@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
+#include "libdnf/common/exception.hpp"
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "../libdnf/utils/fs.hpp"
 #include "repo_impl.hpp"

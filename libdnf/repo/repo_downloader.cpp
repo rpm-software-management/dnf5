@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_downloader.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/common/exception.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 #include "libdnf/utils/fs.hpp"
 #include "libdnf/utils/string.hpp"
@@ -89,7 +90,7 @@ static void result_get_info(LrResult * result, LrResultInfoOption option, T valu
 
 
 static LrYumRepo * get_yum_repo(const std::unique_ptr<LrResult> & lr_result) {
-    libdnf::libdnf_assert(
+    libdnf_assert(
         lr_result != nullptr,
         "load_local() needs to be called before repository attributes can be accessed");
 
@@ -99,7 +100,7 @@ static LrYumRepo * get_yum_repo(const std::unique_ptr<LrResult> & lr_result) {
 }
 
 static LrYumRepoMd * get_yum_repomd(const std::unique_ptr<LrResult> & lr_result) {
-    libdnf::libdnf_assert(
+    libdnf_assert(
         lr_result != nullptr,
         "load_local() needs to be called before repository attributes can be accessed");
 

@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_impl.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/package_set_impl.hpp"
 #include "libdnf/solv/pool.hpp"

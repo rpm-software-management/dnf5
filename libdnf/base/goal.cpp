@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/goal.hpp"
 
 #include "libdnf/base/base_private.hpp"
+#include "libdnf/common/exception.hpp"
 #include "../libdnf/utils/bgettext/bgettext-lib.h"
 #include "../rpm/package_sack_impl.hpp"
 #include "../rpm/package_set_impl.hpp"
@@ -252,7 +253,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                     settings.resolve_clean_requirements_on_remove());
             } break;
             case GoalAction::INSTALL_OR_REINSTALL: {
-                throw AssertionError("Unsupported action \"INSTALL_OR_REINSTALL\"");
+                libdnf_throw_assertion("Unsupported action \"INSTALL_OR_REINSTALL\"");
             }
         }
     }

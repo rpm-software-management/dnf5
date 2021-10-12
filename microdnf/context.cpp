@@ -36,6 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 #include <iostream>
 #include <mutex>
+#include <stdexcept>
 #include <string>
 #include <thread>
 
@@ -634,7 +635,7 @@ public:
             case libdnf::transaction::TransactionItemAction::OBSOLETE:
             case libdnf::transaction::TransactionItemAction::OBSOLETED:
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-                throw libdnf::AssertionError("Unexpected action in TransactionPackage: {}", item.get_action());
+                throw std::logic_error(fmt::format("Unexpected action in TransactionPackage: {}", item.get_action()));
         }
         if (!msg) {
             msg = "Installing ";

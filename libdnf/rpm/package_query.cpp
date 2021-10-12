@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_query.hpp"
 #include "libdnf/base/base.hpp"
 #include "libdnf/base/base_private.hpp"
+#include "libdnf/common/exception.hpp"
 #include "libdnf/utils/utils_internal.hpp"
 
 extern "C" {
