@@ -40,9 +40,10 @@ TempDir::TempDir(const std::string & destdir, const std::string & prefix) {
 
     const char * temp_path = mkdtemp(const_cast<char *>(dir.native().c_str()));
     if (temp_path == nullptr) {
-        // TODO(lukash) use a specific exception class
-        throw RuntimeError(
-            fmt::format(_("Cannot create temporary directory \"{}\": {}"), dir.native().c_str(), strerror(errno)));
+        throw std::filesystem::filesystem_error(
+            "cannot create temporary directory",
+            dir,
+            std::error_code(errno, std::system_category()));
     }
     path = temp_path;
 }
