@@ -157,7 +157,7 @@ static int mirror_failure_cb(void * data, const char * msg, const char * url, co
 /// Recursive renames/moves file/directory.
 /// Implements copy and remove fallback.
 // TODO(lukash) move to utils/fs
-static void move_recursive(const std::string & src, const std::string & dest) {
+static void move_recursive(const std::filesystem::path & src, const std::filesystem::path & dest) {
     try {
         std::filesystem::rename(src, dest);
     } catch (const std::filesystem::filesystem_error & ex) {
@@ -358,25 +358,13 @@ void RepoDownloader::download_metadata(const std::string & destdir) {
     auto r = perform(h.get(), tmpdir.get_path(), config.repo_gpgcheck().get_value());
 
     // move all downloaded object from tmpdir to destdir
-    if (auto * dir = opendir(tmpdir.get_path().c_str())) {
-        std::unique_ptr<DIR, std::function<void(DIR *)>> tmp_dir_remover{dir, [](DIR * dir) { closedir(dir); }};
+    for (auto & dir : std::filesystem::directory_iterator(tmpdir.get_path())) {
+        auto tmp_item = dir.path();
 
-        while (auto ent = readdir(dir)) {
-            auto el_name = ent->d_name;
-            if (el_name[0] == '.' && (el_name[1] == '\0' || (el_name[1] == '.' && el_name[2] == '\0'))) {
-                continue;
-            }
-            auto target_element = destdir + "/" + el_name;
-            std::filesystem::remove_all(target_element);
-            auto tempElement = tmpdir.get_path() / el_name;
-            try {
-                move_recursive(tempElement.c_str(), target_element.c_str());
-            } catch (const std::filesystem::filesystem_error & ex) {
-                std::string err_txt = fmt::format(
-                    _("Cannot rename directory \"{}\" to \"{}\": {}"), tempElement.string(), target_element, ex.what());
-                throw RuntimeError(err_txt);
-            }
-        }
+        auto target_item = destdir / tmp_item.filename();
+        std::filesystem::remove_all(target_item);
+
+        move_recursive(tmp_item, target_item);
     }
 }
 
