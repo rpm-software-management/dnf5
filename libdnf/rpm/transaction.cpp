@@ -666,6 +666,8 @@ private:
         }
     }
 
+#define libdnf_assert_transaction_item_set() libdnf_assert(item != nullptr, "TransactionItem is not set")
+
     /// Function triggered by rpmtsNotify()
     ///
     /// @param te  related transaction element or NULL
@@ -692,16 +694,16 @@ private:
 
         switch (what) {
             case RPMCALLBACK_INST_PROGRESS:
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 cb.install_progress(*item, amount, total);
                 break;
             case RPMCALLBACK_INST_START:
                 // Install? Maybe upgrade/downgrade/...obsolete?
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 cb.install_start(*item, total);
                 break;
             case RPMCALLBACK_INST_OPEN_FILE: {
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 auto file_path = item->get_package().get_package_path();
                 if (file_path.empty()) {
                     return nullptr;
@@ -725,15 +727,15 @@ private:
                 cb.transaction_stop(total);
                 break;
             case RPMCALLBACK_UNINST_PROGRESS:
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 cb.uninstall_progress(*item, amount, total);
                 break;
             case RPMCALLBACK_UNINST_START:
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 cb.uninstall_start(*item, total);
                 break;
             case RPMCALLBACK_UNINST_STOP:
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 cb.uninstall_stop(*item, amount, total);
                 break;
             case RPMCALLBACK_REPACKAGE_PROGRESS:  // obsolete, unused
@@ -742,12 +744,12 @@ private:
                 log.info("Warning: got RPMCALLBACK_REPACKAGE_* obsolete callback");
                 break;
             case RPMCALLBACK_UNPACK_ERROR:
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 cb.unpack_error(*item);
                 break;
             case RPMCALLBACK_CPIO_ERROR:
                 // Not found usage in librpm.
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 cb.cpio_error(*item);
                 break;
             case RPMCALLBACK_SCRIPT_ERROR:
@@ -765,11 +767,11 @@ private:
                 cb.script_stop(item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)), total);
                 break;
             case RPMCALLBACK_INST_STOP:
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 cb.install_stop(*item, amount, total);
                 break;
             case RPMCALLBACK_ELEM_PROGRESS:
-                libdnf_assert(item != nullptr, "TransactionItem is not set");
+                libdnf_assert_transaction_item_set();
                 cb.elem_progress(*item, amount, total);
                 break;
             case RPMCALLBACK_VERIFY_PROGRESS:
@@ -789,6 +791,7 @@ private:
     }
 };
 
+#undef libdnf_assert_transaction_item_set
 
 Transaction::Impl::Impl(const BaseWeakPtr & base, rpmVSFlags vsflags) : base(base) {
     ts = rpmtsCreate();
