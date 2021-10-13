@@ -351,26 +351,12 @@ RepoDownloader::~RepoDownloader() = default;
 
 
 void RepoDownloader::download_metadata(const std::string & destdir) {
-    auto repodir = destdir + "/" + METADATA_RELATIVE_DIR;
-    // TODO(lukash) replace all of these with std::filesystem
-    if (g_mkdir_with_parents(destdir.c_str(), 0755) == -1) {
-        const char * err_txt = strerror(errno);
-        throw RuntimeError(fmt::format(_("Cannot create repo destination directory \"{}\": {}"), destdir, err_txt));
-    }
-
+    std::filesystem::create_directories(destdir);
     libdnf::utils::TempDir tmpdir(destdir, "tmpdir.");
 
-    auto tmprepodir = tmpdir.get_path() / METADATA_RELATIVE_DIR;
-
     std::unique_ptr<LrHandle> h(init_remote_handle(tmpdir.get_path().c_str()));
-
     auto r = perform(h.get(), tmpdir.get_path(), config.repo_gpgcheck().get_value());
 
-    std::filesystem::remove_all(repodir);
-    if (g_mkdir_with_parents(repodir.c_str(), 0755) == -1) {
-        const char * err_txt = strerror(errno);
-        throw RuntimeError(fmt::format(_("Cannot create directory \"{}\": {}"), repodir, err_txt));
-    }
     // move all downloaded object from tmpdir to destdir
     if (auto * dir = opendir(tmpdir.get_path().c_str())) {
         std::unique_ptr<DIR, std::function<void(DIR *)>> tmp_dir_remover{dir, [](DIR * dir) { closedir(dir); }};
