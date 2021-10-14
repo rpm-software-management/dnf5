@@ -352,7 +352,7 @@ RepoDownloader::~RepoDownloader() = default;
 
 void RepoDownloader::download_metadata(const std::string & destdir) {
     std::filesystem::create_directories(destdir);
-    libdnf::utils::TempDir tmpdir(destdir, "tmpdir.");
+    libdnf::utils::TempDir tmpdir(destdir, "tmpdir");
 
     std::unique_ptr<LrHandle> h(init_remote_handle(tmpdir.get_path().c_str()));
     auto r = perform(h.get(), tmpdir.get_path(), config.repo_gpgcheck().get_value());
@@ -373,7 +373,7 @@ void RepoDownloader::download_metadata(const std::string & destdir) {
 bool RepoDownloader::is_metalink_in_sync() {
     auto & logger = *base->get_logger();
 
-    libdnf::utils::TempDir tmpdir("tmpdir.");
+    libdnf::utils::TempDir tmpdir("tmpdir");
 
     std::unique_ptr<LrHandle> h(init_remote_handle(tmpdir.get_path().c_str()));
 
@@ -440,7 +440,7 @@ bool RepoDownloader::is_repomd_in_sync() {
     auto & logger = *base->get_logger();
     LrYumRepo * yum_repo;
 
-    libdnf::utils::TempDir tmpdir("tmpdir.");
+    libdnf::utils::TempDir tmpdir("tmpdir");
 
     const char * dlist[] = LR_YUM_REPOMDONLY;
 

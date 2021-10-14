@@ -157,7 +157,7 @@ static void gpg_import_key(gpgme_ctx_t context, std::vector<char> key) {
 static std::vector<Key> rawkey2infos(int fd) {
     gpg_error_t gpg_err;
 
-    libdnf::utils::TempDir tmpdir("tmpdir.");
+    libdnf::utils::TempDir tmpdir("tmpdir");
 
     auto context = create_context(tmpdir.get_path());
 

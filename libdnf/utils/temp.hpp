@@ -32,10 +32,10 @@ namespace libdnf::utils {
 class TempDir {
 public:
     /// Creates a temporary directory in the system temporary directory path.
-    explicit TempDir(const std::string & prefix);
+    explicit TempDir(const std::string & name_prefix);
 
     /// Creates a temporary directory in `destdir`.
-    TempDir(const std::string & destdir, const std::string & prefix);
+    TempDir(const std::string & destdir, const std::string & name_prefix);
 
     TempDir(const TempDir &) = delete;
     TempDir & operator=(const TempDir &) = delete;

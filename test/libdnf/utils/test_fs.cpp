@@ -32,7 +32,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(UtilsFsTest);
 
 
 void UtilsFsTest::setUp() {
-    temp = new libdnf::utils::TempDir("libdnf_unittest_");
+    temp = new libdnf::utils::TempDir("libdnf_unittest");
     std::filesystem::create_directory(temp->get_path() / "already-exists");
 }
 

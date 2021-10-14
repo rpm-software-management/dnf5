@@ -129,7 +129,7 @@ libdnf::rpm::Package LibdnfTestCase::first_query_pkg(libdnf::rpm::PackageQuery &
 void LibdnfTestCase::setUp() {
     TestCaseFixture::setUp();
 
-    temp = std::make_unique<libdnf::utils::TempDir>("libdnf_unittest_");
+    temp = std::make_unique<libdnf::utils::TempDir>("libdnf_unittest");
     std::filesystem::create_directory(temp->get_path() / "installroot");
 
     // set installroot to a temp directory
@@ -139,7 +139,7 @@ void LibdnfTestCase::setUp() {
     auto class_name = typeid(*this).name();
     auto it = cache_dirs.find(class_name);
     if (it == cache_dirs.end()) {
-        cache_dirs.insert({class_name, std::make_unique<libdnf::utils::TempDir>("libdnf_unittest_")});
+        cache_dirs.insert({class_name, std::make_unique<libdnf::utils::TempDir>("libdnf_unittest")});
     }
     base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dirs.at(class_name)->get_path());
 

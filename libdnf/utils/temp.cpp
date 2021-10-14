@@ -31,12 +31,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::utils {
 
 
-TempDir::TempDir(const std::string & prefix) : TempDir(std::filesystem::temp_directory_path(), prefix) {}
+TempDir::TempDir(const std::string & name_prefix) : TempDir(std::filesystem::temp_directory_path(), name_prefix) {}
 
 
-TempDir::TempDir(const std::string & destdir, const std::string & prefix) {
+TempDir::TempDir(const std::string & destdir, const std::string & name_prefix) {
     std::filesystem::path dir = destdir;
-    dir /= prefix + "XXXXXX";
+    dir /= name_prefix + ".XXXXXX";
 
     const char * temp_path = mkdtemp(const_cast<char *>(dir.native().c_str()));
     if (temp_path == nullptr) {
