@@ -35,7 +35,7 @@ public:
     explicit TempDir(const std::string & name_prefix);
 
     /// Creates a temporary directory in `destdir`.
-    TempDir(const std::string & destdir, const std::string & name_prefix);
+    TempDir(std::filesystem::path destdir, const std::string & name_prefix);
 
     TempDir(const TempDir &) = delete;
     TempDir & operator=(const TempDir &) = delete;

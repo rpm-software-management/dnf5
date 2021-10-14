@@ -34,15 +34,16 @@ namespace libdnf::utils {
 TempDir::TempDir(const std::string & name_prefix) : TempDir(std::filesystem::temp_directory_path(), name_prefix) {}
 
 
-TempDir::TempDir(const std::string & destdir, const std::string & name_prefix) {
-    std::filesystem::path dir = destdir;
-    dir /= name_prefix + ".XXXXXX";
+TempDir::TempDir(std::filesystem::path destdir, const std::string & name_prefix) {
+    destdir /= name_prefix + ".XXXXXX";
 
-    const char * temp_path = mkdtemp(const_cast<char *>(dir.native().c_str()));
+    // mkdtemp modifies the dest's char * in-place
+    std::string dest = destdir;
+    const char * temp_path = mkdtemp(dest.data());
     if (temp_path == nullptr) {
         throw std::filesystem::filesystem_error(
             "cannot create temporary directory",
-            dir,
+            destdir,
             std::error_code(errno, std::system_category()));
     }
     path = temp_path;
