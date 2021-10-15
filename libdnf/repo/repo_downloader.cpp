@@ -787,29 +787,18 @@ std::unique_ptr<LrResult> RepoDownloader::perform(
 
 
 void RepoDownloader::import_repo_keys() {
-    auto & logger = *base->get_logger();
-
     for (const auto & gpgkey_url : config.gpgkey().get_value()) {
-        char tmp_key_file[] = "/tmp/repokey.XXXXXX";
-        auto fd = mkstemp(tmp_key_file);
-        if (fd == -1) {
-            auto msg = fmt::format(
-                "Error creating temporary file \"{}\": {}", tmp_key_file, std::system_category().message(errno));
-            logger.debug(msg);
-            throw LrException(LRE_GPGERROR, msg);
-        }
-        unlink(tmp_key_file);
-        std::unique_ptr<int, std::function<void(int *)>> tmp_file_closer{&fd, [](int * fd) { close(*fd); }};
+        auto tmp_file = libdnf::utils::TempFile("repokey");
 
         try {
-            download_url(gpgkey_url.c_str(), fd);
+            download_url(gpgkey_url.c_str(), tmp_file.get_fd());
         } catch (const LrExceptionWithSourceUrl & e) {
             auto msg = fmt::format(_("Failed to retrieve GPG key for repo '{}': {}"), config.get_id(), e.what());
             throw RuntimeError(msg);
         }
-        lseek(fd, SEEK_SET, 0);
+        lseek(tmp_file.get_fd(), SEEK_SET, 0);
 
-        gpgme.import_key(fd, gpgkey_url);
+        gpgme.import_key(tmp_file.get_fd(), gpgkey_url);
     }
 }
 

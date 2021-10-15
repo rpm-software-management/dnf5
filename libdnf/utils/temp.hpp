@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_UTILS_TEMP_HPP
 
 #include <filesystem>
-#include <vector>
 #include <string>
 
 
@@ -45,6 +44,49 @@ public:
 
 private:
     std::filesystem::path path;
+};
+
+/// A mkstemp wrapper that creates and owns a temporary file, which will be
+/// deleted in the destructor unless released. Throws instances of
+/// `std::filesystem::filesystem_error` on any I/O failure.
+class TempFile {
+public:
+    /// Creates a temporary file in the system temporary directory path.
+    ///
+    /// @param name_prefix The prefix of the filename to which ".XXXXXX" will be appended.
+    explicit TempFile(const std::string & name_prefix);
+
+    /// Creates a temporary file in `destdir`.
+    ///
+    /// @param destdir The directory in which the file will be created.
+    /// @param name_prefix The prefix of the filename to which ".XXXXXX" will be appended.
+    TempFile(std::filesystem::path destdir, const std::string & name_prefix);
+
+    TempFile(const TempDir &) = delete;
+    TempFile & operator=(const TempFile &) = delete;
+
+    ~TempFile();
+
+    /// Call `::fdopen()` on the file descriptor and open it as a FILE * stream.
+    ///
+    /// @param mode The mode for the file, passed to `::fdopen()`.
+    FILE * fdopen(const char * mode);
+
+    /// Close either the FILE * (if fdopened before) or the file descriptor.
+    void close();
+
+    /// Releases the temporary file, meaning it will no longer be closed or
+    /// deleted on destruction.
+    void release() noexcept;
+
+    const std::filesystem::path & get_path() const noexcept { return path; }
+    int get_fd() const noexcept { return fd; }
+    FILE * get_file() const noexcept { return file; }
+
+private:
+    std::filesystem::path path;
+    int fd = -1;
+    FILE * file = nullptr;
 };
 
 }  // namespace libdnf::utils

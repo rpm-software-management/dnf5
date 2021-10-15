@@ -27,6 +27,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdlib>
 
+#include <stdio.h>
+#include <unistd.h>
+
 
 namespace libdnf::utils {
 
@@ -53,11 +56,87 @@ TempDir::TempDir(std::filesystem::path destdir, const std::string & name_prefix)
 TempDir::~TempDir() {
     try {
         std::filesystem::remove_all(path);
-    } catch (std::filesystem::filesystem_error &) {
+    } catch (std::exception &) {
         // catch an exception that shouldn't be raised in a destructor
         // TODO(lukash) consider logging or printing the exception
     }
 }
 
+
+TempFile::TempFile(const std::string & name_prefix) : TempFile(std::filesystem::temp_directory_path(), name_prefix) {}
+
+
+TempFile::TempFile(std::filesystem::path destdir, const std::string & name_prefix) {
+    destdir /= name_prefix + ".XXXXXX";
+
+    // mkstemp modifies the dest's char * in-place
+    std::string dest = destdir;
+    fd = mkstemp(dest.data());
+    if (fd == -1) {
+        throw std::filesystem::filesystem_error(
+            "cannot create temporary file",
+            destdir,
+            std::error_code(errno, std::system_category()));
+    }
+
+    path = dest;
+}
+
+
+TempFile::~TempFile() {
+    try {
+        close();
+    } catch (std::exception &) {
+        // TODO(lukash) consider logging or printing the exception
+    }
+
+    if (!path.empty()) {
+        unlink(path.c_str());
+    }
+}
+
+
+FILE * TempFile::fdopen(const char * mode) {
+    libdnf_assert(fd != -1, "Cannot fdopen a TempFile that has been closed or released");
+
+    file = ::fdopen(fd, mode);
+    if (file == nullptr) {
+        throw std::filesystem::filesystem_error(
+            "cannot open temporary file",
+            path,
+            std::error_code(errno, std::system_category()));
+    }
+
+    return file;
+}
+
+
+void TempFile::close() {
+    if (file != nullptr) {
+        if (fclose(file) != 0) {
+            throw std::filesystem::filesystem_error(
+                "cannot close temporary file",
+                path,
+                std::error_code(errno, std::system_category()));
+        }
+    } else if (fd != -1) {
+        if (::close(fd) != 0) {
+            throw std::filesystem::filesystem_error(
+                "cannot close temporary file",
+                path,
+                std::error_code(errno, std::system_category()));
+        }
+    }
+
+    file = nullptr;
+    fd = -1;
+}
+
+
+void TempFile::release() noexcept {
+    file = nullptr;
+    fd = -1;
+    path = "";
+}
 
 }  // namespace libdnf::utils

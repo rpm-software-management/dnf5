@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../repo/repo_impl.hpp"
 #include "libdnf/solv/id_queue.hpp"
 #include "libdnf/solv/solv_map.hpp"
+#include "libdnf/utils/temp.hpp"
 
 extern "C" {
 #include <solv/chksum.h>
@@ -144,36 +145,27 @@ void PackageSack::Impl::write_main(repo::LibsolvRepoExt & libsolv_repo_ext, bool
     LibsolvRepo * libsolv_repo = libsolv_repo_ext.repo;
     const char * name = libsolv_repo->name;
     const char * chksum = pool_bin2hex(*get_pool(base), libsolv_repo_ext.checksum, solv_chksum_len(CHKSUM_TYPE));
-    auto fn = give_repo_solv_cache_fn(name, NULL);
-    auto tmp_fn_templ = fn + ".XXXXXX";
-    int tmp_fd = mkstemp(tmp_fn_templ.data());
+
+    auto fn = repo_solv_cache_fn(name, nullptr);
+
+    auto tmp_file = libdnf::utils::TempFile(base->get_config().cachedir().get_value(), fn);
+
+    auto fp = tmp_file.fdopen("w+");
 
     logger.debug(fmt::format("caching libsolv_repo: {} (0x{})", name, chksum));
 
-    if (tmp_fd == -1) {
-        throw SystemError(errno, fmt::format(_("cannot create temporary file: {}"), tmp_fn_templ));
-        // g_set_error (error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("cannot create temporary file: %s"), tmp_fn_templ);
-    }
-
-    auto fp = fdopen(tmp_fd, "w+");
-    if (!fp) {
-        auto tmp_err = errno;
-        close(tmp_fd);
-        unlink(tmp_fn_templ.c_str());
-        throw SystemError(tmp_err, _("failed opening tmp file"));
-        // g_set_error (error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("failed opening tmp file: %s"), strerror(errno));
-    }
     int ret = repo_write(libsolv_repo, fp);
     ret |= checksum_write(libsolv_repo_ext.checksum, fp);
-    ret |= fclose(fp);
     if (ret) {
-        unlink(tmp_fn_templ.c_str());
         throw Exception(_("write_main() failed writing data"));
         // g_set_error (error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("write_main() failed writing data: %i"), rc);
     }
+
+    tmp_file.close();
+
     if (switchtosolv && libsolv_repo_ext.is_one_piece()) {
         /* switch over to written solv file activate paging */
-        std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(tmp_fn_templ.c_str(), "r"), &close_file);
+        std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(tmp_file.get_path().c_str(), "r"), &close_file);
         if (fp) {
             repo_empty(libsolv_repo, 1);
             int ret = repo_add_solv(libsolv_repo, fp.get(), 0);
@@ -185,12 +177,9 @@ void PackageSack::Impl::write_main(repo::LibsolvRepoExt & libsolv_repo_ext, bool
         }
     }
 
-    try {
-        std::filesystem::rename(tmp_fn_templ, fn);
-    } catch (...) {
-        unlink(tmp_fn_templ.c_str());
-        throw;
-    }
+
+    std::filesystem::rename(tmp_file.get_path(), std::filesystem::path(base->get_config().cachedir().get_value()) / fn);
+    tmp_file.release();
 }
 
 // this filter makes sure only the updateinfo repodata is written
@@ -210,18 +199,13 @@ void PackageSack::Impl::write_ext(
 
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
     Repodata * data = repo_id2repodata(libsolv_repo, repodata_id);
-    auto fn = give_repo_solv_cache_fn(repo_id, suffix);
-    auto tmp_fn_templ = fn + ".XXXXXX";
-    int tmp_fd = mkstemp(tmp_fn_templ.data());
+    auto fn = repo_solv_cache_fn(repo_id, suffix);
 
-    if (tmp_fd == -1) {
-        throw SystemError(errno, fmt::format(_("cannot create temporary file: {}"), tmp_fn_templ));
-        // g_set_error (error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("can not create temporary file %s"), tmp_fn_templ);
-    }
+    auto tmp_file = libdnf::utils::TempFile(base->get_config().cachedir().get_value(), fn);
 
-    auto fp = fdopen(tmp_fd, "w+");
+    auto fp = tmp_file.fdopen("w+");
 
-    logger.debug(fmt::format("{}: storing {} to: {}", __func__, repo_id, tmp_fn_templ));
+    logger.debug(fmt::format("{}: storing {} to: {}", __func__, repo_id, tmp_file.get_path().native()));
     int ret;
     if (which_repodata != RepodataType::UPDATEINFO)
         ret = repodata_write(data, fp);
@@ -235,15 +219,16 @@ void PackageSack::Impl::write_ext(
         libsolv_repo->nsolvables += libsolv_repo_ext.main_nsolvables;
     }
     ret |= checksum_write(libsolv_repo_ext.checksum, fp);
-    ret |= fclose(fp);
     if (ret) {
-        unlink(tmp_fn_templ.c_str());
         throw Exception(_("write_ext() has failed"));
         // g_set_error(error, DNF_ERROR, DNF_ERROR_FAILED, _("write_ext(%1$d) has failed: %2$d"), which_repodata, ret);
     }
+
+    tmp_file.close();
+
     if (libsolv_repo_ext.is_one_piece() && which_repodata != RepodataType::UPDATEINFO) {
         // switch over to written solv file activate paging
-        std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(tmp_fn_templ.c_str(), "r"), &close_file);
+        std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(tmp_file.get_path().c_str(), "r"), &close_file);
         if (fp) {
             int flags = REPO_USE_LOADING | REPO_EXTEND_SOLVABLES;
             // do not pollute the main pool with directory component ids
@@ -256,12 +241,8 @@ void PackageSack::Impl::write_ext(
         }
     }
 
-    try {
-        std::filesystem::rename(tmp_fn_templ, fn);
-    } catch (...) {
-        unlink(tmp_fn_templ.c_str());
-        throw;
-    }
+    std::filesystem::rename(tmp_file.get_path(), std::filesystem::path(base->get_config().cachedir().get_value()) / fn);
+    tmp_file.release();
 }
 
 void PackageSack::Impl::rewrite_repos(libdnf::solv::IdQueue & addedfileprovides, libdnf::solv::IdQueue & addedfileprovides_inst) {
@@ -329,7 +310,7 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
         repo_create(*get_pool(base), id.c_str()), &libsolv_repo_free);
 
-    auto fn_cache = give_repo_solv_cache_fn(id, nullptr);
+    auto fn_cache = repo_solv_cache_path(id, nullptr);
 
     std::unique_ptr<std::FILE, decltype(&close_file)> fp_repomd(fopen(repomd_fn.c_str(), "rb"), &close_file);
     if (!fp_repomd) {
@@ -389,7 +370,7 @@ PackageSack::Impl::RepodataInfo PackageSack::Impl::load_repo_ext(
         throw NoCapability(fmt::format(_("no {0} string for {1}"), which_filename, repo_id));
     }
 
-    auto fn_cache = give_repo_solv_cache_fn(repo_id, suffix);
+    auto fn_cache = repo_solv_cache_path(repo_id, suffix);
     std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(fn_cache.c_str(), "rb"), &close_file);
     if (can_use_repomd_cache(fp.get(), repo_impl->libsolv_repo_ext.checksum)) {
         logger.debug(fmt::format("{}: using cache file: {}", __func__, fn_cache));
@@ -719,16 +700,16 @@ int PackageSack::get_nsolvables() const noexcept {
 };
 
 // TODO(jrohel): we want to change directory for solv(x) cache (into repo metadata directory?)
-std::string PackageSack::Impl::give_repo_solv_cache_fn(const std::string & repoid, const char * ext) {
-    std::filesystem::path cachedir = base->get_config().cachedir().get_value();
-    auto fn = cachedir / repoid;
-    if (ext) {
-        fn += ext;
-        fn += ".solvx";
+std::string PackageSack::Impl::repo_solv_cache_fn(const std::string & repoid, const char * ext) {
+    if (ext != nullptr) {
+        return repoid + ext + ".solvx";
     } else {
-        fn += ".solv";
+        return repoid + ".solv";
     }
-    return fn;
+}
+
+std::string PackageSack::Impl::repo_solv_cache_path(const std::string & repoid, const char * ext) {
+    return std::filesystem::path(base->get_config().cachedir().get_value()) / repo_solv_cache_fn(repoid, ext);
 }
 
 PackageSack::PackageSack(const BaseWeakPtr & base)

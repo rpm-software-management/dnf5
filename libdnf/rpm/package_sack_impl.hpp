@@ -134,7 +134,10 @@ private:
     void rewrite_repos(libdnf::solv::IdQueue & addedfileprovides, libdnf::solv::IdQueue & addedfileprovides_inst);
 
     /// Constructs libsolv repository cache filename for given repository id and optional extension.
-    std::string give_repo_solv_cache_fn(const std::string & repoid, const char * ext = nullptr);
+    std::string repo_solv_cache_fn(const std::string & repoid, const char * ext = nullptr);
+
+    /// Constructs libsolv repository cache file path for given repository id and optional extension.
+    std::string repo_solv_cache_path(const std::string & repoid, const char * ext = nullptr);
 
     bool considered_uptodate{true};
     bool provides_ready{false};
