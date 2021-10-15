@@ -58,7 +58,7 @@ DowngradeCommand::DowngradeCommand(Command & parent) : Command(parent, "downgrad
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_downgrade_options);
     keys->set_short_description("List of keys to match");
-    keys->set_complete_hook_func([&ctx](const char * arg){return match_installed_pkgs(ctx, arg, false);});
+    keys->set_complete_hook_func([&ctx](const char * arg) { return match_installed_pkgs(ctx, arg, false); });
     cmd.register_positional_arg(keys);
 }
 

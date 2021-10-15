@@ -27,7 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/solver_problems.hpp"
 #include "libdnf/base/transaction_package.hpp"
 
-
 #include <optional>
 
 
