@@ -90,7 +90,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 
     dnfdaemon::KeyValueMap goal_resolve_results;
     goal_resolve_results["transaction_problems"] = static_cast<uint32_t>(transaction.get_problems());
-    goal_resolve_results["transaction_solver_problems"] = transaction.all_package_solver_problems_to_string();
+    goal_resolve_results["transaction_solver_problems"] = transaction.get_package_solver_problems().to_string();
     goal_resolve_results["goal_problems"] = goal_resolve_log_list;
 
     reply << goal_resolve_results;

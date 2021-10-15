@@ -24,7 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/base/log_event.hpp"
+#include "libdnf/base/solver_problems.hpp"
 #include "libdnf/base/transaction_package.hpp"
+
 
 #include <optional>
 
@@ -54,15 +56,7 @@ public:
     /// @return Vector with structuralized package solver problems
     // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
     // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_package_solver_problems();
-
-    /// Convert particular package solver problem to a string;
-    static std::string package_solver_problem_to_string(
-        const std::pair<libdnf::ProblemRules, std::vector<std::string>> & raw);
-
-    /// Concentrate all package solver problems into a string (solver, protected packages, ...)
-    // @replaces libdnf/Goal.formatAllProblemRules(const std::vector<std::vector<std::string>> & problems);
-    std::string all_package_solver_problems_to_string();
+    const libdnf::base::SolverProblems & get_package_solver_problems();
 
 private:
     friend class libdnf::Goal;

@@ -101,7 +101,7 @@ void UpgradeCommand::run() {
     }
     auto transaction = goal.resolve(false);
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
-        std::cout << transaction.all_package_solver_problems_to_string() << std::endl;
+        std::cout << transaction.get_package_solver_problems().to_string() << std::endl;
         return;
     }
 
