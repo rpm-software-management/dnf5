@@ -59,10 +59,10 @@ struct assertion_traits<C<T>> {
         return os.str();
     }
 
-    assertion_traits<C<T>>() = delete;
-    ~assertion_traits<C<T>>() = delete;
-    assertion_traits<C<T>>(const assertion_traits<C<T>>&) = delete;
-    assertion_traits<C<T>>& operator=(const assertion_traits<C<T>>&) = delete;
+    assertion_traits() = delete;
+    ~assertion_traits() = delete;
+    assertion_traits(const assertion_traits &) = delete;
+    assertion_traits & operator=(const assertion_traits &) = delete;
 };
 
 template <>
