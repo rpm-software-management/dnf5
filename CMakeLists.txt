@@ -65,6 +65,9 @@ find_package(PkgConfig REQUIRED)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
+# remove PROJECT_SOURCE_DIR prefix from __FILE__ macro used in asserts (available since GCC 8 and Clang 10)
+add_compile_options("-fmacro-prefix-map=${PROJECT_SOURCE_DIR}/=")
+
 # warnings
 add_compile_options(-Wall -Wextra -Werror)
 add_compile_options(-Wcast-align -Wformat-nonliteral -Wmissing-format-attribute -Wredundant-decls -Wsign-compare -Wtype-limits -Wuninitialized -Wwrite-strings)
