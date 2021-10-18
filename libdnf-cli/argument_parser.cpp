@@ -127,7 +127,7 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
         auto count = static_cast<size_t>(nvals > 0 ? nvals : (nvals == OPTIONAL ? 1 : usable_argc));
         for (size_t i = 0; i < count; ++i) {
             if (owner.complete_arg_ptr == argv + i) {
-                if (complete_hook) {
+                if (get_complete() && complete_hook) {
                     auto result = complete_hook(argv[i]);
                     if (result.size() == 1) {
                         if (result[0] != option) {
@@ -335,6 +335,9 @@ void ArgumentParser::Command::print_complete(
     // Search for matching commands.
     if (arg[0] == '\0' || arg[0] != '-') {
         for (const auto * opt : get_commands()) {
+            if (!opt->get_complete()) {
+                continue;
+            }
             auto & name = opt->get_id();
             if (name.compare(0, strlen(arg), arg) == 0) {
                 help.add_line(name, '(' + opt->get_short_description() + ')', nullptr);
@@ -343,7 +346,7 @@ void ArgumentParser::Command::print_complete(
         }
         if (last.empty() && used_positional_arguments < get_positional_args().size()) {
             auto pos_arg = get_positional_args()[used_positional_arguments];
-            if (pos_arg->complete_hook) {
+            if (pos_arg->get_complete() && pos_arg->complete_hook) {
                 auto result = pos_arg->complete_hook(arg);
                 if (result.size() == 1) {
                     if (result[0] == arg) {
@@ -362,6 +365,9 @@ void ArgumentParser::Command::print_complete(
     // Search for matching named arguments.
     if (arg[0] == '-') {
         for (const auto * opt : named_args) {
+            if (!opt->get_complete()) {
+                continue;
+            }
             if ((arg[1] == '\0' && opt->get_short_name() != '\0') ||
                 (arg[1] == opt->get_short_name() && arg[2] == '\0')) {
                 std::string name = std::string("-") + opt->get_short_name();

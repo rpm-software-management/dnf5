@@ -158,6 +158,12 @@ public:
         /// Returns the first conflicting argument.
         Argument * get_conflict_argument() const noexcept;
 
+        /// Sets whether the argument participates in completion.
+        void set_complete(bool complete) noexcept { this->complete = complete; }
+
+        /// Returns whether the argument participates in completion.
+        bool get_complete() const noexcept { return complete; }
+
         virtual void help() const noexcept {}
 
     private:
@@ -172,6 +178,7 @@ public:
         std::string description;
         std::string short_description;
         std::vector<Argument *> * conflict_args{nullptr};
+        bool complete{true};
         int parse_count{0};
     };
 
