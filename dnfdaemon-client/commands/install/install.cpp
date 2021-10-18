@@ -51,7 +51,7 @@ InstallCommand::InstallCommand(Command & parent) : TransactionCommand(parent, "i
     patterns_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
         "keys_to_match",
-        libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED,
+        libdnf::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_options);
     keys->set_short_description("List of packages to install");

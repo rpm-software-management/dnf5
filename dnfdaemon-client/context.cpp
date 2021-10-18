@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-void Context::init_session() {
+void Context::init_session(sdbus::IConnection & connection) {
     // open dnfdaemon-server session
     auto cfg = static_cast<DaemonCommand *>(get_selected_command())->session_config();
     auto session_manager_proxy = sdbus::createProxy(connection, dnfdaemon::DBUS_NAME, dnfdaemon::DBUS_OBJECT_PATH);

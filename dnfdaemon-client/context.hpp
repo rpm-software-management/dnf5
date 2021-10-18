@@ -43,12 +43,10 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context : public libdnf::cli::session::Session {
 public:
-    Context(sdbus::IConnection & connection)
-        : connection(connection),
-          repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
+    Context() : repositories_status(dnfdaemon::RepoStatus::NOT_READY){};
 
     /// Initialize dbus connection and server session
-    void init_session();
+    void init_session(sdbus::IConnection & connection);
 
     // initialize repository metadata loading on server side and wait for results
     dnfdaemon::RepoStatus wait_for_repos();
@@ -71,7 +69,6 @@ public:
 private:
     /// system d-bus connection
     //std::unique_ptr<sdbus::IConnection> connection;
-    sdbus::IConnection & connection;
     sdbus::ObjectPath session_object_path;
     dnfdaemon::RepoStatus repositories_status;
     std::unique_ptr<RepoCB> repocb;

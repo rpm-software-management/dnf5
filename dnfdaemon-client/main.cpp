@@ -198,17 +198,8 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
 int main(int argc, char * argv[]) {
     std::unique_ptr<sdbus::IConnection> connection;
 
-    try {
-        connection = sdbus::createSystemBusConnection();
-    } catch (const sdbus::Error & ex) {
-        std::cerr << ex.getMessage() << std::endl;
-        std::cerr << "Is D-Bus daemon running?" << std::endl;
-        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
-    }
 
-    connection->enterEventLoopAsync();
-
-    dnfdaemon::client::Context context(*connection);
+    dnfdaemon::client::Context context;
 
     // TODO(mblaha): logging
 
@@ -219,7 +210,9 @@ int main(int argc, char * argv[]) {
     try{
         print_help = dnfdaemon::client::parse_args(context, argc, argv);
     } catch (std::exception & ex) {
+        // print help if fail to parse commands
         std::cout << ex.what() << std::endl;
+        context.get_argument_parser().get_selected_command()->help();
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     }
 
@@ -234,14 +227,23 @@ int main(int argc, char * argv[]) {
         return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
 
+    try {
+        connection = sdbus::createSystemBusConnection();
+    } catch (const sdbus::Error & ex) {
+        std::cerr << ex.getMessage() << std::endl;
+        std::cerr << "Is D-Bus daemon running?" << std::endl;
+        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
+    }
+
+    connection->enterEventLoopAsync();
+
     // initialize server session using command line arguments
     try {
-        context.init_session();
+        context.init_session(*connection);
     } catch (sdbus::Error & ex) {
         std::cerr << ex.getMessage() << std::endl << "Is dnfdaemon-server active?" << std::endl;
         return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
-
 
     // Run selected command
     try {

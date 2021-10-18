@@ -186,7 +186,7 @@ public:
     public:
         constexpr static int OPTIONAL{0};
         constexpr static int UNLIMITED{-1};
-        constexpr static int UNLIMITED_BUT_ONE{-2};
+        constexpr static int AT_LEAST_ONE{-2};
 
         /// Exception is generated when there are insufficient values for the positional argument.
         class FewValues : public Exception {
@@ -203,7 +203,7 @@ public:
         using CompleteHookFunc = std::function<std::vector<std::string>(const char * arg_to_complete)>;
 
         /// Gets the number of values required by this argument on the command line.
-        /// May return special values: OPTIONAL, UNLIMITED, UNLIMITED_BUT_ONE
+        /// May return special values: OPTIONAL, UNLIMITED, AT_LEAST_ONE
         int get_nvals() const noexcept { return nvals; }
 
         /// Enables/disables storing parsed values.
