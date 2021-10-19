@@ -62,13 +62,13 @@ public:
     AdvisoryQuery & filter_name(
         const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    AdvisoryQuery & filter_type(const Advisory::Type type, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    AdvisoryQuery & filter_type(const std::string & type, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
     AdvisoryQuery & filter_type(
-        const std::vector<Advisory::Type> & types, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & types, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
     AdvisoryQuery & filter_reference(
         const std::vector<std::string> & reference_id,
-        std::vector<AdvisoryReferenceType> types,
+        std::vector<std::string> types,
         sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
     //TODO(amatej): What about other reference fitlers (title, url?) - do we want them?
     AdvisoryQuery & filter_CVE(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);

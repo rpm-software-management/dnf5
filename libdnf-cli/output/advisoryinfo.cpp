@@ -32,7 +32,7 @@ void AdvisoryInfo::add_advisory(libdnf::advisory::Advisory & advisory) {
     add_line("Name", advisory.get_name(), "bold");
     add_line("Title", advisory.get_title());
     add_line("Severity", advisory.get_severity());
-    add_line("Type", advisory.get_type_cstring());
+    add_line("Type", advisory.get_type());
     add_line("Status", advisory.get_status());
     add_line("Vendor", advisory.get_vendor());
     add_line("Buildtime", std::to_string(advisory.get_buildtime()));

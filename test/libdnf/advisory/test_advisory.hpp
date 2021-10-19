@@ -34,7 +34,6 @@ class AdvisoryAdvisoryTest : public LibdnfTestCase {
 
     CPPUNIT_TEST(test_get_name);
     CPPUNIT_TEST(test_get_type);
-    CPPUNIT_TEST(test_get_type_cstring);
     CPPUNIT_TEST(test_get_severity);
     CPPUNIT_TEST(test_get_references);
     CPPUNIT_TEST(test_get_collections);
@@ -46,7 +45,6 @@ public:
 
     void test_get_name();
     void test_get_type();
-    void test_get_type_cstring();
     void test_get_severity();
     //void test_filter_package();
 

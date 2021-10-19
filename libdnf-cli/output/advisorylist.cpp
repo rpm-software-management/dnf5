@@ -62,12 +62,12 @@ void print_advisorylist_table(
     for (auto adv_pkg : advisory_package_list) {
         auto advisory = adv_pkg.get_advisory();
         add_line_into_advisorylist_table(
-            table, advisory.get_name().c_str(), advisory.get_type_cstring(), adv_pkg.get_nevra().c_str(), false);
+            table, advisory.get_name().c_str(), advisory.get_type().c_str(), adv_pkg.get_nevra().c_str(), false);
     }
     for (auto adv_pkg : advisory_package_list_installed) {
         auto advisory = adv_pkg.get_advisory();
         add_line_into_advisorylist_table(
-            table, advisory.get_name().c_str(), advisory.get_type_cstring(), adv_pkg.get_nevra().c_str(), true);
+            table, advisory.get_name().c_str(), advisory.get_type().c_str(), adv_pkg.get_nevra().c_str(), true);
     }
     auto cl = scols_table_get_column(table, COL_ADVISORY_NAME);
     scols_sort_table(table, cl);

@@ -51,46 +51,8 @@ std::string Advisory::get_name() const {
     return std::string(name + libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH);
 }
 
-Advisory::Type Advisory::get_type() const {
-    const char * type;
-    type = get_pool(base).lookup_str(id.id, SOLVABLE_PATCHCATEGORY);
-
-    if (type == NULL) {
-        return Advisory::Type::UNKNOWN;
-    }
-    if (!strcmp(type, "bugfix")) {
-        return Advisory::Type::BUGFIX;
-    }
-    if (!strcmp(type, "enhancement")) {
-        return Advisory::Type::ENHANCEMENT;
-    }
-    if (!strcmp(type, "security")) {
-        return Advisory::Type::SECURITY;
-    }
-    if (!strcmp(type, "newpackage")) {
-        return Advisory::Type::NEWPACKAGE;
-    }
-
-    return Advisory::Type::UNKNOWN;
-}
-
-const char * Advisory::get_type_cstring() const {
-    return get_pool(base).lookup_str(id.id, SOLVABLE_PATCHCATEGORY);
-}
-
-const char * Advisory::advisory_type_to_cstring(Type type) {
-    switch (type) {
-        case Type::ENHANCEMENT:
-            return "enhancement";
-        case Type::SECURITY:
-            return "security";
-        case Type::NEWPACKAGE:
-            return "newpackage";
-        case Type::BUGFIX:
-            return "bugfix";
-        default:
-            return NULL;
-    }
+std::string Advisory::get_type() const {
+    return std::string(get_pool(base).lookup_str(id.id, SOLVABLE_PATCHCATEGORY));
 }
 
 std::string Advisory::get_severity() const {
@@ -133,7 +95,7 @@ AdvisoryId Advisory::get_id() const {
     return id;
 }
 
-std::vector<AdvisoryReference> Advisory::get_references(AdvisoryReferenceType ref_type) const {
+std::vector<AdvisoryReference> Advisory::get_references(std::vector<std::string> types) const {
     auto & pool = get_pool(base);
 
     std::vector<AdvisoryReference> output;
@@ -143,14 +105,9 @@ std::vector<AdvisoryReference> Advisory::get_references(AdvisoryReferenceType re
 
     for (int index = 0; dataiterator_step(&di); index++) {
         dataiterator_setpos(&di);
-        const char * current_type = pool.lookup_str(SOLVID_POS, UPDATE_REFERENCE_TYPE);
+        std::string current_type = std::string(pool.lookup_str(SOLVID_POS, UPDATE_REFERENCE_TYPE));
 
-        if (((ref_type & AdvisoryReferenceType::CVE) == AdvisoryReferenceType::CVE &&
-             (strcmp(current_type, "cve") == 0)) ||
-            ((ref_type & AdvisoryReferenceType::BUGZILLA) == AdvisoryReferenceType::BUGZILLA &&
-             (strcmp(current_type, "bugzilla") == 0)) ||
-            ((ref_type & AdvisoryReferenceType::VENDOR) == AdvisoryReferenceType::VENDOR &&
-             (strcmp(current_type, "vendor") == 0))) {
+        if(types.empty() || std::find(types.begin(), types.end(), current_type) != types.end()) {
             output.emplace_back(AdvisoryReference(base, id, index));
         }
     }

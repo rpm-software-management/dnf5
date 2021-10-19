@@ -47,7 +47,7 @@ void AdvisoryAdvisoryReferenceTest::test_get_id() {
 
 void AdvisoryAdvisoryReferenceTest::test_get_type() {
     // Tests get_type method
-    CPPUNIT_ASSERT_EQUAL(libdnf::advisory::AdvisoryReference::Type::CVE, references[0].get_type());
+    CPPUNIT_ASSERT_EQUAL(std::string("cve"), references[0].get_type());
 }
 
 void AdvisoryAdvisoryReferenceTest::test_get_title() {

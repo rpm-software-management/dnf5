@@ -36,20 +36,8 @@ AdvisoryReference::AdvisoryReference(const libdnf::BaseWeakPtr & base, AdvisoryI
 std::string AdvisoryReference::get_id() const {
     return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_ID, advisory.id, index));
 }
-AdvisoryReference::Type AdvisoryReference::get_type() const {
-    const char * type = get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index);
-
-    if (type == nullptr) {
-        return Type::UNKNOWN;
-    } else if (!strcmp(type, "bugzilla")) {
-        return Type::BUGZILLA;
-    } else if (!strcmp(type, "cve")) {
-        return Type::CVE;
-    } else if (!strcmp(type, "vendor")) {
-        return Type::VENDOR;
-    }
-
-    return Type::UNKNOWN;
+std::string AdvisoryReference::get_type() const {
+    return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index));
 }
 const char * AdvisoryReference::get_type_cstring() const {
     return get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index);

@@ -41,7 +41,7 @@ void AdvisoryAdvisoryTest::setUp() {
 void AdvisoryAdvisoryTest::test_get_name() {
     // Tests get_name method
     libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     CPPUNIT_ASSERT_EQUAL(advisory.get_name(), std::string("DNF-2019-1"));
 }
@@ -49,23 +49,15 @@ void AdvisoryAdvisoryTest::test_get_name() {
 void AdvisoryAdvisoryTest::test_get_type() {
     // Tests get_type method
     libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
-    CPPUNIT_ASSERT_EQUAL(advisory.get_type(), libdnf::advisory::Advisory::Type::SECURITY);
-}
-
-void AdvisoryAdvisoryTest::test_get_type_cstring() {
-    // Tests get_type method
-    libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
-    libdnf::advisory::Advisory advisory = *advisories.begin();
-    CPPUNIT_ASSERT(!strcmp(advisory.get_type_cstring(), "security"));
+    CPPUNIT_ASSERT_EQUAL(advisory.get_type(), std::string("security"));
 }
 
 void AdvisoryAdvisoryTest::test_get_severity() {
     // Tests get_severity method
     libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     CPPUNIT_ASSERT_EQUAL(advisory.get_severity(), std::string("moderate"));
 }
@@ -73,14 +65,14 @@ void AdvisoryAdvisoryTest::test_get_severity() {
 void AdvisoryAdvisoryTest::test_get_references() {
     // Tests get_references method
     libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     std::vector<libdnf::advisory::AdvisoryReference> refs = advisory.get_references();
     CPPUNIT_ASSERT_EQUAL(1lu, refs.size());
 
     libdnf::advisory::AdvisoryReference r = refs[0];
     CPPUNIT_ASSERT_EQUAL(std::string("1111"), r.get_id());
-    CPPUNIT_ASSERT_EQUAL(libdnf::advisory::AdvisoryReference::Type::CVE, r.get_type());
+    CPPUNIT_ASSERT_EQUAL(std::string("cve"), r.get_type());
     CPPUNIT_ASSERT_EQUAL(std::string("CVE-2999"), r.get_title());
     CPPUNIT_ASSERT_EQUAL(std::string("https://foobar/foobarupdate_2"), r.get_url());
 }
@@ -88,7 +80,7 @@ void AdvisoryAdvisoryTest::test_get_references() {
 void AdvisoryAdvisoryTest::test_get_collections() {
     // Tests get_collections method
     libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type(libdnf::advisory::Advisory::Type::SECURITY);
+        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     std::vector<libdnf::advisory::AdvisoryCollection> colls = advisory.get_collections();
     CPPUNIT_ASSERT_EQUAL(1lu, colls.size());

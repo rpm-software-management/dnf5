@@ -30,8 +30,6 @@ namespace libdnf::advisory {
 
 class AdvisoryReference {
 public:
-    using Type = AdvisoryReferenceType;
-
     /// Get id of this advisory reference, this id is like a name of this reference
     /// (it is not libsolv id).
     ///
@@ -40,8 +38,8 @@ public:
 
     /// Get type of this reference.
     ///
-    /// @return Type of this reference.
-    Type get_type() const;
+    /// @return type of this reference as std::string.
+    std::string get_type() const;
 
     /// Get type of this reference.
     ///

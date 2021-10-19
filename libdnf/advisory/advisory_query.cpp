@@ -117,15 +117,13 @@ AdvisoryQuery & AdvisoryQuery::filter_name(const std::vector<std::string> & patt
     return *this;
 }
 
-//TODO(amatej): Add a wrapper that accepts string type, eg: "security" not enum
-AdvisoryQuery & AdvisoryQuery::filter_type(const Advisory::Type type, sack::QueryCmp cmp_type) {
-    const std::vector<Advisory::Type> types = {type};
+AdvisoryQuery & AdvisoryQuery::filter_type(const std::string & type, sack::QueryCmp cmp_type) {
+    std::vector<std::string> types = {type};
     filter_type(types, cmp_type);
     return *this;
 }
 
-//TODO(amatej): Add a wrapper that accepts vector of string types, eg: "security", "bugfix" not enums
-AdvisoryQuery & AdvisoryQuery::filter_type(const std::vector<AdvisoryType> & types, sack::QueryCmp cmp_type) {
+AdvisoryQuery & AdvisoryQuery::filter_type(const std::vector<std::string> & types, sack::QueryCmp cmp_type) {
     auto & pool = get_pool(base);
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
 
@@ -136,22 +134,11 @@ AdvisoryQuery & AdvisoryQuery::filter_type(const std::vector<AdvisoryType> & typ
     }
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ: {
-            AdvisoryType ored_types_together = AdvisoryType::UNKNOWN;
-            for (const auto t : types) {
-                ored_types_together = ored_types_together | t;
-            }
 
             //TODO(amatej): extract this into solv::advisroy_private once its created
             for (Id candidate_id : *p_impl) {
-                const char * candidate_type = pool.lookup_str(candidate_id, SOLVABLE_PATCHCATEGORY);
-                if (((ored_types_together & AdvisoryType::SECURITY) == AdvisoryType::SECURITY &&
-                     (strcmp(candidate_type, "security") == 0)) ||
-                    ((ored_types_together & AdvisoryType::BUGFIX) == AdvisoryType::BUGFIX &&
-                     (strcmp(candidate_type, "bugfix") == 0)) ||
-                    ((ored_types_together & AdvisoryType::ENHANCEMENT) == AdvisoryType::ENHANCEMENT &&
-                     (strcmp(candidate_type, "enhancement") == 0)) ||
-                    ((ored_types_together & AdvisoryType::NEWPACKAGE) == AdvisoryType::NEWPACKAGE &&
-                     (strcmp(candidate_type, "newpackage") == 0))) {
+                std::string candidate_type = std::string(pool.lookup_str(candidate_id, SOLVABLE_PATCHCATEGORY));
+                if(types.empty() || std::find(types.begin(), types.end(), candidate_type) != types.end()) {
                     filter_result.add_unsafe(candidate_id);
                 }
             }
@@ -171,7 +158,7 @@ AdvisoryQuery & AdvisoryQuery::filter_type(const std::vector<AdvisoryType> & typ
 }
 
 AdvisoryQuery & AdvisoryQuery::filter_reference(
-    const std::vector<std::string> & reference_id, std::vector<AdvisoryReferenceType> types, sack::QueryCmp cmp_type) {
+    const std::vector<std::string> & reference_id, std::vector<std::string> types, sack::QueryCmp cmp_type) {
     libdnf::solv::SolvMap filter_result(get_pool(base).get_nsolvables());
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
@@ -181,12 +168,6 @@ AdvisoryQuery & AdvisoryQuery::filter_reference(
     }
 
     bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
-
-    // Since the types are defined as bit in an int or them together for faster iteration
-    AdvisoryReferenceType ored_types_together = AdvisoryReferenceType::UNKNOWN;
-    for (const auto t : types) {
-        ored_types_together = ored_types_together | t;
-    }
 
     for (const std::string & pattern : reference_id) {
         libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
@@ -202,7 +183,7 @@ AdvisoryQuery & AdvisoryQuery::filter_reference(
                     //TODO(amatej): replace this with solv::advisroy_private (just like for package)
                     //              So that we don't duplicate code and don't have to create Advisory object (big overhead, has weak pointer)
                     Advisory a = Advisory(base, AdvisoryId(candidate_id));
-                    for (const auto & cve : a.get_references(ored_types_together)) {
+                    for (const auto & cve : a.get_references(types)) {
                         if (cve.get_id() == pattern) {
                             filter_result.add_unsafe(candidate_id);
                         }
@@ -212,7 +193,7 @@ AdvisoryQuery & AdvisoryQuery::filter_reference(
             case libdnf::sack::QueryCmp::GLOB: {
                 for (Id candidate_id : *p_impl) {
                     Advisory a = Advisory(base, AdvisoryId(candidate_id));
-                    for (const auto & cve : a.get_references(ored_types_together)) {
+                    for (const auto & cve : a.get_references(types)) {
                         if (fnmatch(c_pattern, cve.get_id().c_str(), 0) == 0) {
                             filter_result.add_unsafe(candidate_id);
                         }
@@ -234,21 +215,21 @@ AdvisoryQuery & AdvisoryQuery::filter_reference(
 }
 AdvisoryQuery & AdvisoryQuery::filter_CVE(const std::string & pattern, sack::QueryCmp cmp_type) {
     const std::vector<std::string> patterns = {pattern};
-    filter_reference(patterns, {AdvisoryReferenceType::CVE}, cmp_type);
+    filter_reference(patterns, {"cve"}, cmp_type);
     return *this;
 }
 AdvisoryQuery & AdvisoryQuery::filter_CVE(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
-    filter_reference(patterns, {AdvisoryReferenceType::CVE}, cmp_type);
+    filter_reference(patterns, {"cve"}, cmp_type);
     return *this;
 }
 
 AdvisoryQuery & AdvisoryQuery::filter_bug(const std::string & pattern, sack::QueryCmp cmp_type) {
     const std::vector<std::string> patterns = {pattern};
-    filter_reference(patterns, {AdvisoryReferenceType::BUGZILLA}, cmp_type);
+    filter_reference(patterns, {"bugzilla"}, cmp_type);
     return *this;
 }
 AdvisoryQuery & AdvisoryQuery::filter_bug(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
-    filter_reference(patterns, {AdvisoryReferenceType::BUGZILLA}, cmp_type);
+    filter_reference(patterns, {"bugzilla"}, cmp_type);
     return *this;
 }
 
