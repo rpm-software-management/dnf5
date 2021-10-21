@@ -30,6 +30,7 @@ namespace libdnf::base {
 
 class SolverProblems {
 public:
+    SolverProblems(const SolverProblems & src);
     ~SolverProblems();
 
     /// Provide information about package solver problems in a vector. Each problem can be transformed to string by

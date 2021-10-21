@@ -20,7 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_SOLVER_PROBLEMS_IMPL_HPP
 #define LIBDNF_BASE_SOLVER_PROBLEMS_IMPL_HPP
 
+#include "../rpm/solv/goal_private.hpp"
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/base/solver_problems.hpp"
 
 
@@ -30,11 +32,12 @@ namespace libdnf::base {
 class SolverProblems::Impl {
 public:
     Impl() = default;
+    Impl(const SolverProblems::Impl & src) = default;
     ~Impl() = default;
 
+    void set_solver_problems(const libdnf::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal);
 private:
     friend SolverProblems;
-    friend class Transaction;
 
     std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> package_solver_problems;
 

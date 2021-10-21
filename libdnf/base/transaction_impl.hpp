@@ -50,8 +50,6 @@ public:
         rpm::solv::GoalPrivate & solved_goal,
         std::map<Id, std::vector<Id>> & replaced);
 
-    void set_solver_problems(rpm::solv::GoalPrivate & solved_goal);
-
     GoalProblem report_not_found(
         GoalAction action, const std::string & pkg_spec, const GoalJobSettings & settings, bool strict);
     void add_resolve_log(
