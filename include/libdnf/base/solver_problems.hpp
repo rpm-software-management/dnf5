@@ -30,7 +30,7 @@ namespace libdnf::base {
 
 class SolverProblems {
 public:
-    ~SolverProblems() = default;
+    ~SolverProblems();
 
     /// Provide information about package solver problems in a vector. Each problem can be transformed to string by
     /// package_solver_problem_to_string or all problems to a string by all_package_solver_problems_to_string().
@@ -38,9 +38,7 @@ public:
     /// @return Vector with structuralized package solver problems
     // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
     // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_package_solver_problems() {
-        return package_solver_problems;
-    };
+    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_package_solver_problems();
 
     /// Convert SolverProblems class to string representative;
     std::string to_string() const;
@@ -52,9 +50,10 @@ public:
 private:
     friend class Transaction;
 
-    SolverProblems() = default;
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> package_solver_problems;
+    SolverProblems();
 };
 
 }  // namespace libdnf::base

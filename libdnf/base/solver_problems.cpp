@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/base/solver_problems.hpp"
+#include "solver_problems_impl.hpp"
 
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 #include "libdnf/utils/string.hpp"
@@ -79,6 +79,13 @@ std::string string_join(
 
 }  // namespace
 
+SolverProblems::SolverProblems() : p_impl(new Impl()) {}
+
+SolverProblems::~SolverProblems() = default;
+
+std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> SolverProblems::get_package_solver_problems() {
+        return p_impl->package_solver_problems;
+    };
 
 std::string SolverProblems::package_solver_problem_to_string(
     const std::pair<ProblemRules, std::vector<std::string>> & raw) {
@@ -138,22 +145,22 @@ std::string SolverProblems::package_solver_problem_to_string(
 
 
 std::string SolverProblems::to_string() const {
-    if (package_solver_problems.empty()) {
+    if (p_impl->package_solver_problems.empty()) {
         return {};
     }
     std::string output;
-    if (package_solver_problems.size() == 1) {
+    if (p_impl->package_solver_problems.size() == 1) {
         output.append(_("Problem: "));
-        output.append(string_join(*package_solver_problems.begin(), "\n  - "));
+        output.append(string_join(*p_impl->package_solver_problems.begin(), "\n  - "));
         return output;
     }
     const char * problem_prefix = _("Problem {}: ");
 
     output.append(fmt::format(problem_prefix, 1));
-    output.append(string_join(*package_solver_problems.begin(), "\n  - "));
+    output.append(string_join(*p_impl->package_solver_problems.begin(), "\n  - "));
 
     int index = 2;
-    for (auto iter = std::next(package_solver_problems.begin()); iter != package_solver_problems.end(); ++iter) {
+    for (auto iter = std::next(p_impl->package_solver_problems.begin()); iter != p_impl->package_solver_problems.end(); ++iter) {
         output.append("\n ");
         output.append(fmt::format(problem_prefix, index));
         output.append(string_join(*iter, "\n  - "));

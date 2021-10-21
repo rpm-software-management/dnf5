@@ -18,6 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#include "solver_problems_impl.hpp"
 #include "transaction_impl.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -466,15 +467,15 @@ void Transaction::Impl::set_solver_problems(rpm::solv::GoalPrivate & solved_goal
                 problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
             }
         }
-        if (is_unique(package_solver_problems.package_solver_problems, problem_output)) {
-            package_solver_problems.package_solver_problems.push_back(std::move(problem_output));
+        if (is_unique(package_solver_problems.p_impl->package_solver_problems, problem_output)) {
+            package_solver_problems.p_impl->package_solver_problems.push_back(std::move(problem_output));
         }
     }
     auto problem_protected = get_removal_of_protected(solved_goal, broken_installed);
     if (!problem_protected.empty()) {
-        if (is_unique(package_solver_problems.package_solver_problems, problem_protected)) {
-            package_solver_problems.package_solver_problems.insert(
-                package_solver_problems.package_solver_problems.begin(), std::move(problem_protected));
+        if (is_unique(package_solver_problems.p_impl->package_solver_problems, problem_protected)) {
+            package_solver_problems.p_impl->package_solver_problems.insert(
+                package_solver_problems.p_impl->package_solver_problems.begin(), std::move(problem_protected));
         }
     }
 }
