@@ -77,7 +77,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Utility for packages maintaining");
     cmd.set_description("Microdnf is a program for maintaining packages.");
-    cmd.set_named_args_help_header("Global options:");
+    cmd.set_named_args_help_header("Unclassified options:");
 
     // software management commands
     auto * software_management_commands_group = session.get_argument_parser().add_new_group("software_management_commands");
@@ -126,6 +126,20 @@ inline void RootCommand::run() {
     throw_missing_command();
 }
 
+// Registers `group` and all its arguments to `command`
+static void register_group_with_args(
+    libdnf::cli::ArgumentParser::Command & command, libdnf::cli::ArgumentParser::Group & group) {
+    for (auto * argument : group.get_arguments()) {
+        if (auto * arg = dynamic_cast<libdnf::cli::ArgumentParser::PositionalArg *>(argument)) {
+            command.register_positional_arg(arg);
+        } else if (auto * arg = dynamic_cast<libdnf::cli::ArgumentParser::NamedArg *>(argument)) {
+            command.register_named_arg(arg);
+        } else if (auto * arg = dynamic_cast<libdnf::cli::ArgumentParser::Command *>(argument)) {
+            command.register_command(arg);
+        }
+    }
+    command.register_group(&group);
+}
 
 static void set_commandline_args(Context & ctx) {
     ctx.set_root_command(std::make_unique<RootCommand>(ctx));
@@ -133,11 +147,14 @@ static void set_commandline_args(Context & ctx) {
 
     auto & config = ctx.base.get_config();
 
+    auto * global_options_group = ctx.get_argument_parser().add_new_group("global_options");
+    global_options_group->set_header("Global options:");
+
     auto help = ctx.get_argument_parser().add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
     help->set_short_description("Print help");
-    microdnf->register_named_arg(help);
+    global_options_group->register_argument(help);
 
     auto config_file_path = ctx.get_argument_parser().add_new_named_arg("config");
     config_file_path->set_long_name("config");
@@ -145,7 +162,7 @@ static void set_commandline_args(Context & ctx) {
     config_file_path->set_arg_value_help("CONFIG_FILE_PATH");
     config_file_path->set_short_description("Configuration file location");
     config_file_path->link_value(&config.config_file_path());
-    microdnf->register_named_arg(config_file_path);
+    global_options_group->register_argument(config_file_path);
 
     auto quiet = ctx.get_argument_parser().add_new_named_arg("quiet");
     quiet->set_long_name("quiet");
@@ -160,7 +177,7 @@ static void set_commandline_args(Context & ctx) {
         ctx.set_quiet(true);
         return true;
     });
-    microdnf->register_named_arg(quiet);
+    global_options_group->register_argument(quiet);
 
     // --setopt argument support
     auto setopt = ctx.get_argument_parser().add_new_named_arg("setopt");
@@ -200,7 +217,7 @@ static void set_commandline_args(Context & ctx) {
         }
         return true;
     });
-    microdnf->register_named_arg(setopt);
+    global_options_group->register_argument(setopt);
 
     // --setvar argument support
     auto setvar = ctx.get_argument_parser().add_new_named_arg("setvar");
@@ -219,7 +236,7 @@ static void set_commandline_args(Context & ctx) {
             ctx.base.get_vars()->set(name, val + 1, libdnf::Vars::Priority::COMMANDLINE);
             return true;
         });
-    microdnf->register_named_arg(setvar);
+    global_options_group->register_argument(setvar);
 
     auto assume_yes = ctx.get_argument_parser().add_new_named_arg("assumeyes");
     assume_yes->set_long_name("assumeyes");
@@ -227,28 +244,28 @@ static void set_commandline_args(Context & ctx) {
     assume_yes->set_short_description("automatically answer yes for all questions");
     assume_yes->set_const_value("true");
     assume_yes->link_value(&config.assumeyes());
-    microdnf->register_named_arg(assume_yes);
+    global_options_group->register_argument(assume_yes);
 
     auto assume_no = ctx.get_argument_parser().add_new_named_arg("assumeno");
     assume_no->set_long_name("assumeno");
     assume_no->set_short_description("automatically answer no for all questions");
     assume_no->set_const_value("true");
     assume_no->link_value(&config.assumeno());
-    microdnf->register_named_arg(assume_no);
+    global_options_group->register_argument(assume_no);
 
     auto best = ctx.get_argument_parser().add_new_named_arg("best");
     best->set_long_name("best");
     best->set_short_description("try the best available package versions in transactions");
     best->set_const_value("true");
     best->link_value(&config.best());
-    microdnf->register_named_arg(best);
+    global_options_group->register_argument(best);
 
     auto no_best = ctx.get_argument_parser().add_new_named_arg("no-best");
     no_best->set_long_name("no-best");
     no_best->set_short_description("do not limit the transaction to the best candidate");
     no_best->set_const_value("false");
     no_best->link_value(&config.best());
-    microdnf->register_named_arg(no_best);
+    global_options_group->register_argument(no_best);
 
     auto best_conflict_args =
         ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
@@ -262,7 +279,7 @@ static void set_commandline_args(Context & ctx) {
     skip_broken->set_short_description("resolve depsolve problems by skipping packages");
     skip_broken->set_const_value("false");
     skip_broken->link_value(&config.strict());
-    microdnf->register_named_arg(skip_broken);
+    global_options_group->register_argument(skip_broken);
 
     auto enable_repoids = ctx.get_argument_parser().add_new_named_arg("enable-repo");
     enable_repoids->set_long_name("enable-repo");
@@ -280,7 +297,7 @@ static void set_commandline_args(Context & ctx) {
             }
             return true;
         });
-    microdnf->register_named_arg(enable_repoids);
+    global_options_group->register_argument(enable_repoids);
 
     auto disable_repo_ids = ctx.get_argument_parser().add_new_named_arg("disable-repo");
     disable_repo_ids->set_long_name("disable-repo");
@@ -298,7 +315,7 @@ static void set_commandline_args(Context & ctx) {
             }
             return true;
         });
-    microdnf->register_named_arg(disable_repo_ids);
+    global_options_group->register_argument(disable_repo_ids);
 
     auto repo_ids = ctx.get_argument_parser().add_new_named_arg("repo");
     repo_ids->set_long_name("repo");
@@ -320,7 +337,7 @@ static void set_commandline_args(Context & ctx) {
             }
             return true;
         });
-    microdnf->register_named_arg(repo_ids);
+    global_options_group->register_argument(repo_ids);
 
     auto ed_repo_conflict_args =
         ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
@@ -347,14 +364,14 @@ static void set_commandline_args(Context & ctx) {
         ctx.setopts.emplace_back("*.repo_gpgcheck", "0");
         return true;
     });
-    microdnf->register_named_arg(no_gpgchecks);
+    global_options_group->register_argument(no_gpgchecks);
 
     auto no_plugins = ctx.get_argument_parser().add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
     no_plugins->set_short_description("disable all plugins");
     no_plugins->set_const_value("false");
     no_plugins->link_value(&config.plugins());
-    microdnf->register_named_arg(no_plugins);
+    global_options_group->register_argument(no_plugins);
 
     auto enable_plugins_names = ctx.get_argument_parser().add_new_named_arg("enable-plugin");
     enable_plugins_names->set_long_name("enable-plugin");
@@ -370,7 +387,7 @@ static void set_commandline_args(Context & ctx) {
             }
             return true;
         });
-    microdnf->register_named_arg(enable_plugins_names);
+    global_options_group->register_argument(enable_plugins_names);
 
     auto disable_plugins_names = ctx.get_argument_parser().add_new_named_arg("disable-plugin");
     disable_plugins_names->set_long_name("disable-plugin");
@@ -386,7 +403,7 @@ static void set_commandline_args(Context & ctx) {
             }
             return true;
         });
-    microdnf->register_named_arg(disable_plugins_names);
+    global_options_group->register_argument(disable_plugins_names);
 
     auto ed_plugins_names_conflict_args =
         ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
@@ -412,7 +429,7 @@ static void set_commandline_args(Context & ctx) {
             ctx.set_comment(value);
             return true;
         });
-    microdnf->register_named_arg(comment);
+    global_options_group->register_argument(comment);
 
     auto installroot = ctx.get_argument_parser().add_new_named_arg("installroot");
     installroot->set_long_name("installroot");
@@ -420,7 +437,7 @@ static void set_commandline_args(Context & ctx) {
     installroot->set_arg_value_help("ABSOLUTE_PATH");
     installroot->set_short_description("set install root");
     installroot->link_value(&config.installroot());
-    microdnf->register_named_arg(installroot);
+    global_options_group->register_argument(installroot);
 
     auto releasever = ctx.get_argument_parser().add_new_named_arg("releasever");
     releasever->set_long_name("releasever");
@@ -433,7 +450,9 @@ static void set_commandline_args(Context & ctx) {
             ctx.base.get_vars()->set("releasever", value);
             return true;
         });
-    microdnf->register_named_arg(releasever);
+    global_options_group->register_argument(releasever);
+
+    register_group_with_args(*microdnf, *global_options_group);
 
     ctx.get_argument_parser().set_inherit_named_args(true);
 }
