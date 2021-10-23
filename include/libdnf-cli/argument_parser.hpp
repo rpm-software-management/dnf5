@@ -147,6 +147,9 @@ public:
         /// Gets a brief description of the argument.
         const std::string & get_short_description() const { return short_description; }
 
+        /// Returns a list of arguments that cannot be used with this argument or nullptr.
+        std::vector<Argument *> * get_conflict_arguments() noexcept { return conflict_args; }
+
         /// Gets the number of times the argument was used during analysis.
         /// Can be used to determine how many times the argument has been used on the command line.
         int get_parse_count() const noexcept { return parse_count; }
@@ -155,7 +158,7 @@ public:
         void reset_parse_count() noexcept { parse_count = 0; }
 
         /// Tests input for arguments that cannot be used with this argument.
-        /// Returns the first conflicting argument.
+        /// Returns the first conflicting argument or nullptr.
         Argument * get_conflict_argument() const noexcept;
 
         /// Sets whether the argument participates in completion.
@@ -166,12 +169,14 @@ public:
 
         virtual void help() const noexcept {}
 
+        // Returns the ArgumentParser instance to which the argument belongs.
+        ArgumentParser & get_argument_parser() const noexcept { return owner; }
+
     private:
         friend class ArgumentParser;
 
         Argument(ArgumentParser & owner, std::string id);
         static std::string get_conflict_arg_msg(const Argument * conflict_arg);
-        ArgumentParser & get_owner() const noexcept { return owner; }
 
         ArgumentParser & owner;
         std::string id;
@@ -221,8 +226,14 @@ public:
         /// Sets the user function for parsing the argument.
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
 
+        /// Gets the user function for parsing the argument.
+        const ParseHookFunc & get_parse_hook_func() const noexcept { return parse_hook; }
+
         /// Sets the user function to complete the argument.
         void set_complete_hook_func(CompleteHookFunc && func) { complete_hook = std::move(func); }
+
+        /// Gets the user function to complete the argument.
+        const CompleteHookFunc & get_complete_hook_func() const noexcept { return complete_hook; }
 
     private:
         friend class ArgumentParser;
@@ -317,6 +328,9 @@ public:
 
         /// Sets the user function for parsing the argument.
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
+
+        /// Gets the user function for parsing the argument.
+        const ParseHookFunc & get_parse_hook_func() const noexcept { return parse_hook; }
 
         /// Sets help text for argument value.
         void set_arg_value_help(std::string text) { arg_value_help = std::move(text); }
@@ -463,6 +477,9 @@ public:
 
         /// Sets the user function for parsing the argument.
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
+
+        /// Gets the user function for parsing the argument.
+        const ParseHookFunc & get_parse_hook_func() const noexcept { return parse_hook; }
 
         /// Prints command help text.
         void help() const noexcept override;
