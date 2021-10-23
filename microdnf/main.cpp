@@ -54,6 +54,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/logger/stream_logger.hpp>
 #include <string.h>
 
+#include <algorithm>
 #include <cstring>
 #include <filesystem>
 #include <fstream>
@@ -141,6 +142,71 @@ static void register_group_with_args(
     command.register_group(&group);
 }
 
+// Creates a new named argument. The parameters are copied from the `arg` source. Useful for creating aliases.
+static libdnf::cli::ArgumentParser::NamedArg * add_new_named_arg_alias(
+    libdnf::cli::ArgumentParser::NamedArg & src_arg,
+    const std::string & id,
+    const std::string & long_name,
+    char short_name,
+    libdnf::cli::ArgumentParser::Group * group,
+    std::vector<libdnf::cli::ArgumentParser::Argument *> * conflict_args = nullptr) {
+
+    auto alias = src_arg.get_argument_parser().add_new_named_arg(id);
+    alias->set_long_name(long_name);
+    alias->set_short_name(short_name);
+
+    // Set description
+    std::string descr;
+    if (src_arg.get_short_name() != '\0') {
+        descr = std::string("`-") + src_arg.get_short_name() + '`';
+        if (!src_arg.get_long_name().empty()) {
+            descr += ", ";
+        }
+    }
+    if (!src_arg.get_long_name().empty()) {
+        descr += "`--" + src_arg.get_long_name() + '`';
+    }
+    alias->set_short_description(fmt::format("Alias to {}", descr));
+
+    // Copy from source argument
+    alias->set_has_value(src_arg.get_has_value());
+    alias->link_value(src_arg.get_linked_value());
+    alias->set_store_value(src_arg.get_store_value());
+    alias->set_const_value(src_arg.get_const_value());
+    alias->set_arg_value_help(src_arg.get_arg_value_help());
+    alias->set_parse_hook_func(libdnf::cli::ArgumentParser::NamedArg::ParseHookFunc(src_arg.get_parse_hook_func()));
+
+    // Do not offer aliases in completion
+    alias->set_complete(false);
+
+    if (group) {
+        group->register_argument(alias);
+    }
+
+    // Set conflicts
+    if (conflict_args) {
+        alias->set_conflict_arguments(conflict_args);
+
+        // Set reverse conflicts to alias
+        for (auto * conflict_arg : *conflict_args) {
+            auto * conflict_conflict_args = conflict_arg->get_conflict_arguments();
+            if (conflict_conflict_args) {
+                auto it = std::find(conflict_conflict_args->begin(), conflict_conflict_args->end(), alias);
+                if (it == conflict_conflict_args->end()) {
+                    conflict_conflict_args->push_back(alias);
+                }
+            } else {
+                conflict_conflict_args = src_arg.get_argument_parser().add_conflict_args_group(
+                    std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+                        new std::vector<ArgumentParser::Argument *>{alias}));
+                conflict_arg->set_conflict_arguments(conflict_conflict_args);
+            }
+        }
+    }
+
+    return alias;
+}
+
 static void set_commandline_args(Context & ctx) {
     ctx.set_root_command(std::make_unique<RootCommand>(ctx));
     auto microdnf = ctx.get_root_command()->get_argument_parser_command();
@@ -149,6 +215,9 @@ static void set_commandline_args(Context & ctx) {
 
     auto * global_options_group = ctx.get_argument_parser().add_new_group("global_options");
     global_options_group->set_header("Global options:");
+
+    auto * options_aliases_group = ctx.get_argument_parser().add_new_group("global_options_aliases");
+    options_aliases_group->set_header("Options Compatibility Aliases:");
 
     auto help = ctx.get_argument_parser().add_new_named_arg("help");
     help->set_long_name("help");
@@ -267,12 +336,16 @@ static void set_commandline_args(Context & ctx) {
     no_best->link_value(&config.best());
     global_options_group->register_argument(no_best);
 
-    auto best_conflict_args =
-        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{best, no_best}));
+    auto best_conflict_args = ctx.get_argument_parser().add_conflict_args_group(
+        std::unique_ptr<std::vector<ArgumentParser::Argument *>>(new std::vector<ArgumentParser::Argument *>{no_best}));
+
+    auto no_best_conflict_args = ctx.get_argument_parser().add_conflict_args_group(
+        std::unique_ptr<std::vector<ArgumentParser::Argument *>>(new std::vector<ArgumentParser::Argument *>{best}));
 
     best->set_conflict_arguments(best_conflict_args);
-    no_best->set_conflict_arguments(best_conflict_args);
+    no_best->set_conflict_arguments(no_best_conflict_args);
+
+    add_new_named_arg_alias(*no_best, "nobest", "nobest", '\0', options_aliases_group, no_best_conflict_args);
 
     auto skip_broken = ctx.get_argument_parser().add_new_named_arg("skip-broken");
     skip_broken->set_long_name("skip-broken");
@@ -281,13 +354,13 @@ static void set_commandline_args(Context & ctx) {
     skip_broken->link_value(&config.strict());
     global_options_group->register_argument(skip_broken);
 
-    auto enable_repoids = ctx.get_argument_parser().add_new_named_arg("enable-repo");
-    enable_repoids->set_long_name("enable-repo");
-    enable_repoids->set_has_value(true);
-    enable_repoids->set_arg_value_help("REPO_ID,...");
-    enable_repoids->set_short_description(
+    auto enable_repo_ids = ctx.get_argument_parser().add_new_named_arg("enable-repo");
+    enable_repo_ids->set_long_name("enable-repo");
+    enable_repo_ids->set_has_value(true);
+    enable_repo_ids->set_arg_value_help("REPO_ID,...");
+    enable_repo_ids->set_short_description(
         "Enable additional repositories. List option. Supports globs, can be specified multiple times.");
-    enable_repoids->set_parse_hook_func(
+    enable_repo_ids->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             // Store the repositories enablement to vector. Use it later when repositories configuration will be loaded.
@@ -297,7 +370,7 @@ static void set_commandline_args(Context & ctx) {
             }
             return true;
         });
-    global_options_group->register_argument(enable_repoids);
+    global_options_group->register_argument(enable_repo_ids);
 
     auto disable_repo_ids = ctx.get_argument_parser().add_new_named_arg("disable-repo");
     disable_repo_ids->set_long_name("disable-repo");
@@ -342,21 +415,27 @@ static void set_commandline_args(Context & ctx) {
     auto ed_repo_conflict_args =
         ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
             new std::vector<ArgumentParser::Argument *>{repo_ids}));
-    enable_repoids->set_conflict_arguments(ed_repo_conflict_args);
+    enable_repo_ids->set_conflict_arguments(ed_repo_conflict_args);
     disable_repo_ids->set_conflict_arguments(ed_repo_conflict_args);
 
     auto repo_conflict_args =
         ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{enable_repoids, disable_repo_ids}));
+            new std::vector<ArgumentParser::Argument *>{enable_repo_ids, disable_repo_ids}));
     repo_ids->set_conflict_arguments(repo_conflict_args);
+
+    add_new_named_arg_alias(
+        *enable_repo_ids, "enablerepo", "enablerepo", '\0', options_aliases_group, ed_repo_conflict_args);
+    add_new_named_arg_alias(
+        *disable_repo_ids, "disablerepo", "disablerepo", '\0', options_aliases_group, ed_repo_conflict_args);
+    add_new_named_arg_alias(*repo_ids, "repoid", "repoid", '\0', options_aliases_group, repo_conflict_args);
 
     auto no_gpgchecks = ctx.get_argument_parser().add_new_named_arg("no-gpgchecks");
     no_gpgchecks->set_long_name("no-gpgchecks");
     no_gpgchecks->set_short_description("disable gpg signature checking (if RPM policy allows)");
     no_gpgchecks->set_parse_hook_func([&ctx](
-                                         [[maybe_unused]] ArgumentParser::NamedArg * arg,
-                                         [[maybe_unused]] const char * option,
-                                         [[maybe_unused]] const char * value) {
+                                          [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                          [[maybe_unused]] const char * option,
+                                          [[maybe_unused]] const char * value) {
         ctx.base.get_config().gpgcheck().set(libdnf::Option::Priority::COMMANDLINE, 0);
         ctx.base.get_config().repo_gpgcheck().set(libdnf::Option::Priority::COMMANDLINE, 0);
         // Store to vector. Use it later when repositories configuration will be loaded.
@@ -365,6 +444,7 @@ static void set_commandline_args(Context & ctx) {
         return true;
     });
     global_options_group->register_argument(no_gpgchecks);
+    add_new_named_arg_alias(*no_gpgchecks, "nogpgchecks", "nogpgchecks", '\0', options_aliases_group);
 
     auto no_plugins = ctx.get_argument_parser().add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
@@ -377,7 +457,8 @@ static void set_commandline_args(Context & ctx) {
     enable_plugins_names->set_long_name("enable-plugin");
     enable_plugins_names->set_has_value(true);
     enable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
-    enable_plugins_names->set_short_description("Enable plugins by name. List option. Supports globs, can be specified multiple times.");
+    enable_plugins_names->set_short_description(
+        "Enable plugins by name. List option. Supports globs, can be specified multiple times.");
     enable_plugins_names->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -393,7 +474,8 @@ static void set_commandline_args(Context & ctx) {
     disable_plugins_names->set_long_name("disable-plugin");
     disable_plugins_names->set_has_value(true);
     disable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
-    disable_plugins_names->set_short_description("Disable plugins by name. List option. Supports globs, can be specified multiple times.");
+    disable_plugins_names->set_short_description(
+        "Disable plugins by name. List option. Supports globs, can be specified multiple times.");
     disable_plugins_names->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -415,6 +497,23 @@ static void set_commandline_args(Context & ctx) {
         ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
             new std::vector<ArgumentParser::Argument *>{enable_plugins_names, disable_plugins_names}));
     no_plugins->set_conflict_arguments(no_plugins_conflict_args);
+
+    add_new_named_arg_alias(
+        *no_plugins, "noplugins", "noplugins", '\0', options_aliases_group, no_plugins_conflict_args);
+    add_new_named_arg_alias(
+        *enable_plugins_names,
+        "enableplugin",
+        "enableplugin",
+        '\0',
+        options_aliases_group,
+        ed_plugins_names_conflict_args);
+    add_new_named_arg_alias(
+        *disable_plugins_names,
+        "disableplugin",
+        "disableplugin",
+        '\0',
+        options_aliases_group,
+        ed_plugins_names_conflict_args);
 
     auto comment = ctx.get_argument_parser().add_new_named_arg("comment");
     comment->set_long_name("comment");
@@ -453,6 +552,7 @@ static void set_commandline_args(Context & ctx) {
     global_options_group->register_argument(releasever);
 
     register_group_with_args(*microdnf, *global_options_group);
+    register_group_with_args(*microdnf, *options_aliases_group);
 
     ctx.get_argument_parser().set_inherit_named_args(true);
 }
