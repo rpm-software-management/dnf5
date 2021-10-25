@@ -98,28 +98,6 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     return reply;
 }
 
-libdnf::transaction::TransactionWeakPtr new_db_transaction(libdnf::Base * base, const std::string & comment) {
-    auto transaction_sack = base->get_transaction_sack();
-    auto transaction = transaction_sack->new_transaction();
-    // TODO(mblaha): user id
-    //transaction->set_user_id(get_login_uid());
-    if (!comment.empty()) {
-        transaction->set_comment(comment);
-    }
-    auto vars = base->get_vars();
-    if (vars->contains("releasever")) {
-        transaction->set_releasever(base->get_vars()->get_value("releasever"));
-    }
-
-    // TODO (mblaha): command line for the transaction?
-    //transaction->set_cmdline(cmd_line);
-
-    // TODO(jrohel): nevra of running microdnf?
-    //transaction->add_runtime_package("microdnf");
-
-    return transaction;
-}
-
 // TODO (mblaha) shared download_packages with microdnf / libdnf
 // TODO (mblaha) callbacks to report the status
 void download_packages(Session & session, libdnf::base::Transaction & transaction) {
@@ -148,39 +126,26 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
-    std::string comment = key_value_map_get<std::string>(options, "comment", "");
 
     // TODO(mblaha): ensure that system repo is not loaded twice
     //session.fill_sack();
 
-    auto base = session.get_base();
     auto * transaction = session.get_transaction();
+    DbusTransactionCB callbacks(session);
 
     download_packages(session, *transaction);
 
-    libdnf::rpm::Transaction rpm_transaction(*base);
-    rpm_transaction.fill(*transaction);
+    std::optional<std::string> comment{};
+    if (options.find("comment") != options.end()) {
+        comment = key_value_map_get<std::string>(options, "comment");
+    }
 
-    auto db_transaction = new_db_transaction(base, comment);
-    db_transaction->fill_transaction_packages(transaction->get_transaction_packages());
+    auto rpm_result = transaction->run(callbacks, "dnfdaemon-server", std::nullopt, comment);
 
-    auto time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
-    db_transaction->start();
-
-    DbusTransactionCB callback(session);
-    rpm_transaction.register_cb(&callback);
-    auto rpm_result = rpm_transaction.run();
-    callback.finish();
-    rpm_transaction.register_cb(nullptr);
-    if (rpm_result != 0) {
+    if (rpm_result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
         throw sdbus::Error(
             dnfdaemon::ERROR_TRANSACTION, fmt::format("rpm transaction failed with code {}.", rpm_result));
     }
-
-    time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
-    db_transaction->finish(libdnf::transaction::TransactionState::DONE);
 
     // TODO(mblaha): clean up downloaded packages after successfull transaction
 
