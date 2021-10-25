@@ -54,6 +54,10 @@ std::string AdvisoryModule::get_context() const {
 std::string AdvisoryModule::get_arch() const {
     return get_pool(p_impl->base).id2str(p_impl->arch);
 }
+std::string AdvisoryModule::get_nsvca() const {
+    return std::string(get_name() + ":" + get_stream() + ":" + get_version() + ":" + get_context() + ":" + get_arch());
+}
+
 AdvisoryId AdvisoryModule::get_advisory_id() const {
     return p_impl->advisory;
 }

@@ -51,6 +51,9 @@ AdvisoryReference::Type AdvisoryReference::get_type() const {
 
     return Type::UNKNOWN;
 }
+const char * AdvisoryReference::get_type_cstring() const {
+    return get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index);
+}
 std::string AdvisoryReference::get_title() const {
     return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TITLE, advisory.id, index));
 }

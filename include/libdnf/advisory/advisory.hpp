@@ -129,6 +129,42 @@ public:
     /// @return Type of this advisory as const char* !! (temporal values)
     const char * get_type_cstring() const;
 
+    /// Get buildtime of this advisory. Libsolv combines issued and updated dates
+    /// into buildtime by always using the newer one.
+    ///
+    /// @return buildtime of this advisory.
+    unsigned long long get_buildtime() const;
+
+    /// Get vendor of this advisory.
+    ///
+    /// @return Vendor of this advisory as std::string.
+    std::string get_vendor() const;
+
+    /// Get description of this advisory.
+    ///
+    /// @return Description of this advisory as std::string.
+    std::string get_description() const;
+
+    /// Get title of this advisory.
+    ///
+    /// @return Title of this advisory as std::string.
+    std::string get_title() const;
+
+    /// Get status of this advisory.
+    ///
+    /// @return Status of this advisory as std::string.
+    std::string get_status() const;
+
+    /// Get rights of this advisory.
+    ///
+    /// @return Rights of this advisory as std::string.
+    std::string get_rights() const;
+
+    /// Get message of this advisory.
+    ///
+    /// @return Message of this advisory as std::string.
+    std::string get_message() const;
+
     /// Get AdvisoryId.
     ///
     /// @return AdvisoryId of this advisory.

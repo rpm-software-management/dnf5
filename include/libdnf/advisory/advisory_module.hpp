@@ -61,6 +61,11 @@ public:
     /// @return Arch of this AdvisoryModule as std::string.
     std::string get_arch() const;
 
+    /// Get NSVCA of this AdvisoryModule.
+    ///
+    /// @return NSVCA of this AdvisoryModule as std::string.
+    std::string get_nsvca() const;
+
     /// Get AdvisoryId of Advisory this AdvisoryModule belongs to.
     ///
     /// @return AdvisoryId of this AdvisoryModule.

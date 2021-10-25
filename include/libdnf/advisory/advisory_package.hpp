@@ -64,10 +64,33 @@ public:
     /// @return Arch of this AdvisoryPackage as std::string.
     std::string get_arch() const;
 
+    /// Get NEVRA of this AdvisoryPackage.
+    ///
+    /// @return NEVRA of this AdvisoryPackage as std::string.
+    std::string get_nevra() const;
+
     /// Get AdvisoryId of Advisory this AdvisoryPackage belongs to.
     ///
     /// @return AdvisoryId of this AdvisoryPackage.
     AdvisoryId get_advisory_id() const;
+
+    /// Get bool value whether reboot is suggested
+    ///TODO(amatej): not implemented
+    ///
+    /// @return Reboot suggestion of this advisory package as bool
+    bool get_reboot_suggested() const;
+
+    /// Get bool value whether restart is suggested
+    ///TODO(amatej): not implemented
+    ///
+    /// @return Restart suggestion of this advisory package as bool
+    bool get_restart_suggested() const;
+
+    /// Get bool value whether relogin is suggested
+    ///TODO(amatej): not implemented
+    ///
+    /// @return Relogin suggestion of this advisory package as bool
+    bool get_relogin_suggested() const;
 
     //TODO(amatej): we should be able to get Advisory and AdvisoryCollection information
     //              from a package, returning new advisory object is one option but it might

@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory_package_private.hpp"
 
 #include "libdnf/logger/logger.hpp"
-#include "libdnf/rpm/nevra.hpp"
 
 #include <solv/chksum.h>
 #include <solv/repo.h>
@@ -58,6 +57,9 @@ std::string AdvisoryPackage::get_evr() const {
 std::string AdvisoryPackage::get_arch() const {
     return p_impl->get_arch();
 }
+std::string AdvisoryPackage::get_nevra() const {
+    return p_impl->get_name() + "-" + p_impl->get_evr() + "." + p_impl->get_arch();
+}
 AdvisoryId AdvisoryPackage::get_advisory_id() const {
     return p_impl->get_advisory_id();
 }
@@ -66,6 +68,18 @@ Advisory AdvisoryPackage::get_advisory() const {
 }
 AdvisoryCollection AdvisoryPackage::get_advisory_collection() const {
     return AdvisoryCollection(p_impl->base, p_impl->get_advisory_id(), p_impl->owner_collection_index);
+}
+bool AdvisoryPackage::get_reboot_suggested() const {
+    //TODO(amatej): implement
+    return false;
+}
+bool AdvisoryPackage::get_restart_suggested() const {
+    //TODO(amatej): implement
+    return false;
+}
+bool AdvisoryPackage::get_relogin_suggested() const {
+    //TODO(amatej): implement
+    return false;
 }
 
 // AdvisoryPackage::Impl

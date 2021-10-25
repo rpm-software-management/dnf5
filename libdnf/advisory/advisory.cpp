@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_reference.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/solv/pool.hpp"
+#include "libdnf/utils/string.hpp"
 
 #include <fmt/format.h>
 
@@ -96,8 +97,36 @@ std::string Advisory::get_severity() const {
     //TODO(amatej): should we call SolvPrivate::internalize_libsolv_repo(solvable->repo);
     //              before pool.lookup_str?
     //              If so do this just once in solv::advisroy_private
-    const char * severity = get_pool(base).lookup_str(id.id, UPDATE_SEVERITY);
-    return severity ? std::string(severity) : std::string();
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, UPDATE_SEVERITY));
+}
+
+unsigned long long Advisory::get_buildtime() const {
+    return get_pool(base).lookup_num(id.id, SOLVABLE_BUILDTIME);
+}
+
+std::string Advisory::get_title() const {
+    // SOLVABLE_SUMMARY is misnamed, it actually stores the title
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
+}
+
+std::string Advisory::get_vendor() const {
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
+}
+
+std::string Advisory::get_rights() const {
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, UPDATE_RIGHTS));
+}
+
+std::string Advisory::get_status() const {
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, UPDATE_STATUS));
+}
+
+std::string Advisory::get_message() const {
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, UPDATE_MESSAGE));
+}
+
+std::string Advisory::get_description() const {
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
 }
 
 AdvisoryId Advisory::get_id() const {

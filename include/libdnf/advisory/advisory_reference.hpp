@@ -43,6 +43,11 @@ public:
     /// @return Type of this reference.
     Type get_type() const;
 
+    /// Get type of this reference.
+    ///
+    /// @return Type of this reference as const char* !! (temporal value)
+    const char * get_type_cstring() const;
+
     /// Get title of this reference.
     ///
     /// @return Title of this reference.
