@@ -136,6 +136,10 @@ public:
         return pool_lookup_str(pool, id, keyname);
     }
 
+    unsigned long long lookup_num(Id id, Id keyname) const {
+        return pool_lookup_num(pool, id, keyname, 0);
+    }
+
     bool lookup_void(Id id, Id keyname) const {
         return pool_lookup_void(pool, id, keyname);
     }
