@@ -18,13 +18,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef MICRODNF_COMMANDS_ADVISORY_ADVISORY_HPP
-#define MICRODNF_COMMANDS_ADVISORY_ADVISORY_HPP
+#ifndef MICRODNF_COMMANDS_ADVISORY_ADVISORY_INFO_HPP
+#define MICRODNF_COMMANDS_ADVISORY_ADVISORY_INFO_HPP
 
+#include "arguments.hpp"
 
 #include <libdnf-cli/session.hpp>
-#include <libdnf/conf/option_bool.hpp>
-#include <libdnf/conf/option_enum.hpp>
 
 #include <memory>
 #include <vector>
@@ -33,14 +32,24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace microdnf {
 
 
-class AdvisoryCommand : public libdnf::cli::session::Command {
+class AdvisoryInfoCommand : public libdnf::cli::session::Command {
 public:
-    explicit AdvisoryCommand(Command & parent);
+    explicit AdvisoryInfoCommand(Command & parent);
     void run() override;
+
+    std::unique_ptr<AdvisoryAvailableOption> available{nullptr};
+    std::unique_ptr<AdvisoryInstalledOption> installed{nullptr};
+    std::unique_ptr<AdvisoryAllOption> all{nullptr};
+    std::unique_ptr<AdvisoryUpdatesOption> updates{nullptr};
+    std::unique_ptr<AdvisorySpecArguments> package_specs{nullptr};
+
+protected:
+    // to be used by an alias command only
+    explicit AdvisoryInfoCommand(Command & parent, const std::string & name);
 };
 
 
 }  // namespace microdnf
 
 
-#endif  // MICRODNF_COMMANDS_ADVISORY_ADVISORY_HPP
+#endif  // MICRODNF_COMMANDS_ADVISORY_ADVISORY_INFO_HPP
