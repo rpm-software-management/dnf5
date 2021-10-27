@@ -38,7 +38,7 @@ class AdvisoryAdvisoryQueryTest : public LibdnfTestCase {
     CPPUNIT_TEST(test_filter_cve);
     CPPUNIT_TEST(test_filter_bug);
     CPPUNIT_TEST(test_filter_severity);
-    CPPUNIT_TEST(test_get_sorted_advisory_packages);
+    CPPUNIT_TEST(test_get_advisory_packages);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -52,7 +52,7 @@ public:
     void test_filter_cve();
     void test_filter_bug();
     void test_filter_severity();
-    void test_get_sorted_advisory_packages();
+    void test_get_advisory_packages();
 };
 
 

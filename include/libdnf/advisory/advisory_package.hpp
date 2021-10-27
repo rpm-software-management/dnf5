@@ -108,6 +108,7 @@ public:
 private:
     friend class AdvisoryCollection;
     friend class AdvisoryQuery;
+    friend class AdvisorySet;
     friend class libdnf::rpm::PackageQuery;
 
     class Impl;

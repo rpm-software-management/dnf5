@@ -36,6 +36,12 @@ class SolvMap;
 
 }  // namespace libdnf::solv
 
+namespace libdnf::rpm {
+
+class PackageQuery;
+
+}  // namespace libdnf::rpm
+
 namespace libdnf::advisory {
 
 class AdvisorySet {
@@ -127,7 +133,9 @@ public:
 private:
     friend AdvisorySetIterator;
     friend class AdvisoryQuery;
+    friend class libdnf::rpm::PackageQuery;
     AdvisorySet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map);
+    std::vector<AdvisoryPackage> get_advisory_packages_sorted_by_id(bool only_applicable = false) const;
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

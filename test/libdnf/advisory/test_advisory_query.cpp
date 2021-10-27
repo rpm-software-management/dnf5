@@ -154,31 +154,22 @@ void AdvisoryAdvisoryQueryTest::test_filter_severity() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
 }
 
-void AdvisoryAdvisoryQueryTest::test_get_sorted_advisory_packages() {
-    // Tests get_sorted_advisory_packages method
-    std::vector<libdnf::advisory::AdvisoryPackage> adv_pkgs = libdnf::advisory::AdvisoryQuery(base).get_sorted_advisory_packages();
-    CPPUNIT_ASSERT_EQUAL(7lu, adv_pkgs.size());
+void AdvisoryAdvisoryQueryTest::test_get_advisory_packages() {
+    // Tests get_advisory_packages method
+    libdnf::rpm::PackageQuery pkg_query(base);
+    // pkg_query contains: pkg-1.2-3.x86_64, pkg-libs-1:1.3-4.x86_64, unresolvable-1:2-3.noarch
+    std::vector<libdnf::advisory::AdvisoryPackage> adv_pkgs =
+        libdnf::advisory::AdvisoryQuery(base).get_advisory_packages(pkg_query, libdnf::sack::QueryCmp::GTE);
+    CPPUNIT_ASSERT_EQUAL(2lu, adv_pkgs.size());
+    CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[0].get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("1.2-3"), adv_pkgs[0].get_evr());
+    CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[1].get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("4.0-1"), adv_pkgs[1].get_evr());
+
+    adv_pkgs = libdnf::advisory::AdvisoryQuery(base).get_advisory_packages(pkg_query, libdnf::sack::QueryCmp::LTE);
+    CPPUNIT_ASSERT_EQUAL(2lu, adv_pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("1.2-3"), adv_pkgs[0].get_evr());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[1].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("0.1-1"), adv_pkgs[1].get_evr());
-    CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[2].get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("4.0-1"), adv_pkgs[2].get_evr());
-    CPPUNIT_ASSERT_EQUAL(std::string("bitcoin"), adv_pkgs[3].get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("2.5-1"), adv_pkgs[3].get_evr());
-    CPPUNIT_ASSERT_EQUAL(std::string("filesystem"), adv_pkgs[4].get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("3.9-2.fc29"), adv_pkgs[4].get_evr());
-    CPPUNIT_ASSERT_EQUAL(std::string("wget"), adv_pkgs[5].get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("1.19.5-5.fc29"), adv_pkgs[5].get_evr());
-    CPPUNIT_ASSERT_EQUAL(std::string("yum"), adv_pkgs[6].get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("3.4.3-0"), adv_pkgs[6].get_evr());
-
-    adv_pkgs = libdnf::advisory::AdvisoryQuery(base).filter_name("DNF-2020-1").get_sorted_advisory_packages();
-    CPPUNIT_ASSERT_EQUAL(3lu, adv_pkgs.size());
-    CPPUNIT_ASSERT_EQUAL(std::string("bitcoin"), adv_pkgs[0].get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("2.5-1"), adv_pkgs[0].get_evr());
-    CPPUNIT_ASSERT_EQUAL(std::string("wget"), adv_pkgs[1].get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("1.19.5-5.fc29"), adv_pkgs[1].get_evr());
-    CPPUNIT_ASSERT_EQUAL(std::string("yum"), adv_pkgs[2].get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("3.4.3-0"), adv_pkgs[2].get_evr());
 }

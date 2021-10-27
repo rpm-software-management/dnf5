@@ -90,9 +90,6 @@ public:
     std::vector<AdvisoryPackage> get_advisory_packages(
         const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    //TODO(amatej): This is only used for conveniece it might possibly be a method on AdvisorySet? Or there might be some other way of accessing AdvisoryPackages
-    std::vector<AdvisoryPackage> get_sorted_advisory_packages(bool only_applicable = false) const;
-
 private:
     explicit AdvisoryQuery(const AdvisorySackWeakPtr & sack);
 

@@ -1888,7 +1888,7 @@ PackageQuery & PackageQuery::filter_advisories(
     }
 
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
-    std::vector<libdnf::advisory::AdvisoryPackage> adv_pkgs = advisory_query.get_sorted_advisory_packages();
+    std::vector<libdnf::advisory::AdvisoryPackage> adv_pkgs = advisory_query.get_advisory_packages_sorted_by_id();
     auto & sorted_solvables = p_impl->base->get_rpm_package_sack()->p_impl->get_sorted_solvables();
 
     switch (cmp_type) {

@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory.hpp"
 #include "advisory_module.hpp"
 #include "advisory_package.hpp"
+#include "advisory_set.hpp"
 
 #include <vector>
 
@@ -63,6 +64,7 @@ public:
 private:
     friend Advisory;
     friend AdvisoryQuery;
+    friend AdvisorySet;
     friend AdvisoryPackage;
     friend AdvisoryModule;
 

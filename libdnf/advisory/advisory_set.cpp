@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/advisory/advisory_set.hpp"
+#include "libdnf/advisory/advisory_package_private.hpp"
 
 #include "advisory_set_impl.hpp"
 
@@ -137,5 +138,22 @@ BaseWeakPtr AdvisorySet::get_base() const {
     return p_impl->base;
 }
 
+std::vector<AdvisoryPackage> AdvisorySet::get_advisory_packages_sorted_by_id(bool only_applicable) const {
+    std::vector<AdvisoryPackage> out;
+    for (Id candidate_id : *p_impl) {
+        Advisory advisory2 = Advisory(p_impl->base, AdvisoryId(candidate_id));
+        auto collections = advisory2.get_collections();
+        for (auto & collection : collections) {
+            if (only_applicable && !collection.is_applicable()) {
+                continue;
+            }
+            collection.get_packages(out);
+        }
+    }
+
+    std::sort(out.begin(), out.end(), AdvisoryPackage::Impl::nevra_compare_lower_id);
+
+    return out;
+}
 
 }  // namespace libdnf::advisory

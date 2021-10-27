@@ -215,7 +215,7 @@ AdvisoryQuery & AdvisoryQuery::filter_severity(const std::vector<std::string> & 
 AdvisoryQuery & AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
     auto & pool = get_pool(base);
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
-    std::vector<AdvisoryPackage> adv_pkgs = get_sorted_advisory_packages();
+    std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_id();
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -264,7 +264,7 @@ AdvisoryQuery & AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & p
 
 std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
     const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
-    std::vector<AdvisoryPackage> adv_pkgs = get_sorted_advisory_packages();
+    std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_id();
     std::vector<AdvisoryPackage> after_filter;
 
     auto & pool = get_pool(base);
@@ -299,24 +299,6 @@ std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
 
     //after_filter contains just advisoryPackages which comply to condition with package_set
     return after_filter;
-}
-
-std::vector<AdvisoryPackage> AdvisoryQuery::get_sorted_advisory_packages(bool only_applicable) const {
-    std::vector<AdvisoryPackage> out;
-    for (Id candidate_id : *p_impl) {
-        Advisory advisory = Advisory(base, AdvisoryId(candidate_id));
-        auto collections = advisory.get_collections();
-        for (auto & collection : collections) {
-            if (only_applicable && !collection.is_applicable()) {
-                continue;
-            }
-            collection.get_packages(out);
-        }
-    }
-
-    std::sort(out.begin(), out.end(), AdvisoryPackage::Impl::nevra_compare_lower_id);
-
-    return out;
 }
 
 }  // namespace libdnf::advisory
