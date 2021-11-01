@@ -37,6 +37,7 @@ public:
     std::string get_id() const;
 
     /// Get type of this reference.
+    /// Possible reference types are: "bugzilla", "cve", "vendor".
     ///
     /// @return type of this reference as std::string.
     std::string get_type() const;

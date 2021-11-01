@@ -68,6 +68,7 @@ public:
     std::string get_severity() const;
 
     /// Get type of this advisory.
+    /// Possible types are: "security", "bugfix", "enhancement", "newpackage".
     ///
     /// @return type of this advisory as std::string.
     std::string get_type() const;
@@ -114,6 +115,7 @@ public:
     AdvisoryId get_id() const;
 
     /// Get all references of specified type from this advisory.
+    /// Possible refenrece types are: "bugzilla", "cve", "vendor".
     ///
     /// @param types     What types of references to get. If not specified gets all types.
     /// @return Vector of AdvisoryReference objects.

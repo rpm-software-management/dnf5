@@ -62,6 +62,10 @@ public:
     AdvisoryQuery & filter_name(
         const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
+    /// Filter Advisories by type
+    ///
+    /// @param type         Possible types are: "security", "bugfix", "enhancement", "newpackage".
+    /// @param cmp_type     What comparator to use with type, allows: EQ.
     AdvisoryQuery & filter_type(const std::string & type, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
     AdvisoryQuery & filter_type(
         const std::vector<std::string> & types, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
