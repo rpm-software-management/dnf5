@@ -29,6 +29,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/rpm/package.hpp"
 
+#include <optional>
+
 
 namespace libdnf::advisory {
 
@@ -70,13 +72,19 @@ public:
     AdvisoryQuery & filter_type(
         const std::vector<std::string> & types, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    //TODO(amatej): What about other reference fitlers (title, url?) - do we want them?
-    AdvisoryQuery & filter_CVE(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
-    AdvisoryQuery & filter_CVE(
-        const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
-    AdvisoryQuery & filter_bug(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
-    AdvisoryQuery & filter_bug(
-        const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    /// Filter Advisories by reference
+    ///
+    /// @param pattern      Pattern to match with reference id.
+    /// @param cmp_type     What comparator to use with pattern, allows: EQ, IEXACT, GLOB, IGLOB, CONTAINS, ICONTAINS.
+    /// @param type         Possible reference types are: "bugzilla", "cve", "vendor". If none is specified it matches all.
+    AdvisoryQuery & filter_reference(
+        const std::string & pattern,
+        sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ,
+        const std::optional<std::string> type = {});
+    AdvisoryQuery & filter_reference(
+        const std::vector<std::string> & pattern,
+        sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ,
+        const std::optional<std::string> type = {});
 
     AdvisoryQuery & filter_severity(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
     AdvisoryQuery & filter_severity(

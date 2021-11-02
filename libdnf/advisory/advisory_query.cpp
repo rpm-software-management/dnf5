@@ -108,7 +108,7 @@ static void filter_reference_by_type_and_id(
     libdnf::solv::SolvMap & candidates,
     libdnf::sack::QueryCmp cmp_type,
     const std::vector<std::string> & patterns,
-    std::string type) {
+    const std::optional<std::string> type) {
     libdnf::solv::SolvMap filter_result((*pool)->nsolvables);
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
@@ -128,7 +128,12 @@ static void filter_reference_by_type_and_id(
             while (dataiterator_step(&di) != 0) {
                 dataiterator_setpos_parent(&di);
                 const char * current_type = pool.lookup_str(SOLVID_POS, UPDATE_REFERENCE_TYPE);
-                if (current_type && !strcmp(type.c_str(), current_type)) {
+                if (type && current_type) {
+                    if (!strcmp(type->c_str(), current_type)) {
+                        filter_result.add_unsafe(candidate_id);
+                        break;
+                    }
+                } else {
                     filter_result.add_unsafe(candidate_id);
                     break;
                 }
@@ -178,24 +183,15 @@ AdvisoryQuery & AdvisoryQuery::filter_type(const std::vector<std::string> & type
     return *this;
 }
 
-AdvisoryQuery & AdvisoryQuery::filter_CVE(const std::string & pattern, sack::QueryCmp cmp_type) {
-    filter_reference_by_type_and_id(get_pool(base), *p_impl, cmp_type, {pattern}, "cve");
+AdvisoryQuery & AdvisoryQuery::filter_reference(
+    const std::string & pattern, sack::QueryCmp cmp_type, const std::optional<std::string> type) {
+    filter_reference_by_type_and_id(get_pool(base), *p_impl, cmp_type, {pattern}, type);
 
     return *this;
 }
-AdvisoryQuery & AdvisoryQuery::filter_CVE(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
-    filter_reference_by_type_and_id(get_pool(base), *p_impl, cmp_type, patterns, "cve");
-
-    return *this;
-}
-
-AdvisoryQuery & AdvisoryQuery::filter_bug(const std::string & pattern, sack::QueryCmp cmp_type) {
-    filter_reference_by_type_and_id(get_pool(base), *p_impl, cmp_type, {pattern}, "bugzilla");
-
-    return *this;
-}
-AdvisoryQuery & AdvisoryQuery::filter_bug(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
-    filter_reference_by_type_and_id(get_pool(base), *p_impl, cmp_type, patterns, "bugzilla");
+AdvisoryQuery & AdvisoryQuery::filter_reference(
+    const std::vector<std::string> & patterns, sack::QueryCmp cmp_type, const std::optional<std::string> type) {
+    filter_reference_by_type_and_id(get_pool(base), *p_impl, cmp_type, patterns, type);
 
     return *this;
 }

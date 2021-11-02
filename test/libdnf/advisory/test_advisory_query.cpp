@@ -103,41 +103,60 @@ void AdvisoryAdvisoryQueryTest::test_filter_packages() {
 }
 
 void AdvisoryAdvisoryQueryTest::test_filter_cve() {
-    // Tests filter_cve method
+    // Tests filter_reference method with cve
     libdnf::advisory::AdvisoryQuery adv_query =
-        libdnf::advisory::AdvisoryQuery(base).filter_CVE("3333", libdnf::sack::QueryCmp::EQ);
+        libdnf::advisory::AdvisoryQuery(base).filter_reference("3333", libdnf::sack::QueryCmp::EQ, "cve");
     std::vector<std::string> expected = {"DNF-2020-1"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
 
-    adv_query =
-        libdnf::advisory::AdvisoryQuery(base).filter_CVE(std::vector<std::string>{"1111", "3333"}, libdnf::sack::QueryCmp::EQ);
+    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_reference(
+        std::vector<std::string>{"1111", "3333"}, libdnf::sack::QueryCmp::EQ, "cve");
     expected = {"DNF-2019-1", "DNF-2020-1"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
 
-    adv_query =
-        libdnf::advisory::AdvisoryQuery(base).filter_CVE(std::vector<std::string>{"1111", "4444"}, libdnf::sack::QueryCmp::EQ);
+    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_reference(
+        std::vector<std::string>{"1111", "4444"}, libdnf::sack::QueryCmp::EQ, "cve");
     expected = {"DNF-2019-1"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
 
-    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_CVE("*", libdnf::sack::QueryCmp::GLOB);
+    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_reference("*", libdnf::sack::QueryCmp::GLOB, "cve");
     expected = {"DNF-2019-1", "DNF-2020-1"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
 }
 
-void AdvisoryAdvisoryQueryTest::test_filter_bug() {
-    // Tests filter_bug method
+void AdvisoryAdvisoryQueryTest::test_filter_bugzilla() {
+    // Tests filter_reference method with bugzilla
     libdnf::advisory::AdvisoryQuery adv_query =
-        libdnf::advisory::AdvisoryQuery(base).filter_bug("2222", libdnf::sack::QueryCmp::EQ);
+        libdnf::advisory::AdvisoryQuery(base).filter_reference("2222", libdnf::sack::QueryCmp::EQ, "bugzilla");
     std::vector<std::string> expected = {"DNF-2020-1"};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
 
-    adv_query =
-        libdnf::advisory::AdvisoryQuery(base).filter_bug(std::vector<std::string>{"1111", "3333"}, libdnf::sack::QueryCmp::EQ);
+    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_reference(
+        std::vector<std::string>{"1111", "3333"}, libdnf::sack::QueryCmp::EQ, "bugzilla");
     expected = {};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
 
-    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_bug("*", libdnf::sack::QueryCmp::GLOB);
+    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_reference("*", libdnf::sack::QueryCmp::GLOB, "bugzilla");
     expected = {"DNF-2020-1"};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
+}
+
+void AdvisoryAdvisoryQueryTest::test_filter_reference() {
+    // Tests filter_reference method without type specified
+    libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(base).filter_reference("2222");
+    std::vector<std::string> expected = {"DNF-2020-1"};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
+
+    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_reference(std::vector<std::string>{"1111", "3333"});
+    expected = {"DNF-2019-1", "DNF-2020-1"};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
+
+    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_reference("*", libdnf::sack::QueryCmp::GLOB);
+    expected = {"DNF-2019-1", "DNF-2020-1"};
+    CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
+
+    adv_query = libdnf::advisory::AdvisoryQuery(base).filter_reference("none*", libdnf::sack::QueryCmp::GLOB);
+    expected = {};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector_name_string(adv_query));
 }
 
