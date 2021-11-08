@@ -176,6 +176,13 @@ SolverProblems::SolverProblems() : p_impl(new Impl()) {}
 
 SolverProblems::SolverProblems(const SolverProblems & src) : p_impl(new Impl(*src.p_impl)) {}
 
+SolverProblems & SolverProblems::operator=(const SolverProblems & src) {
+    if (this != &src) {
+        *p_impl = *src.p_impl;
+    }
+    return *this;
+}
+
 SolverProblems::~SolverProblems() = default;
 
 std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> SolverProblems::get_problems() {

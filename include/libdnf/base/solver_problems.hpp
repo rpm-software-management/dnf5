@@ -31,6 +31,11 @@ namespace libdnf::base {
 class SolverProblems {
 public:
     SolverProblems(const SolverProblems & src);
+    SolverProblems & operator=(const SolverProblems & src);
+
+    SolverProblems(SolverProblems && src) noexcept = default;
+    SolverProblems & operator=(SolverProblems && src) noexcept = default;
+
     ~SolverProblems();
 
     /// Provide information about package solver problems in a vector. Each problem can be transformed to string by

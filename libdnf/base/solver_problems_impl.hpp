@@ -31,10 +31,6 @@ namespace libdnf::base {
 
 class SolverProblems::Impl {
 public:
-    Impl() = default;
-    Impl(const SolverProblems::Impl & src) = default;
-    ~Impl() = default;
-
     void set_solver_problems(const libdnf::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal);
 private:
     friend SolverProblems;
