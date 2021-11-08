@@ -179,7 +179,7 @@ SolverProblems::SolverProblems(const SolverProblems & src) : p_impl(new Impl(*sr
 SolverProblems::~SolverProblems() = default;
 
 std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> SolverProblems::get_problems() {
-        return p_impl->package_solver_problems;
+        return p_impl->problems;
     };
 
 std::string SolverProblems::problem_to_string(
@@ -240,22 +240,22 @@ std::string SolverProblems::problem_to_string(
 
 
 std::string SolverProblems::to_string() const {
-    if (p_impl->package_solver_problems.empty()) {
+    if (p_impl->problems.empty()) {
         return {};
     }
     std::string output;
-    if (p_impl->package_solver_problems.size() == 1) {
+    if (p_impl->problems.size() == 1) {
         output.append(_("Problem: "));
-        output.append(string_join(*p_impl->package_solver_problems.begin(), "\n  - "));
+        output.append(string_join(*p_impl->problems.begin(), "\n  - "));
         return output;
     }
     const char * problem_prefix = _("Problem {}: ");
 
     output.append(fmt::format(problem_prefix, 1));
-    output.append(string_join(*p_impl->package_solver_problems.begin(), "\n  - "));
+    output.append(string_join(*p_impl->problems.begin(), "\n  - "));
 
     int index = 2;
-    for (auto iter = std::next(p_impl->package_solver_problems.begin()); iter != p_impl->package_solver_problems.end(); ++iter) {
+    for (auto iter = std::next(p_impl->problems.begin()); iter != p_impl->problems.end(); ++iter) {
         output.append("\n ");
         output.append(fmt::format(problem_prefix, index));
         output.append(string_join(*iter, "\n  - "));
@@ -344,15 +344,15 @@ void SolverProblems::Impl::set_solver_problems(const libdnf::BaseWeakPtr & base,
                 problem_output.push_back(std::make_pair(tmp_rule, std::move(elements)));
             }
         }
-        if (is_unique(package_solver_problems, problem_output)) {
-            package_solver_problems.push_back(std::move(problem_output));
+        if (is_unique(problems, problem_output)) {
+            problems.push_back(std::move(problem_output));
         }
     }
     auto problem_protected = get_removal_of_protected(solved_goal, broken_installed);
     if (!problem_protected.empty()) {
-        if (is_unique(package_solver_problems, problem_protected)) {
-            package_solver_problems.insert(
-                package_solver_problems.begin(), std::move(problem_protected));
+        if (is_unique(problems, problem_protected)) {
+            problems.insert(
+                problems.begin(), std::move(problem_protected));
         }
     }
 }

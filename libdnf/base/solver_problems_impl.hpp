@@ -39,7 +39,7 @@ public:
 private:
     friend SolverProblems;
 
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> package_solver_problems;
+    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems;
 
 };
 
