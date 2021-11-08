@@ -68,10 +68,10 @@ std::string string_join(
     if (src.empty()) {
         return {};
     }
-    std::string output(SolverProblems::package_solver_problem_to_string(*src.begin()));
+    std::string output(SolverProblems::problem_to_string(*src.begin()));
     for (auto iter = std::next(src.begin()); iter != src.end(); ++iter) {
         output.append(delim);
-        output.append(SolverProblems::package_solver_problem_to_string(*iter));
+        output.append(SolverProblems::problem_to_string(*iter));
     }
     return output;
 }
@@ -178,11 +178,11 @@ SolverProblems::SolverProblems(const SolverProblems & src) : p_impl(new Impl(*sr
 
 SolverProblems::~SolverProblems() = default;
 
-std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> SolverProblems::get_package_solver_problems() {
+std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> SolverProblems::get_problems() {
         return p_impl->package_solver_problems;
     };
 
-std::string SolverProblems::package_solver_problem_to_string(
+std::string SolverProblems::problem_to_string(
     const std::pair<ProblemRules, std::vector<std::string>> & raw) {
     switch (raw.first) {
         case ProblemRules::RULE_DISTUPGRADE:

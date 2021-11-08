@@ -36,16 +36,20 @@ public:
     /// Provide information about package solver problems in a vector. Each problem can be transformed to string by
     /// package_solver_problem_to_string or all problems to a string by all_package_solver_problems_to_string().
     ///
-    /// @return Vector with structuralized package solver problems
+    /// @return Vector of problems encountered by the solver. Each problem is described by a vector of "rule breakages"
+    /// (TODO(lukash) try to find a better name for this) stored
+    /// in a `std::pair<libdnf::ProblemRules, std::vector<std::string>>`, where the first of the pair is a rule breakage
+    /// identifier and the second is a list of string identifiers which are the subjects of the rule breakage. These can
+    /// be rendered into a string by the `problem_to_string()` method.
     // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
     // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_package_solver_problems();
+    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_problems();
 
     /// Convert SolverProblems class to string representative;
     std::string to_string() const;
 
     /// Convert particular package solver problem to a string;
-    static std::string package_solver_problem_to_string(
+    static std::string problem_to_string(
         const std::pair<libdnf::ProblemRules, std::vector<std::string>> & raw);
 
 private:
