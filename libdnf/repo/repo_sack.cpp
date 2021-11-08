@@ -51,7 +51,7 @@ RepoSack::RepoSack(libdnf::Base & base) : RepoSack(base.get_weak_ptr()) {}
 
 RepoWeakPtr RepoSack::new_repo(const std::string & id) {
     // TODO(jrohel): Test repo exists
-    auto repo = std::make_unique<Repo>(id, *base, Repo::Type::AVAILABLE);
+    auto repo = std::make_unique<Repo>(base, id, Repo::Type::AVAILABLE);
     return add_item_with_return(std::move(repo));
 }
 

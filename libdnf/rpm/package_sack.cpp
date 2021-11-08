@@ -605,7 +605,7 @@ void PackageSack::load_repo(repo::Repo & repo, LoadRepoFlags flags) {
 void PackageSack::create_system_repo(bool build_cache) {
     libdnf_assert(!p_impl->system_repo, "System repo already exists");
 
-    p_impl->system_repo = std::make_unique<repo::Repo>(SYSTEM_REPO_NAME, *p_impl->base, repo::Repo::Type::SYSTEM);
+    p_impl->system_repo = std::make_unique<repo::Repo>(p_impl->base, SYSTEM_REPO_NAME, repo::Repo::Type::SYSTEM);
     p_impl->system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
     p_impl->load_system_repo();
 }
@@ -627,7 +627,7 @@ repo::Repo & PackageSack::Impl::get_cmdline_repo() {
         return *cmdline_repo.get();
     }
 
-    cmdline_repo = std::make_unique<repo::Repo>(CMDLINE_REPO_NAME, *base, repo::Repo::Type::SYSTEM);
+    cmdline_repo = std::make_unique<repo::Repo>(base, CMDLINE_REPO_NAME, repo::Repo::Type::SYSTEM);
     cmdline_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, false);
 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
@@ -651,7 +651,7 @@ repo::Repo & PackageSack::Impl::get_system_repo(bool build_cache) {
     }
     auto & pool = get_pool(base);
 
-    system_repo = std::make_unique<repo::Repo>(SYSTEM_REPO_NAME, *base, repo::Repo::Type::SYSTEM);
+    system_repo = std::make_unique<repo::Repo>(base, SYSTEM_REPO_NAME, repo::Repo::Type::SYSTEM);
     system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
 
     std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(

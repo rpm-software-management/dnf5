@@ -79,13 +79,18 @@ public:
     static std::string::size_type verify_id(const std::string & repo_id);
 
     /// Construct the Repo object
+    /// @param base   weak pointer to the Base instance
     /// @param id     repo ID to use
-    /// @param conf   configuration to use
-    /// @param base   reference to Base instance
     /// @param type   type of repo
-    Repo(const std::string & id, libdnf::Base & base, Repo::Type type = Repo::Type::AVAILABLE);
+    Repo(const libdnf::BaseWeakPtr & base, const std::string & id, Repo::Type type = Repo::Type::AVAILABLE);
 
-    Repo & operator=(Repo && repo) = delete;
+    /// Construct the Repo object
+    /// @param base   a reference to the Base instance
+    /// @param id     repo ID to use
+    /// @param type   type of repo
+    Repo(libdnf::Base & base, const std::string & id, Repo::Type type = Repo::Type::AVAILABLE);
+
+    ~Repo();
 
     /// Registers a class that implements callback methods (fastest mirror detection, download state, key import).
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setCallbacks(std::unique_ptr<RepoCallbacks> && callbacks)
@@ -324,8 +329,6 @@ public:
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
     libdnf::BaseWeakPtr get_base() const;
-
-    ~Repo();
 
 private:
     class Impl;

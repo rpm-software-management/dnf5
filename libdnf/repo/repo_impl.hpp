@@ -88,7 +88,7 @@ public:
     static constexpr const char * MD_FILENAME_GROUP = "group";
     static constexpr const char * MD_FILENAME_MODULES = "modules";
 
-    Impl(Repo & owner, std::string id, Type type, Base & base);
+    Impl(const BaseWeakPtr & base, Repo & owner, std::string id, Type type);
     ~Impl();
 
     bool load();
@@ -131,7 +131,7 @@ public:
     std::map<std::string, std::string> metadata_paths;
 
     Repo * owner;
-    Base * base;
+    libdnf::BaseWeakPtr base;
     void reset_metadata_expired();
 
     bool expired;

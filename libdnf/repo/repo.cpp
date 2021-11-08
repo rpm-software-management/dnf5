@@ -111,15 +111,15 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
 }
 
 
-Repo::Impl::Impl(Repo & owner, std::string id, Type type, Base & base)
+Repo::Impl::Impl(const BaseWeakPtr & base, Repo & owner, std::string id, Type type)
     : type(type)
-    , config(base.get_config(), id)
+    , config(base->get_config(), id)
     , timestamp(-1)
     , sync_strategy(SyncStrategy::TRY_CACHE)
     , owner(&owner)
-    , base(&base)
+    , base(base)
     , expired(false)
-    , downloader(base.get_weak_ptr(), config) {}
+    , downloader(base, config) {}
 
 Repo::Impl::~Impl() {
     if (libsolv_repo_ext.repo) {
@@ -127,15 +127,17 @@ Repo::Impl::~Impl() {
     }
 }
 
-Repo::Repo(const std::string & id, Base & base, Repo::Type type) {
+Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type) {
     if (type == Type::AVAILABLE) {
         auto idx = verify_id(id);
         if (idx != std::string::npos) {
             throw RepoError(M_("Invalid repository id \"{}\": unexpected character '{}'"), id, id[idx]);
         }
     }
-    p_impl.reset(new Impl(*this, id, type, base));
+    p_impl.reset(new Impl(base, *this, id, type));
 }
+
+Repo::Repo(Base & base, const std::string & id, Repo::Type type) : Repo(base.get_weak_ptr(), id, type) {}
 
 Repo::~Repo() = default;
 
@@ -465,7 +467,7 @@ std::vector<std::string> Repo::get_mirrors() const {
 }
 
 BaseWeakPtr Repo::get_base() const {
-    return p_impl->base->get_weak_ptr();
+    return p_impl->base;
 }
 
 Id Repo::Impl::add_rpm_package(const std::string & fn, bool add_with_hdrid) {
