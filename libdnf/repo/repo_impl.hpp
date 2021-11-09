@@ -20,13 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_REPO_IMPL_HPP
 #define LIBDNF_RPM_REPO_IMPL_HPP
 
-#include "repo_downloader.hpp"
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
+#include "repo_downloader.hpp"
+#include "solv_repo.hpp"
 
 #include <gpgme.h>
 #include <solv/chksum.h>
-#include <solv/repo.h>
 #include <solv/util.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -41,39 +41,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 
 
-#define CHKSUM_BYTES 32
-
 namespace libdnf::repo {
 
 using LibsolvRepo = ::Repo;
-
-// Information about attached libsolv repository
-class LibsolvRepoExt {
-public:
-    // Returns "true" when all solvables in the repository are stored contiguously -> No interleaving
-    // with solvables from other repositories.
-    // Complexity: Linear to the current number of solvables in  repository
-    bool is_one_piece() const;
-
-    // Internalize repository if needed.
-    void internalize();
-
-    LibsolvRepo * repo{nullptr};
-
-    // Checksum of data in .solv file. Used for validity check of .solvx files.
-    unsigned char checksum[CHKSUM_BYTES];
-
-    // the following three elements are needed for repo cache (.solv and .solvx updateinfo) writting
-    int main_nsolvables{0};
-    int main_nrepodata{0};
-    int main_end{0};
-
-    void set_needs_internalizing() { needs_internalizing = true; };
-
-private:
-    bool needs_internalizing{false};
-};
-
 
 class Repo::Impl {
 public:
@@ -138,7 +108,7 @@ public:
     static bool ends_with(std::string const & str, std::string const & ending);
 
     // Information about attached libsolv repository
-    LibsolvRepoExt libsolv_repo_ext;
+    SolvRepo solv_repo;
 
     RepoDownloader downloader;
 };

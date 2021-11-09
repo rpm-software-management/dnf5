@@ -124,12 +124,12 @@ private:
 
     /// Writes solv file with main libsolv repodata.
     /// @replaces libdnf/dnf-sack.cpp:method:write_main()
-    void write_main(repo::LibsolvRepoExt & repo, bool switchtosolv);
+    void write_main(repo::SolvRepo & solv_repo, bool switchtosolv);
 
     /// Writes solvx file with extended libsolv repodata.
     /// @replaces libdnf/dnf-sack.cpp:method:write_ext()
     void write_ext(
-        repo::LibsolvRepoExt & libsolv_repo_ext, Id repodata_id, RepodataType which_repodata, const char * suffix);
+        repo::SolvRepo & solv_repo, Id repodata_id, RepodataType which_repodata, const char * suffix);
 
     void rewrite_repos(libdnf::solv::IdQueue & addedfileprovides, libdnf::solv::IdQueue & addedfileprovides_inst);
 

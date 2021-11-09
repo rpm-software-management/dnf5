@@ -122,8 +122,8 @@ Repo::Impl::Impl(const BaseWeakPtr & base, Repo & owner, std::string id, Type ty
     , downloader(base, config) {}
 
 Repo::Impl::~Impl() {
-    if (libsolv_repo_ext.repo) {
-        libsolv_repo_ext.repo->appdata = nullptr;
+    if (solv_repo.repo) {
+        solv_repo.repo->appdata = nullptr;
     }
 }
 
@@ -228,8 +228,8 @@ int Repo::get_cost() const {
 void Repo::set_cost(int value, Option::Priority priority) {
     auto & conf_cost = p_impl->config.cost();
     conf_cost.set(priority, value);
-    if (p_impl->libsolv_repo_ext.repo != nullptr) {
-        p_impl->libsolv_repo_ext.repo->subpriority = -conf_cost.get_value();
+    if (p_impl->solv_repo.repo != nullptr) {
+        p_impl->solv_repo.repo->subpriority = -conf_cost.get_value();
     }
 }
 int Repo::get_priority() const {
@@ -238,8 +238,8 @@ int Repo::get_priority() const {
 void Repo::set_priority(int value, Option::Priority priority) {
     auto & conf_priority = p_impl->config.priority();
     conf_priority.set(priority, value);
-    if (p_impl->libsolv_repo_ext.repo != nullptr) {
-        p_impl->libsolv_repo_ext.repo->priority = -conf_priority.get_value();
+    if (p_impl->solv_repo.repo != nullptr) {
+        p_impl->solv_repo.repo->priority = -conf_priority.get_value();
     }
 }
 int64_t Repo::get_age() const {
@@ -372,22 +372,22 @@ void Repo::Impl::reset_metadata_expired() {
 
 
 void Repo::Impl::attach_libsolv_repo(LibsolvRepo * libsolv_repo) {
-    libdnf_assert(this->libsolv_repo_ext.repo == nullptr, "A libsolv repository is already attached");
+    libdnf_assert(this->solv_repo.repo == nullptr, "A libsolv repository is already attached");
 
     libsolv_repo->appdata = owner;  // The libsolvRepo references back to us.
     libsolv_repo->subpriority = -owner->get_cost();
     libsolv_repo->priority = -owner->get_priority();
-    this->libsolv_repo_ext.repo = libsolv_repo;
+    this->solv_repo.repo = libsolv_repo;
 }
 
 void Repo::Impl::detach_libsolv_repo() {
-    if (!libsolv_repo_ext.repo) {
+    if (!solv_repo.repo) {
         // Nothing to do, libsolvRepo is not attached.
         return;
     }
 
-    libsolv_repo_ext.repo->appdata = nullptr;  // Removes reference to this object from libsolvRepo.
-    this->libsolv_repo_ext.repo = nullptr;
+    solv_repo.repo->appdata = nullptr;  // Removes reference to this object from libsolvRepo.
+    this->solv_repo.repo = nullptr;
 }
 
 void Repo::set_max_mirror_tries(int max_mirror_tries) {
@@ -478,27 +478,12 @@ Id Repo::Impl::add_rpm_package(const std::string & fn, bool add_with_hdrid) {
         flags |= RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM;
     }
 
-    Id new_id = repo_add_rpm(libsolv_repo_ext.repo, fn.c_str(), flags);
+    Id new_id = repo_add_rpm(solv_repo.repo, fn.c_str(), flags);
     if (new_id == 0) {
-        throw RepoRpmError(M_("Failed to load RPM \"{}\": {}"), fn, pool_errstr(libsolv_repo_ext.repo->pool));
+        throw RepoRpmError(M_("Failed to load RPM \"{}\": {}"), fn, pool_errstr(solv_repo.repo->pool));
     }
-    libsolv_repo_ext.set_needs_internalizing();
+    solv_repo.set_needs_internalizing();
     return new_id;
-}
-
-bool LibsolvRepoExt::is_one_piece() const {
-    for (auto i = repo->start; i < repo->end; ++i)
-        if (repo->pool->solvables[i].repo != repo)
-            return false;
-    return true;
-}
-
-void LibsolvRepoExt::internalize() {
-    if (!needs_internalizing) {
-        return;
-    }
-    repo_internalize(repo);
-    needs_internalizing = false;
 }
 
 // TODO(jrohel): Later with rpm sack work.
