@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "reldep_list_impl.hpp"
 #include "libdnf/common/exception.hpp"
-#include "libdnf/rpm/solv/solv_private.hpp"
+#include "libdnf/repo/repo_impl.hpp"
 #include "libdnf/solv/pool.hpp"
 
 #include <filesystem>
@@ -30,16 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 static inline std::string cstring2string(const char * input) {
     return input ? std::string(input) : std::string();
-}
-
-static inline unsigned long long lookup_num(Solvable * solvable, Id type) {
-    libdnf::rpm::solv::SolvPrivate::internalize_libsolv_repo(solvable->repo);
-    return solvable_lookup_num(solvable, type, 0);
-}
-
-static inline const char * lookup_cstring(Solvable * solvable, Id type) {
-    libdnf::rpm::solv::SolvPrivate::internalize_libsolv_repo(solvable->repo);
-    return solvable_lookup_str(solvable, type);
 }
 
 static inline void reldeps_for(Solvable * solvable, libdnf::solv::IdQueue & queue, Id type) {
@@ -100,19 +90,19 @@ std::string Package::get_na() const {
 }
 
 std::string Package::get_group() const {
-    return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_GROUP));
+    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_GROUP));
 }
 
 unsigned long long Package::get_package_size() const {
-    return lookup_num(get_pool(base).id2solvable(id.id), SOLVABLE_DOWNLOADSIZE);
+    return get_pool(base).lookup_num(id.id, SOLVABLE_DOWNLOADSIZE);
 }
 
 unsigned long long Package::get_install_size() const {
-    return lookup_num(get_pool(base).id2solvable(id.id), SOLVABLE_INSTALLSIZE);
+    return get_pool(base).lookup_num(id.id, SOLVABLE_INSTALLSIZE);
 }
 
 std::string Package::get_license() const {
-    return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_LICENSE));
+    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_LICENSE));
 }
 
 std::string Package::get_sourcerpm() const {
@@ -120,7 +110,7 @@ std::string Package::get_sourcerpm() const {
 }
 
 unsigned long long Package::get_build_time() const {
-    return lookup_num(get_pool(base).id2solvable(id.id), SOLVABLE_BUILDTIME);
+    return get_pool(base).lookup_num(id.id, SOLVABLE_BUILDTIME);
 }
 
 // TODO not supported by libsolv: https://github.com/openSUSE/libsolv/issues/400
@@ -129,30 +119,30 @@ unsigned long long Package::get_build_time() const {
 //}
 
 std::string Package::get_packager() const {
-    return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_PACKAGER));
+    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_PACKAGER));
 }
 
 std::string Package::get_vendor() const {
-    return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_VENDOR));
+    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
 }
 
 std::string Package::get_url() const {
-    return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_URL));
+    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_URL));
 }
 
 std::string Package::get_summary() const {
-    return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_SUMMARY));
+    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
 }
 
 std::string Package::get_description() const {
-    return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_DESCRIPTION));
+    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
 }
 
 std::vector<std::string> Package::get_files() const {
     auto &  pool = get_pool(base);
 
     Solvable * solvable = pool.id2solvable(id.id);
-    libdnf::rpm::solv::SolvPrivate::internalize_libsolv_repo(solvable->repo);
+    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
 
     std::vector<std::string> ret;
 
@@ -240,12 +230,12 @@ ReldepList Package::get_regular_requires() const {
 }
 
 std::string Package::get_baseurl() const {
-    return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_MEDIABASE));
+    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_MEDIABASE));
 }
 
 std::string Package::get_location() const {
     Solvable * solvable = get_pool(base).id2solvable(id.id);
-    libdnf::rpm::solv::SolvPrivate::internalize_libsolv_repo(solvable->repo);
+    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
     return cstring2string(solvable_lookup_location(solvable, nullptr));
 }
 
@@ -265,19 +255,19 @@ bool Package::is_installed() const {
 }
 
 unsigned long long Package::get_hdr_end() const {
-    return lookup_num(get_pool(base).id2solvable(id.id), SOLVABLE_HEADEREND);
+    return get_pool(base).lookup_num(id.id, SOLVABLE_HEADEREND);
 }
 
 unsigned long long Package::get_install_time() const {
-    return lookup_num(get_pool(base).id2solvable(id.id), SOLVABLE_INSTALLTIME);
+    return get_pool(base).lookup_num(id.id, SOLVABLE_INSTALLTIME);
 }
 
 unsigned long long Package::get_media_number() const {
-    return lookup_num(get_pool(base).id2solvable(id.id), SOLVABLE_MEDIANR);
+    return get_pool(base).lookup_num(id.id, SOLVABLE_MEDIANR);
 }
 
 unsigned long long Package::get_rpmdbid() const {
-    return lookup_num(get_pool(base).id2solvable(id.id), RPM_RPMDBID);
+    return get_pool(base).lookup_num(id.id, RPM_RPMDBID);
 }
 
 libdnf::repo::RepoWeakPtr Package::get_repo() const {
@@ -298,7 +288,7 @@ libdnf::transaction::TransactionItemReason Package::get_reason() const {
 Checksum Package::get_checksum() const {
     Solvable * solvable = get_pool(base).id2solvable(id.id);
     int type;
-    solv::SolvPrivate::internalize_libsolv_repo(solvable->repo);
+    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_CHECKSUM, &type);
     Checksum checksum(chksum, type);
 
@@ -308,7 +298,7 @@ Checksum Package::get_checksum() const {
 Checksum Package::get_hdr_checksum() const {
     Solvable * solvable = get_pool(base).id2solvable(id.id);
     int type;
-    solv::SolvPrivate::internalize_libsolv_repo(solvable->repo);
+    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_HDRID, &type);
     Checksum checksum(chksum, type);
 

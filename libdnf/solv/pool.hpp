@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
+#include "libdnf/repo/repo_impl.hpp"
 
 #include "libdnf/utils/bgettext/bgettext-lib.h"
 
@@ -51,7 +52,7 @@ constexpr const char * SOLVABLE_NAME_ADVISORY_PREFIX = "patch:";
 constexpr size_t SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH = std::char_traits<char>::length(SOLVABLE_NAME_ADVISORY_PREFIX);
 
 
-repo::Repo & get_repo(Solvable * solvable) {
+inline repo::Repo & get_repo(Solvable * solvable) {
     libdnf_assert(solvable->repo->appdata != nullptr, "libsolv repo without libdnf repo set in appdata");
     return *static_cast<repo::Repo *>(solvable->repo->appdata);
 }
@@ -137,18 +138,30 @@ public:
     }
 
     Id lookup_id(Id id, Id keyname) const {
+        if (id > 0) {
+            libdnf::solv::get_repo(id2solvable(id)).p_impl->solv_repo.internalize();
+        }
         return pool_lookup_id(pool, id, keyname);
     }
 
     const char * lookup_str(Id id, Id keyname) const {
+        if (id > 0) {
+            libdnf::solv::get_repo(id2solvable(id)).p_impl->solv_repo.internalize();
+        }
         return pool_lookup_str(pool, id, keyname);
     }
 
     unsigned long long lookup_num(Id id, Id keyname) const {
+        if (id > 0) {
+            libdnf::solv::get_repo(id2solvable(id)).p_impl->solv_repo.internalize();
+        }
         return pool_lookup_num(pool, id, keyname, 0);
     }
 
     bool lookup_void(Id id, Id keyname) const {
+        if (id > 0) {
+            libdnf::solv::get_repo(id2solvable(id)).p_impl->solv_repo.internalize();
+        }
         return pool_lookup_void(pool, id, keyname);
     }
 

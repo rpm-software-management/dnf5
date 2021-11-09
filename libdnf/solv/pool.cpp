@@ -19,11 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "pool.hpp"
 
-#include "libdnf/rpm/solv/solv_private.hpp"
-
 extern "C" {
-#include "solv/pool.h"
-
+#include <solv/pool.h>
 #include <solv/queue.h>
 #include <solv/util.h>
 }
@@ -142,7 +139,7 @@ std::string Pool::get_full_nevra(Id id) const {
 
 const char * Pool::get_sourcerpm(Id id) const {
     Solvable * solvable = id2solvable(id);
-    libdnf::rpm::solv::SolvPrivate::internalize_libsolv_repo(solvable->repo);
+    solv::get_repo(solvable).p_impl->solv_repo.internalize();
     return solvable_lookup_sourcepkg(solvable);
 }
 

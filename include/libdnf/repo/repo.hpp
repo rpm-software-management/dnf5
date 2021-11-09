@@ -44,6 +44,7 @@ class Pool;
 
 
 namespace libdnf::rpm {
+class Package;
 class PackageSack;
 }
 
@@ -333,6 +334,7 @@ public:
 private:
     class Impl;
     friend class RepoSack;
+    friend class rpm::Package;
     friend class rpm::PackageSack;
     friend class comps::Comps;
     friend class PackageDownloader;
