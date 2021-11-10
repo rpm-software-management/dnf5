@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo_impl.hpp"
+#include "libdnf/repo/solv_repo.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/solv/id_queue.hpp"
 #include "libdnf/solv/pool.hpp"
@@ -60,13 +61,6 @@ namespace libdnf::rpm {
 
 class PackageSack::Impl {
 public:
-    enum class RepodataType { FILENAMES, PRESTO, UPDATEINFO, OTHER };
-    enum class RepodataState { NEW, LOADED_FETCH, LOADED_CACHE };
-    struct RepodataInfo {
-        RepodataState state;
-        Id id;
-    };
-
     explicit Impl(const BaseWeakPtr & base) : base(base) {}
 
     /// Return number of solvables in pool
@@ -111,25 +105,7 @@ private:
 
     /// Loads main metadata (solvables) from available repo.
     /// @replaces libdnf/dnf-sack.cpp:method:load_yum_repo()
-    RepodataState load_repo_main(repo::Repo & repo);
-
-    /// Loads additional metadata (filelist, others, ...) from available repo.
-    /// @replaces libdnf/dnf-sack.cpp:method:load_ext()
-    RepodataInfo load_repo_ext(
-        repo::Repo & repo,
-        const char * suffix,
-        const char * which_filename,
-        int flags,
-        bool (*cb)(repo::LibsolvRepo *, FILE *));
-
-    /// Writes solv file with main libsolv repodata.
-    /// @replaces libdnf/dnf-sack.cpp:method:write_main()
-    void write_main(repo::SolvRepo & solv_repo, bool switchtosolv);
-
-    /// Writes solvx file with extended libsolv repodata.
-    /// @replaces libdnf/dnf-sack.cpp:method:write_ext()
-    void write_ext(
-        repo::SolvRepo & solv_repo, Id repodata_id, RepodataType which_repodata, const char * suffix);
+    repo::RepodataState load_repo_main(repo::Repo & repo);
 
     void rewrite_repos(libdnf::solv::IdQueue & addedfileprovides, libdnf::solv::IdQueue & addedfileprovides_inst);
 

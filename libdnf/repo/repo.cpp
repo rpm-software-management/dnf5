@@ -119,6 +119,7 @@ Repo::Impl::Impl(const BaseWeakPtr & base, Repo & owner, std::string id, Type ty
     , owner(&owner)
     , base(base)
     , expired(false)
+    , solv_repo(base, config)
     , downloader(base, config) {}
 
 Repo::Impl::~Impl() {

@@ -90,16 +90,6 @@ public:
         const char * get_description() const noexcept override { return "rpm::PackageSack exception"; }
     };
 
-    class NoCapability : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::PackageSack"; }
-        const char * get_name() const noexcept override { return "NoCapability"; }
-        const char * get_description() const noexcept override {
-            return "repository does not provide required metadata type";
-        }
-    };
-
     enum class LoadRepoFlags {
         PRIMARY = 1 << 1,       /// Load primary repodata (primary.xml).
         FILELISTS = 1 << 2,     /// Load file lists (filelists.xml). Requires loading PRIMARY.

@@ -20,6 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_SOLV_REPO_HPP
 #define LIBDNF_REPO_SOLV_REPO_HPP
 
+#include "libdnf/base/base_weak.hpp"
+#include "libdnf/common/exception.hpp"
+#include "libdnf/repo/config_repo.hpp"
+
 #include <solv/repo.h>
 
 
@@ -27,8 +31,38 @@ const constexpr int CHKSUM_BYTES = 32;
 
 namespace libdnf::repo {
 
+using LibsolvRepo = ::Repo;
+enum class RepodataType { FILENAMES, PRESTO, UPDATEINFO, OTHER };
+enum class RepodataState { NEW, LOADED_FETCH, LOADED_CACHE };
+
+struct RepodataInfo {
+    RepodataState state;
+    Id id;
+};
+
+
+class SolvError : public Error {
+    using Error::Error;
+
+    const char * get_domain_name() const noexcept override { return "libdnf::repo"; }
+    const char * get_name() const noexcept override { return "SolvError"; }
+};
+
+
 class SolvRepo {
 public:
+    SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config);
+
+    /// Writes libsolv's .solv cache file with main libsolv repodata.
+    void write_main(bool load_after_write);
+
+    /// Writes libsolv's .solvx cache file with extended libsolv repodata.
+    void write_ext(Id repodata_id, RepodataType which_repodata, const char * suffix);
+
+    /// Loads additional metadata (filelist, others, ...) from available repo.
+    RepodataInfo load_repo_ext(
+        const char * suffix, const std::string & filename, int flags, bool (*cb)(LibsolvRepo *, FILE *));
+
     // Returns "true" when all solvables in the repository are stored contiguously -> No interleaving
     // with solvables from other repositories.
     // Complexity: Linear to the current number of solvables in  repository
@@ -50,6 +84,9 @@ public:
     void set_needs_internalizing() { needs_internalizing = true; };
 
 private:
+    libdnf::BaseWeakPtr base;
+    const ConfigRepo & config;
+
     bool needs_internalizing{false};
 };
 
