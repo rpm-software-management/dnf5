@@ -104,11 +104,6 @@ void close_file(std::FILE * fp) {
     std::fclose(fp);
 }
 
-// Deleter for std::unique_ptr<LibsolvRepo>
-static void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
-    repo_free(libsolv_repo, 1);
-}
-
 // return true if q1 is a superset of q2
 // only works if there are no duplicates both in q1 and q2
 // the map parameter must point to an empty map that can hold all ids
@@ -185,6 +180,7 @@ void PackageSack::Impl::rewrite_repos(libdnf::solv::IdQueue & addedfileprovides,
 repo::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & repo) {
     repo::RepodataState data_state = repo::RepodataState::NEW;
     auto repo_impl = repo.p_impl.get();
+    auto & libsolv_repo = repo_impl->solv_repo.repo;
 
     std::string repomd_fn = repo_impl->downloader.get_repomd_filename();
     if (repomd_fn.empty()) {
@@ -193,8 +189,6 @@ repo::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & repo) {
 
     auto & logger = *base->get_logger();
     auto id = repo.get_id();
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
-        repo_create(*get_pool(base), id.c_str()), &libsolv_repo_free);
 
     auto fn_cache = repo_solv_cache_path(id, nullptr);
 
@@ -207,7 +201,7 @@ repo::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & repo) {
     if (can_use_repomd_cache(fp_cache.get(), repo_impl->solv_repo.checksum)) {
         //const char *chksum = pool_checksum_str(pool, repoImpl->checksum);
         //logger.debug("using cached %s (0x%s)", name, chksum);
-        if (repo_add_solv(libsolv_repo.get(), fp_cache.get(), 0)) {
+        if (repo_add_solv(libsolv_repo, fp_cache.get(), 0)) {
             throw Exception(M_("repo_add_solv() has failed."));
             // g_set_error (error, DNF_ERROR, DNF_ERROR_INTERNAL_ERROR, _("repo_add_solv() has failed."));
         }
@@ -228,15 +222,14 @@ repo::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & repo) {
         }
 
         logger.debug(std::string("fetching ") + id);
-        if (repo_add_repomdxml(libsolv_repo.get(), fp_repomd.get(), 0) ||
-            repo_add_rpmmd(libsolv_repo.get(), fp_primary.get(), 0, 0)) {
+        if (repo_add_repomdxml(libsolv_repo, fp_repomd.get(), 0) ||
+            repo_add_rpmmd(libsolv_repo, fp_primary.get(), 0, 0)) {
             throw Exception(M_("repo_add_repomdxml/rpmmd() has failed."));
             // g_set_error (error, DNF_ERROR,  DNF_ERROR_INTERNAL_ERROR, _("repo_add_repomdxml/rpmmd() has failed."));
         }
         data_state = repo::RepodataState::LOADED_FETCH;
     }
 
-    repo_impl->attach_libsolv_repo(libsolv_repo.release());
     provides_ready = false;
     return data_state;
 }
@@ -279,25 +272,21 @@ void PackageSack::Impl::make_provides_ready() {
 bool PackageSack::Impl::load_system_repo() {
     auto & logger = *base->get_logger();
     auto repo_impl = system_repo->p_impl.get();
+    auto & libsolv_repo = repo_impl->solv_repo.repo;
     auto & pool = get_pool(base);
-
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
-        repo_create(*pool, system_repo->get_id().c_str()), &libsolv_repo_free);
 
     logger.debug("load_system_repo(): fetching rpmdb");
     base->get_config().installroot().lock("installroot locked by load_system_repo");
     pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
-    int rc = repo_add_rpmdb(libsolv_repo.get(), nullptr, flagsrpm);
+    int rc = repo_add_rpmdb(libsolv_repo, nullptr, flagsrpm);
     if (rc != 0) {
         // g_set_error(error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("failed loading RPMDB"));
         logger.warning(fmt::format(_("load_system_repo(): failed loading RPMDB: {}"), pool_errstr(*pool)));
         return false;
     }
 
-    repo_impl->attach_libsolv_repo(libsolv_repo.release());
-
-    auto solv_repo = repo_impl->solv_repo;
+    auto & solv_repo = repo_impl->solv_repo;
 
     pool_set_installed(*pool, solv_repo.repo);
 
@@ -315,13 +304,12 @@ bool PackageSack::Impl::load_system_repo() {
 bool PackageSack::Impl::load_extra_system_repo(const std::string & rootdir) {
     auto & logger = *base->get_logger();
     auto & solv_repo = system_repo->p_impl.get()->solv_repo;
-    LibsolvRepo * libsolv_repo = solv_repo.repo;
     auto & pool = get_pool(base);
 
     logger.debug("load_extra_system_repo(): fetching rpmdb");
     pool_set_rootdir(*pool, rootdir.c_str());
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
-    int rc = repo_add_rpmdb(libsolv_repo, nullptr, flagsrpm);
+    int rc = repo_add_rpmdb(solv_repo.repo, nullptr, flagsrpm);
     //reset rootdir to main one
     pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
     if (rc != 0) {
@@ -478,9 +466,6 @@ repo::Repo & PackageSack::Impl::get_cmdline_repo() {
     cmdline_repo = std::make_unique<repo::Repo>(base, CMDLINE_REPO_NAME, repo::Repo::Type::SYSTEM);
     cmdline_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, false);
 
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
-        repo_create(*get_pool(base), CMDLINE_REPO_NAME), &libsolv_repo_free);
-    cmdline_repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
     return *cmdline_repo.get();
 }
 
@@ -502,9 +487,6 @@ repo::Repo & PackageSack::Impl::get_system_repo(bool build_cache) {
     system_repo = std::make_unique<repo::Repo>(base, SYSTEM_REPO_NAME, repo::Repo::Type::SYSTEM);
     system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
 
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
-        repo_create(*pool, SYSTEM_REPO_NAME), &libsolv_repo_free);
-    system_repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
     pool_set_installed(*pool, system_repo->p_impl->solv_repo.repo);
     return *system_repo.get();
 }

@@ -136,6 +136,11 @@ Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type) {
         }
     }
     p_impl.reset(new Impl(base, *this, id, type));
+
+    // TODO(lukash) move this to SolvRepo constructor
+    p_impl->solv_repo.repo->appdata = this;
+    p_impl->solv_repo.repo->subpriority = -get_cost();
+    p_impl->solv_repo.repo->priority = -get_priority();
 }
 
 Repo::Repo(Base & base, const std::string & id, Repo::Type type) : Repo(base.get_weak_ptr(), id, type) {}
@@ -369,26 +374,6 @@ void Repo::Impl::reset_metadata_expired() {
         expired = true;
     else
         expired = get_age() > config.metadata_expire().get_value();
-}
-
-
-void Repo::Impl::attach_libsolv_repo(LibsolvRepo * libsolv_repo) {
-    libdnf_assert(this->solv_repo.repo == nullptr, "A libsolv repository is already attached");
-
-    libsolv_repo->appdata = owner;  // The libsolvRepo references back to us.
-    libsolv_repo->subpriority = -owner->get_cost();
-    libsolv_repo->priority = -owner->get_priority();
-    this->solv_repo.repo = libsolv_repo;
-}
-
-void Repo::Impl::detach_libsolv_repo() {
-    if (!solv_repo.repo) {
-        // Nothing to do, libsolvRepo is not attached.
-        return;
-    }
-
-    solv_repo.repo->appdata = nullptr;  // Removes reference to this object from libsolvRepo.
-    this->solv_repo.repo = nullptr;
 }
 
 void Repo::set_max_mirror_tries(int max_mirror_tries) {

@@ -55,11 +55,6 @@ RepoWeakPtr RepoSack::new_repo(const std::string & id) {
     return add_item_with_return(std::move(repo));
 }
 
-// Deleter for std::unique_ptr<LibsolvRepo>
-static void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
-    repo_free(libsolv_repo, 1);
-}
-
 
 RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path) {
     std::unique_ptr<std::FILE, decltype(&std::fclose)> testcase_file(solv_xfopen(path.c_str(), "r"), &std::fclose);
@@ -68,12 +63,7 @@ RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid,
     }
 
     auto repo = new_repo(repoid);
-    std::unique_ptr<LibsolvRepo, decltype(&libsolv_repo_free)> libsolv_repo(
-        repo_create(*get_pool(base), repoid.c_str()), &libsolv_repo_free);
-
-    testcase_add_testtags(libsolv_repo.get(), testcase_file.get(), 0);
-    repo->p_impl->attach_libsolv_repo(libsolv_repo.release());
-
+    testcase_add_testtags(repo->p_impl->solv_repo.repo, testcase_file.get(), 0);
     return repo;
 }
 

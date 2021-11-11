@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 const constexpr int CHKSUM_BYTES = 32;
 
+
 namespace libdnf::repo {
 
 using LibsolvRepo = ::Repo;
@@ -71,8 +72,6 @@ public:
     // Internalize repository if needed.
     void internalize();
 
-    ::Repo * repo{nullptr};
-
     // Checksum of data in .solv file. Used for validity check of .solvx files.
     unsigned char checksum[CHKSUM_BYTES];
 
@@ -88,6 +87,9 @@ private:
     const ConfigRepo & config;
 
     bool needs_internalizing{false};
+
+public:
+    ::Repo * repo{nullptr};  // libsolv pool retains ownership
 };
 
 }  // namespace libdnf::repo

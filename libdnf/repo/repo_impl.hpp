@@ -71,9 +71,6 @@ public:
     int get_expires_in() const;
     const std::string & get_metadata_path(const std::string & metadata_type) const;
 
-    void attach_libsolv_repo(LibsolvRepo * libsolv_repo);
-    void detach_libsolv_repo();
-
     /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
     /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
     /// When RPM is not accesible or corrupted it raises libdnf::RuntimeError
@@ -108,6 +105,8 @@ public:
     static bool ends_with(std::string const & str, std::string const & ending);
 
     // Information about attached libsolv repository
+    // TODO(lukash) create solv_repo only when loading into the pool (make this std::optional or std::unique_ptr)
+    // and handle the case throughout the code via asserts
     SolvRepo solv_repo;
 
     RepoDownloader downloader;

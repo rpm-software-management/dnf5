@@ -32,7 +32,6 @@ extern "C" {
 }
 
 
-
 // Deleter for std::unique_ptr<FILE>
 void close_file(std::FILE * fp) {
     std::fclose(fp);
@@ -77,7 +76,10 @@ bool can_use_repomd_cache(FILE * fp_solv, unsigned char cs_repomd[CHKSUM_BYTES])
 
 namespace libdnf::repo {
 
-SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config) : base(base), config(config) {}
+SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)
+    : base(base),
+      config(config),
+      repo(repo_create(*get_pool(base), config.get_id().c_str())) {}
 
 
 void SolvRepo::write_main(bool load_after_write) {

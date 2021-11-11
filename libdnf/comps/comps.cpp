@@ -85,10 +85,9 @@ void Comps::load_from_file(repo::Repo & repo, const std::string & path) {
         return;
     }
 
-    Repo * solv_repo = repo.p_impl->solv_repo.repo;
     // TODO(pkratoch): libsolv doesn't support environments yet
     FILE * xml_doc = solv_xfopen(path.c_str(), "r");
-    repo_add_comps(solv_repo, xml_doc, 0);
+    repo_add_comps(repo.p_impl->solv_repo.repo, xml_doc, 0);
     fclose(xml_doc);
 }
 
