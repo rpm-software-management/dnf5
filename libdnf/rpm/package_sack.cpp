@@ -31,7 +31,6 @@ extern "C" {
 #include <solv/repo.h>
 #include <solv/repo_comps.h>
 #include <solv/repo_deltainfoxml.h>
-#include <solv/repo_rpmdb.h>
 #include <solv/repo_rpmmd.h>
 #include <solv/repo_solv.h>
 #include <solv/repo_updateinfoxml.h>
@@ -171,64 +170,6 @@ void PackageSack::Impl::make_provides_ready() {
     provides_ready = true;
 }
 
-bool PackageSack::Impl::load_system_repo() {
-    auto & logger = *base->get_logger();
-    auto repo_impl = system_repo->p_impl.get();
-    auto & libsolv_repo = repo_impl->solv_repo.repo;
-    auto & pool = get_pool(base);
-
-    logger.debug("load_system_repo(): fetching rpmdb");
-    base->get_config().installroot().lock("installroot locked by load_system_repo");
-    pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
-    int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
-    int rc = repo_add_rpmdb(libsolv_repo, nullptr, flagsrpm);
-    if (rc != 0) {
-        // g_set_error(error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("failed loading RPMDB"));
-        logger.warning(fmt::format(_("load_system_repo(): failed loading RPMDB: {}"), pool_errstr(*pool)));
-        return false;
-    }
-
-    auto & solv_repo = repo_impl->solv_repo;
-
-    pool_set_installed(*pool, solv_repo.repo);
-
-    // TODO(jrohel): Probably not needed for system repository. For consistency with available repositories?
-    solv_repo.main_nsolvables = solv_repo.repo->nsolvables;
-    solv_repo.main_nrepodata = solv_repo.repo->nrepodata;
-    solv_repo.main_end = solv_repo.repo->end;
-
-    provides_ready = false;
-    considered_uptodate = false;
-
-    return true;
-}
-
-bool PackageSack::Impl::load_extra_system_repo(const std::string & rootdir) {
-    auto & logger = *base->get_logger();
-    auto & solv_repo = system_repo->p_impl.get()->solv_repo;
-    auto & pool = get_pool(base);
-
-    logger.debug("load_extra_system_repo(): fetching rpmdb");
-    pool_set_rootdir(*pool, rootdir.c_str());
-    int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
-    int rc = repo_add_rpmdb(solv_repo.repo, nullptr, flagsrpm);
-    //reset rootdir to main one
-    pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
-    if (rc != 0) {
-        logger.warning(fmt::format(_("load_extra_system_repo(): failed loading RPMDB: {}"), pool_errstr(*pool)));
-        return false;
-    }
-
-    solv_repo.main_nsolvables = solv_repo.repo->nsolvables;
-    solv_repo.main_nrepodata = solv_repo.repo->nrepodata;
-    solv_repo.main_end = solv_repo.repo->end;
-
-    provides_ready = false;
-    considered_uptodate = false;
-
-    return true;
-}
-
 void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags flags) {
     auto & logger = *base->get_logger();
     auto & repo_impl = repo.p_impl;
@@ -346,21 +287,26 @@ void PackageSack::load_repo(repo::Repo & repo, LoadRepoFlags flags) {
 void PackageSack::create_system_repo(bool build_cache) {
     libdnf_assert(!p_impl->system_repo, "System repo already exists");
 
+    p_impl->base->get_config().installroot().lock("installroot locked by create_system_repo");
+
     p_impl->system_repo = std::make_unique<repo::Repo>(p_impl->base, SYSTEM_REPO_NAME, repo::Repo::Type::SYSTEM);
     p_impl->system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
-    p_impl->load_system_repo();
+    p_impl->system_repo->p_impl->solv_repo.load_system_repo();
+
+    p_impl->provides_ready = false;
+    p_impl->considered_uptodate = false;
 }
 
 
 libdnf::repo::RepoWeakPtr PackageSack::get_system_repo() const {
+    libdnf_assert(p_impl->system_repo != nullptr, "System repo does not exist");
     return p_impl->system_repo->get_weak_ptr();
 }
 
 
 void PackageSack::append_extra_system_repo(const std::string & rootdir) {
     libdnf_assert(p_impl->system_repo != nullptr, "System repo does not exist");
-
-    p_impl->load_extra_system_repo(rootdir);
+    p_impl->system_repo->p_impl->solv_repo.load_system_repo(rootdir);
 }
 
 repo::Repo & PackageSack::Impl::get_cmdline_repo() {

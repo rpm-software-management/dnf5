@@ -118,6 +118,7 @@ public:
     libdnf::repo::RepoWeakPtr get_system_repo() const;
 
     /// Append a rpm database into system repository
+    // TODO(jrohel) this will add packages with conflicting rpmdb ids, which will break some operations
     void append_extra_system_repo(const std::string & rootdir);
 
     /// Adds the given .rpm file to the command line repo.

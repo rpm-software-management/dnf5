@@ -93,13 +93,6 @@ public:
     void set_running_kernel(PackageId kernel) { running_kernel = kernel; };
 
 private:
-    /// Loads system repository into PackageSack
-    /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
-    bool load_system_repo();
-
-    /// Loads extra system repository appended to system repo
-    bool load_extra_system_repo(const std::string & rootdir);
-
     /// Loads available repository into PackageSack
     void load_available_repo(repo::Repo & repo, LoadRepoFlags flags);
 

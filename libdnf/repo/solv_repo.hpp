@@ -67,6 +67,12 @@ public:
     RepodataInfo load_repo_ext(
         const char * suffix, const std::string & filename, int flags, bool (*cb)(LibsolvRepo *, FILE *));
 
+    /// Loads system repository into the pool.
+    ///
+    /// @param rootdir If empty, loads the installroot rpmdb, if not loads rpmdb from this root path
+    /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
+    bool load_system_repo(const std::string & rootdir = "");
+
     // Returns "true" when all solvables in the repository are stored contiguously -> No interleaving
     // with solvables from other repositories.
     // Complexity: Linear to the current number of solvables in  repository

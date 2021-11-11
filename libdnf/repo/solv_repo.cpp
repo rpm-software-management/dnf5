@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #include <solv/chksum.h>
 #include <solv/repo_repomdxml.h>
+#include <solv/repo_rpmdb.h>
 #include <solv/repo_rpmmd.h>
 #include <solv/repo_solv.h>
 #include <solv/repo_write.h>
@@ -267,6 +268,39 @@ RepodataInfo SolvRepo::load_repo_ext(
         info.id = repo->nrepodata - 1;
     }
     return info;
+}
+
+bool SolvRepo::load_system_repo(const std::string & rootdir) {
+    auto & logger = *base->get_logger();
+    auto & pool = get_pool(base);
+
+    logger.debug("Loading system repo rpmdb, root: \"" + rootdir + "\"");
+    if (rootdir.empty()) {
+        pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
+    } else {
+        pool_set_rootdir(*pool, rootdir.c_str());
+    }
+
+    int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
+    int rc = repo_add_rpmdb(repo, nullptr, flagsrpm);
+    if (rc != 0) {
+        logger.warning(fmt::format(_("load_system_repo(): failed loading RPMDB: {}"), pool_errstr(*pool)));
+        return false;
+    }
+
+    if (!rootdir.empty()) {
+        // if loading an extra repo, reset rootdir back to installroot
+        pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
+    }
+
+    pool_set_installed(*pool, repo);
+
+    // not used for system repo; set for consistency
+    main_nsolvables = repo->nsolvables;
+    main_nrepodata = repo->nrepodata;
+    main_end = repo->end;
+
+    return true;
 }
 
 bool SolvRepo::is_one_piece() const {
