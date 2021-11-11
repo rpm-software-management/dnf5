@@ -80,7 +80,7 @@ b_dnpgettext2(const char * domain, const char * ctxMsgId, size_t msgIdOffset, co
 const char *
 b_dmgettext(const char * domain, const char * markedMsg, unsigned long int n)
 {
-    if (*markedMsg & 0x01) {
+    if (*markedMsg == 1 || *markedMsg == 3 || *markedMsg == 5 || *markedMsg == 7) {
         const char * const msgId = markedMsg + 1;
         if (*markedMsg & 0x02) {
             const char * const msgIdPlural = strchr(msgId, 0) + 1;
