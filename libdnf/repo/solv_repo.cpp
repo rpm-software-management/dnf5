@@ -26,6 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 extern "C" {
 #include <solv/chksum.h>
+#include <solv/repo_repomdxml.h>
+#include <solv/repo_rpmmd.h>
 #include <solv/repo_solv.h>
 #include <solv/repo_write.h>
 #include <solv/solv_xfopen.h>
@@ -38,14 +40,26 @@ void close_file(std::FILE * fp) {
 }
 
 
-static std::string repo_solv_cache_fn(const std::string & repoid, const char * ext) {
-    if (ext != nullptr) {
-        return repoid + ext + ".solvx";
-    } else {
-        return repoid + ".solv";
-    }
-}
 
+constexpr auto CHKSUM_TYPE = REPOKEY_TYPE_SHA256;
+constexpr const char * CHKSUM_IDENT = "H000";
+
+// Computes checksum of data in opened file.
+// Calls rewind(fp) before returning.
+void checksum_fp(unsigned char * out, FILE * fp) {
+    // based on calc_checksum_fp in libsolv's solv.c
+    char buf[4096];
+    auto h = solv_chksum_create(CHKSUM_TYPE);
+    int l;
+
+    rewind(fp);
+    solv_chksum_add(h, CHKSUM_IDENT, strlen(CHKSUM_IDENT));
+    while ((l = static_cast<int>(fread(buf, 1, sizeof(buf), fp))) > 0) {
+        solv_chksum_add(h, buf, l);
+    }
+    rewind(fp);
+    solv_chksum_free(h, out);
+}
 
 // Appends checksum to the end of file.
 // Moves fp to the end of file.
@@ -66,8 +80,6 @@ bool checksum_read(unsigned char * csout, FILE * fp) {
     return true;
 }
 
-constexpr auto CHKSUM_TYPE = REPOKEY_TYPE_SHA256;
-
 bool can_use_repomd_cache(FILE * fp_solv, unsigned char cs_repomd[CHKSUM_BYTES]) {
     unsigned char cs_cache[CHKSUM_BYTES];
     return (fp_solv != nullptr) && checksum_read(cs_cache, fp_solv) && memcmp(cs_cache, cs_repomd, CHKSUM_BYTES) == 0;
@@ -87,7 +99,7 @@ void SolvRepo::write_main(bool load_after_write) {
 
     const char * chksum = pool_bin2hex(*get_pool(base), checksum, solv_chksum_len(CHKSUM_TYPE));
 
-    auto fn = repo_solv_cache_fn(repo->name, nullptr);
+    auto fn = solv_file_name();
 
     auto tmp_file = libdnf::utils::TempFile(config.basecachedir().get_value(), fn);
 
@@ -130,12 +142,12 @@ static int write_ext_updateinfo_filter(::Repo * repo, Repokey * key, void * kfda
     return repo_write_stdkeyfilter(repo, key, nullptr);
 }
 
-void SolvRepo::write_ext(Id repodata_id, RepodataType which_repodata, const char * suffix) {
+void SolvRepo::write_ext(Id repodata_id, RepodataType which_repodata, const char * type) {
     auto & logger = *base->get_logger();
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
 
     Repodata * data = repo_id2repodata(repo, repodata_id);
-    auto fn = repo_solv_cache_fn(repo->name, suffix);
+    auto fn = solv_file_name(type);
 
     auto tmp_file = libdnf::utils::TempFile(base->get_config().cachedir().get_value(), fn);
 
@@ -157,7 +169,7 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType which_repodata, const char
     ret |= checksum_write(checksum, fp);
     if (ret) {
         // TODO(lukash) improve error message
-        throw SolvError(M_("Failed writing extended solv cache data \"{}\""), suffix);
+        throw SolvError(M_("Failed writing extended solv cache data \"{}\""), type);
     }
 
     tmp_file.close();
@@ -182,14 +194,51 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType which_repodata, const char
     tmp_file.release();
 }
 
+RepodataState SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string & primary_fn) {
+    auto & logger = *base->get_logger();
+    RepodataState state = RepodataState::NEW;
+
+    std::unique_ptr<std::FILE, decltype(&close_file)> fp_repomd(fopen(repomd_fn.c_str(), "rb"), &close_file);
+    if (!fp_repomd) {
+        throw SystemError(errno, repomd_fn);
+    }
+    checksum_fp(checksum, fp_repomd.get());
+    std::unique_ptr<std::FILE, decltype(&close_file)> fp_cache(fopen(solv_file_path().c_str(), "rb"), &close_file);
+    if (can_use_repomd_cache(fp_cache.get(), checksum)) {
+        //const char *chksum = pool_checksum_str(pool, repoImpl->checksum);
+        //logger.debug("using cached %s (0x%s)", name, chksum);
+        if (repo_add_solv(repo, fp_cache.get(), 0)) {
+            // TODO(lukash) improve error message
+            throw SolvError(M_("repo_add_solv() has failed."));
+        }
+        state = repo::RepodataState::LOADED_CACHE;
+    } else {
+        std::unique_ptr<std::FILE, decltype(&close_file)> fp_primary(solv_xfopen(primary_fn.c_str(), "r"), &close_file);
+
+        if (!fp_primary) {
+            // TODO(lukash) proper exception
+            throw RuntimeError(fmt::format("Failed to open repo primary \"{}\": {}", primary_fn, errno));
+        }
+
+        logger.debug(std::string("fetching ") + config.get_id());
+        if (repo_add_repomdxml(repo, fp_repomd.get(), 0) ||
+            repo_add_rpmmd(repo, fp_primary.get(), 0, 0)) {
+            // TODO(lukash) improve error message
+            throw SolvError(M_("repo_add_repomdxml/rpmmd() has failed."));
+        }
+        state = repo::RepodataState::LOADED_FETCH;
+    }
+
+    return state;
+}
+
 RepodataInfo SolvRepo::load_repo_ext(
-    const char * suffix, const std::string & filename, int flags, bool (*cb)(LibsolvRepo *, FILE *)) {
+    const char * type, const std::string & filename, int flags, bool (*cb)(LibsolvRepo *, FILE *)) {
     auto & logger = *base->get_logger();
 
     RepodataInfo info;
 
-    auto fn_cache =
-        std::filesystem::path(base->get_config().cachedir().get_value()) / repo_solv_cache_fn(repo->name, suffix);
+    auto fn_cache = solv_file_path(type);
 
     std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(fn_cache.c_str(), "rb"), &close_file);
     if (can_use_repomd_cache(fp.get(), checksum)) {
@@ -233,6 +282,18 @@ void SolvRepo::internalize() {
     }
     repo_internalize(repo);
     needs_internalizing = false;
+}
+
+std::string SolvRepo::solv_file_name(const char * type) {
+    if (type != nullptr) {
+        return config.get_id() + type + ".solvx";
+    } else {
+        return config.get_id() + ".solv";
+    }
+}
+
+std::string SolvRepo::solv_file_path(const char * type) {
+    return std::filesystem::path(config.basecachedir().get_value()) / solv_file_name(type);
 }
 
 }  //namespace libdnf::repo

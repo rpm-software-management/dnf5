@@ -31,7 +31,6 @@ extern "C" {
 #include <solv/repo.h>
 #include <solv/repo_comps.h>
 #include <solv/repo_deltainfoxml.h>
-#include <solv/repo_repomdxml.h>
 #include <solv/repo_rpmdb.h>
 #include <solv/repo_rpmmd.h>
 #include <solv/repo_solv.h>
@@ -63,46 +62,6 @@ constexpr const char * SOLV_EXT_FILENAMES = "-filenames";
 constexpr const char * SOLV_EXT_UPDATEINFO = "-updateinfo";
 constexpr const char * SOLV_EXT_PRESTO = "-presto";
 constexpr const char * SOLV_EXT_OTHER = "-other";
-
-constexpr auto CHKSUM_TYPE = REPOKEY_TYPE_SHA256;
-constexpr const char * CHKSUM_IDENT = "H000";
-
-// Computes checksum of data in opened file.
-// Calls rewind(fp) before returning.
-void checksum_fp(unsigned char * out, FILE * fp) {
-    // based on calc_checksum_fp in libsolv's solv.c
-    char buf[4096];
-    auto h = solv_chksum_create(CHKSUM_TYPE);
-    int l;
-
-    rewind(fp);
-    solv_chksum_add(h, CHKSUM_IDENT, strlen(CHKSUM_IDENT));
-    while ((l = static_cast<int>(fread(buf, 1, sizeof(buf), fp))) > 0) {
-        solv_chksum_add(h, buf, l);
-    }
-    rewind(fp);
-    solv_chksum_free(h, out);
-}
-
-// Reads checksum of data in opened file.
-// Calls rewind(fp) before returning.
-bool checksum_read(unsigned char * csout, FILE * fp) {
-    if ((fseek(fp, -CHKSUM_BYTES, SEEK_END) != 0) || fread(csout, CHKSUM_BYTES, 1, fp) != 1) {
-        return false;
-    }
-    rewind(fp);
-    return true;
-}
-
-bool can_use_repomd_cache(FILE * fp_solv, unsigned char cs_repomd[CHKSUM_BYTES]) {
-    unsigned char cs_cache[CHKSUM_BYTES];
-    return (fp_solv != nullptr) && checksum_read(cs_cache, fp_solv) && memcmp(cs_cache, cs_repomd, CHKSUM_BYTES) == 0;
-}
-
-// Deleter for std::unique_ptr<FILE>
-void close_file(std::FILE * fp) {
-    std::fclose(fp);
-}
 
 // return true if q1 is a superset of q2
 // only works if there are no duplicates both in q1 and q2
@@ -175,63 +134,6 @@ void PackageSack::Impl::rewrite_repos(libdnf::solv::IdQueue & addedfileprovides,
         libsolv_repo->nsolvables = oldnsolvables;
         libsolv_repo->end = oldend;
     }
-}
-
-repo::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & repo) {
-    repo::RepodataState data_state = repo::RepodataState::NEW;
-    auto repo_impl = repo.p_impl.get();
-    auto & libsolv_repo = repo_impl->solv_repo.repo;
-
-    std::string repomd_fn = repo_impl->downloader.get_repomd_filename();
-    if (repomd_fn.empty()) {
-        throw Exception("repo md file name is empty");
-    }
-
-    auto & logger = *base->get_logger();
-    auto id = repo.get_id();
-
-    auto fn_cache = repo_solv_cache_path(id, nullptr);
-
-    std::unique_ptr<std::FILE, decltype(&close_file)> fp_repomd(fopen(repomd_fn.c_str(), "rb"), &close_file);
-    if (!fp_repomd) {
-        throw SystemError(errno, repomd_fn);
-    }
-    checksum_fp(repo_impl->solv_repo.checksum, fp_repomd.get());
-    std::unique_ptr<std::FILE, decltype(&close_file)> fp_cache(fopen(fn_cache.c_str(), "rb"), &close_file);
-    if (can_use_repomd_cache(fp_cache.get(), repo_impl->solv_repo.checksum)) {
-        //const char *chksum = pool_checksum_str(pool, repoImpl->checksum);
-        //logger.debug("using cached %s (0x%s)", name, chksum);
-        if (repo_add_solv(libsolv_repo, fp_cache.get(), 0)) {
-            throw Exception(M_("repo_add_solv() has failed."));
-            // g_set_error (error, DNF_ERROR, DNF_ERROR_INTERNAL_ERROR, _("repo_add_solv() has failed."));
-        }
-        data_state = repo::RepodataState::LOADED_CACHE;
-    } else {
-        auto primary = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_PRIMARY);
-        if (primary.empty()) {
-            // It could happen when repomd file has no "primary" data or they are in unsupported
-            // format like zchunk
-            throw Exception(M_("loading of MD_FILENAME_PRIMARY has failed."));
-            // g_set_error (error, DNF_ERROR, DNF_ERROR_INTERNAL_ERROR, _("loading of MD_FILENAME_PRIMARY has failed."));
-        }
-        std::unique_ptr<std::FILE, decltype(&close_file)> fp_primary(solv_xfopen(primary.c_str(), "r"), &close_file);
-
-        if (!fp_primary) {
-            // TODO(lukash) proper exception
-            throw RuntimeError(fmt::format("Failed to open repo primary \"{}\": {}", primary, errno));
-        }
-
-        logger.debug(std::string("fetching ") + id);
-        if (repo_add_repomdxml(libsolv_repo, fp_repomd.get(), 0) ||
-            repo_add_rpmmd(libsolv_repo, fp_primary.get(), 0, 0)) {
-            throw Exception(M_("repo_add_repomdxml/rpmmd() has failed."));
-            // g_set_error (error, DNF_ERROR,  DNF_ERROR_INTERNAL_ERROR, _("repo_add_repomdxml/rpmmd() has failed."));
-        }
-        data_state = repo::RepodataState::LOADED_FETCH;
-    }
-
-    provides_ready = false;
-    return data_state;
 }
 
 void PackageSack::Impl::internalize_libsolv_repos() {
@@ -329,10 +231,17 @@ bool PackageSack::Impl::load_extra_system_repo(const std::string & rootdir) {
 
 void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags flags) {
     auto & logger = *base->get_logger();
-    auto repo_impl = repo.p_impl.get();
+    auto & repo_impl = repo.p_impl;
 
     bool build_cache = repo.get_config().build_cache().get_value();
-    auto state = load_repo_main(repo);
+
+    auto primary_fn = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_PRIMARY);
+    if (primary_fn.empty()) {
+        throw Exception(_("Failed to load repository: \"primary\" data not present or in unsupported format"));
+    }
+
+    auto state = repo_impl->solv_repo.load_repo_main(repo_impl->downloader.get_repomd_filename(), primary_fn);
+
     if (state == repo::RepodataState::LOADED_FETCH && build_cache) {
         repo_impl->solv_repo.write_main(true);
     }
@@ -351,7 +260,6 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
                 [](LibsolvRepo * repo, FILE * fp) {
                     return repo_add_rpmmd(repo, fp, "FL", REPO_EXTEND_SOLVABLES) == 0;
                 });
-            provides_ready = false;
             if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
                 repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::FILENAMES, SOLV_EXT_FILENAMES);
             }
@@ -369,7 +277,6 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
                 md_filename,
                 REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL,
                 [](LibsolvRepo * repo, FILE * fp) { return repo_add_rpmmd(repo, fp, 0, REPO_EXTEND_SOLVABLES) == 0; });
-            provides_ready = false;
             if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
                 repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::OTHER, SOLV_EXT_OTHER);
             }
@@ -386,7 +293,6 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
                 md_filename,
                 REPO_EXTEND_SOLVABLES,
                 [](LibsolvRepo * repo, FILE * fp) { return repo_add_deltainfoxml(repo, fp, 0) == 0; });
-            provides_ready = false;
             if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
                 repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::PRESTO, SOLV_EXT_PRESTO);
             }
@@ -407,7 +313,6 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
                 md_filename,
                 0,
                 [](LibsolvRepo * repo, FILE * fp) { return repo_add_updateinfoxml(repo, fp, 0) == 0; });
-            provides_ready = false;
             if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
                 repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::UPDATEINFO, SOLV_EXT_UPDATEINFO);
             }
@@ -426,7 +331,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
         }
     }
 
-
+    provides_ready = false;
     considered_uptodate = false;
 }
 
@@ -528,19 +433,6 @@ BaseWeakPtr PackageSack::get_base() const {
 int PackageSack::get_nsolvables() const noexcept {
     return p_impl->get_nsolvables();
 };
-
-// TODO(jrohel): we want to change directory for solv(x) cache (into repo metadata directory?)
-std::string PackageSack::Impl::repo_solv_cache_fn(const std::string & repoid, const char * ext) {
-    if (ext != nullptr) {
-        return repoid + ext + ".solvx";
-    } else {
-        return repoid + ".solv";
-    }
-}
-
-std::string PackageSack::Impl::repo_solv_cache_path(const std::string & repoid, const char * ext) {
-    return std::filesystem::path(base->get_config().cachedir().get_value()) / repo_solv_cache_fn(repoid, ext);
-}
 
 PackageSack::PackageSack(const BaseWeakPtr & base)
   : p_impl{new Impl(base)},

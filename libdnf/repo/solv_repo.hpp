@@ -58,7 +58,10 @@ public:
     void write_main(bool load_after_write);
 
     /// Writes libsolv's .solvx cache file with extended libsolv repodata.
-    void write_ext(Id repodata_id, RepodataType which_repodata, const char * suffix);
+    void write_ext(Id repodata_id, RepodataType which_repodata, const char * type);
+
+    /// Loads main metadata (solvables) from available repo.
+    RepodataState load_repo_main(const std::string & repomd_fn, const std::string & primary_fn);
 
     /// Loads additional metadata (filelist, others, ...) from available repo.
     RepodataInfo load_repo_ext(
@@ -83,6 +86,9 @@ public:
     void set_needs_internalizing() { needs_internalizing = true; };
 
 private:
+    std::string solv_file_name(const char * type = nullptr);
+    std::string solv_file_path(const char * type = nullptr);
+
     libdnf::BaseWeakPtr base;
     const ConfigRepo & config;
 
