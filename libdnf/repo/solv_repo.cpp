@@ -26,10 +26,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 extern "C" {
 #include <solv/chksum.h>
+#include <solv/repo_deltainfoxml.h>
 #include <solv/repo_repomdxml.h>
 #include <solv/repo_rpmdb.h>
 #include <solv/repo_rpmmd.h>
 #include <solv/repo_solv.h>
+#include <solv/repo_updateinfoxml.h>
 #include <solv/repo_write.h>
 #include <solv/solv_xfopen.h>
 }
@@ -89,6 +91,28 @@ bool can_use_repomd_cache(FILE * fp_solv, unsigned char cs_repomd[CHKSUM_BYTES])
 
 namespace libdnf::repo {
 
+static const char * repodata_type_to_suffix(RepodataType type) {
+    switch(type) {
+        case RepodataType::FILENAMES: return "-filenames";
+        case RepodataType::PRESTO: return "-presto";
+        case RepodataType::UPDATEINFO: return "-updateinfo";
+        case RepodataType::OTHER: return "-other";
+    }
+
+    libdnf_throw_assertion("Unknown RepodataType: {}", type);
+}
+
+static int repodata_type_to_flags(RepodataType type) {
+    switch(type) {
+        case RepodataType::FILENAMES: return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
+        case RepodataType::PRESTO: return REPO_EXTEND_SOLVABLES;
+        case RepodataType::UPDATEINFO: return 0;
+        case RepodataType::OTHER: return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
+    }
+
+    libdnf_throw_assertion("Unknown RepodataType: {}", type);
+}
+
 SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)
     : base(base),
       config(config),
@@ -143,12 +167,12 @@ static int write_ext_updateinfo_filter(::Repo * repo, Repokey * key, void * kfda
     return repo_write_stdkeyfilter(repo, key, nullptr);
 }
 
-void SolvRepo::write_ext(Id repodata_id, RepodataType which_repodata, const char * type) {
+void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     auto & logger = *base->get_logger();
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
 
     Repodata * data = repo_id2repodata(repo, repodata_id);
-    auto fn = solv_file_name(type);
+    auto fn = solv_file_name(repodata_type_to_suffix(type));
 
     auto tmp_file = libdnf::utils::TempFile(base->get_config().cachedir().get_value(), fn);
 
@@ -156,7 +180,7 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType which_repodata, const char
 
     logger.debug(fmt::format("{}: storing {} to: {}", __func__, repo->name, tmp_file.get_path().native()));
     int ret;
-    if (which_repodata != RepodataType::UPDATEINFO) {
+    if (type != RepodataType::UPDATEINFO) {
         ret = repodata_write(data, fp);
     } else {
         // block replaces: ret = write_ext_updateinfo(hrepo, data, fp);
@@ -170,23 +194,18 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType which_repodata, const char
     ret |= checksum_write(checksum, fp);
     if (ret) {
         // TODO(lukash) improve error message
-        throw SolvError(M_("Failed writing extended solv cache data \"{}\""), type);
+        throw SolvError(M_("Failed writing extended solv cache data \"{}\""), fn);
     }
 
     tmp_file.close();
 
-    if (is_one_piece() && which_repodata != RepodataType::UPDATEINFO) {
+    if (is_one_piece() && type != RepodataType::UPDATEINFO) {
         // switch over to written solv file activate paging
         std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(tmp_file.get_path().c_str(), "r"), &close_file);
         if (fp) {
-            int flags = REPO_USE_LOADING | REPO_EXTEND_SOLVABLES;
-            // do not pollute the main pool with directory component ids
-            if (which_repodata == RepodataType::FILENAMES || which_repodata == RepodataType::OTHER) {
-                flags |= REPO_LOCALPOOL;
-            }
             repodata_extend_block(data, repo->start, repo->end - repo->start);
             data->state = REPODATA_LOADING;
-            repo_add_solv(repo, fp.get(), flags);
+            repo_add_solv(repo, fp.get(), repodata_type_to_flags(type) | REPO_USE_LOADING);
             data->state = REPODATA_AVAILABLE;
         }
     }
@@ -233,18 +252,17 @@ RepodataState SolvRepo::load_repo_main(const std::string & repomd_fn, const std:
     return state;
 }
 
-RepodataInfo SolvRepo::load_repo_ext(
-    const char * type, const std::string & filename, int flags, bool (*cb)(LibsolvRepo *, FILE *)) {
+RepodataInfo SolvRepo::load_repo_ext(const std::string & filename, RepodataType type) {
     auto & logger = *base->get_logger();
 
     RepodataInfo info;
 
-    auto fn_cache = solv_file_path(type);
+    auto fn_cache = solv_file_path(repodata_type_to_suffix(type));
 
     std::unique_ptr<std::FILE, decltype(&close_file)> fp(fopen(fn_cache.c_str(), "rb"), &close_file);
     if (can_use_repomd_cache(fp.get(), checksum)) {
         logger.debug(fmt::format("{}: using cache file: {}", __func__, fn_cache.c_str()));
-        if (repo_add_solv(repo, fp.get(), flags) != 0) {
+        if (repo_add_solv(repo, fp.get(), repodata_type_to_flags(type)) != 0) {
             // TODO(lukash) improve error message
             throw SolvError(M_("repo_add_solv() has failed."));
         }
@@ -260,13 +278,29 @@ RepodataInfo SolvRepo::load_repo_ext(
     }
     logger.debug(fmt::format("{}: loading: {}", __func__, filename));
 
-    int previous_last = repo->nrepodata - 1;
-    auto ok = cb(repo, fp.get());
-    if (ok) {
-        info.state = RepodataState::LOADED_FETCH;
-        libdnf_assert(previous_last == repo->nrepodata - 2, "Repo has not been added through callback");
-        info.id = repo->nrepodata - 1;
+    int res = 0;
+    switch(type) {
+        case RepodataType::FILENAMES:
+            res = repo_add_rpmmd(repo, fp.get(), "FL", REPO_EXTEND_SOLVABLES);
+            break;
+        case RepodataType::PRESTO:
+            repo_add_deltainfoxml(repo, fp.get(), 0);
+            break;
+        case RepodataType::UPDATEINFO:
+            repo_add_updateinfoxml(repo, fp.get(), 0);
+            break;
+        case RepodataType::OTHER:
+            repo_add_rpmmd(repo, fp.get(), 0, REPO_EXTEND_SOLVABLES);
+            break;
     }
+
+    if (res != 0) {
+        // TODO(lukash) verify pool_errstr() is the correct way to get the message here
+        throw SolvError(M_("Failed loading extended metadata type \"{}\": {}"), pool_errstr(*get_pool(base)));
+    }
+
+    info.state = RepodataState::LOADED_FETCH;
+    info.id = repo->nrepodata - 1;
     return info;
 }
 

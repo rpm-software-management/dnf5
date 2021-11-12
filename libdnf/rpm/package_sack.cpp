@@ -30,10 +30,8 @@ extern "C" {
 #include <solv/chksum.h>
 #include <solv/repo.h>
 #include <solv/repo_comps.h>
-#include <solv/repo_deltainfoxml.h>
 #include <solv/repo_rpmmd.h>
 #include <solv/repo_solv.h>
-#include <solv/repo_updateinfoxml.h>
 #include <solv/repo_write.h>
 #include <solv/solv_xfopen.h>
 #include <solv/solver.h>
@@ -55,12 +53,6 @@ constexpr const char * SYSTEM_REPO_NAME = "@System";
 constexpr const char * CMDLINE_REPO_NAME = "@commandline";
 // TODO lukash: unused, remove?
 //constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
-
-// Extensions of solv file names
-constexpr const char * SOLV_EXT_FILENAMES = "-filenames";
-constexpr const char * SOLV_EXT_UPDATEINFO = "-updateinfo";
-constexpr const char * SOLV_EXT_PRESTO = "-presto";
-constexpr const char * SOLV_EXT_OTHER = "-other";
 
 // return true if q1 is a superset of q2
 // only works if there are no duplicates both in q1 and q2
@@ -193,16 +185,10 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
         auto md_filename = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_FILELISTS);
 
         if (!md_filename.empty()) {
-            // do not pollute the main pool with directory component ids flags |= REPO_LOCALPOOL
-            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(
-                SOLV_EXT_FILENAMES,
-                md_filename,
-                REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL,
-                [](LibsolvRepo * repo, FILE * fp) {
-                    return repo_add_rpmmd(repo, fp, "FL", REPO_EXTEND_SOLVABLES) == 0;
-                });
+            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::FILENAMES);
+
             if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
-                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::FILENAMES, SOLV_EXT_FILENAMES);
+                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::FILENAMES);
             }
         } else {
             logger.debug(fmt::format("no filelists metadata available for {}", repo.get_id()));
@@ -212,14 +198,10 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
         auto md_filename = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_OTHER);
 
         if (!md_filename.empty()) {
-            // do not pollute the main pool with directory component ids flags |= REPO_LOCALPOOL
-            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(
-                SOLV_EXT_OTHER,
-                md_filename,
-                REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL,
-                [](LibsolvRepo * repo, FILE * fp) { return repo_add_rpmmd(repo, fp, 0, REPO_EXTEND_SOLVABLES) == 0; });
+            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::OTHER);
+
             if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
-                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::OTHER, SOLV_EXT_OTHER);
+                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::OTHER);
             }
         } else {
             logger.debug(fmt::format("no other metadata available for {}", repo.get_id()));
@@ -229,13 +211,10 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
         auto md_filename = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_PRESTODELTA);
 
         if (!md_filename.empty()) {
-            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(
-                SOLV_EXT_PRESTO,
-                md_filename,
-                REPO_EXTEND_SOLVABLES,
-                [](LibsolvRepo * repo, FILE * fp) { return repo_add_deltainfoxml(repo, fp, 0) == 0; });
+            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::PRESTO);
+
             if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
-                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::PRESTO, SOLV_EXT_PRESTO);
+                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::PRESTO);
             }
         } else {
             logger.debug(fmt::format("no presto metadata available for {}", repo.get_id()));
@@ -248,14 +227,10 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
         auto md_filename = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_UPDATEINFO);
 
         if (!md_filename.empty()) {
-            // the updateinfo is not a real extension flags = 0
-            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(
-                SOLV_EXT_UPDATEINFO,
-                md_filename,
-                0,
-                [](LibsolvRepo * repo, FILE * fp) { return repo_add_updateinfoxml(repo, fp, 0) == 0; });
+            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::UPDATEINFO);
+
             if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
-                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::UPDATEINFO, SOLV_EXT_UPDATEINFO);
+                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::UPDATEINFO);
             }
         } else {
             logger.debug(fmt::format("no updateinfo available for {}", repo.get_id()));

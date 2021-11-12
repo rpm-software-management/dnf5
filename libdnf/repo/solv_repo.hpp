@@ -58,14 +58,13 @@ public:
     void write_main(bool load_after_write);
 
     /// Writes libsolv's .solvx cache file with extended libsolv repodata.
-    void write_ext(Id repodata_id, RepodataType which_repodata, const char * type);
+    void write_ext(Id repodata_id, RepodataType type);
 
     /// Loads main metadata (solvables) from available repo.
     RepodataState load_repo_main(const std::string & repomd_fn, const std::string & primary_fn);
 
     /// Loads additional metadata (filelist, others, ...) from available repo.
-    RepodataInfo load_repo_ext(
-        const char * suffix, const std::string & filename, int flags, bool (*cb)(LibsolvRepo *, FILE *));
+    RepodataInfo load_repo_ext(const std::string & filename, RepodataType type);
 
     /// Loads system repository into the pool.
     ///
