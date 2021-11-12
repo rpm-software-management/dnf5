@@ -54,76 +54,23 @@ constexpr const char * CMDLINE_REPO_NAME = "@commandline";
 // TODO lukash: unused, remove?
 //constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
 
-// return true if q1 is a superset of q2
-// only works if there are no duplicates both in q1 and q2
-// the map parameter must point to an empty map that can hold all ids
-// (it is also returned empty)
-bool is_superset(const libdnf::solv::IdQueue & q1, const libdnf::solv::IdQueue * q2, libdnf::solv::SolvMap & map) {
-    int cnt = 0;
-    for (int i = 0; i < q2->size(); i++) {
-        map.add_unsafe((*q2)[i]);
-    }
-    for (int i = 0; i < q1.size(); i++) {
-        if (map.contains_unsafe(q1[i])) {
-            cnt++;
-        }
-    }
-    for (int i = 0; i < q2->size(); i++) {
-        map.remove_unsafe((*q2)[i]);
-    }
-    return cnt == q2->size();
-}
-
 }  // end of anonymous namespace
 
 void PackageSack::Impl::rewrite_repos(libdnf::solv::IdQueue & addedfileprovides, libdnf::solv::IdQueue & addedfileprovides_inst) {
     int i;
-    auto & logger = *base->get_logger();
-
-    auto & pool = get_pool(base);
-    libdnf::solv::SolvMap providedids(pool->ss.nstrings);
-
-    libdnf::solv::IdQueue fileprovidesq;
-
     LibsolvRepo * libsolv_repo;
+    auto & pool = get_pool(base);
     FOR_REPOS(i, libsolv_repo) {
         auto repo = static_cast<repo::Repo *>(libsolv_repo->appdata);
         if (!repo) {
             continue;
         }
-        if (!(repo->get_config().build_cache().get_value())) {
-            continue;
+
+        if (repo->p_impl->type == repo::Repo::Type::SYSTEM) {
+            repo->p_impl->solv_repo.rewrite_repo(addedfileprovides_inst);
+        } else {
+            repo->p_impl->solv_repo.rewrite_repo(addedfileprovides);
         }
-        auto & solv_repo = repo->p_impl.get()->solv_repo;
-        if (solv_repo.main_nrepodata < 2) {
-            continue;
-        }
-        // now check if the repo already contains all of our file provides
-        libdnf::solv::IdQueue * addedq = libsolv_repo == pool->installed ? &addedfileprovides_inst : &addedfileprovides;
-        if (addedq->size() == 0) {
-            continue;
-        }
-        Repodata * data = repo_id2repodata(libsolv_repo, 1);
-        fileprovidesq.clear();
-        if (repodata_lookup_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &fileprovidesq.get_queue())) {
-            if (is_superset(fileprovidesq, addedq, providedids)) {
-                continue;
-            }
-        }
-        repodata_set_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &addedq->get_queue());
-        repodata_internalize(data);
-        // re-write main data only
-        int oldnrepodata = libsolv_repo->nrepodata;
-        int oldnsolvables = libsolv_repo->nsolvables;
-        int oldend = libsolv_repo->end;
-        libsolv_repo->nrepodata = solv_repo.main_nrepodata;
-        libsolv_repo->nsolvables = solv_repo.main_nsolvables;
-        libsolv_repo->end = solv_repo.main_end;
-        logger.debug(fmt::format("rewriting repo: {}", libsolv_repo->name));
-        repo->p_impl->solv_repo.write_main(false);
-        libsolv_repo->nrepodata = oldnrepodata;
-        libsolv_repo->nsolvables = oldnsolvables;
-        libsolv_repo->end = oldend;
     }
 }
 

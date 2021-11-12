@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/solv/id_queue.hpp"
 #include "libdnf/repo/config_repo.hpp"
 
 #include <solv/repo.h>
@@ -65,6 +66,8 @@ public:
     /// @param rootdir If empty, loads the installroot rpmdb, if not loads rpmdb from this root path
     /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
     bool load_system_repo(const std::string & rootdir = "");
+
+    void rewrite_repo(libdnf::solv::IdQueue & fileprovides);
 
     // Returns "true" when all solvables in the repository are stored contiguously -> No interleaving
     // with solvables from other repositories.

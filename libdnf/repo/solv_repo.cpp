@@ -337,6 +337,64 @@ bool SolvRepo::load_system_repo(const std::string & rootdir) {
     return true;
 }
 
+
+// return true if q1 is a superset of q2
+// only works if there are no duplicates both in q1 and q2
+// the map parameter must point to an empty map that can hold all ids
+// (it is also returned empty)
+static bool is_superset(const libdnf::solv::IdQueue & q1, const libdnf::solv::IdQueue & q2, libdnf::solv::SolvMap & map) {
+    int cnt = 0;
+    for (int i = 0; i < q2.size(); i++) {
+        map.add_unsafe(q2[i]);
+    }
+    for (int i = 0; i < q1.size(); i++) {
+        if (map.contains_unsafe(q1[i])) {
+            cnt++;
+        }
+    }
+    for (int i = 0; i < q2.size(); i++) {
+        map.remove_unsafe(q2[i]);
+    }
+    return cnt == q2.size();
+}
+
+
+void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
+    auto & logger = *base->get_logger();
+    auto & pool = get_pool(base);
+
+    if (!config.build_cache().get_value() || main_nrepodata < 2 || fileprovides.size() == 0) {
+        return;
+    }
+
+    libdnf::solv::IdQueue fileprovidesq;
+    libdnf::solv::SolvMap providedids(pool->ss.nstrings);
+    Repodata * data = repo_id2repodata(repo, 1);
+    if (repodata_lookup_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &fileprovidesq.get_queue())) {
+        if (is_superset(fileprovidesq, fileprovides, providedids)) {
+            return;
+        }
+    }
+
+    repodata_set_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &fileprovides.get_queue());
+    repodata_internalize(data);
+
+    // re-write main data only
+    int oldnrepodata = repo->nrepodata;
+    int oldnsolvables = repo->nsolvables;
+    int oldend = repo->end;
+    repo->nrepodata = main_nrepodata;
+    repo->nsolvables = main_nsolvables;
+    repo->end = main_end;
+
+    logger.debug(fmt::format("rewriting repo: {}", config.get_id()));
+    write_main(false);
+
+    repo->nrepodata = oldnrepodata;
+    repo->nsolvables = oldnsolvables;
+    repo->end = oldend;
+}
+
 bool SolvRepo::is_one_piece() const {
     for (auto i = repo->start; i < repo->end; ++i)
         if (repo->pool->solvables[i].repo != repo)
