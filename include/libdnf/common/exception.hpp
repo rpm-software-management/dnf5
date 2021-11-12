@@ -128,9 +128,7 @@ public:
     /// message from the system error description.
     ///
     /// @param error_code The `errno` of the error.
-    SystemError(int error_code)
-        : Error("({}) - {}", error_code, std::system_category().default_error_condition(error_code).message()),
-          error_code(error_code) {}
+    SystemError(int error_code) : Error("System error"), error_code(error_code), has_user_message(false) {}
 
     /// Constructs the error from the `errno` error code and a formatted message.
     /// The formatted message is prepended to the generated system error message.
@@ -138,14 +136,13 @@ public:
     /// @param error_code The `errno` of the error.
     /// @param format The format string for the message.
     /// @param args The format arguments.
-    template<typename... Ss>
-    SystemError(int error_code, const std::string & format, Ss&&... args)
-        : Error(
-            "{}: ({}) - {}",
-            fmt::format(format, std::forward<Ss>(args)...),
-            error_code,
-            std::system_category().default_error_condition(error_code).message()),
-          error_code(error_code) {}
+    template <typename... Ss>
+    SystemError(int error_code, const std::string & format, Ss &&... args)
+        : Error(format, std::forward<Ss>(args)...),
+          error_code(error_code),
+          has_user_message(true) {}
+
+    const char * what() const noexcept override;
 
     const char * get_domain_name() const noexcept override { return "libdnf"; }
     const char * get_name() const noexcept override { return "SystemError"; }
@@ -158,6 +155,7 @@ public:
 
 private:
     int error_code;
+    bool has_user_message;
 };
 
 
@@ -167,7 +165,7 @@ class RuntimeError : public Error {
 public:
     using Error::Error;
     const char * get_name() const noexcept override { return "RuntimeError"; }
-    virtual const char * get_description() const noexcept { return "General RuntimeError exception"; }
+    virtual const char * get_description() const noexcept;
 };
 
 

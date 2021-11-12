@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+
 #include <algorithm>
 #include <charconv>
 #include <system_error>
@@ -90,17 +92,48 @@ Error & Error::operator=(const Error & e) noexcept {
 const char * Error::what() const noexcept {
     if (!formatter) {
         // formatter not set means copy constructor or assigment operator failed
-        return std::runtime_error::what();
+        return TM_(std::runtime_error::what(), 1);
     }
 
     try {
-        if (message.empty()) {
-            message = formatter(std::runtime_error::what());
-        }
+        message = formatter(TM_(std::runtime_error::what(), 1));
         return message.c_str();
     } catch (...) {
-        return std::runtime_error::what();
+        return TM_(std::runtime_error::what(), 1);
     }
+}
+
+const char * SystemError::what() const noexcept {
+    std::string error_message;
+    try {
+        error_message = std::system_category().default_error_condition(error_code).message();
+    } catch (...) {}
+
+    if (has_user_message) {
+        try {
+            message = fmt::format(
+                "{}: ({}) - {}",
+                formatter ? formatter(TM_(std::runtime_error::what(), 1)) : TM_(std::runtime_error::what(), 1),
+                error_code,
+                error_message);
+        } catch (...) {
+            return TM_(std::runtime_error::what(), 1);
+        }
+    } else {
+        try {
+            message = fmt::format("({}) - {}", error_code, error_message);
+        } catch (...) {
+            if (error_message.empty()) {
+                return std::runtime_error::what();
+            }
+            message = std::move(error_message);
+        }
+    }
+    return message.c_str();
+}
+
+const char * RuntimeError::get_description() const noexcept {
+    return _("General RuntimeError exception");
 }
 
 }  // namespace libdnf
