@@ -166,30 +166,18 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
     auto & logger = *base->get_logger();
     auto & repo_impl = repo.p_impl;
 
-    bool build_cache = repo.get_config().build_cache().get_value();
-
     auto primary_fn = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_PRIMARY);
     if (primary_fn.empty()) {
         throw Exception(_("Failed to load repository: \"primary\" data not present or in unsupported format"));
     }
 
-    auto state = repo_impl->solv_repo.load_repo_main(repo_impl->downloader.get_repomd_filename(), primary_fn);
+    repo_impl->solv_repo.load_repo_main(repo_impl->downloader.get_repomd_filename(), primary_fn);
 
-    if (state == repo::RepodataState::LOADED_FETCH && build_cache) {
-        repo_impl->solv_repo.write_main(true);
-    }
-    repo_impl->solv_repo.main_nsolvables = repo_impl->solv_repo.repo->nsolvables;
-    repo_impl->solv_repo.main_nrepodata = repo_impl->solv_repo.repo->nrepodata;
-    repo_impl->solv_repo.main_end = repo_impl->solv_repo.repo->end;
     if (any(flags & LoadRepoFlags::FILELISTS)) {
         auto md_filename = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_FILELISTS);
 
         if (!md_filename.empty()) {
-            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::FILENAMES);
-
-            if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
-                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::FILENAMES);
-            }
+            repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::FILENAMES);
         } else {
             logger.debug(fmt::format("no filelists metadata available for {}", repo.get_id()));
         }
@@ -198,11 +186,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
         auto md_filename = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_OTHER);
 
         if (!md_filename.empty()) {
-            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::OTHER);
-
-            if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
-                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::OTHER);
-            }
+            repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::OTHER);
         } else {
             logger.debug(fmt::format("no other metadata available for {}", repo.get_id()));
         }
@@ -211,11 +195,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
         auto md_filename = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_PRESTODELTA);
 
         if (!md_filename.empty()) {
-            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::PRESTO);
-
-            if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
-                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::PRESTO);
-            }
+            repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::PRESTO);
         } else {
             logger.debug(fmt::format("no presto metadata available for {}", repo.get_id()));
         }
@@ -227,11 +207,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
         auto md_filename = repo.get_metadata_path(repo::Repo::Impl::MD_FILENAME_UPDATEINFO);
 
         if (!md_filename.empty()) {
-            auto repodata_info = repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::UPDATEINFO);
-
-            if (repodata_info.state == repo::RepodataState::LOADED_FETCH && build_cache) {
-                repo_impl->solv_repo.write_ext(repodata_info.id, repo::RepodataType::UPDATEINFO);
-            }
+            repo.p_impl->solv_repo.load_repo_ext(md_filename, repo::RepodataType::UPDATEINFO);
         } else {
             logger.debug(fmt::format("no updateinfo available for {}", repo.get_id()));
         }

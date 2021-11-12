@@ -214,9 +214,8 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     tmp_file.release();
 }
 
-RepodataState SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string & primary_fn) {
+void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string & primary_fn) {
     auto & logger = *base->get_logger();
-    RepodataState state = RepodataState::NEW;
 
     std::unique_ptr<std::FILE, decltype(&close_file)> fp_repomd(fopen(repomd_fn.c_str(), "rb"), &close_file);
     if (!fp_repomd) {
@@ -231,7 +230,6 @@ RepodataState SolvRepo::load_repo_main(const std::string & repomd_fn, const std:
             // TODO(lukash) improve error message
             throw SolvError(M_("repo_add_solv() has failed."));
         }
-        state = repo::RepodataState::LOADED_CACHE;
     } else {
         std::unique_ptr<std::FILE, decltype(&close_file)> fp_primary(solv_xfopen(primary_fn.c_str(), "r"), &close_file);
 
@@ -246,16 +244,19 @@ RepodataState SolvRepo::load_repo_main(const std::string & repomd_fn, const std:
             // TODO(lukash) improve error message
             throw SolvError(M_("repo_add_repomdxml/rpmmd() has failed."));
         }
-        state = repo::RepodataState::LOADED_FETCH;
+
+        if (config.build_cache().get_value()) {
+            write_main(true);
+        }
     }
 
-    return state;
+    main_nsolvables = repo->nsolvables;
+    main_nrepodata = repo->nrepodata;
+    main_end = repo->end;
 }
 
-RepodataInfo SolvRepo::load_repo_ext(const std::string & filename, RepodataType type) {
+void SolvRepo::load_repo_ext(const std::string & filename, RepodataType type) {
     auto & logger = *base->get_logger();
-
-    RepodataInfo info;
 
     auto fn_cache = solv_file_path(repodata_type_to_suffix(type));
 
@@ -266,9 +267,8 @@ RepodataInfo SolvRepo::load_repo_ext(const std::string & filename, RepodataType 
             // TODO(lukash) improve error message
             throw SolvError(M_("repo_add_solv() has failed."));
         }
-        info.state = RepodataState::LOADED_CACHE;
-        info.id = repo->nrepodata - 1;
-        return info;
+
+        return;
     }
 
     fp.reset(solv_xfopen(filename.c_str(), "r"));
@@ -299,9 +299,9 @@ RepodataInfo SolvRepo::load_repo_ext(const std::string & filename, RepodataType 
         throw SolvError(M_("Failed loading extended metadata type \"{}\": {}"), pool_errstr(*get_pool(base)));
     }
 
-    info.state = RepodataState::LOADED_FETCH;
-    info.id = repo->nrepodata - 1;
-    return info;
+    if (config.build_cache().get_value()) {
+        write_ext(repo->nrepodata - 1, type);
+    }
 }
 
 bool SolvRepo::load_system_repo(const std::string & rootdir) {

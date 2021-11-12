@@ -34,12 +34,6 @@ namespace libdnf::repo {
 
 using LibsolvRepo = ::Repo;
 enum class RepodataType { FILENAMES, PRESTO, UPDATEINFO, OTHER };
-enum class RepodataState { NEW, LOADED_FETCH, LOADED_CACHE };
-
-struct RepodataInfo {
-    RepodataState state;
-    Id id;
-};
 
 
 class SolvError : public Error {
@@ -61,10 +55,10 @@ public:
     void write_ext(Id repodata_id, RepodataType type);
 
     /// Loads main metadata (solvables) from available repo.
-    RepodataState load_repo_main(const std::string & repomd_fn, const std::string & primary_fn);
+    void load_repo_main(const std::string & repomd_fn, const std::string & primary_fn);
 
     /// Loads additional metadata (filelist, others, ...) from available repo.
-    RepodataInfo load_repo_ext(const std::string & filename, RepodataType type);
+    void load_repo_ext(const std::string & filename, RepodataType type);
 
     /// Loads system repository into the pool.
     ///
