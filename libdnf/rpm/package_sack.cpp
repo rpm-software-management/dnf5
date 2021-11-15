@@ -56,38 +56,19 @@ constexpr const char * CMDLINE_REPO_NAME = "@commandline";
 
 }  // end of anonymous namespace
 
-void PackageSack::Impl::rewrite_repos(libdnf::solv::IdQueue & addedfileprovides, libdnf::solv::IdQueue & addedfileprovides_inst) {
-    int i;
-    LibsolvRepo * libsolv_repo;
-    auto & pool = get_pool(base);
-    FOR_REPOS(i, libsolv_repo) {
-        auto repo = static_cast<repo::Repo *>(libsolv_repo->appdata);
-        if (!repo) {
-            continue;
-        }
-
-        if (repo->p_impl->type == repo::Repo::Type::SYSTEM) {
-            repo->p_impl->solv_repo.rewrite_repo(addedfileprovides_inst);
-        } else {
-            repo->p_impl->solv_repo.rewrite_repo(addedfileprovides);
-        }
-    }
-}
 
 void PackageSack::Impl::internalize_libsolv_repos() {
-    int i;
-    LibsolvRepo * libsolv_repo;
-    ::Pool * pool = *get_pool(base);
-
-    FOR_REPOS(i, libsolv_repo) { internalize_libsolv_repo(libsolv_repo); }
-}
-
-void PackageSack::Impl::internalize_libsolv_repo(LibsolvRepo * libsolv_repo) {
-    if (auto repo = static_cast<repo::Repo *>(libsolv_repo->appdata)) {
+    auto rq = repo::RepoQuery(base);
+    for (auto & repo : rq.get_data()) {
         repo->p_impl->solv_repo.internalize();
-    } else {
-        // TODO(jrohel): Do we allow existence of libsolv repo without appdata set?
-        repo_internalize(libsolv_repo);
+    }
+
+    if (system_repo) {
+        system_repo->p_impl->solv_repo.internalize();
+    }
+
+    if (cmdline_repo) {
+        cmdline_repo->p_impl->solv_repo.internalize();
     }
 }
 
@@ -96,15 +77,24 @@ void PackageSack::Impl::make_provides_ready() {
         return;
     }
 
-    auto & pool = get_pool(base);
-
     internalize_libsolv_repos();
+
+    auto & pool = get_pool(base);
     libdnf::solv::IdQueue addedfileprovides;
     libdnf::solv::IdQueue addedfileprovides_inst;
     pool_addfileprovides_queue(*pool, &addedfileprovides.get_queue(), &addedfileprovides_inst.get_queue());
-    if (!addedfileprovides.empty() || !addedfileprovides_inst.empty()) {
-        rewrite_repos(addedfileprovides, addedfileprovides_inst);
+
+    if (system_repo && !addedfileprovides_inst.empty()) {
+        system_repo->p_impl->solv_repo.rewrite_repo(addedfileprovides_inst);
     }
+
+    if (!addedfileprovides.empty()) {
+        auto rq = repo::RepoQuery(base);
+        for (auto & repo : rq.get_data()) {
+            repo->p_impl->solv_repo.rewrite_repo(addedfileprovides);
+        }
+    }
+
     pool_createwhatprovides(*pool);
     provides_ready = true;
 }

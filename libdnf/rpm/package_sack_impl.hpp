@@ -84,8 +84,6 @@ public:
 
     void internalize_libsolv_repos();
 
-    static void internalize_libsolv_repo(repo::LibsolvRepo * libsolv_repo);
-
     void make_provides_ready();
 
     PackageId get_running_kernel() const noexcept { return running_kernel; };
@@ -95,8 +93,6 @@ public:
 private:
     /// Loads available repository into PackageSack
     void load_available_repo(repo::Repo & repo, LoadRepoFlags flags);
-
-    void rewrite_repos(libdnf::solv::IdQueue & addedfileprovides, libdnf::solv::IdQueue & addedfileprovides_inst);
 
     bool considered_uptodate{true};
     bool provides_ready{false};
