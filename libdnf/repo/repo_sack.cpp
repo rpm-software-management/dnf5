@@ -27,6 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/option_bool.hpp"
 #include "libdnf/rpm/package_sack_impl.hpp"
 
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+
 #include <fmt/format.h>
 
 extern "C" {
@@ -62,11 +64,7 @@ static void libsolv_repo_free(LibsolvRepo * libsolv_repo) {
 RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path) {
     std::unique_ptr<std::FILE, decltype(&std::fclose)> testcase_file(solv_xfopen(path.c_str(), "r"), &std::fclose);
     if (!testcase_file) {
-        try {
-            throw SystemError(errno ? errno : EIO, path);
-        } catch (...) {
-            std::throw_with_nested(RuntimeError("Unable to open libsolv testcase file"));
-        }
+        throw SystemError(errno ? errno : EIO, M_("Unable to open libsolv testcase file \"{}\""), path);
     }
 
     auto repo = new_repo(repoid);

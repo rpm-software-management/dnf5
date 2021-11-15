@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/const.hpp"
 
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+
 #include <fmt/format.h>
 #include <glob.h>
 
@@ -86,7 +88,7 @@ static int str_to_bytes(const std::string & str) {
 static void add_from_file(std::ostream & out, const std::string & file_path) {
     std::ifstream ifs(file_path);
     if (!ifs) {
-        throw std::runtime_error("add_from_file(): Can't open file");
+        throw RuntimeError(M_("add_from_file(): Can't open file"));
     }
     ifs.exceptions(std::ifstream::badbit);
 

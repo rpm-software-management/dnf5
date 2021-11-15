@@ -19,9 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/repo/config_repo.hpp"
 
-#include "../conf/config_utils.hpp"
 
 #include "libdnf/conf/const.hpp"
+
+#include "libdnf/conf/config_utils.hpp"
+#include "libdnf/utils/bgettext/bgettext-lib.h"
 
 #include <solv/chksum.h>
 #include <solv/util.h>
@@ -564,7 +566,7 @@ std::string ConfigRepo::get_unique_id() const {
     static constexpr int USE_CHECKSUM_BYTES = 8;
     if (chksum_len < USE_CHECKSUM_BYTES) {
         solv_chksum_free(chksum_obj, nullptr);
-        throw RuntimeError("getCachedir(): Computation of SHA256 failed");
+        throw RuntimeError(M_("get_unique_id(): Computation of SHA256 failed"));
     }
     char chksum_cstr[USE_CHECKSUM_BYTES * 2 + 1];
     solv_bin2hex(chksum, USE_CHECKSUM_BYTES, chksum_cstr);

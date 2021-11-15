@@ -246,7 +246,7 @@ static std::unique_ptr<LrHandle> new_remote_handle(const C & config) {
     if (maxspeed != 0 && maxspeed < static_cast<float>(minrate)) {
         // TODO(lukash) not the best class for the error, possibly check in config parser?
         throw libdnf::repo::RepoDownloadError(
-            _("Maximum download speed is lower than minimum, "
+            M_("Maximum download speed is lower than minimum, "
               "please change configuration of minrate or throttle"));
     }
     handle_set_opt(h, LRO_LOWSPEEDLIMIT, static_cast<int64_t>(minrate));
@@ -357,7 +357,7 @@ void RepoDownloader::download_metadata(const std::string & destdir) try {
 } catch (const std::runtime_error & e) {
     auto src = get_source_info();
     throw_with_nested(RepoDownloadError(
-        _("Failed to download metadata ({}: \"{}\") for repository \"{}\""), src.first, src.second, config.get_id()));
+        M_("Failed to download metadata ({}: \"{}\") for repository \"{}\""), src.first, src.second, config.get_id()));
 }
 
 
@@ -426,7 +426,7 @@ bool RepoDownloader::is_metalink_in_sync() try {
     return true;
 } catch (const std::runtime_error & e) {
     throw_with_nested(RepoDownloadError(
-        _("Error checking if metalink \"{}\" is in sync for repository \"{}\""),
+        M_("Error checking if metalink \"{}\" is in sync for repository \"{}\""),
         get_source_info().second,
         config.get_id()));
 }
@@ -456,7 +456,7 @@ bool RepoDownloader::is_repomd_in_sync() try {
 } catch (const std::runtime_error & e) {
     auto src = get_source_info();
     throw_with_nested(RepoDownloadError(
-        _("Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""),
+        M_("Error checking if repomd ({}: \"{}\") is in sync for repository \"{}\""),
         src.first,
         src.second,
         config.get_id()));
@@ -484,7 +484,7 @@ void RepoDownloader::load_local() try {
 
     g_strfreev(lr_mirrors);
 } catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(_("Error loading local metadata for repository \"{}\""), config.get_id()));
+    throw_with_nested(RepoDownloadError(M_("Error loading local metadata for repository \"{}\""), config.get_id()));
 }
 
 
@@ -502,7 +502,7 @@ LrHandle * RepoDownloader::get_cached_handle() {
 std::string RepoDownloader::get_revision() const try {
     return libdnf::utils::string::c_to_str(get_yum_repomd(lr_result)->revision);
 } catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(_("Error retrieving revision from repository \"{}\""), config.get_id()));
+    throw_with_nested(RepoDownloadError(M_("Error retrieving revision from repository \"{}\""), config.get_id()));
 }
 
 
@@ -516,7 +516,7 @@ int RepoDownloader::get_max_timestamp() const try {
     return res;
 } catch (const std::runtime_error & e) {
     throw_with_nested(
-        RepoDownloadError(_("Error retrieving maximum timestamp from repository \"{}\""), config.get_id()));
+        RepoDownloadError(M_("Error retrieving maximum timestamp from repository \"{}\""), config.get_id()));
 }
 
 std::map<std::string, std::string> RepoDownloader::get_metadata_paths() const try {
@@ -531,7 +531,7 @@ std::map<std::string, std::string> RepoDownloader::get_metadata_paths() const tr
 
     return res;
 } catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(_("Error retrieving metadata paths from repository \"{}\""), config.get_id()));
+    throw_with_nested(RepoDownloadError(M_("Error retrieving metadata paths from repository \"{}\""), config.get_id()));
 }
 
 std::vector<std::string> RepoDownloader::get_content_tags() const try {
@@ -545,7 +545,7 @@ std::vector<std::string> RepoDownloader::get_content_tags() const try {
 
     return res;
 } catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(_("Error retrieving content tags from repository \"{}\""), config.get_id()));
+    throw_with_nested(RepoDownloadError(M_("Error retrieving content tags from repository \"{}\""), config.get_id()));
 }
 
 std::vector<std::pair<std::string, std::string>> RepoDownloader::get_distro_tags() const try {
@@ -562,7 +562,7 @@ std::vector<std::pair<std::string, std::string>> RepoDownloader::get_distro_tags
 
     return res;
 } catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(_("Error retrieving distro tags from repository \"{}\""), config.get_id()));
+    throw_with_nested(RepoDownloadError(M_("Error retrieving distro tags from repository \"{}\""), config.get_id()));
 }
 
 std::vector<std::pair<std::string, std::string>> RepoDownloader::get_metadata_locations() const try {
@@ -578,7 +578,7 @@ std::vector<std::pair<std::string, std::string>> RepoDownloader::get_metadata_lo
     return res;
 } catch (const std::runtime_error & e) {
     throw_with_nested(
-        RepoDownloadError(_("Error retrieving metadata locations from repository \"{}\""), config.get_id()));
+        RepoDownloadError(M_("Error retrieving metadata locations from repository \"{}\""), config.get_id()));
 }
 
 
@@ -648,7 +648,7 @@ std::unique_ptr<LrHandle> RepoDownloader::init_remote_handle(const char * destdi
         handle_set_opt(h.get(), LRO_URLS, urls);
     } else {
         throw RepoDownloadError(
-            _("No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""), config.get_id());
+            M_("No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""), config.get_id());
     }
 
     handle_set_opt(h.get(), LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));

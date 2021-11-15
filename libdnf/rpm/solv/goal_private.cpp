@@ -290,7 +290,7 @@ libdnf::solv::IdQueue GoalPrivate::list_results(Id type_filter1, Id type_filter2
         //}
 
         // TODO(lukash) replace with a proper and descriptive exception
-        throw std::runtime_error("no solution possible");
+        throw RuntimeError(M_("no solution possible"));
     }
 
     libdnf::solv::IdQueue result_ids;
@@ -411,7 +411,7 @@ void GoalPrivate::write_debugdata(const std::string & dir) {
 
     if (!ret) {
         // TODO(jmracek) replace error with Goal Error
-        throw std::runtime_error("failed writing debugdata");
+        throw RuntimeError(M_("failed writing debugdata"));
     }
     //         std::string msg = tfm::format(_("failed writing debugdata to %1$s: %2$s"),
     //                                       absdir, strerror(errno));
@@ -653,7 +653,7 @@ transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
 
 libdnf::solv::IdQueue GoalPrivate::list_obsoleted_by_package(Id id) {
     if (!libsolv_transaction) {
-        throw std::runtime_error("no solution possible");
+        throw RuntimeError(M_("no solution possible"));
     }
     libdnf::solv::IdQueue obsoletes;
     transaction_all_obs_pkgs(libsolv_transaction, id, &obsoletes.get_queue());

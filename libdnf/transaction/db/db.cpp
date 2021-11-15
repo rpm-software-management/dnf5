@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+
 #include <filesystem>
 
 
@@ -66,7 +68,7 @@ void transaction_db_create(libdnf::utils::SQLite3 & conn) {
     if (query_get_schema_version.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         schema_version = query_get_schema_version.get<std::string>(0);
     } else {
-        throw std::runtime_error("Unable to get 'version' from table 'config'");
+        throw RuntimeError(M_("Unable to get 'version' from table 'config'"));
     }
 
     // TODO(dmach): migrations

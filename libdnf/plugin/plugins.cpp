@@ -83,7 +83,7 @@ void Plugins::load_plugin(const std::string & file_path) {
 void Plugins::load_plugins(const std::string & dir_path) {
     auto & logger = *base->get_logger();
     if (dir_path.empty())
-        throw std::runtime_error(_("Plugins::loadPlugins() dirPath cannot be empty"));
+        throw RuntimeError(M_("Plugins::loadPlugins() dirPath cannot be empty"));
 
     std::vector<std::filesystem::path> lib_names;
     for (auto & p : std::filesystem::directory_iterator(dir_path)) {
@@ -105,7 +105,7 @@ void Plugins::load_plugins(const std::string & dir_path) {
     }
 
     if (!error_msgs.empty()) {
-        throw std::runtime_error(error_msgs);
+        throw RuntimeError(M_("Can't load plugins"));
     }
 }
 

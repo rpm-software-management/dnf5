@@ -92,7 +92,7 @@ void comps_environment_groups_insert(libdnf::utils::SQLite3 & conn, CompsEnviron
             env.get_item_id(), grp->get_group_id(), grp->get_installed(), static_cast<int>(grp->get_group_type()));
         if (query->step() != libdnf::utils::SQLite3::Statement::StepResult::DONE) {
             // TODO(dmach): replace with a better exception class
-            throw std::runtime_error("");
+            throw RuntimeError("");
         }
         grp->set_id(query->last_insert_rowid());
         query->reset();

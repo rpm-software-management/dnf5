@@ -348,7 +348,7 @@ void Group::dump(const std::string & path) {
 
     // Save the document
     if (xmlSaveFile(path.c_str(), doc) == -1) {
-        throw std::runtime_error("failed to save xml document for comps");
+        throw RuntimeError(M_("failed to save xml document for comps"));
     }
 
     // Memory free

@@ -409,7 +409,7 @@ public:
         auto rc = rpmtsAddReinstallElement(ts, header, &item);
         headerFree(header);
         if (rc != 0) {
-            throw Exception(fmt::format(_("Can't reinstall package \"{}\""), item.get_package().get_full_nevra()));
+            throw Exception(M_("Can't reinstall package \"{}\""), item.get_package().get_full_nevra());
         }
         libdnf_assert(
             last_item_added_ts_element,
@@ -428,7 +428,7 @@ public:
         int rc = rpmtsAddEraseElement(ts, header, unused);
         headerFree(header);
         if (rc != 0) {
-            throw Exception(fmt::format(_("Can't remove package \"{}\""), item.get_package().get_full_nevra()));
+            throw Exception(M_("Can't remove package \"{}\""), item.get_package().get_full_nevra());
         }
         if (!last_item_added_ts_element) {
             auto it = implicit_ts_elements.find(rpmdb_id);
@@ -530,11 +530,11 @@ public:
         // rec_offset must be unsigned int
         auto * iter = rpmtsInitIterator(ts, RPMDBI_PACKAGES, &rec_offset, sizeof(rec_offset));
         if (!iter) {
-            throw Exception(_("Fatal error, run database recovery"));
+            throw Exception(M_("Fatal error, run database recovery"));
         }
         hdr = rpmdbNextIterator(iter);
         if (!hdr) {
-            throw Exception(_("failed to find package"));
+            throw Exception(M_("Failed to find package"));
         }
         headerLink(hdr);
         rpmdbFreeIterator(iter);
@@ -835,7 +835,7 @@ void Transaction::Impl::install_up_down(TransactionItem & item, libdnf::transact
     auto rc = rpmtsAddInstallElement(ts, header, &item, upgrade ? 1 : 0, nullptr);
     headerFree(header);
     if (rc != 0) {
-        throw Exception(fmt::format(_("Can't {} package \"{}\""), msg_action, item.get_package().get_full_nevra()));
+        throw Exception(M_("Can't {} package \"{}\""), msg_action, item.get_package().get_full_nevra());
     }
     libdnf_assert(
         last_item_added_ts_element,

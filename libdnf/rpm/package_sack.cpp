@@ -157,7 +157,7 @@ void PackageSack::Impl::write_main(repo::LibsolvRepoExt & libsolv_repo_ext, bool
     int ret = repo_write(libsolv_repo, fp);
     ret |= checksum_write(libsolv_repo_ext.checksum, fp);
     if (ret) {
-        throw Exception(_("write_main() failed writing data"));
+        throw Exception(M_("write_main() failed writing data"));
         // g_set_error (error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("write_main() failed writing data: %i"), rc);
     }
 
@@ -171,7 +171,7 @@ void PackageSack::Impl::write_main(repo::LibsolvRepoExt & libsolv_repo_ext, bool
             int ret = repo_add_solv(libsolv_repo, fp.get(), 0);
             if (ret) {
                 /* this is pretty fatal */
-                throw Exception(_("write_main() failed to re-load written solv file"));
+                throw Exception(M_("write_main() failed to re-load written solv file"));
                 // g_set_error_literal (error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("write_main() failed to re-load " "written solv file"));
             }
         }
@@ -220,7 +220,7 @@ void PackageSack::Impl::write_ext(
     }
     ret |= checksum_write(libsolv_repo_ext.checksum, fp);
     if (ret) {
-        throw Exception(_("write_ext() has failed"));
+        throw Exception(M_("write_ext() has failed"));
         // g_set_error(error, DNF_ERROR, DNF_ERROR_FAILED, _("write_ext(%1$d) has failed: %2$d"), which_repodata, ret);
     }
 
@@ -322,7 +322,7 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & 
         //const char *chksum = pool_checksum_str(pool, repoImpl->checksum);
         //logger.debug("using cached %s (0x%s)", name, chksum);
         if (repo_add_solv(libsolv_repo.get(), fp_cache.get(), 0)) {
-            throw Exception(_("repo_add_solv() has failed."));
+            throw Exception(M_("repo_add_solv() has failed."));
             // g_set_error (error, DNF_ERROR, DNF_ERROR_INTERNAL_ERROR, _("repo_add_solv() has failed."));
         }
         data_state = RepodataState::LOADED_CACHE;
@@ -331,7 +331,7 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & 
         if (primary.empty()) {
             // It could happen when repomd file has no "primary" data or they are in unsupported
             // format like zchunk
-            throw Exception(_("loading of MD_FILENAME_PRIMARY has failed."));
+            throw Exception(M_("loading of MD_FILENAME_PRIMARY has failed."));
             // g_set_error (error, DNF_ERROR, DNF_ERROR_INTERNAL_ERROR, _("loading of MD_FILENAME_PRIMARY has failed."));
         }
         std::unique_ptr<std::FILE, decltype(&close_file)> fp_primary(solv_xfopen(primary.c_str(), "r"), &close_file);
@@ -344,7 +344,7 @@ PackageSack::Impl::RepodataState PackageSack::Impl::load_repo_main(repo::Repo & 
         logger.debug(std::string("fetching ") + id);
         if (repo_add_repomdxml(libsolv_repo.get(), fp_repomd.get(), 0) ||
             repo_add_rpmmd(libsolv_repo.get(), fp_primary.get(), 0, 0)) {
-            throw Exception(_("repo_add_repomdxml/rpmmd() has failed."));
+            throw Exception(M_("repo_add_repomdxml/rpmmd() has failed."));
             // g_set_error (error, DNF_ERROR,  DNF_ERROR_INTERNAL_ERROR, _("repo_add_repomdxml/rpmmd() has failed."));
         }
         data_state = RepodataState::LOADED_FETCH;
@@ -367,7 +367,7 @@ PackageSack::Impl::RepodataInfo PackageSack::Impl::load_repo_ext(
     auto fn = repo.get_metadata_path(which_filename);
     if (fn.empty()) {
         // g_set_error (error, DNF_ERROR, DNF_ERROR_NO_CAPABILITY, _("no %1$s string for %2$s"), which_filename, repo_id);
-        throw NoCapability(fmt::format(_("no {0} string for {1}"), which_filename, repo_id));
+        throw NoCapability(M_("no {0} string for {1}"), which_filename, repo_id);
     }
 
     auto fn_cache = repo_solv_cache_path(repo_id, suffix);
@@ -376,7 +376,7 @@ PackageSack::Impl::RepodataInfo PackageSack::Impl::load_repo_ext(
         logger.debug(fmt::format("{}: using cache file: {}", __func__, fn_cache));
         if (repo_add_solv(libsolv_repo, fp.get(), flags) != 0) {
             // g_set_error_literal (error, DNF_ERROR, DNF_ERROR_INTERNAL_ERROR, _("failed to add solv"));
-            throw Exception(_("repo_add_solv() has failed."));
+            throw Exception(M_("repo_add_solv() has failed."));
         }
         info.state = RepodataState::LOADED_CACHE;
         info.id = libsolv_repo->nrepodata - 1;
@@ -386,7 +386,7 @@ PackageSack::Impl::RepodataInfo PackageSack::Impl::load_repo_ext(
     fp.reset(solv_xfopen(fn.c_str(), "r"));
     if (!fp) {
         // g_set_error (error, DNF_ERROR, DNF_ERROR_FILE_INVALID, _("failed to open: %s"), fn.c_str());
-        throw Exception(fmt::format(_("failed to open: {}"), fn));
+        throw Exception(M_("failed to open: {}"), fn);
     }
     logger.debug(fmt::format("{}: loading: {}", __func__, fn.c_str()));
 

@@ -88,14 +88,14 @@ ReldepId Reldep::get_reldep_id(const BaseWeakPtr & base, const std::string & rel
         Id id = pool_parserpmrichdep(*get_pool(base), reldep_str.c_str());
         // TODO(jmracek) Replace runtime_error. Do we need to throw an error?
         if (id == 0) {
-            throw std::runtime_error("Cannot parse a dependency string");
+            throw RuntimeError(M_("Cannot parse a dependency string"));
         }
         return ReldepId(id);
     }
 
     libdnf::solv::ReldepParser dep_splitter;
     if (!dep_splitter.parse(reldep_str)) {
-        throw std::runtime_error("Cannot parse a dependency string");
+        throw RuntimeError(M_("Cannot parse a dependency string"));
     }
     return get_reldep_id(
         base, dep_splitter.get_name_cstr(), dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type(), create);

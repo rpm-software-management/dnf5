@@ -67,11 +67,11 @@ namespace libdnf::repo {
 
 static void is_readable_rpm(const std::string & fn) {
     if (std::filesystem::path(fn).extension() != ".rpm") {
-        throw RepoRpmError(_("Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"), fn);
+        throw RepoRpmError(M_("Failed to load RPM \"{}\": doesn't have the \".rpm\" extension"), fn);
     }
 
     if (access(fn.c_str(), R_OK) != 0) {
-        throw RepoRpmError(_("Failed to access RPM \"{}\": {}"), fn, strerror(errno));
+        throw RepoRpmError(M_("Failed to access RPM \"{}\": {}"), fn, strerror(errno));
     }
 }
 
@@ -131,7 +131,7 @@ Repo::Repo(const std::string & id, Base & base, Repo::Type type) {
     if (type == Type::AVAILABLE) {
         auto idx = verify_id(id);
         if (idx != std::string::npos) {
-            throw RepoError(_("Invalid repository id \"{}\": unexpected character '{}'"), id, id[idx]);
+            throw RepoError(M_("Invalid repository id \"{}\": unexpected character '{}'"), id, id[idx]);
         }
     }
     p_impl.reset(new Impl(*this, id, type, base));
@@ -152,7 +152,7 @@ void Repo::verify() const {
         (p_impl->config.metalink().empty() || p_impl->config.metalink().get_value().empty()) &&
         (p_impl->config.mirrorlist().empty() || p_impl->config.mirrorlist().get_value().empty())) {
         throw RepoError(
-            _("Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."), p_impl->config.get_id());
+            M_("Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."), p_impl->config.get_id());
     }
 
     const auto & type = p_impl->config.type().get_value();
@@ -163,7 +163,7 @@ void Repo::verify() const {
                 return;
             }
         }
-        throw RepoError(_("Repository \"{}\" has unsupported type \"{}\", skipping."), p_impl->config.get_id(), type);
+        throw RepoError(M_("Repository \"{}\" has unsupported type \"{}\", skipping."), p_impl->config.get_id(), type);
     }
 }
 
@@ -320,7 +320,7 @@ bool Repo::Impl::load() {
         }
     }
     if (sync_strategy == SyncStrategy::ONLY_CACHE) {
-        throw RepoError(_("Cache-only enabled but no cache for repository \"{}\""), config.get_id());
+        throw RepoError(M_("Cache-only enabled but no cache for repository \"{}\""), config.get_id());
     }
 
     logger.debug(fmt::format(_("repo: downloading from remote: {}"), config.get_id()));
@@ -478,7 +478,7 @@ Id Repo::Impl::add_rpm_package(const std::string & fn, bool add_with_hdrid) {
 
     Id new_id = repo_add_rpm(libsolv_repo_ext.repo, fn.c_str(), flags);
     if (new_id == 0) {
-        throw RepoRpmError(_("Failed to load RPM \"{}\": {}"), fn, pool_errstr(libsolv_repo_ext.repo->pool));
+        throw RepoRpmError(M_("Failed to load RPM \"{}\": {}"), fn, pool_errstr(libsolv_repo_ext.repo->pool));
     }
     libsolv_repo_ext.set_needs_internalizing();
     return new_id;
@@ -590,7 +590,7 @@ long LibrepoLog::add_handler(const std::string & file_path, bool debug) {
     // Open the file
     FILE * fd = fopen(file_path.c_str(), "ae");
     if (!fd) {
-        throw RuntimeError(fmt::format(_("Cannot open {}: {}"), file_path, g_strerror(errno)));
+        throw RuntimeError(fmt::format(M_("Cannot open {}: {}"), file_path, g_strerror(errno)));
     }
 
     // Setup user data
@@ -634,7 +634,7 @@ void LibrepoLog::remove_handler(long uid) {
         ++it;
     }
     if (it == lr_log_datas.end()) {
-        throw RuntimeError(fmt::format(_("Log handler with id {} doesn't exist"), uid));
+        throw RuntimeError(fmt::format(M_("Log handler with id {} doesn't exist"), uid));
     }
 
     // Remove the handler and free the data

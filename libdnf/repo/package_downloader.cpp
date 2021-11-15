@@ -162,7 +162,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
         throw LibrepoError(std::unique_ptr<GError>(err));
     }
 } catch (const std::runtime_error & e) {
-    throw_with_nested(PackageDownloadError(_("Failed to download packages")));
+    throw_with_nested(PackageDownloadError(M_("Failed to download packages")));
 }
 
 }  // namespace libdnf::repo

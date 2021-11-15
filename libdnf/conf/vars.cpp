@@ -18,6 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "libdnf/conf/vars.hpp"
+#include "libdnf/common/exception.hpp"
+
+#include "libdnf/utils/bgettext/bgettext-lib.h"
 
 #include <dirent.h>
 #include <sys/types.h>
@@ -102,7 +105,7 @@ static void init_lib_rpm() {
     static bool lib_rpm_initiated{false};
     if (!lib_rpm_initiated) {
         if (rpmReadConfigFiles(nullptr, nullptr) != 0) {
-            throw std::runtime_error("failed to read rpm config files\n");
+            throw RuntimeError(M_("failed to read rpm config files"));
         }
         lib_rpm_initiated = true;
     }

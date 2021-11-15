@@ -19,6 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/sack/match_string.hpp"
 
+#include "libdnf/common/exception.hpp"
+
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+
 #include <fnmatch.h>
 
 #include <regex>
@@ -72,18 +76,18 @@ bool match_string(const std::string & value, QueryCmp cmp, const std::string & p
         case QueryCmp::ISTARTSWITH:
         case QueryCmp::ENDSWITH:
         case QueryCmp::IENDSWITH:
-            throw std::runtime_error("Not implemented yet");
+            throw RuntimeError(M_("Not implemented yet"));
             break;
         case QueryCmp::ISNULL:
         case QueryCmp::LT:
         case QueryCmp::LTE:
         case QueryCmp::GT:
         case QueryCmp::GTE:
-            throw std::runtime_error("Unsupported operator");
+            throw RuntimeError(M_("Unsupported operator"));
             break;
         case QueryCmp::NOT:
         case QueryCmp::ICASE:
-            throw std::runtime_error("Operator flag cannot be used standalone");
+            throw RuntimeError(M_("Operator flag cannot be used standalone"));
             break;
     }
     return result;

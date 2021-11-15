@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
 
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+
 #include <fmt/format.h>
 
 #include <climits>
@@ -187,7 +189,7 @@ public:
 
             if (converted == ULONG_MAX || *endptr != '\0') {
                 // TODO(lukash) throw proper exception class
-                throw RuntimeError(fmt::format("Failed to convert epoch \"{}\" to number", evr.e));
+                throw RuntimeError(M_("Failed to convert epoch \"{}\" to number"), evr.e);
             }
 
             return converted;

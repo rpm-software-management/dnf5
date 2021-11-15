@@ -32,6 +32,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/sack.hpp"
 
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+
 #include <vector>
 
 
@@ -75,7 +77,7 @@ TransactionQuery & TransactionQuery::filter_id(const std::vector<int64_t> & patt
         case libdnf::sack::QueryCmp::IGLOB:
         case libdnf::sack::QueryCmp::NOT_IGLOB:
             // TODO(dmach): Replace with a different exception class
-            throw std::runtime_error("Unsupported comparison operator");
+            throw RuntimeError(M_("Unsupported comparison operator"));
             break;
     }
 

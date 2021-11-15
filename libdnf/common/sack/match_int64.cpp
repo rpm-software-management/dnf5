@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 
+#include "libdnf/utils/bgettext/bgettext-lib.h"
+
 #include <stdexcept>
 
 
@@ -65,11 +67,11 @@ bool match_int64(int64_t value, QueryCmp cmp, int64_t pattern) {
         case QueryCmp::ENDSWITH:
         case QueryCmp::IENDSWITH:
         case QueryCmp::ISNULL:
-            throw std::runtime_error("Unsupported operator");
+            throw RuntimeError(M_("Unsupported operator"));
             break;
         case QueryCmp::NOT:
         case QueryCmp::ICASE:
-            throw std::runtime_error("Operator flag cannot be used standalone");
+            throw RuntimeError(M_("Operator flag cannot be used standalone"));
             break;
     }
     return result;
