@@ -34,20 +34,12 @@ extern "C" {
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupTest);
 
 
-void CompsGroupTest::setUp() {
-    base = std::make_unique<libdnf::Base>();
-}
-
-
-void CompsGroupTest::tearDown() {}
-
-
 void CompsGroupTest::test_load() {
     std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    const char * reponame = "repo";
-    libdnf::comps::Comps comps(*base.get());
+    libdnf::comps::Comps comps(base);
+    auto repo = repo_sack->new_repo("repo");
 
-    comps.load_from_file(data_path / "core.xml", reponame);
+    comps.load_from_file(repo, data_path / "core.xml");
     libdnf::comps::GroupQuery q_core(comps.get_group_sack());
     q_core.filter_installed(false);
     q_core.filter_groupid("core");
@@ -75,7 +67,7 @@ void CompsGroupTest::test_load() {
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_condition(), core.get_packages()[i].get_condition());
     }
 
-    comps.load_from_file(data_path / "standard.xml", reponame);
+    comps.load_from_file(repo, data_path / "standard.xml");
     libdnf::comps::GroupQuery q_standard(comps.get_group_sack());
     q_standard.filter_installed(false);
     q_standard.filter_groupid("standard");
@@ -105,10 +97,10 @@ void CompsGroupTest::test_load() {
 
 void CompsGroupTest::test_load_defaults() {
     std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    const char * reponame = "repo";
-    libdnf::comps::Comps comps(*base.get());
+    libdnf::comps::Comps comps(base);
+    auto repo = repo_sack->new_repo("repo");
 
-    comps.load_from_file(data_path / "core-empty.xml", reponame);
+    comps.load_from_file(repo, data_path / "core-empty.xml");
     libdnf::comps::GroupQuery q_core_empty(comps.get_group_sack());
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
@@ -128,13 +120,13 @@ void CompsGroupTest::test_load_defaults() {
 
 void CompsGroupTest::test_merge() {
     std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    const char * reponame = "repo";
-    libdnf::comps::Comps comps(*base.get());
+    libdnf::comps::Comps comps(base);
+    auto repo = repo_sack->new_repo("repo");
 
-    comps.load_from_file(data_path / "core.xml", reponame);
-    comps.load_from_file(data_path / "standard.xml", reponame);
+    comps.load_from_file(repo, data_path / "core.xml");
+    comps.load_from_file(repo, data_path / "standard.xml");
     // load another definiton of the core group that changes all attributes
-    comps.load_from_file(data_path / "core-v2.xml", reponame);
+    comps.load_from_file(repo, data_path / "core-v2.xml");
 
     libdnf::comps::GroupQuery q_core2(comps.get_group_sack());
     q_core2.filter_groupid("core");
@@ -167,13 +159,13 @@ void CompsGroupTest::test_merge() {
 
 void CompsGroupTest::test_merge_with_empty() {
     std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    const char * reponame = "repo";
-    libdnf::comps::Comps comps(*base.get());
+    libdnf::comps::Comps comps(base);
+    auto repo = repo_sack->new_repo("repo");
 
-    comps.load_from_file(data_path / "core.xml", reponame);
-    comps.load_from_file(data_path / "standard.xml", reponame);
+    comps.load_from_file(repo, data_path / "core.xml");
+    comps.load_from_file(repo, data_path / "standard.xml");
     // load another definiton of the core group that has all attributes empty
-    comps.load_from_file(data_path / "core-empty.xml", reponame);
+    comps.load_from_file(repo, data_path / "core-empty.xml");
 
     libdnf::comps::GroupQuery q_core_empty(comps.get_group_sack());
     q_core_empty.filter_groupid("core");
@@ -196,14 +188,14 @@ void CompsGroupTest::test_merge_with_empty() {
 
 void CompsGroupTest::test_merge_empty_with_nonempty() {
     std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    const char * reponame = "repo";
-    libdnf::comps::Comps comps(*base.get());
+    libdnf::comps::Comps comps(base);
+    auto repo = repo_sack->new_repo("repo");
 
     // load definiton of the core group that has all attributes empty
-    comps.load_from_file(data_path / "core-empty.xml", reponame);
-    comps.load_from_file(data_path / "standard.xml", reponame);
+    comps.load_from_file(repo, data_path / "core-empty.xml");
+    comps.load_from_file(repo, data_path / "standard.xml");
     // load another definiton of the core group that has all attributes filled
-    comps.load_from_file(data_path / "core.xml", reponame);
+    comps.load_from_file(repo, data_path / "core.xml");
 
     libdnf::comps::GroupQuery q_core(comps.get_group_sack());
     q_core.filter_groupid("core");
@@ -235,18 +227,18 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
 
 void CompsGroupTest::test_dump_and_load() {
     std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    const char * reponame = "repo";
-    libdnf::comps::Comps comps(*base.get());
+    libdnf::comps::Comps comps(base);
+    auto repo = repo_sack->new_repo("repo");
 
-    comps.load_from_file(data_path / "standard.xml", reponame);
+    comps.load_from_file(repo, data_path / "standard.xml");
     libdnf::comps::GroupQuery q_standard(comps.get_group_sack());
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
 
     auto dumped_standard_path = std::filesystem::temp_directory_path() / "dumped-standard.xml";
     standard.dump(dumped_standard_path);
-    libdnf::comps::Comps comps2(*base.get());
-    comps2.load_from_file(dumped_standard_path, reponame);
+    libdnf::comps::Comps comps2(base);
+    comps2.load_from_file(repo, dumped_standard_path);
 
     libdnf::comps::GroupQuery q_dumped_standard(comps.get_group_sack());
     q_dumped_standard.filter_groupid("standard");

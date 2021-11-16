@@ -49,45 +49,18 @@ void Comps::load_installed() {
 
     auto system_repo = get_base()->get_rpm_package_sack()->get_system_repo();
     // TODO(dmach): use system-state dir
-    load_from_file(*system_repo, "/var/lib/dnf/system-state/comps-installed.xml.zst");
+    load_from_file(system_repo, "/var/lib/dnf/system-state/comps-installed.xml.zst");
 }
 
 
-// TODO(dmach): remove; refactor tests accordingly
-void Comps::load_from_file(const std::string & path, const char * reponame) {
-    libdnf::solv::Pool & spool = get_pool(get_base());
-    Pool * pool = *spool;
-    Repo * repo = 0;
-    Repo * tmp_repo = 0;
-    Id repoid;
-    // Search for repo named reponame
-    FOR_REPOS(repoid, tmp_repo) {
-        if (!strcasecmp(tmp_repo->name, reponame)) {
-            repo = tmp_repo;
-            break;
-        }
-    }
-    // If repo named reponame doesn't exist, create new repo
-    if (!repo) {
-        repo = repo_create(pool, reponame);
-    }
-
-    FILE * xml_doc = fopen(path.c_str(), "r");
-    // Load comps from the file
-    // TODO(pkratoch): libsolv doesn't support environments yet
-    repo_add_comps(repo, xml_doc, 0);
-    fclose(xml_doc);
-}
-
-
-void Comps::load_from_file(repo::Repo & repo, const std::string & path) {
+void Comps::load_from_file(const repo::RepoWeakPtr & repo, const std::string & path) {
     if (!std::filesystem::exists(path)) {
         return;
     }
 
     // TODO(pkratoch): libsolv doesn't support environments yet
     FILE * xml_doc = solv_xfopen(path.c_str(), "r");
-    repo_add_comps(repo.p_impl->solv_repo.repo, xml_doc, 0);
+    repo_add_comps(repo->p_impl->solv_repo.repo, xml_doc, 0);
     fclose(xml_doc);
 }
 

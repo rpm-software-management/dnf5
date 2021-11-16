@@ -166,7 +166,7 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
             path = repo_impl->get_metadata_path(repo::Repo::Impl::MD_FILENAME_GROUP);
         }
         if (!path.empty()) {
-            base->get_comps()->load_from_file(repo, path);
+            base->get_comps()->load_from_file(repo.get_weak_ptr(), path);
         }
     }
 

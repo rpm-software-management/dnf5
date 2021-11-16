@@ -17,6 +17,7 @@
 
 
 import os
+import tempfile
 import unittest
 
 import libdnf
@@ -25,9 +26,14 @@ import libdnf
 class TestGroup(unittest.TestCase):
     def test_group(self):
         base = libdnf.base.Base()
+
+        # Sets path to cache directory.
+        tmpdir = tempfile.mkdtemp(prefix="libdnf-python3-test-comps-")
+        base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, tmpdir)
+
+        repo = base.get_repo_sack().new_repo("repo")
         comps = libdnf.comps.Comps(base)
-        reponame = "repo"
         data_path = os.path.join(os.getcwd(), "../../../test/libdnf/comps/data/core.xml")
-        comps.load_from_file(data_path, reponame)
+        comps.load_from_file(repo, data_path)
         q_core = libdnf.comps.GroupQuery(comps.get_group_sack())
         core = q_core.get()
