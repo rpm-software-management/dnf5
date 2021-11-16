@@ -51,6 +51,12 @@ constexpr const char * SOLVABLE_NAME_ADVISORY_PREFIX = "patch:";
 constexpr size_t SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH = std::char_traits<char>::length(SOLVABLE_NAME_ADVISORY_PREFIX);
 
 
+repo::Repo & get_repo(Solvable * solvable) {
+    libdnf_assert(solvable->repo->appdata != nullptr, "libsolv repo without libdnf repo set in appdata");
+    return *static_cast<repo::Repo *>(solvable->repo->appdata);
+}
+
+
 class Pool;
 
 class TempEvr {
@@ -223,9 +229,8 @@ public:
         return is_installed(id2solvable(id));
     }
 
-    repo::Repo * get_repo(Id id) const noexcept {
-        auto solvable = id2solvable(id);
-        return static_cast<repo::Repo *>(solvable->repo->appdata);
+    repo::Repo & get_repo(Id id) const {
+        return solv::get_repo(id2solvable(id));
     }
 
     const char * get_sourcerpm(Id id) const;

@@ -281,13 +281,11 @@ unsigned long long Package::get_rpmdbid() const {
 }
 
 libdnf::repo::RepoWeakPtr Package::get_repo() const {
-    // TODO(lukash) handle nullptr - is it a possibility?
-    return get_pool(base).get_repo(id.id)->get_weak_ptr();
+    return get_pool(base).get_repo(id.id).get_weak_ptr();
 }
 
 std::string Package::get_repo_id() const {
-    // TODO(lukash) handle nullptr - is it a possibility?
-    return get_pool(base).get_repo(id.id)->get_id();
+    return get_pool(base).get_repo(id.id).get_id();
 }
 
 libdnf::transaction::TransactionItemReason Package::get_reason() const {
