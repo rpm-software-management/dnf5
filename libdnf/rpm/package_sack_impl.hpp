@@ -94,7 +94,6 @@ private:
     /// Loads available repository into PackageSack
     void load_available_repo(repo::Repo & repo, LoadRepoFlags flags);
 
-    bool considered_uptodate{true};
     bool provides_ready{false};
 
     BaseWeakPtr base;

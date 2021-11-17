@@ -161,7 +161,6 @@ void PackageSack::Impl::load_available_repo(repo::Repo & repo, LoadRepoFlags fla
     }
 
     provides_ready = false;
-    considered_uptodate = false;
 }
 
 
@@ -182,7 +181,6 @@ void PackageSack::create_system_repo(bool build_cache) {
     p_impl->system_repo->p_impl->solv_repo.load_system_repo();
 
     p_impl->provides_ready = false;
-    p_impl->considered_uptodate = false;
 }
 
 
@@ -213,7 +211,6 @@ Package PackageSack::add_cmdline_package(const std::string & fn, bool add_with_h
     auto new_id = repo.p_impl->add_rpm_package(fn, add_with_hdrid);
 
     p_impl->provides_ready = false;
-    p_impl->considered_uptodate = false;
     return Package(p_impl->base, PackageId(new_id));
 }
 
@@ -235,7 +232,6 @@ Package PackageSack::add_system_package(const std::string & fn, bool add_with_hd
     auto new_id = repo.p_impl->add_rpm_package(fn, add_with_hdrid);
 
     p_impl->provides_ready = false;
-    p_impl->considered_uptodate = false;
     return Package(p_impl->base, PackageId(new_id));
 }
 
