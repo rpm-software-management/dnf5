@@ -79,7 +79,7 @@ void RemoveCommand::run() {
 
     // To search in the system repository (installed packages)
     // Creates system repository in the repo_sack and loads it into rpm::PackageSack.
-    package_sack.create_system_repo(false);
+    package_sack.get_system_repo()->load();
 
     libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_remove_options) {

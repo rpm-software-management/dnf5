@@ -57,7 +57,7 @@ AdvisoryListCommand::AdvisoryListCommand(Command & parent, const std::string & n
 void AdvisoryListCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    ctx.base.get_rpm_package_sack()->create_system_repo(false);
+    ctx.base.get_rpm_package_sack()->get_system_repo()->load();
 
     libdnf::repo::RepoQuery enabled_repos(ctx.base);
     enabled_repos.filter_enabled(true);

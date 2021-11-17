@@ -94,15 +94,8 @@ public:
     explicit PackageSack(libdnf::Base & base);
     ~PackageSack();
 
-    /// Creates system repository and loads it into PackageSack. Only one system repository can be in PackageSack.
-    void create_system_repo(bool build_cache = false);
-
     /// @return system repo
     libdnf::repo::RepoWeakPtr get_system_repo() const;
-
-    /// Append a rpm database into system repository
-    // TODO(jrohel) this will add packages with conflicting rpmdb ids, which will break some operations
-    void append_extra_system_repo(const std::string & rootdir);
 
     /// Adds the given .rpm file to the command line repo.
     /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
@@ -120,7 +113,7 @@ public:
     /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
     /// When RPM is not accesible or corrupted it raises libdnf::RuntimeError
     /// Return added new Package
-    libdnf::rpm::Package add_system_package(const std::string & fn, bool add_with_hdrid, bool build_cache);
+    libdnf::rpm::Package add_system_package(const std::string & fn, bool add_with_hdrid);
 
     // TODO (lhrazky): There's an overlap with dumping the debugdata on the Goal class
     void dump_debugdata(const std::string & dir);

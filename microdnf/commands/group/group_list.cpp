@@ -56,7 +56,7 @@ GroupListCommand::GroupListCommand(Command & parent, const std::string & name) :
 void GroupListCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    ctx.base.get_rpm_package_sack()->create_system_repo(false);
+    ctx.base.get_rpm_package_sack()->get_system_repo()->load();
 
     auto group_specs_str = group_specs->get_value();
 

@@ -100,29 +100,10 @@ void PackageSack::Impl::make_provides_ready() {
 }
 
 
-void PackageSack::create_system_repo(bool build_cache) {
-    libdnf_assert(!p_impl->system_repo, "System repo already exists");
-
-    p_impl->base->get_config().installroot().lock("installroot locked by create_system_repo");
-
-    p_impl->system_repo = std::make_unique<repo::Repo>(p_impl->base, SYSTEM_REPO_NAME, repo::Repo::Type::SYSTEM);
-    p_impl->system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
-    p_impl->system_repo->p_impl->solv_repo.load_system_repo();
-
-    p_impl->provides_ready = false;
-}
-
-
 libdnf::repo::RepoWeakPtr PackageSack::get_system_repo() const {
-    libdnf_assert(p_impl->system_repo != nullptr, "System repo does not exist");
-    return p_impl->system_repo->get_weak_ptr();
+    return p_impl->get_system_repo();
 }
 
-
-void PackageSack::append_extra_system_repo(const std::string & rootdir) {
-    libdnf_assert(p_impl->system_repo != nullptr, "System repo does not exist");
-    p_impl->system_repo->p_impl->solv_repo.load_system_repo(rootdir);
-}
 
 repo::Repo & PackageSack::Impl::get_cmdline_repo() {
     if (cmdline_repo) {
@@ -143,22 +124,17 @@ Package PackageSack::add_cmdline_package(const std::string & fn, bool add_with_h
     return Package(p_impl->base, PackageId(new_id));
 }
 
-repo::Repo & PackageSack::Impl::get_system_repo(bool build_cache) {
-    if (system_repo) {
-        return *system_repo.get();
+repo::RepoWeakPtr PackageSack::Impl::get_system_repo() {
+    if (!system_repo) {
+        system_repo = std::make_unique<repo::Repo>(base, SYSTEM_REPO_NAME, repo::Repo::Type::SYSTEM);
+        pool_set_installed(*get_pool(base), system_repo->p_impl->solv_repo.repo);
     }
-    auto & pool = get_pool(base);
 
-    system_repo = std::make_unique<repo::Repo>(base, SYSTEM_REPO_NAME, repo::Repo::Type::SYSTEM);
-    system_repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, build_cache);
-
-    pool_set_installed(*pool, system_repo->p_impl->solv_repo.repo);
-    return *system_repo.get();
+    return system_repo->get_weak_ptr();
 }
 
-Package PackageSack::add_system_package(const std::string & fn, bool add_with_hdrid, bool build_cache) {
-    auto & repo = p_impl->get_system_repo(build_cache);
-    auto new_id = repo.p_impl->add_rpm_package(fn, add_with_hdrid);
+Package PackageSack::add_system_package(const std::string & fn, bool add_with_hdrid) {
+    auto new_id = p_impl->get_system_repo()->p_impl->add_rpm_package(fn, add_with_hdrid);
 
     p_impl->provides_ready = false;
     return Package(p_impl->base, PackageId(new_id));

@@ -36,7 +36,7 @@ class TestRepo(unittest.TestCase):
         package_sack = libdnf.rpm.PackageSack(base)
 
         # Creates system repository and loads it
-        package_sack.create_system_repo(False)
+        package_sack.get_system_repo().load()
 
         # Creates new repositories in the repo_sack
         repo = repo_sack.new_repo("repomd-repo1")

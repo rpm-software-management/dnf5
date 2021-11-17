@@ -75,9 +75,8 @@ public:
     /// Create if not already created and return cmdline_repo
     repo::Repo & get_cmdline_repo();
 
-    /// Create if not already created an empty system repository and return system_repo
-    /// After creation of the repo method create_system_repo() will not work => exception
-    repo::Repo & get_system_repo(bool build_cache);
+    /// Create if not already created an empty system repository and return it
+    repo::RepoWeakPtr get_system_repo();
 
     /// Return sorted list of all package solvables in format pair<id_of_lowercase_name, Solvable *>
     std::vector<std::pair<Id, Solvable *>> & get_sorted_icase_solvables();

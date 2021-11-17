@@ -310,6 +310,7 @@ bool SolvRepo::load_system_repo(const std::string & rootdir) {
 
     logger.debug("Loading system repo rpmdb, root: \"" + rootdir + "\"");
     if (rootdir.empty()) {
+        base->get_config().installroot().lock("installroot locked by loading system repo");
         pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
     } else {
         pool_set_rootdir(*pool, rootdir.c_str());

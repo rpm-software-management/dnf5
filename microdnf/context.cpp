@@ -826,7 +826,7 @@ std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string &
     ctx.set_cache_dir();
 
     auto package_sack = ctx.base.get_rpm_package_sack();
-    package_sack->create_system_repo(false);
+    package_sack->get_system_repo()->load();  // TODO(lukash) should this really be here?
 
     std::set<std::string> result_set;
     {

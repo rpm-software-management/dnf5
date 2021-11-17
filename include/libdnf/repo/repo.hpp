@@ -155,9 +155,14 @@ public:
     ///
     /// Also writes the libsolv's solv/solvx cache files.
     ///
-    /// @param flags Types of repodata to be loaded. Loads all metadata by default.
+    /// @param flags Types of repodata to be loaded. Loads all metadata by default. Used only
+    ///              if repository type is `Type::AVAILABLE`.
     // TODO(jrohel): Provide/use configuration options for flags?
     void load(LoadFlags flags = LoadFlags::ALL);
+
+    /// Append a rpm database into the system repository. The type of the repo must be Type::SYSTEM.
+    // TODO(jrohel) this will add packages with conflicting rpmdb ids, which will break some operations
+    void load_extra_system_repo(const std::string & rootdir);
 
     /// Returns whether the using of "includes" is enabled
     /// If enabled, only packages listed in the "includepkgs" will be used from the repository.

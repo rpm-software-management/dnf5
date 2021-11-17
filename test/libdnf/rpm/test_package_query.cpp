@@ -234,7 +234,7 @@ void RpmPackageQueryTest::test_filter_nevra_packgset() {
     add_repo_solv("solv-repo1");
 
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
-    sack->add_system_package(rpm_path, false, false);
+    sack->add_system_package(rpm_path, false);
     sack->add_cmdline_package(rpm_path, false);
 
     libdnf::rpm::PackageQuery query1(base);
@@ -275,7 +275,7 @@ void RpmPackageQueryTest::test_filter_name_arch2() {
     add_repo_solv("solv-repo1");
 
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
-    sack->add_system_package(rpm_path, false, false);
+    sack->add_system_package(rpm_path, false);
     sack->add_cmdline_package(rpm_path, false);
 
     libdnf::rpm::PackageQuery query1(base);

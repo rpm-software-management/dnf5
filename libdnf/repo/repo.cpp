@@ -285,8 +285,16 @@ void Repo::download_metadata(const std::string & destdir) {
 }
 
 void Repo::load(LoadFlags flags) {
-    libdnf_assert(p_impl->type == Type::AVAILABLE, "Only repositories of type AVAILABLE can be loaded");
-    p_impl->load_available_repo(flags);
+    if (p_impl->type == Type::AVAILABLE) {
+        p_impl->load_available_repo(flags);
+    } else if (p_impl->type == Type::SYSTEM) {
+        p_impl->solv_repo.load_system_repo();
+    }
+}
+
+void Repo::load_extra_system_repo(const std::string & rootdir) {
+    libdnf_assert(p_impl->type == Type::SYSTEM, "repo type must be SYSTEM to load an extra system repo");
+    p_impl->solv_repo.load_system_repo(rootdir);
 }
 
 bool Repo::get_use_includes() const {

@@ -101,7 +101,7 @@ libdnf::rpm::Package LibdnfTestCase::add_system_pkg(
         sack->get_system_state().set_reason(na, reason);
     }
 
-    return sack->add_system_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false, false);
+    return sack->add_system_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
 }
 
 

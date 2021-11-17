@@ -127,7 +127,7 @@ Session::~Session() {
 void Session::fill_sack() {
     auto & package_sack = *get_base()->get_rpm_package_sack();
     if (session_configuration_value<bool>("load_system_repo", true)) {
-        package_sack.create_system_repo(false);
+        package_sack.get_system_repo()->load();
     }
 
     if (session_configuration_value<bool>("load_available_repos", true)) {
