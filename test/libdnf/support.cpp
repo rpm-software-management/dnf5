@@ -38,14 +38,10 @@ static std::map<std::string, std::unique_ptr<libdnf::utils::TempDir>> cache_dirs
 void LibdnfTestCase::add_repo(const std::string & repoid, const std::string & repo_path) {
     auto repo = repo_sack->new_repo(repoid);
 
-    // set the repo baseurl
     repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path);
 
-    // load repository into rpm::Repo
     repo->fetch_metadata();
-
-    // load repo content into rpm::PackageSack
-    sack->load_repo(*repo.get());
+    repo->load();
 }
 
 

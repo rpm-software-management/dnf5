@@ -51,11 +51,9 @@ class LibdnfTestCase(unittest.TestCase):
         # set the repo baseurl
         repo.get_config().baseurl().set(libdnf.conf.Option.Priority_RUNTIME, "file://" + repo_path)
 
-        # load repository into rpm.Repo
+        # fetch repo metadata and load it
         repo.fetch_metadata()
-
-        # load repo content into rpm.PackageSack
-        self.sack.load_repo(repo.get())
+        repo.load()
 
     """
     Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-repomd/<repoid>/repodata

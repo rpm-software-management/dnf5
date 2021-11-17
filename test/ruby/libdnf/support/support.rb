@@ -52,11 +52,9 @@ class LibdnfTestCase < Test::Unit::TestCase
         # set the repo baseurl
         repo.get_config().baseurl().set(Conf::Option::Priority_RUNTIME, "file://" + repo_path)
 
-        # load repository into Rpm::Repo
+        # fetch repo metadata and load it
         repo.fetch_metadata()
-
-        # load repo content into Rpm::PackageSack
-        @package_sack.load_repo(repo.get())
+        repo.load()
     end
 
     # Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-repomd/<repoid>/repodata

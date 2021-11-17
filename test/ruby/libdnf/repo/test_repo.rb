@@ -44,11 +44,9 @@ class TestRepo < Test::Unit::TestCase
         repo_cfg = repo.get_config()
         repo_cfg.baseurl().set(Conf::Option::Priority_RUNTIME, baseurl)
 
-        # Loads repository into rpm::Repo.
+        # fetch repo metadata and load it
         repo.fetch_metadata()
-
-        # Loads rpm::Repo into rpm::PackageSack
-        package_sack.load_repo(repo.get())
+        repo.load()
 
         # Remove the cache directory.
         FileUtils.remove_entry(tmpdir)

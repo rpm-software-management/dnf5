@@ -66,9 +66,7 @@ void GroupInfoCommand::run() {
 
     ctx.base.get_comps()->load_installed();
 
-    using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
-    auto flags = LoadFlags::COMPS;
-    ctx.load_rpm_repos(enabled_repos, flags);
+    ctx.load_rpm_repos(enabled_repos, libdnf::repo::Repo::LoadFlags::COMPS);
 
     libdnf::comps::GroupQuery query(ctx.base.get_comps()->get_group_sack());
 

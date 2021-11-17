@@ -34,7 +34,6 @@ my $tmpdir = tempdir("libdnf-perl5-XXXX", TMPDIR => 1, CLEANUP => 1);
 $base->get_config()->cachedir()->set($libdnf::conf::Option::Priority_RUNTIME, $tmpdir);
 
 my $repo_sack = new libdnf::repo::RepoSack($base);
-my $sack = $base->get_rpm_package_sack();
 
 # Creates new repositories in the repo_sack
 my $repo = $repo_sack->new_repo("repomd-repo1");
@@ -45,11 +44,9 @@ my $baseurl = "file://" . $repo_path;
 my $repo_cfg = $repo->get_config();
 $repo_cfg->baseurl()->set($libdnf::conf::Option::Priority_RUNTIME, $baseurl);
 
-# Loads repository into rpm::Repo.
+# fetch repo metadata and load it
 $repo->fetch_metadata();
-
-# Loads rpm::Repo into rpm::PackageSack
-$sack->load_repo($repo->get());
+$repo->load();
 
 #test_size()
 {

@@ -90,26 +90,9 @@ public:
         const char * get_description() const noexcept override { return "rpm::PackageSack exception"; }
     };
 
-    enum class LoadRepoFlags {
-        PRIMARY = 1 << 1,       /// Load primary repodata (primary.xml).
-        FILELISTS = 1 << 2,     /// Load file lists (filelists.xml). Requires loading PRIMARY.
-        OTHER = 1 << 3,         /// Load changelogs (other.xml). Requires loading PRIMARY.
-        PRESTO = 1 << 4,        /// Use deltarpm.
-        UPDATEINFO = 1 << 5,    /// Load advisories (updateinfo.xml).
-        COMPS = 1 << 6,         /// Load comps groups and environments (comps.xml).
-        ALL = ~0,               /// Load all possible repodata.
-    };
-
     explicit PackageSack(const libdnf::BaseWeakPtr & base);
     explicit PackageSack(libdnf::Base & base);
     ~PackageSack();
-
-    //TODO(jrohel): Provide/use configuration options for flags?
-    /// Load repodata into the Sack objects.
-    ///
-    /// @param repo Object the repodata is loaded into.
-    /// @param flags Parts of repodata to be loaded. Everything is loaded by default.
-    void load_repo(repo::Repo & repo, LoadRepoFlags flags = LoadRepoFlags::ALL);
 
     /// Creates system repository and loads it into PackageSack. Only one system repository can be in PackageSack.
     void create_system_repo(bool build_cache = false);
@@ -162,7 +145,7 @@ private:
     friend PackageSet;
     friend Reldep;
     friend class ReldepList;
-    friend class repo::RepoSack;
+    friend class repo::Repo;
     friend class PackageQuery;
     friend class Transaction;
     friend libdnf::Swdb;
@@ -181,22 +164,6 @@ private:
 
     libdnf::system::State system_state;
 };
-
-inline constexpr PackageSack::LoadRepoFlags operator|(PackageSack::LoadRepoFlags lhs, PackageSack::LoadRepoFlags rhs) {
-    return static_cast<PackageSack::LoadRepoFlags>(
-        static_cast<std::underlying_type_t<PackageSack::LoadRepoFlags>>(lhs) |
-        static_cast<std::underlying_type_t<PackageSack::LoadRepoFlags>>(rhs));
-}
-
-inline constexpr PackageSack::LoadRepoFlags operator&(PackageSack::LoadRepoFlags lhs, PackageSack::LoadRepoFlags rhs) {
-    return static_cast<PackageSack::LoadRepoFlags>(
-        static_cast<std::underlying_type_t<PackageSack::LoadRepoFlags>>(lhs) &
-        static_cast<std::underlying_type_t<PackageSack::LoadRepoFlags>>(rhs));
-}
-
-inline constexpr bool any(PackageSack::LoadRepoFlags flags) {
-    return static_cast<typename std::underlying_type<PackageSack::LoadRepoFlags>::type>(flags) != 0;
-}
 
 }  // namespace libdnf::rpm
 

@@ -44,9 +44,6 @@ void RepoTest::tearDown() {
 }
 
 
-using LoadFlags = libdnf::rpm::PackageSack::LoadRepoFlags;
-
-
 void RepoTest::test_repo_basics() {
     libdnf::Base base;
 
@@ -61,9 +58,8 @@ void RepoTest::test_repo_basics() {
     base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
 
     libdnf::repo::RepoSack repo_sack(base);
-    libdnf::rpm::PackageSack sack(base);
 
-    // Creates system repository and loads it into rpm::PackageSack.
+    // Creates system repository and loads it
     // TODO(dmach): commented the next line because it loads the system repo from host; fix it to load the repo from the installroot
     // sack.create_system_repo(false);
 
@@ -74,16 +70,14 @@ void RepoTest::test_repo_basics() {
     std::filesystem::path repo_path = PROJECT_BINARY_DIR "/test/libdnf/rpm/repos-repomd/repomd-repo1/";
     repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path.native());
 
-    // Loads repository into rpm::Repo.
     try {
         repo->fetch_metadata();
     } catch (const std::exception & ex) {
         log_router.error(ex.what());
     }
 
-    // Loads rpm::Repo into rpm::PackageSack
     try {
-        sack.load_repo(*repo.get());
+        repo->load();
     } catch (const std::exception & ex) {
         log_router.error(ex.what());
     }

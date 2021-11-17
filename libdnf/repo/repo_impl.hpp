@@ -47,17 +47,6 @@ using LibsolvRepo = ::Repo;
 
 class Repo::Impl {
 public:
-    // Names of well known metadata files in rpm repository
-    // Final metadata file name is (hash-) + this constant + ".xml" [+ compression suffix]
-    static constexpr const char * MD_FILENAME_PRIMARY = "primary";
-    static constexpr const char * MD_FILENAME_FILELISTS = "filelists";
-    static constexpr const char * MD_FILENAME_PRESTODELTA = "prestodelta";
-    static constexpr const char * MD_FILENAME_UPDATEINFO = "updateinfo";
-    static constexpr const char * MD_FILENAME_OTHER = "other";
-    static constexpr const char * MD_FILENAME_GROUP_GZ = "group_gz";
-    static constexpr const char * MD_FILENAME_GROUP = "group";
-    static constexpr const char * MD_FILENAME_MODULES = "modules";
-
     Impl(const BaseWeakPtr & base, Repo & owner, std::string id, Type type);
     ~Impl();
 
@@ -70,6 +59,8 @@ public:
     bool is_expired() const;
     int get_expires_in() const;
     const std::string & get_metadata_path(const std::string & metadata_type) const;
+
+    void load_available_repo(LoadFlags flags);
 
     /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
     /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading

@@ -71,8 +71,7 @@ private:
 ///                                       under which a lower-level exception can often be nested.
 class RepoDownloader {
 public:
-    // TODO(lukash) deduplicate with Repo::impl
-    // Names of well known metadata files in rpm repository
+    // Names of metadata files in rpm repository
     // Final metadata file name is (hash-) + this constant + ".xml" [+ compression suffix]
     static constexpr const char * MD_FILENAME_PRIMARY = "primary";
     static constexpr const char * MD_FILENAME_FILELISTS = "filelists";

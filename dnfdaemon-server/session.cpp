@@ -151,13 +151,12 @@ bool Session::read_all_repos() {
     //auto & logger = base->get_logger();
     libdnf::repo::RepoQuery enabled_repos(*base);
     enabled_repos.filter_enabled(true);
-    auto & package_sack = *base->get_rpm_package_sack();
     bool retval = true;
     for (auto & repo : enabled_repos.get_data()) {
         repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
         try {
             repo->fetch_metadata();
-            package_sack.load_repo(*repo.get());
+            repo->load();
         } catch (const std::runtime_error & ex) {
             if (!repo->get_config().skip_if_unavailable().get_value()) {
                 retval = false;

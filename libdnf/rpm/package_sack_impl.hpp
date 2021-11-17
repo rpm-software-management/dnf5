@@ -86,14 +86,13 @@ public:
 
     void make_provides_ready();
 
+    void invalidate_provides() { provides_ready = false; }
+
     PackageId get_running_kernel() const noexcept { return running_kernel; };
 
     void set_running_kernel(PackageId kernel) { running_kernel = kernel; };
 
 private:
-    /// Loads available repository into PackageSack
-    void load_available_repo(repo::Repo & repo, LoadRepoFlags flags);
-
     bool provides_ready{false};
 
     BaseWeakPtr base;

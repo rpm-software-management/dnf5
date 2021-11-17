@@ -72,6 +72,16 @@ public:
         TRY_CACHE = 3
     };
 
+    enum class LoadFlags {
+        PRIMARY = 1 << 1,       /// Load primary repodata (primary.xml).
+        FILELISTS = 1 << 2,     /// Load file lists (filelists.xml). Requires loading PRIMARY.
+        OTHER = 1 << 3,         /// Load changelogs (other.xml). Requires loading PRIMARY.
+        PRESTO = 1 << 4,        /// Use deltarpm.
+        UPDATEINFO = 1 << 5,    /// Load advisories (updateinfo.xml).
+        COMPS = 1 << 6,         /// Load comps groups and environments (comps.xml).
+        ALL = ~0,               /// Load all possible repodata.
+    };
+
 
     /// Verify repo ID
     /// @param id repo ID to verify
@@ -140,6 +150,14 @@ public:
     /// Downloads repository metadata.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
     void download_metadata(const std::string & destdir);
+
+    /// Loads the repository objects into sacks.
+    ///
+    /// Also writes the libsolv's solv/solvx cache files.
+    ///
+    /// @param flags Types of repodata to be loaded. Loads all metadata by default.
+    // TODO(jrohel): Provide/use configuration options for flags?
+    void load(LoadFlags flags = LoadFlags::ALL);
 
     /// Returns whether the using of "includes" is enabled
     /// If enabled, only packages listed in the "includepkgs" will be used from the repository.
@@ -341,6 +359,23 @@ private:
     std::unique_ptr<Impl> p_impl;
     WeakPtrGuard<Repo, false> data_guard;
 };
+
+
+inline constexpr Repo::LoadFlags operator|(Repo::LoadFlags lhs, Repo::LoadFlags rhs) {
+    return static_cast<Repo::LoadFlags>(
+        static_cast<std::underlying_type_t<Repo::LoadFlags>>(lhs) |
+        static_cast<std::underlying_type_t<Repo::LoadFlags>>(rhs));
+}
+
+inline constexpr Repo::LoadFlags operator&(Repo::LoadFlags lhs, Repo::LoadFlags rhs) {
+    return static_cast<Repo::LoadFlags>(
+        static_cast<std::underlying_type_t<Repo::LoadFlags>>(lhs) &
+        static_cast<std::underlying_type_t<Repo::LoadFlags>>(rhs));
+}
+
+inline constexpr bool any(Repo::LoadFlags flags) {
+    return static_cast<typename std::underlying_type<Repo::LoadFlags>::type>(flags) != 0;
+}
 
 
 /// Logger for librepo

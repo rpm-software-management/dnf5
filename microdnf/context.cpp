@@ -267,7 +267,7 @@ void Context::print_info(const char * msg) {
 }
 
 // Multithreaded. Main thread prepares (updates) repositories metadata. Second thread loads them to solvable sack.
-void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags) {
+void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags) {
     std::atomic<bool> except{false};  // set to true if an exception occurred
     std::exception_ptr except_ptr;    // for pass exception from thread_sack_loader to main thread,
                                       // a default-constructed std::exception_ptr is a null pointer
@@ -275,20 +275,19 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
     std::vector<libdnf::repo::Repo *> prepared_repos;  // array of repositories prepared to load into solv sack
     std::mutex prepared_repos_mutex;                   // mutex for the array
     std::condition_variable signal_prepared_repo;      // signals that next item is added into array
-    std::size_t num_repos_loaded_to_package_sack{0};   // number of repositories already loaded into solv sack
+    std::size_t num_repos_loaded{0};   // number of repositories already loaded into solv sack
 
     prepared_repos.reserve(repos.size() + 1);  // optimization: preallocate memory to avoid realocations, +1 stop tag
 
     // This thread loads prepared repositories into solvable sack
     std::thread thread_sack_loader([&]() {
         try {
-            auto & package_sack = *base.get_rpm_package_sack();
             while (true) {
                 std::unique_lock<std::mutex> lock(prepared_repos_mutex);
-                while (prepared_repos.size() <= num_repos_loaded_to_package_sack) {
+                while (prepared_repos.size() <= num_repos_loaded) {
                     signal_prepared_repo.wait(lock);
                 }
-                auto repo = prepared_repos[num_repos_loaded_to_package_sack];
+                auto repo = prepared_repos[num_repos_loaded];
                 lock.unlock();
 
                 if (!repo || except) {
@@ -296,8 +295,8 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
                 }
 
                 // std::cout << "Loading repository \"" << repo->get_config()->name().get_value() << "\" into sack." << std::endl;
-                package_sack.load_repo(*repo, flags);
-                ++num_repos_loaded_to_package_sack;
+                repo->load(flags);
+                ++num_repos_loaded;
             }
         } catch (std::runtime_error & ex) {
             // The thread must not throw exceptions. Pass them to the main thread using exception_ptr.
@@ -327,7 +326,7 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
             }
         } catch (std::runtime_error & ex) {
             std::cerr << "Error: Unable to load repository \""
-                      << prepared_repos[num_repos_loaded_to_package_sack]->get_id() << "\" to solv sack" << std::endl;
+                      << prepared_repos[num_repos_loaded]->get_id() << "\" to solv sack" << std::endl;
             throw;
         }
     };
@@ -365,14 +364,13 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::Packa
 // Single thread version.
 // TODO keep this and enable conditionally (compiletime or even runtime) or
 // drop when we know the multithreaded implementation is stable
-// void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::rpm::PackageSack::LoadRepoFlags flags) {
+// void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags) {
 //     std::cout << "Updating repositories metadata and load them:" << std::endl;
 //     for (auto & repo : repos.get_data()) {
 //         try {
 //             load_rpm_repo(*repo.get());
-//             auto & package_sack = *base.get_rpm_package_sack();
 //             // std::cout << "Loading repository \"" << repo->get_config().name().get_value() << "\" into sack." << std::endl;
-//             package_sack.load_repo(*repo.get(), flags);
+//             repo->load(flags);
 //         } catch (const std::runtime_error & ex) {
 //             if (!repo->get_config().skip_if_unavailable().get_value()) {
 //                 std::cerr << "Error: Unable to load repository \"" << repo->get_id()
@@ -881,7 +879,7 @@ std::vector<std::string> match_available_pkgs(Context & ctx, const std::string &
         repo->set_sync_strategy(libdnf::repo::Repo::SyncStrategy::ONLY_CACHE);
         repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
     }
-    ctx.load_rpm_repos(enabled_repos, libdnf::rpm::PackageSack::LoadRepoFlags::PRIMARY);
+    ctx.load_rpm_repos(enabled_repos, libdnf::repo::Repo::LoadFlags::PRIMARY);
 
     std::set<std::string> result_set;
     {

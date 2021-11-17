@@ -35,7 +35,7 @@ class TestRepo(unittest.TestCase):
         repo_sack = libdnf.repo.RepoSack(base)
         package_sack = libdnf.rpm.PackageSack(base)
 
-        # Creates system repository and loads it into rpm::PackageSack.
+        # Creates system repository and loads it
         package_sack.create_system_repo(False)
 
         # Creates new repositories in the repo_sack
@@ -47,12 +47,9 @@ class TestRepo(unittest.TestCase):
         repo_cfg = repo.get_config()
         repo_cfg.baseurl().set(libdnf.conf.Option.Priority_RUNTIME, baseurl)
 
-        # Loads repository into rpm::Repo.
+        # fetch repo metadata and load it
         repo.fetch_metadata()
-
-        # Loads rpm::Repo into rpm::PackageSack
-        PackageSack = libdnf.rpm.PackageSack
-        package_sack.load_repo(repo.get())
+        repo.load()
 
         # Remove the cache directory.
         shutil.rmtree(tmpdir)
