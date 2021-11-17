@@ -46,7 +46,7 @@ my $repo_cfg = $repo->get_config();
 $repo_cfg->baseurl()->set($libdnf::conf::Option::Priority_RUNTIME, $baseurl);
 
 # Loads repository into rpm::Repo.
-$repo->load();
+$repo->fetch_metadata();
 
 # Loads rpm::Repo into rpm::PackageSack
 $sack->load_repo($repo->get());

@@ -42,7 +42,7 @@ void LibdnfTestCase::add_repo(const std::string & repoid, const std::string & re
     repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path);
 
     // load repository into rpm::Repo
-    repo->load();
+    repo->fetch_metadata();
 
     // load repo content into rpm::PackageSack
     sack->load_repo(*repo.get());

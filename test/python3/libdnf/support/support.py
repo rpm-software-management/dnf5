@@ -52,7 +52,7 @@ class LibdnfTestCase(unittest.TestCase):
         repo.get_config().baseurl().set(libdnf.conf.Option.Priority_RUNTIME, "file://" + repo_path)
 
         # load repository into rpm.Repo
-        repo.load()
+        repo.fetch_metadata()
 
         # load repo content into rpm.PackageSack
         self.sack.load_repo(repo.get())

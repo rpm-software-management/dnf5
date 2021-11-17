@@ -250,7 +250,7 @@ void Context::load_rpm_repo(libdnf::repo::Repo & repo) {
     auto callback_ptr = callback.get();
     repo.set_callbacks(std::move(callback));
     try {
-        repo.load();
+        repo.fetch_metadata();
     } catch (const std::runtime_error & ex) {
         logger.warning(ex.what());
         callback_ptr->add_message(libdnf::cli::progressbar::MessageType::ERROR, ex.what());

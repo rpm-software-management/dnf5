@@ -61,8 +61,8 @@ public:
     Impl(const BaseWeakPtr & base, Repo & owner, std::string id, Type type);
     ~Impl();
 
-    bool load();
-    void load_cache();
+    bool fetch_metadata();
+    void read_metadata_cache();
     bool try_load_cache();
     bool is_in_sync();
     int64_t get_age() const;

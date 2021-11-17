@@ -15,8 +15,8 @@ auto repo = repo_sack->new_repo(repoid);
 // * https://example.com/url/
 repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, baseurl);
 
-// download repodata to a local cache
-repo->load();
+// download repodata if not fresh, read metadata cache
+repo->fetch_metadata();
 
 // create a reference to the Base's rpm_sack for better code readability
 auto & rpm_sack = *base.get_rpm_package_sack();

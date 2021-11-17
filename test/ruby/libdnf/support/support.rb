@@ -53,7 +53,7 @@ class LibdnfTestCase < Test::Unit::TestCase
         repo.get_config().baseurl().set(Conf::Option::Priority_RUNTIME, "file://" + repo_path)
 
         # load repository into Rpm::Repo
-        repo.load()
+        repo.fetch_metadata()
 
         # load repo content into Rpm::PackageSack
         @package_sack.load_repo(repo.get())

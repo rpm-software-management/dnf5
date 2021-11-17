@@ -45,7 +45,7 @@ class TestRepo < Test::Unit::TestCase
         repo_cfg.baseurl().set(Conf::Option::Priority_RUNTIME, baseurl)
 
         # Loads repository into rpm::Repo.
-        repo.load()
+        repo.fetch_metadata()
 
         # Loads rpm::Repo into rpm::PackageSack
         package_sack.load_repo(repo.get())

@@ -128,17 +128,16 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.isLocal()
     bool is_local() const;
 
-    /// Initialize the repo with metadata
-    /// Fetches new metadata from the origin or just reuses local cache if still valid.
+    /// Downloads repository metadata from the origin or reads the local metadata cache if still valid.
     /// @return true if fresh metadata were downloaded, false otherwise.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.load()
-    bool load();
+    bool fetch_metadata();
 
-    /// Loads metadata from local cache
+    /// Reads metadata from local cache.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.loadCache(bool throwExcept)
-    void load_cache();
+    void read_metadata_cache();
 
-    /// Downloads all metadata
+    /// Downloads repository metadata.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
     void download_metadata(const std::string & destdir);
 

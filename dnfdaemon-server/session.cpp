@@ -156,7 +156,7 @@ bool Session::read_all_repos() {
     for (auto & repo : enabled_repos.get_data()) {
         repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
         try {
-            repo->load();
+            repo->fetch_metadata();
             package_sack.load_repo(*repo.get());
         } catch (const std::runtime_error & ex) {
             if (!repo->get_config().skip_if_unavailable().get_value()) {

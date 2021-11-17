@@ -207,11 +207,11 @@ bool Repo::is_local() const {
     return false;
 }
 
-bool Repo::load() {
-    return p_impl->load();
+bool Repo::fetch_metadata() {
+    return p_impl->fetch_metadata();
 }
-void Repo::load_cache() {
-    p_impl->load_cache();
+void Repo::read_metadata_cache() {
+    p_impl->read_metadata_cache();
 }
 void Repo::download_metadata(const std::string & destdir) {
     p_impl->downloader.download_metadata(destdir);
@@ -278,7 +278,7 @@ std::string Repo::get_metadata_path(const std::string & metadata_type) {
 }
 
 
-void Repo::Impl::load_cache() {
+void Repo::Impl::read_metadata_cache() {
     downloader.load_local();
 
     revision = downloader.get_revision();
@@ -296,7 +296,7 @@ void Repo::Impl::load_cache() {
 
 bool Repo::Impl::try_load_cache() {
     try {
-        load_cache();
+        read_metadata_cache();
     } catch (std::runtime_error &) {
         return false;
     }
@@ -310,7 +310,7 @@ bool Repo::Impl::is_in_sync() {
     return downloader.is_repomd_in_sync();
 }
 
-bool Repo::Impl::load() {
+bool Repo::Impl::fetch_metadata() {
     auto & logger = *base->get_logger();
 
     if (!get_metadata_path(MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
@@ -334,7 +334,7 @@ bool Repo::Impl::load() {
     logger.debug(fmt::format(_("repo: downloading from remote: {}"), config.get_id()));
     downloader.download_metadata(config.get_cachedir());
     timestamp = -1;
-    load_cache();
+    read_metadata_cache();
 
     expired = false;
     return true;

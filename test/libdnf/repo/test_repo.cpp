@@ -76,7 +76,7 @@ void RepoTest::test_repo_basics() {
 
     // Loads repository into rpm::Repo.
     try {
-        repo->load();
+        repo->fetch_metadata();
     } catch (const std::exception & ex) {
         log_router.error(ex.what());
     }
