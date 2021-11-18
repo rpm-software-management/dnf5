@@ -33,10 +33,9 @@ class TestRepo(unittest.TestCase):
         base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, tmpdir)
 
         repo_sack = libdnf.repo.RepoSack(base)
-        package_sack = libdnf.rpm.PackageSack(base)
 
         # Creates system repository and loads it
-        package_sack.get_system_repo().load()
+        repo_sack.get_system_repo().load()
 
         # Creates new repositories in the repo_sack
         repo = repo_sack.new_repo("repomd-repo1")

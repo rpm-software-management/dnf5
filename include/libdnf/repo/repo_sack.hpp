@@ -64,6 +64,23 @@ public:
     /// Create a new repository from a libsolv testcase file
     RepoWeakPtr new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path);
 
+    /// If not created yet, creates the system repository and returns it.
+    /// @return The system repository.
+    RepoWeakPtr get_system_repo();
+
+    /// If not created yet, creates the cmdline repository and returns it.
+    /// @return The cmdline repository.
+    // TODO(lukash) this was private originally, but don't we want it on the public API?
+    RepoWeakPtr get_cmdline_repo();
+
+    /// @return `true` if the system repository has been initialized (via `get_system_repo()`).
+    bool has_system_repo() const noexcept;
+
+    /// Dumps libsolv's debugdata of all loaded repositories.
+    /// @param dir The directory into which to dump the debugdata.
+    // TODO (lukash): There's an overlap with dumping the debugdata on the Goal class
+    void dump_debugdata(const std::string & dir);
+
     RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
 
     /// @return The `Base` object to which this object belongs.
@@ -72,6 +89,7 @@ public:
 
 private:
     friend class RepoQuery;
+    friend class rpm::PackageSack;
 
     WeakPtrGuard<RepoSack, false> sack_guard;
 
@@ -82,7 +100,12 @@ private:
     /// The files in the directory are read in alphabetical order.
     void new_repos_from_dir(const std::string & dir_path);
 
+    void internalize_repos();
+
     BaseWeakPtr base;
+
+    std::unique_ptr<repo::Repo> system_repo;
+    std::unique_ptr<repo::Repo> cmdline_repo;
 };
 
 }  // namespace libdnf::repo

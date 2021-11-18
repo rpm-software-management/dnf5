@@ -94,9 +94,6 @@ public:
     explicit PackageSack(libdnf::Base & base);
     ~PackageSack();
 
-    /// @return system repo
-    libdnf::repo::RepoWeakPtr get_system_repo() const;
-
     /// Adds the given .rpm file to the command line repo.
     /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
     /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
@@ -114,9 +111,6 @@ public:
     /// When RPM is not accesible or corrupted it raises libdnf::RuntimeError
     /// Return added new Package
     libdnf::rpm::Package add_system_package(const std::string & fn, bool add_with_hdrid);
-
-    // TODO (lhrazky): There's an overlap with dumping the debugdata on the Goal class
-    void dump_debugdata(const std::string & dir);
 
     /// Create WeakPtr to PackageSack
     PackageSackWeakPtr get_weak_ptr();

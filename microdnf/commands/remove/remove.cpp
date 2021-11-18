@@ -75,11 +75,10 @@ RemoveCommand::RemoveCommand(Command & parent, const std::string & name) : Comma
 
 void RemoveCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
-    auto & package_sack = *ctx.base.get_rpm_package_sack();
 
     // To search in the system repository (installed packages)
-    // Creates system repository in the repo_sack and loads it into rpm::PackageSack.
-    package_sack.get_system_repo()->load();
+    // Creates system repository in the repo_sack and loads it
+    ctx.base.get_repo_sack()->get_system_repo()->load();
 
     libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_remove_options) {

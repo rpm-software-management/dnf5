@@ -47,7 +47,7 @@ void Comps::load_installed() {
     // rq.filter_id("@System");
     // auto system_repo = rq.get();
 
-    auto system_repo = get_base()->get_rpm_package_sack()->get_system_repo();
+    auto system_repo = get_base()->get_repo_sack()->get_system_repo();
     // TODO(dmach): use system-state dir
     load_from_file(system_repo, "/var/lib/dnf/system-state/comps-installed.xml.zst");
 }

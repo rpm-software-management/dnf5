@@ -30,10 +30,9 @@ class TestRepo < Test::Unit::TestCase
         base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, tmpdir)
 
         repo_sack = Repo::RepoSack.new(base)
-        package_sack = Rpm::PackageSack.new(base)
 
         # Creates system repository and loads it into rpm::PackageSack.
-        package_sack.get_system_repo().load()
+        repo_sack.get_system_repo().load()
 
         # Creates new repositories in the repo_sack
         repo = repo_sack.new_repo("repomd-repo1")

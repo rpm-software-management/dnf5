@@ -40,11 +40,20 @@ extern "C" {
 #include <cerrno>
 #include <filesystem>
 
+
 using LibsolvRepo = ::Repo;
 
+namespace {
+
+// Names of special repositories
+constexpr const char * SYSTEM_REPO_NAME = "@System";
+constexpr const char * CMDLINE_REPO_NAME = "@commandline";
+// TODO lukash: unused, remove?
+//constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
+
+}
 
 namespace libdnf::repo {
-
 
 RepoSack::RepoSack(libdnf::Base & base) : RepoSack(base.get_weak_ptr()) {}
 
@@ -65,6 +74,48 @@ RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid,
     auto repo = new_repo(repoid);
     testcase_add_testtags(repo->p_impl->solv_repo.repo, testcase_file.get(), 0);
     return repo;
+}
+
+
+RepoWeakPtr RepoSack::get_cmdline_repo() {
+    if (!cmdline_repo) {
+        cmdline_repo = std::make_unique<Repo>(base, CMDLINE_REPO_NAME, Repo::Type::COMMANDLINE);
+    }
+
+    return cmdline_repo->get_weak_ptr();
+}
+
+
+RepoWeakPtr RepoSack::get_system_repo() {
+    if (!system_repo) {
+        system_repo = std::make_unique<Repo>(base, SYSTEM_REPO_NAME, Repo::Type::SYSTEM);
+        pool_set_installed(*get_pool(base), system_repo->p_impl->solv_repo.repo);
+    }
+
+    return system_repo->get_weak_ptr();
+}
+
+
+bool RepoSack::has_system_repo() const noexcept {
+    return static_cast<bool>(system_repo);
+}
+
+
+void RepoSack::dump_debugdata(const std::string & dir) {
+    Solver * solver = solver_create(*get_pool(base));
+
+    try {
+        std::filesystem::create_directory(dir);
+
+        int ret = testcase_write(solver, dir.c_str(), 0, NULL, NULL);
+        if (!ret) {
+            throw SystemError(errno, fmt::format("Failed to write debug data to {}", dir));
+        }
+    } catch (...) {
+        solver_free(solver);
+        throw;
+    }
+    solver_free(solver);
 }
 
 
@@ -142,6 +193,22 @@ void RepoSack::new_repos_from_dirs() {
 
 BaseWeakPtr RepoSack::get_base() const {
     return base;
+}
+
+
+void RepoSack::internalize_repos() {
+    auto rq = RepoQuery(base);
+    for (auto & repo : rq.get_data()) {
+        repo->p_impl->solv_repo.internalize();
+    }
+
+    if (system_repo) {
+        system_repo->p_impl->solv_repo.internalize();
+    }
+
+    if (cmdline_repo) {
+        cmdline_repo->p_impl->solv_repo.internalize();
+    }
 }
 
 }  // namespace libdnf::repo

@@ -72,16 +72,8 @@ public:
     /// Return sorted list of all package solvables
     std::vector<Solvable *> & get_sorted_solvables();
 
-    /// Create if not already created and return cmdline_repo
-    repo::Repo & get_cmdline_repo();
-
-    /// Create if not already created an empty system repository and return it
-    repo::RepoWeakPtr get_system_repo();
-
     /// Return sorted list of all package solvables in format pair<id_of_lowercase_name, Solvable *>
     std::vector<std::pair<Id, Solvable *>> & get_sorted_icase_solvables();
-
-    void internalize_libsolv_repos();
 
     void make_provides_ready();
 
@@ -95,8 +87,6 @@ private:
     bool provides_ready{false};
 
     BaseWeakPtr base;
-    std::unique_ptr<repo::Repo> system_repo;
-    std::unique_ptr<repo::Repo> cmdline_repo;
 
     WeakPtrGuard<PackageSack, false> sack_guard;
 

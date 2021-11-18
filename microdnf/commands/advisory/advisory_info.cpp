@@ -58,7 +58,7 @@ AdvisoryInfoCommand::AdvisoryInfoCommand(Command & parent, const std::string & n
 void AdvisoryInfoCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    ctx.base.get_rpm_package_sack()->get_system_repo()->load();
+    ctx.base.get_repo_sack()->get_system_repo()->load();
 
     libdnf::repo::RepoQuery enabled_repos(ctx.base);
     enabled_repos.filter_enabled(true);

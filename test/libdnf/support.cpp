@@ -144,5 +144,5 @@ void LibdnfTestCase::setUp() {
 }
 
 void LibdnfTestCase::dump_debugdata() {
-    sack->dump_debugdata("debugdata");
+    repo_sack->dump_debugdata("debugdata");
 }
