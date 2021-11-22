@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/config_parser.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
 #include "utils/iniparser.hpp"
 
 #include <algorithm>
@@ -44,6 +45,12 @@ static void read(ConfigParser & cfg_parser, IniParser & parser) {
         }
     }
 }
+
+ConfigParserSectionNotFoundError::ConfigParserSectionNotFoundError(const std::string & section)
+    : ConfigParserError(M_("Section \"{}\" not found"), section) {}
+
+ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError(const std::string & section, const std::string & option)
+    : ConfigParserError(M_("Section \"{}\" does not contain option \"{}\""), section, option) {}
 
 void ConfigParser::read(const std::string & file_path) {
     IniParser parser(file_path);
@@ -80,11 +87,11 @@ void ConfigParser::set_value(const std::string & section, std::string && key, st
 const std::string & ConfigParser::get_value(const std::string & section, const std::string & key) const {
     auto sect = data.find(section);
     if (sect == data.end()) {
-        throw SectionNotFound(section);
+        throw ConfigParserSectionNotFoundError(section);
     }
     auto key_val = sect->second.find(key);
     if (key_val == sect->second.end()) {
-        throw OptionNotFound(key + " in section " + section);
+        throw ConfigParserOptionNotFoundError(section, key);
     }
     return key_val->second;
 }
@@ -141,7 +148,7 @@ void ConfigParser::write(const std::string & file_path, bool append) const {
 void ConfigParser::write(const std::string & file_path, bool append, const std::string & section) const {
     auto sit = data.find(section);
     if (sit == data.end()) {
-        throw SectionNotFound(section);
+        throw ConfigParserSectionNotFoundError(section);
     }
     std::ofstream ofs;
     ofs.exceptions(std::ofstream::failbit | std::ofstream::badbit);
@@ -159,7 +166,7 @@ void ConfigParser::write(std::ostream & output_stream) const {
 void ConfigParser::write(std::ostream & output_stream, const std::string & section) const {
     auto sit = data.find(section);
     if (sit == data.end()) {
-        throw SectionNotFound(section);
+        throw ConfigParserSectionNotFoundError(section);
     }
     write_section(output_stream, sit->first, sit->second, raw_items);
 }

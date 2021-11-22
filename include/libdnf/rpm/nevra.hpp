@@ -30,17 +30,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
+struct NevraIncorrectInputError : public Error {
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf::rpm"; }
+    const char * get_name() const noexcept override { return "NevraIncorrectInputError"; }
+};
+
+
 /// @replaces hawkey:hawkey/__init__.py:class:Nevra
 struct Nevra {
 public:
     enum class Form { NEVRA = 1, NEVR = 2, NEV = 3, NA = 4, NAME = 5 };
-
-    struct IncorrectNevraString : public RuntimeError {
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::Nevra"; }
-        const char * get_name() const noexcept override { return "IncorrectNevraString"; }
-        const char * get_description() const noexcept override { return "Nevra exception"; }
-    };
 
     /// The default forms and their order determine pkg_spec matching
     static const std::vector<Form> & get_default_pkg_spec_forms();

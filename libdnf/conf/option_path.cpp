@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/option_path.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
@@ -76,12 +78,12 @@ OptionPath::OptionPath(const char * default_value, const std::string & regex, bo
 
 void OptionPath::test(const std::string & value) const {
     if (abs_path && value[0] != '/') {
-        throw NotAllowedValue(value);
+        throw OptionValueNotAllowedError(M_("Only absolute paths allowed, relative path \"{}\" detected"), value);
     }
 
     struct stat buffer;
     if (exists && stat(value.c_str(), &buffer) != 0) {
-        throw PathNotExists(value);
+        throw OptionPathNotFoundError(M_("Path \"{}\" does not exist"), value);
     }
 }
 

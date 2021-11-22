@@ -281,7 +281,8 @@ public:
     void set_root_dir(const char * root_dir) {
         auto rc = rpmtsSetRootDir(ts, root_dir);
         if (rc != 0) {
-            throw Exception(std::string("Invalid root directory: ") + root_dir);
+            //TODO(jrohel): Why? Librpm does not provide this information.
+            throw TransactionError(M_("Cannot set root directory \"{}\""), std::string(root_dir));
         }
     }
 
@@ -355,7 +356,10 @@ public:
         FD_t fd = Fopen(file_path.c_str(), "r.ufdio");
 
         if (!fd) {
-            throw Exception("read_pkg_header: Can't open file: " + file_path);
+            throw TransactionError(
+                M_("Failed to read package header, cannot open file \"{}\": {}"),
+                file_path,
+                std::string(Fstrerror(fd)));
         }
 
         const char * descr = file_path.c_str();
@@ -372,7 +376,7 @@ public:
             case RPMRC_FAIL:
             default:
                 h = headerFree(h);
-                throw Exception("read_pkg_header: failed");
+                throw TransactionError(M_("Failed to read package header from file \"{}\""), file_path);
                 break;
         }
 
@@ -409,7 +413,8 @@ public:
         auto rc = rpmtsAddReinstallElement(ts, header, &item);
         headerFree(header);
         if (rc != 0) {
-            throw Exception(M_("Can't reinstall package \"{}\""), item.get_package().get_full_nevra());
+            //TODO(jrohel): Why? Librpm does not provide this information.
+            throw TransactionError(M_("Cannot reinstall package \"{}\""), item.get_package().get_full_nevra());
         }
         libdnf_assert(
             last_item_added_ts_element,
@@ -428,7 +433,8 @@ public:
         int rc = rpmtsAddEraseElement(ts, header, unused);
         headerFree(header);
         if (rc != 0) {
-            throw Exception(M_("Can't remove package \"{}\""), item.get_package().get_full_nevra());
+            //TODO(jrohel): Why? Librpm does not provide this information.
+            throw TransactionError(M_("Cannot remove package \"{}\""), item.get_package().get_full_nevra());
         }
         if (!last_item_added_ts_element) {
             auto it = implicit_ts_elements.find(rpmdb_id);
@@ -530,11 +536,11 @@ public:
         // rec_offset must be unsigned int
         auto * iter = rpmtsInitIterator(ts, RPMDBI_PACKAGES, &rec_offset, sizeof(rec_offset));
         if (!iter) {
-            throw Exception(M_("Fatal error, run database recovery"));
+            throw TransactionError(M_("Cannot init rpm database iterator"));
         }
         hdr = rpmdbNextIterator(iter);
         if (!hdr) {
-            throw Exception(M_("Failed to find package"));
+            throw TransactionError(M_("Package was not found in rpm database"));
         }
         headerLink(hdr);
         rpmdbFreeIterator(iter);
@@ -835,7 +841,8 @@ void Transaction::Impl::install_up_down(TransactionItem & item, libdnf::transact
     auto rc = rpmtsAddInstallElement(ts, header, &item, upgrade ? 1 : 0, nullptr);
     headerFree(header);
     if (rc != 0) {
-        throw Exception(M_("Can't {} package \"{}\""), msg_action, item.get_package().get_full_nevra());
+        //TODO(jrohel): Why? Librpm does not provide this information.
+        throw TransactionError(M_("Cannot {} package \"{}\""), msg_action, item.get_package().get_full_nevra());
     }
     libdnf_assert(
         last_item_added_ts_element,
@@ -920,7 +927,9 @@ void Transaction::set_script_out_fd(int fd) {
     }
     auto * script_fd = fdDup(fd);
     if (!script_fd) {
-        throw Exception("fdDup()");
+        throw TransactionError(
+            M_("Failed to set scriptlet output file, cannot duplicate file descriptor: {}"),
+            std::string(Fstrerror(script_fd)));
     }
     p_impl->set_script_fd(script_fd);
 }
@@ -928,7 +937,10 @@ void Transaction::set_script_out_fd(int fd) {
 void Transaction::set_script_out_file(const std::string & file_path) {
     auto * script_fd = Fopen(file_path.c_str(), "w+b");
     if (!script_fd) {
-        throw Exception("Fopen(): " + file_path);
+        throw TransactionError(
+            M_("Failed to set scriptlet output file, cannot open file \"{}\": {}"),
+            file_path,
+            std::string(Fstrerror(script_fd)));
     }
     p_impl->set_script_fd(script_fd);
 }

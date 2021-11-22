@@ -76,7 +76,7 @@ bool Transaction::operator>(const Transaction & other) const {
 
 void Transaction::start() {
     if (id != 0) {
-        throw std::runtime_error(_("Transaction has already started!"));
+        throw RuntimeError(M_("Transaction has already started!"));
     }
 
     auto conn = transaction_db_connect(sack.base);
@@ -130,7 +130,7 @@ void Transaction::finish(TransactionState state) {
 
 void Transaction::add_console_output_line(int file_descriptor, const std::string & line) {
     if (!get_id()) {
-        throw std::runtime_error(_("Can't add console output to unsaved transaction"));
+        throw RuntimeError(M_("Cannot add console output to unsaved transaction"));
     }
 
     auto conn = transaction_db_connect(sack.base);

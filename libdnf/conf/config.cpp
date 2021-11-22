@@ -37,12 +37,11 @@ void Config<default_priority>::load_from_parser(
             if (opt_binds_iter != binds.end()) {
                 try {
                     opt_binds_iter->second.new_string(default_priority, vars.substitute(opt.second));
-                } catch (const Option::Exception & ex) {
+                } catch (const OptionError & ex) {
                     logger.warning(fmt::format(
-                        R"**(Config error in section "{}" key "{}": {}: {})**",
+                        "Config error in section \"{}\" key \"{}\": {}",
                         section,
                         opt.first,
-                        ex.get_description(),
                         ex.what()
                     ));
                 }

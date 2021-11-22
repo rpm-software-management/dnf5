@@ -101,7 +101,7 @@ void Configuration::read_repo_configs() {
             std::string file_path = glob_result.gl_pathv[i];
             try {
                 repo_parser->read(file_path);
-            } catch (libdnf::ConfigParser::Exception & e) {
+            } catch (libdnf::ConfigParserError & e) {
                 logger.warning(fmt::format("Error parsing config file \"{}\": {}", file_path, e.what()));
                 continue;
             }

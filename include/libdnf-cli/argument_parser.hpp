@@ -30,61 +30,100 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::cli {
 
+/// Parent for all ArgumentsParser runtime errors.
+class ArgumentParserError : public Error {
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf::cli"; }
+    const char * get_name() const noexcept override { return "ArgumentParserError"; }
+};
+
+/// Exception is thrown when conflicting arguments are used together.
+class ArgumentParserConflictingArgumentsError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserConflictingArgumentsError"; }
+};
+
+/// Exception is thrown when no command is found.
+class ArgumentParserMissingCommandError : public ArgumentParserError {
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserMissingCommandError"; }
+};
+
+/// Exception is thrown when a command requires a positional argument that was not found.
+class ArgumentParserMissingPositionalArgumentError : public ArgumentParserError {
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserMissingPositionalArgumentError"; }
+};
+
+/// Exception is generated in the case of an unexpected argument.
+class ArgumentParserUnknownArgumentError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserUnknownArgumentError"; }
+};
+
+
+/// Exception is thrown when an argument with the same ID is already registered.
+class ArgumentParserGroupArgumentIdRegisteredError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserGroupArgumentIdRegisteredError"; }
+};
+
+
+/// Exception is thrown when the Argument `id` contains not allowed '.' character.
+class ArgumentParserArgumentInvalidIdError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserArgumentInvalidIdError"; }
+};
+
+
+/// Exception is thrown when there are too few values for the positional argument.
+class ArgumentParserPositionalArgFewValuesError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserPositionalArgFewValuesError"; }
+};
+
+
+/// Exception is thrown if the named argument requires a value and the value is missing.
+class ArgumentParserNamedArgMissingValueError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserNamedArgMissingValueError"; }
+};
+
+/// Exception is thrown if the named argument is defined without a value and a value is present.
+class ArgumentParserNamedArgValueNotExpectedError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserNamedArgValueNotExpectedError"; }
+};
+
+
+/// Exception is thrown when the command, named_argument, or positional argument was not found.
+class ArgumentParserNotFoundError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserNotFoundError"; }
+};
+
+/// Exception is thrown when the command, named argument, positional argument, or group with the same ID is already registered.
+class ArgumentParserIdAlreadyRegisteredError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserIdAlreadyRegisteredError"; }
+};
+
+
 class ArgumentParser {
 public:
-    /// Parent for all ArgumentsParser runtime errors.
-    class Exception : public RuntimeError {
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser"; }
-        const char * get_name() const noexcept override { return "Exception"; }
-        const char * get_description() const noexcept override { return "ArgumentParser exception"; }
-    };
-
-    /// Exception is generated when conflicting arguments are used together.
-    class Conflict : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "Conflict"; }
-        const char * get_description() const noexcept override { return "Conflicting arguments"; }
-    };
-
-    /// Excepion is thrown when no command is found.
-    class MissingCommand : public Exception {
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "MissingCommand"; }
-        const char * get_description() const noexcept override { return "Command not specified"; }
-    };
-
-    /// Exception is thrown when a command requires a positional argument that was not found.
-    class MissingPositionalArgument : public Exception {
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "MissingPositionalArgument"; }
-        const char * get_description() const noexcept override { return "Missing positional argument"; }
-    };
-
-    /// Exception is generated in the case of an unexpected argument.
-    class UnknownArgument : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "UnknownArgument"; }
-        const char * get_description() const noexcept override { return "Unknown argument"; }
-    };
-
     class Argument;
 
     class Group {
     public:
-        /// Exception is thrown when a an argument with the same ID is already registered.
-        class ArgumentIdExists : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Group"; }
-            const char * get_name() const noexcept override { return "ArgumentIdExists"; }
-            const char * get_description() const noexcept override {
-                return "An argument with the same ID is already registered";
-            }
-        };
-
         /// Sets group header.
         void set_header(std::string header) noexcept { this->header = std::move(header); }
 
@@ -113,15 +152,6 @@ public:
 
     class Argument {
     public:
-        /// Exception is generated when the Argument `id` contains not allowed '.' character.
-        class InvalidId : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Argument"; }
-            const char * get_name() const noexcept override { return "InvalidId"; }
-            const char * get_description() const noexcept override { return "Invalid id"; }
-        };
-
         Argument(const Argument &) = delete;
         Argument(Argument &&) = delete;
         Argument & operator=(const Argument &) = delete;
@@ -176,7 +206,7 @@ public:
         friend class ArgumentParser;
 
         Argument(ArgumentParser & owner, std::string id);
-        static std::string get_conflict_arg_msg(const Argument * conflict_arg);
+        static std::pair<std::string, std::string> get_conflict_arg_msg(const Argument * conflict_arg);
 
         ArgumentParser & owner;
         std::string id;
@@ -192,17 +222,6 @@ public:
         constexpr static int OPTIONAL{0};
         constexpr static int UNLIMITED{-1};
         constexpr static int AT_LEAST_ONE{-2};
-
-        /// Exception is generated when there are insufficient values for the positional argument.
-        class FewValues : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override {
-                return "libdnf::cli::ArgumentParser::PositionalArg";
-            }
-            const char * get_name() const noexcept override { return "FewValues"; }
-            const char * get_description() const noexcept override { return "Few values"; }
-        };
 
         using ParseHookFunc = std::function<bool(PositionalArg * arg, int argc, const char * const argv[])>;
         using CompleteHookFunc = std::function<std::vector<std::string>(const char * arg_to_complete)>;
@@ -261,24 +280,6 @@ public:
 
     class NamedArg : public Argument {
     public:
-        /// Exception is generated if the argument requires a value and the value is missing.
-        class MissingValue : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::NamedArg"; }
-            const char * get_name() const noexcept override { return "MissingValue"; }
-            const char * get_description() const noexcept override { return "Missing argument value"; }
-        };
-
-        /// Exception is generated if the argument is defined without a value and a value is present.
-        class UnexpectedValue : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::NamedArg"; }
-            const char * get_name() const noexcept override { return "UnexpectedValue"; }
-            const char * get_description() const noexcept override { return "Unexpected argument value"; }
-        };
-
         using ParseHookFunc = std::function<bool(NamedArg * arg, const char * option, const char * value)>;
 
         /// Sets long name of argument. Long name is prefixed with two dashes on the command line (e.g. "--help").
@@ -364,77 +365,6 @@ public:
 
     class Command : public Argument {
     public:
-        /// Exception is generated when a command was not found.
-        class CommandNotFound : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
-            const char * get_name() const noexcept override { return "CommandNotFound"; }
-            const char * get_description() const noexcept override { return "Commnand not found"; }
-        };
-
-        /// Exception is generated when a named argument was not found.
-        class NamedArgNotFound : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
-            const char * get_name() const noexcept override { return "NamedArgNotFound"; }
-            const char * get_description() const noexcept override { return "Named argument not found"; }
-        };
-
-        /// Exception is generated when a positional argument was not found.
-        class PositionalArgNotFound : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
-            const char * get_name() const noexcept override { return "PositionalArgNotFound"; }
-            const char * get_description() const noexcept override { return "Positional argument not found"; }
-        };
-
-        /// Exception is thrown when a command with the same ID is already registered.
-        class CommandIdExists : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
-            const char * get_name() const noexcept override { return "CommandIdExists"; }
-            const char * get_description() const noexcept override {
-                return "Command with the same ID is already registered";
-            }
-        };
-
-        /// Exception is thrown when a named argument with the same ID is already registered.
-        class NamedArgIdExists : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
-            const char * get_name() const noexcept override { return "NamedArgIdExists"; }
-            const char * get_description() const noexcept override {
-                return "Named argument with the same ID is already registered";
-            }
-        };
-
-        /// Exception is thrown when a positional argument with the same ID is already registered.
-        class PositionalArgIdExists : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
-            const char * get_name() const noexcept override { return "PositionalArgIdExists"; }
-            const char * get_description() const noexcept override {
-                return "Positional argument with the same ID is already registered";
-            }
-        };
-
-        /// Exception is thrown when a group with the same ID is already registered.
-        class GroupIdExists : public Exception {
-        public:
-            using Exception::Exception;
-            const char * get_domain_name() const noexcept override { return "libdnf::cli::ArgumentParser::Command"; }
-            const char * get_name() const noexcept override { return "GroupIdExists"; }
-            const char * get_description() const noexcept override {
-                return "Group with the same ID is already registered";
-            }
-        };
-
         using ParseHookFunc = std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])>;
 
         /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
@@ -516,7 +446,8 @@ public:
 
         Command(ArgumentParser & owner, const std::string & id) : Argument(owner, id) {}
 
-        void print_complete(const char * arg, std::vector<ArgumentParser::NamedArg *> named_args, size_t used_positional_arguments);
+        void print_complete(
+            const char * arg, std::vector<ArgumentParser::NamedArg *> named_args, size_t used_positional_arguments);
 
         Command * parent{nullptr};
         std::vector<Command *> cmds;

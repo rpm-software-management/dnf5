@@ -71,6 +71,6 @@ void ReldepTest::test_rich_reldep() {
 
 
 void ReldepTest::test_invalid_reldep() {
-    CPPUNIT_ASSERT_THROW(libdnf::rpm::Reldep a(base, "(lab-list if labirinto.txt"), std::runtime_error);
-    CPPUNIT_ASSERT_THROW(libdnf::rpm::Reldep a(base, "labirinto = "), std::runtime_error);
+    CPPUNIT_ASSERT_THROW(libdnf::rpm::Reldep a(base, "(lab-list if labirinto.txt"), libdnf::RuntimeError);
+    CPPUNIT_ASSERT_THROW(libdnf::rpm::Reldep a(base, "labirinto = "), libdnf::RuntimeError);
 }

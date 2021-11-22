@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/option_string.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <regex>
 
 namespace libdnf {
@@ -64,7 +66,11 @@ void OptionString::test(const std::string & value) const {
         regex,
         std::regex::nosubs | std::regex::extended | (icase ? std::regex::icase : std::regex_constants::ECMAScript));
     if (!std::regex_match(value, re)) {
-        throw NotAllowedValue(value);
+        throw OptionValueNotAllowedError(
+            M_("Input value \"{}\" not allowed, allowed values for this option are defined by regular expression "
+               "\"{}\""),
+            value,
+            regex);
     }
 }
 
@@ -80,7 +86,9 @@ void OptionString::set(Priority priority, const std::string & value) {
 
 const std::string & OptionString::get_value() const {
     if (get_priority() == Priority::EMPTY) {
-        throw ValueNotSet();
+        //TODO(jrohel): We don't know the option name at this time. Add a text name to the options
+        //              or extend exception (add name) in upper layer.
+        throw OptionValueNotSetError(M_("Option value is not set"));
     }
     return value;
 }

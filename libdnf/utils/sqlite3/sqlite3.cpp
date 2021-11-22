@@ -20,16 +20,31 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "sqlite3.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 
 namespace libdnf::utils {
 
+
+const char * SQLite3SQLError::SQLite3SQLError::what() const noexcept {
+    try {
+        message = fmt::format(
+            "{}: ({}) - {}",
+            formatter ? formatter(TM_(std::runtime_error::what(), 1)) : TM_(std::runtime_error::what(), 1),
+            error_code,
+            sqlite3_errstr(error_code));
+    } catch (...) {
+        return TM_(std::runtime_error::what(), 1);
+    }
+    return message.c_str();
+}
 
 void SQLite3::open() {
     if (db == nullptr) {
         auto result = sqlite3_open(path.c_str(), &db);
         if (result != SQLITE_OK) {
             sqlite3_close(db);
-            throw SQLError(*this, result, "Open failed");
+            throw SQLite3SQLError(result, M_("Failed to open database \"{}\""), path);
         }
 
         // the busy timeout must be set before executing *any* statements
@@ -66,7 +81,7 @@ void SQLite3::close() {
         result = sqlite3_close(db);
     }
     if (result != SQLITE_OK) {
-        throw SQLError(*this, result, "Close failed");
+        throw SQLite3SQLError(result, M_("Failed to close database \"{}\""), path);
     }
     db = nullptr;
 }
@@ -78,7 +93,7 @@ void SQLite3::backup(const std::string & output_file) {
     auto result = sqlite3_open(output_file.c_str(), &backup_db);
     if (result != SQLITE_OK) {
         sqlite3_close(backup_db);
-        throw SQLError(*this, result, "Failed to open backup database: \"" + output_file + "\"");
+        throw SQLite3SQLError(result, M_("Failed to open backup database \"{}\""), output_file);
     }
 
     sqlite3_backup * backup_handle = sqlite3_backup_init(backup_db, "main", db, "main");
@@ -93,7 +108,7 @@ void SQLite3::backup(const std::string & output_file) {
     sqlite3_close(backup_db);
 
     if (result != SQLITE_OK) {
-        throw SQLError(*this, result, "Database backup failed");
+        throw SQLite3SQLError(result, M_("Failed to backup database \"{}\" into \"{}\""), path, output_file);
     }
 }
 
@@ -104,7 +119,7 @@ void SQLite3::restore(const std::string & input_file) {
     auto result = sqlite3_open(input_file.c_str(), &backup_db);
     if (result != SQLITE_OK) {
         sqlite3_close(backup_db);
-        throw SQLError(*this, result, "Failed to open backup database: \"" + input_file + "\"");
+        throw SQLite3SQLError(result, M_("Failed to open backup database \"{}\""), input_file);
     }
 
     sqlite3_backup * backup_handle = sqlite3_backup_init(db, "main", backup_db, "main");
@@ -119,7 +134,7 @@ void SQLite3::restore(const std::string & input_file) {
     sqlite3_close(backup_db);
 
     if (result != SQLITE_OK) {
-        throw SQLError(*this, result, "Database restore failed");
+        throw SQLite3SQLError(result, M_("Failed to restored database \"{}\""), input_file);
     }
 }
 

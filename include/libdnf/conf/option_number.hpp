@@ -36,21 +36,6 @@ public:
     using ValueType = T;
     using FromStringFunc = std::function<ValueType(const std::string &)>;
 
-    /// Exception that is generated when an invalid input value is detected.
-    class InvalidValue : public Option::InvalidValue {
-    public:
-        using Option::InvalidValue::InvalidValue;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionNumber"; }
-    };
-
-    /// Exception that is generated when not allowed input value is detected.
-    class NotAllowedValue : public InvalidValue {
-    public:
-        using InvalidValue::InvalidValue;
-        const char * get_name() const noexcept override { return "NotAllowedValue"; }
-        const char * get_description() const noexcept override { return "Not allowed value"; }
-    };
-
     /// Constructor that sets default value and limits for min and max values.
     /// @replaces libdnf:conf/OptionNumber.hpp:ctor:OptionNumber.OptionNumber<T>(T default_value, T min, T max)
     OptionNumber(T default_value, T min, T max);

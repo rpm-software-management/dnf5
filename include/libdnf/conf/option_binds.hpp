@@ -28,31 +28,28 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+struct OptionBindsError : public Error {
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_name() const noexcept override { return "OptionBindsError"; }
+};
+
+class OptionBindsOptionNotFoundError : public OptionBindsError {
+public:
+    explicit OptionBindsOptionNotFoundError(const std::string & id);
+    const char * get_name() const noexcept override { return "OptionBindsOptionNotFoundError"; }
+};
+
+class OptionBindsOptionAlreadyExistsError : public OptionBindsError {
+public:
+    explicit OptionBindsOptionAlreadyExistsError(const std::string & id);
+    const char * get_name() const noexcept override { return "OptionBindsOptionAlreadyExistsError"; }
+};
+
 /// Maps the options names (text names readed from config file, command line, ...) to options objects.
 /// Supports user defined functions for processing new value and converting value to string.
 class OptionBinds {
 public:
-    struct Exception : public RuntimeError {
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionBinds"; }
-        const char * get_name() const noexcept override { return "Exception"; }
-        const char * get_description() const noexcept override { return "OptionBinds exception"; }
-    };
-
-    class OptionNotFound : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "OptionNotFound"; }
-        const char * get_description() const noexcept override { return "Option not found"; }
-    };
-
-    class OptionAlreadyExists : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "OptionAlreadyExists"; }
-        const char * get_description() const noexcept override { return "Option already exists"; }
-    };
-
     /// Extends the option with user-defined functions for processing a new value and converting value to a string.
     /// It is used as additional level of processing when the option is accesed by its text name.
     class Item final {

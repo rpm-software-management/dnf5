@@ -261,7 +261,7 @@ void PythonPluginLoader::load_plugins_from_dir(const fs::path & dir_path) {
         try {
             load_plugin_file(p);
         } catch (const std::exception & ex) {
-            std::string msg = fmt::format("Can't load plugin \"{}\": {}", p.string(), ex.what());
+            std::string msg = fmt::format("Cannot load plugin \"{}\": {}", p.string(), ex.what());
             logger.error(msg);
             error_msgs += msg + '\n';
         }

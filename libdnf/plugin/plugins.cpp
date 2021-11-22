@@ -117,19 +117,19 @@ void Plugins::load_plugins(const std::string & dir_path) {
     }
     std::sort(lib_names.begin(), lib_names.end());
 
-    std::string error_msgs;
+    bool cant_load{false};
     for (auto & p : lib_names) {
         try {
             load_plugin(p);
         } catch (const std::exception & ex) {
-            std::string msg = fmt::format(_("Can't load plugin \"{}\": {}"), p.string(), ex.what());
+            std::string msg = fmt::format(_("Cannot load plugin \"{}\": {}"), p.string(), ex.what());
             logger.error(msg);
-            error_msgs += msg + '\n';
+            cant_load = true;
         }
     }
 
-    if (!error_msgs.empty()) {
-        throw RuntimeError(M_("Can't load plugins"));
+    if (cant_load) {
+        throw RuntimeError(M_("Cannot load plugins"));
     }
 }
 

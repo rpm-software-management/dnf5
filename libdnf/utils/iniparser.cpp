@@ -19,13 +19,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/iniparser.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 namespace libdnf {
 
 constexpr char DELIMITER = '\n';
 
 IniParser::IniParser(const std::string & file_path) : is(new std::ifstream(file_path)) {
     if (!(*is)) {
-        throw CantOpenFile(file_path);
+        //TODO(jrohel): Why? This information is not provided by std::ifstream.
+        throw IniParserOpenFileError(M_("Cannot open file \"{}\""), file_path);
     }
     is->exceptions(std::ifstream::badbit);
     line_number = 0;
@@ -34,7 +37,7 @@ IniParser::IniParser(const std::string & file_path) : is(new std::ifstream(file_
 
 IniParser::IniParser(std::unique_ptr<std::istream> && input_stream) : is(std::move(input_stream)) {
     if (!(*is)) {
-        throw CantOpenFile("bad input stream");
+        throw IniParserOpenFileError(M_("Bad input stream"));
     }
     is->exceptions(std::ifstream::badbit);
     line_number = 0;
@@ -116,10 +119,10 @@ IniParser::ItemType IniParser::next() {
         if (line[start] == '[') {
             auto end_sect_pos = line.find(']', ++start);
             if (end_sect_pos == std::string::npos) {
-                throw MissingBracket(std::to_string(line_number));
+                throw IniParserMissingBracketError(M_("Missing ']' on line {}"), line_number);
             }
             if (end_sect_pos == start) {
-                throw EmptySectionName(std::to_string(line_number));
+                throw IniParserEmptySectionNameError(M_("Empty section name on line {}"), line_number);
             }
             for (auto idx = end_sect_pos + 1; idx < end; ++idx) {
                 auto ch = line[idx];
@@ -127,7 +130,7 @@ IniParser::ItemType IniParser::next() {
                     break;
                 }
                 if (ch != ' ' && ch != '\t' && ch != '\r') {
-                    throw TextAfterSection(std::to_string(line_number));
+                    throw IniParserTextAfterSectionError(M_("Text after section on line {}"), line_number);
                 }
             }
             this->section = line.substr(start, end_sect_pos - start);
@@ -140,12 +143,12 @@ IniParser::ItemType IniParser::next() {
         }
 
         if (section.empty()) {
-            throw MissingSectionHeader(std::to_string(line_number));
+            throw IniParserMissingSectionHeaderError(M_("Missing section header on line {}"), line_number);
         }
 
         if (start > 0) {
             if (!previous_line_with_key_val) {
-                throw IllegalContinuationLine(std::to_string(line_number));
+                throw IniParserIllegalContinuationLineError(M_("Illegal continuation line on line {}"), line_number);
             }
             value += DELIMITER + line.substr(start, end - start + 1);
             raw_item += line;
@@ -155,11 +158,11 @@ IniParser::ItemType IniParser::next() {
             line_ready = false;
         } else {
             if (line[start] == '=') {
-                throw MissingKey(std::to_string(line_number));
+                throw IniParserMissingKeyError(M_("Missing option name on line {}"), line_number);
             }
             auto eql_pos = line.find_first_of('=');
             if (eql_pos == std::string::npos) {
-                throw MissingEqual(std::to_string(line_number));
+                throw IniParserMissingEqualError(M_("Missing '=' on line {}"), line_number);
             }
             auto endkeypos = line.find_last_not_of(" \t", eql_pos - 1);
             auto valuepos = line.find_first_not_of(" \t", eql_pos + 1);

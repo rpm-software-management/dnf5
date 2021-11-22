@@ -35,7 +35,6 @@ class RepoError : public Error {
 class RepoDownloadError : public RepoError {
 public:
     using RepoError::RepoError;
-    const char * get_domain_name() const noexcept override { return "libdnf::repo"; }
     const char * get_name() const noexcept override { return "RepoDownloadError"; }
 };
 
@@ -43,14 +42,12 @@ public:
 class RepoGpgError : public RepoError {
 public:
     using RepoError::RepoError;
-    const char * get_domain_name() const noexcept override { return "libdnf::repo"; }
     const char * get_name() const noexcept override { return "RepoGpgError"; }
 };
 
 
 class RepoRpmError : public RepoError {
     using RepoError::RepoError;
-    const char * get_domain_name() const noexcept override { return "libdnf::repo"; }
     const char * get_name() const noexcept override { return "RepoRpmError"; }
 };
 

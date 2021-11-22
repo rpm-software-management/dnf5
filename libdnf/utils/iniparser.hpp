@@ -29,6 +29,61 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+class IniParserError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_name() const noexcept override { return "IniParserError"; }
+};
+
+class IniParserOpenFileError : public IniParserError {
+public:
+    using IniParserError::IniParserError;
+    const char * get_name() const noexcept override { return "IniParserOpenFileError"; }
+};
+
+class IniParserMissingSectionHeaderError : public IniParserError {
+public:
+    using IniParserError::IniParserError;
+    const char * get_name() const noexcept override { return "IniParserMissingSectionHeaderError"; }
+};
+
+class IniParserMissingBracketError : public IniParserError {
+public:
+    using IniParserError::IniParserError;
+    const char * get_name() const noexcept override { return "IniParserMissingBracketError"; }
+};
+
+class IniParserEmptySectionNameError : public IniParserError {
+public:
+    using IniParserError::IniParserError;
+    const char * get_name() const noexcept override { return "IniParserEmptySectionNameError"; }
+};
+
+class IniParserTextAfterSectionError : public IniParserError {
+public:
+    using IniParserError::IniParserError;
+    const char * get_name() const noexcept override { return "IniParserTextAfterSectionError"; }
+};
+
+class IniParserIllegalContinuationLineError : public IniParserError {
+public:
+    using IniParserError::IniParserError;
+    const char * get_name() const noexcept override { return "IniParserIllegalContinuationLineError"; }
+};
+
+class IniParserMissingKeyError : public IniParserError {
+public:
+    using IniParserError::IniParserError;
+    const char * get_name() const noexcept override { return "IniParserMissingKeyError"; }
+};
+
+class IniParserMissingEqualError : public IniParserError {
+public:
+    using IniParserError::IniParserError;
+    const char * get_name() const noexcept override { return "IniParserMissingEqualError"; }
+};
+
 /// @class IniParser
 ///
 /// @brief Simple .INI file parser
@@ -37,70 +92,6 @@ namespace libdnf {
 /// It parses input text to tokens - SECTION, KEY_VAL, COMMENT_LINE, EMPTY_LINE, and END_OF_INPUT.
 class IniParser {
 public:
-    class Exception : public RuntimeError {
-    public:
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::IniParser"; }
-        const char * get_name() const noexcept override { return "Exception"; }
-        const char * get_description() const noexcept override { return "IniParser exception"; }
-    };
-
-    class CantOpenFile : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "CantOpenFile"; }
-        const char * get_description() const noexcept override { return "Can't open file"; }
-    };
-
-    class MissingSectionHeader : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "MissingSectionHeader"; }
-        const char * get_description() const noexcept override { return "Missing section header"; }
-    };
-
-    class MissingBracket : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "MissingBracket"; }
-        const char * get_description() const noexcept override { return "Missing ']'"; }
-    };
-
-    class EmptySectionName : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "EmptySectionName"; }
-        const char * get_description() const noexcept override { return "Empty section name"; }
-    };
-
-    class TextAfterSection : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "TextAfterSection"; }
-        const char * get_description() const noexcept override { return "Text after section"; }
-    };
-
-    class IllegalContinuationLine : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "IllegalContinuationLine"; }
-        const char * get_description() const noexcept override { return "Illegal continuation line"; }
-    };
-
-    class MissingKey : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "MissingKey"; }
-        const char * get_description() const noexcept override { return "Missing key"; }
-    };
-
-    class MissingEqual : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "MissingEqual"; }
-        const char * get_description() const noexcept override { return "Missing '='"; }
-    };
-
     enum class ItemType {
         SECTION,       // [section_name]
         KEY_VAL,       // key = value, (multiline value supported)

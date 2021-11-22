@@ -82,14 +82,6 @@ using PackageSackWeakPtr = WeakPtr<PackageSack, false>;
 
 class PackageSack {
 public:
-    class Exception : public RuntimeError {
-    public:
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::PackageSack"; }
-        const char * get_name() const noexcept override { return "Exception"; }
-        const char * get_description() const noexcept override { return "rpm::PackageSack exception"; }
-    };
-
     explicit PackageSack(const libdnf::BaseWeakPtr & base);
     explicit PackageSack(libdnf::Base & base);
     ~PackageSack();

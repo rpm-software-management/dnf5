@@ -71,7 +71,7 @@ public:
         if (get_data().size() == 1) {
             return *get_data().begin();
         }
-        throw std::runtime_error("Query must contain exactly one object.");
+        throw RuntimeError("Query must contain exactly one object.");
     }
 
     /// List all objects matching the query.

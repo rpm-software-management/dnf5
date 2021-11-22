@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/option_string_list.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <regex>
 
 namespace libdnf {
@@ -60,7 +62,7 @@ void OptionStringList::test(const std::vector<std::string> & value) const {
         std::regex::nosubs | std::regex::extended | (icase ? std::regex::icase : std::regex_constants::ECMAScript));
     for (const auto & val : value) {
         if (!std::regex_match(val, re)) {
-            throw NotAllowedValue(val);
+            throw OptionValueNotAllowedError(M_("Input value \"{}\" not allowed, allowed values for this option are defined by regular expression \"{}\""), val, regex);
         }
     }
 }

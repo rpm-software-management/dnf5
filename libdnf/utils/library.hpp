@@ -27,31 +27,29 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::utils {
 
+/// Library exception
+class LibraryError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf::utils"; }
+    const char * get_name() const noexcept override { return "LibraryError"; }
+};
+
+class LibraryLoadingError : public LibraryError {
+public:
+    using LibraryError::LibraryError;
+    const char * get_name() const noexcept override { return "LibraryLoadingError"; }
+};
+
+class LibrarySymbolNotFoundError : public LibraryError {
+public:
+    using LibraryError::LibraryError;
+    const char * get_name() const noexcept override { return "LibrarySymbolNotFoundError"; }
+};
+
+
 class Library {
 public:
-    /// Library exception
-    class Exception : public RuntimeError {
-    public:
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::Library"; }
-        const char * get_name() const noexcept override { return "Exception"; }
-        const char * get_description() const noexcept override { return "Library exception"; }
-    };
-
-    class CantLoad : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "CantLoad"; }
-        const char * get_description() const noexcept override { return "Can't load shared library"; }
-    };
-
-    class NotFound : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "NotFound"; }
-        const char * get_description() const noexcept override { return "Can't obtain address of symbol"; }
-    };
-
     explicit Library(const std::string & path);
     ~Library();
 

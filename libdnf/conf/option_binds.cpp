@@ -19,9 +19,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/option_binds.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <utility>
 
 namespace libdnf {
+
+OptionBindsOptionNotFoundError::OptionBindsOptionNotFoundError(const std::string & id)
+    : OptionBindsError(M_("Option \"{}\" not found"), id) {}
+
+OptionBindsOptionAlreadyExistsError::OptionBindsOptionAlreadyExistsError(const std::string & id)
+    : OptionBindsError(M_("Option \"{}\" already exists"), id) {}
 
 // ========== OptionBinds::Item class ===============
 
@@ -63,7 +71,7 @@ bool OptionBinds::Item::get_is_append_option() const {
 OptionBinds::Item & OptionBinds::at(const std::string & id) {
     auto item = items.find(id);
     if (item == items.end()) {
-        throw OptionNotFound(id);
+        throw OptionBindsOptionNotFoundError(id);
     }
     return item->second;
 }
@@ -71,7 +79,7 @@ OptionBinds::Item & OptionBinds::at(const std::string & id) {
 const OptionBinds::Item & OptionBinds::at(const std::string & id) const {
     auto item = items.find(id);
     if (item == items.end()) {
-        throw OptionNotFound(id);
+        throw OptionBindsOptionNotFoundError(id);
     }
     return item->second;
 }
@@ -84,7 +92,7 @@ OptionBinds::Item & OptionBinds::add(
     bool add_value) {
     auto item = items.find(id);
     if (item != items.end()) {
-        throw OptionAlreadyExists(id);
+        throw OptionBindsOptionAlreadyExistsError(id);
     }
     auto res = items.emplace(id, Item(option, std::move(new_string_func), std::move(get_value_string_func), add_value));
     return res.first->second;
@@ -93,7 +101,7 @@ OptionBinds::Item & OptionBinds::add(
 OptionBinds::Item & OptionBinds::add(const std::string & id, Option & option) {
     auto item = items.find(id);
     if (item != items.end()) {
-        throw OptionAlreadyExists(id);
+        throw OptionBindsOptionAlreadyExistsError(id);
     }
     auto res = items.emplace(id, Item(option));
     return res.first->second;

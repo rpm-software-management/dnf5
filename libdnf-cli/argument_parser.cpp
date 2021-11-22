@@ -38,7 +38,8 @@ namespace libdnf::cli {
 void ArgumentParser::Group::register_argument(Argument * arg) {
     for (auto * item : arguments) {
         if (item->id == arg->id) {
-            throw ArgumentIdExists(arg->id);
+            throw ArgumentParserGroupArgumentIdRegisteredError(
+                M_("Argument id \"{}\" already registered in group \"{}\""), arg->id, id);
         }
     }
     arguments.push_back(arg);
@@ -46,7 +47,7 @@ void ArgumentParser::Group::register_argument(Argument * arg) {
 
 ArgumentParser::Argument::Argument(ArgumentParser & owner, std::string id) : owner(owner) {
     if (id.find('.') != id.npos) {
-        throw InvalidId(id);
+        throw ArgumentParserArgumentInvalidIdError(M_("Invalid character '.' in argument id \"{}\""), id);
     }
     this->id = std::move(id);
 }
@@ -62,34 +63,32 @@ ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() con
     return nullptr;
 }
 
-std::string ArgumentParser::Argument::get_conflict_arg_msg(const Argument * conflict_arg) {
-    std::string msg;
+std::pair<std::string, std::string> ArgumentParser::Argument::get_conflict_arg_msg(const Argument * conflict_arg) {
     if (const auto * named_arg = dynamic_cast<const NamedArg *>(conflict_arg)) {
         std::string conflict;
         if (!named_arg->get_long_name().empty()) {
-            conflict = "\"--" + named_arg->get_long_name() + "\"";
+            conflict = "--" + named_arg->get_long_name();
         }
         if (!named_arg->get_long_name().empty() && named_arg->get_short_name() != '\0') {
             conflict += "/";
         }
         if (named_arg->get_short_name() != '\0') {
-            conflict = std::string("\"-") + named_arg->get_short_name() + "\"";
+            conflict = std::string("-") + named_arg->get_short_name();
         }
-        msg = fmt::format("not allowed with argument {}", conflict);
+        return {M_("\"{}\" not allowed together with named argument \"{}\""), conflict};
     } else if (dynamic_cast<const Command *>(conflict_arg)) {
-        msg = fmt::format("not allowed with command {}", conflict_arg->id);
+        return {M_("\"{}\" not allowed in command \"{}\""), conflict_arg->id};
     } else {
-        msg = fmt::format("not allowed with positional argument {}", conflict_arg->id);
+        return {M_("\"{}\" not allowed together with positional argument \"{}\""), conflict_arg->id};
     }
-    return msg;
 }
 
 ArgumentParser::PositionalArg::PositionalArg(
     ArgumentParser & owner, const std::string & id, std::vector<std::unique_ptr<libdnf::Option>> * values)
-    : Argument(owner, id)
-    , init_value(nullptr)
-    , values(values) {
-    libdnf_assert(values && !values->empty(), "\"values\" constructor parameter can't be nullptr or empty vector");
+    : Argument(owner, id),
+      init_value(nullptr),
+      values(values) {
+    libdnf_assert(values && !values->empty(), "\"values\" constructor parameter cannot be nullptr or an empty vector");
 
     nvals = static_cast<int>(values->size());
 }
@@ -100,12 +99,12 @@ ArgumentParser::PositionalArg::PositionalArg(
     int nvals,
     libdnf::Option * init_value,
     std::vector<std::unique_ptr<libdnf::Option>> * values)
-    : Argument(owner, id)
-    , nvals(nvals)
-    , init_value(init_value)
-    , values(values)
-    , store_value(values) {
-    libdnf_assert(!values || init_value, "\"init_value\" constructor parameter can't be nullptr if \"value\" is set");
+    : Argument(owner, id),
+      nvals(nvals),
+      init_value(init_value),
+      values(values),
+      store_value(values) {
+    libdnf_assert(!values || init_value, "\"init_value\" constructor parameter cannot be nullptr if \"value\" is set");
 }
 
 void ArgumentParser::PositionalArg::set_store_value(bool enable) {
@@ -116,9 +115,8 @@ void ArgumentParser::PositionalArg::set_store_value(bool enable) {
 
 int ArgumentParser::PositionalArg::parse(const char * option, int argc, const char * const argv[]) {
     if (const auto * arg = get_conflict_argument()) {
-        auto conflict = get_conflict_arg_msg(arg);
-        auto msg = fmt::format("positional argument \"{}\": {}", option, conflict);
-        throw Conflict(msg);
+        auto [fmt_message, conflict_option] = get_conflict_arg_msg(arg);
+        throw ArgumentParserConflictingArgumentsError(fmt_message, std::string(option), conflict_option);
     }
     if (owner.complete_arg_ptr) {
         int usable_argc = 1;
@@ -145,11 +143,11 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
         }
     }
     if (argc < nvals) {
-        throw FewValues(this->id);
+        throw ArgumentParserPositionalArgFewValuesError(M_("Too few values for positional argument \"{}\""), this->id);
     }
     for (int i = 1; i < nvals; ++i) {
         if (*argv[i] == '-') {
-            throw FewValues(this->id);
+            throw ArgumentParserPositionalArgFewValuesError(M_("Too few values for positional argument \"{}\""), this->id);
         }
     }
     int usable_argc = 1;
@@ -176,9 +174,8 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
 
 int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const char * const argv[]) {
     if (const auto * arg = get_conflict_argument()) {
-        auto conflict = get_conflict_arg_msg(arg);
-        auto msg = fmt::format("argument \"--{}\": {}", option, conflict);
-        throw Conflict(msg);
+        auto [fmt_message, conflict_option] = get_conflict_arg_msg(arg);
+        throw ArgumentParserConflictingArgumentsError(fmt_message, "--" + std::string(option), conflict_option);
     }
     const char * arg_value;
     int consumed_args;
@@ -189,14 +186,16 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
             consumed_args = 1;
         } else {
             if (argc < 2) {
-                throw MissingValue(std::string("--") + option);
+                throw ArgumentParserNamedArgMissingValueError(
+                    M_("Missing value for named argument \"--{}\""), std::string(option));
             }
             arg_value = argv[1];
             consumed_args = 2;
         }
     } else {
         if (assign_ptr) {
-            throw UnexpectedValue(std::string("--") + option);
+            throw ArgumentParserNamedArgValueNotExpectedError(
+                M_("Unexpected value for named argumend \"--{}\""), std::string(option));
         }
         arg_value = const_val.c_str();
         consumed_args = 1;
@@ -214,9 +213,8 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
 
 int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const char * const argv[]) {
     if (const auto * arg = get_conflict_argument()) {
-        auto conflict = get_conflict_arg_msg(arg);
-        auto msg = fmt::format("argument \"-{}\": {:.1}", option, conflict);
-        throw Conflict(msg);
+        auto [fmt_message, conflict_option] = get_conflict_arg_msg(arg);
+        throw ArgumentParserConflictingArgumentsError(fmt_message, '-' + std::string(option), conflict_option);
     }
     const char * arg_value;
     int consumed_args;
@@ -226,7 +224,7 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
             consumed_args = 1;
         } else {
             if (argc < 2) {
-                throw MissingValue(std::string("-") + *option);
+                throw ArgumentParserNamedArgMissingValueError(M_("Missing value for named argument \"-{}\""), *option);
             }
             arg_value = argv[1];
             consumed_args = 2;
@@ -249,7 +247,8 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
 void ArgumentParser::Command::register_command(Command * cmd) {
     for (auto * item : cmds) {
         if (item->id == cmd->id) {
-            throw CommandIdExists(cmd->id);
+            throw ArgumentParserIdAlreadyRegisteredError(
+                M_("Command id \"{}\" already registered for command \"{}\""), cmd->id, id);
         }
     }
     cmd->parent = this;
@@ -259,7 +258,8 @@ void ArgumentParser::Command::register_command(Command * cmd) {
 void ArgumentParser::Command::register_named_arg(NamedArg * arg) {
     for (auto * item : named_args) {
         if (item->id == arg->id) {
-            throw NamedArgIdExists(arg->id);
+            throw ArgumentParserIdAlreadyRegisteredError(
+                M_("Named argument id \"{}\" already registered for command \"{}\""), arg->id, id);
         }
     }
     named_args.push_back(arg);
@@ -268,7 +268,8 @@ void ArgumentParser::Command::register_named_arg(NamedArg * arg) {
 void ArgumentParser::Command::register_positional_arg(PositionalArg * arg) {
     for (auto * item : pos_args) {
         if (item->id == arg->id) {
-            throw PositionalArgIdExists(arg->id);
+            throw ArgumentParserIdAlreadyRegisteredError(
+                M_("Positional argument id \"{}\" already registered for command \"{}\""), arg->id, id);
         }
     }
     pos_args.push_back(arg);
@@ -277,7 +278,8 @@ void ArgumentParser::Command::register_positional_arg(PositionalArg * arg) {
 void ArgumentParser::Command::register_group(Group * grp) {
     for (auto * item : groups) {
         if (item->id == grp->id) {
-            throw GroupIdExists(grp->id);
+            throw ArgumentParserIdAlreadyRegisteredError(
+                M_("Group id \"{}\" already registered for command \"{}\""), grp->id, id);
         }
     }
     groups.push_back(grp);
@@ -297,21 +299,24 @@ ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string
     if (auto ret = find_arg(cmds, id)) {
         return *ret;
     }
-    throw CommandNotFound(id);
+    throw ArgumentParserNotFoundError(
+        M_("Command id \"{}\" does not contain subcommand with id \"{}\""), this->id, id);
 }
 
 ArgumentParser::NamedArg & ArgumentParser::Command::get_named_arg(const std::string & id) const {
     if (auto ret = find_arg(named_args, id)) {
         return *ret;
     }
-    throw NamedArgNotFound(id);
+    throw ArgumentParserNotFoundError(
+        M_("Command id \"{}\" does not contain named argument with id \"{}\""), this->id, id);
 }
 
 ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(const std::string & id) const {
     if (auto ret = find_arg(pos_args, id)) {
         return *ret;
     }
-    throw PositionalArgNotFound(id);
+    throw ArgumentParserNotFoundError(
+        M_("Command id \"{}\" does not contain positional argument with id \"{}\""), this->id, id);
 }
 
 void ArgumentParser::Command::parse(const char * option, int argc, const char * const argv[]) {
@@ -424,7 +429,8 @@ void ArgumentParser::Command::parse(
             if (argv + i > owner.complete_arg_ptr) {
                 return;
             } else if (argv + i == owner.complete_arg_ptr) {
-                print_complete(argv[i], additional_named_args ? extended_named_args : named_args, used_positional_arguments);
+                print_complete(
+                    argv[i], additional_named_args ? extended_named_args : named_args, used_positional_arguments);
                 return;
             }
         }
@@ -465,9 +471,9 @@ void ArgumentParser::Command::parse(
             for (auto & cmd : cmds) {
                 if (cmd->id == argv[i]) {
                     if (const auto * arg = get_conflict_argument()) {
-                        auto conflict = get_conflict_arg_msg(arg);
-                        auto msg = fmt::format("command \"{}\": {}", option, conflict);
-                        throw Conflict(msg);
+                        auto [fmt_message, conflict_option] = get_conflict_arg_msg(arg);
+                        throw ArgumentParserConflictingArgumentsError(
+                            fmt_message, std::string(option), conflict_option);
                     }
                     // the last subcommand wins
                     owner.selected_command = cmd;
@@ -488,7 +494,7 @@ void ArgumentParser::Command::parse(
             used = true;
         }
         if (!used) {
-            throw UnknownArgument(argv[i]);
+            throw ArgumentParserUnknownArgumentError(M_("Unknown argument \"{}\" for command \"{}\""), argv[i], id);
         }
     }
     ++parse_count;
@@ -497,7 +503,8 @@ void ArgumentParser::Command::parse(
     for (const auto * pos_arg : pos_args) {
         const auto nvals = pos_arg->get_nvals();
         if (pos_arg->get_parse_count() == 0 && nvals != PositionalArg::UNLIMITED && nvals != PositionalArg::OPTIONAL) {
-            throw MissingPositionalArgument(pos_arg->get_id());
+            throw ArgumentParserMissingPositionalArgumentError(
+                M_("Missing positional argument \"{}\" for command \"{}\""), pos_arg->get_id(), id);
         }
     }
 
@@ -820,7 +827,7 @@ ArgumentParser::NamedArg & ArgumentParser::get_named_arg(const std::string & id_
     if (auto ret = get_arg<ArgumentParser::NamedArg>(root_command, id_path, search_in_parent)) {
         return *ret;
     }
-    throw ArgumentParser::Command::NamedArgNotFound(id_path);
+    throw ArgumentParserNotFoundError(M_("Named argument with path id \"{}\" not found"), id_path);
 }
 
 ArgumentParser::PositionalArg & ArgumentParser::get_positional_arg(const std::string & id_path, bool search_in_parent) {
@@ -829,7 +836,8 @@ ArgumentParser::PositionalArg & ArgumentParser::get_positional_arg(const std::st
     if (auto ret = get_arg<ArgumentParser::PositionalArg>(root_command, id_path, search_in_parent)) {
         return *ret;
     }
-    throw ArgumentParser::Command::PositionalArgNotFound(id_path);
+    throw ArgumentParserNotFoundError(
+        M_("Positional argument with path id \"{}\" not found"), id_path);
 }
 
 void ArgumentParser::complete(int argc, const char * const argv[], int complete_arg_idx) {

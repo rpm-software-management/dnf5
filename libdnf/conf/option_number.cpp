@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/option_number.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <limits>
 #include <sstream>
 
@@ -71,7 +73,7 @@ OptionNumber<T>::OptionNumber(T default_value, FromStringFunc && from_string_fun
 template <typename T>
 void OptionNumber<T>::test(ValueType value) const {
     if (value < min || value > max) {
-        throw NotAllowedValue(to_string(value));
+        throw OptionValueNotAllowedError(M_("Input value {} is outside the allowed range {} ... {}"), value, min, max);
     }
 }
 
@@ -84,7 +86,7 @@ T OptionNumber<T>::from_string(const std::string & value) const {
     if (libdnf::from_string<ValueType>(val, value, std::dec)) {
         return val;
     }
-    throw InvalidValue(value);
+    throw OptionInvalidValueError(M_("Invalid number option value \"{}\""), value);
 }
 
 template <typename T>

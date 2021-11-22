@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/option_seconds.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 namespace libdnf {
 
 OptionSeconds::OptionSeconds(ValueType default_value, ValueType min, ValueType max)
@@ -33,7 +35,7 @@ OptionSeconds::ValueType OptionSeconds::from_string(const std::string & value) c
     constexpr int minutes_in_hour = 60;
     constexpr int hours_in_day = 24;
     if (value.empty()) {
-        throw InvalidValue(value);
+        throw OptionInvalidValueError(M_("Empty time option value"));
     }
 
     if (value == "-1" || value == "never") {  // Special cache timeout, meaning never
@@ -41,14 +43,19 @@ OptionSeconds::ValueType OptionSeconds::from_string(const std::string & value) c
     }
 
     std::size_t idx;
-    auto res = std::stod(value, &idx);
+    double res;
+    try {
+        res = std::stod(value, &idx);
+    } catch (...) {
+        throw OptionInvalidValueError(M_("Invalid time option value \"{}\", number or \"never\" expected"), value);
+    }
     if (res < 0) {
-        throw NegativeValue(value);
+        throw OptionInvalidValueError(M_("Invalid time option value \"{}\", negative values except \"-1\" not allowed"), value);
     }
 
     if (idx < value.length()) {
         if (idx < value.length() - 1) {
-            throw InvalidValue(value);
+            throw OptionInvalidValueError(M_("Unknown time format \"{}\""), value);
         }
         switch (value.back()) {
             case 's':
@@ -67,7 +74,7 @@ OptionSeconds::ValueType OptionSeconds::from_string(const std::string & value) c
                 res *= seconds_in_minute * minutes_in_hour * hours_in_day;
                 break;
             default:
-                throw UnknownUnit(std::string(&value.back(), 1));
+                throw OptionInvalidValueError(M_("Unknown time unit '{}'"), std::string(&value.back(), 1));
         }
     }
 

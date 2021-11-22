@@ -37,21 +37,6 @@ public:
     using ValueType = T;
     using FromStringFunc = std::function<ValueType(const std::string &)>;
 
-    /// Exception that is generated when an invalid input value is detected.
-    class InvalidValue : public Option::InvalidValue {
-    public:
-        using Option::InvalidValue::InvalidValue;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionEnum"; }
-    };
-
-    /// Exception that is generated when not allowed input value is detected.
-    class NotAllowedValue : public InvalidValue {
-    public:
-        using InvalidValue::InvalidValue;
-        const char * get_name() const noexcept override { return "NotAllowedValue"; }
-        const char * get_description() const noexcept override { return "Not allowed value"; }
-    };
-
     OptionEnum(ValueType default_value, const std::vector<ValueType> & enum_vals);
     OptionEnum(ValueType default_value, std::vector<ValueType> && enum_vals);
     OptionEnum(ValueType default_value, const std::vector<ValueType> & enum_vals, FromStringFunc && from_string_func);
@@ -112,18 +97,6 @@ class OptionEnum<std::string> : public Option {
 public:
     using ValueType = std::string;
     using FromStringFunc = std::function<ValueType(const std::string &)>;
-
-    class InvalidValue : public Option::InvalidValue {
-    public:
-        using Option::InvalidValue::InvalidValue;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionEnum"; }
-    };
-
-    class NotAllowedValue : public InvalidValue {
-    public:
-        using InvalidValue::InvalidValue;
-        const char * get_name() const noexcept override { return "NotAllowedValue"; }
-    };
 
     OptionEnum(const std::string & default_value, std::vector<ValueType> enum_vals);
     OptionEnum(const std::string & default_value, std::vector<ValueType> enum_vals, FromStringFunc && from_string_func);

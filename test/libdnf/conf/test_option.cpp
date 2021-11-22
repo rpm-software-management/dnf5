@@ -88,7 +88,7 @@ void OptionTest::test_options_bool() {
     CPPUNIT_ASSERT_EQUAL(false, option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
 
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, std::string("invalid")), Option::InvalidValue);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, std::string("invalid")), OptionInvalidValueError);
 
 
     const std::vector<std::string> MY_TRUE_VALUES{"1", "ano", "true", "zap"};
@@ -109,7 +109,7 @@ void OptionTest::test_options_bool() {
     CPPUNIT_ASSERT_EQUAL(false, option2.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option2.get_priority());
 
-    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, std::string("invalid")), Option::InvalidValue);
+    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, std::string("invalid")), OptionInvalidValueError);
 
     option.lock("option locked by test_options_bool");
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, true), AssertionError);
@@ -143,7 +143,7 @@ void OptionTest::test_options_child() {
     CPPUNIT_ASSERT_EQUAL(true, ochild.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::COMMANDLINE, ochild.get_priority());
 
-    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::COMMANDLINE, std::string("invalid")), Option::InvalidValue);
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::COMMANDLINE, std::string("invalid")), OptionInvalidValueError);
 
     ochild.set(Option::Priority::RUNTIME, true);
     ochild.lock("ochild_bool locked by test_option_child");
@@ -165,7 +165,7 @@ void OptionTest::test_options_enum() {
         CPPUNIT_ASSERT_EQUAL(val, option.get_value());
     }
 
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "not_allowed"), OptionEnum<std::string>::NotAllowedValue);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "not_allowed"), OptionValueNotAllowedError);
 
     option.set(Option::Priority::RUNTIME, "aa");
     option.lock("option locked by test_option_enum");
@@ -189,8 +189,8 @@ void OptionTest::test_options_number() {
         CPPUNIT_ASSERT_EQUAL(val, option.get_value());
     }
 
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, MIN - 1), OptionNumber<NumberType>::NotAllowedValue);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, MAX + 1), OptionNumber<NumberType>::NotAllowedValue);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, MIN - 1), OptionValueNotAllowedError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, MAX + 1), OptionValueNotAllowedError);
 
     option.set(Option::Priority::RUNTIME, 1);
     option.lock("option locked by test_option_number");
@@ -212,7 +212,7 @@ void OptionTest::test_options_path() {
     CPPUNIT_ASSERT_EQUAL(std::string("/path2"), option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
 
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "not_absolute"), OptionPath::NotAllowedValue);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "not_absolute"), OptionValueNotAllowedError);
 
     option.lock("option locked by test_option_path");
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "/path2"), AssertionError);
@@ -236,8 +236,8 @@ void OptionTest::test_options_seconds() {
         CPPUNIT_ASSERT_EQUAL(val, option.get_value());
     }
 
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, MIN - 1), OptionSeconds::NotAllowedValue);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, MAX + 1), OptionSeconds::NotAllowedValue);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, MIN - 1), OptionValueNotAllowedError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, MAX + 1), OptionValueNotAllowedError);
 
     option.set(Option::Priority::RUNTIME, 12);
     option.lock("option locked by test_option_seconds");
@@ -267,10 +267,10 @@ void OptionTest::test_options_seconds() {
     option2.set(Option::Priority::RUNTIME, NEVER);
     CPPUNIT_ASSERT_EQUAL(NEVER, option2.get_value());
 
-    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, -2), OptionSeconds::NotAllowedValue);
-    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, "-2"), OptionSeconds::InvalidValue);
-    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, ""), OptionSeconds::InvalidValue);
-    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, "5g"), OptionSeconds::UnknownUnit);
+    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, -2), OptionValueNotAllowedError);
+    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, "-2"), OptionInvalidValueError);
+    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, ""), OptionInvalidValueError);
+    CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, "5g"), OptionInvalidValueError);
 }
 
 void OptionTest::test_options_string() {
@@ -291,7 +291,7 @@ void OptionTest::test_options_string() {
     CPPUNIT_ASSERT_EQUAL(std::string("do iT"), option.get_value());
     CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
 
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "drain"), OptionString::NotAllowedValue);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "drain"), OptionValueNotAllowedError);
 
     option.lock("option locked by test_option_string");
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "do iT"), AssertionError);
@@ -317,8 +317,8 @@ void OptionTest::test_options_string_list() {
     CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Dfirstx", "DsecondX"}), option.get_value());
 
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "drain"}), OptionStringList::NotAllowedValue);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donutX, drain"), OptionStringList::NotAllowedValue);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "drain"}), OptionValueNotAllowedError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donutX, drain"), OptionValueNotAllowedError);
 
     option.lock("option locked by test_option_string_list");
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "do iT"), AssertionError);

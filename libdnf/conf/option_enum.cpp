@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/option_enum.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <algorithm>
 #include <sstream>
 
@@ -74,7 +76,7 @@ template <typename T>
 void OptionEnum<T>::test(ValueType value) const {
     auto it = std::find(enum_vals.begin(), enum_vals.end(), value);
     if (it == enum_vals.end()) {
-        throw NotAllowedValue(to_string(value));
+        throw OptionValueNotAllowedError(M_("Enum option value \"{}\" not allowed"), value);
     }
 }
 
@@ -87,7 +89,7 @@ T OptionEnum<T>::from_string(const std::string & value) const {
     if (libdnf::from_string<ValueType>(val, value, std::dec)) {
         return val;
     }
-    throw InvalidValue(value);
+    throw OptionInvalidValueError(M_("Invalid enum option value \"{}\""), value);
 }
 
 template <typename T>
@@ -149,7 +151,7 @@ OptionEnum<std::string>::OptionEnum(
 void OptionEnum<std::string>::test(const std::string & value) const {
     auto it = std::find(enum_vals.begin(), enum_vals.end(), value);
     if (it == enum_vals.end()) {
-        throw NotAllowedValue(value);
+        throw OptionValueNotAllowedError(M_("Enum option value \"{}\" not allowed"), value);
     }
 }
 

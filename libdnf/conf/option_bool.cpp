@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/option_bool.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <sstream>
 
 namespace libdnf {
@@ -79,7 +81,7 @@ bool OptionBool::from_string(const std::string & value) const {
             return true;
         }
     }
-    throw InvalidValue(value);
+    throw OptionInvalidValueError(M_("Invalid boolean value \"{}\""), value);
 }
 
 void OptionBool::set(Priority priority, bool value) {

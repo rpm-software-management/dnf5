@@ -27,6 +27,36 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+/// Option exception
+class OptionError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_name() const noexcept override { return "OptionError"; }
+};
+
+/// Exception that is generated when an invalid input value is detected.
+class OptionInvalidValueError : public OptionError {
+public:
+    using OptionError::OptionError;
+    const char * get_name() const noexcept override { return "OptionInvalidValueError"; }
+};
+
+/// Exception that is generated when not allowed input value is detected.
+class OptionValueNotAllowedError : public OptionInvalidValueError {
+public:
+    using OptionInvalidValueError::OptionInvalidValueError;
+    const char * get_name() const noexcept override { return "OptionValueNotAllowedError"; }
+};
+
+/// Exception that is generated during read an empty Option.
+class OptionValueNotSetError : public OptionError {
+public:
+    using OptionError::OptionError;
+    const char * get_name() const noexcept override { return "OptionValueNotSetError"; }
+};
+
+
 /// Option class is an abstract class. Parent of all options. Options are used to store a configuration.
 /// @replaces libdnf:conf/Option.hpp:class:Option
 class Option {
@@ -44,23 +74,6 @@ public:
         DROPINCONFIG = 65,
         COMMANDLINE = 70,
         RUNTIME = 80
-    };
-
-    /// Option exception
-    class Exception : public RuntimeError {
-    public:
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::Option"; }
-        const char * get_name() const noexcept override { return "Exception"; }
-        const char * get_description() const noexcept override { return "Option exception"; }
-    };
-
-    /// Exception that is generated when an invalid input value is detected.
-    class InvalidValue : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "InvalidValue"; }
-        const char * get_description() const noexcept override { return "Invalid value"; }
     };
 
     explicit Option(Priority priority = Priority::EMPTY);

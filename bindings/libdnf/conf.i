@@ -33,24 +33,15 @@
 #define CV __perl_CV
 #define final
 
-%ignore libdnf::Option::Exception;
-%ignore libdnf::Option::InvalidValue;
+%ignore libdnf::OptionError;
+%ignore libdnf::OptionInvalidValueError;
+%ignore libdnf::OptionValueNotAllowedError;
+%ignore libdnf::OptionValueNotSetError;
 %include "libdnf/conf/option.hpp"
-
-%ignore libdnf::OptionBool::InvalidValue;
 %include "libdnf/conf/option_bool.hpp"
-
-%ignore libdnf::OptionString::InvalidValue;
-%ignore libdnf::OptionString::NotAllowedValue;
-%ignore libdnf::OptionString::ValueNotSet;
-
-%ignore libdnf::OptionEnum::InvalidValue;
-%ignore libdnf::OptionEnum::NotAllowedValue;
 %include "libdnf/conf/option_enum.hpp"
 %template(OptionEnumString) libdnf::OptionEnum<std::string>;
 
-%ignore libdnf::OptionNumber::InvalidValue;
-%ignore libdnf::OptionNumber::NotAllowedValue;
 %include "libdnf/conf/option_number.hpp"
 %template(OptionNumberInt32) libdnf::OptionNumber<std::int32_t>;
 %template(OptionNumberUInt32) libdnf::OptionNumber<std::uint32_t>;
@@ -61,6 +52,8 @@
 %include "libdnf/conf/option_seconds.hpp"
 %include "libdnf/conf/option_string.hpp"
 %include "libdnf/conf/option_string_list.hpp"
+
+%ignore libdnf::OptionPathNotFoundError;
 %include "libdnf/conf/option_path.hpp"
 
 %include "libdnf/conf/option_child.hpp"
@@ -75,9 +68,9 @@
 
 
 %rename (OptionBinds_Item) libdnf::OptionBinds::Item;
-%ignore libdnf::OptionBinds::Exception;
-%ignore libdnf::OptionBinds::OptionNotFound;
-%ignore libdnf::OptionBinds::OptionAlreadyExists;
+%ignore libdnf::OptionBindsError;
+%ignore libdnf::OptionBindsOptionNotFoundError;
+%ignore libdnf::OptionBindsOptionAlreadyExistsError;
 %ignore libdnf::OptionBinds::add(const std::string & id, Option & option,
     Item::NewStringFunc new_string_func, Item::GetValueStringFunc get_value_string_func, bool add_value);
 %ignore libdnf::OptionBinds::begin;
@@ -90,6 +83,9 @@
 %include "libdnf/conf/config.hpp"
 %include "libdnf/conf/config_main.hpp"
 
+%ignore libdnf::ConfigParserError;
+%ignore ConfigParserSectionNotFoundError;
+%ignore ConfigParserOptionNotFoundError;
 %include "libdnf/conf/config_parser.hpp"
 
 %include "libdnf/conf/vars.hpp"

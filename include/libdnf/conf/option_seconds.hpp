@@ -30,29 +30,6 @@ namespace libdnf {
 /// @replaces libdnf:conf/OptionSeconds.hpp:class:OptionSeconds
 class OptionSeconds : public OptionNumber<std::int32_t> {
 public:
-    /// Exception that is generated when an invalid input value is detected.
-    class InvalidValue : public Option::InvalidValue {
-    public:
-        using Option::InvalidValue::InvalidValue;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionSeconds"; }
-    };
-
-    /// Exception that is generated when an negative input value is detected.
-    class NegativeValue : public InvalidValue {
-    public:
-        using InvalidValue::InvalidValue;
-        const char * get_name() const noexcept override { return "NegativeValue"; }
-        const char * get_description() const noexcept override { return "Seconds value must not be negative"; };
-    };
-
-    /// Exception that is generated when an unknown input value is detected.
-    class UnknownUnit : public InvalidValue {
-    public:
-        using InvalidValue::InvalidValue;
-        const char * get_name() const noexcept override { return "UnknownUnit"; }
-        const char * get_description() const noexcept override { return "Unknown unit"; };
-    };
-
     OptionSeconds(ValueType default_value, ValueType min, ValueType max);
     OptionSeconds(ValueType default_value, ValueType min);
     explicit OptionSeconds(ValueType default_value);

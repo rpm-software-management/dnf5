@@ -218,15 +218,16 @@ private:
 };
 
 
+class TransactionError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf::rpm"; }
+    const char * get_name() const noexcept override { return "TransactionError"; }
+};
+
+
 class Transaction {
 public:
-    class Exception : public RuntimeError {
-    public:
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::Transaction"; }
-        const char * get_name() const noexcept override { return "Exception"; }
-        const char * get_description() const noexcept override { return "rpm::Transaction exception"; }
-    };
 
     // TODO(jrohel): Define enums or flag setters/getters
     using rpmVSFlags = uint32_t;

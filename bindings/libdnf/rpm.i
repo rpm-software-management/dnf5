@@ -44,6 +44,8 @@
 #define CV __perl_CV
 
 %include "libdnf/rpm/checksum.hpp"
+
+%ignore NevraIncorrectInputError;
 %include "libdnf/rpm/nevra.hpp"
 
 %template(VectorNevra) std::vector<libdnf::rpm::Nevra>;

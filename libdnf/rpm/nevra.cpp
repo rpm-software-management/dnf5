@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/nevra.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <rpm/rpmver.h>
 
 
@@ -52,11 +54,11 @@ std::vector<Nevra> Nevra::parse(const std::string & nevra_str, const std::vector
         } else if (*end == ':') {
             // ':' can be only once in nevra
             if (epoch_delim != nullptr) {
-                throw IncorrectNevraString("String contains ':' multiple times");
+                throw NevraIncorrectInputError(M_("NEVRA string \"{}\" contains ':' multiple times"), nevra_str);
             }
             epoch_delim = end;
         } else if (*end == '(' || *end == '/' || *end == '=' || *end == '<' || *end == '>' || *end == ' ') {
-            throw IncorrectNevraString("String contains not allowed character from set: '(', '/', '=', '<', '>', ' '");
+            throw NevraIncorrectInputError(M_("Invalid character '{}' in NEVRA string \"{}\""), *end, nevra_str);
         }
     }
     for (auto form : forms) {

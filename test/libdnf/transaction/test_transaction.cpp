@@ -83,7 +83,7 @@ void TransactionTest::test_second_start_raises() {
     auto trans = base->get_transaction_sack()->new_transaction();
     trans->start();
     // 2nd begin must throw an exception
-    CPPUNIT_ASSERT_THROW(trans->start(), std::runtime_error);
+    CPPUNIT_ASSERT_THROW(trans->start(), libdnf::RuntimeError);
 }
 
 
@@ -92,7 +92,7 @@ void TransactionTest::test_save_with_specified_id_raises() {
     auto trans = base->get_transaction_sack()->new_transaction();
     trans->set_id(1);
     // it is not allowed to save a transaction with arbitrary ID
-    CPPUNIT_ASSERT_THROW(trans->start(), std::runtime_error);
+    CPPUNIT_ASSERT_THROW(trans->start(), libdnf::RuntimeError);
 }
 
 

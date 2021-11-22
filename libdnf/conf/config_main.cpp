@@ -52,18 +52,18 @@ namespace libdnf {
 /// @return int Number of bytes
 static int str_to_bytes(const std::string & str) {
     if (str.empty()) {
-        throw Option::InvalidValue("no value specified");
+        throw OptionInvalidValueError("Input is empty. Must contain a value.");
     }
 
     std::size_t idx;
     auto res = std::stod(str, &idx);
     if (res < 0) {
-        throw Option::InvalidValue(fmt::format("seconds value '{}' must not be negative", str));
+        throw OptionInvalidValueError("Input value '{}' must not be negative", str);
     }
 
     if (idx < str.length()) {
         if (idx < str.length() - 1) {
-            throw Option::InvalidValue(fmt::format("could not convert '{}' to bytes", str));
+            throw OptionInvalidValueError("Could not convert '{}' to bytes", str);
         }
         switch (str.back()) {
             case 'k':
@@ -79,7 +79,7 @@ static int str_to_bytes(const std::string & str) {
                 res *= 1024 * 1024 * 1024;
                 break;
             default:
-                throw Option::InvalidValue(fmt::format("unknown unit '{}'", str.back()));
+                throw OptionInvalidValueError("Unknown unit '{}'", str.back());
         }
     }
 
@@ -89,7 +89,7 @@ static int str_to_bytes(const std::string & str) {
 static void add_from_file(std::ostream & out, const std::string & file_path) {
     std::ifstream ifs(file_path);
     if (!ifs) {
-        throw RuntimeError(M_("add_from_file(): Can't open file"));
+        throw RuntimeError(M_("add_from_file(): Cannot open file"));
     }
     ifs.exceptions(std::ifstream::badbit);
 
@@ -332,7 +332,7 @@ class ConfigMain::Impl {
                 if (res < 0 || res > 100) {
                     // TODO(jrohel): Better exception info?
                     // throw Option::InvalidValue(tfm::format(_("percentage '%s' is out of range"), value));
-                    throw Option::InvalidValue(value);
+                    throw OptionInvalidValueError(M_("The throttle value {} is outside the allowed range {} ... {}"), value, 0, 100);
                 }
                 return res / 100;
             }

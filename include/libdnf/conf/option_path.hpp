@@ -25,29 +25,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+/// Exception that is generated when input path does not exist.
+class OptionPathNotFoundError : public OptionValueNotAllowedError {
+public:
+    using OptionValueNotAllowedError::OptionValueNotAllowedError;
+    const char * get_name() const noexcept override { return "OptionPathNotFoundError"; }
+};
+
+
 /// Option that stores file/directory path.
 /// Support default value, and path verification (absolute, existence).
 /// @replaces libdnf:conf/OptionPath.hpp:class:OptionPath
 class OptionPath : public OptionString {
 public:
-    /// Exception that is generated when not allowed input value is detected.
-    class NotAllowedValue : public InvalidValue {
-    public:
-        using InvalidValue::InvalidValue;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionPath"; }
-        const char * get_name() const noexcept override { return "NotAllowedValue"; }
-        const char * get_description() const noexcept override { return "Not allowed value"; }
-    };
-
-    /// Exception that is generated when input path does not exist.
-    class PathNotExists : public InvalidValue {
-    public:
-        using InvalidValue::InvalidValue;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionPath"; }
-        const char * get_name() const noexcept override { return "PathNotExists"; }
-        const char * get_description() const noexcept override { return "Path does not exist"; }
-    };
-
     /// Constructor sets default value and conditons.
     /// @replaces libdnf:conf/OptionPath.hpp:ctor:OptionPath.OptionPath(const std::string & defaultValue, bool exists = false, bool absPath = false)
     explicit OptionPath(const std::string & default_value, bool exists = false, bool abs_path = false);

@@ -2296,7 +2296,7 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
                     return {true, libdnf::rpm::Nevra()};
                 }
             }
-        } catch (Nevra::IncorrectNevraString &) {
+        } catch (const NevraIncorrectInputError &) {
         }
     }
     if (settings.with_provides) {

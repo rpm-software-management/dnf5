@@ -248,12 +248,12 @@ int main(int argc, char * argv[]) {
     // Run selected command
     try {
         context.get_selected_command()->run();
-    } catch (libdnf::cli::ArgumentParser::MissingCommand & ex) {
+    } catch (libdnf::cli::ArgumentParserMissingCommandError & ex) {
         // print help if no command is provided
         std::cout << ex.what() << std::endl;
         context.get_argument_parser().get_selected_command()->help();
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
-    } catch (libdnf::cli::ArgumentParser::Exception & ex) {
+    } catch (libdnf::cli::ArgumentParserError & ex) {
         std::cout << ex.what() << std::endl;
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (std::exception & ex) {

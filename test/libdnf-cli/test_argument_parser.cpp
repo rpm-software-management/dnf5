@@ -139,62 +139,62 @@ void ArgumentParserTest::test_argument_parser() {
 
     test->register_command(repoquery);
 
-    CPPUNIT_ASSERT_THROW(arg_parser.add_new_command("bad.id"), ArgParser::Argument::InvalidId);
-    CPPUNIT_ASSERT_THROW(arg_parser.add_new_named_arg("bad.id"), ArgParser::Argument::InvalidId);
+    CPPUNIT_ASSERT_THROW(arg_parser.add_new_command("bad.id"), libdnf::cli::ArgumentParserArgumentInvalidIdError);
+    CPPUNIT_ASSERT_THROW(arg_parser.add_new_named_arg("bad.id"), libdnf::cli::ArgumentParserArgumentInvalidIdError);
     CPPUNIT_ASSERT_THROW(
         arg_parser.add_new_positional_arg("bad.id", ArgParser::PositionalArg::UNLIMITED, nullptr, nullptr),
-        ArgParser::Argument::InvalidId);
+        libdnf::cli::ArgumentParserArgumentInvalidIdError);
 
     CPPUNIT_ASSERT_EQUAL(test, arg_parser.get_root_command());
 
     CPPUNIT_ASSERT_EQUAL(repoquery, &arg_parser.get_command("repoquery"));
-    CPPUNIT_ASSERT_THROW(arg_parser.get_command("unknowncmd"), ArgParser::Command::CommandNotFound);
-    CPPUNIT_ASSERT_THROW(arg_parser.get_command("global_arg"), ArgParser::Command::CommandNotFound);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_command("unknowncmd"), libdnf::cli::ArgumentParserNotFoundError);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_command("global_arg"), libdnf::cli::ArgumentParserNotFoundError);
 
     CPPUNIT_ASSERT_EQUAL(global_arg, &arg_parser.get_named_arg("global_arg", false));
     CPPUNIT_ASSERT_EQUAL(global_arg, &arg_parser.get_named_arg("global_arg", true));
     CPPUNIT_ASSERT_EQUAL(installed, &arg_parser.get_named_arg("repoquery.installed", false));
     CPPUNIT_ASSERT_EQUAL(installed, &arg_parser.get_named_arg("repoquery.installed", true));
-    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.global_arg", false), ArgParser::Command::NamedArgNotFound);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.global_arg", false), libdnf::cli::ArgumentParserNotFoundError);
     CPPUNIT_ASSERT_EQUAL(global_arg, &arg_parser.get_named_arg("repoquery.global_arg", true));
-    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("unknowncmd.installed", false), ArgParser::Command::CommandNotFound);
-    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("unknowncmd.installed", true), ArgParser::Command::CommandNotFound);
-    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.unknown", false), ArgParser::Command::NamedArgNotFound);
-    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.unknown", true), ArgParser::Command::NamedArgNotFound);
-    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.keys", false), ArgParser::Command::NamedArgNotFound);
-    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.keys", true), ArgParser::Command::NamedArgNotFound);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("unknowncmd.installed", false), libdnf::cli::ArgumentParserNotFoundError);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("unknowncmd.installed", true), libdnf::cli::ArgumentParserNotFoundError);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.unknown", false), libdnf::cli::ArgumentParserNotFoundError);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.unknown", true), libdnf::cli::ArgumentParserNotFoundError);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.keys", false), libdnf::cli::ArgumentParserNotFoundError);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_named_arg("repoquery.keys", true), libdnf::cli::ArgumentParserNotFoundError);
 
     CPPUNIT_ASSERT_EQUAL(keys, &arg_parser.get_positional_arg("repoquery.keys", false));
     CPPUNIT_ASSERT_EQUAL(keys, &arg_parser.get_positional_arg("repoquery.keys", true));
-    CPPUNIT_ASSERT_THROW(arg_parser.get_positional_arg("unknowncmd.keys", false), ArgParser::Command::CommandNotFound);
-    CPPUNIT_ASSERT_THROW(arg_parser.get_positional_arg("unknowncmd.keys", true), ArgParser::Command::CommandNotFound);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_positional_arg("unknowncmd.keys", false), libdnf::cli::ArgumentParserNotFoundError);
+    CPPUNIT_ASSERT_THROW(arg_parser.get_positional_arg("unknowncmd.keys", true), libdnf::cli::ArgumentParserNotFoundError);
     CPPUNIT_ASSERT_THROW(
-        arg_parser.get_positional_arg("repoquery.unknown", false), ArgParser::Command::PositionalArgNotFound);
+        arg_parser.get_positional_arg("repoquery.unknown", false), libdnf::cli::ArgumentParserNotFoundError);
     CPPUNIT_ASSERT_THROW(
-        arg_parser.get_positional_arg("repoquery.unknown", true), ArgParser::Command::PositionalArgNotFound);
+        arg_parser.get_positional_arg("repoquery.unknown", true), libdnf::cli::ArgumentParserNotFoundError);
     CPPUNIT_ASSERT_THROW(
-        arg_parser.get_positional_arg("repoquery.installed", false), ArgParser::Command::PositionalArgNotFound);
+        arg_parser.get_positional_arg("repoquery.installed", false), libdnf::cli::ArgumentParserNotFoundError);
     CPPUNIT_ASSERT_THROW(
-        arg_parser.get_positional_arg("repoquery.installed", true), ArgParser::Command::PositionalArgNotFound);
+        arg_parser.get_positional_arg("repoquery.installed", true), libdnf::cli::ArgumentParserNotFoundError);
 
     CPPUNIT_ASSERT_EQUAL((std::vector<ArgParser::Command *>{repoquery}), test->get_commands());
     CPPUNIT_ASSERT_EQUAL((std::vector<ArgParser::NamedArg *>{help, global_arg}), test->get_named_args());
     CPPUNIT_ASSERT_EQUAL((std::vector<ArgParser::PositionalArg *>{}), test->get_positional_args());
     CPPUNIT_ASSERT_EQUAL(repoquery, &test->get_command("repoquery"));
-    CPPUNIT_ASSERT_THROW(test->get_command("unknowncmd"), ArgParser::Command::CommandNotFound);
+    CPPUNIT_ASSERT_THROW(test->get_command("unknowncmd"), libdnf::cli::ArgumentParserNotFoundError);
     CPPUNIT_ASSERT_EQUAL(global_arg, &test->get_named_arg("global_arg"));
-    CPPUNIT_ASSERT_THROW(test->get_named_arg("unknown"), ArgParser::Command::NamedArgNotFound);
-    CPPUNIT_ASSERT_THROW(test->get_positional_arg("keys"), ArgParser::Command::PositionalArgNotFound);
+    CPPUNIT_ASSERT_THROW(test->get_named_arg("unknown"), libdnf::cli::ArgumentParserNotFoundError);
+    CPPUNIT_ASSERT_THROW(test->get_positional_arg("keys"), libdnf::cli::ArgumentParserNotFoundError);
 
     CPPUNIT_ASSERT_EQUAL((std::vector<ArgParser::Command *>{}), repoquery->get_commands());
     CPPUNIT_ASSERT_EQUAL(
         (std::vector<ArgParser::NamedArg *>{available, installed, info, nevra}), repoquery->get_named_args());
     CPPUNIT_ASSERT_EQUAL((std::vector<ArgParser::PositionalArg *>{keys}), repoquery->get_positional_args());
-    CPPUNIT_ASSERT_THROW(repoquery->get_command("repoquery"), ArgParser::Command::CommandNotFound);
+    CPPUNIT_ASSERT_THROW(repoquery->get_command("repoquery"), libdnf::cli::ArgumentParserNotFoundError);
     CPPUNIT_ASSERT_EQUAL(info, &repoquery->get_named_arg("info"));
-    CPPUNIT_ASSERT_THROW(repoquery->get_named_arg("unknown"), ArgParser::Command::NamedArgNotFound);
+    CPPUNIT_ASSERT_THROW(repoquery->get_named_arg("unknown"), libdnf::cli::ArgumentParserNotFoundError);
     CPPUNIT_ASSERT_EQUAL(keys, &repoquery->get_positional_arg("keys"));
-    CPPUNIT_ASSERT_THROW(repoquery->get_positional_arg("unknown"), ArgParser::Command::PositionalArgNotFound);
+    CPPUNIT_ASSERT_THROW(repoquery->get_positional_arg("unknown"), libdnf::cli::ArgumentParserNotFoundError);
 
     CPPUNIT_ASSERT_EQUAL(std::string("info"), info->get_id());
     CPPUNIT_ASSERT_EQUAL(info_option, dynamic_cast<libdnf::OptionBool *>(info->get_linked_value()));
@@ -218,6 +218,6 @@ void ArgumentParserTest::test_argument_parser() {
     {
         // "--info" and "--nevra" cannot be used together
         constexpr const char * argv[]{"test", "repoquery", "--nevra", "--info"};
-        CPPUNIT_ASSERT_THROW(arg_parser.parse(std::size(argv), argv), ArgParser::Conflict);
+        CPPUNIT_ASSERT_THROW(arg_parser.parse(std::size(argv), argv), libdnf::cli::ArgumentParserConflictingArgumentsError);
     }
 }

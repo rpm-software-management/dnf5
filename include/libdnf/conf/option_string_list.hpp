@@ -34,15 +34,6 @@ class OptionStringList : public Option {
 public:
     using ValueType = std::vector<std::string>;
 
-    /// Exception that is generated when not allowed input value is detected.
-    class NotAllowedValue : public InvalidValue {
-    public:
-        using InvalidValue::InvalidValue;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionStringList"; }
-        const char * get_name() const noexcept override { return "NotAllowedValue"; }
-        const char * get_description() const noexcept override { return "Not allowed value"; }
-    };
-
     explicit OptionStringList(const ValueType & default_value);
     OptionStringList(const ValueType & default_value, std::string regex, bool icase);
     explicit OptionStringList(const std::string & default_value);

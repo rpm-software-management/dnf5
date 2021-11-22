@@ -47,7 +47,6 @@ using LibsolvRepo = Repo;
 
 namespace libdnf::rpm {
 
-
 void PackageSack::Impl::make_provides_ready() {
     if (provides_ready) {
         return;

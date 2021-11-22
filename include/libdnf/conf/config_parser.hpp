@@ -34,6 +34,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+class ConfigParserError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_name() const noexcept override { return "ConfigParserError"; }
+};
+
+class ConfigParserSectionNotFoundError : public ConfigParserError {
+public:
+    explicit ConfigParserSectionNotFoundError(const std::string & section);
+    const char * get_name() const noexcept override { return "ConfigParserSectionNotFoundError"; }
+};
+
+class ConfigParserOptionNotFoundError : public ConfigParserError {
+public:
+    explicit ConfigParserOptionNotFoundError(const std::string & section, const std::string & option);
+    const char * get_name() const noexcept override { return "ConfigParserOptionNotFoundError"; }
+};
+
 /**
 * @class ConfigParser
 *
@@ -48,25 +67,7 @@ struct ConfigParser {
 public:
     using Container = PreserveOrderMap<std::string, PreserveOrderMap<std::string, std::string>>;
 
-    class Exception : public RuntimeError {
-    public:
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::ConfigParser"; }
-        const char * get_name() const noexcept override { return "Exception"; }
-        const char * get_description() const noexcept override { return "ConfigParser exception"; }
-    };
-    class SectionNotFound : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "MissingSection"; }
-        const char * get_description() const noexcept override { return "Section not found"; }
-    };
-    class OptionNotFound : public Exception {
-    public:
-        using Exception::Exception;
-        const char * get_name() const noexcept override { return "OptionNotFound"; }
-        const char * get_description() const noexcept override { return "Option not found"; }
-    };
+
 
     /**
     * @brief Reads/parse one INI file
@@ -183,7 +184,7 @@ inline void ConfigParser::set_value(
     const std::string & section, const std::string & key, const std::string & value, const std::string & raw_item) {
     auto section_iter = data.find(section);
     if (section_iter == data.end()) {
-        throw SectionNotFound(section);
+        throw ConfigParserSectionNotFoundError(section);
     }
     if (raw_items.empty()) {
         raw_items.erase(section + ']' + key);
@@ -197,7 +198,7 @@ inline void ConfigParser::set_value(
     const std::string & section, std::string && key, std::string && value, std::string && raw_item) {
     auto section_iter = data.find(section);
     if (section_iter == data.end()) {
-        throw SectionNotFound(section);
+        throw ConfigParserSectionNotFoundError(section);
     }
     if (raw_items.empty()) {
         raw_items.erase(section + ']' + key);
@@ -230,7 +231,7 @@ inline bool ConfigParser::remove_option(const std::string & section, const std::
 inline void ConfigParser::add_comment_line(const std::string & section, const std::string & comment) {
     auto section_iter = data.find(section);
     if (section_iter == data.end()) {
-        throw SectionNotFound(section);
+        throw ConfigParserSectionNotFoundError(section);
     }
     section_iter->second["#" + std::to_string(++item_number)] = comment;
 }
@@ -238,7 +239,7 @@ inline void ConfigParser::add_comment_line(const std::string & section, const st
 inline void ConfigParser::add_comment_line(const std::string & section, std::string && comment) {
     auto section_iter = data.find(section);
     if (section_iter == data.end()) {
-        throw SectionNotFound(section);
+        throw ConfigParserSectionNotFoundError(section);
     }
     section_iter->second["#" + std::to_string(++item_number)] = std::move(comment);
 }

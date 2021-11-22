@@ -41,7 +41,7 @@ std::filesystem::path get_user_home_dir() {
     if (struct passwd * pw = getpwuid(getuid())) {
         return std::filesystem::path(pw->pw_dir);
     }
-    throw RuntimeError(M_("get_user_home_dir(): Can't determine the user's home directory"));
+    throw RuntimeError(M_("get_user_home_dir(): Cannot determine the user's home directory"));
 }
 
 std::filesystem::path get_user_cache_dir() {
@@ -85,7 +85,7 @@ std::filesystem::path get_user_runtime_dir() {
             return ret;
         }
     }
-    throw RuntimeError(M_("get_user_runtime_dir(): Can't determine the user's runtime directory"));
+    throw RuntimeError(M_("get_user_runtime_dir(): Cannot determine the user's runtime directory"));
 }
 
 }  // namespace libdnf::utils::xdg

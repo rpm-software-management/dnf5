@@ -59,7 +59,7 @@ void NevraTest::test_nevra() {
     {
         CPPUNIT_ASSERT_THROW(
             libdnf::rpm::Nevra::parse("four-of-fish-8:9:3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA}),
-            libdnf::rpm::Nevra::IncorrectNevraString);
+            libdnf::rpm::NevraIncorrectInputError);
     }
 
 
@@ -162,7 +162,7 @@ void NevraTest::test_nevra() {
     {
         CPPUNIT_ASSERT_THROW(
             libdnf::rpm::Nevra::parse("four-of(fish.i686)", {libdnf::rpm::Nevra::Form::NA}),
-            libdnf::rpm::Nevra::IncorrectNevraString);
+            libdnf::rpm::NevraIncorrectInputError);
     }
 
     // Test parsing NEVRA with glob in epoch

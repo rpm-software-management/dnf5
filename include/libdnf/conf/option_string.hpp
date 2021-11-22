@@ -32,30 +32,6 @@ class OptionString : public Option {
 public:
     using ValueType = std::string;
 
-    /// Exception that is generated when an invalid input value is detected.
-    class InvalidValue : public Option::InvalidValue {
-    public:
-        using Option::InvalidValue::InvalidValue;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionString"; }
-    };
-
-    /// Exception that is generated when not allowed input value is detected.
-    class NotAllowedValue : public InvalidValue {
-    public:
-        using InvalidValue::InvalidValue;
-        const char * get_name() const noexcept override { return "NotAllowedValue"; }
-        const char * get_description() const noexcept override { return "Not allowed value"; }
-    };
-
-    /// Exception that is generated during read an empty Option.
-    class ValueNotSet : public Exception {
-    public:
-        ValueNotSet() : Exception("") {}
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionString"; }
-        const char * get_name() const noexcept override { return "ValueNotSet"; }
-        const char * get_description() const noexcept override { return "Value is not set"; }
-    };
-
     explicit OptionString(const std::string & default_value);
     explicit OptionString(const char * default_value);
     OptionString(const std::string & default_value, std::string regex, bool icase);

@@ -38,13 +38,6 @@ class OptionBool : public Option {
 public:
     using ValueType = bool;
 
-    /// Exception that is generated when an invalid input value is detected.
-    class InvalidValue : public Option::InvalidValue {
-    public:
-        using Option::InvalidValue::InvalidValue;
-        const char * get_domain_name() const noexcept override { return "libdnf::OptionBool"; }
-    };
-
     /// Constructor that sets default value.
     /// @replaces libdnf:conf/OptionBool.hpp:ctor:OptionBool.OptionBool(bool default_value)
     explicit OptionBool(bool default_value);

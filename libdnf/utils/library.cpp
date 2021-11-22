@@ -19,16 +19,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "library.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <dlfcn.h>
 
 namespace libdnf::utils {
 
-Library::Library(const std::string & path)
-: path(path) {
+Library::Library(const std::string & path) : path(path) {
     handle = dlopen(path.c_str(), RTLD_LAZY);
     if (!handle) {
-        const char * err_msg = dlerror();
-        throw CantLoad(err_msg);
+        const char * err_msg = dlerror();  // returns localized mesage, problem with later translation
+        throw LibraryLoadingError(M_("Cannot load shared library \"{}\": {}"), path, std::string(err_msg));
     }
 }
 
@@ -38,12 +39,12 @@ Library::~Library() {
 
 void * Library::get_address(const char * symbol) const {
     dlerror();  // Clear any existing error
-    void * address  = dlsym(handle, symbol);
-    if (!address)
-    {
-        const char * err_msg = dlerror();
+    void * address = dlsym(handle, symbol);
+    if (!address) {
+        const char * err_msg = dlerror();  // returns localized mesage, problem with later translation
         if (err_msg) {
-            throw NotFound(err_msg);
+            throw LibrarySymbolNotFoundError(
+                M_("Cannot obtain address of symbol \"{}\": {}"), std::string(symbol), std::string(err_msg));
         }
     }
     return address;
