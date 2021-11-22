@@ -59,18 +59,30 @@ std::string SystemError::get_error_message() const {
 }
 
 
-std::string format(const std::exception & e, std::size_t level) {
-    std::string ret(std::string(level, ' ') + e.what() + '\n');
+static std::string format(const std::exception & e, std::size_t level, bool with_domain) {
+    std::string ret;
+    if (auto ex = dynamic_cast<const Error *>(&e)) {
+        if (with_domain) {
+            ret = fmt::format("{}::{}: {}\n", ex->get_domain_name(), ex->get_name(), ex->what());
+        } else {
+            ret = fmt::format("{}: {}\n", ex->get_name(), ex->what());
+        }
+    } else {
+        ret = std::string(level, ' ') + e.what() + '\n';
+    }
     try {
         std::rethrow_if_nested(e);
     } catch (const std::exception & e) {
-        ret += format(e, level + 1);
+        ret += format(e, level + 1, with_domain);
     } catch (...) {
     }
 
     return ret;
 }
 
+std::string format(const std::exception & e, bool with_domain) {
+    return format(e, 0, with_domain);
+}
 
 Error::Error(const Error & e) noexcept : std::runtime_error(e) {
     operator=(e);

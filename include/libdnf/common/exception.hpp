@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_EXCEPTION_HPP
-#define LIBDNF_UTILS_EXCEPTION_HPP
+#ifndef LIBDNF_COMMON_EXCEPTION_HPP
+#define LIBDNF_COMMON_EXCEPTION_HPP
 
 #include <fmt/format.h>
 
@@ -171,7 +171,7 @@ public:
 
 /// Formats the error message of an exception.
 /// If the exception is nested, recurses to format the message of the exception it holds.
-std::string format(const std::exception & e, std::size_t level = 0);
+std::string format(const std::exception & e, bool with_domain);
 
 }  // namespace libdnf
 
