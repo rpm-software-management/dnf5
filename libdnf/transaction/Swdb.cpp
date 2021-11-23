@@ -29,9 +29,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package_set.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-lib.h"
 //#include "../utils/filesystem.hpp"
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
+#include "utils/sqlite3/sqlite3.hpp"
 
 #include "libdnf/rpm/package_sack_impl.hpp"
 

@@ -22,9 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_RPM_RELDEP_LIST_ITERATOR_IMPL_HPP
 
 
-#include "libdnf/rpm/reldep_list_impl.hpp"
+#include "reldep_list_impl.hpp"
 #include "libdnf/rpm/reldep_list_iterator.hpp"
-#include "libdnf/solv/id_queue.hpp"
+#include "solv/id_queue.hpp"
 
 
 namespace libdnf::rpm {

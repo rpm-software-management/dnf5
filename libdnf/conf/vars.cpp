@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/vars.hpp"
 #include "libdnf/common/exception.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-lib.h"
 
 #include <dirent.h>
 #include <sys/types.h>

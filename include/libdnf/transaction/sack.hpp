@@ -26,7 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/sack/sack.hpp"
 #include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/transaction/db/db.hpp"
 
 #include <mutex>
 

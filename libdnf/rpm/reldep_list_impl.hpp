@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/reldep_list.hpp"
 
-#include "libdnf/solv/id_queue.hpp"
+#include "solv/id_queue.hpp"
 
 
 namespace libdnf::rpm {

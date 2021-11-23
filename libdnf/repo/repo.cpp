@@ -20,14 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
 #include "libdnf/common/exception.hpp"
-#include "libdnf/rpm/package_sack_impl.hpp"
-#include "../libdnf/utils/bgettext/bgettext-lib.h"
-#include "../libdnf/utils/fs.hpp"
+#include "rpm/package_sack_impl.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/fs.hpp"
 #include "repo_impl.hpp"
 
 #include "libdnf/logger/logger.hpp"
-#include "libdnf/utils/string.hpp"
-#include "libdnf/utils/temp.hpp"
+#include "utils/string.hpp"
+#include "utils/temp.hpp"
 
 extern "C" {
 #include <solv/repo_rpmdb.h>

@@ -24,8 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/const.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
-#include "libdnf/utils/xdg.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/xdg.hpp"
 
 #include <fmt/format.h>
 #include <glob.h>

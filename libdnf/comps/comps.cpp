@@ -17,10 +17,10 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <libdnf/base/base.hpp>
-#include <libdnf/comps/comps.hpp>
-#include <libdnf/solv/pool.hpp>
-#include "libdnf/repo/repo_impl.hpp"
+#include "libdnf/base/base.hpp"
+#include "libdnf/comps/comps.hpp"
+#include "solv/pool.hpp"
+#include "repo/repo_impl.hpp"
 
 extern "C" {
 #include <solv/pool.h>

@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/transaction/comps_environment.hpp"
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
+#include "utils/sqlite3/sqlite3.hpp"
 
 
 namespace libdnf::transaction {

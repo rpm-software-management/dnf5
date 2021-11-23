@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/const.hpp"
-#include "libdnf/solv/pool.hpp"
+#include "solv/pool.hpp"
 
 #include <fmt/format.h>
 

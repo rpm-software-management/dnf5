@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv_repo.hpp"
 
 #include "libdnf/base/base.hpp"
-#include "libdnf/solv/pool.hpp"
-#include "libdnf/utils/bgettext/bgettext-lib.h"
-#include "libdnf/utils/temp.hpp"
+#include "solv/pool.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/temp.hpp"
 
 extern "C" {
 #include <solv/chksum.h>

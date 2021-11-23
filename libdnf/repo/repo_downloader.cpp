@@ -21,10 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo_errors.hpp"
-#include "libdnf/utils/bgettext/bgettext-lib.h"
-#include "libdnf/utils/fs.hpp"
-#include "libdnf/utils/string.hpp"
-#include "libdnf/utils/temp.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/fs.hpp"
+#include "utils/string.hpp"
+#include "utils/temp.hpp"
 
 #include <fmt/format.h>
 #include <librepo/librepo.h>

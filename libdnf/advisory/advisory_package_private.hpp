@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_ADVISORY_ADVISORY_PACKAGE_PRIVATE_HPP
 
 #include "libdnf/advisory/advisory_package.hpp"
-#include "libdnf/rpm/package_sack_impl.hpp"
-#include "libdnf/solv/pool.hpp"
+#include "rpm/package_sack_impl.hpp"
+#include "solv/pool.hpp"
 
 #include <solv/pooltypes.h>
 #include <solv/solvable.h>

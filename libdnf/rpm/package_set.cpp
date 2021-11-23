@@ -22,10 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_set_impl.hpp"
 
-#include "libdnf/base/base_private.hpp"
+#include "base/base_private.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/rpm/package_set_iterator.hpp"
-#include "libdnf/solv/solv_map.hpp"
+#include "solv/solv_map.hpp"
 
 
 namespace libdnf::rpm {

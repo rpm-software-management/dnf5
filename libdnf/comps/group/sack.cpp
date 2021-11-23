@@ -18,9 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "libdnf/comps/group/sack.hpp"
-#include "libdnf/comps/group/sack_impl.hpp"
+#include "sack_impl.hpp"
 #include "libdnf/comps/group/group.hpp"
-#include "libdnf/comps/group/group-private.hpp"
+#include "group-private.hpp"
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/comps/comps.hpp"
 

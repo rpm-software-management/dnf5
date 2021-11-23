@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/log_event.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
-#include "libdnf/utils/string.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/string.hpp"
 
 #include <fmt/format.h>
 

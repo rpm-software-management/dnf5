@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_ADVISORY_ADVISORY_SACK_IMPL_HPP
 
 #include "libdnf/advisory/advisory_sack.hpp"
-#include "libdnf/solv/solv_map.hpp"
+#include "solv/solv_map.hpp"
 
 
 namespace libdnf::advisory {

@@ -37,7 +37,7 @@ struct Swdb;
 //#include "../hy-types.h"
 //#include "../sack/query.hpp"
 #include "libdnf/rpm/package_set.hpp"
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
+#include "utils/sqlite3/sqlite3.hpp"
 
 #include "comps_group.hpp"
 #include "transaction.hpp"

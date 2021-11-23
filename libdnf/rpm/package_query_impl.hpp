@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_PACKAGE_QUERY_IMPL_HPP
 #define LIBDNF_RPM_PACKAGE_QUERY_IMPL_HPP
 
-#include "libdnf/solv/solv_map.hpp"
+#include "solv/solv_map.hpp"
 
 #include "libdnf/rpm/package_query.hpp"
 

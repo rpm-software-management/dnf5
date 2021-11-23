@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_reference.hpp"
 
 #include "libdnf/logger/logger.hpp"
-#include "libdnf/rpm/package_sack_impl.hpp"
+#include "rpm/package_sack_impl.hpp"
 
 #include <solv/chksum.h>
 #include <solv/repo.h>

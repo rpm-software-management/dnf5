@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/rpm/reldep_list_iterator_impl.hpp"
+#include "reldep_list_iterator_impl.hpp"
 
 
 namespace libdnf::rpm {

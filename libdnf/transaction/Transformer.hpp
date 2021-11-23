@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <vector>
 
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
+#include "utils/sqlite3/sqlite3.hpp"
 
 #include "comps_environment.hpp"
 #include "comps_group.hpp"

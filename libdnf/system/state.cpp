@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/system/state.hpp"
 
-#include "libdnf/utils/fs.hpp"
+#include "utils/fs.hpp"
 
 #include <toml.hpp>
 #include <fstream>

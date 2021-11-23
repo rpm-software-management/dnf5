@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/package_downloader.hpp"
 
 #include "libdnf/common/exception.hpp"
-#include "libdnf/repo/repo_downloader.hpp"
-#include "libdnf/repo/repo_impl.hpp"
-#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "repo_downloader.hpp"
+#include "repo_impl.hpp"
+#include "utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
 #include <librepo/librepo.h>

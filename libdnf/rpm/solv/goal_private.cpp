@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "goal_private.hpp"
 
 #include "libdnf/common/exception.hpp"
-#include "libdnf/solv/pool.hpp"
+#include "solv/pool.hpp"
 
 extern "C" {
 #include <solv/evr.h>

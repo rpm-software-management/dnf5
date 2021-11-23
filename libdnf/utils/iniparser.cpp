@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/utils/iniparser.hpp"
+#include "utils/iniparser.hpp"
 
 namespace libdnf {
 

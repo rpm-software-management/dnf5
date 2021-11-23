@@ -22,8 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
-#include "libdnf/solv/id_queue.hpp"
 #include "libdnf/repo/config_repo.hpp"
+
+#include "solv/id_queue.hpp"
 
 #include <solv/repo.h>
 

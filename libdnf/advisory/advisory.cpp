@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_collection.hpp"
 #include "libdnf/advisory/advisory_reference.hpp"
 #include "libdnf/common/exception.hpp"
-#include "libdnf/solv/pool.hpp"
-#include "libdnf/utils/string.hpp"
+#include "solv/pool.hpp"
+#include "utils/string.hpp"
 
 #include <fmt/format.h>
 

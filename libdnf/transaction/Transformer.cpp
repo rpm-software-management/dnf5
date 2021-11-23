@@ -29,9 +29,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_item.hpp"
 
 #include "libdnf/rpm/nevra.hpp"
-#include "libdnf/utils/bgettext/bgettext-lib.h"
-#include "libdnf/utils/fs.hpp"
-#include "libdnf/utils/string.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/fs.hpp"
+#include "utils/string.hpp"
 
 #include <dirent.h>
 

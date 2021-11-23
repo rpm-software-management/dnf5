@@ -23,8 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/logger/logger.hpp"
 #include "libdnf/repo/repo_errors.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
-#include "libdnf/utils/temp.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/temp.hpp"
 
 #include <fmt/format.h>
 #include <gpgme.h>

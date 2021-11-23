@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/config_parser.hpp"
 
-#include "libdnf/utils/iniparser.hpp"
+#include "utils/iniparser.hpp"
 
 #include <algorithm>
 #include <fstream>

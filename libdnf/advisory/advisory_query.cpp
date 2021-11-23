@@ -19,16 +19,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_query.hpp"
 
-#include "libdnf/advisory/advisory_sack_impl.hpp"
+#include "advisory_sack_impl.hpp"
 #include "libdnf/advisory/advisory_set.hpp"
-#include "libdnf/advisory/advisory_set_impl.hpp"
-#include "libdnf/advisory/advisory_package_private.hpp"
+#include "advisory_set_impl.hpp"
+#include "advisory_package_private.hpp"
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package_set.hpp"
-#include "libdnf/solv/pool.hpp"
-#include "libdnf/solv/solv_map.hpp"
-#include "libdnf/common/sack/query_cmp_private.hpp"
-#include "libdnf/utils/utils_internal.hpp"
+#include "solv/pool.hpp"
+#include "solv/solv_map.hpp"
+#include "common/sack/query_cmp_private.hpp"
+#include "utils/utils_internal.hpp"
 
 #include <solv/evr.h>
 

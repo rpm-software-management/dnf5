@@ -25,9 +25,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/option_bool.hpp"
-#include "libdnf/rpm/package_sack_impl.hpp"
+#include "rpm/package_sack_impl.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
 

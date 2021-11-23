@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TRANSACTION_DB_DB_HPP
 
 
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
+#include "utils/sqlite3/sqlite3.hpp"
 
 #include <memory>
 

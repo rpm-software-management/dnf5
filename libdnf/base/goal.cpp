@@ -19,19 +19,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal.hpp"
 
-#include "libdnf/base/base_private.hpp"
+#include "base_private.hpp"
 #include "libdnf/common/exception.hpp"
-#include "../libdnf/utils/bgettext/bgettext-lib.h"
-#include "../rpm/package_sack_impl.hpp"
-#include "../rpm/package_set_impl.hpp"
-#include "../rpm/solv/goal_private.hpp"
-#include "../utils/string.hpp"
-#include "../utils/utils_internal.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "rpm/package_sack_impl.hpp"
+#include "rpm/package_set_impl.hpp"
+#include "rpm/solv/goal_private.hpp"
+#include "utils/string.hpp"
+#include "utils/utils_internal.hpp"
 #include "transaction_impl.hpp"
 
 #include "libdnf/rpm/package_query.hpp"
-#include "libdnf/solv/id_queue.hpp"
-#include "libdnf/solv/pool.hpp"
+#include "solv/id_queue.hpp"
+#include "solv/pool.hpp"
 
 #include <fmt/format.h>
 #include <sys/utsname.h>

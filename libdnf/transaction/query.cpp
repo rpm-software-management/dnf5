@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/sack.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-lib.h"
 
 #include <vector>
 

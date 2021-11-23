@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/repo/config_repo.hpp"
 #include "libdnf/repo/repo_callbacks.hpp"
-#include "libdnf/repo/repo_gpgme.hpp"
+#include "repo_gpgme.hpp"
 
 #include <librepo/librepo.h>
 

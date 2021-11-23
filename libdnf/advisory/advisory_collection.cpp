@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_collection.hpp"
 
-#include "libdnf/advisory/advisory_module_private.hpp"
-#include "libdnf/advisory/advisory_package_private.hpp"
+#include "advisory/advisory_module_private.hpp"
+#include "advisory/advisory_package_private.hpp"
 
 
 namespace libdnf::advisory {

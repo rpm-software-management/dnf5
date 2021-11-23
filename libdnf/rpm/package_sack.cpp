@@ -19,12 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/common/exception.hpp"
-#include "../libdnf/utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-lib.h"
 #include "package_sack_impl.hpp"
-#include "../repo/repo_impl.hpp"
-#include "libdnf/solv/id_queue.hpp"
-#include "libdnf/solv/solv_map.hpp"
-#include "libdnf/utils/temp.hpp"
+#include "repo/repo_impl.hpp"
+#include "solv/id_queue.hpp"
+#include "solv/solv_map.hpp"
+#include "utils/temp.hpp"
 
 extern "C" {
 #include <solv/chksum.h>

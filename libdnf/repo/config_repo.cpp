@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/const.hpp"
 
-#include "libdnf/conf/config_utils.hpp"
-#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "conf/config_utils.hpp"
+#include "utils/bgettext/bgettext-lib.h"
 
 #include <solv/chksum.h>
 #include <solv/util.h>

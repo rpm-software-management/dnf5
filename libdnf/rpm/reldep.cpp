@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/reldep.hpp"
 
-#include "libdnf/solv/pool.hpp"
-#include "libdnf/solv/reldep_parser.hpp"
+#include "solv/pool.hpp"
+#include "solv/reldep_parser.hpp"
 
 // workaround, libsolv lacks 'extern "C"' in its header file
 extern "C" {

@@ -18,9 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/advisory/advisory_set_impl.hpp"
+#include "advisory_set_impl.hpp"
 #include "libdnf/advisory/advisory_set_iterator.hpp"
-#include "libdnf/solv/solv_map.hpp"
+#include "solv/solv_map.hpp"
 
 
 namespace libdnf::advisory {

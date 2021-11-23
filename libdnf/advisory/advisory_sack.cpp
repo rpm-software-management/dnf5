@@ -18,10 +18,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "libdnf/advisory/advisory_sack.hpp"
-#include "libdnf/advisory/advisory_sack_impl.hpp"
+#include "advisory_sack_impl.hpp"
 
-#include "libdnf/solv/pool.hpp"
-#include "libdnf/solv/solv_map.hpp"
+#include "solv/pool.hpp"
+#include "solv/solv_map.hpp"
 
 #include <solv/dataiterator.h>
 

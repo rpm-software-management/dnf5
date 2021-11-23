@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_module.hpp"
 
-#include "libdnf/advisory/advisory_module_private.hpp"
-#include "libdnf/solv/pool.hpp"
+#include "advisory_module_private.hpp"
+#include "solv/pool.hpp"
 
 
 namespace libdnf::advisory {

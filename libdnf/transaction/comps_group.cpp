@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/transaction/comps_group.hpp"
 
-#include "libdnf/transaction/db/comps_group.hpp"
-#include "libdnf/transaction/db/comps_group_package.hpp"
+#include "db/comps_group.hpp"
+#include "db/comps_group_package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
 

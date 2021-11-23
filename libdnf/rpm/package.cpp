@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "reldep_list_impl.hpp"
 #include "libdnf/common/exception.hpp"
-#include "libdnf/repo/repo_impl.hpp"
-#include "libdnf/solv/pool.hpp"
+#include "repo/repo_impl.hpp"
+#include "solv/pool.hpp"
 
 #include <filesystem>
 

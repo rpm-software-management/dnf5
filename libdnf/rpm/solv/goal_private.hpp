@@ -22,9 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/rpm/package_sack.hpp"
-#include "libdnf/solv/id_queue.hpp"
-#include "libdnf/solv/pool.hpp"
-#include "libdnf/solv/solv_map.hpp"
+#include "solv/id_queue.hpp"
+#include "solv/pool.hpp"
+#include "solv/solv_map.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <solv/solver.h>

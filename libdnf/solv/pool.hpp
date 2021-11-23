@@ -24,9 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
-#include "libdnf/repo/repo_impl.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "repo/repo_impl.hpp"
+#include "utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
 

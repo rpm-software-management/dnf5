@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
-#include "libdnf/solv/reldep_parser.hpp"
+#include "solv/reldep_parser.hpp"
 
 #include "libdnf/rpm/reldep.hpp"
 

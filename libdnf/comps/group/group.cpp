@@ -17,14 +17,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include <libdnf/base/base.hpp>
-#include <libdnf/comps/group/package.hpp>
-#include <libdnf/comps/group/group.hpp>
-#include <libdnf/comps/group/query.hpp>
-#include <libdnf/comps/group/sack.hpp>
-#include <libdnf/comps/comps.hpp>
-#include <libdnf/solv/pool.hpp>
-#include <libdnf/utils/xml.hpp>
+#include "libdnf/base/base.hpp"
+#include "libdnf/comps/group/package.hpp"
+#include "libdnf/comps/group/group.hpp"
+#include "libdnf/comps/group/query.hpp"
+#include "libdnf/comps/group/sack.hpp"
+#include "libdnf/comps/comps.hpp"
+#include "solv/pool.hpp"
+#include "utils/xml.hpp"
 
 extern "C" {
 #include <solv/knownid.h>

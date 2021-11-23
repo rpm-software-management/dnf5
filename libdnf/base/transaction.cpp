@@ -24,10 +24,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/package_query.hpp"
-#include "libdnf/rpm/package_set_impl.hpp"
-#include "libdnf/solv/pool.hpp"
-#include "libdnf/utils/bgettext/bgettext-lib.h"
-#include "libdnf/utils/string.hpp"
+#include "rpm/package_set_impl.hpp"
+#include "solv/pool.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/string.hpp"
 
 #include <fmt/format.h>
 

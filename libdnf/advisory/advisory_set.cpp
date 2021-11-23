@@ -19,13 +19,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/advisory/advisory_set.hpp"
-#include "libdnf/advisory/advisory_package_private.hpp"
+#include "advisory/advisory_package_private.hpp"
 
 #include "advisory_set_impl.hpp"
 
 #include "libdnf/advisory/advisory_set_iterator.hpp"
-#include "libdnf/solv/solv_map.hpp"
-#include "libdnf/base/base_private.hpp"
+#include "solv/solv_map.hpp"
+#include "base/base_private.hpp"
+
 
 namespace libdnf::advisory {
 

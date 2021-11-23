@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "libdnf/comps/group/sack.hpp"
-#include "libdnf/comps/group/sack_impl.hpp"
+#include "sack_impl.hpp"
 
 
 namespace libdnf::comps {
