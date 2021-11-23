@@ -10,6 +10,8 @@ add_definitions(-DGETTEXT_DOMAIN=\"microdnf\")
 # use any sources found under the current directory
 file(GLOB_RECURSE MICRODNF_SOURCES *.cpp)
 
+include_directories(.)
+
 add_executable(microdnf ${MICRODNF_SOURCES})
 
 target_link_libraries(microdnf PUBLIC libdnf libdnf-cli Threads::Threads)

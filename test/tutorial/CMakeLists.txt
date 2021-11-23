@@ -7,6 +7,8 @@ file(GLOB TEST_TUTORIAL_SOURCES *.cpp)
 # share the test runner code with libdnf
 list(APPEND TEST_TUTORIAL_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../libdnf/run_tests.cpp)
 
+include_directories(${PROJECT_SOURCE_DIR}/libdnf)
+
 
 add_executable(run_tests_tutorial ${TEST_TUTORIAL_SOURCES})
 target_link_libraries(run_tests_tutorial stdc++ libdnf libdnf-cli cppunit)

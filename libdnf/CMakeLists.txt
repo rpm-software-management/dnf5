@@ -9,6 +9,8 @@ list(APPEND LIBDNF_PC_REQUIRES_PRIVATE)
 # set gettext domain for translations
 add_definitions(-DGETTEXT_DOMAIN=\"libdnf\")
 
+include_directories(.)
+
 # build libdnf.so
 add_library(libdnf SHARED ${LIBDNF_SOURCES})
 set(DNF_SO_VERSION 3)

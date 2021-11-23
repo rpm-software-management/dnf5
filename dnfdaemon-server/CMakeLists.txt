@@ -5,6 +5,8 @@ endif()
 set(DNFDAEMON_SERVER_BIN dnfdaemon-server)
 file(GLOB_RECURSE DNFDAEMON_SERVER_SOURCES *.cpp)
 
+include_directories(.)
+
 pkg_check_modules(SDBUS_CPP REQUIRED sdbus-c++)
 find_package(Threads)
 

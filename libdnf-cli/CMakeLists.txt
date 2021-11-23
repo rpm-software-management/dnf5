@@ -14,6 +14,7 @@ file(GLOB_RECURSE LIBDNF_CLI_SOURCES *.cpp)
 list(APPEND LIBDNF_CLI_PC_REQUIRES)
 list(APPEND LIBDNF_CLI_PC_REQUIRES_PRIVATE)
 
+include_directories(.)
 
 # build libdnf-cli.so
 add_library(libdnf-cli SHARED ${LIBDNF_CLI_SOURCES})
