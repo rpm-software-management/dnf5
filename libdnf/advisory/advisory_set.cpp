@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_set_iterator.hpp"
 #include "libdnf/solv/solv_map.hpp"
-
+#include "libdnf/base/base_private.hpp"
 
 namespace libdnf::advisory {
 
@@ -70,30 +70,21 @@ AdvisorySet::iterator AdvisorySet::end() const {
 
 
 AdvisorySet & AdvisorySet::operator|=(const AdvisorySet & other) {
-    if (p_impl->base != other.p_impl->base) {
-        throw UsedDifferentSack(
-            "Cannot perform the action with AdvisorySet instances initialized with different Base");
-    }
+    libdnf_assert_same_base(p_impl->base, other.p_impl->base);
     *p_impl |= *other.p_impl;
     return *this;
 }
 
 
 AdvisorySet & AdvisorySet::operator-=(const AdvisorySet & other) {
-    if (p_impl->base != other.p_impl->base) {
-        throw UsedDifferentSack(
-            "Cannot perform the action with AdvisorySet instances initialized with different Base");
-    }
+    libdnf_assert_same_base(p_impl->base, other.p_impl->base);
     *p_impl -= *other.p_impl;
     return *this;
 }
 
 
 AdvisorySet & AdvisorySet::operator&=(const AdvisorySet & other) {
-    if (p_impl->base != other.p_impl->base) {
-        throw UsedDifferentSack(
-            "Cannot perform the action with AdvisorySet instances initialized with different Base");
-    }
+    libdnf_assert_same_base(p_impl->base, other.p_impl->base);
     *p_impl &= *other.p_impl;
     return *this;
 }

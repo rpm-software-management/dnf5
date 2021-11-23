@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_set.hpp"
 #include "libdnf/solv/pool.hpp"
 #include "libdnf/solv/solv_map.hpp"
+#include "libdnf/common/sack/query_cmp_private.hpp"
 #include "libdnf/utils/utils_internal.hpp"
 
 #include <solv/evr.h>
@@ -64,7 +65,7 @@ static int libsolv_cmp_flags(libdnf::sack::QueryCmp cmp_type, const char * patte
         case libdnf::sack::QueryCmp::ICONTAINS:
             return SEARCH_NOCASE | SEARCH_SUBSTRING;
         default:
-            throw AdvisoryQuery::NotSupportedCmpType("Used unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 }
 
@@ -245,7 +246,7 @@ AdvisoryQuery & AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & p
 
         } break;
         default:
-            throw NotSupportedCmpType("Unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 
     // Apply filter results to query
@@ -290,7 +291,7 @@ std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
             }
         } break;
         default:
-            throw NotSupportedCmpType("Unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 
     //after_filter contains just advisoryPackages which comply to condition with package_set

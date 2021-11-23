@@ -46,14 +46,6 @@ namespace libdnf::advisory {
 
 class AdvisorySet {
 public:
-    // TODO(dmach): move to common/exception.hpp, share across multiple sets/queries
-    struct UsedDifferentSack : public RuntimeError {
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::advisory::AdvisorySet"; }
-        const char * get_name() const noexcept override { return "UsedDifferentSack"; }
-        const char * get_description() const noexcept override { return "AdvisorySet exception"; }
-    };
-
     explicit AdvisorySet(const libdnf::BaseWeakPtr & base);
     explicit AdvisorySet(libdnf::Base & base);
 

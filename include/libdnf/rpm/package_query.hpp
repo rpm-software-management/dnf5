@@ -56,14 +56,6 @@ public:
         EMPTY = 1 << 2
     };
 
-    // TODO(dmach): move to common/exception.hpp, share across multiple queries
-    struct NotSupportedCmpType : public RuntimeError {
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::rpm::PackageQuery"; }
-        const char * get_name() const noexcept override { return "NotSupportedCmpType"; }
-        const char * get_description() const noexcept override { return "PackageQuery exception"; }
-    };
-
     // @replaces libdnf/hy-query.h:function:hy_query_create(DnfSack *sack);
     // @replaces libdnf/hy-query.h:function:hy_query_create_flags(DnfSack *sack, int flags);
     // @replaces libdnf/sack/query.hpp:method:Query(DnfSack* sack, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES)

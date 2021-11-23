@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/base/base_private.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/common/sack/query_cmp_private.hpp"
 #include "libdnf/utils/utils_internal.hpp"
 
 extern "C" {
@@ -55,7 +56,7 @@ inline bool is_valid_candidate(libdnf::sack::QueryCmp cmp_type, const char * c_p
             return fnmatch(c_pattern, candidate, FNM_CASEFOLD) == 0;
         } break;
         default:
-            throw libdnf::rpm::PackageQuery::NotSupportedCmpType("Unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 }
 
@@ -330,7 +331,7 @@ PackageQuery & PackageQuery::filter_name(const std::vector<std::string> & patter
                 filter_glob_internal<&libdnf::solv::Pool::get_name>(pool, c_pattern, *p_impl, filter_result, 0);
                 break;
             default:
-                throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
         }
     }
 
@@ -345,7 +346,7 @@ PackageQuery & PackageQuery::filter_name(const std::vector<std::string> & patter
 
 PackageQuery & PackageQuery::filter_name(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     if (cmp_type != sack::QueryCmp::EQ && cmp_type != sack::QueryCmp::NEQ) {
-        throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+        libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
     auto sack = p_impl->base->get_rpm_package_sack();
     auto &  pool = get_pool(p_impl->base);
@@ -376,7 +377,7 @@ PackageQuery & PackageQuery::filter_name(const PackageSet & package_set, libdnf:
 
 PackageQuery & PackageQuery::filter_name_arch(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     if (cmp_type != sack::QueryCmp::EQ && cmp_type != sack::QueryCmp::NEQ) {
-        throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+        libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
     auto sack = p_impl->base->get_rpm_package_sack();
     auto &  pool = get_pool(p_impl->base);
@@ -463,7 +464,7 @@ PackageQuery & PackageQuery::filter_evr(const std::vector<std::string> & pattern
             filter_evr_internal<cmp_eq>(pool, patterns, *p_impl);
             break;
         default:
-            throw NotSupportedCmpType("Used unsupported CmpType");
+             libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
     return *this;
 }
@@ -504,7 +505,7 @@ PackageQuery & PackageQuery::filter_arch(const std::vector<std::string> & patter
                 filter_glob_internal<&libdnf::solv::Pool::get_arch>(pool, c_pattern, *p_impl, filter_result, 0);
                 break;
             default:
-                throw NotSupportedCmpType("Unsupported CmpType");
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
         }
     }
 
@@ -691,7 +692,7 @@ PackageQuery & PackageQuery::filter_nevra(const libdnf::rpm::Nevra & pattern, li
 
 PackageQuery & PackageQuery::filter_nevra(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
     if (cmp_type != sack::QueryCmp::EQ && cmp_type != sack::QueryCmp::NEQ) {
-        throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+        libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
     auto sack = p_impl->base->get_rpm_package_sack();
     auto & pool = get_pool(p_impl->base);
@@ -774,7 +775,7 @@ PackageQuery & PackageQuery::filter_version(const std::vector<std::string> & pat
                 filter_version_internal<cmp_lte>(pool, c_pattern, *p_impl, filter_result);
                 break;
             default:
-                throw NotSupportedCmpType("Used unsupported CmpType");
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
         }
     }
 
@@ -841,7 +842,7 @@ PackageQuery & PackageQuery::filter_release(const std::vector<std::string> & pat
                 filter_release_internal<cmp_lte>(pool, c_pattern, *p_impl, filter_result);
                 break;
             default:
-                throw NotSupportedCmpType("Used unsupported CmpType");
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
         }
     }
 
@@ -897,7 +898,7 @@ PackageQuery & PackageQuery::filter_repo_id(const std::vector<std::string> & pat
                 }
                 break;
             default:
-                throw NotSupportedCmpType("Used unsupported CmpType");
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
         }
     }
     for (Id candidate_id : *p_impl) {
@@ -963,7 +964,7 @@ PackageQuery & PackageQuery::filter_sourcerpm(const std::vector<std::string> & p
                 }
                 break;
             default:
-                throw NotSupportedCmpType("Used unsupported CmpType");
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
         }
     }
 
@@ -1039,7 +1040,7 @@ PackageQuery & PackageQuery::filter_epoch(const std::vector<unsigned long> & pat
             }
             break;
         default:
-            throw NotSupportedCmpType("Used unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 
     // Apply filter results to query
@@ -1090,7 +1091,7 @@ PackageQuery & PackageQuery::filter_epoch(const std::vector<std::string> & patte
                 }
                 break;
             default:
-                throw NotSupportedCmpType("Used unsupported CmpType");
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
         }
     }
 
@@ -1168,7 +1169,7 @@ static void filter_dataiterator_internal(
                 flags = SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_NOCASE | SEARCH_SUBSTRING;
                 break;
             default:
-                throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
         }
         filter_dataiterator(pool, keyname, flags, candidates, filter_result, c_pattern);
     }
@@ -1229,7 +1230,7 @@ PackageQuery & PackageQuery::filter_location(const std::vector<std::string> & pa
             }
         } break;
         default:
-            throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 
     // Apply filter results to query
@@ -1284,7 +1285,7 @@ void PackageQuery::Impl::str2reldep_internal(
             break;
 
         default:
-            throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 }
 
@@ -1330,7 +1331,7 @@ void PackageQuery::Impl::filter_provides(
             break;
         }
         default:
-            throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 }
 
@@ -1363,7 +1364,7 @@ void PackageQuery::Impl::filter_reldep(
             break;
 
         default:
-            throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 
     auto base = pkg_set.get_base();
@@ -1415,7 +1416,7 @@ void PackageQuery::Impl::filter_reldep(
             break;
 
         default:
-            throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 
     auto base = pkg_set.get_base();
@@ -1631,7 +1632,7 @@ void PackageQuery::Impl::filter_nevra(
                 }
             } break;
             default:
-                throw NotSupportedCmpType("Unsupported CmpType");
+                libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
         }
     } else if (!epoch.empty() || !version.empty() || !release.empty() || !arch.empty()) {
         for (Id candidate_id : *pkg_set.p_impl) {
@@ -1716,7 +1717,7 @@ void PackageQuery::Impl::filter_nevra(
             }
         } break;
         default:
-            throw NotSupportedCmpType("Unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 }
 
@@ -1772,7 +1773,7 @@ PackageQuery & PackageQuery::filter_obsoletes(const PackageSet & package_set, li
             break;
 
         default:
-            throw PackageQuery::NotSupportedCmpType("Used unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 
     auto & spool = get_pool(p_impl->base);
@@ -1932,7 +1933,7 @@ PackageQuery & PackageQuery::filter_advisories(
             }
         } break;
         default:
-            throw NotSupportedCmpType("Unsupported CmpType");
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
     }
 
     // Apply filter results to query

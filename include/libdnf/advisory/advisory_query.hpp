@@ -49,13 +49,6 @@ public:
 
     ~AdvisoryQuery();
 
-    struct NotSupportedCmpType : public RuntimeError {
-        using RuntimeError::RuntimeError;
-        const char * get_domain_name() const noexcept override { return "libdnf::advisory::AdvisoryQuery"; }
-        const char * get_name() const noexcept override { return "NotSupportedCmpType"; }
-        const char * get_description() const noexcept override { return "AdvisoryQuery exception"; }
-    };
-
     /// Filter Advisories by name
     ///
     /// @param pattern      Pattern used when matching agains advisory names.
