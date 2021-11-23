@@ -17,41 +17,35 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_ADVISORY_ADVISORY_SACK_HPP
-#define LIBDNF_ADVISORY_ADVISORY_SACK_HPP
+#ifndef LIBDNF_ADVISORY_ADVISORY_SACK_IMPL_HPP
+#define LIBDNF_ADVISORY_ADVISORY_SACK_IMPL_HPP
 
-#include "advisory_query.hpp"
-
-#include "libdnf/base/base_weak.hpp"
-#include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/advisory/advisory_sack.hpp"
+#include "libdnf/solv/solv_map.hpp"
 
 
 namespace libdnf::advisory {
 
-class AsdvisorySack;
-using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 
-
-class AdvisorySack {
+class AdvisorySack::Impl {
 public:
-    explicit AdvisorySack(const libdnf::BaseWeakPtr & base);
+    explicit Impl(const libdnf::BaseWeakPtr & base);
 
-    ~AdvisorySack();
-
-    AdvisorySackWeakPtr get_weak_ptr();
-
-    /// @return The `Base` object to which this object belongs.
-    /// @since 5.0
-    libdnf::BaseWeakPtr get_base() const;
+    /// Load all advisories present in PackageSack from base. This method is
+    /// called automatically when creating a new query and the cached number
+    /// of solvables doesn't match the current number in solv sacks pool.
+    libdnf::solv::SolvMap & get_solvables();
 
 private:
-    class Impl;
+    friend AdvisorySack;
 
-    friend AdvisoryQuery;
+    libdnf::BaseWeakPtr base;
+    WeakPtrGuard<AdvisorySack, false> sack_guard;
 
-    std::unique_ptr<Impl> p_impl;
+    libdnf::solv::SolvMap data_map{0};
+    int cached_solvables_size{0};
 };
 
 }  // namespace libdnf::advisory
 
-#endif
+#endif  // LIBDNF_ADVISORY_ADVISORY_SACK_IMPL_HPP
