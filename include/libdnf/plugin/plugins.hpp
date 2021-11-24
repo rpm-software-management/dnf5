@@ -22,8 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "iplugin.hpp"
 
-#include "libdnf/utils/library.hpp"
-
 #include <memory>
 #include <string>
 #include <vector>
@@ -54,28 +52,6 @@ protected:
     Plugin() = default;
     IPlugin * iplugin_instance{nullptr};
     bool enabled{true};
-};
-
-
-class PluginLibrary : public Plugin {
-public:
-    explicit PluginLibrary(const std::string & library_path);
-    ~PluginLibrary();
-
-#ifndef SWIG
-private:
-    using TGetApiVersionFunc = decltype(&libdnf_plugin_get_api_version);
-    using TGetNameFunc = decltype(&libdnf_plugin_get_name);
-    using TGetVersionFunc = decltype(&libdnf_plugin_get_version);
-    using TNewInstanceFunc = decltype(&libdnf_plugin_new_instance);
-    using TDeleteInstanceFunc = decltype(&libdnf_plugin_delete_instance);
-    TGetApiVersionFunc get_api_version{nullptr};
-    TGetNameFunc get_name{nullptr};
-    TGetVersionFunc get_version{nullptr};
-    TNewInstanceFunc new_instance{nullptr};
-    TDeleteInstanceFunc delete_instance{nullptr};
-    utils::Library library;
-#endif
 };
 
 

@@ -21,12 +21,36 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "libdnf/utils/library.hpp"
+
 
 #include <fmt/format.h>
 
 #include <filesystem>
 
 namespace libdnf::plugin {
+
+// Support for Plugin in the shared library.
+class PluginLibrary : public Plugin {
+public:
+    // Loads a shared library, finds symbols, and instantiates the plugin.
+    explicit PluginLibrary(const std::string & library_path);
+
+    ~PluginLibrary();
+
+private:
+    using TGetApiVersionFunc = decltype(&libdnf_plugin_get_api_version);
+    using TGetNameFunc = decltype(&libdnf_plugin_get_name);
+    using TGetVersionFunc = decltype(&libdnf_plugin_get_version);
+    using TNewInstanceFunc = decltype(&libdnf_plugin_new_instance);
+    using TDeleteInstanceFunc = decltype(&libdnf_plugin_delete_instance);
+    TGetApiVersionFunc get_api_version{nullptr};
+    TGetNameFunc get_name{nullptr};
+    TGetVersionFunc get_version{nullptr};
+    TNewInstanceFunc new_instance{nullptr};
+    TDeleteInstanceFunc delete_instance{nullptr};
+    utils::Library library;
+};
 
 PluginLibrary::PluginLibrary(const std::string & library_path) : library(library_path) {
     get_api_version = reinterpret_cast<TGetApiVersionFunc>(library.get_address("libdnf_plugin_get_api_version"));
