@@ -20,11 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/argument_parser.hpp"
 
-#include "libdnf-cli/output/argument_parser.hpp"
+#include "output/argument_parser.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-lib.h"
 #include "libdnf/common/exception.hpp"
-#include "libdnf/utils/string.hpp"
+#include "utils/string.hpp"
 
 #include <fmt/format.h>
 

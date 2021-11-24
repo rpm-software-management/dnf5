@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "key_value_table.hpp"
-#include "libdnf-cli/utils/units.hpp"
 
 
 namespace libdnf::cli::output {

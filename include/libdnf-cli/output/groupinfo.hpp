@@ -23,10 +23,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/tty.hpp"
 
+// TODO(lukash) include from common in a public libdnf-cli header
+#include "utils/string.hpp"
+
 #include <libdnf/comps/group/package.hpp>
-#include <libdnf/utils/string.hpp>
 #include <libsmartcols/libsmartcols.h>
-#include <string.h>
 
 
 namespace libdnf::cli::output {
