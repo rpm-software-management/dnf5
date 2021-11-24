@@ -15,6 +15,7 @@ add_executable(${DNFDAEMON_SERVER_BIN} ${DNFDAEMON_SERVER_SOURCES})
 target_link_libraries(
     ${DNFDAEMON_SERVER_BIN}
     PUBLIC
+        common
         libdnf
         libdnf-cli
         ${SDBUS_CPP_LIBRARIES}

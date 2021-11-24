@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _BGETTEXT_LIB_H_
 #define _BGETTEXT_LIB_H_
 
+// TODO(jrohel) separate bgettext into a library
 #ifndef GETTEXT_DOMAIN
 #error You must define GETTEXT_DOMAIN before including bgettext-lib.h.
 #endif

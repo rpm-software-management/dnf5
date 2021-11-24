@@ -93,9 +93,11 @@ endif()
 
 
 include_directories("${PROJECT_SOURCE_DIR}/include")
+include_directories("${PROJECT_SOURCE_DIR}/common")
 
 
 # libdnf
+add_subdirectory("common")
 add_subdirectory("include")
 add_subdirectory("libdnf")
 add_subdirectory("libdnf-cli")

@@ -1,5 +1,5 @@
 # use any sources found under the current directory
-file(GLOB_RECURSE LIBDNF_SOURCES *.cpp *.c)
+file(GLOB_RECURSE LIBDNF_SOURCES *.cpp)
 
 
 # gather all pkg-config requires and write them to a .pc file later
@@ -29,6 +29,7 @@ target_link_libraries(libdnf stdc++fs)
 # install libdnf.so
 install(TARGETS libdnf LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR})
 
+target_link_libraries(libdnf common)
 
 # link libraries and set pkg-config requires
 
