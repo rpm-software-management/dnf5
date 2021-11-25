@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "key_value_table.hpp"
+#include "libdnf-cli/output/key_value_table.hpp"
 
 #include "libdnf-cli/tty.hpp"
 #include "libdnf/utils/string.hpp"

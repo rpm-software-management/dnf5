@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_UTILS_UNITS
 #define LIBDNF_CLI_UTILS_UNITS
 
-
 #include <string>
 
 
