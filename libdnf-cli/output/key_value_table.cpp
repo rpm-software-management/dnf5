@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "key_value_table.hpp"
 
-#include "libdnf-cli/utils/tty.hpp"
+#include "libdnf-cli/tty.hpp"
 #include "libdnf/utils/string.hpp"
 
 
@@ -34,7 +34,7 @@ namespace libdnf::cli::output {
 
 KeyValueTable::KeyValueTable() {
     tb = scols_new_table();
-    if (libdnf::cli::utils::tty::is_interactive()) {
+    if (libdnf::cli::tty::is_interactive()) {
         scols_table_enable_colors(tb, true);
     }
 

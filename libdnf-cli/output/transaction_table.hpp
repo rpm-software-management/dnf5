@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 
 #include "libdnf/common/exception.hpp"
-#include "libdnf-cli/utils/tty.hpp"
+#include "libdnf-cli/tty.hpp"
 #include "libdnf-cli/utils/units.hpp"
 
 #include <libdnf/rpm/nevra.hpp>
@@ -255,7 +255,7 @@ bool print_transaction_table(Transaction & transaction) {
     scols_cell_set_color(header, "bold");
 
     scols_table_enable_maxout(tb, 1);
-    scols_table_enable_colors(tb, libdnf::cli::utils::tty::is_interactive());
+    scols_table_enable_colors(tb, libdnf::cli::tty::is_interactive());
 
     struct libscols_symbols *sb = scols_new_symbols();
     scols_symbols_set_branch(sb, " ");

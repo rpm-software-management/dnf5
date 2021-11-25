@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_REPOLIST_HPP
 #define LIBDNF_CLI_OUTPUT_REPOLIST_HPP
 
-#include "libdnf-cli/utils/tty.hpp"
+#include "libdnf-cli/tty.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 
@@ -32,7 +32,7 @@ enum { COL_REPO_ID, COL_REPO_NAME, COL_REPO_STATUS };
 
 static struct libscols_table * create_repolist_table(bool with_status) {
     struct libscols_table * table = scols_new_table();
-    if (libdnf::cli::utils::tty::is_interactive()) {
+    if (libdnf::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, 1);
         scols_table_enable_maxout(table, 1);
     }

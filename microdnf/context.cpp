@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
-#include <libdnf-cli/utils/tty.hpp>
+#include <libdnf-cli/tty.hpp>
 #include <libdnf/base/goal.hpp>
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/package_query.hpp>
@@ -164,10 +164,10 @@ public:
 
 private:
     void print_progress_bar() {
-        if (libdnf::cli::utils::tty::is_interactive()) {
-            std::cout << libdnf::cli::utils::tty::clear_line;
+        if (libdnf::cli::tty::is_interactive()) {
+            std::cout << libdnf::cli::tty::clear_line;
             for (std::size_t i = 0; i < msg_lines; i++) {
-                std::cout << libdnf::cli::utils::tty::cursor_up << libdnf::cli::utils::tty::clear_line;
+                std::cout << libdnf::cli::tty::cursor_up << libdnf::cli::tty::clear_line;
             }
             std::cout << "\r";
         }

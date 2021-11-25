@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CLI_OUTPUT_ARGUMENT_PARSER_HPP
 
 
-#include "libdnf-cli/utils/tty.hpp"
+#include "libdnf-cli/tty.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 
@@ -40,7 +40,7 @@ public:
     explicit Usage() {
         table = scols_new_table();
         scols_table_enable_noheadings(table, 1);
-        if (libdnf::cli::utils::tty::is_interactive()) {
+        if (libdnf::cli::tty::is_interactive()) {
             scols_table_enable_colors(table, 1);
         }
 

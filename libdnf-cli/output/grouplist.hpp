@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_GROUPLIST_HPP
 #define LIBDNF_CLI_OUTPUT_GROUPLIST_HPP
 
-#include "libdnf-cli/utils/tty.hpp"
+#include "libdnf-cli/tty.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 
@@ -34,7 +34,7 @@ enum { COL_GROUP_ID, COL_GROUP_NAME, COL_INSTALLED };
 
 static struct libscols_table * create_grouplist_table() {
     struct libscols_table * table = scols_new_table();
-    if (isatty(1)) {
+    if (libdnf::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, 1);
     }
     struct libscols_column * cl = scols_table_new_column(table, "ID", 20, 0);

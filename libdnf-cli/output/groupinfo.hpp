@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_GROUPINFO_HPP
 #define LIBDNF_CLI_OUTPUT_GROUPINFO_HPP
 
-#include "libdnf-cli/utils/tty.hpp"
+#include "libdnf-cli/tty.hpp"
 
 #include <libdnf/comps/group/package.hpp>
 #include <libdnf/utils/string.hpp>
@@ -93,7 +93,7 @@ static struct libscols_table * create_groupinfo_table(GroupType & group) {
     struct libscols_column * cl = scols_table_new_column(table, "value", 10, SCOLS_FL_WRAP);
     scols_column_set_safechars(cl, "\n");
     scols_column_set_wrapfunc(cl, scols_wrapnl_chunksize, scols_wrapnl_nextchunk, nullptr);
-    if (libdnf::cli::utils::tty::is_interactive()) {
+    if (libdnf::cli::tty::is_interactive()) {
         scols_table_enable_colors(table, true);
     }
     auto sy = scols_new_symbols();

@@ -19,15 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf-cli/progressbar/multi_progress_bar.hpp"
-#include "libdnf-cli/utils/tty.hpp"
+#include "libdnf-cli/tty.hpp"
 
 #include <unistd.h>
 
 #include <algorithm>
 #include <iomanip>
-
-
-using namespace libdnf::cli::utils;
 
 
 namespace libdnf::cli::progressbar {

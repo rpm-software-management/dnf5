@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "tty.hpp"
+#include "libdnf-cli/tty.hpp"
 
 #include <sys/ioctl.h>
 #include <termios.h>
@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstdlib>
 
 
-namespace libdnf::cli::utils::tty {
+namespace libdnf::cli::tty {
 
 
 int get_width() {
@@ -114,4 +114,4 @@ TTY_COMMAND(cursor_hide, "\x1b[?25l")
 TTY_COMMAND(cursor_show, "\x1b[?25h")
 
 
-}  // namespace libdnf::cli::utils::tty
+}  // namespace libdnf::cli::tty

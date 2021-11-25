@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <dnfdaemon-server/transaction.hpp>
-#include <libdnf-cli/utils/tty.hpp>
+#include <libdnf-cli/tty.hpp>
 #include <libdnf/repo/package_downloader.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
@@ -56,10 +56,10 @@ RepoCB::RepoCB(sdbus::IProxy * proxy, std::string session_object_path) : DbusCal
 
 
 void RepoCB::print_progress_bar() {
-    if (libdnf::cli::utils::tty::is_interactive()) {
-        std::cout << libdnf::cli::utils::tty::clear_line;
+    if (libdnf::cli::tty::is_interactive()) {
+        std::cout << libdnf::cli::tty::clear_line;
         for (std::size_t i = 0; i < msg_lines; i++) {
-            std::cout << libdnf::cli::utils::tty::cursor_up << libdnf::cli::utils::tty::clear_line;
+            std::cout << libdnf::cli::tty::cursor_up << libdnf::cli::tty::clear_line;
         }
         std::cout << "\r";
     }

@@ -18,14 +18,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef LIBDNF_CLI_UTILS_TTY_TTY_HPP
-#define LIBDNF_CLI_UTILS_TTY_TTY_HPP
+#ifndef LIBDNF_CLI_TTY_HPP
+#define LIBDNF_CLI_TTY_HPP
 
 
 #include <iostream>
 
 
-namespace libdnf::cli::utils::tty {
+namespace libdnf::cli::tty {
 
 
 std::ostream & reset(std::ostream & stream);
@@ -54,7 +54,7 @@ int get_width();
 bool is_interactive();
 
 
-}  // namespace libdnf::cli::utils::tty
+}  // namespace libdnf::cli::tty
 
 
-#endif  // LIBDNF_CLI_UTILS_TTY_TTY_HPP
+#endif  // LIBDNF_CLI_TTY_HPP
