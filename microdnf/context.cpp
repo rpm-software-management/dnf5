@@ -398,11 +398,11 @@ libdnf::transaction::TransactionWeakPtr Context::new_db_transaction() {
         transaction->set_releasever(vars->get_value("releasever"));
     }
     std::string cmd_line;
-    for (size_t i = 0; i < prg_args.size(); ++i) {
+    for (size_t i = 0; i < argc; ++i) {
         if (i > 0) {
             cmd_line += " ";
         }
-        cmd_line += prg_args[i];
+        cmd_line += argv[i];
     }
     transaction->set_cmdline(cmd_line);
 

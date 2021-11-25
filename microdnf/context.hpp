@@ -26,7 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/base/base.hpp>
 #include <libdnf/base/transaction.hpp>
 #include <libdnf/rpm/transaction.hpp>
-#include <libdnf/utils/span.hpp>
 
 #include <memory>
 #include <string>
@@ -50,11 +49,11 @@ public:
     std::vector<std::string> enable_plugins_patterns;
     std::vector<std::string> disable_plugins_patterns;
 
-    /// Gets program arguments.
-    libdnf::Span<const char * const> get_prg_arguments() const { return prg_args; }
-
     /// Stores reference to program arguments.
-    void set_prg_arguments(size_t argc, const char * const * argv) { prg_args = {argv, argc}; }
+    void set_prg_arguments(size_t argc, const char * const * argv) {
+        this->argc = argc;
+        this->argv = argv;
+    }
 
     /// Gets user comment.
     const char * get_comment() const noexcept { return comment; }
@@ -81,8 +80,9 @@ private:
     /// If quiet mode is not active, it will print `msg` to standard output.
     void print_info(const char * msg);
 
-    /// Refers to program arguments.
-    libdnf::Span<const char * const> prg_args;
+    /// Program arguments.
+    size_t argc{0};
+    const char * const * argv{nullptr};
 
     /// Points to user comment.
     const char * comment{nullptr};
