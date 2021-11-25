@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include <libdnf-cli/session.hpp>
-#include <libdnf/utils/bgettext/bgettext-lib.h>
+#include "utils/bgettext/bgettext-lib.h"
 
 
 namespace microdnf {

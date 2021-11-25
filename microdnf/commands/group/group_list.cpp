@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/group/group.hpp>
 #include <libdnf/comps/group/query.hpp>
-#include "libdnf-cli/output/grouplist.hpp"
+#include <libdnf-cli/output/grouplist.hpp>
 
 #include <filesystem>
 #include <fstream>
