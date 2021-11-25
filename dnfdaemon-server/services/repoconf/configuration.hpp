@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_SERVER_SERVICES_REPOCONF_CONFIGURATION_HPP
 #define DNFDAEMON_SERVER_SERVICES_REPOCONF_CONFIGURATION_HPP
 
-#include "dnfdaemon-server/session.hpp"
+#include "session.hpp"
 
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/conf/config_parser.hpp"

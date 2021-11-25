@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo.hpp"
 
-#include "dnfdaemon-server/dbus.hpp"
-#include "dnfdaemon-server/utils.hpp"
+#include "dbus.hpp"
+#include "utils.hpp"
 
 #include <fmt/format.h>
 #include <libdnf/repo/repo.hpp>

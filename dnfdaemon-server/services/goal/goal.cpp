@@ -19,11 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "goal.hpp"
 
-#include "dnfdaemon-server/callbacks.hpp"
-#include "dnfdaemon-server/dbus.hpp"
-#include "dnfdaemon-server/package.hpp"
-#include "dnfdaemon-server/transaction.hpp"
-#include "dnfdaemon-server/utils.hpp"
+#include "callbacks.hpp"
+#include "dbus.hpp"
+#include "package.hpp"
+#include "transaction.hpp"
+#include "utils.hpp"
 
 #include <fmt/format.h>
 #include <libdnf/rpm/transaction.hpp>

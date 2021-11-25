@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_SERVER_SERVICES_REPOCONF_HPP
 #define DNFDAEMON_SERVER_SERVICES_REPOCONF_HPP
 
-#include "dnfdaemon-server/dbus.hpp"
-#include "dnfdaemon-server/session.hpp"
+#include "dbus.hpp"
+#include "session.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
 

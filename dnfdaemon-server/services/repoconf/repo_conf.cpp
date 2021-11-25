@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_conf.hpp"
 
 #include "configuration.hpp"
-#include "dnfdaemon-server/dbus.hpp"
-#include "dnfdaemon-server/utils.hpp"
+#include "dbus.hpp"
+#include "utils.hpp"
 
 #include <sdbus-c++/sdbus-c++.h>
 
