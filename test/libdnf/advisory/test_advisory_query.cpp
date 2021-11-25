@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_advisory_query.hpp"
 
-#include "test/libdnf/utils.hpp"
+#include "utils.hpp"
 
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/package_set.hpp"

@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_TUTORIAL_TEST_TUTORIAL_HPP
 
 
-#include "libdnf/utils/temp.hpp"
+#include "utils/temp.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

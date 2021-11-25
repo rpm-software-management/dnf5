@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../utils.hpp"
 
 #include "libdnf/rpm/reldep_list.hpp"
-#include "libdnf/utils/temp.hpp"
+#include "utils/temp.hpp"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ReldepListTest);
 

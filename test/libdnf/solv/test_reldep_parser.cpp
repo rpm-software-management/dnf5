@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "test_reldep_parser.hpp"
-#include "libdnf/solv/reldep_parser.hpp"
+#include "solv/reldep_parser.hpp"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ReldepParserTest);
 

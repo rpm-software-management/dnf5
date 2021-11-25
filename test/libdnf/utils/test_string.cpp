@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_string.hpp"
 
-#include "test/libdnf/utils.hpp"
+#include "utils.hpp"
 
-#include "libdnf/utils/string.hpp"
+#include "utils/string.hpp"
 
 
 using namespace libdnf::utils::string;

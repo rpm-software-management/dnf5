@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cppunit/extensions/HelperMacros.h>
 
 #include "libdnf/base/base.hpp"
-#include "libdnf/utils/temp.hpp"
+#include "utils/temp.hpp"
 
 #include <memory>
 

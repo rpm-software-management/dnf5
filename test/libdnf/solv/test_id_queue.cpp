@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_id_queue.hpp"
 
-#include "libdnf/solv/id_queue.hpp"
+#include "solv/id_queue.hpp"
 
 #include <iterator>
 

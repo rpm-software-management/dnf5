@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_iniparser.hpp"
 
-#include "libdnf/utils/iniparser.hpp"
+#include "utils/iniparser.hpp"
 
 #include <memory>
 #include <sstream>

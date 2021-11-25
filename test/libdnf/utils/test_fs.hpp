@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TEST_UTILS_FS_HPP
 
 
-#include "libdnf/utils/temp.hpp"
+#include "utils/temp.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_utf8.hpp"
 
-#include "libdnf-cli/utils/utf8.hpp"
+#include "utils/utf8.hpp"
 
 #include <clocale>
 

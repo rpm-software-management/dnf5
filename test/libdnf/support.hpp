@@ -27,7 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/repo/repo_sack.hpp"
-#include "libdnf/utils/temp.hpp"
+
+#include "utils/temp.hpp"
 
 #include <string>
 

@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 
-#include "libdnf/utils/fs.hpp"
+#include "utils/fs.hpp"
 
 
 using namespace libdnf::utils::fs;

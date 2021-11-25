@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "support.hpp"
 
 #include "libdnf/rpm/package_query.hpp"
-#include "libdnf/utils/string.hpp"
+#include "utils/string.hpp"
 #include "libdnf/rpm/nevra.hpp"
 
 #include "utils.hpp"

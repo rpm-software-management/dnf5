@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_goal.hpp"
 
-#include "test/libdnf/utils.hpp"
+#include "utils.hpp"
 
 #include "libdnf/base/goal.hpp"
 
