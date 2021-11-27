@@ -74,4 +74,12 @@ void RepoQueryTest::test_query_basics() {
     libdnf::repo::RepoQuery repo_query2(base);
     repo_query2.filter_local(false);
     CPPUNIT_ASSERT((repo_query2 == libdnf::Set{repo2, repo1_updates, repo2_updates}));
+
+    // Tests iteration over RepoQuery object
+    libdnf::repo::RepoQuery repo_query3(base);
+    libdnf::Set<libdnf::repo::RepoWeakPtr> result;
+    for (auto repo : repo_query3) {
+        result.add(repo);
+    }
+    CPPUNIT_ASSERT((result == libdnf::Set{repo1, repo2, repo1_updates, repo2_updates}));
 }
