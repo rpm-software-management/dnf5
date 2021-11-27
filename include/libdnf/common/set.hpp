@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_SET_HPP
-#define LIBDNF_UTILS_SET_HPP
+#ifndef LIBDNF_COMMON_SET_HPP
+#define LIBDNF_COMMON_SET_HPP
 
 #include <algorithm>
 #include <set>
@@ -26,11 +26,59 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+template <typename T>
+class Set;
+
+template <typename T>
+class SetConstIterator {
+public:
+    using iterator_category = std::bidirectional_iterator_tag;
+    using difference_type = std::ptrdiff_t;
+    using value_type = T;
+    using pointer = const T *;
+    using reference = const T &;
+
+    reference operator*() const noexcept { return *it; }
+    pointer operator->() const noexcept { return it.operator->(); }
+
+    SetConstIterator & operator++() noexcept {
+        ++it;
+        return *this;
+    }
+
+    SetConstIterator operator++(int) noexcept { return SetConstIterator(it++); }
+
+    SetConstIterator & operator--() noexcept {
+        --it;
+        return *this;
+    }
+
+    SetConstIterator operator--(int) noexcept { return SetConstIterator(it--); }
+
+    bool operator==(const SetConstIterator & other) const { return it == other.it; }
+    bool operator!=(const SetConstIterator & other) const { return it != other.it; }
+
+private:
+    friend class Set<T>;
+
+    explicit SetConstIterator(const typename std::set<T>::iterator & src) : it(src) {}
+    static SetConstIterator begin(const typename std::set<T> & std_set) { return SetConstIterator(std_set.begin()); }
+    static SetConstIterator end(const typename std::set<T> & std_set) { return SetConstIterator(std_set.end()); }
+
+    typename std::set<T>::iterator it;
+};
+
 /// Set represents set of objects (e.g. repositories, or groups)
 /// and implements set operations such as unions or differences.
 template <typename T>
 class Set {
 public:
+    using key_type = T;
+    using value_type = T;
+    using size_type = std::size_t;
+    using iterator = SetConstIterator<T>;
+    using const_iterator = SetConstIterator<T>;
+
     Set() = default;
     Set(const Set<T> & other) : data(other.data) {}
     Set(Set<T> && other) : data(std::move(other.data)) {}
@@ -39,13 +87,15 @@ public:
 
     // GENERIC OPERATIONS
     bool empty() const noexcept { return data.empty(); };
-    std::size_t size() const noexcept { return data.size(); }
+    size_type size() const noexcept { return data.size(); }
     void clear() noexcept { data.clear(); }
 
     // ITEM OPERATIONS
-    void add(const T & obj) { data.insert(obj); }
-    void add(T && obj) { data.insert(std::move(obj)); }
-    void remove(const T & obj) { data.erase(obj); }
+    bool add(const T & obj) { return data.insert(obj).second; }
+    bool add(T && obj) { return data.insert(std::move(obj)).second; }
+    bool remove(const T & obj) { return data.erase(obj) > 0; }
+
+    const_iterator find(const T & obj) const { return const_iterator(data.find(obj)); }
     bool contains(const T & obj) const { return data.find(obj) != data.end(); }
 
     // SET OPERATIONS
@@ -71,6 +121,9 @@ public:
     /// Return reference to underlying std::set
     const std::set<T> & get_data() const noexcept { return data; }
     std::set<T> & get_data() noexcept { return data; }
+
+    const_iterator begin() const { return iterator::begin(this->data); }
+    const_iterator end() const { return iterator::end(this->data); }
 
 private:
     friend bool operator==(const Set<T> & lhs, const Set<T> & rhs) { return lhs.data == rhs.data; }

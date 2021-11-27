@@ -29,7 +29,7 @@ void SetTest::setUp() {}
 
 void SetTest::tearDown() {}
 
-// Test constructors, empty(), size(), contains(), clear(), add(), and remove()
+// Test constructors, empty(), size(), contains(), clear(), add(), remove(), and find()
 void SetTest::test_set_basics() {
     // test default constructor
     libdnf::Set<int> s1;
@@ -59,16 +59,25 @@ void SetTest::test_set_basics() {
     CPPUNIT_ASSERT(s1.empty());
 
     s1 = {1, 4, 6};
-    s1.add(2);
+    CPPUNIT_ASSERT(s1.add(2));
     CPPUNIT_ASSERT((s1 == libdnf::Set<int>{1, 2, 4, 6}));
 
     s1 = {1, 4, 6};
-    s1.add(4);
+    CPPUNIT_ASSERT(!s1.add(4));
     CPPUNIT_ASSERT((s1 == libdnf::Set<int>{1, 4, 6}));
 
     s1 = {1, 4, 6};
-    s1.remove(4);
+    CPPUNIT_ASSERT(s1.remove(4));
     CPPUNIT_ASSERT((s1 == libdnf::Set<int>{1, 6}));
+
+    s1 = {1, 4, 6};
+    CPPUNIT_ASSERT(!s1.remove(5));
+    CPPUNIT_ASSERT((s1 == libdnf::Set<int>{1, 4, 6}));
+
+    s1 = {1, 4, 6};
+    libdnf::Set<int>::iterator it = s1.find(4);
+    CPPUNIT_ASSERT_EQUAL(*it, 4);
+    CPPUNIT_ASSERT(s1.find(5) == s1.end());
 }
 
 // test operator ==()
@@ -151,4 +160,44 @@ void SetTest::test_set_binary_operators() {
     CPPUNIT_ASSERT(((s1 & s2) == libdnf::Set<int>{4}));
     CPPUNIT_ASSERT(((s1 - s2) == libdnf::Set<int>{1, 6}));
     CPPUNIT_ASSERT(((s1 ^ s2) == libdnf::Set<int>{1, 2, 6}));
+}
+
+// test iterator
+void SetTest::test_set_iterator() {
+
+    libdnf::Set<int> s1{1, 4, 5, 6};
+
+    // check if begin() points to the first package
+    auto it1 = s1.begin();
+    CPPUNIT_ASSERT_EQUAL(*it1, 1);
+
+    // test pre-increment operator
+    auto it2 = ++it1;
+    CPPUNIT_ASSERT_EQUAL(*it1, 4);
+    CPPUNIT_ASSERT_EQUAL(*it2, 4);
+
+    // test post-increment operator
+    auto it3 = it2++;
+    CPPUNIT_ASSERT_EQUAL(*it2, 5);
+    CPPUNIT_ASSERT_EQUAL(*it3, 4);
+
+    // test pre-decrement operator
+    auto it4 = --it2;
+    CPPUNIT_ASSERT_EQUAL(*it2, 4);
+    CPPUNIT_ASSERT_EQUAL(*it4, 4);
+
+    // test post-decrement operator
+    auto it5 = it4--;
+    CPPUNIT_ASSERT_EQUAL(*it4, 1);
+    CPPUNIT_ASSERT_EQUAL(*it5, 4);
+
+    // test loop
+    {
+        std::vector<int> expected{1, 4, 5, 6};
+        std::vector<int> result;
+        for (auto value : s1) {
+            result.push_back(value);
+        }
+        CPPUNIT_ASSERT(result == expected);
+    }
 }

@@ -33,6 +33,7 @@ class SetTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_set_unary_operators);
     CPPUNIT_TEST(test_set_unary_operators);
     CPPUNIT_TEST(test_set_binary_operators);
+    CPPUNIT_TEST(test_set_iterator);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -45,6 +46,7 @@ public:
     void test_set_unary_operators();
     void test_set_unary_methods();
     void test_set_binary_operators();
+    void test_set_iterator();
 
 private:
 };
