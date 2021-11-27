@@ -38,6 +38,7 @@
 %include "libdnf/repo/repo.hpp"
 
 %template(RepoWeakPtr) libdnf::WeakPtr<libdnf::repo::Repo, false>;
+%template(SetConstIteratorRepoWeakPtr) libdnf::SetConstIterator<libdnf::repo::RepoWeakPtr>;
 %template(SetRepoWeakPtr) libdnf::Set<libdnf::repo::RepoWeakPtr>;
 %template(SackQueryRepoWeakPtr) libdnf::sack::Query<libdnf::repo::RepoWeakPtr>;
 
@@ -45,3 +46,5 @@
 %template(SackRepoRepoQuery) libdnf::sack::Sack<libdnf::repo::Repo>;
 %include "libdnf/repo/repo_sack.hpp"
 %template(RepoSackWeakPtr) libdnf::WeakPtr<libdnf::repo::RepoSack, false>;
+
+add_iterator(SetRepoWeakPtr)

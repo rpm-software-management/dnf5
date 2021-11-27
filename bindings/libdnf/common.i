@@ -24,6 +24,13 @@
     #include "libdnf/common/weak_ptr.hpp"
 %}
 %include "libdnf/common/weak_ptr.hpp"
+#if defined(SWIGPYTHON)
+%extend libdnf::WeakPtr {
+    intptr_t __hash__() const {
+        return reinterpret_cast<intptr_t>($self->get());
+    }
+}
+#endif
 
 // Cant use %include <catch_error.i> here, SWIG includes each file only once,
 // but the exception handler actually doesnt get registered when this file is
@@ -136,6 +143,13 @@ del ClassName##__iter__
 %include "libdnf/common/sack/sack.hpp"
 %include "libdnf/common/sack/match_int64.hpp"
 %include "libdnf/common/sack/match_string.hpp"
+
+%rename(next) libdnf::SetConstIterator::operator++();
+%rename(prev) libdnf::SetConstIterator::operator--();
+%rename(value) libdnf::SetConstIterator::operator*() const;
+%ignore libdnf::SetConstIterator::operator++(int);
+%ignore libdnf::SetConstIterator::operator--(int);
+%ignore libdnf::SetConstIterator::operator->() const;
 %include "libdnf/common/set.hpp"
 
 %{
