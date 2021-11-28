@@ -151,6 +151,13 @@ del ClassName##__iter__
 %ignore libdnf::SetConstIterator::operator--(int);
 %ignore libdnf::SetConstIterator::operator->() const;
 %include "libdnf/common/set.hpp"
+#if defined(SWIGPYTHON)
+%extend libdnf::Set {
+    size_type __len__() const noexcept {
+        return $self->size();
+    }
+}
+#endif
 
 %{
     #include "libdnf/common/preserve_order_map.hpp"
