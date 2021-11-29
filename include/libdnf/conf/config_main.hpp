@@ -268,6 +268,13 @@ public:
     OptionBool & skip_if_unavailable();
     const OptionBool & skip_if_unavailable() const;
 
+    virtual void load_from_parser(
+        const libdnf::ConfigParser & parser,
+        const std::string & section,
+        const libdnf::Vars & vars,
+        libdnf::Logger & logger
+    ) override;
+
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;

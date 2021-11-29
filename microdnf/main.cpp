@@ -615,8 +615,6 @@ int main(int argc, char * argv[]) try {
     // Load main configuration
     base.load_config_from_file();
 
-    context.set_cache_dir();
-
     // Try to open the current directory to see if we have
     // read and execute access. If not, chdir to /
     auto fd = open(".", O_RDONLY);

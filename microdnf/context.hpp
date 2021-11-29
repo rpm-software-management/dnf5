@@ -39,8 +39,6 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context : public libdnf::cli::session::Session {
 public:
-    void set_cache_dir();
-
     void apply_repository_setopts();
 
     /// Updates the repositories metadata cache.

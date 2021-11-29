@@ -25,9 +25,6 @@ class TestRepQueryo(unittest.TestCase):
 
         repo_sack = base.get_repo_sack()
 
-        # TODO(lukash) repo initialization requires to have the cachedir set; do it differently?
-        base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, base.get_config().system_cachedir().get_value())
-
         # Creates new repositories in the repo_sack
         repo1 = repo_sack.new_repo("repo1")
         repo2 = repo_sack.new_repo("repo2")

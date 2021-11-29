@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/const.hpp"
 
 #include "libdnf/utils/bgettext/bgettext-lib.h"
+#include "libdnf/utils/xdg.hpp"
 
 #include <fmt/format.h>
 #include <glob.h>
@@ -181,7 +182,7 @@ class ConfigMain::Impl {
     OptionPath system_cachedir{SYSTEM_CACHEDIR};
     OptionBool cacheonly{false};
     OptionBool keepcache{false};
-    OptionString logdir{"/var/log"};
+    OptionString logdir{geteuid() == 0 ? "/var/log" : libdnf::utils::xdg::get_user_data_dir() / "dnf"};
     OptionNumber<std::int32_t> log_size{1024 * 1024, str_to_bytes};
     OptionNumber<std::int32_t> log_rotate{4, 0};
     OptionStringList varsdir{VARS_DIRS};
@@ -282,7 +283,7 @@ class ConfigMain::Impl {
     // Repo main config
 
     OptionNumber<std::uint32_t> retries{10};
-    OptionString cachedir{nullptr};
+    OptionString cachedir{geteuid() == 0 ? SYSTEM_CACHEDIR : libdnf::utils::xdg::get_user_cache_dir() / "dnf"};
     OptionBool fastestmirror{false};
     OptionStringList excludepkgs{std::vector<std::string>{}};
     OptionStringList includepkgs{std::vector<std::string>{}};
@@ -1286,6 +1287,19 @@ OptionBool & ConfigMain::skip_if_unavailable() {
 }
 const OptionBool & ConfigMain::skip_if_unavailable() const {
     return p_impl->skip_if_unavailable;
+}
+
+void ConfigMain::load_from_parser(
+    const ConfigParser & parser,
+    const std::string & section,
+    const Vars & vars,
+    Logger & logger
+) {
+    Config::load_from_parser(parser, section, vars, logger);
+
+    if (geteuid() == 0) {
+        p_impl->cachedir.set(Option::Priority::MAINCONFIG, p_impl->system_cachedir.get_value());
+    }
 }
 
 }  // namespace libdnf

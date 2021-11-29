@@ -88,9 +88,6 @@ Session::Session(
     // load configuration
     base->load_config_from_file();
 
-    // set cachedir
-    auto system_cache_dir = config.system_cachedir().get_value();
-    config.cachedir().set(libdnf::Option::Priority::DEFAULT, system_cache_dir);
     // set variables
     base->get_vars()->load(config.installroot().get_value(), config.varsdir().get_value());
     if (session_configuration.find("releasever") != session_configuration.end()) {

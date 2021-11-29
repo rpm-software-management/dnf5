@@ -35,7 +35,9 @@ class Config {
 public:
     OptionBinds & opt_binds() noexcept { return binds; }
 
-    void load_from_parser(
+    virtual ~Config() = default;
+
+    virtual void load_from_parser(
         const ConfigParser & parser,
         const std::string & section,
         const Vars & vars,

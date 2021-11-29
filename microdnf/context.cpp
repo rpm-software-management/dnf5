@@ -28,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/transaction.hpp>
-#include <libdnf/utils/xdg.hpp>
 
 #include <atomic>
 #include <condition_variable>
@@ -198,31 +197,6 @@ std::chrono::time_point<std::chrono::steady_clock> ProgressAndKeyImportRepoCB::p
     std::chrono::steady_clock::now();
 
 }  // namespace
-
-// TODO(jrohel): Move set_cache_dir logic into libdnf
-void Context::set_cache_dir() {
-    // Without "root" effective privileges program switches to user specific directories
-    if (!microdnf::am_i_root()) {
-        auto tmp = fs::temp_directory_path() / "microdnf";
-        if (base.get_config().logdir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
-            auto logdir = tmp / "log";
-            base.get_config().logdir().set(libdnf::Option::Priority::RUNTIME, logdir);
-            fs::create_directories(logdir);
-        }
-        if (base.get_config().cachedir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
-            // Sets path to cache directory.
-            auto cache_dir = libdnf::utils::xdg::get_user_cache_dir() / "microdnf";
-            base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dir);
-        }
-    } else {
-        auto tmp = fs::temp_directory_path() / "microdnf";
-        if (base.get_config().cachedir().get_priority() < libdnf::Option::Priority::COMMANDLINE) {
-            // Sets path to cache directory.
-            auto system_cache_dir = base.get_config().system_cachedir().get_value();
-            base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, system_cache_dir);
-        }
-    }
-}
 
 // TODO(jrohel): Move logic into lidnf?
 void Context::apply_repository_setopts() {
@@ -823,7 +797,6 @@ std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string &
     ctx.set_quiet(true);
 
     ctx.base.load_config_from_file();
-    ctx.set_cache_dir();
 
     ctx.base.get_repo_sack()->get_system_repo()->load();  // TODO(lukash) should this really be here?
 
@@ -862,7 +835,6 @@ std::vector<std::string> match_available_pkgs(Context & ctx, const std::string &
 
     auto & base = ctx.base;
     base.load_config_from_file();
-    ctx.set_cache_dir();
     base.get_vars()->load(base.get_config().installroot().get_value(), base.get_config().varsdir().get_value());
 
     // create rpm repositories according configuration files
