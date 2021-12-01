@@ -93,6 +93,11 @@ void SessionManager::on_name_owner_changed(sdbus::Signal & signal) {
 }
 
 sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall & call) {
+    std::lock_guard<std::mutex> lock(active_mutex);
+    if (!active) {
+        throw sdbus::Error(dnfdaemon::ERROR, "Cannot open new session.");
+    }
+
     auto sender = call.getSender();
     dnfdaemon::KeyValueMap configuration;
     call >> configuration;
@@ -136,3 +141,17 @@ sdbus::MethodReply SessionManager::close_session(sdbus::MethodCall & call) {
 void SessionManager::start_event_loop() {
     connection->enterEventLoop();
 };
+
+void SessionManager::shut_down() {
+    // TODO (mblaha): log info like "Shutdown signal received, waiting for sessions to finish..."
+    std::lock_guard<std::mutex> lock(active_mutex);
+    if (active) {
+        // prevent opening a new session
+        active = false;
+        std::lock_guard<std::mutex> lock(sessions_mutex);
+        // wait for current sessions to finish and delete them
+        sessions.clear();
+        // leave the main event loop
+        connection->leaveEventLoop();
+    }
+}

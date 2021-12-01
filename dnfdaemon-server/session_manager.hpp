@@ -36,6 +36,7 @@ public:
     ~SessionManager();
 
     void start_event_loop();
+    void shut_down();
     ThreadsManager & get_threads_manager() { return threads_manager; };
 
 private:
@@ -43,6 +44,8 @@ private:
     ThreadsManager threads_manager;
     std::unique_ptr<sdbus::IObject> dbus_object;
     std::unique_ptr<sdbus::IProxy> name_changed_proxy;
+    std::mutex active_mutex;
+    bool active = true;
 
     std::mutex sessions_mutex;
     // map {sender_address: {session_id: Session object}}
