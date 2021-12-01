@@ -30,9 +30,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <thread>
 
-SessionManager::SessionManager(sdbus::IConnection & connection, const std::string & object_path)
-    : object_path(object_path),
-      connection(connection) {
+SessionManager::SessionManager() {
+    connection = sdbus::createSystemBusConnection(dnfdaemon::DBUS_NAME);
     dbus_register();
 }
 
@@ -42,7 +41,7 @@ SessionManager::~SessionManager() {
 }
 
 void SessionManager::dbus_register() {
-    dbus_object = sdbus::createObject(connection, object_path);
+    dbus_object = sdbus::createObject(*connection, dnfdaemon::DBUS_OBJECT_PATH);
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_SESSION_MANAGER, "open_session", "a{sv}", "o", [this](sdbus::MethodCall call) -> void {
             threads_manager.handle_method(*this, &SessionManager::open_session, call);
@@ -54,7 +53,7 @@ void SessionManager::dbus_register() {
     dbus_object->finishRegistration();
 
     // register signal handler for NameOwnerChanged
-    name_changed_proxy = sdbus::createProxy(connection, "org.freedesktop.DBus", "/org/freedesktop/DBus");
+    name_changed_proxy = sdbus::createProxy(*connection, "org.freedesktop.DBus", "/org/freedesktop/DBus");
     name_changed_proxy->registerSignalHandler(
         "org.freedesktop.DBus", "NameOwnerChanged", [this](sdbus::Signal signal) -> void {
             threads_manager.handle_signal(*this, &SessionManager::on_name_owner_changed, signal);
@@ -99,12 +98,12 @@ sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall & call) {
     call >> configuration;
 
     // generate UUID-like session id
-    const std::string sessionid = object_path + "/" + gen_session_id();
+    const std::string sessionid = dnfdaemon::DBUS_OBJECT_PATH + std::string("/") + gen_session_id();
     // store newly created session
     {
         std::lock_guard<std::mutex> lock(sessions_mutex);
         sessions[std::move(sender)].emplace(
-            sessionid, std::make_unique<Session>(connection, std::move(configuration), sessionid, sender));
+            sessionid, std::make_unique<Session>(*connection, std::move(configuration), sessionid, sender));
     }
 
     auto reply = call.createReply();
@@ -133,3 +132,7 @@ sdbus::MethodReply SessionManager::close_session(sdbus::MethodCall & call) {
     reply << retval;
     return reply;
 }
+
+void SessionManager::start_event_loop() {
+    connection->enterEventLoop();
+};

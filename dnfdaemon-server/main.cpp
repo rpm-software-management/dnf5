@@ -25,16 +25,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <iostream>
 
+static std::unique_ptr<SessionManager> session_manager = nullptr;
+
 int main() {
-    std::unique_ptr<sdbus::IConnection> connection = nullptr;
     try {
-        connection = sdbus::createSystemBusConnection(dnfdaemon::DBUS_NAME);
+        session_manager = std::make_unique<SessionManager>();
     } catch (const sdbus::Error & e) {
-        //std::cerr << tfm::format("Fatal error: %s", e.what()) << std::endl;
         std::cerr << "Fatal error: " << e.what() << std::endl;
         return 1;
     }
-
-    auto session_manager = SessionManager(*connection, dnfdaemon::DBUS_OBJECT_PATH);
-    connection->enterEventLoop();
+    session_manager->start_event_loop();
 }

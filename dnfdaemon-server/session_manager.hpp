@@ -32,14 +32,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class SessionManager {
 public:
-    SessionManager(sdbus::IConnection & connection, const std::string & object_path);
+    SessionManager();
     ~SessionManager();
 
+    void start_event_loop();
     ThreadsManager & get_threads_manager() { return threads_manager; };
 
 private:
-    std::string object_path;
-    sdbus::IConnection & connection;
+    std::unique_ptr<sdbus::IConnection> connection = nullptr;
     ThreadsManager threads_manager;
     std::unique_ptr<sdbus::IObject> dbus_object;
     std::unique_ptr<sdbus::IProxy> name_changed_proxy;
