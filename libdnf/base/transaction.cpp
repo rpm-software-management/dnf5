@@ -23,21 +23,33 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/common/proc.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "rpm/package_set_impl.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/locker.hpp"
 #include "utils/string.hpp"
 
 #include <fmt/format.h>
 
+#include <filesystem>
 #include <iostream>
 
 
 namespace libdnf::base {
 
-Transaction::Transaction(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
-Transaction::Transaction(const Transaction & transaction) : p_impl(new Impl(*transaction.p_impl)) {}
+static const std::map<base::Transaction::TransactionRunResult, const char *> TRANSACTION_RUN_RESULT_DICT = {
+    {base::Transaction::TransactionRunResult::ERROR_RERUN, M_("This transaction has been already run before.")},
+    {base::Transaction::TransactionRunResult::ERROR_RESOLVE, M_("Cannot run transaction with resolving problems.")},
+    {base::Transaction::TransactionRunResult::ERROR_CHECK, M_("Rpm transaction check failed.")},
+    {base::Transaction::TransactionRunResult::ERROR_LOCK,
+     M_("Failed to obtain rpm transaction lock. Another transaction is in progress.")},
+    {base::Transaction::TransactionRunResult::ERROR_RPM_RUN, M_("Rpm transaction failed.")},
+};
+
+Transaction::Transaction(const BaseWeakPtr & base) : p_impl(new Impl(*this, base)) {}
+Transaction::Transaction(const Transaction & transaction) : p_impl(new Impl(*this, *transaction.p_impl)) {}
 Transaction::~Transaction() = default;
 
 Transaction::Impl::~Impl() {
@@ -138,6 +150,32 @@ const std::vector<LogEvent> & Transaction::get_resolve_logs() {
 const SolverProblems &
 Transaction::get_package_solver_problems() {
     return p_impl->package_solver_problems;
+}
+
+std::string Transaction::transaction_result_to_string(const TransactionRunResult result) {
+    switch (result) {
+        case TransactionRunResult::SUCCESS:
+            return {};
+        case TransactionRunResult::ERROR_RERUN:
+        case TransactionRunResult::ERROR_RESOLVE:
+        case TransactionRunResult::ERROR_CHECK:
+        case TransactionRunResult::ERROR_LOCK:
+        case TransactionRunResult::ERROR_RPM_RUN:
+            return TM_(TRANSACTION_RUN_RESULT_DICT.at(result), 1);
+    }
+    return {};
+}
+
+Transaction::TransactionRunResult Transaction::run(
+    libdnf::rpm::TransactionCallbacks & callbacks,
+    const std::string & cmdline,
+    const std::optional<uint32_t> user_id,
+    const std::optional<std::string> comment) {
+    return p_impl->run(callbacks, cmdline, user_id, comment);
+}
+
+std::vector<std::string> Transaction::get_transaction_problems() const noexcept {
+    return p_impl->transaction_problems;
 }
 
 void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems) {
@@ -279,6 +317,109 @@ TransactionPackage Transaction::Impl::make_transaction_package(
     tspkg.set_reason(reason);
 
     return tspkg;
+}
+
+Transaction::TransactionRunResult Transaction::Impl::run(
+    libdnf::rpm::TransactionCallbacks & callbacks,
+    const std::string & cmdline,
+    const std::optional<uint32_t> user_id,
+    const std::optional<std::string> comment) {
+    // do not allow to run transaction multiple times
+    if (history_db_id > 0) {
+        return TransactionRunResult::ERROR_RERUN;
+    }
+
+    // only successfully resolved transaction can be run
+    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
+        return TransactionRunResult::ERROR_RESOLVE;
+    }
+
+    // acquire the lock
+    // TODO(mblaha): different lock names for different installroots?
+    auto system_cache_dir = base->get_config().system_cachedir().get_value();
+    std::filesystem::path lock_file_path = system_cache_dir;
+    lock_file_path /= "rpmtransaction.lock";
+    libdnf::utils::Locker locker(lock_file_path);
+    if (locker.lock() != libdnf::utils::Locker::LockResult::SUCCESS) {
+        return TransactionRunResult::ERROR_LOCK;
+    }
+    // fill and check the rpm transaction
+    libdnf::rpm::Transaction rpm_transaction(base);
+    rpm_transaction.fill(transaction);
+    if (!rpm_transaction.check()) {
+        auto problems = rpm_transaction.get_problems();
+        for (auto it = problems.begin(); it != problems.end(); ++it) {
+            transaction_problems.emplace_back((*it).to_string());
+        }
+        return TransactionRunResult::ERROR_CHECK;
+    };
+
+    // TODO(mblaha) run test rpm transaction
+
+    // start history db transaction
+    auto transaction_sack = base->get_transaction_sack();
+    auto db_transaction = transaction_sack->new_transaction();
+    // save history db transaction id
+    history_db_id = db_transaction->get_id();
+
+    auto vars = base->get_vars();
+    if (vars->contains("releasever")) {
+        db_transaction->set_releasever(vars->get_value("releasever"));
+    }
+
+    if (comment) {
+        db_transaction->set_comment(comment.value());
+    }
+
+    db_transaction->set_cmdline(cmdline);
+
+    if (user_id) {
+        db_transaction->set_user_id(user_id.value());
+    } else {
+        db_transaction->set_user_id(get_login_uid());
+    }
+    //
+    // TODO(jrohel): nevra of running microdnf?
+    //db_transaction->add_runtime_package("microdnf");
+
+    db_transaction->fill_transaction_packages(packages);
+    auto time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->start();
+
+    // execute rpm transaction
+    //TODO(jrohel): Send scriptlet output to better place
+    rpm_transaction.set_script_out_file("scriptlet.out");
+    rpm_transaction.register_cb(&callbacks);
+    auto ret = rpm_transaction.run();
+    rpm_transaction.register_cb(nullptr);
+
+    // TODO(mblaha): Handle ret == -1 and ret > 0, fill problems list
+
+    if (ret == 0) {
+        // set the new system state
+        auto & system_state = base->get_rpm_package_sack()->get_system_state();
+        for (const auto & tspkg : packages) {
+            system_state.set_reason(tspkg.get_package().get_na(), tspkg.get_reason());
+        }
+        system_state.save();
+    }
+
+    // finish history db transaction
+    time = std::chrono::system_clock::now().time_since_epoch();
+    db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction->finish(
+        ret == 0 ? libdnf::transaction::TransactionState::DONE : libdnf::transaction::TransactionState::ERROR);
+
+    if (ret == 0) {
+        return TransactionRunResult::SUCCESS;
+    } else {
+        auto problems = rpm_transaction.get_problems();
+        for (auto it = problems.begin(); it != problems.end(); ++it) {
+            transaction_problems.emplace_back((*it).to_string());
+        }
+        return TransactionRunResult::ERROR_RPM_RUN;
+    };
 }
 
 

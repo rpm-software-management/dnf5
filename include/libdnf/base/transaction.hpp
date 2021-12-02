@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/log_event.hpp"
 #include "libdnf/base/solver_problems.hpp"
 #include "libdnf/base/transaction_package.hpp"
+#include "libdnf/rpm/transaction.hpp"
 
 #include <optional>
 
@@ -34,6 +35,15 @@ namespace libdnf::base {
 
 class Transaction {
 public:
+    enum class TransactionRunResult {
+        SUCCESS,
+        ERROR_RERUN,
+        ERROR_RESOLVE,
+        ERROR_LOCK,
+        ERROR_CHECK,
+        ERROR_RPM_RUN,
+    };
+
     Transaction(const Transaction & transaction);
     ~Transaction();
 
@@ -56,6 +66,25 @@ public:
     // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
     // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
     const libdnf::base::SolverProblems & get_package_solver_problems();
+
+    /// Prepare, check and run rpm transaction. All the transaction metadata
+    /// (cmdline, user_id, comment) are stored in history database.
+    /// @param callbacks    callbacks to be called during rpm transaction
+    /// @param cmdline      description of the transaction (usually command that started the transaction)
+    /// @param user_id      UID of the user that started the transaction
+    /// @param comment      any comment describing the transaction
+    /// @return libdnf::base::Transaction::TransactionRunResult
+    TransactionRunResult run(
+        libdnf::rpm::TransactionCallbacks & callbacks,
+        const std::string & cmdline,
+        const std::optional<uint32_t> user_id,
+        const std::optional<std::string> comment);
+
+    /// Return string representation of the TransactionRunResult enum
+    static std::string transaction_result_to_string(const TransactionRunResult result);
+
+    /// Retrieve list of problems that occurred during transaction run attempt
+    std::vector<std::string> get_transaction_problems() const noexcept;
 
 private:
     friend class libdnf::Goal;

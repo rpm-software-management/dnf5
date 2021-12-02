@@ -33,9 +33,10 @@ namespace libdnf::base {
 
 class Transaction::Impl {
 public:
-    Impl(const BaseWeakPtr & base) : base(base) {}
-    Impl(const Impl & src)
-        : base(src.base),
+    Impl(Transaction & transaction, const BaseWeakPtr & base) : transaction(transaction), base(base) {}
+    Impl(Transaction & transaction, const Impl & src)
+        : transaction(transaction),
+          base(src.base),
           libsolv_transaction(src.libsolv_transaction ? transaction_create_clone(src.libsolv_transaction) : nullptr),
           packages(src.packages) {}
     ~Impl();
@@ -60,10 +61,17 @@ public:
         const std::set<std::string> & additional_data,
         bool strict);
 
+    TransactionRunResult run(
+        libdnf::rpm::TransactionCallbacks & callbacks,
+        const std::string & cmdline,
+        const std::optional<uint32_t> user_id,
+        const std::optional<std::string> comment);
+
 private:
     friend Transaction;
     friend class libdnf::Goal;
 
+    Transaction & transaction;
     BaseWeakPtr base;
     ::Transaction * libsolv_transaction{nullptr};
     libdnf::GoalProblem problems{GoalProblem::NO_PROBLEM};
@@ -74,6 +82,11 @@ private:
     std::vector<LogEvent> resolve_logs;
 
     SolverProblems package_solver_problems;
+
+    std::vector<std::string> transaction_problems{};
+
+    // history db transaction id
+    int64_t history_db_id = 0;
 };
 
 

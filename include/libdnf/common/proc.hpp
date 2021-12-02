@@ -33,6 +33,12 @@ constexpr uid_t INVALID_UID = static_cast<uid_t>(-1);
 /// @since 5.0
 uid_t read_login_uid_from_proc(pid_t pid) noexcept;
 
+/// Return the current user login uid, if available.
+/// The getuid() is returned instead if there was a problem.
+/// The value is cached.
+/// @since 5.0
+uid_t get_login_uid() noexcept;
+
 }  // namespace libdnf
 
 #endif
