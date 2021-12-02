@@ -64,10 +64,12 @@ Base * Base::get_locked_base() noexcept {
     return locked_base;
 }
 
-void Base::load_config_from_file(const std::string & path) {
+void Base::load_config_from_file(const std::string & path) try {
     ConfigParser parser;
     parser.read(path);
     config.load_from_parser(parser, "main", vars, *get_logger());
+} catch (const Error & e) {
+    std::throw_with_nested(RuntimeError(M_("Unable to load configuration file \"{}\""), path));
 }
 
 void Base::load_config_from_file() {
