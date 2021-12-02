@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/const.hpp"
 #include "solv/pool.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+
 #include <fmt/format.h>
 
 #include <algorithm>
@@ -52,12 +54,8 @@ void Base::lock() {
 }
 
 void Base::unlock() {
-    if (!locked_base) {
-        throw std::logic_error("Base::unlock() called on unlocked \"Base\" instance.");
-    }
-    if (locked_base != this) {
-        throw std::logic_error("Called Base::unlock(). But the lock is not owned by this \"Base\" instance.");
-    }
+    libdnf_assert(locked_base, "Base::unlock() called on unlocked \"Base\" instance");
+    libdnf_assert(locked_base == this, "Called Base::unlock(). But the lock is not owned by this \"Base\" instance.");
     locked_base = nullptr;
     locked_base_mutex.unlock();
 }
