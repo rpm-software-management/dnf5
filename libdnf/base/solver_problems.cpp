@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solver_problems_impl.hpp"
 
-#include "libdnf/utils/bgettext/bgettext-lib.h"
-#include "libdnf/utils/string.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/string.hpp"
 
 
 namespace libdnf::base {
