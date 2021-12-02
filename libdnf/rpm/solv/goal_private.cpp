@@ -99,11 +99,11 @@ void init_solver(Pool * pool, Solver ** solver) {
 
 /// @brief return false when does not depend on anything from b
 bool can_depend_on(Pool * pool, Solvable * sa, Id b) {
-    libdnf::solv::IdQueue requires;
+    libdnf::solv::IdQueue dep_requires;
 
-    solvable_lookup_idarray(sa, SOLVABLE_REQUIRES, &requires.get_queue());
-    for (int i = 0; i < requires.size(); ++i) {
-        Id req_dep = requires[i];
+    solvable_lookup_idarray(sa, SOLVABLE_REQUIRES, &dep_requires.get_queue());
+    for (int i = 0; i < dep_requires.size(); ++i) {
+        Id req_dep = dep_requires[i];
         Id p, pp;
 
         FOR_PROVIDES(p, pp, req_dep)
