@@ -23,10 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/comps/group/package.hpp"
 
-extern "C" {
-#include <solv/repo.h>
-}
-
 #include <filesystem>
 #include <fstream>
 

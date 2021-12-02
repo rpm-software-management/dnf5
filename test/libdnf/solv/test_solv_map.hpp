@@ -24,8 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv/solv_map.hpp"
 
-#include <solv/pool.h>
-
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
