@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solver_problems_impl.hpp"
 
+#include "libdnf/utils/format.hpp"
+
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/string.hpp"
 
@@ -206,7 +208,7 @@ std::string SolverProblems::problem_to_string(
             if (raw.second.size() != 1) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
-            return fmt::format(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0]);
+            return utils::sformat(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0]);
         case ProblemRules::RULE_JOB:
         case ProblemRules::RULE_JOB_UNSUPPORTED:
         case ProblemRules::RULE_PKG:
@@ -222,7 +224,7 @@ std::string SolverProblems::problem_to_string(
             if (raw.second.size() != 2) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
-            return fmt::format(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0], raw.second[1]);
+            return utils::sformat(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0], raw.second[1]);
         case ProblemRules::RULE_PKG_CONFLICTS:
         case ProblemRules::RULE_PKG_OBSOLETES:
         case ProblemRules::RULE_PKG_INSTALLED_OBSOLETES:
@@ -231,7 +233,7 @@ std::string SolverProblems::problem_to_string(
             if (raw.second.size() != 3) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
             }
-            return fmt::format(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0], raw.second[1], raw.second[2]);
+            return utils::sformat(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), raw.second[0], raw.second[1], raw.second[2]);
         case ProblemRules::RULE_UNKNOWN:
             if (raw.second.size() != 0) {
                 throw std::invalid_argument("Incorrect number of elements for a problem rule");
@@ -240,7 +242,7 @@ std::string SolverProblems::problem_to_string(
         case ProblemRules::RULE_PKG_REMOVAL_OF_PROTECTED:
         case ProblemRules::RULE_PKG_REMOVAL_OF_RUNNING_KERNEL:
             auto elements = utils::string::join(raw.second, ", ");
-            return fmt::format(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), elements);
+            return utils::sformat(TM_(PKG_PROBLEMS_DICT.at(raw.first), 1), elements);
     }
     return {};
 }
@@ -258,13 +260,13 @@ std::string SolverProblems::to_string() const {
     }
     const char * problem_prefix = _("Problem {}: ");
 
-    output.append(fmt::format(problem_prefix, 1));
+    output.append(utils::sformat(problem_prefix, 1));
     output.append(string_join(*p_impl->problems.begin(), "\n  - "));
 
     int index = 2;
     for (auto iter = std::next(p_impl->problems.begin()); iter != p_impl->problems.end(); ++iter) {
         output.append("\n ");
-        output.append(fmt::format(problem_prefix, index));
+        output.append(utils::sformat(problem_prefix, index));
         output.append(string_join(*iter, "\n  - "));
         ++index;
     }

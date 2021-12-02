@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMMON_EXCEPTION_HPP
 #define LIBDNF_COMMON_EXCEPTION_HPP
 
+#include "libdnf/utils/format.hpp"
+
 #include <fmt/format.h>
 
 #include <stdexcept>
@@ -102,7 +104,7 @@ public:
         : std::runtime_error(format),
         // stores the format args in the lambda's closure
         formatter([args...](const char * format) {
-            return fmt::format(format, args...);
+            return libdnf::utils::sformat(format, args...);
         }) {}
 
     Error(const Error & e) noexcept;
