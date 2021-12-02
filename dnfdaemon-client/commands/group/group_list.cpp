@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_list.hpp"
 
-#include "../../context.hpp"
-#include "../../wrappers/dbus_group_wrapper.hpp"
+#include "context.hpp"
+#include "wrappers/dbus_group_wrapper.hpp"
 
 #include <libdnf-cli/output/groupinfo.hpp>
 #include <libdnf-cli/output/grouplist.hpp>

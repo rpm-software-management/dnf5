@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MICRODNF_COMMANDS_ALIASES_UPGRADE_MINIMAL_HPP
 
 
-#include "../upgrade/upgrade.hpp"
+#include "commands/upgrade/upgrade.hpp"
 
 
 namespace microdnf {

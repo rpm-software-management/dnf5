@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_info.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 
 #include <libdnf-cli/output/advisoryinfo.hpp>
 #include <libdnf/rpm/package_query.hpp>

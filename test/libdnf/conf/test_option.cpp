@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/option_string.hpp"
 #include "libdnf/conf/option_string_list.hpp"
 
-#include "../utils.hpp"
+#include "utils.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(OptionTest);

@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_CONF_CONF_HPP
 #define TEST_LIBDNF_CONF_CONF_HPP
 
-#include "../testcase_fixture.hpp"
+#include "testcase_fixture.hpp"
 
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/conf/vars.hpp"

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "download.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>

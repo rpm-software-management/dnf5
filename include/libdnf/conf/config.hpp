@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "option_binds.hpp"
 #include "option.hpp"
 #include "vars.hpp"
-#include "../logger/logger.hpp"
+#include "libdnf/logger/logger.hpp"
 
 
 namespace libdnf {

@@ -19,9 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repolist.hpp"
 
-#include "../../context.hpp"
-#include "../../wrappers/dbus_query_repo_wrapper.hpp"
-#include "../../wrappers/dbus_repo_wrapper.hpp"
+#include "context.hpp"
+#include "wrappers/dbus_query_repo_wrapper.hpp"
+#include "wrappers/dbus_repo_wrapper.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <libdnf-cli/output/repo_info.hpp>

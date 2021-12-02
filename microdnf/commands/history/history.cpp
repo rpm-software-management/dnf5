@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "history_store.hpp"
 #include "history_replay.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 
 //#include <libdnf/conf/option_string.hpp>
 //#include <libdnf/rpm/package_query.hpp>

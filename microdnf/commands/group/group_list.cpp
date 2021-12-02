@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_list.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/group/group.hpp>

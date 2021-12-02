@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "package_set_impl.hpp"
-#include "../repo/repo_impl.hpp"
+#include "repo/repo_impl.hpp"
 
 #include "libdnf/transaction/transaction_item_action.hpp"
 

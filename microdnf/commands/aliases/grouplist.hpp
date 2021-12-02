@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MICRODNF_COMMANDS_ALIASES_GROUPLIST_HPP
 
 
-#include "../group/group_list.hpp"
+#include "commands/group/group_list.hpp"
 
 
 namespace microdnf {

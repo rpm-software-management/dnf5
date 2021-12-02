@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_SOLVER_PROBLEMS_IMPL_HPP
 #define LIBDNF_BASE_SOLVER_PROBLEMS_IMPL_HPP
 
-#include "../rpm/solv/goal_private.hpp"
+#include "rpm/solv/goal_private.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/base/solver_problems.hpp"

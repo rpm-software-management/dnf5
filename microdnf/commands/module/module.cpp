@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "module_install.hpp"
 #include "module_remove.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 
 
 namespace microdnf {

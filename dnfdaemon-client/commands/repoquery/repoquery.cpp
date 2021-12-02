@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoquery.hpp"
 
-#include "../../context.hpp"
-#include "../../wrappers/dbus_package_wrapper.hpp"
+#include "context.hpp"
+#include "wrappers/dbus_package_wrapper.hpp"
 
 #include "libdnf-cli/output/repoquery.hpp"
 

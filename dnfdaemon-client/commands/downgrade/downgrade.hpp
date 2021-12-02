@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNFDAEMON_CLIENT_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 #define DNFDAEMON_CLIENT_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 
-#include "../command.hpp"
+#include "commands/command.hpp"
 
 #include <libdnf/conf/option.hpp>
 

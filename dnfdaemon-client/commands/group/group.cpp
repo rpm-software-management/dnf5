@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 #include "group_list.hpp"
 
 namespace dnfdaemon::client {

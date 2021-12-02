@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_conf.hpp"
 
-#include "../utils.hpp"
+#include "utils.hpp"
 
 #include "libdnf/repo/config_repo.hpp"
 

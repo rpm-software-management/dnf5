@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MICRODNF_COMMANDS_ALIASES_REPOLIST_HPP
 
 
-#include "../repo/repo_list.hpp"
+#include "commands/repo/repo_list.hpp"
 
 
 namespace microdnf {

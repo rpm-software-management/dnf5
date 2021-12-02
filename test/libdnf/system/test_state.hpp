@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_SYSTEM_STATE_HPP
 
 
-#include "../support.hpp"
+#include "support.hpp"
 
 #include "libdnf/system/state.hpp"
 

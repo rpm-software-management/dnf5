@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_info.hpp"
 #include "repo_list.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 
 
 namespace microdnf {

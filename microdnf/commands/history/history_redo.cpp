@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "history_redo.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 
 
 namespace microdnf {

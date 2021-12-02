@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_TRANSACTION_IMPL_HPP
 
 
-#include "../rpm/solv/goal_private.hpp"
+#include "rpm/solv/goal_private.hpp"
 
 #include "libdnf/base/transaction.hpp"
 

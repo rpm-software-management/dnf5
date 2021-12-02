@@ -19,8 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "remove.hpp"
 
-#include "../../context.hpp"
-#include "../../utils.hpp"
+#include "context.hpp"
+#include "utils.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
 #include <libdnf/conf/option_string.hpp>

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_summary.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 
 #include <filesystem>
 #include <fstream>

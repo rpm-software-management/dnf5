@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "upgrade.hpp"
 
-#include "../../context.hpp"
+#include "context.hpp"
 
 #include "libdnf-cli/output/transaction_table.hpp"
 

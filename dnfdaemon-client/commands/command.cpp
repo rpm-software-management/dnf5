@@ -19,10 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "command.hpp"
 
-#include "../context.hpp"
-#include "../utils.hpp"
-#include "../wrappers/dbus_goal_wrapper.hpp"
-#include "../wrappers/dbus_package_wrapper.hpp"
+#include "context.hpp"
+#include "utils.hpp"
+#include "wrappers/dbus_goal_wrapper.hpp"
+#include "wrappers/dbus_package_wrapper.hpp"
 #include "dnfdaemon-server/utils.hpp"
 
 #include "libdnf-cli/output/transaction_table.hpp"
