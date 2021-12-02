@@ -74,9 +74,6 @@ private:
     /// Updates the repository metadata cache and load it into rpm::RepoSack.
     void load_rpm_repo(libdnf::repo::Repo & repo);
 
-    /// Creates, initializes and returns new database transaction.
-    libdnf::transaction::TransactionWeakPtr new_db_transaction();
-
     /// If quiet mode is not active, it will print `msg` to standard output.
     void print_info(const char * msg);
 

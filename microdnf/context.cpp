@@ -356,63 +356,6 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo
 // }
 
 
-void Context::download_and_run(libdnf::base::Transaction & transaction) {
-    download_packages(transaction, nullptr);
-
-    std::cout << std::endl;
-
-    libdnf::rpm::Transaction rpm_transaction(base);
-    rpm_transaction.fill(transaction);
-
-    auto db_transaction = new_db_transaction();
-    db_transaction->fill_transaction_packages(transaction.get_transaction_packages());
-
-    auto time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
-    db_transaction->start();
-
-    run_transaction(rpm_transaction);
-
-    auto & system_state = base.get_rpm_package_sack()->get_system_state();
-    for (const auto & tspkg : transaction.get_transaction_packages()) {
-        system_state.set_reason(tspkg.get_package().get_na(), tspkg.get_reason());
-    }
-
-    system_state.save();
-
-    time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
-    db_transaction->finish(libdnf::transaction::TransactionState::DONE);
-}
-
-
-libdnf::transaction::TransactionWeakPtr Context::new_db_transaction() {
-    auto transaction_sack = base.get_transaction_sack();
-    auto transaction = transaction_sack->new_transaction();
-    transaction->set_user_id(get_login_uid());
-    if (comment != nullptr) {
-        transaction->set_comment(comment);
-    }
-    auto vars = base.get_vars();
-    if (vars->contains("releasever")) {
-        transaction->set_releasever(vars->get_value("releasever"));
-    }
-    std::string cmd_line;
-    for (size_t i = 0; i < argc; ++i) {
-        if (i > 0) {
-            cmd_line += " ";
-        }
-        cmd_line += argv[i];
-    }
-    transaction->set_cmdline(cmd_line);
-
-    // TODO(jrohel): nevra of running microdnf?
-    //transaction->add_runtime_package("microdnf");
-
-    return transaction;
-}
-
-
 namespace {
 
 class PkgDownloadCB : public libdnf::repo::PackageDownloadCallbacks {
@@ -572,7 +515,9 @@ public:
             active_progress_bar->get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
             active_progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
         }
-        multi_progress_bar.print();
+        if (active_progress_bar) {
+            multi_progress_bar.print();
+        }
     }
 
     void install_progress(
@@ -779,17 +724,30 @@ std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time =
 
 }  // namespace
 
-void run_transaction(libdnf::rpm::Transaction & transaction) {
-    std::cout << "Running transaction:" << std::endl;
-    {
-        RpmTransCB callback;
-        //TODO(jrohel): Send scriptlet output to better place
-        transaction.set_script_out_file("scriptlet.out");
-        transaction.register_cb(&callback);
-        transaction.run();
-        transaction.register_cb(nullptr);
+void Context::download_and_run(libdnf::base::Transaction & transaction) {
+    download_packages(transaction, nullptr);
+
+    std::cout << std::endl << "Running transaction" << std::endl;
+
+    std::string cmd_line;
+    for (size_t i = 0; i < argc; ++i) {
+        if (i > 0) {
+            cmd_line += " ";
+        }
+        cmd_line += argv[i];
     }
-    std::cout << std::endl;
+
+    RpmTransCB callback;
+    auto result = transaction.run(callback, cmd_line, std::nullopt, comment == nullptr ? std::nullopt : std::make_optional<std::string>(comment));
+
+    if (result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
+        std::cout << "Transaction failed: " << libdnf::base::Transaction::transaction_result_to_string(result) << std::endl;
+        for (auto & problem: transaction.get_transaction_problems()) {
+            std::cout << "  - " << problem << std::endl;
+        }
+    }
+
+    // TODO(mblaha): print a summary of successfull transaction
 }
 
 std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string & pattern, bool nevra_for_same_name) {
