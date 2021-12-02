@@ -1,0 +1,21 @@
+---
+name: Clang Format
+on: pull_request
+
+jobs:
+  clang-format:
+    name: Clang Format
+    runs-on: ubuntu-latest
+    container: ghcr.io/rpm-software-management/dnf-ci-host
+    steps:
+      - name: Check out sources
+        uses: actions/checkout@v2
+
+      - name: Run Clang Format
+        run: |
+          ./clang-format
+          if [ -n "`git diff`" ]; then
+            git diff --color
+            echo "Clang Format detected the above coding style issues, please run the clang-format script from the repository root directory and integrate the changes into your commits."
+            exit 1
+          fi
