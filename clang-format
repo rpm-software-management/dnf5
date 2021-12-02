@@ -1,0 +1,37 @@
+#!/bin/sh
+
+show_help() {
+    cat << EOF
+Usage: $0 [PATHSPEC]...
+Calls clang-format on git tree files. If there's a non-empty diff between the
+working tree and HEAD (note, even if the diff is only on non-C/C++ sources),
+clang-format is called only on C/C++ source files that contain changes. If
+there are no changes in the working tree, calls clang-format on all C/C++
+source files in git.
+
+PATHSPEC is passed directly to the git commands used, it can specify
+files or directories to run on.
+
+Options:
+  -h, --help               Show this help
+
+EOF
+    exit 0
+}
+
+if [ "$1" = "-h" -o "$1" = "--help" ]; then
+    show_help
+fi
+
+# the tutorial files are snippets, not full sources, clang-format doesn't work well on them
+EXCLUDE=":!:test/tutorial"
+
+if [ -n "`git diff --name-only`" ]; then
+    FILES=`git diff --name-only -- "$@" $EXCLUDE | egrep '\.(c|cpp|h|hpp)$'`
+else
+    FILES=`git ls-files -- "$@" $EXCLUDE | egrep '\.(c|cpp|h|hpp)$'`
+fi
+
+for FILE in $FILES; do
+    clang-format -i "$FILE"
+done
