@@ -94,7 +94,7 @@ static void ensure_socket_dir_exists(Logger & logger) {
     std::string dirname = "/run/user/" + std::to_string(getuid());
     int res = mkdir(dirname.c_str(), 0700);
     if (res != 0 && errno != EEXIST) {
-        logger.debug(fmt::format(_("Failed to create directory \"{}\": {} - {}"), dirname, errno, strerror(errno)));
+        logger.debug(fmt::format("Failed to create directory \"{}\": {} - {}", dirname, errno, strerror(errno)));
     }
 }
 
@@ -248,7 +248,7 @@ void RepoGpgme::import_key(int fd, const std::string & url) {
 
     for (auto & key_info : key_infos) {
         if (std::find(known_keys.begin(), known_keys.end(), key_info.get_id()) != known_keys.end()) {
-            logger.debug(fmt::format(_("Gpg key 0x{} for repository {} already imported."), key_info.get_id(), config.get_id()));
+            logger.debug(fmt::format("Gpg key 0x{} for repository {} already imported.", key_info.get_id(), config.get_id()));
             continue;
         }
 
@@ -270,7 +270,7 @@ void RepoGpgme::import_key(int fd, const std::string & url) {
 
         gpg_import_key(context.get(), key_info.raw_key);
 
-        logger.debug(fmt::format(_("Imported gpg key 0x{} for repository {}."), key_info.get_id(), config.get_id()));
+        logger.debug(fmt::format("Imported gpg key 0x{} for repository {}.", key_info.get_id(), config.get_id()));
     }
 }
 

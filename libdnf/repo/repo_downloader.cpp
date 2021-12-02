@@ -374,7 +374,7 @@ bool RepoDownloader::is_metalink_in_sync() try {
     LrMetalink * metalink;
     handle_get_info(h.get(), LRI_METALINK, &metalink);
     if (!metalink) {
-        logger.debug(fmt::format(_("reviving: repo '{}' skipped, no metalink."), config.get_id()));
+        logger.debug(fmt::format("reviving: repo '{}' skipped, no metalink.", config.get_id()));
         return false;
     }
 
@@ -393,7 +393,7 @@ bool RepoDownloader::is_metalink_in_sync() try {
         }
     }
     if (hashes.empty()) {
-        logger.debug(fmt::format(_("reviving: repo '{}' skipped, no usable hash."), config.get_id()));
+        logger.debug(fmt::format("reviving: repo '{}' skipped, no usable hash.", config.get_id()));
         return false;
     }
 
@@ -417,12 +417,12 @@ bool RepoDownloader::is_metalink_in_sync() try {
         solv_bin2hex(chksum, chksumLen, chksumHex);
         if (strcmp(chksumHex, hash.lr_metalink_hash->value) != 0) {
             logger.debug(
-                fmt::format(_("reviving: failed for '{}', mismatched {} sum."), config.get_id(), hash.lr_metalink_hash->type));
+                fmt::format("reviving: failed for '{}', mismatched {} sum.", config.get_id(), hash.lr_metalink_hash->type));
             return false;
         }
     }
 
-    logger.debug(fmt::format(_("reviving: '{}' can be revived - metalink checksums match."), config.get_id()));
+    logger.debug(fmt::format("reviving: '{}' can be revived - metalink checksums match.", config.get_id()));
     return true;
 } catch (const std::runtime_error & e) {
     throw_with_nested(RepoDownloadError(
@@ -449,9 +449,9 @@ bool RepoDownloader::is_repomd_in_sync() try {
 
     auto same = utils::fs::have_files_same_content_noexcept(repomd_filename.c_str(), yum_repo->repomd);
     if (same)
-        logger.debug(fmt::format(_("reviving: '{}' can be revived - repomd matches."), config.get_id()));
+        logger.debug(fmt::format("reviving: '{}' can be revived - repomd matches.", config.get_id()));
     else
-        logger.debug(fmt::format(_("reviving: failed for '{}', mismatched repomd."), config.get_id()));
+        logger.debug(fmt::format("reviving: failed for '{}', mismatched repomd.", config.get_id()));
     return same;
 } catch (const std::runtime_error & e) {
     auto src = get_source_info();

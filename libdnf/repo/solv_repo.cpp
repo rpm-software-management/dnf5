@@ -319,7 +319,7 @@ bool SolvRepo::load_system_repo(const std::string & rootdir) {
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
     int rc = repo_add_rpmdb(repo, nullptr, flagsrpm);
     if (rc != 0) {
-        logger.warning(fmt::format(_("load_system_repo(): failed loading RPMDB: {}"), pool_errstr(*pool)));
+        logger.warning(fmt::format("load_system_repo(): failed loading RPMDB: {}", pool_errstr(*pool)));
         return false;
     }
 

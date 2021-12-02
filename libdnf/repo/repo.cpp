@@ -408,7 +408,7 @@ bool Repo::Impl::fetch_metadata() {
     if (!get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
         reset_metadata_expired();
         if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
-            logger.debug(fmt::format(_("repo: using cache for: {}"), config.get_id()));
+            logger.debug(fmt::format("repo: using cache for: {}", config.get_id()));
             return false;
         }
 
@@ -423,7 +423,7 @@ bool Repo::Impl::fetch_metadata() {
         throw RepoError(M_("Cache-only enabled but no cache for repository \"{}\""), config.get_id());
     }
 
-    logger.debug(fmt::format(_("repo: downloading from remote: {}"), config.get_id()));
+    logger.debug(fmt::format("repo: downloading from remote: {}", config.get_id()));
     downloader.download_metadata(config.get_cachedir());
     timestamp = -1;
     read_metadata_cache();

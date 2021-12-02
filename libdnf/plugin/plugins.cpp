@@ -81,27 +81,27 @@ void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
     auto name = iplugin->get_name();
     auto version = iplugin->get_version();
     logger.debug(fmt::format(
-        _("Added plugin name=\"{}\", version=\"{}.{}.{}\""), name, version.major, version.minor, version.micro));
+        "Added plugin name=\"{}\", version=\"{}.{}.{}\"", name, version.major, version.minor, version.micro));
 
-    logger.debug(fmt::format(_("Trying to load more plugins using the \"{}\" plugin."), name));
+    logger.debug(fmt::format("Trying to load more plugins using the \"{}\" plugin.", name));
     iplugin->load_plugins(base);
-    logger.debug(fmt::format(_("End of loading plugins using the \"{}\" plugin."), name));
+    logger.debug(fmt::format("End of loading plugins using the \"{}\" plugin.", name));
 }
 
 void Plugins::load_plugin(const std::string & file_path) {
     auto & logger = *base->get_logger();
-    logger.debug(fmt::format(_("Loading plugin file=\"{}\""), file_path));
+    logger.debug(fmt::format("Loading plugin file=\"{}\"", file_path));
     auto plugin = std::make_unique<PluginLibrary>(file_path);
     auto * iplugin = plugin->get_iplugin();
     plugins.emplace_back(std::move(plugin));
     auto name = iplugin->get_name();
     auto version = iplugin->get_version();
     logger.debug(fmt::format(
-        _("Loaded plugin name=\"{}\", version=\"{}.{}.{}\""), name, version.major, version.minor, version.micro));
+        "Loaded plugin name=\"{}\", version=\"{}.{}.{}\"", name, version.major, version.minor, version.micro));
 
-    logger.debug(fmt::format(_("Trying to load more plugins using the \"{}\" plugin."), name));
+    logger.debug(fmt::format("Trying to load more plugins using the \"{}\" plugin.", name));
     iplugin->load_plugins(base);
-    logger.debug(fmt::format(_("End of loading plugins using the \"{}\" plugin."), name));
+    logger.debug(fmt::format("End of loading plugins using the \"{}\" plugin.", name));
 }
 
 void Plugins::load_plugins(const std::string & dir_path) {
@@ -122,7 +122,7 @@ void Plugins::load_plugins(const std::string & dir_path) {
         try {
             load_plugin(p);
         } catch (const std::exception & ex) {
-            std::string msg = fmt::format(_("Cannot load plugin \"{}\": {}"), p.string(), ex.what());
+            std::string msg = fmt::format("Cannot load plugin \"{}\": {}", p.string(), ex.what());
             logger.error(msg);
             cant_load = true;
         }
