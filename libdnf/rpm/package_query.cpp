@@ -1789,7 +1789,7 @@ PackageQuery & PackageQuery::filter_obsoletes(const PackageSet & package_set, li
         Solvable * solvable = spool.id2solvable(package_id);
         if (!solvable->repo)
             continue;
-        for (Id * r_id = solvable->repo->idarraydata + solvable->obsoletes; *r_id; ++r_id) {
+        for (Id * r_id = solvable->repo->idarraydata + solvable->dep_obsoletes; *r_id; ++r_id) {
             Id r;
             Id rr;
 

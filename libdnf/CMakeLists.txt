@@ -9,6 +9,11 @@ list(APPEND LIBDNF_PC_REQUIRES_PRIVATE)
 # set gettext domain for translations
 add_definitions(-DGETTEXT_DOMAIN=\"libdnf\")
 
+# If defined, libsolv adds the prefix "dep_" to solvable dependencies.
+# As a result, `requires` is renamed to `dep_requires`.
+# Needed for C++20. `requires` is a keyword in C++20.
+add_definitions(-DLIBSOLV_SOLVABLE_PREPEND_DEP)
+
 include_directories(.)
 
 # build libdnf.so
