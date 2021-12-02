@@ -60,15 +60,16 @@ std::string SystemError::get_error_message() const {
 
 
 static std::string format(const std::exception & e, std::size_t level, bool with_domain) {
-    std::string ret;
+    std::string ret(level, ' ');
     if (auto ex = dynamic_cast<const Error *>(&e)) {
         if (with_domain) {
-            ret = fmt::format("{}::{}: {}\n", ex->get_domain_name(), ex->get_name(), ex->what());
+            ret += fmt::format("{}::{}: {}\n", ex->get_domain_name(), ex->get_name(), ex->what());
         } else {
-            ret = fmt::format("{}: {}\n", ex->get_name(), ex->what());
+            ret += fmt::format("{}: {}\n", ex->get_name(), ex->what());
         }
     } else {
-        ret = std::string(level, ' ') + e.what() + '\n';
+        ret += e.what();
+        ret += '\n';
     }
     try {
         std::rethrow_if_nested(e);
