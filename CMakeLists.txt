@@ -62,7 +62,7 @@ find_package(PkgConfig REQUIRED)
 
 
 # C++ standard
-set(CMAKE_CXX_STANDARD 17)
+set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
 # remove PROJECT_SOURCE_DIR prefix from __FILE__ macro used in asserts (available since GCC 8 and Clang 10)

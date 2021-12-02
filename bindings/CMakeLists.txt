@@ -34,10 +34,15 @@ set(SWIG_COMPILE_OPTIONS
     -Wno-unused-parameter
 )
 
-if(NOT CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
+        -Wno-deprecated-volatile
+    )
+else()
     set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
         -Wno-catch-value
         -Wno-maybe-uninitialized
+        -Wno-volatile
     )
 endif()
 
