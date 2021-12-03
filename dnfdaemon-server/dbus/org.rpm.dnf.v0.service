@@ -2,4 +2,4 @@
 Name=org.rpm.dnf.v0
 Exec=/usr/bin/dnfdaemon-server
 User=root
-SystemdService=dnfdaemon.service
+SystemdService=dnfdaemon-server.service
