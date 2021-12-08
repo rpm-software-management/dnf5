@@ -291,13 +291,13 @@ void SolvRepo::load_repo_ext(const std::string & filename, RepodataType type) {
             res = repo_add_rpmmd(repo, fp.get(), "FL", REPO_EXTEND_SOLVABLES);
             break;
         case RepodataType::PRESTO:
-            repo_add_deltainfoxml(repo, fp.get(), 0);
+            res = repo_add_deltainfoxml(repo, fp.get(), 0);
             break;
         case RepodataType::UPDATEINFO:
-            repo_add_updateinfoxml(repo, fp.get(), 0);
+            res = repo_add_updateinfoxml(repo, fp.get(), 0);
             break;
         case RepodataType::OTHER:
-            repo_add_rpmmd(repo, fp.get(), 0, REPO_EXTEND_SOLVABLES);
+            res = repo_add_rpmmd(repo, fp.get(), 0, REPO_EXTEND_SOLVABLES);
             break;
     }
 
