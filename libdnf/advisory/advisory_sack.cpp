@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "libdnf/advisory/advisory_sack.hpp"
-#include "advisory_sack_impl.hpp"
 
+#include "advisory_sack_impl.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
 

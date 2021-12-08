@@ -38,8 +38,7 @@ ModuleInstallCommand::ModuleInstallCommand(Command & parent) : Command(parent, "
 }
 
 
-void ModuleInstallCommand::run() {
-}
+void ModuleInstallCommand::run() {}
 
 
 }  // namespace microdnf

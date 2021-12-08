@@ -20,13 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
 #define LIBDNF_RPM_PACKAGE_SACK_IMPL_HPP
 
-#include "libdnf/base/base.hpp"
 #include "repo/repo_impl.hpp"
 #include "repo/solv_repo.hpp"
-#include "libdnf/rpm/package.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
+
+#include "libdnf/base/base.hpp"
+#include "libdnf/rpm/package.hpp"
 
 extern "C" {
 #include <solv/pool.h>

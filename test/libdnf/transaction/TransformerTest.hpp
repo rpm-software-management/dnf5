@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/transaction/Transformer.hpp"
 #include "libdnf/utils/sqlite3/sqlite3.hpp"
+
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -56,6 +57,6 @@ protected:
     libdnf::utils::SQLite3 * history;
 };
 
-#endif // LIBDNF_SWDB_RPMITEM_TEST_HPP
+#endif  // LIBDNF_SWDB_RPMITEM_TEST_HPP
 
 #endif

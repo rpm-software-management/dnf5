@@ -40,11 +40,7 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
     add_line("Repo ID", repo.get_id(), "bold");
     add_line("Name", repo.get_name());
 
-    add_line(
-        "Status",
-        repo.is_enabled() ? "enabled" : "disabled",
-        repo.is_enabled() ? "green" : "red"
-    );
+    add_line("Status", repo.is_enabled() ? "enabled" : "disabled", repo.is_enabled() ? "green" : "red");
 
     // TODO(dmach): implement in libdnf::repo::Repo
     /*
@@ -71,7 +67,6 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
     add_line("Verify packages", "", nullptr, group_gpg);
 
     if (verbose) {
-
         // Connection settings
         auto group_conn = add_line("Connection settings", "");
         add_line("Authentication method", "", nullptr, group_conn);
@@ -126,7 +121,7 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
         */
     }
 
-/*
+    /*
 general connection settings?
        bandwidth
        ip_resolve
@@ -137,7 +132,6 @@ general connection settings?
        timeout
        user_agent
 */
-
 }
 
 

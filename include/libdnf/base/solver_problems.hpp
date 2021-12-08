@@ -54,8 +54,7 @@ public:
     std::string to_string() const;
 
     /// Convert particular package solver problem to a string;
-    static std::string problem_to_string(
-        const std::pair<libdnf::ProblemRules, std::vector<std::string>> & raw);
+    static std::string problem_to_string(const std::pair<libdnf::ProblemRules, std::vector<std::string>> & raw);
 
 private:
     friend class Transaction;

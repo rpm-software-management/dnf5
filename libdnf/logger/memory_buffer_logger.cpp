@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 MemoryBufferLogger::MemoryBufferLogger(std::size_t max_items_to_keep, std::size_t reserve)
-    : max_items(max_items_to_keep)
-    , first_item_idx(0) {
+    : max_items(max_items_to_keep),
+      first_item_idx(0) {
     if (reserve > 0) {
         items.reserve(reserve < max_items_to_keep ? reserve : max_items_to_keep);
     }

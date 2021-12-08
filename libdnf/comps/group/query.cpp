@@ -17,13 +17,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/base/base.hpp"
 #include "libdnf/comps/group/query.hpp"
-#include "query_impl.hpp"
+
 #include "group-private.hpp"
-#include "libdnf/comps/group/sack.hpp"
-#include "libdnf/comps/comps.hpp"
+#include "query_impl.hpp"
 #include "solv/pool.hpp"
+
+#include "libdnf/base/base.hpp"
+#include "libdnf/comps/comps.hpp"
+#include "libdnf/comps/group/sack.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -37,11 +39,7 @@ GroupQueryWeakPtr GroupQuery::get_weak_ptr() {
     return GroupQueryWeakPtr(this, &p_impl->data_guard);
 }
 
-GroupQuery::GroupQuery(const GroupSackWeakPtr & sack)
-    : Query()
-    , sack(sack)
-    , p_impl{new Impl()}
-{
+GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : Query(), sack(sack), p_impl{new Impl()} {
     libdnf::solv::Pool & spool = get_pool(sack->comps.get_base());
     Pool * pool = *spool;
 
@@ -87,19 +85,14 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack)
     }
 }
 
-GroupQuery::GroupQuery(const BaseWeakPtr & base): GroupQuery(base->get_comps()->get_group_sack()) {}
+GroupQuery::GroupQuery(const BaseWeakPtr & base) : GroupQuery(base->get_comps()->get_group_sack()) {}
 
-GroupQuery::GroupQuery(Base & base): GroupQuery(base.get_comps()->get_group_sack()) {}
+GroupQuery::GroupQuery(Base & base) : GroupQuery(base.get_comps()->get_group_sack()) {}
 
-GroupQuery::GroupQuery(const GroupQuery & query)
-    : Query(query)
-    , sack(query.sack)
-    , p_impl{new Impl()}
-{}
+GroupQuery::GroupQuery(const GroupQuery & query) : Query(query), sack(query.sack), p_impl{new Impl()} {}
 
 
 GroupQuery::~GroupQuery() {}
 
 
 }  // namespace libdnf::comps
-

@@ -38,8 +38,7 @@ ModuleResetCommand::ModuleResetCommand(Command & parent) : Command(parent, "rese
 }
 
 
-void ModuleResetCommand::run() {
-}
+void ModuleResetCommand::run() {}
 
 
 }  // namespace microdnf

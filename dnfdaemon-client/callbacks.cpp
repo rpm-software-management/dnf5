@@ -271,7 +271,8 @@ void TransactionCB::new_progress_bar(uint64_t total, const std::string & descrip
     if (active_progress_bar && active_progress_bar->get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
         active_progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
     }
-    auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), description);
+    auto progress_bar =
+        std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), description);
     multi_progress_bar.add_bar(progress_bar.get());
     progress_bar->set_auto_finish(false);
     progress_bar->start();

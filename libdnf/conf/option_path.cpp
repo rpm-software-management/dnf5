@@ -36,18 +36,18 @@ static std::string remove_file_prot(const std::string & value) {
 }
 
 OptionPath::OptionPath(const std::string & default_value, bool exists, bool abs_path)
-    : OptionString(default_value)
-    , exists(exists)
-    , abs_path(abs_path) {
+    : OptionString(default_value),
+      exists(exists),
+      abs_path(abs_path) {
     this->default_value = remove_file_prot(this->default_value);
     test(this->default_value);
     this->value = this->default_value;
 }
 
 OptionPath::OptionPath(const char * default_value, bool exists, bool abs_path)
-    : OptionString(default_value)
-    , exists(exists)
-    , abs_path(abs_path) {
+    : OptionString(default_value),
+      exists(exists),
+      abs_path(abs_path) {
     if (default_value) {
         this->default_value = remove_file_prot(this->default_value);
         test(this->default_value);
@@ -57,18 +57,18 @@ OptionPath::OptionPath(const char * default_value, bool exists, bool abs_path)
 
 OptionPath::OptionPath(
     const std::string & default_value, const std::string & regex, bool icase, bool exists, bool abs_path)
-    : OptionString(remove_file_prot(default_value), regex, icase)
-    , exists(exists)
-    , abs_path(abs_path) {
+    : OptionString(remove_file_prot(default_value), regex, icase),
+      exists(exists),
+      abs_path(abs_path) {
     this->default_value = remove_file_prot(this->default_value);
     test(this->default_value);
     this->value = this->default_value;
 }
 
 OptionPath::OptionPath(const char * default_value, const std::string & regex, bool icase, bool exists, bool abs_path)
-    : OptionString(default_value, regex, icase)
-    , exists(exists)
-    , abs_path(abs_path) {
+    : OptionString(default_value, regex, icase),
+      exists(exists),
+      abs_path(abs_path) {
     if (default_value) {
         this->default_value = remove_file_prot(this->default_value);
         test(this->default_value);

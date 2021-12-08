@@ -19,13 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/base/transaction.hpp"
-#include "libdnf/rpm/transaction.hpp"
 
-#include "libdnf/common/exception.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 #include "package_set_impl.hpp"
 #include "repo/repo_impl.hpp"
+#include "utils/bgettext/bgettext-lib.h"
 
+#include "libdnf/common/exception.hpp"
+#include "libdnf/rpm/transaction.hpp"
 #include "libdnf/transaction/transaction_item_action.hpp"
 
 #include <fcntl.h>
@@ -470,8 +470,7 @@ public:
                 case libdnf::transaction::TransactionItemAction::REPLACED:
                     erase(tspkg);
                     break;
-                default:
-                    ; // TODO(lukash) handle the other cases
+                default:;  // TODO(lukash) handle the other cases
             }
         }
     }
@@ -761,16 +760,25 @@ private:
             case RPMCALLBACK_SCRIPT_ERROR:
                 // amount is script tag
                 // total is return code - if (!RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_OK
-                cb.script_error(item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)), total);
+                cb.script_error(
+                    item,
+                    trans_element_to_nevra(trans_element),
+                    rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
+                    total);
                 break;
             case RPMCALLBACK_SCRIPT_START:
                 // amount is script tag
-                cb.script_start(item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)));
+                cb.script_start(
+                    item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)));
                 break;
             case RPMCALLBACK_SCRIPT_STOP:
                 // amount is script tag
                 // total is return code - if (error && !RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_NOTFOUND
-                cb.script_stop(item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)), total);
+                cb.script_stop(
+                    item,
+                    trans_element_to_nevra(trans_element),
+                    rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
+                    total);
                 break;
             case RPMCALLBACK_INST_STOP:
                 libdnf_assert_transaction_item_set();
@@ -807,7 +815,8 @@ Transaction::Impl::Impl(const BaseWeakPtr & base, rpmVSFlags vsflags) : base(bas
     rpmtsSetChangeCallback(ts, ts_change_callback, this);
 }
 
-Transaction::Impl::Impl(const BaseWeakPtr & base) : Impl(base, static_cast<rpmVSFlags>(rpmExpandNumeric("%{?__vsflags}"))) {}
+Transaction::Impl::Impl(const BaseWeakPtr & base)
+    : Impl(base, static_cast<rpmVSFlags>(rpmExpandNumeric("%{?__vsflags}"))) {}
 
 Transaction::Impl::~Impl() {
     rpmtsFree(ts);

@@ -38,8 +38,7 @@ ModuleListCommand::ModuleListCommand(Command & parent) : Command(parent, "list")
 }
 
 
-void ModuleListCommand::run() {
-}
+void ModuleListCommand::run() {}
 
 
 }  // namespace microdnf

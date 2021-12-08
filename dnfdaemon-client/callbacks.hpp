@@ -31,8 +31,8 @@ namespace dnfdaemon::client {
 class DbusCallback {
 public:
     explicit DbusCallback(sdbus::IProxy * proxy, std::string session_object_path)
-        : session_object_path(session_object_path)
-        , proxy(proxy){};
+        : session_object_path(session_object_path),
+          proxy(proxy){};
     virtual ~DbusCallback() = default;
 
 protected:

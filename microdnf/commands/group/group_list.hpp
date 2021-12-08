@@ -25,7 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "arguments.hpp"
 
 #include <libdnf-cli/session.hpp>
-
 #include <libdnf/conf/option_bool.hpp>
 
 #include <memory>

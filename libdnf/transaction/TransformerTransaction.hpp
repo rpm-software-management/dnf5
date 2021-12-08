@@ -35,8 +35,7 @@ namespace libdnf::transaction {
 class TransformerTransaction : public Transaction {
 public:
     using Transaction::Transaction;
-    void start()
-    {
+    void start() {
         dbInsert();
         save_transaction_runtime_packages(*this);
         saveItems();
@@ -45,4 +44,4 @@ public:
 
 }  // namespace libdnf::transaction
 
-#endif // LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP
+#endif  // LIBDNF_TRANSACTION_TRANSFORMERTRANSACTION_HPP

@@ -21,52 +21,44 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 // the whole file is disabled via the SKIP macro because it doesn't compile with the new code
 #ifdef SKIP
 
-#include <cstdio>
-#include <iostream>
-#include <string>
+#include "TransactionItemReasonTest.hpp"
 
+#include "libdnf/transaction/Swdb.hpp"
+#include "libdnf/transaction/Transformer.hpp"
 #include "libdnf/transaction/comps_environment.hpp"
 #include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/rpm_package.hpp"
-#include "libdnf/transaction/Swdb.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
-#include "libdnf/transaction/Transformer.hpp"
 
-#include "TransactionItemReasonTest.hpp"
+#include <cstdio>
+#include <iostream>
+#include <string>
 
 using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionItemReasonTest);
 
-void
-TransactionItemReasonTest::setUp()
-{
+void TransactionItemReasonTest::setUp() {
     conn = new libdnf::utils::SQLite3(":memory:");
     Transformer::createDatabase(*conn);
 }
 
-void
-TransactionItemReasonTest::tearDown()
-{
+void TransactionItemReasonTest::tearDown() {
     delete conn;
 }
 
 // no transactions -> UNKNOWN reason
-void
-TransactionItemReasonTest::testNoTransaction()
-{
+void TransactionItemReasonTest::testNoTransaction() {
     Swdb swdb(*conn);
 
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
-                         TransactionItemReason::UNKNOWN);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
+        TransactionItemReason::UNKNOWN);
 }
 
 // one transaction with no transaction items -> UNKNOWN reason
-void
-TransactionItemReasonTest::testEmptyTransaction()
-{
+void TransactionItemReasonTest::testEmptyTransaction() {
     Swdb swdb(*conn);
 
     swdb.initTransaction();
@@ -74,20 +66,18 @@ TransactionItemReasonTest::testEmptyTransaction()
     swdb.endTransaction(2, "", TransactionState::DONE);
     swdb.closeTransaction();
 
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
-                         TransactionItemReason::UNKNOWN);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
+        TransactionItemReason::UNKNOWN);
 }
 
 // one transaction with one transaction item -> $reason
-void
-TransactionItemReasonTest::test_OneTransaction_OneTransactionItem()
-{
+void TransactionItemReasonTest::test_OneTransaction_OneTransactionItem() {
     Swdb swdb(*conn);
 
     swdb.initTransaction();
 
-    auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+    auto rpm_bash = std::make_shared<Package>(*swdb.get_transaction_in_progress());
     rpm_bash->set_name("bash");
     rpm_bash->set_epoch("0");
     rpm_bash->set_version("4.4.12");
@@ -104,30 +94,28 @@ TransactionItemReasonTest::test_OneTransaction_OneTransactionItem()
     swdb.closeTransaction();
 
     // package exists -> $reason
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
-                         TransactionItemReason::GROUP);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
+        TransactionItemReason::GROUP);
 
     // package does not exist -> UNKNOWN
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "i686", -1)),
-                         TransactionItemReason::UNKNOWN);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "i686", -1)),
+        TransactionItemReason::UNKNOWN);
 
     // package exists, arch not specified -> return best $reason
     CPPUNIT_ASSERT_EQUAL(
-        static_cast< TransactionItemReason >(swdb.resolveRPMTransactionItemReason("bash", "", -1)),
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "", -1)),
         TransactionItemReason::GROUP);
 }
 
 // one FAILED transaction with one transaction item -> $reason
-void
-TransactionItemReasonTest::test_OneFailedTransaction_OneTransactionItem()
-{
+void TransactionItemReasonTest::test_OneFailedTransaction_OneTransactionItem() {
     Swdb swdb(*conn);
 
     swdb.initTransaction();
 
-    auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+    auto rpm_bash = std::make_shared<Package>(*swdb.get_transaction_in_progress());
     rpm_bash->set_name("bash");
     rpm_bash->set_epoch("0");
     rpm_bash->set_version("4.4.12");
@@ -144,31 +132,29 @@ TransactionItemReasonTest::test_OneFailedTransaction_OneTransactionItem()
     swdb.closeTransaction();
 
     // failed transaction -> UNKNOWN
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
-                         TransactionItemReason::UNKNOWN);
-
-    // failed transaction -> UNKNOWN
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "i686", -1)),
-                         TransactionItemReason::UNKNOWN);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
+        TransactionItemReason::UNKNOWN);
 
     // failed transaction -> UNKNOWN
     CPPUNIT_ASSERT_EQUAL(
-        static_cast< TransactionItemReason >(swdb.resolveRPMTransactionItemReason("bash", "", -1)),
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "i686", -1)),
+        TransactionItemReason::UNKNOWN);
+
+    // failed transaction -> UNKNOWN
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "", -1)),
         TransactionItemReason::UNKNOWN);
 }
 
 // one transaction with two transaction items -> $reason
-void
-TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
-{
+void TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems() {
     Swdb swdb(*conn);
 
     swdb.initTransaction();
 
     {
-        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        auto rpm_bash = std::make_shared<Package>(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
         rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
@@ -182,7 +168,7 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
     }
 
     {
-        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        auto rpm_bash = std::make_shared<Package>(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
         rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
@@ -200,31 +186,29 @@ TransactionItemReasonTest::test_OneTransaction_TwoTransactionItems()
     swdb.closeTransaction();
 
     // package exists -> $reason
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
-                         TransactionItemReason::GROUP);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
+        TransactionItemReason::GROUP);
 
     // package exists -> $reason
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "i686", -1)),
-                         TransactionItemReason::USER);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "i686", -1)),
+        TransactionItemReason::USER);
 
     // 2 packages exists, arch not specified -> return best $reason
     CPPUNIT_ASSERT_EQUAL(
-        static_cast< TransactionItemReason >(swdb.resolveRPMTransactionItemReason("bash", "", -1)),
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "", -1)),
         TransactionItemReason::USER);
 }
 
 // two transactions with two transaction items -> $reason
-void
-TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
-{
+void TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems() {
     Swdb swdb(*conn);
 
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        auto rpm_bash = std::make_shared<Package>(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
         rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
@@ -244,7 +228,7 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        auto rpm_bash = std::make_shared<Package>(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
         rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
@@ -262,31 +246,29 @@ TransactionItemReasonTest::test_TwoTransactions_TwoTransactionItems()
     }
 
     // package exists -> $reason
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
-                         TransactionItemReason::GROUP);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)),
+        TransactionItemReason::GROUP);
 
     // package exists -> $reason
-    CPPUNIT_ASSERT_EQUAL(static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "i686", -1)),
-                         TransactionItemReason::USER);
+    CPPUNIT_ASSERT_EQUAL(
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "i686", -1)),
+        TransactionItemReason::USER);
 
     // 2 packages exists, arch not specified -> return best $reason
     CPPUNIT_ASSERT_EQUAL(
-        static_cast< TransactionItemReason >(swdb.resolveRPMTransactionItemReason("bash", "", -1)),
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "", -1)),
         TransactionItemReason::USER);
 }
 
 //
-void
-TransactionItemReasonTest::testRemovedPackage()
-{
+void TransactionItemReasonTest::testRemovedPackage() {
     Swdb swdb(*conn);
 
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        auto rpm_bash = std::make_shared<Package>(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
         rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
@@ -306,7 +288,7 @@ TransactionItemReasonTest::testRemovedPackage()
     {
         swdb.initTransaction();
 
-        auto rpm_bash = std::make_shared< Package >(*swdb.get_transaction_in_progress());
+        auto rpm_bash = std::make_shared<Package>(*swdb.get_transaction_in_progress());
         rpm_bash->set_name("bash");
         rpm_bash->set_epoch("0");
         rpm_bash->set_version("4.4.12");
@@ -332,24 +314,22 @@ TransactionItemReasonTest::testRemovedPackage()
     }
 
     // package exists -> $reason
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::GROUP,
-                         static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)));
+    CPPUNIT_ASSERT_EQUAL(
+        TransactionItemReason::GROUP,
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "x86_64", -1)));
 
     // package exists -> $reason
-    CPPUNIT_ASSERT_EQUAL(TransactionItemReason::UNKNOWN,
-                         static_cast< TransactionItemReason >(
-                             swdb.resolveRPMTransactionItemReason("bash", "i686", -1)));
+    CPPUNIT_ASSERT_EQUAL(
+        TransactionItemReason::UNKNOWN,
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "i686", -1)));
 
     // 2 packages exists, arch not specified -> return best $reason
     CPPUNIT_ASSERT_EQUAL(
         TransactionItemReason::GROUP,
-        static_cast< TransactionItemReason >(swdb.resolveRPMTransactionItemReason("bash", "", -1)));
+        static_cast<TransactionItemReason>(swdb.resolveRPMTransactionItemReason("bash", "", -1)));
 }
 
-void
-TransactionItemReasonTest::testCompareReasons()
-{
+void TransactionItemReasonTest::testCompareReasons() {
     CPPUNIT_ASSERT(TransactionItemReason::USER == TransactionItemReason::USER);
     CPPUNIT_ASSERT(TransactionItemReason::USER <= TransactionItemReason::USER);
     CPPUNIT_ASSERT(TransactionItemReason::USER >= TransactionItemReason::USER);
@@ -363,9 +343,7 @@ TransactionItemReasonTest::testCompareReasons()
     CPPUNIT_ASSERT(TransactionItemReason::GROUP <= TransactionItemReason::USER);
 }
 
-void
-TransactionItemReasonTest::test_TransactionItemReason_compare()
-{
+void TransactionItemReasonTest::test_TransactionItemReason_compare() {
     CPPUNIT_ASSERT_EQUAL(-1, TransactionItemReason_compare(TransactionItemReason::GROUP, TransactionItemReason::USER));
     CPPUNIT_ASSERT_EQUAL(0, TransactionItemReason_compare(TransactionItemReason::USER, TransactionItemReason::USER));
     CPPUNIT_ASSERT_EQUAL(1, TransactionItemReason_compare(TransactionItemReason::USER, TransactionItemReason::GROUP));

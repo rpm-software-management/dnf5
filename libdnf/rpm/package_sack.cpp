@@ -18,13 +18,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/common/exception.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 #include "package_sack_impl.hpp"
 #include "repo/repo_impl.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
+#include "utils/bgettext/bgettext-lib.h"
 #include "utils/temp.hpp"
+
+#include "libdnf/common/exception.hpp"
 
 extern "C" {
 #include <solv/chksum.h>
@@ -104,9 +105,8 @@ int PackageSack::get_nsolvables() const noexcept {
 };
 
 PackageSack::PackageSack(const BaseWeakPtr & base)
-  : p_impl{new Impl(base)},
-    system_state(base->get_config().installroot().get_value())
-{}
+    : p_impl{new Impl(base)},
+      system_state(base->get_config().installroot().get_value()) {}
 
 PackageSack::PackageSack(libdnf::Base & base) : PackageSack(base.get_weak_ptr()) {}
 

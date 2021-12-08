@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory.hpp"
 
-#include "context.hpp"
 #include "advisory_info.hpp"
 #include "advisory_list.hpp"
 #include "advisory_summary.hpp"
+#include "context.hpp"
 
 #include <libdnf/conf/option_string.hpp>
 

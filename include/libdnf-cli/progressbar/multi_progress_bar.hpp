@@ -39,7 +39,10 @@ public:
 
     // TODO(dmach): use std::unique_ptr instead of the raw pointer?
     void add_bar(ProgressBar * bar);
-    void print() { std::cout << *this; std::cout << std::flush; }
+    void print() {
+        std::cout << *this;
+        std::cout << std::flush;
+    }
     friend std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar);
 
 private:

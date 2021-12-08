@@ -25,11 +25,7 @@ namespace libdnf {
 
 template <Option::Priority default_priority>
 void Config<default_priority>::load_from_parser(
-    const ConfigParser & parser,
-    const std::string & section,
-    const Vars & vars,
-    Logger & logger
-) {
+    const ConfigParser & parser, const std::string & section, const Vars & vars, Logger & logger) {
     auto cfg_parser_data_iter = parser.get_data().find(section);
     if (cfg_parser_data_iter != parser.get_data().end()) {
         for (const auto & opt : cfg_parser_data_iter->second) {
@@ -38,12 +34,8 @@ void Config<default_priority>::load_from_parser(
                 try {
                     opt_binds_iter->second.new_string(default_priority, vars.substitute(opt.second));
                 } catch (const OptionError & ex) {
-                    logger.warning(fmt::format(
-                        "Config error in section \"{}\" key \"{}\": {}",
-                        section,
-                        opt.first,
-                        ex.what()
-                    ));
+                    logger.warning(
+                        fmt::format("Config error in section \"{}\" key \"{}\": {}", section, opt.first, ex.what()));
                 }
             }
         }
@@ -53,4 +45,4 @@ void Config<default_priority>::load_from_parser(
 template class Config<Option::Priority::MAINCONFIG>;
 template class Config<Option::Priority::REPOCONFIG>;
 
-}
+}  // namespace libdnf

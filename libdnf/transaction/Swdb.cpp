@@ -26,37 +26,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 //#include "../hy-query-private.hpp"
 //#include "../hy-subject.h"
+#include "utils/bgettext/bgettext-lib.h"
+
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package_set.hpp"
-
-#include "utils/bgettext/bgettext-lib.h"
 //#include "../utils/filesystem.hpp"
+#include "Swdb.hpp"
+#include "Transformer.hpp"
+#include "rpm_package.hpp"
 #include "utils/sqlite3/sqlite3.hpp"
 
 #include "libdnf/rpm/package_sack_impl.hpp"
 
-#include "rpm_package.hpp"
-#include "Swdb.hpp"
-#include "Transformer.hpp"
-
 namespace libdnf::transaction {
 
-Swdb::Swdb(libdnf::utils::SQLite3 & conn)
-  : conn{&conn}
-  , autoClose(true)
-{
-}
+Swdb::Swdb(libdnf::utils::SQLite3 & conn) : conn{&conn}, autoClose(true) {}
 
-Swdb::Swdb(libdnf::utils::SQLite3 & conn, bool autoClose)
-  : conn{&conn}
-  , autoClose(autoClose)
-{
-}
+Swdb::Swdb(libdnf::utils::SQLite3 & conn, bool autoClose) : conn{&conn}, autoClose(autoClose) {}
 
-Swdb::Swdb(const std::string &path)
-  : conn(nullptr)
-  , autoClose(true)
-{
+Swdb::Swdb(const std::string & path) : conn(nullptr), autoClose(true) {
     if (path == ":memory:") {
         // writing to an in-memory database
         conn = new libdnf::utils::SQLite3(path);
@@ -77,9 +65,7 @@ Swdb::Swdb(const std::string &path)
     }
 }
 
-void
-Swdb::resetDatabase()
-{
+void Swdb::resetDatabase() {
     conn->close();
     if (std::filesystem::exists(getPath().c_str())) {
         remove(getPath().c_str());
@@ -88,38 +74,28 @@ Swdb::resetDatabase()
     Transformer::createDatabase(get_connection());
 }
 
-void
-Swdb::closeDatabase()
-{
+void Swdb::closeDatabase() {
     conn->close();
 }
 
-Swdb::~Swdb()
-{
+Swdb::~Swdb() {
     if (autoClose) {
         try {
             closeDatabase();
-        } catch(const std::exception &){}
+        } catch (const std::exception &) {
+        }
     }
 }
 
-void
-Swdb::initTransaction()
-{
+void Swdb::initTransaction() {
     if (transactionInProgress) {
         throw std::logic_error(_("In progress"));
     }
-    transactionInProgress = std::unique_ptr< Transaction >(
-        new Transaction(get_connection()));
+    transactionInProgress = std::unique_ptr<Transaction>(new Transaction(get_connection()));
     itemsInProgress.clear();
 }
 
-int64_t
-Swdb::beginTransaction(int64_t dtStart,
-                       std::string rpmdbVersionBegin,
-                       std::string cmdline,
-                       uint32_t userId)
-{
+int64_t Swdb::beginTransaction(int64_t dtStart, std::string rpmdbVersionBegin, std::string cmdline, uint32_t userId) {
     if (!transactionInProgress) {
         throw std::logic_error(_("Not in progress"));
     }
@@ -146,9 +122,7 @@ Swdb::beginTransaction(int64_t dtStart,
     return transactionInProgress->get_id();
 }
 
-int64_t
-Swdb::endTransaction(int64_t dtEnd, std::string rpmdbVersionEnd, TransactionState state)
-{
+int64_t Swdb::endTransaction(int64_t dtEnd, std::string rpmdbVersionEnd, TransactionState state) {
     if (!transactionInProgress) {
         throw std::logic_error(_("Not in progress"));
     }
@@ -158,24 +132,19 @@ Swdb::endTransaction(int64_t dtEnd, std::string rpmdbVersionEnd, TransactionStat
     return transactionInProgress->get_id();
 }
 
-int64_t
-Swdb::closeTransaction()
-{
+int64_t Swdb::closeTransaction() {
     if (!transactionInProgress) {
         throw std::logic_error(_("Not in progress"));
     }
     int64_t result = transactionInProgress->get_id();
-    transactionInProgress = std::unique_ptr< Transaction >(nullptr);
+    transactionInProgress = std::unique_ptr<Transaction>(nullptr);
     itemsInProgress.clear();
     return result;
 }
 
 
-TransactionItemPtr
-Swdb::addItem(std::shared_ptr< Item > item,
-              const std::string &repoid,
-              TransactionItemAction action,
-              TransactionItemReason reason)
+TransactionItemPtr Swdb::addItem(
+    std::shared_ptr<Item> item, const std::string & repoid, TransactionItemAction action, TransactionItemReason reason)
 //            std::shared_ptr<TransactionItem> replacedBy)
 {
     if (!transactionInProgress) {
@@ -185,9 +154,7 @@ Swdb::addItem(std::shared_ptr< Item > item,
     return transactionInProgress->addItem(item, repoid, action, reason);
 }
 
-void
-Swdb::setItemDone(const std::string &nevra)
-{
+void Swdb::setItemDone(const std::string & nevra) {
     if (!transactionInProgress) {
         throw std::logic_error(_("No transaction in progress"));
     }
@@ -196,11 +163,8 @@ Swdb::setItemDone(const std::string &nevra)
     //item->saveState();
 }
 
-TransactionItemReason
-Swdb::resolveRPMTransactionItemReason(const std::string &name,
-                                      const std::string &arch,
-                                      int64_t maxTransactionId)
-{
+TransactionItemReason Swdb::resolveRPMTransactionItemReason(
+    const std::string & name, const std::string & arch, int64_t maxTransactionId) {
     // TODO:
     // -1: latest
     // -2: latest and lastTransaction data in memory
@@ -221,9 +185,7 @@ Swdb::resolveRPMTransactionItemReason(const std::string &name,
     return Package::resolveTransactionItemReason(get_connection(), name, arch, maxTransactionId);
 }
 
-const std::string
-Swdb::getRPMRepo(const std::string &nevra)
-{
+const std::string Swdb::getRPMRepo(const std::string & nevra) {
     libdnf::rpm::Nevra nevraObject;
     if (!nevraObject.parse(nevra.c_str(), libdnf::rpm::Nevra::Form::NEVRA)) {
         return "";
@@ -234,7 +196,7 @@ Swdb::getRPMRepo(const std::string &nevra)
         nevraObject.set_epoch(0);
     }
 
-    const char *sql = R"**(
+    const char * sql = R"**(
         SELECT
             repo.repoid as repoid
         FROM
@@ -256,22 +218,21 @@ Swdb::getRPMRepo(const std::string &nevra)
     )**";
     // TODO: where trans.done != 0
     libdnf::utils::SQLite3::Query query(*conn, sql);
-    query.bindv(nevraObject.get_name(),
-                nevraObject.get_epoch(),
-                nevraObject.get_version(),
-                nevraObject.get_release(),
-                nevraObject.get_arch());
+    query.bindv(
+        nevraObject.get_name(),
+        nevraObject.get_epoch(),
+        nevraObject.get_version(),
+        nevraObject.get_release(),
+        nevraObject.get_arch());
     if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto repoid = query.get< std::string >("repoid");
+        auto repoid = query.get<std::string>("repoid");
         return repoid;
     }
     return "";
 }
 
-TransactionPtr
-Swdb::getLastTransaction()
-{
-    const char *sql = R"**(
+TransactionPtr Swdb::getLastTransaction() {
+    const char * sql = R"**(
         SELECT
             id
         FROM
@@ -282,17 +243,15 @@ Swdb::getLastTransaction()
     )**";
     libdnf::utils::SQLite3::Statement query(get_connection(), sql);
     if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto transId = query.get< int64_t >(0);
-        auto transaction = std::make_shared< Transaction >(get_connection(), transId);
+        auto transId = query.get<int64_t>(0);
+        auto transaction = std::make_shared<Transaction>(get_connection(), transId);
         return transaction;
     }
     return nullptr;
 }
 
-std::vector< TransactionPtr >
-Swdb::listTransactions()
-{
-    const char *sql = R"**(
+std::vector<TransactionPtr> Swdb::listTransactions() {
+    const char * sql = R"**(
         SELECT
             id
         FROM
@@ -301,18 +260,16 @@ Swdb::listTransactions()
             id
     )**";
     libdnf::utils::SQLite3::Statement query(get_connection(), sql);
-    std::vector< TransactionPtr > result;
+    std::vector<TransactionPtr> result;
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto transId = query.get< int64_t >(0);
-        auto transaction = std::make_shared< Transaction >(get_connection(), transId);
+        auto transId = query.get<int64_t>(0);
+        auto transaction = std::make_shared<Transaction>(get_connection(), transId);
         result.push_back(transaction);
     }
     return result;
 }
 
-void
-Swdb::setReleasever(std::string value)
-{
+void Swdb::setReleasever(std::string value) {
     if (!transactionInProgress) {
         throw std::logic_error(_("Not in progress"));
     }
@@ -320,9 +277,7 @@ Swdb::setReleasever(std::string value)
 }
 
 
-void
-Swdb::add_console_output_line(int file_descriptor, const std::string & line)
-{
+void Swdb::add_console_output_line(int file_descriptor, const std::string & line) {
     if (!transactionInProgress) {
         throw std::logic_error(_("Not in progress"));
     }
@@ -337,10 +292,8 @@ Swdb::getCompsGroupItemsByPattern(const std::string &pattern)
 }
 */
 
-std::vector< std::string >
-Swdb::getPackageCompsGroups(const std::string &packageName)
-{
-    const char *sql_all_groups = R"**(
+std::vector<std::string> Swdb::getPackageCompsGroups(const std::string & packageName) {
+    const char * sql_all_groups = R"**(
         SELECT DISTINCT
             g.groupid
         FROM
@@ -354,7 +307,7 @@ Swdb::getPackageCompsGroups(const std::string &packageName)
             g.groupid
     )**";
 
-    const char *sql_trans_items = R"**(
+    const char * sql_trans_items = R"**(
         SELECT
             ti.action as action,
             ti.reason as reason,
@@ -374,7 +327,7 @@ Swdb::getPackageCompsGroups(const std::string &packageName)
         LIMIT 1
     )**";
 
-    const char *sql_group_package = R"**(
+    const char * sql_group_package = R"**(
         SELECT
             p.name
         FROM
@@ -384,24 +337,23 @@ Swdb::getPackageCompsGroups(const std::string &packageName)
             AND p.installed = 1
     )**";
 
-    std::vector< std::string > result;
+    std::vector<std::string> result;
 
     // list all relevant groups
     libdnf::utils::SQLite3::Query query_all_groups(*conn, sql_all_groups);
     query_all_groups.bindv(packageName);
 
     while (query_all_groups.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto groupid = query_all_groups.get< std::string >("groupid");
+        auto groupid = query_all_groups.get<std::string>("groupid");
         libdnf::utils::SQLite3::Query query_trans_items(*conn, sql_trans_items);
         query_trans_items.bindv(groupid);
         if (query_trans_items.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-            auto action =
-                static_cast< TransactionItemAction >(query_trans_items.get< int64_t >("action"));
+            auto action = static_cast<TransactionItemAction>(query_trans_items.get<int64_t>("action"));
             // if the last record is group removal, skip
             if (action == TransactionItemAction::REMOVE) {
                 continue;
             }
-            auto groupId = query_trans_items.get< int64_t >("group_id");
+            auto groupId = query_trans_items.get<int64_t>("group_id");
             libdnf::utils::SQLite3::Query query_group_package(*conn, sql_group_package);
             query_group_package.bindv(groupId);
             if (query_group_package.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
@@ -412,10 +364,8 @@ Swdb::getPackageCompsGroups(const std::string &packageName)
     return result;
 }
 
-std::vector< std::string >
-Swdb::getCompsGroupEnvironments(const std::string &groupId)
-{
-    const char *sql_all_environments = R"**(
+std::vector<std::string> Swdb::getCompsGroupEnvironments(const std::string & groupId) {
+    const char * sql_all_environments = R"**(
         SELECT DISTINCT
             e.environmentid
         FROM
@@ -429,7 +379,7 @@ Swdb::getCompsGroupEnvironments(const std::string &groupId)
             e.environmentid
     )**";
 
-    const char *sql_trans_items = R"**(
+    const char * sql_trans_items = R"**(
         SELECT
             ti.action as action,
             ti.reason as reason,
@@ -449,7 +399,7 @@ Swdb::getCompsGroupEnvironments(const std::string &groupId)
         LIMIT 1
     )**";
 
-    const char *sql_environment_group = R"**(
+    const char * sql_environment_group = R"**(
         SELECT
             g.groupid
         FROM
@@ -459,24 +409,23 @@ Swdb::getCompsGroupEnvironments(const std::string &groupId)
             AND g.installed = 1
     )**";
 
-    std::vector< std::string > result;
+    std::vector<std::string> result;
 
     // list all relevant groups
     libdnf::utils::SQLite3::Query query_all_environments(*conn, sql_all_environments);
     query_all_environments.bindv(groupId);
 
     while (query_all_environments.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto envid = query_all_environments.get< std::string >("environmentid");
+        auto envid = query_all_environments.get<std::string>("environmentid");
         libdnf::utils::SQLite3::Query query_trans_items(*conn, sql_trans_items);
         query_trans_items.bindv(envid);
         if (query_trans_items.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-            auto action =
-                static_cast< TransactionItemAction >(query_trans_items.get< int64_t >("action"));
+            auto action = static_cast<TransactionItemAction>(query_trans_items.get<int64_t>("action"));
             // if the last record is group removal, skip
             if (action == TransactionItemAction::REMOVE) {
                 continue;
             }
-            auto envId = query_trans_items.get< int64_t >("environment_id");
+            auto envId = query_trans_items.get<int64_t>("environment_id");
             libdnf::utils::SQLite3::Query query_environment_group(*conn, sql_environment_group);
             query_environment_group.bindv(envId);
             if (query_environment_group.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
@@ -521,25 +470,19 @@ Swdb::createCompsGroupItem()
  *
  * \return list of user installed package IDs
  */
-void
-Swdb::filterUserinstalled(libdnf::rpm::PackageSet & installed) const
-{
+void Swdb::filterUserinstalled(libdnf::rpm::PackageSet & installed) const {
     // TODO(dmach): if performance is an issue, rewrite this using the libsolv layer
     for (auto it = installed.begin(); it != installed.end(); it++) {
         auto pkg = *it;
         auto reason = Package::resolveTransactionItemReason(get_connection(), pkg.get_name(), pkg.get_arch(), -1);
         // if not dep or weak, than consider it user installed
-        if (reason == TransactionItemReason::DEPENDENCY ||
-            reason == TransactionItemReason::WEAK_DEPENDENCY) {
+        if (reason == TransactionItemReason::DEPENDENCY || reason == TransactionItemReason::WEAK_DEPENDENCY) {
             installed.remove(pkg);
         }
     }
-
 }
 
-std::vector< int64_t >
-Swdb::searchTransactionsByRPM(const std::vector< std::string > &patterns)
-{
+std::vector<int64_t> Swdb::searchTransactionsByRPM(const std::vector<std::string> & patterns) {
     return Package::searchTransactions(get_connection(), patterns);
 }
 

@@ -19,10 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv_repo.hpp"
 
-#include "libdnf/base/base.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/temp.hpp"
+
+#include "libdnf/base/base.hpp"
 
 extern "C" {
 #include <solv/chksum.h>
@@ -41,7 +42,6 @@ extern "C" {
 void close_file(std::FILE * fp) {
     std::fclose(fp);
 }
-
 
 
 constexpr auto CHKSUM_TYPE = REPOKEY_TYPE_SHA256;
@@ -92,22 +92,30 @@ bool can_use_repomd_cache(FILE * fp_solv, unsigned char cs_repomd[CHKSUM_BYTES])
 namespace libdnf::repo {
 
 static const char * repodata_type_to_suffix(RepodataType type) {
-    switch(type) {
-        case RepodataType::FILENAMES: return "-filenames";
-        case RepodataType::PRESTO: return "-presto";
-        case RepodataType::UPDATEINFO: return "-updateinfo";
-        case RepodataType::OTHER: return "-other";
+    switch (type) {
+        case RepodataType::FILENAMES:
+            return "-filenames";
+        case RepodataType::PRESTO:
+            return "-presto";
+        case RepodataType::UPDATEINFO:
+            return "-updateinfo";
+        case RepodataType::OTHER:
+            return "-other";
     }
 
     libdnf_throw_assertion("Unknown RepodataType: {}", type);
 }
 
 static int repodata_type_to_flags(RepodataType type) {
-    switch(type) {
-        case RepodataType::FILENAMES: return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
-        case RepodataType::PRESTO: return REPO_EXTEND_SOLVABLES;
-        case RepodataType::UPDATEINFO: return 0;
-        case RepodataType::OTHER: return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
+    switch (type) {
+        case RepodataType::FILENAMES:
+            return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
+        case RepodataType::PRESTO:
+            return REPO_EXTEND_SOLVABLES;
+        case RepodataType::UPDATEINFO:
+            return 0;
+        case RepodataType::OTHER:
+            return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
     }
 
     libdnf_throw_assertion("Unknown RepodataType: {}", type);
@@ -239,8 +247,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
         }
 
         logger.debug(std::string("fetching ") + config.get_id());
-        if (repo_add_repomdxml(repo, fp_repomd.get(), 0) ||
-            repo_add_rpmmd(repo, fp_primary.get(), 0, 0)) {
+        if (repo_add_repomdxml(repo, fp_repomd.get(), 0) || repo_add_rpmmd(repo, fp_primary.get(), 0, 0)) {
             // TODO(lukash) improve error message
             throw SolvError(M_("repo_add_repomdxml/rpmmd() has failed."));
         }
@@ -279,7 +286,7 @@ void SolvRepo::load_repo_ext(const std::string & filename, RepodataType type) {
     logger.debug(fmt::format("{}: loading: {}", __func__, filename));
 
     int res = 0;
-    switch(type) {
+    switch (type) {
         case RepodataType::FILENAMES:
             res = repo_add_rpmmd(repo, fp.get(), "FL", REPO_EXTEND_SOLVABLES);
             break;
@@ -343,7 +350,8 @@ bool SolvRepo::load_system_repo(const std::string & rootdir) {
 // only works if there are no duplicates both in q1 and q2
 // the map parameter must point to an empty map that can hold all ids
 // (it is also returned empty)
-static bool is_superset(const libdnf::solv::IdQueue & q1, const libdnf::solv::IdQueue & q2, libdnf::solv::SolvMap & map) {
+static bool is_superset(
+    const libdnf::solv::IdQueue & q1, const libdnf::solv::IdQueue & q2, libdnf::solv::SolvMap & map) {
     int cnt = 0;
     for (int i = 0; i < q2.size(); i++) {
         map.add_unsafe(q2[i]);

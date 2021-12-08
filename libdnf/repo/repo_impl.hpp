@@ -20,10 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_REPO_IMPL_HPP
 #define LIBDNF_RPM_REPO_IMPL_HPP
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/repo/repo.hpp"
 #include "repo_downloader.hpp"
 #include "solv_repo.hpp"
+
+#include "libdnf/base/base.hpp"
+#include "libdnf/repo/repo.hpp"
 
 #include <gpgme.h>
 #include <solv/chksum.h>

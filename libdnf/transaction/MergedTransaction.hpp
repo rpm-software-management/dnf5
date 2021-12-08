@@ -24,17 +24,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TRANSACTION_MERGEDTRANSACTION_HPP
 #define LIBDNF_TRANSACTION_MERGEDTRANSACTION_HPP
 
+#include <map>
 #include <memory>
 #include <set>
 #include <string>
-#include <map>
 #include <vector>
 
 namespace libdnf::transaction {
 
 class MergedTransaction;
-typedef std::shared_ptr< MergedTransaction > MergedTransactionPtr;
-}
+typedef std::shared_ptr<MergedTransaction> MergedTransactionPtr;
+}  // namespace libdnf::transaction
 
 #include "rpm_package.hpp"
 #include "transaction.hpp"
@@ -47,17 +47,17 @@ public:
     explicit MergedTransaction(Transaction & trans);
     void merge(Transaction & trans);
 
-    std::vector< int64_t > listIds() const;
-    std::vector< uint32_t > listUserIds() const;
-    std::vector< std::string > listCmdlines() const;
-    std::vector< TransactionState > listStates() const;
-    std::vector< std::string > listReleasevers() const;
+    std::vector<int64_t> listIds() const;
+    std::vector<uint32_t> listUserIds() const;
+    std::vector<std::string> listCmdlines() const;
+    std::vector<TransactionState> listStates() const;
+    std::vector<std::string> listReleasevers() const;
     int64_t get_dt_begin() const noexcept;
     int64_t get_dt_end() const noexcept;
-    const std::string &get_rpmdb_version_begin() const noexcept;
-    const std::string &get_rpmdb_version_end() const noexcept;
+    const std::string & get_rpmdb_version_begin() const noexcept;
+    const std::string & get_rpmdb_version_end() const noexcept;
     std::set<std::string> get_runtime_packages() const;
-    std::vector< std::pair< int, std::string > > get_console_output();
+    std::vector<std::pair<int, std::string>> get_console_output();
 
     std::vector<std::unique_ptr<CompsEnvironment>> get_comps_environments();
     std::vector<std::unique_ptr<CompsGroup>> get_comps_groups();
@@ -84,6 +84,6 @@ protected:
 
 }  // namespace libdnf::transaction
 
-#endif // LIBDNF_TRANSACTION_TRANSACTION_HPP
+#endif  // LIBDNF_TRANSACTION_TRANSACTION_HPP
 
 #endif

@@ -54,16 +54,16 @@ OptionBool & OptionBool::operator=(const OptionBool & src) {
 
 OptionBool::OptionBool(
     bool default_value, const std::vector<std::string> & true_vals, const std::vector<std::string> & false_vals)
-    : Option(Priority::DEFAULT)
-    , true_values(std::make_unique<std::vector<std::string>>(true_vals))
-    , false_values(std::make_unique<std::vector<std::string>>(false_vals))
-    , default_value(default_value)
-    , value(default_value) {}
+    : Option(Priority::DEFAULT),
+      true_values(std::make_unique<std::vector<std::string>>(true_vals)),
+      false_values(std::make_unique<std::vector<std::string>>(false_vals)),
+      default_value(default_value),
+      value(default_value) {}
 
 OptionBool::OptionBool(bool default_value)
-    : Option(Priority::DEFAULT)
-    , default_value(default_value)
-    , value(default_value) {}
+    : Option(Priority::DEFAULT),
+      default_value(default_value),
+      value(default_value) {}
 
 bool OptionBool::from_string(const std::string & value) const {
     auto tmp_value = value;

@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_SACK_IMPL_HPP
 #define LIBDNF_ADVISORY_ADVISORY_SACK_IMPL_HPP
 
-#include "libdnf/advisory/advisory_sack.hpp"
 #include "solv/solv_map.hpp"
+
+#include "libdnf/advisory/advisory_sack.hpp"
 
 
 namespace libdnf::advisory {

@@ -19,11 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 
+#include "solv/pool.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/const.hpp"
-#include "solv/pool.hpp"
-
-#include "utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
 
@@ -40,11 +40,10 @@ static std::atomic<Base *> locked_base{nullptr};
 static std::mutex locked_base_mutex;
 
 Base::Base()
-  : pool(std::make_unique<libdnf::solv::Pool>()),
-    repo_sack(get_weak_ptr()),
-    rpm_package_sack(get_weak_ptr()),
-    rpm_advisory_sack(get_weak_ptr())
-{}
+    : pool(std::make_unique<libdnf::solv::Pool>()),
+      repo_sack(get_weak_ptr()),
+      rpm_package_sack(get_weak_ptr()),
+      rpm_advisory_sack(get_weak_ptr()) {}
 
 Base::~Base() = default;
 

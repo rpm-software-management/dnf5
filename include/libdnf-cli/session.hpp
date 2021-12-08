@@ -78,7 +78,9 @@ public:
     virtual void run() = 0;
 
     /// Throw a ArgumentParserMissingCommandError exception with the command name in it
-    void throw_missing_command() const { throw ArgumentParserMissingCommandError(get_argument_parser_command()->get_id()); }
+    void throw_missing_command() const {
+        throw ArgumentParserMissingCommandError(get_argument_parser_command()->get_id());
+    }
 
     /// @return Pointer to the Session.
     ///         The returned pointer must **not** be freed manually.
@@ -93,7 +95,9 @@ public:
     /// @return Pointer to the underlying argument parser command.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
-    libdnf::cli::ArgumentParser::Command * get_argument_parser_command() const noexcept { return argument_parser_command; }
+    libdnf::cli::ArgumentParser::Command * get_argument_parser_command() const noexcept {
+        return argument_parser_command;
+    }
 
     /// @return List of subcommands owned by the current command.
     /// @since 5.0
@@ -112,20 +116,24 @@ private:
 };
 
 
-class Option {
-};
+class Option {};
 
 
 class BoolOption : public Option {
 public:
-    explicit BoolOption(libdnf::cli::session::Command & command, const std::string & long_name, char short_name, const std::string & desc, bool default_value);
+    explicit BoolOption(
+        libdnf::cli::session::Command & command,
+        const std::string & long_name,
+        char short_name,
+        const std::string & desc,
+        bool default_value);
 
     /// @return Parsed value.
     /// @since 5.0
     bool get_value() const { return conf->get_value(); }
 
-// TODO(dmach): `arg` must be public, because it is used to define conflicting args
-//protected:
+    // TODO(dmach): `arg` must be public, because it is used to define conflicting args
+    //protected:
     libdnf::OptionBool * conf{nullptr};
     libdnf::cli::ArgumentParser::NamedArg * arg{nullptr};
 };
@@ -133,7 +141,8 @@ public:
 
 class StringArgumentList : public Option {
 public:
-    explicit StringArgumentList(libdnf::cli::session::Command & command, const std::string & name, const std::string & desc);
+    explicit StringArgumentList(
+        libdnf::cli::session::Command & command, const std::string & name, const std::string & desc);
 
     /// @return Parsed value.
     /// @since 5.0
@@ -145,7 +154,7 @@ protected:
 };
 
 
-}  // libdnf::cli::session
+}  // namespace libdnf::cli::session
 
 
 #endif  // LIBDNF_CLI_SESSION_HPP

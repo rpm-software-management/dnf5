@@ -24,75 +24,76 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TRANSACTION_SWDB_HPP
 #define LIBDNF_TRANSACTION_SWDB_HPP
 
+#include <sys/stat.h>
+
 #include <map>
 #include <memory>
-#include <sys/stat.h>
 #include <vector>
 
 namespace libdnf::transaction {
 struct Swdb;
 //class Transformer;
-}
+}  // namespace libdnf::transaction
 
 //#include "../hy-types.h"
 //#include "../sack/query.hpp"
-#include "libdnf/rpm/package_set.hpp"
-#include "utils/sqlite3/sqlite3.hpp"
-
 #include "comps_group.hpp"
 #include "transaction.hpp"
 #include "transaction_item.hpp"
+#include "utils/sqlite3/sqlite3.hpp"
+
+#include "libdnf/rpm/package_set.hpp"
 
 namespace libdnf::transaction {
 
 struct Swdb {
 public:
     explicit Swdb(libdnf::utils::SQLite3 & conn);
-    explicit Swdb(const std::string &path);
+    explicit Swdb(const std::string & path);
     ~Swdb();
 
     // Database
     // FIXME load this from conf
-    static constexpr const char *defaultPath = "/var/lib/dnf/history.sqlite";
-    static constexpr const char *defaultDatabaseName = "history.sqlite";
+    static constexpr const char * defaultPath = "/var/lib/dnf/history.sqlite";
+    static constexpr const char * defaultDatabaseName = "history.sqlite";
 
-    const std::string &getPath() { return conn->get_path(); }
+    const std::string & getPath() { return conn->get_path(); }
     void resetDatabase();
     void closeDatabase();
 
     // Transaction in progress
     void initTransaction();
-    int64_t beginTransaction(int64_t dtBegin,
-                             std::string rpmdbVersionBegin,
-                             std::string cmdline,
-                             uint32_t userId);
+    int64_t beginTransaction(int64_t dtBegin, std::string rpmdbVersionBegin, std::string cmdline, uint32_t userId);
     int64_t endTransaction(int64_t dtEnd, std::string rpmdbVersionEnd, TransactionState state);
     int64_t closeTransaction();
     // TODO:
     //std::vector< TransactionItemPtr > getItems() { return transactionInProgress->getItems(); }
 
-    const std::vector<std::unique_ptr<CompsEnvironment>> & get_comps_environments() const noexcept { return transactionInProgress->get_comps_environments(); }
+    const std::vector<std::unique_ptr<CompsEnvironment>> & get_comps_environments() const noexcept {
+        return transactionInProgress->get_comps_environments();
+    }
     //CompsEnvironment & new_comps_environment();
 
-    const std::vector<std::unique_ptr<CompsGroup>> & get_comps_groups() const noexcept { return transactionInProgress->get_comps_groups(); }
+    const std::vector<std::unique_ptr<CompsGroup>> & get_comps_groups() const noexcept {
+        return transactionInProgress->get_comps_groups();
+    }
     //CompsGroup & new_comps_group();
 
-    const std::vector<std::unique_ptr<Package>> & get_packages() const noexcept { return transactionInProgress->get_packages(); }
+    const std::vector<std::unique_ptr<Package>> & get_packages() const noexcept {
+        return transactionInProgress->get_packages();
+    }
     //Package & new_package();
 
     TransactionPtr getLastTransaction();
-    std::vector< TransactionPtr >
-    listTransactions(); // std::vector<long long> transactionIds);
+    std::vector<TransactionPtr> listTransactions();  // std::vector<long long> transactionIds);
 
     // TransactionItems
-    TransactionItemPtr addItem(ItemPtr item,
-                               const std::string &repoid,
-                               TransactionItemAction action,
-                               TransactionItemReason reason);
+    TransactionItemPtr addItem(
+        ItemPtr item, const std::string & repoid, TransactionItemAction action, TransactionItemReason reason);
     // std::shared_ptr<TransactionItem> replacedBy);
 
     // TODO: remove; TransactionItem states are saved on transaction save
-    void setItemDone(const std::string &nevra);
+    void setItemDone(const std::string & nevra);
 
     // Item: constructors
     /*
@@ -102,22 +103,21 @@ public:
     */
 
     // Item: RPM
-    TransactionItemReason resolveRPMTransactionItemReason(const std::string &name,
-                                                          const std::string &arch,
-                                                          int64_t maxTransactionId);
-    const std::string getRPMRepo(const std::string &nevra);
+    TransactionItemReason resolveRPMTransactionItemReason(
+        const std::string & name, const std::string & arch, int64_t maxTransactionId);
+    const std::string getRPMRepo(const std::string & nevra);
     //TransactionItemPtr getRPMTransactionItem(const std::string &nevra);
-    std::vector< int64_t > searchTransactionsByRPM(const std::vector< std::string > &patterns);
+    std::vector<int64_t> searchTransactionsByRPM(const std::vector<std::string> & patterns);
 
     // Item: CompsGroup
-    TransactionItemPtr getCompsGroupItem(const std::string &groupid);
-    std::vector< TransactionItemPtr > getCompsGroupItemsByPattern(const std::string &pattern);
-    std::vector< std::string > getPackageCompsGroups(const std::string &packageName);
+    TransactionItemPtr getCompsGroupItem(const std::string & groupid);
+    std::vector<TransactionItemPtr> getCompsGroupItemsByPattern(const std::string & pattern);
+    std::vector<std::string> getPackageCompsGroups(const std::string & packageName);
 
     // Item: CompsEnvironment
-    TransactionItemPtr getCompsEnvironmentItem(const std::string &envid);
-    std::vector< TransactionItemPtr > getCompsEnvironmentItemsByPattern(const std::string &pattern);
-    std::vector< std::string > getCompsGroupEnvironments(const std::string &groupId);
+    TransactionItemPtr getCompsEnvironmentItem(const std::string & envid);
+    std::vector<TransactionItemPtr> getCompsEnvironmentItemsByPattern(const std::string & pattern);
+    std::vector<std::string> getCompsGroupEnvironments(const std::string & groupId);
 
     // misc
     void setReleasever(std::string value);
@@ -131,20 +131,21 @@ public:
     libdnf::utils::SQLite3 & get_connection() const { return *conn; }
 
     Transaction * get_transaction_in_progress() { return transactionInProgress.get(); }
+
 protected:
     //friend class Transformer;
 
     explicit Swdb(libdnf::utils::SQLite3 & conn, bool autoClose);
     libdnf::utils::SQLite3 * conn;
     bool autoClose;
-    std::unique_ptr< Transaction > transactionInProgress = nullptr;
-    std::map< std::string, TransactionItemPtr > itemsInProgress;
+    std::unique_ptr<Transaction> transactionInProgress = nullptr;
+    std::map<std::string, TransactionItemPtr> itemsInProgress;
 
 private:
 };
 
-} // namespace libdnf::transaction
+}  // namespace libdnf::transaction
 
-#endif // LIBDNF_TRANSACTION_SWDB_HPP
+#endif  // LIBDNF_TRANSACTION_SWDB_HPP
 
 #endif

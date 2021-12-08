@@ -48,7 +48,7 @@ public:
     template <typename... Ss>
     SQLite3SQLError(int error_code, const std::string & format, Ss &&... args)
         : SQLite3Error(format, std::forward<Ss>(args)...),
-        error_code(error_code) {}
+          error_code(error_code) {}
 
     const char * what() const noexcept override;
 
@@ -84,7 +84,6 @@ public:
 
     class Statement {
     public:
-
         enum class StepResult { DONE, ROW, BUSY };
 
         Statement(const Statement &) = delete;

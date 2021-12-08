@@ -22,9 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_ADVISORY_ADVISORY_SET_IMPL_HPP
 
 
-#include "libdnf/advisory/advisory_set.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
+
+#include "libdnf/advisory/advisory_set.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -62,20 +63,20 @@ private:
 
 
 inline AdvisorySet::Impl::Impl(const BaseWeakPtr & base)
-    : libdnf::solv::SolvMap::SolvMap(get_pool(base).get_nsolvables())
-    , base(base) {}
+    : libdnf::solv::SolvMap::SolvMap(get_pool(base).get_nsolvables()),
+      base(base) {}
 
 inline AdvisorySet::Impl::Impl(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map)
-    : libdnf::solv::SolvMap::SolvMap(solv_map)
-    , base(base) {}
+    : libdnf::solv::SolvMap::SolvMap(solv_map),
+      base(base) {}
 
 inline AdvisorySet::Impl::Impl(const Impl & other)
-    : libdnf::solv::SolvMap::SolvMap(other.get_map())
-    , base(other.base) {}
+    : libdnf::solv::SolvMap::SolvMap(other.get_map()),
+      base(other.base) {}
 
 inline AdvisorySet::Impl::Impl(Impl && other)
-    : libdnf::solv::SolvMap::SolvMap(std::move(other.get_map()))
-    , base(std::move(other.base)) {}
+    : libdnf::solv::SolvMap::SolvMap(std::move(other.get_map())),
+      base(std::move(other.base)) {}
 
 inline AdvisorySet::Impl & AdvisorySet::Impl::operator=(const Impl & other) {
     libdnf::solv::SolvMap::operator=(other);

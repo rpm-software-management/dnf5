@@ -38,8 +38,7 @@ ModuleProvidesCommand::ModuleProvidesCommand(Command & parent) : Command(parent,
 }
 
 
-void ModuleProvidesCommand::run() {
-}
+void ModuleProvidesCommand::run() {}
 
 
 }  // namespace microdnf

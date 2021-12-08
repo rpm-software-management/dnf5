@@ -20,12 +20,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_REPO_DOWNLOADER_HPP
 #define LIBDNF_REPO_REPO_DOWNLOADER_HPP
 
+#include "repo_gpgme.hpp"
+
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/repo/config_repo.hpp"
 #include "libdnf/repo/repo_callbacks.hpp"
-#include "repo_gpgme.hpp"
 
+#include <gpgme.h>
 #include <librepo/librepo.h>
 
 #include <map>
@@ -33,8 +35,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <string>
 #include <vector>
-
-#include <gpgme.h>
 
 
 namespace std {

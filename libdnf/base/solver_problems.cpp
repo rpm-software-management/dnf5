@@ -19,11 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "solver_problems_impl.hpp"
-
-#include "libdnf/utils/format.hpp"
-
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/string.hpp"
+
+#include "libdnf/utils/format.hpp"
 
 
 namespace libdnf::base {
@@ -188,11 +187,10 @@ SolverProblems & SolverProblems::operator=(const SolverProblems & src) {
 SolverProblems::~SolverProblems() = default;
 
 std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> SolverProblems::get_problems() {
-        return p_impl->problems;
-    };
+    return p_impl->problems;
+};
 
-std::string SolverProblems::problem_to_string(
-    const std::pair<ProblemRules, std::vector<std::string>> & raw) {
+std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std::vector<std::string>> & raw) {
     switch (raw.first) {
         case ProblemRules::RULE_DISTUPGRADE:
         case ProblemRules::RULE_INFARCH:
@@ -360,8 +358,7 @@ void SolverProblems::Impl::set_solver_problems(const libdnf::BaseWeakPtr & base,
     auto problem_protected = get_removal_of_protected(solved_goal, broken_installed);
     if (!problem_protected.empty()) {
         if (is_unique(problems, problem_protected)) {
-            problems.insert(
-                problems.begin(), std::move(problem_protected));
+            problems.insert(problems.begin(), std::move(problem_protected));
         }
     }
 }

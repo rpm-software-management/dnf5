@@ -48,10 +48,9 @@ struct Item {
 }  // namespace
 
 void IniparserTest::test_iniparser() {
-
     // Source data
     const std::string ini_file_content =
-R"**([section1]
+        R"**([section1]
 key1 = value1
 key2 =value2
 
@@ -89,14 +88,18 @@ key1 = value1
         {ItemType::KEY_VAL, "section1", "key8", "value8", "key8 = value8\n"},
         {ItemType::EMPTY_LINE, "section1", "", "", "\n"},
         {ItemType::SECTION, "section2", "", "", "[section2]  # Test section2\n"},
-        {ItemType::EMPTY_LINE, "section2", "", "", "" "\n"},
+        {ItemType::EMPTY_LINE,
+         "section2",
+         "",
+         "",
+         ""
+         "\n"},
         {ItemType::KEY_VAL, "section2", "key1", "value1", "key1 = value1\n"},
-        {ItemType::END_OF_INPUT, "section2", "", "", ""}
-    };
+        {ItemType::END_OF_INPUT, "section2", "", "", ""}};
 
     // Parse input
     libdnf::IniParser parser(std::make_unique<std::istringstream>(ini_file_content));
-    for (std::size_t idx = 0; idx < sizeof(expected_items)/sizeof(expected_items[0]); ++idx) {
+    for (std::size_t idx = 0; idx < sizeof(expected_items) / sizeof(expected_items[0]); ++idx) {
         auto readedType = parser.next();
         CPPUNIT_ASSERT_EQUAL(readedType, expected_items[idx].type);
         CPPUNIT_ASSERT_EQUAL(parser.get_section(), std::string(expected_items[idx].section));
@@ -109,10 +112,9 @@ key1 = value1
 }
 
 void IniparserTest::test_iniparser2() {
-
     // Source data
     const std::string ini_file_content =
-R"**(
+        R"**(
 # Test comment1
 # Test comment2
 [section1]
@@ -136,17 +138,20 @@ key1 = value1)**";
         {ItemType::SECTION, "section1", "", "", "[section1]\n"},
         {ItemType::KEY_VAL, "section1", "key1", "value1", "key1 = value1\n"},
         {ItemType::KEY_VAL, "section1", "key2", "two line\nvalue2", "key2 = two line  \n    value2\n"},
-        {ItemType::KEY_VAL, "section1", "key3", "multi line\nwith\n\nvalue3", "key3 = multi line\n    with\n    \n    value3\n"},
+        {ItemType::KEY_VAL,
+         "section1",
+         "key3",
+         "multi line\nwith\n\nvalue3",
+         "key3 = multi line\n    with\n    \n    value3\n"},
         {ItemType::KEY_VAL, "section1", "key4", "value4", "key4 = value4\n"},
         {ItemType::SECTION, "section2", "", "", "[section2]; Test section2\n"},
         {ItemType::EMPTY_LINE, "section2", "", "", "  \n"},
         {ItemType::KEY_VAL, "section2", "key1", "value1", "key1 = value1"},
-        {ItemType::END_OF_INPUT, "section2", "", "", ""}
-    };
+        {ItemType::END_OF_INPUT, "section2", "", "", ""}};
 
     // Parse input
     libdnf::IniParser parser(std::make_unique<std::istringstream>(ini_file_content));
-    for (std::size_t idx = 0; idx < sizeof(expected_items)/sizeof(expected_items[0]); ++idx) {
+    for (std::size_t idx = 0; idx < sizeof(expected_items) / sizeof(expected_items[0]); ++idx) {
         auto readedType = parser.next();
         CPPUNIT_ASSERT_EQUAL(readedType, expected_items[idx].type);
         CPPUNIT_ASSERT_EQUAL(parser.get_section(), std::string(expected_items[idx].section));

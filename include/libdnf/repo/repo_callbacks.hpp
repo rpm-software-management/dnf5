@@ -65,7 +65,9 @@ public:
         const std::string & user_id,
         const std::string & fingerprint,
         const std::string & url,
-        long int timestamp) { return true; }
+        long int timestamp) {
+        return true;
+    }
 #pragma GCC diagnostic pop
 
     virtual ~RepoCallbacks() = default;

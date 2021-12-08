@@ -35,7 +35,7 @@ namespace libdnf::solv {
 
 class SolvMap;
 
-}  // namespace libdnf::rpm::solv
+}  // namespace libdnf::solv
 
 namespace libdnf::rpm {
 

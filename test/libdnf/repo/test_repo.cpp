@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/logger/stream_logger.hpp"
-#include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/repo/repo_sack.hpp"
+#include "libdnf/rpm/package_sack.hpp"
 
 #include <filesystem>
 #include <fstream>

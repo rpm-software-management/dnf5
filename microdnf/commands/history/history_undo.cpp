@@ -38,8 +38,7 @@ HistoryUndoCommand::HistoryUndoCommand(Command & parent) : Command(parent, "undo
 }
 
 
-void HistoryUndoCommand::run() {
-}
+void HistoryUndoCommand::run() {}
 
 
 }  // namespace microdnf

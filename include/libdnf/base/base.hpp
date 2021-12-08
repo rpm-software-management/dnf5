@@ -28,8 +28,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/vars.hpp"
 #include "libdnf/logger/log_router.hpp"
 #include "libdnf/plugin/plugins.hpp"
-#include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/repo/repo_sack.hpp"
+#include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/transaction/sack.hpp"
 
 #include <map>
@@ -89,7 +89,7 @@ public:
     libdnf::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
 private:
-    friend solv::Pool& get_pool(const libdnf::BaseWeakPtr & base);
+    friend solv::Pool & get_pool(const libdnf::BaseWeakPtr & base);
 
     WeakPtrGuard<Base, false> base_guard;
 

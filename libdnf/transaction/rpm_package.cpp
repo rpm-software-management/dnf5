@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/transaction/rpm_package.hpp"
 
-#include "libdnf/rpm/nevra.hpp"
 #include "db/rpm.hpp"
+
+#include "libdnf/rpm/nevra.hpp"
 #include "libdnf/transaction/transaction.hpp"
 
 #include <algorithm>

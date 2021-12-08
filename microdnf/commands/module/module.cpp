@@ -19,18 +19,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "module.hpp"
-#include "module_list.hpp"
-#include "module_info.hpp"
-#include "module_provides.hpp"
-#include "module_repoquery.hpp"
-#include "module_enable.hpp"
-#include "module_disable.hpp"
-#include "module_reset.hpp"
-#include "module_switch_to.hpp"
-#include "module_install.hpp"
-#include "module_remove.hpp"
 
 #include "context.hpp"
+#include "module_disable.hpp"
+#include "module_enable.hpp"
+#include "module_info.hpp"
+#include "module_install.hpp"
+#include "module_list.hpp"
+#include "module_provides.hpp"
+#include "module_remove.hpp"
+#include "module_repoquery.hpp"
+#include "module_reset.hpp"
+#include "module_switch_to.hpp"
 
 
 namespace microdnf {

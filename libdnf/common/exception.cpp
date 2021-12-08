@@ -29,10 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 
-AssertionError::AssertionError(
-    const char * assertion,
-    const SourceLocation & location,
-    const std::string & message)
+AssertionError::AssertionError(const char * assertion, const SourceLocation & location, const std::string & message)
     : logic_error(message),
       condition(assertion),
       location(location) {}
@@ -40,7 +37,8 @@ AssertionError::AssertionError(
 
 const char * AssertionError::what() const noexcept {
     try {
-        str_what = location.file_name + std::string(":") + std::to_string(location.source_line) + ": " + location.function_name;
+        str_what = location.file_name + std::string(":") + std::to_string(location.source_line) + ": " +
+                   location.function_name;
         if (condition) {
             str_what += std::string(": Assertion '") + condition + "' failed: ";
         } else {
@@ -96,7 +94,8 @@ Error & Error::operator=(const Error & e) noexcept {
     try {
         message = e.message;
         formatter = e.formatter;
-    } catch (...) {}
+    } catch (...) {
+    }
 
     return *this;
 }
@@ -120,7 +119,8 @@ const char * SystemError::what() const noexcept {
     std::string error_message;
     try {
         error_message = std::system_category().default_error_condition(error_code).message();
-    } catch (...) {}
+    } catch (...) {
+    }
 
     if (has_user_message) {
         try {

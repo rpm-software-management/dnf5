@@ -35,10 +35,10 @@ OptionBindsOptionAlreadyExistsError::OptionBindsOptionAlreadyExistsError(const s
 
 OptionBinds::Item::Item(
     Option & option, NewStringFunc new_string_func, GetValueStringFunc get_value_string_func, bool add_value)
-    : option(&option)
-    , new_str_func(std::move(new_string_func))
-    , get_value_str_func(std::move(get_value_string_func))
-    , is_append_option(add_value) {}
+    : option(&option),
+      new_str_func(std::move(new_string_func)),
+      get_value_str_func(std::move(get_value_string_func)),
+      is_append_option(add_value) {}
 
 OptionBinds::Item::Item(Option & option) : option(&option) {}
 

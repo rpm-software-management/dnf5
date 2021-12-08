@@ -18,23 +18,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "libdnf/conf/vars.hpp"
-#include "libdnf/common/exception.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
 
-#include <dirent.h>
-#include <sys/types.h>
+#include "libdnf/common/exception.hpp"
 
+#include <dirent.h>
 #include <rpm/rpmdb.h>
 #include <rpm/rpmlib.h>
 #include <rpm/rpmts.h>
+#include <sys/types.h>
 
 #include <algorithm>
 #include <cstring>
 #include <filesystem>
 #include <fstream>
-#include <optional>
 #include <memory>
+#include <optional>
 
 #define ASCII_LOWERCASE "abcdefghijklmnopqrstuvwxyz"
 #define ASCII_UPPERCASE "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
@@ -54,41 +54,42 @@ namespace libdnf {
 static const struct {
     const char * base;
     const char * native[MAX_NATIVE_ARCHES];
-} ARCH_MAP[] = {{"aarch64", {"aarch64", nullptr}},
-                {"alpha",
-                 {"alpha",
-                  "alphaev4",
-                  "alphaev45",
-                  "alphaev5",
-                  "alphaev56",
-                  "alphaev6",
-                  "alphaev67",
-                  "alphaev68",
-                  "alphaev7",
-                  "alphapca56",
-                  nullptr}},
-                {"arm", {"armv5tejl", "armv5tel", "armv5tl", "armv6l", "armv7l", "armv8l", nullptr}},
-                {"armhfp", {"armv6hl", "armv7hl", "armv7hnl", "armv8hl", "armv8hnl", "armv8hcnl", nullptr}},
-                {"i386", {"i386", "athlon", "geode", "i386", "i486", "i586", "i686", nullptr}},
-                {"ia64", {"ia64", nullptr}},
-                {"mips", {"mips", nullptr}},
-                {"mipsel", {"mipsel", nullptr}},
-                {"mips64", {"mips64", nullptr}},
-                {"mips64el", {"mips64el", nullptr}},
-                {"noarch", {"noarch", nullptr}},
-                {"ppc", {"ppc", nullptr}},
-                {"ppc64", {"ppc64", "ppc64iseries", "ppc64p7", "ppc64pseries", nullptr}},
-                {"ppc64le", {"ppc64le", nullptr}},
-                {"riscv32", {"riscv32", nullptr}},
-                {"riscv64", {"riscv64", nullptr}},
-                {"riscv128", {"riscv128", nullptr}},
-                {"s390", {"s390", nullptr}},
-                {"s390x", {"s390x", nullptr}},
-                {"sh3", {"sh3", nullptr}},
-                {"sh4", {"sh4", "sh4a", nullptr}},
-                {"sparc", {"sparc", "sparc64", "sparc64v", "sparcv8", "sparcv9", "sparcv9v", nullptr}},
-                {"x86_64", {"x86_64", "amd64", "ia32e", nullptr}},
-                {nullptr, {nullptr}}};
+} ARCH_MAP[] = {
+    {"aarch64", {"aarch64", nullptr}},
+    {"alpha",
+     {"alpha",
+      "alphaev4",
+      "alphaev45",
+      "alphaev5",
+      "alphaev56",
+      "alphaev6",
+      "alphaev67",
+      "alphaev68",
+      "alphaev7",
+      "alphapca56",
+      nullptr}},
+    {"arm", {"armv5tejl", "armv5tel", "armv5tl", "armv6l", "armv7l", "armv8l", nullptr}},
+    {"armhfp", {"armv6hl", "armv7hl", "armv7hnl", "armv8hl", "armv8hnl", "armv8hcnl", nullptr}},
+    {"i386", {"i386", "athlon", "geode", "i386", "i486", "i586", "i686", nullptr}},
+    {"ia64", {"ia64", nullptr}},
+    {"mips", {"mips", nullptr}},
+    {"mipsel", {"mipsel", nullptr}},
+    {"mips64", {"mips64", nullptr}},
+    {"mips64el", {"mips64el", nullptr}},
+    {"noarch", {"noarch", nullptr}},
+    {"ppc", {"ppc", nullptr}},
+    {"ppc64", {"ppc64", "ppc64iseries", "ppc64p7", "ppc64pseries", nullptr}},
+    {"ppc64le", {"ppc64le", nullptr}},
+    {"riscv32", {"riscv32", nullptr}},
+    {"riscv64", {"riscv64", nullptr}},
+    {"riscv128", {"riscv128", nullptr}},
+    {"s390", {"s390", nullptr}},
+    {"s390x", {"s390x", nullptr}},
+    {"sh3", {"sh3", nullptr}},
+    {"sh4", {"sh4", "sh4a", nullptr}},
+    {"sparc", {"sparc", "sparc64", "sparc64v", "sparcv8", "sparcv9", "sparcv9v", nullptr}},
+    {"x86_64", {"x86_64", "amd64", "ia32e", nullptr}},
+    {nullptr, {nullptr}}};
 
 static const char * get_base_arch(const char * arch) {
     for (int i = 0; ARCH_MAP[i].base; ++i) {
@@ -111,12 +112,13 @@ static void init_lib_rpm() {
     }
 }
 
-static constexpr const char * DISTROVERPKGS[] = {"system-release(releasever)",
-                                                 "system-release",
-                                                 "distribution-release(releasever)",
-                                                 "distribution-release",
-                                                 "redhat-release",
-                                                 "suse-release"};
+static constexpr const char * DISTROVERPKGS[] = {
+    "system-release(releasever)",
+    "system-release",
+    "distribution-release(releasever)",
+    "distribution-release",
+    "redhat-release",
+    "suse-release"};
 
 static const char * detect_arch() {
     init_lib_rpm();
@@ -185,8 +187,9 @@ std::string Vars::substitute(const std::string & text) const {
         } else {
             bracket = false;
         }
-        auto it = std::find_if_not(
-            res.begin() + static_cast<long>(variable), res.end(), [](char c) { return std::isalnum(c) != 0 || c == '_'; });
+        auto it = std::find_if_not(res.begin() + static_cast<long>(variable), res.end(), [](char c) {
+            return std::isalnum(c) != 0 || c == '_';
+        });
         if (bracket && it == res.end()) {
             break;
         }
@@ -333,4 +336,4 @@ void Vars::load_from_env() {
     }
 }
 
-} // namespace libdnf
+}  // namespace libdnf

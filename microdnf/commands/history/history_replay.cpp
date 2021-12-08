@@ -38,8 +38,7 @@ HistoryReplayCommand::HistoryReplayCommand(Command & parent) : Command(parent, "
 }
 
 
-void HistoryReplayCommand::run() {
-}
+void HistoryReplayCommand::run() {}
 
 
 }  // namespace microdnf

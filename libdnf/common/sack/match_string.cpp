@@ -19,9 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/sack/match_string.hpp"
 
-#include "libdnf/common/exception.hpp"
-
 #include "utils/bgettext/bgettext-lib.h"
+
+#include "libdnf/common/exception.hpp"
 
 #include <fnmatch.h>
 

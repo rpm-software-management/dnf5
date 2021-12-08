@@ -35,7 +35,7 @@ namespace libdnf::repo {
 class RepoSack;
 using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
-}
+}  // namespace libdnf::repo
 
 
 namespace libdnf::repo {

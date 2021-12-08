@@ -78,13 +78,13 @@ AdvisoryModule::Impl::Impl(
     Id version,
     Id context,
     Id arch)
-    : base(base)
-    , advisory(advisory)
-    , owner_collection_index(owner_collection_index)
-    , name(name)
-    , stream(stream)
-    , version(version)
-    , context(context)
-    , arch(arch) {}
+    : base(base),
+      advisory(advisory),
+      owner_collection_index(owner_collection_index),
+      name(name),
+      stream(stream),
+      version(version),
+      context(context),
+      arch(arch) {}
 
 }  // namespace libdnf::advisory

@@ -40,7 +40,8 @@ bool GoalJobSettings::resolve_strict(const libdnf::ConfigMain & cfg_main) {
             break;
     }
 
-    libdnf_assert(used_strict == GoalUsedSetting::UNUSED || resolved == used_strict,
+    libdnf_assert(
+        used_strict == GoalUsedSetting::UNUSED || resolved == used_strict,
         "\"strict\" is already set to a different value");
 
     used_strict = resolved;
@@ -51,8 +52,8 @@ bool GoalJobSettings::resolve_strict() {
     bool strict_bool = strict == GoalSetting::SET_TRUE;
     auto resolved = strict_bool ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
 
-    libdnf_assert(used_strict == GoalUsedSetting::UNUSED || resolved == used_strict,
-        "Used value for 'used_strict' already set");
+    libdnf_assert(
+        used_strict == GoalUsedSetting::UNUSED || resolved == used_strict, "Used value for 'used_strict' already set");
 
     used_strict = resolved;
 
@@ -74,8 +75,8 @@ bool GoalJobSettings::resolve_best(const libdnf::ConfigMain & cfg_main) {
             break;
     }
 
-    libdnf_assert(used_best == GoalUsedSetting::UNUSED || resolved == used_best,
-        "'best' is already set to a different value");
+    libdnf_assert(
+        used_best == GoalUsedSetting::UNUSED || resolved == used_best, "'best' is already set to a different value");
 
     used_best = resolved;
     return resolved == GoalUsedSetting::USED_TRUE;
@@ -96,7 +97,8 @@ bool GoalJobSettings::resolve_clean_requirements_on_remove(const libdnf::ConfigM
             break;
     }
 
-    libdnf_assert(used_clean_requirements_on_remove == GoalUsedSetting::UNUSED || resolved == used_clean_requirements_on_remove,
+    libdnf_assert(
+        used_clean_requirements_on_remove == GoalUsedSetting::UNUSED || resolved == used_clean_requirements_on_remove,
         "'clean_requirements_on_remove' is already set to a different value");
 
     used_clean_requirements_on_remove = resolved;
@@ -107,7 +109,8 @@ bool GoalJobSettings::resolve_clean_requirements_on_remove() {
     bool on_remove = clean_requirements_on_remove == GoalSetting::SET_TRUE;
     auto resolved = on_remove ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
 
-    libdnf_assert(used_clean_requirements_on_remove == GoalUsedSetting::UNUSED || resolved == used_clean_requirements_on_remove,
+    libdnf_assert(
+        used_clean_requirements_on_remove == GoalUsedSetting::UNUSED || resolved == used_clean_requirements_on_remove,
         "Used value for 'used_clean_requirements_on_remove' already set");
 
     used_clean_requirements_on_remove = resolved;

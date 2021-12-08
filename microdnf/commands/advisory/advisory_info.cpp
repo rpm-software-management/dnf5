@@ -25,9 +25,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/output/advisoryinfo.hpp>
 #include <libdnf/rpm/package_query.hpp>
 
-#include <iostream>
 #include <filesystem>
 #include <fstream>
+#include <iostream>
 #include <set>
 
 

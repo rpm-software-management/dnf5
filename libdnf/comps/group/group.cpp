@@ -17,26 +17,29 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/comps/group/package.hpp"
 #include "libdnf/comps/group/group.hpp"
-#include "libdnf/comps/group/query.hpp"
-#include "libdnf/comps/group/sack.hpp"
-#include "libdnf/comps/comps.hpp"
+
 #include "solv/pool.hpp"
 #include "utils/xml.hpp"
 
+#include "libdnf/base/base.hpp"
+#include "libdnf/comps/comps.hpp"
+#include "libdnf/comps/group/package.hpp"
+#include "libdnf/comps/group/query.hpp"
+#include "libdnf/comps/group/sack.hpp"
+
 extern "C" {
+#include <solv/dataiterator.h>
 #include <solv/knownid.h>
 #include <solv/pool.h>
 #include <solv/repo.h>
 #include <solv/solvable.h>
-#include <solv/dataiterator.h>
 }
 
-#include <string>
-#include <iostream>
 #include <libxml/tree.h>
+
+#include <iostream>
+#include <string>
 
 
 namespace libdnf::comps {
@@ -67,7 +70,7 @@ Group & Group::operator+=(const Group & rhs) {
 
 
 std::string lookup_str(libdnf::solv::Pool & pool, std::vector<GroupId> group_ids, Id key) {
-    for (GroupId group_id: group_ids) {
+    for (GroupId group_id : group_ids) {
         auto value = pool.lookup_str(group_id.id, key);
         if (value) {
             return value;
@@ -104,7 +107,7 @@ std::string Group::get_translated_name(const char * lang) const {
     libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
 
     std::string translation;
-    for (GroupId group_id: group_ids) {
+    for (GroupId group_id : group_ids) {
         Solvable * solvable = pool->solvables + group_id.id;
         if (solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1)) {
             translation = solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1);
@@ -124,7 +127,7 @@ std::string Group::get_translated_name() const {
     Pool * pool = *spool;
 
     std::string translation;
-    for (GroupId group_id: group_ids) {
+    for (GroupId group_id : group_ids) {
         Solvable * solvable = pool->solvables + group_id.id;
         if (solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY)) {
             translation = solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY);
@@ -143,7 +146,7 @@ std::string Group::get_translated_description(const char * lang) const {
     Pool * pool = *spool;
 
     std::string translation;
-    for (GroupId group_id: group_ids) {
+    for (GroupId group_id : group_ids) {
         Solvable * solvable = pool->solvables + group_id.id;
         if (solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1)) {
             translation = solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1);
@@ -162,7 +165,7 @@ std::string Group::get_translated_description() const {
     Pool * pool = *spool;
 
     std::string translation;
-    for (GroupId group_id: group_ids) {
+    for (GroupId group_id : group_ids) {
         Solvable * solvable = pool->solvables + group_id.id;
         if (solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION)) {
             translation = solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION);
@@ -223,8 +226,7 @@ std::vector<Package> Group::get_packages() {
         for (Id * r_id = solvable->repo->idarraydata + solvable->dep_recommends; *r_id; ++r_id) {
             if (strcmp(pool.id2rel(*r_id), "") == 0) {
                 packages.push_back(Package(pool.id2str(*r_id), PackageType::DEFAULT, ""));
-            }
-            else {
+            } else {
                 packages.push_back(Package(pool.id2str(*r_id), PackageType::CONDITIONAL, pool.id2evr(*r_id)));
             }
         }
@@ -256,7 +258,7 @@ std::set<std::string> Group::get_repos() const {
     libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
 
     std::set<std::string> result;
-    for (GroupId group_id: group_ids) {
+    for (GroupId group_id : group_ids) {
         Solvable * solvable = pool.id2solvable(group_id.id);
         result.emplace(solvable->repo->name);
     }
@@ -315,7 +317,7 @@ void Group::dump(const std::string & path) {
                 lang = keyname.substr(summary_prefix.length());
                 // Add the lang into the set
                 // If it's succesful (wasn't already present), create an XML node for this translation
-                if(name_langs.insert(lang).second) {
+                if (name_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_group, "name", std::string(di.kv.str));
                     xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
                 }
@@ -325,7 +327,7 @@ void Group::dump(const std::string & path) {
                 lang = keyname.substr(description_prefix.length());
                 // Add the lang into the set
                 // If it's succesful (wasn't already present), create an XML node for this translation
-                if(description_langs.insert(lang).second) {
+                if (description_langs.insert(lang).second) {
                     node = utils::xml::add_subnode_with_text(node_group, "description", std::string(di.kv.str));
                     xmlNewProp(node, BAD_CAST "xml:lang", BAD_CAST lang.c_str());
                 }
@@ -337,7 +339,7 @@ void Group::dump(const std::string & path) {
     // Add packagelist
     xmlNodePtr node_packagelist = xmlNewNode(NULL, BAD_CAST "packagelist");
     xmlAddChild(node_group, node_packagelist);
-    for (auto pkg: get_packages()) {
+    for (auto pkg : get_packages()) {
         // Create an XML node for this package
         node = utils::xml::add_subnode_with_text(node_packagelist, "packagereq", pkg.get_name());
         xmlNewProp(node, BAD_CAST "type", BAD_CAST pkg.get_type_string().c_str());

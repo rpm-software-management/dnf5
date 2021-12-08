@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMPS_GROUP_GROUP_HPP
 #define LIBDNF_COMPS_GROUP_GROUP_HPP
 
-#include "libdnf/comps/group/package.hpp"
 #include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <set>
@@ -117,7 +117,9 @@ public:
     //
     // TODO(dmach): return actual value from data in GroupSack
     // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
-    libdnf::transaction::TransactionItemReason get_reason() const { return libdnf::transaction::TransactionItemReason::UNKNOWN; }
+    libdnf::transaction::TransactionItemReason get_reason() const {
+        return libdnf::transaction::TransactionItemReason::UNKNOWN;
+    }
 
     /// Merge a comps Group with another one
     Group & operator+=(const Group & rhs);

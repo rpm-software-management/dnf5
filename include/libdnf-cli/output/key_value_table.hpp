@@ -38,33 +38,23 @@ public:
 
 protected:
     struct libscols_line * add_line(
-        const char * key,
-        const char * value,
-        const char * color = nullptr,
-        struct libscols_line * parent = nullptr
-    );
+        const char * key, const char * value, const char * color = nullptr, struct libscols_line * parent = nullptr);
 
     struct libscols_line * add_line(
         const char * key,
         const std::string & value,
         const char * color = nullptr,
-        struct libscols_line * parent = nullptr
-    );
+        struct libscols_line * parent = nullptr);
 
     struct libscols_line * add_line(
         const char * key,
         const std::vector<std::string> & value,
         const char * color = nullptr,
-        struct libscols_line * parent = nullptr
-    );
+        struct libscols_line * parent = nullptr);
 
-    template<typename V>
+    template <typename V>
     struct libscols_line * add_line(
-        const char * key,
-        V value,
-        const char * color = nullptr,
-        struct libscols_line * parent = nullptr
-    ) {
+        const char * key, V value, const char * color = nullptr, struct libscols_line * parent = nullptr) {
         return add_line(key, std::to_string(value), color, parent);
     }
 

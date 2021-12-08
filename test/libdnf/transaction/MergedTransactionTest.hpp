@@ -24,23 +24,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_SWDB_MERGEDTRANSACTION_TEST_HPP
 #define LIBDNF_SWDB_MERGEDTRANSACTION_TEST_HPP
 
+#include "libdnf/utils/sqlite3/sqlite3.hpp"
+
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
-#include "libdnf/utils/sqlite3/sqlite3.hpp"
-
 class MergedTransactionTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(MergedTransactionTest);
-//     CPPUNIT_TEST(testMerge);
-//     CPPUNIT_TEST(testMergeEraseInstallReinstall);
-//     CPPUNIT_TEST(testMergeEraseInstallDowngrade);
-//     CPPUNIT_TEST(testMergeEraseInstallUpgrade);
-//     CPPUNIT_TEST(testMergeReinstallAny);
-//     CPPUNIT_TEST(testMergeInstallErase);
-//     CPPUNIT_TEST(testMergeInstallAlter);
-//     CPPUNIT_TEST(testMergeAlterReinstall);
-//     CPPUNIT_TEST(testMergeAlterErase);
-//     CPPUNIT_TEST(testMergeAlterAlter);
+    //     CPPUNIT_TEST(testMerge);
+    //     CPPUNIT_TEST(testMergeEraseInstallReinstall);
+    //     CPPUNIT_TEST(testMergeEraseInstallDowngrade);
+    //     CPPUNIT_TEST(testMergeEraseInstallUpgrade);
+    //     CPPUNIT_TEST(testMergeReinstallAny);
+    //     CPPUNIT_TEST(testMergeInstallErase);
+    //     CPPUNIT_TEST(testMergeInstallAlter);
+    //     CPPUNIT_TEST(testMergeAlterReinstall);
+    //     CPPUNIT_TEST(testMergeAlterErase);
+    //     CPPUNIT_TEST(testMergeAlterAlter);
     CPPUNIT_TEST(test_add_remove_installed);
     CPPUNIT_TEST(test_add_remove_removed);
     CPPUNIT_TEST(test_add_install_installed);
@@ -82,10 +82,11 @@ public:
     void test_install_downgrade();
 
     void test_multilib_identity();
+
 private:
     libdnf::utils::SQLite3 * conn;
 };
 
-#endif // LIBDNF_SWDB_MERGEDTRANSACTION_TEST_HPP
+#endif  // LIBDNF_SWDB_MERGEDTRANSACTION_TEST_HPP
 
 #endif

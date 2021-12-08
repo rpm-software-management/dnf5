@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/utils/units.hpp"
 
-#include <cstring>
 #include <fmt/format.h>
+
+#include <cstring>
 
 
 namespace libdnf::cli::utils::units {

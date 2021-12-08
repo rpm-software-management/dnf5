@@ -22,13 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/fs.hpp"
 
 #include <toml.hpp>
+
 #include <fstream>
 
 namespace libdnf::system {
 
-State::State(
-    const std::filesystem::path & installroot,
-    const std::filesystem::path & dir_path)
+State::State(const std::filesystem::path & installroot, const std::filesystem::path & dir_path)
     : path(installroot / dir_path) {
     load();
 }

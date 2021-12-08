@@ -18,18 +18,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#include "rpm/package_set_impl.hpp"
+#include "solv/pool.hpp"
 #include "solver_problems_impl.hpp"
 #include "transaction_impl.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/locker.hpp"
+#include "utils/string.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/proc.hpp"
 #include "libdnf/rpm/package_query.hpp"
-#include "rpm/package_set_impl.hpp"
-#include "solv/pool.hpp"
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/locker.hpp"
-#include "utils/string.hpp"
 
 #include <fmt/format.h>
 
@@ -147,8 +147,7 @@ const std::vector<LogEvent> & Transaction::get_resolve_logs() {
     return p_impl->resolve_logs;
 }
 
-const SolverProblems &
-Transaction::get_package_solver_problems() {
+const SolverProblems & Transaction::get_package_solver_problems() {
     return p_impl->package_solver_problems;
 }
 
@@ -227,27 +226,17 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     }
 
     for (auto id : solved_goal.list_reinstalls()) {
-        packages.emplace_back(make_transaction_package(
-            id,
-            TransactionPackage::Action::REINSTALL,
-            solved_goal,
-            replaced));
+        packages.emplace_back(
+            make_transaction_package(id, TransactionPackage::Action::REINSTALL, solved_goal, replaced));
     }
 
     for (auto id : solved_goal.list_upgrades()) {
-        packages.emplace_back(make_transaction_package(
-            id,
-            TransactionPackage::Action::UPGRADE,
-            solved_goal,
-            replaced));
+        packages.emplace_back(make_transaction_package(id, TransactionPackage::Action::UPGRADE, solved_goal, replaced));
     }
 
     for (auto id : solved_goal.list_downgrades()) {
-        packages.emplace_back(make_transaction_package(
-            id,
-            TransactionPackage::Action::DOWNGRADE,
-            solved_goal,
-            replaced));
+        packages.emplace_back(
+            make_transaction_package(id, TransactionPackage::Action::DOWNGRADE, solved_goal, replaced));
     }
 
     auto list_removes = solved_goal.list_removes();

@@ -20,8 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/output/key_value_table.hpp"
 
-#include "libdnf-cli/tty.hpp"
 #include "utils/string.hpp"
+
+#include "libdnf-cli/tty.hpp"
 
 #include <cstring>
 #include <iostream>
@@ -61,11 +62,7 @@ void KeyValueTable::print() {
 
 
 struct libscols_line * KeyValueTable::add_line(
-    const char * key,
-    const char * value,
-    const char * color,
-    struct libscols_line * parent
-) {
+    const char * key, const char * value, const char * color, struct libscols_line * parent) {
     struct libscols_line * ln = scols_table_new_line(tb, parent);
     scols_line_set_data(ln, 0, key);
     scols_line_set_data(ln, 1, value);
@@ -80,21 +77,13 @@ struct libscols_line * KeyValueTable::add_line(
 
 
 struct libscols_line * KeyValueTable::add_line(
-    const char * key,
-    const std::string & value,
-    const char * color,
-    struct libscols_line * parent
-) {
+    const char * key, const std::string & value, const char * color, struct libscols_line * parent) {
     return add_line(key, value.c_str(), color, parent);
 }
 
 
 struct libscols_line * KeyValueTable::add_line(
-    const char * key,
-    const std::vector<std::string> & value,
-    const char * color,
-    struct libscols_line * parent
-) {
+    const char * key, const std::vector<std::string> & value, const char * color, struct libscols_line * parent) {
     return add_line(key, libdnf::utils::string::join(value, " "), color, parent);
 }
 

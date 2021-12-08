@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf-cli/progressbar/multi_progress_bar.hpp"
+
 #include "libdnf-cli/tty.hpp"
 
 #include <unistd.h>

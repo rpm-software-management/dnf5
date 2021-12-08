@@ -29,10 +29,10 @@ namespace libdnf::utils {
 /// Unlike C++20 `std::format`, the format string of the `libdnf::sformat` function template
 /// does not have to be a constant expression.
 template <typename... Args>
-inline std::string sformat(std::string_view runtime_format_string, Args&&... args) {
+inline std::string sformat(std::string_view runtime_format_string, Args &&... args) {
     return fmt::vformat(runtime_format_string, fmt::make_format_args(args...));
 }
 
-}
+}  // namespace libdnf::utils
 
 #endif  // LIBDNF_UTILS_FORMAT_HPP

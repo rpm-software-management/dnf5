@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::comps {
 
-enum class PackageType {MANDATORY, DEFAULT, OPTIONAL, CONDITIONAL};
+enum class PackageType { MANDATORY, DEFAULT, OPTIONAL, CONDITIONAL };
 
 // TODO(dmach): isn't it more a package dependency rather than a package?
 
@@ -34,7 +34,10 @@ enum class PackageType {MANDATORY, DEFAULT, OPTIONAL, CONDITIONAL};
 /// @replaces dnf:dnf/comps.py:class:CompsTransPkg
 class Package {
 public:
-    explicit Package(std::string name, PackageType type, std::string condition) : name(name), type(type), condition(condition) {}
+    explicit Package(std::string name, PackageType type, std::string condition)
+        : name(name),
+          type(type),
+          condition(condition) {}
 
     /// @replaces dnf:dnf/comps.py:attribute:Package.name
     std::string get_name() const { return name; }
@@ -43,7 +46,7 @@ public:
     PackageType get_type() const { return type; }
     void set_type(PackageType & value) { type = value; }
 
-    std::string get_type_string() const { 
+    std::string get_type_string() const {
         switch (type) {
             case PackageType::MANDATORY:
                 return "mandatory";

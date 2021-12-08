@@ -22,8 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "context.hpp"
 
-#include <libdnf/conf/option_string.hpp>
 #include "libdnf-cli/output/repo_info.hpp"
+
+#include <libdnf/conf/option_string.hpp>
 
 #include <iostream>
 

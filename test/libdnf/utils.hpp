@@ -43,18 +43,14 @@ struct assertion_traits<C<T>> {
         if (left.size() != right.size()) {
             return false;
         }
-        return std::equal(
-            left.cbegin(), left.cend(), right.cbegin(), right.cend(),
-            assertion_traits<T>::equal
-        );
+        return std::equal(left.cbegin(), left.cend(), right.cbegin(), right.cend(), assertion_traits<T>::equal);
     }
 
     inline static std::string toString(const C<T> & x) {
         std::ostringstream os;
         os << "[";
         std::transform(
-            x.cbegin(), x.cend(), std::ostream_iterator<std::string>(os, ", "),
-            assertion_traits<T>::toString);
+            x.cbegin(), x.cend(), std::ostream_iterator<std::string>(os, ", "), assertion_traits<T>::toString);
         os << "]";
         return os.str();
     }
@@ -71,24 +67,20 @@ struct assertion_traits<libdnf::rpm::Package> {
         return left == right;
     }
 
-    inline static std::string toString(const libdnf::rpm::Package & pkg) {
-        return std::to_string(pkg.get_id().id);
-    }
+    inline static std::string toString(const libdnf::rpm::Package & pkg) { return std::to_string(pkg.get_id().id); }
 };
 
 template <>
 struct assertion_traits<libdnf::base::TransactionPackage> {
     inline static bool equal(
-        const libdnf::base::TransactionPackage & left,
-        const libdnf::base::TransactionPackage & right) {
-        return left.get_package() == right.get_package() && \
-            left.get_action() == right.get_action() && \
-            left.get_reason() == right.get_reason() && \
-            left.get_state() == right.get_state();
+        const libdnf::base::TransactionPackage & left, const libdnf::base::TransactionPackage & right) {
+        return left.get_package() == right.get_package() && left.get_action() == right.get_action() &&
+               left.get_reason() == right.get_reason() && left.get_state() == right.get_state();
     }
 
     inline static std::string toString(const libdnf::base::TransactionPackage & tspkg) {
-        return fmt::format("TransactionPackage: package: {}, action: {}, reason: {}, state {}",
+        return fmt::format(
+            "TransactionPackage: package: {}, action: {}, reason: {}, state {}",
             assertion_traits<libdnf::rpm::Package>::toString(tspkg.get_package()),
             TransactionItemAction_get_name(tspkg.get_action()),
             TransactionItemReason_to_string(tspkg.get_reason()),
@@ -121,7 +113,7 @@ inline std::string pkg_info(const libdnf::rpm::Package & pkg) {
         pkg.is_installed() ? "installed" : "available");
 }
 
-template<class T>
+template <class T>
 std::string list_pkg_infos(const T & pkgs) {
     std::string result;
 

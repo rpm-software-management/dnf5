@@ -38,8 +38,7 @@ ModuleInfoCommand::ModuleInfoCommand(Command & parent) : Command(parent, "info")
 }
 
 
-void ModuleInfoCommand::run() {
-}
+void ModuleInfoCommand::run() {}
 
 
 }  // namespace microdnf

@@ -124,7 +124,7 @@ public:
     const OptionStringList & disable_excludes() const;
     OptionEnum<std::string> & multilib_policy();  // :api
     const OptionEnum<std::string> & multilib_policy() const;
-    OptionBool & best();                          // :api
+    OptionBool & best();  // :api
     const OptionBool & best() const;
     OptionBool & install_weak_deps();
     const OptionBool & install_weak_deps() const;
@@ -164,9 +164,9 @@ public:
     const OptionStringList & history_record_packages() const;
     OptionString & rpmverbosity();
     const OptionString & rpmverbosity() const;
-    OptionBool & strict();                    // :api
+    OptionBool & strict();  // :api
     const OptionBool & strict() const;
-    OptionBool & skip_broken();               // :yum-compatibility
+    OptionBool & skip_broken();  // :yum-compatibility
     const OptionBool & skip_broken() const;
     OptionBool & autocheck_running_kernel();  // :yum-compatibility
     const OptionBool & autocheck_running_kernel() const;
@@ -272,8 +272,7 @@ public:
         const libdnf::ConfigParser & parser,
         const std::string & section,
         const libdnf::Vars & vars,
-        libdnf::Logger & logger
-    ) override;
+        libdnf::Logger & logger) override;
 
 private:
     class Impl;

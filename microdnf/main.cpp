@@ -25,7 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/aliases/repoinfo.hpp"
 #include "commands/aliases/repolist.hpp"
 #include "commands/aliases/upgrade_minimal.hpp"
-
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
@@ -40,15 +39,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
 #include "commands/upgrade/upgrade.hpp"
-
 #include "context.hpp"
 #include "utils.hpp"
 
-#include <libdnf-cli/exit-codes.hpp>
-#include <libdnf-cli/session.hpp>
-
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <libdnf-cli/exit-codes.hpp>
+#include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
 #include <libdnf/logger/stream_logger.hpp>
@@ -81,7 +78,8 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     cmd.set_named_args_help_header("Unclassified options:");
 
     // software management commands
-    auto * software_management_commands_group = session.get_argument_parser().add_new_group("software_management_commands");
+    auto * software_management_commands_group =
+        session.get_argument_parser().add_new_group("software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     cmd.register_group(software_management_commands_group);
     register_subcommand(std::make_unique<InstallCommand>(*this), software_management_commands_group);
@@ -120,7 +118,6 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     register_subcommand(std::make_unique<RepoinfoAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<RepolistAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<UpgradeMinimalAlias>(*this), aliases_group);
-
 }
 
 inline void RootCommand::run() {
@@ -150,7 +147,6 @@ static libdnf::cli::ArgumentParser::NamedArg * add_new_named_arg_alias(
     char short_name,
     libdnf::cli::ArgumentParser::Group * group,
     std::vector<libdnf::cli::ArgumentParser::Argument *> * conflict_args = nullptr) {
-
     auto alias = src_arg.get_argument_parser().add_new_named_arg(id);
     alias->set_long_name(long_name);
     alias->set_short_name(short_name);

@@ -24,9 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <stddef.h>
 
 // Marks messages for translation
-#define M_(msgId) ("\001" msgId)
-#define MP_(msgId, msgIdPlural) ("\003" msgId "\00" msgIdPlural)
-#define MC_(context, msgId) ("\005" context "\004" msgId)
+#define M_(msgId)                         ("\001" msgId)
+#define MP_(msgId, msgIdPlural)           ("\003" msgId "\00" msgIdPlural)
+#define MC_(context, msgId)               ("\005" context "\004" msgId)
 #define MCP_(context, msgId, msgIdPlural) ("\007" context "\004" msgId "\00" msgIdPlural)
 
 #ifdef __cplusplus
@@ -36,13 +36,15 @@ extern "C" {
 // Preferred is use of C_() and CP_() macros. But these macros don't support non-string-literals
 // as context and msgid arguments. Next functions are intended for this case.
 const char * b_dpgettext(const char * domain, const char * context, const char * msgId);
-const char * b_dnpgettext(const char * domain, const char * context, const char * msgId, const char * msgIdPlural, unsigned long int n);
+const char * b_dnpgettext(
+    const char * domain, const char * context, const char * msgId, const char * msgIdPlural, unsigned long int n);
 
 const char * b_dmgettext(const char * domain, const char * markedText, unsigned long int n);
 
 // Applications should normally not use this function directly, but use the C_() and CP() macros.
 const char * b_dpgettext2(const char * domain, const char * ctxMsgId, size_t msgIdOffset);
-const char * b_dnpgettext2(const char * domain, const char * ctxMsgId, size_t msgIdOffset, const char * msgIdPlural, unsigned long int n);
+const char * b_dnpgettext2(
+    const char * domain, const char * ctxMsgId, size_t msgIdOffset, const char * msgIdPlural, unsigned long int n);
 
 #ifdef __cplusplus
 }

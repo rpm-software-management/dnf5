@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/transaction/transaction.hpp"
 
-#include "libdnf/transaction/comps_environment.hpp"
-#include "libdnf/transaction/comps_group.hpp"
 #include "db/comps_environment.hpp"
 #include "db/comps_group.hpp"
 #include "db/console_output.hpp"
@@ -30,10 +28,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "db/trans.hpp"
 #include "db/trans_item.hpp"
 #include "db/trans_with.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+
+#include "libdnf/transaction/comps_environment.hpp"
+#include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/sack.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
 

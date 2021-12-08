@@ -53,7 +53,8 @@ public:
     void run() override;
 };
 
-inline RootCommand::RootCommand(session::Session & session) : dnfdaemon::client::DaemonCommand(session, "dnfdaemon-client") {
+inline RootCommand::RootCommand(session::Session & session)
+    : dnfdaemon::client::DaemonCommand(session, "dnfdaemon-client") {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Utility for packages maintaining");
     cmd.set_description("Dnfdaemon-client is a program for maintaining packages.");
@@ -207,7 +208,7 @@ int main(int argc, char * argv[]) {
 
     // Parse command line arguments
     bool print_help;
-    try{
+    try {
         print_help = dnfdaemon::client::parse_args(context, argc, argv);
     } catch (std::exception & ex) {
         // print help if fail to parse commands

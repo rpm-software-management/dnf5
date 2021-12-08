@@ -23,9 +23,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "trans_with.hpp"
 
-#include "libdnf/rpm/nevra.hpp"
 #include "item.hpp"
 #include "rpm.hpp"
+
+#include "libdnf/rpm/nevra.hpp"
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 

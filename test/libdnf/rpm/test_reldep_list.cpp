@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_reldep_list.hpp"
 
 #include "utils.hpp"
+#include "utils/temp.hpp"
 
 #include "libdnf/rpm/reldep_list.hpp"
-#include "utils/temp.hpp"
 
 CPPUNIT_TEST_SUITE_REGISTRATION(ReldepListTest);
 
@@ -153,7 +153,7 @@ void ReldepListTest::test_iterator() {
     // test loop with pre-increment operator
     {
         std::vector<libdnf::rpm::Reldep> result;
-        for(auto it = list.begin(), end = list.end(); it !=end; ++it) {
+        for (auto it = list.begin(), end = list.end(); it != end; ++it) {
             result.push_back(*it);
         }
         CPPUNIT_ASSERT(result == expected);
@@ -162,7 +162,7 @@ void ReldepListTest::test_iterator() {
     // test loop with post-increment operator
     {
         std::vector<libdnf::rpm::Reldep> result;
-        for(auto it = list.begin(), end = list.end(); it != end; it++) {
+        for (auto it = list.begin(), end = list.end(); it != end; it++) {
             result.push_back(*it);
         }
         CPPUNIT_ASSERT(result == expected);

@@ -19,13 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/advisory/advisory_set.hpp"
-#include "advisory/advisory_package_private.hpp"
 
+#include "advisory/advisory_package_private.hpp"
 #include "advisory_set_impl.hpp"
+#include "base/base_private.hpp"
+#include "solv/solv_map.hpp"
 
 #include "libdnf/advisory/advisory_set_iterator.hpp"
-#include "solv/solv_map.hpp"
-#include "base/base_private.hpp"
 
 
 namespace libdnf::advisory {
@@ -41,7 +41,8 @@ AdvisorySet::AdvisorySet(const AdvisorySet & other) : p_impl(new Impl(*other.p_i
 AdvisorySet::AdvisorySet(AdvisorySet && other) noexcept : p_impl(new Impl(std::move(*other.p_impl))) {}
 
 
-AdvisorySet::AdvisorySet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map) : p_impl(new Impl(base, solv_map)) {}
+AdvisorySet::AdvisorySet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map)
+    : p_impl(new Impl(base, solv_map)) {}
 
 
 AdvisorySet::~AdvisorySet() = default;

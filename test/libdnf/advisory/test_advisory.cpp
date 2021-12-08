@@ -40,32 +40,28 @@ void AdvisoryAdvisoryTest::setUp() {
 
 void AdvisoryAdvisoryTest::test_get_name() {
     // Tests get_name method
-    libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
+    libdnf::advisory::AdvisoryQuery advisories = libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     CPPUNIT_ASSERT_EQUAL(advisory.get_name(), std::string("DNF-2019-1"));
 }
 
 void AdvisoryAdvisoryTest::test_get_type() {
     // Tests get_type method
-    libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
+    libdnf::advisory::AdvisoryQuery advisories = libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     CPPUNIT_ASSERT_EQUAL(advisory.get_type(), std::string("security"));
 }
 
 void AdvisoryAdvisoryTest::test_get_severity() {
     // Tests get_severity method
-    libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
+    libdnf::advisory::AdvisoryQuery advisories = libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     CPPUNIT_ASSERT_EQUAL(advisory.get_severity(), std::string("moderate"));
 }
 
 void AdvisoryAdvisoryTest::test_get_references() {
     // Tests get_references method
-    libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
+    libdnf::advisory::AdvisoryQuery advisories = libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     std::vector<libdnf::advisory::AdvisoryReference> refs = advisory.get_references();
     CPPUNIT_ASSERT_EQUAL(1lu, refs.size());
@@ -79,8 +75,7 @@ void AdvisoryAdvisoryTest::test_get_references() {
 
 void AdvisoryAdvisoryTest::test_get_collections() {
     // Tests get_collections method
-    libdnf::advisory::AdvisoryQuery advisories =
-        libdnf::advisory::AdvisoryQuery(base).filter_type("security");
+    libdnf::advisory::AdvisoryQuery advisories = libdnf::advisory::AdvisoryQuery(base).filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     std::vector<libdnf::advisory::AdvisoryCollection> colls = advisory.get_collections();
     CPPUNIT_ASSERT_EQUAL(1lu, colls.size());

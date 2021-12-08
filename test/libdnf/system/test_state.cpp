@@ -37,9 +37,9 @@ void StateTest::setUp() {
 
     std::ofstream toml(temp_dir->get_path() / "userinstalled.toml");
     toml << "userinstalled = [\n"
-    "\"pkg.x86_64\",\n"
-    "\"cmdline.noarch\",\n"
-    "]\n";
+            "\"pkg.x86_64\",\n"
+            "\"cmdline.noarch\",\n"
+            "]\n";
     toml.close();
 }
 
@@ -71,9 +71,10 @@ void StateTest::test_state_write() {
     std::string contents;
     contents.assign(std::istreambuf_iterator<char>(toml), std::istreambuf_iterator<char>());
 
-    std::string expected = "userinstalled = [\n"
-    "\"pkg-libs.x86_64\",\n"
-    "\"pkg.x86_64\",\n"
-    "]\n";
+    std::string expected =
+        "userinstalled = [\n"
+        "\"pkg-libs.x86_64\",\n"
+        "\"pkg.x86_64\",\n"
+        "]\n";
     CPPUNIT_ASSERT_EQUAL(expected, contents);
 }

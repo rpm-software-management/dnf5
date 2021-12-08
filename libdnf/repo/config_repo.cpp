@@ -19,11 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/repo/config_repo.hpp"
 
-
-#include "libdnf/conf/const.hpp"
-
 #include "conf/config_utils.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+
+#include "libdnf/conf/const.hpp"
 
 #include <solv/chksum.h>
 #include <solv/util.h>
@@ -92,7 +91,8 @@ class ConfigRepo::Impl {
 };
 
 ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::string & id)
-  : main_config(main_config), id(id) {
+    : main_config(main_config),
+      id(id) {
     owner.opt_binds().add("name", name);
     owner.opt_binds().add("enabled", enabled);
     owner.opt_binds().add("cachedir", basecachedir);

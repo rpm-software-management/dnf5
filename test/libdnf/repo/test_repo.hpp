@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TEST_REPO_REPO_HPP
 
 #include "testcase_fixture.hpp"
-
 #include "utils/temp.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>

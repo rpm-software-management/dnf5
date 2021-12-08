@@ -20,11 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "support.hpp"
 
-#include "libdnf/rpm/package_query.hpp"
-#include "utils/string.hpp"
-#include "libdnf/rpm/nevra.hpp"
-
 #include "utils.hpp"
+#include "utils/string.hpp"
+
+#include "libdnf/rpm/nevra.hpp"
+#include "libdnf/rpm/package_query.hpp"
 
 #include <filesystem>
 #include <map>
@@ -87,9 +87,7 @@ libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, const ch
 
 
 libdnf::rpm::Package LibdnfTestCase::add_system_pkg(
-    const std::string & relative_path,
-    libdnf::transaction::TransactionItemReason reason)
-{
+    const std::string & relative_path, libdnf::transaction::TransactionItemReason reason) {
     if (reason != libdnf::transaction::TransactionItemReason::UNKNOWN) {
         // parse out the NA from the package path to set the reason for the installed package
         auto filename_toks = libdnf::utils::string::split(relative_path, "/");
@@ -112,8 +110,8 @@ libdnf::rpm::Package LibdnfTestCase::add_cmdline_pkg(const std::string & relativ
 
 libdnf::rpm::Package LibdnfTestCase::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
     if (query.empty()) {
-        CPPUNIT_FAIL("No package \"" + what + "\" found. All sack packages:" + \
-            list_pkg_infos(libdnf::rpm::PackageQuery(base)));
+        CPPUNIT_FAIL(
+            "No package \"" + what + "\" found. All sack packages:" + list_pkg_infos(libdnf::rpm::PackageQuery(base)));
     } else if (query.size() > 1) {
         CPPUNIT_FAIL("More than one package matching \"" + what + "\" found:" + list_pkg_infos(query));
     }

@@ -19,15 +19,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
-#include "libdnf/common/exception.hpp"
+#include "repo_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/fs.hpp"
-#include "repo_impl.hpp"
-
-#include "libdnf/logger/logger.hpp"
 #include "utils/string.hpp"
 #include "utils/temp.hpp"
+
+#include "libdnf/common/exception.hpp"
+#include "libdnf/logger/logger.hpp"
 
 extern "C" {
 #include <solv/repo_rpmdb.h>
@@ -113,15 +113,15 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
 
 
 Repo::Impl::Impl(const BaseWeakPtr & base, Repo & owner, std::string id, Type type)
-    : type(type)
-    , config(base->get_config(), id)
-    , timestamp(-1)
-    , sync_strategy(SyncStrategy::TRY_CACHE)
-    , owner(&owner)
-    , base(base)
-    , expired(false)
-    , solv_repo(base, config)
-    , downloader(base, config) {}
+    : type(type),
+      config(base->get_config(), id),
+      timestamp(-1),
+      sync_strategy(SyncStrategy::TRY_CACHE),
+      owner(&owner),
+      base(base),
+      expired(false),
+      solv_repo(base, config),
+      downloader(base, config) {}
 
 Repo::Impl::~Impl() {
     if (solv_repo.repo) {

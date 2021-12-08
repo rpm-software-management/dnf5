@@ -194,7 +194,7 @@ void RpmPackageSetTest::test_iterator() {
     // test loop with pre-increment operator
     {
         std::vector<libdnf::rpm::Package> result;
-        for(auto it = set1->begin(), end = set1->end(); it != end; ++it) {
+        for (auto it = set1->begin(), end = set1->end(); it != end; ++it) {
             result.push_back(*it);
         }
         CPPUNIT_ASSERT(result == expected);
@@ -203,7 +203,7 @@ void RpmPackageSetTest::test_iterator() {
     // test loop with post-increment operator
     {
         std::vector<libdnf::rpm::Package> result;
-        for(auto it = set1->begin(), end = set1->end(); it != end; it++) {
+        for (auto it = set1->begin(), end = set1->end(); it != end; it++) {
             result.push_back(*it);
         }
         CPPUNIT_ASSERT(result == expected);

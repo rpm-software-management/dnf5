@@ -24,8 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <filesystem>
-#include <string>
 #include <map>
+#include <string>
 
 
 namespace libdnf::system {

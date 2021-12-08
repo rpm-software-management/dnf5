@@ -26,17 +26,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 OptionStringList::OptionStringList(const ValueType & default_value)
-    : Option(Priority::DEFAULT)
-    , icase(false)
-    , default_value(default_value)
-    , value(default_value) {}
+    : Option(Priority::DEFAULT),
+      icase(false),
+      default_value(default_value),
+      value(default_value) {}
 
 OptionStringList::OptionStringList(const ValueType & default_value, std::string regex, bool icase)
-    : Option(Priority::DEFAULT)
-    , regex(std::move(regex))
-    , icase(icase)
-    , default_value(default_value)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      regex(std::move(regex)),
+      icase(icase),
+      default_value(default_value),
+      value(default_value) {
     test(default_value);
 }
 
@@ -45,9 +45,9 @@ OptionStringList::OptionStringList(const std::string & default_value) : Option(P
 }
 
 OptionStringList::OptionStringList(const std::string & default_value, std::string regex, bool icase)
-    : Option(Priority::DEFAULT)
-    , regex(std::move(regex))
-    , icase(icase) {
+    : Option(Priority::DEFAULT),
+      regex(std::move(regex)),
+      icase(icase) {
     this->default_value = from_string(default_value);
     test(this->default_value);
     value = this->default_value;
@@ -62,7 +62,11 @@ void OptionStringList::test(const std::vector<std::string> & value) const {
         std::regex::nosubs | std::regex::extended | (icase ? std::regex::icase : std::regex_constants::ECMAScript));
     for (const auto & val : value) {
         if (!std::regex_match(val, re)) {
-            throw OptionValueNotAllowedError(M_("Input value \"{}\" not allowed, allowed values for this option are defined by regular expression \"{}\""), val, regex);
+            throw OptionValueNotAllowedError(
+                M_("Input value \"{}\" not allowed, allowed values for this option are defined by regular expression "
+                   "\"{}\""),
+                val,
+                regex);
         }
     }
 }

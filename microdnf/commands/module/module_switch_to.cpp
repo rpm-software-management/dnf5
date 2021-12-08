@@ -39,8 +39,7 @@ ModuleSwitchToCommand::ModuleSwitchToCommand(Command & parent) : Command(parent,
 }
 
 
-void ModuleSwitchToCommand::run() {
-}
+void ModuleSwitchToCommand::run() {}
 
 
 }  // namespace microdnf

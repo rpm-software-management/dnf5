@@ -34,41 +34,41 @@ bool from_string(T & out, const std::string & in, std::ios_base & (*manipulator)
 
 template <typename T>
 OptionEnum<T>::OptionEnum(ValueType default_value, const std::vector<ValueType> & enum_vals)
-    : Option(Priority::DEFAULT)
-    , enum_vals(enum_vals)
-    , default_value(default_value)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      enum_vals(enum_vals),
+      default_value(default_value),
+      value(default_value) {
     test(default_value);
 }
 
 template <typename T>
 OptionEnum<T>::OptionEnum(ValueType default_value, std::vector<ValueType> && enum_vals)
-    : Option(Priority::DEFAULT)
-    , enum_vals(std::move(enum_vals))
-    , default_value(default_value)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      enum_vals(std::move(enum_vals)),
+      default_value(default_value),
+      value(default_value) {
     test(default_value);
 }
 
 template <typename T>
 OptionEnum<T>::OptionEnum(
     ValueType default_value, const std::vector<ValueType> & enum_vals, FromStringFunc && from_string_func)
-    : Option(Priority::DEFAULT)
-    , from_string_user(std::move(from_string_func))
-    , enum_vals(enum_vals)
-    , default_value(default_value)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      from_string_user(std::move(from_string_func)),
+      enum_vals(enum_vals),
+      default_value(default_value),
+      value(default_value) {
     test(default_value);
 }
 
 template <typename T>
 OptionEnum<T>::OptionEnum(
     ValueType default_value, std::vector<ValueType> && enum_vals, FromStringFunc && from_string_func)
-    : Option(Priority::DEFAULT)
-    , from_string_user(std::move(from_string_func))
-    , enum_vals(std::move(enum_vals))
-    , default_value(default_value)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      from_string_user(std::move(from_string_func)),
+      enum_vals(std::move(enum_vals)),
+      default_value(default_value),
+      value(default_value) {
     test(default_value);
 }
 
@@ -131,20 +131,20 @@ std::string OptionEnum<T>::get_value_string() const {
 }
 
 OptionEnum<std::string>::OptionEnum(const std::string & default_value, std::vector<ValueType> enum_vals)
-    : Option(Priority::DEFAULT)
-    , enum_vals(std::move(enum_vals))
-    , default_value(default_value)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      enum_vals(std::move(enum_vals)),
+      default_value(default_value),
+      value(default_value) {
     test(default_value);
 }
 
 OptionEnum<std::string>::OptionEnum(
     const std::string & default_value, std::vector<ValueType> enum_vals, FromStringFunc && from_string_func)
-    : Option(Priority::DEFAULT)
-    , from_string_user(std::move(from_string_func))
-    , enum_vals(std::move(enum_vals))
-    , default_value(default_value)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      from_string_user(std::move(from_string_func)),
+      enum_vals(std::move(enum_vals)),
+      default_value(default_value),
+      value(default_value) {
     test(default_value);
 }
 

@@ -21,9 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CONF_CONFIG_HPP
 
 #include "config_parser.hpp"
-#include "option_binds.hpp"
 #include "option.hpp"
+#include "option_binds.hpp"
 #include "vars.hpp"
+
 #include "libdnf/logger/logger.hpp"
 
 
@@ -38,11 +39,7 @@ public:
     virtual ~Config() = default;
 
     virtual void load_from_parser(
-        const ConfigParser & parser,
-        const std::string & section,
-        const Vars & vars,
-        Logger & logger
-    );
+        const ConfigParser & parser, const std::string & section, const Vars & vars, Logger & logger);
 
 private:
     OptionBinds binds;

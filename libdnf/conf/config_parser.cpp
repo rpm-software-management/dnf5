@@ -49,7 +49,8 @@ static void read(ConfigParser & cfg_parser, IniParser & parser) {
 ConfigParserSectionNotFoundError::ConfigParserSectionNotFoundError(const std::string & section)
     : ConfigParserError(M_("Section \"{}\" not found"), section) {}
 
-ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError(const std::string & section, const std::string & option)
+ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError(
+    const std::string & section, const std::string & option)
     : ConfigParserError(M_("Section \"{}\" does not contain option \"{}\""), section, option) {}
 
 void ConfigParser::read(const std::string & file_path) {

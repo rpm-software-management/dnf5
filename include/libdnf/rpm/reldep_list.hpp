@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "reldep.hpp"
 #include "reldep_list_iterator.hpp"
+
 #include "libdnf/base/base_weak.hpp"
 
 #include <memory>

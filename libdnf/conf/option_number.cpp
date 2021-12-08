@@ -34,11 +34,11 @@ bool from_string(T & out, const std::string & in, std::ios_base & (*manipulator)
 
 template <typename T>
 OptionNumber<T>::OptionNumber(T default_value, T min, T max)
-    : Option(Priority::DEFAULT)
-    , default_value(default_value)
-    , min(min)
-    , max(max)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      default_value(default_value),
+      min(min),
+      max(max),
+      value(default_value) {
     test(default_value);
 }
 
@@ -52,12 +52,12 @@ OptionNumber<T>::OptionNumber(T default_value)
 
 template <typename T>
 OptionNumber<T>::OptionNumber(T default_value, T min, T max, FromStringFunc && from_string_func)
-    : Option(Priority::DEFAULT)
-    , from_string_user(std::move(from_string_func))
-    , default_value(default_value)
-    , min(min)
-    , max(max)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      from_string_user(std::move(from_string_func)),
+      default_value(default_value),
+      min(min),
+      max(max),
+      value(default_value) {
     test(default_value);
 }
 

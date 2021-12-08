@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 
 #define libdnf_assert_same_base(base_a, base_b) \
-    libdnf_assert(                          \
+    libdnf_assert(                              \
         (base_a) == (base_b), "Performing an operation on two objects instantiated from different Base instances");
 
 #endif

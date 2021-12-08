@@ -34,7 +34,10 @@ namespace libdnf::rpm {
 class PackageQuery::Impl {
 public:
     static void filter_provides(
-        Pool * pool, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list, libdnf::solv::SolvMap & filter_result);
+        Pool * pool,
+        libdnf::sack::QueryCmp cmp_type,
+        const ReldepList & reldep_list,
+        libdnf::solv::SolvMap & filter_result);
     static void filter_reldep(
         PackageSet & pkg_set,
         Id libsolv_key,

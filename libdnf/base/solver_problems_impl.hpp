@@ -32,15 +32,14 @@ namespace libdnf::base {
 class SolverProblems::Impl {
 public:
     void set_solver_problems(const libdnf::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal);
+
 private:
     friend SolverProblems;
 
     std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems;
-
 };
 
 
 }  // namespace libdnf::base
 
 #endif  // LIBDNF_BASE_SOLVER_PROBLEMS_IMPL_HPP
-

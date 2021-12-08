@@ -24,6 +24,6 @@ namespace libdnf::cli {
 
 enum class ExitCode : int { SUCCESS = 0, ERROR = 1, ARGPARSER_ERROR = 2 };
 
-} // namespace libdnf::cli
+}  // namespace libdnf::cli
 
-#endif // LIBDNF_CLI_EXIT_CODES_HPP
+#endif  // LIBDNF_CLI_EXIT_CODES_HPP

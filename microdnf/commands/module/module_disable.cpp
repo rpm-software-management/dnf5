@@ -39,8 +39,7 @@ ModuleDisableCommand::ModuleDisableCommand(Command & parent) : Command(parent, "
 }
 
 
-void ModuleDisableCommand::run() {
-}
+void ModuleDisableCommand::run() {}
 
 
 }  // namespace microdnf

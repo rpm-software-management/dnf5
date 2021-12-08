@@ -19,12 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_gpgme.hpp"
 
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/temp.hpp"
+
 #include "libdnf/base/base.hpp"
 #include "libdnf/logger/logger.hpp"
 #include "libdnf/repo/repo_errors.hpp"
-
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/temp.hpp"
 
 #include <fmt/format.h>
 #include <gpgme.h>
@@ -248,7 +248,8 @@ void RepoGpgme::import_key(int fd, const std::string & url) {
 
     for (auto & key_info : key_infos) {
         if (std::find(known_keys.begin(), known_keys.end(), key_info.get_id()) != known_keys.end()) {
-            logger.debug(fmt::format("Gpg key 0x{} for repository {} already imported.", key_info.get_id(), config.get_id()));
+            logger.debug(
+                fmt::format("Gpg key 0x{} for repository {} already imported.", key_info.get_id(), config.get_id()));
             continue;
         }
 

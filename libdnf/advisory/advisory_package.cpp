@@ -91,13 +91,13 @@ AdvisoryPackage::Impl::Impl(
     Id evr,
     Id arch,
     const char * filename)
-    : advisory(advisory)
-    , owner_collection_index(owner_collection_index)
-    , name(name)
-    , evr(evr)
-    , arch(arch)
-    , filename(filename)
-    , base(base) {}
+    : advisory(advisory),
+      owner_collection_index(owner_collection_index),
+      name(name),
+      evr(evr),
+      arch(arch),
+      filename(filename),
+      base(base) {}
 
 std::string AdvisoryPackage::Impl::get_name() const {
     return get_pool(base).id2str(name);

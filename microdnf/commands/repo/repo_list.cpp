@@ -22,8 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "context.hpp"
 
-#include <libdnf/conf/option_string.hpp>
 #include "libdnf-cli/output/repolist.hpp"
+
+#include <libdnf/conf/option_string.hpp>
 
 
 namespace microdnf {
@@ -47,9 +48,8 @@ RepoListCommand::RepoListCommand(Command & parent, const std::string & name) : C
     disabled = std::make_unique<RepoDisabledOption>(*this);
     repo_specs = std::make_unique<RepoSpecArguments>(*this);
 
-    auto conflict_args =
-        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{all->arg, enabled->arg, disabled->arg}));
+    auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        new std::vector<ArgumentParser::Argument *>{all->arg, enabled->arg, disabled->arg}));
 
     all->arg->set_conflict_arguments(conflict_args);
     enabled->arg->set_conflict_arguments(conflict_args);
@@ -88,10 +88,7 @@ void RepoListCommand::run() {
 
 
 void RepoListCommand::print(const libdnf::repo::RepoQuery & query, bool with_status) {
-    libdnf::cli::output::print_repolist_table(
-            query,
-            with_status,
-            libdnf::cli::output::COL_REPO_ID);
+    libdnf::cli::output::print_repolist_table(query, with_status, libdnf::cli::output::COL_REPO_ID);
 }
 
 

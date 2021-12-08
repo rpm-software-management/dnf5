@@ -22,8 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MICRODNF_COMMANDS_REPO_ARGUMENTS_HPP
 
 
-#include <libdnf-cli/session.hpp>
 #include "utils/bgettext/bgettext-lib.h"
+
+#include <libdnf-cli/session.hpp>
 
 
 namespace microdnf {

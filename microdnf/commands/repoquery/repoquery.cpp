@@ -90,9 +90,8 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquer
         patterns_to_show_options);
     keys->set_short_description("List of keys to match");
 
-    auto conflict_args =
-        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{info, nevra}));
+    auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        new std::vector<ArgumentParser::Argument *>{info, nevra}));
 
     info->set_conflict_arguments(conflict_args);
     nevra->set_conflict_arguments(conflict_args);
@@ -127,7 +126,7 @@ void RepoqueryCommand::run() {
     for (auto & pattern : *patterns_to_show_options) {
         libdnf::rpm::PackageQuery package_query(full_package_query);
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides=false};
+        libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
         package_query.resolve_pkg_spec(option->get_value(), settings, true);
         result_pset |= package_query;
     }

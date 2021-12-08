@@ -33,12 +33,11 @@ namespace dnfdaemon::client {
 
 class DbusTransactionPackageWrapper {
 public:
-    explicit DbusTransactionPackageWrapper(const dnfdaemon::DbusTransactionItem & dti) :
-        package(std::get<1>(dti)),
-        action(static_cast<libdnf::transaction::TransactionItemAction>(std::get<0>(dti))),
-        // TODO(lukash) reason needs to be added to dbus
-        reason(libdnf::transaction::TransactionItemReason::UNKNOWN)
-    {}
+    explicit DbusTransactionPackageWrapper(const dnfdaemon::DbusTransactionItem & dti)
+        : package(std::get<1>(dti)),
+          action(static_cast<libdnf::transaction::TransactionItemAction>(std::get<0>(dti))),
+          // TODO(lukash) reason needs to be added to dbus
+          reason(libdnf::transaction::TransactionItemReason::UNKNOWN) {}
 
     DbusPackageWrapper get_package() const { return package; }
     libdnf::transaction::TransactionItemAction get_action() const { return action; }

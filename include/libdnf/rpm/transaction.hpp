@@ -73,7 +73,6 @@ private:
 /// User implements Transaction callbacks by inheriting this class and overriding its methods.
 class TransactionCallbacks {
 public:
-
     /// Scriptlet type
     // TODO(jrohel): Are all scriptlets types present and correct?
     enum class ScriptType {
@@ -228,7 +227,6 @@ public:
 
 class Transaction {
 public:
-
     // TODO(jrohel): Define enums or flag setters/getters
     using rpmVSFlags = uint32_t;
     using rpmtransFlags = uint32_t;

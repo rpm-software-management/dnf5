@@ -27,9 +27,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::advisory {
 
 AdvisoryCollection::AdvisoryCollection(const libdnf::BaseWeakPtr & base, AdvisoryId advisory, int index)
-    : base(base)
-    , advisory(advisory)
-    , index(index) {}
+    : base(base),
+      advisory(advisory),
+      index(index) {}
 
 bool AdvisoryCollection::is_applicable() const {
     //TODO(amatej): check if collection is applicable

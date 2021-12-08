@@ -107,7 +107,7 @@ struct WeakPtr {
 public:
     using TWeakPtrGuard = WeakPtrGuard<TPtr, ptr_owner>;
 
-    WeakPtr() : ptr(nullptr), guard(nullptr) { }
+    WeakPtr() : ptr(nullptr), guard(nullptr) {}
 
     WeakPtr(TPtr * ptr, TWeakPtrGuard * guard) : ptr(ptr), guard(guard) {
         libdnf_assert(guard != nullptr, "When initializing WeakPtr with a pointer, guard cannot be nullptr");

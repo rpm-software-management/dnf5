@@ -20,12 +20,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config_main.hpp"
 
 #include "config_utils.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/xdg.hpp"
 
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/const.hpp"
-
-#include "utils/bgettext/bgettext-lib.h"
-#include "utils/xdg.hpp"
 
 #include <fmt/format.h>
 #include <glob.h>
@@ -332,7 +331,8 @@ class ConfigMain::Impl {
                 if (res < 0 || res > 100) {
                     // TODO(jrohel): Better exception info?
                     // throw Option::InvalidValue(tfm::format(_("percentage '%s' is out of range"), value));
-                    throw OptionInvalidValueError(M_("The throttle value {} is outside the allowed range {} ... {}"), value, 0, 100);
+                    throw OptionInvalidValueError(
+                        M_("The throttle value {} is outside the allowed range {} ... {}"), value, 0, 100);
                 }
                 return res / 100;
             }
@@ -1290,11 +1290,7 @@ const OptionBool & ConfigMain::skip_if_unavailable() const {
 }
 
 void ConfigMain::load_from_parser(
-    const ConfigParser & parser,
-    const std::string & section,
-    const Vars & vars,
-    Logger & logger
-) {
+    const ConfigParser & parser, const std::string & section, const Vars & vars, Logger & logger) {
     Config::load_from_parser(parser, section, vars, logger);
 
     if (geteuid() == 0) {

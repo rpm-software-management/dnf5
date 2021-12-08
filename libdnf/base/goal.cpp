@@ -20,18 +20,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/goal.hpp"
 
 #include "base_private.hpp"
-#include "libdnf/common/exception.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 #include "rpm/package_sack_impl.hpp"
 #include "rpm/package_set_impl.hpp"
 #include "rpm/solv/goal_private.hpp"
-#include "utils/string.hpp"
-#include "utils/utils_internal.hpp"
-#include "transaction_impl.hpp"
-
-#include "libdnf/rpm/package_query.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
+#include "transaction_impl.hpp"
+#include "utils/bgettext/bgettext-lib.h"
+#include "utils/string.hpp"
+#include "utils/utils_internal.hpp"
+
+#include "libdnf/common/exception.hpp"
+#include "libdnf/rpm/package_query.hpp"
 
 #include <fmt/format.h>
 #include <sys/utsname.h>
@@ -200,8 +200,7 @@ void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package
     rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
 }
 
-void Goal::Impl::add_rpm_ids(
-    GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
+void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
     libdnf_assert_same_base(base, package_set.get_base());
 
     libdnf::solv::IdQueue ids;

@@ -17,10 +17,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/base/base.hpp"
 #include "libdnf/comps/comps.hpp"
-#include "solv/pool.hpp"
+
 #include "repo/repo_impl.hpp"
+#include "solv/pool.hpp"
+
+#include "libdnf/base/base.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -65,7 +67,9 @@ void Comps::load_from_file(const repo::RepoWeakPtr & repo, const std::string & p
 }
 
 
-CompsWeakPtr Comps::get_weak_ptr() { return CompsWeakPtr(this, &data_guard); }
+CompsWeakPtr Comps::get_weak_ptr() {
+    return CompsWeakPtr(this, &data_guard);
+}
 
 
 BaseWeakPtr Comps::get_base() const {
@@ -74,4 +78,3 @@ BaseWeakPtr Comps::get_base() const {
 
 
 }  // namespace libdnf::comps
-

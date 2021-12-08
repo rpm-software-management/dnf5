@@ -54,9 +54,7 @@ public:
         scols_table_new_column(table, "arg", 30, SCOLS_FL_TREE | SCOLS_FL_WRAP);
     }
 
-    ~Usage() {
-        scols_unref_table(table);
-    }
+    ~Usage() { scols_unref_table(table); }
 
     libscols_line * add_header(const std::string & text) {
         struct libscols_line * ln = scols_table_new_line(table, nullptr);
@@ -70,13 +68,9 @@ public:
         scols_line_set_data(ln, COL_ARG, text.c_str());
     }
 
-    void add_newline() {
-        scols_table_new_line(table, nullptr);
-    }
+    void add_newline() { scols_table_new_line(table, nullptr); }
 
-    void print() {
-        scols_print_table(table);
-    }
+    void print() { scols_print_table(table); }
 
     libscols_table * get_table() const noexcept { return table; }
 

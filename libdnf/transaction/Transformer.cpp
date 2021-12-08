@@ -27,11 +27,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm_package.hpp"
 #include "transaction.hpp"
 #include "transaction_item.hpp"
-
-#include "libdnf/rpm/nevra.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/fs.hpp"
 #include "utils/string.hpp"
+
+#include "libdnf/rpm/nevra.hpp"
 
 #include <dirent.h>
 
@@ -103,8 +103,8 @@ TransactionItemReason Transformer::getReason(const std::string & reason) {
  * \param inputDir directory to load data from (e.g. `/var/lib/dnf/`)
  */
 Transformer::Transformer(const std::string & inputDir, const std::string & outputFile)
-    : inputDir(inputDir)
-    , outputFile(outputFile) {}
+    : inputDir(inputDir),
+      outputFile(outputFile) {}
 
 /**
  * Perform the database transformation routine.

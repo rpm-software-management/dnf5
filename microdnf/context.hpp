@@ -42,7 +42,8 @@ public:
 
     /// Updates the repositories metadata cache.
     /// Loads the updated metadata into rpm::RepoSack and into rpm::PackageSack.
-    void load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags = libdnf::repo::Repo::LoadFlags::ALL);
+    void load_rpm_repos(
+        libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags = libdnf::repo::Repo::LoadFlags::ALL);
 
     libdnf::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;

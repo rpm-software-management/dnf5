@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils.hpp"
 
+#include <fmt/format.h>
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf-cli/tty.hpp>
 #include <libdnf/base/goal.hpp>
@@ -32,7 +33,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <atomic>
 #include <condition_variable>
 #include <filesystem>
-#include <fmt/format.h>
 #include <iostream>
 #include <mutex>
 #include <stdexcept>
@@ -88,7 +88,6 @@ public:
         const std::string & fingerprint,
         const std::string & url,
         [[maybe_unused]] long int timestamp) override {
-
         // TODO(jrohel): In case `assumeno`==true, the key is not imported. Is it OK to skip import atempt information message?
         //               And what about `assumeyes`==true in silent mode? Print key import message or not?
         if (config->assumeno().get_value()) {
@@ -249,7 +248,7 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo
     std::vector<libdnf::repo::Repo *> prepared_repos;  // array of repositories prepared to load into solv sack
     std::mutex prepared_repos_mutex;                   // mutex for the array
     std::condition_variable signal_prepared_repo;      // signals that next item is added into array
-    std::size_t num_repos_loaded{0};   // number of repositories already loaded into solv sack
+    std::size_t num_repos_loaded{0};                   // number of repositories already loaded into solv sack
 
     prepared_repos.reserve(repos.size() + 1);  // optimization: preallocate memory to avoid realocations, +1 stop tag
 
@@ -299,8 +298,8 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo
                 std::rethrow_exception(except_ptr);
             }
         } catch (std::runtime_error & ex) {
-            std::cerr << "Error: Unable to load repository \""
-                      << prepared_repos[num_repos_loaded]->get_id() << "\" to solv sack" << std::endl;
+            std::cerr << "Error: Unable to load repository \"" << prepared_repos[num_repos_loaded]->get_id()
+                      << "\" to solv sack" << std::endl;
             throw;
         }
     };
@@ -467,9 +466,9 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
 void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir) {
     std::vector<libdnf::rpm::Package> downloads;
     for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL || \
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL || \
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE || \
+        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL ||
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL ||
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE ||
             tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADE) {
             downloads.push_back(tspkg.get_package());
         }
@@ -738,11 +737,13 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
     }
 
     RpmTransCB callback;
-    auto result = transaction.run(callback, cmd_line, std::nullopt, comment == nullptr ? std::nullopt : std::make_optional<std::string>(comment));
+    auto result = transaction.run(
+        callback, cmd_line, std::nullopt, comment == nullptr ? std::nullopt : std::make_optional<std::string>(comment));
 
     if (result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
-        std::cout << "Transaction failed: " << libdnf::base::Transaction::transaction_result_to_string(result) << std::endl;
-        for (auto & problem: transaction.get_transaction_problems()) {
+        std::cout << "Transaction failed: " << libdnf::base::Transaction::transaction_result_to_string(result)
+                  << std::endl;
+        for (auto & problem : transaction.get_transaction_problems()) {
             std::cout << "  - " << problem << std::endl;
         }
     }

@@ -40,8 +40,7 @@ ModuleRepoqueryCommand::ModuleRepoqueryCommand(Command & parent) : Command(paren
 }
 
 
-void ModuleRepoqueryCommand::run() {
-}
+void ModuleRepoqueryCommand::run() {}
 
 
 }  // namespace microdnf

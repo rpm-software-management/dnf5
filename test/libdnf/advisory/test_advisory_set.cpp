@@ -188,7 +188,7 @@ void AdvisoryAdvisorySetTest::test_iterator() {
     // test loop with pre-increment operator
     {
         std::vector<libdnf::advisory::Advisory> result;
-        for(auto it = set1->begin(), end = set1->end(); it != end; ++it) {
+        for (auto it = set1->begin(), end = set1->end(); it != end; ++it) {
             result.push_back(*it);
         }
         CPPUNIT_ASSERT(result == expected);
@@ -197,7 +197,7 @@ void AdvisoryAdvisorySetTest::test_iterator() {
     // test loop with post-increment operator
     {
         std::vector<libdnf::advisory::Advisory> result;
-        for(auto it = set1->begin(), end = set1->end(); it != end; it++) {
+        for (auto it = set1->begin(), end = set1->end(); it != end; it++) {
             result.push_back(*it);
         }
         CPPUNIT_ASSERT(result == expected);

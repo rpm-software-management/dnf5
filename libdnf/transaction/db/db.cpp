@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "db.hpp"
 
-#include "libdnf/base/base.hpp"
-
 #include "utils/bgettext/bgettext-lib.h"
+
+#include "libdnf/base/base.hpp"
 
 #include <filesystem>
 

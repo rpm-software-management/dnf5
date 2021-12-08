@@ -18,8 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo_query.hpp"
+
+#include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 
 

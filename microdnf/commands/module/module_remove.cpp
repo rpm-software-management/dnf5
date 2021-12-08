@@ -38,8 +38,7 @@ ModuleRemoveCommand::ModuleRemoveCommand(Command & parent) : Command(parent, "re
 }
 
 
-void ModuleRemoveCommand::run() {
-}
+void ModuleRemoveCommand::run() {}
 
 
 }  // namespace microdnf

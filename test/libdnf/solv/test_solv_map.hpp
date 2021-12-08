@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class SolvMapTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(SolvMapTest);
 
-    #ifndef WITH_PERFORMANCE_TESTS
+#ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_add);
     CPPUNIT_TEST(test_contains);
     CPPUNIT_TEST(test_remove);
@@ -42,13 +42,13 @@ class SolvMapTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_iterator_empty);
     CPPUNIT_TEST(test_iterator_full);
     CPPUNIT_TEST(test_iterator_sparse);
-    #endif
+#endif
 
-    #ifdef WITH_PERFORMANCE_TESTS
+#ifdef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_iterator_performance_empty);
     CPPUNIT_TEST(test_iterator_performance_full);
     CPPUNIT_TEST(test_iterator_performance_4bits);
-    #endif
+#endif
 
     CPPUNIT_TEST_SUITE_END();
 

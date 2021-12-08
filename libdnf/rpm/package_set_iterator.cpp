@@ -18,8 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "package_set_impl.hpp"
 #include "libdnf/rpm/package_set_iterator.hpp"
+
+#include "package_set_impl.hpp"
 #include "solv/solv_map.hpp"
 
 
@@ -28,8 +29,8 @@ namespace libdnf::rpm {
 class PackageSetIterator::Impl : public libdnf::solv::SolvMap::iterator {
 public:
     Impl(const PackageSet & package_set)
-    : libdnf::solv::SolvMap::iterator(package_set.p_impl->get_map()),
-      package_set{package_set} {}
+        : libdnf::solv::SolvMap::iterator(package_set.p_impl->get_map()),
+          package_set{package_set} {}
 
     Impl(const PackageSetIterator::Impl & package_set_iterator_impl) = default;
 

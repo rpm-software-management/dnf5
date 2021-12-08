@@ -39,4 +39,4 @@ public:
 private:
 };
 
-#endif // LIBDNF_TEST_RPM_SOLV_RELDEP_PARSER_HPP
+#endif  // LIBDNF_TEST_RPM_SOLV_RELDEP_PARSER_HPP

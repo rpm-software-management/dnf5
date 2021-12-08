@@ -43,11 +43,10 @@ Command::Command(Command & parent, const std::string & name) : session{parent.se
 
     // set the command as selected when parsed
     argument_parser_command->set_parse_hook_func([this](
-                                [[maybe_unused]] ArgumentParser::Argument * arg,
-                                [[maybe_unused]] const char * option,
-                                [[maybe_unused]] int argc,
-                                [[maybe_unused]] const char * const argv[]) {
-
+                                                     [[maybe_unused]] ArgumentParser::Argument * arg,
+                                                     [[maybe_unused]] const char * option,
+                                                     [[maybe_unused]] int argc,
+                                                     [[maybe_unused]] const char * const argv[]) {
         // set the selected command only if a subcommand hasn't set it already
         auto & session = this->get_session();
         auto * selected_command = session.get_selected_command();

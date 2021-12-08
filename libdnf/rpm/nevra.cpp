@@ -251,11 +251,8 @@ bool Nevra::has_just_name() const {
 
 
 bool Nevra::operator==(const Nevra & other) const {
-    return name == other.name
-        && epoch == other.epoch
-        && version == other.version
-        && release == other.release
-        && arch == other.arch;
+    return name == other.name && epoch == other.epoch && version == other.version && release == other.release &&
+           arch == other.arch;
 }
 
 

@@ -18,10 +18,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#include "libdnf-cli/progressbar/widgets/number.hpp"
+
 #include "common.hpp"
 
 #include "libdnf-cli/progressbar/progress_bar.hpp"
-#include "libdnf-cli/progressbar/widgets/number.hpp"
 
 #include <cmath>
 #include <iomanip>

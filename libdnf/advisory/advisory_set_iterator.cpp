@@ -18,8 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "advisory_set_impl.hpp"
 #include "libdnf/advisory/advisory_set_iterator.hpp"
+
+#include "advisory_set_impl.hpp"
 #include "solv/solv_map.hpp"
 
 
@@ -28,8 +29,8 @@ namespace libdnf::advisory {
 class AdvisorySetIterator::Impl : public libdnf::solv::SolvMap::iterator {
 public:
     Impl(const AdvisorySet & advisory_set)
-    : libdnf::solv::SolvMap::iterator(advisory_set.p_impl->get_map()),
-      advisory_set{advisory_set} {}
+        : libdnf::solv::SolvMap::iterator(advisory_set.p_impl->get_map()),
+          advisory_set{advisory_set} {}
 
     Impl(const AdvisorySetIterator::Impl & advisory_set_iterator_impl) = default;
 

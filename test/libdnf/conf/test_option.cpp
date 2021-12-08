@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_option.hpp"
 
+#include "utils.hpp"
+
 #include "libdnf/conf/option_bool.hpp"
 #include "libdnf/conf/option_child.hpp"
 #include "libdnf/conf/option_enum.hpp"
@@ -29,8 +31,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/option_string.hpp"
 #include "libdnf/conf/option_string_list.hpp"
 
-#include "utils.hpp"
-
 
 CPPUNIT_TEST_SUITE_REGISTRATION(OptionTest);
 
@@ -39,7 +39,8 @@ using namespace libdnf;
 static const std::vector<std::string> DEFAULT_TRUE_VALUES{"1", "yes", "true", "on"};
 static const std::vector<std::string> DEFAULT_FALSE_VALUES{"0", "no", "false", "off"};
 
-static void common_test_option_bool(OptionBool & option, const std::vector<std::string> & true_values, const std::vector<std::string> & false_values) {
+static void common_test_option_bool(
+    OptionBool & option, const std::vector<std::string> & true_values, const std::vector<std::string> & false_values) {
     CPPUNIT_ASSERT_EQUAL(true_values, option.get_true_values());
     CPPUNIT_ASSERT_EQUAL(false_values, option.get_false_values());
 
@@ -69,7 +70,6 @@ static void common_test_option_bool(OptionBool & option, const std::vector<std::
 }
 
 void OptionTest::test_options_bool() {
-
     CPPUNIT_ASSERT_EQUAL(DEFAULT_TRUE_VALUES, OptionBool::get_default_true_values());
     CPPUNIT_ASSERT_EQUAL(DEFAULT_FALSE_VALUES, OptionBool::get_default_false_values());
 
@@ -317,7 +317,8 @@ void OptionTest::test_options_string_list() {
     CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Dfirstx", "DsecondX"}), option.get_value());
 
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "drain"}), OptionValueNotAllowedError);
+    CPPUNIT_ASSERT_THROW(
+        option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "drain"}), OptionValueNotAllowedError);
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donutX, drain"), OptionValueNotAllowedError);
 
     option.lock("option locked by test_option_string_list");

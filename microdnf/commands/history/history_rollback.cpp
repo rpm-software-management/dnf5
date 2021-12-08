@@ -38,8 +38,7 @@ HistoryRollbackCommand::HistoryRollbackCommand(Command & parent) : Command(paren
 }
 
 
-void HistoryRollbackCommand::run() {
-}
+void HistoryRollbackCommand::run() {}
 
 
 }  // namespace microdnf

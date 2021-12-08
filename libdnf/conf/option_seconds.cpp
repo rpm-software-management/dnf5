@@ -50,7 +50,8 @@ OptionSeconds::ValueType OptionSeconds::from_string(const std::string & value) c
         throw OptionInvalidValueError(M_("Invalid time option value \"{}\", number or \"never\" expected"), value);
     }
     if (res < 0) {
-        throw OptionInvalidValueError(M_("Invalid time option value \"{}\", negative values except \"-1\" not allowed"), value);
+        throw OptionInvalidValueError(
+            M_("Invalid time option value \"{}\", negative values except \"-1\" not allowed"), value);
     }
 
     if (idx < value.length()) {

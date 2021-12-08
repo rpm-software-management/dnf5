@@ -20,14 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/repo_sack.hpp"
 
 #include "repo_impl.hpp"
+#include "rpm/package_sack_impl.hpp"
+#include "utils/bgettext/bgettext-lib.h"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/option_bool.hpp"
-#include "rpm/package_sack_impl.hpp"
-
-#include "utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
 
@@ -51,7 +50,7 @@ constexpr const char * CMDLINE_REPO_NAME = "@commandline";
 // TODO lukash: unused, remove?
 //constexpr const char * MODULE_FAIL_SAFE_REPO_NAME = "@modulefailsafe";
 
-}
+}  // namespace
 
 namespace libdnf::repo {
 

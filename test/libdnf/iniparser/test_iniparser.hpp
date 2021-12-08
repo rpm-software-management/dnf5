@@ -28,10 +28,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class IniparserTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(IniparserTest);
 
-    #ifndef WITH_PERFORMANCE_TESTS
+#ifndef WITH_PERFORMANCE_TESTS
     CPPUNIT_TEST(test_iniparser);
     CPPUNIT_TEST(test_iniparser2);
-    #endif
+#endif
 
     CPPUNIT_TEST_SUITE_END();
 

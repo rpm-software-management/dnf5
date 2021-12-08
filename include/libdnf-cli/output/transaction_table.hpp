@@ -21,13 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 #define LIBDNF_CLI_OUTPUT_TRANSACTION_TABLE_HPP
 
-#include "libdnf/common/exception.hpp"
 #include "libdnf-cli/tty.hpp"
 #include "libdnf-cli/utils/units.hpp"
 
-#include <libdnf/rpm/nevra.hpp>
+#include "libdnf/common/exception.hpp"
 
 #include <fmt/format.h>
+#include <libdnf/rpm/nevra.hpp>
 #include <libsmartcols/libsmartcols.h>
 
 #include <iostream>
@@ -79,7 +79,7 @@ public:
     // instad of this method, and we could do (in print_transaction_table(),
     // where this class is instantiated):
     // ActionHeaderPrinter<Transaction::TransactionItem> action_header_printer(...);
-    template<class T>
+    template <class T>
     struct libscols_line * print(const T & tspkg) {
         if (current_action != tspkg.get_action() || current_reason != tspkg.get_reason()) {
             current_header_line = scols_table_new_line(table, NULL);
@@ -136,7 +136,8 @@ private:
     struct libscols_table * table = nullptr;
     struct libscols_line * current_header_line = nullptr;
     // TODO(lukash) better default value?
-    libdnf::transaction::TransactionItemAction current_action = libdnf::transaction::TransactionItemAction::REASON_CHANGE;
+    libdnf::transaction::TransactionItemAction current_action =
+        libdnf::transaction::TransactionItemAction::REASON_CHANGE;
     libdnf::transaction::TransactionItemReason current_reason = libdnf::transaction::TransactionItemReason::UNKNOWN;
 };
 
@@ -185,8 +186,8 @@ public:
         if (upgrades != 0) {
             std::cout << fmt::format(" {:15} {:4} packages\n", "Upgrading:", upgrades);
         }
-        if ( replaced != 0) {
-            std::cout << fmt::format(" {:15} {:4} packages\n", "Replacing:", replaced );
+        if (replaced != 0) {
+            std::cout << fmt::format(" {:15} {:4} packages\n", "Replacing:", replaced);
         }
         if (removes != 0) {
             std::cout << fmt::format(" {:15} {:4} packages\n", "Removing:", removes);
@@ -207,7 +208,7 @@ private:
 };
 
 
-template<class TransactionPackage>
+template <class TransactionPackage>
 static bool transaction_package_cmp(const TransactionPackage & tspkg1, const TransactionPackage & tspkg2) {
     if (tspkg1.get_action() != tspkg2.get_action()) {
         return tspkg1.get_action() > tspkg2.get_action();
@@ -232,7 +233,7 @@ bool print_transaction_table(Transaction & transaction) {
         return false;
     }
 
-    struct libscols_table *tb = scols_new_table();
+    struct libscols_table * tb = scols_new_table();
 
     auto column = scols_table_new_column(tb, "Package", 0.3, SCOLS_FL_TREE);
     auto header = scols_column_get_header(column);
@@ -257,7 +258,7 @@ bool print_transaction_table(Transaction & transaction) {
     scols_table_enable_maxout(tb, 1);
     scols_table_enable_colors(tb, libdnf::cli::tty::is_interactive());
 
-    struct libscols_symbols *sb = scols_new_symbols();
+    struct libscols_symbols * sb = scols_new_symbols();
     scols_symbols_set_branch(sb, " ");
     scols_symbols_set_right(sb, " ");
     scols_symbols_set_vertical(sb, " ");
@@ -277,10 +278,10 @@ bool print_transaction_table(Transaction & transaction) {
     for (auto & tspkg : tspkgs) {
         // TODO(lukash) maybe these shouldn't come here at all
         // TODO(lukash) handle OBSOLETED correctly throught the transaction table output
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALLED || \
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADED || \
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADED || \
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::OBSOLETE || \
+        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALLED ||
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADED ||
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADED ||
+            tspkg.get_action() == libdnf::transaction::TransactionItemAction::OBSOLETE ||
             tspkg.get_action() == libdnf::transaction::TransactionItemAction::REASON_CHANGE) {
             continue;
         }
@@ -294,12 +295,14 @@ bool print_transaction_table(Transaction & transaction) {
 
         header_ln = action_header_printer.print(tspkg);
 
-        struct libscols_line *ln = scols_table_new_line(tb, header_ln);
+        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
         scols_line_set_data(ln, COL_NAME, pkg.get_name().c_str());
         scols_line_set_data(ln, COL_ARCH, pkg.get_arch().c_str());
         scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
         scols_line_set_data(ln, COL_REPO, pkg.get_repo_id().c_str());
-        uint64_t size = tspkg.get_action() == libdnf::transaction::TransactionItemAction::REMOVE ? pkg.get_install_size() : pkg.get_package_size();
+        uint64_t size = tspkg.get_action() == libdnf::transaction::TransactionItemAction::REMOVE
+                            ? pkg.get_install_size()
+                            : pkg.get_package_size();
         scols_line_set_data(ln, COL_SIZE, libdnf::cli::utils::units::format_size(static_cast<int64_t>(size)).c_str());
         auto ce = scols_line_get_cell(ln, COL_NAME);
         scols_cell_set_color(ce, action_color(tspkg.get_action()));

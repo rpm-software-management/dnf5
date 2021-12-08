@@ -26,8 +26,7 @@ void TransactionTestBase::setUp() {
 }
 
 
-void TransactionTestBase::tearDown() {
-}
+void TransactionTestBase::tearDown() {}
 
 
 std::unique_ptr<libdnf::Base> TransactionTestBase::new_base() {

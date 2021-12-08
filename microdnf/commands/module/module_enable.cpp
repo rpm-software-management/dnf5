@@ -38,8 +38,7 @@ ModuleEnableCommand::ModuleEnableCommand(Command & parent) : Command(parent, "en
 }
 
 
-void ModuleEnableCommand::run() {
-}
+void ModuleEnableCommand::run() {}
 
 
 }  // namespace microdnf

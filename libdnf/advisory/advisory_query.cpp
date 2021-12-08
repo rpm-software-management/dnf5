@@ -19,16 +19,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_query.hpp"
 
-#include "advisory_sack_impl.hpp"
-#include "libdnf/advisory/advisory_set.hpp"
-#include "advisory_set_impl.hpp"
 #include "advisory_package_private.hpp"
-#include "libdnf/base/base.hpp"
-#include "libdnf/rpm/package_set.hpp"
+#include "advisory_sack_impl.hpp"
+#include "advisory_set_impl.hpp"
+#include "common/sack/query_cmp_private.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
-#include "common/sack/query_cmp_private.hpp"
 #include "utils/utils_internal.hpp"
+
+#include "libdnf/advisory/advisory_set.hpp"
+#include "libdnf/base/base.hpp"
+#include "libdnf/rpm/package_set.hpp"
 
 #include <solv/evr.h>
 
@@ -231,8 +232,8 @@ AdvisoryQuery & AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & p
             for (libdnf::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
                  package++) {
                 Solvable * solvable = pool.id2solvable((*package).get_id().id);
-                auto low =
-                    std::lower_bound(adv_pkgs.begin(), adv_pkgs.end(), *package, AdvisoryPackage::Impl::name_arch_compare_lower_id);
+                auto low = std::lower_bound(
+                    adv_pkgs.begin(), adv_pkgs.end(), *package, AdvisoryPackage::Impl::name_arch_compare_lower_id);
                 while (low != adv_pkgs.end() && low->p_impl.get()->get_name_id() == solvable->name &&
                        low->p_impl.get()->get_arch_id() == solvable->arch) {
                     int libsolv_cmp = pool.evrcmp(low->p_impl.get()->get_evr_id(), solvable->evr, EVRCMP_COMPARE);
@@ -277,8 +278,8 @@ std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
             for (libdnf::rpm::PackageSet::iterator package = package_set.begin(); package != package_set.end();
                  package++) {
                 Solvable * solvable = pool.id2solvable((*package).get_id().id);
-                auto low =
-                    std::lower_bound(adv_pkgs.begin(), adv_pkgs.end(), *package, AdvisoryPackage::Impl::name_arch_compare_lower_id);
+                auto low = std::lower_bound(
+                    adv_pkgs.begin(), adv_pkgs.end(), *package, AdvisoryPackage::Impl::name_arch_compare_lower_id);
                 while (low != adv_pkgs.end() && low->p_impl.get()->get_name_id() == solvable->name &&
                        low->p_impl.get()->get_arch_id() == solvable->arch) {
                     int libsolv_cmp = pool.evrcmp(low->p_impl.get()->get_evr_id(), solvable->evr, EVRCMP_COMPARE);

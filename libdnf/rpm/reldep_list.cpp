@@ -104,7 +104,8 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
             case SOLVABLE_SUPPLEMENTS:
             case SOLVABLE_ENHANCES:
             case SOLVABLE_FILELIST:
-                add(Reldep::get_reldep_id(p_impl->base, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type()));
+                add(Reldep::get_reldep_id(
+                    p_impl->base, di.kv.str, dep_splitter.get_evr_cstr(), dep_splitter.get_cmp_type()));
         }
     }
     dataiterator_free(&di);

@@ -55,8 +55,8 @@ public:
 
     Library(const Library &) = delete;
     Library(Library &&) = delete;
-    Library & operator =(const Library &) = delete;
-    Library & operator =(Library &&) = delete;
+    Library & operator=(const Library &) = delete;
+    Library & operator=(Library &&) = delete;
 
     const std::string & get_path() const noexcept { return path; }
     void * get_address(const char * symbol) const;

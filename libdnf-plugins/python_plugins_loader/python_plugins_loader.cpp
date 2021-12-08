@@ -309,7 +309,8 @@ void PythonPluginLoader::load_plugins(libdnf::Base * base) {
     }
     UniquePtrPyObject append(PyObject_CallMethod(path_object, "append", "(s)", path.c_str()));
     if (!append) {
-        fetch_python_error_to_exception(("PyDict_CallMethod(path_object, \"append\", \"(s)\", " + path.string() + "): ").c_str());
+        fetch_python_error_to_exception(
+            ("PyDict_CallMethod(path_object, \"append\", \"(s)\", " + path.string() + "): ").c_str());
     }
 
     load_plugins_from_dir(path);

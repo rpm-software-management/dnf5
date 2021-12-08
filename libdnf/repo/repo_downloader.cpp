@@ -19,12 +19,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_downloader.hpp"
 
-#include "libdnf/base/base.hpp"
-#include "libdnf/repo/repo_errors.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/fs.hpp"
 #include "utils/string.hpp"
 #include "utils/temp.hpp"
+
+#include "libdnf/base/base.hpp"
+#include "libdnf/repo/repo_errors.hpp"
 
 #include <fmt/format.h>
 #include <librepo/librepo.h>
@@ -86,9 +87,7 @@ static void result_get_info(LrResult * result, LrResultInfoOption option, T valu
 
 
 static LrYumRepo * get_yum_repo(const std::unique_ptr<LrResult> & lr_result) {
-    libdnf_assert(
-        lr_result != nullptr,
-        "load_local() needs to be called before repository attributes can be accessed");
+    libdnf_assert(lr_result != nullptr, "load_local() needs to be called before repository attributes can be accessed");
 
     LrYumRepo * yum_repo;
     result_get_info(lr_result.get(), LRR_YUM_REPO, &yum_repo);
@@ -96,9 +95,7 @@ static LrYumRepo * get_yum_repo(const std::unique_ptr<LrResult> & lr_result) {
 }
 
 static LrYumRepoMd * get_yum_repomd(const std::unique_ptr<LrResult> & lr_result) {
-    libdnf_assert(
-        lr_result != nullptr,
-        "load_local() needs to be called before repository attributes can be accessed");
+    libdnf_assert(lr_result != nullptr, "load_local() needs to be called before repository attributes can be accessed");
 
     LrYumRepoMd * yum_repomd;
     result_get_info(lr_result.get(), LRR_YUM_REPOMD, &yum_repomd);
@@ -231,7 +228,7 @@ static constexpr struct {
     {"ntlm_wb", LR_AUTH_NTLM_WB},
     {"any", LR_AUTH_ANY}};
 
-template<typename C>
+template <typename C>
 static std::unique_ptr<LrHandle> new_remote_handle(const C & config) {
     std::unique_ptr<LrHandle> handle(lr_handle_init());
     LrHandle * h = handle.get();
@@ -247,7 +244,7 @@ static std::unique_ptr<LrHandle> new_remote_handle(const C & config) {
         // TODO(lukash) not the best class for the error, possibly check in config parser?
         throw libdnf::repo::RepoDownloadError(
             M_("Maximum download speed is lower than minimum, "
-              "please change configuration of minrate or throttle"));
+               "please change configuration of minrate or throttle"));
     }
     handle_set_opt(h, LRO_LOWSPEEDLIMIT, static_cast<int64_t>(minrate));
     handle_set_opt(h, LRO_MAXSPEED, static_cast<int64_t>(maxspeed));
@@ -331,9 +328,9 @@ LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error) : Error(lr_error
 
 
 RepoDownloader::RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)
-  : base(base),
-    config(config),
-    gpgme(base, config) {}
+    : base(base),
+      config(config),
+      gpgme(base, config) {}
 
 RepoDownloader::~RepoDownloader() = default;
 
@@ -416,8 +413,8 @@ bool RepoDownloader::is_metalink_in_sync() try {
         char chksumHex[chksumLen * 2 + 1];
         solv_bin2hex(chksum, chksumLen, chksumHex);
         if (strcmp(chksumHex, hash.lr_metalink_hash->value) != 0) {
-            logger.debug(
-                fmt::format("reviving: failed for '{}', mismatched {} sum.", config.get_id(), hash.lr_metalink_hash->type));
+            logger.debug(fmt::format(
+                "reviving: failed for '{}', mismatched {} sum.", config.get_id(), hash.lr_metalink_hash->type));
             return false;
         }
     }
@@ -711,10 +708,9 @@ void RepoDownloader::apply_http_headers(std::unique_ptr<LrHandle> & handle) {
     }
 
     std::unique_ptr<char * [], std::function<void(char **)>> lr_headers {
-        nullptr,
-        [](char ** ptr) {
+        nullptr, [](char ** ptr) {
             for (auto item = ptr; *item != nullptr; ++item) {
-                delete[] *item;
+                delete[] * item;
             }
             delete[] ptr;
         }

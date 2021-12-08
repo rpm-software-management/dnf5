@@ -20,15 +20,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "temp.hpp"
 
-#include "libdnf/common/exception.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 
+#include "libdnf/common/exception.hpp"
+
 #include <fmt/format.h>
-
-#include <cstdlib>
-
 #include <stdio.h>
 #include <unistd.h>
+
+#include <cstdlib>
 
 
 namespace libdnf::utils {
@@ -45,9 +45,7 @@ TempDir::TempDir(std::filesystem::path destdir, const std::string & name_prefix)
     const char * temp_path = mkdtemp(dest.data());
     if (temp_path == nullptr) {
         throw std::filesystem::filesystem_error(
-            "cannot create temporary directory",
-            destdir,
-            std::error_code(errno, std::system_category()));
+            "cannot create temporary directory", destdir, std::error_code(errno, std::system_category()));
     }
     path = temp_path;
 }
@@ -74,9 +72,7 @@ TempFile::TempFile(std::filesystem::path destdir, const std::string & name_prefi
     fd = mkstemp(dest.data());
     if (fd == -1) {
         throw std::filesystem::filesystem_error(
-            "cannot create temporary file",
-            destdir,
-            std::error_code(errno, std::system_category()));
+            "cannot create temporary file", destdir, std::error_code(errno, std::system_category()));
     }
 
     path = dest;
@@ -102,9 +98,7 @@ FILE * TempFile::fdopen(const char * mode) {
     file = ::fdopen(fd, mode);
     if (file == nullptr) {
         throw std::filesystem::filesystem_error(
-            "cannot open temporary file",
-            path,
-            std::error_code(errno, std::system_category()));
+            "cannot open temporary file", path, std::error_code(errno, std::system_category()));
     }
 
     return file;
@@ -115,16 +109,12 @@ void TempFile::close() {
     if (file != nullptr) {
         if (fclose(file) != 0) {
             throw std::filesystem::filesystem_error(
-                "cannot close temporary file",
-                path,
-                std::error_code(errno, std::system_category()));
+                "cannot close temporary file", path, std::error_code(errno, std::system_category()));
         }
     } else if (fd != -1) {
         if (::close(fd) != 0) {
             throw std::filesystem::filesystem_error(
-                "cannot close temporary file",
-                path,
-                std::error_code(errno, std::system_category()));
+                "cannot close temporary file", path, std::error_code(errno, std::system_category()));
         }
     }
 

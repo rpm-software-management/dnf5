@@ -31,18 +31,19 @@ namespace libdnf::transaction {
 // TODO(jmracek) Copy enum to SWDB including their string definitions and already removed values to keep compatibility
 // Then transform old database data to transform stored reverse action to REPLACED action and remove all unused action from code
 enum class TransactionItemAction : int {
-    INSTALL = 1,              // a new package that was installed on the system
-    DOWNGRADE = 2,            // an older package version that replaced previously installed version
-    DOWNGRADED = 3,           // Unused, kept for SWDB compatibily, replaced by REPLACED
-    OBSOLETE = 4,             // Unused, kept for SWDB compatibily
-    OBSOLETED = 5,            // Used only for coloring of an output, cannot be used for transaction package where it is replaced by REPLACED
-    UPGRADE = 6,              //
-    UPGRADED = 7,             // Unused, kept for SWDB compatibily, replaced by REPLACED
-    REMOVE = 8,               // a package that was removed from the system
-    REINSTALL = 9,            // a package that was reinstalled with the identical version
-    REINSTALLED = 10,         // Unused, kept for SWDB compatibily, replaced by REPLACED
-    REASON_CHANGE = 11,       // a package was kept on the system but it's reason has changed
-    REPLACED = 12             // Replace actions UPGRADED, DOWNGRADED, REINSTALLED, OBSOLETED
+    INSTALL = 1,     // a new package that was installed on the system
+    DOWNGRADE = 2,   // an older package version that replaced previously installed version
+    DOWNGRADED = 3,  // Unused, kept for SWDB compatibily, replaced by REPLACED
+    OBSOLETE = 4,    // Unused, kept for SWDB compatibily
+    OBSOLETED =
+        5,  // Used only for coloring of an output, cannot be used for transaction package where it is replaced by REPLACED
+    UPGRADE = 6,         //
+    UPGRADED = 7,        // Unused, kept for SWDB compatibily, replaced by REPLACED
+    REMOVE = 8,          // a package that was removed from the system
+    REINSTALL = 9,       // a package that was reinstalled with the identical version
+    REINSTALLED = 10,    // Unused, kept for SWDB compatibily, replaced by REPLACED
+    REASON_CHANGE = 11,  // a package was kept on the system but it's reason has changed
+    REPLACED = 12        // Replace actions UPGRADED, DOWNGRADED, REINSTALLED, OBSOLETED
 };
 
 

@@ -21,9 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string.h>
 
-const char *
-b_dpgettext(const char * domain, const char * context, const char * msgId)
-{
+const char * b_dpgettext(const char * domain, const char * context, const char * msgId) {
     size_t context_len = strlen(context) + 1;
     size_t msgId_len = strlen(msgId) + 1;
     char ctxMsgId[context_len + msgId_len];
@@ -40,18 +38,15 @@ b_dpgettext(const char * domain, const char * context, const char * msgId)
     return translation;
 }
 
-const char *
-b_dpgettext2(const char * domain, const char * ctxMsgId, size_t msgIdOffset)
-{
+const char * b_dpgettext2(const char * domain, const char * ctxMsgId, size_t msgIdOffset) {
     const char * const translation = dgettext(domain, ctxMsgId);
     if (translation == ctxMsgId)
         return ctxMsgId + msgIdOffset;
     return translation;
 }
 
-const char *
-b_dnpgettext(const char * domain, const char * context, const char * msgId, const char * msgIdPlural, unsigned long int n)
-{
+const char * b_dnpgettext(
+    const char * domain, const char * context, const char * msgId, const char * msgIdPlural, unsigned long int n) {
     size_t context_len = strlen(context) + 1;
     size_t msgId_len = strlen(msgId) + 1;
     char ctxMsgId[context_len + msgId_len];
@@ -68,18 +63,15 @@ b_dnpgettext(const char * domain, const char * context, const char * msgId, cons
     return translation;
 }
 
-const char *
-b_dnpgettext2(const char * domain, const char * ctxMsgId, size_t msgIdOffset, const char * msgIdPlural, unsigned long int n)
-{
+const char * b_dnpgettext2(
+    const char * domain, const char * ctxMsgId, size_t msgIdOffset, const char * msgIdPlural, unsigned long int n) {
     const char * const translation = dngettext(domain, ctxMsgId, msgIdPlural, n);
     if (translation == ctxMsgId)
         return ctxMsgId + msgIdOffset;
     return translation;
 }
 
-const char *
-b_dmgettext(const char * domain, const char * markedMsg, unsigned long int n)
-{
+const char * b_dmgettext(const char * domain, const char * markedMsg, unsigned long int n) {
     if (*markedMsg == 1 || *markedMsg == 3 || *markedMsg == 5 || *markedMsg == 7) {
         const char * const msgId = markedMsg + 1;
         if (*markedMsg & 0x02) {

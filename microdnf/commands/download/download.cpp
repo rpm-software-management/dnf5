@@ -55,7 +55,7 @@ DownloadCommand::DownloadCommand(Command & parent) : Command(parent, "download")
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_download_options);
     keys->set_short_description("List of keys to match");
-    keys->set_complete_hook_func([&ctx](const char * arg){return match_available_pkgs(ctx, arg);});
+    keys->set_complete_hook_func([&ctx](const char * arg) { return match_available_pkgs(ctx, arg); });
     cmd.register_positional_arg(keys);
 }
 

@@ -23,12 +23,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "support.hpp"
+#include "utils/temp.hpp"
 
 #include "libdnf/system/state.hpp"
 
-#include "utils/temp.hpp"
-
 #include <cppunit/extensions/HelperMacros.h>
+
 #include <memory>
 
 

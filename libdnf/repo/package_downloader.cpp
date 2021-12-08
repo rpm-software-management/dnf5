@@ -19,10 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/repo/package_downloader.hpp"
 
-#include "libdnf/common/exception.hpp"
 #include "repo_downloader.hpp"
 #include "repo_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+
+#include "libdnf/common/exception.hpp"
 
 #include <fmt/format.h>
 #include <librepo/librepo.h>
@@ -82,13 +83,10 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 class PackageTarget {
 public:
     PackageTarget(
-        const libdnf::rpm::Package & package,
-        const std::string & destination,
-        PackageDownloadCallbacks * callbacks)
-      : package(package),
-        destination(destination),
-        callbacks(callbacks)
-    {}
+        const libdnf::rpm::Package & package, const std::string & destination, PackageDownloadCallbacks * callbacks)
+        : package(package),
+          destination(destination),
+          callbacks(callbacks) {}
 
     libdnf::rpm::Package package;
     std::string destination;
@@ -111,9 +109,7 @@ void PackageDownloader::add(const libdnf::rpm::Package & package, PackageDownloa
 }
 
 void PackageDownloader::add(
-    const libdnf::rpm::Package & package,
-    const std::string & destination,
-    PackageDownloadCallbacks * callbacks) {
+    const libdnf::rpm::Package & package, const std::string & destination, PackageDownloadCallbacks * callbacks) {
     p_impl->targets.emplace_back(package, destination, callbacks);
 }
 

@@ -31,15 +31,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class TimingListener : public CppUnit::TestListener {
 public:
-    void startTest(CppUnit::Test *) override {
-        start = std::chrono::high_resolution_clock::now();
-    }
+    void startTest(CppUnit::Test *) override { start = std::chrono::high_resolution_clock::now(); }
 
     void endTest(CppUnit::Test *) override {
         auto end = std::chrono::high_resolution_clock::now();
         auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count();
         std::cout << " (duration: " << duration << "ms)";
     }
+
 private:
     std::chrono::high_resolution_clock::time_point start = std::chrono::high_resolution_clock::from_time_t(0);
 };

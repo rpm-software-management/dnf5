@@ -38,8 +38,7 @@ HistoryListCommand::HistoryListCommand(Command & parent) : Command(parent, "list
 }
 
 
-void HistoryListCommand::run() {
-}
+void HistoryListCommand::run() {}
 
 
 }  // namespace microdnf

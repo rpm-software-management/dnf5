@@ -21,56 +21,48 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 // the whole file is disabled via the SKIP macro because it doesn't compile with the new code
 #ifdef SKIP
 
-#include <json.h>
-#include <set>
-#include <sstream>
-#include <string>
+#include "TransformerTest.hpp"
 
-#include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/Swdb.hpp"
+#include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
 
-#include "TransformerTest.hpp"
+#include <json.h>
+
+#include <set>
+#include <sstream>
+#include <string>
 
 using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransformerTest);
 
-TransformerMock::TransformerMock()
-  : Transformer("", "")
-{
-}
+TransformerMock::TransformerMock() : Transformer("", "") {}
 
-static const char *create_history_sql =
+static const char * create_history_sql =
 #include "sql/create_test_history_db.sql"
     ;
 
-static const char *groups_json =
+static const char * groups_json =
 #include "assets/groups.json"
     ;
 
-void
-TransformerTest::setUp()
-{
+void TransformerTest::setUp() {
     swdb = new libdnf::utils::SQLite3(":memory:");
     history = new libdnf::utils::SQLite3(":memory:");
     Transformer::createDatabase(*swdb);
     history->exec(create_history_sql);
 }
 
-void
-TransformerTest::tearDown()
-{
+void TransformerTest::tearDown() {
     delete swdb;
     delete history;
 }
 
-void
-TransformerTest::testGroupTransformation()
-{
+void TransformerTest::testGroupTransformation() {
     // load test groups.json
-    struct json_object *groupsJson = json_tokener_parse (groups_json);
+    struct json_object * groupsJson = json_tokener_parse(groups_json);
 
     // perform the transformation
     transformer.processGroupPersistor(*swdb, groupsJson);
@@ -84,14 +76,14 @@ TransformerTest::testGroupTransformation()
 
     // load transaction items
     auto items = trans.getItems();
-    CPPUNIT_ASSERT_EQUAL(2, static_cast< int >(items.size()));
+    CPPUNIT_ASSERT_EQUAL(2, static_cast<int>(items.size()));
 
     // verify items
     for (auto transItem : items) {
         auto item = transItem->getItem();
         auto type = item->getItemType();
         if (type == TransactionItemType::GROUP) {
-            auto group = std::dynamic_pointer_cast< CompsGroup >(item);
+            auto group = std::dynamic_pointer_cast<CompsGroup>(item);
 
             CPPUNIT_ASSERT(group->get_group_id() == "core");
             CPPUNIT_ASSERT("Core" == group->get_name());
@@ -107,7 +99,7 @@ TransformerTest::testGroupTransformation()
             CPPUNIT_ASSERT(groupPkg->get_package_type() == CompsPackageType::MANDATORY);
 
         } else if (type == TransactionItemType::ENVIRONMENT) {
-            auto env = std::dynamic_pointer_cast< CompsEnvironment >(item);
+            auto env = std::dynamic_pointer_cast<CompsEnvironment>(item);
             CPPUNIT_ASSERT("minimal-environment" == env->get_environment_id());
             CPPUNIT_ASSERT("Minimal Install" == env->get_name());
             CPPUNIT_ASSERT("Minimálna inštalácia" == env->get_translated_name());
@@ -121,16 +113,14 @@ TransformerTest::testGroupTransformation()
             CPPUNIT_ASSERT(envGroup->get_group_type() == CompsPackageType::MANDATORY);
 
         } else {
-            CPPUNIT_FAIL("Invalid item type: " + std::to_string(static_cast< int >(type)));
+            CPPUNIT_FAIL("Invalid item type: " + std::to_string(static_cast<int>(type)));
         }
     }
 
     json_object_put(groupsJson);
 }
 
-void
-TransformerTest::testTransformTrans()
-{
+void TransformerTest::testTransformTrans() {
     // perform database transformation
     transformer.transformTrans(*swdb, *history);
 
@@ -165,7 +155,7 @@ TransformerTest::testTransformTrans()
     auto items = first.getItems();
     CPPUNIT_ASSERT(items.size() == 2);
     for (auto item : items) {
-        auto rpm = std::dynamic_pointer_cast< Package >(item->getItem());
+        auto rpm = std::dynamic_pointer_cast<Package>(item->getItem());
         if (rpm->get_name() == "chrony" && rpm->get_version() == "3.1") {
             CPPUNIT_ASSERT(rpm->get_epoch() == "1");
             CPPUNIT_ASSERT(rpm->get_release() == "4.fc26");
@@ -174,7 +164,7 @@ TransformerTest::testTransformTrans()
             CPPUNIT_ASSERT(item->get_state() == TransactionItemState::DONE);
 
             // TODO repo, replaced
-        } else { // chrony 3.2
+        } else {  // chrony 3.2
             CPPUNIT_ASSERT(rpm->get_epoch() == "1");
             CPPUNIT_ASSERT(rpm->get_version() == "3.2");
             CPPUNIT_ASSERT(rpm->get_release() == "4.fc26");
@@ -191,8 +181,7 @@ TransformerTest::testTransformTrans()
     CPPUNIT_ASSERT(second.get_id() == 2);
     CPPUNIT_ASSERT(second.get_dt_begin() == 1513267535);
     CPPUNIT_ASSERT(second.get_dt_end() == 1513267539);
-    CPPUNIT_ASSERT(second.get_rpmdb_version_begin() ==
-                   "2213:9eab991133c166f8bcf3ecea9fb422b853f7aebc");
+    CPPUNIT_ASSERT(second.get_rpmdb_version_begin() == "2213:9eab991133c166f8bcf3ecea9fb422b853f7aebc");
     CPPUNIT_ASSERT(second.get_rpmdb_version_end() == "2214:e02004142740afb5b6d148d50bc84be4ab41ad13");
     CPPUNIT_ASSERT(second.get_user_id() == 1000);
     CPPUNIT_ASSERT(second.get_cmdline() == "-y install Foo");
@@ -220,7 +209,7 @@ TransformerTest::testTransformTrans()
     items = second.getItems();
     CPPUNIT_ASSERT(items.size() == 1);
     for (auto item : items) {
-        auto kernel = std::dynamic_pointer_cast< Package >(item->getItem());
+        auto kernel = std::dynamic_pointer_cast<Package>(item->getItem());
         CPPUNIT_ASSERT(kernel->get_name() == "kernel");
         CPPUNIT_ASSERT(kernel->get_epoch() == "0");
         CPPUNIT_ASSERT(kernel->get_version() == "4.11");

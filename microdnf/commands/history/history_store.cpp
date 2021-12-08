@@ -38,8 +38,7 @@ HistoryStoreCommand::HistoryStoreCommand(Command & parent) : Command(parent, "st
 }
 
 
-void HistoryStoreCommand::run() {
-}
+void HistoryStoreCommand::run() {}
 
 
 }  // namespace microdnf

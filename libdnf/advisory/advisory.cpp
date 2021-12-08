@@ -19,11 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory.hpp"
 
+#include "solv/pool.hpp"
+#include "utils/string.hpp"
+
 #include "libdnf/advisory/advisory_collection.hpp"
 #include "libdnf/advisory/advisory_reference.hpp"
 #include "libdnf/common/exception.hpp"
-#include "solv/pool.hpp"
-#include "utils/string.hpp"
 
 #include <fmt/format.h>
 
@@ -107,7 +108,7 @@ std::vector<AdvisoryReference> Advisory::get_references(std::vector<std::string>
         dataiterator_setpos(&di);
         std::string current_type = std::string(pool.lookup_str(SOLVID_POS, UPDATE_REFERENCE_TYPE));
 
-        if(types.empty() || std::find(types.begin(), types.end(), current_type) != types.end()) {
+        if (types.empty() || std::find(types.begin(), types.end(), current_type) != types.end()) {
             output.emplace_back(AdvisoryReference(base, id, index));
         }
     }

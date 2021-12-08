@@ -42,7 +42,8 @@ ItemType key_value_map_get(const dnfdaemon::KeyValueMap & map, const std::string
 }
 
 template <typename ItemType>
-ItemType key_value_map_get(const dnfdaemon::KeyValueMap & map, const std::string & key, const ItemType & default_value) {
+ItemType key_value_map_get(
+    const dnfdaemon::KeyValueMap & map, const std::string & key, const ItemType & default_value) {
     auto it = map.find(key);
     if (it == map.end()) {
         return default_value;

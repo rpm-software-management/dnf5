@@ -21,10 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf-cli/argument_parser.hpp"
 
 #include "output/argument_parser.hpp"
-
 #include "utils/bgettext/bgettext-lib.h"
-#include "libdnf/common/exception.hpp"
 #include "utils/string.hpp"
+
+#include "libdnf/common/exception.hpp"
 
 #include <fmt/format.h>
 
@@ -147,7 +147,8 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
     }
     for (int i = 1; i < nvals; ++i) {
         if (*argv[i] == '-') {
-            throw ArgumentParserPositionalArgFewValuesError(M_("Too few values for positional argument \"{}\""), this->id);
+            throw ArgumentParserPositionalArgFewValuesError(
+                M_("Too few values for positional argument \"{}\""), this->id);
         }
     }
     int usable_argc = 1;
@@ -299,8 +300,7 @@ ArgumentParser::Command & ArgumentParser::Command::get_command(const std::string
     if (auto ret = find_arg(cmds, id)) {
         return *ret;
     }
-    throw ArgumentParserNotFoundError(
-        M_("Command id \"{}\" does not contain subcommand with id \"{}\""), this->id, id);
+    throw ArgumentParserNotFoundError(M_("Command id \"{}\" does not contain subcommand with id \"{}\""), this->id, id);
 }
 
 ArgumentParser::NamedArg & ArgumentParser::Command::get_named_arg(const std::string & id) const {
@@ -332,7 +332,6 @@ void ArgumentParser::Command::parse(const char * option, int argc, const char * 
 // if there is more than one solution.
 void ArgumentParser::Command::print_complete(
     const char * arg, std::vector<ArgumentParser::NamedArg *> named_args, size_t used_positional_arguments) {
-
     // Using the Help class to print the completion suggestions, as it prints a table of two columns
     // which is also what we need here.
     libdnf::cli::output::Help help;
@@ -836,8 +835,7 @@ ArgumentParser::PositionalArg & ArgumentParser::get_positional_arg(const std::st
     if (auto ret = get_arg<ArgumentParser::PositionalArg>(root_command, id_path, search_in_parent)) {
         return *ret;
     }
-    throw ArgumentParserNotFoundError(
-        M_("Positional argument with path id \"{}\" not found"), id_path);
+    throw ArgumentParserNotFoundError(M_("Positional argument with path id \"{}\" not found"), id_path);
 }
 
 void ArgumentParser::complete(int argc, const char * const argv[], int complete_arg_idx) {

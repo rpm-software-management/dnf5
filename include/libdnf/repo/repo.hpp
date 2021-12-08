@@ -46,7 +46,7 @@ class Pool;
 namespace libdnf::rpm {
 class Package;
 class PackageSack;
-}
+}  // namespace libdnf::rpm
 
 
 namespace libdnf::repo {
@@ -73,13 +73,13 @@ public:
     };
 
     enum class LoadFlags {
-        PRIMARY = 1 << 1,       /// Load primary repodata (primary.xml).
-        FILELISTS = 1 << 2,     /// Load file lists (filelists.xml). Requires loading PRIMARY.
-        OTHER = 1 << 3,         /// Load changelogs (other.xml). Requires loading PRIMARY.
-        PRESTO = 1 << 4,        /// Use deltarpm.
-        UPDATEINFO = 1 << 5,    /// Load advisories (updateinfo.xml).
-        COMPS = 1 << 6,         /// Load comps groups and environments (comps.xml).
-        ALL = ~0,               /// Load all possible repodata.
+        PRIMARY = 1 << 1,     /// Load primary repodata (primary.xml).
+        FILELISTS = 1 << 2,   /// Load file lists (filelists.xml). Requires loading PRIMARY.
+        OTHER = 1 << 3,       /// Load changelogs (other.xml). Requires loading PRIMARY.
+        PRESTO = 1 << 4,      /// Use deltarpm.
+        UPDATEINFO = 1 << 5,  /// Load advisories (updateinfo.xml).
+        COMPS = 1 << 6,       /// Load comps groups and environments (comps.xml).
+        ALL = ~0,             /// Load all possible repodata.
     };
 
 

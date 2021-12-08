@@ -21,12 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_SOLV_POOL_HPP
 
 #include "id_queue.hpp"
+#include "repo/repo_impl.hpp"
+#include "utils/bgettext/bgettext-lib.h"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
-
-#include "repo/repo_impl.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
 
@@ -34,12 +33,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 extern "C" {
-#include <solv/evr.h>
 #include <solv/dataiterator.h>
+#include <solv/evr.h>
 #include <solv/pool.h>
 #include <solv/queue.h>
-#include <solv/repodata.h>
 #include <solv/repo.h>
+#include <solv/repodata.h>
 #include <solv/util.h>
 }
 
@@ -82,9 +81,7 @@ private:
 
 class Pool {
 public:
-    Pool() {
-        pool = pool_create();
-    }
+    Pool() { pool = pool_create(); }
 
     Pool(const Pool & pool) = delete;
     Pool & operator=(const Pool & pool) = delete;
@@ -93,49 +90,27 @@ public:
 
     int get_nsolvables() const { return pool->nsolvables; }
 
-    Solvable * id2solvable(Id id) const {
-        return pool_id2solvable(pool, id);
-    }
+    Solvable * id2solvable(Id id) const { return pool_id2solvable(pool, id); }
 
-    const char * id2str(Id id) const {
-        return pool_id2str(pool, id);
-    }
+    const char * id2str(Id id) const { return pool_id2str(pool, id); }
 
-    const char * id2rel(Id id) const {
-        return pool_id2rel(pool, id);
-    }
+    const char * id2rel(Id id) const { return pool_id2rel(pool, id); }
 
-    const char * id2evr(Id id) const {
-        return pool_id2evr(pool, id);
-    }
+    const char * id2evr(Id id) const { return pool_id2evr(pool, id); }
 
-    const char * dep2str(Id id) const {
-        return pool_dep2str(pool, id);
-    }
+    const char * dep2str(Id id) const { return pool_dep2str(pool, id); }
 
-    const char * solvid2str(Id id) const {
-        return pool_solvid2str(pool, id);
-    }
+    const char * solvid2str(Id id) const { return pool_solvid2str(pool, id); }
 
-    const char * solvable2str(Solvable * solvable) const {
-        return pool_solvable2str(pool, solvable);
-    }
+    const char * solvable2str(Solvable * solvable) const { return pool_solvable2str(pool, solvable); }
 
-    Id solvable2id(Solvable * solvable) const {
-        return pool_solvable2id(pool, solvable);
-    }
+    Id solvable2id(Solvable * solvable) const { return pool_solvable2id(pool, solvable); }
 
-    Id str2id(const char * str, bool create) const {
-        return pool_str2id(pool, str, create);
-    }
+    Id str2id(const char * str, bool create) const { return pool_str2id(pool, str, create); }
 
-    Id strn2id(const char * str, unsigned int len, bool create) const {
-        return pool_strn2id(pool, str, len, create);
-    }
+    Id strn2id(const char * str, unsigned int len, bool create) const { return pool_strn2id(pool, str, len, create); }
 
-    Id rel2id(Id name, Id evr, int flags, bool create) const {
-        return pool_rel2id(pool, name, evr, flags, create);
-    }
+    Id rel2id(Id name, Id evr, int flags, bool create) const { return pool_rel2id(pool, name, evr, flags, create); }
 
     Id lookup_id(Id id, Id keyname) const {
         if (id > 0) {
@@ -167,13 +142,9 @@ public:
 
     const char * get_str_from_pool(Id keyname, Id advisory, int index) const;
 
-    Id queuetowhatprovides(IdQueue & queue) const {
-        return pool_queuetowhatprovides(pool, &queue.get_queue());
-    }
+    Id queuetowhatprovides(IdQueue & queue) const { return pool_queuetowhatprovides(pool, &queue.get_queue()); }
 
-    int evrcmp(Id evr1, Id evr2, int mode) const {
-        return pool_evrcmp(pool, evr1, evr2, mode);
-    }
+    int evrcmp(Id evr1, Id evr2, int mode) const { return pool_evrcmp(pool, evr1, evr2, mode); }
 
     int evrcmp_str(const char * evr1, const char * evr2, int mode) const {
         return pool_evrcmp_str(pool, evr1, evr2, mode);
@@ -188,17 +159,11 @@ public:
     TempEvr split_evr(const char * evr) const { return TempEvr(*this, evr); }
 
 
-    const char * get_name(Id id) const noexcept {
-        return id2str(id2solvable(id)->name);
-    }
+    const char * get_name(Id id) const noexcept { return id2str(id2solvable(id)->name); }
 
-    const char * get_evr(Id id) const noexcept {
-        return id2str(id2solvable(id)->evr);
-    }
+    const char * get_evr(Id id) const noexcept { return id2str(id2solvable(id)->evr); }
 
-    const char * get_epoch(Id id) const noexcept {
-        return split_evr(get_evr(id)).e_def();
-    }
+    const char * get_epoch(Id id) const noexcept { return split_evr(get_evr(id)).e_def(); }
 
     unsigned long get_epoch_num(Id id) const {
         const auto evr = split_evr(get_evr(id));
@@ -216,35 +181,21 @@ public:
         return 0;
     }
 
-    const char * get_version(Id id) const noexcept {
-        return split_evr(get_evr(id)).v;
-    }
+    const char * get_version(Id id) const noexcept { return split_evr(get_evr(id)).v; }
 
-    const char * get_release(Id id) const noexcept {
-        return split_evr(get_evr(id)).r;
-    }
+    const char * get_release(Id id) const noexcept { return split_evr(get_evr(id)).r; }
 
-    const char * get_arch(Id id) const noexcept {
-        return id2str(id2solvable(id)->arch);
-    }
+    const char * get_arch(Id id) const noexcept { return id2str(id2solvable(id)->arch); }
 
-    const char * get_nevra(Id id) const noexcept {
-        return solvable2str(id2solvable(id));
-    }
+    const char * get_nevra(Id id) const noexcept { return solvable2str(id2solvable(id)); }
 
     std::string get_full_nevra(Id id) const;
 
-    bool is_installed(Solvable * solvable) const {
-        return solvable->repo == pool->installed;
-    }
+    bool is_installed(Solvable * solvable) const { return solvable->repo == pool->installed; }
 
-    bool is_installed(Id id) const {
-        return is_installed(id2solvable(id));
-    }
+    bool is_installed(Id id) const { return is_installed(id2solvable(id)); }
 
-    repo::Repo & get_repo(Id id) const {
-        return solv::get_repo(id2solvable(id));
-    }
+    repo::Repo & get_repo(Id id) const { return solv::get_repo(id2solvable(id)); }
 
     const char * get_sourcerpm(Id id) const;
 
@@ -292,6 +243,6 @@ inline solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) {
     return *base->pool;
 }
 
-}
+}  // namespace libdnf
 
 #endif  // LIBDNF_SOLV_POOL_HPP

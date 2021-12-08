@@ -36,12 +36,13 @@ constexpr const char * CONF_DIRECTORY = "/etc/dnf/conf.d";
 const std::vector<std::string> VARS_DIRS{"/etc/yum/vars", "/etc/dnf/vars"};
 
 const std::vector<std::string> GROUP_PACKAGE_TYPES{"mandatory", "default", "conditional"};
-const std::vector<std::string> INSTALLONLYPKGS{"kernel",
-                                               "kernel-PAE",
-                                               "installonlypkg(kernel)",
-                                               "installonlypkg(kernel-module)",
-                                               "installonlypkg(vm)",
-                                               "multiversion(kernel)"};
+const std::vector<std::string> INSTALLONLYPKGS{
+    "kernel",
+    "kernel-PAE",
+    "installonlypkg(kernel)",
+    "installonlypkg(kernel-module)",
+    "installonlypkg(vm)",
+    "multiversion(kernel)"};
 
 constexpr const char * BUGTRACKER = "https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora&component=dnf";
 

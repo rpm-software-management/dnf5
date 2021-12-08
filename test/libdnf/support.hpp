@@ -22,13 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_SUPPORT_HPP
 
 #include "testcase_fixture.hpp"
+#include "utils/temp.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/rpm/package_sack.hpp"
-#include "libdnf/repo/repo_sack.hpp"
-
-#include "utils/temp.hpp"
 
 #include <string>
 

@@ -54,8 +54,7 @@ public:
     void filter(std::string (*getter)(const T &), const std::string & pattern, QueryCmp cmp);
     void filter(std::vector<std::string> (*getter)(const T &), const std::string & pattern, QueryCmp cmp);
     void filter(std::string (*getter)(const T &), const std::vector<std::string> & patterns, QueryCmp cmp);
-    void filter(
-        std::vector<std::string> (*getter)(const T &), const std::vector<std::string> & patterns, QueryCmp cmp);
+    void filter(std::vector<std::string> (*getter)(const T &), const std::vector<std::string> & patterns, QueryCmp cmp);
 
     void filter(int64_t (*getter)(const T &), int64_t pattern, QueryCmp cmp);
     void filter(std::vector<int64_t> (*getter)(const T &), int64_t pattern, QueryCmp cmp);
@@ -98,9 +97,7 @@ inline void Query<T>::filter(Query<T>::FilterFunctionString * getter, const std:
 
 
 template <typename T>
-inline void Query<T>::filter(
-    Query<T>::FilterFunctionVectorString * getter, const std::string & pattern, QueryCmp cmp) {
-
+inline void Query<T>::filter(Query<T>::FilterFunctionVectorString * getter, const std::string & pattern, QueryCmp cmp) {
     for (auto it = get_data().begin(); it != get_data().end();) {
         auto values = getter(*it);
         if (match_string(values, cmp, pattern)) {

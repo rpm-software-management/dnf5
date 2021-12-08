@@ -27,10 +27,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "bgettext-common.h"
 
-#define _(msgId) ((const char *)dgettext(GETTEXT_DOMAIN, msgId))
+#define _(msgId)                  ((const char *)dgettext(GETTEXT_DOMAIN, msgId))
 #define P_(msgId, msgIdPlural, n) ((const char *)dngettext(GETTEXT_DOMAIN, msgId, msgIdPlural, n))
-#define C_(context, msgId) b_dpgettext2(GETTEXT_DOMAIN, context "\004" msgId, sizeof(context))
-#define CP_(context, msgId, msgIdPlural, n) ((const char *)b_dnpgettext2(GETTEXT_DOMAIN, context "\004" msgId, sizeof(context), msgIdPlural, n))
+#define C_(context, msgId)        b_dpgettext2(GETTEXT_DOMAIN, context "\004" msgId, sizeof(context))
+#define CP_(context, msgId, msgIdPlural, n) \
+    ((const char *)b_dnpgettext2(GETTEXT_DOMAIN, context "\004" msgId, sizeof(context), msgIdPlural, n))
 
 #define TM_(markedMsg, n) b_dmgettext(GETTEXT_DOMAIN, markedMsg, n)
 

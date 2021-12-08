@@ -23,8 +23,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "reldep_list_impl.hpp"
-#include "libdnf/rpm/reldep_list_iterator.hpp"
 #include "solv/id_queue.hpp"
+
+#include "libdnf/rpm/reldep_list_iterator.hpp"
 
 
 namespace libdnf::rpm {
@@ -44,8 +45,8 @@ private:
 
 
 inline ReldepListIterator::Impl::Impl(const ReldepList & reldep_list)
-    : libdnf::solv::IdQueue::iterator(&(reldep_list.p_impl->get_idqueue().get_queue()))
-    , reldep_list{reldep_list} {}
+    : libdnf::solv::IdQueue::iterator(&(reldep_list.p_impl->get_idqueue().get_queue())),
+      reldep_list{reldep_list} {}
 
 inline ReldepListIterator::Impl & ReldepListIterator::Impl::operator++() {
     libdnf::solv::IdQueue::iterator::operator++();

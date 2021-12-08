@@ -164,7 +164,6 @@ void SetTest::test_set_binary_operators() {
 
 // test iterator
 void SetTest::test_set_iterator() {
-
     libdnf::Set<int> s1{1, 4, 5, 6};
 
     // check if begin() points to the first package

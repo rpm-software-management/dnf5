@@ -103,8 +103,7 @@ public:
     void transaction_stop(uint64_t total) override;
 
     // install a package
-    void install_start(const libdnf::rpm::TransactionItem & item, uint64_t)
-    override;
+    void install_start(const libdnf::rpm::TransactionItem & item, uint64_t) override;
     void install_progress(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
     void install_stop(const libdnf::rpm::TransactionItem & item, uint64_t amount, uint64_t total) override;
 

@@ -38,8 +38,7 @@ HistoryInfoCommand::HistoryInfoCommand(Command & parent) : Command(parent, "info
 }
 
 
-void HistoryInfoCommand::run() {
-}
+void HistoryInfoCommand::run() {}
 
 
 }  // namespace microdnf

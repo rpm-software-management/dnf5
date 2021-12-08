@@ -21,9 +21,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package.hpp"
 
 #include "reldep_list_impl.hpp"
-#include "libdnf/common/exception.hpp"
 #include "repo/repo_impl.hpp"
 #include "solv/pool.hpp"
+
+#include "libdnf/common/exception.hpp"
 
 #include <filesystem>
 
@@ -139,7 +140,7 @@ std::string Package::get_description() const {
 }
 
 std::vector<std::string> Package::get_files() const {
-    auto &  pool = get_pool(base);
+    auto & pool = get_pool(base);
 
     Solvable * solvable = pool.id2solvable(id.id);
     libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();

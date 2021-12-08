@@ -22,11 +22,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "context.hpp"
 
+#include <libdnf-cli/output/groupinfo.hpp>
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/group/group.hpp>
 #include <libdnf/comps/group/query.hpp>
 #include <libdnf/conf/option_string.hpp>
-#include <libdnf-cli/output/groupinfo.hpp>
 
 #include <filesystem>
 #include <fstream>
@@ -88,11 +88,11 @@ void GroupInfoCommand::run() {
     // --installed -> filter installed groups
     if (installed->get_value()) {
         group_list = query_installed.list();
-    // --available / all
+        // --available / all
     } else {
         // all -> first add installed groups to the list
         if (!available->get_value()) {
-            for (auto group: query_installed.list()) {
+            for (auto group : query_installed.list()) {
                 group_list.emplace(group);
             }
         }
@@ -100,10 +100,10 @@ void GroupInfoCommand::run() {
         auto query_available = libdnf::comps::GroupQuery(query);
         query_available.filter_installed(false);
         std::set<std::string> installed_groupids;
-        for (auto group: query_installed.list()) {
+        for (auto group : query_installed.list()) {
             installed_groupids.insert(group.get_groupid());
         }
-        for (auto group: query_available.list()) {
+        for (auto group : query_available.list()) {
             group_list.emplace(group);
         }
     }

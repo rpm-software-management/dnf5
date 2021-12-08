@@ -194,8 +194,7 @@ void RpmPackageQueryTest::test_filter_name() {
     // ---
 
     // unsupported comparison type (operator)
-    CPPUNIT_ASSERT_THROW(
-        query8.filter_name({"pkg"}, libdnf::sack::QueryCmp::GT), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(query8.filter_name({"pkg"}, libdnf::sack::QueryCmp::GT), libdnf::AssertionError);
 
     // ---
 

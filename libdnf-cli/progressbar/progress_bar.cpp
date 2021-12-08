@@ -28,8 +28,8 @@ ProgressBar::ProgressBar(int64_t total_ticks) : total_ticks{total_ticks} {}
 
 
 ProgressBar::ProgressBar(int64_t total_ticks, const std::string & description)
-    : total_ticks{total_ticks}
-    , description{description} {}
+    : total_ticks{total_ticks},
+      description{description} {}
 
 
 void ProgressBar::reset() {

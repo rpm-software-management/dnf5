@@ -77,9 +77,16 @@ public:
     // workflow
     void start();
     ProgressBarState get_state() const noexcept { return state; }
-    void set_state(ProgressBarState value) { update(); state = value; }
-    bool is_finished() const noexcept { return get_state() != ProgressBarState::READY && get_state() != ProgressBarState::STARTED; }
-    bool is_failed() const noexcept { return get_state() == ProgressBarState::ERROR || get_state() == ProgressBarState::WARNING; }
+    void set_state(ProgressBarState value) {
+        update();
+        state = value;
+    }
+    bool is_finished() const noexcept {
+        return get_state() != ProgressBarState::READY && get_state() != ProgressBarState::STARTED;
+    }
+    bool is_failed() const noexcept {
+        return get_state() == ProgressBarState::ERROR || get_state() == ProgressBarState::WARNING;
+    }
 
     // description
     std::string get_description() const noexcept { return description; }

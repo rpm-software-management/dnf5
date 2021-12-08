@@ -24,10 +24,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fmt/format.h>
 
-#include <stdexcept>
 #include <functional>
+#include <stdexcept>
 
-#define LIBDNF_LOCATION { __FILE__, __LINE__, __PRETTY_FUNCTION__ }
+#define LIBDNF_LOCATION \
+    { __FILE__, __LINE__, __PRETTY_FUNCTION__ }
 
 /// An assert macro that throws `libdnf::AssertionError`.
 ///
@@ -35,8 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 /// @param ... The format arguments.
 /// @exception libdnf::AssertionError Thrown always.
 #define libdnf_throw_assertion(msg_format, ...) \
-    (throw libdnf::AssertionError(              \
-        nullptr, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
+    (throw libdnf::AssertionError(nullptr, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
 
 /// An assert macro that throws `libdnf::AssertionError` when `condition` is not met.
 ///
@@ -47,8 +47,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define libdnf_assert(condition, msg_format, ...) \
     (static_cast<bool>(condition)                 \
          ? void(0)                                \
-         : throw libdnf::AssertionError(          \
-               #condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
+         : throw libdnf::AssertionError(#condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
 
 /// Indicates the availability of `libdnf_assert` and` libdnf_throw_assertion` macros.
 /// These macros may be removed in the future. E.g. when migrating the asserts implementation
@@ -70,10 +69,7 @@ struct SourceLocation {
 /// impossible to continue running the program.
 class AssertionError : public std::logic_error {
 public:
-    AssertionError(
-        const char * assertion,
-        const SourceLocation & location,
-        const std::string & message);
+    AssertionError(const char * assertion, const SourceLocation & location, const std::string & message);
 
     const char * what() const noexcept override;
     const char * assertion() const noexcept { return condition; }
@@ -99,13 +95,11 @@ public:
     ///
     /// @param format The format string for the message.
     /// @param args The format arguments.
-    template<typename... Ss>
-    Error(const std::string & format, Ss&&... args)
+    template <typename... Ss>
+    Error(const std::string & format, Ss &&... args)
         : std::runtime_error(format),
-        // stores the format args in the lambda's closure
-        formatter([args...](const char * format) {
-            return libdnf::utils::sformat(format, args...);
-        }) {}
+          // stores the format args in the lambda's closure
+          formatter([args...](const char * format) { return libdnf::utils::sformat(format, args...); }) {}
 
     Error(const Error & e) noexcept;
     Error & operator=(const Error & e) noexcept;
@@ -117,6 +111,7 @@ public:
 
     /// @return The domain name (namespace and enclosing class names) of the exception.
     virtual const char * get_domain_name() const noexcept { return "libdnf"; }
+
 protected:
     mutable std::string message;
     std::function<std::string(const char * format)> formatter;

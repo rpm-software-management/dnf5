@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifdef SKIP
 
 #include "MergedTransaction.hpp"
+
 #include "comps_environment.hpp"
 #include "comps_group.hpp"
 
@@ -31,10 +32,7 @@ namespace libdnf::transaction {
  * Create a new MergedTransaction object with a single transaction
  * \param trans initial transaction
  */
-MergedTransaction::MergedTransaction(Transaction & trans)
-  : transactions{&trans}
-{
-}
+MergedTransaction::MergedTransaction(Transaction & trans) : transactions{&trans} {}
 
 /*
 MergedTransaction::MergedTransaction(Transaction & trans)
@@ -49,9 +47,7 @@ MergedTransaction::MergedTransaction(Transaction & trans)
  *  easily access merged transaction properties on demand.
  * \param trans transaction to be merged with
  */
-void
-MergedTransaction::merge(Transaction & trans)
-{
+void MergedTransaction::merge(Transaction & trans) {
     bool inserted = false;
     for (auto it = transactions.begin(); it < transactions.end(); ++it) {
         if ((*it)->get_id() > trans.get_id()) {
@@ -69,10 +65,8 @@ MergedTransaction::merge(Transaction & trans)
  * Get IDs of the transactions involved in the merged transaction
  * \return list of transaction IDs sorted in ascending order
  */
-std::vector< int64_t >
-MergedTransaction::listIds() const
-{
-    std::vector< int64_t > ids;
+std::vector<int64_t> MergedTransaction::listIds() const {
+    std::vector<int64_t> ids;
     for (auto t : transactions) {
         ids.push_back(t->get_id());
     }
@@ -83,10 +77,8 @@ MergedTransaction::listIds() const
  * Get UNIX IDs of users who performed the transaction.
  * \return list of user IDs sorted by transaction ID in ascending order
  */
-std::vector< uint32_t >
-MergedTransaction::listUserIds() const
-{
-    std::vector< uint32_t > users;
+std::vector<uint32_t> MergedTransaction::listUserIds() const {
+    std::vector<uint32_t> users;
     for (auto t : transactions) {
         users.push_back(t->get_user_id());
     }
@@ -97,55 +89,41 @@ MergedTransaction::listUserIds() const
  * Get list of commands that started the transaction
  * \return list of commands sorted by transaction ID in ascending order
  */
-std::vector< std::string >
-MergedTransaction::listCmdlines() const
-{
-    std::vector< std::string > cmdLines;
+std::vector<std::string> MergedTransaction::listCmdlines() const {
+    std::vector<std::string> cmdLines;
     for (auto t : transactions) {
         cmdLines.push_back(t->get_cmdline());
     }
     return cmdLines;
 }
 
-std::vector< TransactionState >
-MergedTransaction::listStates() const
-{
-    std::vector< TransactionState > result;
+std::vector<TransactionState> MergedTransaction::listStates() const {
+    std::vector<TransactionState> result;
     for (auto t : transactions) {
         result.push_back(t->get_state());
     }
     return result;
 }
 
-std::vector< std::string >
-MergedTransaction::listReleasevers() const
-{
-    std::vector< std::string > result;
+std::vector<std::string> MergedTransaction::listReleasevers() const {
+    std::vector<std::string> result;
     for (auto t : transactions) {
         result.push_back(t->get_releasever());
     }
     return result;
 }
 
-int64_t
-MergedTransaction::get_dt_begin() const noexcept
-{
+int64_t MergedTransaction::get_dt_begin() const noexcept {
     return transactions.front()->get_dt_begin();
 }
-int64_t
-MergedTransaction::get_dt_end() const noexcept
-{
+int64_t MergedTransaction::get_dt_end() const noexcept {
     return transactions.back()->get_dt_end();
 }
-const std::string &
-MergedTransaction::get_rpmdb_version_begin() const noexcept
-{
+const std::string & MergedTransaction::get_rpmdb_version_begin() const noexcept {
     return transactions.front()->get_rpmdb_version_begin();
 }
 
-const std::string &
-MergedTransaction::get_rpmdb_version_end() const noexcept
-{
+const std::string & MergedTransaction::get_rpmdb_version_end() const noexcept {
     return transactions.back()->get_rpmdb_version_end();
 }
 
@@ -160,10 +138,8 @@ std::set<std::string> MergedTransaction::get_runtime_packages() const {
 }
 
 
-std::vector< std::pair< int, std::string > >
-MergedTransaction::get_console_output()
-{
-    std::vector< std::pair< int, std::string > > output;
+std::vector<std::pair<int, std::string>> MergedTransaction::get_console_output() {
+    std::vector<std::pair<int, std::string>> output;
     for (auto t : transactions) {
         auto tranOutput = t->get_console_output();
         output.insert(output.end(), tranOutput.begin(), tranOutput.end());
@@ -302,8 +278,7 @@ void MergedTransaction::resolveRPMDifference(ItemPair & previousItemPair, Transa
     auto * firstRPM = static_cast<Package *>(firstItem);
     auto * secondRPM = static_cast<Package *>(secondItem);
 
-    if (firstRPM->get_version() == secondRPM->get_version() &&
-        firstRPM->get_epoch() == secondRPM->get_epoch()) {
+    if (firstRPM->get_version() == secondRPM->get_version() && firstRPM->get_epoch() == secondRPM->get_epoch()) {
         // reinstall
         mTransItem->set_action(TransactionItemAction::REINSTALL);
         previousItemPair.first = mTransItem;
@@ -359,13 +334,11 @@ void MergedTransaction::resolveAltered(ItemPair & previousItemPair, TransactionI
         // move Erased action to the previous state
         previousItemPair.first->set_action(newState);
         previousItemPair.second = nullptr;
-    } else if (newState == TransactionItemAction::DOWNGRADED ||
-               newState == TransactionItemAction::UPGRADED) {
+    } else if (newState == TransactionItemAction::DOWNGRADED || newState == TransactionItemAction::UPGRADED) {
         // check if the transaction pair is complete
         if (previousItemPair.second == nullptr) {
             // pair might be in a wrong order
-            if (firstState == TransactionItemAction::DOWNGRADE ||
-                firstState == TransactionItemAction::UPGRADE) {
+            if (firstState == TransactionItemAction::DOWNGRADE || firstState == TransactionItemAction::UPGRADE) {
                 // fix the order
                 previousItemPair.second = previousItemPair.first;
                 previousItemPair.first = mTransItem;
@@ -380,8 +353,7 @@ void MergedTransaction::resolveAltered(ItemPair & previousItemPair, TransactionI
          * from previous transaction - unless the RPMDB has altered.
          */
 
-    } else if (newState == TransactionItemAction::DOWNGRADE ||
-               newState == TransactionItemAction::UPGRADE) {
+    } else if (newState == TransactionItemAction::DOWNGRADE || newState == TransactionItemAction::UPGRADE) {
         /*
          * Check whether second item is missing in transaction pair
          * When it does, complete the transaction pair.
@@ -407,9 +379,7 @@ void MergedTransaction::resolveAltered(ItemPair & previousItemPair, TransactionI
  * \param itemPairMap merged transaction set
  * \param mTransItem transaction item
  */
-void
-MergedTransaction::mergeItem(ItemPairMap & itemPairMap, TransactionItem * mTransItem)
-{
+void MergedTransaction::mergeItem(ItemPairMap & itemPairMap, TransactionItem * mTransItem) {
     // get item identifier
     std::string name;
     switch (mTransItem->get_item_type()) {
@@ -426,8 +396,8 @@ MergedTransaction::mergeItem(ItemPairMap & itemPairMap, TransactionItem * mTrans
             break;
     }
 
-//
-//        name = getItemIdentifier(static_cast<Package *>(mTransItem));
+    //
+    //        name = getItemIdentifier(static_cast<Package *>(mTransItem));
 
     auto previous = itemPairMap.find(name);
     if (previous == itemPairMap.end()) {
@@ -435,7 +405,7 @@ MergedTransaction::mergeItem(ItemPairMap & itemPairMap, TransactionItem * mTrans
         return;
     }
 
-    ItemPair &previousItemPair = previous->second;
+    ItemPair & previousItemPair = previous->second;
 
     auto firstState = previousItemPair.first->get_action();
     auto newState = mTransItem->get_action();
@@ -451,8 +421,7 @@ MergedTransaction::mergeItem(ItemPairMap & itemPairMap, TransactionItem * mTrans
             break;
         case TransactionItemAction::INSTALL:
             // the original package has been installed -> it may be either Removed, or altered
-            if (newState == TransactionItemAction::REMOVE ||
-                newState == TransactionItemAction::OBSOLETED) {
+            if (newState == TransactionItemAction::REMOVE || newState == TransactionItemAction::OBSOLETED) {
                 // Install -> Remove = (nothing)
                 itemPairMap.erase(name);
                 break;

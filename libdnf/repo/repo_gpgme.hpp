@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
-#include "libdnf/repo/repo_callbacks.hpp"
 #include "libdnf/repo/config_repo.hpp"
+#include "libdnf/repo/repo_callbacks.hpp"
 
 #include <string>
 #include <vector>

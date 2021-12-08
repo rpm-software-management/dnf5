@@ -19,8 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_reference.hpp"
 
-#include "libdnf/logger/logger.hpp"
 #include "rpm/package_sack_impl.hpp"
+
+#include "libdnf/logger/logger.hpp"
 
 #include <solv/chksum.h>
 #include <solv/repo.h>
@@ -29,9 +30,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::advisory {
 
 AdvisoryReference::AdvisoryReference(const libdnf::BaseWeakPtr & base, AdvisoryId advisory, int index)
-    : base(base)
-    , advisory(advisory)
-    , index(index) {}
+    : base(base),
+      advisory(advisory),
+      index(index) {}
 
 std::string AdvisoryReference::get_id() const {
     return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_ID, advisory.id, index));

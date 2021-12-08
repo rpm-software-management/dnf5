@@ -62,7 +62,8 @@ std::string Reldep::to_string() {
     return cstring ? std::string(cstring) : std::string();
 }
 
-ReldepId Reldep::get_reldep_id(const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type, int create) {
+ReldepId Reldep::get_reldep_id(
+    const BaseWeakPtr & base, const char * name, const char * version, CmpType cmp_type, int create) {
     static_assert(
         static_cast<int>(Reldep::CmpType::EQ) == REL_EQ, "Reldep::ComparisonType::EQ is not identical to solv/REL_EQ");
     static_assert(

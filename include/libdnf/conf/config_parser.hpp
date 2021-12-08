@@ -68,7 +68,6 @@ public:
     using Container = PreserveOrderMap<std::string, PreserveOrderMap<std::string, std::string>>;
 
 
-
     /**
     * @brief Reads/parse one INI file
     *

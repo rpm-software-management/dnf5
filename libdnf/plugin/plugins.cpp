@@ -19,10 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/plugin/plugins.hpp"
 
-#include "libdnf/base/base.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/library.hpp"
 
+#include "libdnf/base/base.hpp"
 
 #include <fmt/format.h>
 

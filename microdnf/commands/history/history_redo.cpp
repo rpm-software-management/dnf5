@@ -38,8 +38,7 @@ HistoryRedoCommand::HistoryRedoCommand(Command & parent) : Command(parent, "redo
 }
 
 
-void HistoryRedoCommand::run() {
-}
+void HistoryRedoCommand::run() {}
 
 
 }  // namespace microdnf

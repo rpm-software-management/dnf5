@@ -26,10 +26,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 OptionString::OptionString(const std::string & default_value)
-    : Option(Priority::DEFAULT)
-    , icase(false)
-    , default_value(default_value)
-    , value(default_value) {}
+    : Option(Priority::DEFAULT),
+      icase(false),
+      default_value(default_value),
+      value(default_value) {}
 
 OptionString::OptionString(const char * default_value) : icase(false) {
     if (default_value) {
@@ -39,17 +39,17 @@ OptionString::OptionString(const char * default_value) : icase(false) {
 }
 
 OptionString::OptionString(const std::string & default_value, std::string regex, bool icase)
-    : Option(Priority::DEFAULT)
-    , regex(std::move(regex))
-    , icase(icase)
-    , default_value(default_value)
-    , value(default_value) {
+    : Option(Priority::DEFAULT),
+      regex(std::move(regex)),
+      icase(icase),
+      default_value(default_value),
+      value(default_value) {
     test(default_value);
 }
 
 OptionString::OptionString(const char * default_value, std::string regex, bool icase)
-    : regex(std::move(regex))
-    , icase(icase) {
+    : regex(std::move(regex)),
+      icase(icase) {
     if (default_value) {
         this->default_value = default_value;
         test(this->default_value);

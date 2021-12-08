@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_fs.hpp"
 
-#include <filesystem>
-
 #include "utils/fs.hpp"
+
+#include <filesystem>
 
 
 using namespace libdnf::utils::fs;

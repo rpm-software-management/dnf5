@@ -30,7 +30,7 @@ extern "C" {
 
 namespace libdnf::comps {
 
-    
+
 void add_solvable_id(Group & group, Id solvable_id);
 
 

@@ -61,12 +61,9 @@ static void add_line_into_grouplist_table(
 template <class Query>
 void print_grouplist_table(Query & group_list) {
     struct libscols_table * table = create_grouplist_table();
-    for (auto group: group_list) {
+    for (auto group : group_list) {
         add_line_into_grouplist_table(
-            table,
-            group.get_groupid().c_str(),
-            group.get_name().c_str(),
-            group.get_installed());
+            table, group.get_groupid().c_str(), group.get_name().c_str(), group.get_installed());
     }
     auto cl = scols_table_get_column(table, COL_GROUP_ID);
     scols_sort_table(table, cl);

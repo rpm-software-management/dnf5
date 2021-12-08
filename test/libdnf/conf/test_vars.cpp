@@ -33,10 +33,12 @@ void VarsTest::test_vars() {
 }
 
 void VarsTest::test_vars_multiple_dirs() {
-    vars.load("/", {
-        PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars",
-        PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars2",
-    });
+    vars.load(
+        "/",
+        {
+            PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars",
+            PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars2",
+        });
 
     CPPUNIT_ASSERT_EQUAL(std::string("av333bthe answer is here"), vars.substitute("a${var1}b${var42}"));
 }
@@ -57,6 +59,5 @@ void VarsTest::test_vars_env() {
     // However, var1 was also an environment variable. The environment has a higher priority.
     CPPUNIT_ASSERT_EQUAL(
         std::string("foo0-foo1-foo9-testvar1-testvar2-456"),
-        vars.substitute("${DNF0}-${DNF1}-${DNF9}-${var1}-${var41}-${var2}")
-    );
+        vars.substitute("${DNF0}-${DNF1}-${DNF9}-${var1}-${var41}-${var2}"));
 }
