@@ -35,7 +35,7 @@ const constexpr int CHKSUM_BYTES = 32;
 namespace libdnf::repo {
 
 using LibsolvRepo = ::Repo;
-enum class RepodataType { FILELISTS, PRESTO, UPDATEINFO, OTHER };
+enum class RepodataType { FILELISTS, PRESTO, UPDATEINFO, COMPS, OTHER };
 
 
 class SolvError : public Error {

@@ -63,8 +63,6 @@ void GroupListCommand::run() {
     libdnf::repo::RepoQuery enabled_repos(ctx.base);
     enabled_repos.filter_enabled(true);
 
-    ctx.base.get_comps()->load_installed();
-
     ctx.load_rpm_repos(enabled_repos, libdnf::repo::Repo::LoadFlags::COMPS);
 
     libdnf::comps::GroupQuery query(ctx.base.get_comps()->get_group_sack());

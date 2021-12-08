@@ -181,12 +181,15 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
     }
 
     if (any(flags & LoadFlags::COMPS)) {
-        auto path = get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
-        if (path.empty()) {
-            path = get_metadata_path(RepoDownloader::MD_FILENAME_GROUP);
+        auto md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
+        if (md_filename.empty()) {
+            md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_GROUP);
         }
-        if (!path.empty()) {
-            base->get_comps()->load_from_file(owner->get_weak_ptr(), path);
+
+        if (!md_filename.empty()) {
+            solv_repo.load_repo_ext(md_filename, RepodataType::COMPS);
+        } else {
+            logger.debug(fmt::format("no comps available for {}", config.get_id()));
         }
     }
 

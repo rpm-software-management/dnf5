@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 extern "C" {
 #include <solv/chksum.h>
+#include <solv/repo_comps.h>
 #include <solv/repo_deltainfoxml.h>
 #include <solv/repo_repomdxml.h>
 #include <solv/repo_rpmdb.h>
@@ -99,6 +100,8 @@ static const char * repodata_type_to_suffix(RepodataType type) {
             return "-presto";
         case RepodataType::UPDATEINFO:
             return "-updateinfo";
+        case RepodataType::COMPS:
+            return "-comps";
         case RepodataType::OTHER:
             return "-other";
     }
@@ -113,6 +116,8 @@ static int repodata_type_to_flags(RepodataType type) {
         case RepodataType::PRESTO:
             return REPO_EXTEND_SOLVABLES;
         case RepodataType::UPDATEINFO:
+            return 0;
+        case RepodataType::COMPS:
             return 0;
         case RepodataType::OTHER:
             return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
@@ -295,6 +300,9 @@ void SolvRepo::load_repo_ext(const std::string & filename, RepodataType type) {
             break;
         case RepodataType::UPDATEINFO:
             res = repo_add_updateinfoxml(repo, fp.get(), 0);
+            break;
+        case RepodataType::COMPS:
+            res = repo_add_comps(repo, fp.get(), 0);
             break;
         case RepodataType::OTHER:
             res = repo_add_rpmmd(repo, fp.get(), 0, REPO_EXTEND_SOLVABLES);

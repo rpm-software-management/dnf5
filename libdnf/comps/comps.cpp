@@ -24,13 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 
-extern "C" {
-#include <solv/pool.h>
-#include <solv/repo.h>
-#include <solv/repo_comps.h>
-#include <solv/solv_xfopen.h>
-}
-
 #include <filesystem>
 
 
@@ -41,30 +34,6 @@ Comps::Comps(libdnf::Base & base) : base{base} {}
 
 
 Comps::~Comps() {}
-
-
-void Comps::load_installed() {
-    // TODO(dmach): Make @System part of RepoSack?
-    // auto rq = libdnf::repo::RepoQuery(get_base());
-    // rq.filter_id("@System");
-    // auto system_repo = rq.get();
-
-    auto system_repo = get_base()->get_repo_sack()->get_system_repo();
-    // TODO(dmach): use system-state dir
-    load_from_file(system_repo, "/var/lib/dnf/system-state/comps-installed.xml.zst");
-}
-
-
-void Comps::load_from_file(const repo::RepoWeakPtr & repo, const std::string & path) {
-    if (!std::filesystem::exists(path)) {
-        return;
-    }
-
-    // TODO(pkratoch): libsolv doesn't support environments yet
-    FILE * xml_doc = solv_xfopen(path.c_str(), "r");
-    repo_add_comps(repo->p_impl->solv_repo.repo, xml_doc, 0);
-    fclose(xml_doc);
-}
 
 
 CompsWeakPtr Comps::get_weak_ptr() {

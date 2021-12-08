@@ -43,9 +43,6 @@ public:
     explicit Comps(libdnf::Base & base);
     ~Comps();
 
-    void load_installed();
-    // Load comps from given file into the pool
-    void load_from_file(const repo::RepoWeakPtr & repo, const std::string & path);
     GroupSackWeakPtr get_group_sack() { return group_sack.get_weak_ptr(); }
 
     CompsWeakPtr get_weak_ptr();
