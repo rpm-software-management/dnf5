@@ -93,8 +93,8 @@ namespace libdnf::repo {
 
 static const char * repodata_type_to_suffix(RepodataType type) {
     switch (type) {
-        case RepodataType::FILENAMES:
-            return "-filenames";
+        case RepodataType::FILELISTS:
+            return "-filelists";
         case RepodataType::PRESTO:
             return "-presto";
         case RepodataType::UPDATEINFO:
@@ -108,7 +108,7 @@ static const char * repodata_type_to_suffix(RepodataType type) {
 
 static int repodata_type_to_flags(RepodataType type) {
     switch (type) {
-        case RepodataType::FILENAMES:
+        case RepodataType::FILELISTS:
             return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
         case RepodataType::PRESTO:
             return REPO_EXTEND_SOLVABLES;
@@ -287,7 +287,7 @@ void SolvRepo::load_repo_ext(const std::string & filename, RepodataType type) {
 
     int res = 0;
     switch (type) {
-        case RepodataType::FILENAMES:
+        case RepodataType::FILELISTS:
             res = repo_add_rpmmd(repo, fp.get(), "FL", REPO_EXTEND_SOLVABLES);
             break;
         case RepodataType::PRESTO:

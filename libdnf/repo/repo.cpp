@@ -144,7 +144,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
         auto md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_FILELISTS);
 
         if (!md_filename.empty()) {
-            solv_repo.load_repo_ext(md_filename, RepodataType::FILENAMES);
+            solv_repo.load_repo_ext(md_filename, RepodataType::FILELISTS);
         } else {
             logger.debug(fmt::format("no filelists metadata available for {}", config.get_id()));
         }
