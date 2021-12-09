@@ -35,15 +35,17 @@ class AdvisorySet;
 
 class AdvisorySetIterator {
 public:
-    explicit AdvisorySetIterator(const AdvisorySet & advisory_set);
-    AdvisorySetIterator(const AdvisorySetIterator & other);
-    ~AdvisorySetIterator();
-
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
     using value_type = Advisory;
     using pointer = void;
     using reference = Advisory;
+
+    AdvisorySetIterator(const AdvisorySetIterator & other);
+    ~AdvisorySetIterator();
+
+    static AdvisorySetIterator begin(const AdvisorySet & advisory_set);
+    static AdvisorySetIterator end(const AdvisorySet & advisory_set);
 
     Advisory operator*();
 
@@ -57,6 +59,8 @@ public:
     void end();
 
 private:
+    explicit AdvisorySetIterator(const AdvisorySet & advisory_set);
+
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

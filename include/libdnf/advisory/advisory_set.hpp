@@ -46,6 +46,8 @@ namespace libdnf::advisory {
 
 class AdvisorySet {
 public:
+    using iterator = AdvisorySetIterator;
+
     explicit AdvisorySet(const libdnf::BaseWeakPtr & base);
     explicit AdvisorySet(libdnf::Base & base);
 
@@ -58,9 +60,8 @@ public:
     AdvisorySet & operator=(const AdvisorySet & src);
     AdvisorySet & operator=(AdvisorySet && src);
 
-    using iterator = AdvisorySetIterator;
-    iterator begin() const;
-    iterator end() const;
+    iterator begin() const { return AdvisorySetIterator::begin(*this); }
+    iterator end() const { return AdvisorySetIterator::end(*this); }
 
     AdvisorySet & operator|=(const AdvisorySet & other);
 

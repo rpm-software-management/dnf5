@@ -26,8 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-class AdvisorySetIterator::Impl : public libdnf::solv::SolvMap::iterator {
-public:
+class AdvisorySetIterator::Impl : private libdnf::solv::SolvMap::iterator {
+private:
     Impl(const AdvisorySet & advisory_set)
         : libdnf::solv::SolvMap::iterator(advisory_set.p_impl->get_map()),
           advisory_set{advisory_set} {}
@@ -39,9 +39,9 @@ public:
         return *this;
     }
 
-private:
-    friend AdvisorySetIterator;
     const AdvisorySet & advisory_set;
+
+    friend AdvisorySetIterator;
 };
 
 
@@ -49,7 +49,21 @@ AdvisorySetIterator::AdvisorySetIterator(const AdvisorySet & advisory_set) : p_i
 
 AdvisorySetIterator::AdvisorySetIterator(const AdvisorySetIterator & other) : p_impl{new Impl(*other.p_impl)} {}
 
-AdvisorySetIterator::~AdvisorySetIterator() {}
+AdvisorySetIterator::~AdvisorySetIterator() = default;
+
+
+AdvisorySetIterator AdvisorySetIterator::begin(const AdvisorySet & advisory_set) {
+    AdvisorySetIterator it(advisory_set);
+    it.begin();
+    return it;
+}
+
+
+AdvisorySetIterator AdvisorySetIterator::end(const AdvisorySet & advisory_set) {
+    AdvisorySetIterator it(advisory_set);
+    it.end();
+    return it;
+}
 
 void AdvisorySetIterator::begin() {
     p_impl->begin();

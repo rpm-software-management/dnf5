@@ -26,8 +26,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
-class PackageSetIterator::Impl : public libdnf::solv::SolvMap::iterator {
-public:
+class PackageSetIterator::Impl : private libdnf::solv::SolvMap::iterator {
+private:
     Impl(const PackageSet & package_set)
         : libdnf::solv::SolvMap::iterator(package_set.p_impl->get_map()),
           package_set{package_set} {}
@@ -39,9 +39,9 @@ public:
         return *this;
     }
 
-private:
-    friend PackageSetIterator;
     const PackageSet & package_set;
+
+    friend PackageSetIterator;
 };
 
 
@@ -49,7 +49,21 @@ PackageSetIterator::PackageSetIterator(const PackageSet & package_set) : p_impl{
 
 PackageSetIterator::PackageSetIterator(const PackageSetIterator & other) : p_impl{new Impl(*other.p_impl)} {}
 
-PackageSetIterator::~PackageSetIterator() {}
+PackageSetIterator::~PackageSetIterator() = default;
+
+
+PackageSetIterator PackageSetIterator::begin(const PackageSet & package_set) {
+    PackageSetIterator it(package_set);
+    it.begin();
+    return it;
+}
+
+
+PackageSetIterator PackageSetIterator::end(const PackageSet & package_set) {
+    PackageSetIterator it(package_set);
+    it.end();
+    return it;
+}
 
 void PackageSetIterator::begin() {
     p_impl->begin();

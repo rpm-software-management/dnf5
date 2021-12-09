@@ -57,19 +57,6 @@ AdvisorySet & AdvisorySet::operator=(AdvisorySet && other) {
     return *this;
 }
 
-AdvisorySet::iterator AdvisorySet::begin() const {
-    AdvisorySet::iterator it(*this);
-    it.begin();
-    return it;
-}
-
-
-AdvisorySet::iterator AdvisorySet::end() const {
-    AdvisorySet::iterator it(*this);
-    it.end();
-    return it;
-}
-
 
 AdvisorySet & AdvisorySet::operator|=(const AdvisorySet & other) {
     libdnf_assert_same_base(p_impl->base, other.p_impl->base);

@@ -56,19 +56,6 @@ PackageSet & PackageSet::operator=(PackageSet && other) {
     return *this;
 }
 
-PackageSet::iterator PackageSet::begin() const {
-    PackageSet::iterator it(*this);
-    it.begin();
-    return it;
-}
-
-
-PackageSet::iterator PackageSet::end() const {
-    PackageSet::iterator it(*this);
-    it.end();
-    return it;
-}
-
 
 PackageSet & PackageSet::operator|=(const PackageSet & other) {
     libdnf_assert_same_base(p_impl->base, other.p_impl->base);

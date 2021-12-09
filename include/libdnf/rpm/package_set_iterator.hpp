@@ -35,15 +35,17 @@ class PackageSet;
 
 class PackageSetIterator {
 public:
-    explicit PackageSetIterator(const PackageSet & package_set);
-    PackageSetIterator(const PackageSetIterator & other);
-    ~PackageSetIterator();
-
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
     using value_type = Package;
     using pointer = void;
     using reference = Package;
+
+    PackageSetIterator(const PackageSetIterator & other);
+    ~PackageSetIterator();
+
+    static PackageSetIterator begin(const PackageSet & package_set);
+    static PackageSetIterator end(const PackageSet & package_set);
 
     Package operator*();
 
@@ -57,6 +59,8 @@ public:
     void end();
 
 private:
+    explicit PackageSetIterator(const PackageSet & package_set);
+
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

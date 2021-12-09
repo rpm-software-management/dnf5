@@ -42,6 +42,8 @@ namespace libdnf::rpm {
 /// @replaces libdnf:sack/packageset.hpp:struct:PackageSet
 class PackageSet {
 public:
+    using iterator = PackageSetIterator;
+
     /// @replaces libdnf:hy-packageset.h:function:dnf_packageset_new(DnfSack * sack)
     explicit PackageSet(const libdnf::BaseWeakPtr & base);
     explicit PackageSet(libdnf::Base & base);
@@ -57,9 +59,8 @@ public:
     PackageSet & operator=(const PackageSet & src);
     PackageSet & operator=(PackageSet && src);
 
-    using iterator = PackageSetIterator;
-    iterator begin() const;
-    iterator end() const;
+    iterator begin() const { return iterator::begin(*this); }
+    iterator end() const { return iterator::end(*this); }
 
     // @replaces libdnf:sack/packageset.hpp:method:PackageSet.operator+=(const libdnf::PackageSet & other)
     PackageSet & operator|=(const PackageSet & other);
