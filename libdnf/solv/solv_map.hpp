@@ -180,13 +180,13 @@ public:
 
     /// Union operator
     SolvMap & operator|=(const Map & other) noexcept {
-        map_or(&map, const_cast<Map *>(&other));
+        map_or(&map, &other);
         return *this;
     }
 
     /// Difference operator
     SolvMap & operator-=(const Map & other) noexcept {
-        map_subtract(&map, const_cast<Map *>(&other));
+        map_subtract(&map, &other);
         return *this;
     }
 

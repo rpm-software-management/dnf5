@@ -70,12 +70,10 @@ inline AdvisorySet::Impl::Impl(const BaseWeakPtr & base, libdnf::solv::SolvMap &
     : libdnf::solv::SolvMap::SolvMap(solv_map),
       base(base) {}
 
-inline AdvisorySet::Impl::Impl(const Impl & other)
-    : libdnf::solv::SolvMap::SolvMap(other.get_map()),
-      base(other.base) {}
+inline AdvisorySet::Impl::Impl(const Impl & other) : libdnf::solv::SolvMap::SolvMap(other), base(other.base) {}
 
 inline AdvisorySet::Impl::Impl(Impl && other)
-    : libdnf::solv::SolvMap::SolvMap(std::move(other.get_map())),
+    : libdnf::solv::SolvMap::SolvMap(std::move(other)),
       base(std::move(other.base)) {}
 
 inline AdvisorySet::Impl & AdvisorySet::Impl::operator=(const Impl & other) {
