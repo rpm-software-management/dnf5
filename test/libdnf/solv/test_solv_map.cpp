@@ -139,7 +139,7 @@ void SolvMapTest::test_iterator_empty() {
     std::vector<Id> expected = {};
     std::vector<Id> result;
     libdnf::solv::SolvMap map(16);
-    for (auto it = map.begin(); it != map.end(); it++) {
+    for (auto it = map.begin(); it != map.end(); ++it) {
         result.push_back(*it);
     }
     CPPUNIT_ASSERT(result == expected);
@@ -182,6 +182,10 @@ void SolvMapTest::test_iterator_sparse() {
     CPPUNIT_ASSERT_EQUAL(*it2, 10);
     CPPUNIT_ASSERT_EQUAL(*it3, 6);
 
+    // test copy assignment
+    it1 = it2;
+    CPPUNIT_ASSERT_EQUAL(*it1, 10);
+
     // test move back to begin
     it2.begin();
     CPPUNIT_ASSERT_EQUAL(*it2, 4);
@@ -206,10 +210,13 @@ void SolvMapTest::test_iterator_sparse() {
     // test loop with post-increment operator
     {
         std::vector<Id> result;
-        for (auto it = map.begin(), end = map.end(); it != end; it++) {
+        std::vector<Id> result2;
+        for (auto it = map.begin(), end = map.end(), prev = it; it != end; prev = it++) {
             result.push_back(*it);
+            result2.push_back(*prev);
         }
         CPPUNIT_ASSERT(result == expected);
+        CPPUNIT_ASSERT(result2 == (std::vector<Id>{4, 4, 6, 10, 11}));
     }
 
     // test jump to existing package
@@ -249,7 +256,7 @@ void SolvMapTest::test_iterator_performance_empty() {
 
     for (int i = 0; i < 500; i++) {
         std::vector<Id> result;
-        for (auto it = map.begin(); it != map.end(); it++) {
+        for (auto it = map.begin(); it != map.end(); ++it) {
             result.push_back(*it);
         }
     }
@@ -262,9 +269,9 @@ void SolvMapTest::test_iterator_performance_full() {
     libdnf::solv::SolvMap map(max);
     memset(map.get_map().map, 255, static_cast<std::size_t>(map.get_map().size));
 
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < 500; ++i) {
         std::vector<Id> result;
-        for (auto it = map.begin(); it != map.end(); it++) {
+        for (auto it = map.begin(); it != map.end(); ++it) {
             result.push_back(*it);
         }
     }
@@ -277,9 +284,9 @@ void SolvMapTest::test_iterator_performance_4bits() {
     libdnf::solv::SolvMap map(max);
     memset(map.get_map().map, 15, static_cast<std::size_t>(map.get_map().size));
 
-    for (int i = 0; i < 500; i++) {
+    for (int i = 0; i < 500; ++i) {
         std::vector<Id> result;
-        for (auto it = map.begin(); it != map.end(); it++) {
+        for (auto it = map.begin(); it != map.end(); ++it) {
             result.push_back(*it);
         }
     }

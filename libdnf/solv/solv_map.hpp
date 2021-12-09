@@ -49,40 +49,54 @@ public:
     using pointer = void;
     using reference = Id;
 
-    explicit SolvMapIterator(const Map & map) noexcept : map{&map}, map_end{map.map + map.size} { begin(); }
+    [[nodiscard]] static SolvMapIterator begin(const Map & map) noexcept {
+        SolvMapIterator it(map);
+        it.begin();
+        return it;
+    }
 
-    SolvMapIterator(const SolvMapIterator & other) noexcept = default;
+    [[nodiscard]] static SolvMapIterator end(const Map & map) noexcept {
+        SolvMapIterator it(map);
+        it.end();
+        return it;
+    }
 
-    Id operator*() const noexcept { return current_value; }
+    [[nodiscard]] Id operator*() const noexcept { return current_value; }
 
     SolvMapIterator & operator++() noexcept;
 
-    SolvMapIterator operator++(int) noexcept {
+    [[nodiscard]] SolvMapIterator operator++(int) noexcept {
         SolvMapIterator it(*this);
         ++*this;
         return it;
     }
 
-    bool operator==(const SolvMapIterator & other) const noexcept { return current_value == other.current_value; }
+    [[nodiscard]] bool operator==(const SolvMapIterator & other) const noexcept {
+        return current_value == other.current_value;
+    }
 
-    bool operator!=(const SolvMapIterator & other) const noexcept { return current_value != other.current_value; }
+    [[nodiscard]] bool operator!=(const SolvMapIterator & other) const noexcept {
+        return current_value != other.current_value;
+    }
 
+    /// Sets the iterator to the first contained item or to the end if there are no items.
     void begin() noexcept {
         current_value = BEGIN;
         map_current = map->map;
         ++*this;
     }
 
+    /// Sets the iterator to the end.
     void end() noexcept {
         current_value = END;
         map_current = map_end;
     }
 
-    /// Sets iterator to the first contained package in the range <id, end>.
+    /// Sets the iterator to the first contained item in the range <id, end>.
     void jump(Id id) noexcept;
 
 protected:
-    const Map * get_map() const noexcept { return map; }
+    explicit SolvMapIterator(const Map & map) noexcept : map{&map}, map_end{map.map + map.size} {}
 
 private:
     constexpr static int BEGIN = -1;
@@ -124,13 +138,8 @@ public:
     SolvMap & operator=(const SolvMap & other) noexcept;
     SolvMap & operator=(SolvMap && other) noexcept;
 
-    iterator begin() const { return iterator(map); }
-
-    iterator end() const {
-        iterator it(map);
-        it.end();
-        return it;
-    }
+    [[nodiscard]] iterator begin() const { return iterator::begin(map); }
+    [[nodiscard]] iterator end() const { return iterator::end(map); }
 
     // GENERIC OPERATIONS
 
@@ -145,16 +154,16 @@ public:
     /// Sets all bits in the map to 0.
     void clear() noexcept { map_empty(&map); }
 
-    const Map & get_map() const noexcept { return map; }
+    [[nodiscard]] const Map & get_map() const noexcept { return map; }
 
     /// @return the number of solvables in the SolvMap (number of 1s in the bitmap).
-    std::size_t size() const noexcept;
+    [[nodiscard]] std::size_t size() const noexcept;
 
     /// @return the size allocated for the map in memory (in number of items, not bytes).
-    int allocated_size() const noexcept { return map.size << 3; }
+    [[nodiscard]] int allocated_size() const noexcept { return map.size << 3; }
 
     /// @return whether the map is empty.
-    bool empty() const noexcept;
+    [[nodiscard]] bool empty() const noexcept;
 
     // ITEM OPERATIONS
 
@@ -163,18 +172,18 @@ public:
         add_unsafe(id);
     }
 
-    void add_unsafe(Id id) noexcept;
+    void add_unsafe(Id id) noexcept { map_set(&map, id); }
 
-    bool contains(Id id) const noexcept;
+    [[nodiscard]] bool contains(Id id) const noexcept;
 
-    bool contains_unsafe(Id id) const noexcept { return MAPTST(&map, id); }
+    [[nodiscard]] bool contains_unsafe(Id id) const noexcept { return MAPTST(&map, id); }
 
     void remove(Id id) {
         check_id_in_bitmap_range(id);
         remove_unsafe(id);
     }
 
-    void remove_unsafe(Id id) noexcept;
+    void remove_unsafe(Id id) noexcept { map_clr(&map, id); }
 
     // SET OPERATIONS - Map
 
@@ -329,22 +338,6 @@ inline bool SolvMap::contains(Id id) const noexcept {
         return false;
     }
     return contains_unsafe(id);
-}
-
-
-inline void SolvMap::add_unsafe(Id id) noexcept {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-    MAPSET(&map, id);
-#pragma GCC diagnostic pop
-}
-
-
-inline void SolvMap::remove_unsafe(Id id) noexcept {
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wconversion"
-    MAPCLR(&map, id);
-#pragma GCC diagnostic pop
 }
 
 
