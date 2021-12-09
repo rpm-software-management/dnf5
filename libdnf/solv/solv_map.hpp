@@ -41,7 +41,7 @@ static const unsigned char BIT_COUNT_LOOKUP[256] = {
 // clang-format on
 
 
-class SolvMapIterator {
+class ConstMapIterator {
 public:
     using iterator_category = std::forward_iterator_tag;
     using difference_type = std::ptrdiff_t;
@@ -49,33 +49,33 @@ public:
     using pointer = void;
     using reference = Id;
 
-    [[nodiscard]] static SolvMapIterator begin(const Map & map) noexcept {
-        SolvMapIterator it(map);
+    [[nodiscard]] static ConstMapIterator begin(const Map & map) noexcept {
+        ConstMapIterator it(map);
         it.begin();
         return it;
     }
 
-    [[nodiscard]] static SolvMapIterator end(const Map & map) noexcept {
-        SolvMapIterator it(map);
+    [[nodiscard]] static ConstMapIterator end(const Map & map) noexcept {
+        ConstMapIterator it(map);
         it.end();
         return it;
     }
 
     [[nodiscard]] Id operator*() const noexcept { return current_value; }
 
-    SolvMapIterator & operator++() noexcept;
+    ConstMapIterator & operator++() noexcept;
 
-    [[nodiscard]] SolvMapIterator operator++(int) noexcept {
-        SolvMapIterator it(*this);
+    [[nodiscard]] ConstMapIterator operator++(int) noexcept {
+        ConstMapIterator it(*this);
         ++*this;
         return it;
     }
 
-    [[nodiscard]] bool operator==(const SolvMapIterator & other) const noexcept {
+    [[nodiscard]] bool operator==(const ConstMapIterator & other) const noexcept {
         return current_value == other.current_value;
     }
 
-    [[nodiscard]] bool operator!=(const SolvMapIterator & other) const noexcept {
+    [[nodiscard]] bool operator!=(const ConstMapIterator & other) const noexcept {
         return current_value != other.current_value;
     }
 
@@ -96,7 +96,7 @@ public:
     void jump(Id id) noexcept;
 
 protected:
-    explicit SolvMapIterator(const Map & map) noexcept : map{&map}, map_end{map.map + map.size} {}
+    explicit ConstMapIterator(const Map & map) noexcept : map{&map}, map_end{map.map + map.size} {}
 
 private:
     constexpr static int BEGIN = -1;
@@ -118,7 +118,8 @@ private:
 
 class SolvMap {
 public:
-    using iterator = SolvMapIterator;
+    using iterator = ConstMapIterator;
+    using const_iterator = ConstMapIterator;
 
     explicit SolvMap(int size) { map_init(&map, size); }
 
@@ -138,8 +139,8 @@ public:
     SolvMap & operator=(const SolvMap & other) noexcept;
     SolvMap & operator=(SolvMap && other) noexcept;
 
-    [[nodiscard]] iterator begin() const { return iterator::begin(map); }
-    [[nodiscard]] iterator end() const { return iterator::end(map); }
+    [[nodiscard]] const_iterator begin() const { return const_iterator::begin(map); }
+    [[nodiscard]] const_iterator end() const { return const_iterator::end(map); }
 
     // GENERIC OPERATIONS
 
@@ -239,7 +240,7 @@ private:
 };
 
 
-inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
+inline ConstMapIterator & ConstMapIterator::operator++() noexcept {
     if (current_value >= 0) {
         // make a copy of byte with the previous match to avoid changing the map
         unsigned char byte = *map_current;
@@ -279,7 +280,7 @@ inline SolvMapIterator & SolvMapIterator::operator++() noexcept {
 }
 
 
-inline void SolvMapIterator::jump(Id id) noexcept {
+inline void ConstMapIterator::jump(Id id) noexcept {
     if (id < 0) {
         begin();
         return;
