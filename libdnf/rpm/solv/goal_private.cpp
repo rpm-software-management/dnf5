@@ -45,7 +45,7 @@ void allow_uninstall_all_but_protected(
         not_protected_pkgs.remove_unsafe(protected_kernel.id);
     }
     if (pool->considered) {
-        not_protected_pkgs &= pool->considered;
+        not_protected_pkgs &= *pool->considered;
     }
 
     for (Id id = 1; id < pool->nsolvables; ++id) {

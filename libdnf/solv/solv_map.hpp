@@ -49,7 +49,7 @@ public:
     using pointer = void;
     using reference = Id;
 
-    explicit SolvMapIterator(const Map * map) noexcept : map{map}, map_end{map->map + map->size} { begin(); }
+    explicit SolvMapIterator(const Map & map) noexcept : map{&map}, map_end{map.map + map.size} { begin(); }
 
     SolvMapIterator(const SolvMapIterator & other) noexcept = default;
 
@@ -111,7 +111,7 @@ public:
     SolvMap(const SolvMap & other) : SolvMap(other.get_map()) {}
 
     /// Clones from an existing libsolv Map.
-    explicit SolvMap(const Map * map) { map_init_clone(&this->map, map); }
+    explicit SolvMap(const Map & map) { map_init_clone(&this->map, &map); }
 
     SolvMap(SolvMap && other) noexcept {
         map = other.map;
@@ -124,10 +124,10 @@ public:
     SolvMap & operator=(const SolvMap & other) noexcept;
     SolvMap & operator=(SolvMap && other) noexcept;
 
-    iterator begin() const { return iterator(&map); }
+    iterator begin() const { return iterator(map); }
 
     iterator end() const {
-        iterator it(&map);
+        iterator it(map);
         it.end();
         return it;
     }
@@ -145,7 +145,7 @@ public:
     /// Sets all bits in the map to 0.
     void clear() noexcept { map_empty(&map); }
 
-    const Map * get_map() const noexcept { return &map; }
+    const Map & get_map() const noexcept { return map; }
 
     /// @return the number of solvables in the SolvMap (number of 1s in the bitmap).
     std::size_t size() const noexcept;
@@ -179,20 +179,20 @@ public:
     // SET OPERATIONS - Map
 
     /// Union operator
-    SolvMap & operator|=(const Map * other) noexcept {
-        map_or(&map, const_cast<Map *>(other));
+    SolvMap & operator|=(const Map & other) noexcept {
+        map_or(&map, const_cast<Map *>(&other));
         return *this;
     }
 
     /// Difference operator
-    SolvMap & operator-=(const Map * other) noexcept {
-        map_subtract(&map, const_cast<Map *>(other));
+    SolvMap & operator-=(const Map & other) noexcept {
+        map_subtract(&map, const_cast<Map *>(&other));
         return *this;
     }
 
     /// Intersection operator
-    SolvMap & operator&=(const Map * other) noexcept {
-        map_and(&map, other);
+    SolvMap & operator&=(const Map & other) noexcept {
+        map_and(&map, &other);
         return *this;
     }
 

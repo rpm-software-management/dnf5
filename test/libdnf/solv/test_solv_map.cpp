@@ -260,7 +260,7 @@ void SolvMapTest::test_iterator_performance_full() {
     // initialize a map filed with ones
     constexpr int max = 1000000;
     libdnf::solv::SolvMap map(max);
-    memset(map.get_map()->map, 255, static_cast<std::size_t>(map.get_map()->size));
+    memset(map.get_map().map, 255, static_cast<std::size_t>(map.get_map().size));
 
     for (int i = 0; i < 500; i++) {
         std::vector<Id> result;
@@ -275,7 +275,7 @@ void SolvMapTest::test_iterator_performance_4bits() {
     // initialize a map filed with 00001111 bytes
     constexpr int max = 1000000;
     libdnf::solv::SolvMap map(max);
-    memset(map.get_map()->map, 15, static_cast<std::size_t>(map.get_map()->size));
+    memset(map.get_map().map, 15, static_cast<std::size_t>(map.get_map().size));
 
     for (int i = 0; i < 500; i++) {
         std::vector<Id> result;
