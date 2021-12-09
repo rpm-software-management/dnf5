@@ -6,3 +6,4 @@ Type=dbus
 BusName=org.rpm.dnf.v0
 User=root
 ExecStart=/usr/bin/dnfdaemon-server
+TimeoutStopSec=5min
