@@ -44,6 +44,8 @@ public:
     AdvisorySetIterator(const AdvisorySetIterator & other);
     ~AdvisorySetIterator();
 
+    AdvisorySetIterator & operator=(const AdvisorySetIterator & other);
+
     static AdvisorySetIterator begin(const AdvisorySet & advisory_set);
     static AdvisorySetIterator end(const AdvisorySet & advisory_set);
 

@@ -30,16 +30,14 @@ class AdvisorySetIterator::Impl : private libdnf::solv::SolvMap::iterator {
 private:
     Impl(const AdvisorySet & advisory_set)
         : libdnf::solv::SolvMap::iterator(advisory_set.p_impl->get_map()),
-          advisory_set{advisory_set} {}
-
-    Impl(const AdvisorySetIterator::Impl & advisory_set_iterator_impl) = default;
+          advisory_set{&advisory_set} {}
 
     AdvisorySetIterator::Impl & operator++() {
         libdnf::solv::SolvMap::iterator::operator++();
         return *this;
     }
 
-    const AdvisorySet & advisory_set;
+    const AdvisorySet * advisory_set;
 
     friend AdvisorySetIterator;
 };
@@ -50,6 +48,12 @@ AdvisorySetIterator::AdvisorySetIterator(const AdvisorySet & advisory_set) : p_i
 AdvisorySetIterator::AdvisorySetIterator(const AdvisorySetIterator & other) : p_impl{new Impl(*other.p_impl)} {}
 
 AdvisorySetIterator::~AdvisorySetIterator() = default;
+
+
+AdvisorySetIterator & AdvisorySetIterator::operator=(const AdvisorySetIterator & other) {
+    *p_impl = *other.p_impl;
+    return *this;
+}
 
 
 AdvisorySetIterator AdvisorySetIterator::begin(const AdvisorySet & advisory_set) {
@@ -76,7 +80,7 @@ void AdvisorySetIterator::end() {
 
 
 Advisory AdvisorySetIterator::operator*() {
-    return {p_impl->advisory_set.get_base(), libdnf::advisory::AdvisoryId(**p_impl)};
+    return {p_impl->advisory_set->get_base(), libdnf::advisory::AdvisoryId(**p_impl)};
 }
 
 

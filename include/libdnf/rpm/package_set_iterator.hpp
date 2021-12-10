@@ -44,6 +44,8 @@ public:
     PackageSetIterator(const PackageSetIterator & other);
     ~PackageSetIterator();
 
+    PackageSetIterator & operator=(const PackageSetIterator & other);
+
     static PackageSetIterator begin(const PackageSet & package_set);
     static PackageSetIterator end(const PackageSet & package_set);
 

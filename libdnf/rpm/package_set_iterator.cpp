@@ -30,16 +30,14 @@ class PackageSetIterator::Impl : private libdnf::solv::SolvMap::iterator {
 private:
     Impl(const PackageSet & package_set)
         : libdnf::solv::SolvMap::iterator(package_set.p_impl->get_map()),
-          package_set{package_set} {}
-
-    Impl(const PackageSetIterator::Impl & package_set_iterator_impl) = default;
+          package_set{&package_set} {}
 
     PackageSetIterator::Impl & operator++() {
         libdnf::solv::SolvMap::iterator::operator++();
         return *this;
     }
 
-    const PackageSet & package_set;
+    const PackageSet * package_set;
 
     friend PackageSetIterator;
 };
@@ -50,6 +48,12 @@ PackageSetIterator::PackageSetIterator(const PackageSet & package_set) : p_impl{
 PackageSetIterator::PackageSetIterator(const PackageSetIterator & other) : p_impl{new Impl(*other.p_impl)} {}
 
 PackageSetIterator::~PackageSetIterator() = default;
+
+
+PackageSetIterator & PackageSetIterator::operator=(const PackageSetIterator & other) {
+    *p_impl = *other.p_impl;
+    return *this;
+}
 
 
 PackageSetIterator PackageSetIterator::begin(const PackageSet & package_set) {
@@ -76,7 +80,7 @@ void PackageSetIterator::end() {
 
 
 Package PackageSetIterator::operator*() {
-    return {p_impl->package_set.get_base(), libdnf::rpm::PackageId(**p_impl)};
+    return {p_impl->package_set->get_base(), libdnf::rpm::PackageId(**p_impl)};
 }
 
 

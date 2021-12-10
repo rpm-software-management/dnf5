@@ -182,6 +182,10 @@ void RpmPackageSetTest::test_iterator() {
     CPPUNIT_ASSERT_EQUAL((*it2).get_id().id, 2);
     CPPUNIT_ASSERT_EQUAL((*it3).get_id().id, 1);
 
+    // test copy assignment
+    it1 = it2;
+    CPPUNIT_ASSERT_EQUAL((*it1).get_id().id, 2);
+
     // test begin()
     it1.begin();
     CPPUNIT_ASSERT_EQUAL((*it1).get_id().id, 0);
