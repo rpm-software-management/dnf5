@@ -38,7 +38,6 @@ public:
 
     void dump_debugdata();
 
-protected:
     // Add (load) a repo from `repo_path`.
     // It's also a shared code for add_repo_repomd() and add_repo_rpm().
     void add_repo(const std::string & repoid, const std::string & repo_path);
