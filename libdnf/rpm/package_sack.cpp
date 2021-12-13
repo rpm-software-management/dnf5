@@ -125,6 +125,21 @@ std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(l
     return considered;
 }
 
+void PackageSack::Impl::recompute_considered_in_pool() {
+    if (considered_uptodate) {
+        return;
+    }
+
+    auto considered = compute_considered_map(libdnf::sack::ExcludeFlags::APPLY_EXCLUDES);
+    if (considered) {
+        get_pool(base).set_considered_map(std::move(*considered));
+    } else {
+        get_pool(base).drop_considered_map();
+    }
+
+    considered_uptodate = true;
+}
+
 Package PackageSack::add_cmdline_package(const std::string & fn, bool add_with_hdrid) {
     auto repo = p_impl->base->get_repo_sack()->get_cmdline_repo();
     auto new_id = repo->p_impl->add_rpm_package(fn, add_with_hdrid);

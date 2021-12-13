@@ -90,6 +90,10 @@ public:
     /// If there are no excluded packages, the considered map may not be present in the return value.
     std::optional<libdnf::solv::SolvMap> compute_considered_map(libdnf::sack::ExcludeFlags flags) const;
 
+    /// If the considered map in the pool is out of date - `considered_uptodate == false` - it will recompute it.
+    /// And sets `considered_uptodate` to` true`.
+    void recompute_considered_in_pool();
+
 private:
     bool provides_ready{false};
 
@@ -106,6 +110,8 @@ private:
     std::unique_ptr<libdnf::solv::SolvMap> repo_excludes;
 
     std::unique_ptr<libdnf::solv::SolvMap> module_excludes;  // packages excluded by modularity
+
+    bool considered_uptodate = true;
 
     std::vector<Solvable *> cached_sorted_solvables;
     int cached_sorted_solvables_size{0};
