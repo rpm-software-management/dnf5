@@ -4,9 +4,6 @@ pkg_check_modules(CPPUNIT REQUIRED cppunit)
 # use any sources found under the current directory
 file(GLOB TEST_TUTORIAL_SOURCES *.cpp)
 
-# share the test runner code with libdnf
-list(APPEND TEST_TUTORIAL_SOURCES ${CMAKE_CURRENT_SOURCE_DIR}/../libdnf/run_tests.cpp)
-
 include_directories(${PROJECT_SOURCE_DIR}/libdnf)
 
 
