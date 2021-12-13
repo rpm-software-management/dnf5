@@ -91,6 +91,16 @@ private:
 
     WeakPtrGuard<PackageSack, false> sack_guard;
 
+    std::unique_ptr<libdnf::solv::SolvMap> pkg_excludes;  // explicitly excluded packages (e.g. by configuration)
+    std::unique_ptr<libdnf::solv::SolvMap> pkg_includes;  // explicitly included packages (e.g. by configuration)
+
+    // packages excluded by disabling repositories
+    // Optimization, the PackageQuery does not have to test whether the package comes from an allowed repository.
+    // TODO(jrohel): Recompute when state of repository is changed enabled/disabled or added solvable to disabled repo
+    std::unique_ptr<libdnf::solv::SolvMap> repo_excludes;
+
+    std::unique_ptr<libdnf::solv::SolvMap> module_excludes;  // packages excluded by modularity
+
     std::vector<Solvable *> cached_sorted_solvables;
     int cached_sorted_solvables_size{0};
     /// pair<id_of_lowercase_name, Solvable *>
