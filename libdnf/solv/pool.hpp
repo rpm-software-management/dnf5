@@ -81,7 +81,7 @@ private:
 
 class Pool {
 public:
-    Pool() { pool = pool_create(); }
+    Pool() : considered(0) { pool = pool_create(); }
 
     Pool(const Pool & pool) = delete;
     Pool & operator=(const Pool & pool) = delete;
@@ -231,7 +231,25 @@ public:
     ::Pool * operator->() { return &*pool; }
     ::Pool * operator->() const { return &*pool; }
 
+    bool is_considered_map_active() const noexcept { return pool->considered; }
+
+    const SolvMap & get_considered_map() const noexcept { return considered; }
+
+    void set_considered_map(SolvMap && considered_map) {
+        libdnf_assert(
+            considered_map.allocated_size() >= get_nsolvables(),
+            "The considered map is smaller than the number of solvables in the pool");
+        considered = std::move(considered_map);
+        pool->considered = const_cast<::Map *>(&considered.get_map());
+    }
+
+    void drop_considered_map() {
+        pool->considered = nullptr;
+        considered = SolvMap(0);
+    }
+
 private:
+    SolvMap considered;
     ::Pool * pool;
 };
 
