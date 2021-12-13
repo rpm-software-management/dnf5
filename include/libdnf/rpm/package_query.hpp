@@ -58,12 +58,12 @@ public:
     explicit PackageQuery(
         const libdnf::BaseWeakPtr & base, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES, bool empty = false);
     explicit PackageQuery(libdnf::Base & base, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES, bool empty = false);
-    PackageQuery(const PackageQuery & src) = default;
-    PackageQuery(PackageQuery && src) noexcept = default;
-    ~PackageQuery() = default;
+    PackageQuery(const PackageQuery & src);
+    PackageQuery(PackageQuery && src) noexcept;
+    ~PackageQuery();
 
-    PackageQuery & operator=(const PackageQuery & src) = default;
-    PackageQuery & operator=(PackageQuery && src) noexcept = default;
+    PackageQuery & operator=(const PackageQuery & src);
+    PackageQuery & operator=(PackageQuery && src) noexcept;
 
     /// Filter packages by their `name`.
     ///
@@ -604,8 +604,9 @@ public:
 
 private:
     friend libdnf::Goal;
-    class Impl;
+    class PQImpl;
     ExcludeFlags flags;
+    std::unique_ptr<PQImpl> p_pq_impl;
 };
 
 

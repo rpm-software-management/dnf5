@@ -28,10 +28,12 @@ extern "C" {
 #include <solv/solvable.h>
 }
 
+#include <optional>
+
 namespace libdnf::rpm {
 
 
-class PackageQuery::Impl {
+class PackageQuery::PQImpl {
 public:
     static void filter_provides(
         Pool * pool,
@@ -69,6 +71,10 @@ public:
     /// Provide libdnf::sack::QueryCmp without NOT flag
     static void str2reldep_internal(
         ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
+
+private:
+    friend PackageQuery;
+    std::optional<libdnf::solv::SolvMap> considered_cache;
 };
 
 

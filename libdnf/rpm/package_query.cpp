@@ -225,25 +225,63 @@ static inline bool name_arch_compare_lower_solvable(const Solvable * first, cons
 }  //  namespace
 
 
-PackageQuery::PackageQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool empty) : PackageSet(base), flags(flags) {
-    if (empty) {
-        return;
+PackageQuery::PackageQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool empty)
+    : PackageSet(base),
+      flags(flags),
+      p_pq_impl(new PQImpl) {
+    if (!empty) {
+        *p_impl |= base->get_rpm_package_sack()->p_impl->get_solvables();
     }
 
+    auto & pool = get_pool(base);
     switch (flags) {
-        case ExcludeFlags::IGNORE_EXCLUDES:
-            // TODO(jmracek) add exclude application
         case ExcludeFlags::APPLY_EXCLUDES:
-        case ExcludeFlags::IGNORE_MODULAR_EXCLUDES:
-        case ExcludeFlags::IGNORE_REGULAR_EXCLUDES:
-            *p_impl |= base->get_rpm_package_sack()->p_impl->get_solvables();
+            base->get_rpm_package_sack()->p_impl->recompute_considered_in_pool();
+            if (!empty && pool.is_considered_map_active()) {
+                *p_impl &= pool.get_considered_map();
+            }
             break;
+        case ExcludeFlags::IGNORE_REGULAR_EXCLUDES:
+        case ExcludeFlags::IGNORE_MODULAR_EXCLUDES: {
+            auto considered = base->get_rpm_package_sack()->p_impl->compute_considered_map(flags);
+            if (considered) {
+                p_pq_impl->considered_cache = std::move(considered);
+                if (!empty) {
+                    *p_impl &= *p_pq_impl->considered_cache;
+                }
+            }
+            break;
+        }
+        case ExcludeFlags::IGNORE_EXCLUDES:;
     }
 }
 
 PackageQuery::PackageQuery(libdnf::Base & base, ExcludeFlags flags, bool empty)
     : PackageQuery(base.get_weak_ptr(), flags, empty) {}
 
+PackageQuery::PackageQuery(const PackageQuery & src)
+    : PackageSet(src),
+      flags(src.flags),
+      p_pq_impl(new PQImpl(*src.p_pq_impl)) {}
+
+PackageQuery::PackageQuery(PackageQuery && src) noexcept = default;
+
+PackageQuery & PackageQuery::operator=(const PackageQuery & src) {
+    if (this != &src) {
+        PackageSet::operator=(src);
+        flags = src.flags;
+        if (p_pq_impl) {
+            *p_pq_impl = *src.p_pq_impl;
+        } else {
+            p_pq_impl.reset(new PQImpl(*src.p_pq_impl));
+        }
+    }
+    return *this;
+}
+
+PackageQuery & PackageQuery::operator=(PackageQuery && src) noexcept = default;
+
+PackageQuery::~PackageQuery() = default;
 
 template <const char * (libdnf::solv::Pool::*getter)(Id) const>
 inline static void filter_glob_internal(
@@ -658,7 +696,7 @@ PackageQuery & PackageQuery::filter_nevra(const std::vector<std::string> & patte
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 
     for (auto & pattern : patterns) {
-        Impl::filter_nevra(*this, sorted_solvables, pattern, cmp_glob, cmp_type, filter_result);
+        PQImpl::filter_nevra(*this, sorted_solvables, pattern, cmp_glob, cmp_type, filter_result);
     }
 
     // Apply filter results to query
@@ -682,7 +720,7 @@ PackageQuery & PackageQuery::filter_nevra(const libdnf::rpm::Nevra & pattern, li
 
     libdnf::solv::SolvMap filter_result(get_pool(p_impl->base).get_nsolvables());
 
-    Impl::filter_nevra(*this, pattern, cmp_glob, cmp_type, filter_result, true);
+    PQImpl::filter_nevra(*this, pattern, cmp_glob, cmp_type, filter_result, true);
 
     // Apply filter results to query
     if (cmp_not) {
@@ -1272,7 +1310,7 @@ PackageQuery & PackageQuery::filter_provides(const ReldepList & reldep_list, lib
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
 
     p_impl->base->get_rpm_package_sack()->p_impl->make_provides_ready();
-    Impl::filter_provides(*pool, cmp_type, reldep_list, filter_result);
+    PQImpl::filter_provides(*pool, cmp_type, reldep_list, filter_result);
 
     // Apply filter results to query
     if (cmp_not) {
@@ -1285,7 +1323,7 @@ PackageQuery & PackageQuery::filter_provides(const ReldepList & reldep_list, lib
 }
 
 /// Provide libdnf::sack::QueryCmp without NOT flag
-void PackageQuery::Impl::str2reldep_internal(
+void PackageQuery::PQImpl::str2reldep_internal(
     ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, bool cmp_glob, const std::string & pattern) {
     libdnf::sack::QueryCmp tmp_cmp_type = cmp_type;
     const char * c_pattern = pattern.c_str();
@@ -1308,7 +1346,7 @@ void PackageQuery::Impl::str2reldep_internal(
 }
 
 /// Provide libdnf::sack::QueryCmp without NOT flag
-void PackageQuery::Impl::str2reldep_internal(
+void PackageQuery::PQImpl::str2reldep_internal(
     ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_glob = (cmp_type & libdnf::sack::QueryCmp::GLOB) == libdnf::sack::QueryCmp::GLOB;
 
@@ -1327,7 +1365,7 @@ PackageQuery & PackageQuery::filter_provides(
 
     ReldepList reldep_list(p_impl->base);
 
-    Impl::str2reldep_internal(reldep_list, cmp_type, patterns);
+    PQImpl::str2reldep_internal(reldep_list, cmp_type, patterns);
 
     if (cmp_not) {
         return filter_provides(reldep_list, libdnf::sack::QueryCmp::NEQ);
@@ -1336,7 +1374,7 @@ PackageQuery & PackageQuery::filter_provides(
     }
 }
 
-void PackageQuery::Impl::filter_provides(
+void PackageQuery::PQImpl::filter_provides(
     Pool * pool,
     libdnf::sack::QueryCmp cmp_type,
     const ReldepList & reldep_list,
@@ -1357,7 +1395,7 @@ void PackageQuery::Impl::filter_provides(
     }
 }
 
-void PackageQuery::Impl::filter_reldep(
+void PackageQuery::PQImpl::filter_reldep(
     PackageSet & pkg_set, Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns) {
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -1374,7 +1412,7 @@ void PackageQuery::Impl::filter_reldep(
     }
 }
 
-void PackageQuery::Impl::filter_reldep(
+void PackageQuery::PQImpl::filter_reldep(
     PackageSet & pkg_set, Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const ReldepList & reldep_list) {
     bool cmp_not;
     switch (cmp_type) {
@@ -1426,7 +1464,7 @@ void PackageQuery::Impl::filter_reldep(
     }
 }
 
-void PackageQuery::Impl::filter_reldep(
+void PackageQuery::PQImpl::filter_reldep(
     PackageSet & pkg_set, Id libsolv_key, libdnf::sack::QueryCmp cmp_type, const PackageSet & package_set) {
     bool cmp_not;
     switch (cmp_type) {
@@ -1479,7 +1517,7 @@ void PackageQuery::Impl::filter_reldep(
     }
 }
 
-void PackageQuery::Impl::filter_nevra(
+void PackageQuery::PQImpl::filter_nevra(
     PackageSet & pkg_set,
     const Nevra & pattern,
     bool cmp_glob,
@@ -1680,7 +1718,7 @@ void PackageQuery::Impl::filter_nevra(
     }
 }
 
-void PackageQuery::Impl::filter_nevra(
+void PackageQuery::PQImpl::filter_nevra(
     PackageSet & pkg_set,
     const std::vector<Solvable *> & sorted_solvables,
     const std::string & pattern,
@@ -1743,46 +1781,46 @@ void PackageQuery::Impl::filter_nevra(
 }
 
 PackageQuery & PackageQuery::filter_conflicts(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, reldep_list);
+    PQImpl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, reldep_list);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_conflicts(
     const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, patterns);
+    PQImpl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, patterns);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_conflicts(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, package_set);
+    PQImpl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, package_set);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_enhances(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_ENHANCES, cmp_type, reldep_list);
+    PQImpl::filter_reldep(*this, SOLVABLE_ENHANCES, cmp_type, reldep_list);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_enhances(
     const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_ENHANCES, cmp_type, patterns);
+    PQImpl::filter_reldep(*this, SOLVABLE_ENHANCES, cmp_type, patterns);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_enhances(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_ENHANCES, cmp_type, package_set);
+    PQImpl::filter_reldep(*this, SOLVABLE_ENHANCES, cmp_type, package_set);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_obsoletes(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_OBSOLETES, cmp_type, reldep_list);
+    PQImpl::filter_reldep(*this, SOLVABLE_OBSOLETES, cmp_type, reldep_list);
 
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_obsoletes(
     const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_OBSOLETES, cmp_type, patterns);
+    PQImpl::filter_reldep(*this, SOLVABLE_OBSOLETES, cmp_type, patterns);
     return *this;
 }
 
@@ -1843,66 +1881,66 @@ PackageQuery & PackageQuery::filter_obsoletes(const PackageSet & package_set, li
 }
 
 PackageQuery & PackageQuery::filter_recommends(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_RECOMMENDS, cmp_type, reldep_list);
+    PQImpl::filter_reldep(*this, SOLVABLE_RECOMMENDS, cmp_type, reldep_list);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_recommends(
     const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_RECOMMENDS, cmp_type, patterns);
+    PQImpl::filter_reldep(*this, SOLVABLE_RECOMMENDS, cmp_type, patterns);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_recommends(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_RECOMMENDS, cmp_type, package_set);
+    PQImpl::filter_reldep(*this, SOLVABLE_RECOMMENDS, cmp_type, package_set);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_requires(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_REQUIRES, cmp_type, reldep_list);
+    PQImpl::filter_reldep(*this, SOLVABLE_REQUIRES, cmp_type, reldep_list);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_requires(
     const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_REQUIRES, cmp_type, patterns);
+    PQImpl::filter_reldep(*this, SOLVABLE_REQUIRES, cmp_type, patterns);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_requires(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_REQUIRES, cmp_type, package_set);
+    PQImpl::filter_reldep(*this, SOLVABLE_REQUIRES, cmp_type, package_set);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_suggests(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_SUGGESTS, cmp_type, reldep_list);
+    PQImpl::filter_reldep(*this, SOLVABLE_SUGGESTS, cmp_type, reldep_list);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_suggests(
     const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_SUGGESTS, cmp_type, patterns);
+    PQImpl::filter_reldep(*this, SOLVABLE_SUGGESTS, cmp_type, patterns);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_suggests(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_SUGGESTS, cmp_type, package_set);
+    PQImpl::filter_reldep(*this, SOLVABLE_SUGGESTS, cmp_type, package_set);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_supplements(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, reldep_list);
+    PQImpl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, reldep_list);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_supplements(
     const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, patterns);
+    PQImpl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, patterns);
     return *this;
 }
 
 PackageQuery & PackageQuery::filter_supplements(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type) {
-    Impl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, package_set);
+    PQImpl::filter_reldep(*this, SOLVABLE_SUPPLEMENTS, cmp_type, package_set);
     return *this;
 }
 
@@ -2084,17 +2122,16 @@ PackageQuery & PackageQuery::filter_upgradable() {
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
 
     for (auto pkg_id : sack->p_impl->get_solvables()) {
-        // if (flags == Query::ExcludeFlags::APPLY_EXCLUDES) {
-        //     if (pool->considered && !map_tst(pool->considered, p))
-        //         continue;
-        // } else {
-        //     if (considered_cached && !map_tst(considered_cached, p))
-        //         continue;
-        // }
-        // s = pool.id2solvable(p);
+        if (flags == ExcludeFlags::APPLY_EXCLUDES) {
+            if (pool.is_considered_map_active() && !pool.get_considered_map().contains_unsafe(pkg_id)) {
+                continue;
+            }
+        } else {
+            if (p_pq_impl->considered_cache && !p_pq_impl->considered_cache->contains_unsafe(pkg_id)) {
+                continue;
+            }
+        }
 
-        // TODO(jmracek) Filter out solvables that were excluded accordin to flags for initiation
-        // When initlad emptu raise Exception
         Solvable * solvable = pool.id2solvable(pkg_id);
         if (solvable->repo == installed_repo) {
             continue;
@@ -2124,17 +2161,16 @@ PackageQuery & PackageQuery::filter_downgradable() {
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
 
     for (auto pkg_id : sack->p_impl->get_solvables()) {
-        //  if (flags == Query::ExcludeFlags::APPLY_EXCLUDES) {
-        //      if (pool->considered && !map_tst(pool->considered, p))
-        //          continue;
-        //  } else {
-        //      if (considered_cached && !map_tst(considered_cached, p))
-        //          continue;
-        //  }
-        //  s = pool.id2solvable(p);
+        if (flags == ExcludeFlags::APPLY_EXCLUDES) {
+            if (pool.is_considered_map_active() && !pool.get_considered_map().contains_unsafe(pkg_id)) {
+                continue;
+            }
+        } else {
+            if (p_pq_impl->considered_cache && !p_pq_impl->considered_cache->contains_unsafe(pkg_id)) {
+                continue;
+            }
+        }
 
-        // TODO(jmracek) Filter out solvables that were excluded accordin to flags for initiation
-        // When initlad emptu raise Exception
         Solvable * solvable = pool.id2solvable(pkg_id);
         if (solvable->repo == installed_repo) {
             continue;
@@ -2298,7 +2334,7 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
         try {
             auto nevras = rpm::Nevra::parse(pkg_spec, test_forms);
             for (auto & nevra_obj : nevras) {
-                Impl::filter_nevra(
+                PQImpl::filter_nevra(
                     *this,
                     nevra_obj,
                     glob,
@@ -2315,7 +2351,7 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
             // When parsed nevra search failed only string with glob can match full nevra
             if (settings.nevra_forms.empty() && glob) {
                 auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
-                Impl::filter_nevra(
+                PQImpl::filter_nevra(
                     *this,
                     sorted_solvables,
                     pkg_spec,
@@ -2333,10 +2369,10 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
     }
     if (settings.with_provides) {
         ReldepList reldep_list(p_impl->base);
-        Impl::str2reldep_internal(reldep_list, cmp, glob, pkg_spec);
+        PQImpl::str2reldep_internal(reldep_list, cmp, glob, pkg_spec);
         if (reldep_list.size() != 0) {
             sack->p_impl->make_provides_ready();
-            Impl::filter_provides(*pool, libdnf::sack::QueryCmp::EQ, reldep_list, filter_result);
+            PQImpl::filter_provides(*pool, libdnf::sack::QueryCmp::EQ, reldep_list, filter_result);
             filter_result &= *p_impl;
             if (!filter_result.empty()) {
                 *p_impl &= filter_result;
@@ -2364,6 +2400,7 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
 void PackageQuery::swap(PackageQuery & other) noexcept {
     PackageSet::swap(other);
     std::swap(flags, other.flags);
+    p_pq_impl.swap(other.p_pq_impl);
 }
 
 }  //  namespace libdnf::rpm
