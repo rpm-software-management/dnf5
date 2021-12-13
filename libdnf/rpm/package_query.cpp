@@ -225,21 +225,24 @@ static inline bool name_arch_compare_lower_solvable(const Solvable * first, cons
 }  //  namespace
 
 
-PackageQuery::PackageQuery(const BaseWeakPtr & base, InitFlags flags) : PackageSet(base), init_flags(flags) {
+PackageQuery::PackageQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool empty) : PackageSet(base), flags(flags) {
+    if (empty) {
+        return;
+    }
+
     switch (flags) {
-        case InitFlags::EMPTY:
-            break;
-        case InitFlags::IGNORE_EXCLUDES:
+        case ExcludeFlags::IGNORE_EXCLUDES:
             // TODO(jmracek) add exclude application
-        case InitFlags::APPLY_EXCLUDES:
-        case InitFlags::IGNORE_MODULAR_EXCLUDES:
-        case InitFlags::IGNORE_REGULAR_EXCLUDES:
+        case ExcludeFlags::APPLY_EXCLUDES:
+        case ExcludeFlags::IGNORE_MODULAR_EXCLUDES:
+        case ExcludeFlags::IGNORE_REGULAR_EXCLUDES:
             *p_impl |= base->get_rpm_package_sack()->p_impl->get_solvables();
             break;
     }
 }
 
-PackageQuery::PackageQuery(libdnf::Base & base, InitFlags flags) : PackageQuery(base.get_weak_ptr(), flags) {}
+PackageQuery::PackageQuery(libdnf::Base & base, ExcludeFlags flags, bool empty)
+    : PackageQuery(base.get_weak_ptr(), flags, empty) {}
 
 
 template <const char * (libdnf::solv::Pool::*getter)(Id) const>
@@ -2360,7 +2363,7 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
 
 void PackageQuery::swap(PackageQuery & other) noexcept {
     PackageSet::swap(other);
-    std::swap(init_flags, other.init_flags);
+    std::swap(flags, other.flags);
 }
 
 }  //  namespace libdnf::rpm

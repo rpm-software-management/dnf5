@@ -76,7 +76,7 @@ std::vector<TransactionPackage> Transaction::get_transaction_packages() const {
 GoalProblem Transaction::Impl::report_not_found(
     GoalAction action, const std::string & pkg_spec, const GoalJobSettings & settings, bool strict) {
     auto sack = base->get_rpm_package_sack();
-    rpm::PackageQuery query(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+    rpm::PackageQuery query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     if (action == GoalAction::REMOVE) {
         query.filter_installed();
     }
@@ -187,7 +187,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     }
     auto & pool = get_pool(base);
 
-    rpm::PackageQuery installonly_query(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+    rpm::PackageQuery installonly_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     installonly_query.filter_provides(base->get_config().installonlypkgs().get_value());
     rpm::PackageQuery installed_installonly_query(installonly_query);
     installed_installonly_query.filter_installed();
@@ -241,7 +241,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
 
     auto list_removes = solved_goal.list_removes();
     if (!list_removes.empty()) {
-        rpm::PackageQuery remaining_installed(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+        rpm::PackageQuery remaining_installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
         remaining_installed.filter_installed();
         for (auto id : list_removes) {
             remaining_installed.p_impl->remove(id);

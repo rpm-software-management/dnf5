@@ -51,7 +51,7 @@ static libdnf::rpm::PackageQuery running_kernel_check_path(const libdnf::BaseWea
     if (access(fn.c_str(), F_OK)) {
         // TODO(jmracek) Report g_debug("running_kernel_check_path(): no matching file: %s.", fn);
     }
-    libdnf::rpm::PackageQuery q(base, libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+    libdnf::rpm::PackageQuery q(base, libdnf::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
 
     // Do we really need it? dnf_sack_make_provides_ready(sack);
     q.filter_installed();
@@ -560,7 +560,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
     auto & pool = get_pool(base);
     auto & cfg_main = base->get_config();
 
-    rpm::PackageQuery installed(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+    rpm::PackageQuery installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     installed.filter_installed();
     for (auto & [action, ids, settings] : rpm_ids) {
         switch (action) {
@@ -657,7 +657,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
         return;
     }
     // Report when package is not installed
-    rpm::PackageQuery all_installed(base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+    rpm::PackageQuery all_installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     all_installed.filter_installed();
     // Report only not installed if not obsoleters - https://bugzilla.redhat.com/show_bug.cgi?id=1818118
     bool obsoleters = false;
@@ -810,7 +810,7 @@ base::Transaction Goal::resolve(bool allow_erasing) {
     // Add protected packages
     {
         auto & protected_packages = cfg_main.protected_packages().get_value();
-        rpm::PackageQuery protected_query(p_impl->base, rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+        rpm::PackageQuery protected_query(p_impl->base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
         protected_query.filter_name(protected_packages);
         p_impl->rpm_goal.add_protected_packages(*protected_query.p_impl);
     }

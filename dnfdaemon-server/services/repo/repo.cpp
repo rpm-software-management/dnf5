@@ -144,7 +144,7 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->get_max_timestamp());
                 break;
             case RepoAttribute::pkgs: {
-                libdnf::rpm::PackageQuery query(base, libdnf::rpm::PackageQuery::InitFlags::IGNORE_EXCLUDES);
+                libdnf::rpm::PackageQuery query(base, libdnf::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
                 std::vector<std::string> reponames = {libdnf_repo->get_id()};
                 query.filter_repo_id(reponames);
                 dbus_repo.emplace(attr, query.size());
