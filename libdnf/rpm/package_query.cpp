@@ -2359,7 +2359,8 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
 }
 
 void PackageQuery::swap(PackageQuery & other) noexcept {
-    p_impl->swap(*other.p_impl);
+    PackageSet::swap(other);
+    std::swap(init_flags, other.init_flags);
 }
 
 }  //  namespace libdnf::rpm
