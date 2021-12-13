@@ -75,6 +75,55 @@ void PackageSack::Impl::make_provides_ready() {
     provides_ready = true;
 }
 
+std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(libdnf::sack::ExcludeFlags flags) const {
+    if ((static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES) ||
+         (!repo_excludes && !pkg_excludes && !pkg_includes)) &&
+        (static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes)) {
+        return {};
+    }
+
+    auto & pool = get_pool(base);
+
+    libdnf::solv::SolvMap considered(pool.get_nsolvables());
+
+    // considered = (all - module_excludes - repo_excludes - pkg_excludes) and
+    //              (pkg_includes + all_from_repos_not_using_includes)
+    considered.set_all();
+
+    if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) && module_excludes) {
+        considered -= *module_excludes;
+    }
+
+    if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES)) {
+        if (repo_excludes) {
+            considered -= *repo_excludes;
+        }
+
+        if (pkg_excludes) {
+            considered -= *pkg_excludes;
+        }
+
+        if (pkg_includes) {
+            pkg_includes->grow(pool.get_nsolvables());
+            libdnf::solv::SolvMap pkg_includes_tmp(*pkg_includes);
+
+            // Add all solvables from repositories which do not use "includes"
+            for (const auto & repo : base->get_repo_sack()->get_data()) {
+                if (!repo->get_use_includes()) {
+                    Id solvableid;
+                    Solvable * solvable;
+                    FOR_REPO_SOLVABLES(repo->p_impl->solv_repo.repo, solvableid, solvable) {
+                        pkg_includes_tmp.add_unsafe(solvableid);
+                    }
+                }
+            }
+
+            considered &= pkg_includes_tmp;
+        }
+    }
+
+    return considered;
+}
 
 Package PackageSack::add_cmdline_package(const std::string & fn, bool add_with_hdrid) {
     auto repo = p_impl->base->get_repo_sack()->get_cmdline_repo();

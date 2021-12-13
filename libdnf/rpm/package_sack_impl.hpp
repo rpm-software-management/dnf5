@@ -27,12 +27,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/solv_map.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/common/sack/exclude_flags.hpp"
 #include "libdnf/rpm/package.hpp"
 
 extern "C" {
 #include <solv/pool.h>
 }
 
+#include <optional>
 #include <vector>
 
 
@@ -83,6 +85,10 @@ public:
     PackageId get_running_kernel() const noexcept { return running_kernel; };
 
     void set_running_kernel(PackageId kernel) { running_kernel = kernel; };
+
+    /// Computes considered map.
+    /// If there are no excluded packages, the considered map may not be present in the return value.
+    std::optional<libdnf::solv::SolvMap> compute_considered_map(libdnf::sack::ExcludeFlags flags) const;
 
 private:
     bool provides_ready{false};
