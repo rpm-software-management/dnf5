@@ -31,12 +31,9 @@ CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupTest);
 
 
 void CompsGroupTest::test_load() {
-    std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    libdnf::comps::Comps comps(base);
-    auto repo = repo_sack->new_repo("repo");
+    add_repo_repomd("repomd-comps-core");
 
-    comps.load_from_file(repo, data_path / "core.xml");
-    libdnf::comps::GroupQuery q_core(comps.get_group_sack());
+    libdnf::comps::GroupQuery q_core(base.get_comps()->get_group_sack());
     q_core.filter_installed(false);
     q_core.filter_groupid("core");
     auto core = q_core.get();
@@ -64,8 +61,9 @@ void CompsGroupTest::test_load() {
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_condition(), core.get_packages()[i].get_condition());
     }
 
-    comps.load_from_file(repo, data_path / "standard.xml");
-    libdnf::comps::GroupQuery q_standard(comps.get_group_sack());
+    add_repo_repomd("repomd-comps-standard");
+
+    libdnf::comps::GroupQuery q_standard(base.get_comps()->get_group_sack());
     q_standard.filter_installed(false);
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
@@ -98,12 +96,9 @@ void CompsGroupTest::test_load() {
 
 
 void CompsGroupTest::test_load_defaults() {
-    std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    libdnf::comps::Comps comps(base);
-    auto repo = repo_sack->new_repo("repo");
+    add_repo_repomd("repomd-comps-core-empty");
 
-    comps.load_from_file(repo, data_path / "core-empty.xml");
-    libdnf::comps::GroupQuery q_core_empty(comps.get_group_sack());
+    libdnf::comps::GroupQuery q_core_empty(base.get_comps()->get_group_sack());
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
@@ -121,16 +116,12 @@ void CompsGroupTest::test_load_defaults() {
 
 
 void CompsGroupTest::test_merge() {
-    std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    libdnf::comps::Comps comps(base);
-    auto repo = repo_sack->new_repo("repo");
-
-    comps.load_from_file(repo, data_path / "core.xml");
-    comps.load_from_file(repo, data_path / "standard.xml");
+    add_repo_repomd("repomd-comps-core");
+    add_repo_repomd("repomd-comps-standard");
     // load another definiton of the core group that changes all attributes
-    comps.load_from_file(repo, data_path / "core-v2.xml");
+    add_repo_repomd("repomd-comps-core-v2");
 
-    libdnf::comps::GroupQuery q_core2(comps.get_group_sack());
+    libdnf::comps::GroupQuery q_core2(base.get_comps()->get_group_sack());
     q_core2.filter_groupid("core");
     auto core2 = q_core2.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core2.get_groupid());
@@ -160,16 +151,12 @@ void CompsGroupTest::test_merge() {
 
 
 void CompsGroupTest::test_merge_with_empty() {
-    std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    libdnf::comps::Comps comps(base);
-    auto repo = repo_sack->new_repo("repo");
-
-    comps.load_from_file(repo, data_path / "core.xml");
-    comps.load_from_file(repo, data_path / "standard.xml");
+    add_repo_repomd("repomd-comps-core");
+    add_repo_repomd("repomd-comps-standard");
     // load another definiton of the core group that has all attributes empty
-    comps.load_from_file(repo, data_path / "core-empty.xml");
+    add_repo_repomd("repomd-comps-core-empty");
 
-    libdnf::comps::GroupQuery q_core_empty(comps.get_group_sack());
+    libdnf::comps::GroupQuery q_core_empty(base.get_comps()->get_group_sack());
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
@@ -189,17 +176,13 @@ void CompsGroupTest::test_merge_with_empty() {
 
 
 void CompsGroupTest::test_merge_empty_with_nonempty() {
-    std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    libdnf::comps::Comps comps(base);
-    auto repo = repo_sack->new_repo("repo");
-
     // load definiton of the core group that has all attributes empty
-    comps.load_from_file(repo, data_path / "core-empty.xml");
-    comps.load_from_file(repo, data_path / "standard.xml");
+    add_repo_repomd("repomd-comps-core-empty");
+    add_repo_repomd("repomd-comps-standard");
     // load another definiton of the core group that has all attributes filled
-    comps.load_from_file(repo, data_path / "core.xml");
+    add_repo_repomd("repomd-comps-core");
 
-    libdnf::comps::GroupQuery q_core(comps.get_group_sack());
+    libdnf::comps::GroupQuery q_core(base.get_comps()->get_group_sack());
     q_core.filter_groupid("core");
     auto core = q_core.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
@@ -228,49 +211,25 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
 }
 
 
-void CompsGroupTest::test_dump_and_load() {
-    std::filesystem::path data_path = PROJECT_SOURCE_DIR "/test/libdnf/comps/data/";
-    libdnf::comps::Comps comps(base);
-    auto repo = repo_sack->new_repo("repo");
+void CompsGroupTest::test_dump() {
+    add_repo_repomd("repomd-comps-standard");
 
-    comps.load_from_file(repo, data_path / "standard.xml");
-    libdnf::comps::GroupQuery q_standard(comps.get_group_sack());
+    libdnf::comps::GroupQuery q_standard(base.get_comps()->get_group_sack());
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
 
-    auto dumped_standard_path = std::filesystem::temp_directory_path() / "dumped-standard.xml";
-    standard.dump(dumped_standard_path);
-    libdnf::comps::Comps comps2(base);
-    comps2.load_from_file(repo, dumped_standard_path);
+    auto dump_path = std::filesystem::temp_directory_path() / "dumped-standard.xml";
+    standard.dump(dump_path);
 
-    libdnf::comps::GroupQuery q_dumped_standard(comps.get_group_sack());
-    q_dumped_standard.filter_groupid("standard");
-    auto dumped_standard = q_dumped_standard.get();
+    std::ifstream dumped_stream(dump_path);
+    std::string actual;
+    actual.assign(std::istreambuf_iterator<char>(dumped_stream), std::istreambuf_iterator<char>());
 
-    CPPUNIT_ASSERT_EQUAL(std::string("standard"), dumped_standard.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Standard"), dumped_standard.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("標準"), dumped_standard.get_translated_name("ja"));
-    CPPUNIT_ASSERT_EQUAL(
-        std::string("Common set of utilities that extend the minimal installation."),
-        dumped_standard.get_description());
-    CPPUNIT_ASSERT_EQUAL(
-        std::string("最小限のインストールを拡張するユーティリティの共通セット"),
-        dumped_standard.get_translated_description("ja"));
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), dumped_standard.get_order());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), dumped_standard.get_langonly());
-    CPPUNIT_ASSERT_EQUAL(false, dumped_standard.get_uservisible());
-    CPPUNIT_ASSERT_EQUAL(false, dumped_standard.get_default());
-    CPPUNIT_ASSERT_EQUAL(false, dumped_standard.get_installed());
-    CPPUNIT_ASSERT_EQUAL(3lu, dumped_standard.get_packages().size());
-    std::vector<libdnf::comps::Package> exp_pkgs_standard;
-    exp_pkgs_standard.push_back(libdnf::comps::Package("cryptsetup", libdnf::comps::PackageType::MANDATORY, ""));
-    exp_pkgs_standard.push_back(
-        libdnf::comps::Package("chrony", libdnf::comps::PackageType::CONDITIONAL, "gnome-control-center"));
-    exp_pkgs_standard.push_back(
-        libdnf::comps::Package("conditional", libdnf::comps::PackageType::CONDITIONAL, "nonexistent"));
-    for (unsigned i = 0; i < exp_pkgs_standard.size(); i++) {
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_name(), dumped_standard.get_packages()[i].get_name());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_type(), dumped_standard.get_packages()[i].get_type());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_condition(), dumped_standard.get_packages()[i].get_condition());
-    }
+    std::filesystem::path expected_path =
+        PROJECT_SOURCE_DIR "/test/data/repos-repomd/repomd-comps-standard/repodata/comps.xml";
+    std::ifstream expected_stream(expected_path);
+    std::string expected;
+    expected.assign(std::istreambuf_iterator<char>(expected_stream), std::istreambuf_iterator<char>());
+
+    CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
