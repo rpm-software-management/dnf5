@@ -349,7 +349,7 @@ void Group::dump(const std::string & path) {
     }
 
     // Save the document
-    if (xmlSaveFile(path.c_str(), doc) == -1) {
+    if (xmlSaveFormatFileEnc(path.c_str(), doc, "utf-8", 1) == -1) {
         throw RuntimeError(M_("failed to save xml document for comps"));
     }
 
