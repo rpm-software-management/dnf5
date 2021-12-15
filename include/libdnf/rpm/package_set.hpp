@@ -150,6 +150,7 @@ public:
 private:
     friend PackageSetIterator;
     friend class PackageQuery;
+    friend class PackageSack;
     friend class Transaction;
     friend class libdnf::base::Transaction;
     friend libdnf::Goal;

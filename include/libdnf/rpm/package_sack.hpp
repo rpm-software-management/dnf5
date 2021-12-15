@@ -118,6 +118,8 @@ public:
     /// @since 5.0
     libdnf::system::State & get_system_state() { return system_state; }
 
+    void setup_excludes_includes(bool only_main = false);
+
 private:
     friend libdnf::Goal;
     friend Package;

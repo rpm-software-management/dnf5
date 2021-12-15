@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "package_sack_impl.hpp"
+#include "package_set_impl.hpp"
 #include "repo/repo_impl.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
@@ -26,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/temp.hpp"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/rpm/package_query.hpp"
 
 extern "C" {
 #include <solv/chksum.h>
@@ -73,6 +75,107 @@ void PackageSack::Impl::make_provides_ready() {
 
     pool_createwhatprovides(*pool);
     provides_ready = true;
+}
+
+void PackageSack::Impl::setup_excludes_includes(bool only_main) {
+    considered_uptodate = false;
+
+    auto & main_config = base->get_config();
+
+    auto & disable_excludes = main_config.disable_excludes().get_value();
+    std::set<std::string> disabled(disable_excludes.begin(), disable_excludes.end());
+
+    if (disabled.count("all") != 0) {
+        return;
+    }
+
+    PackageSet includes(base);
+    PackageSet excludes(base);
+    bool includes_used = false;   // packages for inclusion specified (they may or may not exist)
+    bool excludes_exist = false;  // found packages for exclude
+    bool includes_exist = false;  // found packages for include
+
+    ResolveSpecSettings resolve_settings{
+        .ignore_case = false, .with_nevra = true, .with_provides = false, .with_filenames = false};
+
+    // first evaluate repo specific includes/excludes
+    if (!only_main) {
+        for (const auto & repo : base->get_repo_sack()->get_data()) {
+            if (!repo->is_enabled() || disabled.count(repo->get_id()) != 0) {
+                continue;
+            }
+
+            if (!repo->get_config().includepkgs().get_value().empty()) {
+                repo->set_use_includes(true);
+                includes_used = true;
+            }
+
+            PackageQuery query_repo_pkgs(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+            query_repo_pkgs.filter_repo_id({repo->get_id()});
+
+            for (const auto & name : repo->get_config().includepkgs().get_value()) {
+                PackageQuery query(query_repo_pkgs);
+                const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, false);
+                if (found) {
+                    includes |= query;
+                    includes_exist = true;
+                }
+            }
+
+            for (const auto & name : repo->get_config().excludepkgs().get_value()) {
+                PackageQuery query(query_repo_pkgs);
+                const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, false);
+                if (found) {
+                    excludes |= query;
+                    excludes_exist = true;
+                }
+            }
+        }
+    }
+
+    // then main (global) includes/excludes because they can mask
+    // repo specific settings
+    if (disabled.count("main") == 0) {
+        for (const auto & name : main_config.includepkgs().get_value()) {
+            PackageQuery query(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+            const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, false);
+            if (found) {
+                includes |= query;
+                includes_exist = true;
+            }
+        }
+
+        for (const auto & name : main_config.excludepkgs().get_value()) {
+            PackageQuery query(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+            const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, false);
+            if (found) {
+                excludes |= query;
+                excludes_exist = true;
+            }
+        }
+
+        if (!main_config.includepkgs().get_value().empty()) {
+            // enable the use of `pkg_includes` for all repositories
+            for (const auto & repo : base->get_repo_sack()->get_data()) {
+                repo->set_use_includes(true);
+            }
+            includes_used = true;
+        }
+    }
+
+    if (includes_used) {
+        pkg_includes.reset(new libdnf::solv::SolvMap(0));
+        if (includes_exist) {
+            *pkg_includes = *includes.p_impl;
+        }
+    } else {
+        pkg_includes.reset();
+    }
+
+    if (excludes_exist) {
+        pkg_excludes.reset(new libdnf::solv::SolvMap(0));
+        *pkg_excludes = *excludes.p_impl;
+    }
 }
 
 std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(libdnf::sack::ExcludeFlags flags) const {
@@ -175,5 +278,9 @@ PackageSack::PackageSack(const BaseWeakPtr & base)
 PackageSack::PackageSack(libdnf::Base & base) : PackageSack(base.get_weak_ptr()) {}
 
 PackageSack::~PackageSack() = default;
+
+void PackageSack::setup_excludes_includes(bool only_main) {
+    p_impl->setup_excludes_includes(only_main);
+}
 
 }  // namespace libdnf::rpm

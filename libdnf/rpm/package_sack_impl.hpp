@@ -86,6 +86,15 @@ public:
 
     void set_running_kernel(PackageId kernel) { running_kernel = kernel; };
 
+    /// Sets excluded and included packages according to the configuration.
+    ///
+    /// Uses the `disable_excludes`, `excludepkgs`, and `includepkgs` configuration options to calculate the `pkg_includes` and `pkg_excludes` sets.
+    ///
+    /// Invalidates the Pool's considered map, sets `considered_uptodate` to `false` to mark it needs to be recomputed.
+    /// @param only_main If `true`, only `excludepkgs` and `includepkgs` from the main config are recomputed.
+    // TODO(jrohel): Is param `only_main` needed? Used in DNF4 with commandline repo.
+    void setup_excludes_includes(bool only_main = false);
+
     /// Computes considered map.
     /// If there are no excluded packages, the considered map may not be present in the return value.
     std::optional<libdnf::solv::SolvMap> compute_considered_map(libdnf::sack::ExcludeFlags flags) const;
