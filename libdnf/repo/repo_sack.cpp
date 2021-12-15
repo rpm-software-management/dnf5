@@ -95,11 +95,6 @@ RepoWeakPtr RepoSack::get_system_repo() {
 }
 
 
-bool RepoSack::has_system_repo() const noexcept {
-    return static_cast<bool>(system_repo);
-}
-
-
 void RepoSack::dump_debugdata(const std::string & dir) {
     Solver * solver = solver_create(*get_pool(base));
 

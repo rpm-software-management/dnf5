@@ -74,7 +74,10 @@ public:
     RepoWeakPtr get_cmdline_repo();
 
     /// @return `true` if the system repository has been initialized (via `get_system_repo()`).
-    bool has_system_repo() const noexcept;
+    bool has_system_repo() const noexcept { return static_cast<bool>(system_repo); }
+
+    /// @return `true` if the command line repository has been initialized (via `get_cmdline_repo()`).
+    bool has_cmdline_repo() const noexcept { return static_cast<bool>(cmdline_repo); }
 
     /// Dumps libsolv's debugdata of all loaded repositories.
     /// @param dir The directory into which to dump the debugdata.
