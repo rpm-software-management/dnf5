@@ -40,9 +40,6 @@ extern "C" {
 namespace libdnf::comps {
 
 
-Group::~Group() = default;
-
-
 Group::Group(GroupQuery * query) : query(query->get_weak_ptr()) {}
 
 

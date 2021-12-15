@@ -52,8 +52,6 @@ using GroupQueryWeakPtr = WeakPtr<GroupQuery, false>;
 /// @replaces dnf:dnf/comps.py:class:Group
 class Group {
 public:
-    ~Group();
-
     const std::vector<GroupId> & get_group_ids() const { return group_ids; }
     void add_group_id(GroupId group_id) { group_ids.push_back(group_id); }
 
