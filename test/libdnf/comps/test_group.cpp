@@ -218,7 +218,7 @@ void CompsGroupTest::test_dump() {
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
 
-    auto dump_path = std::filesystem::temp_directory_path() / "dumped-standard.xml";
+    auto dump_path = temp->get_path() / "dumped-standard.xml";
     standard.dump(dump_path);
 
     std::ifstream dumped_stream(dump_path);
