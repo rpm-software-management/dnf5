@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <unistd.h>
 
 #include <array>
-#include <ctime>
+#include <chrono>
 #include <string>
 
 
@@ -74,7 +74,11 @@ public:
     virtual void log(Level level, const std::string & message) noexcept;
 
     /// @replaces libdnf:utils/logger.hpp:method:Logger.write(time_t time, pid_t pid, libdnf::Logger::Level level, const std::string & message)
-    virtual void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept = 0;
+    virtual void write(
+        const std::chrono::time_point<std::chrono::system_clock> & time,
+        pid_t pid,
+        Level level,
+        const std::string & message) noexcept = 0;
 
 private:
 #ifndef SWIG
@@ -85,7 +89,11 @@ private:
 
 class StringLogger : public Logger {
 public:
-    void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept override;
+    void write(
+        const std::chrono::time_point<std::chrono::system_clock> & time,
+        pid_t pid,
+        Level level,
+        const std::string & message) noexcept override;
 
     virtual void write(const char * line) noexcept = 0;
 };

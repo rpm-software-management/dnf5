@@ -28,14 +28,19 @@ std::unique_ptr<Logger> LogRouter::release_logger(size_t index) {
 }
 
 void LogRouter::log(Level level, const std::string & message) noexcept {
-    auto now = time(nullptr);
+    auto now = std::chrono::system_clock::now();
     auto pid = getpid();
     for (auto & logger : loggers) {
         logger->write(now, pid, level, message);
     }
 }
 
-void LogRouter::write(time_t time, pid_t pid, Level level, const std::string & message) noexcept {
+
+void LogRouter::write(
+    const std::chrono::time_point<std::chrono::system_clock> & time,
+    pid_t pid,
+    Level level,
+    const std::string & message) noexcept {
     for (auto & logger : loggers) {
         logger->write(time, pid, level, message);
     }

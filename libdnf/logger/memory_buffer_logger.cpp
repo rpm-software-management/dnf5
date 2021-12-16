@@ -29,7 +29,12 @@ MemoryBufferLogger::MemoryBufferLogger(std::size_t max_items_to_keep, std::size_
     }
 }
 
-void MemoryBufferLogger::write(time_t time, pid_t pid, Level level, const std::string & message) noexcept {
+
+void MemoryBufferLogger::write(
+    const std::chrono::time_point<std::chrono::system_clock> & time,
+    pid_t pid,
+    Level level,
+    const std::string & message) noexcept {
     try {
         std::lock_guard<std::mutex> guard(items_mutex);
         if (max_items == 0 || items.size() < max_items) {

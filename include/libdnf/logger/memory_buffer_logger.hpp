@@ -33,14 +33,20 @@ namespace libdnf {
 class MemoryBufferLogger : public Logger {
 public:
     struct Item {
-        time_t time;
+        std::chrono::time_point<std::chrono::system_clock> time;
         pid_t pid;
         Level level;
         std::string message;
     };
 
     explicit MemoryBufferLogger(std::size_t max_items_to_keep, std::size_t reserve = 0);
-    void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept override;
+
+    void write(
+        const std::chrono::time_point<std::chrono::system_clock> & time,
+        pid_t pid,
+        Level level,
+        const std::string & message) noexcept override;
+
     std::size_t get_items_count() const { return items.size(); }
     const Item & get_item(std::size_t item_idx) const;
     void clear() noexcept;

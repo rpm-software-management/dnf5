@@ -19,29 +19,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/logger/logger.hpp"
 
-#include <iomanip>
-#include <sstream>
+#include "libdnf/utils/format.hpp"
+
+#include <fmt/chrono.h>
 
 
 namespace libdnf {
 
 void Logger::log(Level level, const std::string & message) noexcept {
-    write(time(nullptr), getpid(), level, message);
+    write(std::chrono::system_clock::now(), getpid(), level, message);
 }
 
 
-void StringLogger::write(time_t time, pid_t pid, Level level, const std::string & message) noexcept {
+void StringLogger::write(
+    const std::chrono::time_point<std::chrono::system_clock> & time,
+    pid_t pid,
+    Level level,
+    const std::string & message) noexcept {
     try {
-        struct tm now;
-
-        // gmtime_r() is used because it is thread-safe (std::gmtime() is not).
-        gmtime_r(&time, &now);
-
-        std::ostringstream ss;
-        ss << std::put_time(&now, "%FT%TZ [");  // "YYYY-MM-DDTHH:MM:SSZ ["
-        ss << pid << "] ";
-        ss << level_to_cstr(level) << " " << message << "\n";
-        write(ss.str().c_str());
+        write(utils::sformat("{:%FT%T%z} [{}] {} {}\n", time, pid, level_to_cstr(level), message).c_str());
     } catch (const std::exception & e) {
         write("Failed to format: ");
         write(message.c_str());

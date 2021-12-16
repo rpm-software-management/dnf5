@@ -49,7 +49,12 @@ public:
     size_t get_loggers_count() const noexcept { return loggers.size(); }
 
     void log(Level level, const std::string & message) noexcept override;
-    void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept override;
+
+    void write(
+        const std::chrono::time_point<std::chrono::system_clock> & time,
+        pid_t pid,
+        Level level,
+        const std::string & message) noexcept override;
 
 private:
     std::vector<std::unique_ptr<Logger>> loggers;
