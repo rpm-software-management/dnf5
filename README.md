@@ -58,7 +58,7 @@ Contributing
 Writing patches
 ---------------
 
-* Please follow the [coding style](doc/contributing/coding_style.rst)
+* Please follow the [contributing guidelines](https://libdnf.readthedocs.io/en/dnf-5-devel/contributing/index.html)
 * When a patch is ready, submit a pull request
 * It is a good practice to write documentation and unit tests as part of the patches
 
