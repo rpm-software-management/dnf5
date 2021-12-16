@@ -83,6 +83,13 @@ private:
 #endif
 };
 
+class StringLogger : public Logger {
+public:
+    void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept override;
+
+    virtual void write(const char * line) noexcept = 0;
+};
+
 }  // namespace libdnf
 
 #endif

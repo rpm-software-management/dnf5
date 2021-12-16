@@ -30,10 +30,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 /// StreamLogger is an implementation of logging class that writes messages into a stream.
-class StreamLogger : public Logger {
+class StreamLogger : public StringLogger {
 public:
     explicit StreamLogger(std::unique_ptr<std::ostream> && log_stream) : log_stream(std::move(log_stream)) {}
-    void write(time_t time, pid_t pid, Level level, const std::string & message) noexcept override;
+    void write(const char * line) noexcept override;
 
 private:
     mutable std::mutex stream_mutex;

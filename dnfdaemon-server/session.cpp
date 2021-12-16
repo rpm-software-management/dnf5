@@ -38,18 +38,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace {
 
-class StderrLogger : public libdnf::Logger {
+class StderrLogger : public libdnf::StringLogger {
 public:
     explicit StderrLogger() {}
-    void write(time_t, pid_t, Level, const std::string & message) noexcept override;
-};
-
-void StderrLogger::write(time_t, pid_t, Level, const std::string & message) noexcept {
-    try {
-        std::cerr << message << std::endl;
-    } catch (...) {
+    void write(const char * line) noexcept override {
+        try {
+            std::cerr << line;
+        } catch (...) {
+        }
     }
-}
+};
 
 }  // namespace
 
