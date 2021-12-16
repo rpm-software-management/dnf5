@@ -41,3 +41,11 @@ Includes
 * Other includes should use absolute paths::
 
     #include <libdnf/.../*.hpp>
+
+* Includes within the same component should use the double-quote form. E.g. in microdnf::
+
+    #include "commands/.../*.hpp"
+
+* Includes from a different component in the repository should use the angle-bracket form. E.g. in microdnf::
+
+    #include <libdnf/.../*.hpp>
