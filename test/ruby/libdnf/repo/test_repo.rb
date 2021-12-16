@@ -29,6 +29,9 @@ class TestRepo < Test::Unit::TestCase
         tmpdir = Dir.mktmpdir("libdnf-ruby-")
         base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, tmpdir)
 
+        # Sets Base internals according to configuration
+        base.setup()
+
         repo_sack = Repo::RepoSack.new(base)
 
         # Creates system repository and loads it into rpm::PackageSack.

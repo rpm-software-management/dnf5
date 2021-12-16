@@ -29,10 +29,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class BaseTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(BaseTest);
     CPPUNIT_TEST(test_weak_ptr);
+    CPPUNIT_TEST(test_incorrect_workflow);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_weak_ptr();
+    void test_incorrect_workflow();
 };
 
 

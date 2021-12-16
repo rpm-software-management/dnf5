@@ -23,8 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "testcase_fixture.hpp"
 
-#include "libdnf/conf/config_main.hpp"
-#include "libdnf/conf/vars.hpp"
+#include "libdnf/base/base.hpp"
 #include "libdnf/logger/log_router.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -42,7 +41,7 @@ public:
     void test_config_main();
     void test_config_repo();
 
-    libdnf::Vars vars;
+    libdnf::Base base;
     libdnf::LogRouter logger;
     libdnf::ConfigMain config;
 };

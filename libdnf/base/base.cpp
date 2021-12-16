@@ -39,11 +39,7 @@ namespace libdnf {
 static std::atomic<Base *> locked_base{nullptr};
 static std::mutex locked_base_mutex;
 
-Base::Base()
-    : pool(std::make_unique<libdnf::solv::Pool>()),
-      repo_sack(get_weak_ptr()),
-      rpm_package_sack(get_weak_ptr()),
-      rpm_advisory_sack(get_weak_ptr()) {}
+Base::Base() : repo_sack(get_weak_ptr()), rpm_package_sack(get_weak_ptr()), rpm_advisory_sack(get_weak_ptr()) {}
 
 Base::~Base() = default;
 
@@ -101,6 +97,21 @@ void Base::load_plugins() {
     if (const char * plugin_dir = std::getenv("LIBDNF_PLUGIN_DIR")) {
         plugins.load_plugins(plugin_dir);
     }
+}
+
+void Base::setup() {
+    libdnf_assert(!pool, "Base was already initialized");
+    pool.reset(new libdnf::solv::Pool);
+    auto & config = get_config();
+    auto & installroot = config.installroot();
+    get_vars()->load(installroot.get_value(), config.varsdir().get_value());
+    installroot.lock("Locked by Base::setup()");
+    config.varsdir().lock("Locked by Base::setup()");
+    pool_setdisttype(**pool, DISTTYPE_RPM);
+    // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be sinchronized with Pool
+    // (and force to recompute provides) or locked
+    pool_setarch(**pool, get_vars()->get_value("arch").c_str());
+    pool_set_rootdir(**pool, installroot.get_value().c_str());
 }
 
 }  // namespace libdnf

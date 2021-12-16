@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_base.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/rpm/package_query.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BaseTest);
@@ -47,4 +48,15 @@ void BaseTest::test_weak_ptr() {
     // Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
     CPPUNIT_ASSERT_THROW(vars->get_value("test_variable"), libdnf::InvalidPointerError);
     CPPUNIT_ASSERT_THROW(vars2->get_value("test_variable"), libdnf::InvalidPointerError);
+}
+
+void BaseTest::test_incorrect_workflow() {
+    // Creates a new Base object
+    auto base = std::make_unique<libdnf::Base>();
+
+    // Base object is not fully initialized - not initialized by Base::setup()
+    CPPUNIT_ASSERT_THROW(libdnf::rpm::PackageQuery(*base.get()), libdnf::AssertionError);
+
+    base->setup();
+    libdnf::rpm::PackageQuery(*base.get());
 }

@@ -136,6 +136,7 @@ void LibdnfTestCase::setUp() {
         cache_dirs.insert({class_name, std::make_unique<libdnf::utils::TempDir>("libdnf_unittest")});
     }
     base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dirs.at(class_name)->get_path());
+    base.setup();
 
     repo_sack = base.get_repo_sack();
     sack = base.get_rpm_package_sack();

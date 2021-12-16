@@ -81,6 +81,9 @@ public:
     /// @param name Name of the variable
     const Variable & get(const std::string & name) const { return variables.at(name); }
 
+private:
+    friend class Base;
+
     /// @brief Loads DNF vars from the environment and the passed directories.
     ///
     /// Environment variables are loaded first, then the directories are loaded
@@ -91,7 +94,6 @@ public:
     /// @param directories The directories to load vars from
     void load(const std::string & installroot, const std::vector<std::string> & directories);
 
-private:
     /// @brief Detects the system's arch, basearch and relesever.
     ///
     /// @param installroot The installroot directory

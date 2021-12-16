@@ -57,6 +57,9 @@ void RepoTest::test_repo_basics() {
     // set cachedir to a temp directory
     base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
 
+    // Setup base internals according to config
+    base.setup();
+
     libdnf::repo::RepoSack repo_sack(base);
 
     // Creates system repository and loads it

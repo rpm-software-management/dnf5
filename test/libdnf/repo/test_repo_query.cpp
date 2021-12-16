@@ -33,6 +33,7 @@ void RepoQueryTest::tearDown() {}
 
 void RepoQueryTest::test_query_basics() {
     libdnf::Base base;
+    base.setup();
     auto repo_sack = base.get_repo_sack();
     //libdnf::repo::RepoSack repo_sack(base);
     //auto repo_sack_weak_ptr = repo_sack.get_weak_ptr();

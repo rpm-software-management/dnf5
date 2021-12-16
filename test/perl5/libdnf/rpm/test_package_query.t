@@ -33,6 +33,9 @@ my $base = new libdnf::base::Base();
 my $tmpdir = tempdir("libdnf-perl5-XXXX", TMPDIR => 1, CLEANUP => 1);
 $base->get_config()->cachedir()->set($libdnf::conf::Option::Priority_RUNTIME, $tmpdir);
 
+# Sets base internals according to configuration
+$base->setup();
+
 my $repo_sack = new libdnf::repo::RepoSack($base);
 
 # Creates new repositories in the repo_sack

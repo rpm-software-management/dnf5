@@ -240,6 +240,7 @@ private:
 namespace libdnf {
 
 inline solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) {
+    libdnf_assert(base->pool, "Base instance was not fully initialized by Base::setup()");
     return *base->pool;
 }
 

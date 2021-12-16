@@ -35,6 +35,8 @@ class ReldepTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE_END();
 
 public:
+    void setUp() override;
+
     void test_short_reldep();
     void test_full_reldep();
     void test_rich_reldep();

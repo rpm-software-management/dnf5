@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "testcase_fixture.hpp"
 
-#include "libdnf/conf/vars.hpp"
+#include "libdnf/base/base.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -40,7 +40,7 @@ public:
     void test_vars_multiple_dirs();
     void test_vars_env();
 
-    libdnf::Vars vars;
+    libdnf::Base base;
 };
 
 

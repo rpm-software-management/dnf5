@@ -32,6 +32,9 @@ class TestRepo(unittest.TestCase):
         tmpdir = tempfile.mkdtemp(prefix="libdnf-python3-")
         base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, tmpdir)
 
+        # Sets Base internals according to configuration
+        base.setup()
+
         repo_sack = libdnf.repo.RepoSack(base)
 
         # Creates system repository and loads it

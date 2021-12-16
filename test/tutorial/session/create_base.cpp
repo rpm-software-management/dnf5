@@ -13,3 +13,6 @@ conf.installroot().set(libdnf::Option::Priority::RUNTIME, installroot);
 
 // TODO(dmach): we shouldn't be forcing API users to always set the cache dir
 conf.cachedir().set(libdnf::Option::Priority::RUNTIME, installroot + "/var/cache/dnf");
+
+// set Base internals according to configuration
+base.setup();

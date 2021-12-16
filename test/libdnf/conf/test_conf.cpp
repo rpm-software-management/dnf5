@@ -33,7 +33,7 @@ void ConfTest::setUp() {
     TestCaseFixture::setUp();
     ConfigParser parser;
     parser.read(PROJECT_SOURCE_DIR "/test/libdnf/conf/data/main.conf");
-    config.load_from_parser(parser, "main", vars, logger);
+    config.load_from_parser(parser, "main", *base.get_vars(), logger);
 }
 
 void ConfTest::test_config_main() {
@@ -48,8 +48,10 @@ void ConfTest::test_config_repo() {
     repo::ConfigRepo config_repo(config, "test-repo");
     ConfigParser parser;
     parser.read(PROJECT_SOURCE_DIR "/test/libdnf/conf/data/main.conf");
-    vars.load("/", {PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
-    config_repo.load_from_parser(parser, "repo-1", vars, logger);
+    base.get_config().varsdir().set(
+        libdnf::Option::Priority::RUNTIME, std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
+    base.setup();
+    config_repo.load_from_parser(parser, "repo-1", *base.get_vars(), logger);
 
     std::vector<std::string> baseurl = {"http://example.com/value123", "http://example.com/456"};
     CPPUNIT_ASSERT_EQUAL(baseurl, config_repo.baseurl().get_value());

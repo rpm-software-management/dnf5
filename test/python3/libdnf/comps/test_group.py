@@ -31,6 +31,9 @@ class TestGroup(unittest.TestCase):
         tmpdir = tempfile.mkdtemp(prefix="libdnf-python3-test-comps-")
         base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, tmpdir)
 
+        # Sets Base internals according to configuration
+        base.setup()
+
         repo = base.get_repo_sack().new_repo("repo")
         comps = libdnf.comps.Comps(base)
         data_path = os.path.join(os.getcwd(), "../../../test/libdnf/comps/data/core.xml")

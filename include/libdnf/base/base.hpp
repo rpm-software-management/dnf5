@@ -75,6 +75,12 @@ public:
     repo::RepoSackWeakPtr get_repo_sack() { return repo_sack.get_weak_ptr(); }
     rpm::PackageSackWeakPtr get_rpm_package_sack() { return rpm_package_sack.get_weak_ptr(); }
 
+    /// Load vars from environment, varsdirs and installroot (releasever, arch). To prevent differences between
+    /// configuration and internal Base settings, following configurations will be locked: installroot, varsdir.
+    /// The method is supposed to be called after configuration is updated, plugins applied their pre configuration
+    /// modification in configuration, but before repositories are loaded or any Package or Advisory query created.
+    void setup();
+
     transaction::TransactionSackWeakPtr get_transaction_sack() { return transaction_sack.get_weak_ptr(); }
     libdnf::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
     libdnf::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }

@@ -23,6 +23,9 @@ class TestRepQueryo(unittest.TestCase):
     def test_repo_query(self):
         base = libdnf.base.Base()
 
+        # Sets Base internals according to configuration
+        base.setup()
+
         repo_sack = base.get_repo_sack()
 
         # Creates new repositories in the repo_sack

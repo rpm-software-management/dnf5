@@ -89,7 +89,7 @@ Session::Session(
     base->load_config_from_file();
 
     // set variables
-    base->get_vars()->load(config.installroot().get_value(), config.varsdir().get_value());
+    base->setup();
     if (session_configuration.find("releasever") != session_configuration.end()) {
         auto releasever = session_configuration_value<std::string>("releasever");
         base->get_vars()->set("releasever", releasever);

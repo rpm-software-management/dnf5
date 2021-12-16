@@ -35,6 +35,9 @@ class LibdnfTestCase(unittest.TestCase):
         self.cachedir = tempfile.mkdtemp(prefix="libdnf-test-python3-")
         self.base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, self.cachedir)
 
+        # Sets Base internals according to configuration
+        self.base.setup()
+
         self.repo_sack = self.base.get_repo_sack()
         self.sack = self.base.get_rpm_package_sack()
 

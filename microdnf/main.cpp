@@ -628,7 +628,7 @@ int main(int argc, char * argv[]) try {
     log_router.swap_logger(logger, 0);
     dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
 
-    base.get_vars()->load(base.get_config().installroot().get_value(), base.get_config().varsdir().get_value());
+    base.setup();
 
     // create rpm repositories according configuration files
     auto repo_sack = base.get_repo_sack();

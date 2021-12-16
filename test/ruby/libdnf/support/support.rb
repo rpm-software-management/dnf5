@@ -36,6 +36,9 @@ class LibdnfTestCase < Test::Unit::TestCase
         @cachedir = Dir.mktmpdir("libdnf-test-ruby-")
         @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, @cachedir)
 
+        # Sets Base internals according to configuration
+        @base.setup()
+
         @repo_sack = @base.get_repo_sack()
         @package_sack = @base.get_rpm_package_sack()
     end
