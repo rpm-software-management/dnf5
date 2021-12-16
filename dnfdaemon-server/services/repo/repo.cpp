@@ -248,6 +248,8 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
         repos_query.filter_enabled(false);
     }
 
+    repos_query.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+
     if (patterns.size() > 0) {
         auto query_names = repos_query;
         repos_query.filter_id(patterns, libdnf::sack::QueryCmp::IGLOB);
@@ -257,7 +259,7 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
     // create reply from the query
     dnfdaemon::KeyValueMapList out_repositories;
 
-    for (auto & repo : repos_query.get_data()) {
+    for (auto & repo : repos_query) {
         out_repositories.push_back(repo_to_map(*base, repo, repo_attrs));
     }
 

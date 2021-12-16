@@ -78,7 +78,9 @@ RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid,
 
 RepoWeakPtr RepoSack::get_cmdline_repo() {
     if (!cmdline_repo) {
-        cmdline_repo = std::make_unique<Repo>(base, CMDLINE_REPO_NAME, Repo::Type::COMMANDLINE);
+        std::unique_ptr<Repo> repo(new Repo(base, CMDLINE_REPO_NAME, Repo::Type::COMMANDLINE));
+        cmdline_repo = repo.get();
+        add_item(std::move(repo));
     }
 
     return cmdline_repo->get_weak_ptr();
@@ -87,7 +89,9 @@ RepoWeakPtr RepoSack::get_cmdline_repo() {
 
 RepoWeakPtr RepoSack::get_system_repo() {
     if (!system_repo) {
-        system_repo = std::make_unique<Repo>(base, SYSTEM_REPO_NAME, Repo::Type::SYSTEM);
+        std::unique_ptr<Repo> repo(new Repo(base, SYSTEM_REPO_NAME, Repo::Type::SYSTEM));
+        system_repo = repo.get();
+        add_item(std::move(repo));
         pool_set_installed(*get_pool(base), system_repo->p_impl->solv_repo.repo);
     }
 

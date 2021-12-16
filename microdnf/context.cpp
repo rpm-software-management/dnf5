@@ -203,7 +203,7 @@ void Context::apply_repository_setopts() {
         auto last_dot_pos = setopt.first.rfind('.');
         auto repo_pattern = setopt.first.substr(0, last_dot_pos);
         libdnf::repo::RepoQuery query(base);
-        query.filter_id(repo_pattern, libdnf::sack::QueryCmp::GLOB);
+        query.filter_id(repo_pattern, libdnf::sack::QueryCmp::GLOB).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
         auto key = setopt.first.substr(last_dot_pos + 1);
         for (auto & repo : query.get_data()) {
             try {
@@ -807,7 +807,7 @@ std::vector<std::string> match_available_pkgs(Context & ctx, const std::string &
     ctx.apply_repository_setopts();
 
     libdnf::repo::RepoQuery enabled_repos(ctx.base);
-    enabled_repos.filter_enabled(true);
+    enabled_repos.filter_enabled(true).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
     for (auto & repo : enabled_repos.get_data()) {
         repo->set_sync_strategy(libdnf::repo::Repo::SyncStrategy::ONLY_CACHE);
         repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);

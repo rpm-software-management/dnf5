@@ -80,6 +80,8 @@ void RepoListCommand::run() {
         query |= query_names.filter_name(repo_specs_str, libdnf::sack::QueryCmp::IGLOB);
     }
 
+    query.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+
     // display status because we're printing mix of enabled and disabled repos
     bool with_status = all->get_value();
 

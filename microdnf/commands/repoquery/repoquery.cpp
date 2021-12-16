@@ -116,7 +116,7 @@ void RepoqueryCommand::run() {
     // To search in available repositories (available packages)
     if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
         libdnf::repo::RepoQuery enabled_repos(ctx.base);
-        enabled_repos.filter_enabled(true);
+        enabled_repos.filter_enabled(true).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
         ctx.load_rpm_repos(enabled_repos);
         std::cout << std::endl;
     }

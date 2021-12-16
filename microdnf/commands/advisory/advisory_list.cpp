@@ -60,7 +60,7 @@ void AdvisoryListCommand::run() {
     ctx.base.get_repo_sack()->get_system_repo()->load();
 
     libdnf::repo::RepoQuery enabled_repos(ctx.base);
-    enabled_repos.filter_enabled(true);
+    enabled_repos.filter_enabled(true).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
 
     using QueryCmp = libdnf::sack::QueryCmp;
 
