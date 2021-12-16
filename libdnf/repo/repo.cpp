@@ -215,6 +215,10 @@ Repo::Repo(Base & base, const std::string & id, Repo::Type type) : Repo(base.get
 
 Repo::~Repo() = default;
 
+Repo::Type Repo::get_type() const noexcept {
+    return p_impl->type;
+}
+
 void Repo::set_callbacks(std::unique_ptr<RepoCallbacks> && callbacks) {
     p_impl->downloader.set_callbacks(std::move(callbacks));
 }

@@ -103,6 +103,9 @@ public:
 
     ~Repo();
 
+    /// Returns the repository type
+    Type get_type() const noexcept;
+
     /// Registers a class that implements callback methods (fastest mirror detection, download state, key import).
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setCallbacks(std::unique_ptr<RepoCallbacks> && callbacks)
     void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks);

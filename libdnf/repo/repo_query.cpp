@@ -34,6 +34,7 @@ struct Get {
     static bool local(const RepoWeakPtr & obj) { return obj->is_local(); }
     static std::string id(const RepoWeakPtr & obj) { return obj->get_id(); }
     static std::string name(const RepoWeakPtr & obj) { return obj->get_config().name().get_value(); }
+    static int64_t type(const RepoWeakPtr & obj) { return static_cast<int64_t>(obj->get_type()); }
 };
 
 
@@ -90,5 +91,9 @@ RepoQuery & RepoQuery::filter_name(const std::vector<std::string> & patterns, sa
     return *this;
 }
 
+RepoQuery & RepoQuery::filter_type(Repo::Type type, sack::QueryCmp cmp) {
+    filter(Get::type, static_cast<int64_t>(type), cmp);
+    return *this;
+}
 
 }  // namespace libdnf::repo
