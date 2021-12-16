@@ -29,27 +29,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "services/rpm/rpm.hpp"
 #include "utils.hpp"
 
-#include <libdnf/logger/logger.hpp>
+#include <libdnf/logger/stream_logger.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
 #include <iostream>
 #include <string>
 
-namespace {
-
-class StderrLogger : public libdnf::StringLogger {
-public:
-    explicit StderrLogger() {}
-    void write(const char * line) noexcept override {
-        try {
-            std::cerr << line;
-        } catch (...) {
-        }
-    }
-};
-
-}  // namespace
 
 Session::Session(
     sdbus::IConnection & connection,
@@ -64,7 +50,7 @@ Session::Session(
       sender(sender) {
     // set-up log router for base
     auto & logger = *base->get_logger();
-    logger.add_logger(std::make_unique<StderrLogger>());
+    logger.add_logger(std::make_unique<libdnf::StdCStreamLogger>(std::cerr));
 
     auto & config = base->get_config();
 

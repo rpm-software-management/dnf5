@@ -40,6 +40,17 @@ private:
     std::unique_ptr<std::ostream> log_stream;
 };
 
+/// Logger that logs to a stream stored as a reference, meant to be used with std::cerr and std::cout.
+class StdCStreamLogger : public StringLogger {
+public:
+    explicit StdCStreamLogger(std::ostream & stream) : log_stream(stream) {}
+    void write(const char * line) noexcept override;
+
+private:
+    mutable std::mutex stream_mutex;
+    std::ostream & log_stream;
+};
+
 }  // namespace libdnf
 
 #endif

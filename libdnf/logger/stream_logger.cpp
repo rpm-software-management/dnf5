@@ -30,4 +30,13 @@ void StreamLogger::write(const char * line) noexcept {
     }
 }
 
+
+void StdCStreamLogger::write(const char * line) noexcept {
+    try {
+        std::lock_guard<std::mutex> guard(stream_mutex);
+        log_stream << line << std::flush;
+    } catch (...) {
+    }
+}
+
 }  // namespace libdnf
