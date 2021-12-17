@@ -66,14 +66,8 @@ ReinstallCommand::ReinstallCommand(Command & parent) : Command(parent, "reinstal
 void ReinstallCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    // To search in the system repository (installed packages)
-    // Creates system repository in the repo_sack and loads it
-    ctx.base.get_repo_sack()->get_system_repo()->load();
-
-    // To search in available repositories (available packages)
-    libdnf::repo::RepoQuery enabled_repos(ctx.base);
-    enabled_repos.filter_enabled(true).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
-    ctx.load_rpm_repos(enabled_repos);
+    // Load system and available repositories
+    ctx.load_repos(true, true);
 
     libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_reinstall_options) {

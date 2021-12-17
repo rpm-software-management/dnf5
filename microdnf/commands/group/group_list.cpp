@@ -56,14 +56,10 @@ GroupListCommand::GroupListCommand(Command & parent, const std::string & name) :
 void GroupListCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    ctx.base.get_repo_sack()->get_system_repo()->load();
+    // Load system and available repositories
+    ctx.load_repos(true, true, libdnf::repo::Repo::LoadFlags::COMPS);
 
     auto group_specs_str = group_specs->get_value();
-
-    libdnf::repo::RepoQuery enabled_repos(ctx.base);
-    enabled_repos.filter_enabled(true).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
-
-    ctx.load_rpm_repos(enabled_repos, libdnf::repo::Repo::LoadFlags::COMPS);
 
     libdnf::comps::GroupQuery query(ctx.base.get_comps()->get_group_sack());
 

@@ -64,10 +64,8 @@ void DownloadCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
     auto package_sack = ctx.base.get_rpm_package_sack();
 
-    // To search in available repositories (available packages)
-    libdnf::repo::RepoQuery enabled_repos(ctx.base);
-    enabled_repos.filter_enabled(true).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
-    ctx.load_rpm_repos(enabled_repos);
+    // Load available repositories
+    ctx.load_repos(false, true);
 
     std::cout << std::endl;
 

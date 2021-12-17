@@ -205,7 +205,7 @@ void Context::apply_repository_setopts() {
         libdnf::repo::RepoQuery query(base);
         query.filter_id(repo_pattern, libdnf::sack::QueryCmp::GLOB).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
         auto key = setopt.first.substr(last_dot_pos + 1);
-        for (auto & repo : query.get_data()) {
+        for (auto & repo : query) {
             try {
                 repo->get_config().opt_binds().at(key).new_string(libdnf::Option::Priority::COMMANDLINE, setopt.second);
             } catch (const std::exception & ex) {
@@ -240,7 +240,7 @@ void Context::print_info(const char * msg) {
 }
 
 // Multithreaded. Main thread prepares (updates) repositories metadata. Second thread loads them to solvable sack.
-void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags) {
+void Context::load_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags) {
     std::atomic<bool> except{false};  // set to true if an exception occurred
     std::exception_ptr except_ptr;    // for pass exception from thread_sack_loader to main thread,
                                       // a default-constructed std::exception_ptr is a null pointer
@@ -306,8 +306,23 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo
 
     print_info("Updating repositories metadata and load them:");
 
-    // Prepares repositories metadata for thread sack loader.
-    for (auto & repo : repos.get_data()) {
+    // If the input RepoQuery contains a system repo, we load the system repo first.
+    for (auto & repo : repos) {
+        if (repo->get_type() == libdnf::repo::Repo::Type::SYSTEM) {
+            {
+                std::lock_guard<std::mutex> lock(prepared_repos_mutex);
+                prepared_repos.push_back(repo.get());
+            }
+            signal_prepared_repo.notify_one();
+            break;
+        }
+    }
+
+    // Prepares available repositories metadata for thread sack loader.
+    for (auto & repo : repos) {
+        if (repo->get_type() != libdnf::repo::Repo::Type::AVAILABLE) {
+            continue;
+        }
         catch_thread_sack_loader_exceptions();
         try {
             load_rpm_repo(*repo.get());
@@ -337,22 +352,52 @@ void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo
 // Single thread version.
 // TODO keep this and enable conditionally (compiletime or even runtime) or
 // drop when we know the multithreaded implementation is stable
-// void Context::load_rpm_repos(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags) {
-//     std::cout << "Updating repositories metadata and load them:" << std::endl;
-//     for (auto & repo : repos.get_data()) {
-//         try {
-//             load_rpm_repo(*repo.get());
-//             // std::cout << "Loading repository \"" << repo->get_config().name().get_value() << "\" into sack." << std::endl;
-//             repo->load(flags);
-//         } catch (const std::runtime_error & ex) {
-//             if (!repo->get_config().skip_if_unavailable().get_value()) {
-//                 std::cerr << "Error: Unable to load repository \"" << repo->get_id()
-//                           << "\" and \"skip_if_unavailable\" is disabled for it." << std::endl;
-//                 throw;
-//             }
-//         }
-//     }
-// }
+void Context::load_repos_single_thread(libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags) {
+    std::cout << "Updating repositories metadata and load them:" << std::endl;
+
+    // If the input RepoQuery contains a system repo, we load the system repo first.
+    for (auto & repo : repos) {
+        if (repo->get_type() == libdnf::repo::Repo::Type::SYSTEM) {
+            repo->load(flags);
+            break;
+        }
+    }
+
+    for (auto & repo : repos) {
+        if (repo->get_type() != libdnf::repo::Repo::Type::AVAILABLE) {
+            continue;
+        }
+        try {
+            load_rpm_repo(*repo.get());
+            // std::cout << "Loading repository \"" << repo->get_config().name().get_value() << "\" into sack." << std::endl;
+            repo->load(flags);
+        } catch (const std::runtime_error & ex) {
+            if (!repo->get_config().skip_if_unavailable().get_value()) {
+                std::cerr << "Error: Unable to load repository \"" << repo->get_id()
+                          << "\" and \"skip_if_unavailable\" is disabled for it." << std::endl;
+                throw;
+            }
+        }
+    }
+}
+
+void Context::load_repos(bool system, bool enabled_available, libdnf::repo::Repo::LoadFlags flags) {
+    if (system) {
+        // create a system repository if it does not exist
+        base.get_repo_sack()->get_system_repo();
+    }
+
+    libdnf::repo::RepoQuery repos(base);
+    repos.filter_enabled(true);
+    if (!enabled_available) {
+        repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE, libdnf::sack::QueryCmp::NEQ);
+    }
+    if (!system) {
+        repos.filter_type(libdnf::repo::Repo::Type::SYSTEM, libdnf::sack::QueryCmp::NEQ);
+    }
+
+    load_repos(repos, flags);
+}
 
 
 namespace {
@@ -812,7 +857,7 @@ std::vector<std::string> match_available_pkgs(Context & ctx, const std::string &
         repo->set_sync_strategy(libdnf::repo::Repo::SyncStrategy::ONLY_CACHE);
         repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
     }
-    ctx.load_rpm_repos(enabled_repos, libdnf::repo::Repo::LoadFlags::PRIMARY);
+    ctx.load_repos(false, true, libdnf::repo::Repo::LoadFlags::PRIMARY);
 
     std::set<std::string> result_set;
     {

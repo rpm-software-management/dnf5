@@ -66,14 +66,8 @@ InstallCommand::InstallCommand(Command & parent) : Command(parent, "install") {
 void InstallCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    // To search in the system repository (installed packages)
-    // Creates system repository in the repo_sack and loads it into rpm::PackageSack.
-    ctx.base.get_repo_sack()->get_system_repo()->load();
-
-    // To search in available repositories (available packages)
-    libdnf::repo::RepoQuery enabled_repos(ctx.base);
-    enabled_repos.filter_enabled(true).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
-    ctx.load_rpm_repos(enabled_repos);
+    // Load system and available repositories
+    ctx.load_repos(true, true);
 
     std::cout << std::endl;
 

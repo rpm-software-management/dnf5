@@ -57,14 +57,10 @@ AdvisoryListCommand::AdvisoryListCommand(Command & parent, const std::string & n
 void AdvisoryListCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    ctx.base.get_repo_sack()->get_system_repo()->load();
-
-    libdnf::repo::RepoQuery enabled_repos(ctx.base);
-    enabled_repos.filter_enabled(true).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+    // Load system and available repositories
+    ctx.load_repos(true, true, libdnf::repo::Repo::LoadFlags::UPDATEINFO);
 
     using QueryCmp = libdnf::sack::QueryCmp;
-
-    ctx.load_rpm_repos(enabled_repos, libdnf::repo::Repo::LoadFlags::UPDATEINFO);
 
     libdnf::rpm::PackageQuery package_query(ctx.base);
 
