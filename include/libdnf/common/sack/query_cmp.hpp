@@ -122,24 +122,26 @@ enum class QueryCmp : uint32_t {
 };
 
 
-inline QueryCmp operator|(QueryCmp lhs, QueryCmp rhs) {
+inline constexpr QueryCmp operator|(QueryCmp lhs, QueryCmp rhs) noexcept {
     return static_cast<QueryCmp>(
         static_cast<std::underlying_type<QueryCmp>::type>(lhs) |
         static_cast<std::underlying_type<QueryCmp>::type>(rhs));
 }
 
 
-inline QueryCmp operator&(QueryCmp lhs, QueryCmp rhs) {
+inline constexpr QueryCmp operator&(QueryCmp lhs, QueryCmp rhs) noexcept {
     return static_cast<QueryCmp>(
         static_cast<std::underlying_type<QueryCmp>::type>(lhs) &
         static_cast<std::underlying_type<QueryCmp>::type>(rhs));
 }
 
 
-inline QueryCmp operator-(QueryCmp lhs, QueryCmp rhs) {
+/// Returns the value of the left operand with the bits zeroed that are set in the right operand.
+/// Can be used eg for removing `NOT` or `ICASE` flags.
+inline constexpr QueryCmp operator-(QueryCmp lhs, QueryCmp rhs) noexcept {
     return static_cast<QueryCmp>(
-        static_cast<std::underlying_type<QueryCmp>::type>(lhs) -
-        static_cast<std::underlying_type<QueryCmp>::type>(rhs));
+        static_cast<std::underlying_type<QueryCmp>::type>(lhs) &
+        ~static_cast<std::underlying_type<QueryCmp>::type>(rhs));
 }
 
 }  // namespace libdnf::sack
