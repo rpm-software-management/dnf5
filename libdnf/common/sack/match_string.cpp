@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/sack/match_string.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/string.hpp"
 
 #include "libdnf/common/exception.hpp"
 
@@ -41,12 +42,10 @@ inline std::string tolower(const std::string & s) {
 
 bool match_string(const std::string & value, QueryCmp cmp, const std::string & pattern) {
     bool result = false;
-    switch (cmp) {
+
+    switch (cmp - QueryCmp::NOT) {
         case QueryCmp::EXACT:
             result = value == pattern;
-            break;
-        case QueryCmp::NEQ:
-            result = value != pattern;
             break;
         case QueryCmp::IEXACT:
             result = tolower(value) == tolower(pattern);
@@ -63,34 +62,30 @@ bool match_string(const std::string & value, QueryCmp cmp, const std::string & p
         case QueryCmp::IREGEX:
             result = std::regex_match(value, std::regex(pattern, std::regex::icase));
             break;
-
-        // TODO(jrohel): implement missing comparisons
-        case QueryCmp::NOT_GLOB:
-        case QueryCmp::NOT_IGLOB:
-        case QueryCmp::NOT_IEXACT:
         case QueryCmp::CONTAINS:
-        case QueryCmp::NOT_CONTAINS:
+            result = value.find(pattern) != std::string::npos;
+            break;
         case QueryCmp::ICONTAINS:
-        case QueryCmp::NOT_ICONTAINS:
+            result = tolower(value).find(tolower(pattern)) != std::string::npos;
+            break;
         case QueryCmp::STARTSWITH:
+            result = libdnf::utils::string::starts_with(value, pattern);
+            break;
         case QueryCmp::ISTARTSWITH:
+            result = libdnf::utils::string::starts_with(tolower(value), tolower(pattern));
+            break;
         case QueryCmp::ENDSWITH:
+            result = libdnf::utils::string::ends_with(value, pattern);
+            break;
         case QueryCmp::IENDSWITH:
-            throw RuntimeError(M_("Not implemented yet"));
+            result = libdnf::utils::string::ends_with(tolower(value), tolower(pattern));
             break;
-        case QueryCmp::ISNULL:
-        case QueryCmp::LT:
-        case QueryCmp::LTE:
-        case QueryCmp::GT:
-        case QueryCmp::GTE:
-            throw RuntimeError(M_("Unsupported operator"));
-            break;
-        case QueryCmp::NOT:
-        case QueryCmp::ICASE:
-            throw RuntimeError(M_("Operator flag cannot be used standalone"));
-            break;
+        default:
+            libdnf_assert(cmp - QueryCmp::NOT - QueryCmp::ICASE, "NOT and ICASE modifiers cannot be used standalone");
+            libdnf_throw_assertion("Unsupported operator: operator code {}", cmp);
     }
-    return result;
+
+    return static_cast<bool>(cmp & QueryCmp::NOT) ? !result : result;
 }
 
 
