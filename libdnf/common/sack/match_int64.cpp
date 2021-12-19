@@ -50,29 +50,9 @@ bool match_int64(int64_t value, QueryCmp cmp, int64_t pattern) {
         case QueryCmp::GTE:
             result = value >= pattern;
             break;
-        case QueryCmp::IEXACT:
-        case QueryCmp::NOT_IEXACT:
-        case QueryCmp::GLOB:
-        case QueryCmp::NOT_GLOB:
-        case QueryCmp::IGLOB:
-        case QueryCmp::NOT_IGLOB:
-        case QueryCmp::REGEX:
-        case QueryCmp::IREGEX:
-        case QueryCmp::CONTAINS:
-        case QueryCmp::NOT_CONTAINS:
-        case QueryCmp::ICONTAINS:
-        case QueryCmp::NOT_ICONTAINS:
-        case QueryCmp::STARTSWITH:
-        case QueryCmp::ISTARTSWITH:
-        case QueryCmp::ENDSWITH:
-        case QueryCmp::IENDSWITH:
-        case QueryCmp::ISNULL:
-            throw RuntimeError(M_("Unsupported operator"));
-            break;
-        case QueryCmp::NOT:
-        case QueryCmp::ICASE:
-            throw RuntimeError(M_("Operator flag cannot be used standalone"));
-            break;
+        default:
+            libdnf_assert(cmp - QueryCmp::NOT - QueryCmp::ICASE, "NOT and ICASE modifiers cannot be used standalone");
+            libdnf_throw_assertion("Unsupported operator: operator code {}", cmp);
     }
     return result;
 }
