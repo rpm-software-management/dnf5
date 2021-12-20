@@ -43,6 +43,7 @@ extern "C" {
 
 #include <fmt/format.h>
 
+#include <algorithm>
 #include <filesystem>
 
 
@@ -80,12 +81,10 @@ void PackageSack::Impl::make_provides_ready() {
 void PackageSack::Impl::setup_excludes_includes(bool only_main) {
     considered_uptodate = false;
 
-    auto & main_config = base->get_config();
+    const auto & main_config = base->get_config();
+    const auto & disable_excludes = main_config.disable_excludes().get_value();
 
-    auto & disable_excludes = main_config.disable_excludes().get_value();
-    std::set<std::string> disabled(disable_excludes.begin(), disable_excludes.end());
-
-    if (disabled.count("all") != 0) {
+    if (std::find(disable_excludes.begin(), disable_excludes.end(), "*") != disable_excludes.end()) {
         return;
     }
 
@@ -100,11 +99,10 @@ void PackageSack::Impl::setup_excludes_includes(bool only_main) {
 
     // first evaluate repo specific includes/excludes
     if (!only_main) {
-        for (const auto & repo : base->get_repo_sack()->get_data()) {
-            if (!repo->is_enabled() || disabled.count(repo->get_id()) != 0) {
-                continue;
-            }
-
+        libdnf::repo::RepoQuery rq(base);
+        rq.filter_enabled(true);
+        rq.filter_id(disable_excludes, libdnf::sack::QueryCmp::NOT_GLOB);
+        for (const auto & repo : rq) {
             if (!repo->get_config().includepkgs().get_value().empty()) {
                 repo->set_use_includes(true);
                 includes_used = true;
@@ -135,7 +133,7 @@ void PackageSack::Impl::setup_excludes_includes(bool only_main) {
 
     // then main (global) includes/excludes because they can mask
     // repo specific settings
-    if (disabled.count("main") == 0) {
+    if (std::find(disable_excludes.begin(), disable_excludes.end(), "main") == disable_excludes.end()) {
         for (const auto & name : main_config.includepkgs().get_value()) {
             PackageQuery query(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
             const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, false);
