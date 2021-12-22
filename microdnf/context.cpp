@@ -107,9 +107,6 @@ public:
     virtual void add_message(
         [[maybe_unused]] libdnf::cli::progressbar::MessageType type, [[maybe_unused]] const std::string & message) {}
 
-    // Quiet empty implementation.
-    virtual void end_line() {}
-
 private:
     libdnf::ConfigMain * config;
 };
@@ -159,12 +156,6 @@ public:
     void add_message(libdnf::cli::progressbar::MessageType type, const std::string & message) override {
         progress_bar.add_message(type, message);
         print_progress_bar();
-    }
-
-    void end_line() override {
-        if (progress_bar.get_state() != libdnf::cli::progressbar::ProgressBarState::READY) {
-            std::cout << std::endl;
-        }
     }
 
 private:
@@ -226,7 +217,6 @@ void Context::load_rpm_repo(libdnf::repo::Repo & repo) {
     auto & logger = *base.get_logger();
     auto callback = get_quiet() ? std::make_unique<microdnf::KeyImportRepoCB>(base.get_config())
                                 : std::make_unique<microdnf::ProgressAndKeyImportRepoCB>(base.get_config());
-    auto callback_ptr = callback.get();
     repo.set_callbacks(std::move(callback));
     try {
         repo.fetch_metadata();
@@ -234,7 +224,6 @@ void Context::load_rpm_repo(libdnf::repo::Repo & repo) {
         logger.warning(ex.what());
         throw;
     }
-    callback_ptr->end_line();
 }
 
 void Context::print_info(const char * msg) {
