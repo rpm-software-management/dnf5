@@ -26,10 +26,9 @@ namespace libdnf::utils {
 
 class Locker {
 public:
-    enum class LockResult { SUCCESS, ERROR_FD, ERROR_LOCK };
     explicit Locker(const std::string & path) : path(path){};
     ~Locker();
-    LockResult lock();
+    bool lock();
     void unlock();
 
 private:

@@ -20,16 +20,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "locker.hpp"
 
+#include "libdnf/common/exception.hpp"
+
 #include <fcntl.h>
 #include <string.h>
 #include <unistd.h>
 
 namespace libdnf::utils {
 
-Locker::LockResult Locker::lock() {
+bool Locker::lock() {
     lock_fd = open(path.c_str(), O_CREAT | O_RDWR, 0660);
     if (lock_fd == -1) {
-        return LockResult::ERROR_FD;
+        throw SystemError(errno, "Failed to open lock file \"{}\"", path);
     }
 
     struct flock fl;
@@ -41,21 +43,32 @@ Locker::LockResult Locker::lock() {
     fl.l_pid = 0;
     auto rc = fcntl(lock_fd, F_SETLK, &fl);
     if (rc == -1) {
-        return LockResult::ERROR_LOCK;
+        if (errno == EACCES || errno == EAGAIN) {
+            return false;
+        } else {
+            throw SystemError(errno, "Failed to obtain lock \"{}\"", path);
+        }
     }
 
-    return LockResult::SUCCESS;
+    return true;
 }
 
 void Locker::unlock() {
     if (lock_fd != -1) {
-        unlink(path.c_str());
-        close(lock_fd);
+        if (close(lock_fd) == -1) {
+            throw SystemError(errno, "Failed to close lock file \"{}\"", path);
+        }
+        if (unlink(path.c_str()) == -1) {
+            throw SystemError(errno, "Failed to delete lock file \"{}\"", path);
+        }
     }
 }
 
 Locker::~Locker() {
-    unlock();
+    try {
+        unlock();
+    } catch (...) {
+    }
 }
 
 }  // namespace libdnf::utils

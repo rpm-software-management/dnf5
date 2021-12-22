@@ -329,7 +329,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     std::filesystem::path lock_file_path = system_cache_dir;
     lock_file_path /= "rpmtransaction.lock";
     libdnf::utils::Locker locker(lock_file_path);
-    if (locker.lock() != libdnf::utils::Locker::LockResult::SUCCESS) {
+    if (!locker.lock()) {
         return TransactionRunResult::ERROR_LOCK;
     }
     // fill and check the rpm transaction
