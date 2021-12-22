@@ -74,7 +74,7 @@ public:
     virtual ~DbusRepoCB() = default;
 
     void start(const char * what) override;
-    void end() override;
+    void end(const char * error_message) override;
     int progress(double total_to_download, double downloaded) override;
 
     // TODO(mblaha): how to ask the user for confirmation?

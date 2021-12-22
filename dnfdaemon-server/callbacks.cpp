@@ -115,7 +115,8 @@ void DbusRepoCB::start(const char * what) {
     }
 }
 
-void DbusRepoCB::end() {
+void DbusRepoCB::end([[maybe_unused]] const char * error_message) {
+    // TODO(lukash) forward the error message to the client?
     try {
         {
             auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);

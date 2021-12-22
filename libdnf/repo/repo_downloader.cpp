@@ -736,16 +736,15 @@ std::unique_ptr<LrResult> RepoDownloader::perform(
     }
 
     // Start and end is called only if progress callback is set in handle.
-    LrProgressCb progressFunc;
-    handle_get_info(handle, LRI_PROGRESSCB, &progressFunc);
+    LrProgressCb progress_func;
+    handle_get_info(handle, LRI_PROGRESSCB, &progress_func);
 
     add_countme_flag(handle);
 
     std::unique_ptr<LrResult> result;
-    bool ret;
     bool bad_gpg = false;
     do {
-        if (callbacks && progressFunc) {
+        if (callbacks && progress_func) {
             callbacks->start(
                 !config.name().get_value().empty() ? config.name().get_value().c_str()
                                                    : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"));
@@ -753,23 +752,34 @@ std::unique_ptr<LrResult> RepoDownloader::perform(
 
         GError * err_p{nullptr};
         result.reset(lr_result_init());
-        ret = ::lr_handle_perform(handle, result.get(), &err_p);
+        bool res = ::lr_handle_perform(handle, result.get(), &err_p);
 
-        std::unique_ptr<GError> err(err_p);
+        if (res) {
+            // finished successfully
+            if (callbacks && progress_func) {
+                callbacks->end(nullptr);
+            }
 
-        if (callbacks && progressFunc) {
-            callbacks->end();
-        }
+            break;
+        } else {
+            std::unique_ptr<GError> err(err_p);
 
-        if (ret) {
-            break;  // finished successfully
-        }
+            if (bad_gpg || err_p->code != LRE_BADGPG) {
+                if (callbacks && progress_func) {
+                    callbacks->end(err->message);
+                }
 
-        if (bad_gpg || err_p->code != LRE_BADGPG) {
-            throw LibrepoError(std::move(err));
+                throw LibrepoError(std::move(err));
+            }
+
+            // TODO(lukash) we probably shouldn't call end() in this case
+            if (callbacks && progress_func) {
+                callbacks->end(nullptr);
+            }
         }
 
         bad_gpg = true;
+        // TODO(lukash) this calls callbacks->{start,end}() for the second time, doesn't seem right
         import_repo_keys();
         std::filesystem::remove_all(dest_directory + "/" + METADATA_RELATIVE_DIR);
     } while (true);
@@ -786,14 +796,19 @@ void RepoDownloader::download_url(const char * url, int fd) {
     }
 
     GError * err_p{nullptr};
-    lr_download_url(get_cached_handle(), url, fd, &err_p);
-    std::unique_ptr<GError> err(err_p);
+    bool res = lr_download_url(get_cached_handle(), url, fd, &err_p);
 
-    if (callbacks) {
-        callbacks->end();
-    }
+    if (res) {
+        if (callbacks) {
+            callbacks->end(nullptr);
+        }
+    } else {
+        std::unique_ptr<GError> err(err_p);
 
-    if (err) {
+        if (callbacks) {
+            callbacks->end(err->message);
+        }
+
         // TODO(lukash) does the error from librepo contain the URL or do we need to add it here somehow?
         throw LibrepoError(std::move(err));
     }

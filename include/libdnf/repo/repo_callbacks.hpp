@@ -56,7 +56,7 @@ public:
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
     virtual void start(const char * what) {}
-    virtual void end() {}
+    virtual void end(const char * error_message) {}
     virtual int progress(double total_to_download, double downloaded) { return 0; }
     virtual void fastest_mirror(FastestMirrorStage stage, const char * ptr) {}
     virtual int handle_mirror_failure(const char * msg, const char * url, const char * metadata) { return 0; }

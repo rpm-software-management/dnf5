@@ -126,10 +126,16 @@ public:
         progress_bar.start();
     }
 
-    void end() override {
+    void end(const char * error_message) override {
         progress_bar.set_ticks(progress_bar.get_total_ticks());
-        progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
-        print_progress_bar();
+
+        if (error_message) {
+            progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
+            add_message(libdnf::cli::progressbar::MessageType::ERROR, error_message);
+        } else {
+            progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+            print_progress_bar();
+        }
     }
 
     int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
@@ -226,8 +232,6 @@ void Context::load_rpm_repo(libdnf::repo::Repo & repo) {
         repo.fetch_metadata();
     } catch (const std::runtime_error & ex) {
         logger.warning(ex.what());
-        callback_ptr->add_message(libdnf::cli::progressbar::MessageType::ERROR, ex.what());
-        callback_ptr->end_line();
         throw;
     }
     callback_ptr->end_line();
