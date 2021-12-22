@@ -72,6 +72,7 @@ public:
         TRY_CACHE = 3
     };
 
+    // TODO(lukash) name this RepodataType?
     enum class LoadFlags {
         PRIMARY = 1 << 1,     /// Load primary repodata (primary.xml).
         FILELISTS = 1 << 2,   /// Load file lists (filelists.xml). Requires loading PRIMARY.

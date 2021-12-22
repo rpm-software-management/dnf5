@@ -28,38 +28,73 @@ namespace libdnf::repo {
 class RepoCallbacks {
 public:
     enum class FastestMirrorStage {
-        /// Fastest mirror detection just started. ptr is NULL.
+        /// Fastest mirror detection started. ptr is `nullptr`.
         INIT,
 
-        /// ptr is a (char *) pointer to a string with path to the cache file.
+        // TODO(lukash) what does CACHELOADING mean?
+        /// `ptr` is a (`char *`) pointer to a string with path to the cache file.
         /// Do not modify or free the string.
         CACHELOADING,
 
-        /// If cache was loaded successfully, ptr is NULL, otherwise ptr is a
-        /// (char *) string with error message. Do not modify or free the string.
+        /// If cache was loaded successfully, `ptr` is `nullptr`, otherwise it
+        /// is a (`char *`) string containing the error message. Do not modify
+        /// or free the string.
         CACHELOADINGSTATUS,
 
         /// Detection (pinging) in progress. If all data was loaded from cache,
-        /// this stage is skiped. ptr is a pointer to long, the number mirrors
-        /// which will be tested.
+        /// this stage is skiped. `ptr` is a pointer to `long`, the number of
+        /// mirrors which will be tested.
         DETECTION,
 
-        /// Detection is done, sorting mirrors, updating cache, etc. ptr is NULL.
+        /// Detection is done, sorting mirrors, updating cache, etc. `ptr` is
+        /// `nullptr`.
         FINISHING,
 
-        /// The very last invocation of the fastest mirror callback. If fastest
-        /// mirror detection was successful, ptr is NULL. Otherwise ptr points
-        /// to a string with an error message. Do not modify or free the string.
+        /// The last invocation of the fastest mirror callback. If detection
+        /// was successful, `ptr` is `nullptr`. Otherwise it is a (`char *`) /
+        /// string containing the error message. Do not modify or free the
+        /// string.
         STATUS,
     };
 
 #pragma GCC diagnostic push
 #pragma GCC diagnostic ignored "-Wunused-parameter"
+
+    /// Start of download callback.
+    /// @param what The name (if set) or the id of the repository
     virtual void start(const char * what) {}
+
+    /// End of download callback.
+    /// @param error_message `nullptr` on success, otherwise the error message
     virtual void end(const char * error_message) {}
+
+    /// Download progress callback.
+    /// @param total_to_download total amount of bytes to download
+    /// @param downloaded bytes downloaded
+    /// @return TODO(lukash) this uses librepo's LrCbReturnCode, we should have our own enum
     virtual int progress(double total_to_download, double downloaded) { return 0; }
+
+    // TODO(lukash) needs more specifics about how the detection works
+    /// Callback for fastest mirror detection.
+    /// @param stage the stage of the fastest mirror detection, refer to `FastestMirrorStage`
+    /// @param ptr pointer to additional data depending on the stage, refer to `FastestMirrorStage`
+    // TODO(lukash) should ptr be void * since it points to different things depending on stage?
     virtual void fastest_mirror(FastestMirrorStage stage, const char * ptr) {}
+
+    /// Mirror failure callback. Called when downloading from a mirror failed.
+    /// @param msg the error message
+    /// @param url the mirror url
+    /// @param metadata the type of metadata that is being downloaded TODO(lukash) should this point to Repo::LoadFlags in some way?
+    /// @return TODO(lukash) this uses librepo's LrCbReturnCode, we should have our own enum
     virtual int handle_mirror_failure(const char * msg, const char * url, const char * metadata) { return 0; }
+
+    /// GPG key import callback. Allows to confirm or deny the import.
+    /// @param id the key id
+    /// @param user_id the user id of the key
+    /// @param fingerprint the fingerprint of the key
+    /// @param url the URL from which the key was downloaded
+    /// @param timestamp the timestamp of the key
+    /// @return `true` to import the key, `false` to not import
     virtual bool repokey_import(
         const std::string & id,
         const std::string & user_id,
