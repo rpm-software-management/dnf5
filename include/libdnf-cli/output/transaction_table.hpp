@@ -311,6 +311,13 @@ bool print_transaction_table(Transaction & transaction) {
 
         ts_summary.add(tspkg.get_action());
         for (auto & replaced : tspkg.get_replaces()) {
+            // highlight incoming packages with epoch/version change
+            if (tspkg.get_package().get_epoch() != replaced.get_epoch() ||
+                tspkg.get_package().get_version() != replaced.get_version()) {
+                auto cl_evr = scols_line_get_cell(ln, COL_EVR);
+                scols_cell_set_color(cl_evr, "bold");
+            }
+
             struct libscols_line * ln_replaced = scols_table_new_line(tb, ln);
             // TODO(jmracek) Translate it
             std::string name("replacing ");
