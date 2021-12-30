@@ -53,7 +53,7 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
         case libdnf::transaction::TransactionItemAction::REMOVE:
             return "red";
         case libdnf::transaction::TransactionItemAction::REPLACED:
-            return "gray";
+            return "halfbright";
         case libdnf::transaction::TransactionItemAction::OBSOLETED:
             return "brown";
         case libdnf::transaction::TransactionItemAction::REINSTALLED:
