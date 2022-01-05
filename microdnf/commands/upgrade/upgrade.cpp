@@ -80,8 +80,7 @@ UpgradeCommand::UpgradeCommand(Command & parent, const std::string & name) : Com
 void UpgradeCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    // Load system and available repositories
-    ctx.load_repos(true, true);
+    ctx.load_repos(true);
 
     std::cout << std::endl;
 

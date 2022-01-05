@@ -57,8 +57,7 @@ AdvisoryInfoCommand::AdvisoryInfoCommand(Command & parent, const std::string & n
 void AdvisoryInfoCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    // Load system and available repositories
-    ctx.load_repos(true, true, libdnf::repo::Repo::LoadFlags::UPDATEINFO);
+    ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::UPDATEINFO);
 
     using QueryCmp = libdnf::sack::QueryCmp;
 

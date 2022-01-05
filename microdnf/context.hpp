@@ -40,10 +40,8 @@ class Context : public libdnf::cli::session::Session {
 public:
     void apply_repository_setopts();
 
-    /// Updates the repositories metadata cache.
-    /// Loads the updated metadata, system repo and command line repo into rpm::RepoSack and into rpm::PackageSack.
-    void load_repos(
-        bool system, bool enabled_available, libdnf::repo::Repo::LoadFlags flags = libdnf::repo::Repo::LoadFlags::ALL);
+    /// Sets callbacks for repositories and loads them, updating metadata if necessary.
+    void load_repos(bool load_system, libdnf::repo::Repo::LoadFlags flags = libdnf::repo::Repo::LoadFlags::ALL);
 
     libdnf::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
@@ -72,19 +70,6 @@ public:
     bool get_quiet() const { return quiet; }
 
 private:
-    /// Updates the repositories metadata cache.
-    /// Loads the updated metadata into rpm::RepoSack and into rpm::PackageSack.
-    void load_repos(
-        libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags = libdnf::repo::Repo::LoadFlags::ALL);
-
-    /// Updates the repositories metadata cache. Single thread version.
-    /// Loads the updated metadata into rpm::RepoSack and into rpm::PackageSack.
-    void load_repos_single_thread(
-        libdnf::repo::RepoQuery & repos, libdnf::repo::Repo::LoadFlags flags = libdnf::repo::Repo::LoadFlags::ALL);
-
-    /// Updates the repository metadata cache and load it into rpm::RepoSack.
-    void load_rpm_repo(libdnf::repo::Repo & repo);
-
     /// If quiet mode is not active, it will print `msg` to standard output.
     void print_info(const char * msg);
 

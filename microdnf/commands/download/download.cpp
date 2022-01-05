@@ -64,8 +64,7 @@ void DownloadCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
     auto package_sack = ctx.base.get_rpm_package_sack();
 
-    // Load available repositories
-    ctx.load_repos(false, true);
+    ctx.load_repos(false);
 
     std::cout << std::endl;
 

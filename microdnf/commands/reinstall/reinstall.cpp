@@ -66,8 +66,7 @@ ReinstallCommand::ReinstallCommand(Command & parent) : Command(parent, "reinstal
 void ReinstallCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    // Load system and available repositories
-    ctx.load_repos(true, true);
+    ctx.load_repos(true);
 
     libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_reinstall_options) {

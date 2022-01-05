@@ -107,9 +107,16 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquer
 void RepoqueryCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    ctx.load_repos(
-        installed_option->get_value(),
-        available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value());
+    if (installed_option->get_value()) {
+        ctx.base.get_repo_sack()->get_system_repo()->load();
+    }
+
+    if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
+        ctx.load_repos(false);
+    } else {
+        // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
+        ctx.base.get_rpm_package_sack()->setup_excludes_includes();
+    }
 
     libdnf::rpm::PackageSet result_pset(ctx.base);
     libdnf::rpm::PackageQuery full_package_query(ctx.base);

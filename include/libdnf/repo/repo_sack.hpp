@@ -84,6 +84,28 @@ public:
     // TODO (lukash): There's an overlap with dumping the debugdata on the Goal class
     void dump_debugdata(const std::string & dir);
 
+    /// Downloads (if necessary) all enabled repository metadata and loads them in parallel.
+    ///
+    /// See `update_and_load_repos()`, which is called on the list of enabled
+    /// repos and, if requested, the system repository.
+    ///
+    /// @param load_system Whether to load the system repository
+    /// @param flags The load flags passed to `Repo::load()`
+    void update_and_load_enabled_repos(bool load_system, Repo::LoadFlags flags = Repo::LoadFlags::ALL);
+
+    /// Downloads (if necessary) repository metadata and loads them in parallel.
+    ///
+    /// Launches a thread that picks repos from a queue and loads them into
+    /// memory (calling their `load()` method). Then iterates over `repos`,
+    /// potentially downloads fresh metadata (by calling the
+    /// `download_metadata()` method) and then queues them for loading. This
+    /// speeds up the process by loading repos into memory while others are being
+    /// downloaded.
+    ///
+    /// @param repos The repositories to update and load
+    /// @param flags The load flags passed to `Repo::load()`
+    void update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::LoadFlags flags = Repo::LoadFlags::ALL);
+
     RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
 
     /// @return The `Base` object to which this object belongs.

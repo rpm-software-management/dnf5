@@ -55,12 +55,10 @@ GroupListCommand::GroupListCommand(Command & parent, const std::string & name) :
 void GroupListCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    // Load system and available repositories
-    ctx.load_repos(true, true, libdnf::repo::Repo::LoadFlags::COMPS);
-
-    auto group_specs_str = group_specs->get_value();
+    ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::COMPS);
 
     libdnf::comps::GroupQuery query(ctx.base.get_comps()->get_group_sack());
+    auto group_specs_str = group_specs->get_value();
 
     // Filter by patterns if given
     if (group_specs_str.size() > 0) {

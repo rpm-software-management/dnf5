@@ -76,8 +76,9 @@ RemoveCommand::RemoveCommand(Command & parent, const std::string & name) : Comma
 void RemoveCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    // Load system repositories
-    ctx.load_repos(true, false);
+    ctx.base.get_repo_sack()->get_system_repo()->load();
+    // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
+    ctx.base.get_rpm_package_sack()->setup_excludes_includes();
 
     libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_remove_options) {
