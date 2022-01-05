@@ -1,4 +1,4 @@
-Installing Build Requirements
+Installing build requirements
 =============================
 
 

@@ -1,4 +1,4 @@
-Loading Repositories
+Loading repositories
 ====================
 
 

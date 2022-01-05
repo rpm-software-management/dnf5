@@ -1,18 +1,26 @@
-// create a new Base object
+/* includes; won't compile in tests, in the docs we leave out the comment lines to show them
+#include <libdnf/base/base.hpp>
+*/
+
+// Create a new Base object.
 libdnf::Base base;
 
-// create a reference to the Base's config for better code readability
-auto & conf = base.get_config();
-
-// set installroot
+// Optionally load configuration from the config file.
 //
-// installroot is set to '/' when we're working with the system
-// but we can set it to a different location if we don't need to read or modify system packages
-// of if we want to install content in a different installroot
-conf.installroot().set(libdnf::Option::Priority::RUNTIME, installroot);
+// The Base's config is initialized with default values, one of which is
+// `config_file_path()`. This contains the default path to the config file
+// ("/etc/dnf/dnf.conf"). Set a custom value and call the below method to load
+// configuration from a different location.
+base.load_config_from_file();
 
-// TODO(dmach): we shouldn't be forcing API users to always set the cache dir
-conf.cachedir().set(libdnf::Option::Priority::RUNTIME, installroot + "/var/cache/dnf");
+// Optionally set installroot.
+//
+// Installroot is set to '/' when we're working with the system, but we can set
+// it to a different location. The Base instance will then work with the
+// installroot directory tree as its root for the rest of its lifetime.
+base.get_config().installroot().set(libdnf::Option::Priority::RUNTIME, installroot);
 
-// set Base internals according to configuration
+// Load vars and do other initialization (of libsolv pool, etc.) based on the
+// configuration.  Locks the installroot and varsdir configuration values so
+// that they can't be changed.
 base.setup();
