@@ -80,9 +80,7 @@ Session::Session(
     }
 
     // load repo configuration
-    auto repo_sack = base->get_repo_sack();
-    repo_sack->new_repos_from_file();
-    repo_sack->new_repos_from_dirs();
+    base->get_repo_sack()->create_repos_from_system_configuration();
 
     // instantiate all services provided by the daemon
     services.emplace_back(std::make_unique<Base>(*this));

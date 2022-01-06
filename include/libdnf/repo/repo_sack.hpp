@@ -40,29 +40,47 @@ public:
     explicit RepoSack(const libdnf::BaseWeakPtr & base) : base(base) {}
     explicit RepoSack(libdnf::Base & base);
 
-    /// Creates new repository and add it into RepoSack
-    RepoWeakPtr new_repo(const std::string & id);
+    /// Creates a new clear repository with default configuration.
+    /// @param id The new repo id
+    /// @return A weak pointer to the new repo
+    RepoWeakPtr create_repo(const std::string & id);
 
-    /// Creates new repositories according to the configuration in the file defined by path.
-    /// The created repositories are added into RepoSack.
-    void new_repos_from_file(const std::string & path);
+    /// Creates new repositories from the configuration file at `path`.
+    /// @param path The path to the repository configuration file
+    void create_repos_from_file(const std::string & path);
 
-    // "config_file_path" contains the main configuration, but may also contain the rpm repository definition.
-    // It is analyzed by two parsers. The codes of parsers are similar. However, the repository configuration
-    // parser applies variables/substitutions.
-    /// Creates new repositories according to the configuration in the file defined by "config_file_path"
-    /// configuration option.
-    /// The created repositories are added into RepoSack.
-    void new_repos_from_file();
+    /// Creates new repositories from the Base's configuration file (the
+    /// "config_file_path" configuration option).
+    ///
+    /// Repositories can be configured in dnf's main configuration file in
+    /// sections other than "[main]".
+    void create_repos_from_config_file();
 
-    /// Creates new repositories according to the configuration in the files with ".repo" extension in the directories
-    /// defined by "reposdir" configuration option.
-    /// The created repositories are added into RepoSack.
+    /// Creates new repositories from all configuration files with the ".repo"
+    /// extension in the `dir_path` directory.
+    ///
+    /// The files in the directory are read in alphabetical order.
+    /// @param dir_path The path to the directory with configuration files
+    void create_repos_from_dir(const std::string & dir_path);
+
+    /// Creates new repositories from all configuration files with ".repo" extension in the directories
+    /// defined by the "reposdir" configuration option.
+    ///
     /// The files in the directories are read in alphabetical order.
-    void new_repos_from_dirs();
+    void create_repos_from_reposdir();
 
-    /// Create a new repository from a libsolv testcase file
-    RepoWeakPtr new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path);
+    /// Creates new repositories from the Base's configuration file (the /
+    /// "config_file_path" configuration option) and from directories defined by
+    /// the "reposdir" configuration option.
+    ///
+    /// Calls `create_repos_from_config_file()` and `create_repos_from_reposdir()`.
+    void create_repos_from_system_configuration();
+
+    /// Creates a new repository from a libsolv testcase file.
+    /// @param id The new repo id
+    /// @param path The path to the libsolv testcase file
+    /// @return A weak pointer to the new repo
+    RepoWeakPtr create_repo_from_libsolv_testcase(const std::string & id, const std::string & path);
 
     /// If not created yet, creates the system repository and returns it.
     /// @return The system repository.
@@ -117,13 +135,6 @@ private:
     friend class rpm::PackageSack;
 
     WeakPtrGuard<RepoSack, false> sack_guard;
-
-    //TODO(jrohel): Make public?
-    /// Creates new repositories according to the configuration in the files with ".repo" extension in the directory
-    /// defined by dir_path.
-    /// The created repositories are added into RepoSack.
-    /// The files in the directory are read in alphabetical order.
-    void new_repos_from_dir(const std::string & dir_path);
 
     void internalize_repos();
 

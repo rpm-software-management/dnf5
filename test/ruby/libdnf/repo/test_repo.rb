@@ -38,7 +38,7 @@ class TestRepo < Test::Unit::TestCase
         repo_sack.get_system_repo().load()
 
         # Creates new repositories in the repo_sack
-        repo = repo_sack.new_repo("repomd-repo1")
+        repo = repo_sack.create_repo("repomd-repo1")
 
         # Tunes repository configuration (baseurl is mandatory)
         repo_path = File.join(Dir.getwd(), '../../../test/data/repos-repomd/repomd-repo1/')

@@ -630,10 +630,7 @@ int main(int argc, char * argv[]) try {
 
     base.setup();
 
-    // create rpm repositories according configuration files
-    auto repo_sack = base.get_repo_sack();
-    repo_sack->new_repos_from_file();
-    repo_sack->new_repos_from_dirs();
+    base.get_repo_sack()->create_repos_from_system_configuration();
 
     context.apply_repository_setopts();
 

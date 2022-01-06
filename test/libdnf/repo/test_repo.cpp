@@ -67,7 +67,7 @@ void RepoTest::test_repo_basics() {
     // sack.create_system_repo(false);
 
     // Creates new repositories in the repo_sack
-    auto repo = repo_sack.new_repo("repomd-repo1");
+    auto repo = repo_sack.create_repo("repomd-repo1");
 
     // Tunes repository configuration (baseurl is mandatory)
     std::filesystem::path repo_path = PROJECT_BINARY_DIR "/test/libdnf/rpm/repos-repomd/repomd-repo1/";

@@ -61,20 +61,20 @@ namespace libdnf::repo {
 RepoSack::RepoSack(libdnf::Base & base) : RepoSack(base.get_weak_ptr()) {}
 
 
-RepoWeakPtr RepoSack::new_repo(const std::string & id) {
+RepoWeakPtr RepoSack::create_repo(const std::string & id) {
     // TODO(jrohel): Test repo exists
     auto repo = std::make_unique<Repo>(base, id, Repo::Type::AVAILABLE);
     return add_item_with_return(std::move(repo));
 }
 
 
-RepoWeakPtr RepoSack::new_repo_from_libsolv_testcase(const std::string & repoid, const std::string & path) {
+RepoWeakPtr RepoSack::create_repo_from_libsolv_testcase(const std::string & id, const std::string & path) {
     std::unique_ptr<std::FILE, decltype(&std::fclose)> testcase_file(solv_xfopen(path.c_str(), "r"), &std::fclose);
     if (!testcase_file) {
         throw SystemError(errno ? errno : EIO, M_("Unable to open libsolv testcase file \"{}\""), path);
     }
 
-    auto repo = new_repo(repoid);
+    auto repo = create_repo(id);
     testcase_add_testtags(repo->p_impl->solv_repo.repo, testcase_file.get(), 0);
     return repo;
 }
@@ -249,7 +249,7 @@ void RepoSack::dump_debugdata(const std::string & dir) {
 }
 
 
-void RepoSack::new_repos_from_file(const std::string & path) {
+void RepoSack::create_repos_from_file(const std::string & path) {
     auto & logger = *base->get_logger();
     ConfigParser parser;
     parser.read(path);
@@ -278,7 +278,7 @@ void RepoSack::new_repos_from_file(const std::string & path) {
             throw RuntimeError(msg);
         }
 
-        auto repo = new_repo(repo_id);
+        auto repo = create_repo(repo_id);
         auto & repo_cfg = repo->get_config();
         repo_cfg.load_from_parser(parser, section, *base->get_vars(), *base->get_logger());
         logger.trace(fmt::format(R"**(Loading configuration of repository "{}" from file "{}" done)**", repo_id, path));
@@ -291,11 +291,11 @@ void RepoSack::new_repos_from_file(const std::string & path) {
     }
 }
 
-void RepoSack::new_repos_from_file() {
-    new_repos_from_file(std::filesystem::path(base->get_config().config_file_path().get_value()));
+void RepoSack::create_repos_from_config_file() {
+    create_repos_from_file(std::filesystem::path(base->get_config().config_file_path().get_value()));
 }
 
-void RepoSack::new_repos_from_dir(const std::string & dir_path) {
+void RepoSack::create_repos_from_dir(const std::string & dir_path) {
     std::filesystem::directory_iterator di(dir_path);
     std::vector<std::filesystem::path> paths;
     for (auto & dentry : di) {
@@ -306,19 +306,24 @@ void RepoSack::new_repos_from_dir(const std::string & dir_path) {
     }
     std::sort(paths.begin(), paths.end());
     for (auto & path : paths) {
-        new_repos_from_file(path);
+        create_repos_from_file(path);
     }
 }
 
-void RepoSack::new_repos_from_dirs() {
+void RepoSack::create_repos_from_reposdir() {
     auto & logger = *base->get_logger();
     for (auto & dir : base->get_config().reposdir().get_value()) {
         try {
-            new_repos_from_dir(dir);
+            create_repos_from_dir(dir);
         } catch (const std::filesystem::filesystem_error & ex) {
             logger.info(ex.what());
         }
     }
+}
+
+void RepoSack::create_repos_from_system_configuration() {
+    create_repos_from_config_file();
+    create_repos_from_reposdir();
 }
 
 BaseWeakPtr RepoSack::get_base() const {

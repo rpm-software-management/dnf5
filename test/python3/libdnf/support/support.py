@@ -49,7 +49,7 @@ class LibdnfTestCase(unittest.TestCase):
     It's also a shared code for add_repo_repomd() and add_repo_rpm().
     """
     def _add_repo(self, repoid, repo_path):
-        repo = self.repo_sack.new_repo(repoid)
+        repo = self.repo_sack.create_repo(repoid)
 
         # set the repo baseurl
         repo.get_config().baseurl().set(libdnf.conf.Option.Priority_RUNTIME, "file://" + repo_path)
@@ -78,4 +78,4 @@ class LibdnfTestCase(unittest.TestCase):
     """
     def add_repo_solv(self, repoid):
         repo_path = os.path.join(PROJECT_SOURCE_DIR, "test/data/repos-solv", repoid + ".repo")
-        self.repo_sack.new_repo_from_libsolv_testcase(repoid, repo_path)
+        self.repo_sack.create_repo_from_libsolv_testcase(repoid, repo_path)

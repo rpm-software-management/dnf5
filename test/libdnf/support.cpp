@@ -36,7 +36,7 @@ static std::map<std::string, std::unique_ptr<libdnf::utils::TempDir>> cache_dirs
 
 
 void LibdnfTestCase::add_repo(const std::string & repoid, const std::string & repo_path) {
-    auto repo = repo_sack->new_repo(repoid);
+    auto repo = repo_sack->create_repo(repoid);
 
     repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path);
 
@@ -62,7 +62,7 @@ void LibdnfTestCase::add_repo_rpm(const std::string & repoid) {
 void LibdnfTestCase::add_repo_solv(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-solv";
     repo_path /= repoid + ".repo";
-    repo_sack->new_repo_from_libsolv_testcase(repoid.c_str(), repo_path.native());
+    repo_sack->create_repo_from_libsolv_testcase(repoid.c_str(), repo_path.native());
 }
 
 

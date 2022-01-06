@@ -50,7 +50,7 @@ class LibdnfTestCase < Test::Unit::TestCase
     # Add (load) a repo from `repo_path`.
     # It's also a shared code for add_repo_repomd() and add_repo_rpm().
     def _add_repo(repoid, repo_path)
-        repo = @repo_sack.new_repo(repoid)
+        repo = @repo_sack.create_repo(repoid)
 
         # set the repo baseurl
         repo.get_config().baseurl().set(Conf::Option::Priority_RUNTIME, "file://" + repo_path)
@@ -75,7 +75,7 @@ class LibdnfTestCase < Test::Unit::TestCase
     # Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-solv/<repoid>.repo
     def add_repo_solv(repoid)
         repo_path = File.join(PROJECT_SOURCE_DIR, "test/data/repos-solv", repoid + ".repo")
-        @repo_sack.new_repo_from_libsolv_testcase(repoid, repo_path)
+        @repo_sack.create_repo_from_libsolv_testcase(repoid, repo_path)
     end
 
 end

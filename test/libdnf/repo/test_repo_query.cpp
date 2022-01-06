@@ -39,10 +39,10 @@ void RepoQueryTest::test_query_basics() {
     //auto repo_sack_weak_ptr = repo_sack.get_weak_ptr();
 
     // Creates new repositories in the repo_sack
-    auto repo1 = repo_sack->new_repo("repo1");
-    auto repo2 = repo_sack->new_repo("repo2");
-    auto repo1_updates = repo_sack->new_repo("repo1_updates");
-    auto repo2_updates = repo_sack->new_repo("repo2_updates");
+    auto repo1 = repo_sack->create_repo("repo1");
+    auto repo2 = repo_sack->create_repo("repo2");
+    auto repo1_updates = repo_sack->create_repo("repo1_updates");
+    auto repo2_updates = repo_sack->create_repo("repo2_updates");
 
     // Tunes configuration of repositories
     repo1->enable();

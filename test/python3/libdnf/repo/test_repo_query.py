@@ -29,10 +29,10 @@ class TestRepQueryo(unittest.TestCase):
         repo_sack = base.get_repo_sack()
 
         # Creates new repositories in the repo_sack
-        repo1 = repo_sack.new_repo("repo1")
-        repo2 = repo_sack.new_repo("repo2")
-        repo1_updates = repo_sack.new_repo("repo1_updates")
-        repo2_updates = repo_sack.new_repo("repo2_updates")
+        repo1 = repo_sack.create_repo("repo1")
+        repo2 = repo_sack.create_repo("repo2")
+        repo1_updates = repo_sack.create_repo("repo1_updates")
+        repo2_updates = repo_sack.create_repo("repo2_updates")
 
         # Tunes configuration of repositories
         repo1.enable();

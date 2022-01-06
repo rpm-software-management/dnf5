@@ -677,9 +677,7 @@ std::vector<std::string> match_available_pkgs(Context & ctx, const std::string &
     base.setup();
 
     // create rpm repositories according configuration files
-    auto repo_sack = base.get_repo_sack();
-    repo_sack->new_repos_from_file();
-    repo_sack->new_repos_from_dirs();
+    base.get_repo_sack()->create_repos_from_system_configuration();
 
     ctx.apply_repository_setopts();
 

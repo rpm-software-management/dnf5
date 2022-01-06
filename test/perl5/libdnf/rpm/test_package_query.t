@@ -39,7 +39,7 @@ $base->setup();
 my $repo_sack = new libdnf::repo::RepoSack($base);
 
 # Creates new repositories in the repo_sack
-my $repo = $repo_sack->new_repo("repomd-repo1");
+my $repo = $repo_sack->create_repo("repomd-repo1");
 
 # Tunes repository configuration (baseurl is mandatory)
 my $repo_path = catfile(cwd, "../../../test/data/repos-repomd/repomd-repo1/");
