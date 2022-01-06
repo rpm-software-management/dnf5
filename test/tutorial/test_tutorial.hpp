@@ -37,6 +37,8 @@ class TutorialTest : public CppUnit::TestCase {
     // to detect releasever in the installroot
     //CPPUNIT_TEST(test_load_system_repos);
 
+    CPPUNIT_TEST(test_query);
+
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -46,6 +48,7 @@ public:
     void test_create_base();
     void test_load_repo();
     void test_load_system_repos();
+    void test_query();
 
 private:
     std::string baseurl = PROJECT_BINARY_DIR "/test/data/repos-rpm/rpm-repo1/";

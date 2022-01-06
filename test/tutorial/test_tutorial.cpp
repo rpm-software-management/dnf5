@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_tutorial.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/rpm/package_query.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TutorialTest);
@@ -50,4 +51,11 @@ void TutorialTest::test_load_repo() {
 void TutorialTest::test_load_system_repos() {
     #include "session/create_base.cpp"
     #include "repo/load_system_repos.cpp"
+}
+
+
+void TutorialTest::test_query() {
+    #include "session/create_base.cpp"
+    #include "repo/load_repo.cpp"
+    #include "query/query.cpp"
 }
