@@ -33,6 +33,10 @@ class TutorialTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_create_base);
     CPPUNIT_TEST(test_load_repo);
 
+    // don't register and run the test - it loads host system repos and fails
+    // to detect releasever in the installroot
+    //CPPUNIT_TEST(test_load_system_repos);
+
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -41,6 +45,7 @@ public:
 
     void test_create_base();
     void test_load_repo();
+    void test_load_system_repos();
 
 private:
     std::string baseurl = PROJECT_BINARY_DIR "/test/data/repos-rpm/rpm-repo1/";

@@ -1,3 +1,5 @@
+.. _creating and configuring a session:
+
 Creating and configuring a session
 ==================================
 

@@ -45,3 +45,9 @@ void TutorialTest::test_load_repo() {
     #include "session/create_base.cpp"
     #include "repo/load_repo.cpp"
 }
+
+
+void TutorialTest::test_load_system_repos() {
+    #include "session/create_base.cpp"
+    #include "repo/load_system_repos.cpp"
+}
