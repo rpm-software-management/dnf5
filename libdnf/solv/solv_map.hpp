@@ -318,6 +318,7 @@ inline SolvMap & SolvMap::operator=(const SolvMap & other) noexcept {
 
 inline SolvMap & SolvMap::operator=(SolvMap && other) noexcept {
     if (this != &other) {
+        map_free(&map);
         map = other.map;
         other.map.map = nullptr;
         other.map.size = 0;
