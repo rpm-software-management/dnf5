@@ -227,8 +227,9 @@ static inline bool name_arch_compare_lower_solvable(const Solvable * first, cons
 
 PackageQuery::PackageQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool empty)
     : PackageSet(base),
-      flags(flags),
       p_pq_impl(new PQImpl) {
+    p_pq_impl->flags = flags;
+
     if (!empty) {
         *p_impl |= base->get_rpm_package_sack()->p_impl->get_solvables();
     }
@@ -259,17 +260,13 @@ PackageQuery::PackageQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool em
 PackageQuery::PackageQuery(libdnf::Base & base, ExcludeFlags flags, bool empty)
     : PackageQuery(base.get_weak_ptr(), flags, empty) {}
 
-PackageQuery::PackageQuery(const PackageQuery & src)
-    : PackageSet(src),
-      flags(src.flags),
-      p_pq_impl(new PQImpl(*src.p_pq_impl)) {}
+PackageQuery::PackageQuery(const PackageQuery & src) : PackageSet(src), p_pq_impl(new PQImpl(*src.p_pq_impl)) {}
 
 PackageQuery::PackageQuery(PackageQuery && src) noexcept = default;
 
 PackageQuery & PackageQuery::operator=(const PackageQuery & src) {
     if (this != &src) {
         PackageSet::operator=(src);
-        flags = src.flags;
         if (p_pq_impl) {
             *p_pq_impl = *src.p_pq_impl;
         } else {
@@ -2122,7 +2119,7 @@ PackageQuery & PackageQuery::filter_upgradable() {
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
 
     for (auto pkg_id : sack->p_impl->get_solvables()) {
-        if (flags == ExcludeFlags::APPLY_EXCLUDES) {
+        if (p_pq_impl->flags == ExcludeFlags::APPLY_EXCLUDES) {
             if (pool.is_considered_map_active() && !pool.get_considered_map().contains_unsafe(pkg_id)) {
                 continue;
             }
@@ -2161,7 +2158,7 @@ PackageQuery & PackageQuery::filter_downgradable() {
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
 
     for (auto pkg_id : sack->p_impl->get_solvables()) {
-        if (flags == ExcludeFlags::APPLY_EXCLUDES) {
+        if (p_pq_impl->flags == ExcludeFlags::APPLY_EXCLUDES) {
             if (pool.is_considered_map_active() && !pool.get_considered_map().contains_unsafe(pkg_id)) {
                 continue;
             }
@@ -2399,7 +2396,6 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
 
 void PackageQuery::swap(PackageQuery & other) noexcept {
     PackageSet::swap(other);
-    std::swap(flags, other.flags);
     p_pq_impl.swap(other.p_pq_impl);
 }
 

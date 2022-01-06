@@ -74,6 +74,7 @@ public:
 
 private:
     friend PackageQuery;
+    ExcludeFlags flags;
     std::optional<libdnf::solv::SolvMap> considered_cache;
 };
 

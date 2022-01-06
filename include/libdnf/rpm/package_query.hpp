@@ -605,7 +605,6 @@ public:
 private:
     friend libdnf::Goal;
     class PQImpl;
-    ExcludeFlags flags;
     std::unique_ptr<PQImpl> p_pq_impl;
 };
 
