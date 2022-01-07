@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf/common/exception.hpp>
 
+#include <type_traits>
+
 
 namespace dnfdaemon {
 
@@ -44,9 +46,13 @@ RpmTransactionItemActions transaction_package_to_action(const libdnf::base::Tran
         case libdnf::base::TransactionPackage::Action::REASON_CHANGE:
         case libdnf::transaction::TransactionItemAction::OBSOLETED:
             // TODO(lukash) handle cases
-            libdnf_throw_assertion("Unexpected action in RpmTransactionItem: {}", tspkg.get_action());
+            libdnf_throw_assertion(
+                "Unexpected action in RpmTransactionItem: {}",
+                static_cast<std::underlying_type_t<libdnf::base::TransactionPackage::Action>>(tspkg.get_action()));
     }
-    libdnf_throw_assertion("Unknown action in RpmTransactionItem: {}", tspkg.get_action());
+    libdnf_throw_assertion(
+        "Unknown action in RpmTransactionItem: {}",
+        static_cast<std::underlying_type_t<libdnf::base::TransactionPackage::Action>>(tspkg.get_action()));
 }
 
 }  // namespace dnfdaemon

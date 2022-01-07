@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/sack/match_string.hpp"
 
+#include "common/sack/query_cmp_private.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/string.hpp"
 
@@ -82,7 +83,7 @@ bool match_string(const std::string & value, QueryCmp cmp, const std::string & p
             break;
         default:
             libdnf_assert(cmp - QueryCmp::NOT - QueryCmp::ICASE, "NOT and ICASE modifiers cannot be used standalone");
-            libdnf_throw_assertion("Unsupported operator: operator code {}", cmp);
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp);
     }
 
     return static_cast<bool>(cmp & QueryCmp::NOT) ? !result : result;

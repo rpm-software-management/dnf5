@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf-cli/utils/units.hpp"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/utils/to_underlying.hpp"
 
 #include <fmt/format.h>
 #include <libdnf/rpm/nevra.hpp>
@@ -64,7 +65,7 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
             break;
     }
 
-    libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", action);
+    libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
 }
 
 
@@ -118,7 +119,9 @@ public:
                 case libdnf::transaction::TransactionItemAction::OBSOLETED:
                 case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                 case libdnf::transaction::TransactionItemAction::REPLACED:
-                    libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", tspkg.get_action());
+                    libdnf_throw_assertion(
+                        "Unexpected action in print_transaction_table: {}",
+                        libdnf::utils::to_underlying(tspkg.get_action()));
             }
 
             text += ":";
@@ -171,7 +174,8 @@ public:
             case libdnf::transaction::TransactionItemAction::OBSOLETE:
             case libdnf::transaction::TransactionItemAction::OBSOLETED:
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-                libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", action);
+                libdnf_throw_assertion(
+                    "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
         }
     }
 

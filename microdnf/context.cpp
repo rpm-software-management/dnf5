@@ -551,7 +551,10 @@ public:
             case libdnf::transaction::TransactionItemAction::OBSOLETE:
             case libdnf::transaction::TransactionItemAction::OBSOLETED:
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-                throw std::logic_error(fmt::format("Unexpected action in TransactionPackage: {}", item.get_action()));
+                throw std::logic_error(fmt::format(
+                    "Unexpected action in TransactionPackage: {}",
+                    static_cast<std::underlying_type_t<libdnf::base::Transaction::TransactionRunResult>>(
+                        item.get_action())));
         }
         if (!msg) {
             msg = "Installing ";

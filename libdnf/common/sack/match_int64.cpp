@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/sack/match_int64.hpp"
 
+#include "common/sack/query_cmp_private.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 
 #include "libdnf/common/exception.hpp"
@@ -52,7 +53,7 @@ bool match_int64(int64_t value, QueryCmp cmp, int64_t pattern) {
             break;
         default:
             libdnf_assert(cmp - QueryCmp::NOT - QueryCmp::ICASE, "NOT and ICASE modifiers cannot be used standalone");
-            libdnf_throw_assertion("Unsupported operator: operator code {}", cmp);
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp);
     }
     return result;
 }

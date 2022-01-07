@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/temp.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/utils/to_underlying.hpp"
 
 extern "C" {
 #include <solv/chksum.h>
@@ -106,7 +107,7 @@ static const char * repodata_type_to_suffix(RepodataType type) {
             return "-other";
     }
 
-    libdnf_throw_assertion("Unknown RepodataType: {}", type);
+    libdnf_throw_assertion("Unknown RepodataType: {}", utils::to_underlying(type));
 }
 
 static int repodata_type_to_flags(RepodataType type) {
@@ -123,7 +124,7 @@ static int repodata_type_to_flags(RepodataType type) {
             return REPO_EXTEND_SOLVABLES | REPO_LOCALPOOL;
     }
 
-    libdnf_throw_assertion("Unknown RepodataType: {}", type);
+    libdnf_throw_assertion("Unknown RepodataType: {}", utils::to_underlying(type));
 }
 
 SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)

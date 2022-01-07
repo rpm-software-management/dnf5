@@ -144,7 +144,10 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
 
     if (rpm_result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
         throw sdbus::Error(
-            dnfdaemon::ERROR_TRANSACTION, fmt::format("rpm transaction failed with code {}.", rpm_result));
+            dnfdaemon::ERROR_TRANSACTION,
+            fmt::format(
+                "rpm transaction failed with code {}.",
+                static_cast<std::underlying_type_t<libdnf::base::Transaction::TransactionRunResult>>(rpm_result)));
     }
 
     // TODO(mblaha): clean up downloaded packages after successfull transaction

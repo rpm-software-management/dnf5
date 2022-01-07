@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/transaction.hpp"
 #include "libdnf/transaction/transaction_item_action.hpp"
+#include "libdnf/utils/to_underlying.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>
@@ -841,7 +842,7 @@ void Transaction::Impl::install_up_down(TransactionItem & item, libdnf::transact
         upgrade = false;
         msg_action = "install";
     } else {
-        libdnf_throw_assertion("Unsupported action: {}", action);
+        libdnf_throw_assertion("Unsupported action: {}", utils::to_underlying(action));
     }
     auto file_path = item.get_package().get_package_path();
     auto * header = read_pkg_header(file_path);

@@ -1,11 +1,11 @@
 /*
-Copyright Contributors to the libdnf project.
+Copyright (C) 2022 Red Hat, Inc.
 
 This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
 
 Libdnf is free software: you can redistribute it and/or modify
 it under the terms of the GNU Lesser General Public License as published by
-the Free Software Foundation, either version 2.1 of the License, or
+the Free Software Foundation, either version 2 of the License, or
 (at your option) any later version.
 
 Libdnf is distributed in the hope that it will be useful,
@@ -17,15 +17,22 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifndef LIBDNF_UTILS_TO_UNDERLYING_HPP
+#define LIBDNF_UTILS_TO_UNDERLYING_HPP
 
-#ifndef LIBDNF_COMMON_SACK_QUERY_CMP_PRIVATE_HPP
-#define LIBDNF_COMMON_SACK_QUERY_CMP_PRIVATE_HPP
+#include <fmt/format.h>
 
-#include "libdnf/common/exception.hpp"
-#include "libdnf/common/sack/query_cmp.hpp"
-#include "libdnf/utils/to_underlying.hpp"
+#include <type_traits>
 
-#define libdnf_throw_assert_unsupported_query_cmp_type(cmp_type) \
-    libdnf_throw_assertion("Unsupported sack::QueryCmp value {}", utils::to_underlying(cmp_type))
+namespace libdnf::utils {
 
-#endif  // LIBDNF_COMMON_SACK_QUERY_CMP_PRIVATE_HPP
+/// Converts an enumeration to its underlying type.
+/// `std::to_underlying` is planed for C++23.
+template <class Enum>
+constexpr std::underlying_type_t<Enum> to_underlying(Enum e) noexcept {
+    return static_cast<std::underlying_type_t<Enum>>(e);
+}
+
+}  // namespace libdnf::utils
+
+#endif  // LIBDNF_UTILS_TO_UNDERLYING_HPP
