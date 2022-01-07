@@ -178,7 +178,8 @@ void PackageSack::Impl::setup_excludes_includes(bool only_main) {
 
 std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(libdnf::sack::ExcludeFlags flags) const {
     if ((static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES) ||
-         (!repo_excludes && !pkg_excludes && !pkg_includes)) &&
+         (!pkg_excludes && !pkg_includes)) &&
+        (static_cast<bool>(flags & libdnf::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) || !repo_excludes) &&
         (static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes)) {
         return {};
     }
@@ -195,11 +196,11 @@ std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(l
         considered -= *module_excludes;
     }
 
-    if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES)) {
-        if (repo_excludes) {
-            considered -= *repo_excludes;
-        }
+    if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) && repo_excludes) {
+        considered -= *repo_excludes;
+    }
 
+    if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES)) {
         if (pkg_excludes) {
             considered -= *pkg_excludes;
         }

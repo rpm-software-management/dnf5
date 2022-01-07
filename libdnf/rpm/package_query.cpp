@@ -237,13 +237,15 @@ PackageQuery::PackageQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool em
     auto & pool = get_pool(base);
     switch (flags) {
         case ExcludeFlags::APPLY_EXCLUDES:
+            // Considered map in Pool uses APPLY_EXCLUDES. It can be used in this case.
             base->get_rpm_package_sack()->p_impl->recompute_considered_in_pool();
             if (!empty && pool.is_considered_map_active()) {
                 *p_impl &= pool.get_considered_map();
             }
             break;
-        case ExcludeFlags::IGNORE_REGULAR_EXCLUDES:
-        case ExcludeFlags::IGNORE_MODULAR_EXCLUDES: {
+        case ExcludeFlags::IGNORE_EXCLUDES:
+            break;
+        default: {
             auto considered = base->get_rpm_package_sack()->p_impl->compute_considered_map(flags);
             if (considered) {
                 p_pq_impl->considered_cache = std::move(considered);
@@ -253,7 +255,6 @@ PackageQuery::PackageQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool em
             }
             break;
         }
-        case ExcludeFlags::IGNORE_EXCLUDES:;
     }
 }
 
