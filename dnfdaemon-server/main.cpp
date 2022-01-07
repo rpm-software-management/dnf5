@@ -26,30 +26,24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <iostream>
 
-static std::mutex session_manager_ptr_mutex;
-static SessionManager * session_manager_ptr{nullptr};
-
-void sigint_handler([[maybe_unused]] int signum) {
-    std::lock_guard<std::mutex> lock(session_manager_ptr_mutex);
-    if (session_manager_ptr != nullptr) {
-        session_manager_ptr->shut_down();
-        // make sure that session_manager.shut_down() was called only once
-        session_manager_ptr = nullptr;
-    }
+void sigint_handler(sigset_t * mask, SessionManager * session_manager_ptr) {
+    int sig;
+    sigwait(mask, &sig);
+    session_manager_ptr->shut_down();
 }
 
 int main() {
-    struct sigaction signal_action;
-    memset(&signal_action, 0, sizeof(signal_action));
-    signal_action.sa_handler = sigint_handler;
-    sigaction(SIGINT, &signal_action, NULL);
-    sigaction(SIGTERM, &signal_action, NULL);
+    // block signal handling for all threads
+    sigset_t mask;
+    sigemptyset(&mask);
+    sigaddset(&mask, SIGINT);
+    sigaddset(&mask, SIGTERM);
+    pthread_sigmask(SIG_BLOCK, &mask, NULL);
 
     try {
-        std::unique_lock<std::mutex> lock(session_manager_ptr_mutex);
         SessionManager session_manager;
-        session_manager_ptr = &session_manager;
-        lock.unlock();
+        // spawn special thread for handling sigint / sigterm
+        std::thread(sigint_handler, &mask, &session_manager).detach();
         session_manager.start_event_loop();
         return 0;
     } catch (const sdbus::Error & e) {
