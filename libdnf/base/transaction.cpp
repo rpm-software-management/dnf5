@@ -324,14 +324,15 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     }
 
     // acquire the lock
-    // TODO(mblaha): different lock names for different installroots?
-    auto system_cache_dir = base->get_config().system_cachedir().get_value();
-    std::filesystem::path lock_file_path = system_cache_dir;
-    lock_file_path /= "rpmtransaction.lock";
+    std::filesystem::path lock_file_path = base->get_config().installroot().get_value();
+    lock_file_path /= "run/dnf/rpmtransaction.lock";
+    std::filesystem::create_directories(lock_file_path.parent_path());
+
     libdnf::utils::Locker locker(lock_file_path);
     if (!locker.lock()) {
         return TransactionRunResult::ERROR_LOCK;
     }
+
     // fill and check the rpm transaction
     libdnf::rpm::Transaction rpm_transaction(base);
     rpm_transaction.fill(transaction);
