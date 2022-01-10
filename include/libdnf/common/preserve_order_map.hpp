@@ -83,7 +83,7 @@ public:
     using iterator = MyBidirIterator<value_type, typename container_type::iterator>;
     using const_iterator = MyBidirIterator<const value_type, typename container_type::const_iterator>;
     using reverse_iterator = MyBidirIterator<value_type, typename container_type::reverse_iterator>;
-    using const_reverse_iterator = MyBidirIterator<value_type, typename container_type::const_reverse_iterator>;
+    using const_reverse_iterator = MyBidirIterator<const value_type, typename container_type::const_reverse_iterator>;
 
     bool empty() const noexcept { return items.empty(); }
     size_type size() const noexcept { return items.size(); }
