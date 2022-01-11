@@ -89,7 +89,7 @@ std::string transaction_item_action_to_letter(TransactionItemAction action) {
 }
 
 
-bool transaction_item_action_is_forward(TransactionItemAction action) {
+bool transaction_item_action_is_inbound(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::INSTALL:
         case TransactionItemAction::DOWNGRADE:
@@ -104,7 +104,7 @@ bool transaction_item_action_is_forward(TransactionItemAction action) {
 }
 
 
-bool transaction_item_action_is_backward(TransactionItemAction action) {
+bool transaction_item_action_is_outbound(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::REMOVE:
         case TransactionItemAction::DOWNGRADED:

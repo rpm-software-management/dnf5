@@ -49,8 +49,8 @@ enum class TransactionItemAction : int {
 
 std::string transaction_item_action_to_string(TransactionItemAction action);
 std::string transaction_item_action_to_letter(TransactionItemAction action);
-bool transaction_item_action_is_forward(TransactionItemAction action);
-bool transaction_item_action_is_backward(TransactionItemAction action);
+bool transaction_item_action_is_inbound(TransactionItemAction action);
+bool transaction_item_action_is_outbound(TransactionItemAction action);
 
 }  // namespace libdnf::transaction
 

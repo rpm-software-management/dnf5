@@ -101,12 +101,12 @@ public:
     /// Has the item appeared on the system during the transaction?
     ///
     /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.isForwardAction()
-    bool is_forward_action() const;
+    bool is_inbound_action() const;
 
     /// Has the item got removed from the system during the transaction?
     ///
     /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.isBackwardAction()
-    bool is_backward_action() const;
+    bool is_outbound_action() const;
 
     /// Get database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
     int64_t get_item_id() const noexcept { return item_id; }

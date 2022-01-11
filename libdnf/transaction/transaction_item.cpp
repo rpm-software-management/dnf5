@@ -43,13 +43,13 @@ std::string TransactionItem::get_action_short() {
 TransactionItem::TransactionItem(Transaction & trans, Type item_type) : item_type{item_type}, trans{trans} {}
 
 
-bool TransactionItem::is_forward_action() const {
-    return transaction_item_action_is_forward(action);
+bool TransactionItem::is_inbound_action() const {
+    return transaction_item_action_is_inbound(action);
 }
 
 
-bool TransactionItem::is_backward_action() const {
-    return transaction_item_action_is_backward(action);
+bool TransactionItem::is_outbound_action() const {
+    return transaction_item_action_is_outbound(action);
 }
 
 
