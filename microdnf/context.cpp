@@ -343,10 +343,7 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
 void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir) {
     std::vector<libdnf::rpm::Package> downloads;
     for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADE) {
+        if (transaction_item_action_is_inbound(tspkg.get_action())) {
             downloads.push_back(tspkg.get_package());
         }
     }

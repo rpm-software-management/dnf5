@@ -106,10 +106,7 @@ void download_packages(Session & session, libdnf::base::Transaction & transactio
     std::vector<std::unique_ptr<DbusPackageCB>> download_callbacks;
 
     for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::INSTALL ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALL ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADE ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADE) {
+        if (transaction_item_action_is_inbound(tspkg.get_action())) {
             download_callbacks.push_back(std::make_unique<DbusPackageCB>(session, tspkg.get_package()));
             downloader.add(tspkg.get_package(), download_callbacks.back().get());
         }
