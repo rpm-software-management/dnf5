@@ -35,7 +35,7 @@ enum class TransactionItemReason : int {
 };
 
 
-std::string TransactionItemReason_to_string(TransactionItemReason reason);
+std::string transaction_item_reason_to_string(TransactionItemReason reason);
 
 
 /// Compare transaction items and return:
@@ -43,7 +43,7 @@ std::string TransactionItemReason_to_string(TransactionItemReason reason);
 /// 1 if lhs > rhs
 /// 0 if lhs == rhs
 /// Higher number means a better (or a stronger) reason.
-int TransactionItemReason_compare(TransactionItemReason lhs, TransactionItemReason rhs);
+int transaction_item_reason_compare(TransactionItemReason lhs, TransactionItemReason rhs);
 
 
 bool operator<(TransactionItemReason lhs, TransactionItemReason rhs);

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-std::string TransactionItemAction_get_name(TransactionItemAction action) {
+std::string transaction_item_action_to_string(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::INSTALL:
             return "Install";
@@ -55,7 +55,7 @@ std::string TransactionItemAction_get_name(TransactionItemAction action) {
 }
 
 
-std::string TransactionItemAction_get_short(TransactionItemAction action) {
+std::string transaction_item_action_to_letter(TransactionItemAction action) {
     // TODO(dmach): consider adding the direction, e.g. ">U" == "Upgrade", "<U" == "Upgraded"
     switch (action) {
         case TransactionItemAction::INSTALL:
@@ -89,7 +89,7 @@ std::string TransactionItemAction_get_short(TransactionItemAction action) {
 }
 
 
-bool TransactionItemAction_is_forward_action(TransactionItemAction action) {
+bool transaction_item_action_is_forward(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::INSTALL:
         case TransactionItemAction::DOWNGRADE:
@@ -104,7 +104,7 @@ bool TransactionItemAction_is_forward_action(TransactionItemAction action) {
 }
 
 
-bool TransactionItemAction_is_backward_action(TransactionItemAction action) {
+bool transaction_item_action_is_backward(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::REMOVE:
         case TransactionItemAction::DOWNGRADED:

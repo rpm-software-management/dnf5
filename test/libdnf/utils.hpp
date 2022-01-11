@@ -82,9 +82,9 @@ struct assertion_traits<libdnf::base::TransactionPackage> {
         return fmt::format(
             "TransactionPackage: package: {}, action: {}, reason: {}, state {}",
             assertion_traits<libdnf::rpm::Package>::toString(tspkg.get_package()),
-            TransactionItemAction_get_name(tspkg.get_action()),
-            TransactionItemReason_to_string(tspkg.get_reason()),
-            TransactionItemState_to_string(tspkg.get_state()));
+            transaction_item_action_to_string(tspkg.get_action()),
+            transaction_item_reason_to_string(tspkg.get_reason()),
+            transaction_item_state_to_string(tspkg.get_state()));
     }
 };
 

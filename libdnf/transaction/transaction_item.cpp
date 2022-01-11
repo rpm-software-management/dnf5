@@ -31,12 +31,12 @@ namespace libdnf::transaction {
 
 
 std::string TransactionItem::get_action_name() {
-    return TransactionItemAction_get_name(action);
+    return transaction_item_action_to_string(action);
 }
 
 
 std::string TransactionItem::get_action_short() {
-    return TransactionItemAction_get_short(action);
+    return transaction_item_action_to_letter(action);
 }
 
 
@@ -44,12 +44,12 @@ TransactionItem::TransactionItem(Transaction & trans, Type item_type) : item_typ
 
 
 bool TransactionItem::is_forward_action() const {
-    return TransactionItemAction_is_forward_action(action);
+    return transaction_item_action_is_forward(action);
 }
 
 
 bool TransactionItem::is_backward_action() const {
-    return TransactionItemAction_is_backward_action(action);
+    return transaction_item_action_is_backward(action);
 }
 
 

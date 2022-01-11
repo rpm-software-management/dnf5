@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-std::string TransactionItemState_to_string(TransactionItemState state) {
+std::string transaction_item_state_to_string(TransactionItemState state) {
     switch (state) {
         case TransactionItemState::UNKNOWN:
             return "unknown";

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-std::string TransactionItemReason_to_string(TransactionItemReason reason) {
+std::string transaction_item_reason_to_string(TransactionItemReason reason) {
     switch (reason) {
         case TransactionItemReason::UNKNOWN:
             return "unknown";
@@ -96,7 +96,7 @@ bool operator>=(TransactionItemReason lhs, TransactionItemReason rhs) {
 }
 
 
-int TransactionItemReason_compare(TransactionItemReason lhs, TransactionItemReason rhs) {
+int transaction_item_reason_compare(TransactionItemReason lhs, TransactionItemReason rhs) {
     if (lhs < rhs) {
         return -1;
     }

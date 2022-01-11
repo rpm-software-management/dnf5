@@ -32,7 +32,7 @@ enum class TransactionItemState : int {
 };
 
 
-std::string TransactionItemState_to_string(TransactionItemState state);
+std::string transaction_item_state_to_string(TransactionItemState state);
 
 }  // namespace libdnf::transaction
 
