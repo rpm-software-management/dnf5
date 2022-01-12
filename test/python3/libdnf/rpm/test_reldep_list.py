@@ -22,10 +22,10 @@ import os
 
 import libdnf
 
-import support
+import base_test_case
 
 
-class TestReldepList(support.LibdnfTestCase):
+class TestReldepList(base_test_case.BaseTestCase):
     def setUp(self):
         super().setUp()
         self.add_repo_repomd("repomd-repo1")

@@ -22,10 +22,10 @@ import unittest
 
 import libdnf
 
-import support
+import base_test_case
 
 
-class TestGroup(support.LibdnfTestCase):
+class TestGroup(base_test_case.BaseTestCase):
     def test_group(self):
         self.add_repo_repomd("repomd-comps-core")
         q_core = libdnf.comps.GroupQuery(self.base.get_comps().get_group_sack())

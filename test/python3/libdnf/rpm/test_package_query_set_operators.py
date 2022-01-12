@@ -18,10 +18,10 @@
 
 import libdnf
 
-import support
+import base_test_case
 
 
-class TestPackageQuerySetOperators(support.LibdnfTestCase):
+class TestPackageQuerySetOperators(base_test_case.BaseTestCase):
     def setUp(self):
         super().setUp()
         self.add_repo_solv("solv-24pkgs")

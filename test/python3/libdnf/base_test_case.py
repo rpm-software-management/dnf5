@@ -28,7 +28,7 @@ PROJECT_BINARY_DIR = os.environ["PROJECT_BINARY_DIR"]
 PROJECT_SOURCE_DIR = os.environ["PROJECT_SOURCE_DIR"]
 
 
-class LibdnfTestCase(unittest.TestCase):
+class BaseTestCase(unittest.TestCase):
     def setUp(self):
         self.base = libdnf.base.Base()
 

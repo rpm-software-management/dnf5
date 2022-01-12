@@ -3,7 +3,6 @@ add_test(NAME test_python3_libdnf COMMAND ${Python3_EXECUTABLE} -m unittest WORK
 set_property(TEST test_python3_libdnf PROPERTY ENVIRONMENT
     "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}"
     "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}"
-    # explicitly add path to support.py in the PYTHONPATH to ensure that `import support` always works as expected
-    "PYTHONPATH=${CMAKE_BINARY_DIR}/bindings/python3:${CMAKE_CURRENT_SOURCE_DIR}/support"
+    "PYTHONPATH=${CMAKE_BINARY_DIR}/bindings/python3"
     "${ASAN_OPTIONS}"
 )
