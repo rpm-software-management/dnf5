@@ -29,9 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::comps {
 
 
-class GroupQuery;
-using GroupQueryWeakPtr = WeakPtr<GroupQuery, false>;
-
 class GroupSack;
 using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
 
@@ -43,9 +40,6 @@ public:
     explicit GroupQuery(const libdnf::BaseWeakPtr & base);
     explicit GroupQuery(libdnf::Base & base);
 
-    GroupQuery(const GroupQuery & query);
-    ~GroupQuery();
-
     GroupQuery & filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
     GroupQuery & filter_groupid(
         const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
@@ -55,9 +49,6 @@ public:
     GroupQuery & filter_uservisible(bool value);
     GroupQuery & filter_default(bool value);
     GroupQuery & filter_installed(bool value);
-
-    /// Create WeakPtr to GroupQuery
-    GroupQueryWeakPtr get_weak_ptr();
 
 private:
     struct F {
@@ -69,8 +60,6 @@ private:
     };
 
     GroupSackWeakPtr sack;
-
-    WeakPtrGuard<GroupQuery, false> data_guard;
 
     friend Group;
     friend GroupSack;

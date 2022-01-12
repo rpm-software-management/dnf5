@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 #include "utils/xml.hpp"
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/comps/group/package.hpp"
-#include "libdnf/comps/group/query.hpp"
 
 extern "C" {
 #include <solv/dataiterator.h>
@@ -40,7 +40,7 @@ extern "C" {
 namespace libdnf::comps {
 
 
-Group::Group(GroupQuery * query) : query(query->get_weak_ptr()) {}
+Group::Group(libdnf::Base & base) : base(base.get_weak_ptr()) {}
 
 
 Group & Group::operator+=(const Group & rhs) {
@@ -63,7 +63,7 @@ std::string lookup_str(libdnf::solv::Pool & pool, std::vector<GroupId> group_ids
 
 
 std::string Group::get_groupid() const {
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
 
     std::string solvable_name(lookup_str(pool, group_ids, SOLVABLE_NAME));
     if (solvable_name.find(":") == std::string::npos) {
@@ -74,19 +74,19 @@ std::string Group::get_groupid() const {
 
 
 std::string Group::get_name() const {
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
     return lookup_str(pool, group_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Group::get_description() const {
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
     return lookup_str(pool, group_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Group::get_translated_name(const char * lang) const {
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
 
     std::string translation;
     for (GroupId group_id : group_ids) {
@@ -105,7 +105,7 @@ std::string Group::get_translated_name(const char * lang) const {
 
 // TODO(pkratoch): Test this
 std::string Group::get_translated_name() const {
-    libdnf::solv::Pool & spool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & spool = get_pool(base);
     Pool * pool = *spool;
 
     std::string translation;
@@ -124,7 +124,7 @@ std::string Group::get_translated_name() const {
 
 
 std::string Group::get_translated_description(const char * lang) const {
-    libdnf::solv::Pool & spool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & spool = get_pool(base);
     Pool * pool = *spool;
 
     std::string translation;
@@ -143,7 +143,7 @@ std::string Group::get_translated_description(const char * lang) const {
 
 
 std::string Group::get_translated_description() const {
-    libdnf::solv::Pool & spool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & spool = get_pool(base);
     Pool * pool = *spool;
 
     std::string translation;
@@ -162,25 +162,25 @@ std::string Group::get_translated_description() const {
 
 
 std::string Group::get_order() const {
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
     return lookup_str(pool, group_ids, SOLVABLE_ORDER);
 }
 
 
 std::string Group::get_langonly() const {
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
     return lookup_str(pool, group_ids, SOLVABLE_LANGONLY);
 }
 
 
 bool Group::get_uservisible() const {
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
     return pool.lookup_void(group_ids[0].id, SOLVABLE_ISVISIBLE);
 }
 
 
 bool Group::get_default() const {
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
     return pool.lookup_void(group_ids[0].id, SOLVABLE_ISDEFAULT);
 }
 
@@ -191,7 +191,7 @@ std::vector<Package> Group::get_packages() {
         return packages;
     }
 
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
     //Pool * pool = *spool;
 
     // Use only the first (highest priority) solvable for package lists
@@ -237,7 +237,7 @@ std::vector<Package> Group::get_packages_of_type(PackageType type) {
 
 
 std::set<std::string> Group::get_repos() const {
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
 
     std::set<std::string> result;
     for (GroupId group_id : group_ids) {
@@ -282,7 +282,7 @@ void Group::dump(const std::string & path) {
     std::string lang;
     xmlNodePtr node;
 
-    libdnf::solv::Pool & pool = get_pool(query->sack->comps.get_base());
+    libdnf::solv::Pool & pool = get_pool(base);
 
     for (auto group_id : group_ids) {
         Dataiterator di;

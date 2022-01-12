@@ -34,11 +34,6 @@ extern "C" {
 namespace libdnf::comps {
 
 
-GroupQueryWeakPtr GroupQuery::get_weak_ptr() {
-    return GroupQueryWeakPtr(this, &data_guard);
-}
-
-
 void add_solvable_ids(Group & group, std::vector<Id> solvable_ids) {
     for (Id solvable_id : solvable_ids) {
         group.add_group_id(GroupId(solvable_id));
@@ -86,7 +81,7 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : sack(sack) {
 
     // Create groups based on the group_map
     for (auto it = group_map.begin(); it != group_map.end(); it++) {
-        Group group(this);
+        Group group(sack->comps.base);
         add_solvable_ids(group, it->second);
         add(group);
     }
@@ -95,11 +90,6 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : sack(sack) {
 GroupQuery::GroupQuery(const BaseWeakPtr & base) : GroupQuery(base->get_comps()->get_group_sack()) {}
 
 GroupQuery::GroupQuery(Base & base) : GroupQuery(base.get_comps()->get_group_sack()) {}
-
-GroupQuery::GroupQuery(const GroupQuery & query) : Query(query), sack(query.sack) {}
-
-
-GroupQuery::~GroupQuery() = default;
 
 
 }  // namespace libdnf::comps

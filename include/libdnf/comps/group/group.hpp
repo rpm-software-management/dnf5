@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMPS_GROUP_GROUP_HPP
 #define LIBDNF_COMPS_GROUP_GROUP_HPP
 
-#include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/base/base_weak.hpp"
 #include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
@@ -43,10 +43,6 @@ public:
     // Corresponds to solvable id
     int id{0};
 };
-
-
-class GroupQuery;
-using GroupQueryWeakPtr = WeakPtr<GroupQuery, false>;
 
 
 /// @replaces dnf:dnf/comps.py:class:Group
@@ -127,10 +123,10 @@ public:
     void dump(const std::string & path);
 
 protected:
-    explicit Group(GroupQuery * query);
+    explicit Group(libdnf::Base & base);
 
 private:
-    GroupQueryWeakPtr query;
+    libdnf::BaseWeakPtr base;
 
     // Corresponds to solvable ids for this group (libsolv doesn't merge groups,
     // so there are multiple solvables for one groupid)
