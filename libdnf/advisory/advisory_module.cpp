@@ -28,15 +28,11 @@ namespace libdnf::advisory {
 // AdvisoryModule
 AdvisoryModule::AdvisoryModule(AdvisoryModule::Impl * private_module) : p_impl(private_module) {}
 
-AdvisoryModule::AdvisoryModule(const AdvisoryModule & src) : p_impl(new Impl(*src.p_impl)) {}
-
-AdvisoryModule & AdvisoryModule::operator=(const AdvisoryModule & src) {
-    *p_impl = *src.p_impl;
-    return *this;
-}
-
+AdvisoryModule::AdvisoryModule(const AdvisoryModule & src) = default;
+AdvisoryModule::AdvisoryModule(AdvisoryModule && src) noexcept = default;
+AdvisoryModule & AdvisoryModule::operator=(const AdvisoryModule & src) = default;
+AdvisoryModule & AdvisoryModule::operator=(AdvisoryModule && src) noexcept = default;
 AdvisoryModule::~AdvisoryModule() = default;
-
 
 std::string AdvisoryModule::get_name() const {
     return get_pool(p_impl->base).id2str(p_impl->name);

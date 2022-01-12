@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "goal_elements.hpp"
 
+#include "libdnf/common/impl_ptr.hpp"
+
 
 namespace libdnf::base {
 
@@ -31,11 +33,9 @@ namespace libdnf::base {
 class SolverProblems {
 public:
     SolverProblems(const SolverProblems & src);
+    SolverProblems(SolverProblems && src) noexcept;
     SolverProblems & operator=(const SolverProblems & src);
-
-    SolverProblems(SolverProblems && src) noexcept = default;
-    SolverProblems & operator=(SolverProblems && src) noexcept = default;
-
+    SolverProblems & operator=(SolverProblems && src) noexcept;
     ~SolverProblems();
 
     /// Provide information about package solver problems in a vector. Each problem can be transformed to string by
@@ -59,10 +59,10 @@ public:
 private:
     friend class Transaction;
 
-    class Impl;
-    std::unique_ptr<Impl> p_impl;
-
     SolverProblems();
+
+    class Impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf::base

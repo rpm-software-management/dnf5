@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_ADVISORY_ADVISORY_PACKAGE_HPP
 
 #include "libdnf/advisory/advisory.hpp"
+#include "libdnf/common/impl_ptr.hpp"
 
-#include <memory>
 #include <vector>
 
 
@@ -37,11 +37,9 @@ namespace libdnf::advisory {
 class AdvisoryPackage {
 public:
     AdvisoryPackage(const AdvisoryPackage & src);
+    AdvisoryPackage(AdvisoryPackage && src) noexcept;
     AdvisoryPackage & operator=(const AdvisoryPackage & src);
-
-    AdvisoryPackage(AdvisoryPackage && src) = default;
-    AdvisoryPackage & operator=(AdvisoryPackage && src) = default;
-
+    AdvisoryPackage & operator=(AdvisoryPackage && src) noexcept;
     ~AdvisoryPackage();
 
     /// Get name of this AdvisoryPackage.
@@ -113,7 +111,7 @@ private:
 
     class Impl;
     AdvisoryPackage(Impl * private_pkg);
-    std::unique_ptr<Impl> p_impl;
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf::advisory

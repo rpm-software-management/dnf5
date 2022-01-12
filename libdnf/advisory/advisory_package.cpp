@@ -33,13 +33,10 @@ namespace libdnf::advisory {
 // AdvisoryPackage
 AdvisoryPackage::AdvisoryPackage(AdvisoryPackage::Impl * private_pkg) : p_impl(private_pkg) {}
 
-AdvisoryPackage::AdvisoryPackage(const AdvisoryPackage & src) : p_impl(new Impl(*src.p_impl)) {}
-
-AdvisoryPackage & AdvisoryPackage::operator=(const AdvisoryPackage & src) {
-    *p_impl = *src.p_impl;
-    return *this;
-}
-
+AdvisoryPackage::AdvisoryPackage(const AdvisoryPackage & src) = default;
+AdvisoryPackage::AdvisoryPackage(AdvisoryPackage && src) noexcept = default;
+AdvisoryPackage & AdvisoryPackage::operator=(const AdvisoryPackage & src) = default;
+AdvisoryPackage & AdvisoryPackage::operator=(AdvisoryPackage && src) noexcept = default;
 AdvisoryPackage::~AdvisoryPackage() = default;
 
 

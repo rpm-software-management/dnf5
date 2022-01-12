@@ -175,15 +175,10 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_pr
 
 SolverProblems::SolverProblems() : p_impl(new Impl()) {}
 
-SolverProblems::SolverProblems(const SolverProblems & src) : p_impl(new Impl(*src.p_impl)) {}
-
-SolverProblems & SolverProblems::operator=(const SolverProblems & src) {
-    if (this != &src) {
-        *p_impl = *src.p_impl;
-    }
-    return *this;
-}
-
+SolverProblems::SolverProblems(const SolverProblems & src) = default;
+SolverProblems::SolverProblems(SolverProblems && src) noexcept = default;
+SolverProblems & SolverProblems::operator=(const SolverProblems & src) = default;
+SolverProblems & SolverProblems::operator=(SolverProblems && src) noexcept = default;
 SolverProblems::~SolverProblems() = default;
 
 std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> SolverProblems::get_problems() {
