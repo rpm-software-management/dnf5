@@ -1,9 +1,9 @@
 #if defined(SWIGPYTHON)
-%module(package="libdnf") repo
+%module(package="libdnf", directors="1") repo
 #elif defined(SWIGPERL)
 %module "libdnf::repo"
 #elif defined(SWIGRUBY)
-%module "libdnf/repo"
+%module(directors="1") "libdnf/repo"
 #endif
 
 %include <exception.i>
@@ -27,7 +27,9 @@
 
 %{
     #include "libdnf/repo/config_repo.hpp"
+    #include "libdnf/repo/package_downloader.hpp"
     #include "libdnf/repo/repo.hpp"
+    #include "libdnf/repo/repo_callbacks.hpp"
     #include "libdnf/repo/repo_query.hpp"
     #include "libdnf/repo/repo_sack.hpp"
 %}
@@ -35,12 +37,20 @@
 #define CV __perl_CV
 
 %include "libdnf/repo/config_repo.hpp"
+
+%ignore PackageDownloadError;
+%feature("director") PackageDownloadCallbacks;
+%include "libdnf/repo/package_downloader.hpp"
 %include "libdnf/repo/repo.hpp"
 
 %template(RepoWeakPtr) libdnf::WeakPtr<libdnf::repo::Repo, false>;
 %template(SetConstIteratorRepoWeakPtr) libdnf::SetConstIterator<libdnf::repo::RepoWeakPtr>;
 %template(SetRepoWeakPtr) libdnf::Set<libdnf::repo::RepoWeakPtr>;
 %template(SackQueryRepoWeakPtr) libdnf::sack::Query<libdnf::repo::RepoWeakPtr>;
+
+%feature("director") RepoCallbacks;
+%include "libdnf/repo/repo_callbacks.hpp"
+wrap_unique_ptr(RepoCallbacksUniquePtr, libdnf::repo::RepoCallbacks);
 
 %include "libdnf/repo/repo_query.hpp"
 %template(SackRepoRepoQuery) libdnf::sack::Sack<libdnf::repo::Repo>;

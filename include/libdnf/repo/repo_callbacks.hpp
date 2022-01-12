@@ -78,7 +78,7 @@ public:
     /// Callback for fastest mirror detection.
     /// @param stage the stage of the fastest mirror detection, refer to `FastestMirrorStage`
     /// @param ptr pointer to additional data depending on the stage, refer to `FastestMirrorStage`
-    // TODO(lukash) should ptr be void * since it points to different things depending on stage?
+    // TODO(lukash) the varying data type for ptr will not work with bindings, we need unambiguous API
     virtual void fastest_mirror(FastestMirrorStage stage, const char * ptr) {}
 
     /// Mirror failure callback. Called when downloading from a mirror failed.

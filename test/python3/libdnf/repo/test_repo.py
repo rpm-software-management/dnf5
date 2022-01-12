@@ -28,8 +28,60 @@ class TestRepo(base_test_case.BaseTestCase):
         self.repo_sack.get_system_repo().load()
 
 
-    def test_repo(self):
+    def test_load_repo(self):
         repo = self.add_repo_repomd("repomd-repo1", load=False)
 
+        class RepoCallbacks(libdnf.repo.RepoCallbacks):
+            start_cnt = 0
+            start_what = None
+
+            end_cnt = 0
+            end_error_message = None
+
+            progress_cnt = 0
+            fastest_mirror_cnt = 0
+            handle_mirror_failure_cnt = 0
+            repokey_import_cnt = 0
+
+            def start(self, what):
+                self.start_cnt += 1
+                self.start_what = what
+
+            def end(self, error_message):
+                self.end_cnt += 1
+                self.end_error_message = error_message
+
+            def progress(self, total_to_download, downloaded):
+                self.progress_cnt += 1
+                return 0
+
+            def fastest_mirror(self, stage, ptr):
+                self.fastest_mirror_cnt += 1
+
+            def handle_mirror_failure(self, msg, url, metadata):
+                self.handle_mirror_failure_cnt += 1
+                return 0
+
+            def repokey_import(self, id, user_id, fingerprint, url, timestamp):
+                self.repokey_import_cnt += 1
+                return True
+
+        cbs = RepoCallbacks()
+        # TODO(lukash) try to wrap the creation of the unique_ptr so that cbs
+        # can be passed directly to repo.set_callbacks
+        repo.set_callbacks(libdnf.repo.RepoCallbacksUniquePtr(cbs))
+
         repo.fetch_metadata()
+
+        self.assertEqual(cbs.start_cnt, 1)
+        self.assertEqual(cbs.start_what, "repomd-repo1")
+
+        self.assertEqual(cbs.end_cnt, 1)
+        self.assertEqual(cbs.end_error_message, None)
+
+        self.assertGreaterEqual(cbs.progress_cnt, 1)
+        self.assertEqual(cbs.fastest_mirror_cnt, 0)
+        self.assertEqual(cbs.handle_mirror_failure_cnt, 0)
+        self.assertEqual(cbs.repokey_import_cnt, 0)
+
         repo.load()
