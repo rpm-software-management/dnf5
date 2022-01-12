@@ -42,27 +42,27 @@ public:
     using size_type = typename container_type::size_type;
 
     template <typename valueType, typename ContainerTypeIterator>
-    struct MyBidirIterator {
+    struct BidirIterator {
         using iterator_category = std::bidirectional_iterator_tag;
         using value_type = typename PreserveOrderMap::value_type;
         using difference_type = ptrdiff_t;
         using pointer = valueType *;
         using reference = valueType &;
 
-        explicit MyBidirIterator() = default;
-        explicit MyBidirIterator(ContainerTypeIterator ci) : ci(ci) {}
+        explicit BidirIterator() = default;
+        explicit BidirIterator(ContainerTypeIterator ci) : ci(ci) {}
 
         // Allow iterator to const_iterator conversion
         template <typename CItType = ContainerTypeIterator>
-        MyBidirIterator(
-            const MyBidirIterator<value_type, typename container_type::iterator> & src,
+        BidirIterator(
+            const BidirIterator<value_type, typename container_type::iterator> & src,
             typename std::enable_if<std::is_same<CItType, typename container_type::const_iterator>::value>::type * = 0)
             : ci(src.ci) {}
 
         // Allow reverse_iterator to const_reverse_iterator conversion
         template <typename CItType = ContainerTypeIterator>
-        MyBidirIterator(
-            const MyBidirIterator<value_type, typename container_type::reverse_iterator> & src,
+        BidirIterator(
+            const BidirIterator<value_type, typename container_type::reverse_iterator> & src,
             typename std::enable_if<
                 std::is_same<CItType, typename container_type::const_reverse_iterator>::value>::type * = 0)
             : ci(src.ci) {}
@@ -70,36 +70,36 @@ public:
         reference operator*() const { return reinterpret_cast<reference>(*ci); }
         pointer operator->() const { return reinterpret_cast<pointer>(ci.operator->()); }
 
-        MyBidirIterator & operator++() {
+        BidirIterator & operator++() {
             ++ci;
             return *this;
         }
-        MyBidirIterator operator++(int) {
+        BidirIterator operator++(int) {
             auto tmp = *this;
             ++*this;
             return tmp;
         }
-        MyBidirIterator & operator--() {
+        BidirIterator & operator--() {
             --ci;
             return *this;
         }
-        MyBidirIterator operator--(int) {
+        BidirIterator operator--(int) {
             auto tmp = *this;
             --*this;
             return tmp;
         }
 
-        bool operator==(const MyBidirIterator & other) const { return ci == other.ci; }
-        bool operator!=(const MyBidirIterator & other) const { return ci != other.ci; }
+        bool operator==(const BidirIterator & other) const { return ci == other.ci; }
+        bool operator!=(const BidirIterator & other) const { return ci != other.ci; }
 
     private:
         friend class PreserveOrderMap;
         ContainerTypeIterator ci;
     };
-    using iterator = MyBidirIterator<value_type, typename container_type::iterator>;
-    using const_iterator = MyBidirIterator<const value_type, typename container_type::const_iterator>;
-    using reverse_iterator = MyBidirIterator<value_type, typename container_type::reverse_iterator>;
-    using const_reverse_iterator = MyBidirIterator<const value_type, typename container_type::const_reverse_iterator>;
+    using iterator = BidirIterator<value_type, typename container_type::iterator>;
+    using const_iterator = BidirIterator<const value_type, typename container_type::const_iterator>;
+    using reverse_iterator = BidirIterator<value_type, typename container_type::reverse_iterator>;
+    using const_reverse_iterator = BidirIterator<const value_type, typename container_type::const_reverse_iterator>;
 
     bool empty() const noexcept { return items.empty(); }
     size_type size() const noexcept { return items.size(); }
