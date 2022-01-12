@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_tutorial.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/base/goal.hpp"
+#include "libdnf/repo/package_downloader.hpp"
 #include "libdnf/rpm/package_query.hpp"
 
 
@@ -29,7 +31,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(TutorialTest);
 
 void TutorialTest::setUp() {
     temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
-    installroot = temp->get_path().native() + "/installroot";
+    installroot = temp->get_path() / "installroot";
+    cachedir = installroot / "var/cache/dnf/";
 }
 
 
@@ -58,4 +61,14 @@ void TutorialTest::test_query() {
     #include "session/create_base.cpp"
     #include "repo/load_repo.cpp"
     #include "query/query.cpp"
+}
+
+
+void TutorialTest::test_transaction() {
+    #include "session/create_base.cpp"
+
+    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cachedir);
+
+    #include "repo/load_repo.cpp"
+    #include "transaction/transaction.cpp"
 }
