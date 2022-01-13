@@ -18,10 +18,10 @@
 
 require 'libdnf/base'
 
-require 'support'
+require 'base_test_case'
 
 
-class TestPackageQuerySetOperators < LibdnfTestCase
+class TestPackageQuerySetOperators < BaseTestCase
 
     def setup()
         super

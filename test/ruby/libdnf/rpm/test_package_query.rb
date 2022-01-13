@@ -18,10 +18,10 @@
 
 require 'libdnf/base'
 
-require 'support'
+require 'base_test_case'
 
 
-class TestSimpleNumber < LibdnfTestCase
+class TestSimpleNumber < BaseTestCase
 
     def setup()
         super

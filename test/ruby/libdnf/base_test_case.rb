@@ -28,7 +28,7 @@ PROJECT_BINARY_DIR = ENV["PROJECT_BINARY_DIR"]
 PROJECT_SOURCE_DIR = ENV["PROJECT_SOURCE_DIR"]
 
 
-class LibdnfTestCase < Test::Unit::TestCase
+class BaseTestCase < Test::Unit::TestCase
 
     def setup()
         @base = Base::Base.new()

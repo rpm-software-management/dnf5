@@ -10,8 +10,7 @@ macro(add_ruby_test)
     set(target "test_ruby_${ARGV0}_${ARGV1}")
     add_test(
         NAME "${target}"
-        # explicitly add path to support.rb to the includes to ensure that `require 'support'` always works as expected
-        COMMAND "${RUBY_EXECUTABLE}" "-I${CMAKE_BINARY_DIR}/bindings/ruby" "-I${CMAKE_SOURCE_DIR}/test/ruby/libdnf/support" "${ARGV1}"
+        COMMAND "${RUBY_EXECUTABLE}" "-I${CMAKE_BINARY_DIR}/bindings/ruby" "-I${CMAKE_CURRENT_SOURCE_DIR}" "${ARGV1}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     )
 
