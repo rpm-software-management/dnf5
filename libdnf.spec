@@ -88,7 +88,7 @@ BuildRequires:  pkgconfig(zck) >= %{zchunk_version}
 
 %if %{with html} || %{with man}
 BuildRequires:  python3dist(breathe)
-BuildRequires:  python3dist(sphinx)
+BuildRequires:  python3dist(sphinx) >= 4.1.2
 BuildRequires:  python3dist(sphinx-rtd-theme)
 %endif
 
@@ -397,6 +397,7 @@ Package management service with a DBus interface
 %license COPYING.md
 %license gpl-2.0.txt
 %{_mandir}/man8/dnfdaemon-server.8.gz
+%{_mandir}/man8/dnfdaemon-dbus-api.8.gz
 %endif
 
 

@@ -10,10 +10,16 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sphinx
+import sys
 
+try:
+    libdnf_docdir
+except NameError:
+    libdnf_docdir = os.path.abspath(".")
+
+sys.path.insert(0, os.path.join(libdnf_docdir, "sphinx"))
 
 # -- Project information -----------------------------------------------------
 
@@ -25,6 +31,8 @@ AUTHORS=['See AUTHORS.md in libdnf source distribution.']
 
 
 # -- General configuration ---------------------------------------------------
+# If your documentation needs a minimal Sphinx version, state it here.
+needs_sphinx = '4.1.2'
 
 # Add any Sphinx extension module names here, as strings. They can be
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
@@ -34,6 +42,16 @@ extensions = [
 ]
 breathe_projects = {'libdnf': '@CMAKE_CURRENT_BINARY_DIR@/xml/'}
 breathe_default_project = 'libdnf'
+
+if sphinx.version_info[:3] > (4, 0, 0):
+    tags.add('sphinx4')
+    extensions += ['dbusdoc']
+else:
+    extensions += ['fakedbusdoc']
+
+qapidoc_srctree = os.path.join(libdnf_docdir, '..')
+dbusdoc_srctree = os.path.join(libdnf_docdir, '..')
+dbus_index_common_prefix = ["org.rpm.dnf."]
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -65,6 +83,7 @@ html_static_path = ['_static']
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('microdnf.8', 'microdnf', 'Microdnf Command-line Package Manager', AUTHORS, 8),
-    ('dnfdaemon_client.8', 'dnfdaemon-client', 'Command-line interface for dnfdaemon', AUTHORS, 8),
-    ('dnfdaemon_server.8', 'dnfdaemon-server', 'Package management service with a DBus interface', AUTHORS, 8),
+    ('dnf_daemon/dnfdaemon_client.8', 'dnfdaemon-client', 'Command-line interface for dnfdaemon', AUTHORS, 8),
+    ('dnf_daemon/dnfdaemon_server.8', 'dnfdaemon-server', 'Package management service with a DBus interface', AUTHORS, 8),
+    ('dnf_daemon/dnfdaemon_dbus_api.8', 'dnfdaemon-dbus-api', 'DBus API Reference for Dnfdaemon', AUTHORS, 8),
 ]

@@ -23,3 +23,5 @@ install(
     DESTINATION ${DBUS_SHARE_DIR}/interfaces
     FILES_MATCHING PATTERN "org.rpm.dnf.v0.*.xml"
 )
+
+add_subdirectory(interfaces)

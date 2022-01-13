@@ -5,6 +5,9 @@ configure_file(${CMAKE_CURRENT_SOURCE_DIR}/conf.py.in ${CMAKE_CURRENT_BINARY_DIR
 add_custom_target(doc)
 
 
+add_subdirectory(sphinx)
+
+
 add_custom_target(doxygen
     doxygen ${CMAKE_CURRENT_BINARY_DIR}/Doxyfile
     COMMENT "Building doxygen xml files"
@@ -40,6 +43,7 @@ if(WITH_MAN)
 
     if(WITH_DNFDAEMON_SERVER)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnfdaemon-server.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnfdaemon-dbus-api.8 DESTINATION share/man/man8)
     endif()
 
     if(WITH_MICRODNF)
