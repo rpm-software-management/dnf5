@@ -34,38 +34,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Resolve the transaction.
 
         Following @options are supported:
-        <variablelist>
-          <varlistentry>
-            <term>allow_erasing: boolean, default false</term>
-            <listitem><para>
-            Whether removal of installed package is allowed to resolve the
-            transaction.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
+            - allow_erasing: boolean, default false
+                Whether removal of installed package is allowed to resolve the transaction.
+
         Unknown options are ignored.
 
         Following @resolve_results are returned:
-        <variablelist>
-          <varlistentry>
-            <term>transaction_problems: libdnf::GoalProblem</term>
-            <listitem><para>
+            - transaction_problems: libdnf::GoalProblem
                 Overall result of the resolving.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>transaction_solver_problems: string</term>
-            <listitem><para>
+            - transaction_solver_problems: string
                 Problems found by the solver.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>goal_problems: string</term>
-            <listitem><para>
+            - goal_problems: string
                 Problems of goal resolution other then those from the solver.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
 
     -->
     <method name="resolve">
@@ -81,14 +61,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
         Perform the resolved transaction.
 
         Following @options are supported:
-        <variablelist>
-          <varlistentry>
-            <term>comment: string</term>
-            <listitem><para>
-            Adds a comment to a transaction.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
+            - comment: string
+                Adds a comment to a transaction.
+
         Unknown options are ignored.
     -->
     <method name="do_transaction">

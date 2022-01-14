@@ -34,50 +34,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Following options are supported:
 
-        <variablelist>
-          <varlistentry>
-            <term>patterns: list of strings</term>
-            <listitem><para>
-              any package matching to any of patterns is returned
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>package_attrs: list of strings</term>
-            <listitem><para>
-              list of package attributes that are returned
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>with_nevra: bool (default true)</term>
-            <listitem><para>
-              match patterns against available packages NEVRAs
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>with_provides: bool (default true)</term>
-            <listitem><para>
-              match patterns against available packages provides
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>with_filenames: bool (default true)</term>
-            <listitem><para>
-              match patterns against names of the files in available packages
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>with_src: bool (default true)</term>
-            <listitem><para>
-              include source rpms into the results
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>icase: bool (default true)</term>
-            <listitem><para>
-              ignore case while matching patterns
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
+            - patterns: list of strings
+                any package matching to any of patterns is returned
+            - package_attrs: list of strings
+                list of package attributes that are returned
+            - with_nevra: bool (default true)
+                match patterns against available packages NEVRAs
+            - with_provides: bool (default true)
+                match patterns against available packages provides
+            - with_filenames: bool (default true)
+                match patterns against names of the files in available packages
+            - with_src: bool (default true)
+                include source rpms into the results
+            - icase: bool (default true)
+                ignore case while matching patterns
 
         Unknown options are ignored.
     -->
@@ -95,21 +65,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Following @options are supported:
 
-        <variablelist>
-          <varlistentry>
-            <term>repo_ids: list of strings</term>
-            <listitem><para>
-            Identifiers of the repos from which the packages could be installed.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>strict: boolean, default true</term>
-            <listitem><para>
-            Indicates whether existing but non-installable packages should
-            be skipped (false) or cause transaction resolving fail (true).
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
+            - repo_ids: list of strings
+                Identifiers of the repos from which the packages could be installed.
+            - strict: boolean, default true
+                Indicates whether existing but non-installable packages should be skipped (false) or cause transaction resolving fail (true).
 
         Unknown options are ignored.
     -->
@@ -127,14 +86,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Following @options are supported:
 
-        <variablelist>
-          <varlistentry>
-            <term>repo_ids: list of strings</term>
-            <listitem><para>
-            Identifiers of the repos from which the packages could be upgraded.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
+            - repo_ids: list of strings
+                Identifiers of the repos from which the packages could be upgraded.
 
         Unknown options are ignored.
     -->

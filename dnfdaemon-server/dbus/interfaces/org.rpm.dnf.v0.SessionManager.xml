@@ -34,32 +34,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Following configuration options are supported:
 
-        <variablelist>
-          <varlistentry>
-            <term>load_system_repo: bool, default true</term>
-            <listitem><para>
+            - load_system_repo: bool, default true
                 If true information about currently installed packages is loaded.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>load_available_repos: bool, default true</term>
+            - load_available_repos: bool, default true
                 If true information about packages available in enabled repositories is loaded.
-            <listitem><para>
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>config: map {string: string}</term>
-            <listitem><para>
+            - config: map {string: string}
                 Override configuration options.
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>releasever: string</term>
-            <listitem><para>
+            - releasever: string
                 Override releasever variable used for substitutions in repository configurations.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
 
         Unknown options are ignored.
     -->

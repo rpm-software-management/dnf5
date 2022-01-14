@@ -34,26 +34,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Following options are supported:
 
-        <variablelist>
-          <varlistentry>
-            <term>patterns: list of strings</term>
-            <listitem><para>
-              any repository with id matching to any of patterns is returned
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>repo_attrs: list of strings</term>
-            <listitem><para>
-              list of repository attributes that are returned
-            </para></listitem>
-          </varlistentry>
-          <varlistentry>
-            <term>enable_disable: string (default "enabled")</term>
-            <listitem><para>
-              When set to "enabled" or "disabled", only enabled / disabled repositories are listed. Any other value means all repositories are returned.
-            </para></listitem>
-          </varlistentry>
-        </variablelist>
+            - patterns: list of strings
+                any repository with id matching to any of patterns is returned
+            - repo_attrs: list of strings
+                list of repository attributes that are returned
+            - enable_disable: string (default "enabled")
+                When set to "enabled" or "disabled", only enabled / disabled repositories are listed. Any other value means all repositories are returned.
 
         Unknown options are ignored.
     -->
