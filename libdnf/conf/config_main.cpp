@@ -278,6 +278,7 @@ class ConfigMain::Impl {
     OptionString user_agent{"libdnf"};  // TODO(jrohel): getUserAgent()
     OptionBool countme{false};
     OptionBool protect_running_kernel{true};
+    OptionBool build_cache{true};
 
     // Repo main config
 
@@ -445,6 +446,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("user_agent", user_agent);
     owner.opt_binds().add("countme", countme);
     owner.opt_binds().add("protect_running_kernel", protect_running_kernel);
+    owner.opt_binds().add("build_cache", build_cache);
 
     // Repo main config
 
@@ -1044,6 +1046,13 @@ OptionBool & ConfigMain::protect_running_kernel() {
 
 const OptionBool & ConfigMain::protect_running_kernel() const {
     return p_impl->protect_running_kernel;
+}
+
+OptionBool & ConfigMain::build_cache() {
+    return p_impl->build_cache;
+}
+const OptionBool & ConfigMain::build_cache() const {
+    return p_impl->build_cache;
 }
 
 // Repo main config

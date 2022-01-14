@@ -87,7 +87,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionString> user_agent{main_config.user_agent()};
     OptionChild<OptionBool> countme{main_config.countme()};
     OptionEnum<std::string> failovermethod{"priority", {"priority", "roundrobin"}};
-    OptionBool build_cache{false};
+    OptionChild<OptionBool> build_cache{main_config.build_cache()};
 };
 
 ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::string & id)
@@ -540,10 +540,10 @@ const OptionEnum<std::string> & ConfigRepo::failovermethod() const {
     return p_impl->failovermethod;
 }
 
-OptionBool & ConfigRepo::build_cache() {
+OptionChild<OptionBool> & ConfigRepo::build_cache() {
     return p_impl->build_cache;
 }
-const OptionBool & ConfigRepo::build_cache() const {
+const OptionChild<OptionBool> & ConfigRepo::build_cache() const {
     return p_impl->build_cache;
 }
 

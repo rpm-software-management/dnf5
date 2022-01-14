@@ -129,8 +129,8 @@ public:
     OptionChild<OptionBool> & skip_if_unavailable();
     const OptionChild<OptionBool> & skip_if_unavailable() const;
     /// If true it will create libsolv cache that will speed up the next loading process
-    OptionBool & build_cache();
-    const OptionBool & build_cache() const;
+    OptionChild<OptionBool> & build_cache();
+    const OptionChild<OptionBool> & build_cache() const;
 
     // option recognized by other tools, e.g. gnome-software, but unused in dnf
     OptionString & enabled_metadata();

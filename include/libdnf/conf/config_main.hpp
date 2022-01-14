@@ -197,6 +197,8 @@ public:
     const OptionBool & countme() const;
     OptionBool & protect_running_kernel();
     const OptionBool & protect_running_kernel() const;
+    OptionBool & build_cache();
+    const OptionBool & build_cache() const;
 
     // Repo main config
     OptionNumber<std::uint32_t> & retries();
