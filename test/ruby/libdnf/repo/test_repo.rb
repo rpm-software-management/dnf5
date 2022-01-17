@@ -16,41 +16,23 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 require 'test/unit'
-require 'tmpdir'
 include Test::Unit::Assertions
 
 require 'libdnf/base'
 
-class TestRepo < Test::Unit::TestCase
+require 'base_test_case'
+
+
+class TestRepo < BaseTestCase
+    def test_load_system_repo()
+        # TODO(lukash) there's no rpmdb in the installroot, create data for the test
+        @repo_sack.get_system_repo().load()
+    end
+
     def test_repo()
-        base = Base::Base.new()
+        repo = add_repo_repomd("repomd-repo1", load=false)
 
-        # Sets path to cache directory.
-        tmpdir = Dir.mktmpdir("libdnf-ruby-")
-        base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, tmpdir)
-
-        # Sets Base internals according to configuration
-        base.setup()
-
-        repo_sack = Repo::RepoSack.new(base)
-
-        # Creates system repository and loads it into rpm::PackageSack.
-        repo_sack.get_system_repo().load()
-
-        # Creates new repositories in the repo_sack
-        repo = repo_sack.create_repo("repomd-repo1")
-
-        # Tunes repository configuration (baseurl is mandatory)
-        repo_path = File.join(Dir.getwd(), '../../../test/data/repos-repomd/repomd-repo1/')
-        baseurl = 'file://' + repo_path
-        repo_cfg = repo.get_config()
-        repo_cfg.baseurl().set(Conf::Option::Priority_RUNTIME, baseurl)
-
-        # fetch repo metadata and load it
         repo.fetch_metadata()
         repo.load()
-
-        # Remove the cache directory.
-        FileUtils.remove_entry(tmpdir)
     end
 end

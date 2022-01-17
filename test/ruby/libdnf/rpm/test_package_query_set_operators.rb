@@ -22,7 +22,6 @@ require 'base_test_case'
 
 
 class TestPackageQuerySetOperators < BaseTestCase
-
     def setup()
         super
         add_repo_solv("solv-24pkgs")
@@ -76,5 +75,4 @@ class TestPackageQuerySetOperators < BaseTestCase
         q1.intersection(q2)
         assert_equal(1, q1.size())
     end
-
 end

@@ -21,8 +21,7 @@ require 'libdnf/base'
 require 'base_test_case'
 
 
-class TestSimpleNumber < BaseTestCase
-
+class TestPackageQuery < BaseTestCase
     def setup()
         super
         add_repo_repomd("repomd-repo1")
@@ -66,5 +65,4 @@ class TestSimpleNumber < BaseTestCase
 
         assert_equal(["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"], actual)
     end
-
 end

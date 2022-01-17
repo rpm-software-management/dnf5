@@ -51,7 +51,6 @@ class LibdnfLoggerCB2 < Logger::Logger
 end
 
 class TestLoggers < Test::Unit::TestCase
-
     def test_logger()
         expected_logger_content = "CRITICAL: Critical message\n" \
                                   "ERROR: Error message\n"       \

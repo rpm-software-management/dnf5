@@ -29,7 +29,6 @@ PROJECT_SOURCE_DIR = ENV["PROJECT_SOURCE_DIR"]
 
 
 class BaseTestCase < Test::Unit::TestCase
-
     def setup()
         @base = Base::Base.new()
 
@@ -47,35 +46,35 @@ class BaseTestCase < Test::Unit::TestCase
         FileUtils.remove_entry(@cachedir)
     end
 
-    # Add (load) a repo from `repo_path`.
-    # It's also a shared code for add_repo_repomd() and add_repo_rpm().
-    def _add_repo(repoid, repo_path)
+    # Add a repo from `repo_path`.
+    def _add_repo(repoid, repo_path, load=true)
         repo = @repo_sack.create_repo(repoid)
 
-        # set the repo baseurl
         repo.get_config().baseurl().set(Conf::Option::Priority_RUNTIME, "file://" + repo_path)
 
-        # fetch repo metadata and load it
-        repo.fetch_metadata()
-        repo.load()
+        if load
+          repo.fetch_metadata()
+          repo.load()
+        end
+
+        return repo
     end
 
-    # Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-repomd/<repoid>/repodata
-    def add_repo_repomd(repoid)
+    # Add a repo from PROJECT_SOURCE_DIR/test/data/repos-repomd/<repoid>/repodata
+    def add_repo_repomd(repoid, load=true)
         repo_path = File.join(PROJECT_SOURCE_DIR, "test/data/repos-repomd", repoid)
-        _add_repo(repoid, repo_path)
+        return _add_repo(repoid, repo_path, load)
     end
 
-    # Add (load) a repo from PROJECT_BINARY_DIR/test/data/repos-rpm/<repoid>/repodata
-    def add_repo_rpm(repoid)
+    # Add a repo from PROJECT_BINARY_DIR/test/data/repos-rpm/<repoid>/repodata
+    def add_repo_rpm(repoid, load=true)
         repo_path = File.join(PROJECT_BINARY_DIR, "test/data/repos-rpm", repoid)
-        _add_repo(repoid, repo_path)
+        return _add_repo(repoid, repo_path, load)
     end
 
-    # Add (load) a repo from PROJECT_SOURCE_DIR/test/data/repos-solv/<repoid>.repo
+    # Add a repo from PROJECT_SOURCE_DIR/test/data/repos-solv/<repoid>.repo
     def add_repo_solv(repoid)
         repo_path = File.join(PROJECT_SOURCE_DIR, "test/data/repos-solv", repoid + ".repo")
-        @repo_sack.create_repo_from_libsolv_testcase(repoid, repo_path)
+        return @repo_sack.create_repo_from_libsolv_testcase(repoid, repo_path)
     end
-
 end

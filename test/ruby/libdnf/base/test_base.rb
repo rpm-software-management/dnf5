@@ -23,7 +23,7 @@ require 'libdnf/base'
 class TestBase < Test::Unit::TestCase
     def test_base()
         base = Base::Base.new()
-        loger = base.get_logger()
+        logger = base.get_logger()
         config = base.get_config()
         repo_sack = base.get_repo_sack()
         package_sack = base.get_rpm_package_sack()
@@ -47,7 +47,7 @@ class TestBase < Test::Unit::TestCase
 
         # Invalidates Base object
         base = nil
-        # Ensure gargabe collection
+        # Ensure garbage collection
         GC.start
 
         # Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
