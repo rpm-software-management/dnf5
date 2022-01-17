@@ -16,42 +16,20 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
-import tempfile
-import shutil
-import os
 
 import libdnf.base
-import libdnf.logger
+
+import base_test_case
 
 
-class TestRepo(unittest.TestCase):
+class TestRepo(base_test_case.BaseTestCase):
+    def test_load_system_repo(self):
+        # TODO(lukash) there's no rpmdb in the installroot, create data for the test
+        self.repo_sack.get_system_repo().load()
+
+
     def test_repo(self):
-        base = libdnf.base.Base()
+        repo = self.add_repo_repomd("repomd-repo1", load=False)
 
-        # Sets path to cache directory.
-        tmpdir = tempfile.mkdtemp(prefix="libdnf-python3-")
-        base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, tmpdir)
-
-        # Sets Base internals according to configuration
-        base.setup()
-
-        repo_sack = libdnf.repo.RepoSack(base)
-
-        # Creates system repository and loads it
-        repo_sack.get_system_repo().load()
-
-        # Creates new repositories in the repo_sack
-        repo = repo_sack.create_repo("repomd-repo1")
-
-        # Tunes repository configuration (baseurl is mandatory)
-        repo_path = os.path.join(os.getcwd(), "../../../test/data/repos-repomd/repomd-repo1/")
-        baseurl = "file://" + repo_path
-        repo_cfg = repo.get_config()
-        repo_cfg.baseurl().set(libdnf.conf.Option.Priority_RUNTIME, baseurl)
-
-        # fetch repo metadata and load it
         repo.fetch_metadata()
         repo.load()
-
-        # Remove the cache directory.
-        shutil.rmtree(tmpdir)

@@ -16,9 +16,6 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
-import tempfile
-import shutil
-import os
 
 import libdnf
 

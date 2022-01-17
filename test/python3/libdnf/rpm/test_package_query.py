@@ -16,9 +16,6 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
-import tempfile
-import shutil
-import os
 
 import libdnf
 
@@ -43,7 +40,7 @@ class TestPackageQuery(base_test_case.BaseTestCase):
             id = pkg.get_id().id
             self.assertGreater(id, prev_id)
             prev_id = id
-        self.assertLess(prev_id, self.sack.get_nsolvables())
+        self.assertLess(prev_id, self.package_sack.get_nsolvables())
         self.assertGreaterEqual(prev_id, query.size())
 
         # Similar to above, but longer notation.
@@ -57,7 +54,7 @@ class TestPackageQuery(base_test_case.BaseTestCase):
                 prev_id = id
             except StopIteration:
                 break
-        self.assertLess(prev_id, self.sack.get_nsolvables())
+        self.assertLess(prev_id, self.package_sack.get_nsolvables())
         self.assertGreaterEqual(prev_id, query.size())
 
     def test_iterate_package_query2(self):
@@ -70,7 +67,7 @@ class TestPackageQuery(base_test_case.BaseTestCase):
             id = pkg.get_id().id
             self.assertGreater(id, prev_id)
             prev_id = id
-        self.assertLess(prev_id, self.sack.get_nsolvables())
+        self.assertLess(prev_id, self.package_sack.get_nsolvables())
         self.assertGreaterEqual(prev_id, libdnf.rpm.PackageQuery(self.base).size())
 
         # Another test. The iterator is created from the "query" reference, but the reference
@@ -87,7 +84,7 @@ class TestPackageQuery(base_test_case.BaseTestCase):
                 prev_id = id
             except StopIteration:
                 break
-        self.assertLess(prev_id, self.sack.get_nsolvables())
+        self.assertLess(prev_id, self.package_sack.get_nsolvables())
         self.assertGreaterEqual(prev_id, libdnf.rpm.PackageQuery(self.base).size())
 
     def test_filter_name(self):
