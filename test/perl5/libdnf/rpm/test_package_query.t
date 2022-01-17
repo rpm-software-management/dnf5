@@ -42,7 +42,8 @@ my $repo_sack = new libdnf::repo::RepoSack($base);
 my $repo = $repo_sack->create_repo("repomd-repo1");
 
 # Tunes repository configuration (baseurl is mandatory)
-my $repo_path = catfile(cwd, "../../../test/data/repos-repomd/repomd-repo1/");
+my $project_source_dir = $ENV{"PROJECT_SOURCE_DIR"};
+my $repo_path = catfile($project_source_dir, "/test/data/repos-repomd/repomd-repo1/");
 my $baseurl = "file://" . $repo_path;
 my $repo_cfg = $repo->get_config();
 $repo_cfg->baseurl()->set($libdnf::conf::Option::Priority_RUNTIME, $baseurl);

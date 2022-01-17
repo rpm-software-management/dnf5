@@ -23,7 +23,12 @@ macro(add_perl_test)
         COMMAND "${PERL_EXECUTABLE}" "-I${CMAKE_BINARY_DIR}/bindings/perl5" "${ARGV1}"
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     )
-    set_property(TEST ${target} PROPERTY ENVIRONMENT "${ASAN_OPTIONS}")
+
+    set_property(TEST ${target} PROPERTY ENVIRONMENT
+        "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}"
+        "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}"
+        "${ASAN_OPTIONS}"
+    )
 endmacro()
 
 
