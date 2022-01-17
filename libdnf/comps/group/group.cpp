@@ -90,7 +90,7 @@ std::string Group::get_translated_name(const char * lang) const {
 
     std::string translation;
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = pool->solvables + group_id.id;
+        Solvable * solvable = pool.id2solvable(group_id.id);
         if (solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1)) {
             translation = solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1);
             // Return translation only if it's different from the untranslated string.
@@ -105,12 +105,11 @@ std::string Group::get_translated_name(const char * lang) const {
 
 // TODO(pkratoch): Test this
 std::string Group::get_translated_name() const {
-    libdnf::solv::Pool & spool = get_pool(base);
-    Pool * pool = *spool;
+    libdnf::solv::Pool & pool = get_pool(base);
 
     std::string translation;
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = pool->solvables + group_id.id;
+        Solvable * solvable = pool.id2solvable(group_id.id);
         if (solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY)) {
             translation = solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY);
             // Return translation only if it's different from the untranslated string.
@@ -124,12 +123,11 @@ std::string Group::get_translated_name() const {
 
 
 std::string Group::get_translated_description(const char * lang) const {
-    libdnf::solv::Pool & spool = get_pool(base);
-    Pool * pool = *spool;
+    libdnf::solv::Pool & pool = get_pool(base);
 
     std::string translation;
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = pool->solvables + group_id.id;
+        Solvable * solvable = pool.id2solvable(group_id.id);
         if (solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1)) {
             translation = solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1);
             // Return translation only if it's different from the untranslated string.
@@ -143,12 +141,11 @@ std::string Group::get_translated_description(const char * lang) const {
 
 
 std::string Group::get_translated_description() const {
-    libdnf::solv::Pool & spool = get_pool(base);
-    Pool * pool = *spool;
+    libdnf::solv::Pool & pool = get_pool(base);
 
     std::string translation;
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = pool->solvables + group_id.id;
+        Solvable * solvable = pool.id2solvable(group_id.id);
         if (solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION)) {
             translation = solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION);
             // Return translation only if it's different from the untranslated string.
