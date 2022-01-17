@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TEST_REPO_REPO_HPP
 #define LIBDNF_TEST_REPO_REPO_HPP
 
-#include "testcase_fixture.hpp"
+#include "test_case_fixture.hpp"
 #include "utils/temp.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>

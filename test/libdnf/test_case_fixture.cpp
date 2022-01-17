@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "testcase_fixture.hpp"
+#include "test_case_fixture.hpp"
 
 #include <stdlib.h>
 
