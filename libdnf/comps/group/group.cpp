@@ -318,7 +318,7 @@ void Group::dump(const std::string & path) {
     // Add packagelist
     xmlNodePtr node_packagelist = xmlNewNode(NULL, BAD_CAST "packagelist");
     xmlAddChild(node_group, node_packagelist);
-    for (auto pkg : get_packages()) {
+    for (const auto & pkg : get_packages()) {
         // Create an XML node for this package
         node = utils::xml::add_subnode_with_text(node_packagelist, "packagereq", pkg.get_name());
         xmlNewProp(node, BAD_CAST "type", BAD_CAST pkg.get_type_string().c_str());
