@@ -40,7 +40,7 @@ public:
 
 
 void RpmPackageSetTest::setUp() {
-    LibdnfTestCase::setUp();
+    BaseTestCase::setUp();
     add_repo_solv("solv-24pkgs");
 
     // set1 contains packages 0 - 15

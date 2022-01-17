@@ -45,7 +45,7 @@ public:
 
 
 void RpmPackageQueryTest::setUp() {
-    LibdnfTestCase::setUp();
+    BaseTestCase::setUp();
 }
 
 

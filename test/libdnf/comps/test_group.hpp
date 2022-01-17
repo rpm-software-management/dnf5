@@ -21,13 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TEST_COMPS_GROUP_HPP
 #define LIBDNF_TEST_COMPS_GROUP_HPP
 
-#include "support.hpp"
+#include "base_test_case.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class CompsGroupTest : public LibdnfTestCase {
+class CompsGroupTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(CompsGroupTest);
     CPPUNIT_TEST(test_load);
     CPPUNIT_TEST(test_load_defaults);

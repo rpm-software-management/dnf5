@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_ADVISORY_ADVISORY_SET_HPP
 
 
-#include "support.hpp"
+#include "base_test_case.hpp"
 
 #include "libdnf/advisory/advisory_set.hpp"
 
@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-class AdvisoryAdvisorySetTest : public LibdnfTestCase {
+class AdvisoryAdvisorySetTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(AdvisoryAdvisorySetTest);
 
 #ifndef WITH_PERFORMANCE_TESTS

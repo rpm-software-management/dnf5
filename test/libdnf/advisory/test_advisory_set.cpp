@@ -30,7 +30,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(AdvisoryAdvisorySetTest);
 
 
 void AdvisoryAdvisorySetTest::setUp() {
-    LibdnfTestCase::setUp();
+    BaseTestCase::setUp();
     // Use solv-24pkgs repo to create a pool with 24 slots (packages).
     // Even though the repo doesn't have any advisories we can manually
     // create our own and by specifying their ids in the 0 - 24 range

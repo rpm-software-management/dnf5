@@ -18,8 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef TEST_LIBDNF_SUPPORT_HPP
-#define TEST_LIBDNF_SUPPORT_HPP
+#ifndef TEST_LIBDNF_BASE_TEST_CASE_HPP
+#define TEST_LIBDNF_BASE_TEST_CASE_HPP
 
 #include "testcase_fixture.hpp"
 #include "utils/temp.hpp"
@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 
-class LibdnfTestCase : public TestCaseFixture {
+class BaseTestCase : public TestCaseFixture {
 public:
     void setUp() override;
 
@@ -73,4 +73,4 @@ private:
 };
 
 
-#endif  // TEST_LIBDNF_SUPPORT_HPP
+#endif  // TEST_LIBDNF_BASE_TEST_CASE_HPP

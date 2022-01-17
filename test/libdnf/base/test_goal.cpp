@@ -47,7 +47,7 @@ public:
 
 
 void BaseGoalTest::setUp() {
-    LibdnfTestCase::setUp();
+    BaseTestCase::setUp();
 }
 
 void BaseGoalTest::test_install() {

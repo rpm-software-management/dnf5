@@ -31,7 +31,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RpmPackageTest);
 
 
 void RpmPackageTest::setUp() {
-    LibdnfTestCase::setUp();
+    BaseTestCase::setUp();
     add_repo_repomd("repomd-repo1");
 }
 

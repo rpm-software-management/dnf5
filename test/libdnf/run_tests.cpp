@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "support.hpp"
+#include "base_test_case.hpp"
 
 #include "libdnf/logger/memory_buffer_logger.hpp"
 #include "libdnf/logger/stream_logger.hpp"
@@ -67,7 +67,7 @@ class LogCaptureListener : public CppUnit::TestListener {
 public:
     void startTest(CppUnit::Test * t) override {
         auto * f = reinterpret_cast<HackTestCaller *>(t);
-        auto * tc = dynamic_cast<LibdnfTestCase *>(f->m_fixture);
+        auto * tc = dynamic_cast<BaseTestCase *>(f->m_fixture);
 
         if (tc) {
             tc->base.get_logger()->add_logger(std::make_unique<libdnf::MemoryBufferLogger>(10000, 256));
@@ -76,7 +76,7 @@ public:
 
     void addFailure(const CppUnit::TestFailure & failure) override {
         auto * f = reinterpret_cast<HackTestCaller *>(failure.failedTest());
-        auto * tc = dynamic_cast<LibdnfTestCase *>(f->m_fixture);
+        auto * tc = dynamic_cast<BaseTestCase *>(f->m_fixture);
 
         if (tc) {
             std::cout << std::endl << "Dnf log:" << std::endl;

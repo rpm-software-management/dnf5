@@ -30,7 +30,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(StateTest);
 using namespace libdnf;
 
 void StateTest::setUp() {
-    LibdnfTestCase::setUp();
+    BaseTestCase::setUp();
     add_repo_repomd("repomd-repo1");
 
     temp_dir = std::make_unique<libdnf::utils::TempDir>("libdnf_test_state");
@@ -46,7 +46,7 @@ void StateTest::setUp() {
 void StateTest::tearDown() {
     temp_dir.reset();
 
-    LibdnfTestCase::tearDown();
+    BaseTestCase::tearDown();
 }
 
 void StateTest::test_state_read() {

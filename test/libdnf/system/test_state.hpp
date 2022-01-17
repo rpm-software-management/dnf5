@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_SYSTEM_STATE_HPP
 
 
-#include "support.hpp"
+#include "base_test_case.hpp"
 #include "utils/temp.hpp"
 
 #include "libdnf/system/state.hpp"
@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-class StateTest : public LibdnfTestCase {
+class StateTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(StateTest);
     CPPUNIT_TEST(test_state_read);
     CPPUNIT_TEST(test_state_write);

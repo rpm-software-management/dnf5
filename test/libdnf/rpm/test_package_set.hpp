@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_RPM_PACKAGE_SET_HPP
 
 
-#include "support.hpp"
+#include "base_test_case.hpp"
 
 #include "libdnf/rpm/package_set.hpp"
 
@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 
 
-class RpmPackageSetTest : public LibdnfTestCase {
+class RpmPackageSetTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(RpmPackageSetTest);
 
 #ifndef WITH_PERFORMANCE_TESTS

@@ -34,8 +34,8 @@ CPPUNIT_TEST_SUITE_REGISTRATION(AdvisoryAdvisoryTest);
 CPPUNIT_TEST_SUITE_NAMED_REGISTRATION(AdvisoryAdvisoryTest, "AdvisoryAdvisoryTest_suite");
 
 void AdvisoryAdvisoryTest::setUp() {
-    LibdnfTestCase::setUp();
-    LibdnfTestCase::add_repo_repomd("repomd-repo1");
+    BaseTestCase::setUp();
+    BaseTestCase::add_repo_repomd("repomd-repo1");
 }
 
 void AdvisoryAdvisoryTest::test_get_name() {

@@ -22,12 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_RPM_PACKAGE_HPP
 
 
-#include "support.hpp"
+#include "base_test_case.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class RpmPackageTest : public LibdnfTestCase {
+class RpmPackageTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(RpmPackageTest);
     CPPUNIT_TEST(test_equality);
     CPPUNIT_TEST(test_get_id);

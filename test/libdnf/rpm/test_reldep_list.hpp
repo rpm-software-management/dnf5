@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef TEST_LIBDNF_RPM_RELDEP_LIST_HPP
 #define TEST_LIBDNF_RPM_RELDEP_LIST_HPP
 
-#include "support.hpp"
+#include "base_test_case.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/rpm/package_sack.hpp"
@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class ReldepListTest : public LibdnfTestCase {
+class ReldepListTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(ReldepListTest);
     CPPUNIT_TEST(test_get);
     CPPUNIT_TEST(test_add);

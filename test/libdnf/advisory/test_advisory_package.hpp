@@ -22,14 +22,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_ADVISORY_ADVISORY_PACKAGE_HPP
 
 
-#include "support.hpp"
+#include "base_test_case.hpp"
 
 #include "libdnf/advisory/advisory_collection.hpp"
 #include "libdnf/advisory/advisory_package.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 
-class AdvisoryAdvisoryPackageTest : public LibdnfTestCase {
+class AdvisoryAdvisoryPackageTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(AdvisoryAdvisoryPackageTest);
 
     CPPUNIT_TEST(test_get_name);

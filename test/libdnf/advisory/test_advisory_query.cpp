@@ -33,8 +33,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(AdvisoryAdvisoryQueryTest);
 
 void AdvisoryAdvisoryQueryTest::setUp() {
-    LibdnfTestCase::setUp();
-    LibdnfTestCase::add_repo_repomd("repomd-repo1");
+    BaseTestCase::setUp();
+    BaseTestCase::add_repo_repomd("repomd-repo1");
 }
 
 void AdvisoryAdvisoryQueryTest::test_size() {

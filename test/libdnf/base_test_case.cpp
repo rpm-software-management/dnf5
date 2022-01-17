@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "support.hpp"
+#include "base_test_case.hpp"
 
 #include "utils.hpp"
 #include "utils/string.hpp"
@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 static std::map<std::string, std::unique_ptr<libdnf::utils::TempDir>> cache_dirs;
 
 
-void LibdnfTestCase::add_repo(const std::string & repoid, const std::string & repo_path) {
+void BaseTestCase::add_repo(const std::string & repoid, const std::string & repo_path) {
     auto repo = repo_sack->create_repo(repoid);
 
     repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path);
@@ -45,28 +45,28 @@ void LibdnfTestCase::add_repo(const std::string & repoid, const std::string & re
 }
 
 
-void LibdnfTestCase::add_repo_repomd(const std::string & repoid) {
+void BaseTestCase::add_repo_repomd(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
     repo_path /= repoid;
     add_repo(repoid, repo_path);
 }
 
 
-void LibdnfTestCase::add_repo_rpm(const std::string & repoid) {
+void BaseTestCase::add_repo_rpm(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_BINARY_DIR "/test/data/repos-rpm";
     repo_path /= repoid;
     add_repo(repoid, repo_path);
 }
 
 
-void LibdnfTestCase::add_repo_solv(const std::string & repoid) {
+void BaseTestCase::add_repo_solv(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-solv";
     repo_path /= repoid + ".repo";
     repo_sack->create_repo_from_libsolv_testcase(repoid.c_str(), repo_path.native());
 }
 
 
-libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, bool installed) {
+libdnf::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, bool installed) {
     libdnf::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});
     if (installed) {
@@ -78,7 +78,7 @@ libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, bool ins
 }
 
 
-libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, const char * repo) {
+libdnf::rpm::Package BaseTestCase::get_pkg(const std::string & nevra, const char * repo) {
     libdnf::rpm::PackageQuery query(base);
     query.filter_nevra({nevra});
     query.filter_repo_id({repo});
@@ -86,7 +86,7 @@ libdnf::rpm::Package LibdnfTestCase::get_pkg(const std::string & nevra, const ch
 }
 
 
-libdnf::rpm::Package LibdnfTestCase::add_system_pkg(
+libdnf::rpm::Package BaseTestCase::add_system_pkg(
     const std::string & relative_path, libdnf::transaction::TransactionItemReason reason) {
     if (reason != libdnf::transaction::TransactionItemReason::UNKNOWN) {
         // parse out the NA from the package path to set the reason for the installed package
@@ -103,12 +103,12 @@ libdnf::rpm::Package LibdnfTestCase::add_system_pkg(
 }
 
 
-libdnf::rpm::Package LibdnfTestCase::add_cmdline_pkg(const std::string & relative_path) {
+libdnf::rpm::Package BaseTestCase::add_cmdline_pkg(const std::string & relative_path) {
     return sack->add_cmdline_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
 }
 
 
-libdnf::rpm::Package LibdnfTestCase::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
+libdnf::rpm::Package BaseTestCase::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
     if (query.empty()) {
         CPPUNIT_FAIL(
             "No package \"" + what + "\" found. All sack packages:" + list_pkg_infos(libdnf::rpm::PackageQuery(base)));
@@ -120,7 +120,7 @@ libdnf::rpm::Package LibdnfTestCase::first_query_pkg(libdnf::rpm::PackageQuery &
 }
 
 
-void LibdnfTestCase::setUp() {
+void BaseTestCase::setUp() {
     TestCaseFixture::setUp();
 
     temp = std::make_unique<libdnf::utils::TempDir>("libdnf_unittest");
@@ -142,6 +142,6 @@ void LibdnfTestCase::setUp() {
     sack = base.get_rpm_package_sack();
 }
 
-void LibdnfTestCase::dump_debugdata() {
+void BaseTestCase::dump_debugdata() {
     repo_sack->dump_debugdata("debugdata");
 }
