@@ -88,14 +88,13 @@ std::string Group::get_description() const {
 std::string Group::get_translated_name(const char * lang) const {
     libdnf::solv::Pool & pool = get_pool(base);
 
-    std::string translation;
     for (GroupId group_id : group_ids) {
         Solvable * solvable = pool.id2solvable(group_id.id);
-        if (solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1)) {
-            translation = solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1);
+        if (const char * translation = solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1)) {
             // Return translation only if it's different from the untranslated string.
-            if (translation != solvable_lookup_str(solvable, SOLVABLE_SUMMARY)) {
-                return translation;
+            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_SUMMARY);
+            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
+                return std::string(translation);
             }
         }
     }
@@ -107,14 +106,13 @@ std::string Group::get_translated_name(const char * lang) const {
 std::string Group::get_translated_name() const {
     libdnf::solv::Pool & pool = get_pool(base);
 
-    std::string translation;
     for (GroupId group_id : group_ids) {
         Solvable * solvable = pool.id2solvable(group_id.id);
-        if (solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY)) {
-            translation = solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY);
+        if (const char * translation = solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY)) {
             // Return translation only if it's different from the untranslated string.
-            if (translation != solvable_lookup_str(solvable, SOLVABLE_SUMMARY)) {
-                return translation;
+            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_SUMMARY);
+            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
+                return std::string(translation);
             }
         }
     }
@@ -125,14 +123,13 @@ std::string Group::get_translated_name() const {
 std::string Group::get_translated_description(const char * lang) const {
     libdnf::solv::Pool & pool = get_pool(base);
 
-    std::string translation;
     for (GroupId group_id : group_ids) {
         Solvable * solvable = pool.id2solvable(group_id.id);
-        if (solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1)) {
-            translation = solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1);
+        if (const char * translation = solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1)) {
             // Return translation only if it's different from the untranslated string.
-            if (translation != solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION)) {
-                return translation;
+            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION);
+            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
+                return std::string(translation);
             }
         }
     }
@@ -143,14 +140,13 @@ std::string Group::get_translated_description(const char * lang) const {
 std::string Group::get_translated_description() const {
     libdnf::solv::Pool & pool = get_pool(base);
 
-    std::string translation;
     for (GroupId group_id : group_ids) {
         Solvable * solvable = pool.id2solvable(group_id.id);
-        if (solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION)) {
-            translation = solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION);
+        if (const char * translation = solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION)) {
             // Return translation only if it's different from the untranslated string.
-            if (translation != solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION)) {
-                return translation;
+            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION);
+            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
+                return std::string(translation);
             }
         }
     }
