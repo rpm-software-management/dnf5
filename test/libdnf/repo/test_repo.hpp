@@ -20,25 +20,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TEST_REPO_REPO_HPP
 #define LIBDNF_TEST_REPO_REPO_HPP
 
-#include "test_case_fixture.hpp"
-#include "utils/temp.hpp"
+#include "base_test_case.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class RepoTest : public TestCaseFixture {
+class RepoTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(RepoTest);
-    CPPUNIT_TEST(test_repo_basics);
+    CPPUNIT_TEST(test_load_system_repo);
+    CPPUNIT_TEST(test_load_repo);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp() override;
-    void tearDown() override;
-
-    void test_repo_basics();
-
-private:
-    libdnf::utils::TempDir * temp;
+    void test_load_system_repo();
+    void test_load_repo();
 };
 
 #endif

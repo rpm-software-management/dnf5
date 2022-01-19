@@ -35,34 +35,38 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 static std::map<std::string, std::unique_ptr<libdnf::utils::TempDir>> cache_dirs;
 
 
-void BaseTestCase::add_repo(const std::string & repoid, const std::string & repo_path) {
+libdnf::repo::RepoWeakPtr BaseTestCase::add_repo(const std::string & repoid, const std::string & repo_path, bool load) {
     auto repo = repo_sack->create_repo(repoid);
 
     repo->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file://" + repo_path);
 
-    repo->fetch_metadata();
-    repo->load();
+    if (load) {
+        repo->fetch_metadata();
+        repo->load();
+    }
+
+    return repo;
 }
 
 
-void BaseTestCase::add_repo_repomd(const std::string & repoid) {
+libdnf::repo::RepoWeakPtr BaseTestCase::add_repo_repomd(const std::string & repoid, bool load) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-repomd";
     repo_path /= repoid;
-    add_repo(repoid, repo_path);
+    return add_repo(repoid, repo_path, load);
 }
 
 
-void BaseTestCase::add_repo_rpm(const std::string & repoid) {
+libdnf::repo::RepoWeakPtr BaseTestCase::add_repo_rpm(const std::string & repoid, bool load) {
     std::filesystem::path repo_path = PROJECT_BINARY_DIR "/test/data/repos-rpm";
     repo_path /= repoid;
-    add_repo(repoid, repo_path);
+    return add_repo(repoid, repo_path, load);
 }
 
 
-void BaseTestCase::add_repo_solv(const std::string & repoid) {
+libdnf::repo::RepoWeakPtr BaseTestCase::add_repo_solv(const std::string & repoid) {
     std::filesystem::path repo_path = PROJECT_SOURCE_DIR "/test/data/repos-solv";
     repo_path /= repoid + ".repo";
-    repo_sack->create_repo_from_libsolv_testcase(repoid.c_str(), repo_path.native());
+    return repo_sack->create_repo_from_libsolv_testcase(repoid.c_str(), repo_path.native());
 }
 
 
