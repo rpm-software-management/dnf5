@@ -212,6 +212,26 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
 }
 
 
+void CompsGroupTest::test_merge_different_translations() {
+    add_repo_repomd("repomd-comps-core");
+    // load another definiton of the core group with different set of translations
+    add_repo_repomd("repomd-comps-core-different-translations");
+
+    libdnf::comps::GroupQuery q_core(base.get_comps()->get_group_sack());
+    q_core.filter_groupid("core");
+    auto core = q_core.get();
+    CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Core"), core.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core.get_description());
+    // translations that are missing in repomd-comps-core-different-translations are taken from repomd-comps-core
+    CPPUNIT_ASSERT_EQUAL(std::string("Kern"), core.get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core.get_translated_description("de"));
+    // translations that are missing in repomd-comps-core are taken from repomd-comps-core-different-translations
+    CPPUNIT_ASSERT_EQUAL(std::string("Tuum"), core.get_translated_name("et"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Väikseim võimalik paigaldus"), core.get_translated_description("et"));
+}
+
+
 void CompsGroupTest::test_dump() {
     add_repo_repomd("repomd-comps-standard");
 

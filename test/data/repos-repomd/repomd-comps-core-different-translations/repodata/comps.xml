@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE comps
+  PUBLIC '-//Red Hat, Inc.//DTD Comps info//EN'
+  'comps.dtd'>
+<comps>
+  <group>
+    <id>core</id>
+    <name>Core</name>
+    <name xml:lang="et">Tuum</name>
+    <description>Smallest possible installation</description>
+    <description xml:lang="et">Väikseim võimalik paigaldus</description>
+    <default>false</default>
+    <uservisible>false</uservisible>
+    <display_order>1</display_order>
+    <langonly>it</langonly>
+    <packagelist>
+      <packagereq type="mandatory">bash</packagereq>
+      <packagereq type="mandatory">glibc</packagereq>
+      <packagereq type="default">dnf</packagereq>
+      <packagereq type="optional">dnf-plugins-core</packagereq>
+      <packagereq requires="nonexistent" type="conditional">conditional</packagereq>
+    </packagelist>
+  </group>
+</comps>
