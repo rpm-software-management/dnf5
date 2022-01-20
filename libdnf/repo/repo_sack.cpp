@@ -83,6 +83,7 @@ RepoWeakPtr RepoSack::create_repo_from_libsolv_testcase(const std::string & id, 
 RepoWeakPtr RepoSack::get_cmdline_repo() {
     if (!cmdline_repo) {
         std::unique_ptr<Repo> repo(new Repo(base, CMDLINE_REPO_NAME, Repo::Type::COMMANDLINE));
+        repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, false);
         cmdline_repo = repo.get();
         add_item(std::move(repo));
     }
@@ -94,6 +95,8 @@ RepoWeakPtr RepoSack::get_cmdline_repo() {
 RepoWeakPtr RepoSack::get_system_repo() {
     if (!system_repo) {
         std::unique_ptr<Repo> repo(new Repo(base, SYSTEM_REPO_NAME, Repo::Type::SYSTEM));
+        // TODO(mblaha): re-enable caching once we can reliably detect whether system repo is up-to-date
+        repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, false);
         system_repo = repo.get();
         add_item(std::move(repo));
         pool_set_installed(*get_pool(base), system_repo->p_impl->solv_repo.repo);
