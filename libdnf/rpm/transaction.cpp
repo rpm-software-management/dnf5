@@ -611,7 +611,7 @@ private:
             auto te_nevra = fmt::format(
                 "{}-{}:{}-{}.{}", rpmteN(te), rpmteE(te) ? rpmteE(te) : "0", rpmteV(te), rpmteR(te), rpmteA(te));
             auto & log = *transaction->base->get_logger();
-            const char * te_type;
+            const char * te_type = "unknown";
             switch (rpmteType(te)) {
                 case TR_ADDED:
                     te_type = "install package";
