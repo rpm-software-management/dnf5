@@ -26,6 +26,7 @@
     #include "libdnf/base/transaction.hpp"
     #include "libdnf/base/transaction_package.hpp"
     #include "libdnf/base/goal.hpp"
+    #include "libdnf/base/goal_elements.hpp"
 %}
 
 #define CV __perl_CV
@@ -40,3 +41,4 @@
 %include "libdnf/base/transaction.hpp"
 %include "libdnf/base/transaction_package.hpp"
 %include "libdnf/base/goal.hpp"
+%include "libdnf/base/goal_elements.hpp"
