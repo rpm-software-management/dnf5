@@ -117,7 +117,7 @@ public:
     Group & operator+=(const Group & rhs);
 
     bool operator<(const Group & rhs) const {
-        return get_groupid() < rhs.get_groupid() or (get_installed() and !rhs.get_installed());
+        return get_groupid() < rhs.get_groupid() || (get_installed() && !rhs.get_installed());
     }
 
     void dump(const std::string & path);
