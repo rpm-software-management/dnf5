@@ -39,6 +39,11 @@ struct default_delete<GError> {
     void operator()(GError * ptr) noexcept { g_error_free(ptr); }
 };
 
+template <>
+struct default_delete<LrPackageTarget> {
+    void operator()(LrPackageTarget * ptr) noexcept { lr_packagetarget_free(ptr); }
+};
+
 }  // namespace std
 
 
