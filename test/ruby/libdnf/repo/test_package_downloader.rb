@@ -67,9 +67,13 @@ class TestPackageDownloader < BaseTestCase
         downloader = Repo::PackageDownloader.new()
 
         cbs = PackageDownloadCallbacks.new()
-        downloader.add(query.begin().value, cbs)
+        downloader.add(query.begin().value, Repo::PackageDownloadCallbacksUniquePtr.new(cbs))
 
         downloader.download(true, true)
+
+        # forcefully deallocate the downloader, to check cbs is still valid
+        downloader = nil
+        GC.start
 
         assert_equal(1, cbs.end_cnt)
         assert_equal(PackageDownloadCallbacks::TransferStatus_SUCCESSFUL, cbs.end_status)

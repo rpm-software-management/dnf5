@@ -103,12 +103,9 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 void download_packages(Session & session, libdnf::base::Transaction & transaction) {
     libdnf::repo::PackageDownloader downloader;
 
-    std::vector<std::unique_ptr<DbusPackageCB>> download_callbacks;
-
     for (auto & tspkg : transaction.get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action())) {
-            download_callbacks.push_back(std::make_unique<DbusPackageCB>(session, tspkg.get_package()));
-            downloader.add(tspkg.get_package(), download_callbacks.back().get());
+            downloader.add(tspkg.get_package(), std::make_unique<DbusPackageCB>(session, tspkg.get_package()));
         }
     }
 

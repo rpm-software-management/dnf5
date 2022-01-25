@@ -88,14 +88,16 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 class PackageTarget {
 public:
     PackageTarget(
-        const libdnf::rpm::Package & package, const std::string & destination, PackageDownloadCallbacks * callbacks)
+        const libdnf::rpm::Package & package,
+        const std::string & destination,
+        std::unique_ptr<PackageDownloadCallbacks> && callbacks)
         : package(package),
           destination(destination),
-          callbacks(callbacks) {}
+          callbacks(std::move(callbacks)) {}
 
     libdnf::rpm::Package package;
     std::string destination;
-    PackageDownloadCallbacks * callbacks;
+    std::unique_ptr<PackageDownloadCallbacks> callbacks;
 };
 
 
@@ -109,13 +111,17 @@ PackageDownloader::PackageDownloader() : p_impl(std::make_unique<Impl>()) {}
 PackageDownloader::~PackageDownloader() = default;
 
 
-void PackageDownloader::add(const libdnf::rpm::Package & package, PackageDownloadCallbacks * callbacks) {
-    add(package, std::filesystem::path(package.get_repo()->get_cachedir()) / "packages", callbacks);
+void PackageDownloader::add(
+    const libdnf::rpm::Package & package, std::unique_ptr<PackageDownloadCallbacks> && callbacks) {
+    add(package, std::filesystem::path(package.get_repo()->get_cachedir()) / "packages", std::move(callbacks));
 }
 
+
 void PackageDownloader::add(
-    const libdnf::rpm::Package & package, const std::string & destination, PackageDownloadCallbacks * callbacks) {
-    p_impl->targets.emplace_back(package, destination, callbacks);
+    const libdnf::rpm::Package & package,
+    const std::string & destination,
+    std::unique_ptr<PackageDownloadCallbacks> && callbacks) {
+    p_impl->targets.emplace_back(package, destination, std::move(callbacks));
 }
 
 
@@ -137,7 +143,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
             it->package.get_baseurl().empty() ? nullptr : it->package.get_baseurl().c_str(),
             resume,
             progress_callback,
-            it->callbacks,
+            it->callbacks.get(),
             end_callback,
             mirror_failure_callback,
             0,

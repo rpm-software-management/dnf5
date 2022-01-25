@@ -24,6 +24,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/rpm/package.hpp"
 
+#include <memory>
+
+
 namespace libdnf::repo {
 
 /// Base class for package download callbacks.
@@ -70,7 +73,7 @@ public:
     /// Adds a package to download to the standard location of repo cachedir/packages.
     /// @param package The package to download.
     /// @param callbacks (optional) A pointer to an instance of the `PackageDownloadCallbacks` class.
-    void add(const libdnf::rpm::Package & package, PackageDownloadCallbacks * callbacks = nullptr);
+    void add(const libdnf::rpm::Package & package, std::unique_ptr<PackageDownloadCallbacks> && callbacks = {});
 
     /// Adds a package to download to a specific destination directory.
     /// @param package The package to download.
@@ -79,7 +82,7 @@ public:
     void add(
         const libdnf::rpm::Package & package,
         const std::string & destination,
-        PackageDownloadCallbacks * callbacks = nullptr);
+        std::unique_ptr<PackageDownloadCallbacks> && callbacks = {});
 
     /// Download the previously added packages.
     /// @param fail_fast Whether to fail the whole download on a first error or keep downloading.

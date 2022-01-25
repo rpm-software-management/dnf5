@@ -65,15 +65,16 @@ void PackageDownloaderTest::test_package_downloader() {
 
     auto downloader = libdnf::repo::PackageDownloader();
 
-    auto cbs = PackageDownloadCallbacks();
-    downloader.add(*query.begin(), &cbs);
+    auto cbs_unique_ptr = std::make_unique<PackageDownloadCallbacks>();
+    auto cbs = cbs_unique_ptr.get();
+    downloader.add(*query.begin(), std::move(cbs_unique_ptr));
 
     downloader.download(true, true);
 
-    CPPUNIT_ASSERT_EQUAL(1, cbs.end_cnt);
-    CPPUNIT_ASSERT_EQUAL(PackageDownloadCallbacks::TransferStatus::SUCCESSFUL, cbs.end_status);
-    CPPUNIT_ASSERT_EQUAL(std::string(""), cbs.end_msg);
+    CPPUNIT_ASSERT_EQUAL(1, cbs->end_cnt);
+    CPPUNIT_ASSERT_EQUAL(PackageDownloadCallbacks::TransferStatus::SUCCESSFUL, cbs->end_status);
+    CPPUNIT_ASSERT_EQUAL(std::string(""), cbs->end_msg);
 
-    CPPUNIT_ASSERT_GREATEREQUAL(1, cbs.progress_cnt);
-    CPPUNIT_ASSERT_EQUAL(0, cbs.mirror_failure_cnt);
+    CPPUNIT_ASSERT_GREATEREQUAL(1, cbs->progress_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, cbs->mirror_failure_cnt);
 }

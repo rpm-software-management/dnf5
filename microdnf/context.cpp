@@ -316,15 +316,13 @@ std::chrono::time_point<std::chrono::steady_clock> PkgDownloadCB::prev_print_tim
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf::repo::PackageDownloader downloader;
-    std::vector<std::unique_ptr<PkgDownloadCB>> download_callbacks;
 
     for (auto & package : packages) {
-        download_callbacks.push_back(std::make_unique<PkgDownloadCB>(multi_progress_bar, package.get_full_nevra()));
-
         if (dest_dir != nullptr) {
-            downloader.add(package, dest_dir, download_callbacks.back().get());
+            downloader.add(
+                package, dest_dir, std::make_unique<PkgDownloadCB>(multi_progress_bar, package.get_full_nevra()));
         } else {
-            downloader.add(package, download_callbacks.back().get());
+            downloader.add(package, std::make_unique<PkgDownloadCB>(multi_progress_bar, package.get_full_nevra()));
         }
     }
 

@@ -16,6 +16,7 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 import unittest
+import gc
 
 import libdnf.base
 
@@ -55,9 +56,15 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
                 return 0
 
         cbs = PackageDownloadCallbacks()
-        downloader.add(query.begin().value(), cbs)
+        # TODO(lukash) try to wrap the creation of the unique_ptr so that cbs
+        # can be passed directly to downloader.add
+        downloader.add(query.begin().value(), libdnf.repo.PackageDownloadCallbacksUniquePtr(cbs))
 
         downloader.download(True, True)
+
+        # forcefully deallocate the downloader, to check cbs is still valid
+        downloader = None
+        gc.collect()
 
         self.assertEqual(cbs.end_cnt, 1)
         self.assertEqual(cbs.end_status, PackageDownloadCallbacks.TransferStatus_SUCCESSFUL)

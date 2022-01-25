@@ -41,6 +41,8 @@
 %ignore PackageDownloadError;
 %feature("director") PackageDownloadCallbacks;
 %include "libdnf/repo/package_downloader.hpp"
+wrap_unique_ptr(PackageDownloadCallbacksUniquePtr, libdnf::repo::PackageDownloadCallbacks);
+
 %include "libdnf/repo/repo.hpp"
 
 %template(RepoWeakPtr) libdnf::WeakPtr<libdnf::repo::Repo, false>;
