@@ -62,7 +62,7 @@ public:
         bool strict);
 
     TransactionRunResult run(
-        libdnf::rpm::TransactionCallbacks & callbacks,
+        std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
         const std::string & cmdline,
         const std::optional<uint32_t> user_id,
         const std::optional<std::string> comment);

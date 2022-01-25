@@ -290,8 +290,9 @@ public:
     /// @return  transaction id
     rpm_tid_t get_id() const;
 
-    // Set transaction notify callback.
-    void register_cb(TransactionCallbacks * cb);
+    /// Set transaction callbacks.
+    /// @param callbacks a `unique_ptr` containing the callbacks object
+    void set_callbacks(std::unique_ptr<TransactionCallbacks> && callbacks);
 
     /// Fill the RPM transaction from base::Transaction.
     /// @param transcation The base::Transaction object.

@@ -125,7 +125,6 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     //session.fill_sack();
 
     auto * transaction = session.get_transaction();
-    DbusTransactionCB callbacks(session);
 
     download_packages(session, *transaction);
 
@@ -134,7 +133,8 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
         comment = key_value_map_get<std::string>(options, "comment");
     }
 
-    auto rpm_result = transaction->run(callbacks, "dnfdaemon-server", std::nullopt, comment);
+    auto rpm_result =
+        transaction->run(std::make_unique<DbusTransactionCB>(session), "dnfdaemon-server", std::nullopt, comment);
 
     if (rpm_result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
         throw sdbus::Error(

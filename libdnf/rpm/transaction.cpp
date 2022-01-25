@@ -476,9 +476,6 @@ public:
         }
     }
 
-    // Set transaction notify callback.
-    void register_cb(TransactionCallbacks * cb) { cb_info.cb = cb; }
-
     /// Perform dependency resolution on the transaction set.
     /// Any problems found by rpmtsCheck() can be examined by retrieving the problem set with rpmtsProblems(),
     /// success here only means that the resolution was successfully attempted for all packages in the set.
@@ -517,12 +514,12 @@ public:
         if (downgrade_requested) {
             ignore_set |= RPMPROB_FILTER_OLDPACKAGE;
         }
-        if (cb_info.cb) {
+        if (callbacks_holder.callbacks) {
             rpmtsSetNotifyStyle(ts, 1);
-            rpmtsSetNotifyCallback(ts, ts_callback, &cb_info);
+            rpmtsSetNotifyCallback(ts, ts_callback, &callbacks_holder);
         }
         auto rc = rpmtsRun(ts, nullptr, ignore_set);
-        if (cb_info.cb) {
+        if (callbacks_holder.callbacks) {
             rpmtsSetNotifyCallback(ts, nullptr, nullptr);
         }
 
@@ -550,15 +547,15 @@ public:
 private:
     friend class Transaction;
 
-    struct CallbackInfo {
-        TransactionCallbacks * cb;
+    struct CallbacksHolder {
+        std::unique_ptr<TransactionCallbacks> callbacks;
         Impl * transaction;
     };
 
     BaseWeakPtr base;
     rpmts ts;
     FD_t script_fd{nullptr};
-    CallbackInfo cb_info{nullptr, this};
+    CallbacksHolder callbacks_holder{nullptr, this};
     FD_t fd_in_cb{nullptr};  // file descriptor used by transaction in callback (install/reinstall package)
 
     TransactionItem * last_added_item{nullptr};  // item added by last install/reinstall/erase/...
@@ -691,22 +688,22 @@ private:
         [[maybe_unused]] const void * pkg_key,
         rpmCallbackData data) {
         void * rc = nullptr;
-        auto * cb_info = static_cast<CallbackInfo *>(data);
-        auto * transaction = cb_info->transaction;
+        auto * callbacks_holder = static_cast<CallbacksHolder *>(data);
+        auto * transaction = callbacks_holder->transaction;
         auto & log = *transaction->base->get_logger();
-        auto & cb = *cb_info->cb;
+        auto & callbacks = *callbacks_holder->callbacks;
         auto * trans_element = static_cast<rpmte>(const_cast<void *>(te));
         auto * item = trans_element ? static_cast<TransactionItem *>(rpmteUserdata(trans_element)) : nullptr;
 
         switch (what) {
             case RPMCALLBACK_INST_PROGRESS:
                 libdnf_assert_transaction_item_set();
-                cb.install_progress(*item, amount, total);
+                callbacks.install_progress(*item, amount, total);
                 break;
             case RPMCALLBACK_INST_START:
                 // Install? Maybe upgrade/downgrade/...obsolete?
                 libdnf_assert_transaction_item_set();
-                cb.install_start(*item, total);
+                callbacks.install_start(*item, total);
                 break;
             case RPMCALLBACK_INST_OPEN_FILE: {
                 libdnf_assert_transaction_item_set();
@@ -724,25 +721,25 @@ private:
                 }
                 break;
             case RPMCALLBACK_TRANS_PROGRESS:
-                cb.transaction_progress(amount, total);
+                callbacks.transaction_progress(amount, total);
                 break;
             case RPMCALLBACK_TRANS_START:
-                cb.transaction_start(total);
+                callbacks.transaction_start(total);
                 break;
             case RPMCALLBACK_TRANS_STOP:
-                cb.transaction_stop(total);
+                callbacks.transaction_stop(total);
                 break;
             case RPMCALLBACK_UNINST_PROGRESS:
                 libdnf_assert_transaction_item_set();
-                cb.uninstall_progress(*item, amount, total);
+                callbacks.uninstall_progress(*item, amount, total);
                 break;
             case RPMCALLBACK_UNINST_START:
                 libdnf_assert_transaction_item_set();
-                cb.uninstall_start(*item, total);
+                callbacks.uninstall_start(*item, total);
                 break;
             case RPMCALLBACK_UNINST_STOP:
                 libdnf_assert_transaction_item_set();
-                cb.uninstall_stop(*item, amount, total);
+                callbacks.uninstall_stop(*item, amount, total);
                 break;
             case RPMCALLBACK_REPACKAGE_PROGRESS:  // obsolete, unused
             case RPMCALLBACK_REPACKAGE_START:     // obsolete, unused
@@ -751,17 +748,17 @@ private:
                 break;
             case RPMCALLBACK_UNPACK_ERROR:
                 libdnf_assert_transaction_item_set();
-                cb.unpack_error(*item);
+                callbacks.unpack_error(*item);
                 break;
             case RPMCALLBACK_CPIO_ERROR:
                 // Not found usage in librpm.
                 libdnf_assert_transaction_item_set();
-                cb.cpio_error(*item);
+                callbacks.cpio_error(*item);
                 break;
             case RPMCALLBACK_SCRIPT_ERROR:
                 // amount is script tag
                 // total is return code - if (!RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_OK
-                cb.script_error(
+                callbacks.script_error(
                     item,
                     trans_element_to_nevra(trans_element),
                     rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
@@ -769,13 +766,13 @@ private:
                 break;
             case RPMCALLBACK_SCRIPT_START:
                 // amount is script tag
-                cb.script_start(
+                callbacks.script_start(
                     item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)));
                 break;
             case RPMCALLBACK_SCRIPT_STOP:
                 // amount is script tag
                 // total is return code - if (error && !RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_NOTFOUND
-                cb.script_stop(
+                callbacks.script_stop(
                     item,
                     trans_element_to_nevra(trans_element),
                     rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
@@ -783,20 +780,20 @@ private:
                 break;
             case RPMCALLBACK_INST_STOP:
                 libdnf_assert_transaction_item_set();
-                cb.install_stop(*item, amount, total);
+                callbacks.install_stop(*item, amount, total);
                 break;
             case RPMCALLBACK_ELEM_PROGRESS:
                 libdnf_assert_transaction_item_set();
-                cb.elem_progress(*item, amount, total);
+                callbacks.elem_progress(*item, amount, total);
                 break;
             case RPMCALLBACK_VERIFY_PROGRESS:
-                cb.verify_progress(amount, total);
+                callbacks.verify_progress(amount, total);
                 break;
             case RPMCALLBACK_VERIFY_START:
-                cb.verify_start(total);
+                callbacks.verify_start(total);
                 break;
             case RPMCALLBACK_VERIFY_STOP:
-                cb.verify_stop(total);
+                callbacks.verify_stop(total);
                 break;
             case RPMCALLBACK_UNKNOWN:
                 log.warning("Unknown RPM Transaction callback type: RPMCALLBACK_UNKNOWN");
@@ -907,8 +904,8 @@ rpm_tid_t Transaction::get_id() const {
     return p_impl->get_id();
 }
 
-void Transaction::register_cb(TransactionCallbacks * cb) {
-    p_impl->register_cb(cb);
+void Transaction::set_callbacks(std::unique_ptr<TransactionCallbacks> && callbacks) {
+    p_impl->callbacks_holder.callbacks = std::move(callbacks);
 }
 
 void Transaction::fill(const base::Transaction & transaction) {

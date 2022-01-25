@@ -166,11 +166,11 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
 }
 
 Transaction::TransactionRunResult Transaction::run(
-    libdnf::rpm::TransactionCallbacks & callbacks,
+    std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
     const std::string & cmdline,
     const std::optional<uint32_t> user_id,
     const std::optional<std::string> comment) {
-    return p_impl->run(callbacks, cmdline, user_id, comment);
+    return p_impl->run(std::move(callbacks), cmdline, user_id, comment);
 }
 
 std::vector<std::string> Transaction::get_transaction_problems() const noexcept {
@@ -309,7 +309,7 @@ TransactionPackage Transaction::Impl::make_transaction_package(
 }
 
 Transaction::TransactionRunResult Transaction::Impl::run(
-    libdnf::rpm::TransactionCallbacks & callbacks,
+    std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
     const std::string & cmdline,
     const std::optional<uint32_t> user_id,
     const std::optional<std::string> comment) {
@@ -380,9 +380,8 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     // execute rpm transaction
     //TODO(jrohel): Send scriptlet output to better place
     rpm_transaction.set_script_out_file("scriptlet.out");
-    rpm_transaction.register_cb(&callbacks);
+    rpm_transaction.set_callbacks(std::move(callbacks));
     auto ret = rpm_transaction.run();
-    rpm_transaction.register_cb(nullptr);
 
     // TODO(mblaha): Handle ret == -1 and ret > 0, fill problems list
 
