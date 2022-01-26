@@ -67,16 +67,18 @@ public:
     // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
     const libdnf::base::SolverProblems & get_package_solver_problems();
 
-    /// Prepare, check and run rpm transaction. All the transaction metadata
-    /// (cmdline, user_id, comment) are stored in history database.
-    /// @param callbacks    callbacks to be called during rpm transaction
-    /// @param cmdline      description of the transaction (usually command that started the transaction)
-    /// @param user_id      UID of the user that started the transaction
-    /// @param comment      any comment describing the transaction
-    /// @return libdnf::base::Transaction::TransactionRunResult
+    /// Prepare, check and run the transaction. All the transaction metadata
+    /// (`description`, `user_id` and `comment`) are stored in the history database.
+    ///
+    /// @param callbacks Callbacks to be called during rpm transaction.
+    /// @param description Description of the transaction (the console command for CLI,
+    //                     verbose description for API usage)
+    /// @param user_id UID of the user that started the transaction.
+    /// @param comment Any comment to store in the history database along with the transaction.
+    /// @return An enum describing the result of running the transaction.
     TransactionRunResult run(
         std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
-        const std::string & cmdline,
+        const std::string & description,
         const std::optional<uint32_t> user_id,
         const std::optional<std::string> comment);
 
