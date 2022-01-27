@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/base/goal_elements.hpp"
+#include "libdnf/base/solver_problems.hpp"
 
 #include <optional>
 #include <set>
@@ -39,6 +40,7 @@ public:
         const libdnf::GoalJobSettings & settings,
         const std::string & spec,
         const std::set<std::string> & additional_data);
+    LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_problems);
     ~LogEvent() = default;
 
     libdnf::GoalAction get_action() const { return action; };
@@ -46,6 +48,7 @@ public:
     const std::optional<libdnf::GoalJobSettings> & get_job_settings() const { return job_settings; };
     const std::optional<std::string> & get_spec() const { return spec; };
     const std::optional<std::set<std::string>> & get_additional_data() const { return additional_data; };
+    const std::optional<SolverProblems> & get_solver_problems() const { return solver_problems; };
 
     /// Convert an element from resolve log to string;
     static std::string to_string(
@@ -53,10 +56,13 @@ public:
         libdnf::GoalProblem problem,
         const std::optional<libdnf::GoalJobSettings> & settings,
         const std::optional<std::string> & spec,
-        const std::optional<std::set<std::string>> & additional_data);
+        const std::optional<std::set<std::string>> & additional_data,
+        const std::optional<SolverProblems> & solver_problems);
 
     /// Convert an element from resolve log to string;
-    std::string to_string() { return to_string(action, problem, job_settings, spec, additional_data); };
+    std::string to_string() {
+        return to_string(action, problem, job_settings, spec, additional_data, solver_problems);
+    };
 
 private:
     friend class Goal;
@@ -66,6 +72,7 @@ private:
     std::optional<libdnf::GoalJobSettings> job_settings;
     std::optional<std::string> spec;
     std::optional<std::set<std::string>> additional_data;
+    std::optional<SolverProblems> solver_problems;
 };
 
 }  // namespace libdnf::base

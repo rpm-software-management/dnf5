@@ -40,12 +40,24 @@ LogEvent::LogEvent(
       spec(spec),
       additional_data(additional_data) {}
 
+LogEvent::LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_problems)
+    : action(libdnf::GoalAction::RESOLVE),
+      problem(problem),
+      solver_problems(solver_problems) {
+    libdnf_assert(
+        problem == libdnf::GoalProblem::SOLVER_PROBLEM,
+        "LogEvent::LogEvent() called with incorrect "
+        "problem, only libdnf::GoalProblem::SOLVER_PROBLEM is supported");
+}
+
+
 std::string LogEvent::to_string(
     libdnf::GoalAction action,
     libdnf::GoalProblem problem,
     const std::optional<libdnf::GoalJobSettings> & settings,
     const std::optional<std::string> & spec,
-    const std::optional<std::set<std::string>> & additional_data) {
+    const std::optional<std::set<std::string>> & additional_data,
+    const std::optional<SolverProblems> & solver_problems) {
     std::string ret;
     switch (problem) {
         // TODO(jmracek) Improve messages => Each message can contain also an action
@@ -101,6 +113,8 @@ std::string LogEvent::to_string(
                 throw std::invalid_argument("Incorrect number of elements for ALREADY_INSTALLED");
             }
             return ret.append(utils::sformat(_("Package \"{}\" is already installed."), *additional_data->begin()));
+        case GoalProblem::SOLVER_PROBLEM:
+            return ret.append(solver_problems->to_string());
     }
     return ret;
 }

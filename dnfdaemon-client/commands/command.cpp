@@ -59,6 +59,7 @@ void TransactionCommand::run_transaction() {
 
     // TODO(jmracek) Handle optional elements
     for (const auto & e : goal_resolve_log_list) {
+        // TODO(jmracek) goal_resolve_log contains optional elements therefore we do not need to transfer them
         libdnf::GoalAction action = static_cast<libdnf::GoalAction>(key_value_map_get<uint32_t>(e, "action"));
         libdnf::GoalProblem problem = static_cast<libdnf::GoalProblem>(key_value_map_get<uint32_t>(e, "problem"));
         libdnf::GoalJobSettings job_settings;
@@ -67,7 +68,9 @@ void TransactionCommand::run_transaction() {
         std::vector<std::string> report_list = key_value_map_get<std::vector<std::string>>(e, "report_list");
         std::set<std::string> report_set{report_list.begin(), report_list.end()};
 
-        std::string format_log = libdnf::base::LogEvent::to_string(action, problem, job_settings, report, report_set);
+        // TODO(jmracek) - add a support of transfering solver problems
+        std::string format_log =
+            libdnf::base::LogEvent::to_string(action, problem, job_settings, report, report_set, {});
         if (!format_log.empty()) {
             std::cout << format_log << std::endl;
         }

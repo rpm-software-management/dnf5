@@ -254,6 +254,9 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::INSTALL_OR_REINSTALL: {
                 libdnf_throw_assertion("Unsupported action \"INSTALL_OR_REINSTALL\"");
             }
+            case GoalAction::RESOLVE: {
+                libdnf_throw_assertion("Unsupported action \"RESOLVE\"");
+            }
         }
     }
     return ret;

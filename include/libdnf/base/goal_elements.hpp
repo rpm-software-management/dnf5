@@ -73,7 +73,8 @@ enum class GoalProblem : uint32_t {
     INSTALLED_LOWEST_VERSION = (1 << 9),
     INSTALLED_IN_DIFFERENT_VERSION = (1 << 10),
     NOT_AVAILABLE = (1 << 11),
-    ALREADY_INSTALLED = (1 << 12)
+    ALREADY_INSTALLED = (1 << 12),
+    SOLVER_PROBLEM = (1 << 13)
 };
 
 enum class GoalAction {
@@ -85,7 +86,8 @@ enum class GoalAction {
     DISTRO_SYNC,
     DISTRO_SYNC_ALL,
     DOWNGRADE,
-    REMOVE
+    REMOVE,
+    RESOLVE
 };
 
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
