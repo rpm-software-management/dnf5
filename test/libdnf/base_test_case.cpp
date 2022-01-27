@@ -30,11 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <map>
 
 
-// Static map (class_name -> cache_dir) that allows re-using cache dirs among test cases in a class.
-// Prevents creating solv files over and over again.
-static std::map<std::string, std::unique_ptr<libdnf::utils::TempDir>> cache_dirs;
-
-
 libdnf::repo::RepoWeakPtr BaseTestCase::add_repo(const std::string & repoid, const std::string & repo_path, bool load) {
     auto repo = repo_sack->create_repo(repoid);
 
@@ -130,16 +125,9 @@ void BaseTestCase::setUp() {
     temp = std::make_unique<libdnf::utils::TempDir>("libdnf_unittest");
     std::filesystem::create_directory(temp->get_path() / "installroot");
 
-    // set installroot to a temp directory
     base.get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
+    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
 
-    // use the shared cache dir (see cache_dirs comment for more details)
-    auto class_name = typeid(*this).name();
-    auto it = cache_dirs.find(class_name);
-    if (it == cache_dirs.end()) {
-        cache_dirs.insert({class_name, std::make_unique<libdnf::utils::TempDir>("libdnf_unittest")});
-    }
-    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cache_dirs.at(class_name)->get_path());
     base.setup();
 
     repo_sack = base.get_repo_sack();
