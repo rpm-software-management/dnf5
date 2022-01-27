@@ -59,14 +59,6 @@ public:
     // TODO(jrohel): Return reference instead of copy?
     std::vector<libdnf::base::TransactionPackage> get_transaction_packages() const;
 
-    /// Provide information about package solver problems in vector. Each problem can be transformed to string by
-    /// package_solver_problem_to_string or all problems to a string by all_package_solver_problems_to_string().
-    ///
-    /// @return Vector with structuralized package solver problems
-    // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
-    // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
-    const libdnf::base::SolverProblems & get_package_solver_problems();
-
     /// Prepare, check and run the transaction. All the transaction metadata
     /// (`description`, `user_id` and `comment`) are stored in the history database.
     ///

@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "solver_problems_impl.hpp"
+#include "solver_problems_internal.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/string.hpp"
 
@@ -173,17 +173,15 @@ std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_pr
 
 }  // namespace
 
-SolverProblems::SolverProblems() : p_impl(new Impl()) {}
+SolverProblems::SolverProblems(
+    const std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> & problems)
+    : problems(problems) {}
 
 SolverProblems::SolverProblems(const SolverProblems & src) = default;
 SolverProblems::SolverProblems(SolverProblems && src) noexcept = default;
 SolverProblems & SolverProblems::operator=(const SolverProblems & src) = default;
 SolverProblems & SolverProblems::operator=(SolverProblems && src) noexcept = default;
 SolverProblems::~SolverProblems() = default;
-
-std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> SolverProblems::get_problems() {
-    return p_impl->problems;
-};
 
 std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std::vector<std::string>> & raw) {
     switch (raw.first) {
@@ -242,22 +240,22 @@ std::string SolverProblems::problem_to_string(const std::pair<ProblemRules, std:
 
 
 std::string SolverProblems::to_string() const {
-    if (p_impl->problems.empty()) {
+    if (problems.empty()) {
         return {};
     }
     std::string output;
-    if (p_impl->problems.size() == 1) {
+    if (problems.size() == 1) {
         output.append(_("Problem: "));
-        output.append(string_join(*p_impl->problems.begin(), "\n  - "));
+        output.append(string_join(*problems.begin(), "\n  - "));
         return output;
     }
     const char * problem_prefix = _("Problem {}: ");
 
     output.append(utils::sformat(problem_prefix, 1));
-    output.append(string_join(*p_impl->problems.begin(), "\n  - "));
+    output.append(string_join(*problems.begin(), "\n  - "));
 
     int index = 2;
-    for (auto iter = std::next(p_impl->problems.begin()); iter != p_impl->problems.end(); ++iter) {
+    for (auto iter = std::next(problems.begin()); iter != problems.end(); ++iter) {
         output.append("\n ");
         output.append(utils::sformat(problem_prefix, index));
         output.append(string_join(*iter, "\n  - "));
@@ -266,13 +264,16 @@ std::string SolverProblems::to_string() const {
     return output;
 }
 
-void SolverProblems::Impl::set_solver_problems(const libdnf::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal) {
+std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> process_solver_problems(
+    const libdnf::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal) {
     auto & pool = get_pool(base);
 
     // Required to discover of problems related to protected packages
     libdnf::solv::IdQueue broken_installed;
 
     auto solver_problems = solved_goal.get_problems();
+
+    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems;
 
     for (auto & problem : solver_problems) {
         std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
@@ -356,6 +357,7 @@ void SolverProblems::Impl::set_solver_problems(const libdnf::BaseWeakPtr & base,
             problems.insert(problems.begin(), std::move(problem_protected));
         }
     }
+    return problems;
 }
 
 

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rpm/package_set_impl.hpp"
 #include "solv/pool.hpp"
-#include "solver_problems_impl.hpp"
+#include "solver_problems_internal.hpp"
 #include "transaction_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/locker.hpp"
@@ -142,14 +142,19 @@ void Transaction::Impl::add_resolve_log(
     }
 }
 
+void Transaction::Impl::add_resolve_log(
+    GoalProblem problem, std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems) {
+    resolve_logs.emplace_back(LogEvent(problem, problems));
+    // TODO(jmracek) Use a logger properly and change a way how to report to terminal
+    std::cout << resolve_logs.back().to_string() << std::endl;
+    auto & logger = *base->get_logger();
+    logger.error(resolve_logs.back().to_string());
+}
 
 const std::vector<LogEvent> & Transaction::get_resolve_logs() {
     return p_impl->resolve_logs;
 }
 
-const SolverProblems & Transaction::get_package_solver_problems() {
-    return p_impl->package_solver_problems;
-}
 
 std::string Transaction::transaction_result_to_string(const TransactionRunResult result) {
     switch (result) {
@@ -178,7 +183,10 @@ std::vector<std::string> Transaction::get_transaction_problems() const noexcept 
 }
 
 void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems) {
-    package_solver_problems.p_impl->set_solver_problems(base, solved_goal);
+    auto solver_problems = process_solver_problems(base, solved_goal);
+    if (!solver_problems.empty()) {
+        add_resolve_log(GoalProblem::SOLVER_ERROR, solver_problems);
+    }
     this->problems = problems;
     auto transaction = solved_goal.get_transaction();
     libsolv_transaction = transaction ? transaction_create_clone(transaction) : nullptr;

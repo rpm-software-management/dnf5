@@ -32,6 +32,9 @@ namespace libdnf::base {
 
 class SolverProblems {
 public:
+    SolverProblems(
+        const std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> & problems);
+
     SolverProblems(const SolverProblems & src);
     SolverProblems(SolverProblems && src) noexcept;
     SolverProblems & operator=(const SolverProblems & src);
@@ -48,7 +51,9 @@ public:
     /// be rendered into a string by the `problem_to_string()` method.
     // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
     // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_problems();
+    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_problems() {
+        return problems;
+    };
 
     /// Convert SolverProblems class to string representative;
     std::string to_string() const;
@@ -59,10 +64,7 @@ public:
 private:
     friend class Transaction;
 
-    SolverProblems();
-
-    class Impl;
-    ImplPtr<Impl> p_impl;
+    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems;
 };
 
 }  // namespace libdnf::base

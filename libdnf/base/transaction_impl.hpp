@@ -60,6 +60,9 @@ public:
         const std::string & spec,
         const std::set<std::string> & additional_data,
         bool strict);
+    void add_resolve_log(
+        GoalProblem problem,
+        std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems);
 
     TransactionRunResult run(
         std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
@@ -80,8 +83,6 @@ private:
 
     /// <libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
     std::vector<LogEvent> resolve_logs;
-
-    SolverProblems package_solver_problems;
 
     std::vector<std::string> transaction_problems{};
 

@@ -38,16 +38,24 @@ LogEvent::LogEvent(
       problem(problem),
       job_settings(settings),
       spec(spec),
-      additional_data(additional_data) {}
+      additional_data(additional_data) {
+    libdnf_assert(
+        !(problem == libdnf::GoalProblem::SOLVER_ERROR ||
+          problem == libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT),
+        "LogEvent::LogEvent() called with incorrect problem, the constructor does not allow"
+        "libdnf::GoalProblem::SOLVER_ERROR or libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT. With those "
+        "problems it is necesarry to provide SolverProblems in constructor");
+}
 
 LogEvent::LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_problems)
     : action(libdnf::GoalAction::RESOLVE),
       problem(problem),
       solver_problems(solver_problems) {
     libdnf_assert(
-        problem == libdnf::GoalProblem::SOLVER_PROBLEM,
-        "LogEvent::LogEvent() called with incorrect "
-        "problem, only libdnf::GoalProblem::SOLVER_PROBLEM is supported");
+        problem == libdnf::GoalProblem::SOLVER_ERROR ||
+            problem == libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT,
+        "LogEvent::LogEvent() called with incorrect problem, only libdnf::GoalProblem::SOLVER_ERROR or "
+        "libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT is supported");
 }
 
 
@@ -106,14 +114,17 @@ std::string LogEvent::to_string(
         case GoalProblem::NOT_AVAILABLE:
             return ret.append(utils::sformat(_("Packages for argument '{}' installed, but not available."), *spec));
         case GoalProblem::NO_PROBLEM:
-        case GoalProblem::SOLVER_ERROR:
             throw std::invalid_argument("Unsupported elements for a goal problem");
         case GoalProblem::ALREADY_INSTALLED:
             if (additional_data->size() != 1) {
                 throw std::invalid_argument("Incorrect number of elements for ALREADY_INSTALLED");
             }
             return ret.append(utils::sformat(_("Package \"{}\" is already installed."), *additional_data->begin()));
-        case GoalProblem::SOLVER_PROBLEM:
+        case GoalProblem::SOLVER_ERROR:
+        case GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT:
+            if (!solver_problems) {
+                throw std::invalid_argument("Missing SolverProblems to convert event into string");
+            }
             return ret.append(solver_problems->to_string());
     }
     return ret;
