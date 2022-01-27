@@ -1,3 +1,0 @@
-Resolving Dependencies
-======================
-

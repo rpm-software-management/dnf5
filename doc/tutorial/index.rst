@@ -10,5 +10,4 @@ Tutorial
     session
     repos
     queries
-    depsolve
     transaction
