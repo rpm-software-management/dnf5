@@ -40,6 +40,7 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"url", PackageAttribute::url},
     {"license", PackageAttribute::license},
     {"description", PackageAttribute::description},
+    {"files", PackageAttribute::files},
     {"provides", PackageAttribute::provides},
     {"requires", PackageAttribute::requires_all},
     {"requires_pre", PackageAttribute::requires_pre},
@@ -117,6 +118,9 @@ dnfdaemon::KeyValueMap package_to_map(
                 break;
             case PackageAttribute::provides:
                 dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_provides()));
+                break;
+            case PackageAttribute::files:
+                dbus_package.emplace(attr, libdnf_package.get_files());
                 break;
             case PackageAttribute::requires_all:
                 dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_requires()));

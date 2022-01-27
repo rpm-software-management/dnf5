@@ -44,6 +44,7 @@ enum class PackageAttribute {
     url,
     license,
     description,
+    files,
 
     // ReldepList attributes
     provides,
