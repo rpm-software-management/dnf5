@@ -45,6 +45,19 @@ enum class PackageAttribute {
     license,
     description,
 
+    // ReldepList attributes
+    provides,
+    requires_all,
+    requires_pre,
+    prereq_ignoreinst,
+    regular_requires,
+    conflicts,
+    obsoletes,
+    recommends,
+    suggests,
+    enhances,
+    supplements,
+
     evr,
     nevra,
     full_nevra

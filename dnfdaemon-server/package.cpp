@@ -40,9 +40,26 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"url", PackageAttribute::url},
     {"license", PackageAttribute::license},
     {"description", PackageAttribute::description},
+    {"provides", PackageAttribute::provides},
+    {"requires", PackageAttribute::requires_all},
+    {"requires_pre", PackageAttribute::requires_pre},
+    {"conflicts", PackageAttribute::conflicts},
+    {"obsoletes", PackageAttribute::obsoletes},
+    {"recommends", PackageAttribute::recommends},
+    {"suggests", PackageAttribute::suggests},
+    {"enhances", PackageAttribute::enhances},
+    {"supplements", PackageAttribute::supplements},
     {"evr", PackageAttribute::evr},
     {"nevra", PackageAttribute::nevra},
     {"full_nevra", PackageAttribute::full_nevra}};
+
+std::vector<std::string> reldeplist_to_strings(const libdnf::rpm::ReldepList & reldeps) {
+    std::vector<std::string> lst;
+    for (auto reldep : reldeps) {
+        lst.emplace_back(reldep.to_string());
+    }
+    return lst;
+}
 
 dnfdaemon::KeyValueMap package_to_map(
     const libdnf::rpm::Package & libdnf_package, const std::vector<std::string> & attributes) {
@@ -97,6 +114,39 @@ dnfdaemon::KeyValueMap package_to_map(
                 break;
             case PackageAttribute::description:
                 dbus_package.emplace(attr, libdnf_package.get_description());
+                break;
+            case PackageAttribute::provides:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_provides()));
+                break;
+            case PackageAttribute::requires_all:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_requires()));
+                break;
+            case PackageAttribute::requires_pre:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_requires_pre()));
+                break;
+            case PackageAttribute::prereq_ignoreinst:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_prereq_ignoreinst()));
+                break;
+            case PackageAttribute::regular_requires:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_regular_requires()));
+                break;
+            case PackageAttribute::conflicts:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_conflicts()));
+                break;
+            case PackageAttribute::obsoletes:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_obsoletes()));
+                break;
+            case PackageAttribute::recommends:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_recommends()));
+                break;
+            case PackageAttribute::suggests:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_suggests()));
+                break;
+            case PackageAttribute::enhances:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_enhances()));
+                break;
+            case PackageAttribute::supplements:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_supplements()));
                 break;
             case PackageAttribute::evr:
                 dbus_package.emplace(attr, libdnf_package.get_evr());
