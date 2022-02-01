@@ -62,6 +62,17 @@ public:
     int id{0};
 };
 
+struct Changelog {
+public:
+    explicit Changelog(time_t timestamp, std::string author, std::string text)
+        : timestamp(timestamp),
+          author(std::move(author)),
+          text(std::move(text)) {}
+    time_t timestamp;
+    std::string author;
+    std::string text;
+};
+
 // IMPORTANT: Package methods MUST NOT be 'noexcept'
 // because accessing deleted sack throws an exception.
 
@@ -312,10 +323,13 @@ public:
 
     // ===== CHANGELOGS (other.xml) =====
 
-    // TODO get_changelogs - requires changelog
+    /// @return List of package changelog entries. If `other` repository metadata are
+    //          not loaded, empty list is returned.
+    /// @since 5.0
+    //
     // @replaces dnf:dnf/package.py:attribute:Package.changelogs
     // @replaces libdnf:libdnf/hy-package-private.hpp:function:dnf_package_get_changelogs(DnfPackage * pkg)
-    // void get_changelogs() const;
+    std::vector<Changelog> get_changelogs() const;
 
     // ===== REPODATA =====
 

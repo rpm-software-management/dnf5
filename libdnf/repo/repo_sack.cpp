@@ -182,6 +182,9 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
         if (repo->get_type() != libdnf::repo::Repo::Type::AVAILABLE) {
             continue;
         }
+        if (any(flags & libdnf::repo::Repo::LoadFlags::OTHER)) {
+            repo->set_load_metadata_other(true);
+        }
         catch_thread_sack_loader_exceptions();
         try {
             repo->fetch_metadata();

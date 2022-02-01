@@ -158,6 +158,26 @@ std::vector<std::string> Package::get_files() const {
     return ret;
 }
 
+std::vector<libdnf::rpm::Changelog> Package::get_changelogs() const {
+    std::vector<libdnf::rpm::Changelog> changelogs;
+    auto & pool = get_pool(base);
+    Solvable * solvable = pool.id2solvable(id.id);
+    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
+
+    Dataiterator di;
+    dataiterator_init(&di, *pool, solvable->repo, id.id, SOLVABLE_CHANGELOG, nullptr, 0);
+    while (dataiterator_step(&di)) {
+        dataiterator_setpos(&di);
+        std::string author = pool_lookup_str(*pool, SOLVID_POS, SOLVABLE_CHANGELOG_AUTHOR);
+        std::string text = pool_lookup_str(*pool, SOLVID_POS, SOLVABLE_CHANGELOG_TEXT);
+        time_t timestamp = static_cast<time_t>(pool_lookup_num(*pool, SOLVID_POS, SOLVABLE_CHANGELOG_TIME, 0));
+        changelogs.emplace_back(timestamp, std::move(author), std::move(text));
+    }
+    dataiterator_free(&di);
+
+    return changelogs;
+}
+
 ReldepList Package::get_provides() const {
     ReldepList list(base);
     reldeps_for(get_pool(base).id2solvable(id.id), list.p_impl->queue, SOLVABLE_PROVIDES);
