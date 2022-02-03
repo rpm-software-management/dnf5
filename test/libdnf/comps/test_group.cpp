@@ -31,10 +31,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupTest);
 
 
+using namespace libdnf::comps;
+
+
 void CompsGroupTest::test_load() {
     add_repo_repomd("repomd-comps-core");
 
-    libdnf::comps::GroupQuery q_core(base.get_comps()->get_group_sack());
+    GroupQuery q_core(base.get_comps()->get_group_sack());
     q_core.filter_installed(false);
     q_core.filter_groupid("core");
     auto core = q_core.get();
@@ -48,14 +51,14 @@ void CompsGroupTest::test_load() {
     CPPUNIT_ASSERT_EQUAL(false, core.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(false, core.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core.get_installed());
+
     CPPUNIT_ASSERT_EQUAL(5lu, core.get_packages().size());
-    std::vector<libdnf::comps::Package> exp_pkgs_core;
-    exp_pkgs_core.push_back(libdnf::comps::Package("bash", libdnf::comps::PackageType::MANDATORY, ""));
-    exp_pkgs_core.push_back(libdnf::comps::Package("glibc", libdnf::comps::PackageType::MANDATORY, ""));
-    exp_pkgs_core.push_back(libdnf::comps::Package("dnf", libdnf::comps::PackageType::DEFAULT, ""));
-    exp_pkgs_core.push_back(
-        libdnf::comps::Package("conditional", libdnf::comps::PackageType::CONDITIONAL, "nonexistent"));
-    exp_pkgs_core.push_back(libdnf::comps::Package("dnf-plugins-core", libdnf::comps::PackageType::OPTIONAL, ""));
+    std::vector<Package> exp_pkgs_core = {
+        Package("bash", PackageType::MANDATORY, ""),
+        Package("glibc", PackageType::MANDATORY, ""),
+        Package("dnf", PackageType::DEFAULT, ""),
+        Package("conditional", PackageType::CONDITIONAL, "nonexistent"),
+        Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
     for (unsigned i = 0; i < exp_pkgs_core.size(); i++) {
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_name(), core.get_packages()[i].get_name());
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_type(), core.get_packages()[i].get_type());
@@ -64,7 +67,7 @@ void CompsGroupTest::test_load() {
 
     add_repo_repomd("repomd-comps-standard");
 
-    libdnf::comps::GroupQuery q_standard(base.get_comps()->get_group_sack());
+    GroupQuery q_standard(base.get_comps()->get_group_sack());
     q_standard.filter_installed(false);
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
@@ -81,13 +84,12 @@ void CompsGroupTest::test_load() {
     CPPUNIT_ASSERT_EQUAL(false, standard.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(false, standard.get_default());
     CPPUNIT_ASSERT_EQUAL(false, standard.get_installed());
+
     CPPUNIT_ASSERT_EQUAL(3lu, standard.get_packages().size());
-    std::vector<libdnf::comps::Package> exp_pkgs_standard;
-    exp_pkgs_standard.push_back(libdnf::comps::Package("cryptsetup", libdnf::comps::PackageType::MANDATORY, ""));
-    exp_pkgs_standard.push_back(
-        libdnf::comps::Package("chrony", libdnf::comps::PackageType::CONDITIONAL, "gnome-control-center"));
-    exp_pkgs_standard.push_back(
-        libdnf::comps::Package("conditional", libdnf::comps::PackageType::CONDITIONAL, "nonexistent"));
+    std::vector<Package> exp_pkgs_standard = {
+        Package("cryptsetup", PackageType::MANDATORY, ""),
+        Package("chrony", PackageType::CONDITIONAL, "gnome-control-center"),
+        Package("conditional", PackageType::CONDITIONAL, "nonexistent")};
     for (unsigned i = 0; i < exp_pkgs_standard.size(); i++) {
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_name(), standard.get_packages()[i].get_name());
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_type(), standard.get_packages()[i].get_type());
@@ -99,7 +101,7 @@ void CompsGroupTest::test_load() {
 void CompsGroupTest::test_load_defaults() {
     add_repo_repomd("repomd-comps-core-empty");
 
-    libdnf::comps::GroupQuery q_core_empty(base.get_comps()->get_group_sack());
+    GroupQuery q_core_empty(base.get_comps()->get_group_sack());
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
@@ -122,7 +124,7 @@ void CompsGroupTest::test_merge() {
     // load another definiton of the core group that changes all attributes
     add_repo_repomd("repomd-comps-core-v2");
 
-    libdnf::comps::GroupQuery q_core2(base.get_comps()->get_group_sack());
+    GroupQuery q_core2(base.get_comps()->get_group_sack());
     q_core2.filter_groupid("core");
     auto core2 = q_core2.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core2.get_groupid());
@@ -137,12 +139,13 @@ void CompsGroupTest::test_merge() {
     CPPUNIT_ASSERT_EQUAL(true, core2.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(true, core2.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core2.get_installed());
+
     CPPUNIT_ASSERT_EQUAL(4lu, core2.get_packages().size());
-    std::vector<libdnf::comps::Package> exp_pkgs_core2;
-    exp_pkgs_core2.push_back(libdnf::comps::Package("bash", libdnf::comps::PackageType::MANDATORY, ""));
-    exp_pkgs_core2.push_back(libdnf::comps::Package("glibc", libdnf::comps::PackageType::MANDATORY, ""));
-    exp_pkgs_core2.push_back(libdnf::comps::Package("dnf", libdnf::comps::PackageType::DEFAULT, ""));
-    exp_pkgs_core2.push_back(libdnf::comps::Package("dnf-plugins-core", libdnf::comps::PackageType::OPTIONAL, ""));
+    std::vector<Package> exp_pkgs_core2 = {
+        Package("bash", PackageType::MANDATORY, ""),
+        Package("glibc", PackageType::MANDATORY, ""),
+        Package("dnf", PackageType::DEFAULT, ""),
+        Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
     for (unsigned i = 0; i < exp_pkgs_core2.size(); i++) {
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2[i].get_name(), core2.get_packages()[i].get_name());
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2[i].get_type(), core2.get_packages()[i].get_type());
@@ -157,7 +160,7 @@ void CompsGroupTest::test_merge_with_empty() {
     // load another definiton of the core group that has all attributes empty
     add_repo_repomd("repomd-comps-core-empty");
 
-    libdnf::comps::GroupQuery q_core_empty(base.get_comps()->get_group_sack());
+    GroupQuery q_core_empty(base.get_comps()->get_group_sack());
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
@@ -183,7 +186,7 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
     // load another definiton of the core group that has all attributes filled
     add_repo_repomd("repomd-comps-core");
 
-    libdnf::comps::GroupQuery q_core(base.get_comps()->get_group_sack());
+    GroupQuery q_core(base.get_comps()->get_group_sack());
     q_core.filter_groupid("core");
     auto core = q_core.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
@@ -196,14 +199,14 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
     CPPUNIT_ASSERT_EQUAL(false, core.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(false, core.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core.get_installed());
+
     CPPUNIT_ASSERT_EQUAL(5lu, core.get_packages().size());
-    std::vector<libdnf::comps::Package> exp_pkgs_core;
-    exp_pkgs_core.push_back(libdnf::comps::Package("bash", libdnf::comps::PackageType::MANDATORY, ""));
-    exp_pkgs_core.push_back(libdnf::comps::Package("glibc", libdnf::comps::PackageType::MANDATORY, ""));
-    exp_pkgs_core.push_back(libdnf::comps::Package("dnf", libdnf::comps::PackageType::DEFAULT, ""));
-    exp_pkgs_core.push_back(
-        libdnf::comps::Package("conditional", libdnf::comps::PackageType::CONDITIONAL, "nonexistent"));
-    exp_pkgs_core.push_back(libdnf::comps::Package("dnf-plugins-core", libdnf::comps::PackageType::OPTIONAL, ""));
+    std::vector<Package> exp_pkgs_core = {
+        Package("bash", PackageType::MANDATORY, ""),
+        Package("glibc", PackageType::MANDATORY, ""),
+        Package("dnf", PackageType::DEFAULT, ""),
+        Package("conditional", PackageType::CONDITIONAL, "nonexistent"),
+        Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
     for (unsigned i = 0; i < exp_pkgs_core.size(); i++) {
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_name(), core.get_packages()[i].get_name());
         CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_type(), core.get_packages()[i].get_type());
@@ -217,7 +220,7 @@ void CompsGroupTest::test_merge_different_translations() {
     // load another definiton of the core group with different set of translations
     add_repo_repomd("repomd-comps-core-different-translations");
 
-    libdnf::comps::GroupQuery q_core(base.get_comps()->get_group_sack());
+    GroupQuery q_core(base.get_comps()->get_group_sack());
     q_core.filter_groupid("core");
     auto core = q_core.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
@@ -235,7 +238,7 @@ void CompsGroupTest::test_merge_different_translations() {
 void CompsGroupTest::test_dump() {
     add_repo_repomd("repomd-comps-standard");
 
-    libdnf::comps::GroupQuery q_standard(base.get_comps()->get_group_sack());
+    GroupQuery q_standard(base.get_comps()->get_group_sack());
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
 
