@@ -25,10 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::utils::fs {
 
-/// Create directories for a specified path to a file.
-/// Make sure trailing '/' is present if a file name is not specified.
-void makedirs_for_file(const std::string & file_path);
-
 /// Compares content of two files.
 /// Returns "true" if files have the same content.
 /// If content differs or error occurred (file doesn't exist, not readable, ...) returns "false".

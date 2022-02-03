@@ -22,7 +22,6 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "repo_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
-#include "utils/fs.hpp"
 #include "utils/string.hpp"
 #include "utils/temp.hpp"
 

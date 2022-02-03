@@ -19,11 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/system/state.hpp"
 
-#include "utils/fs.hpp"
-
 #include <toml.hpp>
 
 #include <fstream>
+
 
 namespace libdnf::system {
 
@@ -54,7 +53,7 @@ void State::set_reason(const std::string & na, libdnf::transaction::TransactionI
 
 void State::save() {
     std::filesystem::path path = get_userinstalled_path();
-    utils::fs::makedirs_for_file(path);
+    std::filesystem::create_directories(path.parent_path());
 
     std::vector<std::string> userinstalled;
 

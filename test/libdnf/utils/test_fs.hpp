@@ -30,14 +30,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class UtilsFsTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(UtilsFsTest);
-    CPPUNIT_TEST(test_makedirs_for_file);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void setUp() override;
     void tearDown() override;
-
-    void test_makedirs_for_file();
 
 private:
     libdnf::utils::TempDir * temp;

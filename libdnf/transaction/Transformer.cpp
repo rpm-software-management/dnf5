@@ -28,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction.hpp"
 #include "transaction_item.hpp"
 #include "utils/bgettext/bgettext-lib.h"
-#include "utils/fs.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf/rpm/nevra.hpp"
@@ -119,7 +118,7 @@ void Transformer::transform() {
     }
 
     // create directory path if necessary
-    libdnf::utils::fs::makedirs_for_file(outputFile);
+    std::filesystem::create_directories(std::filesystem::path(outputFile).parent_path());
 
     // create a new database file
     createDatabase(swdb);
