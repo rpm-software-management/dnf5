@@ -20,15 +20,38 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_group.hpp"
 
+#include "utils.hpp"
+
 #include "libdnf/comps/comps.hpp"
 #include "libdnf/comps/group/package.hpp"
 #include "libdnf/comps/group/query.hpp"
+#include "libdnf/utils/format.hpp"
 
 #include <filesystem>
 #include <fstream>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupTest);
+
+
+namespace CPPUNIT_NS {
+
+template <>
+struct assertion_traits<libdnf::comps::Package> {
+    inline static bool equal(const libdnf::comps::Package & left, const libdnf::comps::Package & right) {
+        return left == right;
+    }
+
+    inline static std::string toString(const libdnf::comps::Package & package) {
+        return libdnf::utils::sformat(
+            "{} (type: {}, condition: {})",
+            package.get_name(),
+            static_cast<int>(package.get_type()),
+            package.get_condition());
+    }
+};
+
+}  // namespace CPPUNIT_NS
 
 
 using namespace libdnf::comps;
@@ -52,18 +75,13 @@ void CompsGroupTest::test_load() {
     CPPUNIT_ASSERT_EQUAL(false, core.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core.get_installed());
 
-    CPPUNIT_ASSERT_EQUAL(5lu, core.get_packages().size());
     std::vector<Package> exp_pkgs_core = {
         Package("bash", PackageType::MANDATORY, ""),
         Package("glibc", PackageType::MANDATORY, ""),
         Package("dnf", PackageType::DEFAULT, ""),
         Package("conditional", PackageType::CONDITIONAL, "nonexistent"),
         Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
-    for (unsigned i = 0; i < exp_pkgs_core.size(); i++) {
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_name(), core.get_packages()[i].get_name());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_type(), core.get_packages()[i].get_type());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_condition(), core.get_packages()[i].get_condition());
-    }
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core.get_packages());
 
     add_repo_repomd("repomd-comps-standard");
 
@@ -85,16 +103,11 @@ void CompsGroupTest::test_load() {
     CPPUNIT_ASSERT_EQUAL(false, standard.get_default());
     CPPUNIT_ASSERT_EQUAL(false, standard.get_installed());
 
-    CPPUNIT_ASSERT_EQUAL(3lu, standard.get_packages().size());
     std::vector<Package> exp_pkgs_standard = {
         Package("cryptsetup", PackageType::MANDATORY, ""),
         Package("chrony", PackageType::CONDITIONAL, "gnome-control-center"),
         Package("conditional", PackageType::CONDITIONAL, "nonexistent")};
-    for (unsigned i = 0; i < exp_pkgs_standard.size(); i++) {
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_name(), standard.get_packages()[i].get_name());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_type(), standard.get_packages()[i].get_type());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard[i].get_condition(), standard.get_packages()[i].get_condition());
-    }
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_standard, standard.get_packages());
 }
 
 
@@ -140,17 +153,12 @@ void CompsGroupTest::test_merge() {
     CPPUNIT_ASSERT_EQUAL(true, core2.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core2.get_installed());
 
-    CPPUNIT_ASSERT_EQUAL(4lu, core2.get_packages().size());
     std::vector<Package> exp_pkgs_core2 = {
         Package("bash", PackageType::MANDATORY, ""),
         Package("glibc", PackageType::MANDATORY, ""),
         Package("dnf", PackageType::DEFAULT, ""),
         Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
-    for (unsigned i = 0; i < exp_pkgs_core2.size(); i++) {
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2[i].get_name(), core2.get_packages()[i].get_name());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2[i].get_type(), core2.get_packages()[i].get_type());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2[i].get_condition(), core2.get_packages()[i].get_condition());
-    }
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2, core2.get_packages());
 }
 
 
@@ -200,18 +208,13 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
     CPPUNIT_ASSERT_EQUAL(false, core.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core.get_installed());
 
-    CPPUNIT_ASSERT_EQUAL(5lu, core.get_packages().size());
     std::vector<Package> exp_pkgs_core = {
         Package("bash", PackageType::MANDATORY, ""),
         Package("glibc", PackageType::MANDATORY, ""),
         Package("dnf", PackageType::DEFAULT, ""),
         Package("conditional", PackageType::CONDITIONAL, "nonexistent"),
         Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
-    for (unsigned i = 0; i < exp_pkgs_core.size(); i++) {
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_name(), core.get_packages()[i].get_name());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_type(), core.get_packages()[i].get_type());
-        CPPUNIT_ASSERT_EQUAL(exp_pkgs_core[i].get_condition(), core.get_packages()[i].get_condition());
-    }
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core.get_packages());
 }
 
 

@@ -40,6 +40,12 @@ public:
           type(type),
           condition(condition) {}
 
+    bool operator==(const Package & other) const noexcept {
+        return name == other.name && type == other.type && condition == other.condition;
+    }
+
+    bool operator!=(const Package & other) const noexcept { return !(*this == other); }
+
     /// @replaces dnf:dnf/comps.py:attribute:Package.name
     std::string get_name() const { return name; }
     void set_name(const std::string & value) { name = value; }
