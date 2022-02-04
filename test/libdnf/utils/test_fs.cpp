@@ -26,17 +26,34 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 using namespace libdnf::utils::fs;
+namespace stdfs = std::filesystem;
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(UtilsFsTest);
 
 
-void UtilsFsTest::setUp() {
-    temp = new libdnf::utils::fs::TempDir("libdnf_unittest");
-    std::filesystem::create_directory(temp->get_path() / "already-exists");
-}
+void UtilsFsTest::test_temp_dir() {
+    stdfs::path path;
 
+    {
+        libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_dir");
+        path = temp_dir.get_path();
 
-void UtilsFsTest::tearDown() {
-    delete temp;
+        CPPUNIT_ASSERT(path.native().starts_with("/tmp/libdnf_unittest_temp_dir."));
+        CPPUNIT_ASSERT(stdfs::exists(path));
+        CPPUNIT_ASSERT_EQUAL(stdfs::status(path).type(), stdfs::file_type::directory);
+    }
+    CPPUNIT_ASSERT(!stdfs::exists(path));
+
+    // test creating temp dir at a custom location (in another temp dir) and removing a non-empty dir
+    {
+        libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_dir");
+        libdnf::utils::fs::TempDir nested_temp_dir(temp_dir.get_path(), "nested_temp_dir");
+        path = temp_dir.get_path();
+
+        CPPUNIT_ASSERT(nested_temp_dir.get_path().native().starts_with((path / "nested_temp_dir.").native()));
+        CPPUNIT_ASSERT(stdfs::exists(nested_temp_dir.get_path()));
+        CPPUNIT_ASSERT_EQUAL(stdfs::status(nested_temp_dir.get_path()).type(), stdfs::file_type::directory);
+    }
+    CPPUNIT_ASSERT(!stdfs::exists(path));
 }
