@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_fs.hpp"
 
-#include "utils/fs.hpp"
+#include "utils/fs/utils.hpp"
 
 #include <filesystem>
 
@@ -32,7 +32,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(UtilsFsTest);
 
 
 void UtilsFsTest::setUp() {
-    temp = new libdnf::utils::TempDir("libdnf_unittest");
+    temp = new libdnf::utils::fs::TempDir("libdnf_unittest");
     std::filesystem::create_directory(temp->get_path() / "already-exists");
 }
 

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_gpgme.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
-#include "utils/temp.hpp"
+#include "utils/fs/temp.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/logger/logger.hpp"
@@ -156,7 +156,7 @@ static void gpg_import_key(gpgme_ctx_t context, std::vector<char> key) {
 static std::vector<Key> rawkey2infos(int fd) {
     gpg_error_t gpg_err;
 
-    libdnf::utils::TempDir tmpdir("tmpdir");
+    libdnf::utils::fs::TempDir tmpdir("tmpdir");
 
     auto context = create_context(tmpdir.get_path());
 

@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "base_test_case.hpp"
-#include "utils/temp.hpp"
+#include "utils/fs/temp.hpp"
 
 #include "libdnf/system/state.hpp"
 
@@ -45,7 +45,7 @@ public:
     void test_state_read();
     void test_state_write();
 
-    std::unique_ptr<libdnf::utils::TempDir> temp_dir;
+    std::unique_ptr<libdnf::utils::fs::TempDir> temp_dir;
 };
 
 

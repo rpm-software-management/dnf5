@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 void TransactionTestBase::setUp() {
-    persistdir = std::make_unique<libdnf::utils::TempDir>("libdnf_unittest");
+    persistdir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
 }
 
 

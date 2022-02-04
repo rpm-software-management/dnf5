@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_BASE_TEST_CASE_HPP
 
 #include "test_case_fixture.hpp"
-#include "utils/temp.hpp"
+#include "utils/fs/temp.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo_sack.hpp"
@@ -69,7 +69,7 @@ public:
 
     libdnf::repo::RepoSackWeakPtr repo_sack;
     libdnf::rpm::PackageSackWeakPtr sack;
-    std::unique_ptr<libdnf::utils::TempDir> temp;
+    std::unique_ptr<libdnf::utils::fs::TempDir> temp;
 
 private:
     libdnf::rpm::Package first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what);

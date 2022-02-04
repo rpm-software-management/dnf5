@@ -164,7 +164,7 @@ libdnf::rpm::Package BaseTestCase::first_query_pkg(libdnf::rpm::PackageQuery & q
 void BaseTestCase::setUp() {
     TestCaseFixture::setUp();
 
-    temp = std::make_unique<libdnf::utils::TempDir>("libdnf_unittest");
+    temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
     std::filesystem::create_directory(temp->get_path() / "installroot");
 
     base.get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");

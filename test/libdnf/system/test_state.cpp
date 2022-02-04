@@ -33,7 +33,7 @@ void StateTest::setUp() {
     BaseTestCase::setUp();
     add_repo_repomd("repomd-repo1");
 
-    temp_dir = std::make_unique<libdnf::utils::TempDir>("libdnf_test_state");
+    temp_dir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_test_state");
 
     std::ofstream toml(temp_dir->get_path() / "userinstalled.toml");
     toml << "userinstalled = [\n"

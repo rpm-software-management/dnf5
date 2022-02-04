@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_TUTORIAL_TEST_TUTORIAL_HPP
 
 
-#include "utils/temp.hpp"
+#include "utils/fs/temp.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -45,7 +45,7 @@ public:
 private:
     std::string baseurl = PROJECT_BINARY_DIR "/test/data/repos-rpm/rpm-repo1/";
 
-    std::unique_ptr<libdnf::utils::TempDir> temp;
+    std::unique_ptr<libdnf::utils::fs::TempDir> temp;
     std::string installroot;
 };
 

@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_FS_HPP
-#define LIBDNF_UTILS_FS_HPP
+#ifndef LIBDNF_UTILS_FS_UTILS_HPP
+#define LIBDNF_UTILS_FS_UTILS_HPP
 
 #include <string>
 
@@ -32,4 +32,4 @@ bool have_files_same_content_noexcept(const char * file_path1, const char * file
 
 }  // namespace libdnf::utils::fs
 
-#endif  // LIBDNF_UTILS_FS_HPP
+#endif  // LIBDNF_UTILS_FS_UTILS_HPP

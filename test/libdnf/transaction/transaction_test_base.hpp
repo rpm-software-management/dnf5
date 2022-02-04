@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TEST_TRANSACTION_TRANSACTION_TEST_BASE_HPP
 
 
-#include "utils/temp.hpp"
+#include "utils/fs/temp.hpp"
 
 #include "libdnf/base/base.hpp"
 
@@ -39,7 +39,7 @@ public:
 
 protected:
     std::unique_ptr<libdnf::Base> new_base();
-    std::unique_ptr<libdnf::utils::TempDir> persistdir;
+    std::unique_ptr<libdnf::utils::fs::TempDir> persistdir;
 };
 
 

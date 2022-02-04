@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-lib.h"
-#include "utils/temp.hpp"
+#include "utils/fs/temp.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/utils/to_underlying.hpp"
@@ -140,7 +140,7 @@ void SolvRepo::write_main(bool load_after_write) {
 
     auto fn = solv_file_name();
 
-    auto tmp_file = libdnf::utils::TempFile(config.basecachedir().get_value(), fn);
+    auto tmp_file = libdnf::utils::fs::TempFile(config.basecachedir().get_value(), fn);
 
     auto fp = tmp_file.fdopen("w+");
 
@@ -188,7 +188,7 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     Repodata * data = repo_id2repodata(repo, repodata_id);
     auto fn = solv_file_name(repodata_type_to_suffix(type));
 
-    auto tmp_file = libdnf::utils::TempFile(base->get_config().cachedir().get_value(), fn);
+    auto tmp_file = libdnf::utils::fs::TempFile(base->get_config().cachedir().get_value(), fn);
 
     auto fp = tmp_file.fdopen("w+");
 

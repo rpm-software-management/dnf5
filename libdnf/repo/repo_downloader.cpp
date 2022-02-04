@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_downloader.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
-#include "utils/fs.hpp"
+#include "utils/fs/temp.hpp"
+#include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
-#include "utils/temp.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo_errors.hpp"
@@ -337,7 +337,7 @@ RepoDownloader::~RepoDownloader() = default;
 
 void RepoDownloader::download_metadata(const std::string & destdir) try {
     std::filesystem::create_directories(destdir);
-    libdnf::utils::TempDir tmpdir(destdir, "tmpdir");
+    libdnf::utils::fs::TempDir tmpdir(destdir, "tmpdir");
 
     std::unique_ptr<LrHandle> h(init_remote_handle(tmpdir.get_path().c_str()));
     auto r = perform(h.get(), tmpdir.get_path(), config.repo_gpgcheck().get_value());
@@ -362,7 +362,7 @@ void RepoDownloader::download_metadata(const std::string & destdir) try {
 bool RepoDownloader::is_metalink_in_sync() try {
     auto & logger = *base->get_logger();
 
-    libdnf::utils::TempDir tmpdir("tmpdir");
+    libdnf::utils::fs::TempDir tmpdir("tmpdir");
 
     std::unique_ptr<LrHandle> h(init_remote_handle(tmpdir.get_path().c_str()));
 
@@ -434,7 +434,7 @@ bool RepoDownloader::is_repomd_in_sync() try {
     auto & logger = *base->get_logger();
     LrYumRepo * yum_repo;
 
-    libdnf::utils::TempDir tmpdir("tmpdir");
+    libdnf::utils::fs::TempDir tmpdir("tmpdir");
 
     const char * dlist[] = LR_YUM_REPOMDONLY;
 
@@ -828,7 +828,7 @@ std::pair<std::string, std::string> RepoDownloader::get_source_info() const {
 
 void RepoDownloader::import_repo_keys() {
     for (const auto & gpgkey_url : config.gpgkey().get_value()) {
-        auto tmp_file = libdnf::utils::TempFile("repokey");
+        auto tmp_file = libdnf::utils::fs::TempFile("repokey");
 
         download_url(gpgkey_url.c_str(), tmp_file.get_fd());
 

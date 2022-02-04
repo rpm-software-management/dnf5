@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
 #include "utils/bgettext/bgettext-lib.h"
-#include "utils/temp.hpp"
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/package_query.hpp"

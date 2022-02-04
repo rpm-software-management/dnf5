@@ -17,14 +17,14 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_TEMP_HPP
-#define LIBDNF_UTILS_TEMP_HPP
+#ifndef LIBDNF_UTILS_FS_TEMP_HPP
+#define LIBDNF_UTILS_FS_TEMP_HPP
 
 #include <filesystem>
 #include <string>
 
 
-namespace libdnf::utils {
+namespace libdnf::utils::fs {
 
 /// Object that creates and holds a temp directory.
 /// The directory gets removed when the object is deleted.
@@ -89,6 +89,6 @@ private:
     FILE * file = nullptr;
 };
 
-}  // namespace libdnf::utils
+}  // namespace libdnf::utils::fs
 
-#endif  // LIBDNF_UTILS_TEMP_HPP
+#endif  // LIBDNF_UTILS_FS_TEMP_HPP
