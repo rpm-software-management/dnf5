@@ -62,7 +62,7 @@ public:
     /// @param name_prefix The prefix of the filename to which ".XXXXXX" will be appended.
     TempFile(std::filesystem::path destdir, const std::string & name_prefix);
 
-    TempFile(const TempDir &) = delete;
+    TempFile(const TempFile &) = delete;
     TempFile & operator=(const TempFile &) = delete;
 
     ~TempFile();
