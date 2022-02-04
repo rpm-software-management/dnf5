@@ -20,7 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_FS_TEMP_HPP
 #define LIBDNF_UTILS_FS_TEMP_HPP
 
+#include "file.hpp"
+
 #include <filesystem>
+#include <optional>
 #include <string>
 
 
@@ -67,26 +70,30 @@ public:
 
     ~TempFile();
 
-    /// Call `::fdopen()` on the file descriptor and open it as a FILE * stream.
+    /// Open the TempFile as a File object.
     ///
     /// @param mode The mode for the file, passed to `::fdopen()`.
-    FILE * fdopen(const char * mode);
+    File & open_as_file(const char * mode);
 
-    /// Close either the FILE * (if fdopened before) or the file descriptor.
+    /// If this TempFile has been opened as File (via `open_as_file()`), unsets
+    /// and destroys that File (automatically closing upon destruction).
+    /// Otherwise closes the open file descriptor.
     void close();
 
     /// Releases the temporary file, meaning it will no longer be closed or
-    /// deleted on destruction.
+    /// deleted on destruction. If open as File (via `open_as_file()`), releases
+    /// the File by calling its `release()` method and unsets and destroys the
+    /// File.
     void release() noexcept;
 
     const std::filesystem::path & get_path() const noexcept { return path; }
     int get_fd() const noexcept { return fd; }
-    FILE * get_file() const noexcept { return file; }
+    std::optional<File> & get_file() noexcept { return file; }
 
 private:
     std::filesystem::path path;
     int fd = -1;
-    FILE * file = nullptr;
+    std::optional<File> file;
 };
 
 }  // namespace libdnf::utils::fs

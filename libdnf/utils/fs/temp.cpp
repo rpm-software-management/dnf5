@@ -92,25 +92,18 @@ TempFile::~TempFile() {
 }
 
 
-FILE * TempFile::fdopen(const char * mode) {
-    libdnf_assert(fd != -1, "Cannot fdopen a TempFile that has been closed or released");
+File & TempFile::open_as_file(const char * mode) {
+    libdnf_assert(fd != -1, "Cannot open as file TempFile that has been closed or released");
+    libdnf_assert(!file, "This TempFile has already been opened as File");
 
-    file = ::fdopen(fd, mode);
-    if (file == nullptr) {
-        throw std::filesystem::filesystem_error(
-            "cannot open temporary file", path, std::error_code(errno, std::system_category()));
-    }
-
-    return file;
+    file.emplace(fd, path, mode);
+    return *file;
 }
 
 
 void TempFile::close() {
-    if (file != nullptr) {
-        if (fclose(file) != 0) {
-            throw std::filesystem::filesystem_error(
-                "cannot close temporary file", path, std::error_code(errno, std::system_category()));
-        }
+    if (file) {
+        file.reset();
     } else if (fd != -1) {
         if (::close(fd) != 0) {
             throw std::filesystem::filesystem_error(
@@ -118,13 +111,15 @@ void TempFile::close() {
         }
     }
 
-    file = nullptr;
     fd = -1;
 }
 
 
 void TempFile::release() noexcept {
-    file = nullptr;
+    if (file) {
+        file->release();
+        file.reset();
+    }
     fd = -1;
     path = "";
 }

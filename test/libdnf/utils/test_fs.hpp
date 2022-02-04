@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TEST_UTILS_FS_HPP
 
 
+#include "utils/fs/file.hpp"
 #include "utils/fs/temp.hpp"
 
 #include <cppunit/TestCase.h>
@@ -37,6 +38,16 @@ class UtilsFsTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_temp_file_operation);
     CPPUNIT_TEST(test_temp_file_release);
 
+    CPPUNIT_TEST(test_file_basic);
+    CPPUNIT_TEST(test_file_simple_io);
+    CPPUNIT_TEST(test_file_open_fd);
+    CPPUNIT_TEST(test_file_putc_getc);
+    CPPUNIT_TEST(test_file_high_level_io);
+    CPPUNIT_TEST(test_file_read_line);
+    CPPUNIT_TEST(test_file_seek);
+    CPPUNIT_TEST(test_file_release);
+    CPPUNIT_TEST(test_file_flush);
+
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -45,6 +56,16 @@ public:
     void test_temp_file_creation();
     void test_temp_file_operation();
     void test_temp_file_release();
+
+    void test_file_basic();
+    void test_file_simple_io();
+    void test_file_open_fd();
+    void test_file_putc_getc();
+    void test_file_high_level_io();
+    void test_file_read_line();
+    void test_file_seek();
+    void test_file_release();
+    void test_file_flush();
 };
 
 
