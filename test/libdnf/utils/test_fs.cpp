@@ -57,3 +57,66 @@ void UtilsFsTest::test_temp_dir() {
     }
     CPPUNIT_ASSERT(!stdfs::exists(path));
 }
+
+
+void UtilsFsTest::test_temp_file_creation() {
+    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_file_creation");
+
+    stdfs::path path;
+    {
+        libdnf::utils::fs::TempFile temp_file(temp_dir.get_path() / "temp_file");
+        path = temp_file.get_path();
+
+        CPPUNIT_ASSERT(path.native().starts_with((temp_dir.get_path() / "temp_file.").native()));
+        CPPUNIT_ASSERT(stdfs::exists(path));
+        CPPUNIT_ASSERT_EQUAL(stdfs::status(path).type(), stdfs::file_type::regular);
+    }
+    CPPUNIT_ASSERT(!stdfs::exists(path));
+}
+
+
+void UtilsFsTest::test_temp_file_operation() {
+    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_file_operation");
+
+    stdfs::path path;
+    {
+        libdnf::utils::fs::TempFile temp_file(temp_dir.get_path() / "temp.file");
+
+        path = temp_file.get_path();
+
+        CPPUNIT_ASSERT_GREATER(-1, temp_file.get_fd());
+
+        char buf[8] = {};
+        CPPUNIT_ASSERT_EQUAL(6l, write(temp_file.get_fd(), "hello", 6));
+        CPPUNIT_ASSERT_EQUAL(0l, read(temp_file.get_fd(), buf, 6));
+        CPPUNIT_ASSERT_EQUAL(0l, lseek(temp_file.get_fd(), 0, SEEK_SET));
+        CPPUNIT_ASSERT_EQUAL(6l, read(temp_file.get_fd(), buf, 8));
+        CPPUNIT_ASSERT_EQUAL(std::string("hello"), std::string(buf));
+
+        CPPUNIT_ASSERT(temp_file.fdopen("w+") != nullptr);
+        CPPUNIT_ASSERT(temp_file.get_file() != nullptr);
+
+        temp_file.close();
+        CPPUNIT_ASSERT_EQUAL(-1, temp_file.get_fd());
+        CPPUNIT_ASSERT_EQUAL(static_cast<FILE *>(nullptr), temp_file.get_file());
+    }
+    CPPUNIT_ASSERT(!stdfs::exists(path));
+}
+
+
+void UtilsFsTest::test_temp_file_release() {
+    libdnf::utils::fs::TempDir temp_dir("libdnf_unittest_temp_file_release");
+
+    stdfs::path path;
+    {
+        libdnf::utils::fs::TempFile temp_file(temp_dir.get_path() / "temp.file");
+
+        path = temp_file.get_path();
+
+        temp_file.release();
+        CPPUNIT_ASSERT_EQUAL(-1, temp_file.get_fd());
+        CPPUNIT_ASSERT_EQUAL(static_cast<FILE *>(nullptr), temp_file.get_file());
+        CPPUNIT_ASSERT_EQUAL(std::string(), temp_file.get_path().native());
+    }
+    CPPUNIT_ASSERT(stdfs::exists(path));
+}

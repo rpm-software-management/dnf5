@@ -30,11 +30,21 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class UtilsFsTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE(UtilsFsTest);
+
     CPPUNIT_TEST(test_temp_dir);
+
+    CPPUNIT_TEST(test_temp_file_creation);
+    CPPUNIT_TEST(test_temp_file_operation);
+    CPPUNIT_TEST(test_temp_file_release);
+
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_temp_dir();
+
+    void test_temp_file_creation();
+    void test_temp_file_operation();
+    void test_temp_file_release();
 };
 
 
