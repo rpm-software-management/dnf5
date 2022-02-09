@@ -51,13 +51,9 @@ public:
     Advisory(const libdnf::BaseWeakPtr & base, AdvisoryId id);
     Advisory(libdnf::Base & base, AdvisoryId id);
 
-    bool operator==(const Advisory & other) const noexcept {
-        return id == other.id && base == other.base;
-    }
+    bool operator==(const Advisory & other) const noexcept { return id == other.id && base == other.base; }
 
-    bool operator!=(const Advisory & other) const noexcept {
-        return !(*this == other);
-    }
+    bool operator!=(const Advisory & other) const noexcept { return !(*this == other); }
 
     /// Destroy the Advisory object
     ~Advisory();
