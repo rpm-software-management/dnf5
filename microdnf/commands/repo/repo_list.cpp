@@ -74,10 +74,12 @@ void RepoListCommand::run() {
     auto repo_specs_str = repo_specs->get_value();
     if (repo_specs_str.size() > 0) {
         auto query_names = query;
+        // filter by repo Name
+        query_names.filter_name(repo_specs_str, libdnf::sack::QueryCmp::IGLOB);
         // filter by repo ID
         query.filter_id(repo_specs_str, libdnf::sack::QueryCmp::IGLOB);
-        // filter by repo Name
-        query |= query_names.filter_name(repo_specs_str, libdnf::sack::QueryCmp::IGLOB);
+        // union the results
+        query |= query_names;
     }
 
     query.filter_type(libdnf::repo::Repo::Type::AVAILABLE);

@@ -252,8 +252,9 @@ sdbus::MethodReply Repo::list(sdbus::MethodCall & call) {
 
     if (patterns.size() > 0) {
         auto query_names = repos_query;
+        query_names.filter_name(patterns, libdnf::sack::QueryCmp::IGLOB);
         repos_query.filter_id(patterns, libdnf::sack::QueryCmp::IGLOB);
-        repos_query |= query_names.filter_name(patterns, libdnf::sack::QueryCmp::IGLOB);
+        repos_query |= query_names;
     }
 
     // create reply from the query

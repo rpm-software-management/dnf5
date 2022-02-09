@@ -218,7 +218,8 @@ void BaseGoalTest::test_install_installed_pkg() {
     add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
 
     libdnf::rpm::PackageQuery query(base);
-    query.filter_available().filter_nevra({"one-0:1-1.noarch"});
+    query.filter_available();
+    query.filter_nevra({"one-0:1-1.noarch"});
 
     std::vector<libdnf::rpm::Package> expected = {get_pkg("one-0:1-1.noarch")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
@@ -437,7 +438,8 @@ void BaseGoalTest::test_install_or_reinstall() {
 
     libdnf::Goal goal(base);
     libdnf::rpm::PackageQuery query(base);
-    query.filter_available().filter_nevra({"one-0:1-1.noarch"});
+    query.filter_available();
+    query.filter_nevra({"one-0:1-1.noarch"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
     goal.add_rpm_install_or_reinstall(query);
     auto transaction = goal.resolve(false);

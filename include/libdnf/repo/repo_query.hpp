@@ -69,54 +69,54 @@ public:
     ///
     /// @param enabled  A boolean value the filter is matched against.
     /// @since 5.0
-    RepoQuery & filter_enabled(bool enabled);
+    void filter_enabled(bool enabled);
 
     /// Filter repos by their `expired` state.
     ///
     /// @param expired  A boolean value the filter is matched against.
     /// @since 5.0
-    RepoQuery & filter_expired(bool expired);
+    void filter_expired(bool expired);
 
     /// Filter repos by their `id`.
     ///
     /// @param pattern  A string the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    RepoQuery & filter_id(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_id(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
     /// Filter repos by their `id`.
     ///
     /// @param pattern  A vector of strings the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    RepoQuery & filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
     /// Filter repos by their `name`.
     ///
     /// @param pattern  A string the filter is matched against.
     /// @since 5.0
-    RepoQuery & filter_local(bool local);
+    void filter_local(bool local);
 
     /// Filter repos by their `name`.
     ///
     /// @param pattern  A string the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    RepoQuery & filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
     /// Filter repos by their `name`.
     ///
     /// @param pattern  A vector of strings the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    RepoQuery & filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
     /// Filter repos by their `type`.
     ///
     /// @param pattern  A type the filter is matched against.
     /// @param cmp      A comparison (match) operator, defaults to `QueryCmp::EQ`.
     /// @since 5.0
-    RepoQuery & filter_type(Repo::Type type, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+    void filter_type(Repo::Type type, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
 private:
     BaseWeakPtr base;

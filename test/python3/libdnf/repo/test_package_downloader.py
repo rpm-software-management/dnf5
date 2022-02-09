@@ -28,7 +28,9 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
         repo = self.add_repo_rpm("rpm-repo1")
 
         query = libdnf.rpm.PackageQuery(self.base)
-        query.filter_name(["one"]).filter_version(["2"]).filter_arch(["noarch"])
+        query.filter_name(["one"])
+        query.filter_version(["2"])
+        query.filter_arch(["noarch"])
         self.assertEqual(query.size(), 1)
 
         downloader = libdnf.repo.PackageDownloader()

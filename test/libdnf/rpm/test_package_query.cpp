@@ -471,8 +471,9 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::EQ with equal advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(base).filter_name("DNF-2019-1");
-        PackageQuery query(base);
+        libdnf::advisory::AdvisoryQuery adv_query(base);
+        adv_query.filter_name("DNF-2019-1");
+        libdnf::rpm::PackageQuery query(base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
@@ -480,7 +481,8 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::GT with older advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(base).filter_name("PKG-OLDER");
+        libdnf::advisory::AdvisoryQuery adv_query(base);
+        adv_query.filter_name("PKG-OLDER");
         PackageQuery query(base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::GT);
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
@@ -489,7 +491,8 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::LTE with older advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(base).filter_name("PKG-OLDER");
+        libdnf::advisory::AdvisoryQuery adv_query(base);
+        adv_query.filter_name("PKG-OLDER");
         PackageQuery query(base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::LTE);
         std::vector<Package> expected = {};
@@ -498,7 +501,8 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::LT with newer advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(base).filter_name("PKG-NEWER");
+        libdnf::advisory::AdvisoryQuery adv_query(base);
+        adv_query.filter_name("PKG-NEWER");
         PackageQuery query(base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::LT);
         std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
@@ -507,7 +511,8 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::GTE with newer advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query = libdnf::advisory::AdvisoryQuery(base).filter_name("PKG-NEWER");
+        libdnf::advisory::AdvisoryQuery adv_query(base);
+        adv_query.filter_name("PKG-NEWER");
         PackageQuery query(base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::GTE);
         std::vector<Package> expected = {};
@@ -516,8 +521,8 @@ void RpmPackageQueryTest::test_filter_advisories() {
 
     {
         // Test QueryCmp::EQ with older and newer advisory pkg
-        libdnf::advisory::AdvisoryQuery adv_query =
-            libdnf::advisory::AdvisoryQuery(base).filter_name("PKG-*", libdnf::sack::QueryCmp::IGLOB);
+        libdnf::advisory::AdvisoryQuery adv_query(base);
+        adv_query.filter_name("PKG-*", libdnf::sack::QueryCmp::IGLOB);
         ;
         PackageQuery query(base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);
@@ -530,13 +535,13 @@ void RpmPackageQueryTest::test_filter_chain() {
     add_repo_solv("solv-repo1");
 
     PackageQuery query(base);
-    query.filter_name({"pkg"})
-        .filter_epoch({"0"})
-        .filter_version({"1.2"})
-        .filter_release({"3"})
-        .filter_arch({"x86_64"})
-        .filter_provides({"foo"}, libdnf::sack::QueryCmp::NEQ)
-        .filter_requires({"foo"}, libdnf::sack::QueryCmp::NEQ);
+    query.filter_name({"pkg"});
+    query.filter_epoch({"0"});
+    query.filter_version({"1.2"});
+    query.filter_release({"3"});
+    query.filter_arch({"x86_64"});
+    query.filter_provides({"foo"}, libdnf::sack::QueryCmp::NEQ);
+    query.filter_requires({"foo"}, libdnf::sack::QueryCmp::NEQ);
 
     std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));

@@ -60,7 +60,9 @@ void PackageDownloaderTest::test_package_downloader() {
     auto repo = add_repo_rpm("rpm-repo1");
 
     libdnf::rpm::PackageQuery query(base);
-    query.filter_name({"one"}).filter_version({"2"}).filter_arch({"noarch"});
+    query.filter_name({"one"});
+    query.filter_version({"2"});
+    query.filter_arch({"noarch"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
 
     auto downloader = libdnf::repo::PackageDownloader();

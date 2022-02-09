@@ -137,9 +137,10 @@ sdbus::MethodReply Group::list(sdbus::MethodCall & call) {
 
     libdnf::comps::GroupQuery query(base->get_comps()->get_group_sack());
     if (patterns.size() > 0) {
-        auto query_names = libdnf::comps::GroupQuery(query);
+        libdnf::comps::GroupQuery query_names(query);
+        query_names.filter_name(patterns, libdnf::sack::QueryCmp::IGLOB);
         query.filter_groupid(patterns, libdnf::sack::QueryCmp::IGLOB);
-        query |= query_names.filter_name(patterns, libdnf::sack::QueryCmp::IGLOB);
+        query |= query_names;
     }
 
     // create reply from the query

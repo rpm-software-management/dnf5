@@ -128,7 +128,8 @@ bool Session::read_all_repos() {
     // TODO(mblaha): get flags from session configuration
     //auto & logger = base->get_logger();
     libdnf::repo::RepoQuery enabled_repos(*base);
-    enabled_repos.filter_enabled(true).filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+    enabled_repos.filter_enabled(true);
+    enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
     bool retval = true;
     for (auto & repo : enabled_repos) {
         repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));

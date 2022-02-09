@@ -732,7 +732,8 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
             rpm_goal.add_distro_sync(tmp_queue, strict, best, clean_requirements_on_remove);
             break;
         case GoalAction::DOWNGRADE: {
-            query.filter_available().filter_downgrades();
+            query.filter_available();
+            query.filter_downgrades();
             auto & pool = get_pool(base);
             std::vector<Solvable *> tmp_solvables;
             for (auto pkg_id : *query.p_impl) {

@@ -40,15 +40,25 @@ public:
     explicit GroupQuery(const libdnf::BaseWeakPtr & base);
     explicit GroupQuery(libdnf::Base & base);
 
-    GroupQuery & filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
-    GroupQuery & filter_groupid(
-        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
-    GroupQuery & filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
-    GroupQuery & filter_name(
-        const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
-    GroupQuery & filter_uservisible(bool value);
-    GroupQuery & filter_default(bool value);
-    GroupQuery & filter_installed(bool value);
+    void filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+        filter(F::groupid, pattern, cmp);
+    }
+
+    void filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+        filter(F::groupid, patterns, cmp);
+    }
+
+    void filter_name(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+        filter(F::name, pattern, cmp);
+    }
+
+    void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
+        filter(F::name, patterns, cmp);
+    }
+
+    void filter_uservisible(bool value) { filter(F::is_uservisible, value, sack::QueryCmp::EQ); }
+    void filter_default(bool value) { filter(F::is_default, value, sack::QueryCmp::EQ); }
+    void filter_installed(bool value) { filter(F::is_installed, value, sack::QueryCmp::EQ); }
 
 private:
     struct F {
@@ -64,48 +74,6 @@ private:
     friend Group;
     friend GroupSack;
 };
-
-
-inline GroupQuery & GroupQuery::filter_groupid(const std::string & pattern, sack::QueryCmp cmp) {
-    filter(F::groupid, pattern, cmp);
-    return *this;
-}
-
-
-inline GroupQuery & GroupQuery::filter_groupid(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
-    filter(F::groupid, patterns, cmp);
-    return *this;
-}
-
-
-inline GroupQuery & GroupQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
-    filter(F::name, pattern, cmp);
-    return *this;
-}
-
-
-inline GroupQuery & GroupQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
-    filter(F::name, patterns, cmp);
-    return *this;
-}
-
-
-inline GroupQuery & GroupQuery::filter_default(bool value) {
-    filter(F::is_default, value, sack::QueryCmp::EQ);
-    return *this;
-}
-
-
-inline GroupQuery & GroupQuery::filter_uservisible(bool value) {
-    filter(F::is_uservisible, value, sack::QueryCmp::EQ);
-    return *this;
-}
-
-
-inline GroupQuery & GroupQuery::filter_installed(bool value) {
-    filter(F::is_installed, value, sack::QueryCmp::EQ);
-    return *this;
-}
 
 
 }  // namespace libdnf::comps

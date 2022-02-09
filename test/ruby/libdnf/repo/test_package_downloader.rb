@@ -61,7 +61,9 @@ class TestPackageDownloader < BaseTestCase
         repo = add_repo_rpm("rpm-repo1")
 
         query = Rpm::PackageQuery.new(@base)
-        query.filter_name(["one"]).filter_version(["2"]).filter_arch(["noarch"])
+        query.filter_name(["one"])
+        query.filter_version(["2"])
+        query.filter_arch(["noarch"])
         assert_equal(1, query.size())
 
         downloader = Repo::PackageDownloader.new()

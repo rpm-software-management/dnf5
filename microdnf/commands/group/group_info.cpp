@@ -63,9 +63,10 @@ void GroupInfoCommand::run() {
 
     // Filter by patterns if given
     if (group_specs_str.size() > 0) {
-        auto query_names = libdnf::comps::GroupQuery(query);
+        libdnf::comps::GroupQuery query_names(query);
+        query_names.filter_name(group_specs_str, libdnf::sack::QueryCmp::IGLOB);
         query.filter_groupid(group_specs_str, libdnf::sack::QueryCmp::IGLOB);
-        query |= query_names.filter_name(group_specs_str, libdnf::sack::QueryCmp::IGLOB);
+        query |= query_names;
     } else if (not hidden->get_value()) {
         // Filter uservisible only if patterns are not given
         query.filter_uservisible(true);

@@ -40,7 +40,6 @@ struct Get {
 
 RepoQuery::RepoQuery(const BaseWeakPtr & base) : RepoQuery(*base) {}
 
-
 RepoQuery::RepoQuery(Base & base) : base{base.get_weak_ptr()} {
     // copy all repos from RepoSack to the this object
     auto sack = base.get_repo_sack();
@@ -49,51 +48,37 @@ RepoQuery::RepoQuery(Base & base) : base{base.get_weak_ptr()} {
     }
 }
 
-
-RepoQuery & RepoQuery::filter_enabled(bool enabled) {
+void RepoQuery::filter_enabled(bool enabled) {
     filter(Get::enabled, enabled, sack::QueryCmp::EQ);
-    return *this;
 }
 
-
-RepoQuery & RepoQuery::filter_expired(bool expired) {
+void RepoQuery::filter_expired(bool expired) {
     filter(Get::expired, expired, sack::QueryCmp::EQ);
-    return *this;
 }
 
-
-RepoQuery & RepoQuery::filter_id(const std::string & pattern, sack::QueryCmp cmp) {
+void RepoQuery::filter_id(const std::string & pattern, sack::QueryCmp cmp) {
     filter(Get::id, pattern, cmp);
-    return *this;
 }
 
-
-RepoQuery & RepoQuery::filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
+void RepoQuery::filter_id(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
     filter(Get::id, patterns, cmp);
-    return *this;
 }
 
-
-RepoQuery & RepoQuery::filter_local(bool local) {
+void RepoQuery::filter_local(bool local) {
     filter(Get::local, local, sack::QueryCmp::EQ);
-    return *this;
 }
 
-
-RepoQuery & RepoQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
+void RepoQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp) {
     filter(Get::name, pattern, cmp);
-    return *this;
 }
 
 
-RepoQuery & RepoQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
+void RepoQuery::filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp) {
     filter(Get::name, patterns, cmp);
-    return *this;
 }
 
-RepoQuery & RepoQuery::filter_type(Repo::Type type, sack::QueryCmp cmp) {
+void RepoQuery::filter_type(Repo::Type type, sack::QueryCmp cmp) {
     filter(Get::type, static_cast<int64_t>(type), cmp);
-    return *this;
 }
 
 }  // namespace libdnf::repo
