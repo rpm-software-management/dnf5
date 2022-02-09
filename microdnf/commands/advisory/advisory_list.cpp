@@ -76,14 +76,17 @@ void AdvisoryListCommand::run() {
     std::vector<libdnf::advisory::AdvisoryPackage> installed_pkgs;
 
     if (installed->get_value() || all->get_value()) {
-        auto installed_package_query = package_query.filter_installed();
+        auto installed_package_query = package_query;
+        installed_package_query.filter_installed();
         installed_pkgs = advisory_query.get_advisory_packages(installed_package_query, QueryCmp::LTE);
     }
 
     // Default if nothing specified
     if (available->get_value() || all->get_value() ||
         (!installed->get_value() && !available->get_value() && !updates->get_value())) {
-        auto installed_package_query = package_query.filter_installed().filter_latest_evr();
+        auto installed_package_query = package_query;
+        installed_package_query.filter_installed();
+        installed_package_query.filter_latest_evr();
         //TODO(amatej): https://github.com/rpm-software-management/dnf/pull/1485, show for currently running
         //kernel and if it is not the latests one show also for the latest kernel
         //auto kernel_id = ctx.base.get_rpm_package_sack()->p_impl->get_running_kernel();
@@ -93,7 +96,8 @@ void AdvisoryListCommand::run() {
     }
 
     if (updates->get_value()) {
-        auto upgradable_package_query = package_query.filter_upgradable();
+        auto upgradable_package_query = package_query;
+        upgradable_package_query.filter_upgradable();
         pkgs = advisory_query.get_advisory_packages(upgradable_package_query, QueryCmp::GT);
     }
 
