@@ -34,7 +34,9 @@ extern "C" {
 
 #include <libxml/tree.h>
 
+#include <set>
 #include <string>
+#include <vector>
 
 
 namespace libdnf::comps {
@@ -63,9 +65,7 @@ std::string lookup_str(libdnf::solv::Pool & pool, std::vector<GroupId> group_ids
 
 
 std::string Group::get_groupid() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-
-    std::string solvable_name(lookup_str(pool, group_ids, SOLVABLE_NAME));
+    std::string solvable_name(lookup_str(get_pool(base), group_ids, SOLVABLE_NAME));
     if (solvable_name.find(":") == std::string::npos) {
         return "";
     }
@@ -74,23 +74,19 @@ std::string Group::get_groupid() const {
 
 
 std::string Group::get_name() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-    return lookup_str(pool, group_ids, SOLVABLE_SUMMARY);
+    return lookup_str(get_pool(base), group_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Group::get_description() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-    return lookup_str(pool, group_ids, SOLVABLE_DESCRIPTION);
+    return lookup_str(get_pool(base), group_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Group::get_translated_name(const char * lang) const {
-    libdnf::solv::Pool & pool = get_pool(base);
-
     // Go through all group solvables and return first translation found.
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = pool.id2solvable(group_id.id);
+        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
         if (const char * translation = solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1)) {
             // Return translation only if it's different from the untranslated string
             // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
@@ -107,11 +103,9 @@ std::string Group::get_translated_name(const char * lang) const {
 
 // TODO(pkratoch): Test this
 std::string Group::get_translated_name() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-
     // Go through all group solvables and return first translation found.
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = pool.id2solvable(group_id.id);
+        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
         if (const char * translation = solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY)) {
             // Return translation only if it's different from the untranslated string
             // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
@@ -127,11 +121,9 @@ std::string Group::get_translated_name() const {
 
 
 std::string Group::get_translated_description(const char * lang) const {
-    libdnf::solv::Pool & pool = get_pool(base);
-
     // Go through all group solvables and return first translation found.
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = pool.id2solvable(group_id.id);
+        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
         if (const char * translation = solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1)) {
             // Return translation only if it's different from the untranslated string
             // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
@@ -147,11 +139,9 @@ std::string Group::get_translated_description(const char * lang) const {
 
 
 std::string Group::get_translated_description() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-
     // Go through all group solvables and return first translation found.
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = pool.id2solvable(group_id.id);
+        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
         if (const char * translation = solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION)) {
             // Return translation only if it's different from the untranslated string
             // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
@@ -167,26 +157,22 @@ std::string Group::get_translated_description() const {
 
 
 std::string Group::get_order() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-    return lookup_str(pool, group_ids, SOLVABLE_ORDER);
+    return lookup_str(get_pool(base), group_ids, SOLVABLE_ORDER);
 }
 
 
 std::string Group::get_langonly() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-    return lookup_str(pool, group_ids, SOLVABLE_LANGONLY);
+    return lookup_str(get_pool(base), group_ids, SOLVABLE_LANGONLY);
 }
 
 
 bool Group::get_uservisible() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-    return pool.lookup_void(group_ids[0].id, SOLVABLE_ISVISIBLE);
+    return get_pool(base).lookup_void(group_ids[0].id, SOLVABLE_ISVISIBLE);
 }
 
 
 bool Group::get_default() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-    return pool.lookup_void(group_ids[0].id, SOLVABLE_ISDEFAULT);
+    return get_pool(base).lookup_void(group_ids[0].id, SOLVABLE_ISDEFAULT);
 }
 
 
@@ -197,7 +183,6 @@ std::vector<Package> Group::get_packages() {
     }
 
     libdnf::solv::Pool & pool = get_pool(base);
-    //Pool * pool = *spool;
 
     // Use only the first (highest priority) solvable for package lists
     Solvable * solvable = pool.id2solvable(group_ids[0].id);
@@ -242,11 +227,9 @@ std::vector<Package> Group::get_packages_of_type(PackageType type) {
 
 
 std::set<std::string> Group::get_repos() const {
-    libdnf::solv::Pool & pool = get_pool(base);
-
     std::set<std::string> result;
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = pool.id2solvable(group_id.id);
+        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
         result.emplace(solvable->repo->name);
     }
     return result;

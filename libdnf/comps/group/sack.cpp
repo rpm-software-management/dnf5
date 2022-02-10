@@ -23,8 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/group.hpp"
 #include "libdnf/comps/group/query.hpp"
 
-#include <map>
-
 
 namespace libdnf::comps {
 

@@ -25,6 +25,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/comps/group/group.hpp"
 
+#include <string>
+#include <vector>
+
 
 namespace libdnf::comps {
 
