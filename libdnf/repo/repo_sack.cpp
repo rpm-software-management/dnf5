@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/fs/file.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
@@ -69,11 +70,7 @@ RepoWeakPtr RepoSack::create_repo(const std::string & id) {
 
 
 RepoWeakPtr RepoSack::create_repo_from_libsolv_testcase(const std::string & id, const std::string & path) {
-    std::unique_ptr<std::FILE, decltype(&std::fclose)> testcase_file(solv_xfopen(path.c_str(), "r"), &std::fclose);
-    if (!testcase_file) {
-        throw SystemError(errno ? errno : EIO, M_("Unable to open libsolv testcase file \"{}\""), path);
-    }
-
+    libdnf::utils::fs::File testcase_file(path, "r", true);
     auto repo = create_repo(id);
     testcase_add_testtags(repo->p_impl->solv_repo.repo, testcase_file.get(), 0);
     return repo;
