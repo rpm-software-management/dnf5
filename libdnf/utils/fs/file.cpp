@@ -22,6 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 
+extern "C" {
+#include <solv/solv_xfopen.h>
+}
+
 #include <cstdio>
 
 
@@ -30,13 +34,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::utils::fs {
 
-File::File(const std::filesystem::path & path, const char * mode) {
-    open(path, mode);
+File::File(const std::filesystem::path & path, const char * mode, bool use_solv_xfopen) {
+    open(path, mode, use_solv_xfopen);
 }
 
 
-File::File(int fd, const std::filesystem::path & path, const char * mode) {
-    open(fd, path, mode);
+File::File(int fd, const std::filesystem::path & path, const char * mode, bool use_solv_xfopen_fd) {
+    open(fd, path, mode, use_solv_xfopen_fd);
 }
 
 
@@ -66,10 +70,11 @@ File::~File() {
 }
 
 
-void File::open(const std::filesystem::path & path, const char * mode) {
+void File::open(const std::filesystem::path & path, const char * mode, bool use_solv_xfopen) {
     close();
 
-    file = std::fopen(path.c_str(), mode);
+    file = use_solv_xfopen ? solv_xfopen(path.c_str(), mode) : std::fopen(path.c_str(), mode);
+
     if (file == nullptr) {
         this->path = "";
         throw std::filesystem::filesystem_error(
@@ -80,10 +85,10 @@ void File::open(const std::filesystem::path & path, const char * mode) {
 }
 
 
-void File::open(int fd, const std::filesystem::path & path, const char * mode) {
+void File::open(int fd, const std::filesystem::path & path, const char * mode, bool use_solv_xfopen_fd) {
     close();
 
-    file = ::fdopen(fd, mode);
+    file = use_solv_xfopen_fd ? solv_xfopen_fd(path.c_str(), fd, mode) : ::fdopen(fd, mode);
     if (file == nullptr) {
         this->path = "";
         throw std::filesystem::filesystem_error(

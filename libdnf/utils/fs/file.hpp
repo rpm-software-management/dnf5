@@ -38,7 +38,10 @@ public:
     ///
     /// @param path The path of the file.
     /// @param mode The mode for opening the file.
-    File(const std::filesystem::path & path, const char * mode);
+    /// @param use_solv_xfopen Use libsolv's solv_xfopen to transparently work
+    ///                        with compressed files (based on filename
+    ///                        extension).
+    File(const std::filesystem::path & path, const char * mode, bool use_solv_xfopen = false);
 
     /// Creates an instance of `File` by opening file descriptor `fd`. The
     /// `path` argument is only used for error reporting and for retrieving from
@@ -47,7 +50,10 @@ public:
     /// @param fd The file descriptor to call fdopen() on.
     /// @param path The path of the file, for error reporting etc.
     /// @param mode The mode for opening the file.
-    File(int fd, const std::filesystem::path & path, const char * mode);
+    /// @param use_solv_xfopen_fd Use libsolv's solv_xfopen_fd to transparently
+    ///                           work with compressed files (based on filename
+    ///                           extension).
+    File(int fd, const std::filesystem::path & path, const char * mode, bool use_solv_xfopen_fd = false);
 
     File(const File &) = delete;
     File & operator=(const File &) = delete;
@@ -60,7 +66,10 @@ public:
     ///
     /// @param path The path of the file.
     /// @param mode The mode for opening the file.
-    void open(const std::filesystem::path & path, const char * mode);
+    /// @param use_solv_xfopen Use libsolv's solv_xfopen to transparently work
+    ///                        with compressed files (based on filename
+    ///                        extension).
+    void open(const std::filesystem::path & path, const char * mode, bool use_solv_xfopen = false);
 
     /// Opens the file by opening file descriptor `fd` (via `fdopen()`). The
     /// `path` argument is only used for error reporting and for retrieving from
@@ -69,7 +78,10 @@ public:
     /// @param fd The file descriptor to call `fdopen()` on.
     /// @param path The path of the file, for error reporting etc.
     /// @param mode The mode for opening the file.
-    void open(int fd, const std::filesystem::path & path, const char * mode);
+    /// @param use_solv_xfopen_fd Use libsolv's solv_xfopen_fd to transparently
+    ///                           work with compressed files (based on filename
+    ///                           extension).
+    void open(int fd, const std::filesystem::path & path, const char * mode, bool use_solv_xfopen_fd = false);
 
     /// Close the file.
     void close();
