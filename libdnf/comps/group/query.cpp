@@ -34,13 +34,6 @@ extern "C" {
 namespace libdnf::comps {
 
 
-void add_solvable_ids(Group & group, std::vector<Id> solvable_ids) {
-    for (Id solvable_id : solvable_ids) {
-        group.add_group_id(GroupId(solvable_id));
-    }
-}
-
-
 GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : sack(sack) {
     libdnf::solv::Pool & spool = get_pool(sack->comps.get_base());
     Pool * pool = *spool;
@@ -82,7 +75,9 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : sack(sack) {
     // Create groups based on the group_map
     for (auto it = group_map.begin(); it != group_map.end(); it++) {
         Group group(sack->comps.base);
-        add_solvable_ids(group, it->second);
+        for (Id solvable_id : it->second) {
+            group.group_ids.push_back(GroupId(solvable_id));
+        }
         add(group);
     }
 }

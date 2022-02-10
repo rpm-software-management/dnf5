@@ -48,9 +48,6 @@ public:
 /// @replaces dnf:dnf/comps.py:class:Group
 class Group {
 public:
-    const std::vector<GroupId> & get_group_ids() const { return group_ids; }
-    void add_group_id(GroupId group_id) { group_ids.push_back(group_id); }
-
     /// Get group id
     std::string get_groupid() const;
 
