@@ -233,20 +233,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
     checksum_calc(checksum, repomd_file);
 
-    fs::File cache_file;
-    try {
-        cache_file.open(solv_file_path(), "r");
-    } catch (const std::filesystem::filesystem_error & e) {
-        logger.debug(utils::sformat("Error opening cache file: {}", e.what()));
-    }
-
-    if (can_use_repomd_cache(cache_file, checksum)) {
-        //logger.debug("using cached %s (0x%s)", name, chksum);
-        if (repo_add_solv(repo, cache_file.get(), 0)) {
-            // TODO(lukash) improve error message
-            throw SolvError(M_("repo_add_solv() has failed."));
-        }
-    } else {
+    if (!load_solv_cache(solv_file_path(), 0)) {
         fs::File primary_file(primary_fn, "r", true);
 
         logger.debug(std::string("fetching ") + config.get_id());
@@ -268,22 +255,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 void SolvRepo::load_repo_ext(const std::string & ext_fn, RepodataType type) {
     auto & logger = *base->get_logger();
 
-    auto cache_fn = solv_file_path(repodata_type_to_suffix(type));
-
-    fs::File cache_file;
-    try {
-        cache_file.open(cache_fn, "r");
-    } catch (const std::filesystem::filesystem_error & e) {
-        logger.debug(utils::sformat("Error opening cache file: {}", e.what()));
-    }
-
-    if (can_use_repomd_cache(cache_file, checksum)) {
-        logger.debug(fmt::format("{}: using cache file: {}", __func__, cache_fn.c_str()));
-        if (repo_add_solv(repo, cache_file.get(), repodata_type_to_flags(type)) != 0) {
-            // TODO(lukash) improve error message
-            throw SolvError(M_("repo_add_solv() has failed."));
-        }
-
+    if (load_solv_cache(solv_file_path(repodata_type_to_suffix(type)), repodata_type_to_flags(type))) {
         return;
     }
 
@@ -425,6 +397,31 @@ void SolvRepo::internalize() {
     }
     repo_internalize(repo);
     needs_internalizing = false;
+}
+
+bool SolvRepo::load_solv_cache(const std::string & path, int flags) {
+    auto & logger = *base->get_logger();
+
+    try {
+        fs::File cache_file(path, "r");
+
+        if (can_use_repomd_cache(cache_file, checksum)) {
+            logger.debug(utils::sformat("Loading solv cache file: {}", path));
+            if (repo_add_solv(repo, cache_file.get(), flags)) {
+                // TODO(lukash) improve error message
+                throw SolvError(M_("repo_add_solv() has failed."));
+            }
+            return true;
+        }
+    } catch (const std::filesystem::filesystem_error & e) {
+        libdnf::Logger::Level level = libdnf::Logger::Level::WARNING;
+        if (e.code().default_error_condition() == std::errc::no_such_file_or_directory) {
+            level = libdnf::Logger::Level::DEBUG;
+        }
+        logger.log(level, utils::sformat("Error opening cache file, ignoring: {}", e.what()));
+    }
+
+    return false;
 }
 
 std::string SolvRepo::solv_file_name(const char * type) {
