@@ -45,6 +45,7 @@ enum class PackageAttribute {
     license,
     description,
     files,
+    changelogs,
 
     // ReldepList attributes
     provides,

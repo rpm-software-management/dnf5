@@ -41,6 +41,7 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"license", PackageAttribute::license},
     {"description", PackageAttribute::description},
     {"files", PackageAttribute::files},
+    {"changelogs", PackageAttribute::changelogs},
     {"provides", PackageAttribute::provides},
     {"requires", PackageAttribute::requires_all},
     {"requires_pre", PackageAttribute::requires_pre},
@@ -60,6 +61,16 @@ std::vector<std::string> reldeplist_to_strings(const libdnf::rpm::ReldepList & r
         lst.emplace_back(reldep.to_string());
     }
     return lst;
+}
+
+std::vector<dnfdaemon::Changelog> changelogs_to_list(const libdnf::rpm::Package & libdnf_package) {
+    std::vector<dnfdaemon::Changelog> changelogs;
+
+    for (const auto & chlog : libdnf_package.get_changelogs()) {
+        changelogs.emplace_back(static_cast<int64_t>(chlog.timestamp), chlog.author, chlog.text);
+    }
+
+    return changelogs;
 }
 
 dnfdaemon::KeyValueMap package_to_map(
@@ -116,11 +127,14 @@ dnfdaemon::KeyValueMap package_to_map(
             case PackageAttribute::description:
                 dbus_package.emplace(attr, libdnf_package.get_description());
                 break;
-            case PackageAttribute::provides:
-                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_provides()));
-                break;
             case PackageAttribute::files:
                 dbus_package.emplace(attr, libdnf_package.get_files());
+                break;
+            case PackageAttribute::changelogs:
+                dbus_package.emplace(attr, changelogs_to_list(libdnf_package));
+                break;
+            case PackageAttribute::provides:
+                dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_provides()));
                 break;
             case PackageAttribute::requires_all:
                 dbus_package.emplace(attr, reldeplist_to_strings(libdnf_package.get_requires()));

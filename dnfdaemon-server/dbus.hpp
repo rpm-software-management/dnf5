@@ -36,6 +36,8 @@ using DbusTransactionItem = sdbus::Struct<
     unsigned int,  //action
     KeyValueMap>;
 
+using Changelog = sdbus::Struct<int64_t, std::string, std::string>;
+
 
 // constants
 
