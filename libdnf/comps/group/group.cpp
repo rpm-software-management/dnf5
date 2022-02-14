@@ -19,13 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/comps/group/group.hpp"
 
+#include "comps/pool_utils.hpp"
 #include "solv/pool.hpp"
 #include "utils/xml.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/comps/group/package.hpp"
-
-#include "comps/pool_utils.hpp"
 
 extern "C" {
 #include <solv/dataiterator.h>
@@ -57,11 +56,7 @@ Group & Group::operator+=(const Group & rhs) {
 
 
 std::string Group::get_groupid() const {
-    std::string solvable_name(lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_NAME));
-    if (solvable_name.find(":") == std::string::npos) {
-        return "";
-    }
-    return solvable_name.substr(solvable_name.find(":") + 1);
+    return split_solvable_name(lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_NAME)).second;
 }
 
 

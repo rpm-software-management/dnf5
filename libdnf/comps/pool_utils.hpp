@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/pool.hpp"
 
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -66,6 +67,9 @@ std::string get_translated_str(libdnf::solv::Pool & pool, std::vector<T> ids, Id
     // If no translation was found, return the untranslated string.
     return lookup_str(pool, ids, key);
 }
+
+
+std::pair<std::string, std::string> split_solvable_name(std::string_view solvable_name);
 
 }  // namespace libdnf::comps
 

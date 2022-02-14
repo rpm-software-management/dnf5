@@ -19,12 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/comps/environment/environment.hpp"
 
+#include "comps/pool_utils.hpp"
 #include "solv/pool.hpp"
 #include "utils/xml.hpp"
 
 #include "libdnf/base/base.hpp"
-
-#include "comps/pool_utils.hpp"
 
 extern "C" {
 #include <solv/dataiterator.h>
@@ -57,11 +56,7 @@ Environment & Environment::operator+=(const Environment & rhs) {
 
 
 std::string Environment::get_environmentid() const {
-    std::string solvable_name(lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_NAME));
-    if (solvable_name.find(":") == std::string::npos) {
-        return "";
-    }
-    return solvable_name.substr(solvable_name.find(":") + 1);
+    return split_solvable_name(lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_NAME)).second;
 }
 
 
@@ -116,7 +111,7 @@ std::vector<std::string> load_groups_from_pool(libdnf::solv::Pool & pool, Id env
     if (offset) {
         for (Id * r_id = solvable->repo->idarraydata + offset; *r_id; ++r_id) {
             group_solvable_name = pool.id2str(*r_id);
-            groups.push_back(group_solvable_name.substr(group_solvable_name.find(":") + 1, std::string::npos));
+            groups.push_back(split_solvable_name(group_solvable_name).second);
         }
     }
 

@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/comps/environment/query.hpp"
 
+#include "comps/pool_utils.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -32,6 +33,7 @@ extern "C" {
 
 #include <map>
 #include <string>
+#include <utility>
 #include <vector>
 
 
@@ -43,7 +45,7 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
 
     std::map<std::string, std::vector<Id>> environment_map;
     Id solvable_id;
-    std::string solvable_name;
+    std::pair<std::string, std::string> solvable_name_pair;
     std::string environmentid;
 
     // Loop over all solvables
@@ -54,14 +56,13 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
             continue;
         }
         // SOLVABLE_NAME is in a form "type:id"; include only solvables of type "environment"
-        solvable_name = pool.lookup_str(solvable_id, SOLVABLE_NAME);
-        auto delimiter_position = solvable_name.find(":");
-        if (solvable_name.substr(0, delimiter_position) != "environment") {
+        solvable_name_pair = split_solvable_name(pool.lookup_str(solvable_id, SOLVABLE_NAME));
+        if (solvable_name_pair.first != "environment") {
             continue;
         }
         // Map environmentids with list of corresponding solvable_ids
         // TODO(pkratoch): Sort solvable_ids for each environmentid according to something (repo priority / repo id / ?)
-        environmentid = solvable_name.substr(delimiter_position, std::string::npos);
+        environmentid = solvable_name_pair.second;
         if (strcmp(pool.id2solvable(solvable_id)->repo->name, "@System")) {
             environmentid.append("_available");
         } else {

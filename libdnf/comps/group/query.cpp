@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/comps/group/query.hpp"
 
+#include "comps/pool_utils.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -30,6 +31,11 @@ extern "C" {
 #include <solv/pool.h>
 }
 
+#include <map>
+#include <string>
+#include <utility>
+#include <vector>
+
 
 namespace libdnf::comps {
 
@@ -39,7 +45,7 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base) : base(base) {
     
     std::map<std::string, std::vector<Id>> group_map;
     Id solvable_id;
-    std::string solvable_name;
+    std::pair<std::string, std::string> solvable_name_pair;
     std::string groupid;
 
     // Loop over all solvables
@@ -50,14 +56,13 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base) : base(base) {
             continue;
         }
         // SOLVABLE_NAME is in a form "type:id"; include only solvables of type "group"
-        solvable_name = pool.lookup_str(solvable_id, SOLVABLE_NAME);
-        auto delimiter_position = solvable_name.find(":");
-        if (solvable_name.substr(0, delimiter_position) != "group") {
+        solvable_name_pair = split_solvable_name(pool.lookup_str(solvable_id, SOLVABLE_NAME));
+        if (solvable_name_pair.first != "group") {
             continue;
         }
         // Map groupids with list of corresponding solvable_ids
         // TODO(pkratoch): Sort solvable_ids for each groupid according to something (repo priority / repo id / ?)
-        groupid = solvable_name.substr(delimiter_position, std::string::npos);
+        groupid = solvable_name_pair.second;
         if (strcmp(pool.id2solvable(solvable_id)->repo->name, "@System")) {
             groupid.append("_available");
         } else {
