@@ -125,28 +125,28 @@ bool Session::read_all_repos() {
         return false;
     }
     repositories_status = dnfdaemon::RepoStatus::PENDING;
-    // TODO(mblaha): get flags from session configuration
     //auto & logger = base->get_logger();
     libdnf::repo::RepoQuery enabled_repos(*base);
     enabled_repos.filter_enabled(true);
     enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
-    bool retval = true;
     for (auto & repo : enabled_repos) {
         repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
-        try {
-            repo->fetch_metadata();
-            repo->load();
-        } catch (const std::runtime_error & ex) {
-            if (!repo->get_config().skip_if_unavailable().get_value()) {
-                retval = false;
-                break;
-            }
-        }
-        // reset callbacks - otherwise progress callback is called later on during
-        // packages download when internal mirrorlist in librepo is prepared.
-        // (lr_download_packages() -> lr_handle_prepare_internal_mirrorlist())
-        repo->set_callbacks(nullptr);
     }
+    bool retval = true;
+    libdnf::repo::Repo::LoadFlags flags;
+    if (session_configuration.find("repo_load_flags") != session_configuration.end()) {
+        flags =
+            static_cast<libdnf::repo::Repo::LoadFlags>(session_configuration_value<unsigned int>("repo_load_flags"));
+    } else {
+        flags = libdnf::repo::Repo::LoadFlags::ALL;
+    }
+
+    try {
+        base->get_repo_sack()->update_and_load_enabled_repos(false, flags);
+    } catch (const std::runtime_error & ex) {
+        retval = false;
+    }
+
     repositories_status = retval ? dnfdaemon::RepoStatus::READY : dnfdaemon::RepoStatus::ERROR;
     return retval;
 }
