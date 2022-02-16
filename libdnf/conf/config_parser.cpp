@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config_parser.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/fs/file.hpp"
 #include "utils/iniparser.hpp"
 
 #include <algorithm>
-#include <fstream>
 
 namespace libdnf {
 
@@ -55,11 +55,6 @@ ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError(
 
 void ConfigParser::read(const std::string & file_path) {
     IniParser parser(file_path);
-    ::libdnf::read(*this, parser);
-}
-
-void ConfigParser::read(std::unique_ptr<std::istream> && input_stream) {
-    IniParser parser(std::move(input_stream));
     ::libdnf::read(*this, parser);
 }
 
@@ -98,52 +93,54 @@ const std::string & ConfigParser::get_value(const std::string & section, const s
 }
 
 static void write_key_vals(
-    std::ostream & out,
+    utils::fs::File & file,
     const std::string & section,
     const ConfigParser::Container::mapped_type & key_val_map,
     const std::map<std::string, std::string> & raw_items) {
     for (const auto & key_val : key_val_map) {
         auto first = key_val.first[0];
         if (first == '#' || first == ';') {
-            out << key_val.second;
+            file.write(key_val.second);
         } else {
             auto raw_item = raw_items.find(section + ']' + key_val.first);
             if (raw_item != raw_items.end()) {
-                out << raw_item->second;
+                file.write(raw_item->second);
             } else {
-                out << key_val.first << "=";
+                file.write(key_val.first);
+                file.putc('=');
                 for (const auto chr : key_val.second) {
-                    out << chr;
+                    file.putc(chr);
                     if (chr == '\n') {
-                        out << " ";
+                        file.putc(' ');
                     }
                 }
-                out << "\n";
+                file.putc('\n');
             }
         }
     }
 }
 
 static void write_section(
-    std::ostream & out,
+    utils::fs::File & file,
     const std::string & section,
     const ConfigParser::Container::mapped_type & key_val_map,
     const std::map<std::string, std::string> & raw_items) {
     auto raw_item = raw_items.find(section);
     if (raw_item != raw_items.end()) {
-        out << raw_item->second;
+        file.write(raw_item->second);
     } else {
-        out << "[" << section << "]"
-            << "\n";
+        file.write(utils::sformat("[{}]\n", raw_item->second));
     }
-    write_key_vals(out, section, key_val_map, raw_items);
+    write_key_vals(file, section, key_val_map, raw_items);
 }
 
 void ConfigParser::write(const std::string & file_path, bool append) const {
-    std::ofstream ofs;
-    ofs.exceptions(std::ofstream::failbit | std::ofstream::badbit);
-    ofs.open(file_path, append ? std::ofstream::app : std::ofstream::trunc);
-    write(ofs);
+    utils::fs::File file(file_path, append ? "a" : "w");
+
+    file.write(header);
+    for (const auto & section : data) {
+        write_section(file, section.first, section.second, raw_items);
+    }
 }
 
 void ConfigParser::write(const std::string & file_path, bool append, const std::string & section) const {
@@ -151,25 +148,9 @@ void ConfigParser::write(const std::string & file_path, bool append, const std::
     if (sit == data.end()) {
         throw ConfigParserSectionNotFoundError(section);
     }
-    std::ofstream ofs;
-    ofs.exceptions(std::ofstream::failbit | std::ofstream::badbit);
-    ofs.open(file_path, append ? std::ofstream::app : std::ofstream::trunc);
-    write_section(ofs, sit->first, sit->second, raw_items);
-}
 
-void ConfigParser::write(std::ostream & output_stream) const {
-    output_stream << header;
-    for (const auto & section : data) {
-        write_section(output_stream, section.first, section.second, raw_items);
-    }
-}
-
-void ConfigParser::write(std::ostream & output_stream, const std::string & section) const {
-    auto sit = data.find(section);
-    if (sit == data.end()) {
-        throw ConfigParserSectionNotFoundError(section);
-    }
-    write_section(output_stream, sit->first, sit->second, raw_items);
+    utils::fs::File file(file_path, append ? "a" : "w");
+    write_section(file, sit->first, sit->second, raw_items);
 }
 
 }  // namespace libdnf

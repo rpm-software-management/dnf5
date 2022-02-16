@@ -77,14 +77,6 @@ public:
     */
     void read(const std::string & file_path);
     /**
-    * @brief Reads/parse from istream
-    *
-    * Can be called repeately for reading/merge more istreams.
-    *
-    * @param inputStream Stream to read
-    */
-    void read(std::unique_ptr<std::istream> && input_stream);
-    /**
     * @brief Writes all data (all sections) to INI file
     *
     * @param file_path Name (with path) of file to write
@@ -99,19 +91,7 @@ public:
     * @param section Section to write
     */
     void write(const std::string & file_path, bool append, const std::string & section) const;
-    /**
-    * @brief Writes one section data to stream
-    *
-    * @param output_stream Stream to write
-    * @param section Section to write
-    */
-    void write(std::ostream & output_stream, const std::string & section) const;
-    /**
-    * @brief Writes all data (all sections) to stream
-    *
-    * @param output_stream Stream to write
-    */
-    void write(std::ostream & output_stream) const;
+
     bool add_section(const std::string & section, const std::string & raw_line);
     bool add_section(const std::string & section);
     bool add_section(std::string && section, std::string && raw_line);
