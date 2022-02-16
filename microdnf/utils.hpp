@@ -30,15 +30,6 @@ namespace microdnf {
 /// Returns "true" if program runs with effective user ID = 0
 bool am_i_root() noexcept;
 
-/// find the base architecture
-const char * get_base_arch(const char * arch);
-
-/// detect hardware architecture
-std::string detect_arch();
-
-/// detect operation system release
-std::string detect_release(const std::string & install_root_path);
-
 }  // namespace microdnf
 
 #endif
