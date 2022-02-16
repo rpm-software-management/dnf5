@@ -19,9 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/system/state.hpp"
 
-#include <toml.hpp>
+#include "utils/fs/file.hpp"
 
-#include <fstream>
+#include <toml.hpp>
 
 
 namespace libdnf::system {
@@ -64,9 +64,8 @@ void State::save() {
     }
     std::sort(userinstalled.begin(), userinstalled.end());
 
-    std::ofstream toml(path);
-    toml << toml::value({{"userinstalled", userinstalled}});
-    toml.close();
+    utils::fs::File file(path, "w");
+    file.write(toml::format(toml::value({{"userinstalled", userinstalled}}), 0));
 }
 
 

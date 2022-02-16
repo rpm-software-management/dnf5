@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_state.hpp"
 
 #include "utils.hpp"
-
-#include <iostream>
+#include "utils/fs/file.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(StateTest);
@@ -35,12 +34,12 @@ void StateTest::setUp() {
 
     temp_dir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_test_state");
 
-    std::ofstream toml(temp_dir->get_path() / "userinstalled.toml");
-    toml << "userinstalled = [\n"
+    libdnf::utils::fs::File(temp_dir->get_path() / "userinstalled.toml", "w")
+        .write(
+            "userinstalled = [\n"
             "\"pkg.x86_64\",\n"
             "\"cmdline.noarch\",\n"
-            "]\n";
-    toml.close();
+            "]\n");
 }
 
 void StateTest::tearDown() {
@@ -67,9 +66,7 @@ void StateTest::test_state_write() {
 
     state.save();
 
-    std::ifstream toml(path / "userinstalled.toml");
-    std::string contents;
-    contents.assign(std::istreambuf_iterator<char>(toml), std::istreambuf_iterator<char>());
+    std::string contents = libdnf::utils::fs::File(path / "userinstalled.toml", "r").read();
 
     std::string expected =
         "userinstalled = [\n"
