@@ -896,12 +896,16 @@ void RepoDownloader::add_countme_flag(LrHandle * handle) {
     }
 
     // Load the cookie
-    std::string fname = config.get_persistdir() + "/" + COUNTME_COOKIE;
+    std::filesystem::path file_path(config.get_persistdir());
+    file_path /= COUNTME_COOKIE;
+
     int ver = COUNTME_VERSION;    // file format version (for future use)
     time_t epoch = 0;             // position of first-ever counted window
     time_t win = COUNTME_OFFSET;  // position of last counted window
     int budget = -1;              // budget for this window (-1 = generate)
-    std::ifstream(fname) >> ver >> epoch >> win >> budget;
+    // TODO(lukash) ideally replace with utils::fs::File (via adding scanf() support?),
+    // once we are able to test this (using CI stack tests)
+    std::ifstream(file_path) >> ver >> epoch >> win >> budget;
 
     // Bail out if the window has not advanced since
     time_t now = time(nullptr);
@@ -952,7 +956,7 @@ void RepoDownloader::add_countme_flag(LrHandle * handle) {
     }
 
     // Save the cookie
-    std::ofstream(fname) << COUNTME_VERSION << " " << epoch << " " << win << " " << budget;
+    utils::fs::File(file_path, "w").write(utils::sformat("{} {} {} {}", COUNTME_VERSION, epoch, win, budget));
 }
 
 
