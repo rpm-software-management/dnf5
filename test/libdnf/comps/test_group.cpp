@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_group.hpp"
 
 #include "utils.hpp"
+#include "utils/fs/file.hpp"
 
 #include "libdnf/comps/comps.hpp"
 #include "libdnf/comps/group/package.hpp"
@@ -28,7 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/utils/format.hpp"
 
 #include <filesystem>
-#include <fstream>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(CompsGroupTest);
@@ -248,15 +248,11 @@ void CompsGroupTest::test_dump() {
     auto dump_path = temp->get_path() / "dumped-standard.xml";
     standard.dump(dump_path);
 
-    std::ifstream dumped_stream(dump_path);
-    std::string actual;
-    actual.assign(std::istreambuf_iterator<char>(dumped_stream), std::istreambuf_iterator<char>());
+    std::string actual = libdnf::utils::fs::File(dump_path, "r").read();
 
     std::filesystem::path expected_path =
         PROJECT_SOURCE_DIR "/test/data/repos-repomd/repomd-comps-standard/repodata/comps.xml";
-    std::ifstream expected_stream(expected_path);
-    std::string expected;
-    expected.assign(std::istreambuf_iterator<char>(expected_stream), std::istreambuf_iterator<char>());
+    std::string expected = libdnf::utils::fs::File(expected_path, "r").read();
 
     CPPUNIT_ASSERT_EQUAL(expected, actual);
 }
