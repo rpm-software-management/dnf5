@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TEST_INIPARSER_HPP
 #define LIBDNF_TEST_INIPARSER_HPP
 
+#include "utils/fs/temp.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
@@ -42,7 +43,7 @@ public:
     void test_iniparser();
     void test_iniparser2();
 
-private:
+    std::unique_ptr<libdnf::utils::fs::TempDir> temp_dir;
 };
 
 #endif

@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_INIPARSER_HPP
 #define LIBDNF_UTILS_INIPARSER_HPP
 
+#include "utils/fs/file.hpp"
+
 #include "libdnf/common/exception.hpp"
 
-#include <fstream>
 #include <memory>
 #include <string>
 
@@ -34,12 +35,6 @@ public:
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf"; }
     const char * get_name() const noexcept override { return "IniParserError"; }
-};
-
-class IniParserOpenFileError : public IniParserError {
-public:
-    using IniParserError::IniParserError;
-    const char * get_name() const noexcept override { return "IniParserOpenFileError"; }
 };
 
 class IniParserMissingSectionHeaderError : public IniParserError {
@@ -101,7 +96,6 @@ public:
     };
 
     explicit IniParser(const std::string & file_path);
-    explicit IniParser(std::unique_ptr<std::istream> && input_stream);
     /**
     * @brief Parse one item from input file
     *
@@ -123,14 +117,14 @@ public:
     void trim_value() noexcept;
 
 private:
-    std::unique_ptr<std::istream> is;
-    int line_number;
+    utils::fs::File file;
+    int line_number{0};
     std::string section;
     std::string key;
     std::string value;
     std::string raw_item;
     std::string line;
-    bool line_ready;
+    bool line_ready{false};
 };
 
 inline const std::string & IniParser::get_section() const noexcept {

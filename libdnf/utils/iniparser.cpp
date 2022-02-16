@@ -25,24 +25,7 @@ namespace libdnf {
 
 constexpr char DELIMITER = '\n';
 
-IniParser::IniParser(const std::string & file_path) : is(new std::ifstream(file_path)) {
-    if (!(*is)) {
-        //TODO(jrohel): Why? This information is not provided by std::ifstream.
-        throw IniParserOpenFileError(M_("Cannot open file \"{}\""), file_path);
-    }
-    is->exceptions(std::ifstream::badbit);
-    line_number = 0;
-    line_ready = false;
-}
-
-IniParser::IniParser(std::unique_ptr<std::istream> && input_stream) : is(std::move(input_stream)) {
-    if (!(*is)) {
-        throw IniParserOpenFileError(M_("Bad input stream"));
-    }
-    is->exceptions(std::ifstream::badbit);
-    line_number = 0;
-    line_ready = false;
-}
+IniParser::IniParser(const std::string & file_path) : file(file_path, "r") {}
 
 void IniParser::trim_value() noexcept {
     auto end = value.find_last_not_of(DELIMITER);
@@ -58,9 +41,15 @@ void IniParser::trim_value() noexcept {
 IniParser::ItemType IniParser::next() {
     bool previous_line_with_key_val = false;
     raw_item.clear();
-    while (line_ready || !is->eof()) {
+    while (true) {
         if (!line_ready) {
-            std::getline(*is, line, DELIMITER);
+            if (!file.read_line(line)) {
+                if (previous_line_with_key_val) {
+                    trim_value();
+                    return ItemType::KEY_VAL;
+                }
+                return ItemType::END_OF_INPUT;
+            }
             ++line_number;
             line_ready = true;
         }
@@ -77,17 +66,11 @@ IniParser::ItemType IniParser::next() {
                 return ItemType::KEY_VAL;
             }
             if (line.empty()) {
-                if (is->eof()) {
-                    return ItemType::END_OF_INPUT;
-                }
                 line_ready = false;
                 raw_item = DELIMITER;
                 return ItemType::EMPTY_LINE;
             }
-            raw_item = line;
-            if (!is->eof()) {
-                raw_item += DELIMITER;
-            }
+            raw_item = line + DELIMITER;
             line_ready = false;
             return ItemType::COMMENT_LINE;
         }
@@ -95,17 +78,11 @@ IniParser::ItemType IniParser::next() {
         if (start == std::string::npos) {
             if (previous_line_with_key_val) {
                 value += DELIMITER;
-                raw_item += line;
-                if (!is->eof()) {
-                    raw_item += DELIMITER;
-                }
+                raw_item += line + DELIMITER;
                 line_ready = false;
                 continue;
             }
-            raw_item = line;
-            if (!is->eof()) {
-                raw_item += DELIMITER;
-            }
+            raw_item = line + DELIMITER;
             line_ready = false;
             return ItemType::EMPTY_LINE;
         }
@@ -134,10 +111,7 @@ IniParser::ItemType IniParser::next() {
                 }
             }
             this->section = line.substr(start, end_sect_pos - start);
-            raw_item = line;
-            if (!is->eof()) {
-                raw_item += DELIMITER;
-            }
+            raw_item = line + DELIMITER;
             line_ready = false;
             return ItemType::SECTION;
         }
@@ -151,10 +125,7 @@ IniParser::ItemType IniParser::next() {
                 throw IniParserIllegalContinuationLineError(M_("Illegal continuation line on line {}"), line_number);
             }
             value += DELIMITER + line.substr(start, end - start + 1);
-            raw_item += line;
-            if (!is->eof()) {
-                raw_item += DELIMITER;
-            }
+            raw_item += line + DELIMITER;
             line_ready = false;
         } else {
             if (line[start] == '=') {
@@ -173,10 +144,7 @@ IniParser::ItemType IniParser::next() {
                 value.clear();
             }
             previous_line_with_key_val = true;
-            raw_item = line;
-            if (!is->eof()) {
-                raw_item += DELIMITER;
-            }
+            raw_item = line + DELIMITER;
             line_ready = false;
         }
     }
