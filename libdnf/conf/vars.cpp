@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/vars.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/fs/file.hpp"
 
 #include "libdnf/common/exception.hpp"
 
@@ -32,7 +33,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <cstring>
 #include <filesystem>
-#include <fstream>
 #include <memory>
 #include <optional>
 
@@ -298,17 +298,10 @@ void Vars::load_from_dir(const std::string & directory) {
                 full_path += "/";
             }
             full_path += dname;
-            std::ifstream in_stream(full_path);
-            if (in_stream.fail()) {
-                // log.warning()
-                continue;
-            }
+
+            utils::fs::File file(full_path, "r");
             std::string line;
-            std::getline(in_stream, line);
-            if (in_stream.fail()) {
-                // log.warning()
-                continue;
-            }
+            file.read_line(line);
             set(dname, line, Priority::VARSDIR);
         }
     }
