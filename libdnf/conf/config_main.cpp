@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "config_utils.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/fs/file.hpp"
 #include "utils/xdg.hpp"
 
 #include "libdnf/conf/config_parser.hpp"
@@ -32,8 +33,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <algorithm>
 #include <array>
 #include <cctype>
-#include <fstream>
-#include <ostream>
 #include <sstream>
 #include <utility>
 
@@ -86,15 +85,10 @@ static int str_to_bytes(const std::string & str) {
 }
 
 static void add_from_file(std::ostream & out, const std::string & file_path) {
-    std::ifstream ifs(file_path);
-    if (!ifs) {
-        throw RuntimeError(M_("add_from_file(): Cannot open file"));
-    }
-    ifs.exceptions(std::ifstream::badbit);
+    utils::fs::File file(file_path, "r");
 
     std::string line;
-    while (!ifs.eof()) {
-        std::getline(ifs, line);
+    while (file.read_line(line)) {
         auto start = line.find_first_not_of(" \t\r");
         if (start == std::string::npos) {
             continue;
