@@ -43,16 +43,18 @@ namespace libdnf::comps {
 EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
     libdnf::solv::Pool & pool = get_pool(base);
 
-    std::map<std::string, std::vector<Id>> environment_map;
+    std::map<std::string, std::vector<Id>> available_map;
     Id solvable_id;
+    Solvable * solvable;
     std::pair<std::string, std::string> solvable_name_pair;
-    std::string environmentid;
 
     // Loop over all solvables
     FOR_POOL_SOLVABLES(solvable_id) {
+        solvable = pool.id2solvable(solvable_id);
+
         // Do not include solvables from disabled repositories
         // TODO(pkratoch): Test this works
-        if (pool.id2solvable(solvable_id)->repo->disabled) {
+        if (solvable->repo->disabled) {
             continue;
         }
         // SOLVABLE_NAME is in a form "type:id"; include only solvables of type "environment"
@@ -60,25 +62,25 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
         if (solvable_name_pair.first != "environment") {
             continue;
         }
-        // Map environmentids with list of corresponding solvable_ids
-        // TODO(pkratoch): Sort solvable_ids for each environmentid according to something (repo priority / repo id / ?)
-        environmentid = solvable_name_pair.second;
-        if (strcmp(pool.id2solvable(solvable_id)->repo->name, "@System")) {
-            environmentid.append("_available");
+
+        // Add installed environments directly, because there is only one solvable for each
+        if (strcmp(solvable->repo->name, "@System") == 0) {
+            Environment environment(base);
+            environment.environment_ids.push_back(EnvironmentId(solvable_id));
+            add(environment);
         } else {
-            environmentid.append("_installed");
+            // Create map of available environments:
+            // for each environmentid (SOLVABLE_NAME), list all corresponding solvable_ids
+            // TODO(pkratoch): Sort solvable_ids for each environmentid according to repo id
+            available_map[solvable_name_pair.second].insert(
+                available_map[solvable_name_pair.second].begin(), solvable_id);
         }
-        if (environment_map.find(environmentid) == environment_map.end()) {
-            std::vector<Id> solvable_ids;
-            environment_map.emplace(environmentid, solvable_ids);
-        }
-        environment_map[environmentid].insert(environment_map[environmentid].begin(), solvable_id);
     }
 
-    // Create environments based on the environment_map
-    for (auto it = environment_map.begin(); it != environment_map.end(); it++) {
+    // Create environments based on the available_map
+    for (const auto & item : available_map) {
         Environment environment(base);
-        for (Id solvable_id : it->second) {
+        for (Id solvable_id : item.second) {
             environment.environment_ids.push_back(EnvironmentId(solvable_id));
         }
         add(environment);
