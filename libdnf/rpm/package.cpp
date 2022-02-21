@@ -106,6 +106,11 @@ std::string Package::get_license() const {
     return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_LICENSE));
 }
 
+std::string Package::get_source_name() const {
+    const char * source_name = get_pool(base).lookup_str(id.id, SOLVABLE_SOURCENAME);
+    return source_name ? source_name : get_name();
+}
+
 std::string Package::get_sourcerpm() const {
     return cstring2string(get_pool(base).get_sourcerpm(id.id));
 }

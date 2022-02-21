@@ -181,6 +181,12 @@ public:
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_license(DnfPackage * pkg)
     std::string get_license() const;
 
+    /// @return RPM package source name.
+    /// @since 5.0
+    //
+    // @replaces dnf:dnf/package.py:attribute:Package.source_name
+    std::string get_source_name() const;
+
     /// @return RPM package source package filename (`RPMTAG_SOURCERPM`).
     /// @since 5.0
     //
