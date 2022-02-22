@@ -17,28 +17,24 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef DNFDAEMON_SERVER_SERVICES_RPM_RPM_HPP
-#define DNFDAEMON_SERVER_SERVICES_RPM_RPM_HPP
+#ifndef DNFDAEMON_CLIENT_COMMANDS_DISTRO_SYNC_DISTRO_SYNC_HPP
+#define DNFDAEMON_CLIENT_COMMANDS_DISTRO_SYNC_DISTRO_SYNC_HPP
 
-#include "session.hpp"
+#include "commands/command.hpp"
 
-#include <sdbus-c++/sdbus-c++.h>
+#include <libdnf/conf/option.hpp>
 
-class Rpm : public IDbusSessionService {
+namespace dnfdaemon::client {
+
+class DistroSyncCommand : public TransactionCommand {
 public:
-    using IDbusSessionService::IDbusSessionService;
-    ~Rpm() = default;
-    void dbus_register();
-    void dbus_deregister();
+    explicit DistroSyncCommand(Command & parent);
+    void run() override;
 
 private:
-    sdbus::MethodReply list(sdbus::MethodCall & call);
-    sdbus::MethodReply install(sdbus::MethodCall & call);
-    sdbus::MethodReply upgrade(sdbus::MethodCall & call);
-    sdbus::MethodReply remove(sdbus::MethodCall & call);
-    sdbus::MethodReply distro_sync(sdbus::MethodCall & call);
-    sdbus::MethodReply downgrade(sdbus::MethodCall & call);
-    sdbus::MethodReply reinstall(sdbus::MethodCall & call);
+    std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
 };
 
-#endif
+}  // namespace dnfdaemon::client
+
+#endif  // DNFDAEMON_CLIENT_COMMANDS_DISTRO_SYNC_DISTRO_SYNC_HPP

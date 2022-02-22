@@ -111,6 +111,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     </method>
 
     <!--
+        distro_sync:
+        @specs: array of package specifications to synchronize to the latest available versions
+        @options: an array of key/value pairs to modify distro_sync behavior
+
+        Following @options are supported:
+
+        Unknown options are ignored.
+    -->
+    <method name="distro_sync">
+        <arg name="specs" type="as" direction="in" />
+        <arg name="options" type="a{sv}" direction="in" />
+    </method>
+
+    <!--
         downgrade:
         @specs: an array of package specifications to be downgraded on the system
         @options: an array of key/value pairs to modify downgrade behavior

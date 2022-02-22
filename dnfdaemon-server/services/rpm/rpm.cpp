@@ -28,10 +28,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <iostream>
 #include <string>
+#include <vector>
 
 
 void Rpm::dbus_register() {
     auto dbus_object = session.get_dbus_object();
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_RPM, "distro_sync", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(*this, &Rpm::distro_sync, call);
+        });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "downgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Rpm::downgrade, call);
@@ -105,6 +110,29 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
 
     auto reply = call.createReply();
     reply << out_packages;
+    return reply;
+}
+
+sdbus::MethodReply Rpm::distro_sync(sdbus::MethodCall & call) {
+    std::vector<std::string> specs;
+    call >> specs;
+
+    // read options from dbus call
+    dnfdaemon::KeyValueMap options;
+    call >> options;
+
+    // fill the goal
+    auto & goal = session.get_goal();
+    libdnf::GoalJobSettings setting;
+    if (specs.empty()) {
+        goal.add_rpm_distro_sync(setting);
+    } else {
+        for (const auto & spec : specs) {
+            goal.add_rpm_distro_sync(spec, setting);
+        }
+    }
+
+    auto reply = call.createReply();
     return reply;
 }
 

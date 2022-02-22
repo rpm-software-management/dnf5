@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/group/group.hpp"
 #include "commands/install/install.hpp"
@@ -68,11 +69,12 @@ inline RootCommand::RootCommand(session::Session & session)
         session.get_argument_parser().add_new_group("software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     cmd.register_group(software_management_commands_group);
+    register_subcommand(std::make_unique<DistroSyncCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
     register_subcommand(std::make_unique<InstallCommand>(*this), software_management_commands_group);
     register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_commands_group);
     register_subcommand(std::make_unique<RemoveCommand>(*this), software_management_commands_group);
     register_subcommand(std::make_unique<UpgradeCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
 
     // query commands
     auto * query_commands_group = session.get_argument_parser().add_new_group("query_commands");
