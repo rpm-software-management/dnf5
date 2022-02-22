@@ -26,5 +26,5 @@ import base_test_case
 class TestGroup(base_test_case.BaseTestCase):
     def test_group(self):
         self.add_repo_repomd("repomd-comps-core")
-        q_core = libdnf.comps.GroupQuery(self.base.get_comps().get_group_sack())
+        q_core = libdnf.comps.GroupQuery(self.base)
         core = q_core.get()

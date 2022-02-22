@@ -42,6 +42,9 @@ extern "C" {
 namespace libdnf::comps {
 
 
+Group::Group(const BaseWeakPtr & base) : base(base) {}
+
+
 Group::Group(libdnf::Base & base) : base(base.get_weak_ptr()) {}
 
 

@@ -34,9 +34,9 @@ extern "C" {
 namespace libdnf::comps {
 
 
-GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : sack(sack) {
-    libdnf::solv::Pool & pool = get_pool(sack->comps.get_base());
-
+GroupQuery::GroupQuery(const BaseWeakPtr & base) : base(base) {
+    libdnf::solv::Pool & pool = get_pool(base);
+    
     std::map<std::string, std::vector<Id>> group_map;
     Id solvable_id;
     std::string solvable_name;
@@ -73,7 +73,7 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : sack(sack) {
 
     // Create groups based on the group_map
     for (auto it = group_map.begin(); it != group_map.end(); it++) {
-        Group group(sack->comps.base);
+        Group group(base);
         for (Id solvable_id : it->second) {
             group.group_ids.push_back(GroupId(solvable_id));
         }
@@ -81,9 +81,7 @@ GroupQuery::GroupQuery(const GroupSackWeakPtr & sack) : sack(sack) {
     }
 }
 
-GroupQuery::GroupQuery(const BaseWeakPtr & base) : GroupQuery(base->get_comps()->get_group_sack()) {}
-
-GroupQuery::GroupQuery(Base & base) : GroupQuery(base.get_comps()->get_group_sack()) {}
+GroupQuery::GroupQuery(libdnf::Base & base) : GroupQuery(base.get_weak_ptr()) {}
 
 
 }  // namespace libdnf::comps

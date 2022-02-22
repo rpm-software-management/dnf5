@@ -120,6 +120,7 @@ public:
     void dump(const std::string & path);
 
 protected:
+    explicit Group(const BaseWeakPtr & base);
     explicit Group(libdnf::Base & base);
 
 private:

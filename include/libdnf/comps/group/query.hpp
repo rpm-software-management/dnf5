@@ -39,7 +39,6 @@ using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
 class GroupQuery : public libdnf::sack::Query<Group> {
 public:
     // Create new query with newly composed groups (using only solvables from currently enabled repositories)
-    explicit GroupQuery(const GroupSackWeakPtr & sack);
     explicit GroupQuery(const libdnf::BaseWeakPtr & base);
     explicit GroupQuery(libdnf::Base & base);
 
@@ -72,7 +71,7 @@ private:
         static bool is_installed(const Group & obj) { return obj.get_installed(); }
     };
 
-    GroupSackWeakPtr sack;
+    libdnf::BaseWeakPtr base;
 
     friend Group;
     friend GroupSack;

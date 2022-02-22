@@ -58,7 +58,7 @@ void GroupInfoCommand::run() {
 
     ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::COMPS);
 
-    libdnf::comps::GroupQuery query(ctx.base.get_comps()->get_group_sack());
+    libdnf::comps::GroupQuery query(ctx.base);
     auto group_specs_str = group_specs->get_value();
 
     // Filter by patterns if given

@@ -60,7 +60,7 @@ using namespace libdnf::comps;
 void CompsGroupTest::test_load() {
     add_repo_repomd("repomd-comps-core");
 
-    GroupQuery q_core(base.get_comps()->get_group_sack());
+    GroupQuery q_core(base);
     q_core.filter_installed(false);
     q_core.filter_groupid("core");
     auto core = q_core.get();
@@ -85,7 +85,7 @@ void CompsGroupTest::test_load() {
 
     add_repo_repomd("repomd-comps-standard");
 
-    GroupQuery q_standard(base.get_comps()->get_group_sack());
+    GroupQuery q_standard(base);
     q_standard.filter_installed(false);
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
@@ -114,7 +114,7 @@ void CompsGroupTest::test_load() {
 void CompsGroupTest::test_load_defaults() {
     add_repo_repomd("repomd-comps-core-empty");
 
-    GroupQuery q_core_empty(base.get_comps()->get_group_sack());
+    GroupQuery q_core_empty(base);
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
@@ -137,7 +137,7 @@ void CompsGroupTest::test_merge() {
     // load another definiton of the core group that changes all attributes
     add_repo_repomd("repomd-comps-core-v2");
 
-    GroupQuery q_core2(base.get_comps()->get_group_sack());
+    GroupQuery q_core2(base);
     q_core2.filter_groupid("core");
     auto core2 = q_core2.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core2.get_groupid());
@@ -168,7 +168,7 @@ void CompsGroupTest::test_merge_with_empty() {
     // load another definiton of the core group that has all attributes empty
     add_repo_repomd("repomd-comps-core-empty");
 
-    GroupQuery q_core_empty(base.get_comps()->get_group_sack());
+    GroupQuery q_core_empty(base);
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core_empty.get_groupid());
@@ -194,7 +194,7 @@ void CompsGroupTest::test_merge_empty_with_nonempty() {
     // load another definiton of the core group that has all attributes filled
     add_repo_repomd("repomd-comps-core");
 
-    GroupQuery q_core(base.get_comps()->get_group_sack());
+    GroupQuery q_core(base);
     q_core.filter_groupid("core");
     auto core = q_core.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
@@ -223,7 +223,7 @@ void CompsGroupTest::test_merge_different_translations() {
     // load another definiton of the core group with different set of translations
     add_repo_repomd("repomd-comps-core-different-translations");
 
-    GroupQuery q_core(base.get_comps()->get_group_sack());
+    GroupQuery q_core(base);
     q_core.filter_groupid("core");
     auto core = q_core.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
@@ -241,7 +241,7 @@ void CompsGroupTest::test_merge_different_translations() {
 void CompsGroupTest::test_dump() {
     add_repo_repomd("repomd-comps-standard");
 
-    GroupQuery q_standard(base.get_comps()->get_group_sack());
+    GroupQuery q_standard(base);
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
 
