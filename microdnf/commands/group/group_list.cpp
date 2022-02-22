@@ -70,36 +70,14 @@ void GroupListCommand::run() {
         // Filter uservisible only if patterns are not given
         query.filter_uservisible(true);
     }
-
-    std::set<libdnf::comps::Group> group_list;
-
-    auto query_installed = libdnf::comps::GroupQuery(query);
-    query_installed.filter_installed(true);
-
-    // --installed -> filter installed groups
     if (installed->get_value()) {
-        group_list = query_installed.list();
-        // --available / all
-    } else {
-        // all -> first add installed groups to the list
-        if (!available->get_value()) {
-            for (auto group : query_installed.list()) {
-                group_list.emplace(group);
-            }
-        }
-        // --available / all -> add available not-installed groups into the list
-        auto query_available = libdnf::comps::GroupQuery(query);
-        query_available.filter_installed(false);
-        std::set<std::string> installed_groupids;
-        for (auto group : query_installed.list()) {
-            installed_groupids.insert(group.get_groupid());
-        }
-        for (auto group : query_available.list()) {
-            group_list.emplace(group);
-        }
+        query.filter_installed(true);
+    }
+    if (available->get_value()) {
+        query.filter_installed(false);
     }
 
-    libdnf::cli::output::print_grouplist_table(group_list);
+    libdnf::cli::output::print_grouplist_table(query.list());
 }
 
 
