@@ -7,6 +7,9 @@ find_package(Threads)
 # set gettext domain for translations
 add_definitions(-DGETTEXT_DOMAIN=\"microdnf\")
 
+# set LIBDIR, used to find the directory containing the microdnf plugins
+add_definitions(-DLIBDIR=\"${CMAKE_INSTALL_FULL_LIBDIR}\")
+
 # use any sources found under the current directory
 file(GLOB_RECURSE MICRODNF_SOURCES *.cpp)
 

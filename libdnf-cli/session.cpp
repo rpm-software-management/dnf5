@@ -23,6 +23,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::cli::session {
 
+libdnf::cli::ArgumentParser & Session::get_argument_parser() {
+    return *argument_parser;
+}
+
+
+void Session::clear() {
+    set_root_command(nullptr);
+    argument_parser.reset();
+}
+
 
 Command::Command(Session & session, const std::string & program_name) : session{session} {
     // create a new root command; owned by the arg_parser

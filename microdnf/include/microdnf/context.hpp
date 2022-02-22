@@ -34,10 +34,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace microdnf {
 
+class Plugins;
+
 constexpr const char * VERSION = "0.1.0";
 
 class Context : public libdnf::cli::session::Session {
 public:
+    Context();
+    ~Context();
+
     void apply_repository_setopts();
 
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
@@ -74,6 +79,8 @@ public:
 
     bool get_quiet() const { return quiet; }
 
+    Plugins & get_plugins() { return *plugins; }
+
 private:
     /// If quiet mode is not active, it will print `msg` to standard output.
     void print_info(const char * msg);
@@ -86,6 +93,8 @@ private:
     const char * comment{nullptr};
 
     bool quiet{false};
+
+    std::unique_ptr<Plugins> plugins;
 };
 
 class RpmTransactionItem : public libdnf::rpm::TransactionItem {

@@ -36,6 +36,8 @@ class Command;
 
 class Session {
 public:
+    Session() : argument_parser(new libdnf::cli::ArgumentParser) {}
+
     /// @return Root command that represents the main program.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
@@ -58,12 +60,16 @@ public:
 
     /// @return The underlying argument parser.
     /// @since 5.0
-    libdnf::cli::ArgumentParser & get_argument_parser() { return argument_parser; }
+    libdnf::cli::ArgumentParser & get_argument_parser();
+
+    /// Remove all commands from the session and argument parser.
+    /// @since 5.0
+    void clear();
 
 private:
     std::unique_ptr<Command> root_command;
     Command * selected_command;
-    libdnf::cli::ArgumentParser argument_parser;
+    std::unique_ptr<libdnf::cli::ArgumentParser> argument_parser;
 };
 
 

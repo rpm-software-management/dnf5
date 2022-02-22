@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "microdnf/context.hpp"
 
+#include "plugins.hpp"
 #include "utils.hpp"
 
 #include <fmt/format.h>
@@ -193,6 +194,16 @@ std::chrono::time_point<std::chrono::steady_clock> ProgressAndKeyImportRepoCB::p
     std::chrono::steady_clock::now();
 
 }  // namespace
+
+Context::Context() : plugins(std::make_unique<Plugins>(*this)) {}
+
+Context::~Context() {
+    // "Session", which is the parent of "Context", owns objects from microdnf plugins (command arguments).
+    // Objects from plugins must be destroyed before the plugins can be released,
+    // otherwise they will reference the released code.
+    // TODO(jrohel): Calling clear() is not nice here. Better workflow.
+    clear();
+}
 
 // TODO(jrohel): Move logic into lidnf?
 void Context::apply_repository_setopts() {
