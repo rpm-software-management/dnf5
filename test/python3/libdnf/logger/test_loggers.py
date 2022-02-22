@@ -27,7 +27,7 @@ class LibdnfLoggerCB1(libdnf.logger.Logger):
         super(LibdnfLoggerCB1, self).__init__()
         self._stream = stream
 
-    def log(self, level, message):
+    def log_line(self, level, message):
         self._stream.write("{}: {}\n".format(self.level_to_cstr(level), message))
 
     def write(self, time, pid, level, message):

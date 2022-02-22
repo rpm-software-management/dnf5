@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-void Logger::log(Level level, const std::string & message) noexcept {
+void Logger::log_line(Level level, const std::string & message) noexcept {
     write(std::chrono::system_clock::now(), getpid(), level, message);
 }
 

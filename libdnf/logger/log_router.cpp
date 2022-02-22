@@ -27,7 +27,7 @@ std::unique_ptr<Logger> LogRouter::release_logger(size_t index) {
     return ret;
 }
 
-void LogRouter::log(Level level, const std::string & message) noexcept {
+void LogRouter::log_line(Level level, const std::string & message) noexcept {
     auto now = std::chrono::system_clock::now();
     auto pid = getpid();
     for (auto & logger : loggers) {

@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_LOGGER_LOGGER_HPP
 #define LIBDNF_LOGGER_LOGGER_HPP
 
+#include "libdnf/utils/format.hpp"
+
 #include <unistd.h>
 
 #include <array>
@@ -31,8 +33,6 @@ namespace libdnf {
 
 /// Logger is an abstract interface used for logging.
 /// An implementation (inherited class) can call callbacks, log the messages to memory, file, or somewhere else.
-///
-/// @replaces libdnf:utils/logger.hpp:class:Logger
 class Logger {
 public:
     Logger() = default;
@@ -49,31 +49,48 @@ public:
         return ilevel >= LEVEL_C_STR.size() ? "UNDEFINED" : LEVEL_C_STR[ilevel];
     }
 
-    /// @replaces libdnf:utils/logger.hpp:method:Logger.critical(const std::string & message)
-    void critical(const std::string & message) noexcept { log(Level::CRITICAL, message); }
+    template <typename... Ss>
+    void critical(std::string_view format, Ss &&... args) {
+        log(Level::CRITICAL, format, std::forward<Ss>(args)...);
+    }
 
-    /// @replaces libdnf:utils/logger.hpp:method:Logger.error(const std::string & message)
-    void error(const std::string & message) noexcept { log(Level::ERROR, message); }
+    template <typename... Ss>
+    void error(std::string_view format, Ss &&... args) {
+        log(Level::ERROR, format, std::forward<Ss>(args)...);
+    }
 
-    /// @replaces libdnf:utils/logger.hpp:method:Logger.warning(const std::string & message)
-    void warning(const std::string & message) noexcept { log(Level::WARNING, message); }
+    template <typename... Ss>
+    void warning(std::string_view format, Ss &&... args) {
+        log(Level::WARNING, format, std::forward<Ss>(args)...);
+    }
 
-    /// @replaces libdnf:utils/logger.hpp:method:Logger.notice(const std::string & message)
-    void notice(const std::string & message) noexcept { log(Level::NOTICE, message); }
+    template <typename... Ss>
+    void notice(std::string_view format, Ss &&... args) {
+        log(Level::NOTICE, format, std::forward<Ss>(args)...);
+    }
 
-    /// @replaces libdnf:utils/logger.hpp:method:Logger.info(const std::string & message)
-    void info(const std::string & message) noexcept { log(Level::INFO, message); }
+    template <typename... Ss>
+    void info(std::string_view format, Ss &&... args) {
+        log(Level::INFO, format, std::forward<Ss>(args)...);
+    }
 
-    /// @replaces libdnf:utils/logger.hpp:method:Logger.debug(const std::string & message)
-    void debug(const std::string & message) noexcept { log(Level::DEBUG, message); }
+    template <typename... Ss>
+    void debug(std::string_view format, Ss &&... args) {
+        log(Level::DEBUG, format, std::forward<Ss>(args)...);
+    }
 
-    /// @replaces libdnf:utils/logger.hpp:method:Logger.trace(const std::string & message)
-    void trace(const std::string & message) noexcept { log(Level::TRACE, message); }
+    template <typename... Ss>
+    void trace(std::string_view format, Ss &&... args) {
+        log(Level::TRACE, format, std::forward<Ss>(args)...);
+    }
 
-    /// @replaces libdnf:utils/logger.hpp:method:Logger.write(libdnf::Logger::Level level, const std::string & message)
-    virtual void log(Level level, const std::string & message) noexcept;
+    template <typename... Ss>
+    void log(Level level, std::string_view format, Ss &&... args) {
+        log_line(level, libdnf::utils::sformat(format, std::forward<Ss>(args)...));
+    }
 
-    /// @replaces libdnf:utils/logger.hpp:method:Logger.write(time_t time, pid_t pid, libdnf::Logger::Level level, const std::string & message)
+    virtual void log_line(Level level, const std::string & message) noexcept;
+
     virtual void write(
         const std::chrono::time_point<std::chrono::system_clock> & time,
         pid_t pid,

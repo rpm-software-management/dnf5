@@ -29,7 +29,7 @@ class LibdnfLoggerCB1 < Logger::Logger
         @stream = stream
     end
 
-    def log(level, message)
+    def log_line(level, message)
        @stream.write("%s: %s\n" % [Logger::Logger::level_to_cstr(level), message])
     end
 

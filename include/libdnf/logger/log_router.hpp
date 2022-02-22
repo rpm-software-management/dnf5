@@ -48,7 +48,7 @@ public:
     /// Returns number of loggers registered in LogRouter.
     size_t get_loggers_count() const noexcept { return loggers.size(); }
 
-    void log(Level level, const std::string & message) noexcept override;
+    void log_line(Level level, const std::string & message) noexcept override;
 
     void write(
         const std::chrono::time_point<std::chrono::system_clock> & time,
