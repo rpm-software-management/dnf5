@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module.hpp"
 
-#include "context.hpp"
+#include "microdnf/context.hpp"
 #include "module_disable.hpp"
 #include "module_enable.hpp"
 #include "module_info.hpp"

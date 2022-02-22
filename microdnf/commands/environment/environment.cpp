@@ -19,9 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "environment.hpp"
 
-#include "context.hpp"
 #include "environment_info.hpp"
 #include "environment_list.hpp"
+#include "microdnf/context.hpp"
 
 
 namespace microdnf {

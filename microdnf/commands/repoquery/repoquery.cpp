@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoquery.hpp"
 
-#include "context.hpp"
+#include "microdnf/context.hpp"
 
 #include "libdnf-cli/output/repoquery.hpp"
 

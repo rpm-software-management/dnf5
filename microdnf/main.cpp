@@ -40,7 +40,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
 #include "commands/upgrade/upgrade.hpp"
-#include "context.hpp"
+#include "microdnf/context.hpp"
 #include "utils.hpp"
 
 #include <fcntl.h>

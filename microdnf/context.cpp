@@ -17,7 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "context.hpp"
+#include "microdnf/context.hpp"
 
 #include "utils.hpp"
 

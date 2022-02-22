@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "environment_info.hpp"
 
-#include "context.hpp"
+#include "microdnf/context.hpp"
 
 #include <libdnf-cli/output/environmentinfo.hpp>
 #include <libdnf/comps/comps.hpp>

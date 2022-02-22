@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory_info.hpp"
 #include "advisory_list.hpp"
 #include "advisory_summary.hpp"
-#include "context.hpp"
+#include "microdnf/context.hpp"
 
 #include <libdnf/conf/option_string.hpp>
 

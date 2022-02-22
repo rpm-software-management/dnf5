@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "swap.hpp"
 
-#include "context.hpp"
+#include "microdnf/context.hpp"
 
 #include <libdnf-cli/output/transaction_table.hpp>
 #include <libdnf/base/goal.hpp>

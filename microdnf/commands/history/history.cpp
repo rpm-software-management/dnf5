@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "history.hpp"
 
-#include "context.hpp"
 #include "history_info.hpp"
 #include "history_list.hpp"
 #include "history_redo.hpp"
@@ -28,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "history_rollback.hpp"
 #include "history_store.hpp"
 #include "history_undo.hpp"
+#include "microdnf/context.hpp"
 
 //#include <libdnf/conf/option_string.hpp>
 //#include <libdnf/rpm/package_query.hpp>

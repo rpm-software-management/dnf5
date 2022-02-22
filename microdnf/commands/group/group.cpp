@@ -19,9 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group.hpp"
 
-#include "context.hpp"
 #include "group_info.hpp"
 #include "group_list.hpp"
+#include "microdnf/context.hpp"
 
 
 namespace microdnf {

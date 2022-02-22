@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_info.hpp"
 
-#include "context.hpp"
+#include "microdnf/context.hpp"
 
 #include <libdnf-cli/output/groupinfo.hpp>
 #include <libdnf/comps/comps.hpp>
