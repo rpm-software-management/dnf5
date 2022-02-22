@@ -15,6 +15,9 @@ include_directories(.)
 
 add_executable(microdnf ${MICRODNF_SOURCES})
 
+# Enable symbol export. Needed for loadable modules (microdnf plugins).
+set_property(TARGET microdnf PROPERTY ENABLE_EXPORTS 1)
+
 target_link_libraries(microdnf PUBLIC common libdnf libdnf-cli Threads::Threads)
 install(TARGETS microdnf RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
 
