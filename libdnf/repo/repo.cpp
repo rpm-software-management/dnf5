@@ -90,7 +90,6 @@ bool Repo::Impl::ends_with(const std::string & str, const std::string & ending) 
 }
 
 const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_type) const {
-    auto & logger = *base->get_logger();
     static const std::string empty;
     std::string lookup_metadata_type = metadata_type;
     if (config.get_main_config().zchunk().get_value()) {
@@ -103,9 +102,6 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
         it = metadata_paths.find(metadata_type);
     }
     auto & ret = (it != metadata_paths.end()) ? it->second : empty;
-    if (ret.empty()) {
-        logger.debug(fmt::format("not found \"{}\" for: {}", metadata_type, config.get_id()));
-    }
     return ret;
 }
 
@@ -144,7 +140,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
         if (!md_filename.empty()) {
             solv_repo.load_repo_ext(md_filename, RepodataType::FILELISTS);
         } else {
-            logger.debug(fmt::format("no filelists metadata available for {}", config.get_id()));
+            logger.debug("No filelists metadata available for repo \"{}\"", config.get_id());
         }
     }
     if (any(flags & LoadFlags::OTHER)) {
@@ -153,7 +149,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
         if (!md_filename.empty()) {
             solv_repo.load_repo_ext(md_filename, RepodataType::OTHER);
         } else {
-            logger.debug(fmt::format("no other metadata available for {}", config.get_id()));
+            logger.debug("No other metadata available for repo \"{}\"", config.get_id());
         }
     }
     if (any(flags & LoadFlags::PRESTO)) {
@@ -162,7 +158,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
         if (!md_filename.empty()) {
             solv_repo.load_repo_ext(md_filename, RepodataType::PRESTO);
         } else {
-            logger.debug(fmt::format("no presto metadata available for {}", config.get_id()));
+            logger.debug("No presto metadata available for repo \"{}\"", config.get_id());
         }
     }
 
@@ -174,7 +170,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
         if (!md_filename.empty()) {
             solv_repo.load_repo_ext(md_filename, RepodataType::UPDATEINFO);
         } else {
-            logger.debug(fmt::format("no updateinfo available for {}", config.get_id()));
+            logger.debug("No updateinfo metadata available for repo \"{}\"", config.get_id());
         }
     }
 
@@ -187,7 +183,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
         if (!md_filename.empty()) {
             solv_repo.load_repo_ext(md_filename, RepodataType::COMPS);
         } else {
-            logger.debug(fmt::format("no comps available for {}", config.get_id()));
+            logger.debug("No group metadata available for repo \"{}\"", config.get_id());
         }
     }
 
@@ -413,7 +409,7 @@ bool Repo::Impl::fetch_metadata() {
     if (!get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
         reset_metadata_expired();
         if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
-            logger.debug(fmt::format("repo: using cache for: {}", config.get_id()));
+            logger.debug("Using cache for repo \"{}\"", config.get_id());
             return false;
         }
 
@@ -428,7 +424,7 @@ bool Repo::Impl::fetch_metadata() {
         throw RepoError(M_("Cache-only enabled but no cache for repository \"{}\""), config.get_id());
     }
 
-    logger.debug(fmt::format("repo: downloading from remote: {}", config.get_id()));
+    logger.debug("Downloading metadata for repo \"{}\"", config.get_id());
     downloader.download_metadata(config.get_cachedir());
     timestamp = -1;
     read_metadata_cache();

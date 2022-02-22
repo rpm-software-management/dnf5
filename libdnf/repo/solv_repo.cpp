@@ -141,7 +141,11 @@ void SolvRepo::write_main(bool load_after_write) {
 
     auto & cache_file = cache_tmp_file.open_as_file("w+");
 
-    logger.debug(fmt::format("caching libsolv_repo: {} (0x{})", repo->name, chksum));
+    logger.trace(
+        "Writing primary cache for repo \"{}\" to \"{}\" (checksum: 0x{})",
+        config.get_id(),
+        cache_tmp_file.get_path().native(),
+        chksum);
 
     int ret = repo_write(repo, cache_file.get());
     if (ret) {
@@ -189,7 +193,7 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
 
     auto & cache_file = cache_tmp_file.open_as_file("w+");
 
-    logger.debug(fmt::format("{}: storing {} to: {}", __func__, repo->name, cache_tmp_file.get_path().native()));
+    logger.trace("Writing ext cache for repo \"{}\" to \"{}\"", config.get_id(), cache_tmp_file.get_path().native());
     int ret;
     if (type != RepodataType::UPDATEINFO) {
         ret = repodata_write(data, cache_file.get());
@@ -236,7 +240,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
     if (!load_solv_cache(solv_file_path(), 0)) {
         fs::File primary_file(primary_fn, "r", true);
 
-        logger.debug(std::string("fetching ") + config.get_id());
+        logger.debug("Loading repomd and primary for repo \"{}\"", config.get_id());
         if (repo_add_repomdxml(repo, repomd_file.get(), 0) || repo_add_rpmmd(repo, primary_file.get(), 0, 0)) {
             // TODO(lukash) improve error message
             throw SolvError(M_("repo_add_repomdxml/rpmmd() has failed."));
@@ -260,7 +264,7 @@ void SolvRepo::load_repo_ext(const std::string & ext_fn, RepodataType type) {
     }
 
     fs::File ext_file(ext_fn, "r", true);
-    logger.debug(fmt::format("{}: loading: {}", __func__, ext_fn));
+    logger.debug("Loading ext for repo \"{}\" from \"{}\"", config.get_id(), ext_fn);
 
     int res = 0;
     switch (type) {
@@ -295,7 +299,7 @@ bool SolvRepo::load_system_repo(const std::string & rootdir) {
     auto & logger = *base->get_logger();
     auto & pool = get_pool(base);
 
-    logger.debug("Loading system repo rpmdb, root: \"" + rootdir + "\"");
+    logger.debug("Loading system repo rpmdb from root \"{}\"", rootdir);
     if (rootdir.empty()) {
         base->get_config().installroot().lock("installroot locked by loading system repo");
         pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
@@ -306,7 +310,7 @@ bool SolvRepo::load_system_repo(const std::string & rootdir) {
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
     int rc = repo_add_rpmdb(repo, nullptr, flagsrpm);
     if (rc != 0) {
-        logger.warning(fmt::format("load_system_repo(): failed loading RPMDB: {}", pool_errstr(*pool)));
+        logger.warning("Failed to load system repo rpmdb: {}", pool_errstr(*pool));
         return false;
     }
 
@@ -376,7 +380,7 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
     repo->nsolvables = main_nsolvables;
     repo->end = main_end;
 
-    logger.debug(fmt::format("rewriting repo: {}", config.get_id()));
+    logger.debug("Rewriting repo: {}", config.get_id());
     write_main(false);
 
     repo->nrepodata = oldnrepodata;
@@ -406,7 +410,7 @@ bool SolvRepo::load_solv_cache(const std::string & path, int flags) {
         fs::File cache_file(path, "r");
 
         if (can_use_repomd_cache(cache_file, checksum)) {
-            logger.debug(utils::sformat("Loading solv cache file: {}", path));
+            logger.debug("Loading solv cache file: {}", path);
             if (repo_add_solv(repo, cache_file.get(), flags)) {
                 // TODO(lukash) improve error message
                 throw SolvError(M_("repo_add_solv() has failed."));
@@ -418,7 +422,7 @@ bool SolvRepo::load_solv_cache(const std::string & path, int flags) {
         if (e.code().default_error_condition() == std::errc::no_such_file_or_directory) {
             level = libdnf::Logger::Level::DEBUG;
         }
-        logger.log(level, utils::sformat("Error opening cache file, ignoring: {}", e.what()));
+        logger.log(level, "Error opening cache file, ignoring: {}", e.what());
     }
 
     return false;

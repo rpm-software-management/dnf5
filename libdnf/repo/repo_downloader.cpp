@@ -371,7 +371,7 @@ bool RepoDownloader::is_metalink_in_sync() try {
     LrMetalink * metalink;
     handle_get_info(h.get(), LRI_METALINK, &metalink);
     if (!metalink) {
-        logger.debug(fmt::format("reviving: repo '{}' skipped, no metalink.", config.get_id()));
+        logger.trace("Sync check: repo \"{}\" skipped, no metalink", config.get_id());
         return false;
     }
 
@@ -390,7 +390,7 @@ bool RepoDownloader::is_metalink_in_sync() try {
         }
     }
     if (hashes.empty()) {
-        logger.debug(fmt::format("reviving: repo '{}' skipped, no usable hash.", config.get_id()));
+        logger.trace("Sync check: repo \"{}\" skipped, no usable hash", config.get_id());
         return false;
     }
 
@@ -413,13 +413,15 @@ bool RepoDownloader::is_metalink_in_sync() try {
         char chksumHex[chksumLen * 2 + 1];
         solv_bin2hex(chksum, chksumLen, chksumHex);
         if (strcmp(chksumHex, hash.lr_metalink_hash->value) != 0) {
-            logger.debug(fmt::format(
-                "reviving: failed for '{}', mismatched {} sum.", config.get_id(), hash.lr_metalink_hash->type));
+            logger.trace(
+                "Sync check: failed for repo \"{}\", {} checksum mismatch",
+                config.get_id(),
+                hash.lr_metalink_hash->type);
             return false;
         }
     }
 
-    logger.debug(fmt::format("reviving: '{}' can be revived - metalink checksums match.", config.get_id()));
+    logger.debug("Sync check: repo \"{}\" in sync, metalink checksums match", config.get_id());
     return true;
 } catch (const std::runtime_error & e) {
     throw_with_nested(RepoDownloadError(
@@ -446,9 +448,9 @@ bool RepoDownloader::is_repomd_in_sync() try {
 
     auto same = utils::fs::have_files_same_content_noexcept(repomd_filename.c_str(), yum_repo->repomd);
     if (same)
-        logger.debug(fmt::format("reviving: '{}' can be revived - repomd matches.", config.get_id()));
+        logger.debug("Sync check: repo \"{}\" in sync, repomd matches", config.get_id());
     else
-        logger.debug(fmt::format("reviving: failed for '{}', mismatched repomd.", config.get_id()));
+        logger.trace("Sync check: failed for repo \"{}\", repomd mismatch", config.get_id());
     return same;
 } catch (const std::runtime_error & e) {
     auto src = get_source_info();
@@ -911,7 +913,7 @@ void RepoDownloader::add_countme_flag(LrHandle * handle) {
     time_t now = time(nullptr);
     time_t delta = now - win;
     if (delta < COUNTME_WINDOW) {
-        logger.debug(fmt::format("countme: no event for {}: window already counted", config.get_id()));
+        logger.trace("countme: no event for repo \"{}\": window already counted", config.get_id());
         return;
     }
 
@@ -947,12 +949,12 @@ void RepoDownloader::add_countme_flag(LrHandle * handle) {
         // Set the flag
         std::string flag = "countme=" + std::to_string(bucket);
         handle_set_opt(handle, LRO_ONETIMEFLAG, flag.c_str());
-        logger.debug(fmt::format("countme: event triggered for {}: bucket {}", config.get_id(), bucket));
+        logger.trace("countme: event triggered for repo \"{}\": bucket {}", config.get_id(), bucket);
 
         // Request a new budget
         budget = -1;
     } else {
-        logger.debug(fmt::format("countme: no event for {}: budget to spend: {}", config.get_id(), budget));
+        logger.trace("countme: no event for repo \"{}\": budget to spend: {}", config.get_id(), budget);
     }
 
     // Save the cookie

@@ -197,10 +197,10 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
                 finish_sack_loader();
                 throw;
             } else {
-                base->get_logger()->warning(utils::sformat(
-                    "Error loading repository \"{}\" (skipping due to \"skip_if_unavailable=true\"): {}",
+                base->get_logger()->warning(
+                    "Error loading repo \"{}\" (skipping due to \"skip_if_unavailable=true\"): {}",
                     repo->get_id(),
-                    e.what()));  // TODO(lukash) we should print nested exceptions
+                    e.what());  // TODO(lukash) we should print nested exceptions
             }
         } catch (const std::runtime_error & e) {
             except_in_main_thread = true;
@@ -241,7 +241,7 @@ void RepoSack::dump_debugdata(const std::string & dir) {
 
         int ret = testcase_write(solver, dir.c_str(), 0, NULL, NULL);
         if (!ret) {
-            throw SystemError(errno, fmt::format("Failed to write debug data to {}", dir));
+            throw SystemError(errno, "Failed to write debug data to {}", dir);
         }
     } catch (...) {
         solver_free(solver);
@@ -263,16 +263,12 @@ void RepoSack::create_repos_from_file(const std::string & path) {
         }
         auto repo_id = base->get_vars()->substitute(section);
 
-        logger.debug(fmt::format(
-            R"**(Start of loading configuration of repository "{}" from file "{}" section "{}")**",
-            repo_id,
-            path,
-            section));
+        logger.debug("Creating repo \"{}\" from config file \"{}\" section \"{}\"", repo_id, path, section);
 
         auto bad_char_idx = Repo::verify_id(repo_id);
         if (bad_char_idx != std::string::npos) {
             auto msg = fmt::format(
-                R"**(Bad id for repo "{}" section "{}", char = {} at pos {})**",
+                "Bad id for repo \"{}\" section \"{}\", char = {} at pos {}",
                 repo_id,
                 section,
                 repo_id[bad_char_idx],
@@ -283,11 +279,9 @@ void RepoSack::create_repos_from_file(const std::string & path) {
         auto repo = create_repo(repo_id);
         auto & repo_cfg = repo->get_config();
         repo_cfg.load_from_parser(parser, section, *base->get_vars(), *base->get_logger());
-        logger.trace(fmt::format(R"**(Loading configuration of repository "{}" from file "{}" done)**", repo_id, path));
 
         if (repo_cfg.name().get_priority() == Option::Priority::DEFAULT) {
-            logger.warning(fmt::format(
-                "Repository \"{}\" is missing name in configuration file \"{}\", using id.", repo_id, path));
+            logger.debug("Repo \"{}\" is missing name in configuration file \"{}\", using id.", repo_id, path);
             repo_cfg.name().set(Option::Priority::REPOCONFIG, repo_id);
         }
     }
