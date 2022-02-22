@@ -313,12 +313,9 @@ void RepoSack::create_repos_from_dir(const std::string & dir_path) {
 }
 
 void RepoSack::create_repos_from_reposdir() {
-    auto & logger = *base->get_logger();
     for (auto & dir : base->get_config().reposdir().get_value()) {
-        try {
+        if (std::filesystem::exists(dir)) {
             create_repos_from_dir(dir);
-        } catch (const std::filesystem::filesystem_error & ex) {
-            logger.info(ex.what());
         }
     }
 }
