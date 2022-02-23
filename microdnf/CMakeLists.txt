@@ -31,3 +31,4 @@ else()
 endif()
 
 install(FILES bash-completion/microdnf DESTINATION ${BASH_COMPLETION_COMPLETIONSDIR})
+install(FILES "README.plugins" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/microdnf5/plugins" RENAME "README")

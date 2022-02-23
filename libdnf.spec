@@ -421,6 +421,9 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %files -n microdnf5
 %{_bindir}/microdnf5
+%dir %{_libdir}/microdnf5/
+%dir %{_libdir}/microdnf5/plugins/
+%{_libdir}/microdnf5/plugins/README
 %dir %{_datadir}/bash-completion/
 %dir %{_datadir}/bash-completion/completions/
 %{_datadir}/bash-completion/completions/microdnf5
