@@ -45,63 +45,83 @@ public:
 };
 
 
-/// @replaces dnf:dnf/comps.py:class:Group
+// @replaces dnf:dnf/comps.py:class:Group
 class Group {
 public:
-    /// Get group id
+    /// @return The Group id.
+    /// @since 5.0
     std::string get_groupid() const;
 
-    /// Get group name
+    /// @return The Group name.
+    /// @since 5.0
     std::string get_name() const;
 
-    /// Get group description
+    /// @return The Group description.
+    /// @since 5.0
     std::string get_description() const;
 
-    /// Get translated name of a group based on current locales.
-    /// If a translation is not found, return untranslated name.
-    ///
-    /// @replaces dnf:dnf/comps.py:attribute:Group.ui_name
+    /// @return The translated name of the Group based on current locales.
+    ///         If no translation is found, return untranslated name.
+    /// @since 5.0
+    //
+    // @replaces dnf:dnf/comps.py:attribute:Group.ui_name
     std::string get_translated_name(const char * lang) const;
     std::string get_translated_name() const;
 
-    /// Get translated description of a group based on current locales.
-    /// If a translation is not found, return untranslated description.
-    ///
-    /// @replaces dnf:dnf/comps.py:attribute:Group.ui_description
+    /// @return The translated description of the Group based on current locales.
+    ///         If no translation is found, return untranslated ui_description.
+    /// @since 5.0
+    //
+    // @replaces dnf:dnf/comps.py:attribute:Group.ui_description
     std::string get_translated_description(const char * lang) const;
     std::string get_translated_description() const;
 
-    /// Get group order
+    /// @return The Group display order.
+    /// @since 5.0
+    //
+    // TODO(pkratoch): respect the display_order when listing groups
     std::string get_order() const;
 
-    /// Get group langonly
+    /// @return The Group langonly.
+    /// @since 5.0
     std::string get_langonly() const;
 
-    /// Determine if group is visible to the users
-    ///
-    /// @replaces dnf:dnf/comps.py:attribute:Group.visible
+    /// @return `true` if the Group is visible to the users.
+    /// @since 5.0
+    //
+    // @replaces dnf:dnf/comps.py:attribute:Group.visible
     bool get_uservisible() const;
 
-    /// Determine if group is installed by default
+    /// @return `true` if the Group is installed by default.
+    /// @since 5.0
     bool get_default() const;
 
-    /// @replaces dnf:dnf/comps.py:method:Group.packages_iter(self)
+    /// @return std::vector of Packages belonging to the Group.
+    /// @since 5.0
+    //
+    // @replaces dnf:dnf/comps.py:method:Group.packages_iter(self)
     std::vector<Package> get_packages();
 
-    /// @replaces dnf:dnf/comps.py:attribute:Group.conditional_packages
-    /// @replaces dnf:dnf/comps.py:attribute:Group.default_packages
-    /// @replaces dnf:dnf/comps.py:attribute:Group.mandatory_packages
-    /// @replaces dnf:dnf/comps.py:attribute:Group.optional_packages
+    /// @return std::vector of Packages of given type belonging to the Group.
+    /// @param type One of the PackageTypes.
+    /// @since 5.0
+    //
+    // @replaces dnf:dnf/comps.py:attribute:Group.conditional_packages
+    // @replaces dnf:dnf/comps.py:attribute:Group.default_packages
+    // @replaces dnf:dnf/comps.py:attribute:Group.mandatory_packages
+    // @replaces dnf:dnf/comps.py:attribute:Group.optional_packages
     std::vector<Package> get_packages_of_type(PackageType type);
 
+    /// @return std::set of names of repositories that contain the Group.
+    /// @since 5.0
     std::set<std::string> get_repos() const;
 
-    /// Determine if group is installed
-    /// If it belongs to the @System repo, return true
+    /// @return `true` if the Group is installed (belongs to the @System repo).
+    /// @since 5.0
     bool get_installed() const;
 
-    /// @return Resolved reason why a group was installed.
-    ///         A group can be installed due to multiple reasons, only the most significant is returned.
+    /// @return Resolved reason why the Group was installed.
+    ///         Groups can be installed due to multiple reasons, only the most significant is returned.
     /// @since 5.0
     //
     // TODO(dmach): return actual value from data in GroupSack
@@ -110,13 +130,18 @@ public:
         return libdnf::transaction::TransactionItemReason::UNKNOWN;
     }
 
-    /// Merge a comps Group with another one
+    /// Merge the Group with another one.
+    /// @since 5.0
     Group & operator+=(const Group & rhs);
 
     bool operator<(const Group & rhs) const {
         return get_groupid() < rhs.get_groupid() || (get_installed() && !rhs.get_installed());
     }
 
+    /// Dump the Group into an xml file.
+    /// @param path Path of the output xml file.
+    /// @exception utils::xml::XMLSaveError When saving of the file fails.
+    /// @since 5.0
     void dump(const std::string & path);
 
 protected:

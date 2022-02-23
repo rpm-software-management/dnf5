@@ -31,8 +31,8 @@ enum class PackageType { MANDATORY, DEFAULT, OPTIONAL, CONDITIONAL };
 // TODO(dmach): isn't it more a package dependency rather than a package?
 
 
-/// @replaces dnf:dnf/comps.py:class:Package
-/// @replaces dnf:dnf/comps.py:class:CompsTransPkg
+// @replaces dnf:dnf/comps.py:class:Package
+// @replaces dnf:dnf/comps.py:class:CompsTransPkg
 class Package {
 public:
     explicit Package(const std::string & name, PackageType type, const std::string & condition)
@@ -46,13 +46,20 @@ public:
 
     bool operator!=(const Package & other) const noexcept { return !(*this == other); }
 
-    /// @replaces dnf:dnf/comps.py:attribute:Package.name
+    /// @return The Package name.
+    /// @since 5.0
+    //
+    // @replaces dnf:dnf/comps.py:attribute:Package.name
     std::string get_name() const { return name; }
     void set_name(const std::string & value) { name = value; }
 
+    /// @return The PackageType.
+    /// @since 5.0
     PackageType get_type() const { return type; }
     void set_type(const PackageType & value) { type = value; }
 
+    /// @return std::string that corresponds to the PackageType.
+    /// @since 5.0
     std::string get_type_string() const {
         switch (type) {
             case PackageType::MANDATORY:
@@ -67,6 +74,8 @@ public:
         return "";
     }
 
+    /// @return The condition (name of package) under which the package gets installed.
+    /// @since 5.0
     std::string get_condition() const { return condition; }
     void set_condition(const std::string & value) { condition = value; }
 
