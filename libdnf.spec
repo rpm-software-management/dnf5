@@ -13,6 +13,7 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 %bcond_without dnfdaemon_server
 %bcond_without libdnf_cli
 %bcond_without microdnf
+%bcond_without microdnf_plugins
 %bcond_without python_plugins_loader
 
 %bcond_without comps
@@ -430,6 +431,22 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %license COPYING.md
 %license gpl-2.0.txt
 %{_mandir}/man8/microdnf5.8.gz
+%endif
+
+
+# ========== microdnf-plugins ==========
+
+%if %{with microdnf_plugins}
+%package -n microdnf5-plugins
+Summary:        microdnf plugins
+License:        LGPLv2.1+
+Requires:       microdnf5%{?_isa} = %{version}-%{release}
+
+%description -n microdnf5-plugins
+Microdnf plugins
+
+%files -n microdnf5-plugins
+%{_libdir}/microdnf5/plugins/*.so
 %endif
 
 
