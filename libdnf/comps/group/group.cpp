@@ -323,7 +323,7 @@ void Group::dump(const std::string & path) {
 
     // Save the document
     if (xmlSaveFormatFileEnc(path.c_str(), doc, "utf-8", 1) == -1) {
-        throw RuntimeError(M_("failed to save xml document for comps"));
+        throw utils::xml::XMLSaveError(M_("failed to save xml document for comps"));
     }
 
     // Memory free

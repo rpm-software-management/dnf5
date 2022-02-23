@@ -20,10 +20,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_XML_HPP
 #define LIBDNF_UTILS_XML_HPP
 
+#include "libdnf/common/exception.hpp"
+
 #include <libxml/tree.h>
 
 
 namespace libdnf::utils::xml {
+
+struct XMLSaveError : public Error {
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf::utils"; }
+    const char * get_name() const noexcept override { return "XMLSaveError"; }
+};
+
 
 xmlNodePtr add_subnode_with_text(xmlNodePtr parent, std::string child_name, std::string child_text) {
     xmlNodePtr node = xmlNewNode(NULL, BAD_CAST child_name.c_str());
