@@ -95,6 +95,8 @@ public:
 
     /// @return std::set of names of repositories that contain the Environment.
     /// @since 5.0
+    //
+    // TODO(pkratoch): Either remove this method, or return a vector of the weak pointers to the repo objects
     std::set<std::string> get_repos() const;
 
     /// @return `true` if the Environment is installed (belongs to the @System repo).
