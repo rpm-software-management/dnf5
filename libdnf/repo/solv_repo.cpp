@@ -161,7 +161,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
         }
 
         if (config.build_cache().get_value()) {
-            write_main(true);
+            write_main();
         }
     }
 
@@ -302,19 +302,11 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
     repo->nsolvables = main_nsolvables;
     repo->end = main_end;
 
-    write_main(false);
+    write_main();
 
     repo->nrepodata = oldnrepodata;
     repo->nsolvables = oldnsolvables;
     repo->end = oldend;
-}
-
-
-bool SolvRepo::is_one_piece() const {
-    for (auto i = repo->start; i < repo->end; ++i)
-        if (repo->pool->solvables[i].repo != repo)
-            return false;
-    return true;
 }
 
 
@@ -361,7 +353,7 @@ bool SolvRepo::load_solv_cache(const char * type, int flags) {
 }
 
 
-void SolvRepo::write_main(bool load_after_write) {
+void SolvRepo::write_main() {
     auto & logger = *base->get_logger();
 
     const char * chksum = pool_bin2hex(*get_pool(base), checksum, solv_chksum_len(CHKSUM_TYPE));
@@ -389,18 +381,6 @@ void SolvRepo::write_main(bool load_after_write) {
     checksum_write(checksum, cache_file);
 
     cache_tmp_file.close();
-
-    if (load_after_write && is_one_piece()) {
-        // switch over to written solv file activate paging
-        fs::File file(cache_tmp_file.get_path(), "r");
-
-        repo_empty(repo, 1);
-        int ret = repo_add_solv(repo, file.get(), 0);
-        if (ret) {
-            // TODO(lukash) improve error message
-            throw SolvError(M_("Failed to re-load main solv cache data file"));
-        }
-    }
 
     std::filesystem::rename(cache_tmp_file.get_path(), std::filesystem::path(config.basecachedir().get_value()) / fn);
     cache_tmp_file.release();
@@ -458,16 +438,6 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     checksum_write(checksum, cache_file);
 
     cache_tmp_file.close();
-
-    if (is_one_piece() && type != RepodataType::UPDATEINFO) {
-        // switch over to written solv file activate paging
-        fs::File file(cache_tmp_file.get_path(), "r");
-
-        repodata_extend_block(data, repo->start, repo->end - repo->start);
-        data->state = REPODATA_LOADING;
-        repo_add_solv(repo, file.get(), repodata_type_to_flags(type) | REPO_USE_LOADING);
-        data->state = REPODATA_AVAILABLE;
-    }
 
     std::filesystem::rename(
         cache_tmp_file.get_path(), std::filesystem::path(base->get_config().cachedir().get_value()) / fn);

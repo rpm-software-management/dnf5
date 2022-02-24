@@ -64,11 +64,6 @@ public:
 
     void rewrite_repo(libdnf::solv::IdQueue & fileprovides);
 
-    // Returns "true" when all solvables in the repository are stored contiguously -> No interleaving
-    // with solvables from other repositories.
-    // Complexity: Linear to the current number of solvables in  repository
-    bool is_one_piece() const;
-
     // Internalize repository if needed.
     void internalize();
 
@@ -86,7 +81,7 @@ private:
     bool load_solv_cache(const char * type, int flags);
 
     /// Writes libsolv's .solv cache file with main libsolv repodata.
-    void write_main(bool load_after_write);
+    void write_main();
 
     /// Writes libsolv's .solvx cache file with extended libsolv repodata.
     void write_ext(Id repodata_id, RepodataType type);
