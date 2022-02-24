@@ -144,9 +144,20 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
         fs::File primary_file(primary_fn, "r", true);
 
         logger.debug("Loading repomd and primary for repo \"{}\"", config.get_id());
-        if (repo_add_repomdxml(repo, repomd_file.get(), 0) || repo_add_rpmmd(repo, primary_file.get(), 0, 0)) {
-            // TODO(lukash) improve error message
-            throw SolvError(M_("repo_add_repomdxml/rpmmd() has failed."));
+        if (repo_add_repomdxml(repo, repomd_file.get(), 0) != 0) {
+            throw SolvError(
+                M_("Failed to load repomd for repo \"{}\" from \"{}\": {}."),
+                config.get_id(),
+                repomd_fn,
+                pool_errstr(*get_pool(base)));
+        }
+
+        if (repo_add_rpmmd(repo, primary_file.get(), 0, 0) != 0) {
+            throw SolvError(
+                M_("Failed to load primary for repo \"{}\" from \"{}\": {}."),
+                config.get_id(),
+                primary_fn,
+                pool_errstr(*get_pool(base)));
         }
 
         if (config.build_cache().get_value()) {
@@ -191,8 +202,12 @@ void SolvRepo::load_repo_ext(const std::string & ext_fn, RepodataType type) {
     }
 
     if (res != 0) {
-        // TODO(lukash) verify pool_errstr() is the correct way to get the message here
-        throw SolvError(M_("Failed loading extended metadata type \"{}\": {}"), pool_errstr(*get_pool(base)));
+        throw SolvError(
+            M_("Failed to load {} extension for repo \"{}\" from \"{}\": {}"),
+            type_name,
+            config.get_id(),
+            ext_fn,
+            pool_errstr(*get_pool(base)));
     }
 
     if (config.build_cache().get_value()) {
@@ -323,9 +338,13 @@ bool SolvRepo::load_solv_cache(const char * type, int flags) {
 
         if (can_use_repomd_cache(cache_file, checksum)) {
             logger.debug("Loading solv cache file: \"{}\"", path);
-            if (repo_add_solv(repo, cache_file.get(), flags)) {
-                // TODO(lukash) improve error message
-                throw SolvError(M_("repo_add_solv() has failed."));
+            if (repo_add_solv(repo, cache_file.get(), flags) != 0) {
+                throw SolvError(
+                    M_("Failed to load {} cache for repo \"{}\" from \"{}\": {}"),
+                    type ? type : "primary",
+                    config.get_id(),
+                    path,
+                    pool_errstr(*get_pool(base)));
             }
             return true;
         } else {
@@ -360,10 +379,12 @@ void SolvRepo::write_main(bool load_after_write) {
         cache_tmp_file.get_path().native(),
         chksum);
 
-    int ret = repo_write(repo, cache_file.get());
-    if (ret) {
-        // TODO(lukash) improve error message
-        throw SolvError(M_("Failed writing main solv cache data"));
+    if (repo_write(repo, cache_file.get()) != 0) {
+        throw SolvError(
+            M_("Failed to write primary cache for repo \"{}\" to \"{}\": {}"),
+            config.get_id(),
+            cache_tmp_file.get_path().native(),
+            pool_errstr(*get_pool(base)));
     }
 
     checksum_write(checksum, cache_file);
@@ -426,9 +447,13 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
         repo->start = oldstart;
         repo->nsolvables += main_nsolvables;
     }
-    if (ret) {
-        // TODO(lukash) improve error message
-        throw SolvError(M_("Failed writing extended solv cache data \"{}\""), fn);
+    if (ret != 0) {
+        throw SolvError(
+            M_("Failed to write {} cache for repo \"{}\" to \"{}\": {}"),
+            type_name,
+            config.get_id(),
+            cache_tmp_file.get_path().native(),
+            pool_errstr(*get_pool(base)));
     }
 
     checksum_write(checksum, cache_file);
