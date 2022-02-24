@@ -89,7 +89,7 @@ public:
     void set_needs_internalizing() { needs_internalizing = true; };
 
 private:
-    bool load_solv_cache(const std::string & path, int flags);
+    bool load_solv_cache(const char * type, int flags);
 
     std::string solv_file_name(const char * type = nullptr);
     std::string solv_file_path(const char * type = nullptr);

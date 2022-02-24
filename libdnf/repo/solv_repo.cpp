@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv_repo.hpp"
 
+#include "repo_downloader.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/fs/file.hpp"
@@ -90,18 +91,18 @@ bool can_use_repomd_cache(fs::File & file, unsigned char cs_repomd[CHKSUM_BYTES]
 }
 
 
-static const char * repodata_type_to_suffix(RepodataType type) {
+static const char * repodata_type_to_name(RepodataType type) {
     switch (type) {
         case RepodataType::FILELISTS:
-            return "-filelists";
+            return RepoDownloader::MD_FILENAME_FILELISTS;
         case RepodataType::PRESTO:
-            return "-presto";
+            return RepoDownloader::MD_FILENAME_PRESTODELTA;
         case RepodataType::UPDATEINFO:
-            return "-updateinfo";
+            return RepoDownloader::MD_FILENAME_UPDATEINFO;
         case RepodataType::COMPS:
-            return "-comps";
+            return RepoDownloader::MD_FILENAME_GROUP;
         case RepodataType::OTHER:
-            return "-other";
+            return RepoDownloader::MD_FILENAME_OTHER;
     }
 
     libdnf_throw_assertion("Unknown RepodataType: {}", utils::to_underlying(type));
@@ -187,18 +188,23 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
 
     Repodata * data = repo_id2repodata(repo, repodata_id);
-    auto fn = solv_file_name(repodata_type_to_suffix(type));
+
+    auto type_name = repodata_type_to_name(type);
+    auto fn = solv_file_name(type_name);
 
     auto cache_tmp_file = fs::TempFile(base->get_config().cachedir().get_value(), fn);
-
     auto & cache_file = cache_tmp_file.open_as_file("w+");
 
-    logger.trace("Writing ext cache for repo \"{}\" to \"{}\"", config.get_id(), cache_tmp_file.get_path().native());
+    logger.trace(
+        "Writing {} extension cache for repo \"{}\" to \"{}\"",
+        type_name,
+        config.get_id(),
+        cache_tmp_file.get_path().native());
     int ret;
     if (type != RepodataType::UPDATEINFO) {
         ret = repodata_write(data, cache_file.get());
     } else {
-        // block replaces: ret = write_ext_updateinfo(hrepo, data, fp);
+        // block replaces: ret = write_ext_updateinfo(repo, data, cache_file.get());
         auto oldstart = repo->start;
         repo->start = main_end;
         repo->nsolvables -= main_nsolvables;
@@ -237,7 +243,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
     checksum_calc(checksum, repomd_file);
 
-    if (!load_solv_cache(solv_file_path(), 0)) {
+    if (!load_solv_cache(nullptr, 0)) {
         fs::File primary_file(primary_fn, "r", true);
 
         logger.debug("Loading repomd and primary for repo \"{}\"", config.get_id());
@@ -259,12 +265,13 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 void SolvRepo::load_repo_ext(const std::string & ext_fn, RepodataType type) {
     auto & logger = *base->get_logger();
 
-    if (load_solv_cache(solv_file_path(repodata_type_to_suffix(type)), repodata_type_to_flags(type))) {
+    auto type_name = repodata_type_to_name(type);
+    if (load_solv_cache(type_name, repodata_type_to_flags(type))) {
         return;
     }
 
     fs::File ext_file(ext_fn, "r", true);
-    logger.debug("Loading ext for repo \"{}\" from \"{}\"", config.get_id(), ext_fn);
+    logger.debug("Loading {} extension for repo \"{}\" from \"{}\"", type_name, config.get_id(), ext_fn);
 
     int res = 0;
     switch (type) {
@@ -299,7 +306,7 @@ bool SolvRepo::load_system_repo(const std::string & rootdir) {
     auto & logger = *base->get_logger();
     auto & pool = get_pool(base);
 
-    logger.debug("Loading system repo rpmdb from root \"{}\"", rootdir);
+    logger.debug("Loading system repo rpmdb from root \"{}\"", rootdir.empty() ? "/" : rootdir);
     if (rootdir.empty()) {
         base->get_config().installroot().lock("installroot locked by loading system repo");
         pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
@@ -356,6 +363,8 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
     auto & logger = *base->get_logger();
     auto & pool = get_pool(base);
 
+    logger.debug("Rewriting repo \"{}\" with added file provides", config.get_id());
+
     if (!config.build_cache().get_value() || main_nrepodata < 2 || fileprovides.size() == 0) {
         return;
     }
@@ -380,7 +389,6 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
     repo->nsolvables = main_nsolvables;
     repo->end = main_end;
 
-    logger.debug("Rewriting repo: {}", config.get_id());
     write_main(false);
 
     repo->nrepodata = oldnrepodata;
@@ -403,26 +411,30 @@ void SolvRepo::internalize() {
     needs_internalizing = false;
 }
 
-bool SolvRepo::load_solv_cache(const std::string & path, int flags) {
+bool SolvRepo::load_solv_cache(const char * type, int flags) {
     auto & logger = *base->get_logger();
+
+    auto path = solv_file_path(type);
 
     try {
         fs::File cache_file(path, "r");
 
         if (can_use_repomd_cache(cache_file, checksum)) {
-            logger.debug("Loading solv cache file: {}", path);
+            logger.debug("Loading solv cache file: \"{}\"", path);
             if (repo_add_solv(repo, cache_file.get(), flags)) {
                 // TODO(lukash) improve error message
                 throw SolvError(M_("repo_add_solv() has failed."));
             }
             return true;
+        } else {
+            logger.trace("Cache file \"{}\" checksum mismatch, not loading", path);
         }
     } catch (const std::filesystem::filesystem_error & e) {
-        libdnf::Logger::Level level = libdnf::Logger::Level::WARNING;
         if (e.code().default_error_condition() == std::errc::no_such_file_or_directory) {
-            level = libdnf::Logger::Level::DEBUG;
+            logger.trace("Cache file \"{}\" not found", path);
+        } else {
+            logger.warning("Error opening cache file, ignoring: {}", e.what());
         }
-        logger.log(level, "Error opening cache file, ignoring: {}", e.what());
     }
 
     return false;
@@ -430,7 +442,7 @@ bool SolvRepo::load_solv_cache(const std::string & path, int flags) {
 
 std::string SolvRepo::solv_file_name(const char * type) {
     if (type != nullptr) {
-        return config.get_id() + type + ".solvx";
+        return utils::sformat("{}-{}.solvx", config.get_id(), type);
     } else {
         return config.get_id() + ".solv";
     }
