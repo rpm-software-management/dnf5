@@ -60,7 +60,7 @@ public:
     ///
     /// @param rootdir If empty, loads the installroot rpmdb, if not loads rpmdb from this root path
     /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
-    bool load_system_repo(const std::string & rootdir = "");
+    void load_system_repo(const std::string & rootdir = "");
 
     void rewrite_repo(libdnf::solv::IdQueue & fileprovides);
 

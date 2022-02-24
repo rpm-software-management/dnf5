@@ -216,7 +216,7 @@ void SolvRepo::load_repo_ext(const std::string & ext_fn, RepodataType type) {
 }
 
 
-bool SolvRepo::load_system_repo(const std::string & rootdir) {
+void SolvRepo::load_system_repo(const std::string & rootdir) {
     auto & logger = *base->get_logger();
     auto & pool = get_pool(base);
 
@@ -229,10 +229,11 @@ bool SolvRepo::load_system_repo(const std::string & rootdir) {
     }
 
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
-    int rc = repo_add_rpmdb(repo, nullptr, flagsrpm);
-    if (rc != 0) {
-        logger.warning("Failed to load system repo rpmdb: {}", pool_errstr(*pool));
-        return false;
+    if (repo_add_rpmdb(repo, nullptr, flagsrpm) != 0) {
+        throw SolvError(
+            M_("Failed to load system repo from root \"{}\": {}"),
+            rootdir.empty() ? "/" : rootdir,
+            pool_errstr(*get_pool(base)));
     }
 
     if (!rootdir.empty()) {
@@ -246,8 +247,6 @@ bool SolvRepo::load_system_repo(const std::string & rootdir) {
     main_nsolvables = repo->nsolvables;
     main_nrepodata = repo->nrepodata;
     main_end = repo->end;
-
-    return true;
 }
 
 
