@@ -108,6 +108,7 @@ static const char * repodata_type_to_name(RepodataType type) {
     libdnf_throw_assertion("Unknown RepodataType: {}", utils::to_underlying(type));
 }
 
+
 static int repodata_type_to_flags(RepodataType type) {
     switch (type) {
         case RepodataType::FILELISTS:
@@ -125,116 +126,12 @@ static int repodata_type_to_flags(RepodataType type) {
     libdnf_throw_assertion("Unknown RepodataType: {}", utils::to_underlying(type));
 }
 
+
 SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)
     : base(base),
       config(config),
       repo(repo_create(*get_pool(base), config.get_id().c_str())) {}
 
-
-void SolvRepo::write_main(bool load_after_write) {
-    auto & logger = *base->get_logger();
-
-    const char * chksum = pool_bin2hex(*get_pool(base), checksum, solv_chksum_len(CHKSUM_TYPE));
-
-    auto fn = solv_file_name();
-
-    auto cache_tmp_file = fs::TempFile(config.basecachedir().get_value(), fn);
-
-    auto & cache_file = cache_tmp_file.open_as_file("w+");
-
-    logger.trace(
-        "Writing primary cache for repo \"{}\" to \"{}\" (checksum: 0x{})",
-        config.get_id(),
-        cache_tmp_file.get_path().native(),
-        chksum);
-
-    int ret = repo_write(repo, cache_file.get());
-    if (ret) {
-        // TODO(lukash) improve error message
-        throw SolvError(M_("Failed writing main solv cache data"));
-    }
-
-    checksum_write(checksum, cache_file);
-
-    cache_tmp_file.close();
-
-    if (load_after_write && is_one_piece()) {
-        // switch over to written solv file activate paging
-        fs::File file(cache_tmp_file.get_path(), "r");
-
-        repo_empty(repo, 1);
-        int ret = repo_add_solv(repo, file.get(), 0);
-        if (ret) {
-            // TODO(lukash) improve error message
-            throw SolvError(M_("Failed to re-load main solv cache data file"));
-        }
-    }
-
-    std::filesystem::rename(cache_tmp_file.get_path(), std::filesystem::path(config.basecachedir().get_value()) / fn);
-    cache_tmp_file.release();
-}
-
-// this filter makes sure only the updateinfo repodata is written
-static int write_ext_updateinfo_filter(::Repo * repo, Repokey * key, void * kfdata) {
-    auto data = static_cast<Repodata *>(kfdata);
-    if (key->name == 1 && static_cast<Id>(key->size) != data->repodataid) {
-        return -1;
-    }
-    return repo_write_stdkeyfilter(repo, key, nullptr);
-}
-
-void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
-    auto & logger = *base->get_logger();
-    libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
-
-    Repodata * data = repo_id2repodata(repo, repodata_id);
-
-    auto type_name = repodata_type_to_name(type);
-    auto fn = solv_file_name(type_name);
-
-    auto cache_tmp_file = fs::TempFile(base->get_config().cachedir().get_value(), fn);
-    auto & cache_file = cache_tmp_file.open_as_file("w+");
-
-    logger.trace(
-        "Writing {} extension cache for repo \"{}\" to \"{}\"",
-        type_name,
-        config.get_id(),
-        cache_tmp_file.get_path().native());
-    int ret;
-    if (type != RepodataType::UPDATEINFO) {
-        ret = repodata_write(data, cache_file.get());
-    } else {
-        // block replaces: ret = write_ext_updateinfo(repo, data, cache_file.get());
-        auto oldstart = repo->start;
-        repo->start = main_end;
-        repo->nsolvables -= main_nsolvables;
-        ret = repo_write_filtered(repo, cache_file.get(), write_ext_updateinfo_filter, data, 0);
-        repo->start = oldstart;
-        repo->nsolvables += main_nsolvables;
-    }
-    if (ret) {
-        // TODO(lukash) improve error message
-        throw SolvError(M_("Failed writing extended solv cache data \"{}\""), fn);
-    }
-
-    checksum_write(checksum, cache_file);
-
-    cache_tmp_file.close();
-
-    if (is_one_piece() && type != RepodataType::UPDATEINFO) {
-        // switch over to written solv file activate paging
-        fs::File file(cache_tmp_file.get_path(), "r");
-
-        repodata_extend_block(data, repo->start, repo->end - repo->start);
-        data->state = REPODATA_LOADING;
-        repo_add_solv(repo, file.get(), repodata_type_to_flags(type) | REPO_USE_LOADING);
-        data->state = REPODATA_AVAILABLE;
-    }
-
-    std::filesystem::rename(
-        cache_tmp_file.get_path(), std::filesystem::path(base->get_config().cachedir().get_value()) / fn);
-    cache_tmp_file.release();
-}
 
 void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string & primary_fn) {
     auto & logger = *base->get_logger();
@@ -261,6 +158,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
     main_nrepodata = repo->nrepodata;
     main_end = repo->end;
 }
+
 
 void SolvRepo::load_repo_ext(const std::string & ext_fn, RepodataType type) {
     auto & logger = *base->get_logger();
@@ -301,6 +199,7 @@ void SolvRepo::load_repo_ext(const std::string & ext_fn, RepodataType type) {
         write_ext(repo->nrepodata - 1, type);
     }
 }
+
 
 bool SolvRepo::load_system_repo(const std::string & rootdir) {
     auto & logger = *base->get_logger();
@@ -396,12 +295,14 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
     repo->end = oldend;
 }
 
+
 bool SolvRepo::is_one_piece() const {
     for (auto i = repo->start; i < repo->end; ++i)
         if (repo->pool->solvables[i].repo != repo)
             return false;
     return true;
 }
+
 
 void SolvRepo::internalize() {
     if (!needs_internalizing) {
@@ -410,6 +311,7 @@ void SolvRepo::internalize() {
     repo_internalize(repo);
     needs_internalizing = false;
 }
+
 
 bool SolvRepo::load_solv_cache(const char * type, int flags) {
     auto & logger = *base->get_logger();
@@ -440,6 +342,115 @@ bool SolvRepo::load_solv_cache(const char * type, int flags) {
     return false;
 }
 
+
+void SolvRepo::write_main(bool load_after_write) {
+    auto & logger = *base->get_logger();
+
+    const char * chksum = pool_bin2hex(*get_pool(base), checksum, solv_chksum_len(CHKSUM_TYPE));
+
+    auto fn = solv_file_name();
+
+    auto cache_tmp_file = fs::TempFile(config.basecachedir().get_value(), fn);
+
+    auto & cache_file = cache_tmp_file.open_as_file("w+");
+
+    logger.trace(
+        "Writing primary cache for repo \"{}\" to \"{}\" (checksum: 0x{})",
+        config.get_id(),
+        cache_tmp_file.get_path().native(),
+        chksum);
+
+    int ret = repo_write(repo, cache_file.get());
+    if (ret) {
+        // TODO(lukash) improve error message
+        throw SolvError(M_("Failed writing main solv cache data"));
+    }
+
+    checksum_write(checksum, cache_file);
+
+    cache_tmp_file.close();
+
+    if (load_after_write && is_one_piece()) {
+        // switch over to written solv file activate paging
+        fs::File file(cache_tmp_file.get_path(), "r");
+
+        repo_empty(repo, 1);
+        int ret = repo_add_solv(repo, file.get(), 0);
+        if (ret) {
+            // TODO(lukash) improve error message
+            throw SolvError(M_("Failed to re-load main solv cache data file"));
+        }
+    }
+
+    std::filesystem::rename(cache_tmp_file.get_path(), std::filesystem::path(config.basecachedir().get_value()) / fn);
+    cache_tmp_file.release();
+}
+
+
+// this filter makes sure only the updateinfo repodata is written
+static int write_ext_updateinfo_filter(::Repo * repo, Repokey * key, void * kfdata) {
+    auto data = static_cast<Repodata *>(kfdata);
+    if (key->name == 1 && static_cast<Id>(key->size) != data->repodataid) {
+        return -1;
+    }
+    return repo_write_stdkeyfilter(repo, key, nullptr);
+}
+
+
+void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
+    auto & logger = *base->get_logger();
+    libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
+
+    Repodata * data = repo_id2repodata(repo, repodata_id);
+
+    auto type_name = repodata_type_to_name(type);
+    auto fn = solv_file_name(type_name);
+
+    auto cache_tmp_file = fs::TempFile(base->get_config().cachedir().get_value(), fn);
+    auto & cache_file = cache_tmp_file.open_as_file("w+");
+
+    logger.trace(
+        "Writing {} extension cache for repo \"{}\" to \"{}\"",
+        type_name,
+        config.get_id(),
+        cache_tmp_file.get_path().native());
+    int ret;
+    if (type != RepodataType::UPDATEINFO) {
+        ret = repodata_write(data, cache_file.get());
+    } else {
+        // block replaces: ret = write_ext_updateinfo(repo, data, cache_file.get());
+        auto oldstart = repo->start;
+        repo->start = main_end;
+        repo->nsolvables -= main_nsolvables;
+        ret = repo_write_filtered(repo, cache_file.get(), write_ext_updateinfo_filter, data, 0);
+        repo->start = oldstart;
+        repo->nsolvables += main_nsolvables;
+    }
+    if (ret) {
+        // TODO(lukash) improve error message
+        throw SolvError(M_("Failed writing extended solv cache data \"{}\""), fn);
+    }
+
+    checksum_write(checksum, cache_file);
+
+    cache_tmp_file.close();
+
+    if (is_one_piece() && type != RepodataType::UPDATEINFO) {
+        // switch over to written solv file activate paging
+        fs::File file(cache_tmp_file.get_path(), "r");
+
+        repodata_extend_block(data, repo->start, repo->end - repo->start);
+        data->state = REPODATA_LOADING;
+        repo_add_solv(repo, file.get(), repodata_type_to_flags(type) | REPO_USE_LOADING);
+        data->state = REPODATA_AVAILABLE;
+    }
+
+    std::filesystem::rename(
+        cache_tmp_file.get_path(), std::filesystem::path(base->get_config().cachedir().get_value()) / fn);
+    cache_tmp_file.release();
+}
+
+
 std::string SolvRepo::solv_file_name(const char * type) {
     if (type != nullptr) {
         return utils::sformat("{}-{}.solvx", config.get_id(), type);
@@ -447,6 +458,7 @@ std::string SolvRepo::solv_file_name(const char * type) {
         return config.get_id() + ".solv";
     }
 }
+
 
 std::string SolvRepo::solv_file_path(const char * type) {
     return std::filesystem::path(config.basecachedir().get_value()) / solv_file_name(type);

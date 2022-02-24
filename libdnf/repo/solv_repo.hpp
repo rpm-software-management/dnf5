@@ -50,12 +50,6 @@ class SolvRepo {
 public:
     SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config);
 
-    /// Writes libsolv's .solv cache file with main libsolv repodata.
-    void write_main(bool load_after_write);
-
-    /// Writes libsolv's .solvx cache file with extended libsolv repodata.
-    void write_ext(Id repodata_id, RepodataType type);
-
     /// Loads main metadata (solvables) from available repo.
     void load_repo_main(const std::string & repomd_fn, const std::string & primary_fn);
 
@@ -90,6 +84,12 @@ public:
 
 private:
     bool load_solv_cache(const char * type, int flags);
+
+    /// Writes libsolv's .solv cache file with main libsolv repodata.
+    void write_main(bool load_after_write);
+
+    /// Writes libsolv's .solvx cache file with extended libsolv repodata.
+    void write_ext(Id repodata_id, RepodataType type);
 
     std::string solv_file_name(const char * type = nullptr);
     std::string solv_file_path(const char * type = nullptr);
