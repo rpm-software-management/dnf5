@@ -619,6 +619,11 @@ private:
                 case TR_RPMDB:
                     te_type = "package from_rpmdb";
                     break;
+                //case TR_RESTORED:
+                //TODO(jrohel): Newly added to librpm. What exactly does it do?
+                //    te_type = "package will be restored";
+                //    break;
+                default:;
             }
             libdnf_assert(
                 te_rpmdb_record_number != 0,
