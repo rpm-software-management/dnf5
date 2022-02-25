@@ -106,12 +106,11 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
 }
 
 
-Repo::Impl::Impl(const BaseWeakPtr & base, Repo & owner, std::string id, Type type)
+Repo::Impl::Impl(const BaseWeakPtr & base, std::string id, Type type)
     : type(type),
       config(base->get_config(), id),
       timestamp(-1),
       sync_strategy(SyncStrategy::TRY_CACHE),
-      owner(&owner),
       base(base),
       expired(false),
       solv_repo(base, config),
@@ -197,7 +196,7 @@ Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type) {
             throw RepoError(M_("Invalid repository id \"{}\": unexpected character '{}'"), id, id[idx]);
         }
     }
-    p_impl.reset(new Impl(base, *this, id, type));
+    p_impl.reset(new Impl(base, id, type));
 
     // TODO(lukash) move this to SolvRepo constructor
     p_impl->solv_repo.repo->appdata = this;

@@ -48,7 +48,7 @@ using LibsolvRepo = ::Repo;
 
 class Repo::Impl {
 public:
-    Impl(const BaseWeakPtr & base, Repo & owner, std::string id, Type type);
+    Impl(const BaseWeakPtr & base, std::string id, Type type);
     ~Impl();
 
     bool fetch_metadata();
@@ -89,7 +89,6 @@ public:
     SyncStrategy sync_strategy;
     std::map<std::string, std::string> metadata_paths;
 
-    Repo * owner;
     libdnf::BaseWeakPtr base;
     void reset_metadata_expired();
 
