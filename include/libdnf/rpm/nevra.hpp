@@ -118,7 +118,17 @@ template <typename T>
 inline std::string to_full_nevra_string(const T & obj) {
     auto epoch = obj.get_epoch();
     if (epoch.empty()) {
+// TODO(lukash) gcc bug: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=104336
+//                       https://bugzilla.redhat.com/show_bug.cgi?id=2057597
+// Remove the pragmas when fixed
+#ifndef __clang__
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wrestrict"
+#endif
         epoch = "0";
+#ifndef __clang__
+#pragma GCC diagnostic pop
+#endif
     }
     // reserve() & append() is about 25% faster than string concatenation
     std::string result;
