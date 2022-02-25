@@ -81,28 +81,19 @@ static int64_t mtime(const char * filename) {
     return st.st_mtime;
 }
 
-
-bool Repo::Impl::ends_with(const std::string & str, const std::string & ending) {
-    if (str.length() >= ending.length()) {
-        return (str.compare(str.length() - ending.length(), ending.length(), ending) == 0);
-    }
-    return false;
-}
-
 const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_type) const {
-    static const std::string empty;
-    std::string lookup_metadata_type = metadata_type;
-    if (config.get_main_config().zchunk().get_value()) {
-        if (!ends_with(metadata_type, "_zck")) {
-            lookup_metadata_type = metadata_type + "_zck";
-        }
+    auto it = downloader.metadata_paths.end();
+
+    if (config.get_main_config().zchunk().get_value() && !utils::string::ends_with(metadata_type, "_zck")) {
+        it = downloader.metadata_paths.find(metadata_type + "_zck");
     }
-    auto it = downloader.metadata_paths.find(lookup_metadata_type);
-    if (it == downloader.metadata_paths.end() && lookup_metadata_type != metadata_type) {
+
+    if (it == downloader.metadata_paths.end()) {
         it = downloader.metadata_paths.find(metadata_type);
     }
-    auto & ret = (it != downloader.metadata_paths.end()) ? it->second : empty;
-    return ret;
+
+    static const std::string empty;
+    return it != downloader.metadata_paths.end() ? it->second : empty;
 }
 
 

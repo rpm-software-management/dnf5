@@ -86,7 +86,6 @@ public:
     void reset_metadata_expired();
 
     bool expired;
-    static bool ends_with(std::string const & str, std::string const & ending);
 
     // Information about attached libsolv repository
     // TODO(lukash) create solv_repo only when loading into the pool (make this std::optional or std::unique_ptr)
