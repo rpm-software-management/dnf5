@@ -265,17 +265,6 @@ void RepoSack::create_repos_from_file(const std::string & path) {
 
         logger.debug("Creating repo \"{}\" from config file \"{}\" section \"{}\"", repo_id, path, section);
 
-        auto bad_char_idx = Repo::verify_id(repo_id);
-        if (bad_char_idx != std::string::npos) {
-            auto msg = fmt::format(
-                "Bad id for repo \"{}\" section \"{}\", char = {} at pos {}",
-                repo_id,
-                section,
-                repo_id[bad_char_idx],
-                bad_char_idx + 1);
-            throw RuntimeError(msg);
-        }
-
         auto repo = create_repo(repo_id);
         auto & repo_cfg = repo->get_config();
         repo_cfg.load_from_parser(parser, section, *base->get_vars(), *base->get_logger());
