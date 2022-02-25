@@ -93,16 +93,6 @@ public:
 
     LrHandle * get_cached_handle();
 
-    std::vector<std::string> get_mirrors() const noexcept { return mirrors; }
-
-    std::string get_repomd_filename() const noexcept { return repomd_filename; }
-    std::string get_revision() const;
-    int get_max_timestamp() const;
-    std::map<std::string, std::string> get_metadata_paths() const;
-    std::vector<std::string> get_content_tags() const;
-    std::vector<std::pair<std::string, std::string>> get_distro_tags() const;
-    std::vector<std::pair<std::string, std::string>> get_metadata_locations() const;
-
     void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks) noexcept;
 
 private:
@@ -131,6 +121,7 @@ private:
 
     std::unique_ptr<RepoCallbacks> callbacks;
 
+    // download input
     bool load_metadata_other = false;
     std::set<std::string> additional_metadata;
     bool preserve_remote_time = false;
@@ -138,13 +129,18 @@ private:
     std::map<std::string, std::string> substitutions;
     std::vector<std::string> http_headers;
 
+    // download output
     std::string repomd_filename;
-
-    std::unique_ptr<LrResult> lr_result;
+    std::vector<std::string> mirrors;
+    std::string revision;
+    int max_timestamp{0};
+    std::vector<std::string> content_tags;
+    std::vector<std::pair<std::string, std::string>> distro_tags;
+    std::vector<std::pair<std::string, std::string>> metadata_locations;
+    std::map<std::string, std::string> metadata_paths;
 
     std::unique_ptr<LrHandle> handle;
-
-    std::vector<std::string> mirrors;
+    std::unique_ptr<LrResult> lr_result;
 };
 
 

@@ -474,14 +474,50 @@ void RepoDownloader::load_local() try {
     // store a vector of strings)
     char ** lr_mirrors;
     handle_get_info(h.get(), LRI_MIRRORS, &lr_mirrors);
-
     if (lr_mirrors) {
         for (auto mirror = lr_mirrors; *mirror; ++mirror) {
             mirrors.emplace_back(*mirror);
         }
     }
-
     g_strfreev(lr_mirrors);
+
+    revision = libdnf::utils::string::c_to_str(get_yum_repomd(lr_result)->revision);
+
+    GError * err_p{nullptr};
+    // TODO(lukash) return time_t instead of converting to signed int
+    max_timestamp = static_cast<int>(lr_yum_repomd_get_highest_timestamp(get_yum_repomd(lr_result), &err_p));
+    if (err_p != nullptr) {
+        throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
+    }
+
+    for (auto elem = get_yum_repomd(lr_result)->content_tags; elem; elem = g_slist_next(elem)) {
+        if (elem->data) {
+            content_tags.emplace_back(static_cast<const char *>(elem->data));
+        }
+    }
+
+    for (auto elem = get_yum_repomd(lr_result)->distro_tags; elem; elem = g_slist_next(elem)) {
+        if (elem->data) {
+            auto distro_tag = static_cast<LrYumDistroTag *>(elem->data);
+            if (distro_tag->tag) {
+                distro_tags.emplace_back(distro_tag->cpeid, distro_tag->tag);
+            }
+        }
+    }
+
+    for (auto elem = get_yum_repomd(lr_result)->records; elem; elem = g_slist_next(elem)) {
+        if (elem->data) {
+            auto rec = static_cast<LrYumRepoMdRecord *>(elem->data);
+            metadata_locations.emplace_back(rec->type, rec->location_href);
+        }
+    }
+
+    for (auto * elem = get_yum_repo(lr_result)->paths; elem; elem = g_slist_next(elem)) {
+        if (elem->data) {
+            auto yumrepopath = static_cast<LrYumRepoPath *>(elem->data);
+            metadata_paths.emplace(yumrepopath->type, yumrepopath->path);
+        }
+    }
 } catch (const std::runtime_error & e) {
     throw_with_nested(RepoDownloadError(M_("Error loading local metadata for repository \"{}\""), config.get_id()));
 }
@@ -495,89 +531,6 @@ LrHandle * RepoDownloader::get_cached_handle() {
     }
     apply_http_headers(handle);
     return handle.get();
-}
-
-
-std::string RepoDownloader::get_revision() const try {
-    return libdnf::utils::string::c_to_str(get_yum_repomd(lr_result)->revision);
-} catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(M_("Error retrieving revision from repository \"{}\""), config.get_id()));
-}
-
-
-int RepoDownloader::get_max_timestamp() const try {
-    GError * err_p{nullptr};
-    // TODO(lukash) return time_t instead of converting to signed int
-    int res = static_cast<int>(lr_yum_repomd_get_highest_timestamp(get_yum_repomd(lr_result), &err_p));
-    if (err_p != nullptr) {
-        throw libdnf::repo::LibrepoError(std::unique_ptr<GError>(err_p));
-    }
-    return res;
-} catch (const std::runtime_error & e) {
-    throw_with_nested(
-        RepoDownloadError(M_("Error retrieving maximum timestamp from repository \"{}\""), config.get_id()));
-}
-
-std::map<std::string, std::string> RepoDownloader::get_metadata_paths() const try {
-    std::map<std::string, std::string> res;
-
-    for (auto * elem = get_yum_repo(lr_result)->paths; elem; elem = g_slist_next(elem)) {
-        if (elem->data) {
-            auto yumrepopath = static_cast<LrYumRepoPath *>(elem->data);
-            res.emplace(yumrepopath->type, yumrepopath->path);
-        }
-    }
-
-    return res;
-} catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(M_("Error retrieving metadata paths from repository \"{}\""), config.get_id()));
-}
-
-std::vector<std::string> RepoDownloader::get_content_tags() const try {
-    std::vector<std::string> res;
-
-    for (auto elem = get_yum_repomd(lr_result)->content_tags; elem; elem = g_slist_next(elem)) {
-        if (elem->data) {
-            res.emplace_back(static_cast<const char *>(elem->data));
-        }
-    }
-
-    return res;
-} catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(M_("Error retrieving content tags from repository \"{}\""), config.get_id()));
-}
-
-std::vector<std::pair<std::string, std::string>> RepoDownloader::get_distro_tags() const try {
-    std::vector<std::pair<std::string, std::string>> res;
-
-    for (auto elem = get_yum_repomd(lr_result)->distro_tags; elem; elem = g_slist_next(elem)) {
-        if (elem->data) {
-            auto distro_tag = static_cast<LrYumDistroTag *>(elem->data);
-            if (distro_tag->tag) {
-                res.emplace_back(distro_tag->cpeid, distro_tag->tag);
-            }
-        }
-    }
-
-    return res;
-} catch (const std::runtime_error & e) {
-    throw_with_nested(RepoDownloadError(M_("Error retrieving distro tags from repository \"{}\""), config.get_id()));
-}
-
-std::vector<std::pair<std::string, std::string>> RepoDownloader::get_metadata_locations() const try {
-    std::vector<std::pair<std::string, std::string>> res;
-
-    for (auto elem = get_yum_repomd(lr_result)->records; elem; elem = g_slist_next(elem)) {
-        if (elem->data) {
-            auto rec = static_cast<LrYumRepoMdRecord *>(elem->data);
-            res.emplace_back(rec->type, rec->location_href);
-        }
-    }
-
-    return res;
-} catch (const std::runtime_error & e) {
-    throw_with_nested(
-        RepoDownloadError(M_("Error retrieving metadata locations from repository \"{}\""), config.get_id()));
 }
 
 

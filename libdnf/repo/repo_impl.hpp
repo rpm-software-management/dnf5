@@ -74,20 +74,13 @@ public:
     Type type;
     ConfigRepo config;
 
-    std::vector<std::string> mirrors;
     // 0 forces expiration on the next call to load(), -1 means undefined value
     int64_t timestamp;
-    int max_timestamp{0};
-    std::string revision;
-    std::vector<std::string> content_tags;
-    std::vector<std::pair<std::string, std::string>> distro_tags;
-    std::vector<std::pair<std::string, std::string>> metadata_locations;
     bool use_includes{false};
 
     std::string repo_file_path;
 
     SyncStrategy sync_strategy;
-    std::map<std::string, std::string> metadata_paths;
 
     libdnf::BaseWeakPtr base;
     void reset_metadata_expired();

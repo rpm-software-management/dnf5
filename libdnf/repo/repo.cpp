@@ -97,11 +97,11 @@ const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_t
             lookup_metadata_type = metadata_type + "_zck";
         }
     }
-    auto it = metadata_paths.find(lookup_metadata_type);
-    if (it == metadata_paths.end() && lookup_metadata_type != metadata_type) {
-        it = metadata_paths.find(metadata_type);
+    auto it = downloader.metadata_paths.find(lookup_metadata_type);
+    if (it == downloader.metadata_paths.end() && lookup_metadata_type != metadata_type) {
+        it = downloader.metadata_paths.find(metadata_type);
     }
-    auto & ret = (it != metadata_paths.end()) ? it->second : empty;
+    auto & ret = (it != downloader.metadata_paths.end()) ? it->second : empty;
     return ret;
 }
 
@@ -131,7 +131,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
         throw RepoError(_("Failed to load repository: \"primary\" data not present or in unsupported format"));
     }
 
-    solv_repo.load_repo_main(downloader.get_repomd_filename(), primary_fn);
+    solv_repo.load_repo_main(downloader.repomd_filename, primary_fn);
 
     if (any(flags & LoadFlags::FILELISTS)) {
         auto md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_FILELISTS);
@@ -373,14 +373,7 @@ std::string Repo::get_metadata_path(const std::string & metadata_type) {
 void Repo::Impl::read_metadata_cache() {
     downloader.load_local();
 
-    revision = downloader.get_revision();
-    max_timestamp = downloader.get_max_timestamp();
-    metadata_paths = downloader.get_metadata_paths();
-    content_tags = downloader.get_content_tags();
-    distro_tags = downloader.get_distro_tags();
-    metadata_locations = downloader.get_metadata_locations();
-
-    // Load timestamp unless explicitly expired
+    // set timestamp unless explicitly expired
     if (timestamp != 0) {
         timestamp = mtime(get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
     }
@@ -477,7 +470,7 @@ int64_t Repo::get_timestamp() const {
 }
 
 int Repo::get_max_timestamp() {
-    return p_impl->max_timestamp;
+    return p_impl->downloader.max_timestamp;
 }
 
 void Repo::set_preserve_remote_time(bool preserve_remote_time) {
@@ -489,15 +482,15 @@ bool Repo::get_preserve_remote_time() const {
 }
 
 const std::vector<std::string> & Repo::get_content_tags() {
-    return p_impl->content_tags;
+    return p_impl->downloader.content_tags;
 }
 
 const std::vector<std::pair<std::string, std::string>> & Repo::get_distro_tags() {
-    return p_impl->distro_tags;
+    return p_impl->downloader.distro_tags;
 }
 
 const std::vector<std::pair<std::string, std::string>> Repo::get_metadata_locations() const {
-    return p_impl->metadata_locations;
+    return p_impl->downloader.metadata_locations;
 }
 
 std::string Repo::get_cachedir() const {
@@ -509,7 +502,7 @@ std::string Repo::get_persistdir() const {
 }
 
 const std::string & Repo::get_revision() const {
-    return p_impl->revision;
+    return p_impl->downloader.revision;
 }
 
 void Repo::set_repo_file_path(const std::string & path) {
@@ -541,7 +534,7 @@ std::vector<std::string> Repo::get_http_headers() const {
 }
 
 std::vector<std::string> Repo::get_mirrors() const {
-    return p_impl->downloader.get_mirrors();
+    return p_impl->downloader.mirrors;
 }
 
 BaseWeakPtr Repo::get_base() const {
