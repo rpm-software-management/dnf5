@@ -81,22 +81,6 @@ static int64_t mtime(const char * filename) {
     return st.st_mtime;
 }
 
-const std::string & Repo::Impl::get_metadata_path(const std::string & metadata_type) const {
-    auto it = downloader.metadata_paths.end();
-
-    if (config.get_main_config().zchunk().get_value() && !utils::string::ends_with(metadata_type, "_zck")) {
-        it = downloader.metadata_paths.find(metadata_type + "_zck");
-    }
-
-    if (it == downloader.metadata_paths.end()) {
-        it = downloader.metadata_paths.find(metadata_type);
-    }
-
-    static const std::string empty;
-    return it != downloader.metadata_paths.end() ? it->second : empty;
-}
-
-
 Repo::Impl::Impl(const BaseWeakPtr & base, std::string id, Type type)
     : type(type),
       config(base->get_config(), id),
@@ -117,7 +101,7 @@ Repo::Impl::~Impl() {
 void Repo::Impl::load_available_repo(LoadFlags flags) {
     auto & logger = *base->get_logger();
 
-    auto primary_fn = get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
+    auto primary_fn = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
     if (primary_fn.empty()) {
         throw RepoError(_("Failed to load repository: \"primary\" data not present or in unsupported format"));
     }
@@ -125,7 +109,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
     solv_repo.load_repo_main(downloader.repomd_filename, primary_fn);
 
     if (any(flags & LoadFlags::FILELISTS)) {
-        auto md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_FILELISTS);
+        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_FILELISTS);
 
         if (!md_filename.empty()) {
             solv_repo.load_repo_ext(md_filename, RepodataType::FILELISTS);
@@ -134,7 +118,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
         }
     }
     if (any(flags & LoadFlags::OTHER)) {
-        auto md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_OTHER);
+        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_OTHER);
 
         if (!md_filename.empty()) {
             solv_repo.load_repo_ext(md_filename, RepodataType::OTHER);
@@ -143,7 +127,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
         }
     }
     if (any(flags & LoadFlags::PRESTO)) {
-        auto md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_PRESTODELTA);
+        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRESTODELTA);
 
         if (!md_filename.empty()) {
             solv_repo.load_repo_ext(md_filename, RepodataType::PRESTO);
@@ -155,7 +139,7 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
     // updateinfo must come *after* all other extensions, as it is not a real
     //   extension, but contains a new set of packages
     if (any(flags & LoadFlags::UPDATEINFO)) {
-        auto md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_UPDATEINFO);
+        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_UPDATEINFO);
 
         if (!md_filename.empty()) {
             solv_repo.load_repo_ext(md_filename, RepodataType::UPDATEINFO);
@@ -165,9 +149,9 @@ void Repo::Impl::load_available_repo(LoadFlags flags) {
     }
 
     if (any(flags & LoadFlags::COMPS)) {
-        auto md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
+        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
         if (md_filename.empty()) {
-            md_filename = get_metadata_path(RepoDownloader::MD_FILENAME_GROUP);
+            md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_GROUP);
         }
 
         if (!md_filename.empty()) {
@@ -357,7 +341,7 @@ void Repo::remove_metadata_type_from_download(const std::string & metadata_type)
 }
 
 std::string Repo::get_metadata_path(const std::string & metadata_type) {
-    return p_impl->get_metadata_path(metadata_type);
+    return p_impl->downloader.get_metadata_path(metadata_type);
 }
 
 
@@ -366,7 +350,7 @@ void Repo::Impl::read_metadata_cache() {
 
     // set timestamp unless explicitly expired
     if (timestamp != 0) {
-        timestamp = mtime(get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
+        timestamp = mtime(downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
     }
 }
 
@@ -389,7 +373,7 @@ bool Repo::Impl::is_in_sync() {
 bool Repo::Impl::fetch_metadata() {
     auto & logger = *base->get_logger();
 
-    if (!get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
+    if (!downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
         reset_metadata_expired();
         if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
             logger.debug("Using cache for repo \"{}\"", config.get_id());
@@ -398,7 +382,7 @@ bool Repo::Impl::fetch_metadata() {
 
         if (is_in_sync()) {
             // the expired metadata still reflect the origin:
-            utimes(get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
+            utimes(downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
             expired = false;
             return true;
         }
@@ -417,7 +401,7 @@ bool Repo::Impl::fetch_metadata() {
 }
 
 int64_t Repo::Impl::get_age() const {
-    return time(nullptr) - mtime(get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
+    return time(nullptr) - mtime(downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
 }
 
 void Repo::Impl::expire() {
@@ -446,7 +430,8 @@ void Repo::Impl::reset_metadata_expired() {
     if (expired || config.metadata_expire().get_value() == -1)
         return;
     if (config.get_main_config().check_config_file_age().get_value() && !repo_file_path.empty() &&
-        mtime(repo_file_path.c_str()) > mtime(get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str()))
+        mtime(repo_file_path.c_str()) >
+            mtime(downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str()))
         expired = true;
     else
         expired = get_age() > config.metadata_expire().get_value();

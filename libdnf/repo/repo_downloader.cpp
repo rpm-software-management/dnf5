@@ -540,6 +540,22 @@ void RepoDownloader::set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> 
 }
 
 
+const std::string & RepoDownloader::get_metadata_path(const std::string & metadata_type) const {
+    auto it = metadata_paths.end();
+
+    if (config.get_main_config().zchunk().get_value() && !utils::string::ends_with(metadata_type, "_zck")) {
+        it = metadata_paths.find(metadata_type + "_zck");
+    }
+
+    if (it == metadata_paths.end()) {
+        it = metadata_paths.find(metadata_type);
+    }
+
+    static const std::string empty;
+    return it != metadata_paths.end() ? it->second : empty;
+}
+
+
 std::unique_ptr<LrHandle> RepoDownloader::init_local_handle() {
     std::unique_ptr<LrHandle> h(lr_handle_init());
     common_handle_setup(h);

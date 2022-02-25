@@ -95,6 +95,8 @@ public:
 
     void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks) noexcept;
 
+    const std::string & get_metadata_path(const std::string & metadata_type) const;
+
 private:
     friend class Repo;
 

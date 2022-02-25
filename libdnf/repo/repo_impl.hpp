@@ -59,7 +59,6 @@ public:
     void expire();
     bool is_expired() const;
     int get_expires_in() const;
-    const std::string & get_metadata_path(const std::string & metadata_type) const;
 
     void load_available_repo(LoadFlags flags);
 
