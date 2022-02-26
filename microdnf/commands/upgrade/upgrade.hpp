@@ -37,12 +37,14 @@ public:
     explicit UpgradeCommand(Command & parent);
     void run() override;
 
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_upgrade_options{nullptr};
-    libdnf::OptionBool * minimal{nullptr};
 
 protected:
     // to be used by an alias command only
     explicit UpgradeCommand(Command & parent, const std::string & name);
+
+    libdnf::OptionBool * minimal{nullptr};
+    std::vector<std::string> pkg_specs;
+    std::vector<std::string> pkg_file_paths;
 };
 
 

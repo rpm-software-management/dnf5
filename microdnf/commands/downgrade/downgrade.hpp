@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include <libdnf-cli/session.hpp>
-#include <libdnf/conf/option_bool.hpp>
 
 #include <memory>
 #include <vector>
@@ -38,7 +37,8 @@ public:
     void run() override;
 
 private:
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_downgrade_options{nullptr};
+    std::vector<std::string> pkg_specs;
+    std::vector<std::string> pkg_file_paths;
 };
 
 

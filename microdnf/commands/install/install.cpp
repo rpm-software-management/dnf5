@@ -51,13 +51,14 @@ InstallCommand::InstallCommand(Command & parent) : Command(parent, "install") {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Install software");
 
-    patterns_to_install_options = parser.add_new_values();
-    auto keys = parser.add_new_positional_arg(
-        "keys_to_match",
-        ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns_to_install_options);
+    auto keys =
+        parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
     keys->set_short_description("List of keys to match");
+    keys->set_parse_hook_func(
+        [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
+            parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);
+            return true;
+        });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_available_pkgs(ctx, arg); });
     cmd.register_positional_arg(keys);
 }
@@ -68,13 +69,22 @@ void InstallCommand::run() {
 
     ctx.load_repos(true);
 
+    std::vector<std::string> error_messages;
+    const auto cmdline_packages = ctx.add_cmdline_packages(pkg_file_paths, error_messages);
+    for (const auto & msg : error_messages) {
+        std::cout << msg << std::endl;
+    }
+
     std::cout << std::endl;
 
     libdnf::Goal goal(ctx.base);
-    for (auto & pattern : *patterns_to_install_options) {
-        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        goal.add_rpm_install(option->get_value());
+    for (const auto & pkg : cmdline_packages) {
+        goal.add_rpm_install(pkg);
     }
+    for (const auto & spec : pkg_specs) {
+        goal.add_rpm_install(spec);
+    }
+
     auto transaction = goal.resolve(false);
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
         return;

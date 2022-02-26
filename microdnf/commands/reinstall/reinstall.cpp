@@ -51,13 +51,14 @@ ReinstallCommand::ReinstallCommand(Command & parent) : Command(parent, "reinstal
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Reinstall software");
 
-    patterns_to_reinstall_options = parser.add_new_values();
-    auto keys = parser.add_new_positional_arg(
-        "keys_to_match",
-        ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns_to_reinstall_options);
+    auto keys =
+        parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
     keys->set_short_description("List of keys to match");
+    keys->set_parse_hook_func(
+        [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
+            parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);
+            return true;
+        });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_installed_pkgs(ctx, arg, true); });
     cmd.register_positional_arg(keys);
 }
@@ -68,13 +69,23 @@ void ReinstallCommand::run() {
 
     ctx.load_repos(true);
 
-    libdnf::Goal goal(ctx.base);
-    for (auto & pattern : *patterns_to_reinstall_options) {
-        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        goal.add_rpm_reinstall(option->get_value());
+    std::vector<std::string> error_messages;
+    const auto cmdline_packages = ctx.add_cmdline_packages(pkg_file_paths, error_messages);
+    for (const auto & msg : error_messages) {
+        std::cout << msg << std::endl;
     }
-    auto transaction = goal.resolve(true);
 
+    std::cout << std::endl;
+
+    libdnf::Goal goal(ctx.base);
+    for (const auto & pkg : cmdline_packages) {
+        goal.add_rpm_reinstall(pkg);
+    }
+    for (const auto & spec : pkg_specs) {
+        goal.add_rpm_reinstall(spec);
+    }
+
+    auto transaction = goal.resolve(true);
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
         return;
     }
