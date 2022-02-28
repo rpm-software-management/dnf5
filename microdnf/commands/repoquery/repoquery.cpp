@@ -82,13 +82,14 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquer
     nevra->set_const_value("true");
     nevra->link_value(nevra_option);
 
-    patterns_to_show_options = parser.add_new_values();
-    auto keys = parser.add_new_positional_arg(
-        "keys_to_match",
-        ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns_to_show_options);
+    auto keys =
+        parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
     keys->set_short_description("List of keys to match");
+    keys->set_parse_hook_func(
+        [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
+            parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);
+            return true;
+        });
 
     auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
         new std::vector<ArgumentParser::Argument *>{info, nevra}));
@@ -106,26 +107,41 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquer
 
 void RepoqueryCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
+    std::vector<libdnf::rpm::Package> cmdline_packages;
 
     if (installed_option->get_value()) {
         ctx.base.get_repo_sack()->get_system_repo()->load();
     }
 
     if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
+        // load available repositories
         ctx.load_repos(false);
+
+        std::vector<std::string> error_messages;
+        cmdline_packages = ctx.add_cmdline_packages(pkg_file_paths, error_messages);
+        for (const auto & msg : error_messages) {
+            std::cout << msg << std::endl;
+        }
     } else {
         // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
         ctx.base.get_rpm_package_sack()->setup_excludes_includes();
     }
 
     libdnf::rpm::PackageSet result_pset(ctx.base);
-    libdnf::rpm::PackageQuery full_package_query(ctx.base);
-    for (auto & pattern : *patterns_to_show_options) {
-        libdnf::rpm::PackageQuery package_query(full_package_query);
-        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
-        package_query.resolve_pkg_spec(option->get_value(), settings, true);
-        result_pset |= package_query;
+
+    for (const auto & pkg : cmdline_packages) {
+        if (!pkg.is_excluded()) {
+            result_pset.add(pkg);
+        }
+    }
+    if (!pkg_specs.empty()) {
+        const libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
+        const libdnf::rpm::PackageQuery full_package_query(ctx.base);
+        for (const auto & spec : pkg_specs) {
+            libdnf::rpm::PackageQuery package_query(full_package_query);
+            package_query.resolve_pkg_spec(spec, settings, true);
+            result_pset |= package_query;
+        }
     }
 
     if (info_option->get_value()) {
