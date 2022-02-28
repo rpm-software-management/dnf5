@@ -22,8 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "context.hpp"
 
+#include "libdnf-cli/output/transaction_table.hpp"
+
+#include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
 
+#include <iostream>
 
 namespace fs = std::filesystem;
 
@@ -34,27 +38,58 @@ namespace microdnf {
 using namespace libdnf::cli;
 
 
-DistroSyncCommand::DistroSyncCommand(Command & parent) : Command(parent, "distro-sync") {
+DistroSyncCommand::DistroSyncCommand(Command & parent) : DistroSyncCommand(parent, "distro-sync") {}
+
+DistroSyncCommand::DistroSyncCommand(Command & parent, const std::string & name) : Command(parent, name) {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Upgrade or downgrade installed software to the latest available versions");
 
-    patterns = parser.add_new_values();
+    patterns_to_distro_sync_options = parser.add_new_values();
     auto patterns_arg = parser.add_new_positional_arg(
         "patterns",
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns);
+        patterns_to_distro_sync_options);
     patterns_arg->set_short_description("Patterns");
     cmd.register_positional_arg(patterns_arg);
 }
 
 
 void DistroSyncCommand::run() {
-    // auto & ctx = static_cast<Context &>(get_session());
-    // auto & package_sack = *ctx.base.get_rpm_package_sack();
+    auto & ctx = static_cast<Context &>(get_session());
+
+    ctx.load_repos(true);
+
+    std::cout << std::endl;
+
+    libdnf::Goal goal(ctx.base);
+    if (patterns_to_distro_sync_options->empty()) {
+        goal.add_rpm_distro_sync();
+    } else {
+        for (auto & pattern : *patterns_to_distro_sync_options) {
+            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+            goal.add_rpm_distro_sync(option->get_value());
+        }
+    }
+    auto transaction = goal.resolve(false);
+    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
+        std::cout << transaction.get_package_solver_problems().to_string() << std::endl;
+        return;
+    }
+
+    if (!libdnf::cli::output::print_transaction_table(transaction)) {
+        return;
+    }
+
+    if (!userconfirm(ctx.base.get_config())) {
+        std::cout << "Operation aborted." << std::endl;
+        return;
+    }
+
+    ctx.download_and_run(transaction);
 }
 
 
