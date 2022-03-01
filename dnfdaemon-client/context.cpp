@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnfdaemon-server/dbus.hpp>
 #include <dnfdaemon-server/utils.hpp>
 #include <libdnf/rpm/package_set.hpp>
+#include <locale.h>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <filesystem>
@@ -50,6 +51,7 @@ void Context::init_session(sdbus::IConnection & connection) {
     if (!releasever.get_value().empty()) {
         cfg["releasever"] = releasever.get_value();
     }
+    cfg["locale"] = setlocale(LC_MESSAGES, nullptr);
 
     session_manager_proxy->callMethod("open_session")
         .onInterface(dnfdaemon::INTERFACE_SESSION_MANAGER)

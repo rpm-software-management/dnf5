@@ -36,6 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/base/base.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
 #include <libdnf/logger/stream_logger.hpp>
+#include <locale.h>
 #include <string.h>
 
 #include <cstring>
@@ -201,6 +202,7 @@ static bool parse_args(Context & ctx, int argc, char * argv[]) {
 int main(int argc, char * argv[]) {
     std::unique_ptr<sdbus::IConnection> connection;
 
+    setlocale(LC_ALL, "");
 
     dnfdaemon::client::Context context;
 
