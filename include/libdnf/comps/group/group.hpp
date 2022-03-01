@@ -134,8 +134,12 @@ public:
     /// @since 5.0
     Group & operator+=(const Group & rhs);
 
+    // Groups are the same if they have the same group_ids (libsolv solvable_ids) in the same order, and the same base.
+    bool operator==(const Group & rhs) const noexcept { return group_ids == rhs.group_ids && base == rhs.base; }
+    bool operator!=(const Group & rhs) const noexcept { return group_ids != rhs.group_ids || base != rhs.base; }
+    // Compare Groups by groupid and then by repoids (the string ids, so that it's deterministic even when loaded in a different order).
     bool operator<(const Group & rhs) const {
-        return get_groupid() < rhs.get_groupid() || (get_installed() && !rhs.get_installed());
+        return get_groupid() < rhs.get_groupid() || get_repos() < rhs.get_repos();
     }
 
     /// Dump the Group into an xml file.
