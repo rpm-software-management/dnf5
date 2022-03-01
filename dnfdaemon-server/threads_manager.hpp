@@ -23,11 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dbus.hpp"
 
 #include <fmt/format.h>
+#include <locale.h>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <atomic>
 #include <iostream>
 #include <mutex>
+#include <optional>
 #include <thread>
 #include <vector>
 
@@ -42,9 +44,23 @@ public:
     void finish();
 
     template <class S>
-    void handle_method(S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &), sdbus::MethodCall & call) {
+    void handle_method(
+        S & service,
+        sdbus::MethodReply (S::*method)(sdbus::MethodCall &),
+        sdbus::MethodCall & call,
+        std::optional<std::string> thread_locale = std::nullopt) {
         auto worker = std::thread(
-            [this](S & service, sdbus::MethodReply (S::*method)(sdbus::MethodCall &), sdbus::MethodCall call) {
+            [this](
+                S & service,
+                sdbus::MethodReply (S::*method)(sdbus::MethodCall &),
+                sdbus::MethodCall call,
+                std::optional<std::string> thread_locale = std::nullopt) {
+                locale_t new_locale{nullptr};
+                locale_t orig_locale{nullptr};
+                if (thread_locale) {
+                    orig_locale = set_thread_locale(thread_locale.value(), new_locale);
+                }
+
                 sdbus::MethodReply reply;
                 try {
                     reply = (service.*method)(call);
@@ -73,11 +89,17 @@ public:
                                      error_msg)
                               << std::endl;
                 }
+
+                if (thread_locale) {
+                    uselocale(orig_locale);
+                    freelocale(new_locale);
+                }
                 current_thread_finished();
             },
             std::ref(service),
             method,
-            call);
+            call,
+            thread_locale);
         register_thread(std::move(worker));
     }
 
@@ -121,6 +143,7 @@ private:
     std::vector<std::thread> running_threads{};
     // vector of finished threads id
     std::vector<std::thread::id> finished_threads{};
+    static locale_t set_thread_locale(const std::string & thread_locale, locale_t & new_locale);
 };
 
 #endif

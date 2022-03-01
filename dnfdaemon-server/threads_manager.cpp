@@ -19,6 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "threads_manager.hpp"
 
+#include <libdnf/common/exception.hpp>
+#include <locale.h>
+
 #include <algorithm>
 #include <chrono>
 #include <iostream>
@@ -80,4 +83,19 @@ void ThreadsManager::finish() {
     finish_collector = true;
     join_threads(false);
     running_threads_collector.join();
+}
+
+
+locale_t ThreadsManager::set_thread_locale(const std::string & thread_locale, locale_t & new_locale) {
+    auto no_locale = static_cast<locale_t>(0);
+    new_locale = newlocale(LC_ALL_MASK, thread_locale.c_str(), no_locale);
+    if (new_locale == no_locale) {
+        throw libdnf::SystemError(errno, "Failed to create locale \"{}\".", thread_locale);
+    }
+    locale_t orig_locale = uselocale(new_locale);
+    if (orig_locale == no_locale) {
+        freelocale(new_locale);
+        throw libdnf::SystemError(errno, "Failed to use locale \"{}\".", thread_locale);
+    }
+    return orig_locale;
 }
