@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<comps>
+  <group>
+    <id>critical-path-standard</id>
+    <name>Critical Path (Standard)</name>
+    <description>A set of packages that relate to Critical Path functionality and are in standard but not base</description>
+    <default>true</default>
+    <uservisible>true</uservisible>
+    <packagelist>
+      <packagereq type="mandatory">fprintd-pam</packagereq>
+    </packagelist>
+  </group>
+</comps>

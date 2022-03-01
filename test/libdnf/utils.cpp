@@ -46,3 +46,12 @@ std::vector<libdnf::advisory::Advisory> to_vector(const libdnf::advisory::Adviso
     }
     return res;
 }
+
+
+std::vector<libdnf::comps::Group> to_vector(const libdnf::Set<libdnf::comps::Group> & group_set) {
+    std::vector<libdnf::comps::Group> res;
+    for (const auto & group : group_set) {
+        res.push_back(group);
+    }
+    return res;
+}

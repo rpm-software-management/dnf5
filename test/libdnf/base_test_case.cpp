@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 #include "utils/string.hpp"
 
+#include "libdnf/comps/group/group.hpp"
+#include "libdnf/comps/group/query.hpp"
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package_query.hpp"
 
@@ -83,6 +85,27 @@ libdnf::advisory::Advisory BaseTestCase::get_advisory(const std::string & name) 
         CPPUNIT_FAIL(sformat("No advisory \"{}\" found. All pool advisories:{}", name, to_string(advisories)));
     } else if (found.size() > 1) {
         CPPUNIT_FAIL(sformat("More than one advisory matching \"{}\" found:{}", name, to_string(advisories)));
+    }
+
+    return *found.begin();
+}
+
+
+libdnf::comps::Group BaseTestCase::get_group(const std::string & groupid, bool installed) {
+    // This is used for testing queries as well, hence we don't use the GroupQuery facility for filtering
+    libdnf::Set<libdnf::comps::Group> groups = libdnf::comps::GroupQuery(base);
+
+    std::set<libdnf::comps::Group> found;
+    for (auto group : groups) {
+        if (group.get_groupid() == groupid && group.get_installed() == installed) {
+            found.insert(group);
+        }
+    }
+
+    if (found.empty()) {
+        CPPUNIT_FAIL(sformat("No group \"{}\" found. All pool groups:{}", groupid, to_string(groups)));
+    } else if (found.size() > 1) {
+        CPPUNIT_FAIL(sformat("More than one group matching \"{}\" found:{}", groupid, to_string(groups)));
     }
 
     return *found.begin();

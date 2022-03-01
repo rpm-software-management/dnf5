@@ -23,6 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_set.hpp"
 #include "libdnf/base/transaction.hpp"
+#include "libdnf/comps/group/group.hpp"
+#include "libdnf/comps/group/query.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/package_set.hpp"
 #include "libdnf/utils/format.hpp"
@@ -94,6 +96,38 @@ struct assertion_traits<libdnf::advisory::AdvisorySet> {
 };
 
 template <>
+struct assertion_traits<libdnf::comps::Group> {
+    inline static bool equal(const libdnf::comps::Group & left, const libdnf::comps::Group & right) {
+        return left == right;
+    }
+
+    inline static std::string toString(const libdnf::comps::Group & group) {
+        std::string repos;
+        for (const auto & repo : group.get_repos()) {
+            if (!repos.empty()) {
+                repos += ", ";
+            }
+            repos += repo;
+        }
+
+        return libdnf::utils::sformat("{} (repos: {})", group.get_groupid(), repos);
+    }
+};
+
+template <>
+struct assertion_traits<libdnf::Set<libdnf::comps::Group>> {
+    inline static std::string toString(const libdnf::Set<libdnf::comps::Group> & groups) {
+        std::string result;
+
+        for (const auto & group : groups) {
+            result += "\n    " + assertion_traits<libdnf::comps::Group>::toString(group);
+        }
+
+        return result;
+    }
+};
+
+template <>
 struct assertion_traits<libdnf::rpm::Package> {
     inline static bool equal(const libdnf::rpm::Package & left, const libdnf::rpm::Package & right) {
         return left == right;
@@ -155,6 +189,7 @@ struct assertion_traits<libdnf::base::TransactionPackage> {
 
 
 std::vector<libdnf::advisory::Advisory> to_vector(const libdnf::advisory::AdvisorySet & advisory_set);
+std::vector<libdnf::comps::Group> to_vector(const libdnf::Set<libdnf::comps::Group> & group_set);
 std::vector<libdnf::rpm::Reldep> to_vector(const libdnf::rpm::ReldepList & reldep_list);
 std::vector<libdnf::rpm::Package> to_vector(const libdnf::rpm::PackageSet & package_set);
 
