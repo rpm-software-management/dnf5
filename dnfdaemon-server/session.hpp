@@ -81,6 +81,7 @@ public:
     bool check_authorization(const std::string & actionid, const std::string & sender);
     void fill_sack();
     bool read_all_repos();
+    std::optional<std::string> session_locale;
 
 private:
     sdbus::IConnection & connection;

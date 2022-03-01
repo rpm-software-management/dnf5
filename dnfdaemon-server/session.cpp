@@ -48,6 +48,10 @@ Session::Session(
       session_configuration(session_configuration),
       object_path(object_path),
       sender(sender) {
+    if (session_configuration.find("locale") != session_configuration.end()) {
+        session_locale = session_configuration_value<std::string>("locale");
+    }
+
     // set-up log router for base
     auto & logger = *base->get_logger();
     logger.add_logger(std::make_unique<libdnf::StdCStreamLogger>(std::cerr));

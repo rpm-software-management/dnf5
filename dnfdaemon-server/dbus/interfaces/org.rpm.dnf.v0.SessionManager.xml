@@ -42,6 +42,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
                 Override configuration options.
             - releasever: string
                 Override releasever variable used for substitutions in repository configurations.
+            - locale: string
+                Override server locale for this session. Affects language used in various error messages.
 
         Unknown options are ignored.
     -->
