@@ -114,28 +114,28 @@ public:
 
     Id lookup_id(Id id, Id keyname) const {
         if (id > 0) {
-            libdnf::solv::get_repo(id2solvable(id)).p_impl->solv_repo.internalize();
+            libdnf::solv::get_repo(id2solvable(id)).internalize();
         }
         return pool_lookup_id(pool, id, keyname);
     }
 
     const char * lookup_str(Id id, Id keyname) const {
         if (id > 0) {
-            libdnf::solv::get_repo(id2solvable(id)).p_impl->solv_repo.internalize();
+            libdnf::solv::get_repo(id2solvable(id)).internalize();
         }
         return pool_lookup_str(pool, id, keyname);
     }
 
     unsigned long long lookup_num(Id id, Id keyname) const {
         if (id > 0) {
-            libdnf::solv::get_repo(id2solvable(id)).p_impl->solv_repo.internalize();
+            libdnf::solv::get_repo(id2solvable(id)).internalize();
         }
         return pool_lookup_num(pool, id, keyname, 0);
     }
 
     bool lookup_void(Id id, Id keyname) const {
         if (id > 0) {
-            libdnf::solv::get_repo(id2solvable(id)).p_impl->solv_repo.internalize();
+            libdnf::solv::get_repo(id2solvable(id)).internalize();
         }
         return pool_lookup_void(pool, id, keyname);
     }

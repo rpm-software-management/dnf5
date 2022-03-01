@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/repo/repo_errors.hpp"
 #include "libdnf/repo/repo_weak.hpp"
+#include "libdnf/rpm/package.hpp"
 
 #include <memory>
 
@@ -52,12 +53,14 @@ class PackageSack;
 
 namespace libdnf::repo {
 
+class SolvRepo;
+
+
 /// RPM repository
 /// Represents a repository used to download packages.
 /// Remote metadata is cached locally.
 class Repo {
 public:
-    // TODO(jrohel): Do we need this Repo class for SYSTEM and COMMANDINE repos? Thinking about removing enum.
     enum class Type { AVAILABLE, SYSTEM, COMMANDLINE };
 
     enum class SyncStrategy {
@@ -348,6 +351,8 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
     void set_substitutions(const std::map<std::string, std::string> & substitutions);
 
+    void add_libsolv_testcase(const std::string & path);
+
     libdnf::repo::RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
 
     /// @return The `Base` object to which this object belongs.
@@ -362,7 +367,28 @@ private:
     friend class comps::Comps;
     friend class PackageDownloader;
     friend class solv::Pool;
+
+    void make_solv_repo();
+
+    void load_available_repo(LoadFlags flags);
+
+    /// Adds an RPM package at `path` to the repository.
+    ///
+    /// If `with_hdrid` is `true`, the RPM is loaded with the
+    /// `RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM` flags, meaning libsolv will
+    /// calculate the SHA256 checksum of the RPM header and store it. This adds
+    /// overhead but has the advantage of TODO(lukash) describe the advantage.
+    /// @param path The path to the RPM file.
+    /// @param with_hdrid If true, libsolv calculates header checksum and stores it.
+    /// @throws RepoRpmError if the RPM file can't be read or is corrupted.
+    /// @return PackageId of the added package.
+    rpm::PackageId add_rpm_package(const std::string & path, bool with_hdrid);
+
+    void internalize();
+
     std::unique_ptr<Impl> p_impl;
+    std::unique_ptr<SolvRepo> solv_repo;
+
     WeakPtrGuard<Repo, false> data_guard;
 };
 

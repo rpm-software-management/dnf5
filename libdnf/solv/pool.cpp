@@ -139,7 +139,7 @@ std::string Pool::get_full_nevra(Id id) const {
 
 const char * Pool::get_sourcerpm(Id id) const {
     Solvable * solvable = id2solvable(id);
-    solv::get_repo(solvable).p_impl->solv_repo.internalize();
+    solv::get_repo(solvable).internalize();
     return solvable_lookup_sourcepkg(solvable);
 }
 

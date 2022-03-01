@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_SOLV_REPO_HPP
 #define LIBDNF_REPO_SOLV_REPO_HPP
 
+#include "repo_downloader.hpp"
 #include "solv/id_queue.hpp"
 
 #include "libdnf/base/base_weak.hpp"
@@ -48,13 +49,14 @@ class SolvError : public Error {
 
 class SolvRepo {
 public:
-    SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config);
+    SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, void * appdata);
+    ~SolvRepo();
 
     /// Loads main metadata (solvables) from available repo.
     void load_repo_main(const std::string & repomd_fn, const std::string & primary_fn);
 
     /// Loads additional metadata (filelist, others, ...) from available repo.
-    void load_repo_ext(const std::string & filename, RepodataType type);
+    void load_repo_ext(RepodataType type, const RepoDownloader & downloader);
 
     /// Loads system repository into the pool.
     ///
@@ -66,6 +68,9 @@ public:
 
     // Internalize repository if needed.
     void internalize();
+
+    void set_priority(int priority);
+    void set_subpriority(int subpriority);
 
     // Checksum of data in .solv file. Used for validity check of .solvx files.
     unsigned char checksum[CHKSUM_BYTES];

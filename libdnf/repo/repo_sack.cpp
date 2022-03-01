@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
-#include "utils/fs/file.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
@@ -32,8 +31,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 
 extern "C" {
-#include <solv/repo.h>
-#include <solv/solv_xfopen.h>
 #include <solv/testcase.h>
 }
 
@@ -70,9 +67,8 @@ RepoWeakPtr RepoSack::create_repo(const std::string & id) {
 
 
 RepoWeakPtr RepoSack::create_repo_from_libsolv_testcase(const std::string & id, const std::string & path) {
-    libdnf::utils::fs::File testcase_file(path, "r", true);
     auto repo = create_repo(id);
-    testcase_add_testtags(repo->p_impl->solv_repo.repo, testcase_file.get(), 0);
+    repo->add_libsolv_testcase(path);
     return repo;
 }
 
@@ -96,7 +92,6 @@ RepoWeakPtr RepoSack::get_system_repo() {
         repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, false);
         system_repo = repo.get();
         add_item(std::move(repo));
-        pool_set_installed(*get_pool(base), system_repo->p_impl->solv_repo.repo);
     }
 
     return system_repo->get_weak_ptr();
@@ -316,15 +311,15 @@ BaseWeakPtr RepoSack::get_base() const {
 void RepoSack::internalize_repos() {
     auto rq = RepoQuery(base);
     for (auto & repo : rq.get_data()) {
-        repo->p_impl->solv_repo.internalize();
+        repo->internalize();
     }
 
     if (system_repo) {
-        system_repo->p_impl->solv_repo.internalize();
+        system_repo->internalize();
     }
 
     if (cmdline_repo) {
-        cmdline_repo->p_impl->solv_repo.internalize();
+        cmdline_repo->internalize();
     }
 }
 

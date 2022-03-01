@@ -49,7 +49,6 @@ using LibsolvRepo = ::Repo;
 class Repo::Impl {
 public:
     Impl(const BaseWeakPtr & base, std::string id, Type type);
-    ~Impl();
 
     bool fetch_metadata();
     void read_metadata_cache();
@@ -59,14 +58,6 @@ public:
     void expire();
     bool is_expired() const;
     int get_expires_in() const;
-
-    void load_available_repo(LoadFlags flags);
-
-    /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
-    /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
-    /// When RPM is not accesible or corrupted it raises libdnf::RuntimeError
-    /// Return Id of a new solvable
-    Id add_rpm_package(const std::string & fn, bool add_with_hdrid);
 
 public:
     friend class Repo;
@@ -85,11 +76,6 @@ public:
     void reset_metadata_expired();
 
     bool expired;
-
-    // Information about attached libsolv repository
-    // TODO(lukash) create solv_repo only when loading into the pool (make this std::optional or std::unique_ptr)
-    // and handle the case throughout the code via asserts
-    SolvRepo solv_repo;
 
     RepoDownloader downloader;
 };

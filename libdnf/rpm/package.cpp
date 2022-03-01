@@ -148,7 +148,7 @@ std::vector<std::string> Package::get_files() const {
     auto & pool = get_pool(base);
 
     Solvable * solvable = pool.id2solvable(id.id);
-    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
+    libdnf::solv::get_repo(solvable).internalize();
 
     std::vector<std::string> ret;
 
@@ -167,7 +167,7 @@ std::vector<libdnf::rpm::Changelog> Package::get_changelogs() const {
     std::vector<libdnf::rpm::Changelog> changelogs;
     auto & pool = get_pool(base);
     Solvable * solvable = pool.id2solvable(id.id);
-    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
+    libdnf::solv::get_repo(solvable).internalize();
 
     Dataiterator di;
     dataiterator_init(&di, *pool, solvable->repo, id.id, SOLVABLE_CHANGELOG, nullptr, 0);
@@ -261,7 +261,7 @@ std::string Package::get_baseurl() const {
 
 std::string Package::get_location() const {
     Solvable * solvable = get_pool(base).id2solvable(id.id);
-    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
+    libdnf::solv::get_repo(solvable).internalize();
     return cstring2string(solvable_lookup_location(solvable, nullptr));
 }
 
@@ -314,7 +314,7 @@ libdnf::transaction::TransactionItemReason Package::get_reason() const {
 Checksum Package::get_checksum() const {
     Solvable * solvable = get_pool(base).id2solvable(id.id);
     int type;
-    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
+    libdnf::solv::get_repo(solvable).internalize();
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_CHECKSUM, &type);
     Checksum checksum(chksum, type);
 
@@ -324,7 +324,7 @@ Checksum Package::get_checksum() const {
 Checksum Package::get_hdr_checksum() const {
     Solvable * solvable = get_pool(base).id2solvable(id.id);
     int type;
-    libdnf::solv::get_repo(solvable).p_impl->solv_repo.internalize();
+    libdnf::solv::get_repo(solvable).internalize();
     const char * chksum = solvable_lookup_checksum(solvable, SOLVABLE_HDRID, &type);
     Checksum checksum(chksum, type);
 

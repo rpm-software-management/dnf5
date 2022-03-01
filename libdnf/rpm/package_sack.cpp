@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_sack_impl.hpp"
 #include "package_set_impl.hpp"
 #include "repo/repo_impl.hpp"
+#include "repo/solv_repo.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
 #include "utils/bgettext/bgettext-lib.h"
@@ -63,13 +64,20 @@ void PackageSack::Impl::make_provides_ready() {
     pool_addfileprovides_queue(*pool, &addedfileprovides.get_queue(), &addedfileprovides_inst.get_queue());
 
     if (base->get_repo_sack()->has_system_repo() && !addedfileprovides_inst.empty()) {
-        base->get_repo_sack()->get_system_repo()->p_impl->solv_repo.rewrite_repo(addedfileprovides_inst);
+        auto system_repo = base->get_repo_sack()->get_system_repo();
+        // TODO(lukash) handle the existence of solv_repo in a unified manner?
+        if (system_repo->solv_repo) {
+            system_repo->solv_repo->rewrite_repo(addedfileprovides_inst);
+        }
     }
 
     if (!addedfileprovides.empty()) {
         auto rq = repo::RepoQuery(base);
         for (auto & repo : rq.get_data()) {
-            repo->p_impl->solv_repo.rewrite_repo(addedfileprovides);
+            // TODO(lukash) handle the existence of solv_repo in a unified manner?
+            if (repo->solv_repo) {
+                repo->solv_repo->rewrite_repo(addedfileprovides);
+            }
         }
     }
 
@@ -210,10 +218,11 @@ std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(l
 
             // Add all solvables from repositories which do not use "includes"
             for (const auto & repo : base->get_repo_sack()->get_data()) {
-                if (!repo->get_use_includes()) {
+                // TODO(lukash) handle the existence of solv_repo in a unified manner?
+                if (!repo->get_use_includes() && repo->solv_repo) {
                     Id solvableid;
                     Solvable * solvable;
-                    FOR_REPO_SOLVABLES(repo->p_impl->solv_repo.repo, solvableid, solvable) {
+                    FOR_REPO_SOLVABLES(repo->solv_repo->repo, solvableid, solvable) {
                         pkg_includes_tmp.add_unsafe(solvableid);
                     }
                 }
@@ -243,18 +252,18 @@ void PackageSack::Impl::recompute_considered_in_pool() {
 
 Package PackageSack::add_cmdline_package(const std::string & fn, bool add_with_hdrid) {
     auto repo = p_impl->base->get_repo_sack()->get_cmdline_repo();
-    auto new_id = repo->p_impl->add_rpm_package(fn, add_with_hdrid);
+    auto new_id = repo->add_rpm_package(fn, add_with_hdrid);
 
     p_impl->provides_ready = false;
-    return Package(p_impl->base, PackageId(new_id));
+    return Package(p_impl->base, new_id);
 }
 
 
 Package PackageSack::add_system_package(const std::string & fn, bool add_with_hdrid) {
-    auto new_id = p_impl->base->get_repo_sack()->get_system_repo()->p_impl->add_rpm_package(fn, add_with_hdrid);
+    auto new_id = p_impl->base->get_repo_sack()->get_system_repo()->add_rpm_package(fn, add_with_hdrid);
 
     p_impl->provides_ready = false;
-    return Package(p_impl->base, PackageId(new_id));
+    return Package(p_impl->base, new_id);
 }
 
 PackageSackWeakPtr PackageSack::get_weak_ptr() {

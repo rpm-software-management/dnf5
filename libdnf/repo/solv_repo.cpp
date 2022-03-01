@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv_repo.hpp"
 
-#include "repo_downloader.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/fs/file.hpp"
@@ -127,10 +126,17 @@ static int repodata_type_to_flags(RepodataType type) {
 }
 
 
-SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)
+SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, void * appdata)
     : base(base),
       config(config),
-      repo(repo_create(*get_pool(base), config.get_id().c_str())) {}
+      repo(repo_create(*get_pool(base), config.get_id().c_str())) {
+    repo->appdata = appdata;
+}
+
+
+SolvRepo::~SolvRepo() {
+    repo->appdata = nullptr;
+}
 
 
 void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string & primary_fn) {
@@ -171,10 +177,27 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 }
 
 
-void SolvRepo::load_repo_ext(const std::string & ext_fn, RepodataType type) {
+void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloader) {
     auto & logger = *base->get_logger();
 
     auto type_name = repodata_type_to_name(type);
+
+    std::string_view ext_fn;
+
+    if (type == RepodataType::COMPS) {
+        ext_fn = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
+        if (ext_fn.empty()) {
+            ext_fn = downloader.get_metadata_path(type_name);
+        }
+    } else {
+        ext_fn = downloader.get_metadata_path(type_name);
+    }
+
+    if (ext_fn.empty()) {
+        logger.debug("No {} metadata available for repo \"{}\"", type_name, config.get_id());
+        return;
+    }
+
     if (load_solv_cache(type_name, repodata_type_to_flags(type))) {
         return;
     }
@@ -316,6 +339,16 @@ void SolvRepo::internalize() {
     }
     repo_internalize(repo);
     needs_internalizing = false;
+}
+
+
+void SolvRepo::set_priority(int priority) {
+    repo->priority = priority;
+}
+
+
+void SolvRepo::set_subpriority(int subpriority) {
+    repo->subpriority = subpriority;
 }
 
 

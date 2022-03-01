@@ -22,6 +22,7 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "repo_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/fs/file.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf/common/exception.hpp"
@@ -29,6 +30,7 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 
 extern "C" {
 #include <solv/repo_rpmdb.h>
+#include <solv/testcase.h>
 }
 
 #include <fcntl.h>
@@ -88,81 +90,8 @@ Repo::Impl::Impl(const BaseWeakPtr & base, std::string id, Type type)
       sync_strategy(SyncStrategy::TRY_CACHE),
       base(base),
       expired(false),
-      solv_repo(base, config),
       downloader(base, config) {}
 
-Repo::Impl::~Impl() {
-    if (solv_repo.repo) {
-        solv_repo.repo->appdata = nullptr;
-    }
-}
-
-
-void Repo::Impl::load_available_repo(LoadFlags flags) {
-    auto & logger = *base->get_logger();
-
-    auto primary_fn = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
-    if (primary_fn.empty()) {
-        throw RepoError(_("Failed to load repository: \"primary\" data not present or in unsupported format"));
-    }
-
-    solv_repo.load_repo_main(downloader.repomd_filename, primary_fn);
-
-    if (any(flags & LoadFlags::FILELISTS)) {
-        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_FILELISTS);
-
-        if (!md_filename.empty()) {
-            solv_repo.load_repo_ext(md_filename, RepodataType::FILELISTS);
-        } else {
-            logger.debug("No filelists metadata available for repo \"{}\"", config.get_id());
-        }
-    }
-    if (any(flags & LoadFlags::OTHER)) {
-        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_OTHER);
-
-        if (!md_filename.empty()) {
-            solv_repo.load_repo_ext(md_filename, RepodataType::OTHER);
-        } else {
-            logger.debug("No other metadata available for repo \"{}\"", config.get_id());
-        }
-    }
-    if (any(flags & LoadFlags::PRESTO)) {
-        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRESTODELTA);
-
-        if (!md_filename.empty()) {
-            solv_repo.load_repo_ext(md_filename, RepodataType::PRESTO);
-        } else {
-            logger.debug("No presto metadata available for repo \"{}\"", config.get_id());
-        }
-    }
-
-    // updateinfo must come *after* all other extensions, as it is not a real
-    //   extension, but contains a new set of packages
-    if (any(flags & LoadFlags::UPDATEINFO)) {
-        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_UPDATEINFO);
-
-        if (!md_filename.empty()) {
-            solv_repo.load_repo_ext(md_filename, RepodataType::UPDATEINFO);
-        } else {
-            logger.debug("No updateinfo metadata available for repo \"{}\"", config.get_id());
-        }
-    }
-
-    if (any(flags & LoadFlags::COMPS)) {
-        auto md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_GROUP_GZ);
-        if (md_filename.empty()) {
-            md_filename = downloader.get_metadata_path(RepoDownloader::MD_FILENAME_GROUP);
-        }
-
-        if (!md_filename.empty()) {
-            solv_repo.load_repo_ext(md_filename, RepodataType::COMPS);
-        } else {
-            logger.debug("No group metadata available for repo \"{}\"", config.get_id());
-        }
-    }
-
-    base->get_rpm_package_sack()->p_impl->invalidate_provides();
-}
 
 Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type) {
     if (type == Type::AVAILABLE) {
@@ -172,11 +101,6 @@ Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type) {
         }
     }
     p_impl.reset(new Impl(base, id, type));
-
-    // TODO(lukash) move this to SolvRepo constructor
-    p_impl->solv_repo.repo->appdata = this;
-    p_impl->solv_repo.repo->subpriority = -get_cost();
-    p_impl->solv_repo.repo->priority = -get_priority();
 }
 
 Repo::Repo(Base & base, const std::string & id, Repo::Type type) : Repo(base.get_weak_ptr(), id, type) {}
@@ -260,16 +184,32 @@ void Repo::download_metadata(const std::string & destdir) {
 }
 
 void Repo::load(LoadFlags flags) {
+    make_solv_repo();
+
     if (p_impl->type == Type::AVAILABLE) {
-        p_impl->load_available_repo(flags);
+        load_available_repo(flags);
     } else if (p_impl->type == Type::SYSTEM) {
-        p_impl->solv_repo.load_system_repo();
+        solv_repo->load_system_repo();
     }
+
+    solv_repo->set_needs_internalizing();
+    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
 }
 
 void Repo::load_extra_system_repo(const std::string & rootdir) {
     libdnf_assert(p_impl->type == Type::SYSTEM, "repo type must be SYSTEM to load an extra system repo");
-    p_impl->solv_repo.load_system_repo(rootdir);
+    libdnf_assert(solv_repo, "repo must be loaded to load an extra system repo");
+    solv_repo->load_system_repo(rootdir);
+}
+
+void Repo::add_libsolv_testcase(const std::string & path) {
+    make_solv_repo();
+
+    libdnf::utils::fs::File testcase_file(path, "r", true);
+    testcase_add_testtags(solv_repo->repo, testcase_file.get(), 0);
+
+    solv_repo->set_needs_internalizing();
+    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
 }
 
 bool Repo::get_use_includes() const {
@@ -295,8 +235,8 @@ int Repo::get_cost() const {
 void Repo::set_cost(int value, Option::Priority priority) {
     auto & conf_cost = p_impl->config.cost();
     conf_cost.set(priority, value);
-    if (p_impl->solv_repo.repo != nullptr) {
-        p_impl->solv_repo.repo->subpriority = -conf_cost.get_value();
+    if (solv_repo) {
+        solv_repo->set_subpriority(-conf_cost.get_value());
     }
 }
 
@@ -307,8 +247,8 @@ int Repo::get_priority() const {
 void Repo::set_priority(int value, Option::Priority priority) {
     auto & conf_priority = p_impl->config.priority();
     conf_priority.set(priority, value);
-    if (p_impl->solv_repo.repo != nullptr) {
-        p_impl->solv_repo.repo->priority = -conf_priority.get_value();
+    if (solv_repo) {
+        solv_repo->set_priority(-conf_priority.get_value());
     }
 }
 
@@ -517,47 +457,82 @@ BaseWeakPtr Repo::get_base() const {
     return p_impl->base;
 }
 
-Id Repo::Impl::add_rpm_package(const std::string & fn, bool add_with_hdrid) {
-    is_readable_rpm(fn);
+
+void Repo::make_solv_repo() {
+    if (!solv_repo) {
+        solv_repo.reset(new SolvRepo(p_impl->base, p_impl->config, this));
+
+        // TODO(lukash) move the below to SolvRepo? Requires sharing Type
+        if (p_impl->type == Type::SYSTEM) {
+            pool_set_installed(*get_pool(p_impl->base), solv_repo->repo);
+        }
+
+        solv_repo->set_priority(-get_priority());
+        solv_repo->set_subpriority(-get_cost());
+    }
+}
+
+
+void Repo::load_available_repo(LoadFlags flags) {
+    auto primary_fn = p_impl->downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
+    if (primary_fn.empty()) {
+        throw RepoError(_("Failed to load repository: \"primary\" data not present or in unsupported format"));
+    }
+
+    solv_repo->load_repo_main(p_impl->downloader.repomd_filename, primary_fn);
+
+    if (any(flags & LoadFlags::FILELISTS)) {
+        solv_repo->load_repo_ext(RepodataType::FILELISTS, p_impl->downloader);
+    }
+
+    if (any(flags & LoadFlags::OTHER)) {
+        solv_repo->load_repo_ext(RepodataType::OTHER, p_impl->downloader);
+    }
+
+    if (any(flags & LoadFlags::PRESTO)) {
+        solv_repo->load_repo_ext(RepodataType::PRESTO, p_impl->downloader);
+    }
+
+    // updateinfo must come *after* all other extensions, as it is not a real
+    // extension, but contains a new set of packages
+    if (any(flags & LoadFlags::UPDATEINFO)) {
+        solv_repo->load_repo_ext(RepodataType::UPDATEINFO, p_impl->downloader);
+    }
+
+    if (any(flags & LoadFlags::COMPS)) {
+        solv_repo->load_repo_ext(RepodataType::COMPS, p_impl->downloader);
+    }
+}
+
+
+rpm::PackageId Repo::add_rpm_package(const std::string & path, bool with_hdrid) {
+    is_readable_rpm(path);
+
+    make_solv_repo();
 
     int flags = REPO_REUSE_REPODATA | REPO_NO_INTERNALIZE;
-    if (add_with_hdrid) {
+    if (with_hdrid) {
         flags |= RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM;
     }
 
-    Id new_id = repo_add_rpm(solv_repo.repo, fn.c_str(), flags);
+    Id new_id = repo_add_rpm(solv_repo->repo, path.c_str(), flags);
     if (new_id == 0) {
-        throw RepoRpmError(M_("Failed to load RPM \"{}\": {}"), fn, pool_errstr(solv_repo.repo->pool));
-    }
-    solv_repo.set_needs_internalizing();
-    return new_id;
-}
-
-// TODO(jrohel): Later with rpm sack work.
-/* void repo_internalize_trigger(LibsolvRepo * repo) {
-    if (!repo)
-        return;
-
-    if (auto hrepo = static_cast<libdnf::Repo *>(repo->appdata)) {
-        // HyRepo is attached. The hint needs_internalizing will be used.
-        auto repoImpl = libdnf::repo_get_impl(hrepo);
-        assert(repoImpl->libsolv_repo == repo);
-        if (!repoImpl->needs_internalizing)
-            return;
-        repoImpl->needs_internalizing = false;
+        throw RepoRpmError(M_("Failed to load RPM \"{}\": {}"), path, pool_errstr(solv_repo->repo->pool));
     }
 
-    repo_internalize(repo);
+    solv_repo->set_needs_internalizing();
+    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
+
+    return rpm::PackageId(new_id);
 }
 
-void repo_internalize_all_trigger(Pool * pool) {
-    int i;
-    LibsolvRepo * repo;
 
-    FOR_REPOS(i, repo)
-    repo_internalize_trigger(repo);
+void Repo::internalize() {
+    if (solv_repo) {
+        solv_repo->internalize();
+    }
 }
-*/
+
 
 // ============ librepo logging ===========
 
