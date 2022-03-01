@@ -31,19 +31,19 @@ void RepoConf::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &RepoConf::list, call);
+            session.get_threads_manager().handle_method(*this, &RepoConf::list, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "get", "s", "a{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &RepoConf::get, call);
+            session.get_threads_manager().handle_method(*this, &RepoConf::get, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "enable", "as", "as", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &RepoConf::enable, call);
+            session.get_threads_manager().handle_method(*this, &RepoConf::enable, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_REPOCONF, "disable", "as", "as", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &RepoConf::disable, call);
+            session.get_threads_manager().handle_method(*this, &RepoConf::disable, call, session.session_locale);
         });
 }
 

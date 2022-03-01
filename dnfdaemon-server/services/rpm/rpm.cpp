@@ -35,31 +35,31 @@ void Rpm::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "distro_sync", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::distro_sync, call);
+            session.get_threads_manager().handle_method(*this, &Rpm::distro_sync, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "downgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::downgrade, call);
+            session.get_threads_manager().handle_method(*this, &Rpm::downgrade, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::list, call);
+            session.get_threads_manager().handle_method(*this, &Rpm::list, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "install", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::install, call);
+            session.get_threads_manager().handle_method(*this, &Rpm::install, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "upgrade", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::upgrade, call);
+            session.get_threads_manager().handle_method(*this, &Rpm::upgrade, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "reinstall", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::reinstall, call);
+            session.get_threads_manager().handle_method(*this, &Rpm::reinstall, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_RPM, "remove", "asa{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Rpm::remove, call);
+            session.get_threads_manager().handle_method(*this, &Rpm::remove, call, session.session_locale);
         });
 }
 

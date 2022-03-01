@@ -119,7 +119,7 @@ void Group::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_GROUP, "list", "a{sv}", "aa{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Group::list, call);
+            session.get_threads_manager().handle_method(*this, &Group::list, call, session.session_locale);
         });
 }
 

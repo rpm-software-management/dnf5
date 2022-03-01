@@ -39,11 +39,11 @@ void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(ua{sv})a{sv}", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Goal::resolve, call);
+            session.get_threads_manager().handle_method(*this, &Goal::resolve, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_GOAL, "do_transaction", "a{sv}", "", [this](sdbus::MethodCall call) -> void {
-            session.get_threads_manager().handle_method(*this, &Goal::do_transaction, call);
+            session.get_threads_manager().handle_method(*this, &Goal::do_transaction, call, session.session_locale);
         });
 }
 
