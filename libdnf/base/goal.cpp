@@ -144,6 +144,10 @@ void Goal::add_rpm_reinstall(const std::string & spec, const GoalJobSettings & s
     p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::REINSTALL, spec, settings));
 }
 
+void Goal::add_rpm_reinstall(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
+    p_impl->add_rpm_ids(GoalAction::REINSTALL, rpm_package, settings);
+}
+
 void Goal::add_rpm_remove(const std::string & spec, const GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::REMOVE, spec, settings));
 }
@@ -174,6 +178,10 @@ void Goal::add_rpm_upgrade(const rpm::PackageSet & package_set, const GoalJobSet
 
 void Goal::add_rpm_downgrade(const std::string & spec, const GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::DOWNGRADE, spec, settings));
+}
+
+void Goal::add_rpm_downgrade(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
+    p_impl->add_rpm_ids(GoalAction::DOWNGRADE, rpm_package, settings);
 }
 
 void Goal::add_rpm_distro_sync(const std::string & spec, const GoalJobSettings & settings) {
@@ -568,6 +576,9 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
     for (auto [action, ids, settings] : rpm_ids) {
         switch (action) {
             case GoalAction::INSTALL: {
+                bool strict = settings.resolve_strict(cfg_main);
+                bool best = settings.resolve_best(cfg_main);
+                bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
                 //  include installed packages with the same NEVRA into transaction to prevent reinstall
                 std::vector<std::string> nevras;
                 for (auto id : ids) {
@@ -578,19 +589,10 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 //  report aready installed packages with the same NEVRA
                 for (auto package_id : *query.p_impl) {
                     transaction.p_impl->add_resolve_log(
-                        GoalAction::INSTALL,
-                        GoalProblem::ALREADY_INSTALLED,
-                        settings,
-                        {},
-                        {pool.get_nevra(package_id)},
-                        false);
+                        action, GoalProblem::ALREADY_INSTALLED, settings, {}, {pool.get_nevra(package_id)}, strict);
                     ids.push_back(package_id);
                 }
-                rpm_goal.add_install(
-                    ids,
-                    settings.resolve_strict(cfg_main),
-                    settings.resolve_best(cfg_main),
-                    settings.resolve_clean_requirements_on_remove());
+                rpm_goal.add_install(ids, strict, best, clean_requirements_on_remove);
             } break;
             case GoalAction::INSTALL_OR_REINSTALL:
                 rpm_goal.add_install(
@@ -599,9 +601,126 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                     settings.resolve_best(cfg_main),
                     settings.resolve_clean_requirements_on_remove());
                 break;
+            case GoalAction::REINSTALL: {
+                bool strict = settings.resolve_strict(cfg_main);
+                bool best = settings.resolve_best(cfg_main);
+                bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+                solv::IdQueue ids_nevra_installed;
+                for (auto id : ids) {
+                    rpm::PackageQuery query(installed);
+                    query.filter_nevra({pool.get_nevra(id)});
+                    if (query.empty()) {
+                        // Report when package with the same NEVRA is not installed
+                        transaction.p_impl->add_resolve_log(
+                            action, GoalProblem::NOT_INSTALLED, settings, {pool.get_nevra(id)}, {}, strict);
+                    } else {
+                        // Only installed packages can be reinstalled
+                        ids_nevra_installed.push_back(id);
+                    }
+                }
+                rpm_goal.add_install(ids_nevra_installed, strict, best, clean_requirements_on_remove);
+            } break;
             case GoalAction::UPGRADE: {
-                rpm_goal.add_upgrade(
-                    ids, settings.resolve_best(cfg_main), settings.resolve_clean_requirements_on_remove());
+                bool best = settings.resolve_best(cfg_main);
+                bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+                // TODO(jrohel): Now logs all packages that are not upgrades. It can be confusing in some cases.
+                for (auto id : ids) {
+                    if (cfg_main.obsoletes().get_value()) {
+                        rpm::PackageQuery query_id(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES, true);
+                        query_id.add(rpm::Package(base, rpm::PackageId(id)));
+                        query_id.filter_obsoletes(installed);
+                        if (!query_id.empty()) {
+                            continue;
+                        }
+                    }
+                    rpm::PackageQuery query(installed);
+                    query.filter_name({pool.get_name(id)});
+                    if (query.empty()) {
+                        // Report when package with the same name is not installed
+                        transaction.p_impl->add_resolve_log(
+                            action, GoalProblem::NOT_INSTALLED, settings, {pool.get_nevra(id)}, {}, false);
+                        continue;
+                    }
+                    std::string arch = pool.get_arch(id);
+                    if (arch != "noarch") {
+                        query.filter_arch({arch, "noarch"});
+                        if (query.empty()) {
+                            // Report when package with the same name is installed for a different architecture
+                            // Conversion from/to "noarch" is allowed for upgrade.
+                            transaction.p_impl->add_resolve_log(
+                                action,
+                                GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
+                                settings,
+                                {pool.get_nevra(id)},
+                                {},
+                                false);
+                            continue;
+                        }
+                    }
+                    query.filter_evr({pool.get_evr(id)}, sack::QueryCmp::GTE);
+                    if (!query.empty()) {
+                        // Report when package with higher or equal version is installed
+                        transaction.p_impl->add_resolve_log(
+                            action,
+                            GoalProblem::ALREADY_INSTALLED,
+                            settings,
+                            {pool.get_nevra(id)},
+                            {pool.get_name(id) + ("." + arch)},
+                            false);
+                        // include installed packages with higher or equal version into transaction to prevent downgrade
+                        for (auto installed_id : *query.p_impl) {
+                            ids.push_back(installed_id);
+                        }
+                    }
+                }
+                rpm_goal.add_upgrade(ids, best, clean_requirements_on_remove);
+            } break;
+            case GoalAction::DOWNGRADE: {
+                bool strict = settings.resolve_strict(cfg_main);
+                bool best = settings.resolve_best(cfg_main);
+                bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+                solv::IdQueue ids_downgrades;
+                for (auto id : ids) {
+                    rpm::PackageQuery query(installed);
+                    query.filter_name({pool.get_name(id)});
+                    if (query.empty()) {
+                        // Report when package with the same name is not installed
+                        transaction.p_impl->add_resolve_log(
+                            action, GoalProblem::NOT_INSTALLED, settings, {pool.get_nevra(id)}, {}, strict);
+                        continue;
+                    }
+                    query.filter_arch({pool.get_arch(id)});
+                    if (query.empty()) {
+                        // Report when package with the same name is installed for a different architecture
+                        transaction.p_impl->add_resolve_log(
+                            action,
+                            GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
+                            settings,
+                            {pool.get_nevra(id)},
+                            {},
+                            strict);
+                        continue;
+                    }
+                    query.filter_evr({pool.get_evr(id)}, sack::QueryCmp::LTE);
+                    if (!query.empty()) {
+                        // Report when package with lower or equal version is installed
+                        std::string name_arch(pool.get_name(id));
+                        name_arch.append(".");
+                        name_arch.append(pool.get_arch(id));
+                        transaction.p_impl->add_resolve_log(
+                            action,
+                            GoalProblem::INSTALLED_LOWEST_VERSION,
+                            settings,
+                            {pool.get_nevra(id)},
+                            {name_arch},
+                            strict);
+                        continue;
+                    }
+
+                    // Only installed packages with same name, architecture and higher version can be downgraded
+                    ids_downgrades.push_back(id);
+                }
+                rpm_goal.add_install(ids_downgrades, strict, best, clean_requirements_on_remove);
             } break;
             case GoalAction::DISTRO_SYNC: {
                 rpm_goal.add_distro_sync(

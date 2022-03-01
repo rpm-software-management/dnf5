@@ -94,6 +94,14 @@ public:
     void add_rpm_reinstall(
         const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
+    /// Add reinstall request to the goal. By default uses `clean_requirements_on_remove` set to `false`.
+    ///
+    /// @param rpm_package      A package to be reinstalled.
+    /// @param settings  A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` are used.
+    // @replaces dnf:dnf/base.py:method:Base().package_reinstall(self, pkg)
+    void add_rpm_reinstall(
+        const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
     // TODO(jmracek) Do we want to add reinstall or remove?
 
     /// Add remove request to the goal. The `spec` will be resolved to packages in the resolve() call. By default uses
@@ -145,6 +153,7 @@ public:
 
     /// Add upgrade request to the goal. By default uses `clean_requirements_on_remove` set to `false`,
     /// which can be overridden in `settings`.
+    /// Supports obsoletes and architecture change to/from "noarch".
     ///
     /// @param rpm_package      A package that will be used as candidate for the upgrade action.
     /// @param settings         A structure to override default goal settings. Only `clean_requirements_on_remove` and `best` values are used.
@@ -171,6 +180,17 @@ public:
     // @replaces dnf:dnf/base.py:method:Base().downgrade(self, pkg_spec)
     void add_rpm_downgrade(
         const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
+    /// Add downgrade request to the goal. By default uses `clean_requirements_on_remove` set to `false`,
+    /// which can be overridden in `settings`.
+    /// Ignores obsoletes. Only installed packages with the same name, architecture and higher version can be downgraded.
+    /// Skips package if the same or lower version is installed.
+    ///
+    /// @param rpm_package      A package that will be used as candidate for the downgrade action.
+    /// @param settings         A structure to override default goal settings. Only `strict`, `best`, and `clean_requirements_on_remove` are used.
+    // @replaces dnf:dnf/base.py:method:Base().package_downgrade(self, pkg, strict=False)
+    void add_rpm_downgrade(
+        const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
     /// Add distrosync request to the goal. The `spec` will be resolved to packages in the resolve() call. By default uses
     /// `clean_requirements_on_remove` set to `false`, which can be overridden in `settings`.
