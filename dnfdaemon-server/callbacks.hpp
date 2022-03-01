@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNFDAEMON_SERVER_CALLBACKS_HPP
 
 #include <libdnf/repo/package_downloader.hpp>
+#include <libdnf/repo/repo_callbacks.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 

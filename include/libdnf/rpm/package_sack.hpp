@@ -55,14 +55,6 @@ class AdvisoryReference;
 
 }  // namespace libdnf::advisory
 
-namespace libdnf::repo {
-
-class Repo;
-class RepoSack;
-using RepoWeakPtr = WeakPtr<Repo, false>;
-
-}  // namespace libdnf::repo
-
 namespace libdnf::rpm::solv {
 
 class SolvPrivate;

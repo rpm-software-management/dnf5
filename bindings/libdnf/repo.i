@@ -45,6 +45,7 @@ wrap_unique_ptr(PackageDownloadCallbacksUniquePtr, libdnf::repo::PackageDownload
 
 %include "libdnf/repo/repo.hpp"
 
+%include "libdnf/repo/repo_weak.hpp"
 %template(RepoWeakPtr) libdnf::WeakPtr<libdnf::repo::Repo, false>;
 %template(SetConstIteratorRepoWeakPtr) libdnf::SetConstIterator<libdnf::repo::RepoWeakPtr>;
 %template(SetRepoWeakPtr) libdnf::Set<libdnf::repo::RepoWeakPtr>;

@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "checksum.hpp"
 #include "reldep_list.hpp"
 
-#include "libdnf/repo/repo_query.hpp"
+#include "libdnf/repo/repo_weak.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <string>

@@ -43,7 +43,7 @@ public:
     /// Creates a new clear repository with default configuration.
     /// @param id The new repo id
     /// @return A weak pointer to the new repo
-    RepoWeakPtr create_repo(const std::string & id);
+    libdnf::repo::RepoWeakPtr create_repo(const std::string & id);
 
     /// Creates new repositories from the configuration file at `path`.
     /// @param path The path to the repository configuration file
@@ -80,16 +80,16 @@ public:
     /// @param id The new repo id
     /// @param path The path to the libsolv testcase file
     /// @return A weak pointer to the new repo
-    RepoWeakPtr create_repo_from_libsolv_testcase(const std::string & id, const std::string & path);
+    libdnf::repo::RepoWeakPtr create_repo_from_libsolv_testcase(const std::string & id, const std::string & path);
 
     /// If not created yet, creates the system repository and returns it.
     /// @return The system repository.
-    RepoWeakPtr get_system_repo();
+    libdnf::repo::RepoWeakPtr get_system_repo();
 
     /// If not created yet, creates the cmdline repository and returns it.
     /// @return The cmdline repository.
     // TODO(lukash) this was private originally, but don't we want it on the public API?
-    RepoWeakPtr get_cmdline_repo();
+    libdnf::repo::RepoWeakPtr get_cmdline_repo();
 
     /// @return `true` if the system repository has been initialized (via `get_system_repo()`).
     bool has_system_repo() const noexcept { return system_repo; }

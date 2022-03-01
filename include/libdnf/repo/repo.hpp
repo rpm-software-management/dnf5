@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/repo/repo_errors.hpp"
+#include "libdnf/repo/repo_weak.hpp"
 
 #include <memory>
 
@@ -50,10 +51,6 @@ class PackageSack;
 
 
 namespace libdnf::repo {
-
-class Repo;
-using RepoWeakPtr = WeakPtr<Repo, false>;
-
 
 /// RPM repository
 /// Represents a repository used to download packages.
@@ -351,7 +348,7 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setSubstitutions(const std::map<std::string, std::string> & substitutions)
     void set_substitutions(const std::map<std::string, std::string> & substitutions);
 
-    RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
+    libdnf::repo::RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
