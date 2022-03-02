@@ -20,10 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/package_downloader.hpp"
 
 #include "repo_downloader.hpp"
-#include "repo_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/repo/repo.hpp"
 
 #include <librepo/librepo.h>
 
@@ -133,7 +133,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
         std::filesystem::create_directory(it->destination);
 
         auto lr_target = lr_packagetarget_new_v3(
-            it->package.get_repo()->p_impl->downloader.get_cached_handle(),
+            it->package.get_repo()->downloader->get_cached_handle(),
             it->package.get_location().c_str(),
             it->destination.c_str(),
             static_cast<LrChecksumType>(it->package.get_checksum().get_type()),

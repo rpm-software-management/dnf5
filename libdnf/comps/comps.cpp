@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/comps/comps.hpp"
 
-#include "repo/repo_impl.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf/base/base.hpp"

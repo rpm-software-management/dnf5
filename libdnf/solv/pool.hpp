@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_SOLV_POOL_HPP
 
 #include "id_queue.hpp"
-#include "repo/repo_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 
 #include "libdnf/base/base.hpp"

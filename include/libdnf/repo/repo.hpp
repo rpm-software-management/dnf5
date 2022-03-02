@@ -54,6 +54,7 @@ class PackageSack;
 namespace libdnf::repo {
 
 class SolvRepo;
+class RepoDownloader;
 
 
 /// RPM repository
@@ -150,6 +151,10 @@ public:
     /// Reads metadata from local cache.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.loadCache(bool throwExcept)
     void read_metadata_cache();
+
+    /// Checks whether the locally downloaded metadata are in sync with the origin.
+    /// @return `true` if metadata are in sync with the origin, `false` otherwise.
+    bool is_in_sync();
 
     /// Downloads repository metadata.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.downloadMetadata(const std::string & destdir)
@@ -386,7 +391,19 @@ private:
 
     void internalize();
 
-    std::unique_ptr<Impl> p_impl;
+    void reset_metadata_expired();
+
+    libdnf::BaseWeakPtr base;
+    ConfigRepo config;
+
+    Type type;
+    int64_t timestamp{-1};  // 0 forces expiration on the next call to load(), -1 means undefined value
+    bool use_includes{false};
+    std::string repo_file_path;
+    SyncStrategy sync_strategy{SyncStrategy::TRY_CACHE};
+    bool expired{false};
+
+    std::unique_ptr<RepoDownloader> downloader;
     std::unique_ptr<SolvRepo> solv_repo;
 
     WeakPtrGuard<Repo, false> data_guard;

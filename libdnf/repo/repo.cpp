@@ -19,8 +19,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
-#include "repo_impl.hpp"
+#include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
+#include "solv_repo.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/fs/file.hpp"
 #include "utils/string.hpp"
@@ -83,24 +84,18 @@ static int64_t mtime(const char * filename) {
     return st.st_mtime;
 }
 
-Repo::Impl::Impl(const BaseWeakPtr & base, std::string id, Type type)
-    : type(type),
+
+Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type)
+    : base(base),
       config(base->get_config(), id),
-      timestamp(-1),
-      sync_strategy(SyncStrategy::TRY_CACHE),
-      base(base),
-      expired(false),
-      downloader(base, config) {}
-
-
-Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type) {
+      type(type),
+      downloader(new RepoDownloader(base, config)) {
     if (type == Type::AVAILABLE) {
         auto idx = verify_id(id);
         if (idx != std::string::npos) {
             throw RepoError(M_("Invalid repository id \"{}\": unexpected character '{}'"), id, id[idx]);
         }
     }
-    p_impl.reset(new Impl(base, id, type));
 }
 
 Repo::Repo(Base & base, const std::string & id, Repo::Type type) : Repo(base.get_weak_ptr(), id, type) {}
@@ -108,11 +103,11 @@ Repo::Repo(Base & base, const std::string & id, Repo::Type type) : Repo(base.get
 Repo::~Repo() = default;
 
 Repo::Type Repo::get_type() const noexcept {
-    return p_impl->type;
+    return type;
 }
 
 void Repo::set_callbacks(std::unique_ptr<RepoCallbacks> && callbacks) {
-    p_impl->downloader.set_callbacks(std::move(callbacks));
+    downloader->set_callbacks(std::move(callbacks));
 }
 
 std::string::size_type Repo::verify_id(const std::string & repo_id) {
@@ -120,14 +115,12 @@ std::string::size_type Repo::verify_id(const std::string & repo_id) {
 }
 
 void Repo::verify() const {
-    if (p_impl->config.baseurl().empty() &&
-        (p_impl->config.metalink().empty() || p_impl->config.metalink().get_value().empty()) &&
-        (p_impl->config.mirrorlist().empty() || p_impl->config.mirrorlist().get_value().empty())) {
-        throw RepoError(
-            M_("Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."), p_impl->config.get_id());
+    if (config.baseurl().empty() && (config.metalink().empty() || config.metalink().get_value().empty()) &&
+        (config.mirrorlist().empty() || config.mirrorlist().get_value().empty())) {
+        throw RepoError(M_("Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."), config.get_id());
     }
 
-    const auto & type = p_impl->config.type().get_value();
+    const auto & type = config.type().get_value();
     const char * supported_repo_types[]{"rpm-md", "rpm", "repomd", "rpmmd", "yum", "YUM"};
     if (!type.empty()) {
         for (auto supported : supported_repo_types) {
@@ -135,32 +128,31 @@ void Repo::verify() const {
                 return;
             }
         }
-        throw RepoError(M_("Repository \"{}\" has unsupported type \"{}\", skipping."), p_impl->config.get_id(), type);
+        throw RepoError(M_("Repository \"{}\" has unsupported type \"{}\", skipping."), config.get_id(), type);
     }
 }
 
 ConfigRepo & Repo::get_config() noexcept {
-    return p_impl->config;
+    return config;
 }
 
 std::string Repo::get_id() const noexcept {
-    return p_impl->config.get_id();
+    return config.get_id();
 }
 
 void Repo::enable() {
-    p_impl->config.enabled().set(Option::Priority::RUNTIME, true);
+    config.enabled().set(Option::Priority::RUNTIME, true);
 }
 
 void Repo::disable() {
-    p_impl->config.enabled().set(Option::Priority::RUNTIME, false);
+    config.enabled().set(Option::Priority::RUNTIME, false);
 }
 
 bool Repo::is_enabled() const {
-    return p_impl->config.enabled().get_value();
+    return config.enabled().get_value();
 }
 
 bool Repo::is_local() const {
-    auto & config = p_impl->config;
     if ((!config.metalink().empty() && !config.metalink().get_value().empty()) ||
         (!config.mirrorlist().empty() && !config.mirrorlist().get_value().empty())) {
         return false;
@@ -172,32 +164,82 @@ bool Repo::is_local() const {
 }
 
 bool Repo::fetch_metadata() {
-    return p_impl->fetch_metadata();
+    auto & logger = *base->get_logger();
+
+    if (downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
+        // cache hasn't been loaded yet, try to load it
+        try {
+            read_metadata_cache();
+        } catch (std::runtime_error & e) {
+            // TODO(lukash) ideally we'd log something here, but we don't want it to look like an error
+        }
+    }
+
+    if (!downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
+        // cache loaded
+        reset_metadata_expired();
+        if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
+            logger.debug("Using cache for repo \"{}\"", config.get_id());
+            return false;
+        }
+
+        if (is_in_sync()) {
+            // the expired metadata still reflect the origin:
+            utimes(downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
+            expired = false;
+            return true;
+        }
+    }
+    if (sync_strategy == SyncStrategy::ONLY_CACHE) {
+        throw RepoError(M_("Cache-only enabled but no cache for repository \"{}\""), config.get_id());
+    }
+
+    logger.debug("Downloading metadata for repo \"{}\"", config.get_id());
+    downloader->download_metadata(config.get_cachedir());
+    timestamp = -1;
+    read_metadata_cache();
+
+    expired = false;
+    return true;
 }
 
 void Repo::read_metadata_cache() {
-    p_impl->read_metadata_cache();
+    downloader->load_local();
+
+    // set timestamp unless explicitly expired
+    if (timestamp != 0) {
+        timestamp = mtime(downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
+    }
 }
 
+
+bool Repo::is_in_sync() {
+    if (!config.metalink().empty() && !config.metalink().get_value().empty()) {
+        return downloader->is_metalink_in_sync();
+    }
+    return downloader->is_repomd_in_sync();
+}
+
+
 void Repo::download_metadata(const std::string & destdir) {
-    p_impl->downloader.download_metadata(destdir);
+    downloader->download_metadata(destdir);
 }
 
 void Repo::load(LoadFlags flags) {
     make_solv_repo();
 
-    if (p_impl->type == Type::AVAILABLE) {
+    if (type == Type::AVAILABLE) {
         load_available_repo(flags);
-    } else if (p_impl->type == Type::SYSTEM) {
+    } else if (type == Type::SYSTEM) {
         solv_repo->load_system_repo();
     }
 
     solv_repo->set_needs_internalizing();
-    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
+    base->get_rpm_package_sack()->p_impl->invalidate_provides();
 }
 
 void Repo::load_extra_system_repo(const std::string & rootdir) {
-    libdnf_assert(p_impl->type == Type::SYSTEM, "repo type must be SYSTEM to load an extra system repo");
+    libdnf_assert(type == Type::SYSTEM, "repo type must be SYSTEM to load an extra system repo");
     libdnf_assert(solv_repo, "repo must be loaded to load an extra system repo");
     solv_repo->load_system_repo(rootdir);
 }
@@ -209,31 +251,31 @@ void Repo::add_libsolv_testcase(const std::string & path) {
     testcase_add_testtags(solv_repo->repo, testcase_file.get(), 0);
 
     solv_repo->set_needs_internalizing();
-    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
+    base->get_rpm_package_sack()->p_impl->invalidate_provides();
 }
 
 bool Repo::get_use_includes() const {
-    return p_impl->use_includes;
+    return use_includes;
 }
 
 void Repo::set_use_includes(bool enabled) {
-    p_impl->use_includes = enabled;
+    use_includes = enabled;
 }
 
 bool Repo::get_load_metadata_other() const {
-    return p_impl->downloader.load_metadata_other;
+    return downloader->load_metadata_other;
 }
 
 void Repo::set_load_metadata_other(bool value) {
-    p_impl->downloader.load_metadata_other = value;
+    downloader->load_metadata_other = value;
 }
 
 int Repo::get_cost() const {
-    return p_impl->config.cost().get_value();
+    return config.cost().get_value();
 }
 
 void Repo::set_cost(int value, Option::Priority priority) {
-    auto & conf_cost = p_impl->config.cost();
+    auto & conf_cost = config.cost();
     conf_cost.set(priority, value);
     if (solv_repo) {
         solv_repo->set_subpriority(-conf_cost.get_value());
@@ -241,11 +283,11 @@ void Repo::set_cost(int value, Option::Priority priority) {
 }
 
 int Repo::get_priority() const {
-    return p_impl->config.priority().get_value();
+    return config.priority().get_value();
 }
 
 void Repo::set_priority(int value, Option::Priority priority) {
-    auto & conf_priority = p_impl->config.priority();
+    auto & conf_priority = config.priority();
     conf_priority.set(priority, value);
     if (solv_repo) {
         solv_repo->set_priority(-conf_priority.get_value());
@@ -253,103 +295,15 @@ void Repo::set_priority(int value, Option::Priority priority) {
 }
 
 int64_t Repo::get_age() const {
-    return p_impl->get_age();
+    return time(nullptr) - mtime(downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
 }
 
 void Repo::expire() {
-    p_impl->expire();
-}
-
-bool Repo::is_expired() const {
-    return p_impl->is_expired();
-}
-
-int Repo::get_expires_in() const {
-    return p_impl->get_expires_in();
-}
-
-void Repo::set_substitutions(const std::map<std::string, std::string> & substitutions) {
-    p_impl->downloader.substitutions = substitutions;
-}
-
-void Repo::add_metadata_type_to_download(const std::string & metadata_type) {
-    p_impl->downloader.additional_metadata.insert(metadata_type);
-}
-
-void Repo::remove_metadata_type_from_download(const std::string & metadata_type) {
-    p_impl->downloader.additional_metadata.erase(metadata_type);
-}
-
-std::string Repo::get_metadata_path(const std::string & metadata_type) {
-    return p_impl->downloader.get_metadata_path(metadata_type);
-}
-
-
-void Repo::Impl::read_metadata_cache() {
-    downloader.load_local();
-
-    // set timestamp unless explicitly expired
-    if (timestamp != 0) {
-        timestamp = mtime(downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
-    }
-}
-
-bool Repo::Impl::try_load_cache() {
-    try {
-        read_metadata_cache();
-    } catch (std::runtime_error &) {
-        return false;
-    }
-    return true;
-}
-
-bool Repo::Impl::is_in_sync() {
-    if (!config.metalink().empty() && !config.metalink().get_value().empty()) {
-        return downloader.is_metalink_in_sync();
-    }
-    return downloader.is_repomd_in_sync();
-}
-
-bool Repo::Impl::fetch_metadata() {
-    auto & logger = *base->get_logger();
-
-    if (!downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() || try_load_cache()) {
-        reset_metadata_expired();
-        if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
-            logger.debug("Using cache for repo \"{}\"", config.get_id());
-            return false;
-        }
-
-        if (is_in_sync()) {
-            // the expired metadata still reflect the origin:
-            utimes(downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
-            expired = false;
-            return true;
-        }
-    }
-    if (sync_strategy == SyncStrategy::ONLY_CACHE) {
-        throw RepoError(M_("Cache-only enabled but no cache for repository \"{}\""), config.get_id());
-    }
-
-    logger.debug("Downloading metadata for repo \"{}\"", config.get_id());
-    downloader.download_metadata(config.get_cachedir());
-    timestamp = -1;
-    read_metadata_cache();
-
-    expired = false;
-    return true;
-}
-
-int64_t Repo::Impl::get_age() const {
-    return time(nullptr) - mtime(downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str());
-}
-
-void Repo::Impl::expire() {
     expired = true;
     timestamp = 0;
 }
 
-bool Repo::Impl::is_expired() const {
+bool Repo::is_expired() const {
     if (expired)
         // explicitly requested expired state
         return true;
@@ -358,113 +312,118 @@ bool Repo::Impl::is_expired() const {
     return get_age() > config.metadata_expire().get_value();
 }
 
-int Repo::Impl::get_expires_in() const {
+int Repo::get_expires_in() const {
     return config.metadata_expire().get_value() - static_cast<int>(get_age());
 }
 
-bool Repo::fresh() {
-    return p_impl->timestamp >= 0;
+void Repo::set_substitutions(const std::map<std::string, std::string> & substitutions) {
+    downloader->substitutions = substitutions;
 }
 
-void Repo::Impl::reset_metadata_expired() {
-    if (expired || config.metadata_expire().get_value() == -1)
-        return;
-    if (config.get_main_config().check_config_file_age().get_value() && !repo_file_path.empty() &&
-        mtime(repo_file_path.c_str()) >
-            mtime(downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str()))
-        expired = true;
-    else
-        expired = get_age() > config.metadata_expire().get_value();
+void Repo::add_metadata_type_to_download(const std::string & metadata_type) {
+    downloader->additional_metadata.insert(metadata_type);
+}
+
+void Repo::remove_metadata_type_from_download(const std::string & metadata_type) {
+    downloader->additional_metadata.erase(metadata_type);
+}
+
+std::string Repo::get_metadata_path(const std::string & metadata_type) {
+    return downloader->get_metadata_path(metadata_type);
+}
+
+bool Repo::fresh() {
+    return timestamp >= 0;
 }
 
 void Repo::set_max_mirror_tries(int max_mirror_tries) {
-    p_impl->downloader.max_mirror_tries = max_mirror_tries;
+    downloader->max_mirror_tries = max_mirror_tries;
 }
 
 int64_t Repo::get_timestamp() const {
-    return p_impl->timestamp;
+    return timestamp;
 }
 
 int Repo::get_max_timestamp() {
-    return p_impl->downloader.max_timestamp;
+    return downloader->max_timestamp;
 }
 
 void Repo::set_preserve_remote_time(bool preserve_remote_time) {
-    p_impl->downloader.preserve_remote_time = preserve_remote_time;
+    downloader->preserve_remote_time = preserve_remote_time;
 }
 
 bool Repo::get_preserve_remote_time() const {
-    return p_impl->downloader.preserve_remote_time;
+    return downloader->preserve_remote_time;
 }
 
 const std::vector<std::string> & Repo::get_content_tags() {
-    return p_impl->downloader.content_tags;
+    return downloader->content_tags;
 }
 
 const std::vector<std::pair<std::string, std::string>> & Repo::get_distro_tags() {
-    return p_impl->downloader.distro_tags;
+    return downloader->distro_tags;
 }
 
 const std::vector<std::pair<std::string, std::string>> Repo::get_metadata_locations() const {
-    return p_impl->downloader.metadata_locations;
+    return downloader->metadata_locations;
 }
 
 std::string Repo::get_cachedir() const {
-    return p_impl->config.get_cachedir();
+    return config.get_cachedir();
 }
 
 std::string Repo::get_persistdir() const {
-    return p_impl->config.get_persistdir();
+    return config.get_persistdir();
 }
 
 const std::string & Repo::get_revision() const {
-    return p_impl->downloader.revision;
+    return downloader->revision;
 }
 
 void Repo::set_repo_file_path(const std::string & path) {
-    p_impl->repo_file_path = path;
+    repo_file_path = path;
 }
 
 const std::string & Repo::get_repo_file_path() const noexcept {
-    return p_impl->repo_file_path;
+    return repo_file_path;
 }
 
 void Repo::set_sync_strategy(SyncStrategy strategy) {
-    p_impl->sync_strategy = strategy;
+    sync_strategy = strategy;
 }
 
 Repo::SyncStrategy Repo::get_sync_strategy() const noexcept {
-    return p_impl->sync_strategy;
+    return sync_strategy;
 }
 
 //void Repo::download_url(const char * url, int fd) {
-//    p_impl->downloader.download_url(url, fd);
+//    downloader->download_url(url, fd);
 //}
 
 void Repo::set_http_headers(const std::vector<std::string> & headers) {
-    p_impl->downloader.http_headers = headers;
+    downloader->http_headers = headers;
 }
 
 std::vector<std::string> Repo::get_http_headers() const {
-    return p_impl->downloader.http_headers;
+    return downloader->http_headers;
 }
 
 std::vector<std::string> Repo::get_mirrors() const {
-    return p_impl->downloader.mirrors;
+    return downloader->mirrors;
 }
 
 BaseWeakPtr Repo::get_base() const {
-    return p_impl->base;
+    return base;
 }
 
 
 void Repo::make_solv_repo() {
     if (!solv_repo) {
-        solv_repo.reset(new SolvRepo(p_impl->base, p_impl->config, this));
+        solv_repo.reset(new SolvRepo(base, config, this));
 
         // TODO(lukash) move the below to SolvRepo? Requires sharing Type
-        if (p_impl->type == Type::SYSTEM) {
-            pool_set_installed(*get_pool(p_impl->base), solv_repo->repo);
+        if (type == Type::SYSTEM) {
+            pool_set_installed(*get_pool(base), solv_repo->repo);
         }
 
         solv_repo->set_priority(-get_priority());
@@ -474,33 +433,33 @@ void Repo::make_solv_repo() {
 
 
 void Repo::load_available_repo(LoadFlags flags) {
-    auto primary_fn = p_impl->downloader.get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
+    auto primary_fn = downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
     if (primary_fn.empty()) {
         throw RepoError(_("Failed to load repository: \"primary\" data not present or in unsupported format"));
     }
 
-    solv_repo->load_repo_main(p_impl->downloader.repomd_filename, primary_fn);
+    solv_repo->load_repo_main(downloader->repomd_filename, primary_fn);
 
     if (any(flags & LoadFlags::FILELISTS)) {
-        solv_repo->load_repo_ext(RepodataType::FILELISTS, p_impl->downloader);
+        solv_repo->load_repo_ext(RepodataType::FILELISTS, *downloader.get());
     }
 
     if (any(flags & LoadFlags::OTHER)) {
-        solv_repo->load_repo_ext(RepodataType::OTHER, p_impl->downloader);
+        solv_repo->load_repo_ext(RepodataType::OTHER, *downloader.get());
     }
 
     if (any(flags & LoadFlags::PRESTO)) {
-        solv_repo->load_repo_ext(RepodataType::PRESTO, p_impl->downloader);
+        solv_repo->load_repo_ext(RepodataType::PRESTO, *downloader.get());
     }
 
     // updateinfo must come *after* all other extensions, as it is not a real
     // extension, but contains a new set of packages
     if (any(flags & LoadFlags::UPDATEINFO)) {
-        solv_repo->load_repo_ext(RepodataType::UPDATEINFO, p_impl->downloader);
+        solv_repo->load_repo_ext(RepodataType::UPDATEINFO, *downloader.get());
     }
 
     if (any(flags & LoadFlags::COMPS)) {
-        solv_repo->load_repo_ext(RepodataType::COMPS, p_impl->downloader);
+        solv_repo->load_repo_ext(RepodataType::COMPS, *downloader.get());
     }
 }
 
@@ -521,7 +480,7 @@ rpm::PackageId Repo::add_rpm_package(const std::string & path, bool with_hdrid) 
     }
 
     solv_repo->set_needs_internalizing();
-    p_impl->base->get_rpm_package_sack()->p_impl->invalidate_provides();
+    base->get_rpm_package_sack()->p_impl->invalidate_provides();
 
     return rpm::PackageId(new_id);
 }
@@ -530,6 +489,21 @@ rpm::PackageId Repo::add_rpm_package(const std::string & path, bool with_hdrid) 
 void Repo::internalize() {
     if (solv_repo) {
         solv_repo->internalize();
+    }
+}
+
+
+void Repo::reset_metadata_expired() {
+    if (expired || config.metadata_expire().get_value() == -1) {
+        return;
+    }
+
+    if (config.get_main_config().check_config_file_age().get_value() && !repo_file_path.empty() &&
+        mtime(repo_file_path.c_str()) >
+            mtime(downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str())) {
+        expired = true;
+    } else {
+        expired = get_age() > config.metadata_expire().get_value();
     }
 }
 

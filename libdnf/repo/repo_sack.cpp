@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/repo/repo_sack.hpp"
 
-#include "repo_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 

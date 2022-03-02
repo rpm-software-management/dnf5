@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "package_sack_impl.hpp"
 #include "package_set_impl.hpp"
-#include "repo/repo_impl.hpp"
 #include "repo/solv_repo.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
