@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/comps/group/package.hpp"
 
+#include "comps/pool_utils.hpp"
+
 extern "C" {
 #include <solv/dataiterator.h>
 #include <solv/knownid.h>
@@ -54,21 +56,8 @@ Group & Group::operator+=(const Group & rhs) {
 }
 
 
-// Search solvables that correspond to the group_ids for given key
-// Return first non-empty string
-std::string lookup_str(libdnf::solv::Pool & pool, std::vector<GroupId> group_ids, Id key) {
-    for (GroupId group_id : group_ids) {
-        auto value = pool.lookup_str(group_id.id, key);
-        if (value) {
-            return value;
-        }
-    }
-    return "";
-}
-
-
 std::string Group::get_groupid() const {
-    std::string solvable_name(lookup_str(get_pool(base), group_ids, SOLVABLE_NAME));
+    std::string solvable_name(lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_NAME));
     if (solvable_name.find(":") == std::string::npos) {
         return "";
     }
@@ -77,95 +66,43 @@ std::string Group::get_groupid() const {
 
 
 std::string Group::get_name() const {
-    return lookup_str(get_pool(base), group_ids, SOLVABLE_SUMMARY);
+    return lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Group::get_description() const {
-    return lookup_str(get_pool(base), group_ids, SOLVABLE_DESCRIPTION);
+    return lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Group::get_translated_name(const char * lang) const {
-    // Go through all group solvables and return first translation found.
-    for (GroupId group_id : group_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
-        if (const char * translation = solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1)) {
-            // Return translation only if it's different from the untranslated string
-            // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
-            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_SUMMARY);
-            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
-                return std::string(translation);
-            }
-        }
-    }
-    // If no translation was found, return the untranslated string.
-    return this->get_name();
+    return get_translated_str<GroupId>(get_pool(base), group_ids, SOLVABLE_SUMMARY, lang);
 }
 
 
 // TODO(pkratoch): Test this
 std::string Group::get_translated_name() const {
-    // Go through all group solvables and return first translation found.
-    for (GroupId group_id : group_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
-        if (const char * translation = solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY)) {
-            // Return translation only if it's different from the untranslated string
-            // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
-            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_SUMMARY);
-            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
-                return std::string(translation);
-            }
-        }
-    }
-    // If no translation was found, return the untranslated string.
-    return this->get_name();
+    return get_translated_str<GroupId>(get_pool(base), group_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Group::get_translated_description(const char * lang) const {
-    // Go through all group solvables and return first translation found.
-    for (GroupId group_id : group_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
-        if (const char * translation = solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1)) {
-            // Return translation only if it's different from the untranslated string
-            // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
-            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION);
-            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
-                return std::string(translation);
-            }
-        }
-    }
-    // If no translation was found, return the untranslated string.
-    return this->get_description();
+    return get_translated_str<GroupId>(get_pool(base), group_ids, SOLVABLE_DESCRIPTION, lang);
 }
 
 
 std::string Group::get_translated_description() const {
-    // Go through all group solvables and return first translation found.
-    for (GroupId group_id : group_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
-        if (const char * translation = solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION)) {
-            // Return translation only if it's different from the untranslated string
-            // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
-            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION);
-            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
-                return std::string(translation);
-            }
-        }
-    }
-    // If no translation was found, return the untranslated string.
-    return this->get_description();
+    return get_translated_str<GroupId>(get_pool(base), group_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Group::get_order() const {
-    return lookup_str(get_pool(base), group_ids, SOLVABLE_ORDER);
+    return lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_ORDER);
 }
 
 
 std::string Group::get_langonly() const {
-    return lookup_str(get_pool(base), group_ids, SOLVABLE_LANGONLY);
+    return lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_LANGONLY);
 }
 
 

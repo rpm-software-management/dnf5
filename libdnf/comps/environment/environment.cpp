@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 
+#include "comps/pool_utils.hpp"
+
 extern "C" {
 #include <solv/dataiterator.h>
 #include <solv/knownid.h>
@@ -54,21 +56,8 @@ Environment & Environment::operator+=(const Environment & rhs) {
 }
 
 
-// Search solvables that correspond to the environment_ids for given key
-// Return first non-empty string
-std::string lookup_str(libdnf::solv::Pool & pool, std::vector<EnvironmentId> environment_ids, Id key) {
-    for (EnvironmentId environment_id : environment_ids) {
-        auto value = pool.lookup_str(environment_id.id, key);
-        if (value) {
-            return value;
-        }
-    }
-    return "";
-}
-
-
 std::string Environment::get_environmentid() const {
-    std::string solvable_name(lookup_str(get_pool(base), environment_ids, SOLVABLE_NAME));
+    std::string solvable_name(lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_NAME));
     if (solvable_name.find(":") == std::string::npos) {
         return "";
     }
@@ -77,90 +66,38 @@ std::string Environment::get_environmentid() const {
 
 
 std::string Environment::get_name() const {
-    return lookup_str(get_pool(base), environment_ids, SOLVABLE_SUMMARY);
+    return lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Environment::get_description() const {
-    return lookup_str(get_pool(base), environment_ids, SOLVABLE_DESCRIPTION);
+    return lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Environment::get_translated_name(const char * lang) const {
-    // Go through all environment solvables and return first translation found.
-    for (EnvironmentId environment_id : environment_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(environment_id.id);
-        if (const char * translation = solvable_lookup_str_lang(solvable, SOLVABLE_SUMMARY, lang, 1)) {
-            // Return translation only if it's different from the untranslated string
-            // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
-            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_SUMMARY);
-            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
-                return std::string(translation);
-            }
-        }
-    }
-    // If no translation was found, return the untranslated string.
-    return this->get_name();
+    return get_translated_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_SUMMARY, lang);
 }
 
 
 // TODO(pkratoch): Test this
 std::string Environment::get_translated_name() const {
-    // Go through all environment solvables and return first translation found.
-    for (EnvironmentId environment_id : environment_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(environment_id.id);
-        if (const char * translation = solvable_lookup_str_poollang(solvable, SOLVABLE_SUMMARY)) {
-            // Return translation only if it's different from the untranslated string
-            // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
-            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_SUMMARY);
-            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
-                return std::string(translation);
-            }
-        }
-    }
-    // If no translation was found, return the untranslated string.
-    return this->get_name();
+    return get_translated_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Environment::get_translated_description(const char * lang) const {
-    // Go through all environment solvables and return first translation found.
-    for (EnvironmentId environment_id : environment_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(environment_id.id);
-        if (const char * translation = solvable_lookup_str_lang(solvable, SOLVABLE_DESCRIPTION, lang, 1)) {
-            // Return translation only if it's different from the untranslated string
-            // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
-            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION);
-            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
-                return std::string(translation);
-            }
-        }
-    }
-    // If no translation was found, return the untranslated string.
-    return this->get_description();
+    return get_translated_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_DESCRIPTION, lang);
 }
 
 
 std::string Environment::get_translated_description() const {
-    // Go through all environment solvables and return first translation found.
-    for (EnvironmentId environment_id : environment_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(environment_id.id);
-        if (const char * translation = solvable_lookup_str_poollang(solvable, SOLVABLE_DESCRIPTION)) {
-            // Return translation only if it's different from the untranslated string
-            // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
-            const char * untranslated = solvable_lookup_str(solvable, SOLVABLE_DESCRIPTION);
-            if (translation != untranslated && strcmp(translation, untranslated) != 0) {
-                return std::string(translation);
-            }
-        }
-    }
-    // If no translation was found, return the untranslated string.
-    return this->get_description();
+    return get_translated_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Environment::get_order() const {
-    return lookup_str(get_pool(base), environment_ids, SOLVABLE_ORDER);
+    return lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_ORDER);
 }
 
 
