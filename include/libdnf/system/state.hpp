@@ -41,7 +41,7 @@ public:
     /// where the state is stored.
     /// @param dir_path The directory where the state is stored.
     /// @since 5.0
-    State(const std::filesystem::path & installroot, const std::filesystem::path & dir_path = "/var/lib/dnf/state");
+    State(const std::filesystem::path & installroot, const std::filesystem::path & dir_path = "var/lib/dnf/state");
 
     /// @return The reason for a package NA (Name.Arch).
     /// @param na The NA to get the reason for.
