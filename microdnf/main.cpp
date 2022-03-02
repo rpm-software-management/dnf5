@@ -343,6 +343,24 @@ static void set_commandline_args(Context & ctx) {
 
     add_new_named_arg_alias(*no_best, "nobest", "nobest", '\0', options_aliases_group, no_best_conflict_args);
 
+    {
+        auto exclude = ctx.get_argument_parser().add_new_named_arg("exclude");
+        exclude->set_long_name("exclude");
+        exclude->set_short_name('x');
+        exclude->set_short_description("exclude packages by name or glob");
+        exclude->set_has_value(true);
+        exclude->set_arg_value_help("package,...");
+        exclude->set_parse_hook_func([&ctx](
+                                         [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                         [[maybe_unused]] const char * option,
+                                         const char * value) {
+            auto & conf = ctx.base.get_config();
+            conf.opt_binds().at("excludepkgs").new_string(libdnf::Option::Priority::COMMANDLINE, value);
+            return true;
+        });
+        global_options_group->register_argument(exclude);
+    }
+
     auto skip_broken = ctx.get_argument_parser().add_new_named_arg("skip-broken");
     skip_broken->set_long_name("skip-broken");
     skip_broken->set_short_description("resolve depsolve problems by skipping packages");
