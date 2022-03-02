@@ -108,3 +108,8 @@ void RepoTest::test_load_repo() {
 
     repo->load();
 }
+
+void RepoTest::test_load_repo_nonexistent() {
+    auto repo = add_repo("nonexistent", "/path/thats/not/here", false);
+    CPPUNIT_ASSERT_THROW(repo->fetch_metadata(), libdnf::repo::RepoDownloadError);
+}
