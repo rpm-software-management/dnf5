@@ -105,6 +105,7 @@ void Base::setup() {
     auto & config = get_config();
     auto & installroot = config.installroot();
     get_vars()->load(installroot.get_value(), config.varsdir().get_value());
+    system_state.emplace(installroot.get_value());
     installroot.lock("Locked by Base::setup()");
     config.varsdir().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);

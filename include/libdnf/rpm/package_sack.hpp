@@ -114,10 +114,6 @@ public:
     /// Returns number of solvables in pool.
     int get_nsolvables() const noexcept;
 
-    /// @return The system state object.
-    /// @since 5.0
-    libdnf::system::State & get_system_state() { return system_state; }
-
     void setup_excludes_includes(bool only_main = false);
 
 private:
@@ -142,8 +138,6 @@ private:
 
     class Impl;
     std::unique_ptr<Impl> p_impl;
-
-    libdnf::system::State system_state;
 };
 
 }  // namespace libdnf::rpm

@@ -387,7 +387,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
 
     if (ret == 0) {
         // set the new system state
-        auto & system_state = base->get_rpm_package_sack()->get_system_state();
+        auto & system_state = base->get_system_state();
         for (const auto & tspkg : packages) {
             system_state.set_reason(tspkg.get_package().get_na(), tspkg.get_reason());
         }

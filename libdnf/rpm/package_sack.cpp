@@ -269,9 +269,7 @@ int PackageSack::get_nsolvables() const noexcept {
     return p_impl->get_nsolvables();
 };
 
-PackageSack::PackageSack(const BaseWeakPtr & base)
-    : p_impl{new Impl(base)},
-      system_state(base->get_config().installroot().get_value()) {}
+PackageSack::PackageSack(const BaseWeakPtr & base) : p_impl{new Impl(base)} {}
 
 PackageSack::PackageSack(libdnf::Base & base) : PackageSack(base.get_weak_ptr()) {}
 

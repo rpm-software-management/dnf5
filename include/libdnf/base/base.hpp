@@ -88,6 +88,11 @@ public:
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     VarsWeakPtr get_vars() { return VarsWeakPtr(&vars, &vars_gurad); }
 
+    /// @return The system state object.
+    /// @since 5.0
+    // TODO(lukash) if it stays on public API, use WeakPtr
+    libdnf::system::State & get_system_state() { return *system_state; }
+
     void add_plugin(plugin::IPlugin & iplugin_instance);
     void load_plugins();
     plugin::Plugins & get_plugins() { return plugins; }
@@ -124,6 +129,7 @@ private:
     plugin::Plugins plugins{*this};
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
     std::map<std::string, std::string> variables;
+    std::optional<libdnf::system::State> system_state;
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;
     WeakPtrGuard<Vars, false> vars_gurad;
