@@ -112,7 +112,7 @@ void PackageSack::Impl::setup_excludes_includes(bool only_main) {
 
             for (const auto & name : repo->get_config().includepkgs().get_value()) {
                 PackageQuery query(query_repo_pkgs);
-                const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, false);
+                const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, true);
                 if (found) {
                     includes |= query;
                     includes_exist = true;
@@ -121,7 +121,7 @@ void PackageSack::Impl::setup_excludes_includes(bool only_main) {
 
             for (const auto & name : repo->get_config().excludepkgs().get_value()) {
                 PackageQuery query(query_repo_pkgs);
-                const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, false);
+                const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, true);
                 if (found) {
                     excludes |= query;
                     excludes_exist = true;
@@ -135,7 +135,7 @@ void PackageSack::Impl::setup_excludes_includes(bool only_main) {
     if (std::find(disable_excludes.begin(), disable_excludes.end(), "main") == disable_excludes.end()) {
         for (const auto & name : main_config.includepkgs().get_value()) {
             PackageQuery query(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
-            const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, false);
+            const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, true);
             if (found) {
                 includes |= query;
                 includes_exist = true;
@@ -144,7 +144,7 @@ void PackageSack::Impl::setup_excludes_includes(bool only_main) {
 
         for (const auto & name : main_config.excludepkgs().get_value()) {
             PackageQuery query(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
-            const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, false);
+            const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, true);
             if (found) {
                 excludes |= query;
                 excludes_exist = true;
