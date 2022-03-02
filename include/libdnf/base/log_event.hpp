@@ -60,7 +60,7 @@ public:
         const std::optional<SolverProblems> & solver_problems);
 
     /// Convert an element from resolve log to string;
-    std::string to_string() {
+    std::string to_string() const {
         return to_string(action, problem, job_settings, spec, additional_data, solver_problems);
     };
 
