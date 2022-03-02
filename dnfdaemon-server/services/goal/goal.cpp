@@ -24,8 +24,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package.hpp"
 #include "transaction.hpp"
 #include "utils.hpp"
+#include "utils/string.hpp"
 
 #include <fmt/format.h>
+#include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/transaction.hpp>
 #include <libdnf/transaction/transaction_item.hpp>
 #include <sdbus-c++/sdbus-c++.h>
@@ -38,8 +40,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(ua{sv})a{sv}", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(ua{sv})u", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Goal::resolve, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_GOAL, "get_transaction_problems_string", "", "as", [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(
+                *this, &Goal::get_transaction_problems_string, call, session.session_locale);
+        });
+    dbus_object->registerMethod(
+        dnfdaemon::INTERFACE_GOAL, "get_transaction_problems", "", "a{sv}", [this](sdbus::MethodCall call) -> void {
+            session.get_threads_manager().handle_method(
+                *this, &Goal::get_transaction_problems, call, session.session_locale);
         });
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_GOAL, "do_transaction", "a{sv}", "", [this](sdbus::MethodCall call) -> void {
@@ -59,43 +71,92 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     auto transaction = goal.resolve(allow_erasing);
     session.set_transaction(transaction);
 
-    std::vector<std::string> attr{
-        "name", "epoch", "version", "release", "arch", "repo", "package_size", "install_size", "evr"};
-
-    std::vector<dnfdaemon::DbusTransactionItem> result;
-
-    for (auto & tspkg : transaction.get_transaction_packages()) {
-        result.push_back(dnfdaemon::DbusTransactionItem(
-            static_cast<unsigned int>(tspkg.get_action()), package_to_map(tspkg.get_package(), attr)));
+    std::vector<dnfdaemon::DbusTransactionItem> dbus_transaction;
+    auto overall_result = dnfdaemon::ResolveResult::ERROR;
+    if (transaction.get_problems() == libdnf::GoalProblem::NO_PROBLEM) {
+        // return the transaction only if there were no problems
+        std::vector<std::string> attr{
+            "name", "epoch", "version", "release", "arch", "repo", "package_size", "install_size", "evr"};
+        for (auto & tspkg : transaction.get_transaction_packages()) {
+            dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
+                static_cast<uint32_t>(tspkg.get_action()), package_to_map(tspkg.get_package(), attr)));
+        }
+        // there are transactions resolved without problems but still resolve_logs
+        // may contain some warnings / informations
+        if (transaction.get_resolve_logs().size() > 0) {
+            overall_result = dnfdaemon::ResolveResult::WARNING;
+        } else {
+            overall_result = dnfdaemon::ResolveResult::NO_PROBLEM;
+        }
     }
 
     auto reply = call.createReply();
-    reply << result;
-
-    dnfdaemon::KeyValueMapList goal_resolve_log_list;
-
-    for (const auto & log : transaction.get_resolve_logs()) {
-        dnfdaemon::KeyValueMap goal_resolve_log_item;
-        goal_resolve_log_item["action"] = static_cast<uint32_t>(log.get_action());
-        goal_resolve_log_item["problem"] = static_cast<uint32_t>(log.get_problem());
-        // TODO(nsella) better use of KeyValueMap with GoalJobSettings
-        dnfdaemon::KeyValueMap goal_job_settings;
-        goal_job_settings.emplace(std::make_pair("to_repo_ids", log.get_job_settings()->to_repo_ids));
-        goal_resolve_log_item["goal_job_settings"] = goal_job_settings;
-        goal_resolve_log_item["report"] = *log.get_spec();  // string
-        goal_resolve_log_item["report_list"] =
-            std::vector<std::string>{log.get_additional_data()->begin(), log.get_additional_data()->end()};
-        goal_resolve_log_list.push_back(goal_resolve_log_item);
-    }
-
-    dnfdaemon::KeyValueMap goal_resolve_results;
-    goal_resolve_results["transaction_problems"] = static_cast<uint32_t>(transaction.get_problems());
-    goal_resolve_results["goal_problems"] = goal_resolve_log_list;
-
-    reply << goal_resolve_results;
+    reply << dbus_transaction;
+    reply << static_cast<uint32_t>(overall_result);
 
     return reply;
 }
+
+
+sdbus::MethodReply Goal::get_transaction_problems_string(sdbus::MethodCall & call) {
+    auto * transaction = session.get_transaction();
+
+    auto resolve_logs = transaction->get_resolve_logs();
+    std::vector<std::string> reslog;
+    reslog.reserve(resolve_logs.size());
+    for (const auto & log : resolve_logs) {
+        reslog.emplace_back(log.to_string());
+    }
+
+    auto reply = call.createReply();
+    reply << reslog;
+    return reply;
+}
+
+
+sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
+    auto * transaction = session.get_transaction();
+
+    auto resolve_logs = transaction->get_resolve_logs();
+    dnfdaemon::KeyValueMapList goal_resolve_log_list;
+    goal_resolve_log_list.reserve(resolve_logs.size());
+    for (const auto & log : resolve_logs) {
+        dnfdaemon::KeyValueMap goal_resolve_log_item;
+        goal_resolve_log_item["action"] = static_cast<uint32_t>(log.get_action());
+        goal_resolve_log_item["problem"] = static_cast<uint32_t>(log.get_problem());
+        if (log.get_job_settings()) {
+            dnfdaemon::KeyValueMap goal_job_settings;
+            goal_job_settings["to_repo_ids"] = log.get_job_settings()->to_repo_ids;
+            goal_resolve_log_item["goal_job_settings"] = goal_job_settings;
+        }
+        if (log.get_spec()) {
+            goal_resolve_log_item["spec"] = log.get_spec().value();
+        }
+        if (log.get_additional_data()) {
+            auto & data = log.get_additional_data();
+            // convert std::set<std::string> to std::vector<std::string>
+            goal_resolve_log_item["additional_data"] = std::vector<std::string>{data->begin(), data->end()};
+        }
+        if (log.get_solver_problems()) {
+            using DbusRule = sdbus::Struct<uint32_t, std::vector<std::string>>;
+            std::vector<std::vector<DbusRule>> dbus_problems;
+            for (const auto & problem : log.get_solver_problems().value().get_problems()) {
+                std::vector<DbusRule> dbus_problem;
+                for (const auto & rule : problem) {
+                    dbus_problem.emplace_back(DbusRule{static_cast<uint32_t>(rule.first), rule.second});
+                }
+                dbus_problems.push_back(std::move(dbus_problem));
+            }
+            goal_resolve_log_item["solver_problems"] = std::move(dbus_problems);
+        }
+        goal_resolve_log_list.push_back(std::move(goal_resolve_log_item));
+    }
+
+    auto reply = call.createReply();
+    reply << goal_resolve_log_list;
+    return reply;
+}
+
 
 // TODO (mblaha) shared download_packages with microdnf / libdnf
 // TODO (mblaha) callbacks to report the status

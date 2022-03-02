@@ -33,6 +33,8 @@ public:
 
 private:
     sdbus::MethodReply resolve(sdbus::MethodCall & call);
+    sdbus::MethodReply get_transaction_problems_string(sdbus::MethodCall & call);
+    sdbus::MethodReply get_transaction_problems(sdbus::MethodCall & call);
     sdbus::MethodReply do_transaction(sdbus::MethodCall & call);
 };
 

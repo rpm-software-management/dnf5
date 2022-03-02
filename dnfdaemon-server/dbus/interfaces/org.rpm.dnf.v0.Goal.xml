@@ -28,8 +28,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
     <!--
         resolve:
         @options: an array of key/value pairs to modify dependency resolving
-        @transaction: array of (action, n, e, v, r, a, repoid) tuples where action is one of libdnf::transaction::TransactionItemAction enum
-        @resolve_results: problems detected during transaction resolving
+        @transaction: array of (action, {package}) tuples where action is one of libdnf::transaction::TransactionItemAction enum and package is a map {atttibute: value}. These package attributes are returned: "name", "epoch", "version", "release", "arch", "repo", "package_size", "install_size", "evr".
+        @result: problems detected during transaction resolving. Possible values are 0 - no problem, 1 - no problem, but some info / warnings are present or 2 - resolving failed.
 
         Resolve the transaction.
 
@@ -38,21 +38,43 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
                 Whether removal of installed package is allowed to resolve the transaction.
 
         Unknown options are ignored.
-
-        Following @resolve_results are returned:
-            - transaction_problems: libdnf::GoalProblem
-                Overall result of the resolving.
-            - transaction_solver_problems: string
-                Problems found by the solver.
-            - goal_problems: string
-                Problems of goal resolution other then those from the solver.
-
     -->
     <method name="resolve">
         <arg name="options" type="a{sv}" direction="in" />
-        <arg name="transaction" type="a(ussssss)" direction="out" />
+        <arg name="transaction" type="a(ua{sv})" direction="out" />
+        <arg name="result" type="u" direction="out" />
+    </method>
+
+
+    <!--
+        get_transaction_problems_string:
+        @problems: array of strings containing all problems found during the transaction resolution.
+
+        Return all problems found during the transaction resolution as human readable messages.
+    -->
+    <method name="get_transaction_problems_string">
+        <arg name="problems" type="as" direction="out" />
+    </method>
+
+
+    <!--
+        get_transaction_problems:
+        @problems: array of {key: value} maps
+
+        Return all problems found during the transaction resolution as structures. This is the list of problem keys:
+        always present:
+        action - see include/libdnf/base/goal_elements.hpp: GoalAction
+        problem - see include/libdnf/base/goal_elements.hpp: GoalProblem
+        optional:
+        goal_job_settings - {string: variant}, settings used to resolve the goal
+        spec - string, usually nevra of affected package
+        additional_data - array of strings, more details on the problem
+        solver_problems - problems reported by underlying libsolv
+    -->
+    <method name="get_transaction_problems">
         <arg name="problems" type="a{sv}" direction="out" />
     </method>
+
 
     <!--
         do_transaction:

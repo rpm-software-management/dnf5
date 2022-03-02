@@ -31,6 +31,7 @@ namespace dnfdaemon {
 using KeyValueMap = std::map<std::string, sdbus::Variant>;
 using KeyValueMapList = std::vector<KeyValueMap>;
 enum class RepoStatus { NOT_READY, PENDING, READY, ERROR };
+enum class ResolveResult { NO_PROBLEM, WARNING, ERROR };
 
 using DbusTransactionItem = sdbus::Struct<
     unsigned int,  //action
