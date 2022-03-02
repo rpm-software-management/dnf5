@@ -188,12 +188,12 @@ libdnf::rpm::Package BaseTestCase::add_system_pkg(
         base.get_system_state().set_reason(na, reason);
     }
 
-    return sack->add_system_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
+    return repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
 }
 
 
 libdnf::rpm::Package BaseTestCase::add_cmdline_pkg(const std::string & relative_path) {
-    return sack->add_cmdline_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
+    return repo_sack->get_cmdline_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
 }
 
 

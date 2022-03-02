@@ -464,7 +464,7 @@ void Repo::load_available_repo(LoadFlags flags) {
 }
 
 
-rpm::PackageId Repo::add_rpm_package(const std::string & path, bool with_hdrid) {
+rpm::Package Repo::add_rpm_package(const std::string & path, bool with_hdrid) {
     is_readable_rpm(path);
 
     make_solv_repo();
@@ -482,7 +482,7 @@ rpm::PackageId Repo::add_rpm_package(const std::string & path, bool with_hdrid) 
     solv_repo->set_needs_internalizing();
     base->get_rpm_package_sack()->p_impl->invalidate_provides();
 
-    return rpm::PackageId(new_id);
+    return rpm::Package(base, rpm::PackageId(new_id));
 }
 
 

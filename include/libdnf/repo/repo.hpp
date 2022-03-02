@@ -358,6 +358,18 @@ public:
 
     void add_libsolv_testcase(const std::string & path);
 
+    /// Adds an RPM package at `path` to the repository.
+    ///
+    /// If `with_hdrid` is `true`, the RPM is loaded with the
+    /// `RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM` flags, meaning libsolv will
+    /// calculate the SHA256 checksum of the RPM header and store it. This adds
+    /// overhead but has the advantage of TODO(lukash) describe the advantage.
+    /// @param path The path to the RPM file.
+    /// @param with_hdrid If true, libsolv calculates header checksum and stores it.
+    /// @throws RepoRpmError if the RPM file can't be read or is corrupted.
+    /// @return PackageId of the added package.
+    libdnf::rpm::Package add_rpm_package(const std::string & path, bool with_hdrid);
+
     libdnf::repo::RepoWeakPtr get_weak_ptr() { return RepoWeakPtr(this, &data_guard); }
 
     /// @return The `Base` object to which this object belongs.
@@ -376,18 +388,6 @@ private:
     void make_solv_repo();
 
     void load_available_repo(LoadFlags flags);
-
-    /// Adds an RPM package at `path` to the repository.
-    ///
-    /// If `with_hdrid` is `true`, the RPM is loaded with the
-    /// `RPM_ADD_WITH_HDRID | RPM_ADD_WITH_SHA256SUM` flags, meaning libsolv will
-    /// calculate the SHA256 checksum of the RPM header and store it. This adds
-    /// overhead but has the advantage of TODO(lukash) describe the advantage.
-    /// @param path The path to the RPM file.
-    /// @param with_hdrid If true, libsolv calculates header checksum and stores it.
-    /// @throws RepoRpmError if the RPM file can't be read or is corrupted.
-    /// @return PackageId of the added package.
-    rpm::PackageId add_rpm_package(const std::string & path, bool with_hdrid);
 
     void internalize();
 

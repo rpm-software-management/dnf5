@@ -36,6 +36,8 @@
 
 #define CV __perl_CV
 
+%feature("valuewrapper") Package;
+
 %include "libdnf/repo/config_repo.hpp"
 
 %ignore PackageDownloadError;

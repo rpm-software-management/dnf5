@@ -467,6 +467,7 @@ protected:
 private:
     friend class PackageSetIterator;
     friend class PackageSack;
+    friend class libdnf::repo::Repo;
     friend class libdnf::Goal;
     friend class libdnf::base::Transaction;
     friend class libdnf::rpm::Transaction;

@@ -249,22 +249,6 @@ void PackageSack::Impl::recompute_considered_in_pool() {
     considered_uptodate = true;
 }
 
-Package PackageSack::add_cmdline_package(const std::string & fn, bool add_with_hdrid) {
-    auto repo = p_impl->base->get_repo_sack()->get_cmdline_repo();
-    auto new_id = repo->add_rpm_package(fn, add_with_hdrid);
-
-    p_impl->provides_ready = false;
-    return Package(p_impl->base, new_id);
-}
-
-
-Package PackageSack::add_system_package(const std::string & fn, bool add_with_hdrid) {
-    auto new_id = p_impl->base->get_repo_sack()->get_system_repo()->add_rpm_package(fn, add_with_hdrid);
-
-    p_impl->provides_ready = false;
-    return Package(p_impl->base, new_id);
-}
-
 PackageSackWeakPtr PackageSack::get_weak_ptr() {
     return PackageSackWeakPtr(this, &p_impl->sack_guard);
 }

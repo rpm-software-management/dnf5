@@ -78,24 +78,6 @@ public:
     explicit PackageSack(libdnf::Base & base);
     ~PackageSack();
 
-    /// Adds the given .rpm file to the command line repo.
-    /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
-    /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
-    /// When RPM is not accesible or corrupted it raises libdnf::RuntimeError
-    /// Return added new Package
-    /// @replaces libdnf/dnf_sack.h:function:dnf_sack_add_cmdline_package(DnfSack *sack, const char *fn)
-    /// @replaces libdnf/dnf_sack.h:function:dnf_sack_add_cmdline_package_nochecksum(DnfSack *sack, const char *fn)
-    /// @replaces hawkey:hawkey/Sack:method:add_cmdline_package()
-    libdnf::rpm::Package add_cmdline_package(const std::string & fn, bool add_with_hdrid);
-
-    // TODO(jmracek) The method is highly experimental, what about to move it somewhere else?
-    /// Adds the given .rpm file to the system repo. The function is mostly for testing purpose (not only for unittests)
-    /// When add_with_hdrid == true the rpm is loaded with additional flags (RPM_ADD_WITH_HDRID|RPM_ADD_WITH_SHA256SUM)
-    /// It will calculate SHA256 checksum of header and store it in pool => Requires more CPU for loading
-    /// When RPM is not accesible or corrupted it raises libdnf::RuntimeError
-    /// Return added new Package
-    libdnf::rpm::Package add_system_package(const std::string & fn, bool add_with_hdrid);
-
     /// Create WeakPtr to PackageSack
     PackageSackWeakPtr get_weak_ptr();
 
