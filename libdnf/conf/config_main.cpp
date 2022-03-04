@@ -177,6 +177,7 @@ class ConfigMain::Impl {
     OptionString logdir{geteuid() == 0 ? "/var/log" : libdnf::utils::xdg::get_user_data_dir() / "dnf"};
     OptionNumber<std::int32_t> log_size{1024 * 1024, str_to_bytes};
     OptionNumber<std::int32_t> log_rotate{4, 0};
+    OptionPath debugdir{"./debugdata"};
     OptionStringList varsdir{VARS_DIRS};
     OptionStringList reposdir{{"/etc/yum.repos.d", "/etc/yum/repos.d", "/etc/distro.repos.d"}};
     OptionBool debug_solver{false};
@@ -367,6 +368,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("logdir", logdir);
     owner.opt_binds().add("log_size", log_size);
     owner.opt_binds().add("log_rotate", log_rotate);
+    owner.opt_binds().add("debugdir", debugdir);
     owner.opt_binds().add("varsdir", varsdir);
     owner.opt_binds().add("reposdir", reposdir);
     owner.opt_binds().add("debug_solver", debug_solver);
@@ -637,6 +639,13 @@ OptionNumber<std::int32_t> & ConfigMain::log_rotate() {
 }
 const OptionNumber<std::int32_t> & ConfigMain::log_rotate() const {
     return p_impl->log_rotate;
+}
+
+OptionPath & ConfigMain::debugdir() {
+    return p_impl->debugdir;
+}
+const OptionPath & ConfigMain::debugdir() const {
+    return p_impl->debugdir;
 }
 
 OptionStringList & ConfigMain::varsdir() {

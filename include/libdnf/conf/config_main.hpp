@@ -76,6 +76,8 @@ public:
     const OptionNumber<std::int32_t> & log_size() const;
     OptionNumber<std::int32_t> & log_rotate();
     const OptionNumber<std::int32_t> & log_rotate() const;
+    OptionPath & debugdir();
+    const OptionPath & debugdir() const;
     OptionStringList & varsdir();
     const OptionStringList & varsdir() const;
     OptionStringList & reposdir();
