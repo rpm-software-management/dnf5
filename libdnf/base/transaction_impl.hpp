@@ -38,7 +38,10 @@ public:
         : transaction(transaction),
           base(src.base),
           libsolv_transaction(src.libsolv_transaction ? transaction_create_clone(src.libsolv_transaction) : nullptr),
-          packages(src.packages) {}
+          problems(src.problems),
+          packages(src.packages),
+          resolve_logs(src.resolve_logs),
+          transaction_problems(src.transaction_problems) {}
     ~Impl();
 
     Impl & operator=(const Impl & other);
