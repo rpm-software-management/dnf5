@@ -25,7 +25,7 @@ class InstallTest(support.InstallrootCase):
         # install a package
         self.iface_rpm.install(['one'], dbus.Dictionary({}, signature='sv'))
 
-        resolved, errors = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
 
         # id of package depends on order of the repos in the sack which varies
         # between runs so we can't rely on the value
@@ -33,6 +33,7 @@ class InstallTest(support.InstallrootCase):
             pkg.pop('id')
             pkg.pop('package_size')
 
+        self.assertEqual(result, 0)
         self.assertCountEqual(
             resolved,
             dbus.Array([
@@ -52,40 +53,23 @@ class InstallTest(support.InstallrootCase):
                 ], signature=dbus.Signature('(ua{sv})'))
             )
 
-        self.assertResolveErrorsEmpty(errors)
-
         self.iface_goal.do_transaction(dbus.Dictionary({}, signature='sv'))
 
     def test_install_strict(self):
         '''with strict=True attempt to install nonexistent package returns error'''
         self.iface_rpm.install(['no_one'], dbus.Dictionary({'strict': True}, signature='sv'))
-        resolved, errors = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+
+        self.assertEqual(result, 2)
         self.assertCountEqual(
             resolved,
             dbus.Array([
                 ], signature=dbus.Signature('(ua{sv})'))
             )
 
-        self.assertDictEqual(
-            errors,
-            dbus.Dictionary({
-                dbus.String('transaction_problems'): dbus.UInt32(2, variant_level=1),
-                dbus.String('transaction_solver_problems'): dbus.String('', variant_level=1),
-                dbus.String('goal_problems'): dbus.Array([
-                    dbus.Dictionary({
-                        dbus.String('action'): dbus.UInt32(0, variant_level=1),
-                        dbus.String('problem'): dbus.UInt32(2, variant_level=1),
-                        dbus.String('goal_job_settings'): dbus.Dictionary({
-                            dbus.String('to_repo_ids'): dbus.Array([
-                                ], signature=dbus.Signature('s'), variant_level=1)
-                            }, signature=dbus.Signature('sv'), variant_level=1),
-                        dbus.String('report'): dbus.String('no_one', variant_level=1),
-                        dbus.String('report_list'): dbus.Array([
-                            ], signature=dbus.Signature('s'), variant_level=1)
-                        }, signature=dbus.Signature('sv'))
-                    ], signature=dbus.Signature('a{sv}'), variant_level=1),
-                }, signature=dbus.Signature('sv'), variant_level=1)
-        )
+        errors = self.iface_goal.get_transaction_problems_string()
+        self.assertEqual(errors, dbus.Array([
+            dbus.String('No match for argument: no_one')], signature=dbus.Signature('s')))
 
     def test_install_nostrict(self):
         '''
@@ -94,65 +78,34 @@ class InstallTest(support.InstallrootCase):
         '''
         self.iface_rpm.install(['no_one'], dbus.Dictionary({'strict': False}, signature='sv'))
 
-        resolved, errors = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+
+        self.assertEqual(result, 1)
         self.assertCountEqual(
             resolved,
             dbus.Array([
                 ], signature=dbus.Signature('(ua{sv})'))
             )
 
-        self.assertDictEqual(
-            errors,
-            dbus.Dictionary({
-                dbus.String('transaction_problems'): dbus.UInt32(0, variant_level=1),
-                dbus.String('transaction_solver_problems'): dbus.String('', variant_level=1),
-                dbus.String('goal_problems'): dbus.Array([
-                    dbus.Dictionary({
-                        dbus.String('action'): dbus.UInt32(0, variant_level=1),
-                        dbus.String('problem'): dbus.UInt32(2, variant_level=1),
-                        dbus.String('goal_job_settings'): dbus.Dictionary({
-                            dbus.String('to_repo_ids'): dbus.Array([
-                                ], signature=dbus.Signature('s'), variant_level=1)
-                            }, signature=dbus.Signature('sv'), variant_level=1),
-                        dbus.String('report'): dbus.String('no_one', variant_level=1),
-                        dbus.String('report_list'): dbus.Array([
-                            ], signature=dbus.Signature('s'), variant_level=1)
-                        }, signature=dbus.Signature('sv'))
-                    ], signature=dbus.Signature('a{sv}'), variant_level=1),
-                }, signature=dbus.Signature('sv'), variant_level=1)
-        )
+        errors = self.iface_goal.get_transaction_problems_string()
+        self.assertEqual(errors, dbus.Array([
+            dbus.String('No match for argument: no_one')], signature=dbus.Signature('s')))
 
     def test_install_fromrepo(self):
         '''
         attempt to install package from repo that does not contain it return error
         '''
         self.iface_rpm.install(['one'], dbus.Dictionary({'repo_ids': ['rpm-repo2']}, signature='sv'))
-        resolved, errors = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
 
+        self.assertEqual(result, 2)
         self.assertCountEqual(
             resolved,
             dbus.Array([
                 ], signature=dbus.Signature("(ua{sv})")),
             )
 
-        self.assertDictEqual(
-            errors,
-            dbus.Dictionary({
-                dbus.String('transaction_problems'): dbus.UInt32(16, variant_level=1),
-                dbus.String('transaction_solver_problems'): dbus.String('', variant_level=1),
-                dbus.String('goal_problems'): dbus.Array([
-                    dbus.Dictionary({
-                        dbus.String('action'): dbus.UInt32(0, variant_level=1),
-                        dbus.String('problem'): dbus.UInt32(16, variant_level=1),
-                        dbus.String('goal_job_settings'): dbus.Dictionary({
-                            dbus.String('to_repo_ids'): dbus.Array([
-                                dbus.String('rpm-repo2', variant_level=1)
-                                ], signature=dbus.Signature('s'), variant_level=1)
-                            }, signature=dbus.Signature('sv'), variant_level=1),
-                        dbus.String('report'): dbus.String('one', variant_level=1),
-                        dbus.String('report_list'): dbus.Array([
-                            ], signature=dbus.Signature('s'), variant_level=1)
-                        }, signature=dbus.Signature('sv'))
-                    ], signature=dbus.Signature('a{sv}'), variant_level=1),
-                }, signature=dbus.Signature('sv'), variant_level=1)
-        )
+        errors = self.iface_goal.get_transaction_problems_string()
+        self.assertEqual(errors, dbus.Array([
+            dbus.String("No match for argument 'one' in repositories 'rpm-repo2'")],
+            signature=dbus.Signature('s')))

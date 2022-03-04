@@ -34,20 +34,7 @@ IFACE_RPM = '{}.rpm.Rpm'.format(DNFDAEMON_BUS_NAME)
 IFACE_GOAL = '{}.Goal'.format(DNFDAEMON_BUS_NAME)
 
 
-class DnfdaemonTestCase(unittest.TestCase):
-
-    def assertResolveErrorsEmpty(self, errors):
-        self.assertDictEqual(
-            errors,
-            dbus.Dictionary({
-                dbus.String('transaction_problems'): dbus.UInt32(0, variant_level=1),
-                dbus.String('transaction_solver_problems'): dbus.String('', variant_level=1),
-                dbus.String('goal_problems'): dbus.Array([
-                    ], signature=dbus.Signature('a{sv}'), variant_level=1)
-                }, signature=dbus.Signature('sv', variant_level=1))
-        )
-
-class InstallrootCase(DnfdaemonTestCase):
+class InstallrootCase(unittest.TestCase):
 
     def setUp(self):
         super(InstallrootCase, self).setUp()

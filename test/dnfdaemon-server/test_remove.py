@@ -34,7 +34,7 @@ class RemoveTest(support.InstallrootCase):
         # remove an installed package
         self.iface_rpm.remove(['one'], dbus.Dictionary({}, signature='sv'))
 
-        resolved, errors = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
 
         # id of package depends on order of the repos in the sack which varies
         # between runs so we can't rely on the value
@@ -42,6 +42,7 @@ class RemoveTest(support.InstallrootCase):
             pkg.pop('id')
             pkg.pop('package_size')
 
+        self.assertEqual(result, 0)
         self.assertCountEqual(
             resolved,
             dbus.Array([
@@ -60,7 +61,5 @@ class RemoveTest(support.InstallrootCase):
                     signature=None)
                 ], signature=dbus.Signature('(ua{sv})'))
             )
-
-        self.assertResolveErrorsEmpty(errors)
 
         self.iface_goal.do_transaction(dbus.Dictionary({}, signature='sv'))
