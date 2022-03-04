@@ -36,6 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <sys/utsname.h>
 
+#include <filesystem>
 #include <iostream>
 #include <map>
 
@@ -964,7 +965,22 @@ base::Transaction Goal::resolve(bool allow_erasing) {
     }
     ret |= p_impl->rpm_goal.resolve();
 
+    // Write debug solver data
+    if (cfg_main.debug_solver().get_value()) {
+        auto debug_dir = std::filesystem::path(cfg_main.debugdir().get_value()) / "packages";
+        auto abs_debug_dir = std::filesystem::absolute(debug_dir);
+
+        // Ensures the presence of the directory.
+        std::filesystem::create_directories(abs_debug_dir);
+
+        p_impl->rpm_goal.write_debugdata(abs_debug_dir);
+
+        transaction.p_impl->add_resolve_log(
+            GoalAction::RESOLVE, GoalProblem::WRITE_DEBUG, {}, "", {abs_debug_dir}, false);
+    }
+
     transaction.p_impl->set_transaction(p_impl->rpm_goal, ret);
+
     return transaction;
 }
 

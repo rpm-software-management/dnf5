@@ -396,28 +396,23 @@ libdnf::solv::IdQueue GoalPrivate::list_obsoleted() {
     return list_results(SOLVER_TRANSACTION_OBSOLETED, 0);
 }
 
-void GoalPrivate::write_debugdata(const std::string & dir) {
+void GoalPrivate::write_debugdata(const std::filesystem::path & abs_dest_dir) {
     libdnf_assert_goal_resolved();
 
-    int flags = TESTCASE_RESULT_TRANSACTION | TESTCASE_RESULT_PROBLEMS;
-    // TODO(jmracek) add support of relative path and create required dirs and parents
-    //     g_autofree char * absdir = abspath(dir);
-    //     if (!absdir) {
-    //         std::string msg = tfm::format(_("failed to make %s absolute"), dir);
-    //         throw Goal::Error(msg, DNF_ERROR_FILE_INVALID);
-    //     }
-    //     makeDirPath(dir);
-    //     g_debug("writing solver debugdata to %s", absdir);
-    auto ret = ::testcase_write(libsolv_solver, dir.c_str(), flags, NULL, NULL);
-
-    if (!ret) {
-        // TODO(jmracek) replace error with Goal Error
-        throw RuntimeError(M_("failed writing debugdata"));
+    // Removes old debug data, if it exists.
+    for (const auto & dir_entry : std::filesystem::directory_iterator(abs_dest_dir)) {
+        std::filesystem::remove(dir_entry);
     }
-    //         std::string msg = tfm::format(_("failed writing debugdata to %1$s: %2$s"),
-    //                                       absdir, strerror(errno));
-    //         throw Goal::Error(msg, DNF_ERROR_FILE_INVALID);
-    //     }
+
+    int flags = TESTCASE_RESULT_TRANSACTION | TESTCASE_RESULT_PROBLEMS;
+    auto ret = ::testcase_write(libsolv_solver, abs_dest_dir.c_str(), flags, NULL, NULL);
+
+    if (ret == 0) {
+        // TODO(jmracek) replace error with Goal Error
+        const auto * libsolv_err_msg = pool_errstr(libsolv_solver->pool);
+        throw RuntimeError(
+            M_("failed writing debugsolver data into \"{}\": {}"), abs_dest_dir.native(), libsolv_err_msg);
+    }
 }
 
 // PackageSet

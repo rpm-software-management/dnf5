@@ -31,6 +31,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <solv/solver.h>
 
+#include <filesystem>
+
 #define libdnf_assert_goal_resolved() \
     libdnf_assert(libsolv_solver != nullptr, "Performing an operation that requires Goal to be resolved");
 
@@ -66,8 +68,8 @@ public:
     libdnf::solv::IdQueue list_removes();
     libdnf::solv::IdQueue list_obsoleted();
 
-    /// @dir Requires full path that exists
-    void write_debugdata(const std::string & dir);
+    /// @param abs_dest_dir Destination directory. Requires a full existing path.
+    void write_debugdata(const std::filesystem::path & abs_dest_dir);
 
     /// Get protected running kernel
     /// PackageId.id == 0 => not set
