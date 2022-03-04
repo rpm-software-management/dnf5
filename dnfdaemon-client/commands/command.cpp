@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "command.hpp"
 
 #include "context.hpp"
+#include "dnfdaemon-server/dbus.hpp"
 #include "dnfdaemon-server/utils.hpp"
-#include "utils.hpp"
 #include "wrappers/dbus_goal_wrapper.hpp"
 #include "wrappers/dbus_package_wrapper.hpp"
 
@@ -42,43 +42,29 @@ void TransactionCommand::run_transaction() {
     // resolve the transaction
     options["allow_erasing"] = ctx.allow_erasing.get_value();
     std::vector<dnfdaemon::DbusTransactionItem> transaction;
-    dnfdaemon::KeyValueMap dbus_goal_resolve_results;
+    unsigned int result_int;
     ctx.session_proxy->callMethod("resolve")
         .onInterface(dnfdaemon::INTERFACE_GOAL)
         .withTimeout(static_cast<uint64_t>(-1))
         .withArguments(options)
-        .storeResultsTo(transaction, dbus_goal_resolve_results);
+        .storeResultsTo(transaction, result_int);
+    dnfdaemon::ResolveResult result = static_cast<dnfdaemon::ResolveResult>(result_int);
 
-    // TODO (nsella): handle localization
-    if (!key_value_map_get<std::string>(dbus_goal_resolve_results, "transaction_solver_problems").empty()) {
-        std::cout << key_value_map_get<std::string>(dbus_goal_resolve_results, "transaction_solver_problems")
-                  << std::endl;
-    }
-    dnfdaemon::KeyValueMapList goal_resolve_log_list =
-        key_value_map_get<dnfdaemon::KeyValueMapList>(dbus_goal_resolve_results, "goal_problems");
-
-    // TODO(jmracek) Handle optional elements
-    for (const auto & e : goal_resolve_log_list) {
-        // TODO(jmracek) goal_resolve_log contains optional elements therefore we do not need to transfer them
-        libdnf::GoalAction action = static_cast<libdnf::GoalAction>(key_value_map_get<uint32_t>(e, "action"));
-        libdnf::GoalProblem problem = static_cast<libdnf::GoalProblem>(key_value_map_get<uint32_t>(e, "problem"));
-        libdnf::GoalJobSettings job_settings;
-        job_settings.to_repo_ids = key_value_map_get<dnfdaemon::KeyValueMap>(e, "goal_job_settings").at("to_repo_ids");
-        std::string report = key_value_map_get<std::string>(e, "report");
-        std::vector<std::string> report_list = key_value_map_get<std::vector<std::string>>(e, "report_list");
-        std::set<std::string> report_set{report_list.begin(), report_list.end()};
-
-        // TODO(jmracek) - add a support of transfering solver problems
-        std::string format_log =
-            libdnf::base::LogEvent::to_string(action, problem, job_settings, report, report_set, {});
-        if (!format_log.empty()) {
-            std::cout << format_log << std::endl;
+    if (result != dnfdaemon::ResolveResult::NO_PROBLEM) {
+        // retrieve and print resolving error messages
+        std::vector<std::string> problems;
+        ctx.session_proxy->callMethod("get_transaction_problems_string")
+            .onInterface(dnfdaemon::INTERFACE_GOAL)
+            .withTimeout(static_cast<uint64_t>(-1))
+            .storeResultsTo(problems);
+        for (const auto & problem : problems) {
+            std::cout << problem << std::endl;
+        }
+        if (result == dnfdaemon::ResolveResult::ERROR) {
+            return;
         }
     }
-    if (static_cast<libdnf::GoalProblem>(key_value_map_get<uint32_t>(
-            dbus_goal_resolve_results, "transaction_problems")) != libdnf::GoalProblem::NO_PROBLEM) {
-        return;
-    }
+
     if (transaction.empty()) {
         std::cout << "Nothing to do." << std::endl;
         return;
