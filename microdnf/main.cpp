@@ -602,6 +602,15 @@ static void set_commandline_args(Context & ctx) {
         });
     global_options_group->register_argument(releasever);
 
+    {
+        auto debug_solver = ctx.get_argument_parser().add_new_named_arg("debug_solver");
+        debug_solver->set_long_name("debugsolver");
+        debug_solver->set_short_description("Dump detailed solving results into files");
+        debug_solver->set_const_value("true");
+        debug_solver->link_value(&config.debug_solver());
+        global_options_group->register_argument(debug_solver);
+    }
+
     register_group_with_args(*microdnf, *global_options_group);
     register_group_with_args(*microdnf, *options_aliases_group);
 
