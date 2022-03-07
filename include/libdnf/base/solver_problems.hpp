@@ -51,7 +51,7 @@ public:
     /// be rendered into a string by the `problem_to_string()` method.
     // @replaces libdnf/Goal.describeProblemRules(unsigned i, bool pkgs);
     // @replaces libdnf/Goal.describeAllProblemRules(bool pkgs);
-    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_problems() {
+    std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> get_problems() const {
         return problems;
     };
 
