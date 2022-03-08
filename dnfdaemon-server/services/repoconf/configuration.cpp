@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "configuration.hpp"
 
-#include <fmt/format.h>
 #include <glob.h>
 #include <rpm/rpmlib.h>
 
@@ -52,7 +51,7 @@ void Configuration::read_main_config() {
         // store the parser so it can be used for saving the config file later on
         config_parsers[std::move(main_config_path)] = std::move(main_parser);
     } catch (const std::exception & e) {
-        logger.warning(fmt::format("Error parsing config file \"{}\": {}", main_config_path, e.what()));
+        logger.warning("Error parsing config file \"{}\": {}", main_config_path, e.what());
     }
 }
 
@@ -88,8 +87,7 @@ void Configuration::read_repo_configs() {
         try {
             pattern = std::filesystem::canonical(repos_dir).string() + "/*.repo";
         } catch (std::filesystem::filesystem_error & e) {
-            logger.debug(
-                fmt::format("Error reading repository configuration directory \"{}\": {}", repos_dir, e.what()));
+            logger.debug("Error reading repository configuration directory \"{}\": {}", repos_dir, e.what());
             continue;
         }
         glob_t glob_result;
@@ -100,7 +98,7 @@ void Configuration::read_repo_configs() {
             try {
                 repo_parser->read(file_path);
             } catch (libdnf::ConfigParserError & e) {
-                logger.warning(fmt::format("Error parsing config file \"{}\": {}", file_path, e.what()));
+                logger.warning("Error parsing config file \"{}\": {}", file_path, e.what());
                 continue;
             }
             read_repos(repo_parser.get(), file_path);

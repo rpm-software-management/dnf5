@@ -21,8 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rpm/package_sack_impl.hpp"
 
-#include "libdnf/logger/logger.hpp"
-
 #include <solv/chksum.h>
 #include <solv/repo.h>
 #include <solv/util.h>

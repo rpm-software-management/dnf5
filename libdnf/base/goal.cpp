@@ -33,7 +33,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/package_query.hpp"
 
-#include <fmt/format.h>
 #include <sys/utsname.h>
 
 #include <iostream>

@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/config.hpp"
 
-#include <fmt/format.h>
 
 namespace libdnf {
 
@@ -34,8 +33,7 @@ void Config<default_priority>::load_from_parser(
                 try {
                     opt_binds_iter->second.new_string(default_priority, vars.substitute(opt.second));
                 } catch (const OptionError & ex) {
-                    logger.warning(
-                        fmt::format("Config error in section \"{}\" key \"{}\": {}", section, opt.first, ex.what()));
+                    logger.warning("Config error in section \"{}\" key \"{}\": {}", section, opt.first, ex.what());
                 }
             }
         }

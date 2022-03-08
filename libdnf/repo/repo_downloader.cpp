@@ -27,7 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo_errors.hpp"
 
-#include <fmt/format.h>
 #include <librepo/librepo.h>
 #include <solv/chksum.h>
 #include <solv/util.h>

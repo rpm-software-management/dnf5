@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 
-#include <fmt/format.h>
 #include <stdio.h>
 #include <unistd.h>
 

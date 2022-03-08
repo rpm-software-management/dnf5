@@ -69,7 +69,7 @@ Session::Session(
         if (bind != opt_binds.end()) {
             bind->second.new_string(libdnf::Option::Priority::RUNTIME, value);
         } else {
-            logger.warning(fmt::format("Unknown config option: {}", key));
+            logger.warning("Unknown config option: {}", key);
         }
     }
 

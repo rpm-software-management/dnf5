@@ -36,8 +36,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/sack.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
 
-#include <fmt/format.h>
-
 
 namespace libdnf::transaction {
 

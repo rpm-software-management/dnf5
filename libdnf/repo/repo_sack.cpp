@@ -27,8 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/option_bool.hpp"
 
-#include <fmt/format.h>
-
 extern "C" {
 #include <solv/testcase.h>
 }

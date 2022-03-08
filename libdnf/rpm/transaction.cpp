@@ -606,7 +606,7 @@ private:
             auto te_rpmdb_record_number = rpmteDBOffset(te);
             auto te_nevra = fmt::format(
                 "{}-{}:{}-{}.{}", rpmteN(te), rpmteE(te) ? rpmteE(te) : "0", rpmteV(te), rpmteR(te), rpmteA(te));
-            auto & log = *transaction->base->get_logger();
+            auto & logger = *transaction->base->get_logger();
             const char * te_type = "unknown";
             switch (rpmteType(te)) {
                 case TR_ADDED:
@@ -633,8 +633,8 @@ private:
             switch (event) {
                 case RPMTS_EVENT_ADD: {
                     transaction->implicit_ts_elements.insert({te_rpmdb_record_number, te});
-                    log.debug(fmt::format(
-                        "Implicitly added element {} type {} (caused by {})", te_nevra, te_type, trigger_nevra));
+                    logger.debug(
+                        "Implicitly added element {} type {} (caused by {})", te_nevra, te_type, trigger_nevra);
                     break;
                 }
                 case RPMTS_EVENT_DEL: {
@@ -694,7 +694,7 @@ private:
         void * rc = nullptr;
         auto * callbacks_holder = static_cast<CallbacksHolder *>(data);
         auto * transaction = callbacks_holder->transaction;
-        auto & log = *transaction->base->get_logger();
+        auto & logger = *transaction->base->get_logger();
         auto & callbacks = *callbacks_holder->callbacks;
         auto * trans_element = static_cast<rpmte>(const_cast<void *>(te));
         auto * item = trans_element ? static_cast<TransactionItem *>(rpmteUserdata(trans_element)) : nullptr;
@@ -748,7 +748,7 @@ private:
             case RPMCALLBACK_REPACKAGE_PROGRESS:  // obsolete, unused
             case RPMCALLBACK_REPACKAGE_START:     // obsolete, unused
             case RPMCALLBACK_REPACKAGE_STOP:      // obsolete, unused
-                log.info("Warning: got RPMCALLBACK_REPACKAGE_* obsolete callback");
+                logger.info("Warning: got RPMCALLBACK_REPACKAGE_* obsolete callback");
                 break;
             case RPMCALLBACK_UNPACK_ERROR:
                 libdnf_assert_transaction_item_set();
@@ -800,7 +800,7 @@ private:
                 callbacks.verify_stop(total);
                 break;
             case RPMCALLBACK_UNKNOWN:
-                log.warning("Unknown RPM Transaction callback type: RPMCALLBACK_UNKNOWN");
+                logger.warning("Unknown RPM Transaction callback type: RPMCALLBACK_UNKNOWN");
         }
 
         return rc;
