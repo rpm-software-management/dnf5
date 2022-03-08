@@ -153,6 +153,31 @@ void BaseGoalTest::test_reinstall() {
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
+void BaseGoalTest::test_reinstall_from_cmdline() {
+    // Tests the reinstallation using a cmdline package when a package with the same NEVRA is in available repo
+    add_repo_rpm("rpm-repo1");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
+    auto cmdline_pkg = add_cmdline_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+
+    libdnf::Goal goal(base);
+    goal.add_rpm_reinstall(cmdline_pkg);
+
+    auto transaction = goal.resolve(false);
+
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("one-0:1-1.noarch", "@commandline"),
+            TransactionItemAction::REINSTALL,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::UNKNOWN),
+        TransactionPackage(
+            get_pkg("one-0:1-1.noarch", true),
+            TransactionItemAction::REPLACED,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::UNKNOWN)};
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
+}
+
 void BaseGoalTest::test_reinstall_user() {
     add_repo_rpm("rpm-repo1");
     add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::USER);
@@ -257,6 +282,62 @@ void BaseGoalTest::test_upgrade() {
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
+void BaseGoalTest::test_upgrade_from_cmdline() {
+    // Tests the upgrade using a cmdline package when a package with the same NEVRA is in available repo
+    add_repo_rpm("rpm-repo1");
+    add_system_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
+    auto cmdline_pkg = add_cmdline_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm");
+
+    libdnf::rpm::PackageQuery query(base);
+
+    libdnf::Goal goal(base);
+    goal.add_rpm_upgrade(cmdline_pkg);
+
+    auto transaction = goal.resolve(false);
+
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("one-0:2-1.noarch", "@commandline"),
+            TransactionItemAction::UPGRADE,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::UNKNOWN),
+        TransactionPackage(
+            get_pkg("one-0:1-1.noarch", true),
+            TransactionItemAction::REPLACED,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::UNKNOWN)};
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
+}
+
+void BaseGoalTest::test_upgrade_not_downgrade_from_cmdline() {
+    // Tests the upgrade using a command line package when a newer version of package is installed
+    // (downgrade must not be performed).
+    // The package with the same NEVRA is also in available repo
+    add_repo_rpm("rpm-repo1");
+    add_system_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
+    auto cmdline_pkg = add_cmdline_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+
+    libdnf::rpm::PackageQuery query(base);
+
+    libdnf::Goal goal(base);
+    goal.add_rpm_upgrade(cmdline_pkg);
+
+    auto transaction = goal.resolve(false);
+
+    CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
+
+    auto & log = transaction.get_resolve_logs();
+    CPPUNIT_ASSERT_EQUAL(1lu, log.size());
+    auto & first_event = *log.begin();
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::UPGRADE, first_event.get_action());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::ALREADY_INSTALLED, first_event.get_problem());
+    CPPUNIT_ASSERT_EQUAL(std::string("one.noarch"), *first_event.get_additional_data()->begin());
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_clean_requirements_on_remove());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_best());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_strict());
+}
+
 void BaseGoalTest::test_upgrade_not_available() {
     base.get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
     base.get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
@@ -346,6 +427,33 @@ void BaseGoalTest::test_downgrade() {
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
+            TransactionItemAction::DOWNGRADE,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::UNKNOWN),
+        TransactionPackage(
+            get_pkg("one-0:2-1.noarch", true),
+            TransactionItemAction::REPLACED,
+            TransactionItemReason::DEPENDENCY,
+            TransactionItemState::UNKNOWN)};
+    CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
+}
+
+void BaseGoalTest::test_downgrade_from_cmdline() {
+    // Tests the downgrade using a cmdline package when a package with the same NEVRA is in available repo
+    add_repo_rpm("rpm-repo1");
+    add_system_pkg("repos-rpm/rpm-repo1/one-2-1.noarch.rpm", TransactionItemReason::DEPENDENCY);
+    auto cmdline_pkg = add_cmdline_pkg("repos-rpm/rpm-repo1/one-1-1.noarch.rpm");
+
+    libdnf::rpm::PackageQuery query(base);
+
+    libdnf::Goal goal(base);
+    goal.add_rpm_downgrade(cmdline_pkg);
+
+    auto transaction = goal.resolve(false);
+
+    std::vector<libdnf::base::TransactionPackage> expected = {
+        TransactionPackage(
+            get_pkg("one-0:1-1.noarch", "@commandline"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::UNKNOWN),
