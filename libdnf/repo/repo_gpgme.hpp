@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/config_repo.hpp"
 #include "libdnf/repo/repo_callbacks.hpp"
 
+#include <filesystem>
 #include <string>
 #include <vector>
 
@@ -39,7 +40,7 @@ public:
 
     void set_callbacks(RepoCallbacks * callbacks) noexcept { this->callbacks = callbacks; }
 
-    std::string get_keyring_dir() { return config.get_cachedir() + "/pubring"; }
+    std::filesystem::path get_keyring_dir() { return std::filesystem::path(config.get_cachedir()) / "pubring"; }
 
     void import_key(int fd, const std::string & url);
 

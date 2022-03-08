@@ -27,7 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/repo_errors.hpp"
 
 #include <gpgme.h>
-#include <sys/stat.h>
 
 #include <memory>
 
@@ -90,10 +89,11 @@ private:
 /// [3] https://github.com/rpm-software-management/microdnf/issues/50
 /// [4] https://bugzilla.redhat.com/show_bug.cgi?id=1781601
 static void ensure_socket_dir_exists(Logger & logger) {
-    std::string dirname = "/run/user/" + std::to_string(getuid());
-    int res = mkdir(dirname.c_str(), 0700);
-    if (res != 0 && errno != EEXIST) {
-        logger.debug("Failed to create directory \"{}\": {} - {}", dirname, errno, strerror(errno));
+    auto dir_path = std::filesystem::path("/run/user") / std::to_string(getuid());
+    try {
+        std::filesystem::create_directories(dir_path);
+    } catch (const std::runtime_error & e) {
+        logger.debug("Failed to create GPGME socket directory: {}", e.what());
     }
 }
 
@@ -210,8 +210,7 @@ RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base
 
     gpgme_check_version(nullptr);
 
-    struct stat sb;
-    if (stat(get_keyring_dir().c_str(), &sb) == 0 && S_ISDIR(sb.st_mode)) {
+    if (std::filesystem::is_directory(get_keyring_dir())) {
         auto context = create_context(get_keyring_dir());
 
         gpgme_key_t key;
@@ -261,11 +260,13 @@ void RepoGpgme::import_key(int fd, const std::string & url) {
                 continue;
         }
 
-        struct stat sb;
-        if (stat(get_keyring_dir().c_str(), &sb) != 0 || !S_ISDIR(sb.st_mode))
-            mkdir(get_keyring_dir().c_str(), 0777);
+        auto keyring_dir = get_keyring_dir();
 
-        auto context = create_context(get_keyring_dir());
+        if (!std::filesystem::is_directory(keyring_dir)) {
+            std::filesystem::create_directories(keyring_dir);
+        }
+
+        auto context = create_context(keyring_dir);
 
         gpg_import_key(context.get(), key_info.raw_key);
 
