@@ -565,7 +565,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
 
     rpm::PackageQuery installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     installed.filter_installed();
-    for (auto & [action, ids, settings] : rpm_ids) {
+    for (auto [action, ids, settings] : rpm_ids) {
         switch (action) {
             case GoalAction::INSTALL: {
                 //  include installed packages with the same NEVRA into transaction to prevent reinstall
