@@ -47,8 +47,6 @@ void Configuration::read_main_config() {
         main_parser->read(main_config_path);
         cfg_main.load_from_parser(*main_parser, "main", *base->get_vars(), *base->get_logger());
 
-        base->setup();
-
         // read repos possibly configured in the main config file
         read_repos(main_parser.get(), main_config_path);
         // store the parser so it can be used for saving the config file later on
