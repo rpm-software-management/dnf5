@@ -66,11 +66,32 @@ void CompsEnvironmentTest::test_load_defaults() {
 }
 
 void CompsEnvironmentTest::test_merge() {
+    // Load multiple different definitions of the minimal environment
     add_repo_repomd("repomd-comps-minimal-environment");
     add_repo_repomd("repomd-comps-custom-environment");
-    // load another definiton of the minimal-environment that changes all attributes
     add_repo_repomd("repomd-comps-minimal-environment-v2");
 
+    // The "Minimal Install v2" is preferred because its repoid is alphabetically higher
+    EnvironmentQuery q_minimal_env(base);
+    q_minimal_env.filter_environmentid("minimal-environment");
+    auto minimal_env = q_minimal_env.get();
+    CPPUNIT_ASSERT_EQUAL(std::string("minimal-environment"), minimal_env.get_environmentid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimal Install v2"), minimal_env.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Minimale Installation v2"), minimal_env.get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Basic functionality v2."), minimal_env.get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Grundlegende Funktionalität v2."), minimal_env.get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("4"), minimal_env.get_order());
+    CPPUNIT_ASSERT_EQUAL(false, minimal_env.get_installed());
+}
+
+void CompsEnvironmentTest::test_merge_when_different_load_order() {
+    // Load multiple different definitions of the minimal environment
+    // The order of loading the repositories does not matter
+    add_repo_repomd("repomd-comps-minimal-environment-v2");
+    add_repo_repomd("repomd-comps-custom-environment");
+    add_repo_repomd("repomd-comps-minimal-environment");
+
+    // The "Minimal Install v2" is preferred because its repoid is alphabetically higher
     EnvironmentQuery q_minimal_env(base);
     q_minimal_env.filter_environmentid("minimal-environment");
     auto minimal_env = q_minimal_env.get();
@@ -85,11 +106,12 @@ void CompsEnvironmentTest::test_merge() {
 
 
 void CompsEnvironmentTest::test_merge_with_empty() {
+    // Load minimal environment and another definition with all attributes empty
     add_repo_repomd("repomd-comps-minimal-environment");
     add_repo_repomd("repomd-comps-custom-environment");
-    // load another definiton of the minimal-environment that has all attributes empty
     add_repo_repomd("repomd-comps-minimal-environment-empty");
 
+    // All the attributes are taken from the non-empty definition
     EnvironmentQuery q_minimal_empty(base);
     q_minimal_empty.filter_environmentid("minimal-environment");
     auto minimal_empty = q_minimal_empty.get();
@@ -105,12 +127,12 @@ void CompsEnvironmentTest::test_merge_with_empty() {
 
 
 void CompsEnvironmentTest::test_merge_empty_with_nonempty() {
-    // load definiton of the minimal-environment that has all attributes empty
+    // Load minimal environment and another definition with all attributes empty
     add_repo_repomd("repomd-comps-minimal-environment-empty");
     add_repo_repomd("repomd-comps-custom-environment");
-    // load another definiton of the minimal-environment that has all attributes filled
     add_repo_repomd("repomd-comps-minimal-environment");
 
+    // All the attributes are taken from the non-empty definition
     EnvironmentQuery q_minimal_env(base);
     q_minimal_env.filter_installed(false);
     q_minimal_env.filter_environmentid("minimal-environment");
@@ -126,8 +148,8 @@ void CompsEnvironmentTest::test_merge_empty_with_nonempty() {
 
 
 void CompsEnvironmentTest::test_merge_different_translations() {
+    // Load different definitions of the minimal environment with different set of translations
     add_repo_repomd("repomd-comps-minimal-environment");
-    // load another definiton of the minimal environment with different set of translations
     add_repo_repomd("repomd-comps-minimal-environment-different-translations");
 
     EnvironmentQuery q_minimal_env(base);

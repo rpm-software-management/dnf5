@@ -112,13 +112,13 @@ void CompsGroupQueryTest::test_query_filter_uservisible() {
     // Filter groups with uservisible=true
     GroupQuery q_groups(base);
     q_groups.filter_uservisible(true);
-    std::vector<Group> expected = {get_group("critical-path-standard")};
+    std::vector<Group> expected = {get_group("core"), get_group("critical-path-standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 
     // Filter groups with uservisible=false
     q_groups = GroupQuery(base);
     q_groups.filter_uservisible(false);
-    expected = {get_group("core"), get_group("standard")};
+    expected = {get_group("standard")};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(q_groups));
 }
 

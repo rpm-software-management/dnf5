@@ -140,8 +140,13 @@ protected:
 private:
     libdnf::BaseWeakPtr base;
 
-    // Corresponds to solvable ids for this environment (libsolv doesn't merge environments,
-    // so there are multiple solvables for one environmentid)
+    // Corresponds to solvable ids for this environment (libsolv doesn't merge groups, so there are multiple solvables
+    // for one environmentid).
+    // The order is given by the repoids of the originating repositories. The repoids that come later in the alphabet
+    // are preferred (e.g. the description is taken from solvable from repository "B", even though there is a different
+    // description in repository "A"). A notable case are repositories "fedora" and "updates" where the "updates"
+    // repository is preferred, and coincidentally, this is what we want, because "updates" contains more up-to-date
+    // definitions.
     std::vector<EnvironmentId> environment_ids;
 
     std::vector<std::string> groups;

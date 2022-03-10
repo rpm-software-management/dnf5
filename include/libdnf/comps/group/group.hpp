@@ -155,8 +155,13 @@ protected:
 private:
     libdnf::BaseWeakPtr base;
 
-    // Corresponds to solvable ids for this group (libsolv doesn't merge groups,
-    // so there are multiple solvables for one groupid)
+    // Corresponds to solvable ids for this group (libsolv doesn't merge groups, so there are multiple solvables
+    // for one groupid).
+    // The order is given by the repoids of the originating repositories. The repoids that come later in the alphabet
+    // are preferred (e.g. the description is taken from solvable from repository "B", even though there is a different
+    // description in repository "A"). A notable case are repositories "fedora" and "updates" where the "updates"
+    // repository is preferred, and coincidentally, this is what we want, because "updates" contains more up-to-date
+    // definitions.
     std::vector<GroupId> group_ids;
 
     std::vector<Package> packages;

@@ -32,6 +32,7 @@ class CompsGroupTest : public BaseTestCase {
     CPPUNIT_TEST(test_load);
     CPPUNIT_TEST(test_load_defaults);
     CPPUNIT_TEST(test_merge);
+    CPPUNIT_TEST(test_merge_when_different_load_order);
     CPPUNIT_TEST(test_merge_with_empty);
     CPPUNIT_TEST(test_merge_empty_with_nonempty);
     CPPUNIT_TEST(test_merge_different_translations);
@@ -43,6 +44,7 @@ public:
     void test_load();
     void test_load_defaults();
     void test_merge();
+    void test_merge_when_different_load_order();
     void test_merge_with_empty();
     void test_merge_empty_with_nonempty();
     void test_merge_different_translations();

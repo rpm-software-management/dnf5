@@ -132,11 +132,45 @@ void CompsGroupTest::test_load_defaults() {
 
 
 void CompsGroupTest::test_merge() {
+    // Load multiple different definitions of the core group
     add_repo_repomd("repomd-comps-core");
     add_repo_repomd("repomd-comps-standard");
-    // load another definiton of the core group that changes all attributes
     add_repo_repomd("repomd-comps-core-v2");
 
+    // The "Core v2" is preferred because its repoid is alphabetically higher
+    GroupQuery q_core2(base);
+    q_core2.filter_groupid("core");
+    auto core2 = q_core2.get();
+    CPPUNIT_ASSERT_EQUAL(std::string("core"), core2.get_groupid());
+    CPPUNIT_ASSERT_EQUAL(std::string("Core v2"), core2.get_name());
+    // When attributes are missing in core-v2.xml, original values are kept
+    CPPUNIT_ASSERT_EQUAL(std::string("Kern v2"), core2.get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core2.get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core2.get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2"), core2.get_order());
+    CPPUNIT_ASSERT_EQUAL(std::string("de"), core2.get_langonly());
+    // When boolean attributes are missing in core-v2.xml, default values are taken
+    CPPUNIT_ASSERT_EQUAL(true, core2.get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(true, core2.get_default());
+    CPPUNIT_ASSERT_EQUAL(false, core2.get_installed());
+
+    std::vector<Package> exp_pkgs_core2 = {
+        Package("bash", PackageType::MANDATORY, ""),
+        Package("glibc", PackageType::MANDATORY, ""),
+        Package("dnf", PackageType::DEFAULT, ""),
+        Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
+    CPPUNIT_ASSERT_EQUAL(exp_pkgs_core2, core2.get_packages());
+}
+
+
+void CompsGroupTest::test_merge_when_different_load_order() {
+    // Load multiple different definitions of the core group
+    // The order of loading the repositories does not matter
+    add_repo_repomd("repomd-comps-core-v2");
+    add_repo_repomd("repomd-comps-standard");
+    add_repo_repomd("repomd-comps-core");
+
+    // The "Core v2" is preferred because its repoid is alphabetically higher
     GroupQuery q_core2(base);
     q_core2.filter_groupid("core");
     auto core2 = q_core2.get();
@@ -163,11 +197,13 @@ void CompsGroupTest::test_merge() {
 
 
 void CompsGroupTest::test_merge_with_empty() {
+    // Load core group and another definition with all attributes empty
     add_repo_repomd("repomd-comps-core");
     add_repo_repomd("repomd-comps-standard");
-    // load another definiton of the core group that has all attributes empty
     add_repo_repomd("repomd-comps-core-empty");
 
+    // All the attributes are taken from the non-empty definition except for boolean values
+    // uservisible and hidden (these are missing, so default values are taken)
     GroupQuery q_core_empty(base);
     q_core_empty.filter_groupid("core");
     auto core_empty = q_core_empty.get();
@@ -188,39 +224,38 @@ void CompsGroupTest::test_merge_with_empty() {
 
 
 void CompsGroupTest::test_merge_empty_with_nonempty() {
-    // load definiton of the core group that has all attributes empty
-    add_repo_repomd("repomd-comps-core-empty");
+    // Load core group and another definition with all attributes empty
+    add_repo_repomd("repomd-comps-core-v2");
     add_repo_repomd("repomd-comps-standard");
-    // load another definiton of the core group that has all attributes filled
-    add_repo_repomd("repomd-comps-core");
+    add_repo_repomd("repomd-comps-core-empty");
 
+    // All the attributes are taken from the non-empty definition
     GroupQuery q_core(base);
     q_core.filter_groupid("core");
     auto core = q_core.get();
     CPPUNIT_ASSERT_EQUAL(std::string("core"), core.get_groupid());
-    CPPUNIT_ASSERT_EQUAL(std::string("Core"), core.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("Kern"), core.get_translated_name("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation"), core.get_description());
-    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation"), core.get_translated_description("de"));
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), core.get_order());
-    CPPUNIT_ASSERT_EQUAL(std::string("it"), core.get_langonly());
-    CPPUNIT_ASSERT_EQUAL(false, core.get_uservisible());
-    CPPUNIT_ASSERT_EQUAL(false, core.get_default());
+    CPPUNIT_ASSERT_EQUAL(std::string("Core v2"), core.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kern v2"), core.get_translated_name("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("Smallest possible installation v2"), core.get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("Kleinstmögliche Installation v2"), core.get_translated_description("de"));
+    CPPUNIT_ASSERT_EQUAL(std::string("2"), core.get_order());
+    CPPUNIT_ASSERT_EQUAL(std::string("de"), core.get_langonly());
+    CPPUNIT_ASSERT_EQUAL(true, core.get_uservisible());
+    CPPUNIT_ASSERT_EQUAL(true, core.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core.get_installed());
 
     std::vector<Package> exp_pkgs_core = {
         Package("bash", PackageType::MANDATORY, ""),
         Package("glibc", PackageType::MANDATORY, ""),
         Package("dnf", PackageType::DEFAULT, ""),
-        Package("conditional", PackageType::CONDITIONAL, "nonexistent"),
         Package("dnf-plugins-core", PackageType::OPTIONAL, "")};
     CPPUNIT_ASSERT_EQUAL(exp_pkgs_core, core.get_packages());
 }
 
 
 void CompsGroupTest::test_merge_different_translations() {
+    // Load different definitions of the core group with different set of translations
     add_repo_repomd("repomd-comps-core");
-    // load another definiton of the core group with different set of translations
     add_repo_repomd("repomd-comps-core-different-translations");
 
     GroupQuery q_core(base);

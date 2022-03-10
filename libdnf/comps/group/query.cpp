@@ -33,6 +33,7 @@ extern "C" {
 
 #include <map>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -43,10 +44,15 @@ namespace libdnf::comps {
 GroupQuery::GroupQuery(const BaseWeakPtr & base) : base(base) {
     libdnf::solv::Pool & pool = get_pool(base);
 
-    std::map<std::string, std::vector<Id>> available_map;
+    // Map of available groups:
+    //     For each groupid (SOLVABLE_NAME) have a vector of (repoid, solvable_id) pairs.
+    //     Each pair consists of one solvable_id that represents one definition of the group
+    //     and repoid of its originating repository.
+    std::map<std::string, std::vector<std::pair<std::string_view, Id>>> available_map;
     Id solvable_id;
     Solvable * solvable;
-    std::pair<std::string, std::string> solvable_name_pair;
+    std::pair<std::string_view, std::string> solvable_name_pair;
+    std::string_view repoid;
 
     // Loop over all solvables
     FOR_POOL_SOLVABLES(solvable_id) {
@@ -63,25 +69,29 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base) : base(base) {
             continue;
         }
 
+        repoid = solvable->repo->name;
+
         // Add installed groups directly, because there is only one solvable for each
-        if (strcmp(solvable->repo->name, "@System") == 0) {
+        if (repoid == "@System") {
             Group group(base);
             group.group_ids.push_back(GroupId(solvable_id));
             add(group);
         } else {
             // Create map of available groups:
-            // for each groupid (SOLVABLE_NAME), list all corresponding solvable_ids
-            // TODO(pkratoch): Sort solvable_ids for each groupid according to repo id
+            // for each groupid (SOLVABLE_NAME), list all corresponding solvable_ids with repoids
             available_map[solvable_name_pair.second].insert(
-                available_map[solvable_name_pair.second].begin(), solvable_id);
+                available_map[solvable_name_pair.second].end(), std::make_pair(repoid, solvable_id));
         }
     }
 
     // Create groups based on the available_map
-    for (const auto & item : available_map) {
+    for (auto & item : available_map) {
         Group group(base);
-        for (Id solvable_id : item.second) {
-            group.group_ids.push_back(GroupId(solvable_id));
+        // Sort the vector of (repoid, solvable_id) pairs by repoid
+        std::sort(item.second.begin(), item.second.end(), std::greater<>());
+        // Create group_ids vector from the sorted solvable_ids
+        for (const auto & solvableid_repoid_pair : item.second) {
+            group.group_ids.emplace_back(solvableid_repoid_pair.second);
         }
         add(group);
     }
