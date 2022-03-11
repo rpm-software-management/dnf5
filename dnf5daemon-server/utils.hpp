@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dbus.hpp"
 
+#include <fmt/format.h>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>
@@ -32,12 +33,12 @@ template <typename ItemType>
 ItemType key_value_map_get(const dnfdaemon::KeyValueMap & map, const std::string & key) {
     auto it = map.find(key);
     if (it == map.end()) {
-        throw sdbus::Error(dnfdaemon::ERROR, "Key not present in the map.");
+        throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Key \"{}\" not present in the map.", key));
     }
     try {
         return it->second.get<ItemType>();
     } catch (sdbus::Error & e) {
-        throw sdbus::Error(dnfdaemon::ERROR, "Incorrect map item type.");
+        throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Map item \"{}\" has incorrect type.", key));
     }
 }
 
@@ -51,7 +52,7 @@ ItemType key_value_map_get(
     try {
         return it->second.get<ItemType>();
     } catch (sdbus::Error & e) {
-        throw sdbus::Error(dnfdaemon::ERROR, "Incorrect map item type.");
+        throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Map item \"{}\" has incorrect type.", key));
     }
 }
 
