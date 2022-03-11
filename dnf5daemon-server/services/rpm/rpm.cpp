@@ -63,6 +63,25 @@ void Rpm::dbus_register() {
         });
 }
 
+std::vector<std::string> get_filter_patterns(dnfdaemon::KeyValueMap options, const std::string & option) {
+    auto filter_patterns = key_value_map_get<std::vector<std::string>>(options, option);
+    if (filter_patterns.empty()) {
+        throw sdbus::Error(dnfdaemon::ERROR, fmt::format("\"{}\" option expected an argument.", option));
+    }
+    return filter_patterns;
+}
+
+libdnf::rpm::PackageQuery resolve_nevras(libdnf::rpm::PackageQuery base_query, std::vector<std::string> nevras) {
+    libdnf::rpm::PackageQuery result(base_query.get_base(), libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+    libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
+    for (const auto & nevra : nevras) {
+        libdnf::rpm::PackageQuery nevra_query(base_query);
+        nevra_query.resolve_pkg_spec(nevra, settings, false);
+        result |= nevra_query;
+    }
+    return result;
+}
+
 sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
@@ -71,32 +90,172 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     session.fill_sack();
     auto base = session.get_base();
 
-    // patterns to search
-    std::vector<std::string> default_patterns{};
-    std::vector<std::string> patterns =
-        key_value_map_get<std::vector<std::string>>(options, "patterns", std::move(default_patterns));
-    // packages matching flags
-    bool icase = key_value_map_get<bool>(options, "icase", true);
-    bool with_nevra = key_value_map_get<bool>(options, "with_nevra", true);
-    bool with_provides = key_value_map_get<bool>(options, "with_provides", true);
-    bool with_filenames = key_value_map_get<bool>(options, "with_filenames", true);
-    bool with_src = key_value_map_get<bool>(options, "with_src", true);
+    // start with all packages
+    libdnf::rpm::PackageQuery query(*base);
 
-    libdnf::rpm::PackageSet result_pset(*base);
-    libdnf::rpm::PackageQuery full_package_query(*base);
-    if (patterns.size() > 0) {
-        for (auto & pattern : patterns) {
-            libdnf::rpm::PackageQuery package_query(full_package_query);
-            libdnf::ResolveSpecSettings settings{
-                .ignore_case = icase,
-                .with_nevra = with_nevra,
-                .with_provides = with_provides,
-                .with_filenames = with_filenames};
-            package_query.resolve_pkg_spec(pattern, settings, with_src);
-            result_pset |= package_query;
-        }
+    // toplevel filtering - the scope
+    // TODO(mblaha): support for other possible scopes?
+    //     userinstalled, duplicates, unneeded, extras, installonly, recent, unsatisfied
+    std::string scope = key_value_map_get<std::string>(options, "scope", "all");
+    if (scope == "installed") {
+        query.filter_installed();
+    } else if (scope == "available") {
+        query.filter_available();
+    } else if (scope == "upgrades") {
+        query.filter_upgrades();
+    } else if (scope == "upgradable") {
+        query.filter_upgradable();
+    } else if (scope == "all") {
+        // the query already contains all packages
     } else {
-        result_pset = full_package_query;
+        throw sdbus::Error(dnfdaemon::ERROR, fmt::format("Unsupported scope for package filtering \"{}\".", scope));
+    }
+
+    // applying patterns filtering early can increase performance of slow
+    // what* filters by reducing the size of their base query
+    std::vector<std::string> patterns =
+        key_value_map_get<std::vector<std::string>>(options, "patterns", std::vector<std::string>{});
+
+    if (patterns.size() > 0) {
+        libdnf::rpm::PackageQuery result(*base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        // packages matching flags
+        bool with_src = key_value_map_get<bool>(options, "with_src", true);
+        libdnf::ResolveSpecSettings settings{
+            .ignore_case = key_value_map_get<bool>(options, "icase", true),
+            .with_nevra = key_value_map_get<bool>(options, "with_nevra", true),
+            .with_provides = key_value_map_get<bool>(options, "with_provides", true),
+            .with_filenames = key_value_map_get<bool>(options, "with_filenames", true)};
+        for (auto & pattern : patterns) {
+            libdnf::rpm::PackageQuery package_query(query);
+            package_query.resolve_pkg_spec(pattern, settings, with_src);
+            result |= package_query;
+        }
+        query = result;
+    }
+
+    // then apply specific filters
+    if (options.find("arch") != options.end()) {
+        query.filter_arch(key_value_map_get<std::vector<std::string>>(options, "arch"));
+    }
+    if (options.find("repo") != options.end()) {
+        query.filter_repo_id(key_value_map_get<std::vector<std::string>>(options, "repo"));
+    }
+    if (options.find("whatprovides") != options.end()) {
+        auto filter_patterns = get_filter_patterns(options, "whatprovides");
+        libdnf::rpm::PackageQuery reldeps_query(query);
+        reldeps_query.filter_provides(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        if (!reldeps_query.empty()) {
+            query = reldeps_query;
+        } else {
+            query.filter_file(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        }
+    }
+    if (options.find("whatobsoletes") != options.end()) {
+        query.filter_obsoletes(get_filter_patterns(options, "whatobsoletes"), libdnf::sack::QueryCmp::GLOB);
+    }
+    if (options.find("whatconflicts") != options.end()) {
+        auto filter_patterns = get_filter_patterns(options, "whatconflicts");
+
+        libdnf::rpm::PackageQuery by_package_query(query);
+        by_package_query.filter_conflicts(resolve_nevras(query, filter_patterns));
+
+        query.filter_conflicts(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query |= by_package_query;
+    }
+    if (options.find("whatdepends") != options.end()) {
+        // TODO(mblaha): support for `exactdeps/alldeps` and `recursive` options
+        auto filter_patterns = get_filter_patterns(options, "whatdepends");
+        auto resolved_nevras = resolve_nevras(query, filter_patterns);
+        libdnf::rpm::PackageQuery by_package_query(query);
+        libdnf::rpm::PackageQuery by_glob_query(query);
+        libdnf::rpm::PackageQuery dep_query(query.get_base(), libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+
+        // requires
+        by_glob_query.filter_requires(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        dep_query |= by_glob_query;
+        by_package_query.filter_requires(resolved_nevras);
+        dep_query |= by_package_query;
+        // recommends
+        by_glob_query = query;
+        by_glob_query.filter_recommends(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        dep_query |= by_glob_query;
+        by_package_query = query;
+        by_package_query.filter_recommends(resolved_nevras);
+        dep_query |= by_package_query;
+        // enhances
+        by_glob_query = query;
+        by_glob_query.filter_enhances(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        dep_query |= by_glob_query;
+        by_package_query = query;
+        by_package_query.filter_enhances(resolved_nevras);
+        dep_query |= by_package_query;
+        // supplements
+        by_glob_query = query;
+        by_glob_query.filter_supplements(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        dep_query |= by_glob_query;
+        by_package_query = query;
+        by_package_query.filter_supplements(resolved_nevras);
+        dep_query |= by_package_query;
+        // suggests
+        by_glob_query = query;
+        by_glob_query.filter_suggests(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        dep_query |= by_glob_query;
+        by_package_query = query;
+        by_package_query.filter_suggests(resolved_nevras);
+        dep_query |= by_package_query;
+
+        query = dep_query;
+    }
+    if (options.find("whatrequires") != options.end()) {
+        // TODO(mblaha): support for `exactdeps/alldeps` and `recursive` options
+        auto filter_patterns = get_filter_patterns(options, "whatrequires");
+
+        libdnf::rpm::PackageQuery by_package_query(query);
+        by_package_query.filter_requires(resolve_nevras(query, filter_patterns));
+
+        query.filter_requires(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query |= by_package_query;
+    }
+    if (options.find("whatrecommends") != options.end()) {
+        auto filter_patterns = get_filter_patterns(options, "whatrecommends");
+
+        libdnf::rpm::PackageQuery by_package_query(query);
+        by_package_query.filter_recommends(resolve_nevras(query, filter_patterns));
+
+        query.filter_recommends(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query |= by_package_query;
+    }
+    if (options.find("whatenhances") != options.end()) {
+        auto filter_patterns = get_filter_patterns(options, "whatenhances");
+
+        libdnf::rpm::PackageQuery by_package_query(query);
+        by_package_query.filter_enhances(resolve_nevras(query, filter_patterns));
+
+        query.filter_enhances(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query |= by_package_query;
+    }
+    if (options.find("whatsuggests") != options.end()) {
+        auto filter_patterns = get_filter_patterns(options, "whatsuggests");
+
+        libdnf::rpm::PackageQuery by_package_query(query);
+        by_package_query.filter_suggests(resolve_nevras(query, filter_patterns));
+
+        query.filter_suggests(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query |= by_package_query;
+    }
+    if (options.find("whatsupplements") != options.end()) {
+        auto filter_patterns = get_filter_patterns(options, "whatsupplements");
+
+        libdnf::rpm::PackageQuery by_package_query(query);
+        by_package_query.filter_supplements(resolve_nevras(query, filter_patterns));
+
+        query.filter_supplements(filter_patterns, libdnf::sack::QueryCmp::GLOB);
+        query |= by_package_query;
+    }
+
+    // finally apply latest filter
+    if (options.find("latest-limit") != options.end()) {
+        query.filter_latest_evr(key_value_map_get<int>(options, "latest-limit"));
     }
 
     // create reply from the query
@@ -104,7 +263,7 @@ sdbus::MethodReply Rpm::list(sdbus::MethodCall & call) {
     std::vector<std::string> default_attrs{};
     std::vector<std::string> package_attrs =
         key_value_map_get<std::vector<std::string>>(options, "package_attrs", default_attrs);
-    for (auto pkg : result_pset) {
+    for (const auto & pkg : query) {
         out_packages.push_back(package_to_map(pkg, package_attrs));
     }
 
