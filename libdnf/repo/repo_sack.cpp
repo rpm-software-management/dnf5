@@ -104,9 +104,9 @@ RepoWeakPtr RepoSack::get_system_repo() {
 
 
 void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::LoadFlags flags) {
-    std::atomic<bool> except{false};  // set to true if an exception occurred
-    std::exception_ptr except_ptr;    // for pass exception from thread_sack_loader to main thread,
-                                      // a default-constructed std::exception_ptr is a null pointer
+    std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
+    std::exception_ptr except_ptr;                   // for pass exception from thread_sack_loader to main thread,
+                                                     // a default-constructed std::exception_ptr is a null pointer
 
     std::vector<libdnf::repo::Repo *> prepared_repos;  // array of repositories prepared to load into solv sack
     std::mutex prepared_repos_mutex;                   // mutex for the array
@@ -126,7 +126,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
                 auto repo = prepared_repos[num_repos_loaded];
                 lock.unlock();
 
-                if (!repo || except) {
+                if (!repo || except_in_main_thread) {
                     break;  // nullptr mark - work is done, or exception in main thread
                 }
 
@@ -136,7 +136,6 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
         } catch (std::runtime_error & ex) {
             // The thread must not throw exceptions. Pass them to the main thread using exception_ptr.
             except_ptr = std::current_exception();
-            except = true;
         }
     });
 
@@ -152,7 +151,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
     };
 
     auto catch_thread_sack_loader_exceptions = [&]() {
-        if (except) {
+        if (except_ptr) {
             if (thread_sack_loader.joinable()) {
                 thread_sack_loader.join();
             }
@@ -194,7 +193,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
             signal_prepared_repo.notify_one();
         } catch (const libdnf::repo::RepoDownloadError & e) {
             if (!repo->get_config().skip_if_unavailable().get_value()) {
-                except = true;
+                except_in_main_thread = true;
                 finish_sack_loader();
                 throw;
             } else {
@@ -204,7 +203,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
                     e.what()));  // TODO(lukash) we should print nested exceptions
             }
         } catch (const std::runtime_error & e) {
-            except = true;
+            except_in_main_thread = true;
             finish_sack_loader();
             throw;
         }
