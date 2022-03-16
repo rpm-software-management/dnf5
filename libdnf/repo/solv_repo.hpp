@@ -99,6 +99,10 @@ private:
 
     bool needs_internalizing{false};
 
+    /// Ranges of solvables for different types of data, used for writing libsolv cache files
+    int updateinfo_solvables_start{0};
+    int updateinfo_solvables_end{0};
+
 public:
     ::Repo * repo{nullptr};  // libsolv pool retains ownership
 };

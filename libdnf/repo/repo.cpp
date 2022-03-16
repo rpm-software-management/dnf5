@@ -452,8 +452,6 @@ void Repo::load_available_repo(LoadFlags flags) {
         solv_repo->load_repo_ext(RepodataType::PRESTO, *downloader.get());
     }
 
-    // updateinfo must come *after* all other extensions, as it is not a real
-    // extension, but contains a new set of packages
     if (any(flags & LoadFlags::UPDATEINFO)) {
         solv_repo->load_repo_ext(RepodataType::UPDATEINFO, *downloader.get());
     }

@@ -179,6 +179,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
 void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloader) {
     auto & logger = *base->get_logger();
+    auto & pool = get_pool(base);
 
     auto type_name = repodata_type_to_name(type);
 
@@ -198,7 +199,14 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
         return;
     }
 
+    int solvables_start = pool->nsolvables;
+
     if (load_solv_cache(type_name, repodata_type_to_flags(type))) {
+        if (type == RepodataType::UPDATEINFO) {
+            updateinfo_solvables_start = solvables_start;
+            updateinfo_solvables_end = pool->nsolvables;
+        }
+
         return;
     }
 
@@ -214,7 +222,10 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
             res = repo_add_deltainfoxml(repo, ext_file.get(), 0);
             break;
         case RepodataType::UPDATEINFO:
-            res = repo_add_updateinfoxml(repo, ext_file.get(), 0);
+            if ((res = repo_add_updateinfoxml(repo, ext_file.get(), 0)) == 0) {
+                updateinfo_solvables_start = solvables_start;
+                updateinfo_solvables_end = pool->nsolvables;
+            }
             break;
         case RepodataType::COMPS:
             res = repo_add_comps(repo, ext_file.get(), 0);
@@ -420,21 +431,9 @@ void SolvRepo::write_main() {
 }
 
 
-// this filter makes sure only the updateinfo repodata is written
-static int write_ext_updateinfo_filter(::Repo * repo, Repokey * key, void * kfdata) {
-    auto data = static_cast<Repodata *>(kfdata);
-    if (key->name == 1 && static_cast<Id>(key->size) != data->repodataid) {
-        return -1;
-    }
-    return repo_write_stdkeyfilter(repo, key, nullptr);
-}
-
-
 void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     auto & logger = *base->get_logger();
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
-
-    Repodata * data = repo_id2repodata(repo, repodata_id);
 
     auto type_name = repodata_type_to_name(type);
     auto fn = solv_file_name(type_name);
@@ -447,19 +446,20 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
         type_name,
         config.get_id(),
         cache_tmp_file.get_path().native());
-    int ret;
-    if (type != RepodataType::UPDATEINFO) {
-        ret = repodata_write(data, cache_file.get());
+
+    Repowriter * writer = repowriter_create(repo);
+    repowriter_set_repodatarange(writer, repodata_id, repodata_id + 1);
+
+    if (type == RepodataType::UPDATEINFO) {
+        repowriter_set_solvablerange(writer, updateinfo_solvables_start, updateinfo_solvables_end);
     } else {
-        // block replaces: ret = write_ext_updateinfo(repo, data, cache_file.get());
-        auto oldstart = repo->start;
-        repo->start = main_end;
-        repo->nsolvables -= main_nsolvables;
-        ret = repo_write_filtered(repo, cache_file.get(), write_ext_updateinfo_filter, data, 0);
-        repo->start = oldstart;
-        repo->nsolvables += main_nsolvables;
+        repowriter_set_flags(writer, REPOWRITER_NO_STORAGE_SOLVABLE);
     }
-    if (ret != 0) {
+
+    int res = repowriter_write(writer, cache_file.get());
+    repowriter_free(writer);
+
+    if (res != 0) {
         throw SolvError(
             M_("Failed to write {} cache for repo \"{}\" to \"{}\": {}"),
             type_name,
