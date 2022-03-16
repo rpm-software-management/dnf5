@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/transaction.hpp"
 
 #include "package_set_impl.hpp"
+#include "rpm_log_guard.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 
 #include "libdnf/common/exception.hpp"
@@ -589,6 +590,8 @@ private:
     bool downgrade_requested{false};
     std::vector<TransactionItem> transaction_items;
 
+    RpmLogGuard rpm_log_guard;
+
     /// Add package to be installed to transaction set.
     /// The transaction set is checked for duplicate package names.
     /// If found, the package with the "newest" EVR will be replaced.
@@ -834,7 +837,7 @@ private:
 
 #undef libdnf_assert_transaction_item_set
 
-Transaction::Impl::Impl(const BaseWeakPtr & base, rpmVSFlags vsflags) : base(base) {
+Transaction::Impl::Impl(const BaseWeakPtr & base, rpmVSFlags vsflags) : base(base), rpm_log_guard(base) {
     ts = rpmtsCreate();
     auto & config = base->get_config();
     set_root_dir(config.installroot().get_value().c_str());
