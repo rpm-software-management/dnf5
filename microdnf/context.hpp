@@ -43,6 +43,11 @@ public:
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
     void load_repos(bool load_system, libdnf::repo::Repo::LoadFlags flags = libdnf::repo::Repo::LoadFlags::ALL);
 
+    /// Adds packages from path-defined files to the command line repository.
+    /// Returns the added Package objects.
+    std::vector<libdnf::rpm::Package> add_cmdline_packages(
+        const std::vector<std::string> & packages_paths, std::vector<std::string> & error_messages);
+
     libdnf::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
     std::vector<std::string> enable_plugins_patterns;
@@ -102,6 +107,14 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
 void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir);
 
 void run_transaction(libdnf::rpm::Transaction & transaction);
+
+/// Parses the items in the `specs` array and adds the individual items to the appropriate vector.
+/// Duplicate items are ignored.
+void parse_add_specs(
+    int specs_count,
+    const char * const specs[],
+    std::vector<std::string> & pkg_specs,
+    std::vector<std::string> & filepaths);
 
 /// Returns the names of matching installed packages.
 /// If `nevra_for_same_name` is true, it returns a full nevra for packages with the same name.

@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 #include <iostream>
+#include <set>
 #include <stdexcept>
 #include <string>
 
@@ -233,6 +234,28 @@ void Context::load_repos(bool load_system, libdnf::repo::Repo::LoadFlags flags) 
     print_info("Repositories loaded.");
 }
 
+
+std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(
+    const std::vector<std::string> & packages_paths, std::vector<std::string> & error_messages) {
+    std::vector<libdnf::rpm::Package> added_packages;
+
+    if (!packages_paths.empty()) {
+        auto cmdline_repo = base.get_repo_sack()->get_cmdline_repo();
+        for (const auto & path : packages_paths) {
+            try {
+                added_packages.push_back(cmdline_repo->add_rpm_package(path, true));
+            } catch (const std::exception & e) {
+                error_messages.emplace_back(e.what());
+            }
+        }
+
+        if (!added_packages.empty()) {
+            base.get_rpm_package_sack()->setup_excludes_includes();
+        }
+    }
+
+    return added_packages;
+}
 
 namespace {
 
@@ -628,6 +651,25 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
     }
 
     // TODO(mblaha): print a summary of successfull transaction
+}
+
+void parse_add_specs(
+    int specs_count,
+    const char * const specs[],
+    std::vector<std::string> & pkg_specs,
+    std::vector<std::string> & filepaths) {
+    const std::string_view ext(".rpm");
+    std::set<std::string> unique_items;
+    for (int i = 0; i < specs_count; ++i) {
+        const std::string_view spec(specs[i]);
+        if (auto [it, inserted] = unique_items.emplace(spec); inserted) {
+            if (spec.length() > ext.length() && spec.compare(spec.length() - ext.length(), ext.length(), ext) == 0) {
+                filepaths.emplace_back(spec);
+            } else {
+                pkg_specs.emplace_back(spec);
+            }
+        }
+    }
 }
 
 std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string & pattern, bool nevra_for_same_name) {
