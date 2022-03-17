@@ -192,6 +192,10 @@ public:
 
     bool is_installed(Id id) const { return is_installed(id2solvable(id)); }
 
+    /// Returns `true` if solvable with `id` is excluded.
+    /// The return value is undefined for invalid `id`. Valid range for `id` in [1, nsolvables).
+    bool is_solvable_excluded(Id id) const { return is_considered_map_active() && !considered.contains(id); }
+
     repo::Repo & get_repo(Id id) const { return solv::get_repo(id2solvable(id)); }
 
     const char * get_sourcerpm(Id id) const;

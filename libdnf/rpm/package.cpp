@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/package.hpp"
 
+#include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
 #include "solv/pool.hpp"
 
@@ -277,6 +278,11 @@ std::string Package::get_package_path() const {
 
 bool Package::is_installed() const {
     return get_pool(base).is_installed(id.id);
+}
+
+bool Package::is_excluded() const {
+    base->get_rpm_package_sack()->p_impl->recompute_considered_in_pool();
+    return get_pool(base).is_solvable_excluded(id.id);
 }
 
 unsigned long long Package::get_hdr_end() const {

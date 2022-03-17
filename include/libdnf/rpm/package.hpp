@@ -406,6 +406,10 @@ public:
     // @replaces dnf:dnf/package.py:attribute:Package.installed
     bool is_installed() const;
 
+    /// @return `true` if the package is excluded, `false` otherwise.
+    /// @since 5.0
+    bool is_excluded() const;
+
     /// TODO is_local
     // @replaces dnf:dnf/package.py:method:Package.localPkg(self)
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_is_local(DnfPackage * pkg)
