@@ -232,21 +232,23 @@ public:
 
     const SolvMap & get_considered_map() const noexcept { return considered; }
 
-    void set_considered_map(SolvMap && considered_map) {
+    /// Exchanges the internal map `considered` with `other_considered_map`.
+    /// The allocated size of `other_considered_map` must be >= nsolvables,
+    /// or 0 if we want to disable the use of the considered map.
+    void swap_considered_map(SolvMap & other_considered_map) {
         libdnf_assert(
-            considered_map.allocated_size() >= get_nsolvables(),
+            other_considered_map.allocated_size() == 0 || other_considered_map.allocated_size() >= get_nsolvables(),
             "The considered map is smaller than the number of solvables in the pool");
-        considered = std::move(considered_map);
-        pool->considered = const_cast<::Map *>(&considered.get_map());
-    }
-
-    void drop_considered_map() {
-        pool->considered = nullptr;
-        considered = SolvMap(0);
+        considered.swap(other_considered_map);
+        if (considered.allocated_size() == 0) {
+            pool->considered = nullptr;
+        } else {
+            pool->considered = const_cast<::Map *>(&considered.get_map());
+        }
     }
 
 private:
-    SolvMap considered;
+    SolvMap considered;  // owner of the considered map, `pool->considered` is only a raw pointer
     ::Pool * pool;
 };
 

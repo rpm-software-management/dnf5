@@ -239,9 +239,10 @@ void PackageSack::Impl::recompute_considered_in_pool() {
 
     auto considered = compute_considered_map(libdnf::sack::ExcludeFlags::APPLY_EXCLUDES);
     if (considered) {
-        get_pool(base).set_considered_map(std::move(*considered));
+        get_pool(base).swap_considered_map(*considered);
     } else {
-        get_pool(base).drop_considered_map();
+        libdnf::solv::SolvMap empty_map(0);
+        get_pool(base).swap_considered_map(empty_map);
     }
 
     considered_uptodate = true;
