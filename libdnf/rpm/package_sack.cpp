@@ -53,6 +53,10 @@ void PackageSack::Impl::make_provides_ready() {
         return;
     }
 
+    // Temporarily replaces the considered map with an empty one. Ignores "excludes" during calculation provides.
+    libdnf::solv::SolvMap original_considered_map(0);
+    get_pool(base).swap_considered_map(original_considered_map);
+
     base->get_repo_sack()->internalize_repos();
 
     auto & pool = get_pool(base);
@@ -80,6 +84,9 @@ void PackageSack::Impl::make_provides_ready() {
 
     pool_createwhatprovides(*pool);
     provides_ready = true;
+
+    // Sets the original considered map.
+    get_pool(base).swap_considered_map(original_considered_map);
 }
 
 void PackageSack::Impl::setup_excludes_includes(bool only_main) {
