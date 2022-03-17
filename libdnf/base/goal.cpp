@@ -912,6 +912,7 @@ base::Transaction Goal::resolve(bool allow_erasing) {
     pool_setarch(*pool, "x86_64");
     auto ret = GoalProblem::NO_PROBLEM;
 
+    sack->p_impl->recompute_considered_in_pool();
     sack->p_impl->make_provides_ready();
     // TODO(jmracek) Apply modules first
     // TODO(jmracek) Apply comps second or later
