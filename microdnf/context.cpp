@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <fmt/format.h>
+#include <fnmatch.h>
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf-cli/tty.hpp>
 #include <libdnf/base/goal.hpp>
@@ -713,32 +714,76 @@ std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string &
     return result;
 }
 
+/// Returns file and directory paths that begins with `path_to_complete`.
+/// Files must match `pattern`.
+static std::pair<std::vector<std::string>, std::vector<std::string>> complete_paths(
+    const std::string & path_to_complete, const char * pattern) {
+    std::pair<std::vector<std::string>, std::vector<std::string>> ret;
+
+    fs::path parent_path = fs::path(path_to_complete).parent_path();
+    if (parent_path.empty()) {
+        parent_path = ".";
+    }
+
+    const bool path_to_complete_prefix_dot_slash = path_to_complete[0] == '.' && path_to_complete[1] == '/';
+    std::error_code ec;  // Do not report errors when constructing a directory iterator
+    for (const auto & dir_entry : fs::directory_iterator(parent_path, ec)) {
+        std::string dir_entry_path;
+        const auto & raw_dir_entry_path = dir_entry.path().native();
+        if (path_to_complete_prefix_dot_slash) {
+            dir_entry_path = raw_dir_entry_path;
+        } else {
+            dir_entry_path = raw_dir_entry_path[0] == '.' && raw_dir_entry_path[1] == '/'
+                                 ? raw_dir_entry_path.substr(2)  // remove "./" prefix
+                                 : raw_dir_entry_path;
+        }
+
+        if (dir_entry_path.compare(0, path_to_complete.length(), path_to_complete) == 0) {
+            if (dir_entry.is_directory()) {
+                ret.second.push_back(dir_entry_path + '/');
+                continue;
+            }
+            auto fn = dir_entry.path().filename();
+            if (dir_entry.is_regular_file() && fnmatch(pattern, fn.c_str(), 0) == 0) {
+                ret.first.push_back(dir_entry_path);
+            }
+        }
+    }
+
+    return ret;
+}
+
 std::vector<std::string> match_available_pkgs(Context & ctx, const std::string & pattern) {
-    ctx.base.get_config().assumeno().set(libdnf::Option::Priority::RUNTIME, true);
+    auto & base = ctx.base;
+
+    base.get_config().assumeno().set(libdnf::Option::Priority::RUNTIME, true);
     ctx.set_quiet(true);
 
-    auto & base = ctx.base;
     base.load_config_from_file();
     base.setup();
 
-    // create rpm repositories according configuration files
-    base.get_repo_sack()->create_repos_from_system_configuration();
+    try {
+        // create rpm repositories according configuration files
+        base.get_repo_sack()->create_repos_from_system_configuration();
 
-    ctx.apply_repository_setopts();
+        ctx.apply_repository_setopts();
 
-    libdnf::repo::RepoQuery enabled_repos(ctx.base);
-    enabled_repos.filter_enabled(true);
-    enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
-    for (auto & repo : enabled_repos.get_data()) {
-        repo->set_sync_strategy(libdnf::repo::Repo::SyncStrategy::ONLY_CACHE);
-        repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
+        libdnf::repo::RepoQuery enabled_repos(base);
+        enabled_repos.filter_enabled(true);
+        enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+        for (auto & repo : enabled_repos.get_data()) {
+            repo->set_sync_strategy(libdnf::repo::Repo::SyncStrategy::ONLY_CACHE);
+            repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
+        }
+
+        ctx.load_repos(false, libdnf::repo::Repo::LoadFlags::PRIMARY);
+    } catch (...) {
+        // Ignores errors when completing available packages, paths completion may still work.
     }
-
-    ctx.load_repos(false, libdnf::repo::Repo::LoadFlags::PRIMARY);
 
     std::set<std::string> result_set;
     {
-        libdnf::rpm::PackageQuery matched_pkgs_query(ctx.base);
+        libdnf::rpm::PackageQuery matched_pkgs_query(base);
         matched_pkgs_query.resolve_pkg_spec(
             pattern + '*', {.ignore_case = false, .with_provides = false, .with_filenames = false}, true);
 
@@ -747,9 +792,15 @@ std::vector<std::string> match_available_pkgs(Context & ctx, const std::string &
         }
     }
 
+    auto [file_paths, dir_paths] = complete_paths(pattern, "*.rpm");
+    std::sort(file_paths.begin(), file_paths.end());
+    std::sort(dir_paths.begin(), dir_paths.end());
+
     std::vector<std::string> result;
-    result.reserve(result_set.size());
+    result.reserve(file_paths.size() + dir_paths.size() + result_set.size());
+    std::move(file_paths.begin(), file_paths.end(), std::back_inserter(result));
     std::move(result_set.begin(), result_set.end(), std::back_inserter(result));
+    std::move(dir_paths.begin(), dir_paths.end(), std::back_inserter(result));
     return result;
 }
 
