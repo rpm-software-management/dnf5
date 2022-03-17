@@ -32,10 +32,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
         Get list of packages that match to given filters.
 
-        Following options are supported:
+        Following options and filters are supported:
 
-            - patterns: list of strings
-                any package matching to any of patterns is returned
             - package_attrs: list of strings
                 list of package attributes that are returned
             - with_nevra: bool (default true)
@@ -48,6 +46,36 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
                 include source rpms into the results
             - icase: bool (default true)
                 ignore case while matching patterns
+
+            - patterns: list of strings
+                any package matching to any of patterns is returned
+            - scope: string (default "all")
+                limit packages to one of "all", "installed", "available", "upgrades", "upradable"
+            - arch: list of strings
+                limit the resulting set only to packages of given architectures
+            - repo: list of strings
+                limit the resulting set only to packages from given repositories
+            - latest-limit: int
+                limit the resulting set to only <limit> of latest packages for every name and architecture
+            - whatprovides: list of strings
+                limit the resulting set only to packages that provide any of given capabilities
+            - whatdepends: list of strings
+                limit the resulting set only to packages that require, enhance, recommend, suggest or supplement any of given capabilities
+            - whatrequires: list of strings
+                limit the resulting set only to packages that require any of given capabilities
+            - whatrecommends: list of strings
+                limit the resulting set only to packages that recommend any of given capabilities
+            - whatenhances: list of strings
+                limit the resulting set only to packages that enhance any of given capabilities
+            - whatsuggests: list of strings
+                limit the resulting set only to packages that suggest any of given capabilities
+            - whatsupplements: list of strings
+                limit the resulting set only to packages that supplement any of given capabilities
+            - whatobsoletes: list of strings
+                limit the resulting set only to packages that obsolete any of given capabilities
+            - whatconflicts: list of strings
+                limit the resulting set only to packages that conflict with any of given capabilities
+
 
         Unknown options are ignored.
     -->
