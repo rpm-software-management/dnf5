@@ -52,11 +52,18 @@ TempDir::TempDir(std::filesystem::path destdir, const std::string & name_prefix)
 
 TempDir::~TempDir() {
     try {
-        std::filesystem::remove_all(path);
+        if (!path.empty()) {
+            std::filesystem::remove_all(path);
+        }
     } catch (std::exception &) {
         // catch an exception that shouldn't be raised in a destructor
         // TODO(lukash) consider logging or printing the exception
     }
+}
+
+
+void TempDir::release() noexcept {
+    path = "";
 }
 
 

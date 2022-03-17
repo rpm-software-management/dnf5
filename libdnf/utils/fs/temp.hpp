@@ -43,6 +43,11 @@ public:
     TempDir & operator=(const TempDir &) = delete;
 
     ~TempDir();
+
+    /// Releases the temporary directory, meaning it will no longer be deleted
+    /// on destruction.
+    void release() noexcept;
+
     const std::filesystem::path & get_path() const noexcept { return path; }
 
 private:
