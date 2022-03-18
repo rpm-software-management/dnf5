@@ -75,11 +75,6 @@ public:
     // Checksum of data in .solv file. Used for validity check of .solvx files.
     unsigned char checksum[CHKSUM_BYTES];
 
-    // the following three elements are needed for repo cache (.solv and .solvx updateinfo) writting
-    int main_nsolvables{0};
-    int main_nrepodata{0};
-    int main_end{0};
-
     void set_needs_internalizing() { needs_internalizing = true; };
 
 private:
@@ -100,6 +95,8 @@ private:
     bool needs_internalizing{false};
 
     /// Ranges of solvables for different types of data, used for writing libsolv cache files
+    int main_solvables_start{0};
+    int main_solvables_end{0};
     int updateinfo_solvables_start{0};
     int updateinfo_solvables_end{0};
 

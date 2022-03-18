@@ -141,39 +141,46 @@ SolvRepo::~SolvRepo() {
 
 void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string & primary_fn) {
     auto & logger = *base->get_logger();
+    auto & pool = get_pool(base);
 
     fs::File repomd_file(repomd_fn, "r");
 
     checksum_calc(checksum, repomd_file);
 
-    if (!load_solv_cache(nullptr, 0)) {
-        fs::File primary_file(primary_fn, "r", true);
+    int solvables_start = pool->nsolvables;
 
-        logger.debug("Loading repomd and primary for repo \"{}\"", config.get_id());
-        if (repo_add_repomdxml(repo, repomd_file.get(), 0) != 0) {
-            throw SolvError(
-                M_("Failed to load repomd for repo \"{}\" from \"{}\": {}."),
-                config.get_id(),
-                repomd_fn,
-                pool_errstr(*get_pool(base)));
-        }
+    if (load_solv_cache(nullptr, 0)) {
+        main_solvables_start = solvables_start;
+        main_solvables_end = pool->nsolvables;
 
-        if (repo_add_rpmmd(repo, primary_file.get(), 0, 0) != 0) {
-            throw SolvError(
-                M_("Failed to load primary for repo \"{}\" from \"{}\": {}."),
-                config.get_id(),
-                primary_fn,
-                pool_errstr(*get_pool(base)));
-        }
-
-        if (config.build_cache().get_value()) {
-            write_main();
-        }
+        return;
     }
 
-    main_nsolvables = repo->nsolvables;
-    main_nrepodata = repo->nrepodata;
-    main_end = repo->end;
+    fs::File primary_file(primary_fn, "r", true);
+
+    logger.debug("Loading repomd and primary for repo \"{}\"", config.get_id());
+    if (repo_add_repomdxml(repo, repomd_file.get(), 0) != 0) {
+        throw SolvError(
+            M_("Failed to load repomd for repo \"{}\" from \"{}\": {}."),
+            config.get_id(),
+            repomd_fn,
+            pool_errstr(*pool));
+    }
+
+    if (repo_add_rpmmd(repo, primary_file.get(), 0, 0) != 0) {
+        throw SolvError(
+            M_("Failed to load primary for repo \"{}\" from \"{}\": {}."),
+            config.get_id(),
+            primary_fn,
+            pool_errstr(*pool));
+    }
+
+    main_solvables_start = solvables_start;
+    main_solvables_end = pool->nsolvables;
+
+    if (config.build_cache().get_value()) {
+        write_main();
+    }
 }
 
 
@@ -262,6 +269,8 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
         pool_set_rootdir(*pool, rootdir.c_str());
     }
 
+    int solvables_start = pool->nsolvables;
+
     int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
     if (repo_add_rpmdb(repo, nullptr, flagsrpm) != 0) {
         throw SolvError(
@@ -277,10 +286,8 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
 
     pool_set_installed(*pool, repo);
 
-    // not used for system repo; set for consistency
-    main_nsolvables = repo->nsolvables;
-    main_nrepodata = repo->nrepodata;
-    main_end = repo->end;
+    main_solvables_start = solvables_start;
+    main_solvables_end = pool->nsolvables;
 }
 
 
@@ -312,7 +319,7 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
 
     logger.debug("Rewriting repo \"{}\" with added file provides", config.get_id());
 
-    if (!config.build_cache().get_value() || main_nrepodata < 2 || fileprovides.size() == 0) {
+    if (!config.build_cache().get_value() || main_solvables_start == 0 || fileprovides.size() == 0) {
         return;
     }
 
@@ -328,19 +335,7 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
     repodata_set_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &fileprovides.get_queue());
     repodata_internalize(data);
 
-    // re-write main data only
-    int oldnrepodata = repo->nrepodata;
-    int oldnsolvables = repo->nsolvables;
-    int oldend = repo->end;
-    repo->nrepodata = main_nrepodata;
-    repo->nsolvables = main_nsolvables;
-    repo->end = main_end;
-
     write_main();
-
-    repo->nrepodata = oldnrepodata;
-    repo->nsolvables = oldnsolvables;
-    repo->end = oldend;
 }
 
 
@@ -414,7 +409,12 @@ void SolvRepo::write_main() {
         cache_tmp_file.get_path().native(),
         chksum);
 
-    if (repo_write(repo, cache_file.get()) != 0) {
+    Repowriter * writer = repowriter_create(repo);
+    repowriter_set_solvablerange(writer, main_solvables_start, main_solvables_end);
+    int res = repowriter_write(writer, cache_file.get());
+    repowriter_free(writer);
+
+    if (res != 0) {
         throw SolvError(
             M_("Failed to write primary cache for repo \"{}\" to \"{}\": {}"),
             config.get_id(),
