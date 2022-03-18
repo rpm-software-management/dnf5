@@ -18,4 +18,4 @@ target_link_directories(run_tests_cli PUBLIC ${CMAKE_BINARY_DIR}/libdnf)
 target_link_libraries(run_tests_cli stdc++ libdnf libdnf-cli cppunit)
 
 
-add_test(NAME test_libdnf_cli COMMAND ${CMAKE_CURRENT_BINARY_DIR}/run_tests_cli DEPENDS run_tests_cli COMMENT "Running libdnf-cli C++ tests...")
+add_test(NAME test_libdnf_cli COMMAND run_tests_cli)

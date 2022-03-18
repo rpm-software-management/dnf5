@@ -11,4 +11,4 @@ add_executable(run_tests_tutorial ${TEST_TUTORIAL_SOURCES})
 target_link_libraries(run_tests_tutorial stdc++ libdnf libdnf-cli cppunit)
 
 
-add_test(NAME test_tutorial COMMAND ${CMAKE_CURRENT_BINARY_DIR}/run_tests_tutorial DEPENDS run_tests_cli COMMENT "Testing tutorial code snippets...")
+add_test(NAME test_tutorial COMMAND run_tests_tutorial)

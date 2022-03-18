@@ -28,4 +28,4 @@ if(WITH_PERFORMANCE_TESTS)
 endif()
 
 
-add_test(NAME test_libdnf COMMAND ${CMAKE_CURRENT_BINARY_DIR}/run_tests DEPENDS run_tests COMMENT "Running libdnf C++ tests...")
+add_test(NAME test_libdnf COMMAND run_tests)
