@@ -90,6 +90,13 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquer
             parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);
             return true;
         });
+    keys->set_complete_hook_func([this, &ctx](const char * arg) {
+        if (this->installed_option->get_value()) {
+            return match_installed_pkgs(ctx, arg, true);
+        } else {
+            return match_available_pkgs(ctx, arg);
+        }
+    });
 
     auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
         new std::vector<ArgumentParser::Argument *>{info, nevra}));
