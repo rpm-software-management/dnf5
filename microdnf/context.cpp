@@ -682,6 +682,7 @@ std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string &
     base.setup();
 
     base.get_repo_sack()->get_system_repo()->load();
+    base.get_rpm_package_sack()->setup_excludes_includes();
 
     std::set<std::string> result_set;
     {
