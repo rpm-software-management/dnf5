@@ -673,16 +673,19 @@ void parse_add_specs(
 }
 
 std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string & pattern, bool nevra_for_same_name) {
-    ctx.base.get_config().assumeno().set(libdnf::Option::Priority::RUNTIME, true);
+    auto & base = ctx.base;
+
+    base.get_config().assumeno().set(libdnf::Option::Priority::RUNTIME, true);
     ctx.set_quiet(true);
 
-    ctx.base.load_config_from_file();
+    base.load_config_from_file();
+    base.setup();
 
-    ctx.base.get_repo_sack()->get_system_repo()->load();  // TODO(lukash) should this really be here?
+    base.get_repo_sack()->get_system_repo()->load();
 
     std::set<std::string> result_set;
     {
-        libdnf::rpm::PackageQuery matched_pkgs_query(ctx.base);
+        libdnf::rpm::PackageQuery matched_pkgs_query(base);
         matched_pkgs_query.resolve_pkg_spec(
             pattern + '*', {.ignore_case = false, .with_provides = false, .with_filenames = false}, true);
 
