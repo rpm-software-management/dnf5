@@ -212,6 +212,9 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
         if (type == RepodataType::UPDATEINFO) {
             updateinfo_solvables_start = solvables_start;
             updateinfo_solvables_end = pool->nsolvables;
+        } else if (type == RepodataType::COMPS) {
+            comps_solvables_start = solvables_start;
+            comps_solvables_end = pool->nsolvables;
         }
 
         return;
@@ -235,7 +238,10 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
             }
             break;
         case RepodataType::COMPS:
-            res = repo_add_comps(repo, ext_file.get(), 0);
+            if ((res = repo_add_comps(repo, ext_file.get(), 0)) == 0) {
+                comps_solvables_start = solvables_start;
+                comps_solvables_end = pool->nsolvables;
+            }
             break;
         case RepodataType::OTHER:
             res = repo_add_rpmmd(repo, ext_file.get(), 0, REPO_EXTEND_SOLVABLES);
@@ -452,6 +458,8 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
 
     if (type == RepodataType::UPDATEINFO) {
         repowriter_set_solvablerange(writer, updateinfo_solvables_start, updateinfo_solvables_end);
+    } else if (type == RepodataType::COMPS) {
+        repowriter_set_solvablerange(writer, comps_solvables_start, comps_solvables_end);
     } else {
         repowriter_set_flags(writer, REPOWRITER_NO_STORAGE_SOLVABLE);
     }
