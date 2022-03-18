@@ -116,12 +116,10 @@ void parse_add_specs(
     std::vector<std::string> & pkg_specs,
     std::vector<std::string> & filepaths);
 
-/// Returns the names of matching installed packages.
+/// Returns the names of matching packages and paths of matching package file names and directories.
 /// If `nevra_for_same_name` is true, it returns a full nevra for packages with the same name.
-std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string & pattern, bool nevra_for_same_name);
-
-/// Returns the names of matching available packages.
-std::vector<std::string> match_available_pkgs(Context & ctx, const std::string & pattern);
+std::vector<std::string> match_specs(
+    Context & ctx, const std::string & pattern, bool installed, bool available, bool paths, bool nevra_for_same_name);
 
 }  // namespace microdnf
 

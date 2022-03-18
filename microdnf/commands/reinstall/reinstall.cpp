@@ -59,7 +59,7 @@ ReinstallCommand::ReinstallCommand(Command & parent) : Command(parent, "reinstal
             parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);
             return true;
         });
-    keys->set_complete_hook_func([&ctx](const char * arg) { return match_installed_pkgs(ctx, arg, true); });
+    keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, true); });
     cmd.register_positional_arg(keys);
 }
 

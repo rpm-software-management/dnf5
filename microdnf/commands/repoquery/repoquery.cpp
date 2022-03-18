@@ -92,9 +92,9 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquer
         });
     keys->set_complete_hook_func([this, &ctx](const char * arg) {
         if (this->installed_option->get_value()) {
-            return match_installed_pkgs(ctx, arg, true);
+            return match_specs(ctx, arg, true, false, false, true);
         } else {
-            return match_available_pkgs(ctx, arg);
+            return match_specs(ctx, arg, false, true, true, false);
         }
     });
 

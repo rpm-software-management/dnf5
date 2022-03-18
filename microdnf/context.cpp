@@ -36,6 +36,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <set>
 #include <stdexcept>
 #include <string>
+#include <tuple>
+#include <utility>
 
 namespace fs = std::filesystem;
 
@@ -673,47 +675,6 @@ void parse_add_specs(
     }
 }
 
-std::vector<std::string> match_installed_pkgs(Context & ctx, const std::string & pattern, bool nevra_for_same_name) {
-    auto & base = ctx.base;
-
-    base.get_config().assumeno().set(libdnf::Option::Priority::RUNTIME, true);
-    ctx.set_quiet(true);
-
-    base.load_config_from_file();
-    base.setup();
-
-    base.get_repo_sack()->get_system_repo()->load();
-    base.get_rpm_package_sack()->setup_excludes_includes();
-
-    std::set<std::string> result_set;
-    {
-        libdnf::rpm::PackageQuery matched_pkgs_query(base);
-        matched_pkgs_query.resolve_pkg_spec(
-            pattern + '*', {.ignore_case = false, .with_provides = false, .with_filenames = false}, true);
-
-        for (const auto & package : matched_pkgs_query) {
-            auto [it, inserted] = result_set.insert(package.get_name());
-
-            // Package name was already present - not inserted. There are multiple packages with the same name.
-            // If requested, removes the name and inserts a full nevra for these packages.
-            if (nevra_for_same_name && !inserted) {
-                result_set.erase(it);
-                libdnf::rpm::PackageQuery name_query(matched_pkgs_query);
-                name_query.filter_name({package.get_name()});
-                for (const auto & pkg : name_query) {
-                    result_set.insert(pkg.get_full_nevra());
-                    matched_pkgs_query.remove(pkg);
-                }
-            }
-        }
-    }
-
-    std::vector<std::string> result;
-    result.reserve(result_set.size());
-    std::move(result_set.begin(), result_set.end(), std::back_inserter(result));
-    return result;
-}
-
 /// Returns file and directory paths that begins with `path_to_complete`.
 /// Files must match `pattern`.
 static std::pair<std::vector<std::string>, std::vector<std::string>> complete_paths(
@@ -753,7 +714,8 @@ static std::pair<std::vector<std::string>, std::vector<std::string>> complete_pa
     return ret;
 }
 
-std::vector<std::string> match_available_pkgs(Context & ctx, const std::string & pattern) {
+std::vector<std::string> match_specs(
+    Context & ctx, const std::string & pattern, bool installed, bool available, bool paths, bool nevra_for_same_name) {
     auto & base = ctx.base;
 
     base.get_config().assumeno().set(libdnf::Option::Priority::RUNTIME, true);
@@ -762,23 +724,39 @@ std::vector<std::string> match_available_pkgs(Context & ctx, const std::string &
     base.load_config_from_file();
     base.setup();
 
-    try {
-        // create rpm repositories according configuration files
-        base.get_repo_sack()->create_repos_from_system_configuration();
+    // optimization - if pattern contain '/', disable the search for matching installed and available packages
+    if (pattern.find('/') != std::string::npos) {
+        installed = available = false;
+    }
 
-        ctx.apply_repository_setopts();
-
-        libdnf::repo::RepoQuery enabled_repos(base);
-        enabled_repos.filter_enabled(true);
-        enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
-        for (auto & repo : enabled_repos.get_data()) {
-            repo->set_sync_strategy(libdnf::repo::Repo::SyncStrategy::ONLY_CACHE);
-            repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
+    if (installed) {
+        try {
+            base.get_repo_sack()->get_system_repo()->load();
+            base.get_rpm_package_sack()->setup_excludes_includes();
+        } catch (...) {
+            // Ignores errors when completing installed packages, other completions may still work.
         }
+    }
 
-        ctx.load_repos(false, libdnf::repo::Repo::LoadFlags::PRIMARY);
-    } catch (...) {
-        // Ignores errors when completing available packages, paths completion may still work.
+    if (available) {
+        try {
+            // create rpm repositories according configuration files
+            base.get_repo_sack()->create_repos_from_system_configuration();
+
+            ctx.apply_repository_setopts();
+
+            libdnf::repo::RepoQuery enabled_repos(base);
+            enabled_repos.filter_enabled(true);
+            enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+            for (auto & repo : enabled_repos.get_data()) {
+                repo->set_sync_strategy(libdnf::repo::Repo::SyncStrategy::ONLY_CACHE);
+                repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
+            }
+
+            ctx.load_repos(false, libdnf::repo::Repo::LoadFlags::PRIMARY);
+        } catch (...) {
+            // Ignores errors when completing available packages, other completions may still work.
+        }
     }
 
     std::set<std::string> result_set;
@@ -788,13 +766,29 @@ std::vector<std::string> match_available_pkgs(Context & ctx, const std::string &
             pattern + '*', {.ignore_case = false, .with_provides = false, .with_filenames = false}, true);
 
         for (const auto & package : matched_pkgs_query) {
-            result_set.insert(package.get_name());
+            auto [it, inserted] = result_set.insert(package.get_name());
+
+            // Package name was already present - not inserted. There are multiple packages with the same name.
+            // If requested, removes the name and inserts a full nevra for these packages.
+            if (nevra_for_same_name && !inserted) {
+                result_set.erase(it);
+                libdnf::rpm::PackageQuery name_query(matched_pkgs_query);
+                name_query.filter_name({package.get_name()});
+                for (const auto & pkg : name_query) {
+                    result_set.insert(pkg.get_full_nevra());
+                    matched_pkgs_query.remove(pkg);
+                }
+            }
         }
     }
 
-    auto [file_paths, dir_paths] = complete_paths(pattern, "*.rpm");
-    std::sort(file_paths.begin(), file_paths.end());
-    std::sort(dir_paths.begin(), dir_paths.end());
+    std::vector<std::string> file_paths;
+    std::vector<std::string> dir_paths;
+    if (paths) {
+        std::tie(file_paths, dir_paths) = complete_paths(pattern, "*.rpm");
+        std::sort(file_paths.begin(), file_paths.end());
+        std::sort(dir_paths.begin(), dir_paths.end());
+    }
 
     std::vector<std::string> result;
     result.reserve(file_paths.size() + dir_paths.size() + result_set.size());
