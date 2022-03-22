@@ -380,6 +380,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     // TODO(jrohel): nevra of running microdnf?
     //db_transaction->add_runtime_package("microdnf");
 
+    db_transaction->set_rpmdb_version_begin(rpm_transaction.get_db_cookie());
     db_transaction->fill_transaction_packages(packages);
     auto time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
@@ -405,6 +406,9 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     // finish history db transaction
     time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    // TODO(jrohel): Also save the rpm db cookie to system state.
+    //               Possibility to detect rpm database change without the need for a history database.
+    db_transaction->set_rpmdb_version_end(rpm_transaction.get_db_cookie());
     db_transaction->finish(
         ret == 0 ? libdnf::transaction::TransactionState::DONE : libdnf::transaction::TransactionState::ERROR);
 
