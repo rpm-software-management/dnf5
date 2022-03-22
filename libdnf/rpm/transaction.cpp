@@ -344,6 +344,31 @@ public:
     /// @return  old package verify level
     int set_pkg_verify_level(int verify_level) { return rpmtsSetVfyLevel(ts, verify_level); }
 
+    /// Retrieve rpm database cookie.
+    /// Useful for eg. determining cache validity.
+    /// @return rpm database cookie
+    std::string get_db_cookie() const {
+        std::string rpmdb_cookie;
+
+        // Open rpm database if it is not already open
+        if (!rpmtsGetRdb(ts)) {
+            auto rc = rpmtsOpenDB(ts, rpmtsGetDBMode(ts));
+            if (rc != 0) {
+                throw TransactionError(M_("Error %i opening rpm database"), rc);
+            }
+        }
+
+        std::unique_ptr<char, decltype(free) *> rpmdb_cookie_uptr{rpmdbCookie(rpmtsGetRdb(ts)), free};
+        if (rpmdb_cookie_uptr) {
+            rpmdb_cookie = rpmdb_cookie_uptr.get();
+        }
+        if (rpmdb_cookie.empty()) {
+            throw TransactionError(M_("The rpmdbCookie() function did not return cookie of rpm database."));
+        }
+
+        return rpmdb_cookie;
+    }
+
     /// Get transaction id, i.e. transaction time stamp.
     /// @return  transaction id
     rpm_tid_t get_id() const { return rpmtsGetTid(ts); }
@@ -902,6 +927,10 @@ int Transaction::get_pkg_verify_level() const {
 
 int Transaction::set_pkg_verify_level(int verify_level) {
     return p_impl->set_pkg_verify_level(verify_level);
+}
+
+std::string Transaction::get_db_cookie() const {
+    return p_impl->get_db_cookie();
 }
 
 rpm_tid_t Transaction::get_id() const {

@@ -286,6 +286,11 @@ public:
     /// @return  old package verify level
     int set_pkg_verify_level(int verify_level);
 
+    /// Retrieve rpm database cookie.
+    /// Useful for eg. determining cache validity.
+    /// @return rpm database cookie
+    std::string get_db_cookie() const;
+
     /// Get transaction id, i.e. transaction time stamp.
     /// @return  transaction id
     rpm_tid_t get_id() const;
