@@ -700,12 +700,26 @@ static std::pair<std::vector<std::string>, std::vector<std::string>> complete_pa
         }
 
         if (dir_entry_path.compare(0, path_to_complete.length(), path_to_complete) == 0) {
+            // Adds the directory.
+            // Only directories that contain files that match the pattern or contain subdirectories are added.
             if (dir_entry.is_directory()) {
-                ret.second.push_back(dir_entry_path + '/');
+                bool complete = false;
+                for (const auto & subdir_entry : fs::directory_iterator(dir_entry.path(), ec)) {
+                    if ((subdir_entry.is_regular_file() &&
+                         fnmatch(pattern, subdir_entry.path().filename().c_str(), 0) == 0) ||
+                        subdir_entry.is_directory()) {
+                        complete = true;
+                        break;
+                    }
+                }
+                if (complete) {
+                    ret.second.push_back(dir_entry_path + '/');
+                }
                 continue;
             }
-            auto fn = dir_entry.path().filename();
-            if (dir_entry.is_regular_file() && fnmatch(pattern, fn.c_str(), 0) == 0) {
+
+            // Adds the file if it matches the pattern.
+            if (dir_entry.is_regular_file() && fnmatch(pattern, dir_entry.path().filename().c_str(), 0) == 0) {
                 ret.first.push_back(dir_entry_path);
             }
         }
