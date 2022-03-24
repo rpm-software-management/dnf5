@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/vars.hpp"
 
+#include "rpm/rpm_log_guard.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/fs/file.hpp"
 
@@ -128,9 +129,11 @@ static const char * detect_arch() {
     return value;
 }
 
-static std::optional<std::string> detect_release(const std::string & install_root_path) {
+static std::optional<std::string> detect_release(const BaseWeakPtr & base, const std::string & install_root_path) {
     init_lib_rpm();
     std::optional<std::string> release_ver;
+
+    libdnf::rpm::RpmLogGuard rpm_log_guard(base);
 
     auto ts = rpmtsCreate();
     rpmtsSetRootDir(ts, install_root_path.c_str());
@@ -164,6 +167,9 @@ static std::optional<std::string> detect_release(const std::string & install_roo
 }
 
 // ==================================================================
+
+Vars::Vars(Base & base) : Vars(base.get_weak_ptr()) {}
+
 
 std::string Vars::substitute(const std::string & text) const {
     std::string res = text;
@@ -268,12 +274,12 @@ void Vars::detect_vars(const std::string & installroot) {
 
     it = variables.find("releasever");
     if (it == variables.end()) {
-        auto release = detect_release(installroot);
+        auto release = detect_release(base, installroot);
         if (release) {
             variables.insert({"releasever", {*release, Priority::AUTO}});
         }
     } else if (it->second.priority <= Priority::AUTO) {
-        auto release = detect_release(installroot);
+        auto release = detect_release(base, installroot);
         if (release) {
             it->second.value = *release;
             it->second.priority = Priority::AUTO;

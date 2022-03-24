@@ -125,11 +125,11 @@ private:
     rpm::PackageSack rpm_package_sack;
     transaction::TransactionSack transaction_sack{*this};
     comps::Comps comps{*this};
-    Vars vars;
     plugin::Plugins plugins{*this};
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
     std::map<std::string, std::string> variables;
     std::optional<libdnf::system::State> system_state;
+    Vars vars;
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;
     WeakPtrGuard<Vars, false> vars_gurad;

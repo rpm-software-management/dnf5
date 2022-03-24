@@ -37,7 +37,11 @@ namespace libdnf {
 static std::atomic<Base *> locked_base{nullptr};
 static std::mutex locked_base_mutex;
 
-Base::Base() : repo_sack(get_weak_ptr()), rpm_package_sack(get_weak_ptr()), rpm_advisory_sack(get_weak_ptr()) {}
+Base::Base()
+    : repo_sack(get_weak_ptr()),
+      rpm_package_sack(get_weak_ptr()),
+      rpm_advisory_sack(get_weak_ptr()),
+      vars(get_weak_ptr()) {}
 
 Base::~Base() = default;
 

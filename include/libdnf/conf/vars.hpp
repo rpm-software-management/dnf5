@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CONF_VARS_HPP
 #define LIBDNF_CONF_VARS_HPP
 
+#include "libdnf/base/base_weak.hpp"
+
 #include <map>
 #include <string>
 #include <vector>
@@ -49,6 +51,9 @@ public:
         std::string value;
         Priority priority;
     };
+
+    Vars(const libdnf::BaseWeakPtr & base) : base(base) {}
+    Vars(libdnf::Base & base);
 
     /// @brief Substitute DNF vars in the input text.
     ///
@@ -114,6 +119,7 @@ private:
     /// "DNF_VAR_[A-Za-z0-9_]+" patterns. The "DNF_VAR_" prefix is cut off.
     void load_from_env();
 
+    BaseWeakPtr base;
     std::map<std::string, Variable> variables;
 };
 
