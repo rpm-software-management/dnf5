@@ -127,6 +127,20 @@ static int repodata_type_to_flags(RepodataType type) {
 }
 
 
+// Returns `true` when all solvables in the repository are stored continuously,
+// without interleaving with solvables from other repositories.
+// Complexity: Linear to the current number of solvables in the repository
+bool is_one_piece(::Repo * repo) {
+    for (auto i = repo->start; i < repo->end; ++i) {
+        if (repo->pool->solvables[i].repo != repo) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+
 SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, void * appdata)
     : base(base),
       config(config),
@@ -180,7 +194,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
     main_solvables_end = pool->nsolvables;
 
     if (config.build_cache().get_value()) {
-        write_main();
+        write_main(true);
     }
 }
 
@@ -342,7 +356,7 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
     repodata_set_idarray(data, SOLVID_META, REPOSITORY_ADDEDFILEPROVIDES, &fileprovides.get_queue());
     repodata_internalize(data);
 
-    write_main();
+    write_main(false);
 }
 
 
@@ -399,10 +413,11 @@ bool SolvRepo::load_solv_cache(const char * type, int flags) {
 }
 
 
-void SolvRepo::write_main() {
+void SolvRepo::write_main(bool load_after_write) {
     auto & logger = *base->get_logger();
+    auto & pool = get_pool(base);
 
-    const char * chksum = pool_bin2hex(*get_pool(base), checksum, solv_chksum_len(CHKSUM_TYPE));
+    const char * chksum = pool_bin2hex(*pool, checksum, solv_chksum_len(CHKSUM_TYPE));
 
     const auto solvfile_path = solv_file_path();
     const auto solvfile_parent_dir = solvfile_path.parent_path();
@@ -428,12 +443,28 @@ void SolvRepo::write_main() {
             M_("Failed to write primary cache for repo \"{}\" to \"{}\": {}"),
             config.get_id(),
             cache_tmp_file.get_path().native(),
-            pool_errstr(*get_pool(base)));
+            pool_errstr(*pool));
     }
 
     checksum_write(checksum, cache_file);
 
     cache_tmp_file.close();
+
+    if (load_after_write && is_one_piece(repo)) {
+        // this saves memory, libsolv doesn't load all the data from a solv file, it dup()s the fd,
+        // keeps the file open and lazily loads some data on-demand.
+        fs::File file(cache_tmp_file.get_path(), "r");
+
+        repo_empty(repo, 1);
+        int ret = repo_add_solv(repo, file.get(), 0);
+        if (ret) {
+            throw SolvError(
+                M_("Failed to re-load primary cache for repo \"{}\" from \"{}\": {}"),
+                config.get_id(),
+                cache_tmp_file.get_path().native(),
+                pool_errstr(*pool));
+        }
+    }
 
     std::filesystem::rename(cache_tmp_file.get_path(), solvfile_path);
     cache_tmp_file.release();
@@ -441,8 +472,10 @@ void SolvRepo::write_main() {
 
 
 void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
-    auto & logger = *base->get_logger();
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
+
+    auto & logger = *base->get_logger();
+    auto & pool = get_pool(base);
 
     const auto type_name = repodata_type_to_name(type);
     const auto solvfile_path = solv_file_path(type_name);
@@ -479,12 +512,33 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
             type_name,
             config.get_id(),
             cache_tmp_file.get_path().native(),
-            pool_errstr(*get_pool(base)));
+            pool_errstr(*pool));
     }
 
     checksum_write(checksum, cache_file);
 
     cache_tmp_file.close();
+
+    if (is_one_piece(repo) && type != RepodataType::UPDATEINFO && type != RepodataType::COMPS) {
+        // this saves memory, libsolv doesn't load all the data from a solv file, it dup()s the fd,
+        // keeps the file open and lazily loads some data on-demand.
+        fs::File file(cache_tmp_file.get_path(), "r");
+
+        Repodata * data = repo_id2repodata(repo, repodata_id);
+
+        repodata_extend_block(data, repo->start, repo->end - repo->start);
+        data->state = REPODATA_LOADING;
+        res = repo_add_solv(repo, file.get(), repodata_type_to_flags(type) | REPO_USE_LOADING);
+        if (res) {
+            throw SolvError(
+                M_("Failed to re-load {} cache for repo \"{}\" from \"{}\": {}"),
+                type_name,
+                config.get_id(),
+                cache_tmp_file.get_path().native(),
+                pool_errstr(*pool));
+        }
+        data->state = REPODATA_AVAILABLE;
+    }
 
     std::filesystem::rename(cache_tmp_file.get_path(), solvfile_path);
     cache_tmp_file.release();
