@@ -130,7 +130,7 @@ int ArgumentParser::PositionalArg::parse(const char * option, int argc, const ch
                     auto result = complete_hook(argv[i]);
                     if (result.size() == 1) {
                         if (result[0] != option) {
-                            std::cout << result[0] + ' ' << std::endl;
+                            std::cout << result[0] << std::endl;
                         }
                     } else {
                         for (const auto & line : result) {
@@ -357,7 +357,7 @@ void ArgumentParser::Command::print_complete(
                     if (result[0] == arg) {
                         return;
                     }
-                    std::cout << result[0] + ' ' << std::endl;
+                    std::cout << result[0] << std::endl;
                     return;
                 }
                 for (const auto & line : result) {
