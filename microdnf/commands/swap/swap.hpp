@@ -23,22 +23,24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include <libdnf-cli/session.hpp>
-#include <libdnf/conf/option_bool.hpp>
 
-#include <memory>
 #include <vector>
 
 
 namespace microdnf {
 
 
+// TODO(jrohel): The "swap" command may be removed in the future in favor of a more powerful command (eg "do"),
+//               which will allow multiple actions to be combined in one transaction.
 class SwapCommand : public libdnf::cli::session::Command {
 public:
     explicit SwapCommand(Command & parent);
     void run() override;
 
 private:
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns{nullptr};
+    std::string remove_pkg_spec;
+    std::vector<std::string> install_pkg_specs;
+    std::vector<std::string> install_pkg_file_paths;
 };
 
 
