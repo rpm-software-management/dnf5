@@ -681,14 +681,23 @@ static std::pair<std::vector<std::string>, std::vector<std::string>> complete_pa
     const std::string & path_to_complete, const char * pattern) {
     std::pair<std::vector<std::string>, std::vector<std::string>> ret;
 
-    fs::path parent_path = fs::path(path_to_complete).parent_path();
+    const fs::path ppath_to_complete(path_to_complete);
+    fs::path parent_path = ppath_to_complete.parent_path();
     if (parent_path.empty()) {
         parent_path = ".";
     }
 
     const bool path_to_complete_prefix_dot_slash = path_to_complete[0] == '.' && path_to_complete[1] == '/';
+    const bool filename_to_complete_starts_with_dot = ppath_to_complete.filename().native()[0] == '.';
     std::error_code ec;  // Do not report errors when constructing a directory iterator
     for (const auto & dir_entry : fs::directory_iterator(parent_path, ec)) {
+        const auto filename = dir_entry.path().filename();
+
+        // Skips hidden entries (starting with a dot) unless explicitly requested by `path_to_complete`.
+        if (!filename_to_complete_starts_with_dot && filename.native()[0] == '.') {
+            continue;
+        }
+
         std::string dir_entry_path;
         const auto & raw_dir_entry_path = dir_entry.path().native();
         if (path_to_complete_prefix_dot_slash) {
@@ -719,7 +728,7 @@ static std::pair<std::vector<std::string>, std::vector<std::string>> complete_pa
             }
 
             // Adds the file if it matches the pattern.
-            if (dir_entry.is_regular_file() && fnmatch(pattern, dir_entry.path().filename().c_str(), 0) == 0) {
+            if (dir_entry.is_regular_file() && fnmatch(pattern, filename.c_str(), 0) == 0) {
                 ret.first.push_back(dir_entry_path);
             }
         }
