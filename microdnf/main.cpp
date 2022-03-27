@@ -573,12 +573,6 @@ static void set_commandline_args(Context & ctx) {
     ctx.get_argument_parser().set_inherit_named_args(true);
 }
 
-static bool parse_commandline_args(Context & ctx, int argc, char * argv[]) {
-    ctx.get_argument_parser().parse(argc, argv);
-    auto & help = ctx.get_argument_parser().get_named_arg("help", false);
-    return help.get_parse_count() > 0;
-}
-
 }  // namespace microdnf
 
 int main(int argc, char * argv[]) try {
@@ -614,18 +608,22 @@ int main(int argc, char * argv[]) try {
     }
 
     // Parse command line arguments
-    bool print_help;
-    try {
-        print_help = microdnf::parse_commandline_args(context, argc, argv);
-    } catch (const std::exception & ex) {
-        std::cout << ex.what() << std::endl;
-        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
-    }
+    {
+        const auto & help = context.get_argument_parser().get_named_arg("help", false);
+        try {
+            context.get_argument_parser().parse(argc, argv);
+        } catch (const std::exception & ex) {
+            if (help.get_parse_count() == 0) {
+                std::cout << ex.what() << std::endl;
+                return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+            }
+        }
 
-    // print help of the selected command if --help was used
-    if (print_help) {
-        context.get_argument_parser().get_selected_command()->help();
-        return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+        // print help of the selected command if --help was used
+        if (help.get_parse_count() > 0) {
+            context.get_argument_parser().get_selected_command()->help();
+            return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+        }
     }
 
     // Load main configuration
