@@ -47,18 +47,27 @@ void TutorialTest::test_create_base() {
 
 void TutorialTest::test_load_repo() {
     #include "session/create_base.cpp"
+
+    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cachedir);
+
     #include "repo/load_repo.cpp"
 }
 
 
 void TutorialTest::test_load_system_repos() {
     #include "session/create_base.cpp"
+
+    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cachedir);
+
     #include "repo/load_system_repos.cpp"
 }
 
 
 void TutorialTest::test_query() {
     #include "session/create_base.cpp"
+
+    base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, cachedir);
+
     #include "repo/load_repo.cpp"
     #include "query/query.cpp"
 }
