@@ -49,6 +49,7 @@ public:
 protected:
     // to be used by an alias command only
     explicit RepoListCommand(Command & parent, const std::string & name);
+    explicit RepoListCommand(Command & parent, const std::string & name, const std::string & short_description);
 };
 
 

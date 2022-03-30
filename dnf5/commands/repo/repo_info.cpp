@@ -38,7 +38,8 @@ using namespace libdnf::cli;
 RepoInfoCommand::RepoInfoCommand(Command & parent) : RepoInfoCommand(parent, "info") {}
 
 
-RepoInfoCommand::RepoInfoCommand(Command & parent, const std::string & name) : RepoListCommand(parent, name) {}
+RepoInfoCommand::RepoInfoCommand(Command & parent, const std::string & name)
+    : RepoListCommand(parent, name, "Print details about repositories") {}
 
 
 void RepoInfoCommand::print(const libdnf::repo::RepoQuery & query, [[maybe_unused]] bool with_status) {

@@ -35,13 +35,17 @@ using namespace libdnf::cli;
 
 RepoListCommand::RepoListCommand(Command & parent) : RepoListCommand(parent, "list") {}
 
+RepoListCommand::RepoListCommand(Command & parent, const std::string & name)
+    : RepoListCommand(parent, name, "List repositories") {}
 
-RepoListCommand::RepoListCommand(Command & parent, const std::string & name) : Command(parent, name) {
+//TODO(amatej): Find a different way of sharing code rather than repoinfo inheriting from repolist
+RepoListCommand::RepoListCommand(Command & parent, const std::string & name, const std::string & short_description)
+    : Command(parent, name) {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("List defined repositories");
+    cmd.set_short_description(short_description);
 
     all = std::make_unique<RepoAllOption>(*this);
     enabled = std::make_unique<RepoEnabledOption>(*this);
