@@ -129,6 +129,10 @@ public:
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
     libdnf::BaseWeakPtr get_base() const;
+    //
+    /// For each enabled repository enable corresponding source repository.
+    /// @since 5.0
+    void enable_source_repos();
 
 private:
     friend class RepoQuery;

@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rpm/package_sack_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/string.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
@@ -304,6 +305,27 @@ BaseWeakPtr RepoSack::get_base() const {
     return base;
 }
 
+void RepoSack::enable_source_repos() {
+    RepoQuery enabled_repos(base);
+    enabled_repos.filter_enabled(true);
+    for (const auto & repo : enabled_repos) {
+        RepoQuery source_query(base);
+        // There is no way how to find source (or debuginfo) repository for
+        // given repo. This is only guessing according to the current practice:
+        auto repoid = repo->get_id();
+        if (libdnf::utils::string::ends_with(repoid, "-rpms")) {
+            source_query.filter_id(repoid.substr(0, repoid.size() - 5) + "-source-rpms");
+        } else {
+            source_query.filter_id(repoid + "-source");
+        }
+        for (auto & source_repo : source_query) {
+            if (!source_repo->is_enabled()) {
+                // TODO(mblaha): log source repo enabling
+                source_repo->enable();
+            }
+        }
+    }
+}
 
 void RepoSack::internalize_repos() {
     auto rq = RepoQuery(base);
