@@ -36,7 +36,6 @@ public:
     ~KeyValueTable();
     void print();
 
-protected:
     struct libscols_line * add_line(
         const char * key, const char * value, const char * color = nullptr, struct libscols_line * parent = nullptr);
 
@@ -49,6 +48,12 @@ protected:
     struct libscols_line * add_line(
         const char * key,
         const std::vector<std::string> & value,
+        const char * color = nullptr,
+        struct libscols_line * parent = nullptr);
+
+    struct libscols_line * add_lines(
+        const char * key,
+        const std::vector<std::string> & values,
         const char * color = nullptr,
         struct libscols_line * parent = nullptr);
 

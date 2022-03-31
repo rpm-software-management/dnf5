@@ -87,5 +87,19 @@ struct libscols_line * KeyValueTable::add_line(
     return add_line(key, libdnf::utils::string::join(value, " "), color, parent);
 }
 
+struct libscols_line * KeyValueTable::add_lines(
+    const char * key, const std::vector<std::string> & values, const char * color, struct libscols_line * parent) {
+    struct libscols_line * added_key_line = NULL;
+    if (!values.empty()) {
+        auto iterator = values.begin();
+        added_key_line = add_line(key, *iterator, color, parent);
+        iterator++;
+        for (; iterator != values.end(); ++iterator) {
+            add_line("", *iterator, color, parent);
+        }
+    }
+    return added_key_line;
+}
+
 
 }  // namespace libdnf::cli::output
