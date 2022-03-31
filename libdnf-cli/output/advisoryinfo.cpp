@@ -20,9 +20,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/output/advisoryinfo.hpp"
 
+#include "utils/string.hpp"
+
 #include "libdnf/advisory/advisory_collection.hpp"
 #include "libdnf/advisory/advisory_reference.hpp"
-
 
 namespace libdnf::cli::output {
 
@@ -35,7 +36,7 @@ void AdvisoryInfo::add_advisory(libdnf::advisory::Advisory & advisory) {
     add_line("Status", advisory.get_status());
     add_line("Vendor", advisory.get_vendor());
     add_line("Buildtime", std::to_string(advisory.get_buildtime()));
-    add_line("Description", advisory.get_description());
+    add_lines("Description", libdnf::utils::string::split(advisory.get_description(), "\n"));
     add_line("Message", advisory.get_message());
     add_line("Rights", advisory.get_rights());
 

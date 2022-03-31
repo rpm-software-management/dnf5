@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::cli::output {
 
 void print_advisorylist_table(
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list,
+    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
     std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed);
 
 

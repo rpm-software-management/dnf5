@@ -26,7 +26,7 @@ namespace libdnf::cli::output {
 
 
 // advisory list table columns
-enum { COL_ADVISORY_NAME, COL_ADVISORY_TYPE, COL_ADVISORY_PACKAGE };
+enum { COL_ADVISORY_NAME, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE };
 
 
 static struct libscols_table * create_advisorylist_table() {
@@ -37,16 +37,23 @@ static struct libscols_table * create_advisorylist_table() {
     struct libscols_column * cl = scols_table_new_column(table, "Name", 20, 0);
     scols_column_set_cmpfunc(cl, scols_cmpstr_cells, NULL);
     scols_table_new_column(table, "Type", 0.5, SCOLS_FL_TRUNC);
+    scols_table_new_column(table, "Severity", 0.5, SCOLS_FL_TRUNC);
     scols_table_new_column(table, "Package", 0.1, SCOLS_FL_RIGHT);
     return table;
 }
 
 
 static void add_line_into_advisorylist_table(
-    struct libscols_table * table, const char * name, const char * type, const char * package, bool installed) {
+    struct libscols_table * table,
+    const char * name,
+    const char * type,
+    const char * severity,
+    const char * package,
+    bool installed) {
     struct libscols_line * ln = scols_table_new_line(table, NULL);
     scols_line_set_data(ln, COL_ADVISORY_NAME, name);
     scols_line_set_data(ln, COL_ADVISORY_TYPE, type);
+    scols_line_set_data(ln, COL_ADVISORY_SEVERITY, severity);
     scols_line_set_data(ln, COL_ADVISORY_PACKAGE, package);
     if (installed) {
         struct libscols_cell * cl = scols_line_get_cell(ln, COL_ADVISORY_PACKAGE);
@@ -56,18 +63,28 @@ static void add_line_into_advisorylist_table(
 
 
 void print_advisorylist_table(
-    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list,
+    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
     std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed) {
     struct libscols_table * table = create_advisorylist_table();
-    for (auto adv_pkg : advisory_package_list) {
+    for (auto adv_pkg : advisory_package_list_not_installed) {
         auto advisory = adv_pkg.get_advisory();
         add_line_into_advisorylist_table(
-            table, advisory.get_name().c_str(), advisory.get_type().c_str(), adv_pkg.get_nevra().c_str(), false);
+            table,
+            advisory.get_name().c_str(),
+            advisory.get_type().c_str(),
+            advisory.get_severity().c_str(),
+            adv_pkg.get_nevra().c_str(),
+            false);
     }
     for (auto adv_pkg : advisory_package_list_installed) {
         auto advisory = adv_pkg.get_advisory();
         add_line_into_advisorylist_table(
-            table, advisory.get_name().c_str(), advisory.get_type().c_str(), adv_pkg.get_nevra().c_str(), true);
+            table,
+            advisory.get_name().c_str(),
+            advisory.get_type().c_str(),
+            advisory.get_severity().c_str(),
+            adv_pkg.get_nevra().c_str(),
+            true);
     }
     auto cl = scols_table_get_column(table, COL_ADVISORY_NAME);
     scols_sort_table(table, cl);
