@@ -373,22 +373,22 @@ bool SolvRepo::load_solv_cache(const char * type, int flags) {
         fs::File cache_file(path, "r");
 
         if (can_use_repomd_cache(cache_file, checksum)) {
-            logger.debug("Loading solv cache file: \"{}\"", path);
+            logger.debug("Loading solv cache file: \"{}\"", path.native());
             if (repo_add_solv(repo, cache_file.get(), flags) != 0) {
                 throw SolvError(
                     M_("Failed to load {} cache for repo \"{}\" from \"{}\": {}"),
                     type ? type : "primary",
                     config.get_id(),
-                    path,
+                    path.native(),
                     pool_errstr(*get_pool(base)));
             }
             return true;
         } else {
-            logger.trace("Cache file \"{}\" checksum mismatch, not loading", path);
+            logger.trace("Cache file \"{}\" checksum mismatch, not loading", path.native());
         }
     } catch (const std::filesystem::filesystem_error & e) {
         if (e.code().default_error_condition() == std::errc::no_such_file_or_directory) {
-            logger.trace("Cache file \"{}\" not found", path);
+            logger.trace("Cache file \"{}\" not found", path.native());
         } else {
             logger.warning("Error opening cache file, ignoring: {}", e.what());
         }
@@ -403,9 +403,9 @@ void SolvRepo::write_main() {
 
     const char * chksum = pool_bin2hex(*get_pool(base), checksum, solv_chksum_len(CHKSUM_TYPE));
 
-    auto fn = solv_file_name();
+    const auto solvfile_path = solv_file_path();
 
-    auto cache_tmp_file = fs::TempFile(config.basecachedir().get_value(), fn);
+    auto cache_tmp_file = fs::TempFile(solvfile_path.parent_path(), solvfile_path.filename());
 
     auto & cache_file = cache_tmp_file.open_as_file("w+");
 
@@ -432,7 +432,7 @@ void SolvRepo::write_main() {
 
     cache_tmp_file.close();
 
-    std::filesystem::rename(cache_tmp_file.get_path(), std::filesystem::path(config.basecachedir().get_value()) / fn);
+    std::filesystem::rename(cache_tmp_file.get_path(), solvfile_path);
     cache_tmp_file.release();
 }
 
@@ -441,10 +441,10 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     auto & logger = *base->get_logger();
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
 
-    auto type_name = repodata_type_to_name(type);
-    auto fn = solv_file_name(type_name);
+    const auto type_name = repodata_type_to_name(type);
+    const auto solvfile_path = solv_file_path(type_name);
 
-    auto cache_tmp_file = fs::TempFile(base->get_config().cachedir().get_value(), fn);
+    auto cache_tmp_file = fs::TempFile(solvfile_path.parent_path(), solvfile_path.filename());
     auto & cache_file = cache_tmp_file.open_as_file("w+");
 
     logger.trace(
@@ -480,8 +480,7 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
 
     cache_tmp_file.close();
 
-    std::filesystem::rename(
-        cache_tmp_file.get_path(), std::filesystem::path(base->get_config().cachedir().get_value()) / fn);
+    std::filesystem::rename(cache_tmp_file.get_path(), solvfile_path);
     cache_tmp_file.release();
 }
 
@@ -495,8 +494,8 @@ std::string SolvRepo::solv_file_name(const char * type) {
 }
 
 
-std::string SolvRepo::solv_file_path(const char * type) {
-    return std::filesystem::path(config.basecachedir().get_value()) / solv_file_name(type);
+std::filesystem::path SolvRepo::solv_file_path(const char * type) {
+    return std::filesystem::path(config.get_cachedir()) / solv_file_name(type);
 }
 
 }  //namespace libdnf::repo

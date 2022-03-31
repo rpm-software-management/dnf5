@@ -29,6 +29,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <solv/repo.h>
 
+#include <filesystem>
+
 
 const constexpr int CHKSUM_BYTES = 32;
 
@@ -87,7 +89,7 @@ private:
     void write_ext(Id repodata_id, RepodataType type);
 
     std::string solv_file_name(const char * type = nullptr);
-    std::string solv_file_path(const char * type = nullptr);
+    std::filesystem::path solv_file_path(const char * type = nullptr);
 
     libdnf::BaseWeakPtr base;
     const ConfigRepo & config;
