@@ -107,3 +107,6 @@ list(JOIN LIBDNF_PC_REQUIRES_PRIVATE ", " LIBDNF_PC_REQUIRES_PRIVATE_STRING)
 # create a .pc file
 configure_file("libdnf.pc.in" ${CMAKE_CURRENT_BINARY_DIR}/libdnf.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libdnf.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
+
+# Makes an empty directory for libdnf cache
+install(DIRECTORY DESTINATION ${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/cache/libdnf)

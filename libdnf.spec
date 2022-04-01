@@ -118,7 +118,7 @@ Package management library
 %files
 %{_libdir}/libdnf.so.*
 %license lgpl-2.1.txt
-
+%{_var}/cache/libdnf/
 
 # ========== libdnf-cli ==========
 
