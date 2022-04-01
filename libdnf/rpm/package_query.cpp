@@ -2293,7 +2293,7 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
         filter_dataiterator(
             *pool,
             SOLVABLE_FILELIST,
-            SEARCH_FILES | SEARCH_COMPLETE_FILELIST | (glob ? SEARCH_GLOB : 0),
+            SEARCH_FILES | SEARCH_COMPLETE_FILELIST | SEARCH_STRING | (glob ? SEARCH_GLOB : 0),
             *p_impl,
             filter_result,
             pkg_spec.c_str());
