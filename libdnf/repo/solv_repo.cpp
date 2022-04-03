@@ -48,6 +48,7 @@ namespace fs = libdnf::utils::fs;
 
 constexpr auto CHKSUM_TYPE = REPOKEY_TYPE_SHA256;
 constexpr const char * CHKSUM_IDENT = "H000";
+constexpr const char * CACHE_SOLV_FILES_DIR = "solv";
 
 // Computes checksum of data in opened file.
 // Calls rewind(fp) before returning.
@@ -404,9 +405,11 @@ void SolvRepo::write_main() {
     const char * chksum = pool_bin2hex(*get_pool(base), checksum, solv_chksum_len(CHKSUM_TYPE));
 
     const auto solvfile_path = solv_file_path();
+    const auto solvfile_parent_dir = solvfile_path.parent_path();
 
-    auto cache_tmp_file = fs::TempFile(solvfile_path.parent_path(), solvfile_path.filename());
+    std::filesystem::create_directory(solvfile_parent_dir);
 
+    auto cache_tmp_file = fs::TempFile(solvfile_parent_dir, solvfile_path.filename());
     auto & cache_file = cache_tmp_file.open_as_file("w+");
 
     logger.trace(
@@ -443,8 +446,11 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
 
     const auto type_name = repodata_type_to_name(type);
     const auto solvfile_path = solv_file_path(type_name);
+    const auto solvfile_parent_dir = solvfile_path.parent_path();
 
-    auto cache_tmp_file = fs::TempFile(solvfile_path.parent_path(), solvfile_path.filename());
+    std::filesystem::create_directory(solvfile_parent_dir);
+
+    auto cache_tmp_file = fs::TempFile(solvfile_parent_dir, solvfile_path.filename());
     auto & cache_file = cache_tmp_file.open_as_file("w+");
 
     logger.trace(
@@ -495,7 +501,7 @@ std::string SolvRepo::solv_file_name(const char * type) {
 
 
 std::filesystem::path SolvRepo::solv_file_path(const char * type) {
-    return std::filesystem::path(config.get_cachedir()) / solv_file_name(type);
+    return std::filesystem::path(config.get_cachedir()) / CACHE_SOLV_FILES_DIR / solv_file_name(type);
 }
 
 }  //namespace libdnf::repo
