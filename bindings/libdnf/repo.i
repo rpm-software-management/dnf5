@@ -29,6 +29,7 @@
     #include "libdnf/repo/config_repo.hpp"
     #include "libdnf/repo/package_downloader.hpp"
     #include "libdnf/repo/repo.hpp"
+    #include "libdnf/repo/repo_cache.hpp"
     #include "libdnf/repo/repo_callbacks.hpp"
     #include "libdnf/repo/repo_query.hpp"
     #include "libdnf/repo/repo_sack.hpp"
@@ -44,6 +45,9 @@
 %feature("director") PackageDownloadCallbacks;
 %include "libdnf/repo/package_downloader.hpp"
 wrap_unique_ptr(PackageDownloadCallbacksUniquePtr, libdnf::repo::PackageDownloadCallbacks);
+
+%ignore RepoCacheError;
+%include "libdnf/repo/repo_cache.hpp"
 
 %include "libdnf/repo/repo.hpp"
 
