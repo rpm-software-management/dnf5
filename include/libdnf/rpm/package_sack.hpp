@@ -140,6 +140,8 @@ public:
     /// @since 5.0
     void clear_user_includes();
 
+    rpm::Package get_running_kernel();
+
 private:
     friend libdnf::Goal;
     friend Package;

@@ -80,9 +80,7 @@ public:
 
     void invalidate_provides() { provides_ready = false; }
 
-    PackageId get_running_kernel() const noexcept { return running_kernel; };
-
-    void set_running_kernel(PackageId kernel) { running_kernel = kernel; };
+    PackageId get_running_kernel_id();
 
     /// Sets excluded and included packages according to the configuration.
     ///

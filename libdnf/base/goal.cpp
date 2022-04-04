@@ -34,8 +34,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/reldep.hpp"
 
-#include <sys/utsname.h>
-
 #include <filesystem>
 #include <iostream>
 #include <map>
@@ -46,18 +44,6 @@ void add_obsoletes_to_data(const libdnf::rpm::PackageQuery & base_query, libdnf:
     libdnf::rpm::PackageQuery obsoletes_query(base_query);
     obsoletes_query.filter_obsoletes(data);
     data |= obsoletes_query;
-}
-
-static libdnf::rpm::PackageQuery running_kernel_check_path(const libdnf::BaseWeakPtr & base, const std::string & fn) {
-    if (access(fn.c_str(), F_OK)) {
-        // TODO(jmracek) Report g_debug("running_kernel_check_path(): no matching file: %s.", fn);
-    }
-    libdnf::rpm::PackageQuery q(base, libdnf::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
-
-    // Do we really need it? dnf_sack_make_provides_ready(sack);
-    q.filter_installed();
-    q.filter_file({fn});
-    return q;
 }
 
 
@@ -946,7 +932,7 @@ base::Transaction Goal::resolve(bool allow_erasing) {
     p_impl->rpm_goal.set_install_weak_deps(cfg_main.install_weak_deps().get_value());
 
     if (cfg_main.protect_running_kernel().get_value()) {
-        p_impl->rpm_goal.set_protected_running_kernel(get_running_kernel_internal());
+        p_impl->rpm_goal.set_protected_running_kernel(sack->p_impl->get_running_kernel_id());
     }
 
     // Add protected packages
@@ -982,46 +968,6 @@ base::Transaction Goal::resolve(bool allow_erasing) {
     transaction.p_impl->set_transaction(p_impl->rpm_goal, ret);
 
     return transaction;
-}
-
-rpm::PackageId Goal::get_running_kernel_internal() {
-    auto base = p_impl->base->get_weak_ptr();
-    auto & sack = *p_impl->base->get_rpm_package_sack();
-    auto kernel = sack.p_impl->get_running_kernel();
-    if (kernel.id != 0) {
-        return kernel;
-    }
-
-    struct utsname un;
-
-    if (uname(&un) < 0) {
-        // TODO(jmracek)  report g_debug("uname(): %s", g_strerror(errno));
-        kernel.id = -1;
-        sack.p_impl->set_running_kernel(kernel);
-        return kernel;
-    }
-
-    std::string fn("/boot/vmlinuz-");
-    auto un_release = un.release;
-    fn.append(un_release);
-    auto query = running_kernel_check_path(base, fn);
-
-    if (query.empty()) {
-        fn.clear();
-        fn.append("/lib/modules/");
-        fn.append(un_release);
-        query = running_kernel_check_path(base, fn);
-    }
-
-    if (query.empty()) {
-        // TODO(mracek) g_debug("running_kernel(): running kernel not matched to a package.");
-        kernel.id = -1;
-    } else {
-        // TODO(mracek) g_debug("running_kernel(): %s.", id2nevra(pool, kernel_id));
-        kernel = libdnf::rpm::PackageId(*query.p_impl->begin());
-    }
-    sack.p_impl->set_running_kernel(kernel);
-    return kernel;
 }
 
 void Goal::reset() {

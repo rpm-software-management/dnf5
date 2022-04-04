@@ -28,6 +28,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/package_query.hpp"
 
+#include <sys/utsname.h>
+
 extern "C" {
 #include <solv/chksum.h>
 #include <solv/repo.h>
@@ -408,6 +410,58 @@ void PackageSack::set_user_includes(const PackageSet & includes) {
 
 void PackageSack::clear_user_includes() {
     p_impl->clear_user_includes();
+}
+
+static libdnf::rpm::PackageQuery running_kernel_check_path(const libdnf::BaseWeakPtr & base, const std::string & fn) {
+    auto & logger = *base->get_logger();
+    if (access(fn.c_str(), F_OK)) {
+        logger.debug("Cannot find \"{}\" to verify running kernel", fn);
+    }
+    libdnf::rpm::PackageQuery q(base, libdnf::rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+
+    q.filter_installed();
+    q.filter_file({fn});
+    return q;
+}
+
+rpm::PackageId PackageSack::Impl::get_running_kernel_id() {
+    auto & logger = *base->get_logger();
+    if (running_kernel.id != 0) {
+        return running_kernel;
+    }
+
+    struct utsname un;
+
+    if (uname(&un) < 0) {
+        logger.debug("Failed to get information about running kernel \"{}\"", strerror(errno));
+        running_kernel.id = -1;
+        return running_kernel;
+    }
+
+    std::string fn("/boot/vmlinuz-");
+    auto un_release = un.release;
+    fn.append(un_release);
+    auto query = running_kernel_check_path(base, fn);
+
+    if (query.empty()) {
+        fn.clear();
+        fn.append("/lib/modules/");
+        fn.append(un_release);
+        query = running_kernel_check_path(base, fn);
+    }
+
+    if (query.empty()) {
+        logger.debug("Failed to find rpm package of a running kernel in sack");
+        running_kernel.id = -1;
+    } else {
+        running_kernel = libdnf::rpm::PackageId(*query.p_impl->begin());
+        logger.debug("Found running kernel: {}", get_pool(base).id2str(running_kernel.id));
+    }
+    return running_kernel;
+}
+
+rpm::Package PackageSack::get_running_kernel() {
+    return rpm::Package(p_impl->base, p_impl->get_running_kernel_id());
 }
 
 }  // namespace libdnf::rpm
