@@ -41,9 +41,12 @@ public:
 
 private:
     void parse_builddep_specs(int specs_count, const char * const specs[]);
-    bool add_from_spec_file(std::set<std::string> & specs, const char * spec_file_name);
-    bool add_from_srpm_file(std::set<std::string> & specs, const char * srpm_file_name);
-    bool add_from_pkg(std::set<std::string> & specs, const std::string & pkg_spec);
+    bool add_from_spec_file(
+        std::set<std::string> & install_specs, std::set<std::string> & conflicts_specs, const char * spec_file_name);
+    bool add_from_srpm_file(
+        std::set<std::string> & install_specs, std::set<std::string> & conflicts_specs, const char * srpm_file_name);
+    bool add_from_pkg(
+        std::set<std::string> & install_specs, std::set<std::string> & conflicts_specs, const std::string & pkg_spec);
 
     std::vector<std::string> pkg_specs{};
     std::vector<std::string> spec_file_paths{};
