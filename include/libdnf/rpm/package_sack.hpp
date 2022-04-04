@@ -69,6 +69,7 @@ class Transaction;
 
 namespace libdnf::rpm {
 
+class PackageSet;
 class PackageSack;
 using PackageSackWeakPtr = WeakPtr<PackageSack, false>;
 
@@ -94,6 +95,28 @@ public:
     /// @since 5.0
     // TODO(mblaha): do we have a use case for only_main=true? Is the parameter needed?
     void load_config_excludes_includes(bool only_main = false);
+
+    /// Returns user excluded package set
+    const PackageSet get_user_excludes();
+
+    /// Add package set to user excluded packages
+    /// @param excludes: packages to add to excludes
+    /// @since 5.0
+    void add_user_excludes(const PackageSet & excludes);
+
+    /// Remove package set from user excluded packages
+    /// @param excludes: packages to remove from excludes
+    /// @since 5.0
+    void remove_user_excludes(const PackageSet & excludes);
+
+    /// Resets user excluded packages to a new value
+    /// @param excludes: packages to exclude
+    /// @since 5.0
+    void set_user_excludes(const PackageSet & excludes);
+
+    /// Clear user excluded packages
+    /// @since 5.0
+    void clear_user_excludes();
 
 private:
     friend libdnf::Goal;

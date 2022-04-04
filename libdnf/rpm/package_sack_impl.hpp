@@ -93,6 +93,12 @@ public:
     // TODO(jrohel): Is param `only_main` needed? Used in DNF4 with commandline repo.
     void load_config_excludes_includes(bool only_main = false);
 
+    const PackageSet get_user_excludes();
+    void add_user_excludes(const PackageSet & excludes);
+    void remove_user_excludes(const PackageSet & excludes);
+    void set_user_excludes(const PackageSet & excludes);
+    void clear_user_excludes();
+
     /// Computes considered map.
     /// If there are no excluded packages, the considered map may not be present in the return value.
     std::optional<libdnf::solv::SolvMap> compute_considered_map(libdnf::sack::ExcludeFlags flags) const;
