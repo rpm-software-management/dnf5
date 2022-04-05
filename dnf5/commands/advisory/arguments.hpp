@@ -33,7 +33,7 @@ namespace dnf5 {
 class AdvisoryAllOption : public libdnf::cli::session::BoolOption {
 public:
     explicit AdvisoryAllOption(libdnf::cli::session::Command & command)
-        : BoolOption(command, "all", '\0', _("Show advisories about any version of installed packages."), false) {}
+        : BoolOption(command, "all", '\0', _("Show advisories containing any version of installed packages."), false) {}
 };
 
 
@@ -41,7 +41,11 @@ class AdvisoryAvailableOption : public libdnf::cli::session::BoolOption {
 public:
     explicit AdvisoryAvailableOption(libdnf::cli::session::Command & command)
         : BoolOption(
-              command, "available", '\0', _("Show advisories about newer versions of installed packages."), false) {}
+              command,
+              "available",
+              '\0',
+              _("Show advisories containing newer versions of installed packages."),
+              false) {}
 };
 
 
@@ -52,7 +56,7 @@ public:
               command,
               "installed",
               '\0',
-              _("Show advisories about equal and older versions of installed packages."),
+              _("Show advisories containing equal and older versions of installed packages."),
               false) {}
 };
 
@@ -64,8 +68,21 @@ public:
               command,
               "updates",
               '\0',
-              _("Show advisories about newer versions of installed packages for which a newer version is available."),
+              _("Show advisories containing newer versions of installed packages for which a newer version is "
+                "available."),
               false) {}
+};
+
+
+class AdvisoryContainsPkgsOption : public libdnf::cli::session::StringListOption {
+public:
+    explicit AdvisoryContainsPkgsOption(libdnf::cli::session::Command & command)
+        : StringListOption(
+              command,
+              "contains-pkgs",
+              '\0',
+              _("Show only advisories containing packages with specified names. List option, supports globs."),
+              _("PACKAGE_NAME,...")) {}
 };
 
 

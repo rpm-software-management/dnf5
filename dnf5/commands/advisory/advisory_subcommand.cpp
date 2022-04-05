@@ -50,6 +50,7 @@ AdvisorySubCommand::AdvisorySubCommand(
     installed = std::make_unique<AdvisoryInstalledOption>(*this);
     updates = std::make_unique<AdvisoryUpdatesOption>(*this);
     advisory_specs = std::make_unique<AdvisorySpecArguments>(*this);
+    contains_pkgs = std::make_unique<AdvisoryContainsPkgsOption>(*this);
 
     auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
         new std::vector<ArgumentParser::Argument *>{all->arg, available->arg, installed->arg, updates->arg}));
@@ -80,6 +81,11 @@ void AdvisorySubCommand::run() {
     ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::UPDATEINFO);
 
     libdnf::rpm::PackageQuery package_query(ctx.base);
+    auto package_specs_strs = contains_pkgs->get_value();
+    // Filter packages by name patterns if given
+    if (package_specs_strs.size() > 0) {
+        package_query.filter_name(package_specs_strs, libdnf::sack::QueryCmp::IGLOB);
+    }
 
     auto advisories = libdnf::advisory::AdvisoryQuery(ctx.base);
     auto advisory_specs_strs = advisory_specs->get_value();

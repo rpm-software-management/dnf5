@@ -49,6 +49,7 @@ protected:
     std::unique_ptr<AdvisoryInstalledOption> installed{nullptr};
     std::unique_ptr<AdvisoryAllOption> all{nullptr};
     std::unique_ptr<AdvisoryUpdatesOption> updates{nullptr};
+    std::unique_ptr<AdvisoryContainsPkgsOption> contains_pkgs{nullptr};
     std::unique_ptr<AdvisorySpecArguments> advisory_specs{nullptr};
 
     AdvisorySubCommand(Command & parent, const std::string & name, const std::string & short_description);
