@@ -60,6 +60,20 @@ AdvisorySubCommand::AdvisorySubCommand(
     updates->arg->set_conflict_arguments(conflict_args);
 }
 
+// There can be multiple versions of kernel installed at the same time.
+// When the running kernel has available advisories show them because the system
+// is vulnerable (even if the newer fixed version of kernel is already installed).
+// DNF4 bug with behavior description: https://bugzilla.redhat.com/show_bug.cgi?id=1728004
+void AdvisorySubCommand::add_running_kernel_packages(libdnf::Base & base, libdnf::rpm::PackageQuery & package_query) {
+    auto kernel = base.get_rpm_package_sack()->get_running_kernel();
+    if (kernel.get_id().id > 0) {
+        libdnf::rpm::PackageQuery kernel_query(base);
+        kernel_query.filter_sourcerpm({kernel.get_sourcerpm()});
+        kernel_query.filter_installed();
+        package_query |= kernel_query;
+    }
+}
+
 void AdvisorySubCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 

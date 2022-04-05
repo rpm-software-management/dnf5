@@ -43,6 +43,8 @@ protected:
     virtual void process_and_print_queries(
         Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) = 0;
 
+    void add_running_kernel_packages(libdnf::Base & base, libdnf::rpm::PackageQuery & package_query);
+
     std::unique_ptr<AdvisoryAvailableOption> available{nullptr};
     std::unique_ptr<AdvisoryInstalledOption> installed{nullptr};
     std::unique_ptr<AdvisoryAllOption> all{nullptr};

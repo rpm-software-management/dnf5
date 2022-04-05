@@ -58,6 +58,8 @@ void AdvisoryListCommand::process_and_print_queries(
         packages.filter_installed();
         packages.filter_latest_evr();
 
+        add_running_kernel_packages(ctx.base, packages);
+
         not_installed_pkgs = advisories.get_advisory_packages(packages, libdnf::sack::QueryCmp::GT);
     }
 
