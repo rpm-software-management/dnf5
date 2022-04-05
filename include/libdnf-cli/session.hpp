@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf/conf/option_bool.hpp>
 #include <libdnf/conf/option_string.hpp>
+#include <libdnf/conf/option_string_list.hpp>
 
 
 namespace libdnf::cli::session {
@@ -141,6 +142,24 @@ public:
     // TODO(dmach): `arg` must be public, because it is used to define conflicting args
     //protected:
     libdnf::OptionBool * conf{nullptr};
+    libdnf::cli::ArgumentParser::NamedArg * arg{nullptr};
+};
+
+
+class StringListOption : public Option {
+public:
+    explicit StringListOption(
+        libdnf::cli::session::Command & command,
+        const std::string & long_name,
+        char short_name,
+        const std::string & desc,
+        const std::string & help);
+
+    /// @return Parsed value.
+    /// @since 5.0
+    std::vector<std::string> get_value() const { return conf->get_value(); }
+
+    libdnf::OptionStringList * conf{nullptr};
     libdnf::cli::ArgumentParser::NamedArg * arg{nullptr};
 };
 
