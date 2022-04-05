@@ -50,6 +50,8 @@ class TransactionSack;
 /// @replaces libdnf:transaction/Types.hpp:enum:TransactionState
 enum class TransactionState : int { UNKNOWN = 0, DONE = 1, ERROR = 2 };
 
+std::string transaction_state_to_string(TransactionState state);
+
 
 /// Transaction holds information about a transaction.
 /// It contains transaction items such as packages, comps groups and environments.

@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_HISTORY_LIST_HPP
 #define DNF5_COMMANDS_HISTORY_HISTORY_LIST_HPP
 
+#include "arguments.hpp"
 
 #include <libdnf-cli/session.hpp>
 
@@ -32,6 +33,8 @@ class HistoryListCommand : public libdnf::cli::session::Command {
 public:
     explicit HistoryListCommand(Command & parent);
     void run() override;
+
+    std::unique_ptr<TransactionSpecArguments> transaction_specs{nullptr};
 };
 
 

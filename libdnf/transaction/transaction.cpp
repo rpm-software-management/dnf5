@@ -40,6 +40,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
+std::string transaction_state_to_string(TransactionState state) {
+    switch (state) {
+        case TransactionState::UNKNOWN:
+            return "unknown";
+        case TransactionState::DONE:
+            return "done";
+        case TransactionState::ERROR:
+            return "error";
+    }
+    return "";
+}
+
+
 Transaction::Transaction(TransactionSack & sack, int64_t pk) : sack{sack} {
     auto conn = transaction_db_connect(sack.base);
 

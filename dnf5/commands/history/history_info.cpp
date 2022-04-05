@@ -22,6 +22,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/context.hpp"
 
+#include <libdnf-cli/output/transactioninfo.hpp>
+
+#include <iostream>
+
 
 namespace dnf5 {
 
@@ -30,15 +34,36 @@ using namespace libdnf::cli;
 
 
 HistoryInfoCommand::HistoryInfoCommand(Command & parent) : Command(parent, "info") {
-    // auto & ctx = static_cast<Context &>(get_session());
-    // auto & parser = ctx.get_argument_parser();
-
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Print details about transactions");
+
+    transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
 }
 
 
-void HistoryInfoCommand::run() {}
+void HistoryInfoCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
+
+    libdnf::transaction::TransactionQuery transaction_query(ctx.base);
+
+    auto specs_str = transaction_specs->get_value();
+
+    std::vector<int64_t> spec_ids;
+
+    // TODO(lukash) proper transaction id parsing
+    std::transform(specs_str.begin(), specs_str.end(), std::back_inserter(spec_ids), [](const std::string & spec) {
+        return std::stol(spec);
+    });
+
+    if (spec_ids.size() > 0) {
+        transaction_query.filter_id(spec_ids, libdnf::sack::QueryCmp::EQ);
+    }
+
+    for (auto ts : transaction_query) {
+        libdnf::cli::output::print_transaction_info(*ts);
+        std::cout << std::endl;
+    }
+}
 
 
 }  // namespace dnf5
