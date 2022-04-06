@@ -391,7 +391,11 @@ private:
 
     void internalize();
 
-    void reset_metadata_expired();
+    /// If the repository is not already marked as expired, it checks for the presence of the repository cache
+    /// expiration attribute, and if the metadata_expire configuration value is set, also checks the modification times
+    /// of the main configuration file, the repository configuration file, and the cached primary file.
+    /// Depending on the result, the repository may be marked as expired.
+    void recompute_expired();
 
     libdnf::BaseWeakPtr base;
     ConfigRepo config;

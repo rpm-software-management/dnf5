@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv_repo.hpp"
 
+#include "repo_cache_private.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/fs/file.hpp"
@@ -48,7 +49,6 @@ namespace fs = libdnf::utils::fs;
 
 constexpr auto CHKSUM_TYPE = REPOKEY_TYPE_SHA256;
 constexpr const char * CHKSUM_IDENT = "H000";
-constexpr const char * CACHE_SOLV_FILES_DIR = "solv";
 
 // Computes checksum of data in opened file.
 // Calls rewind(fp) before returning.

@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789-_.:";
 
+#include "repo_cache_private.hpp"
 #include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "solv_repo.hpp"
@@ -177,7 +178,7 @@ bool Repo::fetch_metadata() {
 
     if (!downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
         // cache loaded
-        reset_metadata_expired();
+        recompute_expired();
         if (!expired || sync_strategy == SyncStrategy::ONLY_CACHE || sync_strategy == SyncStrategy::LAZY) {
             logger.debug("Using cache for repo \"{}\"", config.get_id());
             return false;
@@ -186,6 +187,7 @@ bool Repo::fetch_metadata() {
         if (is_in_sync()) {
             // the expired metadata still reflect the origin:
             utimes(downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
+            RepoCache(base, config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
             expired = false;
             return true;
         }
@@ -195,7 +197,9 @@ bool Repo::fetch_metadata() {
     }
 
     logger.debug("Downloading metadata for repo \"{}\"", config.get_id());
-    downloader->download_metadata(config.get_cachedir());
+    auto cache_dir = config.get_cachedir();
+    downloader->download_metadata(cache_dir);
+    RepoCache(base, config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
     timestamp = -1;
     read_metadata_cache();
 
@@ -491,8 +495,17 @@ void Repo::internalize() {
 }
 
 
-void Repo::reset_metadata_expired() {
-    if (expired || config.metadata_expire().get_value() == -1) {
+void Repo::recompute_expired() {
+    if (expired) {
+        return;
+    }
+
+    if (RepoCache(base, get_cachedir()).is_attribute(RepoCache::ATTRIBUTE_EXPIRED)) {
+        expired = true;
+        return;
+    }
+
+    if (config.metadata_expire().get_value() == -1) {
         return;
     }
 
