@@ -33,8 +33,9 @@ namespace dnf5 {
 
 using namespace libdnf::cli;
 
+AdvisoryCommand::AdvisoryCommand(Command & parent) : AdvisoryCommand(parent, "advisory") {}
 
-AdvisoryCommand::AdvisoryCommand(Command & parent) : Command(parent, "advisory") {
+AdvisoryCommand::AdvisoryCommand(Command & parent, const std::string & name) : Command(parent, name) {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
 

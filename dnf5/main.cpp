@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/aliases/grouplist.hpp"
 #include "commands/aliases/repoinfo.hpp"
 #include "commands/aliases/repolist.hpp"
+#include "commands/aliases/updateinfo.hpp"
 #include "commands/aliases/upgrade_minimal.hpp"
 #include "commands/clean/clean.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
@@ -125,6 +126,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     register_subcommand(std::make_unique<GrouplistAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<RepoinfoAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<RepolistAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<UpdateinfoAlias>(*this), aliases_group);
     register_subcommand(std::make_unique<UpgradeMinimalAlias>(*this), aliases_group);
 
     auto & context = static_cast<Context &>(session);
