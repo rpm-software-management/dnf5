@@ -118,6 +118,28 @@ public:
     /// @since 5.0
     void clear_user_excludes();
 
+    /// Returns user included package set
+    const PackageSet get_user_includes();
+
+    /// Add package set to user included packages
+    /// @param includes: packages to add to includes
+    /// @since 5.0
+    void add_user_includes(const PackageSet & includes);
+
+    /// Remove package set from user included packages
+    /// @param includes: packages to remove from includes
+    /// @since 5.0
+    void remove_user_includes(const PackageSet & includes);
+
+    /// Resets user included packages to a new value
+    /// @param includes: packages to include
+    /// @since 5.0
+    void set_user_includes(const PackageSet & includes);
+
+    /// Clear user included packages
+    /// @since 5.0
+    void clear_user_includes();
+
 private:
     friend libdnf::Goal;
     friend Package;

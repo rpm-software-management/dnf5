@@ -99,6 +99,12 @@ public:
     void set_user_excludes(const PackageSet & excludes);
     void clear_user_excludes();
 
+    const PackageSet get_user_includes();
+    void add_user_includes(const PackageSet & includes);
+    void remove_user_includes(const PackageSet & includes);
+    void set_user_includes(const PackageSet & includes);
+    void clear_user_includes();
+
     /// Computes considered map.
     /// If there are no excluded packages, the considered map may not be present in the return value.
     std::optional<libdnf::solv::SolvMap> compute_considered_map(libdnf::sack::ExcludeFlags flags) const;

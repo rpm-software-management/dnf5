@@ -198,10 +198,10 @@ const PackageSet PackageSack::Impl::get_user_excludes() {
 void PackageSack::Impl::add_user_excludes(const PackageSet & excludes) {
     if (user_excludes) {
         *user_excludes |= *excludes.p_impl;
+        considered_uptodate = false;
     } else {
-        user_excludes.reset(new libdnf::solv::SolvMap(*excludes.p_impl));
+        set_user_excludes(excludes);
     }
-    considered_uptodate = false;
 }
 
 void PackageSack::Impl::remove_user_excludes(const PackageSet & excludes) {
@@ -217,9 +217,48 @@ void PackageSack::Impl::set_user_excludes(const PackageSet & excludes) {
 }
 
 void PackageSack::Impl::clear_user_excludes() {
-    user_excludes.reset(new libdnf::solv::SolvMap(0));
+    user_excludes.reset();
     considered_uptodate = false;
 }
+
+const PackageSet PackageSack::Impl::get_user_includes() {
+    if (user_includes) {
+        return PackageSet(base, *user_includes);
+    } else {
+        return PackageSet(base);
+    }
+}
+
+void PackageSack::Impl::add_user_includes(const PackageSet & includes) {
+    if (user_includes) {
+        *user_includes |= *includes.p_impl;
+        considered_uptodate = false;
+    } else {
+        set_user_includes(includes);
+    }
+}
+
+void PackageSack::Impl::remove_user_includes(const PackageSet & includes) {
+    if (user_includes) {
+        *user_includes -= *includes.p_impl;
+        considered_uptodate = false;
+    }
+}
+
+void PackageSack::Impl::set_user_includes(const PackageSet & includes) {
+    user_includes.reset(new libdnf::solv::SolvMap(*includes.p_impl));
+    // enable the use of includes for all repositories
+    for (const auto & repo : base->get_repo_sack()->get_data()) {
+        repo->set_use_includes(true);
+    }
+    considered_uptodate = false;
+}
+
+void PackageSack::Impl::clear_user_includes() {
+    user_includes.reset();
+    considered_uptodate = false;
+}
+
 
 std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(libdnf::sack::ExcludeFlags flags) const {
     if ((static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES) ||
@@ -351,5 +390,24 @@ void PackageSack::clear_user_excludes() {
     p_impl->clear_user_excludes();
 }
 
+const PackageSet PackageSack::get_user_includes() {
+    return p_impl->get_user_includes();
+}
+
+void PackageSack::add_user_includes(const PackageSet & includes) {
+    p_impl->add_user_includes(includes);
+}
+
+void PackageSack::remove_user_includes(const PackageSet & includes) {
+    p_impl->remove_user_includes(includes);
+}
+
+void PackageSack::set_user_includes(const PackageSet & includes) {
+    p_impl->set_user_includes(includes);
+}
+
+void PackageSack::clear_user_includes() {
+    p_impl->clear_user_includes();
+}
 
 }  // namespace libdnf::rpm
