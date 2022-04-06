@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/aliases/repoinfo.hpp"
 #include "commands/aliases/repolist.hpp"
 #include "commands/aliases/upgrade_minimal.hpp"
+#include "commands/clean/clean.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
 #include "commands/download/download.hpp"
@@ -110,6 +111,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     register_subcommand(std::make_unique<RepoCommand>(*this), subcommands_group);
     register_subcommand(std::make_unique<AdvisoryCommand>(*this), subcommands_group);
 
+    register_subcommand(std::make_unique<CleanCommand>(*this));
     register_subcommand(std::make_unique<DownloadCommand>(*this));
     register_subcommand(std::make_unique<MakeCacheCommand>(*this));
 
