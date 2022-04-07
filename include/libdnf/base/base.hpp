@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/conf/vars.hpp"
 #include "libdnf/logger/log_router.hpp"
+#include "libdnf/module/module_item_container.hpp"
 #include "libdnf/plugin/plugins.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/rpm/package_sack.hpp"
@@ -83,6 +84,9 @@ public:
 
     transaction::TransactionSackWeakPtr get_transaction_sack() { return transaction_sack.get_weak_ptr(); }
     libdnf::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
+    libdnf::module::ModuleItemContainerWeakPtr get_module_item_container() {
+        return module_item_container.get_weak_ptr();
+    }
     libdnf::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
@@ -125,6 +129,7 @@ private:
     rpm::PackageSack rpm_package_sack;
     transaction::TransactionSack transaction_sack{*this};
     comps::Comps comps{*this};
+    module::ModuleItemContainer module_item_container{*this};
     plugin::Plugins plugins{*this};
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
     std::map<std::string, std::string> variables;
