@@ -72,11 +72,7 @@ CompsGroup::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr conn, const s
 */
 
 CompsGroupPackage & CompsGroup::new_package() {
-    auto pkg = new CompsGroupPackage(*this);
-    auto pkg_ptr = std::unique_ptr<CompsGroupPackage>(std::move(pkg));
-    // TODO(dmach): following lines are not thread-safe
-    packages.push_back(std::move(pkg_ptr));
-    return *packages.back();
+    return packages.emplace_back(*this);
 }
 
 

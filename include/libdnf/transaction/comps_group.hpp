@@ -100,7 +100,7 @@ public:
     /// Get list of packages associated with the group.
     ///
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getPackages()
-    const std::vector<std::unique_ptr<CompsGroupPackage>> & get_packages() { return packages; }
+    std::vector<CompsGroupPackage> & get_packages() { return packages; }
 
     // TODO(dmach): rewrite into TransactionSack.list_installed_groups(); how to deal with references to different transactions? We don't want all of them loaded into memory.
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
@@ -118,7 +118,7 @@ private:
     std::string name;
     std::string translated_name;
     CompsPackageType package_types;
-    std::vector<std::unique_ptr<CompsGroupPackage>> packages;
+    std::vector<CompsGroupPackage> packages;
 };
 
 
@@ -127,6 +127,8 @@ private:
 /// @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupPackage
 class CompsGroupPackage {
 public:
+    explicit CompsGroupPackage(CompsGroup & group);
+
     /// Get database id (primary key)
     ///
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getId()
@@ -176,11 +178,7 @@ public:
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getGroup()
     const CompsGroup & get_group() const noexcept { return group; }
 
-protected:
-    explicit CompsGroupPackage(CompsGroup & group);
-
 private:
-    friend class CompsGroup;
     int64_t id = 0;
     std::string name;
     bool installed = false;

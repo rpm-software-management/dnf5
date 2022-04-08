@@ -66,19 +66,18 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_transaction_ite
 }
 
 
-std::vector<std::unique_ptr<CompsEnvironment>> get_transaction_comps_environments(
-    libdnf::utils::SQLite3 & conn, Transaction & trans) {
-    std::vector<std::unique_ptr<CompsEnvironment>> result;
+std::vector<CompsEnvironment> get_transaction_comps_environments(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+    std::vector<CompsEnvironment> result;
 
     auto query = comps_environment_transaction_item_select_new_query(conn, trans.get_id());
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto ti = std::make_unique<CompsEnvironment>(trans);
-        transaction_item_select(*query, *ti);
-        ti->set_environment_id(query->get<std::string>("environmentid"));
-        ti->set_name(query->get<std::string>("name"));
-        ti->set_translated_name(query->get<std::string>("translated_name"));
-        ti->set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
-        comps_environment_groups_select(conn, *ti);
+        CompsEnvironment ti(trans);
+        transaction_item_select(*query, ti);
+        ti.set_environment_id(query->get<std::string>("environmentid"));
+        ti.set_name(query->get<std::string>("name"));
+        ti.set_translated_name(query->get<std::string>("translated_name"));
+        ti.set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
+        comps_environment_groups_select(conn, ti);
         result.push_back(std::move(ti));
     }
 
@@ -129,9 +128,9 @@ void insert_transaction_comps_environments(libdnf::utils::SQLite3 & conn, Transa
     auto query_trans_item_insert = trans_item_insert_new_query(conn);
 
     for (auto & env : trans.get_comps_environments()) {
-        comps_environment_insert(*query_comps_environment_insert, *env);
-        transaction_item_insert(*query_trans_item_insert, *env);
-        comps_environment_groups_insert(conn, *env);
+        comps_environment_insert(*query_comps_environment_insert, env);
+        transaction_item_insert(*query_trans_item_insert, env);
+        comps_environment_groups_insert(conn, env);
     }
 }
 

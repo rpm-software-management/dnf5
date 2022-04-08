@@ -44,7 +44,6 @@ namespace libdnf::transaction {
 
 class Item;
 class Transformer;
-class TransactionSack;
 
 
 /// @replaces libdnf:transaction/Types.hpp:enum:TransactionState
@@ -64,9 +63,20 @@ class Transaction {
 public:
     using State = TransactionState;
 
-    explicit Transaction(TransactionSack & sack);
+    /// Constructs a new, empty `Transaction` object. The object is expected to
+    /// be filled by the user and saved to the database.
+    ///
+    /// @param base The base.
+    explicit Transaction(const libdnf::BaseWeakPtr & base);
 
-    explicit Transaction(TransactionSack & sack, int64_t pk);
+    /// Constructs the transaction with a known id which needs to exist in the
+    /// database. The data are then lazily loaded from the database on first call
+    /// of an attribute getter.
+    ///
+    /// @param base The base.
+    /// @param id The id of the transaction.
+    Transaction(const libdnf::BaseWeakPtr & base, int64_t id);
+
     virtual ~Transaction() = default;
 
     bool operator==(const Transaction & other) const;
@@ -177,39 +187,27 @@ public:
     /// Get set of package NEVRAs of runtime packages (used to perform the transaction)
     ///
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getSoftwarePerformedWith()
-    const std::set<std::string> & get_runtime_packages() const { return runtime_packages; }
+    const std::set<std::string> & get_runtime_packages();
 
     /// Add a package NEVRA to set of runtime packages (used to perform the transaction)
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addSoftwarePerformedWith(std::shared_ptr<RPMItem> software)
-    void add_runtime_package(const std::string & nevra) { runtime_packages.insert(nevra); }
+    void add_runtime_package(const std::string & nevra);
 
     /// Get lines recorded during the transaction
     ///
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getConsoleOutput()
-    const std::vector<std::pair<int, std::string>> & get_console_output() const { return console_output; }
+    const std::vector<std::pair<int, std::string>> & get_console_output();
 
     /// Record a line printed during the transction to the database and also store it in the object
     ///
     /// The method must be called only on a started transaction
     void add_console_output_line(int file_descriptor, const std::string & line);
 
-    /// Start the transaction by inserting it into the database
-    ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.begin()
-    void start();
-
-    /// Finish the transaction by updating it's state in the database
-    ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.finish(libdnf::TransactionState state)
-    void finish(TransactionState state);
-
     /// Return all comps environments associated with the transaction
     ///
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
-    const std::vector<std::unique_ptr<CompsEnvironment>> & get_comps_environments() const noexcept {
-        return comps_environments;
-    }
+    std::vector<CompsEnvironment> & get_comps_environments();
 
     /// Create a new comps environment in the transaction and return a reference to it.
     /// The environment is owned by the transaction.
@@ -220,7 +218,7 @@ public:
     /// Return all comps groups associated with the transaction
     ///
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
-    const std::vector<std::unique_ptr<CompsGroup>> & get_comps_groups() const noexcept { return comps_groups; }
+    std::vector<CompsGroup> & get_comps_groups();
 
     /// Create a new comps group in the transaction and return a reference to it.
     /// The group is owned by the transaction.
@@ -231,7 +229,7 @@ public:
     /// Return all rpm packages associated with the transaction
     ///
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
-    const std::vector<std::unique_ptr<Package>> & get_packages() const noexcept { return packages; }
+    std::vector<Package> & get_packages();
 
     /// Create a new rpm package in the transaction and return a reference to it.
     /// The package is owned by the transaction.
@@ -242,11 +240,23 @@ public:
     /// Fill the transaction packages.
     void fill_transaction_packages(const std::vector<libdnf::base::TransactionPackage> & transaction_packages);
 
+    /// Start the transaction by inserting it into the database
+    ///
+    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.begin()
+    /// TODO(lukash) make the whole transaction creation API private
+    void start();
+
+    /// Finish the transaction by updating it's state in the database
+    ///
+    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.finish(libdnf::TransactionState state)
+    void finish(TransactionState state);
+
 protected:
     friend Transformer;
 
 private:
-    int64_t id = 0;
+    int64_t id{0};
+
     int64_t dt_begin = 0;
     int64_t dt_end = 0;
     std::string rpmdb_version_begin;
@@ -259,14 +269,14 @@ private:
     std::string comment;
     State state = State::UNKNOWN;
 
-    std::set<std::string> runtime_packages;
-    std::vector<std::pair<int, std::string>> console_output;
+    std::optional<std::set<std::string>> runtime_packages;
+    std::optional<std::vector<std::pair<int, std::string>>> console_output;
 
-    std::vector<std::unique_ptr<CompsEnvironment>> comps_environments;
-    std::vector<std::unique_ptr<CompsGroup>> comps_groups;
-    std::vector<std::unique_ptr<Package>> packages;
+    std::optional<std::vector<CompsEnvironment>> comps_environments;
+    std::optional<std::vector<CompsGroup>> comps_groups;
+    std::optional<std::vector<Package>> packages;
 
-    TransactionSack & sack;
+    BaseWeakPtr base;
 };
 
 }  // namespace libdnf::transaction

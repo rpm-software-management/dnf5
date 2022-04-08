@@ -36,14 +36,14 @@ void TransactionWorkflowTest::test_default_workflow() {
     auto base = new_base();
 
     // create an empty Transaction object
-    auto trans = base->get_transaction_sack()->new_transaction();
-    CPPUNIT_ASSERT_EQUAL(TransactionState::UNKNOWN, trans->get_state());
+    auto trans = base->get_transaction_history()->new_transaction();
+    CPPUNIT_ASSERT_EQUAL(TransactionState::UNKNOWN, trans.get_state());
 
     // set packages used to perform the transaction
-    trans->add_runtime_package("dnf-3.5.1-1.fc29.noarch");
+    trans.add_runtime_package("dnf-3.5.1-1.fc29.noarch");
 
     // set vars
-    trans->set_releasever("26");
+    trans.set_releasever("26");
 
     // populate goal
     // resolve dependencies
@@ -52,7 +52,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     // add rpm packages to the transaction
 
     // bash-4.4.12-5.fc26.x86_64
-    auto & rpm_bash = trans->new_package();
+    auto & rpm_bash = trans.new_package();
     rpm_bash.set_name("bash");
     rpm_bash.set_epoch("0");
     rpm_bash.set_version("4.4.12");
@@ -63,7 +63,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     rpm_bash.set_reason(TransactionItemReason::GROUP);
 
     // systemd-233-6.fc26
-    auto & rpm_systemd = trans->new_package();
+    auto & rpm_systemd = trans.new_package();
     rpm_systemd.set_name("systemd");
     rpm_systemd.set_epoch("0");
     rpm_systemd.set_version("233");
@@ -74,7 +74,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     rpm_systemd.set_reason(TransactionItemReason::USER);
 
     // sysvinit-2.88-14.dsf.fc20
-    auto & rpm_sysvinit = trans->new_package();
+    auto & rpm_sysvinit = trans.new_package();
     rpm_sysvinit.set_name("sysvinit");
     rpm_sysvinit.set_epoch("0");
     rpm_sysvinit.set_version("2.88");
@@ -89,7 +89,7 @@ void TransactionWorkflowTest::test_default_workflow() {
 
     // add comps groups to the transaction
 
-    auto & comps_group_core = trans->new_comps_group();
+    auto & comps_group_core = trans.new_comps_group();
     comps_group_core.set_group_id("core");
     comps_group_core.set_name("Core");
     comps_group_core.set_translated_name("Úplný základ");
@@ -107,7 +107,7 @@ void TransactionWorkflowTest::test_default_workflow() {
 
     // add comps environments to the transaction
 
-    auto & comps_environment_minimal = trans->new_comps_environment();
+    auto & comps_environment_minimal = trans.new_comps_environment();
     comps_environment_minimal.set_environment_id("minimal");
     comps_environment_minimal.set_name("Minimal");
     comps_environment_minimal.set_translated_name("mmm");
@@ -121,31 +121,31 @@ void TransactionWorkflowTest::test_default_workflow() {
     minimal_core.set_group_type(CompsPackageType::MANDATORY);
 
     // save transaction and all associated transaction items
-    trans->start();
+    trans.start();
 
     // record transaction output coming from rpm transaction callbacks
-    trans->add_console_output_line(1, "line1");
-    trans->add_console_output_line(2, "line2");
+    trans.add_console_output_line(1, "line1");
+    trans.add_console_output_line(2, "line2");
 
     // run a rpm transaction
     // mark completed transaction items
 
-    for (auto & it : trans->get_comps_environments()) {
-        it->set_state(TransactionItemState::DONE);
+    for (auto & env : trans.get_comps_environments()) {
+        env.set_state(TransactionItemState::DONE);
         // it->save();
     }
 
-    for (auto & it : trans->get_comps_groups()) {
-        it->set_state(TransactionItemState::DONE);
+    for (auto & grp : trans.get_comps_groups()) {
+        grp.set_state(TransactionItemState::DONE);
         // it->save();
     }
 
-    for (auto & it : trans->get_packages()) {
-        it->set_state(TransactionItemState::DONE);
+    for (auto & pkg : trans.get_packages()) {
+        pkg.set_state(TransactionItemState::DONE);
         // it->save();
     }
 
     // finish transaction
-    trans->finish(TransactionState::DONE);
-    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans->get_state());
+    trans.finish(TransactionState::DONE);
+    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans.get_state());
 }

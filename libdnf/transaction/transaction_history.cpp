@@ -18,7 +18,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/transaction/sack.hpp"
+#include "libdnf/transaction/transaction_history.hpp"
+
+#include "db/trans.hpp"
 
 #include "libdnf/base/base.hpp"
 
@@ -26,18 +28,30 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-TransactionSack::TransactionSack(libdnf::Base & base) : base{base} {}
+TransactionHistory::TransactionHistory(const libdnf::BaseWeakPtr & base) : base{base} {}
 
 
-TransactionSack::~TransactionSack() = default;
+TransactionHistory::TransactionHistory(libdnf::Base & base) : TransactionHistory(base.get_weak_ptr()) {}
 
 
-TransactionWeakPtr TransactionSack::new_transaction() {
-    return add_item_with_return(std::make_unique<Transaction>(*this));
+Transaction TransactionHistory::new_transaction() {
+    return Transaction(base);
 }
 
-BaseWeakPtr TransactionSack::get_base() const {
-    return base.get_weak_ptr();
+std::vector<Transaction> TransactionHistory::list_transactions(const std::vector<int64_t> & ids) {
+    return select_transactions_by_ids(base, ids);
+}
+
+std::vector<Transaction> TransactionHistory::list_transactions(int64_t start, int64_t end) {
+    return select_transactions_by_range(base, start, end);
+}
+
+std::vector<Transaction> TransactionHistory::list_all_transactions() {
+    return select_transactions_by_ids(base, {});
+}
+
+BaseWeakPtr TransactionHistory::get_base() const {
+    return base;
 }
 
 }  // namespace libdnf::transaction

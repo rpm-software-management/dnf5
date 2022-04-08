@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/plugin/plugins.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/rpm/package_sack.hpp"
-#include "libdnf/transaction/sack.hpp"
+#include "libdnf/transaction/transaction_history.hpp"
 
 #include <map>
 
@@ -82,7 +82,7 @@ public:
     /// modification in configuration, but before repositories are loaded or any Package or Advisory query created.
     void setup();
 
-    transaction::TransactionSackWeakPtr get_transaction_sack() { return transaction_sack.get_weak_ptr(); }
+    transaction::TransactionHistoryWeakPtr get_transaction_history() { return transaction_history.get_weak_ptr(); }
     libdnf::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
     libdnf::module::ModuleItemContainerWeakPtr get_module_item_container() {
         return module_item_container.get_weak_ptr();
@@ -127,13 +127,13 @@ private:
     LogRouter log_router;
     repo::RepoSack repo_sack;
     rpm::PackageSack rpm_package_sack;
-    transaction::TransactionSack transaction_sack{*this};
     comps::Comps comps{*this};
     module::ModuleItemContainer module_item_container{*this};
     plugin::Plugins plugins{*this};
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
     std::map<std::string, std::string> variables;
     std::optional<libdnf::system::State> system_state;
+    transaction::TransactionHistory transaction_history;
     Vars vars;
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;

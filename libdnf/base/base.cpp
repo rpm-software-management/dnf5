@@ -41,6 +41,7 @@ Base::Base()
     : repo_sack(get_weak_ptr()),
       rpm_package_sack(get_weak_ptr()),
       rpm_advisory_sack(get_weak_ptr()),
+      transaction_history(get_weak_ptr()),
       vars(get_weak_ptr()) {}
 
 Base::~Base() = default;

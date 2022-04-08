@@ -44,8 +44,6 @@ HistoryInfoCommand::HistoryInfoCommand(Command & parent) : Command(parent, "info
 void HistoryInfoCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
-    libdnf::transaction::TransactionQuery transaction_query(ctx.base);
-
     auto specs_str = transaction_specs->get_value();
 
     std::vector<int64_t> spec_ids;
@@ -55,12 +53,11 @@ void HistoryInfoCommand::run() {
         return std::stol(spec);
     });
 
-    if (spec_ids.size() > 0) {
-        transaction_query.filter_id(spec_ids, libdnf::sack::QueryCmp::EQ);
-    }
+    auto ts_hist = ctx.base.get_transaction_history();
+    auto ts_list = spec_ids.empty() ? ts_hist->list_all_transactions() : ts_hist->list_transactions(spec_ids);
 
-    for (auto ts : transaction_query) {
-        libdnf::cli::output::print_transaction_info(*ts);
+    for (auto ts : ts_list) {
+        libdnf::cli::output::print_transaction_info(ts);
         std::cout << std::endl;
     }
 }

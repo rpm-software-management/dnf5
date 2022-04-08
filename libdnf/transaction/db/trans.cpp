@@ -20,42 +20,24 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "trans.hpp"
 
+#include "db.hpp"
+
 #include "libdnf/transaction/transaction.hpp"
 
 
 namespace libdnf::transaction {
 
 
-const char * SQL_TRANS_SELECT = R"**(
-    SELECT
-        id,
-        dt_begin,
-        dt_end,
-        rpmdb_version_begin,
-        rpmdb_version_end,
-        releasever,
-        user_id,
-        cmdline,
-        state
-    FROM
-        trans
-    WHERE
-        id = ?
-)**";
+static const std::string select_sql{
+    "SELECT id, dt_begin, dt_end, rpmdb_version_begin, rpmdb_version_end, releasever, user_id, cmdline, state "
+    "FROM trans"};
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Query> trans_select_new_query(libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_TRANS_SELECT);
-    return query;
-}
+static std::vector<Transaction> load_from_select(const BaseWeakPtr & base, libdnf::utils::SQLite3::Query & query) {
+    std::vector<Transaction> res;
 
-
-bool trans_select(libdnf::utils::SQLite3::Query & query, int64_t transaction_id, Transaction & trans) {
-    bool result = false;
-    query.bindv(transaction_id);
-
-    if (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        trans.set_id(query.get<int>("id"));
+    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        auto & trans = res.emplace_back(base, query.get<int>("id"));
         trans.set_dt_start(query.get<int64_t>("dt_begin"));
         trans.set_dt_end(query.get<int64_t>("dt_end"));
         trans.set_rpmdb_version_begin(query.get<std::string>("rpmdb_version_begin"));
@@ -64,11 +46,48 @@ bool trans_select(libdnf::utils::SQLite3::Query & query, int64_t transaction_id,
         trans.set_user_id(query.get<uint32_t>("user_id"));
         trans.set_cmdline(query.get<std::string>("cmdline"));
         trans.set_state(static_cast<TransactionState>(query.get<int>("state")));
-        result = true;
     }
 
-    query.reset();
-    return result;
+    return res;
+}
+
+
+std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, const std::vector<int64_t> & ids) {
+    auto conn = transaction_db_connect(*base);
+
+    std::string sql = select_sql;
+
+    if (!ids.empty()) {
+        sql += " WHERE id IN (";
+        for (size_t i = 0; i < ids.size(); ++i) {
+            if (i == 0) {
+                sql += "?";
+            } else {
+                sql += ", ?";
+            }
+        }
+        sql += ")";
+    }
+
+    auto query = libdnf::utils::SQLite3::Query(*conn, sql.c_str());
+
+    for (size_t i = 0; i < ids.size(); ++i) {
+        query.bind(static_cast<int>(i + 1), ids[i]);
+    }
+
+    return load_from_select(base, query);
+}
+
+
+std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, int64_t start, int64_t end) {
+    auto conn = transaction_db_connect(*base);
+
+    std::string sql = select_sql + " WHERE id >= ? AND id <= ?";
+
+    auto query = libdnf::utils::SQLite3::Query(*conn, sql.c_str());
+    query.bindv(start, end);
+
+    return load_from_select(base, query);
 }
 
 
@@ -143,7 +162,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_update_new_query(libdnf
 }
 
 
-void trans_update(libdnf::utils::SQLite3::Statement & query, const Transaction & trans) {
+void trans_update(libdnf::utils::SQLite3::Statement & query, Transaction & trans) {
     query.bindv(
         // SET key=value
         trans.get_dt_start(),

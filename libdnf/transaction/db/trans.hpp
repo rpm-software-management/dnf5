@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/sqlite3/sqlite3.hpp"
 
+#include "libdnf/base/base_weak.hpp"
+
 #include <memory>
 
 
@@ -33,12 +35,12 @@ namespace libdnf::transaction {
 class Transaction;
 
 
-/// Create a query that returns a record from 'trans' table
-std::unique_ptr<libdnf::utils::SQLite3::Query> trans_select_new_query(libdnf::utils::SQLite3 & conn);
+/// Selects transactions using a list of ids, in case `ids` is empty, selects all transactions.
+std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, const std::vector<int64_t> & ids);
 
 
-/// Use a query to retrieve data from the 'trans' table and store it in a Transaction object
-bool trans_select(libdnf::utils::SQLite3::Query & query, int64_t transaction_id, Transaction & trans);
+/// Selects transactions with ids within the [start, end] range (inclusive).
+std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, int64_t start, int64_t end);
 
 
 /// Create a query for inserting records to the 'trans' table
@@ -54,7 +56,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_update_new_query(libdnf
 
 
 /// Use a query to update a record in the 'trans' table
-void trans_update(libdnf::utils::SQLite3::Statement & query, const Transaction & trans);
+void trans_update(libdnf::utils::SQLite3::Statement & query, Transaction & trans);
 
 
 }  // namespace libdnf::transaction

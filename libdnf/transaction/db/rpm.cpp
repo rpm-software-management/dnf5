@@ -179,13 +179,13 @@ bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package &
 }
 
 
-std::vector<std::unique_ptr<Package>> get_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
-    std::vector<std::unique_ptr<Package>> result;
+std::vector<Package> get_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+    std::vector<Package> result;
 
     auto query = rpm_transaction_item_select_new_query(conn, trans.get_id());
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto trans_item = std::make_unique<Package>(trans);
-        rpm_transaction_item_select(*query, *trans_item);
+        Package trans_item(trans);
+        rpm_transaction_item_select(*query, trans_item);
         result.push_back(std::move(trans_item));
     }
 
@@ -200,14 +200,14 @@ void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & tr
     auto query_trans_item_insert = trans_item_insert_new_query(conn);
 
     for (auto & pkg : trans.get_packages()) {
-        pkg->set_item_id(rpm_select_pk(*query_rpm_select_pk, *pkg));
-        if (pkg->get_item_id() == 0) {
+        pkg.set_item_id(rpm_select_pk(*query_rpm_select_pk, pkg));
+        if (pkg.get_item_id() == 0) {
             // insert into 'item' table, create item_id
-            pkg->set_item_id(item_insert(*query_item_insert));
+            pkg.set_item_id(item_insert(*query_item_insert));
             // insert into 'rpm' table
-            rpm_insert(*query_rpm_insert, *pkg);
+            rpm_insert(*query_rpm_insert, pkg);
         }
-        transaction_item_insert(*query_trans_item_insert, *pkg);
+        transaction_item_insert(*query_trans_item_insert, pkg);
     }
 }
 

@@ -60,9 +60,9 @@ void print_transaction_info(libdnf::transaction::Transaction & transaction) {
     for (auto & pkg : transaction.get_packages()) {
         struct libscols_line * ln = scols_table_new_line(item_list.get(), NULL);
         scols_line_set_data(
-            ln, 0, ("  " + libdnf::transaction::transaction_item_action_to_string(pkg->get_action())).c_str());
-        scols_line_set_data(ln, 1, pkg->to_string().c_str());
-        scols_line_set_data(ln, 2, pkg->get_repoid().c_str());
+            ln, 0, ("  " + libdnf::transaction::transaction_item_action_to_string(pkg.get_action())).c_str());
+        scols_line_set_data(ln, 1, pkg.to_string().c_str());
+        scols_line_set_data(ln, 2, pkg.get_repoid().c_str());
     }
 
     info.print();

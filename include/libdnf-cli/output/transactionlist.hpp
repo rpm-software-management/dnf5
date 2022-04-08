@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::cli::output {
 
-void print_transaction_list(const libdnf::Set<libdnf::transaction::TransactionWeakPtr> & ts_list);
+void print_transaction_list(std::vector<libdnf::transaction::Transaction> & ts_list);
 
 }  // namespace libdnf::cli::output
 

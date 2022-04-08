@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::cli::output {
 
-void print_transaction_list(const libdnf::Set<libdnf::transaction::TransactionWeakPtr> & ts_list) {
+void print_transaction_list(std::vector<libdnf::transaction::Transaction> & ts_list) {
     std::unique_ptr<libscols_table, decltype(&scols_unref_table)> table(scols_new_table(), &scols_unref_table);
 
     scols_table_new_column(table.get(), "ID", 0, SCOLS_FL_RIGHT);
@@ -44,15 +44,15 @@ void print_transaction_list(const libdnf::Set<libdnf::transaction::TransactionWe
 
     for (auto & ts : ts_list) {
         struct libscols_line * ln = scols_table_new_line(table.get(), NULL);
-        scols_line_set_data(ln, 0, std::to_string(ts->get_id()).c_str());
-        scols_line_set_data(ln, 1, ts->get_cmdline().c_str());
+        scols_line_set_data(ln, 0, std::to_string(ts.get_id()).c_str());
+        scols_line_set_data(ln, 1, ts.get_cmdline().c_str());
         scols_line_set_data(
             ln,
             2,
-            libdnf::utils::sformat("{:%F %X}", std::chrono::system_clock::from_time_t(ts->get_dt_start())).c_str());
+            libdnf::utils::sformat("{:%F %X}", std::chrono::system_clock::from_time_t(ts.get_dt_start())).c_str());
         // TODO(lukash) fill the Actions(s), if we even want them?
         scols_line_set_data(ln, 3, "");
-        scols_line_set_data(ln, 4, std::to_string(ts->get_packages().size()).c_str());
+        scols_line_set_data(ln, 4, std::to_string(ts.get_packages().size()).c_str());
     }
 
     scols_print_table(table.get());

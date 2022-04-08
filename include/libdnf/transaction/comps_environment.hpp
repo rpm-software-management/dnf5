@@ -87,7 +87,7 @@ public:
     /// Get list of groups associated with the environment.
     ///
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentItem.getGroups()
-    const std::vector<std::unique_ptr<CompsEnvironmentGroup>> & get_groups() { return groups; }
+    std::vector<CompsEnvironmentGroup> & get_groups() { return groups; }
 
     // TODO(dmach): rewrite into TransactionSack.list_installed_environments(); how to deal with references to different transactions? We don't want all of them loaded into memory.
     //static std::vector< TransactionItemPtr > getTransactionItemsByPattern(
@@ -106,13 +106,15 @@ private:
     std::string name;
     std::string translated_name;
     CompsPackageType package_types = CompsPackageType::DEFAULT;
-    std::vector<std::unique_ptr<CompsEnvironmentGroup>> groups;
+    std::vector<CompsEnvironmentGroup> groups;
 };
 
 
 /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:class:CompsEnvironmentGroup
 class CompsEnvironmentGroup {
 public:
+    explicit CompsEnvironmentGroup(CompsEnvironment & environment);
+
     /// Get database id (primary key)
     ///
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentGroup.getId()
@@ -158,11 +160,7 @@ public:
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentGroup.getEnvironment()
     const CompsEnvironment & get_environment() const noexcept { return environment; }
 
-protected:
-    explicit CompsEnvironmentGroup(CompsEnvironment & environment);
-
 private:
-    friend class CompsEnvironment;
     int64_t id = 0;
     std::string group_id;
     bool installed = false;

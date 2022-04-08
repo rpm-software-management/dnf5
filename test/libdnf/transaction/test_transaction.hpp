@@ -35,6 +35,9 @@ class TransactionTest : public TransactionTestBase {
     CPPUNIT_TEST(test_second_start_raises);
     CPPUNIT_TEST(test_update);
     CPPUNIT_TEST(test_compare);
+    CPPUNIT_TEST(test_select_all);
+    CPPUNIT_TEST(test_select_multiple);
+    CPPUNIT_TEST(test_select_range);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -43,6 +46,9 @@ public:
     void test_second_start_raises();
     void test_update();
     void test_compare();
+    void test_select_all();
+    void test_select_multiple();
+    void test_select_range();
 };
 
 

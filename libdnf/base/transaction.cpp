@@ -419,36 +419,35 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     }
 
     // start history db transaction
-    auto transaction_sack = base->get_transaction_sack();
-    auto db_transaction = transaction_sack->new_transaction();
+    auto db_transaction = base->get_transaction_history()->new_transaction();
     // save history db transaction id
-    history_db_id = db_transaction->get_id();
+    history_db_id = db_transaction.get_id();
 
     auto vars = base->get_vars();
     if (vars->contains("releasever")) {
-        db_transaction->set_releasever(vars->get_value("releasever"));
+        db_transaction.set_releasever(vars->get_value("releasever"));
     }
 
     if (comment) {
-        db_transaction->set_comment(comment.value());
+        db_transaction.set_comment(comment.value());
     }
 
-    db_transaction->set_cmdline(description);
+    db_transaction.set_cmdline(description);
 
     if (user_id) {
-        db_transaction->set_user_id(user_id.value());
+        db_transaction.set_user_id(user_id.value());
     } else {
-        db_transaction->set_user_id(get_login_uid());
+        db_transaction.set_user_id(get_login_uid());
     }
     //
     // TODO(jrohel): nevra of running dnf5?
-    //db_transaction->add_runtime_package("dnf5");
+    //db_transaction.add_runtime_package("dnf5");
 
-    db_transaction->set_rpmdb_version_begin(rpm_transaction.get_db_cookie());
-    db_transaction->fill_transaction_packages(packages);
+    db_transaction.set_rpmdb_version_begin(rpm_transaction.get_db_cookie());
+    db_transaction.fill_transaction_packages(packages);
     auto time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction->set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
-    db_transaction->start();
+    db_transaction.set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction.start();
 
     // execute rpm transaction
     //TODO(jrohel): Send scriptlet output to better place
@@ -470,11 +469,11 @@ Transaction::TransactionRunResult Transaction::Impl::run(
 
     // finish history db transaction
     time = std::chrono::system_clock::now().time_since_epoch();
-    db_transaction->set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
+    db_transaction.set_dt_end(std::chrono::duration_cast<std::chrono::seconds>(time).count());
     // TODO(jrohel): Also save the rpm db cookie to system state.
     //               Possibility to detect rpm database change without the need for a history database.
-    db_transaction->set_rpmdb_version_end(rpm_transaction.get_db_cookie());
-    db_transaction->finish(
+    db_transaction.set_rpmdb_version_end(rpm_transaction.get_db_cookie());
+    db_transaction.finish(
         ret == 0 ? libdnf::transaction::TransactionState::DONE : libdnf::transaction::TransactionState::ERROR);
 
     if (ret == 0) {

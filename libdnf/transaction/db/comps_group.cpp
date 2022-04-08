@@ -66,23 +66,22 @@ std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_transaction_item_sele
 }
 
 
-std::vector<std::unique_ptr<CompsGroup>> get_transaction_comps_groups(
-    libdnf::utils::SQLite3 & conn, Transaction & trans) {
-    std::vector<std::unique_ptr<CompsGroup>> result;
+std::vector<CompsGroup> get_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+    std::vector<CompsGroup> result;
 
     auto query = comps_group_transaction_item_select_new_query(conn, trans.get_id());
 
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto ti = std::make_unique<CompsGroup>(trans);
-        transaction_item_select(*query, *ti);
+        CompsGroup ti(trans);
+        transaction_item_select(*query, ti);
         //        auto trans_item = std::make_shared< TransactionItem >(trans);
         //        auto item = std::make_shared< CompsGroup >(trans);
         //        trans_item->setItem(item);
-        ti->set_group_id(query->get<std::string>("groupid"));
-        ti->set_name(query->get<std::string>("name"));
-        ti->set_translated_name(query->get<std::string>("translated_name"));
-        ti->set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
-        comps_group_packages_select(conn, *ti);
+        ti.set_group_id(query->get<std::string>("groupid"));
+        ti.set_name(query->get<std::string>("name"));
+        ti.set_translated_name(query->get<std::string>("translated_name"));
+        ti.set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
+        comps_group_packages_select(conn, ti);
         result.push_back(std::move(ti));
     }
 
@@ -133,9 +132,9 @@ void insert_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction 
     auto query_trans_item_insert = trans_item_insert_new_query(conn);
 
     for (auto & grp : trans.get_comps_groups()) {
-        comps_group_insert(*query_comps_group_insert, *grp);
-        transaction_item_insert(*query_trans_item_insert, *grp);
-        comps_group_packages_insert(conn, *grp);
+        comps_group_insert(*query_comps_group_insert, grp);
+        transaction_item_insert(*query_trans_item_insert, grp);
+        comps_group_packages_insert(conn, grp);
     }
 }
 

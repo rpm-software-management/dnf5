@@ -31,12 +31,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class TransactionQueryTest : public TransactionTestBase {
     CPPUNIT_TEST_SUITE(TransactionQueryTest);
     CPPUNIT_TEST(test_filter_id_eq);
-    CPPUNIT_TEST(test_filter_id_eq_parallel_queries);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_filter_id_eq();
-    void test_filter_id_eq_parallel_queries();
 };
 
 

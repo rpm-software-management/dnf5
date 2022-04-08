@@ -26,9 +26,7 @@
     #include "libdnf/transaction/comps_environment.hpp"
     #include "libdnf/transaction/rpm_package.hpp"
 
-    // sack and query
-    #include "libdnf/transaction/query.hpp"
-    #include "libdnf/transaction/sack.hpp"
+    #include "libdnf/transaction/transaction_history.hpp"
 
     // transaction
     #include "libdnf/transaction/transaction.hpp"
@@ -47,10 +45,8 @@
 %include "libdnf/transaction/comps_environment.hpp"
 %include "libdnf/transaction/rpm_package.hpp"
 
-// sack and query
-%include "libdnf/transaction/query.hpp"
-%include "libdnf/transaction/sack.hpp"
-%template(TransactionSackWeakPtr) libdnf::WeakPtr<libdnf::transaction::TransactionSack, false>;
+%include "libdnf/transaction/transaction_history.hpp"
+%template(TransactionHistoryWeakPtr) libdnf::WeakPtr<libdnf::transaction::TransactionHistory, false>;
 
 // transaction
 %include "libdnf/transaction/transaction.hpp"

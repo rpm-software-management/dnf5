@@ -74,11 +74,7 @@ CompsEnvironmentGroup::CompsEnvironmentGroup(CompsEnvironment & environment) : e
 
 
 CompsEnvironmentGroup & CompsEnvironment::new_group() {
-    auto grp = new CompsEnvironmentGroup(*this);
-    auto grp_ptr = std::unique_ptr<CompsEnvironmentGroup>(grp);
-    // TODO(dmach): following lines are not thread-safe
-    groups.push_back(std::move(grp_ptr));
-    return *groups.back();
+    return groups.emplace_back(*this);
 }
 
 
