@@ -36,10 +36,6 @@ class TransactionSack;
 
 using TransactionSackWeakPtr = libdnf::WeakPtr<TransactionSack, false>;
 
-/// Weak pointer to Transaction. TransactionWeakPtr does not own it (ptr_owner = false).
-/// Transaction objects are owned by TransactionSack.
-using TransactionWeakPtr = libdnf::WeakPtr<Transaction, false>;
-
 class TransactionQuery : public libdnf::sack::Query<TransactionWeakPtr> {
 public:
     using libdnf::sack::Query<TransactionWeakPtr>::Query;

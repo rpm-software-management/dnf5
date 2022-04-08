@@ -32,11 +32,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
-/// Weak pointer to Transaction. It doesn't own the object (ptr_owner = false).
-/// Transactions are owned by TransactionSack.
-using TransactionWeakPtr = libdnf::WeakPtr<Transaction, false>;
-
-
 using TransactionSackWeakPtr = libdnf::WeakPtr<TransactionSack, false>;
 
 
@@ -49,7 +44,7 @@ public:
 
     /// Create a new Transaction object, store it in the sack and return a weak pointer to it.
     /// The Transaction object is owned by the TransactionSack.
-    TransactionWeakPtr new_transaction();
+    libdnf::transaction::TransactionWeakPtr new_transaction();
 
     using libdnf::sack::Sack<Transaction>::get_data;
 

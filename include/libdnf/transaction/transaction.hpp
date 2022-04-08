@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 class Transaction;
-typedef std::shared_ptr<Transaction> TransactionPtr;
+using TransactionWeakPtr = libdnf::WeakPtr<Transaction, false>;
 
 }  // namespace libdnf::transaction
 
