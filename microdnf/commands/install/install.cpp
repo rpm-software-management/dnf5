@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "microdnf/context.hpp"
 
+#include "libdnf-cli/exception.hpp"
 #include "libdnf-cli/output/transaction_table.hpp"
 
 #include <libdnf/base/goal.hpp>
@@ -86,7 +87,7 @@ void InstallCommand::run() {
 
     auto transaction = goal.resolve(false);
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
-        return;
+        throw GoalResolveError(transaction);
     }
 
     if (!libdnf::cli::output::print_transaction_table(transaction)) {
@@ -94,8 +95,7 @@ void InstallCommand::run() {
     }
 
     if (!userconfirm(ctx.base.get_config())) {
-        std::cout << "Operation aborted." << std::endl;
-        return;
+        throw AbortedByUserError();
     }
 
     ctx.download_and_run(transaction);

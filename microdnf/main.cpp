@@ -48,6 +48,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fcntl.h>
 #include <fmt/format.h>
+#include <libdnf-cli/exception.hpp>
 #include <libdnf-cli/exit-codes.hpp>
 #include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
@@ -728,6 +729,9 @@ int main(int argc, char * argv[]) try {
     } catch (libdnf::cli::ArgumentParserError & ex) {
         std::cout << ex.what() << std::endl;
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+    } catch (libdnf::cli::CommandExitError & ex) {
+        std::cout << ex.what() << std::endl;
+        return ex.get_exit_code();
     } catch (std::exception & ex) {
         std::cout << ex.what() << std::endl;
         log_router.error(fmt::format("Command returned error: {}", ex.what()));

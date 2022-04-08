@@ -93,7 +93,7 @@ void SwapCommand::run() {
 
     auto transaction = goal.resolve(false);
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
-        return;
+        throw GoalResolveError(transaction);
     }
 
     if (!libdnf::cli::output::print_transaction_table(transaction)) {
@@ -101,8 +101,7 @@ void SwapCommand::run() {
     }
 
     if (!userconfirm(ctx.base.get_config())) {
-        std::cout << "Operation aborted." << std::endl;
-        return;
+        throw AbortedByUserError();
     }
 
     ctx.download_and_run(transaction);
