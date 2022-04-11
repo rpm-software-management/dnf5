@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/group/group.hpp"
 #include "commands/history/history.hpp"
 #include "commands/install/install.hpp"
+#include "commands/makecache/makecache.hpp"
 #include "commands/module/module.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
@@ -110,6 +111,7 @@ inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Comma
     register_subcommand(std::make_unique<AdvisoryCommand>(*this), subcommands_group);
 
     register_subcommand(std::make_unique<DownloadCommand>(*this));
+    register_subcommand(std::make_unique<MakeCacheCommand>(*this));
 
     // aliases
     auto * aliases_group = session.get_argument_parser().add_new_group("aliases");
