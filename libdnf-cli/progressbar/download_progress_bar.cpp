@@ -51,7 +51,7 @@ DownloadProgressBar::DownloadProgressBar(int64_t download_size, const std::strin
 }
 
 
-static std::size_t get_bar_width(std::vector<Widget *> widgets) {
+static std::size_t get_bar_width(const std::vector<Widget *> & widgets) {
     std::size_t result = 0;
     for (Widget * widget : widgets) {
         result += widget->get_total_width();
