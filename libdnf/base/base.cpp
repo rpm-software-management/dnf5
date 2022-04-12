@@ -107,9 +107,13 @@ void Base::setup() {
     pool.reset(new libdnf::solv::Pool);
     auto & config = get_config();
     auto & installroot = config.installroot();
-    get_vars()->load(installroot.get_value(), config.varsdir().get_value());
-    system_state.emplace(installroot.get_value());
     installroot.lock("Locked by Base::setup()");
+
+    get_vars()->load(installroot.get_value(), config.varsdir().get_value());
+
+    std::filesystem::path system_state_dir{config.system_state_dir().get_value()};
+    system_state.emplace(installroot.get_value() / system_state_dir.relative_path());
+
     config.varsdir().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
     // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be sinchronized with Pool

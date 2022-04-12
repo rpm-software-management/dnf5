@@ -26,8 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::system {
 
-State::State(const std::filesystem::path & installroot, const std::filesystem::path & dir_path)
-    : path(installroot / dir_path) {
+State::State(const std::filesystem::path & path) : path(path) {
     load();
 }
 

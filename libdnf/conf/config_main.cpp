@@ -168,6 +168,8 @@ class ConfigMain::Impl {
     OptionStringList pluginpath{std::vector<std::string>{}};
     OptionStringList pluginconfpath{std::vector<std::string>{}};
     OptionPath persistdir{PERSISTDIR};
+    OptionPath system_state_dir{SYSTEM_STATE_DIR};
+    OptionPath transaction_history_dir{SYSTEM_STATE_DIR};
     OptionBool transformdb{true};
     OptionNumber<std::int32_t> recent{7, 0};
     OptionBool reset_nice{true};
@@ -359,6 +361,20 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("pluginpath", pluginpath);
     owner.opt_binds().add("pluginconfpath", pluginconfpath);
     owner.opt_binds().add("persistdir", persistdir);
+
+    // Unless transaction_history_dir has been explicitly set, use the system_state_dir as its default
+    owner.opt_binds().add(
+        "system_state_dir",
+        system_state_dir,
+        [&](Option::Priority priority, const std::string & value) {
+            system_state_dir.set(priority, value);
+            transaction_history_dir.set(Option::Priority::DEFAULT, value);
+        },
+        nullptr,
+        false);
+
+    owner.opt_binds().add("transaction_history_dir", transaction_history_dir);
+
     owner.opt_binds().add("transformdb", transformdb);
     owner.opt_binds().add("recent", recent);
     owner.opt_binds().add("reset_nice", reset_nice);
@@ -577,6 +593,23 @@ OptionPath & ConfigMain::persistdir() {
 const OptionPath & ConfigMain::persistdir() const {
     return p_impl->persistdir;
 }
+
+OptionPath & ConfigMain::system_state_dir() {
+    return p_impl->system_state_dir;
+}
+
+const OptionPath & ConfigMain::system_state_dir() const {
+    return p_impl->system_state_dir;
+}
+
+OptionPath & ConfigMain::transaction_history_dir() {
+    return p_impl->transaction_history_dir;
+}
+
+const OptionPath & ConfigMain::transaction_history_dir() const {
+    return p_impl->transaction_history_dir;
+}
+
 
 OptionBool & ConfigMain::transformdb() {
     return p_impl->transformdb;

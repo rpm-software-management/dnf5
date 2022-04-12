@@ -49,7 +49,7 @@ void StateTest::tearDown() {
 }
 
 void StateTest::test_state_read() {
-    libdnf::system::State state("/", temp_dir->get_path());
+    libdnf::system::State state(temp_dir->get_path());
 
     CPPUNIT_ASSERT_EQUAL(libdnf::transaction::TransactionItemReason::USER, state.get_reason("pkg.x86_64"));
     CPPUNIT_ASSERT_EQUAL(libdnf::transaction::TransactionItemReason::DEPENDENCY, state.get_reason("pkg-libs.x86_64"));
@@ -57,7 +57,7 @@ void StateTest::test_state_read() {
 
 void StateTest::test_state_write() {
     const auto path = temp_dir->get_path() / "write_test";
-    libdnf::system::State state("/", path);
+    libdnf::system::State state(path);
 
     state.set_reason("pkg.x86_64", libdnf::transaction::TransactionItemReason::USER);
     state.set_reason("pkg-libs.x86_64", libdnf::transaction::TransactionItemReason::USER);

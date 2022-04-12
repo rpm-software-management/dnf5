@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 void TransactionTestBase::setUp() {
-    persistdir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
+    temp_dir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
 }
 
 
@@ -31,6 +31,6 @@ void TransactionTestBase::tearDown() {}
 
 std::unique_ptr<libdnf::Base> TransactionTestBase::new_base() {
     auto new_base = std::make_unique<libdnf::Base>();
-    new_base->get_config().persistdir().set(libdnf::Option::Priority::RUNTIME, persistdir->get_path());
+    new_base->get_config().transaction_history_dir().set(libdnf::Option::Priority::RUNTIME, temp_dir->get_path());
     return new_base;
 }

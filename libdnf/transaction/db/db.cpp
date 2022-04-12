@@ -76,19 +76,14 @@ void transaction_db_create(libdnf::utils::SQLite3 & conn) {
 
 
 std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & base) {
-    std::string db_path;
-
-    // use db_path based on persistdir
     auto & config = base.get_config();
     config.installroot().lock("installroot locked by transaction_db_connect");
-    std::filesystem::path path(config.installroot().get_value());
-    std::filesystem::path persistdir(config.persistdir().get_value());
-    path /= persistdir.relative_path();
-    std::filesystem::create_directories(path);
-    path /= "history.sqlite";
-    db_path = path.native();
 
-    auto conn = std::make_unique<libdnf::utils::SQLite3>(db_path);
+    std::filesystem::path path{config.installroot().get_value()};
+    path /= std::filesystem::path(config.transaction_history_dir().get_value()).relative_path();
+    std::filesystem::create_directories(path);
+
+    auto conn = std::make_unique<libdnf::utils::SQLite3>((path / "transaction_history.sqlite").native());
     transaction_db_create(*conn);
     return conn;
 }

@@ -39,7 +39,7 @@ public:
 
 protected:
     std::unique_ptr<libdnf::Base> new_base();
-    std::unique_ptr<libdnf::utils::fs::TempDir> persistdir;
+    std::unique_ptr<libdnf::utils::fs::TempDir> temp_dir;
 };
 
 

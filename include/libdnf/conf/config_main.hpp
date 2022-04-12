@@ -58,6 +58,10 @@ public:
     const OptionStringList & pluginconfpath() const;
     OptionPath & persistdir();
     const OptionPath & persistdir() const;
+    OptionPath & system_state_dir();
+    const OptionPath & system_state_dir() const;
+    OptionPath & transaction_history_dir();
+    const OptionPath & transaction_history_dir() const;
     OptionBool & transformdb();
     const OptionBool & transformdb() const;
     OptionNumber<std::int32_t> & recent();
