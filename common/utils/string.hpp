@@ -87,6 +87,13 @@ std::vector<std::string> rsplit(const std::string & str, const std::string & del
 std::vector<std::string> split(
     const std::string & str, const std::string & delimiter, std::size_t limit = std::string::npos);
 
+
+inline std::string tolower(const std::string & s) {
+    std::string result = s;
+    std::for_each(result.begin(), result.end(), [](char & c) { c = static_cast<char>(::tolower(c)); });
+    return result;
+}
+
 }  // namespace libdnf::utils::string
 
 #endif  // LIBDNF_UTILS_STRING_HPP

@@ -33,13 +33,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::sack {
 
 
-inline std::string tolower(const std::string & s) {
-    std::string result = s;
-    std::for_each(result.begin(), result.end(), [](char & c) { c = static_cast<char>(::tolower(c)); });
-    return result;
-}
-
-
 bool match_string(const std::string & value, QueryCmp cmp, const std::string & pattern) {
     bool result = false;
 
@@ -48,7 +41,7 @@ bool match_string(const std::string & value, QueryCmp cmp, const std::string & p
             result = value == pattern;
             break;
         case QueryCmp::IEXACT:
-            result = tolower(value) == tolower(pattern);
+            result = libdnf::utils::string::tolower(value) == libdnf::utils::string::tolower(pattern);
             break;
         case QueryCmp::GLOB:
             result = fnmatch(pattern.c_str(), value.c_str(), FNM_EXTMATCH) == 0;
@@ -66,19 +59,22 @@ bool match_string(const std::string & value, QueryCmp cmp, const std::string & p
             result = value.find(pattern) != std::string::npos;
             break;
         case QueryCmp::ICONTAINS:
-            result = tolower(value).find(tolower(pattern)) != std::string::npos;
+            result = libdnf::utils::string::tolower(value).find(libdnf::utils::string::tolower(pattern)) !=
+                     std::string::npos;
             break;
         case QueryCmp::STARTSWITH:
             result = libdnf::utils::string::starts_with(value, pattern);
             break;
         case QueryCmp::ISTARTSWITH:
-            result = libdnf::utils::string::starts_with(tolower(value), tolower(pattern));
+            result = libdnf::utils::string::starts_with(
+                libdnf::utils::string::tolower(value), libdnf::utils::string::tolower(pattern));
             break;
         case QueryCmp::ENDSWITH:
             result = libdnf::utils::string::ends_with(value, pattern);
             break;
         case QueryCmp::IENDSWITH:
-            result = libdnf::utils::string::ends_with(tolower(value), tolower(pattern));
+            result = libdnf::utils::string::ends_with(
+                libdnf::utils::string::tolower(value), libdnf::utils::string::tolower(pattern));
             break;
         default:
             libdnf_assert(cmp - QueryCmp::NOT - QueryCmp::ICASE, "NOT and ICASE modifiers cannot be used standalone");
