@@ -37,7 +37,7 @@ void TransactionWorkflowTest::test_default_workflow() {
 
     // create an empty Transaction object
     auto trans = base->get_transaction_history()->new_transaction();
-    CPPUNIT_ASSERT_EQUAL(TransactionState::UNKNOWN, trans.get_state());
+    CPPUNIT_ASSERT_EQUAL(TransactionState::STARTED, trans.get_state());
 
     // set packages used to perform the transaction
     trans.add_runtime_package("dnf-3.5.1-1.fc29.noarch");
@@ -146,6 +146,6 @@ void TransactionWorkflowTest::test_default_workflow() {
     }
 
     // finish transaction
-    trans.finish(TransactionState::DONE);
-    CPPUNIT_ASSERT_EQUAL(TransactionState::DONE, trans.get_state());
+    trans.finish(TransactionState::OK);
+    CPPUNIT_ASSERT_EQUAL(TransactionState::OK, trans.get_state());
 }

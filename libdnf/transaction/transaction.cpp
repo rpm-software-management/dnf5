@@ -38,18 +38,34 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
-
 std::string transaction_state_to_string(TransactionState state) {
     switch (state) {
-        case TransactionState::UNKNOWN:
-            return "unknown";
-        case TransactionState::DONE:
-            return "done";
+        case TransactionState::STARTED:
+            return "Started";
+        case TransactionState::OK:
+            return "Ok";
         case TransactionState::ERROR:
-            return "error";
+            return "Error";
     }
     return "";
 }
+
+
+TransactionState transaction_state_from_string(const std::string & state) {
+    if (state == "Started") {
+        return TransactionState::STARTED;
+    } else if (state == "Ok") {
+        return TransactionState::OK;
+    } else if (state == "Error") {
+        return TransactionState::ERROR;
+    }
+
+    throw InvalidTransactionState(state);
+}
+
+
+InvalidTransactionState::InvalidTransactionState(const std::string & state)
+    : libdnf::Error(M_("Invalid transaction state: {}"), state) {}
 
 
 Transaction::Transaction(const BaseWeakPtr & base, int64_t id) : id(id), base(base) {}

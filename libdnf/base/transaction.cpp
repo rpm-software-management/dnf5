@@ -479,7 +479,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     //               Possibility to detect rpm database change without the need for a history database.
     db_transaction.set_rpmdb_version_end(rpm_transaction.get_db_cookie());
     db_transaction.finish(
-        ret == 0 ? libdnf::transaction::TransactionState::DONE : libdnf::transaction::TransactionState::ERROR);
+        ret == 0 ? libdnf::transaction::TransactionState::OK : libdnf::transaction::TransactionState::ERROR);
 
     if (ret == 0) {
         return TransactionRunResult::SUCCESS;

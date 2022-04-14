@@ -1,14 +1,20 @@
 R"**(
+    CREATE TABLE trans_state (
+        id INTEGER PRIMARY KEY,
+        name TEXT
+    );
+    INSERT INTO trans_state VALUES (1, "Started"), (2, "Ok"), (3, "Error");
+
     CREATE TABLE trans (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
-        dt_begin INTEGER NOT NULL,      /* (unix timestamp) date and time of transaction begin */
-        dt_end INTEGER,                 /* (unix timestamp) date and time of transaction end */
+        dt_begin INTEGER NOT NULL,                      /* (unix timestamp) date and time of transaction begin */
+        dt_end INTEGER,                                 /* (unix timestamp) date and time of transaction end */
         rpmdb_version_begin TEXT,
         rpmdb_version_end TEXT,
-        releasever TEXT NOT NULL,       /* var: $releasever */
-        user_id INTEGER NOT NULL,       /* user ID (UID) */
-        cmdline TEXT,                   /* recorded command line (program, options, arguments) */
-        state INTEGER NOT NULL          /* (enum) */
+        releasever TEXT NOT NULL,                       /* var: $releasever */
+        user_id INTEGER NOT NULL,                       /* user ID (UID) */
+        cmdline TEXT,                                   /* recorded command line (program, options, arguments) */
+        state_id INTEGER REFERENCES trans_state(id)     /* (enum) */
     );
     CREATE TABLE repo (
         id INTEGER PRIMARY KEY,

@@ -73,7 +73,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
 
     // save the transaction with all transaction items to the database
     trans.start();
-    trans.finish(TransactionState::DONE);
+    trans.finish(TransactionState::OK);
 
     // create a new Base to force reading the transaction from disk
     auto base2 = new_base();

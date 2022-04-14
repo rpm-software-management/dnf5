@@ -39,7 +39,7 @@ void TransactionQueryTest::test_filter_id_eq() {
 
     // save the transaction
     trans.start();
-    trans.finish(TransactionState::DONE);
+    trans.finish(TransactionState::OK);
 
     // create a new Base to force reading the transaction from disk
     auto base2 = new_base();

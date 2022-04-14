@@ -56,7 +56,7 @@ void TransactionTest::test_save_load() {
 
     auto trans = create_transaction(*base, 1);
     trans.start();
-    trans.finish(TransactionState::DONE);
+    trans.finish(TransactionState::OK);
 
     // load the saved transaction from database and compare values
     auto base2 = new_base();
@@ -112,7 +112,7 @@ void TransactionTest::test_update() {
     trans.set_user_id(10002);
     trans.set_cmdline("dnf install foo_2");
     trans.set_state(TransactionState::ERROR);
-    trans.finish(TransactionState::DONE);
+    trans.finish(TransactionState::OK);
 
     // load the transction from the database
     auto base2 = new_base();
@@ -167,15 +167,15 @@ void TransactionTest::test_select_all() {
 
     auto trans1 = create_transaction(*base, 1);
     trans1.start();
-    trans1.finish(TransactionState::DONE);
+    trans1.finish(TransactionState::OK);
 
     auto trans2 = create_transaction(*base, 2);
     trans2.start();
-    trans2.finish(TransactionState::DONE);
+    trans2.finish(TransactionState::OK);
 
     auto trans3 = create_transaction(*base, 3);
     trans3.start();
-    trans3.finish(TransactionState::DONE);
+    trans3.finish(TransactionState::OK);
 
     // load the saved transaction from database and compare values
     auto ts_list = base->get_transaction_history()->list_all_transactions();
@@ -227,15 +227,15 @@ void TransactionTest::test_select_multiple() {
 
     auto trans1 = create_transaction(*base, 1);
     trans1.start();
-    trans1.finish(TransactionState::DONE);
+    trans1.finish(TransactionState::OK);
 
     auto trans2 = create_transaction(*base, 2);
     trans2.start();
-    trans2.finish(TransactionState::DONE);
+    trans2.finish(TransactionState::OK);
 
     auto trans3 = create_transaction(*base, 3);
     trans3.start();
-    trans3.finish(TransactionState::DONE);
+    trans3.finish(TransactionState::OK);
 
     // load the saved transaction from database and compare values
     auto ts_list = base->get_transaction_history()->list_transactions({1, 3});
@@ -274,15 +274,15 @@ void TransactionTest::test_select_range() {
 
     auto trans1 = create_transaction(*base, 1);
     trans1.start();
-    trans1.finish(TransactionState::DONE);
+    trans1.finish(TransactionState::OK);
 
     auto trans2 = create_transaction(*base, 2);
     trans2.start();
-    trans2.finish(TransactionState::DONE);
+    trans2.finish(TransactionState::OK);
 
     auto trans3 = create_transaction(*base, 3);
     trans3.start();
-    trans3.finish(TransactionState::DONE);
+    trans3.finish(TransactionState::OK);
 
     // load the saved transaction from database and compare values
     auto ts_list = base->get_transaction_history()->list_transactions(1, 2);

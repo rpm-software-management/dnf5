@@ -47,9 +47,18 @@ class Transformer;
 
 
 /// @replaces libdnf:transaction/Types.hpp:enum:TransactionState
-enum class TransactionState : int { UNKNOWN = 0, DONE = 1, ERROR = 2 };
+enum class TransactionState : int { STARTED = 1, OK = 2, ERROR = 3 };
 
 std::string transaction_state_to_string(TransactionState state);
+TransactionState transaction_state_from_string(const std::string & state);
+
+class InvalidTransactionState : public libdnf::Error {
+public:
+    InvalidTransactionState(const std::string & state);
+
+    const char * get_domain_name() const noexcept override { return "libdnf::transaction"; }
+    const char * get_name() const noexcept override { return "InvalidTransactionState"; }
+};
 
 
 /// Transaction holds information about a transaction.
@@ -267,7 +276,7 @@ private:
     std::string cmdline;
     // TODO(dmach): backport comment support from dnf-4-master
     std::string comment;
-    State state = State::UNKNOWN;
+    State state = State::STARTED;
 
     std::optional<std::set<std::string>> runtime_packages;
     std::optional<std::vector<std::pair<int, std::string>>> console_output;
