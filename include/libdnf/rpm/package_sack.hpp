@@ -88,7 +88,12 @@ public:
     /// Returns number of solvables in pool.
     int get_nsolvables() const noexcept;
 
-    void setup_excludes_includes(bool only_main = false);
+    /// Loads excluded and included package sets from the configuration.
+    /// Uses the `disable_excludes`, `excludepkgs`, and `includepkgs` configuration options for calculation.
+    /// @param only_main If `true`, the repository specific configurations are not used.
+    /// @since 5.0
+    // TODO(mblaha): do we have a use case for only_main=true? Is the parameter needed?
+    void load_config_excludes_includes(bool only_main = false);
 
 private:
     friend libdnf::Goal;

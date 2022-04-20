@@ -264,7 +264,7 @@ std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(
         }
 
         if (!added_packages.empty()) {
-            base.get_rpm_package_sack()->setup_excludes_includes();
+            base.get_rpm_package_sack()->load_config_excludes_includes();
         }
     }
 
@@ -772,7 +772,7 @@ std::vector<std::string> match_specs(
     if (installed) {
         try {
             base.get_repo_sack()->get_system_repo()->load();
-            base.get_rpm_package_sack()->setup_excludes_includes();
+            base.get_rpm_package_sack()->load_config_excludes_includes();
         } catch (...) {
             // Ignores errors when completing installed packages, other completions may still work.
         }

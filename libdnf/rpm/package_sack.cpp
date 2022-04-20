@@ -89,7 +89,7 @@ void PackageSack::Impl::make_provides_ready() {
     get_pool(base).swap_considered_map(original_considered_map);
 }
 
-void PackageSack::Impl::setup_excludes_includes(bool only_main) {
+void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
     considered_uptodate = false;
 
     const auto & main_config = base->get_config();
@@ -164,7 +164,7 @@ void PackageSack::Impl::setup_excludes_includes(bool only_main) {
         }
 
         if (!main_config.includepkgs().get_value().empty()) {
-            // enable the use of `pkg_includes` for all repositories
+            // enable the use of includes for all repositories
             for (const auto & repo : base->get_repo_sack()->get_data()) {
                 repo->set_use_includes(true);
             }
@@ -173,23 +173,25 @@ void PackageSack::Impl::setup_excludes_includes(bool only_main) {
     }
 
     if (includes_used) {
-        pkg_includes.reset(new libdnf::solv::SolvMap(0));
+        config_includes.reset(new libdnf::solv::SolvMap(0));
         if (includes_exist) {
-            *pkg_includes = *includes.p_impl;
+            *config_includes = *includes.p_impl;
         }
     } else {
-        pkg_includes.reset();
+        config_includes.reset();
     }
 
     if (excludes_exist) {
-        pkg_excludes.reset(new libdnf::solv::SolvMap(0));
-        *pkg_excludes = *excludes.p_impl;
+        config_excludes.reset(new libdnf::solv::SolvMap(0));
+        *config_excludes = *excludes.p_impl;
     }
 }
 
 std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(libdnf::sack::ExcludeFlags flags) const {
-    if ((static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES) ||
-         (!pkg_excludes && !pkg_includes)) &&
+    if ((static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES) ||
+         (!config_excludes && !config_includes)) &&
+        (static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES) ||
+         (!user_excludes && !user_includes)) &&
         (static_cast<bool>(flags & libdnf::sack::ExcludeFlags::USE_DISABLED_REPOSITORIES) || !repo_excludes) &&
         (static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) || !module_excludes)) {
         return {};
@@ -199,8 +201,8 @@ std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(l
 
     libdnf::solv::SolvMap considered(pool.get_nsolvables());
 
-    // considered = (all - module_excludes - repo_excludes - pkg_excludes) and
-    //              (pkg_includes + all_from_repos_not_using_includes)
+    // considered = (all - module_excludes - repo_excludes - config_excludes - user_excludes) and
+    //              (config_includes + user_includes + all_from_repos_not_using_includes)
     considered.set_all();
 
     if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_MODULAR_EXCLUDES) && module_excludes) {
@@ -212,8 +214,26 @@ std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(l
     }
 
     if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_EXCLUDES)) {
-        if (pkg_excludes) {
-            considered -= *pkg_excludes;
+        std::unique_ptr<libdnf::solv::SolvMap> pkg_includes;
+        if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES)) {
+            if (config_includes) {
+                pkg_includes.reset(new libdnf::solv::SolvMap(*config_includes));
+            }
+            if (config_excludes) {
+                considered -= *config_excludes;
+            }
+        }
+        if (!static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_USER_EXCLUDES)) {
+            if (user_includes) {
+                if (pkg_includes) {
+                    *pkg_includes |= *user_includes;
+                } else {
+                    pkg_includes.reset(new libdnf::solv::SolvMap(*user_includes));
+                }
+            }
+            if (user_excludes) {
+                considered -= *user_excludes;
+            }
         }
 
         if (pkg_includes) {
@@ -273,8 +293,8 @@ PackageSack::PackageSack(libdnf::Base & base) : PackageSack(base.get_weak_ptr())
 
 PackageSack::~PackageSack() = default;
 
-void PackageSack::setup_excludes_includes(bool only_main) {
-    p_impl->setup_excludes_includes(only_main);
+void PackageSack::load_config_excludes_includes(bool only_main) {
+    p_impl->load_config_excludes_includes(only_main);
 }
 
 }  // namespace libdnf::rpm

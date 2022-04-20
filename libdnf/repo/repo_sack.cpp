@@ -205,7 +205,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
     finish_sack_loader();
     catch_thread_sack_loader_exceptions();
 
-    base->get_rpm_package_sack()->setup_excludes_includes();
+    base->get_rpm_package_sack()->load_config_excludes_includes();
 }
 
 

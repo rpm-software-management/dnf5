@@ -78,7 +78,7 @@ void RemoveCommand::run() {
 
     ctx.base.get_repo_sack()->get_system_repo()->load();
     // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
-    ctx.base.get_rpm_package_sack()->setup_excludes_includes();
+    ctx.base.get_rpm_package_sack()->load_config_excludes_includes();
 
     libdnf::Goal goal(ctx.base);
     for (auto & pattern : *patterns_to_remove_options) {

@@ -86,12 +86,12 @@ public:
 
     /// Sets excluded and included packages according to the configuration.
     ///
-    /// Uses the `disable_excludes`, `excludepkgs`, and `includepkgs` configuration options to calculate the `pkg_includes` and `pkg_excludes` sets.
+    /// Uses the `disable_excludes`, `excludepkgs`, and `includepkgs` configuration options to calculate the `config_includes` and `config_excludes` sets.
     ///
     /// Invalidates the Pool's considered map, sets `considered_uptodate` to `false` to mark it needs to be recomputed.
     /// @param only_main If `true`, only `excludepkgs` and `includepkgs` from the main config are recomputed.
     // TODO(jrohel): Is param `only_main` needed? Used in DNF4 with commandline repo.
-    void setup_excludes_includes(bool only_main = false);
+    void load_config_excludes_includes(bool only_main = false);
 
     /// Computes considered map.
     /// If there are no excluded packages, the considered map may not be present in the return value.
@@ -108,8 +108,11 @@ private:
 
     WeakPtrGuard<PackageSack, false> sack_guard;
 
-    std::unique_ptr<libdnf::solv::SolvMap> pkg_excludes;  // explicitly excluded packages (e.g. by configuration)
-    std::unique_ptr<libdnf::solv::SolvMap> pkg_includes;  // explicitly included packages (e.g. by configuration)
+    std::unique_ptr<libdnf::solv::SolvMap> config_excludes;  // packages explicitly excluded by configuration
+    std::unique_ptr<libdnf::solv::SolvMap> config_includes;  // packages explicitly included by configuration
+
+    std::unique_ptr<libdnf::solv::SolvMap> user_excludes;  // packages explicitly excluded by API user
+    std::unique_ptr<libdnf::solv::SolvMap> user_includes;  // packages explicitly included by API user
 
     // packages excluded by disabling repositories
     // Optimization, the PackageQuery does not have to test whether the package comes from an allowed repository.
