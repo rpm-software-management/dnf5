@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_GOAL_ELEMENTS_HPP
 
 
+#include "libdnf/advisory/advisory_query.hpp"
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/rpm/nevra.hpp"
 
@@ -116,6 +117,9 @@ public:
     GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
     std::vector<std::string> from_repo_ids;
     std::vector<std::string> to_repo_ids;
+
+    /// Optionally assign AdvisoryQuery that is used to filter goal target packages (used for upgrade and install)
+    std::optional<libdnf::advisory::AdvisoryQuery> advisory_filter;
 
 private:
     friend class Goal;

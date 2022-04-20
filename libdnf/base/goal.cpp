@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/goal.hpp"
 
 #include "base_private.hpp"
+#include "rpm/package_query_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "rpm/package_set_impl.hpp"
 #include "rpm/solv/goal_private.hpp"
@@ -80,8 +81,16 @@ public:
         base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
     void add_remove_to_goal(base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
     void add_up_down_distrosync_to_goal(
-        base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings);
+        base::Transaction & transaction,
+        GoalAction action,
+        const std::string & spec,
+        GoalJobSettings & settings);
     void add_rpms_to_goal(base::Transaction & transaction);
+
+    static void filter_candidates_for_advisory_upgrade(
+        const BaseWeakPtr & base,
+        libdnf::rpm::PackageQuery & candidates,
+        const libdnf::advisory::AdvisoryQuery & advisories);
 
 private:
     friend class Goal;
@@ -210,6 +219,58 @@ void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::PackageSet & package_
     rpm_ids.push_back(std::make_tuple(action, std::move(ids), settings));
 }
 
+// @replaces part of libdnf/sack/query.cpp:method:filterAdvisory called with HY_EQG and HY_UPGRADE
+void Goal::Impl::filter_candidates_for_advisory_upgrade(
+    const BaseWeakPtr & base,
+    libdnf::rpm::PackageQuery & candidates,
+    const libdnf::advisory::AdvisoryQuery & advisories) {
+    rpm::PackageQuery installed(base);
+    installed.filter_installed();
+
+    // Prepare obsoletes of installed as well as obsoletes of any possible upgrade that could happen
+    rpm::PackageQuery possibly_obsoleted(candidates);
+    possibly_obsoleted.filter_upgrades();
+    possibly_obsoleted |= installed;
+    rpm::PackageQuery obsoletes(candidates);
+    obsoletes.filter_available();
+    obsoletes.filter_obsoletes(possibly_obsoleted);
+
+    // When doing advisory upgrade consider only candidate pkgs that have matching Name and Arch
+    // with some already installed pkg (in other words: some other version of the pkg is already installed).
+    // Otherwise a pkg with different Arch than installed can end up in upgrade set which is wrong.
+    // It can result in dependency issues, reported as: RhBug:2088149.
+    candidates.filter_name_arch(installed);
+
+    // Add obsoletes after filter_name_arch(installed)
+    candidates |= obsoletes;
+
+    // Apply security filters only to packages with highest priority (lowest priority number),
+    // to unify behaviour of upgrade and upgrade-minimal
+    candidates.filter_priority();
+
+    // Get unresolved advisories for all installed + possible obsoletes
+    rpm::PackageQuery installed_plus_possibly_installed_obsoletes(installed);
+    installed_plus_possibly_installed_obsoletes |= obsoletes;
+    auto adv_pkgs = advisories.get_advisory_packages_sorted(
+        installed_plus_possibly_installed_obsoletes, libdnf::sack::QueryCmp::GT);
+
+    // Since we want to satisfy all advisory pacakges we can keep just the latest
+    // (all lower EVR adv pkgs are satistified by the latests)
+    // This assumes that adv_pkgs vector is sorted by Name, Arch, EVR
+    std::vector<libdnf::advisory::AdvisoryPackage> latest_adv_pkgs;
+    for (std::vector<libdnf::advisory::AdvisoryPackage>::iterator i = adv_pkgs.begin(); i != adv_pkgs.end(); ++i) {
+        auto next_adv_pkg = std::next(i);
+        if (next_adv_pkg == adv_pkgs.end() || i->get_name() != next_adv_pkg->get_name() ||
+            i->get_arch() != next_adv_pkg->get_arch()) {
+            latest_adv_pkgs.push_back(*i);
+        }
+    }
+
+    // Get only packages that satisfy some advisory package
+    libdnf::rpm::PackageQuery::PQImpl::filter_sorted_advisory_pkgs(
+        candidates, latest_adv_pkgs, libdnf::sack::QueryCmp::GTE);
+}
+
 GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     auto sack = base->get_rpm_package_sack();
     auto & cfg_main = base->get_config();
@@ -235,6 +296,12 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                 break;
             case GoalAction::UPGRADE_ALL: {
                 rpm::PackageQuery query(base);
+
+                // Apply advisory filters
+                if (settings.advisory_filter.has_value()) {
+                    filter_candidates_for_advisory_upgrade(base, query, settings.advisory_filter.value());
+                }
+
                 libdnf::solv::IdQueue upgrade_ids;
                 for (auto package_id : *query.p_impl) {
                     upgrade_ids.push_back(package_id);
@@ -277,6 +344,7 @@ GoalProblem Goal::Impl::add_install_to_goal(
     auto multilib_policy = cfg_main.multilib_policy().get_value();
     libdnf::solv::IdQueue tmp_queue;
     rpm::PackageQuery base_query(base);
+
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
@@ -307,6 +375,12 @@ GoalProblem Goal::Impl::add_install_to_goal(
             }
             query |= installed;
         }
+
+        // Apply advisory filters
+        if (settings.advisory_filter.has_value()) {
+            query.filter_advisories(settings.advisory_filter.value(), libdnf::sack::QueryCmp::EQ);
+        }
+
         /// <name, <arch, std::vector<pkg Solvables>>>
         std::unordered_map<Id, std::unordered_map<Id, std::vector<Solvable *>>> na_map;
 
@@ -384,6 +458,12 @@ GoalProblem Goal::Impl::add_install_to_goal(
                 }
                 query |= installed;
             }
+
+            // Apply advisory filters
+            if (settings.advisory_filter.has_value()) {
+                query.filter_advisories(settings.advisory_filter.value(), libdnf::sack::QueryCmp::EQ);
+            }
+
             rpm::PackageQuery available(query);
             available.filter_available();
 
@@ -448,6 +528,12 @@ GoalProblem Goal::Impl::add_install_to_goal(
                 }
                 query |= installed;
             }
+
+            // Apply advisory filters
+            if (settings.advisory_filter.has_value()) {
+                query.filter_advisories(settings.advisory_filter.value(), libdnf::sack::QueryCmp::EQ);
+            }
+
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
             rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
             return GoalProblem::NO_PROBLEM;
@@ -766,7 +852,10 @@ void Goal::Impl::add_remove_to_goal(
 }
 
 void Goal::Impl::add_up_down_distrosync_to_goal(
-    base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings) {
+    base::Transaction & transaction,
+    GoalAction action,
+    const std::string & spec,
+    GoalJobSettings & settings) {
     // Get values before the first report to set in GoalJobSettings used values
     bool best = settings.resolve_best(base->get_config());
     bool strict = action == GoalAction::UPGRADE ? false : settings.resolve_strict(base->get_config());
@@ -842,7 +931,11 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
         query |= installed;
     }
 
-    // TODO(jmracek) Apply security filters
+    // Apply advisory filters
+    if (settings.advisory_filter.has_value()) {
+        filter_candidates_for_advisory_upgrade(base, query, settings.advisory_filter.value());
+    }
+
     switch (action) {
         case GoalAction::UPGRADE:
             // For a correct upgrade of installonly packages keep only the latest installed packages
