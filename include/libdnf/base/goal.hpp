@@ -138,18 +138,22 @@ public:
     ///
     /// @param spec      A string describing the Goal upgrade request.
     /// @param settings  A structure to override default goal settings. Values  `from_repo_ids` and `strict` are not used.
+    /// @param minimal   Whether to do smallest possible upgrade
     // @replaces dnf:dnf/base.py:method:Base().upgrade(self, pkg_spec, reponame=None)
     void add_rpm_upgrade(
-        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const std::string & spec,
+        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(),
+        bool minimal = false);
 
     // TODO(jmracek) Add suport `to_repo_ids`
     /// Add upgrade job of all installed packages to the goal if not limited in `settings`. By default uses
     /// `clean_requirements_on_remove` set to `false`, which can be overridden in `settings`.
     ///
     /// @param settings  A structure to override default goal settings. Values `from_repo_ids` and `strict` are not used.
+    /// @param minimal   Whether to do smallest possible upgrade
     // @replaces libdnf/hy-goal.h:function:hy_goal_upgrade_all(HyGoal goal)
     // @replaces dnf:dnf/base.py:method:Base().upgrade_all(self, reponame=None)
-    void add_rpm_upgrade(const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+    void add_rpm_upgrade(const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(), bool minimal = false);
 
     /// Add upgrade request to the goal. By default uses `clean_requirements_on_remove` set to `false`,
     /// which can be overridden in `settings`.
@@ -157,20 +161,25 @@ public:
     ///
     /// @param rpm_package      A package that will be used as candidate for the upgrade action.
     /// @param settings         A structure to override default goal settings. Only `clean_requirements_on_remove` and `best` values are used.
+    /// @param minimal          Whether to do smallest possible upgrade
     // @replaces libdnf/hy-goal.h:function:hy_goal_upgrade_to(HyGoal goal, DnfPackage *new_pkg)
     // @replaces dnf:dnf/base.py:method:Base().package_upgrade(self, pkg)
     void add_rpm_upgrade(
-        const libdnf::rpm::Package & rpm_package, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf::rpm::Package & rpm_package,
+        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(),
+        bool minimal = false);
 
     /// Add upgrade request to the goal. By default uses `clean_requirements_on_remove` set to `false`,
     /// which can be overridden in `settings`.
     ///
     /// @param package_set      A package_set containing candidates for the upgrade action.
     /// @param settings         A structure to override default goal settings. Only `clean_requirements_on_remove` and `best` values are used.
+    /// @param minimal          Whether to do smallest possible upgrade
     // @replaces libdnf/hy-goal.h:function:hy_goal_upgrade_selector(HyGoal goal, HySelector sltr)
     void add_rpm_upgrade(
         const libdnf::rpm::PackageSet & package_set,
-        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(),
+        bool minimal = false);
 
     /// Add downgrade request to the goal. The `spec` will be resolved to packages in the resolve() call. By default uses
     /// `clean_requirements_on_remove` set to `false`, which can be overridden in `settings`.

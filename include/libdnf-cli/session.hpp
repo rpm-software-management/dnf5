@@ -163,6 +163,10 @@ public:
     /// @since 5.0
     bool get_value() const { return conf->get_value(); }
 
+    /// @set bool value with priority for the option
+    /// @since 5.0
+    void set(libdnf::Option::Priority priority, bool value) { return conf->set(priority, value); }
+
     // TODO(dmach): `arg` must be public, because it is used to define conflicting args
     //protected:
     libdnf::OptionBool * conf{nullptr};

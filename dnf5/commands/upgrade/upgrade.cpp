@@ -79,6 +79,18 @@ void UpgradeCommand::run() {
 
     auto settings = libdnf::GoalJobSettings();
 
+    if (minimal->get_value()) {
+        if ((advisory_name->get_value().empty() && !advisory_security->get_value() && !advisory_bugfix->get_value() &&
+             !advisory_enhancement->get_value() && !advisory_newpackage->get_value() &&
+             advisory_severity->get_value().empty() && advisory_bz->get_value().empty() &&
+             advisory_cve->get_value().empty())) {
+            advisory_security->set(libdnf::Option::Priority::RUNTIME, true);
+            advisory_bugfix->set(libdnf::Option::Priority::RUNTIME, true);
+            advisory_enhancement->set(libdnf::Option::Priority::RUNTIME, true);
+            advisory_newpackage->set(libdnf::Option::Priority::RUNTIME, true);
+        }
+    }
+
     auto advisories = advisory_query_from_cli_input(
         ctx.base,
         advisory_name->get_value(),
@@ -94,13 +106,13 @@ void UpgradeCommand::run() {
     }
 
     if (pkg_specs.empty() && pkg_file_paths.empty()) {
-        goal->add_rpm_upgrade(settings);
+        goal->add_rpm_upgrade(settings, minimal->get_value());
     } else {
         for (const auto & pkg : cmdline_packages) {
-            goal->add_rpm_upgrade(pkg, settings);
+            goal->add_rpm_upgrade(pkg, settings, minimal->get_value());
         }
         for (const auto & spec : pkg_specs) {
-            goal->add_rpm_upgrade(spec, settings);
+            goal->add_rpm_upgrade(spec, settings, minimal->get_value());
         }
     }
 }

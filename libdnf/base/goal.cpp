@@ -84,7 +84,8 @@ public:
         base::Transaction & transaction,
         GoalAction action,
         const std::string & spec,
-        GoalJobSettings & settings);
+        GoalJobSettings & settings,
+        bool minimal = false);
     void add_rpms_to_goal(base::Transaction & transaction);
 
     static void filter_candidates_for_advisory_upgrade(
@@ -157,20 +158,36 @@ void Goal::add_rpm_remove(const rpm::PackageSet & package_set, const GoalJobSett
     p_impl->add_rpm_ids(GoalAction::REMOVE, package_set, settings);
 }
 
-void Goal::add_rpm_upgrade(const std::string & spec, const GoalJobSettings & settings) {
-    p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE, spec, settings));
+void Goal::add_rpm_upgrade(const std::string & spec, const GoalJobSettings & settings, bool minimal) {
+    if (minimal) {
+        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE_MINIMAL, spec, settings));
+    } else {
+        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE, spec, settings));
+    }
 }
 
-void Goal::add_rpm_upgrade(const GoalJobSettings & settings) {
-    p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE_ALL, std::string(), settings));
+void Goal::add_rpm_upgrade(const GoalJobSettings & settings, bool minimal) {
+    if (minimal) {
+        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE_ALL_MINIMAL, std::string(), settings));
+    } else {
+        p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::UPGRADE_ALL, std::string(), settings));
+    }
 }
 
-void Goal::add_rpm_upgrade(const rpm::Package & rpm_package, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(GoalAction::UPGRADE, rpm_package, settings);
+void Goal::add_rpm_upgrade(const rpm::Package & rpm_package, const GoalJobSettings & settings, bool minimal) {
+    if (minimal) {
+        p_impl->add_rpm_ids(GoalAction::UPGRADE_MINIMAL, rpm_package, settings);
+    } else {
+        p_impl->add_rpm_ids(GoalAction::UPGRADE, rpm_package, settings);
+    }
 }
 
-void Goal::add_rpm_upgrade(const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
-    p_impl->add_rpm_ids(GoalAction::UPGRADE, package_set, settings);
+void Goal::add_rpm_upgrade(const rpm::PackageSet & package_set, const GoalJobSettings & settings, bool minimal) {
+    if (minimal) {
+        p_impl->add_rpm_ids(GoalAction::UPGRADE_MINIMAL, package_set, settings);
+    } else {
+        p_impl->add_rpm_ids(GoalAction::UPGRADE, package_set, settings);
+    }
 }
 
 void Goal::add_rpm_downgrade(const std::string & spec, const GoalJobSettings & settings) {
@@ -294,12 +311,21 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::UPGRADE:
                 add_up_down_distrosync_to_goal(transaction, action, spec, settings);
                 break;
-            case GoalAction::UPGRADE_ALL: {
+            case GoalAction::UPGRADE_MINIMAL:
+                add_up_down_distrosync_to_goal(transaction, action, spec, settings, true);
+                break;
+            case GoalAction::UPGRADE_ALL:
+            case GoalAction::UPGRADE_ALL_MINIMAL: {
                 rpm::PackageQuery query(base);
 
                 // Apply advisory filters
                 if (settings.advisory_filter.has_value()) {
                     filter_candidates_for_advisory_upgrade(base, query, settings.advisory_filter.value());
+                }
+
+                // Make the smallest possible upgrade
+                if (action == GoalAction::UPGRADE_ALL_MINIMAL) {
+                    query.filter_earliest_evr();
                 }
 
                 libdnf::solv::IdQueue upgrade_ids;
@@ -855,7 +881,8 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
     base::Transaction & transaction,
     GoalAction action,
     const std::string & spec,
-    GoalJobSettings & settings) {
+    GoalJobSettings & settings,
+    bool minimal) {
     // Get values before the first report to set in GoalJobSettings used values
     bool best = settings.resolve_best(base->get_config());
     bool strict = action == GoalAction::UPGRADE ? false : settings.resolve_strict(base->get_config());
@@ -936,7 +963,12 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
         filter_candidates_for_advisory_upgrade(base, query, settings.advisory_filter.value());
     }
 
+    if (minimal) {
+        query.filter_earliest_evr();
+    }
+
     switch (action) {
+        case GoalAction::UPGRADE_MINIMAL:
         case GoalAction::UPGRADE:
             // For a correct upgrade of installonly packages keep only the latest installed packages
             // Otherwise it will also install not the latest installonly packages
