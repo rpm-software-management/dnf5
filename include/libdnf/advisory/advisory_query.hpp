@@ -77,16 +77,19 @@ public:
         sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ,
         const std::optional<std::string> type = {});
 
-    void filter_severity(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    /// Filter Advisories by severity
+    ///
+    /// @param severity     Possible severities are: "critical", "important", "moderate", "low", "none".
+    /// @param cmp_type     What comparator to use with severity, allows: EQ.
+    void filter_severity(const std::string & severity, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
     void filter_severity(
-        const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+        const std::vector<std::string> & severities, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    //TODO(amatej): this might not be needed and could be possibly removed
-    /// Filter out advisories that don't contain at least one package fulfilling the cmp_type condition when compated to input packages
+    /// Filter out advisories that don't contain at least one AdvisoryPackage that has a counterpart Package in package_set
+    /// such that they have matching name and architecture and also their epoch-version-release complies to cmp_type.
     ///
     /// @param package_set  libdnf::rpm::PackageSet used when filtering.
-    /// @param cmp_type     Condition to fulfill with packages.
-    /// @return This AdvisoryQuery with applied filter.
+    /// @param cmp_type     Condition to fulfill when comparing epoch-version-release of packages.
     void filter_packages(
         const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 

@@ -187,14 +187,13 @@ void AdvisoryQuery::filter_reference(
     filter_reference_by_type_and_id(get_pool(base), *p_impl, cmp_type, patterns, type);
 }
 
-void AdvisoryQuery::filter_severity(const std::string & pattern, sack::QueryCmp cmp_type) {
-    filter_dataiterator_internal(*get_pool(base), UPDATE_SEVERITY, *p_impl, cmp_type, {pattern});
+void AdvisoryQuery::filter_severity(const std::string & severity, sack::QueryCmp cmp_type) {
+    filter_dataiterator_internal(*get_pool(base), UPDATE_SEVERITY, *p_impl, cmp_type, {severity});
 }
-void AdvisoryQuery::filter_severity(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
-    filter_dataiterator_internal(*get_pool(base), UPDATE_SEVERITY, *p_impl, cmp_type, patterns);
+void AdvisoryQuery::filter_severity(const std::vector<std::string> & severities, sack::QueryCmp cmp_type) {
+    filter_dataiterator_internal(*get_pool(base), UPDATE_SEVERITY, *p_impl, cmp_type, severities);
 }
 
-//TODO(amatej): this might not be needed and could be possibly removed
 void AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
     auto & pool = get_pool(base);
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
