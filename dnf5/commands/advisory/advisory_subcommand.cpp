@@ -47,6 +47,9 @@ void AdvisorySubCommand::set_argument_parser() {
     advisory_bz = std::make_unique<BzOption>(*this);
     advisory_cve = std::make_unique<CveOption>(*this);
 
+    with_bz = std::make_unique<AdvisoryWithBzOption>(*this);
+    with_cve = std::make_unique<AdvisoryWithCveOption>(*this);
+
     auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
         new std::vector<ArgumentParser::Argument *>{all->arg, available->arg, installed->arg, updates->arg}));
 
@@ -99,6 +102,13 @@ void AdvisorySubCommand::run() {
         advisory_cve->get_value());
 
     auto advisories = advisories_opt.value_or(libdnf::advisory::AdvisoryQuery(ctx.base));
+
+    if (with_bz->get_value()) {
+        advisories.filter_reference("*", libdnf::sack::QueryCmp::IGLOB, {"bugzilla"});
+    }
+    if (with_cve->get_value()) {
+        advisories.filter_reference("*", libdnf::sack::QueryCmp::IGLOB, {"cve"});
+    }
 
     process_and_print_queries(ctx, advisories, package_query);
 }

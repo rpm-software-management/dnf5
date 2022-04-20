@@ -27,15 +27,15 @@ namespace libdnf::cli::output {
 
 
 // advisory list table columns
-enum { COL_ADVISORY_NAME, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE, COL_ADVISORY_BUILDTIME };
+enum { COL_ID, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE, COL_ADVISORY_BUILDTIME };
 
 
-static struct libscols_table * create_advisorylist_table() {
+static struct libscols_table * create_advisorylist_table(std::string column_id_name) {
     struct libscols_table * table = scols_new_table();
     if (isatty(1)) {
         scols_table_enable_colors(table, 1);
     }
-    struct libscols_column * cl = scols_table_new_column(table, "Name", 20, 0);
+    struct libscols_column * cl = scols_table_new_column(table, column_id_name.c_str(), 0.5, 0);
     scols_column_set_cmpfunc(cl, scols_cmpstr_cells, NULL);
     scols_table_new_column(table, "Type", 0.5, SCOLS_FL_TRUNC);
     scols_table_new_column(table, "Severity", 0.5, SCOLS_FL_TRUNC);
@@ -54,7 +54,7 @@ static void add_line_into_advisorylist_table(
     unsigned long long buildtime,
     bool installed) {
     struct libscols_line * ln = scols_table_new_line(table, NULL);
-    scols_line_set_data(ln, COL_ADVISORY_NAME, name);
+    scols_line_set_data(ln, COL_ID, name);
     scols_line_set_data(ln, COL_ADVISORY_TYPE, type);
     scols_line_set_data(ln, COL_ADVISORY_SEVERITY, severity);
     scols_line_set_data(ln, COL_ADVISORY_PACKAGE, package);
@@ -69,7 +69,7 @@ static void add_line_into_advisorylist_table(
 void print_advisorylist_table(
     std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
     std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed) {
-    struct libscols_table * table = create_advisorylist_table();
+    struct libscols_table * table = create_advisorylist_table("Name");
     for (auto adv_pkg : advisory_package_list_not_installed) {
         auto advisory = adv_pkg.get_advisory();
         add_line_into_advisorylist_table(
@@ -92,7 +92,52 @@ void print_advisorylist_table(
             advisory.get_buildtime(),
             true);
     }
-    auto cl = scols_table_get_column(table, COL_ADVISORY_NAME);
+    auto cl = scols_table_get_column(table, COL_ID);
+    scols_sort_table(table, cl);
+    scols_print_table(table);
+    scols_unref_table(table);
+}
+
+void print_advisorylist_references_table(
+    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
+    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed,
+    std::string reference_type) {
+    std::string first_column_name;
+    if (reference_type == "cve") {
+        first_column_name = "CVE";
+    } else {
+        first_column_name = "Bugzilla";
+    }
+    struct libscols_table * table = create_advisorylist_table(first_column_name);
+    for (auto adv_pkg : advisory_package_list_not_installed) {
+        auto advisory = adv_pkg.get_advisory();
+        auto references = advisory.get_references({reference_type});
+        for (auto reference : references) {
+            add_line_into_advisorylist_table(
+                table,
+                reference.get_id().c_str(),
+                advisory.get_type().c_str(),
+                advisory.get_severity().c_str(),
+                adv_pkg.get_nevra().c_str(),
+                advisory.get_buildtime(),
+                false);
+        }
+    }
+    for (auto adv_pkg : advisory_package_list_installed) {
+        auto advisory = adv_pkg.get_advisory();
+        auto references = advisory.get_references({reference_type});
+        for (auto reference : references) {
+            add_line_into_advisorylist_table(
+                table,
+                reference.get_id().c_str(),
+                advisory.get_type().c_str(),
+                advisory.get_severity().c_str(),
+                adv_pkg.get_nevra().c_str(),
+                advisory.get_buildtime(),
+                true);
+        }
+    }
+    auto cl = scols_table_get_column(table, COL_ID);
     scols_sort_table(table, cl);
     scols_print_table(table);
     scols_unref_table(table);

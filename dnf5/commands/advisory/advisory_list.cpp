@@ -52,7 +52,13 @@ void AdvisoryListCommand::process_and_print_queries(
         not_installed_pkgs = advisories.get_advisory_packages(packages, libdnf::sack::QueryCmp::GT);
     }
 
-    libdnf::cli::output::print_advisorylist_table(not_installed_pkgs, installed_pkgs);
+    if (with_bz->get_value()) {
+        libdnf::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "bugzilla");
+    } else if (with_cve->get_value()) {
+        libdnf::cli::output::print_advisorylist_references_table(not_installed_pkgs, installed_pkgs, "cve");
+    } else {
+        libdnf::cli::output::print_advisorylist_table(not_installed_pkgs, installed_pkgs);
+    }
 }
 
 }  // namespace dnf5

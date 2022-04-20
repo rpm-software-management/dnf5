@@ -95,4 +95,18 @@ public:
 }  // namespace dnf5
 
 
+class AdvisoryWithBzOption : public libdnf::cli::session::BoolOption {
+public:
+    explicit AdvisoryWithBzOption(libdnf::cli::session::Command & command)
+        : BoolOption(command, "with-bz", '\0', _("Show only advisories referencing a bugzilla."), false) {}
+};
+
+
+class AdvisoryWithCveOption : public libdnf::cli::session::BoolOption {
+public:
+    explicit AdvisoryWithCveOption(libdnf::cli::session::Command & command)
+        : BoolOption(command, "with-cve", '\0', _("Show only advisories referencing a CVE."), false) {}
+};
+
+
 #endif  // DNF5_COMMANDS_ADVISORY_ARGUMENTS_HPP

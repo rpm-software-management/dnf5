@@ -48,6 +48,8 @@ protected:
     std::unique_ptr<AdvisoryUpdatesOption> updates{nullptr};
     std::unique_ptr<AdvisoryContainsPkgsOption> contains_pkgs{nullptr};
     std::unique_ptr<AdvisorySpecArguments> advisory_specs{nullptr};
+    std::unique_ptr<AdvisoryWithBzOption> with_bz{nullptr};
+    std::unique_ptr<AdvisoryWithCveOption> with_cve{nullptr};
 
     AdvisorySubCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 

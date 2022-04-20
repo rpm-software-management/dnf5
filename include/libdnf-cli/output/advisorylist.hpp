@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CLI_OUTPUT_ADVISORYLIST_HPP
 
 #include "libdnf/advisory/advisory_package.hpp"
+#include "libdnf/advisory/advisory_reference.hpp"
 
 namespace libdnf::cli::output {
 
@@ -29,6 +30,10 @@ void print_advisorylist_table(
     std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
     std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed);
 
+void print_advisorylist_references_table(
+    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_not_installed,
+    std::vector<libdnf::advisory::AdvisoryPackage> & advisory_package_list_installed,
+    std::string reference_type);
 
 }  // namespace libdnf::cli::output
 
