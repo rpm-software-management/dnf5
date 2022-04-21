@@ -181,7 +181,7 @@ static libdnf::cli::ArgumentParser::NamedArg * add_new_named_arg_alias(
     if (!src_arg.get_long_name().empty()) {
         descr += "`--" + src_arg.get_long_name() + '`';
     }
-    alias->set_short_description(fmt::format("Alias to {}", descr));
+    alias->set_short_description(fmt::format("Alias for {}", descr));
 
     // Copy from source argument
     alias->set_has_value(src_arg.get_has_value());
