@@ -32,7 +32,7 @@ class GroupinfoAlias : public GroupInfoCommand {
 public:
     explicit GroupinfoAlias(Command & parent) : GroupInfoCommand(parent, "groupinfo") {
         auto & cmd = *get_argument_parser_command();
-        cmd.set_short_description("Alias for `group info`");
+        cmd.set_short_description("Alias for 'group info'");
     }
 };
 

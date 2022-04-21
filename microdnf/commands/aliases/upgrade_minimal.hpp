@@ -32,7 +32,7 @@ class UpgradeMinimalAlias : public UpgradeCommand {
 public:
     explicit UpgradeMinimalAlias(Command & parent) : UpgradeCommand(parent, "upgrade-minimal") {
         auto & cmd = *get_argument_parser_command();
-        cmd.set_short_description("Alias for `upgrade --minimal`");
+        cmd.set_short_description("Alias for 'upgrade --minimal'");
 
         // set the default value of the --minimal option to `true`
         auto minimal = dynamic_cast<libdnf::OptionBool *>(this->minimal);

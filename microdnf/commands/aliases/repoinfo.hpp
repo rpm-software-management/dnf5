@@ -32,7 +32,7 @@ class RepoinfoAlias : public RepoInfoCommand {
 public:
     explicit RepoinfoAlias(Command & parent) : RepoInfoCommand(parent, "repoinfo") {
         auto & cmd = *get_argument_parser_command();
-        cmd.set_short_description("Alias for `repo info`");
+        cmd.set_short_description("Alias for 'repo info'");
     }
 };
 

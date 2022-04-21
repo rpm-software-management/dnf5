@@ -32,7 +32,7 @@ class RepolistAlias : public RepoListCommand {
 public:
     explicit RepolistAlias(Command & parent) : RepoListCommand(parent, "repolist") {
         auto & cmd = *get_argument_parser_command();
-        cmd.set_short_description("Alias for `repo list`");
+        cmd.set_short_description("Alias for 'repo list'");
     }
 };
 

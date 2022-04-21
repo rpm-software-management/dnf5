@@ -32,7 +32,7 @@ class AutoremoveAlias : public RemoveCommand {
 public:
     explicit AutoremoveAlias(Command & parent) : RemoveCommand(parent, "autoremove") {
         auto & cmd = *get_argument_parser_command();
-        cmd.set_short_description("Alias for `remove --unneeded`");
+        cmd.set_short_description("Alias for 'remove --unneeded'");
 
         // set the default value of the --unneeded option to `true`
         auto unneeded = dynamic_cast<libdnf::OptionBool *>(this->unneeded);

@@ -32,7 +32,7 @@ class GrouplistAlias : public GroupListCommand {
 public:
     explicit GrouplistAlias(Command & parent) : GroupListCommand(parent, "grouplist") {
         auto & cmd = *get_argument_parser_command();
-        cmd.set_short_description("Alias for `group list`");
+        cmd.set_short_description("Alias for 'group list'");
     }
 };
 

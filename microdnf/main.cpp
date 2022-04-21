@@ -173,13 +173,13 @@ static libdnf::cli::ArgumentParser::NamedArg * add_new_named_arg_alias(
     // Set description
     std::string descr;
     if (src_arg.get_short_name() != '\0') {
-        descr = std::string("`-") + src_arg.get_short_name() + '`';
+        descr = std::string("'-") + src_arg.get_short_name() + "'";
         if (!src_arg.get_long_name().empty()) {
             descr += ", ";
         }
     }
     if (!src_arg.get_long_name().empty()) {
-        descr += "`--" + src_arg.get_long_name() + '`';
+        descr += "'--" + src_arg.get_long_name() + "'";
     }
     alias->set_short_description(fmt::format("Alias for {}", descr));
 
