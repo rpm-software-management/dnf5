@@ -539,14 +539,10 @@ public:
         if (downgrade_requested) {
             ignore_set |= RPMPROB_FILTER_OLDPACKAGE;
         }
-        if (callbacks_holder.callbacks) {
-            rpmtsSetNotifyStyle(ts, 1);
-            rpmtsSetNotifyCallback(ts, ts_callback, &callbacks_holder);
-        }
+        rpmtsSetNotifyStyle(ts, 1);
+        rpmtsSetNotifyCallback(ts, ts_callback, &callbacks_holder);
         auto rc = rpmtsRun(ts, nullptr, ignore_set);
-        if (callbacks_holder.callbacks) {
-            rpmtsSetNotifyCallback(ts, nullptr, nullptr);
-        }
+        rpmtsSetNotifyCallback(ts, nullptr, nullptr);
 
         return rc;
     }
@@ -720,22 +716,26 @@ private:
         [[maybe_unused]] const void * pkg_key,
         rpmCallbackData data) {
         void * rc = nullptr;
-        auto * callbacks_holder = static_cast<CallbacksHolder *>(data);
-        auto * transaction = callbacks_holder->transaction;
-        auto & logger = *transaction->base->get_logger();
-        auto & callbacks = *callbacks_holder->callbacks;
-        auto * trans_element = static_cast<rpmte>(const_cast<void *>(te));
-        auto * item = trans_element ? static_cast<TransactionItem *>(rpmteUserdata(trans_element)) : nullptr;
+        const auto & callbacks_holder = *static_cast<CallbacksHolder *>(data);
+        auto & transaction = *callbacks_holder.transaction;
+        auto & logger = *transaction.base->get_logger();
+        auto * const callbacks = callbacks_holder.callbacks.get();
+        auto * const trans_element = static_cast<rpmte>(const_cast<void *>(te));
+        auto * const item = trans_element ? static_cast<TransactionItem *>(rpmteUserdata(trans_element)) : nullptr;
 
         switch (what) {
             case RPMCALLBACK_INST_PROGRESS:
                 libdnf_assert_transaction_item_set();
-                callbacks.install_progress(*item, amount, total);
+                if (callbacks) {
+                    callbacks->install_progress(*item, amount, total);
+                }
                 break;
             case RPMCALLBACK_INST_START:
                 // Install? Maybe upgrade/downgrade/...obsolete?
                 libdnf_assert_transaction_item_set();
-                callbacks.install_start(*item, total);
+                if (callbacks) {
+                    callbacks->install_start(*item, total);
+                }
                 break;
             case RPMCALLBACK_INST_OPEN_FILE: {
                 libdnf_assert_transaction_item_set();
@@ -743,35 +743,47 @@ private:
                 if (file_path.empty()) {
                     return nullptr;
                 }
-                transaction->fd_in_cb = Fopen(file_path.c_str(), "r.ufdio");
-                rc = transaction->fd_in_cb;
+                transaction.fd_in_cb = Fopen(file_path.c_str(), "r.ufdio");
+                rc = transaction.fd_in_cb;
             } break;
             case RPMCALLBACK_INST_CLOSE_FILE:
-                if (transaction->fd_in_cb) {
-                    Fclose(transaction->fd_in_cb);
-                    transaction->fd_in_cb = nullptr;
+                if (transaction.fd_in_cb) {
+                    Fclose(transaction.fd_in_cb);
+                    transaction.fd_in_cb = nullptr;
                 }
                 break;
             case RPMCALLBACK_TRANS_PROGRESS:
-                callbacks.transaction_progress(amount, total);
+                if (callbacks) {
+                    callbacks->transaction_progress(amount, total);
+                }
                 break;
             case RPMCALLBACK_TRANS_START:
-                callbacks.transaction_start(total);
+                if (callbacks) {
+                    callbacks->transaction_start(total);
+                }
                 break;
             case RPMCALLBACK_TRANS_STOP:
-                callbacks.transaction_stop(total);
+                if (callbacks) {
+                    callbacks->transaction_stop(total);
+                }
                 break;
             case RPMCALLBACK_UNINST_PROGRESS:
                 libdnf_assert_transaction_item_set();
-                callbacks.uninstall_progress(*item, amount, total);
+                if (callbacks) {
+                    callbacks->uninstall_progress(*item, amount, total);
+                }
                 break;
             case RPMCALLBACK_UNINST_START:
                 libdnf_assert_transaction_item_set();
-                callbacks.uninstall_start(*item, total);
+                if (callbacks) {
+                    callbacks->uninstall_start(*item, total);
+                }
                 break;
             case RPMCALLBACK_UNINST_STOP:
                 libdnf_assert_transaction_item_set();
-                callbacks.uninstall_stop(*item, amount, total);
+                if (callbacks) {
+                    callbacks->uninstall_stop(*item, amount, total);
+                }
                 break;
             case RPMCALLBACK_REPACKAGE_PROGRESS:  // obsolete, unused
             case RPMCALLBACK_REPACKAGE_START:     // obsolete, unused
@@ -780,52 +792,74 @@ private:
                 break;
             case RPMCALLBACK_UNPACK_ERROR:
                 libdnf_assert_transaction_item_set();
-                callbacks.unpack_error(*item);
+                if (callbacks) {
+                    callbacks->unpack_error(*item);
+                }
                 break;
             case RPMCALLBACK_CPIO_ERROR:
                 // Not found usage in librpm.
                 libdnf_assert_transaction_item_set();
-                callbacks.cpio_error(*item);
+                if (callbacks) {
+                    callbacks->cpio_error(*item);
+                }
                 break;
             case RPMCALLBACK_SCRIPT_ERROR:
                 // amount is script tag
                 // total is return code - if (!RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_OK
-                callbacks.script_error(
-                    item,
-                    trans_element_to_nevra(trans_element),
-                    rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
-                    total);
+                if (callbacks) {
+                    callbacks->script_error(
+                        item,
+                        trans_element_to_nevra(trans_element),
+                        rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
+                        total);
+                }
                 break;
             case RPMCALLBACK_SCRIPT_START:
                 // amount is script tag
-                callbacks.script_start(
-                    item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)));
+                if (callbacks) {
+                    callbacks->script_start(
+                        item,
+                        trans_element_to_nevra(trans_element),
+                        rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)));
+                }
                 break;
             case RPMCALLBACK_SCRIPT_STOP:
                 // amount is script tag
                 // total is return code - if (error && !RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_NOTFOUND
-                callbacks.script_stop(
-                    item,
-                    trans_element_to_nevra(trans_element),
-                    rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
-                    total);
+                if (callbacks) {
+                    callbacks->script_stop(
+                        item,
+                        trans_element_to_nevra(trans_element),
+                        rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
+                        total);
+                }
                 break;
             case RPMCALLBACK_INST_STOP:
                 libdnf_assert_transaction_item_set();
-                callbacks.install_stop(*item, amount, total);
+                if (callbacks) {
+                    callbacks->install_stop(*item, amount, total);
+                }
                 break;
             case RPMCALLBACK_ELEM_PROGRESS:
                 libdnf_assert_transaction_item_set();
-                callbacks.elem_progress(*item, amount, total);
+                if (callbacks) {
+                    callbacks->elem_progress(*item, amount, total);
+                }
                 break;
             case RPMCALLBACK_VERIFY_PROGRESS:
-                callbacks.verify_progress(amount, total);
+                if (callbacks) {
+                    callbacks->verify_progress(amount, total);
+                }
                 break;
             case RPMCALLBACK_VERIFY_START:
-                callbacks.verify_start(total);
+                if (callbacks) {
+                    callbacks->verify_start(total);
+                }
                 break;
             case RPMCALLBACK_VERIFY_STOP:
-                callbacks.verify_stop(total);
+                if (callbacks) {
+                    callbacks->verify_stop(total);
+                }
                 break;
             case RPMCALLBACK_UNKNOWN:
                 logger.warning("Unknown RPM Transaction callback type: RPMCALLBACK_UNKNOWN");
