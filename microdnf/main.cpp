@@ -363,6 +363,24 @@ static void set_commandline_args(Context & ctx) {
     add_new_named_arg_alias(*no_best, "nobest", "nobest", '\0', options_aliases_group, no_best_conflict_args);
 
     {
+        auto no_docs = ctx.get_argument_parser().add_new_named_arg("no-docs");
+        no_docs->set_long_name("no-docs");
+        no_docs->set_short_description(
+            "Don't install files that are marked as documentation (which includes man pages and texinfo documents)");
+        no_docs->set_parse_hook_func([&ctx](
+                                         [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                         [[maybe_unused]] const char * option,
+                                         [[maybe_unused]] const char * value) {
+            auto & conf = ctx.base.get_config();
+            conf.opt_binds().at("tsflags").new_string(libdnf::Option::Priority::COMMANDLINE, "nodocs");
+            return true;
+        });
+        global_options_group->register_argument(no_docs);
+
+        add_new_named_arg_alias(*no_docs, "nodocs", "nodocs", '\0', options_aliases_group);
+    }
+
+    {
         auto exclude = ctx.get_argument_parser().add_new_named_arg("exclude");
         exclude->set_long_name("exclude");
         exclude->set_short_name('x');
