@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include <fmt/format.h>
-#include <fnmatch.h>
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf-cli/tty.hpp>
 #include <libdnf/base/goal.hpp>
@@ -34,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 #include <iostream>
+#include <regex>
 #include <set>
 #include <stdexcept>
 #include <string>
@@ -687,9 +687,9 @@ void parse_add_specs(
 }
 
 /// Returns file and directory paths that begins with `path_to_complete`.
-/// Files must match `pattern`.
+/// Files must match `regex_pattern`.
 static std::pair<std::vector<std::string>, std::vector<std::string>> complete_paths(
-    const std::string & path_to_complete, const char * pattern) {
+    const std::string & path_to_complete, const std::regex & regex_pattern) {
     std::pair<std::vector<std::string>, std::vector<std::string>> ret;
 
     const fs::path ppath_to_complete(path_to_complete);
@@ -726,7 +726,7 @@ static std::pair<std::vector<std::string>, std::vector<std::string>> complete_pa
                 bool complete = false;
                 for (const auto & subdir_entry : fs::directory_iterator(dir_entry.path(), ec)) {
                     if ((subdir_entry.is_regular_file() &&
-                         fnmatch(pattern, subdir_entry.path().filename().c_str(), 0) == 0) ||
+                         std::regex_match(subdir_entry.path().filename().native(), regex_pattern)) ||
                         subdir_entry.is_directory()) {
                         complete = true;
                         break;
@@ -739,7 +739,7 @@ static std::pair<std::vector<std::string>, std::vector<std::string>> complete_pa
             }
 
             // Adds the file if it matches the pattern.
-            if (dir_entry.is_regular_file() && fnmatch(pattern, filename.c_str(), 0) == 0) {
+            if (dir_entry.is_regular_file() && std::regex_match(filename.native(), regex_pattern)) {
                 ret.first.push_back(dir_entry_path);
             }
         }
@@ -819,7 +819,8 @@ std::vector<std::string> match_specs(
     std::vector<std::string> file_paths;
     std::vector<std::string> dir_paths;
     if (paths) {
-        std::tie(file_paths, dir_paths) = complete_paths(pattern, "*.rpm");
+        std::regex regex_pattern(".*\\.rpm", std::regex_constants::nosubs | std::regex_constants::optimize);
+        std::tie(file_paths, dir_paths) = complete_paths(pattern, regex_pattern);
         std::sort(file_paths.begin(), file_paths.end());
         std::sort(dir_paths.begin(), dir_paths.end());
     }
