@@ -17,8 +17,9 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "libdnf-cli/output/advisorylist.hpp"
+
+#include "utils/string.hpp"
 
 #include <libsmartcols/libsmartcols.h>
 
@@ -26,7 +27,7 @@ namespace libdnf::cli::output {
 
 
 // advisory list table columns
-enum { COL_ADVISORY_NAME, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE };
+enum { COL_ADVISORY_NAME, COL_ADVISORY_TYPE, COL_ADVISORY_SEVERITY, COL_ADVISORY_PACKAGE, COL_ADVISORY_BUILDTIME };
 
 
 static struct libscols_table * create_advisorylist_table() {
@@ -39,6 +40,7 @@ static struct libscols_table * create_advisorylist_table() {
     scols_table_new_column(table, "Type", 0.5, SCOLS_FL_TRUNC);
     scols_table_new_column(table, "Severity", 0.5, SCOLS_FL_TRUNC);
     scols_table_new_column(table, "Package", 0.1, SCOLS_FL_RIGHT);
+    scols_table_new_column(table, "Issued", 0.1, SCOLS_FL_RIGHT);
     return table;
 }
 
@@ -49,12 +51,14 @@ static void add_line_into_advisorylist_table(
     const char * type,
     const char * severity,
     const char * package,
+    unsigned long long buildtime,
     bool installed) {
     struct libscols_line * ln = scols_table_new_line(table, NULL);
     scols_line_set_data(ln, COL_ADVISORY_NAME, name);
     scols_line_set_data(ln, COL_ADVISORY_TYPE, type);
     scols_line_set_data(ln, COL_ADVISORY_SEVERITY, severity);
     scols_line_set_data(ln, COL_ADVISORY_PACKAGE, package);
+    scols_line_set_data(ln, COL_ADVISORY_BUILDTIME, libdnf::utils::string::format_epoch(buildtime).c_str());
     if (installed) {
         struct libscols_cell * cl = scols_line_get_cell(ln, COL_ADVISORY_PACKAGE);
         scols_cell_set_color(cl, "green");
@@ -74,6 +78,7 @@ void print_advisorylist_table(
             advisory.get_type().c_str(),
             advisory.get_severity().c_str(),
             adv_pkg.get_nevra().c_str(),
+            advisory.get_buildtime(),
             false);
     }
     for (auto adv_pkg : advisory_package_list_installed) {
@@ -84,6 +89,7 @@ void print_advisorylist_table(
             advisory.get_type().c_str(),
             advisory.get_severity().c_str(),
             adv_pkg.get_nevra().c_str(),
+            advisory.get_buildtime(),
             true);
     }
     auto cl = scols_table_get_column(table, COL_ADVISORY_NAME);

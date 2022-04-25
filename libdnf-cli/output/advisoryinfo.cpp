@@ -35,7 +35,7 @@ void AdvisoryInfo::add_advisory(libdnf::advisory::Advisory & advisory) {
     add_line("Type", advisory.get_type());
     add_line("Status", advisory.get_status());
     add_line("Vendor", advisory.get_vendor());
-    add_line("Buildtime", std::to_string(advisory.get_buildtime()));
+    add_line("Issued", libdnf::utils::string::format_epoch(advisory.get_buildtime()));
     add_lines("Description", libdnf::utils::string::split(advisory.get_description(), "\n"));
     add_line("Message", advisory.get_message());
     add_line("Rights", advisory.get_rights());

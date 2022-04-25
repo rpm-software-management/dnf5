@@ -94,6 +94,14 @@ inline std::string tolower(const std::string & s) {
     return result;
 }
 
+inline std::string format_epoch(unsigned long long epoch_num) {
+    const time_t epoch = static_cast<time_t>(epoch_num);
+    struct tm * ptm = gmtime(&epoch);
+    char buffer[20];
+    strftime(buffer, 20, "%F %T", ptm);
+    return std::string(buffer);
+}
+
 }  // namespace libdnf::utils::string
 
 #endif  // LIBDNF_UTILS_STRING_HPP
