@@ -99,7 +99,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_insert_new_query(libdnf::
 
 int64_t rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(
-        rpm.get_item_id(), rpm.get_name(), rpm.get_epoch(), rpm.get_version(), rpm.get_release(), rpm.get_arch());
+        rpm.get_item_id(), rpm.get_name(), rpm.get_epoch_int(), rpm.get_version(), rpm.get_release(), rpm.get_arch());
     query.step();
     int64_t result = query.last_insert_rowid();
     query.reset();
