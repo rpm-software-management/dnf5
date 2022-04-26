@@ -64,12 +64,10 @@ protected:
     int error_code;
 };
 
+
 /// An error class that will log the SQL statement in its constructor.
 class SQLite3StatementSQLError : public SQLite3SQLError {
 public:
-    // TODO(dmach): replace with a new logger
-    // auto logger(libdnf::Log::getLogger());
-    // logger->debug(std::string("SQL statement being executed: ") + stmt.getExpandedSql());
     using SQLite3SQLError::SQLite3SQLError;
     const char * get_name() const noexcept override { return "SQLite3StatementSQLError"; }
 };
@@ -91,26 +89,30 @@ public:
 
         Statement(SQLite3 & db, const char * sql) : db(db) {
             auto result = sqlite3_prepare_v2(db.db, sql, -1, &stmt, nullptr);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_compilation_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_compilation_failed, sql);
+            }
         };
 
         Statement(SQLite3 & db, const std::string & sql) : db(db) {
             auto result = sqlite3_prepare_v2(db.db, sql.c_str(), static_cast<int>(sql.length()) + 1, &stmt, nullptr);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_compilation_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_compilation_failed, sql);
+            }
         };
 
         void bind(int pos, int val) {
             auto result = sqlite3_bind_int(stmt, pos, val);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_bind_int_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_bind_int_failed, get_expanded_sql());
+            }
         }
 
         void bind(int pos, std::int64_t val) {
             auto result = sqlite3_bind_int64(stmt, pos, val);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_bind_int64_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_bind_int64_failed, get_expanded_sql());
+            }
         }
 
         void bind(int pos, std::uint32_t val) {
@@ -118,44 +120,51 @@ public:
             // we can just use the 64 bit version, it all converts to a single
             // signed INTEGER type in the DB
             auto result = sqlite3_bind_int64(stmt, pos, static_cast<int64_t>(val));
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_bind_uint32_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_bind_uint32_failed, get_expanded_sql());
+            }
         }
 
         void bind(int pos, double val) {
             auto result = sqlite3_bind_double(stmt, pos, val);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_bind_double_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_bind_double_failed, get_expanded_sql());
+            }
         }
 
         void bind(int pos, bool val) {
             auto result = sqlite3_bind_int(stmt, pos, val ? 1 : 0);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_bind_bool_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_bind_bool_failed, get_expanded_sql());
+            }
         }
 
         void bind(int pos, const char * val) {
             auto result = sqlite3_bind_text(stmt, pos, val, -1, SQLITE_TRANSIENT);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_bind_text_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_bind_text_failed, get_expanded_sql());
+            }
         }
 
         void bind(int pos, const std::string & val) {
             auto result = sqlite3_bind_text(stmt, pos, val.c_str(), -1, SQLITE_TRANSIENT);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_bind_text_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_bind_text_failed, get_expanded_sql());
+            }
         }
 
         void bind(int pos, const Blob & val) {
             auto result = sqlite3_bind_blob(stmt, pos, val.data, static_cast<int>(val.size), SQLITE_TRANSIENT);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_bind_blob_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_bind_blob_failed, get_expanded_sql());
+            }
         }
 
         void bind(int pos, const std::vector<unsigned char> & val) {
             auto result = sqlite3_bind_blob(stmt, pos, val.data(), static_cast<int>(val.size()), SQLITE_TRANSIENT);
-            if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, msg_bind_blob_failed);
+            if (result != SQLITE_OK) {
+                throw SQLite3StatementSQLError(result, msg_bind_blob_failed, get_expanded_sql());
+            }
         }
 
         template <typename... Args>
@@ -176,7 +185,7 @@ public:
                 case SQLITE_BUSY:
                     return StepResult::BUSY;
                 default:
-                    throw SQLite3StatementSQLError(result, msg_eval_failed);
+                    throw SQLite3StatementSQLError(result, msg_eval_failed, get_expanded_sql());
             }
         }
 
@@ -331,7 +340,7 @@ public:
     void exec(const char * sql) {
         auto result = sqlite3_exec(db, sql, nullptr, nullptr, nullptr);
         if (result != SQLITE_OK) {
-            throw SQLite3SQLError(result, msg_statement_exec_failed);
+            throw SQLite3SQLError(result, msg_statement_exec_failed, sql);
         }
     }
 
