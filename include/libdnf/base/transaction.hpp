@@ -62,7 +62,7 @@ public:
     /// related to SOLVER_ERROR, and can be obtained from get_package_solver_problems() or
     /// all_package_solver_problems_to_string().
     /// @returns <libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalSettings settings, std::string spec>.
-    const std::vector<libdnf::base::LogEvent> & get_resolve_logs();
+    const std::vector<libdnf::base::LogEvent> & get_resolve_logs() const;
 
     /// @return the transaction packages.
     // TODO(jrohel): Return reference instead of copy?
