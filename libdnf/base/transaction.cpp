@@ -150,8 +150,7 @@ void Transaction::Impl::add_resolve_log(
     const std::set<std::string> & additional_data,
     bool strict) {
     resolve_logs.emplace_back(LogEvent(action, problem, settings, spec, additional_data));
-    // TODO(jmracek) Use a logger properly and change a way how to report to terminal
-    std::cout << resolve_logs.back().to_string() << std::endl;
+    // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
     if (strict) {
         logger.error(resolve_logs.back().to_string());
@@ -163,8 +162,7 @@ void Transaction::Impl::add_resolve_log(
 void Transaction::Impl::add_resolve_log(
     GoalProblem problem, std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems) {
     resolve_logs.emplace_back(LogEvent(problem, problems));
-    // TODO(jmracek) Use a logger properly and change a way how to report to terminal
-    std::cout << resolve_logs.back().to_string() << std::endl;
+    // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
     logger.error(resolve_logs.back().to_string());
 }
