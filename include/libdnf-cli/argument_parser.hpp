@@ -20,7 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_ARGUMENT_PARSER_HPP
 #define LIBDNF_CLI_ARGUMENT_PARSER_HPP
 
-#include "libdnf/common/exception.hpp"
+#include "libdnf-cli/exception.hpp"
+
 #include "libdnf/conf/option.hpp"
 
 #include <functional>
@@ -33,7 +34,6 @@ namespace libdnf::cli {
 /// Parent for all ArgumentsParser runtime errors.
 class ArgumentParserError : public Error {
     using Error::Error;
-    const char * get_domain_name() const noexcept override { return "libdnf::cli"; }
     const char * get_name() const noexcept override { return "ArgumentParserError"; }
 };
 
