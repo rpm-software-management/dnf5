@@ -25,7 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/base/transaction.hpp>
-#include <libdnf/rpm/transaction.hpp>
 
 #include <memory>
 #include <string>

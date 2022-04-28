@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/log_event.hpp"
 #include "libdnf/base/solver_problems.hpp"
 #include "libdnf/base/transaction_package.hpp"
-#include "libdnf/rpm/transaction.hpp"
+#include "libdnf/rpm/transaction_callbacks.hpp"
 
 #include <optional>
 

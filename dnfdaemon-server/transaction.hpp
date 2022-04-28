@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNFDAEMON_SERVER_SERVICES_RPM_TRANSACTION_HPP
 
 #include <libdnf/base/transaction_package.hpp>
-#include <libdnf/rpm/transaction.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <string>

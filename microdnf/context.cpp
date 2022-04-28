@@ -29,7 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
-#include <libdnf/rpm/transaction.hpp>
 
 #include <filesystem>
 #include <iostream>

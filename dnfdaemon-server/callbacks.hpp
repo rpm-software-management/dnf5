@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/repo/repo_callbacks.hpp>
-#include <libdnf/rpm/transaction.hpp>
+#include <libdnf/rpm/transaction_callbacks.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>

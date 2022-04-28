@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/proc.hpp"
 #include "libdnf/rpm/package_query.hpp"
+#include "libdnf/rpm/transaction.hpp"
 
 #include <fmt/format.h>
 

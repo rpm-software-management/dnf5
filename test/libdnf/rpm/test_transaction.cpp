@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal.hpp"
 #include "libdnf/repo/package_downloader.hpp"
-#include "libdnf/rpm/transaction.hpp"
+#include "libdnf/rpm/transaction_callbacks.hpp"
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(RpmTransactionTest);

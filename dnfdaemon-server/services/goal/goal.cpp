@@ -28,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fmt/format.h>
 #include <libdnf/repo/package_downloader.hpp>
-#include <libdnf/rpm/transaction.hpp>
 #include <libdnf/transaction/transaction_item.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
