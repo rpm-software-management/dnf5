@@ -18,14 +18,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "libdnf/base/transaction.hpp"
+#include "transaction.hpp"
 
 #include "package_set_impl.hpp"
 #include "rpm_log_guard.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 
+#include "libdnf/base/transaction.hpp"
 #include "libdnf/common/exception.hpp"
-#include "libdnf/rpm/transaction.hpp"
 #include "libdnf/transaction/transaction_item_action.hpp"
 #include "libdnf/utils/to_underlying.hpp"
 

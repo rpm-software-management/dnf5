@@ -21,11 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_TRANSACTION_HPP
 #define LIBDNF_RPM_TRANSACTION_HPP
 
-#include "package.hpp"
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/base/transaction_package.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/rpm/package.hpp"
 #include "libdnf/rpm/transaction_callbacks.hpp"
 
 #include <memory>
