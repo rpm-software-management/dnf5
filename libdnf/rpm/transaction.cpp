@@ -36,7 +36,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <rpm/rpmlib.h>
 #include <rpm/rpmpgp.h>
 #include <rpm/rpmtag.h>
-#include <rpm/rpmts.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 
@@ -142,8 +141,8 @@ std::string RpmProblem::get_alt_nevr() const {
     return rpmProblemGetAltNEVR(p_impl->problem);
 }
 
-RpmProblem::Type RpmProblem::get_type() const {
-    return static_cast<Type>(rpmProblemGetType(p_impl->problem));
+rpmProblemType RpmProblem::get_type() const {
+    return rpmProblemGetType(p_impl->problem);
 }
 
 const TransactionItem * RpmProblem::get_transaction_item() const {

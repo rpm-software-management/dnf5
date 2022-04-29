@@ -28,6 +28,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/rpm/transaction_callbacks.hpp"
 
+#include <rpm/rpmts.h>
+
 #include <memory>
 
 
@@ -68,24 +70,6 @@ private:
 
 class RpmProblem {
 public:
-    /// Enumerate transaction set problem types.
-    // TODO(jrohel): check value with librpm (static_assert?)
-    enum class Type {
-        BADARCH,            // package ... is for a different architecture
-        BADOS,              // package ... is for a different operating system
-        PKG_INSTALLED,      // package ... is already installed
-        BADRELOCATE,        // path ... is not relocatable for package ...
-        REQUIRES,           // package ... has unsatisfied Requires: ...
-        CONFLICT,           // package ... has unsatisfied Conflicts: ...
-        NEW_FILE_CONFLICT,  // file ... conflicts between attempted installs of ...
-        FILE_CONFLICT,      // file ... from install of ... conflicts with file from package ...
-        OLDPACKAGE,         // package ... (which is newer than ...) is already installed
-        DISKSPACE,          // installing package ... needs ... on the ... filesystem
-        DISKNODES,          // installing package ... needs ... on the ... filesystem
-        OBSOLETES,          // package ... is obsoleted by ...
-        VERIFY              // package did not pass verification
-    };
-
     ~RpmProblem();
 
     bool operator==(RpmProblem & other) const noexcept;
@@ -98,7 +82,7 @@ public:
     std::string get_alt_nevr() const;
 
     /// Return type of problem (dependency, diskpace etc)
-    Type get_type() const;
+    rpmProblemType get_type() const;
 
     /// Return pointer to transaction item associated to the problem or nullptr.
     const TransactionItem * get_transaction_item() const;
@@ -179,11 +163,6 @@ public:
 
 class Transaction {
 public:
-    // TODO(jrohel): Define enums or flag setters/getters
-    using rpmVSFlags = uint32_t;
-    using rpmtransFlags = uint32_t;
-    using rpm_tid_t = uint32_t;
-
     explicit Transaction(Base & base);
     explicit Transaction(const BaseWeakPtr & base);
     Transaction(const Transaction &) = delete;
