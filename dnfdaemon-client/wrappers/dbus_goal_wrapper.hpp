@@ -35,9 +35,12 @@ public:
     DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem>);
 
     std::vector<DbusTransactionPackageWrapper> get_transaction_packages() const { return transaction_packages; };
+    std::vector<std::string> get_resolve_logs_as_strings() const { return resolve_logs; }
+    void set_resolve_logs(std::vector<std::string> logs) { resolve_logs = logs; }
 
 private:
     std::vector<DbusTransactionPackageWrapper> transaction_packages;
+    std::vector<std::string> resolve_logs;
 };
 
 }  // namespace dnfdaemon::client
