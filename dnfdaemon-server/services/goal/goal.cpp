@@ -98,17 +98,8 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 
 
 sdbus::MethodReply Goal::get_transaction_problems_string(sdbus::MethodCall & call) {
-    auto * transaction = session.get_transaction();
-
-    auto resolve_logs = transaction->get_resolve_logs();
-    std::vector<std::string> reslog;
-    reslog.reserve(resolve_logs.size());
-    for (const auto & log : resolve_logs) {
-        reslog.emplace_back(log.to_string());
-    }
-
     auto reply = call.createReply();
-    reply << reslog;
+    reply << session.get_transaction()->get_resolve_logs_as_strings();
     return reply;
 }
 
