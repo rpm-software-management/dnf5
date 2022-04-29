@@ -226,8 +226,25 @@ static bool transaction_package_cmp(const TransactionPackage & tspkg1, const Tra
 }
 
 
+/// Prints all transaction problems
+template <class Transaction>
+void print_resolve_logs(Transaction transaction) {
+    const std::vector<std::string> logs = transaction.get_resolve_logs_as_strings();
+    for (const auto & log : logs) {
+        std::cout << log << std::endl;
+    }
+    if (logs.size() > 0) {
+        std::cout << std::endl;
+    }
+}
+
 template <class Transaction>
 bool print_transaction_table(Transaction & transaction) {
+    // even correctly resolved transaction can contain some warnings / hints / infos
+    // in resolve logs (e.g. the package user wanted to install is already installed).
+    // Present them to the user.
+    print_resolve_logs(transaction);
+
     // TODO (nsella) split function into create/print if possible
     //static struct libscols_table * create_transaction_table(bool with_status) {}
     auto tspkgs = transaction.get_transaction_packages();
