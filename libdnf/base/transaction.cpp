@@ -171,6 +171,14 @@ const std::vector<LogEvent> & Transaction::get_resolve_logs() const {
     return p_impl->resolve_logs;
 }
 
+std::vector<std::string> Transaction::get_resolve_logs_as_strings() const {
+    std::vector<std::string> logs;
+    for (const auto & log : get_resolve_logs()) {
+        logs.emplace_back(log.to_string());
+    }
+    return logs;
+}
+
 
 std::string Transaction::transaction_result_to_string(const TransactionRunResult result) {
     switch (result) {

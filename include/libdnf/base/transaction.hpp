@@ -58,11 +58,13 @@ public:
 
     libdnf::GoalProblem get_problems();
 
-    /// Returns information about resolvement of Goal, except problemes related to solver. Additional information
-    /// related to SOLVER_ERROR, and can be obtained from get_package_solver_problems() or
-    /// all_package_solver_problems_to_string().
-    /// @returns <libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalSettings settings, std::string spec>.
+    /// Returns information about resolvement of Goal.
+    /// @return A vector of LogEvent instances.
     const std::vector<libdnf::base::LogEvent> & get_resolve_logs() const;
+
+    /// Returns information about resolvement of Goal as a list of printable messages
+    /// @return A vector of string representations of problems.
+    std::vector<std::string> get_resolve_logs_as_strings() const;
 
     /// @return the transaction packages.
     // TODO(jrohel): Return reference instead of copy?
