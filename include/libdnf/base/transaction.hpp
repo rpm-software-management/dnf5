@@ -33,6 +33,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::base {
 
+
+class TransactionError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf::base"; }
+    const char * get_name() const noexcept override { return "TransactionError"; }
+};
+
+
 class Transaction {
 public:
     enum class TransactionRunResult {

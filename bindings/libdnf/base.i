@@ -37,6 +37,7 @@
 %ignore libdnf::get_pool;
 
 %include "libdnf/base/base.hpp"
+%ignore libdnf::base::TransactionError;
 %include "libdnf/base/transaction.hpp"
 %include "libdnf/base/transaction_package.hpp"
 %include "libdnf/base/goal.hpp"

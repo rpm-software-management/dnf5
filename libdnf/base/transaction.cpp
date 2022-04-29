@@ -41,7 +41,21 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::base {
 
-static const std::map<base::Transaction::TransactionRunResult, const char *> TRANSACTION_RUN_RESULT_DICT = {
+namespace {
+
+// Maps the string representation of transaction flags to the rpmtransFlags_e enum.
+constexpr std::pair<const char *, rpmtransFlags_e> string_tsflag_map[]{
+    {"test", RPMTRANS_FLAG_TEST},
+    {"nodocs", RPMTRANS_FLAG_NODOCS},
+    {"noscripts", RPMTRANS_FLAG_NOSCRIPTS},
+    {"notriggers", RPMTRANS_FLAG_NOTRIGGERS},
+    {"justdb", RPMTRANS_FLAG_JUSTDB},
+    {"nocontexts", RPMTRANS_FLAG_NOCONTEXTS},
+    {"nocaps", RPMTRANS_FLAG_NOCAPS},
+    {"nocrypto", RPMTRANS_FLAG_NOFILEDIGEST},
+};
+
+const std::map<base::Transaction::TransactionRunResult, const char *> TRANSACTION_RUN_RESULT_DICT = {
     {base::Transaction::TransactionRunResult::ERROR_RERUN, M_("This transaction has been already run before.")},
     {base::Transaction::TransactionRunResult::ERROR_RESOLVE, M_("Cannot run transaction with resolving problems.")},
     {base::Transaction::TransactionRunResult::ERROR_CHECK, M_("Rpm transaction check failed.")},
@@ -49,6 +63,8 @@ static const std::map<base::Transaction::TransactionRunResult, const char *> TRA
      M_("Failed to obtain rpm transaction lock. Another transaction is in progress.")},
     {base::Transaction::TransactionRunResult::ERROR_RPM_RUN, M_("Rpm transaction failed.")},
 };
+
+}  // namespace
 
 Transaction::Transaction(const BaseWeakPtr & base) : p_impl(new Impl(*this, base)) {}
 Transaction::Transaction(const Transaction & transaction) : p_impl(new Impl(*this, *transaction.p_impl)) {}
@@ -333,8 +349,10 @@ Transaction::TransactionRunResult Transaction::Impl::run(
         return TransactionRunResult::ERROR_RESOLVE;
     }
 
+    auto & config = base->get_config();
+
     // acquire the lock
-    std::filesystem::path lock_file_path = base->get_config().installroot().get_value();
+    std::filesystem::path lock_file_path = config.installroot().get_value();
     lock_file_path /= "run/dnf/rpmtransaction.lock";
     std::filesystem::create_directories(lock_file_path.parent_path());
 
@@ -352,9 +370,46 @@ Transaction::TransactionRunResult Transaction::Impl::run(
             transaction_problems.emplace_back((*it).to_string());
         }
         return TransactionRunResult::ERROR_CHECK;
-    };
+    }
 
-    // TODO(mblaha) run test rpm transaction
+    rpmtransFlags rpm_transaction_flags{RPMTRANS_FLAG_NONE};
+    for (const auto & tsflag : config.tsflags().get_value()) {
+        bool found = false;
+        for (const auto & [string_name, enum_item] : string_tsflag_map) {
+            if (tsflag == string_name) {
+                rpm_transaction_flags |= static_cast<rpmtransFlags>(enum_item);
+                found = true;
+                break;
+            }
+        }
+        if (!found) {
+            throw TransactionError(M_("Invalid tsflag: {}"), tsflag);
+        }
+
+        // The "nocrypto" option will also set signature verify flags.
+        if (tsflag == "nocrypto") {
+            rpm_transaction.set_signature_verify_flags(
+                rpm_transaction.get_signature_verify_flags() | RPMVSF_MASK_NOSIGNATURES | RPMVSF_MASK_NODIGESTS);
+        }
+    }
+
+    // Run rpm transaction test
+    rpm_transaction.set_flags(rpm_transaction_flags | RPMTRANS_FLAG_TEST);
+    //TODO(jrohel): Do we want callbacks for transaction test?
+    //rpm_transaction.set_callbacks(std::move(callbacks));
+    auto ret = rpm_transaction.run();
+    if (ret != 0) {
+        auto problems = rpm_transaction.get_problems();
+        for (auto it = problems.begin(); it != problems.end(); ++it) {
+            transaction_problems.emplace_back((*it).to_string());
+        }
+        return TransactionRunResult::ERROR_RPM_RUN;
+    }
+
+    // With RPMTRANS_FLAG_TEST return just before anything is stored permanently
+    if (rpm_transaction_flags & RPMTRANS_FLAG_TEST) {
+        return TransactionRunResult::SUCCESS;
+    }
 
     // start history db transaction
     auto transaction_sack = base->get_transaction_sack();
@@ -392,7 +447,8 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     //TODO(jrohel): Send scriptlet output to better place
     rpm_transaction.set_script_out_file("scriptlet.out");
     rpm_transaction.set_callbacks(std::move(callbacks));
-    auto ret = rpm_transaction.run();
+    rpm_transaction.set_flags(rpm_transaction_flags);
+    ret = rpm_transaction.run();
 
     // TODO(mblaha): Handle ret == -1 and ret > 0, fill problems list
 
@@ -422,7 +478,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
             transaction_problems.emplace_back((*it).to_string());
         }
         return TransactionRunResult::ERROR_RPM_RUN;
-    };
+    }
 }
 
 
