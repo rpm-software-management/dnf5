@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "wrappers/dbus_goal_wrapper.hpp"
 #include "wrappers/dbus_package_wrapper.hpp"
 
+#include "libdnf-cli/exception.hpp"
 #include "libdnf-cli/output/transaction_table.hpp"
 
 #include <dnfdaemon-server/dbus.hpp>
@@ -50,6 +51,7 @@ void TransactionCommand::run_transaction() {
         .withArguments(options)
         .storeResultsTo(transaction, result_int);
     dnfdaemon::ResolveResult result = static_cast<dnfdaemon::ResolveResult>(result_int);
+    DbusGoalWrapper dbus_goal_wrapper(transaction);
 
     if (result != dnfdaemon::ResolveResult::NO_PROBLEM) {
         // retrieve and print resolving error messages
@@ -58,26 +60,19 @@ void TransactionCommand::run_transaction() {
             .onInterface(dnfdaemon::INTERFACE_GOAL)
             .withTimeout(static_cast<uint64_t>(-1))
             .storeResultsTo(problems);
-        for (const auto & problem : problems) {
-            std::cout << problem << std::endl;
-        }
         if (result == dnfdaemon::ResolveResult::ERROR) {
-            return;
+            throw libdnf::cli::GoalResolveError(problems);
         }
-    }
-
-    if (transaction.empty()) {
-        std::cout << "Nothing to do." << std::endl;
-        return;
+        dbus_goal_wrapper.set_resolve_logs(std::move(problems));
     }
 
     // print the transaction to the user and ask for confirmation
-    DbusGoalWrapper dbus_goal_wrapper(transaction);
-    libdnf::cli::output::print_transaction_table(dbus_goal_wrapper);
+    if (!libdnf::cli::output::print_transaction_table(dbus_goal_wrapper)) {
+        return;
+    }
 
     if (!userconfirm(ctx)) {
-        std::cout << "Operation aborted." << std::endl;
-        return;
+        throw libdnf::cli::AbortedByUserError();
     }
 
     // do the transaction

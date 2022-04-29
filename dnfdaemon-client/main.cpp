@@ -262,7 +262,7 @@ int main(int argc, char * argv[]) {
         std::cout << ex.what() << std::endl;
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (std::exception & ex) {
-        std::cerr << fmt::format("Command returned error: {}", ex.what()) << std::endl;
+        std::cout << ex.what() << std::endl;
         return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
 
