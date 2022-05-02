@@ -234,7 +234,12 @@ void BuildDepCommand::run() {
     // fill the goal with build dependencies
     libdnf::Goal goal(ctx.base);
     for (const auto & spec : install_specs) {
-        goal.add_rpm_install(spec);
+        if (spec[0] == '(') {
+            // rich dependencies require different method
+            goal.add_provide_install(spec);
+        } else {
+            goal.add_rpm_install(spec);
+        }
     }
 
     auto transaction = goal.resolve(false);
