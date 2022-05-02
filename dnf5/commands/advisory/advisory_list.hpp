@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_ADVISORY_ADVISORY_LIST_HPP
 
 
+#include "advisory_subcommand.hpp"
 #include "arguments.hpp"
 
 #include <libdnf-cli/session.hpp>
@@ -34,20 +35,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class AdvisoryListCommand : public libdnf::cli::session::Command {
+class AdvisoryListCommand : public AdvisorySubCommand {
 public:
     explicit AdvisoryListCommand(Command & parent);
-    void run() override;
-
-    std::unique_ptr<AdvisoryAvailableOption> available{nullptr};
-    std::unique_ptr<AdvisoryInstalledOption> installed{nullptr};
-    std::unique_ptr<AdvisoryAllOption> all{nullptr};
-    std::unique_ptr<AdvisoryUpdatesOption> updates{nullptr};
-    std::unique_ptr<AdvisorySpecArguments> package_specs{nullptr};
 
 protected:
-    // to be used by an alias command only
-    explicit AdvisoryListCommand(Command & parent, const std::string & name);
+    void process_and_print_queries(
+        Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) override;
 };
 
 

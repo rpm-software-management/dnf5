@@ -37,79 +37,36 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 
-AdvisoryInfoCommand::AdvisoryInfoCommand(Command & parent) : AdvisoryInfoCommand(parent, "info") {}
+AdvisoryInfoCommand::AdvisoryInfoCommand(Command & parent)
+    : AdvisorySubCommand(parent, "info", _("Print details about advisories")) {}
 
+void AdvisoryInfoCommand::process_and_print_queries(
+    Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) {
+    if (all->get_value()) {
+        packages.filter_installed();
+        advisories.filter_packages(packages, libdnf::sack::QueryCmp::LTE);
+        auto advisory_query_not_installed = libdnf::advisory::AdvisoryQuery(ctx.base);
+        advisory_query_not_installed.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        advisories |= advisory_query_not_installed;
+    } else if (installed->get_value()) {
+        packages.filter_installed();
+        advisories.filter_packages(packages, libdnf::sack::QueryCmp::LTE);
+    } else if (updates->get_value()) {
+        packages.filter_upgradable();
+        advisories.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+    } else {  // available is the default
+        packages.filter_installed();
+        packages.filter_latest_evr();
 
-AdvisoryInfoCommand::AdvisoryInfoCommand(Command & parent, const std::string & name) : Command(parent, name) {
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Info advisories");
-
-    available = std::make_unique<AdvisoryAvailableOption>(*this);
-    installed = std::make_unique<AdvisoryInstalledOption>(*this);
-    all = std::make_unique<AdvisoryAllOption>(*this);
-    updates = std::make_unique<AdvisoryUpdatesOption>(*this);
-    // TODO(amatej): set_conflicting_args({available, installed, all, updates});
-
-    package_specs = std::make_unique<AdvisorySpecArguments>(*this);
-}
-
-
-void AdvisoryInfoCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
-
-    ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::UPDATEINFO);
-
-    using QueryCmp = libdnf::sack::QueryCmp;
-
-    libdnf::rpm::PackageQuery package_query(ctx.base);
-
-    auto package_specs_str = package_specs->get_value();
-
-    // Filter by patterns if given
-    if (package_specs_str.size() > 0) {
-        package_query.filter_name(package_specs_str, QueryCmp::IGLOB);
+        advisories.filter_packages(packages, libdnf::sack::QueryCmp::GT);
     }
 
-    auto adv_q_installed = libdnf::advisory::AdvisoryQuery(ctx.base);
-    auto adv_q_available = libdnf::advisory::AdvisoryQuery(ctx.base);
-    auto adv_q_updates = libdnf::advisory::AdvisoryQuery(ctx.base);
-
-    if (installed->get_value() || all->get_value()) {
-        auto installed_package_query = package_query;
-        installed_package_query.filter_installed();
-        adv_q_installed.filter_packages(installed_package_query, QueryCmp::LTE);
-    }
-
-    // Default if nothing specified
-    if (available->get_value() || all->get_value() ||
-        (!installed->get_value() && !available->get_value() && !updates->get_value())) {
-        auto installed_package_query = package_query;
-        installed_package_query.filter_installed();
-        installed_package_query.filter_latest_evr();
-        //TODO(amatej): https://github.com/rpm-software-management/dnf/pull/1485, show for currently running
-        //kernel and if it is not the latests one show also for the latest kernel
-        //auto kernel_id = ctx.base.get_rpm_package_sack()->p_impl->get_running_kernel();
-        //Use rpm::PackageId Goal::get_running_kernel_internal()?
-
-        adv_q_updates.filter_packages(installed_package_query, QueryCmp::GT);
-    }
-
-    if (updates->get_value()) {
-        auto upgradable_package_query = package_query;
-        upgradable_package_query.filter_upgradable();
-        adv_q_updates.filter_packages(upgradable_package_query, QueryCmp::GT);
-    }
-
-    adv_q_installed |= adv_q_available;
-    adv_q_installed |= adv_q_updates;
-
-    for (auto advisory : adv_q_installed) {
+    for (auto advisory : advisories) {
         libdnf::cli::output::AdvisoryInfo advisory_info;
         advisory_info.add_advisory(advisory);
         advisory_info.print();
         std::cout << std::endl;
     }
 }
-
 
 }  // namespace dnf5
