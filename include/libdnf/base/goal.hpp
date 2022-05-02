@@ -229,6 +229,19 @@ public:
         const libdnf::rpm::PackageSet & package_set,
         const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
+
+    /// Request to install providers of the `spec`. Useful to install package
+    /// using rich dependencies.  The `spec` (e.g. "(depA and depB)") is not
+    /// parsed but directly passed to the solver to install package(s) which
+    /// provide the `spec`. Solver then creates a job like:
+    /// "job install provides depA and depB".
+    ///
+    /// @param spec      A string with libsolv relational dependency.
+    /// @param settings  A structure to override default goal settings. The value `from_repo_ids` is not used.
+    void add_provide_install(
+        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
+
     // TODO(jmracek) Move transaction reports to Transaction class
     /// Resolve all jobs and return a transaction object. Everytime it resolves specs (strings) to packages
     ///

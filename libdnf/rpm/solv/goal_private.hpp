@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/rpm/package_sack.hpp"
+#include "libdnf/rpm/reldep.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <solv/solver.h>
@@ -50,6 +51,7 @@ public:
     void set_installonly_limit(unsigned int limit) { installonly_limit = limit; };
 
     void add_install(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps);
+    void add_provide_install(libdnf::rpm::ReldepId reldepid, bool strict, bool best, bool clean_deps);
     void add_remove(const libdnf::solv::IdQueue & queue, bool clean_deps);
     void add_remove(const libdnf::solv::SolvMap & solv_map, bool clean_deps);
     void add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps);
@@ -204,6 +206,13 @@ inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool strict,
         SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
         what);
+}
+
+inline void GoalPrivate::add_provide_install(libdnf::rpm::ReldepId reldepid, bool strict, bool best, bool clean_deps) {
+    staging.push_back(
+        SOLVER_INSTALL | SOLVER_SOLVABLE_PROVIDES | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
+            (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
+        reldepid.id);
 }
 
 inline void GoalPrivate::add_remove(const libdnf::solv::IdQueue & queue, bool clean_deps) {

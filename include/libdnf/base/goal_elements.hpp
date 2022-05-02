@@ -80,6 +80,7 @@ enum class GoalProblem : uint32_t {
 enum class GoalAction {
     INSTALL,
     INSTALL_OR_REINSTALL,
+    INSTALL_VIA_PROVIDE,
     REINSTALL,
     UPGRADE,
     UPGRADE_ALL,

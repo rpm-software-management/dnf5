@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/package_query.hpp"
+#include "libdnf/rpm/reldep.hpp"
 
 #include <sys/utsname.h>
 
@@ -87,6 +88,7 @@ public:
     GoalProblem add_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_install_to_goal(
         base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
+    void add_provide_install_to_goal(const std::string & spec, GoalJobSettings & settings);
     GoalProblem add_reinstall_to_goal(
         base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
     void add_remove_to_goal(base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
@@ -199,6 +201,10 @@ void Goal::add_rpm_distro_sync(const rpm::PackageSet & package_set, const GoalJo
     p_impl->add_rpm_ids(GoalAction::DISTRO_SYNC, package_set, settings);
 }
 
+void Goal::add_provide_install(const std::string & spec, const GoalJobSettings & settings) {
+    p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::INSTALL_VIA_PROVIDE, spec, settings));
+}
+
 void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
     libdnf_assert_same_base(base, rpm_package.base);
 
@@ -225,6 +231,9 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
         switch (action) {
             case GoalAction::INSTALL:
                 ret |= add_install_to_goal(transaction, spec, settings);
+                break;
+            case GoalAction::INSTALL_VIA_PROVIDE:
+                add_provide_install_to_goal(spec, settings);
                 break;
             case GoalAction::REINSTALL:
                 ret |= add_reinstall_to_goal(transaction, spec, settings);
@@ -462,6 +471,15 @@ GoalProblem Goal::Impl::add_install_to_goal(
     }
 
     return GoalProblem::NO_PROBLEM;
+}
+
+void Goal::Impl::add_provide_install_to_goal(const std::string & spec, GoalJobSettings & settings) {
+    auto & cfg_main = base->get_config();
+    bool strict = settings.resolve_strict(cfg_main);
+    bool best = settings.resolve_best(cfg_main);
+    bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
+    rpm::Reldep reldep(base, spec);
+    rpm_goal.add_provide_install(reldep.get_id(), strict, best, clean_requirements_on_remove);
 }
 
 GoalProblem Goal::Impl::add_reinstall_to_goal(
