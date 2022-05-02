@@ -69,11 +69,10 @@ public:
 };
 
 
-//TODO(amatej): What should be the StringArgumentList used for? just package spec? current dnf also matches AdvisoryIds
 class AdvisorySpecArguments : public libdnf::cli::session::StringArgumentList {
 public:
     explicit AdvisorySpecArguments(libdnf::cli::session::Command & command)
-        : StringArgumentList(command, "package-spec", _("Package spec present in advisories.")) {}
+        : StringArgumentList(command, "advisory-spec", _("List of patterns matched against advisory names.")) {}
 };
 
 

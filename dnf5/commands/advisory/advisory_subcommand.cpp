@@ -1,0 +1,80 @@
+/*
+Copyright Contributors to the libdnf project.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 2 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+*/
+
+
+#include "advisory_subcommand.hpp"
+
+#include "dnf5/context.hpp"
+
+#include <libdnf-cli/output/advisorysummary.hpp>
+#include <libdnf/rpm/package_query.hpp>
+
+#include <filesystem>
+#include <fstream>
+#include <set>
+
+
+namespace dnf5 {
+
+
+using namespace libdnf::cli;
+
+
+AdvisorySubCommand::AdvisorySubCommand(
+    Command & parent, const std::string & name, const std::string & short_description)
+    : Command(parent, name) {
+    auto & ctx = static_cast<Context &>(get_session());
+    auto & parser = ctx.get_argument_parser();
+
+    auto & cmd = *get_argument_parser_command();
+    cmd.set_short_description(short_description);
+
+    all = std::make_unique<AdvisoryAllOption>(*this);
+    available = std::make_unique<AdvisoryAvailableOption>(*this);
+    installed = std::make_unique<AdvisoryInstalledOption>(*this);
+    updates = std::make_unique<AdvisoryUpdatesOption>(*this);
+    advisory_specs = std::make_unique<AdvisorySpecArguments>(*this);
+
+    auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        new std::vector<ArgumentParser::Argument *>{all->arg, available->arg, installed->arg, updates->arg}));
+
+    all->arg->set_conflict_arguments(conflict_args);
+    available->arg->set_conflict_arguments(conflict_args);
+    installed->arg->set_conflict_arguments(conflict_args);
+    updates->arg->set_conflict_arguments(conflict_args);
+}
+
+void AdvisorySubCommand::run() {
+    auto & ctx = static_cast<Context &>(get_session());
+
+    ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::UPDATEINFO);
+
+    libdnf::rpm::PackageQuery package_query(ctx.base);
+
+    auto advisories = libdnf::advisory::AdvisoryQuery(ctx.base);
+    auto advisory_specs_strs = advisory_specs->get_value();
+    // Filter advisories by patterns if given
+    if (advisory_specs_strs.size() > 0) {
+        advisories.filter_name(advisory_specs_strs, libdnf::sack::QueryCmp::IGLOB);
+    }
+
+    process_and_print_queries(ctx, advisories, package_query);
+}
+
+}  // namespace dnf5

@@ -18,10 +18,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#ifndef DNF5_COMMANDS_ADVISORY_ADVISORY_SUMMARY_HPP
-#define DNF5_COMMANDS_ADVISORY_ADVISORY_SUMMARY_HPP
+#ifndef DNF5_COMMANDS_ADVISORY_ADVISORY_SUBCOMMAND_HPP
+#define DNF5_COMMANDS_ADVISORY_ADVISORY_SUBCOMMAND_HPP
 
-#include "advisory_subcommand.hpp"
+#include "arguments.hpp"
 #include "dnf5/context.hpp"
 
 #include "libdnf/advisory/advisory_query.hpp"
@@ -35,17 +35,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class AdvisorySummaryCommand : public AdvisorySubCommand {
+class AdvisorySubCommand : public libdnf::cli::session::Command {
 public:
-    explicit AdvisorySummaryCommand(Command & parent);
+    void run() override;
 
 protected:
-    void process_and_print_queries(
-        Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) override;
+    virtual void process_and_print_queries(
+        Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) = 0;
+
+    std::unique_ptr<AdvisoryAvailableOption> available{nullptr};
+    std::unique_ptr<AdvisoryInstalledOption> installed{nullptr};
+    std::unique_ptr<AdvisoryAllOption> all{nullptr};
+    std::unique_ptr<AdvisoryUpdatesOption> updates{nullptr};
+    std::unique_ptr<AdvisorySpecArguments> advisory_specs{nullptr};
+
+    AdvisorySubCommand(Command & parent, const std::string & name, const std::string & short_description);
 };
 
 
 }  // namespace dnf5
 
 
-#endif  // DNF5_COMMANDS_ADVISORY_ADVISORY_SUMMARY_HPP
+#endif  // DNF5_COMMANDS_ADVISORY_ADVISORY_SUBCOMMAND_HPP

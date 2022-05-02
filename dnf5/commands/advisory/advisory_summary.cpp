@@ -22,6 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/context.hpp"
 
+#include <libdnf-cli/output/advisorysummary.hpp>
+#include <libdnf/rpm/package_query.hpp>
+
 #include <filesystem>
 #include <fstream>
 #include <set>
@@ -33,26 +36,37 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 
-AdvisorySummaryCommand::AdvisorySummaryCommand(Command & parent) : AdvisorySummaryCommand(parent, "summary") {}
+AdvisorySummaryCommand::AdvisorySummaryCommand(Command & parent)
+    : AdvisorySubCommand(parent, "summary", _("Print summary of advisories")) {}
 
+void AdvisorySummaryCommand::process_and_print_queries(
+    Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) {
+    std::string mode;
 
-AdvisorySummaryCommand::AdvisorySummaryCommand(Command & parent, const std::string & name) : Command(parent, name) {
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Summary advisories");
+    if (all->get_value()) {
+        packages.filter_installed();
+        advisories.filter_packages(packages, libdnf::sack::QueryCmp::LTE);
+        auto advisory_query_not_installed = libdnf::advisory::AdvisoryQuery(ctx.base);
+        advisory_query_not_installed.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        advisories |= advisory_query_not_installed;
+        mode = _("All");
+    } else if (installed->get_value()) {
+        packages.filter_installed();
+        advisories.filter_packages(packages, libdnf::sack::QueryCmp::LTE);
+        mode = _("Installed");
+    } else if (updates->get_value()) {
+        packages.filter_upgradable();
+        advisories.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        mode = _("Updates");
+    } else {  // available is the default
+        packages.filter_installed();
+        packages.filter_latest_evr();
 
-    available = std::make_unique<AdvisoryAvailableOption>(*this);
-    installed = std::make_unique<AdvisoryInstalledOption>(*this);
-    all = std::make_unique<AdvisoryAllOption>(*this);
-    updates = std::make_unique<AdvisoryUpdatesOption>(*this);
-    // TODO(amatej): set_conflicting_args({available, installed, all, updates});
+        advisories.filter_packages(packages, libdnf::sack::QueryCmp::GT);
+        mode = _("Available");
+    }
 
-    package_specs = std::make_unique<AdvisorySpecArguments>(*this);
+    libdnf::cli::output::print_advisorysummary_table(advisories, mode);
 }
-
-
-void AdvisorySummaryCommand::run() {
-    //TODO(amatej): implement
-}
-
 
 }  // namespace dnf5
