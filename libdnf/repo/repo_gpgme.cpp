@@ -86,7 +86,7 @@ private:
 ///
 /// [1] https://bugzilla.redhat.com/show_bug.cgi?id=1650266
 /// [2] https://bugzilla.redhat.com/show_bug.cgi?id=1769831
-/// [3] https://github.com/rpm-software-management/microdnf/issues/50
+/// [3] https://github.com/rpm-software-management/dnf5/issues/50
 /// [4] https://bugzilla.redhat.com/show_bug.cgi?id=1781601
 static void ensure_socket_dir_exists(Logger & logger) {
     auto dir_path = std::filesystem::path("/run/user") / std::to_string(getuid());

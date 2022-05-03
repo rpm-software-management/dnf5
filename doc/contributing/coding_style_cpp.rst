@@ -42,10 +42,10 @@ Includes
 
     #include <libdnf/.../*.hpp>
 
-* Includes within the same component should use the double-quote form. E.g. in microdnf::
+* Includes within the same component should use the double-quote form. E.g. in dnf5::
 
     #include "commands/.../*.hpp"
 
-* Includes from a different component in the repository should use the angle-bracket form. E.g. in microdnf::
+* Includes from a different component in the repository should use the angle-bracket form. E.g. in dnf5::
 
     #include <libdnf/.../*.hpp>

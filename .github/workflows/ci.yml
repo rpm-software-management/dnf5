@@ -97,7 +97,7 @@ jobs:
         - /var/lib/mycontainer:/var/lib/containers
     strategy:
       matrix:
-        extra-run-args: [--tags dnf5 --command microdnf5, --tags dnfdaemon --command dnfdaemon-client]
+        extra-run-args: [--tags dnf5 --command dnf5, --tags dnfdaemon --command dnfdaemon-client]
     steps:
       - name: Check out ci-dnf-stack
         uses: actions/checkout@v2

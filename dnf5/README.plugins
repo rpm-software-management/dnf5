@@ -1,0 +1,2 @@
+dnf5 plugins directory
+Any files in this directory with the ".so" extension will be loaded as dnf5 plugins, in alphabetical order.

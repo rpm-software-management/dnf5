@@ -1,0 +1,10 @@
+# bash completion for dnf5
+
+_do_dnf5_completion()
+{
+    local words=() cword
+    __reassemble_comp_words_by_ref "><=;|&(:" words cword
+    mapfile -t COMPREPLY < <($1 "--complete=${cword}" "${words[@]}")
+}
+
+complete -F _do_dnf5_completion -o nosort -o nospace dnf5

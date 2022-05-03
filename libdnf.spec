@@ -12,8 +12,8 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 %bcond_without dnfdaemon_client
 %bcond_without dnfdaemon_server
 %bcond_without libdnf_cli
-%bcond_without microdnf
-%bcond_without microdnf_plugins
+%bcond_without dnf5
+%bcond_without dnf5_plugins
 %bcond_without python_plugins_loader
 
 %bcond_without comps
@@ -402,10 +402,10 @@ Package management service with a DBus interface
 %endif
 
 
-# ========== microdnf ==========
+# ========== dnf5 ==========
 
-%if %{with microdnf}
-%package -n microdnf5
+%if %{with dnf5}
+%package -n dnf5
 Summary:        Command-line package manager
 License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -413,40 +413,39 @@ Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 Recommends:     bash-completion
 BuildRequires:  bash-completion
-BuildRequires:  sed
 
-%description -n microdnf5
-Microdnf is a command-line package manager that automates the process of installing,
+%description -n dnf5
+DNF5 is a command-line package manager that automates the process of installing,
 upgrading, configuring, and removing computer programs in a consistent manner.
 It supports RPM packages, modulemd modules, and comps groups & environments.
 
-%files -n microdnf5
-%{_bindir}/microdnf5
-%dir %{_libdir}/microdnf5/
-%dir %{_libdir}/microdnf5/plugins/
-%{_libdir}/microdnf5/plugins/README
+%files -n dnf5
+%{_bindir}/dnf5
+%dir %{_libdir}/dnf5/
+%dir %{_libdir}/dnf5/plugins/
+%{_libdir}/dnf5/plugins/README
 %dir %{_datadir}/bash-completion/
 %dir %{_datadir}/bash-completion/completions/
-%{_datadir}/bash-completion/completions/microdnf5
+%{_datadir}/bash-completion/completions/dnf5
 %license COPYING.md
 %license gpl-2.0.txt
-%{_mandir}/man8/microdnf5.8.gz
+%{_mandir}/man8/dnf5.8.gz
 %endif
 
 
-# ========== microdnf-plugins ==========
+# ========== dnf5-plugins ==========
 
-%if %{with microdnf_plugins}
-%package -n microdnf5-plugins
-Summary:        microdnf plugins
+%if %{with dnf5_plugins}
+%package -n dnf5-plugins
+Summary:        dnf5 plugins
 License:        LGPLv2.1+
-Requires:       microdnf5%{?_isa} = %{version}-%{release}
+Requires:       dnf5%{?_isa} = %{version}-%{release}
 
-%description -n microdnf5-plugins
-Microdnf plugins
+%description -n dnf5-plugins
+DNF5 plugins
 
-%files -n microdnf5-plugins
-%{_libdir}/microdnf5/plugins/*.so
+%files -n dnf5-plugins
+%{_libdir}/dnf5/plugins/*.so
 %endif
 
 
@@ -464,7 +463,7 @@ Microdnf plugins
     -DWITH_DNFDAEMON_CLIENT=%{?with_dnfdaemon_client:ON}%{!?with_dnfdaemon_client:OFF} \
     -DWITH_DNFDAEMON_SERVER=%{?with_dnfdaemon_server:ON}%{!?with_dnfdaemon_server:OFF} \
     -DWITH_LIBDNF_CLI=%{?with_libdnf_cli:ON}%{!?with_libdnf_cli:OFF} \
-    -DWITH_MICRODNF=%{?with_microdnf:ON}%{!?with_microdnf:OFF} \
+    -DWITH_DNF5=%{?with_dnf5:ON}%{!?with_dnf5:OFF} \
     -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
     \
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
@@ -500,12 +499,6 @@ Microdnf plugins
 
 # HACK: temporarily rename libdnf to ensure parallel installability with old libdnf
 mv $RPM_BUILD_ROOT/%{python3_sitearch}/libdnf $RPM_BUILD_ROOT/%{python3_sitearch}/libdnf5
-
-# HACK: temporarily rename microdnf to ensure parallel installability with old microdnf
-mv $RPM_BUILD_ROOT/%{_bindir}/microdnf $RPM_BUILD_ROOT/%{_bindir}/microdnf5
-mv $RPM_BUILD_ROOT/%{_mandir}/man8/microdnf.8 $RPM_BUILD_ROOT/%{_mandir}/man8/microdnf5.8
-mv $RPM_BUILD_ROOT/%{_datadir}/bash-completion/completions/microdnf $RPM_BUILD_ROOT/%{_datadir}/bash-completion/completions/microdnf5
-sed -i 's/microdnf/microdnf5/g' $RPM_BUILD_ROOT/%{_datadir}/bash-completion/completions/microdnf5
 
 
 #find_lang {name}

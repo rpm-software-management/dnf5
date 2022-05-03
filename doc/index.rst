@@ -8,7 +8,7 @@ Welcome to libdnf's documentation!
     about
     tutorial/index
     api/index
-    microdnf.8
+    dnf5.8
     dnf_daemon/index
     contributing/index
     migration_guide

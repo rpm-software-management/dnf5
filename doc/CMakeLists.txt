@@ -46,8 +46,8 @@ if(WITH_MAN)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnfdaemon-dbus-api.8 DESTINATION share/man/man8)
     endif()
 
-    if(WITH_MICRODNF)
-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/microdnf.8 DESTINATION share/man/man8)
+    if(WITH_DNF5)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5.8 DESTINATION share/man/man8)
     endif()
 
 endif()

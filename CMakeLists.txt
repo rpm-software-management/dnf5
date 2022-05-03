@@ -21,8 +21,8 @@ endif()
 option(WITH_DNFDAEMON_CLIENT "Build command-line interface for dnfdaemon" ON)
 option(WITH_DNFDAEMON_SERVER "Build package management service with a DBus interface" ON)
 option(WITH_LIBDNF_CLI "Build library for working with a terminal in a command-line package manager" ON)
-option(WITH_MICRODNF "Build microdnf command-line package manager" ON)
-option(WITH_MICRODNF_PLUGINS "Build plugins for microdnf command-line package manager" ON)
+option(WITH_DNF5 "Build dnf5 command-line package manager" ON)
+option(WITH_DNF5_PLUGINS "Build plugins for dnf5 command-line package manager" ON)
 option(WITH_PYTHON_PLUGINS_LOADER "Build a special libdnf plugin that loads Python plugins. Requires WITH_PYTHON3=ON." ON)
 
 # build options - features
@@ -110,9 +110,9 @@ add_subdirectory("bindings")
 add_subdirectory("dnfdaemon-server")
 add_subdirectory("dnfdaemon-client")
 
-# microdnf
-add_subdirectory("microdnf")
-add_subdirectory("microdnf-plugins")
+# dnf5
+add_subdirectory("dnf5")
+add_subdirectory("dnf5-plugins")
 
 # tests
 enable_testing()

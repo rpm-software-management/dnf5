@@ -82,7 +82,7 @@ html_static_path = ['_static']
 # One entry per manual page. List of tuples
 # (source start file, name, description, authors, manual section).
 man_pages = [
-    ('microdnf.8', 'microdnf', 'Microdnf Command-line Package Manager', AUTHORS, 8),
+    ('dnf5.8', 'dnf5', 'DNF5 Command-line Package Manager', AUTHORS, 8),
     ('dnf_daemon/dnfdaemon_client.8', 'dnfdaemon-client', 'Command-line interface for dnfdaemon', AUTHORS, 8),
     ('dnf_daemon/dnfdaemon_server.8', 'dnfdaemon-server', 'Package management service with a DBus interface', AUTHORS, 8),
     ('dnf_daemon/dnfdaemon_dbus_api.8', 'dnfdaemon-dbus-api', 'DBus API Reference for Dnfdaemon', AUTHORS, 8),

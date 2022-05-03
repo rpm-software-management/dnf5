@@ -148,7 +148,7 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
 }
 
 
-// TODO (mblaha) shared download_packages with microdnf / libdnf
+// TODO (mblaha) shared download_packages with dnf5 / libdnf
 // TODO (mblaha) callbacks to report the status
 void download_packages(Session & session, libdnf::base::Transaction & transaction) {
     libdnf::repo::PackageDownloader downloader;

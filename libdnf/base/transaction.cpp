@@ -440,8 +440,8 @@ Transaction::TransactionRunResult Transaction::Impl::run(
         db_transaction->set_user_id(get_login_uid());
     }
     //
-    // TODO(jrohel): nevra of running microdnf?
-    //db_transaction->add_runtime_package("microdnf");
+    // TODO(jrohel): nevra of running dnf5?
+    //db_transaction->add_runtime_package("dnf5");
 
     db_transaction->set_rpmdb_version_begin(rpm_transaction.get_db_cookie());
     db_transaction->fill_transaction_packages(packages);
