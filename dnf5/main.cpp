@@ -47,6 +47,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include "libdnf-cli/output/transaction_table.hpp"
+#include "libdnf-cli/utils/userconfirm.hpp"
 
 #include <fcntl.h>
 #include <fmt/format.h>
@@ -670,7 +671,7 @@ int main(int argc, char * argv[]) try {
                 return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
             }
 
-            if (!dnf5::userconfirm(context.base.get_config())) {
+            if (!libdnf::cli::utils::userconfirm::userconfirm(context.base.get_config())) {
                 throw libdnf::cli::AbortedByUserError();
             }
 

@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "plugins.hpp"
 #include "utils.hpp"
 
+#include "libdnf-cli/utils/userconfirm.hpp"
+
 #include <fmt/format.h>
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf-cli/tty.hpp>
@@ -44,47 +46,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace fs = std::filesystem;
 
 namespace dnf5 {
-
-bool userconfirm(libdnf::ConfigMain & config) {
-    for (const auto & tsflag : config.tsflags().get_value()) {
-        if (tsflag == "test") {
-            std::cout << "Test mode enabled: Only package downloads, gpg key installations and transaction checks will "
-                         "be performed."
-                      << std::endl;
-            break;
-        }
-    }
-
-    // "assumeno" takes precedence over "assumeyes"
-    if (config.assumeno().get_value()) {
-        return false;
-    }
-    if (config.assumeyes().get_value()) {
-        return true;
-    }
-    std::string msg;
-    if (config.defaultyes().get_value()) {
-        msg = "Is this ok [Y/n]: ";
-    } else {
-        msg = "Is this ok [y/N]: ";
-    }
-    while (true) {
-        std::cout << msg;
-
-        std::string choice;
-        std::getline(std::cin, choice);
-
-        if (choice.empty()) {
-            return config.defaultyes().get_value();
-        }
-        if (choice == "y" || choice == "Y") {
-            return true;
-        }
-        if (choice == "n" || choice == "N") {
-            return false;
-        }
-    }
-}
 
 namespace {
 
@@ -111,7 +72,7 @@ public:
         std::cout << " Fingerprint: " << fingerprint << "\n";
         std::cout << " From       : " << url << std::endl;
 
-        return userconfirm(*config);
+        return libdnf::cli::utils::userconfirm::userconfirm(*config);
     }
 
     // Quiet empty implementation.
