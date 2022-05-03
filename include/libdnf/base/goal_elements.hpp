@@ -74,7 +74,8 @@ enum class GoalProblem : uint32_t {
     INSTALLED_IN_DIFFERENT_VERSION = (1 << 10),
     NOT_AVAILABLE = (1 << 11),
     ALREADY_INSTALLED = (1 << 12),
-    SOLVER_PROBLEM_STRICT_RESOLVEMENT = (1 << 13)
+    SOLVER_PROBLEM_STRICT_RESOLVEMENT = (1 << 13),
+    WRITE_DEBUG = (1 << 14)
 };
 
 enum class GoalAction {

@@ -126,6 +126,8 @@ std::string LogEvent::to_string(
                 throw std::invalid_argument("Missing SolverProblems to convert event into string");
             }
             return ret.append(solver_problems->to_string());
+        case GoalProblem::WRITE_DEBUG:
+            return ret.append(utils::sformat(_("Debug data written to \"{}\""), *additional_data->begin()));
     }
     return ret;
 }
