@@ -17,11 +17,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "libdnf/transaction/transaction_item_action.hpp"
+
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 
 namespace libdnf::transaction {
+
+InvalidTransactionItemAction::InvalidTransactionItemAction(const std::string & action)
+    : libdnf::Error(M_("Invalid transaction item action: {}"), action) {}
 
 
 std::string transaction_item_action_to_string(TransactionItemAction action) {
@@ -35,13 +39,34 @@ std::string transaction_item_action_to_string(TransactionItemAction action) {
         case TransactionItemAction::REINSTALL:
             return "Reinstall";
         case TransactionItemAction::REMOVE:
-            return "Removed";
+            return "Remove";
         case TransactionItemAction::REPLACED:
             return "Replaced";
         case TransactionItemAction::REASON_CHANGE:
             return "Reason Change";
     }
     return "";
+}
+
+
+TransactionItemAction transaction_item_action_from_string(const std::string & action) {
+    if (action == "Install") {
+        return TransactionItemAction::INSTALL;
+    } else if (action == "Upgrade") {
+        return TransactionItemAction::UPGRADE;
+    } else if (action == "Downgrade") {
+        return TransactionItemAction::DOWNGRADE;
+    } else if (action == "Reinstall") {
+        return TransactionItemAction::REINSTALL;
+    } else if (action == "Remove") {
+        return TransactionItemAction::REMOVE;
+    } else if (action == "Replaced") {
+        return TransactionItemAction::REPLACED;
+    } else if (action == "Reason Change") {
+        return TransactionItemAction::REASON_CHANGE;
+    }
+
+    throw InvalidTransactionItemAction(action);
 }
 
 

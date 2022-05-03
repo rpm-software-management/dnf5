@@ -32,28 +32,24 @@ namespace libdnf::transaction {
 
 static const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
     SELECT
-        /* trans_item */
         ti.id,
-        ti.action,
-        ti.reason,
-        ti.state,
-        /* repo */
+        trans_item_action.name AS action,
+        trans_item_reason.name AS reason,
+        trans_item_state.name AS state,
         r.repoid,
-        /* rpm */
         i.item_id,
         i.name,
         i.epoch,
         i.version,
         i.release,
         i.arch
-    FROM
-        trans_item ti
-    JOIN
-        repo r ON ti.repo_id == r.id
-    JOIN
-        rpm i USING (item_id)
-    WHERE
-        ti.trans_id = ?
+    FROM trans_item ti
+    JOIN repo r ON ti.repo_id == r.id
+    JOIN rpm i USING (item_id)
+    LEFT JOIN trans_item_action ON ti.action_id == trans_item_action.id
+    LEFT JOIN trans_item_reason ON ti.reason_id == trans_item_reason.id
+    LEFT JOIN trans_item_state ON ti.state_id == trans_item_state.id
+    WHERE ti.trans_id = ?
 )**";
 
 

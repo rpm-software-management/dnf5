@@ -31,9 +31,9 @@ namespace libdnf::transaction {
 
 void transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionItem & ti) {
     ti.set_id(query.get<int64_t>("id"));
-    ti.set_action(static_cast<TransactionItemAction>(query.get<int>("action")));
-    ti.set_reason(static_cast<TransactionItemReason>(query.get<int>("reason")));
-    ti.set_state(static_cast<TransactionItemState>(query.get<int>("state")));
+    ti.set_action(transaction_item_action_from_string(query.get<std::string>("action")));
+    ti.set_reason(transaction_item_reason_from_string(query.get<std::string>("reason")));
+    ti.set_state(transaction_item_state_from_string(query.get<std::string>("state")));
     ti.set_repoid(query.get<std::string>("repoid"));
     ti.set_item_id(query.get<int64_t>("item_id"));
 }
@@ -46,12 +46,19 @@ static const char * SQL_TRANS_ITEM_INSERT = R"**(
             trans_id,
             item_id,
             repo_id,
-            action,
-            reason,
-            state
+            action_id,
+            reason_id,
+            state_id
         )
-    VALUES
-        (null, ?, ?, ?, ?, ?, ?)
+    VALUES (
+        null,
+        ?,
+        ?,
+        ?,
+        (SELECT id FROM trans_item_action WHERE name=?),
+        (SELECT id FROM trans_item_reason WHERE name=?),
+        (SELECT id FROM trans_item_state WHERE name=?)
+    )
 )**";
 
 
@@ -77,9 +84,9 @@ int64_t transaction_item_insert(libdnf::utils::SQLite3::Statement & query, Trans
         ti.get_transaction().get_id(),
         ti.get_item_id(),
         repo_id,
-        static_cast<int>(ti.get_action()),
-        static_cast<int>(ti.get_reason()),
-        static_cast<int>(ti.get_state()));
+        transaction_item_action_to_string(ti.get_action()),
+        transaction_item_reason_to_string(ti.get_reason()),
+        transaction_item_state_to_string(ti.get_state()));
     query.step();
     auto pk = query.last_insert_rowid();
     ti.set_id(pk);

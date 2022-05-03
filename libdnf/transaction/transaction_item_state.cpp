@@ -17,11 +17,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "libdnf/transaction/transaction_item_state.hpp"
+
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 
 namespace libdnf::transaction {
+
+InvalidTransactionItemState::InvalidTransactionItemState(const std::string & state)
+    : libdnf::Error(M_("Invalid transaction item state: {}"), state) {}
 
 
 std::string transaction_item_state_to_string(TransactionItemState state) {
@@ -34,6 +38,19 @@ std::string transaction_item_state_to_string(TransactionItemState state) {
             return "Error";
     }
     return "";
+}
+
+
+TransactionItemState transaction_item_state_from_string(const std::string & state) {
+    if (state == "Started") {
+        return TransactionItemState::STARTED;
+    } else if (state == "Ok") {
+        return TransactionItemState::OK;
+    } else if (state == "Error") {
+        return TransactionItemState::ERROR;
+    }
+
+    throw InvalidTransactionItemState(state);
 }
 
 

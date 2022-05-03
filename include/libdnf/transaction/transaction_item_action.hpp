@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TRANSACTION_ITEM_ACTION_HPP
 #define LIBDNF_TRANSACTION_ITEM_ACTION_HPP
 
+#include "libdnf/common/exception.hpp"
+
 #include <string>
 
 
@@ -41,8 +43,20 @@ enum class TransactionItemAction : int {
 };
 
 
+class InvalidTransactionItemAction : public libdnf::Error {
+public:
+    InvalidTransactionItemAction(const std::string & action);
+
+    const char * get_domain_name() const noexcept override { return "libdnf::transaction"; }
+    const char * get_name() const noexcept override { return "InvalidTransactionItemAction"; }
+};
+
+
 std::string transaction_item_action_to_string(TransactionItemAction action);
+TransactionItemAction transaction_item_action_from_string(const std::string & action);
+
 std::string transaction_item_action_to_letter(TransactionItemAction action);
+
 bool transaction_item_action_is_inbound(TransactionItemAction action);
 bool transaction_item_action_is_outbound(TransactionItemAction action);
 

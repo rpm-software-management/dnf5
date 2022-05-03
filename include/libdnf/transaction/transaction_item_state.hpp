@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_ITEM_STATE_HPP
 
+#include "libdnf/common/exception.hpp"
+
 #include <string>
 
 
@@ -28,7 +30,17 @@ namespace libdnf::transaction {
 enum class TransactionItemState : int { STARTED = 1, OK = 2, ERROR = 3 };
 
 
+class InvalidTransactionItemState : public libdnf::Error {
+public:
+    InvalidTransactionItemState(const std::string & state);
+
+    const char * get_domain_name() const noexcept override { return "libdnf::transaction"; }
+    const char * get_name() const noexcept override { return "InvalidTransactionItemState"; }
+};
+
+
 std::string transaction_item_state_to_string(TransactionItemState state);
+TransactionItemState transaction_item_state_from_string(const std::string & state);
 
 }  // namespace libdnf::transaction
 

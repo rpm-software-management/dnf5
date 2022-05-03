@@ -16,34 +16,58 @@ R"**(
         cmdline TEXT,                                   /* recorded command line (program, options, arguments) */
         state_id INTEGER REFERENCES trans_state(id)     /* (enum) */
     );
+
     CREATE TABLE repo (
         id INTEGER PRIMARY KEY,
         repoid TEXT NOT NULL            /* repository ID aka 'repoid' */
     );
+
     CREATE TABLE console_output (
         id INTEGER PRIMARY KEY,
         trans_id INTEGER REFERENCES trans(id),
         file_descriptor INTEGER NOT NULL,       /* stdout: 1, stderr : 2 */
         line TEXT NOT NULL
     );
+
     CREATE TABLE item (
         id INTEGER PRIMARY KEY,
         item_type INTEGER NOT NULL              /* (enum) 1: rpm, 2: group, 3: env ...*/
     );
+
+    CREATE TABLE trans_item_action (
+        id INTEGER PRIMARY KEY,
+        name TEXT
+    );
+    INSERT INTO trans_item_action VALUES (1, "Install"), (2, "Upgrade"), (3, "Downgrade"), (4, "Reinstall"), (5, "Remove"), (6, "Replaced"), (7, "Reason Change");
+
+    CREATE TABLE trans_item_reason (
+        id INTEGER PRIMARY KEY,
+        name TEXT
+    );
+    INSERT INTO trans_item_reason VALUES (0, "None"), (1, "Dependency"), (2, "User"), (3, "Clean"), (4, "Weak Dependency"), (5, "Group");
+
+    CREATE TABLE trans_item_state (
+        id INTEGER PRIMARY KEY,
+        name TEXT
+    );
+    INSERT INTO trans_item_state VALUES (1, "Started"), (2, "Ok"), (3, "Error");
+
     CREATE TABLE trans_item (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         trans_id INTEGER REFERENCES trans(id),
         item_id INTEGER REFERENCES item(id),
         repo_id INTEGER REFERENCES repo(id),
-        action INTEGER NOT NULL,                                /* (enum) */
-        reason INTEGER NOT NULL,                                /* (enum) */
-        state INTEGER NOT NULL                                  /* (enum) */
+        action_id INTEGER NOT NULL REFERENCES trans_item_action(id),    /* (enum) */
+        reason_id INTEGER NOT NULL REFERENCES trans_item_reason(id),    /* (enum) */
+        state_id INTEGER NOT NULL REFERENCES trans_item_state(id)       /* (enum) */
     );
+
     CREATE TABLE item_replaced_by (              /* M:N relationship between transaction items */
         trans_item_id INTEGER REFERENCES trans_item(id),
         by_trans_item_id INTEGER REFERENCES trans_item(id),
         PRIMARY KEY (trans_item_id, by_trans_item_id)
     );
+
     CREATE TABLE trans_with (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         trans_id INTEGER REFERENCES trans(id),
@@ -72,6 +96,7 @@ R"**(
         pkg_types INTEGER NOT NULL,
         FOREIGN KEY(item_id) REFERENCES item(id)
     );
+
     CREATE TABLE comps_group_package (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         group_id INTEGER NOT NULL,
@@ -91,6 +116,7 @@ R"**(
         pkg_types INTEGER NOT NULL,
         FOREIGN KEY(item_id) REFERENCES item(id)
     );
+
     CREATE TABLE comps_environment_group (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         environment_id INTEGER NOT NULL,

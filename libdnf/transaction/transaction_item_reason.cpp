@@ -17,11 +17,15 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "libdnf/transaction/transaction_item_reason.hpp"
+
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 
 namespace libdnf::transaction {
+
+InvalidTransactionItemReason::InvalidTransactionItemReason(const std::string & reason)
+    : libdnf::Error(M_("Invalid transaction item reason: {}"), reason) {}
 
 
 std::string transaction_item_reason_to_string(TransactionItemReason reason) {
@@ -29,17 +33,36 @@ std::string transaction_item_reason_to_string(TransactionItemReason reason) {
         case TransactionItemReason::NONE:
             return "none";
         case TransactionItemReason::DEPENDENCY:
-            return "dependency";
+            return "Dependency";
         case TransactionItemReason::USER:
-            return "user";
+            return "User";
         case TransactionItemReason::CLEAN:
-            return "clean";
+            return "Clean";
         case TransactionItemReason::WEAK_DEPENDENCY:
-            return "weak-dependency";
+            return "Weak Dependency";
         case TransactionItemReason::GROUP:
-            return "group";
+            return "Group";
     }
     return "";
+}
+
+
+TransactionItemReason transaction_item_reason_from_string(const std::string & reason) {
+    if (reason == "None") {
+        return TransactionItemReason::NONE;
+    } else if (reason == "Dependency") {
+        return TransactionItemReason::DEPENDENCY;
+    } else if (reason == "User") {
+        return TransactionItemReason::USER;
+    } else if (reason == "Clean") {
+        return TransactionItemReason::CLEAN;
+    } else if (reason == "Weak Dependency") {
+        return TransactionItemReason::WEAK_DEPENDENCY;
+    } else if (reason == "Group") {
+        return TransactionItemReason::GROUP;
+    }
+
+    throw InvalidTransactionItemReason(reason);
 }
 
 // TransactionItemReason::UNKNOWN will have higher value than TransactionItemReason::DEPENDENCY

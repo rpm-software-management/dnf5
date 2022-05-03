@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
 #define LIBDNF_TRANSACTION_TRANSACTION_ITEM_REASON_HPP
 
+#include "libdnf/common/exception.hpp"
+
 #include <string>
 
 
@@ -35,7 +37,17 @@ enum class TransactionItemReason : int {
 };
 
 
+class InvalidTransactionItemReason : public libdnf::Error {
+public:
+    InvalidTransactionItemReason(const std::string & reason);
+
+    const char * get_domain_name() const noexcept override { return "libdnf::transaction"; }
+    const char * get_name() const noexcept override { return "InvalidTransactionItemReason"; }
+};
+
+
 std::string transaction_item_reason_to_string(TransactionItemReason reason);
+TransactionItemReason transaction_item_reason_from_string(const std::string & reason);
 
 
 /// Compare transaction items and return:
