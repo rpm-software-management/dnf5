@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/exception.hpp"
 #include "libdnf-cli/output/transaction_table.hpp"
+#include "libdnf-cli/utils/userconfirm.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <libdnf/base/goal.hpp>
@@ -71,7 +72,7 @@ void TransactionCommand::run_transaction() {
         return;
     }
 
-    if (!userconfirm(ctx)) {
+    if (!libdnf::cli::utils::userconfirm::userconfirm(ctx)) {
         throw libdnf::cli::AbortedByUserError();
     }
 

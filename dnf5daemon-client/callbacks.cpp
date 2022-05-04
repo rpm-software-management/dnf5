@@ -20,7 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "callbacks.hpp"
 
 #include "context.hpp"
-#include "utils.hpp"
+
+#include "libdnf-cli/utils/userconfirm.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <dnf5daemon-server/transaction.hpp>
@@ -124,7 +125,7 @@ void RepoCB::key_import(sdbus::Signal & signal) {
         print_progress_bar();
 
         // ask user for the key import confirmation
-        auto confirmed = userconfirm(context);
+        auto confirmed = libdnf::cli::utils::userconfirm::userconfirm(context);
 
         // signal the confirmation back to the server
         try {

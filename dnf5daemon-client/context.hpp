@@ -58,11 +58,16 @@ public:
     /// proxy to dnf5daemon session
     std::unique_ptr<sdbus::IProxy> session_proxy;
 
+    libdnf::OptionBool assumeno() const { return assume_no; }
+    libdnf::OptionBool assumeyes() const { return assume_yes; }
+    libdnf::OptionBool defaultyes() const { return default_yes; }
+
     // global command line arguments
     std::vector<std::pair<std::string, std::string>> setopts;
     libdnf::OptionBool verbose{false};
     libdnf::OptionBool assume_yes{false};
     libdnf::OptionBool assume_no{false};
+    libdnf::OptionBool default_yes{false};
     libdnf::OptionBool allow_erasing{false};
     libdnf::OptionString installroot{"/"};
     libdnf::OptionString releasever{""};
