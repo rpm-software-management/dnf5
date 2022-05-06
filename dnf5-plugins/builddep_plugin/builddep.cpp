@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
+#include "libdnf-cli/exception.hpp"
 #include "libdnf-cli/output/transaction_table.hpp"
 
 #include <libdnf/base/goal.hpp>
@@ -113,7 +114,7 @@ void BuildDepCommand::parse_builddep_specs(int specs_count, const char * const s
 bool BuildDepCommand::add_from_spec_file(std::set<std::string> & specs, const char * spec_file_name) {
     auto spec = rpmSpecParse(spec_file_name, RPMSPEC_ANYARCH | RPMSPEC_FORCE, nullptr);
     if (spec == nullptr) {
-        std::cout << "Failed to parse spec file \"" << spec_file_name << "\"." << std::endl;
+        std::cerr << "Failed to parse spec file \"" << spec_file_name << "\"." << std::endl;
         return false;
     }
     auto dependency_set = rpmdsInit(rpmSpecDS(spec, RPMTAG_REQUIRENAME));
@@ -228,8 +229,7 @@ void BuildDepCommand::run() {
 
     if (!parse_ok) {
         // failed to parse some of inputs (invalid spec, no package matched...)
-        // TODO(mblaha): command failed, throw an exception here
-        return;
+        throw libdnf::cli::Error(M_("Failed to parse some inputs."));
     }
 
     // fill the goal with build dependencies
