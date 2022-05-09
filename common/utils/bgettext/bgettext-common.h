@@ -27,16 +27,6 @@ struct BgettextMessage {
     const char * bgettextMsg;
 };
 
-// Marks messages for translation
-#define M_(msgId) \
-    { .bgettextMsg = "\000" msgId }
-#define MP_(msgId, msgIdPlural) \
-    { .bgettextMsg = "\001" msgId "\00" msgIdPlural }
-#define MC_(context, msgId) \
-    { .bgettextMsg = "\002" context "\004" msgId }
-#define MCP_(context, msgId, msgIdPlural) \
-    { .bgettextMsg = "\003" context "\004" msgId "\00" msgIdPlural }
-
 #ifdef __cplusplus
 extern "C" {
 #endif

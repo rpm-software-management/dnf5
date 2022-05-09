@@ -73,8 +73,14 @@ const char * b_dnpgettext2(
 
 const char * b_dmgettext(const char * domain, struct BgettextMessage message, unsigned long int n) {
     const char * markedMsg = message.bgettextMsg;
-    if (*markedMsg == 0 || *markedMsg == 1 || *markedMsg == 2 || *markedMsg == 3) {
-        const char * const msgId = markedMsg + 1;
+    if ((*markedMsg & 0xF8) == 0) {
+        const char * msgId;
+        if (*markedMsg & 0x04) {
+            domain = markedMsg + 1;
+            msgId = strchr(domain, 0) + 1;
+        } else {
+            msgId = markedMsg + 1;
+        }
         if (*markedMsg & 0x01) {
             const char * const msgIdPlural = strchr(msgId, 0) + 1;
             const char * const translation = dngettext(domain, msgId, msgIdPlural, n);
