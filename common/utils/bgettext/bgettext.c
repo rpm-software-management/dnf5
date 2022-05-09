@@ -71,7 +71,8 @@ const char * b_dnpgettext2(
     return translation;
 }
 
-const char * b_dmgettext(const char * domain, const char * markedMsg, unsigned long int n) {
+const char * b_dmgettext(const char * domain, struct BgettextMessage message, unsigned long int n) {
+    const char * markedMsg = message.bgettextMsg;
     if (*markedMsg == 1 || *markedMsg == 3 || *markedMsg == 5 || *markedMsg == 7) {
         const char * const msgId = markedMsg + 1;
         if (*markedMsg & 0x02) {
