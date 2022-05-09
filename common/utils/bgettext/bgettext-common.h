@@ -29,13 +29,13 @@ struct BgettextMessage {
 
 // Marks messages for translation
 #define M_(msgId) \
-    { .bgettextMsg = "\001" msgId }
+    { .bgettextMsg = "\000" msgId }
 #define MP_(msgId, msgIdPlural) \
-    { .bgettextMsg = "\003" msgId "\00" msgIdPlural }
+    { .bgettextMsg = "\001" msgId "\00" msgIdPlural }
 #define MC_(context, msgId) \
-    { .bgettextMsg = "\005" context "\004" msgId }
+    { .bgettextMsg = "\002" context "\004" msgId }
 #define MCP_(context, msgId, msgIdPlural) \
-    { .bgettextMsg = "\007" context "\004" msgId "\00" msgIdPlural }
+    { .bgettextMsg = "\003" context "\004" msgId "\00" msgIdPlural }
 
 #ifdef __cplusplus
 extern "C" {
