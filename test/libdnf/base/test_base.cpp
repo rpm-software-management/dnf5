@@ -46,8 +46,8 @@ void BaseTest::test_weak_ptr() {
     base.reset();
 
     // Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
-    CPPUNIT_ASSERT_THROW(vars->get_value("test_variable"), libdnf::InvalidPointerError);
-    CPPUNIT_ASSERT_THROW(vars2->get_value("test_variable"), libdnf::InvalidPointerError);
+    CPPUNIT_ASSERT_THROW(vars->get_value("test_variable"), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(vars2->get_value("test_variable"), libdnf::AssertionError);
 }
 
 void BaseTest::test_incorrect_workflow() {

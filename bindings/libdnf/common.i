@@ -38,8 +38,6 @@
 %exception {
     try {
         $action
-    } catch (const libdnf::InvalidPointerError & e) {
-        SWIG_exception(SWIG_NullReferenceError, e.what());
     } catch (const std::out_of_range & e) {
         SWIG_exception(SWIG_IndexError, e.what());
     } catch (const std::runtime_error & e) {

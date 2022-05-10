@@ -87,15 +87,6 @@ private:
 };
 
 
-/// Exception generated when the managed object is not valid.
-class InvalidPointerError : public Error {
-public:
-    InvalidPointerError() : Error("Dereferencing an invalidated WeakPtr") {}
-    const char * get_domain_name() const noexcept override { return "libdnf"; }
-    const char * get_name() const noexcept override { return "InvalidPointerError"; }
-};
-
-
 /// WeakPtr is a "smart" pointer. It contains a pointer to resource and to guard of resource.
 /// WeakPtr pointer can be owner of the resource. However, the resource itself may depend on another resource.
 /// WeakPtr registers/unregisters itself at the guard of resource. And the resource guard invalidates
@@ -214,13 +205,13 @@ public:
 
     /// Provides access to the managed object. Generates exception if object is not valid.
     TPtr * operator->() const {
-        check();
+        libdnf_assert(is_valid(), "Dereferencing an invalidated WeakPtr");
         return ptr;
     }
 
     /// Returns a pointer to the managed object. Generates exception if object is not valid.
     TPtr * get() const {
-        check();
+        libdnf_assert(is_valid(), "Dereferencing an invalidated WeakPtr");
         return ptr;
     }
 
@@ -241,11 +232,6 @@ public:
 private:
     friend TWeakPtrGuard;
     void invalidate_guard() noexcept { guard = nullptr; }
-    void check() const {
-        if (!is_valid()) {
-            throw InvalidPointerError();  // TODO(lukash) should this be an AssertionError too?
-        }
-    }
 
     TPtr * ptr;
     TWeakPtrGuard * guard;
