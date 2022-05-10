@@ -24,6 +24,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #error You must define GETTEXT_DOMAIN before including bgettext-mark.h.
 #endif
 
+#include "bgettext-mark-common.h"
+
 #define M_(msgId) \
     { .bgettextMsg = "\004" GETTEXT_DOMAIN "\00" msgId }
 #define MP_(msgId, msgIdPlural) \

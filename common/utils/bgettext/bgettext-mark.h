@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef _BGETTEXT_MARK_H_
 #define _BGETTEXT_MARK_H_
 
+#include "bgettext-mark-common.h"
+
 #define M_(msgId) \
     { .bgettextMsg = "\000" msgId }
 #define MP_(msgId, msgIdPlural) \

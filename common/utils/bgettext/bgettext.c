@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <string.h>
 
+enum { BGETTEXT_PLURAL = 1 << 0, BGETTEXT_CONTEXT = 1 << 1, BGETTEXT_DOMAIN = 1 << 2 };
+
 const char * b_dpgettext(const char * domain, const char * context, const char * msgId) {
     size_t context_len = strlen(context) + 1;
     size_t msgId_len = strlen(msgId) + 1;
@@ -71,25 +73,40 @@ const char * b_dnpgettext2(
     return translation;
 }
 
+const char * b_gettextmsg_get_domain(struct BgettextMessage message) {
+    return *message.bgettextMsg & BGETTEXT_DOMAIN ? message.bgettextMsg + 1 : NULL;
+}
+
+const char * b_gettextmsg_get_id(struct BgettextMessage message) {
+    const char * msgId = message.bgettextMsg + 1;
+    if (*message.bgettextMsg & BGETTEXT_DOMAIN) {
+        msgId = strchr(msgId, 0) + 1;
+    }
+    if (*message.bgettextMsg & BGETTEXT_CONTEXT) {
+        msgId = strchr(msgId, 0x04) + 1;
+    }
+    return msgId;
+}
+
 const char * b_dmgettext(const char * domain, struct BgettextMessage message, unsigned long int n) {
     const char * markedMsg = message.bgettextMsg;
-    if ((*markedMsg & 0xF8) == 0) {
+    if ((*markedMsg & ~(BGETTEXT_PLURAL | BGETTEXT_CONTEXT | BGETTEXT_DOMAIN)) == 0) {
         const char * msgId;
-        if (*markedMsg & 0x04) {
+        if (*markedMsg & BGETTEXT_DOMAIN) {
             domain = markedMsg + 1;
             msgId = strchr(domain, 0) + 1;
         } else {
             msgId = markedMsg + 1;
         }
-        if (*markedMsg & 0x01) {
+        if (*markedMsg & BGETTEXT_PLURAL) {
             const char * const msgIdPlural = strchr(msgId, 0) + 1;
             const char * const translation = dngettext(domain, msgId, msgIdPlural, n);
-            if ((*markedMsg & 0x02) && n == 1 && translation == msgId)
+            if ((*markedMsg & BGETTEXT_CONTEXT) && n == 1 && translation == msgId)
                 return strchr(msgId, 4) + 1;
             return translation;
         } else {
             const char * const translation = dgettext(domain, msgId);
-            if ((*markedMsg & 0x02) && (translation == msgId))
+            if ((*markedMsg & BGETTEXT_CONTEXT) && (translation == msgId))
                 return strchr(msgId, 4) + 1;
             return translation;
         }
