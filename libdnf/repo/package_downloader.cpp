@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/package_downloader.hpp"
 
 #include "repo_downloader.hpp"
-#include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/repo/repo.hpp"

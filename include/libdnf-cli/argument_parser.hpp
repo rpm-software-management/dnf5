@@ -206,7 +206,6 @@ public:
         friend class ArgumentParser;
 
         Argument(ArgumentParser & owner, std::string id);
-        static std::pair<std::string, std::string> get_conflict_arg_msg(const Argument * conflict_arg);
 
         ArgumentParser & owner;
         std::string id;

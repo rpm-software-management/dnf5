@@ -46,7 +46,7 @@ public:
     /// @param format The format string for the message.
     /// @param args The format arguments.
     template <typename... Ss>
-    SQLite3SQLError(int error_code, const std::string & format, Ss &&... args)
+    explicit SQLite3SQLError(int error_code, BgettextMessage format, Ss &&... args)
         : SQLite3Error(format, std::forward<Ss>(args)...),
           error_code(error_code) {}
 
@@ -92,25 +92,25 @@ public:
         Statement(SQLite3 & db, const char * sql) : db(db) {
             auto result = sqlite3_prepare_v2(db.db, sql, -1, &stmt, nullptr);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "SQL statement compilation failed");
+                throw SQLite3StatementSQLError(result, msg_compilation_failed);
         };
 
         Statement(SQLite3 & db, const std::string & sql) : db(db) {
             auto result = sqlite3_prepare_v2(db.db, sql.c_str(), static_cast<int>(sql.length()) + 1, &stmt, nullptr);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "SQL statement compilation failed");
+                throw SQLite3StatementSQLError(result, msg_compilation_failed);
         };
 
         void bind(int pos, int val) {
             auto result = sqlite3_bind_int(stmt, pos, val);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "Binding integer value to SQL statement failed");
+                throw SQLite3StatementSQLError(result, msg_bind_int_failed);
         }
 
         void bind(int pos, std::int64_t val) {
             auto result = sqlite3_bind_int64(stmt, pos, val);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "Binding integer64 value to SQL statement failed");
+                throw SQLite3StatementSQLError(result, msg_bind_int64_failed);
         }
 
         void bind(int pos, std::uint32_t val) {
@@ -119,43 +119,43 @@ public:
             // signed INTEGER type in the DB
             auto result = sqlite3_bind_int64(stmt, pos, static_cast<int64_t>(val));
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "Binding unsigned integer value to SQL statement failed");
+                throw SQLite3StatementSQLError(result, msg_bind_uint32_failed);
         }
 
         void bind(int pos, double val) {
             auto result = sqlite3_bind_double(stmt, pos, val);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "Binding double value to SQL statement failed");
+                throw SQLite3StatementSQLError(result, msg_bind_double_failed);
         }
 
         void bind(int pos, bool val) {
             auto result = sqlite3_bind_int(stmt, pos, val ? 1 : 0);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "Binding bool value to SQL statement failed");
+                throw SQLite3StatementSQLError(result, msg_bind_bool_failed);
         }
 
         void bind(int pos, const char * val) {
             auto result = sqlite3_bind_text(stmt, pos, val, -1, SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "Binding text to SQL statement failed");
+                throw SQLite3StatementSQLError(result, msg_bind_text_failed);
         }
 
         void bind(int pos, const std::string & val) {
             auto result = sqlite3_bind_text(stmt, pos, val.c_str(), -1, SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "Binding text to SQL statement failed");
+                throw SQLite3StatementSQLError(result, msg_bind_text_failed);
         }
 
         void bind(int pos, const Blob & val) {
             auto result = sqlite3_bind_blob(stmt, pos, val.data, static_cast<int>(val.size), SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "Binding blob to SQL statement failed");
+                throw SQLite3StatementSQLError(result, msg_bind_blob_failed);
         }
 
         void bind(int pos, const std::vector<unsigned char> & val) {
             auto result = sqlite3_bind_blob(stmt, pos, val.data(), static_cast<int>(val.size()), SQLITE_TRANSIENT);
             if (result != SQLITE_OK)
-                throw SQLite3StatementSQLError(result, "Binding blob to SQL statement failed");
+                throw SQLite3StatementSQLError(result, msg_bind_blob_failed);
         }
 
         template <typename... Args>
@@ -176,7 +176,7 @@ public:
                 case SQLITE_BUSY:
                     return StepResult::BUSY;
                 default:
-                    throw SQLite3StatementSQLError(result, "SQL statement evaluation failed");
+                    throw SQLite3StatementSQLError(result, msg_eval_failed);
             }
         }
 
@@ -199,7 +199,7 @@ public:
 #else
             expanded_sql = sqlite3_expanded_sql(stmt);
             if (!expanded_sql) {
-                throw SQLite3Error("Insufficient memory or result exceed maximum SQLite3 string length");
+                throw SQLite3Error(msg_insufficient_memory);
             }
             return expanded_sql;
 #endif
@@ -268,6 +268,18 @@ public:
         SQLite3 & db;
         sqlite3_stmt * stmt{};
         char * expanded_sql{nullptr};
+
+    private:
+        static const BgettextMessage msg_compilation_failed;
+        static const BgettextMessage msg_bind_int_failed;
+        static const BgettextMessage msg_bind_int64_failed;
+        static const BgettextMessage msg_bind_uint32_failed;
+        static const BgettextMessage msg_bind_double_failed;
+        static const BgettextMessage msg_bind_bool_failed;
+        static const BgettextMessage msg_bind_text_failed;
+        static const BgettextMessage msg_bind_blob_failed;
+        static const BgettextMessage msg_eval_failed;
+        static const BgettextMessage msg_insufficient_memory;
     };
 
     class Query : public Statement {
@@ -278,7 +290,7 @@ public:
         int get_column_index(const std::string & col_name) {
             auto it = cols_name_to_index.find(col_name);
             if (it == cols_name_to_index.end())
-                throw SQLite3Error("Column \"{}\" not found", col_name);
+                throw SQLite3Error(msg_column_not_found, col_name);
             return it->second;
         }
 
@@ -299,6 +311,8 @@ public:
         }
 
         std::map<std::string, int> cols_name_to_index{};
+
+        static const BgettextMessage msg_column_not_found;
     };
 
     SQLite3(const SQLite3 &) = delete;
@@ -317,7 +331,7 @@ public:
     void exec(const char * sql) {
         auto result = sqlite3_exec(db, sql, nullptr, nullptr, nullptr);
         if (result != SQLITE_OK) {
-            throw SQLite3SQLError(result, "SQL statement execution failed");
+            throw SQLite3SQLError(result, msg_statement_exec_failed);
         }
     }
 
@@ -334,6 +348,9 @@ protected:
     std::string path;
 
     sqlite3 * db;
+
+private:
+    static const BgettextMessage msg_statement_exec_failed;
 };
 
 

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "db/trans.hpp"
 #include "db/trans_item.hpp"
 #include "db/trans_with.hpp"
-#include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/transaction/comps_environment.hpp"
 #include "libdnf/transaction/comps_group.hpp"

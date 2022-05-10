@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "locker.hpp"
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+
 #include "libdnf/common/exception.hpp"
 
 #include <fcntl.h>
@@ -31,7 +33,7 @@ namespace libdnf::utils {
 bool Locker::lock() {
     lock_fd = open(path.c_str(), O_CREAT | O_RDWR, 0660);
     if (lock_fd == -1) {
-        throw SystemError(errno, "Failed to open lock file \"{}\"", path);
+        throw SystemError(errno, M_("Failed to open lock file \"{}\""), path);
     }
 
     struct flock fl;
@@ -46,7 +48,7 @@ bool Locker::lock() {
         if (errno == EACCES || errno == EAGAIN) {
             return false;
         } else {
-            throw SystemError(errno, "Failed to obtain lock \"{}\"", path);
+            throw SystemError(errno, M_("Failed to obtain lock \"{}\""), path);
         }
     }
 
@@ -56,10 +58,10 @@ bool Locker::lock() {
 void Locker::unlock() {
     if (lock_fd != -1) {
         if (close(lock_fd) == -1) {
-            throw SystemError(errno, "Failed to close lock file \"{}\"", path);
+            throw SystemError(errno, M_("Failed to close lock file \"{}\""), path);
         }
         if (unlink(path.c_str()) == -1) {
-            throw SystemError(errno, "Failed to delete lock file \"{}\"", path);
+            throw SystemError(errno, M_("Failed to delete lock file \"{}\""), path);
         }
     }
 }

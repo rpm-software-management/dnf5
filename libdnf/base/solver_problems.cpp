@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solver_problems_internal.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
 #include "libdnf/utils/format.hpp"
@@ -32,7 +33,7 @@ namespace {
 
 
 // TODO(jmracek) Translation must be done later. After setting the locale.
-static const std::map<ProblemRules, const char *> PKG_PROBLEMS_DICT = {
+static const std::map<ProblemRules, BgettextMessage> PKG_PROBLEMS_DICT = {
     {ProblemRules::RULE_DISTUPGRADE, M_("{} does not belong to a distupgrade repository")},
     {ProblemRules::RULE_INFARCH, M_("{} has inferior architecture")},
     {ProblemRules::RULE_UPDATE, M_("problem with installed package ")},

@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction.hpp"
 
 #include "package_set_impl.hpp"
-#include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/base/transaction.hpp"
 #include "libdnf/common/exception.hpp"

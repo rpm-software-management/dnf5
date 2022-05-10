@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/vars.hpp"
 
 #include "rpm/rpm_log_guard.hpp"
-#include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
 
 #include "libdnf/common/exception.hpp"

@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "output/argument_parser.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
 #include "libdnf/common/exception.hpp"
@@ -32,8 +33,33 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iomanip>
 #include <iostream>
 #include <set>
+#include <utility>
 
 namespace libdnf::cli {
+
+namespace {
+
+std::pair<BgettextMessage, std::string> get_conflict_arg_msg(const ArgumentParser::Argument * conflict_arg) {
+    if (const auto * named_arg = dynamic_cast<const ArgumentParser::NamedArg *>(conflict_arg)) {
+        std::string conflict;
+        if (!named_arg->get_long_name().empty()) {
+            conflict = "--" + named_arg->get_long_name();
+        }
+        if (!named_arg->get_long_name().empty() && named_arg->get_short_name() != '\0') {
+            conflict += "/";
+        }
+        if (named_arg->get_short_name() != '\0') {
+            conflict = std::string("-") + named_arg->get_short_name();
+        }
+        return {M_("\"{}\" not allowed together with named argument \"{}\""), conflict};
+    } else if (dynamic_cast<const ArgumentParser::Command *>(conflict_arg)) {
+        return {M_("\"{}\" not allowed in command \"{}\""), conflict_arg->get_id()};
+    } else {
+        return {M_("\"{}\" not allowed together with positional argument \"{}\""), conflict_arg->get_id()};
+    }
+}
+
+}  // namespace
 
 void ArgumentParser::Group::register_argument(Argument * arg) {
     for (auto * item : arguments) {
@@ -61,26 +87,6 @@ ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() con
         }
     }
     return nullptr;
-}
-
-std::pair<std::string, std::string> ArgumentParser::Argument::get_conflict_arg_msg(const Argument * conflict_arg) {
-    if (const auto * named_arg = dynamic_cast<const NamedArg *>(conflict_arg)) {
-        std::string conflict;
-        if (!named_arg->get_long_name().empty()) {
-            conflict = "--" + named_arg->get_long_name();
-        }
-        if (!named_arg->get_long_name().empty() && named_arg->get_short_name() != '\0') {
-            conflict += "/";
-        }
-        if (named_arg->get_short_name() != '\0') {
-            conflict = std::string("-") + named_arg->get_short_name();
-        }
-        return {M_("\"{}\" not allowed together with named argument \"{}\""), conflict};
-    } else if (dynamic_cast<const Command *>(conflict_arg)) {
-        return {M_("\"{}\" not allowed in command \"{}\""), conflict_arg->id};
-    } else {
-        return {M_("\"{}\" not allowed together with positional argument \"{}\""), conflict_arg->id};
-    }
 }
 
 ArgumentParser::PositionalArg::PositionalArg(

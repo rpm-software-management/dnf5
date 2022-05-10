@@ -3,7 +3,7 @@ if(NOT WITH_LIBDNF_CLI)
 endif()
 
 
-add_definitions(-DGETTEXT_DOMAIN=\"libdnf-cli\")
+add_definitions(-DGETTEXT_DOMAIN=\"libdnf5-cli\")
 
 
 # use any sources found under the current directory

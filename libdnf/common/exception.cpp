@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include <algorithm>
 #include <charconv>
@@ -51,6 +52,7 @@ const char * AssertionError::what() const noexcept {
     }
 }
 
+SystemError::SystemError(int error_code) : Error(M_("System error")), error_code(error_code), has_user_message(false) {}
 
 std::string SystemError::get_error_message() const {
     return std::system_category().default_error_condition(error_code).message();
@@ -93,6 +95,7 @@ Error & Error::operator=(const Error & e) noexcept {
 
     try {
         message = e.message;
+        format = e.format;
         formatter = e.formatter;
     } catch (...) {
     }
@@ -104,14 +107,14 @@ Error & Error::operator=(const Error & e) noexcept {
 const char * Error::what() const noexcept {
     if (!formatter) {
         // formatter not set means copy constructor or assigment operator failed
-        return TM_(std::runtime_error::what(), 1);
+        return TM_(format, 1);
     }
 
     try {
-        message = formatter(TM_(std::runtime_error::what(), 1));
+        message = formatter(TM_(format, 1));
         return message.c_str();
     } catch (...) {
-        return TM_(std::runtime_error::what(), 1);
+        return std::runtime_error::what();
     }
 }
 
@@ -125,12 +128,9 @@ const char * SystemError::what() const noexcept {
     if (has_user_message) {
         try {
             message = fmt::format(
-                "{}: ({}) - {}",
-                formatter ? formatter(TM_(std::runtime_error::what(), 1)) : TM_(std::runtime_error::what(), 1),
-                error_code,
-                error_message);
+                "{}: ({}) - {}", formatter ? formatter(TM_(format, 1)) : TM_(format, 1), error_code, error_message);
         } catch (...) {
-            return TM_(std::runtime_error::what(), 1);
+            return TM_(format, 1);
         }
     } else {
         try {

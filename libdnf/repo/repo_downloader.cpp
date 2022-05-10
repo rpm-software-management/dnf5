@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_downloader.hpp"
 
-#include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/temp.hpp"
 #include "utils/fs/utils.hpp"
 #include "utils/string.hpp"
@@ -323,7 +323,9 @@ static std::unique_ptr<LrHandle> new_remote_handle(const C & config) {
 
 namespace libdnf::repo {
 
-LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error) : Error(lr_error->message), code(lr_error->code) {}
+LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error)
+    : Error(M_("Librepo error: {}"), lr_error->message),
+      code(lr_error->code) {}
 
 
 RepoDownloader::RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)

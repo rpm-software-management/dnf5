@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/repo_sack.hpp"
 
 #include "rpm/package_sack_impl.hpp"
-#include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -234,7 +234,7 @@ void RepoSack::dump_debugdata(const std::string & dir) {
 
         int ret = testcase_write(solver, dir.c_str(), 0, NULL, NULL);
         if (!ret) {
-            throw SystemError(errno, "Failed to write debug data to {}", dir);
+            throw SystemError(errno, M_("Failed to write debug data to {}"), dir);
         }
     } catch (...) {
         solver_free(solver);

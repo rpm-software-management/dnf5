@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory.hpp"
 
 #include "solv/pool.hpp"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
 #include "libdnf/advisory/advisory_collection.hpp"
@@ -41,12 +42,11 @@ std::string Advisory::get_name() const {
     if (strncmp(
             libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX, name, libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH) !=
         0) {
-        auto msg = fmt::format(
-            R"**(Bad libsolv id for advisory "{}", solvable name "{}" doesn't have advisory prefix "{}")**",
+        throw RuntimeError(
+            M_("Bad libsolv id for advisory \"{}\", solvable name \"{}\" doesn't have advisory prefix \"{}\""),
             id.id,
             name,
             libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX);
-        throw RuntimeError(msg);
     }
 
     return std::string(name + libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH);

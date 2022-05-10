@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/sack/match_string.hpp"
 
 #include "common/sack/query_cmp_private.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 #include "utils/string.hpp"
 
 #include "libdnf/common/exception.hpp"

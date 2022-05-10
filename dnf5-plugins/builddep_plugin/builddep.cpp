@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "builddep.hpp"
 
 #include "dnf5/context.hpp"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
 #include "libdnf-cli/output/transaction_table.hpp"
@@ -79,7 +80,7 @@ BuildDepCommand::BuildDepCommand(Command & parent) : Command(parent, "builddep")
             auto split = libdnf::utils::string::split(value, " ", 2);
             if (split.size() != 2) {
                 throw libdnf::cli::ArgumentParserError(
-                    "Invalid value for macro definition \"{}\". \"macro expr\" format expected.", value);
+                    M_("Invalid value for macro definition \"{}\". \"macro expr\" format expected."), value);
             }
             rpm_macros.emplace_back(std::move(split[0]), std::move(split[1]));
             return true;

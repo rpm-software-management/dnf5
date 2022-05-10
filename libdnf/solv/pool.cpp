@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "pool.hpp"
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+
 extern "C" {
 #include <solv/pool.h>
 #include <solv/queue.h>
@@ -93,6 +95,23 @@ const char * Pool::get_str_from_pool(Id keyname, Id advisory, int index) const {
     dataiterator_free(&di);
 
     return str;
+}
+
+
+unsigned long Pool::get_epoch_num(Id id) const {
+    const auto evr = split_evr(get_evr(id));
+    if (evr.e) {
+        char * endptr;
+        unsigned long converted = std::strtoul(evr.e, &endptr, 10);
+
+        if (converted == ULONG_MAX || *endptr != '\0') {
+            // TODO(lukash) throw proper exception class
+            throw RuntimeError(M_("Failed to convert epoch \"{}\" to number"), evr.e);
+        }
+
+        return converted;
+    }
+    return 0;
 }
 
 

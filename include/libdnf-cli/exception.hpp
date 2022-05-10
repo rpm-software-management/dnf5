@@ -39,7 +39,7 @@ public:
 /// Exception is thrown when the user does not confirm the transaction.
 class AbortedByUserError : public Error {
 public:
-    AbortedByUserError() : Error("Operation aborted by the user.") {}
+    AbortedByUserError();
     const char * get_name() const noexcept override { return "AbortedByUserError"; }
 };
 
@@ -49,9 +49,7 @@ class GoalResolveError : public Error {
 public:
     /// Construct Error from a list of string representations of resolve logs.
     /// @param resolve_logs List of resolve logs
-    explicit GoalResolveError(const std::vector<std::string> resolve_logs)
-        : Error("Failed to resolve the transaction"),
-          resolve_logs(resolve_logs) {}
+    explicit GoalResolveError(const std::vector<std::string> resolve_logs);
 
     /// A constructor that extracts errors from the transaction.
     ///
@@ -77,7 +75,7 @@ public:
     /// @format The format string for the message
     /// @args The format arguments
     template <typename... Ss>
-    CommandExitError(int exit_code, const std::string & format, Ss &&... args)
+    explicit CommandExitError(int exit_code, BgettextMessage format, Ss &&... args)
         : Error(format, std::forward<Ss>(args)...),
           exit_code(exit_code) {}
 

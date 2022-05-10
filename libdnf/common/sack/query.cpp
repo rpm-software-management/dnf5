@@ -17,32 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "libdnf/common/sack/query.hpp"
 
-#include "libdnf-cli/exception.hpp"
-
-#include "utils/bgettext/bgettext-lib.h"
 #include "utils/bgettext/bgettext-mark-domain.h"
-#include "utils/string.hpp"
 
-namespace libdnf::cli {
 
-AbortedByUserError::AbortedByUserError() : Error(M_("Operation aborted by the user.")) {}
+namespace libdnf::sack {
 
-GoalResolveError::GoalResolveError(const std::vector<std::string> resolve_logs)
-    : Error(M_("Failed to resolve the transaction")),
-      resolve_logs(resolve_logs) {}
+const BgettextMessage msg_err_exact_one_object = M_("Query must contain exactly one object.");
 
-const char * GoalResolveError::what() const noexcept {
-    try {
-        if (resolve_logs.empty()) {
-            message = TM_(format, 1);
-        } else {
-            message = fmt::format("{}:\n{}", TM_(format, 1), libdnf::utils::string::join(resolve_logs, "\n"));
-        }
-    } catch (...) {
-        message = TM_(format, 1);
-    }
-    return message.c_str();
-}
-
-}  // namespace libdnf::cli
+}  // namespace libdnf::sack

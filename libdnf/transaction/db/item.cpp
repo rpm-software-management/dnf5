@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "item.hpp"
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+
 
 namespace libdnf::transaction {
 
@@ -45,7 +47,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(
 int64_t item_insert(libdnf::utils::SQLite3::Statement & query) {
     if (query.step() != libdnf::utils::SQLite3::Statement::StepResult::DONE) {
         // TODO(dmach): replace with a better exception class
-        throw RuntimeError("");
+        throw RuntimeError(M_("Failed to insert record into table 'item' in history database"));
     }
     return query.last_insert_rowid();
 }

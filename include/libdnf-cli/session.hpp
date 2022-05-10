@@ -85,9 +85,7 @@ public:
     virtual void run() = 0;
 
     /// Throw a ArgumentParserMissingCommandError exception with the command name in it
-    void throw_missing_command() const {
-        throw ArgumentParserMissingCommandError(get_argument_parser_command()->get_id());
-    }
+    void throw_missing_command() const;
 
     /// @return Pointer to the Session.
     ///         The returned pointer must **not** be freed manually.

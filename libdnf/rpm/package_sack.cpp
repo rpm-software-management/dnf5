@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo/solv_repo.hpp"
 #include "solv/id_queue.hpp"
 #include "solv/solv_map.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/package_query.hpp"

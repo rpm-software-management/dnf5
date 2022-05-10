@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/transaction_item.hpp"
 
 #include "db/repo.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item_action.hpp"

@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solver_problems_internal.hpp"
 #include "transaction_impl.hpp"
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/locker.hpp"
 #include "utils/string.hpp"
 
@@ -55,7 +56,7 @@ constexpr std::pair<const char *, rpmtransFlags_e> string_tsflag_map[]{
     {"nocrypto", RPMTRANS_FLAG_NOFILEDIGEST},
 };
 
-const std::map<base::Transaction::TransactionRunResult, const char *> TRANSACTION_RUN_RESULT_DICT = {
+const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSACTION_RUN_RESULT_DICT = {
     {base::Transaction::TransactionRunResult::ERROR_RERUN, M_("This transaction has been already run before.")},
     {base::Transaction::TransactionRunResult::ERROR_RESOLVE, M_("Cannot run transaction with resolving problems.")},
     {base::Transaction::TransactionRunResult::ERROR_CHECK, M_("Rpm transaction check failed.")},

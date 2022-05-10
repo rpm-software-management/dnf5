@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMMON_EXCEPTION_HPP
 #define LIBDNF_COMMON_EXCEPTION_HPP
 
+#include "utils/bgettext/bgettext-mark-common.h"
+
 #include "libdnf/utils/format.hpp"
 
 #include <fmt/format.h>
@@ -69,7 +71,7 @@ struct SourceLocation {
 /// impossible to continue running the program.
 class AssertionError : public std::logic_error {
 public:
-    AssertionError(const char * assertion, const SourceLocation & location, const std::string & message);
+    explicit AssertionError(const char * assertion, const SourceLocation & location, const std::string & message);
 
     const char * what() const noexcept override;
     const char * assertion() const noexcept { return condition; }
@@ -96,8 +98,9 @@ public:
     /// @param format The format string for the message.
     /// @param args The format arguments.
     template <typename... Ss>
-    Error(const std::string & format, Ss &&... args)
-        : std::runtime_error(format),
+    explicit Error(BgettextMessage format, Ss &&... args)
+        : std::runtime_error(b_gettextmsg_get_id(format)),
+          format(format),
           // stores the format args in the lambda's closure
           formatter([args...](const char * format) { return libdnf::utils::sformat(format, args...); }) {}
 
@@ -114,6 +117,7 @@ public:
 
 protected:
     mutable std::string message;
+    BgettextMessage format;
     std::function<std::string(const char * format)> formatter;
 };
 
@@ -125,7 +129,7 @@ public:
     /// message from the system error description.
     ///
     /// @param error_code The `errno` of the error.
-    SystemError(int error_code) : Error("System error"), error_code(error_code), has_user_message(false) {}
+    explicit SystemError(int error_code);
 
     /// Constructs the error from the `errno` error code and a formatted message.
     /// The formatted message is prepended to the generated system error message.
@@ -134,7 +138,7 @@ public:
     /// @param format The format string for the message.
     /// @param args The format arguments.
     template <typename... Ss>
-    SystemError(int error_code, const std::string & format, Ss &&... args)
+    explicit SystemError(int error_code, BgettextMessage format, Ss &&... args)
         : Error(format, std::forward<Ss>(args)...),
           error_code(error_code),
           has_user_message(true) {}

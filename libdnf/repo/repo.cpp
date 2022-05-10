@@ -23,7 +23,7 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "solv_repo.hpp"
-#include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
 #include "utils/string.hpp"
 
@@ -439,7 +439,7 @@ void Repo::make_solv_repo() {
 void Repo::load_available_repo(LoadFlags flags) {
     auto primary_fn = downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
     if (primary_fn.empty()) {
-        throw RepoError(_("Failed to load repository: \"primary\" data not present or in unsupported format"));
+        throw RepoError(M_("Failed to load repository: \"primary\" data not present or in unsupported format"));
     }
 
     solv_repo->load_repo_main(downloader->repomd_filename, primary_fn);
@@ -584,7 +584,7 @@ long LibrepoLog::add_handler(const std::string & file_path, bool debug) {
     // Open the file
     FILE * fd = fopen(file_path.c_str(), "ae");
     if (!fd) {
-        throw RuntimeError(fmt::format(M_("Cannot open {}: {}"), file_path, g_strerror(errno)));
+        throw RuntimeError(M_("Cannot open {}: {}"), file_path, g_strerror(errno));
     }
 
     // Setup user data
@@ -628,7 +628,7 @@ void LibrepoLog::remove_handler(long uid) {
         ++it;
     }
     if (it == lr_log_datas.end()) {
-        throw RuntimeError(fmt::format(M_("Log handler with id {} doesn't exist"), uid));
+        throw RuntimeError(M_("Log handler with id {} doesn't exist"), uid);
     }
 
     // Remove the handler and free the data

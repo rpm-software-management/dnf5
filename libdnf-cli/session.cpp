@@ -18,6 +18,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+
 #include <libdnf-cli/session.hpp>
 
 
@@ -65,6 +67,11 @@ Command::Command(Command & parent, const std::string & name) : session{parent.se
         }
         return true;
     });
+}
+
+
+void Command::throw_missing_command() const {
+    throw ArgumentParserMissingCommandError(M_("Unknown command"), get_argument_parser_command()->get_id());
 }
 
 

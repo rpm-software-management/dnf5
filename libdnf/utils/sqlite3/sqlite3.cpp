@@ -21,20 +21,37 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "sqlite3.hpp"
 
 #include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 
 namespace libdnf::utils {
 
+const BgettextMessage SQLite3::Statement::msg_compilation_failed = M_("SQL statement compilation failed");
+const BgettextMessage SQLite3::Statement::msg_bind_int_failed = M_("Binding integer value to SQL statement failed");
+const BgettextMessage SQLite3::Statement::msg_bind_int64_failed = M_("Binding integer64 value to SQL statement failed");
+const BgettextMessage SQLite3::Statement::msg_bind_uint32_failed =
+    M_("Binding unsigned integer32 value to SQL statement failed");
+const BgettextMessage SQLite3::Statement::msg_bind_double_failed = M_("Binding double value to SQL statement faile");
+const BgettextMessage SQLite3::Statement::msg_bind_bool_failed = M_("Binding bool value to SQL statement failed");
+const BgettextMessage SQLite3::Statement::msg_bind_text_failed = M_("Binding text to SQL statement failed");
+const BgettextMessage SQLite3::Statement::msg_bind_blob_failed = M_("Binding blob to SQL statement failedd");
+const BgettextMessage SQLite3::Statement::msg_eval_failed = M_("SQL statement evaluation failed");
+const BgettextMessage SQLite3::Statement::msg_insufficient_memory =
+    M_("Insufficient memory or result exceed maximum SQLite3 string length");
+
+const BgettextMessage SQLite3::Query::msg_column_not_found = M_("Column \"{}\" not found");
+
+const BgettextMessage SQLite3::msg_statement_exec_failed = M_("SQL statement execution failed");
 
 const char * SQLite3SQLError::SQLite3SQLError::what() const noexcept {
     try {
         message = fmt::format(
             "{}: ({}) - {}",
-            formatter ? formatter(TM_(std::runtime_error::what(), 1)) : TM_(std::runtime_error::what(), 1),
+            formatter ? formatter(TM_(format, 1)) : TM_(format, 1),
             error_code,
             sqlite3_errstr(error_code));
     } catch (...) {
-        return TM_(std::runtime_error::what(), 1);
+        return TM_(format, 1);
     }
     return message.c_str();
 }

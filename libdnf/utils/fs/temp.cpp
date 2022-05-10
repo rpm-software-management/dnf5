@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "temp.hpp"
 
-#include "utils/bgettext/bgettext-lib.h"
-
 #include "libdnf/common/exception.hpp"
 
 #include <stdio.h>

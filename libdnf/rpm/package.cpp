@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
 #include "solv/pool.hpp"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
 #include "libdnf/common/exception.hpp"
@@ -351,7 +352,7 @@ Package::Package(const BaseWeakPtr & base, unsigned long long rpmdbid) : base(ba
         }
     }
 
-    throw RuntimeError("Package with rpmdbid was not found");
+    throw RuntimeError(M_("Package with rpmdbid was not found"));
 }
 
 }  // namespace libdnf::rpm

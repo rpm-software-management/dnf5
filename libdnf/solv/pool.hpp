@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_SOLV_POOL_HPP
 
 #include "id_queue.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
@@ -162,21 +161,7 @@ public:
 
     const char * get_epoch(Id id) const noexcept { return split_evr(get_evr(id)).e_def(); }
 
-    unsigned long get_epoch_num(Id id) const {
-        const auto evr = split_evr(get_evr(id));
-        if (evr.e) {
-            char * endptr;
-            unsigned long converted = std::strtoul(evr.e, &endptr, 10);
-
-            if (converted == ULONG_MAX || *endptr != '\0') {
-                // TODO(lukash) throw proper exception class
-                throw RuntimeError(M_("Failed to convert epoch \"{}\" to number"), evr.e);
-            }
-
-            return converted;
-        }
-        return 0;
-    }
+    unsigned long get_epoch_num(Id id) const;
 
     const char * get_version(Id id) const noexcept { return split_evr(get_evr(id)).v; }
 

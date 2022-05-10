@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
 #include "transaction_impl.hpp"
-#include "utils/bgettext/bgettext-lib.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 #include "utils/utils_internal.hpp"
 
@@ -454,7 +454,7 @@ GoalProblem Goal::Impl::add_install_to_goal(
         }
     } else {
         // TODO(lukash) throw a proper exception
-        throw RuntimeError("Incorrect configuration value for multilib_policy: " + multilib_policy);
+        throw RuntimeError(M_("Incorrect configuration value for multilib_policy: {}"), multilib_policy);
     }
 
     return GoalProblem::NO_PROBLEM;

@@ -1,3 +1,6 @@
+# set gettext domain for translations
+add_definitions(-DGETTEXT_DOMAIN=\"dnf5_cmd_builddep\")
+
 add_library(builddep_cmd_plugin MODULE builddep.cpp builddep_cmd_plugin.cpp)
 
 # disable the 'lib' prefix in order to create builddep_cmd_plugin.so

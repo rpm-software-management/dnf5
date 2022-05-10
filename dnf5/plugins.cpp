@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "plugins.hpp"
 
 #include "library.hpp"
-#include "utils/bgettext/bgettext-lib.h"
 
 #include <fmt/format.h>
 

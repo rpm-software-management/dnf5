@@ -7,7 +7,7 @@ list(APPEND LIBDNF_PC_REQUIRES)
 list(APPEND LIBDNF_PC_REQUIRES_PRIVATE)
 
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"libdnf\")
+add_definitions(-DGETTEXT_DOMAIN=\"libdnf5\")
 
 # If defined, libsolv adds the prefix "dep_" to solvable dependencies.
 # As a result, `requires` is renamed to `dep_requires`.

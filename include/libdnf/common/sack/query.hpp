@@ -36,6 +36,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::sack {
 
+extern const BgettextMessage msg_err_exact_one_object;
+
 /// Query is a Set with filtering capabilities.
 template <typename T>
 class Query : public Set<T> {
@@ -70,7 +72,7 @@ public:
         if (get_data().size() == 1) {
             return *get_data().begin();
         }
-        throw RuntimeError("Query must contain exactly one object.");
+        throw RuntimeError(msg_err_exact_one_object);
     }
 
     /// List all objects matching the query.
@@ -79,6 +81,9 @@ public:
     // operators; OR at least
     // copy()
     using Set<T>::get_data;
+
+private:
+    static void throw_except_one_object();
 };
 
 
