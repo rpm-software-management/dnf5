@@ -30,22 +30,12 @@ std::string transaction_item_action_to_string(TransactionItemAction action) {
             return "Install";
         case TransactionItemAction::DOWNGRADE:
             return "Downgrade";
-        case TransactionItemAction::DOWNGRADED:
-            return "Downgraded";
-        case TransactionItemAction::OBSOLETE:
-            return "Obsolete";
-        case TransactionItemAction::OBSOLETED:
-            return "Obsoleted";
         case TransactionItemAction::UPGRADE:
             return "Upgrade";
-        case TransactionItemAction::UPGRADED:
-            return "Upgraded";
         case TransactionItemAction::REMOVE:
             return "Removed";
         case TransactionItemAction::REINSTALL:
             return "Reinstall";
-        case TransactionItemAction::REINSTALLED:
-            return "Reinstalled";
         case TransactionItemAction::REASON_CHANGE:
             return "Reason Change";
         case TransactionItemAction::REPLACED:
@@ -62,22 +52,12 @@ std::string transaction_item_action_to_letter(TransactionItemAction action) {
             return "I";
         case TransactionItemAction::DOWNGRADE:
             return "D";
-        case TransactionItemAction::DOWNGRADED:
-            return "D";
-        case TransactionItemAction::OBSOLETE:
-            return "O";
-        case TransactionItemAction::OBSOLETED:
-            return "O";
         case TransactionItemAction::UPGRADE:
-            return "U";
-        case TransactionItemAction::UPGRADED:
             return "U";
         case TransactionItemAction::REMOVE:
             // "R" is for Reinstall, therefore use "E" for rEmove (or Erase)
             return "E";
         case TransactionItemAction::REINSTALL:
-            return "R";
-        case TransactionItemAction::REINSTALLED:
             return "R";
         case TransactionItemAction::REASON_CHANGE:
             // TODO(dmach): replace "?" with something better
@@ -93,7 +73,6 @@ bool transaction_item_action_is_inbound(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::INSTALL:
         case TransactionItemAction::DOWNGRADE:
-        case TransactionItemAction::OBSOLETE:
         case TransactionItemAction::UPGRADE:
         case TransactionItemAction::REINSTALL:
             return true;
@@ -107,10 +86,6 @@ bool transaction_item_action_is_inbound(TransactionItemAction action) {
 bool transaction_item_action_is_outbound(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::REMOVE:
-        case TransactionItemAction::DOWNGRADED:
-        case TransactionItemAction::OBSOLETED:
-        case TransactionItemAction::UPGRADED:
-        case TransactionItemAction::REINSTALLED:
         case TransactionItemAction::REPLACED:
             return true;
         default:

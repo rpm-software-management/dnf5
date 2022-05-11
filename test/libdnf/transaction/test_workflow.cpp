@@ -70,7 +70,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     rpm_systemd.set_release("6.fc26");
     rpm_systemd.set_arch("x86_64");
     rpm_systemd.set_repoid("base");
-    rpm_systemd.set_action(TransactionItemAction::OBSOLETE);
+    rpm_systemd.set_action(TransactionItemAction::INSTALL);
     rpm_systemd.set_reason(TransactionItemReason::USER);
 
     // sysvinit-2.88-14.dsf.fc20
@@ -81,7 +81,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     rpm_sysvinit.set_release("14.dsf.fc20");
     rpm_sysvinit.set_arch("x86_64");
     rpm_sysvinit.set_repoid("f20");
-    rpm_sysvinit.set_action(TransactionItemAction::OBSOLETED);
+    rpm_sysvinit.set_action(TransactionItemAction::REPLACED);
     rpm_sysvinit.set_reason(TransactionItemReason::USER);
 
     // TODO(dmach):

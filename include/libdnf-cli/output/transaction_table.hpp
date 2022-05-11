@@ -55,12 +55,6 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
             return "red";
         case libdnf::transaction::TransactionItemAction::REPLACED:
             return "halfbright";
-        case libdnf::transaction::TransactionItemAction::OBSOLETED:
-            return "brown";
-        case libdnf::transaction::TransactionItemAction::REINSTALLED:
-        case libdnf::transaction::TransactionItemAction::UPGRADED:
-        case libdnf::transaction::TransactionItemAction::DOWNGRADED:
-        case libdnf::transaction::TransactionItemAction::OBSOLETE:
         case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
             break;
     }
@@ -112,11 +106,6 @@ public:
                         text += " unused dependencies";
                     }
                     break;
-                case libdnf::transaction::TransactionItemAction::REINSTALLED:
-                case libdnf::transaction::TransactionItemAction::UPGRADED:
-                case libdnf::transaction::TransactionItemAction::DOWNGRADED:
-                case libdnf::transaction::TransactionItemAction::OBSOLETE:
-                case libdnf::transaction::TransactionItemAction::OBSOLETED:
                 case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                 case libdnf::transaction::TransactionItemAction::REPLACED:
                     libdnf_throw_assertion(
@@ -168,11 +157,6 @@ public:
             case libdnf::transaction::TransactionItemAction::REPLACED:
                 replaced++;
                 break;
-            case libdnf::transaction::TransactionItemAction::REINSTALLED:
-            case libdnf::transaction::TransactionItemAction::UPGRADED:
-            case libdnf::transaction::TransactionItemAction::DOWNGRADED:
-            case libdnf::transaction::TransactionItemAction::OBSOLETE:
-            case libdnf::transaction::TransactionItemAction::OBSOLETED:
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                 libdnf_throw_assertion(
                     "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
@@ -297,13 +281,9 @@ bool print_transaction_table(Transaction & transaction) {
     ActionHeaderPrinter action_header_printer(tb);
 
     for (auto & tspkg : tspkgs) {
-        // TODO(lukash) maybe these shouldn't come here at all
+        // TODO(lukash) maybe this shouldn't come here at all
         // TODO(lukash) handle OBSOLETED correctly throught the transaction table output
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REINSTALLED ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::UPGRADED ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::DOWNGRADED ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::OBSOLETE ||
-            tspkg.get_action() == libdnf::transaction::TransactionItemAction::REASON_CHANGE) {
+        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REASON_CHANGE) {
             continue;
         }
 
@@ -351,7 +331,8 @@ bool print_transaction_table(Transaction & transaction) {
             auto replaced_size = static_cast<int64_t>(replaced.get_install_size());
             scols_line_set_data(ln_replaced, COL_SIZE, libdnf::cli::utils::units::format_size(replaced_size).c_str());
             auto replaced_color = action_color(libdnf::transaction::TransactionItemAction::REPLACED);
-            auto obsoleted_color = action_color(libdnf::transaction::TransactionItemAction::OBSOLETED);
+            auto obsoleted_color = "brown";
+
             scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_EVR), replaced_color);
             if (pkg.get_arch() == replaced.get_arch()) {
                 scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_ARCH), replaced_color);

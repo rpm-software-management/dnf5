@@ -40,12 +40,7 @@ RpmTransactionItemActions transaction_package_to_action(const libdnf::base::Tran
         case libdnf::base::TransactionPackage::Action::REMOVE:
         case libdnf::transaction::TransactionItemAction::REPLACED:
             return RpmTransactionItemActions::ERASE;
-        case libdnf::base::TransactionPackage::Action::REINSTALLED:
-        case libdnf::base::TransactionPackage::Action::UPGRADED:
-        case libdnf::base::TransactionPackage::Action::DOWNGRADED:
-        case libdnf::base::TransactionPackage::Action::OBSOLETE:
         case libdnf::base::TransactionPackage::Action::REASON_CHANGE:
-        case libdnf::transaction::TransactionItemAction::OBSOLETED:
             // TODO(lukash) handle cases
             libdnf_throw_assertion(
                 "Unexpected action in RpmTransactionItem: {}",

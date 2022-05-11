@@ -530,11 +530,6 @@ public:
             case libdnf::transaction::TransactionItemAction::REMOVE:
             case libdnf::transaction::TransactionItemAction::REPLACED:
                 break;
-            case libdnf::transaction::TransactionItemAction::REINSTALLED:
-            case libdnf::transaction::TransactionItemAction::UPGRADED:
-            case libdnf::transaction::TransactionItemAction::DOWNGRADED:
-            case libdnf::transaction::TransactionItemAction::OBSOLETE:
-            case libdnf::transaction::TransactionItemAction::OBSOLETED:
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                 throw std::logic_error(fmt::format(
                     "Unexpected action in TransactionPackage: {}",
