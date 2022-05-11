@@ -15,6 +15,13 @@ jobs:
 
       - name: Rebase the pull request on target branch
         run: |
+          # Fix for: https://github.com/actions/checkout/issues/766 (git CVE-2022-24765)
+          # This is needed because we run in ./ (we do not cd into any directory created by our current user),
+          # this is problematic because the working directory is owned by the github actions runner user not our
+          # current container user and git doesn't allow that since the mentioned CVE.
+          # We have to explicitly state it is a safe directory.
+          git config --global --add safe.directory "$GITHUB_WORKSPACE"
+
           git config user.name github-actions
           git config user.email github-actions@github.com
           echo "Rebasing \"`git log --oneline -1`\" on ${{github.event.pull_request.base.ref}}: \"`git log --oneline -1 origin/${{github.event.pull_request.base.ref}}`\""
