@@ -23,15 +23,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
 #include "solv/pool.hpp"
+#include "utils/string.hpp"
 
 #include "libdnf/common/exception.hpp"
 
 #include <filesystem>
 
-
-static inline std::string cstring2string(const char * input) {
-    return input ? std::string(input) : std::string();
-}
 
 static inline void reldeps_for(Solvable * solvable, libdnf::solv::IdQueue & queue, Id type) {
     Id marker = -1;
@@ -52,31 +49,31 @@ static inline void reldeps_for(Solvable * solvable, libdnf::solv::IdQueue & queu
 namespace libdnf::rpm {
 
 std::string Package::get_name() const {
-    return cstring2string(get_pool(base).get_name(id.id));
+    return libdnf::utils::string::c_to_str(get_pool(base).get_name(id.id));
 }
 
 std::string Package::get_epoch() const {
-    return cstring2string(get_pool(base).get_epoch(id.id));
+    return libdnf::utils::string::c_to_str(get_pool(base).get_epoch(id.id));
 }
 
 std::string Package::get_version() const {
-    return cstring2string(get_pool(base).get_version(id.id));
+    return libdnf::utils::string::c_to_str(get_pool(base).get_version(id.id));
 }
 
 std::string Package::get_release() const {
-    return cstring2string(get_pool(base).get_release(id.id));
+    return libdnf::utils::string::c_to_str(get_pool(base).get_release(id.id));
 }
 
 std::string Package::get_arch() const {
-    return cstring2string(get_pool(base).get_arch(id.id));
+    return libdnf::utils::string::c_to_str(get_pool(base).get_arch(id.id));
 }
 
 std::string Package::get_evr() const {
-    return cstring2string(get_pool(base).get_evr(id.id));
+    return libdnf::utils::string::c_to_str(get_pool(base).get_evr(id.id));
 }
 
 std::string Package::get_nevra() const {
-    return cstring2string(get_pool(base).get_nevra(id.id));
+    return libdnf::utils::string::c_to_str(get_pool(base).get_nevra(id.id));
 }
 
 std::string Package::get_full_nevra() const {
@@ -91,7 +88,7 @@ std::string Package::get_na() const {
 }
 
 std::string Package::get_group() const {
-    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_GROUP));
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_GROUP));
 }
 
 unsigned long long Package::get_package_size() const {
@@ -103,7 +100,7 @@ unsigned long long Package::get_install_size() const {
 }
 
 std::string Package::get_license() const {
-    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_LICENSE));
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_LICENSE));
 }
 
 std::string Package::get_source_name() const {
@@ -112,7 +109,7 @@ std::string Package::get_source_name() const {
 }
 
 std::string Package::get_sourcerpm() const {
-    return cstring2string(get_pool(base).get_sourcerpm(id.id));
+    return libdnf::utils::string::c_to_str(get_pool(base).get_sourcerpm(id.id));
 }
 
 unsigned long long Package::get_build_time() const {
@@ -121,27 +118,27 @@ unsigned long long Package::get_build_time() const {
 
 // TODO not supported by libsolv: https://github.com/openSUSE/libsolv/issues/400
 //std::string Package::get_build_host() {
-//    return cstring2string(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_BUILDHOST));
+//    return libdnf::utils::string::c_to_str(lookup_cstring(get_pool(base).id2solvable(id.id), SOLVABLE_BUILDHOST));
 //}
 
 std::string Package::get_packager() const {
-    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_PACKAGER));
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_PACKAGER));
 }
 
 std::string Package::get_vendor() const {
-    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
 }
 
 std::string Package::get_url() const {
-    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_URL));
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_URL));
 }
 
 std::string Package::get_summary() const {
-    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
 }
 
 std::string Package::get_description() const {
-    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
 }
 
 std::vector<std::string> Package::get_files() const {
@@ -256,13 +253,13 @@ ReldepList Package::get_regular_requires() const {
 }
 
 std::string Package::get_baseurl() const {
-    return cstring2string(get_pool(base).lookup_str(id.id, SOLVABLE_MEDIABASE));
+    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_MEDIABASE));
 }
 
 std::string Package::get_location() const {
     Solvable * solvable = get_pool(base).id2solvable(id.id);
     libdnf::solv::get_repo(solvable).internalize();
-    return cstring2string(solvable_lookup_location(solvable, nullptr));
+    return libdnf::utils::string::c_to_str(solvable_lookup_location(solvable, nullptr));
 }
 
 //TODO(jrohel): What about local repositories? The original code in DNF4 uses baseurl+get_location(pool, package_id).
