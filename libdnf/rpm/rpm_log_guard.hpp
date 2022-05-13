@@ -28,16 +28,35 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
-class RpmLogGuard {
+class RpmLogGuardBase {
+public:
+    RpmLogGuardBase() : rpm_log_mutex_guard(rpm_log_mutex) {}
+    ~RpmLogGuardBase() {}
+
+private:
+    static std::mutex rpm_log_mutex;
+    std::lock_guard<std::mutex> rpm_log_mutex_guard;
+};
+
+class RpmLogGuard : public RpmLogGuardBase {
 public:
     RpmLogGuard(const BaseWeakPtr & base);
     ~RpmLogGuard();
 
 private:
-    static std::mutex rpm_log_mutex;
-
-    std::lock_guard<std::mutex> rpm_log_mutex_guard;
     int old_log_mask{0};
+};
+
+class RpmLogGuardStrings : public RpmLogGuardBase {
+public:
+    RpmLogGuardStrings();
+    ~RpmLogGuardStrings(){};
+
+    const std::vector<std::string> & get_rpm_logs() const { return rpm_logs; }
+    void add_rpm_log(const std::string & log) { rpm_logs.emplace_back(log); }
+
+private:
+    std::vector<std::string> rpm_logs{};
 };
 
 }  // namespace libdnf::rpm

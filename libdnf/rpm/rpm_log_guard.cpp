@@ -24,8 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
-std::mutex RpmLogGuard::rpm_log_mutex;
-
+std::mutex RpmLogGuardBase::rpm_log_mutex;
 
 static int rpmlog_callback(rpmlogRec rec, rpmlogCallbackData data) {
     Logger::Level level = Logger::Level::DEBUG;  // default for the case of an unknown value below
@@ -63,7 +62,7 @@ static int rpmlog_callback(rpmlogRec rec, rpmlogCallbackData data) {
 }
 
 
-RpmLogGuard::RpmLogGuard(const BaseWeakPtr & base) : rpm_log_mutex_guard(rpm_log_mutex) {
+RpmLogGuard::RpmLogGuard(const BaseWeakPtr & base) : RpmLogGuardBase() {
     rpmlogSetCallback(&rpmlog_callback, &*base->get_logger());
 
     // TODO(lukash) once Logger supports log mask, propagate to rpm
@@ -75,5 +74,19 @@ RpmLogGuard::~RpmLogGuard() {
     rpmlogSetMask(old_log_mask);
 }
 
+
+static int rpmlog_callback_strings(rpmlogRec rec, rpmlogCallbackData data) {
+    std::string msg(rpmlogRecMessage(rec));
+    if (!msg.empty() && msg[msg.length() - 1] == '\n') {
+        msg.pop_back();
+    }
+
+    static_cast<RpmLogGuardStrings *>(data)->add_rpm_log(msg);
+    return 0;
+}
+
+RpmLogGuardStrings::RpmLogGuardStrings() : RpmLogGuardBase() {
+    rpmlogSetCallback(&rpmlog_callback_strings, this);
+}
 
 }  // namespace libdnf::rpm
