@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_REPO_DOWNLOADER_HPP
 #define LIBDNF_REPO_REPO_DOWNLOADER_HPP
 
+#include "librepo.hpp"
 #include "repo_gpgme.hpp"
 
 #include "libdnf/base/base_weak.hpp"
@@ -32,39 +33,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <map>
 #include <memory>
+#include <optional>
 #include <set>
 #include <string>
 #include <vector>
 
 
-namespace std {
-
-template <>
-struct default_delete<LrHandle> {
-    void operator()(LrHandle * ptr) noexcept { lr_handle_free(ptr); }
-};
-
-template <>
-struct default_delete<LrResult> {
-    void operator()(LrResult * ptr) noexcept { lr_result_free(ptr); }
-};
-
-}  // namespace std
-
-
 namespace libdnf::repo {
-
-class LibrepoError : public Error {
-public:
-    LibrepoError(std::unique_ptr<GError> && lr_error);
-    const char * get_domain_name() const noexcept override { return "libdnf::repo"; }
-    const char * get_name() const noexcept override { return "LibrepoError"; }
-    int get_code() const noexcept { return code; }
-
-private:
-    int code;
-};
-
 
 /// Handles downloading and loading of repository metadata.
 /// @exception RepoDownloadError (public) All public methods should throw this exception,
@@ -91,7 +66,7 @@ public:
     bool is_repomd_in_sync();
     void load_local();
 
-    LrHandle * get_cached_handle();
+    LibrepoHandle & get_cached_handle();
 
     void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks) noexcept;
 
@@ -100,13 +75,13 @@ public:
 private:
     friend class Repo;
 
-    std::unique_ptr<LrHandle> init_local_handle();
-    std::unique_ptr<LrHandle> init_remote_handle(const char * destdir, bool mirror_setup = true);
-    void common_handle_setup(std::unique_ptr<LrHandle> & h);
+    LibrepoHandle init_local_handle();
+    LibrepoHandle init_remote_handle(const char * destdir, bool mirror_setup = true);
+    void common_handle_setup(LibrepoHandle & h);
 
-    void apply_http_headers(std::unique_ptr<LrHandle> & handle);
+    void apply_http_headers(LibrepoHandle & handle);
 
-    std::unique_ptr<LrResult> perform(LrHandle * handle, const std::string & dest_directory, bool set_gpg_home_dir);
+    LibrepoResult perform(LibrepoHandle & handle, const std::string & dest_directory, bool set_gpg_home_dir);
 
     void download_url(const char * url, int fd);
 
@@ -115,7 +90,7 @@ private:
     void import_repo_keys();
 
     std::string get_persistdir() const;
-    void add_countme_flag(LrHandle * handle);
+    void add_countme_flag(LibrepoHandle & handle);
 
     libdnf::BaseWeakPtr base;
     const ConfigRepo & config;
@@ -141,8 +116,7 @@ private:
     std::vector<std::pair<std::string, std::string>> metadata_locations;
     std::map<std::string, std::string> metadata_paths;
 
-    std::unique_ptr<LrHandle> handle;
-    std::unique_ptr<LrResult> lr_result;
+    std::optional<LibrepoHandle> handle;
 };
 
 

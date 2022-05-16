@@ -32,12 +32,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace std {
 
-// TODO(lukash) share this deleter with repo code
-template <>
-struct default_delete<GError> {
-    void operator()(GError * ptr) noexcept { g_error_free(ptr); }
-};
-
 template <>
 struct default_delete<LrPackageTarget> {
     void operator()(LrPackageTarget * ptr) noexcept { lr_packagetarget_free(ptr); }
@@ -133,7 +127,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
         std::filesystem::create_directory(it->destination);
 
         auto lr_target = lr_packagetarget_new_v3(
-            it->package.get_repo()->downloader->get_cached_handle(),
+            it->package.get_repo()->downloader->get_cached_handle().get(),
             it->package.get_location().c_str(),
             it->destination.c_str(),
             static_cast<LrChecksumType>(it->package.get_checksum().get_type()),
