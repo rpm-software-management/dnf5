@@ -28,18 +28,18 @@ std::string transaction_item_action_to_string(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::INSTALL:
             return "Install";
-        case TransactionItemAction::DOWNGRADE:
-            return "Downgrade";
         case TransactionItemAction::UPGRADE:
             return "Upgrade";
-        case TransactionItemAction::REMOVE:
-            return "Removed";
+        case TransactionItemAction::DOWNGRADE:
+            return "Downgrade";
         case TransactionItemAction::REINSTALL:
             return "Reinstall";
-        case TransactionItemAction::REASON_CHANGE:
-            return "Reason Change";
+        case TransactionItemAction::REMOVE:
+            return "Removed";
         case TransactionItemAction::REPLACED:
             return "Replaced";
+        case TransactionItemAction::REASON_CHANGE:
+            return "Reason Change";
     }
     return "";
 }
@@ -50,20 +50,20 @@ std::string transaction_item_action_to_letter(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::INSTALL:
             return "I";
-        case TransactionItemAction::DOWNGRADE:
-            return "D";
         case TransactionItemAction::UPGRADE:
             return "U";
+        case TransactionItemAction::DOWNGRADE:
+            return "D";
+        case TransactionItemAction::REINSTALL:
+            return "R";
         case TransactionItemAction::REMOVE:
             // "R" is for Reinstall, therefore use "E" for rEmove (or Erase)
             return "E";
-        case TransactionItemAction::REINSTALL:
-            return "R";
+        case TransactionItemAction::REPLACED:
+            return "O";  // TODO(lukash) historically Obsolete, do we change this?
         case TransactionItemAction::REASON_CHANGE:
             // TODO(dmach): replace "?" with something better
             return "?";
-        case TransactionItemAction::REPLACED:
-            return "O";
     }
     return "";
 }
@@ -72,8 +72,8 @@ std::string transaction_item_action_to_letter(TransactionItemAction action) {
 bool transaction_item_action_is_inbound(TransactionItemAction action) {
     switch (action) {
         case TransactionItemAction::INSTALL:
-        case TransactionItemAction::DOWNGRADE:
         case TransactionItemAction::UPGRADE:
+        case TransactionItemAction::DOWNGRADE:
         case TransactionItemAction::REINSTALL:
             return true;
         default:

@@ -145,20 +145,21 @@ void Transaction::fill(const base::Transaction & transaction) {
             case libdnf::transaction::TransactionItemAction::INSTALL:
                 install(tspkg);
                 break;
-            case libdnf::transaction::TransactionItemAction::REINSTALL:
-                reinstall(tspkg);
-                break;
             case libdnf::transaction::TransactionItemAction::UPGRADE:
                 upgrade(tspkg);
                 break;
             case libdnf::transaction::TransactionItemAction::DOWNGRADE:
                 downgrade(tspkg);
                 break;
+            case libdnf::transaction::TransactionItemAction::REINSTALL:
+                reinstall(tspkg);
+                break;
             case libdnf::transaction::TransactionItemAction::REMOVE:
             case libdnf::transaction::TransactionItemAction::REPLACED:
                 erase(tspkg);
                 break;
-            default:;  // TODO(lukash) handle the other cases
+            case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+                break;
         }
     }
     libdnf_assert(implicit_ts_elements.empty(), "The rpm transaction contains more elements than requested");

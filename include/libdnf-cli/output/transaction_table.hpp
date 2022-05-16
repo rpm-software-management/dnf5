@@ -44,10 +44,8 @@ enum { COL_NAME, COL_ARCH, COL_EVR, COL_REPO, COL_SIZE };
 static const char * action_color(libdnf::transaction::TransactionItemAction action) {
     switch (action) {
         case libdnf::transaction::TransactionItemAction::INSTALL:
-            return "green";
-        case libdnf::transaction::TransactionItemAction::REINSTALL:
-            return "green";
         case libdnf::transaction::TransactionItemAction::UPGRADE:
+        case libdnf::transaction::TransactionItemAction::REINSTALL:
             return "green";
         case libdnf::transaction::TransactionItemAction::DOWNGRADE:
             return "magenta";
@@ -89,14 +87,14 @@ public:
                         text += " weak dependencies";
                     }
                     break;
-                case libdnf::transaction::TransactionItemAction::REINSTALL:
-                    text = "Reinstalling";
-                    break;
                 case libdnf::transaction::TransactionItemAction::UPGRADE:
                     text = "Upgrading";
                     break;
                 case libdnf::transaction::TransactionItemAction::DOWNGRADE:
                     text = "Downgrading";
+                    break;
+                case libdnf::transaction::TransactionItemAction::REINSTALL:
+                    text = "Reinstalling";
                     break;
                 case libdnf::transaction::TransactionItemAction::REMOVE:
                     text = "Removing";
@@ -106,8 +104,8 @@ public:
                         text += " unused dependencies";
                     }
                     break;
-                case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                 case libdnf::transaction::TransactionItemAction::REPLACED:
+                case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                     libdnf_throw_assertion(
                         "Unexpected action in print_transaction_table: {}",
                         libdnf::utils::to_underlying(tspkg.get_action()));
@@ -141,19 +139,18 @@ public:
             case libdnf::transaction::TransactionItemAction::INSTALL:
                 installs++;
                 break;
-            case libdnf::transaction::TransactionItemAction::REINSTALL:
-                reinstalls++;
-                break;
             case libdnf::transaction::TransactionItemAction::UPGRADE:
                 upgrades++;
                 break;
             case libdnf::transaction::TransactionItemAction::DOWNGRADE:
                 downgrades++;
                 break;
+            case libdnf::transaction::TransactionItemAction::REINSTALL:
+                reinstalls++;
+                break;
             case libdnf::transaction::TransactionItemAction::REMOVE:
                 removes++;
                 break;
-
             case libdnf::transaction::TransactionItemAction::REPLACED:
                 replaced++;
                 break;

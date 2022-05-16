@@ -31,13 +31,13 @@ namespace libdnf::transaction {
 // TODO(jmracek) Copy enum to SWDB including their string definitions and already removed values to keep compatibility
 // Then transform old database data to transform stored reverse action to REPLACED action and remove all unused action from code
 enum class TransactionItemAction : int {
-    INSTALL = 1,         // a new package that was installed on the system
-    DOWNGRADE = 2,       // an older package version that replaced previously installed version
-    UPGRADE = 6,         //
-    REMOVE = 8,          // a package that was removed from the system
-    REINSTALL = 9,       // a package that was reinstalled with the identical version
-    REASON_CHANGE = 11,  // a package was kept on the system but it's reason has changed
-    REPLACED = 12        // Replace actions UPGRADED, DOWNGRADED, REINSTALLED, OBSOLETED
+    INSTALL = 1,
+    UPGRADE = 2,
+    DOWNGRADE = 3,
+    REINSTALL = 4,
+    REMOVE = 5,
+    REPLACED = 6,      // a package that is being replaced by another package (this one is leaving the system)
+    REASON_CHANGE = 7  // a package is being kept on the system but its reason is changing
 };
 
 
