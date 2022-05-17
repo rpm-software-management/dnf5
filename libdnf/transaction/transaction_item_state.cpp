@@ -26,12 +26,12 @@ namespace libdnf::transaction {
 
 std::string transaction_item_state_to_string(TransactionItemState state) {
     switch (state) {
-        case TransactionItemState::UNKNOWN:
-            return "unknown";
-        case TransactionItemState::DONE:
-            return "done";
+        case TransactionItemState::STARTED:
+            return "Started";
+        case TransactionItemState::OK:
+            return "Ok";
         case TransactionItemState::ERROR:
-            return "error";
+            return "Error";
     }
     return "";
 }

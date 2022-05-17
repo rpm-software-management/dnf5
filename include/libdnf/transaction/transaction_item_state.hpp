@@ -25,11 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
-enum class TransactionItemState : int {
-    UNKNOWN = 0,  // default state, must be changed before save
-    DONE = 1,
-    ERROR = 2
-};
+enum class TransactionItemState : int { STARTED = 1, OK = 2, ERROR = 3 };
 
 
 std::string transaction_item_state_to_string(TransactionItemState state);

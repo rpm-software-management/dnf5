@@ -88,7 +88,7 @@ void RpmTransactionTest::test_transaction() {
         get_pkg("one-0:2-1.noarch"),
         libdnf::transaction::TransactionItemAction::INSTALL,
         libdnf::transaction::TransactionItemReason::USER,
-        libdnf::transaction::TransactionItemState::UNKNOWN)};
+        libdnf::transaction::TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 
     libdnf::repo::PackageDownloader downloader;

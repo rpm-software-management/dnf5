@@ -83,7 +83,7 @@ public:
     libdnf::rpm::Package package;
     Action action;
     Reason reason;
-    State state{State::UNKNOWN};
+    State state{State::STARTED};
 
     std::vector<rpm::Package> replaces;
     std::vector<rpm::Package> replaced_by;

@@ -52,7 +52,7 @@ void TransactionRpmPackageTest::test_save_load() {
         pkg.set_repoid("repoid");
         pkg.set_action(TransactionItemAction::INSTALL);
         pkg.set_reason(TransactionItemReason::USER);
-        pkg.set_state(TransactionItemState::DONE);
+        pkg.set_state(TransactionItemState::OK);
     }
 
     // check that there's exactly 10 packages
@@ -84,7 +84,7 @@ void TransactionRpmPackageTest::test_save_load() {
         CPPUNIT_ASSERT_EQUAL(std::string("repoid"), pkg2.get_repoid());
         CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, pkg2.get_action());
         CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, pkg2.get_reason());
-        CPPUNIT_ASSERT_EQUAL(TransactionItemState::DONE, pkg2.get_state());
+        CPPUNIT_ASSERT_EQUAL(TransactionItemState::OK, pkg2.get_state());
         pkg2_num++;
     }
 }

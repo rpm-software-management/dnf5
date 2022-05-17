@@ -239,7 +239,7 @@ void Transaction::finish(TransactionState state) {
     }
 
     for (auto i : getItems()) {
-        if (i->get_state() == TransactionItemState::UNKNOWN) {
+        if (i->get_state() == TransactionItemState::STARTED) {
             throw std::runtime_error(
                 fmt::format(_("TransactionItem state is not set: {}"), i->getItem()->toStr()));
         }

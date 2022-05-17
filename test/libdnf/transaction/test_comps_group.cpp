@@ -43,7 +43,7 @@ static CompsGroup & create_comps_group(Transaction & trans) {
     grp.set_repoid("repoid");
     grp.set_action(TransactionItemAction::INSTALL);
     grp.set_reason(TransactionItemReason::USER);
-    grp.set_state(TransactionItemState::DONE);
+    grp.set_state(TransactionItemState::OK);
 
     auto & pkg1 = grp.new_package();
     pkg1.set_name("bash");
@@ -93,7 +93,7 @@ void TransactionCompsGroupTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(std::string("repoid"), grp2.get_repoid());
     CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, grp2.get_action());
     CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, grp2.get_reason());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemState::DONE, grp2.get_state());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemState::OK, grp2.get_state());
 
     // check if the group has all expected packages in the same order as inserted
     CPPUNIT_ASSERT_EQUAL(2LU, grp2.get_packages().size());

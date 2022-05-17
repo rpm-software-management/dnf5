@@ -61,7 +61,7 @@ void BaseGoalTest::test_install() {
         get_pkg("pkg-0:1.2-3.x86_64"),
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER,
-        TransactionItemState::UNKNOWN)};
+        TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -103,7 +103,7 @@ void BaseGoalTest::test_install_from_cmdline() {
         get_pkg("one-0:1-1.noarch", "@commandline"),
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER,
-        TransactionItemState::UNKNOWN)};
+        TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -121,12 +121,12 @@ void BaseGoalTest::test_install_multilib_all() {
             get_pkg("multilib-0:1.2-4.i686"),
             TransactionItemAction::INSTALL,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("multilib-0:1.2-4.x86_64"),
             TransactionItemAction::INSTALL,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -144,12 +144,12 @@ void BaseGoalTest::test_reinstall() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -169,12 +169,12 @@ void BaseGoalTest::test_reinstall_from_cmdline() {
             get_pkg("one-0:1-1.noarch", "@commandline"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -192,12 +192,12 @@ void BaseGoalTest::test_reinstall_user() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -213,7 +213,7 @@ void BaseGoalTest::test_remove() {
         get_pkg("one-0:1-1.noarch", true),
         TransactionItemAction::REMOVE,
         TransactionItemReason::USER,
-        TransactionItemState::UNKNOWN)};
+        TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -273,12 +273,12 @@ void BaseGoalTest::test_upgrade() {
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -300,12 +300,12 @@ void BaseGoalTest::test_upgrade_from_cmdline() {
             get_pkg("one-0:2-1.noarch", "@commandline"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -379,12 +379,12 @@ void BaseGoalTest::test_upgrade_all() {
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -404,12 +404,12 @@ void BaseGoalTest::test_upgrade_user() {
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -429,12 +429,12 @@ void BaseGoalTest::test_downgrade() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -456,12 +456,12 @@ void BaseGoalTest::test_downgrade_from_cmdline() {
             get_pkg("one-0:1-1.noarch", "@commandline"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -481,12 +481,12 @@ void BaseGoalTest::test_downgrade_user() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::USER,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -506,12 +506,12 @@ void BaseGoalTest::test_distrosync() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -531,12 +531,12 @@ void BaseGoalTest::test_distrosync_all() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }
 
@@ -557,11 +557,11 @@ void BaseGoalTest::test_install_or_reinstall() {
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN),
+            TransactionItemState::STARTED),
         TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
-            TransactionItemState::UNKNOWN)};
+            TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 }

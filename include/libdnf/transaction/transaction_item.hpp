@@ -140,7 +140,7 @@ protected:
     int64_t id = 0;
     Action action = Action::INSTALL;
     Reason reason = Reason::UNKNOWN;
-    State state = State::UNKNOWN;
+    State state = State::STARTED;
     std::string repoid;
 
     int64_t item_id = 0;

@@ -43,7 +43,7 @@ static CompsEnvironment & create_comps_environment(Transaction & trans) {
     env.set_repoid("repoid");
     env.set_action(TransactionItemAction::INSTALL);
     env.set_reason(TransactionItemReason::USER);
-    env.set_state(TransactionItemState::DONE);
+    env.set_state(TransactionItemState::OK);
 
     auto & grp_core = env.new_group();
     grp_core.set_group_id("core");
@@ -93,7 +93,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(std::string("repoid"), env2.get_repoid());
     CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, env2.get_action());
     CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, env2.get_reason());
-    CPPUNIT_ASSERT_EQUAL(TransactionItemState::DONE, env2.get_state());
+    CPPUNIT_ASSERT_EQUAL(TransactionItemState::OK, env2.get_state());
 
     // check if the environment has all expected groups in the same order as inserted
     CPPUNIT_ASSERT_EQUAL(2LU, env2.get_groups().size());

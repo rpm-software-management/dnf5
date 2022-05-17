@@ -127,22 +127,16 @@ void TransactionWorkflowTest::test_default_workflow() {
     trans.add_console_output_line(1, "line1");
     trans.add_console_output_line(2, "line2");
 
-    // run a rpm transaction
-    // mark completed transaction items
-
     for (auto & env : trans.get_comps_environments()) {
-        env.set_state(TransactionItemState::DONE);
-        // it->save();
+        env.set_state(TransactionItemState::OK);
     }
 
     for (auto & grp : trans.get_comps_groups()) {
-        grp.set_state(TransactionItemState::DONE);
-        // it->save();
+        grp.set_state(TransactionItemState::OK);
     }
 
     for (auto & pkg : trans.get_packages()) {
-        pkg.set_state(TransactionItemState::DONE);
-        // it->save();
+        pkg.set_state(TransactionItemState::OK);
     }
 
     // finish transaction
