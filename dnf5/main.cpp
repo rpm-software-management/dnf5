@@ -671,6 +671,15 @@ int main(int argc, char * argv[]) try {
                 return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
             }
 
+            for (const auto & tsflag : base.get_config().tsflags().get_value()) {
+                if (tsflag == "test") {
+                    std::cout
+                        << "Test mode enabled: Only package downloads, gpg key installations and transaction checks "
+                           "will be performed."
+                        << std::endl;
+                }
+            }
+
             if (!libdnf::cli::utils::userconfirm::userconfirm(context.base.get_config())) {
                 throw libdnf::cli::AbortedByUserError();
             }

@@ -31,15 +31,6 @@ namespace libdnf::cli::utils::userconfirm {
 
 template <class Config>
 bool userconfirm(Config & config) {
-    for (const auto & tsflag : config.tsflags().get_value()) {
-        if (tsflag == "test") {
-            std::cout << "Test mode enabled: Only package downloads, gpg key installations and transaction checks will "
-                         "be performed."
-                      << std::endl;
-            break;
-        }
-    }
-
     // "assumeno" takes precedence over "assumeyes"
     if (config.assumeno().get_value()) {
         return false;
