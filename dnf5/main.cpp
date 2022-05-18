@@ -725,17 +725,17 @@ int main(int argc, char * argv[]) try {
         context.get_selected_command()->run();
     } catch (libdnf::cli::ArgumentParserMissingCommandError & ex) {
         // print help if no command is provided
-        std::cout << ex.what() << std::endl;
+        std::cerr << ex.what() << std::endl;
         context.get_argument_parser().get_selected_command()->help();
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (libdnf::cli::ArgumentParserError & ex) {
-        std::cout << ex.what() << std::endl;
+        std::cerr << ex.what() << std::endl;
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (libdnf::cli::CommandExitError & ex) {
-        std::cout << ex.what() << std::endl;
+        std::cerr << ex.what() << std::endl;
         return ex.get_exit_code();
     } catch (std::exception & ex) {
-        std::cout << ex.what() << std::endl;
+        std::cerr << ex.what() << std::endl;
         log_router.error(fmt::format("Command returned error: {}", ex.what()));
         return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
