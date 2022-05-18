@@ -144,7 +144,17 @@ StringListOption::StringListOption(
     arg->set_short_description(desc);
     arg->set_arg_value_help(help);
     arg->set_has_value(true);
-    arg->link_value(conf);
+    arg->set_parse_hook_func(
+        [this](
+            [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
+            std::string conf_str_value = conf->get_value_string();
+            if (!conf_str_value.empty()) {
+                conf_str_value.append(",");
+            }
+            conf_str_value.append(value);
+            conf->set(libdnf::Option::Priority::COMMANDLINE, conf_str_value);
+            return true;
+        });
 
     command.get_argument_parser_command()->register_named_arg(arg);
 }
