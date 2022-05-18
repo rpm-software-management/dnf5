@@ -248,8 +248,7 @@ void BuildDepCommand::run() {
     auto transaction_problems = transaction.get_problems();
     if (transaction_problems != libdnf::GoalProblem::NO_PROBLEM) {
         if (transaction_problems != libdnf::GoalProblem::NOT_FOUND || !skip_unavailable) {
-            // TODO(mblaha): command failed, throw an exception here
-            return;
+            throw GoalResolveError(transaction);
         }
     }
 
@@ -259,9 +258,7 @@ void BuildDepCommand::run() {
     }
 
     if (!userconfirm(ctx.base.get_config())) {
-        std::cout << "Operation aborted." << std::endl;
-        // TODO(mblaha): command failed, throw an exception here
-        return;
+        throw AbortedByUserError();
     }
 
     ctx.download_and_run(transaction);
