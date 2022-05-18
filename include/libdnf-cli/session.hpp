@@ -179,6 +179,15 @@ public:
         const std::string & desc,
         const std::string & help);
 
+    explicit StringListOption(
+        libdnf::cli::session::Command & command,
+        const std::string & long_name,
+        char short_name,
+        const std::string & desc,
+        const std::string & help,
+        const std::string & allowed_values_regex,
+        const bool icase);
+
     /// @return Parsed value.
     /// @since 5.0
     std::vector<std::string> get_value() const { return conf->get_value(); }
