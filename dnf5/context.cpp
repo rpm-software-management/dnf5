@@ -373,8 +373,46 @@ std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vecto
 
     if (!packages_paths.empty()) {
         auto cmdline_repo = base.get_repo_sack()->get_cmdline_repo();
+
+        std::vector<std::string> urls;
+
         for (const auto & path : packages_paths) {
+            if (is_url(path)) {
+                urls.emplace_back(path);
+                continue;
+            }
+            // Add local rpm files
             added_packages.push_back(cmdline_repo->add_rpm_package(path, true));
+        }
+
+        // Download and add remote rpm files
+        if (!urls.empty()) {
+            std::filesystem::path cmd_repo_pkgs_dir{base.get_config().cachedir().get_value()};
+            cmd_repo_pkgs_dir /= "commandline";
+            cmd_repo_pkgs_dir /= "packages";
+
+            // Ensure that the command line repository packages directory exists.
+            std::filesystem::create_directories(cmd_repo_pkgs_dir);
+
+            // Create a mapping of URLs to paths to destination local files.
+            std::vector<std::pair<std::string, std::filesystem::path>> url2dest_path;
+            for (const auto & url : urls) {
+                // TODO(jrohel): Handle corner cases - not filename in url, "?query", "#fragment"?
+                std::filesystem::path path(url.substr(url.find("://") + 3));
+                auto dest_path = path.filename();
+                if (dest_path.empty()) {
+                    continue;
+                }
+                url2dest_path.emplace_back(url, cmd_repo_pkgs_dir / dest_path);
+            }
+
+            // Download files.
+            download_urls(url2dest_path, true, true);
+
+            // Add downloaded rpm files
+            for (const auto & [url, local_path] : url2dest_path) {
+                added_packages.push_back(cmdline_repo->add_rpm_package(local_path, true));
+            }
         }
 
         if (!added_packages.empty()) {
@@ -723,11 +761,13 @@ void parse_add_specs(
     std::vector<std::string> & pkg_specs,
     std::vector<std::string> & filepaths) {
     const std::string_view ext(".rpm");
-    std::set<std::string> unique_items;
+    std::set<std::string_view> unique_items;
     for (int i = 0; i < specs_count; ++i) {
         const std::string_view spec(specs[i]);
         if (auto [it, inserted] = unique_items.emplace(spec); inserted) {
-            if (spec.length() > ext.length() && spec.compare(spec.length() - ext.length(), ext.length(), ext) == 0) {
+            if (spec.length() > ext.length() && spec.ends_with(ext)) {
+                filepaths.emplace_back(spec);
+            } else if (is_url(specs[i])) {
                 filepaths.emplace_back(spec);
             } else {
                 pkg_specs.emplace_back(spec);
