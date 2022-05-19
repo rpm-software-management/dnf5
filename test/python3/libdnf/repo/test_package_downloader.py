@@ -35,7 +35,7 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
 
         downloader = libdnf.repo.PackageDownloader()
 
-        class PackageDownloadCallbacks(libdnf.repo.PackageDownloadCallbacks):
+        class PackageDownloadCallbacks(libdnf.repo.DownloadCallbacks):
             end_cnt = 0
             end_status = None
             end_msg = None
@@ -60,7 +60,7 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
         cbs = PackageDownloadCallbacks()
         # TODO(lukash) try to wrap the creation of the unique_ptr so that cbs
         # can be passed directly to downloader.add
-        downloader.add(query.begin().value(), libdnf.repo.PackageDownloadCallbacksUniquePtr(cbs))
+        downloader.add(query.begin().value(), libdnf.repo.DownloadCallbacksUniquePtr(cbs))
 
         downloader.download(True, True)
 

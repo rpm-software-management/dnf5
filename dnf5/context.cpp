@@ -277,7 +277,7 @@ std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vecto
 
 namespace {
 
-class PkgDownloadCB : public libdnf::repo::PackageDownloadCallbacks {
+class PkgDownloadCB : public libdnf::repo::DownloadCallbacks {
 public:
     PkgDownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
         : multi_progress_bar(&mp_bar),

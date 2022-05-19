@@ -382,6 +382,7 @@ private:
     friend class rpm::Package;
     friend class rpm::PackageSack;
     friend class comps::Comps;
+    friend class FileDownloader;
     friend class PackageDownloader;
     friend class solv::Pool;
 

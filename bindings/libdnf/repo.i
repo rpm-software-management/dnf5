@@ -25,6 +25,8 @@
 
 %{
     #include "libdnf/repo/config_repo.hpp"
+    #include "libdnf/repo/download_callbacks.hpp"
+    #include "libdnf/repo/file_downloader.hpp"
     #include "libdnf/repo/package_downloader.hpp"
     #include "libdnf/repo/repo.hpp"
     #include "libdnf/repo/repo_cache.hpp"
@@ -39,10 +41,15 @@
 
 %include "libdnf/repo/config_repo.hpp"
 
+%feature("director") DownloadCallbacks;
+%include "libdnf/repo/download_callbacks.hpp"
+wrap_unique_ptr(DownloadCallbacksUniquePtr, libdnf::repo::DownloadCallbacks);
+
+%ignore FileDownloadError;
+%include "libdnf/repo/file_downloader.hpp"
+
 %ignore PackageDownloadError;
-%feature("director") PackageDownloadCallbacks;
 %include "libdnf/repo/package_downloader.hpp"
-wrap_unique_ptr(PackageDownloadCallbacksUniquePtr, libdnf::repo::PackageDownloadCallbacks);
 
 %ignore RepoCacheError;
 %include "libdnf/repo/repo_cache.hpp"

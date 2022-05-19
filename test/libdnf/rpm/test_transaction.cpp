@@ -47,9 +47,9 @@ public:
 using namespace libdnf::rpm;
 
 
-class PackageDownloadCallbacks : public libdnf::repo::PackageDownloadCallbacks {
+class PackageDownloadCallbacks : public libdnf::repo::DownloadCallbacks {
 public:
-    int end(libdnf::repo::PackageDownloadCallbacks::TransferStatus status, const char * msg) override {
+    int end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) override {
         ++end_cnt;
         end_status = status;
         end_msg = msg ? msg : "";

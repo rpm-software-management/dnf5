@@ -188,12 +188,12 @@ void PackageDownloadCB::end(sdbus::Signal & signal) {
         std::string msg;
         signal >> msg;
         using namespace libdnf::repo;
-        auto status = static_cast<PackageDownloadCallbacks::TransferStatus>(status_i);
+        auto status = static_cast<DownloadCallbacks::TransferStatus>(status_i);
         switch (status) {
-            case PackageDownloadCallbacks::TransferStatus::SUCCESSFUL:
+            case DownloadCallbacks::TransferStatus::SUCCESSFUL:
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
-            case PackageDownloadCallbacks::TransferStatus::ALREADYEXISTS:
+            case DownloadCallbacks::TransferStatus::ALREADYEXISTS:
                 // skipping the download -> downloading 0 bytes
                 progress_bar->set_ticks(0);
                 progress_bar->set_total_ticks(0);
@@ -201,7 +201,7 @@ void PackageDownloadCB::end(sdbus::Signal & signal) {
                 progress_bar->start();
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
-            case PackageDownloadCallbacks::TransferStatus::ERROR:
+            case DownloadCallbacks::TransferStatus::ERROR:
                 progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg);
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
                 break;

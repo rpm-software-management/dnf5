@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(PackageDownloaderTest);
 
 
-class PackageDownloadCallbacks : public libdnf::repo::PackageDownloadCallbacks {
+class DownloadCallbacks : public libdnf::repo::DownloadCallbacks {
 public:
     int end(TransferStatus status, const char * msg) override {
         ++end_cnt;
@@ -67,14 +67,14 @@ void PackageDownloaderTest::test_package_downloader() {
 
     auto downloader = libdnf::repo::PackageDownloader();
 
-    auto cbs_unique_ptr = std::make_unique<PackageDownloadCallbacks>();
+    auto cbs_unique_ptr = std::make_unique<DownloadCallbacks>();
     auto cbs = cbs_unique_ptr.get();
     downloader.add(*query.begin(), std::move(cbs_unique_ptr));
 
     downloader.download(true, true);
 
     CPPUNIT_ASSERT_EQUAL(1, cbs->end_cnt);
-    CPPUNIT_ASSERT_EQUAL(PackageDownloadCallbacks::TransferStatus::SUCCESSFUL, cbs->end_status);
+    CPPUNIT_ASSERT_EQUAL(DownloadCallbacks::TransferStatus::SUCCESSFUL, cbs->end_status);
     CPPUNIT_ASSERT_EQUAL(std::string(""), cbs->end_msg);
 
     CPPUNIT_ASSERT_GREATEREQUAL(1, cbs->progress_cnt);

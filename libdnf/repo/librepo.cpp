@@ -18,6 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 #include "librepo.hpp"
+
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/repo/repo_errors.hpp"

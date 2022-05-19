@@ -20,43 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_PACKAGE_DOWNLOADER_HPP
 #define LIBDNF_REPO_PACKAGE_DOWNLOADER_HPP
 
-
 #include "libdnf/conf/config_main.hpp"
+#include "libdnf/repo/download_callbacks.hpp"
 #include "libdnf/rpm/package.hpp"
 
 #include <memory>
 
-
 namespace libdnf::repo {
-
-/// Base class for package download callbacks.
-/// To implement a callback, inherit from this class and override the virtual methods.
-class PackageDownloadCallbacks {
-public:
-    /// Transfer status codes.
-    enum class TransferStatus { SUCCESSFUL, ALREADYEXISTS, ERROR };
-
-    virtual ~PackageDownloadCallbacks() = default;
-
-    /// End of download callback.
-    /// @param status The transfer status.
-    /// @param msg The error message in case of error.
-    /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
-    virtual int end(TransferStatus status, const char * msg);
-
-    /// Download progress callback.
-    /// @param total_to_download Total number of bytes to download.
-    /// @param downloaded Number of bytes downloaded.
-    /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
-    virtual int progress(double total_to_download, double downloaded);
-
-    /// Mirror failure callback.
-    /// @param msg Error message.
-    /// @param url Failed mirror URL.
-    /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
-    virtual int mirror_failure(const char * msg, const char * url);
-};
-
 
 class PackageDownloadError : public Error {
     using Error::Error;
@@ -73,7 +43,7 @@ public:
     /// Adds a package to download to the standard location of repo cachedir/packages.
     /// @param package The package to download.
     /// @param callbacks (optional) A pointer to an instance of the `PackageDownloadCallbacks` class.
-    void add(const libdnf::rpm::Package & package, std::unique_ptr<PackageDownloadCallbacks> && callbacks = {});
+    void add(const libdnf::rpm::Package & package, std::unique_ptr<DownloadCallbacks> && callbacks = {});
 
     /// Adds a package to download to a specific destination directory.
     /// @param package The package to download.
@@ -82,7 +52,7 @@ public:
     void add(
         const libdnf::rpm::Package & package,
         const std::string & destination,
-        std::unique_ptr<PackageDownloadCallbacks> && callbacks = {});
+        std::unique_ptr<DownloadCallbacks> && callbacks = {});
 
     /// Download the previously added packages.
     /// @param fail_fast Whether to fail the whole download on a first error or keep downloading.

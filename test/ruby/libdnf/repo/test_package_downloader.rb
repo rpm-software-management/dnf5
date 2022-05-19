@@ -24,7 +24,7 @@ require 'base_test_case'
 
 
 class TestPackageDownloader < BaseTestCase
-    class PackageDownloadCallbacks < Repo::PackageDownloadCallbacks
+    class PackageDownloadCallbacks < Repo::DownloadCallbacks
         attr_accessor :end_cnt, :end_status, :end_msg
         attr_accessor :progress_cnt, :mirror_failure_cnt
 
@@ -69,7 +69,7 @@ class TestPackageDownloader < BaseTestCase
         downloader = Repo::PackageDownloader.new()
 
         cbs = PackageDownloadCallbacks.new()
-        downloader.add(query.begin().value, Repo::PackageDownloadCallbacksUniquePtr.new(cbs))
+        downloader.add(query.begin().value, Repo::DownloadCallbacksUniquePtr.new(cbs))
 
         downloader.download(true, true)
 

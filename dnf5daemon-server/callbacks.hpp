@@ -53,7 +53,7 @@ protected:
     }
 };
 
-class DbusPackageCB : public libdnf::repo::PackageDownloadCallbacks, public DbusCallback {
+class DbusPackageCB : public libdnf::repo::DownloadCallbacks, public DbusCallback {
 public:
     explicit DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg);
     virtual ~DbusPackageCB() = default;

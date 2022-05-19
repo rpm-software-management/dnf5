@@ -17,24 +17,20 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/repo/package_downloader.hpp"
+#include "libdnf/repo/file_downloader.hpp"
 
 #include "repo_downloader.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
-#include "libdnf/common/exception.hpp"
 #include "libdnf/repo/repo.hpp"
 
 #include <librepo/librepo.h>
 
-#include <filesystem>
-
-
 namespace std {
 
 template <>
-struct default_delete<LrPackageTarget> {
-    void operator()(LrPackageTarget * ptr) noexcept { lr_packagetarget_free(ptr); }
+struct default_delete<LrDownloadTarget> {
+    void operator()(LrDownloadTarget * ptr) noexcept { lr_downloadtarget_free(ptr); }
 };
 
 }  // namespace std
@@ -67,73 +63,89 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
     return static_cast<DownloadCallbacks *>(data)->mirror_failure(msg, url);
 }
 
-class PackageTarget {
+class FileTarget {
 public:
-    PackageTarget(
-        const libdnf::rpm::Package & package,
+    FileTarget(
+        RepoWeakPtr & repo,
+        const std::string & url,
         const std::string & destination,
         std::unique_ptr<DownloadCallbacks> && callbacks)
-        : package(package),
+        : repo(repo),
+          url(url),
           destination(destination),
           callbacks(std::move(callbacks)) {}
 
-    libdnf::rpm::Package package;
+    FileTarget(
+        const std::string & url, const std::string & destination, std::unique_ptr<DownloadCallbacks> && callbacks)
+        : url(url),
+          destination(destination),
+          callbacks(std::move(callbacks)) {}
+
+    RepoWeakPtr repo;
+    std::string url;
     std::string destination;
     std::unique_ptr<DownloadCallbacks> callbacks;
 };
 
 
-class PackageDownloader::Impl {
-    friend PackageDownloader;
-    std::vector<PackageTarget> targets;
+class FileDownloader::Impl {
+public:
+    Impl(ConfigMain & config) : config(&config) {}
+    ConfigMain * config;
+    std::vector<FileTarget> targets;
 };
 
 
-PackageDownloader::PackageDownloader() : p_impl(std::make_unique<Impl>()) {}
-PackageDownloader::~PackageDownloader() = default;
+FileDownloader::FileDownloader(ConfigMain & config) : p_impl(std::make_unique<Impl>(config)) {}
+FileDownloader::~FileDownloader() = default;
 
-
-void PackageDownloader::add(const libdnf::rpm::Package & package, std::unique_ptr<DownloadCallbacks> && callbacks) {
-    add(package, std::filesystem::path(package.get_repo()->get_cachedir()) / "packages", std::move(callbacks));
-}
-
-
-void PackageDownloader::add(
-    const libdnf::rpm::Package & package,
+void FileDownloader::add(
+    RepoWeakPtr & repo,
+    const std::string & url,
     const std::string & destination,
     std::unique_ptr<DownloadCallbacks> && callbacks) {
-    p_impl->targets.emplace_back(package, destination, std::move(callbacks));
+    p_impl->targets.emplace_back(repo, url, destination, std::move(callbacks));
 }
 
+void FileDownloader::add(
+    const std::string & url, const std::string & destination, std::unique_ptr<DownloadCallbacks> && callbacks) {
+    p_impl->targets.emplace_back(url, destination, std::move(callbacks));
+}
 
-void PackageDownloader::download(bool fail_fast, bool resume) try {
-    GError * err{nullptr};
+void FileDownloader::download(bool fail_fast, bool resume) try {
     GSList * list{nullptr};
-    std::vector<std::unique_ptr<LrPackageTarget>> lr_targets;
+    std::vector<std::unique_ptr<LrDownloadTarget>> lr_targets;
+
+    LibrepoHandle local_handle;
+    local_handle.init_remote(*p_impl->config);
 
     for (auto it = p_impl->targets.rbegin(); it != p_impl->targets.rend(); ++it) {
-        std::filesystem::create_directory(it->destination);
+        LrHandle * handle;
+        if (it->repo.is_valid()) {
+            handle = it->repo->downloader->get_cached_handle().get();
+        } else {
+            handle = local_handle.get();
+        }
 
-        auto lr_target = lr_packagetarget_new_v3(
-            it->package.get_repo()->downloader->get_cached_handle().get(),
-            it->package.get_location().c_str(),
+        auto lr_target = lr_downloadtarget_new(
+            handle,
+            it->url.c_str(),
+            NULL,
+            -1,
             it->destination.c_str(),
-            static_cast<LrChecksumType>(it->package.get_checksum().get_type()),
-            it->package.get_checksum().get_checksum().c_str(),
-            static_cast<int64_t>(it->package.get_package_size()),
-            it->package.get_baseurl().empty() ? nullptr : it->package.get_baseurl().c_str(),
+            NULL,
+            0,
             resume,
             progress_callback,
             it->callbacks.get(),
             end_callback,
             mirror_failure_callback,
+            NULL,
             0,
             0,
-            &err);
-
-        if (lr_target == nullptr) {
-            throw LibrepoError(std::unique_ptr<GError>(err));
-        }
+            NULL,
+            FALSE,
+            FALSE);
 
         lr_targets.emplace_back(lr_target);
         list = g_slist_prepend(list, lr_target);
@@ -141,16 +153,12 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
 
     std::unique_ptr<GSList, decltype(&g_slist_free)> list_holder(list, &g_slist_free);
 
-    LrPackageDownloadFlag flags = static_cast<LrPackageDownloadFlag>(0);
-    if (fail_fast) {
-        flags = static_cast<LrPackageDownloadFlag>(flags | LR_PACKAGEDOWNLOAD_FAILFAST);
-    }
-
-    if (!lr_download_packages(list, flags, &err)) {
+    GError * err{nullptr};
+    if (!lr_download(list, fail_fast, &err)) {
         throw LibrepoError(std::unique_ptr<GError>(err));
     }
 } catch (const std::runtime_error & e) {
-    throw_with_nested(PackageDownloadError(M_("Failed to download packages")));
+    throw_with_nested(FileDownloadError(M_("Failed to download files")));
 }
 
 }  // namespace libdnf::repo

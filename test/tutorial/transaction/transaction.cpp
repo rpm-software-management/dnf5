@@ -30,8 +30,8 @@ for (const auto & tspkg : transaction.get_transaction_packages()) {
 // and overriding its methods.
 //
 // We only override one of the callbacks here, see
-// `libdnf::repo::PackageDownloadCallbacks` documentation for a complete list.
-class PackageDownloadCallbacks : public libdnf::repo::PackageDownloadCallbacks {
+// `libdnf::repo::DownloadCallbacks` documentation for a complete list.
+class PackageDownloadCallbacks : public libdnf::repo::DownloadCallbacks {
     int mirror_failure(const char * msg, [[maybe_unused]] const char * url) override {
         std::cout << "Mirror failure: " << msg << std::endl;
         return 0;
