@@ -74,7 +74,8 @@ public:
     // ActionHeaderPrinter<Transaction::TransactionItem> action_header_printer(...);
     template <class T>
     struct libscols_line * print(const T & tspkg) {
-        if (current_action != tspkg.get_action() || current_reason != tspkg.get_reason()) {
+        if (!current_action || *current_action != tspkg.get_action() || !current_reason ||
+            *current_reason != tspkg.get_reason()) {
             current_header_line = scols_table_new_line(table, NULL);
             std::string text;
 
@@ -125,11 +126,8 @@ public:
 private:
     struct libscols_table * table = nullptr;
     struct libscols_line * current_header_line = nullptr;
-    // TODO(lukash) better default value?
-    libdnf::transaction::TransactionItemAction current_action =
-        libdnf::transaction::TransactionItemAction::REASON_CHANGE;
-    libdnf::transaction::TransactionItemReason current_reason =
-        libdnf::transaction::TransactionItemReason::NONE;  // TODO(lukash) fix default values
+    std::optional<libdnf::transaction::TransactionItemAction> current_action;
+    std::optional<libdnf::transaction::TransactionItemReason> current_reason;
 };
 
 
