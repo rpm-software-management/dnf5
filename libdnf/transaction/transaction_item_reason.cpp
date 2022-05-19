@@ -26,8 +26,8 @@ namespace libdnf::transaction {
 
 std::string transaction_item_reason_to_string(TransactionItemReason reason) {
     switch (reason) {
-        case TransactionItemReason::UNKNOWN:
-            return "unknown";
+        case TransactionItemReason::NONE:
+            return "none";
         case TransactionItemReason::DEPENDENCY:
             return "dependency";
         case TransactionItemReason::USER:
@@ -45,11 +45,12 @@ std::string transaction_item_reason_to_string(TransactionItemReason reason) {
 // TransactionItemReason::UNKNOWN will have higher value than TransactionItemReason::DEPENDENCY
 // Important for autoremove to prevent unwanted removal
 // https://bugzilla.redhat.com/show_bug.cgi?id=1921063
+// TODO(lukash) the above doesn't make much sense. likely not needed with the new system state, revise
 static TransactionItemReason order[] = {
     TransactionItemReason::CLEAN,
     TransactionItemReason::WEAK_DEPENDENCY,
     TransactionItemReason::DEPENDENCY,
-    TransactionItemReason::UNKNOWN,
+    TransactionItemReason::NONE,
     TransactionItemReason::GROUP,
     TransactionItemReason::USER,
 };

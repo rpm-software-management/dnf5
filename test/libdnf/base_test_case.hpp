@@ -65,8 +65,7 @@ public:
     libdnf::rpm::Package get_pkg_i(const std::string & nevra, size_t index);
 
     libdnf::rpm::Package add_system_pkg(
-        const std::string & relative_path,
-        libdnf::transaction::TransactionItemReason reason = libdnf::transaction::TransactionItemReason::UNKNOWN);
+        const std::string & relative_path, libdnf::transaction::TransactionItemReason reason);
     libdnf::rpm::Package add_cmdline_pkg(const std::string & relative_path);
 
     libdnf::Base base;

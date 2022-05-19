@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 enum class TransactionItemReason : int {
-    UNKNOWN = 0,
+    NONE = 0,
     DEPENDENCY = 1,
     USER = 2,
     CLEAN = 3,

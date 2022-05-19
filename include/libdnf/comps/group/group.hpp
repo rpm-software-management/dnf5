@@ -129,7 +129,7 @@ public:
     // TODO(dmach): return actual value from data in GroupSack
     // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
     libdnf::transaction::TransactionItemReason get_reason() const {
-        return libdnf::transaction::TransactionItemReason::UNKNOWN;
+        return libdnf::transaction::TransactionItemReason::NONE;
     }
 
     /// Merge the Group with another one.

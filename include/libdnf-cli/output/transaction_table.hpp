@@ -128,7 +128,8 @@ private:
     // TODO(lukash) better default value?
     libdnf::transaction::TransactionItemAction current_action =
         libdnf::transaction::TransactionItemAction::REASON_CHANGE;
-    libdnf::transaction::TransactionItemReason current_reason = libdnf::transaction::TransactionItemReason::UNKNOWN;
+    libdnf::transaction::TransactionItemReason current_reason =
+        libdnf::transaction::TransactionItemReason::NONE;  // TODO(lukash) fix default values
 };
 
 
