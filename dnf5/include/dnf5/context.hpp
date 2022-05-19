@@ -52,6 +52,10 @@ public:
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
     void load_repos(bool load_system, libdnf::repo::Repo::LoadFlags flags = libdnf::repo::Repo::LoadFlags::ALL);
 
+    /// Downloads the given URLs to specified destination local paths.
+    void download_urls(
+        std::vector<std::pair<std::string, std::filesystem::path>> url_to_dest_path, bool fail_fast, bool resume);
+
     /// Adds packages from path-defined files to the command line repository.
     /// Returns the added Package objects.
     std::vector<libdnf::rpm::Package> add_cmdline_packages(const std::vector<std::string> & packages_paths);

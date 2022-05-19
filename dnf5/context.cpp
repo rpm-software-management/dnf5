@@ -26,10 +26,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf-cli/tty.hpp>
 #include <libdnf/base/goal.hpp>
+#include <libdnf/repo/file_downloader.hpp>
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
 
+#include <cctype>
 #include <filesystem>
 #include <iostream>
 #include <regex>
@@ -257,29 +259,11 @@ void Context::load_repos(bool load_system, libdnf::repo::Repo::LoadFlags flags) 
 }
 
 
-std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vector<std::string> & packages_paths) {
-    std::vector<libdnf::rpm::Package> added_packages;
-
-    if (!packages_paths.empty()) {
-        auto cmdline_repo = base.get_repo_sack()->get_cmdline_repo();
-        for (const auto & path : packages_paths) {
-            added_packages.push_back(cmdline_repo->add_rpm_package(path, true));
-        }
-
-        if (!added_packages.empty()) {
-            base.get_rpm_package_sack()->load_config_excludes_includes();
-        }
-    }
-
-    return added_packages;
-}
-
-
 namespace {
 
-class PkgDownloadCB : public libdnf::repo::DownloadCallbacks {
+class DownloadCB : public libdnf::repo::DownloadCallbacks {
 public:
-    PkgDownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
+    DownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
         : multi_progress_bar(&mp_bar),
           what(what) {
         progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, what);
@@ -289,10 +273,8 @@ public:
     int end(TransferStatus status, const char * msg) override {
         switch (status) {
             case TransferStatus::SUCCESSFUL:
-                //std::cout << "[DONE] " << what << std::endl;
                 break;
             case TransferStatus::ALREADYEXISTS:
-                //std::cout << "[SKIPPED] " << what << ": " << msg << std::endl;
                 // skipping the download -> downloading 0 bytes
                 progress_bar->set_ticks(0);
                 progress_bar->set_total_ticks(0);
@@ -301,7 +283,6 @@ public:
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
             case TransferStatus::ERROR:
-                //std::cout << "[ERROR] " << what << ": " << msg << std::endl;
                 progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg);
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
                 break;
@@ -352,9 +333,57 @@ private:
     std::string what;
 };
 
-std::chrono::time_point<std::chrono::steady_clock> PkgDownloadCB::prev_print_time = std::chrono::steady_clock::now();
+std::chrono::time_point<std::chrono::steady_clock> DownloadCB::prev_print_time = std::chrono::steady_clock::now();
 
 }  // namespace
+
+static bool is_url(std::string path) {
+    for (auto & ch : path) {
+        if (ch == ':' || ch == '/') {
+            break;
+        }
+        ch = static_cast<char>(std::tolower(ch));
+    }
+    return path.starts_with("file://") || path.starts_with("http://") || path.starts_with("ftp://") ||
+           path.starts_with("https://");
+}
+
+void Context::download_urls(
+    std::vector<std::pair<std::string, std::filesystem::path>> url_to_dest_path, bool fail_fast, bool resume) {
+    libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
+    libdnf::repo::FileDownloader downloader(base.get_config());
+
+    for (auto & [url, dest_path] : url_to_dest_path) {
+        if (!is_url(url)) {
+            continue;
+        }
+        downloader.add(url, dest_path, std::make_unique<DownloadCB>(multi_progress_bar, url));
+    }
+
+    downloader.download(fail_fast, resume);
+
+    // print a completed progress bar
+    multi_progress_bar.print();
+    std::cout << std::endl;
+    // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
+}
+
+std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vector<std::string> & packages_paths) {
+    std::vector<libdnf::rpm::Package> added_packages;
+
+    if (!packages_paths.empty()) {
+        auto cmdline_repo = base.get_repo_sack()->get_cmdline_repo();
+        for (const auto & path : packages_paths) {
+            added_packages.push_back(cmdline_repo->add_rpm_package(path, true));
+        }
+
+        if (!added_packages.empty()) {
+            base.get_rpm_package_sack()->load_config_excludes_includes();
+        }
+    }
+
+    return added_packages;
+}
 
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
@@ -363,9 +392,9 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
     for (auto & package : packages) {
         if (dest_dir != nullptr) {
             downloader.add(
-                package, dest_dir, std::make_unique<PkgDownloadCB>(multi_progress_bar, package.get_full_nevra()));
+                package, dest_dir, std::make_unique<DownloadCB>(multi_progress_bar, package.get_full_nevra()));
         } else {
-            downloader.add(package, std::make_unique<PkgDownloadCB>(multi_progress_bar, package.get_full_nevra()));
+            downloader.add(package, std::make_unique<DownloadCB>(multi_progress_bar, package.get_full_nevra()));
         }
     }
 
