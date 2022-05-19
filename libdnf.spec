@@ -1,5 +1,9 @@
+%global project_version_major 5
+%global project_version_minor 0
+%global project_version_patch 0
+
 Name:           libdnf5
-Version:        5.0.0
+Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
 Release:        0~pre%{?dist}
 Summary:        Package management library
 License:        LGPLv2.1+
@@ -481,7 +485,11 @@ DNF5 plugins
     -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF} \
     -DWITH_TESTS=%{?with_tests:ON}%{!?with_tests:OFF} \
     -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
-    -DWITH_DNFDAEMON_TESTS=%{?with_dnfdaemon_tests:ON}%{!?with_dnfdaemon_tests:OFF}
+    -DWITH_DNFDAEMON_TESTS=%{?with_dnfdaemon_tests:ON}%{!?with_dnfdaemon_tests:OFF} \
+    \
+    -DPROJECT_VERSION_MAJOR=%{project_version_major} \
+    -DPROJECT_VERSION_MINOR=%{project_version_minor} \
+    -DPROJECT_VERSION_PATCH=%{project_version_patch}
 %cmake_build
 %if %{with man}
     %cmake_build --target doc-man
