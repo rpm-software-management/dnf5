@@ -1,6 +1,6 @@
 Name:           libdnf5
 Version:        5.0.0
-Release:        1%{?dist}
+Release:        0~pre%{?dist}
 Summary:        Package management library
 License:        LGPLv2.1+
 URL:            https://github.com/rpm-software-management/libdnf
