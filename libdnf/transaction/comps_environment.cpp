@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-CompsEnvironment::CompsEnvironment(Transaction & trans) : TransactionItem::TransactionItem(trans, Type::ENVIRONMENT) {}
+CompsEnvironment::CompsEnvironment(Transaction & trans) : TransactionItem::TransactionItem(trans) {}
 
 
 /*

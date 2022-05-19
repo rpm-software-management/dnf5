@@ -24,8 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/sqlite3/sqlite3.hpp"
 
-#include "libdnf/transaction/transaction_item_type.hpp"
-
 #include <memory>
 
 
@@ -33,8 +31,7 @@ namespace libdnf::transaction {
 
 
 /// Create a query (statement) that inserts new records to the 'item' table
-std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(
-    libdnf::utils::SQLite3 & conn, TransactionItemType type);
+std::unique_ptr<libdnf::utils::SQLite3::Statement> item_insert_new_query(libdnf::utils::SQLite3 & conn);
 
 
 /// Use a query to insert a new record to the 'item' table

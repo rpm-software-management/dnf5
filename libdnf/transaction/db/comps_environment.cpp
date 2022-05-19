@@ -103,7 +103,7 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_insert_new_
 
 int64_t comps_environment_insert(libdnf::utils::SQLite3::Statement & query, CompsEnvironment & grp) {
     // insert a record to the 'item' table first
-    auto query_item_insert = item_insert_new_query(query.get_db(), TransactionItemType::GROUP);
+    auto query_item_insert = item_insert_new_query(query.get_db());
     auto item_id = item_insert(*query_item_insert);
 
     query.bindv(

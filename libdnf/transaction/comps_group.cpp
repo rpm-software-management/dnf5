@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-CompsGroup::CompsGroup(Transaction & trans) : TransactionItem::TransactionItem(trans, Type::GROUP) {}
+CompsGroup::CompsGroup(Transaction & trans) : TransactionItem::TransactionItem(trans) {}
 
 
 /*

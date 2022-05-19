@@ -191,7 +191,7 @@ std::vector<Package> get_transaction_packages(libdnf::utils::SQLite3 & conn, Tra
 
 void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     auto query_rpm_select_pk = rpm_select_pk_new_query(conn);
-    auto query_item_insert = item_insert_new_query(conn, TransactionItemType::RPM);
+    auto query_item_insert = item_insert_new_query(conn);
     auto query_rpm_insert = rpm_insert_new_query(conn);
     auto query_trans_item_insert = trans_item_insert_new_query(conn);
 

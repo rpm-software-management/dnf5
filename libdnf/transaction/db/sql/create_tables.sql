@@ -30,8 +30,7 @@ R"**(
     );
 
     CREATE TABLE item (
-        id INTEGER PRIMARY KEY,
-        item_type INTEGER NOT NULL              /* (enum) 1: rpm, 2: group, 3: env ...*/
+        id INTEGER PRIMARY KEY
     );
 
     CREATE TABLE trans_item_action (

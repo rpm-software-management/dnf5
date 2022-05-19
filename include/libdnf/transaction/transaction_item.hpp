@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_item_action.hpp"
 #include "transaction_item_reason.hpp"
 #include "transaction_item_state.hpp"
-#include "transaction_item_type.hpp"
 
 #include <string>
 
@@ -38,9 +37,8 @@ public:
     using Action = TransactionItemAction;
     using Reason = TransactionItemReason;
     using State = TransactionItemState;
-    using Type = TransactionItemType;
 
-    explicit TransactionItem(Transaction & trans, Type item_type);
+    explicit TransactionItem(Transaction & trans);
 
     /// Get database id (primary key) of the transaction item (table 'trans_item')
     int64_t get_id() const noexcept { return id; }
@@ -114,14 +112,6 @@ public:
     /// Set database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
     void set_item_id(int64_t value) { item_id = value; }
 
-    /// Get an enum value representing the item type in the database table 'item'
-    ///
-    /// @replaces libdnf:transaction/Item.hpp:method:Item.getItemType()
-    /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentItem.getItemType()
-    /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getItemType()
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getItemType()
-    Type get_item_type() const noexcept { return item_type; }
-
     // TODO(dmach): move to sack, resolve for all packages; return the user who initially installed the package
     /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItem.getInstalledBy()
     uint32_t getInstalledBy() const;
@@ -144,7 +134,6 @@ protected:
     std::string repoid;
 
     int64_t item_id = 0;
-    const Type item_type;
 
     Transaction & trans;
 

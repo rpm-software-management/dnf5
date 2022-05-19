@@ -39,7 +39,7 @@ std::string TransactionItem::get_action_short() {
 }
 
 
-TransactionItem::TransactionItem(Transaction & trans, Type item_type) : item_type{item_type}, trans{trans} {}
+TransactionItem::TransactionItem(Transaction & trans) : trans{trans} {}
 
 
 bool TransactionItem::is_inbound_action() const {
