@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "upgrade.hpp"
 
-#include "dnf5/context.hpp"
-
 #include "libdnf-cli/output/transaction_table.hpp"
 
 #include <libdnf/base/goal.hpp>
@@ -47,7 +45,7 @@ UpgradeCommand::UpgradeCommand(Command & parent) : UpgradeCommand(parent, "upgra
 
 
 UpgradeCommand::UpgradeCommand(Command & parent, const std::string & name) : Command(parent, name) {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -78,7 +76,7 @@ UpgradeCommand::UpgradeCommand(Command & parent, const std::string & name) : Com
 
 
 void UpgradeCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     ctx.load_repos(true);
 

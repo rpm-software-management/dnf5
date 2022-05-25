@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_REINSTALL_REINSTALL_HPP
 #define DNF5_COMMANDS_REINSTALL_REINSTALL_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 #include <memory>
 #include <vector>
@@ -31,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class ReinstallCommand : public libdnf::cli::session::Command {
+class ReinstallCommand : public Command {
 public:
     explicit ReinstallCommand(Command & parent);
     void run() override;

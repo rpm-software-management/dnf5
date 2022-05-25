@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "advisory_subcommand.hpp"
 #include "arguments.hpp"
 
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 #include <memory>
 #include <vector>

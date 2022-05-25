@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "distro-sync.hpp"
 
-#include "dnf5/context.hpp"
-
 #include "libdnf-cli/output/transaction_table.hpp"
 
 #include <libdnf/base/goal.hpp>
@@ -41,7 +39,7 @@ using namespace libdnf::cli;
 DistroSyncCommand::DistroSyncCommand(Command & parent) : DistroSyncCommand(parent, "distro-sync") {}
 
 DistroSyncCommand::DistroSyncCommand(Command & parent, const std::string & name) : Command(parent, name) {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -59,7 +57,7 @@ DistroSyncCommand::DistroSyncCommand(Command & parent, const std::string & name)
 
 
 void DistroSyncCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     ctx.load_repos(true);
 

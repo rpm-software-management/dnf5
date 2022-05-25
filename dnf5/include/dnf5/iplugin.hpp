@@ -70,10 +70,9 @@ public:
     virtual const char * get_attribute(const char * name) const noexcept = 0;
 
     /// Plugin initialization.
-    virtual void init(dnf5::Context * context) = 0;
+    virtual void init(Context * context) = 0;
 
-    virtual std::vector<std::unique_ptr<libdnf::cli::session::Command>> create_commands(
-        libdnf::cli::session::Command & parent) = 0;
+    virtual std::vector<std::unique_ptr<Command>> create_commands(Command & parent) = 0;
 
     /// It is called when a hook is reached. The argument describes what happened.
     // TODO(jrohel): Design an API for a different plugin type than command. For example, to modify or log output.

@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_INSTALL_INSTALL_HPP
 #define DNF5_COMMANDS_INSTALL_INSTALL_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 #include <memory>
 #include <vector>
@@ -31,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class InstallCommand : public libdnf::cli::session::Command {
+class InstallCommand : public Command {
 public:
     explicit InstallCommand(Command & parent);
     void run() override;

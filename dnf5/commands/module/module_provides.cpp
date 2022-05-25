@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module_provides.hpp"
 
-#include "dnf5/context.hpp"
-
 
 namespace dnf5 {
 
@@ -30,7 +28,7 @@ using namespace libdnf::cli;
 
 
 ModuleProvidesCommand::ModuleProvidesCommand(Command & parent) : Command(parent, "provides") {
-    // auto & ctx = static_cast<Context &>(get_session());
+    // auto & ctx = get_context();
     // auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();

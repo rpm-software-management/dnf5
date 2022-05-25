@@ -21,14 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_MODULE_MODULE_REMOVE_HPP
 #define DNF5_COMMANDS_MODULE_MODULE_REMOVE_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class ModuleRemoveCommand : public libdnf::cli::session::Command {
+class ModuleRemoveCommand : public Command {
 public:
     explicit ModuleRemoveCommand(Command & parent);
     void run() override;

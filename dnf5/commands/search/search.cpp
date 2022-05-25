@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "search.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf/conf/option_string.hpp>
 
 
@@ -35,7 +33,7 @@ using namespace libdnf::cli;
 
 
 SearchCommand::SearchCommand(Command & parent) : Command(parent, "search") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -53,7 +51,7 @@ SearchCommand::SearchCommand(Command & parent) : Command(parent, "search") {
 
 
 void SearchCommand::run() {
-    // auto & ctx = static_cast<Context &>(get_session());
+    // auto & ctx = get_context();
     // auto & package_sack = *ctx.base.get_rpm_package_sack();
 
     // TODO(dmach): implement

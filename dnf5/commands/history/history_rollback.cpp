@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "history_rollback.hpp"
 
-#include "dnf5/context.hpp"
-
 
 namespace dnf5 {
 
@@ -30,7 +28,7 @@ using namespace libdnf::cli;
 
 
 HistoryRollbackCommand::HistoryRollbackCommand(Command & parent) : Command(parent, "rollback") {
-    // auto & ctx = static_cast<Context &>(get_session());
+    // auto & ctx = get_context();
     // auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();

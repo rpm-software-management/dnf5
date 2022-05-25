@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module_repoquery.hpp"
 
-#include "dnf5/context.hpp"
-
 
 namespace dnf5 {
 
@@ -30,7 +28,7 @@ using namespace libdnf::cli;
 
 
 ModuleRepoqueryCommand::ModuleRepoqueryCommand(Command & parent) : Command(parent, "repoquery") {
-    // auto & ctx = static_cast<Context &>(get_session());
+    // auto & ctx = get_context();
     // auto & parser = ctx.get_argument_parser();
 
     // TODO(dmach): Consider replacing with repoquery with a filter option: dnf repoquery --module=<module_spec>

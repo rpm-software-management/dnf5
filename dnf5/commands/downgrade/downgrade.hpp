@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 #define DNF5_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 #include <memory>
 #include <vector>
@@ -31,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class DowngradeCommand : public libdnf::cli::session::Command {
+class DowngradeCommand : public Command {
 public:
     explicit DowngradeCommand(Command & parent);
     void run() override;

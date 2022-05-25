@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "history_info.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf-cli/output/transactioninfo.hpp>
 
 #include <iostream>
@@ -42,7 +40,7 @@ HistoryInfoCommand::HistoryInfoCommand(Command & parent) : Command(parent, "info
 
 
 void HistoryInfoCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     auto specs_str = transaction_specs->get_value();
 

@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "environment.hpp"
 
-#include "dnf5/context.hpp"
 #include "environment_info.hpp"
 #include "environment_list.hpp"
 
@@ -31,7 +30,7 @@ using namespace libdnf::cli;
 
 
 EnvironmentCommand::EnvironmentCommand(Command & parent) : Command(parent, "environment") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();

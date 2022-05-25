@@ -21,14 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_REPO_REPO_HPP
 #define DNF5_COMMANDS_REPO_REPO_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class RepoCommand : public libdnf::cli::session::Command {
+class RepoCommand : public Command {
 public:
     explicit RepoCommand(Command & parent);
     void run() override;

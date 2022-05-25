@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "download.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_query.hpp>
@@ -41,7 +39,7 @@ using namespace libdnf::cli;
 
 
 DownloadCommand::DownloadCommand(Command & parent) : Command(parent, "download") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -60,7 +58,7 @@ DownloadCommand::DownloadCommand(Command & parent) : Command(parent, "download")
 
 
 void DownloadCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto package_sack = ctx.base.get_rpm_package_sack();
 
     ctx.load_repos(false);

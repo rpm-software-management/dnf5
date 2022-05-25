@@ -21,14 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_MAKECAHE_MAKECACHE_HPP
 #define DNF5_COMMANDS_MAKECAHE_MAKECACHE_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class MakeCacheCommand : public libdnf::cli::session::Command {
+class MakeCacheCommand : public Command {
 public:
     explicit MakeCacheCommand(Command & parent);
     void run() override;

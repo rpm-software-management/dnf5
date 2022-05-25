@@ -26,8 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_query.hpp"
 
-#include <libdnf-cli/session.hpp>
-
 #include <memory>
 #include <vector>
 

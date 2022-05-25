@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "makecache.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <fmt/format.h>
 
 #include <iostream>
@@ -40,7 +38,7 @@ MakeCacheCommand::MakeCacheCommand(Command & parent) : Command(parent, "makecach
 
 
 void MakeCacheCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     libdnf::repo::RepoQuery enabled_repos_query(ctx.base);
     enabled_repos_query.filter_enabled(true);

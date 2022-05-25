@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "install.hpp"
 
-#include "dnf5/context.hpp"
-
 #include "libdnf-cli/exception.hpp"
 #include "libdnf-cli/output/transaction_table.hpp"
 
@@ -45,7 +43,7 @@ using namespace libdnf::cli;
 
 
 InstallCommand::InstallCommand(Command & parent) : Command(parent, "install") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -65,7 +63,7 @@ InstallCommand::InstallCommand(Command & parent) : Command(parent, "install") {
 
 
 void InstallCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     ctx.load_repos(true);
 

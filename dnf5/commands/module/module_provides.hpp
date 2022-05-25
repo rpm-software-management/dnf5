@@ -21,14 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_MODULE_MODULE_PROVIDES_HPP
 #define DNF5_COMMANDS_MODULE_MODULE_PROVIDES_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class ModuleProvidesCommand : public libdnf::cli::session::Command {
+class ModuleProvidesCommand : public Command {
 public:
     explicit ModuleProvidesCommand(Command & parent);
     void run() override;

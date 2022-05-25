@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_DOWNLOAD_DOWNLOAD_HPP
 #define DNF5_COMMANDS_DOWNLOAD_DOWNLOAD_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
 #include <memory>
@@ -32,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class DownloadCommand : public libdnf::cli::session::Command {
+class DownloadCommand : public Command {
 public:
     explicit DownloadCommand(Command & parent);
     void run() override;

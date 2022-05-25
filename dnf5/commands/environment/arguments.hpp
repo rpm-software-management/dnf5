@@ -25,7 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf-cli/session.hpp>
 
-
 namespace dnf5 {
 
 

@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_SWAP_SWAP_HPP
 #define DNF5_COMMANDS_SWAP_SWAP_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 #include <vector>
 
@@ -32,7 +31,7 @@ namespace dnf5 {
 
 // TODO(jrohel): The "swap" command may be removed in the future in favor of a more powerful command (eg "do"),
 //               which will allow multiple actions to be combined in one transaction.
-class SwapCommand : public libdnf::cli::session::Command {
+class SwapCommand : public Command {
 public:
     explicit SwapCommand(Command & parent);
     void run() override;

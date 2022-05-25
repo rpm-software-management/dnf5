@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "arguments.hpp"
 
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 #include <libdnf/conf/option_enum.hpp>
 #include <libdnf/repo/repo_query.hpp>
 
@@ -35,7 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class RepoListCommand : public libdnf::cli::session::Command {
+class RepoListCommand : public Command {
 public:
     explicit RepoListCommand(Command & parent);
     void run() override;

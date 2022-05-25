@@ -70,7 +70,7 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 
-class RootCommand : public libdnf::cli::session::Command {
+class RootCommand : public Command {
 public:
     explicit RootCommand(libdnf::cli::session::Session & session);
     void run() override;

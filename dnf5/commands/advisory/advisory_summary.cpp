@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_summary.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf-cli/output/advisorysummary.hpp>
 #include <libdnf/rpm/package_query.hpp>
 

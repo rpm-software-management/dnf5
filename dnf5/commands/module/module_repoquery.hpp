@@ -21,14 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_MODULE_MODULE_REPOQUERY_HPP
 #define DNF5_COMMANDS_MODULE_MODULE_REPOQUERY_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class ModuleRepoqueryCommand : public libdnf::cli::session::Command {
+class ModuleRepoqueryCommand : public Command {
 public:
     explicit ModuleRepoqueryCommand(Command & parent);
     void run() override;

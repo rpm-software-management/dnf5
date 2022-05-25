@@ -26,8 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_query.hpp"
 
-#include <libdnf-cli/session.hpp>
-
 #include <memory>
 #include <vector>
 
@@ -35,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class AdvisorySubCommand : public libdnf::cli::session::Command {
+class AdvisorySubCommand : public Command {
 public:
     void run() override;
 

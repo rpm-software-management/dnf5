@@ -20,14 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_ENVIRONMENT_ENVIRONMENT_HPP
 #define DNF5_COMMANDS_ENVIRONMENT_ENVIRONMENT_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class EnvironmentCommand : public libdnf::cli::session::Command {
+class EnvironmentCommand : public Command {
 public:
     explicit EnvironmentCommand(Command & parent);
     void run() override;

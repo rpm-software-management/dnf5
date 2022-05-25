@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_SEARCH_SEARCH_HPP
 #define DNF5_COMMANDS_SEARCH_SEARCH_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
 #include <memory>
@@ -32,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class SearchCommand : public libdnf::cli::session::Command {
+class SearchCommand : public Command {
 public:
     explicit SearchCommand(Command & parent);
     void run() override;

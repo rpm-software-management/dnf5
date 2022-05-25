@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repoquery.hpp"
 
-#include "dnf5/context.hpp"
-
 #include "libdnf-cli/output/repoquery.hpp"
 
 #include <libdnf/conf/option_string.hpp>
@@ -39,7 +37,7 @@ using namespace libdnf::cli;
 
 
 RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquery") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -113,7 +111,7 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquer
 
 
 void RepoqueryCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     std::vector<libdnf::rpm::Package> cmdline_packages;
 
     if (installed_option->get_value()) {

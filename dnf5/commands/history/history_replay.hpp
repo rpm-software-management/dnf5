@@ -21,14 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_HISTORY_REPLAY_HPP
 #define DNF5_COMMANDS_HISTORY_HISTORY_REPLAY_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class HistoryReplayCommand : public libdnf::cli::session::Command {
+class HistoryReplayCommand : public Command {
 public:
     explicit HistoryReplayCommand(Command & parent);
     void run() override;

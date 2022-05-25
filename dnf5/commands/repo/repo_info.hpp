@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "arguments.hpp"
 #include "repo_list.hpp"
 
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 #include <libdnf/conf/option_enum.hpp>
 
 #include <memory>

@@ -23,13 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "arguments.hpp"
 
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class HistoryInfoCommand : public libdnf::cli::session::Command {
+class HistoryInfoCommand : public Command {
 public:
     explicit HistoryInfoCommand(Command & parent);
     void run() override;

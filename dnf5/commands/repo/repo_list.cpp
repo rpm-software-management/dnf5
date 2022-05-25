@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_list.hpp"
 
-#include "dnf5/context.hpp"
-
 #include "libdnf-cli/output/repolist.hpp"
 
 #include <libdnf/conf/option_string.hpp>
@@ -41,7 +39,7 @@ RepoListCommand::RepoListCommand(Command & parent, const std::string & name)
 //TODO(amatej): Find a different way of sharing code rather than repoinfo inheriting from repolist
 RepoListCommand::RepoListCommand(Command & parent, const std::string & name, const std::string & short_description)
     : Command(parent, name) {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -62,7 +60,7 @@ RepoListCommand::RepoListCommand(Command & parent, const std::string & name, con
 
 
 void RepoListCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     libdnf::repo::RepoQuery query(ctx.base);
     if (all->get_value()) {

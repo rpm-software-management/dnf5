@@ -21,14 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_HISTORY_HISTORY_UNDO_HPP
 #define DNF5_COMMANDS_HISTORY_HISTORY_UNDO_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class HistoryUndoCommand : public libdnf::cli::session::Command {
+class HistoryUndoCommand : public Command {
 public:
     explicit HistoryUndoCommand(Command & parent);
     void run() override;

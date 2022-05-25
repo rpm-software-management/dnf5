@@ -39,7 +39,7 @@ using namespace libdnf::cli;
 AdvisorySubCommand::AdvisorySubCommand(
     Command & parent, const std::string & name, const std::string & short_description)
     : Command(parent, name) {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -76,7 +76,7 @@ void AdvisorySubCommand::add_running_kernel_packages(libdnf::Base & base, libdnf
 }
 
 void AdvisorySubCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::UPDATEINFO);
 

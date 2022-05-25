@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "history_list.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf-cli/output/transactionlist.hpp>
 
 #include <iostream>
@@ -42,7 +40,7 @@ HistoryListCommand::HistoryListCommand(Command & parent) : Command(parent, "list
 
 
 void HistoryListCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     auto specs_str = transaction_specs->get_value();
 

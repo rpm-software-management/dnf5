@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "arguments.hpp"
 
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
 #include <memory>
@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class EnvironmentListCommand : public libdnf::cli::session::Command {
+class EnvironmentListCommand : public Command {
 public:
     explicit EnvironmentListCommand(Command & parent);
     void run() override;

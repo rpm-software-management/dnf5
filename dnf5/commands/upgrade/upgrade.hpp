@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_UPGRADE_UPGRADE_HPP
 #define DNF5_COMMANDS_UPGRADE_UPGRADE_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
 #include <memory>
@@ -32,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class UpgradeCommand : public libdnf::cli::session::Command {
+class UpgradeCommand : public Command {
 public:
     explicit UpgradeCommand(Command & parent);
     void run() override;

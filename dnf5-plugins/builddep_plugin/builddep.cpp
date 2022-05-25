@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "builddep.hpp"
 
-#include "dnf5/context.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
@@ -44,7 +43,7 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 BuildDepCommand::BuildDepCommand(Command & parent) : Command(parent, "builddep") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -165,7 +164,7 @@ bool BuildDepCommand::add_from_srpm_file(std::set<std::string> & specs, const ch
 
 
 bool BuildDepCommand::add_from_pkg(std::set<std::string> & specs, const std::string & pkg_spec) {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     libdnf::rpm::PackageQuery pkg_query(ctx.base);
     pkg_query.resolve_pkg_spec(
@@ -193,7 +192,7 @@ bool BuildDepCommand::add_from_pkg(std::set<std::string> & specs, const std::str
 }
 
 void BuildDepCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     if (!pkg_specs.empty()) {
         ctx.base.get_repo_sack()->enable_source_repos();

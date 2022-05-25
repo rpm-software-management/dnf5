@@ -17,13 +17,11 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "advisory.hpp"
 
 #include "advisory_info.hpp"
 #include "advisory_list.hpp"
 #include "advisory_summary.hpp"
-#include "dnf5/context.hpp"
 
 #include <libdnf/conf/option_string.hpp>
 
@@ -36,7 +34,7 @@ using namespace libdnf::cli;
 AdvisoryCommand::AdvisoryCommand(Command & parent) : AdvisoryCommand(parent, "advisory") {}
 
 AdvisoryCommand::AdvisoryCommand(Command & parent, const std::string & name) : Command(parent, name) {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();

@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "remove.hpp"
 
-#include "dnf5/context.hpp"
-
 #include "libdnf-cli/output/transaction_table.hpp"
 
 #include <libdnf/base/goal.hpp>
@@ -43,7 +41,7 @@ RemoveCommand::RemoveCommand(Command & parent) : RemoveCommand(parent, "remove")
 
 
 RemoveCommand::RemoveCommand(Command & parent, const std::string & name) : Command(parent, name) {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -73,7 +71,7 @@ RemoveCommand::RemoveCommand(Command & parent, const std::string & name) : Comma
 
 
 void RemoveCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     ctx.base.get_repo_sack()->get_system_repo()->load();
     // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf

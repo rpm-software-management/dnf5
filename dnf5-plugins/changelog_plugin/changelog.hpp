@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_CHANGELOG_HPP
 
 
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 #include <libdnf/conf/option_bool.hpp>
 #include <libdnf/conf/option_number.hpp>
 
@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class ChangelogCommand : public libdnf::cli::session::Command {
+class ChangelogCommand : public Command {
 public:
     explicit ChangelogCommand(Command & parent);
     void run() override;

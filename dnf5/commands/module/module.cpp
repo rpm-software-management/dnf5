@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module.hpp"
 
-#include "dnf5/context.hpp"
 #include "module_disable.hpp"
 #include "module_enable.hpp"
 #include "module_info.hpp"
@@ -40,7 +39,7 @@ using namespace libdnf::cli;
 
 
 ModuleCommand::ModuleCommand(Command & parent) : Command(parent, "module") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();

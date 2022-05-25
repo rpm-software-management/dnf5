@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "swap.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf-cli/output/transaction_table.hpp>
 #include <libdnf/base/goal.hpp>
 
@@ -37,7 +35,7 @@ using namespace libdnf::cli;
 
 
 SwapCommand::SwapCommand(Command & parent) : Command(parent, "swap") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -70,7 +68,7 @@ SwapCommand::SwapCommand(Command & parent) : Command(parent, "swap") {
 
 
 void SwapCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     ctx.load_repos(true);
 

@@ -21,14 +21,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_MODULE_MODULE_DISABLE_HPP
 #define DNF5_COMMANDS_MODULE_MODULE_DISABLE_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class ModuleDisableCommand : public libdnf::cli::session::Command {
+class ModuleDisableCommand : public Command {
 public:
     explicit ModuleDisableCommand(Command & parent);
     void run() override;

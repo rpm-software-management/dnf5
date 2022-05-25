@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module_switch_to.hpp"
 
-#include "dnf5/context.hpp"
-
 
 namespace dnf5 {
 
@@ -30,7 +28,7 @@ using namespace libdnf::cli;
 
 
 ModuleSwitchToCommand::ModuleSwitchToCommand(Command & parent) : Command(parent, "switch-to") {
-    // auto & ctx = static_cast<Context &>(get_session());
+    // auto & ctx = get_context();
     // auto & parser = ctx.get_argument_parser();
 
     // TODO(dmach): this is convenient but inconsistent UX - enable/disable/reset do not touch the packages while switch-to does

@@ -21,8 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_ADVISORY_ADVISORY_HPP
 #define DNF5_COMMANDS_ADVISORY_ADVISORY_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 #include <libdnf/conf/option_bool.hpp>
 #include <libdnf/conf/option_enum.hpp>
 
@@ -33,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class AdvisoryCommand : public libdnf::cli::session::Command {
+class AdvisoryCommand : public Command {
 public:
     explicit AdvisoryCommand(Command & parent);
     void run() override;

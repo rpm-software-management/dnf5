@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group.hpp"
 
-#include "dnf5/context.hpp"
 #include "group_info.hpp"
 #include "group_list.hpp"
 
@@ -31,7 +30,7 @@ using namespace libdnf::cli;
 
 
 GroupCommand::GroupCommand(Command & parent) : Command(parent, "group") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();

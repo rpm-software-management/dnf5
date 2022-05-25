@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "history.hpp"
 
-#include "dnf5/context.hpp"
 #include "history_info.hpp"
 #include "history_list.hpp"
 #include "history_redo.hpp"
@@ -43,7 +42,7 @@ using namespace libdnf::cli;
 
 
 HistoryCommand::HistoryCommand(Command & parent) : Command(parent, "history") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();

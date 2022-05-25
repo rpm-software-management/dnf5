@@ -20,14 +20,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_GROUP_GROUP_HPP
 #define DNF5_COMMANDS_GROUP_GROUP_HPP
 
-
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 
 
 namespace dnf5 {
 
 
-class GroupCommand : public libdnf::cli::session::Command {
+class GroupCommand : public Command {
 public:
     explicit GroupCommand(Command & parent);
     void run() override;

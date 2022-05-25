@@ -33,21 +33,19 @@ public:
         return nullptr;
     }
 
-    void init(dnf5::Context * context) override { this->context = context; }
+    void init(Context * context) override { this->context = context; }
 
-    std::vector<std::unique_ptr<libdnf::cli::session::Command>> create_commands(
-        libdnf::cli::session::Command & parent) override;
+    std::vector<std::unique_ptr<Command>> create_commands(Command & parent) override;
 
     void finish() noexcept override {}
 
 private:
-    dnf5::Context * context;
+    Context * context;
 };
 
 
-std::vector<std::unique_ptr<libdnf::cli::session::Command>> BuildDepCmdPlugin::create_commands(
-    libdnf::cli::session::Command & parent) {
-    std::vector<std::unique_ptr<libdnf::cli::session::Command>> commands;
+std::vector<std::unique_ptr<Command>> BuildDepCmdPlugin::create_commands(Command & parent) {
+    std::vector<std::unique_ptr<Command>> commands;
     commands.push_back(std::make_unique<BuildDepCommand>(parent));
     return commands;
 }

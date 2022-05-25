@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_BUILD_DEP_BUILD_DEP_HPP
 
 
-#include <libdnf-cli/session.hpp>
+#include <dnf5/context.hpp>
 #include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 
-class BuildDepCommand : public libdnf::cli::session::Command {
+class BuildDepCommand : public Command {
 public:
     explicit BuildDepCommand(Command & parent);
     void run() override;

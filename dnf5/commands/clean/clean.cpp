@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "clean.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf/repo/repo_cache.hpp>
 
 #include <filesystem>
@@ -58,7 +56,7 @@ using namespace libdnf::cli;
 
 
 CleanCommand::CleanCommand(Command & parent) : Command(parent, "clean") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -111,7 +109,7 @@ CleanCommand::CleanCommand(Command & parent) : Command(parent, "clean") {
 
 
 void CleanCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     fs::path cachedir{ctx.base.get_config().cachedir().get_value()};
 
     libdnf::repo::RepoCache::RemoveStatistics statistics{};

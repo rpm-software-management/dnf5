@@ -20,8 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "changelog.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_query.hpp>
@@ -40,7 +38,7 @@ using namespace libdnf::cli;
 
 
 ChangelogCommand::ChangelogCommand(Command & parent) : Command(parent, "changelog") {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
@@ -107,7 +105,7 @@ ChangelogCommand::ChangelogCommand(Command & parent) : Command(parent, "changelo
 
 
 void ChangelogCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     auto since = since_option->get_value();
     auto count = count_option->get_value();

@@ -19,8 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "environment_list.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf-cli/output/environmentlist.hpp>
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/environment/environment.hpp>
@@ -52,7 +50,7 @@ EnvironmentListCommand::EnvironmentListCommand(Command & parent, const std::stri
 
 
 void EnvironmentListCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::COMPS);
 

@@ -19,8 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_list.hpp"
 
-#include "dnf5/context.hpp"
-
 #include <libdnf-cli/output/grouplist.hpp>
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/group/group.hpp>
@@ -53,7 +51,7 @@ GroupListCommand::GroupListCommand(Command & parent, const std::string & name) :
 
 
 void GroupListCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::COMPS);
 
