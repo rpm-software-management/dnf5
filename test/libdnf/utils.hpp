@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/package_set.hpp"
+#include "libdnf/system/state.hpp"
 #include "libdnf/utils/format.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
@@ -216,6 +217,28 @@ struct assertion_traits<libdnf::base::TransactionPackage> {
             transaction_item_action_to_string(tspkg.get_action()),
             transaction_item_reason_to_string(tspkg.get_reason()),
             transaction_item_state_to_string(tspkg.get_state()));
+    }
+};
+
+template <>
+struct assertion_traits<libdnf::system::PackageState> {
+    inline static bool equal(const libdnf::system::PackageState & left, const libdnf::system::PackageState & right) {
+        return left.reason == right.reason;
+    }
+
+    inline static std::string toString(const libdnf::system::PackageState & pkg_state) {
+        return libdnf::utils::sformat("PackageState: reason: {}", pkg_state.reason);
+    }
+};
+
+template <>
+struct assertion_traits<libdnf::system::NevraState> {
+    inline static bool equal(const libdnf::system::NevraState & left, const libdnf::system::NevraState & right) {
+        return left.from_repo == right.from_repo;
+    }
+
+    inline static std::string toString(const libdnf::system::NevraState & nevra_state) {
+        return libdnf::utils::sformat("NevraState: from_repo: {}", nevra_state.from_repo);
     }
 };
 

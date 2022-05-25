@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/plugin/plugins.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/rpm/package_sack.hpp"
+#include "libdnf/system/state.hpp"
 #include "libdnf/transaction/transaction_history.hpp"
 
 #include <map>

@@ -28,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/common/weak_ptr.hpp"
-#include "libdnf/system/state.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <map>

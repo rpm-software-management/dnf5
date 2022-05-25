@@ -33,7 +33,8 @@ enum class TransactionItemReason : int {
     USER = 2,
     CLEAN = 3,
     WEAK_DEPENDENCY = 4,
-    GROUP = 5
+    GROUP = 5,
+    EXTERNAL_USER = 6
 };
 
 

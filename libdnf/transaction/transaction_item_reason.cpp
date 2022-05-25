@@ -31,7 +31,7 @@ InvalidTransactionItemReason::InvalidTransactionItemReason(const std::string & r
 std::string transaction_item_reason_to_string(TransactionItemReason reason) {
     switch (reason) {
         case TransactionItemReason::NONE:
-            return "none";
+            return "None";
         case TransactionItemReason::DEPENDENCY:
             return "Dependency";
         case TransactionItemReason::USER:
@@ -42,6 +42,8 @@ std::string transaction_item_reason_to_string(TransactionItemReason reason) {
             return "Weak Dependency";
         case TransactionItemReason::GROUP:
             return "Group";
+        case TransactionItemReason::EXTERNAL_USER:
+            return "External User";
     }
     return "";
 }
@@ -60,20 +62,20 @@ TransactionItemReason transaction_item_reason_from_string(const std::string & re
         return TransactionItemReason::WEAK_DEPENDENCY;
     } else if (reason == "Group") {
         return TransactionItemReason::GROUP;
+    } else if (reason == "External User") {
+        return TransactionItemReason::EXTERNAL_USER;
     }
 
     throw InvalidTransactionItemReason(reason);
 }
 
-// TransactionItemReason::UNKNOWN will have higher value than TransactionItemReason::DEPENDENCY
-// Important for autoremove to prevent unwanted removal
-// https://bugzilla.redhat.com/show_bug.cgi?id=1921063
-// TODO(lukash) the above doesn't make much sense. likely not needed with the new system state, revise
+
 static TransactionItemReason order[] = {
+    TransactionItemReason::NONE,
     TransactionItemReason::CLEAN,
     TransactionItemReason::WEAK_DEPENDENCY,
     TransactionItemReason::DEPENDENCY,
-    TransactionItemReason::NONE,
+    TransactionItemReason::EXTERNAL_USER,
     TransactionItemReason::GROUP,
     TransactionItemReason::USER,
 };
