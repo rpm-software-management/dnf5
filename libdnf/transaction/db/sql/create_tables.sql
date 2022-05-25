@@ -43,7 +43,7 @@ R"**(
         id INTEGER PRIMARY KEY,
         name TEXT
     );
-    INSERT INTO trans_item_reason VALUES (0, "None"), (1, "Dependency"), (2, "User"), (3, "Clean"), (4, "Weak Dependency"), (5, "Group");
+    INSERT INTO trans_item_reason VALUES (0, "None"), (1, "Dependency"), (2, "User"), (3, "Clean"), (4, "Weak Dependency"), (5, "Group"), (6, "External User");
 
     CREATE TABLE trans_item_state (
         id INTEGER PRIMARY KEY,

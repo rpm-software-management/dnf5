@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/rpm/package_query.hpp"
 
 #include <filesystem>
 
@@ -313,10 +314,25 @@ std::string Package::get_repo_id() const {
 }
 
 libdnf::transaction::TransactionItemReason Package::get_reason() const {
-    // TODO(lukash) Right now this breaks getting reasons in Transaction::Impl::set_transaction
-    //libdnf_assert(is_installed(), "Package \"{}\" is not installed", get_nevra());
+    // TODO(lukash) this query is a temporary solution.
+    // The logic should be moved to the system::State, where a cache of
+    // installed NAs needs to be created (perhaps still as a query), as it is
+    // needed for transaction reason resolution anyway
+    rpm::PackageQuery installed_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+    installed_query.filter_installed();
+    installed_query.filter_name({get_name()});
+    installed_query.filter_arch({get_arch()});
+    if (!installed_query.empty()) {
+        auto reason = base->get_system_state().get_package_reason(get_na());
 
-    return base->get_system_state().get_reason(get_na());
+        if (reason == libdnf::transaction::TransactionItemReason::NONE) {
+            return libdnf::transaction::TransactionItemReason::EXTERNAL_USER;
+        }
+
+        return reason;
+    }
+
+    return libdnf::transaction::TransactionItemReason::NONE;
 }
 
 Checksum Package::get_checksum() const {

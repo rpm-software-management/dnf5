@@ -52,7 +52,8 @@ public:
         Id id,
         TransactionPackage::Action action,
         rpm::solv::GoalPrivate & solved_goal,
-        std::map<Id, std::vector<Id>> & replaced);
+        std::map<Id, std::vector<Id>> & replaced,
+        rpm::PackageQuery installed_query);
 
     GoalProblem report_not_found(
         GoalAction action, const std::string & pkg_spec, const GoalJobSettings & settings, bool strict);

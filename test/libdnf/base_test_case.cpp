@@ -184,7 +184,7 @@ libdnf::rpm::Package BaseTestCase::add_system_pkg(
     CPPUNIT_ASSERT_MESSAGE("Couldn't parse NEVRA from package path: \"" + relative_path + "\"", !nevras.empty());
     auto na = nevras[0].get_name() + "." + nevras[0].get_arch();
 
-    base.get_system_state().set_reason(na, reason);
+    base.get_system_state().set_package_reason(na, reason);
 
     return repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
 }

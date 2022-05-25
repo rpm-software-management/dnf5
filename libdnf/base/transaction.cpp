@@ -223,87 +223,38 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     if (!libsolv_transaction) {
         return;
     }
-    auto & pool = get_pool(base);
-
-    rpm::PackageQuery installonly_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
-    installonly_query.filter_provides(base->get_config().installonlypkgs().get_value());
-    rpm::PackageQuery installed_installonly_query(installonly_query);
-    installed_installonly_query.filter_installed();
 
     // std::map<replaced, replaced_by>
     std::map<Id, std::vector<Id>> replaced;
 
+    rpm::PackageQuery installed_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+    installed_query.filter_installed();
+
+    // The order of packages in the vector matters, we rely on outbound actions
+    // being at the end in Transaction::Impl::run()
     for (auto id : solved_goal.list_installs()) {
-        // TODO(lukash) use make_transaction_package(), the installonly query makes it awkward
-        auto obs = solved_goal.list_obsoleted_by_package(id);
-        auto reason = solved_goal.get_reason(id);
-
-        TransactionPackage tspkg(rpm::Package(base, rpm::PackageId(id)), TransactionPackage::Action::INSTALL, reason);
-
-        //  Inherit the reason if package is installonly an package with the same name is installed
-        //  Use the same logic like upgrade
-        //  Upgrade of installonly packages result in install or install and remove step
-        if (installonly_query.p_impl->contains(id)) {
-            rpm::PackageQuery query(installed_installonly_query);
-            query.filter_name({pool.get_name(id)});
-            if (!query.empty()) {
-                reason = tspkg.get_package().get_reason();
-            }
-        }
-        for (int i = 0; i < obs.size(); ++i) {
-            rpm::Package obsoleted(base, rpm::PackageId(obs[i]));
-            auto obs_reson = obsoleted.get_reason();
-            if (obs_reson > reason) {
-                reason = obs_reson;
-            }
-            tspkg.replaces.emplace_back(std::move(obsoleted));
-            replaced[obs[i]].push_back(id);
-        }
-        tspkg.set_reason(reason);
-        packages.emplace_back(std::move(tspkg));
+        packages.emplace_back(
+            make_transaction_package(id, TransactionPackage::Action::INSTALL, solved_goal, replaced, installed_query));
     }
 
     for (auto id : solved_goal.list_reinstalls()) {
-        packages.emplace_back(
-            make_transaction_package(id, TransactionPackage::Action::REINSTALL, solved_goal, replaced));
+        packages.emplace_back(make_transaction_package(
+            id, TransactionPackage::Action::REINSTALL, solved_goal, replaced, installed_query));
     }
 
     for (auto id : solved_goal.list_upgrades()) {
-        packages.emplace_back(make_transaction_package(id, TransactionPackage::Action::UPGRADE, solved_goal, replaced));
+        packages.emplace_back(
+            make_transaction_package(id, TransactionPackage::Action::UPGRADE, solved_goal, replaced, installed_query));
     }
 
     for (auto id : solved_goal.list_downgrades()) {
-        packages.emplace_back(
-            make_transaction_package(id, TransactionPackage::Action::DOWNGRADE, solved_goal, replaced));
+        packages.emplace_back(make_transaction_package(
+            id, TransactionPackage::Action::DOWNGRADE, solved_goal, replaced, installed_query));
     }
 
-    auto list_removes = solved_goal.list_removes();
-    if (!list_removes.empty()) {
-        rpm::PackageQuery remaining_installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
-        remaining_installed.filter_installed();
-        for (auto id : list_removes) {
-            remaining_installed.p_impl->remove(id);
-        }
-        rpm::PackageSet tmp_set(base);
-
-        // https://bugzilla.redhat.com/show_bug.cgi?id=1921063
-        // To keep a reason of installonly pkgs in DB for remove step it requires TSI with reason change
-        for (auto id : list_removes) {
-            rpm::Package rm_package(base, rpm::PackageId(id));
-            tmp_set.add(rm_package);
-            rpm::PackageQuery remaining_na(remaining_installed);
-            remaining_na.filter_name_arch(tmp_set);
-            if (!remaining_na.empty()) {
-                auto keep_reason = (*remaining_na.begin()).get_reason();
-                TransactionPackage keep_reason_tspkg(
-                    *remaining_na.begin(), TransactionPackage::Action::REASON_CHANGE, keep_reason);
-                packages.emplace_back(std::move(keep_reason_tspkg));
-            }
-            tmp_set.clear();
-            auto reason = solved_goal.get_reason(id);
-            TransactionPackage tspkg(rm_package, TransactionPackage::Action::REMOVE, reason);
-            packages.emplace_back(std::move(tspkg));
-        }
+    for (auto id : solved_goal.list_removes()) {
+        packages.emplace_back(TransactionPackage(
+            rpm::Package(base, rpm::PackageId(id)), TransactionPackage::Action::REMOVE, solved_goal.get_reason(id)));
     }
 
     // Add replaced packages to transaction
@@ -323,21 +274,36 @@ TransactionPackage Transaction::Impl::make_transaction_package(
     Id id,
     TransactionPackage::Action action,
     rpm::solv::GoalPrivate & solved_goal,
-    std::map<Id, std::vector<Id>> & replaced) {
+    std::map<Id, std::vector<Id>> & replaced,
+    rpm::PackageQuery installed_query) {
     auto obs = solved_goal.list_obsoleted_by_package(id);
 
-    libdnf_assert(!obs.empty(), "No obsoletes for {}", transaction_item_action_to_string(action));
-
     rpm::Package new_package(base, rpm::PackageId(id));
-    auto reason = new_package.get_reason();
+
+    transaction::TransactionItemReason reason;
+    if (action == TransactionPackage::Action::INSTALL) {
+        reason = std::max(new_package.get_reason(), solved_goal.get_reason(id));
+
+        installed_query.filter_name({new_package.get_name()});
+        installed_query.filter_arch({new_package.get_arch()});
+        // For installonly packages: if the NA is already on the system, but
+        // not recorded in system state as installed, it was installed outside
+        // DNF and we want to preserve NONE as reason
+        // TODO(lukash) this is still required even with having EXTERNAL_USER
+        // as a reason, because with --best the reason returned from the goal
+        // is USER, which is wrong here
+        if (!installed_query.empty() && new_package.get_reason() == transaction::TransactionItemReason::EXTERNAL_USER) {
+            reason = transaction::TransactionItemReason::EXTERNAL_USER;
+        }
+    } else {
+        reason = new_package.get_reason();
+    }
+
     TransactionPackage tspkg(new_package, action, reason);
 
     for (auto replaced_id : obs) {
         rpm::Package replaced_pkg(base, rpm::PackageId(replaced_id));
-        auto old_reson = replaced_pkg.get_reason();
-        if (old_reson > reason) {
-            reason = old_reson;
-        }
+        reason = std::max(reason, replaced_pkg.get_reason());
         tspkg.replaces.emplace_back(std::move(replaced_pkg));
         replaced[replaced_id].push_back(id);
     }
@@ -469,9 +435,45 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     if (ret == 0) {
         // set the new system state
         auto & system_state = base->get_system_state();
-        for (const auto & tspkg : packages) {
-            system_state.set_reason(tspkg.get_package().get_na(), tspkg.get_reason());
+
+        rpm::PackageQuery installed_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        installed_query.filter_installed();
+
+        // Iterate in reverse, inbound actions are first in the vector, we want to process outbound first
+        for (auto it = packages.rbegin(); it != packages.rend(); ++it) {
+            auto tspkg = *it;
+            if (transaction_item_action_is_inbound(tspkg.get_action())) {
+                if (tspkg.get_reason() != transaction::TransactionItemReason::NONE) {
+                    system_state.set_package_reason(tspkg.get_package().get_na(), tspkg.get_reason());
+                }
+                system_state.set_package_from_repo(tspkg.get_package().get_nevra(), tspkg.get_package().get_repo_id());
+            } else if (transaction_item_action_is_outbound(tspkg.get_action())) {
+                // Check if the NA is still installed. We do this check for all outbound actions.
+                //
+                // For REMOVE, if there's a package with the same NA still on the system,
+                // it's an installonly package and we're keeping the reason.
+                //
+                // For REPLACED, we don't know if it was UPGRADE/DOWNGRADE/REINSTALL
+                // (we're keeping the reason) or it's an obsolete (we're removing the reason)
+
+                // We need to filter out packages that are being removed in the transaction
+                // (the installed query still contains the packages before this transaction)
+                installed_query.filter_nevra({tspkg.get_package().get_nevra()}, libdnf::sack::QueryCmp::NEQ);
+
+                rpm::PackageQuery query(installed_query);
+                query.filter_name({tspkg.get_package().get_name()});
+                query.filter_arch({tspkg.get_package().get_arch()});
+                if (query.empty()) {
+                    system_state.remove_package_na_state(tspkg.get_package().get_na());
+                }
+
+                // for a REINSTALL, the remove needs to happen first, hence the reverse iteration of the for loop
+                system_state.remove_package_nevra_state(tspkg.get_package().get_nevra());
+            } else if (tspkg.get_action() == TransactionPackage::Action::REASON_CHANGE) {
+                system_state.set_package_reason(tspkg.get_package().get_na(), tspkg.get_reason());
+            }
         }
+
         system_state.save();
     }
 
