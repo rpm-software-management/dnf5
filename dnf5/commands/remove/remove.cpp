@@ -17,30 +17,13 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "remove.hpp"
-
-#include "libdnf-cli/output/transaction_table.hpp"
-
-#include <libdnf/base/goal.hpp>
-#include <libdnf/conf/option_string.hpp>
-#include <libdnf/rpm/package.hpp>
-#include <libdnf/rpm/package_query.hpp>
-#include <libdnf/rpm/package_set.hpp>
-
-#include <iostream>
-
 
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
 
-
-RemoveCommand::RemoveCommand(Command & parent) : RemoveCommand(parent, "remove") {}
-
-
-RemoveCommand::RemoveCommand(Command & parent, const std::string & name) : Command(parent, name) {
+void RemoveCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
@@ -69,34 +52,18 @@ RemoveCommand::RemoveCommand(Command & parent, const std::string & name) : Comma
     cmd.register_named_arg(unneeded_opt);
 }
 
-
-void RemoveCommand::run() {
-    auto & ctx = get_context();
-
-    ctx.base.get_repo_sack()->get_system_repo()->load();
-    // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
-    ctx.base.get_rpm_package_sack()->load_config_excludes_includes();
-
-    libdnf::Goal goal(ctx.base);
-    for (auto & pattern : *patterns_to_remove_options) {
-        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        goal.add_rpm_remove(option->get_value());
-    }
-    auto transaction = goal.resolve(true);
-    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
-        throw GoalResolveError(transaction);
-    }
-
-    if (!libdnf::cli::output::print_transaction_table(transaction)) {
-        return;
-    }
-
-    if (!userconfirm(ctx.base.get_config())) {
-        throw AbortedByUserError();
-    }
-
-    ctx.download_and_run(transaction);
+void RemoveCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::NONE);
 }
 
+void RemoveCommand::run() {
+    auto goal = get_context().get_goal();
+    for (auto & pattern : *patterns_to_remove_options) {
+        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+        goal->add_rpm_remove(option->get_value());
+    }
+}
 
 }  // namespace dnf5

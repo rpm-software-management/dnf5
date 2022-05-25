@@ -17,26 +17,15 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "module_enable.hpp"
-
 
 namespace dnf5 {
 
-
-using namespace libdnf::cli;
-
-
-ModuleEnableCommand::ModuleEnableCommand(Command & parent) : Command(parent, "enable") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
+void ModuleEnableCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Enable module streams and make their packages available.");
 }
 
-
 void ModuleEnableCommand::run() {}
-
 
 }  // namespace dnf5

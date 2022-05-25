@@ -17,28 +17,13 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "repo_info.hpp"
 
 #include "libdnf-cli/output/repo_info.hpp"
 
-#include <libdnf/conf/option_string.hpp>
-
 #include <iostream>
 
-
 namespace dnf5 {
-
-
-using namespace libdnf::cli;
-
-
-RepoInfoCommand::RepoInfoCommand(Command & parent) : RepoInfoCommand(parent, "info") {}
-
-
-RepoInfoCommand::RepoInfoCommand(Command & parent, const std::string & name)
-    : RepoListCommand(parent, name, "Print details about repositories") {}
-
 
 void RepoInfoCommand::print(const libdnf::repo::RepoQuery & query, [[maybe_unused]] bool with_status) {
     for (auto & repo : query.get_data()) {
@@ -48,6 +33,5 @@ void RepoInfoCommand::print(const libdnf::repo::RepoQuery & query, [[maybe_unuse
         std::cout << std::endl;
     }
 }
-
 
 }  // namespace dnf5

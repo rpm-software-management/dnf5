@@ -17,26 +17,15 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "module_provides.hpp"
-
 
 namespace dnf5 {
 
-
-using namespace libdnf::cli;
-
-
-ModuleProvidesCommand::ModuleProvidesCommand(Command & parent) : Command(parent, "provides") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
+void ModuleProvidesCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Print module and module profile the specified packages come from.");
 }
 
-
 void ModuleProvidesCommand::run() {}
-
 
 }  // namespace dnf5

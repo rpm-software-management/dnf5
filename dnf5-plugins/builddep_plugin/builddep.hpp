@@ -23,10 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include <dnf5/context.hpp>
-#include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
-#include <memory>
 #include <vector>
 
 
@@ -35,8 +33,11 @@ namespace dnf5 {
 
 class BuildDepCommand : public Command {
 public:
-    explicit BuildDepCommand(Command & parent);
+    explicit BuildDepCommand(Command & parent) : Command(parent, "builddep") {}
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
+    void goal_resolved() override;
 
 private:
     void parse_builddep_specs(int specs_count, const char * const specs[]);

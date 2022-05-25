@@ -17,32 +17,23 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "builddep.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 
 #include "libdnf-cli/exception.hpp"
-#include "libdnf-cli/output/transaction_table.hpp"
 
-#include <libdnf/base/goal.hpp>
-#include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <rpm/rpmbuild.h>
 
 #include <iostream>
 
-
-namespace fs = std::filesystem;
-
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-BuildDepCommand::BuildDepCommand(Command & parent) : Command(parent, "builddep") {
+void BuildDepCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
@@ -88,6 +79,15 @@ BuildDepCommand::BuildDepCommand(Command & parent) : Command(parent, "builddep")
     cmd.register_named_arg(defs);
 }
 
+void BuildDepCommand::configure() {
+    if (!pkg_specs.empty()) {
+        get_context().base.get_repo_sack()->enable_source_repos();
+    }
+
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+}
 
 void BuildDepCommand::parse_builddep_specs(int specs_count, const char * const specs[]) {
     const std::string_view ext_spec(".spec");
@@ -108,7 +108,6 @@ void BuildDepCommand::parse_builddep_specs(int specs_count, const char * const s
         }
     }
 }
-
 
 bool BuildDepCommand::add_from_spec_file(std::set<std::string> & specs, const char * spec_file_name) {
     auto spec = rpmSpecParse(spec_file_name, RPMSPEC_ANYARCH | RPMSPEC_FORCE, nullptr);
@@ -192,14 +191,6 @@ bool BuildDepCommand::add_from_pkg(std::set<std::string> & specs, const std::str
 }
 
 void BuildDepCommand::run() {
-    auto & ctx = get_context();
-
-    if (!pkg_specs.empty()) {
-        ctx.base.get_repo_sack()->enable_source_repos();
-    }
-
-    ctx.load_repos(true);
-
     // get build dependencies from various inputs
     std::set<std::string> install_specs{};
     bool parse_ok = true;
@@ -232,35 +223,25 @@ void BuildDepCommand::run() {
     }
 
     // fill the goal with build dependencies
-    libdnf::Goal goal(ctx.base);
+    auto goal = get_context().get_goal();
     for (const auto & spec : install_specs) {
         if (spec[0] == '(') {
             // rich dependencies require different method
-            goal.add_provide_install(spec);
+            goal->add_provide_install(spec);
         } else {
-            goal.add_rpm_install(spec);
+            goal->add_rpm_install(spec);
         }
     }
+}
 
-    auto transaction = goal.resolve(false);
-    auto skip_unavailable = skip_unavailable_option.get_value();
+void BuildDepCommand::goal_resolved() {
+    auto & transaction = *get_context().get_transaction();
     auto transaction_problems = transaction.get_problems();
     if (transaction_problems != libdnf::GoalProblem::NO_PROBLEM) {
-        if (transaction_problems != libdnf::GoalProblem::NOT_FOUND || !skip_unavailable) {
+        if (transaction_problems != libdnf::GoalProblem::NOT_FOUND || !skip_unavailable_option.get_value()) {
             throw GoalResolveError(transaction);
         }
     }
-
-    if (!libdnf::cli::output::print_transaction_table(transaction)) {
-        // the transaction was empty
-        return;
-    }
-
-    if (!userconfirm(ctx.base.get_config())) {
-        throw AbortedByUserError();
-    }
-
-    ctx.download_and_run(transaction);
 }
 
 }  // namespace dnf5

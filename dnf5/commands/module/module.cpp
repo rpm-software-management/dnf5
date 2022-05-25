@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "module.hpp"
 
 #include "module_disable.hpp"
@@ -31,19 +30,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "module_reset.hpp"
 #include "module_switch_to.hpp"
 
-
 namespace dnf5 {
 
+void ModuleCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("Manage modules");
+}
 
-using namespace libdnf::cli;
-
-
-ModuleCommand::ModuleCommand(Command & parent) : Command(parent, "module") {
-    auto & ctx = get_context();
-    auto & parser = ctx.get_argument_parser();
-
+void ModuleCommand::register_subcommands() {
+    auto & parser = get_context().get_argument_parser();
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Manage modules");
 
     // query commands
     auto * query_commands_group = parser.add_new_group("module_query_commands");
@@ -70,10 +65,8 @@ ModuleCommand::ModuleCommand(Command & parent) : Command(parent, "module") {
     register_subcommand(std::make_unique<ModuleRemoveCommand>(*this), software_management_commands_group);
 }
 
-
-void ModuleCommand::run() {
+void ModuleCommand::pre_configure() {
     throw_missing_command();
 }
-
 
 }  // namespace dnf5

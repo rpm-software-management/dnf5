@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "repoquery.hpp"
 
 #include "libdnf-cli/output/repoquery.hpp"
@@ -29,14 +28,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <iostream>
 
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquery") {
+void RepoqueryCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
@@ -109,28 +105,23 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : Command(parent, "repoquer
     cmd.register_positional_arg(keys);
 }
 
+void RepoqueryCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(installed_option->get_value());
+    context.set_load_available_repos(
+        available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()
+            ? Context::LoadAvailableRepos::ENABLED
+            : Context::LoadAvailableRepos::NONE);
+}
+
+void RepoqueryCommand::load_additional_packages() {
+    if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
+        cmdline_packages = get_context().add_cmdline_packages(pkg_file_paths);
+    }
+}
 
 void RepoqueryCommand::run() {
     auto & ctx = get_context();
-    std::vector<libdnf::rpm::Package> cmdline_packages;
-
-    if (installed_option->get_value()) {
-        ctx.base.get_repo_sack()->get_system_repo()->load();
-    }
-
-    if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
-        // load available repositories
-        ctx.load_repos(false);
-
-        std::vector<std::string> error_messages;
-        cmdline_packages = ctx.add_cmdline_packages(pkg_file_paths, error_messages);
-        for (const auto & msg : error_messages) {
-            std::cout << msg << std::endl;
-        }
-    } else {
-        // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
-        ctx.base.get_rpm_package_sack()->load_config_excludes_includes();
-    }
 
     libdnf::rpm::PackageSet result_pset(ctx.base);
 
@@ -160,6 +151,5 @@ void RepoqueryCommand::run() {
         }
     }
 }
-
 
 }  // namespace dnf5

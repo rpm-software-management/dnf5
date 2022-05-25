@@ -32,12 +32,16 @@ namespace dnf5 {
 
 class DowngradeCommand : public Command {
 public:
-    explicit DowngradeCommand(Command & parent);
+    explicit DowngradeCommand(Command & parent) : Command(parent, "downgrade") {}
+    void set_argument_parser() override;
+    void configure() override;
+    void load_additional_packages() override;
     void run() override;
 
 private:
     std::vector<std::string> pkg_specs;
     std::vector<std::string> pkg_file_paths;
+    std::vector<libdnf::rpm::Package> cmdline_packages;
 };
 
 

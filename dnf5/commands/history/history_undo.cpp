@@ -17,26 +17,16 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "history_undo.hpp"
-
 
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
 
-
-HistoryUndoCommand::HistoryUndoCommand(Command & parent) : Command(parent, "undo") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Revert all actions from the specified transactions");
+void HistoryUndoCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("Revert all actions from the specified transactions");
 }
 
-
 void HistoryUndoCommand::run() {}
-
 
 }  // namespace dnf5

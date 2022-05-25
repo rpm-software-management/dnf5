@@ -22,18 +22,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5/context.hpp>
 
-
 namespace dnf5 {
-
 
 class GroupCommand : public Command {
 public:
-    explicit GroupCommand(Command & parent);
-    void run() override;
+    explicit GroupCommand(Command & parent) : Command(parent, "group") {}
+    void set_argument_parser() override;
+    void register_subcommands() override;
+    void pre_configure() override;
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_GROUP_GROUP_HPP

@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "commands/advisory/advisory.hpp"
 #include "commands/aliases/autoremove.hpp"
 #include "commands/aliases/groupinfo.hpp"
@@ -47,6 +46,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "plugins.hpp"
 #include "utils.hpp"
 
+#include "libdnf-cli/output/transaction_table.hpp"
+
 #include <fcntl.h>
 #include <fmt/format.h>
 #include <libdnf-cli/exception.hpp>
@@ -68,83 +69,6 @@ namespace fs = std::filesystem;
 namespace dnf5 {
 
 using namespace libdnf::cli;
-
-
-class RootCommand : public Command {
-public:
-    explicit RootCommand(libdnf::cli::session::Session & session);
-    void run() override;
-};
-
-
-inline RootCommand::RootCommand(libdnf::cli::session::Session & session) : Command(session, "dnf5") {
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Utility for packages maintaining");
-    cmd.set_description("DNF5 is a program for maintaining packages.");
-    cmd.set_named_args_help_header("Unclassified options:");
-
-    // software management commands
-    auto * software_management_commands_group =
-        session.get_argument_parser().add_new_group("software_management_commands");
-    software_management_commands_group->set_header("Software Management Commands:");
-    cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<InstallCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<UpgradeCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<RemoveCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<DistroSyncCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<SwapCommand>(*this), software_management_commands_group);
-
-    // query commands
-    auto * query_commands_group = session.get_argument_parser().add_new_group("query_commands");
-    query_commands_group->set_header("Query Commands:");
-    cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<SearchCommand>(*this), query_commands_group);
-
-    auto * subcommands_group = session.get_argument_parser().add_new_group("subcommands");
-    subcommands_group->set_header("Subcommands:");
-    cmd.register_group(subcommands_group);
-    register_subcommand(std::make_unique<GroupCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<EnvironmentCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<ModuleCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<HistoryCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<RepoCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<AdvisoryCommand>(*this), subcommands_group);
-
-    register_subcommand(std::make_unique<CleanCommand>(*this));
-    register_subcommand(std::make_unique<DownloadCommand>(*this));
-    register_subcommand(std::make_unique<MakeCacheCommand>(*this));
-
-    // aliases
-    auto * aliases_group = session.get_argument_parser().add_new_group("aliases");
-    aliases_group->set_header("Compatibility Aliases:");
-    cmd.register_group(aliases_group);
-    register_subcommand(std::make_unique<AutoremoveAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<GroupinfoAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<GrouplistAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<RepoinfoAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<RepolistAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<UpdateinfoAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<UpgradeMinimalAlias>(*this), aliases_group);
-
-    auto & context = static_cast<Context &>(session);
-    auto & dnf5_plugins = context.get_plugins();
-    auto & plugins = dnf5_plugins.get_plugins();
-    for (auto & plugin : plugins) {
-        if (plugin->get_enabled()) {
-            auto commands = plugin->get_iplugin()->create_commands(*this);
-            for (auto & command : commands) {
-                register_subcommand(std::move(command));
-            }
-        }
-    }
-}
-
-inline void RootCommand::run() {
-    throw_missing_command();
-}
 
 // Registers `group` and all its arguments to `command`
 static void register_group_with_args(
@@ -225,25 +149,37 @@ static libdnf::cli::ArgumentParser::NamedArg * add_new_named_arg_alias(
     return alias;
 }
 
-static void set_commandline_args(Context & ctx) {
-    ctx.set_root_command(std::make_unique<RootCommand>(ctx));
-    auto dnf5 = ctx.get_root_command()->get_argument_parser_command();
+class RootCommand : public Command {
+public:
+    explicit RootCommand(libdnf::cli::session::Session & context) : Command(context, "dnf5") {}
+    void set_argument_parser() override;
+    void register_subcommands() override;
+    void pre_configure() override { throw_missing_command(); }
+};
 
+void RootCommand::set_argument_parser() {
+    auto & ctx = get_context();
+    auto & parser = ctx.get_argument_parser();
+    auto & cmd = *get_argument_parser_command();
     auto & config = ctx.base.get_config();
 
-    auto * global_options_group = ctx.get_argument_parser().add_new_group("global_options");
+    cmd.set_short_description("Utility for packages maintaining");
+    cmd.set_description("DNF5 is a program for maintaining packages.");
+    cmd.set_named_args_help_header("Unclassified options:");
+
+    auto * global_options_group = parser.add_new_group("global_options");
     global_options_group->set_header("Global options:");
 
-    auto * options_aliases_group = ctx.get_argument_parser().add_new_group("global_options_aliases");
+    auto * options_aliases_group = parser.add_new_group("global_options_aliases");
     options_aliases_group->set_header("Options Compatibility Aliases:");
 
-    auto help = ctx.get_argument_parser().add_new_named_arg("help");
+    auto help = parser.add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
     help->set_short_description("Print help");
     global_options_group->register_argument(help);
 
-    auto config_file_path = ctx.get_argument_parser().add_new_named_arg("config");
+    auto config_file_path = parser.add_new_named_arg("config");
     config_file_path->set_long_name("config");
     config_file_path->set_has_value(true);
     config_file_path->set_arg_value_help("CONFIG_FILE_PATH");
@@ -251,7 +187,7 @@ static void set_commandline_args(Context & ctx) {
     config_file_path->link_value(&config.config_file_path());
     global_options_group->register_argument(config_file_path);
 
-    auto quiet = ctx.get_argument_parser().add_new_named_arg("quiet");
+    auto quiet = parser.add_new_named_arg("quiet");
     quiet->set_long_name("quiet");
     quiet->set_short_name('q');
     quiet->set_short_description(
@@ -267,7 +203,7 @@ static void set_commandline_args(Context & ctx) {
     global_options_group->register_argument(quiet);
 
     // --setopt argument support
-    auto setopt = ctx.get_argument_parser().add_new_named_arg("setopt");
+    auto setopt = parser.add_new_named_arg("setopt");
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);
     setopt->set_arg_value_help("[REPO_ID.]OPTION=VALUE");
@@ -307,7 +243,7 @@ static void set_commandline_args(Context & ctx) {
     global_options_group->register_argument(setopt);
 
     // --setvar argument support
-    auto setvar = ctx.get_argument_parser().add_new_named_arg("setvar");
+    auto setvar = parser.add_new_named_arg("setvar");
     setvar->set_long_name("setvar");
     setvar->set_has_value(true);
     setvar->set_arg_value_help("VAR_NAME=VALUE");
@@ -325,7 +261,7 @@ static void set_commandline_args(Context & ctx) {
         });
     global_options_group->register_argument(setvar);
 
-    auto assume_yes = ctx.get_argument_parser().add_new_named_arg("assumeyes");
+    auto assume_yes = parser.add_new_named_arg("assumeyes");
     assume_yes->set_long_name("assumeyes");
     assume_yes->set_short_name('y');
     assume_yes->set_short_description("automatically answer yes for all questions");
@@ -333,31 +269,31 @@ static void set_commandline_args(Context & ctx) {
     assume_yes->link_value(&config.assumeyes());
     global_options_group->register_argument(assume_yes);
 
-    auto assume_no = ctx.get_argument_parser().add_new_named_arg("assumeno");
+    auto assume_no = parser.add_new_named_arg("assumeno");
     assume_no->set_long_name("assumeno");
     assume_no->set_short_description("automatically answer no for all questions");
     assume_no->set_const_value("true");
     assume_no->link_value(&config.assumeno());
     global_options_group->register_argument(assume_no);
 
-    auto best = ctx.get_argument_parser().add_new_named_arg("best");
+    auto best = parser.add_new_named_arg("best");
     best->set_long_name("best");
     best->set_short_description("try the best available package versions in transactions");
     best->set_const_value("true");
     best->link_value(&config.best());
     global_options_group->register_argument(best);
 
-    auto no_best = ctx.get_argument_parser().add_new_named_arg("no-best");
+    auto no_best = parser.add_new_named_arg("no-best");
     no_best->set_long_name("no-best");
     no_best->set_short_description("do not limit the transaction to the best candidate");
     no_best->set_const_value("false");
     no_best->link_value(&config.best());
     global_options_group->register_argument(no_best);
 
-    auto best_conflict_args = ctx.get_argument_parser().add_conflict_args_group(
+    auto best_conflict_args = parser.add_conflict_args_group(
         std::unique_ptr<std::vector<ArgumentParser::Argument *>>(new std::vector<ArgumentParser::Argument *>{no_best}));
 
-    auto no_best_conflict_args = ctx.get_argument_parser().add_conflict_args_group(
+    auto no_best_conflict_args = parser.add_conflict_args_group(
         std::unique_ptr<std::vector<ArgumentParser::Argument *>>(new std::vector<ArgumentParser::Argument *>{best}));
 
     best->set_conflict_arguments(best_conflict_args);
@@ -366,7 +302,7 @@ static void set_commandline_args(Context & ctx) {
     add_new_named_arg_alias(*no_best, "nobest", "nobest", '\0', options_aliases_group, no_best_conflict_args);
 
     {
-        auto no_docs = ctx.get_argument_parser().add_new_named_arg("no-docs");
+        auto no_docs = parser.add_new_named_arg("no-docs");
         no_docs->set_long_name("no-docs");
         no_docs->set_short_description(
             "Don't install files that are marked as documentation (which includes man pages and texinfo documents)");
@@ -384,7 +320,7 @@ static void set_commandline_args(Context & ctx) {
     }
 
     {
-        auto exclude = ctx.get_argument_parser().add_new_named_arg("exclude");
+        auto exclude = parser.add_new_named_arg("exclude");
         exclude->set_long_name("exclude");
         exclude->set_short_name('x');
         exclude->set_short_description("exclude packages by name or glob");
@@ -401,14 +337,14 @@ static void set_commandline_args(Context & ctx) {
         global_options_group->register_argument(exclude);
     }
 
-    auto skip_broken = ctx.get_argument_parser().add_new_named_arg("skip-broken");
+    auto skip_broken = parser.add_new_named_arg("skip-broken");
     skip_broken->set_long_name("skip-broken");
     skip_broken->set_short_description("resolve depsolve problems by skipping packages");
     skip_broken->set_const_value("false");
     skip_broken->link_value(&config.strict());
     global_options_group->register_argument(skip_broken);
 
-    auto enable_repo_ids = ctx.get_argument_parser().add_new_named_arg("enable-repo");
+    auto enable_repo_ids = parser.add_new_named_arg("enable-repo");
     enable_repo_ids->set_long_name("enable-repo");
     enable_repo_ids->set_has_value(true);
     enable_repo_ids->set_arg_value_help("REPO_ID,...");
@@ -426,7 +362,7 @@ static void set_commandline_args(Context & ctx) {
         });
     global_options_group->register_argument(enable_repo_ids);
 
-    auto disable_repo_ids = ctx.get_argument_parser().add_new_named_arg("disable-repo");
+    auto disable_repo_ids = parser.add_new_named_arg("disable-repo");
     disable_repo_ids->set_long_name("disable-repo");
     disable_repo_ids->set_has_value(true);
     disable_repo_ids->set_arg_value_help("REPO_ID,...");
@@ -444,7 +380,7 @@ static void set_commandline_args(Context & ctx) {
         });
     global_options_group->register_argument(disable_repo_ids);
 
-    auto repo_ids = ctx.get_argument_parser().add_new_named_arg("repo");
+    auto repo_ids = parser.add_new_named_arg("repo");
     repo_ids->set_long_name("repo");
     repo_ids->set_has_value(true);
     repo_ids->set_arg_value_help("REPO_ID,...");
@@ -467,14 +403,13 @@ static void set_commandline_args(Context & ctx) {
     global_options_group->register_argument(repo_ids);
 
     auto ed_repo_conflict_args =
-        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
             new std::vector<ArgumentParser::Argument *>{repo_ids}));
     enable_repo_ids->set_conflict_arguments(ed_repo_conflict_args);
     disable_repo_ids->set_conflict_arguments(ed_repo_conflict_args);
 
-    auto repo_conflict_args =
-        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{enable_repo_ids, disable_repo_ids}));
+    auto repo_conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        new std::vector<ArgumentParser::Argument *>{enable_repo_ids, disable_repo_ids}));
     repo_ids->set_conflict_arguments(repo_conflict_args);
 
     add_new_named_arg_alias(
@@ -483,7 +418,7 @@ static void set_commandline_args(Context & ctx) {
         *disable_repo_ids, "disablerepo", "disablerepo", '\0', options_aliases_group, ed_repo_conflict_args);
     add_new_named_arg_alias(*repo_ids, "repoid", "repoid", '\0', options_aliases_group, repo_conflict_args);
 
-    auto no_gpgchecks = ctx.get_argument_parser().add_new_named_arg("no-gpgchecks");
+    auto no_gpgchecks = parser.add_new_named_arg("no-gpgchecks");
     no_gpgchecks->set_long_name("no-gpgchecks");
     no_gpgchecks->set_short_description("disable gpg signature checking (if RPM policy allows)");
     no_gpgchecks->set_parse_hook_func([&ctx](
@@ -500,14 +435,14 @@ static void set_commandline_args(Context & ctx) {
     global_options_group->register_argument(no_gpgchecks);
     add_new_named_arg_alias(*no_gpgchecks, "nogpgchecks", "nogpgchecks", '\0', options_aliases_group);
 
-    auto no_plugins = ctx.get_argument_parser().add_new_named_arg("no-plugins");
+    auto no_plugins = parser.add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
     no_plugins->set_short_description("disable all plugins");
     no_plugins->set_const_value("false");
     no_plugins->link_value(&config.plugins());
     global_options_group->register_argument(no_plugins);
 
-    auto enable_plugins_names = ctx.get_argument_parser().add_new_named_arg("enable-plugin");
+    auto enable_plugins_names = parser.add_new_named_arg("enable-plugin");
     enable_plugins_names->set_long_name("enable-plugin");
     enable_plugins_names->set_has_value(true);
     enable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
@@ -524,7 +459,7 @@ static void set_commandline_args(Context & ctx) {
         });
     global_options_group->register_argument(enable_plugins_names);
 
-    auto disable_plugins_names = ctx.get_argument_parser().add_new_named_arg("disable-plugin");
+    auto disable_plugins_names = parser.add_new_named_arg("disable-plugin");
     disable_plugins_names->set_long_name("disable-plugin");
     disable_plugins_names->set_has_value(true);
     disable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
@@ -542,13 +477,13 @@ static void set_commandline_args(Context & ctx) {
     global_options_group->register_argument(disable_plugins_names);
 
     auto ed_plugins_names_conflict_args =
-        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
             new std::vector<ArgumentParser::Argument *>{no_plugins}));
     enable_plugins_names->set_conflict_arguments(ed_plugins_names_conflict_args);
     disable_plugins_names->set_conflict_arguments(ed_plugins_names_conflict_args);
 
     auto no_plugins_conflict_args =
-        ctx.get_argument_parser().add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
             new std::vector<ArgumentParser::Argument *>{enable_plugins_names, disable_plugins_names}));
     no_plugins->set_conflict_arguments(no_plugins_conflict_args);
 
@@ -569,7 +504,7 @@ static void set_commandline_args(Context & ctx) {
         options_aliases_group,
         ed_plugins_names_conflict_args);
 
-    auto comment = ctx.get_argument_parser().add_new_named_arg("comment");
+    auto comment = parser.add_new_named_arg("comment");
     comment->set_long_name("comment");
     comment->set_has_value(true);
     comment->set_arg_value_help("COMMENT");
@@ -584,7 +519,7 @@ static void set_commandline_args(Context & ctx) {
         });
     global_options_group->register_argument(comment);
 
-    auto installroot = ctx.get_argument_parser().add_new_named_arg("installroot");
+    auto installroot = parser.add_new_named_arg("installroot");
     installroot->set_long_name("installroot");
     installroot->set_has_value(true);
     installroot->set_arg_value_help("ABSOLUTE_PATH");
@@ -592,7 +527,7 @@ static void set_commandline_args(Context & ctx) {
     installroot->link_value(&config.installroot());
     global_options_group->register_argument(installroot);
 
-    auto releasever = ctx.get_argument_parser().add_new_named_arg("releasever");
+    auto releasever = parser.add_new_named_arg("releasever");
     releasever->set_long_name("releasever");
     releasever->set_has_value(true);
     releasever->set_arg_value_help("RELEASEVER");
@@ -606,7 +541,7 @@ static void set_commandline_args(Context & ctx) {
     global_options_group->register_argument(releasever);
 
     {
-        auto debug_solver = ctx.get_argument_parser().add_new_named_arg("debug_solver");
+        auto debug_solver = parser.add_new_named_arg("debug_solver");
         debug_solver->set_long_name("debugsolver");
         debug_solver->set_short_description("Dump detailed solving results into files");
         debug_solver->set_const_value("true");
@@ -614,10 +549,72 @@ static void set_commandline_args(Context & ctx) {
         global_options_group->register_argument(debug_solver);
     }
 
-    register_group_with_args(*dnf5, *global_options_group);
-    register_group_with_args(*dnf5, *options_aliases_group);
+    register_group_with_args(cmd, *global_options_group);
+    register_group_with_args(cmd, *options_aliases_group);
 
-    ctx.get_argument_parser().set_inherit_named_args(true);
+    parser.set_inherit_named_args(true);
+}
+
+void RootCommand::register_subcommands() {
+    auto & context = get_context();
+    auto & cmd = *get_argument_parser_command();
+
+    // software management commands
+    auto * software_management_commands_group =
+        context.get_argument_parser().add_new_group("software_management_commands");
+    software_management_commands_group->set_header("Software Management Commands:");
+    cmd.register_group(software_management_commands_group);
+    register_subcommand(std::make_unique<InstallCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<UpgradeCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<RemoveCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<DistroSyncCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<SwapCommand>(*this), software_management_commands_group);
+
+    // query commands
+    auto * query_commands_group = context.get_argument_parser().add_new_group("query_commands");
+    query_commands_group->set_header("Query Commands:");
+    cmd.register_group(query_commands_group);
+    register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<SearchCommand>(*this), query_commands_group);
+
+    auto * subcommands_group = context.get_argument_parser().add_new_group("subcommands");
+    subcommands_group->set_header("Subcommands:");
+    cmd.register_group(subcommands_group);
+    register_subcommand(std::make_unique<GroupCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<EnvironmentCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<ModuleCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<HistoryCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<RepoCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<AdvisoryCommand>(*this), subcommands_group);
+
+    register_subcommand(std::make_unique<CleanCommand>(*this));
+    register_subcommand(std::make_unique<DownloadCommand>(*this));
+    register_subcommand(std::make_unique<MakeCacheCommand>(*this));
+
+    // aliases
+    auto * aliases_group = context.get_argument_parser().add_new_group("aliases");
+    aliases_group->set_header("Compatibility Aliases:");
+    cmd.register_group(aliases_group);
+    register_subcommand(std::make_unique<AutoremoveAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<GroupinfoAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<GrouplistAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<RepoinfoAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<RepolistAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<UpdateinfoAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<UpgradeMinimalAlias>(*this), aliases_group);
+
+    auto & dnf5_plugins = context.get_plugins();
+    auto & plugins = dnf5_plugins.get_plugins();
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            auto commands = plugin->get_iplugin()->create_commands(*this);
+            for (auto & command : commands) {
+                register_subcommand(std::move(command));
+            }
+        }
+    }
 }
 
 }  // namespace dnf5
@@ -652,8 +649,8 @@ int main(int argc, char * argv[]) try {
         dnf5_plugins.load_plugins(plugins_directory);
     }
 
-    // Set commandline arguments
-    dnf5::set_commandline_args(context);
+    // Register root command
+    context.register_root_command(std::make_unique<dnf5::RootCommand>(context));
 
     // Argument completion handler
     // If the argument at position 1 is "--complete=<index>", this is a request to complete the argument
@@ -684,45 +681,71 @@ int main(int argc, char * argv[]) try {
         }
     }
 
-    // Load main configuration
-    base.load_config_from_file();
+    auto command = context.get_selected_command();
 
-    // Try to open the current directory to see if we have
-    // read and execute access. If not, chdir to /
-    auto fd = open(".", O_RDONLY);
-    if (fd == -1) {
-        log_router.warning("No read/execute access in current directory, moving to /");
-        std::filesystem::current_path("/");
-    } else {
-        close(fd);
-    }
-
-    // Swap to destination logger (log to file) and write messages from memory buffer logger to it
-    auto log_file = fs::path(base.get_config().logdir().get_value()) / "dnf5.log";
-    auto log_stream = std::make_unique<std::ofstream>(log_file, std::ios::app);
-    std::unique_ptr<libdnf::Logger> logger = std::make_unique<libdnf::StreamLogger>(std::move(log_stream));
-    log_router.swap_logger(logger, 0);
-    dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
-
-    base.setup();
-
-    base.get_repo_sack()->create_repos_from_system_configuration();
-
-    context.apply_repository_setopts();
-
-    //configure_plugins
-    //configure_from_options(context);
-    plugins.hook(libdnf::plugin::HookId::LOAD_CONFIG_FROM_FILE);
-
-    // TODO(dmach): argparser should error out on unselected command
-    if (!context.get_selected_command()) {
-        context.get_argument_parser().get_selected_command()->help();
-        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
-    }
-
-    // Run selected command
     try {
-        context.get_selected_command()->run();
+        command->pre_configure();
+
+        // Load main configuration
+        base.load_config_from_file();
+
+        // Try to open the current directory to see if we have
+        // read and execute access. If not, chdir to /
+        auto fd = open(".", O_RDONLY);
+        if (fd == -1) {
+            log_router.warning("No read/execute access in current directory, moving to /");
+            std::filesystem::current_path("/");
+        } else {
+            close(fd);
+        }
+
+        // Swap to destination logger (log to file) and write messages from memory buffer logger to it
+        auto log_file = fs::path(base.get_config().logdir().get_value()) / "dnf5.log";
+        auto log_stream = std::make_unique<std::ofstream>(log_file, std::ios::app);
+        std::unique_ptr<libdnf::Logger> logger = std::make_unique<libdnf::StreamLogger>(std::move(log_stream));
+        log_router.swap_logger(logger, 0);
+        dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
+
+        base.setup();
+
+        base.get_repo_sack()->create_repos_from_system_configuration();
+
+        context.apply_repository_setopts();
+
+        //configure_plugins
+        //configure_from_options(context);
+        plugins.hook(libdnf::plugin::HookId::LOAD_CONFIG_FROM_FILE);
+
+        // Run selected command
+        command->configure();
+        {
+            if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {
+                context.load_repos(context.get_load_system_repo(), context.get_available_repos_load_flags());
+            } else if (context.get_load_system_repo()) {
+                context.base.get_repo_sack()->get_system_repo()->load();
+                // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf
+                context.base.get_rpm_package_sack()->load_config_excludes_includes();
+            }
+        }
+
+        command->load_additional_packages();
+
+        command->run();
+        if (auto goal = context.get_goal(false)) {
+            context.set_transaction(goal->resolve(false));
+
+            command->goal_resolved();
+
+            if (!libdnf::cli::output::print_transaction_table(*context.get_transaction())) {
+                return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+            }
+
+            if (!dnf5::userconfirm(context.base.get_config())) {
+                throw libdnf::cli::AbortedByUserError();
+            }
+
+            context.download_and_run(*context.get_transaction());
+        }
     } catch (libdnf::cli::ArgumentParserMissingCommandError & ex) {
         // print help if no command is provided
         std::cerr << ex.what() << std::endl;

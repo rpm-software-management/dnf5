@@ -23,23 +23,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/group/group.hpp>
 #include <libdnf/comps/group/query.hpp>
-#include <libdnf/conf/option_string.hpp>
-
-#include <filesystem>
-#include <fstream>
-#include <set>
-
 
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
 
-
-GroupInfoCommand::GroupInfoCommand(Command & parent) : GroupInfoCommand(parent, "info") {}
-
-
-GroupInfoCommand::GroupInfoCommand(Command & parent, const std::string & name) : Command(parent, name) {
+void GroupInfoCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Print details about comps groups");
 
@@ -50,11 +39,15 @@ GroupInfoCommand::GroupInfoCommand(Command & parent, const std::string & name) :
     group_specs = std::make_unique<GroupSpecArguments>(*this);
 }
 
+void GroupInfoCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_available_repos_load_flags(libdnf::repo::Repo::LoadFlags::COMPS);
+}
 
 void GroupInfoCommand::run() {
     auto & ctx = get_context();
-
-    ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::COMPS);
 
     libdnf::comps::GroupQuery query(ctx.base);
     auto group_specs_str = group_specs->get_value();
@@ -81,6 +74,5 @@ void GroupInfoCommand::run() {
         std::cout << '\n';
     }
 }
-
 
 }  // namespace dnf5

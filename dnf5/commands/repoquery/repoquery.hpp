@@ -33,7 +33,10 @@ namespace dnf5 {
 
 class RepoqueryCommand : public Command {
 public:
-    explicit RepoqueryCommand(Command & parent);
+    explicit RepoqueryCommand(Command & parent) : Command(parent, "repoquery") {}
+    void set_argument_parser() override;
+    void configure() override;
+    void load_additional_packages() override;
     void run() override;
 
 private:
@@ -43,6 +46,7 @@ private:
     libdnf::OptionBool * nevra_option{nullptr};
     std::vector<std::string> pkg_specs;
     std::vector<std::string> pkg_file_paths;
+    std::vector<libdnf::rpm::Package> cmdline_packages;
 };
 
 

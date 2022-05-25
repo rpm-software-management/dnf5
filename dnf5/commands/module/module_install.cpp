@@ -17,26 +17,15 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "module_install.hpp"
-
 
 namespace dnf5 {
 
-
-using namespace libdnf::cli;
-
-
-ModuleInstallCommand::ModuleInstallCommand(Command & parent) : Command(parent, "install") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
+void ModuleInstallCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Install module profiles, including their packages.");
 }
 
-
 void ModuleInstallCommand::run() {}
-
 
 }  // namespace dnf5

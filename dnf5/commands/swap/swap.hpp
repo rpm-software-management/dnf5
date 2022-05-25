@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_SWAP_SWAP_HPP
 #define DNF5_COMMANDS_SWAP_SWAP_HPP
 
@@ -25,25 +24,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <vector>
 
-
 namespace dnf5 {
-
 
 // TODO(jrohel): The "swap" command may be removed in the future in favor of a more powerful command (eg "do"),
 //               which will allow multiple actions to be combined in one transaction.
 class SwapCommand : public Command {
 public:
-    explicit SwapCommand(Command & parent);
+    explicit SwapCommand(Command & parent) : Command(parent, "swap") {}
+    void set_argument_parser() override;
+    void configure() override;
+    void load_additional_packages() override;
     void run() override;
 
 private:
     std::string remove_pkg_spec;
     std::vector<std::string> install_pkg_specs;
     std::vector<std::string> install_pkg_file_paths;
+    std::vector<libdnf::rpm::Package> cmdline_packages;
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_SWAP_SWAP_HPP

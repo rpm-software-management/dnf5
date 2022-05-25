@@ -22,30 +22,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "group_info.hpp"
 #include "group_list.hpp"
 
-
 namespace dnf5 {
 
+void GroupCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("Manage comps groups");
+}
 
-using namespace libdnf::cli;
-
-
-GroupCommand::GroupCommand(Command & parent) : Command(parent, "group") {
-    auto & ctx = get_context();
-    auto & parser = ctx.get_argument_parser();
-
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Manage comps groups");
-
+void GroupCommand::register_subcommands() {
     // query commands
-    auto * query_commands_group = parser.add_new_group("group_query_commands");
+    auto * query_commands_group = get_context().get_argument_parser().add_new_group("group_query_commands");
     query_commands_group->set_header("Query Commands:");
-    cmd.register_group(query_commands_group);
+    get_argument_parser_command()->register_group(query_commands_group);
     register_subcommand(std::make_unique<GroupListCommand>(*this), query_commands_group);
     register_subcommand(std::make_unique<GroupInfoCommand>(*this), query_commands_group);
 }
 
-
-void GroupCommand::run() {
+void GroupCommand::pre_configure() {
     throw_missing_command();
 }
 

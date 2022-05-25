@@ -17,29 +17,30 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_INSTALL_INSTALL_HPP
 #define DNF5_COMMANDS_INSTALL_INSTALL_HPP
 
 #include <dnf5/context.hpp>
+#include <libdnf/rpm/package.hpp>
 
 #include <memory>
 #include <vector>
 
-
 namespace dnf5 {
-
 
 class InstallCommand : public Command {
 public:
-    explicit InstallCommand(Command & parent);
+    explicit InstallCommand(Command & parent) : Command(parent, "install") {}
+    void set_argument_parser() override;
+    void configure() override;
+    void load_additional_packages() override;
     void run() override;
 
 private:
     std::vector<std::string> pkg_specs;
     std::vector<std::string> pkg_file_paths;
+    std::vector<libdnf::rpm::Package> cmdline_packages;
 };
-
 
 }  // namespace dnf5
 

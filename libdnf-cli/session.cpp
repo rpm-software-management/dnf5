@@ -30,18 +30,25 @@ libdnf::cli::ArgumentParser & Session::get_argument_parser() {
 }
 
 
+void Session::register_root_command(std::unique_ptr<Command> command) {
+    // register command as root command in argument parser
+    get_argument_parser().set_root_command(command->get_argument_parser_command());
+
+    command->set_argument_parser();
+    command->register_subcommands();
+    root_command = std::move(command);
+}
+
+
 void Session::clear() {
-    set_root_command(nullptr);
+    root_command.reset();
     argument_parser.reset();
 }
 
 
 Command::Command(Session & session, const std::string & program_name) : session{session} {
-    // create a new root command; owned by the arg_parser
+    // create a new command owned by the arg_parser
     argument_parser_command = session.get_argument_parser().add_new_command(program_name);
-
-    // register command as root command
-    session.get_argument_parser().set_root_command(argument_parser_command);
 
     // set the created root command as the selected
     // the value will get overwritten with a subcommand during parsing the arguments
@@ -50,7 +57,7 @@ Command::Command(Session & session, const std::string & program_name) : session{
 
 
 Command::Command(Command & parent, const std::string & name) : session{parent.session}, parent_command{&parent} {
-    // create a new command (owned by the arg_parser)
+    // create a new command owned by the arg_parser
     argument_parser_command = session.get_argument_parser().add_new_command(name);
 
     // set the command as selected when parsed
@@ -71,7 +78,7 @@ Command::Command(Command & parent, const std::string & name) : session{parent.se
 
 
 void Command::throw_missing_command() const {
-    throw ArgumentParserMissingCommandError(M_("Unknown command"), get_argument_parser_command()->get_id());
+    throw ArgumentParserMissingCommandError(M_("Missing command"), get_argument_parser_command()->get_id());
 }
 
 
@@ -80,6 +87,8 @@ void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf::c
     if (group) {
         group->register_argument(subcommand->get_argument_parser_command());
     }
+    subcommand->set_argument_parser();
+    subcommand->register_subcommands();
     subcommands.push_back(std::move(subcommand));
 }
 

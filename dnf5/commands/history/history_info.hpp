@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_HISTORY_HISTORY_INFO_HPP
 #define DNF5_COMMANDS_HISTORY_HISTORY_INFO_HPP
 
@@ -25,20 +24,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5/context.hpp>
 
-
 namespace dnf5 {
-
 
 class HistoryInfoCommand : public Command {
 public:
-    explicit HistoryInfoCommand(Command & parent);
+    explicit HistoryInfoCommand(Command & parent) : Command(parent, "info") {}
+    void set_argument_parser() override;
     void run() override;
 
     std::unique_ptr<TransactionSpecArguments> transaction_specs{nullptr};
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_HISTORY_HISTORY_INFO_HPP

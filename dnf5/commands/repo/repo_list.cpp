@@ -17,33 +17,21 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "repo_list.hpp"
 
 #include "libdnf-cli/output/repolist.hpp"
 
-#include <libdnf/conf/option_string.hpp>
-
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-RepoListCommand::RepoListCommand(Command & parent) : RepoListCommand(parent, "list") {}
-
-RepoListCommand::RepoListCommand(Command & parent, const std::string & name)
-    : RepoListCommand(parent, name, "List repositories") {}
-
 //TODO(amatej): Find a different way of sharing code rather than repoinfo inheriting from repolist
-RepoListCommand::RepoListCommand(Command & parent, const std::string & name, const std::string & short_description)
-    : Command(parent, name) {
+void RepoListCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description(short_description);
+    cmd.set_short_description("List repositories");
 
     all = std::make_unique<RepoAllOption>(*this);
     enabled = std::make_unique<RepoEnabledOption>(*this);
@@ -57,7 +45,6 @@ RepoListCommand::RepoListCommand(Command & parent, const std::string & name, con
     enabled->arg->set_conflict_arguments(conflict_args);
     disabled->arg->set_conflict_arguments(conflict_args);
 }
-
 
 void RepoListCommand::run() {
     auto & ctx = get_context();
@@ -92,10 +79,8 @@ void RepoListCommand::run() {
     print(query, with_status);
 }
 
-
 void RepoListCommand::print(const libdnf::repo::RepoQuery & query, bool with_status) {
     libdnf::cli::output::print_repolist_table(query, with_status, libdnf::cli::output::COL_REPO_ID);
 }
-
 
 }  // namespace dnf5

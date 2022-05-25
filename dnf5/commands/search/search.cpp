@@ -32,7 +32,7 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 
-SearchCommand::SearchCommand(Command & parent) : Command(parent, "search") {
+void SearchCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 

@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_DOWNLOAD_DOWNLOAD_HPP
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option_bool.hpp>
+#include <libdnf/conf/option.hpp>
 
 #include <memory>
 #include <vector>
@@ -33,7 +33,9 @@ namespace dnf5 {
 
 class DownloadCommand : public Command {
 public:
-    explicit DownloadCommand(Command & parent);
+    explicit DownloadCommand(Command & parent) : Command(parent, "download") {}
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
 
 private:

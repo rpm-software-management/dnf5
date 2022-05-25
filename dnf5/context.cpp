@@ -257,18 +257,13 @@ void Context::load_repos(bool load_system, libdnf::repo::Repo::LoadFlags flags) 
 }
 
 
-std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(
-    const std::vector<std::string> & packages_paths, std::vector<std::string> & error_messages) {
+std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vector<std::string> & packages_paths) {
     std::vector<libdnf::rpm::Package> added_packages;
 
     if (!packages_paths.empty()) {
         auto cmdline_repo = base.get_repo_sack()->get_cmdline_repo();
         for (const auto & path : packages_paths) {
-            try {
-                added_packages.push_back(cmdline_repo->add_rpm_package(path, true));
-            } catch (const std::exception & e) {
-                error_messages.emplace_back(e.what());
-            }
+            added_packages.push_back(cmdline_repo->add_rpm_package(path, true));
         }
 
         if (!added_packages.empty()) {
@@ -278,6 +273,7 @@ std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(
 
     return added_packages;
 }
+
 
 namespace {
 
@@ -675,6 +671,20 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
     }
 
     // TODO(mblaha): print a summary of successfull transaction
+}
+
+libdnf::Goal * Context::get_goal(bool new_if_not_exist) {
+    if (!goal && new_if_not_exist) {
+        goal = std::make_unique<libdnf::Goal>(base);
+    }
+    return goal.get();
+}
+
+void Command::goal_resolved() {
+    auto & transaction = *get_context().get_transaction();
+    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
+        throw libdnf::cli::GoalResolveError(transaction);
+    }
 }
 
 void parse_add_specs(

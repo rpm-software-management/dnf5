@@ -17,24 +17,20 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_MODULE_MODULE_INFO_HPP
 #define DNF5_COMMANDS_MODULE_MODULE_INFO_HPP
 
 #include <dnf5/context.hpp>
 
-
 namespace dnf5 {
-
 
 class ModuleInfoCommand : public Command {
 public:
-    explicit ModuleInfoCommand(Command & parent);
+    explicit ModuleInfoCommand(Command & parent) : Command(parent, "info") {}
+    void set_argument_parser() override;
     void run() override;
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_MODULE_MODULE_INFO_HPP

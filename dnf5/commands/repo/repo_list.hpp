@@ -17,29 +17,20 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_REPO_REPO_LIST_HPP
 #define DNF5_COMMANDS_REPO_REPO_LIST_HPP
-
 
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option_enum.hpp>
-#include <libdnf/repo/repo_query.hpp>
-
-#include <memory>
-#include <vector>
-
 
 namespace dnf5 {
 
-
 class RepoListCommand : public Command {
 public:
-    explicit RepoListCommand(Command & parent);
+    explicit RepoListCommand(Command & parent) : RepoListCommand(parent, "list") {}
+    void set_argument_parser() override;
     void run() override;
-    virtual void print(const libdnf::repo::RepoQuery & query, bool with_status);
 
     std::unique_ptr<RepoAllOption> all{nullptr};
     std::unique_ptr<RepoEnabledOption> enabled{nullptr};
@@ -48,12 +39,10 @@ public:
 
 protected:
     // to be used by an alias command only
-    explicit RepoListCommand(Command & parent, const std::string & name);
-    explicit RepoListCommand(Command & parent, const std::string & name, const std::string & short_description);
+    explicit RepoListCommand(Command & parent, const std::string & name) : Command(parent, name) {}
+    virtual void print(const libdnf::repo::RepoQuery & query, bool with_status);
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_REPO_REPO_LIST_HPP

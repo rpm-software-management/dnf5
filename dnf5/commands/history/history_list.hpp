@@ -31,7 +31,8 @@ namespace dnf5 {
 
 class HistoryListCommand : public Command {
 public:
-    explicit HistoryListCommand(Command & parent);
+    explicit HistoryListCommand(Command & parent) : Command(parent, "list") {}
+    void set_argument_parser() override;
     void run() override;
 
     std::unique_ptr<TransactionSpecArguments> transaction_specs{nullptr};

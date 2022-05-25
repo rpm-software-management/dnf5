@@ -30,7 +30,11 @@ namespace dnf5 {
 
 class AutoremoveAlias : public RemoveCommand {
 public:
-    explicit AutoremoveAlias(Command & parent) : RemoveCommand(parent, "autoremove") {
+    explicit AutoremoveAlias(Command & parent) : RemoveCommand(parent, "autoremove") {}
+
+    void set_argument_parser() override {
+        RemoveCommand::set_argument_parser();
+
         auto & cmd = *get_argument_parser_command();
         cmd.set_short_description("Alias for 'remove --unneeded'");
 

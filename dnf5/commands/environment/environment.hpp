@@ -22,18 +22,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5/context.hpp>
 
-
 namespace dnf5 {
-
 
 class EnvironmentCommand : public Command {
 public:
-    explicit EnvironmentCommand(Command & parent);
-    void run() override;
+    explicit EnvironmentCommand(Command & parent) : Command(parent, "environment") {}
+    void set_argument_parser() override;
+    void register_subcommands() override;
+    void pre_configure() override;
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_ENVIRONMENT_ENVIRONMENT_HPP

@@ -17,34 +17,13 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "upgrade.hpp"
-
-#include "libdnf-cli/output/transaction_table.hpp"
-
-#include <libdnf/base/goal.hpp>
-#include <libdnf/conf/option_string.hpp>
-#include <libdnf/rpm/package.hpp>
-#include <libdnf/rpm/package_query.hpp>
-#include <libdnf/rpm/package_set.hpp>
-
-#include <filesystem>
-#include <iostream>
-
-
-namespace fs = std::filesystem;
-
 
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
 
-
-UpgradeCommand::UpgradeCommand(Command & parent) : UpgradeCommand(parent, "upgrade") {}
-
-
-UpgradeCommand::UpgradeCommand(Command & parent, const std::string & name) : Command(parent, name) {
+void UpgradeCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
@@ -74,47 +53,28 @@ UpgradeCommand::UpgradeCommand(Command & parent, const std::string & name) : Com
     cmd.register_positional_arg(keys);
 }
 
-
-void UpgradeCommand::run() {
-    auto & ctx = get_context();
-
-    ctx.load_repos(true);
-
-    std::vector<std::string> error_messages;
-    const auto cmdline_packages = ctx.add_cmdline_packages(pkg_file_paths, error_messages);
-    for (const auto & msg : error_messages) {
-        std::cout << msg << std::endl;
-    }
-
-    std::cout << std::endl;
-
-    libdnf::Goal goal(ctx.base);
-    if (pkg_specs.empty() && pkg_file_paths.empty()) {
-        goal.add_rpm_upgrade();
-    } else {
-        for (const auto & pkg : cmdline_packages) {
-            goal.add_rpm_upgrade(pkg);
-        }
-        for (const auto & spec : pkg_specs) {
-            goal.add_rpm_upgrade(spec);
-        }
-    }
-
-    auto transaction = goal.resolve(false);
-    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
-        throw GoalResolveError(transaction);
-    }
-
-    if (!libdnf::cli::output::print_transaction_table(transaction)) {
-        return;
-    }
-
-    if (!userconfirm(ctx.base.get_config())) {
-        throw AbortedByUserError();
-    }
-
-    ctx.download_and_run(transaction);
+void UpgradeCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
+void UpgradeCommand::load_additional_packages() {
+    cmdline_packages = get_context().add_cmdline_packages(pkg_file_paths);
+}
+
+void UpgradeCommand::run() {
+    auto goal = get_context().get_goal();
+    if (pkg_specs.empty() && pkg_file_paths.empty()) {
+        goal->add_rpm_upgrade();
+    } else {
+        for (const auto & pkg : cmdline_packages) {
+            goal->add_rpm_upgrade(pkg);
+        }
+        for (const auto & spec : pkg_specs) {
+            goal->add_rpm_upgrade(spec);
+        }
+    }
+}
 
 }  // namespace dnf5

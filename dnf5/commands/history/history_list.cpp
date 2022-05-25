@@ -17,27 +17,21 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "history_list.hpp"
 
 #include <libdnf-cli/output/transactionlist.hpp>
 
 #include <iostream>
 
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-HistoryListCommand::HistoryListCommand(Command & parent) : Command(parent, "list") {
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("List transactions");
+void HistoryListCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("List transactions");
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
 }
-
 
 void HistoryListCommand::run() {
     auto & ctx = get_context();
@@ -56,6 +50,5 @@ void HistoryListCommand::run() {
 
     libdnf::cli::output::print_transaction_list(ts_list);
 }
-
 
 }  // namespace dnf5

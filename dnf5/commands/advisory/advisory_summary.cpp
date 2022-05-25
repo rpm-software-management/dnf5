@@ -17,25 +17,14 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "advisory_summary.hpp"
 
 #include <libdnf-cli/output/advisorysummary.hpp>
 #include <libdnf/rpm/package_query.hpp>
 
-#include <filesystem>
-#include <fstream>
-#include <set>
-
-
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
-
-
-AdvisorySummaryCommand::AdvisorySummaryCommand(Command & parent)
-    : AdvisorySubCommand(parent, "summary", _("Print summary of advisories")) {}
 
 void AdvisorySummaryCommand::process_and_print_queries(
     Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) {

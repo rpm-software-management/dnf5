@@ -17,24 +17,21 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_HISTORY_HISTORY_HPP
 #define DNF5_COMMANDS_HISTORY_HISTORY_HPP
 
 #include <dnf5/context.hpp>
 
-
 namespace dnf5 {
-
 
 class HistoryCommand : public Command {
 public:
-    explicit HistoryCommand(Command & parent);
-    void run() override;
+    explicit HistoryCommand(Command & parent) : Command(parent, "history") {}
+    void set_argument_parser() override;
+    void register_subcommands() override;
+    void pre_configure() override;
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_HISTORY_HISTORY_HPP

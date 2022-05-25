@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "advisory_subcommand.hpp"
 
 #include "dnf5/context.hpp"
@@ -25,25 +24,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/output/advisorysummary.hpp>
 #include <libdnf/rpm/package_query.hpp>
 
-#include <filesystem>
-#include <fstream>
-#include <set>
-
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-AdvisorySubCommand::AdvisorySubCommand(
-    Command & parent, const std::string & name, const std::string & short_description)
-    : Command(parent, name) {
+void AdvisorySubCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
-
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description(short_description);
 
     all = std::make_unique<AdvisoryAllOption>(*this);
     available = std::make_unique<AdvisoryAvailableOption>(*this);
@@ -75,10 +62,15 @@ void AdvisorySubCommand::add_running_kernel_packages(libdnf::Base & base, libdnf
     }
 }
 
+void AdvisorySubCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_available_repos_load_flags(libdnf::repo::Repo::LoadFlags::UPDATEINFO);
+}
+
 void AdvisorySubCommand::run() {
     auto & ctx = get_context();
-
-    ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::UPDATEINFO);
 
     libdnf::rpm::PackageQuery package_query(ctx.base);
     auto package_specs_strs = contains_pkgs->get_value();

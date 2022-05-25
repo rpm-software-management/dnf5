@@ -25,15 +25,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <dnf5/context.hpp>
 
 #include <memory>
-#include <vector>
-
 
 namespace dnf5 {
 
-
 class EnvironmentInfoCommand : public Command {
 public:
-    explicit EnvironmentInfoCommand(Command & parent);
+    explicit EnvironmentInfoCommand(Command & parent) : EnvironmentInfoCommand(parent, "info") {}
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
 
     std::unique_ptr<EnvironmentAvailableOption> available{nullptr};
@@ -42,11 +41,9 @@ public:
 
 protected:
     // to be used by an alias command only
-    explicit EnvironmentInfoCommand(Command & parent, const std::string & name);
+    explicit EnvironmentInfoCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_ENVIRONMENT_ENVIRONMENT_INFO_HPP

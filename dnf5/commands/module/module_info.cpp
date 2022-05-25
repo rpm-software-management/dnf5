@@ -17,26 +17,15 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "module_info.hpp"
-
 
 namespace dnf5 {
 
-
-using namespace libdnf::cli;
-
-
-ModuleInfoCommand::ModuleInfoCommand(Command & parent) : Command(parent, "info") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
+void ModuleInfoCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Print details about module streams");
 }
 
-
 void ModuleInfoCommand::run() {}
-
 
 }  // namespace dnf5

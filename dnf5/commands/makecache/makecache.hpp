@@ -17,24 +17,20 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_MAKECAHE_MAKECACHE_HPP
 #define DNF5_COMMANDS_MAKECAHE_MAKECACHE_HPP
 
 #include <dnf5/context.hpp>
 
-
 namespace dnf5 {
-
 
 class MakeCacheCommand : public Command {
 public:
-    explicit MakeCacheCommand(Command & parent);
+    explicit MakeCacheCommand(Command & parent) : Command(parent, "makecache") {}
+    void set_argument_parser() override;
     void run() override;
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_MAKECAHE_MAKECACHE_HPP

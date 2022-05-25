@@ -17,33 +17,27 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_ADVISORY_ADVISORY_INFO_HPP
 #define DNF5_COMMANDS_ADVISORY_ADVISORY_INFO_HPP
 
 #include "advisory_subcommand.hpp"
-#include "arguments.hpp"
-
-#include <dnf5/context.hpp>
-
-#include <memory>
-#include <vector>
-
 
 namespace dnf5 {
 
-
 class AdvisoryInfoCommand : public AdvisorySubCommand {
 public:
-    explicit AdvisoryInfoCommand(Command & parent);
+    explicit AdvisoryInfoCommand(Command & parent) : AdvisorySubCommand(parent, "info") {}
+
+    void set_argument_parser() override {
+        AdvisorySubCommand::set_argument_parser();
+        get_argument_parser_command()->set_short_description(_("Print details about advisories"));
+    }
 
 protected:
     void process_and_print_queries(
         Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) override;
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_ADVISORY_ADVISORY_INFO_HPP

@@ -35,7 +35,9 @@ namespace dnf5 {
 
 class GroupListCommand : public Command {
 public:
-    explicit GroupListCommand(Command & parent);
+    explicit GroupListCommand(Command & parent) : GroupListCommand(parent, "list") {}
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
 
     std::unique_ptr<GroupAvailableOption> available{nullptr};
@@ -45,7 +47,7 @@ public:
 
 protected:
     // to be used by an alias command only
-    explicit GroupListCommand(Command & parent, const std::string & name);
+    explicit GroupListCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
 

@@ -17,26 +17,16 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "history_store.hpp"
-
 
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
 
-
-HistoryStoreCommand::HistoryStoreCommand(Command & parent) : Command(parent, "store") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Store transaction to a file");
+void HistoryStoreCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("Store transaction to a file");
 }
 
-
 void HistoryStoreCommand::run() {}
-
 
 }  // namespace dnf5

@@ -24,21 +24,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/comps/environment/environment.hpp>
 #include <libdnf/comps/environment/query.hpp>
 
-#include <filesystem>
-#include <fstream>
-#include <set>
-
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-EnvironmentListCommand::EnvironmentListCommand(Command & parent) : EnvironmentListCommand(parent, "list") {}
-
-
-EnvironmentListCommand::EnvironmentListCommand(Command & parent, const std::string & name) : Command(parent, name) {
+void EnvironmentListCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("List comps environments");
 
@@ -48,11 +38,15 @@ EnvironmentListCommand::EnvironmentListCommand(Command & parent, const std::stri
     environment_specs = std::make_unique<EnvironmentSpecArguments>(*this);
 }
 
+void EnvironmentListCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_available_repos_load_flags(libdnf::repo::Repo::LoadFlags::COMPS);
+}
 
 void EnvironmentListCommand::run() {
     auto & ctx = get_context();
-
-    ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::COMPS);
 
     libdnf::comps::EnvironmentQuery query(ctx.base);
     auto environment_specs_str = environment_specs->get_value();
@@ -73,6 +67,5 @@ void EnvironmentListCommand::run() {
 
     libdnf::cli::output::print_environmentlist_table(query.list());
 }
-
 
 }  // namespace dnf5

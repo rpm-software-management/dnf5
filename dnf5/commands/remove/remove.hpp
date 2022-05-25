@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_REMOVE_REMOVE_HPP
 #define DNF5_COMMANDS_REMOVE_REMOVE_HPP
 
@@ -27,13 +26,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <vector>
 
-
 namespace dnf5 {
-
 
 class RemoveCommand : public Command {
 public:
-    explicit RemoveCommand(Command & parent);
+    explicit RemoveCommand(Command & parent) : RemoveCommand(parent, "remove") {}
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
 
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_remove_options{nullptr};
@@ -41,9 +40,8 @@ public:
 
 protected:
     // to be used by an alias command only
-    explicit RemoveCommand(Command & parent, const std::string & name);
+    explicit RemoveCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
-
 
 }  // namespace dnf5
 

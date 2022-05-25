@@ -33,13 +33,15 @@ namespace dnf5 {
 
 class DistroSyncCommand : public Command {
 public:
-    explicit DistroSyncCommand(Command & parent);
+    explicit DistroSyncCommand(Command & parent) : DistroSyncCommand(parent, "distro-sync") {}
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
 
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_distro_sync_options{nullptr};
 
 protected:
-    explicit DistroSyncCommand(Command & parent, const std::string & name);
+    explicit DistroSyncCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
 

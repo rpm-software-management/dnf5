@@ -17,26 +17,15 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "module_remove.hpp"
-
 
 namespace dnf5 {
 
-
-using namespace libdnf::cli;
-
-
-ModuleRemoveCommand::ModuleRemoveCommand(Command & parent) : Command(parent, "remove") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
+void ModuleRemoveCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Remove installed module profiles including their packages.");
 }
 
-
 void ModuleRemoveCommand::run() {}
-
 
 }  // namespace dnf5

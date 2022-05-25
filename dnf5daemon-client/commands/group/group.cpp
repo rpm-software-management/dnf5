@@ -41,7 +41,7 @@ GroupCommand::GroupCommand(Command & parent) : DaemonCommand(parent, "group") {
     register_subcommand(std::make_unique<GroupListCommand>(*this, "info"), query_commands_group);
 }
 
-void GroupCommand::run() {
+void GroupCommand::pre_configure() {
     throw_missing_command();
 }
 

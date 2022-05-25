@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "history.hpp"
 
 #include "history_info.hpp"
@@ -28,25 +27,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "history_store.hpp"
 #include "history_undo.hpp"
 
-//#include <libdnf/conf/option_string.hpp>
-//#include <libdnf/rpm/package_query.hpp>
-
-//TODO(amatej): just for test output -> remove
-//#include <iostream>
-
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
+void HistoryCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("Manage transaction history");
+}
 
-HistoryCommand::HistoryCommand(Command & parent) : Command(parent, "history") {
-    auto & ctx = get_context();
-    auto & parser = ctx.get_argument_parser();
-
+void HistoryCommand::register_subcommands() {
+    auto & parser = get_context().get_argument_parser();
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Manage transaction history");
 
     // query commands
     auto * query_commands_group = parser.add_new_group("history_query_commands");
@@ -66,10 +57,8 @@ HistoryCommand::HistoryCommand(Command & parent) : Command(parent, "history") {
     register_subcommand(std::make_unique<HistoryReplayCommand>(*this), software_management_commands_group);
 }
 
-
-void HistoryCommand::run() {
+void HistoryCommand::pre_configure() {
     throw_missing_command();
 }
-
 
 }  // namespace dnf5

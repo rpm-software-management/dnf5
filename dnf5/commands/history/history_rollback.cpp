@@ -17,26 +17,17 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "history_rollback.hpp"
-
 
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
 
-
-HistoryRollbackCommand::HistoryRollbackCommand(Command & parent) : Command(parent, "rollback") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Undo all transactions performed after the specified transaction");
+void HistoryRollbackCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description(
+        "Undo all transactions performed after the specified transaction");
 }
 
-
 void HistoryRollbackCommand::run() {}
-
 
 }  // namespace dnf5

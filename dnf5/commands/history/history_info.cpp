@@ -17,27 +17,21 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "history_info.hpp"
 
 #include <libdnf-cli/output/transactioninfo.hpp>
 
 #include <iostream>
 
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-HistoryInfoCommand::HistoryInfoCommand(Command & parent) : Command(parent, "info") {
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Print details about transactions");
+void HistoryInfoCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("Print details about transactions");
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
 }
-
 
 void HistoryInfoCommand::run() {
     auto & ctx = get_context();
@@ -59,6 +53,5 @@ void HistoryInfoCommand::run() {
         std::cout << std::endl;
     }
 }
-
 
 }  // namespace dnf5

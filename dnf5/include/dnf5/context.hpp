@@ -24,9 +24,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/argument_parser.hpp>
 #include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
+#include <libdnf/base/goal.hpp>
 #include <libdnf/base/transaction.hpp>
+#include <libdnf/rpm/package.hpp>
 
 #include <memory>
+#include <optional>
 #include <string>
 #include <utility>
 #include <vector>
@@ -39,6 +42,8 @@ constexpr const char * VERSION = "0.1.0";
 
 class Context : public libdnf::cli::session::Session {
 public:
+    enum class LoadAvailableRepos { NONE, ENABLED, ALL };
+
     Context();
     ~Context();
 
@@ -49,8 +54,7 @@ public:
 
     /// Adds packages from path-defined files to the command line repository.
     /// Returns the added Package objects.
-    std::vector<libdnf::rpm::Package> add_cmdline_packages(
-        const std::vector<std::string> & packages_paths, std::vector<std::string> & error_messages);
+    std::vector<libdnf::rpm::Package> add_cmdline_packages(const std::vector<std::string> & packages_paths);
 
     libdnf::Base base;
     std::vector<std::pair<std::string, std::string>> setopts;
@@ -80,6 +84,23 @@ public:
 
     Plugins & get_plugins() { return *plugins; }
 
+    libdnf::Goal * get_goal(bool new_if_not_exist = true);
+
+    void set_transaction(libdnf::base::Transaction && transaction) {
+        this->transaction = std::make_unique<libdnf::base::Transaction>(std::move(transaction));
+    }
+
+    libdnf::base::Transaction * get_transaction() { return transaction.get(); }
+
+    void set_load_system_repo(bool on) { load_system_repo = on; }
+    bool get_load_system_repo() const noexcept { return load_system_repo; }
+
+    void set_load_available_repos(LoadAvailableRepos which) { load_available_repos = which; }
+    LoadAvailableRepos get_load_available_repos() const noexcept { return load_available_repos; }
+
+    void set_available_repos_load_flags(libdnf::repo::Repo::LoadFlags flags) { available_repos_load_flags = flags; }
+    libdnf::repo::Repo::LoadFlags get_available_repos_load_flags() const noexcept { return available_repos_load_flags; }
+
 private:
     /// If quiet mode is not active, it will print `msg` to standard output.
     void print_info(const char * msg);
@@ -94,6 +115,13 @@ private:
     bool quiet{false};
 
     std::unique_ptr<Plugins> plugins;
+    std::unique_ptr<libdnf::Goal> goal;
+    std::unique_ptr<libdnf::base::Transaction> transaction;
+
+    bool load_system_repo{false};
+    LoadAvailableRepos load_available_repos{LoadAvailableRepos::NONE};
+    //system_repo_load_flags;
+    libdnf::repo::Repo::LoadFlags available_repos_load_flags{libdnf::repo::Repo::LoadFlags::ALL};
 };
 
 
@@ -103,6 +131,8 @@ public:
 
     /// @return Reference to the Context.
     Context & get_context() const noexcept { return static_cast<Context &>(get_session()); }
+
+    void goal_resolved() override;
 };
 
 

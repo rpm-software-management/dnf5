@@ -17,24 +17,20 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_MODULE_MODULE_SWITCH_TO_HPP
 #define DNF5_COMMANDS_MODULE_MODULE_SWITCH_TO_HPP
 
 #include <dnf5/context.hpp>
 
-
 namespace dnf5 {
-
 
 class ModuleSwitchToCommand : public Command {
 public:
-    explicit ModuleSwitchToCommand(Command & parent);
+    explicit ModuleSwitchToCommand(Command & parent) : Command(parent, "switch-to") {}
+    void set_argument_parser() override;
     void run() override;
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_MODULE_MODULE_SWITCH_TO_HPP

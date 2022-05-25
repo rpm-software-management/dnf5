@@ -17,26 +17,15 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "module_reset.hpp"
-
 
 namespace dnf5 {
 
-
-using namespace libdnf::cli;
-
-
-ModuleResetCommand::ModuleResetCommand(Command & parent) : Command(parent, "reset") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
+void ModuleResetCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Reset module state so it's no longer enabled or disabled.");
 }
 
-
 void ModuleResetCommand::run() {}
-
 
 }  // namespace dnf5

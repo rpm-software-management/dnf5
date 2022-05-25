@@ -20,22 +20,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_ENVIRONMENT_ENVIRONMENT_LIST_HPP
 #define DNF5_COMMANDS_ENVIRONMENT_ENVIRONMENT_LIST_HPP
 
-
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option_bool.hpp>
 
 #include <memory>
-#include <vector>
-
 
 namespace dnf5 {
 
-
 class EnvironmentListCommand : public Command {
 public:
-    explicit EnvironmentListCommand(Command & parent);
+    explicit EnvironmentListCommand(Command & parent) : EnvironmentListCommand(parent, "list") {}
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
 
     std::unique_ptr<EnvironmentAvailableOption> available{nullptr};
@@ -44,11 +41,9 @@ public:
 
 protected:
     // to be used by an alias command only
-    explicit EnvironmentListCommand(Command & parent, const std::string & name);
+    explicit EnvironmentListCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_ENVIRONMENT_ENVIRONMENT_LIST_HPP

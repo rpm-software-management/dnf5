@@ -17,24 +17,22 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_ADVISORY_ADVISORY_SUBCOMMAND_HPP
 #define DNF5_COMMANDS_ADVISORY_ADVISORY_SUBCOMMAND_HPP
 
 #include "arguments.hpp"
-#include "dnf5/context.hpp"
 
-#include "libdnf/advisory/advisory_query.hpp"
+#include <dnf5/context.hpp>
+#include <libdnf/advisory/advisory_query.hpp>
 
 #include <memory>
-#include <vector>
-
 
 namespace dnf5 {
 
-
 class AdvisorySubCommand : public Command {
 public:
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
 
 protected:
@@ -50,11 +48,9 @@ protected:
     std::unique_ptr<AdvisoryContainsPkgsOption> contains_pkgs{nullptr};
     std::unique_ptr<AdvisorySpecArguments> advisory_specs{nullptr};
 
-    AdvisorySubCommand(Command & parent, const std::string & name, const std::string & short_description);
+    AdvisorySubCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_ADVISORY_ADVISORY_SUBCOMMAND_HPP

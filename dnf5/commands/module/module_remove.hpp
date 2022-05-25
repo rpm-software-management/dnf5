@@ -17,24 +17,20 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_MODULE_MODULE_REMOVE_HPP
 #define DNF5_COMMANDS_MODULE_MODULE_REMOVE_HPP
 
 #include <dnf5/context.hpp>
 
-
 namespace dnf5 {
-
 
 class ModuleRemoveCommand : public Command {
 public:
-    explicit ModuleRemoveCommand(Command & parent);
+    explicit ModuleRemoveCommand(Command & parent) : Command(parent, "remove") {}
+    void set_argument_parser() override;
     void run() override;
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_MODULE_MODULE_REMOVE_HPP

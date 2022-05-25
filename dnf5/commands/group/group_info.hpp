@@ -33,7 +33,9 @@ namespace dnf5 {
 
 class GroupInfoCommand : public Command {
 public:
-    explicit GroupInfoCommand(Command & parent);
+    explicit GroupInfoCommand(Command & parent) : GroupInfoCommand(parent, "info") {}
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
 
     std::unique_ptr<GroupAvailableOption> available{nullptr};
@@ -43,7 +45,7 @@ public:
 
 protected:
     // to be used by an alias command only
-    explicit GroupInfoCommand(Command & parent, const std::string & name);
+    explicit GroupInfoCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
 

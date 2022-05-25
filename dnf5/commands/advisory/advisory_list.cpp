@@ -17,27 +17,16 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "advisory_list.hpp"
-
-#include "dnf5/context.hpp"
 
 #include "libdnf-cli/output/advisorylist.hpp"
 
 #include <libdnf/advisory/advisory_package.hpp>
 #include <libdnf/rpm/package_query.hpp>
 
-#include <filesystem>
-#include <fstream>
-
-
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
-
-
-AdvisoryListCommand::AdvisoryListCommand(Command & parent) : AdvisorySubCommand(parent, "list", _("List advisories")) {}
 
 void AdvisoryListCommand::process_and_print_queries(
     Context & ctx, libdnf::advisory::AdvisoryQuery & advisories, libdnf::rpm::PackageQuery & packages) {

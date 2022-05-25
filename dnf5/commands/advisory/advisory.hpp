@@ -17,33 +17,25 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_ADVISORY_ADVISORY_HPP
 #define DNF5_COMMANDS_ADVISORY_ADVISORY_HPP
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option_bool.hpp>
-#include <libdnf/conf/option_enum.hpp>
-
-#include <memory>
-#include <vector>
-
 
 namespace dnf5 {
 
-
 class AdvisoryCommand : public Command {
 public:
-    explicit AdvisoryCommand(Command & parent);
-    void run() override;
+    explicit AdvisoryCommand(Command & parent) : AdvisoryCommand(parent, "advisory") {}
+    void set_argument_parser() override;
+    void register_subcommands() override;
+    void pre_configure() override;
 
 protected:
     // to be used by an alias command only
-    explicit AdvisoryCommand(Command & parent, const std::string & name);
+    explicit AdvisoryCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_ADVISORY_ADVISORY_HPP

@@ -17,25 +17,19 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "makecache.hpp"
 
 #include <fmt/format.h>
 
 #include <iostream>
 
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-MakeCacheCommand::MakeCacheCommand(Command & parent) : Command(parent, "makecache") {
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Generate the metadada cache");
+void MakeCacheCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("Generate the metadada cache");
 }
-
 
 void MakeCacheCommand::run() {
     auto & ctx = get_context();
@@ -60,6 +54,5 @@ void MakeCacheCommand::run() {
 
     std::cout << "Metadata cache created." << std::endl;
 }
-
 
 }  // namespace dnf5

@@ -17,27 +17,16 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "module_switch_to.hpp"
-
 
 namespace dnf5 {
 
-
-using namespace libdnf::cli;
-
-
-ModuleSwitchToCommand::ModuleSwitchToCommand(Command & parent) : Command(parent, "switch-to") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
+void ModuleSwitchToCommand::set_argument_parser() {
     // TODO(dmach): this is convenient but inconsistent UX - enable/disable/reset do not touch the packages while switch-to does
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("Enable different module streams, upgrade their profiles and distro-sync packages.");
 }
 
-
 void ModuleSwitchToCommand::run() {}
-
 
 }  // namespace dnf5

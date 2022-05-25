@@ -17,28 +17,17 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "module_repoquery.hpp"
-
 
 namespace dnf5 {
 
-
-using namespace libdnf::cli;
-
-
-ModuleRepoqueryCommand::ModuleRepoqueryCommand(Command & parent) : Command(parent, "repoquery") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
+void ModuleRepoqueryCommand::set_argument_parser() {
     // TODO(dmach): Consider replacing with repoquery with a filter option: dnf repoquery --module=<module_spec>
     // TODO(dmach): The current UX is not nice, it requires enabled streams to work
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("List packages that belong to specified modules.");
 }
 
-
 void ModuleRepoqueryCommand::run() {}
-
 
 }  // namespace dnf5

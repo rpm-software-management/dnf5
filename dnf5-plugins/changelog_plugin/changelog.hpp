@@ -17,10 +17,8 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #ifndef DNF5_COMMANDS_CHANGELOG_HPP
 #define DNF5_COMMANDS_CHANGELOG_HPP
-
 
 #include <dnf5/context.hpp>
 #include <libdnf/conf/option_bool.hpp>
@@ -29,13 +27,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <vector>
 
-
 namespace dnf5 {
-
 
 class ChangelogCommand : public Command {
 public:
-    explicit ChangelogCommand(Command & parent);
+    explicit ChangelogCommand(Command & parent) : Command(parent, "changelog") {}
+    void set_argument_parser() override;
+    void configure() override;
     void run() override;
 
 private:
@@ -45,8 +43,6 @@ private:
     std::vector<std::unique_ptr<libdnf::Option>> * pkgs_spec_to_show_options{nullptr};
 };
 
-
 }  // namespace dnf5
-
 
 #endif  // DNF5_COMMANDS_CHANGELOG_HPP

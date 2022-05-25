@@ -17,28 +17,15 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "distro-sync.hpp"
 
-#include "libdnf-cli/output/transaction_table.hpp"
-
-#include <libdnf/base/goal.hpp>
 #include <libdnf/conf/option_string.hpp>
-
-#include <iostream>
-
-namespace fs = std::filesystem;
-
 
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
 
-
-DistroSyncCommand::DistroSyncCommand(Command & parent) : DistroSyncCommand(parent, "distro-sync") {}
-
-DistroSyncCommand::DistroSyncCommand(Command & parent, const std::string & name) : Command(parent, name) {
+void DistroSyncCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
@@ -55,38 +42,22 @@ DistroSyncCommand::DistroSyncCommand(Command & parent, const std::string & name)
     cmd.register_positional_arg(patterns_arg);
 }
 
+void DistroSyncCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+}
 
 void DistroSyncCommand::run() {
-    auto & ctx = get_context();
-
-    ctx.load_repos(true);
-
-    std::cout << std::endl;
-
-    libdnf::Goal goal(ctx.base);
+    auto goal = get_context().get_goal();
     if (patterns_to_distro_sync_options->empty()) {
-        goal.add_rpm_distro_sync();
+        goal->add_rpm_distro_sync();
     } else {
         for (auto & pattern : *patterns_to_distro_sync_options) {
             auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-            goal.add_rpm_distro_sync(option->get_value());
+            goal->add_rpm_distro_sync(option->get_value());
         }
     }
-    auto transaction = goal.resolve(false);
-    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
-        throw GoalResolveError(transaction);
-    }
-
-    if (!libdnf::cli::output::print_transaction_table(transaction)) {
-        return;
-    }
-
-    if (!userconfirm(ctx.base.get_config())) {
-        throw AbortedByUserError();
-    }
-
-    ctx.download_and_run(transaction);
 }
-
 
 }  // namespace dnf5

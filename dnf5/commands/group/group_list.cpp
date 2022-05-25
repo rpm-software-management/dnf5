@@ -24,21 +24,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/comps/group/group.hpp>
 #include <libdnf/comps/group/query.hpp>
 
-#include <filesystem>
-#include <fstream>
-#include <set>
-
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-GroupListCommand::GroupListCommand(Command & parent) : GroupListCommand(parent, "list") {}
-
-
-GroupListCommand::GroupListCommand(Command & parent, const std::string & name) : Command(parent, name) {
+void GroupListCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_short_description("List comps groups");
 
@@ -49,11 +39,15 @@ GroupListCommand::GroupListCommand(Command & parent, const std::string & name) :
     group_specs = std::make_unique<GroupSpecArguments>(*this);
 }
 
+void GroupListCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_available_repos_load_flags(libdnf::repo::Repo::LoadFlags::COMPS);
+}
 
 void GroupListCommand::run() {
     auto & ctx = get_context();
-
-    ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::COMPS);
 
     libdnf::comps::GroupQuery query(ctx.base);
     auto group_specs_str = group_specs->get_value();
@@ -77,6 +71,5 @@ void GroupListCommand::run() {
 
     libdnf::cli::output::print_grouplist_table(query.list());
 }
-
 
 }  // namespace dnf5

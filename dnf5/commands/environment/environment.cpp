@@ -22,32 +22,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "environment_info.hpp"
 #include "environment_list.hpp"
 
-
 namespace dnf5 {
 
+void EnvironmentCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("Manage comps environments");
+}
 
-using namespace libdnf::cli;
-
-
-EnvironmentCommand::EnvironmentCommand(Command & parent) : Command(parent, "environment") {
-    auto & ctx = get_context();
-    auto & parser = ctx.get_argument_parser();
-
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Manage comps environments");
-
-    // query commands
-    auto * query_commands_environment = parser.add_new_group("environment_query_commands");
+void EnvironmentCommand::register_subcommands() {
+    auto * query_commands_environment = get_context().get_argument_parser().add_new_group("environment_query_commands");
     query_commands_environment->set_header("Query Commands:");
-    cmd.register_group(query_commands_environment);
+    get_argument_parser_command()->register_group(query_commands_environment);
     register_subcommand(std::make_unique<EnvironmentListCommand>(*this), query_commands_environment);
     register_subcommand(std::make_unique<EnvironmentInfoCommand>(*this), query_commands_environment);
 }
 
-
-void EnvironmentCommand::run() {
+void EnvironmentCommand::pre_configure() {
     throw_missing_command();
 }
-
 
 }  // namespace dnf5

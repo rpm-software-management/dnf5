@@ -17,27 +17,22 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "changelog.hpp"
 
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_query.hpp>
-#include <libdnf/rpm/package_set.hpp>
 
 #include <ctime>
 #include <iomanip>
 #include <iostream>
 #include <sstream>
 
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-ChangelogCommand::ChangelogCommand(Command & parent) : Command(parent, "changelog") {
+void ChangelogCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
@@ -103,6 +98,12 @@ ChangelogCommand::ChangelogCommand(Command & parent) : Command(parent, "changelo
     cmd.register_positional_arg(keys);
 }
 
+void ChangelogCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    context.set_available_repos_load_flags(libdnf::repo::Repo::LoadFlags::ALL);
+}
 
 void ChangelogCommand::run() {
     auto & ctx = get_context();
@@ -110,8 +111,6 @@ void ChangelogCommand::run() {
     auto since = since_option->get_value();
     auto count = count_option->get_value();
     auto upgrades = upgrades_option->get_value();
-
-    ctx.load_repos(true, libdnf::repo::Repo::LoadFlags::ALL);
 
     if (since > 0) {
         std::cout << "Listing changelogs since " << std::put_time(std::localtime(&since), "%c") << std::endl;
@@ -219,6 +218,5 @@ void ChangelogCommand::run() {
         }
     }
 }
-
 
 }  // namespace dnf5

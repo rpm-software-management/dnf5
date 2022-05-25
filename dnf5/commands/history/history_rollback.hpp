@@ -29,7 +29,8 @@ namespace dnf5 {
 
 class HistoryRollbackCommand : public Command {
 public:
-    explicit HistoryRollbackCommand(Command & parent);
+    explicit HistoryRollbackCommand(Command & parent) : Command(parent, "rollback") {}
+    void set_argument_parser() override;
     void run() override;
 };
 

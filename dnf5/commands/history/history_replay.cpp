@@ -17,26 +17,14 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "history_replay.hpp"
-
 
 namespace dnf5 {
 
-
-using namespace libdnf::cli;
-
-
-HistoryReplayCommand::HistoryReplayCommand(Command & parent) : Command(parent, "replay") {
-    // auto & ctx = get_context();
-    // auto & parser = ctx.get_argument_parser();
-
-    auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Replay a transaction that was previously stored to a file");
+void HistoryReplayCommand::set_argument_parser() {
+    get_argument_parser_command()->set_short_description("Replay a transaction that was previously stored to a file");
 }
 
-
 void HistoryReplayCommand::run() {}
-
 
 }  // namespace dnf5

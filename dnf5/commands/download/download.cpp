@@ -17,7 +17,6 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
 #include "download.hpp"
 
 #include <libdnf/conf/option_string.hpp>
@@ -25,20 +24,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
 
-#include <filesystem>
-#include <iostream>
-
-
-namespace fs = std::filesystem;
-
-
 namespace dnf5 {
-
 
 using namespace libdnf::cli;
 
-
-DownloadCommand::DownloadCommand(Command & parent) : Command(parent, "download") {
+void DownloadCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
@@ -56,14 +46,14 @@ DownloadCommand::DownloadCommand(Command & parent) : Command(parent, "download")
     cmd.register_positional_arg(keys);
 }
 
+void DownloadCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(false);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+}
 
 void DownloadCommand::run() {
     auto & ctx = get_context();
-    auto package_sack = ctx.base.get_rpm_package_sack();
-
-    ctx.load_repos(false);
-
-    std::cout << std::endl;
 
     libdnf::rpm::PackageSet result_pset(ctx.base);
     libdnf::rpm::PackageQuery full_package_query(ctx.base);
@@ -81,6 +71,5 @@ void DownloadCommand::run() {
     }
     download_packages(download_pkgs, ".");
 }
-
 
 }  // namespace dnf5

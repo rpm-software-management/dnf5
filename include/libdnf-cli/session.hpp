@@ -44,10 +44,10 @@ public:
     /// @since 5.0
     Command * get_root_command() { return root_command.get(); }
 
-    /// Set `command` as the root command that represents the main program.
+    /// Register `command` as the root command that represents the main program.
     /// Session becomes owner of the `command`.
     /// @since 5.0
-    void set_root_command(std::unique_ptr<Command> command) { root_command = std::move(command); }
+    void register_root_command(std::unique_ptr<Command> command);
 
     /// @return Selected (sub)command that a user specified on the command line.
     ///         The returned pointer must **not** be freed manually.
@@ -73,16 +73,41 @@ private:
     std::unique_ptr<libdnf::cli::ArgumentParser> argument_parser;
 };
 
-
 class Command {
 public:
     explicit Command(Command & parent, const std::string & name);
     explicit Command(Session & session, const std::string & program_name);
     virtual ~Command() = default;
 
-    /// Run the command. Must be overriden in inherited classes.
+    /// Set command arguments.
     /// @since 5.0
-    virtual void run() = 0;
+    virtual void set_argument_parser() {}
+
+    /// Register subcommands.
+    /// @since 5.0
+    virtual void register_subcommands() {}
+
+    /// Adjust configuration.
+    /// Called after parsing the command line and but before loading configuration files.
+    /// @since 5.0
+    virtual void pre_configure() {}
+
+    /// Adjust configuration.
+    /// Called after parsing the command line and loading configuration files.
+    /// @since 5.0
+    virtual void configure() {}
+
+    /// Loads additional packages that are not in the repositories.
+    /// @since 5.0
+    virtual void load_additional_packages() {}
+
+    /// Run the command.
+    /// @since 5.0
+    virtual void run() {}
+
+    /// Called immediately after the goal is resolved.
+    /// @since 5.0
+    virtual void goal_resolved() {}
 
     /// Throw a ArgumentParserMissingCommandError exception with the command name in it
     void throw_missing_command() const;
@@ -108,6 +133,7 @@ public:
     /// @since 5.0
     const std::vector<std::unique_ptr<Command>> & get_subcommands() const noexcept { return subcommands; }
 
+protected:
     /// Register a `subcommand` to the current command.
     /// The command becomes owner of the `subcommand`.
     /// @since 5.0
