@@ -96,6 +96,16 @@ private:
     std::unique_ptr<Plugins> plugins;
 };
 
+
+class Command : public libdnf::cli::session::Command {
+public:
+    using libdnf::cli::session::Command::Command;
+
+    /// @return Reference to the Context.
+    Context & get_context() const noexcept { return static_cast<Context &>(get_session()); }
+};
+
+
 class RpmTransactionItem : public libdnf::rpm::TransactionItem {
 public:
     enum class Actions { INSTALL, ERASE, UPGRADE, DOWNGRADE, REINSTALL };
