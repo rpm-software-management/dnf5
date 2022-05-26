@@ -174,7 +174,7 @@ class ConfigMain::Impl {
     OptionPath system_cachedir{SYSTEM_CACHEDIR};
     OptionBool cacheonly{false};
     OptionBool keepcache{false};
-    OptionString logdir{geteuid() == 0 ? "/var/log" : libdnf::utils::xdg::get_user_data_dir() / "dnf"};
+    OptionPath logdir{geteuid() == 0 ? "/var/log" : libdnf::utils::xdg::get_user_data_dir() / "dnf"};
     OptionNumber<std::int32_t> log_size{1024 * 1024, str_to_bytes};
     OptionNumber<std::int32_t> log_rotate{4, 0};
     OptionPath debugdir{"./debugdata"};
@@ -277,7 +277,7 @@ class ConfigMain::Impl {
     // Repo main config
 
     OptionNumber<std::uint32_t> retries{10};
-    OptionString cachedir{geteuid() == 0 ? SYSTEM_CACHEDIR : libdnf::utils::xdg::get_user_cache_dir() / "dnf"};
+    OptionPath cachedir{geteuid() == 0 ? SYSTEM_CACHEDIR : libdnf::utils::xdg::get_user_cache_dir() / "dnf"};
     OptionBool fastestmirror{false};
     OptionStringList excludepkgs{std::vector<std::string>{}};
     OptionStringList includepkgs{std::vector<std::string>{}};
@@ -536,17 +536,17 @@ const OptionNumber<std::int32_t> & ConfigMain::errorlevel() const {
     return p_impl->errorlevel;
 }
 
-OptionString & ConfigMain::installroot() {
+OptionPath & ConfigMain::installroot() {
     return p_impl->installroot;
 }
-const OptionString & ConfigMain::installroot() const {
+const OptionPath & ConfigMain::installroot() const {
     return p_impl->installroot;
 }
 
-OptionString & ConfigMain::config_file_path() {
+OptionPath & ConfigMain::config_file_path() {
     return p_impl->config_file_path;
 }
-const OptionString & ConfigMain::config_file_path() const {
+const OptionPath & ConfigMain::config_file_path() const {
     return p_impl->config_file_path;
 }
 
@@ -571,10 +571,10 @@ const OptionStringList & ConfigMain::pluginconfpath() const {
     return p_impl->pluginconfpath;
 }
 
-OptionString & ConfigMain::persistdir() {
+OptionPath & ConfigMain::persistdir() {
     return p_impl->persistdir;
 }
-const OptionString & ConfigMain::persistdir() const {
+const OptionPath & ConfigMain::persistdir() const {
     return p_impl->persistdir;
 }
 
@@ -599,10 +599,10 @@ const OptionBool & ConfigMain::reset_nice() const {
     return p_impl->reset_nice;
 }
 
-OptionString & ConfigMain::system_cachedir() {
+OptionPath & ConfigMain::system_cachedir() {
     return p_impl->system_cachedir;
 }
-const OptionString & ConfigMain::system_cachedir() const {
+const OptionPath & ConfigMain::system_cachedir() const {
     return p_impl->system_cachedir;
 }
 
@@ -620,10 +620,10 @@ const OptionBool & ConfigMain::keepcache() const {
     return p_impl->keepcache;
 }
 
-OptionString & ConfigMain::logdir() {
+OptionPath & ConfigMain::logdir() {
     return p_impl->logdir;
 }
-const OptionString & ConfigMain::logdir() const {
+const OptionPath & ConfigMain::logdir() const {
     return p_impl->logdir;
 }
 
@@ -1065,10 +1065,10 @@ const OptionNumber<std::uint32_t> & ConfigMain::retries() const {
     return p_impl->retries;
 }
 
-OptionString & ConfigMain::cachedir() {
+OptionPath & ConfigMain::cachedir() {
     return p_impl->cachedir;
 }
-const OptionString & ConfigMain::cachedir() const {
+const OptionPath & ConfigMain::cachedir() const {
     return p_impl->cachedir;
 }
 
