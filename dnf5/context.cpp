@@ -393,7 +393,9 @@ void download_packages(libdnf::base::Transaction & transaction, const char * des
         }
     }
 
-    download_packages(downloads, dest_dir);
+    if (!downloads.empty()) {
+        download_packages(downloads, dest_dir);
+    }
 }
 
 namespace {
