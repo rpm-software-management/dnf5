@@ -37,13 +37,13 @@ if(WITH_MAN)
     )
     add_dependencies(doc doc-man)
 
-    if(WITH_DNFDAEMON_CLIENT)
-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnfdaemon-client.8 DESTINATION share/man/man8)
+    if(WITH_DNF5DAEMON_CLIENT)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5daemon-client.8 DESTINATION share/man/man8)
     endif()
 
-    if(WITH_DNFDAEMON_SERVER)
-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnfdaemon-server.8 DESTINATION share/man/man8)
-        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnfdaemon-dbus-api.8 DESTINATION share/man/man8)
+    if(WITH_DNF5DAEMON_SERVER)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5daemon-server.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5daemon-dbus-api.8 DESTINATION share/man/man8)
     endif()
 
     if(WITH_DNF5)

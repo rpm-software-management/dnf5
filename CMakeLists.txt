@@ -18,8 +18,8 @@ endif()
 
 
 # build options - components (sub-packages)
-option(WITH_DNFDAEMON_CLIENT "Build command-line interface for dnfdaemon" ON)
-option(WITH_DNFDAEMON_SERVER "Build package management service with a DBus interface" ON)
+option(WITH_DNF5DAEMON_CLIENT "Build command-line interface for Dnf5daemon" ON)
+option(WITH_DNF5DAEMON_SERVER "Build package management service with a DBus interface" ON)
 option(WITH_LIBDNF_CLI "Build library for working with a terminal in a command-line package manager" ON)
 option(WITH_DNF5 "Build dnf5 command-line package manager" ON)
 option(WITH_DNF5_PLUGINS "Build plugins for dnf5 command-line package manager" ON)
@@ -37,7 +37,7 @@ option(WITH_MAN "Build man pages" ON)
 # build options - tests
 option(WITH_TESTS "Build tests" ON)
 option(WITH_PERFORMANCE_TESTS "Build performance tests (DEBUG ONLY)" OFF)
-option(WITH_DNFDAEMON_TESTS "Build dnfdaemon tests (requires configured dbus)" OFF)
+option(WITH_DNF5DAEMON_TESTS "Build dnf5daemon tests (requires configured dbus)" OFF)
 
 # build options - debugging
 option(WITH_SANITIZERS "Build with address, leak and undefined sanitizers (DEBUG ONLY)" OFF)
@@ -106,9 +106,9 @@ add_subdirectory("libdnf-plugins")
 add_subdirectory("doc")
 add_subdirectory("bindings")
 
-# dnfdaemon
-add_subdirectory("dnfdaemon-server")
-add_subdirectory("dnfdaemon-client")
+# dnf5daemon
+add_subdirectory("dnf5daemon-server")
+add_subdirectory("dnf5daemon-client")
 
 # dnf5
 add_subdirectory("dnf5")

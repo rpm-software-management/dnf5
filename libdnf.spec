@@ -13,8 +13,8 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 
 # ========== build options ==========
 
-%bcond_without dnfdaemon_client
-%bcond_without dnfdaemon_server
+%bcond_without dnf5daemon_client
+%bcond_without dnf5daemon_server
 %bcond_without libdnf_cli
 %bcond_without dnf5
 %bcond_without dnf5_plugins
@@ -41,7 +41,7 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 %bcond_with    sanitizers
 %bcond_without tests
 %bcond_with    performance_tests
-%bcond_with    dnfdaemon_tests
+%bcond_with    dnf5daemon_tests
 
 %if %{with clang}
     %global toolchain clang
@@ -340,31 +340,31 @@ Libdnf plugin that allows loading Python plugins
 %endif
 
 
-# ========== dnfdaemon-client ==========
+# ========== dnf5daemon-client ==========
 
-%if %{with dnfdaemon_client}
-%package -n dnfdaemon-client
-Summary:        Command-line interface for dnfdaemon-server
+%if %{with dnf5daemon_client}
+%package -n dnf5daemon-client
+Summary:        Command-line interface for dnf5daemon-server
 License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
-Requires:       dnfdaemon-server
+Requires:       dnf5daemon-server
 
-%description -n dnfdaemon-client
-Command-line interface for dnfdaemon-server
+%description -n dnf5daemon-client
+Command-line interface for dnf5daemon-server
 
-%files -n dnfdaemon-client
-%{_bindir}/dnfdaemon-client
+%files -n dnf5daemon-client
+%{_bindir}/dnf5daemon-client
 %license COPYING.md
 %license gpl-2.0.txt
-%{_mandir}/man8/dnfdaemon-client.8.gz
+%{_mandir}/man8/dnf5daemon-client.8.gz
 %endif
 
 
-# ========== dnfdaemon-server ==========
+# ========== dnf5daemon-server ==========
 
-%if %{with dnfdaemon_server}
-%package -n dnfdaemon-server
+%if %{with dnf5daemon_server}
+%package -n dnf5daemon-server
 Summary:        Package management service with a DBus interface
 License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -373,36 +373,36 @@ Requires:       dnf-data
 %{?systemd_requires}
 BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
 BuildRequires:  systemd-rpm-macros
-%if %{with dnfdaemon_tests}
+%if %{with dnf5daemon_tests}
 BuildRequires:  dbus-daemon
 BuildRequires:  polkit
 BuildRequires:  python3-devel
 BuildRequires:  python3dist(dbus-python)
 %endif
 
-%description -n dnfdaemon-server
+%description -n dnf5daemon-server
 Package management service with a DBus interface
 
-%post -n dnfdaemon-server
-%systemd_post dnfdaemon-server.service
+%post -n dnf5daemon-server
+%systemd_post dnf5daemon-server.service
 
-%preun -n dnfdaemon-server
-%systemd_preun dnfdaemon-server.service
+%preun -n dnf5daemon-server
+%systemd_preun dnf5daemon-server.service
 
-%postun -n dnfdaemon-server
-%systemd_postun_with_restart dnfdaemon-server.service
+%postun -n dnf5daemon-server
+%systemd_postun_with_restart dnf5daemon-server.service
 
-%files -n dnfdaemon-server
-%{_bindir}/dnfdaemon-server
-%{_unitdir}/dnfdaemon-server.service
+%files -n dnf5daemon-server
+%{_bindir}/dnf5daemon-server
+%{_unitdir}/dnf5daemon-server.service
 %{_sysconfdir}/dbus-1/system.d/org.rpm.dnf.v0.conf
 %{_datadir}/dbus-1/system-services/org.rpm.dnf.v0.service
 %{_datadir}/dbus-1/interfaces/org.rpm.dnf.v0.*.xml
 %{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy
 %license COPYING.md
 %license gpl-2.0.txt
-%{_mandir}/man8/dnfdaemon-server.8.gz
-%{_mandir}/man8/dnfdaemon-dbus-api.8.gz
+%{_mandir}/man8/dnf5daemon-server.8.gz
+%{_mandir}/man8/dnf5daemon-dbus-api.8.gz
 %endif
 
 
@@ -464,8 +464,8 @@ DNF5 plugins
     -DPACKAGE_VERSION=%{version} \
     -DPERL_INSTALLDIRS=vendor \
     \
-    -DWITH_DNFDAEMON_CLIENT=%{?with_dnfdaemon_client:ON}%{!?with_dnfdaemon_client:OFF} \
-    -DWITH_DNFDAEMON_SERVER=%{?with_dnfdaemon_server:ON}%{!?with_dnfdaemon_server:OFF} \
+    -DWITH_DNF5DAEMON_CLIENT=%{?with_dnf5daemon_client:ON}%{!?with_dnf5daemon_client:OFF} \
+    -DWITH_DNF5DAEMON_SERVER=%{?with_dnf5daemon_server:ON}%{!?with_dnf5daemon_server:OFF} \
     -DWITH_LIBDNF_CLI=%{?with_libdnf_cli:ON}%{!?with_libdnf_cli:OFF} \
     -DWITH_DNF5=%{?with_dnf5:ON}%{!?with_dnf5:OFF} \
     -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
@@ -485,7 +485,7 @@ DNF5 plugins
     -DWITH_SANITIZERS=%{?with_sanitizers:ON}%{!?with_sanitizers:OFF} \
     -DWITH_TESTS=%{?with_tests:ON}%{!?with_tests:OFF} \
     -DWITH_PERFORMANCE_TESTS=%{?with_performance_tests:ON}%{!?with_performance_tests:OFF} \
-    -DWITH_DNFDAEMON_TESTS=%{?with_dnfdaemon_tests:ON}%{!?with_dnfdaemon_tests:OFF} \
+    -DWITH_DNF5DAEMON_TESTS=%{?with_dnf5daemon_tests:ON}%{!?with_dnf5daemon_tests:OFF} \
     \
     -DPROJECT_VERSION_MAJOR=%{project_version_major} \
     -DPROJECT_VERSION_MINOR=%{project_version_minor} \

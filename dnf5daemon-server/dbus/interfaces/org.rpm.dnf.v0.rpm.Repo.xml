@@ -1,0 +1,121 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<!--
+Copyright Contributors to the libdnf project.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2.1 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<node>
+<!-- org.rpm.dnf.v0.rpm.Repo:
+   @short_description: Interface to RPM repositories
+-->
+<interface name="org.rpm.dnf.v0.rpm.Repo">
+    <!--
+        list:
+        @options: an array of key/value pairs
+        @data: array of returned repositories with requested attributes
+
+        Get list of repositories that match to given filters.
+
+        Following options are supported:
+
+            - patterns: list of strings
+                any repository with id matching to any of patterns is returned
+            - repo_attrs: list of strings
+                list of repository attributes that are returned
+            - enable_disable: string (default "enabled")
+                When set to "enabled" or "disabled", only enabled / disabled repositories are listed. Any other value means all repositories are returned.
+
+        Unknown options are ignored.
+    -->
+    <method name="list">
+        <arg name="options" type="a{sv}" direction="in"/>
+        <arg name="data" type="aa{sv}" direction="out"/>
+    </method>
+
+    <!--
+        confirm_key:
+        @key_id: id of the key in question
+        @confirmed: whether the key import is confirmed by user
+
+        Get list of repositories that match to given filters.
+    -->
+    <method name="confirm_key">
+        <arg name="key_id" type="s" direction="in"/>
+        <arg name="confirmed" type="b" direction="in"/>
+    </method>
+
+    <!--
+        repo_load_start:
+        @session_object_path: object path of the dnf5daemon session
+        @repository_name: the name of repository
+
+        Repository metadata loading has started.
+    -->
+    <signal name="repo_load_start">
+        <arg name="session_object_path" type="o" />
+        <arg name="repository_name" type="s" />
+    </signal>
+
+    <!--
+        repo_load_progress:
+        @session_object_path: object path of the dnf5daemon session
+        @downloaded: bytes already downloaded
+        @total: total bytes to download
+
+        Progress in repository metadata downloading.
+    -->
+    <signal name="repo_load_progress">
+        <arg name="session_object_path" type="o" />
+        <arg name="downloaded" type="t" />
+        <arg name="total" type="t" />
+    </signal>
+
+    <!--
+        repo_load_end:
+        @session_object_path: object path of the dnf5daemon session
+
+        Repository metadata loading has ended.
+    -->
+    <signal name="repo_load_end">
+        <arg name="session_object_path" type="o" />
+    </signal>
+
+    <!--
+        repo_key_import_request:
+        @session_object_path: object path of the dnf5daemon session
+        @key_id: GPG key id
+        @user_id: User id
+        @key_fingerprint: Fingerprint of the GPG key
+        @key_url: URL of the GPG key
+        @timestamp: timestamp when the key was created
+
+        Request for repository key import confirmation.
+    -->
+    <signal name="repo_key_import_request">
+        <arg name="session_object_path" type="o" />
+        <arg name="key_id" type="s" />
+        <arg name="user_id" type="s" />
+        <arg name="key_fingerprint" type="s" />
+        <arg name="key_url" type="s" />
+        <arg name="timestamp" type="x" />
+    </signal>
+
+</interface>
+
+</node>

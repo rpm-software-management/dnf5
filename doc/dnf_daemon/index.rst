@@ -1,12 +1,12 @@
 ===========
-Dnf Daemon
+Dnf5 Daemon
 ===========
 
 
 .. toctree::
     :maxdepth: 1
 
-    dnfdaemon_client.8
-    dnfdaemon_server.8
-    dnfdaemon_dbus_api.8
+    dnf5daemon_client.8
+    dnf5daemon_server.8
+    dnf5daemon_dbus_api.8
 

@@ -19,7 +19,7 @@ Project layout
     +-- libdnf                  # libdnf code and private headers
     +-- libdnf-cli              # libdnf-cli code and private headers
     +-- libdnf-plugins          # libdnf C/C++ plugins
-    +-- dnfdaemon-client        # command line client for dnfdaemon-server
-    +-- dnfdaemon-server        # DBus package manager service
+    +-- dnf5daemon-client       # command line client for dnf5daemon-server
+    +-- dnf5daemon-server       # DBus package manager service
     +-- dnf5                # dnf5 command line package manager
     +-- test                    # tests; similar layout to the bindings

@@ -83,7 +83,7 @@ html_static_path = ['_static']
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('dnf5.8', 'dnf5', 'DNF5 Command-line Package Manager', AUTHORS, 8),
-    ('dnf_daemon/dnfdaemon_client.8', 'dnfdaemon-client', 'Command-line interface for dnfdaemon', AUTHORS, 8),
-    ('dnf_daemon/dnfdaemon_server.8', 'dnfdaemon-server', 'Package management service with a DBus interface', AUTHORS, 8),
-    ('dnf_daemon/dnfdaemon_dbus_api.8', 'dnfdaemon-dbus-api', 'DBus API Reference for Dnfdaemon', AUTHORS, 8),
+    ('dnf_daemon/dnf5daemon_client.8', 'dnf5daemon-client', 'Command-line interface for Dnf5daemon', AUTHORS, 8),
+    ('dnf_daemon/dnf5daemon_server.8', 'dnf5daemon-server', 'Package management service with a DBus interface', AUTHORS, 8),
+    ('dnf_daemon/dnf5daemon_dbus_api.8', 'dnf5daemon-dbus-api', 'DBus API Reference for Dnf5daemon', AUTHORS, 8),
 ]
