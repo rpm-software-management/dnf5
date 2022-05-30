@@ -33,9 +33,9 @@ namespace libdnf::base {
 
 class Transaction::Impl {
 public:
-    Impl(Transaction & transaction, const BaseWeakPtr & base) : transaction(transaction), base(base) {}
+    Impl(Transaction & transaction, const BaseWeakPtr & base) : transaction(&transaction), base(base) {}
     Impl(Transaction & transaction, const Impl & src)
-        : transaction(transaction),
+        : transaction(&transaction),
           base(src.base),
           libsolv_transaction(src.libsolv_transaction ? transaction_create_clone(src.libsolv_transaction) : nullptr),
           problems(src.problems),
@@ -77,7 +77,7 @@ private:
     friend Transaction;
     friend class libdnf::Goal;
 
-    Transaction & transaction;
+    Transaction * transaction;
     BaseWeakPtr base;
     ::Transaction * libsolv_transaction{nullptr};
     libdnf::GoalProblem problems{GoalProblem::NO_PROBLEM};

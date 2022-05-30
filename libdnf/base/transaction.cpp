@@ -69,6 +69,11 @@ const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSAC
 
 Transaction::Transaction(const BaseWeakPtr & base) : p_impl(new Impl(*this, base)) {}
 Transaction::Transaction(const Transaction & transaction) : p_impl(new Impl(*this, *transaction.p_impl)) {}
+
+Transaction::Transaction(Transaction && transaction) : p_impl(std::move(transaction.p_impl)) {
+    p_impl->transaction = this;
+}
+
 Transaction::~Transaction() = default;
 
 Transaction::Impl::~Impl() {
@@ -352,7 +357,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     }
 
     // only successfully resolved transaction can be run
-    if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
+    if (transaction->get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
         return TransactionRunResult::ERROR_RESOLVE;
     }
 
@@ -370,7 +375,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
 
     // fill and check the rpm transaction
     libdnf::rpm::Transaction rpm_transaction(base);
-    rpm_transaction.fill(transaction);
+    rpm_transaction.fill(*transaction);
     if (!rpm_transaction.check()) {
         auto problems = rpm_transaction.get_problems();
         for (auto it = problems.begin(); it != problems.end(); ++it) {

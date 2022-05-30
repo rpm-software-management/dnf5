@@ -54,6 +54,7 @@ public:
     };
 
     Transaction(const Transaction & transaction);
+    Transaction(Transaction && transaction);
     ~Transaction();
 
     libdnf::GoalProblem get_problems();
