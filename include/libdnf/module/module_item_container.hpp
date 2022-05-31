@@ -31,6 +31,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::module {
 
 
+// TODO(pkratoch): Make this a docstring.
+// ENABLED - a module that has an enabled stream.
+// DISABLED - a module that is disabled.
+// DEFAULT - a module that has a default stream (but isn't ENABLED nor DISABLED).
+// AVAILABLE - otherwise.
+enum class ModuleState { AVAILABLE, DEFAULT, ENABLED, DISABLED };
+
+
 class ModuleItemContainer;
 
 
@@ -39,8 +47,6 @@ using ModuleItemContainerWeakPtr = libdnf::WeakPtr<ModuleItemContainer, false>;
 
 class ModuleItemContainer {
 public:
-    enum class ModuleState { UNKNOWN, ENABLED, DISABLED, DEFAULT, INSTALLED };
-
     ModuleItemContainer(const BaseWeakPtr & base);
     ModuleItemContainer(Base & base);
 
