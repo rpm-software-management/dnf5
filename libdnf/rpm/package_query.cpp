@@ -2156,16 +2156,36 @@ static int latest_cmp(const Id * ap, const Id * bp, libdnf::solv::Pool * pool) {
     return *ap - *bp;
 }
 
-void PackageQuery::filter_latest_evr(int limit) {
-    auto & pool = get_pool(p_impl->base);
+static int earliest_cmp(const Id * ap, const Id * bp, libdnf::solv::Pool * pool) {
+    Solvable * sa = pool->id2solvable(*ap);
+    Solvable * sb = pool->id2solvable(*bp);
+    int r;
+    r = sa->name - sb->name;
+    if (r)
+        return r;
+    r = sa->arch - sb->arch;
+    if (r)
+        return r;
+    r = pool->evrcmp(sb->evr, sa->evr, EVRCMP_COMPARE);
+    if (r > 0)
+        return -1;
+    if (r < 0)
+        return 1;
+    return *ap - *bp;
+}
 
+static void filter_first_sorted_by(
+    libdnf::solv::Pool & pool,
+    int limit,
+    int (*cmp)(const Id * a, const Id * b, libdnf::solv::Pool * pool),
+    libdnf::solv::SolvMap & data) {
     libdnf::solv::IdQueue samename;
-    for (Id candidate_id : *p_impl) {
+    for (Id candidate_id : data) {
         samename.push_back(candidate_id);
     }
-    samename.sort(latest_cmp, &pool);
+    samename.sort(cmp, &pool);
 
-    p_impl->clear();
+    data.clear();
     // Create blocks per name, arch
     Solvable * highest = nullptr;
     int start_block = -1;
@@ -2187,6 +2207,14 @@ void PackageQuery::filter_latest_evr(int limit) {
     if (start_block != -1) {  // Add last block to the map
         add_n_first_to_map(pool, data, samename, start_block, i, limit);
     }
+}
+
+void PackageQuery::filter_latest_evr(int limit) {
+    filter_first_sorted_by(get_pool(p_impl->base), limit, latest_cmp, *p_impl);
+}
+
+void PackageQuery::filter_earliest_evr(int limit) {
+    filter_first_sorted_by(get_pool(p_impl->base), limit, earliest_cmp, *p_impl);
 }
 
 static inline bool priority_solvable_cmp_key(const Solvable * first, const Solvable * second) {

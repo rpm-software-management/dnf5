@@ -115,6 +115,64 @@ void RpmPackageQueryTest::test_filter_latest_evr() {
     }
 }
 
+void RpmPackageQueryTest::test_filter_earliest_evr() {
+    add_repo_solv("solv-repo1");
+    add_repo_solv("solv-24pkgs");
+
+    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+    // also add 2 time the same package
+    repo_sack->get_cmdline_repo()->add_rpm_package(rpm_path, false);
+    repo_sack->get_cmdline_repo()->add_rpm_package(rpm_path, false);
+
+    {
+        PackageQuery query(base);
+        query.filter_earliest_evr(1);
+        std::vector<Package> expected = {
+            get_pkg("pkg-0:1.2-3.src"),
+            get_pkg("pkg-0:1.2-3.x86_64"),
+            get_pkg("pkg-libs-0:1.2-3.x86_64"),
+            get_pkg("pkg-0:1-1.noarch"),
+            get_pkg_i("cmdline-0:1.2-3.noarch", 0),
+            get_pkg_i("cmdline-0:1.2-3.noarch", 1)};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+    {
+        PackageQuery query(base);
+        query.filter_earliest_evr(2);
+        std::vector<Package> expected = {
+            get_pkg("pkg-0:1.2-3.src"),
+            get_pkg("pkg-0:1.2-3.x86_64"),
+            get_pkg("pkg-libs-0:1.2-3.x86_64"),
+            get_pkg("pkg-libs-1:1.2-4.x86_64"),
+            get_pkg("pkg-0:1-1.noarch"),
+            get_pkg("pkg-0:1-2.noarch"),
+            get_pkg_i("cmdline-0:1.2-3.noarch", 0),
+            get_pkg_i("cmdline-0:1.2-3.noarch", 1)};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+    {
+        PackageQuery query(base);
+        query.filter_earliest_evr(-1);
+        std::vector<Package> expected = {
+            get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64"), get_pkg("pkg-0:1-2.noarch"),
+            get_pkg("pkg-0:1-3.noarch"),        get_pkg("pkg-0:1-4.noarch"),        get_pkg("pkg-0:1-5.noarch"),
+            get_pkg("pkg-0:1-6.noarch"),        get_pkg("pkg-0:1-7.noarch"),        get_pkg("pkg-0:1-8.noarch"),
+            get_pkg("pkg-0:1-9.noarch"),        get_pkg("pkg-0:1-10.noarch"),       get_pkg("pkg-0:1-11.noarch"),
+            get_pkg("pkg-0:1-12.noarch"),       get_pkg("pkg-0:1-13.noarch"),       get_pkg("pkg-0:1-14.noarch"),
+            get_pkg("pkg-0:1-15.noarch"),       get_pkg("pkg-0:1-16.noarch"),       get_pkg("pkg-0:1-17.noarch"),
+            get_pkg("pkg-0:1-18.noarch"),       get_pkg("pkg-0:1-19.noarch"),       get_pkg("pkg-0:1-20.noarch"),
+            get_pkg("pkg-0:1-21.noarch"),       get_pkg("pkg-0:1-22.noarch"),       get_pkg("pkg-0:1-23.noarch"),
+            get_pkg("pkg-0:1-24.noarch")};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+    {
+        PackageQuery query(base);
+        query.filter_earliest_evr(-23);
+        std::vector<Package> expected = {get_pkg("pkg-0:1-24.noarch")};
+        CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
+    }
+}
+
 void RpmPackageQueryTest::test_filter_name() {
     add_repo_solv("solv-repo1");
 
