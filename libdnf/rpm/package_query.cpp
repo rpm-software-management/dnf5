@@ -2107,15 +2107,15 @@ void PackageQuery::filter_downgradable() {
 /// @param samename: Queue containing the block
 /// @param start_block: Start of the block
 /// @param stop_block: End of the block
-/// @param latest: Number of first packages in the block to add into the map.
-///                If negative, it's number of first packages in the block to exclude.
-static void add_latest_to_map(
+/// @param n_first: Number of first packages in the block to add into the map.
+///                 If negative, it's number of first packages in the block to exclude.
+static void add_n_first_to_map(
     libdnf::solv::Pool & pool,
     libdnf::solv::SolvMap & result,
     libdnf::solv::IdQueue & samename,
     int start_block,
     int stop_block,
-    int latest) {
+    int n_first) {
     int version_counter = 0;
     Solvable * solv_previous_element = pool.id2solvable(samename[start_block]);
     Id id_previous_evr = solv_previous_element->evr;
@@ -2127,12 +2127,12 @@ static void add_latest_to_map(
             version_counter += 1;
             id_previous_evr = id_current_evr;
         }
-        if (latest > 0) {
-            if (!(version_counter < latest)) {
+        if (n_first > 0) {
+            if (!(version_counter < n_first)) {
                 return;
             }
         } else {
-            if (version_counter < -latest) {
+            if (version_counter < -n_first) {
                 continue;
             }
         }
@@ -2179,13 +2179,13 @@ void PackageQuery::filter_latest_evr(int limit) {
                 start_block = i;
                 continue;
             }
-            add_latest_to_map(pool, *p_impl, samename, start_block, i, limit);
+            add_n_first_to_map(pool, data, samename, start_block, i, limit);
             highest = considered;
             start_block = i;
         }
     }
     if (start_block != -1) {  // Add last block to the map
-        add_latest_to_map(pool, *p_impl, samename, start_block, i, limit);
+        add_n_first_to_map(pool, data, samename, start_block, i, limit);
     }
 }
 
