@@ -189,19 +189,19 @@ void AdvisoryAdvisoryQueryTest::test_filter_severity() {
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(adv_query));
 }
 
-void AdvisoryAdvisoryQueryTest::test_get_advisory_packages() {
-    // Tests get_advisory_packages method
+void AdvisoryAdvisoryQueryTest::test_get_advisory_packages_sorted() {
+    // Tests get_advisory_packages_sorted method
     libdnf::rpm::PackageQuery pkg_query(base);
     // pkg_query contains: pkg-1.2-3.x86_64, pkg-libs-1:1.3-4.x86_64, unresolvable-1:2-3.noarch
     std::vector<AdvisoryPackage> adv_pkgs =
-        AdvisoryQuery(base).get_advisory_packages(pkg_query, libdnf::sack::QueryCmp::GTE);
+        AdvisoryQuery(base).get_advisory_packages_sorted(pkg_query, libdnf::sack::QueryCmp::GTE);
     CPPUNIT_ASSERT_EQUAL(2lu, adv_pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("1.2-3"), adv_pkgs[0].get_evr());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[1].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("4.0-1"), adv_pkgs[1].get_evr());
 
-    adv_pkgs = AdvisoryQuery(base).get_advisory_packages(pkg_query, libdnf::sack::QueryCmp::LTE);
+    adv_pkgs = AdvisoryQuery(base).get_advisory_packages_sorted(pkg_query, libdnf::sack::QueryCmp::LTE);
     CPPUNIT_ASSERT_EQUAL(2lu, adv_pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), adv_pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("1.2-3"), adv_pkgs[0].get_evr());

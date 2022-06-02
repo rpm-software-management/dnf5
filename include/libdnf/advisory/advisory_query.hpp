@@ -93,8 +93,16 @@ public:
     void filter_packages(
         const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    std::vector<AdvisoryPackage> get_advisory_packages(
-        const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
+    /// Get std::vector of AdvisoryPackages present in advisories from query.
+    /// Each AdvisoryPackage is returned only if it has a counterpart Package in package_set such that they have matching
+    /// name and architecture and also their epoch-version-release complies to cmp_type.
+    /// AdvisoryPackages are sorted in the std::vector by Name, Arch and EVR.
+    ///
+    /// @param package_set  libdnf::rpm::PackageSet used when filtering.
+    /// @param cmp_type     Condition to fulfill when comparing epoch-version-release of packages.
+    /// @return std::vector of AdvisoryPackages
+    std::vector<AdvisoryPackage> get_advisory_packages_sorted(
+        const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ) const;
 
 private:
     explicit AdvisoryQuery(const AdvisorySackWeakPtr & sack);

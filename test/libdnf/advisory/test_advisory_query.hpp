@@ -39,7 +39,7 @@ class AdvisoryAdvisoryQueryTest : public BaseTestCase {
     CPPUNIT_TEST(test_filter_bugzilla);
     CPPUNIT_TEST(test_filter_reference);
     CPPUNIT_TEST(test_filter_severity);
-    CPPUNIT_TEST(test_get_advisory_packages);
+    CPPUNIT_TEST(test_get_advisory_packages_sorted);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -54,7 +54,7 @@ public:
     void test_filter_bugzilla();
     void test_filter_reference();
     void test_filter_severity();
-    void test_get_advisory_packages();
+    void test_get_advisory_packages_sorted();
 };
 
 

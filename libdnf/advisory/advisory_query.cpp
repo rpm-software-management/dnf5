@@ -242,8 +242,8 @@ void AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set,
     }
 }
 
-std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
-    const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
+std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages_sorted(
+    const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) const {
     std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_name_arch_evr();
     std::vector<AdvisoryPackage> after_filter;
 

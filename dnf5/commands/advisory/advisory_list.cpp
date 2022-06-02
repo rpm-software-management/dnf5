@@ -35,21 +35,21 @@ void AdvisoryListCommand::process_and_print_queries(
 
     if (all->get_value()) {
         packages.filter_installed();
-        installed_pkgs = advisories.get_advisory_packages(packages, libdnf::sack::QueryCmp::LTE);
-        not_installed_pkgs = advisories.get_advisory_packages(packages, libdnf::sack::QueryCmp::GT);
+        installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::LTE);
+        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::GT);
     } else if (installed->get_value()) {
         packages.filter_installed();
-        installed_pkgs = advisories.get_advisory_packages(packages, libdnf::sack::QueryCmp::LTE);
+        installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::LTE);
     } else if (updates->get_value()) {
         packages.filter_upgradable();
-        not_installed_pkgs = advisories.get_advisory_packages(packages, libdnf::sack::QueryCmp::GT);
+        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::GT);
     } else {  // available is the default
         packages.filter_installed();
         packages.filter_latest_evr();
 
         add_running_kernel_packages(ctx.base, packages);
 
-        not_installed_pkgs = advisories.get_advisory_packages(packages, libdnf::sack::QueryCmp::GT);
+        not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::GT);
     }
 
     if (with_bz->get_value()) {
