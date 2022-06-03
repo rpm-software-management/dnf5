@@ -48,8 +48,11 @@ void print_advisorysummary_table(const libdnf::advisory::AdvisoryQuery & advisor
     security_moderate.filter_severity("Moderate");
     libdnf::advisory::AdvisoryQuery security_low{securities};
     security_low.filter_severity("Low");
-    libdnf::advisory::AdvisoryQuery security_none{securities};
-    security_none.filter_severity("None");
+    libdnf::advisory::AdvisoryQuery security_other{securities};
+    security_other -= security_critical;
+    security_other -= security_important;
+    security_other -= security_moderate;
+    security_other -= security_low;
 
     libdnf::advisory::AdvisoryQuery others{advisories};
     others -= bugfixes;
@@ -61,12 +64,12 @@ void print_advisorysummary_table(const libdnf::advisory::AdvisoryQuery & advisor
     output_table.add_line("Important", security_important.size(), nullptr, security_row);
     output_table.add_line("Moderate", security_moderate.size(), nullptr, security_row);
     output_table.add_line("Low", security_low.size(), nullptr, security_row);
-    output_table.add_line("None", security_none.size(), nullptr, security_row);
+    output_table.add_line("Other", security_other.size(), nullptr, security_row);
 
     output_table.add_line("Bugfix", bugfixes.size(), nullptr);
     output_table.add_line("Enhancement", enhancements.size(), nullptr);
 
-    output_table.add_line("Others", others.size(), nullptr);
+    output_table.add_line("Other", others.size(), nullptr);
 
     output_table.print();
 }
