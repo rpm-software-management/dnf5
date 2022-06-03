@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <modulemd-2.0/modulemd-module-index.h>
 #include <modulemd-2.0/modulemd.h>
 
+#include <map>
 #include <string>
 #include <vector>
 
@@ -55,6 +56,12 @@ private:
     void resolve_added_metadata();
 
     std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> get_all_module_items();
+
+    // TODO(pkratoch): Implement getting default streams and profiles.
+    /// @return Map of module names and their default streams.
+    std::map<std::string, std::string> get_default_streams();
+    /// @return List of all default profiles for given module stream.
+    std::vector<std::string> get_default_profiles(std::string module_name, std::string module_stream);
 };
 
 

@@ -52,9 +52,27 @@ public:
 
     ModuleItemContainerWeakPtr get_weak_ptr();
 
+    std::vector<std::unique_ptr<ModuleItem>> modules;
+
     // TODO(pkratoch): Maybe make this private later
     void add(const std::string & file_content);
-    std::vector<std::unique_ptr<ModuleItem>> modules;
+
+    // TODO(pkratoch): Implement adding defaults from "/etc/dnf/modules.defaults.d/", which are defined by user.
+    //                 They are added with priority 1000 after everything else is loaded.
+    /// Add and resolve defaults.
+    /// @since 5.0
+    //
+    // @replaces libdnf:ModuleItemContainer.hpp:method:ModuleItemContainer.addDefaultsFromDisk()
+    // @replaces libdnf:ModuleItemContainer.hpp:method:ModuleItemContainer.moduleDefaultsResolve()
+    void add_defaults_from_disk();
+
+    // TODO(pkratoch): Implement getting default streams and profiles.
+    /// @return Default stream for given module.
+    /// @since 5.0
+    const std::string & get_default_stream(const std::string & name) const;
+    /// @return List of all default profiles for given module stream.
+    /// @since 5.0
+    std::vector<std::string> get_default_profiles(std::string module_name, std::string module_stream);
 
 private:
     BaseWeakPtr base;
