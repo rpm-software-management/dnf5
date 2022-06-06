@@ -39,6 +39,16 @@ void InstallCommand::set_argument_parser() {
             return true;
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, true, false); });
+
+    advisory_name = std::make_unique<AdvisoryOption>(*this);
+    advisory_security = std::make_unique<SecurityOption>(*this);
+    advisory_bugfix = std::make_unique<BugfixOption>(*this);
+    advisory_enhancement = std::make_unique<EnhancementOption>(*this);
+    advisory_newpackage = std::make_unique<NewpackageOption>(*this);
+    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
+    advisory_bz = std::make_unique<BzOption>(*this);
+    advisory_cve = std::make_unique<CveOption>(*this);
+
     cmd.register_positional_arg(keys);
 }
 
@@ -53,12 +63,27 @@ void InstallCommand::load_additional_packages() {
 }
 
 void InstallCommand::run() {
+    auto & ctx = get_context();
     auto goal = get_context().get_goal();
+    auto settings = libdnf::GoalJobSettings();
+    auto advisories = advisory_query_from_cli_input(
+        ctx.base,
+        advisory_name->get_value(),
+        advisory_security->get_value(),
+        advisory_bugfix->get_value(),
+        advisory_enhancement->get_value(),
+        advisory_newpackage->get_value(),
+        advisory_severity->get_value(),
+        advisory_bz->get_value(),
+        advisory_cve->get_value());
+    if (advisories.has_value()) {
+        settings.advisory_filter = advisories;
+    }
     for (const auto & pkg : cmdline_packages) {
-        goal->add_rpm_install(pkg);
+        goal->add_rpm_install(pkg, settings);
     }
     for (const auto & spec : pkg_specs) {
-        goal->add_rpm_install(spec);
+        goal->add_rpm_install(spec, settings);
     }
 }
 
