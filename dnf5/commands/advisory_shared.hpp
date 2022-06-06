@@ -112,7 +112,10 @@ public:
               "advisories",
               '\0',
               _("Consider only content contained in advisories with specified name. List option."),
-              _("ADVISORY_NAME,...")) {}
+              _("ADVISORY_NAME,...")) {
+        auto * alias = arg->add_alias("advisory", "advisory", '\0', nullptr);
+        command.get_argument_parser_command()->register_named_arg(alias);
+    }
 };
 
 
@@ -159,6 +162,7 @@ public:
               "critical|important|moderate|low|none",
               true) {}
 
+
     std::vector<std::string> get_value() const {
         auto vals = StringListOption::get_value();
         std::transform(vals.begin(), vals.end(), vals.begin(), [](std::string val) -> std::string {
@@ -179,7 +183,10 @@ public:
               "bzs",
               '\0',
               _("Consider only content contained in advisories that fix a Bugzilla ID, Eg. 123123. List option."),
-              _("BUGZILLA_ID,...")) {}
+              _("BUGZILLA_ID,...")) {
+        auto * alias = arg->add_alias("bz", "bz", '\0', nullptr);
+        command.get_argument_parser_command()->register_named_arg(alias);
+    }
 };
 
 class CveOption : public libdnf::cli::session::StringListOption {
@@ -191,7 +198,10 @@ public:
               '\0',
               _("Consider only content contained in advisories that fix a CVE (Common Vulnerabilities and Exposures) "
                 "ID, Eg. CVE-2201-0123. List option."),
-              _("CVE_ID,...")) {}
+              _("CVE_ID,...")) {
+        auto * alias = arg->add_alias("cve", "cve", '\0', nullptr);
+        command.get_argument_parser_command()->register_named_arg(alias);
+    }
 };
 
 
