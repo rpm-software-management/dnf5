@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_ADVISORY_ADVISORY_SUBCOMMAND_HPP
 #define DNF5_COMMANDS_ADVISORY_ADVISORY_SUBCOMMAND_HPP
 
+#include "../advisory_shared.hpp"
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
@@ -49,6 +50,15 @@ protected:
     std::unique_ptr<AdvisorySpecArguments> advisory_specs{nullptr};
 
     AdvisorySubCommand(Command & parent, const std::string & name) : Command(parent, name) {}
+
+protected:
+    std::unique_ptr<SecurityOption> advisory_security{nullptr};
+    std::unique_ptr<BugfixOption> advisory_bugfix{nullptr};
+    std::unique_ptr<EnhancementOption> advisory_enhancement{nullptr};
+    std::unique_ptr<NewpackageOption> advisory_newpackage{nullptr};
+    std::unique_ptr<AdvisorySeverityOption> advisory_severity{nullptr};
+    std::unique_ptr<BzOption> advisory_bz{nullptr};
+    std::unique_ptr<CveOption> advisory_cve{nullptr};
 };
 
 }  // namespace dnf5

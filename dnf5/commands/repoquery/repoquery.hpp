@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_REPOQUERY_REPOQUERY_HPP
 #define DNF5_COMMANDS_REPOQUERY_REPOQUERY_HPP
 
+#include "../advisory_shared.hpp"
+
 #include <dnf5/context.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
@@ -47,6 +49,15 @@ private:
     std::vector<std::string> pkg_specs;
     std::vector<std::string> pkg_file_paths;
     std::vector<libdnf::rpm::Package> cmdline_packages;
+
+    std::unique_ptr<AdvisoryOption> advisory_name{nullptr};
+    std::unique_ptr<SecurityOption> advisory_security{nullptr};
+    std::unique_ptr<BugfixOption> advisory_bugfix{nullptr};
+    std::unique_ptr<EnhancementOption> advisory_enhancement{nullptr};
+    std::unique_ptr<NewpackageOption> advisory_newpackage{nullptr};
+    std::unique_ptr<AdvisorySeverityOption> advisory_severity{nullptr};
+    std::unique_ptr<BzOption> advisory_bz{nullptr};
+    std::unique_ptr<CveOption> advisory_cve{nullptr};
 };
 
 

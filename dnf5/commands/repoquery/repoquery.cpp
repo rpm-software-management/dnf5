@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/output/repoquery.hpp"
 
+#include <libdnf/advisory/advisory_query.hpp>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_query.hpp>
@@ -98,6 +99,15 @@ void RepoqueryCommand::set_argument_parser() {
     info->set_conflict_arguments(conflict_args);
     nevra->set_conflict_arguments(conflict_args);
 
+    advisory_name = std::make_unique<AdvisoryOption>(*this);
+    advisory_security = std::make_unique<SecurityOption>(*this);
+    advisory_bugfix = std::make_unique<BugfixOption>(*this);
+    advisory_enhancement = std::make_unique<EnhancementOption>(*this);
+    advisory_newpackage = std::make_unique<NewpackageOption>(*this);
+    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
+    advisory_bz = std::make_unique<BzOption>(*this);
+    advisory_cve = std::make_unique<CveOption>(*this);
+
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);
     cmd.register_named_arg(info);
@@ -132,7 +142,22 @@ void RepoqueryCommand::run() {
     }
     if (!pkg_specs.empty()) {
         const libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
-        const libdnf::rpm::PackageQuery full_package_query(ctx.base);
+        libdnf::rpm::PackageQuery full_package_query(ctx.base);
+
+        auto advisories = advisory_query_from_cli_input(
+            ctx.base,
+            advisory_name->get_value(),
+            advisory_security->get_value(),
+            advisory_bugfix->get_value(),
+            advisory_enhancement->get_value(),
+            advisory_newpackage->get_value(),
+            advisory_severity->get_value(),
+            advisory_bz->get_value(),
+            advisory_cve->get_value());
+        if (advisories.has_value()) {
+            full_package_query.filter_advisories(advisories.value(), libdnf::sack::QueryCmp::EQ);
+        }
+
         for (const auto & spec : pkg_specs) {
             libdnf::rpm::PackageQuery package_query(full_package_query);
             package_query.resolve_pkg_spec(spec, settings, true);
