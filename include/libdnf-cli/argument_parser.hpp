@@ -338,6 +338,14 @@ public:
         /// Gets help text for argument value.
         const std::string & get_arg_value_help() const noexcept { return arg_value_help; }
 
+        /// Create alias for this named arg. The alias is not shown in completion.
+        /// The conflicting args of the alias are copied to match the current conflicting args of this named arg.
+        libdnf::cli::ArgumentParser::NamedArg * add_alias(
+            const std::string & id,
+            const std::string & long_name,
+            char short_name,
+            libdnf::cli::ArgumentParser::Group * group);
+
     private:
         friend class ArgumentParser;
 

@@ -85,70 +85,6 @@ static void register_group_with_args(
     command.register_group(&group);
 }
 
-// Creates a new named argument. The parameters are copied from the `arg` source. Useful for creating aliases.
-static libdnf::cli::ArgumentParser::NamedArg * add_new_named_arg_alias(
-    libdnf::cli::ArgumentParser::NamedArg & src_arg,
-    const std::string & id,
-    const std::string & long_name,
-    char short_name,
-    libdnf::cli::ArgumentParser::Group * group,
-    std::vector<libdnf::cli::ArgumentParser::Argument *> * conflict_args = nullptr) {
-    auto alias = src_arg.get_argument_parser().add_new_named_arg(id);
-    alias->set_long_name(long_name);
-    alias->set_short_name(short_name);
-
-    // Set description
-    std::string descr;
-    if (src_arg.get_short_name() != '\0') {
-        descr = std::string("'-") + src_arg.get_short_name() + "'";
-        if (!src_arg.get_long_name().empty()) {
-            descr += ", ";
-        }
-    }
-    if (!src_arg.get_long_name().empty()) {
-        descr += "'--" + src_arg.get_long_name() + "'";
-    }
-    alias->set_short_description(fmt::format("Alias for {}", descr));
-
-    // Copy from source argument
-    alias->set_has_value(src_arg.get_has_value());
-    alias->link_value(src_arg.get_linked_value());
-    alias->set_store_value(src_arg.get_store_value());
-    alias->set_const_value(src_arg.get_const_value());
-    alias->set_arg_value_help(src_arg.get_arg_value_help());
-    alias->set_parse_hook_func(libdnf::cli::ArgumentParser::NamedArg::ParseHookFunc(src_arg.get_parse_hook_func()));
-
-    // Do not offer aliases in completion
-    alias->set_complete(false);
-
-    if (group) {
-        group->register_argument(alias);
-    }
-
-    // Set conflicts
-    if (conflict_args) {
-        alias->set_conflict_arguments(conflict_args);
-
-        // Set reverse conflicts to alias
-        for (auto * conflict_arg : *conflict_args) {
-            auto * conflict_conflict_args = conflict_arg->get_conflict_arguments();
-            if (conflict_conflict_args) {
-                auto it = std::find(conflict_conflict_args->begin(), conflict_conflict_args->end(), alias);
-                if (it == conflict_conflict_args->end()) {
-                    conflict_conflict_args->push_back(alias);
-                }
-            } else {
-                conflict_conflict_args = src_arg.get_argument_parser().add_conflict_args_group(
-                    std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-                        new std::vector<ArgumentParser::Argument *>{alias}));
-                conflict_arg->set_conflict_arguments(conflict_conflict_args);
-            }
-        }
-    }
-
-    return alias;
-}
-
 class RootCommand : public Command {
 public:
     explicit RootCommand(libdnf::cli::session::Session & context) : Command(context, "dnf5") {}
@@ -299,7 +235,7 @@ void RootCommand::set_argument_parser() {
     best->set_conflict_arguments(best_conflict_args);
     no_best->set_conflict_arguments(no_best_conflict_args);
 
-    add_new_named_arg_alias(*no_best, "nobest", "nobest", '\0', options_aliases_group, no_best_conflict_args);
+    no_best->add_alias("nobest", "nobest", '\0', options_aliases_group);
 
     {
         auto no_docs = parser.add_new_named_arg("no-docs");
@@ -316,7 +252,7 @@ void RootCommand::set_argument_parser() {
         });
         global_options_group->register_argument(no_docs);
 
-        add_new_named_arg_alias(*no_docs, "nodocs", "nodocs", '\0', options_aliases_group);
+        no_docs->add_alias("nodocs", "nodocs", '\0', options_aliases_group);
     }
 
     {
@@ -412,11 +348,9 @@ void RootCommand::set_argument_parser() {
         new std::vector<ArgumentParser::Argument *>{enable_repo_ids, disable_repo_ids}));
     repo_ids->set_conflict_arguments(repo_conflict_args);
 
-    add_new_named_arg_alias(
-        *enable_repo_ids, "enablerepo", "enablerepo", '\0', options_aliases_group, ed_repo_conflict_args);
-    add_new_named_arg_alias(
-        *disable_repo_ids, "disablerepo", "disablerepo", '\0', options_aliases_group, ed_repo_conflict_args);
-    add_new_named_arg_alias(*repo_ids, "repoid", "repoid", '\0', options_aliases_group, repo_conflict_args);
+    enable_repo_ids->add_alias("enablerepo", "enablerepo", '\0', options_aliases_group);
+    disable_repo_ids->add_alias("disablerepo", "disablerepo", '\0', options_aliases_group);
+    repo_ids->add_alias("repoid", "repoid", '\0', options_aliases_group);
 
     auto no_gpgchecks = parser.add_new_named_arg("no-gpgchecks");
     no_gpgchecks->set_long_name("no-gpgchecks");
@@ -433,7 +367,7 @@ void RootCommand::set_argument_parser() {
         return true;
     });
     global_options_group->register_argument(no_gpgchecks);
-    add_new_named_arg_alias(*no_gpgchecks, "nogpgchecks", "nogpgchecks", '\0', options_aliases_group);
+    no_gpgchecks->add_alias("nogpgchecks", "nogpgchecks", '\0', options_aliases_group);
 
     auto no_plugins = parser.add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
@@ -487,22 +421,9 @@ void RootCommand::set_argument_parser() {
             new std::vector<ArgumentParser::Argument *>{enable_plugins_names, disable_plugins_names}));
     no_plugins->set_conflict_arguments(no_plugins_conflict_args);
 
-    add_new_named_arg_alias(
-        *no_plugins, "noplugins", "noplugins", '\0', options_aliases_group, no_plugins_conflict_args);
-    add_new_named_arg_alias(
-        *enable_plugins_names,
-        "enableplugin",
-        "enableplugin",
-        '\0',
-        options_aliases_group,
-        ed_plugins_names_conflict_args);
-    add_new_named_arg_alias(
-        *disable_plugins_names,
-        "disableplugin",
-        "disableplugin",
-        '\0',
-        options_aliases_group,
-        ed_plugins_names_conflict_args);
+    no_plugins->add_alias("noplugins", "noplugins", '\0', options_aliases_group);
+    enable_plugins_names->add_alias("enableplugin", "enableplugin", '\0', options_aliases_group);
+    disable_plugins_names->add_alias("disableplugin", "disableplugin", '\0', options_aliases_group);
 
     auto comment = parser.add_new_named_arg("comment");
     comment->set_long_name("comment");

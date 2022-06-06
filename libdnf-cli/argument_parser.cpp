@@ -835,6 +835,66 @@ ArgumentParser::NamedArg & ArgumentParser::get_named_arg(const std::string & id_
     throw ArgumentParserNotFoundError(M_("Named argument with path id \"{}\" not found"), id_path);
 }
 
+libdnf::cli::ArgumentParser::NamedArg * ArgumentParser::NamedArg::add_alias(
+    const std::string & id,
+    const std::string & long_name,
+    char short_name,
+    libdnf::cli::ArgumentParser::Group * group) {
+    auto * alias = get_argument_parser().add_new_named_arg(id);
+    alias->set_long_name(long_name);
+    alias->set_short_name(short_name);
+
+    // Set description
+    std::string descr;
+    if (get_short_name() != '\0') {
+        descr = std::string("'-") + get_short_name() + "'";
+        if (!get_long_name().empty()) {
+            descr += ", ";
+        }
+    }
+    if (!get_long_name().empty()) {
+        descr += "'--" + get_long_name() + "'";
+    }
+    alias->set_short_description(fmt::format("Alias for {}", descr));
+
+    // Copy from source argument
+    alias->set_has_value(get_has_value());
+    alias->link_value(get_linked_value());
+    alias->set_store_value(get_store_value());
+    alias->set_const_value(get_const_value());
+    alias->set_arg_value_help(get_arg_value_help());
+    alias->set_parse_hook_func(libdnf::cli::ArgumentParser::NamedArg::ParseHookFunc(get_parse_hook_func()));
+
+    // Do not offer aliases in completion
+    alias->set_complete(false);
+
+    if (group) {
+        group->register_argument(alias);
+    }
+
+    if (conflict_args) {
+        alias->set_conflict_arguments(conflict_args);
+
+        // Set reverse conflicts to alias
+        for (auto * conflict_arg : *conflict_args) {
+            auto * conflict_conflict_args = conflict_arg->get_conflict_arguments();
+            if (conflict_conflict_args) {
+                auto it = std::find(conflict_conflict_args->begin(), conflict_conflict_args->end(), alias);
+                if (it == conflict_conflict_args->end()) {
+                    conflict_conflict_args->push_back(alias);
+                }
+            } else {
+                conflict_conflict_args = get_argument_parser().add_conflict_args_group(
+                    std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
+                        new std::vector<ArgumentParser::Argument *>{alias}));
+                conflict_arg->set_conflict_arguments(conflict_conflict_args);
+            }
+        }
+    }
+
+    return alias;
+}
+
 ArgumentParser::PositionalArg & ArgumentParser::get_positional_arg(const std::string & id_path, bool search_in_parent) {
     assert_root_command();
 
