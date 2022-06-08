@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 /// MemoryBufferLogger is an implementation of logging class that stores incoming logging messages into memory buffer.
-/// It is usually used as temporary logger until a final logger is not configured.
+/// It is usually used as temporary logger until a final logger is configured.
 class MemoryBufferLogger : public Logger {
 public:
     struct Item {
