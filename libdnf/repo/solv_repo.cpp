@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_cache_private.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
-#include "utils/fs/file.hpp"
 #include "utils/fs/temp.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -50,6 +49,106 @@ namespace fs = libdnf::utils::fs;
 constexpr auto CHKSUM_TYPE = REPOKEY_TYPE_SHA256;
 constexpr const char * CHKSUM_IDENT = "H000";
 
+
+static std::array<char, SOLV_USERDATA_SOLV_TOOLVERSION_SIZE> get_padded_solv_toolversion() {
+    std::array<char, SOLV_USERDATA_SOLV_TOOLVERSION_SIZE> padded_solv_toolversion{};
+    std::string solv_ver_str{solv_toolversion};
+    std::copy(solv_ver_str.rbegin(), solv_ver_str.rend(), padded_solv_toolversion.rbegin());
+
+    return padded_solv_toolversion;
+}
+
+void SolvRepo::userdata_fill(SolvUserdata * userdata) {
+    if (strlen(solv_toolversion) > SOLV_USERDATA_SOLV_TOOLVERSION_SIZE) {
+        libdnf_throw_assertion(
+            "Libsolv's solv_toolvesion is: {} long but we expect max of: {}",
+            strlen(solv_toolversion),
+            SOLV_USERDATA_SOLV_TOOLVERSION_SIZE);
+    }
+
+    memcpy(userdata->dnf_magic, SOLV_USERDATA_MAGIC.data(), SOLV_USERDATA_MAGIC.size());
+    memcpy(userdata->dnf_version, SOLV_USERDATA_DNF_VERSION.data(), SOLV_USERDATA_DNF_VERSION.size());
+    memcpy(userdata->libsolv_version, get_padded_solv_toolversion().data(), SOLV_USERDATA_SOLV_TOOLVERSION_SIZE);
+    memcpy(userdata->checksum, checksum, CHKSUM_BYTES);
+}
+
+bool SolvRepo::can_use_solvfile_cache(fs::File & solvfile_cache) {
+    auto & logger = *base->get_logger();
+
+    if (!solvfile_cache) {
+        logger.debug(("Missing solvfile cache: \"{}\""), solvfile_cache.get_path().native());
+        return false;
+    }
+
+    unsigned char * dnf_solv_userdata_read;
+    int dnf_solv_userdata_len_read;
+
+    int ret_code = solv_read_userdata(solvfile_cache.get(), &dnf_solv_userdata_read, &dnf_solv_userdata_len_read);
+    std::unique_ptr<SolvUserdata> solv_userdata(reinterpret_cast<SolvUserdata *>(dnf_solv_userdata_read));
+    if (ret_code != 0) {
+        auto & pool = get_pool(base);
+        logger.warning(
+            ("Failed to read solv userdata: \"{}\": for: {}"), pool_errstr(*pool), solvfile_cache.get_path().native());
+        return false;
+    }
+
+    if (dnf_solv_userdata_len_read != SOLV_USERDATA_SIZE) {
+        logger.warning(
+            ("Solv userdata length mismatch read: \"{}\" vs expected \"{}\" for: {}"),
+            dnf_solv_userdata_len_read,
+            SOLV_USERDATA_SIZE,
+            solvfile_cache.get_path().native());
+        return false;
+    }
+
+    // check dnf solvfile magic bytes
+    if (memcmp(solv_userdata->dnf_magic, SOLV_USERDATA_MAGIC.data(), SOLV_USERDATA_MAGIC.size()) != 0) {
+        logger.warning(
+            "Magic bytes don't match, read: \"{}\" vs. dnf solvfile magic: \"{}\" for: {}",
+            solv_userdata->dnf_magic,
+            SOLV_USERDATA_MAGIC.data(),
+            solvfile_cache.get_path().native());
+        return false;
+    }
+
+    // check dnf solvfile version
+    if (memcmp(solv_userdata->dnf_version, SOLV_USERDATA_DNF_VERSION.data(), SOLV_USERDATA_DNF_VERSION.size()) != 0) {
+        logger.warning(
+            "Dnf solvfile version doesn't match, read: \"{}\" vs. expected dnf solvfile version: \"{}\" for: {}",
+            solv_userdata->dnf_version,
+            SOLV_USERDATA_DNF_VERSION.data(),
+            solvfile_cache.get_path().native());
+        return false;
+    }
+
+    // check libsolv solvfile version
+    if (memcmp(
+            solv_userdata->libsolv_version,
+            get_padded_solv_toolversion().data(),
+            SOLV_USERDATA_SOLV_TOOLVERSION_SIZE) != 0) {
+        logger.warning(
+            "Libsolv solvfile version doesn't match, read: \"{}\" vs. expected libsolv version: \"{}\" for: {}",
+            solv_userdata->libsolv_version,
+            solv_toolversion,
+            solvfile_cache.get_path().native());
+        return false;
+    }
+
+    // check solvfile checksum
+    if (memcmp(solv_userdata->checksum, checksum, CHKSUM_BYTES) != 0) {
+        logger.debug(
+            "Solvfile's repomd checksum doesn't match, read: \"{}\" vs. expected repomd checksum: \"{}\" for: {}",
+            solv_userdata->checksum,
+            checksum,
+            solvfile_cache.get_path().native());
+        return false;
+    }
+
+    solvfile_cache.rewind();
+    return true;
+}
+
+
 // Computes checksum of data in opened file.
 // Calls rewind(fp) before returning.
 void checksum_calc(unsigned char * out, fs::File & file) {
@@ -65,29 +164,6 @@ void checksum_calc(unsigned char * out, fs::File & file) {
     }
     file.rewind();
     solv_chksum_free(h, out);
-}
-
-// Appends checksum to the end of file.
-// Moves fp to the end of file.
-void checksum_write(const unsigned char * cs, fs::File & file) {
-    file.seek(0, SEEK_END);
-    file.write(cs, CHKSUM_BYTES);
-}
-
-// Checks checksum of data in an opened file.
-// Rewinds the file before returning.
-bool can_use_repomd_cache(fs::File & file, unsigned char cs_repomd[CHKSUM_BYTES]) {
-    if (!file) {
-        return false;
-    }
-
-    unsigned char cs_cache[CHKSUM_BYTES] = {};
-
-    file.seek(-CHKSUM_BYTES, SEEK_END);
-    file.read(cs_cache, CHKSUM_BYTES);  // short read not checked, it'd just cause checksum mismatch
-    file.rewind();
-
-    return memcmp(cs_cache, cs_repomd, CHKSUM_BYTES) == 0;
 }
 
 
@@ -387,7 +463,7 @@ bool SolvRepo::load_solv_cache(const char * type, int flags) {
     try {
         fs::File cache_file(path, "r");
 
-        if (can_use_repomd_cache(cache_file, checksum)) {
+        if (can_use_solvfile_cache(cache_file)) {
             logger.debug("Loading solv cache file: \"{}\"", path.native());
             if (repo_add_solv(repo, cache_file.get(), flags) != 0) {
                 throw SolvError(
@@ -398,8 +474,6 @@ bool SolvRepo::load_solv_cache(const char * type, int flags) {
                     pool_errstr(*get_pool(base)));
             }
             return true;
-        } else {
-            logger.trace("Cache file \"{}\" checksum mismatch, not loading", path.native());
         }
     } catch (const std::filesystem::filesystem_error & e) {
         if (e.code().default_error_condition() == std::errc::no_such_file_or_directory) {
@@ -433,7 +507,11 @@ void SolvRepo::write_main(bool load_after_write) {
         cache_tmp_file.get_path().native(),
         chksum);
 
+    SolvUserdata solv_userdata{};
+    userdata_fill(&solv_userdata);
+
     Repowriter * writer = repowriter_create(repo);
+    repowriter_set_userdata(writer, &solv_userdata, SOLV_USERDATA_SIZE);
     repowriter_set_solvablerange(writer, main_solvables_start, main_solvables_end);
     int res = repowriter_write(writer, cache_file.get());
     repowriter_free(writer);
@@ -445,8 +523,6 @@ void SolvRepo::write_main(bool load_after_write) {
             cache_tmp_file.get_path().native(),
             pool_errstr(*pool));
     }
-
-    checksum_write(checksum, cache_file);
 
     cache_tmp_file.close();
 
@@ -492,7 +568,12 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
         config.get_id(),
         cache_tmp_file.get_path().native());
 
+
+    SolvUserdata solv_userdata{};
+    userdata_fill(&solv_userdata);
+
     Repowriter * writer = repowriter_create(repo);
+    repowriter_set_userdata(writer, &solv_userdata, SOLV_USERDATA_SIZE);
     repowriter_set_repodatarange(writer, repodata_id, repodata_id + 1);
 
     if (type == RepodataType::UPDATEINFO) {
@@ -514,8 +595,6 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
             cache_tmp_file.get_path().native(),
             pool_errstr(*pool));
     }
-
-    checksum_write(checksum, cache_file);
 
     cache_tmp_file.close();
 

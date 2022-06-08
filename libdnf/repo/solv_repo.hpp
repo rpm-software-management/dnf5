@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_downloader.hpp"
 #include "solv/id_queue.hpp"
+#include "utils/fs/file.hpp"
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
@@ -32,8 +33,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 
 
-const constexpr int CHKSUM_BYTES = 32;
+static const constexpr size_t CHKSUM_BYTES = 32;
+static const constexpr size_t SOLV_USERDATA_SOLV_TOOLVERSION_SIZE{8};
+static const constexpr std::array<char, 4> SOLV_USERDATA_MAGIC{'\0', 'd', 'n', 'f'};
+static const constexpr std::array<char, 4> SOLV_USERDATA_DNF_VERSION{'\0', '1', '.', '0'};
 
+static constexpr const size_t SOLV_USERDATA_SIZE =
+    SOLV_USERDATA_SOLV_TOOLVERSION_SIZE + SOLV_USERDATA_MAGIC.size() + SOLV_USERDATA_DNF_VERSION.size() + CHKSUM_BYTES;
+
+struct SolvUserdata {
+    char dnf_magic[SOLV_USERDATA_MAGIC.size()];
+    char dnf_version[SOLV_USERDATA_DNF_VERSION.size()];
+    char libsolv_version[SOLV_USERDATA_SOLV_TOOLVERSION_SIZE];
+    unsigned char checksum[CHKSUM_BYTES];
+} __attribute__((packed));
 
 namespace libdnf::repo {
 
@@ -103,6 +116,9 @@ private:
     int comps_solvables_end{0};
     int updateinfo_solvables_start{0};
     int updateinfo_solvables_end{0};
+
+    bool can_use_solvfile_cache(utils::fs::File & solvfile_cache);
+    void userdata_fill(SolvUserdata * userdata);
 
 public:
     ::Repo * repo{nullptr};  // libsolv pool retains ownership

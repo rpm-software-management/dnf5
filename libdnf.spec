@@ -51,7 +51,7 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 
 %global libmodulemd_version 2.5.0
 %global librepo_version 1.13.0
-%global libsolv_version 0.7.7
+%global libsolv_version 0.7.21
 %global swig_version 4
 %global zchunk_version 0.9.11
 
