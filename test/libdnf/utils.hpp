@@ -256,6 +256,22 @@ struct assertion_traits<libdnf::system::GroupState> {
     }
 };
 
+template <>
+struct assertion_traits<libdnf::system::ModuleState> {
+    inline static bool equal(const libdnf::system::ModuleState & left, const libdnf::system::ModuleState & right) {
+        return left.enabled_stream == right.enabled_stream && left.state == right.state &&
+               left.installed_profiles == right.installed_profiles;
+    }
+
+    inline static std::string toString(const libdnf::system::ModuleState & module_state) {
+        return libdnf::utils::sformat(
+            "ModuleState: enabled_stream: {}, state: {}, installed_profiles: {}",
+            module_state.enabled_stream,
+            libdnf::module::module_state_to_string(module_state.state),
+            assertion_traits<std::vector<std::string>>::toString(module_state.installed_profiles));
+    }
+};
+
 }  // namespace CPPUNIT_NS
 
 

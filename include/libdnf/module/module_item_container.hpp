@@ -82,6 +82,19 @@ private:
 };
 
 
+class InvalidModuleState : public libdnf::Error {
+public:
+    InvalidModuleState(const std::string & state);
+
+    const char * get_domain_name() const noexcept override { return "libdnf::module"; }
+    const char * get_name() const noexcept override { return "InvalidModuleState"; }
+};
+
+
+std::string module_state_to_string(ModuleState state);
+ModuleState module_state_from_string(const std::string & state);
+
+
 }  // namespace libdnf::module
 
 

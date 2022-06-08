@@ -104,6 +104,34 @@ struct into<libdnf::system::GroupState> {
     }
 };
 
+
+template <>
+struct from<libdnf::system::ModuleState> {
+    static libdnf::system::ModuleState from_toml(const value & v) {
+        libdnf::system::ModuleState module_state;
+
+        module_state.enabled_stream = toml::find<std::string>(v, "enabled_stream");
+        module_state.state = libdnf::module::module_state_from_string(toml::find<std::string>(v, "state"));
+        module_state.installed_profiles = toml::find<std::vector<std::string>>(v, "installed_profiles");
+
+        return module_state;
+    }
+};
+
+
+template <>
+struct into<libdnf::system::ModuleState> {
+    static toml::value into_toml(const libdnf::system::ModuleState & module_state) {
+        toml::value res;
+
+        res["enabled_stream"] = module_state.enabled_stream;
+        res["state"] = libdnf::module::module_state_to_string(module_state.state);
+        res["installed_profiles"] = module_state.installed_profiles;
+
+        return res;
+    }
+};
+
 }  // namespace toml
 
 
@@ -189,12 +217,63 @@ void State::remove_group_state(const std::string & id) {
 }
 
 
+std::string State::get_module_enabled_stream(const std::string & name) {
+    auto it = module_states.find(name);
+    if (it == module_states.end()) {
+        throw StateNotFoundError("Module", name);
+    }
+
+    return it->second.enabled_stream;
+}
+
+
+void State::set_module_enabled_stream(const std::string & name, const std::string & stream) {
+    module_states[name].enabled_stream = stream;
+}
+
+
+module::ModuleState State::get_module_state(const std::string & name) {
+    auto it = module_states.find(name);
+    if (it == module_states.end()) {
+        throw StateNotFoundError("Module", name);
+    }
+
+    return it->second.state;
+}
+
+
+void State::set_module_state(const std::string & name, module::ModuleState state) {
+    module_states[name].state = state;
+}
+
+
+std::vector<std::string> State::get_module_installed_profiles(const std::string & name) {
+    auto it = module_states.find(name);
+    if (it == module_states.end()) {
+        throw StateNotFoundError("Module", name);
+    }
+
+    return it->second.installed_profiles;
+}
+
+
+void State::set_module_installed_profiles(const std::string & name, const std::vector<std::string> & profiles) {
+    module_states[name].installed_profiles = profiles;
+}
+
+
+void State::remove_module_state(const std::string & name) {
+    module_states.erase(name);
+}
+
+
 void State::save() {
     std::filesystem::create_directories(path);
 
     utils::fs::File(get_package_state_path(), "w").write(toml::format(toml::value({{"packages", package_states}})));
     utils::fs::File(get_nevra_state_path(), "w").write(toml::format(toml::value({{"nevras", nevra_states}})));
     utils::fs::File(get_group_state_path(), "w").write(toml::format(toml::value({{"groups", group_states}})));
+    utils::fs::File(get_module_state_path(), "w").write(toml::format(toml::value({{"modules", module_states}})));
 }
 
 
@@ -214,6 +293,7 @@ void State::load() {
     package_states = load_toml_to_map<PackageState>(get_package_state_path(), "packages");
     nevra_states = load_toml_to_map<NevraState>(get_nevra_state_path(), "nevras");
     group_states = load_toml_to_map<GroupState>(get_group_state_path(), "groups");
+    module_states = load_toml_to_map<ModuleState>(get_module_state_path(), "modules");
 }
 
 
@@ -229,6 +309,11 @@ std::filesystem::path State::get_nevra_state_path() {
 
 std::filesystem::path State::get_group_state_path() {
     return path / "groups.toml";
+}
+
+
+std::filesystem::path State::get_module_state_path() {
+    return path / "modules.toml";
 }
 
 }  // namespace libdnf::system

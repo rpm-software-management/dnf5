@@ -52,6 +52,17 @@ group-1 = {packages=["foo","bar"],userinstalled=true}
 
 )"""};
 
+static const std::string modules_contents{R"""(
+[modules]
+module-2 = {installed_profiles=[],state="Disabled",enabled_stream="stream-2"}
+
+[modules.module-1]
+installed_profiles = ["zigg","zagg"]
+state = "Enabled"
+enabled_stream = "stream-1"
+
+)"""};
+
 
 void StateTest::setUp() {
     BaseTestCase::setUp();
@@ -62,6 +73,7 @@ void StateTest::setUp() {
     libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(packages_contents);
     libdnf::utils::fs::File(temp_dir->get_path() / "nevras.toml", "w").write(nevras_contents);
     libdnf::utils::fs::File(temp_dir->get_path() / "groups.toml", "w").write(groups_contents);
+    libdnf::utils::fs::File(temp_dir->get_path() / "modules.toml", "w").write(modules_contents);
 }
 
 void StateTest::tearDown() {
@@ -83,6 +95,13 @@ void StateTest::test_state_read() {
     CPPUNIT_ASSERT_EQUAL(grp_state_1, state.get_group_state("group-1"));
     libdnf::system::GroupState grp_state_2{.userinstalled = false, .packages = {"pkg1", "pkg2"}};
     CPPUNIT_ASSERT_EQUAL(grp_state_2, state.get_group_state("group-2"));
+
+    CPPUNIT_ASSERT_EQUAL(std::string("stream-1"), state.get_module_enabled_stream("module-1"));
+    CPPUNIT_ASSERT_EQUAL(libdnf::module::ModuleState::ENABLED, state.get_module_state("module-1"));
+    std::vector<std::string> module_1_installed_profiles{"zigg", "zagg"};
+    CPPUNIT_ASSERT_EQUAL(module_1_installed_profiles, state.get_module_installed_profiles("module-1"));
+    CPPUNIT_ASSERT_EQUAL(std::string("stream-2"), state.get_module_enabled_stream("module-2"));
+    CPPUNIT_ASSERT_EQUAL(libdnf::module::ModuleState::DISABLED, state.get_module_state("module-2"));
 }
 
 void StateTest::test_state_write() {
@@ -101,16 +120,25 @@ void StateTest::test_state_write() {
     state.set_group_state("group-1", {.userinstalled = true, .packages = {"foo", "bar"}});
     state.set_group_state("group-2", {.userinstalled = false, .packages = {"pkg1", "pkg2"}});
 
+    state.set_module_enabled_stream("module-1", "stream-1");
+    state.set_module_state("module-1", libdnf::module::ModuleState::ENABLED);
+    state.set_module_installed_profiles("module-1", {"zigg", "zagg"});
+
+    state.set_module_enabled_stream("module-2", "stream-2");
+    state.set_module_state("module-2", libdnf::module::ModuleState::DISABLED);
+
     state.save();
 
     CPPUNIT_ASSERT_EQUAL(packages_contents, libdnf::utils::fs::File(path / "packages.toml", "r").read());
     CPPUNIT_ASSERT_EQUAL(nevras_contents, libdnf::utils::fs::File(path / "nevras.toml", "r").read());
     CPPUNIT_ASSERT_EQUAL(groups_contents, libdnf::utils::fs::File(path / "groups.toml", "r").read());
+    CPPUNIT_ASSERT_EQUAL(modules_contents, libdnf::utils::fs::File(path / "modules.toml", "r").read());
 
     // Test removes
     state.remove_package_na_state("pkg.x86_64");
     state.remove_package_nevra_state("pkg-1.2-1.x86_64");
     state.remove_group_state("group-1");
+    state.remove_module_state("module-1");
 
     state.save();
 
@@ -134,4 +162,11 @@ void StateTest::test_state_write() {
         R"""(groups = {group-2={packages=["pkg1","pkg2"],userinstalled=false}}
 )"""};
     CPPUNIT_ASSERT_EQUAL(groups_contents_after_remove, libdnf::utils::fs::File(path / "groups.toml", "r").read());
+
+    const std::string modules_contents_after_remove{R"""(
+[modules]
+module-2 = {installed_profiles=[],state="Disabled",enabled_stream="stream-2"}
+
+)"""};
+    CPPUNIT_ASSERT_EQUAL(modules_contents_after_remove, libdnf::utils::fs::File(path / "modules.toml", "r").read());
 }
