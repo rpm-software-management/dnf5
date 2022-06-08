@@ -620,11 +620,20 @@ int main(int argc, char * argv[]) try {
             close(fd);
         }
 
-        // Swap to destination logger (log to file) and write messages from memory buffer logger to it
-        auto log_file = fs::path(base.get_config().logdir().get_value()) / "dnf5.log";
+        auto log_dir_full_path = fs::path(base.get_config().installroot().get_value());
+        log_dir_full_path += base.get_config().logdir().get_value();
+        std::filesystem::create_directories(log_dir_full_path);
+        auto log_file = log_dir_full_path / "dnf5.log";
         auto log_stream = std::make_unique<std::ofstream>(log_file, std::ios::app);
+        if (!log_stream->is_open()) {
+            throw std::runtime_error(fmt::format("Cannot open log file: {}: {}", log_file.c_str(), strerror(errno)));
+        }
+        // Throw exceptions if there is an error while writing to the log stream
+        log_stream->exceptions(std::ios::badbit | std::ios::failbit);
         std::unique_ptr<libdnf::Logger> logger = std::make_unique<libdnf::StreamLogger>(std::move(log_stream));
+        // Swap to destination stream logger (log to file)
         log_router.swap_logger(logger, 0);
+        // Write messages from memory buffer logger to stream logger
         dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
 
         base.setup();
