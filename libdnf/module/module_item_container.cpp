@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/module/module_item_container.hpp"
 
 #include "module/module_metadata.hpp"
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/base/base_weak.hpp"
@@ -69,5 +70,38 @@ BaseWeakPtr ModuleItemContainer::get_base() const {
     return base;
 }
 
+
+InvalidModuleState::InvalidModuleState(const std::string & state)
+    : libdnf::Error(M_("Invalid module state: {}"), state) {}
+
+
+std::string module_state_to_string(ModuleState state) {
+    switch (state) {
+        case ModuleState::AVAILABLE:
+            return "Available";
+        case ModuleState::DEFAULT:
+            return "Default";
+        case ModuleState::ENABLED:
+            return "Enabled";
+        case ModuleState::DISABLED:
+            return "Disabled";
+    }
+    return "";
+}
+
+
+ModuleState module_state_from_string(const std::string & state) {
+    if (state == "Available") {
+        return ModuleState::AVAILABLE;
+    } else if (state == "Default") {
+        return ModuleState::DEFAULT;
+    } else if (state == "Enabled") {
+        return ModuleState::ENABLED;
+    } else if (state == "Disabled") {
+        return ModuleState::DISABLED;
+    }
+
+    throw InvalidModuleState(state);
+}
 
 }  // namespace libdnf::module

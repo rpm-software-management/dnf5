@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_SYSTEM_STATE_HPP
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/module/module_item_container.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
@@ -45,6 +46,15 @@ class GroupState {
 public:
     bool userinstalled{false};
     std::vector<std::string> packages;
+};
+
+// TODO(lukash) same class name as module::ModuleState
+// probably better to name differently, although right now this class isn't on the interface and could be "hidden"
+class ModuleState {
+public:
+    std::string enabled_stream;
+    module::ModuleState state{module::ModuleState::AVAILABLE};
+    std::vector<std::string> installed_profiles;
 };
 
 
@@ -118,6 +128,22 @@ public:
     /// @since 5.0
     void remove_group_state(const std::string & id);
 
+    std::string get_module_enabled_stream(const std::string & name);
+
+    void set_module_enabled_stream(const std::string & name, const std::string & stream);
+
+    module::ModuleState get_module_state(const std::string & name);
+
+    // TODO(lukash) if not called, the state will be the default value: ModuleState::AVAILABLE
+    // might be better to ensure this always gets set?
+    void set_module_state(const std::string & name, module::ModuleState state);
+
+    std::vector<std::string> get_module_installed_profiles(const std::string & name);
+
+    void set_module_installed_profiles(const std::string & name, const std::vector<std::string> & profiles);
+
+    void remove_module_state(const std::string & name);
+
     /// Saves the system state to the filesystem path specified in constructor.
     /// @since 5.0
     void save();
@@ -139,11 +165,16 @@ private:
     /// @since 5.0
     std::filesystem::path get_group_state_path();
 
+    /// @return The path to the toml file containing the module data.
+    /// @since 5.0
+    std::filesystem::path get_module_state_path();
+
     std::filesystem::path path;
 
     std::map<std::string, PackageState> package_states;
     std::map<std::string, NevraState> nevra_states;
     std::map<std::string, GroupState> group_states;
+    std::map<std::string, ModuleState> module_states;
 };
 
 }  // namespace libdnf::system
