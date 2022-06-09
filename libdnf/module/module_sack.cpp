@@ -425,21 +425,12 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
     // No strict requirements
     ModuleGoalPrivate goal_weak(base->get_module_sack()->get_weak_ptr());
 
-    ModuleStatus status;
-
     for (const auto & module_item : module_items) {
         // Create "module(name:stream)" provide reldep
         const Id reldep_id = pool_str2id(pool, fmt::format("module({})", module_item->get_name_stream()).c_str(), 1);
-
-        try {
-            status = base->p_impl->get_system_state().get_module_state(module_item->get_name()).status;
-        } catch (libdnf::system::StateNotFoundError &) {
-            status = ModuleStatus::AVAILABLE;
-        }
-
         goal_strict.add_provide_install(reldep_id, 0, 1);
         goal_weak.add_provide_install(reldep_id, 1, 0);
-        if (status == ModuleStatus::ENABLED) {
+        if (module_db->get_status(module_item->get_name()) == ModuleStatus::ENABLED) {
             goal_best.add_provide_install(reldep_id, 0, 1);
             goal.add_provide_install(reldep_id, 0, 0);
         } else {
@@ -666,25 +657,19 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
 std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType>
 ModuleSack::resolve_active_module_items() {
     p_impl->excludes.reset(new libdnf::solv::SolvMap(p_impl->pool->nsolvables));
+    p_impl->module_db->initialize();
 
-    auto system_state = p_impl->base->p_impl->get_system_state();
-    system::ModuleState module_state;
     ModuleStatus status;
-    std::string enabled_stream;
     std::vector<ModuleItem *> module_items_to_solve;
     // Use only enabled or default modules for transaction
     for (const auto & module_item : get_modules()) {
         const auto & module_name = module_item->get_name();
-        try {
-            module_state = system_state.get_module_state(module_name);
-            status = module_state.status;
-            enabled_stream = module_state.enabled_stream;
-        } catch (libdnf::system::StateNotFoundError &) {
-            status = ModuleStatus::AVAILABLE;
-        }
+        status = p_impl->module_db->get_status(module_name);
         if (status == ModuleStatus::DISABLED) {
             p_impl->excludes->add(module_item->id.id);
-        } else if (status == ModuleStatus::ENABLED && enabled_stream == module_item->get_stream()) {
+        } else if (
+            status == ModuleStatus::ENABLED &&
+            p_impl->module_db->get_enabled_stream(module_name) == module_item->get_stream()) {
             module_items_to_solve.push_back(module_item.get());
         } else if (get_default_stream(module_name) == module_item->get_stream()) {
             module_items_to_solve.push_back(module_item.get());

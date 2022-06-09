@@ -191,6 +191,10 @@ public:
     /// @since 5.0
     void remove_environment_state(const std::string & id);
 
+    /// @return All module states.
+    /// @since 5.0.8
+    const std::map<std::string, ModuleState> & get_module_states();
+
     /// @return The state of a module.
     /// @param name The module id to get the state for.
     /// @since 5.0.8

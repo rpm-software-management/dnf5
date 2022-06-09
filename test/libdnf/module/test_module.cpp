@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_module.hpp"
 
 #include "../shared/utils.hpp"
+#include "module/module_db.hpp"
 #include "utils/fs/file.hpp"
 
 #include "libdnf/module/module_errors.hpp"
@@ -556,4 +557,45 @@ void ModuleTest::test_query_spec() {
         CPPUNIT_ASSERT_EQUAL(return_value.first, false);
         CPPUNIT_ASSERT_EQUAL((size_t)0, query.size());
     }
+}
+
+
+void ModuleTest::test_module_db() {
+    add_repo_repomd("repomd-modules");
+
+    ModuleDB module_db = ModuleDB(base.get_weak_ptr());
+    module_db.initialize();
+
+    // Check initial state of a module that wasn't in the `system::state`
+    CPPUNIT_ASSERT_EQUAL(ModuleStatus::AVAILABLE, module_db.get_status("meson"));
+    CPPUNIT_ASSERT_EQUAL(std::string(""), module_db.get_enabled_stream("meson"));
+    CPPUNIT_ASSERT_EQUAL(std::vector<std::string>(), module_db.get_installed_profiles("meson"));
+
+    CPPUNIT_ASSERT(module_db.get_all_newly_disabled_modules().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_reset_modules().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_enabled_streams().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_disabled_streams().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_reset_streams().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_switched_streams().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_installed_profiles().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_removed_profiles().empty());
+
+    // Check state of a module after modification
+    CPPUNIT_ASSERT(module_db.change_status("meson", ModuleStatus::ENABLED));
+    CPPUNIT_ASSERT(module_db.change_stream("meson", "master"));
+    CPPUNIT_ASSERT(module_db.add_profile("meson", "default"));
+    CPPUNIT_ASSERT_EQUAL(ModuleStatus::ENABLED, module_db.get_status("meson"));
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), module_db.get_enabled_stream("meson"));
+    CPPUNIT_ASSERT_EQUAL(std::vector<std::string>({"default"}), module_db.get_installed_profiles("meson"));
+
+    CPPUNIT_ASSERT(module_db.get_all_newly_disabled_modules().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_reset_modules().empty());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, module_db.get_all_newly_enabled_streams().size());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), module_db.get_all_newly_enabled_streams()["meson"]);
+    CPPUNIT_ASSERT(module_db.get_all_newly_disabled_streams().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_reset_streams().empty());
+    CPPUNIT_ASSERT(module_db.get_all_newly_switched_streams().empty());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, module_db.get_all_newly_installed_profiles().size());
+    CPPUNIT_ASSERT_EQUAL(std::vector<std::string>({"default"}), module_db.get_all_newly_installed_profiles()["meson"]);
+    CPPUNIT_ASSERT(module_db.get_all_newly_removed_profiles().empty());
 }
