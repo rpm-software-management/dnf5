@@ -399,6 +399,11 @@ std::vector<std::string> State::get_installed_groups() {
 }
 
 
+const std::map<std::string, ModuleState> & State::get_module_states() {
+    return module_states;
+}
+
+
 ModuleState State::get_module_state(const std::string & name) {
     auto it = module_states.find(name);
     if (it == module_states.end()) {

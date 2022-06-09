@@ -20,9 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
 #define LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
 
+#include "base/base_impl.hpp"
+#include "module/module_db.hpp"
 #include "module/module_metadata.hpp"
 #include "solv/solv_map.hpp"
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/rpm/reldep_list.hpp"
 
@@ -46,7 +49,8 @@ public:
         : module_sack(&module_sack),
           base(base),
           module_metadata(base),
-          pool(pool_create()) {
+          pool(pool_create()),
+          module_db(new ModuleDB(base)) {
         pool_set_flag(pool, POOL_FLAG_WHATPROVIDESWITHDISABLED, 1);
     }
     ~Impl() {
@@ -125,6 +129,8 @@ private:
     std::map<std::string, std::string> module_defaults;
     std::unique_ptr<libdnf::solv::SolvMap> excludes;
     std::map<Id, ModuleItem *> active_modules;
+
+    std::unique_ptr<ModuleDB> module_db;
 
     /// @brief Method for autodetection of the platform id.
     /// @return If platform id was detected, it returns a pair where the first item is the platform

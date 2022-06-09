@@ -39,6 +39,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <map>
 
 
+namespace libdnf::module {
+
+class ModuleDB;
+
+}
+
+
 namespace libdnf {
 
 using LogRouterWeakPtr = WeakPtr<LogRouter, false>;
@@ -117,6 +124,7 @@ private:
     friend class libdnf::Goal;
     friend class libdnf::rpm::Package;
     friend class libdnf::advisory::AdvisoryQuery;
+    friend class libdnf::module::ModuleDB;
     friend class libdnf::module::ModuleSack;
     friend class libdnf::repo::RepoSack;
     friend class libdnf::repo::SolvRepo;
