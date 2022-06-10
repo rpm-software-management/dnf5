@@ -384,7 +384,8 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
 void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir) {
     std::vector<libdnf::rpm::Package> downloads;
     for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (transaction_item_action_is_inbound(tspkg.get_action())) {
+        if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+            tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
             downloads.push_back(tspkg.get_package());
         }
     }
