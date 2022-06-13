@@ -242,6 +242,20 @@ struct assertion_traits<libdnf::system::NevraState> {
     }
 };
 
+template <>
+struct assertion_traits<libdnf::system::GroupState> {
+    inline static bool equal(const libdnf::system::GroupState & left, const libdnf::system::GroupState & right) {
+        return left.userinstalled == right.userinstalled && left.packages == right.packages;
+    }
+
+    inline static std::string toString(const libdnf::system::GroupState & group_state) {
+        return libdnf::utils::sformat(
+            "GroupState: userinstalled: {}, packages: {}",
+            group_state.userinstalled,
+            assertion_traits<std::vector<std::string>>::toString(group_state.packages));
+    }
+};
+
 }  // namespace CPPUNIT_NS
 
 

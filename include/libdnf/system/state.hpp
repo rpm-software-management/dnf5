@@ -41,6 +41,12 @@ public:
     std::string from_repo;
 };
 
+class GroupState {
+public:
+    bool userinstalled{false};
+    std::vector<std::string> packages;
+};
+
 
 class StateNotFoundError : public libdnf::Error {
 public:
@@ -96,6 +102,22 @@ public:
     /// @since 5.0
     void remove_package_nevra_state(const std::string & nevra);
 
+    /// @return The reason for a group id.
+    /// @param id The group id to get the reason for.
+    /// @since 5.0
+    GroupState get_group_state(const std::string & id);
+
+    /// Sets the reason for a group id.
+    /// @param id The group id to set the reason for.
+    /// @param reason The reason to set.
+    /// @since 5.0
+    void set_group_state(const std::string & id, const GroupState & group_state);
+
+    /// Removes the state for a group id.
+    /// @param na The id to remove the state for.
+    /// @since 5.0
+    void remove_group_state(const std::string & id);
+
     /// Saves the system state to the filesystem path specified in constructor.
     /// @since 5.0
     void save();
@@ -113,10 +135,15 @@ private:
     /// @since 5.0
     std::filesystem::path get_nevra_state_path();
 
+    /// @return The path to the toml file containing the group data.
+    /// @since 5.0
+    std::filesystem::path get_group_state_path();
+
     std::filesystem::path path;
 
     std::map<std::string, PackageState> package_states;
     std::map<std::string, NevraState> nevra_states;
+    std::map<std::string, GroupState> group_states;
 };
 
 }  // namespace libdnf::system

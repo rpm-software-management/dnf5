@@ -44,6 +44,14 @@ static const std::string nevras_contents{R"""(
 
 )"""};
 
+// TODO(lukash) alphabetic sorting
+static const std::string groups_contents{R"""(
+[groups]
+group-2 = {packages=["pkg1","pkg2"],userinstalled=false}
+group-1 = {packages=["foo","bar"],userinstalled=true}
+
+)"""};
+
 
 void StateTest::setUp() {
     BaseTestCase::setUp();
@@ -53,6 +61,7 @@ void StateTest::setUp() {
 
     libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(packages_contents);
     libdnf::utils::fs::File(temp_dir->get_path() / "nevras.toml", "w").write(nevras_contents);
+    libdnf::utils::fs::File(temp_dir->get_path() / "groups.toml", "w").write(groups_contents);
 }
 
 void StateTest::tearDown() {
@@ -69,6 +78,11 @@ void StateTest::test_state_read() {
 
     CPPUNIT_ASSERT_EQUAL(std::string("repo1"), state.get_package_from_repo("pkg-1.2-1.x86_64"));
     CPPUNIT_ASSERT_EQUAL(std::string("repo2"), state.get_package_from_repo("unresolvable-1.2-1.noarch"));
+
+    libdnf::system::GroupState grp_state_1{.userinstalled = true, .packages = {"foo", "bar"}};
+    CPPUNIT_ASSERT_EQUAL(grp_state_1, state.get_group_state("group-1"));
+    libdnf::system::GroupState grp_state_2{.userinstalled = false, .packages = {"pkg1", "pkg2"}};
+    CPPUNIT_ASSERT_EQUAL(grp_state_2, state.get_group_state("group-2"));
 }
 
 void StateTest::test_state_write() {
@@ -84,14 +98,19 @@ void StateTest::test_state_write() {
     state.set_package_from_repo("unresolvable-1.2-1.noarch", "repo2");
     state.set_package_from_repo("pkg-libs-1.2-1.x86_64", "");
 
+    state.set_group_state("group-1", {.userinstalled = true, .packages = {"foo", "bar"}});
+    state.set_group_state("group-2", {.userinstalled = false, .packages = {"pkg1", "pkg2"}});
+
     state.save();
 
     CPPUNIT_ASSERT_EQUAL(packages_contents, libdnf::utils::fs::File(path / "packages.toml", "r").read());
     CPPUNIT_ASSERT_EQUAL(nevras_contents, libdnf::utils::fs::File(path / "nevras.toml", "r").read());
+    CPPUNIT_ASSERT_EQUAL(groups_contents, libdnf::utils::fs::File(path / "groups.toml", "r").read());
 
     // Test removes
     state.remove_package_na_state("pkg.x86_64");
     state.remove_package_nevra_state("pkg-1.2-1.x86_64");
+    state.remove_group_state("group-1");
 
     state.save();
 
@@ -110,4 +129,9 @@ void StateTest::test_state_write() {
 
 )"""};
     CPPUNIT_ASSERT_EQUAL(nevras_contents_after_remove, libdnf::utils::fs::File(path / "nevras.toml", "r").read());
+
+    const std::string groups_contents_after_remove{
+        R"""(groups = {group-2={packages=["pkg1","pkg2"],userinstalled=false}}
+)"""};
+    CPPUNIT_ASSERT_EQUAL(groups_contents_after_remove, libdnf::utils::fs::File(path / "groups.toml", "r").read());
 }
