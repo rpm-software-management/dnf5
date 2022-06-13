@@ -76,6 +76,34 @@ struct into<libdnf::system::NevraState> {
     }
 };
 
+
+template <>
+struct from<libdnf::system::GroupState> {
+    static libdnf::system::GroupState from_toml(const value & v) {
+        libdnf::system::GroupState group_state;
+
+        group_state.userinstalled = toml::find<bool>(v, "userinstalled");
+        if (v.contains("packages")) {
+            group_state.packages = toml::find<std::vector<std::string>>(v, "packages");
+        }
+
+        return group_state;
+    }
+};
+
+
+template <>
+struct into<libdnf::system::GroupState> {
+    static toml::value into_toml(const libdnf::system::GroupState & group_state) {
+        toml::value res;
+
+        res["userinstalled"] = group_state.userinstalled;
+        res["packages"] = group_state.packages;
+
+        return res;
+    }
+};
+
 }  // namespace toml
 
 
@@ -141,11 +169,32 @@ void State::remove_package_nevra_state(const std::string & nevra) {
 }
 
 
+GroupState State::get_group_state(const std::string & id) {
+    auto it = group_states.find(id);
+    if (it == group_states.end()) {
+        throw StateNotFoundError("Group", id);
+    }
+
+    return it->second;
+}
+
+
+void State::set_group_state(const std::string & id, const GroupState & group_state) {
+    group_states[id] = group_state;
+}
+
+
+void State::remove_group_state(const std::string & id) {
+    group_states.erase(id);
+}
+
+
 void State::save() {
     std::filesystem::create_directories(path);
 
     utils::fs::File(get_package_state_path(), "w").write(toml::format(toml::value({{"packages", package_states}})));
     utils::fs::File(get_nevra_state_path(), "w").write(toml::format(toml::value({{"nevras", nevra_states}})));
+    utils::fs::File(get_group_state_path(), "w").write(toml::format(toml::value({{"groups", group_states}})));
 }
 
 
@@ -164,6 +213,7 @@ static std::map<std::string, T> load_toml_to_map(const std::string & path, const
 void State::load() {
     package_states = load_toml_to_map<PackageState>(get_package_state_path(), "packages");
     nevra_states = load_toml_to_map<NevraState>(get_nevra_state_path(), "nevras");
+    group_states = load_toml_to_map<GroupState>(get_group_state_path(), "groups");
 }
 
 
@@ -174,6 +224,11 @@ std::filesystem::path State::get_package_state_path() {
 
 std::filesystem::path State::get_nevra_state_path() {
     return path / "nevras.toml";
+}
+
+
+std::filesystem::path State::get_group_state_path() {
+    return path / "groups.toml";
 }
 
 }  // namespace libdnf::system
