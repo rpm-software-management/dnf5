@@ -118,7 +118,7 @@ BaseWeakPtr AdvisorySet::get_base() const {
     return p_impl->base;
 }
 
-std::vector<AdvisoryPackage> AdvisorySet::get_advisory_packages_sorted_by_id(bool only_applicable) const {
+std::vector<AdvisoryPackage> AdvisorySet::get_advisory_packages_sorted_by_name_arch_evr(bool only_applicable) const {
     std::vector<AdvisoryPackage> out;
     for (Id candidate_id : *p_impl) {
         Advisory advisory2 = Advisory(p_impl->base, AdvisoryId(candidate_id));

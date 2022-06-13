@@ -197,7 +197,7 @@ void AdvisoryQuery::filter_severity(const std::vector<std::string> & severities,
 void AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
     auto & pool = get_pool(base);
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
-    std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_id();
+    std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_name_arch_evr();
 
     bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     if (cmp_not) {
@@ -244,7 +244,7 @@ void AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set,
 
 std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages(
     const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
-    std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_id();
+    std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_name_arch_evr();
     std::vector<AdvisoryPackage> after_filter;
 
     auto & pool = get_pool(base);
