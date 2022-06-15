@@ -134,30 +134,30 @@ void RepoqueryCommand::run() {
     auto & ctx = get_context();
 
     libdnf::rpm::PackageSet result_pset(ctx.base);
+    libdnf::rpm::PackageQuery full_package_query(ctx.base);
 
-    for (const auto & pkg : cmdline_packages) {
-        if (!pkg.is_excluded()) {
-            result_pset.add(pkg);
-        }
+    auto advisories = advisory_query_from_cli_input(
+        ctx.base,
+        advisory_name->get_value(),
+        advisory_security->get_value(),
+        advisory_bugfix->get_value(),
+        advisory_enhancement->get_value(),
+        advisory_newpackage->get_value(),
+        advisory_severity->get_value(),
+        advisory_bz->get_value(),
+        advisory_cve->get_value());
+    if (advisories.has_value()) {
+        full_package_query.filter_advisories(advisories.value(), libdnf::sack::QueryCmp::EQ);
     }
-    if (!pkg_specs.empty()) {
-        const libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
-        libdnf::rpm::PackageQuery full_package_query(ctx.base);
 
-        auto advisories = advisory_query_from_cli_input(
-            ctx.base,
-            advisory_name->get_value(),
-            advisory_security->get_value(),
-            advisory_bugfix->get_value(),
-            advisory_enhancement->get_value(),
-            advisory_newpackage->get_value(),
-            advisory_severity->get_value(),
-            advisory_bz->get_value(),
-            advisory_cve->get_value());
-        if (advisories.has_value()) {
-            full_package_query.filter_advisories(advisories.value(), libdnf::sack::QueryCmp::EQ);
+    if (!pkg_specs.empty() || !pkg_file_paths.empty()) {
+        for (const auto & pkg : cmdline_packages) {
+            if (full_package_query.contains(pkg)) {
+                result_pset.add(pkg);
+            }
         }
 
+        const libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false};
         for (const auto & spec : pkg_specs) {
             libdnf::rpm::PackageQuery package_query(full_package_query);
             package_query.resolve_pkg_spec(spec, settings, true);
