@@ -150,7 +150,9 @@ void RepoqueryCommand::run() {
         full_package_query.filter_advisories(advisories.value(), libdnf::sack::QueryCmp::EQ);
     }
 
-    if (!pkg_specs.empty() || !pkg_file_paths.empty()) {
+    if (pkg_specs.empty() && pkg_file_paths.empty()) {
+        result_pset |= full_package_query;
+    } else {
         for (const auto & pkg : cmdline_packages) {
             if (full_package_query.contains(pkg)) {
                 result_pset.add(pkg);
