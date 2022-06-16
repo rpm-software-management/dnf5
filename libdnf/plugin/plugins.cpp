@@ -53,6 +53,21 @@ private:
 PluginLibrary::PluginLibrary(const std::string & library_path) : library(library_path) {
     get_api_version = reinterpret_cast<TGetApiVersionFunc>(library.get_address("libdnf_plugin_get_api_version"));
     get_name = reinterpret_cast<TGetNameFunc>(library.get_address("libdnf_plugin_get_name"));
+
+    auto api_version = get_api_version();
+    if (api_version.major != PLUGIN_API_VERSION.major || api_version.minor > PLUGIN_API_VERSION.minor) {
+        auto msg = fmt::format(
+            "Unsupported plugin API combination. API version required by plugin \"{}\" (\"{}\") is \"{}.{}\"."
+            " API version in libdnf is \"{}.{}\".",
+            get_name(),
+            library_path,
+            api_version.major,
+            api_version.minor,
+            PLUGIN_API_VERSION.major,
+            PLUGIN_API_VERSION.minor);
+        throw std::runtime_error(msg);
+    }
+
     get_version = reinterpret_cast<TGetVersionFunc>(library.get_address("libdnf_plugin_get_version"));
     new_instance = reinterpret_cast<TNewInstanceFunc>(library.get_address("libdnf_plugin_new_instance"));
     delete_instance = reinterpret_cast<TDeleteInstanceFunc>(library.get_address("libdnf_plugin_delete_instance"));
@@ -78,7 +93,7 @@ void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
     plugins.emplace_back(std::move(plugin));
     auto name = iplugin->get_name();
     auto version = iplugin->get_version();
-    logger.debug("Added plugin name=\"{}\", version=\"{}.{}.{}\"", name, version.major, version.minor, version.micro);
+    logger.info("Added plugin name=\"{}\", version=\"{}.{}.{}\"", name, version.major, version.minor, version.micro);
 
     logger.debug("Trying to load more plugins using the \"{}\" plugin.", name);
     iplugin->load_plugins(base);
@@ -93,7 +108,13 @@ void Plugins::load_plugin(const std::string & file_path) {
     plugins.emplace_back(std::move(plugin));
     auto name = iplugin->get_name();
     auto version = iplugin->get_version();
-    logger.debug("Loaded plugin name=\"{}\", version=\"{}.{}.{}\"", name, version.major, version.minor, version.micro);
+    logger.info(
+        "Loaded libdnf plugin \"{}\" (\"{}\"), version=\"{}.{}.{}\"",
+        name,
+        file_path,
+        version.major,
+        version.minor,
+        version.micro);
 
     logger.debug("Trying to load more plugins using the \"{}\" plugin.", name);
     iplugin->load_plugins(base);
@@ -105,26 +126,29 @@ void Plugins::load_plugins(const std::string & dir_path) {
     if (dir_path.empty())
         throw RuntimeError(M_("Plugins::loadPlugins() dirPath cannot be empty"));
 
-    std::vector<std::filesystem::path> lib_names;
-    for (auto & p : std::filesystem::directory_iterator(dir_path)) {
+    std::vector<std::filesystem::path> lib_paths;
+    for (const auto & p : std::filesystem::directory_iterator(dir_path)) {
         if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".so") {
-            lib_names.emplace_back(p.path());
+            lib_paths.emplace_back(p.path());
         }
     }
-    std::sort(lib_names.begin(), lib_names.end());
+    std::sort(lib_paths.begin(), lib_paths.end());
 
-    bool cant_load{false};
-    for (auto & p : lib_names) {
+    std::string failed_filenames;
+    for (const auto & path : lib_paths) {
         try {
-            load_plugin(p);
+            load_plugin(path);
         } catch (const std::exception & ex) {
-            logger.error("Cannot load plugin \"{}\": {}", p.string(), ex.what());
-            cant_load = true;
+            logger.error("Cannot load plugin \"{}\": {}", path.string(), ex.what());
+            if (!failed_filenames.empty()) {
+                failed_filenames += ", ";
+            }
+            failed_filenames += path.filename();
         }
     }
 
-    if (cant_load) {
-        throw RuntimeError(M_("Cannot load plugins"));
+    if (!failed_filenames.empty()) {
+        throw RuntimeError(M_("Cannot load plugins: {}"), failed_filenames);
     }
 }
 

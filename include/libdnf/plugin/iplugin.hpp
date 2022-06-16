@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdint>
 
-
 namespace libdnf {
 
 class Base;
@@ -34,13 +33,20 @@ namespace libdnf::plugin {
 /// Enum of all plugin hooks
 enum class HookId { LOAD_CONFIG_FROM_FILE };
 
-struct Version {
+/// Plugin API version
+struct APIVersion {
+    std::uint16_t major;  // libdnf and the plugin must implement the same `major` version to work together
+    std::uint16_t minor;  // libdnf must implement the `minor` version >= than the plugin to work together
+};
+
+/// Plugin version
+struct PluginVersion {
     std::uint16_t major;
     std::uint16_t minor;
     std::uint16_t micro;
 };
 
-static constexpr Version PLUGIN_API_VERSION{.major = 0, .minor = 1, .micro = 0};
+static constexpr APIVersion PLUGIN_API_VERSION{.major = 0, .minor = 1};
 
 class IPlugin {
 public:
@@ -53,13 +59,13 @@ public:
     IPlugin & operator=(IPlugin &&) = delete;
 
     /// Returns the version of the API supported by the plugin. It can be called at any time.
-    virtual Version get_api_version() const noexcept = 0;
+    virtual APIVersion get_api_version() const noexcept = 0;
 
     /// Returns the name of the plugin. It can be called at any time.
     virtual const char * get_name() const noexcept = 0;
 
     /// Gets the plugin version. It can be called at any time.
-    virtual Version get_version() const noexcept = 0;
+    virtual PluginVersion get_version() const noexcept = 0;
 
     /// Gets the value of the attribute from the plugin. Returns nullptr if the attribute does not exist.
     /// It can be called at any time.
@@ -86,7 +92,7 @@ extern "C" {
 
 /// Returns the version of the API supported by the plugin.
 /// Same result as IPlugin::get_api_version(), but can be called without creating an IPlugin instance.
-libdnf::plugin::Version libdnf_plugin_get_api_version(void);
+libdnf::plugin::APIVersion libdnf_plugin_get_api_version(void);
 
 /// Returns the name of the plugin. It can be called at any time.
 /// Same result as IPlugin::get_name(), but can be called without creating an IPlugin instance.
@@ -94,10 +100,10 @@ const char * libdnf_plugin_get_name(void);
 
 /// Returns the version of the plugin. It can be called at any time.
 /// Same result as IPlugin::get_version(), but can be called without creating an IPlugin instance.
-libdnf::plugin::Version libdnf_plugin_get_version(void);
+libdnf::plugin::PluginVersion libdnf_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
-libdnf::plugin::IPlugin * libdnf_plugin_new_instance(libdnf::plugin::Version api_version);
+libdnf::plugin::IPlugin * libdnf_plugin_new_instance(libdnf::plugin::APIVersion api_version);
 
 /// Deletes plugin instance.
 void libdnf_plugin_delete_instance(libdnf::plugin::IPlugin * plugin_instance);

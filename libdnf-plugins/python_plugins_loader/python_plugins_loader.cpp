@@ -32,7 +32,7 @@ namespace fs = std::filesystem;
 namespace {
 
 constexpr const char * PLUGIN_NAME = "python_plugin_loader";
-constexpr Version PLUGIN_VERSION{0, 1, 0};
+constexpr PluginVersion PLUGIN_VERSION{0, 1, 0};
 constexpr const char * PLUGIN_DESCRIPTION = "Plugin for loading Python plugins.";
 constexpr const char * PLUGIN_AUTHOR_NAME = "Jaroslav Rohel";
 constexpr const char * PLUGIN_AUTHOR_EMAIL = "jrohel@redhat.com";
@@ -43,11 +43,11 @@ public:
     PythonPluginLoader() = default;
     virtual ~PythonPluginLoader();
 
-    Version get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
+    APIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
 
     const char * get_name() const noexcept override { return PLUGIN_NAME; }
 
-    Version get_version() const noexcept override { return PLUGIN_VERSION; }
+    PluginVersion get_version() const noexcept override { return PLUGIN_VERSION; }
 
     const char * get_attribute(const char * attribute) const noexcept override {
         if (std::strcmp(attribute, "author_name") == 0)
@@ -317,7 +317,7 @@ void PythonPluginLoader::load_plugins(libdnf::Base * base) {
 }
 
 
-Version libdnf_plugin_get_api_version(void) {
+APIVersion libdnf_plugin_get_api_version(void) {
     return PLUGIN_API_VERSION;
 }
 
@@ -325,25 +325,14 @@ const char * libdnf_plugin_get_name(void) {
     return PLUGIN_NAME;
 }
 
-Version libdnf_plugin_get_version(void) {
+PluginVersion libdnf_plugin_get_version(void) {
     return PLUGIN_VERSION;
 }
 
-IPlugin * libdnf_plugin_new_instance(Version api_version) {
-    if (api_version.major != PLUGIN_API_VERSION.major || api_version.minor != PLUGIN_API_VERSION.minor) {
-        auto msg = fmt::format(
-            "Unsupported API combination. API version implemented by plugin = \"{}.{}.{}\"."
-            " API version in libdnf = \"{}.{}.{}\".",
-            PLUGIN_API_VERSION.major,
-            PLUGIN_API_VERSION.minor,
-            PLUGIN_API_VERSION.micro,
-            api_version.major,
-            api_version.minor,
-            api_version.micro);
-
-        throw std::runtime_error(msg);
-    }
+IPlugin * libdnf_plugin_new_instance([[maybe_unused]] APIVersion api_version) try {
     return new PythonPluginLoader;
+} catch (...) {
+    return nullptr;
 }
 
 void libdnf_plugin_delete_instance(IPlugin * plugin_object) {
