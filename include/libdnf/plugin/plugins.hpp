@@ -45,6 +45,8 @@ public:
     bool get_enabled() const noexcept;
 
     void init();
+    void pre_transaction();
+    void post_transaction();
     bool hook(HookId hook_id);
     void finish() noexcept;
 
@@ -75,6 +77,10 @@ public:
 
     /// Call init of all allowed plugins.
     bool init();
+
+    void pre_transaction();
+
+    void post_transaction();
 
     /// Call hook of all allowed plugins.
     bool hook(HookId id);
@@ -109,6 +115,18 @@ inline bool Plugin::get_enabled() const noexcept {
 inline void Plugin::init() {
     if (iplugin_instance) {
         iplugin_instance->init();
+    }
+}
+
+inline void Plugin::pre_transaction() {
+    if (iplugin_instance) {
+        iplugin_instance->pre_transaction();
+    }
+}
+
+inline void Plugin::post_transaction() {
+    if (iplugin_instance) {
+        iplugin_instance->post_transaction();
     }
 }
 

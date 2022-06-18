@@ -163,6 +163,22 @@ bool Plugins::init() {
     return true;
 }
 
+void Plugins::pre_transaction() {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->pre_transaction();
+        }
+    }
+}
+
+void Plugins::post_transaction() {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->post_transaction();
+        }
+    }
+}
+
 bool Plugins::hook(HookId id) {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {

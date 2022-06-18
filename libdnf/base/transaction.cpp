@@ -423,6 +423,9 @@ Transaction::TransactionRunResult Transaction::Impl::run(
         return TransactionRunResult::SUCCESS;
     }
 
+    auto & plugins = base->get_plugins();
+    plugins.pre_transaction();
+
     // start history db transaction
     auto db_transaction = base->get_transaction_history()->new_transaction();
     // save history db transaction id
@@ -480,6 +483,8 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     db_transaction.set_rpmdb_version_end(rpm_transaction.get_db_cookie());
     db_transaction.finish(
         ret == 0 ? libdnf::transaction::TransactionState::OK : libdnf::transaction::TransactionState::ERROR);
+
+    plugins.post_transaction();
 
     if (ret == 0) {
         return TransactionRunResult::SUCCESS;

@@ -81,6 +81,10 @@ public:
     /// Plugin initialization.
     virtual void init() {}
 
+    virtual void pre_transaction() {}
+
+    virtual void post_transaction() {}
+
     /// It is called when a hook is reached. The argument describes what happened.
     virtual bool hook(HookId) { return true; }
 
