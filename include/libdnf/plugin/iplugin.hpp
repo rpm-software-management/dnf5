@@ -67,22 +67,25 @@ public:
     /// Gets the plugin version. It can be called at any time.
     virtual PluginVersion get_version() const noexcept = 0;
 
+    /// @return A nullptr terminated array of attributes supported by the plugin.
+    virtual const char * const * get_attributes() const noexcept = 0;
+
     /// Gets the value of the attribute from the plugin. Returns nullptr if the attribute does not exist.
     /// It can be called at any time.
     virtual const char * get_attribute(const char * name) const noexcept = 0;
 
     /// The plugin can load additional plugins. E.g. C++ plugin for loading Python plugins.
     /// Called before init.
-    virtual void load_plugins(Base * /*base*/) {}
+    virtual void load_plugins() {}
 
     /// Plugin initialization.
-    virtual void init(Base * base) = 0;
+    virtual void init() {}
 
     /// It is called when a hook is reached. The argument describes what happened.
-    virtual bool hook(HookId hook_id) = 0;
+    virtual bool hook(HookId) { return true; }
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
-    virtual void finish() noexcept = 0;
+    virtual void finish() noexcept {}
 };
 
 }  // namespace libdnf::plugin
@@ -103,7 +106,7 @@ const char * libdnf_plugin_get_name(void);
 libdnf::plugin::PluginVersion libdnf_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
-libdnf::plugin::IPlugin * libdnf_plugin_new_instance(libdnf::plugin::APIVersion api_version);
+libdnf::plugin::IPlugin * libdnf_plugin_new_instance(libdnf::plugin::APIVersion api_version, libdnf::Base & base);
 
 /// Deletes plugin instance.
 void libdnf_plugin_delete_instance(libdnf::plugin::IPlugin * plugin_instance);

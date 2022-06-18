@@ -44,7 +44,7 @@ public:
     void set_enabled(bool enabled) noexcept;
     bool get_enabled() const noexcept;
 
-    void init(Base * base);
+    void init();
     bool hook(HookId hook_id);
     void finish() noexcept;
 
@@ -106,9 +106,9 @@ inline bool Plugin::get_enabled() const noexcept {
     return enabled;
 }
 
-inline void Plugin::init(Base * base) {
+inline void Plugin::init() {
     if (iplugin_instance) {
-        iplugin_instance->init(base);
+        iplugin_instance->init();
     }
 }
 

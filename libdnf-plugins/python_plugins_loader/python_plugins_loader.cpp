@@ -33,14 +33,13 @@ namespace {
 
 constexpr const char * PLUGIN_NAME = "python_plugin_loader";
 constexpr PluginVersion PLUGIN_VERSION{0, 1, 0};
-constexpr const char * PLUGIN_DESCRIPTION = "Plugin for loading Python plugins.";
-constexpr const char * PLUGIN_AUTHOR_NAME = "Jaroslav Rohel";
-constexpr const char * PLUGIN_AUTHOR_EMAIL = "jrohel@redhat.com";
 
+constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
+constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Plugin for loading Python plugins."};
 
 class PythonPluginLoader : public IPlugin {
 public:
-    PythonPluginLoader() = default;
+    PythonPluginLoader(libdnf::Base & base) : base(base) {}
     virtual ~PythonPluginLoader();
 
     APIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
@@ -49,23 +48,18 @@ public:
 
     PluginVersion get_version() const noexcept override { return PLUGIN_VERSION; }
 
+    const char * const * get_attributes() const noexcept override { return attrs; }
+
     const char * get_attribute(const char * attribute) const noexcept override {
-        if (std::strcmp(attribute, "author_name") == 0)
-            return PLUGIN_AUTHOR_NAME;
-        if (std::strcmp(attribute, "author_email") == 0)
-            return PLUGIN_AUTHOR_EMAIL;
-        if (std::strcmp(attribute, "description") == 0)
-            return PLUGIN_DESCRIPTION;
+        for (size_t i = 0; attrs[i]; ++i) {
+            if (std::strcmp(attribute, attrs[i]) == 0) {
+                return attrs_value[i];
+            }
+        }
         return nullptr;
     }
 
-    void load_plugins(libdnf::Base * base) override;
-
-    void init(libdnf::Base *) override {}
-
-    bool hook(HookId) override { return true; }
-
-    void finish() noexcept override {}
+    void load_plugins() override;
 
 private:
     void load_plugin_file(const fs::path & file);
@@ -73,7 +67,7 @@ private:
 
     static int python_ref_counter;
     bool active{false};
-    libdnf::Base * base{nullptr};
+    libdnf::Base & base;
 };
 
 int PythonPluginLoader::python_ref_counter{0};
@@ -160,7 +154,7 @@ PycompString::PycompString(PyObject * str) {
 
 PythonPluginLoader::~PythonPluginLoader() {
     if (active) {
-        std::lock_guard<libdnf::Base> guard(*base);
+        std::lock_guard<libdnf::Base> guard(base);
         if (--python_ref_counter == 0) {
             Py_Finalize();
         }
@@ -243,7 +237,7 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
 
 
 void PythonPluginLoader::load_plugins_from_dir(const fs::path & dir_path) {
-    auto & logger = *base->get_logger();
+    auto & logger = *base.get_logger();
 
     if (dir_path.empty())
         throw std::runtime_error("PythonPluginLoader::load_from_dir() dir_path cannot be empty");
@@ -272,16 +266,14 @@ void PythonPluginLoader::load_plugins_from_dir(const fs::path & dir_path) {
     }
 }
 
-void PythonPluginLoader::load_plugins(libdnf::Base * base) {
-    this->base = base;
-
+void PythonPluginLoader::load_plugins() {
     const char * plugin_dir = std::getenv("LIBDNF_PYTHON_PLUGIN_DIR");
     if (!plugin_dir) {
         return;
     }
     const fs::path path(plugin_dir);
 
-    std::lock_guard<libdnf::Base> guard(*base);
+    std::lock_guard<libdnf::Base> guard(base);
 
     if (python_ref_counter == 0) {
         Py_InitializeEx(0);
@@ -329,8 +321,8 @@ PluginVersion libdnf_plugin_get_version(void) {
     return PLUGIN_VERSION;
 }
 
-IPlugin * libdnf_plugin_new_instance([[maybe_unused]] APIVersion api_version) try {
-    return new PythonPluginLoader;
+IPlugin * libdnf_plugin_new_instance([[maybe_unused]] APIVersion api_version, libdnf::Base & base) try {
+    return new PythonPluginLoader(base);
 } catch (...) {
     return nullptr;
 }
