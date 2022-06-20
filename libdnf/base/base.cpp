@@ -97,8 +97,11 @@ void Base::add_plugin(plugin::IPlugin & iplugin_instance) {
 }
 
 void Base::load_plugins() {
-    if (const char * plugin_dir = std::getenv("LIBDNF_PLUGIN_DIR")) {
-        plugins.load_plugins(plugin_dir);
+    if (const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR")) {
+        plugins.load_plugins(plugins_config_dir);
+    }
+    for (const auto & plugins_config_dir : config.pluginconfpath().get_value()) {
+        plugins.load_plugins(plugins_config_dir);
     }
 }
 

@@ -22,12 +22,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "iplugin.hpp"
 
+#include "libdnf/common/exception.hpp"
+
 #include <memory>
 #include <string>
 #include <vector>
 
 
 namespace libdnf::plugin {
+
+class PluginError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf::plugin"; }
+    const char * get_name() const noexcept override { return "PluginError"; }
+};
+
 
 class Plugin {
 public:
@@ -66,11 +76,11 @@ public:
     /// Registers the plugin passed by the argument.
     void register_plugin(std::unique_ptr<Plugin> && plugin);
 
-    /// Loads the plugin from the library defined by the file path.
-    void load_plugin(const std::string & file_path);
+    /// Loads the plugin from the library defined by the configuration file config_file_path.
+    void load_plugin(const std::string & config_file_path);
 
-    /// Loads plugins from libraries in the directory.
-    void load_plugins(const std::string & dir_path);
+    /// Loads plugins defined by configuration files in the directory.
+    void load_plugins(const std::string & config_dir_path);
 
     /// Returns the number of registered plugins.
     size_t count() const noexcept;
@@ -89,6 +99,11 @@ public:
     void finish() noexcept;
 
 private:
+    std::string find_plugin_library(const std::string & plugin_conf_path);
+
+    /// Loads the plugin from the library defined by the file path.
+    void load_plugin_library(const std::string & file_path);
+
     Base * base;
     std::vector<std::unique_ptr<Plugin>> plugins;
 };

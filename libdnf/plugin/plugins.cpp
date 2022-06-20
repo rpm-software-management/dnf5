@@ -56,16 +56,15 @@ PluginLibrary::PluginLibrary(Base & base, const std::string & library_path) : li
 
     auto api_version = get_api_version();
     if (api_version.major != PLUGIN_API_VERSION.major || api_version.minor > PLUGIN_API_VERSION.minor) {
-        auto msg = fmt::format(
-            "Unsupported plugin API combination. API version required by plugin \"{}\" (\"{}\") is \"{}.{}\"."
-            " API version in libdnf is \"{}.{}\".",
+        throw PluginError(
+            M_("Unsupported plugin API combination. API version required by plugin \"{}\" (\"{}\") is \"{}.{}\"."
+               " API version in libdnf is \"{}.{}\"."),
             get_name(),
             library_path,
             api_version.major,
             api_version.minor,
             PLUGIN_API_VERSION.major,
             PLUGIN_API_VERSION.minor);
-        throw std::runtime_error(msg);
     }
 
     get_version = reinterpret_cast<TGetVersionFunc>(library.get_address("libdnf_plugin_get_version"));
@@ -100,9 +99,22 @@ void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
     logger.debug("End of loading plugins using the \"{}\" plugin.", name);
 }
 
-void Plugins::load_plugin(const std::string & file_path) {
+std::string Plugins::find_plugin_library(const std::string & plugin_conf_path) {
+    auto library_name = std::filesystem::path(plugin_conf_path).stem();
+    library_name += ".so";
+    for (const auto & plugins_lib_dir : base->get_config().pluginpath().get_value()) {
+        std::filesystem::path library_path = plugins_lib_dir;
+        library_path /= library_name;
+        if (std::filesystem::exists(library_path)) {
+            return library_path;
+        }
+    }
+    throw PluginError(M_("Cannot find plugin library \"{}\""), library_name.string());
+}
+
+void Plugins::load_plugin_library(const std::string & file_path) {
     auto & logger = *base->get_logger();
-    logger.debug("Loading plugin file=\"{}\"", file_path);
+    logger.debug("Loading plugin library file=\"{}\"", file_path);
     auto plugin = std::make_unique<PluginLibrary>(*base, file_path);
     auto * iplugin = plugin->get_iplugin();
     plugins.emplace_back(std::move(plugin));
@@ -121,21 +133,53 @@ void Plugins::load_plugin(const std::string & file_path) {
     logger.debug("End of loading plugins using the \"{}\" plugin.", name);
 }
 
-void Plugins::load_plugins(const std::string & dir_path) {
+void Plugins::load_plugin(const std::string & config_file_path) {
     auto & logger = *base->get_logger();
-    if (dir_path.empty())
-        throw RuntimeError(M_("Plugins::loadPlugins() dirPath cannot be empty"));
 
-    std::vector<std::filesystem::path> lib_paths;
-    for (const auto & p : std::filesystem::directory_iterator(dir_path)) {
-        if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".so") {
-            lib_paths.emplace_back(p.path());
+    libdnf::ConfigParser parser;
+    parser.read(config_file_path);
+
+    enum class Enabled { NO, YES, HOST_ONLY, INSTALLROOT_ONLY } enabled;
+    const auto & enabled_str = parser.get_value("main", "enabled");
+    if (enabled_str == "host-only") {
+        enabled = Enabled::HOST_ONLY;
+    } else if (enabled_str == "installroot-only") {
+        enabled = Enabled::INSTALLROOT_ONLY;
+    } else {
+        try {
+            enabled = OptionBool(false).from_string(enabled_str) ? Enabled::YES : Enabled::NO;
+        } catch (OptionInvalidValueError & ex) {
+            throw OptionInvalidValueError(M_("Invalid option value: enabled={}"), enabled_str);
         }
     }
-    std::sort(lib_paths.begin(), lib_paths.end());
+    const auto & installroot = base->get_config().installroot().get_value();
+    const bool is_enabled = enabled == Enabled::YES || (enabled == Enabled::HOST_ONLY && installroot == "/") ||
+                            (enabled == Enabled::INSTALLROOT_ONLY && installroot != "/");
+    if (!is_enabled) {
+        logger.debug("Skip disabled plugin \"{}\"", config_file_path);
+        return;
+    }
+
+    auto library_path = find_plugin_library(config_file_path);
+    load_plugin_library(library_path);
+}
+
+void Plugins::load_plugins(const std::string & config_dir_path) {
+    auto & logger = *base->get_logger();
+    if (config_dir_path.empty())
+        throw PluginError(M_("Plugins::load_plugins(): config_dir_path cannot be empty"));
+
+    std::vector<std::filesystem::path> config_paths;
+    std::error_code ec;  // Do not report errors if config_dir_path refers to a non-existing file or not a directory
+    for (const auto & p : std::filesystem::directory_iterator(config_dir_path, ec)) {
+        if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".conf") {
+            config_paths.emplace_back(p.path());
+        }
+    }
+    std::sort(config_paths.begin(), config_paths.end());
 
     std::string failed_filenames;
-    for (const auto & path : lib_paths) {
+    for (const auto & path : config_paths) {
         try {
             load_plugin(path);
         } catch (const std::exception & ex) {
@@ -148,7 +192,7 @@ void Plugins::load_plugins(const std::string & dir_path) {
     }
 
     if (!failed_filenames.empty()) {
-        throw RuntimeError(M_("Cannot load plugins: {}"), failed_filenames);
+        throw PluginError(M_("Cannot load plugins: {}"), failed_filenames);
     }
 }
 
