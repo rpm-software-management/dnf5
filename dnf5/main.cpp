@@ -556,10 +556,6 @@ int main(int argc, char * argv[]) try {
 
     context.set_prg_arguments(static_cast<size_t>(argc), argv);
 
-    context.base.load_plugins();
-    auto & plugins = context.base.get_plugins();
-    plugins.init();
-
     // Load dnf5 plugins
     auto & dnf5_plugins = context.get_plugins();
     const char * plugins_dir = std::getenv("DNF5_PLUGINS_DIR");
@@ -636,6 +632,10 @@ int main(int argc, char * argv[]) try {
         log_router.swap_logger(logger, 0);
         // Write messages from memory buffer logger to stream logger
         dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
+
+        context.base.load_plugins();
+        auto & plugins = context.base.get_plugins();
+        plugins.init();
 
         base.setup();
 
