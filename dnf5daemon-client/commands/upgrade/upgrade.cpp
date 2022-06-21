@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "upgrade.hpp"
 
 #include "context.hpp"
+#include "exception.hpp"
 #include "utils.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
@@ -53,9 +54,7 @@ void UpgradeCommand::run() {
     auto & ctx = static_cast<Context &>(get_session());
 
     if (!am_i_root()) {
-        std::cout << "This command has to be run with superuser privileges (under the root user on most systems)."
-                  << std::endl;
-        return;
+        throw UnprivilegedUserError();
     }
 
     // get package specs from command line and add them to the goal
