@@ -5,6 +5,9 @@ endif()
 set(DNF5DAEMON_CLIENT_BIN dnf5daemon-client)
 file(GLOB_RECURSE DNF5DAEMON_CLIENT_SOURCES *.cpp)
 
+#set gettext domain for translations
+add_definitions(-DGETTEXT_DOMAIN=\"dnf5-daemon-client\")
+
 include_directories(.)
 # TODO(mblaha) workround for dnf5daemon-client using server's headers, fix
 include_directories(..)
