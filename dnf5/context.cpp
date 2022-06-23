@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "plugins.hpp"
 #include "utils.hpp"
+#include "utils/url.hpp"
 
 #include "libdnf-cli/utils/userconfirm.hpp"
 
@@ -298,24 +299,13 @@ std::chrono::time_point<std::chrono::steady_clock> DownloadCB::prev_print_time =
 
 }  // namespace
 
-static bool is_url(std::string path) {
-    for (auto & ch : path) {
-        if (ch == ':' || ch == '/') {
-            break;
-        }
-        ch = static_cast<char>(std::tolower(ch));
-    }
-    return path.starts_with("file://") || path.starts_with("http://") || path.starts_with("ftp://") ||
-           path.starts_with("https://");
-}
-
 void Context::download_urls(
     std::vector<std::pair<std::string, std::filesystem::path>> url_to_dest_path, bool fail_fast, bool resume) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf::repo::FileDownloader downloader(base.get_config());
 
     for (auto & [url, dest_path] : url_to_dest_path) {
-        if (!is_url(url)) {
+        if (!libdnf::utils::url::is_url(url)) {
             continue;
         }
         downloader.add(url, dest_path, std::make_unique<DownloadCB>(multi_progress_bar, url));
@@ -338,7 +328,7 @@ std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vecto
         std::vector<std::string> urls;
 
         for (const auto & path : packages_paths) {
-            if (is_url(path)) {
+            if (libdnf::utils::url::is_url(path)) {
                 urls.emplace_back(path);
                 continue;
             }
@@ -723,7 +713,7 @@ void parse_add_specs(
         if (auto [it, inserted] = unique_items.emplace(spec); inserted) {
             if (spec.length() > ext.length() && spec.ends_with(ext)) {
                 filepaths.emplace_back(spec);
-            } else if (is_url(specs[i])) {
+            } else if (libdnf::utils::url::is_url(specs[i])) {
                 filepaths.emplace_back(spec);
             } else {
                 pkg_specs.emplace_back(spec);
