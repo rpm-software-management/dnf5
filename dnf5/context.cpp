@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "plugins.hpp"
 #include "utils.hpp"
+#include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/url.hpp"
 
 #include "libdnf-cli/utils/userconfirm.hpp"
@@ -28,12 +29,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 #include <libdnf-cli/progressbar/multi_progress_bar.hpp>
 #include <libdnf-cli/tty.hpp>
+#include <libdnf/base/base.hpp>
 #include <libdnf/base/goal.hpp>
 #include <libdnf/repo/file_downloader.hpp>
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
+#include <libdnf/rpm/rpm_signature.hpp>
 
+#include <algorithm>
 #include <cctype>
 #include <filesystem>
 #include <iostream>
@@ -657,8 +661,137 @@ std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time =
 
 }  // namespace
 
+
+bool user_confirm_key(libdnf::ConfigMain & config, const libdnf::rpm::KeyInfo & key_info) {
+    std::cout << "Importing GPG key 0x" << key_info.get_short_key_id() << std::endl;
+    std::cout << " UserId     : \"" << key_info.get_user_id() << "\"" << std::endl;
+    std::cout << " Fingerprint: " << key_info.get_fingerprint() << std::endl;
+    std::cout << " From       : " << key_info.get_url() << std::endl;
+    return libdnf::cli::utils::userconfirm::userconfirm(config);
+}
+
+Context::ImportRepoKeys Context::import_repo_keys(libdnf::repo::Repo & repo) {
+    auto key_urls = repo.get_config().gpgkey().get_value();
+    if (!key_urls.size()) {
+        return ImportRepoKeys::NO_KEYS;
+    }
+
+    libdnf::rpm::RpmSignature rpm_signature(base);
+    bool already_present{true};
+    bool key_confirmed{false};
+    bool key_imported{false};
+    for (auto const & key_url : key_urls) {
+        libdnf::rpm::KeyInfo key_info{key_url, base.get_weak_ptr()};
+        if (rpm_signature.key_present(key_info)) {
+            std::cerr << fmt::format("Public key \"{}\" is already present, not importing.", key_url) << std::endl;
+            continue;
+        }
+        already_present = false;
+
+        if (user_confirm_key(base.get_config(), key_info)) {
+            key_confirmed = true;
+        } else {
+            continue;
+        }
+
+        try {
+            if (rpm_signature.import_key(key_info)) {
+                key_imported = true;
+                std::cout << "Key imported successfully." << std::endl;
+            }
+        } catch (const libdnf::rpm::KeyImportError & ex) {
+            std::cerr << ex.what() << std::endl;
+        }
+    }
+
+    if (already_present) {
+        return ImportRepoKeys::ALREADY_PRESENT;
+    }
+
+    if (!key_confirmed) {
+        throw libdnf::cli::AbortedByUserError();
+    }
+
+    return key_imported ? ImportRepoKeys::KEY_IMPORTED : ImportRepoKeys::IMPORT_FAILED;
+}
+
+bool Context::check_gpg_signatures(const libdnf::base::Transaction & transaction) {
+    auto & config = base.get_config();
+    if (!config.gpgcheck().get_value()) {
+        // gpg check switched off by configuration / command line option
+        return true;
+    }
+    // TODO(mblaha): DNSsec key verification
+    bool retval{true};
+    libdnf::rpm::RpmSignature rpm_signature(base);
+    std::set<std::string> repo_keys_imported{};
+    for (const auto & trans_pkg : transaction.get_transaction_packages()) {
+        if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
+            auto const & pkg = trans_pkg.get_package();
+            auto repo = pkg.get_repo();
+            auto err_msg = fmt::format(
+                "GPG check for package \"{}\" ({}) from repo \"{}\" has failed: ",
+                pkg.get_nevra(),
+                pkg.get_package_path(),
+                repo->get_id());
+            switch (rpm_signature.check_package_signature(pkg)) {
+                case libdnf::rpm::RpmSignature::CheckResult::OK:
+                    continue;
+                case libdnf::rpm::RpmSignature::CheckResult::FAILED:
+                    std::cerr << err_msg << "problem opening package." << std::endl;
+                    retval = false;
+                    break;
+                case libdnf::rpm::RpmSignature::CheckResult::FAILED_NOT_SIGNED:
+                    std::cerr << err_msg << "package is not signed." << std::endl;
+                    retval = false;
+                    break;
+                case libdnf::rpm::RpmSignature::CheckResult::FAILED_KEY_MISSING:
+                case libdnf::rpm::RpmSignature::CheckResult::FAILED_NOT_TRUSTED: {
+                    // these two errors are possibly recoverable by importing the correct public key
+                    // do not try to import keys for the same repo twice
+                    if (repo_keys_imported.find(repo->get_id()) != repo_keys_imported.end()) {
+                        std::cerr << err_msg << "public key is not installed." << std::endl;
+                        retval = false;
+                        break;
+                    }
+                    repo_keys_imported.emplace(repo->get_id());
+                    switch (import_repo_keys(*repo)) {
+                        case ImportRepoKeys::KEY_IMPORTED:
+                            if (rpm_signature.check_package_signature(pkg) !=
+                                libdnf::rpm::RpmSignature::CheckResult::OK) {
+                                std::cerr << err_msg << "import of the key didn't help, wrong key?" << std::endl;
+                                retval = false;
+                            }
+                            break;
+                        case ImportRepoKeys::ALREADY_PRESENT:
+                            std::cerr << err_msg << "public key is not installed." << std::endl;
+                            retval = false;
+                            break;
+                        case ImportRepoKeys::NO_KEYS:
+                            std::cerr << err_msg << "the repository does not have any gpg key configured." << std::endl;
+                            retval = false;
+                            break;
+                        case ImportRepoKeys::IMPORT_FAILED:
+                            std::cerr << err_msg << "public key import failed." << std::endl;
+                            retval = false;
+                            break;
+                    }
+                    break;
+                }
+            }
+        }
+    }
+    return retval;
+}
+
+
 void Context::download_and_run(libdnf::base::Transaction & transaction) {
     download_packages(transaction, nullptr);
+
+    std::cout << std::endl << "Verifying GPG signatures" << std::endl;
+    if (!check_gpg_signatures(transaction)) {
+        throw libdnf::cli::CommandExitError(1, M_("Signature verification failed"));
+    }
 
     std::cout << std::endl << "Running transaction" << std::endl;
 

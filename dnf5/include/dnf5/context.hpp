@@ -43,6 +43,7 @@ constexpr const char * VERSION = "0.1.0";
 class Context : public libdnf::cli::session::Session {
 public:
     enum class LoadAvailableRepos { NONE, ENABLED, ALL };
+    enum class ImportRepoKeys { KEY_IMPORTED, IMPORT_FAILED, NO_KEYS, ALREADY_PRESENT };
 
     Context();
     ~Context();
@@ -80,6 +81,12 @@ public:
     /// Downloads transaction packages, creates the history DB transaction and
     /// rpm transaction and runs it.
     void download_and_run(libdnf::base::Transaction & transaction);
+
+    /// Check GPG signatures of packages that are going to be installed
+    bool check_gpg_signatures(const libdnf::base::Transaction & transaction);
+
+    /// Import repository gpg keys for the package
+    ImportRepoKeys import_repo_keys(libdnf::repo::Repo & repo);
 
     /// Set to true to suppresses messages notifying about the current state or actions of dnf5.
     void set_quiet(bool quiet) { this->quiet = quiet; }
