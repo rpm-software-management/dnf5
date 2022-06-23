@@ -25,12 +25,37 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/config_repo.hpp"
 #include "libdnf/repo/repo_callbacks.hpp"
 
+#include <gpgme.h>
+
 #include <filesystem>
 #include <string>
 #include <vector>
 
 
 namespace libdnf::repo {
+
+class Key {
+public:
+    Key(gpgme_key_t key, gpgme_subkey_t subkey) {
+        id = subkey->keyid;
+        fingerprint = subkey->fpr;
+        timestamp = subkey->timestamp;
+        userid = key->uids->uid;
+    }
+
+    std::string get_id() const { return id; }
+    std::string get_user_id() const { return userid; }
+    std::string get_fingerprint() const { return fingerprint; }
+    long int get_timestamp() const { return timestamp; }
+
+    std::vector<char> raw_key;
+
+private:
+    std::string id;
+    std::string fingerprint;
+    std::string userid;
+    long int timestamp;
+};
 
 /// Wraps gpgme in a higher-level interface.
 /// @exception RepoGpgError (public) Thrown on any gpgme-related error.
@@ -43,6 +68,7 @@ public:
     std::filesystem::path get_keyring_dir() { return std::filesystem::path(config.get_cachedir()) / "pubring"; }
 
     void import_key(int fd, const std::string & url);
+    static std::vector<Key> rawkey2infos(const int fd);
 
 private:
     BaseWeakPtr base;

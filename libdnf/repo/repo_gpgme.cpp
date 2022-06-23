@@ -26,8 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/logger/logger.hpp"
 #include "libdnf/repo/repo_errors.hpp"
 
-#include <gpgme.h>
-
 #include <memory>
 
 
@@ -44,29 +42,6 @@ struct default_delete<std::remove_pointer<gpgme_ctx_t>::type> {
 
 
 namespace libdnf::repo {
-
-class Key {
-public:
-    Key(gpgme_key_t key, gpgme_subkey_t subkey) {
-        id = subkey->keyid;
-        fingerprint = subkey->fpr;
-        timestamp = subkey->timestamp;
-        userid = key->uids->uid;
-    }
-
-    std::string get_id() const { return id; }
-    std::string get_user_id() const { return userid; }
-    std::string get_fingerprint() const { return fingerprint; }
-    long int get_timestamp() const { return timestamp; }
-
-    std::vector<char> raw_key;
-
-private:
-    std::string id;
-    std::string fingerprint;
-    std::string userid;
-    long int timestamp;
-};
 
 /// Creates the '/run/user/$UID' directory if it doesn't exist. If this
 /// directory exists, gpgagent will create its sockets under
@@ -152,7 +127,7 @@ static void gpg_import_key(gpgme_ctx_t context, std::vector<char> key) {
 }
 
 
-static std::vector<Key> rawkey2infos(int fd) {
+std::vector<Key> RepoGpgme::rawkey2infos(const int fd) {
     gpg_error_t gpg_err;
 
     libdnf::utils::fs::TempDir tmpdir("tmpdir");
