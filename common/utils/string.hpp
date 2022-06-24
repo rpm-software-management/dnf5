@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_UTILS_STRING_HPP
 
 #include <algorithm>
+#include <ctime>
 #include <string>
 #include <vector>
 
