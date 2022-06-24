@@ -107,6 +107,9 @@ void Base::load_plugins() {
 
 void Base::setup() {
     libdnf_assert(!pool, "Base was already initialized");
+
+    plugins.pre_base_setup();
+
     pool.reset(new libdnf::solv::Pool);
     auto & config = get_config();
     auto & installroot = config.installroot();
@@ -123,6 +126,8 @@ void Base::setup() {
     // (and force to recompute provides) or locked
     pool_setarch(**pool, get_vars()->get_value("arch").c_str());
     pool_set_rootdir(**pool, installroot.get_value().c_str());
+
+    plugins.post_base_setup();
 }
 
 }  // namespace libdnf

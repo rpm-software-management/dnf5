@@ -39,7 +39,7 @@ constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Plu
 
 class PythonPluginLoader : public IPlugin {
 public:
-    PythonPluginLoader(libdnf::Base & base) : base(base) {}
+    PythonPluginLoader(libdnf::Base & base, libdnf::ConfigParser &) : base(base) {}
     virtual ~PythonPluginLoader();
 
     APIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
@@ -321,8 +321,9 @@ PluginVersion libdnf_plugin_get_version(void) {
     return PLUGIN_VERSION;
 }
 
-IPlugin * libdnf_plugin_new_instance([[maybe_unused]] APIVersion api_version, libdnf::Base & base) try {
-    return new PythonPluginLoader(base);
+IPlugin * libdnf_plugin_new_instance(
+    [[maybe_unused]] APIVersion api_version, libdnf::Base & base, libdnf::ConfigParser & parser) try {
+    return new PythonPluginLoader(base, parser);
 } catch (...) {
     return nullptr;
 }

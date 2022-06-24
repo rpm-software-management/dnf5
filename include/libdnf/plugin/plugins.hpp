@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "iplugin.hpp"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/conf/config_parser.hpp"
 
 #include <memory>
 #include <string>
@@ -50,19 +51,23 @@ public:
     Plugin & operator=(Plugin &&) = delete;
 
     IPlugin * get_iplugin() const noexcept;
+    ConfigParser & get_config_parser() noexcept;
 
     void set_enabled(bool enabled) noexcept;
     bool get_enabled() const noexcept;
 
     void init();
-    void pre_transaction();
-    void post_transaction();
+    void pre_base_setup();
+    void post_base_setup();
+    void pre_transaction(const libdnf::base::Transaction & transaction);
+    void post_transaction(const libdnf::base::Transaction & transaction);
     bool hook(HookId hook_id);
     void finish() noexcept;
 
 protected:
     Plugin() = default;
     IPlugin * iplugin_instance{nullptr};
+    ConfigParser cfg_parser;
     bool enabled{true};
 };
 
@@ -88,9 +93,13 @@ public:
     /// Call init of all allowed plugins.
     bool init();
 
-    void pre_transaction();
+    void pre_base_setup();
 
-    void post_transaction();
+    void post_base_setup();
+
+    void pre_transaction(const libdnf::base::Transaction & transaction);
+
+    void post_transaction(const libdnf::base::Transaction & transaction);
 
     /// Call hook of all allowed plugins.
     bool hook(HookId id);
@@ -102,7 +111,7 @@ private:
     std::string find_plugin_library(const std::string & plugin_conf_path);
 
     /// Loads the plugin from the library defined by the file path.
-    void load_plugin_library(const std::string & file_path);
+    void load_plugin_library(ConfigParser && parser, const std::string & file_path);
 
     Base * base;
     std::vector<std::unique_ptr<Plugin>> plugins;
@@ -119,6 +128,10 @@ inline IPlugin * Plugin::get_iplugin() const noexcept {
     return iplugin_instance;
 }
 
+inline ConfigParser & Plugin::get_config_parser() noexcept {
+    return cfg_parser;
+}
+
 inline void Plugin::set_enabled(bool enabled) noexcept {
     this->enabled = enabled;
 }
@@ -133,15 +146,27 @@ inline void Plugin::init() {
     }
 }
 
-inline void Plugin::pre_transaction() {
+inline void Plugin::pre_base_setup() {
     if (iplugin_instance) {
-        iplugin_instance->pre_transaction();
+        iplugin_instance->pre_base_setup();
     }
 }
 
-inline void Plugin::post_transaction() {
+inline void Plugin::post_base_setup() {
     if (iplugin_instance) {
-        iplugin_instance->post_transaction();
+        iplugin_instance->post_base_setup();
+    }
+}
+
+inline void Plugin::pre_transaction(const libdnf::base::Transaction & transaction) {
+    if (iplugin_instance) {
+        iplugin_instance->pre_transaction(transaction);
+    }
+}
+
+inline void Plugin::post_transaction(const libdnf::base::Transaction & transaction) {
+    if (iplugin_instance) {
+        iplugin_instance->post_transaction(transaction);
     }
 }
 

@@ -424,7 +424,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     }
 
     auto & plugins = base->get_plugins();
-    plugins.pre_transaction();
+    plugins.pre_transaction(*transaction);
 
     // start history db transaction
     auto db_transaction = base->get_transaction_history()->new_transaction();
@@ -484,7 +484,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     db_transaction.finish(
         ret == 0 ? libdnf::transaction::TransactionState::OK : libdnf::transaction::TransactionState::ERROR);
 
-    plugins.post_transaction();
+    plugins.post_transaction(*transaction);
 
     if (ret == 0) {
         return TransactionRunResult::SUCCESS;

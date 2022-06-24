@@ -70,7 +70,7 @@ PluginLibrary::PluginLibrary(Base & base, const std::string & library_path) : li
     get_version = reinterpret_cast<TGetVersionFunc>(library.get_address("libdnf_plugin_get_version"));
     new_instance = reinterpret_cast<TNewInstanceFunc>(library.get_address("libdnf_plugin_new_instance"));
     delete_instance = reinterpret_cast<TDeleteInstanceFunc>(library.get_address("libdnf_plugin_delete_instance"));
-    iplugin_instance = new_instance(PLUGIN_API_VERSION, base);
+    iplugin_instance = new_instance(PLUGIN_API_VERSION, base, cfg_parser);
 }
 
 PluginLibrary::~PluginLibrary() {
@@ -112,10 +112,11 @@ std::string Plugins::find_plugin_library(const std::string & plugin_conf_path) {
     throw PluginError(M_("Cannot find plugin library \"{}\""), library_name.string());
 }
 
-void Plugins::load_plugin_library(const std::string & file_path) {
+void Plugins::load_plugin_library(ConfigParser && parser, const std::string & file_path) {
     auto & logger = *base->get_logger();
     logger.debug("Loading plugin library file=\"{}\"", file_path);
     auto plugin = std::make_unique<PluginLibrary>(*base, file_path);
+    plugin->get_config_parser() = std::move(parser);
     auto * iplugin = plugin->get_iplugin();
     plugins.emplace_back(std::move(plugin));
     auto name = iplugin->get_name();
@@ -161,7 +162,7 @@ void Plugins::load_plugin(const std::string & config_file_path) {
     }
 
     auto library_path = find_plugin_library(config_file_path);
-    load_plugin_library(library_path);
+    load_plugin_library(std::move(parser), library_path);
 }
 
 void Plugins::load_plugins(const std::string & config_dir_path) {
@@ -199,26 +200,40 @@ void Plugins::load_plugins(const std::string & config_dir_path) {
 bool Plugins::init() {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
-            if (auto * iplugin = plugin->get_iplugin()) {
-                iplugin->init();
-            }
+            plugin->init();
         }
     }
     return true;
 }
 
-void Plugins::pre_transaction() {
+void Plugins::pre_base_setup() {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
-            plugin->pre_transaction();
+            plugin->pre_base_setup();
         }
     }
 }
 
-void Plugins::post_transaction() {
+void Plugins::post_base_setup() {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
-            plugin->post_transaction();
+            plugin->post_base_setup();
+        }
+    }
+}
+
+void Plugins::pre_transaction(const libdnf::base::Transaction & transaction) {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->pre_transaction(transaction);
+        }
+    }
+}
+
+void Plugins::post_transaction(const libdnf::base::Transaction & transaction) {
+    for (auto & plugin : plugins) {
+        if (plugin->get_enabled()) {
+            plugin->post_transaction(transaction);
         }
     }
 }

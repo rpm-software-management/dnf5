@@ -25,6 +25,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 class Base;
+struct ConfigParser;
+
+namespace base {
+class Transaction;
+}
 
 }  // namespace libdnf
 
@@ -81,9 +86,13 @@ public:
     /// Plugin initialization.
     virtual void init() {}
 
-    virtual void pre_transaction() {}
+    virtual void pre_base_setup() {}
 
-    virtual void post_transaction() {}
+    virtual void post_base_setup() {}
+
+    virtual void pre_transaction(const libdnf::base::Transaction &) {}
+
+    virtual void post_transaction(const libdnf::base::Transaction &) {}
 
     /// It is called when a hook is reached. The argument describes what happened.
     virtual bool hook(HookId) { return true; }
@@ -110,7 +119,8 @@ const char * libdnf_plugin_get_name(void);
 libdnf::plugin::PluginVersion libdnf_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
-libdnf::plugin::IPlugin * libdnf_plugin_new_instance(libdnf::plugin::APIVersion api_version, libdnf::Base & base);
+libdnf::plugin::IPlugin * libdnf_plugin_new_instance(
+    libdnf::plugin::APIVersion api_version, libdnf::Base & base, libdnf::ConfigParser & parser);
 
 /// Deletes plugin instance.
 void libdnf_plugin_delete_instance(libdnf::plugin::IPlugin * plugin_instance);
