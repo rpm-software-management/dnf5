@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/conf/config_main.hpp"
 
+#include "config.h"
 #include "config_utils.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
@@ -165,8 +166,8 @@ class ConfigMain::Impl {
     OptionPath installroot{"/", false, true};
     OptionPath config_file_path{CONF_FILENAME};
     OptionBool plugins{true};
-    OptionStringList pluginpath{std::vector<std::string>{}};
-    OptionStringList pluginconfpath{std::vector<std::string>{}};
+    OptionStringList pluginpath{std::vector<std::string>{DEFAULT_LIBDNF5_PLUGINS_LIB_DIR}};
+    OptionStringList pluginconfpath{std::vector<std::string>{PLUGINS_CONF_DIR}};
     OptionPath persistdir{PERSISTDIR};
     OptionPath system_state_dir{SYSTEM_STATE_DIR};
     OptionPath transaction_history_dir{SYSTEM_STATE_DIR};

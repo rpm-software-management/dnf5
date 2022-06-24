@@ -1,6 +1,8 @@
 # use any sources found under the current directory
 file(GLOB_RECURSE LIBDNF_SOURCES *.cpp)
 
+# create config header file
+configure_file("config.h.in" ${CMAKE_CURRENT_SOURCE_DIR}/conf/config.h)
 
 # gather all pkg-config requires and write them to a .pc file later
 list(APPEND LIBDNF_PC_REQUIRES)

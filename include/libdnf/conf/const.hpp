@@ -33,6 +33,8 @@ constexpr const char * SYSTEM_CACHEDIR = "/var/cache/libdnf";
 constexpr const char * CONF_FILENAME = "/etc/dnf/dnf.conf";
 constexpr const char * CONF_DIRECTORY = "/etc/dnf/conf.d";
 
+constexpr const char * PLUGINS_CONF_DIR = "/etc/dnf/libdnf5-plugins";
+
 // More important varsdirs must be on the end of vector
 const std::vector<std::string> VARS_DIRS{"/etc/yum/vars", "/etc/dnf/vars"};
 
