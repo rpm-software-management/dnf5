@@ -18,6 +18,7 @@ Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
 %bcond_without libdnf_cli
 %bcond_without dnf5
 %bcond_without dnf5_plugins
+%bcond_without plugin_actions
 %bcond_without python_plugins_loader
 
 %bcond_without comps
@@ -321,19 +322,35 @@ Ruby bindings for the libdnf-cli library.
 %endif
 
 
-# ========== libdnf-plugin-python-plugins-loader ==========
+# ========== libdnf5-plugin-actions ==========
+
+%if %{with plugin_actions}
+%package -n libdnf5-plugin-actions
+Summary:        Libdnf plugin that allows to run actions (external executables) on hooks
+License:        LGPLv2.1+
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+
+%description -n libdnf5-plugin-actions
+Libdnf plugin that allows to run actions (external executables) on hooks.
+
+%files -n libdnf5-plugin-actions
+%{_libdir}/libdnf5/plugins/actions.*
+%endif
+
+
+# ========== libdnf5-python-plugins-loader ==========
 
 %if %{with python_plugins_loader}
-%package -n python3-libdnf-python-plugins-loader
+%package -n python3-libdnf5-python-plugins-loader
 Summary:        Libdnf plugin that allows loading Python plugins
 License:        LGPLv2.1+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       python3-libdnf5%{?_isa} = %{version}-%{release}
 
-%description -n python3-libdnf-python-plugins-loader
+%description -n python3-libdnf5-python-plugins-loader
 Libdnf plugin that allows loading Python plugins
 
-%files -n python3-libdnf-python-plugins-loader
+%files -n python3-libdnf5-python-plugins-loader
 %{_libdir}/libdnf5/plugins/python_plugins_loader.*
 %{python3_sitelib}/libdnf_plugins/
 %{python3_sitelib}/libdnf_plugins/README
@@ -468,6 +485,7 @@ DNF5 plugins
     -DWITH_DNF5DAEMON_SERVER=%{?with_dnf5daemon_server:ON}%{!?with_dnf5daemon_server:OFF} \
     -DWITH_LIBDNF_CLI=%{?with_libdnf_cli:ON}%{!?with_libdnf_cli:OFF} \
     -DWITH_DNF5=%{?with_dnf5:ON}%{!?with_dnf5:OFF} \
+    -DWITH_PLUGIN_ACTIONS=%{?with_plugin_actions:ON}%{!?with_plugin_actions:OFF} \
     -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
     \
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
