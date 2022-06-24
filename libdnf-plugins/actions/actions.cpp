@@ -346,7 +346,6 @@ void Actions::on_base_setup(const std::vector<Action> & trans_actions) {
         return;
     }
 
-    std::vector<CommandToRun> commands_to_run;      // std::vector because we want to keep the order of commands
     std::set<CommandToRun> unique_commands_to_run;  // std::set is used to detect duplicate commands
 
     for (const auto & action : trans_actions) {
@@ -356,14 +355,9 @@ void Actions::on_base_setup(const std::vector<Action> & trans_actions) {
             }
             CommandToRun cmd_to_run{action.command, std::move(substituted_args)};
             if (auto [it, inserted] = unique_commands_to_run.insert(cmd_to_run); inserted) {
-                commands_to_run.push_back(std::move(cmd_to_run));
+                execute_command(cmd_to_run);
             }
         }
-    }
-
-    // execute commands
-    for (auto & cmd : commands_to_run) {
-        execute_command(cmd);
     }
 }
 
@@ -669,7 +663,6 @@ void Actions::on_transaction(const libdnf::base::Transaction & transaction, cons
         transaction_cached = true;
     }
 
-    std::vector<CommandToRun> commands_to_run;      // std::vector because we want to keep the order of commands
     std::set<CommandToRun> unique_commands_to_run;  // std::set is used to detect duplicate commands
 
     libdnf::ResolveSpecSettings spec_settings{
@@ -683,7 +676,7 @@ void Actions::on_transaction(const libdnf::base::Transaction & transaction, cons
                 }
                 CommandToRun cmd_to_run{action.command, std::move(substituted_args)};
                 if (auto [it, inserted] = unique_commands_to_run.insert(cmd_to_run); inserted) {
-                    commands_to_run.push_back(std::move(cmd_to_run));
+                    execute_command(cmd_to_run);
                 }
             }
         } else {
@@ -693,6 +686,7 @@ void Actions::on_transaction(const libdnf::base::Transaction & transaction, cons
                              : (action.direction == Action::Direction::OUT ? *out_full_query : *all_full_query);
             query.resolve_pkg_spec(action.pkg_filter, spec_settings, false);
 
+            std::vector<CommandToRun> commands_to_run;
             for (auto pkg : query) {
                 const auto * trans_pkg = pkg_id_to_trans_pkg.at(pkg.get_id());
 
@@ -709,12 +703,12 @@ void Actions::on_transaction(const libdnf::base::Transaction & transaction, cons
                     commands_to_run.push_back(std::move(cmd_to_run));
                 }
             }
-        }
-    }
 
-    // execute commands
-    for (auto & cmd : commands_to_run) {
-        execute_command(cmd);
+            // execute commands
+            for (auto & cmd : commands_to_run) {
+                execute_command(cmd);
+            }
+        }
     }
 }
 
