@@ -204,7 +204,9 @@ public:
 class StringArgumentList : public Option {
 public:
     explicit StringArgumentList(
-        libdnf::cli::session::Command & command, const std::string & name, const std::string & desc);
+        libdnf::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs);
+    StringArgumentList(libdnf::cli::session::Command & command, const std::string & name, const std::string & desc)
+        : StringArgumentList(command, name, desc, ArgumentParser::PositionalArg::UNLIMITED){};
 
     /// @return Parsed value.
     /// @since 5.0
