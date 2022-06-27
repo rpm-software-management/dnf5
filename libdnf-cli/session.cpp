@@ -170,20 +170,16 @@ StringListOption::StringListOption(
 
 
 StringArgumentList::StringArgumentList(
-    libdnf::cli::session::Command & command, const std::string & name, const std::string & desc) {
+    libdnf::cli::session::Command & command, const std::string & name, const std::string & desc, int nargs) {
     auto & parser = command.get_session().get_argument_parser();
 
     conf = parser.add_new_values();
     arg = parser.add_new_positional_arg(
-        name,
-        ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::make_unique<libdnf::OptionString>(nullptr)),
-        conf);
+        name, nargs, parser.add_init_value(std::make_unique<libdnf::OptionString>(nullptr)), conf);
     arg->set_description(desc);
 
     command.get_argument_parser_command()->register_positional_arg(arg);
 }
-
 
 std::vector<std::string> StringArgumentList::get_value() const {
     std::vector<std::string> result;
