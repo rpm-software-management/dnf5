@@ -52,8 +52,17 @@ public:
 
 class GroupSpecArguments : public libdnf::cli::session::StringArgumentList {
 public:
+    GroupSpecArguments(libdnf::cli::session::Command & command, int nargs)
+        : StringArgumentList(command, "group-spec", _("Pattern matching group IDS."), nargs) {}
     explicit GroupSpecArguments(libdnf::cli::session::Command & command)
-        : StringArgumentList(command, "group-spec", _("Pattern matching group IDs.")) {}
+        : GroupSpecArguments(command, libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED) {}
+};
+
+
+class GroupWithOptionalOption : public libdnf::cli::session::BoolOption {
+public:
+    explicit GroupWithOptionalOption(libdnf::cli::session::Command & command)
+        : BoolOption(command, "with-optional", '\0', _("Include optional packages from group."), false) {}
 };
 
 
