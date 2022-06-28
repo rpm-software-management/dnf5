@@ -173,12 +173,11 @@ bool Session::read_all_repos() {
         repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
     }
     bool retval = true;
-    libdnf::repo::Repo::LoadFlags flags;
+    libdnf::repo::LoadFlags flags;
     if (session_configuration.find("repo_load_flags") != session_configuration.end()) {
-        flags =
-            static_cast<libdnf::repo::Repo::LoadFlags>(session_configuration_value<unsigned int>("repo_load_flags"));
+        flags = static_cast<libdnf::repo::LoadFlags>(session_configuration_value<unsigned int>("repo_load_flags"));
     } else {
-        flags = libdnf::repo::Repo::LoadFlags::ALL;
+        flags = libdnf::repo::LoadFlags::ALL;
     }
 
     try {

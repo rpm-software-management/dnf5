@@ -433,19 +433,31 @@ LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirr
 }
 
 void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
-    std::vector<const char *> dlist = {
-        MD_FILENAME_PRIMARY,
-        MD_FILENAME_FILELISTS,
-        MD_FILENAME_PRESTODELTA,
-        MD_FILENAME_GROUP_GZ,
-        MD_FILENAME_UPDATEINFO};
+    std::vector<const char *> dlist;
 
 #ifdef MODULEMD
     dlist.push_back(MD_FILENAME_MODULES);
 #endif
-    if (load_metadata_other) {
+
+    if (any(load_flags & LoadFlags::PRIMARY)) {
+        dlist.push_back(MD_FILENAME_PRIMARY);
+    }
+    if (any(load_flags & LoadFlags::FILELISTS)) {
+        dlist.push_back(MD_FILENAME_FILELISTS);
+    }
+    if (any(load_flags & LoadFlags::OTHER)) {
         dlist.push_back(MD_FILENAME_OTHER);
     }
+    if (any(load_flags & LoadFlags::PRESTO)) {
+        dlist.push_back(MD_FILENAME_PRESTODELTA);
+    }
+    if (any(load_flags & LoadFlags::COMPS)) {
+        dlist.push_back(MD_FILENAME_GROUP_GZ);
+    }
+    if (any(load_flags & LoadFlags::UPDATEINFO)) {
+        dlist.push_back(MD_FILENAME_UPDATEINFO);
+    }
+
     for (auto & item : additional_metadata) {
         dlist.push_back(item.c_str());
     }

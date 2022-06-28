@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_REPO_SACK_HPP
 #define LIBDNF_RPM_REPO_SACK_HPP
 
+#include "load_flags.hpp"
 #include "repo.hpp"
 #include "repo_query.hpp"
 
@@ -109,7 +110,7 @@ public:
     ///
     /// @param load_system Whether to load the system repository
     /// @param flags The load flags passed to `Repo::load()`
-    void update_and_load_enabled_repos(bool load_system, Repo::LoadFlags flags = Repo::LoadFlags::ALL);
+    void update_and_load_enabled_repos(bool load_system, libdnf::repo::LoadFlags flags = libdnf::repo::LoadFlags::ALL);
 
     /// Downloads (if necessary) repository metadata and loads them in parallel.
     ///
@@ -122,7 +123,8 @@ public:
     ///
     /// @param repos The repositories to update and load
     /// @param flags The load flags passed to `Repo::load()`
-    void update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::LoadFlags flags = Repo::LoadFlags::ALL);
+    void update_and_load_repos(
+        libdnf::repo::RepoQuery & repos, libdnf::repo::LoadFlags flags = libdnf::repo::LoadFlags::ALL);
 
     RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
 

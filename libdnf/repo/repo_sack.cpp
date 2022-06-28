@@ -96,7 +96,7 @@ RepoWeakPtr RepoSack::get_system_repo() {
 }
 
 
-void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::LoadFlags flags) {
+void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, LoadFlags flags) {
     std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
     std::exception_ptr except_ptr;                   // for pass exception from thread_sack_loader to main thread,
                                                      // a default-constructed std::exception_ptr is a null pointer
@@ -171,9 +171,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
         if (repo->get_type() != libdnf::repo::Repo::Type::AVAILABLE) {
             continue;
         }
-        if (any(flags & libdnf::repo::Repo::LoadFlags::OTHER)) {
-            repo->set_load_metadata_other(true);
-        }
+        repo->set_load_flags(flags);
         catch_thread_sack_loader_exceptions();
         try {
             repo->fetch_metadata();
@@ -209,7 +207,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, Repo::Load
 }
 
 
-void RepoSack::update_and_load_enabled_repos(bool load_system, Repo::LoadFlags flags) {
+void RepoSack::update_and_load_enabled_repos(bool load_system, LoadFlags flags) {
     if (load_system) {
         // create the system repository if it does not exist
         base->get_repo_sack()->get_system_repo();

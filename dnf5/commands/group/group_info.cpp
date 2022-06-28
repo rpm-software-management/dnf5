@@ -43,7 +43,7 @@ void GroupInfoCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.set_available_repos_load_flags(libdnf::repo::Repo::LoadFlags::COMPS);
+    context.set_available_repos_load_flags(libdnf::repo::LoadFlags::COMPS);
 }
 
 void GroupInfoCommand::run() {

@@ -84,7 +84,7 @@ public:
     /// Mirror failure callback. Called when downloading from a mirror failed.
     /// @param msg the error message
     /// @param url the mirror url
-    /// @param metadata the type of metadata that is being downloaded TODO(lukash) should this point to Repo::LoadFlags in some way?
+    /// @param metadata the type of metadata that is being downloaded TODO(lukash) should this point to LoadFlags in some way?
     /// @return TODO(lukash) this uses librepo's LrCbReturnCode, we should have our own enum
     virtual int handle_mirror_failure(const char * msg, const char * url, const char * metadata) { return 0; }
 

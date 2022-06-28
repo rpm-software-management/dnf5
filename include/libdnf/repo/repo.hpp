@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MODULEMD
 
 #include "config_repo.hpp"
+#include "load_flags.hpp"
 #include "repo_callbacks.hpp"
 
 #include "libdnf/base/base_weak.hpp"
@@ -72,18 +73,6 @@ public:
         // try the cache, if it is expired download new md.
         TRY_CACHE = 3
     };
-
-    // TODO(lukash) name this RepodataType?
-    enum class LoadFlags {
-        PRIMARY = 1 << 1,     /// Load primary repodata (primary.xml).
-        FILELISTS = 1 << 2,   /// Load file lists (filelists.xml). Requires loading PRIMARY.
-        OTHER = 1 << 3,       /// Load changelogs (other.xml). Requires loading PRIMARY.
-        PRESTO = 1 << 4,      /// Use deltarpm.
-        UPDATEINFO = 1 << 5,  /// Load advisories (updateinfo.xml).
-        COMPS = 1 << 6,       /// Load comps groups and environments (comps.xml).
-        ALL = ~0,             /// Load all possible repodata.
-    };
-
 
     /// Verify repo ID
     /// @param id repo ID to verify
@@ -167,7 +156,7 @@ public:
     /// @param flags Types of repodata to be loaded. Loads all metadata by default. Used only
     ///              if repository type is `Type::AVAILABLE`.
     // TODO(jrohel): Provide/use configuration options for flags?
-    void load(LoadFlags flags = LoadFlags::ALL);
+    void load(libdnf::repo::LoadFlags flags = libdnf::repo::LoadFlags::ALL);
 
     /// Append a rpm database into the system repository. The type of the repo must be Type::SYSTEM.
     // TODO(jrohel) this will add packages with conflicting rpmdb ids, which will break some operations
@@ -183,13 +172,9 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setUseIncludes(bool enabled)
     void set_use_includes(bool enabled);
 
-    /// Returns whether the loading of "other" metadata file is enabled
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getLoadMetadataOther()
-    bool get_load_metadata_other() const;
-
-    /// Enables/disables loading of "other" metadata file
+    /// Determine which repodata types to download.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setLoadMetadataOther(bool value)
-    void set_load_metadata_other(bool value);
+    void set_load_flags(libdnf::repo::LoadFlags value);
 
     /// Returns repository cost
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getCost()
@@ -388,7 +373,7 @@ private:
 
     void make_solv_repo();
 
-    void load_available_repo(LoadFlags flags);
+    void load_available_repo(libdnf::repo::LoadFlags flags);
 
     void internalize();
 
@@ -413,23 +398,6 @@ private:
 
     WeakPtrGuard<Repo, false> data_guard;
 };
-
-
-inline constexpr Repo::LoadFlags operator|(Repo::LoadFlags lhs, Repo::LoadFlags rhs) {
-    return static_cast<Repo::LoadFlags>(
-        static_cast<std::underlying_type_t<Repo::LoadFlags>>(lhs) |
-        static_cast<std::underlying_type_t<Repo::LoadFlags>>(rhs));
-}
-
-inline constexpr Repo::LoadFlags operator&(Repo::LoadFlags lhs, Repo::LoadFlags rhs) {
-    return static_cast<Repo::LoadFlags>(
-        static_cast<std::underlying_type_t<Repo::LoadFlags>>(lhs) &
-        static_cast<std::underlying_type_t<Repo::LoadFlags>>(rhs));
-}
-
-inline constexpr bool any(Repo::LoadFlags flags) {
-    return static_cast<typename std::underlying_type<Repo::LoadFlags>::type>(flags) != 0;
-}
 
 
 /// Logger for librepo

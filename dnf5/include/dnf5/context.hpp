@@ -51,7 +51,7 @@ public:
     void apply_repository_setopts();
 
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
-    void load_repos(bool load_system, libdnf::repo::Repo::LoadFlags flags = libdnf::repo::Repo::LoadFlags::ALL);
+    void load_repos(bool load_system, libdnf::repo::LoadFlags flags = libdnf::repo::LoadFlags::ALL);
 
     /// Downloads the given URLs to specified destination local paths.
     void download_urls(
@@ -109,8 +109,8 @@ public:
     void set_load_available_repos(LoadAvailableRepos which) { load_available_repos = which; }
     LoadAvailableRepos get_load_available_repos() const noexcept { return load_available_repos; }
 
-    void set_available_repos_load_flags(libdnf::repo::Repo::LoadFlags flags) { available_repos_load_flags = flags; }
-    libdnf::repo::Repo::LoadFlags get_available_repos_load_flags() const noexcept { return available_repos_load_flags; }
+    void set_available_repos_load_flags(libdnf::repo::LoadFlags flags) { available_repos_load_flags = flags; }
+    libdnf::repo::LoadFlags get_available_repos_load_flags() const noexcept { return available_repos_load_flags; }
 
 private:
     /// If quiet mode is not active, it will print `msg` to standard output.
@@ -132,7 +132,7 @@ private:
     bool load_system_repo{false};
     LoadAvailableRepos load_available_repos{LoadAvailableRepos::NONE};
     //system_repo_load_flags;
-    libdnf::repo::Repo::LoadFlags available_repos_load_flags{libdnf::repo::Repo::LoadFlags::ALL};
+    libdnf::repo::LoadFlags available_repos_load_flags{libdnf::repo::LoadFlags::ALL};
 };
 
 

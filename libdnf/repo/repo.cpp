@@ -266,12 +266,8 @@ void Repo::set_use_includes(bool enabled) {
     use_includes = enabled;
 }
 
-bool Repo::get_load_metadata_other() const {
-    return downloader->load_metadata_other;
-}
-
-void Repo::set_load_metadata_other(bool value) {
-    downloader->load_metadata_other = value;
+void Repo::set_load_flags(LoadFlags value) {
+    downloader->set_load_flags(value);
 }
 
 int Repo::get_cost() const {

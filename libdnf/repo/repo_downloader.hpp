@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/repo/config_repo.hpp"
+#include "libdnf/repo/load_flags.hpp"
 #include "libdnf/repo/repo_callbacks.hpp"
 
 #include <gpgme.h>
@@ -61,6 +62,7 @@ public:
 
     ~RepoDownloader();
 
+    void set_load_flags(libdnf::repo::LoadFlags value) { load_flags = value; }
     void download_metadata(const std::string & destdir);
     bool is_metalink_in_sync();
     bool is_repomd_in_sync();
@@ -99,7 +101,7 @@ private:
     std::unique_ptr<RepoCallbacks> callbacks;
 
     // download input
-    bool load_metadata_other = false;
+    LoadFlags load_flags = LoadFlags::ALL;
     std::set<std::string> additional_metadata;
     bool preserve_remote_time = false;
     int max_mirror_tries = 0;  // try all mirrors

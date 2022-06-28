@@ -208,7 +208,7 @@ void Context::print_info(const char * msg) {
 }
 
 
-void Context::load_repos(bool load_system, libdnf::repo::Repo::LoadFlags flags) {
+void Context::load_repos(bool load_system, libdnf::repo::LoadFlags flags) {
     libdnf::repo::RepoQuery repos(base);
     repos.filter_enabled(true);
     repos.filter_type(libdnf::repo::Repo::Type::SYSTEM, libdnf::sack::QueryCmp::NEQ);
@@ -963,7 +963,7 @@ std::vector<std::string> match_specs(
                 repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
             }
 
-            ctx.load_repos(false, libdnf::repo::Repo::LoadFlags::PRIMARY);
+            ctx.load_repos(false, libdnf::repo::LoadFlags::PRIMARY);
         } catch (...) {
             // Ignores errors when completing available packages, other completions may still work.
         }
