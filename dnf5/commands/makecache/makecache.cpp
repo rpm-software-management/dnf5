@@ -50,7 +50,12 @@ void MakeCacheCommand::run() {
         return;
     }
 
-    ctx.load_repos(false);
+    auto flags = libdnf::repo::LoadFlags::ALL;
+    // TODO(dmach): it might be good to add a (config?) option to control which repodata parts get downloaded
+    flags = flags & ~libdnf::repo::LoadFlags::FILELISTS;
+    flags = flags & ~libdnf::repo::LoadFlags::OTHER;
+    flags = flags & ~libdnf::repo::LoadFlags::PRESTO;
+    ctx.load_repos(false, flags);
 
     std::cout << "Metadata cache created." << std::endl;
 }

@@ -51,6 +51,11 @@ inline constexpr LoadFlags operator&(LoadFlags lhs, LoadFlags rhs) {
 }
 
 
+inline constexpr LoadFlags operator~(LoadFlags lhs) {
+    return static_cast<LoadFlags>(~static_cast<std::underlying_type_t<LoadFlags>>(lhs));
+}
+
+
 inline constexpr bool any(LoadFlags flags) {
     return static_cast<typename std::underlying_type<LoadFlags>::type>(flags) != 0;
 }

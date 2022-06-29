@@ -50,6 +50,10 @@ public:
 
     void apply_repository_setopts();
 
+    /// Update `available_repos_load_flags` according to the provided `pkg_specs`.
+    /// If a pkg_spec contains '/' then assume it's a path and file lists need to be loaded.
+    void update_repo_load_flags_from_specs(const std::vector<std::string> & pkg_specs);
+
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
     void load_repos(bool load_system, libdnf::repo::LoadFlags flags = libdnf::repo::LoadFlags::ALL);
 

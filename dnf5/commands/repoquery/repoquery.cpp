@@ -117,6 +117,7 @@ void RepoqueryCommand::set_argument_parser() {
 
 void RepoqueryCommand::configure() {
     auto & context = get_context();
+    context.update_repo_load_flags_from_specs(pkg_specs);
     context.set_load_system_repo(installed_option->get_value());
     context.set_load_available_repos(
         available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()

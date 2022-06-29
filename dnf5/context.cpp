@@ -208,6 +208,17 @@ void Context::print_info(const char * msg) {
 }
 
 
+void Context::update_repo_load_flags_from_specs(const std::vector<std::string> & pkg_specs) {
+    // if a pkg_spec contains '/', it's a path and we need to load filelists
+    for (auto & spec : pkg_specs) {
+        if (spec.find("/") != std::string::npos) {
+            available_repos_load_flags = available_repos_load_flags | libdnf::repo::LoadFlags::FILELISTS;
+            break;
+        }
+    }
+}
+
+
 void Context::load_repos(bool load_system, libdnf::repo::LoadFlags flags) {
     libdnf::repo::RepoQuery repos(base);
     repos.filter_enabled(true);

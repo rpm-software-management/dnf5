@@ -48,6 +48,14 @@ void DownloadCommand::set_argument_parser() {
 
 void DownloadCommand::configure() {
     auto & context = get_context();
+
+    std::vector<std::string> pkg_specs;
+    for (auto & pattern : *patterns_to_download_options) {
+        auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
+        pkg_specs.push_back(option->get_value());
+    }
+
+    context.update_repo_load_flags_from_specs(pkg_specs);
     context.set_load_system_repo(false);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
