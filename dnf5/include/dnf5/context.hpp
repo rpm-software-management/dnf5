@@ -132,7 +132,7 @@ private:
     bool load_system_repo{false};
     LoadAvailableRepos load_available_repos{LoadAvailableRepos::NONE};
     //system_repo_load_flags;
-    libdnf::repo::LoadFlags available_repos_load_flags{libdnf::repo::LoadFlags::ALL};
+    libdnf::repo::LoadFlags available_repos_load_flags{libdnf::repo::LoadFlags::PRIMARY};
 };
 
 
