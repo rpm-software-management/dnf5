@@ -28,10 +28,13 @@ class Locker {
 public:
     explicit Locker(const std::string & path) : path(path){};
     ~Locker();
-    bool lock();
+    bool read_lock();
+    bool write_lock();
     void unlock();
 
 private:
+    bool lock(short int type);
+
     std::string path;
     int lock_fd{-1};
 };
