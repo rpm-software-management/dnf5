@@ -356,7 +356,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     std::filesystem::create_directories(lock_file_path.parent_path());
 
     libdnf::utils::Locker locker(lock_file_path);
-    if (!locker.lock()) {
+    if (!locker.write_lock()) {
         return TransactionRunResult::ERROR_LOCK;
     }
 

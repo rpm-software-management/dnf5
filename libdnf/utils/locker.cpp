@@ -30,7 +30,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::utils {
 
-bool Locker::lock() {
+bool Locker::read_lock() {
+    return lock(F_RDLCK);
+}
+
+bool Locker::write_lock() {
+    return lock(F_WRLCK);
+}
+
+bool Locker::lock(short int type) {
     lock_fd = open(path.c_str(), O_CREAT | O_RDWR, 0660);
     if (lock_fd == -1) {
         throw SystemError(errno, M_("Failed to open lock file \"{}\""), path);
@@ -38,7 +46,7 @@ bool Locker::lock() {
 
     struct flock fl;
     memset(&fl, 0, sizeof(fl));
-    fl.l_type = F_WRLCK;
+    fl.l_type = type;
     fl.l_whence = SEEK_SET;
     fl.l_start = 0;
     fl.l_len = 0;
