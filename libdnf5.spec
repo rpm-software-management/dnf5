@@ -334,7 +334,7 @@ Requires:       python3-libdnf5%{?_isa} = %{version}-%{release}
 Libdnf plugin that allows loading Python plugins
 
 %files -n python3-libdnf-python-plugins-loader
-%{_libdir}/libdnf-plugins/python_plugins_loader.*
+%{_libdir}/libdnf5/plugins/python_plugins_loader.*
 %{python3_sitelib}/libdnf_plugins/
 %{python3_sitelib}/libdnf_plugins/README
 %endif

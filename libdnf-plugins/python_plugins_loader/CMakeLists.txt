@@ -16,5 +16,5 @@ set_target_properties(python_plugins_loader PROPERTIES PREFIX "")
 target_link_libraries(python_plugins_loader PUBLIC libdnf libdnf-cli)
 target_link_libraries(python_plugins_loader PUBLIC ${Python3_LIBRARIES})
 
-install(TARGETS python_plugins_loader LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/libdnf-plugins/)
+install(TARGETS python_plugins_loader LIBRARY DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/libdnf5/plugins/)
 install(FILES "README" DESTINATION ${Python3_SITELIB}/libdnf_plugins/)
