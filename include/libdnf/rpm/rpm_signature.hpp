@@ -47,25 +47,28 @@ using RpmKeyPktPtr = std::unique_ptr<uint8_t, std::function<void(uint8_t * pkt)>
 
 class KeyInfo {
 public:
-    KeyInfo(std::string key_url, const BaseWeakPtr & base);
     std::string get_key_id() const { return key_id; }
     std::string get_short_key_id() const;
     std::string get_user_id() const { return user_id; }
     std::string get_fingerprint() const { return fingerprint; }
     std::string get_url() const { return key_url; }
     std::string get_path() const { return key_path; }
-    const RpmKeyPktPtr & get_pkt() const { return pkt_ptr; }
-    size_t get_pkt_len() const { return pkt_len; }
 
 private:
+    friend class RpmSignature;
+    KeyInfo(
+        const std::string & key_url,
+        const std::string & key_path,
+        const std::string & key_id,
+        const std::string & user_id,
+        const std::string & fingerprint,
+        std::vector<char> raw_key);
     std::string key_url;
     std::string key_path;
     std::string key_id;
     std::string user_id;
     std::string fingerprint;
-    size_t pkt_len{0};
-    RpmKeyPktPtr pkt_ptr;
-    BaseWeakPtr base;
+    std::vector<char> raw_key;
 };
 
 class RpmSignature {
@@ -86,14 +89,15 @@ public:
     CheckResult check_package_signature(Package package) const;
 
     /// Import public key into rpm database.
-    /// @param key_url: URL of the public key to be imported
-    /// @param user_confirm_cb: callback function to perform user confirmation. This
-    ///     function returns bool whether the user confirms the key import and accepts
-    ///     KeyInfo parameter with key details
+    /// @param key: GPG key to be imported into rpm database.
     bool import_key(const KeyInfo & key) const;
 
     /// Check public key presence in rpm database
     bool key_present(const KeyInfo & key) const;
+
+    /// Download the key file if needed and return a vector of keys contained in it
+    /// @param key_url: URL of the public key to be imported.
+    std::vector<KeyInfo> parse_key_file(const std::string & key_url);
 
 private:
     BaseWeakPtr base;

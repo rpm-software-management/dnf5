@@ -71,37 +71,19 @@ static bool rpmdb_lookup(const RpmTransactionPtr & ts_ptr, const KeyInfo & key) 
 }
 
 
-KeyInfo::KeyInfo(std::string key_url, const BaseWeakPtr & base) : key_url(key_url), base(base) {
-    std::unique_ptr<utils::fs::TempFile> downloaded_key;
-    if (utils::url::is_url(key_url)) {
-        if (key_url.starts_with("file://")) {
-            key_path = key_url.substr(7);
-        } else {
-            // download the remote key
-            downloaded_key = std::make_unique<libdnf::utils::fs::TempFile>("rpmkey");
-            libdnf::repo::FileDownloader downloader(base->get_config());
-            downloader.add(key_url, downloaded_key->get_path());
-            downloader.download(true, true);
-            key_path = downloaded_key->get_path();
-        }
-    } else {
-        key_path = key_url;
-    }
-
-    utils::fs::File key_file(key_path, "r");
-    for (auto & key_info : repo::RepoGpgme::rawkey2infos(key_file.get_fd())) {
-        key_id = key_info.get_id();
-        user_id = key_info.get_user_id();
-        fingerprint = key_info.get_fingerprint();
-    }
-
-    uint8_t * pkt = nullptr;
-    if (pgpReadPkts(key_path.c_str(), &pkt, &pkt_len) != PGPARMOR_PUBKEY) {
-        free(pkt);
-        throw KeyImportError(M_("\"{}\": key is not an armored public key."), key_url);
-    }
-    pkt_ptr = RpmKeyPktPtr{pkt, pkt_deleter};
-}
+KeyInfo::KeyInfo(
+    const std::string & key_url,
+    const std::string & key_path,
+    const std::string & key_id,
+    const std::string & user_id,
+    const std::string & fingerprint,
+    std::vector<char> raw_key)
+    : key_url(key_url),
+      key_path(key_path),
+      key_id(key_id),
+      user_id(user_id),
+      fingerprint(fingerprint),
+      raw_key(raw_key) {}
 
 std::string KeyInfo::get_short_key_id() const {
     auto short_key_id = key_id.size() > 8 ? key_id.substr(key_id.size() - 8) : key_id;
@@ -201,12 +183,54 @@ bool RpmSignature::import_key(const KeyInfo & key) const {
 
     auto ts_ptr = create_transaction(base);
     if (!rpmdb_lookup(ts_ptr, key)) {
-        if (rpmtsImportPubkey(ts_ptr.get(), key.get_pkt().get(), key.get_pkt_len()) != RPMRC_OK) {
+        uint8_t * pkt = nullptr;
+        size_t pkt_len{0};
+        if (pgpParsePkts(key.raw_key.data(), &pkt, &pkt_len) != PGPARMOR_PUBKEY) {
+            free(pkt);
+            throw KeyImportError(M_("\"{}\": key is not an armored public key."), key.get_url());
+        }
+        auto pkt_ptr = RpmKeyPktPtr{pkt, pkt_deleter};
+        if (rpmtsImportPubkey(ts_ptr.get(), pkt_ptr.get(), pkt_len) != RPMRC_OK) {
             throw KeyImportError(M_("Failed to import public key \"{}\" to rpmdb."), key.get_url());
         }
         return true;
     }
     return false;
+}
+
+std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
+    std::string key_path;
+    std::unique_ptr<utils::fs::TempFile> downloaded_key;
+    if (utils::url::is_url(key_url)) {
+        if (key_url.starts_with("file://")) {
+            key_path = key_url.substr(7);
+        } else {
+            // download the remote key
+            downloaded_key = std::make_unique<libdnf::utils::fs::TempFile>("rpmkey");
+            libdnf::repo::FileDownloader downloader(base->get_config());
+            downloader.add(key_url, downloaded_key->get_path());
+            downloader.download(true, true);
+            key_path = downloaded_key->get_path();
+        }
+    } else {
+        key_path = key_url;
+    }
+
+    std::vector<KeyInfo> keys;
+    utils::fs::File key_file(key_path, "r");
+    for (auto & key_info : repo::RepoGpgme::rawkey2infos(key_file.get_fd())) {
+        key_info.raw_key.insert(key_info.raw_key.end(), '\0');
+        KeyInfo key{
+            key_url,
+            key_path,
+            key_info.get_id(),
+            key_info.get_user_id(),
+            key_info.get_fingerprint(),
+            std::move(key_info.raw_key)};
+        keys.emplace_back(std::move(key));
+    }
+
+    return keys;
 }
 
 }  //  namespace libdnf::rpm

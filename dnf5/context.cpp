@@ -681,26 +681,27 @@ Context::ImportRepoKeys Context::import_repo_keys(libdnf::repo::Repo & repo) {
     bool key_confirmed{false};
     bool key_imported{false};
     for (auto const & key_url : key_urls) {
-        libdnf::rpm::KeyInfo key_info{key_url, base.get_weak_ptr()};
-        if (rpm_signature.key_present(key_info)) {
-            std::cerr << fmt::format("Public key \"{}\" is already present, not importing.", key_url) << std::endl;
-            continue;
-        }
-        already_present = false;
-
-        if (user_confirm_key(base.get_config(), key_info)) {
-            key_confirmed = true;
-        } else {
-            continue;
-        }
-
-        try {
-            if (rpm_signature.import_key(key_info)) {
-                key_imported = true;
-                std::cout << "Key imported successfully." << std::endl;
+        for (auto & key_info : rpm_signature.parse_key_file(key_url)) {
+            if (rpm_signature.key_present(key_info)) {
+                std::cerr << fmt::format("Public key \"{}\" is already present, not importing.", key_url) << std::endl;
+                continue;
             }
-        } catch (const libdnf::rpm::KeyImportError & ex) {
-            std::cerr << ex.what() << std::endl;
+            already_present = false;
+
+            if (user_confirm_key(base.get_config(), key_info)) {
+                key_confirmed = true;
+            } else {
+                continue;
+            }
+
+            try {
+                if (rpm_signature.import_key(key_info)) {
+                    key_imported = true;
+                    std::cout << "Key imported successfully." << std::endl;
+                }
+            } catch (const libdnf::rpm::KeyImportError & ex) {
+                std::cerr << ex.what() << std::endl;
+            }
         }
     }
 
