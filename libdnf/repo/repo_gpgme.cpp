@@ -169,7 +169,7 @@ std::vector<Key> RepoGpgme::rawkey2infos(const int fd) {
         do {
             readed = gpgme_data_read(sink, buf, sizeof(buf));
             if (readed > 0)
-                key_info.raw_key.insert(key_info.raw_key.end(), buf, buf + sizeof(buf));
+                key_info.raw_key.insert(key_info.raw_key.end(), buf, buf + readed);
         } while (readed == sizeof(buf));
     }
     return key_infos;
