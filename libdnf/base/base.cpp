@@ -116,7 +116,7 @@ void Base::setup() {
 
     config.varsdir().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
-    // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be sinchronized with Pool
+    // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be synchronized with Pool
     // (and force to recompute provides) or locked
     pool_setarch(**pool, get_vars()->get_value("arch").c_str());
     pool_set_rootdir(**pool, installroot.get_value().c_str());

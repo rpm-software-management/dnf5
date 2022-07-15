@@ -910,11 +910,6 @@ base::Transaction Goal::resolve(bool allow_erasing) {
 
     auto sack = p_impl->base->get_rpm_package_sack();
     base::Transaction transaction(p_impl->base);
-    auto & pool = get_pool(p_impl->base);
-    // TODO(jmracek) Move pool settings in base
-    pool_setdisttype(*pool, DISTTYPE_RPM);
-    // TODO(jmracek) Move pool settings in base and replace it with a Substitotion class arch value
-    pool_setarch(*pool, "x86_64");
     auto ret = GoalProblem::NO_PROBLEM;
 
     sack->p_impl->recompute_considered_in_pool();
