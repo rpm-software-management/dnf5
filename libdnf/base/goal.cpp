@@ -74,7 +74,7 @@ public:
     void add_rpm_ids(GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings);
 
     GoalProblem add_specs_to_goal(base::Transaction & transaction);
-    GoalProblem add_install_to_goal(
+    std::pair<GoalProblem, libdnf::solv::IdQueue> add_install_to_goal(
         base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
     void add_provide_install_to_goal(const std::string & spec, GoalJobSettings & settings);
     GoalProblem add_reinstall_to_goal(
@@ -294,9 +294,11 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
     for (auto & [action, spec, settings] : rpm_specs) {
         switch (action) {
-            case GoalAction::INSTALL:
-                ret |= add_install_to_goal(transaction, spec, settings);
-                break;
+            case GoalAction::INSTALL: {
+                auto [problem, idqueue] = add_install_to_goal(transaction, spec, settings);
+                rpm_goal.add_user_installed(idqueue);
+                ret |= problem;
+            } break;
             case GoalAction::INSTALL_VIA_PROVIDE:
                 add_provide_install_to_goal(spec, settings);
                 break;
@@ -359,6 +361,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
 }
 
 GoalProblem Goal::Impl::add_install_to_goal(
+std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings) {
     auto sack = base->get_rpm_package_sack();
     auto & pool = get_pool(base);
@@ -368,7 +371,7 @@ GoalProblem Goal::Impl::add_install_to_goal(
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
 
     auto multilib_policy = cfg_main.multilib_policy().get_value();
-    libdnf::solv::IdQueue tmp_queue;
+    libdnf::solv::IdQueue result_queue;
     rpm::PackageQuery base_query(base);
 
     rpm::PackageQuery query(base_query);
@@ -376,9 +379,9 @@ GoalProblem Goal::Impl::add_install_to_goal(
     if (!nevra_pair.first) {
         auto problem = transaction.p_impl->report_not_found(GoalAction::INSTALL, spec, settings, strict);
         if (strict) {
-            return problem;
+            return {problem, result_queue};
         } else {
-            return GoalProblem::NO_PROBLEM;
+            return {GoalProblem::NO_PROBLEM, result_queue};
         }
     }
     bool has_just_name = nevra_pair.second.has_just_name();
@@ -397,7 +400,7 @@ GoalProblem Goal::Impl::add_install_to_goal(
             if (query.empty()) {
                 transaction.p_impl->add_resolve_log(
                     GoalAction::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
-                return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
+                return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
             }
             query |= installed;
         }
@@ -426,8 +429,8 @@ GoalProblem Goal::Impl::add_install_to_goal(
                 if (add_obsoletes) {
                     add_obsoletes_to_data(base_query, selected);
                 }
-                solv_map_to_id_queue(tmp_queue, *selected.p_impl);
-                rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
+                solv_map_to_id_queue(result_queue, *selected.p_impl);
+                rpm_goal.add_install(result_queue, strict, best, clean_requirements_on_remove);
             } else {
                 // when multiple architectures -> add noarch solvables into each architecture solvable set
                 auto noarch = name_iter.second.find(ARCH_NOARCH);
@@ -451,8 +454,8 @@ GoalProblem Goal::Impl::add_install_to_goal(
                             add_obsoletes_to_data(base_query, selected);
                         }
                         selected |= selected_noarch;
-                        solv_map_to_id_queue(tmp_queue, *selected.p_impl);
-                        rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
+                        solv_map_to_id_queue(result_queue, *selected.p_impl);
+                        rpm_goal.add_install(result_queue, strict, best, clean_requirements_on_remove);
                     }
                 } else {
                     for (auto & arch_iter : name_iter.second) {
@@ -463,8 +466,8 @@ GoalProblem Goal::Impl::add_install_to_goal(
                         if (add_obsoletes) {
                             add_obsoletes_to_data(base_query, selected);
                         }
-                        solv_map_to_id_queue(tmp_queue, *selected.p_impl);
-                        rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
+                        solv_map_to_id_queue(result_queue, *selected.p_impl);
+                        rpm_goal.add_install(result_queue, strict, best, clean_requirements_on_remove);
                     }
                 }
             }
@@ -480,7 +483,7 @@ GoalProblem Goal::Impl::add_install_to_goal(
                 if (query.empty()) {
                     transaction.p_impl->add_resolve_log(
                         GoalAction::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
-                    return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
+                    return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
                 }
                 query |= installed;
             }
@@ -529,8 +532,8 @@ GoalProblem Goal::Impl::add_install_to_goal(
                 if (add_obsoletes) {
                     add_obsoletes_to_data(base_query, selected);
                 }
-                solv_map_to_id_queue(tmp_queue, static_cast<libdnf::solv::SolvMap>(*selected.p_impl));
-                rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
+                solv_map_to_id_queue(result_queue, static_cast<libdnf::solv::SolvMap>(*selected.p_impl));
+                rpm_goal.add_install(result_queue, strict, best, clean_requirements_on_remove);
                 selected.clear();
                 selected.p_impl->add_unsafe(pool.solvable2id(*iter));
                 current_name = (*iter)->name;
@@ -538,9 +541,8 @@ GoalProblem Goal::Impl::add_install_to_goal(
             if (add_obsoletes) {
                 add_obsoletes_to_data(base_query, selected);
             }
-            solv_map_to_id_queue(tmp_queue, static_cast<libdnf::solv::SolvMap>(*selected.p_impl));
-            rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
-            return GoalProblem::NO_PROBLEM;
+            solv_map_to_id_queue(result_queue, static_cast<libdnf::solv::SolvMap>(*selected.p_impl));
+            rpm_goal.add_install(result_queue, strict, best, clean_requirements_on_remove);
         } else {
             if (add_obsoletes) {
                 add_obsoletes_to_data(base_query, query);
@@ -550,7 +552,7 @@ GoalProblem Goal::Impl::add_install_to_goal(
                 if (query.empty()) {
                     transaction.p_impl->add_resolve_log(
                         GoalAction::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
-                    return GoalProblem::NOT_FOUND_IN_REPOSITORIES;
+                    return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
                 }
                 query |= installed;
             }
@@ -559,17 +561,15 @@ GoalProblem Goal::Impl::add_install_to_goal(
             if (settings.advisory_filter.has_value()) {
                 query.filter_advisories(settings.advisory_filter.value(), libdnf::sack::QueryCmp::EQ);
             }
-
-            solv_map_to_id_queue(tmp_queue, *query.p_impl);
-            rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
-            return GoalProblem::NO_PROBLEM;
+            solv_map_to_id_queue(result_queue, *query.p_impl);
+            rpm_goal.add_install(result_queue, strict, best, clean_requirements_on_remove);
         }
     } else {
         // TODO(lukash) throw a proper exception
         throw RuntimeError(M_("Incorrect configuration value for multilib_policy: {}"), multilib_policy);
     }
 
-    return GoalProblem::NO_PROBLEM;
+    return {GoalProblem::NO_PROBLEM, result_queue};
 }
 
 void Goal::Impl::add_provide_install_to_goal(const std::string & spec, GoalJobSettings & settings) {
