@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "group.hpp"
 
 #include "group_info.hpp"
+#include "group_install.hpp"
 #include "group_list.hpp"
 
 namespace dnf5 {
@@ -35,6 +36,12 @@ void GroupCommand::register_subcommands() {
     get_argument_parser_command()->register_group(query_commands_group);
     register_subcommand(std::make_unique<GroupListCommand>(*this), query_commands_group);
     register_subcommand(std::make_unique<GroupInfoCommand>(*this), query_commands_group);
+    // software management commands
+    auto * software_management_commands_group =
+        get_context().get_argument_parser().add_new_group("module_software_management_commands");
+    software_management_commands_group->set_header("Software Management Commands:");
+    get_argument_parser_command()->register_group(software_management_commands_group);
+    register_subcommand(std::make_unique<GroupInstallCommand>(*this), software_management_commands_group);
 }
 
 void GroupCommand::pre_configure() {
