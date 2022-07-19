@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/utils/to_underlying.hpp"
 
 #include <fmt/format.h>
+#include <libdnf/base/transaction.hpp>
 #include <libdnf/rpm/nevra.hpp>
 #include <libsmartcols/libsmartcols.h>
 
@@ -76,16 +77,20 @@ public:
     struct libscols_line * print(const T & tspkg) {
         if (!current_action || *current_action != tspkg.get_action() || !current_reason ||
             *current_reason != tspkg.get_reason()) {
+            auto reason = tspkg.get_reason();
+            auto action = tspkg.get_action();
             current_header_line = scols_table_new_line(table, NULL);
             std::string text;
 
-            switch (tspkg.get_action()) {
+            switch (action) {
                 case libdnf::transaction::TransactionItemAction::INSTALL:
                     text = "Installing";
-                    if (tspkg.get_reason() == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+                    if (reason == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
                         text += " dependencies";
-                    } else if (tspkg.get_reason() == libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY) {
+                    } else if (reason == libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY) {
                         text += " weak dependencies";
+                    } else if (reason == libdnf::transaction::TransactionItemReason::GROUP) {
+                        text += " group/module packages";
                     }
                     break;
                 case libdnf::transaction::TransactionItemAction::UPGRADE:
@@ -99,25 +104,78 @@ public:
                     break;
                 case libdnf::transaction::TransactionItemAction::REMOVE:
                     text = "Removing";
-                    if (tspkg.get_reason() == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+                    if (reason == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
                         text += " dependent packages";
-                    } else if (tspkg.get_reason() == libdnf::transaction::TransactionItemReason::CLEAN) {
+                    } else if (reason == libdnf::transaction::TransactionItemReason::CLEAN) {
                         text += " unused dependencies";
                     }
                     break;
                 case libdnf::transaction::TransactionItemAction::REPLACED:
                 case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
                     libdnf_throw_assertion(
-                        "Unexpected action in print_transaction_table: {}",
-                        libdnf::utils::to_underlying(tspkg.get_action()));
+                        "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
             }
 
             text += ":";
 
             scols_line_set_data(current_header_line, COL_NAME, text.c_str());
 
-            current_action = tspkg.get_action();
-            current_reason = tspkg.get_reason();
+            current_action = action;
+            current_reason = reason;
+        }
+
+        return current_header_line;
+    }
+
+private:
+    struct libscols_table * table = nullptr;
+    struct libscols_line * current_header_line = nullptr;
+    std::optional<libdnf::transaction::TransactionItemAction> current_action;
+    std::optional<libdnf::transaction::TransactionItemReason> current_reason;
+};
+
+
+class ActionHeaderPrinterGroup {
+public:
+    ActionHeaderPrinterGroup(struct libscols_table * table) : table(table) {}
+
+    // TODO(lukash) to bring more sanity into the templated functions here, it
+    // would be better if the Transaction template type of
+    // print_transaction_table() was required to have a TransactionItem type
+    // defined inside, so that the ActionHeaderPrinter class could be templated
+    // instad of this method, and we could do (in print_transaction_table(),
+    // where this class is instantiated):
+    // ActionHeaderPrinter<Transaction::TransactionItem> action_header_printer(...);
+    template <class T>
+    struct libscols_line * print(const T & tsgrp) {
+        if (!current_action || *current_action != tsgrp.get_action() || !current_reason ||
+            *current_reason != tsgrp.get_reason()) {
+            auto reason = tsgrp.get_reason();
+            auto action = tsgrp.get_action();
+            current_header_line = scols_table_new_line(table, NULL);
+            std::string text;
+
+            switch (action) {
+                case libdnf::transaction::TransactionItemAction::INSTALL:
+                    text = "Installing groups";
+                    if (reason == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+                        text += " dependencies";
+                    }
+                    break;
+                case libdnf::transaction::TransactionItemAction::REMOVE:
+                    text = "Removing groups";
+                    break;
+                default:
+                    libdnf_throw_assertion(
+                        "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
+            }
+
+            text += ":";
+
+            scols_line_set_data(current_header_line, COL_NAME, text.c_str());
+
+            current_action = action;
+            current_reason = reason;
         }
 
         return current_header_line;
@@ -206,6 +264,20 @@ static bool transaction_package_cmp(const TransactionPackage & tspkg1, const Tra
 }
 
 
+template <class TransactionGroup>
+static bool transaction_group_cmp(const TransactionGroup & tsgrp1, const TransactionGroup & tsgrp2) {
+    if (tsgrp1.get_action() != tsgrp2.get_action()) {
+        return tsgrp1.get_action() > tsgrp2.get_action();
+    }
+
+    if (tsgrp1.get_reason() != tsgrp2.get_reason()) {
+        return tsgrp1.get_reason() > tsgrp2.get_reason();
+    }
+
+    return tsgrp1.get_group().get_groupid() > tsgrp2.get_group().get_groupid();
+}
+
+
 /// Prints all transaction problems
 template <class Transaction>
 void print_resolve_logs(Transaction transaction) {
@@ -228,8 +300,9 @@ bool print_transaction_table(Transaction & transaction) {
     // TODO (nsella) split function into create/print if possible
     //static struct libscols_table * create_transaction_table(bool with_status) {}
     auto tspkgs = transaction.get_transaction_packages();
+    auto tsgrps = transaction.get_transaction_groups();
 
-    if (tspkgs.empty()) {
+    if (tspkgs.empty() && tsgrps.empty()) {
         std::cout << "Nothing to do." << std::endl;
         return false;
     }
@@ -271,6 +344,7 @@ bool print_transaction_table(Transaction & transaction) {
     // TODO(jrohel): Print relations with obsoleted packages
 
     std::sort(tspkgs.begin(), tspkgs.end(), transaction_package_cmp<decltype(*tspkgs.begin())>);
+    std::sort(tsgrps.begin(), tsgrps.end(), transaction_group_cmp<decltype(*tsgrps.begin())>);
 
     struct libscols_line * header_ln = nullptr;
     TransactionSummary ts_summary;
@@ -343,6 +417,18 @@ bool print_transaction_table(Transaction & transaction) {
             scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_REPO), replaced_color);
             scols_cell_set_color(scols_line_get_cell(ln_replaced, COL_SIZE), replaced_color);
         }
+    }
+
+    ActionHeaderPrinterGroup action_header_printer_group(tb);
+    for (auto & tsgrp : tsgrps) {
+        auto grp = tsgrp.get_group();
+
+        header_ln = action_header_printer_group.print(tsgrp);
+
+        struct libscols_line * ln = scols_table_new_line(tb, header_ln);
+        scols_line_set_data(ln, COL_NAME, grp.get_name().c_str());
+        auto ce = scols_line_get_cell(ln, COL_NAME);
+        scols_cell_set_color(ce, action_color(tsgrp.get_action()));
     }
 
     scols_print_table(tb);
