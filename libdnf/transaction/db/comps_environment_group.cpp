@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 
 #include <algorithm>
@@ -62,7 +63,7 @@ void comps_environment_groups_select(libdnf::utils::SQLite3 & conn, CompsEnviron
         grp.set_id(query->get<int64_t>("id"));
         grp.set_group_id(query->get<std::string>("groupid"));
         grp.set_installed(query->get<bool>("installed"));
-        grp.set_group_type(static_cast<CompsPackageType>(query->get<int>("group_type")));
+        grp.set_group_type(static_cast<comps::PackageType>(query->get<int>("group_type")));
     }
 }
 

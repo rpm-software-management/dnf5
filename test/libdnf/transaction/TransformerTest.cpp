@@ -96,7 +96,7 @@ void TransformerTest::testGroupTransformation() {
             auto & groupPkg = packages[0];
             CPPUNIT_ASSERT(groupPkg->get_name() == "dnf-yum");
             CPPUNIT_ASSERT(groupPkg->get_installed() == true);
-            CPPUNIT_ASSERT(groupPkg->get_package_type() == CompsPackageType::MANDATORY);
+            CPPUNIT_ASSERT(groupPkg->get_package_type() == PackageType::MANDATORY);
 
         } else if (type == TransactionItemType::ENVIRONMENT) {
             auto env = std::dynamic_pointer_cast<CompsEnvironment>(item);
@@ -110,7 +110,7 @@ void TransformerTest::testGroupTransformation() {
             auto & envGroup = groups[0];
             CPPUNIT_ASSERT(envGroup->get_group_id() == "core");
             CPPUNIT_ASSERT(envGroup->get_installed() == true);
-            CPPUNIT_ASSERT(envGroup->get_group_type() == CompsPackageType::MANDATORY);
+            CPPUNIT_ASSERT(envGroup->get_group_type() == PackageType::MANDATORY);
 
         } else {
             CPPUNIT_FAIL("Invalid item type: " + std::to_string(static_cast<int>(type)));

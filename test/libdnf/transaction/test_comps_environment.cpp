@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_comps_environment.hpp"
 
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/comps_environment.hpp"
 #include "libdnf/transaction/transaction.hpp"
 
@@ -38,7 +39,7 @@ static CompsEnvironment & create_comps_environment(Transaction & trans) {
     env.set_environment_id("minimal");
     env.set_name("Minimal Environment");
     env.set_translated_name("translated(Minimal Environment)");
-    env.set_package_types(CompsPackageType::DEFAULT);
+    env.set_package_types(libdnf::comps::PackageType::DEFAULT);
 
     env.set_repoid("repoid");
     env.set_action(TransactionItemAction::INSTALL);
@@ -48,12 +49,12 @@ static CompsEnvironment & create_comps_environment(Transaction & trans) {
     auto & grp_core = env.new_group();
     grp_core.set_group_id("core");
     grp_core.set_installed(true);
-    grp_core.set_group_type(CompsPackageType::MANDATORY);
+    grp_core.set_group_type(libdnf::comps::PackageType::MANDATORY);
 
     auto & grp_base = env.new_group();
     grp_base.set_group_id("base");
     grp_base.set_installed(false);
-    grp_base.set_group_type(CompsPackageType::OPTIONAL);
+    grp_base.set_group_type(libdnf::comps::PackageType::OPTIONAL);
 
     return env;
 }
@@ -89,7 +90,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(std::string("minimal"), env2.get_environment_id());
     CPPUNIT_ASSERT_EQUAL(std::string("Minimal Environment"), env2.get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("translated(Minimal Environment)"), env2.get_translated_name());
-    CPPUNIT_ASSERT_EQUAL(CompsPackageType::DEFAULT, env2.get_package_types());
+    CPPUNIT_ASSERT_EQUAL(libdnf::comps::PackageType::DEFAULT, env2.get_package_types());
     CPPUNIT_ASSERT_EQUAL(std::string("repoid"), env2.get_repoid());
     CPPUNIT_ASSERT_EQUAL(TransactionItemAction::INSTALL, env2.get_action());
     CPPUNIT_ASSERT_EQUAL(TransactionItemReason::USER, env2.get_reason());
@@ -101,10 +102,10 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     auto & env2_group1 = env2.get_groups().at(0);
     CPPUNIT_ASSERT_EQUAL(std::string("core"), env2_group1.get_group_id());
     CPPUNIT_ASSERT_EQUAL(true, env2_group1.get_installed());
-    CPPUNIT_ASSERT_EQUAL(CompsPackageType::MANDATORY, env2_group1.get_group_type());
+    CPPUNIT_ASSERT_EQUAL(libdnf::comps::PackageType::MANDATORY, env2_group1.get_group_type());
 
     auto & env2_group2 = env2.get_groups().at(1);
     CPPUNIT_ASSERT_EQUAL(std::string("base"), env2_group2.get_group_id());
     CPPUNIT_ASSERT_EQUAL(false, env2_group2.get_installed());
-    CPPUNIT_ASSERT_EQUAL(CompsPackageType::OPTIONAL, env2_group2.get_group_type());
+    CPPUNIT_ASSERT_EQUAL(libdnf::comps::PackageType::OPTIONAL, env2_group2.get_group_type());
 }

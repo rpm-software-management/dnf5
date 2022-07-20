@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "comps_group.hpp"
 
+#include "libdnf/comps/group/package.hpp"
+
 #include <memory>
 #include <vector>
 
@@ -73,12 +75,12 @@ public:
     /// Get types of the packages to be installed with the environment (related xml elements: <comps><group><packagelist><packagereq type="VALUE" ...>)
     ///
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentItem.getPackageTypes()
-    CompsPackageType get_package_types() const noexcept { return package_types; }
+    libdnf::comps::PackageType get_package_types() const noexcept { return package_types; }
 
     /// Set types of the packages to be installed with the environment (related xml elements: <comps><group><packagelist><packagereq type="VALUE" ...>)
     ///
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentItem.setPackageTypes(libdnf::CompsPackageType value)
-    void set_package_types(CompsPackageType value) { package_types = value; }
+    void set_package_types(libdnf::comps::PackageType value) { package_types = value; }
 
     /// Create a new CompsEnvironmentGroup object and return a reference to it.
     /// The object is owned by the CompsEnvironment.
@@ -105,7 +107,7 @@ private:
     std::string environment_id;
     std::string name;
     std::string translated_name;
-    CompsPackageType package_types = CompsPackageType::DEFAULT;
+    libdnf::comps::PackageType package_types = libdnf::comps::PackageType::DEFAULT;
     std::vector<CompsEnvironmentGroup> groups;
 };
 
@@ -149,11 +151,11 @@ public:
 
     // TODO(dmach): this is not entirely clear; investigate and document
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentGroup.getGroupType()
-    CompsPackageType get_group_type() const noexcept { return group_type; }
+    libdnf::comps::PackageType get_group_type() const noexcept { return group_type; }
 
     // TODO(dmach): this is not entirely clear; investigate and document
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentGroup.setGroupType(libdnf::CompsPackageType value)
-    void set_group_type(CompsPackageType value) { group_type = value; }
+    void set_group_type(libdnf::comps::PackageType value) { group_type = value; }
 
     /// Get the environment the group is part of
     ///
@@ -164,7 +166,7 @@ private:
     int64_t id = 0;
     std::string group_id;
     bool installed = false;
-    CompsPackageType group_type;
+    libdnf::comps::PackageType group_type;
     CompsEnvironment & environment;
 };
 

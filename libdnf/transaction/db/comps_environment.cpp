@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "item.hpp"
 #include "trans_item.hpp"
 
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/transaction.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
@@ -72,7 +73,7 @@ std::vector<CompsEnvironment> get_transaction_comps_environments(libdnf::utils::
         ti.set_environment_id(query->get<std::string>("environmentid"));
         ti.set_name(query->get<std::string>("name"));
         ti.set_translated_name(query->get<std::string>("translated_name"));
-        ti.set_package_types(static_cast<CompsPackageType>(query->get<int>("pkg_types")));
+        ti.set_package_types(static_cast<comps::PackageType>(query->get<int>("pkg_types")));
         comps_environment_groups_select(conn, ti);
         result.push_back(std::move(ti));
     }

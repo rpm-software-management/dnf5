@@ -26,7 +26,36 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::comps {
 
 
-enum class PackageType { MANDATORY, DEFAULT, OPTIONAL, CONDITIONAL };
+enum class PackageType : int {
+    CONDITIONAL = 1 << 0,  // a weak dependency
+    DEFAULT = 1 << 1,      // installed by default, but can be unchecked in the UI
+    MANDATORY = 1 << 2,    // installed
+    OPTIONAL = 1 << 3      // not installed by default, but can be checked in the UI
+};
+
+inline PackageType operator|(PackageType a, PackageType b) {
+    return static_cast<PackageType>(
+        static_cast<std::underlying_type<PackageType>::type>(a) |
+        static_cast<std::underlying_type<PackageType>::type>(b));
+}
+
+inline PackageType operator|=(PackageType & a, PackageType b) {
+    a = static_cast<PackageType>(
+        static_cast<std::underlying_type<PackageType>::type>(a) |
+        static_cast<std::underlying_type<PackageType>::type>(b));
+    return a;
+}
+
+inline constexpr PackageType operator&(PackageType a, PackageType b) {
+    return static_cast<PackageType>(
+        static_cast<std::underlying_type<PackageType>::type>(a) &
+        static_cast<std::underlying_type<PackageType>::type>(b));
+}
+
+inline constexpr bool any(PackageType flags) {
+    return static_cast<std::underlying_type<PackageType>::type>(flags) != 0;
+}
+
 
 // TODO(dmach): isn't it more a package dependency rather than a package?
 
