@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "pkg_names.hpp"
 
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 
 #include <algorithm>
@@ -62,7 +63,7 @@ void comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & gro
         pkg.set_id(query->get<int64_t>("id"));
         pkg.set_name(query->get<std::string>("name"));
         pkg.set_installed(query->get<bool>("installed"));
-        pkg.set_package_type(static_cast<CompsPackageType>(query->get<int>("pkg_type")));
+        pkg.set_package_type(static_cast<comps::PackageType>(query->get<int>("pkg_type")));
     }
 }
 

@@ -454,7 +454,7 @@ std::shared_ptr<CompsGroup> Transformer::processGroup(
         compsGroup->set_translated_name(json_object_get_string(value));
     }
 
-    // TODO parse pkg_types to CompsPackageType
+    // TODO parse pkg_types to PackageType
     if (json_object_object_get_ex(group, "full_list", &value)) {
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
@@ -462,11 +462,11 @@ std::shared_ptr<CompsGroup> Transformer::processGroup(
             auto & pkg = compsGroup->new_package();
             pkg.set_name(key);
             pkg.set_installed(true);
-            pkg.set_package_type(CompsPackageType::MANDATORY);
+            pkg.set_package_type(PackageType::MANDATORY);
         }
     }
 
-    // TODO parse pkg_types to CompsPackageType
+    // TODO parse pkg_types to PackageType
     if (json_object_object_get_ex(group, "pkg_exclude", &value)) {
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
@@ -474,7 +474,7 @@ std::shared_ptr<CompsGroup> Transformer::processGroup(
             auto & pkg = compsGroup->new_package();
             pkg.set_name(key);
             pkg.set_installed(false);
-            pkg.set_package_type(CompsPackageType::MANDATORY);
+            pkg.set_package_type(PackageType::MANDATORY);
         }
     }
 
@@ -502,7 +502,7 @@ std::shared_ptr<CompsEnvironment> Transformer::processEnvironment(
         compsEnv->set_translated_name(json_object_get_string(value));
     }
 
-    // TODO parse pkg_types/grp_types to CompsPackageType
+    // TODO parse pkg_types/grp_types to PackageType
     if (json_object_object_get_ex(env, "full_list", &value)) {
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
@@ -510,11 +510,11 @@ std::shared_ptr<CompsEnvironment> Transformer::processEnvironment(
             auto & grp = compsEnv->new_group();
             grp.set_group_id(key);
             grp.set_installed(true);
-            grp.set_group_type(CompsPackageType::MANDATORY);
+            grp.set_group_type(PackageType::MANDATORY);
         }
     }
 
-    // TODO parse pkg_types/grp_types to CompsPackageType
+    // TODO parse pkg_types/grp_types to PackageType
     if (json_object_object_get_ex(env, "pkg_exclude", &value)) {
         auto len = json_object_array_length(value);
         for (std::size_t i = 0; i < len; ++i) {
@@ -522,7 +522,7 @@ std::shared_ptr<CompsEnvironment> Transformer::processEnvironment(
             auto & grp = compsEnv->new_group();
             grp.set_group_id(key);
             grp.set_installed(false);
-            grp.set_group_type(CompsPackageType::MANDATORY);
+            grp.set_group_type(PackageType::MANDATORY);
         }
     }
 

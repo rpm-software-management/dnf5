@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "test_workflow.hpp"
 
 #include "libdnf/common/sack/query_cmp.hpp"
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/transaction.hpp"
 
 #include <string>
@@ -100,7 +101,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     // Both cases are equal from comps perspective and the group package must be marked as installed.
     // Please note that set_installed() has a completely different meaning than TransactionItemAction::INSTALL.
     core_bash.set_installed(true);
-    core_bash.set_package_type(CompsPackageType::MANDATORY);
+    core_bash.set_package_type(libdnf::comps::PackageType::MANDATORY);
 
     // add comps environments to the transaction
 
@@ -115,7 +116,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     auto & minimal_core = comps_environment_minimal.new_group();
     minimal_core.set_group_id("core");
     minimal_core.set_installed(true);
-    minimal_core.set_group_type(CompsPackageType::MANDATORY);
+    minimal_core.set_group_type(libdnf::comps::PackageType::MANDATORY);
 
     // save transaction and all associated transaction items
     trans.start();

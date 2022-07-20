@@ -32,19 +32,6 @@ class CompsGroupPackage;
 class Transaction;
 
 
-/// CompsPackageType determines when a package in a comps group gets installed.
-///
-/// Expected behavior:
-/// * All comps operations are weak, if something is not available, it's silently skipped.
-/// * If something is available but has unresolvable dependencies, an error is reported.
-enum class CompsPackageType : int {
-    CONDITIONAL = 1 << 0,  // a weak dependency
-    DEFAULT = 1 << 1,      // installed by default, but can be unchecked in the UI
-    MANDATORY = 1 << 2,    // installed
-    OPTIONAL = 1 << 3      // not installed by default, but can be checked in the UI
-};
-
-
 /// CompsGroup contains a copy of important data from comps::CompsGroup that is used
 /// to perform comps transaction and then stored in the transaction (history) database.
 ///
@@ -86,12 +73,12 @@ public:
     /// Get types of the packages to be installed with the group (related xml elements: <comps><group><packagelist><packagereq type="VALUE" ...>)
     ///
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.getPackageTypes()
-    CompsPackageType get_package_types() const noexcept { return package_types; }
+    libdnf::comps::PackageType get_package_types() const noexcept { return package_types; }
 
     /// Set types of the packages to be installed with the group (related xml elements: <comps><group><packagelist><packagereq type="VALUE" ...>)
     ///
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.setPackageTypes(libdnf::CompsPackageType value)
-    void set_package_types(CompsPackageType value) { package_types = value; }
+    void set_package_types(libdnf::comps::PackageType value) { package_types = value; }
 
     /// Create a new CompsGroupPackage object and return a reference to it.
     /// The object is owned by the CompsGroup.
@@ -117,7 +104,7 @@ private:
     std::string group_id;
     std::string name;
     std::string translated_name;
-    CompsPackageType package_types;
+    libdnf::comps::PackageType package_types;
     std::vector<CompsGroupPackage> packages;
 };
 
@@ -162,16 +149,16 @@ public:
     void set_installed(bool value) { installed = value; }
 
     /// Get type of package associated with a comps group (xml element: <comps><group><packagelist><packagereq type="VALUE" ...>)
-    /// See `enum class CompsPackageType` documentation for more details.
+    /// See `enum class comps::PackageType` documentation for more details.
     ///
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getPackageType()
-    CompsPackageType get_package_type() const noexcept { return package_type; }
+    libdnf::comps::PackageType get_package_type() const noexcept { return package_type; }
 
     /// Set type of package associated with a comps group (xml element: <comps><group><packagelist><packagereq type="VALUE" ...>)
-    /// See `enum class CompsPackageType` documentation for more details.
+    /// See `enum class libdnf::comps::PackageType` documentation for more details.
     ///
-    /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setPackageType(libdnf::CompsPackageType value)
-    void set_package_type(CompsPackageType value) { package_type = value; }
+    /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setPackageType(libdnf::PackageType value)
+    void set_package_type(libdnf::comps::PackageType value) { package_type = value; }
 
     /// Get the group the package is part of
     ///
@@ -182,7 +169,7 @@ private:
     int64_t id = 0;
     std::string name;
     bool installed = false;
-    CompsPackageType package_type = CompsPackageType::DEFAULT;
+    libdnf::comps::PackageType package_type = libdnf::comps::PackageType::DEFAULT;
     CompsGroup & group;
 };
 
