@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm_package.hpp"
 #include "transaction_item.hpp"
 
+#include "libdnf/base/transaction_group.hpp"
 #include "libdnf/base/transaction_package.hpp"
 
 #include <memory>
@@ -238,6 +239,11 @@ public:
 
     /// Fill the transaction packages.
     void fill_transaction_packages(const std::vector<libdnf::base::TransactionPackage> & transaction_packages);
+
+    /// Fill the transaction groups.
+    void fill_transaction_groups(
+        const std::vector<libdnf::base::TransactionGroup> & transaction_groups,
+        const std::set<std::string> & installed_names);
 
     /// Start the transaction by inserting it into the database
     ///

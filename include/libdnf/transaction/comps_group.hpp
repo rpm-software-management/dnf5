@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "transaction_item.hpp"
 
+#include "libdnf/comps/group/package.hpp"
+
 #include <memory>
 #include <vector>
 

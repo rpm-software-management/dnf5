@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/solv/goal_private.hpp"
 
 #include "libdnf/base/transaction.hpp"
+#include "libdnf/base/transaction_group.hpp"
 
 #include <solv/transaction.h>
 
@@ -85,6 +86,7 @@ private:
     libdnf::GoalProblem problems{GoalProblem::NO_PROBLEM};
 
     std::vector<TransactionPackage> packages;
+    std::vector<TransactionGroup> groups;
 
     /// <libdnf::GoalAction, libdnf::GoalProblem, libdnf::GoalJobSettings settings, std::string spec, std::set<std::string> additional_data>
     std::vector<LogEvent> resolve_logs;

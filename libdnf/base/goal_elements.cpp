@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-
 bool GoalJobSettings::resolve_strict(const libdnf::ConfigMain & cfg_main) {
     auto resolved = GoalUsedSetting::UNUSED;
     switch (strict) {
@@ -118,5 +117,18 @@ bool GoalJobSettings::resolve_clean_requirements_on_remove() {
     return on_remove;
 }
 
+libdnf::comps::PackageType GoalJobSettings::resolve_group_package_types(const libdnf::ConfigMain & cfg_main) {
+    auto resolved = group_package_types;
+    if (!resolved) {
+        resolved = libdnf::comps::package_type_from_string(cfg_main.group_package_types().get_value());
+    }
+    libdnf_assert(
+        !used_group_package_types || used_group_package_types == resolved,
+        "Used value for 'used_group_package_types' already set");
+
+    used_group_package_types = resolved;
+
+    return *used_group_package_types;
+}
 
 }  // namespace libdnf

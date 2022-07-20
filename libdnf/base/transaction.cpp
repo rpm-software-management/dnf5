@@ -39,6 +39,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 #include <iostream>
+#include <ranges>
 
 
 namespace libdnf::base {
@@ -96,6 +97,10 @@ GoalProblem Transaction::get_problems() {
 
 std::vector<TransactionPackage> Transaction::get_transaction_packages() const {
     return p_impl->packages;
+}
+
+std::vector<TransactionGroup> & Transaction::get_transaction_groups() const {
+    return p_impl->groups;
 }
 
 GoalProblem Transaction::Impl::report_not_found(
@@ -278,6 +283,11 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
         }
         packages.emplace_back(std::move(tspkg));
     }
+
+    // Add groups to the transaction
+    for (auto & [group, action, reason] : solved_goal.list_groups()) {
+        groups.emplace_back(group, action, reason);
+    }
 }
 
 
@@ -430,6 +440,23 @@ Transaction::TransactionRunResult Transaction::Impl::run(
 
     db_transaction.set_rpmdb_version_begin(rpm_transaction.get_db_cookie());
     db_transaction.fill_transaction_packages(packages);
+
+    if (!groups.empty()) {
+        // consider currently installed packages + inbound packages as installed for group members
+        rpm::PackageQuery installed_query(base);
+        installed_query.filter_installed();
+        std::set<std::string> installed_names{};
+        for (const auto & pkg : installed_query) {
+            installed_names.emplace(pkg.get_name());
+        }
+        for (const auto & tspkg : packages) {
+            if (transaction_item_action_is_inbound(tspkg.get_action())) {
+                installed_names.emplace(tspkg.get_package().get_name());
+            }
+        }
+        db_transaction.fill_transaction_groups(groups, installed_names);
+    }
+
     auto time = std::chrono::system_clock::now().time_since_epoch();
     db_transaction.set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
     db_transaction.start();
@@ -449,15 +476,29 @@ Transaction::TransactionRunResult Transaction::Impl::run(
 
         rpm::PackageQuery installed_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
         installed_query.filter_installed();
+        std::set<std::string> inbound_packages_reason_group{};
 
         // Iterate in reverse, inbound actions are first in the vector, we want to process outbound first
         for (auto it = packages.rbegin(); it != packages.rend(); ++it) {
             auto tspkg = *it;
+            const auto & pkg = tspkg.get_package();
             if (transaction_item_action_is_inbound(tspkg.get_action())) {
-                if (tspkg.get_reason() != transaction::TransactionItemReason::NONE) {
-                    system_state.set_package_reason(tspkg.get_package().get_na(), tspkg.get_reason());
+                auto tspkg_reason = tspkg.get_reason();
+                switch (tspkg_reason) {
+                    case transaction::TransactionItemReason::DEPENDENCY:
+                    case transaction::TransactionItemReason::WEAK_DEPENDENCY:
+                    case transaction::TransactionItemReason::USER:
+                    case transaction::TransactionItemReason::EXTERNAL_USER:
+                        system_state.set_package_reason(pkg.get_na(), tspkg_reason);
+                        break;
+                    case transaction::TransactionItemReason::GROUP:
+                        inbound_packages_reason_group.emplace(pkg.get_name());
+                        break;
+                    case transaction::TransactionItemReason::NONE:
+                    case transaction::TransactionItemReason::CLEAN:
+                        break;
                 }
-                system_state.set_package_from_repo(tspkg.get_package().get_nevra(), tspkg.get_package().get_repo_id());
+                system_state.set_package_from_repo(pkg.get_nevra(), tspkg.get_package().get_repo_id());
             } else if (transaction_item_action_is_outbound(tspkg.get_action())) {
                 // Check if the NA is still installed. We do this check for all outbound actions.
                 //
@@ -469,19 +510,45 @@ Transaction::TransactionRunResult Transaction::Impl::run(
 
                 // We need to filter out packages that are being removed in the transaction
                 // (the installed query still contains the packages before this transaction)
-                installed_query.filter_nevra({tspkg.get_package().get_nevra()}, libdnf::sack::QueryCmp::NEQ);
+                installed_query.filter_nevra({pkg.get_nevra()}, libdnf::sack::QueryCmp::NEQ);
 
                 rpm::PackageQuery query(installed_query);
-                query.filter_name({tspkg.get_package().get_name()});
-                query.filter_arch({tspkg.get_package().get_arch()});
+                query.filter_name({pkg.get_name()});
+                query.filter_arch({pkg.get_arch()});
                 if (query.empty()) {
-                    system_state.remove_package_na_state(tspkg.get_package().get_na());
+                    system_state.remove_package_na_state(pkg.get_na());
                 }
 
                 // for a REINSTALL, the remove needs to happen first, hence the reverse iteration of the for loop
-                system_state.remove_package_nevra_state(tspkg.get_package().get_nevra());
+                system_state.remove_package_nevra_state(pkg.get_nevra());
             } else if (tspkg.get_action() == TransactionPackage::Action::REASON_CHANGE) {
-                system_state.set_package_reason(tspkg.get_package().get_na(), tspkg.get_reason());
+                system_state.set_package_reason(pkg.get_na(), tspkg.get_reason());
+            }
+        }
+
+        // Set correct system state for groups in the transaction
+        for (const auto & tsgroup : groups) {
+            auto group = tsgroup.get_group();
+            if (transaction_item_action_is_inbound(tsgroup.get_action())) {
+                libdnf::system::GroupState state;
+                state.userinstalled = tsgroup.get_reason() == transaction::TransactionItemReason::USER;
+                // Remember packages installed by this group
+                for (const auto & pkg : group.get_packages()) {
+                    auto pkg_name = pkg.get_name();
+                    if (inbound_packages_reason_group.find(pkg_name) != inbound_packages_reason_group.end()) {
+                        // inbound package with reason GROUP from this transaction
+                        state.packages.emplace_back(pkg_name);
+                    } else {
+                        // also group packages that were installed before this transaction
+                        // system state consideres as installed by group
+                        rpm::PackageQuery query(installed_query);
+                        query.filter_name({pkg_name});
+                        if (!query.empty()) {
+                            state.packages.emplace_back(pkg_name);
+                        }
+                    }
+                }
+                system_state.set_group_state(group.get_groupid(), state);
             }
         }
 

@@ -241,6 +241,9 @@ public:
         const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
 
+    void add_group_install(
+        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
     /// Request to install providers of the `spec`. Useful to install package
     /// using rich dependencies.  The `spec` (e.g. "(depA and depB)") is not
     /// parsed but directly passed to the solver to install package(s) which
