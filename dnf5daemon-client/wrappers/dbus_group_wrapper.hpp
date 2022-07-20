@@ -43,7 +43,7 @@ public:
         dnfdaemon::KeyValueMap rawdata;
     };
 
-    explicit DbusGroupWrapper(dnfdaemon::KeyValueMap & rawdata);
+    explicit DbusGroupWrapper(const dnfdaemon::KeyValueMap & rawdata);
 
     std::string get_groupid() const { return rawdata.at("groupid"); }
     std::string get_name() const { return rawdata.at("name"); }
