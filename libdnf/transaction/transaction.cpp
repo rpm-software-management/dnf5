@@ -34,7 +34,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction_item.hpp"
 
-
 namespace libdnf::transaction {
 
 std::string transaction_state_to_string(TransactionState state) {
@@ -185,6 +184,31 @@ void Transaction::fill_transaction_packages(
     }
 }
 
+
+void Transaction::fill_transaction_groups(
+    const std::vector<libdnf::base::TransactionGroup> & transaction_groups,
+    const std::set<std::string> & installed_names) {
+    for (auto & tsgrp : transaction_groups) {
+        auto & new_grp = new_comps_group();
+        auto group = tsgrp.get_group();
+        new_grp.set_name(group.get_name());
+        new_grp.set_action(tsgrp.get_action());
+        new_grp.set_reason(tsgrp.get_reason());
+        new_grp.set_translated_name(group.get_translated_name());
+
+        libdnf::comps::PackageType package_types{0};
+        for (const auto & group_package : group.get_packages()) {
+            auto & new_grp_pkg = new_grp.new_package();
+            auto name = group_package.get_name();
+            new_grp_pkg.set_name(name);
+            new_grp_pkg.set_package_type(group_package.get_type());
+            new_grp_pkg.set_installed(installed_names.contains(name) ? true : false);
+            package_types |= group_package.get_type();
+        }
+
+        new_grp.set_package_types(package_types);
+    }
+}
 
 void Transaction::start() {
     if (id != 0) {

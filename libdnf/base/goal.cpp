@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/utils_internal.hpp"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/comps/group/query.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/reldep.hpp"
 
@@ -74,8 +75,10 @@ public:
     void add_rpm_ids(GoalAction action, const rpm::PackageSet & package_set, const GoalJobSettings & settings);
 
     GoalProblem add_specs_to_goal(base::Transaction & transaction);
+    GoalProblem add_group_specs_to_goal(base::Transaction & transaction);
+
     std::pair<GoalProblem, libdnf::solv::IdQueue> add_install_to_goal(
-        base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
+        base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings);
     void add_provide_install_to_goal(const std::string & spec, GoalJobSettings & settings);
     GoalProblem add_reinstall_to_goal(
         base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings);
@@ -93,6 +96,12 @@ public:
         libdnf::rpm::PackageQuery & candidates,
         const libdnf::advisory::AdvisoryQuery & advisories);
 
+    GoalProblem add_group_install_to_goal(
+        base::Transaction & transaction,
+        const std::string & spec,
+        const transaction::TransactionItemReason reason,
+        GoalJobSettings & settings);
+
 private:
     friend class Goal;
     BaseWeakPtr base;
@@ -101,6 +110,7 @@ private:
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_specs;
     /// <libdnf::GoalAction, rpm Ids, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
+    std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> group_specs;
 
     rpm::solv::GoalPrivate rpm_goal;
 };
@@ -288,15 +298,20 @@ void Goal::Impl::filter_candidates_for_advisory_upgrade(
         candidates, latest_adv_pkgs, libdnf::sack::QueryCmp::GTE);
 }
 
+void Goal::add_group_install(const std::string & spec, const GoalJobSettings & settings) {
+    p_impl->group_specs.push_back(std::make_tuple(GoalAction::INSTALL, spec, settings));
+}
+
 GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     auto sack = base->get_rpm_package_sack();
     auto & cfg_main = base->get_config();
     auto ret = GoalProblem::NO_PROBLEM;
     for (auto & [action, spec, settings] : rpm_specs) {
         switch (action) {
-            case GoalAction::INSTALL: {
-                auto [problem, idqueue] = add_install_to_goal(transaction, spec, settings);
-                rpm_goal.add_user_installed(idqueue);
+            case GoalAction::INSTALL:
+            case GoalAction::INSTALL_BY_GROUP: {
+                auto [problem, idqueue] = add_install_to_goal(transaction, action, spec, settings);
+                rpm_goal.add_transaction_user_installed(idqueue);
                 ret |= problem;
             } break;
             case GoalAction::INSTALL_VIA_PROVIDE:
@@ -360,9 +375,24 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
     return ret;
 }
 
-GoalProblem Goal::Impl::add_install_to_goal(
+
+GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction) {
+    auto ret = GoalProblem::NO_PROBLEM;
+    for (auto & [action, spec, settings] : group_specs) {
+        switch (action) {
+            case GoalAction::INSTALL:
+                ret |= add_group_install_to_goal(transaction, spec, transaction::TransactionItemReason::USER, settings);
+                break;
+            default: {
+                libdnf_throw_assertion("Unsupported action for group.");
+            }
+        }
+    }
+    return ret;
+}
+
 std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
-    base::Transaction & transaction, const std::string & spec, GoalJobSettings & settings) {
+    base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings) {
     auto sack = base->get_rpm_package_sack();
     auto & pool = get_pool(base);
     auto & cfg_main = base->get_config();
@@ -377,7 +407,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        auto problem = transaction.p_impl->report_not_found(GoalAction::INSTALL, spec, settings, strict);
+        auto problem = transaction.p_impl->report_not_found(action, spec, settings, strict);
         if (strict) {
             return {problem, result_queue};
         } else {
@@ -391,7 +421,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     installed.filter_installed();
     for (auto package_id : *installed.p_impl) {
         transaction.p_impl->add_resolve_log(
-            GoalAction::INSTALL, GoalProblem::ALREADY_INSTALLED, settings, spec, {pool.get_nevra(package_id)}, false);
+            action, GoalProblem::ALREADY_INSTALLED, settings, spec, {pool.get_nevra(package_id)}, false);
     }
 
     if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
@@ -399,7 +429,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
             query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
             if (query.empty()) {
                 transaction.p_impl->add_resolve_log(
-                    GoalAction::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
+                    action, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
                 return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
             }
             query |= installed;
@@ -482,7 +512,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                 query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
                 if (query.empty()) {
                     transaction.p_impl->add_resolve_log(
-                        GoalAction::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
+                        action, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
                     return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
                 }
                 query |= installed;
@@ -551,7 +581,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                 query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
                 if (query.empty()) {
                     transaction.p_impl->add_resolve_log(
-                        GoalAction::INSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
+                        action, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
                     return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
                 }
                 query |= installed;
@@ -709,6 +739,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                     ids.push_back(package_id);
                 }
                 rpm_goal.add_install(ids, strict, best, clean_requirements_on_remove);
+                rpm_goal.add_transaction_user_installed(ids);
             } break;
             case GoalAction::INSTALL_OR_REINSTALL:
                 rpm_goal.add_install(
@@ -1030,6 +1061,78 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
     }
 }
 
+GoalProblem Goal::Impl::add_group_install_to_goal(
+    base::Transaction & transaction,
+    const std::string & spec,
+    const transaction::TransactionItemReason reason,
+    GoalJobSettings & settings) {
+    auto & cfg_main = base->get_config();
+    bool strict = settings.resolve_strict(cfg_main);
+    sack::QueryCmp cmp = settings.ignore_case ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
+    comps::GroupQuery group_query(base, true);
+    if (settings.group_with_id) {
+        comps::GroupQuery group_query_id(base);
+        group_query_id.filter_groupid(spec, cmp);
+        group_query |= group_query_id;
+    }
+    // TODO(mblaha): reconsider usefulness of searching groups by names
+    if (settings.group_with_name) {
+        comps::GroupQuery group_query_name(base);
+        group_query_name.filter_name(spec, cmp);
+        group_query |= group_query_name;
+    }
+    if (group_query.empty()) {
+        auto problem = transaction.p_impl->report_not_found(GoalAction::INSTALL, spec, GoalJobSettings(), strict);
+        if (strict) {
+            return problem;
+        } else {
+            return GoalProblem::NO_PROBLEM;
+        }
+    }
+    auto allowed_package_types = settings.resolve_group_package_types(cfg_main);
+    auto pkg_settings = GoalJobSettings();
+    // TODO(mblaha): consider inheriting from `settings`
+    pkg_settings.with_provides = false;
+    pkg_settings.with_filenames = false;
+    pkg_settings.nevra_forms.push_back(rpm::Nevra::Form::NAME);
+    for (auto group : group_query) {
+        std::vector<libdnf::comps::Package> packages;
+        // TODO(mblaha): filter packages by p.arch attribute when supported by comps
+        for (const auto & p : group.get_packages()) {
+            if (any(allowed_package_types & p.get_type())) {
+                packages.emplace_back(std::move(p));
+            }
+        }
+        for (const auto & pkg : packages) {
+            // TODO(mblaha): apply pkg.basearchonly when available in comps
+            auto pkg_name = pkg.get_name();
+            auto pkg_condition = pkg.get_condition();
+            if (pkg_condition.empty()) {
+                auto [pkg_problem, pkg_queue] =
+                    // TODO(mblaha): add_install_to_goal needs group spec for better problems reporting
+                    add_install_to_goal(transaction, GoalAction::INSTALL_BY_GROUP, pkg_name, pkg_settings);
+                rpm_goal.add_transaction_group_installed(pkg_queue);
+            } else {
+                // check whether condition can even be met
+                rpm::PackageQuery condition_query(base);
+                condition_query.filter_name(std::vector<std::string>{pkg_condition});
+                if (!condition_query.empty()) {
+                    // remember names to identify GROUP reason of conditional packages
+                    rpm::PackageQuery query(base);
+                    query.filter_name(std::vector<std::string>{pkg_name});
+                    // TODO(mblaha): log absence of pkg in case the query is empty
+                    if (!query.empty()) {
+                        add_provide_install_to_goal(fmt::format("({} if {})", pkg_name, pkg_condition), pkg_settings);
+                        rpm_goal.add_transaction_group_installed(*query.p_impl);
+                    }
+                }
+            }
+        }
+        rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason);
+    }
+    return GoalProblem::NO_PROBLEM;
+}
+
 base::Transaction Goal::resolve(bool allow_erasing) {
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
 
@@ -1044,6 +1147,8 @@ base::Transaction Goal::resolve(bool allow_erasing) {
     // TODO(jmracek) Reset rpm_goal, setup rpm-goal flags according to conf, (allow downgrade), obsoletes, vendor, ...
     ret |= p_impl->add_specs_to_goal(transaction);
     p_impl->add_rpms_to_goal(transaction);
+
+    ret |= p_impl->add_group_specs_to_goal(transaction);
 
     auto & cfg_main = p_impl->base->get_config();
     // Set goal flags
@@ -1083,6 +1188,7 @@ base::Transaction Goal::resolve(bool allow_erasing) {
         p_impl->rpm_goal.set_installonly(installonly_packages);
         p_impl->rpm_goal.set_installonly_limit(cfg_main.installonly_limit().get_value());
     }
+
     ret |= p_impl->rpm_goal.resolve();
 
     // Write debug solver data
@@ -1108,6 +1214,7 @@ void Goal::reset() {
     p_impl->module_enable_specs.clear();
     p_impl->rpm_specs.clear();
     p_impl->rpm_ids.clear();
+    p_impl->group_specs.clear();
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
 }
 

@@ -22,10 +22,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "libdnf/advisory/advisory_query.hpp"
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/rpm/nevra.hpp"
+#include "libdnf/transaction/transaction_item_reason.hpp"
 
 #include <cstdint>
+#include <optional>
 
 
 namespace libdnf {
@@ -87,6 +90,7 @@ enum class GoalAction {
     INSTALL,
     INSTALL_OR_REINSTALL,
     INSTALL_VIA_PROVIDE,
+    INSTALL_BY_GROUP,
     REINSTALL,
     UPGRADE,
     UPGRADE_MINIMAL,
@@ -117,6 +121,10 @@ public:
     bool with_filenames{true};
     /// Important for queries that resolve SPEC
     std::vector<libdnf::rpm::Nevra::Form> nevra_forms{};
+
+    /// these flags are used only for group resolving
+    bool group_with_id{true};
+    bool group_with_name{false};
 };
 
 struct GoalJobSettings : public ResolveSpecSettings {
@@ -143,6 +151,10 @@ public:
 
     /// Optionally assign AdvisoryQuery that is used to filter goal target packages (used for upgrade and install)
     std::optional<libdnf::advisory::AdvisoryQuery> advisory_filter;
+
+    // Which types of group packages are going to be installed with the group.
+    // If not set, default is taken from ConfigMain.group_package_types
+    std::optional<libdnf::comps::PackageType> group_package_types{std::nullopt};
 
 private:
     friend class Goal;
@@ -184,9 +196,15 @@ private:
     /// @since 1.0
     bool resolve_clean_requirements_on_remove();
 
+    /// Compute and store effective group_package_types value. Used only for goal jobs operating on groups.
+    /// @return group_package_types value if set, cfg_main.group_package_types value otherwise.
+    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
+    libdnf::comps::PackageType resolve_group_package_types(const libdnf::ConfigMain & cfg_main);
+
     GoalUsedSetting used_strict{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_best{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_clean_requirements_on_remove{GoalUsedSetting::UNUSED};
+    std::optional<libdnf::comps::PackageType> used_group_package_types{std::nullopt};
 };
 
 

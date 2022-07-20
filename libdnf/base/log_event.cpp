@@ -72,6 +72,8 @@ std::string LogEvent::to_string(
         case GoalProblem::NOT_FOUND:
             if (action == GoalAction::REMOVE) {
                 return ret.append(utils::sformat(_("No packages to remove for argument: {}"), *spec));
+            } else if (action == GoalAction::INSTALL_BY_GROUP) {
+                return ret.append(utils::sformat(_("No match for group package: {}"), *spec));
             }
             return ret.append(utils::sformat(_("No match for argument: {}"), *spec));
         case GoalProblem::NOT_FOUND_IN_REPOSITORIES:

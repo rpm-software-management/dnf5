@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/base/log_event.hpp"
 #include "libdnf/base/solver_problems.hpp"
+#include "libdnf/base/transaction_group.hpp"
 #include "libdnf/base/transaction_package.hpp"
 #include "libdnf/rpm/transaction_callbacks.hpp"
 
@@ -74,6 +75,9 @@ public:
     /// @return the transaction packages.
     // TODO(jrohel): Return reference instead of copy?
     std::vector<libdnf::base::TransactionPackage> get_transaction_packages() const;
+
+    /// @return the transaction groups.
+    std::vector<libdnf::base::TransactionGroup> & get_transaction_groups() const;
 
     /// Prepare, check and run the transaction. All the transaction metadata
     /// (`description`, `user_id` and `comment`) are stored in the history database.

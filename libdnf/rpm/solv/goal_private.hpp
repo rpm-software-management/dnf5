@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/solv_map.hpp"
 
 #include "libdnf/base/goal_elements.hpp"
+#include "libdnf/comps/group/group.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/rpm/reldep.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
@@ -59,6 +60,14 @@ public:
     void add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps);
     void add_distro_sync(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps);
 
+    /// Remember group action in the transaction
+    /// @param action Action to be commited - INSTALL, REMOVE, UPGRADE
+    /// @param reason Reason for the group action - USER, DEPENDENCY
+    void add_group(
+        libdnf::comps::Group & group,
+        transaction::TransactionItemAction action,
+        transaction::TransactionItemReason reason);
+
     libdnf::GoalProblem resolve();
 
     libdnf::solv::IdQueue list_installs();
@@ -67,6 +76,12 @@ public:
     libdnf::solv::IdQueue list_downgrades();
     libdnf::solv::IdQueue list_removes();
     libdnf::solv::IdQueue list_obsoleted();
+
+    std::vector<
+        std::tuple<libdnf::comps::Group, transaction::TransactionItemAction, transaction::TransactionItemReason>>
+    list_groups() {
+        return groups;
+    };
 
     /// @param abs_dest_dir Destination directory. Requires a full existing path.
     void write_debugdata(const std::filesystem::path & abs_dest_dir);
@@ -121,6 +136,9 @@ public:
     /// @return True if SOLVER_CLEANDEPS flag was set for any of jobs
     bool is_clean_deps_present() { return clean_deps_present; }
 
+    void add_transaction_user_installed(const libdnf::solv::IdQueue & idqueue);
+    void add_transaction_group_installed(const libdnf::solv::IdQueue & idqueue);
+    void add_transaction_group_installed(const libdnf::solv::SolvMap & solvmap);
 
 private:
     bool limit_installonly_packages(libdnf::solv::IdQueue & job, Id running_kernel);
@@ -132,6 +150,11 @@ private:
     libdnf::solv::IdQueue staging;
     libdnf::solv::IdQueue installonly;
     unsigned int installonly_limit{0};
+
+    // packages potentially installed by any group in this transaction
+    std::unique_ptr<libdnf::solv::SolvMap> transaction_group_installed;
+    // packages explicitely user-installed in this transaction
+    std::unique_ptr<libdnf::solv::SolvMap> transaction_user_installed;
 
     ::Solver * libsolv_solver{nullptr};
     ::Transaction * libsolv_transaction{nullptr};
@@ -148,6 +171,10 @@ private:
     // Remove SOLVER_WEAK and add SOLVER_BEST to all jobs
     bool run_in_strict_mode{false};
     bool clean_deps_present{false};
+
+    std::vector<
+        std::tuple<libdnf::comps::Group, transaction::TransactionItemAction, transaction::TransactionItemReason>>
+        groups;
 
     /// Return libdnf::GoalProblem::NO_PROBLEM when no problems in protected
     libdnf::GoalProblem protected_in_removals();
@@ -263,6 +290,13 @@ inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool str
         SOLVER_DISTUPGRADE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
         what);
+}
+
+inline void GoalPrivate::add_group(
+    libdnf::comps::Group & group,
+    transaction::TransactionItemAction action,
+    transaction::TransactionItemReason reason) {
+    groups.emplace_back(group, action, reason);
 }
 
 }  // namespace libdnf::rpm::solv

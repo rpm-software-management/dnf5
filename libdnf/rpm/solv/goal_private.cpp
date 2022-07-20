@@ -644,6 +644,34 @@ void GoalPrivate::set_user_installed_packages(const libdnf::solv::IdQueue & queu
     user_installed_packages.reset(new libdnf::solv::IdQueue(queue));
 }
 
+void GoalPrivate::add_transaction_user_installed(const libdnf::solv::IdQueue & idqueue) {
+    if (!transaction_user_installed) {
+        auto & pool = get_pool();
+        transaction_user_installed.reset(new libdnf::solv::SolvMap(pool->nsolvables));
+    }
+    for (const auto & id : idqueue) {
+        transaction_user_installed->add(id);
+    }
+}
+
+void GoalPrivate::add_transaction_group_installed(const libdnf::solv::IdQueue & idqueue) {
+    if (!transaction_group_installed) {
+        auto & pool = get_pool();
+        transaction_group_installed.reset(new libdnf::solv::SolvMap(pool->nsolvables));
+    }
+    for (const auto & id : idqueue) {
+        transaction_group_installed->add(id);
+    }
+}
+
+void GoalPrivate::add_transaction_group_installed(const libdnf::solv::SolvMap & solvmap) {
+    if (!transaction_group_installed) {
+        transaction_group_installed.reset(new libdnf::solv::SolvMap(solvmap));
+    } else {
+        *transaction_group_installed |= solvmap;
+    }
+}
+
 transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
     //solver_get_recommendations
     libdnf_assert_goal_resolved();
@@ -653,8 +681,18 @@ transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
 
     if ((reason == SOLVER_REASON_UNIT_RULE || reason == SOLVER_REASON_RESOLVE_JOB) &&
         (solver_ruleclass(libsolv_solver, info) == SOLVER_RULE_JOB ||
-         solver_ruleclass(libsolv_solver, info) == SOLVER_RULE_BEST))
+         solver_ruleclass(libsolv_solver, info) == SOLVER_RULE_BEST)) {
+        // explicitely user-installed
+        if (transaction_user_installed && transaction_user_installed->contains(id)) {
+            return transaction::TransactionItemReason::USER;
+        }
+        // explicitely group-installed
+        if (transaction_group_installed && transaction_group_installed->contains(id)) {
+            return transaction::TransactionItemReason::GROUP;
+        }
+        // for some packages (e.g. installed by provide) we cannot decide the reason, resort to USER
         return transaction::TransactionItemReason::USER;
+    }
     if (reason == SOLVER_REASON_CLEANDEPS_ERASE)
         return transaction::TransactionItemReason::CLEAN;
     if (reason == SOLVER_REASON_WEAKDEP)
