@@ -38,6 +38,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
+    // TODO(mblaha) Adjust resolve method to accomodate also groups, environments,
+    // and modules as part of the transaction
     dbus_object->registerMethod(
         dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(ua{sv})u", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Goal::resolve, call, session.session_locale);

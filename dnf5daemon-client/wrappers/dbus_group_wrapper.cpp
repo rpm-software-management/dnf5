@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnfdaemon::client {
 
-DbusGroupWrapper::DbusGroupWrapper(dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata) {
+DbusGroupWrapper::DbusGroupWrapper(const dnfdaemon::KeyValueMap & rawdata) : rawdata(rawdata) {
     auto packages_iter = rawdata.find("packages");
     if (packages_iter != rawdata.end()) {
         dnfdaemon::KeyValueMapList raw_packages = packages_iter->second;
