@@ -368,7 +368,7 @@ void RootCommand::set_argument_parser() {
         return true;
     });
     global_options_group->register_argument(no_gpgchecks);
-    no_gpgchecks->add_alias("nogpgchecks", "nogpgchecks", '\0', options_aliases_group);
+    no_gpgchecks->add_alias("nogpgcheck", "nogpgcheck", '\0', options_aliases_group);
 
     auto no_plugins = parser.add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
