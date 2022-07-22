@@ -40,7 +40,7 @@ void ConfTest::test_config_main() {
     CPPUNIT_ASSERT_EQUAL(7, config.debuglevel().get_value());
     CPPUNIT_ASSERT_EQUAL(std::string("hello"), config.persistdir().get_value());
     CPPUNIT_ASSERT_EQUAL(false, config.plugins().get_value());
-    std::vector<std::string> pluginpath = {"/foo", "/bar"};
+    std::string pluginpath = "/foo";
     CPPUNIT_ASSERT_EQUAL(pluginpath, config.pluginpath().get_value());
 }
 

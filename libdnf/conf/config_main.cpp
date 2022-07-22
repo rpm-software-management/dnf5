@@ -166,8 +166,8 @@ class ConfigMain::Impl {
     OptionPath installroot{"/", false, true};
     OptionPath config_file_path{CONF_FILENAME};
     OptionBool plugins{true};
-    OptionStringList pluginpath{std::vector<std::string>{DEFAULT_LIBDNF5_PLUGINS_LIB_DIR}};
-    OptionStringList pluginconfpath{std::vector<std::string>{PLUGINS_CONF_DIR}};
+    OptionPath pluginpath{DEFAULT_LIBDNF5_PLUGINS_LIB_DIR};
+    OptionPath pluginconfpath{PLUGINS_CONF_DIR};
     OptionPath persistdir{PERSISTDIR};
     OptionPath system_state_dir{SYSTEM_STATE_DIR};
     OptionPath transaction_history_dir{SYSTEM_STATE_DIR};
@@ -574,17 +574,17 @@ const OptionBool & ConfigMain::plugins() const {
     return p_impl->plugins;
 }
 
-OptionStringList & ConfigMain::pluginpath() {
+OptionPath & ConfigMain::pluginpath() {
     return p_impl->pluginpath;
 }
-const OptionStringList & ConfigMain::pluginpath() const {
+const OptionPath & ConfigMain::pluginpath() const {
     return p_impl->pluginpath;
 }
 
-OptionStringList & ConfigMain::pluginconfpath() {
+OptionPath & ConfigMain::pluginconfpath() {
     return p_impl->pluginconfpath;
 }
-const OptionStringList & ConfigMain::pluginconfpath() const {
+const OptionPath & ConfigMain::pluginconfpath() const {
     return p_impl->pluginconfpath;
 }
 

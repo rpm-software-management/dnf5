@@ -102,12 +102,10 @@ void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
 std::string Plugins::find_plugin_library(const std::string & plugin_conf_path) {
     auto library_name = std::filesystem::path(plugin_conf_path).stem();
     library_name += ".so";
-    for (const auto & plugins_lib_dir : base->get_config().pluginpath().get_value()) {
-        std::filesystem::path library_path = plugins_lib_dir;
-        library_path /= library_name;
-        if (std::filesystem::exists(library_path)) {
-            return library_path;
-        }
+    std::filesystem::path library_path = base->get_config().pluginpath().get_value();
+    library_path /= library_name;
+    if (std::filesystem::exists(library_path)) {
+        return library_path;
     }
     throw PluginError(M_("Cannot find plugin library \"{}\""), library_name.string());
 }

@@ -97,11 +97,11 @@ void Base::add_plugin(plugin::IPlugin & iplugin_instance) {
 }
 
 void Base::load_plugins() {
-    if (const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR")) {
+    const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
+    if (plugins_config_dir && config.pluginconfpath().get_priority() < Option::Priority::COMMANDLINE) {
         plugins.load_plugins(plugins_config_dir);
-    }
-    for (const auto & plugins_config_dir : config.pluginconfpath().get_value()) {
-        plugins.load_plugins(plugins_config_dir);
+    } else {
+        plugins.load_plugins(config.pluginconfpath().get_value());
     }
 }
 

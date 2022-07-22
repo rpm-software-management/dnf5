@@ -52,10 +52,10 @@ public:
     const OptionPath & config_file_path() const;
     OptionBool & plugins();
     const OptionBool & plugins() const;
-    OptionStringList & pluginpath();
-    const OptionStringList & pluginpath() const;
-    OptionStringList & pluginconfpath();
-    const OptionStringList & pluginconfpath() const;
+    OptionPath & pluginpath();
+    const OptionPath & pluginpath() const;
+    OptionPath & pluginconfpath();
+    const OptionPath & pluginconfpath() const;
     OptionPath & persistdir();
     const OptionPath & persistdir() const;
     OptionPath & system_state_dir();
