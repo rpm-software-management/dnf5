@@ -1988,16 +1988,18 @@ void PackageQuery::filter_upgrades() {
 
     p_impl->base->get_rpm_package_sack()->p_impl->make_provides_ready();
 
+    libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
+
     for (Id candidate_id : *p_impl) {
         Solvable * solvable = pool.id2solvable(candidate_id);
         if (solvable->repo == installed_repo) {
-            p_impl->remove_unsafe(candidate_id);
             continue;
         }
-        if (what_upgrades(pool, solvable) <= 0) {
-            p_impl->remove_unsafe(candidate_id);
+        if (what_upgrades(pool, solvable) > 0) {
+            filter_result.add_unsafe(candidate_id);
         }
     }
+    *p_impl &= filter_result;
 }
 
 void PackageQuery::filter_downgrades() {
