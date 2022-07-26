@@ -7,5 +7,5 @@ message("Building bindings for go: libdnf_cli")
 
 
 foreach(MODULE_NAME ${SWIG_LIBDNF_CLI_MODULES})
-    add_go_module(libdnf_cli ${MODULE_NAME})
+    add_go_module(libdnf5_cli ${MODULE_NAME})
 endforeach()

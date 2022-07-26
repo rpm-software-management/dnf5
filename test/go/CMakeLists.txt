@@ -3,5 +3,5 @@ if(NOT WITH_GO)
 endif()
 
 
-add_subdirectory(libdnf)
-add_subdirectory(libdnf_cli)
+add_subdirectory(libdnf5)
+add_subdirectory(libdnf5_cli)
