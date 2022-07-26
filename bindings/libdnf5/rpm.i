@@ -1,9 +1,9 @@
 #if defined(SWIGPYTHON)
-%module(package="libdnf") rpm
+%module(package="libdnf5") rpm
 #elif defined(SWIGPERL)
-%module "libdnf::rpm"
+%module "libdnf5::rpm"
 #elif defined(SWIGRUBY)
-%module "libdnf/rpm"
+%module "libdnf5/rpm"
 #endif
 
 %include <exception.i>

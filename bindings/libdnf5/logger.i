@@ -1,9 +1,9 @@
 #if defined(SWIGPYTHON)
-%module(package="libdnf", directors="1") logger
+%module(package="libdnf5", directors="1") logger
 #elif defined(SWIGPERL)
-%module(directors="1") "libdnf::logger"
+%module(directors="1") "libdnf5::logger"
 #elif defined(SWIGRUBY)
-%module(directors="1") "libdnf/logger"
+%module(directors="1") "libdnf5/logger"
 #endif
 
 %include <exception.i>

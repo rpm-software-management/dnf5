@@ -1,9 +1,9 @@
 #if defined(SWIGPYTHON)
-%module(package="libdnf") common
+%module(package="libdnf5") common
 #elif defined(SWIGPERL)
-%module "libdnf::common"
+%module "libdnf5::common"
 #elif defined(SWIGRUBY)
-%module "libdnf/common"
+%module "libdnf5/common"
 #endif
 
 #define SWIGWORDSIZE64

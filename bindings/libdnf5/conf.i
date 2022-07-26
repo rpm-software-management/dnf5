@@ -1,9 +1,9 @@
 #if defined(SWIGPYTHON)
-%module(package="libdnf") conf
+%module(package="libdnf5") conf
 #elif defined(SWIGPERL)
-%module "libdnf::conf"
+%module "libdnf5::conf"
 #elif defined(SWIGRUBY)
-%module "libdnf/conf"
+%module "libdnf5/conf"
 #endif
 
 %include <exception.i>
