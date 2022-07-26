@@ -201,20 +201,20 @@ public:
 
         const char * get_sql() const { return sqlite3_sql(stmt); }
 
-        const char * get_expanded_sql() {
+        const std::string get_expanded_sql() {
 #if SQLITE_VERSION_NUMBER < 3014000
             // sqlite3_expanded_sql was added in sqlite 3.14; return sql instead
             return get_sql();
 #else
-            expanded_sql = sqlite3_expanded_sql(stmt);
+            char * expanded_sql = sqlite3_expanded_sql(stmt);
             if (!expanded_sql) {
                 throw SQLite3Error(msg_insufficient_memory);
             }
-            return expanded_sql;
+            std::string result(expanded_sql);
+            sqlite3_free(expanded_sql);
+            return result;
 #endif
         }
-
-        void free_expanded_sql() { sqlite3_free(expanded_sql); }
 
         /// Reset prepared query to its initial state, ready to be re-executed.
         /// All the bound values remain untouched - retain their values.
@@ -232,10 +232,7 @@ public:
 
         SQLite3 & get_db() const { return db; }
 
-        ~Statement() {
-            free_expanded_sql();
-            sqlite3_finalize(stmt);
-        };
+        ~Statement() { sqlite3_finalize(stmt); };
 
     protected:
         template <typename T>
@@ -276,7 +273,6 @@ public:
 
         SQLite3 & db;
         sqlite3_stmt * stmt{};
-        char * expanded_sql{nullptr};
 
     private:
         static const BgettextMessage msg_compilation_failed;
