@@ -505,10 +505,6 @@ DNF5 plugins
 %install
 %cmake_install
 
-# HACK: temporarily rename libdnf to ensure parallel installability with old libdnf
-mv $RPM_BUILD_ROOT/%{python3_sitearch}/libdnf $RPM_BUILD_ROOT/%{python3_sitearch}/libdnf5
-
-
 #find_lang {name}
 
 
