@@ -138,13 +138,13 @@ inline libdnf::sack::QueryCmp remove_glob_when_unneeded(
  *
  * Or 0 if none such package is installed.
  */
-Id what_upgrades(libdnf::solv::Pool & spool, Solvable * solvable) {
+Id what_upgrades(libdnf::solv::Pool & spool, const Solvable * solvable) {
     ::Pool * pool = *spool;
     Id l = 0;
     Id l_evr = 0;
     Id p;
     Id pp;
-    Solvable * updated;
+    const Solvable * updated;
 
     libdnf_assert(spool->installed != nullptr, "installed repo has not been set for libsolv pool");
     libdnf_assert(spool->whatprovides != nullptr, "whatprovides have not been created for libsolv pool");
@@ -180,7 +180,7 @@ Id what_upgrades(libdnf::solv::Pool & spool, Solvable * solvable) {
 ///    installed)
 ///
 /// Or 0 if none such package is installed.
-Id what_downgrades(libdnf::solv::Pool & spool, Solvable * solvable) {
+Id what_downgrades(libdnf::solv::Pool & spool, const Solvable * solvable) {
     ::Pool * pool = *spool;
     Id l = 0;
     Id l_evr = 0;
