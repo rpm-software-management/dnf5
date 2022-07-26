@@ -21,7 +21,7 @@ import shutil
 import tempfile
 import unittest
 
-import libdnf
+import libdnf5
 
 
 PROJECT_BINARY_DIR = os.environ["PROJECT_BINARY_DIR"]
@@ -30,10 +30,10 @@ PROJECT_SOURCE_DIR = os.environ["PROJECT_SOURCE_DIR"]
 
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
-        self.base = libdnf.base.Base()
+        self.base = libdnf5.base.Base()
 
-        self.cachedir = tempfile.mkdtemp(prefix="libdnf-test-python3-")
-        self.base.get_config().cachedir().set(libdnf.conf.Option.Priority_RUNTIME, self.cachedir)
+        self.cachedir = tempfile.mkdtemp(prefix="libdnf5-test-python3-")
+        self.base.get_config().cachedir().set(libdnf5.conf.Option.Priority_RUNTIME, self.cachedir)
 
         self.base.setup()
 
@@ -49,7 +49,7 @@ class BaseTestCase(unittest.TestCase):
         """
         repo = self.repo_sack.create_repo(repoid)
 
-        repo.get_config().baseurl().set(libdnf.conf.Option.Priority_RUNTIME, "file://" + repo_path)
+        repo.get_config().baseurl().set(libdnf5.conf.Option.Priority_RUNTIME, "file://" + repo_path)
 
         if load:
             repo.fetch_metadata()

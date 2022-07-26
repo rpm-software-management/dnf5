@@ -18,7 +18,7 @@
 import unittest
 import gc
 
-import libdnf.base
+import libdnf5.base
 
 import base_test_case
 
@@ -27,15 +27,15 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
     def test_package_downloader(self):
         repo = self.add_repo_rpm("rpm-repo1")
 
-        query = libdnf.rpm.PackageQuery(self.base)
+        query = libdnf5.rpm.PackageQuery(self.base)
         query.filter_name(["one"])
         query.filter_version(["2"])
         query.filter_arch(["noarch"])
         self.assertEqual(query.size(), 1)
 
-        downloader = libdnf.repo.PackageDownloader()
+        downloader = libdnf5.repo.PackageDownloader()
 
-        class PackageDownloadCallbacks(libdnf.repo.DownloadCallbacks):
+        class PackageDownloadCallbacks(libdnf5.repo.DownloadCallbacks):
             end_cnt = 0
             end_status = None
             end_msg = None
@@ -60,7 +60,7 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
         cbs = PackageDownloadCallbacks()
         # TODO(lukash) try to wrap the creation of the unique_ptr so that cbs
         # can be passed directly to downloader.add
-        downloader.add(query.begin().value(), libdnf.repo.DownloadCallbacksUniquePtr(cbs))
+        downloader.add(query.begin().value(), libdnf5.repo.DownloadCallbacksUniquePtr(cbs))
 
         downloader.download(True, True)
 

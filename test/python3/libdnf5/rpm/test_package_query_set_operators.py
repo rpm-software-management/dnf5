@@ -16,7 +16,7 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
-import libdnf
+import libdnf5
 
 import base_test_case
 
@@ -28,12 +28,12 @@ class TestPackageQuerySetOperators(base_test_case.BaseTestCase):
 
     def test_update(self):
         # packages with releases: 1, 2
-        q1 = libdnf.rpm.PackageQuery(self.base)
+        q1 = libdnf5.rpm.PackageQuery(self.base)
         q1.filter_release(["1", "2"])
         self.assertEqual(q1.size(), 2)
 
         # packages with releases: 2, 3
-        q2 = libdnf.rpm.PackageQuery(self.base)
+        q2 = libdnf5.rpm.PackageQuery(self.base)
         q2.filter_release(["2", "3"])
         self.assertEqual(q2.size(), 2)
 
@@ -43,11 +43,11 @@ class TestPackageQuerySetOperators(base_test_case.BaseTestCase):
 
     def test_difference(self):
         # packages with releases: 1, 2
-        q1 = libdnf.rpm.PackageQuery(self.base)
+        q1 = libdnf5.rpm.PackageQuery(self.base)
         q1.filter_release(["1", "2"])
         self.assertEqual(q1.size(), 2)
 
-        q2 = libdnf.rpm.PackageQuery(self.base)
+        q2 = libdnf5.rpm.PackageQuery(self.base)
         q2.filter_release(["2", "3"])
         self.assertEqual(q2.size(), 2)
 
@@ -60,12 +60,12 @@ class TestPackageQuerySetOperators(base_test_case.BaseTestCase):
 
     def test_intersection(self):
         # packages with releases: 1, 2
-        q1 = libdnf.rpm.PackageQuery(self.base)
+        q1 = libdnf5.rpm.PackageQuery(self.base)
         q1.filter_release(["1", "2"])
         self.assertEqual(q1.size(), 2)
 
         # packages with releases: 2, 3
-        q2 = libdnf.rpm.PackageQuery(self.base)
+        q2 = libdnf5.rpm.PackageQuery(self.base)
         q2.filter_release(["2", "3"])
         self.assertEqual(q2.size(), 2)
 

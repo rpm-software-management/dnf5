@@ -17,7 +17,7 @@
 
 import unittest
 
-import libdnf.base
+import libdnf5.base
 
 import base_test_case
 
@@ -31,7 +31,7 @@ class TestRepo(base_test_case.BaseTestCase):
     def test_load_repo(self):
         repo = self.add_repo_repomd("repomd-repo1", load=False)
 
-        class RepoCallbacks(libdnf.repo.RepoCallbacks):
+        class RepoCallbacks(libdnf5.repo.RepoCallbacks):
             start_cnt = 0
             start_what = None
 
@@ -69,7 +69,7 @@ class TestRepo(base_test_case.BaseTestCase):
         cbs = RepoCallbacks()
         # TODO(lukash) try to wrap the creation of the unique_ptr so that cbs
         # can be passed directly to repo.set_callbacks
-        repo.set_callbacks(libdnf.repo.RepoCallbacksUniquePtr(cbs))
+        repo.set_callbacks(libdnf5.repo.RepoCallbacksUniquePtr(cbs))
 
         repo.fetch_metadata()
 

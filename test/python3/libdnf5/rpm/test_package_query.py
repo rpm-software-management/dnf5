@@ -17,7 +17,7 @@
 
 import unittest
 
-import libdnf
+import libdnf5
 
 import base_test_case
 
@@ -28,11 +28,11 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         self.add_repo_repomd("repomd-repo1")
 
     def test_size(self):
-        query = libdnf.rpm.PackageQuery(self.base)
+        query = libdnf5.rpm.PackageQuery(self.base)
         self.assertEqual(query.size(), 3)
 
     def test_iterate_package_query(self):
-        query = libdnf.rpm.PackageQuery(self.base)
+        query = libdnf5.rpm.PackageQuery(self.base)
 
         # Iterates over reference "query".
         prev_id = 0
@@ -61,18 +61,18 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         # Tests the iteration of an unreferenced PackageQuery object. The iterator must hold a reference
         # to the iterated object, otherwise the gargabe collector can remove the object.
 
-        # Iterates directly over "libdnf.rpm.PackageQuery(self.base)" result. No helping reference.
+        # Iterates directly over "libdnf5.rpm.PackageQuery(self.base)" result. No helping reference.
         prev_id = 0
-        for pkg in libdnf.rpm.PackageQuery(self.base):
+        for pkg in libdnf5.rpm.PackageQuery(self.base):
             id = pkg.get_id().id
             self.assertGreater(id, prev_id)
             prev_id = id
         self.assertLess(prev_id, self.package_sack.get_nsolvables())
-        self.assertGreaterEqual(prev_id, libdnf.rpm.PackageQuery(self.base).size())
+        self.assertGreaterEqual(prev_id, libdnf5.rpm.PackageQuery(self.base).size())
 
         # Another test. The iterator is created from the "query" reference, but the reference
         # is removed (set to "None") before starting the iteration.
-        query = libdnf.rpm.PackageQuery(self.base)
+        query = libdnf5.rpm.PackageQuery(self.base)
         query_iterator = iter(query)
         query = None
         prev_id = 0
@@ -85,11 +85,11 @@ class TestPackageQuery(base_test_case.BaseTestCase):
             except StopIteration:
                 break
         self.assertLess(prev_id, self.package_sack.get_nsolvables())
-        self.assertGreaterEqual(prev_id, libdnf.rpm.PackageQuery(self.base).size())
+        self.assertGreaterEqual(prev_id, libdnf5.rpm.PackageQuery(self.base).size())
 
     def test_filter_name(self):
         # Test QueryCmp::EQ
-        query = libdnf.rpm.PackageQuery(self.base)
+        query = libdnf5.rpm.PackageQuery(self.base)
         query.filter_name(["pkg"])
         self.assertEqual(query.size(), 1)
         # TODO(dmach): implement __str__()
@@ -98,8 +98,8 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         # ---
 
         # Test QueryCmp::GLOB
-        query = libdnf.rpm.PackageQuery(self.base)
-        query.filter_name(["pk*"], libdnf.common.QueryCmp_GLOB)
+        query = libdnf5.rpm.PackageQuery(self.base)
+        query.filter_name(["pk*"], libdnf5.common.QueryCmp_GLOB)
         self.assertEqual(query.size(), 2)
         # TODO(dmach): implement __str__()
         self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])

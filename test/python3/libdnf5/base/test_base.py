@@ -17,12 +17,12 @@
 
 import unittest
 
-import libdnf.base
+import libdnf5.base
 
 
 class TestBase(unittest.TestCase):
     def test_base(self):
-        base = libdnf.base.Base()
+        base = libdnf5.base.Base()
         loger = base.get_logger()
         config = base.get_config()
         repo_sack = base.get_repo_sack()
@@ -30,7 +30,7 @@ class TestBase(unittest.TestCase):
 
     def test_weak_ptr(self):
         # Creates a new Base object
-        base = libdnf.base.Base()
+        base = libdnf5.base.Base()
 
         # Gets a WeakPtr pointing to Vars in the Base object
         vars = base.get_vars()
