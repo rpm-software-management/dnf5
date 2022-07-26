@@ -25,18 +25,18 @@ use File::Temp qw(tempdir);
 use File::Spec::Functions 'catfile';
 
 
-use libdnf::base;
+use libdnf5::base;
 
-my $base = new libdnf::base::Base();
+my $base = new libdnf5::base::Base();
 
 # Sets path to cache directory.
-my $tmpdir = tempdir("libdnf-perl5-XXXX", TMPDIR => 1, CLEANUP => 1);
-$base->get_config()->cachedir()->set($libdnf::conf::Option::Priority_RUNTIME, $tmpdir);
+my $tmpdir = tempdir("libdnf5-perl5-XXXX", TMPDIR => 1, CLEANUP => 1);
+$base->get_config()->cachedir()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir);
 
 # Sets base internals according to configuration
 $base->setup();
 
-my $repo_sack = new libdnf::repo::RepoSack($base);
+my $repo_sack = new libdnf5::repo::RepoSack($base);
 
 # Creates new repositories in the repo_sack
 my $repo = $repo_sack->create_repo("repomd-repo1");
@@ -46,7 +46,7 @@ my $project_source_dir = $ENV{"PROJECT_SOURCE_DIR"};
 my $repo_path = catfile($project_source_dir, "/test/data/repos-repomd/repomd-repo1/");
 my $baseurl = "file://" . $repo_path;
 my $repo_cfg = $repo->get_config();
-$repo_cfg->baseurl()->set($libdnf::conf::Option::Priority_RUNTIME, $baseurl);
+$repo_cfg->baseurl()->set($libdnf5::conf::Option::Priority_RUNTIME, $baseurl);
 
 # fetch repo metadata and load it
 $repo->fetch_metadata();
@@ -54,7 +54,7 @@ $repo->load();
 
 #test_size()
 {
-    my $query = new libdnf::rpm::PackageQuery($base);
+    my $query = new libdnf5::rpm::PackageQuery($base);
     is($query->size(), 3);
 }
 
@@ -66,7 +66,7 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 
 # Test QueryCmp::EQ
 {
-    my $query = new libdnf::rpm::PackageQuery($base);
+    my $query = new libdnf5::rpm::PackageQuery($base);
     $query->filter_name(["pkg"]);
     is($query->size(), 1);
 
@@ -84,8 +84,8 @@ my @full_nevras = ("CQRlib-0:1.1.1-4.fc29.src", "CQRlib-0:1.1.1-4.fc29.x86_64",
 
 # Test QueryCmp::GLOB
 {
-    my $query = new libdnf::rpm::PackageQuery($base);
-    $query->filter_name(["pk*"], $libdnf::common::QueryCmp_GLOB);
+    my $query = new libdnf5::rpm::PackageQuery($base);
+    $query->filter_name(["pk*"], $libdnf5::common::QueryCmp_GLOB);
     is($query->size(), 2);
 
     my @expected = ("pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64");

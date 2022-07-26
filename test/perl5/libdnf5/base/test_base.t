@@ -21,14 +21,14 @@ use warnings;
 use Test::More;
 use Test::Exception;
 
-use libdnf::base;
+use libdnf5::base;
 
 {
     # Creates a new Base object
-    my $base = new libdnf::base::Base();
+    my $base = new libdnf5::base::Base();
     # Tests returned value
-    ok(defined $base, 'new libdnf::base::Base() returned something');
-    ok($base->isa('libdnf::base::Base'), "  and it's the right class" );
+    ok(defined $base, 'new libdnf5::base::Base() returned something');
+    ok($base->isa('libdnf5::base::Base'), "  and it's the right class" );
 
     # Attempts to call some methods from Base object
     my $loger = $base->get_logger();
@@ -41,7 +41,7 @@ use libdnf::base;
     # Tests WeakPtr returned from a Base object.
 
     # Creates a new Base object
-    my $base = new libdnf::base::Base();
+    my $base = new libdnf5::base::Base();
 
     # Gets a WeakPtr pointing to Vars in the Base object
     my $vars = $base->get_vars();
