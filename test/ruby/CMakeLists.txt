@@ -25,5 +25,5 @@ macro(add_ruby_test)
 endmacro()
 
 
-add_subdirectory(libdnf)
-add_subdirectory(libdnf_cli)
+add_subdirectory(libdnf5)
+add_subdirectory(libdnf5_cli)

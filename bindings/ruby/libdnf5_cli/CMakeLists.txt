@@ -7,5 +7,5 @@ message("Building bindings for ruby: libdnf_cli")
 
 
 foreach(MODULE_NAME ${SWIG_LIBDNF_CLI_MODULES})
-    add_ruby_module(libdnf_cli ${MODULE_NAME})
+    add_ruby_module(libdnf5_cli ${MODULE_NAME})
 endforeach()

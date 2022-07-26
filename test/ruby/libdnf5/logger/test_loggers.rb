@@ -20,7 +20,7 @@ include Test::Unit::Assertions
 
 require 'stringio'
 
-require 'libdnf/logger'
+require 'libdnf5/logger'
 
 # Tests overloading of log() method
 class LibdnfLoggerCB1 < Logger::Logger

@@ -18,7 +18,7 @@
 require 'test/unit'
 include Test::Unit::Assertions
 
-require 'libdnf/base'
+require 'libdnf5/base'
 
 class TestBase < Test::Unit::TestCase
     def test_base()

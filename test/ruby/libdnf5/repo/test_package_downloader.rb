@@ -18,7 +18,7 @@
 require 'test/unit'
 include Test::Unit::Assertions
 
-require 'libdnf/base'
+require 'libdnf5/base'
 
 require 'base_test_case'
 

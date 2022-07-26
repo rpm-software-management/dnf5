@@ -20,6 +20,8 @@ function(add_ruby_module LIBRARY_NAME MODULE_NAME)
     target_compile_options(${TARGET_NAME} PUBLIC ${SWIG_COMPILE_OPTIONS})
 
     string(REPLACE "_" "-" C_LIBRARY_NAME ${LIBRARY_NAME})
+    # c library is called just libdnf (libdnf_cli) -> strip the 5
+    string(REPLACE "5" "" C_LIBRARY_NAME ${C_LIBRARY_NAME})
     swig_link_libraries(${TARGET_NAME} ${C_LIBRARY_NAME})
     swig_link_libraries(${TARGET_NAME} ${RUBY_LIBRARIES})
 
@@ -27,5 +29,5 @@ function(add_ruby_module LIBRARY_NAME MODULE_NAME)
 endfunction()
 
 
-add_subdirectory(libdnf)
-add_subdirectory(libdnf_cli)
+add_subdirectory(libdnf5)
+add_subdirectory(libdnf5_cli)

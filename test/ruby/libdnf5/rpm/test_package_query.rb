@@ -16,7 +16,7 @@
 # along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
-require 'libdnf/base'
+require 'libdnf5/base'
 
 require 'base_test_case'
 

@@ -20,8 +20,8 @@ require 'test/unit'
 require 'tmpdir'
 include Test::Unit::Assertions
 
-require 'libdnf/base'
-require 'libdnf/rpm'
+require 'libdnf5/base'
+require 'libdnf5/rpm'
 
 
 PROJECT_BINARY_DIR = ENV["PROJECT_BINARY_DIR"]
