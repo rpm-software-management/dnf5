@@ -181,7 +181,7 @@ Development files for libdnf-cli.
 # ========== perl5-libdnf ==========
 
 %if %{with perl5}
-%package -n perl5-libdnf
+%package -n perl5-libdnf5
 Summary:        Perl 5 bindings for the libdnf library.
 Provides:       perl(libdnf) = %{version}-%{release}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -195,12 +195,12 @@ BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(warnings)
 %endif
 
-%description -n perl5-libdnf
+%description -n perl5-libdnf5
 Perl 5 bindings for the libdnf library.
 
-%files -n perl5-libdnf
-%{perl_vendorarch}/libdnf
-%{perl_vendorarch}/auto/libdnf
+%files -n perl5-libdnf5
+%{perl_vendorarch}/libdnf5
+%{perl_vendorarch}/auto/libdnf5
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -209,7 +209,7 @@ Perl 5 bindings for the libdnf library.
 # ========== perl5-libdnf-cli ==========
 
 %if %{with perl5} && %{with libdnf_cli}
-%package -n perl5-libdnf-cli
+%package -n perl5-libdnf5-cli
 Summary:        Perl 5 bindings for the libdnf-cli library.
 Provides:       perl(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
@@ -223,12 +223,12 @@ BuildRequires:  perl(Test::Exception)
 BuildRequires:  perl(warnings)
 %endif
 
-%description -n perl5-libdnf-cli
+%description -n perl5-libdnf5-cli
 Perl 5 bindings for the libdnf-cli library.
 
-%files -n perl5-libdnf-cli
-%{perl_vendorarch}/libdnf_cli
-%{perl_vendorarch}/auto/libdnf_cli
+%files -n perl5-libdnf5-cli
+%{perl_vendorarch}/libdnf5_cli
+%{perl_vendorarch}/auto/libdnf5_cli
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -257,18 +257,18 @@ Python 3 bindings for the libdnf library.
 # ========== python3-libdnf-cli ==========
 
 %if %{with python3} && %{with libdnf_cli}
-%package -n python3-libdnf-cli
+%package -n python3-libdnf5-cli
 %{?python_provide:%python_provide python3-libdnf-cli}
 Summary:        Python 3 bindings for the libdnf-cli library.
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
 BuildRequires:  python3-devel
 BuildRequires:  swig >= %{swig_version}
 
-%description -n python3-libdnf-cli
+%description -n python3-libdnf5-cli
 Python 3 bindings for the libdnf-cli library.
 
-%files -n python3-libdnf-cli
-%{python3_sitearch}/libdnf_cli/
+%files -n python3-libdnf5-cli
+%{python3_sitearch}/libdnf5_cli/
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -277,7 +277,7 @@ Python 3 bindings for the libdnf-cli library.
 # ========== ruby-libdnf ==========
 
 %if %{with ruby}
-%package -n ruby-libdnf
+%package -n ruby-libdnf5
 Summary:        Ruby bindings for the libdnf library.
 Provides:       ruby(libdnf) = %{version}-%{release}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
@@ -288,11 +288,11 @@ BuildRequires:  swig >= %{swig_version}
 BuildRequires:  rubygem-test-unit
 %endif
 
-%description -n ruby-libdnf
+%description -n ruby-libdnf5
 Ruby bindings for the libdnf library.
 
-%files -n ruby-libdnf
-%{ruby_vendorarchdir}/libdnf/
+%files -n ruby-libdnf5
+%{ruby_vendorarchdir}/libdnf5/
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -301,7 +301,7 @@ Ruby bindings for the libdnf library.
 # ========== ruby-libdnf-cli ==========
 
 %if %{with ruby} && %{with libdnf_cli}
-%package -n ruby-libdnf-cli
+%package -n ruby-libdnf5-cli
 Summary:        Ruby bindings for the libdnf-cli library.
 Provides:       ruby(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
@@ -311,11 +311,11 @@ BuildRequires:  swig >= %{swig_version}
 BuildRequires:  rubygem-test-unit
 %endif
 
-%description -n ruby-libdnf-cli
+%description -n ruby-libdnf5-cli
 Ruby bindings for the libdnf-cli library.
 
-%files -n ruby-libdnf-cli
-%{ruby_vendorarchdir}/libdnf_cli/
+%files -n ruby-libdnf5-cli
+%{ruby_vendorarchdir}/libdnf5_cli/
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
