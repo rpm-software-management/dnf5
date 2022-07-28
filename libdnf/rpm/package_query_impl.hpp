@@ -72,6 +72,12 @@ public:
     static void str2reldep_internal(
         ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type, const std::vector<std::string> & patterns);
 
+    /// Filter PackageSet by vector of SORTED advisory packages
+    static void filter_sorted_advisory_pkgs(
+        PackageSet & pkg_set,
+        const std::vector<libdnf::advisory::AdvisoryPackage> & adv_pkgs,
+        libdnf::sack::QueryCmp cmp_type);
+
 private:
     friend PackageQuery;
     ExcludeFlags flags;

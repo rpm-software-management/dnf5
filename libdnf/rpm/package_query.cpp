@@ -1734,6 +1734,72 @@ void PackageQuery::PQImpl::filter_nevra(
     }
 }
 
+void PackageQuery::PQImpl::filter_sorted_advisory_pkgs(
+    PackageSet & pkg_set,
+    const std::vector<libdnf::advisory::AdvisoryPackage> & adv_pkgs,
+    libdnf::sack::QueryCmp cmp_type) {
+    libdnf::solv::Pool & pool = get_pool(pkg_set.get_base());
+
+    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
+    if (cmp_not) {
+        // Removal of NOT CmpType makes following comparissons easier and effective
+        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
+    }
+
+    libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
+    auto & sorted_solvables = pkg_set.get_base()->get_rpm_package_sack()->p_impl->get_sorted_solvables();
+
+    switch (cmp_type) {
+        case libdnf::sack::QueryCmp::EQ: {
+            // Special faster case for EQ (we can compare whole NEVRA in std::lower_bound)
+            for (auto & adv_pkg : adv_pkgs) {
+                auto low = std::lower_bound(
+                    sorted_solvables.begin(),
+                    sorted_solvables.end(),
+                    *(adv_pkg.p_impl.get()),
+                    libdnf::advisory::AdvisoryPackage::Impl::nevra_compare_lower_solvable);
+                while (low != sorted_solvables.end() && (*low)->name == adv_pkg.p_impl.get()->get_name_id() &&
+                       (*low)->arch == adv_pkg.p_impl.get()->get_arch_id() &&
+                       (*low)->evr == adv_pkg.p_impl.get()->get_evr_id()) {
+                    filter_result.add_unsafe(pool.solvable2id(*low));
+                    ++low;
+                }
+            }
+        } break;
+        case libdnf::sack::QueryCmp::GTE:
+        case libdnf::sack::QueryCmp::LTE:
+        case libdnf::sack::QueryCmp::LT:
+        case libdnf::sack::QueryCmp::GT: {
+            for (auto & adv_pkg : adv_pkgs) {
+                auto low = std::lower_bound(
+                    sorted_solvables.begin(),
+                    sorted_solvables.end(),
+                    *(adv_pkg.p_impl.get()),
+                    libdnf::advisory::AdvisoryPackage::Impl::name_arch_compare_lower_solvable);
+                while (low != sorted_solvables.end() && (*low)->name == adv_pkg.p_impl.get()->get_name_id() &&
+                       (*low)->arch == adv_pkg.p_impl.get()->get_arch_id()) {
+                    int libsolv_cmp = pool.evrcmp((*low)->evr, adv_pkg.p_impl.get()->get_evr_id(), EVRCMP_COMPARE);
+                    if (((libsolv_cmp > 0) && ((cmp_type & sack::QueryCmp::GT) == sack::QueryCmp::GT)) ||
+                        ((libsolv_cmp < 0) && ((cmp_type & sack::QueryCmp::LT) == sack::QueryCmp::LT)) ||
+                        ((libsolv_cmp == 0) && ((cmp_type & sack::QueryCmp::EQ) == sack::QueryCmp::EQ))) {
+                        filter_result.add_unsafe(pool.solvable2id(*low));
+                    }
+                    ++low;
+                }
+            }
+        } break;
+        default:
+            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
+    }
+
+    // Apply filter results to query
+    if (cmp_not) {
+        *pkg_set.p_impl -= filter_result;
+    } else {
+        *pkg_set.p_impl &= filter_result;
+    }
+}
+
 void PackageQuery::filter_conflicts(const ReldepList & reldep_list, libdnf::sack::QueryCmp cmp_type) {
     PQImpl::filter_reldep(*this, SOLVABLE_CONFLICTS, cmp_type, reldep_list);
 }
@@ -1870,67 +1936,9 @@ void PackageQuery::filter_supplements(const PackageSet & package_set, libdnf::sa
 
 void PackageQuery::filter_advisories(
     const libdnf::advisory::AdvisoryQuery & advisory_query, libdnf::sack::QueryCmp cmp_type) {
-    auto & pool = get_pool(p_impl->base);
-
-    bool cmp_not = (cmp_type & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
-    if (cmp_not) {
-        // Removal of NOT CmpType makes following comparissons easier and effective
-        cmp_type = cmp_type - libdnf::sack::QueryCmp::NOT;
-    }
-
-    libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
-    std::vector<libdnf::advisory::AdvisoryPackage> adv_pkgs = advisory_query.get_advisory_packages_sorted_by_id();
-    auto & sorted_solvables = p_impl->base->get_rpm_package_sack()->p_impl->get_sorted_solvables();
-
-    switch (cmp_type) {
-        case libdnf::sack::QueryCmp::EQ: {
-            // Special faster case for EQ (we can compare whole NEVRA in std::lower_bound)
-            for (auto & adv_pkg : adv_pkgs) {
-                auto low = std::lower_bound(
-                    sorted_solvables.begin(),
-                    sorted_solvables.end(),
-                    *(adv_pkg.p_impl.get()),
-                    libdnf::advisory::AdvisoryPackage::Impl::nevra_compare_lower_solvable);
-                while (low != sorted_solvables.end() && (*low)->name == adv_pkg.p_impl.get()->get_name_id() &&
-                       (*low)->arch == adv_pkg.p_impl.get()->get_arch_id() &&
-                       (*low)->evr == adv_pkg.p_impl.get()->get_evr_id()) {
-                    filter_result.add_unsafe(pool.solvable2id(*low));
-                    ++low;
-                }
-            }
-        } break;
-        case libdnf::sack::QueryCmp::GTE:
-        case libdnf::sack::QueryCmp::LTE:
-        case libdnf::sack::QueryCmp::LT:
-        case libdnf::sack::QueryCmp::GT: {
-            for (auto & adv_pkg : adv_pkgs) {
-                auto low = std::lower_bound(
-                    sorted_solvables.begin(),
-                    sorted_solvables.end(),
-                    *(adv_pkg.p_impl.get()),
-                    libdnf::advisory::AdvisoryPackage::Impl::name_arch_compare_lower_solvable);
-                while (low != sorted_solvables.end() && (*low)->name == adv_pkg.p_impl.get()->get_name_id() &&
-                       (*low)->arch == adv_pkg.p_impl.get()->get_arch_id()) {
-                    int libsolv_cmp = pool.evrcmp((*low)->evr, adv_pkg.p_impl.get()->get_evr_id(), EVRCMP_COMPARE);
-                    if (((libsolv_cmp > 0) && ((cmp_type & sack::QueryCmp::GT) == sack::QueryCmp::GT)) ||
-                        ((libsolv_cmp < 0) && ((cmp_type & sack::QueryCmp::LT) == sack::QueryCmp::LT)) ||
-                        ((libsolv_cmp == 0) && ((cmp_type & sack::QueryCmp::EQ) == sack::QueryCmp::EQ))) {
-                        filter_result.add_unsafe(pool.solvable2id(*low));
-                    }
-                    ++low;
-                }
-            }
-        } break;
-        default:
-            libdnf_throw_assert_unsupported_query_cmp_type(cmp_type);
-    }
-
-    // Apply filter results to query
-    if (cmp_not) {
-        *p_impl -= filter_result;
-    } else {
-        *p_impl &= filter_result;
-    }
+    std::vector<libdnf::advisory::AdvisoryPackage> adv_pkgs =
+        advisory_query.get_advisory_packages_sorted_by_name_arch_evr();
+    PQImpl::filter_sorted_advisory_pkgs(*this, adv_pkgs, cmp_type);
 }
 
 void PackageQuery::filter_installed() {
