@@ -42,7 +42,7 @@ void EnvironmentInfoCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.set_available_repos_load_flags(libdnf::repo::LoadFlags::COMPS);
+    context.set_available_repos_load_flags(libdnf::repo::LoadFlags::PRIMARY | libdnf::repo::LoadFlags::COMPS);
 }
 
 void EnvironmentInfoCommand::run() {
