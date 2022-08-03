@@ -39,8 +39,8 @@ using GroupSackWeakPtr = WeakPtr<GroupSack, false>;
 class GroupQuery : public libdnf::sack::Query<Group> {
 public:
     // Create new query with newly composed groups (using only solvables from currently enabled repositories)
-    explicit GroupQuery(const libdnf::BaseWeakPtr & base);
-    explicit GroupQuery(libdnf::Base & base);
+    explicit GroupQuery(const libdnf::BaseWeakPtr & base, bool empty = false);
+    explicit GroupQuery(libdnf::Base & base, bool empty = false);
 
     void filter_groupid(const std::string & pattern, sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ) {
         filter(F::groupid, pattern, cmp);
