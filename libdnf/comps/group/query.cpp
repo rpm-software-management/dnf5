@@ -41,7 +41,11 @@ extern "C" {
 namespace libdnf::comps {
 
 
-GroupQuery::GroupQuery(const BaseWeakPtr & base) : base(base) {
+GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
+    if (empty) {
+        return;
+    }
+
     libdnf::solv::Pool & pool = get_pool(base);
 
     // Map of available groups:
@@ -97,7 +101,7 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base) : base(base) {
     }
 }
 
-GroupQuery::GroupQuery(libdnf::Base & base) : GroupQuery(base.get_weak_ptr()) {}
+GroupQuery::GroupQuery(libdnf::Base & base, bool empty) : GroupQuery(base.get_weak_ptr(), empty) {}
 
 
 }  // namespace libdnf::comps
