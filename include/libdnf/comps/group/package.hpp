@@ -20,11 +20,21 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_COMPS_GROUP_PACKAGE_HPP
 #define LIBDNF_COMPS_GROUP_PACKAGE_HPP
 
+#include "libdnf/common/exception.hpp"
+
 #include <string>
+#include <vector>
 
 
 namespace libdnf::comps {
 
+class InvalidPackageType : public libdnf::Error {
+public:
+    InvalidPackageType(const std::string & action);
+
+    const char * get_domain_name() const noexcept override { return "libdnf::comps"; }
+    const char * get_name() const noexcept override { return "InvalidPackageType"; }
+};
 
 enum class PackageType : int {
     CONDITIONAL = 1 << 0,  // a weak dependency
@@ -55,6 +65,9 @@ inline constexpr PackageType operator&(PackageType a, PackageType b) {
 inline constexpr bool any(PackageType flags) {
     return static_cast<std::underlying_type<PackageType>::type>(flags) != 0;
 }
+
+PackageType package_type_from_string(const std::string & type);
+PackageType package_type_from_string(const std::vector<std::string> types);
 
 
 // TODO(dmach): isn't it more a package dependency rather than a package?
