@@ -316,7 +316,7 @@ void RepoDownloader::load_local() try {
     for (auto * elem = get_yum_repo(result)->paths; elem; elem = g_slist_next(elem)) {
         if (elem->data) {
             auto yumrepopath = static_cast<LrYumRepoPath *>(elem->data);
-            metadata_paths.emplace(yumrepopath->type, yumrepopath->path);
+            metadata_paths[yumrepopath->type] = yumrepopath->path;
         }
     }
 } catch (const std::runtime_error & e) {
