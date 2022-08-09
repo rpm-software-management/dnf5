@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
+#include "utils/string.hpp"
 
 #include <toml.hpp>
 
@@ -136,6 +137,34 @@ struct into<libdnf::system::ModuleState> {
 
 
 namespace libdnf::system {
+
+const constexpr uint8_t version_major{1};
+const constexpr uint8_t version_minor{0};
+
+
+static std::string make_version() {
+    return libdnf::utils::sformat("{}.{}", version_major, version_minor);
+}
+
+
+static std::pair<uint64_t, uint64_t> parse_version(const std::string & version) {
+    std::vector<std::string> split_version = libdnf::utils::string::split(version, ".");
+    if (split_version.size() != 2) {
+        throw InvalidVersionError(M_("Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"), version);
+    }
+
+    uint64_t major;
+    uint64_t minor;
+    try {
+        major = std::stoul(split_version[0]);
+        minor = std::stoul(split_version[1]);
+    } catch (const std::exception & e) {
+        throw InvalidVersionError(M_("Invalid TOML version \"{}\", \"MAJOR.MINOR\" expected"), version);
+    }
+
+    return {major, minor};
+}
+
 
 StateNotFoundError::StateNotFoundError(const std::string & type, const std::string & key)
     : libdnf::Error(M_("{} state for \"{}\" not found."), type, key) {}
@@ -267,13 +296,19 @@ void State::remove_module_state(const std::string & name) {
 }
 
 
+template <typename T>
+static toml::value make_top_value(const std::string & key, const T & value) {
+    return toml::value({{key, value}, {"version", make_version()}});
+}
+
+
 void State::save() {
     std::filesystem::create_directories(path);
 
-    utils::fs::File(get_package_state_path(), "w").write(toml::format(toml::value({{"packages", package_states}})));
-    utils::fs::File(get_nevra_state_path(), "w").write(toml::format(toml::value({{"nevras", nevra_states}})));
-    utils::fs::File(get_group_state_path(), "w").write(toml::format(toml::value({{"groups", group_states}})));
-    utils::fs::File(get_module_state_path(), "w").write(toml::format(toml::value({{"modules", module_states}})));
+    utils::fs::File(get_package_state_path(), "w").write(toml::format(make_top_value("packages", package_states)));
+    utils::fs::File(get_nevra_state_path(), "w").write(toml::format(make_top_value("nevras", nevra_states)));
+    utils::fs::File(get_group_state_path(), "w").write(toml::format(make_top_value("groups", group_states)));
+    utils::fs::File(get_module_state_path(), "w").write(toml::format(make_top_value("modules", module_states)));
 }
 
 
@@ -284,8 +319,18 @@ static std::map<std::string, T> load_toml_to_map(const std::string & path, const
         return {};
     }
 
+    auto toml_value = toml::parse(path);
+
+    auto version_string = toml::find<std::string>(toml_value, "version");
+    auto version_parsed = parse_version(version_string);
+
+    if (version_parsed.first != version_major || version_parsed.second > version_minor) {
+        throw UnsupportedVersionError(
+            M_("Unsupported TOML version \"{}\", maximum supported version is \"{}\""), version_string, make_version());
+    }
+
     // TODO(lukash) throws std::runtime_error with no error description in case opening the file fails
-    return toml::find<std::map<std::string, T>>(toml::parse(path), key);
+    return toml::find<std::map<std::string, T>>(toml_value, key);
 }
 
 
