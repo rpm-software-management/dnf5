@@ -67,6 +67,24 @@ public:
 };
 
 
+class InvalidVersionError : public libdnf::Error {
+public:
+    using libdnf::Error::Error;
+
+    const char * get_domain_name() const noexcept override { return "libdnf::system"; }
+    const char * get_name() const noexcept override { return "InvalidVersionError"; }
+};
+
+
+class UnsupportedVersionError : public libdnf::Error {
+public:
+    using libdnf::Error::Error;
+
+    const char * get_domain_name() const noexcept override { return "libdnf::system"; }
+    const char * get_name() const noexcept override { return "UnsupportedVersionError"; }
+};
+
+
 /// A class providing information and allowing modification of the DNF system
 /// state. The state consists of a list of userinstalled packages, installed
 /// groups and their packages etc.

@@ -34,6 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class StateTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(StateTest);
+    CPPUNIT_TEST(test_state_version);
     CPPUNIT_TEST(test_state_read);
     CPPUNIT_TEST(test_state_write);
     CPPUNIT_TEST_SUITE_END();
@@ -42,6 +43,7 @@ public:
     void setUp() override;
     void tearDown() override;
 
+    void test_state_version();
     void test_state_read();
     void test_state_write();
 

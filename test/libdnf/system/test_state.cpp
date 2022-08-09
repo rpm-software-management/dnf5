@@ -28,25 +28,29 @@ CPPUNIT_TEST_SUITE_REGISTRATION(StateTest);
 
 using namespace libdnf;
 
-static const std::string packages_contents{R"""([packages]
+static const std::string packages_contents{R"""(version = "1.0"
+[packages]
 "pkg.x86_64" = {reason="User"}
 "unresolvable.noarch" = {reason="Dependency"}
 "pkg-libs.x86_64" = {reason="Dependency"}
 )"""};
 
-static const std::string nevras_contents{R"""([nevras]
+static const std::string nevras_contents{R"""(version = "1.0"
+[nevras]
 "unresolvable-1.2-1.noarch" = {from_repo="repo2"}
 "pkg-libs-1.2-1.x86_64" = {from_repo=""}
 "pkg-1.2-1.x86_64" = {from_repo="repo1"}
 )"""};
 
 // TODO(lukash) alphabetic sorting
-static const std::string groups_contents{R"""([groups]
+static const std::string groups_contents{R"""(version = "1.0"
+[groups]
 group-2 = {packages=["pkg1","pkg2"],userinstalled=false}
 group-1 = {packages=["foo","bar"],userinstalled=true}
 )"""};
 
-static const std::string modules_contents{R"""([modules]
+static const std::string modules_contents{R"""(version = "1.0"
+[modules]
 module-2 = {installed_profiles=[],state="Disabled",enabled_stream="stream-2"}
 [modules.module-1]
 installed_profiles = ["zigg","zagg"]
@@ -79,6 +83,18 @@ void StateTest::tearDown() {
     temp_dir.reset();
 
     BaseTestCase::tearDown();
+}
+
+void StateTest::test_state_version() {
+    libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "aaa"
+[packages])""");
+
+    CPPUNIT_ASSERT_THROW(libdnf::system::State(temp_dir->get_path()), libdnf::system::InvalidVersionError);
+
+    libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "4.0"
+[packages])""");
+
+    CPPUNIT_ASSERT_THROW(libdnf::system::State(temp_dir->get_path()), libdnf::system::UnsupportedVersionError);
 }
 
 void StateTest::test_state_read() {
@@ -141,7 +157,8 @@ void StateTest::test_state_write() {
 
     state.save();
 
-    const std::string packages_contents_after_remove{R"""([packages]
+    const std::string packages_contents_after_remove{R"""(version = "1.0"
+[packages]
 "unresolvable.noarch" = {reason="Dependency"}
 "pkg-libs.x86_64" = {reason="Dependency"}
 )"""};
@@ -149,7 +166,8 @@ void StateTest::test_state_write() {
     CPPUNIT_ASSERT_EQUAL(
         packages_contents_after_remove, trim(libdnf::utils::fs::File(path / "packages.toml", "r").read()));
 
-    const std::string nevras_contents_after_remove{R"""([nevras]
+    const std::string nevras_contents_after_remove{R"""(version = "1.0"
+[nevras]
 "unresolvable-1.2-1.noarch" = {from_repo="repo2"}
 "pkg-libs-1.2-1.x86_64" = {from_repo=""}
 )"""};
@@ -157,12 +175,14 @@ void StateTest::test_state_write() {
     CPPUNIT_ASSERT_EQUAL(nevras_contents_after_remove, trim(libdnf::utils::fs::File(path / "nevras.toml", "r").read()));
 
     const std::string groups_contents_after_remove{
-        R"""(groups = {group-2={packages=["pkg1","pkg2"],userinstalled=false}}
+        R"""(version = "1.0"
+groups = {group-2={packages=["pkg1","pkg2"],userinstalled=false}}
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(groups_contents_after_remove, trim(libdnf::utils::fs::File(path / "groups.toml", "r").read()));
 
-    const std::string modules_contents_after_remove{R"""([modules]
+    const std::string modules_contents_after_remove{R"""(version = "1.0"
+[modules]
 module-2 = {installed_profiles=[],state="Disabled",enabled_stream="stream-2"}
 )"""};
 
