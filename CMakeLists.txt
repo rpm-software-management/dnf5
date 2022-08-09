@@ -23,6 +23,7 @@ option(WITH_DNF5DAEMON_SERVER "Build package management service with a DBus inte
 option(WITH_LIBDNF_CLI "Build library for working with a terminal in a command-line package manager" ON)
 option(WITH_DNF5 "Build dnf5 command-line package manager" ON)
 option(WITH_DNF5_PLUGINS "Build plugins for dnf5 command-line package manager" ON)
+option(WITH_PLUGIN_ACTIONS "Build a libdnf actions plugin" ON)
 option(WITH_PYTHON_PLUGINS_LOADER "Build a special libdnf plugin that loads Python plugins. Requires WITH_PYTHON3=ON." ON)
 
 # build options - features
