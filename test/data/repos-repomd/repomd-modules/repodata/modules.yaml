@@ -166,10 +166,10 @@ data:
           ref: d715e30e897f9fca5716dcb7b0a8a07ca3496d17
   dependencies:
   - buildrequires:
-      platform: [f29]
+      platform: [f31,f29,f30]
     requires:
       ninja: []
-      platform: [f29]
+      platform: [f31,f29,f30]
   references:
     community: https://mesonbuild.com/
     documentation: https://mesonbuild.com/

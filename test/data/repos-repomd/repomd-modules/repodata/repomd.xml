@@ -9,8 +9,8 @@
     <open-size>864433</open-size>
   </data>
   <data type="module">
-    <checksum type="sha256">6bb7d9d092e5592eba907bcd0ba5e4d2a33c28a3282e98b978cf470d6c62f451</checksum>
-    <open-checksum type="sha256">6bb7d9d092e5592eba907bcd0ba5e4d2a33c28a3282e98b978cf470d6c62f451</open-checksum>
+    <checksum type="sha256">922d7a0c917fc74cc91225b648970cb326b8445c9bbfbf0e4972f41e7cbc2829</checksum>
+    <open-checksum type="sha256">922d7a0c917fc74cc91225b648970cb326b8445c9bbfbf0e4972f41e7cbc2829</open-checksum>
     <location href="repodata/modules.yaml" />
     <timestamp>1641802880</timestamp>
     <size>492</size>

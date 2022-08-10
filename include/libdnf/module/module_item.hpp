@@ -20,12 +20,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_MODULE_MODULE_ITEM_HPP
 #define LIBDNF_MODULE_MODULE_ITEM_HPP
 
+#include "libdnf/module/module_dependency.hpp"
 #include "libdnf/module/module_profile.hpp"
 
 #include <string>
 #include <vector>
 
 struct _ModulemdModuleStream;
+
+class ModuleTest;
 
 
 namespace libdnf::module {
@@ -138,13 +141,11 @@ public:
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getStaticContext()
     bool get_static_context() const;
 
-    /// @return The list of strings of modules requires (e.g. "nodejs", "nodejs:12", "nodejs:-11").
-    /// @param remove_platform When true, the method will not return requires with stream "platform"
-    //                         (default is false).
+    /// @return Module dependencies.
     /// @since 5.0
     //
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getRequires(bool removePlatform=false)
-    std::vector<std::string> get_requires(bool remove_platform = false);
+    std::vector<ModuleDependency> get_module_dependencies(bool remove_platform = false) const;
 
     /// @return The repo id.
     /// @since 5.0
@@ -160,6 +161,7 @@ public:
 
 private:
     friend class ModuleMetadata;
+    friend ::ModuleTest;
 
     ModuleItem(_ModulemdModuleStream * md_stream);
     ModuleItem(const ModuleItem & mpkg);
@@ -181,7 +183,20 @@ private:
     std::string get_name_stream_version() const;
 
     std::vector<ModuleProfile> get_profiles_internal(const char * name) const;
-    static std::vector<std::string> get_requires(_ModulemdModuleStream * md_stream, bool remove_platform);
+
+    static std::vector<ModuleDependency> get_module_dependencies(
+        _ModulemdModuleStream * md_stream, bool remove_platform);
+
+    // TODO(pkratoch): Make this private once it's not used in tests.
+    /// @return The string representing module dependencies (e.g. "ninja;platform:[f29]" or "nodejs:[-11]").
+    /// @param remove_platform When true, the method will not return dependencies with stream "platform"
+    ///                        (default is false).
+    /// @since 5.0
+    //
+    // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getRequires(bool removePlatform=false)
+    static std::string get_module_dependencies_string(_ModulemdModuleStream * md_stream, bool remove_platform);
+    std::string get_module_dependencies_string(bool remove_platform = false) const;
+
     static std::string get_name_stream(_ModulemdModuleStream * md_stream);
 
     // Corresponds to one yaml document
@@ -210,8 +225,13 @@ inline std::vector<ModuleProfile> ModuleItem::get_profiles() const {
 }
 
 
-inline std::vector<std::string> ModuleItem::get_requires(bool remove_platform) {
-    return get_requires(md_stream, remove_platform);
+inline std::vector<ModuleDependency> ModuleItem::get_module_dependencies(bool remove_platform) const {
+    return get_module_dependencies(md_stream, remove_platform);
+}
+
+
+inline std::string ModuleItem::get_module_dependencies_string(bool remove_platform) const {
+    return get_module_dependencies_string(md_stream, remove_platform);
 }
 
 

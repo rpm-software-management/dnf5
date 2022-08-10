@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/string.hpp"
 
+#include "libdnf/module/module_dependency.hpp"
 #include "libdnf/utils/format.hpp"
 
 #include <modulemd-2.0/modulemd-module-stream.h>
@@ -168,47 +169,46 @@ bool ModuleItem::get_static_context() const {
 }
 
 
-std::vector<std::string> ModuleItem::get_requires(ModulemdModuleStream * md_stream, bool remove_platform) {
-    std::vector<std::string> dependencies_result;
+std::vector<ModuleDependency> ModuleItem::get_module_dependencies(
+    ModulemdModuleStream * md_stream, bool remove_platform) {
+    std::vector<ModuleDependency> dependencies;
 
     GPtrArray * c_dependencies = modulemd_module_stream_v2_get_dependencies((ModulemdModuleStreamV2 *)md_stream);
 
     for (unsigned int i = 0; i < c_dependencies->len; i++) {
-        auto dependencies = static_cast<ModulemdDependencies *>(g_ptr_array_index(c_dependencies, i));
-        if (!dependencies) {
-            continue;
-        }
-        char ** runtime_req_modules = modulemd_dependencies_get_runtime_modules_as_strv(dependencies);
+        auto modulemd_dependencies = static_cast<ModulemdDependencies *>(g_ptr_array_index(c_dependencies, i));
 
+        char ** runtime_req_modules = modulemd_dependencies_get_runtime_modules_as_strv(modulemd_dependencies);
         for (char ** iter_module = runtime_req_modules; iter_module && *iter_module; iter_module++) {
-            char ** runtime_req_streams = modulemd_dependencies_get_runtime_streams_as_strv(dependencies, *iter_module);
-            auto module_name = static_cast<char *>(*iter_module);
-            if (remove_platform && strcmp(module_name, "platform") == 0) {
-                g_strfreev(runtime_req_streams);
+            std::string module_name = static_cast<char *>(*iter_module);
+            if (remove_platform && module_name == "platform") {
                 continue;
             }
-            std::vector<std::string> required_streams;
+            char ** runtime_req_streams =
+                modulemd_dependencies_get_runtime_streams_as_strv(modulemd_dependencies, *iter_module);
+            std::vector<std::string> streams;
             for (char ** iter_stream = runtime_req_streams; iter_stream && *iter_stream; iter_stream++) {
-                required_streams.push_back(*iter_stream);
-            }
-            if (required_streams.empty()) {
-                dependencies_result.emplace_back(module_name);
-            } else {
-                std::sort(required_streams.begin(), required_streams.end());
-                std::string required_streams_string = *required_streams.begin();
-                for (auto iter = std::next(required_streams.begin()); iter != required_streams.end(); ++iter) {
-                    required_streams_string.append(",");
-                    required_streams_string.append(*iter);
-                }
-                dependencies_result.emplace_back(
-                    libdnf::utils::sformat("{}:[{}]", module_name, required_streams_string));
+                streams.emplace_back(*iter_stream);
             }
             g_strfreev(runtime_req_streams);
+            dependencies.emplace_back(ModuleDependency(std::move(module_name), std::move(streams)));
         }
         g_strfreev(runtime_req_modules);
     }
 
-    return dependencies_result;
+    return dependencies;
+}
+
+
+std::string ModuleItem::get_module_dependencies_string(ModulemdModuleStream * md_stream, bool remove_platform) {
+    std::vector<std::string> dependencies_result;
+
+    for (auto dependency : get_module_dependencies(md_stream, remove_platform)) {
+        dependencies_result.emplace_back(dependency.to_string());
+    }
+
+    std::sort(dependencies_result.begin(), dependencies_result.end());
+    return utils::string::join(dependencies_result, ";");
 }
 
 
