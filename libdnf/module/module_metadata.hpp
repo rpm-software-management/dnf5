@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/module/module_item.hpp"
+#include "libdnf/module/module_item_container_weak.hpp"
 
 #include <modulemd-2.0/modulemd-module-index.h>
 #include <modulemd-2.0/modulemd.h>
@@ -55,7 +56,8 @@ private:
     void add_metadata_from_string(const std::string & yaml, int priority);
     void resolve_added_metadata();
 
-    std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> get_all_module_items();
+    std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> get_all_module_items(
+        const ModuleItemContainerWeakPtr & module_item_container);
 
     // TODO(pkratoch): Implement getting default streams and profiles.
     /// @return Map of module names and their default streams.

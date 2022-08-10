@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_MODULE_MODULE_ITEM_HPP
 
 #include "libdnf/module/module_dependency.hpp"
+#include "libdnf/module/module_item_container_weak.hpp"
 #include "libdnf/module/module_profile.hpp"
 
 #include <string>
@@ -163,7 +164,7 @@ private:
     friend class ModuleMetadata;
     friend ::ModuleTest;
 
-    ModuleItem(_ModulemdModuleStream * md_stream);
+    ModuleItem(_ModulemdModuleStream * md_stream, const ModuleItemContainerWeakPtr & module_item_container);
     ModuleItem(const ModuleItem & mpkg);
     ModuleItem & operator=(const ModuleItem & mpkg);
     ModuleItem(ModuleItem && mpkg) = default;
@@ -202,8 +203,7 @@ private:
     // Corresponds to one yaml document
     _ModulemdModuleStream * md_stream;
 
-    // TODO(pkratoch): Figure out how to make modular sack
-    // DnfSack * moduleSack;
+    ModuleItemContainerWeakPtr module_item_container;
     ModuleItemId id;
     std::string repo_id;
 };

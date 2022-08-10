@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/module/module_item.hpp"
+#include "libdnf/module/module_item_container_weak.hpp"
 
 #include <modulemd-2.0/modulemd.h>
 
@@ -49,7 +50,7 @@ void ModuleItemContainer::add(const std::string & file_content) {
     md.resolve_added_metadata();
 
     // TODO(pkratoch): Implement compatibility for ModuleItems without static context
-    auto items = md.get_all_module_items();
+    auto items = md.get_all_module_items(get_weak_ptr());
     for (auto const & module_item_ptr : items.first) {
         std::unique_ptr<ModuleItem> module_item(module_item_ptr);
         modules.push_back(std::move(module_item));

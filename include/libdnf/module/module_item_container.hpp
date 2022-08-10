@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/module/module_item.hpp"
+#include "libdnf/module/module_item_container_weak.hpp"
 
 #include <memory>
 #include <string>
@@ -40,9 +41,6 @@ enum class ModuleState { AVAILABLE, DEFAULT, ENABLED, DISABLED };
 
 
 class ModuleItemContainer;
-
-
-using ModuleItemContainerWeakPtr = libdnf::WeakPtr<ModuleItemContainer, false>;
 
 
 class ModuleItemContainer {
