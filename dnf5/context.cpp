@@ -39,7 +39,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <algorithm>
 #include <cctype>
-#include <filesystem>
 #include <iostream>
 #include <regex>
 #include <set>

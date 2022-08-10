@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_sack.hpp"
 #include "libdnf/base/base_weak.hpp"
+#include "libdnf/common/impl_ptr.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/comps/comps.hpp"
 #include "libdnf/conf/config_main.hpp"
@@ -31,7 +32,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/plugin/plugins.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/rpm/package_sack.hpp"
-#include "libdnf/system/state.hpp"
 #include "libdnf/transaction/transaction_history.hpp"
 
 #include <map>
@@ -97,19 +97,18 @@ public:
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     VarsWeakPtr get_vars() { return VarsWeakPtr(&vars, &vars_gurad); }
 
-    /// @return The system state object.
-    /// @since 5.0
-    // TODO(lukash) if it stays on public API, use WeakPtr
-    libdnf::system::State & get_system_state() { return *system_state; }
-
     void add_plugin(plugin::IPlugin & iplugin_instance);
     void load_plugins();
     plugin::Plugins & get_plugins() { return plugins; }
 
     libdnf::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
+    class Impl;
+
 private:
     friend solv::Pool & get_pool(const libdnf::BaseWeakPtr & base);
+    friend class libdnf::base::Transaction;
+    friend class libdnf::rpm::Package;
 
     WeakPtrGuard<Base, false> base_guard;
 
@@ -137,12 +136,13 @@ private:
     plugin::Plugins plugins{*this};
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
     std::map<std::string, std::string> variables;
-    std::optional<libdnf::system::State> system_state;
     transaction::TransactionHistory transaction_history;
     Vars vars;
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;
     WeakPtrGuard<Vars, false> vars_gurad;
+
+    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf

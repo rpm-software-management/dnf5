@@ -88,8 +88,6 @@ public:
 /// A class providing information and allowing modification of the DNF system
 /// state. The state consists of a list of userinstalled packages, installed
 /// groups and their packages etc.
-// TODO(lukash) make parts of the api (creating the class, saving reasons)
-// private or remove the class from the interface altogether
 class State {
 public:
     /// Creates an instance of `State`, optionally specifying the directory

@@ -11,6 +11,7 @@ file(GLOB_RECURSE TEST_LIBDNF5_CLI_SOURCES *.cpp)
 
 include_directories(.)
 include_directories(${PROJECT_SOURCE_DIR}/libdnf-cli)
+include_directories(${PROJECT_SOURCE_DIR}/libdnf)
 
 
 add_executable(run_tests_cli ${TEST_LIBDNF5_CLI_SOURCES})

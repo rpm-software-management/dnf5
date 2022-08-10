@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/base/transaction.hpp>
 #include <libdnf/rpm/package.hpp>
 
+#include <filesystem>
 #include <memory>
 #include <optional>
 #include <string>

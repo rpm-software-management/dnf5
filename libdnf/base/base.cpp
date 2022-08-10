@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 
+#include "base_impl.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
@@ -42,7 +43,8 @@ Base::Base()
       rpm_package_sack(get_weak_ptr()),
       rpm_advisory_sack(get_weak_ptr()),
       transaction_history(get_weak_ptr()),
-      vars(get_weak_ptr()) {}
+      vars(get_weak_ptr()),
+      p_impl(new Impl()) {}
 
 Base::~Base() = default;
 
@@ -121,7 +123,7 @@ void Base::setup() {
     get_vars()->load(installroot.get_value(), config.varsdir().get_value());
 
     std::filesystem::path system_state_dir{config.system_state_dir().get_value()};
-    system_state.emplace(installroot.get_value() / system_state_dir.relative_path());
+    p_impl->system_state.emplace(installroot.get_value() / system_state_dir.relative_path());
 
     config.varsdir().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
