@@ -148,7 +148,7 @@ void RepoqueryCommand::run() {
         advisory_bz->get_value(),
         advisory_cve->get_value());
     if (advisories.has_value()) {
-        full_package_query.filter_advisories(advisories.value(), libdnf::sack::QueryCmp::EQ);
+        full_package_query.filter_advisories(advisories.value(), libdnf::sack::QueryCmp::GTE);
     }
 
     if (pkg_specs.empty() && pkg_file_paths.empty()) {
