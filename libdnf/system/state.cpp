@@ -133,6 +133,30 @@ struct into<libdnf::system::ModuleState> {
     }
 };
 
+
+template <>
+struct from<libdnf::system::SystemState> {
+    static libdnf::system::SystemState from_toml(const value & v) {
+        libdnf::system::SystemState system_state;
+
+        system_state.rpmdb_cookie = toml::find<std::string>(v, "rpmdb_cookie");
+
+        return system_state;
+    }
+};
+
+
+template <>
+struct into<libdnf::system::SystemState> {
+    static toml::value into_toml(const libdnf::system::SystemState & system_state) {
+        toml::value res;
+
+        res["rpmdb_cookie"] = system_state.rpmdb_cookie;
+
+        return res;
+    }
+};
+
 }  // namespace toml
 
 
@@ -296,6 +320,16 @@ void State::remove_module_state(const std::string & name) {
 }
 
 
+std::string State::get_rpmdb_cookie() const {
+    return system_state.rpmdb_cookie;
+}
+
+
+void State::set_rpmdb_cookie(const std::string & cookie) {
+    system_state.rpmdb_cookie = cookie;
+}
+
+
 template <typename T>
 static toml::value make_top_value(const std::string & key, const T & value) {
     return toml::value({{key, value}, {"version", make_version()}});
@@ -309,11 +343,12 @@ void State::save() {
     utils::fs::File(get_nevra_state_path(), "w").write(toml::format(make_top_value("nevras", nevra_states)));
     utils::fs::File(get_group_state_path(), "w").write(toml::format(make_top_value("groups", group_states)));
     utils::fs::File(get_module_state_path(), "w").write(toml::format(make_top_value("modules", module_states)));
+    utils::fs::File(get_system_state_path(), "w").write(toml::format(make_top_value("system", system_state)));
 }
 
 
 template <typename T>
-static std::map<std::string, T> load_toml_to_map(const std::string & path, const std::string & key) {
+static T load_toml_data(const std::string & path, const std::string & key) {
     if (!std::filesystem::exists(path)) {
         // TODO(lukash) log this?
         return {};
@@ -330,15 +365,16 @@ static std::map<std::string, T> load_toml_to_map(const std::string & path, const
     }
 
     // TODO(lukash) throws std::runtime_error with no error description in case opening the file fails
-    return toml::find<std::map<std::string, T>>(toml_value, key);
+    return toml::find<T>(toml_value, key);
 }
 
 
 void State::load() {
-    package_states = load_toml_to_map<PackageState>(get_package_state_path(), "packages");
-    nevra_states = load_toml_to_map<NevraState>(get_nevra_state_path(), "nevras");
-    group_states = load_toml_to_map<GroupState>(get_group_state_path(), "groups");
-    module_states = load_toml_to_map<ModuleState>(get_module_state_path(), "modules");
+    package_states = load_toml_data<std::map<std::string, PackageState>>(get_package_state_path(), "packages");
+    nevra_states = load_toml_data<std::map<std::string, NevraState>>(get_nevra_state_path(), "nevras");
+    group_states = load_toml_data<std::map<std::string, GroupState>>(get_group_state_path(), "groups");
+    module_states = load_toml_data<std::map<std::string, ModuleState>>(get_module_state_path(), "modules");
+    system_state = load_toml_data<SystemState>(get_system_state_path(), "system");
 }
 
 
@@ -359,6 +395,11 @@ std::filesystem::path State::get_group_state_path() {
 
 std::filesystem::path State::get_module_state_path() {
     return path / "modules.toml";
+}
+
+
+std::filesystem::path State::get_system_state_path() {
+    return path / "system.toml";
 }
 
 }  // namespace libdnf::system

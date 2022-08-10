@@ -475,6 +475,8 @@ Transaction::TransactionRunResult Transaction::Impl::run(
             }
         }
 
+        system_state.set_rpmdb_cookie(rpm_transaction.get_db_cookie());
+
         system_state.save();
     }
 
