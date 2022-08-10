@@ -65,6 +65,7 @@ void UpgradeCommand::set_argument_parser() {
 
 void UpgradeCommand::configure() {
     auto & context = get_context();
+    context.update_repo_load_flags_from_specs(pkg_specs);
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
