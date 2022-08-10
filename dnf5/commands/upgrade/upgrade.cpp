@@ -67,6 +67,14 @@ void UpgradeCommand::configure() {
     auto & context = get_context();
     context.update_repo_load_flags_from_specs(pkg_specs);
     context.set_load_system_repo(true);
+    bool updateinfo_needed = advisory_name->get_value().empty() || advisory_security->get_value() ||
+                             advisory_bugfix->get_value() || advisory_enhancement->get_value() ||
+                             advisory_newpackage->get_value() || advisory_severity->get_value().empty() ||
+                             advisory_bz->get_value().empty() || advisory_cve->get_value().empty();
+    if (updateinfo_needed) {
+        context.set_available_repos_load_flags(
+            context.get_available_repos_load_flags() | libdnf::repo::LoadFlags::UPDATEINFO);
+    }
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
