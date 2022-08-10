@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include "libdnf/module/module_dependency.hpp"
+#include "libdnf/module/module_item_container_weak.hpp"
 #include "libdnf/utils/format.hpp"
 
 #include <modulemd-2.0/modulemd-module-stream.h>
@@ -212,7 +213,9 @@ std::string ModuleItem::get_module_dependencies_string(ModulemdModuleStream * md
 }
 
 
-ModuleItem::ModuleItem(_ModulemdModuleStream * md_stream) : md_stream(md_stream) {
+ModuleItem::ModuleItem(_ModulemdModuleStream * md_stream, const ModuleItemContainerWeakPtr & module_item_container)
+    : md_stream(md_stream),
+      module_item_container(module_item_container) {
     if (md_stream != nullptr) {
         g_object_ref(md_stream);
     }
