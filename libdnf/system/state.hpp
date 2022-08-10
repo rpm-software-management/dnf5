@@ -57,6 +57,11 @@ public:
     std::vector<std::string> installed_profiles;
 };
 
+class SystemState {
+public:
+    std::string rpmdb_cookie;
+};
+
 
 class StateNotFoundError : public libdnf::Error {
 public:
@@ -160,6 +165,15 @@ public:
 
     void remove_module_state(const std::string & name);
 
+    /// @return The rpmdb cookie from system state toml.
+    /// @since 5.0
+    std::string get_rpmdb_cookie() const;
+
+    /// Sets the rpmdb cookie in system state toml.
+    /// @param cookie The rpmdb cookie.
+    /// @since 5.0
+    void set_rpmdb_cookie(const std::string & cookie);
+
     /// Saves the system state to the filesystem path specified in constructor.
     /// @since 5.0
     void save();
@@ -185,12 +199,17 @@ private:
     /// @since 5.0
     std::filesystem::path get_module_state_path();
 
+    /// @return The path to the toml file containing the system data.
+    /// @since 5.0
+    std::filesystem::path get_system_state_path();
+
     std::filesystem::path path;
 
     std::map<std::string, PackageState> package_states;
     std::map<std::string, NevraState> nevra_states;
     std::map<std::string, GroupState> group_states;
     std::map<std::string, ModuleState> module_states;
+    SystemState system_state;
 };
 
 }  // namespace libdnf::system

@@ -58,6 +58,11 @@ state = "Enabled"
 enabled_stream = "stream-1"
 )"""};
 
+static const std::string system_contents{R"""(version = "1.0"
+system = {rpmdb_cookie="foo"}
+)"""};
+
+
 // workaround, because of different behavior before toml 3.7.1
 static std::string trim(std::string str) {
     str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](char c) { return c != '\n'; }));
@@ -77,6 +82,7 @@ void StateTest::setUp() {
     libdnf::utils::fs::File(temp_dir->get_path() / "nevras.toml", "w").write(nevras_contents);
     libdnf::utils::fs::File(temp_dir->get_path() / "groups.toml", "w").write(groups_contents);
     libdnf::utils::fs::File(temp_dir->get_path() / "modules.toml", "w").write(modules_contents);
+    libdnf::utils::fs::File(temp_dir->get_path() / "system.toml", "w").write(system_contents);
 }
 
 void StateTest::tearDown() {
@@ -117,6 +123,8 @@ void StateTest::test_state_read() {
     CPPUNIT_ASSERT_EQUAL(module_1_installed_profiles, state.get_module_installed_profiles("module-1"));
     CPPUNIT_ASSERT_EQUAL(std::string("stream-2"), state.get_module_enabled_stream("module-2"));
     CPPUNIT_ASSERT_EQUAL(libdnf::module::ModuleState::DISABLED, state.get_module_state("module-2"));
+
+    CPPUNIT_ASSERT_EQUAL(std::string("foo"), state.get_rpmdb_cookie());
 }
 
 void StateTest::test_state_write() {
@@ -142,12 +150,15 @@ void StateTest::test_state_write() {
     state.set_module_enabled_stream("module-2", "stream-2");
     state.set_module_state("module-2", libdnf::module::ModuleState::DISABLED);
 
+    state.set_rpmdb_cookie("foo");
+
     state.save();
 
     CPPUNIT_ASSERT_EQUAL(packages_contents, trim(libdnf::utils::fs::File(path / "packages.toml", "r").read()));
     CPPUNIT_ASSERT_EQUAL(nevras_contents, trim(libdnf::utils::fs::File(path / "nevras.toml", "r").read()));
     CPPUNIT_ASSERT_EQUAL(groups_contents, trim(libdnf::utils::fs::File(path / "groups.toml", "r").read()));
     CPPUNIT_ASSERT_EQUAL(modules_contents, trim(libdnf::utils::fs::File(path / "modules.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(system_contents, trim(libdnf::utils::fs::File(path / "system.toml", "r").read()));
 
     // Test removes
     state.remove_package_na_state("pkg.x86_64");
