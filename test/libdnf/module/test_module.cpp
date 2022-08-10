@@ -68,6 +68,7 @@ void ModuleTest::test_load() {
                     "spends writing or debugging build definitions is a second wasted. So is every second spent "
                     "waiting for the build system to actually start compiling code."),
         meson->get_description());
+    CPPUNIT_ASSERT_EQUAL(std::string("ninja;platform:[f29,f30,f31]"), meson->get_module_dependencies_string());
 
     CPPUNIT_ASSERT_EQUAL(std::string("nodejs"), module_item_container->modules[1]->get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("nodejs"), module_item_container->modules[2]->get_name());
