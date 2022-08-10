@@ -67,9 +67,9 @@ public:
                 } catch (const sdbus::Error & ex) {
                     reply = call.createErrorReply(ex);
                 } catch (const std::exception & ex) {
-                    reply = call.createErrorReply({dnfdaemon::ERROR, ex.what()});
+                    reply = call.createErrorReply(sdbus::Error(dnfdaemon::ERROR, ex.what()));
                 } catch (...) {
-                    reply = call.createErrorReply({dnfdaemon::ERROR, "Unknown exception caught"});
+                    reply = call.createErrorReply(sdbus::Error(dnfdaemon::ERROR, "Unknown exception caught"));
                 }
                 bool success = false;
                 std::string error_msg;
