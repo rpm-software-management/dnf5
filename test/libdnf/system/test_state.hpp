@@ -23,9 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "base_test_case.hpp"
+#include "system/state.hpp"
 #include "utils/fs/temp.hpp"
-
-#include "libdnf/system/state.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

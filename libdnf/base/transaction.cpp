@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rpm/transaction.hpp"
 
+#include "base_impl.hpp"
 #include "rpm/package_set_impl.hpp"
 #include "solv/pool.hpp"
 #include "solver_problems_internal.hpp"
@@ -434,7 +435,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
 
     if (ret == 0) {
         // set the new system state
-        auto & system_state = base->get_system_state();
+        auto & system_state = base->p_impl->get_system_state();
 
         rpm::PackageQuery installed_query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
         installed_query.filter_installed();

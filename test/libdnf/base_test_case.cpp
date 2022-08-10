@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "base_test_case.hpp"
 
+#include "base/base_impl.hpp"
+#include "private_accessor.hpp"
 #include "utils.hpp"
 #include "utils/string.hpp"
 
@@ -175,6 +177,10 @@ libdnf::rpm::Package BaseTestCase::get_pkg_i(const std::string & nevra, size_t i
 }
 
 
+// Accessor of private Base::p_impl, see private_accessor.hpp
+create_getter(priv_impl, &libdnf::Base::p_impl);
+
+
 libdnf::rpm::Package BaseTestCase::add_system_pkg(
     const std::string & relative_path, libdnf::transaction::TransactionItemReason reason) {
     // parse out the NA from the package path to set the reason for the installed package
@@ -184,7 +190,7 @@ libdnf::rpm::Package BaseTestCase::add_system_pkg(
     CPPUNIT_ASSERT_MESSAGE("Couldn't parse NEVRA from package path: \"" + relative_path + "\"", !nevras.empty());
     auto na = nevras[0].get_name() + "." + nevras[0].get_arch();
 
-    base.get_system_state().set_package_reason(na, reason);
+    (base.*get(priv_impl()))->get_system_state().set_package_reason(na, reason);
 
     return repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
 }

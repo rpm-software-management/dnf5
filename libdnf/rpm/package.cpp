@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/package.hpp"
 
+#include "base/base_impl.hpp"
 #include "package_sack_impl.hpp"
 #include "reldep_list_impl.hpp"
 #include "solv/pool.hpp"
@@ -319,7 +320,7 @@ std::string Package::get_from_repo_id() const {
     }
 
     try {
-        return base->get_system_state().get_package_from_repo(get_nevra());
+        return base->p_impl->get_system_state().get_package_from_repo(get_nevra());
     } catch (const std::runtime_error & e) {
         return "<unknown>";
     }
@@ -336,7 +337,7 @@ libdnf::transaction::TransactionItemReason Package::get_reason() const {
     installed_query.filter_name({get_name()});
     installed_query.filter_arch({get_arch()});
     if (!installed_query.empty()) {
-        auto reason = base->get_system_state().get_package_reason(get_na());
+        auto reason = base->p_impl->get_system_state().get_package_reason(get_na());
 
         if (reason == libdnf::transaction::TransactionItemReason::NONE) {
             return libdnf::transaction::TransactionItemReason::EXTERNAL_USER;

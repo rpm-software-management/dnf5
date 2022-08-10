@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/system/state.hpp"
+#include "system/state.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
