@@ -643,10 +643,6 @@ int main(int argc, char * argv[]) try {
 
         context.apply_repository_setopts();
 
-        //configure_plugins
-        //configure_from_options(context);
-        plugins.hook(libdnf::plugin::HookId::LOAD_CONFIG_FROM_FILE);
-
         // Run selected command
         command->configure();
         {
