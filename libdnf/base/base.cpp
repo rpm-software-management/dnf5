@@ -108,6 +108,9 @@ void Base::load_plugins() {
 void Base::setup() {
     libdnf_assert(!pool, "Base was already initialized");
 
+    load_plugins();
+    plugins.init();
+
     plugins.pre_base_setup();
 
     pool.reset(new libdnf::solv::Pool);
