@@ -136,10 +136,11 @@ bool SolvRepo::can_use_solvfile_cache(fs::File & solvfile_cache) {
 
     // check solvfile checksum
     if (memcmp(solv_userdata->checksum, checksum, CHKSUM_BYTES) != 0) {
+        auto & pool = get_pool(base);
         logger.debug(
             "Solvfile's repomd checksum doesn't match, read: \"{}\" vs. expected repomd checksum: \"{}\" for: {}",
-            solv_userdata->checksum,
-            checksum,
+            pool_bin2hex(*pool, solv_userdata->checksum, sizeof solv_userdata->checksum),
+            pool_bin2hex(*pool, checksum, sizeof checksum),
             solvfile_cache.get_path().native());
         return false;
     }
