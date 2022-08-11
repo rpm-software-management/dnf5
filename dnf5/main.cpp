@@ -633,10 +633,6 @@ int main(int argc, char * argv[]) try {
         // Write messages from memory buffer logger to stream logger
         dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
 
-        context.base.load_plugins();
-        auto & plugins = context.base.get_plugins();
-        plugins.init();
-
         base.setup();
 
         base.get_repo_sack()->create_repos_from_system_configuration();
