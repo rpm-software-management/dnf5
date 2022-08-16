@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/module/module_item.hpp"
 
+#include "module/module_item_container_impl.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf/module/module_dependency.hpp"
@@ -213,9 +214,13 @@ std::string ModuleItem::get_module_dependencies_string(ModulemdModuleStream * md
 }
 
 
-ModuleItem::ModuleItem(_ModulemdModuleStream * md_stream, const ModuleItemContainerWeakPtr & module_item_container)
+ModuleItem::ModuleItem(
+    _ModulemdModuleStream * md_stream,
+    const ModuleItemContainerWeakPtr & module_item_container,
+    const std::string & repo_id)
     : md_stream(md_stream),
-      module_item_container(module_item_container) {
+      module_item_container(module_item_container),
+      repo_id(repo_id) {
     if (md_stream != nullptr) {
         g_object_ref(md_stream);
     }

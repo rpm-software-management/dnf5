@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/module/module_item.hpp"
 #include "libdnf/module/module_item_container_weak.hpp"
 
+#include <map>
 #include <memory>
 #include <string>
 #include <vector>
@@ -47,13 +48,14 @@ class ModuleItemContainer {
 public:
     ModuleItemContainer(const BaseWeakPtr & base);
     ModuleItemContainer(Base & base);
+    ~ModuleItemContainer();
 
     ModuleItemContainerWeakPtr get_weak_ptr();
 
     std::vector<std::unique_ptr<ModuleItem>> modules;
 
     // TODO(pkratoch): Maybe make this private later
-    void add(const std::string & file_content);
+    void add(const std::string & file_content, const std::string & repo_id);
 
     // TODO(pkratoch): Implement adding defaults from "/etc/dnf/modules.defaults.d/", which are defined by user.
     //                 They are added with priority 1000 after everything else is loaded.
@@ -73,10 +75,15 @@ public:
     std::vector<std::string> get_default_profiles(std::string module_name, std::string module_stream);
 
 private:
+    friend ModuleItem;
+
     BaseWeakPtr base;
     WeakPtrGuard<ModuleItemContainer, false> data_guard;
 
     BaseWeakPtr get_base() const;
+
+    class Impl;
+    std::unique_ptr<Impl> p_impl;
 };
 
 

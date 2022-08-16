@@ -51,7 +51,7 @@ void ModuleTest::test_load() {
     }
 
     auto module_item_container = new ModuleItemContainer(base);
-    module_item_container->add(module_yaml_string);
+    module_item_container->add(module_yaml_string, "repomd-modules");
     CPPUNIT_ASSERT_EQUAL(3lu, module_item_container->modules.size());
 
     auto & meson = module_item_container->modules[0];

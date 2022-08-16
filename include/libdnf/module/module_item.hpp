@@ -164,7 +164,10 @@ private:
     friend class ModuleMetadata;
     friend ::ModuleTest;
 
-    ModuleItem(_ModulemdModuleStream * md_stream, const ModuleItemContainerWeakPtr & module_item_container);
+    ModuleItem(
+        _ModulemdModuleStream * md_stream,
+        const ModuleItemContainerWeakPtr & module_item_container,
+        const std::string & repo_id);
     ModuleItem(const ModuleItem & mpkg);
     ModuleItem & operator=(const ModuleItem & mpkg);
     ModuleItem(ModuleItem && mpkg) = default;
