@@ -6,8 +6,17 @@ jobs:
   clang-format:
     name: Clang Format
     runs-on: ubuntu-latest
-    container: ghcr.io/rpm-software-management/dnf-ci-host
+    # TODO(mblaha) temporarily lock to Fedora 35 due to bugged
+    # clang-format (clang-tools-extra-0:14.0.0-1.fc36):
+    # https://github.com/llvm/llvm-project/issues/55260
+    # change back to ghcr.io/rpm-software-management/dnf-ci-host when fixed
+    container: registry.fedoraproject.org/fedora:35
     steps:
+      # TODO(mblaha) remove this step when dnf-ci-host image is used again
+      - name: Install clang-tools-extra and git
+        run: |
+          dnf install -y git clang-tools-extra
+
       - name: Check out sources
         uses: actions/checkout@v2
         with:
