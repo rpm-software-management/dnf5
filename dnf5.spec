@@ -2,14 +2,35 @@
 %global project_version_minor 0
 %global project_version_patch 0
 
-Name:           libdnf5
+Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
 Release:        0~pre%{?dist}
-Summary:        Package management library
-License:        LGPLv2.1+
-URL:            https://github.com/rpm-software-management/libdnf
-Source0:        %{url}/archive/%{version}/libdnf-%{version}.tar.gz
+Summary:        Command-line package manager
+License:        GPLv2+
+URL:            https://github.com/rpm-software-management/dnf5
+Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
 
+Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       dnf-data
+Recommends:     bash-completion
+BuildRequires:  bash-completion
+
+%description
+DNF5 is a command-line package manager that automates the process of installing,
+upgrading, configuring, and removing computer programs in a consistent manner.
+It supports RPM packages, modulemd modules, and comps groups & environments.
+
+%files
+%{_bindir}/dnf5
+%dir %{_libdir}/dnf5/
+%dir %{_libdir}/dnf5/plugins/
+%{_libdir}/dnf5/plugins/README
+%dir %{_datadir}/bash-completion/
+%dir %{_datadir}/bash-completion/completions/
+%{_datadir}/bash-completion/completions/dnf5
+%license COPYING.md
+%license gpl-2.0.txt
+%{_mandir}/man8/dnf5.8.gz
 
 # ========== build options ==========
 
@@ -112,41 +133,46 @@ BuildRequires:  libubsan
 %endif
 
 
-# ========== libdnf ==========
+# ========== libdnf5 ==========
+%package -n libdnf5
+Summary:        Package management library
+License:        LGPLv2.1+
 #Requires:       libmodulemd{?_isa} >= {libmodulemd_version}
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
 
-%description
+%description -n libdnf5
 Package management library
 
-%files
+%files -n libdnf5
 %{_libdir}/libdnf.so.*
 %license lgpl-2.1.txt
 %{_var}/cache/libdnf/
 
-# ========== libdnf-cli ==========
+# ========== libdnf5-cli ==========
 
 %if %{with libdnf_cli}
-%package -n libdnf-cli
+%package -n libdnf5-cli
 Summary:        Library for working with a terminal in a command-line package manager
+License:        LGPLv2.1+
 BuildRequires:  pkgconfig(smartcols)
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 
-%description -n libdnf-cli
+%description -n libdnf5-cli
 Library for working with a terminal in a command-line package manager.
 
-%files -n libdnf-cli
+%files -n libdnf5-cli
 %{_libdir}/libdnf-cli.so.*
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
 
 
-# ========== libdnf-devel ==========
+# ========== libdnf5-devel ==========
 
 %package -n libdnf5-devel
 Summary:        Development files for libdnf
+License:        LGPLv2.1+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       libsolv-devel%{?_isa} >= %{libsolv_version}
 Conflicts:      libdnf-devel < 5
@@ -162,16 +188,17 @@ Development files for libdnf.
 %license lgpl-2.1.txt
 
 
-# ========== libdnf-cli-devel ==========
+# ========== libdnf5-cli-devel ==========
 
-%package cli-devel
-Summary:        Development files for libdnf-cli
-Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
+%package -n libdnf5-cli-devel
+Summary:        Development files for libdnf5-cli
+License:        LGPLv2.1+
+Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 
-%description cli-devel
-Development files for libdnf-cli.
+%description -n libdnf5-cli-devel
+Development files for libdnf5-cli.
 
-%files cli-devel
+%files -n libdnf5-cli-devel
 %{_includedir}/libdnf-cli/
 %{_libdir}/libdnf-cli.so
 %{_libdir}/pkgconfig/libdnf-cli.pc
@@ -184,6 +211,7 @@ Development files for libdnf-cli.
 %if %{with perl5}
 %package -n perl5-libdnf5
 Summary:        Perl 5 bindings for the libdnf library.
+License:        LGPLv2.1+
 Provides:       perl(libdnf) = %{version}-%{release}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 BuildRequires:  perl-devel
@@ -207,13 +235,14 @@ Perl 5 bindings for the libdnf library.
 %endif
 
 
-# ========== perl5-libdnf-cli ==========
+# ========== perl5-libdnf5-cli ==========
 
 %if %{with perl5} && %{with libdnf_cli}
 %package -n perl5-libdnf5-cli
-Summary:        Perl 5 bindings for the libdnf-cli library.
+Summary:        Perl 5 bindings for the libdnf5-cli library.
+License:        LGPLv2.1+
 Provides:       perl(libdnf_cli) = %{version}-%{release}
-Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
+Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 BuildRequires:  perl-devel
 BuildRequires:  perl-macros
 BuildRequires:  swig >= %{swig_version}
@@ -225,7 +254,7 @@ BuildRequires:  perl(warnings)
 %endif
 
 %description -n perl5-libdnf5-cli
-Perl 5 bindings for the libdnf-cli library.
+Perl 5 bindings for the libdnf5-cli library.
 
 %files -n perl5-libdnf5-cli
 %{perl_vendorarch}/libdnf5_cli
@@ -235,12 +264,13 @@ Perl 5 bindings for the libdnf-cli library.
 %endif
 
 
-# ========== python3-libdnf ==========
+# ========== python3-libdnf5 ==========
 
 %if %{with python3}
 %package -n python3-libdnf5
 %{?python_provide:%python_provide python3-libdnf}
 Summary:        Python 3 bindings for the libdnf library.
+License:        LGPLv2.1+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 BuildRequires:  python3-devel
 BuildRequires:  swig >= %{swig_version}
@@ -255,18 +285,19 @@ Python 3 bindings for the libdnf library.
 %endif
 
 
-# ========== python3-libdnf-cli ==========
+# ========== python3-libdnf5-cli ==========
 
 %if %{with python3} && %{with libdnf_cli}
 %package -n python3-libdnf5-cli
-%{?python_provide:%python_provide python3-libdnf-cli}
-Summary:        Python 3 bindings for the libdnf-cli library.
-Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
+%{?python_provide:%python_provide python3-libdnf5-cli}
+Summary:        Python 3 bindings for the libdnf5-cli library.
+License:        LGPLv2.1+
+Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 BuildRequires:  python3-devel
 BuildRequires:  swig >= %{swig_version}
 
 %description -n python3-libdnf5-cli
-Python 3 bindings for the libdnf-cli library.
+Python 3 bindings for the libdnf5-cli library.
 
 %files -n python3-libdnf5-cli
 %{python3_sitearch}/libdnf5_cli/
@@ -275,11 +306,12 @@ Python 3 bindings for the libdnf-cli library.
 %endif
 
 
-# ========== ruby-libdnf ==========
+# ========== ruby-libdnf5 ==========
 
 %if %{with ruby}
 %package -n ruby-libdnf5
 Summary:        Ruby bindings for the libdnf library.
+License:        LGPLv2.1+
 Provides:       ruby(libdnf) = %{version}-%{release}
 Requires:       %{name}%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
@@ -299,13 +331,14 @@ Ruby bindings for the libdnf library.
 %endif
 
 
-# ========== ruby-libdnf-cli ==========
+# ========== ruby-libdnf5-cli ==========
 
 %if %{with ruby} && %{with libdnf_cli}
 %package -n ruby-libdnf5-cli
-Summary:        Ruby bindings for the libdnf-cli library.
+Summary:        Ruby bindings for the libdnf5-cli library.
+License:        LGPLv2.1+
 Provides:       ruby(libdnf_cli) = %{version}-%{release}
-Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
+Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 BuildRequires:  pkgconfig(ruby)
 BuildRequires:  swig >= %{swig_version}
 %if %{with tests}
@@ -313,7 +346,7 @@ BuildRequires:  rubygem-test-unit
 %endif
 
 %description -n ruby-libdnf5-cli
-Ruby bindings for the libdnf-cli library.
+Ruby bindings for the libdnf5-cli library.
 
 %files -n ruby-libdnf5-cli
 %{ruby_vendorarchdir}/libdnf5_cli/
@@ -338,7 +371,7 @@ Libdnf plugin that allows to run actions (external executables) on hooks.
 %endif
 
 
-# ========== libdnf5-python-plugins-loader ==========
+# ========== python3-libdnf5-plugins-loader ==========
 
 %if %{with python_plugins_loader}
 %package -n python3-libdnf5-python-plugins-loader
@@ -364,7 +397,7 @@ Libdnf plugin that allows loading Python plugins
 Summary:        Command-line interface for dnf5daemon-server
 License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
+Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf5daemon-server
 
 %description -n dnf5daemon-client
@@ -385,7 +418,7 @@ Command-line interface for dnf5daemon-server
 Summary:        Package management service with a DBus interface
 License:        GPLv2+
 Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
+Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 %{?systemd_requires}
 BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
@@ -423,37 +456,6 @@ Package management service with a DBus interface
 %endif
 
 
-# ========== dnf5 ==========
-
-%if %{with dnf5}
-%package -n dnf5
-Summary:        Command-line package manager
-License:        GPLv2+
-Requires:       %{name}%{?_isa} = %{version}-%{release}
-Requires:       libdnf-cli%{?_isa} = %{version}-%{release}
-Requires:       dnf-data
-Recommends:     bash-completion
-BuildRequires:  bash-completion
-
-%description -n dnf5
-DNF5 is a command-line package manager that automates the process of installing,
-upgrading, configuring, and removing computer programs in a consistent manner.
-It supports RPM packages, modulemd modules, and comps groups & environments.
-
-%files -n dnf5
-%{_bindir}/dnf5
-%dir %{_libdir}/dnf5/
-%dir %{_libdir}/dnf5/plugins/
-%{_libdir}/dnf5/plugins/README
-%dir %{_datadir}/bash-completion/
-%dir %{_datadir}/bash-completion/completions/
-%{_datadir}/bash-completion/completions/dnf5
-%license COPYING.md
-%license gpl-2.0.txt
-%{_mandir}/man8/dnf5.8.gz
-%endif
-
-
 # ========== dnf5-plugins ==========
 
 %if %{with dnf5_plugins}
@@ -473,7 +475,7 @@ DNF5 plugins
 # ========== unpack, build, check & install ==========
 
 %prep
-%autosetup -p1 -n libdnf-%{version}
+%autosetup -p1 -n dnf5-%{version}
 
 
 %build
