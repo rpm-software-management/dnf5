@@ -23,12 +23,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include "libdnf/module/module_dependency.hpp"
+#include "libdnf/module/module_item_container.hpp"
 #include "libdnf/module/module_item_container_weak.hpp"
 #include "libdnf/utils/format.hpp"
 
 #include <modulemd-2.0/modulemd-module-stream.h>
 #include <modulemd-2.0/modulemd-profile.h>
 #include <modulemd-2.0/modulemd.h>
+
+extern "C" {
+#include <solv/pool.h>
+#include <solv/pool_parserpmrichdep.h>
+#include <solv/repo.h>
+}
 
 #include <algorithm>
 #include <string>
@@ -101,6 +108,15 @@ std::string ModuleItem::get_name_stream_version() const {
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
         std::to_string(modulemd_module_stream_get_version(md_stream)));
+}
+
+
+std::string ModuleItem::get_name_stream_context() const {
+    return libdnf::utils::sformat(
+        "{}:{}:{}",
+        libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
+        libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
+        libdnf::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream)));
 }
 
 
@@ -224,6 +240,12 @@ ModuleItem::ModuleItem(
     if (md_stream != nullptr) {
         g_object_ref(md_stream);
     }
+    create_solvable();
+    create_dependencies();
+
+    // TODO(pkratoch): Implement these calls
+    // dnf_sack_set_provides_not_ready(moduleSack);
+    // dnf_sack_set_considered_to_update(moduleSack);
 }
 
 
@@ -265,6 +287,79 @@ std::string ModuleItem::get_yaml() const {
     g_free(cStrYaml);
     g_object_unref(i);
     return yaml;
+}
+
+
+void ModuleItem::create_solvable() {
+    Pool * pool = module_item_container->p_impl->pool;
+
+    // Create new solvable and store its id
+    id = *new ModuleItemId(
+        repo_add_solvable(pool_id2repo(pool, Id(module_item_container->p_impl->repositories[repo_id]))));
+    Solvable * solvable = pool_id2solvable(pool, id.id);
+
+    // Name: $name:$stream:$context
+    solvable_set_str(solvable, SOLVABLE_NAME, get_name_stream_context().c_str());
+    // Version: $version
+    solvable_set_str(solvable, SOLVABLE_EVR, get_version_str().c_str());
+    // TODO(pkratoch): The test can be removed once modules always have arch
+    // Arch: $arch (if arch is not defined, set "noarch")
+    auto arch = modulemd_module_stream_get_arch(md_stream);
+    solvable_set_str(solvable, SOLVABLE_ARCH, arch ? arch : "noarch");
+    // Store original $name:$stream in description
+    solvable_set_str(solvable, SOLVABLE_DESCRIPTION, get_name_stream().c_str());
+
+    // Create Provides: module($name)
+    std::string provide = libdnf::utils::sformat("module({})", get_name());
+    auto dep_id = pool_str2id(pool, provide.c_str(), 1);
+    solvable_add_deparray(solvable, SOLVABLE_PROVIDES, dep_id, -1);
+    // Create Conflicts: module($name)
+    solvable_add_deparray(solvable, SOLVABLE_CONFLICTS, dep_id, 0);
+    // Create Provides: module($name:$stream)
+    provide = libdnf::utils::sformat("module({})", get_name_stream());
+    dep_id = pool_str2id(pool, provide.c_str(), 1);
+    solvable_add_deparray(solvable, SOLVABLE_PROVIDES, dep_id, -1);
+
+    // TODO(pkratoch): Maybe store original context in summary
+    // solvable_set_str(solvable, SOLVABLE_SUMMARY, original_context.c_str());
+}
+
+
+void ModuleItem::create_dependencies() const {
+    Pool * pool = module_item_container->p_impl->pool;
+    Solvable * solvable = pool_id2solvable(pool, id.id);
+    std::string req_formated;
+
+    for (const auto & dependency : get_module_dependencies()) {
+        auto module_name = dependency.get_module_name();
+        std::vector<std::string> required_streams;
+        for (const auto & stream : dependency.get_streams()) {
+            // If the stream require starts with "-", create conflict with the stream, otherwise, remember the stream require
+            if (stream.find('-', 0) != std::string::npos) {
+                req_formated = libdnf::utils::sformat("module({}:{}", module_name, stream.substr(1));
+                solvable_add_deparray(solvable, SOLVABLE_CONFLICTS, pool_str2id(pool, req_formated.c_str(), 1), 0);
+            } else {
+                req_formated = libdnf::utils::sformat("module({}:{})", module_name, stream);
+                required_streams.push_back(req_formated);
+            }
+        }
+        // If there are no required streams, require the whole module
+        // If there is exactly one required stream, require the stream
+        // If there are more required streams, add a rich dependency to require any of the streams
+        if (required_streams.empty()) {
+            req_formated = libdnf::utils::sformat("module({})", module_name);
+            solvable_add_deparray(solvable, SOLVABLE_REQUIRES, pool_str2id(pool, req_formated.c_str(), 1), -1);
+        } else if (required_streams.size() == 1) {
+            solvable_add_deparray(solvable, SOLVABLE_REQUIRES, pool_str2id(pool, required_streams[0].c_str(), 1), -1);
+        } else {
+            req_formated = libdnf::utils::sformat("({})", utils::string::join(required_streams, " or "));
+            Id dep_id = pool_parserpmrichdep(pool, req_formated.c_str());
+            if (!dep_id) {
+                throw std::runtime_error("Cannot parse module requires");
+            }
+            solvable_add_deparray(solvable, SOLVABLE_REQUIRES, dep_id, -1);
+        }
+    }
 }
 
 
