@@ -313,6 +313,19 @@ std::string Package::get_repo_id() const {
     return get_pool(base).get_repo(id.id).get_id();
 }
 
+std::string Package::get_from_repo_id() const {
+    if (!is_installed()) {
+        return "";
+    }
+
+    try {
+        return base->get_system_state().get_package_from_repo(get_nevra());
+    } catch (const std::runtime_error & e) {
+        return "<unknown>";
+    }
+}
+
+
 libdnf::transaction::TransactionItemReason Package::get_reason() const {
     // TODO(lukash) this query is a temporary solution.
     // The logic should be moved to the system::State, where a cache of
