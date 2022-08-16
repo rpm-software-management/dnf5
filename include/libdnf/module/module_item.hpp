@@ -185,6 +185,7 @@ private:
     std::string get_name_stream() const;
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getNameStreamVersion()
     std::string get_name_stream_version() const;
+    std::string get_name_stream_context() const;
 
     std::vector<ModuleProfile> get_profiles_internal(const char * name) const;
 
@@ -202,6 +203,17 @@ private:
     std::string get_module_dependencies_string(bool remove_platform = false) const;
 
     static std::string get_name_stream(_ModulemdModuleStream * md_stream);
+
+    /// Create solvable with:
+    ///     Name: $name:$stream:$context
+    ///     Version: $version
+    ///     Arch: $arch (if arch is not defined, set "noarch")
+    ///     Provides: module($name)
+    ///     Provides: module($name:$stream)
+    ///     Conflicts: module($name)
+    ///     Description: $name:$stream
+    void create_solvable();
+    void create_dependencies() const;
 
     // Corresponds to one yaml document
     _ModulemdModuleStream * md_stream;
