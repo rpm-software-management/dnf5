@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/module/module_item_container.hpp"
 
+#include "module/module_item_container_impl.hpp"
 #include "module/module_metadata.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
@@ -40,17 +41,26 @@ extern "C" {
 namespace libdnf::module {
 
 
-ModuleItemContainer::ModuleItemContainer(const BaseWeakPtr & base) : base(base){};
-ModuleItemContainer::ModuleItemContainer(libdnf::Base & base) : base(base.get_weak_ptr()) {}
+ModuleItemContainer::ModuleItemContainer(const BaseWeakPtr & base) : base(base), p_impl(new Impl()) {}
+ModuleItemContainer::ModuleItemContainer(libdnf::Base & base) : base(base.get_weak_ptr()), p_impl(new Impl()) {}
+ModuleItemContainer::~ModuleItemContainer() {}
 
 
-void ModuleItemContainer::add(const std::string & file_content) {
+void ModuleItemContainer::add(const std::string & file_content, const std::string & repo_id) {
     ModuleMetadata md(base);
     md.add_metadata_from_string(file_content, 0);
     md.resolve_added_metadata();
 
+    Repo * repo;
+    auto repo_pair = p_impl->repositories.find(repo_id);
+    if (repo_pair == p_impl->repositories.end()) {
+        repo = repo_create(p_impl->pool, repo_id.c_str());
+        p_impl->repositories[repo_id] = int(repo->repoid);
+    } else {
+        repo = pool_id2repo(p_impl->pool, Id(repo_pair->second));
+    }
     // TODO(pkratoch): Implement compatibility for ModuleItems without static context
-    auto items = md.get_all_module_items(get_weak_ptr());
+    auto items = md.get_all_module_items(get_weak_ptr(), repo_id);
     for (auto const & module_item_ptr : items.first) {
         std::unique_ptr<ModuleItem> module_item(module_item_ptr);
         modules.push_back(std::move(module_item));

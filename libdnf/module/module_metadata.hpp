@@ -57,7 +57,7 @@ private:
     void resolve_added_metadata();
 
     std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> get_all_module_items(
-        const ModuleItemContainerWeakPtr & module_item_container);
+        const ModuleItemContainerWeakPtr & module_item_container, const std::string & repo_id);
 
     // TODO(pkratoch): Implement getting default streams and profiles.
     /// @return Map of module names and their default streams.
