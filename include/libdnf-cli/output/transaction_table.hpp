@@ -297,7 +297,7 @@ bool print_transaction_table(Transaction & transaction) {
         scols_line_set_data(ln, COL_ARCH, pkg.get_arch().c_str());
         scols_line_set_data(ln, COL_EVR, pkg.get_evr().c_str());
         if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REMOVE) {
-            scols_line_set_data(ln, COL_REPO, "<TODO: from_repo>");
+            scols_line_set_data(ln, COL_REPO, pkg.get_from_repo_id().c_str());
         } else {
             scols_line_set_data(ln, COL_REPO, pkg.get_repo_id().c_str());
         }
@@ -322,7 +322,7 @@ bool print_transaction_table(Transaction & transaction) {
             scols_line_set_data(ln_replaced, COL_NAME, name.c_str());
             scols_line_set_data(ln_replaced, COL_ARCH, replaced.get_arch().c_str());
             scols_line_set_data(ln_replaced, COL_EVR, replaced.get_evr().c_str());
-            scols_line_set_data(ln_replaced, COL_REPO, "<TODO: from_repo>");
+            scols_line_set_data(ln_replaced, COL_REPO, replaced.get_from_repo_id().c_str());
 
             auto replaced_size = static_cast<int64_t>(replaced.get_install_size());
             scols_line_set_data(ln_replaced, COL_SIZE, libdnf::cli::utils::units::format_size(replaced_size).c_str());

@@ -415,13 +415,12 @@ public:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_is_local(DnfPackage * pkg)
     //bool is_local() const;
 
-    /// TODO get_from_repo_id - requires swdb
     /// For an installed package, return id of repo from the package was installed.
     /// For an available package, return an empty string.
     //
     // @replaces dnf:dnf/package.py:attribute:Package.ui_from_repo
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_get_origin(DnfPackage * pkg)
-    // void get_from_repo_id() const;
+    std::string get_from_repo_id() const;
 
     /// @return The unix timestamp (seconds since epoch) of when the package was installed.
     ///         Return 0 if the package is not installed.
