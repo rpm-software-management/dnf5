@@ -55,6 +55,7 @@ void print_transaction_info(libdnf::transaction::Transaction & transaction) {
     // The two spaces indent the table the same way as child lines in KeyValueTable
     scols_table_new_column(item_list.get(), "  Action", 0, 0);
     scols_table_new_column(item_list.get(), "Package", 0, 0);
+    scols_table_new_column(item_list.get(), "Reason", 0, 0);
     scols_table_new_column(item_list.get(), "Repository", 0, 0);
 
     for (auto & pkg : transaction.get_packages()) {
@@ -62,7 +63,8 @@ void print_transaction_info(libdnf::transaction::Transaction & transaction) {
         scols_line_set_data(
             ln, 0, ("  " + libdnf::transaction::transaction_item_action_to_string(pkg.get_action())).c_str());
         scols_line_set_data(ln, 1, pkg.to_string().c_str());
-        scols_line_set_data(ln, 2, pkg.get_repoid().c_str());
+        scols_line_set_data(ln, 2, libdnf::transaction::transaction_item_reason_to_string(pkg.get_reason()).c_str());
+        scols_line_set_data(ln, 3, pkg.get_repoid().c_str());
     }
 
     info.print();
