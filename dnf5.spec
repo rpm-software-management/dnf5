@@ -15,23 +15,6 @@ Requires:       dnf-data
 Recommends:     bash-completion
 BuildRequires:  bash-completion
 
-%description
-DNF5 is a command-line package manager that automates the process of installing,
-upgrading, configuring, and removing computer programs in a consistent manner.
-It supports RPM packages, modulemd modules, and comps groups & environments.
-
-%files
-%{_bindir}/dnf5
-%dir %{_libdir}/dnf5/
-%dir %{_libdir}/dnf5/plugins/
-%{_libdir}/dnf5/plugins/README
-%dir %{_datadir}/bash-completion/
-%dir %{_datadir}/bash-completion/completions/
-%{_datadir}/bash-completion/completions/dnf5
-%license COPYING.md
-%license gpl-2.0.txt
-%{_mandir}/man8/dnf5.8.gz
-
 # ========== build options ==========
 
 %bcond_without dnf5daemon_client
@@ -132,6 +115,23 @@ BuildRequires:  liblsan
 BuildRequires:  libubsan
 %endif
 
+
+%description
+DNF5 is a command-line package manager that automates the process of installing,
+upgrading, configuring, and removing computer programs in a consistent manner.
+It supports RPM packages, modulemd modules, and comps groups & environments.
+
+%files
+%{_bindir}/dnf5
+%dir %{_libdir}/dnf5/
+%dir %{_libdir}/dnf5/plugins/
+%{_libdir}/dnf5/plugins/README
+%dir %{_datadir}/bash-completion/
+%dir %{_datadir}/bash-completion/completions/
+%{_datadir}/bash-completion/completions/dnf5
+%license COPYING.md
+%license gpl-2.0.txt
+%{_mandir}/man8/dnf5.8.gz
 
 # ========== libdnf5 ==========
 %package -n libdnf5
