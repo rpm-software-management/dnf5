@@ -1,7 +1,7 @@
-file(GLOB_RECURSE LIBDNF_HEADERS *.hpp)
+file(GLOB_RECURSE LIBDNF5_HEADERS *.hpp)
 
 # preserve relative paths of the header files
-foreach(abspath ${LIBDNF_HEADERS})
+foreach(abspath ${LIBDNF5_HEADERS})
     # relative path to the header file
     file(RELATIVE_PATH relpath ${CMAKE_CURRENT_SOURCE_DIR} ${abspath})
     # dirname of the relative path

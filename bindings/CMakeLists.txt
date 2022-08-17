@@ -48,11 +48,11 @@ endif()
 
 
 # list of all modules that will be included in libdnf bindings
-list(APPEND SWIG_LIBDNF_MODULES base common comps conf logger repo rpm transaction plugin)
+list(APPEND SWIG_LIBDNF5_MODULES base common comps conf logger repo rpm transaction plugin)
 
 
 # list of all modules that will be included in libdnf-cli bindings
-list(APPEND SWIG_LIBDNF_CLI_MODULES progressbar)
+list(APPEND SWIG_LIBDNF5_CLI_MODULES progressbar)
 
 
 add_subdirectory(go)
