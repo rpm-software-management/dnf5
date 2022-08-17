@@ -64,7 +64,9 @@ void BuildDepCommand::set_argument_parser() {
     defs->set_long_name("define");
     defs->set_has_value(true);
     defs->set_arg_value_help("\"macro expr\"");
-    defs->set_short_description("Define the RPM macro named \"macro\" to the value \"expr\" when parsing spec files");
+    defs->set_short_description(
+        "Define the RPM macro named \"macro\" to the value \"expr\" when parsing spec files. "
+        "Does not apply for source rpm files.");
     defs->set_parse_hook_func(
         [this](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -221,6 +223,10 @@ void BuildDepCommand::run() {
 
         for (const auto & macro : rpm_macros) {
             rpmPopMacro(nullptr, macro.first.c_str());
+        }
+    } else {
+        if (srpm_file_paths.size() > 0 && rpm_macros.size() > 0) {
+            std::cerr << "Warning: -D or --define arguments have no meaning for source rpm packages." << std::endl;
         }
     }
 
