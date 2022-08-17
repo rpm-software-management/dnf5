@@ -1,9 +1,9 @@
-message("Running CMake on libdnf...")
+message("Running CMake on dnf5...")
 cmake_minimum_required(VERSION 3.5)
 
 
 include(VERSION.cmake)
-project(libdnf LANGUAGES CXX C VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
+project(dnf5 LANGUAGES CXX C VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
 cmake_policy(VERSION ${CMAKE_VERSION})
 
 
@@ -20,11 +20,11 @@ endif()
 # build options - components (sub-packages)
 option(WITH_DNF5DAEMON_CLIENT "Build command-line interface for Dnf5daemon" ON)
 option(WITH_DNF5DAEMON_SERVER "Build package management service with a DBus interface" ON)
-option(WITH_LIBDNF_CLI "Build library for working with a terminal in a command-line package manager" ON)
+option(WITH_LIBDNF5_CLI "Build library for working with a terminal in a command-line package manager" ON)
 option(WITH_DNF5 "Build dnf5 command-line package manager" ON)
 option(WITH_DNF5_PLUGINS "Build plugins for dnf5 command-line package manager" ON)
-option(WITH_PLUGIN_ACTIONS "Build a libdnf actions plugin" ON)
-option(WITH_PYTHON_PLUGINS_LOADER "Build a special libdnf plugin that loads Python plugins. Requires WITH_PYTHON3=ON." ON)
+option(WITH_PLUGIN_ACTIONS "Build a dnf5 actions plugin" ON)
+option(WITH_PYTHON_PLUGINS_LOADER "Build a special dnf5 plugin that loads Python plugins. Requires WITH_PYTHON3=ON." ON)
 
 # build options - features
 option(WITH_COMPS "Build with comps groups and environments support" ON)

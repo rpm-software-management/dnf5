@@ -1,4 +1,4 @@
-if(NOT WITH_LIBDNF_CLI)
+if(NOT WITH_LIBDNF5_CLI)
     return()
 endif()
 

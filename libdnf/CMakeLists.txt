@@ -1,12 +1,12 @@
 # use any sources found under the current directory
-file(GLOB_RECURSE LIBDNF_SOURCES *.cpp)
+file(GLOB_RECURSE LIBDNF5_SOURCES *.cpp)
 
 # create config header file
 configure_file("config.h.in" ${CMAKE_CURRENT_SOURCE_DIR}/conf/config.h)
 
 # gather all pkg-config requires and write them to a .pc file later
-list(APPEND LIBDNF_PC_REQUIRES)
-list(APPEND LIBDNF_PC_REQUIRES_PRIVATE)
+list(APPEND LIBDNF5_PC_REQUIRES)
+list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE)
 
 # set gettext domain for translations
 add_definitions(-DGETTEXT_DOMAIN=\"libdnf5\")
@@ -19,7 +19,7 @@ add_definitions(-DLIBSOLV_SOLVABLE_PREPEND_DEP)
 include_directories(.)
 
 # build libdnf.so
-add_library(libdnf SHARED ${LIBDNF_SOURCES})
+add_library(libdnf SHARED ${LIBDNF5_SOURCES})
 set(DNF_SO_VERSION 3)
 set_target_properties(libdnf PROPERTIES OUTPUT_NAME "dnf")
 set_target_properties(libdnf PROPERTIES SOVERSION ${DNF_SO_VERSION})
@@ -43,7 +43,7 @@ target_link_libraries(libdnf common)
 find_package(toml11 REQUIRED)
 
 pkg_check_modules(LIBFMT REQUIRED fmt)
-list(APPEND LIBDNF_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
+list(APPEND LIBDNF5_PC_REQUIRES "${LIBFMT_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBFMT_LIBRARIES})
 
 pkg_check_modules(JSONC REQUIRED json-c)
@@ -51,24 +51,24 @@ include_directories(${JSONC_INCLUDE_DIRS})
 target_link_libraries(libdnf ${JSONC_LIBRARIES})
 
 pkg_check_modules(LIBMODULEMD REQUIRED modulemd-2.0>=2.11.2)
-list(APPEND LIBDNF_PC_REQUIRES "${LIBMODULEMD_MODULE_NAME}")
+list(APPEND LIBDNF5_PC_REQUIRES "${LIBMODULEMD_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBMODULEMD_LIBRARIES})
 
 pkg_check_modules(LIBSOLV REQUIRED libsolv>=0.7.21)
-list(APPEND LIBDNF_PC_REQUIRES "${LIBSOLV_MODULE_NAME}")
+list(APPEND LIBDNF5_PC_REQUIRES "${LIBSOLV_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBSOLV_LIBRARIES})
 
 pkg_check_modules(LIBSOLVEXT REQUIRED libsolvext>=0.7.7)
-list(APPEND LIBDNF_PC_REQUIRES_PRIVATE "${LIBSOLVEXT_MODULE_NAME}")
+list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LIBSOLVEXT_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBSOLVEXT_LIBRARIES})
 
 pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
-list(APPEND LIBDNF_PC_REQUIRES "${RPM_MODULE_NAME}")
+list(APPEND LIBDNF5_PC_REQUIRES "${RPM_MODULE_NAME}")
 target_link_libraries(libdnf ${RPM_LIBRARIES})
 
 if(WITH_COMPS)
     pkg_check_modules(LIBXML2 REQUIRED libxml-2.0)
-    list(APPEND LIBDNF_PC_REQUIRES_PRIVATE "${LIBXML2_MODULE_NAME}")
+    list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LIBXML2_MODULE_NAME}")
     include_directories(${LIBXML2_INCLUDE_DIRS})
     target_link_libraries(libdnf ${LIBXML2_LIBRARIES})
 endif()
@@ -90,24 +90,24 @@ if(NOT GPGME_FOUND)
     set(GPGME_MODULE_NAME gpgme)
     set(GPGME_LIBRARIES gpgme)
 endif()
-list(APPEND LIBDNF_PC_REQUIRES "${GPGME_MODULE_NAME}")
+list(APPEND LIBDNF5_PC_REQUIRES "${GPGME_MODULE_NAME}")
 target_link_libraries(libdnf ${GPGME_LIBRARIES})
 
 pkg_check_modules(LIBREPO REQUIRED librepo>=1.13.0)
-list(APPEND LIBDNF_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
+list(APPEND LIBDNF5_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBREPO_LIBRARIES})
 
 # SQLite3
 pkg_check_modules(SQLite3 REQUIRED sqlite3)
-list(APPEND LIBDNF_PC_REQUIRES "${SQLite3_MODULE_NAME}")
+list(APPEND LIBDNF5_PC_REQUIRES "${SQLite3_MODULE_NAME}")
 target_link_libraries(libdnf ${SQLite3_LIBRARIES})
 
 
 # sort the pkg-config requires and concatenate them into a string
-list(SORT LIBDNF_PC_REQUIRES)
-list(JOIN LIBDNF_PC_REQUIRES ", " LIBDNF_PC_REQUIRES_STRING)
-list(SORT LIBDNF_PC_REQUIRES_PRIVATE)
-list(JOIN LIBDNF_PC_REQUIRES_PRIVATE ", " LIBDNF_PC_REQUIRES_PRIVATE_STRING)
+list(SORT LIBDNF5_PC_REQUIRES)
+list(JOIN LIBDNF5_PC_REQUIRES ", " LIBDNF5_PC_REQUIRES_STRING)
+list(SORT LIBDNF5_PC_REQUIRES_PRIVATE)
+list(JOIN LIBDNF5_PC_REQUIRES_PRIVATE ", " LIBDNF5_PC_REQUIRES_PRIVATE_STRING)
 
 
 # create a .pc file

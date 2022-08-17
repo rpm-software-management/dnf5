@@ -2,12 +2,12 @@ pkg_check_modules(CPPUNIT REQUIRED cppunit)
 
 
 # use any sources found under the current directory
-file(GLOB_RECURSE TEST_LIBDNF_SOURCES *.cpp)
+file(GLOB_RECURSE TEST_LIBDNF5_SOURCES *.cpp)
 
 include_directories(.)
 include_directories(${PROJECT_SOURCE_DIR}/libdnf)
 
-add_executable(run_tests ${TEST_LIBDNF_SOURCES})
+add_executable(run_tests ${TEST_LIBDNF5_SOURCES})
 
 # Disable warnings for operations used intentionally to test how the case is handled
 target_compile_options(run_tests PRIVATE "-Wno-unused-comparison")
