@@ -28,41 +28,40 @@ CPPUNIT_TEST_SUITE_REGISTRATION(StateTest);
 
 using namespace libdnf;
 
-static const std::string packages_contents{R"""(
-[packages]
+static const std::string packages_contents{R"""([packages]
 "pkg.x86_64" = {reason="User"}
 "unresolvable.noarch" = {reason="Dependency"}
 "pkg-libs.x86_64" = {reason="Dependency"}
-
 )"""};
 
-static const std::string nevras_contents{R"""(
-[nevras]
+static const std::string nevras_contents{R"""([nevras]
 "unresolvable-1.2-1.noarch" = {from_repo="repo2"}
 "pkg-libs-1.2-1.x86_64" = {from_repo=""}
 "pkg-1.2-1.x86_64" = {from_repo="repo1"}
-
 )"""};
 
 // TODO(lukash) alphabetic sorting
-static const std::string groups_contents{R"""(
-[groups]
+static const std::string groups_contents{R"""([groups]
 group-2 = {packages=["pkg1","pkg2"],userinstalled=false}
 group-1 = {packages=["foo","bar"],userinstalled=true}
-
 )"""};
 
-static const std::string modules_contents{R"""(
-[modules]
+static const std::string modules_contents{R"""([modules]
 module-2 = {installed_profiles=[],state="Disabled",enabled_stream="stream-2"}
-
 [modules.module-1]
 installed_profiles = ["zigg","zagg"]
 state = "Enabled"
 enabled_stream = "stream-1"
-
 )"""};
 
+// workaround, because of different behavior before toml 3.7.1
+static std::string trim(std::string str) {
+    str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](char c) { return c != '\n'; }));
+    str.erase(
+        std::unique(str.begin(), str.end(), [](char c1, char c2) { return c1 == '\n' && c2 == '\n'; }), str.end());
+
+    return str;
+}
 
 void StateTest::setUp() {
     BaseTestCase::setUp();
@@ -129,10 +128,10 @@ void StateTest::test_state_write() {
 
     state.save();
 
-    CPPUNIT_ASSERT_EQUAL(packages_contents, libdnf::utils::fs::File(path / "packages.toml", "r").read());
-    CPPUNIT_ASSERT_EQUAL(nevras_contents, libdnf::utils::fs::File(path / "nevras.toml", "r").read());
-    CPPUNIT_ASSERT_EQUAL(groups_contents, libdnf::utils::fs::File(path / "groups.toml", "r").read());
-    CPPUNIT_ASSERT_EQUAL(modules_contents, libdnf::utils::fs::File(path / "modules.toml", "r").read());
+    CPPUNIT_ASSERT_EQUAL(packages_contents, trim(libdnf::utils::fs::File(path / "packages.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(nevras_contents, trim(libdnf::utils::fs::File(path / "nevras.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(groups_contents, trim(libdnf::utils::fs::File(path / "groups.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(modules_contents, trim(libdnf::utils::fs::File(path / "modules.toml", "r").read()));
 
     // Test removes
     state.remove_package_na_state("pkg.x86_64");
@@ -142,31 +141,31 @@ void StateTest::test_state_write() {
 
     state.save();
 
-    const std::string packages_contents_after_remove{R"""(
-[packages]
+    const std::string packages_contents_after_remove{R"""([packages]
 "unresolvable.noarch" = {reason="Dependency"}
 "pkg-libs.x86_64" = {reason="Dependency"}
-
 )"""};
-    CPPUNIT_ASSERT_EQUAL(packages_contents_after_remove, libdnf::utils::fs::File(path / "packages.toml", "r").read());
 
-    const std::string nevras_contents_after_remove{R"""(
-[nevras]
+    CPPUNIT_ASSERT_EQUAL(
+        packages_contents_after_remove, trim(libdnf::utils::fs::File(path / "packages.toml", "r").read()));
+
+    const std::string nevras_contents_after_remove{R"""([nevras]
 "unresolvable-1.2-1.noarch" = {from_repo="repo2"}
 "pkg-libs-1.2-1.x86_64" = {from_repo=""}
-
 )"""};
-    CPPUNIT_ASSERT_EQUAL(nevras_contents_after_remove, libdnf::utils::fs::File(path / "nevras.toml", "r").read());
+
+    CPPUNIT_ASSERT_EQUAL(nevras_contents_after_remove, trim(libdnf::utils::fs::File(path / "nevras.toml", "r").read()));
 
     const std::string groups_contents_after_remove{
         R"""(groups = {group-2={packages=["pkg1","pkg2"],userinstalled=false}}
 )"""};
-    CPPUNIT_ASSERT_EQUAL(groups_contents_after_remove, libdnf::utils::fs::File(path / "groups.toml", "r").read());
 
-    const std::string modules_contents_after_remove{R"""(
-[modules]
+    CPPUNIT_ASSERT_EQUAL(groups_contents_after_remove, trim(libdnf::utils::fs::File(path / "groups.toml", "r").read()));
+
+    const std::string modules_contents_after_remove{R"""([modules]
 module-2 = {installed_profiles=[],state="Disabled",enabled_stream="stream-2"}
-
 )"""};
-    CPPUNIT_ASSERT_EQUAL(modules_contents_after_remove, libdnf::utils::fs::File(path / "modules.toml", "r").read());
+
+    CPPUNIT_ASSERT_EQUAL(
+        modules_contents_after_remove, trim(libdnf::utils::fs::File(path / "modules.toml", "r").read()));
 }
