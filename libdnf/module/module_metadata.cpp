@@ -159,9 +159,6 @@ std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> ModuleMetadata::
         if (modulemd_module_stream_v2_is_static_context((ModulemdModuleStreamV2 *)modulemd_stream)) {
             module_items.push_back(new ModuleItem(modulemd_stream, module_item_container, repo_id));
         } else {
-            // TODO(pkratoch): Implement compatibility for ModuleItems without static context
-            // TODO(pkratoch): In DNF4, the ModuleItem object was not immediatelly created for modules without static context,
-            //                 but a tuple <repo, modulemd_stream, repo_id> was stored instead. Find out why.
             module_items_without_static_context.push_back(
                 new ModuleItem(modulemd_stream, module_item_container, repo_id));
         }

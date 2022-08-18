@@ -59,16 +59,70 @@ void ModuleItemContainer::add(const std::string & file_content, const std::strin
     } else {
         repo = pool_id2repo(p_impl->pool, Id(repo_pair->second));
     }
-    // TODO(pkratoch): Implement compatibility for ModuleItems without static context
     auto items = md.get_all_module_items(get_weak_ptr(), repo_id);
+    // Store module items with static context
     for (auto const & module_item_ptr : items.first) {
         std::unique_ptr<ModuleItem> module_item(module_item_ptr);
         modules.push_back(std::move(module_item));
     }
+    // Store module items without static context
     for (auto const & module_item_ptr : items.second) {
         std::unique_ptr<ModuleItem> module_item(module_item_ptr);
+        modules_without_static_context.push_back(std::move(module_item));
+    }
+}
+
+
+void ModuleItemContainer::add_modules_without_static_context() {
+    if (modules_without_static_context.empty()) {
+        return;
+    }
+
+    // Create a map based on modules with static context. For each "name:stream", map requires_strings to ModuleItems.
+    std::map<std::string, std::map<std::string, std::vector<ModuleItem *>>> static_context_map;
+    for (auto const & module_item : modules) {
+        auto requires_string = module_item->get_module_dependencies_string();
+        static_context_map[module_item->get_name_stream()][requires_string].push_back(module_item.get());
+    }
+
+    // For each module with dynamic context, check whether its requires_string matches requires_string of any
+    // static-context module with the same "name:stream" (i.e. if it's in the static_context_map). If so, assign it
+    // the same static context.
+    for (auto & module_item : modules_without_static_context) {
+        auto requires_string = module_item->get_module_dependencies_string();
+
+        auto stream_iterator = static_context_map.find(module_item->get_name_stream());
+        if (stream_iterator != static_context_map.end()) {
+            auto context_iterator = stream_iterator->second.find(requires_string);
+            if (context_iterator != stream_iterator->second.end()) {
+                module_item->computed_static_context = context_iterator->second[0]->get_context();
+                modules.push_back(std::move(module_item));
+                continue;
+            }
+        }
+        // If the requires_string didn't match anything in the static_context_map, set the new static context to
+        // the requires_string (or "NoRequires" if empty). This means all dynamic-context modules with the same
+        // "name:stream" and the same dependencies will have the same static context.
+        if (requires_string.empty()) {
+            requires_string.append("NoRequires");
+        }
+        module_item->computed_static_context = requires_string;
         modules.push_back(std::move(module_item));
     }
+    modules_without_static_context.clear();
+    create_module_solvables();
+}
+
+
+void ModuleItemContainer::create_module_solvables() {
+    for (auto const & module_item : modules) {
+        module_item->create_solvable();
+        module_item->create_dependencies();
+    }
+
+    // TODO(pkratoch): Implement these calls (must be called lazy, before constructing goal or creating query for provides)
+    // dnf_sack_set_provides_not_ready(moduleSack);
+    // dnf_sack_set_considered_to_update(moduleSack);
 }
 
 

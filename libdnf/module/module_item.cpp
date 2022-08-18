@@ -112,11 +112,13 @@ std::string ModuleItem::get_name_stream_version() const {
 
 
 std::string ModuleItem::get_name_stream_context() const {
+    // TODO(pkratoch): Find out what is the fastest way to concatenate strings.
     return libdnf::utils::sformat(
         "{}:{}:{}",
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
-        libdnf::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream)));
+        computed_static_context.empty() ? libdnf::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream))
+                                        : computed_static_context);
 }
 
 
@@ -240,12 +242,6 @@ ModuleItem::ModuleItem(
     if (md_stream != nullptr) {
         g_object_ref(md_stream);
     }
-    create_solvable();
-    create_dependencies();
-
-    // TODO(pkratoch): Implement these calls
-    // dnf_sack_set_provides_not_ready(moduleSack);
-    // dnf_sack_set_considered_to_update(moduleSack);
 }
 
 
