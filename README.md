@@ -67,13 +67,13 @@ Building
 --------
 To install build requirements, run::
 
-    $ dnf builddep libdnf.spec --define '_with_sanitizers 1' [--define '_without_<option> 1 ...]
+    $ dnf builddep libdnf.spec [--define '_without_<option> 1 ...]
 
 To build code, run::
 
     $ mkdir build
     $ cd build
-    $ cmake .. -DWITH_SANITIZERS=ON [-DWITH_<OPTION>=<ON|OFF> ...]
+    $ cmake .. [-DWITH_<OPTION>=<ON|OFF> ...]
     $ make -j4
 
 To build rpms from git, run::
