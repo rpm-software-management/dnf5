@@ -56,6 +56,8 @@ public:
 
     // TODO(pkratoch): Maybe make this private later
     void add(const std::string & file_content, const std::string & repo_id);
+    // Compute static context for older modules and move these modules to `ModuleItemContainer.modules`.
+    void add_modules_without_static_context();
 
     // TODO(pkratoch): Implement adding defaults from "/etc/dnf/modules.defaults.d/", which are defined by user.
     //                 They are added with priority 1000 after everything else is loaded.
@@ -77,10 +79,16 @@ public:
 private:
     friend ModuleItem;
 
+    void create_module_solvables();
+    BaseWeakPtr get_base() const;
+
     BaseWeakPtr base;
     WeakPtrGuard<ModuleItemContainer, false> data_guard;
 
-    BaseWeakPtr get_base() const;
+    // Older ModuleItems that don't have static context. After all metadata are loaded, static contexts are assigned
+    // also to these ModuleItems and they are removed from this vector and added to `ModuleItemContainer.modules`.
+    // This is done in `ModuleItemContainer::add_modules_without_static_context`.
+    std::vector<std::unique_ptr<ModuleItem>> modules_without_static_context;
 
     class Impl;
     std::unique_ptr<Impl> p_impl;

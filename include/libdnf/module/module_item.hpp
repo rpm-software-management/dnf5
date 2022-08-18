@@ -161,6 +161,7 @@ public:
     std::string get_yaml() const;
 
 private:
+    friend class ModuleItemContainer;
     friend class ModuleMetadata;
     friend ::ModuleTest;
 
@@ -221,6 +222,9 @@ private:
     ModuleItemContainerWeakPtr module_item_container;
     ModuleItemId id;
     std::string repo_id;
+
+    // For compatibility with older modules that didn't have static contexts
+    std::string computed_static_context;
 };
 
 
