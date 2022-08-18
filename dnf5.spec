@@ -145,7 +145,7 @@ Requires:       librepo%{?_isa} >= %{librepo_version}
 Package management library
 
 %files -n libdnf5
-%{_libdir}/libdnf.so.*
+%{_libdir}/libdnf5.so.*
 %license lgpl-2.1.txt
 %{_var}/cache/libdnf/
 
@@ -182,7 +182,7 @@ Development files for libdnf.
 
 %files -n libdnf5-devel
 %{_includedir}/libdnf/
-%{_libdir}/libdnf.so
+%{_libdir}/libdnf5.so
 %{_libdir}/pkgconfig/libdnf.pc
 %license COPYING.md
 %license lgpl-2.1.txt
