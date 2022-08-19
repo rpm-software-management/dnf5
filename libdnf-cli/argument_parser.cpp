@@ -39,6 +39,15 @@ namespace libdnf::cli {
 
 namespace {
 
+std::size_t replace_all(std::string & inout, std::string_view what, std::string_view with) {
+    std::size_t count = 0;
+    for (std::string::size_type pos = 0; inout.npos != (pos = inout.find(what.data(), pos, what.length()));
+         pos += with.length(), ++count) {
+        inout.replace(pos, what.length(), with.data(), with.length());
+    }
+    return count;
+}
+
 std::pair<BgettextMessage, std::string> get_conflict_arg_msg(const ArgumentParser::Argument * conflict_arg) {
     if (const auto * named_arg = dynamic_cast<const ArgumentParser::NamedArg *>(conflict_arg)) {
         std::string conflict;
@@ -253,6 +262,21 @@ int ArgumentParser::NamedArg::parse_long(const char * option, int argc, const ch
     if (parse_hook) {
         parse_hook(this, option, arg_value);
     }
+
+    // Invoke the attached named arguments
+    for (auto & target_named_arg : attached_named_args) {
+        auto & target_arg = owner.get_named_arg(target_named_arg.id_path, false);
+        const char * args[2];
+        int args_count = 1;
+        if (target_arg.get_has_value()) {
+            std::string target_arg_val = target_named_arg.value;
+            replace_all(target_arg_val, "${}", arg_value);
+            args[args_count++] = target_arg_val.c_str();
+        }
+        args[0] = option;
+        target_arg.parse_long(option, args_count, args);
+    }
+
     return consumed_args;
 }
 
@@ -287,6 +311,22 @@ int ArgumentParser::NamedArg::parse_short(const char * option, int argc, const c
     if (parse_hook) {
         parse_hook(this, option, arg_value);
     }
+
+    // Invoke the attached named arguments
+    for (auto & target_named_arg : attached_named_args) {
+        auto & target_arg = owner.get_named_arg(target_named_arg.id_path, false);
+        const char * args[2];
+        int args_count = 1;
+        if (target_arg.get_has_value()) {
+            std::string target_arg_val = target_named_arg.value;
+            replace_all(target_arg_val, "${}", arg_value);
+            args[args_count++] = target_arg_val.c_str();
+        }
+        char short_name[] = {option[0], '\0'};
+        args[0] = short_name;
+        target_arg.parse_short(short_name, args_count, args);
+    }
+
     return consumed_args;
 }
 
@@ -921,6 +961,10 @@ libdnf::cli::ArgumentParser::NamedArg * ArgumentParser::NamedArg::add_alias(
     alias->add_conflict_arguments_from_another(*this);
 
     return alias;
+}
+
+void ArgumentParser::NamedArg::attach_named_arg(const std::string & id_path, const std::string & value) {
+    attached_named_args.push_back({id_path, value});
 }
 
 ArgumentParser::PositionalArg & ArgumentParser::get_positional_arg(const std::string & id_path, bool search_in_parent) {

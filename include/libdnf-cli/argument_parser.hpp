@@ -352,6 +352,8 @@ public:
             char short_name,
             libdnf::cli::ArgumentParser::Group * group);
 
+        void attach_named_arg(const std::string & id_path, const std::string & value);
+
     private:
         friend class ArgumentParser;
 
@@ -374,6 +376,13 @@ public:
         bool store_value{true};
         ParseHookFunc parse_hook;
         std::string arg_value_help;
+
+        // A named argument can invoke other named arguments - for aliases
+        struct AttachedNamedArg {
+            std::string id_path;
+            std::string value;
+        };
+        std::vector<AttachedNamedArg> attached_named_args;
     };
 
     class Command : public Argument {
