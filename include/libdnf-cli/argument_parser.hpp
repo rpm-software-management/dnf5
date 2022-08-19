@@ -448,13 +448,6 @@ public:
         const std::string & get_positional_args_help_header() const noexcept { return positional_args_help_header; }
 
     private:
-        /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
-        void parse(
-            const char * option,
-            int argc,
-            const char * const argv[],
-            const std::vector<NamedArg *> * additional_named_args);
-
         friend class ArgumentParser;
 
         Command(ArgumentParser & owner, const std::string & id) : Argument(owner, id) {}
