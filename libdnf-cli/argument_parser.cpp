@@ -364,15 +364,6 @@ ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(cons
         M_("Command id \"{}\" does not contain positional argument with id \"{}\""), this->id, id);
 }
 
-void ArgumentParser::Command::parse(const char * option, int argc, const char * const argv[]) {
-    if (owner.inherit_named_args) {
-        const std::vector<NamedArg *> additional_named_args;
-        parse(option, argc, argv, &additional_named_args);
-    } else {
-        parse(option, argc, argv, nullptr);
-    }
-}
-
 // Prints a completed argument `arg` or a table with suggestions and help to complete
 // if there is more than one solution.
 void ArgumentParser::Command::print_complete(
@@ -457,14 +448,20 @@ void ArgumentParser::Command::print_complete(
     }
 }
 
-void ArgumentParser::Command::parse(
-    const char * option, int argc, const char * const argv[], const std::vector<NamedArg *> * additional_named_args) {
+void ArgumentParser::Command::parse(const char * option, int argc, const char * const argv[]) {
     std::vector<NamedArg *> extended_named_args;
-    if (additional_named_args) {
-        extended_named_args.reserve(named_args.size() + additional_named_args->size());
-        extended_named_args.insert(extended_named_args.begin(), named_args.begin(), named_args.end());
-        extended_named_args.insert(
-            extended_named_args.end(), additional_named_args->begin(), additional_named_args->end());
+    bool inherit_named_args_from_parent = owner.inherit_named_args && parent;
+    if (inherit_named_args_from_parent) {
+        auto named_args_count = named_args.size();
+        for (auto previous = parent; previous; previous = previous->parent) {
+            named_args_count += previous->named_args.size();
+        }
+        extended_named_args.reserve(named_args_count);
+        extended_named_args.insert(extended_named_args.end(), named_args.begin(), named_args.end());
+        for (auto previous = parent; previous; previous = previous->parent) {
+            extended_named_args.insert(
+                extended_named_args.end(), previous->named_args.begin(), previous->named_args.end());
+        }
     }
     size_t used_positional_arguments = 0;
     int short_option_idx = 0;
@@ -474,7 +471,9 @@ void ArgumentParser::Command::parse(
                 return;
             } else if (argv + i == owner.complete_arg_ptr) {
                 print_complete(
-                    argv[i], additional_named_args ? extended_named_args : named_args, used_positional_arguments);
+                    argv[i],
+                    inherit_named_args_from_parent ? extended_named_args : named_args,
+                    used_positional_arguments);
                 return;
             }
         }
@@ -486,7 +485,7 @@ void ArgumentParser::Command::parse(
                 ++tmp;
             }
             const auto * assign_ptr = strchr(tmp, '=');
-            for (auto * opt : (additional_named_args ? extended_named_args : named_args)) {
+            for (auto * opt : (inherit_named_args_from_parent ? extended_named_args : named_args)) {
                 if (long_option) {
                     if (!opt->get_long_name().empty() &&
                         (assign_ptr ? std::string(tmp).compare(
@@ -521,7 +520,7 @@ void ArgumentParser::Command::parse(
                     }
                     // the last subcommand wins
                     owner.selected_command = cmd;
-                    cmd->parse(argv[i], argc - i, &argv[i], additional_named_args ? &extended_named_args : nullptr);
+                    cmd->parse(argv[i], argc - i, &argv[i]);
                     i = argc;
                     used = true;
                     // The subcommand processed the completion of the argument. There is no need to continue parsing.
