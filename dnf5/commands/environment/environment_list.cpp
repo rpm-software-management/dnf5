@@ -30,7 +30,7 @@ using namespace libdnf::cli;
 
 void EnvironmentListCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("List comps environments");
+    cmd.set_description("List comps environments");
 
     available = std::make_unique<EnvironmentAvailableOption>(*this);
     installed = std::make_unique<EnvironmentInstalledOption>(*this);

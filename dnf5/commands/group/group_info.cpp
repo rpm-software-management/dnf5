@@ -30,7 +30,7 @@ using namespace libdnf::cli;
 
 void GroupInfoCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Print details about comps groups");
+    cmd.set_description("Print details about comps groups");
 
     available = std::make_unique<GroupAvailableOption>(*this);
     installed = std::make_unique<GroupInstalledOption>(*this);

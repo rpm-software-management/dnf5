@@ -31,7 +31,7 @@ GroupCommand::GroupCommand(Command & parent) : DaemonCommand(parent, "group") {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Manage comps groups");
+    cmd.set_description("Manage comps groups");
 
     // query commands
     auto * query_commands_group = parser.add_new_group("group_query_commands");

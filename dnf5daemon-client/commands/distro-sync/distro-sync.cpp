@@ -38,7 +38,7 @@ DistroSyncCommand::DistroSyncCommand(Command & parent) : TransactionCommand(pare
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    cmd.set_short_description("Upgrade or downgrade installed software to the latest available versions");
+    cmd.set_description("Upgrade or downgrade installed software to the latest available versions");
 
     patterns_options = parser.add_new_values();
     auto patterns_arg = parser.add_new_positional_arg(
@@ -46,7 +46,7 @@ DistroSyncCommand::DistroSyncCommand(Command & parent) : TransactionCommand(pare
         libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_options);
-    patterns_arg->set_short_description("Patterns");
+    patterns_arg->set_description("Patterns");
     cmd.register_positional_arg(patterns_arg);
 }
 

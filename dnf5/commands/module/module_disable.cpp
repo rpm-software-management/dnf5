@@ -24,7 +24,7 @@ namespace dnf5 {
 void ModuleDisableCommand::set_argument_parser() {
     // TODO(dmach): shouldn't module disable work on streams rather than the whole module?
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Disable modules including all their streams.");
+    cmd.set_description("Disable modules including all their streams.");
 }
 
 void ModuleDisableCommand::run() {}

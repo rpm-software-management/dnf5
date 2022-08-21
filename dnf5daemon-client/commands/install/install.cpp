@@ -38,11 +38,11 @@ InstallCommand::InstallCommand(Command & parent) : TransactionCommand(parent, "i
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    cmd.set_short_description("install packages on the system");
+    cmd.set_description("install packages on the system");
 
     auto strict = parser.add_new_named_arg("strict");
     strict->set_long_name("strict");
-    strict->set_short_description(
+    strict->set_description(
         "Broken or unavailable packages cause the transaction to fail (yes) or will be skipped (no).");
     strict->set_has_value(true);
     strict->set_arg_value_help("<yes|no>");
@@ -55,7 +55,7 @@ InstallCommand::InstallCommand(Command & parent) : TransactionCommand(parent, "i
         libdnf::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_options);
-    keys->set_short_description("List of packages to install");
+    keys->set_description("List of packages to install");
     cmd.register_positional_arg(keys);
 }
 

@@ -60,11 +60,11 @@ CleanCommand::CleanCommand(Command & parent) : Command(parent, "clean") {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Remove or expire cached data");
+    cmd.set_description("Remove or expire cached data");
 
     auto cache_types =
         parser.add_new_positional_arg("cache_types", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
-    cache_types->set_short_description("List of cache types to clean up");
+    cache_types->set_description("List of cache types to clean up");
 
     cache_types->set_parse_hook_func(
         // Parses arguments and sets the appropriate bits in the required_actions.

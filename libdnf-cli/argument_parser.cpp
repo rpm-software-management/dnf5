@@ -390,7 +390,7 @@ void ArgumentParser::Command::print_complete(
             }
             auto & name = opt->get_id();
             if (name.compare(0, strlen(arg), arg) == 0) {
-                help.add_line(name, '(' + opt->get_short_description() + ')', nullptr);
+                help.add_line(name, '(' + opt->get_description() + ')', nullptr);
                 last = name + ' ';
             }
         }
@@ -425,7 +425,7 @@ void ArgumentParser::Command::print_complete(
                 if (opt->get_has_value()) {
                     extended_name += opt->get_arg_value_help().empty() ? "VALUE" : opt->get_arg_value_help();
                 }
-                help.add_line(extended_name, '(' + opt->get_short_description() + ')', nullptr);
+                help.add_line(extended_name, '(' + opt->get_description() + ')', nullptr);
                 last = name;
                 if (!opt->get_has_value()) {
                     last += ' ';
@@ -439,7 +439,7 @@ void ArgumentParser::Command::print_complete(
                     extended_name += '=' + (opt->get_arg_value_help().empty() ? "VALUE" : opt->get_arg_value_help());
                 }
                 if (name.compare(0, strlen(arg), arg) == 0) {
-                    help.add_line(extended_name, '(' + opt->get_short_description() + ')', nullptr);
+                    help.add_line(extended_name, '(' + opt->get_description() + ')', nullptr);
                     last = name;
                     if (!opt->get_has_value()) {
                         last += ' ';
@@ -606,10 +606,10 @@ void ArgumentParser::Command::help() const noexcept {
     }
 
     // print description
-    if (!description.empty()) {
+    if (!long_description.empty()) {
         usage_output.add_newline();
         auto * desc_header = usage_output.add_header(_("Description:"));
-        for (auto & line : libdnf::utils::string::split(description, "\n")) {
+        for (auto & line : libdnf::utils::string::split(long_description, "\n")) {
             usage_output.add_line(line, desc_header);
         }
     }
@@ -632,7 +632,7 @@ void ArgumentParser::Command::help() const noexcept {
                         help.add_newline();
                         header = help.add_header(grp->get_header());
                     }
-                    help.add_line(arg->get_id(), arg->get_short_description(), header);
+                    help.add_line(arg->get_id(), arg->get_description(), header);
                     args_used_in_groups.insert(arg);
                 }
             }
@@ -652,7 +652,7 @@ void ArgumentParser::Command::help() const noexcept {
             help.add_newline();
             struct libscols_line * header = help.add_header(commands_help_header);
             for (auto * arg : ungrouped_commands) {
-                help.add_line(arg->get_id(), arg->get_short_description(), header);
+                help.add_line(arg->get_id(), arg->get_description(), header);
             }
         }
     }
@@ -671,7 +671,7 @@ void ArgumentParser::Command::help() const noexcept {
                         help.add_newline();
                         header = help.add_header(grp->get_header());
                     }
-                    help.add_line(get_named_arg_names(named_arg), arg->get_short_description(), header);
+                    help.add_line(get_named_arg_names(named_arg), arg->get_description(), header);
                     args_used_in_groups.insert(arg);
                 }
             }
@@ -691,7 +691,7 @@ void ArgumentParser::Command::help() const noexcept {
             help.add_newline();
             struct libscols_line * header = help.add_header(named_args_help_header);
             for (const auto * arg : ungrouped_named_args) {
-                help.add_line(get_named_arg_names(arg), arg->get_short_description(), header);
+                help.add_line(get_named_arg_names(arg), arg->get_description(), header);
             }
         }
     }
@@ -709,7 +709,7 @@ void ArgumentParser::Command::help() const noexcept {
                         help.add_newline();
                         header = help.add_header(grp->get_header());
                     }
-                    help.add_line(arg->get_id(), arg->get_short_description(), header);
+                    help.add_line(arg->get_id(), arg->get_description(), header);
                     args_used_in_groups.insert(arg);
                 }
             }
@@ -719,7 +719,7 @@ void ArgumentParser::Command::help() const noexcept {
         help.add_newline();
         struct libscols_line * header = help.add_header(positional_args_help_header);
         for (const auto * arg : pos_args) {
-            help.add_line(arg->get_id(), arg->get_short_description(), header);
+            help.add_line(arg->get_id(), arg->get_description(), header);
         }
     }
 
@@ -894,7 +894,7 @@ libdnf::cli::ArgumentParser::NamedArg * ArgumentParser::NamedArg::add_alias(
     if (!get_long_name().empty()) {
         descr += "'--" + get_long_name() + "'";
     }
-    alias->set_short_description(fmt::format("Alias for {}", descr));
+    alias->set_description(fmt::format("Alias for {}", descr));
 
     // Copy from source argument
     alias->set_has_value(get_has_value());

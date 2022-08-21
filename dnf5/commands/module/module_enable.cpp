@@ -23,7 +23,7 @@ namespace dnf5 {
 
 void ModuleEnableCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Enable module streams and make their packages available.");
+    cmd.set_description("Enable module streams and make their packages available.");
 }
 
 void ModuleEnableCommand::run() {}

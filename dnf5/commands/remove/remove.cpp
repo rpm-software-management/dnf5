@@ -28,7 +28,7 @@ void RemoveCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Remove (uninstall) software");
+    cmd.set_description("Remove (uninstall) software");
 
     patterns_to_remove_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
@@ -36,7 +36,7 @@ void RemoveCommand::set_argument_parser() {
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_remove_options);
-    keys->set_short_description("List of keys to match");
+    keys->set_description("List of keys to match");
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, false, true); });
     cmd.register_positional_arg(keys);
 
@@ -46,7 +46,7 @@ void RemoveCommand::set_argument_parser() {
 
     auto unneeded_opt = parser.add_new_named_arg("unneeded");
     unneeded_opt->set_long_name("unneeded");
-    unneeded_opt->set_short_description("Remove unneeded packages that were installed as dependencies");
+    unneeded_opt->set_description("Remove unneeded packages that were installed as dependencies");
     unneeded_opt->set_const_value("false");
     unneeded_opt->link_value(unneeded);
     cmd.register_named_arg(unneeded_opt);

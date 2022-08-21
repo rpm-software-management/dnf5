@@ -38,10 +38,10 @@ void BuildDepCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Install build dependencies for package or spec file");
+    cmd.set_description("Install build dependencies for package or spec file");
 
     auto specs = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
-    specs->set_short_description("List of specifications. Accepts *.spec / *.src.rpm files or package name.");
+    specs->set_description("List of specifications. Accepts *.spec / *.src.rpm files or package name.");
     specs->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             parse_builddep_specs(argc, argv);
@@ -54,7 +54,7 @@ void BuildDepCommand::set_argument_parser() {
 
     auto skip_unavailable = parser.add_new_named_arg("skip-unavailable");
     skip_unavailable->set_long_name("skip-unavailable");
-    skip_unavailable->set_short_description("Skip build dependencies not available in repositories");
+    skip_unavailable->set_description("Skip build dependencies not available in repositories");
     skip_unavailable->set_const_value("true");
     skip_unavailable->link_value(&skip_unavailable_option);
     cmd.register_named_arg(skip_unavailable);
@@ -64,7 +64,7 @@ void BuildDepCommand::set_argument_parser() {
     defs->set_long_name("define");
     defs->set_has_value(true);
     defs->set_arg_value_help("\"macro expr\"");
-    defs->set_short_description(
+    defs->set_description(
         "Define the RPM macro named \"macro\" to the value \"expr\" when parsing spec files. "
         "Does not apply for source rpm files.");
     defs->set_parse_hook_func(

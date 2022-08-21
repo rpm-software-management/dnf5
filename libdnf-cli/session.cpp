@@ -112,7 +112,7 @@ BoolOption::BoolOption(
         arg->set_short_name(short_name);
     }
 
-    arg->set_short_description(desc);
+    arg->set_description(desc);
     arg->set_const_value(default_value ? "false" : "true");
     arg->link_value(conf);
 
@@ -141,7 +141,7 @@ StringListOption::StringListOption(
         arg->set_short_name(short_name);
     }
 
-    arg->set_short_description(desc);
+    arg->set_description(desc);
     arg->set_arg_value_help(help);
     arg->set_has_value(true);
     arg->set_parse_hook_func(
@@ -179,7 +179,7 @@ StringArgumentList::StringArgumentList(
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::make_unique<libdnf::OptionString>(nullptr)),
         conf);
-    arg->set_short_description(desc);
+    arg->set_description(desc);
 
     command.get_argument_parser_command()->register_positional_arg(arg);
 }

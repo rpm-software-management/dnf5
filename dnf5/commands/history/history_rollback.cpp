@@ -24,8 +24,7 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 void HistoryRollbackCommand::set_argument_parser() {
-    get_argument_parser_command()->set_short_description(
-        "Undo all transactions performed after the specified transaction");
+    get_argument_parser_command()->set_description("Undo all transactions performed after the specified transaction");
 }
 
 void HistoryRollbackCommand::run() {}

@@ -28,7 +28,7 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 void HistoryInfoCommand::set_argument_parser() {
-    get_argument_parser_command()->set_short_description("Print details about transactions");
+    get_argument_parser_command()->set_description("Print details about transactions");
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
 }

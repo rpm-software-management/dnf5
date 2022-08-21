@@ -23,7 +23,7 @@ namespace dnf5 {
 
 void ModuleProvidesCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Print module and module profile the specified packages come from.");
+    cmd.set_description("Print module and module profile the specified packages come from.");
 }
 
 void ModuleProvidesCommand::run() {}

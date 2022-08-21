@@ -23,7 +23,7 @@ namespace dnf5 {
 
 void ModuleRemoveCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Remove installed module profiles including their packages.");
+    cmd.set_description("Remove installed module profiles including their packages.");
 }
 
 void ModuleRemoveCommand::run() {}
