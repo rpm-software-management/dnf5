@@ -49,19 +49,19 @@ RepolistCommand::RepolistCommand(Command & parent, const char * command)
 
     auto all = parser.add_new_named_arg("all");
     all->set_long_name("all");
-    all->set_short_description("show all repos");
+    all->set_description("show all repos");
     all->set_const_value("all");
     all->link_value(enable_disable_option);
 
     auto enabled = parser.add_new_named_arg("enabled");
     enabled->set_long_name("enabled");
-    enabled->set_short_description("show enabled repos (default)");
+    enabled->set_description("show enabled repos (default)");
     enabled->set_const_value("enabled");
     enabled->link_value(enable_disable_option);
 
     auto disabled = parser.add_new_named_arg("disabled");
     disabled->set_long_name("disabled");
-    disabled->set_short_description("show disabled repos");
+    disabled->set_description("show disabled repos");
     disabled->set_const_value("disabled");
     disabled->link_value(enable_disable_option);
 
@@ -71,7 +71,7 @@ RepolistCommand::RepolistCommand(Command & parent, const char * command)
         libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_options);
-    repos->set_short_description("List of repos to show");
+    repos->set_description("List of repos to show");
 
     auto conflict_args =
         parser.add_conflict_args_group(std::unique_ptr<std::vector<libdnf::cli::ArgumentParser::Argument *>>(
@@ -81,7 +81,7 @@ RepolistCommand::RepolistCommand(Command & parent, const char * command)
     enabled->set_conflict_arguments(conflict_args);
     disabled->set_conflict_arguments(conflict_args);
 
-    cmd.set_short_description("display the configured software repositories");
+    cmd.set_description("display the configured software repositories");
 
     cmd.register_named_arg(all);
     cmd.register_named_arg(enabled);

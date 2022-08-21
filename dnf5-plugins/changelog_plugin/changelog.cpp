@@ -37,7 +37,7 @@ void ChangelogCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Show package changelogs");
+    cmd.set_description("Show package changelogs");
 
     since_option = dynamic_cast<libdnf::OptionNumber<std::int64_t> *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionNumber<std::int64_t>>(
@@ -59,19 +59,19 @@ void ChangelogCommand::set_argument_parser() {
 
     auto since = parser.add_new_named_arg("since");
     since->set_long_name("since");
-    since->set_short_description("Show changelog entries since date in the YYYY-MM-DD format");
+    since->set_description("Show changelog entries since date in the YYYY-MM-DD format");
     since->set_has_value(true);
     since->link_value(since_option);
 
     auto count = parser.add_new_named_arg("count");
     count->set_long_name("count");
-    count->set_short_description("Limit the number of changelog entries shown per package");
+    count->set_description("Limit the number of changelog entries shown per package");
     count->set_has_value(true);
     count->link_value(count_option);
 
     auto upgrades = parser.add_new_named_arg("upgrades");
     upgrades->set_long_name("upgrades");
-    upgrades->set_short_description(
+    upgrades->set_description(
         "Show new changelog entries for packages that provide an upgrade for an already installed package");
     upgrades->set_const_value("true");
     upgrades->link_value(upgrades_option);
@@ -82,7 +82,7 @@ void ChangelogCommand::set_argument_parser() {
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         pkgs_spec_to_show_options);
-    keys->set_short_description("List of packages specifiers");
+    keys->set_description("List of packages specifiers");
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, false, false); });
 
     auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(

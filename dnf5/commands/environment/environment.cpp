@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 void EnvironmentCommand::set_argument_parser() {
-    get_argument_parser_command()->set_short_description("Manage comps environments");
+    get_argument_parser_command()->set_description("Manage comps environments");
 }
 
 void EnvironmentCommand::register_subcommands() {

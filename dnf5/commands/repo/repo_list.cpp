@@ -31,7 +31,7 @@ void RepoListCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("List repositories");
+    cmd.set_description("List repositories");
 
     all = std::make_unique<RepoAllOption>(*this);
     enabled = std::make_unique<RepoEnabledOption>(*this);

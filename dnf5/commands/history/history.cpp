@@ -32,7 +32,7 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 void HistoryCommand::set_argument_parser() {
-    get_argument_parser_command()->set_short_description("Manage transaction history");
+    get_argument_parser_command()->set_description("Manage transaction history");
 }
 
 void HistoryCommand::register_subcommands() {

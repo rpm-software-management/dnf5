@@ -32,7 +32,7 @@ class UpdateinfoAlias : public AdvisoryCommand {
 public:
     explicit UpdateinfoAlias(Command & parent) : AdvisoryCommand(parent, "updateinfo") {
         auto & cmd = *get_argument_parser_command();
-        cmd.set_short_description("Alias for 'advisory'");
+        cmd.set_description("Alias for 'advisory'");
     }
 };
 

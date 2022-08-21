@@ -100,8 +100,8 @@ void RootCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     auto & config = ctx.base.get_config();
 
-    cmd.set_short_description("Utility for packages maintaining");
-    cmd.set_description("DNF5 is a program for maintaining packages.");
+    cmd.set_description("Utility for packages maintaining");
+    cmd.set_long_description("DNF5 is a program for maintaining packages.");
     cmd.set_named_args_help_header("Unclassified options:");
 
     auto * global_options_group = parser.add_new_group("global_options");
@@ -113,21 +113,21 @@ void RootCommand::set_argument_parser() {
     auto help = parser.add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
-    help->set_short_description("Print help");
+    help->set_description("Print help");
     global_options_group->register_argument(help);
 
     auto config_file_path = parser.add_new_named_arg("config");
     config_file_path->set_long_name("config");
     config_file_path->set_has_value(true);
     config_file_path->set_arg_value_help("CONFIG_FILE_PATH");
-    config_file_path->set_short_description("Configuration file location");
+    config_file_path->set_description("Configuration file location");
     config_file_path->link_value(&config.config_file_path());
     global_options_group->register_argument(config_file_path);
 
     auto quiet = parser.add_new_named_arg("quiet");
     quiet->set_long_name("quiet");
     quiet->set_short_name('q');
-    quiet->set_short_description(
+    quiet->set_description(
         "In combination with a non-interactive command, shows just the relevant content. "
         "Suppresses messages notifying about the current state or actions of dnf5.");
     quiet->set_parse_hook_func([&ctx](
@@ -144,8 +144,8 @@ void RootCommand::set_argument_parser() {
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);
     setopt->set_arg_value_help("[REPO_ID.]OPTION=VALUE");
-    setopt->set_short_description("set arbitrary config and repo options");
-    setopt->set_description(
+    setopt->set_description("set arbitrary config and repo options");
+    setopt->set_long_description(
         R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
               <option>.  Values  for configuration options like excludepkgs, includepkgs, installonlypkgs and tsflags are appended to the original value,
               they do not override it. However, specifying an empty value (e.g. --setopt=tsflags=) will clear the option.)**");
@@ -184,7 +184,7 @@ void RootCommand::set_argument_parser() {
     setvar->set_long_name("setvar");
     setvar->set_has_value(true);
     setvar->set_arg_value_help("VAR_NAME=VALUE");
-    setvar->set_short_description("set arbitrary variable");
+    setvar->set_description("set arbitrary variable");
     setvar->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -201,28 +201,28 @@ void RootCommand::set_argument_parser() {
     auto assume_yes = parser.add_new_named_arg("assumeyes");
     assume_yes->set_long_name("assumeyes");
     assume_yes->set_short_name('y');
-    assume_yes->set_short_description("automatically answer yes for all questions");
+    assume_yes->set_description("automatically answer yes for all questions");
     assume_yes->set_const_value("true");
     assume_yes->link_value(&config.assumeyes());
     global_options_group->register_argument(assume_yes);
 
     auto assume_no = parser.add_new_named_arg("assumeno");
     assume_no->set_long_name("assumeno");
-    assume_no->set_short_description("automatically answer no for all questions");
+    assume_no->set_description("automatically answer no for all questions");
     assume_no->set_const_value("true");
     assume_no->link_value(&config.assumeno());
     global_options_group->register_argument(assume_no);
 
     auto best = parser.add_new_named_arg("best");
     best->set_long_name("best");
-    best->set_short_description("try the best available package versions in transactions");
+    best->set_description("try the best available package versions in transactions");
     best->set_const_value("true");
     best->link_value(&config.best());
     global_options_group->register_argument(best);
 
     auto no_best = parser.add_new_named_arg("no-best");
     no_best->set_long_name("no-best");
-    no_best->set_short_description("do not limit the transaction to the best candidate");
+    no_best->set_description("do not limit the transaction to the best candidate");
     no_best->set_const_value("false");
     no_best->link_value(&config.best());
     global_options_group->register_argument(no_best);
@@ -241,7 +241,7 @@ void RootCommand::set_argument_parser() {
     {
         auto no_docs = parser.add_new_named_arg("no-docs");
         no_docs->set_long_name("no-docs");
-        no_docs->set_short_description(
+        no_docs->set_description(
             "Don't install files that are marked as documentation (which includes man pages and texinfo documents)");
         no_docs->set_parse_hook_func([&ctx](
                                          [[maybe_unused]] ArgumentParser::NamedArg * arg,
@@ -260,7 +260,7 @@ void RootCommand::set_argument_parser() {
         auto exclude = parser.add_new_named_arg("exclude");
         exclude->set_long_name("exclude");
         exclude->set_short_name('x');
-        exclude->set_short_description("exclude packages by name or glob");
+        exclude->set_description("exclude packages by name or glob");
         exclude->set_has_value(true);
         exclude->set_arg_value_help("package,...");
         exclude->set_parse_hook_func([&ctx](
@@ -276,7 +276,7 @@ void RootCommand::set_argument_parser() {
 
     auto skip_broken = parser.add_new_named_arg("skip-broken");
     skip_broken->set_long_name("skip-broken");
-    skip_broken->set_short_description("resolve depsolve problems by skipping packages");
+    skip_broken->set_description("resolve depsolve problems by skipping packages");
     skip_broken->set_const_value("false");
     skip_broken->link_value(&config.strict());
     global_options_group->register_argument(skip_broken);
@@ -285,7 +285,7 @@ void RootCommand::set_argument_parser() {
     enable_repo_ids->set_long_name("enable-repo");
     enable_repo_ids->set_has_value(true);
     enable_repo_ids->set_arg_value_help("REPO_ID,...");
-    enable_repo_ids->set_short_description(
+    enable_repo_ids->set_description(
         "Enable additional repositories. List option. Supports globs, can be specified multiple times.");
     enable_repo_ids->set_parse_hook_func(
         [&ctx](
@@ -303,7 +303,7 @@ void RootCommand::set_argument_parser() {
     disable_repo_ids->set_long_name("disable-repo");
     disable_repo_ids->set_has_value(true);
     disable_repo_ids->set_arg_value_help("REPO_ID,...");
-    disable_repo_ids->set_short_description(
+    disable_repo_ids->set_description(
         "Disable repositories. List option. Supports globs, can be specified multiple times.");
     disable_repo_ids->set_parse_hook_func(
         [&ctx](
@@ -321,7 +321,7 @@ void RootCommand::set_argument_parser() {
     repo_ids->set_long_name("repo");
     repo_ids->set_has_value(true);
     repo_ids->set_arg_value_help("REPO_ID,...");
-    repo_ids->set_short_description(
+    repo_ids->set_description(
         "Enable just specific repositories. List option. Supports globs, can be specified multiple times.");
     repo_ids->set_parse_hook_func(
         [&ctx](
@@ -355,7 +355,7 @@ void RootCommand::set_argument_parser() {
 
     auto no_gpgchecks = parser.add_new_named_arg("no-gpgchecks");
     no_gpgchecks->set_long_name("no-gpgchecks");
-    no_gpgchecks->set_short_description("disable gpg signature checking (if RPM policy allows)");
+    no_gpgchecks->set_description("disable gpg signature checking (if RPM policy allows)");
     no_gpgchecks->set_parse_hook_func([&ctx](
                                           [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                           [[maybe_unused]] const char * option,
@@ -372,7 +372,7 @@ void RootCommand::set_argument_parser() {
 
     auto no_plugins = parser.add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
-    no_plugins->set_short_description("disable all plugins");
+    no_plugins->set_description("disable all plugins");
     no_plugins->set_const_value("false");
     no_plugins->link_value(&config.plugins());
     global_options_group->register_argument(no_plugins);
@@ -381,7 +381,7 @@ void RootCommand::set_argument_parser() {
     enable_plugins_names->set_long_name("enable-plugin");
     enable_plugins_names->set_has_value(true);
     enable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
-    enable_plugins_names->set_short_description(
+    enable_plugins_names->set_description(
         "Enable plugins by name. List option. Supports globs, can be specified multiple times.");
     enable_plugins_names->set_parse_hook_func(
         [&ctx](
@@ -398,7 +398,7 @@ void RootCommand::set_argument_parser() {
     disable_plugins_names->set_long_name("disable-plugin");
     disable_plugins_names->set_has_value(true);
     disable_plugins_names->set_arg_value_help("PLUGIN_NAME,...");
-    disable_plugins_names->set_short_description(
+    disable_plugins_names->set_description(
         "Disable plugins by name. List option. Supports globs, can be specified multiple times.");
     disable_plugins_names->set_parse_hook_func(
         [&ctx](
@@ -430,8 +430,8 @@ void RootCommand::set_argument_parser() {
     comment->set_long_name("comment");
     comment->set_has_value(true);
     comment->set_arg_value_help("COMMENT");
-    comment->set_short_description("add a comment to transaction");
-    comment->set_description(
+    comment->set_description("add a comment to transaction");
+    comment->set_long_description(
         "Adds a comment to the action. If a transaction takes place, the comment is stored in it.");
     comment->set_parse_hook_func(
         [&ctx](
@@ -445,7 +445,7 @@ void RootCommand::set_argument_parser() {
     installroot->set_long_name("installroot");
     installroot->set_has_value(true);
     installroot->set_arg_value_help("ABSOLUTE_PATH");
-    installroot->set_short_description("set install root");
+    installroot->set_description("set install root");
     installroot->link_value(&config.installroot());
     global_options_group->register_argument(installroot);
 
@@ -453,7 +453,7 @@ void RootCommand::set_argument_parser() {
     releasever->set_long_name("releasever");
     releasever->set_has_value(true);
     releasever->set_arg_value_help("RELEASEVER");
-    releasever->set_short_description("override the value of $releasever in config and repo files");
+    releasever->set_description("override the value of $releasever in config and repo files");
     releasever->set_parse_hook_func(
         [&ctx](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -465,7 +465,7 @@ void RootCommand::set_argument_parser() {
     {
         auto debug_solver = parser.add_new_named_arg("debug_solver");
         debug_solver->set_long_name("debugsolver");
-        debug_solver->set_short_description("Dump detailed solving results into files");
+        debug_solver->set_description("Dump detailed solving results into files");
         debug_solver->set_const_value("true");
         debug_solver->link_value(&config.debug_solver());
         global_options_group->register_argument(debug_solver);

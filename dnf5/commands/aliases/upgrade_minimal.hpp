@@ -33,7 +33,7 @@ public:
     explicit UpgradeMinimalAlias(Command & parent) : UpgradeCommand(parent, "upgrade-minimal") {}
     void set_argument_parser() override {
         UpgradeCommand::set_argument_parser();
-        get_argument_parser_command()->set_short_description("Alias for 'upgrade --minimal'");
+        get_argument_parser_command()->set_description("Alias for 'upgrade --minimal'");
 
         // set the default value of the --minimal option to `true`
         minimal->set(libdnf::Option::Priority::DEFAULT, true);

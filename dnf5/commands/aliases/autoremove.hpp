@@ -36,7 +36,7 @@ public:
         RemoveCommand::set_argument_parser();
 
         auto & cmd = *get_argument_parser_command();
-        cmd.set_short_description("Alias for 'remove --unneeded'");
+        cmd.set_description("Alias for 'remove --unneeded'");
 
         // set the default value of the --unneeded option to `true`
         auto unneeded = dynamic_cast<libdnf::OptionBool *>(this->unneeded);

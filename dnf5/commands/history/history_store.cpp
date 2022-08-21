@@ -24,7 +24,7 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 void HistoryStoreCommand::set_argument_parser() {
-    get_argument_parser_command()->set_short_description("Store transaction to a file");
+    get_argument_parser_command()->set_description("Store transaction to a file");
 }
 
 void HistoryStoreCommand::run() {}

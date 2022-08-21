@@ -23,7 +23,7 @@ namespace dnf5 {
 
 void ModuleInstallCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Install module profiles, including their packages.");
+    cmd.set_description("Install module profiles, including their packages.");
 }
 
 void ModuleInstallCommand::run() {}

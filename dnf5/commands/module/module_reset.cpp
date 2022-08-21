@@ -23,7 +23,7 @@ namespace dnf5 {
 
 void ModuleResetCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Reset module state so it's no longer enabled or disabled.");
+    cmd.set_description("Reset module state so it's no longer enabled or disabled.");
 }
 
 void ModuleResetCommand::run() {}

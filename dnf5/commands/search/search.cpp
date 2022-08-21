@@ -37,7 +37,7 @@ void SearchCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Search for software matching all specified strings");
+    cmd.set_description("Search for software matching all specified strings");
 
     patterns = parser.add_new_values();
     auto patterns_arg = parser.add_new_positional_arg(
@@ -45,7 +45,7 @@ void SearchCommand::set_argument_parser() {
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns);
-    patterns_arg->set_short_description("Patterns");
+    patterns_arg->set_description("Patterns");
     cmd.register_positional_arg(patterns_arg);
 }
 

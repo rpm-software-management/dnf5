@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 void ModuleCommand::set_argument_parser() {
-    get_argument_parser_command()->set_short_description("Manage modules");
+    get_argument_parser_command()->set_description("Manage modules");
 }
 
 void ModuleCommand::register_subcommands() {

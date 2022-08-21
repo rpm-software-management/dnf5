@@ -38,7 +38,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Search for packages matching various criteria");
+    cmd.set_description("Search for packages matching various criteria");
 
     available_option = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
@@ -54,32 +54,31 @@ void RepoqueryCommand::set_argument_parser() {
 
     auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
-    available->set_short_description("display available packages (default)");
+    available->set_description("display available packages (default)");
     available->set_const_value("true");
     available->link_value(available_option);
 
     auto installed = parser.add_new_named_arg("installed");
     installed->set_long_name("installed");
-    installed->set_short_description("display installed packages");
+    installed->set_description("display installed packages");
     installed->set_const_value("true");
     installed->link_value(installed_option);
 
     auto info = parser.add_new_named_arg("info");
     info->set_long_name("info");
-    info->set_short_description("show detailed information about the packages");
+    info->set_description("show detailed information about the packages");
     info->set_const_value("true");
     info->link_value(info_option);
 
     auto nevra = parser.add_new_named_arg("nevra");
     nevra->set_long_name("nevra");
-    nevra->set_short_description(
-        "use name-epoch:version-release.architecture format for displaying packages (default)");
+    nevra->set_description("use name-epoch:version-release.architecture format for displaying packages (default)");
     nevra->set_const_value("true");
     nevra->link_value(nevra_option);
 
     auto keys =
         parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
-    keys->set_short_description("List of keys to match");
+    keys->set_description("List of keys to match");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);

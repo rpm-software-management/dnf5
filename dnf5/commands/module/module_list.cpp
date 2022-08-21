@@ -23,7 +23,7 @@ namespace dnf5 {
 
 void ModuleListCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("List module streams");
+    cmd.set_description("List module streams");
 }
 
 void ModuleListCommand::run() {}

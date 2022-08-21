@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 void RepoCommand::set_argument_parser() {
-    get_argument_parser_command()->set_short_description("Manage repositories");
+    get_argument_parser_command()->set_description("Manage repositories");
 }
 
 void RepoCommand::register_subcommands() {

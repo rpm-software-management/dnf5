@@ -158,11 +158,11 @@ public:
         Argument & operator=(Argument &&) = delete;
         virtual ~Argument() = default;
 
-        /// Sets a description of the argument.
-        void set_description(std::string descr) noexcept { description = std::move(descr); }
+        /// Sets a long description of the argument.
+        void set_long_description(std::string descr) noexcept { long_description = std::move(descr); }
 
         /// Sets a brief description of the argument.
-        void set_short_description(std::string descr) noexcept { short_description = std::move(descr); }
+        void set_description(std::string descr) noexcept { description = std::move(descr); }
 
         /// Passes a list of arguments that cannot be used with this argument.
         /// Can contain this argument. Groups of conflicting argument can be used.
@@ -177,11 +177,11 @@ public:
         /// Gets argument id.
         const std::string & get_id() const noexcept { return id; }
 
-        /// Gets a description of the argument.
-        const std::string & get_description() const { return description; }
+        /// Gets a long description of the argument.
+        const std::string & get_long_description() const { return long_description; }
 
         /// Gets a brief description of the argument.
-        const std::string & get_short_description() const { return short_description; }
+        const std::string & get_description() const { return description; }
 
         /// Returns a list of arguments that cannot be used with this argument or nullptr.
         std::vector<Argument *> * get_conflict_arguments() noexcept { return conflict_args; }
@@ -215,8 +215,8 @@ public:
 
         ArgumentParser & owner;
         std::string id;
+        std::string long_description;
         std::string description;
-        std::string short_description;
         std::vector<Argument *> * conflict_args{nullptr};
         bool complete{true};
         int parse_count{0};

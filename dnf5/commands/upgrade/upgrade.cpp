@@ -28,14 +28,14 @@ void UpgradeCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Upgrade software");
+    cmd.set_description("Upgrade software");
 
     minimal = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
     auto minimal_opt = parser.add_new_named_arg("minimal");
     minimal_opt->set_long_name("minimal");
     // TODO(dmach): Explain how this relates to options such as --security, --enhacement etc.
-    minimal_opt->set_short_description(
+    minimal_opt->set_description(
         "Upgrade packages only to the lowest versions of packages that fix the problems affecting the system.");
     minimal_opt->set_const_value("true");
     minimal_opt->link_value(minimal);
@@ -43,7 +43,7 @@ void UpgradeCommand::set_argument_parser() {
 
     auto keys =
         parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
-    keys->set_short_description("List of keys to match");
+    keys->set_description("List of keys to match");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
             parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);

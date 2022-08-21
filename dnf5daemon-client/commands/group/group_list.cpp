@@ -40,7 +40,7 @@ GroupListCommand::GroupListCommand(Command & parent, const char * command)
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    cmd.set_short_description("search for packages matching keyword");
+    cmd.set_description("search for packages matching keyword");
 
     patterns_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
@@ -48,7 +48,7 @@ GroupListCommand::GroupListCommand(Command & parent, const char * command)
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_options);
-    keys->set_short_description("List of keys to match");
+    keys->set_description("List of keys to match");
     cmd.register_positional_arg(keys);
 }
 

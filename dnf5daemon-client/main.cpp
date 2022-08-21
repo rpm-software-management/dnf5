@@ -61,21 +61,21 @@ void RootCommand::set_argument_parser() {
     auto & ctx = static_cast<Context &>(get_session());
     auto & cmd = *get_argument_parser_command();
 
-    cmd.set_short_description("Utility for packages maintaining");
-    cmd.set_description("Dnf5daemon-client is a program for maintaining packages.");
+    cmd.set_description("Utility for packages maintaining");
+    cmd.set_long_description("Dnf5daemon-client is a program for maintaining packages.");
     cmd.set_named_args_help_header("Global options:");
 
     auto help = ctx.get_argument_parser().add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
-    help->set_short_description("Print help");
+    help->set_description("Print help");
     cmd.register_named_arg(help);
 
     // set ctx.verbose = true
     auto verbose = ctx.get_argument_parser().add_new_named_arg("verbose");
     verbose->set_short_name('v');
     verbose->set_long_name("verbose");
-    verbose->set_short_description("increase output verbosity");
+    verbose->set_description("increase output verbosity");
     verbose->set_const_value("true");
     verbose->link_value(&ctx.verbose);
     cmd.register_named_arg(verbose);
@@ -83,21 +83,21 @@ void RootCommand::set_argument_parser() {
     auto assume_yes = ctx.get_argument_parser().add_new_named_arg("assumeyes");
     assume_yes->set_long_name("assumeyes");
     assume_yes->set_short_name('y');
-    assume_yes->set_short_description("automatically answer yes for all questions");
+    assume_yes->set_description("automatically answer yes for all questions");
     assume_yes->set_const_value("true");
     assume_yes->link_value(&ctx.assume_yes);
     cmd.register_named_arg(assume_yes);
 
     auto assume_no = ctx.get_argument_parser().add_new_named_arg("assumeno");
     assume_no->set_long_name("assumeno");
-    assume_no->set_short_description("automatically answer no for all questions");
+    assume_no->set_description("automatically answer no for all questions");
     assume_no->set_const_value("true");
     assume_no->link_value(&ctx.assume_no);
     cmd.register_named_arg(assume_no);
 
     auto allow_erasing = ctx.get_argument_parser().add_new_named_arg("allow_erasing");
     allow_erasing->set_long_name("allowerasing");
-    allow_erasing->set_short_description("installed package can be removed to resolve the transaction");
+    allow_erasing->set_description("installed package can be removed to resolve the transaction");
     allow_erasing->set_const_value("true");
     allow_erasing->link_value(&ctx.allow_erasing);
     cmd.register_named_arg(allow_erasing);
@@ -106,7 +106,7 @@ void RootCommand::set_argument_parser() {
     installroot->set_long_name("installroot");
     installroot->set_has_value(true);
     installroot->set_arg_value_help("<absolute path>");
-    installroot->set_short_description("set install root");
+    installroot->set_description("set install root");
     installroot->link_value(&ctx.installroot);
     installroot->set_parse_hook_func(
         [](libdnf::cli::ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
@@ -120,7 +120,7 @@ void RootCommand::set_argument_parser() {
     auto releasever = ctx.get_argument_parser().add_new_named_arg("releasever");
     releasever->set_long_name("releasever");
     releasever->set_has_value(true);
-    releasever->set_short_description("override the $releasever variable value");
+    releasever->set_description("override the $releasever variable value");
     releasever->link_value(&ctx.releasever);
     cmd.register_named_arg(releasever);
 
@@ -128,8 +128,8 @@ void RootCommand::set_argument_parser() {
     setopt->set_long_name("setopt");
     setopt->set_has_value(true);
     setopt->set_arg_value_help("KEY=VALUE");
-    setopt->set_short_description("set arbitrary config and repo options");
-    setopt->set_description(
+    setopt->set_description("set arbitrary config and repo options");
+    setopt->set_long_description(
         R"**(Override a configuration option from the configuration file. To override configuration options for repositories, use repoid.option for  the
               <option>.  Values  for configuration options like excludepkgs, includepkgs, installonlypkgs and tsflags are appended to the original value,
               they do not override it. However, specifying an empty value (e.g. --setopt=tsflags=) will clear the option.)**");

@@ -33,7 +33,7 @@ public:
 
     void set_argument_parser() override {
         RepoListCommand::set_argument_parser();
-        get_argument_parser_command()->set_short_description("Print details about repositories");
+        get_argument_parser_command()->set_description("Print details about repositories");
     }
 
 protected:

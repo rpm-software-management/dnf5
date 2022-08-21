@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 void HistoryReplayCommand::set_argument_parser() {
-    get_argument_parser_command()->set_short_description("Replay a transaction that was previously stored to a file");
+    get_argument_parser_command()->set_description("Replay a transaction that was previously stored to a file");
 }
 
 void HistoryReplayCommand::run() {}

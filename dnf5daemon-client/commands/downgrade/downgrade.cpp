@@ -38,7 +38,7 @@ DowngradeCommand::DowngradeCommand(Command & parent) : TransactionCommand(parent
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
-    cmd.set_short_description("downgrade packages on the system");
+    cmd.set_description("downgrade packages on the system");
 
     patterns_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
@@ -46,7 +46,7 @@ DowngradeCommand::DowngradeCommand(Command & parent) : TransactionCommand(parent
         libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_options);
-    keys->set_short_description("List of packages to downgrade");
+    keys->set_description("List of packages to downgrade");
     cmd.register_positional_arg(keys);
 }
 

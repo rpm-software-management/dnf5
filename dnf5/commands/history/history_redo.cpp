@@ -24,7 +24,7 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 void HistoryRedoCommand::set_argument_parser() {
-    get_argument_parser_command()->set_short_description("Repeat transactions");
+    get_argument_parser_command()->set_description("Repeat transactions");
 }
 
 void HistoryRedoCommand::run() {}

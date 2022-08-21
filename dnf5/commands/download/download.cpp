@@ -33,7 +33,7 @@ void DownloadCommand::set_argument_parser() {
     auto & parser = ctx.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
-    cmd.set_short_description("Download software to the current directory");
+    cmd.set_description("Download software to the current directory");
 
     patterns_to_download_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
@@ -41,7 +41,7 @@ void DownloadCommand::set_argument_parser() {
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_to_download_options);
-    keys->set_short_description("List of keys to match");
+    keys->set_description("List of keys to match");
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, false, false); });
     cmd.register_positional_arg(keys);
 }

@@ -53,19 +53,19 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : DaemonCommand(parent, "re
 
     auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
-    available->set_short_description("display available packages (default)");
+    available->set_description("display available packages (default)");
     available->set_const_value("true");
     available->link_value(available_option);
 
     auto installed = parser.add_new_named_arg("installed");
     installed->set_long_name("installed");
-    installed->set_short_description("display installed packages");
+    installed->set_description("display installed packages");
     installed->set_const_value("true");
     installed->link_value(installed_option);
 
     auto info = parser.add_new_named_arg("info");
     info->set_long_name("info");
-    info->set_short_description("show detailed information about the packages");
+    info->set_description("show detailed information about the packages");
     info->set_const_value("true");
     info->link_value(info_option);
 
@@ -75,9 +75,9 @@ RepoqueryCommand::RepoqueryCommand(Command & parent) : DaemonCommand(parent, "re
         ArgumentParser::PositionalArg::UNLIMITED,
         parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
         patterns_options);
-    keys->set_short_description("List of keys to match");
+    keys->set_description("List of keys to match");
 
-    cmd.set_short_description("search for packages matching various criteria");
+    cmd.set_description("search for packages matching various criteria");
 
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);

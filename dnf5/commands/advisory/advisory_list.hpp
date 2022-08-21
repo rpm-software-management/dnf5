@@ -30,7 +30,7 @@ public:
 
     void set_argument_parser() override {
         AdvisorySubCommand::set_argument_parser();
-        get_argument_parser_command()->set_short_description(_("List advisories"));
+        get_argument_parser_command()->set_description(_("List advisories"));
     }
 
 protected:

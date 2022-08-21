@@ -37,8 +37,8 @@ void ArgumentParserTest::test_argument_parser() {
     ArgParser::Command * selected_cmd{nullptr};
 
     auto * test = arg_parser.add_new_command("test");
-    test->set_short_description("Unit test for testing ArgumentParser");
-    test->set_description("Tets is a unit test for testing ArgumentParser.");
+    test->set_description("Unit test for testing ArgumentParser");
+    test->set_long_description("Tets is a unit test for testing ArgumentParser.");
     test->set_commands_help_header("List of commands:");
     test->set_named_args_help_header("Global arguments:");
 
@@ -47,7 +47,7 @@ void ArgumentParserTest::test_argument_parser() {
     auto * help = arg_parser.add_new_named_arg("help");
     help->set_long_name("help");
     help->set_short_name('h');
-    help->set_short_description("Print help");
+    help->set_description("Print help");
     help->set_parse_hook_func([test](
                                   [[maybe_unused]] ArgParser::NamedArg * arg,
                                   [[maybe_unused]] const char * option,
@@ -59,7 +59,7 @@ void ArgumentParserTest::test_argument_parser() {
 
     auto * global_arg = arg_parser.add_new_named_arg("global_arg");
     global_arg->set_long_name("global_arg");
-    global_arg->set_short_description("Global argument for test");
+    global_arg->set_description("Global argument for test");
     test->register_named_arg(global_arg);
 
     auto * available_option =
@@ -80,26 +80,25 @@ void ArgumentParserTest::test_argument_parser() {
 
     auto * available = arg_parser.add_new_named_arg("available");
     available->set_long_name("available");
-    available->set_short_description("display available packages (default)");
+    available->set_description("display available packages (default)");
     available->set_const_value("true");
     available->link_value(available_option);
 
     auto * installed = arg_parser.add_new_named_arg("installed");
     installed->set_long_name("installed");
-    installed->set_short_description("display installed packages");
+    installed->set_description("display installed packages");
     installed->set_const_value("true");
     installed->link_value(installed_option);
 
     auto * info = arg_parser.add_new_named_arg("info");
     info->set_long_name("info");
-    info->set_short_description("show detailed information about the packages");
+    info->set_description("show detailed information about the packages");
     info->set_const_value("true");
     info->link_value(info_option);
 
     auto * nevra = arg_parser.add_new_named_arg("nevra");
     nevra->set_long_name("nevra");
-    nevra->set_short_description(
-        "use name-epoch:version-release.architecture format for displaying packages (default)");
+    nevra->set_description("use name-epoch:version-release.architecture format for displaying packages (default)");
     nevra->set_const_value("true");
     nevra->link_value(nevra_option);
 
@@ -109,7 +108,7 @@ void ArgumentParserTest::test_argument_parser() {
         ArgParser::PositionalArg::UNLIMITED,
         arg_parser.add_init_value(std::make_unique<libdnf::OptionString>(nullptr)),
         keys_options);
-    keys->set_short_description("List of keys to match");
+    keys->set_description("List of keys to match");
 
     auto * conflict_args = arg_parser.add_conflict_args_group(
         std::unique_ptr<std::vector<ArgParser::Argument *>>(new std::vector<ArgParser::Argument *>{info, nevra}));
@@ -118,8 +117,8 @@ void ArgumentParserTest::test_argument_parser() {
     nevra->set_conflict_arguments(conflict_args);
 
     auto * repoquery = arg_parser.add_new_command("repoquery");
-    repoquery->set_short_description("search for packages matching keyword");
-    repoquery->set_description("");
+    repoquery->set_description("search for packages matching keyword");
+    repoquery->set_long_description("");
     repoquery->set_named_args_help_header("Optional arguments:");
     repoquery->set_positional_args_help_header("Positional arguments:");
     repoquery->set_parse_hook_func([&selected_cmd](
