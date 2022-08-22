@@ -71,8 +71,10 @@ namespace dnf5 {
 
 using namespace libdnf::cli;
 
+namespace {
+
 // Registers `group` and all its arguments to `command`
-static void register_group_with_args(
+void register_group_with_args(
     libdnf::cli::ArgumentParser::Command & command, libdnf::cli::ArgumentParser::Group & group) {
     for (auto * argument : group.get_arguments()) {
         if (auto * arg = dynamic_cast<libdnf::cli::ArgumentParser::PositionalArg *>(argument)) {
@@ -86,12 +88,19 @@ static void register_group_with_args(
     command.register_group(&group);
 }
 
+}  // namespace
+
+
 class RootCommand : public Command {
 public:
     explicit RootCommand(libdnf::cli::session::Session & context) : Command(context, "dnf5") {}
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override { throw_missing_command(); }
+
+private:
+    void add_named_args_aliases();
+    void register_commands_aliases();
 };
 
 void RootCommand::set_argument_parser() {
@@ -106,9 +115,6 @@ void RootCommand::set_argument_parser() {
 
     auto * global_options_group = parser.add_new_group("global_options");
     global_options_group->set_header("Global options:");
-
-    auto * options_aliases_group = parser.add_new_group("global_options_aliases");
-    options_aliases_group->set_header("Options Compatibility Aliases:");
 
     auto help = parser.add_new_named_arg("help");
     help->set_long_name("help");
@@ -229,8 +235,6 @@ void RootCommand::set_argument_parser() {
 
     no_best->add_conflict_argument(*best);
 
-    no_best->add_alias("nobest", "nobest", '\0', options_aliases_group);
-
     {
         auto no_docs = parser.add_new_named_arg("no-docs");
         no_docs->set_long_name("no-docs");
@@ -245,8 +249,6 @@ void RootCommand::set_argument_parser() {
             return true;
         });
         global_options_group->register_argument(no_docs);
-
-        no_docs->add_alias("nodocs", "nodocs", '\0', options_aliases_group);
     }
 
     {
@@ -335,10 +337,6 @@ void RootCommand::set_argument_parser() {
     repo_ids->add_conflict_argument(*enable_repo_ids);
     repo_ids->add_conflict_argument(*disable_repo_ids);
 
-    enable_repo_ids->add_alias("enablerepo", "enablerepo", '\0', options_aliases_group);
-    disable_repo_ids->add_alias("disablerepo", "disablerepo", '\0', options_aliases_group);
-    repo_ids->add_alias("repoid", "repoid", '\0', options_aliases_group);
-
     auto no_gpgchecks = parser.add_new_named_arg("no-gpgchecks");
     no_gpgchecks->set_long_name("no-gpgchecks");
     no_gpgchecks->set_description("disable gpg signature checking (if RPM policy allows)");
@@ -354,7 +352,6 @@ void RootCommand::set_argument_parser() {
         return true;
     });
     global_options_group->register_argument(no_gpgchecks);
-    no_gpgchecks->add_alias("nogpgcheck", "nogpgcheck", '\0', options_aliases_group);
 
     auto no_plugins = parser.add_new_named_arg("no-plugins");
     no_plugins->set_long_name("no-plugins");
@@ -399,10 +396,6 @@ void RootCommand::set_argument_parser() {
 
     no_plugins->add_conflict_argument(*enable_plugins_names);
     no_plugins->add_conflict_argument(*disable_plugins_names);
-
-    no_plugins->add_alias("noplugins", "noplugins", '\0', options_aliases_group);
-    enable_plugins_names->add_alias("enableplugin", "enableplugin", '\0', options_aliases_group);
-    disable_plugins_names->add_alias("disableplugin", "disableplugin", '\0', options_aliases_group);
 
     auto comment = parser.add_new_named_arg("comment");
     comment->set_long_name("comment");
@@ -450,7 +443,6 @@ void RootCommand::set_argument_parser() {
     }
 
     register_group_with_args(cmd, *global_options_group);
-    register_group_with_args(cmd, *options_aliases_group);
 
     parser.set_inherit_named_args(true);
 }
@@ -493,18 +485,6 @@ void RootCommand::register_subcommands() {
     register_subcommand(std::make_unique<DownloadCommand>(*this));
     register_subcommand(std::make_unique<MakeCacheCommand>(*this));
 
-    // aliases
-    auto * aliases_group = context.get_argument_parser().add_new_group("aliases");
-    aliases_group->set_header("Compatibility Aliases:");
-    cmd.register_group(aliases_group);
-    register_subcommand(std::make_unique<AutoremoveAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<GroupinfoAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<GrouplistAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<RepoinfoAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<RepolistAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<UpdateinfoAlias>(*this), aliases_group);
-    register_subcommand(std::make_unique<UpgradeMinimalAlias>(*this), aliases_group);
-
     auto & dnf5_plugins = context.get_plugins();
     auto & plugins = dnf5_plugins.get_plugins();
     for (auto & plugin : plugins) {
@@ -515,6 +495,57 @@ void RootCommand::register_subcommands() {
             }
         }
     }
+
+    add_named_args_aliases();
+    register_commands_aliases();
+}
+
+void RootCommand::add_named_args_aliases() {
+    auto & context = get_context();
+    auto & cmd = *get_argument_parser_command();
+
+    // Create a new group for the aliases of the named arguments
+    auto & parser = context.get_argument_parser();
+    auto * options_aliases_group = parser.add_new_group("options-compatibility-aliases");
+    options_aliases_group->set_header("Options Compatibility Aliases:");
+
+    // Register aliases
+    auto & no_best = parser.get_named_arg("no-best", false);
+    no_best.add_alias("nobest", "nobest", '\0', options_aliases_group);
+    auto & no_docs = parser.get_named_arg("no-docs", false);
+    no_docs.add_alias("nodocs", "nodocs", '\0', options_aliases_group);
+    auto & enable_repo_ids = parser.get_named_arg("enable-repo", false);
+    enable_repo_ids.add_alias("enablerepo", "enablerepo", '\0', options_aliases_group);
+    auto & disable_repo_ids = parser.get_named_arg("disable-repo", false);
+    disable_repo_ids.add_alias("disablerepo", "disablerepo", '\0', options_aliases_group);
+    auto & repo_ids = parser.get_named_arg("repo", false);
+    repo_ids.add_alias("repoid", "repoid", '\0', options_aliases_group);
+    auto & no_gpgchecks = parser.get_named_arg("no-gpgchecks", false);
+    no_gpgchecks.add_alias("nogpgcheck", "nogpgcheck", '\0', options_aliases_group);
+    auto & no_plugins = parser.get_named_arg("no-plugins", false);
+    no_plugins.add_alias("noplugins", "noplugins", '\0', options_aliases_group);
+    auto & enable_plugins_names = parser.get_named_arg("enable-plugin", false);
+    enable_plugins_names.add_alias("enableplugin", "enableplugin", '\0', options_aliases_group);
+    auto & disable_plugins_names = parser.get_named_arg("disable-plugin", false);
+    disable_plugins_names.add_alias("disableplugin", "disableplugin", '\0', options_aliases_group);
+
+    register_group_with_args(cmd, *options_aliases_group);
+}
+
+void RootCommand::register_commands_aliases() {
+    // Create a new group for the aliases of the commands
+    auto * aliases_group = get_context().get_argument_parser().add_new_group("aliases");
+    aliases_group->set_header("Compatibility Aliases:");
+    get_argument_parser_command()->register_group(aliases_group);
+
+    // Register aliases
+    register_subcommand(std::make_unique<AutoremoveAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<GroupinfoAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<GrouplistAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<RepoinfoAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<RepolistAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<UpdateinfoAlias>(*this), aliases_group);
+    register_subcommand(std::make_unique<UpgradeMinimalAlias>(*this), aliases_group);
 }
 
 }  // namespace dnf5
