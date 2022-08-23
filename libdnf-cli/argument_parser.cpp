@@ -364,6 +364,14 @@ ArgumentParser::PositionalArg & ArgumentParser::Command::get_positional_arg(cons
         M_("Command id \"{}\" does not contain positional argument with id \"{}\""), this->id, id);
 }
 
+ArgumentParser::Group & ArgumentParser::Command::get_group(const std::string & id) const {
+    if (auto ret = find_arg(groups, id)) {
+        return *ret;
+    }
+    throw ArgumentParserNotFoundError(
+        M_("Command id \"{}\" does not contain group with id \"{}\""), this->id, id);
+}
+
 // Prints a completed argument `arg` or a table with suggestions and help to complete
 // if there is more than one solution.
 void ArgumentParser::Command::print_complete(
