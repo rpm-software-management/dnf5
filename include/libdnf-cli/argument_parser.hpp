@@ -406,6 +406,9 @@ public:
         /// Gets a list of registered positional arguments.
         const std::vector<PositionalArg *> & get_positional_args() const noexcept { return pos_args; }
 
+        /// Gets a list of registered groups.
+        const std::vector<Group *> & get_groups() const noexcept { return groups; }
+
         /// Returns (sub)command with given ID.
         /// Exception CommandNotFound is thrown if command is not found.
         Command & get_command(const std::string & id) const;
@@ -417,6 +420,10 @@ public:
         /// Returns positional argument with given ID.
         /// Exception PositionalArgNotFound is thrown if argument is not found.
         PositionalArg & get_positional_arg(const std::string & id) const;
+
+        /// Returns registered group with given ID.
+        /// Exception ArgumentParserNotFoundError is thrown if group is not found.
+        Group & get_group(const std::string & id) const;
 
         /// Sets the user function for parsing the argument.
         void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
