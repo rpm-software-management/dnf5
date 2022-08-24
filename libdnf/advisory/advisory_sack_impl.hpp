@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv/solv_map.hpp"
 
-#include "libdnf/advisory/advisory_sack.hpp"
+#include "advisory_sack.hpp"
 
 
 namespace libdnf::advisory {

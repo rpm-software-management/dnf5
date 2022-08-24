@@ -20,8 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_SACK_HPP
 #define LIBDNF_ADVISORY_ADVISORY_SACK_HPP
 
-#include "advisory_query.hpp"
-
+#include "libdnf/advisory/advisory_query.hpp"
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 
