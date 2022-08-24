@@ -24,8 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "base_test_case.hpp"
 
-#include "libdnf/advisory/advisory_sack.hpp"
-
 #include <cppunit/extensions/HelperMacros.h>
 
 class AdvisoryAdvisoryQueryTest : public BaseTestCase {
