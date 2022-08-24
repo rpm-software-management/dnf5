@@ -33,8 +33,6 @@ namespace libdnf::advisory {
 
 Advisory::Advisory(const libdnf::BaseWeakPtr & base, AdvisoryId id) : base(base), id(id) {}
 
-Advisory::Advisory(libdnf::Base & base, AdvisoryId id) : Advisory(base.get_weak_ptr(), id) {}
-
 std::string Advisory::get_name() const {
     const char * name;
     name = get_pool(base).lookup_str(id.id, SOLVABLE_NAME);

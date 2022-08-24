@@ -43,8 +43,6 @@ public:
 /// An advisory, represents advisory used to track security updates
 class Advisory {
 public:
-    Advisory(libdnf::Base & base, AdvisoryId id);
-
     bool operator==(const Advisory & other) const noexcept { return id == other.id && base == other.base; }
 
     bool operator!=(const Advisory & other) const noexcept { return !(*this == other); }
