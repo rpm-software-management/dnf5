@@ -21,9 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_BASE_IMPL_HPP
 
 
+#include "../advisory/advisory_sack.hpp"
 #include "system/state.hpp"
 
-#include "libdnf/advisory/advisory_sack.hpp"
 #include "libdnf/base/base.hpp"
 
 

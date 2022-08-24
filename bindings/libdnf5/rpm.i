@@ -26,7 +26,6 @@
 %{
     #include "libdnf/advisory/advisory_module.hpp"
     #include "libdnf/advisory/advisory_query.hpp"
-    #include "libdnf/advisory/advisory_sack.hpp"
     #include "libdnf/rpm/checksum.hpp"
     #include "libdnf/rpm/nevra.hpp"
     #include "libdnf/rpm/package.hpp"
@@ -50,12 +49,6 @@
 
 %include "libdnf/rpm/package_sack.hpp"
 %template(PackageSackWeakPtr) libdnf::WeakPtr<libdnf::rpm::PackageSack, false>;
-
-
-%ignore libdnf::advisory::AdvisorySack::new_query();
-%include "libdnf/advisory/advisory_sack.hpp"
-%template(AdvisorySackWeakPtr) libdnf::WeakPtr<libdnf::advisory::AdvisorySack, false>;
-
 
 %include "libdnf/rpm/reldep.hpp"
 
