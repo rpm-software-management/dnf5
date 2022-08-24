@@ -41,12 +41,13 @@ static std::mutex locked_base_mutex;
 Base::Base()
     : repo_sack(get_weak_ptr()),
       rpm_package_sack(get_weak_ptr()),
-      rpm_advisory_sack(get_weak_ptr()),
       transaction_history(get_weak_ptr()),
       vars(get_weak_ptr()),
-      p_impl(new Impl()) {}
+      p_impl(new Impl(get_weak_ptr())) {}
 
 Base::~Base() = default;
+
+Base::Impl::Impl(const libdnf::BaseWeakPtr & base) : rpm_advisory_sack(base) {}
 
 void Base::lock() {
     locked_base_mutex.lock();
