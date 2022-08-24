@@ -34,8 +34,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
-
 class AdvisoryQuery : public AdvisorySet {
 public:
     explicit AdvisoryQuery(const BaseWeakPtr & base);
@@ -105,8 +103,6 @@ public:
         const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ) const;
 
 private:
-    explicit AdvisoryQuery(const AdvisorySackWeakPtr & sack);
-
     BaseWeakPtr base;
 };
 
