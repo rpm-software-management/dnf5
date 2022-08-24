@@ -20,14 +20,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_SACK_HPP
 #define LIBDNF_ADVISORY_ADVISORY_SACK_HPP
 
-#include "libdnf/advisory/advisory_query.hpp"
+#include "solv/solv_map.hpp"
+
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 
 
 namespace libdnf::advisory {
 
-class AsdvisorySack;
+class AdvisorySack;
 using AdvisorySackWeakPtr = WeakPtr<AdvisorySack, false>;
 
 
@@ -35,20 +36,21 @@ class AdvisorySack {
 public:
     explicit AdvisorySack(const libdnf::BaseWeakPtr & base);
 
-    ~AdvisorySack();
-
     AdvisorySackWeakPtr get_weak_ptr();
 
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
     libdnf::BaseWeakPtr get_base() const;
 
+    /// @return All advisories from pool inside of base.
+    libdnf::solv::SolvMap & get_solvables();
+
 private:
-    class Impl;
+    libdnf::BaseWeakPtr base;
+    WeakPtrGuard<AdvisorySack, false> sack_guard;
 
-    friend AdvisoryQuery;
-
-    std::unique_ptr<Impl> p_impl;
+    libdnf::solv::SolvMap data_map{0};
+    int cached_solvables_size{0};
 };
 
 }  // namespace libdnf::advisory
