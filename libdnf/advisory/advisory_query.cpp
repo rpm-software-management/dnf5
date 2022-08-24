@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_query.hpp"
 
 #include "advisory_package_private.hpp"
-#include "advisory_sack_impl.hpp"
 #include "advisory_set_impl.hpp"
 #include "base/base_impl.hpp"
 #include "common/sack/query_cmp_private.hpp"
@@ -39,7 +38,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::advisory {
 
 AdvisoryQuery::AdvisoryQuery(const BaseWeakPtr & base) : AdvisorySet(base), base(base) {
-    *p_impl |= base->p_impl->get_rpm_advisory_sack()->p_impl->get_solvables();
+    *p_impl |= base->p_impl->get_rpm_advisory_sack()->get_solvables();
 }
 
 AdvisoryQuery::AdvisoryQuery(Base & base) : AdvisoryQuery(base.get_weak_ptr()) {}

@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "advisory_sack.hpp"
 
-#include "advisory_sack_impl.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
 
@@ -27,9 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
-AdvisorySack::Impl::Impl(const libdnf::BaseWeakPtr & base) : base(base) {}
-
-libdnf::solv::SolvMap & AdvisorySack::Impl::get_solvables() {
+libdnf::solv::SolvMap & AdvisorySack::get_solvables() {
     auto & pool = get_pool(base);
 
     if (cached_solvables_size == pool.get_nsolvables()) {
@@ -63,16 +60,14 @@ libdnf::solv::SolvMap & AdvisorySack::Impl::get_solvables() {
     return data_map;
 }
 
-AdvisorySack::AdvisorySack(const libdnf::BaseWeakPtr & base) : p_impl(new Impl(base)) {}
-
-AdvisorySack::~AdvisorySack() = default;
+AdvisorySack::AdvisorySack(const libdnf::BaseWeakPtr & base) : base(base) {}
 
 AdvisorySackWeakPtr AdvisorySack::get_weak_ptr() {
-    return AdvisorySackWeakPtr(this, &p_impl->sack_guard);
+    return AdvisorySackWeakPtr(this, &sack_guard);
 }
 
 BaseWeakPtr AdvisorySack::get_base() const {
-    return p_impl->base->get_weak_ptr();
+    return base->get_weak_ptr();
 }
 
 }  // namespace libdnf::advisory
