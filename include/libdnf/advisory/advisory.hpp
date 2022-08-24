@@ -43,12 +43,6 @@ public:
 /// An advisory, represents advisory used to track security updates
 class Advisory {
 public:
-    /// Construct the Advisory object
-    ///
-    /// @param sack   WeakPtr to libdnf::rpm::PackageSack instance which holds the data.
-    /// @param id     AdvisoryId into libsolv pool.
-    /// @return New Advisory instance.
-    Advisory(const libdnf::BaseWeakPtr & base, AdvisoryId id);
     Advisory(libdnf::Base & base, AdvisoryId id);
 
     bool operator==(const Advisory & other) const noexcept { return id == other.id && base == other.base; }
@@ -132,7 +126,21 @@ public:
     /// @return True if applicable, False otherwise.
     bool is_applicable() const;
 
+protected:
+    /// Construct the Advisory object
+    ///
+    /// @param sack   WeakPtr to libdnf::rpm::PackageSack instance which holds the data.
+    /// @param id     AdvisoryId into libsolv pool.
+    /// @return New Advisory instance.
+    Advisory(const libdnf::BaseWeakPtr & base, AdvisoryId id);
+
 private:
+    friend class AdvisoryCollection;
+    friend class AdvisoryModule;
+    friend class AdvisoryPackage;
+    friend class AdvisorySetIterator;
+    friend class AdvisorySet;
+
     libdnf::BaseWeakPtr base;
 
     AdvisoryId id;
