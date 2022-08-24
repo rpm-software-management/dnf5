@@ -20,7 +20,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_BASE_BASE_HPP
 #define LIBDNF_BASE_BASE_HPP
 
-#include "libdnf/advisory/advisory_sack.hpp"
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/impl_ptr.hpp"
 #include "libdnf/common/weak_ptr.hpp"
@@ -92,7 +91,6 @@ public:
     libdnf::module::ModuleItemContainerWeakPtr get_module_item_container() {
         return module_item_container.get_weak_ptr();
     }
-    libdnf::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     VarsWeakPtr get_vars() { return VarsWeakPtr(&vars, &vars_gurad); }
@@ -109,6 +107,7 @@ private:
     friend solv::Pool & get_pool(const libdnf::BaseWeakPtr & base);
     friend class libdnf::base::Transaction;
     friend class libdnf::rpm::Package;
+    friend class libdnf::advisory::AdvisoryQuery;
 
     WeakPtrGuard<Base, false> base_guard;
 
@@ -134,7 +133,6 @@ private:
     comps::Comps comps{*this};
     module::ModuleItemContainer module_item_container{*this};
     plugin::Plugins plugins{*this};
-    libdnf::advisory::AdvisorySack rpm_advisory_sack;
     std::map<std::string, std::string> variables;
     transaction::TransactionHistory transaction_history;
     Vars vars;

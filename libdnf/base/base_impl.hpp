@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "system/state.hpp"
 
+#include "libdnf/advisory/advisory_sack.hpp"
 #include "libdnf/base/base.hpp"
 
 
@@ -34,11 +35,14 @@ public:
     /// @return The system state object.
     /// @since 5.0
     libdnf::system::State & get_system_state() { return *system_state; }
+    libdnf::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
 
 private:
     friend class Base;
+    Impl(const libdnf::BaseWeakPtr & base);
 
     std::optional<libdnf::system::State> system_state;
+    libdnf::advisory::AdvisorySack rpm_advisory_sack;
 };
 
 
