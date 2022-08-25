@@ -31,9 +31,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::base {
 
-
+/// Contain information, hint, or a problem created during Goal::resolve
 class LogEvent {
 public:
+    /// Public constructor
     LogEvent(
         libdnf::GoalAction action,
         libdnf::GoalProblem problem,
@@ -43,11 +44,17 @@ public:
     LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_problems);
     ~LogEvent() = default;
 
+    /// @return GoalAction for which goal event was created
     libdnf::GoalAction get_action() const { return action; };
+    /// @return GoalProblem that specify the type of report
     libdnf::GoalProblem get_problem() const { return problem; };
+    /// @return GoalJobSetting if it is relevant for the particular GoalProblem
     const std::optional<libdnf::GoalJobSettings> & get_job_settings() const { return job_settings; };
+    /// @return SPEC if it is relevant for the particular GoalProblem
     const std::optional<std::string> & get_spec() const { return spec; };
+    /// @return Additional information (internal), that are required for formated string
     const std::optional<std::set<std::string>> & get_additional_data() const { return additional_data; };
+    /// @return SolverProblems if they are relevant for the particular GoalProblem
     const std::optional<SolverProblems> & get_solver_problems() const { return solver_problems; };
 
     /// Convert an element from resolve log to string;

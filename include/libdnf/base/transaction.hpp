@@ -33,17 +33,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::base {
 
-
+/// Error related to processing transaction
 class TransactionError : public Error {
 public:
     using Error::Error;
+    /// @return Error class' domain name"
     const char * get_domain_name() const noexcept override { return "libdnf::base"; }
+    /// @return Error class' name"
     const char * get_name() const noexcept override { return "TransactionError"; }
 };
 
 
 class Transaction {
 public:
+    /// enum representing Transaction run result
     enum class TransactionRunResult {
         SUCCESS,
         ERROR_RERUN,
@@ -57,6 +60,7 @@ public:
     Transaction(Transaction && transaction);
     ~Transaction();
 
+    /// Return basic overvie about result of resolving transaction. The get complete informaion use get_resolve_logs()
     libdnf::GoalProblem get_problems();
 
     /// Returns information about resolvement of Goal.
