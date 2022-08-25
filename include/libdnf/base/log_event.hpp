@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::base {
 
-/// Contain information, hint, or a problem created during Goal::resolve
+/// Contain information, hint, or a problem created during libdnf::Goal::resolve()
 class LogEvent {
 public:
     /// Public constructor
