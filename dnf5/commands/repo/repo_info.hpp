@@ -29,7 +29,7 @@ namespace dnf5 {
 
 class RepoInfoCommand : public RepoListCommand {
 public:
-    explicit RepoInfoCommand(Command & parent) : RepoInfoCommand(parent, "info") {}
+    explicit RepoInfoCommand(Command & parent) : RepoListCommand(parent, "info") {}
 
     void set_argument_parser() override {
         RepoListCommand::set_argument_parser();
@@ -37,8 +37,6 @@ public:
     }
 
 protected:
-    // to be used by an alias command only
-    explicit RepoInfoCommand(Command & parent, const std::string & name) : RepoListCommand(parent, name) {}
     void print(const libdnf::repo::RepoQuery & query, [[maybe_unused]] bool with_status) override;
 };
 
