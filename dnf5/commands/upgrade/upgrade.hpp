@@ -32,16 +32,13 @@ namespace dnf5 {
 
 class UpgradeCommand : public Command {
 public:
-    explicit UpgradeCommand(Command & parent) : UpgradeCommand(parent, "upgrade") {}
+    explicit UpgradeCommand(Command & parent) : Command(parent, "upgrade") {}
     void set_argument_parser() override;
     void configure() override;
     void load_additional_packages() override;
     void run() override;
 
 protected:
-    // to be used by an alias command only
-    explicit UpgradeCommand(Command & parent, const std::string & name) : Command(parent, name) {}
-
     libdnf::OptionBool * minimal{nullptr};
     std::vector<std::string> pkg_specs;
     std::vector<std::string> pkg_file_paths;

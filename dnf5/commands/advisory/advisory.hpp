@@ -26,14 +26,10 @@ namespace dnf5 {
 
 class AdvisoryCommand : public Command {
 public:
-    explicit AdvisoryCommand(Command & parent) : AdvisoryCommand(parent, "advisory") {}
+    explicit AdvisoryCommand(Command & parent) : Command(parent, "advisory") {}
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override;
-
-protected:
-    // to be used by an alias command only
-    explicit AdvisoryCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
 }  // namespace dnf5

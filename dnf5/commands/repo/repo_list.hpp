@@ -38,8 +38,9 @@ public:
     std::unique_ptr<RepoSpecArguments> repo_specs{nullptr};
 
 protected:
-    // to be used by an alias command only
+    // for RepoInfoCommand
     explicit RepoListCommand(Command & parent, const std::string & name) : Command(parent, name) {}
+
     virtual void print(const libdnf::repo::RepoQuery & query, bool with_status);
 };
 

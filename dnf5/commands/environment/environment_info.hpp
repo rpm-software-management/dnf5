@@ -30,7 +30,7 @@ namespace dnf5 {
 
 class EnvironmentInfoCommand : public Command {
 public:
-    explicit EnvironmentInfoCommand(Command & parent) : EnvironmentInfoCommand(parent, "info") {}
+    explicit EnvironmentInfoCommand(Command & parent) : Command(parent, "info") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;
@@ -38,10 +38,6 @@ public:
     std::unique_ptr<EnvironmentAvailableOption> available{nullptr};
     std::unique_ptr<EnvironmentInstalledOption> installed{nullptr};
     std::unique_ptr<EnvironmentSpecArguments> environment_specs{nullptr};
-
-protected:
-    // to be used by an alias command only
-    explicit EnvironmentInfoCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
 }  // namespace dnf5

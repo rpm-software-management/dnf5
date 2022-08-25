@@ -30,17 +30,13 @@ namespace dnf5 {
 
 class RemoveCommand : public Command {
 public:
-    explicit RemoveCommand(Command & parent) : RemoveCommand(parent, "remove") {}
+    explicit RemoveCommand(Command & parent) : Command(parent, "remove") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;
 
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_remove_options{nullptr};
     libdnf::OptionBool * unneeded{nullptr};
-
-protected:
-    // to be used by an alias command only
-    explicit RemoveCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
 }  // namespace dnf5
