@@ -72,6 +72,7 @@ public:
     /// Loads main configuration from file defined by the current configuration.
     void load_config_from_file();
 
+    /// @return a reference to configuration
     ConfigMain & get_config() { return config; }
     LogRouterWeakPtr get_logger() { return LogRouterWeakPtr(&log_router, &log_router_gurad); }
     repo::RepoSackWeakPtr get_repo_sack() { return repo_sack.get_weak_ptr(); }
@@ -85,6 +86,7 @@ public:
     /// or Advisory query created.
     void setup();
 
+    // TODO(jmracek) Remove from public API due to unstability of the code
     transaction::TransactionHistoryWeakPtr get_transaction_history() { return transaction_history.get_weak_ptr(); }
     libdnf::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
     libdnf::module::ModuleItemContainerWeakPtr get_module_item_container() {

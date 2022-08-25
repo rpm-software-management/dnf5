@@ -29,6 +29,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+
+/// Centralized point to perform operations with RPMs, Comps groups, and Modules
 class Goal {
 public:
     explicit Goal(const libdnf::BaseWeakPtr & base);
@@ -260,6 +262,7 @@ public:
     // @replaces dnf:dnf/base.py:method:Base().resolve(self, allow_erasing=False)
     base::Transaction resolve(bool allow_erasing);
 
+    /// Clean all request from the Goal instance
     void reset();
 
     /// @return The `Base` object to which this object belongs.

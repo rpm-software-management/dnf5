@@ -29,9 +29,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::base {
 
-
+/// Represent problems detected by a RPM solver (libsolv)
 class SolverProblems {
 public:
+    /// Public constructor
     SolverProblems(
         const std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> & problems);
 

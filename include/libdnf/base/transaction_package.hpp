@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::base {
 
+/// Describe transaction operation related to rpm Package
 class TransactionPackage {
 public:
     using Action = transaction::TransactionItemAction;
