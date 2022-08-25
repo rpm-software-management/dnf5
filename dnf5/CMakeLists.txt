@@ -10,6 +10,12 @@ add_definitions(-DGETTEXT_DOMAIN=\"dnf5\")
 # set LIBDIR, used to find the directory containing the dnf5 plugins
 add_definitions(-DLIBDIR=\"${CMAKE_INSTALL_FULL_LIBDIR}\")
 
+# set INSTALL_PREFIX, used to find the directory containing the dnf5 default configuration
+add_definitions(-DINSTALL_PREFIX=\"${CMAKE_INSTALL_PREFIX}\")
+
+# set SYSCONFIG_DIR, used to find the directory containing the dnf5 configuration
+add_definitions(-DSYSCONFIG_DIR=\"${CMAKE_INSTALL_FULL_SYSCONFDIR}\")
+
 # use any sources found under the current directory
 file(GLOB_RECURSE DNF5_SOURCES *.cpp)
 

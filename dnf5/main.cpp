@@ -17,6 +17,7 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "cmdline_aliases.hpp"
 #include "commands/advisory/advisory.hpp"
 #include "commands/aliases/autoremove.hpp"
 #include "commands/aliases/groupinfo.hpp"
@@ -498,6 +499,9 @@ void RootCommand::register_subcommands() {
 
     add_named_args_aliases();
     register_commands_aliases();
+
+    load_cmdline_aliases(context, INSTALL_PREFIX "/lib/dnf5/aliases.d");
+    load_cmdline_aliases(context, SYSCONFIG_DIR "/dnf/dnf5-aliases.d");
 }
 
 void RootCommand::add_named_args_aliases() {
