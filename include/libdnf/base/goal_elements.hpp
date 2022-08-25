@@ -30,6 +30,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+
+/// Define a type of a broken solver rule
 enum class ProblemRules {
     RULE_DISTUPGRADE = 1,
     RULE_INFARCH,
@@ -60,6 +62,7 @@ enum class ProblemRules {
     RULE_PKG_REMOVAL_OF_RUNNING_KERNEL
 };
 
+/// Define a type of information, hint, or problem gathered during libdnf::Goal::resolve()
 enum class GoalProblem : uint32_t {
     NO_PROBLEM = 0,
     SOLVER_ERROR = (1 << 0),
@@ -79,6 +82,7 @@ enum class GoalProblem : uint32_t {
     WRITE_DEBUG = (1 << 14)
 };
 
+/// Types of Goal actions
 enum class GoalAction {
     INSTALL,
     INSTALL_OR_REINSTALL,
@@ -95,29 +99,46 @@ enum class GoalAction {
     RESOLVE
 };
 
+/// Settings for GoalJobSettings
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
+
+/// Unresolved or resolved values based on GoalSetting
 enum class GoalUsedSetting { UNUSED, USED_TRUE, USED_FALSE };
 
 struct ResolveSpecSettings {
 public:
+    /// Important for queries that resolve SPEC
     bool ignore_case{false};
+    /// Important for queries that resolve SPEC
     bool with_nevra{true};
+    /// Important for queries that resolve SPEC
     bool with_provides{true};
+    /// Important for queries that resolve SPEC
     bool with_filenames{true};
+    /// Important for queries that resolve SPEC
     std::vector<libdnf::rpm::Nevra::Form> nevra_forms{};
 };
 
 struct GoalJobSettings : public ResolveSpecSettings {
 public:
+    /// Return used value for strict
     GoalUsedSetting get_used_strict() const { return used_strict; };
+    /// Return used value for best
     GoalUsedSetting get_used_best() const { return used_best; };
+    /// Return used value for clean_requirements_on_remove
     GoalUsedSetting get_used_clean_requirements_on_remove() const { return used_clean_requirements_on_remove; };
 
+    /// Set whether hints should be reported
     bool report_hint{true};
+    /// Set strict, AUTO means that it is handled according the the default behavior
     GoalSetting strict{GoalSetting::AUTO};
+    /// Set best, AUTO means that it is handled according the the default behavior
     GoalSetting best{GoalSetting::AUTO};
+    /// Set clean_requirements_on_remove, AUTO means that it is handled according the the default behavior
     GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
+    /// Define which installed packagies should be modified acording to repoid from which they were installed
     std::vector<std::string> from_repo_ids;
+    /// Reduce candidates for the operation according repository ids
     std::vector<std::string> to_repo_ids;
 
     /// Optionally assign AdvisoryQuery that is used to filter goal target packages (used for upgrade and install)
