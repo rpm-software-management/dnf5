@@ -390,55 +390,55 @@ public:
         using ParseHookFunc = std::function<bool(Command * arg, const char * cmd, int argc, const char * const argv[])>;
 
         /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
-        void parse(const char * option, int argc, const char * const argv[]);
+        virtual void parse(const char * option, int argc, const char * const argv[]) = 0;
 
         /// Registers (sub)command to the command.
         /// An exception is thrown when a command with the same ID is already registered.
-        void register_command(Command * cmd);
+        virtual void register_command(Command * cmd) = 0;
 
         /// Registers named argument to the command.
         /// An exception is thrown when a named argument with the same ID is already registered.
-        void register_named_arg(NamedArg * arg);
+        virtual void register_named_arg(NamedArg * arg) = 0;
 
         /// Registers positional argument to the command.
         /// An exception is thrown when a positional argument with the same ID is already registered.
-        void register_positional_arg(PositionalArg * arg);
+        virtual void register_positional_arg(PositionalArg * arg) = 0;
 
-        void register_group(Group * grp);
+        virtual void register_group(Group * grp) = 0;
 
         /// Gets a list of registered commands.
-        const std::vector<Command *> & get_commands() const noexcept { return cmds; }
+        virtual const std::vector<Command *> & get_commands() const noexcept = 0;
 
         /// Gets a list of registered named arguments.
-        const std::vector<NamedArg *> & get_named_args() const noexcept { return named_args; }
+        virtual const std::vector<NamedArg *> & get_named_args() const noexcept = 0;
 
         /// Gets a list of registered positional arguments.
-        const std::vector<PositionalArg *> & get_positional_args() const noexcept { return pos_args; }
+        virtual const std::vector<PositionalArg *> & get_positional_args() const noexcept = 0;
 
         /// Gets a list of registered groups.
-        const std::vector<Group *> & get_groups() const noexcept { return groups; }
+        virtual const std::vector<Group *> & get_groups() const noexcept = 0;
 
         /// Returns (sub)command with given ID.
         /// Exception CommandNotFound is thrown if command is not found.
-        Command & get_command(const std::string & id) const;
+        virtual Command & get_command(const std::string & id) const = 0;
 
         /// Returns named argument with given ID.
         /// Exception NamedArgNotFound is thrown if argument is not found.
-        NamedArg & get_named_arg(const std::string & id) const;
+        virtual NamedArg & get_named_arg(const std::string & id) const = 0;
 
         /// Returns positional argument with given ID.
         /// Exception PositionalArgNotFound is thrown if argument is not found.
-        PositionalArg & get_positional_arg(const std::string & id) const;
+        virtual PositionalArg & get_positional_arg(const std::string & id) const = 0;
 
         /// Returns registered group with given ID.
         /// Exception ArgumentParserNotFoundError is thrown if group is not found.
-        Group & get_group(const std::string & id) const;
+        virtual Group & get_group(const std::string & id) const = 0;
 
         /// Sets the user function for parsing the argument.
-        void set_parse_hook_func(ParseHookFunc && func) { parse_hook = std::move(func); }
+        virtual void set_parse_hook_func(ParseHookFunc && func) = 0;
 
         /// Gets the user function for parsing the argument.
-        const ParseHookFunc & get_parse_hook_func() const noexcept { return parse_hook; }
+        virtual const ParseHookFunc & get_parse_hook_func() const noexcept = 0;
 
         /// Prints command help text.
         void help() const noexcept override;
@@ -472,19 +472,170 @@ public:
             const char * arg, std::vector<ArgumentParser::NamedArg *> named_args, size_t used_positional_arguments);
 
         Command * parent{nullptr};
-        std::vector<Command *> cmds;
-        std::vector<NamedArg *> named_args;
-        std::vector<PositionalArg *> pos_args;
-        std::vector<Group *> groups;
-        ParseHookFunc parse_hook;
         std::string commands_help_header = "Commands:";
         std::string named_args_help_header = "Options:";
         std::string positional_args_help_header = "Arguments:";
     };
 
+    class CommandOrdinary : public Command {
+    public:
+        /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
+        void parse(const char * option, int argc, const char * const argv[]) override;
+
+        /// Registers (sub)command to the command.
+        /// An exception is thrown when a command with the same ID is already registered.
+        void register_command(Command * cmd) override;
+
+        /// Registers named argument to the command.
+        /// An exception is thrown when a named argument with the same ID is already registered.
+        void register_named_arg(NamedArg * arg) override;
+
+        /// Registers positional argument to the command.
+        /// An exception is thrown when a positional argument with the same ID is already registered.
+        void register_positional_arg(PositionalArg * arg) override;
+
+        void register_group(Group * grp) override;
+
+        /// Gets a list of registered commands.
+        const std::vector<Command *> & get_commands() const noexcept override { return cmds; }
+
+        /// Gets a list of registered named arguments.
+        const std::vector<NamedArg *> & get_named_args() const noexcept override { return named_args; }
+
+        /// Gets a list of registered positional arguments.
+        const std::vector<PositionalArg *> & get_positional_args() const noexcept override { return pos_args; }
+
+        /// Gets a list of registered groups.
+        const std::vector<Group *> & get_groups() const noexcept override { return groups; }
+
+        /// Returns (sub)command with given ID.
+        /// Exception CommandNotFound is thrown if command is not found.
+        Command & get_command(const std::string & id) const override;
+
+        /// Returns named argument with given ID.
+        /// Exception NamedArgNotFound is thrown if argument is not found.
+        NamedArg & get_named_arg(const std::string & id) const override;
+
+        /// Returns positional argument with given ID.
+        /// Exception PositionalArgNotFound is thrown if argument is not found.
+        PositionalArg & get_positional_arg(const std::string & id) const override;
+
+        /// Returns registered group with given ID.
+        /// Exception ArgumentParserNotFoundError is thrown if group is not found.
+        Group & get_group(const std::string & id) const override;
+
+        /// Sets the user function for parsing the argument.
+        void set_parse_hook_func(ParseHookFunc && func) override { parse_hook = std::move(func); }
+
+        /// Gets the user function for parsing the argument.
+        const ParseHookFunc & get_parse_hook_func() const noexcept override { return parse_hook; }
+
+    private:
+        friend class ArgumentParser;
+
+        CommandOrdinary(ArgumentParser & owner, const std::string & id) : Command(owner, id) {}
+
+        std::vector<Command *> cmds;
+        std::vector<NamedArg *> named_args;
+        std::vector<PositionalArg *> pos_args;
+        std::vector<Group *> groups;
+        ParseHookFunc parse_hook;
+    };
+
+    class CommandAlias : public Command {
+    public:
+        /// Parses input. The input may contain named arguments, (sub)commands and positional arguments.
+        void parse(const char * option, int argc, const char * const argv[]) override;
+
+        /// Registers (sub)command to the command.
+        /// An exception is thrown when a command with the same ID is already registered.
+        void register_command(Command * cmd) override { attached_command.register_command(cmd); }
+
+        /// Registers named argument to the command.
+        /// An exception is thrown when a named argument with the same ID is already registered.
+        void register_named_arg(NamedArg * arg) override { attached_command.register_named_arg(arg); }
+
+        /// Registers positional argument to the command.
+        /// An exception is thrown when a positional argument with the same ID is already registered.
+        void register_positional_arg(PositionalArg * arg) override { attached_command.register_positional_arg(arg); }
+
+        void register_group(Group * grp) override { attached_command.register_group(grp); }
+
+        /// Gets a list of registered commands.
+        const std::vector<Command *> & get_commands() const noexcept override {
+            return attached_command.get_commands();
+        }
+
+        /// Gets a list of registered named arguments.
+        const std::vector<NamedArg *> & get_named_args() const noexcept override {
+            return attached_command.get_named_args();
+        }
+
+        /// Gets a list of registered positional arguments.
+        const std::vector<PositionalArg *> & get_positional_args() const noexcept override {
+            return attached_command.get_positional_args();
+        }
+
+        /// Gets a list of registered groups.
+        const std::vector<Group *> & get_groups() const noexcept override { return attached_command.get_groups(); }
+
+        /// Returns (sub)command with given ID.
+        /// Exception CommandNotFound is thrown if command is not found.
+        Command & get_command(const std::string & id) const override { return attached_command.get_command(id); }
+
+        /// Returns named argument with given ID.
+        /// Exception NamedArgNotFound is thrown if argument is not found.
+        NamedArg & get_named_arg(const std::string & id) const override { return attached_command.get_named_arg(id); }
+
+        /// Returns positional argument with given ID.
+        /// Exception PositionalArgNotFound is thrown if argument is not found.
+        PositionalArg & get_positional_arg(const std::string & id) const override {
+            return attached_command.get_positional_arg(id);
+        }
+
+        /// Returns registered group with given ID.
+        /// Exception ArgumentParserNotFoundError is thrown if group is not found.
+        Group & get_group(const std::string & id) const override { return attached_command.get_group(id); }
+
+        /// Sets the user function for parsing the argument.
+        void set_parse_hook_func(ParseHookFunc && func) override {
+            attached_command.set_parse_hook_func(std::move(func));
+        }
+
+        /// Gets the user function for parsing the argument.
+        const ParseHookFunc & get_parse_hook_func() const noexcept override {
+            return attached_command.get_parse_hook_func();
+        }
+
+        /// Returns the Command to which the CommandAlias is attached.
+        Command & get_attached_command() noexcept { return attached_command; }
+
+        void attach_named_arg(const std::string & id_path, const std::string & value);
+
+    private:
+        friend class ArgumentParser;
+
+        CommandAlias(ArgumentParser & owner, const std::string & id, Command & attached_command)
+            : Command(owner, id),
+              attached_command(attached_command) {}
+
+        Command & attached_command;
+
+        // A command can invoke named arguments - for aliases
+        struct AttachedNamedArg {
+            std::string id_path;
+            std::string value;
+        };
+        std::vector<AttachedNamedArg> attached_named_args;
+    };
+
     /// Constructs a new command and stores it to the argument parser.
     /// Returns a pointer to the newly created command.
-    Command * add_new_command(const std::string & id);
+    CommandOrdinary * add_new_command(const std::string & id);
+
+    /// Constructs a new command alias and stores it to the argument parser.
+    /// Returns a pointer to the newly created command alias.
+    CommandAlias * add_new_command_alias(const std::string & id, Command & attached_command);
 
     /// Constructs a new named argument and stores it to the argument parser.
     /// Returns a pointer to the newly created named argument.

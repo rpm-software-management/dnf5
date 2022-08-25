@@ -36,7 +36,7 @@ void ArgumentParserTest::test_argument_parser() {
     ArgParser arg_parser;
     ArgParser::Command * selected_cmd{nullptr};
 
-    auto * test = arg_parser.add_new_command("test");
+    ArgParser::Command * test = arg_parser.add_new_command("test");
     test->set_description("Unit test for testing ArgumentParser");
     test->set_long_description("Tets is a unit test for testing ArgumentParser.");
     test->set_commands_help_header("List of commands:");
@@ -116,7 +116,7 @@ void ArgumentParserTest::test_argument_parser() {
     info->set_conflict_arguments(conflict_args);
     nevra->set_conflict_arguments(conflict_args);
 
-    auto * repoquery = arg_parser.add_new_command("repoquery");
+    ArgParser::Command * repoquery = arg_parser.add_new_command("repoquery");
     repoquery->set_description("search for packages matching keyword");
     repoquery->set_long_description("");
     repoquery->set_named_args_help_header("Optional arguments:");
