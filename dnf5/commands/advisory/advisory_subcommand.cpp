@@ -29,9 +29,6 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 void AdvisorySubCommand::set_argument_parser() {
-    auto & ctx = get_context();
-    auto & parser = ctx.get_argument_parser();
-
     all = std::make_unique<AdvisoryAllOption>(*this);
     available = std::make_unique<AdvisoryAvailableOption>(*this);
     installed = std::make_unique<AdvisoryInstalledOption>(*this);
@@ -50,13 +47,12 @@ void AdvisorySubCommand::set_argument_parser() {
     with_bz = std::make_unique<AdvisoryWithBzOption>(*this);
     with_cve = std::make_unique<AdvisoryWithCveOption>(*this);
 
-    auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-        new std::vector<ArgumentParser::Argument *>{all->arg, available->arg, installed->arg, updates->arg}));
-
-    all->arg->set_conflict_arguments(conflict_args);
-    available->arg->set_conflict_arguments(conflict_args);
-    installed->arg->set_conflict_arguments(conflict_args);
-    updates->arg->set_conflict_arguments(conflict_args);
+    all->arg->add_conflict_argument(*available->arg);
+    all->arg->add_conflict_argument(*installed->arg);
+    all->arg->add_conflict_argument(*updates->arg);
+    available->arg->add_conflict_argument(*installed->arg);
+    available->arg->add_conflict_argument(*updates->arg);
+    installed->arg->add_conflict_argument(*updates->arg);
 }
 
 // There can be multiple versions of kernel installed at the same time.

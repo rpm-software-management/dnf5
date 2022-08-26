@@ -110,11 +110,7 @@ void ArgumentParserTest::test_argument_parser() {
         keys_options);
     keys->set_description("List of keys to match");
 
-    auto * conflict_args = arg_parser.add_conflict_args_group(
-        std::unique_ptr<std::vector<ArgParser::Argument *>>(new std::vector<ArgParser::Argument *>{info, nevra}));
-
-    info->set_conflict_arguments(conflict_args);
-    nevra->set_conflict_arguments(conflict_args);
+    info->add_conflict_argument(*nevra);
 
     ArgParser::Command * repoquery = arg_parser.add_new_command("repoquery");
     repoquery->set_description("search for packages matching keyword");

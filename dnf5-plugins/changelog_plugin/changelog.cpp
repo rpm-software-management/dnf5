@@ -85,12 +85,9 @@ void ChangelogCommand::set_argument_parser() {
     keys->set_description("List of packages specifiers");
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, false, false); });
 
-    auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-        new std::vector<ArgumentParser::Argument *>{since, count, upgrades}));
-
-    since->set_conflict_arguments(conflict_args);
-    count->set_conflict_arguments(conflict_args);
-    upgrades->set_conflict_arguments(conflict_args);
+    since->add_conflict_argument(*count);
+    since->add_conflict_argument(*upgrades);
+    count->add_conflict_argument(*upgrades);
 
     cmd.register_named_arg(since);
     cmd.register_named_arg(count);

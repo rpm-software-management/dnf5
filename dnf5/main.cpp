@@ -227,14 +227,7 @@ void RootCommand::set_argument_parser() {
     no_best->link_value(&config.best());
     global_options_group->register_argument(no_best);
 
-    auto best_conflict_args = parser.add_conflict_args_group(
-        std::unique_ptr<std::vector<ArgumentParser::Argument *>>(new std::vector<ArgumentParser::Argument *>{no_best}));
-
-    auto no_best_conflict_args = parser.add_conflict_args_group(
-        std::unique_ptr<std::vector<ArgumentParser::Argument *>>(new std::vector<ArgumentParser::Argument *>{best}));
-
-    best->set_conflict_arguments(best_conflict_args);
-    no_best->set_conflict_arguments(no_best_conflict_args);
+    no_best->add_conflict_argument(*best);
 
     no_best->add_alias("nobest", "nobest", '\0', options_aliases_group);
 
@@ -339,15 +332,8 @@ void RootCommand::set_argument_parser() {
         });
     global_options_group->register_argument(repo_ids);
 
-    auto ed_repo_conflict_args =
-        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{repo_ids}));
-    enable_repo_ids->set_conflict_arguments(ed_repo_conflict_args);
-    disable_repo_ids->set_conflict_arguments(ed_repo_conflict_args);
-
-    auto repo_conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-        new std::vector<ArgumentParser::Argument *>{enable_repo_ids, disable_repo_ids}));
-    repo_ids->set_conflict_arguments(repo_conflict_args);
+    repo_ids->add_conflict_argument(*enable_repo_ids);
+    repo_ids->add_conflict_argument(*disable_repo_ids);
 
     enable_repo_ids->add_alias("enablerepo", "enablerepo", '\0', options_aliases_group);
     disable_repo_ids->add_alias("disablerepo", "disablerepo", '\0', options_aliases_group);
@@ -411,16 +397,8 @@ void RootCommand::set_argument_parser() {
         });
     global_options_group->register_argument(disable_plugins_names);
 
-    auto ed_plugins_names_conflict_args =
-        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{no_plugins}));
-    enable_plugins_names->set_conflict_arguments(ed_plugins_names_conflict_args);
-    disable_plugins_names->set_conflict_arguments(ed_plugins_names_conflict_args);
-
-    auto no_plugins_conflict_args =
-        parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-            new std::vector<ArgumentParser::Argument *>{enable_plugins_names, disable_plugins_names}));
-    no_plugins->set_conflict_arguments(no_plugins_conflict_args);
+    no_plugins->add_conflict_argument(*enable_plugins_names);
+    no_plugins->add_conflict_argument(*disable_plugins_names);
 
     no_plugins->add_alias("noplugins", "noplugins", '\0', options_aliases_group);
     enable_plugins_names->add_alias("enableplugin", "enableplugin", '\0', options_aliases_group);
