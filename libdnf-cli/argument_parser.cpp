@@ -78,6 +78,45 @@ ArgumentParser::Argument::Argument(ArgumentParser & owner, std::string id) : own
     this->id = std::move(id);
 }
 
+void ArgumentParser::Argument::add_conflict_argument(ArgumentParser::Argument & conflict_arg) {
+    auto add_conflict = [](Argument & arg, Argument & conflict_arg) {
+        if (arg.conflict_args) {
+            auto it = std::find(arg.conflict_args->begin(), arg.conflict_args->end(), &conflict_arg);
+            if (it == arg.conflict_args->end()) {
+                arg.conflict_args->push_back(&conflict_arg);
+            }
+        } else {
+            // Creates a new group of conflict arguments if it does not exist
+            arg.conflict_args = arg.owner.add_conflict_args_group(std::make_unique<std::vector<Argument *>>());
+            arg.conflict_args->push_back(&conflict_arg);
+        }
+    };
+
+    // Adds forward conflict
+    add_conflict(*this, conflict_arg);
+
+    // Adds reverse (back) conflict
+    add_conflict(conflict_arg, *this);
+}
+
+void ArgumentParser::Argument::add_conflict_arguments_from_another(Argument & src_arg) {
+    // Return immediately if there are no conflicting arguments in the source argument or it is a self-assignment.
+    if (!src_arg.conflict_args || &src_arg == this) {
+        return;
+    }
+
+    for (std::size_t idx = 0; idx < src_arg.conflict_args->size(); ++idx) {
+        auto * conflict_arg = (*src_arg.conflict_args)[idx];
+
+        // Don't add a conflict to the argument itself and to the source argument.
+        if (conflict_arg == this || conflict_arg == &src_arg) {
+            continue;
+        }
+
+        add_conflict_argument(*conflict_arg);
+    }
+}
+
 ArgumentParser::Argument * ArgumentParser::Argument::get_conflict_argument() const noexcept {
     if (conflict_args) {
         for (auto * arg : *conflict_args) {
