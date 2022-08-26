@@ -911,36 +911,7 @@ libdnf::cli::ArgumentParser::NamedArg * ArgumentParser::NamedArg::add_alias(
         group->register_argument(alias);
     }
 
-    if (conflict_args) {
-        // Create a new conflict group for the alias
-        auto tmp_conflict_args = owner.add_conflict_args_group(std::make_unique<std::vector<Argument *>>());
-        alias->set_conflict_arguments(tmp_conflict_args);
-
-        for (std::size_t idx = 0; idx < conflict_args->size(); ++idx) {
-            auto * conflict_arg = (*conflict_args)[idx];
-
-            // Do not add the alias as a conflict for the aliased argument
-            if (conflict_arg == this) {
-                continue;
-            }
-
-            tmp_conflict_args->push_back(conflict_arg);
-
-            // Set reverse conflicts to alias
-            auto * conflict_conflict_args = conflict_arg->get_conflict_arguments();
-            if (conflict_conflict_args) {
-                auto it = std::find(conflict_conflict_args->begin(), conflict_conflict_args->end(), alias);
-                if (it == conflict_conflict_args->end()) {
-                    conflict_conflict_args->push_back(alias);
-                }
-            } else {
-                conflict_conflict_args = get_argument_parser().add_conflict_args_group(
-                    std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-                        new std::vector<ArgumentParser::Argument *>{alias}));
-                conflict_arg->set_conflict_arguments(conflict_conflict_args);
-            }
-        }
-    }
+    alias->add_conflict_arguments_from_another(*this);
 
     return alias;
 }
