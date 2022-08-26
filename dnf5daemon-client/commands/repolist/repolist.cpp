@@ -73,13 +73,9 @@ RepolistCommand::RepolistCommand(Command & parent, const char * command)
         patterns_options);
     repos->set_description("List of repos to show");
 
-    auto conflict_args =
-        parser.add_conflict_args_group(std::unique_ptr<std::vector<libdnf::cli::ArgumentParser::Argument *>>(
-            new std::vector<libdnf::cli::ArgumentParser::Argument *>{all, enabled, disabled}));
-
-    all->set_conflict_arguments(conflict_args);
-    enabled->set_conflict_arguments(conflict_args);
-    disabled->set_conflict_arguments(conflict_args);
+    all->add_conflict_argument(*enabled);
+    all->add_conflict_argument(*disabled);
+    enabled->add_conflict_argument(*disabled);
 
     cmd.set_description("display the configured software repositories");
 

@@ -92,11 +92,7 @@ void RepoqueryCommand::set_argument_parser() {
         }
     });
 
-    auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-        new std::vector<ArgumentParser::Argument *>{info, nevra}));
-
-    info->set_conflict_arguments(conflict_args);
-    nevra->set_conflict_arguments(conflict_args);
+    info->add_conflict_argument(*nevra);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);

@@ -27,9 +27,6 @@ using namespace libdnf::cli;
 
 //TODO(amatej): Find a different way of sharing code rather than repoinfo inheriting from repolist
 void RepoListCommand::set_argument_parser() {
-    auto & ctx = get_context();
-    auto & parser = ctx.get_argument_parser();
-
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("List repositories");
 
@@ -38,12 +35,9 @@ void RepoListCommand::set_argument_parser() {
     disabled = std::make_unique<RepoDisabledOption>(*this);
     repo_specs = std::make_unique<RepoSpecArguments>(*this);
 
-    auto conflict_args = parser.add_conflict_args_group(std::unique_ptr<std::vector<ArgumentParser::Argument *>>(
-        new std::vector<ArgumentParser::Argument *>{all->arg, enabled->arg, disabled->arg}));
-
-    all->arg->set_conflict_arguments(conflict_args);
-    enabled->arg->set_conflict_arguments(conflict_args);
-    disabled->arg->set_conflict_arguments(conflict_args);
+    all->arg->add_conflict_argument(*enabled->arg);
+    all->arg->add_conflict_argument(*disabled->arg);
+    enabled->arg->add_conflict_argument(*disabled->arg);
 }
 
 void RepoListCommand::run() {
