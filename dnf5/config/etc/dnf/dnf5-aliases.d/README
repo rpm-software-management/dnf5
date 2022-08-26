@@ -1,0 +1,2 @@
+All files in this directory with the extension ".conf" are loaded as alias definitions
+of the dnf5 command line arguments. The files are loaded in alphabetical order.
