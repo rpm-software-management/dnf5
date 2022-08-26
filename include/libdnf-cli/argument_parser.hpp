@@ -168,6 +168,12 @@ public:
         /// Can contain this argument. Groups of conflicting argument can be used.
         void set_conflict_arguments(std::vector<Argument *> * args) noexcept { conflict_args = args; }
 
+        /// Adds a conflicting argument. Also adds reverse conflict.
+        void add_conflict_argument(Argument & conflict_arg);
+
+        /// Add conflict arguments from another argument. Also adds reverse conflicts.
+        void add_conflict_arguments_from_another(Argument & src_arg);
+
         /// Gets argument id.
         const std::string & get_id() const noexcept { return id; }
 
