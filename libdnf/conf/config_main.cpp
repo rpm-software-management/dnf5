@@ -23,8 +23,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "config_utils.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
-#include "utils/xdg.hpp"
 
+#include "libdnf/common/xdg.hpp"
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/const.hpp"
 
@@ -177,7 +177,7 @@ class ConfigMain::Impl {
     OptionPath system_cachedir{SYSTEM_CACHEDIR};
     OptionBool cacheonly{false};
     OptionBool keepcache{false};
-    OptionPath logdir{geteuid() == 0 ? "/var/log" : libdnf::utils::xdg::get_user_data_dir() / "dnf"};
+    OptionPath logdir{geteuid() == 0 ? "/var/log" : libdnf::xdg::get_user_data_dir() / "dnf"};
     OptionNumber<std::int32_t> log_size{1024 * 1024, str_to_bytes};
     OptionNumber<std::int32_t> log_rotate{4, 0};
     OptionPath debugdir{"./debugdata"};
@@ -280,7 +280,7 @@ class ConfigMain::Impl {
     // Repo main config
 
     OptionNumber<std::uint32_t> retries{10};
-    OptionPath cachedir{geteuid() == 0 ? SYSTEM_CACHEDIR : libdnf::utils::xdg::get_user_cache_dir() / "dnf"};
+    OptionPath cachedir{geteuid() == 0 ? SYSTEM_CACHEDIR : libdnf::xdg::get_user_cache_dir() / "dnf"};
     OptionBool fastestmirror{false};
     OptionStringList excludepkgs{std::vector<std::string>{}};
     OptionStringList includepkgs{std::vector<std::string>{}};
