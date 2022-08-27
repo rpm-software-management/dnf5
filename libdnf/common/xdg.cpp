@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "xdg.hpp"
+#include "libdnf/common/xdg.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 
@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <cstdlib>
 
-namespace libdnf::utils::xdg {
+namespace libdnf::xdg {
 
 std::filesystem::path get_user_home_dir() {
     const char * dir = std::getenv("HOME");
@@ -88,4 +88,4 @@ std::filesystem::path get_user_runtime_dir() {
     throw RuntimeError(M_("get_user_runtime_dir(): Cannot determine the user's runtime directory"));
 }
 
-}  // namespace libdnf::utils::xdg
+}  // namespace libdnf::xdg

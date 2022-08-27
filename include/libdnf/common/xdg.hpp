@@ -17,12 +17,12 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_UTILS_XDG_HPP
-#define LIBDNF_UTILS_XDG_HPP
+#ifndef LIBDNF_COMMON_XDG_HPP
+#define LIBDNF_COMMON_XDG_HPP
 
 #include <filesystem>
 
-namespace libdnf::utils::xdg {
+namespace libdnf::xdg {
 
 /// Returns user home directory.
 std::filesystem::path get_user_home_dir();
@@ -44,6 +44,6 @@ std::filesystem::path get_user_data_dir();
 /// (such as sockets, named pipes, ...) should be stored.
 std::filesystem::path get_user_runtime_dir();
 
-}  // namespace libdnf::utils::xdg
+}  // namespace libdnf::xdg
 
 #endif
