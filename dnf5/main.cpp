@@ -49,6 +49,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/exit-codes.hpp>
 #include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
+#include <libdnf/common/xdg.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
 #include <libdnf/logger/stream_logger.hpp>
 #include <string.h>
@@ -488,6 +489,7 @@ void RootCommand::register_subcommands() {
 
     load_cmdline_aliases(context, INSTALL_PREFIX "/lib/dnf5/aliases.d");
     load_cmdline_aliases(context, SYSCONFIG_DIR "/dnf/dnf5-aliases.d");
+    load_cmdline_aliases(context, libdnf::xdg::get_user_config_dir() / "dnf5/aliases.d");
 }
 
 }  // namespace dnf5
