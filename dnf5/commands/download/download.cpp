@@ -43,6 +43,28 @@ void DownloadCommand::set_argument_parser() {
         patterns_to_download_options);
     keys->set_description("List of keys to match");
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, false, false); });
+
+    resolve_option = dynamic_cast<libdnf::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+
+    alldeps_option = dynamic_cast<libdnf::OptionBool *>(
+        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
+
+    auto resolve = parser.add_new_named_arg("resolve");
+    resolve->set_long_name("resolve");
+    resolve->set_description("Resolve and download needed dependencies");
+    resolve->set_const_value("true");
+    resolve->link_value(resolve_option);
+
+    auto alldeps = parser.add_new_named_arg("alldeps");
+    alldeps->set_long_name("alldeps");
+    alldeps->set_description(
+        "When running with --resolve, download all dependencies (do not exclude already installed ones)");
+    alldeps->set_const_value("true");
+    alldeps->link_value(alldeps_option);
+
+    cmd.register_named_arg(resolve);
+    cmd.register_named_arg(alldeps);
     cmd.register_positional_arg(keys);
 }
 
@@ -56,13 +78,18 @@ void DownloadCommand::configure() {
     }
 
     context.update_repo_load_flags_from_specs(pkg_specs);
-    context.set_load_system_repo(false);
+    if (resolve_option->get_value() && !alldeps_option->get_value()) {
+        context.set_load_system_repo(true);
+    } else {
+        context.set_load_system_repo(false);
+    }
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
 void DownloadCommand::run() {
     auto & ctx = get_context();
 
+    std::vector<libdnf::rpm::Package> download_pkgs;
     libdnf::rpm::PackageSet result_pset(ctx.base);
     libdnf::rpm::PackageQuery full_package_query(ctx.base);
     for (auto & pattern : *patterns_to_download_options) {
@@ -71,13 +98,36 @@ void DownloadCommand::run() {
         package_query.resolve_pkg_spec(option->get_value(), {}, true);
         result_pset |= package_query;
     }
-
-    std::vector<libdnf::rpm::Package> download_pkgs;
-    download_pkgs.reserve(result_pset.size());
-    for (auto package : result_pset) {
-        download_pkgs.push_back(std::move(package));
+    if (resolve_option->get_value()) {
+        auto goal = std::make_unique<libdnf::Goal>(ctx.base);
+        libdnf::GoalJobSettings settings;
+        for (auto pkg : result_pset) {
+            goal->add_rpm_install(pkg, settings);
+        }
+        auto transaction = goal->resolve();
+        auto transaction_problems = transaction.get_problems();
+        if (transaction_problems != libdnf::GoalProblem::NO_PROBLEM) {
+            if (transaction_problems != libdnf::GoalProblem::NOT_FOUND) {
+                throw GoalResolveError(transaction);
+            }
+        }
+        download_pkgs.reserve(transaction.get_transaction_packages().size());
+        for (auto & tspkg : transaction.get_transaction_packages()) {
+            if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+                tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
+                download_pkgs.push_back(tspkg.get_package());
+            }
+        }
+    } else {
+        download_pkgs.reserve(result_pset.size());
+        for (auto package : result_pset) {
+            download_pkgs.push_back(std::move(package));
+        }
     }
-    download_packages(download_pkgs, ".");
+
+    if (!download_pkgs.empty()) {
+        download_packages(download_pkgs, ".");
+    }
 }
 
 }  // namespace dnf5
