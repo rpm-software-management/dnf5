@@ -17,30 +17,35 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "history_list.hpp"
 
-#include "transaction_id.hpp"
+#ifndef DNF5_COMMANDS_HISTORY_TRANSACTION_ID_HPP
+#define DNF5_COMMANDS_HISTORY_TRANSACTION_ID_HPP
 
-#include <libdnf-cli/output/transactionlist.hpp>
+#include "libdnf/common/exception.hpp"
+#include "libdnf/transaction/transaction_history.hpp"
 
-#include <iostream>
+#include <cstdint>
+#include <string>
+#include <utility>
 
 
 namespace dnf5 {
 
-using namespace libdnf::cli;
 
-void HistoryListCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("List transactions");
+class InvalidIdRangeError : public libdnf::Error {
+public:
+    InvalidIdRangeError(const std::string & id_range);
 
-    transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
-}
+    const char * get_domain_name() const noexcept override { return "dnf5"; }
+    const char * get_name() const noexcept override { return "InvalidIdRangeError"; }
+};
 
-void HistoryListCommand::run() {
-    auto transactions =
-        list_transactions_from_specs(*get_context().base.get_transaction_history(), transaction_specs->get_value());
 
-    libdnf::cli::output::print_transaction_list(transactions);
-}
+std::vector<libdnf::transaction::Transaction> list_transactions_from_specs(
+    libdnf::transaction::TransactionHistory & ts_history, const std::vector<std::string> & specs);
+
 
 }  // namespace dnf5
+
+
+#endif  // DNF5_COMMANDS_HISTORY_TRANSACTION_ID_HPP
