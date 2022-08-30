@@ -30,7 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-CompsEnvironment::CompsEnvironment(Transaction & trans) : TransactionItem::TransactionItem(trans) {}
+CompsEnvironment::CompsEnvironment(const Transaction & trans) : TransactionItem::TransactionItem(trans) {}
 
 
 /*
@@ -70,11 +70,8 @@ CompsEnvironmentItem::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr con
 */
 
 
-CompsEnvironmentGroup::CompsEnvironmentGroup(CompsEnvironment & environment) : environment(environment) {}
-
-
 CompsEnvironmentGroup & CompsEnvironment::new_group() {
-    return groups.emplace_back(*this);
+    return groups.emplace_back();
 }
 
 

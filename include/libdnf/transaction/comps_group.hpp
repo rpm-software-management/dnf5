@@ -40,7 +40,7 @@ class Transaction;
 /// @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupItem
 class CompsGroup : public TransactionItem {
 public:
-    explicit CompsGroup(Transaction & trans);
+    explicit CompsGroup(const Transaction & trans);
 
     /// Get text id of the group (xml element: <comps><group><id>VALUE</id>...)
     ///
@@ -116,8 +116,6 @@ private:
 /// @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupPackage
 class CompsGroupPackage {
 public:
-    explicit CompsGroupPackage(CompsGroup & group);
-
     /// Get database id (primary key)
     ///
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getId()
@@ -162,17 +160,11 @@ public:
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setPackageType(libdnf::PackageType value)
     void set_package_type(libdnf::comps::PackageType value) { package_type = value; }
 
-    /// Get the group the package is part of
-    ///
-    /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getGroup()
-    const CompsGroup & get_group() const noexcept { return group; }
-
 private:
     int64_t id = 0;
     std::string name;
     bool installed = false;
     libdnf::comps::PackageType package_type = libdnf::comps::PackageType::DEFAULT;
-    CompsGroup & group;
 };
 
 }  // namespace libdnf::transaction

@@ -33,7 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-Package::Package(Transaction & trans) : TransactionItem::TransactionItem(trans) {}
+Package::Package(const Transaction & trans) : TransactionItem::TransactionItem(trans) {}
 
 
 uint32_t Package::get_epoch_int() const {

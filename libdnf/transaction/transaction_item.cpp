@@ -39,7 +39,7 @@ std::string TransactionItem::get_action_short() {
 }
 
 
-TransactionItem::TransactionItem(Transaction & trans) : trans{trans} {}
+TransactionItem::TransactionItem(const Transaction & trans) : trans{&trans} {}
 
 
 bool TransactionItem::is_inbound_action() const {
@@ -51,6 +51,11 @@ bool TransactionItem::is_outbound_action() const {
     return transaction_item_action_is_outbound(action);
 }
 
+
+const Transaction & TransactionItem::get_transaction() const {
+    libdnf_assert(trans, "Transaction in TransactionItem was not set.");
+    return *trans;
+}
 
 /*
 void
