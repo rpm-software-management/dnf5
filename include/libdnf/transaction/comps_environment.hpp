@@ -40,7 +40,7 @@ class Transction;
 /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:class:CompsEnvironmentItem
 class CompsEnvironment : public TransactionItem {
 public:
-    explicit CompsEnvironment(Transaction & trans);
+    explicit CompsEnvironment(const Transaction & trans);
 
     /// Get text id of the environment (xml element: <comps><environment><id>VALUE</id>...)
     ///
@@ -115,8 +115,6 @@ private:
 /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:class:CompsEnvironmentGroup
 class CompsEnvironmentGroup {
 public:
-    explicit CompsEnvironmentGroup(CompsEnvironment & environment);
-
     /// Get database id (primary key)
     ///
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentGroup.getId()
@@ -157,17 +155,11 @@ public:
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentGroup.setGroupType(libdnf::CompsPackageType value)
     void set_group_type(libdnf::comps::PackageType value) { group_type = value; }
 
-    /// Get the environment the group is part of
-    ///
-    /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentGroup.getEnvironment()
-    const CompsEnvironment & get_environment() const noexcept { return environment; }
-
 private:
     int64_t id = 0;
     std::string group_id;
     bool installed = false;
     libdnf::comps::PackageType group_type;
-    CompsEnvironment & environment;
 };
 
 }  // namespace libdnf::transaction

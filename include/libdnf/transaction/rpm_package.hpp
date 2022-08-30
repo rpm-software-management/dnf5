@@ -38,7 +38,7 @@ class Transaction;
 /// @replaces libdnf:transaction/RPMItem.hpp:class:RPMItem
 class Package : public TransactionItem {
 public:
-    explicit Package(Transaction & trans);
+    explicit Package(const Transaction & trans);
 
     /// Get package name
     ///

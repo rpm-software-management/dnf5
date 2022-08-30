@@ -38,7 +38,7 @@ public:
     using Reason = TransactionItemReason;
     using State = TransactionItemState;
 
-    explicit TransactionItem(Transaction & trans);
+    explicit TransactionItem(const Transaction & trans);
 
     /// Get database id (primary key) of the transaction item (table 'trans_item')
     int64_t get_id() const noexcept { return id; }
@@ -124,7 +124,7 @@ public:
     // TODO(dmach): Review and bring back if needed
     //void saveState();
 
-    Transaction & get_transaction() { return trans; }
+    const Transaction & get_transaction() const;
 
 protected:
     int64_t id = 0;
@@ -135,7 +135,12 @@ protected:
 
     int64_t item_id = 0;
 
-    Transaction & trans;
+    // TODO(lukash) this won't be safe in bindings (or in general when a
+    // TransactionItem is kept around after a Transaction is destroyed), but we
+    // can't easily use a WeakPtr here, since the Transactions are expected to
+    // be at least movable, and the WeakPtrGuard would make the Transaction
+    // unmovable
+    const Transaction * trans = nullptr;
 
     // TODO(dmach): Reimplement in Package class; it's most likely not needed in Comps{Group,Environment}
     // std::vector< TransactionItemPtr > replacedBy;

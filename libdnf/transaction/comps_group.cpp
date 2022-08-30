@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-CompsGroup::CompsGroup(Transaction & trans) : TransactionItem::TransactionItem(trans) {}
+CompsGroup::CompsGroup(const Transaction & trans) : TransactionItem::TransactionItem(trans) {}
 
 
 /*
@@ -72,11 +72,8 @@ CompsGroup::getTransactionItemsByPattern(libdnf::utils::SQLite3Ptr conn, const s
 */
 
 CompsGroupPackage & CompsGroup::new_package() {
-    return packages.emplace_back(*this);
+    return packages.emplace_back();
 }
-
-
-CompsGroupPackage::CompsGroupPackage(CompsGroup & group) : group(group) {}
 
 
 }  // namespace libdnf::transaction
