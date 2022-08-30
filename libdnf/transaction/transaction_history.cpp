@@ -38,6 +38,10 @@ Transaction TransactionHistory::new_transaction() {
     return Transaction(base);
 }
 
+std::vector<int64_t> TransactionHistory::list_transaction_ids() {
+    return select_transaction_ids(base);
+}
+
 std::vector<Transaction> TransactionHistory::list_transactions(const std::vector<int64_t> & ids) {
     return select_transactions_by_ids(base, ids);
 }

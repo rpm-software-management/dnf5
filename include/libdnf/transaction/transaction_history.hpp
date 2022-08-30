@@ -43,6 +43,12 @@ public:
 
     TransactionHistoryWeakPtr get_weak_ptr() { return TransactionHistoryWeakPtr(this, &guard); }
 
+    /// Lists all transaction IDs from the transaction history database. The
+    /// result is sorted in ascending order.
+    ///
+    /// @return The list of transaction IDs.
+    std::vector<int64_t> list_transaction_ids();
+
     /// Lists transactions from the transaction history for transaction ids in `ids`.
     ///
     /// @param ids The ids to list.
