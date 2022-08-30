@@ -51,7 +51,7 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
     std::map<std::string, std::vector<std::pair<std::string_view, Id>>> available_map;
     Id solvable_id;
     Solvable * solvable;
-    std::pair<std::string_view, std::string> solvable_name_pair;
+    std::pair<std::string, std::string> solvable_name_pair;
     std::string_view repoid;
 
     // Loop over all solvables
