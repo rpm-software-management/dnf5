@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "history_info.hpp"
 
+#include "transaction_id.hpp"
+
 #include <libdnf-cli/output/transactioninfo.hpp>
 
 #include <iostream>
@@ -34,21 +36,10 @@ void HistoryInfoCommand::set_argument_parser() {
 }
 
 void HistoryInfoCommand::run() {
-    auto & ctx = get_context();
+    auto transactions =
+        list_transactions_from_specs(*get_context().base.get_transaction_history(), transaction_specs->get_value());
 
-    auto specs_str = transaction_specs->get_value();
-
-    std::vector<int64_t> spec_ids;
-
-    // TODO(lukash) proper transaction id parsing
-    std::transform(specs_str.begin(), specs_str.end(), std::back_inserter(spec_ids), [](const std::string & spec) {
-        return std::stol(spec);
-    });
-
-    auto ts_hist = ctx.base.get_transaction_history();
-    auto ts_list = spec_ids.empty() ? ts_hist->list_all_transactions() : ts_hist->list_transactions(spec_ids);
-
-    for (auto ts : ts_list) {
+    for (auto ts : transactions) {
         libdnf::cli::output::print_transaction_info(ts);
         std::cout << std::endl;
     }
