@@ -35,6 +35,10 @@ namespace libdnf::transaction {
 class Transaction;
 
 
+/// Selects all transaction IDs, sorting in ascending order.
+std::vector<int64_t> select_transaction_ids(const BaseWeakPtr & base);
+
+
 /// Selects transactions using a list of ids, in case `ids` is empty, selects all transactions.
 std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, const std::vector<int64_t> & ids);
 

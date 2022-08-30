@@ -45,6 +45,21 @@ static constexpr const char * select_sql = R"**(
 )**";
 
 
+std::vector<int64_t> select_transaction_ids(const BaseWeakPtr & base) {
+    auto conn = transaction_db_connect(*base);
+
+    auto query = libdnf::utils::SQLite3::Query(*conn, "SELECT \"id\" FROM \"trans\" ORDER BY \"id\"");
+
+    std::vector<int64_t> res;
+
+    while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
+        res.push_back(query.get<int64_t>("id"));
+    }
+
+    return res;
+}
+
+
 static std::vector<Transaction> load_from_select(const BaseWeakPtr & base, libdnf::utils::SQLite3::Query & query) {
     std::vector<Transaction> res;
 
