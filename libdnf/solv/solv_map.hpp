@@ -246,7 +246,7 @@ inline ConstMapIterator & ConstMapIterator::operator++() noexcept {
         unsigned char byte = *map_current;
 
         // reset previously seen bits to 0
-        byte >>= (current_value & 7) + 1;
+        byte = static_cast<unsigned char>(byte >> ((current_value & 7) + 1));
 
         auto bit = ffs(byte << ((current_value & 7) + 1));
         if (bit) {
