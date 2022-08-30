@@ -50,7 +50,7 @@ void ModuleTest::test_load() {
         module_yaml_file.close();
     }
 
-    auto module_item_container = new ModuleItemContainer(base);
+    auto module_item_container = std::make_unique<ModuleItemContainer>(base);
     module_item_container->add(module_yaml_string, "repomd-modules");
     module_item_container->add_modules_without_static_context();
     CPPUNIT_ASSERT_EQUAL(3lu, module_item_container->modules.size());
