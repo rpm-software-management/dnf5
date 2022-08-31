@@ -48,6 +48,7 @@ KeyValueTable::KeyValueTable() {
     scols_symbols_set_right(sy, "  ");
     scols_symbols_set_vertical(sy, "");
     scols_table_set_symbols(tb, sy);
+    scols_unref_symbols(sy);
 }
 
 
