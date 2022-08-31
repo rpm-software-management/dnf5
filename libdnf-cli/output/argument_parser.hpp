@@ -49,6 +49,7 @@ public:
         scols_symbols_set_right(sb, "  ");
         scols_symbols_set_vertical(sb, "  ");
         scols_table_set_symbols(table, sb);
+        scols_unref_symbols(sb);
 
         scols_table_set_column_separator(table, "  ");
         scols_table_new_column(table, "arg", 30, SCOLS_FL_TREE | SCOLS_FL_WRAP);

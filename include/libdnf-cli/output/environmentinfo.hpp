@@ -89,6 +89,7 @@ static struct libscols_table * create_environmentinfo_table(EnvironmentType & en
     scols_symbols_set_right(sy, "  ");
     scols_symbols_set_vertical(sy, "");
     scols_table_set_symbols(table, sy);
+    scols_unref_symbols(sy);
 
     add_line_into_environmentinfo_table(table, "Id", environment.get_environmentid().c_str(), "bold");
     add_line_into_environmentinfo_table(table, "Name", environment.get_name().c_str());

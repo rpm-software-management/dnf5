@@ -102,6 +102,7 @@ static struct libscols_table * create_groupinfo_table(GroupType & group) {
     scols_symbols_set_right(sy, "  ");
     scols_symbols_set_vertical(sy, "");
     scols_table_set_symbols(table, sy);
+    scols_unref_symbols(sy);
 
     add_line_into_groupinfo_table(table, "Id", group.get_groupid().c_str(), "bold");
     add_line_into_groupinfo_table(table, "Name", group.get_name().c_str());
