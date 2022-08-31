@@ -84,7 +84,8 @@ bool SolvRepo::can_use_solvfile_cache(fs::File & solvfile_cache) {
     int dnf_solv_userdata_len_read;
 
     int ret_code = solv_read_userdata(solvfile_cache.get(), &dnf_solv_userdata_read, &dnf_solv_userdata_len_read);
-    std::unique_ptr<SolvUserdata> solv_userdata(reinterpret_cast<SolvUserdata *>(dnf_solv_userdata_read));
+    std::unique_ptr<SolvUserdata, decltype(&solv_free)> solv_userdata(
+        reinterpret_cast<SolvUserdata *>(dnf_solv_userdata_read), &solv_free);
     if (ret_code != 0) {
         auto & pool = get_pool(base);
         logger.warning(
