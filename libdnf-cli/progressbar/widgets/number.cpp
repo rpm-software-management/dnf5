@@ -39,8 +39,8 @@ std::size_t NumberWidget::get_total_width() const noexcept {
 
 std::size_t NumberWidget::get_number_width() const {
     std::size_t result = std::max(
-        static_cast<std::size_t>(log10(get_bar()->get_number())),
-        static_cast<std::size_t>(log10(get_bar()->get_total())));
+        static_cast<std::size_t>((get_bar()->get_number() > 0) ? log10(get_bar()->get_number()) : 0),
+        static_cast<std::size_t>((get_bar()->get_total() > 0) ? log10(get_bar()->get_total()) : 0));
     return result + 1;
 }
 
