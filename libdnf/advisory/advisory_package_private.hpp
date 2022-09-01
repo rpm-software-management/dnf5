@@ -44,6 +44,10 @@ public:
     Id get_arch_id() const { return arch; };
     AdvisoryId get_advisory_id() const { return advisory; };
 
+    bool get_reboot_suggested() const { return reboot_suggested; };
+    bool get_restart_suggested() const { return restart_suggested; };
+    bool get_relogin_suggested() const { return relogin_suggested; };
+
     //TODO(amatej): Is this the correct name?
     /// Compare NEVRAs of two AdvisoryPackages
     ///
@@ -113,6 +117,9 @@ private:
         Id name,
         Id evr,
         Id arch,
+        bool reboot_suggested,
+        bool restart_suggested,
+        bool relogin_suggested,
         const char * filename);
 
     AdvisoryId advisory;
@@ -121,6 +128,11 @@ private:
     Id name;
     Id evr;
     Id arch;
+
+    bool reboot_suggested;
+    bool restart_suggested;
+    bool relogin_suggested;
+
     const char * filename;
     libdnf::BaseWeakPtr base;
 };

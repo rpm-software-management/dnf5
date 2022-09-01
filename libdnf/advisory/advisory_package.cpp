@@ -65,16 +65,13 @@ AdvisoryCollection AdvisoryPackage::get_advisory_collection() const {
     return AdvisoryCollection(p_impl->base, p_impl->get_advisory_id(), p_impl->owner_collection_index);
 }
 bool AdvisoryPackage::get_reboot_suggested() const {
-    //TODO(amatej): implement
-    return false;
+    return p_impl->get_reboot_suggested();
 }
 bool AdvisoryPackage::get_restart_suggested() const {
-    //TODO(amatej): implement
-    return false;
+    return p_impl->get_restart_suggested();
 }
 bool AdvisoryPackage::get_relogin_suggested() const {
-    //TODO(amatej): implement
-    return false;
+    return p_impl->get_relogin_suggested();
 }
 
 // AdvisoryPackage::Impl
@@ -85,12 +82,18 @@ AdvisoryPackage::Impl::Impl(
     Id name,
     Id evr,
     Id arch,
+    bool reboot_suggested,
+    bool restart_suggested,
+    bool relogin_suggested,
     const char * filename)
     : advisory(advisory),
       owner_collection_index(owner_collection_index),
       name(name),
       evr(evr),
       arch(arch),
+      reboot_suggested(reboot_suggested),
+      restart_suggested(restart_suggested),
+      relogin_suggested(relogin_suggested),
       filename(filename),
       base(base) {}
 
