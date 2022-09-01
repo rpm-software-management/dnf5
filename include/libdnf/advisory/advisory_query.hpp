@@ -34,9 +34,18 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::advisory {
 
+/// AdvisoryQuery is the only way how to acess advisories.
+/// It is constructed using Base and filled with advisories from enabled repositories in its RepoSack.
 class AdvisoryQuery : public AdvisorySet {
 public:
+    /// Create a new AdvisoryQuery instance.
+    ///
+    /// @param base     A weak pointer to Base
     explicit AdvisoryQuery(const BaseWeakPtr & base);
+
+    /// Create a new AdvisoryQuery instance.
+    ///
+    /// @param base     Reference to Base
     explicit AdvisoryQuery(Base & base);
 
     AdvisoryQuery(const AdvisoryQuery & src) = default;
@@ -47,21 +56,21 @@ public:
 
     ~AdvisoryQuery();
 
-    /// Filter Advisories by name
+    /// Filter Advisories by name.
     ///
     /// @param pattern      Pattern used when matching agains advisory names.
     /// @param cmp_type     What comparator to use with pattern, allows: EQ, GLOB, IGLOB.
     void filter_name(const std::string & pattern, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
     void filter_name(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    /// Filter Advisories by type
+    /// Filter Advisories by type.
     ///
     /// @param type         Possible types are: "security", "bugfix", "enhancement", "newpackage".
     /// @param cmp_type     What comparator to use with type, allows: EQ.
     void filter_type(const std::string & type, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
     void filter_type(const std::vector<std::string> & types, sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    /// Filter Advisories by reference
+    /// Filter Advisories by reference.
     ///
     /// @param pattern      Pattern to match with reference id.
     /// @param cmp_type     What comparator to use with pattern, allows: EQ, IEXACT, GLOB, IGLOB, CONTAINS, ICONTAINS.
@@ -75,7 +84,7 @@ public:
         sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ,
         const std::optional<std::string> type = {});
 
-    /// Filter Advisories by severity
+    /// Filter Advisories by severity.
     ///
     /// @param severity     Possible severities are: "critical", "important", "moderate", "low", "none".
     /// @param cmp_type     What comparator to use with severity, allows: EQ.
