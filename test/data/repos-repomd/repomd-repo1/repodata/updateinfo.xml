@@ -17,6 +17,7 @@
                 <module name="ethereum" stream="2.0" version="2" context="3b" arch="x86_64"/>
                 <package name="pkg" version="1.2" release="3" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
                     <filename>pkg-1.2-3.x86_64.rpm</filename>
+                    <reboot_suggested>True</reboot_suggested>
                 </package>
                 <package name="filesystem" version="3.9" release="2.fc29" epoch="0" arch="x86_64" src="https://the.url/the.package.rpm">
                     <filename>filesystem-3.9-2.fc29.x86_64.rpm</filename>

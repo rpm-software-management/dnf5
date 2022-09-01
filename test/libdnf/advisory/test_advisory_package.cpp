@@ -79,3 +79,18 @@ void AdvisoryAdvisoryPackageTest::test_get_advisory_collection() {
     size_t target_size = 2;
     CPPUNIT_ASSERT_EQUAL(target_size, out_pkgs.size());
 }
+
+void AdvisoryAdvisoryPackageTest::test_get_reboot_suggested() {
+    // Tests get_reboot_suggested method
+    CPPUNIT_ASSERT_EQUAL(true, packages[0].get_reboot_suggested());
+}
+
+void AdvisoryAdvisoryPackageTest::test_get_restart_suggested() {
+    // Tests get_restart_suggested method
+    CPPUNIT_ASSERT_EQUAL(false, packages[0].get_restart_suggested());
+}
+
+void AdvisoryAdvisoryPackageTest::test_get_relogin_suggested() {
+    // Tests get_relogin_suggested method
+    CPPUNIT_ASSERT_EQUAL(false, packages[0].get_relogin_suggested());
+}

@@ -25,8 +25,8 @@
     <open-size>52054</open-size>
   </data>
   <data type="updateinfo">
-    <checksum type="sha256">0bad6ed78db8e058e59eefddd20744d71219b736045b10821811180972f6d1fa</checksum>
-    <open-checksum type="sha256">0bad6ed78db8e058e59eefddd20744d71219b736045b10821811180972f6d1fa</open-checksum>
+    <checksum type="sha256">a1732db95964e07fef567552ca2c895702bdd02aba7110c855d85d2f6378c95c</checksum>
+    <open-checksum type="sha256">a1732db95964e07fef567552ca2c895702bdd02aba7110c855d85d2f6378c95c</open-checksum>
     <location href="repodata/updateinfo.xml" />
     <timestamp>1597222003</timestamp>
     <size>646</size>

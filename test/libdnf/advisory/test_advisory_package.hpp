@@ -39,6 +39,9 @@ class AdvisoryAdvisoryPackageTest : public BaseTestCase {
     CPPUNIT_TEST(test_get_advisory_id);
     CPPUNIT_TEST(test_get_advisory);
     CPPUNIT_TEST(test_get_advisory_collection);
+    CPPUNIT_TEST(test_get_reboot_suggested);
+    CPPUNIT_TEST(test_get_restart_suggested);
+    CPPUNIT_TEST(test_get_relogin_suggested);
 
     CPPUNIT_TEST_SUITE_END();
 
@@ -52,6 +55,9 @@ public:
     void test_get_advisory_id();
     void test_get_advisory();
     void test_get_advisory_collection();
+    void test_get_reboot_suggested();
+    void test_get_restart_suggested();
+    void test_get_relogin_suggested();
 
 private:
     std::vector<libdnf::advisory::AdvisoryPackage> packages;

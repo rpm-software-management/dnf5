@@ -73,19 +73,16 @@ public:
     AdvisoryId get_advisory_id() const;
 
     /// Get bool value whether reboot is suggested
-    ///TODO(amatej): not implemented
     ///
     /// @return Reboot suggestion of this advisory package as bool
     bool get_reboot_suggested() const;
 
     /// Get bool value whether restart is suggested
-    ///TODO(amatej): not implemented
     ///
     /// @return Restart suggestion of this advisory package as bool
     bool get_restart_suggested() const;
 
     /// Get bool value whether relogin is suggested
-    ///TODO(amatej): not implemented
     ///
     /// @return Relogin suggestion of this advisory package as bool
     bool get_relogin_suggested() const;

@@ -65,11 +65,23 @@ void AdvisoryCollection::get_packages(std::vector<AdvisoryPackage> & output, boo
                 Id name = pool.lookup_id(SOLVID_POS, UPDATE_COLLECTION_NAME);
                 Id evr = pool.lookup_id(SOLVID_POS, UPDATE_COLLECTION_EVR);
                 Id arch = pool.lookup_id(SOLVID_POS, UPDATE_COLLECTION_ARCH);
+                bool reboot_suggested = pool.lookup_void(SOLVID_POS, UPDATE_REBOOT);
+                bool restart_suggested = pool.lookup_void(SOLVID_POS, UPDATE_RESTART);
+                bool relogin_suggested = pool.lookup_void(SOLVID_POS, UPDATE_RELOGIN);
                 if (with_filemanes) {
                     filename = pool.lookup_str(SOLVID_POS, UPDATE_COLLECTION_FILENAME);
                 }
-                output.emplace_back(
-                    AdvisoryPackage(new AdvisoryPackage::Impl(base, advisory, index, name, evr, arch, filename)));
+                output.emplace_back(AdvisoryPackage(new AdvisoryPackage::Impl(
+                    base,
+                    advisory,
+                    index,
+                    name,
+                    evr,
+                    arch,
+                    reboot_suggested,
+                    restart_suggested,
+                    relogin_suggested,
+                    filename)));
             }
             dataiterator_free(&di_inner);
             break;
