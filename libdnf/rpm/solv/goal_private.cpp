@@ -337,10 +337,12 @@ libdnf::GoalProblem GoalPrivate::resolve() {
 
     init_solver(*pool, &libsolv_solver);
 
-    // Removal of SOLVER_WEAK to allow report errors
-    if (remove_solver_weak) {
+    // Remove SOLVER_WEAK and add SOLVER_BEST to all transactions to allow report skipped packages and best candidates
+    // with broken dependenies
+    if (run_in_strict_mode) {
         for (int i = 0; i < job.size(); i += 2) {
             job[i] &= ~SOLVER_WEAK;
+            job[i] |= SOLVER_FORCEBEST;
         }
     }
 

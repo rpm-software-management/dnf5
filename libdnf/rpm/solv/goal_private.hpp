@@ -102,7 +102,9 @@ public:
     void set_allow_erasing(bool value) { allow_erasing = value; }
     void set_allow_vendor_change(bool value) { allow_vendor_change = value; }
     void set_install_weak_deps(bool value) { install_weak_deps = value; }
-    void set_remove_solver_weak(bool value) { remove_solver_weak = value; }
+    /// Remove SOLVER_WEAK and add SOLVER_BEST to all jobs to allow report skipped packages and best candidates
+    /// with broken dependenies
+    void set_run_in_strict_mode(bool value) { run_in_strict_mode = value; }
     // TODO(jmracek)
     //     PackageSet listUnneeded();
     //     PackageSet listSuggested();
@@ -137,7 +139,8 @@ private:
     bool allow_erasing{false};
     bool allow_vendor_change{true};
     bool install_weak_deps{true};
-    bool remove_solver_weak{false};
+    // Remove SOLVER_WEAK and add SOLVER_BEST to all jobs
+    bool run_in_strict_mode{false};
 
     /// Return libdnf::GoalProblem::NO_PROBLEM when no problems in protected
     libdnf::GoalProblem protected_in_removals();
@@ -153,7 +156,7 @@ inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
       allow_erasing(src.allow_erasing),
       allow_vendor_change(src.allow_vendor_change),
       install_weak_deps(src.install_weak_deps),
-      remove_solver_weak(src.remove_solver_weak) {
+      run_in_strict_mode(src.run_in_strict_mode) {
     if (src.protected_packages) {
         protected_packages.reset(new libdnf::solv::SolvMap(*src.protected_packages));
     }
@@ -189,7 +192,7 @@ inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
         allow_erasing = src.allow_erasing;
         allow_vendor_change = src.allow_vendor_change;
         install_weak_deps = src.install_weak_deps;
-        remove_solver_weak = src.remove_solver_weak;
+        run_in_strict_mode = src.run_in_strict_mode;
     }
     return *this;
 }
