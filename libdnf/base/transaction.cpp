@@ -216,6 +216,16 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     auto solver_problems = process_solver_problems(base, solved_goal);
     if (!solver_problems.empty()) {
         add_resolve_log(GoalProblem::SOLVER_ERROR, solver_problems);
+    } else {
+        // TODO(jmracek) To improve performance add a test whether it make sence to resolve transaction in strict mode
+        // Test whether there were skipped jobs or used not the best candidates due to broken dependencies
+        rpm::solv::GoalPrivate solved_goal_copy(solved_goal);
+        solved_goal_copy.set_run_in_strict_mode(true);
+        solved_goal_copy.resolve();
+        auto solver_problems_strict = process_solver_problems(base, solved_goal_copy);
+        if (!solver_problems_strict.empty()) {
+            add_resolve_log(GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT, solver_problems_strict);
+        }
     }
     this->problems = problems;
     auto transaction = solved_goal.get_transaction();
