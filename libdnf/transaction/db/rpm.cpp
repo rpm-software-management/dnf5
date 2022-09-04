@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm.hpp"
 
 #include "item.hpp"
+#include "pkg_names.hpp"
 #include "trans_item.hpp"
 
 #include "libdnf/transaction/rpm_package.hpp"
@@ -38,7 +39,7 @@ static const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
         trans_item_state.name AS state,
         r.repoid,
         i.item_id,
-        i.name,
+        pkg_names.name,
         i.epoch,
         i.version,
         i.release,
@@ -49,6 +50,7 @@ static const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
     LEFT JOIN trans_item_action ON ti.action_id == trans_item_action.id
     LEFT JOIN trans_item_reason ON ti.reason_id == trans_item_reason.id
     LEFT JOIN trans_item_state ON ti.state_id == trans_item_state.id
+    LEFT JOIN pkg_names ON i.name_id == pkg_names.id
     WHERE ti.trans_id = ?
 )**";
 
@@ -76,14 +78,14 @@ static const char * SQL_RPM_INSERT = R"**(
     INSERT INTO
         rpm (
             item_id,
-            name,
+            name_id,
             epoch,
             version,
             release,
             arch
         )
     VALUES
-        (?, ?, ?, ?, ?, ?)
+        (?, (SELECT id FROM pkg_names WHERE name=?), ?, ?, ?, ?)
 )**";
 
 
@@ -108,8 +110,9 @@ static const char * SQL_RPM_SELECT_PK = R"**(
         item_id
     FROM
         rpm
+    LEFT JOIN pkg_names ON rpm.name_id = pkg_names.id
     WHERE
-        name=?
+        pkg_names.name=?
         AND epoch=?
         AND version=?
         AND release=?
@@ -138,13 +141,14 @@ int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package &
 static const char * SQL_RPM_SELECT = R"**(
     SELECT
         item_id,
-        name,
+        pkg_names.name,
         epoch,
         version,
         release,
         arch
     FROM
         rpm
+    LEFT JOIN pkg_names ON rpm.name_id = pkg_names.id
     WHERE
         item_id = ?
 )**";
@@ -192,6 +196,7 @@ std::vector<Package> get_transaction_packages(libdnf::utils::SQLite3 & conn, Tra
 void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     auto query_rpm_select_pk = rpm_select_pk_new_query(conn);
     auto query_item_insert = item_insert_new_query(conn);
+    auto query_pkg_name_insert_if_not_exists = pkg_names_insert_if_not_exists_new_query(conn);
     auto query_rpm_insert = rpm_insert_new_query(conn);
     auto query_trans_item_insert = trans_item_insert_new_query(conn);
 
@@ -200,6 +205,8 @@ void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & tr
         if (pkg.get_item_id() == 0) {
             // insert into 'item' table, create item_id
             pkg.set_item_id(item_insert(*query_item_insert));
+            // insert package name into 'pkg_names' table if not exists
+            pkg_names_insert_if_not_exists(*query_pkg_name_insert_if_not_exists, pkg.get_name());
             // insert into 'rpm' table
             rpm_insert(*query_rpm_insert, pkg);
         }

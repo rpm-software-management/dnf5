@@ -23,6 +23,11 @@ R"**(
         repoid TEXT NOT NULL            /* repository ID aka 'repoid' */
     );
 
+    CREATE TABLE pkg_names (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE
+    );
+
     CREATE TABLE console_output (
         id INTEGER PRIMARY KEY,
         trans_id INTEGER REFERENCES trans(id),
@@ -71,13 +76,14 @@ R"**(
     /* item: rpm */
     CREATE TABLE rpm (
         item_id INTEGER UNIQUE NOT NULL,
-        name TEXT NOT NULL,
+        name_id INTEGER NOT NULL,
         epoch INTEGER NOT NULL,                 /* empty epoch is stored as 0 */
         version TEXT NOT NULL,
         release TEXT NOT NULL,
         arch TEXT NOT NULL,
         FOREIGN KEY(item_id) REFERENCES item(id),
-        CONSTRAINT rpm_unique_nevra UNIQUE (name, epoch, version, release, arch)
+        FOREIGN KEY(name_id) REFERENCES pkg_names(id),
+        CONSTRAINT rpm_unique_nevra UNIQUE (name_id, epoch, version, release, arch)
     );
 
     /* item: comps-group */
@@ -120,7 +126,7 @@ R"**(
         CONSTRAINT comps_environment_group_unique_groupid UNIQUE (environment_id, groupid)
     );
 
-    CREATE INDEX rpm_name ON rpm(name);
+    CREATE INDEX pkg_name ON pkg_names(name);
     CREATE INDEX trans_item_trans_id ON trans_item(trans_id);
     CREATE INDEX trans_item_item_id ON trans_item(item_id);
 
