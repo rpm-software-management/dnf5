@@ -41,12 +41,6 @@ static Transaction create_transaction(libdnf::Base & base, int nr) {
     trans.set_user_id(1000);
     trans.set_cmdline("dnf install foo");
 
-    trans.add_runtime_package("rpm-4.14.2-1.fc29.x86_64");
-    trans.add_runtime_package("dnf-3.5.1-1.fc29.noarch");
-    // test adding a duplicate; only a single occurrence of the rpm is expected
-    trans.add_runtime_package("rpm-4.14.2-1.fc29.x86_64");
-    CPPUNIT_ASSERT_EQUAL(2UL, trans.get_runtime_packages().size());
-
     return trans;
 }
 
@@ -75,7 +69,6 @@ void TransactionTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(trans.get_user_id(), trans2.get_user_id());
     CPPUNIT_ASSERT_EQUAL(trans.get_cmdline(), trans2.get_cmdline());
     CPPUNIT_ASSERT_EQUAL(trans.get_state(), trans2.get_state());
-    CPPUNIT_ASSERT_EQUAL(2UL, trans2.get_runtime_packages().size());
 }
 
 
@@ -131,7 +124,6 @@ void TransactionTest::test_update() {
     CPPUNIT_ASSERT_EQUAL(trans.get_user_id(), trans2.get_user_id());
     CPPUNIT_ASSERT_EQUAL(trans.get_cmdline(), trans2.get_cmdline());
     CPPUNIT_ASSERT_EQUAL(trans.get_state(), trans2.get_state());
-    CPPUNIT_ASSERT_EQUAL(2UL, trans2.get_runtime_packages().size());
 }
 
 
@@ -192,7 +184,6 @@ void TransactionTest::test_select_all() {
     CPPUNIT_ASSERT_EQUAL(trans1.get_user_id(), trans1_loaded.get_user_id());
     CPPUNIT_ASSERT_EQUAL(trans1.get_cmdline(), trans1_loaded.get_cmdline());
     CPPUNIT_ASSERT_EQUAL(trans1.get_state(), trans1_loaded.get_state());
-    CPPUNIT_ASSERT_EQUAL(2UL, trans1_loaded.get_runtime_packages().size());
 
     auto trans2_loaded = ts_list[1];
 
@@ -205,7 +196,6 @@ void TransactionTest::test_select_all() {
     CPPUNIT_ASSERT_EQUAL(trans2.get_user_id(), trans2_loaded.get_user_id());
     CPPUNIT_ASSERT_EQUAL(trans2.get_cmdline(), trans2_loaded.get_cmdline());
     CPPUNIT_ASSERT_EQUAL(trans2.get_state(), trans2_loaded.get_state());
-    CPPUNIT_ASSERT_EQUAL(2UL, trans2_loaded.get_runtime_packages().size());
 
     auto trans3_loaded = ts_list[2];
 
@@ -218,7 +208,6 @@ void TransactionTest::test_select_all() {
     CPPUNIT_ASSERT_EQUAL(trans3.get_user_id(), trans3_loaded.get_user_id());
     CPPUNIT_ASSERT_EQUAL(trans3.get_cmdline(), trans3_loaded.get_cmdline());
     CPPUNIT_ASSERT_EQUAL(trans3.get_state(), trans3_loaded.get_state());
-    CPPUNIT_ASSERT_EQUAL(2UL, trans3_loaded.get_runtime_packages().size());
 }
 
 
@@ -252,7 +241,6 @@ void TransactionTest::test_select_multiple() {
     CPPUNIT_ASSERT_EQUAL(trans1.get_user_id(), trans1_loaded.get_user_id());
     CPPUNIT_ASSERT_EQUAL(trans1.get_cmdline(), trans1_loaded.get_cmdline());
     CPPUNIT_ASSERT_EQUAL(trans1.get_state(), trans1_loaded.get_state());
-    CPPUNIT_ASSERT_EQUAL(2UL, trans1_loaded.get_runtime_packages().size());
 
     auto trans3_loaded = ts_list[1];
 
@@ -265,7 +253,6 @@ void TransactionTest::test_select_multiple() {
     CPPUNIT_ASSERT_EQUAL(trans3.get_user_id(), trans3_loaded.get_user_id());
     CPPUNIT_ASSERT_EQUAL(trans3.get_cmdline(), trans3_loaded.get_cmdline());
     CPPUNIT_ASSERT_EQUAL(trans3.get_state(), trans3_loaded.get_state());
-    CPPUNIT_ASSERT_EQUAL(2UL, trans3_loaded.get_runtime_packages().size());
 }
 
 
@@ -299,7 +286,6 @@ void TransactionTest::test_select_range() {
     CPPUNIT_ASSERT_EQUAL(trans1.get_user_id(), trans1_loaded.get_user_id());
     CPPUNIT_ASSERT_EQUAL(trans1.get_cmdline(), trans1_loaded.get_cmdline());
     CPPUNIT_ASSERT_EQUAL(trans1.get_state(), trans1_loaded.get_state());
-    CPPUNIT_ASSERT_EQUAL(2UL, trans1_loaded.get_runtime_packages().size());
 
     auto trans2_loaded = ts_list[1];
 
@@ -312,5 +298,4 @@ void TransactionTest::test_select_range() {
     CPPUNIT_ASSERT_EQUAL(trans2.get_user_id(), trans2_loaded.get_user_id());
     CPPUNIT_ASSERT_EQUAL(trans2.get_cmdline(), trans2_loaded.get_cmdline());
     CPPUNIT_ASSERT_EQUAL(trans2.get_state(), trans2_loaded.get_state());
-    CPPUNIT_ASSERT_EQUAL(2UL, trans2_loaded.get_runtime_packages().size());
 }

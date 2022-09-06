@@ -67,13 +67,6 @@ R"**(
         PRIMARY KEY (trans_item_id, by_trans_item_id)
     );
 
-    CREATE TABLE trans_with (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        trans_id INTEGER REFERENCES trans(id),
-        item_id INTEGER REFERENCES item(id),
-        CONSTRAINT trans_with_unique_trans_item UNIQUE (trans_id, item_id)
-    );
-
     /* item: rpm */
     CREATE TABLE rpm (
         item_id INTEGER UNIQUE NOT NULL,

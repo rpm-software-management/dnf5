@@ -39,9 +39,6 @@ void TransactionWorkflowTest::test_default_workflow() {
     auto trans = base->get_transaction_history()->new_transaction();
     CPPUNIT_ASSERT_EQUAL(TransactionState::STARTED, trans.get_state());
 
-    // set packages used to perform the transaction
-    trans.add_runtime_package("dnf-3.5.1-1.fc29.noarch");
-
     // set vars
     trans.set_releasever("26");
 

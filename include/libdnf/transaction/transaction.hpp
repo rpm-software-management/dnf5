@@ -193,16 +193,6 @@ public:
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setState(libdnf::TransactionState value)
     void set_state(State value) { state = value; }
 
-    /// Get set of package NEVRAs of runtime packages (used to perform the transaction)
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getSoftwarePerformedWith()
-    const std::set<std::string> & get_runtime_packages();
-
-    /// Add a package NEVRA to set of runtime packages (used to perform the transaction)
-    ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addSoftwarePerformedWith(std::shared_ptr<RPMItem> software)
-    void add_runtime_package(const std::string & nevra);
-
     /// Get lines recorded during the transaction
     ///
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getConsoleOutput()
@@ -278,7 +268,6 @@ private:
     std::string comment;
     State state = State::STARTED;
 
-    std::optional<std::set<std::string>> runtime_packages;
     std::optional<std::vector<std::pair<int, std::string>>> console_output;
 
     std::optional<std::vector<CompsEnvironment>> comps_environments;
