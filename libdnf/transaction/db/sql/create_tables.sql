@@ -13,7 +13,8 @@ R"**(
         rpmdb_version_end TEXT,
         releasever TEXT NOT NULL,                       /* var: $releasever */
         user_id INTEGER NOT NULL,                       /* user ID (UID) */
-        cmdline TEXT,                                   /* recorded command line (program, options, arguments) */
+        description TEXT,                               /* A description of the transaction (e.g. the CLI command being executed) */
+        comment TEXT,                                   /* An arbitrary comment */
         state_id INTEGER REFERENCES trans_state(id)     /* (enum) */
     );
 

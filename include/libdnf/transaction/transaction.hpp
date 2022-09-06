@@ -167,15 +167,15 @@ public:
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setUserId(uint32_t value)
     void set_user_id(uint32_t value) { user_id = value; }
 
-    /// Get command line of a program that started the transaction
+    /// Get the description of the transaction (e.g. the CLI command that was executed)
     ///
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_cmdline()
-    const std::string & get_cmdline() const noexcept { return cmdline; }
+    const std::string & get_description() const noexcept { return description; }
 
-    /// Set command line of a program that started the transaction
+    /// Set the description of the transaction (e.g. the CLI command that was executed)
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setCmdline(const std::string & value)
-    void set_cmdline(const std::string & value) { cmdline = value; }
+    void set_description(const std::string & value) { description = value; }
 
     /// Get a user-specified comment describing the transaction
     const std::string & get_comment() const noexcept { return comment; }
@@ -263,8 +263,7 @@ private:
     // TODO(dmach): move to a new "vars" table?
     std::string releasever;
     uint32_t user_id = 0;
-    std::string cmdline;
-    // TODO(dmach): backport comment support from dnf-4-master
+    std::string description;
     std::string comment;
     State state = State::STARTED;
 
