@@ -39,7 +39,7 @@ static Transaction create_transaction(libdnf::Base & base, int nr) {
     trans.set_rpmdb_version_end(libdnf::utils::sformat("ts {} end", nr));
     trans.set_releasever("26");
     trans.set_user_id(1000);
-    trans.set_cmdline("dnf install foo");
+    trans.set_description("dnf install foo");
 
     return trans;
 }
@@ -67,7 +67,7 @@ void TransactionTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(trans.get_rpmdb_version_end(), trans2.get_rpmdb_version_end());
     CPPUNIT_ASSERT_EQUAL(trans.get_releasever(), trans2.get_releasever());
     CPPUNIT_ASSERT_EQUAL(trans.get_user_id(), trans2.get_user_id());
-    CPPUNIT_ASSERT_EQUAL(trans.get_cmdline(), trans2.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(trans.get_description(), trans2.get_description());
     CPPUNIT_ASSERT_EQUAL(trans.get_state(), trans2.get_state());
 }
 
@@ -103,7 +103,7 @@ void TransactionTest::test_update() {
     trans.set_rpmdb_version_end("end_2");
     trans.set_releasever("26_2");
     trans.set_user_id(10002);
-    trans.set_cmdline("dnf install foo_2");
+    trans.set_description("dnf install foo_2");
     trans.set_state(TransactionState::ERROR);
     trans.finish(TransactionState::OK);
 
@@ -122,7 +122,7 @@ void TransactionTest::test_update() {
     CPPUNIT_ASSERT_EQUAL(trans.get_rpmdb_version_end(), trans2.get_rpmdb_version_end());
     CPPUNIT_ASSERT_EQUAL(trans.get_releasever(), trans2.get_releasever());
     CPPUNIT_ASSERT_EQUAL(trans.get_user_id(), trans2.get_user_id());
-    CPPUNIT_ASSERT_EQUAL(trans.get_cmdline(), trans2.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(trans.get_description(), trans2.get_description());
     CPPUNIT_ASSERT_EQUAL(trans.get_state(), trans2.get_state());
 }
 
@@ -182,7 +182,7 @@ void TransactionTest::test_select_all() {
     CPPUNIT_ASSERT_EQUAL(trans1.get_rpmdb_version_end(), trans1_loaded.get_rpmdb_version_end());
     CPPUNIT_ASSERT_EQUAL(trans1.get_releasever(), trans1_loaded.get_releasever());
     CPPUNIT_ASSERT_EQUAL(trans1.get_user_id(), trans1_loaded.get_user_id());
-    CPPUNIT_ASSERT_EQUAL(trans1.get_cmdline(), trans1_loaded.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(trans1.get_description(), trans1_loaded.get_description());
     CPPUNIT_ASSERT_EQUAL(trans1.get_state(), trans1_loaded.get_state());
 
     auto trans2_loaded = ts_list[1];
@@ -194,7 +194,7 @@ void TransactionTest::test_select_all() {
     CPPUNIT_ASSERT_EQUAL(trans2.get_rpmdb_version_end(), trans2_loaded.get_rpmdb_version_end());
     CPPUNIT_ASSERT_EQUAL(trans2.get_releasever(), trans2_loaded.get_releasever());
     CPPUNIT_ASSERT_EQUAL(trans2.get_user_id(), trans2_loaded.get_user_id());
-    CPPUNIT_ASSERT_EQUAL(trans2.get_cmdline(), trans2_loaded.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(trans2.get_description(), trans2_loaded.get_description());
     CPPUNIT_ASSERT_EQUAL(trans2.get_state(), trans2_loaded.get_state());
 
     auto trans3_loaded = ts_list[2];
@@ -206,7 +206,7 @@ void TransactionTest::test_select_all() {
     CPPUNIT_ASSERT_EQUAL(trans3.get_rpmdb_version_end(), trans3_loaded.get_rpmdb_version_end());
     CPPUNIT_ASSERT_EQUAL(trans3.get_releasever(), trans3_loaded.get_releasever());
     CPPUNIT_ASSERT_EQUAL(trans3.get_user_id(), trans3_loaded.get_user_id());
-    CPPUNIT_ASSERT_EQUAL(trans3.get_cmdline(), trans3_loaded.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(trans3.get_description(), trans3_loaded.get_description());
     CPPUNIT_ASSERT_EQUAL(trans3.get_state(), trans3_loaded.get_state());
 }
 
@@ -239,7 +239,7 @@ void TransactionTest::test_select_multiple() {
     CPPUNIT_ASSERT_EQUAL(trans1.get_rpmdb_version_end(), trans1_loaded.get_rpmdb_version_end());
     CPPUNIT_ASSERT_EQUAL(trans1.get_releasever(), trans1_loaded.get_releasever());
     CPPUNIT_ASSERT_EQUAL(trans1.get_user_id(), trans1_loaded.get_user_id());
-    CPPUNIT_ASSERT_EQUAL(trans1.get_cmdline(), trans1_loaded.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(trans1.get_description(), trans1_loaded.get_description());
     CPPUNIT_ASSERT_EQUAL(trans1.get_state(), trans1_loaded.get_state());
 
     auto trans3_loaded = ts_list[1];
@@ -251,7 +251,7 @@ void TransactionTest::test_select_multiple() {
     CPPUNIT_ASSERT_EQUAL(trans3.get_rpmdb_version_end(), trans3_loaded.get_rpmdb_version_end());
     CPPUNIT_ASSERT_EQUAL(trans3.get_releasever(), trans3_loaded.get_releasever());
     CPPUNIT_ASSERT_EQUAL(trans3.get_user_id(), trans3_loaded.get_user_id());
-    CPPUNIT_ASSERT_EQUAL(trans3.get_cmdline(), trans3_loaded.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(trans3.get_description(), trans3_loaded.get_description());
     CPPUNIT_ASSERT_EQUAL(trans3.get_state(), trans3_loaded.get_state());
 }
 
@@ -284,7 +284,7 @@ void TransactionTest::test_select_range() {
     CPPUNIT_ASSERT_EQUAL(trans1.get_rpmdb_version_end(), trans1_loaded.get_rpmdb_version_end());
     CPPUNIT_ASSERT_EQUAL(trans1.get_releasever(), trans1_loaded.get_releasever());
     CPPUNIT_ASSERT_EQUAL(trans1.get_user_id(), trans1_loaded.get_user_id());
-    CPPUNIT_ASSERT_EQUAL(trans1.get_cmdline(), trans1_loaded.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(trans1.get_description(), trans1_loaded.get_description());
     CPPUNIT_ASSERT_EQUAL(trans1.get_state(), trans1_loaded.get_state());
 
     auto trans2_loaded = ts_list[1];
@@ -296,6 +296,6 @@ void TransactionTest::test_select_range() {
     CPPUNIT_ASSERT_EQUAL(trans2.get_rpmdb_version_end(), trans2_loaded.get_rpmdb_version_end());
     CPPUNIT_ASSERT_EQUAL(trans2.get_releasever(), trans2_loaded.get_releasever());
     CPPUNIT_ASSERT_EQUAL(trans2.get_user_id(), trans2_loaded.get_user_id());
-    CPPUNIT_ASSERT_EQUAL(trans2.get_cmdline(), trans2_loaded.get_cmdline());
+    CPPUNIT_ASSERT_EQUAL(trans2.get_description(), trans2_loaded.get_description());
     CPPUNIT_ASSERT_EQUAL(trans2.get_state(), trans2_loaded.get_state());
 }

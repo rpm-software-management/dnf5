@@ -42,7 +42,7 @@ void print_transaction_info(libdnf::transaction::Transaction & transaction) {
     info.add_line("User", transaction.get_user_id());
     info.add_line("Status", libdnf::transaction::transaction_state_to_string(transaction.get_state()));
     info.add_line("Releasever", transaction.get_releasever());
-    info.add_line("Command line", transaction.get_cmdline());
+    info.add_line("Description", transaction.get_description());
     info.add_line("Comment", transaction.get_comment());
 
     info.add_line("Packages altered", "");

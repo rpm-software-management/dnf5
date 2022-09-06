@@ -45,7 +45,7 @@ void print_transaction_list(std::vector<libdnf::transaction::Transaction> & ts_l
     for (auto & ts : ts_list) {
         struct libscols_line * ln = scols_table_new_line(table.get(), NULL);
         scols_line_set_data(ln, 0, std::to_string(ts.get_id()).c_str());
-        scols_line_set_data(ln, 1, ts.get_cmdline().c_str());
+        scols_line_set_data(ln, 1, ts.get_description().c_str());
         scols_line_set_data(
             ln,
             2,

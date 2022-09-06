@@ -417,7 +417,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
         db_transaction.set_comment(comment.value());
     }
 
-    db_transaction.set_cmdline(description);
+    db_transaction.set_description(description);
 
     if (user_id) {
         db_transaction.set_user_id(user_id.value());
