@@ -27,7 +27,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "db/rpm.hpp"
 #include "db/trans.hpp"
 #include "db/trans_item.hpp"
-#include "db/trans_with.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/transaction/comps_environment.hpp"
@@ -86,25 +85,6 @@ bool Transaction::operator<(const Transaction & other) const {
 
 bool Transaction::operator>(const Transaction & other) const {
     return get_id() < other.get_id();
-}
-
-
-const std::set<std::string> & Transaction::get_runtime_packages() {
-    if (runtime_packages) {
-        return *runtime_packages;
-    }
-
-    runtime_packages = load_transaction_runtime_packages(*transaction_db_connect(*base), *this);
-    return *runtime_packages;
-}
-
-
-void Transaction::add_runtime_package(const std::string & nevra) {
-    if (!runtime_packages) {
-        runtime_packages.emplace();
-    }
-
-    runtime_packages->insert(nevra);
 }
 
 
@@ -216,8 +196,6 @@ void Transaction::start() {
     try {
         auto query = trans_insert_new_query(*conn);
         trans_insert(*query, *this);
-
-        save_transaction_runtime_packages(*conn, *this);
 
         insert_transaction_comps_environments(*conn, *this);
         insert_transaction_comps_groups(*conn, *this);
