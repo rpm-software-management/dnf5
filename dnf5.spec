@@ -10,7 +10,7 @@ License:        GPLv2+
 URL:            https://github.com/rpm-software-management/dnf5
 Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
 
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 Recommends:     bash-completion
 BuildRequires:  bash-completion
@@ -156,7 +156,7 @@ Package management library
 Summary:        Library for working with a terminal in a command-line package manager
 License:        LGPLv2.1+
 BuildRequires:  pkgconfig(smartcols)
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 
 %description -n libdnf5-cli
 Library for working with a terminal in a command-line package manager.
@@ -173,7 +173,7 @@ Library for working with a terminal in a command-line package manager.
 %package -n libdnf5-devel
 Summary:        Development files for libdnf
 License:        LGPLv2.1+
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libsolv-devel%{?_isa} >= %{libsolv_version}
 Conflicts:      libdnf-devel < 5
 
@@ -213,7 +213,7 @@ Development files for libdnf5-cli.
 Summary:        Perl 5 bindings for the libdnf library.
 License:        LGPLv2.1+
 Provides:       perl(libdnf) = %{version}-%{release}
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 BuildRequires:  perl-devel
 BuildRequires:  perl-macros
 BuildRequires:  swig >= %{swig_version}
@@ -271,7 +271,7 @@ Perl 5 bindings for the libdnf5-cli library.
 %{?python_provide:%python_provide python3-libdnf}
 Summary:        Python 3 bindings for the libdnf library.
 License:        LGPLv2.1+
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 BuildRequires:  python3-devel
 BuildRequires:  swig >= %{swig_version}
 
@@ -313,7 +313,7 @@ Python 3 bindings for the libdnf5-cli library.
 Summary:        Ruby bindings for the libdnf library.
 License:        LGPLv2.1+
 Provides:       ruby(libdnf) = %{version}-%{release}
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
 BuildRequires:  pkgconfig(ruby)
 BuildRequires:  swig >= %{swig_version}
@@ -361,7 +361,7 @@ Ruby bindings for the libdnf5-cli library.
 %package -n libdnf5-plugin-actions
 Summary:        Libdnf plugin that allows to run actions (external executables) on hooks
 License:        LGPLv2.1+
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 
 %description -n libdnf5-plugin-actions
 Libdnf plugin that allows to run actions (external executables) on hooks.
@@ -377,7 +377,7 @@ Libdnf plugin that allows to run actions (external executables) on hooks.
 %package -n python3-libdnf5-python-plugins-loader
 Summary:        Libdnf plugin that allows loading Python plugins
 License:        LGPLv2.1+
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       python3-libdnf5%{?_isa} = %{version}-%{release}
 
 %description -n python3-libdnf5-python-plugins-loader
@@ -396,7 +396,7 @@ Libdnf plugin that allows loading Python plugins
 %package -n dnf5daemon-client
 Summary:        Command-line interface for dnf5daemon-server
 License:        GPLv2+
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf5daemon-server
 
@@ -417,7 +417,7 @@ Command-line interface for dnf5daemon-server
 %package -n dnf5daemon-server
 Summary:        Package management service with a DBus interface
 License:        GPLv2+
-Requires:       %{name}%{?_isa} = %{version}-%{release}
+Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 %{?systemd_requires}
