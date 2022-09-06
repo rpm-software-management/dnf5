@@ -276,8 +276,7 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     // Add replaced packages to transaction
     for (const auto & [replaced_id, replaced_by_ids] : replaced) {
         rpm::Package obsoleted(base, rpm::PackageId(replaced_id));
-        auto reason = solved_goal.get_reason(replaced_id);
-        TransactionPackage tspkg(obsoleted, TransactionPackage::Action::REPLACED, reason);
+        TransactionPackage tspkg(obsoleted, TransactionPackage::Action::REPLACED, obsoleted.get_reason());
         for (auto id : replaced_by_ids) {
             tspkg.replaced_by.emplace_back(rpm::Package(base, rpm::PackageId(id)));
         }
