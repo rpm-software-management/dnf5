@@ -82,7 +82,7 @@ std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, co
         sql += ")";
     }
 
-    auto query = libdnf::utils::SQLite3::Query(*conn, sql.c_str());
+    auto query = libdnf::utils::SQLite3::Query(*conn, sql);
 
     for (size_t i = 0; i < ids.size(); ++i) {
         query.bind(static_cast<int>(i + 1), ids[i]);
@@ -97,7 +97,7 @@ std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, 
 
     std::string sql = select_sql + " WHERE trans.id >= ? AND trans.id <= ?";
 
-    auto query = libdnf::utils::SQLite3::Query(*conn, sql.c_str());
+    auto query = libdnf::utils::SQLite3::Query(*conn, sql);
     query.bindv(start, end);
 
     return load_from_select(base, query);
