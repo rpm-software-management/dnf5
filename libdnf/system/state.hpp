@@ -27,6 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 #include <map>
+#include <optional>
+#include <set>
 #include <string>
 
 
@@ -203,6 +205,11 @@ private:
     /// @since 5.0
     std::filesystem::path get_system_state_path();
 
+    /// Cache to speed-up searching the group packages in group_states map
+    /// @return The map {package_name -> [id of groups the package_name is part of]}
+    /// @since 5.0
+    const std::map<std::string, std::set<std::string>> & get_package_groups_cache();
+
     std::filesystem::path path;
 
     std::map<std::string, PackageState> package_states;
@@ -210,6 +217,7 @@ private:
     std::map<std::string, GroupState> group_states;
     std::map<std::string, ModuleState> module_states;
     SystemState system_state;
+    std::optional<std::map<std::string, std::set<std::string>>> package_groups_cache;
 };
 
 }  // namespace libdnf::system
