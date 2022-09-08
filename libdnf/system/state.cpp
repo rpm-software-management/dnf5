@@ -200,13 +200,26 @@ State::State(const std::filesystem::path & path) : path(path) {
 
 
 transaction::TransactionItemReason State::get_package_reason(const std::string & na) {
+    transaction::TransactionItemReason packages_reason = transaction::TransactionItemReason::NONE;
     auto it = package_states.find(na);
-    if (it == package_states.end()) {
-        return transaction::TransactionItemReason::NONE;
+    if (it != package_states.end()) {
+        // TODO(lukash) this allows more reasons than valid here, assert?
+        packages_reason = transaction::transaction_item_reason_from_string(it->second.reason);
     }
 
-    // TODO(lukash) this allows more reasons than valid here, assert?
-    return transaction::transaction_item_reason_from_string(it->second.reason);
+    if (packages_reason < transaction::TransactionItemReason::GROUP) {
+        // group packages are not stored in packages.toml but in groups.toml
+        // using its name
+        std::string name = na;
+        auto dot_pos = name.find('.');
+        if (dot_pos != name.npos) {
+            name = name.substr(0, dot_pos);
+        }
+        if (get_package_groups_cache().contains(name)) {
+            return transaction::TransactionItemReason::GROUP;
+        }
+    }
+    return packages_reason;
 }
 
 
@@ -262,11 +275,13 @@ GroupState State::get_group_state(const std::string & id) {
 
 void State::set_group_state(const std::string & id, const GroupState & group_state) {
     group_states[id] = group_state;
+    package_groups_cache.reset();
 }
 
 
 void State::remove_group_state(const std::string & id) {
     group_states.erase(id);
+    package_groups_cache.reset();
 }
 
 
@@ -375,6 +390,20 @@ void State::load() {
     group_states = load_toml_data<std::map<std::string, GroupState>>(get_group_state_path(), "groups");
     module_states = load_toml_data<std::map<std::string, ModuleState>>(get_module_state_path(), "modules");
     system_state = load_toml_data<SystemState>(get_system_state_path(), "system");
+    package_groups_cache.reset();
+}
+
+const std::map<std::string, std::set<std::string>> & State::get_package_groups_cache() {
+    if (!package_groups_cache) {
+        std::map<std::string, std::set<std::string>> cache;
+        for (const auto & [group_id, group_state] : group_states) {
+            for (const auto & pkg : group_state.packages) {
+                cache[pkg].emplace(group_id);
+            }
+        }
+        package_groups_cache.emplace(std::move(cache));
+    }
+    return package_groups_cache.value();
 }
 
 
