@@ -87,6 +87,8 @@ public:
     /// Reset all protected packages
     void reset_protected_packages();
     void set_protected_running_kernel(PackageId kernel) { protected_running_kernel = kernel; };
+    /// Set Ids of user-installed packages
+    void set_user_installed_packages(const libdnf::solv::IdQueue & queue);
 
     ///  Return count of problems detected by solver
     size_t count_solver_problems();
@@ -137,6 +139,7 @@ private:
     std::unique_ptr<libdnf::solv::SolvMap> protected_packages;
     std::unique_ptr<libdnf::solv::SolvMap> removal_of_protected;
     PackageId protected_running_kernel{0};
+    std::unique_ptr<libdnf::solv::IdQueue> user_installed_packages;
 
     bool allow_downgrade{true};
     bool allow_erasing{false};
