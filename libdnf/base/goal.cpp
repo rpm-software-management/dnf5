@@ -1055,6 +1055,20 @@ base::Transaction Goal::resolve(bool allow_erasing) {
         p_impl->rpm_goal.set_protected_running_kernel(sack->p_impl->get_running_kernel_id());
     }
 
+    // Set user-installed packages (installed packages with reason USER or GROUP)
+    // proceed only if the transaction could result in removal of unused dependencies
+    if (p_impl->rpm_goal.is_clean_deps_present()) {
+        libdnf::solv::IdQueue user_installed_packages;
+        rpm::PackageQuery installed_query(p_impl->base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
+        installed_query.filter_installed();
+        for (const auto & pkg : installed_query) {
+            if (pkg.get_reason() > transaction::TransactionItemReason::DEPENDENCY) {
+                user_installed_packages.push_back(pkg.get_id().id);
+            }
+        }
+        p_impl->rpm_goal.set_user_installed_packages(std::move(user_installed_packages));
+    }
+
     // Add protected packages
     {
         auto & protected_packages = cfg_main.protected_packages().get_value();

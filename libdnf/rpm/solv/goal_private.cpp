@@ -63,7 +63,8 @@ void construct_job(
     const libdnf::solv::IdQueue & install_only,
     bool allow_erasing,
     const libdnf::solv::SolvMap * protected_packages,
-    libdnf::rpm::PackageId protected_kernel) {
+    libdnf::rpm::PackageId protected_kernel,
+    const libdnf::solv::IdQueue * user_installed_packages) {
     // turn off implicit obsoletes for installonly packages
     for (int i = 0; i < install_only.size(); ++i) {
         job.push_back(SOLVER_MULTIVERSION | SOLVER_SOLVABLE_PROVIDES, install_only[i]);
@@ -71,6 +72,13 @@ void construct_job(
 
     if (allow_erasing) {
         allow_uninstall_all_but_protected(pool, job, protected_packages, protected_kernel);
+    }
+
+    // mark user-installed packages
+    if (user_installed_packages != nullptr) {
+        for (auto id : *user_installed_packages) {
+            job.push_back(SOLVER_SOLVABLE | SOLVER_USERINSTALLED, id);
+        }
     }
 
     //     if (flags & DNF_VERIFY)
@@ -323,7 +331,14 @@ libdnf::solv::IdQueue GoalPrivate::list_results(Id type_filter1, Id type_filter2
 libdnf::GoalProblem GoalPrivate::resolve() {
     auto & pool = get_pool();
     libdnf::solv::IdQueue job(staging);
-    construct_job(*pool, job, installonly, allow_erasing, protected_packages.get(), protected_running_kernel);
+    construct_job(
+        *pool,
+        job,
+        installonly,
+        allow_erasing,
+        protected_packages.get(),
+        protected_running_kernel,
+        user_installed_packages.get());
 
     /* apply the excludes */
     //dnf_sack_recompute_considered(sack);
@@ -623,6 +638,10 @@ void GoalPrivate::set_protected_packages(const libdnf::solv::SolvMap & map) {
 
 void GoalPrivate::reset_protected_packages() {
     protected_packages.reset();
+}
+
+void GoalPrivate::set_user_installed_packages(const libdnf::solv::IdQueue & queue) {
+    user_installed_packages.reset(new libdnf::solv::IdQueue(queue));
 }
 
 transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
