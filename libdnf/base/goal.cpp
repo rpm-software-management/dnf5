@@ -256,21 +256,22 @@ void Goal::Impl::filter_candidates_for_advisory_upgrade(
     rpm::PackageQuery installed(base);
     installed.filter_installed();
 
-    // Prepare obsoletes of installed as well as obsoletes of any possible upgrade that could happen
-    rpm::PackageQuery possibly_obsoleted(candidates);
-    possibly_obsoleted.filter_upgrades();
-    possibly_obsoleted |= installed;
+    // Prepare obsoletes of installed as well as obsoletes of any possible upgrade that could happen (candidates)
     rpm::PackageQuery obsoletes(candidates);
     obsoletes.filter_available();
+
+    // When doing advisory upgrade consider only candidate pkgs that can possibly upgrade some pkg.
+    // This basically means that it matches some already installed pkg by name, has higher evr and
+    // has the same architecture or one of them is noarch.
+    // This is required because otherwise a pkg with different Arch than installed or noarch can end
+    // up in upgrade set which is wrong. It can result in dependency issues, reported as: RhBug:2088149.
+    candidates.filter_upgrades();
+
+    rpm::PackageQuery possibly_obsoleted(candidates);
+    possibly_obsoleted |= installed;
     obsoletes.filter_obsoletes(possibly_obsoleted);
 
-    // When doing advisory upgrade consider only candidate pkgs that have matching Name and Arch
-    // with some already installed pkg (in other words: some other version of the pkg is already installed).
-    // Otherwise a pkg with different Arch than installed can end up in upgrade set which is wrong.
-    // It can result in dependency issues, reported as: RhBug:2088149.
-    candidates.filter_name_arch(installed);
-
-    // Add obsoletes after filter_name_arch(installed)
+    // Add obsoletes to candidates
     candidates |= obsoletes;
 
     // Apply security filters only to packages with highest priority (lowest priority number),
