@@ -284,6 +284,16 @@ void State::remove_group_state(const std::string & id) {
     package_groups_cache.reset();
 }
 
+std::set<std::string> State::get_package_groups(const std::string & name) {
+    auto & package_groups = get_package_groups_cache();
+    auto it = package_groups.find(name);
+    if (it == package_groups.end()) {
+        return {};
+    } else {
+        return it->second;
+    }
+}
+
 
 std::string State::get_module_enabled_stream(const std::string & name) {
     auto it = module_states.find(name);
