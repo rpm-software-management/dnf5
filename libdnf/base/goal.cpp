@@ -276,15 +276,10 @@ void Goal::Impl::filter_candidates_for_advisory_upgrade(
     // to unify behaviour of upgrade and upgrade-minimal
     candidates.filter_priority();
 
-    // Get unresolved advisories for all installed + possible obsoletes
-    rpm::PackageQuery installed_plus_possibly_installed_obsoletes(installed);
-    installed_plus_possibly_installed_obsoletes |= obsoletes;
-    auto adv_pkgs = advisories.get_advisory_packages_sorted(
-        installed_plus_possibly_installed_obsoletes, libdnf::sack::QueryCmp::GT);
-
     // Since we want to satisfy all advisory pacakges we can keep just the latest
     // (all lower EVR adv pkgs are satistified by the latests)
     // This assumes that adv_pkgs vector is sorted by Name, Arch, EVR
+    auto adv_pkgs = advisories.get_advisory_packages_sorted_by_name_arch_evr();
     std::vector<libdnf::advisory::AdvisoryPackage> latest_adv_pkgs;
     for (std::vector<libdnf::advisory::AdvisoryPackage>::iterator i = adv_pkgs.begin(); i != adv_pkgs.end(); ++i) {
         auto next_adv_pkg = std::next(i);
