@@ -151,6 +151,11 @@ public:
     /// @since 5.0
     void remove_group_state(const std::string & id);
 
+    /// @return All group ids the package is part of
+    /// @param name Package name
+    /// @since 5.0
+    std::set<std::string> get_package_groups(const std::string & name);
+
     std::string get_module_enabled_stream(const std::string & name);
 
     void set_module_enabled_stream(const std::string & name, const std::string & stream);
