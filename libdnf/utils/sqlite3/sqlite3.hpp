@@ -90,7 +90,7 @@ public:
         Statement(SQLite3 & db, const char * sql) : db(db) {
             auto result = sqlite3_prepare_v2(db.db, sql, -1, &stmt, nullptr);
             if (result != SQLITE_OK) {
-                throw SQLite3StatementSQLError(result, msg_compilation_failed, sql);
+                throw SQLite3StatementSQLError(result, msg_compilation_failed, std::string(sql));
             }
         };
 
@@ -336,7 +336,7 @@ public:
     void exec(const char * sql) {
         auto result = sqlite3_exec(db, sql, nullptr, nullptr, nullptr);
         if (result != SQLITE_OK) {
-            throw SQLite3SQLError(result, msg_statement_exec_failed, sql);
+            throw SQLite3SQLError(result, msg_statement_exec_failed, std::string(sql));
         }
     }
 
