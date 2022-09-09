@@ -99,11 +99,12 @@ R"**(
     CREATE TABLE comps_group_package (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         group_id INTEGER NOT NULL,
-        name TEXT NOT NULL,
+        name_id INTEGER NOT NULL,
         installed INTEGER NOT NULL,
         pkg_type INTEGER NOT NULL,
         FOREIGN KEY(group_id) REFERENCES comps_group(item_id),
-        CONSTRAINT comps_group_package_unique_name UNIQUE (group_id, name)
+        FOREIGN KEY(name_id) REFERENCES pkg_names(id),
+        CONSTRAINT comps_group_package_unique_name UNIQUE (group_id, name_id)
     );
 
     /* item: comps-environment */
