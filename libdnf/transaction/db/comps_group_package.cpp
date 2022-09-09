@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "comps_group_package.hpp"
 
+#include "pkg_names.hpp"
+
 #include "libdnf/transaction/transaction.hpp"
 
 #include <algorithm>
@@ -31,16 +33,17 @@ namespace libdnf::transaction {
 
 static const char * SQL_COMPS_GROUP_PACKAGE_SELECT = R"**(
     SELECT
-        id,
-        name,
-        installed,
-        pkg_type
+        cgp.id,
+        pkg_names.name,
+        cgp.installed,
+        cgp.pkg_type
     FROM
-        comps_group_package
+        comps_group_package cgp
+    LEFT JOIN pkg_names ON cgp.name_id = pkg_names.id
     WHERE
-        group_id = ?
+        cgp.group_id = ?
     ORDER BY
-        id
+        cgp.id
 )**";
 
 
@@ -68,12 +71,12 @@ static const char * SQL_COMPS_GROUP_PACKAGE_INSERT = R"**(
     INSERT INTO
         comps_group_package (
             group_id,
-            name,
+            name_id,
             installed,
             pkg_type
         )
     VALUES
-        (?, ?, ?, ?)
+        (?, (SELECT id FROM pkg_names WHERE name=?), ?, ?)
 )**";
 
 
@@ -84,8 +87,11 @@ std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_group_package_insert_ne
 
 
 void comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & group) {
+    auto query_pkg_name_insert_if_not_exists = pkg_names_insert_if_not_exists_new_query(conn);
     auto query = comps_group_package_insert_new_query(conn);
     for (auto & pkg : group.get_packages()) {
+        // insert package name into 'pkg_names' table if not exists
+        pkg_names_insert_if_not_exists(*query_pkg_name_insert_if_not_exists, pkg.get_name());
         query->bindv(
             group.get_item_id(), pkg.get_name(), pkg.get_installed(), static_cast<int>(pkg.get_package_type()));
         query->step();
