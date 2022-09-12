@@ -116,6 +116,9 @@ public:
 
     libdnf::solv::Pool & get_pool() { return libdnf::get_pool(base); };
 
+    /// @return True if SOLVER_CLEANDEPS flag was set for any of jobs
+    bool is_clean_deps_present() { return clean_deps_present; }
+
 
 private:
     bool limit_installonly_packages(libdnf::solv::IdQueue & job, Id running_kernel);
@@ -141,6 +144,7 @@ private:
     bool install_weak_deps{true};
     // Remove SOLVER_WEAK and add SOLVER_BEST to all jobs
     bool run_in_strict_mode{false};
+    bool clean_deps_present{false};
 
     /// Return libdnf::GoalProblem::NO_PROBLEM when no problems in protected
     libdnf::GoalProblem protected_in_removals();
@@ -206,6 +210,7 @@ inline void GoalPrivate::set_installonly(const std::vector<std::string> & instal
 
 inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
+    clean_deps_present = clean_deps_present || clean_deps;
     Id what = get_pool().queuetowhatprovides(queue);
     staging.push_back(
         SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
@@ -214,6 +219,7 @@ inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool strict,
 }
 
 inline void GoalPrivate::add_provide_install(libdnf::rpm::ReldepId reldepid, bool strict, bool best, bool clean_deps) {
+    clean_deps_present = clean_deps_present || clean_deps;
     staging.push_back(
         SOLVER_INSTALL | SOLVER_SOLVABLE_PROVIDES | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
@@ -221,6 +227,7 @@ inline void GoalPrivate::add_provide_install(libdnf::rpm::ReldepId reldepid, boo
 }
 
 inline void GoalPrivate::add_remove(const libdnf::solv::IdQueue & queue, bool clean_deps) {
+    clean_deps_present = clean_deps_present || clean_deps;
     Id flags = SOLVER_SOLVABLE | SOLVER_ERASE | (clean_deps ? SOLVER_CLEANDEPS : 0);
     for (Id what : queue) {
         staging.push_back(flags, what);
@@ -228,6 +235,7 @@ inline void GoalPrivate::add_remove(const libdnf::solv::IdQueue & queue, bool cl
 }
 
 inline void GoalPrivate::add_remove(const libdnf::solv::SolvMap & solv_map, bool clean_deps) {
+    clean_deps_present = clean_deps_present || clean_deps;
     Id flags = SOLVER_SOLVABLE | SOLVER_ERASE | (clean_deps ? SOLVER_CLEANDEPS : 0);
     for (auto what : solv_map) {
         staging.push_back(flags, what);
@@ -235,6 +243,7 @@ inline void GoalPrivate::add_remove(const libdnf::solv::SolvMap & solv_map, bool
 }
 
 inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps) {
+    clean_deps_present = clean_deps_present || clean_deps;
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = get_pool().queuetowhatprovides(queue);
     staging.push_back(
@@ -244,6 +253,7 @@ inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, b
 }
 
 inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
+    clean_deps_present = clean_deps_present || clean_deps;
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = get_pool().queuetowhatprovides(queue);
     staging.push_back(
