@@ -114,6 +114,11 @@ public:
     /// @since 5.0
     void set_package_reason(const std::string & na, transaction::TransactionItemReason reason);
 
+    // @return All NA of packages installed with specified reason.
+    // @param reason The set of reasons to search for
+    /// @since 5.0
+    std::set<std::string> get_packages_by_reason(const std::set<transaction::TransactionItemReason> & reasons);
+
     /// Removes the state for a package NA (Name.Arch).
     /// @param na The NA to remove the state for.
     /// @since 5.0

@@ -238,6 +238,27 @@ void State::set_package_reason(const std::string & na, transaction::TransactionI
 }
 
 
+std::set<std::string> State::get_packages_by_reason(const std::set<transaction::TransactionItemReason> & reasons) {
+    std::set<std::string> packages;
+    if (reasons.contains(transaction::TransactionItemReason::GROUP)) {
+        auto & package_groups = get_package_groups_cache();
+        for (const auto & pkg : package_groups) {
+            packages.emplace(pkg.first);
+        }
+    }
+    std::set<std::string> reasons_str;
+    for (const auto & reason : reasons) {
+        reasons_str.emplace(transaction::transaction_item_reason_to_string(reason));
+    }
+    for (const auto & [na, pkg_state] : package_states) {
+        if (reasons_str.contains(pkg_state.reason)) {
+            packages.emplace(na);
+        }
+    }
+    return packages;
+}
+
+
 void State::remove_package_na_state(const std::string & na) {
     package_states.erase(na);
 }
