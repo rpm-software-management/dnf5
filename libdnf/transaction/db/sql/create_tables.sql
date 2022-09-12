@@ -28,6 +28,11 @@ R"**(
         name TEXT NOT NULL UNIQUE
     );
 
+    CREATE TABLE archs (
+        id INTEGER PRIMARY KEY,
+        name TEXT NOT NULL UNIQUE
+    );
+
     CREATE TABLE console_output (
         id INTEGER PRIMARY KEY,
         trans_id INTEGER REFERENCES trans(id),
@@ -80,10 +85,11 @@ R"**(
         epoch INTEGER NOT NULL,                 /* empty epoch is stored as 0 */
         version TEXT NOT NULL,
         release TEXT NOT NULL,
-        arch TEXT NOT NULL,
+        arch_id INTEGER NOT NULL,
         FOREIGN KEY(item_id) REFERENCES item(id),
         FOREIGN KEY(name_id) REFERENCES pkg_names(id),
-        CONSTRAINT rpm_unique_nevra UNIQUE (name_id, epoch, version, release, arch)
+        FOREIGN KEY(arch_id) REFERENCES archs(id),
+        CONSTRAINT rpm_unique_nevra UNIQUE (name_id, epoch, version, release, arch_id)
     );
 
     /* item: comps-group */
