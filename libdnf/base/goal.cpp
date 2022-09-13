@@ -95,7 +95,8 @@ public:
     static void filter_candidates_for_advisory_upgrade(
         const BaseWeakPtr & base,
         libdnf::rpm::PackageQuery & candidates,
-        const libdnf::advisory::AdvisoryQuery & advisories);
+        const libdnf::advisory::AdvisoryQuery & advisories,
+        bool add_obsoletes);
 
     GoalProblem add_group_install_to_goal(
         base::Transaction & transaction,
@@ -252,27 +253,33 @@ void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::PackageSet & package_
 void Goal::Impl::filter_candidates_for_advisory_upgrade(
     const BaseWeakPtr & base,
     libdnf::rpm::PackageQuery & candidates,
-    const libdnf::advisory::AdvisoryQuery & advisories) {
+    const libdnf::advisory::AdvisoryQuery & advisories,
+    bool add_obsoletes) {
     rpm::PackageQuery installed(base);
     installed.filter_installed();
 
-    // Prepare obsoletes of installed as well as obsoletes of any possible upgrade that could happen (candidates)
-    rpm::PackageQuery obsoletes(candidates);
-    obsoletes.filter_available();
-
     // When doing advisory upgrade consider only candidate pkgs that can possibly upgrade some pkg.
+    // Both branches do candidates.filter_upgrades().
     // This basically means that it matches some already installed pkg by name, has higher evr and
     // has the same architecture or one of them is noarch.
     // This is required because otherwise a pkg with different Arch than installed or noarch can end
     // up in upgrade set which is wrong. It can result in dependency issues, reported as: RhBug:2088149.
-    candidates.filter_upgrades();
+    if (add_obsoletes) {
+        rpm::PackageQuery obsoletes(candidates);
 
-    rpm::PackageQuery possibly_obsoleted(candidates);
-    possibly_obsoleted |= installed;
-    obsoletes.filter_obsoletes(possibly_obsoleted);
+        candidates.filter_upgrades();
 
-    // Add obsoletes to candidates
-    candidates |= obsoletes;
+        obsoletes.filter_available();
+        // Prepare obsoletes of installed as well as obsoletes of any possible upgrade that could happen (candidates)
+        rpm::PackageQuery possibly_obsoleted(candidates);
+        possibly_obsoleted |= installed;
+        obsoletes.filter_obsoletes(possibly_obsoleted);
+
+        // Add obsoletes to candidates
+        candidates |= obsoletes;
+    } else {
+        candidates.filter_upgrades();
+    }
 
     // Apply security filters only to packages with highest priority (lowest priority number),
     // to unify behaviour of upgrade and upgrade-minimal
@@ -341,7 +348,8 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
 
                 // Apply advisory filters
                 if (settings.advisory_filter.has_value()) {
-                    filter_candidates_for_advisory_upgrade(base, query, settings.advisory_filter.value());
+                    filter_candidates_for_advisory_upgrade(
+                        base, query, settings.advisory_filter.value(), cfg_main.obsoletes().get_value());
                 }
 
                 // Make the smallest possible upgrade
@@ -995,7 +1003,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
 
     // Apply advisory filters
     if (settings.advisory_filter.has_value()) {
-        filter_candidates_for_advisory_upgrade(base, query, settings.advisory_filter.value());
+        filter_candidates_for_advisory_upgrade(base, query, settings.advisory_filter.value(), obsoletes);
     }
 
     if (minimal) {
