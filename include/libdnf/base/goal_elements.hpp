@@ -100,7 +100,8 @@ enum class GoalAction {
     DISTRO_SYNC_ALL,
     DOWNGRADE,
     REMOVE,
-    RESOLVE
+    RESOLVE,
+    REASON_CHANGE
 };
 
 /// Settings for GoalJobSettings

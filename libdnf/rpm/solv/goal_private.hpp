@@ -59,6 +59,14 @@ public:
     void add_remove(const libdnf::solv::SolvMap & solv_map, bool clean_deps);
     void add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps);
     void add_distro_sync(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps);
+    /// Store reason changes in the transaction
+    /// @param queue    Packages to change reason for
+    /// @param reason   New reason
+    /// @param group_id In case the new reason is GROUP, also group_id is required
+    void add_reason_change(
+        const libdnf::rpm::Package & pkg,
+        transaction::TransactionItemReason reason,
+        std::optional<std::string> group_id);
 
     /// Remember group action in the transaction
     /// @param action Action to be commited - INSTALL, REMOVE, UPGRADE
@@ -81,6 +89,11 @@ public:
         std::tuple<libdnf::comps::Group, transaction::TransactionItemAction, transaction::TransactionItemReason>>
     list_groups() {
         return groups;
+    };
+
+    std::vector<std::tuple<libdnf::rpm::Package, transaction::TransactionItemReason, std::optional<std::string>>>
+    list_reason_changes() {
+        return reason_changes;
     };
 
     /// @param abs_dest_dir Destination directory. Requires a full existing path.
@@ -175,6 +188,10 @@ private:
     std::vector<
         std::tuple<libdnf::comps::Group, transaction::TransactionItemAction, transaction::TransactionItemReason>>
         groups;
+
+    // Reason change requirements
+    std::vector<std::tuple<libdnf::rpm::Package, transaction::TransactionItemReason, std::optional<std::string>>>
+        reason_changes;
 
     /// Return libdnf::GoalProblem::NO_PROBLEM when no problems in protected
     libdnf::GoalProblem protected_in_removals();
@@ -297,6 +314,11 @@ inline void GoalPrivate::add_group(
     transaction::TransactionItemAction action,
     transaction::TransactionItemReason reason) {
     groups.emplace_back(group, action, reason);
+}
+
+inline void GoalPrivate::add_reason_change(
+    const libdnf::rpm::Package & pkg, transaction::TransactionItemReason reason, std::optional<std::string> group_id) {
+    reason_changes.emplace_back(pkg, reason, group_id);
 }
 
 }  // namespace libdnf::rpm::solv

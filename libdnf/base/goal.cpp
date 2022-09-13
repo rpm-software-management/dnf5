@@ -77,6 +77,7 @@ public:
 
     GoalProblem add_specs_to_goal(base::Transaction & transaction);
     GoalProblem add_group_specs_to_goal(base::Transaction & transaction);
+    GoalProblem add_reason_change_specs_to_goal(base::Transaction & transaction);
 
     std::pair<GoalProblem, libdnf::solv::IdQueue> add_install_to_goal(
         base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings);
@@ -104,14 +105,27 @@ public:
         const transaction::TransactionItemReason reason,
         GoalJobSettings & settings);
 
+    void add_reason_change_to_goal(
+        base::Transaction & transaction,
+        const std::string & spec,
+        const transaction::TransactionItemReason reason,
+        const std::optional<std::string> & group_id,
+        GoalJobSettings & settings);
+
 private:
     friend class Goal;
     BaseWeakPtr base;
     std::vector<std::string> module_enable_specs;
     /// <libdnf::GoalAction, std::string pkg_spec, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_specs;
+    /// <TransactionItemReason reason, std::string pkg_spec, optional<std::string> group id, libdnf::GoalJobSettings settings>
+    std::vector<
+        std::
+            tuple<libdnf::transaction::TransactionItemReason, std::string, std::optional<std::string>, GoalJobSettings>>
+        rpm_reason_change_specs;
     /// <libdnf::GoalAction, rpm Ids, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
+    /// <libdnf::GoalAction, std::string group_spec, GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> group_specs;
 
     rpm::solv::GoalPrivate rpm_goal;
@@ -225,6 +239,17 @@ void Goal::add_rpm_distro_sync(const rpm::Package & rpm_package, const GoalJobSe
 
 void Goal::add_rpm_distro_sync(const rpm::PackageSet & package_set, const GoalJobSettings & settings) {
     p_impl->add_rpm_ids(GoalAction::DISTRO_SYNC, package_set, settings);
+}
+
+void Goal::add_rpm_reason_change(
+    const std::string & spec,
+    const libdnf::transaction::TransactionItemReason reason,
+    const std::optional<std::string> & group_id,
+    const libdnf::GoalJobSettings & settings) {
+    libdnf_assert(
+        reason != libdnf::transaction::TransactionItemReason::GROUP || group_id != std::nullopt,
+        "group_id is required for setting reason \"GROUP\"");
+    p_impl->rpm_reason_change_specs.push_back(std::make_tuple(reason, spec, group_id, settings));
 }
 
 void Goal::add_provide_install(const std::string & spec, const GoalJobSettings & settings) {
@@ -382,6 +407,9 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
             case GoalAction::RESOLVE: {
                 libdnf_throw_assertion("Unsupported action \"RESOLVE\"");
             }
+            case GoalAction::REASON_CHANGE: {
+                libdnf_throw_assertion("Unsupported action \"REASON_CHANGE\"");
+            }
         }
     }
     return ret;
@@ -399,6 +427,15 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
                 libdnf_throw_assertion("Unsupported action for group.");
             }
         }
+    }
+    return ret;
+}
+
+
+GoalProblem Goal::Impl::add_reason_change_specs_to_goal(base::Transaction & transaction) {
+    auto ret = GoalProblem::NO_PROBLEM;
+    for (auto & [reason, spec, group_id, settings] : rpm_reason_change_specs) {
+        add_reason_change_to_goal(transaction, spec, reason, group_id, settings);
     }
     return ret;
 }
@@ -1145,6 +1182,24 @@ GoalProblem Goal::Impl::add_group_install_to_goal(
     return GoalProblem::NO_PROBLEM;
 }
 
+void Goal::Impl::add_reason_change_to_goal(
+    base::Transaction & transaction,
+    const std::string & spec,
+    const transaction::TransactionItemReason reason,
+    const std::optional<std::string> & group_id,
+    GoalJobSettings & settings) {
+    rpm::PackageQuery query(base);
+    query.filter_installed();
+    auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
+    if (!nevra_pair.first) {
+        transaction.p_impl->report_not_found(GoalAction::REASON_CHANGE, spec, settings, false);
+        return;
+    }
+    for (const auto & pkg : query) {
+        rpm_goal.add_reason_change(pkg, reason, group_id);
+    }
+}
+
 void Goal::set_allow_erasing(bool value) {
     p_impl->allow_erasing = value;
 }
@@ -1169,6 +1224,8 @@ base::Transaction Goal::resolve() {
     p_impl->add_rpms_to_goal(transaction);
 
     ret |= p_impl->add_group_specs_to_goal(transaction);
+
+    ret |= p_impl->add_reason_change_specs_to_goal(transaction);
 
     auto & cfg_main = p_impl->base->get_config();
     // Set goal flags

@@ -290,6 +290,11 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     for (auto & [group, action, reason] : solved_goal.list_groups()) {
         groups.emplace_back(group, action, reason);
     }
+
+    // Add reason change actions to the transaction
+    for (auto & [pkg, reason, group_id] : solved_goal.list_reason_changes()) {
+        packages.emplace_back(pkg, TransactionPackage::Action::REASON_CHANGE, reason, group_id);
+    }
 }
 
 
@@ -535,8 +540,8 @@ Transaction::TransactionRunResult Transaction::Impl::run(
         for (auto it = packages.rbegin(); it != packages.rend(); ++it) {
             auto tspkg = *it;
             const auto & pkg = tspkg.get_package();
+            auto tspkg_reason = tspkg.get_reason();
             if (transaction_item_action_is_inbound(tspkg.get_action())) {
-                auto tspkg_reason = tspkg.get_reason();
                 switch (tspkg_reason) {
                     case transaction::TransactionItemReason::DEPENDENCY:
                     case transaction::TransactionItemReason::WEAK_DEPENDENCY:
@@ -575,7 +580,14 @@ Transaction::TransactionRunResult Transaction::Impl::run(
                 // for a REINSTALL, the remove needs to happen first, hence the reverse iteration of the for loop
                 system_state.remove_package_nevra_state(pkg.get_nevra());
             } else if (tspkg.get_action() == TransactionPackage::Action::REASON_CHANGE) {
-                system_state.set_package_reason(pkg.get_na(), tspkg.get_reason());
+                if (tspkg_reason == transaction::TransactionItemReason::GROUP) {
+                    auto group_id = tspkg.get_reason_change_group_id().value();
+                    auto state = system_state.get_group_state(group_id);
+                    state.packages.emplace_back(pkg.get_name());
+                    system_state.set_group_state(group_id, state);
+                } else {
+                    system_state.set_package_reason(pkg.get_na(), tspkg_reason);
+                }
             }
         }
 

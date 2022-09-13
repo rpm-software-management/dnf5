@@ -71,6 +71,10 @@ public:
     /// packages that are leaving the system).
     const std::vector<rpm::Package> & get_replaced_by() const noexcept { return replaced_by; }
 
+    /// The REASON_CHANGE action requires group id in case the reason is changed to GROUP
+    /// @return id of group the package belongs to
+    const std::optional<std::string> & get_reason_change_group_id() const noexcept { return reason_change_group_id; }
+
 public:
     friend class Transaction;
 
@@ -79,12 +83,20 @@ public:
           action(action),
           reason(reason) {}
 
+    TransactionPackage(
+        const libdnf::rpm::Package & pkg, Action action, Reason reason, std::optional<std::string> group_id)
+        : package(pkg),
+          action(action),
+          reason(reason),
+          reason_change_group_id(group_id) {}
+
     void set_state(State value) noexcept { state = value; }
 
     libdnf::rpm::Package package;
     Action action;
     Reason reason;
     State state{State::STARTED};
+    std::optional<std::string> reason_change_group_id;
 
     std::vector<rpm::Package> replaces;
     std::vector<rpm::Package> replaced_by;
