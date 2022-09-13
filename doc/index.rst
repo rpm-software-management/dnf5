@@ -11,6 +11,7 @@ Welcome to DNF5's documentation!
     dnf5.8
     dnf_daemon/index
     contributing/index
+    templates/index
     migration_guide
 
 
