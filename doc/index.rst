@@ -1,4 +1,4 @@
-Welcome to libdnf's documentation!
+Welcome to DNF5's documentation!
 ==================================
 
 
