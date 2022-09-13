@@ -28,6 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/history/history.hpp"
 #include "commands/install/install.hpp"
 #include "commands/makecache/makecache.hpp"
+#include "commands/mark/mark.hpp"
 #include "commands/module/module.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
@@ -454,6 +455,7 @@ void RootCommand::register_subcommands() {
     register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
     register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_commands_group);
     register_subcommand(std::make_unique<SwapCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<MarkCommand>(*this), software_management_commands_group);
 
     // query commands
     auto * query_commands_group = context.get_argument_parser().add_new_group("query_commands");
