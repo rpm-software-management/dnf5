@@ -61,6 +61,8 @@ public:
 
     void create_module_solvables();
 
+    void make_provides_ready();
+
 private:
     friend ModuleSack;
     friend ModuleItem;
@@ -76,6 +78,8 @@ private:
     // also to these ModuleItems and they are removed from this vector and added to `ModuleSack.modules`.
     // This is done in `ModuleSack::add_modules_without_static_context`.
     std::vector<std::unique_ptr<ModuleItem>> modules_without_static_context;
+
+    bool provides_ready = false;
 };
 
 inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_modules() {

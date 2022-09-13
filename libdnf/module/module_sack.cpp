@@ -129,6 +129,7 @@ void ModuleSack::Impl::add_modules_without_static_context() {
 
 
 void ModuleSack::Impl::create_module_solvables() {
+    provides_ready = false;
     for (auto const & module_item : modules) {
         module_item->create_solvable();
         module_item->create_dependencies();
@@ -294,6 +295,26 @@ void ModuleSack::Impl::module_filtering() {
 
     // dnf_sack_set_module_includes(sack, includeQuery.getResultPset());*/
 }
+
+
+void ModuleSack::Impl::make_provides_ready() {
+    if (provides_ready) {
+        return;
+    }
+
+    // Temporarily replaces the considered map with an empty one. Ignores "excludes" during calculation provides.
+    Map * considered = pool->considered;
+    pool->considered = nullptr;
+
+    // TODO(pkratoch): Internalize repositories
+
+    pool_createwhatprovides(pool);
+    provides_ready = true;
+
+    // Sets the original considered map.
+    pool->considered = considered;
+}
+
 
 InvalidModuleState::InvalidModuleState(const std::string & state)
     : libdnf::Error(M_("Invalid module state: {}"), state) {}
