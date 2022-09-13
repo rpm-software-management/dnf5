@@ -240,6 +240,17 @@ public:
         const libdnf::rpm::PackageSet & package_set,
         const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
+    /// Add reason change request to the goal.
+    ///
+    /// @param spec      A string describing the requested package
+    /// @param reason    New reason for the package
+    /// @param group_id  Id of group the package belongs to (only relevant in case the reason is GROUP)
+    /// @param settings  A sructure to overrice default goal settings. Only ResolveSpecSettings values are used
+    void add_rpm_reason_change(
+        const std::string & spec,
+        const libdnf::transaction::TransactionItemReason reason,
+        const std::optional<std::string> & group_id,
+        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
     void add_group_install(
         const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
