@@ -41,6 +41,8 @@ void AdvisoryListCommand::process_and_print_queries(
         packages.filter_installed();
         installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::LTE);
     } else if (updates->get_value()) {
+        //TODO(amatej): all advisory commands with --updates should respect obsoletes and upgrades when noarch is involved,
+        //              filed as: https://issues.redhat.com/browse/RHELPLAN-133820
         packages.filter_upgradable();
         not_installed_pkgs = advisories.get_advisory_packages_sorted(packages, libdnf::sack::QueryCmp::GT);
     } else {  // available is the default
