@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
+static constexpr const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
     SELECT
         ti.id,
         trans_item_action.name AS action,
@@ -76,7 +76,7 @@ int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Packa
 }
 
 
-static const char * SQL_RPM_INSERT = R"**(
+static constexpr const char * SQL_RPM_INSERT = R"**(
     INSERT INTO
         rpm (
             item_id,
@@ -107,7 +107,7 @@ int64_t rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rp
 }
 
 
-static const char * SQL_RPM_SELECT_PK = R"**(
+static constexpr const char * SQL_RPM_SELECT_PK = R"**(
     SELECT
         item_id
     FROM
@@ -141,7 +141,7 @@ int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package &
 }
 
 
-static const char * SQL_RPM_SELECT = R"**(
+static constexpr const char * SQL_RPM_SELECT = R"**(
     SELECT
         item_id,
         pkg_names.name,

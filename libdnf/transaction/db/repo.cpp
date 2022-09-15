@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char * SQL_REPO_INSERT = R"**(
+static constexpr const char * SQL_REPO_INSERT = R"**(
     INSERT INTO
         repo (
             repoid
@@ -49,7 +49,7 @@ int64_t repo_insert(libdnf::utils::SQLite3::Statement & query, const std::string
 }
 
 
-static const char * SQL_REPO_SELECT_PK = R"**(
+static constexpr const char * SQL_REPO_SELECT_PK = R"**(
     SELECT
         id
     FROM

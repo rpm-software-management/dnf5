@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char * SQL_COMPS_ENVIRONMENT_GROUP_SELECT = R"**(
+static constexpr const char * SQL_COMPS_ENVIRONMENT_GROUP_SELECT = R"**(
     SELECT
         id,
         groupid,
@@ -66,7 +66,7 @@ void comps_environment_groups_select(libdnf::utils::SQLite3 & conn, CompsEnviron
 }
 
 
-static const char * SQL_COMPS_ENVIRONMENT_GROUP_INSERT = R"**(
+static constexpr const char * SQL_COMPS_ENVIRONMENT_GROUP_INSERT = R"**(
     INSERT INTO
         comps_environment_group (
             environment_id,

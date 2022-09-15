@@ -30,12 +30,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char * SQL_CREATE_TABLES =
+static constexpr const char * SQL_CREATE_TABLES =
 #include "sql/create_tables.sql"
     ;
 
 
-static const char * SQL_TABLE_CONFIG_EXISTS = R"**(
+static constexpr const char * SQL_TABLE_CONFIG_EXISTS = R"**(
     SELECT
         name
     FROM
@@ -46,7 +46,7 @@ static const char * SQL_TABLE_CONFIG_EXISTS = R"**(
 )**";
 
 
-static const char * SQL_GET_SCHEMA_VERSION = R"**(
+static constexpr const char * SQL_GET_SCHEMA_VERSION = R"**(
     SELECT
         value
     FROM
