@@ -36,11 +36,13 @@ class VarsTest : public TestCaseFixture {
     CPPUNIT_TEST_SUITE_END();
 
 public:
+    void setUp() override;
+
     void test_vars();
     void test_vars_multiple_dirs();
     void test_vars_env();
 
-    libdnf::Base base;
+    std::unique_ptr<libdnf::Base> base;
 };
 
 

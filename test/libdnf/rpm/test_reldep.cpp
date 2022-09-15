@@ -24,11 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(ReldepTest);
 
 
-void ReldepTest::setUp() {
-    base.setup();
-}
-
-
 void ReldepTest::test_short_reldep() {
     libdnf::rpm::Reldep a(base, "labirinto.txt");
     CPPUNIT_ASSERT(std::string(a.get_name()) == "labirinto.txt");

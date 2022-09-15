@@ -216,6 +216,8 @@ libdnf::rpm::Package BaseTestCase::first_query_pkg(libdnf::rpm::PackageQuery & q
 void BaseTestCase::setUp() {
     TestCaseFixture::setUp();
 
+    // TODO we could use get_preconfigured_base() for this now, but that would
+    // need changing the `base` member to a unique_ptr
     temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
     std::filesystem::create_directory(temp->get_path() / "installroot");
 

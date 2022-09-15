@@ -28,7 +28,7 @@ CPPUNIT_TEST_SUITE_REGISTRATION(BaseTest);
 
 void BaseTest::test_weak_ptr() {
     // Creates a new Base object
-    auto base = std::make_unique<libdnf::Base>();
+    auto base = get_preconfigured_base();
 
     // Gets a WeakPtr pointing to Vars in the Base object
     auto vars = base->get_vars();
@@ -52,7 +52,7 @@ void BaseTest::test_weak_ptr() {
 
 void BaseTest::test_incorrect_workflow() {
     // Creates a new Base object
-    auto base = std::make_unique<libdnf::Base>();
+    auto base = get_preconfigured_base();
 
     // Base object is not fully initialized - not initialized by Base::setup()
     CPPUNIT_ASSERT_THROW(libdnf::rpm::PackageQuery(*base.get()), libdnf::AssertionError);

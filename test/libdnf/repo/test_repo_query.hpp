@@ -21,19 +21,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TEST_REPO_QUERY_HPP
 
 
-#include <cppunit/TestCase.h>
+#include "base_test_case.hpp"
+
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class RepoQueryTest : public CppUnit::TestCase {
+class RepoQueryTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(RepoQueryTest);
     CPPUNIT_TEST(test_query_basics);
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp() override;
-    void tearDown() override;
-
     void test_query_basics();
 };
 

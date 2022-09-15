@@ -20,13 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TEST_RELDEP_HPP
 #define LIBDNF_TEST_RELDEP_HPP
 
-#include "libdnf/base/base.hpp"
+#include "base_test_case.hpp"
 
-#include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class ReldepTest : public CppUnit::TestCase {
+class ReldepTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(ReldepTest);
     CPPUNIT_TEST(test_short_reldep);
     CPPUNIT_TEST(test_full_reldep);
@@ -35,15 +34,10 @@ class ReldepTest : public CppUnit::TestCase {
     CPPUNIT_TEST_SUITE_END();
 
 public:
-    void setUp() override;
-
     void test_short_reldep();
     void test_full_reldep();
     void test_rich_reldep();
     void test_invalid_reldep();
-
-private:
-    libdnf::Base base;
 };
 
 #endif  // TEST_LIBDNF_RPM_RELDEP_HPP
