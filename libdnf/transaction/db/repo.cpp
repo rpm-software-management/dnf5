@@ -26,8 +26,8 @@ namespace libdnf::transaction {
 
 static constexpr const char * SQL_REPO_INSERT = R"**(
     INSERT INTO
-        repo (
-            repoid
+        "repo" (
+            "repoid"
         )
     VALUES
         (?)
@@ -51,11 +51,11 @@ int64_t repo_insert(libdnf::utils::SQLite3::Statement & query, const std::string
 
 static constexpr const char * SQL_REPO_SELECT_PK = R"**(
     SELECT
-        id
+        "id"
     FROM
-        repo
+        "repo"
     WHERE
-        repoid = ?
+        "repoid" = ?
 )**";
 
 

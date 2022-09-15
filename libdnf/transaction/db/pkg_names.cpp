@@ -23,13 +23,13 @@ namespace libdnf::transaction {
 
 static constexpr const char * SQL_NAME_INSERT_IF_NOT_EXISTS = R"**(
     INSERT INTO
-        pkg_names (
-            name
+        "pkg_names" (
+            "name"
         )
     VALUES
         (?)
     ON CONFLICT DO NOTHING
-    RETURNING id
+    RETURNING "id"
 )**";
 
 std::unique_ptr<utils::SQLite3::Statement> pkg_names_insert_if_not_exists_new_query(utils::SQLite3 & conn) {

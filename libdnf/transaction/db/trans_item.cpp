@@ -41,23 +41,23 @@ void transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionI
 
 static constexpr const char * SQL_TRANS_ITEM_INSERT = R"**(
     INSERT INTO
-        trans_item (
-            id,
-            trans_id,
-            item_id,
-            repo_id,
-            action_id,
-            reason_id,
-            state_id
+        "trans_item" (
+            "id",
+            "trans_id",
+            "item_id",
+            "repo_id",
+            "action_id",
+            "reason_id",
+            "state_id"
         )
     VALUES (
         null,
         ?,
         ?,
         ?,
-        (SELECT id FROM trans_item_action WHERE name=?),
-        (SELECT id FROM trans_item_reason WHERE name=?),
-        (SELECT id FROM trans_item_state WHERE name=?)
+        (SELECT "id" FROM "trans_item_action" WHERE "name"=?),
+        (SELECT "id" FROM "trans_item_reason" WHERE "name"=?),
+        (SELECT "id" FROM "trans_item_state" WHERE "name"=?)
     )
 )**";
 

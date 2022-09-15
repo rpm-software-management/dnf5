@@ -28,10 +28,10 @@ namespace libdnf::transaction {
 
 static constexpr const char * SQL_CONSOLE_OUTPUT_INSERT = R"**(
     INSERT INTO
-        console_output (
-            trans_id,
-            file_descriptor,
-            line
+        "console_output" (
+            "trans_id",
+            "file_descriptor",
+            "line"
         )
     VALUES
         (?, ?, ?);
@@ -57,14 +57,14 @@ int64_t console_output_insert_line(
 
 static constexpr const char * SQL_CONSOLE_OUTPUT_SELECT = R"**(
     SELECT
-        file_descriptor,
-        line
+        "file_descriptor",
+        "line"
     FROM
-        console_output
+        "console_output"
     WHERE
-        trans_id = ?
+        "trans_id" = ?
     ORDER BY
-        id
+        "id"
 )**";
 
 

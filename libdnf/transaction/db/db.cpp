@@ -37,22 +37,22 @@ static constexpr const char * SQL_CREATE_TABLES =
 
 static constexpr const char * SQL_TABLE_CONFIG_EXISTS = R"**(
     SELECT
-        name
+        "name"
     FROM
-        sqlite_master
+        "sqlite_master"
     WHERE
-        type='table'
-        AND name='config'
+        "type"='table'
+        AND "name"='config'
 )**";
 
 
 static constexpr const char * SQL_GET_SCHEMA_VERSION = R"**(
     SELECT
-        value
+        "value"
     FROM
-        config
+        "config"
     WHERE
-        key = 'version'
+        "key" = 'version'
 )**";
 
 
