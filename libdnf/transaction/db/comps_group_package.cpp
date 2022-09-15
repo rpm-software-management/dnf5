@@ -31,7 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char * SQL_COMPS_GROUP_PACKAGE_SELECT = R"**(
+static constexpr const char * SQL_COMPS_GROUP_PACKAGE_SELECT = R"**(
     SELECT
         cgp.id,
         pkg_names.name,
@@ -67,7 +67,7 @@ void comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & gro
 }
 
 
-static const char * SQL_COMPS_GROUP_PACKAGE_INSERT = R"**(
+static constexpr const char * SQL_COMPS_GROUP_PACKAGE_INSERT = R"**(
     INSERT INTO
         comps_group_package (
             group_id,

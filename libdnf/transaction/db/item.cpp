@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char * SQL_ITEM_INSERT = R"**(
+static constexpr const char * SQL_ITEM_INSERT = R"**(
     INSERT INTO item DEFAULT VALUES
 )**";
 

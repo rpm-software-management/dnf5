@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char * SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT = R"**(
+static constexpr const char * SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT = R"**(
     SELECT
         ti.id,
         trans_item_action.name AS action,
@@ -81,7 +81,7 @@ std::vector<CompsEnvironment> get_transaction_comps_environments(libdnf::utils::
 }
 
 
-static const char * SQL_COMPS_ENVIRONMENT_INSERT = R"**(
+static constexpr const char * SQL_COMPS_ENVIRONMENT_INSERT = R"**(
     INSERT INTO
         comps_environment (
             item_id,

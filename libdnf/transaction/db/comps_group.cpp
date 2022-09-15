@@ -32,7 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const char * SQL_COMPS_GROUP_TRANSACTION_ITEM_SELECT = R"**(
+static constexpr const char * SQL_COMPS_GROUP_TRANSACTION_ITEM_SELECT = R"**(
     SELECT
         ti.id,
         trans_item_action.name AS action,
@@ -85,7 +85,7 @@ std::vector<CompsGroup> get_transaction_comps_groups(libdnf::utils::SQLite3 & co
 }
 
 
-static const char * SQL_COMPS_GROUP_INSERT = R"**(
+static constexpr const char * SQL_COMPS_GROUP_INSERT = R"**(
     INSERT INTO
         comps_group (
             item_id,

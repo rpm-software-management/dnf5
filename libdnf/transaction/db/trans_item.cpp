@@ -39,7 +39,7 @@ void transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionI
 }
 
 
-static const char * SQL_TRANS_ITEM_INSERT = R"**(
+static constexpr const char * SQL_TRANS_ITEM_INSERT = R"**(
     INSERT INTO
         trans_item (
             id,

@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-const char * SQL_CONSOLE_OUTPUT_INSERT = R"**(
+static constexpr const char * SQL_CONSOLE_OUTPUT_INSERT = R"**(
     INSERT INTO
         console_output (
             trans_id,
@@ -54,7 +54,7 @@ int64_t console_output_insert_line(
 }
 
 
-const char * SQL_CONSOLE_OUTPUT_SELECT = R"**(
+static constexpr const char * SQL_CONSOLE_OUTPUT_SELECT = R"**(
     SELECT
         file_descriptor,
         line

@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-static const std::string select_sql{R"**(
+static constexpr const char * select_sql = R"**(
     SELECT
         trans.id,
         dt_begin,
@@ -42,7 +42,7 @@ static const std::string select_sql{R"**(
         trans_state.name AS state
     FROM trans
     LEFT JOIN trans_state ON trans.state_id = trans_state.id
-)**"};
+)**";
 
 
 static std::vector<Transaction> load_from_select(const BaseWeakPtr & base, libdnf::utils::SQLite3::Query & query) {
@@ -95,7 +95,7 @@ std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, co
 std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, int64_t start, int64_t end) {
     auto conn = transaction_db_connect(*base);
 
-    std::string sql = select_sql + " WHERE trans.id >= ? AND trans.id <= ?";
+    std::string sql = std::string(select_sql) + " WHERE trans.id >= ? AND trans.id <= ?";
 
     auto query = libdnf::utils::SQLite3::Query(*conn, sql);
     query.bindv(start, end);
@@ -104,7 +104,7 @@ std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, 
 }
 
 
-static const char * SQL_TRANS_INSERT = R"**(
+static constexpr const char * SQL_TRANS_INSERT = R"**(
     INSERT INTO
         trans (
             dt_begin,
@@ -154,7 +154,7 @@ void trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans
 }
 
 
-static const char * SQL_TRANS_UPDATE = R"**(
+static constexpr const char * SQL_TRANS_UPDATE = R"**(
     UPDATE
         trans
     SET
