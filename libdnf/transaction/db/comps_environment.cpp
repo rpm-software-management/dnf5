@@ -45,11 +45,11 @@ static constexpr const char * SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT = R"
         "i"."translated_name",
         "i"."pkg_types"
     FROM "trans_item" "ti"
-    JOIN "repo" "r" ON "ti"."repo_id" == "r"."id"
+    JOIN "repo" "r" ON "ti"."repo_id" = "r"."id"
     JOIN "comps_environment" "i" USING ("item_id")
-    LEFT JOIN "trans_item_action" ON "ti"."action_id" == "trans_item_action"."id"
-    LEFT JOIN "trans_item_reason" ON "ti"."reason_id" == "trans_item_reason"."id"
-    LEFT JOIN "trans_item_state" ON "ti"."state_id" == "trans_item_state"."id"
+    LEFT JOIN "trans_item_action" ON "ti"."action_id" = "trans_item_action"."id"
+    LEFT JOIN "trans_item_reason" ON "ti"."reason_id" = "trans_item_reason"."id"
+    LEFT JOIN "trans_item_state" ON "ti"."state_id" = "trans_item_state"."id"
     WHERE "ti"."trans_id" = ?
 )**";
 

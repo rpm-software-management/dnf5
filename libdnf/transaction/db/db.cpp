@@ -41,8 +41,8 @@ static constexpr const char * SQL_TABLE_CONFIG_EXISTS = R"**(
     FROM
         "sqlite_master"
     WHERE
-        "type"='table'
-        AND "name"='config'
+        "type" = 'table'
+        AND "name" = 'config'
 )**";
 
 

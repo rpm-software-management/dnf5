@@ -119,7 +119,7 @@ static constexpr const char * SQL_TRANS_INSERT = R"**(
             "id"
         )
         VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, (SELECT "id" FROM "trans_state" WHERE "name"=?), ?)
+            (?, ?, ?, ?, ?, ?, ?, ?, (SELECT "id" FROM "trans_state" WHERE "name" = ?), ?)
 )**";
 
 
@@ -158,15 +158,15 @@ static constexpr const char * SQL_TRANS_UPDATE = R"**(
     UPDATE
         "trans"
     SET
-        "dt_begin"=?,
-        "dt_end"=?,
-        "rpmdb_version_begin"=?,
-        "rpmdb_version_end"=?,
-        "releasever"=?,
-        "user_id"=?,
-        "description"=?,
-        "comment"=?,
-        "state_id"=(select "id" from "trans_state" where "name"=?)
+        "dt_begin" = ?,
+        "dt_end" = ?,
+        "rpmdb_version_begin" = ?,
+        "rpmdb_version_end" = ?,
+        "releasever" = ?,
+        "user_id" = ?,
+        "description" = ?,
+        "comment" = ?,
+        "state_id" = (SELECT "id" FROM "trans_state" WHERE "name" = ?)
     WHERE
         "id" = ?
 )**";

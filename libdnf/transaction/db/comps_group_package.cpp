@@ -77,7 +77,7 @@ static constexpr const char * SQL_COMPS_GROUP_PACKAGE_INSERT = R"**(
             "pkg_type"
         )
     VALUES
-        (?, (SELECT "id" FROM "pkg_names" WHERE "name"=?), ?, ?)
+        (?, (SELECT "id" FROM "pkg_names" WHERE "name" = ?), ?, ?)
 )**";
 
 
