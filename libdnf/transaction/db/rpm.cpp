@@ -46,13 +46,13 @@ static constexpr const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
         "i"."release",
         "archs"."name" AS "arch"
     FROM "trans_item" "ti"
-    JOIN "repo" "r" ON "ti"."repo_id" == "r"."id"
+    JOIN "repo" "r" ON "ti"."repo_id" = "r"."id"
     JOIN "rpm" "i" USING ("item_id")
-    LEFT JOIN "trans_item_action" ON "ti"."action_id" == "trans_item_action"."id"
-    LEFT JOIN "trans_item_reason" ON "ti"."reason_id" == "trans_item_reason"."id"
-    LEFT JOIN "trans_item_state" ON "ti"."state_id" == "trans_item_state"."id"
-    LEFT JOIN "pkg_names" ON "i"."name_id" == "pkg_names"."id"
-    LEFT JOIN "archs" ON "i"."arch_id" == "archs"."id"
+    LEFT JOIN "trans_item_action" ON "ti"."action_id" = "trans_item_action"."id"
+    LEFT JOIN "trans_item_reason" ON "ti"."reason_id" = "trans_item_reason"."id"
+    LEFT JOIN "trans_item_state" ON "ti"."state_id" = "trans_item_state"."id"
+    LEFT JOIN "pkg_names" ON "i"."name_id" = "pkg_names"."id"
+    LEFT JOIN "archs" ON "i"."arch_id" = "archs"."id"
     WHERE "ti"."trans_id" = ?
 )**";
 
@@ -88,7 +88,7 @@ static constexpr const char * SQL_RPM_INSERT = R"**(
             "arch_id"
         )
     VALUES
-        (?, (SELECT "id" FROM "pkg_names" WHERE "name"=?), ?, ?, ?, (SELECT "id" FROM "archs" WHERE "name"=?))
+        (?, (SELECT "id" FROM "pkg_names" WHERE "name" = ?), ?, ?, ?, (SELECT "id" FROM "archs" WHERE "name" = ?))
 )**";
 
 
@@ -115,13 +115,13 @@ static constexpr const char * SQL_RPM_SELECT_PK = R"**(
     FROM
         "rpm"
     LEFT JOIN "pkg_names" ON "rpm"."name_id" = "pkg_names"."id"
-    LEFT JOIN "archs" ON "rpm"."arch_id" == "archs"."id"
+    LEFT JOIN "archs" ON "rpm"."arch_id" = "archs"."id"
     WHERE
-        "pkg_names"."name"=?
-        AND "epoch"=?
-        AND "version"=?
-        AND "release"=?
-        AND "archs"."name"=?
+        "pkg_names"."name" = ?
+        AND "epoch" = ?
+        AND "version" = ?
+        AND "release" = ?
+        AND "archs"."name" = ?
 )**";
 
 

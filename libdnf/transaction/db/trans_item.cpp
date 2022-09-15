@@ -55,9 +55,9 @@ static constexpr const char * SQL_TRANS_ITEM_INSERT = R"**(
         ?,
         ?,
         ?,
-        (SELECT "id" FROM "trans_item_action" WHERE "name"=?),
-        (SELECT "id" FROM "trans_item_reason" WHERE "name"=?),
-        (SELECT "id" FROM "trans_item_state" WHERE "name"=?)
+        (SELECT "id" FROM "trans_item_action" WHERE "name" = ?),
+        (SELECT "id" FROM "trans_item_reason" WHERE "name" = ?),
+        (SELECT "id" FROM "trans_item_state" WHERE "name" = ?)
     )
 )**";
 
