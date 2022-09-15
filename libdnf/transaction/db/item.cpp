@@ -27,7 +27,7 @@ namespace libdnf::transaction {
 
 
 static constexpr const char * SQL_ITEM_INSERT = R"**(
-    INSERT INTO item DEFAULT VALUES
+    INSERT INTO "item" DEFAULT VALUES
 )**";
 
 

@@ -30,18 +30,18 @@ namespace libdnf::transaction {
 
 static constexpr const char * select_sql = R"**(
     SELECT
-        trans.id,
-        dt_begin,
-        dt_end,
-        rpmdb_version_begin,
-        rpmdb_version_end,
-        releasever,
-        user_id,
-        description,
-        comment,
-        trans_state.name AS state
-    FROM trans
-    LEFT JOIN trans_state ON trans.state_id = trans_state.id
+        "trans"."id",
+        "dt_begin",
+        "dt_end",
+        "rpmdb_version_begin",
+        "rpmdb_version_end",
+        "releasever",
+        "user_id",
+        "description",
+        "comment",
+        "trans_state"."name" AS "state"
+    FROM "trans"
+    LEFT JOIN "trans_state" ON "trans"."state_id" = "trans_state"."id"
 )**";
 
 
@@ -71,7 +71,7 @@ std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, co
     std::string sql = select_sql;
 
     if (!ids.empty()) {
-        sql += " WHERE trans.id IN (";
+        sql += " WHERE \"trans\".\"id\" IN (";
         for (size_t i = 0; i < ids.size(); ++i) {
             if (i == 0) {
                 sql += "?";
@@ -95,7 +95,7 @@ std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, co
 std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, int64_t start, int64_t end) {
     auto conn = transaction_db_connect(*base);
 
-    std::string sql = std::string(select_sql) + " WHERE trans.id >= ? AND trans.id <= ?";
+    std::string sql = std::string(select_sql) + " WHERE \"trans\".\"id\" >= ? AND \"trans\".\"id\" <= ?";
 
     auto query = libdnf::utils::SQLite3::Query(*conn, sql);
     query.bindv(start, end);
@@ -106,20 +106,20 @@ std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, 
 
 static constexpr const char * SQL_TRANS_INSERT = R"**(
     INSERT INTO
-        trans (
-            dt_begin,
-            dt_end,
-            rpmdb_version_begin,
-            rpmdb_version_end,
-            releasever,
-            user_id,
-            description,
-            comment,
-            state_id,
-            id
+        "trans" (
+            "dt_begin",
+            "dt_end",
+            "rpmdb_version_begin",
+            "rpmdb_version_end",
+            "releasever",
+            "user_id",
+            "description",
+            "comment",
+            "state_id",
+            "id"
         )
         VALUES
-            (?, ?, ?, ?, ?, ?, ?, ?, (SELECT id FROM trans_state WHERE name=?), ?)
+            (?, ?, ?, ?, ?, ?, ?, ?, (SELECT "id" FROM "trans_state" WHERE "name"=?), ?)
 )**";
 
 
@@ -156,19 +156,19 @@ void trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans
 
 static constexpr const char * SQL_TRANS_UPDATE = R"**(
     UPDATE
-        trans
+        "trans"
     SET
-        dt_begin=?,
-        dt_end=?,
-        rpmdb_version_begin=?,
-        rpmdb_version_end=?,
-        releasever=?,
-        user_id=?,
-        description=?,
-        comment=?,
-        state_id=(select id from trans_state where name=?)
+        "dt_begin"=?,
+        "dt_end"=?,
+        "rpmdb_version_begin"=?,
+        "rpmdb_version_end"=?,
+        "releasever"=?,
+        "user_id"=?,
+        "description"=?,
+        "comment"=?,
+        "state_id"=(select "id" from "trans_state" where "name"=?)
     WHERE
-        id = ?
+        "id" = ?
 )**";
 
 

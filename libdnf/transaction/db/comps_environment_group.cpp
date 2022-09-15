@@ -33,16 +33,16 @@ namespace libdnf::transaction {
 
 static constexpr const char * SQL_COMPS_ENVIRONMENT_GROUP_SELECT = R"**(
     SELECT
-        id,
-        groupid,
-        installed,
-        group_type
+        "id",
+        "groupid",
+        "installed",
+        "group_type"
     FROM
-        comps_environment_group
+        "comps_environment_group"
     WHERE
-        environment_id = ?
+        "environment_id" = ?
     ORDER BY
-        id
+        "id"
 )**";
 
 
@@ -69,11 +69,11 @@ void comps_environment_groups_select(libdnf::utils::SQLite3 & conn, CompsEnviron
 
 static constexpr const char * SQL_COMPS_ENVIRONMENT_GROUP_INSERT = R"**(
     INSERT INTO
-        comps_environment_group (
-            environment_id,
-            groupid,
-            installed,
-            group_type
+        "comps_environment_group" (
+            "environment_id",
+            "groupid",
+            "installed",
+            "group_type"
         )
     VALUES
         (?, ?, ?, ?)

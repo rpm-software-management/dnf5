@@ -33,17 +33,17 @@ namespace libdnf::transaction {
 
 static constexpr const char * SQL_COMPS_GROUP_PACKAGE_SELECT = R"**(
     SELECT
-        cgp.id,
-        pkg_names.name,
-        cgp.installed,
-        cgp.pkg_type
+        "cgp"."id",
+        "pkg_names"."name",
+        "cgp"."installed",
+        "cgp"."pkg_type"
     FROM
-        comps_group_package cgp
-    LEFT JOIN pkg_names ON cgp.name_id = pkg_names.id
+        "comps_group_package" "cgp"
+    LEFT JOIN "pkg_names" ON "cgp"."name_id" = "pkg_names"."id"
     WHERE
-        cgp.group_id = ?
+        "cgp"."group_id" = ?
     ORDER BY
-        cgp.id
+        "cgp"."id"
 )**";
 
 
@@ -70,14 +70,14 @@ void comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & gro
 
 static constexpr const char * SQL_COMPS_GROUP_PACKAGE_INSERT = R"**(
     INSERT INTO
-        comps_group_package (
-            group_id,
-            name_id,
-            installed,
-            pkg_type
+        "comps_group_package" (
+            "group_id",
+            "name_id",
+            "installed",
+            "pkg_type"
         )
     VALUES
-        (?, (SELECT id FROM pkg_names WHERE name=?), ?, ?)
+        (?, (SELECT "id" FROM "pkg_names" WHERE "name"=?), ?, ?)
 )**";
 
 
