@@ -46,7 +46,8 @@ static constexpr const char * SQL_COMPS_ENVIRONMENT_GROUP_SELECT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_group_select_new_query(libdnf::utils::SQLite3 & conn) {
+static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_group_select_new_query(
+    libdnf::utils::SQLite3 & conn) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_COMPS_ENVIRONMENT_GROUP_SELECT);
     return query;
 }
@@ -79,7 +80,7 @@ static constexpr const char * SQL_COMPS_ENVIRONMENT_GROUP_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_group_insert_new_query(
+static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_group_insert_new_query(
     libdnf::utils::SQLite3 & conn) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_COMPS_ENVIRONMENT_GROUP_INSERT);
     return query;

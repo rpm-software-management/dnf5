@@ -32,15 +32,10 @@ namespace libdnf::transaction {
 
 class CompsGroup;
 class Transaction;
-class TransactionItem;
 
 
 /// Return a vector of CompsGroup objects with comps groups in a transaction
 std::vector<CompsGroup> get_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans);
-
-
-/// Create a query (statement) that inserts new records to the 'comps_group' table
-std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_group_insert_new_query(libdnf::utils::SQLite3 & conn);
 
 
 /// Use a query to insert a new record to the 'comps_group' table

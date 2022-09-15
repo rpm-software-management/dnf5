@@ -56,7 +56,8 @@ static constexpr const char * SQL_GET_SCHEMA_VERSION = R"**(
 )**";
 
 
-void transaction_db_create(libdnf::utils::SQLite3 & conn) {
+// Create tables and migrate schema if necessary.
+static void transaction_db_create(libdnf::utils::SQLite3 & conn) {
     // check if table 'config' exists; if not, assume an empty database and create the tables
     libdnf::utils::SQLite3::Statement query_table_config_exists(conn, SQL_TABLE_CONFIG_EXISTS);
     if (query_table_config_exists.step() != libdnf::utils::SQLite3::Statement::StepResult::ROW) {

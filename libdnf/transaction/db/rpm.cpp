@@ -57,7 +57,8 @@ static constexpr const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_query(
+// Create a query that returns all rpm transaction items for a transaction
+static std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_select_new_query(
     libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_RPM_TRANSACTION_ITEM_SELECT);
     query->bindv(transaction_id);
@@ -91,7 +92,8 @@ static constexpr const char * SQL_RPM_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_insert_new_query(libdnf::utils::SQLite3 & conn) {
+// Create a query (statement) that inserts new records to the 'rpm' table
+static std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_insert_new_query(libdnf::utils::SQLite3 & conn) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_RPM_INSERT);
     return query;
 }
@@ -123,7 +125,8 @@ static constexpr const char * SQL_RPM_SELECT_PK = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_select_pk_new_query(libdnf::utils::SQLite3 & conn) {
+// Create a query that returns primary keys from table 'rpm'
+static std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_select_pk_new_query(libdnf::utils::SQLite3 & conn) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_RPM_SELECT_PK);
     return query;
 }
@@ -138,29 +141,6 @@ int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package &
     }
     query.reset();
     return result;
-}
-
-
-static constexpr const char * SQL_RPM_SELECT = R"**(
-    SELECT
-        item_id,
-        pkg_names.name,
-        epoch,
-        version,
-        release,
-        archs.name AS arch
-    FROM
-        rpm
-    LEFT JOIN pkg_names ON rpm.name_id = pkg_names.id
-    LEFT JOIN archs ON rpm.arch_id == archs.id
-    WHERE
-        item_id = ?
-)**";
-
-
-std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_select_new_query(libdnf::utils::SQLite3 & conn) {
-    auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_RPM_SELECT);
-    return query;
 }
 
 

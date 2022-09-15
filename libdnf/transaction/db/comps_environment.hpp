@@ -32,15 +32,10 @@ namespace libdnf::transaction {
 
 class CompsEnvironment;
 class Transaction;
-class TransactionItem;
 
 
 /// Return a vector of CompsEnvironment objects with comps environments in a transaction
 std::vector<CompsEnvironment> get_transaction_comps_environments(libdnf::utils::SQLite3 & conn, Transaction & trans);
-
-
-/// Create a query (statement) that inserts new records to the 'comps_environment' table
-std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_insert_new_query(libdnf::utils::SQLite3 & conn);
 
 
 /// Use a query to insert a new record to the 'comps_environment' table

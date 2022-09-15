@@ -54,7 +54,7 @@ static constexpr const char * SQL_COMPS_GROUP_TRANSACTION_ITEM_SELECT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_transaction_item_select_new_query(
+static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_transaction_item_select_new_query(
     libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_COMPS_GROUP_TRANSACTION_ITEM_SELECT);
     query->bindv(transaction_id);
@@ -99,7 +99,8 @@ static constexpr const char * SQL_COMPS_GROUP_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_group_insert_new_query(libdnf::utils::SQLite3 & conn) {
+// Create a query (statement) that inserts new records to the 'comps_group' table
+static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_group_insert_new_query(libdnf::utils::SQLite3 & conn) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_COMPS_GROUP_INSERT);
     return query;
 }

@@ -54,7 +54,7 @@ static constexpr const char * SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT = R"
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_transaction_item_select_new_query(
+static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_transaction_item_select_new_query(
     libdnf::utils::SQLite3 & conn, int64_t transaction_id) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Query>(conn, SQL_COMPS_ENVIRONMENT_TRANSACTION_ITEM_SELECT);
     query->bindv(transaction_id);
@@ -95,7 +95,9 @@ static constexpr const char * SQL_COMPS_ENVIRONMENT_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_insert_new_query(libdnf::utils::SQLite3 & conn) {
+// Create a query (statement) that inserts new records to the 'comps_environment' table
+static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_insert_new_query(
+    libdnf::utils::SQLite3 & conn) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_COMPS_ENVIRONMENT_INSERT);
     return query;
 }
