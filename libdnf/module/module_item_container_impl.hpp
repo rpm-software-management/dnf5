@@ -32,7 +32,7 @@ namespace libdnf::module {
 class ModuleItemContainer::Impl {
 public:
     Impl() : pool(pool_create()) {}
-    ~Impl() {}
+    ~Impl() { pool_free(pool); }
 
 private:
     friend ModuleItemContainer;
