@@ -35,12 +35,8 @@ class Base;
 namespace libdnf::transaction {
 
 
-/// Create tables and migrate schema if necessary.
-void transaction_db_create(libdnf::utils::SQLite3 & conn);
-
-
 /// Create a connection to transaction database in the 'persistdir' directory.
-/// The file is named 'history.sqlite' for compatibility reasons.
+/// The file is named 'transaction_history.sqlite'.
 std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & base);
 
 
