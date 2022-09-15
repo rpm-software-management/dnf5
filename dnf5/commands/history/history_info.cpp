@@ -33,11 +33,18 @@ void HistoryInfoCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Print details about transactions");
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
+    reverse = std::make_unique<ReverseOption>(*this);
 }
 
 void HistoryInfoCommand::run() {
     auto transactions =
         list_transactions_from_specs(*get_context().base.get_transaction_history(), transaction_specs->get_value());
+
+    if (reverse->get_value()) {
+        std::sort(transactions.begin(), transactions.end(), std::greater{});
+    } else {
+        std::sort(transactions.begin(), transactions.end());
+    }
 
     for (auto ts : transactions) {
         libdnf::cli::output::print_transaction_info(ts);

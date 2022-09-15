@@ -34,6 +34,7 @@ void HistoryListCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("List transactions");
 
     transaction_specs = std::make_unique<TransactionSpecArguments>(*this);
+    reverse = std::make_unique<ReverseOption>(*this);
 }
 
 void HistoryListCommand::run() {
@@ -45,6 +46,12 @@ void HistoryListCommand::run() {
         transactions = history.list_all_transactions();
     } else {
         transactions = list_transactions_from_specs(history, transaction_specs->get_value());
+    }
+
+    if (reverse->get_value()) {
+        std::sort(transactions.begin(), transactions.end(), std::greater{});
+    } else {
+        std::sort(transactions.begin(), transactions.end());
     }
 
     libdnf::cli::output::print_transaction_list(transactions);

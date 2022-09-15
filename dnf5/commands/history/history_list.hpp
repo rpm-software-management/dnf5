@@ -36,6 +36,7 @@ public:
     void run() override;
 
     std::unique_ptr<TransactionSpecArguments> transaction_specs{nullptr};
+    std::unique_ptr<ReverseOption> reverse{nullptr};
 };
 
 

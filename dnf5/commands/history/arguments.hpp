@@ -36,6 +36,13 @@ public:
 };
 
 
+class ReverseOption : public libdnf::cli::session::BoolOption {
+public:
+    explicit ReverseOption(libdnf::cli::session::Command & command)
+        : BoolOption(command, "reverse", '\0', _("Reverse the order of transactions."), false) {}
+};
+
+
 }  // namespace dnf5
 
 
