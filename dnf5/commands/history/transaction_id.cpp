@@ -126,8 +126,6 @@ std::vector<libdnf::transaction::Transaction> list_transactions_from_specs(
         result.insert(result.end(), transactions.begin(), transactions.end());
     }
 
-    std::sort(result.begin(), result.end());
-
     return result;
 }
 
