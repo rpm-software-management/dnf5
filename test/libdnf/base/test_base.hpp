@@ -22,11 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_BASE_BASE_HPP
 
 
-#include <cppunit/TestCase.h>
+#include "test_case_fixture.hpp"
+
 #include <cppunit/extensions/HelperMacros.h>
 
 
-class BaseTest : public CppUnit::TestCase {
+class BaseTest : public TestCaseFixture {
     CPPUNIT_TEST_SUITE(BaseTest);
     CPPUNIT_TEST(test_weak_ptr);
     CPPUNIT_TEST(test_incorrect_workflow);
