@@ -459,6 +459,22 @@ void Repo::load_available_repo(LoadFlags flags) {
     if (any(flags & LoadFlags::COMPS)) {
         solv_repo->load_repo_ext(RepodataType::COMPS, *downloader.get());
     }
+
+    // Load module metadata
+#ifdef MODULEMD
+    auto & logger = *base->get_logger();
+
+    std::string_view ext_fn = downloader->get_metadata_path(RepoDownloader::MD_FILENAME_MODULES);
+
+    if (ext_fn.empty()) {
+        logger.debug("No {} metadata available for repo {}", RepoDownloader::MD_FILENAME_MODULES, config.get_id());
+        return;
+    }
+    logger.debug(
+        "Loading {} extension for repo {} from \"{}\"", RepoDownloader::MD_FILENAME_MODULES, config.get_id(), ext_fn);
+
+    base->get_module_item_container()->add(libdnf::utils::fs::File(ext_fn, "r", true).read(), config.get_id());
+#endif
 }
 
 

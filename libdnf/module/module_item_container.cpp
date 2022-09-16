@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/base/base_weak.hpp"
+#include "libdnf/module/module_errors.hpp"
 #include "libdnf/module/module_item.hpp"
 #include "libdnf/module/module_item_container_weak.hpp"
 
@@ -48,7 +49,12 @@ ModuleItemContainer::~ModuleItemContainer() {}
 
 void ModuleItemContainer::add(const std::string & file_content, const std::string & repo_id) {
     ModuleMetadata md(base);
-    md.add_metadata_from_string(file_content, 0);
+    try {
+        md.add_metadata_from_string(file_content, 0);
+    } catch (const ModuleResolveError & e) {
+        throw ModuleResolveError(
+            M_("Failed to load module metadata for repository \"{}\": {}"), repo_id, std::string(e.what()));
+    }
     md.resolve_added_metadata();
 
     Repo * repo;
