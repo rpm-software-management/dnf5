@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 
 #include "base_impl.hpp"
+#include "conf/config.h"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
@@ -43,7 +44,9 @@ Base::Base()
       rpm_package_sack(get_weak_ptr()),
       transaction_history(get_weak_ptr()),
       vars(get_weak_ptr()),
-      p_impl(new Impl(get_weak_ptr())) {}
+      p_impl(new Impl(get_weak_ptr())) {
+    load_defaults();
+}
 
 Base::~Base() = default;
 
@@ -63,6 +66,24 @@ void Base::unlock() {
 
 Base * Base::get_locked_base() noexcept {
     return locked_base;
+}
+
+void Base::load_defaults() {
+    const std::string file_path = LIBDNF5_DISTRIBUTION_CONFIG_FILE;
+    try {
+        log_router.debug("Loading default configuration from \"{}\"", file_path);
+        ConfigParser parser;
+        parser.read(file_path);
+        config.load_from_parser(parser, "main", vars, *get_logger(), Option::Priority::DEFAULT);
+    } catch (const std::filesystem::filesystem_error & ex) {
+        if (ex.code().value() == ENOENT) {
+            log_router.debug("Configuration file \"{}\" not found", file_path);
+        } else {
+            std::throw_with_nested(RuntimeError(M_("Unable to load configuration file \"{}\""), file_path));
+        }
+    } catch (const libdnf::Error & ex) {
+        std::throw_with_nested(RuntimeError(M_("Error in configuration file \"{}\""), file_path));
+    }
 }
 
 void Base::load_config_from_file(const std::string & path) try {

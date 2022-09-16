@@ -111,6 +111,9 @@ private:
 
     WeakPtrGuard<Base, false> base_guard;
 
+    /// Loads the default configuration. To load distribution-specific configuration.
+    void load_defaults();
+
     //TODO(jrohel): Make public?
     /// Loads main configuration from file defined by path.
     void load_config_from_file(const std::string & path);
