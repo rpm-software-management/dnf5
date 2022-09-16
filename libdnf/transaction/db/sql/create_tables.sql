@@ -20,7 +20,7 @@ R"**(
         "comment" TEXT,                                   /* An arbitrary comment */
         "state_id" INTEGER,                               /* (enum) */
         PRIMARY KEY("id" AUTOINCREMENT),
-	FOREIGN KEY("state_id") REFERENCES "trans_state"("id")
+        FOREIGN KEY("state_id") REFERENCES "trans_state"("id")
     );
 
     CREATE TABLE "repo" (
@@ -29,13 +29,13 @@ R"**(
         PRIMARY KEY("id")
     );
 
-    CREATE TABLE "pkg_names" (
+    CREATE TABLE "pkg_name" (
         "id" INTEGER,
         "name" TEXT NOT NULL UNIQUE,
         PRIMARY KEY("id")
     );
 
-    CREATE TABLE "archs" (
+    CREATE TABLE "arch" (
         "id" INTEGER,
         "name" TEXT NOT NULL UNIQUE,
         PRIMARY KEY("id")
@@ -110,8 +110,8 @@ R"**(
         "release" TEXT NOT NULL,
         "arch_id" INTEGER NOT NULL,
         FOREIGN KEY("item_id") REFERENCES "item"("id"),
-        FOREIGN KEY("name_id") REFERENCES "pkg_names"("id"),
-        FOREIGN KEY("arch_id") REFERENCES "archs"("id"),
+        FOREIGN KEY("name_id") REFERENCES "pkg_name"("id"),
+        FOREIGN KEY("arch_id") REFERENCES "arch"("id"),
         CONSTRAINT "rpm_unique_nevra" UNIQUE ("name_id", "epoch", "version", "release", "arch_id")
     );
 
@@ -132,7 +132,7 @@ R"**(
         "installed" INTEGER NOT NULL,
         "pkg_type" INTEGER NOT NULL,
         FOREIGN KEY("group_id") REFERENCES "comps_group"("item_id"),
-        FOREIGN KEY("name_id") REFERENCES "pkg_names"("id"),
+        FOREIGN KEY("name_id") REFERENCES "pkg_name"("id"),
         CONSTRAINT "comps_group_package_unique_name" UNIQUE ("group_id", "name_id"),
         PRIMARY KEY("id" AUTOINCREMENT)
     );
@@ -167,7 +167,7 @@ R"**(
 
     DELETE FROM "sqlite_sequence";
 
-    CREATE INDEX "pkg_name" ON "pkg_names"("name");
+    CREATE INDEX "pkg_name_name" ON "pkg_name"("name");
     CREATE INDEX "trans_item_trans_id" ON "trans_item"("trans_id");
     CREATE INDEX "trans_item_item_id" ON "trans_item"("item_id");
 
