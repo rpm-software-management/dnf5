@@ -8,7 +8,7 @@
     <size>81503</size>
     <open-size>864433</open-size>
   </data>
-  <data type="module">
+  <data type="modules">
     <checksum type="sha256">922d7a0c917fc74cc91225b648970cb326b8445c9bbfbf0e4972f41e7cbc2829</checksum>
     <open-checksum type="sha256">922d7a0c917fc74cc91225b648970cb326b8445c9bbfbf0e4972f41e7cbc2829</open-checksum>
     <location href="repodata/modules.yaml" />
