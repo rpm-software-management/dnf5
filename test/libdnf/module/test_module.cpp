@@ -40,18 +40,9 @@ using namespace libdnf::module;
 
 
 void ModuleTest::test_load() {
-    std::ifstream module_yaml_file(PROJECT_SOURCE_DIR "/test/data/repos-repomd/repomd-modules/repodata/modules.yaml");
-    std::string module_yaml_string;
-    std::string line;
-    if (module_yaml_file.is_open()) {
-        while (getline(module_yaml_file, line)) {
-            module_yaml_string.append(line).append("\n");
-        }
-        module_yaml_file.close();
-    }
+    add_repo_repomd("repomd-modules");
 
-    auto module_item_container = std::make_unique<ModuleItemContainer>(base);
-    module_item_container->add(module_yaml_string, "repomd-modules");
+    auto module_item_container = base.get_module_item_container();
     module_item_container->add_modules_without_static_context();
     CPPUNIT_ASSERT_EQUAL(3lu, module_item_container->modules.size());
 
