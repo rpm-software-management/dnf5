@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_TRANSACTION_DB_ARCHS_HPP
-#define LIBDNF_TRANSACTION_DB_ARCHS_HPP
+#ifndef LIBDNF_TRANSACTION_DB_ARCH_HPP
+#define LIBDNF_TRANSACTION_DB_ARCH_HPP
 
 #include "utils/sqlite3/sqlite3.hpp"
 
@@ -26,12 +26,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
-/// Create a query (statement) that inserts new records to the 'archs' table
-std::unique_ptr<utils::SQLite3::Statement> archs_insert_if_not_exists_new_query(utils::SQLite3 & conn);
+/// Create a query (statement) that inserts new records to the 'arch' table
+std::unique_ptr<utils::SQLite3::Statement> arch_insert_if_not_exists_new_query(utils::SQLite3 & conn);
 
-/// Use a query to insert a new record to the 'archs' table
-int64_t archs_insert_if_not_exists(utils::SQLite3::Statement & query, const std::string & name);
+/// Use a query to insert a new record to the 'arch' table
+int64_t arch_insert_if_not_exists(utils::SQLite3::Statement & query, const std::string & name);
 
 }  // namespace libdnf::transaction
 
-#endif  // LIBDNF_TRANSACTION_DB_ARCHS_HPP
+#endif  // LIBDNF_TRANSACTION_DB_ARCH_HPP

@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "rpm.hpp"
 
-#include "archs.hpp"
+#include "arch.hpp"
 #include "item.hpp"
-#include "pkg_names.hpp"
+#include "pkg_name.hpp"
 #include "trans_item.hpp"
 
 #include "libdnf/transaction/rpm_package.hpp"
@@ -40,19 +40,19 @@ static constexpr const char * SQL_RPM_TRANSACTION_ITEM_SELECT = R"**(
         "trans_item_state"."name" AS "state",
         "r"."repoid",
         "i"."item_id",
-        "pkg_names"."name",
+        "pkg_name"."name",
         "i"."epoch",
         "i"."version",
         "i"."release",
-        "archs"."name" AS "arch"
+        "arch"."name" AS "arch"
     FROM "trans_item" "ti"
     JOIN "repo" "r" ON "ti"."repo_id" = "r"."id"
     JOIN "rpm" "i" USING ("item_id")
     LEFT JOIN "trans_item_action" ON "ti"."action_id" = "trans_item_action"."id"
     LEFT JOIN "trans_item_reason" ON "ti"."reason_id" = "trans_item_reason"."id"
     LEFT JOIN "trans_item_state" ON "ti"."state_id" = "trans_item_state"."id"
-    LEFT JOIN "pkg_names" ON "i"."name_id" = "pkg_names"."id"
-    LEFT JOIN "archs" ON "i"."arch_id" = "archs"."id"
+    LEFT JOIN "pkg_name" ON "i"."name_id" = "pkg_name"."id"
+    LEFT JOIN "arch" ON "i"."arch_id" = "arch"."id"
     WHERE "ti"."trans_id" = ?
 )**";
 
@@ -88,7 +88,7 @@ static constexpr const char * SQL_RPM_INSERT = R"**(
             "arch_id"
         )
     VALUES
-        (?, (SELECT "id" FROM "pkg_names" WHERE "name" = ?), ?, ?, ?, (SELECT "id" FROM "archs" WHERE "name" = ?))
+        (?, (SELECT "id" FROM "pkg_name" WHERE "name" = ?), ?, ?, ?, (SELECT "id" FROM "arch" WHERE "name" = ?))
 )**";
 
 
@@ -114,14 +114,14 @@ static constexpr const char * SQL_RPM_SELECT_PK = R"**(
         "item_id"
     FROM
         "rpm"
-    LEFT JOIN "pkg_names" ON "rpm"."name_id" = "pkg_names"."id"
-    LEFT JOIN "archs" ON "rpm"."arch_id" = "archs"."id"
+    LEFT JOIN "pkg_name" ON "rpm"."name_id" = "pkg_name"."id"
+    LEFT JOIN "arch" ON "rpm"."arch_id" = "arch"."id"
     WHERE
-        "pkg_names"."name" = ?
+        "pkg_name"."name" = ?
         AND "epoch" = ?
         AND "version" = ?
         AND "release" = ?
-        AND "archs"."name" = ?
+        AND "arch"."name" = ?
 )**";
 
 
@@ -180,8 +180,8 @@ std::vector<Package> get_transaction_packages(libdnf::utils::SQLite3 & conn, Tra
 void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     auto query_rpm_select_pk = rpm_select_pk_new_query(conn);
     auto query_item_insert = item_insert_new_query(conn);
-    auto query_pkg_name_insert_if_not_exists = pkg_names_insert_if_not_exists_new_query(conn);
-    auto query_arch_insert_if_not_exists = archs_insert_if_not_exists_new_query(conn);
+    auto query_pkg_name_insert_if_not_exists = pkg_name_insert_if_not_exists_new_query(conn);
+    auto query_arch_insert_if_not_exists = arch_insert_if_not_exists_new_query(conn);
     auto query_rpm_insert = rpm_insert_new_query(conn);
     auto query_trans_item_insert = trans_item_insert_new_query(conn);
 
@@ -190,10 +190,10 @@ void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & tr
         if (pkg.get_item_id() == 0) {
             // insert into 'item' table, create item_id
             pkg.set_item_id(item_insert(*query_item_insert));
-            // insert package name into 'pkg_names' table if not exists
-            pkg_names_insert_if_not_exists(*query_pkg_name_insert_if_not_exists, pkg.get_name());
-            // insert arch name into 'archs' table if not exists
-            archs_insert_if_not_exists(*query_arch_insert_if_not_exists, pkg.get_arch());
+            // insert package name into 'pkg_name' table if not exists
+            pkg_name_insert_if_not_exists(*query_pkg_name_insert_if_not_exists, pkg.get_name());
+            // insert arch name into 'arch' table if not exists
+            arch_insert_if_not_exists(*query_arch_insert_if_not_exists, pkg.get_arch());
             // insert into 'rpm' table
             rpm_insert(*query_rpm_insert, pkg);
         }
