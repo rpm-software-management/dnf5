@@ -1335,8 +1335,12 @@ const OptionBool & ConfigMain::skip_if_unavailable() const {
 }
 
 void ConfigMain::load_from_parser(
-    const ConfigParser & parser, const std::string & section, const Vars & vars, Logger & logger) {
-    Config::load_from_parser(parser, section, vars, logger);
+    const ConfigParser & parser,
+    const std::string & section,
+    const Vars & vars,
+    Logger & logger,
+    Option::Priority priority) {
+    Config::load_from_parser(parser, section, vars, logger, priority);
 
     if (geteuid() == 0) {
         p_impl->cachedir.set(Option::Priority::MAINCONFIG, p_impl->system_cachedir.get_value());

@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::repo {
 
 /// Holds repo configuration options. Default values of some options are inherited from ConfigMain.
-class ConfigRepo : public Config<Option::Priority::REPOCONFIG> {
+class ConfigRepo : public Config {
 public:
     ConfigRepo(ConfigMain & main_config, const std::string & id);
     ~ConfigRepo();
@@ -156,6 +156,13 @@ public:
     /// @return The path to the repository's perisistent directory, where its
     /// persistent data are stored.
     std::string get_persistdir() const;
+
+    void load_from_parser(
+        const libdnf::ConfigParser & parser,
+        const std::string & section,
+        const libdnf::Vars & vars,
+        libdnf::Logger & logger,
+        Option::Priority priority = Option::Priority::REPOCONFIG) override;
 
 private:
     class Impl;

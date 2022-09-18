@@ -31,7 +31,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 /// Base class for configurations objects
-template <Option::Priority default_priority>
 class Config {
 public:
     OptionBinds & opt_binds() noexcept { return binds; }
@@ -39,14 +38,16 @@ public:
     virtual ~Config() = default;
 
     virtual void load_from_parser(
-        const ConfigParser & parser, const std::string & section, const Vars & vars, Logger & logger);
+        const ConfigParser & parser,
+        const std::string & section,
+        const Vars & vars,
+        Logger & logger,
+        Option::Priority priority);
 
 private:
     OptionBinds binds;
 };
 
-extern template class Config<Option::Priority::MAINCONFIG>;
-extern template class Config<Option::Priority::REPOCONFIG>;
 
 }  // namespace libdnf
 
