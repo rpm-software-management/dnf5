@@ -587,4 +587,13 @@ std::string ConfigRepo::get_persistdir() const {
     return main_persistdir / "repos" / get_unique_id();
 }
 
+void ConfigRepo::load_from_parser(
+    const ConfigParser & parser,
+    const std::string & section,
+    const Vars & vars,
+    Logger & logger,
+    Option::Priority priority) {
+    Config::load_from_parser(parser, section, vars, logger, priority);
+}
+
 }  // namespace libdnf::repo

@@ -37,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 /// Holds global configuration
-class ConfigMain : public Config<Option::Priority::MAINCONFIG> {
+class ConfigMain : public Config {
 public:
     ConfigMain();
     ~ConfigMain();
@@ -276,11 +276,12 @@ public:
     OptionBool & skip_if_unavailable();
     const OptionBool & skip_if_unavailable() const;
 
-    virtual void load_from_parser(
+    void load_from_parser(
         const libdnf::ConfigParser & parser,
         const std::string & section,
         const libdnf::Vars & vars,
-        libdnf::Logger & logger) override;
+        libdnf::Logger & logger,
+        Option::Priority priority = Option::Priority::MAINCONFIG) override;
 
 private:
     class Impl;
