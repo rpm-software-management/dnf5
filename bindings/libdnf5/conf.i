@@ -12,6 +12,7 @@
 %include <shared.i>
 
 %import "common.i"
+%import "logger.i"
 
 %exception {
     try {
@@ -26,6 +27,8 @@
     #include "libdnf/conf/config_main.hpp"
     #include "libdnf/conf/config_parser.hpp"
     #include "libdnf/common/weak_ptr.hpp"
+    #include "libdnf/logger/log_router.hpp"
+    #include "libdnf/logger/memory_buffer_logger.hpp"
 %}
 
 #define CV __perl_CV
@@ -78,12 +81,13 @@
 %ignore libdnf::OptionBinds::find;
 %include "libdnf/conf/option_binds.hpp"
 
-%include "libdnf/conf/config.hpp"
-%include "libdnf/conf/config_main.hpp"
-
 %ignore libdnf::ConfigParserError;
 %ignore ConfigParserSectionNotFoundError;
 %ignore ConfigParserOptionNotFoundError;
 %include "libdnf/conf/config_parser.hpp"
 
 %include "libdnf/conf/vars.hpp"
+
+%include "libdnf/conf/config.hpp"
+%include "libdnf/conf/config_main.hpp"
+
