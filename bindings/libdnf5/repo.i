@@ -24,6 +24,8 @@
 }
 
 %{
+    #include "libdnf/logger/log_router.hpp"
+    #include "libdnf/logger/memory_buffer_logger.hpp"
     #include "libdnf/repo/config_repo.hpp"
     #include "libdnf/repo/download_callbacks.hpp"
     #include "libdnf/repo/file_downloader.hpp"
