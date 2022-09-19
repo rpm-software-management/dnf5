@@ -14,7 +14,7 @@ goal.add_rpm_install("one");
 //
 // The argument is `allow_erasing`, a flag indicating wheter to allow removing
 // packages in the resolved transaction.
-auto transaction = goal.resolve(false);
+auto transaction = goal.resolve();
 
 // We can iterate over the resolved transction and inspect the packages.
 std::cout << "Resolved transaction:" << std::endl;

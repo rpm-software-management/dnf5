@@ -69,7 +69,8 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     session.fill_sack();
 
     auto & goal = session.get_goal();
-    auto transaction = goal.resolve(allow_erasing);
+    goal.set_allow_erasing(allow_erasing);
+    auto transaction = goal.resolve();
     session.set_transaction(transaction);
 
     std::vector<dnfdaemon::DbusTransactionItem> dbus_transaction;

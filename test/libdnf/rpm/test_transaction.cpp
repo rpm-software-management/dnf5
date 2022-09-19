@@ -82,7 +82,7 @@ void RpmTransactionTest::test_transaction() {
 
     goal.add_rpm_install("one");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
         get_pkg("one-0:2-1.noarch"),

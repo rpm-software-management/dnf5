@@ -608,7 +608,7 @@ int main(int argc, char * argv[]) try {
 
         command->run();
         if (auto goal = context.get_goal(false)) {
-            context.set_transaction(goal->resolve(false));
+            context.set_transaction(goal->resolve());
 
             command->goal_resolved();
 

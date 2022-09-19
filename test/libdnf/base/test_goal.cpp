@@ -55,7 +55,7 @@ void BaseGoalTest::test_install() {
 
     libdnf::Goal goal(base);
     goal.add_rpm_install("pkg");
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
         get_pkg("pkg-0:1.2-3.x86_64"),
@@ -73,7 +73,7 @@ void BaseGoalTest::test_install_not_available() {
     base.get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
     base.get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
     goal.add_rpm_install("not_available");
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
@@ -97,7 +97,7 @@ void BaseGoalTest::test_install_from_cmdline() {
     libdnf::Goal goal(base);
     goal.add_rpm_install(cmdline_pkg);
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
         get_pkg("one-0:1-1.noarch", "@commandline"),
@@ -114,7 +114,7 @@ void BaseGoalTest::test_install_multilib_all() {
     libdnf::Goal goal(base);
     goal.add_rpm_install("multilib");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -137,7 +137,7 @@ void BaseGoalTest::test_reinstall() {
     libdnf::Goal goal(base);
     goal.add_rpm_reinstall("one");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -162,7 +162,7 @@ void BaseGoalTest::test_reinstall_from_cmdline() {
     libdnf::Goal goal(base);
     goal.add_rpm_reinstall(cmdline_pkg);
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -185,7 +185,7 @@ void BaseGoalTest::test_reinstall_user() {
     libdnf::Goal goal(base);
     goal.add_rpm_reinstall("one");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -207,7 +207,7 @@ void BaseGoalTest::test_remove() {
 
     libdnf::Goal goal(base);
     goal.add_rpm_remove("one");
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
         get_pkg("one-0:1-1.noarch", true),
@@ -222,7 +222,7 @@ void BaseGoalTest::test_remove_not_installed() {
 
     libdnf::Goal goal(base);
     goal.add_rpm_remove("not_installed");
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
@@ -252,7 +252,7 @@ void BaseGoalTest::test_install_installed_pkg() {
     libdnf::Goal goal(base);
     goal.add_rpm_install(query);
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 }
@@ -266,7 +266,7 @@ void BaseGoalTest::test_upgrade() {
     libdnf::Goal goal(base);
     goal.add_rpm_upgrade("one");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -293,7 +293,7 @@ void BaseGoalTest::test_upgrade_from_cmdline() {
     libdnf::Goal goal(base);
     goal.add_rpm_upgrade(cmdline_pkg);
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -322,7 +322,7 @@ void BaseGoalTest::test_upgrade_not_downgrade_from_cmdline() {
     libdnf::Goal goal(base);
     goal.add_rpm_upgrade(cmdline_pkg);
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
@@ -347,7 +347,7 @@ void BaseGoalTest::test_upgrade_not_available() {
     libdnf::Goal goal(base);
     goal.add_rpm_upgrade("not_available");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
@@ -372,7 +372,7 @@ void BaseGoalTest::test_upgrade_all() {
     libdnf::Goal goal(base);
     goal.add_rpm_upgrade();
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -397,7 +397,7 @@ void BaseGoalTest::test_upgrade_user() {
     libdnf::Goal goal(base);
     goal.add_rpm_upgrade("one");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -422,7 +422,7 @@ void BaseGoalTest::test_downgrade() {
     libdnf::Goal goal(base);
     goal.add_rpm_downgrade("one");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -449,7 +449,7 @@ void BaseGoalTest::test_downgrade_from_cmdline() {
     libdnf::Goal goal(base);
     goal.add_rpm_downgrade(cmdline_pkg);
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -474,7 +474,7 @@ void BaseGoalTest::test_downgrade_user() {
     libdnf::Goal goal(base);
     goal.add_rpm_downgrade("one");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -499,7 +499,7 @@ void BaseGoalTest::test_distrosync() {
     libdnf::Goal goal(base);
     goal.add_rpm_distro_sync("one");
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -524,7 +524,7 @@ void BaseGoalTest::test_distrosync_all() {
     libdnf::Goal goal(base);
     goal.add_rpm_distro_sync();
 
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
@@ -550,7 +550,7 @@ void BaseGoalTest::test_install_or_reinstall() {
     query.filter_nevra({"one-0:1-1.noarch"});
     CPPUNIT_ASSERT_EQUAL(1lu, query.size());
     goal.add_rpm_install_or_reinstall(query);
-    auto transaction = goal.resolve(false);
+    auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
         TransactionPackage(
