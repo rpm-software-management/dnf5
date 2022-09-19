@@ -117,6 +117,10 @@ std::vector<libdnf::transaction::Transaction> list_transactions_from_specs(
             continue;
         }
 
+        if (id_range.first > id_range.second) {
+            std::swap(id_range.first, id_range.second);
+        }
+
         auto transactions = ts_history.list_transactions(id_range.first, id_range.second);
         result.insert(result.end(), transactions.begin(), transactions.end());
     }
