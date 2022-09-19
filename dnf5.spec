@@ -13,7 +13,6 @@ Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 Recommends:     bash-completion
-BuildRequires:  bash-completion
 
 # ========== build options ==========
 
@@ -63,35 +62,42 @@ BuildRequires:  bash-completion
 
 # ========== build requires ==========
 
+BuildRequires:  bash-completion
 BuildRequires:  cmake
 BuildRequires:  doxygen
 BuildRequires:  gettext
+BuildRequires:  pkgconfig(check)
+BuildRequires:  pkgconfig(fmt)
+BuildRequires:  (pkgconfig(gpgme) or gpgme-devel)
+BuildRequires:  pkgconfig(json-c)
+BuildRequires:  pkgconfig(libcrypto)
+BuildRequires:  pkgconfig(librepo) >= %{librepo_version}
+BuildRequires:  pkgconfig(libsolv) >= %{libsolv_version}
+BuildRequires:  pkgconfig(libsolvext) >= %{libsolv_version}
+BuildRequires:  pkgconfig(rpm) >= 4.17.0
+BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  toml11-static
+
 %if %{with clang}
 BuildRequires:  clang
 %else
 BuildRequires:  gcc-c++
 %endif
 
-BuildRequires:  toml11-static
-BuildRequires:  pkgconfig(check)
 %if %{with tests}
+BuildRequires:  createrepo_c
 BuildRequires:  pkgconfig(cppunit)
+BuildRequires:  rpm-build
 %endif
-BuildRequires:  pkgconfig(fmt)
-BuildRequires:  (pkgconfig(gpgme) or gpgme-devel)
-BuildRequires:  pkgconfig(json-c)
+
 %if %{with comps}
 BuildRequires:  pkgconfig(libcomps)
 %endif
-BuildRequires:  pkgconfig(libcrypto)
-BuildRequires:  pkgconfig(librepo) >= %{librepo_version}
-BuildRequires:  pkgconfig(libsolv) >= %{libsolv_version}
-BuildRequires:  pkgconfig(libsolvext) >= %{libsolv_version}
+
 %if %{with modulemd}
 BuildRequires:  pkgconfig(modulemd-2.0) >= %{libmodulemd_version}
 %endif
-BuildRequires:  pkgconfig(rpm) >= 4.17.0
-BuildRequires:  pkgconfig(sqlite3)
+
 %if %{with zchunk}
 BuildRequires:  pkgconfig(zck) >= %{zchunk_version}
 %endif
@@ -102,17 +108,61 @@ BuildRequires:  python3dist(sphinx) >= 4.1.2
 BuildRequires:  python3dist(sphinx-rtd-theme)
 %endif
 
-%if %{with tests}
-BuildRequires:  rpm-build
-BuildRequires:  createrepo_c
-%endif
-
 %if %{with sanitizers}
 # compiler-rt is required by sanitizers in clang
 BuildRequires:  compiler-rt
 BuildRequires:  libasan
 BuildRequires:  liblsan
 BuildRequires:  libubsan
+%endif
+
+%if %{with libdnf_cli}
+# required for libdnf5-cli
+BuildRequires:  pkgconfig(smartcols)
+%endif
+
+%if %{with dnf5daemon_server}
+# required for dnf5daemon-server
+%{?systemd_requires}
+BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
+BuildRequires:  systemd-rpm-macros
+%if %{with dnf5daemon_tests}
+BuildRequires:  dbus-daemon
+BuildRequires:  polkit
+BuildRequires:  python3-devel
+BuildRequires:  python3dist(dbus-python)
+%endif
+%endif
+
+# ========== language bindings section ==========
+
+%if %{with perl5} || %{with ruby} || %{with python3}
+BuildRequires:  swig >= %{swig_version}
+%endif
+
+%if %{with perl5}
+# required for perl5-libdnf5 and perl5-libdnf5-cli
+BuildRequires:  perl-devel
+BuildRequires:  perl-generators
+%if %{with tests}
+BuildRequires:  perl(strict)
+BuildRequires:  perl(Test::More)
+BuildRequires:  perl(Test::Exception)
+BuildRequires:  perl(warnings)
+%endif
+%endif
+
+%if %{with ruby}
+# required for ruby-libdnf5 and ruby-libdnf5-cli
+BuildRequires:  pkgconfig(ruby)
+%if %{with tests}
+BuildRequires:  rubygem-test-unit
+%endif
+%endif
+
+%if %{with python3}
+# required for python3-libdnf5 and python3-libdnf5-cli
+BuildRequires:  python3-devel
 %endif
 
 %description
@@ -156,7 +206,6 @@ Package management library.
 %package -n libdnf5-cli
 Summary:        Library for working with a terminal in a command-line package manager
 License:        LGPL-2.1-or-later
-BuildRequires:  pkgconfig(smartcols)
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 
 %description -n libdnf5-cli
@@ -207,7 +256,7 @@ Development files for libdnf5-cli.
 %license lgpl-2.1.txt
 
 
-# ========== perl5-libdnf ==========
+# ========== perl5-libdnf5 ==========
 
 %if %{with perl5}
 %package -n perl5-libdnf5
@@ -215,15 +264,6 @@ Summary:        Perl 5 bindings for the libdnf library.
 License:        LGPL-2.1-or-later
 Provides:       perl(libdnf) = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  swig >= %{swig_version}
-%if %{with tests}
-BuildRequires:  perl(strict)
-BuildRequires:  perl(Test::More)
-BuildRequires:  perl(Test::Exception)
-BuildRequires:  perl(warnings)
-%endif
 
 %description -n perl5-libdnf5
 Perl 5 bindings for the libdnf library.
@@ -244,15 +284,6 @@ Summary:        Perl 5 bindings for the libdnf5-cli library.
 License:        LGPL-2.1-or-later
 Provides:       perl(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-BuildRequires:  perl-devel
-BuildRequires:  perl-generators
-BuildRequires:  swig >= %{swig_version}
-%if %{with tests}
-BuildRequires:  perl(strict)
-BuildRequires:  perl(Test::More)
-BuildRequires:  perl(Test::Exception)
-BuildRequires:  perl(warnings)
-%endif
 
 %description -n perl5-libdnf5-cli
 Perl 5 bindings for the libdnf5-cli library.
@@ -273,8 +304,6 @@ Perl 5 bindings for the libdnf5-cli library.
 Summary:        Python 3 bindings for the libdnf library.
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
-BuildRequires:  python3-devel
-BuildRequires:  swig >= %{swig_version}
 
 %description -n python3-libdnf5
 Python 3 bindings for the libdnf library.
@@ -294,8 +323,6 @@ Python 3 bindings for the libdnf library.
 Summary:        Python 3 bindings for the libdnf5-cli library.
 License:        LGPL-2.1-or-later
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
-BuildRequires:  python3-devel
-BuildRequires:  swig >= %{swig_version}
 
 %description -n python3-libdnf5-cli
 Python 3 bindings for the libdnf5-cli library.
@@ -316,11 +343,6 @@ License:        LGPL-2.1-or-later
 Provides:       ruby(libdnf) = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
-BuildRequires:  pkgconfig(ruby)
-BuildRequires:  swig >= %{swig_version}
-%if %{with tests}
-BuildRequires:  rubygem-test-unit
-%endif
 
 %description -n ruby-libdnf5
 Ruby bindings for the libdnf library.
@@ -341,11 +363,6 @@ License:        LGPL-2.1-or-later
 Provides:       ruby(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       ruby(release)
-BuildRequires:  pkgconfig(ruby)
-BuildRequires:  swig >= %{swig_version}
-%if %{with tests}
-BuildRequires:  rubygem-test-unit
-%endif
 
 %description -n ruby-libdnf5-cli
 Ruby bindings for the libdnf5-cli library.
@@ -422,15 +439,6 @@ License:        GPL-2.0-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
-%{?systemd_requires}
-BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
-BuildRequires:  systemd-rpm-macros
-%if %{with dnf5daemon_tests}
-BuildRequires:  dbus-daemon
-BuildRequires:  polkit
-BuildRequires:  python3-devel
-BuildRequires:  python3dist(dbus-python)
-%endif
 
 %description -n dnf5daemon-server
 Package management service with a DBus interface.
