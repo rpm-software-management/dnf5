@@ -538,6 +538,11 @@ int main(int argc, char * argv[]) try {
         const auto & help = context.get_argument_parser().get_named_arg("help", false);
         try {
             context.get_argument_parser().parse(argc, argv);
+        } catch (libdnf::cli::ArgumentParserUnknownArgumentError & ex) {
+            // print help if an unknown command is provided
+            std::cerr << ex.what() << std::endl;
+            context.get_argument_parser().get_selected_command()->help();
+            return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
         } catch (const std::exception & ex) {
             if (help.get_parse_count() == 0) {
                 std::cout << ex.what() << std::endl;
