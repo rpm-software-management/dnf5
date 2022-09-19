@@ -54,7 +54,9 @@ solv::Pool & get_pool(const libdnf::BaseWeakPtr & base);
 /// :class:`.Base` instances are stateful objects owning various data.
 class Base {
 public:
-    Base();
+    /// Constructs a new Base instance and sets the destination loggers.
+    Base(std::vector<std::unique_ptr<Logger>> && loggers = {});
+
     ~Base();
 
     /// Sets the pointer to the locked instance "Base" to "this" instance. Blocks if the pointer is already set.
@@ -128,9 +130,9 @@ private:
     /// The files in the directory are read in alphabetical order.
     void load_config_from_dir();
 
+    LogRouter log_router;
     std::unique_ptr<solv::Pool> pool;
     ConfigMain config;
-    LogRouter log_router;
     repo::RepoSack repo_sack;
     rpm::PackageSack rpm_package_sack;
     comps::Comps comps{*this};
