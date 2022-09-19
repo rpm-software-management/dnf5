@@ -255,15 +255,19 @@ public:
     void add_provide_install(
         const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
+    /// When true it allows to remove installed packages to resolve dependency problems
+    void set_allow_erasing(bool value);
+
+    /// Return the currets setting of allow_erasing
+    bool get_allow_erasing() const;
 
     // TODO(jmracek) Move transaction reports to Transaction class
     /// Resolve all jobs and return a transaction object. Everytime it resolves specs (strings) to packages
     ///
-    /// @param allow_erasing    When `true`, allows to remove installed packages to resolve dependency problems
     /// @return transaction object
     // @replaces libdnf/hy-goal.h:function:hy_goal_run_flags(HyGoal goal, DnfGoalActions flags)
     // @replaces dnf:dnf/base.py:method:Base().resolve(self, allow_erasing=False)
-    base::Transaction resolve(bool allow_erasing);
+    base::Transaction resolve();
 
     /// Clean all request from the Goal instance
     void reset();

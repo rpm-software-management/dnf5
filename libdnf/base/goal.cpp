@@ -113,6 +113,7 @@ private:
     std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> group_specs;
 
     rpm::solv::GoalPrivate rpm_goal;
+    bool allow_erasing{false};
 };
 
 Goal::Goal(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
@@ -1133,7 +1134,15 @@ GoalProblem Goal::Impl::add_group_install_to_goal(
     return GoalProblem::NO_PROBLEM;
 }
 
-base::Transaction Goal::resolve(bool allow_erasing) {
+void Goal::set_allow_erasing(bool value) {
+    p_impl->allow_erasing = value;
+}
+
+bool Goal::get_allow_erasing() const {
+    return p_impl->allow_erasing;
+}
+
+base::Transaction Goal::resolve() {
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
 
     auto sack = p_impl->base->get_rpm_package_sack();
@@ -1153,7 +1162,7 @@ base::Transaction Goal::resolve(bool allow_erasing) {
     auto & cfg_main = p_impl->base->get_config();
     // Set goal flags
     p_impl->rpm_goal.set_allow_vendor_change(cfg_main.allow_vendor_change().get_value());
-    p_impl->rpm_goal.set_allow_erasing(allow_erasing);
+    p_impl->rpm_goal.set_allow_erasing(p_impl->allow_erasing);
     p_impl->rpm_goal.set_install_weak_deps(cfg_main.install_weak_deps().get_value());
 
     if (cfg_main.protect_running_kernel().get_value()) {
