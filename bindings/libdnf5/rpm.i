@@ -46,6 +46,8 @@
 %include "libdnf/rpm/nevra.hpp"
 
 %template(VectorNevra) std::vector<libdnf::rpm::Nevra>;
+%template(VectorNevraForm) std::vector<libdnf::rpm::Nevra::Form>;
+%template(PairBoolNevra) std::pair<bool, libdnf::rpm::Nevra>;
 
 %include "libdnf/rpm/package_sack.hpp"
 %template(PackageSackWeakPtr) libdnf::WeakPtr<libdnf::rpm::PackageSack, false>;
