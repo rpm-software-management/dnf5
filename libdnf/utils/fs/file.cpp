@@ -230,6 +230,8 @@ bool File::is_at_eof() const {
 
 
 std::string File::read(std::size_t count) {
+    // TODO(pkratoch): This fails for compressed files. Add a fallback for this method that doesn't need ftell and
+    // fseek. It can be then used in libdnf::Repo::load_available_repo for loading modules.yaml.gz.
     long cur_pos = tell();
     seek(0, SEEK_END);
     std::size_t length_till_end = static_cast<std::size_t>(tell() - cur_pos);
