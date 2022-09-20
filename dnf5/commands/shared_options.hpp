@@ -17,36 +17,22 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#ifndef DNF5_COMMANDS_SHARED_OPTIONS_HPP
+#define DNF5_COMMANDS_SHARED_OPTIONS_HPP
 
-#ifndef DNF5_COMMANDS_DISTRO_SYNC_DISTRO_SYNC_HPP
-#define DNF5_COMMANDS_DISTRO_SYNC_DISTRO_SYNC_HPP
+#include "utils/bgettext/bgettext-lib.h"
 
-#include "../shared_options.hpp"
-
-#include <dnf5/context.hpp>
-#include <libdnf/conf/option_bool.hpp>
-
-#include <memory>
-#include <vector>
-
+#include <libdnf-cli/session.hpp>
 
 namespace dnf5 {
 
-
-class DistroSyncCommand : public Command {
+class AllowErasingOption : public libdnf::cli::session::BoolOption {
 public:
-    explicit DistroSyncCommand(Command & parent) : Command(parent, "distro-sync") {}
-    void set_argument_parser() override;
-    void configure() override;
-    void run() override;
-
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_to_distro_sync_options{nullptr};
-
-    std::unique_ptr<AllowErasingOption> allow_erasing;
+    explicit AllowErasingOption(libdnf::cli::session::Command & command)
+        : BoolOption(
+              command, "allowerasing", '\0', _("Allow erasing of installed packages to resolve problems"), false) {}
 };
-
 
 }  // namespace dnf5
 
-
-#endif  // DNF5_COMMANDS_DISTRO_SYNC_DISTRO_SYNC_HPP
+#endif  // DNF5_COMMANDS_SHARED_OPTIONS_HPP

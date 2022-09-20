@@ -21,6 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 #define DNF5_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 
+#include "../shared_options.hpp"
+
 #include <dnf5/context.hpp>
 
 #include <memory>
@@ -42,6 +44,8 @@ private:
     std::vector<std::string> pkg_specs;
     std::vector<std::string> pkg_file_paths;
     std::vector<libdnf::rpm::Package> cmdline_packages;
+
+    std::unique_ptr<AllowErasingOption> allow_erasing;
 };
 
 

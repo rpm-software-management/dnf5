@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_UPGRADE_UPGRADE_HPP
 
 #include "../advisory_shared.hpp"
+#include "../shared_options.hpp"
 
 #include <dnf5/context.hpp>
 #include <libdnf/conf/option_bool.hpp>
@@ -43,6 +44,8 @@ protected:
     std::vector<std::string> pkg_specs;
     std::vector<std::string> pkg_file_paths;
     std::vector<libdnf::rpm::Package> cmdline_packages;
+
+    std::unique_ptr<AllowErasingOption> allow_erasing;
 
     std::unique_ptr<AdvisoryOption> advisory_name;
     std::unique_ptr<SecurityOption> advisory_security;

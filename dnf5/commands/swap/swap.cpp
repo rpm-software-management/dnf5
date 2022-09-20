@@ -55,6 +55,8 @@ void SwapCommand::set_argument_parser() {
     install_spec_arg->set_complete_hook_func(
         [&ctx](const char * arg) { return match_specs(ctx, arg, false, true, true, false); });
     cmd.register_positional_arg(install_spec_arg);
+
+    allow_erasing = std::make_unique<AllowErasingOption>(*this);
 }
 
 void SwapCommand::configure() {
@@ -69,6 +71,7 @@ void SwapCommand::load_additional_packages() {
 
 void SwapCommand::run() {
     auto goal = get_context().get_goal();
+    goal->set_allow_erasing(allow_erasing->get_value());
     for (const auto & pkg : cmdline_packages) {
         goal->add_rpm_install(pkg);
     }

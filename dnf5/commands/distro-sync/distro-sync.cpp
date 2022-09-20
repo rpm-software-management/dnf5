@@ -40,6 +40,8 @@ void DistroSyncCommand::set_argument_parser() {
         patterns_to_distro_sync_options);
     patterns_arg->set_description("Patterns");
     cmd.register_positional_arg(patterns_arg);
+
+    allow_erasing = std::make_unique<AllowErasingOption>(*this);
 }
 
 void DistroSyncCommand::configure() {
@@ -50,6 +52,7 @@ void DistroSyncCommand::configure() {
 
 void DistroSyncCommand::run() {
     auto goal = get_context().get_goal();
+    goal->set_allow_erasing(allow_erasing->get_value());
     if (patterns_to_distro_sync_options->empty()) {
         goal->add_rpm_distro_sync();
     } else {

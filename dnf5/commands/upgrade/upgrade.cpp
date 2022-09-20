@@ -51,6 +51,8 @@ void UpgradeCommand::set_argument_parser() {
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, false); });
 
+    allow_erasing = std::make_unique<AllowErasingOption>(*this);
+
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
     advisory_bugfix = std::make_unique<BugfixOption>(*this);
@@ -85,6 +87,7 @@ void UpgradeCommand::load_additional_packages() {
 void UpgradeCommand::run() {
     auto & ctx = get_context();
     auto goal = get_context().get_goal();
+    goal->set_allow_erasing(allow_erasing->get_value());
 
     auto settings = libdnf::GoalJobSettings();
 
