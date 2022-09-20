@@ -542,5 +542,5 @@ DNF5 plugins.
 
 
 %changelog
-* Fri Sep 16 2022 Nicola Sella - <nsella@redhat.com> - 5.0.0-1~pre
+* Fri Sep 16 2022 Nicola Sella - <nsella@redhat.com> - 5.0.0-0~pre
 - Dnf pre release build for Fedora
