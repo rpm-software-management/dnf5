@@ -25,6 +25,7 @@ set(SWIG_COMPILE_OPTIONS
     -Wno-conversion
     -Wno-deprecated-copy
     -Wno-deprecated-declarations
+    -Wno-ignored-qualifiers
     -Wno-missing-declarations
     -Wno-missing-field-initializers
     -Wno-sign-compare

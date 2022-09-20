@@ -103,3 +103,30 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         self.assertEqual(query.size(), 2)
         # TODO(dmach): implement __str__()
         self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])
+
+    def test_resolve_pkg_spec(self):
+        # Test passing empty forms
+        query = libdnf5.rpm.PackageQuery(self.base)
+        settings = libdnf5.base.ResolveSpecSettings()
+
+        match, nevra = query.resolve_pkg_spec("pkg*", settings, True)
+
+        self.assertEqual(query.size(), 2)
+        self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])
+        self.assertTrue(match)
+        self.assertEqual(nevra.get_name(), "pkg*")
+        self.assertTrue(nevra.has_just_name())
+
+        # Test passing an explicit list of forms
+        query = libdnf5.rpm.PackageQuery(self.base)   
+        settings = libdnf5.base.ResolveSpecSettings()
+        settings.nevra_forms.append(libdnf5.rpm.Nevra.Form_NA)
+
+        match, nevra = query.resolve_pkg_spec("pkg.x86_64", settings, True)
+
+        self.assertEqual(query.size(), 1)
+        self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64"])
+        self.assertTrue(match)
+        self.assertEqual(nevra.get_name(), "pkg")
+        self.assertEqual(nevra.get_arch(), "x86_64")
+        self.assertFalse(nevra.has_just_name())
