@@ -40,6 +40,8 @@ void DowngradeCommand::set_argument_parser() {
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, false); });
     cmd.register_positional_arg(keys);
+
+    allow_erasing = std::make_unique<AllowErasingOption>(*this);
 }
 
 void DowngradeCommand::configure() {
@@ -54,6 +56,7 @@ void DowngradeCommand::load_additional_packages() {
 
 void DowngradeCommand::run() {
     auto goal = get_context().get_goal();
+    goal->set_allow_erasing(allow_erasing->get_value());
     for (const auto & pkg : cmdline_packages) {
         goal->add_rpm_downgrade(pkg);
     }

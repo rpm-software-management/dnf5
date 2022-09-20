@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_SWAP_SWAP_HPP
 #define DNF5_COMMANDS_SWAP_SWAP_HPP
 
+#include "../shared_options.hpp"
+
 #include <dnf5/context.hpp>
 
 #include <vector>
@@ -41,6 +43,8 @@ private:
     std::vector<std::string> install_pkg_specs;
     std::vector<std::string> install_pkg_file_paths;
     std::vector<libdnf::rpm::Package> cmdline_packages;
+
+    std::unique_ptr<AllowErasingOption> allow_erasing;
 };
 
 }  // namespace dnf5
