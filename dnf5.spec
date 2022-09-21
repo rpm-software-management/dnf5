@@ -173,7 +173,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %files
 %{_bindir}/dnf5
 %{_prefix}/lib/dnf5
-%{_sysconfdir}/dnf/dnf5-aliases.d
+%dir %{_sysconfdir}/dnf/dnf5-aliases.d
 %doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
 %dir %{_libdir}/dnf5/
 %dir %{_libdir}/dnf5/plugins/
@@ -197,6 +197,7 @@ Requires:       librepo%{?_isa} >= %{librepo_version}
 Package management library.
 
 %files -n libdnf5
+%dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so.*
 %license lgpl-2.1.txt
 %{_var}/cache/libdnf/
@@ -233,6 +234,7 @@ Development files for libdnf.
 
 %files -n libdnf5-devel
 %{_includedir}/libdnf/
+%dir %{_libdir}/libdnf5
 %{_libdir}/libdnf5.so
 %{_libdir}/pkgconfig/libdnf.pc
 %license COPYING.md
@@ -387,6 +389,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Libdnf plugin that allows to run actions (external executables) on hooks.
 
 %files -n libdnf5-plugin-actions
+%dir %{_libdir}/libdnf5/plugins
 %{_libdir}/libdnf5/plugins/actions.*
 %endif
 
@@ -404,6 +407,7 @@ Requires:       python3-libdnf5%{?_isa} = %{version}-%{release}
 Libdnf plugin that allows loading Python plugins.
 
 %files -n python3-libdnf5-python-plugins-loader
+%dir %{_libdir}/libdnf5/plugins
 %{_libdir}/libdnf5/plugins/python_plugins_loader.*
 %dir %{python3_sitelib}/libdnf_plugins/
 %doc %{python3_sitelib}/libdnf_plugins/README
@@ -439,7 +443,9 @@ Summary:        Package management service with a DBus interface
 License:        GPL-2.0-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
+Requires:       dbus
 Requires:       dnf-data
+Requires:       polkit
 
 %description -n dnf5daemon-server
 Package management service with a DBus interface.
