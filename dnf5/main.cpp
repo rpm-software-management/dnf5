@@ -495,17 +495,20 @@ void RootCommand::register_subcommands() {
 }  // namespace dnf5
 
 int main(int argc, char * argv[]) try {
-    dnf5::Context context;
+    // Creates a vector of loggers with one circular memory buffer logger
+    std::vector<std::unique_ptr<libdnf::Logger>> loggers;
+    const std::size_t max_log_items_to_keep = 10000;
+    const std::size_t prealloc_log_items = 256;
+    loggers.emplace_back(std::make_unique<libdnf::MemoryBufferLogger>(max_log_items_to_keep, prealloc_log_items));
+
+    loggers.front()->info("DNF5 start");
+
+    // Creates a context and passes the loggers to it. We want to capture all messages from the context in the log.
+    dnf5::Context context(std::move(loggers));
+
     libdnf::Base & base = context.base;
 
     auto & log_router = *base.get_logger();
-
-    // Add circular memory buffer logger
-    const std::size_t max_log_items_to_keep = 10000;
-    const std::size_t prealloc_log_items = 256;
-    log_router.add_logger(std::make_unique<libdnf::MemoryBufferLogger>(max_log_items_to_keep, prealloc_log_items));
-
-    log_router.info("DNF5 start");
 
     context.set_prg_arguments(static_cast<size_t>(argc), argv);
 
