@@ -131,7 +131,6 @@ private:
     void load_config_from_dir();
 
     LogRouter log_router;
-    std::unique_ptr<solv::Pool> pool;
     ConfigMain config;
     repo::RepoSack repo_sack;
     rpm::PackageSack rpm_package_sack;

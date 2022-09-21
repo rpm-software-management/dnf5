@@ -37,9 +37,16 @@ public:
     libdnf::system::State & get_system_state() { return *system_state; }
     libdnf::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
 
+    solv::Pool & get_pool() {
+        libdnf_assert(pool, "Base instance was not fully initialized by Base::setup()");
+        return *pool;
+    }
+
 private:
     friend class Base;
     Impl(const libdnf::BaseWeakPtr & base);
+
+    std::unique_ptr<solv::Pool> pool;
 
     std::optional<libdnf::system::State> system_state;
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
