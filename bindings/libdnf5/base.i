@@ -34,8 +34,6 @@
 %template(BaseWeakPtr) libdnf::WeakPtr<libdnf::Base, false>;
 %template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
 
-%ignore libdnf::get_pool;
-
 %include "libdnf/base/base.hpp"
 %ignore libdnf::base::TransactionError;
 %include "libdnf/base/transaction.hpp"

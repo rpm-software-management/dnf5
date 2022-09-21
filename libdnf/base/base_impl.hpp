@@ -29,6 +29,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+namespace solv {
+
+class Pool;
+
+}
 
 class Base::Impl {
 public:
@@ -52,6 +57,11 @@ private:
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
 };
 
+
+class InternalBaseUser {
+public:
+    static solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) { return base->p_impl->get_pool(); }
+};
 
 }  // namespace libdnf
 
