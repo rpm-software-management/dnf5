@@ -32,6 +32,12 @@ namespace libdnf {
 /// Loggers can be addressed via index. Index is serial number of the logger starting from zero.
 class LogRouter : public Logger {
 public:
+    /// Constructs a new LogRouter instance with an empty set of destination loggers.
+    LogRouter() = default;
+
+    /// Constructs a new LogRouter instance and sets the destination loggers.
+    LogRouter(std::vector<std::unique_ptr<Logger>> && loggers) : loggers(std::move(loggers)) {}
+
     /// Moves (registers) the "logger" into the log router. It gets next free index number.
     void add_logger(std::unique_ptr<Logger> && logger) { loggers.push_back(std::move(logger)); }
 
