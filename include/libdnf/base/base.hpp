@@ -41,13 +41,7 @@ namespace libdnf {
 using LogRouterWeakPtr = WeakPtr<LogRouter, false>;
 using VarsWeakPtr = WeakPtr<Vars, false>;
 
-namespace solv {
-
-class Pool;
-
-}
-
-solv::Pool & get_pool(const libdnf::BaseWeakPtr & base);
+class InternalBaseUser;
 
 /// Instances of :class:`libdnf::Base` are the central point of functionality supplied by libdnf.
 /// An application will typically create a single instance of this class which it will keep for the run-time needed to accomplish its packaging tasks.
@@ -106,7 +100,7 @@ public:
     class Impl;
 
 private:
-    friend solv::Pool & get_pool(const libdnf::BaseWeakPtr & base);
+    friend class libdnf::InternalBaseUser;
     friend class libdnf::base::Transaction;
     friend class libdnf::rpm::Package;
     friend class libdnf::advisory::AdvisoryQuery;

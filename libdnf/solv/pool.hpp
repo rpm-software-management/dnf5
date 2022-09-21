@@ -245,8 +245,8 @@ private:
 
 namespace libdnf {
 
-inline solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) {
-    return base->p_impl->get_pool();
+static inline solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) {
+    return InternalBaseUser::get_pool(base);
 }
 
 }  // namespace libdnf
