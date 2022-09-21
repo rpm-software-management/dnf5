@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "dbus.hpp"
 #include "session.hpp"
 
+#include <libdnf/logger/stream_logger.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <iostream>
@@ -106,9 +107,14 @@ sdbus::MethodReply SessionManager::open_session(sdbus::MethodCall & call) {
     const std::string sessionid = dnfdaemon::DBUS_OBJECT_PATH + std::string("/") + gen_session_id();
     // store newly created session
     {
+        // create a vector of loggers with one logger
+        std::vector<std::unique_ptr<libdnf::Logger>> loggers;
+        loggers.emplace_back(std::make_unique<libdnf::StdCStreamLogger>(std::cerr));
+
         std::lock_guard<std::mutex> lock(sessions_mutex);
         sessions[sender].emplace(
-            sessionid, std::make_unique<Session>(*connection, std::move(configuration), sessionid, sender));
+            sessionid,
+            std::make_unique<Session>(std::move(loggers), *connection, std::move(configuration), sessionid, sender));
     }
 
     auto reply = call.createReply();
