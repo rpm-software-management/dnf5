@@ -131,6 +131,7 @@ void Base::load_plugins() {
 }
 
 void Base::setup() {
+    auto & pool = p_impl->pool;
     libdnf_assert(!pool, "Base was already initialized");
 
     load_plugins();

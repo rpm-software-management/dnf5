@@ -20,9 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_SOLV_POOL_HPP
 #define LIBDNF_SOLV_POOL_HPP
 
+#include "base/base_impl.hpp"
 #include "id_queue.hpp"
 
-#include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
 
 #include <climits>
@@ -246,8 +246,7 @@ private:
 namespace libdnf {
 
 inline solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) {
-    libdnf_assert(base->pool, "Base instance was not fully initialized by Base::setup()");
-    return *base->pool;
+    return base->p_impl->get_pool();
 }
 
 }  // namespace libdnf
