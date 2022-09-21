@@ -174,6 +174,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_bindir}/dnf5
 %{_prefix}/lib/dnf5
 %{_sysconfdir}/dnf/dnf5-aliases.d
+%doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
 %dir %{_libdir}/dnf5/
 %dir %{_libdir}/dnf5/plugins/
 %doc %{_libdir}/dnf5/plugins/README
@@ -260,7 +261,7 @@ Development files for libdnf5-cli.
 
 %if %{with perl5}
 %package -n perl5-libdnf5
-Summary:        Perl 5 bindings for the libdnf library.
+Summary:        Perl 5 bindings for the libdnf library
 License:        LGPL-2.1-or-later
 Provides:       perl(libdnf) = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
@@ -280,7 +281,7 @@ Perl 5 bindings for the libdnf library.
 
 %if %{with perl5} && %{with libdnf_cli}
 %package -n perl5-libdnf5-cli
-Summary:        Perl 5 bindings for the libdnf5-cli library.
+Summary:        Perl 5 bindings for the libdnf5-cli library
 License:        LGPL-2.1-or-later
 Provides:       perl(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
@@ -301,7 +302,7 @@ Perl 5 bindings for the libdnf5-cli library.
 %if %{with python3}
 %package -n python3-libdnf5
 %{?python_provide:%python_provide python3-libdnf}
-Summary:        Python 3 bindings for the libdnf library.
+Summary:        Python 3 bindings for the libdnf library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 
@@ -320,7 +321,7 @@ Python 3 bindings for the libdnf library.
 %if %{with python3} && %{with libdnf_cli}
 %package -n python3-libdnf5-cli
 %{?python_provide:%python_provide python3-libdnf5-cli}
-Summary:        Python 3 bindings for the libdnf5-cli library.
+Summary:        Python 3 bindings for the libdnf5-cli library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 
@@ -338,7 +339,7 @@ Python 3 bindings for the libdnf5-cli library.
 
 %if %{with ruby}
 %package -n ruby-libdnf5
-Summary:        Ruby bindings for the libdnf library.
+Summary:        Ruby bindings for the libdnf library
 License:        LGPL-2.1-or-later
 Provides:       ruby(libdnf) = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
@@ -358,7 +359,7 @@ Ruby bindings for the libdnf library.
 
 %if %{with ruby} && %{with libdnf_cli}
 %package -n ruby-libdnf5-cli
-Summary:        Ruby bindings for the libdnf5-cli library.
+Summary:        Ruby bindings for the libdnf5-cli library
 License:        LGPL-2.1-or-later
 Provides:       ruby(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
@@ -404,7 +405,7 @@ Libdnf plugin that allows loading Python plugins.
 
 %files -n python3-libdnf5-python-plugins-loader
 %{_libdir}/libdnf5/plugins/python_plugins_loader.*
-%{python3_sitelib}/libdnf_plugins/
+%dir %{python3_sitelib}/libdnf_plugins/
 %doc %{python3_sitelib}/libdnf_plugins/README
 %endif
 
@@ -470,7 +471,7 @@ Package management service with a DBus interface.
 
 %if %{with dnf5_plugins}
 %package -n dnf5-plugins
-Summary:        dnf5 plugins
+Summary:        Plugins for dnf5
 License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 
