@@ -170,7 +170,9 @@ std::chrono::time_point<std::chrono::steady_clock> ProgressAndKeyImportRepoCB::p
 
 }  // namespace
 
-Context::Context() : plugins(std::make_unique<Plugins>(*this)) {}
+Context::Context(std::vector<std::unique_ptr<libdnf::Logger>> && loggers)
+    : base(std::move(loggers)),
+      plugins(std::make_unique<Plugins>(*this)) {}
 
 Context::~Context() {
     // "Session", which is the parent of "Context", owns objects from dnf5 plugins (command arguments).

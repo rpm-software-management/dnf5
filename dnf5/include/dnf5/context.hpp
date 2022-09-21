@@ -46,7 +46,9 @@ public:
     enum class LoadAvailableRepos { NONE, ENABLED, ALL };
     enum class ImportRepoKeys { KEY_IMPORTED, IMPORT_FAILED, NO_KEYS, ALREADY_PRESENT };
 
-    Context();
+    /// Constructs a new Context instance and sets the destination loggers.
+    Context(std::vector<std::unique_ptr<libdnf::Logger>> && loggers = {});
+
     ~Context();
 
     void apply_repository_setopts();
