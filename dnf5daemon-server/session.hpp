@@ -51,6 +51,7 @@ protected:
 class Session {
 public:
     Session(
+        std::vector<std::unique_ptr<libdnf::Logger>> && loggers,
         sdbus::IConnection & connection,
         dnfdaemon::KeyValueMap session_configuration,
         std::string object_path,

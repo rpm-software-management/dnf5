@@ -29,7 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "services/rpm/rpm.hpp"
 #include "utils.hpp"
 
-#include <libdnf/logger/stream_logger.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
@@ -38,12 +37,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 Session::Session(
+    std::vector<std::unique_ptr<libdnf::Logger>> && loggers,
     sdbus::IConnection & connection,
     dnfdaemon::KeyValueMap session_configuration,
     std::string object_path,
     std::string sender)
     : connection(connection),
-      base(std::make_unique<libdnf::Base>()),
+      base(std::make_unique<libdnf::Base>(std::move(loggers))),
       goal(*base),
       session_configuration(session_configuration),
       object_path(object_path),
@@ -51,10 +51,6 @@ Session::Session(
     if (session_configuration.find("locale") != session_configuration.end()) {
         session_locale = session_configuration_value<std::string>("locale");
     }
-
-    // set-up log router for base
-    auto & logger = *base->get_logger();
-    logger.add_logger(std::make_unique<libdnf::StdCStreamLogger>(std::cerr));
 
     auto & config = base->get_config();
 
@@ -69,7 +65,7 @@ Session::Session(
         if (bind != opt_binds.end()) {
             bind->second.new_string(libdnf::Option::Priority::RUNTIME, value);
         } else {
-            logger.warning("Unknown config option: {}", key);
+            base->get_logger()->warning("Unknown config option: {}", key);
         }
     }
 
