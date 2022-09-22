@@ -198,7 +198,7 @@ Package management library.
 
 %files -n libdnf5
 %dir %{_libdir}/libdnf5
-%{_libdir}/libdnf5.so.*
+%{_libdir}/libdnf5.so.1*
 %license lgpl-2.1.txt
 %{_var}/cache/libdnf/
 
@@ -214,7 +214,7 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Library for working with a terminal in a command-line package manager.
 
 %files -n libdnf5-cli
-%{_libdir}/libdnf-cli.so.*
+%{_libdir}/libdnf-cli.so.1*
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -273,7 +273,9 @@ Perl 5 bindings for the libdnf library.
 
 %files -n perl5-libdnf5
 %{perl_vendorarch}/libdnf5
-%{perl_vendorarch}/auto/libdnf5
+%{perl_vendorarch}/auto/libdnf5/*/*.so.1*
+# excluding .so since we are not providing -devel package
+%exclude %{perl_vendorarch}/auto/libdnf5/*/*.so
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -293,7 +295,9 @@ Perl 5 bindings for the libdnf5-cli library.
 
 %files -n perl5-libdnf5-cli
 %{perl_vendorarch}/libdnf5_cli
-%{perl_vendorarch}/auto/libdnf5_cli
+%{perl_vendorarch}/auto/libdnf5_cli/*/*.so.1*
+# excluding .so since we are not providing -devel package
+%exclude %{perl_vendorarch}/auto/libdnf5_cli/*/*.so
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -312,7 +316,11 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Python 3 bindings for the libdnf library.
 
 %files -n python3-libdnf5
-%{python3_sitearch}/libdnf5/
+%{python3_sitearch}/libdnf5/*.py
+%{python3_sitearch}/libdnf5/*.so.1*
+%{python3_sitearch}/libdnf5/__pycache__
+# excluding .so since we are not providing -devel package
+%{python3_sitearch}/libdnf5/*.so
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -331,7 +339,11 @@ Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Python 3 bindings for the libdnf5-cli library.
 
 %files -n python3-libdnf5-cli
-%{python3_sitearch}/libdnf5_cli/
+%{python3_sitearch}/libdnf5_cli/*.py
+%{python3_sitearch}/libdnf5_cli/*.so.1*
+%{python3_sitearch}/libdnf5_cli/__pycache__
+# excluding .so since we are not providing -devel package
+%{python3_sitearch}/libdnf5_cli/*.so
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -351,7 +363,9 @@ Requires:       ruby(release)
 Ruby bindings for the libdnf library.
 
 %files -n ruby-libdnf5
-%{ruby_vendorarchdir}/libdnf5/
+%{ruby_vendorarchdir}/libdnf5/*.so.1*
+# excluding .so since we are not providing -devel package
+%{ruby_vendorarchdir}/libdnf5/*.so
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -371,7 +385,9 @@ Requires:       ruby(release)
 Ruby bindings for the libdnf5-cli library.
 
 %files -n ruby-libdnf5-cli
-%{ruby_vendorarchdir}/libdnf5_cli/
+%{ruby_vendorarchdir}/libdnf5_cli/*.so.1*
+# excluding .so since we are not providing -devel package
+%{ruby_vendorarchdir}/libdnf5_cli/*.so
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
