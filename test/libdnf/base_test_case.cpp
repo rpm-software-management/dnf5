@@ -218,7 +218,7 @@ void BaseTestCase::setUp() {
 
     // TODO we could use get_preconfigured_base() for this now, but that would
     // need changing the `base` member to a unique_ptr
-    temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
+    temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf5_unittest");
     std::filesystem::create_directory(temp->get_path() / "installroot");
 
     base.get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
