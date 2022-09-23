@@ -76,35 +76,36 @@ void StateTest::setUp() {
     BaseTestCase::setUp();
     add_repo_repomd("repomd-repo1");
 
-    temp_dir = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_test_state");
+    auto & config = base.get_config();
+    std::filesystem::path system_state_dir{config.system_state_dir().get_value()};
+    state_dir = config.installroot().get_value() / system_state_dir.relative_path();
+    std::filesystem::create_directories(state_dir);
 
-    libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(packages_contents);
-    libdnf::utils::fs::File(temp_dir->get_path() / "nevras.toml", "w").write(nevras_contents);
-    libdnf::utils::fs::File(temp_dir->get_path() / "groups.toml", "w").write(groups_contents);
-    libdnf::utils::fs::File(temp_dir->get_path() / "modules.toml", "w").write(modules_contents);
-    libdnf::utils::fs::File(temp_dir->get_path() / "system.toml", "w").write(system_contents);
+    libdnf::utils::fs::File(state_dir / "packages.toml", "w").write(packages_contents);
+    libdnf::utils::fs::File(state_dir / "nevras.toml", "w").write(nevras_contents);
+    libdnf::utils::fs::File(state_dir / "groups.toml", "w").write(groups_contents);
+    libdnf::utils::fs::File(state_dir / "modules.toml", "w").write(modules_contents);
+    libdnf::utils::fs::File(state_dir / "system.toml", "w").write(system_contents);
 }
 
 void StateTest::tearDown() {
-    temp_dir.reset();
-
     BaseTestCase::tearDown();
 }
 
 void StateTest::test_state_version() {
-    libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "aaa"
+    libdnf::utils::fs::File(state_dir / "packages.toml", "w").write(R"""(version = "aaa"
 [packages])""");
 
-    CPPUNIT_ASSERT_THROW(libdnf::system::State(temp_dir->get_path()), libdnf::system::InvalidVersionError);
+    CPPUNIT_ASSERT_THROW(libdnf::system::State{base}, libdnf::system::InvalidVersionError);
 
-    libdnf::utils::fs::File(temp_dir->get_path() / "packages.toml", "w").write(R"""(version = "4.0"
+    libdnf::utils::fs::File(state_dir / "packages.toml", "w").write(R"""(version = "4.0"
 [packages])""");
 
-    CPPUNIT_ASSERT_THROW(libdnf::system::State(temp_dir->get_path()), libdnf::system::UnsupportedVersionError);
+    CPPUNIT_ASSERT_THROW(libdnf::system::State{base}, libdnf::system::UnsupportedVersionError);
 }
 
 void StateTest::test_state_read() {
-    libdnf::system::State state(temp_dir->get_path());
+    libdnf::system::State state(base);
 
     CPPUNIT_ASSERT_EQUAL(transaction::TransactionItemReason::USER, state.get_package_reason("pkg.x86_64"));
     CPPUNIT_ASSERT_EQUAL(transaction::TransactionItemReason::DEPENDENCY, state.get_package_reason("pkg-libs.x86_64"));
@@ -128,8 +129,7 @@ void StateTest::test_state_read() {
 }
 
 void StateTest::test_state_write() {
-    const auto path = temp_dir->get_path() / "write_test";
-    libdnf::system::State state(path);
+    libdnf::system::State state(base);
 
     state.set_package_reason("pkg.x86_64", transaction::TransactionItemReason::USER);
     state.set_package_reason("pkg-libs.x86_64", transaction::TransactionItemReason::DEPENDENCY);
@@ -154,11 +154,11 @@ void StateTest::test_state_write() {
 
     state.save();
 
-    CPPUNIT_ASSERT_EQUAL(packages_contents, trim(libdnf::utils::fs::File(path / "packages.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(nevras_contents, trim(libdnf::utils::fs::File(path / "nevras.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(groups_contents, trim(libdnf::utils::fs::File(path / "groups.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(modules_contents, trim(libdnf::utils::fs::File(path / "modules.toml", "r").read()));
-    CPPUNIT_ASSERT_EQUAL(system_contents, trim(libdnf::utils::fs::File(path / "system.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(packages_contents, trim(libdnf::utils::fs::File(state_dir / "packages.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(nevras_contents, trim(libdnf::utils::fs::File(state_dir / "nevras.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(groups_contents, trim(libdnf::utils::fs::File(state_dir / "groups.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(modules_contents, trim(libdnf::utils::fs::File(state_dir / "modules.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(system_contents, trim(libdnf::utils::fs::File(state_dir / "system.toml", "r").read()));
 
     // Test removes
     state.remove_package_na_state("pkg.x86_64");
@@ -175,7 +175,7 @@ void StateTest::test_state_write() {
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(
-        packages_contents_after_remove, trim(libdnf::utils::fs::File(path / "packages.toml", "r").read()));
+        packages_contents_after_remove, trim(libdnf::utils::fs::File(state_dir / "packages.toml", "r").read()));
 
     const std::string nevras_contents_after_remove{R"""(version = "1.0"
 [nevras]
@@ -183,14 +183,16 @@ void StateTest::test_state_write() {
 "pkg-libs-1.2-1.x86_64" = {from_repo=""}
 )"""};
 
-    CPPUNIT_ASSERT_EQUAL(nevras_contents_after_remove, trim(libdnf::utils::fs::File(path / "nevras.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(
+        nevras_contents_after_remove, trim(libdnf::utils::fs::File(state_dir / "nevras.toml", "r").read()));
 
     const std::string groups_contents_after_remove{
         R"""(version = "1.0"
 groups = {group-2={packages=["pkg1","pkg2"],userinstalled=false}}
 )"""};
 
-    CPPUNIT_ASSERT_EQUAL(groups_contents_after_remove, trim(libdnf::utils::fs::File(path / "groups.toml", "r").read()));
+    CPPUNIT_ASSERT_EQUAL(
+        groups_contents_after_remove, trim(libdnf::utils::fs::File(state_dir / "groups.toml", "r").read()));
 
     const std::string modules_contents_after_remove{R"""(version = "1.0"
 [modules]
@@ -198,5 +200,5 @@ module-2 = {installed_profiles=[],state="Disabled",enabled_stream="stream-2"}
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(
-        modules_contents_after_remove, trim(libdnf::utils::fs::File(path / "modules.toml", "r").read()));
+        modules_contents_after_remove, trim(libdnf::utils::fs::File(state_dir / "modules.toml", "r").read()));
 }

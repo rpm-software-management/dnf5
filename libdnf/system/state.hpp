@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_SYSTEM_STATE_HPP
 #define LIBDNF_SYSTEM_STATE_HPP
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/module/module_item_container.hpp"
 #include "libdnf/rpm/package.hpp"
@@ -97,11 +98,15 @@ public:
 /// groups and their packages etc.
 class State {
 public:
-    /// Creates an instance of `State`, optionally specifying the directory
-    /// where the state is stored.
-    /// @param dir_path The directory where the state is stored.
+    /// Create a new State instance.
+    /// @param base     A weak pointer to Base
     /// @since 5.0
-    State(const std::filesystem::path & path);
+    explicit State(const libdnf::BaseWeakPtr & base);
+
+    /// Create a new State instance.
+    /// @param base     Reference to Base
+    /// @since 5.0
+    explicit State(libdnf::Base & base);
 
     /// @return The reason for a package NA (Name.Arch).
     /// @param na The NA to get the reason for.
@@ -220,6 +225,7 @@ private:
     /// @since 5.0
     const std::map<std::string, std::set<std::string>> & get_package_groups_cache();
 
+    BaseWeakPtr base;
     std::filesystem::path path;
 
     std::map<std::string, PackageState> package_states;

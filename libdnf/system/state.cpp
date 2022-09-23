@@ -194,9 +194,17 @@ StateNotFoundError::StateNotFoundError(const std::string & type, const std::stri
     : libdnf::Error(M_("{} state for \"{}\" not found."), type, key) {}
 
 
-State::State(const std::filesystem::path & path) : path(path) {
+State::State(const libdnf::BaseWeakPtr & base) : base(base) {
+    // get the directory where the state is stored from the configuration
+    auto & config = base->get_config();
+    std::filesystem::path system_state_dir{config.system_state_dir().get_value()};
+    path = config.installroot().get_value() / system_state_dir.relative_path();
+
     load();
 }
+
+
+State::State(libdnf::Base & base) : State(base.get_weak_ptr()) {}
 
 
 transaction::TransactionItemReason State::get_package_reason(const std::string & na) {

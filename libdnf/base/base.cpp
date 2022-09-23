@@ -146,8 +146,7 @@ void Base::setup() {
 
     get_vars()->load(installroot.get_value(), config.varsdir().get_value());
 
-    std::filesystem::path system_state_dir{config.system_state_dir().get_value()};
-    p_impl->system_state.emplace(installroot.get_value() / system_state_dir.relative_path());
+    p_impl->system_state.emplace(get_weak_ptr());
 
     config.varsdir().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);

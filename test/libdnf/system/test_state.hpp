@@ -46,7 +46,7 @@ public:
     void test_state_read();
     void test_state_write();
 
-    std::unique_ptr<libdnf::utils::fs::TempDir> temp_dir;
+    std::filesystem::path state_dir;
 };
 
 
