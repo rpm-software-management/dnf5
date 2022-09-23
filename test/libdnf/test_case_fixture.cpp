@@ -79,7 +79,7 @@ void TestCaseFixture::tearDown() {
 }
 
 std::unique_ptr<libdnf::Base> TestCaseFixture::get_preconfigured_base() {
-    temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf_unittest");
+    temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf5_unittest");
     std::filesystem::create_directory(temp->get_path() / "installroot");
 
     std::unique_ptr<libdnf::Base> base(new libdnf::Base());
