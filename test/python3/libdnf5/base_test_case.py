@@ -31,9 +31,14 @@ PROJECT_SOURCE_DIR = os.environ["PROJECT_SOURCE_DIR"]
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
         self.base = libdnf5.base.Base()
+        self.temp_dir = tempfile.mkdtemp(prefix="libdnf5_python3_unittest.")
 
-        self.cachedir = tempfile.mkdtemp(prefix="libdnf5-test-python3-")
-        self.base.get_config().cachedir().set(libdnf5.conf.Option.Priority_RUNTIME, self.cachedir)
+        self.base.get_config().installroot().set(
+            libdnf5.conf.Option.Priority_RUNTIME,
+            os.path.join(self.temp_dir, "installroot"))
+        self.base.get_config().cachedir().set(
+            libdnf5.conf.Option.Priority_RUNTIME,
+            os.path.join(self.temp_dir, "cache"))
 
         self.base.setup()
 
@@ -41,7 +46,7 @@ class BaseTestCase(unittest.TestCase):
         self.package_sack = self.base.get_rpm_package_sack()
 
     def tearDown(self):
-        shutil.rmtree(self.cachedir)
+        shutil.rmtree(self.temp_dir)
 
     def _add_repo(self, repoid, repo_path, load=True):
         """
