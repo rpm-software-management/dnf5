@@ -31,9 +31,10 @@ PROJECT_SOURCE_DIR = ENV["PROJECT_SOURCE_DIR"]
 class BaseTestCase < Test::Unit::TestCase
     def setup()
         @base = Base::Base.new()
+        @temp_dir = Dir.mktmpdir("libdnf5_ruby_unittest.")
 
-        @cachedir = Dir.mktmpdir("libdnf-test-ruby-")
-        @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, @cachedir)
+        @base.get_config().installroot().set(Conf::Option::Priority_RUNTIME, File.join(@temp_dir, "installroot"))
+        @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, File.join(@temp_dir, "cache"))
 
         # Sets Base internals according to configuration
         @base.setup()
@@ -43,7 +44,7 @@ class BaseTestCase < Test::Unit::TestCase
     end
 
     def teardown()
-        FileUtils.remove_entry(@cachedir)
+        FileUtils.remove_entry(@temp_dir)
     end
 
     # Add a repo from `repo_path`.
