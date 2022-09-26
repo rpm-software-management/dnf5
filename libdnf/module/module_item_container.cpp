@@ -46,6 +46,11 @@ ModuleItemContainer::ModuleItemContainer(const BaseWeakPtr & base) : p_impl(new 
 ModuleItemContainer::~ModuleItemContainer() {}
 
 
+const std::vector<std::unique_ptr<ModuleItem>> & ModuleItemContainer::get_modules() const {
+    // TODO(mracek) What about to call add_modules_without_static_context before returning the vector?
+    return p_impl->modules;
+}
+
 void ModuleItemContainer::add(const std::string & file_content, const std::string & repo_id) {
     ModuleMetadata md(get_base());
     try {
@@ -68,7 +73,7 @@ void ModuleItemContainer::add(const std::string & file_content, const std::strin
     // Store module items with static context
     for (auto const & module_item_ptr : items.first) {
         std::unique_ptr<ModuleItem> module_item(module_item_ptr);
-        modules.push_back(std::move(module_item));
+        p_impl->modules.push_back(std::move(module_item));
     }
     // Store module items without static context
     for (auto const & module_item_ptr : items.second) {
@@ -85,7 +90,7 @@ void ModuleItemContainer::add_modules_without_static_context() {
 
     // Create a map based on modules with static context. For each "name:stream", map requires_strings to ModuleItems.
     std::map<std::string, std::map<std::string, std::vector<ModuleItem *>>> static_context_map;
-    for (auto const & module_item : modules) {
+    for (auto const & module_item : p_impl->modules) {
         auto requires_string = module_item->get_module_dependencies_string();
         static_context_map[module_item->get_name_stream()][requires_string].push_back(module_item.get());
     }
@@ -101,7 +106,7 @@ void ModuleItemContainer::add_modules_without_static_context() {
             auto context_iterator = stream_iterator->second.find(requires_string);
             if (context_iterator != stream_iterator->second.end()) {
                 module_item->computed_static_context = context_iterator->second[0]->get_context();
-                modules.push_back(std::move(module_item));
+                p_impl->modules.push_back(std::move(module_item));
                 continue;
             }
         }
@@ -112,7 +117,7 @@ void ModuleItemContainer::add_modules_without_static_context() {
             requires_string.append("NoRequires");
         }
         module_item->computed_static_context = requires_string;
-        modules.push_back(std::move(module_item));
+        p_impl->modules.push_back(std::move(module_item));
     }
     modules_without_static_context.clear();
     create_module_solvables();
@@ -120,7 +125,7 @@ void ModuleItemContainer::add_modules_without_static_context() {
 
 
 void ModuleItemContainer::create_module_solvables() {
-    for (auto const & module_item : modules) {
+    for (auto const & module_item : p_impl->modules) {
         module_item->create_solvable();
         module_item->create_dependencies();
     }

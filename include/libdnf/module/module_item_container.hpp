@@ -50,7 +50,8 @@ public:
 
     ModuleItemContainerWeakPtr get_weak_ptr();
 
-    std::vector<std::unique_ptr<ModuleItem>> modules;
+    /// Return module items in container
+    const std::vector<std::unique_ptr<ModuleItem>> & get_modules() const;
 
     // TODO(pkratoch): Maybe make this private later
     void add(const std::string & file_content, const std::string & repo_id);
