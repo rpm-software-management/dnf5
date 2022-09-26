@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "system/state.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
+#include "utils/dnf4convert/dnf4convert.hpp"
 #include "utils/fs/file.hpp"
 #include "utils/string.hpp"
 
@@ -427,7 +428,11 @@ void State::load() {
     package_states = load_toml_data<std::map<std::string, PackageState>>(get_package_state_path(), "packages");
     nevra_states = load_toml_data<std::map<std::string, NevraState>>(get_nevra_state_path(), "nevras");
     group_states = load_toml_data<std::map<std::string, GroupState>>(get_group_state_path(), "groups");
-    module_states = load_toml_data<std::map<std::string, ModuleState>>(get_module_state_path(), "modules");
+    // TODO(mblaha) re-enable loading from toml once we do not need dnf4 modularity data
+    // module_states = load_toml_data<std::map<std::string, ModuleState>>(get_module_state_path(), "modules");
+    libdnf::dnf4convert::Dnf4Convert convertor(base);
+    module_states = convertor.read_module_states();
+
     system_state = load_toml_data<SystemState>(get_system_state_path(), "system");
     package_groups_cache.reset();
 }
