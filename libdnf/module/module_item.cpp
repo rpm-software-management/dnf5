@@ -19,12 +19,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/module/module_item.hpp"
 
-#include "module/module_item_container_impl.hpp"
+#include "module/module_sack_impl.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf/module/module_dependency.hpp"
-#include "libdnf/module/module_item_container.hpp"
-#include "libdnf/module/module_item_container_weak.hpp"
+#include "libdnf/module/module_sack.hpp"
+#include "libdnf/module/module_sack_weak.hpp"
 #include "libdnf/utils/format.hpp"
 
 #include <modulemd-2.0/modulemd-module-stream.h>
@@ -233,11 +233,9 @@ std::string ModuleItem::get_module_dependencies_string(ModulemdModuleStream * md
 
 
 ModuleItem::ModuleItem(
-    _ModulemdModuleStream * md_stream,
-    const ModuleItemContainerWeakPtr & module_item_container,
-    const std::string & repo_id)
+    _ModulemdModuleStream * md_stream, const ModuleSackWeakPtr & module_sack, const std::string & repo_id)
     : md_stream(md_stream),
-      module_item_container(module_item_container),
+      module_sack(module_sack),
       repo_id(repo_id) {
     if (md_stream != nullptr) {
         g_object_ref(md_stream);
@@ -287,11 +285,10 @@ std::string ModuleItem::get_yaml() const {
 
 
 void ModuleItem::create_solvable() {
-    Pool * pool = module_item_container->p_impl->pool;
+    Pool * pool = module_sack->p_impl->pool;
 
     // Create new solvable and store its id
-    id = *new ModuleItemId(
-        repo_add_solvable(pool_id2repo(pool, Id(module_item_container->p_impl->repositories[repo_id]))));
+    id = *new ModuleItemId(repo_add_solvable(pool_id2repo(pool, Id(module_sack->p_impl->repositories[repo_id]))));
     Solvable * solvable = pool_id2solvable(pool, id.id);
 
     // Name: $name:$stream:$context
@@ -322,7 +319,7 @@ void ModuleItem::create_solvable() {
 
 
 void ModuleItem::create_dependencies() const {
-    Pool * pool = module_item_container->p_impl->pool;
+    Pool * pool = module_sack->p_impl->pool;
     Solvable * solvable = pool_id2solvable(pool, id.id);
     std::string req_formated;
 

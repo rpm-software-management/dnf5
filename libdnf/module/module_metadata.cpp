@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/logger/logger.hpp"
 #include "libdnf/module/module_errors.hpp"
-#include "libdnf/module/module_item_container_weak.hpp"
+#include "libdnf/module/module_sack_weak.hpp"
 
 #include <modulemd-2.0/modulemd-module-index.h>
 #include <modulemd-2.0/modulemd.h>
@@ -146,7 +146,7 @@ void ModuleMetadata::resolve_added_metadata() {
 
 
 std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> ModuleMetadata::get_all_module_items(
-    const ModuleItemContainerWeakPtr & module_item_container, const std::string & repo_id) {
+    const ModuleSackWeakPtr & module_sack, const std::string & repo_id) {
     std::vector<ModuleItem *> module_items;
     std::vector<ModuleItem *> module_items_without_static_context;
     if (!resulting_module_index) {
@@ -157,10 +157,9 @@ std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> ModuleMetadata::
     for (unsigned int i = 0; i < streams->len; i++) {
         ModulemdModuleStream * modulemd_stream = static_cast<ModulemdModuleStream *>(g_ptr_array_index(streams, i));
         if (modulemd_module_stream_v2_is_static_context((ModulemdModuleStreamV2 *)modulemd_stream)) {
-            module_items.push_back(new ModuleItem(modulemd_stream, module_item_container, repo_id));
+            module_items.push_back(new ModuleItem(modulemd_stream, module_sack, repo_id));
         } else {
-            module_items_without_static_context.push_back(
-                new ModuleItem(modulemd_stream, module_item_container, repo_id));
+            module_items_without_static_context.push_back(new ModuleItem(modulemd_stream, module_sack, repo_id));
         }
     }
 

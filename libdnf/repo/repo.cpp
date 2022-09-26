@@ -499,7 +499,7 @@ void Repo::load_available_repo(LoadFlags flags) {
         yaml_content = file.read();
     }
 
-    base->get_module_item_container()->add(yaml_content, config.get_id());
+    base->get_module_sack()->add(yaml_content, config.get_id());
 #endif
 }
 

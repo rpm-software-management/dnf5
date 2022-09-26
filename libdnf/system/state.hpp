@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_SYSTEM_STATE_HPP
 
 #include "libdnf/common/exception.hpp"
-#include "libdnf/module/module_item_container.hpp"
+#include "libdnf/module/module_sack.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 

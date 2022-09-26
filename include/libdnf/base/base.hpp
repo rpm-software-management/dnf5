@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/conf/vars.hpp"
 #include "libdnf/logger/log_router.hpp"
-#include "libdnf/module/module_item_container.hpp"
+#include "libdnf/module/module_sack.hpp"
 #include "libdnf/plugin/plugins.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/rpm/package_sack.hpp"
@@ -84,9 +84,7 @@ public:
     // TODO(jmracek) Remove from public API due to unstability of the code
     transaction::TransactionHistoryWeakPtr get_transaction_history() { return transaction_history.get_weak_ptr(); }
     libdnf::comps::CompsWeakPtr get_comps() { return comps.get_weak_ptr(); }
-    libdnf::module::ModuleItemContainerWeakPtr get_module_item_container() {
-        return module_item_container.get_weak_ptr();
-    }
+    libdnf::module::ModuleSackWeakPtr get_module_sack() { return module_sack.get_weak_ptr(); }
 
     /// Gets base variables. They can be used in configuration files. Syntax in the config - ${var_name} or $var_name.
     VarsWeakPtr get_vars() { return VarsWeakPtr(&vars, &vars_gurad); }
@@ -129,7 +127,7 @@ private:
     repo::RepoSack repo_sack;
     rpm::PackageSack rpm_package_sack;
     comps::Comps comps{*this};
-    module::ModuleItemContainer module_item_container{get_weak_ptr()};
+    module::ModuleSack module_sack{get_weak_ptr()};
     plugin::Plugins plugins{*this};
     std::map<std::string, std::string> variables;
     transaction::TransactionHistory transaction_history;

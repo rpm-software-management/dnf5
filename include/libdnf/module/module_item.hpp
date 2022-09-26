@@ -21,8 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_MODULE_MODULE_ITEM_HPP
 
 #include "libdnf/module/module_dependency.hpp"
-#include "libdnf/module/module_item_container_weak.hpp"
 #include "libdnf/module/module_profile.hpp"
+#include "libdnf/module/module_sack_weak.hpp"
 
 #include <string>
 #include <vector>
@@ -127,7 +127,7 @@ public:
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getProfiles()
     std::vector<ModuleProfile> get_profiles() const;
 
-    // TODO(pkratoch): Similar implementation as in ModuleItemContainer::getDefaultProfiles().
+    // TODO(pkratoch): Similar implementation as in ModulePackageContainer::getDefaultProfiles().
     /// @return The default profiles.
     //
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getDefaultProfile()
@@ -166,14 +166,11 @@ public:
     bool is_active() const { return false; };
 
 private:
-    friend class ModuleItemContainer;
+    friend class ModuleSack;
     friend class ModuleMetadata;
     friend ::ModuleTest;
 
-    ModuleItem(
-        _ModulemdModuleStream * md_stream,
-        const ModuleItemContainerWeakPtr & module_item_container,
-        const std::string & repo_id);
+    ModuleItem(_ModulemdModuleStream * md_stream, const ModuleSackWeakPtr & module_sack, const std::string & repo_id);
     ModuleItem(const ModuleItem & mpkg);
     ModuleItem & operator=(const ModuleItem & mpkg);
     ModuleItem(ModuleItem && mpkg) = default;
@@ -224,7 +221,7 @@ private:
     // Corresponds to one yaml document
     _ModulemdModuleStream * md_stream;
 
-    ModuleItemContainerWeakPtr module_item_container;
+    ModuleSackWeakPtr module_sack;
     ModuleItemId id;
     std::string repo_id;
 
