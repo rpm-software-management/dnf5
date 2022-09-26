@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/repo/repo_sack.hpp"
 
+#include "../module/module_sack_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
@@ -221,6 +222,9 @@ void RepoSack::update_and_load_enabled_repos(bool load_system, LoadFlags flags) 
     }
 
     update_and_load_repos(repos, flags);
+
+    // TODO(jmracek) Replace by call that will resolve active modules and apply modular filterring
+    base->get_module_sack()->p_impl->module_filtering();
 }
 
 

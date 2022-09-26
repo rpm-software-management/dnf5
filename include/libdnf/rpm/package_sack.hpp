@@ -54,6 +54,12 @@ class AdvisoryReference;
 
 }  // namespace libdnf::advisory
 
+namespace libdnf::module {
+
+class ModuleSack;
+
+}  // namespace libdnf::module
+
 namespace libdnf::rpm::solv {
 
 class SolvPrivate;
@@ -160,6 +166,7 @@ private:
     friend libdnf::advisory::AdvisoryModule;
     friend libdnf::advisory::AdvisoryReference;
     friend libdnf::base::Transaction;
+    friend class libdnf::module::ModuleSack;
 
     class Impl;
     std::unique_ptr<Impl> p_impl;

@@ -36,6 +36,11 @@ extern "C" {
 #include <solv/repo.h>
 }
 
+#include "../rpm/package_sack_impl.hpp"
+
+#include "libdnf/repo/repo_weak.hpp"
+#include "libdnf/rpm/package_query.hpp"
+
 #include <memory>
 #include <string>
 
@@ -145,6 +150,153 @@ BaseWeakPtr ModuleSack::get_base() const {
     return p_impl->base;
 }
 
+std::tuple<
+    std::vector<std::string>,
+    std::vector<std::string>,
+    std::vector<std::string>,
+    std::vector<std::string>,
+    rpm::ReldepList>
+ModuleSack::Impl::collect_data_for_modular_filtering() {
+    base->get_module_sack()->add_modules_without_static_context();
+
+    // TODO(jmracek) Add support of demodularized RPMs
+    // auto demodularizedNames = getDemodularizedRpms(modulePackageContainer, allPackages);
+
+    std::vector<std::string> include_NEVRAs;
+    std::vector<std::string> exclude_NEVRAs;
+    std::vector<std::string> names;
+    std::vector<std::string> src_names;
+    libdnf::rpm::ReldepList reldep_name_list(base);
+    for (const auto & module : get_modules()) {
+        auto artifacts = module->get_artifacts();
+        if (module->is_active()) {
+            // TODO(jmracek) Add support of demodularized RPMs
+            // std::string package_ID{module->get_name_stream()};
+            // package_ID.append(".");
+            // package_ID.append(module->get_arch());
+            //auto it = demodularizedNames.find(package_ID);
+            //if (it == demodularizedNames.end()) {
+            if (true) {
+                for (const auto & rpm : artifacts) {
+                    auto nevras = rpm::Nevra::parse(rpm, {rpm::Nevra::Form::NEVRA});
+                    if (nevras.empty()) {
+                        // TODO(jmracek) Unparsable NEVRA - What to do?
+                        continue;
+                    }
+                    auto & nevra = *nevras.begin();
+                    auto arch = nevra.get_arch();
+                    if (arch == "src" || arch == "nosrc") {
+                        src_names.push_back(nevra.get_name());
+                    } else {
+                        names.push_back(nevra.get_name());
+                        reldep_name_list.add_reldep(nevra.get_name());
+                    }
+                }
+            }
+            // } else {
+            //     for (const auto &rpm : artifacts) {
+            //         auto nevras = rpm::Nevra::parse(rpm, {rpm::Nevra::Form::NEVRA});
+            //         if (nevras.empty()) {
+            //             // TODO(jmracek) Unparsable NEVRA - What to do?
+            //             continue;rpm/package_query.hpp
+            //         }
+            //         auto & nevra = *nevras.begin();
+            //         bool found = false;
+            //         for ( auto & demodularized : it->second) {
+            //             if (nevra.get_name() == demodularized) {
+            //                 found = true;
+            //                 break;
+            //             }
+            //         }
+            //         if (found) {
+            //             continue;
+            //         }
+            //         auto arch = nevra.get_arch();
+            //         // source packages do not provide anything and must not cause excluding binary packages
+            //         if (arch == "src" || arch == "nosrc") {
+            //             src_names.push_back(nevra.get_name());
+            //         } else {
+            //             names.push_back(nevra.get_name());
+            //             reldep_name_list.add_reldep(nevra.get_name());
+            //         }
+            //     }rpm/package_query.hpp
+            // }
+            copy(std::begin(artifacts), std::end(artifacts), std::back_inserter(include_NEVRAs));
+        } else {
+            copy(std::begin(artifacts), std::end(artifacts), std::back_inserter(exclude_NEVRAs));
+        }
+    }
+
+    return std::make_tuple(
+        std::move(include_NEVRAs),
+        std::move(exclude_NEVRAs),
+        std::move(names),
+        std::move(src_names),
+        std::move(reldep_name_list));
+}
+
+void ModuleSack::Impl::module_filtering() {
+    auto [include_NEVRAs, exclude_NEVRAs, names, src_names, reldep_name_list] = collect_data_for_modular_filtering();
+
+    // Pakages from system, commandline, and hotfix repositories are not targets for modular filterring
+    libdnf::rpm::PackageQuery target_packages(base);
+
+    // TODO(replace) "@System", "@commandline" by defined variables like in dnf4
+    std::vector<std::string> keep_repo_ids = {"@System", "@commandline"};
+
+    libdnf::repo::RepoQuery hotfix_repos(base);
+    hotfix_repos.filter_enabled(true);
+    hotfix_repos.filter(
+        [](const libdnf::repo::RepoWeakPtr & repo) { return repo->get_config().module_hotfixes().get_value(); },
+        true,
+        libdnf::sack::QueryCmp::EQ);
+    for (auto & repo : hotfix_repos) {
+        keep_repo_ids.push_back(repo->get_id());
+    }
+
+    target_packages.filter_repo_id(keep_repo_ids, libdnf::sack::QueryCmp::NEQ);
+
+    libdnf::rpm::PackageQuery include_query(base);
+    libdnf::rpm::PackageQuery exclude_query(target_packages);
+    libdnf::rpm::PackageQuery exclude_provides_query(target_packages);
+    libdnf::rpm::PackageQuery exclude_names_query(target_packages);
+    libdnf::rpm::PackageQuery exclude_src_names_query(target_packages);
+
+    include_query.filter_nevra(include_NEVRAs);
+
+    // All packages from not active modules must be filtered out by modular filtering except packages from active
+    // modules
+    exclude_query.filter_nevra(exclude_NEVRAs);
+    exclude_query.difference(include_query);
+
+    // Exclude packages by their Provides. Provides are used to disable obsoletes. Remove included modular packages to
+    // not exclude modular packages from active modules
+    exclude_provides_query.filter_provides(reldep_name_list);
+    exclude_provides_query.difference(include_query);
+
+    // Search for source packages with same names as included source artifacts. Handling of sorce packages differently
+    // prevent filtering out of binary packages that has the same name as source package but binary package is not
+    // in module (it prevents creation of broken dependenciers in the distribution)
+    exclude_src_names_query.filter_name(src_names);
+    exclude_src_names_query.filter_arch({"src", "nosrc"});
+
+    // Required to filtrate out source packages and packages with incompatible architectures.
+    exclude_names_query.filter_name(names);
+
+    // Performance optimization => merging with exclude_src_names_query will prevent additional removal of included
+    // packages. Remove included modular packages to not exclude modular packages from active modules
+    exclude_names_query.update(exclude_src_names_query);
+    exclude_names_query.difference(include_query);
+
+    base->get_rpm_package_sack()->p_impl->set_module_excludes(exclude_query);
+    base->get_rpm_package_sack()->p_impl->add_module_excludes(exclude_provides_query);
+    base->get_rpm_package_sack()->p_impl->add_module_excludes(exclude_names_query);
+
+    // TODO(jmracek) Store also includes or data more structuralized - module not actave packages,
+    // filtered out not modular packages or so on
+
+    // dnf_sack_set_module_includes(sack, includeQuery.getResultPset());*/
+}
 
 InvalidModuleState::InvalidModuleState(const std::string & state)
     : libdnf::Error(M_("Invalid module state: {}"), state) {}
