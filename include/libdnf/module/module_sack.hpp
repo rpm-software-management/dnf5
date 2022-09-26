@@ -30,6 +30,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+
+namespace libdnf::repo {
+
+class RepoSack;
+
+}  // namespace libdnf::repo
+
 namespace libdnf::module {
 
 
@@ -75,6 +82,7 @@ public:
 
 private:
     friend class libdnf::Base;
+    friend class libdnf::repo::RepoSack;
     friend ModuleItem;
 
     ModuleSack(const BaseWeakPtr & base);

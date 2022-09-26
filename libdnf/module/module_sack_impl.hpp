@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
 
 #include "libdnf/module/module_sack.hpp"
+#include "libdnf/rpm/reldep_list.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -35,6 +36,25 @@ public:
     ~Impl() { pool_free(pool); }
 
     const std::vector<std::unique_ptr<ModuleItem>> & get_modules();
+
+    /// Apply modular filtering to package set. For proper functionality, all repositories must be loaded and active
+    /// modules must be resolved (modular solver).
+    void module_filtering();
+
+    /// Supporting method that iterates over all modules and creates filtering sets for modular filtering
+    /// include_NEVRAs contains artifacts from active modules
+    /// exclude_NEVRAs contains artifacts from not active modules
+    /// names and reldep_name_list contain names from include_NEVRAs that are not source
+    /// src_names contains names from include_NEVRAs that are source
+    ///
+    /// @return <include_NEVRAs>, <exclude_NEVRAs>, <names>, <src_names>, <reldep_name_list>
+    std::tuple<
+        std::vector<std::string>,
+        std::vector<std::string>,
+        std::vector<std::string>,
+        std::vector<std::string>,
+        rpm::ReldepList>
+    collect_data_for_modular_filtering();
 
 private:
     friend ModuleSack;

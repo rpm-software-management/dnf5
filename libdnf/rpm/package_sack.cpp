@@ -260,6 +260,39 @@ void PackageSack::Impl::clear_user_includes() {
     considered_uptodate = false;
 }
 
+const PackageSet PackageSack::Impl::get_module_excludes() {
+    if (module_excludes) {
+        return PackageSet(base, *module_excludes);
+    } else {
+        return PackageSet(base);
+    }
+}
+
+void PackageSack::Impl::add_module_excludes(const PackageSet & excludes) {
+    if (module_excludes) {
+        *module_excludes |= *excludes.p_impl;
+        considered_uptodate = false;
+    } else {
+        set_module_excludes(excludes);
+    }
+}
+
+void PackageSack::Impl::remove_module_excludes(const PackageSet & excludes) {
+    if (module_excludes) {
+        *module_excludes -= *excludes.p_impl;
+        considered_uptodate = false;
+    }
+}
+
+void PackageSack::Impl::set_module_excludes(const PackageSet & excludes) {
+    module_excludes.reset(new libdnf::solv::SolvMap(*excludes.p_impl));
+    considered_uptodate = false;
+}
+
+void PackageSack::Impl::clear_module_excludes() {
+    module_excludes.reset();
+    considered_uptodate = false;
+}
 
 std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(libdnf::sack::ExcludeFlags flags) const {
     if ((static_cast<bool>(flags & libdnf::sack::ExcludeFlags::IGNORE_REGULAR_CONFIG_EXCLUDES) ||
