@@ -31,13 +31,14 @@ namespace libdnf::module {
 
 class ModuleItemContainer::Impl {
 public:
-    Impl() : pool(pool_create()) {}
+    Impl(const BaseWeakPtr & base) : base(base), pool(pool_create()) {}
     ~Impl() { pool_free(pool); }
 
 private:
     friend ModuleItemContainer;
     friend ModuleItem;
 
+    BaseWeakPtr base;
     Pool * pool;
     // Repositories containing any modules. Key is repoid, value is Id of the repo in libsolv.
     // This is needed in `ModuleItem::create_solvable` for creating solvable in the correct repository.

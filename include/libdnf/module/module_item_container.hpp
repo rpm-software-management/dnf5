@@ -47,7 +47,6 @@ class ModuleItemContainer;
 class ModuleItemContainer {
 public:
     ModuleItemContainer(const BaseWeakPtr & base);
-    ModuleItemContainer(Base & base);
     ~ModuleItemContainer();
 
     ModuleItemContainerWeakPtr get_weak_ptr();
@@ -82,7 +81,6 @@ private:
     void create_module_solvables();
     BaseWeakPtr get_base() const;
 
-    BaseWeakPtr base;
     WeakPtrGuard<ModuleItemContainer, false> data_guard;
 
     // Older ModuleItems that don't have static context. After all metadata are loaded, static contexts are assigned
