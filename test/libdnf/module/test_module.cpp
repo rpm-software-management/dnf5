@@ -44,9 +44,9 @@ void ModuleTest::test_load() {
 
     auto module_item_container = base.get_module_item_container();
     module_item_container->add_modules_without_static_context();
-    CPPUNIT_ASSERT_EQUAL(3lu, module_item_container->modules.size());
+    CPPUNIT_ASSERT_EQUAL(3lu, module_item_container->get_modules().size());
 
-    auto & meson = module_item_container->modules[0];
+    auto & meson = module_item_container->get_modules()[0];
     CPPUNIT_ASSERT_EQUAL(std::string("meson"), meson->get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("master"), meson->get_stream());
     CPPUNIT_ASSERT_EQUAL(20180816151613ll, meson->get_version());
@@ -62,6 +62,6 @@ void ModuleTest::test_load() {
         meson->get_description());
     CPPUNIT_ASSERT_EQUAL(std::string("ninja;platform:[f29,f30,f31]"), meson->get_module_dependencies_string());
 
-    CPPUNIT_ASSERT_EQUAL(std::string("nodejs"), module_item_container->modules[1]->get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("nodejs"), module_item_container->modules[2]->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("nodejs"), module_item_container->get_modules()[1]->get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("nodejs"), module_item_container->get_modules()[2]->get_name());
 }

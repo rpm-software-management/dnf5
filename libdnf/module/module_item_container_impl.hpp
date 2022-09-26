@@ -39,6 +39,7 @@ private:
     friend ModuleItem;
 
     BaseWeakPtr base;
+    std::vector<std::unique_ptr<ModuleItem>> modules;
     Pool * pool;
     // Repositories containing any modules. Key is repoid, value is Id of the repo in libsolv.
     // This is needed in `ModuleItem::create_solvable` for creating solvable in the correct repository.
