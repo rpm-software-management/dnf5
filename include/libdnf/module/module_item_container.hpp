@@ -41,9 +41,6 @@ namespace libdnf::module {
 enum class ModuleState { AVAILABLE, DEFAULT, ENABLED, DISABLED };
 
 
-class ModuleItemContainer;
-
-
 class ModuleItemContainer {
 public:
     ~ModuleItemContainer();
