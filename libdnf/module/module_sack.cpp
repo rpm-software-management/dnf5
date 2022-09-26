@@ -17,17 +17,17 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/module/module_item_container.hpp"
+#include "libdnf/module/module_sack.hpp"
 
-#include "module/module_item_container_impl.hpp"
 #include "module/module_metadata.hpp"
+#include "module/module_sack_impl.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/module/module_errors.hpp"
 #include "libdnf/module/module_item.hpp"
-#include "libdnf/module/module_item_container_weak.hpp"
+#include "libdnf/module/module_sack_weak.hpp"
 
 #include <modulemd-2.0/modulemd.h>
 
@@ -42,16 +42,16 @@ extern "C" {
 namespace libdnf::module {
 
 
-ModuleItemContainer::ModuleItemContainer(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
-ModuleItemContainer::~ModuleItemContainer() {}
+ModuleSack::ModuleSack(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
+ModuleSack::~ModuleSack() {}
 
 
-const std::vector<std::unique_ptr<ModuleItem>> & ModuleItemContainer::get_modules() const {
+const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::get_modules() const {
     // TODO(mracek) What about to call add_modules_without_static_context before returning the vector?
     return p_impl->modules;
 }
 
-void ModuleItemContainer::add(const std::string & file_content, const std::string & repo_id) {
+void ModuleSack::add(const std::string & file_content, const std::string & repo_id) {
     ModuleMetadata md(get_base());
     try {
         md.add_metadata_from_string(file_content, 0);
@@ -83,7 +83,7 @@ void ModuleItemContainer::add(const std::string & file_content, const std::strin
 }
 
 
-void ModuleItemContainer::add_modules_without_static_context() {
+void ModuleSack::add_modules_without_static_context() {
     if (modules_without_static_context.empty()) {
         return;
     }
@@ -124,7 +124,7 @@ void ModuleItemContainer::add_modules_without_static_context() {
 }
 
 
-void ModuleItemContainer::create_module_solvables() {
+void ModuleSack::create_module_solvables() {
     for (auto const & module_item : p_impl->modules) {
         module_item->create_solvable();
         module_item->create_dependencies();
@@ -136,12 +136,12 @@ void ModuleItemContainer::create_module_solvables() {
 }
 
 
-ModuleItemContainerWeakPtr ModuleItemContainer::get_weak_ptr() {
-    return ModuleItemContainerWeakPtr(this, &data_guard);
+ModuleSackWeakPtr ModuleSack::get_weak_ptr() {
+    return ModuleSackWeakPtr(this, &data_guard);
 }
 
 
-BaseWeakPtr ModuleItemContainer::get_base() const {
+BaseWeakPtr ModuleSack::get_base() const {
     return p_impl->base;
 }
 

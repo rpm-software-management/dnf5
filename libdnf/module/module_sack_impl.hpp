@@ -17,20 +17,36 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_MODULE_MODULE_ITEM_CONTAINER_WEAK_HPP
-#define LIBDNF_MODULE_MODULE_ITEM_CONTAINER_WEAK_HPP
+#ifndef LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
+#define LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
 
-#include "libdnf/common/weak_ptr.hpp"
+#include "libdnf/module/module_sack.hpp"
 
+extern "C" {
+#include <solv/pool.h>
+}
 
 namespace libdnf::module {
 
 
-class ModuleItemContainer;
-using ModuleItemContainerWeakPtr = WeakPtr<ModuleItemContainer, false>;
+class ModuleSack::Impl {
+public:
+    Impl(const BaseWeakPtr & base) : base(base), pool(pool_create()) {}
+    ~Impl() { pool_free(pool); }
+
+private:
+    friend ModuleSack;
+    friend ModuleItem;
+
+    BaseWeakPtr base;
+    std::vector<std::unique_ptr<ModuleItem>> modules;
+    Pool * pool;
+    // Repositories containing any modules. Key is repoid, value is Id of the repo in libsolv.
+    // This is needed in `ModuleItem::create_solvable` for creating solvable in the correct repository.
+    std::map<std::string, Id> repositories;
+};
 
 
 }  // namespace libdnf::module
 
-
-#endif
+#endif  // LIBDNF_MODULE_MODULE_SACK_IMPL_HPP

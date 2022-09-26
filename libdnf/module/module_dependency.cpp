@@ -22,8 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include "libdnf/module/module_item.hpp"
-#include "libdnf/module/module_item_container.hpp"
-#include "libdnf/module/module_item_container_weak.hpp"
+#include "libdnf/module/module_sack.hpp"
+#include "libdnf/module/module_sack_weak.hpp"
 #include "libdnf/utils/format.hpp"
 
 #include <modulemd-2.0/modulemd-module-stream.h>

@@ -17,13 +17,13 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_MODULE_MODULE_ITEM_CONTAINER_HPP
-#define LIBDNF_MODULE_MODULE_ITEM_CONTAINER_HPP
+#ifndef LIBDNF_MODULE_MODULE_SACK_HPP
+#define LIBDNF_MODULE_MODULE_SACK_HPP
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/module/module_item.hpp"
-#include "libdnf/module/module_item_container_weak.hpp"
+#include "libdnf/module/module_sack_weak.hpp"
 
 #include <map>
 #include <memory>
@@ -41,18 +41,19 @@ namespace libdnf::module {
 enum class ModuleState { AVAILABLE, DEFAULT, ENABLED, DISABLED };
 
 
-class ModuleItemContainer {
+/// Container with data and methods related to modules
+class ModuleSack {
 public:
-    ~ModuleItemContainer();
+    ~ModuleSack();
 
-    ModuleItemContainerWeakPtr get_weak_ptr();
+    ModuleSackWeakPtr get_weak_ptr();
 
     /// Return module items in container
     const std::vector<std::unique_ptr<ModuleItem>> & get_modules() const;
 
     // TODO(pkratoch): Maybe make this private later
     void add(const std::string & file_content, const std::string & repo_id);
-    // Compute static context for older modules and move these modules to `ModuleItemContainer.modules`.
+    // Compute static context for older modules and move these modules to `ModuleSack.modules`.
     void add_modules_without_static_context();
 
     // TODO(pkratoch): Implement adding defaults from "/etc/dnf/modules.defaults.d/", which are defined by user.
@@ -60,8 +61,8 @@ public:
     /// Add and resolve defaults.
     /// @since 5.0
     //
-    // @replaces libdnf:ModuleItemContainer.hpp:method:ModuleItemContainer.addDefaultsFromDisk()
-    // @replaces libdnf:ModuleItemContainer.hpp:method:ModuleItemContainer.moduleDefaultsResolve()
+    // @replaces libdnf:ModulePackageContainer.hpp:method:ModulePackageContainer.addDefaultsFromDisk()
+    // @replaces libdnf:ModulePackageContainer.hpp:method:ModulePackageContainer.moduleDefaultsResolve()
     void add_defaults_from_disk();
 
     // TODO(pkratoch): Implement getting default streams and profiles.
@@ -76,16 +77,16 @@ private:
     friend class libdnf::Base;
     friend ModuleItem;
 
-    ModuleItemContainer(const BaseWeakPtr & base);
+    ModuleSack(const BaseWeakPtr & base);
 
     void create_module_solvables();
     BaseWeakPtr get_base() const;
 
-    WeakPtrGuard<ModuleItemContainer, false> data_guard;
+    WeakPtrGuard<ModuleSack, false> data_guard;
 
     // Older ModuleItems that don't have static context. After all metadata are loaded, static contexts are assigned
-    // also to these ModuleItems and they are removed from this vector and added to `ModuleItemContainer.modules`.
-    // This is done in `ModuleItemContainer::add_modules_without_static_context`.
+    // also to these ModuleItems and they are removed from this vector and added to `ModuleSack.modules`.
+    // This is done in `ModuleSack::add_modules_without_static_context`.
     std::vector<std::unique_ptr<ModuleItem>> modules_without_static_context;
 
     class Impl;
@@ -109,4 +110,4 @@ ModuleState module_state_from_string(const std::string & state);
 }  // namespace libdnf::module
 
 
-#endif  // LIBDNF_MODULE_MODULE_ITEM_CONTAINER_HPP
+#endif  // LIBDNF_MODULE_MODULE_SACK_HPP
