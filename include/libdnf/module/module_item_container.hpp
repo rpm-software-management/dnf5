@@ -46,7 +46,6 @@ class ModuleItemContainer;
 
 class ModuleItemContainer {
 public:
-    ModuleItemContainer(const BaseWeakPtr & base);
     ~ModuleItemContainer();
 
     ModuleItemContainerWeakPtr get_weak_ptr();
@@ -76,7 +75,10 @@ public:
     std::vector<std::string> get_default_profiles(std::string module_name, std::string module_stream);
 
 private:
+    friend class libdnf::Base;
     friend ModuleItem;
+
+    ModuleItemContainer(const BaseWeakPtr & base);
 
     void create_module_solvables();
     BaseWeakPtr get_base() const;
