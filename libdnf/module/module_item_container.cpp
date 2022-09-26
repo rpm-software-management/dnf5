@@ -42,13 +42,12 @@ extern "C" {
 namespace libdnf::module {
 
 
-ModuleItemContainer::ModuleItemContainer(const BaseWeakPtr & base) : base(base), p_impl(new Impl()) {}
-ModuleItemContainer::ModuleItemContainer(libdnf::Base & base) : base(base.get_weak_ptr()), p_impl(new Impl()) {}
+ModuleItemContainer::ModuleItemContainer(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
 ModuleItemContainer::~ModuleItemContainer() {}
 
 
 void ModuleItemContainer::add(const std::string & file_content, const std::string & repo_id) {
-    ModuleMetadata md(base);
+    ModuleMetadata md(get_base());
     try {
         md.add_metadata_from_string(file_content, 0);
     } catch (const ModuleResolveError & e) {
@@ -138,7 +137,7 @@ ModuleItemContainerWeakPtr ModuleItemContainer::get_weak_ptr() {
 
 
 BaseWeakPtr ModuleItemContainer::get_base() const {
-    return base;
+    return p_impl->base;
 }
 
 

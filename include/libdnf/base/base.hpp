@@ -129,7 +129,7 @@ private:
     repo::RepoSack repo_sack;
     rpm::PackageSack rpm_package_sack;
     comps::Comps comps{*this};
-    module::ModuleItemContainer module_item_container{*this};
+    module::ModuleItemContainer module_item_container{get_weak_ptr()};
     plugin::Plugins plugins{*this};
     std::map<std::string, std::string> variables;
     transaction::TransactionHistory transaction_history;
