@@ -46,9 +46,9 @@ ModuleSack::ModuleSack(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
 ModuleSack::~ModuleSack() {}
 
 
-const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::get_modules() const {
+const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::get_modules() {
     // TODO(mracek) What about to call add_modules_without_static_context before returning the vector?
-    return p_impl->modules;
+    return p_impl->get_modules();
 }
 
 void ModuleSack::add(const std::string & file_content, const std::string & repo_id) {

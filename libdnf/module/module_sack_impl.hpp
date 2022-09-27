@@ -34,6 +34,8 @@ public:
     Impl(const BaseWeakPtr & base) : base(base), pool(pool_create()) {}
     ~Impl() { pool_free(pool); }
 
+    const std::vector<std::unique_ptr<ModuleItem>> & get_modules();
+
 private:
     friend ModuleSack;
     friend ModuleItem;
@@ -46,6 +48,10 @@ private:
     std::map<std::string, Id> repositories;
 };
 
+inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_modules() {
+    // TODO(mracek) What about to call add_modules_without_static_context before returning the vector?
+    return modules;
+}
 
 }  // namespace libdnf::module
 

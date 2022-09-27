@@ -49,7 +49,7 @@ public:
     ModuleSackWeakPtr get_weak_ptr();
 
     /// Return module items in container
-    const std::vector<std::unique_ptr<ModuleItem>> & get_modules() const;
+    const std::vector<std::unique_ptr<ModuleItem>> & get_modules();
 
     // TODO(pkratoch): Maybe make this private later
     void add(const std::string & file_content, const std::string & repo_id);
