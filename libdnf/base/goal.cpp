@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal.hpp"
 
+#include "advisory/advisory_package_private.hpp"
 #include "base_private.hpp"
 #include "rpm/package_query_impl.hpp"
 #include "rpm/package_sack_impl.hpp"
@@ -278,20 +279,26 @@ void Goal::Impl::filter_candidates_for_advisory_upgrade(
 
     // Since we want to satisfy all advisory pacakges we can keep just the latest
     // (all lower EVR adv pkgs are satistified by the latests)
+    // We also want to skip already resolved advisories.
     // This assumes that adv_pkgs vector is sorted by Name, Arch, EVR
     auto adv_pkgs = advisories.get_advisory_packages_sorted_by_name_arch_evr();
-    std::vector<libdnf::advisory::AdvisoryPackage> latest_adv_pkgs;
+    std::vector<libdnf::advisory::AdvisoryPackage> latest_unresolved_adv_pkgs;
     for (std::vector<libdnf::advisory::AdvisoryPackage>::iterator i = adv_pkgs.begin(); i != adv_pkgs.end(); ++i) {
+        // Filter out already resolved advisories
+        if (i->p_impl->is_resolved_in(installed)) {
+            continue;
+        }
+
         auto next_adv_pkg = std::next(i);
         if (next_adv_pkg == adv_pkgs.end() || i->get_name() != next_adv_pkg->get_name() ||
             i->get_arch() != next_adv_pkg->get_arch()) {
-            latest_adv_pkgs.push_back(*i);
+            latest_unresolved_adv_pkgs.push_back(*i);
         }
     }
 
     // Get only packages that satisfy some advisory package
     libdnf::rpm::PackageQuery::PQImpl::filter_sorted_advisory_pkgs(
-        candidates, latest_adv_pkgs, libdnf::sack::QueryCmp::GTE);
+        candidates, latest_unresolved_adv_pkgs, libdnf::sack::QueryCmp::GTE);
 }
 
 void Goal::add_group_install(const std::string & spec, const GoalJobSettings & settings) {

@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/advisory/advisory_package.hpp"
 
 #include "advisory_package_private.hpp"
+#include "rpm/package_set_impl.hpp"
 
 #include <solv/chksum.h>
 #include <solv/repo.h>
@@ -112,6 +113,29 @@ std::string AdvisoryPackage::Impl::get_evr() const {
 
 std::string AdvisoryPackage::Impl::get_arch() const {
     return get_pool(base).id2str(arch);
+}
+
+bool AdvisoryPackage::Impl::is_resolved_in(const libdnf::rpm::PackageSet & pkgs) const {
+    auto & pool = get_pool(base);
+    auto sack = base->get_rpm_package_sack();
+    auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
+
+    auto low = std::lower_bound(
+        sorted_solvables.begin(),
+        sorted_solvables.end(),
+        *this,
+        libdnf::advisory::AdvisoryPackage::Impl::name_arch_compare_lower_solvable);
+    while (low != sorted_solvables.end() && (*low)->name == get_name_id() && (*low)->arch == get_arch_id()) {
+        int libsolv_cmp = pool.evrcmp((*low)->evr, get_evr_id(), EVRCMP_COMPARE);
+        if (libsolv_cmp >= 0) {  // We are interested only in lower or equal evr
+            if (pkgs.p_impl->contains(pool.solvable2id(*low))) {
+                return true;
+            }
+        }
+        ++low;
+    }
+
+    return false;
 }
 
 }  // namespace libdnf::advisory
