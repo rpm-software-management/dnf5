@@ -191,6 +191,13 @@ public:
     void save();
 
 private:
+    friend Base;
+
+    /// Reset modules states to match given new values.
+    /// @param new_states New values for modules states.
+    /// @since 5.0
+    void reset_module_states(std::map<std::string, ModuleState> new_states) { module_states = new_states; }
+
     /// Loads the system state from the filesystem path given in constructor.
     /// @since 5.0
     void load();

@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "conf/config.h"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
+#include "utils/dnf4convert/dnf4convert.hpp"
 
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/const.hpp"
@@ -148,6 +149,12 @@ void Base::setup() {
 
     std::filesystem::path system_state_dir{config.system_state_dir().get_value()};
     p_impl->system_state.emplace(installroot.get_value() / system_state_dir.relative_path());
+
+    // TODO(mblaha) - this is temporary override of modules state by reading
+    // dnf4 persistor from /etc/dnf/modules.d/
+    // Remove once reading of dnf4 data is not needed
+    libdnf::dnf4convert::Dnf4Convert convertor(get_weak_ptr());
+    p_impl->get_system_state().reset_module_states(convertor.read_module_states());
 
     config.varsdir().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
