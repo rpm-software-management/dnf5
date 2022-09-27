@@ -19,8 +19,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/module/module_item_container.hpp"
 
+#include "base/base_impl.hpp"
 #include "module/module_item_container_impl.hpp"
 #include "module/module_metadata.hpp"
+#include "system/state.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/base/base.hpp"
@@ -139,6 +141,27 @@ ModuleItemContainerWeakPtr ModuleItemContainer::get_weak_ptr() {
 
 BaseWeakPtr ModuleItemContainer::get_base() const {
     return base;
+}
+
+
+bool ModuleItemContainer::is_enabled(const std::string & name, const std::string & stream) const {
+    try {
+        auto & system_state = get_base()->p_impl->get_system_state();
+        return system_state.get_module_state(name) == module::ModuleState::ENABLED &&
+               system_state.get_module_enabled_stream(name) == stream;
+    } catch (const libdnf::system::StateNotFoundError & e) {
+        return false;
+    }
+}
+
+
+bool ModuleItemContainer::is_disabled(const std::string & name) const {
+    try {
+        auto & system_state = get_base()->p_impl->get_system_state();
+        return system_state.get_module_state(name) == module::ModuleState::DISABLED;
+    } catch (const libdnf::system::StateNotFoundError & e) {
+        return false;
+    }
 }
 
 

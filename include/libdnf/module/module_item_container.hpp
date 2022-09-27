@@ -76,6 +76,19 @@ public:
     /// @since 5.0
     std::vector<std::string> get_default_profiles(std::string module_name, std::string module_stream);
 
+    /// @return `true` the module stream is enabled on the system, `false` otherwise.
+    /// @param name Name of the module
+    /// @param stream Name of the module stream
+    /// @since 5.0
+    // @replaces libdnf:ModuleItemContainer.hpp:method:ModuleItemContainer.isEnabled()
+    bool is_enabled(const std::string & name, const std::string & stream) const;
+
+    /// @return `true` the module is disabled on the system, `false` otherwise.
+    /// @param name Name of the module
+    /// @since 5.0
+    // @replaces libdnf:ModuleItemContainer.hpp:method:ModuleItemContainer.isDisabled()
+    bool is_disabled(const std::string & name) const;
+
 private:
     friend ModuleItem;
 

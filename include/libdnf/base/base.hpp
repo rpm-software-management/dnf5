@@ -102,6 +102,7 @@ public:
 private:
     friend class libdnf::InternalBaseUser;
     friend class libdnf::base::Transaction;
+    friend class libdnf::module::ModuleItemContainer;
     friend class libdnf::rpm::Package;
     friend class libdnf::advisory::AdvisoryQuery;
 
