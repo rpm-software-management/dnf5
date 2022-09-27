@@ -32,6 +32,12 @@ class PackageQuery;
 
 }
 
+namespace libdnf {
+
+class Goal;
+
+}
+
 namespace libdnf::advisory {
 
 class AdvisoryPackage {
@@ -105,6 +111,7 @@ private:
     friend class AdvisoryQuery;
     friend class AdvisorySet;
     friend class libdnf::rpm::PackageQuery;
+    friend class libdnf::Goal;
 
     class Impl;
     AdvisoryPackage(Impl * private_pkg);

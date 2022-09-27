@@ -106,6 +106,14 @@ public:
         return solvable->evr < adv_pkg.evr;
     }
 
+    /// Check whether this AdvisoryPackage is resolved (meaning there is a counterpart
+    /// package with lower or equal EVR and matching name and arch) in pkgs PacakgeSet.
+    ///
+    /// @param pkgs             libdnf::rpm::PackageSet of packages to check
+    ///
+    /// @return true or false whether this AdvisoryPackage is resolved in pkgs
+    bool is_resolved_in(const libdnf::rpm::PackageSet & pkgs) const;
+
 private:
     friend class AdvisoryCollection;
     friend AdvisoryPackage;

@@ -30,6 +30,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstddef>
 #include <memory>
 
+namespace libdnf::advisory {
+
+class AdvisoryPackage;
+
+}  // namespace libdnf::advisory
 
 namespace libdnf::solv {
 
@@ -153,6 +158,8 @@ private:
     friend class PackageSack;
     friend class Transaction;
     friend class libdnf::base::Transaction;
+    friend class libdnf::advisory::AdvisoryPackage;
+
     friend libdnf::Goal;
     PackageSet(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map);
     class Impl;
