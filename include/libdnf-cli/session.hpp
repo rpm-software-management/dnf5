@@ -69,7 +69,7 @@ public:
 
 private:
     std::unique_ptr<Command> root_command;
-    Command * selected_command;
+    Command * selected_command{nullptr};
     std::unique_ptr<libdnf::cli::ArgumentParser> argument_parser;
 };
 
