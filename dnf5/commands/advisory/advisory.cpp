@@ -33,9 +33,9 @@ void AdvisoryCommand::register_subcommands() {
     auto * query_commands_advisory = get_context().get_argument_parser().add_new_group("advisory_query_commands");
     query_commands_advisory->set_header("Query Commands:");
     get_argument_parser_command()->register_group(query_commands_advisory);
-    register_subcommand(std::make_unique<AdvisoryListCommand>(*this), query_commands_advisory);
-    register_subcommand(std::make_unique<AdvisoryInfoCommand>(*this), query_commands_advisory);
-    register_subcommand(std::make_unique<AdvisorySummaryCommand>(*this), query_commands_advisory);
+    register_subcommand(std::make_unique<AdvisoryListCommand>(*this));
+    register_subcommand(std::make_unique<AdvisoryInfoCommand>(*this));
+    register_subcommand(std::make_unique<AdvisorySummaryCommand>(*this));
 }
 
 void AdvisoryCommand::pre_configure() {

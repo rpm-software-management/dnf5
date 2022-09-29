@@ -34,14 +34,14 @@ void GroupCommand::register_subcommands() {
     auto * query_commands_group = get_context().get_argument_parser().add_new_group("group_query_commands");
     query_commands_group->set_header("Query Commands:");
     get_argument_parser_command()->register_group(query_commands_group);
-    register_subcommand(std::make_unique<GroupListCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<GroupInfoCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<GroupListCommand>(*this));
+    register_subcommand(std::make_unique<GroupInfoCommand>(*this));
     // software management commands
     auto * software_management_commands_group =
-        get_context().get_argument_parser().add_new_group("module_software_management_commands");
+        get_context().get_argument_parser().add_new_group("group_software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     get_argument_parser_command()->register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<GroupInstallCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<GroupInstallCommand>(*this));
 }
 
 void GroupCommand::pre_configure() {

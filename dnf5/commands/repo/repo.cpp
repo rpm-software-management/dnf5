@@ -33,8 +33,8 @@ void RepoCommand::register_subcommands() {
     auto * query_commands_group = get_context().get_argument_parser().add_new_group("repo_query_commands");
     query_commands_group->set_header("Query Commands:");
     get_argument_parser_command()->register_group(query_commands_group);
-    register_subcommand(std::make_unique<RepoListCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<RepoInfoCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<RepoListCommand>(*this));
+    register_subcommand(std::make_unique<RepoInfoCommand>(*this));
 }
 
 void RepoCommand::pre_configure() {

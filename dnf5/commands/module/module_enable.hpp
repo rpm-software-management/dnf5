@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class ModuleEnableCommand : public Command {
 public:
-    explicit ModuleEnableCommand(Command & parent) : Command(parent, "enable") {}
+    explicit ModuleEnableCommand(Command & parent) : Command(parent, "enable", "module_stream_management_commands") {}
     void set_argument_parser() override;
     void run() override;
 };

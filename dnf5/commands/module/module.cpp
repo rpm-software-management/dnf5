@@ -44,25 +44,25 @@ void ModuleCommand::register_subcommands() {
     auto * query_commands_group = parser.add_new_group("module_query_commands");
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<ModuleListCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<ModuleInfoCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<ModuleProvidesCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<ModuleListCommand>(*this));
+    register_subcommand(std::make_unique<ModuleInfoCommand>(*this));
+    register_subcommand(std::make_unique<ModuleProvidesCommand>(*this));
 
     // stream management commands
     auto * stream_management_commands_group = parser.add_new_group("module_stream_management_commands");
     stream_management_commands_group->set_header("Stream Management Commands:");
     cmd.register_group(stream_management_commands_group);
-    register_subcommand(std::make_unique<ModuleEnableCommand>(*this), stream_management_commands_group);
-    register_subcommand(std::make_unique<ModuleSwitchToCommand>(*this), stream_management_commands_group);
-    register_subcommand(std::make_unique<ModuleResetCommand>(*this), stream_management_commands_group);
-    register_subcommand(std::make_unique<ModuleDisableCommand>(*this), stream_management_commands_group);
+    register_subcommand(std::make_unique<ModuleEnableCommand>(*this));
+    register_subcommand(std::make_unique<ModuleSwitchToCommand>(*this));
+    register_subcommand(std::make_unique<ModuleResetCommand>(*this));
+    register_subcommand(std::make_unique<ModuleDisableCommand>(*this));
 
     // software management commands
     auto * software_management_commands_group = parser.add_new_group("module_software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<ModuleInstallCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<ModuleRemoveCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<ModuleInstallCommand>(*this));
+    register_subcommand(std::make_unique<ModuleRemoveCommand>(*this));
 }
 
 void ModuleCommand::pre_configure() {

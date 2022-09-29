@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class ModuleRemoveCommand : public Command {
 public:
-    explicit ModuleRemoveCommand(Command & parent) : Command(parent, "remove") {}
+    explicit ModuleRemoveCommand(Command & parent) : Command(parent, "remove", "module_software_management_commands") {}
     void set_argument_parser() override;
     void run() override;
 };

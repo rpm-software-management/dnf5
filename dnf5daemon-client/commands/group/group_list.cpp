@@ -33,8 +33,8 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-GroupListCommand::GroupListCommand(Command & parent, const char * command)
-    : DaemonCommand(parent, command),
+GroupListCommand::GroupListCommand(Command & parent, const char * command, const std::string & group_id)
+    : DaemonCommand(parent, command, group_id),
       command(command) {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();

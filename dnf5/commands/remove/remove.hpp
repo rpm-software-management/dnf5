@@ -30,7 +30,7 @@ namespace dnf5 {
 
 class RemoveCommand : public Command {
 public:
-    explicit RemoveCommand(Command & parent) : Command(parent, "remove") {}
+    explicit RemoveCommand(Command & parent) : Command(parent, "remove", "software_management_commands") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;

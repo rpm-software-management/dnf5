@@ -33,7 +33,7 @@ namespace dnf5 {
 
 class GroupInfoCommand : public Command {
 public:
-    explicit GroupInfoCommand(Command & parent) : Command(parent, "info") {}
+    explicit GroupInfoCommand(Command & parent) : Command(parent, "info", "group_query_commands") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;

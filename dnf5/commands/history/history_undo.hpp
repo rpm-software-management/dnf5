@@ -29,7 +29,7 @@ namespace dnf5 {
 
 class HistoryUndoCommand : public Command {
 public:
-    explicit HistoryUndoCommand(Command & parent) : Command(parent, "undo") {}
+    explicit HistoryUndoCommand(Command & parent) : Command(parent, "undo", "history_software_management_commands") {}
     void set_argument_parser() override;
     void run() override;
 };

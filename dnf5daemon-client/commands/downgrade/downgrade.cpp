@@ -33,7 +33,8 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-DowngradeCommand::DowngradeCommand(Command & parent) : TransactionCommand(parent, "downgrade") {
+DowngradeCommand::DowngradeCommand(Command & parent)
+    : TransactionCommand(parent, "downgrade", "software_management_commands") {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();

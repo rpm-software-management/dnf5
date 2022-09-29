@@ -447,30 +447,30 @@ void RootCommand::register_subcommands() {
         context.get_argument_parser().add_new_group("software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<InstallCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<UpgradeCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<RemoveCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<DistroSyncCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<SwapCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<InstallCommand>(*this));
+    register_subcommand(std::make_unique<UpgradeCommand>(*this));
+    register_subcommand(std::make_unique<RemoveCommand>(*this));
+    register_subcommand(std::make_unique<DistroSyncCommand>(*this));
+    register_subcommand(std::make_unique<DowngradeCommand>(*this));
+    register_subcommand(std::make_unique<ReinstallCommand>(*this));
+    register_subcommand(std::make_unique<SwapCommand>(*this));
 
     // query commands
     auto * query_commands_group = context.get_argument_parser().add_new_group("query_commands");
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<SearchCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<RepoqueryCommand>(*this));
+    register_subcommand(std::make_unique<SearchCommand>(*this));
 
     auto * subcommands_group = context.get_argument_parser().add_new_group("subcommands");
     subcommands_group->set_header("Subcommands:");
     cmd.register_group(subcommands_group);
-    register_subcommand(std::make_unique<GroupCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<EnvironmentCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<ModuleCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<HistoryCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<RepoCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<AdvisoryCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<GroupCommand>(*this));
+    register_subcommand(std::make_unique<EnvironmentCommand>(*this));
+    register_subcommand(std::make_unique<ModuleCommand>(*this));
+    register_subcommand(std::make_unique<HistoryCommand>(*this));
+    register_subcommand(std::make_unique<RepoCommand>(*this));
+    register_subcommand(std::make_unique<AdvisoryCommand>(*this));
 
     register_subcommand(std::make_unique<CleanCommand>(*this));
     register_subcommand(std::make_unique<DownloadCommand>(*this));

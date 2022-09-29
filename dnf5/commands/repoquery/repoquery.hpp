@@ -35,7 +35,7 @@ namespace dnf5 {
 
 class RepoqueryCommand : public Command {
 public:
-    explicit RepoqueryCommand(Command & parent) : Command(parent, "repoquery") {}
+    explicit RepoqueryCommand(Command & parent) : Command(parent, "repoquery", "query_commands") {}
     void set_argument_parser() override;
     void configure() override;
     void load_additional_packages() override;

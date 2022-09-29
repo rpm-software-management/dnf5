@@ -56,7 +56,10 @@ Command::Command(Session & session, const std::string & program_name) : session{
 }
 
 
-Command::Command(Command & parent, const std::string & name) : session{parent.session}, parent_command{&parent} {
+Command::Command(Command & parent, const std::string & name, const std::string & group_id)
+    : session{parent.session},
+      parent_command{&parent},
+      group_id{group_id} {
     // create a new command owned by the arg_parser
     argument_parser_command = session.get_argument_parser().add_new_command(name);
 
@@ -82,11 +85,15 @@ void Command::throw_missing_command() const {
 }
 
 
-void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf::cli::ArgumentParser::Group * group) {
-    get_argument_parser_command()->register_command(subcommand->get_argument_parser_command());
-    if (group) {
-        group->register_argument(subcommand->get_argument_parser_command());
+void Command::register_subcommand(std::unique_ptr<Command> subcommand) {
+    auto * arg_parser_command = get_argument_parser_command();
+    auto * arg_parser_subcommand = subcommand->get_argument_parser_command();
+    arg_parser_command->register_command(arg_parser_subcommand);
+
+    if (!subcommand->group_id.empty()) {
+        arg_parser_command->get_group(subcommand->group_id).register_argument(arg_parser_subcommand);
     }
+
     subcommand->set_argument_parser();
     subcommand->register_subcommands();
     subcommands.push_back(std::move(subcommand));

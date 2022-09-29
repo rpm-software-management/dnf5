@@ -51,7 +51,7 @@ protected:
     std::unique_ptr<AdvisoryWithBzOption> with_bz{nullptr};
     std::unique_ptr<AdvisoryWithCveOption> with_cve{nullptr};
 
-    AdvisorySubCommand(Command & parent, const std::string & name) : Command(parent, name) {}
+    using Command::Command;
 
 protected:
     std::unique_ptr<SecurityOption> advisory_security{nullptr};

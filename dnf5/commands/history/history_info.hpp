@@ -28,7 +28,7 @@ namespace dnf5 {
 
 class HistoryInfoCommand : public Command {
 public:
-    explicit HistoryInfoCommand(Command & parent) : Command(parent, "info") {}
+    explicit HistoryInfoCommand(Command & parent) : Command(parent, "info", "history_query_commands") {}
     void set_argument_parser() override;
     void run() override;
 

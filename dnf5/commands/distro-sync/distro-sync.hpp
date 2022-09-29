@@ -35,7 +35,7 @@ namespace dnf5 {
 
 class DistroSyncCommand : public Command {
 public:
-    explicit DistroSyncCommand(Command & parent) : Command(parent, "distro-sync") {}
+    explicit DistroSyncCommand(Command & parent) : Command(parent, "distro-sync", "software_management_commands") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;

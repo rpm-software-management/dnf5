@@ -33,7 +33,8 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-UpgradeCommand::UpgradeCommand(Command & parent) : TransactionCommand(parent, "upgrade") {
+UpgradeCommand::UpgradeCommand(Command & parent)
+    : TransactionCommand(parent, "upgrade", "software_management_commands") {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();

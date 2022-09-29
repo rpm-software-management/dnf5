@@ -33,7 +33,7 @@ namespace dnf5 {
 
 class SearchCommand : public Command {
 public:
-    explicit SearchCommand(Command & parent) : Command(parent, "search") {}
+    explicit SearchCommand(Command & parent) : Command(parent, "search", "query_commands") {}
     void set_argument_parser() override;
     void run() override;
 

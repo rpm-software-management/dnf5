@@ -75,7 +75,7 @@ private:
 
 class Command {
 public:
-    explicit Command(Command & parent, const std::string & name);
+    explicit Command(Command & parent, const std::string & name, const std::string & group_id = "");
     explicit Command(Session & session, const std::string & program_name);
     virtual ~Command() = default;
 
@@ -133,17 +133,22 @@ public:
     /// @since 5.0
     const std::vector<std::unique_ptr<Command>> & get_subcommands() const noexcept { return subcommands; }
 
+    /// @return Group id to register this command.
+    /// @since 5.0
+    const std::string & get_group_id() const noexcept { return group_id; }
+
 protected:
     /// Register a `subcommand` to the current command.
     /// The command becomes owner of the `subcommand`.
     /// @since 5.0
-    void register_subcommand(std::unique_ptr<Command> subcommand, libdnf::cli::ArgumentParser::Group * group = nullptr);
+    void register_subcommand(std::unique_ptr<Command> subcommand);
 
 private:
     Session & session;
     Command * parent_command = nullptr;
     libdnf::cli::ArgumentParser::Command * argument_parser_command;
     std::vector<std::unique_ptr<Command>> subcommands;
+    std::string group_id;
 };
 
 

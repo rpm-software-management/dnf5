@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class AdvisoryInfoCommand : public AdvisorySubCommand {
 public:
-    explicit AdvisoryInfoCommand(Command & parent) : AdvisorySubCommand(parent, "info") {}
+    explicit AdvisoryInfoCommand(Command & parent) : AdvisorySubCommand(parent, "info", "advisory_query_commands") {}
 
     void set_argument_parser() override {
         AdvisorySubCommand::set_argument_parser();

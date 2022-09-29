@@ -34,7 +34,7 @@ namespace dnf5 {
 
 class DowngradeCommand : public Command {
 public:
-    explicit DowngradeCommand(Command & parent) : Command(parent, "downgrade") {}
+    explicit DowngradeCommand(Command & parent) : Command(parent, "downgrade", "software_management_commands") {}
     void set_argument_parser() override;
     void configure() override;
     void load_additional_packages() override;

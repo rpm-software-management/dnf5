@@ -33,17 +33,13 @@ namespace dnf5 {
 
 class GroupInstallCommand : public Command {
 public:
-    explicit GroupInstallCommand(Command & parent) : GroupInstallCommand(parent, "install") {}
+    explicit GroupInstallCommand(Command & parent) : Command(parent, "install", "group_software_management_commands") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;
 
     std::unique_ptr<GroupWithOptionalOption> with_optional{nullptr};
     std::unique_ptr<GroupSpecArguments> group_specs{nullptr};
-
-protected:
-    // to be used by an alias command only
-    explicit GroupInstallCommand(Command & parent, const std::string & name) : Command(parent, name) {}
 };
 
 

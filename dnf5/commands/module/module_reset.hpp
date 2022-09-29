@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class ModuleResetCommand : public Command {
 public:
-    explicit ModuleResetCommand(Command & parent) : Command(parent, "reset") {}
+    explicit ModuleResetCommand(Command & parent) : Command(parent, "reset", "module_stream_management_commands") {}
     void set_argument_parser() override;
     void run() override;
 };

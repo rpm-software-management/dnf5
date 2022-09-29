@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class RepoCommand : public Command {
 public:
-    explicit RepoCommand(Command & parent) : Command(parent, "repo") {}
+    explicit RepoCommand(Command & parent) : Command(parent, "repo", "subcommands") {}
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override;

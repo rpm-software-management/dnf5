@@ -33,7 +33,8 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-ReinstallCommand::ReinstallCommand(Command & parent) : TransactionCommand(parent, "reinstall") {
+ReinstallCommand::ReinstallCommand(Command & parent)
+    : TransactionCommand(parent, "reinstall", "software_management_commands") {
     auto & ctx = static_cast<Context &>(get_session());
     auto & parser = ctx.get_argument_parser();
     auto & cmd = *get_argument_parser_command();

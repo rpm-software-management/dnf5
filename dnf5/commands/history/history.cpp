@@ -43,18 +43,18 @@ void HistoryCommand::register_subcommands() {
     auto * query_commands_group = parser.add_new_group("history_query_commands");
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<HistoryListCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<HistoryInfoCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<HistoryListCommand>(*this));
+    register_subcommand(std::make_unique<HistoryInfoCommand>(*this));
 
     // software management commands
     auto * software_management_commands_group = parser.add_new_group("history_software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryUndoCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryRedoCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryRollbackCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryStoreCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryReplayCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<HistoryUndoCommand>(*this));
+    register_subcommand(std::make_unique<HistoryRedoCommand>(*this));
+    register_subcommand(std::make_unique<HistoryRollbackCommand>(*this));
+    register_subcommand(std::make_unique<HistoryStoreCommand>(*this));
+    register_subcommand(std::make_unique<HistoryReplayCommand>(*this));
 }
 
 void HistoryCommand::pre_configure() {

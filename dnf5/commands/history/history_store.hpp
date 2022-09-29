@@ -29,7 +29,7 @@ namespace dnf5 {
 
 class HistoryStoreCommand : public Command {
 public:
-    explicit HistoryStoreCommand(Command & parent) : Command(parent, "store") {}
+    explicit HistoryStoreCommand(Command & parent) : Command(parent, "store", "history_software_management_commands") {}
     void set_argument_parser() override;
     void run() override;
 };

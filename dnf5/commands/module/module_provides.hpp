@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class ModuleProvidesCommand : public Command {
 public:
-    explicit ModuleProvidesCommand(Command & parent) : Command(parent, "provides") {}
+    explicit ModuleProvidesCommand(Command & parent) : Command(parent, "provides", "module_query_commands") {}
     void set_argument_parser() override;
     void run() override;
 };

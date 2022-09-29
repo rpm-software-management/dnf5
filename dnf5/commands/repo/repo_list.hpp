@@ -39,7 +39,8 @@ public:
 
 protected:
     // for RepoInfoCommand
-    explicit RepoListCommand(Command & parent, const std::string & name) : Command(parent, name) {}
+    explicit RepoListCommand(Command & parent, const std::string & name)
+        : Command(parent, name, "repo_query_commands") {}
 
     virtual void print(const libdnf::repo::RepoQuery & query, bool with_status);
 };
