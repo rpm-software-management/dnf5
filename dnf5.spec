@@ -265,7 +265,6 @@ Development files for libdnf5-cli.
 %package -n perl5-libdnf5
 Summary:        Perl 5 bindings for the libdnf library
 License:        LGPL-2.1-or-later
-Provides:       perl(libdnf) = %{version}-%{release}
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 
 %description -n perl5-libdnf5
@@ -287,7 +286,6 @@ Perl 5 bindings for the libdnf library.
 %package -n perl5-libdnf5-cli
 Summary:        Perl 5 bindings for the libdnf5-cli library
 License:        LGPL-2.1-or-later
-Provides:       perl(libdnf_cli) = %{version}-%{release}
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 
 %description -n perl5-libdnf5-cli
