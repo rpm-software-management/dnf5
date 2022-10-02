@@ -36,10 +36,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_query.hpp"
 
 #include <fmt/format.h>
+#include <unistd.h>
 
 #include <filesystem>
 #include <iostream>
 #include <ranges>
+#include <string_view>
+#include <thread>
 
 
 namespace libdnf::base {
@@ -332,6 +335,37 @@ TransactionPackage Transaction::Impl::make_transaction_package(
     return tspkg;
 }
 
+// Reads the output of scriptlets from the file descriptor and processes them.
+static void process_scriptlets_output(int fd, Logger * logger) {
+    try {
+        char buf[512];
+        do {
+            auto len = read(fd, buf, sizeof(buf));
+            if (len > 0) {
+                std::string_view str(buf, static_cast<size_t>(len));
+                std::string_view::size_type start = 0;
+                do {
+                    auto end = str.find('\n', start);
+                    logger->info("[scriptlet] {}", str.substr(start, end - start));
+                    if (end == std::string_view::npos) {
+                        break;
+                    }
+                    start = end + 1;
+                } while (start < str.size());
+            } else {
+                if (len == -1) {
+                    logger->error("Transaction::Run: Cannot read scriptlet output from pipe: {}", std::strerror(errno));
+                }
+                break;
+            }
+        } while (true);
+    } catch (const std::exception & ex) {
+        // The thread must not throw exceptions.
+        logger->error("Transaction::Run: Exception while processing scriptlet output: {}", ex.what());
+    }
+    close(fd);
+}
+
 Transaction::TransactionRunResult Transaction::Impl::run(
     std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
     const std::string & description,
@@ -460,12 +494,32 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     db_transaction.set_dt_start(std::chrono::duration_cast<std::chrono::seconds>(time).count());
     db_transaction.start();
 
-    // execute rpm transaction
-    //TODO(jrohel): Send scriptlet output to better place
-    rpm_transaction.set_script_out_file("scriptlet.out");
+
+    auto logger = base->get_logger().get();
+    int pipe_out_from_scriptlets[2];
+    if (pipe(pipe_out_from_scriptlets) == -1) {
+        logger->error("Transaction::Run: Cannot create pipe: {}", std::strerror(errno));
+        return TransactionRunResult::ERROR_RPM_RUN;
+    }
+
+    // This thread processes the output of RPM scriptlets.
+    std::thread thread_processes_scriptlets_output(process_scriptlets_output, pipe_out_from_scriptlets[0], logger);
+
+    // Set file descriptor for output of scriptlets in transaction.
+    rpm_transaction.set_script_out_fd(pipe_out_from_scriptlets[1]);
+    // set_script_out_fd() copies the file descriptor using dup(). Closing the original fd.
+    close(pipe_out_from_scriptlets[1]);
+
     rpm_transaction.set_callbacks(std::move(callbacks));
     rpm_transaction.set_flags(rpm_transaction_flags);
+
+    // execute rpm transaction
     ret = rpm_transaction.run();
+
+    // Reset/close file descriptor for output of RPM scriptlets. Required to end thread_processes_scriptlets_output.
+    rpm_transaction.set_script_out_fd(-1);
+
+    thread_processes_scriptlets_output.join();
 
     // TODO(mblaha): Handle ret == -1 and ret > 0, fill problems list
 
