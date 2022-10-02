@@ -280,7 +280,7 @@ class ConfigMain::Impl {
     // Repo main config
 
     OptionNumber<std::uint32_t> retries{10};
-    OptionPath cachedir{geteuid() == 0 ? SYSTEM_CACHEDIR : libdnf::xdg::get_user_cache_dir() / "dnf"};
+    OptionPath cachedir{geteuid() == 0 ? SYSTEM_CACHEDIR : libdnf::xdg::get_user_cache_dir() / "libdnf5"};
     OptionBool fastestmirror{false};
     OptionStringList excludepkgs{std::vector<std::string>{}};
     OptionStringList includepkgs{std::vector<std::string>{}};

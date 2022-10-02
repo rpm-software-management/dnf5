@@ -27,8 +27,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf {
 
 constexpr const char * PERSISTDIR = "/var/lib/dnf";
-constexpr const char * SYSTEM_STATE_DIR = "/usr/lib/sysimage/dnf";
-constexpr const char * SYSTEM_CACHEDIR = "/var/cache/libdnf";
+constexpr const char * SYSTEM_STATE_DIR = "/usr/lib/sysimage/libdnf5";
+constexpr const char * SYSTEM_CACHEDIR = "/var/cache/libdnf5";
 
 constexpr const char * CONF_FILENAME = "/etc/dnf/dnf.conf";
 constexpr const char * CONF_DIRECTORY = "/etc/dnf/conf.d";
