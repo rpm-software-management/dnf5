@@ -32,6 +32,8 @@ namespace dnf5 {
 
 namespace {
 
+constexpr const char * CONF_FILE_VERSION = "1.0";
+
 using ArgParser = libdnf::cli::ArgumentParser;
 using BasicValue = toml::basic_value<toml::discard_comments, libdnf::PreserveOrderMap, std::vector>;
 
@@ -99,8 +101,40 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
         const auto arg_parser_elements =
             toml::parse<::toml::discard_comments, libdnf::PreserveOrderMap, std::vector>(config_file_path);
 
+        try {
+            const auto & version = toml::find<std::string>(arg_parser_elements, "version");
+            if (version != CONF_FILE_VERSION) {
+                auto msg = fmt::format(
+                    "Unsupported version \"{}\" in file \"{}\", \"{}\" expected",
+                    version,
+                    config_file_path.native(),
+                    CONF_FILE_VERSION);
+                logger->error("{}", msg);
+                std::cerr << msg << std::endl;
+                return;
+            }
+        } catch (const toml::type_error & e) {
+            logger->error("{}", e.what());
+            auto loc = e.location();
+            auto msg = fmt::format(
+                "Bad value type of attribute \"version\" in file \"{}\" on line {}: {}",
+                config_file_path.native(),
+                loc.line(),
+                loc.line_str());
+            std::cerr << msg << std::endl;
+            return;
+        } catch (const std::out_of_range & e) {
+            auto msg = fmt::format("Mising attribute \"version\" in file \"{}\"", config_file_path.native());
+            logger->error("{}", msg);
+            std::cerr << msg << std::endl;
+            return;
+        }
+
         for (const auto & [element_id_path, element_options] : arg_parser_elements.as_table()) {
             if (!element_options.is_table()) {
+                if (element_id_path == "version") {
+                    continue;
+                }
                 auto location = element_options.location();
                 logger->warning(
                     "Unknown key \"{}\" in file \"{}\" on line {}: {}",
