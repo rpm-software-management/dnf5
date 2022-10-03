@@ -47,6 +47,7 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
         case libdnf::transaction::TransactionItemAction::INSTALL:
         case libdnf::transaction::TransactionItemAction::UPGRADE:
         case libdnf::transaction::TransactionItemAction::REINSTALL:
+        case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
             return "green";
         case libdnf::transaction::TransactionItemAction::DOWNGRADE:
             return "magenta";
@@ -54,8 +55,6 @@ static const char * action_color(libdnf::transaction::TransactionItemAction acti
             return "red";
         case libdnf::transaction::TransactionItemAction::REPLACED:
             return "halfbright";
-        case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-            break;
     }
 
     libdnf_throw_assertion("Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
@@ -110,8 +109,10 @@ public:
                         text += " unused dependencies";
                     }
                     break;
-                case libdnf::transaction::TransactionItemAction::REPLACED:
                 case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
+                    text = "Changing reason";
+                    break;
+                case libdnf::transaction::TransactionItemAction::REPLACED:
                     libdnf_throw_assertion(
                         "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
             }
@@ -212,8 +213,8 @@ public:
                 replaced++;
                 break;
             case libdnf::transaction::TransactionItemAction::REASON_CHANGE:
-                libdnf_throw_assertion(
-                    "Unexpected action in print_transaction_table: {}", libdnf::utils::to_underlying(action));
+                reason_changes++;
+                break;
         }
     }
 
@@ -237,6 +238,9 @@ public:
         if (downgrades != 0) {
             std::cout << fmt::format(" {:15} {:4} packages\n", "Downgrading:", downgrades);
         }
+        if (reason_changes != 0) {
+            std::cout << fmt::format(" {:15} {:4} packages\n", "Changing reason:", reason_changes);
+        }
         std::cout << std::endl;
     }
 
@@ -247,6 +251,7 @@ private:
     int downgrades = 0;
     int removes = 0;
     int replaced = 0;
+    int reason_changes = 0;
 };
 
 
@@ -351,12 +356,7 @@ bool print_transaction_table(Transaction & transaction) {
     ActionHeaderPrinter action_header_printer(tb);
 
     for (auto & tspkg : tspkgs) {
-        // TODO(lukash) maybe this shouldn't come here at all
         // TODO(lukash) handle OBSOLETED correctly throught the transaction table output
-        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REASON_CHANGE) {
-            continue;
-        }
-
         if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REPLACED) {
             ts_summary.add(tspkg.get_action());
             continue;
@@ -381,6 +381,14 @@ bool print_transaction_table(Transaction & transaction) {
         scols_cell_set_color(ce, action_color(tspkg.get_action()));
 
         ts_summary.add(tspkg.get_action());
+        if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REASON_CHANGE) {
+            auto replaced_color = action_color(libdnf::transaction::TransactionItemAction::REPLACED);
+            struct libscols_line * ln_reason = scols_table_new_line(tb, ln);
+            std::string reason{"-> "};
+            reason.append(libdnf::transaction::transaction_item_reason_to_string(tspkg.get_reason()));
+            scols_line_set_data(ln_reason, COL_EVR, reason.c_str());
+            scols_cell_set_color(scols_line_get_cell(ln_reason, COL_EVR), replaced_color);
+        }
         for (auto & replaced : tspkg.get_replaces()) {
             // highlight incoming packages with epoch/version change
             if (tspkg.get_package().get_epoch() != replaced.get_epoch() ||
