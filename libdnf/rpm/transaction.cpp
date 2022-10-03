@@ -428,6 +428,34 @@ TransactionCallbacks::ScriptType Transaction::rpm_tag_to_script_type(rpmTag_e ta
     }
 }
 
+const char * TransactionCallbacks::script_type_to_string(ScriptType type) noexcept {
+    switch (type) {
+        case ScriptType::PRE_INSTALL:
+            return "pre-install";
+        case ScriptType::POST_INSTALL:
+            return "post-install";
+        case ScriptType::PRE_UNINSTALL:
+            return "pre-uninstall";
+        case ScriptType::POST_UNINSTALL:
+            return "post-uninstall";
+        case ScriptType::PRE_TRANSACTION:
+            return "pre-transaction";
+        case ScriptType::POST_TRANSACTION:
+            return "post-transaction";
+        case ScriptType::TRIGGER_PRE_INSTALL:
+            return "trigger-pre-install";
+        case ScriptType::TRIGGER_INSTALL:
+            return "trigger-install";
+        case ScriptType::TRIGGER_UNINSTALL:
+            return "trigger-uninstall";
+        case ScriptType::TRIGGER_POST_UNINSTALL:
+            return "trigger-post-uninstall";
+        case ScriptType::UNKNOWN:
+            return "unknown";
+    }
+    return "unknown";
+}
+
 #define libdnf_assert_transaction_item_set() libdnf_assert(item != nullptr, "TransactionItem is not set")
 
 void * Transaction::ts_callback(
@@ -455,6 +483,10 @@ void * Transaction::ts_callback(
         case RPMCALLBACK_INST_START:
             // Install? Maybe upgrade/downgrade/...obsolete?
             libdnf_assert_transaction_item_set();
+            logger.info(
+                "RPM callback install start \"{}\" total {}",
+                to_full_nevra_string(trans_element_to_nevra(trans_element)),
+                total);
             if (callbacks) {
                 callbacks->install_start(*item, total);
             }
@@ -462,13 +494,16 @@ void * Transaction::ts_callback(
         case RPMCALLBACK_INST_OPEN_FILE: {
             libdnf_assert_transaction_item_set();
             auto file_path = item->get_package().get_package_path();
+            logger.info("RPM callback open file \"{}\"", file_path);
             if (file_path.empty()) {
                 return nullptr;
             }
             transaction.fd_in_cb = Fopen(file_path.c_str(), "r.ufdio");
             rc = transaction.fd_in_cb;
-        } break;
+            break;
+        }
         case RPMCALLBACK_INST_CLOSE_FILE:
+            logger.info("RPM callback close file");
             if (transaction.fd_in_cb) {
                 Fclose(transaction.fd_in_cb);
                 transaction.fd_in_cb = nullptr;
@@ -480,11 +515,13 @@ void * Transaction::ts_callback(
             }
             break;
         case RPMCALLBACK_TRANS_START:
+            logger.info("RPM callback transaction start, total {}", total);
             if (callbacks) {
                 callbacks->transaction_start(total);
             }
             break;
         case RPMCALLBACK_TRANS_STOP:
+            logger.info("RPM callback transaction stop, total {}", total);
             if (callbacks) {
                 callbacks->transaction_stop(total);
             }
@@ -497,12 +534,21 @@ void * Transaction::ts_callback(
             break;
         case RPMCALLBACK_UNINST_START:
             libdnf_assert_transaction_item_set();
+            logger.info(
+                "RPM callback uninstall start \"{}\" total {}",
+                to_full_nevra_string(trans_element_to_nevra(trans_element)),
+                total);
             if (callbacks) {
                 callbacks->uninstall_start(*item, total);
             }
             break;
         case RPMCALLBACK_UNINST_STOP:
             libdnf_assert_transaction_item_set();
+            logger.info(
+                "RPM callback uninstall stop \"{}\" amount {} total {}",
+                to_full_nevra_string(trans_element_to_nevra(trans_element)),
+                amount,
+                total);
             if (callbacks) {
                 callbacks->uninstall_stop(*item, amount, total);
             }
@@ -510,10 +556,12 @@ void * Transaction::ts_callback(
         case RPMCALLBACK_REPACKAGE_PROGRESS:  // obsolete, unused
         case RPMCALLBACK_REPACKAGE_START:     // obsolete, unused
         case RPMCALLBACK_REPACKAGE_STOP:      // obsolete, unused
-            logger.info("Warning: got RPMCALLBACK_REPACKAGE_* obsolete callback");
+            logger.warning("Got RPMCALLBACK_REPACKAGE_* obsolete callback");
             break;
         case RPMCALLBACK_UNPACK_ERROR:
             libdnf_assert_transaction_item_set();
+            logger.error(
+                "RPM callback unpack error \"{}\"", to_full_nevra_string(trans_element_to_nevra(trans_element)));
             if (callbacks) {
                 callbacks->unpack_error(*item);
             }
@@ -521,41 +569,61 @@ void * Transaction::ts_callback(
         case RPMCALLBACK_CPIO_ERROR:
             // Not found usage in librpm.
             libdnf_assert_transaction_item_set();
+            logger.error("RPM callback CPIO error \"{}\"", to_full_nevra_string(trans_element_to_nevra(trans_element)));
             if (callbacks) {
                 callbacks->cpio_error(*item);
             }
             break;
-        case RPMCALLBACK_SCRIPT_ERROR:
+        case RPMCALLBACK_SCRIPT_ERROR: {
             // amount is script tag
             // total is return code - if (!RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_OK
+            auto script_type = rpm_tag_to_script_type(static_cast<rpmTag_e>(amount));
+            auto nevra = trans_element_to_nevra(trans_element);
+            logger.error(
+                "RPM callback error in {} scriptlet \"{}\" return code {}",
+                TransactionCallbacks::script_type_to_string(script_type),
+                to_full_nevra_string(nevra),
+                total);
             if (callbacks) {
-                callbacks->script_error(
-                    item,
-                    trans_element_to_nevra(trans_element),
-                    rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
-                    total);
+                callbacks->script_error(item, nevra, script_type, total);
             }
             break;
-        case RPMCALLBACK_SCRIPT_START:
+        }
+        case RPMCALLBACK_SCRIPT_START: {
             // amount is script tag
+            auto script_type = rpm_tag_to_script_type(static_cast<rpmTag_e>(amount));
+            auto nevra = trans_element_to_nevra(trans_element);
+            logger.info(
+                "RPM callback start {} scriptlet \"{}\"",
+                TransactionCallbacks::script_type_to_string(script_type),
+                to_full_nevra_string(nevra));
             if (callbacks) {
-                callbacks->script_start(
-                    item, trans_element_to_nevra(trans_element), rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)));
+                callbacks->script_start(item, nevra, script_type);
             }
             break;
-        case RPMCALLBACK_SCRIPT_STOP:
+        }
+        case RPMCALLBACK_SCRIPT_STOP: {
             // amount is script tag
             // total is return code - if (error && !RPMSCRIPT_FLAG_CRITICAL) return_code = RPMRC_NOTFOUND
+            auto script_type = rpm_tag_to_script_type(static_cast<rpmTag_e>(amount));
+            auto nevra = trans_element_to_nevra(trans_element);
+            logger.info(
+                "RPM callback stop {} scriptlet \"{}\" return code {}",
+                TransactionCallbacks::script_type_to_string(script_type),
+                to_full_nevra_string(nevra),
+                total);
             if (callbacks) {
-                callbacks->script_stop(
-                    item,
-                    trans_element_to_nevra(trans_element),
-                    rpm_tag_to_script_type(static_cast<rpmTag_e>(amount)),
-                    total);
+                callbacks->script_stop(item, nevra, script_type, total);
             }
             break;
+        }
         case RPMCALLBACK_INST_STOP:
             libdnf_assert_transaction_item_set();
+            logger.info(
+                "RPM callback install stop \"{}\" amount {} total {}",
+                to_full_nevra_string(trans_element_to_nevra(trans_element)),
+                amount,
+                total);
             if (callbacks) {
                 callbacks->install_stop(*item, amount, total);
             }
@@ -572,11 +640,13 @@ void * Transaction::ts_callback(
             }
             break;
         case RPMCALLBACK_VERIFY_START:
+            logger.info("RPM callback verify start, total {}", total);
             if (callbacks) {
                 callbacks->verify_start(total);
             }
             break;
         case RPMCALLBACK_VERIFY_STOP:
+            logger.info("RPM callback verify stop, total {}", total);
             if (callbacks) {
                 callbacks->verify_stop(total);
             }

@@ -56,6 +56,10 @@ public:
         TRIGGER_POST_UNINSTALL  // "%triggerpostun"
     };
 
+    /// @param type  scriptlet type
+    /// @return  string representation of the scriptlet type
+    static const char * script_type_to_string(ScriptType type) noexcept;
+
     virtual ~TransactionCallbacks() = default;
 
     virtual void install_progress(const TransactionItem & item, uint64_t amount, uint64_t total) {}
