@@ -433,34 +433,6 @@ namespace {
 
 class RpmTransCB : public libdnf::rpm::TransactionCallbacks {
 public:
-    static const char * script_type_to_string(ScriptType type) noexcept {
-        switch (type) {
-            case ScriptType::PRE_INSTALL:
-                return "pre-install";
-            case ScriptType::POST_INSTALL:
-                return "post-install";
-            case ScriptType::PRE_UNINSTALL:
-                return "pre-uninstall";
-            case ScriptType::POST_UNINSTALL:
-                return "post-uninstall";
-            case ScriptType::PRE_TRANSACTION:
-                return "pre-transaction";
-            case ScriptType::POST_TRANSACTION:
-                return "post-transaction";
-            case ScriptType::TRIGGER_PRE_INSTALL:
-                return "trigger-pre-install";
-            case ScriptType::TRIGGER_INSTALL:
-                return "trigger-install";
-            case ScriptType::TRIGGER_UNINSTALL:
-                return "trigger-uninstall";
-            case ScriptType::TRIGGER_POST_UNINSTALL:
-                return "trigger-post-uninstall";
-            case ScriptType::UNKNOWN:
-                return "unknown";
-        }
-        return "unknown";
-    }
-
     ~RpmTransCB() {
         if (active_progress_bar &&
             active_progress_bar->get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
