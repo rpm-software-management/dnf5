@@ -56,8 +56,6 @@ list(APPEND SWIG_LIBDNF5_MODULES base common comps conf logger repo rpm transact
 list(APPEND SWIG_LIBDNF5_CLI_MODULES progressbar)
 
 
-set(BINDINGS_SO_VERSION 1)
-
 add_subdirectory(go)
 add_subdirectory(perl5)
 add_subdirectory(python3)
