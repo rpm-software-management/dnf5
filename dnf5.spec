@@ -141,7 +141,7 @@ BuildRequires:  swig >= %{swig_version}
 %endif
 
 %if %{with perl5}
-# required for perl5-libdnf5 and perl5-libdnf5-cli
+# required for perl-libdnf5 and perl-libdnf5-cli
 BuildRequires:  perl-devel
 BuildRequires:  perl-generators
 %if %{with tests}
@@ -259,18 +259,18 @@ Development files for libdnf5-cli.
 %license lgpl-2.1.txt
 
 
-# ========== perl5-libdnf5 ==========
+# ========== perl-libdnf5 ==========
 
 %if %{with perl5}
-%package -n perl5-libdnf5
+%package -n perl-libdnf5
 Summary:        Perl 5 bindings for the libdnf library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 
-%description -n perl5-libdnf5
+%description -n perl-libdnf5
 Perl 5 bindings for the libdnf library.
 
-%files -n perl5-libdnf5
+%files -n perl-libdnf5
 %{perl_vendorarch}/libdnf5
 %{perl_vendorarch}/auto/libdnf5
 %license COPYING.md
@@ -278,18 +278,18 @@ Perl 5 bindings for the libdnf library.
 %endif
 
 
-# ========== perl5-libdnf5-cli ==========
+# ========== perl-libdnf5-cli ==========
 
 %if %{with perl5} && %{with libdnf_cli}
-%package -n perl5-libdnf5-cli
+%package -n perl-libdnf5-cli
 Summary:        Perl 5 bindings for the libdnf5-cli library
 License:        LGPL-2.1-or-later
 Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 
-%description -n perl5-libdnf5-cli
+%description -n perl-libdnf5-cli
 Perl 5 bindings for the libdnf5-cli library.
 
-%files -n perl5-libdnf5-cli
+%files -n perl-libdnf5-cli
 %{perl_vendorarch}/libdnf5_cli
 %{perl_vendorarch}/auto/libdnf5_cli
 %license COPYING.md
