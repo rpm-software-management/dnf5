@@ -73,7 +73,8 @@ private:
     std::unique_ptr<libdnf::cli::ArgumentParser> argument_parser;
 };
 
-class Command {
+
+class Command : public libdnf::cli::ArgumentParserUserData {
 public:
     explicit Command(Command & parent, const std::string & name);
     explicit Command(Session & session, const std::string & program_name);
@@ -120,7 +121,9 @@ public:
     /// @return Pointer to the parent Command. Root command returns null because it has no parent.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
-    Command * get_parent_command() const noexcept { return parent_command; }
+    Command * get_parent_command() const noexcept {
+        return static_cast<Command *>(argument_parser_command->get_user_data());
+    }
 
     /// @return Pointer to the underlying argument parser command.
     ///         The returned pointer must **not** be freed manually.
@@ -141,7 +144,6 @@ protected:
 
 private:
     Session & session;
-    Command * parent_command = nullptr;
     libdnf::cli::ArgumentParser::Command * argument_parser_command;
     std::vector<std::unique_ptr<Command>> subcommands;
 };
