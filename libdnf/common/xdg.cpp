@@ -77,6 +77,17 @@ std::filesystem::path get_user_data_dir() {
     return std::filesystem::path(get_user_home_dir()) / ".local" / "share";
 }
 
+std::filesystem::path get_user_state_dir() {
+    const char * dir = std::getenv("XDG_STATE_HOME");
+    if (dir && *dir != '\0') {
+        auto ret = std::filesystem::path(dir);
+        if (ret.is_absolute()) {
+            return ret;
+        }
+    }
+    return std::filesystem::path(get_user_home_dir()) / ".local" / "state";
+}
+
 std::filesystem::path get_user_runtime_dir() {
     const char * dir = std::getenv("XDG_RUNTIME_DIR");
     if (dir && *dir != '\0') {
