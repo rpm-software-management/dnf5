@@ -43,7 +43,6 @@ void ModuleTest::test_load() {
     add_repo_repomd("repomd-modules");
 
     auto module_sack = base.get_module_sack();
-    module_sack->add_modules_without_static_context();
     CPPUNIT_ASSERT_EQUAL(3lu, module_sack->get_modules().size());
 
     auto & meson = module_sack->get_modules()[0];

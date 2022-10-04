@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::repo {
 
+class Repo;
 class RepoSack;
 
 }  // namespace libdnf::repo
@@ -58,20 +59,6 @@ public:
     /// Return module items in container
     const std::vector<std::unique_ptr<ModuleItem>> & get_modules();
 
-    // TODO(pkratoch): Maybe make this private later
-    void add(const std::string & file_content, const std::string & repo_id);
-    // Compute static context for older modules and move these modules to `ModuleSack.modules`.
-    void add_modules_without_static_context();
-
-    // TODO(pkratoch): Implement adding defaults from "/etc/dnf/modules.defaults.d/", which are defined by user.
-    //                 They are added with priority 1000 after everything else is loaded.
-    /// Add and resolve defaults.
-    /// @since 5.0
-    //
-    // @replaces libdnf:ModulePackageContainer.hpp:method:ModulePackageContainer.addDefaultsFromDisk()
-    // @replaces libdnf:ModulePackageContainer.hpp:method:ModulePackageContainer.moduleDefaultsResolve()
-    void add_defaults_from_disk();
-
     // TODO(pkratoch): Implement getting default streams and profiles.
     /// @return Default stream for given module.
     /// @since 5.0
@@ -82,20 +69,28 @@ public:
 
 private:
     friend class libdnf::Base;
+    friend class libdnf::repo::Repo;
     friend class libdnf::repo::RepoSack;
     friend ModuleItem;
 
     ModuleSack(const BaseWeakPtr & base);
 
-    void create_module_solvables();
     BaseWeakPtr get_base() const;
 
-    WeakPtrGuard<ModuleSack, false> data_guard;
+    /// Load information about modules from file to ModuleSack. It is critical to load all module information from
+    /// all available repositories when modular metadata are available.
+    void add(const std::string & file_content, const std::string & repo_id);
 
-    // Older ModuleItems that don't have static context. After all metadata are loaded, static contexts are assigned
-    // also to these ModuleItems and they are removed from this vector and added to `ModuleSack.modules`.
-    // This is done in `ModuleSack::add_modules_without_static_context`.
-    std::vector<std::unique_ptr<ModuleItem>> modules_without_static_context;
+    // TODO(pkratoch): Implement adding defaults from "/etc/dnf/modules.defaults.d/", which are defined by user.
+    //                 They are added with priority 1000 after everything else is loaded.
+    /// Add and resolve defaults.
+    /// @since 5.0
+    //
+    // @replaces libdnf:ModulePackageContainer.hpp:method:ModulePackageContainer.addDefaultsFromDisk()
+    // @replaces libdnf:ModulePackageContainer.hpp:method:ModulePackageContainer.moduleDefaultsResolve()
+    void add_defaults_from_disk();
+
+    WeakPtrGuard<ModuleSack, false> data_guard;
 
     class Impl;
     std::unique_ptr<Impl> p_impl;
