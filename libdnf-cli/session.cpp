@@ -47,8 +47,10 @@ void Session::clear() {
 
 
 Command::Command(Session & session, const std::string & program_name) : session{session} {
-    // create a new command owned by the arg_parser
+    // create a new argument parser command (owned by arg_parser)
     argument_parser_command = session.get_argument_parser().add_new_command(program_name);
+    // set a backlink from the argument parser command to this command
+    argument_parser_command->set_user_data(this);
 
     // set the created root command as the selected
     // the value will get overwritten with a subcommand during parsing the arguments
@@ -56,21 +58,23 @@ Command::Command(Session & session, const std::string & program_name) : session{
 }
 
 
-Command::Command(Command & parent, const std::string & name) : session{parent.session}, parent_command{&parent} {
-    // create a new command owned by the arg_parser
+Command::Command(Command & parent, const std::string & name) : session{parent.session} {
+    // create a new argument parser command (owned by arg_parser)
     argument_parser_command = session.get_argument_parser().add_new_command(name);
+    // set a backlink from the argument parser command to this command
+    argument_parser_command->set_user_data(this);
 
     // set the command as selected when parsed
-    argument_parser_command->set_parse_hook_func([this](
-                                                     [[maybe_unused]] ArgumentParser::Argument * arg,
-                                                     [[maybe_unused]] const char * option,
-                                                     [[maybe_unused]] int argc,
-                                                     [[maybe_unused]] const char * const argv[]) {
+    argument_parser_command->set_parse_hook_func([]([[maybe_unused]] ArgumentParser::Argument * arg,
+                                                    [[maybe_unused]] const char * option,
+                                                    [[maybe_unused]] int argc,
+                                                    [[maybe_unused]] const char * const argv[]) {
         // set the selected command only if a subcommand hasn't set it already
-        auto & session = this->get_session();
+        auto * command = static_cast<Command *>(arg->get_user_data());
+        auto & session = command->get_session();
         auto * selected_command = session.get_selected_command();
         if (!selected_command || selected_command == session.get_root_command()) {
-            session.set_selected_command(this);
+            session.set_selected_command(command);
         }
         return true;
     });
