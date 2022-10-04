@@ -297,9 +297,7 @@ class ConfigMain::Impl {
             return tmp;
         }};
 
-    OptionStringList protected_packages{
-        resolve_globs("dnf glob:/etc/yum/protected.d/*.conf "
-                      "glob:/etc/dnf/protected.d/*.conf")};
+    OptionStringList protected_packages{resolve_globs("dnf glob:/etc/dnf/protected.d/*.conf")};
     OptionString username{""};
     OptionString password{""};
     OptionBool gpgcheck{false};
