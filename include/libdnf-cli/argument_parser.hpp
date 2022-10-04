@@ -117,6 +117,8 @@ public:
     const char * get_name() const noexcept override { return "ArgumentParserIdAlreadyRegisteredError"; }
 };
 
+/// Base class for user data used in ArgumentParser::Argument
+class ArgumentParserUserData {};
 
 class ArgumentParser {
 public:
@@ -208,6 +210,12 @@ public:
         // Returns the ArgumentParser instance to which the argument belongs.
         ArgumentParser & get_argument_parser() const noexcept { return owner; }
 
+        /// Sets a pointer to user data in the argument.
+        void set_user_data(ArgumentParserUserData * user_data) noexcept { this->user_data = user_data; }
+
+        /// Gets a pointer to the user data attached to the argment.
+        ArgumentParserUserData * get_user_data() const noexcept { return user_data; }
+
     private:
         friend class ArgumentParser;
 
@@ -220,6 +228,7 @@ public:
         std::vector<Argument *> * conflict_args{nullptr};
         bool complete{true};
         int parse_count{0};
+        ArgumentParserUserData * user_data{nullptr};
     };
 
     class PositionalArg : public Argument {
