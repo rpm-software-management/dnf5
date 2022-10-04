@@ -56,6 +56,11 @@ public:
         rpm::ReldepList>
     collect_data_for_modular_filtering();
 
+    // Compute static context for older modules and move these modules to `ModuleSack.modules`.
+    void add_modules_without_static_context();
+
+    void create_module_solvables();
+
 private:
     friend ModuleSack;
     friend ModuleItem;
@@ -66,10 +71,15 @@ private:
     // Repositories containing any modules. Key is repoid, value is Id of the repo in libsolv.
     // This is needed in `ModuleItem::create_solvable` for creating solvable in the correct repository.
     std::map<std::string, Id> repositories;
+
+    // Older ModuleItems that don't have static context. After all metadata are loaded, static contexts are assigned
+    // also to these ModuleItems and they are removed from this vector and added to `ModuleSack.modules`.
+    // This is done in `ModuleSack::add_modules_without_static_context`.
+    std::vector<std::unique_ptr<ModuleItem>> modules_without_static_context;
 };
 
 inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_modules() {
-    // TODO(mracek) What about to call add_modules_without_static_context before returning the vector?
+    add_modules_without_static_context();
     return modules;
 }
 

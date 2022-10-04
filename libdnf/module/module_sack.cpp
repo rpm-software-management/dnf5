@@ -52,7 +52,6 @@ ModuleSack::~ModuleSack() {}
 
 
 const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::get_modules() {
-    // TODO(mracek) What about to call add_modules_without_static_context before returning the vector?
     return p_impl->get_modules();
 }
 
@@ -83,19 +82,19 @@ void ModuleSack::add(const std::string & file_content, const std::string & repo_
     // Store module items without static context
     for (auto const & module_item_ptr : items.second) {
         std::unique_ptr<ModuleItem> module_item(module_item_ptr);
-        modules_without_static_context.push_back(std::move(module_item));
+        p_impl->modules_without_static_context.push_back(std::move(module_item));
     }
 }
 
 
-void ModuleSack::add_modules_without_static_context() {
+void ModuleSack::Impl::add_modules_without_static_context() {
     if (modules_without_static_context.empty()) {
         return;
     }
 
     // Create a map based on modules with static context. For each "name:stream", map requires_strings to ModuleItems.
     std::map<std::string, std::map<std::string, std::vector<ModuleItem *>>> static_context_map;
-    for (auto const & module_item : p_impl->modules) {
+    for (auto const & module_item : modules) {
         auto requires_string = module_item->get_module_dependencies_string();
         static_context_map[module_item->get_name_stream()][requires_string].push_back(module_item.get());
     }
@@ -111,7 +110,7 @@ void ModuleSack::add_modules_without_static_context() {
             auto context_iterator = stream_iterator->second.find(requires_string);
             if (context_iterator != stream_iterator->second.end()) {
                 module_item->computed_static_context = context_iterator->second[0]->get_context();
-                p_impl->modules.push_back(std::move(module_item));
+                modules.push_back(std::move(module_item));
                 continue;
             }
         }
@@ -122,15 +121,15 @@ void ModuleSack::add_modules_without_static_context() {
             requires_string.append("NoRequires");
         }
         module_item->computed_static_context = requires_string;
-        p_impl->modules.push_back(std::move(module_item));
+        modules.push_back(std::move(module_item));
     }
     modules_without_static_context.clear();
     create_module_solvables();
 }
 
 
-void ModuleSack::create_module_solvables() {
-    for (auto const & module_item : p_impl->modules) {
+void ModuleSack::Impl::create_module_solvables() {
+    for (auto const & module_item : modules) {
         module_item->create_solvable();
         module_item->create_dependencies();
     }
@@ -157,8 +156,6 @@ std::tuple<
     std::vector<std::string>,
     rpm::ReldepList>
 ModuleSack::Impl::collect_data_for_modular_filtering() {
-    base->get_module_sack()->add_modules_without_static_context();
-
     // TODO(jmracek) Add support of demodularized RPMs
     // auto demodularizedNames = getDemodularizedRpms(modulePackageContainer, allPackages);
 
