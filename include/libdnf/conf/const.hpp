@@ -36,7 +36,7 @@ constexpr const char * CONF_DIRECTORY = "/etc/dnf/conf.d";
 constexpr const char * PLUGINS_CONF_DIR = "/etc/dnf/libdnf5-plugins";
 
 // More important varsdirs must be on the end of vector
-const std::vector<std::string> VARS_DIRS{"/etc/yum/vars", "/etc/dnf/vars"};
+const std::vector<std::string> VARS_DIRS{"/etc/dnf/vars"};
 
 const std::vector<std::string> GROUP_PACKAGE_TYPES{"mandatory", "default", "conditional"};
 const std::vector<std::string> INSTALLONLYPKGS{
