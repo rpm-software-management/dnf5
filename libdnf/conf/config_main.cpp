@@ -177,7 +177,7 @@ class ConfigMain::Impl {
     OptionPath system_cachedir{SYSTEM_CACHEDIR};
     OptionBool cacheonly{false};
     OptionBool keepcache{false};
-    OptionPath logdir{geteuid() == 0 ? "/var/log" : libdnf::xdg::get_user_data_dir() / "dnf"};
+    OptionPath logdir{geteuid() == 0 ? "/var/log" : libdnf::xdg::get_user_state_dir()};
     OptionNumber<std::int32_t> log_size{1024 * 1024, str_to_bytes};
     OptionNumber<std::int32_t> log_rotate{4, 0};
     OptionPath debugdir{"./debugdata"};
