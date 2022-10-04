@@ -39,6 +39,10 @@ std::filesystem::path get_user_config_dir();
 /// A base directory relative to which user specific data files should be stored.
 std::filesystem::path get_user_data_dir();
 
+/// Returns user state directory.
+/// A base directory relative to which user specific state data should be stored.
+std::filesystem::path get_user_state_dir();
+
 /// Returns user runtime directory.
 /// A base directory relative to which user-specific non-essential runtime files and other file objects
 /// (such as sockets, named pipes, ...) should be stored.
