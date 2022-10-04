@@ -35,6 +35,8 @@ constexpr const char * CONF_DIRECTORY = "/etc/dnf/conf.d";
 
 constexpr const char * PLUGINS_CONF_DIR = "/etc/dnf/libdnf5-plugins";
 
+const std::vector<std::string> REPOSITORY_CONF_DIRS{"/etc/yum.repos.d", "/etc/distro.repos.d"};
+
 // More important varsdirs must be on the end of vector
 const std::vector<std::string> VARS_DIRS{"/etc/dnf/vars"};
 
