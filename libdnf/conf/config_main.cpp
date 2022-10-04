@@ -182,7 +182,7 @@ class ConfigMain::Impl {
     OptionNumber<std::int32_t> log_rotate{4, 0};
     OptionPath debugdir{"./debugdata"};
     OptionStringList varsdir{VARS_DIRS};
-    OptionStringList reposdir{{"/etc/yum.repos.d", "/etc/yum/repos.d", "/etc/distro.repos.d"}};
+    OptionStringList reposdir{REPOSITORY_CONF_DIRS};
     OptionBool debug_solver{false};
     OptionStringList installonlypkgs{INSTALLONLYPKGS};
     OptionStringList group_package_types{GROUP_PACKAGE_TYPES};
