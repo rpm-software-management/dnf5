@@ -26,6 +26,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::cli::session {
 
 void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
+    auto * arg_parser_command = command->get_argument_parser_command();
+
+    // set the command as selected when parsed
+    arg_parser_command->set_parse_hook_func([](ArgumentParser::Argument * arg,
+                                               [[maybe_unused]] const char * option,
+                                               [[maybe_unused]] int argc,
+                                               [[maybe_unused]] const char * const argv[]) {
+        // set the selected command only if a subcommand hasn't set it already
+        auto * command = static_cast<Command *>(arg->get_user_data());
+        auto & session = command->get_session();
+        auto * selected_command = session.get_selected_command();
+        if (!selected_command || selected_command == session.get_root_command()) {
+            session.set_selected_command(command);
+        }
+        return true;
+    });
+
     command->set_argument_parser();
     command->register_subcommands();
     commands.push_back(std::move(command));
@@ -44,6 +61,10 @@ void Session::register_root_command(std::unique_ptr<Command> && command) {
     command->set_argument_parser();
     command->register_subcommands();
     root_command = std::move(command);
+
+    // set the root command as the selected
+    // the value will get overwritten with a subcommand during parsing the arguments
+    set_selected_command(root_command.get());
 }
 
 
@@ -53,39 +74,15 @@ void Session::clear() {
 }
 
 
-Command::Command(Session & session, const std::string & program_name) : session{session} {
-    // create a new argument parser command (owned by arg_parser)
-    argument_parser_command = session.get_argument_parser().add_new_command(program_name);
-    // set a backlink from the argument parser command to this command
-    argument_parser_command->set_user_data(this);
-
-    // set the created root command as the selected
-    // the value will get overwritten with a subcommand during parsing the arguments
-    session.set_selected_command(this);
-}
-
-
-Command::Command(Command & parent, const std::string & name) : session{parent.session} {
+Command::Command(Session & session, const std::string & name) : session{session} {
     // create a new argument parser command (owned by arg_parser)
     argument_parser_command = session.get_argument_parser().add_new_command(name);
     // set a backlink from the argument parser command to this command
     argument_parser_command->set_user_data(this);
-
-    // set the command as selected when parsed
-    argument_parser_command->set_parse_hook_func([]([[maybe_unused]] ArgumentParser::Argument * arg,
-                                                    [[maybe_unused]] const char * option,
-                                                    [[maybe_unused]] int argc,
-                                                    [[maybe_unused]] const char * const argv[]) {
-        // set the selected command only if a subcommand hasn't set it already
-        auto * command = static_cast<Command *>(arg->get_user_data());
-        auto & session = command->get_session();
-        auto * selected_command = session.get_selected_command();
-        if (!selected_command || selected_command == session.get_root_command()) {
-            session.set_selected_command(command);
-        }
-        return true;
-    });
 }
+
+
+Command::Command(Command & parent, const std::string & name) : Command(parent.session, name) {}
 
 
 void Command::throw_missing_command() const {
@@ -94,10 +91,13 @@ void Command::throw_missing_command() const {
 
 
 void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf::cli::ArgumentParser::Group * group) {
-    get_argument_parser_command()->register_command(subcommand->get_argument_parser_command());
+    auto * sub_arg_parser_command = subcommand->get_argument_parser_command();
+    get_argument_parser_command()->register_command(sub_arg_parser_command);
+
     if (group) {
-        group->register_argument(subcommand->get_argument_parser_command());
+        group->register_argument(sub_arg_parser_command);
     }
+
     session.add_and_initialize_command(std::move(subcommand));
 }
 

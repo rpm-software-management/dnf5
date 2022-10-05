@@ -82,7 +82,7 @@ private:
 class Command : public libdnf::cli::ArgumentParserUserData {
 public:
     explicit Command(Command & parent, const std::string & name);
-    explicit Command(Session & session, const std::string & program_name);
+    explicit Command(Session & session, const std::string & name);
     virtual ~Command() = default;
 
     /// Set command arguments.
