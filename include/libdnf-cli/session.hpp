@@ -39,6 +39,10 @@ class Session {
 public:
     Session() : argument_parser(new libdnf::cli::ArgumentParser) {}
 
+    /// Store the command to the session and initialize it.
+    /// @since 5.0
+    void add_and_initialize_command(std::unique_ptr<Command> && command);
+
     /// @return Root command that represents the main program.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
@@ -47,7 +51,7 @@ public:
     /// Register `command` as the root command that represents the main program.
     /// Session becomes owner of the `command`.
     /// @since 5.0
-    void register_root_command(std::unique_ptr<Command> command);
+    void register_root_command(std::unique_ptr<Command> && command);
 
     /// @return Selected (sub)command that a user specified on the command line.
     ///         The returned pointer must **not** be freed manually.
@@ -70,6 +74,7 @@ public:
 private:
     std::unique_ptr<Command> root_command;
     Command * selected_command{nullptr};
+    std::vector<std::unique_ptr<Command>> commands;
     std::unique_ptr<libdnf::cli::ArgumentParser> argument_parser;
 };
 
@@ -132,10 +137,6 @@ public:
         return argument_parser_command;
     }
 
-    /// @return List of subcommands owned by the current command.
-    /// @since 5.0
-    const std::vector<std::unique_ptr<Command>> & get_subcommands() const noexcept { return subcommands; }
-
 protected:
     /// Register a `subcommand` to the current command.
     /// The command becomes owner of the `subcommand`.
@@ -145,7 +146,6 @@ protected:
 private:
     Session & session;
     libdnf::cli::ArgumentParser::Command * argument_parser_command;
-    std::vector<std::unique_ptr<Command>> subcommands;
 };
 
 

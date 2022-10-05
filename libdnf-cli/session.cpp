@@ -25,12 +25,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::cli::session {
 
+void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
+    command->set_argument_parser();
+    command->register_subcommands();
+    commands.push_back(std::move(command));
+}
+
+
 libdnf::cli::ArgumentParser & Session::get_argument_parser() {
     return *argument_parser;
 }
 
 
-void Session::register_root_command(std::unique_ptr<Command> command) {
+void Session::register_root_command(std::unique_ptr<Command> && command) {
     // register command as root command in argument parser
     get_argument_parser().set_root_command(command->get_argument_parser_command());
 
@@ -91,9 +98,7 @@ void Command::register_subcommand(std::unique_ptr<Command> subcommand, libdnf::c
     if (group) {
         group->register_argument(subcommand->get_argument_parser_command());
     }
-    subcommand->set_argument_parser();
-    subcommand->register_subcommands();
-    subcommands.push_back(std::move(subcommand));
+    session.add_and_initialize_command(std::move(subcommand));
 }
 
 
