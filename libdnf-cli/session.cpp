@@ -36,8 +36,7 @@ void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
         // set the selected command only if a subcommand hasn't set it already
         auto * command = static_cast<Command *>(arg->get_user_data());
         auto & session = command->get_session();
-        auto * selected_command = session.get_selected_command();
-        if (!selected_command || selected_command == session.get_root_command()) {
+        if (!session.get_selected_command()) {
             session.set_selected_command(command);
         }
         return true;
@@ -58,18 +57,14 @@ void Session::register_root_command(std::unique_ptr<Command> && command) {
     // register command as root command in argument parser
     get_argument_parser().set_root_command(command->get_argument_parser_command());
 
-    command->set_argument_parser();
-    command->register_subcommands();
-    root_command = std::move(command);
-
-    // set the root command as the selected
-    // the value will get overwritten with a subcommand during parsing the arguments
-    set_selected_command(root_command.get());
+    add_and_initialize_command(std::move(command));
 }
 
 
 void Session::clear() {
-    root_command.reset();
+    for (auto & cmd : commands) {
+        cmd.reset();
+    }
     argument_parser.reset();
 }
 
