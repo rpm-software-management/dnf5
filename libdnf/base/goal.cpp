@@ -105,7 +105,7 @@ public:
         const transaction::TransactionItemReason reason,
         GoalJobSettings & settings);
 
-    void add_reason_change_to_goal(
+    GoalProblem add_reason_change_to_goal(
         base::Transaction & transaction,
         const std::string & spec,
         const transaction::TransactionItemReason reason,
@@ -435,7 +435,7 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
 GoalProblem Goal::Impl::add_reason_change_specs_to_goal(base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
     for (auto & [reason, spec, group_id, settings] : rpm_reason_change_specs) {
-        add_reason_change_to_goal(transaction, spec, reason, group_id, settings);
+        ret |= add_reason_change_to_goal(transaction, spec, reason, group_id, settings);
     }
     return ret;
 }
@@ -1182,22 +1182,29 @@ GoalProblem Goal::Impl::add_group_install_to_goal(
     return GoalProblem::NO_PROBLEM;
 }
 
-void Goal::Impl::add_reason_change_to_goal(
+GoalProblem Goal::Impl::add_reason_change_to_goal(
     base::Transaction & transaction,
     const std::string & spec,
     const transaction::TransactionItemReason reason,
     const std::optional<std::string> & group_id,
     GoalJobSettings & settings) {
+    auto & cfg_main = base->get_config();
+    bool strict = settings.resolve_strict(cfg_main);
     rpm::PackageQuery query(base);
     query.filter_installed();
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        transaction.p_impl->report_not_found(GoalAction::REASON_CHANGE, spec, settings, false);
-        return;
+        auto problem = transaction.p_impl->report_not_found(GoalAction::REASON_CHANGE, spec, settings, strict);
+        if (strict) {
+            return problem;
+        } else {
+            return GoalProblem::NO_PROBLEM;
+        }
     }
     for (const auto & pkg : query) {
         rpm_goal.add_reason_change(pkg, reason, group_id);
     }
+    return GoalProblem::NO_PROBLEM;
 }
 
 void Goal::set_allow_erasing(bool value) {
