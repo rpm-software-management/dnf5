@@ -46,7 +46,7 @@ public:
     /// @return Root command that represents the main program.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
-    Command * get_root_command() { return root_command.get(); }
+    Command * get_root_command();
 
     /// Register `command` as the root command that represents the main program.
     /// Session becomes owner of the `command`.
@@ -72,7 +72,6 @@ public:
     void clear();
 
 private:
-    std::unique_ptr<Command> root_command;
     Command * selected_command{nullptr};
     std::vector<std::unique_ptr<Command>> commands;
     std::unique_ptr<libdnf::cli::ArgumentParser> argument_parser;
@@ -147,6 +146,12 @@ private:
     Session & session;
     libdnf::cli::ArgumentParser::Command * argument_parser_command;
 };
+
+
+inline Command * Session::get_root_command() {
+    auto * arg_parser_root_command = argument_parser->get_root_command();
+    return arg_parser_root_command ? static_cast<Command *>(arg_parser_root_command->get_user_data()) : nullptr;
+}
 
 
 class Option {};
