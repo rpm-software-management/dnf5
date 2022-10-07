@@ -28,7 +28,7 @@ namespace dnfdaemon::client {
 
 class ReinstallCommand : public TransactionCommand {
 public:
-    explicit ReinstallCommand(Command & parent);
+    explicit ReinstallCommand(Context & context);
     void run() override;
 
 private:

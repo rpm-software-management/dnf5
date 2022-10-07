@@ -33,9 +33,8 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-ReinstallCommand::ReinstallCommand(Command & parent) : TransactionCommand(parent, "reinstall") {
-    auto & ctx = static_cast<Context &>(get_session());
-    auto & parser = ctx.get_argument_parser();
+ReinstallCommand::ReinstallCommand(Context & context) : TransactionCommand(context, "reinstall") {
+    auto & parser = context.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
     cmd.set_description("reinstall packages on the system");
@@ -51,7 +50,7 @@ ReinstallCommand::ReinstallCommand(Command & parent) : TransactionCommand(parent
 }
 
 void ReinstallCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     if (!am_i_root()) {
         throw UnprivilegedUserError();

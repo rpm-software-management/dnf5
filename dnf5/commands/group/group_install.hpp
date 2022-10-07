@@ -33,7 +33,7 @@ namespace dnf5 {
 
 class GroupInstallCommand : public Command {
 public:
-    explicit GroupInstallCommand(Command & parent) : GroupInstallCommand(parent, "install") {}
+    explicit GroupInstallCommand(Context & context) : GroupInstallCommand(context, "install") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;
@@ -43,7 +43,7 @@ public:
 
 protected:
     // to be used by an alias command only
-    explicit GroupInstallCommand(Command & parent, const std::string & name) : Command(parent, name) {}
+    explicit GroupInstallCommand(Context & context, const std::string & name) : Command(context, name) {}
 };
 
 

@@ -33,9 +33,8 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-UpgradeCommand::UpgradeCommand(Command & parent) : TransactionCommand(parent, "upgrade") {
-    auto & ctx = static_cast<Context &>(get_session());
-    auto & parser = ctx.get_argument_parser();
+UpgradeCommand::UpgradeCommand(Context & context) : TransactionCommand(context, "upgrade") {
+    auto & parser = context.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
     cmd.set_description("upgrade packages on the system");
@@ -51,7 +50,7 @@ UpgradeCommand::UpgradeCommand(Command & parent) : TransactionCommand(parent, "u
 }
 
 void UpgradeCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     if (!am_i_root()) {
         throw UnprivilegedUserError();

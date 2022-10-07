@@ -30,10 +30,10 @@ void MarkCommand::set_argument_parser() {
 }
 
 void MarkCommand::register_subcommands() {
-    register_subcommand(std::make_unique<MarkUserCommand>(*this));
-    register_subcommand(std::make_unique<MarkDependencyCommand>(*this));
-    register_subcommand(std::make_unique<MarkWeakDependencyCommand>(*this));
-    register_subcommand(std::make_unique<MarkGroupCommand>(*this));
+    register_subcommand(std::make_unique<MarkUserCommand>(get_context()));
+    register_subcommand(std::make_unique<MarkDependencyCommand>(get_context()));
+    register_subcommand(std::make_unique<MarkWeakDependencyCommand>(get_context()));
+    register_subcommand(std::make_unique<MarkGroupCommand>(get_context()));
 }
 
 void MarkCommand::pre_configure() {

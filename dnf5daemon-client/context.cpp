@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "context.hpp"
 
+#include "commands/command.hpp"
+
 #include <dnf5daemon-server/dbus.hpp>
 #include <dnf5daemon-server/utils.hpp>
 #include <libdnf/rpm/package_set.hpp>

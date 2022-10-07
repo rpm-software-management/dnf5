@@ -31,7 +31,7 @@ namespace dnfdaemon::client {
 
 class GroupCommand : public DaemonCommand {
 public:
-    explicit GroupCommand(Command & parent);
+    explicit GroupCommand(Context & context);
     void pre_configure() override;
 };
 

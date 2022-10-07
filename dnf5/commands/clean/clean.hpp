@@ -31,7 +31,7 @@ namespace dnf5 {
 
 class CleanCommand : public Command {
 public:
-    explicit CleanCommand(Command & parent);
+    explicit CleanCommand(Context & context);
     void run() override;
 
     enum Actions : unsigned {

@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class ModuleRepoqueryCommand : public Command {
 public:
-    explicit ModuleRepoqueryCommand(Command & parent) : Command(parent, "enable") {}
+    explicit ModuleRepoqueryCommand(Context & context) : Command(context, "enable") {}
     void set_argument_parser() override;
     void run() override;
 };

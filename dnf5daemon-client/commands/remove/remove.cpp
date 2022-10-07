@@ -33,9 +33,8 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-RemoveCommand::RemoveCommand(Command & parent) : TransactionCommand(parent, "remove") {
-    auto & ctx = static_cast<Context &>(get_session());
-    auto & parser = ctx.get_argument_parser();
+RemoveCommand::RemoveCommand(Context & context) : TransactionCommand(context, "remove") {
+    auto & parser = context.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
     cmd.set_description("remove packages on the system");
@@ -50,11 +49,11 @@ RemoveCommand::RemoveCommand(Command & parent) : TransactionCommand(parent, "rem
     cmd.register_positional_arg(keys);
 
     // run remove command allways with allow_erasing on
-    ctx.allow_erasing.set(libdnf::Option::Priority::RUNTIME, true);
+    context.allow_erasing.set(libdnf::Option::Priority::RUNTIME, true);
 }
 
 void RemoveCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     if (!am_i_root()) {
         throw UnprivilegedUserError();

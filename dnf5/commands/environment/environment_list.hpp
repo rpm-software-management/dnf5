@@ -30,7 +30,7 @@ namespace dnf5 {
 
 class EnvironmentListCommand : public Command {
 public:
-    explicit EnvironmentListCommand(Command & parent) : Command(parent, "list") {}
+    explicit EnvironmentListCommand(Context & context) : Command(context, "list") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;

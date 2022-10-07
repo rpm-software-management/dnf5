@@ -29,7 +29,7 @@ namespace dnf5 {
 
 class HistoryReplayCommand : public Command {
 public:
-    explicit HistoryReplayCommand(Command & parent) : Command(parent, "replay") {}
+    explicit HistoryReplayCommand(Context & context) : Command(context, "replay") {}
     void set_argument_parser() override;
     void run() override;
 };

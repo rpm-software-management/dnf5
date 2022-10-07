@@ -28,7 +28,7 @@ namespace dnfdaemon::client {
 
 class DowngradeCommand : public TransactionCommand {
 public:
-    explicit DowngradeCommand(Command & parent);
+    explicit DowngradeCommand(Context & context);
     void run() override;
 
 private:

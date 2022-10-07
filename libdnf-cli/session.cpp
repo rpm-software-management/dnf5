@@ -77,9 +77,6 @@ Command::Command(Session & session, const std::string & name) : session{session}
 }
 
 
-Command::Command(Command & parent, const std::string & name) : Command(parent.session, name) {}
-
-
 void Command::throw_missing_command() const {
     throw ArgumentParserMissingCommandError(M_("Missing command"), get_argument_parser_command()->get_id());
 }

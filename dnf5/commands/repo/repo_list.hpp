@@ -28,7 +28,7 @@ namespace dnf5 {
 
 class RepoListCommand : public Command {
 public:
-    explicit RepoListCommand(Command & parent) : RepoListCommand(parent, "list") {}
+    explicit RepoListCommand(Context & context) : RepoListCommand(context, "list") {}
     void set_argument_parser() override;
     void run() override;
 
@@ -39,7 +39,7 @@ public:
 
 protected:
     // for RepoInfoCommand
-    explicit RepoListCommand(Command & parent, const std::string & name) : Command(parent, name) {}
+    explicit RepoListCommand(Context & context, const std::string & name) : Command(context, name) {}
 
     virtual void print(const libdnf::repo::RepoQuery & query, bool with_status);
 };

@@ -29,7 +29,7 @@ namespace dnf5 {
 
 class HistoryRedoCommand : public Command {
 public:
-    explicit HistoryRedoCommand(Command & parent) : Command(parent, "redo") {}
+    explicit HistoryRedoCommand(Context & context) : Command(context, "redo") {}
     void set_argument_parser() override;
     void run() override;
 };

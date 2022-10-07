@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class ModuleInfoCommand : public Command {
 public:
-    explicit ModuleInfoCommand(Command & parent) : Command(parent, "info") {}
+    explicit ModuleInfoCommand(Context & context) : Command(context, "info") {}
     void set_argument_parser() override;
     void run() override;
 };

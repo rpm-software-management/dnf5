@@ -31,7 +31,7 @@ namespace dnf5 {
 
 class ChangelogCommand : public Command {
 public:
-    explicit ChangelogCommand(Command & parent) : Command(parent, "changelog") {}
+    explicit ChangelogCommand(Context & context) : Command(context, "changelog") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;

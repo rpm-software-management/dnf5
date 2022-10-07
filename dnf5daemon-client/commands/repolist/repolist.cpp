@@ -35,11 +35,10 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-RepolistCommand::RepolistCommand(Command & parent, const char * command)
-    : DaemonCommand(parent, command),
+RepolistCommand::RepolistCommand(Context & context, const char * command)
+    : DaemonCommand(context, command),
       command(command) {
-    auto & ctx = static_cast<Context &>(get_session());
-    auto & parser = ctx.get_argument_parser();
+    auto & parser = context.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
 
@@ -86,7 +85,7 @@ RepolistCommand::RepolistCommand(Command & parent, const char * command)
 }
 
 void RepolistCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     // prepare options from command line arguments
     dnfdaemon::KeyValueMap options = {};

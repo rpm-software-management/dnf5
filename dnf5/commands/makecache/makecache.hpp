@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class MakeCacheCommand : public Command {
 public:
-    explicit MakeCacheCommand(Command & parent) : Command(parent, "makecache") {}
+    explicit MakeCacheCommand(Context & context) : Command(context, "makecache") {}
     void set_argument_parser() override;
     void run() override;
 };

@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class ModuleDisableCommand : public Command {
 public:
-    explicit ModuleDisableCommand(Command & parent) : Command(parent, "disable") {}
+    explicit ModuleDisableCommand(Context & context) : Command(context, "disable") {}
     void set_argument_parser() override;
     void run() override;
 };

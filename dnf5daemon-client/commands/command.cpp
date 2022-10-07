@@ -39,7 +39,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnfdaemon::client {
 
 void TransactionCommand::run_transaction() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
     dnfdaemon::KeyValueMap options = {};
 
     // resolve the transaction

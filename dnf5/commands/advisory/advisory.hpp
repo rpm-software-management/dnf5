@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class AdvisoryCommand : public Command {
 public:
-    explicit AdvisoryCommand(Command & parent) : Command(parent, "advisory") {}
+    explicit AdvisoryCommand(Context & context) : Command(context, "advisory") {}
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override;

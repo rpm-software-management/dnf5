@@ -29,7 +29,7 @@ namespace dnfdaemon::client {
 
 class InstallCommand : public TransactionCommand {
 public:
-    explicit InstallCommand(Command & parent);
+    explicit InstallCommand(Context & context);
     void run() override;
 
 private:
