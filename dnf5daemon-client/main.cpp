@@ -51,7 +51,7 @@ using namespace libdnf::cli;
 
 class RootCommand : public dnfdaemon::client::DaemonCommand {
 public:
-    explicit RootCommand(session::Session & session) : dnfdaemon::client::DaemonCommand(session, "dnf5daemon-client") {}
+    explicit RootCommand(Context & context) : dnfdaemon::client::DaemonCommand(context, "dnf5daemon-client") {}
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override { throw_missing_command(); }
@@ -161,35 +161,35 @@ void RootCommand::set_argument_parser() {
 }
 
 void RootCommand::register_subcommands() {
-    auto & session = get_session();
+    auto & context = get_context();
     auto & cmd = *get_argument_parser_command();
 
-    register_subcommand(std::make_unique<RepolistCommand>(*this, "repolist"));
-    register_subcommand(std::make_unique<RepolistCommand>(*this, "repoinfo"));
+    register_subcommand(std::make_unique<RepolistCommand>(context, "repolist"));
+    register_subcommand(std::make_unique<RepolistCommand>(context, "repoinfo"));
 
     // software management commands
     auto * software_management_commands_group =
-        session.get_argument_parser().add_new_group("software_management_commands");
+        context.get_argument_parser().add_new_group("software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<DistroSyncCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<InstallCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<RemoveCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<UpgradeCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<DistroSyncCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<DowngradeCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<InstallCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<ReinstallCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<RemoveCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<UpgradeCommand>(context), software_management_commands_group);
 
     // query commands
-    auto * query_commands_group = session.get_argument_parser().add_new_group("query_commands");
+    auto * query_commands_group = context.get_argument_parser().add_new_group("query_commands");
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<RepoqueryCommand>(context), query_commands_group);
 
     // subcommands
-    auto * subcommands_group = session.get_argument_parser().add_new_group("subcommands");
+    auto * subcommands_group = context.get_argument_parser().add_new_group("subcommands");
     subcommands_group->set_header("Subcommands:");
     cmd.register_group(subcommands_group);
-    register_subcommand(std::make_unique<GroupCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<GroupCommand>(context), subcommands_group);
 }
 
 }  // namespace dnfdaemon::client

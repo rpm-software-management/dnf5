@@ -32,7 +32,7 @@ namespace dnf5 {
 //               which will allow multiple actions to be combined in one transaction.
 class SwapCommand : public Command {
 public:
-    explicit SwapCommand(Command & parent) : Command(parent, "swap") {}
+    explicit SwapCommand(Context & context) : Command(context, "swap") {}
     void set_argument_parser() override;
     void configure() override;
     void load_additional_packages() override;

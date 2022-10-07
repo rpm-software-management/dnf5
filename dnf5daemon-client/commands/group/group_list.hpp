@@ -31,7 +31,7 @@ namespace dnfdaemon::client {
 
 class GroupListCommand : public DaemonCommand {
 public:
-    explicit GroupListCommand(Command & parent, const char * command);
+    explicit GroupListCommand(Context & context, const char * command);
     void run() override;
 
 private:

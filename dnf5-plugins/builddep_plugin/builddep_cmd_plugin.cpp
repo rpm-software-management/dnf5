@@ -43,7 +43,7 @@ public:
 
 std::vector<std::unique_ptr<Command>> BuildDepCmdPlugin::create_commands(Command & parent) {
     std::vector<std::unique_ptr<Command>> commands;
-    commands.push_back(std::make_unique<BuildDepCommand>(parent));
+    commands.push_back(std::make_unique<BuildDepCommand>(parent.get_context()));
     return commands;
 }
 

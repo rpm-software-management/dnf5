@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5DAEMON_CLIENT_CONTEXT_HPP
 
 #include "callbacks.hpp"
-#include "commands/command.hpp"
 
 #include <dnf5daemon-server/dbus.hpp>
 #include <libdnf-cli/argument_parser.hpp>
@@ -31,7 +30,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/repo/repo.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
-#include <iostream>
 #include <memory>
 #include <utility>
 #include <vector>

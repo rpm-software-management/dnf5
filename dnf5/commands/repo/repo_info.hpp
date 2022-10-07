@@ -29,7 +29,7 @@ namespace dnf5 {
 
 class RepoInfoCommand : public RepoListCommand {
 public:
-    explicit RepoInfoCommand(Command & parent) : RepoListCommand(parent, "info") {}
+    explicit RepoInfoCommand(Context & context) : RepoListCommand(context, "info") {}
 
     void set_argument_parser() override {
         RepoListCommand::set_argument_parser();

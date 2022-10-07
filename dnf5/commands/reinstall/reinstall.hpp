@@ -32,7 +32,7 @@ namespace dnf5 {
 
 class ReinstallCommand : public Command {
 public:
-    explicit ReinstallCommand(Command & parent) : Command(parent, "reinstall") {}
+    explicit ReinstallCommand(Context & context) : Command(context, "reinstall") {}
     void set_argument_parser() override;
     void configure() override;
     void load_additional_packages() override;

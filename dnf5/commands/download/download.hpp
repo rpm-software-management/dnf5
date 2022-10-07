@@ -33,7 +33,7 @@ namespace dnf5 {
 
 class DownloadCommand : public Command {
 public:
-    explicit DownloadCommand(Command & parent) : Command(parent, "download") {}
+    explicit DownloadCommand(Context & context) : Command(context, "download") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;

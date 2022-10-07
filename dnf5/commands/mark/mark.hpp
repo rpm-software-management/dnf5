@@ -32,7 +32,7 @@ namespace dnf5 {
 
 class MarkCommand : public Command {
 public:
-    explicit MarkCommand(Command & parent) : Command(parent, "mark") {}
+    explicit MarkCommand(Context & context) : Command(context, "mark") {}
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override;
@@ -41,16 +41,16 @@ public:
 
 class MarkUserCommand : public Command {
 public:
-    explicit MarkUserCommand(Command & parent)
-        : MarkUserCommand(parent, "user", libdnf::transaction::TransactionItemReason::USER) {}
+    explicit MarkUserCommand(Context & context)
+        : MarkUserCommand(context, "user", libdnf::transaction::TransactionItemReason::USER) {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;
 
 protected:
     explicit MarkUserCommand(
-        Command & parent, const std::string & name, libdnf::transaction::TransactionItemReason reason)
-        : Command(parent, name),
+        Context & context, const std::string & name, libdnf::transaction::TransactionItemReason reason)
+        : Command(context, name),
           reason(reason) {}
     std::vector<std::unique_ptr<libdnf::Option>> * pkg_specs{nullptr};
     libdnf::transaction::TransactionItemReason reason;
@@ -59,8 +59,8 @@ protected:
 
 class MarkDependencyCommand : public MarkUserCommand {
 public:
-    explicit MarkDependencyCommand(Command & parent)
-        : MarkUserCommand(parent, "dependency", libdnf::transaction::TransactionItemReason::DEPENDENCY) {}
+    explicit MarkDependencyCommand(Context & context)
+        : MarkUserCommand(context, "dependency", libdnf::transaction::TransactionItemReason::DEPENDENCY) {}
     void set_argument_parser() override {
         MarkUserCommand::set_argument_parser();
         get_argument_parser_command()->set_description("Mark package as a dependency");
@@ -70,8 +70,8 @@ public:
 
 class MarkWeakDependencyCommand : public MarkUserCommand {
 public:
-    explicit MarkWeakDependencyCommand(Command & parent)
-        : MarkUserCommand(parent, "weak", libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY) {}
+    explicit MarkWeakDependencyCommand(Context & context)
+        : MarkUserCommand(context, "weak", libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY) {}
     void set_argument_parser() override {
         MarkUserCommand::set_argument_parser();
         get_argument_parser_command()->set_description("Mark package as a weak dependency");
@@ -81,8 +81,8 @@ public:
 
 class MarkGroupCommand : public MarkUserCommand {
 public:
-    explicit MarkGroupCommand(Command & parent)
-        : MarkUserCommand(parent, "group", libdnf::transaction::TransactionItemReason::GROUP) {}
+    explicit MarkGroupCommand(Context & context)
+        : MarkUserCommand(context, "group", libdnf::transaction::TransactionItemReason::GROUP) {}
     void set_argument_parser() override;
     void run() override;
 

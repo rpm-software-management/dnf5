@@ -33,7 +33,7 @@ namespace dnfdaemon::client {
 
 class RepolistCommand : public DaemonCommand {
 public:
-    explicit RepolistCommand(Command & parent, const char * command);
+    explicit RepolistCommand(Context & context, const char * command);
     void run() override;
 
 private:

@@ -33,9 +33,8 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-DistroSyncCommand::DistroSyncCommand(Command & parent) : TransactionCommand(parent, "distro-sync") {
-    auto & ctx = static_cast<Context &>(get_session());
-    auto & parser = ctx.get_argument_parser();
+DistroSyncCommand::DistroSyncCommand(Context & context) : TransactionCommand(context, "distro-sync") {
+    auto & parser = context.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
     cmd.set_description("Upgrade or downgrade installed software to the latest available versions");
@@ -51,7 +50,7 @@ DistroSyncCommand::DistroSyncCommand(Command & parent) : TransactionCommand(pare
 }
 
 void DistroSyncCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     if (!am_i_root()) {
         throw UnprivilegedUserError();

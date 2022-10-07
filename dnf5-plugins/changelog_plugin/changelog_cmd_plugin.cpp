@@ -43,7 +43,7 @@ public:
 
 std::vector<std::unique_ptr<Command>> ChangelogCmdPlugin::create_commands(Command & parent) {
     std::vector<std::unique_ptr<Command>> commands;
-    commands.push_back(std::make_unique<ChangelogCommand>(parent));
+    commands.push_back(std::make_unique<ChangelogCommand>(parent.get_context()));
     return commands;
 }
 

@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class ModuleSwitchToCommand : public Command {
 public:
-    explicit ModuleSwitchToCommand(Command & parent) : Command(parent, "switch-to") {}
+    explicit ModuleSwitchToCommand(Context & context) : Command(context, "switch-to") {}
     void set_argument_parser() override;
     void run() override;
 };

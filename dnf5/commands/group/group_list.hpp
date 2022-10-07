@@ -35,7 +35,7 @@ namespace dnf5 {
 
 class GroupListCommand : public Command {
 public:
-    explicit GroupListCommand(Command & parent) : Command(parent, "list") {}
+    explicit GroupListCommand(Context & context) : Command(context, "list") {}
     void set_argument_parser() override;
     void configure() override;
     void run() override;

@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class ModuleInstallCommand : public Command {
 public:
-    explicit ModuleInstallCommand(Command & parent) : Command(parent, "install") {}
+    explicit ModuleInstallCommand(Context & context) : Command(context, "install") {}
     void set_argument_parser() override;
     void run() override;
 };

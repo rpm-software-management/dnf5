@@ -43,18 +43,18 @@ void HistoryCommand::register_subcommands() {
     auto * query_commands_group = parser.add_new_group("history_query_commands");
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<HistoryListCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<HistoryInfoCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<HistoryListCommand>(get_context()), query_commands_group);
+    register_subcommand(std::make_unique<HistoryInfoCommand>(get_context()), query_commands_group);
 
     // software management commands
     auto * software_management_commands_group = parser.add_new_group("history_software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryUndoCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryRedoCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryRollbackCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryStoreCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<HistoryReplayCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<HistoryUndoCommand>(get_context()), software_management_commands_group);
+    register_subcommand(std::make_unique<HistoryRedoCommand>(get_context()), software_management_commands_group);
+    register_subcommand(std::make_unique<HistoryRollbackCommand>(get_context()), software_management_commands_group);
+    register_subcommand(std::make_unique<HistoryStoreCommand>(get_context()), software_management_commands_group);
+    register_subcommand(std::make_unique<HistoryReplayCommand>(get_context()), software_management_commands_group);
 }
 
 void HistoryCommand::pre_configure() {

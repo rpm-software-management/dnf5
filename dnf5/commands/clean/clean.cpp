@@ -55,7 +55,7 @@ const CacheType CACHE_TYPES[]{
 using namespace libdnf::cli;
 
 
-CleanCommand::CleanCommand(Command & parent) : Command(parent, "clean") {
+CleanCommand::CleanCommand(Context & context) : Command(context, "clean") {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 

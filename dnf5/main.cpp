@@ -457,36 +457,36 @@ void RootCommand::register_subcommands() {
         context.get_argument_parser().add_new_group("software_management_commands");
     software_management_commands_group->set_header("Software Management Commands:");
     cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<InstallCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<UpgradeCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<RemoveCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<DistroSyncCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<DowngradeCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<ReinstallCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<SwapCommand>(*this), software_management_commands_group);
-    register_subcommand(std::make_unique<MarkCommand>(*this), software_management_commands_group);
+    register_subcommand(std::make_unique<InstallCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<UpgradeCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<RemoveCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<DistroSyncCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<DowngradeCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<ReinstallCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<SwapCommand>(context), software_management_commands_group);
+    register_subcommand(std::make_unique<MarkCommand>(context), software_management_commands_group);
 
     // query commands
     auto * query_commands_group = context.get_argument_parser().add_new_group("query_commands");
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
+    register_subcommand(std::make_unique<RepoqueryCommand>(context), query_commands_group);
     // TODO(jmracek) The search commnd is not yet implemented
-    // register_subcommand(std::make_unique<SearchCommand>(*this), query_commands_group);
+    // register_subcommand(std::make_unique<SearchCommand>(context), query_commands_group);
 
     auto * subcommands_group = context.get_argument_parser().add_new_group("subcommands");
     subcommands_group->set_header("Subcommands:");
     cmd.register_group(subcommands_group);
-    register_subcommand(std::make_unique<GroupCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<EnvironmentCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<ModuleCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<HistoryCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<RepoCommand>(*this), subcommands_group);
-    register_subcommand(std::make_unique<AdvisoryCommand>(*this), subcommands_group);
+    register_subcommand(std::make_unique<GroupCommand>(context), subcommands_group);
+    register_subcommand(std::make_unique<EnvironmentCommand>(context), subcommands_group);
+    register_subcommand(std::make_unique<ModuleCommand>(context), subcommands_group);
+    register_subcommand(std::make_unique<HistoryCommand>(context), subcommands_group);
+    register_subcommand(std::make_unique<RepoCommand>(context), subcommands_group);
+    register_subcommand(std::make_unique<AdvisoryCommand>(context), subcommands_group);
 
-    register_subcommand(std::make_unique<CleanCommand>(*this));
-    register_subcommand(std::make_unique<DownloadCommand>(*this));
-    register_subcommand(std::make_unique<MakeCacheCommand>(*this));
+    register_subcommand(std::make_unique<CleanCommand>(context));
+    register_subcommand(std::make_unique<DownloadCommand>(context));
+    register_subcommand(std::make_unique<MakeCacheCommand>(context));
 
     auto & dnf5_plugins = context.get_plugins();
     auto & plugins = dnf5_plugins.get_plugins();

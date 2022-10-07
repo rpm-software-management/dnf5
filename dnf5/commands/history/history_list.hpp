@@ -31,7 +31,7 @@ namespace dnf5 {
 
 class HistoryListCommand : public Command {
 public:
-    explicit HistoryListCommand(Command & parent) : Command(parent, "list") {}
+    explicit HistoryListCommand(Context & context) : Command(context, "list") {}
     void set_argument_parser() override;
     void run() override;
 

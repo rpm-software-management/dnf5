@@ -26,9 +26,8 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-GroupCommand::GroupCommand(Command & parent) : DaemonCommand(parent, "group") {
-    auto & ctx = static_cast<Context &>(get_session());
-    auto & parser = ctx.get_argument_parser();
+GroupCommand::GroupCommand(Context & context) : DaemonCommand(context, "group") {
+    auto & parser = context.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Manage comps groups");
@@ -37,8 +36,8 @@ GroupCommand::GroupCommand(Command & parent) : DaemonCommand(parent, "group") {
     auto * query_commands_group = parser.add_new_group("group_query_commands");
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<GroupListCommand>(*this, "list"), query_commands_group);
-    register_subcommand(std::make_unique<GroupListCommand>(*this, "info"), query_commands_group);
+    register_subcommand(std::make_unique<GroupListCommand>(context, "list"), query_commands_group);
+    register_subcommand(std::make_unique<GroupListCommand>(context, "info"), query_commands_group);
 }
 
 void GroupCommand::pre_configure() {

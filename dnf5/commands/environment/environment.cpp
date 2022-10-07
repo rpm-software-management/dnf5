@@ -32,8 +32,8 @@ void EnvironmentCommand::register_subcommands() {
     auto * query_commands_environment = get_context().get_argument_parser().add_new_group("environment_query_commands");
     query_commands_environment->set_header("Query Commands:");
     get_argument_parser_command()->register_group(query_commands_environment);
-    register_subcommand(std::make_unique<EnvironmentListCommand>(*this), query_commands_environment);
-    register_subcommand(std::make_unique<EnvironmentInfoCommand>(*this), query_commands_environment);
+    register_subcommand(std::make_unique<EnvironmentListCommand>(get_context()), query_commands_environment);
+    register_subcommand(std::make_unique<EnvironmentInfoCommand>(get_context()), query_commands_environment);
 }
 
 void EnvironmentCommand::pre_configure() {

@@ -33,11 +33,10 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-GroupListCommand::GroupListCommand(Command & parent, const char * command)
-    : DaemonCommand(parent, command),
+GroupListCommand::GroupListCommand(Context & context, const char * command)
+    : DaemonCommand(context, command),
       command(command) {
-    auto & ctx = static_cast<Context &>(get_session());
-    auto & parser = ctx.get_argument_parser();
+    auto & parser = context.get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
     cmd.set_description("search for packages matching keyword");
@@ -53,7 +52,7 @@ GroupListCommand::GroupListCommand(Command & parent, const char * command)
 }
 
 void GroupListCommand::run() {
-    auto & ctx = static_cast<Context &>(get_session());
+    auto & ctx = get_context();
 
     // query groups
     dnfdaemon::KeyValueMap options = {};

@@ -26,7 +26,7 @@ namespace dnf5 {
 
 class GroupCommand : public Command {
 public:
-    explicit GroupCommand(Command & parent) : Command(parent, "group") {}
+    explicit GroupCommand(Context & context) : Command(context, "group") {}
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override;
