@@ -42,6 +42,7 @@ void Session::add_and_initialize_command(std::unique_ptr<Command> && command) {
         return true;
     });
 
+    command->set_parent_command();
     command->set_argument_parser();
     command->register_subcommands();
     commands.push_back(std::move(command));

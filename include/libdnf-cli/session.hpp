@@ -83,6 +83,10 @@ public:
     explicit Command(Session & session, const std::string & name);
     virtual ~Command() = default;
 
+    /// Sets a parent command and group. Can add a new group to the parent command.
+    /// @since 5.0
+    virtual void set_parent_command() {}
+
     /// Set command arguments.
     /// @since 5.0
     virtual void set_argument_parser() {}
