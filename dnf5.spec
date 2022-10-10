@@ -462,9 +462,9 @@ Package management service with a DBus interface.
 %systemd_postun_with_restart dnf5daemon-server.service
 
 %files -n dnf5daemon-server
-%{_bindir}/dnf5daemon-server
+%{_sbindir}/dnf5daemon-server
 %{_unitdir}/dnf5daemon-server.service
-%{_sysconfdir}/dbus-1/system.d/org.rpm.dnf.v0.conf
+%config(noreplace) %{_sysconfdir}/dbus-1/system.d/org.rpm.dnf.v0.conf
 %{_datadir}/dbus-1/system-services/org.rpm.dnf.v0.service
 %{_datadir}/dbus-1/interfaces/org.rpm.dnf.v0.*.xml
 %{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy

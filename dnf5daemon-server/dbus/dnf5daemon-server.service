@@ -5,5 +5,5 @@ Description=DNF daemon
 Type=dbus
 BusName=org.rpm.dnf.v0
 User=root
-ExecStart=/usr/bin/dnf5daemon-server
+ExecStart=/usr/sbin/dnf5daemon-server
 TimeoutStopSec=5min
