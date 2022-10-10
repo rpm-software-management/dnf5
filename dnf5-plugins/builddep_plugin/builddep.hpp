@@ -34,6 +34,7 @@ namespace dnf5 {
 class BuildDepCommand : public Command {
 public:
     explicit BuildDepCommand(Context & context) : Command(context, "builddep") {}
+    void set_parent_command() override;
     void set_argument_parser() override;
     void configure() override;
     void run() override;

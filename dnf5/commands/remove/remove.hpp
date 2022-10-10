@@ -31,6 +31,7 @@ namespace dnf5 {
 class RemoveCommand : public Command {
 public:
     explicit RemoveCommand(Context & context) : Command(context, "remove") {}
+    void set_parent_command() override;
     void set_argument_parser() override;
     void configure() override;
     void run() override;

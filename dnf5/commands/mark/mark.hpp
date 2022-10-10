@@ -33,6 +33,7 @@ namespace dnf5 {
 class MarkCommand : public Command {
 public:
     explicit MarkCommand(Context & context) : Command(context, "mark") {}
+    void set_parent_command() override;
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override;

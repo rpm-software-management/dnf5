@@ -92,10 +92,14 @@ void register_group_with_args(
 class RootCommand : public Command {
 public:
     explicit RootCommand(libdnf::cli::session::Session & context) : Command(context, "dnf5") {}
+    void set_parent_command() override;
     void set_argument_parser() override;
-    void register_subcommands() override;
     void pre_configure() override { throw_missing_command(); }
 };
+
+void RootCommand::set_parent_command() {
+    get_session().get_argument_parser().set_root_command(this->get_argument_parser_command());
+}
 
 void RootCommand::set_argument_parser() {
     auto & ctx = get_context();
@@ -446,59 +450,84 @@ void RootCommand::set_argument_parser() {
     register_group_with_args(cmd, *global_options_group);
 
     parser.set_inherit_named_args(true);
+
+    // software management commands group
+    {
+        auto * software_management_commands_group =
+            ctx.get_argument_parser().add_new_group("software_management_commands");
+        software_management_commands_group->set_header("Software Management Commands:");
+        cmd.register_group(software_management_commands_group);
+    }
+
+    // query commands group
+    {
+        auto * query_commands_group = ctx.get_argument_parser().add_new_group("query_commands");
+        query_commands_group->set_header("Query Commands:");
+        cmd.register_group(query_commands_group);
+    }
+
+    // subcommands group
+    {
+        auto * subcommands_group = ctx.get_argument_parser().add_new_group("subcommands");
+        subcommands_group->set_header("Subcommands:");
+        cmd.register_group(subcommands_group);
+    }
 }
 
-void RootCommand::register_subcommands() {
-    auto & context = get_context();
-    auto & cmd = *get_argument_parser_command();
+static void add_commands(Context & context) {
+    // First, add the "root" command.
+    context.add_and_initialize_command(std::make_unique<RootCommand>(context));
 
-    // software management commands
-    auto * software_management_commands_group =
-        context.get_argument_parser().add_new_group("software_management_commands");
-    software_management_commands_group->set_header("Software Management Commands:");
-    cmd.register_group(software_management_commands_group);
-    register_subcommand(std::make_unique<InstallCommand>(context), software_management_commands_group);
-    register_subcommand(std::make_unique<UpgradeCommand>(context), software_management_commands_group);
-    register_subcommand(std::make_unique<RemoveCommand>(context), software_management_commands_group);
-    register_subcommand(std::make_unique<DistroSyncCommand>(context), software_management_commands_group);
-    register_subcommand(std::make_unique<DowngradeCommand>(context), software_management_commands_group);
-    register_subcommand(std::make_unique<ReinstallCommand>(context), software_management_commands_group);
-    register_subcommand(std::make_unique<SwapCommand>(context), software_management_commands_group);
-    register_subcommand(std::make_unique<MarkCommand>(context), software_management_commands_group);
+    context.add_and_initialize_command(std::make_unique<InstallCommand>(context));
+    context.add_and_initialize_command(std::make_unique<UpgradeCommand>(context));
+    context.add_and_initialize_command(std::make_unique<RemoveCommand>(context));
+    context.add_and_initialize_command(std::make_unique<DistroSyncCommand>(context));
+    context.add_and_initialize_command(std::make_unique<DowngradeCommand>(context));
+    context.add_and_initialize_command(std::make_unique<ReinstallCommand>(context));
+    context.add_and_initialize_command(std::make_unique<SwapCommand>(context));
+    context.add_and_initialize_command(std::make_unique<MarkCommand>(context));
 
-    // query commands
-    auto * query_commands_group = context.get_argument_parser().add_new_group("query_commands");
-    query_commands_group->set_header("Query Commands:");
-    cmd.register_group(query_commands_group);
-    register_subcommand(std::make_unique<RepoqueryCommand>(context), query_commands_group);
+    context.add_and_initialize_command(std::make_unique<RepoqueryCommand>(context));
     // TODO(jmracek) The search commnd is not yet implemented
-    // register_subcommand(std::make_unique<SearchCommand>(context), query_commands_group);
+    // context.add_and_initialize_command(std::make_unique<SearchCommand>(context));
 
-    auto * subcommands_group = context.get_argument_parser().add_new_group("subcommands");
-    subcommands_group->set_header("Subcommands:");
-    cmd.register_group(subcommands_group);
-    register_subcommand(std::make_unique<GroupCommand>(context), subcommands_group);
-    register_subcommand(std::make_unique<EnvironmentCommand>(context), subcommands_group);
-    register_subcommand(std::make_unique<ModuleCommand>(context), subcommands_group);
-    register_subcommand(std::make_unique<HistoryCommand>(context), subcommands_group);
-    register_subcommand(std::make_unique<RepoCommand>(context), subcommands_group);
-    register_subcommand(std::make_unique<AdvisoryCommand>(context), subcommands_group);
+    context.add_and_initialize_command(std::make_unique<GroupCommand>(context));
+    context.add_and_initialize_command(std::make_unique<EnvironmentCommand>(context));
+    context.add_and_initialize_command(std::make_unique<ModuleCommand>(context));
+    context.add_and_initialize_command(std::make_unique<HistoryCommand>(context));
+    context.add_and_initialize_command(std::make_unique<RepoCommand>(context));
+    context.add_and_initialize_command(std::make_unique<AdvisoryCommand>(context));
 
-    register_subcommand(std::make_unique<CleanCommand>(context));
-    register_subcommand(std::make_unique<DownloadCommand>(context));
-    register_subcommand(std::make_unique<MakeCacheCommand>(context));
+    context.add_and_initialize_command(std::make_unique<CleanCommand>(context));
+    context.add_and_initialize_command(std::make_unique<DownloadCommand>(context));
+    context.add_and_initialize_command(std::make_unique<MakeCacheCommand>(context));
+}
 
+static void load_plugins(Context & context) {
     auto & dnf5_plugins = context.get_plugins();
-    auto & plugins = dnf5_plugins.get_plugins();
-    for (auto & plugin : plugins) {
-        if (plugin->get_enabled()) {
-            auto commands = plugin->get_iplugin()->create_commands();
-            for (auto & command : commands) {
-                register_subcommand(std::move(command));
+
+    const char * plugins_dir = std::getenv("DNF5_PLUGINS_DIR");
+    if (!plugins_dir) {
+        plugins_dir = LIBDIR "/dnf5/plugins/";
+    }
+
+    const std::filesystem::path plugins_directory = plugins_dir;
+    if (std::filesystem::exists(plugins_directory) && std::filesystem::is_directory(plugins_directory)) {
+        dnf5_plugins.load_plugins(plugins_directory);
+        dnf5_plugins.init();
+        auto & plugins = dnf5_plugins.get_plugins();
+        for (auto & plugin : plugins) {
+            if (plugin->get_enabled()) {
+                auto commands = plugin->get_iplugin()->create_commands();
+                for (auto & command : commands) {
+                    context.add_and_initialize_command(std::move(command));
+                }
             }
         }
     }
+}
 
+static void load_cmdline_aliases(Context & context) {
     load_cmdline_aliases(context, INSTALL_PREFIX "/lib/dnf5/aliases.d");
     load_cmdline_aliases(context, SYSCONFIG_DIR "/dnf/dnf5-aliases.d");
     load_cmdline_aliases(context, libdnf::xdg::get_user_config_dir() / "dnf5/aliases.d");
@@ -540,6 +569,7 @@ static void print_versions(Context & context) {
 
 }  // namespace dnf5
 
+
 int main(int argc, char * argv[]) try {
     // Creates a vector of loggers with one circular memory buffer logger
     std::vector<std::unique_ptr<libdnf::Logger>> loggers;
@@ -558,20 +588,9 @@ int main(int argc, char * argv[]) try {
 
     context.set_prg_arguments(static_cast<size_t>(argc), argv);
 
-    // Load dnf5 plugins
-    auto & dnf5_plugins = context.get_plugins();
-    const char * plugins_dir = std::getenv("DNF5_PLUGINS_DIR");
-    if (!plugins_dir) {
-        plugins_dir = LIBDIR "/dnf5/plugins/";
-    }
-    std::filesystem::path plugins_directory = plugins_dir;
-    if (std::filesystem::exists(plugins_directory) && std::filesystem::is_directory(plugins_directory)) {
-        dnf5_plugins.load_plugins(plugins_directory);
-    }
-    dnf5_plugins.init();
-
-    // Register root command
-    context.register_root_command(std::make_unique<dnf5::RootCommand>(context));
+    dnf5::add_commands(context);
+    dnf5::load_plugins(context);
+    dnf5::load_cmdline_aliases(context);
 
     // Argument completion handler
     // If the argument at position 1 is "--complete=<index>", this is a request to complete the argument

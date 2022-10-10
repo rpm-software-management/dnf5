@@ -25,6 +25,13 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 
+void MarkCommand::set_parent_command() {
+    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * arg_parser_this_cmd = get_argument_parser_command();
+    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
+    arg_parser_parent_cmd->get_group("software_management_commands").register_argument(arg_parser_this_cmd);
+}
+
 void MarkCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Change the reason of an installed package");
 }

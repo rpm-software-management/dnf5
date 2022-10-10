@@ -34,6 +34,7 @@ namespace dnf5 {
 class InstallCommand : public Command {
 public:
     explicit InstallCommand(Context & context) : Command(context, "install") {}
+    void set_parent_command() override;
     void set_argument_parser() override;
     void configure() override;
     void load_additional_packages() override;

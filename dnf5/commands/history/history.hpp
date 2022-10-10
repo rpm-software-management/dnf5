@@ -27,6 +27,7 @@ namespace dnf5 {
 class HistoryCommand : public Command {
 public:
     explicit HistoryCommand(Context & context) : Command(context, "history") {}
+    void set_parent_command() override;
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override;

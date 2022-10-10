@@ -27,6 +27,7 @@ namespace dnf5 {
 class ModuleCommand : public Command {
 public:
     explicit ModuleCommand(Context & context) : Command(context, "module") {}
+    void set_parent_command() override;
     void set_argument_parser() override;
     void register_subcommands() override;
     void pre_configure() override;

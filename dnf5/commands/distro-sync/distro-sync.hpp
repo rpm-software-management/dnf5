@@ -36,6 +36,7 @@ namespace dnf5 {
 class DistroSyncCommand : public Command {
 public:
     explicit DistroSyncCommand(Context & context) : Command(context, "distro-sync") {}
+    void set_parent_command() override;
     void set_argument_parser() override;
     void configure() override;
     void run() override;
