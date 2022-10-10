@@ -1,5 +1,5 @@
 [D-BUS Service]
 Name=org.rpm.dnf.v0
-Exec=/usr/bin/dnf5daemon-server
+Exec=/usr/sbin/dnf5daemon-server
 User=root
 SystemdService=dnf5daemon-server.service

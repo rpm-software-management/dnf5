@@ -25,7 +25,7 @@ target_link_libraries(
         Threads::Threads
 )
 
-install(TARGETS ${DNF5DAEMON_SERVER_BIN} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+install(TARGETS ${DNF5DAEMON_SERVER_BIN} RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR})
 
 add_subdirectory(polkit)
 add_subdirectory(dbus)
