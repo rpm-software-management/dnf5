@@ -34,6 +34,7 @@ namespace dnf5 {
 class SearchCommand : public Command {
 public:
     explicit SearchCommand(Context & context) : Command(context, "search") {}
+    void set_parent_command() override;
     void set_argument_parser() override;
     void run() override;
 

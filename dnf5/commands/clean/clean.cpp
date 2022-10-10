@@ -54,8 +54,13 @@ const CacheType CACHE_TYPES[]{
 
 using namespace libdnf::cli;
 
+void CleanCommand::set_parent_command() {
+    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * arg_parser_this_cmd = get_argument_parser_command();
+    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
+}
 
-CleanCommand::CleanCommand(Context & context) : Command(context, "clean") {
+void CleanCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
 
@@ -106,7 +111,6 @@ CleanCommand::CleanCommand(Context & context) : Command(context, "clean") {
 
     cmd.register_positional_arg(cache_types);
 }
-
 
 void CleanCommand::run() {
     auto & ctx = get_context();

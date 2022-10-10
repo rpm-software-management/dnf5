@@ -25,6 +25,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
+void AdvisoryCommand::set_parent_command() {
+    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * arg_parser_this_cmd = get_argument_parser_command();
+    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
+    arg_parser_parent_cmd->get_group("subcommands").register_argument(arg_parser_this_cmd);
+}
+
 void AdvisoryCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Manage advisories");
 }
