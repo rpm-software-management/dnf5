@@ -59,6 +59,9 @@ void ModuleSack::add(const std::string & file_content, const std::string & repo_
     ModuleMetadata md(get_base());
     try {
         md.add_metadata_from_string(file_content, 0);
+        // The second call to add_metadata_from_string is to load all metadata in to `p_impl->module_metadata` and use
+        // them later to get all defaults.
+        p_impl->module_metadata.add_metadata_from_string(file_content, 0);
     } catch (const ModuleResolveError & e) {
         throw ModuleResolveError(
             M_("Failed to load module metadata for repository \"{}\": {}"), repo_id, std::string(e.what()));

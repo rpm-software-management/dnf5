@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
 #define LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
 
+#include "module/module_metadata.hpp"
+
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/rpm/reldep_list.hpp"
 
@@ -32,7 +34,7 @@ namespace libdnf::module {
 
 class ModuleSack::Impl {
 public:
-    Impl(const BaseWeakPtr & base) : base(base), pool(pool_create()) {}
+    Impl(const BaseWeakPtr & base) : base(base), module_metadata(base), pool(pool_create()) {}
     ~Impl() { pool_free(pool); }
 
     const std::vector<std::unique_ptr<ModuleItem>> & get_modules();
@@ -68,6 +70,7 @@ private:
     friend ModuleItem;
 
     BaseWeakPtr base;
+    ModuleMetadata module_metadata;
     std::vector<std::unique_ptr<ModuleItem>> modules;
     Pool * pool;
     // Repositories containing any modules. Key is repoid, value is Id of the repo in libsolv.
