@@ -54,14 +54,6 @@ libdnf::cli::ArgumentParser & Session::get_argument_parser() {
 }
 
 
-void Session::register_root_command(std::unique_ptr<Command> && command) {
-    // register command as root command in argument parser
-    get_argument_parser().set_root_command(command->get_argument_parser_command());
-
-    add_and_initialize_command(std::move(command));
-}
-
-
 void Session::clear() {
     for (auto & cmd : commands) {
         cmd.reset();
