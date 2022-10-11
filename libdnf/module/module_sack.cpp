@@ -47,6 +47,9 @@ extern "C" {
 namespace libdnf::module {
 
 
+static const std::string EMPTY_RESULT;
+
+
 ModuleSack::ModuleSack(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
 ModuleSack::~ModuleSack() {}
 
@@ -151,6 +154,22 @@ ModuleSackWeakPtr ModuleSack::get_weak_ptr() {
 BaseWeakPtr ModuleSack::get_base() const {
     return p_impl->base;
 }
+
+
+const std::string & ModuleSack::get_default_stream(const std::string & name) const {
+    p_impl->module_defaults = p_impl->module_metadata.get_default_streams();
+    auto it = p_impl->module_defaults.find(name);
+    if (it == p_impl->module_defaults.end()) {
+        return EMPTY_RESULT;
+    }
+    return it->second;
+}
+
+
+std::vector<std::string> ModuleSack::get_default_profiles(std::string module_name, std::string module_stream) {
+    return p_impl->module_metadata.get_default_profiles(module_name, module_stream);
+}
+
 
 std::tuple<
     std::vector<std::string>,
