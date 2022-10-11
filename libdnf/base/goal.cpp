@@ -1121,12 +1121,14 @@ GoalProblem Goal::Impl::add_group_install_to_goal(
     comps::GroupQuery group_query(base, true);
     if (settings.group_with_id) {
         comps::GroupQuery group_query_id(base);
+        group_query_id.filter_installed(false);
         group_query_id.filter_groupid(spec, cmp);
         group_query |= group_query_id;
     }
     // TODO(mblaha): reconsider usefulness of searching groups by names
     if (settings.group_with_name) {
         comps::GroupQuery group_query_name(base);
+        group_query_name.filter_installed(false);
         group_query_name.filter_name(spec, cmp);
         group_query |= group_query_name;
     }
