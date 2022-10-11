@@ -123,7 +123,6 @@ BuildRequires:  pkgconfig(smartcols)
 
 %if %{with dnf5daemon_server}
 # required for dnf5daemon-server
-%{?systemd_requires}
 BuildRequires:  pkgconfig(sdbus-c++) >= 0.8.1
 BuildRequires:  systemd-rpm-macros
 %if %{with dnf5daemon_tests}
