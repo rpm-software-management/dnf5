@@ -505,6 +505,11 @@ const std::map<std::string, std::set<std::string>> & State::get_package_groups_c
 }
 
 
+std::filesystem::path State::get_group_xml_dir() {
+    return path / "comps_groups";
+}
+
+
 std::filesystem::path State::get_package_state_path() {
     return path / "packages.toml";
 }

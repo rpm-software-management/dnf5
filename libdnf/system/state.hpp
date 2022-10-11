@@ -151,6 +151,10 @@ public:
     /// @since 5.0
     std::vector<std::string> get_installed_groups();
 
+    /// @return The path to the directory containing the installed groups xml data.
+    /// @since 5.0
+    std::filesystem::path get_group_xml_dir();
+
     /// @return The state for a group id.
     /// @param id The group id to get the state for.
     /// @since 5.0
