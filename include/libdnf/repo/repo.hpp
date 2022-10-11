@@ -374,6 +374,7 @@ private:
     void make_solv_repo();
 
     void load_available_repo(libdnf::repo::LoadFlags flags);
+    void load_system_repo(libdnf::repo::LoadFlags flags);
 
     void internalize();
 

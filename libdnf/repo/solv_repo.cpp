@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "solv_repo.hpp"
 
+#include "base/base_impl.hpp"
 #include "repo_cache_private.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
@@ -273,6 +274,49 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
     if (config.build_cache().get_value()) {
         write_main(true);
+    }
+}
+
+
+void SolvRepo::load_system_repo_ext(RepodataType type) {
+    auto & logger = *base->get_logger();
+    auto & pool = get_pool(base);
+    int solvables_start = pool->nsolvables;
+    auto type_name = repodata_type_to_name(type);
+    int res = 0;
+    switch (type) {
+        case RepodataType::COMPS: {
+            // get installed groups from system state and load respective xml files
+            // to the libsolv pool
+            auto & system_state = base->p_impl->get_system_state();
+            auto comps_dir = system_state.get_group_xml_dir();
+            auto installed_groups = system_state.get_installed_groups();
+            for (const auto & group_id : installed_groups) {
+                auto ext_fn = comps_dir / (group_id + ".xml");
+                fs::File ext_file;
+                try {
+                    ext_file = fs::File(ext_fn, "r", true);
+                } catch (std::filesystem::filesystem_error & e) {
+                    logger.warning(
+                        "Cannot load {} extension for system repo from \"{}\": {}",
+                        type_name,
+                        ext_fn.string(),
+                        e.what());
+                    continue;
+                }
+                logger.debug("Loading {} extension for system repo from \"{}\"", type_name, ext_fn.string());
+                if ((res = repo_add_comps(repo, ext_file.get(), 0)) == 0) {
+                    comps_solvables_start = solvables_start;
+                    comps_solvables_end = pool->nsolvables;
+                }
+            }
+            break;
+        }
+        case RepodataType::FILELISTS:
+        case RepodataType::OTHER:
+        case RepodataType::PRESTO:
+        case RepodataType::UPDATEINFO:
+            throw SolvError(M_("Unsupported extended repodata type for the system repo: \"{}\"."), type_name);
     }
 }
 

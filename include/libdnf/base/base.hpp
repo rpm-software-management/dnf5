@@ -102,6 +102,7 @@ private:
     friend class libdnf::base::Transaction;
     friend class libdnf::rpm::Package;
     friend class libdnf::advisory::AdvisoryQuery;
+    friend class libdnf::repo::SolvRepo;
 
     WeakPtrGuard<Base, false> base_guard;
 

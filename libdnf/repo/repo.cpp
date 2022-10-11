@@ -236,7 +236,7 @@ void Repo::load(LoadFlags flags) {
     if (type == Type::AVAILABLE) {
         load_available_repo(flags);
     } else if (type == Type::SYSTEM) {
-        solv_repo->load_system_repo();
+        load_system_repo(flags);
     }
 
     solv_repo->set_needs_internalizing();
@@ -501,6 +501,15 @@ void Repo::load_available_repo(LoadFlags flags) {
 
     base->get_module_sack()->add(yaml_content, config.get_id());
 #endif
+}
+
+
+void Repo::load_system_repo(LoadFlags flags) {
+    solv_repo->load_system_repo();
+
+    if (any(flags & LoadFlags::COMPS)) {
+        solv_repo->load_system_repo_ext(RepodataType::COMPS);
+    }
 }
 
 
