@@ -79,6 +79,9 @@ public:
     /// TODO(jrohel): Performance: Implement libsolv cache ("build_cache" argument) of system repo in future.
     void load_system_repo(const std::string & rootdir = "");
 
+    /// Loads additional system repo metadata (comps, modules)
+    void load_system_repo_ext(RepodataType type);
+
     void rewrite_repo(libdnf::solv::IdQueue & fileprovides);
 
     // Internalize repository if needed.
