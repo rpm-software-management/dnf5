@@ -369,6 +369,15 @@ std::set<std::string> State::get_package_groups(const std::string & name) {
     }
 }
 
+std::vector<std::string> State::get_installed_groups() {
+    std::vector<std::string> group_ids;
+    group_ids.reserve(group_states.size());
+    for (const auto & grp : group_states) {
+        group_ids.push_back(grp.first);
+    }
+    return group_ids;
+}
+
 
 std::string State::get_module_enabled_stream(const std::string & name) {
     auto it = module_states.find(name);
