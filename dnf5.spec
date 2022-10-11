@@ -484,7 +484,7 @@ License:        LGPL-2.1-or-later
 Requires:       dnf5%{?_isa} = %{version}-%{release}
 
 %description -n dnf5-plugins
-DNF5 plugins.
+Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
 
 %files -n dnf5-plugins
 %{_libdir}/dnf5/plugins/*.so
