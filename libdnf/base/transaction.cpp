@@ -594,6 +594,8 @@ Transaction::TransactionRunResult Transaction::Impl::run(
         }
 
         // Set correct system state for groups in the transaction
+        auto comps_xml_dir = system_state.get_group_xml_dir();
+        std::filesystem::create_directories(comps_xml_dir);
         for (const auto & tsgroup : groups) {
             auto group = tsgroup.get_group();
             if (transaction_item_action_is_inbound(tsgroup.get_action())) {
@@ -616,6 +618,8 @@ Transaction::TransactionRunResult Transaction::Impl::run(
                     }
                 }
                 system_state.set_group_state(group.get_groupid(), state);
+                // save the current xml group definition
+                group.dump(comps_xml_dir / (group.get_groupid() + ".xml"));
             }
         }
 
