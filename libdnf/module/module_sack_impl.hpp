@@ -83,6 +83,8 @@ private:
     std::vector<std::unique_ptr<ModuleItem>> modules_without_static_context;
 
     bool provides_ready = false;
+
+    std::map<std::string, std::string> module_defaults;
 };
 
 inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_modules() {

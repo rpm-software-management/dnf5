@@ -154,7 +154,7 @@ std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> ModuleMetadata::
 
     std::vector<ModuleItem *> module_items;
     std::vector<ModuleItem *> module_items_without_static_context;
-    if (!resulting_module_index) {
+    if (!resulting_module_index) {  // no module metadata were added
         return std::make_pair(module_items, module_items_without_static_context);
     }
 
@@ -169,6 +169,51 @@ std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> ModuleMetadata::
     }
 
     return std::make_pair(module_items, module_items_without_static_context);
+}
+
+
+std::map<std::string, std::string> ModuleMetadata::get_default_streams() {
+    resolve_added_metadata();
+
+    std::map<std::string, std::string> default_streams;
+    if (!resulting_module_index) {  // no module metadata were added
+        return default_streams;
+    }
+
+    GHashTable * table = modulemd_module_index_get_default_streams_as_hash_table(resulting_module_index, NULL);
+    GHashTableIter iterator;
+    gpointer key, value;
+    g_hash_table_iter_init(&iterator, table);
+    while (g_hash_table_iter_next(&iterator, &key, &value)) {
+        default_streams[(char *)key] = (char *)value;
+    }
+    g_hash_table_unref(table);
+    return default_streams;
+}
+
+
+std::vector<std::string> ModuleMetadata::get_default_profiles(std::string module_name, std::string module_stream) {
+    resolve_added_metadata();
+
+    std::vector<std::string> default_profiles;
+    if (!resulting_module_index) {  // no module metadata were added
+        return default_profiles;
+    }
+
+    ModulemdDefaultsV1 * defaults = (ModulemdDefaultsV1 *)modulemd_module_get_defaults(
+        modulemd_module_index_get_module(resulting_module_index, module_name.c_str()));
+    if (!defaults) {
+        return default_profiles;
+    }
+
+    char ** list = modulemd_defaults_v1_get_default_profiles_for_stream_as_strv(defaults, module_stream.c_str(), NULL);
+
+    for (char ** iter = list; iter && *iter; iter++) {
+        default_profiles.emplace_back(*iter);
+    }
+
+    g_strfreev(list);
+    return default_profiles;
 }
 
 
