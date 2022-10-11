@@ -28,7 +28,9 @@ namespace dnfdaemon::client {
 
 class UpgradeCommand : public TransactionCommand {
 public:
-    explicit UpgradeCommand(Context & context);
+    explicit UpgradeCommand(Context & context) : TransactionCommand(context, "upgrade") {}
+    void set_parent_command() override;
+    void set_argument_parser() override;
     void run() override;
 
 private:

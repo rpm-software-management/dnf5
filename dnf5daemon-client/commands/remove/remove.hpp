@@ -28,7 +28,9 @@ namespace dnfdaemon::client {
 
 class RemoveCommand : public TransactionCommand {
 public:
-    explicit RemoveCommand(Context & context);
+    explicit RemoveCommand(Context & context) : TransactionCommand(context, "remove") {}
+    void set_parent_command() override;
+    void set_argument_parser() override;
     void run() override;
 
 private:

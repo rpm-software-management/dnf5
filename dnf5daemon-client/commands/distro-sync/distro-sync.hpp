@@ -28,7 +28,9 @@ namespace dnfdaemon::client {
 
 class DistroSyncCommand : public TransactionCommand {
 public:
-    explicit DistroSyncCommand(Context & context);
+    explicit DistroSyncCommand(Context & context) : TransactionCommand(context, "distro-sync") {}
+    void set_parent_command() override;
+    void set_argument_parser() override;
     void run() override;
 
 private:

@@ -33,8 +33,15 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-DowngradeCommand::DowngradeCommand(Context & context) : TransactionCommand(context, "downgrade") {
-    auto & parser = context.get_argument_parser();
+void DowngradeCommand::set_parent_command() {
+    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * arg_parser_this_cmd = get_argument_parser_command();
+    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
+    arg_parser_parent_cmd->get_group("software_management_commands").register_argument(arg_parser_this_cmd);
+}
+
+void DowngradeCommand::set_argument_parser() {
+    auto & parser = get_context().get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
     cmd.set_description("downgrade packages on the system");

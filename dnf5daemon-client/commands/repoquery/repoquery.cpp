@@ -37,8 +37,15 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-RepoqueryCommand::RepoqueryCommand(Context & context) : DaemonCommand(context, "repoquery") {
-    auto & parser = context.get_argument_parser();
+void RepoqueryCommand::set_parent_command() {
+    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * arg_parser_this_cmd = get_argument_parser_command();
+    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
+    arg_parser_parent_cmd->get_group("query_commands").register_argument(arg_parser_this_cmd);
+}
+
+void RepoqueryCommand::set_argument_parser() {
+    auto & parser = get_context().get_argument_parser();
     auto & cmd = *get_argument_parser_command();
 
     available_option = dynamic_cast<libdnf::OptionBool *>(
