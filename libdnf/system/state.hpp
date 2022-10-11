@@ -147,6 +147,10 @@ public:
     /// @since 5.0
     void remove_package_nevra_state(const std::string & nevra);
 
+    /// @return List of ids of installed groups.
+    /// @since 5.0
+    std::vector<std::string> get_installed_groups();
+
     /// @return The state for a group id.
     /// @param id The group id to get the state for.
     /// @since 5.0
