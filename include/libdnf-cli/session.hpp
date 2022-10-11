@@ -48,6 +48,10 @@ public:
     /// @since 5.0
     Command * get_root_command();
 
+    /// Set `command` as the root command that represents the main program.
+    /// @since 5.0
+    void set_root_command(Command & command);
+
     /// @return Selected (sub)command that a user specified on the command line.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0

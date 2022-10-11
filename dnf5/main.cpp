@@ -92,14 +92,10 @@ void register_group_with_args(
 class RootCommand : public Command {
 public:
     explicit RootCommand(libdnf::cli::session::Session & context) : Command(context, "dnf5") {}
-    void set_parent_command() override;
+    void set_parent_command() override { get_session().set_root_command(*this); }
     void set_argument_parser() override;
     void pre_configure() override { throw_missing_command(); }
 };
-
-void RootCommand::set_parent_command() {
-    get_session().get_argument_parser().set_root_command(this->get_argument_parser_command());
-}
 
 void RootCommand::set_argument_parser() {
     auto & ctx = get_context();

@@ -52,14 +52,10 @@ using namespace libdnf::cli;
 class RootCommand : public dnfdaemon::client::DaemonCommand {
 public:
     explicit RootCommand(Context & context) : dnfdaemon::client::DaemonCommand(context, "dnf5daemon-client") {}
-    void set_parent_command() override;
+    void set_parent_command() override { get_session().set_root_command(*this); }
     void set_argument_parser() override;
     void pre_configure() override { throw_missing_command(); }
 };
-
-void RootCommand::set_parent_command() {
-    get_session().get_argument_parser().set_root_command(this->get_argument_parser_command());
-}
 
 void RootCommand::set_argument_parser() {
     auto & ctx = static_cast<Context &>(get_session());
