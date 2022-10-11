@@ -48,11 +48,6 @@ public:
     /// @since 5.0
     Command * get_root_command();
 
-    /// Register `command` as the root command that represents the main program.
-    /// Session becomes owner of the `command`.
-    /// @since 5.0
-    void register_root_command(std::unique_ptr<Command> && command);
-
     /// @return Selected (sub)command that a user specified on the command line.
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
