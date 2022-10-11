@@ -71,4 +71,10 @@ void ModuleTest::test_load() {
         meson_checked = true;
     }
     CPPUNIT_ASSERT_EQUAL(true, meson_checked);
+
+    CPPUNIT_ASSERT_EQUAL(std::string(""), module_sack->get_default_stream("meson"));
+    CPPUNIT_ASSERT_EQUAL(std::string("main"), module_sack->get_default_stream("berries"));
+    CPPUNIT_ASSERT_EQUAL(0lu, module_sack->get_default_profiles("meson", "master").size());
+    CPPUNIT_ASSERT_EQUAL(1lu, module_sack->get_default_profiles("berries", "main").size());
+    CPPUNIT_ASSERT_EQUAL(std::string("minimal"), module_sack->get_default_profiles("berries", "main")[0]);
 }
