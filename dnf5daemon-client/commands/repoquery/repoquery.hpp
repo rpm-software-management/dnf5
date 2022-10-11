@@ -33,7 +33,9 @@ namespace dnfdaemon::client {
 
 class RepoqueryCommand : public DaemonCommand {
 public:
-    explicit RepoqueryCommand(Context & context);
+    explicit RepoqueryCommand(Context & context) : DaemonCommand(context, "repoquery") {}
+    void set_parent_command() override;
+    void set_argument_parser() override;
     void run() override;
     dnfdaemon::KeyValueMap session_config() override;
 

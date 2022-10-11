@@ -29,7 +29,9 @@ namespace dnfdaemon::client {
 
 class InstallCommand : public TransactionCommand {
 public:
-    explicit InstallCommand(Context & context);
+    explicit InstallCommand(Context & context) : TransactionCommand(context, "install") {}
+    void set_parent_command() override;
+    void set_argument_parser() override;
     void run() override;
 
 private:

@@ -26,7 +26,15 @@ namespace dnfdaemon::client {
 
 using namespace libdnf::cli;
 
-GroupCommand::GroupCommand(Context & context) : DaemonCommand(context, "group") {
+void GroupCommand::set_parent_command() {
+    auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
+    auto * arg_parser_this_cmd = get_argument_parser_command();
+    arg_parser_parent_cmd->register_command(arg_parser_this_cmd);
+    arg_parser_parent_cmd->get_group("subcommands").register_argument(arg_parser_this_cmd);
+}
+
+void GroupCommand::set_argument_parser() {
+    auto & context = get_context();
     auto & parser = context.get_argument_parser();
 
     auto & cmd = *get_argument_parser_command();
