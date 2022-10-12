@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_TRANSACTION_GROUP_HPP
 
 #include "libdnf/base/goal_elements.hpp"
+#include "libdnf/base/transaction.hpp"
 #include "libdnf/comps/group/group.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/transaction/transaction_item_action.hpp"
@@ -57,8 +58,8 @@ public:
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
     Reason get_reason() const noexcept { return reason; }
 
-public:
-    friend class Transaction;
+private:
+    friend class Transaction::Impl;
 
     TransactionGroup(const libdnf::comps::Group & grp, Action action, Reason reason)
         : group(grp),

@@ -288,12 +288,14 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
 
     // Add groups to the transaction
     for (auto & [group, action, reason] : solved_goal.list_groups()) {
-        groups.emplace_back(group, action, reason);
+        TransactionGroup tsgrp(group, action, reason);
+        groups.emplace_back(std::move(tsgrp));
     }
 
     // Add reason change actions to the transaction
     for (auto & [pkg, reason, group_id] : solved_goal.list_reason_changes()) {
-        packages.emplace_back(pkg, TransactionPackage::Action::REASON_CHANGE, reason, group_id);
+        TransactionPackage tspkg(pkg, TransactionPackage::Action::REASON_CHANGE, reason, group_id);
+        packages.emplace_back(std::move(tspkg));
     }
 }
 

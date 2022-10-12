@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include "libdnf/base/goal.hpp"
+#include "libdnf/base/transaction_package.hpp"
 #include "libdnf/repo/package_downloader.hpp"
 #include "libdnf/rpm/transaction_callbacks.hpp"
 
@@ -30,21 +31,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 CPPUNIT_TEST_SUITE_REGISTRATION(RpmTransactionTest);
 
 
-namespace {
-
-// make constructor public so we can create instances in the tests
-class TransactionPackage : public libdnf::base::TransactionPackage {
-public:
-    TransactionPackage(const libdnf::rpm::Package & pkg, Action action, Reason reason, State state)
-        : libdnf::base::TransactionPackage(pkg, action, reason) {
-        this->state = state;
-    }
-};
-
-}  // namespace
-
-
 using namespace libdnf::rpm;
+using namespace libdnf::transaction;
 
 
 class PackageDownloadCallbacks : public libdnf::repo::DownloadCallbacks {
@@ -84,11 +72,11 @@ void RpmTransactionTest::test_transaction() {
 
     auto transaction = goal.resolve();
 
-    std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
+    std::vector<libdnf::base::TransactionPackage> expected = {libdnf::base::TransactionPackage(
         get_pkg("one-0:2-1.noarch"),
-        libdnf::transaction::TransactionItemAction::INSTALL,
-        libdnf::transaction::TransactionItemReason::USER,
-        libdnf::transaction::TransactionItemState::STARTED)};
+        TransactionItemAction::INSTALL,
+        TransactionItemReason::USER,
+        TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 
     libdnf::repo::PackageDownloader downloader;
