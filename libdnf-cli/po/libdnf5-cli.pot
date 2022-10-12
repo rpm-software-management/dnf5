@@ -1,0 +1,123 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-12 15:37+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: argument_parser.cpp:63
+msgid "\"{}\" not allowed together with named argument \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:65
+msgid "\"{}\" not allowed in command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:67
+msgid "\"{}\" not allowed together with positional argument \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:77
+msgid "Argument id \"{}\" already registered in group \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:85
+msgid "Invalid character '.' in argument id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:200 argument_parser.cpp:205
+msgid "Too few values for positional argument \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:245
+msgid "Missing value for named argument \"--{}\""
+msgstr ""
+
+#: argument_parser.cpp:253
+msgid "Unexpected value for named argumend \"--{}\""
+msgstr ""
+
+#: argument_parser.cpp:297
+msgid "Missing value for named argument \"-{}\""
+msgstr ""
+
+#: argument_parser.cpp:433
+msgid "Command id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:444
+msgid "Named argument id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:454
+msgid "Positional argument id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:464
+msgid "Group id \"{}\" already registered for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:474
+msgid "Command id \"{}\" does not contain subcommand with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:482
+msgid "Command id \"{}\" does not contain named argument with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:490
+msgid "Command id \"{}\" does not contain positional argument with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:497
+msgid "Command id \"{}\" does not contain group with id \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:589 argument_parser.cpp:712
+msgid "Unknown argument \"{}\" for command \"{}\""
+msgstr ""
+
+#: argument_parser.cpp:599 argument_parser.cpp:722
+msgid "Missing positional argument \"{}\" for command \"{}\""
+msgstr ""
+
+#. print usage
+#: argument_parser.cpp:784
+msgid "Usage:"
+msgstr ""
+
+#: argument_parser.cpp:792
+msgid "Description:"
+msgstr ""
+
+#: argument_parser.cpp:1063
+msgid "Named argument with path id \"{}\" not found"
+msgstr ""
+
+#: argument_parser.cpp:1118
+msgid "Positional argument with path id \"{}\" not found"
+msgstr ""
+
+#: exception.cpp:29
+msgid "Operation aborted by the user."
+msgstr ""
+
+#: exception.cpp:32
+msgid "Failed to resolve the transaction"
+msgstr ""
+
+#: session.cpp:81
+msgid "Missing command"
+msgstr ""
