@@ -35,15 +35,15 @@ public:
         return nullptr;
     }
 
-    std::vector<std::unique_ptr<Command>> create_commands(Command & parent) override;
+    std::vector<std::unique_ptr<Command>> create_commands() override;
 
     void finish() noexcept override {}
 };
 
 
-std::vector<std::unique_ptr<Command>> BuildDepCmdPlugin::create_commands(Command & parent) {
+std::vector<std::unique_ptr<Command>> BuildDepCmdPlugin::create_commands() {
     std::vector<std::unique_ptr<Command>> commands;
-    commands.push_back(std::make_unique<BuildDepCommand>(parent.get_context()));
+    commands.push_back(std::make_unique<BuildDepCommand>(get_context()));
     return commands;
 }
 
