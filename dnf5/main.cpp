@@ -492,7 +492,7 @@ void RootCommand::register_subcommands() {
     auto & plugins = dnf5_plugins.get_plugins();
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
-            auto commands = plugin->get_iplugin()->create_commands(*this);
+            auto commands = plugin->get_iplugin()->create_commands();
             for (auto & command : commands) {
                 register_subcommand(std::move(command));
             }
@@ -568,6 +568,7 @@ int main(int argc, char * argv[]) try {
     if (std::filesystem::exists(plugins_directory) && std::filesystem::is_directory(plugins_directory)) {
         dnf5_plugins.load_plugins(plugins_directory);
     }
+    dnf5_plugins.init();
 
     // Register root command
     context.register_root_command(std::make_unique<dnf5::RootCommand>(context));

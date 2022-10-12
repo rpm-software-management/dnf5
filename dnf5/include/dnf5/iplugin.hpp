@@ -63,7 +63,7 @@ public:
     /// Plugin initialization.
     virtual void init() {}
 
-    virtual std::vector<std::unique_ptr<Command>> create_commands(Command & parent) = 0;
+    virtual std::vector<std::unique_ptr<Command>> create_commands() = 0;
 
     /// It is called when a hook is reached. The argument describes what happened.
     // TODO(jrohel): Design an API for a different plugin type than command. For example, to modify or log output.
