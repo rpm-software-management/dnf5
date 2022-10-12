@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_TRANSACTION_PACKAGE_HPP
 
 #include "libdnf/base/goal_elements.hpp"
+#include "libdnf/base/transaction.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/transaction/transaction_item_action.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
@@ -29,6 +30,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <optional>
 
+class BaseGoalTest;
+class RpmTransactionTest;
 
 namespace libdnf::base {
 
@@ -75,13 +78,21 @@ public:
     /// @return id of group the package belongs to
     const std::optional<std::string> & get_reason_change_group_id() const noexcept { return reason_change_group_id; }
 
-public:
-    friend class Transaction;
+private:
+    friend class Transaction::Impl;
+    friend class ::BaseGoalTest;
+    friend class ::RpmTransactionTest;
 
     TransactionPackage(const libdnf::rpm::Package & pkg, Action action, Reason reason)
         : package(pkg),
           action(action),
           reason(reason) {}
+
+    TransactionPackage(const libdnf::rpm::Package & pkg, Action action, Reason reason, State state)
+        : package(pkg),
+          action(action),
+          reason(reason),
+          state(state) {}
 
     TransactionPackage(
         const libdnf::rpm::Package & pkg, Action action, Reason reason, std::optional<std::string> group_id)

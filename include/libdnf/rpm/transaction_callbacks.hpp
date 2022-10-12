@@ -21,9 +21,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_RPM_TRANSACTION_CALLBACKS_HPP
 #define LIBDNF_RPM_TRANSACTION_CALLBACKS_HPP
 
-#include "libdnf/base/transaction_package.hpp"
+#include "libdnf/rpm/nevra.hpp"
 
 #include <cstdint>
+
+namespace libdnf::base {
+
+class TransactionGroup;
+class TransactionPackage;
+
+}  // namespace libdnf::base
 
 namespace libdnf::rpm {
 

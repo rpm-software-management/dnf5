@@ -25,14 +25,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/base/log_event.hpp"
 #include "libdnf/base/solver_problems.hpp"
-#include "libdnf/base/transaction_group.hpp"
-#include "libdnf/base/transaction_package.hpp"
 #include "libdnf/rpm/transaction_callbacks.hpp"
 
 #include <optional>
 
 
 namespace libdnf::base {
+
+class TransactionGroup;
+class TransactionPackage;
 
 /// Error related to processing transaction
 class TransactionError : public Error {
@@ -101,6 +102,8 @@ public:
     std::vector<std::string> get_transaction_problems() const noexcept;
 
 private:
+    friend class TransactionGroup;
+    friend class TransactionPackage;
     friend class libdnf::Goal;
 
     Transaction(const libdnf::BaseWeakPtr & base);

@@ -23,28 +23,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils.hpp"
 
 #include "libdnf/base/goal.hpp"
+#include "libdnf/base/transaction_package.hpp"
 
 #include <libdnf/rpm/package_query.hpp>
 
 
 CPPUNIT_TEST_SUITE_REGISTRATION(BaseGoalTest);
 
-
-namespace {
-
 using namespace libdnf::transaction;
-
-// make constructor public so we can create Package instances in the tests
-class TransactionPackage : public libdnf::base::TransactionPackage {
-public:
-    TransactionPackage(const libdnf::rpm::Package & pkg, Action action, Reason reason, State state)
-        : libdnf::base::TransactionPackage(pkg, action, reason) {
-        this->state = state;
-    }
-};
-
-}  // namespace
-
 
 void BaseGoalTest::setUp() {
     BaseTestCase::setUp();
@@ -57,7 +43,7 @@ void BaseGoalTest::test_install() {
     goal.add_rpm_install("pkg");
     auto transaction = goal.resolve();
 
-    std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
+    std::vector<libdnf::base::TransactionPackage> expected = {libdnf::base::TransactionPackage(
         get_pkg("pkg-0:1.2-3.x86_64"),
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER,
@@ -99,7 +85,7 @@ void BaseGoalTest::test_install_from_cmdline() {
 
     auto transaction = goal.resolve();
 
-    std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
+    std::vector<libdnf::base::TransactionPackage> expected = {libdnf::base::TransactionPackage(
         get_pkg("one-0:1-1.noarch", "@commandline"),
         TransactionItemAction::INSTALL,
         TransactionItemReason::USER,
@@ -117,12 +103,12 @@ void BaseGoalTest::test_install_multilib_all() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("multilib-0:1.2-4.i686"),
             TransactionItemAction::INSTALL,
             TransactionItemReason::USER,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("multilib-0:1.2-4.x86_64"),
             TransactionItemAction::INSTALL,
             TransactionItemReason::USER,
@@ -140,12 +126,12 @@ void BaseGoalTest::test_reinstall() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
@@ -165,12 +151,12 @@ void BaseGoalTest::test_reinstall_from_cmdline() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", "@commandline"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
@@ -188,12 +174,12 @@ void BaseGoalTest::test_reinstall_user() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::USER,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::USER,
@@ -209,7 +195,7 @@ void BaseGoalTest::test_remove() {
     goal.add_rpm_remove("one");
     auto transaction = goal.resolve();
 
-    std::vector<libdnf::base::TransactionPackage> expected = {TransactionPackage(
+    std::vector<libdnf::base::TransactionPackage> expected = {libdnf::base::TransactionPackage(
         get_pkg("one-0:1-1.noarch", true),
         TransactionItemAction::REMOVE,
         TransactionItemReason::USER,
@@ -269,12 +255,12 @@ void BaseGoalTest::test_upgrade() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
@@ -296,12 +282,12 @@ void BaseGoalTest::test_upgrade_from_cmdline() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:2-1.noarch", "@commandline"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
@@ -375,12 +361,12 @@ void BaseGoalTest::test_upgrade_all() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
@@ -400,12 +386,12 @@ void BaseGoalTest::test_upgrade_user() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:2-1.noarch"),
             TransactionItemAction::UPGRADE,
             TransactionItemReason::USER,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::USER,
@@ -425,12 +411,12 @@ void BaseGoalTest::test_downgrade() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
@@ -452,12 +438,12 @@ void BaseGoalTest::test_downgrade_from_cmdline() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", "@commandline"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
@@ -477,12 +463,12 @@ void BaseGoalTest::test_downgrade_user() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::USER,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::USER,
@@ -502,12 +488,12 @@ void BaseGoalTest::test_distrosync() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
@@ -527,12 +513,12 @@ void BaseGoalTest::test_distrosync_all() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::DOWNGRADE,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:2-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,
@@ -553,12 +539,12 @@ void BaseGoalTest::test_install_or_reinstall() {
     auto transaction = goal.resolve();
 
     std::vector<libdnf::base::TransactionPackage> expected = {
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch"),
             TransactionItemAction::REINSTALL,
             TransactionItemReason::DEPENDENCY,
             TransactionItemState::STARTED),
-        TransactionPackage(
+        libdnf::base::TransactionPackage(
             get_pkg("one-0:1-1.noarch", true),
             TransactionItemAction::REPLACED,
             TransactionItemReason::DEPENDENCY,

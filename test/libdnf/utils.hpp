@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/advisory/advisory_set.hpp"
 #include "libdnf/base/transaction.hpp"
+#include "libdnf/base/transaction_package.hpp"
 #include "libdnf/comps/environment/environment.hpp"
 #include "libdnf/comps/environment/query.hpp"
 #include "libdnf/comps/group/group.hpp"
