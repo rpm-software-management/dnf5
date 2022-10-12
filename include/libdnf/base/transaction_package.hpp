@@ -60,13 +60,6 @@ public:
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
     Reason get_reason() const noexcept { return reason; }
 
-    /// Set the reason of the action being performed on the transaction package.
-    ///
-    /// @param reason The reason to set.
-    //
-    // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setReason(libdnf::TransactionItemReason value)
-    void set_reason(Reason reason) { this->reason = reason; }
-
     /// @return packages replaced by this transaction package.
     const std::vector<rpm::Package> get_replaces() const noexcept { return replaces; }
 
@@ -101,6 +94,7 @@ private:
           reason(reason),
           reason_change_group_id(group_id) {}
 
+    void set_reason(Reason value) noexcept { reason = value; }
     void set_state(State value) noexcept { state = value; }
 
     libdnf::rpm::Package package;
