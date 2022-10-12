@@ -6,7 +6,8 @@ set(DNF5DAEMON_CLIENT_BIN dnf5daemon-client)
 file(GLOB_RECURSE DNF5DAEMON_CLIENT_SOURCES *.cpp)
 
 #set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"dnf5-daemon-client\")
+set(GETTEXT_DOMAIN dnf5daemon-client)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 include_directories(.)
 # TODO(mblaha) workround for dnf5daemon-client using server's headers, fix
@@ -27,3 +28,6 @@ target_link_libraries(
 )
 
 install(TARGETS ${DNF5DAEMON_CLIENT_BIN} RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR})
+
+
+add_subdirectory(po)

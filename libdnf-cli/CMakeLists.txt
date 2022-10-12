@@ -3,7 +3,8 @@ if(NOT WITH_LIBDNF5_CLI)
 endif()
 
 
-add_definitions(-DGETTEXT_DOMAIN=\"libdnf5-cli\")
+set(GETTEXT_DOMAIN libdnf5-cli)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 
 # use any sources found under the current directory
@@ -51,3 +52,6 @@ list(JOIN LIBDNF5_CLI_PC_REQUIRES_PRIVATE ", " LIBDNF5_CLI_PC_REQUIRES_PRIVATE_S
 # create a .pc file
 configure_file("libdnf-cli.pc.in" ${CMAKE_CURRENT_BINARY_DIR}/libdnf-cli.pc @ONLY)
 install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libdnf-cli.pc DESTINATION ${CMAKE_INSTALL_FULL_LIBDIR}/pkgconfig)
+
+
+add_subdirectory(po)

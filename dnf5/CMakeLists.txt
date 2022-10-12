@@ -5,7 +5,8 @@ endif()
 find_package(Threads)
 
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"dnf5\")
+set(GETTEXT_DOMAIN dnf5)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 # set LIBDIR, used to find the directory containing the dnf5 plugins
 add_definitions(-DLIBDIR=\"${CMAKE_INSTALL_FULL_LIBDIR}\")
@@ -43,3 +44,6 @@ install(FILES bash-completion/dnf5 DESTINATION ${BASH_COMPLETION_COMPLETIONSDIR}
 install(FILES "README.plugins" DESTINATION "${CMAKE_INSTALL_FULL_LIBDIR}/dnf5/plugins" RENAME "README")
 install(DIRECTORY "config/usr/" DESTINATION "${CMAKE_INSTALL_PREFIX}")
 install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}")
+
+
+add_subdirectory(po)

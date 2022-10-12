@@ -9,7 +9,8 @@ list(APPEND LIBDNF5_PC_REQUIRES)
 list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE)
 
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"libdnf5\")
+set(GETTEXT_DOMAIN libdnf5)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 # If defined, libsolv adds the prefix "dep_" to solvable dependencies.
 # As a result, `requires` is renamed to `dep_requires`.
@@ -116,3 +117,6 @@ install(FILES ${CMAKE_CURRENT_BINARY_DIR}/libdnf.pc DESTINATION ${CMAKE_INSTALL_
 
 # Makes an empty directory for libdnf cache
 install(DIRECTORY DESTINATION ${CMAKE_INSTALL_FULL_LOCALSTATEDIR}/cache/libdnf)
+
+
+add_subdirectory(po)
