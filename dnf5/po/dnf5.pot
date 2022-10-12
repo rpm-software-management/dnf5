@@ -1,0 +1,221 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2022-10-12 15:37+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: commands/advisory/advisory_info.hpp:33
+msgid "Print details about advisories"
+msgstr ""
+
+#: commands/advisory/advisory_list.hpp:33
+msgid "List advisories"
+msgstr ""
+
+#: commands/advisory/advisory_summary.cpp:39
+msgid "All"
+msgstr ""
+
+#: commands/advisory/advisory_summary.cpp:43
+msgid "Installed"
+msgstr ""
+
+#: commands/advisory/advisory_summary.cpp:47
+msgid "Updates"
+msgstr ""
+
+#: commands/advisory/advisory_summary.cpp:55
+msgid "Available"
+msgstr ""
+
+#: commands/advisory/advisory_summary.hpp:33
+msgid "Print summary of advisories"
+msgstr ""
+
+#: commands/advisory/arguments.hpp:35
+msgid "Show advisories containing any version of installed packages."
+msgstr ""
+
+#: commands/advisory/arguments.hpp:46
+msgid "Show advisories containing newer versions of installed packages."
+msgstr ""
+
+#: commands/advisory/arguments.hpp:58
+msgid ""
+"Show advisories containing equal and older versions of installed packages."
+msgstr ""
+
+#: commands/advisory/arguments.hpp:70
+msgid ""
+"Show advisories containing newer versions of installed packages for which a "
+"newer version is available."
+msgstr ""
+
+#: commands/advisory/arguments.hpp:83
+msgid ""
+"Show only advisories containing packages with specified names. List option, "
+"supports globs."
+msgstr ""
+
+#: commands/advisory/arguments.hpp:84
+msgid "PACKAGE_NAME,..."
+msgstr ""
+
+#: commands/advisory/arguments.hpp:91
+msgid "List of patterns matched against advisory names."
+msgstr ""
+
+#: commands/advisory/arguments.hpp:101
+msgid "Show only advisories referencing a bugzilla."
+msgstr ""
+
+#: commands/advisory/arguments.hpp:108
+msgid "Show only advisories referencing a CVE."
+msgstr ""
+
+#: commands/advisory_shared.hpp:114
+msgid ""
+"Consider only content contained in advisories with specified name. List "
+"option."
+msgstr ""
+
+#: commands/advisory_shared.hpp:115
+msgid "ADVISORY_NAME,..."
+msgstr ""
+
+#: commands/advisory_shared.hpp:122
+msgid "Consider only content contained in security advisories."
+msgstr ""
+
+#: commands/advisory_shared.hpp:129
+msgid "Consider only content contained in bugfix advisories."
+msgstr ""
+
+#: commands/advisory_shared.hpp:137
+msgid "Consider only content contained in enhancement advisories."
+msgstr ""
+
+#: commands/advisory_shared.hpp:145
+msgid "Consider only content contained in newpackage advisories."
+msgstr ""
+
+#: commands/advisory_shared.hpp:156
+msgid ""
+"Consider only content contained in advisories with specified severity. List "
+"option. Can be \"critical\", \"important\", \"moderate\", \"low\", \"none\"."
+msgstr ""
+
+#: commands/advisory_shared.hpp:158
+msgid "ADVISORY_SEVERITY,..."
+msgstr ""
+
+#: commands/advisory_shared.hpp:182
+msgid ""
+"Consider only content contained in advisories that fix a Bugzilla ID, Eg. "
+"123123. List option."
+msgstr ""
+
+#: commands/advisory_shared.hpp:183
+msgid "BUGZILLA_ID,..."
+msgstr ""
+
+#: commands/advisory_shared.hpp:193
+msgid ""
+"Consider only content contained in advisories that fix a CVE (Common "
+"Vulnerabilities and Exposures) ID, Eg. CVE-2201-0123. List option."
+msgstr ""
+
+#: commands/advisory_shared.hpp:195
+msgid "CVE_ID,..."
+msgstr ""
+
+#: commands/environment/arguments.hpp:34
+msgid "Show only available environments."
+msgstr ""
+
+#: commands/environment/arguments.hpp:41
+msgid "Show only installed environments."
+msgstr ""
+
+#: commands/environment/arguments.hpp:48
+msgid "Pattern matching environment IDs."
+msgstr ""
+
+#: commands/group/arguments.hpp:35
+msgid "Show only available groups."
+msgstr ""
+
+#: commands/group/arguments.hpp:42
+msgid "Show also hidden groups."
+msgstr ""
+
+#: commands/group/arguments.hpp:49
+msgid "Show only installed groups."
+msgstr ""
+
+#: commands/group/arguments.hpp:56
+msgid "Pattern matching group IDS."
+msgstr ""
+
+#: commands/group/arguments.hpp:65
+msgid "Include optional packages from group."
+msgstr ""
+
+#: commands/history/arguments.hpp:35
+msgid "Transaction ID"
+msgstr ""
+
+#: commands/history/arguments.hpp:42
+msgid "Reverse the order of transactions."
+msgstr ""
+
+#: commands/history/transaction_id.cpp:31
+msgid ""
+"Invalid transaction ID range \"{}\", \"ID\" or \"ID..ID\" expected, where ID "
+"is \"NUMBER\", \"last\" or \"last-NUMBER\"."
+msgstr ""
+
+#: commands/repo/arguments.hpp:36
+msgid "Show all repositories."
+msgstr ""
+
+#: commands/repo/arguments.hpp:43
+msgid "Show enabled repositories (default)."
+msgstr ""
+
+#: commands/repo/arguments.hpp:50
+msgid "Show disabled repositories."
+msgstr ""
+
+#: commands/repo/arguments.hpp:57
+msgid "Pattern matching repo IDs."
+msgstr ""
+
+#: commands/shared_options.hpp:33
+msgid "Allow erasing of installed packages to resolve problems"
+msgstr ""
+
+#: context.cpp:778
+msgid "Signature verification failed"
+msgstr ""
+
+#: library.cpp:34
+msgid "Cannot load shared library \"{}\": {}"
+msgstr ""
+
+#: library.cpp:49
+msgid "Cannot obtain address of symbol \"{}\": {}"
+msgstr ""
