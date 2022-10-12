@@ -6,7 +6,8 @@ set(DNF5DAEMON_SERVER_BIN dnf5daemon-server)
 file(GLOB_RECURSE DNF5DAEMON_SERVER_SOURCES *.cpp)
 
 # set gettext domain for translations
-add_definitions(-DGETTEXT_DOMAIN=\"dnf5-daemon-server\")
+set(GETTEXT_DOMAIN dnf5daemon-server)
+add_definitions(-DGETTEXT_DOMAIN=\"${GETTEXT_DOMAIN}\")
 
 include_directories(.)
 
@@ -27,5 +28,7 @@ target_link_libraries(
 
 install(TARGETS ${DNF5DAEMON_SERVER_BIN} RUNTIME DESTINATION ${CMAKE_INSTALL_SBINDIR})
 
+
 add_subdirectory(polkit)
 add_subdirectory(dbus)
+add_subdirectory(po)

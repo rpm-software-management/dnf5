@@ -6,6 +6,7 @@ include(VERSION.cmake)
 project(dnf5 LANGUAGES CXX C VERSION ${PROJECT_VERSION_MAJOR}.${PROJECT_VERSION_MINOR}.${PROJECT_VERSION_PATCH})
 cmake_policy(VERSION ${CMAKE_VERSION})
 
+set (CMAKE_MODULE_PATH "${CMAKE_MODULE_PATH};${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
 message("Building ${PROJECT_NAME} version ${PROJECT_VERSION}")
 
@@ -34,6 +35,9 @@ option(WITH_ZCHUNK "Build with zchunk delta compression support" ON)
 # build options - documentation
 option(WITH_HTML "Build HTML documentation" ON)
 option(WITH_MAN "Build man pages" ON)
+
+# build options - translations
+option(WITH_TRANSLATIONS "Build translations" ON)
 
 # build options - tests
 option(WITH_TESTS "Build tests" ON)
@@ -91,6 +95,12 @@ if(WITH_SANITIZERS)
     message(WARNING "Building with sanitizers enabled!")
     add_compile_options(-fsanitize=address -fsanitize=undefined -fsanitize=leak)
     link_libraries(asan ubsan)
+endif()
+
+if(WITH_TRANSLATIONS)
+    # define common command to generate the pot file from sources
+    list(APPEND XGETTEXT_COMMAND xgettext -F --from-code=UTF-8 --keyword=_ --keyword=M_ --keyword=P_:1,2 --keyword=MP_:1,2 --keyword=C_:1c,2 --keyword=MC_:1c,2 --keyword=CP_:1c,2,3 --keyword=MCP_:1c,2,3 -c)
+    add_custom_target(gettext-potfiles)
 endif()
 
 
