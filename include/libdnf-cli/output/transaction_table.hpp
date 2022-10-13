@@ -384,10 +384,12 @@ bool print_transaction_table(Transaction & transaction) {
         if (tspkg.get_action() == libdnf::transaction::TransactionItemAction::REASON_CHANGE) {
             auto replaced_color = action_color(libdnf::transaction::TransactionItemAction::REPLACED);
             struct libscols_line * ln_reason = scols_table_new_line(tb, ln);
-            std::string reason{"-> "};
-            reason.append(libdnf::transaction::transaction_item_reason_to_string(tspkg.get_reason()));
-            scols_line_set_data(ln_reason, COL_EVR, reason.c_str());
-            scols_cell_set_color(scols_line_get_cell(ln_reason, COL_EVR), replaced_color);
+            std::string reason = fmt::format(
+                "{} -> {}",
+                libdnf::transaction::transaction_item_reason_to_string(pkg.get_reason()),
+                libdnf::transaction::transaction_item_reason_to_string(tspkg.get_reason()));
+            scols_line_set_data(ln_reason, COL_NAME, reason.c_str());
+            scols_cell_set_color(scols_line_get_cell(ln_reason, COL_NAME), replaced_color);
         }
         for (auto & replaced : tspkg.get_replaces()) {
             // highlight incoming packages with epoch/version change
