@@ -1202,6 +1202,17 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
         }
     }
     for (const auto & pkg : query) {
+        if (pkg.get_reason() == reason) {
+            // pkg is already installed with correct reason
+            transaction.p_impl->add_resolve_log(
+                GoalAction::REASON_CHANGE,
+                GoalProblem::ALREADY_INSTALLED,
+                settings,
+                pkg.get_nevra(),
+                {libdnf::transaction::transaction_item_reason_to_string(reason)},
+                false);
+            continue;
+        }
         rpm_goal.add_reason_change(pkg, reason, group_id);
     }
     return GoalProblem::NO_PROBLEM;
