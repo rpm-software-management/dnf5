@@ -121,7 +121,12 @@ std::string LogEvent::to_string(
             if (additional_data->size() != 1) {
                 throw std::invalid_argument("Incorrect number of elements for ALREADY_INSTALLED");
             }
-            return ret.append(utils::sformat(_("Package \"{}\" is already installed."), *additional_data->begin()));
+            if (action == GoalAction::REASON_CHANGE) {
+                return ret.append(utils::sformat(
+                    _("Package \"{}\" is already installed with reason \"{}\"."), *spec, *additional_data->begin()));
+            } else {
+                return ret.append(utils::sformat(_("Package \"{}\" is already installed."), *additional_data->begin()));
+            }
         case GoalProblem::SOLVER_ERROR:
         case GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT:
             if (!solver_problems) {
