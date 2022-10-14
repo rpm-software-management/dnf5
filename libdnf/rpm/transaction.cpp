@@ -553,11 +553,6 @@ void * Transaction::ts_callback(
                 callbacks->uninstall_stop(*item, amount, total);
             }
             break;
-        case RPMCALLBACK_REPACKAGE_PROGRESS:  // obsolete, unused
-        case RPMCALLBACK_REPACKAGE_START:     // obsolete, unused
-        case RPMCALLBACK_REPACKAGE_STOP:      // obsolete, unused
-            logger.warning("Got RPMCALLBACK_REPACKAGE_* obsolete callback");
-            break;
         case RPMCALLBACK_UNPACK_ERROR:
             libdnf_assert_transaction_item_set();
             logger.error(
@@ -651,8 +646,9 @@ void * Transaction::ts_callback(
                 callbacks->verify_stop(total);
             }
             break;
-        case RPMCALLBACK_UNKNOWN:
-            logger.warning("Unknown RPM Transaction callback type: RPMCALLBACK_UNKNOWN");
+        default:
+            logger.warning("Unknown RPM Transaction callback type {}", what);
+            break;
     }
 
     return rc;
