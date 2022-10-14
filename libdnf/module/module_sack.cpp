@@ -66,7 +66,6 @@ void ModuleSack::add(const std::string & file_content, const std::string & repo_
         throw ModuleResolveError(
             M_("Failed to load module metadata for repository \"{}\": {}"), repo_id, std::string(e.what()));
     }
-    md.resolve_added_metadata();
 
     Repo * repo;
     auto repo_pair = p_impl->repositories.find(repo_id);
