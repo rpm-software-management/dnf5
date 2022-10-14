@@ -91,6 +91,10 @@ endif()
 add_definitions(-DPROJECT_BINARY_DIR="${PROJECT_BINARY_DIR}")
 add_definitions(-DPROJECT_SOURCE_DIR="${PROJECT_SOURCE_DIR}")
 
+add_definitions(-DPROJECT_VERSION_MAJOR=${PROJECT_VERSION_MAJOR})
+add_definitions(-DPROJECT_VERSION_MINOR=${PROJECT_VERSION_MINOR})
+add_definitions(-DPROJECT_VERSION_PATCH=${PROJECT_VERSION_PATCH})
+
 if(WITH_SANITIZERS)
     message(WARNING "Building with sanitizers enabled!")
     add_compile_options(-fsanitize=address -fsanitize=undefined -fsanitize=leak)
