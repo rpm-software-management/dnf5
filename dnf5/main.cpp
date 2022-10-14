@@ -54,6 +54,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/common/xdg.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
 #include <libdnf/logger/stream_logger.hpp>
+#include <libdnf/version.hpp>
 #include <string.h>
 
 #include <algorithm>
@@ -435,6 +436,13 @@ void RootCommand::set_argument_parser() {
         global_options_group->register_argument(debug_solver);
     }
 
+    {
+        auto version = parser.add_new_named_arg("version");
+        version->set_long_name("version");
+        version->set_description("Show DNF5 version and exit");
+        global_options_group->register_argument(version);
+    }
+
     register_group_with_args(cmd, *global_options_group);
 
     parser.set_inherit_named_args(true);
@@ -496,6 +504,40 @@ void RootCommand::register_subcommands() {
     load_cmdline_aliases(context, libdnf::xdg::get_user_config_dir() / "dnf5/aliases.d");
 }
 
+static void print_versions(Context & context) {
+    constexpr const char * appl_name = "dnf5";
+    {
+        const auto & version = get_application_version();
+        std::cout << fmt::format("{} version {}.{}.{}", appl_name, version.major, version.minor, version.micro)
+                  << std::endl;
+        const auto & api_version = get_plugin_api_version();
+        std::cout << fmt::format("{} plugin API version {}.{}", appl_name, api_version.major, api_version.minor)
+                  << std::endl;
+    }
+    {
+        const auto & version = libdnf::get_library_version();
+        std::cout << fmt::format("libdnf5 version {}.{}.{}", version.major, version.minor, version.micro) << std::endl;
+        const auto & api_version = libdnf::get_plugin_api_version();
+        std::cout << fmt::format("libdnf5 plugin API version {}.{}", api_version.major, api_version.minor) << std::endl;
+    }
+
+    bool first{true};
+    for (const auto & plugin : context.get_plugins().get_plugins()) {
+        if (first) {
+            first = false;
+            std::cout << fmt::format("\nLoaded {} plugins:", appl_name) << std::endl;
+        } else {
+            std::cout << std::endl;
+        }
+        auto * iplugin = plugin->get_iplugin();
+        std::cout << fmt::format("  name: {}", iplugin->get_name()) << std::endl;
+        const auto & version = iplugin->get_version();
+        std::cout << fmt::format("  version: {}.{}.{}", version.major, version.minor, version.micro) << std::endl;
+        const auto & api_version = iplugin->get_api_version();
+        std::cout << fmt::format("  API version: {}.{}", api_version.major, api_version.minor) << std::endl;
+    }
+}
+
 }  // namespace dnf5
 
 int main(int argc, char * argv[]) try {
@@ -542,7 +584,6 @@ int main(int argc, char * argv[]) try {
 
     // Parse command line arguments
     {
-        const auto & help = context.get_argument_parser().get_named_arg("help", false);
         try {
             context.get_argument_parser().parse(argc, argv);
         } catch (libdnf::cli::ArgumentParserUnknownArgumentError & ex) {
@@ -551,14 +592,18 @@ int main(int argc, char * argv[]) try {
             context.get_argument_parser().get_selected_command()->help();
             return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
         } catch (const std::exception & ex) {
-            if (help.get_parse_count() == 0) {
-                std::cout << ex.what() << std::endl;
-                return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
-            }
+            std::cout << ex.what() << std::endl;
+            return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
         }
 
+        auto & arg_parser = context.get_argument_parser();
+        // print version of program if --version was used
+        if (arg_parser.get_named_arg("version", false).get_parse_count() > 0) {
+            dnf5::print_versions(context);
+            return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+        }
         // print help of the selected command if --help was used
-        if (help.get_parse_count() > 0) {
+        if (arg_parser.get_named_arg("help", false).get_parse_count() > 0) {
             context.get_argument_parser().get_selected_command()->help();
             return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
         }
