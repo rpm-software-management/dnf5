@@ -113,11 +113,12 @@ void ModuleMetadata::add_metadata_from_string(const std::string & yaml, int prio
 
     modulemd_module_index_merger_associate_index(module_merger, module_index, priority);
     g_object_unref(module_index);
+    metadata_resolved = false;
 }
 
 
 void ModuleMetadata::resolve_added_metadata() {
-    if (!module_merger) {
+    if (metadata_resolved || !module_merger) {
         return;
     }
 
@@ -142,11 +143,15 @@ void ModuleMetadata::resolve_added_metadata() {
         throw ModuleResolveError(M_("Failed to upgrade streams: {}"), error->message);
     }
     g_clear_pointer(&module_merger, g_object_unref);
+
+    metadata_resolved = true;
 }
 
 
 std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> ModuleMetadata::get_all_module_items(
     const ModuleSackWeakPtr & module_sack, const std::string & repo_id) {
+    resolve_added_metadata();
+
     std::vector<ModuleItem *> module_items;
     std::vector<ModuleItem *> module_items_without_static_context;
     if (!resulting_module_index) {

@@ -51,6 +51,8 @@ private:
     ModulemdModuleIndex * resulting_module_index{nullptr};
     ModulemdModuleIndexMerger * module_merger{nullptr};
 
+    bool metadata_resolved = false;
+
     BaseWeakPtr get_base() const;
 
     void add_metadata_from_string(const std::string & yaml, int priority);
