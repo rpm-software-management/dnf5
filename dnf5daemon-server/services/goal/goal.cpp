@@ -78,7 +78,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     if (transaction.get_problems() == libdnf::GoalProblem::NO_PROBLEM) {
         // return the transaction only if there were no problems
         std::vector<std::string> attr{
-            "name", "epoch", "version", "release", "arch", "repo", "package_size", "install_size", "evr"};
+            "name", "epoch", "version", "release", "arch", "repo", "package_size", "install_size", "evr", "reason"};
         for (auto & tspkg : transaction.get_transaction_packages()) {
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
                 static_cast<uint32_t>(tspkg.get_action()), package_to_map(tspkg.get_package(), attr)));
