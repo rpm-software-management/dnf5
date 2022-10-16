@@ -9,7 +9,7 @@ using namespace dnf5;
 namespace {
 
 constexpr const char * PLUGIN_NAME{"builddep"};
-constexpr PluginVersion PLUGIN_VERSION{.major = 0, .minor = 1, .micro = 0};
+constexpr PluginVersion PLUGIN_VERSION{.major = 1, .minor = 0, .micro = 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Marek Blaha", "mblaha@redhat.com", "builddep command."};
