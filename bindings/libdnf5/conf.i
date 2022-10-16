@@ -29,10 +29,13 @@
     #include "libdnf/common/weak_ptr.hpp"
     #include "libdnf/logger/log_router.hpp"
     #include "libdnf/logger/memory_buffer_logger.hpp"
+    #include "libdnf/version.hpp"
 %}
 
 #define CV __perl_CV
 #define final
+
+%include "libdnf/version.hpp"
 
 %ignore libdnf::OptionError;
 %ignore libdnf::OptionInvalidValueError;

@@ -37,12 +37,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <utility>
 #include <vector>
 
-using namespace libdnf::plugin;
+using namespace libdnf;
 
 namespace {
 
 constexpr const char * PLUGIN_NAME = "actions";
-constexpr PluginVersion PLUGIN_VERSION{0, 1, 0};
+constexpr plugin::Version PLUGIN_VERSION{0, 1, 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
 constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Actions Plugin."};
@@ -66,16 +66,16 @@ struct CommandToRun {
 };
 
 
-class Actions : public IPlugin {
+class Actions : public plugin::IPlugin {
 public:
     Actions(libdnf::Base & base, libdnf::ConfigParser &) : base(base) {}
     virtual ~Actions() = default;
 
-    APIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
+    PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
 
     const char * get_name() const noexcept override { return PLUGIN_NAME; }
 
-    PluginVersion get_version() const noexcept override { return PLUGIN_VERSION; }
+    plugin::Version get_version() const noexcept override { return PLUGIN_VERSION; }
 
     const char * const * get_attributes() const noexcept override { return attrs; }
 
@@ -714,7 +714,7 @@ void Actions::on_transaction(const libdnf::base::Transaction & transaction, cons
 
 }  // namespace
 
-APIVersion libdnf_plugin_get_api_version(void) {
+PluginAPIVersion libdnf_plugin_get_api_version(void) {
     return PLUGIN_API_VERSION;
 }
 
@@ -722,17 +722,17 @@ const char * libdnf_plugin_get_name(void) {
     return PLUGIN_NAME;
 }
 
-PluginVersion libdnf_plugin_get_version(void) {
+plugin::Version libdnf_plugin_get_version(void) {
     return PLUGIN_VERSION;
 }
 
-IPlugin * libdnf_plugin_new_instance(
-    [[maybe_unused]] APIVersion api_version, libdnf::Base & base, libdnf::ConfigParser & parser) try {
+plugin::IPlugin * libdnf_plugin_new_instance(
+    [[maybe_unused]] LibraryVersion library_version, libdnf::Base & base, libdnf::ConfigParser & parser) try {
     return new Actions(base, parser);
 } catch (...) {
     return nullptr;
 }
 
-void libdnf_plugin_delete_instance(IPlugin * plugin_object) {
+void libdnf_plugin_delete_instance(plugin::IPlugin * plugin_object) {
     delete plugin_object;
 }

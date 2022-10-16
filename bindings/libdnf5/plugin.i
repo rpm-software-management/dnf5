@@ -12,6 +12,8 @@
 
 %include <shared.i>
 
+%import "conf.i"
+
 %{
     #include "libdnf/plugin/iplugin.hpp"
     #include "libdnf/plugin/plugins.hpp"
