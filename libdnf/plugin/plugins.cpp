@@ -54,23 +54,25 @@ PluginLibrary::PluginLibrary(Base & base, const std::string & library_path) : li
     get_api_version = reinterpret_cast<TGetApiVersionFunc>(library.get_address("libdnf_plugin_get_api_version"));
     get_name = reinterpret_cast<TGetNameFunc>(library.get_address("libdnf_plugin_get_name"));
 
-    auto api_version = get_api_version();
-    if (api_version.major != PLUGIN_API_VERSION.major || api_version.minor > PLUGIN_API_VERSION.minor) {
+    const auto & libdnf_plugin_api_version = libdnf::get_plugin_api_version();
+    const auto & plugin_api_version = get_api_version();
+    if (plugin_api_version.major != libdnf_plugin_api_version.major ||
+        plugin_api_version.minor > libdnf_plugin_api_version.minor) {
         throw PluginError(
             M_("Unsupported plugin API combination. API version required by plugin \"{}\" (\"{}\") is \"{}.{}\"."
                " API version in libdnf is \"{}.{}\"."),
             get_name(),
             library_path,
-            api_version.major,
-            api_version.minor,
-            PLUGIN_API_VERSION.major,
-            PLUGIN_API_VERSION.minor);
+            plugin_api_version.major,
+            plugin_api_version.minor,
+            libdnf_plugin_api_version.major,
+            libdnf_plugin_api_version.minor);
     }
 
     get_version = reinterpret_cast<TGetVersionFunc>(library.get_address("libdnf_plugin_get_version"));
     new_instance = reinterpret_cast<TNewInstanceFunc>(library.get_address("libdnf_plugin_new_instance"));
     delete_instance = reinterpret_cast<TDeleteInstanceFunc>(library.get_address("libdnf_plugin_delete_instance"));
-    iplugin_instance = new_instance(PLUGIN_API_VERSION, base, cfg_parser);
+    iplugin_instance = new_instance(libdnf::get_library_version(), base, cfg_parser);
 }
 
 PluginLibrary::~PluginLibrary() {
