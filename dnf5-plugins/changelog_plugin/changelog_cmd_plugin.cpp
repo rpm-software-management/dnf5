@@ -8,11 +8,11 @@ using namespace dnf5;
 
 namespace {
 
-constexpr const char * PLUGIN_NAME{"dnf5_test_plugin"};
-constexpr PluginVersion PLUGIN_VERSION{.major = 0, .minor = 1, .micro = 0};
+constexpr const char * PLUGIN_NAME{"changelog"};
+constexpr PluginVersion PLUGIN_VERSION{.major = 1, .minor = 0, .micro = 0};
 
 constexpr const char * attrs[]{"author.name", "author.email", "description", nullptr};
-constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Test plugin."};
+constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "changelog command."};
 
 class ChangelogCmdPlugin : public IPlugin {
 public:
