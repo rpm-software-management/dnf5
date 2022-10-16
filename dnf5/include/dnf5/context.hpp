@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_CONTEXT_HPP
 #define DNF5_CONTEXT_HPP
 
+#include "version.hpp"
 
 #include <libdnf-cli/argument_parser.hpp>
 #include <libdnf-cli/session.hpp>
@@ -38,8 +39,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace dnf5 {
 
 class Plugins;
-
-constexpr const char * VERSION = "0.1.0";
 
 class Context : public libdnf::cli::session::Session {
 public:
