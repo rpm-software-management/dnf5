@@ -16,7 +16,7 @@ constexpr const char * attrs_value[]{"Marek Blaha", "mblaha@redhat.com", "buildd
 
 class BuildDepCmdPlugin : public IPlugin {
 public:
-    APIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
+    PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
 
     const char * get_name() const noexcept override { return PLUGIN_NAME; }
 
@@ -54,7 +54,7 @@ std::vector<std::unique_ptr<Command>> BuildDepCmdPlugin::create_commands(Command
 }  // namespace
 
 
-APIVersion dnf5_plugin_get_api_version(void) {
+PluginAPIVersion dnf5_plugin_get_api_version(void) {
     return PLUGIN_API_VERSION;
 }
 
@@ -66,7 +66,7 @@ PluginVersion dnf5_plugin_get_version(void) {
     return PLUGIN_VERSION;
 }
 
-IPlugin * dnf5_plugin_new_instance([[maybe_unused]] APIVersion api_version) try {
+IPlugin * dnf5_plugin_new_instance([[maybe_unused]] ApplicationVersion application_version) try {
     return new BuildDepCmdPlugin;
 } catch (...) {
     return nullptr;

@@ -25,14 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <cstdint>
 #include <vector>
 
-
 namespace dnf5 {
-
-/// Plugin API version
-struct APIVersion {
-    std::uint16_t major;  // dnf5 and the plugin must implement the same `major` version to work together
-    std::uint16_t minor;  // dnf5 must implement the `minor` version >= than the plugin to work together
-};
 
 /// Plugin version
 struct PluginVersion {
@@ -40,8 +33,6 @@ struct PluginVersion {
     std::uint16_t minor;
     std::uint16_t micro;
 };
-
-static constexpr APIVersion PLUGIN_API_VERSION{.major = 0, .minor = 1};
 
 class IPlugin {
 public:
@@ -54,7 +45,7 @@ public:
     IPlugin & operator=(IPlugin &&) = delete;
 
     /// @return The version of the API required by the plugin.
-    virtual APIVersion get_api_version() const noexcept = 0;
+    virtual PluginAPIVersion get_api_version() const noexcept = 0;
 
     /// @return The name of the plugin.
     virtual const char * get_name() const noexcept = 0;
@@ -89,7 +80,7 @@ extern "C" {
 
 /// Returns the version of the API required by the plugin.
 /// Same result as IPlugin::get_api_version(), but can be called without creating an IPlugin instance.
-dnf5::APIVersion dnf5_plugin_get_api_version(void);
+dnf5::PluginAPIVersion dnf5_plugin_get_api_version(void);
 
 /// Returns the name of the plugin. It can be called at any time.
 /// Same result as IPlugin::get_name(), but can be called without creating an IPlugin instance.
@@ -100,7 +91,7 @@ const char * dnf5_plugin_get_name(void);
 dnf5::PluginVersion dnf5_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
-dnf5::IPlugin * dnf5_plugin_new_instance(dnf5::APIVersion api_version);
+dnf5::IPlugin * dnf5_plugin_new_instance(dnf5::ApplicationVersion application_version);
 
 /// Deletes plugin instance.
 void dnf5_plugin_delete_instance(dnf5::IPlugin * plugin_instance);
