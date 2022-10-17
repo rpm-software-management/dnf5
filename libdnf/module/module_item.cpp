@@ -356,4 +356,14 @@ void ModuleItem::create_dependencies() const {
 }
 
 
+void ModuleItem::create_solvable_and_dependencies() {
+    module_sack->p_impl->provides_ready = false;
+    create_solvable();
+    create_dependencies();
+
+    // TODO(pkratoch): Implement this call (must be called lazy, before constructing goal or creating query for provides)
+    // dnf_sack_set_considered_to_update(moduleSack);
+}
+
+
 }  // namespace libdnf::module

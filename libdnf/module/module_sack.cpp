@@ -82,6 +82,7 @@ void ModuleSack::add(const std::string & file_content, const std::string & repo_
     // Store module items with static context
     for (auto const & module_item_ptr : items.first) {
         std::unique_ptr<ModuleItem> module_item(module_item_ptr);
+        module_item->create_solvable_and_dependencies();
         p_impl->modules.push_back(std::move(module_item));
     }
     // Store module items without static context
@@ -115,6 +116,7 @@ void ModuleSack::Impl::add_modules_without_static_context() {
             auto context_iterator = stream_iterator->second.find(requires_string);
             if (context_iterator != stream_iterator->second.end()) {
                 module_item->computed_static_context = context_iterator->second[0]->get_context();
+                module_item->create_solvable_and_dependencies();
                 modules.push_back(std::move(module_item));
                 continue;
             }
@@ -126,23 +128,10 @@ void ModuleSack::Impl::add_modules_without_static_context() {
             requires_string.append("NoRequires");
         }
         module_item->computed_static_context = requires_string;
+        module_item->create_solvable_and_dependencies();
         modules.push_back(std::move(module_item));
     }
     modules_without_static_context.clear();
-    create_module_solvables();
-}
-
-
-void ModuleSack::Impl::create_module_solvables() {
-    provides_ready = false;
-    for (auto const & module_item : modules) {
-        module_item->create_solvable();
-        module_item->create_dependencies();
-    }
-
-    // TODO(pkratoch): Implement these calls (must be called lazy, before constructing goal or creating query for provides)
-    // dnf_sack_set_provides_not_ready(moduleSack);
-    // dnf_sack_set_considered_to_update(moduleSack);
 }
 
 
