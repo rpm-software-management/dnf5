@@ -61,8 +61,6 @@ public:
     // Compute static context for older modules and move these modules to `ModuleSack.modules`.
     void add_modules_without_static_context();
 
-    void create_module_solvables();
-
     void make_provides_ready();
 
 private:

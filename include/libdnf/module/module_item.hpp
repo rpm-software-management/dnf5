@@ -217,6 +217,7 @@ private:
     ///     Description: $name:$stream
     void create_solvable();
     void create_dependencies() const;
+    void create_solvable_and_dependencies();
 
     // Corresponds to one yaml document
     _ModulemdModuleStream * md_stream;
