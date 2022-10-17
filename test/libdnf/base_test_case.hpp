@@ -72,6 +72,7 @@ public:
 
     libdnf::repo::RepoSackWeakPtr repo_sack;
     libdnf::rpm::PackageSackWeakPtr sack;
+    std::string test_arch;
 
 private:
     libdnf::rpm::Package first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what);

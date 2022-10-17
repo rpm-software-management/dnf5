@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <filesystem>
 #include <set>
+#include <string>
 #include <vector>
 
 
@@ -71,8 +72,8 @@ void RpmPackageQueryTest::test_filter_latest_evr() {
         query.filter_latest_evr(1);
         std::vector<Package> expected = {
             get_pkg("pkg-0:1.2-3.src"),
-            get_pkg("pkg-0:1.2-3.x86_64"),
-            get_pkg("pkg-libs-1:1.3-4.x86_64"),
+            get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+            get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch),
             get_pkg("pkg-0:1-24.noarch"),
             get_pkg_i("cmdline-0:1.2-3.noarch", 0),
             get_pkg_i("cmdline-0:1.2-3.noarch", 1)};
@@ -83,9 +84,9 @@ void RpmPackageQueryTest::test_filter_latest_evr() {
         query.filter_latest_evr(2);
         std::vector<Package> expected = {
             get_pkg("pkg-0:1.2-3.src"),
-            get_pkg("pkg-0:1.2-3.x86_64"),
-            get_pkg("pkg-libs-1:1.2-4.x86_64"),
-            get_pkg("pkg-libs-1:1.3-4.x86_64"),
+            get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+            get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+            get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch),
             get_pkg("pkg-0:1-23.noarch"),
             get_pkg("pkg-0:1-24.noarch"),
             get_pkg_i("cmdline-0:1.2-3.noarch", 0),
@@ -96,14 +97,30 @@ void RpmPackageQueryTest::test_filter_latest_evr() {
         PackageQuery query(base);
         query.filter_latest_evr(-1);
         std::vector<Package> expected = {
-            get_pkg("pkg-libs-0:1.2-3.x86_64"), get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-0:1-1.noarch"),
-            get_pkg("pkg-0:1-2.noarch"),        get_pkg("pkg-0:1-3.noarch"),        get_pkg("pkg-0:1-4.noarch"),
-            get_pkg("pkg-0:1-5.noarch"),        get_pkg("pkg-0:1-6.noarch"),        get_pkg("pkg-0:1-7.noarch"),
-            get_pkg("pkg-0:1-8.noarch"),        get_pkg("pkg-0:1-9.noarch"),        get_pkg("pkg-0:1-10.noarch"),
-            get_pkg("pkg-0:1-11.noarch"),       get_pkg("pkg-0:1-12.noarch"),       get_pkg("pkg-0:1-13.noarch"),
-            get_pkg("pkg-0:1-14.noarch"),       get_pkg("pkg-0:1-15.noarch"),       get_pkg("pkg-0:1-16.noarch"),
-            get_pkg("pkg-0:1-17.noarch"),       get_pkg("pkg-0:1-18.noarch"),       get_pkg("pkg-0:1-19.noarch"),
-            get_pkg("pkg-0:1-20.noarch"),       get_pkg("pkg-0:1-21.noarch"),       get_pkg("pkg-0:1-22.noarch"),
+            get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+            get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+            get_pkg("pkg-0:1-1.noarch"),
+            get_pkg("pkg-0:1-2.noarch"),
+            get_pkg("pkg-0:1-3.noarch"),
+            get_pkg("pkg-0:1-4.noarch"),
+            get_pkg("pkg-0:1-5.noarch"),
+            get_pkg("pkg-0:1-6.noarch"),
+            get_pkg("pkg-0:1-7.noarch"),
+            get_pkg("pkg-0:1-8.noarch"),
+            get_pkg("pkg-0:1-9.noarch"),
+            get_pkg("pkg-0:1-10.noarch"),
+            get_pkg("pkg-0:1-11.noarch"),
+            get_pkg("pkg-0:1-12.noarch"),
+            get_pkg("pkg-0:1-13.noarch"),
+            get_pkg("pkg-0:1-14.noarch"),
+            get_pkg("pkg-0:1-15.noarch"),
+            get_pkg("pkg-0:1-16.noarch"),
+            get_pkg("pkg-0:1-17.noarch"),
+            get_pkg("pkg-0:1-18.noarch"),
+            get_pkg("pkg-0:1-19.noarch"),
+            get_pkg("pkg-0:1-20.noarch"),
+            get_pkg("pkg-0:1-21.noarch"),
+            get_pkg("pkg-0:1-22.noarch"),
             get_pkg("pkg-0:1-23.noarch")};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -129,8 +146,8 @@ void RpmPackageQueryTest::test_filter_earliest_evr() {
         query.filter_earliest_evr(1);
         std::vector<Package> expected = {
             get_pkg("pkg-0:1.2-3.src"),
-            get_pkg("pkg-0:1.2-3.x86_64"),
-            get_pkg("pkg-libs-0:1.2-3.x86_64"),
+            get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+            get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
             get_pkg("pkg-0:1-1.noarch"),
             get_pkg_i("cmdline-0:1.2-3.noarch", 0),
             get_pkg_i("cmdline-0:1.2-3.noarch", 1)};
@@ -141,9 +158,9 @@ void RpmPackageQueryTest::test_filter_earliest_evr() {
         query.filter_earliest_evr(2);
         std::vector<Package> expected = {
             get_pkg("pkg-0:1.2-3.src"),
-            get_pkg("pkg-0:1.2-3.x86_64"),
-            get_pkg("pkg-libs-0:1.2-3.x86_64"),
-            get_pkg("pkg-libs-1:1.2-4.x86_64"),
+            get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+            get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+            get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
             get_pkg("pkg-0:1-1.noarch"),
             get_pkg("pkg-0:1-2.noarch"),
             get_pkg_i("cmdline-0:1.2-3.noarch", 0),
@@ -154,14 +171,30 @@ void RpmPackageQueryTest::test_filter_earliest_evr() {
         PackageQuery query(base);
         query.filter_earliest_evr(-1);
         std::vector<Package> expected = {
-            get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64"), get_pkg("pkg-0:1-2.noarch"),
-            get_pkg("pkg-0:1-3.noarch"),        get_pkg("pkg-0:1-4.noarch"),        get_pkg("pkg-0:1-5.noarch"),
-            get_pkg("pkg-0:1-6.noarch"),        get_pkg("pkg-0:1-7.noarch"),        get_pkg("pkg-0:1-8.noarch"),
-            get_pkg("pkg-0:1-9.noarch"),        get_pkg("pkg-0:1-10.noarch"),       get_pkg("pkg-0:1-11.noarch"),
-            get_pkg("pkg-0:1-12.noarch"),       get_pkg("pkg-0:1-13.noarch"),       get_pkg("pkg-0:1-14.noarch"),
-            get_pkg("pkg-0:1-15.noarch"),       get_pkg("pkg-0:1-16.noarch"),       get_pkg("pkg-0:1-17.noarch"),
-            get_pkg("pkg-0:1-18.noarch"),       get_pkg("pkg-0:1-19.noarch"),       get_pkg("pkg-0:1-20.noarch"),
-            get_pkg("pkg-0:1-21.noarch"),       get_pkg("pkg-0:1-22.noarch"),       get_pkg("pkg-0:1-23.noarch"),
+            get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+            get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch),
+            get_pkg("pkg-0:1-2.noarch"),
+            get_pkg("pkg-0:1-3.noarch"),
+            get_pkg("pkg-0:1-4.noarch"),
+            get_pkg("pkg-0:1-5.noarch"),
+            get_pkg("pkg-0:1-6.noarch"),
+            get_pkg("pkg-0:1-7.noarch"),
+            get_pkg("pkg-0:1-8.noarch"),
+            get_pkg("pkg-0:1-9.noarch"),
+            get_pkg("pkg-0:1-10.noarch"),
+            get_pkg("pkg-0:1-11.noarch"),
+            get_pkg("pkg-0:1-12.noarch"),
+            get_pkg("pkg-0:1-13.noarch"),
+            get_pkg("pkg-0:1-14.noarch"),
+            get_pkg("pkg-0:1-15.noarch"),
+            get_pkg("pkg-0:1-16.noarch"),
+            get_pkg("pkg-0:1-17.noarch"),
+            get_pkg("pkg-0:1-18.noarch"),
+            get_pkg("pkg-0:1-19.noarch"),
+            get_pkg("pkg-0:1-20.noarch"),
+            get_pkg("pkg-0:1-21.noarch"),
+            get_pkg("pkg-0:1-22.noarch"),
+            get_pkg("pkg-0:1-23.noarch"),
             get_pkg("pkg-0:1-24.noarch")};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -180,7 +213,7 @@ void RpmPackageQueryTest::test_filter_name() {
     PackageQuery query1(base);
     query1.filter_name({"pkg"});
 
-    std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
+    std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
 
     // ---
@@ -191,10 +224,10 @@ void RpmPackageQueryTest::test_filter_name() {
 
     expected = {
         get_pkg("pkg-0:1.2-3.src"),
-        get_pkg("pkg-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-1:1.2-4.x86_64"),
-        get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
 
     // ---
@@ -203,7 +236,7 @@ void RpmPackageQueryTest::test_filter_name() {
     PackageQuery query3(base);
     query3.filter_name({"p?g"}, libdnf::sack::QueryCmp::GLOB);
 
-    expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
+    expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query3));
 
     // ---
@@ -213,7 +246,9 @@ void RpmPackageQueryTest::test_filter_name() {
     query4.filter_name({"pkg"}, libdnf::sack::QueryCmp::NEQ);
 
     expected = {
-        get_pkg("pkg-libs-0:1.2-3.x86_64"), get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query4));
 
     // ---
@@ -222,7 +257,7 @@ void RpmPackageQueryTest::test_filter_name() {
     PackageQuery query5(base);
     query5.filter_name({"Pkg"}, libdnf::sack::QueryCmp::IEXACT);
 
-    expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
+    expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query5));
 
     // ---
@@ -232,7 +267,7 @@ void RpmPackageQueryTest::test_filter_name() {
     std::vector<std::string> names_glob_icase{"cq?lib"};
     query6.filter_name({"P?g"}, libdnf::sack::QueryCmp::IGLOB);
 
-    expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
+    expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query6));
 
     // ---
@@ -242,7 +277,9 @@ void RpmPackageQueryTest::test_filter_name() {
     query7.filter_name({"kg-l"}, libdnf::sack::QueryCmp::CONTAINS);
 
     expected = {
-        get_pkg("pkg-libs-0:1.2-3.x86_64"), get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query7));
 
     // ---
@@ -252,7 +289,9 @@ void RpmPackageQueryTest::test_filter_name() {
     query8.filter_name({"kG-l"}, libdnf::sack::QueryCmp::ICONTAINS);
 
     expected = {
-        get_pkg("pkg-libs-0:1.2-3.x86_64"), get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query8));
 
     // ---
@@ -268,10 +307,10 @@ void RpmPackageQueryTest::test_filter_name() {
 
     expected = {
         get_pkg("pkg-0:1.2-3.src"),
-        get_pkg("pkg-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-1:1.2-4.x86_64"),
-        get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query9));
 }
 
@@ -289,7 +328,7 @@ void RpmPackageQueryTest::test_filter_name_packgset() {
     PackageQuery query2(base);
     query2.filter_name(query1);
 
-    std::vector<Package> expected2 = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
+    std::vector<Package> expected2 = {get_pkg("pkg-0:1.2-3.src"), get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected2, to_vector(query2));
 }
 
@@ -364,16 +403,16 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument without 0 epoch - two elements
         PackageQuery query(base);
-        query.filter_nevra({"pkg-1.2-3.src", "pkg-1.2-3.x86_64"});
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
+        query.filter_nevra({"pkg-1.2-3.src", std::string("pkg-1.2-3.") + test_arch});
+        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
     {
         // Test QueryCmp::EQ - argument without 0 epoch - two elements
         PackageQuery query(base);
-        query.filter_nevra({"pkg-0:1.2-3.src", "pkg-0:1.2-3.x86_64"});
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
+        query.filter_nevra({"pkg-0:1.2-3.src", std::string("pkg-0:1.2-3.") + test_arch});
+        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
@@ -396,7 +435,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument with unknown release - two elements
         PackageQuery query(base);
-        query.filter_nevra({"pkg-0:1.2-unknown.src", "pkg-0:1.2-unknown1.x86_64"});
+        query.filter_nevra({"pkg-0:1.2-unknown.src", std::string("pkg-0:1.2-unknown1.") + test_arch});
         std::vector<Package> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -404,7 +443,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument with unknown version - single argument
         PackageQuery query(base);
-        query.filter_nevra({"pkg-0:1.2-unknown2.x86_64"});
+        query.filter_nevra({std::string("pkg-0:1.2-unknown2.") + test_arch});
         CPPUNIT_ASSERT_EQUAL(0LU, query.size());
         std::vector<Package> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
@@ -413,7 +452,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
     {
         // Test QueryCmp::EQ - argument without epoch, but package with epoch - single argument
         PackageQuery query(base);
-        query.filter_nevra({"pkg-libs-1.2-4.x86_64"});
+        query.filter_nevra({std::string("pkg-libs-1.2-4.") + test_arch});
         std::vector<Package> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -429,9 +468,9 @@ void RpmPackageQueryTest::test_filter_version() {
 
     std::vector<Package> expected = {
         get_pkg("pkg-0:1.2-3.src"),
-        get_pkg("pkg-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-1:1.2-4.x86_64")};
+        get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
 
     // ---
@@ -440,7 +479,7 @@ void RpmPackageQueryTest::test_filter_version() {
     PackageQuery query2(base);
     query2.filter_version({"1.2"}, libdnf::sack::QueryCmp::NEQ);
 
-    expected = {get_pkg("pkg-libs-1:1.3-4.x86_64")};
+    expected = {get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
 }
 
@@ -453,7 +492,9 @@ void RpmPackageQueryTest::test_filter_release() {
     query1.filter_release({"3"});
 
     std::vector<Package> expected = {
-        get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64"), get_pkg("pkg-libs-0:1.2-3.x86_64")};
+        get_pkg("pkg-0:1.2-3.src"),
+        get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
 
     // ---
@@ -462,7 +503,8 @@ void RpmPackageQueryTest::test_filter_release() {
     PackageQuery query2(base);
     query2.filter_release({"3"}, libdnf::sack::QueryCmp::NEQ);
 
-    expected = {get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64")};
+    expected = {
+        get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch), get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
 }
 
@@ -482,7 +524,7 @@ void RpmPackageQueryTest::test_filter_provides() {
     PackageQuery query1(base);
     query1.filter_provides({"libpkg.so.0()(64bit)"});
 
-    std::vector<Package> expected = {get_pkg("pkg-libs-1:1.2-4.x86_64")};
+    std::vector<Package> expected = {get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
 
     // ---
@@ -493,9 +535,9 @@ void RpmPackageQueryTest::test_filter_provides() {
 
     expected = {
         get_pkg("pkg-0:1.2-3.src"),
-        get_pkg("pkg-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
 }
 
@@ -507,7 +549,7 @@ void RpmPackageQueryTest::test_filter_requires() {
     PackageQuery query1(base);
     query1.filter_requires({"pkg-libs"});
 
-    std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+    std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
 
     // ---
@@ -518,9 +560,9 @@ void RpmPackageQueryTest::test_filter_requires() {
 
     expected = {
         get_pkg("pkg-0:1.2-3.src"),
-        get_pkg("pkg-libs-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-1:1.2-4.x86_64"),
-        get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query2));
 }
 
@@ -533,7 +575,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
         adv_query.filter_name("DNF-2019-1");
         libdnf::rpm::PackageQuery query(base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::EQ);
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
@@ -543,7 +585,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
         adv_query.filter_name("PKG-OLDER");
         PackageQuery query(base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::GT);
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
@@ -563,7 +605,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
         adv_query.filter_name("PKG-NEWER");
         PackageQuery query(base);
         query.filter_advisories(adv_query, libdnf::sack::QueryCmp::LT);
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
@@ -597,11 +639,11 @@ void RpmPackageQueryTest::test_filter_chain() {
     query.filter_epoch({"0"});
     query.filter_version({"1.2"});
     query.filter_release({"3"});
-    query.filter_arch({"x86_64"});
+    query.filter_arch({test_arch});
     query.filter_provides({"foo"}, libdnf::sack::QueryCmp::NEQ);
     query.filter_requires({"foo"}, libdnf::sack::QueryCmp::NEQ);
 
-    std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+    std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
 }
 
@@ -613,9 +655,9 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         // test Name.Arch
         PackageQuery query(base);
         libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
-        auto return_value = query.resolve_pkg_spec("pkg.x86_64", settings, true);
+        auto return_value = query.resolve_pkg_spec(std::string("pkg.") + test_arch, settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
@@ -623,9 +665,9 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         // Test NA icase
         PackageQuery query(base);
         libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
-        auto return_value = query.resolve_pkg_spec("Pkg.x86_64", settings, true);
+        auto return_value = query.resolve_pkg_spec(std::string("Pkg.") + test_arch, settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
@@ -635,7 +677,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         libdnf::ResolveSpecSettings settings{.with_filenames = false};
         auto return_value = query.resolve_pkg_spec("pkg >= 1", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
@@ -645,7 +687,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
         auto return_value = query.resolve_pkg_spec("pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
@@ -665,7 +707,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
         auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 
@@ -674,7 +716,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         PackageQuery query(base);
         libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
         auto return_value = query.resolve_pkg_spec("Pkg-0:1.2-3.X86_64", settings, true);
-        std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.x86_64")};
+        std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
 }
@@ -697,10 +739,10 @@ void RpmPackageQueryTest::test_update() {
     // check the resulting NEVRAs
     std::vector<Package> expected = {
         get_pkg("pkg-0:1.2-3.src"),
-        get_pkg("pkg-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-0:1.2-3.x86_64"),
-        get_pkg("pkg-libs-1:1.2-4.x86_64"),
-        get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        get_pkg(std::string("pkg-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.2-4.") + test_arch),
+        get_pkg(std::string("pkg-libs-1:1.3-4.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
 }
 
@@ -722,7 +764,7 @@ void RpmPackageQueryTest::test_intersection() {
     CPPUNIT_ASSERT_EQUAL(1LU, query1.size());
 
     // check the resulting NEVRAs
-    std::vector<Package> expected = {get_pkg("pkg-libs-0:1.2-3.x86_64")};
+    std::vector<Package> expected = {get_pkg(std::string("pkg-libs-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
 }
 
@@ -745,7 +787,7 @@ void RpmPackageQueryTest::test_difference() {
     CPPUNIT_ASSERT_EQUAL(2LU, query1.size());
 
     // check the resulting NEVRAs
-    std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};
+    std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
 }
 

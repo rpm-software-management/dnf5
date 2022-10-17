@@ -226,6 +226,8 @@ void BaseTestCase::setUp() {
 
     base.setup();
 
+    auto vars = base.get_vars();
+    test_arch = vars->get_value("arch");
     repo_sack = base.get_repo_sack();
     sack = base.get_rpm_package_sack();
 }
