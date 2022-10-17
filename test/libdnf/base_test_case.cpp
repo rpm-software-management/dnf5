@@ -224,6 +224,8 @@ void BaseTestCase::setUp() {
     base.get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
     base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
 
+    base.get_vars()->set("arch", "x86_64");
+
     base.setup();
 
     repo_sack = base.get_repo_sack();
