@@ -52,14 +52,14 @@ void RpmPackageQueryTest::setUp() {
 
 
 void RpmPackageQueryTest::test_size() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     PackageQuery query(base);
     CPPUNIT_ASSERT_EQUAL(5LU, query.size());
 }
 
 void RpmPackageQueryTest::test_filter_latest_evr() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
     add_repo_solv("solv-24pkgs");
 
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
@@ -133,7 +133,7 @@ void RpmPackageQueryTest::test_filter_latest_evr() {
 }
 
 void RpmPackageQueryTest::test_filter_earliest_evr() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
     add_repo_solv("solv-24pkgs");
 
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
@@ -207,7 +207,7 @@ void RpmPackageQueryTest::test_filter_earliest_evr() {
 }
 
 void RpmPackageQueryTest::test_filter_name() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with Name == "pkg"
     PackageQuery query1(base);
@@ -315,7 +315,7 @@ void RpmPackageQueryTest::test_filter_name() {
 }
 
 void RpmPackageQueryTest::test_filter_name_packgset() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with Name == "pkg"
     PackageQuery query1(base);
@@ -333,7 +333,7 @@ void RpmPackageQueryTest::test_filter_name_packgset() {
 }
 
 void RpmPackageQueryTest::test_filter_nevra_packgset() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     repo_sack->get_system_repo()->add_rpm_package(rpm_path, false);
@@ -357,7 +357,7 @@ void RpmPackageQueryTest::test_filter_nevra_packgset() {
 }
 
 void RpmPackageQueryTest::test_filter_name_arch() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with Name == "pkg"
     PackageQuery query1(base);
@@ -374,7 +374,7 @@ void RpmPackageQueryTest::test_filter_name_arch() {
 }
 
 void RpmPackageQueryTest::test_filter_name_arch2() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     repo_sack->get_system_repo()->add_rpm_package(rpm_path, false);
@@ -398,7 +398,7 @@ void RpmPackageQueryTest::test_filter_name_arch2() {
 }
 
 void RpmPackageQueryTest::test_filter_nevra() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     {
         // Test QueryCmp::EQ - argument without 0 epoch - two elements
@@ -460,7 +460,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
 
 
 void RpmPackageQueryTest::test_filter_version() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with version == "1.2"
     PackageQuery query1(base);
@@ -485,7 +485,7 @@ void RpmPackageQueryTest::test_filter_version() {
 
 
 void RpmPackageQueryTest::test_filter_release() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with release == "3"
     PackageQuery query1(base);
@@ -509,7 +509,7 @@ void RpmPackageQueryTest::test_filter_release() {
 }
 
 void RpmPackageQueryTest::test_filter_priority() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
     add_repo_solv("solv-24pkgs");
 
     PackageQuery query1(base);
@@ -518,7 +518,7 @@ void RpmPackageQueryTest::test_filter_priority() {
 }
 
 void RpmPackageQueryTest::test_filter_provides() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with Provides == "libpkg.so.0()(64bit)"
     PackageQuery query1(base);
@@ -543,7 +543,7 @@ void RpmPackageQueryTest::test_filter_provides() {
 
 
 void RpmPackageQueryTest::test_filter_requires() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with Requires == "pkg-libs"
     PackageQuery query1(base);
@@ -632,7 +632,7 @@ void RpmPackageQueryTest::test_filter_advisories() {
 }
 
 void RpmPackageQueryTest::test_filter_chain() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     PackageQuery query(base);
     query.filter_name({"pkg"});
@@ -649,7 +649,7 @@ void RpmPackageQueryTest::test_filter_chain() {
 
 
 void RpmPackageQueryTest::test_resolve_pkg_spec() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     {
         // test Name.Arch
@@ -723,7 +723,7 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
 
 
 void RpmPackageQueryTest::test_update() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with Release == "3"
     PackageQuery query1(base);
@@ -748,7 +748,7 @@ void RpmPackageQueryTest::test_update() {
 
 
 void RpmPackageQueryTest::test_intersection() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with Release == "3"
     PackageQuery query1(base);
@@ -770,7 +770,7 @@ void RpmPackageQueryTest::test_intersection() {
 
 
 void RpmPackageQueryTest::test_difference() {
-    add_repo_solv("solv-repo1");
+    add_repo_solv(std::string("solv-repo1-") + test_arch);
 
     // packages with Release == "3"
     PackageQuery query1(base);
