@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_set.hpp"
 
 #include <filesystem>
+#include <map>
 #include <set>
 #include <string>
 #include <vector>
@@ -45,6 +46,9 @@ public:
 
 }  // namespace
 
+std::map<std::string, std::string> test_arch_globs = {{"aarch64", "aa?hc64"}, {"x86_64", "x8?_64"}};
+
+std::map<std::string, std::string> test_arch_icase_globs = {{"aarch64", "AARCH64"}, {"x86_64", "X86_64"}};
 
 void RpmPackageQueryTest::setUp() {
     BaseTestCase::setUp();
@@ -685,7 +689,8 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         // Test NEVRA glob
         PackageQuery query(base);
         libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
-        auto return_value = query.resolve_pkg_spec("pk?-?:1.?-?.x8?_64", settings, true);
+        auto return_value =
+            query.resolve_pkg_spec(std::string("pk?-?:1.?-?.") + test_arch_globs[test_arch], settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
@@ -695,7 +700,8 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         // Test NEVRA glob - icase == false, nothing found
         PackageQuery query(base);
         libdnf::ResolveSpecSettings settings{.with_provides = false, .with_filenames = false};
-        auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", settings, true);
+        auto return_value =
+            query.resolve_pkg_spec(std::string("Pk?-?:1.?-?.") + test_arch_globs[test_arch], settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, false);
         std::vector<Package> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
@@ -705,7 +711,8 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         // Test NEVRA glob - icase == true
         PackageQuery query(base);
         libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
-        auto return_value = query.resolve_pkg_spec("Pk?-?:1.?-?.x8?_64", settings, true);
+        auto return_value =
+            query.resolve_pkg_spec(std::string("Pk?-?:1.?-?.") + test_arch_globs[test_arch], settings, true);
         CPPUNIT_ASSERT_EQUAL(return_value.first, true);
         std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
@@ -715,7 +722,8 @@ void RpmPackageQueryTest::test_resolve_pkg_spec() {
         // Test NEVRA icase
         PackageQuery query(base);
         libdnf::ResolveSpecSettings settings{.ignore_case = true, .with_provides = false, .with_filenames = false};
-        auto return_value = query.resolve_pkg_spec("Pkg-0:1.2-3.X86_64", settings, true);
+        auto return_value =
+            query.resolve_pkg_spec(std::string("Pkg-0:1.2-3.") + test_arch_icase_globs[test_arch], settings, true);
         std::vector<Package> expected = {get_pkg(std::string("pkg-0:1.2-3.") + test_arch)};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
