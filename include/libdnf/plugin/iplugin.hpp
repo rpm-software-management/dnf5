@@ -49,7 +49,7 @@ struct Version {
 
 class IPlugin {
 public:
-    IPlugin() = default;
+    IPlugin(Base & base) : base(&base) {}
     virtual ~IPlugin() = default;
 
     IPlugin(const IPlugin &) = delete;
@@ -93,6 +93,11 @@ public:
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
     virtual void finish() noexcept {}
+
+    Base & get_base() noexcept { return *base; }
+
+private:
+    Base * base;
 };
 
 }  // namespace libdnf::plugin

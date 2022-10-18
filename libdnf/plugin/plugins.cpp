@@ -32,7 +32,7 @@ namespace libdnf::plugin {
 class PluginLibrary : public Plugin {
 public:
     // Loads a shared library, finds symbols, and instantiates the plugin.
-    explicit PluginLibrary(Base & base, const std::string & library_path);
+    explicit PluginLibrary(Base & base, ConfigParser && parser, const std::string & library_path);
 
     ~PluginLibrary();
 
@@ -50,7 +50,9 @@ private:
     utils::Library library;
 };
 
-PluginLibrary::PluginLibrary(Base & base, const std::string & library_path) : library(library_path) {
+PluginLibrary::PluginLibrary(Base & base, ConfigParser && parser, const std::string & library_path)
+    : Plugin(std::move(parser)),
+      library(library_path) {
     get_api_version = reinterpret_cast<TGetApiVersionFunc>(library.get_address("libdnf_plugin_get_api_version"));
     get_name = reinterpret_cast<TGetNameFunc>(library.get_address("libdnf_plugin_get_name"));
 
@@ -72,7 +74,7 @@ PluginLibrary::PluginLibrary(Base & base, const std::string & library_path) : li
     get_version = reinterpret_cast<TGetVersionFunc>(library.get_address("libdnf_plugin_get_version"));
     new_instance = reinterpret_cast<TNewInstanceFunc>(library.get_address("libdnf_plugin_new_instance"));
     delete_instance = reinterpret_cast<TDeleteInstanceFunc>(library.get_address("libdnf_plugin_delete_instance"));
-    iplugin_instance = new_instance(libdnf::get_library_version(), base, cfg_parser);
+    iplugin_instance = new_instance(libdnf::get_library_version(), base, get_config_parser());
 }
 
 PluginLibrary::~PluginLibrary() {
@@ -115,8 +117,7 @@ std::string Plugins::find_plugin_library(const std::string & plugin_conf_path) {
 void Plugins::load_plugin_library(ConfigParser && parser, const std::string & file_path) {
     auto & logger = *base->get_logger();
     logger.debug("Loading plugin library file=\"{}\"", file_path);
-    auto plugin = std::make_unique<PluginLibrary>(*base, file_path);
-    plugin->get_config_parser() = std::move(parser);
+    auto plugin = std::make_unique<PluginLibrary>(*base, std::move(parser), file_path);
     auto * iplugin = plugin->get_iplugin();
     plugins.emplace_back(std::move(plugin));
     auto name = iplugin->get_name();
