@@ -188,8 +188,8 @@ void Transaction::start() {
     auto conn = transaction_db_connect(*base);
     conn->exec("BEGIN");
     try {
-        auto query = trans_insert_new_query(*conn);
-        trans_insert(*query, *this);
+        auto query = TransactionDbUtils::trans_insert_new_query(*conn);
+        TransactionDbUtils::trans_insert(*query, *this);
 
         insert_transaction_comps_environments(*conn, *this);
         insert_transaction_comps_groups(*conn, *this);
@@ -222,8 +222,8 @@ void Transaction::finish(TransactionState state) {
     conn->exec("BEGIN");
     try {
         set_state(state);
-        auto query = trans_update_new_query(*conn);
-        trans_update(*query, *this);
+        auto query = TransactionDbUtils::trans_update_new_query(*conn);
+        TransactionDbUtils::trans_update(*query, *this);
         conn->exec("COMMIT");
     } catch (...) {
         conn->exec("ROLLBACK");

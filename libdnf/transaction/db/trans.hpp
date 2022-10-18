@@ -34,34 +34,32 @@ namespace libdnf::transaction {
 
 class Transaction;
 
+class TransactionDbUtils {
+public:
+    static std::vector<Transaction> load_from_select(const BaseWeakPtr & base, libdnf::utils::SQLite3::Query & query);
 
-/// Selects all transaction IDs, sorting in ascending order.
-std::vector<int64_t> select_transaction_ids(const BaseWeakPtr & base);
+    /// Use a query to insert a new record to the 'trans' table
+    static void trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans);
 
+    /// Selects all transaction IDs, sorting in ascending order.
+    static std::vector<int64_t> select_transaction_ids(const BaseWeakPtr & base);
 
-/// Selects transactions using a list of ids, in case `ids` is empty, selects all transactions.
-std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, const std::vector<int64_t> & ids);
+    /// Selects transactions using a list of ids, in case `ids` is empty, selects all transactions.
+    static std::vector<Transaction> select_transactions_by_ids(
+        const BaseWeakPtr & base, const std::vector<int64_t> & ids);
 
+    /// Selects transactions with ids within the [start, end] range (inclusive).
+    static std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, int64_t start, int64_t end);
 
-/// Selects transactions with ids within the [start, end] range (inclusive).
-std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, int64_t start, int64_t end);
+    /// Create a query for inserting records to the 'trans' table
+    static std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_insert_new_query(libdnf::utils::SQLite3 & conn);
 
+    /// Create a query that updates a record in 'trans' table
+    static std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_update_new_query(libdnf::utils::SQLite3 & conn);
 
-/// Create a query for inserting records to the 'trans' table
-std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_insert_new_query(libdnf::utils::SQLite3 & conn);
-
-
-/// Use a query to insert a new record to the 'trans' table
-void trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans);
-
-
-/// Create a query that updates a record in 'trans' table
-std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_update_new_query(libdnf::utils::SQLite3 & conn);
-
-
-/// Use a query to update a record in the 'trans' table
-void trans_update(libdnf::utils::SQLite3::Statement & query, Transaction & trans);
-
+    /// Use a query to update a record in the 'trans' table
+    static void trans_update(libdnf::utils::SQLite3::Statement & query, Transaction & trans);
+};
 
 }  // namespace libdnf::transaction
 

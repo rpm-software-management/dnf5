@@ -39,19 +39,19 @@ Transaction TransactionHistory::new_transaction() {
 }
 
 std::vector<int64_t> TransactionHistory::list_transaction_ids() {
-    return select_transaction_ids(base);
+    return TransactionDbUtils::select_transaction_ids(base);
 }
 
 std::vector<Transaction> TransactionHistory::list_transactions(const std::vector<int64_t> & ids) {
-    return select_transactions_by_ids(base, ids);
+    return TransactionDbUtils::select_transactions_by_ids(base, ids);
 }
 
 std::vector<Transaction> TransactionHistory::list_transactions(int64_t start, int64_t end) {
-    return select_transactions_by_range(base, start, end);
+    return TransactionDbUtils::select_transactions_by_range(base, start, end);
 }
 
 std::vector<Transaction> TransactionHistory::list_all_transactions() {
-    return select_transactions_by_ids(base, {});
+    return TransactionDbUtils::select_transactions_by_ids(base, {});
 }
 
 BaseWeakPtr TransactionHistory::get_base() const {

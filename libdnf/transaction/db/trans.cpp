@@ -45,7 +45,7 @@ static constexpr const char * select_sql = R"**(
 )**";
 
 
-std::vector<int64_t> select_transaction_ids(const BaseWeakPtr & base) {
+std::vector<int64_t> TransactionDbUtils::select_transaction_ids(const BaseWeakPtr & base) {
     auto conn = transaction_db_connect(*base);
 
     auto query = libdnf::utils::SQLite3::Query(*conn, "SELECT \"id\" FROM \"trans\" ORDER BY \"id\"");
@@ -60,7 +60,8 @@ std::vector<int64_t> select_transaction_ids(const BaseWeakPtr & base) {
 }
 
 
-static std::vector<Transaction> load_from_select(const BaseWeakPtr & base, libdnf::utils::SQLite3::Query & query) {
+std::vector<Transaction> TransactionDbUtils::load_from_select(
+    const BaseWeakPtr & base, libdnf::utils::SQLite3::Query & query) {
     std::vector<Transaction> res;
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
@@ -80,7 +81,8 @@ static std::vector<Transaction> load_from_select(const BaseWeakPtr & base, libdn
 }
 
 
-std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, const std::vector<int64_t> & ids) {
+std::vector<Transaction> TransactionDbUtils::select_transactions_by_ids(
+    const BaseWeakPtr & base, const std::vector<int64_t> & ids) {
     auto conn = transaction_db_connect(*base);
 
     std::string sql = select_sql;
@@ -103,11 +105,12 @@ std::vector<Transaction> select_transactions_by_ids(const BaseWeakPtr & base, co
         query.bind(static_cast<int>(i + 1), ids[i]);
     }
 
-    return load_from_select(base, query);
+    return TransactionDbUtils::load_from_select(base, query);
 }
 
 
-std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, int64_t start, int64_t end) {
+std::vector<Transaction> TransactionDbUtils::select_transactions_by_range(
+    const BaseWeakPtr & base, int64_t start, int64_t end) {
     auto conn = transaction_db_connect(*base);
 
     std::string sql = std::string(select_sql) + " WHERE \"trans\".\"id\" >= ? AND \"trans\".\"id\" <= ?";
@@ -115,7 +118,7 @@ std::vector<Transaction> select_transactions_by_range(const BaseWeakPtr & base, 
     auto query = libdnf::utils::SQLite3::Query(*conn, sql);
     query.bindv(start, end);
 
-    return load_from_select(base, query);
+    return TransactionDbUtils::load_from_select(base, query);
 }
 
 
@@ -138,13 +141,14 @@ static constexpr const char * SQL_TRANS_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_insert_new_query(libdnf::utils::SQLite3 & conn) {
+std::unique_ptr<libdnf::utils::SQLite3::Statement> TransactionDbUtils::trans_insert_new_query(
+    libdnf::utils::SQLite3 & conn) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_TRANS_INSERT);
     return query;
 }
 
 
-void trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans) {
+void TransactionDbUtils::trans_insert(libdnf::utils::SQLite3::Statement & query, Transaction & trans) {
     query.bindv(
         trans.get_dt_start(),
         trans.get_dt_end(),
@@ -187,13 +191,14 @@ static constexpr const char * SQL_TRANS_UPDATE = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_update_new_query(libdnf::utils::SQLite3 & conn) {
+std::unique_ptr<libdnf::utils::SQLite3::Statement> TransactionDbUtils::trans_update_new_query(
+    libdnf::utils::SQLite3 & conn) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_TRANS_UPDATE);
     return query;
 }
 
 
-void trans_update(libdnf::utils::SQLite3::Statement & query, Transaction & trans) {
+void TransactionDbUtils::trans_update(libdnf::utils::SQLite3::Statement & query, Transaction & trans) {
     query.bindv(
         // SET key=value
         trans.get_dt_start(),
