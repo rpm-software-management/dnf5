@@ -177,6 +177,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %dir %{_libdir}/dnf5/
 %dir %{_libdir}/dnf5/plugins/
 %doc %{_libdir}/dnf5/plugins/README
+%dir %{_libdir}/libdnf5/plugins
 %dir %{_datadir}/bash-completion/
 %dir %{_datadir}/bash-completion/completions/
 %{_datadir}/bash-completion/completions/dnf5
@@ -390,7 +391,6 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Libdnf plugin that allows to run actions (external executables) on hooks.
 
 %files -n libdnf5-plugin-actions
-%dir %{_libdir}/libdnf5/plugins
 %{_libdir}/libdnf5/plugins/actions.*
 %endif
 
@@ -408,7 +408,6 @@ Requires:       python3-libdnf5%{?_isa} = %{version}-%{release}
 Libdnf plugin that allows loading Python plugins.
 
 %files -n python3-libdnf5-python-plugins-loader
-%dir %{_libdir}/libdnf5/plugins
 %{_libdir}/libdnf5/plugins/python_plugins_loader.*
 %dir %{python3_sitelib}/libdnf_plugins/
 %doc %{python3_sitelib}/libdnf_plugins/README
