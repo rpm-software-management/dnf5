@@ -40,7 +40,7 @@ constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "Plu
 
 class PythonPluginLoader : public plugin::IPlugin {
 public:
-    PythonPluginLoader(libdnf::Base & base, libdnf::ConfigParser &) : base(base) {}
+    PythonPluginLoader(libdnf::Base & base, libdnf::ConfigParser &) : IPlugin(base) {}
     virtual ~PythonPluginLoader();
 
     PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
@@ -68,7 +68,6 @@ private:
 
     static int python_ref_counter;
     bool active{false};
-    libdnf::Base & base;
 };
 
 int PythonPluginLoader::python_ref_counter{0};
@@ -155,7 +154,7 @@ PycompString::PycompString(PyObject * str) {
 
 PythonPluginLoader::~PythonPluginLoader() {
     if (active) {
-        std::lock_guard<libdnf::Base> guard(base);
+        std::lock_guard<libdnf::Base> guard(get_base());
         if (--python_ref_counter == 0) {
             Py_Finalize();
         }
@@ -238,7 +237,7 @@ void PythonPluginLoader::load_plugin_file(const fs::path & file_path) {
 
 
 void PythonPluginLoader::load_plugins_from_dir(const fs::path & dir_path) {
-    auto & logger = *base.get_logger();
+    auto & logger = *get_base().get_logger();
 
     if (dir_path.empty())
         throw std::runtime_error("PythonPluginLoader::load_from_dir() dir_path cannot be empty");
@@ -274,7 +273,7 @@ void PythonPluginLoader::load_plugins() {
     }
     const fs::path path(plugin_dir);
 
-    std::lock_guard<libdnf::Base> guard(base);
+    std::lock_guard<libdnf::Base> guard(get_base());
 
     if (python_ref_counter == 0) {
         Py_InitializeEx(0);

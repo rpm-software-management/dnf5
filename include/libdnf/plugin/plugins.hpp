@@ -65,7 +65,7 @@ public:
     void finish() noexcept;
 
 protected:
-    Plugin() = default;
+    Plugin(ConfigParser && parser) : cfg_parser(std::move(parser)) {}
     IPlugin * iplugin_instance{nullptr};
     ConfigParser cfg_parser;
     bool enabled{true};

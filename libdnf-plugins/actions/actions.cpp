@@ -68,7 +68,7 @@ struct CommandToRun {
 
 class Actions : public plugin::IPlugin {
 public:
-    Actions(libdnf::Base & base, libdnf::ConfigParser &) : base(base) {}
+    Actions(libdnf::Base & base, libdnf::ConfigParser &) : IPlugin(base) {}
     virtual ~Actions() = default;
 
     PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
@@ -119,8 +119,6 @@ private:
         const libdnf::base::TransactionPackage * trans_pkg, const libdnf::rpm::Package * pkg, const Action & action);
 
     void process_command_output_line(std::string_view line);
-
-    libdnf::Base & base;
 
     // Parsed actions for individual hooks
     std::vector<Action> pre_base_setup_actions;
@@ -191,6 +189,7 @@ std::pair<std::string, bool> Actions::substitute(
     std::string_view in,
     std::filesystem::path file,
     int line_number) {
+    auto & base = get_base();
     auto & logger = *base.get_logger();
     std::string ret;
     bool error = false;
@@ -362,7 +361,7 @@ void Actions::on_base_setup(const std::vector<Action> & trans_actions) {
 }
 
 void Actions::parse_action_files() {
-    const auto & config = base.get_config();
+    const auto & config = get_base().get_config();
     const char * env_plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
     const std::string plugins_config_dir =
         env_plugins_config_dir && config.pluginconfpath().get_priority() < libdnf::Option::Priority::COMMANDLINE
@@ -492,6 +491,8 @@ void Actions::parse_action_files() {
 }
 
 void Actions::process_command_output_line(std::string_view line) {
+    auto & base = get_base();
+
     auto eq_pos = line.find('=');
     if (line.starts_with("tmp.")) {
         std::string var_name(line.substr(4, eq_pos - 4));
@@ -538,6 +539,8 @@ void Actions::process_command_output_line(std::string_view line) {
 }
 
 void Actions::execute_command(CommandToRun & command) {
+    auto & base = get_base();
+
     int pipe_out_from_child[2];
     int pipe_to_child[2];
     if (pipe(pipe_to_child) == -1) {
@@ -644,7 +647,7 @@ void Actions::on_transaction(const libdnf::base::Transaction & transaction, cons
     if (!transaction_cached) {
         trans_packages = transaction.get_transaction_packages();
 
-        all_full_query = libdnf::rpm::PackageQuery(base, libdnf::sack::ExcludeFlags::IGNORE_EXCLUDES, true);
+        all_full_query = libdnf::rpm::PackageQuery(get_base(), libdnf::sack::ExcludeFlags::IGNORE_EXCLUDES, true);
         in_full_query = out_full_query = all_full_query;
         for (const auto & trans_pkg : trans_packages) {
             auto pkg = trans_pkg.get_package();
