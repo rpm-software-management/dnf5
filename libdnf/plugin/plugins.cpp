@@ -59,9 +59,9 @@ PluginLibrary::PluginLibrary(Base & base, ConfigParser && parser, const std::str
     const auto & libdnf_plugin_api_version = libdnf::get_plugin_api_version();
     const auto & plugin_api_version = get_api_version();
     if (plugin_api_version.major != libdnf_plugin_api_version.major ||
-        plugin_api_version.minor > libdnf_plugin_api_version.minor) {
+        plugin_api_version.minor < libdnf_plugin_api_version.minor) {
         throw PluginError(
-            M_("Unsupported plugin API combination. API version required by plugin \"{}\" (\"{}\") is \"{}.{}\"."
+            M_("Unsupported plugin API combination. API version provided by plugin \"{}\" (\"{}\") is \"{}.{}\"."
                " API version in libdnf is \"{}.{}\"."),
             get_name(),
             library_path,
