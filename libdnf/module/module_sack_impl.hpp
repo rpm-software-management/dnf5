@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_MODULE_MODULE_SACK_IMPL_HPP
 
 #include "module/module_metadata.hpp"
+#include "solv/solv_map.hpp"
 
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/rpm/reldep_list.hpp"
@@ -62,6 +63,7 @@ public:
     void add_modules_without_static_context();
 
     void make_provides_ready();
+    void recompute_considered_in_pool();
 
 private:
     friend ModuleSack;
@@ -81,8 +83,10 @@ private:
     std::vector<std::unique_ptr<ModuleItem>> modules_without_static_context;
 
     bool provides_ready = false;
+    bool considered_uptodate = false;
 
     std::map<std::string, std::string> module_defaults;
+    std::unique_ptr<libdnf::solv::SolvMap> excludes;
 };
 
 inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_modules() {
