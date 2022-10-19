@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "module/module_metadata.hpp"
 #include "module/module_sack_impl.hpp"
+#include "solv/solv_map.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/base/base.hpp"
@@ -323,6 +324,30 @@ void ModuleSack::Impl::make_provides_ready() {
 
     // Sets the original considered map.
     pool->considered = considered;
+}
+
+
+void ModuleSack::Impl::recompute_considered_in_pool() {
+    if (considered_uptodate) {
+        return;
+    }
+
+    // TODO(pkratoch): This can be optimized: pool->considered can be a nullptr if there are no excludes, so, we can
+    // check it at the beginning and either set the pool->considered to nullptr or not initialize it in the first
+    // place (if it already was a nullptr).
+    if (!pool->considered) {
+        pool->considered = static_cast<Map *>(g_malloc0(sizeof(Map)));
+        map_init(pool->considered, pool->nsolvables);
+    } else {
+        map_grow(pool->considered, pool->nsolvables);
+    }
+    map_setall(pool->considered);
+
+    if (excludes) {
+        map_subtract(pool->considered, &excludes->get_map());
+    }
+
+    considered_uptodate = true;
 }
 
 
