@@ -36,7 +36,7 @@ struct PluginVersion {
 
 class IPlugin {
 public:
-    IPlugin() = default;
+    IPlugin(Context & context) : context(&context) {}
     virtual ~IPlugin() = default;
 
     IPlugin(const IPlugin &) = delete;
@@ -61,7 +61,7 @@ public:
     virtual const char * get_attribute(const char * name) const noexcept = 0;
 
     /// Plugin initialization.
-    virtual void init(Context * context) = 0;
+    virtual void init() {}
 
     virtual std::vector<std::unique_ptr<Command>> create_commands(Command & parent) = 0;
 
@@ -71,6 +71,11 @@ public:
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
     virtual void finish() noexcept = 0;
+
+    Context & get_context() noexcept { return *context; }
+
+private:
+    Context * context;
 };
 
 }  // namespace dnf5
@@ -91,7 +96,7 @@ const char * dnf5_plugin_get_name(void);
 dnf5::PluginVersion dnf5_plugin_get_version(void);
 
 /// Creates a new plugin instance. Passes the API version to the plugin.
-dnf5::IPlugin * dnf5_plugin_new_instance(dnf5::ApplicationVersion application_version);
+dnf5::IPlugin * dnf5_plugin_new_instance(dnf5::ApplicationVersion application_version, dnf5::Context & context);
 
 /// Deletes plugin instance.
 void dnf5_plugin_delete_instance(dnf5::IPlugin * plugin_instance);
