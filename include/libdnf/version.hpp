@@ -35,8 +35,8 @@ struct LibraryVersion {
 /// Plugin API version
 /// @since 5.0
 struct PluginAPIVersion {
-    std::uint16_t major;  // libdnf5 and the plugin must implement the same `major` version to work together
-    std::uint16_t minor;  // libdnf5 must implement the `minor` version >= than the plugin to work together
+    std::uint16_t major;  // plugin and the libdnf must implement the same `major` version to work together
+    std::uint16_t minor;  // plugin must implement the `minor` version >= than the libdnf to work together
 };
 
 static constexpr PluginAPIVersion PLUGIN_API_VERSION{.major = 1, .minor = 0};
