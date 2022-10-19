@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "plugins.hpp"
 
+#include "dnf5/context.hpp"
 #include "library.hpp"
 
 #include <fmt/format.h>
@@ -31,7 +32,7 @@ namespace dnf5 {
 class PluginLibrary : public Plugin {
 public:
     // Loads a shared library, finds symbols, and instantiates the plugin.
-    explicit PluginLibrary(const std::string & library_path);
+    explicit PluginLibrary(Context & context, const std::string & library_path);
 
     ~PluginLibrary();
 
@@ -49,7 +50,7 @@ private:
     utils::Library library;
 };
 
-PluginLibrary::PluginLibrary(const std::string & library_path) : library(library_path) {
+PluginLibrary::PluginLibrary(Context & context, const std::string & library_path) : library(library_path) {
     get_api_version = reinterpret_cast<TGetApiVersionFunc>(library.get_address("dnf5_plugin_get_api_version"));
     get_name = reinterpret_cast<TGetNameFunc>(library.get_address("dnf5_plugin_get_name"));
 
@@ -73,7 +74,7 @@ PluginLibrary::PluginLibrary(const std::string & library_path) : library(library
     new_instance = reinterpret_cast<TNewInstanceFunc>(library.get_address("dnf5_plugin_new_instance"));
     delete_instance = reinterpret_cast<TDeleteInstanceFunc>(library.get_address("dnf5_plugin_delete_instance"));
 
-    iplugin_instance = new_instance(dnf5::get_application_version());
+    iplugin_instance = new_instance(dnf5::get_application_version(), context);
 }
 
 PluginLibrary::~PluginLibrary() {
@@ -101,7 +102,7 @@ void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
 void Plugins::load_plugin(const std::string & file_path) {
     auto logger = context->base.get_logger();
     logger->debug("Loading plugin file=\"{}\"", file_path);
-    auto plugin = std::make_unique<PluginLibrary>(file_path);
+    auto plugin = std::make_unique<PluginLibrary>(*context, file_path);
     auto * iplugin = plugin->get_iplugin();
     plugins.emplace_back(std::move(plugin));
     auto name = iplugin->get_name();
@@ -146,7 +147,7 @@ void Plugins::load_plugins(const std::string & dir_path) {
 bool Plugins::init() {
     for (auto & plugin : plugins) {
         if (plugin->get_enabled()) {
-            plugin->init(context);
+            plugin->init();
         }
     }
     return true;

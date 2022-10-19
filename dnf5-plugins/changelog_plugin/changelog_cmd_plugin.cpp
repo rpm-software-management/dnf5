@@ -16,6 +16,8 @@ constexpr const char * attrs_value[]{"Jaroslav Rohel", "jrohel@redhat.com", "cha
 
 class ChangelogCmdPlugin : public IPlugin {
 public:
+    using IPlugin::IPlugin;
+
     PluginAPIVersion get_api_version() const noexcept override { return PLUGIN_API_VERSION; }
 
     const char * get_name() const noexcept override { return PLUGIN_NAME; }
@@ -33,14 +35,9 @@ public:
         return nullptr;
     }
 
-    void init(Context * context) override { this->context = context; }
-
     std::vector<std::unique_ptr<Command>> create_commands(Command & parent) override;
 
     void finish() noexcept override {}
-
-private:
-    Context * context;
 };
 
 
@@ -66,8 +63,8 @@ PluginVersion dnf5_plugin_get_version(void) {
     return PLUGIN_VERSION;
 }
 
-IPlugin * dnf5_plugin_new_instance([[maybe_unused]] ApplicationVersion application_version) try {
-    return new ChangelogCmdPlugin;
+IPlugin * dnf5_plugin_new_instance([[maybe_unused]] ApplicationVersion application_version, Context & context) try {
+    return new ChangelogCmdPlugin(context);
 } catch (...) {
     return nullptr;
 }

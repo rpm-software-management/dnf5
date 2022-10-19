@@ -44,9 +44,9 @@ public:
     void set_enabled(bool enabled) noexcept { this->enabled = enabled; }
     bool get_enabled() const noexcept { return enabled; }
 
-    void init(dnf5::Context * context) {
+    void init() {
         if (iplugin_instance) {
-            iplugin_instance->init(context);
+            iplugin_instance->init();
         }
     }
 
