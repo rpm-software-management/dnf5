@@ -34,7 +34,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/remove/remove.hpp"
 #include "commands/repo/repo.hpp"
 #include "commands/repoquery/repoquery.hpp"
-#include "commands/search/search.hpp"
+// TODO(jmracek) The search commnd is not yet implemented
+// #include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "dnf5/context.hpp"
@@ -462,7 +463,8 @@ void RootCommand::register_subcommands() {
     query_commands_group->set_header("Query Commands:");
     cmd.register_group(query_commands_group);
     register_subcommand(std::make_unique<RepoqueryCommand>(*this), query_commands_group);
-    register_subcommand(std::make_unique<SearchCommand>(*this), query_commands_group);
+    // TODO(jmracek) The search commnd is not yet implemented
+    // register_subcommand(std::make_unique<SearchCommand>(*this), query_commands_group);
 
     auto * subcommands_group = context.get_argument_parser().add_new_group("subcommands");
     subcommands_group->set_header("Subcommands:");
