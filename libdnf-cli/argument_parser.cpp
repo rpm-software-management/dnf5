@@ -724,7 +724,7 @@ void ArgumentParser::CommandAlias::parse(const char * option, int argc, const ch
     }
 
     if (auto & parse_hook = attached_command.get_parse_hook_func()) {
-        parse_hook(this, option, argc, argv);
+        parse_hook(&attached_command, option, argc, argv);
     }
 }
 
