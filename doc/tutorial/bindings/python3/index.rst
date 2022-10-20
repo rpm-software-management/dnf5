@@ -1,14 +1,11 @@
-Tutorial
-========
+Python3
+=======
 
 
 .. toctree::
     :maxdepth: 2
-    :numbered:
 
-    install-build-deps
     session
     repos
     queries
     transaction
-
