@@ -7,6 +7,7 @@ Welcome to DNF5's documentation!
 
     about
     tutorial/index
+    tutorial/bindings/index
     api/index
     commands/index
     dnf5.8
