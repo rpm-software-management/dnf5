@@ -107,6 +107,32 @@ struct into<libdnf::system::GroupState> {
 
 
 template <>
+struct from<libdnf::system::EnvironmentState> {
+    static libdnf::system::EnvironmentState from_toml(const value & v) {
+        libdnf::system::EnvironmentState environment_state;
+
+        if (v.contains("groups")) {
+            environment_state.groups = toml::find<std::vector<std::string>>(v, "groups");
+        }
+
+        return environment_state;
+    }
+};
+
+
+template <>
+struct into<libdnf::system::EnvironmentState> {
+    static toml::value into_toml(const libdnf::system::EnvironmentState & environment_state) {
+        toml::value res;
+
+        res["groups"] = environment_state.groups;
+
+        return res;
+    }
+};
+
+
+template <>
 struct from<libdnf::system::ModuleState> {
     static libdnf::system::ModuleState from_toml(const value & v) {
         libdnf::system::ModuleState module_state;
@@ -312,6 +338,27 @@ void State::remove_group_state(const std::string & id) {
     package_groups_cache.reset();
 }
 
+
+EnvironmentState State::get_environment_state(const std::string & id) {
+    auto it = environment_states.find(id);
+    if (it == environment_states.end()) {
+        throw StateNotFoundError("Environment", id);
+    }
+
+    return it->second;
+}
+
+
+void State::set_environment_state(const std::string & id, const EnvironmentState & environment_state) {
+    environment_states[id] = environment_state;
+}
+
+
+void State::remove_environment_state(const std::string & id) {
+    environment_states.erase(id);
+}
+
+
 std::set<std::string> State::get_package_groups(const std::string & name) {
     auto & package_groups = get_package_groups_cache();
     auto it = package_groups.find(name);
@@ -395,6 +442,8 @@ void State::save() {
     utils::fs::File(get_package_state_path(), "w").write(toml::format(make_top_value("packages", package_states)));
     utils::fs::File(get_nevra_state_path(), "w").write(toml::format(make_top_value("nevras", nevra_states)));
     utils::fs::File(get_group_state_path(), "w").write(toml::format(make_top_value("groups", group_states)));
+    utils::fs::File(get_environment_state_path(), "w")
+        .write(toml::format(make_top_value("environments", environment_states)));
     utils::fs::File(get_module_state_path(), "w").write(toml::format(make_top_value("modules", module_states)));
     utils::fs::File(get_system_state_path(), "w").write(toml::format(make_top_value("system", system_state)));
 }
@@ -426,6 +475,8 @@ void State::load() {
     package_states = load_toml_data<std::map<std::string, PackageState>>(get_package_state_path(), "packages");
     nevra_states = load_toml_data<std::map<std::string, NevraState>>(get_nevra_state_path(), "nevras");
     group_states = load_toml_data<std::map<std::string, GroupState>>(get_group_state_path(), "groups");
+    environment_states =
+        load_toml_data<std::map<std::string, EnvironmentState>>(get_environment_state_path(), "environments");
     module_states = load_toml_data<std::map<std::string, ModuleState>>(get_module_state_path(), "modules");
     system_state = load_toml_data<SystemState>(get_system_state_path(), "system");
     package_groups_cache.reset();
@@ -457,6 +508,11 @@ std::filesystem::path State::get_nevra_state_path() {
 
 std::filesystem::path State::get_group_state_path() {
     return path / "groups.toml";
+}
+
+
+std::filesystem::path State::get_environment_state_path() {
+    return path / "environments.toml";
 }
 
 

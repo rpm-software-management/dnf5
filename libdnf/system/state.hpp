@@ -50,6 +50,11 @@ public:
     std::vector<std::string> packages;
 };
 
+class EnvironmentState {
+public:
+    std::vector<std::string> groups;
+};
+
 // TODO(lukash) same class name as module::ModuleState
 // probably better to name differently, although right now this class isn't on the interface and could be "hidden"
 class ModuleState {
@@ -140,14 +145,13 @@ public:
     /// @since 5.0
     void remove_package_nevra_state(const std::string & nevra);
 
-    /// @return The reason for a group id.
-    /// @param id The group id to get the reason for.
+    /// @return The state for a group id.
+    /// @param id The group id to get the state for.
     /// @since 5.0
     GroupState get_group_state(const std::string & id);
 
-    /// Sets the reason for a group id.
-    /// @param id The group id to set the reason for.
-    /// @param reason The reason to set.
+    /// Sets the state for a group id.
+    /// @param id The group id to set the state for.
     /// @since 5.0
     void set_group_state(const std::string & id, const GroupState & group_state);
 
@@ -160,6 +164,22 @@ public:
     /// @param name Package name
     /// @since 5.0
     std::set<std::string> get_package_groups(const std::string & name);
+
+    /// @return The the state for environmental group
+    /// @param id The environmental group id to get the state for.
+    /// @since 5.0
+    EnvironmentState get_environment_state(const std::string & id);
+
+    /// Sets the state for an environmental group id.
+    /// @param id The environmental group id to set the state for.
+    /// @since 5.0
+    void set_environment_state(const std::string & id, const EnvironmentState & environment_state);
+
+    /// Removes the state for an environmental group id.
+    /// @param na The id to remove the state for.
+    /// @since 5.0
+    void remove_environment_state(const std::string & id);
+
 
     std::string get_module_enabled_stream(const std::string & name);
 
@@ -219,6 +239,10 @@ private:
     /// @since 5.0
     std::filesystem::path get_group_state_path();
 
+    /// @return The path to the toml file containing the environment data.
+    /// @since 5.0
+    std::filesystem::path get_environment_state_path();
+
     /// @return The path to the toml file containing the module data.
     /// @since 5.0
     std::filesystem::path get_module_state_path();
@@ -237,6 +261,7 @@ private:
     std::map<std::string, PackageState> package_states;
     std::map<std::string, NevraState> nevra_states;
     std::map<std::string, GroupState> group_states;
+    std::map<std::string, EnvironmentState> environment_states;
     std::map<std::string, ModuleState> module_states;
     SystemState system_state;
     std::optional<std::map<std::string, std::set<std::string>>> package_groups_cache;
