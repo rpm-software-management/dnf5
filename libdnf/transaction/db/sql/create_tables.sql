@@ -41,15 +41,6 @@ R"**(
         PRIMARY KEY("id")
     );
 
-    CREATE TABLE "console_output" (
-        "id" INTEGER,
-        "trans_id" INTEGER,
-        "file_descriptor" INTEGER NOT NULL,       /* stdout: 1, stderr : 2 */
-        "line" TEXT NOT NULL,
-        PRIMARY KEY("id"),
-        FOREIGN KEY("trans_id") REFERENCES "trans"("id")
-    );
-
     CREATE TABLE "item" (
         "id" INTEGER,
         PRIMARY KEY("id")

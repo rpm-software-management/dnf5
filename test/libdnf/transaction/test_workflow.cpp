@@ -121,10 +121,6 @@ void TransactionWorkflowTest::test_default_workflow() {
     // save transaction and all associated transaction items
     trans.start();
 
-    // record transaction output coming from rpm transaction callbacks
-    trans.add_console_output_line(1, "line1");
-    trans.add_console_output_line(2, "line2");
-
     for (auto & env : trans.get_comps_environments()) {
         env.set_state(TransactionItemState::OK);
     }
