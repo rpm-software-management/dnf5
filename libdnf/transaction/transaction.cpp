@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "db/comps_environment.hpp"
 #include "db/comps_group.hpp"
-#include "db/console_output.hpp"
 #include "db/db.hpp"
 #include "db/rpm.hpp"
 #include "db/trans.hpp"
@@ -84,35 +83,6 @@ bool Transaction::operator<(const Transaction & other) const {
 
 bool Transaction::operator>(const Transaction & other) const {
     return get_id() < other.get_id();
-}
-
-
-const std::vector<std::pair<int, std::string>> & Transaction::get_console_output() {
-    if (console_output) {
-        return *console_output;
-    }
-
-    console_output = console_output_load(*transaction_db_connect(*base), *this);
-    return *console_output;
-}
-
-
-void Transaction::add_console_output_line(int file_descriptor, const std::string & line) {
-    if (!get_id()) {
-        throw RuntimeError(M_("Cannot add console output to unsaved transaction"));
-    }
-
-    if (!console_output) {
-        console_output.emplace();
-    }
-
-    auto conn = transaction_db_connect(*base);
-
-    // save the line to the database
-    console_output_insert_line(*conn, *this, file_descriptor, line);
-
-    // also store the line in the console_output vector
-    console_output->emplace_back(file_descriptor, line);
 }
 
 

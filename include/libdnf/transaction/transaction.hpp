@@ -194,16 +194,6 @@ public:
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setState(libdnf::TransactionState value)
     void set_state(State value) { state = value; }
 
-    /// Get lines recorded during the transaction
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getConsoleOutput()
-    const std::vector<std::pair<int, std::string>> & get_console_output();
-
-    /// Record a line printed during the transction to the database and also store it in the object
-    ///
-    /// The method must be called only on a started transaction
-    void add_console_output_line(int file_descriptor, const std::string & line);
-
     /// Return all comps environments associated with the transaction
     ///
     /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
