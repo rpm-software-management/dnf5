@@ -193,6 +193,11 @@ public:
 private:
     friend Base;
 
+    /// @return True if the State instance does not contain information about installed
+    /// packages and this information should be imported from other sources.
+    /// @since 5.0
+    bool packages_import_required();
+
     /// Reset modules states to match given new values.
     /// @param new_states New values for modules states.
     /// @since 5.0

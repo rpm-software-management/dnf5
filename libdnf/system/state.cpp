@@ -199,6 +199,13 @@ State::State(const std::filesystem::path & path) : path(path) {
 }
 
 
+bool State::packages_import_required() {
+    // TODO(mblaha) - detect by absence of toml file instead of empty nevra_states?
+    // Because even empty nevra_states is a valid state.
+    return nevra_states.empty();
+}
+
+
 transaction::TransactionItemReason State::get_package_reason(const std::string & na) {
     transaction::TransactionItemReason packages_reason = transaction::TransactionItemReason::NONE;
     auto it = package_states.find(na);
