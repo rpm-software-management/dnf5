@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/module/module_sack.hpp"
+#include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
 
@@ -30,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <optional>
 #include <set>
 #include <string>
+#include <vector>
 
 
 namespace libdnf::system {
@@ -222,6 +224,17 @@ private:
     /// @param new_states New values for modules states.
     /// @since 5.0
     void reset_module_states(std::map<std::string, ModuleState> new_states) { module_states = new_states; }
+
+    /// Reset packages system state to match given values.
+    /// @param installed_packages Vector of tuples <rpm::Nevra nevra, TransactionItemReason reason, std::string repository_id> of currently installed packages
+    /// @param installed_groups Vector of tuples <std::string group_id, TransactionItemReason reason, std::set<std::string> installed_packages> of currently installed groups
+    /// @param installed_environments Vector of tuples <std::string environment_id, std::set<std::string> installed_groups> of currently installed environmental groups
+    /// @since 5.0
+    void reset_packages_states(
+        std::map<std::string, libdnf::system::PackageState> && package_states,
+        std::map<std::string, libdnf::system::NevraState> && nevra_states,
+        std::map<std::string, libdnf::system::GroupState> && group_states,
+        std::map<std::string, libdnf::system::EnvironmentState> && environment_states);
 
     /// Loads the system state from the filesystem path given in constructor.
     /// @since 5.0
