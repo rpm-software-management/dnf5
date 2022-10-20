@@ -525,4 +525,24 @@ std::filesystem::path State::get_system_state_path() {
     return path / "system.toml";
 }
 
+void State::reset_packages_states(
+    std::map<std::string, libdnf::system::PackageState> && package_states,
+    std::map<std::string, libdnf::system::NevraState> && nevra_states,
+    std::map<std::string, libdnf::system::GroupState> && group_states,
+    std::map<std::string, libdnf::system::EnvironmentState> && environment_states) {
+    this->package_states = std::move(package_states);
+    this->nevra_states = std::move(nevra_states);
+    this->group_states = std::move(group_states);
+    this->environment_states = std::move(environment_states);
+
+    // Try to save the new system state.
+    // dnf can be used without root priviledges or with read-only system state location.
+    // In that case ignore the filesystem errors and only keep new system state in memory.
+    try {
+        save();
+    } catch (const std::filesystem::filesystem_error & e) {
+        // TODO(mblaha) - log this? (will need access to the base)
+    }
+}
+
 }  // namespace libdnf::system
