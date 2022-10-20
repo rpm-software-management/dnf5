@@ -147,14 +147,34 @@ void Base::setup() {
 
     get_vars()->load(installroot.get_value(), config.varsdir().get_value());
 
+    // TODO(mblaha) - move system state load closer to the system repo loading
     std::filesystem::path system_state_dir{config.system_state_dir().get_value()};
     p_impl->system_state.emplace(installroot.get_value() / system_state_dir.relative_path());
+
+    auto & system_state = p_impl->get_system_state();
 
     // TODO(mblaha) - this is temporary override of modules state by reading
     // dnf4 persistor from /etc/dnf/modules.d/
     // Remove once reading of dnf4 data is not needed
     libdnf::dnf4convert::Dnf4Convert convertor(get_weak_ptr());
-    p_impl->get_system_state().reset_module_states(convertor.read_module_states());
+    system_state.reset_module_states(convertor.read_module_states());
+
+    if (system_state.packages_import_required()) {
+        // TODO(mblaha) - first try dnf5 history database, then fall back to dnf4
+        std::map<std::string, libdnf::system::PackageState> package_states;
+        std::map<std::string, libdnf::system::NevraState> nevra_states;
+        std::map<std::string, libdnf::system::GroupState> group_states;
+        std::map<std::string, libdnf::system::EnvironmentState> environment_states;
+
+        if (convertor.read_package_states_from_history(
+                package_states, nevra_states, group_states, environment_states)) {
+            system_state.reset_packages_states(
+                std::move(package_states),
+                std::move(nevra_states),
+                std::move(group_states),
+                std::move(environment_states));
+        }
+    }
 
     config.varsdir().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
