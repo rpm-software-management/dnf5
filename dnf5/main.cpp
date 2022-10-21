@@ -665,4 +665,5 @@ int main(int argc, char * argv[]) try {
     return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
 } catch (const libdnf::Error & e) {
     std::cerr << libdnf::format(e, false);
+    return static_cast<int>(libdnf::cli::ExitCode::ERROR);
 }
