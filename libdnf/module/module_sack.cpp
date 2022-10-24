@@ -359,8 +359,6 @@ std::string module_state_to_string(ModuleState state) {
     switch (state) {
         case ModuleState::AVAILABLE:
             return "Available";
-        case ModuleState::DEFAULT:
-            return "Default";
         case ModuleState::ENABLED:
             return "Enabled";
         case ModuleState::DISABLED:
@@ -373,8 +371,6 @@ std::string module_state_to_string(ModuleState state) {
 ModuleState module_state_from_string(const std::string & state) {
     if (state == "Available") {
         return ModuleState::AVAILABLE;
-    } else if (state == "Default") {
-        return ModuleState::DEFAULT;
     } else if (state == "Enabled") {
         return ModuleState::ENABLED;
     } else if (state == "Disabled") {
