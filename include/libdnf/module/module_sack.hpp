@@ -44,9 +44,8 @@ namespace libdnf::module {
 // TODO(pkratoch): Make this a docstring.
 // ENABLED - a module that has an enabled stream.
 // DISABLED - a module that is disabled.
-// DEFAULT - a module that has a default stream (but isn't ENABLED nor DISABLED).
 // AVAILABLE - otherwise.
-enum class ModuleState { AVAILABLE, DEFAULT, ENABLED, DISABLED };
+enum class ModuleState { AVAILABLE, ENABLED, DISABLED };
 
 
 /// Container with data and methods related to modules
