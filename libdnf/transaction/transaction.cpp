@@ -91,7 +91,8 @@ std::vector<CompsEnvironment> & Transaction::get_comps_environments() {
         return *comps_environments;
     }
 
-    comps_environments = get_transaction_comps_environments(*transaction_db_connect(*base), *this);
+    comps_environments =
+        CompsEnvironmentDbUtils::get_transaction_comps_environments(*transaction_db_connect(*base), *this);
     return *comps_environments;
 }
 
@@ -191,7 +192,7 @@ void Transaction::start() {
         auto query = TransactionDbUtils::trans_insert_new_query(*conn);
         TransactionDbUtils::trans_insert(*query, *this);
 
-        insert_transaction_comps_environments(*conn, *this);
+        CompsEnvironmentDbUtils::insert_transaction_comps_environments(*conn, *this);
         CompsGroupDbUtils::insert_transaction_comps_groups(*conn, *this);
         RpmDbUtils::insert_transaction_packages(*conn, *this);
         conn->exec("COMMIT");
