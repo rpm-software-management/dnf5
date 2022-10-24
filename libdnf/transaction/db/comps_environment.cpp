@@ -63,7 +63,8 @@ static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_transact
 }
 
 
-std::vector<CompsEnvironment> get_transaction_comps_environments(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+std::vector<CompsEnvironment> CompsEnvironmentDbUtils::get_transaction_comps_environments(
+    libdnf::utils::SQLite3 & conn, Transaction & trans) {
     std::vector<CompsEnvironment> result;
 
     auto query = comps_environment_transaction_item_select_new_query(conn, trans.get_id());
@@ -74,7 +75,7 @@ std::vector<CompsEnvironment> get_transaction_comps_environments(libdnf::utils::
         ti.set_name(query->get<std::string>("name"));
         ti.set_translated_name(query->get<std::string>("translated_name"));
         ti.set_package_types(static_cast<comps::PackageType>(query->get<int>("pkg_types")));
-        comps_environment_groups_select(conn, ti);
+        CompsEnvironmentGroupDbUtils::comps_environment_groups_select(conn, ti);
         result.push_back(std::move(ti));
     }
 
@@ -104,7 +105,8 @@ static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_inse
 }
 
 
-int64_t comps_environment_insert(libdnf::utils::SQLite3::Statement & query, CompsEnvironment & grp) {
+int64_t CompsEnvironmentDbUtils::comps_environment_insert(
+    libdnf::utils::SQLite3::Statement & query, CompsEnvironment & grp) {
     // insert a record to the 'item' table first
     auto query_item_insert = item_insert_new_query(query.get_db());
     auto item_id = item_insert(*query_item_insert);
@@ -122,14 +124,15 @@ int64_t comps_environment_insert(libdnf::utils::SQLite3::Statement & query, Comp
 }
 
 
-void insert_transaction_comps_environments(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+void CompsEnvironmentDbUtils::insert_transaction_comps_environments(
+    libdnf::utils::SQLite3 & conn, Transaction & trans) {
     auto query_comps_environment_insert = comps_environment_insert_new_query(conn);
     auto query_trans_item_insert = trans_item_insert_new_query(conn);
 
     for (auto & env : trans.get_comps_environments()) {
         comps_environment_insert(*query_comps_environment_insert, env);
         transaction_item_insert(*query_trans_item_insert, env);
-        comps_environment_groups_insert(conn, env);
+        CompsEnvironmentGroupDbUtils::comps_environment_groups_insert(conn, env);
     }
 }
 
