@@ -110,7 +110,7 @@ std::vector<CompsGroup> & Transaction::get_comps_groups() {
         return *comps_groups;
     }
 
-    comps_groups = get_transaction_comps_groups(*transaction_db_connect(*base), *this);
+    comps_groups = CompsGroupDbUtils::get_transaction_comps_groups(*transaction_db_connect(*base), *this);
     return *comps_groups;
 }
 
@@ -192,7 +192,7 @@ void Transaction::start() {
         TransactionDbUtils::trans_insert(*query, *this);
 
         insert_transaction_comps_environments(*conn, *this);
-        insert_transaction_comps_groups(*conn, *this);
+        CompsGroupDbUtils::insert_transaction_comps_groups(*conn, *this);
         RpmDbUtils::insert_transaction_packages(*conn, *this);
         conn->exec("COMMIT");
     } catch (...) {

@@ -33,17 +33,19 @@ namespace libdnf::transaction {
 class CompsGroup;
 class Transaction;
 
-
-/// Return a vector of CompsGroup objects with comps groups in a transaction
-std::vector<CompsGroup> get_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans);
-
-
-/// Use a query to insert a new record to the 'comps_group' table
-int64_t comps_group_insert(libdnf::utils::SQLite3::Statement & query, CompsGroup & grp);
+class CompsGroupDbUtils {
+public:
+    /// Return a vector of CompsGroup objects with comps groups in a transaction
+    static std::vector<CompsGroup> get_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans);
 
 
-/// Insert CompsGroup objects associated with a transaction into the database
-void insert_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans);
+    /// Use a query to insert a new record to the 'comps_group' table
+    static int64_t comps_group_insert(libdnf::utils::SQLite3::Statement & query, CompsGroup & grp);
+
+
+    /// Insert CompsGroup objects associated with a transaction into the database
+    static void insert_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans);
+};
 
 
 }  // namespace libdnf::transaction
