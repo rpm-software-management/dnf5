@@ -176,10 +176,13 @@ libdnf::rpm::Package BaseTestCase::get_pkg_i(const std::string & nevra, size_t i
     return *it;
 }
 
+namespace {
 
 // Accessor of private Base::p_impl, see private_accessor.hpp
+create_private_getter_template;
 create_getter(priv_impl, &libdnf::Base::p_impl);
 
+}  // namespace
 
 libdnf::rpm::Package BaseTestCase::add_system_pkg(
     const std::string & relative_path, libdnf::transaction::TransactionItemReason reason) {
