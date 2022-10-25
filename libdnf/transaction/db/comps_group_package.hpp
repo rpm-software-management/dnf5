@@ -30,13 +30,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-/// Load GroupPackage objects from the database to the CompsGroup object
-void comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & group);
+class CompsGroupPackageDbUtils {
+public:
+    /// Load GroupPackage objects from the database to the CompsGroup object
+    static void comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & group);
 
 
-/// Insert GroupPackage objects associated with a CompsGroup into the database
-void comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & group);
-
+    /// Insert GroupPackage objects associated with a CompsGroup into the database
+    static void comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & group);
+};
 
 }  // namespace libdnf::transaction
 
