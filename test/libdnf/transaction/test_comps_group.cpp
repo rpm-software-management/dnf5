@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_comps_group.hpp"
 
+#include "private_accessor.hpp"
+
 #include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/comps_group.hpp"
 #include "libdnf/transaction/transaction.hpp"
@@ -32,9 +34,18 @@ using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionCompsGroupTest);
 
+namespace {
+
+// Allows accessing private methods
+create_private_getter_template;
+create_getter(new_comps_group, &libdnf::transaction::Transaction::new_comps_group);
+create_getter(start, &libdnf::transaction::Transaction::start);
+create_getter(finish, &libdnf::transaction::Transaction::finish);
+
+}  // namespace
 
 static CompsGroup & create_comps_group(Transaction & trans) {
-    auto & grp = trans.new_comps_group();
+    auto & grp = (trans.*get(new_comps_group{}))();
 
     grp.set_group_id("core");
     grp.set_name("Smallest possible installation");
@@ -73,8 +84,8 @@ void TransactionCompsGroupTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(1LU, trans.get_comps_groups().size());
 
     // save the transaction with all transaction items to the database
-    trans.start();
-    trans.finish(TransactionState::OK);
+    (trans.*get(start{}))();
+    (trans.*get(finish{}))(TransactionState::OK);
 
     // create a new Base to force reading the transaction from disk
     auto base2 = new_base();

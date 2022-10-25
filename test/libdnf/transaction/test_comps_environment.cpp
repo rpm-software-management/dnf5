@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_comps_environment.hpp"
 
+#include "private_accessor.hpp"
+
 #include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/comps_environment.hpp"
 #include "libdnf/transaction/transaction.hpp"
@@ -32,9 +34,18 @@ using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionCompsEnvironmentTest);
 
+namespace {
 
-static CompsEnvironment & create_comps_environment(Transaction & trans) {
-    auto & env = trans.new_comps_environment();
+// Allows accessing private methods
+create_private_getter_template;
+create_getter(new_comps_environment, &libdnf::transaction::Transaction::new_comps_environment);
+create_getter(start, &libdnf::transaction::Transaction::start);
+create_getter(finish, &libdnf::transaction::Transaction::finish);
+
+}  //namespace
+
+CompsEnvironment & create_comps_environment(Transaction & trans) {
+    auto & env = (trans.*get(new_comps_environment{}))();
 
     env.set_environment_id("minimal");
     env.set_name("Minimal Environment");
@@ -73,8 +84,8 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(1LU, trans.get_comps_environments().size());
 
     // save the transaction with all transaction items to the database
-    trans.start();
-    trans.finish(TransactionState::OK);
+    (trans.*get(start{}))();
+    (trans.*get(finish{}))(TransactionState::OK);
 
     // create a new Base to force reading the transaction from disk
     auto base2 = new_base();

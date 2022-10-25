@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_rpm_package.hpp"
 
+#include "private_accessor.hpp"
+
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/transaction/rpm_package.hpp"
 #include "libdnf/transaction/transaction.hpp"
@@ -32,6 +34,15 @@ using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionRpmPackageTest);
 
+namespace {
+
+// Allows accessing private methods
+create_private_getter_template;
+create_getter(new_package, &libdnf::transaction::Transaction::new_package);
+create_getter(start, &libdnf::transaction::Transaction::start);
+create_getter(finish, &libdnf::transaction::Transaction::finish);
+
+}  //namespace
 
 void TransactionRpmPackageTest::test_save_load() {
     constexpr std::size_t num = 10;
@@ -43,7 +54,7 @@ void TransactionRpmPackageTest::test_save_load() {
 
     // create packages in the transaction
     for (std::size_t i = 0; i < num; i++) {
-        auto & pkg = trans.new_package();
+        auto & pkg = (trans.*get(new_package{}))();
         pkg.set_name("name_" + std::to_string(i));
         pkg.set_epoch("1");
         pkg.set_version("2");
@@ -59,8 +70,8 @@ void TransactionRpmPackageTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(num, trans.get_packages().size());
 
     // save the transaction with all transaction items to the database
-    trans.start();
-    trans.finish(TransactionState::OK);
+    (trans.*get(start{}))();
+    (trans.*get(finish{}))(TransactionState::OK);
 
     // create a new Base to force reading the transaction from disk
     auto base2 = new_base();

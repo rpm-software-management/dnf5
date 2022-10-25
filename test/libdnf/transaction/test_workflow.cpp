@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_workflow.hpp"
 
+#include "private_accessor.hpp"
+
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/transaction.hpp"
@@ -32,6 +34,18 @@ using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionWorkflowTest);
 
+namespace {
+
+// Allows accessing private methods
+create_private_getter_template;
+create_getter(new_package, &libdnf::transaction::Transaction::new_package);
+create_getter(new_comps_group, &libdnf::transaction::Transaction::new_comps_group);
+create_getter(new_comps_environment, &libdnf::transaction::Transaction::new_comps_environment);
+create_getter(set_releasever, &libdnf::transaction::Transaction::set_releasever);
+create_getter(start, &libdnf::transaction::Transaction::start);
+create_getter(finish, &libdnf::transaction::Transaction::finish);
+
+}  //namespace
 
 void TransactionWorkflowTest::test_default_workflow() {
     auto base = new_base();
@@ -41,7 +55,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     CPPUNIT_ASSERT_EQUAL(TransactionState::STARTED, trans.get_state());
 
     // set vars
-    trans.set_releasever("26");
+    (trans.*get(set_releasever{}))("26");
 
     // populate goal
     // resolve dependencies
@@ -50,7 +64,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     // add rpm packages to the transaction
 
     // bash-4.4.12-5.fc26.x86_64
-    auto & rpm_bash = trans.new_package();
+    auto & rpm_bash = (trans.*get(new_package{}))();
     rpm_bash.set_name("bash");
     rpm_bash.set_epoch("0");
     rpm_bash.set_version("4.4.12");
@@ -61,7 +75,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     rpm_bash.set_reason(TransactionItemReason::GROUP);
 
     // systemd-233-6.fc26
-    auto & rpm_systemd = trans.new_package();
+    auto & rpm_systemd = (trans.*get(new_package{}))();
     rpm_systemd.set_name("systemd");
     rpm_systemd.set_epoch("0");
     rpm_systemd.set_version("233");
@@ -72,7 +86,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     rpm_systemd.set_reason(TransactionItemReason::USER);
 
     // sysvinit-2.88-14.dsf.fc20
-    auto & rpm_sysvinit = trans.new_package();
+    auto & rpm_sysvinit = (trans.*get(new_package{}))();
     rpm_sysvinit.set_name("sysvinit");
     rpm_sysvinit.set_epoch("0");
     rpm_sysvinit.set_version("2.88");
@@ -87,7 +101,7 @@ void TransactionWorkflowTest::test_default_workflow() {
 
     // add comps groups to the transaction
 
-    auto & comps_group_core = trans.new_comps_group();
+    auto & comps_group_core = (trans.*get(new_comps_group{}))();
     comps_group_core.set_group_id("core");
     comps_group_core.set_name("Core");
     comps_group_core.set_translated_name("Úplný základ");
@@ -105,7 +119,7 @@ void TransactionWorkflowTest::test_default_workflow() {
 
     // add comps environments to the transaction
 
-    auto & comps_environment_minimal = trans.new_comps_environment();
+    auto & comps_environment_minimal = (trans.*get(new_comps_environment{}))();
     comps_environment_minimal.set_environment_id("minimal");
     comps_environment_minimal.set_name("Minimal");
     comps_environment_minimal.set_translated_name("mmm");
@@ -119,7 +133,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     minimal_core.set_group_type(libdnf::comps::PackageType::MANDATORY);
 
     // save transaction and all associated transaction items
-    trans.start();
+    (trans.*get(start{}))();
 
     for (auto & env : trans.get_comps_environments()) {
         env.set_state(TransactionItemState::OK);
@@ -134,6 +148,6 @@ void TransactionWorkflowTest::test_default_workflow() {
     }
 
     // finish transaction
-    trans.finish(TransactionState::OK);
+    (trans.*get(finish{}))(TransactionState::OK);
     CPPUNIT_ASSERT_EQUAL(TransactionState::OK, trans.get_state());
 }
