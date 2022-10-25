@@ -55,7 +55,7 @@ static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_group_package_select
 }
 
 
-void comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & group) {
+void CompsGroupPackageDbUtils::comps_group_packages_select(libdnf::utils::SQLite3 & conn, CompsGroup & group) {
     auto query = comps_group_package_select_new_query(conn);
     query->bindv(group.get_item_id());
 
@@ -89,7 +89,7 @@ static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_group_package_in
 }
 
 
-void comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & group) {
+void CompsGroupPackageDbUtils::comps_group_packages_insert(libdnf::utils::SQLite3 & conn, CompsGroup & group) {
     auto query_pkg_name_insert_if_not_exists = pkg_name_insert_if_not_exists_new_query(conn);
     auto query = comps_group_package_insert_new_query(conn);
     for (auto & pkg : group.get_packages()) {
