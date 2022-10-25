@@ -66,7 +66,7 @@ static std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_selec
 }
 
 
-int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Package & pkg) {
+int64_t RpmDbUtils::rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Package & pkg) {
     transaction_item_select(query, pkg);
     pkg.set_name(query.get<std::string>("name"));
     pkg.set_epoch(std::to_string(query.get<uint32_t>("epoch")));
@@ -99,7 +99,7 @@ static std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_insert_new_query(l
 }
 
 
-int64_t rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
+int64_t RpmDbUtils::rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(
         rpm.get_item_id(), rpm.get_name(), rpm.get_epoch_int(), rpm.get_version(), rpm.get_release(), rpm.get_arch());
     query.step();
@@ -132,7 +132,7 @@ static std::unique_ptr<libdnf::utils::SQLite3::Statement> rpm_select_pk_new_quer
 }
 
 
-int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
+int64_t RpmDbUtils::rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package & rpm) {
     query.bindv(rpm.get_name(), rpm.get_epoch_int(), rpm.get_version(), rpm.get_release(), rpm.get_arch());
 
     int64_t result = 0;
@@ -144,7 +144,7 @@ int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package &
 }
 
 
-bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package & rpm) {
+bool RpmDbUtils::rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package & rpm) {
     bool result = false;
     query.bindv(rpm_id);
 
@@ -163,7 +163,7 @@ bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package &
 }
 
 
-std::vector<Package> get_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+std::vector<Package> RpmDbUtils::get_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     std::vector<Package> result;
 
     auto query = rpm_transaction_item_select_new_query(conn, trans.get_id());
@@ -177,7 +177,7 @@ std::vector<Package> get_transaction_packages(libdnf::utils::SQLite3 & conn, Tra
 }
 
 
-void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
+void RpmDbUtils::insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     auto query_rpm_select_pk = rpm_select_pk_new_query(conn);
     auto query_item_insert = item_insert_new_query(conn);
     auto query_pkg_name_insert_if_not_exists = pkg_name_insert_if_not_exists_new_query(conn);

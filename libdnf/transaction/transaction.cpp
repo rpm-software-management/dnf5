@@ -129,7 +129,7 @@ std::vector<Package> & Transaction::get_packages() {
         return *packages;
     }
 
-    packages = get_transaction_packages(*transaction_db_connect(*base), *this);
+    packages = RpmDbUtils::get_transaction_packages(*transaction_db_connect(*base), *this);
     return *packages;
 }
 
@@ -193,7 +193,7 @@ void Transaction::start() {
 
         insert_transaction_comps_environments(*conn, *this);
         insert_transaction_comps_groups(*conn, *this);
-        insert_transaction_packages(*conn, *this);
+        RpmDbUtils::insert_transaction_packages(*conn, *this);
         conn->exec("COMMIT");
     } catch (...) {
         conn->exec("ROLLBACK");

@@ -34,30 +34,32 @@ namespace libdnf::transaction {
 class Package;
 class Transaction;
 
-
-/// Use a query to select a record from the 'rpm' table and populate a TransactionItem
-int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Package & pkg);
-
-
-/// Use a query to insert a new record to the 'rpm' table
-int64_t rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rpm);
+class RpmDbUtils {
+public:
+    /// Use a query to select a record from the 'rpm' table and populate a TransactionItem
+    static int64_t rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Package & pkg);
 
 
-/// Find a primary key of a recod in table 'rpm' that matches the Package.
-/// Return an existing primary key or 0 if the record was not found.
-int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package & rpm);
+    /// Use a query to insert a new record to the 'rpm' table
+    static int64_t rpm_insert(libdnf::utils::SQLite3::Statement & query, const Package & rpm);
 
 
-/// Use a query to select a record from 'rpm' table and populate a Package
-bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package & rpm);
+    /// Find a primary key of a recod in table 'rpm' that matches the Package.
+    /// Return an existing primary key or 0 if the record was not found.
+    static int64_t rpm_select_pk(libdnf::utils::SQLite3::Statement & query, const Package & rpm);
 
 
-/// Return a vector of Package objects with packages in a transaction
-std::vector<Package> get_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
+    /// Use a query to select a record from 'rpm' table and populate a Package
+    static bool rpm_select(libdnf::utils::SQLite3::Query & query, int64_t rpm_id, Package & rpm);
 
 
-/// Insert Package objects associated with a transaction into the database
-void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
+    /// Return a vector of Package objects with packages in a transaction
+    static std::vector<Package> get_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
+
+
+    /// Insert Package objects associated with a transaction into the database
+    static void insert_transaction_packages(libdnf::utils::SQLite3 & conn, Transaction & trans);
+};
 
 
 }  // namespace libdnf::transaction
