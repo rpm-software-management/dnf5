@@ -32,6 +32,8 @@ namespace libdnf::transaction {
 
 class CompsGroupPackage;
 class Transaction;
+class CompsGroupDbUtils;
+class CompsGroupPackageDbUtils;
 
 
 /// CompsGroup contains a copy of important data from comps::CompsGroup that is used
@@ -39,7 +41,11 @@ class Transaction;
 ///
 /// @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupItem
 class CompsGroup : public TransactionItem {
-public:
+private:
+    friend Transaction;
+    friend CompsGroupDbUtils;
+    friend CompsGroupPackageDbUtils;
+
     explicit CompsGroup(const Transaction & trans);
 
     /// Get text id of the group (xml element: <comps><group><id>VALUE</id>...)
@@ -101,7 +107,6 @@ public:
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.toStr()
     std::string to_string() const { return get_group_id(); }
 
-private:
     friend class CompsGroupPackage;
     std::string group_id;
     std::string name;
@@ -115,7 +120,10 @@ private:
 ///
 /// @replaces libdnf:transaction/CompsGroupItem.hpp:class:CompsGroupPackage
 class CompsGroupPackage {
-public:
+private:
+    friend Transaction;
+    friend CompsGroupPackageDbUtils;
+
     /// Get database id (primary key)
     ///
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.getId()
@@ -160,7 +168,6 @@ public:
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupPackage.setPackageType(libdnf::PackageType value)
     void set_package_type(libdnf::comps::PackageType value) { package_type = value; }
 
-private:
     int64_t id = 0;
     std::string name;
     bool installed = false;

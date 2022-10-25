@@ -36,6 +36,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 class TransactionDbUtils;
+class CompsEnvironment;
+class CompsEnvironmentDbUtils;
 
 class Transaction;
 using TransactionWeakPtr = libdnf::WeakPtr<Transaction, false>;
@@ -153,6 +155,8 @@ private:
     friend libdnf::base::Transaction;
     friend TransactionDbUtils;
     friend TransactionHistory;
+    friend CompsEnvironment;
+    friend CompsEnvironmentDbUtils;
 
     /// Constructs a new, empty `Transaction` object. The object is expected to
     /// be filled by the user and saved to the database.
