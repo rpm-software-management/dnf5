@@ -29,13 +29,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
+class CompsEnvironmentGroupDbUtils {
+public:
+    /// Load EnvironmentGroup objects from the database to the CompsEnvironment object
+    static void comps_environment_groups_select(libdnf::utils::SQLite3 & conn, CompsEnvironment & env);
 
-/// Load EnvironmentGroup objects from the database to the CompsEnvironment object
-void comps_environment_groups_select(libdnf::utils::SQLite3 & conn, CompsEnvironment & env);
-
-
-/// Insert EnvironmentGroup objects associated with a CompsEnvironment into the database
-void comps_environment_groups_insert(libdnf::utils::SQLite3 & conn, CompsEnvironment & env);
+    /// Insert EnvironmentGroup objects associated with a CompsEnvironment into the database
+    static void comps_environment_groups_insert(libdnf::utils::SQLite3 & conn, CompsEnvironment & env);
+};
 
 
 }  // namespace libdnf::transaction
