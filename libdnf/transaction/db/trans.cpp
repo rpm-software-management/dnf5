@@ -65,7 +65,7 @@ std::vector<Transaction> TransactionDbUtils::load_from_select(
     std::vector<Transaction> res;
 
     while (query.step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
-        auto & trans = res.emplace_back(base, query.get<int>("id"));
+        Transaction trans(base, query.get<int>("id"));
         trans.set_dt_start(query.get<int64_t>("dt_begin"));
         trans.set_dt_end(query.get<int64_t>("dt_end"));
         trans.set_rpmdb_version_begin(query.get<std::string>("rpmdb_version_begin"));
@@ -75,6 +75,7 @@ std::vector<Transaction> TransactionDbUtils::load_from_select(
         trans.set_description(query.get<std::string>("description"));
         trans.set_comment(query.get<std::string>("comment"));
         trans.set_state(transaction_state_from_string(query.get<std::string>("state")));
+        res.emplace_back(std::move(trans));
     }
 
     return res;

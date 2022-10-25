@@ -35,6 +35,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
+class TransactionDbUtils;
+
 class Transaction;
 using TransactionWeakPtr = libdnf::WeakPtr<Transaction, false>;
 
@@ -45,6 +47,7 @@ namespace libdnf::transaction {
 
 class Item;
 class Transformer;
+class TransactionHistory;
 
 
 /// @replaces libdnf:transaction/Types.hpp:enum:TransactionState
@@ -73,6 +76,84 @@ class Transaction {
 public:
     using State = TransactionState;
 
+    virtual ~Transaction() = default;
+
+    bool operator==(const Transaction & other) const;
+    bool operator<(const Transaction & other) const;
+    bool operator>(const Transaction & other) const;
+
+    /// Get Transaction database id (primary key)
+    /// Return 0 if the id wasn't set yet
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getId()
+    int64_t get_id() const noexcept { return id; }
+
+    /// Get date and time of the transaction start
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_dt_begin()
+    int64_t get_dt_start() const noexcept { return dt_begin; }
+
+    /// Get date and time of the transaction end
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_dt_begin()
+    int64_t get_dt_end() const noexcept { return dt_end; }
+
+    /// Get RPM database version before the transaction
+    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_begin()
+    const std::string & get_rpmdb_version_begin() const noexcept { return rpmdb_version_begin; }
+
+    /// Get RPM database version after the transaction
+    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_end()
+    const std::string & get_rpmdb_version_end() const noexcept { return rpmdb_version_end; }
+
+    /// Get $releasever variable value that was used during the transaction
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_releasever()
+    const std::string & get_releasever() const noexcept { return releasever; }
+
+    /// Get UID of a user that started the transaction
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_user_id()
+    uint32_t get_user_id() const noexcept { return user_id; }
+
+    /// Get the description of the transaction (e.g. the CLI command that was executed)
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_cmdline()
+    const std::string & get_description() const noexcept { return description; }
+
+    /// Get a user-specified comment describing the transaction
+    const std::string & get_comment() const noexcept { return comment; }
+
+    /// Get transaction state
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getState()
+    State get_state() const noexcept { return state; }
+
+    /// Return all comps environments associated with the transaction
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
+    std::vector<CompsEnvironment> & get_comps_environments();
+
+    /// Return all comps groups associated with the transaction
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
+    std::vector<CompsGroup> & get_comps_groups();
+
+    /// Return all rpm packages associated with the transaction
+    ///
+    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
+    std::vector<Package> & get_packages();
+
+private:
+    friend Transformer;
+    friend libdnf::base::Transaction;
+    friend TransactionDbUtils;
+    friend TransactionHistory;
+
     /// Constructs a new, empty `Transaction` object. The object is expected to
     /// be filled by the user and saved to the database.
     ///
@@ -87,60 +168,38 @@ public:
     /// @param id The id of the transaction.
     Transaction(const libdnf::BaseWeakPtr & base, int64_t id);
 
-    virtual ~Transaction() = default;
-
-    bool operator==(const Transaction & other) const;
-    bool operator<(const Transaction & other) const;
-    bool operator>(const Transaction & other) const;
-
-    /// Get Transaction database id (primary key)
-    /// Return 0 if the id wasn't set yet
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getId()
-    int64_t get_id() const noexcept { return id; }
-
     /// Set Transaction database id (primary key)
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setId(int64_t value)
     void set_id(int64_t value) { id = value; }
 
-    /// Get date and time of the transaction start
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_dt_begin()
-    int64_t get_dt_start() const noexcept { return dt_begin; }
+    /// Set a user-specified comment describing the transaction
+    void set_comment(const std::string & value) { comment = value; }
 
     /// Set date and time of the transaction start
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setDtBegin(int64_t value)
     void set_dt_start(int64_t value) { dt_begin = value; }
 
-    /// Get date and time of the transaction end
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_dt_begin()
-    int64_t get_dt_end() const noexcept { return dt_end; }
-
     /// Set date and time of the transaction end
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setDtEnd(int64_t value)
     void set_dt_end(int64_t value) { dt_end = value; }
 
-    /// Get RPM database version before the transaction
-    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
+    /// Set the description of the transaction (e.g. the CLI command that was executed)
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_begin()
-    const std::string & get_rpmdb_version_begin() const noexcept { return rpmdb_version_begin; }
+    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setCmdline(const std::string & value)
+    void set_description(const std::string & value) { description = value; }
 
-    /// Set RPM database version before the transaction
-    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
+    /// Set UID of a user that started the transaction
     ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionBegin(const std::string & value)
-    void set_rpmdb_version_begin(const std::string & value) { rpmdb_version_begin = value; }
+    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setUserId(uint32_t value)
+    void set_user_id(uint32_t value) { user_id = value; }
 
-    /// Get RPM database version after the transaction
-    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
+    /// Set $releasever variable value that was used during the transaction
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_rpmdb_version_end()
-    const std::string & get_rpmdb_version_end() const noexcept { return rpmdb_version_end; }
+    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setReleasever(const std::string & value)
+    void set_releasever(const std::string & value) { releasever = value; }
 
     /// Set RPM database version after the transaction
     /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
@@ -148,78 +207,16 @@ public:
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionEnd(const std::string & value)
     void set_rpmdb_version_end(const std::string & value) { rpmdb_version_end = value; }
 
-    /// Get $releasever variable value that was used during the transaction
+    /// Set RPM database version before the transaction
+    /// Format: <rpm_count>:<sha1 of sorted SHA1HEADER fields of installed RPMs>
     ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_releasever()
-    const std::string & get_releasever() const noexcept { return releasever; }
-
-    /// Set $releasever variable value that was used during the transaction
-    ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setReleasever(const std::string & value)
-    void set_releasever(const std::string & value) { releasever = value; }
-
-    /// Get UID of a user that started the transaction
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_user_id()
-    uint32_t get_user_id() const noexcept { return user_id; }
-
-    /// Set UID of a user that started the transaction
-    ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setUserId(uint32_t value)
-    void set_user_id(uint32_t value) { user_id = value; }
-
-    /// Get the description of the transaction (e.g. the CLI command that was executed)
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.get_cmdline()
-    const std::string & get_description() const noexcept { return description; }
-
-    /// Set the description of the transaction (e.g. the CLI command that was executed)
-    ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setCmdline(const std::string & value)
-    void set_description(const std::string & value) { description = value; }
-
-    /// Get a user-specified comment describing the transaction
-    const std::string & get_comment() const noexcept { return comment; }
-
-    /// Set a user-specified comment describing the transaction
-    void set_comment(const std::string & value) { comment = value; }
-
-    /// Get transaction state
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getState()
-    State get_state() const noexcept { return state; }
+    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setRpmdbVersionBegin(const std::string & value)
+    void set_rpmdb_version_begin(const std::string & value) { rpmdb_version_begin = value; }
 
     /// Set transaction state
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.setState(libdnf::TransactionState value)
     void set_state(State value) { state = value; }
-
-    /// Return all comps environments associated with the transaction
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
-    std::vector<CompsEnvironment> & get_comps_environments();
-
-    /// Create a new comps environment in the transaction and return a reference to it.
-    /// The environment is owned by the transaction.
-    ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
-    CompsEnvironment & new_comps_environment();
-
-    /// Return all comps groups associated with the transaction
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
-    std::vector<CompsGroup> & get_comps_groups();
-
-    /// Create a new comps group in the transaction and return a reference to it.
-    /// The group is owned by the transaction.
-    ///
-    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
-    CompsGroup & new_comps_group();
-
-    /// Return all rpm packages associated with the transaction
-    ///
-    /// @replaces libdnf:transaction/Transaction.hpp:method:Transaction.getItems()
-    std::vector<Package> & get_packages();
 
     /// Create a new rpm package in the transaction and return a reference to it.
     /// The package is owned by the transaction.
@@ -235,10 +232,21 @@ public:
         const std::vector<libdnf::base::TransactionGroup> & transaction_groups,
         const std::set<std::string> & installed_names);
 
+    /// Create a new comps group in the transaction and return a reference to it.
+    /// The group is owned by the transaction.
+    ///
+    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
+    CompsGroup & new_comps_group();
+
+    /// Create a new comps environment in the transaction and return a reference to it.
+    /// The environment is owned by the transaction.
+    ///
+    /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.addItem(std::shared_ptr<Item> item, const std::string & repoid, libdnf::TransactionItemAction action, libdnf::TransactionItemReason reason)
+    CompsEnvironment & new_comps_environment();
+
     /// Start the transaction by inserting it into the database
     ///
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.begin()
-    /// TODO(lukash) make the whole transaction creation API private
     void start();
 
     /// Finish the transaction by updating it's state in the database
@@ -246,10 +254,6 @@ public:
     /// @replaces libdnf:transaction/private/Transaction.hpp:method:Transaction.finish(libdnf::TransactionState state)
     void finish(TransactionState state);
 
-protected:
-    friend Transformer;
-
-private:
     int64_t id{0};
 
     int64_t dt_begin = 0;

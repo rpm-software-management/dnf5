@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_query.hpp"
 
+#include "private_accessor.hpp"
+
 #include "libdnf/transaction/transaction.hpp"
 
 #include <string>
@@ -30,6 +32,14 @@ using namespace libdnf::transaction;
 
 CPPUNIT_TEST_SUITE_REGISTRATION(TransactionQueryTest);
 
+namespace {
+
+// Allows accessing private methods
+create_private_getter_template;
+create_getter(start, &libdnf::transaction::Transaction::start);
+create_getter(finish, &libdnf::transaction::Transaction::finish);
+
+}  //namespace
 
 void TransactionQueryTest::test_filter_id_eq() {
     auto base = new_base();
@@ -38,8 +48,8 @@ void TransactionQueryTest::test_filter_id_eq() {
     auto trans = base->get_transaction_history()->new_transaction();
 
     // save the transaction
-    trans.start();
-    trans.finish(TransactionState::OK);
+    (trans.*get(start{}))();
+    (trans.*get(finish{}))(TransactionState::OK);
 
     // create a new Base to force reading the transaction from disk
     auto base2 = new_base();
