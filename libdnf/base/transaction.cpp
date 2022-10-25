@@ -454,7 +454,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     plugins.pre_transaction(*transaction);
 
     // start history db transaction
-    auto db_transaction = base->get_transaction_history()->new_transaction();
+    auto db_transaction = libdnf::transaction::Transaction(base);
     // save history db transaction id
     history_db_id = db_transaction.get_id();
 

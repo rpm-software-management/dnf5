@@ -37,10 +37,6 @@ public:
     explicit TransactionHistory(const libdnf::BaseWeakPtr & base);
     explicit TransactionHistory(libdnf::Base & base);
 
-    /// Create a new Transaction object.
-    // TODO(lukash) make private -> move out of the public interface
-    libdnf::transaction::Transaction new_transaction();
-
     TransactionHistoryWeakPtr get_weak_ptr() { return TransactionHistoryWeakPtr(this, &guard); }
 
     /// Lists all transaction IDs from the transaction history database. The
@@ -73,6 +69,9 @@ public:
     libdnf::BaseWeakPtr get_base() const;
 
 private:
+    /// Create a new Transaction object.
+    libdnf::transaction::Transaction new_transaction();
+
     BaseWeakPtr base;
 
     WeakPtrGuard<TransactionHistory, false> guard;
