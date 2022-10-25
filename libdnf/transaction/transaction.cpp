@@ -102,7 +102,8 @@ CompsEnvironment & Transaction::new_comps_environment() {
         comps_environments.emplace();
     }
 
-    return comps_environments->emplace_back(*this);
+    CompsEnvironment comps_env(*this);
+    return comps_environments->emplace_back(std::move(comps_env));
 }
 
 
@@ -121,7 +122,8 @@ CompsGroup & Transaction::new_comps_group() {
         comps_groups.emplace();
     }
 
-    return comps_groups->emplace_back(*this);
+    CompsGroup comps_group(*this);
+    return comps_groups->emplace_back(comps_group);
 }
 
 

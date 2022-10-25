@@ -30,8 +30,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::transaction {
 
+class Transaction;
 class CompsEnvironmentGroup;
-class Transction;
+class CompsEnvironmentDbUtils;
+class CompsEnvironmentGroupDbUtils;
 
 
 /// CompsEnvironment contains a copy of important data from comps::CompsEnvironment that is used
@@ -39,7 +41,11 @@ class Transction;
 ///
 /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:class:CompsEnvironmentItem
 class CompsEnvironment : public TransactionItem {
-public:
+private:
+    friend Transaction;
+    friend CompsEnvironmentDbUtils;
+    friend CompsEnvironmentGroupDbUtils;
+
     explicit CompsEnvironment(const Transaction & trans);
 
     /// Get text id of the environment (xml element: <comps><environment><id>VALUE</id>...)
@@ -102,8 +108,6 @@ public:
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentItem.toStr()
     std::string to_string() const { return get_environment_id(); }
 
-private:
-    friend class CompsEnvironmentGroup;
     std::string environment_id;
     std::string name;
     std::string translated_name;
@@ -114,7 +118,9 @@ private:
 
 /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:class:CompsEnvironmentGroup
 class CompsEnvironmentGroup {
-public:
+private:
+    friend CompsEnvironmentGroupDbUtils;
+
     /// Get database id (primary key)
     ///
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentGroup.getId()
@@ -155,7 +161,6 @@ public:
     /// @replaces libdnf:transaction/CompsEnvironmentItem.hpp:method:CompsEnvironmentGroup.setGroupType(libdnf::CompsPackageType value)
     void set_group_type(libdnf::comps::PackageType value) { group_type = value; }
 
-private:
     int64_t id = 0;
     std::string group_id;
     bool installed = false;
