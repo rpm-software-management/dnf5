@@ -54,7 +54,8 @@ static std::unique_ptr<libdnf::utils::SQLite3::Query> comps_environment_group_se
 }
 
 
-void comps_environment_groups_select(libdnf::utils::SQLite3 & conn, CompsEnvironment & env) {
+void CompsEnvironmentGroupDbUtils::comps_environment_groups_select(
+    libdnf::utils::SQLite3 & conn, CompsEnvironment & env) {
     auto query = comps_environment_group_select_new_query(conn);
     query->bindv(env.get_item_id());
 
@@ -88,7 +89,8 @@ static std::unique_ptr<libdnf::utils::SQLite3::Statement> comps_environment_grou
 }
 
 
-void comps_environment_groups_insert(libdnf::utils::SQLite3 & conn, CompsEnvironment & env) {
+void CompsEnvironmentGroupDbUtils::comps_environment_groups_insert(
+    libdnf::utils::SQLite3 & conn, CompsEnvironment & env) {
     auto query = comps_environment_group_insert_new_query(conn);
 
     for (auto & grp : env.get_groups()) {
