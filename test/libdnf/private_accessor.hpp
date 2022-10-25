@@ -23,16 +23,23 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 // A getter generating structure
-template <typename AccessTag, auto value>
-struct CreateGetter {
-    friend constexpr auto get(AccessTag) { return value; }
-};
+#define create_private_getter_template                         \
+    template <typename AccessTag, typename T, T value>         \
+    struct PrivateGetter {                                     \
+        friend constexpr auto get(AccessTag) { return value; } \
+    }
 
-// Helper macro
+// Helper macro with automatic member type deduction
 #define create_getter(AccessTag, class_member_ptr) \
     struct AccessTag {};                           \
     constexpr auto get(AccessTag);                 \
-    template struct CreateGetter<AccessTag, class_member_ptr>;
+    template struct PrivateGetter<AccessTag, decltype(class_member_ptr), class_member_ptr>
+
+// Helper macro with member type as argument. Needed in case of overloaded members.
+#define create_getter_type(AccessTag, class_member_type, class_member_ptr) \
+    struct AccessTag {};                                                   \
+    constexpr auto get(AccessTag);                                         \
+    template struct PrivateGetter<AccessTag, class_member_type, class_member_ptr>
 
 
 #endif  // TEST_LIBDNF_PRIVATE_ACCESSOR_HPP
