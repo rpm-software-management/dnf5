@@ -43,6 +43,16 @@ create_getter(start, &libdnf::transaction::Transaction::start);
 create_getter(finish, &libdnf::transaction::Transaction::finish);
 create_getter(new_transaction, &libdnf::transaction::TransactionHistory::new_transaction);
 
+create_getter(set_name, &libdnf::transaction::Package::set_name);
+create_getter(set_epoch, &libdnf::transaction::Package::set_epoch);
+create_getter(set_version, &libdnf::transaction::Package::set_version);
+create_getter(set_release, &libdnf::transaction::Package::set_release);
+create_getter(set_arch, &libdnf::transaction::Package::set_arch);
+create_getter(set_repoid, &libdnf::transaction::Package::set_repoid);
+create_getter(set_action, &libdnf::transaction::Package::set_action);
+create_getter(set_reason, &libdnf::transaction::Package::set_reason);
+create_getter(set_state, &libdnf::transaction::Package::set_state);
+
 }  //namespace
 
 void TransactionRpmPackageTest::test_save_load() {
@@ -56,15 +66,15 @@ void TransactionRpmPackageTest::test_save_load() {
     // create packages in the transaction
     for (std::size_t i = 0; i < num; i++) {
         auto & pkg = (trans.*get(new_package{}))();
-        pkg.set_name("name_" + std::to_string(i));
-        pkg.set_epoch("1");
-        pkg.set_version("2");
-        pkg.set_release("3");
-        pkg.set_arch("x86_64");
-        pkg.set_repoid("repoid");
-        pkg.set_action(TransactionItemAction::INSTALL);
-        pkg.set_reason(TransactionItemReason::USER);
-        pkg.set_state(TransactionItemState::OK);
+        (pkg.*get(set_name{}))("name_" + std::to_string(i));
+        (pkg.*get(set_epoch{}))("1");
+        (pkg.*get(set_version{}))("2");
+        (pkg.*get(set_release{}))("3");
+        (pkg.*get(set_arch{}))("x86_64");
+        (pkg.*get(set_repoid{}))("repoid");
+        (pkg.*get(set_action{}))(TransactionItemAction::INSTALL);
+        (pkg.*get(set_reason{}))(TransactionItemReason::USER);
+        (pkg.*get(set_state{}))(TransactionItemState::OK);
     }
 
     // check that there's exactly 10 packages
