@@ -142,7 +142,8 @@ Package & Transaction::new_package() {
         packages.emplace();
     }
 
-    return packages->emplace_back(*this);
+    Package const pkg(*this);
+    return packages->emplace_back(pkg);
 }
 
 
@@ -150,7 +151,12 @@ void Transaction::fill_transaction_packages(
     const std::vector<libdnf::base::TransactionPackage> & transaction_packages) {
     for (auto & tspkg : transaction_packages) {
         auto & new_pkg = new_package();
-        libdnf::rpm::copy_nevra_attributes(tspkg.get_package(), new_pkg);
+        auto source_pkg = tspkg.get_package();
+        new_pkg.set_name(source_pkg.get_name());
+        new_pkg.set_epoch(source_pkg.get_epoch());
+        new_pkg.set_version(source_pkg.get_version());
+        new_pkg.set_release(source_pkg.get_release());
+        new_pkg.set_arch(source_pkg.get_arch());
         new_pkg.set_repoid(tspkg.get_package().get_repo_id());
         new_pkg.set_action(tspkg.get_action());
         new_pkg.set_reason(tspkg.get_reason());

@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 class Transaction;
+class RpmDbUtils;
 
 
 /// Package contains a copy of important data from rpm::Package that is used
@@ -38,22 +39,46 @@ class Transaction;
 /// @replaces libdnf:transaction/RPMItem.hpp:class:RPMItem
 class Package : public TransactionItem {
 public:
-    explicit Package(const Transaction & trans);
-
     /// Get package name
     ///
     /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getName()
     const std::string & get_name() const noexcept { return name; }
 
-    /// Set package name
-    ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setName(const std::string & value)
-    void set_name(const std::string & value) { name = value; }
-
     /// Get package epoch
     ///
     /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getEpoch()
     const std::string & get_epoch() const noexcept { return epoch; }
+
+    /// Get package release
+    ///
+    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getRelease()
+    const std::string & get_release() const noexcept { return release; }
+
+    /// Get package arch
+    ///
+    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getArch()
+    const std::string & get_arch() const noexcept { return arch; }
+
+    /// Get package version
+    ///
+    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getVersion()
+    const std::string & get_version() const noexcept { return version; }
+
+    /// Get string representation of the object, which equals to package NEVRA
+    ///
+    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.toStr()
+    std::string to_string() const;
+
+private:
+    friend RpmDbUtils;
+    friend Transaction;
+
+    explicit Package(const Transaction & trans);
+
+    /// Set package name
+    ///
+    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setName(const std::string & value)
+    void set_name(const std::string & value) { name = value; }
 
     /// Get package epoch as an integer
     uint32_t get_epoch_int() const;
@@ -63,30 +88,15 @@ public:
     /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setEpoch(int32_t value)
     void set_epoch(const std::string & value) { epoch = value; }
 
-    /// Get package version
-    ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getVersion()
-    const std::string & get_version() const noexcept { return version; }
-
     /// Set package version
     ///
     /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setVersion(const std::string & value)
     void set_version(const std::string & value) { version = value; }
 
-    /// Get package release
-    ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getRelease()
-    const std::string & get_release() const noexcept { return release; }
-
     /// Set package release
     ///
     /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.setRelease(const std::string & value)
     void set_release(const std::string & value) { release = value; }
-
-    /// Get package arch
-    ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.getArch()
-    const std::string & get_arch() const noexcept { return arch; }
 
     /// Set package arch
     ///
@@ -103,14 +113,8 @@ public:
         libdnf::utils::SQLite3 & conn, const std::string & name, const std::string & arch, int64_t maxTransactionId);
     */
 
-    /// Get string representation of the object, which equals to package NEVRA
-    ///
-    /// @replaces libdnf:transaction/RPMItem.hpp:method:RPMItem.toStr()
-    std::string to_string() const;
-
     bool operator<(const Package & other) const;
 
-private:
     std::string name;
     std::string epoch;
     std::string version;
