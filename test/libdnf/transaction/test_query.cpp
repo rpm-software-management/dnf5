@@ -38,6 +38,7 @@ namespace {
 create_private_getter_template;
 create_getter(start, &libdnf::transaction::Transaction::start);
 create_getter(finish, &libdnf::transaction::Transaction::finish);
+create_getter(new_transaction, &libdnf::transaction::TransactionHistory::new_transaction);
 
 }  //namespace
 
@@ -45,7 +46,7 @@ void TransactionQueryTest::test_filter_id_eq() {
     auto base = new_base();
 
     // create a new empty transaction
-    auto trans = base->get_transaction_history()->new_transaction();
+    auto trans = (*(base->get_transaction_history()).*get(new_transaction{}))();
 
     // save the transaction
     (trans.*get(start{}))();

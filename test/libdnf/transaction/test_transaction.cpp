@@ -47,11 +47,12 @@ create_getter(set_state, &libdnf::transaction::Transaction::set_state);
 create_getter(set_id, &libdnf::transaction::Transaction::set_id);
 create_getter(start, &libdnf::transaction::Transaction::start);
 create_getter(finish, &libdnf::transaction::Transaction::finish);
+create_getter(new_transaction, &libdnf::transaction::TransactionHistory::new_transaction);
 
 }  //namespace
 
 static Transaction create_transaction(libdnf::Base & base, int nr) {
-    auto trans = base.get_transaction_history()->new_transaction();
+    auto trans = (*(base.get_transaction_history()).*get(new_transaction{}))();
     (trans.*get(set_dt_start{}))(nr * 10 + 1);
     (trans.*get(set_dt_end{}))(nr * 10 + 2);
     (trans.*get(set_rpmdb_version_begin{}))(libdnf::utils::sformat("ts {} begin", nr));
@@ -93,7 +94,7 @@ void TransactionTest::test_save_load() {
 
 void TransactionTest::test_second_start_raises() {
     auto base = new_base();
-    auto trans = base->get_transaction_history()->new_transaction();
+    auto trans = (*(base->get_transaction_history()).*get(new_transaction{}))();
     (trans.*get(start{}))();
     // 2nd begin must throw an exception
     CPPUNIT_ASSERT_THROW((trans.*get(start{}))(), libdnf::RuntimeError);
@@ -102,7 +103,7 @@ void TransactionTest::test_second_start_raises() {
 
 void TransactionTest::test_save_with_specified_id_raises() {
     auto base = new_base();
-    auto trans = base->get_transaction_history()->new_transaction();
+    auto trans = (*(base->get_transaction_history()).*get(new_transaction{}))();
     (trans.*get(set_id{}))(1);
     // it is not allowed to save a transaction with arbitrary ID
     CPPUNIT_ASSERT_THROW((trans.*get(start{}))(), libdnf::RuntimeError);
@@ -151,8 +152,8 @@ void TransactionTest::test_compare() {
 
     // test operator ==, > and <
     auto transaction_history = base->get_transaction_history();
-    auto first = transaction_history->new_transaction();
-    auto second = transaction_history->new_transaction();
+    auto first = (*(base->get_transaction_history()).*get(new_transaction{}))();
+    auto second = (*(base->get_transaction_history()).*get(new_transaction{}))();
 
     // equal id
     (first.*get(set_id{}))(1);

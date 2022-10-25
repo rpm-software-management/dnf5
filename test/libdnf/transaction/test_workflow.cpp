@@ -44,6 +44,7 @@ create_getter(new_comps_environment, &libdnf::transaction::Transaction::new_comp
 create_getter(set_releasever, &libdnf::transaction::Transaction::set_releasever);
 create_getter(start, &libdnf::transaction::Transaction::start);
 create_getter(finish, &libdnf::transaction::Transaction::finish);
+create_getter(new_transaction, &libdnf::transaction::TransactionHistory::new_transaction);
 
 }  //namespace
 
@@ -51,7 +52,7 @@ void TransactionWorkflowTest::test_default_workflow() {
     auto base = new_base();
 
     // create an empty Transaction object
-    auto trans = base->get_transaction_history()->new_transaction();
+    auto trans = (*(base->get_transaction_history()).*get(new_transaction{}))();
     CPPUNIT_ASSERT_EQUAL(TransactionState::STARTED, trans.get_state());
 
     // set vars
