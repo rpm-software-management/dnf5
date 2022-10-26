@@ -32,17 +32,20 @@ namespace libdnf::transaction {
 
 class TransactionItem;
 
-
-/// Copy 'trans_item' fields from a query to TransactionItem or an object that inherits from it
-void transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionItem & ti);
-
-
-/// Create a query (statement) that inserts new records to the 'trans_item' table
-std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_item_insert_new_query(libdnf::utils::SQLite3 & conn);
+class TransItemDbUtils {
+public:
+    /// Copy 'trans_item' fields from a query to TransactionItem or an object that inherits from it
+    static void transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionItem & ti);
 
 
-/// Use a query to insert a new record to the 'trans_item' table
-int64_t transaction_item_insert(libdnf::utils::SQLite3::Statement & query, TransactionItem & ti);
+    /// Create a query (statement) that inserts new records to the 'trans_item' table
+    static std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_item_insert_new_query(
+        libdnf::utils::SQLite3 & conn);
+
+
+    /// Use a query to insert a new record to the 'trans_item' table
+    static int64_t transaction_item_insert(libdnf::utils::SQLite3::Statement & query, TransactionItem & ti);
+};
 
 
 }  // namespace libdnf::transaction
