@@ -93,7 +93,7 @@ create_getter(set_reason, &libdnf::transaction::CompsEnvironment::set_reason);
 create_getter(new_group, &libdnf::transaction::CompsEnvironment::new_group);
 
 }  // namespace CompsEnvironmentPrivates
-   //
+
 namespace CompsEnvironmentGroupPrivates {
 
 create_private_getter_template;
@@ -102,6 +102,13 @@ create_getter(set_installed, &libdnf::transaction::CompsEnvironmentGroup::set_in
 create_getter(set_group_type, &libdnf::transaction::CompsEnvironmentGroup::set_group_type);
 
 }  // namespace CompsEnvironmentGroupPrivates
+
+namespace TransactionItemPrivates {
+
+create_private_getter_template;
+create_getter(set_state, &libdnf::transaction::TransactionItem::set_state);
+
+}  // namespace TransactionItemPrivates
 
 void TransactionWorkflowTest::test_default_workflow() {
     auto base = new_base();
@@ -192,15 +199,15 @@ void TransactionWorkflowTest::test_default_workflow() {
     (trans.*get(start{}))();
 
     for (auto & env : trans.get_comps_environments()) {
-        env.set_state(TransactionItemState::OK);
+        (env.*get(TransactionItemPrivates::set_state{}))(TransactionItemState::OK);
     }
 
     for (auto & grp : trans.get_comps_groups()) {
-        grp.set_state(TransactionItemState::OK);
+        (grp.*get(TransactionItemPrivates::set_state{}))(TransactionItemState::OK);
     }
 
     for (auto & pkg : trans.get_packages()) {
-        pkg.set_state(TransactionItemState::OK);
+        (pkg.*get(TransactionItemPrivates::set_state{}))(TransactionItemState::OK);
     }
 
     // finish transaction
