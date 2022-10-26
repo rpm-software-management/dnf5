@@ -43,6 +43,7 @@ class CompsGroupPackageDbUtils;
 class CompsGroup : public TransactionItem {
 private:
     friend Transaction;
+    friend CompsGroupPackage;
     friend CompsGroupDbUtils;
     friend CompsGroupPackageDbUtils;
 
@@ -107,7 +108,6 @@ private:
     /// @replaces libdnf:transaction/CompsGroupItem.hpp:method:CompsGroupItem.toStr()
     std::string to_string() const { return get_group_id(); }
 
-    friend class CompsGroupPackage;
     std::string group_id;
     std::string name;
     std::string translated_name;
