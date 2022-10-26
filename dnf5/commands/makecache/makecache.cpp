@@ -28,7 +28,7 @@ namespace dnf5 {
 using namespace libdnf::cli;
 
 void MakeCacheCommand::set_argument_parser() {
-    get_argument_parser_command()->set_description("Generate the metadada cache");
+    get_argument_parser_command()->set_description("Generate the metadata cache");
 }
 
 void MakeCacheCommand::run() {
