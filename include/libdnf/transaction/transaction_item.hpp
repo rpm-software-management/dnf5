@@ -30,6 +30,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 class Transaction;
+class CompsEnvironment;
+class CompsGroup;
+class RpmDbUtils;
+class Package;
+class TransItemDbUtils;
+class CompsGroupDbUtils;
+class CompsEnvironmentDbUtils;
+class CompsGroupPackageDbUtils;
+class CompsEnvironmentGroupDbUtils;
 
 
 class TransactionItem {
@@ -38,6 +47,38 @@ public:
     using Reason = TransactionItemReason;
     using State = TransactionItemState;
 
+    /// Get action associated with the transaction item in the transaction
+    ///
+    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
+    Action get_action() const noexcept { return action; }
+
+    /// Get reason of the action associated with the transaction item in the transaction
+    ///
+    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
+    Reason get_reason() const noexcept { return reason; }
+
+    /// Get transaction item repoid (text identifier of a repository)
+    ///
+    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getRepoid()
+    const std::string & get_repoid() const noexcept { return repoid; }
+
+    /// Get transaction item state
+    ///
+    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getState()
+    State get_state() const noexcept { return state; }
+
+private:
+    friend RpmDbUtils;
+    friend Transaction;
+    friend CompsEnvironment;
+    friend CompsGroup;
+    friend Package;
+    friend TransItemDbUtils;
+    friend CompsGroupDbUtils;
+    friend CompsEnvironmentDbUtils;
+    friend CompsGroupPackageDbUtils;
+    friend CompsEnvironmentGroupDbUtils;
+
     explicit TransactionItem(const Transaction & trans);
 
     /// Get database id (primary key) of the transaction item (table 'trans_item')
@@ -45,11 +86,6 @@ public:
 
     /// Set database id (primary key) of the transaction item (table 'trans_item')
     void set_id(int64_t value) { id = value; }
-
-    /// Get action associated with the transaction item in the transaction
-    ///
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getAction()
-    Action get_action() const noexcept { return action; }
 
     /// Set action associated with the transaction item in the transaction
     ///
@@ -66,30 +102,15 @@ public:
     /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getActionShort()
     std::string get_action_short();
 
-    /// Get reason of the action associated with the transaction item in the transaction
-    ///
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
-    Reason get_reason() const noexcept { return reason; }
-
     /// Set reason of the action associated with the transaction item in the transaction
     ///
     /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setReason(libdnf::TransactionItemReason value)
     void set_reason(Reason value) { reason = value; }
 
-    /// Get transaction item state
-    ///
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getState()
-    State get_state() const noexcept { return state; }
-
     /// Set transaction item state
     ///
     /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.setState(libdnf::TransactionItemState value)
     void set_state(State value) { state = value; }
-
-    /// Get transaction item repoid (text identifier of a repository)
-    ///
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getRepoid()
-    const std::string & get_repoid() const noexcept { return repoid; }
 
     /// Get transaction item repoid (text identifier of a repository)
     ///
@@ -106,15 +127,9 @@ public:
     /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.isBackwardAction()
     bool is_outbound_action() const;
 
-    /// Get database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
-    int64_t get_item_id() const noexcept { return item_id; }
-
-    /// Set database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
-    void set_item_id(int64_t value) { item_id = value; }
-
-    // TODO(dmach): move to sack, resolve for all packages; return the user who initially installed the package
-    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItem.getInstalledBy()
-    uint32_t getInstalledBy() const;
+    // TODO(dmach): Reimplement in Package class; it's most likely not needed in Comps{Group,Environment}
+    // std::vector< TransactionItemPtr > replacedBy;
+    const Transaction & get_transaction() const;
 
     // TODO(dmach): Reimplement in Package class
     //const std::vector< TransactionItemPtr > &getReplacedBy() const noexcept { return replacedBy; }
@@ -124,9 +139,15 @@ public:
     // TODO(dmach): Review and bring back if needed
     //void saveState();
 
-    const Transaction & get_transaction() const;
+    // TODO(dmach): move to sack, resolve for all packages; return the user who initially installed the package
+    /// @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItem.getInstalledBy()
+    uint32_t getInstalledBy() const;
 
-protected:
+    /// Get database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
+    int64_t get_item_id() const noexcept { return item_id; }
+
+    /// Set database id (primary key) of the item (table 'item'; other item tables such 'rpm' inherit from it via 1:1 relation)
+    void set_item_id(int64_t value) { item_id = value; }
     int64_t id = 0;
     Action action = Action::INSTALL;
     Reason reason = Reason::NONE;
@@ -141,9 +162,6 @@ protected:
     // be at least movable, and the WeakPtrGuard would make the Transaction
     // unmovable
     const Transaction * trans = nullptr;
-
-    // TODO(dmach): Reimplement in Package class; it's most likely not needed in Comps{Group,Environment}
-    // std::vector< TransactionItemPtr > replacedBy;
 };
 
 }  // namespace libdnf::transaction
