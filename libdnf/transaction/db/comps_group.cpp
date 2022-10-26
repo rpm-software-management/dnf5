@@ -71,7 +71,7 @@ std::vector<CompsGroup> CompsGroupDbUtils::get_transaction_comps_groups(
 
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         CompsGroup ti(trans);
-        transaction_item_select(*query, ti);
+        TransItemDbUtils::transaction_item_select(*query, ti);
         //        auto trans_item = std::make_shared< TransactionItem >(trans);
         //        auto item = std::make_shared< CompsGroup >(trans);
         //        trans_item->setItem(item);
@@ -128,11 +128,11 @@ int64_t CompsGroupDbUtils::comps_group_insert(libdnf::utils::SQLite3::Statement 
 
 void CompsGroupDbUtils::insert_transaction_comps_groups(libdnf::utils::SQLite3 & conn, Transaction & trans) {
     auto query_comps_group_insert = comps_group_insert_new_query(conn);
-    auto query_trans_item_insert = trans_item_insert_new_query(conn);
+    auto query_trans_item_insert = TransItemDbUtils::trans_item_insert_new_query(conn);
 
     for (auto & grp : trans.get_comps_groups()) {
         comps_group_insert(*query_comps_group_insert, grp);
-        transaction_item_insert(*query_trans_item_insert, grp);
+        TransItemDbUtils::transaction_item_insert(*query_trans_item_insert, grp);
         CompsGroupPackageDbUtils::comps_group_packages_insert(conn, grp);
     }
 }

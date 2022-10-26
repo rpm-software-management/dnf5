@@ -67,7 +67,7 @@ static std::unique_ptr<libdnf::utils::SQLite3::Query> rpm_transaction_item_selec
 
 
 int64_t RpmDbUtils::rpm_transaction_item_select(libdnf::utils::SQLite3::Query & query, Package & pkg) {
-    transaction_item_select(query, pkg);
+    TransItemDbUtils::transaction_item_select(query, pkg);
     pkg.set_name(query.get<std::string>("name"));
     pkg.set_epoch(std::to_string(query.get<uint32_t>("epoch")));
     pkg.set_version(query.get<std::string>("version"));
@@ -183,7 +183,7 @@ void RpmDbUtils::insert_transaction_packages(libdnf::utils::SQLite3 & conn, Tran
     auto query_pkg_name_insert_if_not_exists = pkg_name_insert_if_not_exists_new_query(conn);
     auto query_arch_insert_if_not_exists = arch_insert_if_not_exists_new_query(conn);
     auto query_rpm_insert = rpm_insert_new_query(conn);
-    auto query_trans_item_insert = trans_item_insert_new_query(conn);
+    auto query_trans_item_insert = TransItemDbUtils::trans_item_insert_new_query(conn);
 
     for (auto & pkg : trans.get_packages()) {
         pkg.set_item_id(rpm_select_pk(*query_rpm_select_pk, pkg));
@@ -197,7 +197,7 @@ void RpmDbUtils::insert_transaction_packages(libdnf::utils::SQLite3 & conn, Tran
             // insert into 'rpm' table
             rpm_insert(*query_rpm_insert, pkg);
         }
-        transaction_item_insert(*query_trans_item_insert, pkg);
+        TransItemDbUtils::transaction_item_insert(*query_trans_item_insert, pkg);
     }
 }
 

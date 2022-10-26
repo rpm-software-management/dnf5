@@ -29,7 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::transaction {
 
 
-void transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionItem & ti) {
+void TransItemDbUtils::transaction_item_select(libdnf::utils::SQLite3::Query & query, TransactionItem & ti) {
     ti.set_id(query.get<int64_t>("id"));
     ti.set_action(transaction_item_action_from_string(query.get<std::string>("action")));
     ti.set_reason(transaction_item_reason_from_string(query.get<std::string>("reason")));
@@ -62,13 +62,14 @@ static constexpr const char * SQL_TRANS_ITEM_INSERT = R"**(
 )**";
 
 
-std::unique_ptr<libdnf::utils::SQLite3::Statement> trans_item_insert_new_query(libdnf::utils::SQLite3 & conn) {
+std::unique_ptr<libdnf::utils::SQLite3::Statement> TransItemDbUtils::trans_item_insert_new_query(
+    libdnf::utils::SQLite3 & conn) {
     auto query = std::make_unique<libdnf::utils::SQLite3::Statement>(conn, SQL_TRANS_ITEM_INSERT);
     return query;
 }
 
 
-int64_t transaction_item_insert(libdnf::utils::SQLite3::Statement & query, TransactionItem & ti) {
+int64_t TransItemDbUtils::transaction_item_insert(libdnf::utils::SQLite3::Statement & query, TransactionItem & ti) {
     // try to find an existing repo
     auto query_repo_select_pkg = repo_select_pk_new_query(query.get_db());
     auto repo_id = repo_select_pk(*query_repo_select_pkg, ti.get_repoid());

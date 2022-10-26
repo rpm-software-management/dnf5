@@ -70,7 +70,7 @@ std::vector<CompsEnvironment> CompsEnvironmentDbUtils::get_transaction_comps_env
     auto query = comps_environment_transaction_item_select_new_query(conn, trans.get_id());
     while (query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
         CompsEnvironment ti(trans);
-        transaction_item_select(*query, ti);
+        TransItemDbUtils::transaction_item_select(*query, ti);
         ti.set_environment_id(query->get<std::string>("environmentid"));
         ti.set_name(query->get<std::string>("name"));
         ti.set_translated_name(query->get<std::string>("translated_name"));
@@ -127,11 +127,11 @@ int64_t CompsEnvironmentDbUtils::comps_environment_insert(
 void CompsEnvironmentDbUtils::insert_transaction_comps_environments(
     libdnf::utils::SQLite3 & conn, Transaction & trans) {
     auto query_comps_environment_insert = comps_environment_insert_new_query(conn);
-    auto query_trans_item_insert = trans_item_insert_new_query(conn);
+    auto query_trans_item_insert = TransItemDbUtils::trans_item_insert_new_query(conn);
 
     for (auto & env : trans.get_comps_environments()) {
         comps_environment_insert(*query_comps_environment_insert, env);
-        transaction_item_insert(*query_trans_item_insert, env);
+        TransItemDbUtils::transaction_item_insert(*query_trans_item_insert, env);
         CompsEnvironmentGroupDbUtils::comps_environment_groups_insert(conn, env);
     }
 }
