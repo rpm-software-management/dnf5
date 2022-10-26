@@ -64,7 +64,7 @@ void RemoveCommand::run() {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
         goal->add_rpm_remove(option->get_value());
     }
-    // To enable removal of dependenct packages it requires to use allow_erasing
+    // To enable removal of dependency packages it requires to use allow_erasing
     goal->set_allow_erasing(true);
 }
 

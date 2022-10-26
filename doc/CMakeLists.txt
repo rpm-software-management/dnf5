@@ -48,6 +48,33 @@ if(WITH_MAN)
 
     if(WITH_DNF5)
         install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-advisory.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-clean.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-distro-sync.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-downgrade.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-download.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-environment.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-group.8 DESTINATION share/man/man8)
+        # TODO(jkolarik): history is not ready yet
+        # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-history.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-install.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-makecache.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-mark.8 DESTINATION share/man/man8)
+        # TODO(jkolarik): module is not ready yet
+        # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-module.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-reinstall.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-remove.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-repo.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-repoquery.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-swap.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-upgrade.8 DESTINATION share/man/man8)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-comps.7 DESTINATION share/man/man7)
+        # TODO(jkolarik): filtering is not ready yet
+        # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-filtering.7 DESTINATION share/man/man7)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-installroot.7 DESTINATION share/man/man7)
+        # TODO(jkolarik): modularity is not ready yet
+        # install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-modularity.7 DESTINATION share/man/man7)
+        install(FILES ${CMAKE_CURRENT_BINARY_DIR}/man/dnf5-specs.7 DESTINATION share/man/man7)
     endif()
 
 endif()

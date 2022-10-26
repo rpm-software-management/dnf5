@@ -1,5 +1,5 @@
 ===========
-Dnf5 Daemon
+DNF5 Daemon
 ===========
 
 
