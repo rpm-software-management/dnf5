@@ -53,6 +53,11 @@ create_getter(set_name_pkg, &libdnf::transaction::CompsGroupPackage::set_name);
 create_getter(set_installed, &libdnf::transaction::CompsGroupPackage::set_installed);
 create_getter(set_package_type, &libdnf::transaction::CompsGroupPackage::set_package_type);
 
+create_getter(set_repoid, &libdnf::transaction::TransactionItem::set_repoid);
+create_getter(set_action, &libdnf::transaction::TransactionItem::set_action);
+create_getter(set_reason, &libdnf::transaction::TransactionItem::set_reason);
+create_getter(set_state, &libdnf::transaction::TransactionItem::set_state);
+
 }  // namespace
 
 static CompsGroup & create_comps_group(Transaction & trans) {
@@ -63,10 +68,10 @@ static CompsGroup & create_comps_group(Transaction & trans) {
     (grp.*get(set_translated_name{}))("translated(Smallest possible installation)");
     (grp.*get(set_package_types{}))(libdnf::comps::PackageType::DEFAULT);
 
-    grp.set_repoid("repoid");
-    grp.set_action(TransactionItemAction::INSTALL);
-    grp.set_reason(TransactionItemReason::USER);
-    grp.set_state(TransactionItemState::OK);
+    (grp.*get(set_repoid{}))("repoid");
+    (grp.*get(set_action{}))(TransactionItemAction::INSTALL);
+    (grp.*get(set_reason{}))(TransactionItemReason::USER);
+    (grp.*get(set_state{}))(TransactionItemState::OK);
 
     auto & pkg1 = (grp.*get(new_package{}))();
     (pkg1.*get(set_name_pkg{}))("bash");
