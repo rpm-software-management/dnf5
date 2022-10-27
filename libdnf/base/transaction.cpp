@@ -619,7 +619,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
                 }
                 system_state.set_group_state(group.get_groupid(), state);
                 // save the current xml group definition
-                group.dump(comps_xml_dir / (group.get_groupid() + ".xml"));
+                group.serialize(comps_xml_dir / (group.get_groupid() + ".xml"));
             }
         }
 

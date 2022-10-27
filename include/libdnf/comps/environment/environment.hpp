@@ -129,11 +129,11 @@ public:
         return get_environmentid() < rhs.get_environmentid() || get_repos() < rhs.get_repos();
     }
 
-    /// Dump the Environment into an xml file
+    /// Serialize the Environment into an xml file
     /// @param path Path of the output xml file.
     /// @exception utils::xml::XMLSaveError When saving of the file fails.
     /// @since 5.0
-    void dump(const std::string & path);
+    void serialize(const std::string & path);
 
 protected:
     explicit Environment(const libdnf::BaseWeakPtr & base);

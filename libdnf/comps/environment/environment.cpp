@@ -152,7 +152,7 @@ bool Environment::get_installed() const {
 }
 
 
-void Environment::dump(const std::string & path) {
+void Environment::serialize(const std::string & path) {
     // Create doc with root node "comps"
     xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
     xmlNodePtr node_comps = xmlNewNode(NULL, BAD_CAST "comps");

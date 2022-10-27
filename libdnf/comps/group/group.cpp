@@ -178,7 +178,7 @@ bool Group::get_installed() const {
 }
 
 
-void Group::dump(const std::string & path) {
+void Group::serialize(const std::string & path) {
     // Create doc with root node "comps"
     xmlDocPtr doc = xmlNewDoc(BAD_CAST "1.0");
     xmlNodePtr node_comps = xmlNewNode(NULL, BAD_CAST "comps");
