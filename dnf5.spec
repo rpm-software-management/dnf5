@@ -173,13 +173,18 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_prefix}/share/dnf5
 %dir %{_sysconfdir}/dnf/dnf5-aliases.d
 %doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
-%dir %{_libdir}/dnf5/
-%dir %{_libdir}/dnf5/plugins/
+%dir %{_prefix}/lib/dnf5
+%dir %{_prefix}/lib/dnf5/aliases.d
+%config %{_prefix}/lib/dnf5/aliases.d/compatibility.conf
+%dir %{_libdir}/dnf5
+%dir %{_libdir}/dnf5/plugins
 %doc %{_libdir}/dnf5/plugins/README
 %dir %{_libdir}/libdnf5/plugins
 %dir %{_datadir}/bash-completion/
 %dir %{_datadir}/bash-completion/completions/
 %{_datadir}/bash-completion/completions/dnf5
+%dir %{_prefix}/lib/sysimage/dnf
+%verify(not md5 size mtime) %ghost %{_prefix}/lib/sysimage/dnf/*
 %license COPYING.md
 %license gpl-2.0.txt
 %{_mandir}/man8/dnf5.8.*
@@ -582,6 +587,17 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
 
 %install
 %cmake_install
+
+# own dirs and files that dnf5 creates on runtime
+mkdir -p %{buildroot}%{_prefix}/lib/sysimage/dnf
+for files in \
+    groups.toml modules.toml nevras.toml packages.toml \
+    system.toml transaction_history.sqlite \
+    transaction_history.sqlite-shm \
+    transaction_history.sqlite-wal userinstalled.toml
+do
+    touch %{buildroot}%{_prefix}/lib/sysimage/dnf/$files
+done
 
 #find_lang {name}
 
