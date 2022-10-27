@@ -12,6 +12,9 @@ include_directories(${Python3_INCLUDE_DIRS})
 
 function(add_python3_module LIBRARY_NAME MODULE_NAME)
     set(TARGET_NAME "python3_${MODULE_NAME}")
+    set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
+        -Wno-redundant-decls
+    )
     set_source_files_properties(../../${LIBRARY_NAME}/${MODULE_NAME}.i PROPERTIES CPLUSPLUS ON)
     set_source_files_properties(../../${LIBRARY_NAME}/${MODULE_NAME}.i PROPERTIES SWIG_FLAGS "-relativeimport")
     swig_add_library(${TARGET_NAME} LANGUAGE python SOURCES ../../${LIBRARY_NAME}/${MODULE_NAME}.i)
