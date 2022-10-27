@@ -41,15 +41,16 @@ void RemoveCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 
     // TODO(dmach): implement the option; should work as `dnf autoremove`
-    unneeded = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
+    // TODO(jkolarik): commented out as it is not implemented now
+    // unneeded = dynamic_cast<libdnf::OptionBool *>(
+    //     parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
 
-    auto unneeded_opt = parser.add_new_named_arg("unneeded");
-    unneeded_opt->set_long_name("unneeded");
-    unneeded_opt->set_description("Remove unneeded packages that were installed as dependencies");
-    unneeded_opt->set_const_value("false");
-    unneeded_opt->link_value(unneeded);
-    cmd.register_named_arg(unneeded_opt);
+    // auto unneeded_opt = parser.add_new_named_arg("unneeded");
+    // unneeded_opt->set_long_name("unneeded");
+    // unneeded_opt->set_description("Remove unneeded packages that were installed as dependencies");
+    // unneeded_opt->set_const_value("false");
+    // unneeded_opt->link_value(unneeded);
+    // cmd.register_named_arg(unneeded_opt);
 }
 
 void RemoveCommand::configure() {
