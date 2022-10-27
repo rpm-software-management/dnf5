@@ -36,7 +36,7 @@ class CompsEnvironmentTest : public BaseTestCase {
     CPPUNIT_TEST(test_merge_with_empty);
     CPPUNIT_TEST(test_merge_empty_with_nonempty);
     CPPUNIT_TEST(test_merge_different_translations);
-    CPPUNIT_TEST(test_dump);
+    CPPUNIT_TEST(test_serialize);
     CPPUNIT_TEST(test_solvables);
     CPPUNIT_TEST_SUITE_END();
 
@@ -48,7 +48,7 @@ public:
     void test_merge_with_empty();
     void test_merge_empty_with_nonempty();
     void test_merge_different_translations();
-    void test_dump();
+    void test_serialize();
     void test_solvables();
 };
 

@@ -144,11 +144,11 @@ public:
         return get_groupid() < rhs.get_groupid() || get_repos() < rhs.get_repos();
     }
 
-    /// Dump the Group into an xml file.
+    /// Serialize the Group into an xml file.
     /// @param path Path of the output xml file.
     /// @exception utils::xml::XMLSaveError When saving of the file fails.
     /// @since 5.0
-    void dump(const std::string & path);
+    void serialize(const std::string & path);
 
 protected:
     explicit Group(const BaseWeakPtr & base);

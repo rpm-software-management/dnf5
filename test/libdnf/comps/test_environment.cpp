@@ -167,19 +167,19 @@ void CompsEnvironmentTest::test_merge_different_translations() {
 }
 
 
-void CompsEnvironmentTest::test_dump() {
+void CompsEnvironmentTest::test_serialize() {
     add_repo_repomd("repomd-comps-minimal-environment");
 
     EnvironmentQuery q_minimal_env(base);
     q_minimal_env.filter_environmentid("minimal-environment");
     auto minimal_env = q_minimal_env.get();
 
-    auto dump_path = std::filesystem::temp_directory_path() / "dumped-standard.xml";
-    minimal_env.dump(dump_path);
+    auto serialize_path = std::filesystem::temp_directory_path() / "serialized-standard.xml";
+    minimal_env.serialize(serialize_path);
 
-    std::ifstream dumped_stream(dump_path);
+    std::ifstream serialized_stream(serialize_path);
     std::string actual;
-    actual.assign(std::istreambuf_iterator<char>(dumped_stream), std::istreambuf_iterator<char>());
+    actual.assign(std::istreambuf_iterator<char>(serialized_stream), std::istreambuf_iterator<char>());
 
     std::filesystem::path expected_path =
         PROJECT_SOURCE_DIR "/test/data/repos-repomd/repomd-comps-minimal-environment/repodata/comps.xml";

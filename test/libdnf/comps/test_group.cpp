@@ -273,17 +273,17 @@ void CompsGroupTest::test_merge_different_translations() {
 }
 
 
-void CompsGroupTest::test_dump() {
+void CompsGroupTest::test_serialize() {
     add_repo_repomd("repomd-comps-standard");
 
     GroupQuery q_standard(base);
     q_standard.filter_groupid("standard");
     auto standard = q_standard.get();
 
-    auto dump_path = temp->get_path() / "dumped-standard.xml";
-    standard.dump(dump_path);
+    auto serialize_path = temp->get_path() / "serialized-standard.xml";
+    standard.serialize(serialize_path);
 
-    std::string actual = libdnf::utils::fs::File(dump_path, "r").read();
+    std::string actual = libdnf::utils::fs::File(serialize_path, "r").read();
 
     std::filesystem::path expected_path =
         PROJECT_SOURCE_DIR "/test/data/repos-repomd/repomd-comps-standard/repodata/comps.xml";
