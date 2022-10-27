@@ -38,6 +38,7 @@ set(SWIG_COMPILE_OPTIONS
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
         -Wno-deprecated-volatile
+        -Wno-unknown-warning-option
     )
 else()
     set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
