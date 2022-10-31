@@ -192,12 +192,12 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-environment.8.*
 %{_mandir}/man8/dnf5-group.8.*
 # TODO(jkolarik): history is not ready yet
-# %{_mandir}/man8/dnf5-history.8.*
+# %%{_mandir}/man8/dnf5-history.8.*
 %{_mandir}/man8/dnf5-install.8.*
 %{_mandir}/man8/dnf5-makecache.8.*
 %{_mandir}/man8/dnf5-mark.8.*
 # TODO(jkolarik): module is not ready yet
-# %{_mandir}/man8/dnf5-module.8.*
+# %%{_mandir}/man8/dnf5-module.8.*
 %{_mandir}/man8/dnf5-reinstall.8.*
 %{_mandir}/man8/dnf5-remove.8.*
 %{_mandir}/man8/dnf5-repo.8.*
@@ -206,10 +206,10 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-upgrade.8.*
 %{_mandir}/man7/dnf5-comps.7.*
 # TODO(jkolarik): filtering is not ready yet
-# %{_mandir}/man7/dnf5-filtering.7.*
+# %%{_mandir}/man7/dnf5-filtering.7.*
 %{_mandir}/man7/dnf5-installroot.7.*
 # TODO(jkolarik): modularity is not ready yet
-# %{_mandir}/man7/dnf5-modularity.7.*
+# %%{_mandir}/man7/dnf5-modularity.7.*
 %{_mandir}/man7/dnf5-specs.7.*
 
 # ========== libdnf5 ==========
