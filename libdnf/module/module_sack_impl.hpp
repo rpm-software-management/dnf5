@@ -68,6 +68,10 @@ public:
     void make_provides_ready();
     void recompute_considered_in_pool();
 
+    // Requires resolved goal. Takes list_installs() from goal and adds all modules with the same SOLVABLE_NAME
+    // (<name>:<stream>:<context>) into active_modules.
+    void set_active_modules(ModuleGoalPrivate & goal);
+
 private:
     friend ModuleSack;
     friend ModuleItem;
@@ -91,6 +95,7 @@ private:
 
     std::map<std::string, std::string> module_defaults;
     std::unique_ptr<libdnf::solv::SolvMap> excludes;
+    std::map<Id, ModuleItem *> active_modules;
 };
 
 inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_modules() {

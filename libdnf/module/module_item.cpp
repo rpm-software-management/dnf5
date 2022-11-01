@@ -364,4 +364,9 @@ void ModuleItem::create_solvable_and_dependencies() {
 }
 
 
+bool ModuleItem::is_active() const {
+    return module_sack->p_impl->active_modules.contains(id.id);
+}
+
+
 }  // namespace libdnf::module

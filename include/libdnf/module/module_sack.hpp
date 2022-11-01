@@ -55,8 +55,12 @@ public:
 
     ModuleSackWeakPtr get_weak_ptr();
 
-    /// Return module items in container
+    /// @return All module items.
+    /// @since 5.0
     const std::vector<std::unique_ptr<ModuleItem>> & get_modules();
+    /// @return Active module items. I.e. module items whose RPMs are included in the set of available packages.
+    /// @since 5.0
+    std::vector<ModuleItem *> get_active_modules();
 
     // TODO(pkratoch): Implement getting default streams and profiles.
     /// @return Default stream for given module.
