@@ -41,12 +41,12 @@ static std::atomic<Base *> locked_base{nullptr};
 static std::mutex locked_base_mutex;
 
 Base::Base(std::vector<std::unique_ptr<Logger>> && loggers)
-    : log_router(std::move(loggers)),
+    : p_impl(new Impl(get_weak_ptr())),
+      log_router(std::move(loggers)),
       repo_sack(get_weak_ptr()),
       rpm_package_sack(get_weak_ptr()),
       transaction_history(get_weak_ptr()),
-      vars(get_weak_ptr()),
-      p_impl(new Impl(get_weak_ptr())) {
+      vars(get_weak_ptr()) {
     load_defaults();
 }
 

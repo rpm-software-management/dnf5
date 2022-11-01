@@ -51,6 +51,7 @@ private:
     friend class Base;
     Impl(const libdnf::BaseWeakPtr & base);
 
+    // Pool as the owner of underlying libsolv data, has to be the first member so that it is destroyed last.
     std::unique_ptr<solv::Pool> pool;
 
     std::optional<libdnf::system::State> system_state;
