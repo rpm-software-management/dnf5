@@ -43,7 +43,7 @@ void ModuleTest::test_load() {
     add_repo_repomd("repomd-modules");
 
     auto module_sack = base.get_module_sack();
-    CPPUNIT_ASSERT_EQUAL((size_t)9, module_sack->get_modules().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)10, module_sack->get_modules().size());
 
     // TODO(pkratoch): Change this once individual modules can be queried
     bool meson_checked = false;
@@ -77,4 +77,43 @@ void ModuleTest::test_load() {
     CPPUNIT_ASSERT_EQUAL((size_t)0, module_sack->get_default_profiles("meson", "master").size());
     CPPUNIT_ASSERT_EQUAL((size_t)1, module_sack->get_default_profiles("berries", "main").size());
     CPPUNIT_ASSERT_EQUAL(std::string("minimal"), module_sack->get_default_profiles("berries", "main")[0]);
+}
+
+
+void ModuleTest::test_resolve() {
+    add_repo_repomd("repomd-modules");
+
+    auto module_sack = base.get_module_sack();
+
+    CPPUNIT_ASSERT_EQUAL(ModuleSack::ModuleErrorType::NO_ERROR, module_sack->resolve_active_module_items().second);
+
+    std::vector<std::string> expected_active_module_specs{
+        "berries:main:4:6c81f848:x86_64", "gooseberry:5.5:2:72aaf46b6:x86_64", "gooseberry:5.5:3:72aaf46b6:x86_64"};
+    std::vector<std::string> active_module_specs;
+
+    for (auto & module_item : module_sack->get_active_modules()) {
+        active_module_specs.push_back(module_item->get_full_identifier());
+    }
+    std::sort(active_module_specs.begin(), active_module_specs.end());
+    CPPUNIT_ASSERT_EQUAL(expected_active_module_specs, active_module_specs);
+}
+
+
+void ModuleTest::test_resolve_broken_defaults() {
+    add_repo_repomd("repomd-modules-broken-defaults");
+
+    auto module_sack = base.get_module_sack();
+
+    CPPUNIT_ASSERT_EQUAL(
+        ModuleSack::ModuleErrorType::ERROR_IN_DEFAULTS, module_sack->resolve_active_module_items().second);
+
+    std::vector<std::string> expected_active_module_specs{
+        "berries:main:3:72aaf46b6:x86_64", "gooseberry:5.5:3:72aaf46b6:x86_64"};
+    std::vector<std::string> active_module_specs;
+
+    for (auto & module_item : module_sack->get_active_modules()) {
+        active_module_specs.push_back(module_item->get_full_identifier());
+    }
+    std::sort(active_module_specs.begin(), active_module_specs.end());
+    CPPUNIT_ASSERT_EQUAL(expected_active_module_specs, active_module_specs);
 }
