@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/module/module_sack.hpp"
 
+#include "module/module_goal_private.hpp"
 #include "module/module_metadata.hpp"
 #include "module/module_sack_impl.hpp"
 #include "solv/solv_map.hpp"
@@ -58,6 +59,16 @@ ModuleSack::~ModuleSack() {}
 const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::get_modules() {
     return p_impl->get_modules();
 }
+
+
+std::vector<ModuleItem *> ModuleSack::get_active_modules() {
+    std::vector<ModuleItem *> modules;
+    for (auto id_module_pair : p_impl->active_modules) {
+        modules.push_back(id_module_pair.second);
+    }
+    return modules;
+}
+
 
 void ModuleSack::add(const std::string & file_content, const std::string & repo_id) {
     ModuleMetadata md(get_base());
@@ -348,6 +359,26 @@ void ModuleSack::Impl::recompute_considered_in_pool() {
     }
 
     considered_uptodate = true;
+}
+
+
+void ModuleSack::Impl::set_active_modules(ModuleGoalPrivate & goal) {
+    if (!goal.get_transaction()) {
+        active_modules.clear();
+    }
+
+    std::set<std::string> solvable_names;
+    for (auto id : goal.list_installs()) {
+        Solvable * s = pool_id2solvable(pool, id);
+        const char * name = pool_id2str(pool, s->name);
+        solvable_names.emplace(name);
+    }
+    for (const auto & module_item : modules) {
+        std::string solvable_name = module_item->get_name_stream_context();
+        if (solvable_names.contains(solvable_name)) {
+            active_modules[module_item->id.id] = module_item.get();
+        }
+    }
 }
 
 

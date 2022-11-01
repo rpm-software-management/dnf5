@@ -163,7 +163,7 @@ public:
     /// Return true if module_item belongs to enabled or default module stream and it is applicable forcurrent system.
     /// The decision is performed by a modular solver.
     // TODO(jmracek) Read a real decision from the modular solver
-    bool is_active() const { return false; };
+    bool is_active() const;
 
 private:
     friend class ModuleSack;
