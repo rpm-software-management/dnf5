@@ -30,10 +30,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class ModuleTest : public BaseTestCase {
     CPPUNIT_TEST_SUITE(ModuleTest);
     CPPUNIT_TEST(test_load);
+    CPPUNIT_TEST(test_resolve);
+    CPPUNIT_TEST(test_resolve_broken_defaults);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_load();
+    void test_resolve();
+    void test_resolve_broken_defaults();
 };
 
 #endif

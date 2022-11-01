@@ -92,6 +92,28 @@ data:
     stream: 5.5
     version: 1
     context: 6c81f848
+    static_context: true
+    arch: x86_64
+    summary: Test module
+    description: Test module
+    license:
+      module: [MIT]
+    profiles:
+      minimal:
+        rpms: []
+    dependencies:
+    - requires:
+        nonexistent: []
+...
+---
+  document: modulemd
+  version: 2
+  data:
+    name: gooseberry
+    stream: 5.5
+    version: 2
+    context: 72aaf46b6
+    static_context: true
     arch: x86_64
     summary: Test module
     description: Test module
@@ -107,8 +129,9 @@ data:
   data:
     name: gooseberry
     stream: 5.5
-    version: 2
+    version: 3
     context: 72aaf46b6
+    static_context: true
     arch: x86_64
     summary: Test module
     description: Test module
@@ -126,6 +149,7 @@ data:
     stream: main
     version: 3
     context: 72aaf46b6
+    static_context: true
     arch: x86_64
     summary: Test module
     description: Test module
@@ -146,6 +170,7 @@ data:
     stream: main
     version: 4
     context: 6c81f848
+    static_context: true
     arch: x86_64
     summary: Test module
     description: Test module

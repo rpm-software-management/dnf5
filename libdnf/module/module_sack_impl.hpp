@@ -72,6 +72,14 @@ public:
     // (<name>:<stream>:<context>) into active_modules.
     void set_active_modules(ModuleGoalPrivate & goal);
 
+    /// Resolve given module items.
+    ///
+    /// @param module_items Module Items to resolve.
+    /// @return `std::pair` of problems in resolving and ModuleErrorType.
+    /// @since 5.0
+    std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> module_solve(
+        std::vector<ModuleItem *> module_items);
+
 private:
     friend ModuleSack;
     friend ModuleItem;

@@ -51,6 +51,22 @@ enum class ModuleState { AVAILABLE, ENABLED, DISABLED };
 /// Container with data and methods related to modules
 class ModuleSack {
 public:
+    enum class ModuleErrorType {
+        NO_ERROR = 0,
+        INFO,
+        /// Error in module defaults detected during resolvement of module dependencies
+        ERROR_IN_DEFAULTS,
+        /// Error detected during resolvement of module dependencies
+        ERROR,
+        /// Error detected during resolvement of module dependencies - Unexpected error!!!
+        CANNOT_RESOLVE_MODULES,
+        CANNOT_RESOLVE_MODULE_SPEC,
+        CANNOT_ENABLE_MULTIPLE_STREAMS,
+        CANNOT_MODIFY_MULTIPLE_TIMES_MODULE_STATE,
+        /// Problem with latest modules during resolvement of module dependencies
+        ERROR_IN_LATEST
+    };
+
     ~ModuleSack();
 
     ModuleSackWeakPtr get_weak_ptr();
@@ -69,6 +85,13 @@ public:
     /// @return List of all default profiles for given module stream.
     /// @since 5.0
     std::vector<std::string> get_default_profiles(std::string module_name, std::string module_stream);
+
+    /// Resolve which module items are active. This means requesting all enabled streams or default streams (default
+    /// streams only from not-enabled non-disabled modules), while excluding all disabled module streams.
+    ///
+    /// @return A pair of problems in resolving to report and ModuleErrorType.
+    /// @since 5.0
+    std::pair<std::vector<std::vector<std::string>>, ModuleErrorType> resolve_active_module_items();
 
 private:
     friend class libdnf::Base;
