@@ -104,8 +104,6 @@ private:
     friend class libdnf::advisory::AdvisoryQuery;
     friend class libdnf::repo::SolvRepo;
 
-    WeakPtrGuard<Base, false> base_guard;
-
     /// Loads the default configuration. To load distribution-specific configuration.
     void load_defaults();
 
@@ -123,6 +121,12 @@ private:
     /// The files in the directory are read in alphabetical order.
     void load_config_from_dir();
 
+    WeakPtrGuard<Base, false> base_guard;
+    // Impl has to be the second data member (right after base_guard which is needed for its construction) because it
+    // contains Pool and that has be destructed last.
+    // See commit: https://github.com/rpm-software-management/dnf5/commit/c8e26cb545aed0d6ca66545d51eda7568efdf232
+    ImplPtr<Impl> p_impl;
+
     LogRouter log_router;
     ConfigMain config;
     repo::RepoSack repo_sack;
@@ -136,8 +140,6 @@ private:
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;
     WeakPtrGuard<Vars, false> vars_gurad;
-
-    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf
