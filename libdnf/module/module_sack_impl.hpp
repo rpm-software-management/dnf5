@@ -33,6 +33,9 @@ extern "C" {
 namespace libdnf::module {
 
 
+class ModuleGoalPrivate;
+
+
 class ModuleSack::Impl {
 public:
     Impl(const BaseWeakPtr & base) : base(base), module_metadata(base), pool(pool_create()) {}
@@ -68,6 +71,7 @@ public:
 private:
     friend ModuleSack;
     friend ModuleItem;
+    friend ModuleGoalPrivate;
 
     BaseWeakPtr base;
     ModuleMetadata module_metadata;

@@ -71,6 +71,7 @@ private:
     friend class libdnf::repo::Repo;
     friend class libdnf::repo::RepoSack;
     friend ModuleItem;
+    friend class ModuleGoalPrivate;
 
     ModuleSack(const BaseWeakPtr & base);
 
