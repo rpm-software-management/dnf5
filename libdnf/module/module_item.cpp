@@ -288,7 +288,7 @@ void ModuleItem::create_solvable() {
     Pool * pool = module_sack->p_impl->pool;
 
     // Create new solvable and store its id
-    id = *new ModuleItemId(repo_add_solvable(pool_id2repo(pool, Id(module_sack->p_impl->repositories[repo_id]))));
+    id = ModuleItemId(repo_add_solvable(pool_id2repo(pool, Id(module_sack->p_impl->repositories[repo_id]))));
     Solvable * solvable = pool_id2solvable(pool, id.id);
 
     // Name: $name:$stream:$context
