@@ -112,4 +112,131 @@ libdnf::solv::IdQueue ModuleGoalPrivate::list_installs() {
 }
 
 
+size_t ModuleGoalPrivate::count_solver_problems() {
+    libdnf_assert_goal_resolved();
+
+    return solver_problem_count(libsolv_solver);
+}
+
+
+std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> ModuleGoalPrivate::get_problems() {
+    auto & pool = module_sack->p_impl->pool;
+
+    libdnf_assert_goal_resolved();
+
+    auto count_problems = static_cast<int>(count_solver_problems());
+    if (count_problems == 0) {
+        return {};
+    }
+    // std::tuple<ProblemRules, Id source, Id dep, Id target, std::string>>
+    std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> problems;
+
+    libdnf::solv::IdQueue problem_queue;
+    libdnf::solv::IdQueue descriptions_queue;
+    // libsolv counts problem from 1
+    for (int i = 1; i <= count_problems; ++i) {
+        solver_findallproblemrules(libsolv_solver, i, &problem_queue.get_queue());
+        std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>> problem;
+        for (int j = 0; j < problem_queue.size(); ++j) {
+            Id rid = problem_queue[j];
+            if (solver_allruleinfos(libsolv_solver, rid, &descriptions_queue.get_queue())) {
+                for (int ir = 0; ir < descriptions_queue.size(); ir += 4) {
+                    SolverRuleinfo type = static_cast<SolverRuleinfo>(descriptions_queue[ir]);
+                    Id source = descriptions_queue[ir + 1];
+                    Id target = descriptions_queue[ir + 2];
+                    Id dep = descriptions_queue[ir + 3];
+                    ProblemRules rule;
+                    const char * solv_strig = nullptr;
+                    switch (type) {
+                        case SOLVER_RULE_DISTUPGRADE:
+                            rule = ProblemRules::RULE_DISTUPGRADE;
+                            break;
+                        case SOLVER_RULE_INFARCH:
+                            rule = ProblemRules::RULE_INFARCH;
+                            break;
+                        case SOLVER_RULE_UPDATE:
+                            rule = ProblemRules::RULE_UPDATE;
+                            break;
+                        case SOLVER_RULE_JOB:
+                            rule = ProblemRules::RULE_JOB;
+                            break;
+                        case SOLVER_RULE_JOB_UNSUPPORTED:
+                            rule = ProblemRules::RULE_JOB_UNSUPPORTED;
+                            break;
+                        case SOLVER_RULE_JOB_NOTHING_PROVIDES_DEP:
+                            rule = ProblemRules::RULE_JOB_NOTHING_PROVIDES_DEP;
+                            break;
+                        case SOLVER_RULE_JOB_UNKNOWN_PACKAGE:
+                            rule = ProblemRules::RULE_JOB_UNKNOWN_PACKAGE;
+                            break;
+                        case SOLVER_RULE_JOB_PROVIDED_BY_SYSTEM:
+                            rule = ProblemRules::RULE_JOB_PROVIDED_BY_SYSTEM;
+                            break;
+                        case SOLVER_RULE_PKG:
+                            rule = ProblemRules::RULE_PKG;
+                            break;
+                        case SOLVER_RULE_BEST:
+                            if (source > 0) {
+                                rule = ProblemRules::RULE_BEST_1;
+                                break;
+                            }
+                            rule = ProblemRules::RULE_BEST_2;
+                            break;
+                        case SOLVER_RULE_PKG_NOT_INSTALLABLE: {
+                            Solvable * solvable = pool_id2solvable(pool, source);
+                            if (pool_disabled_solvable(pool, solvable)) {
+                                // TODO(jmracek) RULE_PKG_NOT_INSTALLABLE_4 not handled
+                                rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_1;
+                                break;
+                            }
+                            if (solvable->arch && solvable->arch != ARCH_SRC && solvable->arch != ARCH_NOSRC &&
+                                pool->id2arch && (solvable->arch > pool->lastarch || !pool->id2arch[solvable->arch])) {
+                                rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_2;
+                                break;
+                            }
+                            rule = ProblemRules::RULE_PKG_NOT_INSTALLABLE_3;
+                        } break;
+                        case SOLVER_RULE_PKG_NOTHING_PROVIDES_DEP:
+                            rule = ProblemRules::RULE_PKG_NOTHING_PROVIDES_DEP;
+                            break;
+                        case SOLVER_RULE_PKG_SAME_NAME:
+                            rule = ProblemRules::RULE_PKG_SAME_NAME;
+                            break;
+                        case SOLVER_RULE_PKG_CONFLICTS:
+                            rule = ProblemRules::RULE_PKG_CONFLICTS;
+                            break;
+                        case SOLVER_RULE_PKG_OBSOLETES:
+                            rule = ProblemRules::RULE_PKG_OBSOLETES;
+                            break;
+                        case SOLVER_RULE_PKG_INSTALLED_OBSOLETES:
+                            rule = ProblemRules::RULE_PKG_INSTALLED_OBSOLETES;
+                            break;
+                        case SOLVER_RULE_PKG_IMPLICIT_OBSOLETES:
+                            rule = ProblemRules::RULE_PKG_IMPLICIT_OBSOLETES;
+                            break;
+                        case SOLVER_RULE_PKG_REQUIRES:
+                            rule = ProblemRules::RULE_PKG_REQUIRES;
+                            break;
+                        case SOLVER_RULE_PKG_SELF_CONFLICT:
+                            rule = ProblemRules::RULE_PKG_SELF_CONFLICT;
+                            break;
+                        case SOLVER_RULE_YUMOBS:
+                            rule = ProblemRules::RULE_YUMOBS;
+                            break;
+                        default:
+                            rule = ProblemRules::RULE_UNKNOWN;
+                            solv_strig = solver_problemruleinfo2str(libsolv_solver, type, source, target, dep);
+                            break;
+                    }
+                    problem.emplace_back(std::make_tuple(
+                        rule, source, dep, target, solv_strig ? std::string(solv_strig) : std::string()));
+                }
+            }
+        }
+        problems.push_back(std::move(problem));
+    }
+    return problems;
+}
+
+
 }  // namespace libdnf::module
