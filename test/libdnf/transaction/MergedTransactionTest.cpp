@@ -114,7 +114,7 @@ void MergedTransactionTest::testMerge() {
     auto software = merged.get_runtime_packages();
     std::set<std::string> packages = {"dnf-3.0.0-2.fc26.x86_64", "rpm-4.14.0-2.fc26.x86_64"};
 
-    CPPUNIT_ASSERT_EQUAL(2ul, packages.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, packages.size());
 
     for (auto & nevra : software) {
         CPPUNIT_ASSERT_MESSAGE("Package: " + nevra, packages.find(nevra) != packages.end());

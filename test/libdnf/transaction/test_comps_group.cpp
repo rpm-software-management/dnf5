@@ -97,7 +97,7 @@ void TransactionCompsGroupTest::test_save_load() {
     create_comps_group(trans);
 
     //// check that there's exactly 1 group
-    //CPPUNIT_ASSERT_EQUAL(1LU, trans.get_comps_groups().size());
+    //CPPUNIT_ASSERT_EQUAL((size_t)1, trans.get_comps_groups().size());
 
     //// save the transaction with all transaction items to the database
     //(trans.*get(start{}))();
@@ -108,10 +108,10 @@ void TransactionCompsGroupTest::test_save_load() {
 
     //// get the written transaction
     //auto ts_list = base2->get_transaction_history()->list_transactions({trans.get_id()});
-    //CPPUNIT_ASSERT_EQUAL(1LU, ts_list.size());
+    //CPPUNIT_ASSERT_EQUAL((size_t)1, ts_list.size());
 
     //auto trans2 = ts_list[0];
-    //CPPUNIT_ASSERT_EQUAL(1LU, trans2.get_comps_groups().size());
+    //CPPUNIT_ASSERT_EQUAL((size_t)1, trans2.get_comps_groups().size());
 
     //auto & grp2 = trans2.get_comps_groups().at(0);
     //CPPUNIT_ASSERT_EQUAL(std::string("core"), grp2.get_group_id());
@@ -124,7 +124,7 @@ void TransactionCompsGroupTest::test_save_load() {
     //CPPUNIT_ASSERT_EQUAL(TransactionItemState::OK, grp2.get_state());
 
     //// check if the group has all expected packages in the same order as inserted
-    //CPPUNIT_ASSERT_EQUAL(2LU, grp2.get_packages().size());
+    //CPPUNIT_ASSERT_EQUAL((size_t)2, grp2.get_packages().size());
 
     //auto & grp2_pkg2 = grp2.get_packages().at(0);
     //CPPUNIT_ASSERT_EQUAL(std::string("bash"), grp2_pkg2.get_name());

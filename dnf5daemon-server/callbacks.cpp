@@ -155,7 +155,7 @@ bool DbusRepoCB::repokey_import(
     bool confirmed;
     try {
         auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST);
-        signal << id << user_id << fingerprint << url << timestamp;
+        signal << id << user_id << fingerprint << url << static_cast<int64_t>(timestamp);
         // wait for client's confirmation
         confirmed = session.wait_for_key_confirmation(id, signal);
     } catch (...) {
