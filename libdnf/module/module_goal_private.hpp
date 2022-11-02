@@ -68,6 +68,9 @@ public:
     /// @return IdQueue of items to install. The goal must be resolved first.
     /// @since 5.0
     libdnf::solv::IdQueue list_installs();
+    /// @return IdQueue of items that conflict. The goal must be resolved first.
+    /// @since 5.0
+    libdnf::solv::IdQueue list_conflicting();
 
     /// @return Transaction object. The goal must be resolved first.
     /// @since 5.0

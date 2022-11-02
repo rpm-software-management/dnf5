@@ -452,7 +452,20 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
         return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_LATEST);
     }
 
-    // TODO(pkratoch): Exclude conflicting modules and resolve goal_weak
+    // Conflicting modules has to be removed otherwice it could result than one of them will be active
+    for (auto conflicting_module_id : goal.list_conflicting()) {
+        excludes->add(conflicting_module_id);
+    }
+
+    ret = goal_weak.resolve();
+
+    if (ret == libdnf::GoalProblem::NO_PROBLEM) {
+        set_active_modules(goal_weak);
+        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR);
+    }
+
+    auto logger = base->get_logger();
+    logger->critical("Modularity filtering totally broken\n");
 
     active_modules.clear();
     return make_pair(problems, ModuleSack::ModuleErrorType::CANNOT_RESOLVE_MODULES);

@@ -239,4 +239,23 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Modu
 }
 
 
+// Report packages that have a conflict
+libdnf::solv::IdQueue ModuleGoalPrivate::list_conflicting() {
+    libdnf::solv::IdQueue result_ids;
+
+    for (auto problem : get_problems()) {
+        for (auto i : problem) {
+            if (std::get<0>(i) == ProblemRules::RULE_PKG_CONFLICTS ||
+                std::get<0>(i) == ProblemRules::RULE_PKG_SAME_NAME) {
+                result_ids.push_back(std::get<1>(i));
+                result_ids.push_back(std::get<3>(i));
+            } else if (std::get<0>(i) == ProblemRules::RULE_PKG_SELF_CONFLICT) {
+                result_ids.push_back(std::get<1>(i));
+            }
+        }
+    }
+    return result_ids;
+}
+
+
 }  // namespace libdnf::module
