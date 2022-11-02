@@ -445,16 +445,21 @@ static toml::value make_top_value(const std::string & key, const T & value) {
 }
 
 
+static std::string toml_format(const toml::value & value) {
+    return toml::format<toml::discard_comments, std::map, std::vector>(value);
+}
+
+
 void State::save() {
     std::filesystem::create_directories(path);
 
-    utils::fs::File(get_package_state_path(), "w").write(toml::format(make_top_value("packages", package_states)));
-    utils::fs::File(get_nevra_state_path(), "w").write(toml::format(make_top_value("nevras", nevra_states)));
-    utils::fs::File(get_group_state_path(), "w").write(toml::format(make_top_value("groups", group_states)));
+    utils::fs::File(get_package_state_path(), "w").write(toml_format(make_top_value("packages", package_states)));
+    utils::fs::File(get_nevra_state_path(), "w").write(toml_format(make_top_value("nevras", nevra_states)));
+    utils::fs::File(get_group_state_path(), "w").write(toml_format(make_top_value("groups", group_states)));
     utils::fs::File(get_environment_state_path(), "w")
-        .write(toml::format(make_top_value("environments", environment_states)));
-    utils::fs::File(get_module_state_path(), "w").write(toml::format(make_top_value("modules", module_states)));
-    utils::fs::File(get_system_state_path(), "w").write(toml::format(make_top_value("system", system_state)));
+        .write(toml_format(make_top_value("environments", environment_states)));
+    utils::fs::File(get_module_state_path(), "w").write(toml_format(make_top_value("modules", module_states)));
+    utils::fs::File(get_system_state_path(), "w").write(toml_format(make_top_value("system", system_state)));
 }
 
 
