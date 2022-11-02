@@ -43,7 +43,7 @@ void ModuleTest::test_load() {
     add_repo_repomd("repomd-modules");
 
     auto module_sack = base.get_module_sack();
-    CPPUNIT_ASSERT_EQUAL(9lu, module_sack->get_modules().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)9, module_sack->get_modules().size());
 
     // TODO(pkratoch): Change this once individual modules can be queried
     bool meson_checked = false;
@@ -74,7 +74,7 @@ void ModuleTest::test_load() {
 
     CPPUNIT_ASSERT_EQUAL(std::string(""), module_sack->get_default_stream("meson"));
     CPPUNIT_ASSERT_EQUAL(std::string("main"), module_sack->get_default_stream("berries"));
-    CPPUNIT_ASSERT_EQUAL(0lu, module_sack->get_default_profiles("meson", "master").size());
-    CPPUNIT_ASSERT_EQUAL(1lu, module_sack->get_default_profiles("berries", "main").size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, module_sack->get_default_profiles("meson", "master").size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, module_sack->get_default_profiles("berries", "main").size());
     CPPUNIT_ASSERT_EQUAL(std::string("minimal"), module_sack->get_default_profiles("berries", "main")[0]);
 }

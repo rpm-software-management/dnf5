@@ -64,7 +64,7 @@ void BaseGoalTest::test_install_not_available() {
     CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
     auto & log = transaction.get_resolve_logs();
-    CPPUNIT_ASSERT_EQUAL(1lu, log.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, log.size());
     auto & fist_event = *log.begin();
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::INSTALL, fist_event.get_action());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, fist_event.get_problem());
@@ -213,7 +213,7 @@ void BaseGoalTest::test_remove_not_installed() {
     CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
     auto & log = transaction.get_resolve_logs();
-    CPPUNIT_ASSERT_EQUAL(1lu, log.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, log.size());
     auto & first_event = *log.begin();
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::REMOVE, first_event.get_action());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, first_event.get_problem());
@@ -313,7 +313,7 @@ void BaseGoalTest::test_upgrade_not_downgrade_from_cmdline() {
     CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
     auto & log = transaction.get_resolve_logs();
-    CPPUNIT_ASSERT_EQUAL(1lu, log.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, log.size());
     auto & first_event = *log.begin();
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::UPGRADE, first_event.get_action());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::ALREADY_INSTALLED, first_event.get_problem());
@@ -338,7 +338,7 @@ void BaseGoalTest::test_upgrade_not_available() {
     CPPUNIT_ASSERT(transaction.get_transaction_packages().empty());
 
     auto & log = transaction.get_resolve_logs();
-    CPPUNIT_ASSERT_EQUAL(1lu, log.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, log.size());
     auto & first_event = *log.begin();
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::UPGRADE, first_event.get_action());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::NOT_FOUND, first_event.get_problem());
@@ -534,7 +534,7 @@ void BaseGoalTest::test_install_or_reinstall() {
     libdnf::rpm::PackageQuery query(base);
     query.filter_available();
     query.filter_nevra({"one-0:1-1.noarch"});
-    CPPUNIT_ASSERT_EQUAL(1lu, query.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, query.size());
     goal.add_rpm_install_or_reinstall(query);
     auto transaction = goal.resolve();
 

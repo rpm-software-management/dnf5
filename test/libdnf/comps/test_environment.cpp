@@ -199,7 +199,7 @@ void CompsEnvironmentTest::test_solvables() {
 
     EnvironmentQuery q_environments(base);
     auto environments = q_environments.list();
-    CPPUNIT_ASSERT_EQUAL(2lu, environments.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, environments.size());
 
     // Check that environment core is only based on the environment solvables
     // There is a group with id core that has a translation for lang "de", but it shouldn't be used for the environment with id core.

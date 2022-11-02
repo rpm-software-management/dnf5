@@ -68,7 +68,7 @@ void AdvisoryAdvisoryTest::test_get_references() {
     advisories.filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     std::vector<libdnf::advisory::AdvisoryReference> refs = advisory.get_references();
-    CPPUNIT_ASSERT_EQUAL(1lu, refs.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, refs.size());
 
     libdnf::advisory::AdvisoryReference r = refs[0];
     CPPUNIT_ASSERT_EQUAL(std::string("1111"), r.get_id());
@@ -83,45 +83,45 @@ void AdvisoryAdvisoryTest::test_get_collections() {
     advisories.filter_type("security");
     libdnf::advisory::Advisory advisory = *advisories.begin();
     std::vector<libdnf::advisory::AdvisoryCollection> colls = advisory.get_collections();
-    CPPUNIT_ASSERT_EQUAL(1lu, colls.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, colls.size());
 
     libdnf::advisory::AdvisoryCollection c = colls[0];
     std::vector<libdnf::advisory::AdvisoryPackage> pkgs = c.get_packages();
-    CPPUNIT_ASSERT_EQUAL(2lu, pkgs.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("pkg"), pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("filesystem"), pkgs[1].get_name());
 
     std::vector<libdnf::advisory::AdvisoryModule> mods = c.get_modules();
-    CPPUNIT_ASSERT_EQUAL(2lu, mods.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, mods.size());
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), mods[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("ethereum"), mods[1].get_name());
 
     libdnf::advisory::AdvisoryQuery adv_query(base);
     adv_query.filter_name("DNF-2020-1");
-    CPPUNIT_ASSERT_EQUAL(1lu, adv_query.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, adv_query.size());
     colls = (*adv_query.begin()).get_collections();
-    CPPUNIT_ASSERT_EQUAL(2lu, colls.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, colls.size());
 
     libdnf::advisory::AdvisoryCollection c1 = colls[0];
     pkgs.clear();
     pkgs = c1.get_packages();
-    CPPUNIT_ASSERT_EQUAL(2lu, pkgs.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("wget"), pkgs[0].get_name());
     CPPUNIT_ASSERT_EQUAL(std::string("yum"), pkgs[1].get_name());
 
     mods.clear();
     mods = c1.get_modules();
-    CPPUNIT_ASSERT_EQUAL(1lu, mods.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, mods.size());
     CPPUNIT_ASSERT_EQUAL(std::string("perl-DBI"), mods[0].get_name());
 
     libdnf::advisory::AdvisoryCollection c2 = colls[1];
     pkgs.clear();
     pkgs = c2.get_packages();
-    CPPUNIT_ASSERT_EQUAL(1lu, pkgs.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, pkgs.size());
     CPPUNIT_ASSERT_EQUAL(std::string("bitcoin"), pkgs[0].get_name());
 
     mods.clear();
     mods = c2.get_modules();
-    CPPUNIT_ASSERT_EQUAL(1lu, mods.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, mods.size());
     CPPUNIT_ASSERT_EQUAL(std::string("perl"), mods[0].get_name());
 }

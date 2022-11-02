@@ -28,15 +28,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::cli::output {
 
 void print_transaction_info(libdnf::transaction::Transaction & transaction) {
+    const auto dt_start_time = static_cast<time_t>(transaction.get_dt_start());
+    const auto dt_end_time = static_cast<time_t>(transaction.get_dt_end());
+
     KeyValueTable info;
     info.add_line("Transaction ID", transaction.get_id(), "bold");
     info.add_line(
-        "Begin time",
-        libdnf::utils::sformat("{:%F %X}", std::chrono::system_clock::from_time_t(transaction.get_dt_start())));
+        "Begin time", libdnf::utils::sformat("{:%F %X}", std::chrono::system_clock::from_time_t(dt_start_time)));
     info.add_line("Begin rpmdb", transaction.get_rpmdb_version_begin());
-    info.add_line(
-        "End time",
-        libdnf::utils::sformat("{:%F %X}", std::chrono::system_clock::from_time_t(transaction.get_dt_end())));
+    info.add_line("End time", libdnf::utils::sformat("{:%F %X}", std::chrono::system_clock::from_time_t(dt_end_time)));
     info.add_line("End rpmdb", transaction.get_rpmdb_version_end());
 
     info.add_line("User", transaction.get_user_id());
