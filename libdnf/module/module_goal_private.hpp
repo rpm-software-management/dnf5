@@ -56,6 +56,15 @@ public:
     /// @since 5.0
     libdnf::GoalProblem resolve();
 
+    /// @return Number of problems during resolving. The goal must be resolved first.
+    /// @since 5.0
+    size_t count_solver_problems();
+    /// @return `std::vector` of problems during resolving. Each problem is a `std::vector` of items:
+    ///          ProblemRules, source, dependency, target, solv string.
+    ///          The goal must be resolved first.
+    /// @since 5.0
+    std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> get_problems();
+
     /// @return IdQueue of items to install. The goal must be resolved first.
     /// @since 5.0
     libdnf::solv::IdQueue list_installs();
