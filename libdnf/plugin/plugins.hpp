@@ -20,10 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_PLUGIN_PLUGINS_HPP
 #define LIBDNF_PLUGIN_PLUGINS_HPP
 
-#include "iplugin.hpp"
-
 #include "libdnf/common/exception.hpp"
 #include "libdnf/conf/config_parser.hpp"
+#include "libdnf/plugin/iplugin.hpp"
 
 #include <memory>
 #include <string>
