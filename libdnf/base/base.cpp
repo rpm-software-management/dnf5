@@ -52,7 +52,7 @@ Base::Base(std::vector<std::unique_ptr<Logger>> && loggers)
 
 Base::~Base() = default;
 
-Base::Impl::Impl(const libdnf::BaseWeakPtr & base) : rpm_advisory_sack(base) {}
+Base::Impl::Impl(const libdnf::BaseWeakPtr & base) : rpm_advisory_sack(base), plugins(*base) {}
 
 void Base::lock() {
     locked_base_mutex.lock();
@@ -119,15 +119,15 @@ void Base::load_config_from_dir() {
 }
 
 void Base::add_plugin(plugin::IPlugin & iplugin_instance) {
-    plugins.register_plugin(std::make_unique<plugin::Plugin>(iplugin_instance));
+    p_impl->plugins.register_plugin(std::make_unique<plugin::Plugin>(iplugin_instance));
 }
 
 void Base::load_plugins() {
     const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
     if (plugins_config_dir && config.pluginconfpath().get_priority() < Option::Priority::COMMANDLINE) {
-        plugins.load_plugins(plugins_config_dir);
+        p_impl->plugins.load_plugins(plugins_config_dir);
     } else {
-        plugins.load_plugins(config.pluginconfpath().get_value());
+        p_impl->plugins.load_plugins(config.pluginconfpath().get_value());
     }
 }
 
@@ -136,9 +136,9 @@ void Base::setup() {
     libdnf_assert(!pool, "Base was already initialized");
 
     load_plugins();
-    plugins.init();
+    p_impl->plugins.init();
 
-    plugins.pre_base_setup();
+    p_impl->plugins.pre_base_setup();
 
     pool.reset(new libdnf::solv::Pool);
     auto & config = get_config();
@@ -183,7 +183,7 @@ void Base::setup() {
     pool_setarch(**pool, get_vars()->get_value("arch").c_str());
     pool_set_rootdir(**pool, installroot.get_value().c_str());
 
-    plugins.post_base_setup();
+    p_impl->plugins.post_base_setup();
 }
 
 }  // namespace libdnf

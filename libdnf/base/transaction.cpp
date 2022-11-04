@@ -450,7 +450,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
         return TransactionRunResult::SUCCESS;
     }
 
-    auto & plugins = base->get_plugins();
+    auto & plugins = base->p_impl->get_plugins();
     plugins.pre_transaction(*transaction);
 
     // start history db transaction

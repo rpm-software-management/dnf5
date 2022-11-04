@@ -16,7 +16,6 @@
 
 %{
     #include "libdnf/plugin/iplugin.hpp"
-    #include "libdnf/plugin/plugins.hpp"
 %}
 
 #define CV __perl_CV
@@ -36,5 +35,3 @@
         return ver;
     }
 }
-
-%include "libdnf/plugin/plugins.hpp"

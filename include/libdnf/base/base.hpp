@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/vars.hpp"
 #include "libdnf/logger/log_router.hpp"
 #include "libdnf/module/module_sack.hpp"
-#include "libdnf/plugin/plugins.hpp"
+#include "libdnf/plugin/iplugin.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/transaction/transaction_history.hpp"
@@ -91,7 +91,6 @@ public:
 
     void add_plugin(plugin::IPlugin & iplugin_instance);
     void load_plugins();
-    plugin::Plugins & get_plugins() { return plugins; }
 
     libdnf::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
@@ -133,7 +132,6 @@ private:
     rpm::PackageSack rpm_package_sack;
     comps::Comps comps{*this};
     module::ModuleSack module_sack{get_weak_ptr()};
-    plugin::Plugins plugins{*this};
     std::map<std::string, std::string> variables;
     transaction::TransactionHistory transaction_history;
     Vars vars;

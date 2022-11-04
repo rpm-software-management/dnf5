@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "../advisory/advisory_sack.hpp"
+#include "plugin/plugins.hpp"
 #include "system/state.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -47,6 +48,8 @@ public:
         return *pool;
     }
 
+    plugin::Plugins & get_plugins() { return plugins; }
+
 private:
     friend class Base;
     Impl(const libdnf::BaseWeakPtr & base);
@@ -56,6 +59,8 @@ private:
 
     std::optional<libdnf::system::State> system_state;
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
+
+    plugin::Plugins plugins;
 };
 
 
