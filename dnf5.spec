@@ -13,6 +13,8 @@ Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 Recommends:     bash-completion
+Provides:       microdnf = %{version}-%{release}
+Obsoletes:      microdnf < 4
 
 # ========== build options ==========
 
@@ -171,6 +173,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %files
 %{_bindir}/dnf5
+%{_bindir}/microdnf
 %{_prefix}/share/dnf5
 %dir %{_sysconfdir}/dnf/dnf5-aliases.d
 %doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
@@ -570,7 +573,7 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
 %cmake_install
 
 #find_lang {name}
-
+ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 
 %ldconfig_scriptlets
 
