@@ -14,6 +14,12 @@ Requires:       libdnf5%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 Recommends:     bash-completion
 
+# Remove if condition when Fedora 37 is EOL
+%if 0%{?fedora} > 37
+Provides:       microdnf = %{version}-%{release}
+Obsoletes:      microdnf < 4
+%endif
+
 # ========== build options ==========
 
 %bcond_without dnf5daemon_client
@@ -170,6 +176,12 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %files
 %{_bindir}/dnf5
+
+# Remove if condition when Fedora 37 is EOL
+%if 0%{?fedora} > 37
+%{_bindir}/microdnf
+%endif
+
 %{_prefix}/share/dnf5
 %dir %{_sysconfdir}/dnf/dnf5-aliases.d
 %doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
@@ -601,6 +613,10 @@ done
 
 #find_lang {name}
 
+# Remove if condition when Fedora 37 is EOL
+%if 0%{?fedora} > 37
+ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
+%endif
 
 %ldconfig_scriptlets
 
