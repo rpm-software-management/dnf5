@@ -463,6 +463,15 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
             return {GoalProblem::NO_PROBLEM, result_queue};
         }
     }
+
+    // The correct evaluation of rich dependencies can be only performed by solver.
+    // There are some limitations - solver is unable to handle whan operation is limited to packages from the
+    // particular repository and multilib_policy `all`.
+    if (libdnf::rpm::Reldep::is_rich_dependency(spec) && settings.to_repo_ids.empty()) {
+        add_provide_install_to_goal(spec, settings);
+        return {GoalProblem::NO_PROBLEM, result_queue};
+    }
+
     bool has_just_name = nevra_pair.second.has_just_name();
     bool add_obsoletes = cfg_main.obsoletes().get_value() && has_just_name;
 
