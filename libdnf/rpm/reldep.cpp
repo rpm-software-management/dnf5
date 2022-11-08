@@ -85,8 +85,7 @@ ReldepId Reldep::get_reldep_id(
 }
 
 ReldepId Reldep::get_reldep_id(const BaseWeakPtr & base, const std::string & reldep_str, int create) {
-    if (reldep_str[0] == '(') {
-        // Rich dependency
+    if (is_rich_dependency(reldep_str)) {
         Id id = pool_parserpmrichdep(*get_pool(base), reldep_str.c_str());
         // TODO(jmracek) Replace runtime_error. Do we need to throw an error?
         if (id == 0) {
