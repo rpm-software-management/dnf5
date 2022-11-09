@@ -32,11 +32,13 @@ LogEvent::LogEvent(
     libdnf::GoalAction action,
     libdnf::GoalProblem problem,
     const libdnf::GoalJobSettings & settings,
+    const SpecType spec_type,
     const std::string & spec,
     const std::set<std::string> & additional_data)
     : action(action),
       problem(problem),
       job_settings(settings),
+      spec_type(spec_type),
       spec(spec),
       additional_data(additional_data) {
     libdnf_assert(
@@ -63,6 +65,7 @@ std::string LogEvent::to_string(
     libdnf::GoalAction action,
     libdnf::GoalProblem problem,
     const std::optional<libdnf::GoalJobSettings> & settings,
+    const std::optional<LogEvent::SpecType> & spec_type,
     const std::optional<std::string> & spec,
     const std::optional<std::set<std::string>> & additional_data,
     const std::optional<SolverProblems> & solver_problems) {
@@ -71,7 +74,22 @@ std::string LogEvent::to_string(
         // TODO(jmracek) Improve messages => Each message can contain also an action
         case GoalProblem::NOT_FOUND:
             if (action == GoalAction::REMOVE) {
-                return ret.append(utils::sformat(_("No packages to remove for argument: {}"), *spec));
+                std::string spec_type_str;
+                switch (*spec_type) {
+                    case LogEvent::SpecType::PACKAGE:
+                        spec_type_str = _("packages");
+                        break;
+                    case LogEvent::SpecType::GROUP:
+                        spec_type_str = _("groups");
+                        break;
+                    case LogEvent::SpecType::ENVIRONMENT:
+                        spec_type_str = _("environmental groups");
+                        break;
+                    case LogEvent::SpecType::MODULE:
+                        spec_type_str = _("modules");
+                        break;
+                }
+                return ret.append(utils::sformat(_("No {} to remove for argument: {}"), spec_type_str, *spec));
             } else if (action == GoalAction::INSTALL_BY_GROUP) {
                 return ret.append(utils::sformat(_("No match for group package: {}"), *spec));
             }

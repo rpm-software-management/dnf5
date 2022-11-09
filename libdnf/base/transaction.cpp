@@ -116,7 +116,7 @@ GoalProblem Transaction::Impl::report_not_found(
     auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, settings, true);
     if (!nevra_pair_reports.first) {
         // RPM was not excluded or there is no related srpm
-        add_resolve_log(action, GoalProblem::NOT_FOUND, settings, pkg_spec, {}, strict);
+        add_resolve_log(action, GoalProblem::NOT_FOUND, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, strict);
         if (settings.report_hint) {
             rpm::PackageQuery hints(base);
             if (action == GoalAction::REMOVE) {
@@ -131,7 +131,13 @@ GoalProblem Transaction::Impl::report_not_found(
                 auto nevra_pair_icase = icase.resolve_pkg_spec(pkg_spec, settings_copy, false);
                 if (nevra_pair_icase.first) {
                     add_resolve_log(
-                        action, GoalProblem::HINT_ICASE, settings, pkg_spec, {(*icase.begin()).get_name()}, false);
+                        action,
+                        GoalProblem::HINT_ICASE,
+                        settings,
+                        LogEvent::SpecType::PACKAGE,
+                        pkg_spec,
+                        {(*icase.begin()).get_name()},
+                        false);
                 }
             }
             rpm::PackageQuery alternatives(hints);
@@ -142,18 +148,25 @@ GoalProblem Transaction::Impl::report_not_found(
                 for (auto pkg : alternatives) {
                     hints.emplace(pkg.get_name());
                 }
-                add_resolve_log(action, GoalProblem::HINT_ALTERNATIVES, settings, pkg_spec, hints, false);
+                add_resolve_log(
+                    action,
+                    GoalProblem::HINT_ALTERNATIVES,
+                    settings,
+                    LogEvent::SpecType::PACKAGE,
+                    pkg_spec,
+                    hints,
+                    false);
             }
         }
         return GoalProblem::NOT_FOUND;
     }
     query.filter_repo_id({"src", "nosrc"}, sack::QueryCmp::NEQ);
     if (query.empty()) {
-        add_resolve_log(action, GoalProblem::ONLY_SRC, settings, pkg_spec, {}, strict);
+        add_resolve_log(action, GoalProblem::ONLY_SRC, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, strict);
         return GoalProblem::ONLY_SRC;
     }
     // TODO(jmracek) make difference between regular excludes and modular excludes
-    add_resolve_log(action, GoalProblem::EXCLUDED, settings, pkg_spec, {}, strict);
+    add_resolve_log(action, GoalProblem::EXCLUDED, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, strict);
     return GoalProblem::EXCLUDED;
 }
 
@@ -161,10 +174,11 @@ void Transaction::Impl::add_resolve_log(
     GoalAction action,
     GoalProblem problem,
     const GoalJobSettings & settings,
+    const LogEvent::SpecType spec_type,
     const std::string & spec,
     const std::set<std::string> & additional_data,
     bool strict) {
-    resolve_logs.emplace_back(LogEvent(action, problem, settings, spec, additional_data));
+    resolve_logs.emplace_back(LogEvent(action, problem, settings, spec_type, spec, additional_data));
     // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
     if (strict) {
