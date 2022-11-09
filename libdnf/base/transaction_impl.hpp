@@ -64,6 +64,7 @@ public:
         GoalAction action,
         GoalProblem problem,
         const GoalJobSettings & settings,
+        const LogEvent::SpecType spec_type,
         const std::string & spec,
         const std::set<std::string> & additional_data,
         bool strict);

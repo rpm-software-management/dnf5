@@ -34,11 +34,15 @@ namespace libdnf::base {
 /// Contain information, hint, or a problem created during libdnf::Goal::resolve()
 class LogEvent {
 public:
+    /// What object type is the spec supposed to describe
+    enum class SpecType { PACKAGE, GROUP, ENVIRONMENT, MODULE };
+
     /// Public constructor
     LogEvent(
         libdnf::GoalAction action,
         libdnf::GoalProblem problem,
         const libdnf::GoalJobSettings & settings,
+        const SpecType spec_type,
         const std::string & spec,
         const std::set<std::string> & additional_data);
     LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_problems);
@@ -62,13 +66,14 @@ public:
         libdnf::GoalAction action,
         libdnf::GoalProblem problem,
         const std::optional<libdnf::GoalJobSettings> & settings,
+        const std::optional<SpecType> & spec_type,
         const std::optional<std::string> & spec,
         const std::optional<std::set<std::string>> & additional_data,
         const std::optional<SolverProblems> & solver_problems);
 
     /// Convert an element from resolve log to string;
     std::string to_string() const {
-        return to_string(action, problem, job_settings, spec, additional_data, solver_problems);
+        return to_string(action, problem, job_settings, spec_type, spec, additional_data, solver_problems);
     };
 
 private:
@@ -77,6 +82,7 @@ private:
     libdnf::GoalAction action;
     libdnf::GoalProblem problem;
     std::optional<libdnf::GoalJobSettings> job_settings;
+    std::optional<SpecType> spec_type;
     std::optional<std::string> spec;
     std::optional<std::set<std::string>> additional_data;
     std::optional<SolverProblems> solver_problems;
