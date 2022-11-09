@@ -78,6 +78,18 @@ inline std::string join(const ContainerT & input, const std::string & delimiter)
 }
 
 
+/// Trim leading and trailing spaces from string `str` in place.
+inline void trim(std::string & str) {
+    str.erase(
+        std::find_if(str.rbegin(), str.rend(), [](unsigned char character) { return std::isspace(character) == 0; })
+            .base(),
+        str.end());
+    str.erase(str.begin(), std::find_if(str.begin(), str.end(), [](unsigned char character) {
+                  return std::isspace(character) == 0;
+              }));
+}
+
+
 /// Right-split `str` with a `delimiter` into a vector of strings.
 /// The `limit` argument determines maximum number of elements in the resulting vector.
 std::vector<std::string> rsplit(const std::string & str, const std::string & delimiter, std::size_t limit);
