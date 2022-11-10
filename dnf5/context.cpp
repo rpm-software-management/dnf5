@@ -93,27 +93,29 @@ public:
     explicit ProgressAndKeyImportRepoCB(libdnf::ConfigMain & config) : KeyImportRepoCB(config) {}
 
     void start(const char * what) override {
-        progress_bar.set_description(what);
-        progress_bar.set_auto_finish(false);
-        progress_bar.set_total_ticks(0);
-        progress_bar.start();
+        progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, what);
+        msg_lines = 0;
+        progress_bar->set_auto_finish(false);
+        progress_bar->start();
     }
 
     void end(const char * error_message) override {
-        progress_bar.set_ticks(progress_bar.get_total_ticks());
+        libdnf_assert(progress_bar != nullptr, "Called \"end\" callback before \"start\" callback");
+        progress_bar->set_ticks(progress_bar->get_total_ticks());
 
         if (error_message) {
-            progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
+            progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
             add_message(libdnf::cli::progressbar::MessageType::ERROR, error_message);
         } else {
-            progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
+            progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
             print_progress_bar();
         }
     }
 
     int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
-        progress_bar.set_total_ticks(static_cast<int64_t>(total_to_download));
-        progress_bar.set_ticks(static_cast<int64_t>(downloaded));
+        libdnf_assert(progress_bar != nullptr, "Called \"progress\" callback before \"start\" callback");
+        progress_bar->set_total_ticks(static_cast<int64_t>(total_to_download));
+        progress_bar->set_ticks(static_cast<int64_t>(downloaded));
         if (is_time_to_print()) {
             print_progress_bar();
         }
@@ -124,13 +126,14 @@ public:
         [[maybe_unused]] const char * msg,
         [[maybe_unused]] const char * url,
         [[maybe_unused]] const char * metadata) override {
-        progress_bar.add_message(libdnf::cli::progressbar::MessageType::WARNING, msg);
+        libdnf_assert(progress_bar != nullptr, "Called \"handle_mirror_failure\" callback before \"start\" callback");
+        progress_bar->add_message(libdnf::cli::progressbar::MessageType::WARNING, msg);
         print_progress_bar();
         return 0;
     }
 
     void add_message(libdnf::cli::progressbar::MessageType type, const std::string & message) override {
-        progress_bar.add_message(type, message);
+        progress_bar->add_message(type, message);
         print_progress_bar();
     }
 
@@ -143,8 +146,8 @@ private:
             }
             std::cout << "\r";
         }
-        std::cout << progress_bar << std::flush;
-        msg_lines = progress_bar.get_messages().size();
+        std::cout << *progress_bar << std::flush;
+        msg_lines = progress_bar->get_messages().size();
     }
 
     static bool is_time_to_print() {
@@ -161,8 +164,8 @@ private:
 
     static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
 
-    libdnf::cli::progressbar::DownloadProgressBar progress_bar{-1, ""};
-    std::size_t msg_lines{0};
+    std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar> progress_bar;
+    std::size_t msg_lines;
 };
 
 std::chrono::time_point<std::chrono::steady_clock> ProgressAndKeyImportRepoCB::prev_print_time =
