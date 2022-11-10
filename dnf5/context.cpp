@@ -95,18 +95,24 @@ public:
     void start(const char * what) override {
         progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, what);
         msg_lines = 0;
+        prev_total_tick = -1;
+        prev_downloaded = 0;
+        sum_prev_downloaded = 0;
         progress_bar->set_auto_finish(false);
         progress_bar->start();
     }
 
     void end(const char * error_message) override {
         libdnf_assert(progress_bar != nullptr, "Called \"end\" callback before \"start\" callback");
-        progress_bar->set_ticks(progress_bar->get_total_ticks());
 
         if (error_message) {
             progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
             add_message(libdnf::cli::progressbar::MessageType::ERROR, error_message);
         } else {
+            // Correction of the total data size for the download.
+            // Sometimes Librepo returns a larger data size for download than the actual file size.
+            progress_bar->set_total_ticks(progress_bar->get_ticks());
+
             progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
             print_progress_bar();
         }
@@ -114,8 +120,18 @@ public:
 
     int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
         libdnf_assert(progress_bar != nullptr, "Called \"progress\" callback before \"start\" callback");
-        progress_bar->set_total_ticks(static_cast<int64_t>(total_to_download));
-        progress_bar->set_ticks(static_cast<int64_t>(downloaded));
+
+        // "total_to_download" and "downloaded" are related to the currently downloaded file.
+        // We add the size of previously downloaded files.
+        auto total_ticks = static_cast<std::int64_t>(total_to_download);
+        if (total_ticks != prev_total_tick) {
+            prev_total_tick = total_ticks;
+            sum_prev_downloaded += prev_downloaded;
+        }
+        prev_downloaded = static_cast<std::int64_t>(downloaded);
+        progress_bar->set_total_ticks(sum_prev_downloaded + total_ticks);
+        progress_bar->set_ticks(sum_prev_downloaded + prev_downloaded);
+
         if (is_time_to_print()) {
             print_progress_bar();
         }
@@ -127,8 +143,8 @@ public:
         [[maybe_unused]] const char * url,
         [[maybe_unused]] const char * metadata) override {
         libdnf_assert(progress_bar != nullptr, "Called \"handle_mirror_failure\" callback before \"start\" callback");
-        progress_bar->add_message(libdnf::cli::progressbar::MessageType::WARNING, msg);
-        print_progress_bar();
+
+        add_message(libdnf::cli::progressbar::MessageType::WARNING, msg);
         return 0;
     }
 
@@ -166,6 +182,9 @@ private:
 
     std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar> progress_bar;
     std::size_t msg_lines;
+    std::int64_t prev_total_tick;
+    std::int64_t prev_downloaded;
+    std::int64_t sum_prev_downloaded;
 };
 
 std::chrono::time_point<std::chrono::steady_clock> ProgressAndKeyImportRepoCB::prev_print_time =
