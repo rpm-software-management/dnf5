@@ -94,6 +94,7 @@ public:
 
     void start(const char * what) override {
         progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, what);
+        progress_bar->set_number_widget_visible(false);
         msg_lines = 0;
         prev_total_tick = -1;
         prev_downloaded = 0;
