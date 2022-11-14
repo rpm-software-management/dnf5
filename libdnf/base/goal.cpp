@@ -1160,9 +1160,23 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
     switch (action) {
         case GoalAction::UPGRADE_MINIMAL:
         case GoalAction::UPGRADE:
-            // For a correct upgrade of installonly packages keep only the latest installed packages
-            // Otherwise it will also install not the latest installonly packages
             query.filter_available();
+            // Given that we use libsolv's targeted transactions, we need to ensure that the transaction contains both
+            // the new targeted version and also the current installed version (for the upgraded package). This is
+            // because if it only contained the new version, libsolv would decide to reinstall the package even if it
+            // had just a different buildtime or vendor but the same version
+            // (https://github.com/openSUSE/libsolv/issues/287)
+            //   - Make sure that query contains both the new and installed versions (i.e. add installed versions)
+            //   - However we need to add installed versions of just the packages that are being upgraded. We don't want
+            //     to add all installed packages because it could increase the number of solutions for the transaction
+            //     (especially with --no-best) and since libsolv prefers the smallest possible upgrade it could result
+            //     in no upgrade even if there is one available. This is a problem in general but its critical with
+            //     --security transactions (https://bugzilla.redhat.com/show_bug.cgi?id=2097757)
+            all_installed.filter_name(query);
+            //   - We want to add only the latest versions of installed packages, this is specifically for installonly
+            //     packages. Otherwise if for example kernel-1 and kernel-3 were installed and present in the
+            //     transaction libsolv could decide to install kernel-2 because it is an upgrade for kernel-1 even
+            //     though we don't want it because there already is a newer version present.
             all_installed.filter_latest_evr();
             query |= all_installed;
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
