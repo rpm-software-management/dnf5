@@ -125,13 +125,16 @@ public:
         // "total_to_download" and "downloaded" are related to the currently downloaded file.
         // We add the size of previously downloaded files.
         auto total_ticks = static_cast<std::int64_t>(total_to_download);
-        if (total_ticks != prev_total_tick) {
-            prev_total_tick = total_ticks;
-            sum_prev_downloaded += prev_downloaded;
+        // ignore zero progress events at the beginning of the download, so we don't start with 100% progress
+        if (total_ticks != 0 || prev_total_tick != -1) {
+            if (total_ticks != prev_total_tick) {
+                prev_total_tick = total_ticks;
+                sum_prev_downloaded += prev_downloaded;
+            }
+            prev_downloaded = static_cast<std::int64_t>(downloaded);
+            progress_bar->set_total_ticks(sum_prev_downloaded + total_ticks);
+            progress_bar->set_ticks(sum_prev_downloaded + prev_downloaded);
         }
-        prev_downloaded = static_cast<std::int64_t>(downloaded);
-        progress_bar->set_total_ticks(sum_prev_downloaded + total_ticks);
-        progress_bar->set_ticks(sum_prev_downloaded + prev_downloaded);
 
         if (is_time_to_print()) {
             print_progress_bar();
