@@ -35,6 +35,8 @@ class OptionTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_options_seconds);
     CPPUNIT_TEST(test_options_string);
     CPPUNIT_TEST(test_options_string_list);
+    CPPUNIT_TEST(test_options_string_list_delimiters);
+    CPPUNIT_TEST(test_options_string_list_custom_delimiters);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -46,6 +48,8 @@ public:
     void test_options_seconds();
     void test_options_string();
     void test_options_string_list();
+    void test_options_string_list_delimiters();
+    void test_options_string_list_custom_delimiters();
 };
 
 
