@@ -178,16 +178,12 @@ std::vector<Key> RepoGpgme::rawkey2infos(const int fd) {
 }
 
 
-RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base(base), config(config) {
-    auto & logger = *base->get_logger();
-
-    ensure_socket_dir_exists(logger);
-
-    gpg_error_t gpg_err;
-
-    gpgme_check_version(nullptr);
+std::vector<std::string> RepoGpgme::load_keys_ids_from_keyring() {
+    std::vector<std::string> keys_ids;
 
     if (std::filesystem::is_directory(get_keyring_dir())) {
+        gpg_error_t gpg_err;
+
         auto context = create_context(get_keyring_dir());
 
         gpgme_key_t key;
@@ -204,7 +200,7 @@ RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base
                 subkey = subkey->next;
             }
             if (subkey) {
-                known_keys.push_back(subkey->keyid);
+                keys_ids.push_back(subkey->keyid);
             }
             gpgme_key_release(key);
         }
@@ -213,6 +209,15 @@ RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base
             throw RepoGpgError(M_("Failed to list gpg keys: {}"), gpgme_strerror(gpg_err));
         }
     }
+
+    return keys_ids;
+}
+
+
+RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base(base), config(config) {
+    auto & logger = *base->get_logger();
+    ensure_socket_dir_exists(logger);
+    gpgme_check_version(nullptr);
 }
 
 
@@ -221,6 +226,7 @@ void RepoGpgme::import_key(int fd, const std::string & url) {
 
     auto key_infos = rawkey2infos(fd);
 
+    auto known_keys = load_keys_ids_from_keyring();
     for (auto & key_info : key_infos) {
         if (std::find(known_keys.begin(), known_keys.end(), key_info.get_id()) != known_keys.end()) {
             logger.debug("Gpg key 0x{} for repository {} already imported.", key_info.get_id(), config.get_id());

@@ -71,9 +71,9 @@ public:
     static std::vector<Key> rawkey2infos(const int fd);
 
 private:
+    std::vector<std::string> load_keys_ids_from_keyring();
     BaseWeakPtr base;
     const ConfigRepo & config;
-    std::vector<std::string> known_keys;
     RepoCallbacks * callbacks = nullptr;
 };
 
