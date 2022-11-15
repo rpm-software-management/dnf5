@@ -42,6 +42,14 @@ public:
     OptionStringContainer(const ValueType & default_value, std::string regex, bool icase);
     explicit OptionStringContainer(const std::string & default_value);
     OptionStringContainer(const std::string & default_value, std::string regex, bool icase);
+    OptionStringContainer(const ValueType & default_value, std::string regex, bool icase, std::string delimiters);
+
+    OptionStringContainer(const OptionStringContainer & src);
+    OptionStringContainer(OptionStringContainer && src) noexcept = default;
+    ~OptionStringContainer() override = default;
+
+    OptionStringContainer & operator=(const OptionStringContainer & src);
+    OptionStringContainer & operator=(OptionStringContainer && src) noexcept = default;
 
     /// Makes copy (clone) of this object.
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.clone()
@@ -83,11 +91,17 @@ public:
 
     /// Parses input string and returns result.
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.fromString(const std::string & value)
-    ValueType from_string(const std::string & value) const;
+    ValueType from_string(std::string value) const;
 
     /// Converts input value to the string.
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.toString(const ValueType & value)
     std::string to_string(const ValueType & value) const;
+
+    /// Returns the default delimiters
+    static const char * get_default_delimiters() noexcept;
+
+    /// Return delimiters of this OptionStringList
+    const char * get_delimiters() const noexcept;
 
 protected:
     /// Tests new container item value and throws exception if the item value is not allowed.
@@ -96,6 +110,7 @@ protected:
     std::optional<std::regex> regex_matcher;
     std::string regex;
     bool icase;
+    std::optional<std::string> delimiters;
     ValueType default_value;
     ValueType value;
 
@@ -122,6 +137,16 @@ inline const T & OptionStringContainer<T>::get_default_value() const {
 template <typename T>
 inline std::string OptionStringContainer<T>::get_value_string() const {
     return to_string(value);
+}
+
+template <typename T>
+inline const char * OptionStringContainer<T>::get_default_delimiters() noexcept {
+    return " ,\n";
+}
+
+template <typename T>
+inline const char * OptionStringContainer<T>::get_delimiters() const noexcept {
+    return delimiters ? delimiters->c_str() : get_default_delimiters();
 }
 
 using OptionStringList = OptionStringContainer<std::vector<std::string>>;

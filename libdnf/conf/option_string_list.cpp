@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/option_string_list.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
+#include "utils/string.hpp"
 
 namespace libdnf {
 
@@ -57,6 +58,42 @@ OptionStringContainer<T>::OptionStringContainer(const std::string & default_valu
     this->default_value = from_string(default_value);
     test(this->default_value);
     value = this->default_value;
+}
+
+template <typename T>
+OptionStringContainer<T>::OptionStringContainer(
+    const ValueType & default_value, std::string regex, bool icase, std::string delimiters)
+    : Option(Priority::DEFAULT),
+      regex(std::move(regex)),
+      icase(icase),
+      delimiters(std::move(delimiters)),
+      default_value(default_value),
+      value(this->default_value) {
+    test(this->default_value);
+}
+
+template <typename T>
+OptionStringContainer<T>::OptionStringContainer(const OptionStringContainer & src)
+    : Option(src),
+      regex(src.regex),
+      icase(src.icase),
+      delimiters(src.delimiters),
+      default_value(src.default_value),
+      value(src.value) {}
+
+template <typename T>
+OptionStringContainer<T> & OptionStringContainer<T>::operator=(const OptionStringContainer & src) {
+    assert_not_locked();
+
+    if (this == &src) {
+        return *this;
+    }
+    regex = src.regex;
+    icase = src.icase;
+    delimiters = src.delimiters;
+    default_value = src.default_value;
+    value = src.value;
+    return *this;
 }
 
 template <typename T>
@@ -99,26 +136,34 @@ void OptionStringContainer<T>::test(const ValueType & value) const {
     }
 }
 
+// Since strtok_r modifies its str input we copy `value` param
 template <typename T>
-T OptionStringContainer<T>::from_string(const std::string & value) const {
+T OptionStringContainer<T>::from_string(std::string value) const {
     ValueType tmp;
+    char * str = nullptr;
+    char * token = nullptr;
+    char * saveptr = nullptr;
+
+    // If the first token in the string is empty (we start with a delimiter) it's
+    // a special case, it can be used to clear existing content of the option.
     auto start = value.find_first_not_of(' ');
-    while (start != std::string::npos && start < value.length()) {
-        auto end = value.find_first_of(" ,\n", start);
-        if (end == std::string::npos) {
-            tmp.insert(tmp.end(), value.substr(start));
+    if (start != std::string::npos && strchr(get_delimiters(), value[start]) != nullptr) {
+        tmp.insert(tmp.end(), "");
+    }
+
+    for (str = value.data();; str = nullptr) {
+        token = strtok_r(str, get_delimiters(), &saveptr);
+        if (token == nullptr) {
             break;
         }
-        tmp.insert(tmp.end(), value.substr(start, end - start));
-        start = value.find_first_not_of(' ', end + 1);
-        if (start != std::string::npos && value[start] == ',' && value[end] == ' ') {
-            end = start;
-            start = value.find_first_not_of(' ', start + 1);
-        }
-        if (start != std::string::npos && value[start] == '\n' && (value[end] == ' ' || value[end] == ',')) {
-            start = value.find_first_not_of(' ', start + 1);
+        std::string token_str(token);
+        // Since deliemeters don't have to include space, we have to trim the token
+        utils::string::trim(token_str);
+        if (!token_str.empty()) {
+            tmp.insert(tmp.end(), std::move(token_str));
         }
     }
+
     return tmp;
 }
 
