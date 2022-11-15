@@ -171,6 +171,8 @@ std::vector<Key> RepoGpgme::rawkey2infos(const int fd) {
             if (readed > 0)
                 key_info.raw_key.insert(key_info.raw_key.end(), buf, buf + readed);
         } while (readed == sizeof(buf));
+
+        gpgme_data_release(sink);
     }
     return key_infos;
 }
