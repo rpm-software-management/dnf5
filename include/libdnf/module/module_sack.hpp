@@ -119,6 +119,8 @@ private:
 
     WeakPtrGuard<ModuleSack, false> data_guard;
 
+    bool active_modules_resolved = false;
+
     class Impl;
     std::unique_ptr<Impl> p_impl;
 };

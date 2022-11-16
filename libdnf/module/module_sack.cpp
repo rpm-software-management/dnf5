@@ -63,6 +63,12 @@ const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::get_modules() {
 
 std::vector<ModuleItem *> ModuleSack::get_active_modules() {
     std::vector<ModuleItem *> modules;
+    if (p_impl->get_modules().empty()) {
+        return modules;
+    }
+    if (!active_modules_resolved) {
+        resolve_active_module_items();
+    }
     for (auto id_module_pair : p_impl->active_modules) {
         modules.push_back(id_module_pair.second);
     }
@@ -499,6 +505,7 @@ ModuleSack::resolve_active_module_items() {
     }
 
     auto problems = p_impl->module_solve(module_items_to_solve);
+    active_modules_resolved = true;
     return problems;
 }
 
