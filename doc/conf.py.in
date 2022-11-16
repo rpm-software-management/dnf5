@@ -20,6 +20,7 @@ except NameError:
     libdnf_docdir = os.path.abspath(".")
 
 sys.path.insert(0, os.path.join(libdnf_docdir, "sphinx"))
+sys.path.insert(0, os.path.join(libdnf_docdir, "../bindings/python3"))
 
 # -- Project information -----------------------------------------------------
 
@@ -38,7 +39,8 @@ needs_sphinx = '4.1.2'
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'breathe'
+    'breathe',
+    'sphinx.ext.autodoc',
 ]
 breathe_projects = {'dnf5': '@CMAKE_CURRENT_BINARY_DIR@/xml/'}
 breathe_default_project = 'dnf5'
