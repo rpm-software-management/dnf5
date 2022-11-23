@@ -54,7 +54,7 @@ Recommends:     bash-completion
 # ========== versions of dependencies ==========
 
 %global libmodulemd_version 2.5.0
-%global librepo_version 1.13.0
+%global librepo_version 1.15.0
 %global libsolv_version 0.7.21
 %global swig_version 4
 %global zchunk_version 0.9.11
@@ -68,7 +68,6 @@ BuildRequires:  doxygen
 BuildRequires:  gettext
 BuildRequires:  pkgconfig(check)
 BuildRequires:  pkgconfig(fmt)
-BuildRequires:  (pkgconfig(gpgme) or gpgme-devel)
 BuildRequires:  pkgconfig(json-c)
 BuildRequires:  pkgconfig(libcrypto)
 BuildRequires:  pkgconfig(librepo) >= %{librepo_version}

@@ -84,17 +84,7 @@ pkg_check_modules (GLIB2 glib-2.0>=2.46.0)
 include_directories(${GLIB2_INCLUDE_DIRS})
 target_link_libraries(libdnf ${GLIB2_LIBRARIES})
 
-# GPGME
-pkg_check_modules(GPGME gpgme)
-if(NOT GPGME_FOUND)
-    # gpgme.pc is not available on RHEL 8 / CentOS Stream 8
-    set(GPGME_MODULE_NAME gpgme)
-    set(GPGME_LIBRARIES gpgme)
-endif()
-list(APPEND LIBDNF5_PC_REQUIRES "${GPGME_MODULE_NAME}")
-target_link_libraries(libdnf ${GPGME_LIBRARIES})
-
-pkg_check_modules(LIBREPO REQUIRED librepo>=1.13.0)
+pkg_check_modules(LIBREPO REQUIRED librepo>=1.15.0)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBREPO_LIBRARIES})
 

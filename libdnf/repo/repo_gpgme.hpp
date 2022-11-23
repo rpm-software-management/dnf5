@@ -25,7 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/config_repo.hpp"
 #include "libdnf/repo/repo_callbacks.hpp"
 
-#include <gpgme.h>
+#include <librepo/librepo.h>
 
 #include <filesystem>
 #include <string>
@@ -36,17 +36,12 @@ namespace libdnf::repo {
 
 class Key {
 public:
-    Key(gpgme_key_t key, gpgme_subkey_t subkey) {
-        id = subkey->keyid;
-        fingerprint = subkey->fpr;
-        timestamp = subkey->timestamp;
-        userid = key->uids->uid;
-    }
+    Key(const LrGpgKey * key, const LrGpgSubkey * subkey);
 
-    std::string get_id() const { return id; }
-    std::string get_user_id() const { return userid; }
-    std::string get_fingerprint() const { return fingerprint; }
-    long int get_timestamp() const { return timestamp; }
+    const std::string & get_id() const noexcept { return id; }
+    const std::string & get_user_id() const noexcept { return userid; }
+    const std::string & get_fingerprint() const noexcept { return fingerprint; }
+    long int get_timestamp() const noexcept { return timestamp; }
 
     std::vector<char> raw_key;
 
@@ -57,18 +52,18 @@ private:
     long int timestamp;
 };
 
-/// Wraps gpgme in a higher-level interface.
-/// @exception RepoGpgError (public) Thrown on any gpgme-related error.
+/// Wraps pgp in a higher-level interface.
+/// @exception RepoGpgError (public) Thrown on any pgp-related error.
 class RepoGpgme {
 public:
     RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config);
 
     void set_callbacks(RepoCallbacks * callbacks) noexcept { this->callbacks = callbacks; }
 
-    std::filesystem::path get_keyring_dir() { return std::filesystem::path(config.get_cachedir()) / "pubring"; }
+    std::filesystem::path get_keyring_dir() const { return std::filesystem::path(config.get_cachedir()) / "pubring"; }
 
     void import_key(int fd, const std::string & url);
-    static std::vector<Key> rawkey2infos(const int fd);
+    static std::vector<Key> rawkey2infos(int fd);
 
 private:
     std::vector<std::string> load_keys_ids_from_keyring();

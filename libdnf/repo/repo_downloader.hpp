@@ -29,7 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/repo/load_flags.hpp"
 #include "libdnf/repo/repo_callbacks.hpp"
 
-#include <gpgme.h>
 #include <librepo/librepo.h>
 
 #include <map>
