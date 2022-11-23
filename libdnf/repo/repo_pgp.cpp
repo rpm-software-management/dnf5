@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "repo_gpgme.hpp"
+#include "repo_pgp.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/temp.hpp"
@@ -44,11 +44,11 @@ Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey)
 [[noreturn]] static void throw_repo_pgp_error(const BgettextMessage & msg, GError * err) {
     std::string err_msg = err->message;
     g_error_free(err);
-    throw RepoGpgError(msg, err_msg);
+    throw RepoPgpError(msg, err_msg);
 }
 
 
-std::vector<Key> RepoGpgme::rawkey2infos(int fd) {
+std::vector<Key> RepoPgp::rawkey2infos(int fd) {
     std::vector<Key> key_infos;
 
     libdnf::utils::fs::TempDir tmpdir("tmpdir");
@@ -79,7 +79,7 @@ std::vector<Key> RepoGpgme::rawkey2infos(int fd) {
 }
 
 
-std::vector<std::string> RepoGpgme::load_keys_ids_from_keyring() {
+std::vector<std::string> RepoPgp::load_keys_ids_from_keyring() {
     std::vector<std::string> keys_ids;
 
     auto keyring_dir = get_keyring_dir();
@@ -107,10 +107,10 @@ std::vector<std::string> RepoGpgme::load_keys_ids_from_keyring() {
 }
 
 
-RepoGpgme::RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config) : base(base), config(config) {}
+RepoPgp::RepoPgp(const BaseWeakPtr & base, const ConfigRepo & config) : base(base), config(config) {}
 
 
-void RepoGpgme::import_key(int fd, const std::string & url) {
+void RepoPgp::import_key(int fd, const std::string & url) {
     auto & logger = *base->get_logger();
 
     auto key_infos = rawkey2infos(fd);

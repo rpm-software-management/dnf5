@@ -17,8 +17,8 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#ifndef LIBDNF_REPO_REPO_GPGME_HPP
-#define LIBDNF_REPO_REPO_GPGME_HPP
+#ifndef LIBDNF_REPO_REPO_PGP_HPP
+#define LIBDNF_REPO_REPO_PGP_HPP
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
@@ -53,10 +53,10 @@ private:
 };
 
 /// Wraps pgp in a higher-level interface.
-/// @exception RepoGpgError (public) Thrown on any pgp-related error.
-class RepoGpgme {
+/// @exception RepoPgpError (public) Thrown on any pgp-related error.
+class RepoPgp {
 public:
-    RepoGpgme(const BaseWeakPtr & base, const ConfigRepo & config);
+    RepoPgp(const BaseWeakPtr & base, const ConfigRepo & config);
 
     void set_callbacks(RepoCallbacks * callbacks) noexcept { this->callbacks = callbacks; }
 
@@ -74,4 +74,4 @@ private:
 
 }  // namespace libdnf::repo
 
-#endif  // LIBDNF_REPO_REPO_GPGME_HPP
+#endif  // LIBDNF_REPO_REPO_PGP_HPP

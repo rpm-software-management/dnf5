@@ -19,7 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/rpm/rpm_signature.hpp"
 
-#include "repo/repo_gpgme.hpp"
+#include "repo/repo_pgp.hpp"
 #include "rpm/rpm_log_guard.hpp"
 #include "utils/bgettext/bgettext-lib.h"
 #include "utils/bgettext/bgettext-mark-domain.h"
@@ -218,7 +218,7 @@ std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
 
     std::vector<KeyInfo> keys;
     utils::fs::File key_file(key_path, "r");
-    for (auto & key_info : repo::RepoGpgme::rawkey2infos(key_file.get_fd())) {
+    for (auto & key_info : repo::RepoPgp::rawkey2infos(key_file.get_fd())) {
         key_info.raw_key.insert(key_info.raw_key.end(), '\0');
         KeyInfo key{
             key_url,

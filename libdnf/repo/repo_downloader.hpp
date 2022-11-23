@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_REPO_REPO_DOWNLOADER_HPP
 
 #include "librepo.hpp"
-#include "repo_gpgme.hpp"
+#include "repo_pgp.hpp"
 
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
@@ -95,7 +95,7 @@ private:
 
     libdnf::BaseWeakPtr base;
     const ConfigRepo & config;
-    RepoGpgme gpgme;
+    RepoPgp pgp;
 
     std::unique_ptr<RepoCallbacks> callbacks;
 
