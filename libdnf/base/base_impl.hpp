@@ -48,6 +48,11 @@ public:
         return *pool;
     }
 
+    solv::Pool & get_comps_pool() {
+        libdnf_assert(comps_pool, "Base instance was not fully initialized by Base::setup()");
+        return *comps_pool;
+    }
+
     plugin::Plugins & get_plugins() { return plugins; }
 
 private:
@@ -56,6 +61,15 @@ private:
 
     // Pool as the owner of underlying libsolv data, has to be the first member so that it is destroyed last.
     std::unique_ptr<solv::Pool> pool;
+    // In libsolv the groups and environmental groups are stored as regular
+    // solvables (just with "group:" / "environment:" prefix in their name).
+    // These group solvables then contain hard requirements for included
+    // mandatory packages. But dnf5's groups behavior is less restrictive - we
+    // allow to install group without having any of it's packages installed.
+    // When groups (especially the installed ones in @System repo) are in main
+    // pool, they can block removals of mandatory group packages.
+    // Thus we need to keep group solvables in a separate pool.
+    std::unique_ptr<solv::Pool> comps_pool;
 
     std::optional<libdnf::system::State> system_state;
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
@@ -67,6 +81,7 @@ private:
 class InternalBaseUser {
 public:
     static solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) { return base->p_impl->get_pool(); }
+    static solv::Pool & get_comps_pool(const libdnf::BaseWeakPtr & base) { return base->p_impl->get_comps_pool(); }
 };
 
 }  // namespace libdnf

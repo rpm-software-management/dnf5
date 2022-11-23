@@ -249,6 +249,10 @@ static inline solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) {
     return InternalBaseUser::get_pool(base);
 }
 
+static inline solv::Pool & get_comps_pool(const libdnf::BaseWeakPtr & base) {
+    return InternalBaseUser::get_comps_pool(base);
+}
+
 }  // namespace libdnf
 
 #endif  // LIBDNF_SOLV_POOL_HPP
