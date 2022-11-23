@@ -46,7 +46,7 @@ GroupQuery::GroupQuery(const BaseWeakPtr & base, bool empty) : base(base) {
         return;
     }
 
-    libdnf::solv::Pool & pool = get_pool(base);
+    libdnf::solv::Pool & pool = get_comps_pool(base);
 
     // Map of available groups:
     //     For each groupid (SOLVABLE_NAME) have a vector of (repoid, solvable_id) pairs.

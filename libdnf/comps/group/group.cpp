@@ -57,58 +57,58 @@ Group & Group::operator+=(const Group & rhs) {
 
 
 std::string Group::get_groupid() const {
-    return split_solvable_name(lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_NAME)).second;
+    return split_solvable_name(lookup_str<GroupId>(get_comps_pool(base), group_ids, SOLVABLE_NAME)).second;
 }
 
 
 std::string Group::get_name() const {
-    return lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_SUMMARY);
+    return lookup_str<GroupId>(get_comps_pool(base), group_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Group::get_description() const {
-    return lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_DESCRIPTION);
+    return lookup_str<GroupId>(get_comps_pool(base), group_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Group::get_translated_name(const char * lang) const {
-    return get_translated_str<GroupId>(get_pool(base), group_ids, SOLVABLE_SUMMARY, lang);
+    return get_translated_str<GroupId>(get_comps_pool(base), group_ids, SOLVABLE_SUMMARY, lang);
 }
 
 
 // TODO(pkratoch): Test this
 std::string Group::get_translated_name() const {
-    return get_translated_str<GroupId>(get_pool(base), group_ids, SOLVABLE_SUMMARY);
+    return get_translated_str<GroupId>(get_comps_pool(base), group_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Group::get_translated_description(const char * lang) const {
-    return get_translated_str<GroupId>(get_pool(base), group_ids, SOLVABLE_DESCRIPTION, lang);
+    return get_translated_str<GroupId>(get_comps_pool(base), group_ids, SOLVABLE_DESCRIPTION, lang);
 }
 
 
 std::string Group::get_translated_description() const {
-    return get_translated_str<GroupId>(get_pool(base), group_ids, SOLVABLE_DESCRIPTION);
+    return get_translated_str<GroupId>(get_comps_pool(base), group_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Group::get_order() const {
-    return lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_ORDER);
+    return lookup_str<GroupId>(get_comps_pool(base), group_ids, SOLVABLE_ORDER);
 }
 
 
 std::string Group::get_langonly() const {
-    return lookup_str<GroupId>(get_pool(base), group_ids, SOLVABLE_LANGONLY);
+    return lookup_str<GroupId>(get_comps_pool(base), group_ids, SOLVABLE_LANGONLY);
 }
 
 
 bool Group::get_uservisible() const {
-    return get_pool(base).lookup_void(group_ids[0].id, SOLVABLE_ISVISIBLE);
+    return get_comps_pool(base).lookup_void(group_ids[0].id, SOLVABLE_ISVISIBLE);
 }
 
 
 bool Group::get_default() const {
-    return get_pool(base).lookup_void(group_ids[0].id, SOLVABLE_ISDEFAULT);
+    return get_comps_pool(base).lookup_void(group_ids[0].id, SOLVABLE_ISDEFAULT);
 }
 
 
@@ -118,7 +118,7 @@ std::vector<Package> Group::get_packages() {
         return packages;
     }
 
-    libdnf::solv::Pool & pool = get_pool(base);
+    libdnf::solv::Pool & pool = get_comps_pool(base);
 
     // Use only the first (highest priority) solvable for package lists
     Solvable * solvable = pool.id2solvable(group_ids[0].id);
@@ -165,7 +165,7 @@ std::vector<Package> Group::get_packages_of_type(PackageType type) {
 std::set<std::string> Group::get_repos() const {
     std::set<std::string> result;
     for (GroupId group_id : group_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(group_id.id);
+        Solvable * solvable = get_comps_pool(base).id2solvable(group_id.id);
         result.emplace(solvable->repo->name);
     }
     return result;
@@ -206,7 +206,7 @@ void Group::serialize(const std::string & path) {
     std::string lang;
     xmlNodePtr node;
 
-    libdnf::solv::Pool & pool = get_pool(base);
+    libdnf::solv::Pool & pool = get_comps_pool(base);
 
     for (auto group_id : group_ids) {
         Dataiterator di;

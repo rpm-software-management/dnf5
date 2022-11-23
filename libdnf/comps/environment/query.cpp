@@ -42,7 +42,7 @@ namespace libdnf::comps {
 
 
 EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
-    libdnf::solv::Pool & pool = get_pool(base);
+    libdnf::solv::Pool & pool = get_comps_pool(base);
 
     // Map of available environments:
     //     For each environmentid (SOLVABLE_NAME) have a vector of (repoid, solvable_id) pairs.
