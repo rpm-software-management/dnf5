@@ -141,6 +141,7 @@ void Base::setup() {
     p_impl->plugins.pre_base_setup();
 
     pool.reset(new libdnf::solv::Pool);
+    p_impl->comps_pool.reset(new libdnf::solv::Pool);
     auto & config = get_config();
     auto & installroot = config.installroot();
     installroot.lock("Locked by Base::setup()");
