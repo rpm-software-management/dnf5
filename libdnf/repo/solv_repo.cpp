@@ -73,7 +73,7 @@ void SolvRepo::userdata_fill(SolvUserdata * userdata) {
     memcpy(userdata->checksum, checksum, CHKSUM_BYTES);
 }
 
-bool SolvRepo::can_use_solvfile_cache(fs::File & solvfile_cache) {
+bool SolvRepo::can_use_solvfile_cache(solv::Pool & pool, fs::File & solvfile_cache) {
     auto & logger = *base->get_logger();
 
     if (!solvfile_cache) {
@@ -88,7 +88,6 @@ bool SolvRepo::can_use_solvfile_cache(fs::File & solvfile_cache) {
     std::unique_ptr<SolvUserdata, decltype(&solv_free)> solv_userdata(
         reinterpret_cast<SolvUserdata *>(dnf_solv_userdata_read), &solv_free);
     if (ret_code != 0) {
-        auto & pool = get_pool(base);
         logger.warning(
             ("Failed to read solv userdata: \"{}\": for: {}"), pool_errstr(*pool), solvfile_cache.get_path().native());
         return false;
@@ -138,7 +137,6 @@ bool SolvRepo::can_use_solvfile_cache(fs::File & solvfile_cache) {
 
     // check solvfile checksum
     if (memcmp(solv_userdata->checksum, checksum, CHKSUM_BYTES) != 0) {
-        auto & pool = get_pool(base);
         logger.debug(
             "Solvfile's repomd checksum doesn't match, read: \"{}\" vs. expected repomd checksum: \"{}\" for: {}",
             pool_bin2hex(*pool, solv_userdata->checksum, sizeof solv_userdata->checksum),
@@ -223,13 +221,16 @@ bool is_one_piece(::Repo * repo) {
 SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, void * appdata)
     : base(base),
       config(config),
-      repo(repo_create(*get_pool(base), config.get_id().c_str())) {
+      repo(repo_create(*get_pool(base), config.get_id().c_str())),
+      comps_repo(repo_create(*get_comps_pool(base), config.get_id().c_str())) {
     repo->appdata = appdata;
+    comps_repo->appdata = appdata;
 }
 
 
 SolvRepo::~SolvRepo() {
     repo->appdata = nullptr;
+    comps_repo->appdata = nullptr;
 }
 
 
@@ -243,7 +244,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
     int solvables_start = pool->nsolvables;
 
-    if (load_solv_cache(nullptr, 0)) {
+    if (load_solv_cache(pool, nullptr, 0)) {
         main_solvables_start = solvables_start;
         main_solvables_end = pool->nsolvables;
 
@@ -280,7 +281,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
 void SolvRepo::load_system_repo_ext(RepodataType type) {
     auto & logger = *base->get_logger();
-    auto & pool = get_pool(base);
+    solv::Pool & pool = type == RepodataType::COMPS ? get_comps_pool(base) : get_pool(base);
     int solvables_start = pool->nsolvables;
     auto type_name = repodata_type_to_name(type);
     int res = 0;
@@ -305,7 +306,7 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
                     continue;
                 }
                 logger.debug("Loading {} extension for system repo from \"{}\"", type_name, ext_fn.string());
-                if ((res = repo_add_comps(repo, ext_file.get(), 0)) == 0) {
+                if ((res = repo_add_comps(comps_repo, ext_file.get(), 0)) == 0) {
                     comps_solvables_start = solvables_start;
                     comps_solvables_end = pool->nsolvables;
                 }
@@ -323,7 +324,7 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
 
 void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloader) {
     auto & logger = *base->get_logger();
-    auto & pool = get_pool(base);
+    solv::Pool & pool = type == RepodataType::COMPS ? get_comps_pool(base) : get_pool(base);
 
     auto type_name = repodata_type_to_name(type);
 
@@ -345,7 +346,7 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
 
     int solvables_start = pool->nsolvables;
 
-    if (load_solv_cache(type_name, repodata_type_to_flags(type))) {
+    if (load_solv_cache(pool, type_name, repodata_type_to_flags(type))) {
         if (type == RepodataType::UPDATEINFO) {
             updateinfo_solvables_start = solvables_start;
             updateinfo_solvables_end = pool->nsolvables;
@@ -375,7 +376,7 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
             }
             break;
         case RepodataType::COMPS:
-            if ((res = repo_add_comps(repo, ext_file.get(), 0)) == 0) {
+            if ((res = repo_add_comps(comps_repo, ext_file.get(), 0)) == 0) {
                 comps_solvables_start = solvables_start;
                 comps_solvables_end = pool->nsolvables;
             }
@@ -501,7 +502,7 @@ void SolvRepo::set_subpriority(int subpriority) {
 }
 
 
-bool SolvRepo::load_solv_cache(const char * type, int flags) {
+bool SolvRepo::load_solv_cache(solv::Pool & pool, const char * type, int flags) {
     auto & logger = *base->get_logger();
 
     auto path = solv_file_path(type);
@@ -509,9 +510,10 @@ bool SolvRepo::load_solv_cache(const char * type, int flags) {
     try {
         fs::File cache_file(path, "r");
 
-        if (can_use_solvfile_cache(cache_file)) {
+        if (can_use_solvfile_cache(pool, cache_file)) {
             logger.debug("Loading solv cache file: \"{}\"", path.native());
-            if (repo_add_solv(repo, cache_file.get(), flags) != 0) {
+            if (repo_add_solv(type == RepoDownloader::MD_FILENAME_GROUP ? comps_repo : repo, cache_file.get(), flags) !=
+                0) {
                 throw SolvError(
                     M_("Failed to load {} cache for repo \"{}\" from \"{}\": {}"),
                     type ? type : "primary",
@@ -597,7 +599,7 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
 
     auto & logger = *base->get_logger();
-    auto & pool = get_pool(base);
+    solv::Pool & pool = type == RepodataType::COMPS ? get_comps_pool(base) : get_pool(base);
 
     const auto type_name = repodata_type_to_name(type);
     const auto solvfile_path = solv_file_path(type_name);
@@ -618,7 +620,12 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     SolvUserdata solv_userdata{};
     userdata_fill(&solv_userdata);
 
-    Repowriter * writer = repowriter_create(repo);
+    Repowriter * writer;
+    if (type == RepodataType::COMPS) {
+        writer = repowriter_create(comps_repo);
+    } else {
+        writer = repowriter_create(repo);
+    }
     repowriter_set_userdata(writer, &solv_userdata, SOLV_USERDATA_SIZE);
     repowriter_set_repodatarange(writer, repodata_id, repodata_id + 1);
 
