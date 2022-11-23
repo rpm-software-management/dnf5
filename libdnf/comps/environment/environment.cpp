@@ -57,43 +57,43 @@ Environment & Environment::operator+=(const Environment & rhs) {
 
 
 std::string Environment::get_environmentid() const {
-    return split_solvable_name(lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_NAME)).second;
+    return split_solvable_name(lookup_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_NAME)).second;
 }
 
 
 std::string Environment::get_name() const {
-    return lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_SUMMARY);
+    return lookup_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Environment::get_description() const {
-    return lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_DESCRIPTION);
+    return lookup_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Environment::get_translated_name(const char * lang) const {
-    return get_translated_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_SUMMARY, lang);
+    return get_translated_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_SUMMARY, lang);
 }
 
 
 // TODO(pkratoch): Test this
 std::string Environment::get_translated_name() const {
-    return get_translated_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_SUMMARY);
+    return get_translated_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Environment::get_translated_description(const char * lang) const {
-    return get_translated_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_DESCRIPTION, lang);
+    return get_translated_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_DESCRIPTION, lang);
 }
 
 
 std::string Environment::get_translated_description() const {
-    return get_translated_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_DESCRIPTION);
+    return get_translated_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Environment::get_order() const {
-    return lookup_str<EnvironmentId>(get_pool(base), environment_ids, SOLVABLE_ORDER);
+    return lookup_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_ORDER);
 }
 
 
@@ -122,7 +122,7 @@ std::vector<std::string> load_groups_from_pool(libdnf::solv::Pool & pool, Id env
 
 std::vector<std::string> Environment::get_groups() {
     if (groups.empty()) {
-        groups = load_groups_from_pool(get_pool(base), environment_ids[0].id);
+        groups = load_groups_from_pool(get_comps_pool(base), environment_ids[0].id);
     }
     return groups;
 }
@@ -130,7 +130,7 @@ std::vector<std::string> Environment::get_groups() {
 
 std::vector<std::string> Environment::get_optional_groups() {
     if (optional_groups.empty()) {
-        optional_groups = load_groups_from_pool(get_pool(base), environment_ids[0].id, false);
+        optional_groups = load_groups_from_pool(get_comps_pool(base), environment_ids[0].id, false);
     }
     return optional_groups;
 }
@@ -139,7 +139,7 @@ std::vector<std::string> Environment::get_optional_groups() {
 std::set<std::string> Environment::get_repos() const {
     std::set<std::string> result;
     for (EnvironmentId environment_id : environment_ids) {
-        Solvable * solvable = get_pool(base).id2solvable(environment_id.id);
+        Solvable * solvable = get_comps_pool(base).id2solvable(environment_id.id);
         result.emplace(solvable->repo->name);
     }
     return result;
@@ -177,7 +177,7 @@ void Environment::serialize(const std::string & path) {
     std::string lang;
     xmlNodePtr node;
 
-    libdnf::solv::Pool & pool = get_pool(base);
+    libdnf::solv::Pool & pool = get_comps_pool(base);
 
     for (auto environment_id : environment_ids) {
         Dataiterator di;
