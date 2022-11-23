@@ -71,7 +71,7 @@ public:
         }
 
         auto tmp_id = id.size() > 8 ? id.substr(id.size() - 8) : id;
-        std::cout << "Importing GPG key 0x" << id << ":\n";
+        std::cout << "Importing PGP key 0x" << id << ":\n";
         std::cout << " Userid     : \"" << user_id << "\"\n";
         std::cout << " Fingerprint: " << fingerprint << "\n";
         std::cout << " From       : " << url << std::endl;
@@ -670,7 +670,7 @@ private:
 std::chrono::time_point<std::chrono::steady_clock> RpmTransCB::prev_print_time = std::chrono::steady_clock::now();
 
 static bool user_confirm_key(libdnf::ConfigMain & config, const libdnf::rpm::KeyInfo & key_info) {
-    std::cout << "Importing GPG key 0x" << key_info.get_short_key_id() << std::endl;
+    std::cout << "Importing PGP key 0x" << key_info.get_short_key_id() << std::endl;
     std::cout << " UserId     : \"" << key_info.get_user_id() << "\"" << std::endl;
     std::cout << " Fingerprint: " << key_info.get_fingerprint() << std::endl;
     std::cout << " From       : " << key_info.get_url() << std::endl;
@@ -779,7 +779,7 @@ bool Context::check_gpg_signatures(const libdnf::base::Transaction & transaction
                             retval = false;
                             break;
                         case ImportRepoKeys::NO_KEYS:
-                            std::cerr << err_msg << "the repository does not have any gpg key configured." << std::endl;
+                            std::cerr << err_msg << "the repository does not have any pgp key configured." << std::endl;
                             retval = false;
                             break;
                         case ImportRepoKeys::IMPORT_FAILED:
@@ -799,7 +799,7 @@ bool Context::check_gpg_signatures(const libdnf::base::Transaction & transaction
 void Context::download_and_run(libdnf::base::Transaction & transaction) {
     download_packages(transaction, nullptr);
 
-    std::cout << std::endl << "Verifying GPG signatures" << std::endl;
+    std::cout << std::endl << "Verifying PGP signatures" << std::endl;
     if (!check_gpg_signatures(transaction)) {
         throw libdnf::cli::CommandExitError(1, M_("Signature verification failed"));
     }

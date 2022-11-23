@@ -131,7 +131,7 @@ LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error)
 RepoDownloader::RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)
     : base(base),
       config(config),
-      gpgme(base, config) {}
+      pgp(base, config) {}
 
 RepoDownloader::~RepoDownloader() = default;
 
@@ -337,7 +337,7 @@ LibrepoHandle & RepoDownloader::get_cached_handle() {
 
 void RepoDownloader::set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && cbs) noexcept {
     callbacks = std::move(cbs);
-    gpgme.set_callbacks(callbacks.get());
+    pgp.set_callbacks(callbacks.get());
 }
 
 
@@ -518,7 +518,7 @@ void RepoDownloader::apply_http_headers(LibrepoHandle & handle) {
 LibrepoResult RepoDownloader::perform(
     LibrepoHandle & handle, const std::string & dest_directory, bool set_gpg_home_dir) {
     if (set_gpg_home_dir) {
-        auto pubringdir = gpgme.get_keyring_dir();
+        auto pubringdir = pgp.get_keyring_dir();
         handle.set_opt(LRO_GNUPGHOMEDIR, pubringdir.c_str());
     }
 
@@ -610,7 +610,7 @@ void RepoDownloader::import_repo_keys() {
         download_url(gpgkey_url.c_str(), tmp_file.get_fd());
 
         lseek(tmp_file.get_fd(), SEEK_SET, 0);
-        gpgme.import_key(tmp_file.get_fd(), gpgkey_url);
+        pgp.import_key(tmp_file.get_fd(), gpgkey_url);
     }
 }
 

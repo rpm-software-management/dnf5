@@ -61,7 +61,7 @@ void RepoInfo::add_repo(Repo & repo, bool verbose, bool show_sack_data) {
     */
 
     // GPG
-    auto group_gpg = add_line("GPG", "", nullptr);
+    auto group_gpg = add_line("PGP", "", nullptr);
     add_line("Keys", "", nullptr, group_gpg);
     add_line("Verify repodata", "", nullptr, group_gpg);
     add_line("Verify packages", "", nullptr, group_gpg);

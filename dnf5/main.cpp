@@ -692,7 +692,7 @@ int main(int argc, char * argv[]) try {
             for (const auto & tsflag : base.get_config().tsflags().get_value()) {
                 if (tsflag == "test") {
                     std::cout
-                        << "Test mode enabled: Only package downloads, gpg key installations and transaction checks "
+                        << "Test mode enabled: Only package downloads, pgp key installations and transaction checks "
                            "will be performed."
                         << std::endl;
                 }

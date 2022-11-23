@@ -117,7 +117,7 @@ void RepoCB::key_import(sdbus::Signal & signal) {
         std::string fingerprint;
         std::string url;
         signal >> key_id >> user_id >> fingerprint >> url;
-        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, "Importing GPG key: " + key_id);
+        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, "Importing PGP key: " + key_id);
         progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, " Userid     : " + user_id);
         progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, " Fingerprint: " + fingerprint);
         progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, " From       : " + url);

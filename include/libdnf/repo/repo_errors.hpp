@@ -39,10 +39,10 @@ public:
 };
 
 
-class RepoGpgError : public RepoError {
+class RepoPgpError : public RepoError {
 public:
     using RepoError::RepoError;
-    const char * get_name() const noexcept override { return "RepoGpgError"; }
+    const char * get_name() const noexcept override { return "RepoPgpError"; }
 };
 
 
