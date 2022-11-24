@@ -99,10 +99,10 @@ public:
         const libdnf::advisory::AdvisoryQuery & advisories,
         bool add_obsoletes);
 
-    GoalProblem add_group_install_to_goal(
+    void add_group_install_to_goal(
         base::Transaction & transaction,
-        const std::string & spec,
         const transaction::TransactionItemReason reason,
+        comps::GroupQuery group_query,
         GoalJobSettings & settings);
 
     GoalProblem add_reason_change_to_goal(
@@ -422,16 +422,53 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
 
 GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction) {
     auto ret = GoalProblem::NO_PROBLEM;
-    for (auto & [action, spec, settings] : group_specs) {
-        switch (action) {
-            case GoalAction::INSTALL:
-                ret |= add_group_install_to_goal(transaction, spec, transaction::TransactionItemReason::USER, settings);
-                break;
-            default: {
-                libdnf_throw_assertion("Unsupported action for group.");
+    auto & cfg_main = base->get_config();
+    // To correctly remove all unneeded group packages when a group is removed,
+    // the list of all other removed groups in the transaction is needed.
+    // Therefore resolve spec -> group_query first.
+    std::vector<std::tuple<std::string, transaction::TransactionItemReason, comps::GroupQuery, GoalJobSettings>>
+        groups_remove, groups_install;
+    for (auto & [action, reason, spec, settings] : group_specs) {
+        if (action != GoalAction::INSTALL && action != GoalAction::REMOVE) {
+            libdnf_throw_assertion("Unsupported group action.");
+        }
+        bool strict = settings.resolve_strict(cfg_main);
+        sack::QueryCmp cmp = settings.ignore_case ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
+        comps::GroupQuery group_query(base, true);
+        comps::GroupQuery base_groups_query(base);
+        // for REMOVE / UPGRADE actions take only installed groups into account
+        // for INSTALL only available groups
+        base_groups_query.filter_installed(action != GoalAction::INSTALL);
+        if (settings.group_with_id) {
+            comps::GroupQuery group_query_id(base_groups_query);
+            group_query_id.filter_groupid(spec, cmp);
+            group_query |= group_query_id;
+        }
+        // TODO(mblaha): reconsider usefulness of searching groups by names
+        if (settings.group_with_name) {
+            comps::GroupQuery group_query_name(base_groups_query);
+            group_query_name.filter_name(spec, cmp);
+            group_query |= group_query_name;
+        }
+        if (group_query.empty()) {
+            transaction.p_impl->add_resolve_log(
+                action, GoalProblem::NOT_FOUND, settings, base::LogEvent::SpecType::GROUP, spec, {}, strict);
+            if (strict) {
+                ret |= GoalProblem::NOT_FOUND;
+            }
+        } else {
+            if (action == GoalAction::INSTALL) {
+                groups_install.emplace_back(spec, reason, std::move(group_query), settings);
+            } else if (action == GoalAction::REMOVE) {
+                groups_remove.emplace_back(spec, reason, std::move(group_query), settings);
             }
         }
     }
+
+    for (auto & [spec, reason, group_query, settings] : groups_install) {
+        add_group_install_to_goal(transaction, reason, group_query, settings);
+    }
+
     return ret;
 }
 
@@ -1244,37 +1281,12 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
     }
 }
 
-GoalProblem Goal::Impl::add_group_install_to_goal(
+void Goal::Impl::add_group_install_to_goal(
     base::Transaction & transaction,
-    const std::string & spec,
     const transaction::TransactionItemReason reason,
+    comps::GroupQuery group_query,
     GoalJobSettings & settings) {
     auto & cfg_main = base->get_config();
-    bool strict = settings.resolve_strict(cfg_main);
-    sack::QueryCmp cmp = settings.ignore_case ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
-    comps::GroupQuery group_query(base, true);
-    if (settings.group_with_id) {
-        comps::GroupQuery group_query_id(base);
-        group_query_id.filter_installed(false);
-        group_query_id.filter_groupid(spec, cmp);
-        group_query |= group_query_id;
-    }
-    // TODO(mblaha): reconsider usefulness of searching groups by names
-    if (settings.group_with_name) {
-        comps::GroupQuery group_query_name(base);
-        group_query_name.filter_installed(false);
-        group_query_name.filter_name(spec, cmp);
-        group_query |= group_query_name;
-    }
-    if (group_query.empty()) {
-        transaction.p_impl->add_resolve_log(
-            GoalAction::INSTALL, GoalProblem::NOT_FOUND, settings, base::LogEvent::SpecType::GROUP, spec, {}, strict);
-        if (strict) {
-            return GoalProblem::NOT_FOUND;
-        } else {
-            return GoalProblem::NO_PROBLEM;
-        }
-    }
     auto allowed_package_types = settings.resolve_group_package_types(cfg_main);
     auto pkg_settings = GoalJobSettings();
     // TODO(mblaha): consider inheriting from `settings`
@@ -1316,7 +1328,6 @@ GoalProblem Goal::Impl::add_group_install_to_goal(
         }
         rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason);
     }
-    return GoalProblem::NO_PROBLEM;
 }
 
 GoalProblem Goal::Impl::add_reason_change_to_goal(
