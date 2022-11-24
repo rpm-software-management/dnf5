@@ -99,6 +99,7 @@ public:
 private:
     friend class libdnf::InternalBaseUser;
     friend class libdnf::base::Transaction;
+    friend class libdnf::Goal;
     friend class libdnf::rpm::Package;
     friend class libdnf::advisory::AdvisoryQuery;
     friend class libdnf::module::ModuleSack;

@@ -72,7 +72,7 @@ public:
     /// @param action Action to be commited - INSTALL, REMOVE, UPGRADE
     /// @param reason Reason for the group action - USER, DEPENDENCY
     void add_group(
-        libdnf::comps::Group & group,
+        const libdnf::comps::Group & group,
         transaction::TransactionItemAction action,
         transaction::TransactionItemReason reason);
 
@@ -310,7 +310,7 @@ inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool str
 }
 
 inline void GoalPrivate::add_group(
-    libdnf::comps::Group & group,
+    const libdnf::comps::Group & group,
     transaction::TransactionItemAction action,
     transaction::TransactionItemReason reason) {
     groups.emplace_back(group, action, reason);

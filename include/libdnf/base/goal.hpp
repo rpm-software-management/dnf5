@@ -263,6 +263,17 @@ public:
         const libdnf::transaction::TransactionItemReason reason,
         const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
+    /// Add group remove request to the goal. The `spec` will be resolved to groups in the resolve() call.
+    /// Also packages not belonging to another group and not explicitly user-installed will get removed.
+    ///
+    /// @param spec      A string describing the Goal group remove request.
+    /// @param reason    Reason why the group is removed.
+    /// @param settings  A structure to override default goal settings.
+    void add_group_remove(
+        const std::string & spec,
+        const libdnf::transaction::TransactionItemReason reason,
+        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
     /// Request to install providers of the `spec`. Useful to install package
     /// using rich dependencies.  The `spec` (e.g. "(depA and depB)") is not
     /// parsed but directly passed to the solver to install package(s) which
