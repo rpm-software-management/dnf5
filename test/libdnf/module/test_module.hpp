@@ -32,12 +32,14 @@ class ModuleTest : public BaseTestCase {
     CPPUNIT_TEST(test_load);
     CPPUNIT_TEST(test_resolve);
     CPPUNIT_TEST(test_resolve_broken_defaults);
+    CPPUNIT_TEST(test_query);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_load();
     void test_resolve();
     void test_resolve_broken_defaults();
+    void test_query();
 };
 
 #endif
