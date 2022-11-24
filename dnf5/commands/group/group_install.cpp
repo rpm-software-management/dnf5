@@ -56,7 +56,7 @@ void GroupInstallCommand::run() {
         *settings.group_package_types |= libdnf::comps::PackageType::OPTIONAL;
     }
     for (const auto & spec : group_specs->get_value()) {
-        goal->add_group_install(spec, settings);
+        goal->add_group_install(spec, libdnf::transaction::TransactionItemReason::USER, settings);
     }
 }
 
