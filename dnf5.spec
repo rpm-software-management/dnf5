@@ -1,10 +1,10 @@
 %global project_version_major 5
 %global project_version_minor 0
-%global project_version_patch 0
+%global project_version_patch 1
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
-Release:        0~pre%{?dist}
+Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
@@ -576,5 +576,19 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
 
 
 %changelog
+* Thu Nov 24 2022 Nicola Sella <nsella@redhat.com> - 5.0.1-1
+- Fix loading known keys for RepoGpgme
+- Fix dnf5 progress_bar
+- Improve modules: conflicting packages, weak resolve, active modules resolving
+- plugins.hpp moved away from public headers and improvements logic
+
+* Wed Nov 2 2022 Nicola Sella <nsella@redhat.com> - 5.0.0-2~pre
+- Fix failing builds for i686 arch
+
+* Mon Oct 31 2022 Nicola Sella <nsella@redhat.com> - 5.0.0-1~pre
+- Add man pages to dnf5
+- Fix non x86_64 builds
+- Remove unimplemented commands
+
 * Fri Sep 16 2022 Nicola Sella - <nsella@redhat.com> - 5.0.0-0~pre
 - Dnf pre release build for Fedora
