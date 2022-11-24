@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/module/module_errors.hpp"
 #include "libdnf/module/module_item.hpp"
+#include "libdnf/module/module_query.hpp"
 #include "libdnf/module/module_sack_weak.hpp"
 
 #include <modulemd-2.0/modulemd.h>

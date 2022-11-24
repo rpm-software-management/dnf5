@@ -52,7 +52,9 @@ public:
 // @replaces libdnf:module/ModuleItem.hpp:class:ModuleItem
 class ModuleItem {
 public:
-    bool operator==(const ModuleItem & r) const;
+    bool operator==(const ModuleItem & rhs) const noexcept { return id.id == rhs.id.id; }
+    bool operator!=(const ModuleItem & rhs) const noexcept { return id.id != rhs.id.id; }
+    bool operator<(const ModuleItem & rhs) const noexcept { return id.id < rhs.id.id; }
 
     ~ModuleItem();
 
@@ -165,16 +167,18 @@ public:
     // TODO(jmracek) Read a real decision from the modular solver
     bool is_active() const;
 
+    ModuleItem(const ModuleItem & mpkg);
+    ModuleItem & operator=(const ModuleItem & mpkg);
+    ModuleItem(ModuleItem && mpkg) = default;
+    ModuleItem & operator=(ModuleItem && mpkg) = default;
+
 private:
+    friend class ModuleQuery;
     friend class ModuleSack;
     friend class ModuleMetadata;
     friend ::ModuleTest;
 
     ModuleItem(_ModulemdModuleStream * md_stream, const ModuleSackWeakPtr & module_sack, const std::string & repo_id);
-    ModuleItem(const ModuleItem & mpkg);
-    ModuleItem & operator=(const ModuleItem & mpkg);
-    ModuleItem(ModuleItem && mpkg) = default;
-    ModuleItem & operator=(ModuleItem && mpkg) = default;
 
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getNameCStr()
     const char * get_name_cstr() const;
@@ -229,12 +233,6 @@ private:
     // For compatibility with older modules that didn't have static contexts
     std::string computed_static_context;
 };
-
-
-// TODO(pkratoch): Compare olso their modular sacks.
-inline bool ModuleItem::operator==(const ModuleItem & r) const {
-    return id == r.id;
-}
 
 
 inline std::vector<ModuleProfile> ModuleItem::get_profiles(const std::string & name) const {
