@@ -256,9 +256,12 @@ public:
     /// Also packages of the types specified in setting.group_package_types be installed.
     ///
     /// @param spec      A string describing the Goal group install request.
+    /// @param reason    Reason why the group is installed (USER/DEPENDENCY)
     /// @param settings  A structure to override default goal settings.
     void add_group_install(
-        const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+        const std::string & spec,
+        const libdnf::transaction::TransactionItemReason reason,
+        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
     /// Request to install providers of the `spec`. Useful to install package
     /// using rich dependencies.  The `spec` (e.g. "(depA and depB)") is not

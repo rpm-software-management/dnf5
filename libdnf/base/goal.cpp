@@ -125,8 +125,9 @@ private:
         rpm_reason_change_specs;
     /// <libdnf::GoalAction, rpm Ids, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
-    /// <libdnf::GoalAction, std::string group_spec, GoalJobSettings settings>
-    std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> group_specs;
+    /// <libdnf::GoalAction, TransactionItemReason reason, std::string group_spec, GoalJobSettings settings>
+    std::vector<std::tuple<GoalAction, libdnf::transaction::TransactionItemReason, std::string, GoalJobSettings>>
+        group_specs;
 
     rpm::solv::GoalPrivate rpm_goal;
     bool allow_erasing{false};
@@ -334,8 +335,11 @@ void Goal::Impl::filter_candidates_for_advisory_upgrade(
         candidates, latest_unresolved_adv_pkgs, libdnf::sack::QueryCmp::GTE);
 }
 
-void Goal::add_group_install(const std::string & spec, const GoalJobSettings & settings) {
-    p_impl->group_specs.push_back(std::make_tuple(GoalAction::INSTALL, spec, settings));
+void Goal::add_group_install(
+    const std::string & spec,
+    const libdnf::transaction::TransactionItemReason reason,
+    const GoalJobSettings & settings) {
+    p_impl->group_specs.push_back(std::make_tuple(GoalAction::INSTALL, reason, spec, settings));
 }
 
 GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
