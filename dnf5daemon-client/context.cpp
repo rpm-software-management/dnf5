@@ -44,7 +44,6 @@ void Context::init_session(sdbus::IConnection & connection) {
     auto config = key_value_map_get<std::map<std::string, std::string>>(cfg, "config", empty_options);
     std::filesystem::path ir{installroot.get_value()};
     config["installroot"] = ir.string();
-    config["cachedir"] = (ir / "var/cache/dnf").string();
     for (auto & opt : setopts) {
         config[opt.first] = opt.second;
     }
