@@ -42,14 +42,15 @@ public:
     const std::string & get_user_id() const noexcept { return userid; }
     const std::string & get_fingerprint() const noexcept { return fingerprint; }
     long int get_timestamp() const noexcept { return timestamp; }
+    const std::string & get_raw_key() const noexcept { return raw_key; }
 
-    std::vector<char> raw_key;
 
 private:
     std::string id;
     std::string fingerprint;
     std::string userid;
     long int timestamp;
+    std::string raw_key;
 };
 
 /// Wraps pgp in a higher-level interface.

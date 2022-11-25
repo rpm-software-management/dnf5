@@ -77,7 +77,7 @@ KeyInfo::KeyInfo(
     const std::string & key_id,
     const std::string & user_id,
     const std::string & fingerprint,
-    std::vector<char> raw_key)
+    std::string raw_key)
     : key_url(key_url),
       key_path(key_path),
       key_id(key_id),
@@ -185,7 +185,7 @@ bool RpmSignature::import_key(const KeyInfo & key) const {
     if (!rpmdb_lookup(ts_ptr, key)) {
         uint8_t * pkt = nullptr;
         size_t pkt_len{0};
-        if (pgpParsePkts(key.raw_key.data(), &pkt, &pkt_len) != PGPARMOR_PUBKEY) {
+        if (pgpParsePkts(key.raw_key.c_str(), &pkt, &pkt_len) != PGPARMOR_PUBKEY) {
             free(pkt);
             throw KeyImportError(M_("\"{}\": key is not an armored public key."), key.get_url());
         }
@@ -219,14 +219,13 @@ std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
     std::vector<KeyInfo> keys;
     utils::fs::File key_file(key_path, "r");
     for (auto & key_info : repo::RepoPgp::rawkey2infos(key_file.get_fd())) {
-        key_info.raw_key.insert(key_info.raw_key.end(), '\0');
         KeyInfo key{
             key_url,
             key_path,
             key_info.get_id(),
             key_info.get_user_id(),
             key_info.get_fingerprint(),
-            std::move(key_info.raw_key)};
+            key_info.get_raw_key()};
         keys.emplace_back(std::move(key));
     }
 
