@@ -33,11 +33,10 @@ namespace libdnf::repo {
 Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey)
     : id{lr_gpg_subkey_get_id(subkey)},
       fingerprint{lr_gpg_subkey_get_fingerprint(subkey)},
-      timestamp{lr_gpg_subkey_get_timestamp(subkey)} {
+      timestamp{lr_gpg_subkey_get_timestamp(subkey)},
+      raw_key{lr_gpg_key_get_raw_key(key)} {
     auto * userid_c = lr_gpg_key_get_userids(key)[0];
     userid = userid_c ? userid_c : "";
-    std::string_view raw_key_str = lr_gpg_key_get_raw_key(key);
-    std::copy(raw_key_str.begin(), raw_key_str.end(), std::back_inserter(raw_key));
 }
 
 
@@ -140,7 +139,7 @@ void RepoPgp::import_key(int fd, const std::string & url) {
 
         GError * err = NULL;
         if (!lr_gpg_import_key_from_memory(
-                key_info.raw_key.data(), key_info.raw_key.size(), keyring_dir.c_str(), &err)) {
+                key_info.get_raw_key().c_str(), key_info.get_raw_key().size(), keyring_dir.c_str(), &err)) {
             throw_repo_pgp_error(M_("Failed to import pgp keys: {}"), err);
         }
 

@@ -62,13 +62,13 @@ private:
         const std::string & key_id,
         const std::string & user_id,
         const std::string & fingerprint,
-        std::vector<char> raw_key);
+        std::string raw_key);
     std::string key_url;
     std::string key_path;
     std::string key_id;
     std::string user_id;
     std::string fingerprint;
-    std::vector<char> raw_key;
+    std::string raw_key;
 };
 
 class RpmSignature {
