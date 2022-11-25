@@ -35,8 +35,9 @@ Key::Key(const LrGpgKey * key, const LrGpgSubkey * subkey)
       fingerprint{lr_gpg_subkey_get_fingerprint(subkey)},
       timestamp{lr_gpg_subkey_get_timestamp(subkey)},
       raw_key{lr_gpg_key_get_raw_key(key)} {
-    auto * userid_c = lr_gpg_key_get_userids(key)[0];
-    userid = userid_c ? userid_c : "";
+    for (auto * const * item = lr_gpg_key_get_userids(key); *item; ++item) {
+        user_ids.push_back(*item);
+    }
 }
 
 
@@ -124,7 +125,7 @@ void RepoPgp::import_key(int fd, const std::string & url) {
         if (callbacks) {
             if (!callbacks->repokey_import(
                     key_info.get_id(),
-                    key_info.get_user_id(),
+                    key_info.get_user_ids(),
                     key_info.get_fingerprint(),
                     url,
                     key_info.get_timestamp()))
