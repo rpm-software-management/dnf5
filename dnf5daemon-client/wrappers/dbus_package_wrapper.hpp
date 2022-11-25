@@ -38,8 +38,8 @@ public:
     std::string get_version() const { return rawdata.at("version"); }
     std::string get_release() const { return rawdata.at("release"); }
     std::string get_arch() const { return rawdata.at("arch"); }
-    std::string get_repo_id() const { return rawdata.at("repo"); }
-    std::string get_from_repo_id() const { return "TODO:from_repo"; }
+    std::string get_repo_id() const { return rawdata.at("repo_id"); }
+    std::string get_from_repo_id() const { return rawdata.at("from_repo_id"); }
     std::string get_nevra() const { return rawdata.at("nevra"); }
     std::string get_full_nevra() const { return rawdata.at("full_nevra"); }
     std::string get_evr() const { return rawdata.at("evr"); }
