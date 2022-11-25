@@ -39,7 +39,7 @@ public:
     Key(const LrGpgKey * key, const LrGpgSubkey * subkey);
 
     const std::string & get_id() const noexcept { return id; }
-    const std::string & get_user_id() const noexcept { return userid; }
+    const std::vector<std::string> & get_user_ids() const noexcept { return user_ids; }
     const std::string & get_fingerprint() const noexcept { return fingerprint; }
     long int get_timestamp() const noexcept { return timestamp; }
     const std::string & get_raw_key() const noexcept { return raw_key; }
@@ -48,7 +48,7 @@ public:
 private:
     std::string id;
     std::string fingerprint;
-    std::string userid;
+    std::vector<std::string> user_ids;
     long int timestamp;
     std::string raw_key;
 };

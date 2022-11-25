@@ -47,12 +47,12 @@ using RpmKeyPktPtr = std::unique_ptr<uint8_t, std::function<void(uint8_t * pkt)>
 
 class KeyInfo {
 public:
-    std::string get_key_id() const { return key_id; }
+    const std::string & get_key_id() const noexcept { return key_id; }
     std::string get_short_key_id() const;
-    std::string get_user_id() const { return user_id; }
-    std::string get_fingerprint() const { return fingerprint; }
-    std::string get_url() const { return key_url; }
-    std::string get_path() const { return key_path; }
+    const std::vector<std::string> & get_user_ids() const noexcept { return user_ids; }
+    const std::string & get_fingerprint() const noexcept { return fingerprint; }
+    const std::string & get_url() const noexcept { return key_url; }
+    const std::string & get_path() const noexcept { return key_path; }
 
 private:
     friend class RpmSignature;
@@ -60,13 +60,13 @@ private:
         const std::string & key_url,
         const std::string & key_path,
         const std::string & key_id,
-        const std::string & user_id,
+        const std::vector<std::string> & user_ids,
         const std::string & fingerprint,
         std::string raw_key);
     std::string key_url;
     std::string key_path;
     std::string key_id;
-    std::string user_id;
+    std::vector<std::string> user_ids;
     std::string fingerprint;
     std::string raw_key;
 };

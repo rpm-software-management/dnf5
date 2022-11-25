@@ -75,13 +75,13 @@ KeyInfo::KeyInfo(
     const std::string & key_url,
     const std::string & key_path,
     const std::string & key_id,
-    const std::string & user_id,
+    const std::vector<std::string> & user_ids,
     const std::string & fingerprint,
     std::string raw_key)
     : key_url(key_url),
       key_path(key_path),
       key_id(key_id),
-      user_id(user_id),
+      user_ids(user_ids),
       fingerprint(fingerprint),
       raw_key(raw_key) {}
 
@@ -223,7 +223,7 @@ std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
             key_url,
             key_path,
             key_info.get_id(),
-            key_info.get_user_id(),
+            key_info.get_user_ids(),
             key_info.get_fingerprint(),
             key_info.get_raw_key()};
         keys.emplace_back(std::move(key));

@@ -66,7 +66,7 @@ public:
 
     bool repokey_import(
         [[maybe_unused]] const std::string & id,
-        [[maybe_unused]] const std::string & user_id,
+        [[maybe_unused]] const std::vector<std::string> & user_ids,
         [[maybe_unused]] const std::string & fingerprint,
         [[maybe_unused]] const std::string & url,
         [[maybe_unused]] long int timestamp) override {

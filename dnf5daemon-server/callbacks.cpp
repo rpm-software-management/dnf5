@@ -148,14 +148,14 @@ int DbusRepoCB::progress(double total_to_download, double downloaded) {
 
 bool DbusRepoCB::repokey_import(
     const std::string & id,
-    const std::string & user_id,
+    const std::vector<std::string> & user_ids,
     const std::string & fingerprint,
     const std::string & url,
     long int timestamp) {
     bool confirmed;
     try {
         auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST);
-        signal << id << user_id << fingerprint << url << static_cast<int64_t>(timestamp);
+        signal << id << (user_ids.empty() ? "" : user_ids[0]) << fingerprint << url << static_cast<int64_t>(timestamp);
         // wait for client's confirmation
         confirmed = session.wait_for_key_confirmation(id, signal);
     } catch (...) {

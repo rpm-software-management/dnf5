@@ -80,7 +80,7 @@ public:
 
     bool repokey_import(
         const std::string & id,
-        const std::string & user_id,
+        const std::vector<std::string> & user_ids,
         const std::string & fingerprint,
         const std::string & url,
         long int timestamp) override;
