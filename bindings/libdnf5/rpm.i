@@ -36,6 +36,7 @@
     #include "libdnf/rpm/reldep.hpp"
     #include "libdnf/rpm/reldep_list.hpp"
     #include "libdnf/rpm/reldep_list_iterator.hpp"
+    #include "libdnf/rpm/transaction_callbacks.hpp"
 %}
 
 #define CV __perl_CV
@@ -70,3 +71,7 @@
 
 add_iterator(PackageSet)
 add_iterator(ReldepList)
+
+%feature("director") TransactionCallbacks;
+%include "libdnf/rpm/transaction_callbacks.hpp"
+wrap_unique_ptr(TransactionCallbacksUniquePtr, libdnf::rpm::TransactionCallbacks);

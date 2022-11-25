@@ -8,6 +8,7 @@
 
 %include <exception.i>
 %include <std_common.i>
+%include <std_vector.i>
 
 %include <shared.i>
 
@@ -31,6 +32,29 @@
 
 #define CV __perl_CV
 
+#if defined(SWIGPYTHON)
+%typemap(in) std::optional<int> %{
+    if($input == Py_None)
+        $1 = std::optional<int>();
+    else
+        $1 = std::optional<int>(PyLong_AsLong($input));
+%}
+
+%typemap(in) std::optional<unsigned int> %{
+    if($input == Py_None)
+        $1 = std::optional<unsigned int>();
+    else
+        $1 = std::optional<unsigned int>(PyLong_AsUnsignedLong($input));
+%}
+
+%typemap(in) std::optional<std::string> %{
+    if($input == Py_None)
+        $1 = std::optional<std::string>();
+    else
+        $1 = std::optional<std::string>(PyString_AsString($input));
+%}
+#endif
+
 %template(BaseWeakPtr) libdnf::WeakPtr<libdnf::Base, false>;
 %template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
 
@@ -38,5 +62,11 @@
 %ignore libdnf::base::TransactionError;
 %include "libdnf/base/transaction.hpp"
 %include "libdnf/base/transaction_package.hpp"
+
+%ignore std::vector<libdnf::base::TransactionPackage>::vector(size_type);
+%ignore std::vector<libdnf::base::TransactionPackage>::vector(unsigned int);
+%ignore std::vector<libdnf::base::TransactionPackage>::resize;
+%template(VectorTransactionPackage) std::vector<libdnf::base::TransactionPackage>;
+
 %include "libdnf/base/goal.hpp"
 %include "libdnf/base/goal_elements.hpp"
