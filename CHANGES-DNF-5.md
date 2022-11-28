@@ -46,3 +46,8 @@ Renaming boolean options to format `--<option>`, and `--no-<option>`
 
 ### Upgrade command
 - New dnf5 option `--minimal` (`upgrade-minimal` command still exists as a compatibility alias for `upgrade --minimal`).
+
+
+### Repoquery command
+- Dropped: `-a/--all`, `--alldeps`, `--nevra` options, their behavior is and has been the default for both dnf4 and dnf5. The options are no longer needed.
+- Dopped: `--nvr`, `--envra` options. They are no longer supported.
