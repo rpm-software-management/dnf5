@@ -2,8 +2,11 @@
 About
 =====
 
-Libdnf is a package management library.
-It was originally written to support the `DNF <https://github.com/rpm-software-management/dnf/>`_
+DNF5 is a command-line package manager that automates the process of installing, upgrading, configuring, and removing computer programs in a consistent manner.
+It supports RPM packages, modulemd modules, and comps groups & environments.
+
+As part of the DNF5 stack, libdnf is the package management library.
+It was originally written to support the `DNF <https://github.com/rpm-software-management/dnf/>`_,
 package manager and grew up into a versatile library.
 Now we can use it for building custom tools that load repositories,
 query packages, resolve dependencies and install packages.
@@ -11,7 +14,7 @@ query packages, resolve dependencies and install packages.
 It is powered with `libsolv <https://github.com/openSUSE/libsolv/>`_,
 wrapping it with an easy to use programming interface.
 
-Libdnf supports working with the following artifacts:
+DNF5 supports working with the following artifacts:
 
  * RPM repositories (repomd)
  * RPM packages
@@ -20,7 +23,7 @@ Libdnf supports working with the following artifacts:
  * Advisories (updateinfo, errata)
  * Modules (modulemd)
 
-Libdnf interfaces with several programming languages with the following support:
+DNF5 is written in C++ and it can interface with several programming languages:
 
  * C++ - fully supported
  * Python 3 - fully supported
@@ -41,6 +44,6 @@ License
 Authors
 =======
 
-Libdnf has been developed mainly by the Red Hat's Software Management team.
+DNF5 has been developed mainly by the Red Hat's Software Management team.
 Many features, bug fixes and bug reports came also from the community,
 see AUTHORS.md and git history for the complete list.
