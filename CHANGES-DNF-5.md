@@ -31,8 +31,6 @@ The filter was replaced with `filter_latest_evr()` which has the same behavior a
 
 Changes on the command line:
 ----------------------------
-dnf upgrade-minimal -> dnf upgrade --minimal
-
 Commands cannot have optional subcommands and optional arguments. Is some cases subcommand can have the same string as
 an argument. It means there is a difficulty to find advisory for package with the name `list`, `info`, or `summary`.
 `dnf history info <transaction ID>` -> `dnf history --info <transaction ID>`
@@ -44,3 +42,7 @@ options and implemented only for related commands
 
 Renaming boolean options to format `--<option>`, and `--no-<option>`
 `--nobest` -> `--no-best`. Proposing to keep `--nobest` as a deprecated option.
+
+
+### Upgrade command
+- New dnf5 option `--minimal` (`upgrade-minimal` command still exists as a compatibility alias for `upgrade --minimal`).
