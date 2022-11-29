@@ -221,7 +221,7 @@ bool is_one_piece(::Repo * repo) {
 SolvRepo::SolvRepo(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, void * appdata)
     : base(base),
       config(config),
-      repo(repo_create(*get_pool(base), config.get_id().c_str())),
+      repo(repo_create(*get_rpm_pool(base), config.get_id().c_str())),
       comps_repo(repo_create(*get_comps_pool(base), config.get_id().c_str())) {
     repo->appdata = appdata;
     comps_repo->appdata = appdata;
@@ -236,7 +236,7 @@ SolvRepo::~SolvRepo() {
 
 void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string & primary_fn) {
     auto & logger = *base->get_logger();
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     fs::File repomd_file(repomd_fn, "r");
 
@@ -281,7 +281,8 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
 void SolvRepo::load_system_repo_ext(RepodataType type) {
     auto & logger = *base->get_logger();
-    solv::Pool & pool = type == RepodataType::COMPS ? get_comps_pool(base) : get_pool(base);
+    solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
+                                                    : static_cast<solv::Pool &>(get_rpm_pool(base));
     int solvables_start = pool->nsolvables;
     auto type_name = repodata_type_to_name(type);
     int res = 0;
@@ -324,7 +325,8 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
 
 void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloader) {
     auto & logger = *base->get_logger();
-    solv::Pool & pool = type == RepodataType::COMPS ? get_comps_pool(base) : get_pool(base);
+    solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
+                                                    : static_cast<solv::Pool &>(get_rpm_pool(base));
 
     auto type_name = repodata_type_to_name(type);
 
@@ -392,7 +394,7 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
             type_name,
             config.get_id(),
             ext_fn,
-            pool_errstr(*get_pool(base)));
+            pool_errstr(*get_rpm_pool(base)));
     }
 
     if (config.build_cache().get_value()) {
@@ -403,7 +405,7 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
 
 void SolvRepo::load_system_repo(const std::string & rootdir) {
     auto & logger = *base->get_logger();
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     logger.debug("Loading system repo rpmdb from root \"{}\"", rootdir.empty() ? "/" : rootdir);
     if (rootdir.empty()) {
@@ -420,7 +422,7 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
         throw SolvError(
             M_("Failed to load system repo from root \"{}\": {}"),
             rootdir.empty() ? "/" : rootdir,
-            pool_errstr(*get_pool(base)));
+            pool_errstr(*get_rpm_pool(base)));
     }
 
     if (!rootdir.empty()) {
@@ -459,7 +461,7 @@ static bool is_superset(
 
 void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
     auto & logger = *base->get_logger();
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     logger.debug("Rewriting repo \"{}\" with added file provides", config.get_id());
 
@@ -519,7 +521,7 @@ bool SolvRepo::load_solv_cache(solv::Pool & pool, const char * type, int flags) 
                     type ? type : "primary",
                     config.get_id(),
                     path.native(),
-                    pool_errstr(*get_pool(base)));
+                    pool_errstr(*get_rpm_pool(base)));
             }
             return true;
         }
@@ -537,7 +539,7 @@ bool SolvRepo::load_solv_cache(solv::Pool & pool, const char * type, int flags) 
 
 void SolvRepo::write_main(bool load_after_write) {
     auto & logger = *base->get_logger();
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     const char * chksum = pool_bin2hex(*pool, checksum, solv_chksum_len(CHKSUM_TYPE));
 
@@ -599,7 +601,8 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
     libdnf_assert(repodata_id != 0, "0 is not a valid repodata id");
 
     auto & logger = *base->get_logger();
-    solv::Pool & pool = type == RepodataType::COMPS ? get_comps_pool(base) : get_pool(base);
+    solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
+                                                    : static_cast<solv::Pool &>(get_rpm_pool(base));
 
     const auto type_name = repodata_type_to_name(type);
     const auto solvfile_path = solv_file_path(type_name);

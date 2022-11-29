@@ -69,7 +69,7 @@ public:
     /// @param pkg          libdnf::rpm::Package to compare.
     /// @return True if AdvisoryPackage has smaller name or architecture than libdnf::rpm::package, False otherwise.
     static bool name_arch_compare_lower_id(const AdvisoryPackage & adv_pkg, const rpm::Package & pkg) {
-        const auto & pool = get_pool(adv_pkg.p_impl->base);
+        const auto & pool = get_rpm_pool(adv_pkg.p_impl->base);
         Solvable * s = pool.id2solvable(pkg.get_id().id);
 
         if (adv_pkg.p_impl->name != s->name)

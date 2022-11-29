@@ -236,20 +236,27 @@ public:
         }
     }
 
-private:
+protected:
     SolvMap considered;  // owner of the considered map, `pool->considered` is only a raw pointer
     ::Pool * pool;
 };
+
+
+class RpmPool : public Pool {
+    // TODO(mblaha): Move rpm specific methods from parent Pool class here
+};
+
+class CompsPool : public Pool {};
 
 }  // namespace libdnf::solv
 
 namespace libdnf {
 
-static inline solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) {
-    return InternalBaseUser::get_pool(base);
+static inline solv::RpmPool & get_rpm_pool(const libdnf::BaseWeakPtr & base) {
+    return InternalBaseUser::get_rpm_pool(base);
 }
 
-static inline solv::Pool & get_comps_pool(const libdnf::BaseWeakPtr & base) {
+static inline solv::CompsPool & get_comps_pool(const libdnf::BaseWeakPtr & base) {
     return InternalBaseUser::get_comps_pool(base);
 }
 

@@ -97,7 +97,8 @@ std::string Environment::get_order() const {
 }
 
 
-std::vector<std::string> load_groups_from_pool(libdnf::solv::Pool & pool, Id environment_id, bool required = true) {
+std::vector<std::string> load_groups_from_pool(
+    libdnf::solv::CompsPool & pool, Id environment_id, bool required = true) {
     Solvable * solvable = pool.id2solvable(environment_id);
     Offset offset;
     if (required) {
@@ -177,7 +178,7 @@ void Environment::serialize(const std::string & path) {
     std::string lang;
     xmlNodePtr node;
 
-    libdnf::solv::Pool & pool = get_comps_pool(base);
+    libdnf::solv::CompsPool & pool = get_comps_pool(base);
 
     for (auto environment_id : environment_ids) {
         Dataiterator di;

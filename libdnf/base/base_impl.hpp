@@ -32,9 +32,10 @@ namespace libdnf {
 
 namespace solv {
 
-class Pool;
+class CompsPool;
+class RpmPool;
 
-}
+}  // namespace solv
 
 class Base::Impl {
 public:
@@ -43,12 +44,12 @@ public:
     libdnf::system::State & get_system_state() { return *system_state; }
     libdnf::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
 
-    solv::Pool & get_pool() {
+    solv::RpmPool & get_rpm_pool() {
         libdnf_assert(pool, "Base instance was not fully initialized by Base::setup()");
         return *pool;
     }
 
-    solv::Pool & get_comps_pool() {
+    solv::CompsPool & get_comps_pool() {
         libdnf_assert(comps_pool, "Base instance was not fully initialized by Base::setup()");
         return *comps_pool;
     }
@@ -59,8 +60,9 @@ private:
     friend class Base;
     Impl(const libdnf::BaseWeakPtr & base);
 
-    // Pool as the owner of underlying libsolv data, has to be the first member so that it is destroyed last.
-    std::unique_ptr<solv::Pool> pool;
+    // RpmPool as the owner of underlying libsolv data, has to be the first member so that it is destroyed last.
+    std::unique_ptr<solv::RpmPool> pool;
+
     // In libsolv the groups and environmental groups are stored as regular
     // solvables (just with "group:" / "environment:" prefix in their name).
     // These group solvables then contain hard requirements for included
@@ -69,7 +71,7 @@ private:
     // When groups (especially the installed ones in @System repo) are in main
     // pool, they can block removals of mandatory group packages.
     // Thus we need to keep group solvables in a separate pool.
-    std::unique_ptr<solv::Pool> comps_pool;
+    std::unique_ptr<solv::CompsPool> comps_pool;
 
     std::optional<libdnf::system::State> system_state;
     libdnf::advisory::AdvisorySack rpm_advisory_sack;
@@ -80,8 +82,8 @@ private:
 
 class InternalBaseUser {
 public:
-    static solv::Pool & get_pool(const libdnf::BaseWeakPtr & base) { return base->p_impl->get_pool(); }
-    static solv::Pool & get_comps_pool(const libdnf::BaseWeakPtr & base) { return base->p_impl->get_comps_pool(); }
+    static solv::RpmPool & get_rpm_pool(const libdnf::BaseWeakPtr & base) { return base->p_impl->get_rpm_pool(); }
+    static solv::CompsPool & get_comps_pool(const libdnf::BaseWeakPtr & base) { return base->p_impl->get_comps_pool(); }
 };
 
 }  // namespace libdnf

@@ -35,7 +35,7 @@ Advisory::Advisory(const libdnf::BaseWeakPtr & base, AdvisoryId id) : base(base)
 
 std::string Advisory::get_name() const {
     const char * name;
-    name = get_pool(base).lookup_str(id.id, SOLVABLE_NAME);
+    name = get_rpm_pool(base).lookup_str(id.id, SOLVABLE_NAME);
 
     if (strncmp(
             libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX, name, libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX_LENGTH) !=
@@ -51,43 +51,43 @@ std::string Advisory::get_name() const {
 }
 
 std::string Advisory::get_type() const {
-    return std::string(get_pool(base).lookup_str(id.id, SOLVABLE_PATCHCATEGORY));
+    return std::string(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_PATCHCATEGORY));
 }
 
 std::string Advisory::get_severity() const {
     //TODO(amatej): should we call SolvPrivate::internalize_libsolv_repo(solvable->repo);
     //              before pool.lookup_str?
     //              If so do this just once in solv::advisroy_private
-    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, UPDATE_SEVERITY));
+    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_SEVERITY));
 }
 
 unsigned long long Advisory::get_buildtime() const {
-    return get_pool(base).lookup_num(id.id, SOLVABLE_BUILDTIME);
+    return get_rpm_pool(base).lookup_num(id.id, SOLVABLE_BUILDTIME);
 }
 
 std::string Advisory::get_title() const {
     // SOLVABLE_SUMMARY is misnamed, it actually stores the title
-    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
+    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_SUMMARY));
 }
 
 std::string Advisory::get_vendor() const {
-    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
+    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_VENDOR));
 }
 
 std::string Advisory::get_rights() const {
-    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, UPDATE_RIGHTS));
+    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_RIGHTS));
 }
 
 std::string Advisory::get_status() const {
-    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, UPDATE_STATUS));
+    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_STATUS));
 }
 
 std::string Advisory::get_message() const {
-    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, UPDATE_MESSAGE));
+    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, UPDATE_MESSAGE));
 }
 
 std::string Advisory::get_description() const {
-    return libdnf::utils::string::c_to_str(get_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
+    return libdnf::utils::string::c_to_str(get_rpm_pool(base).lookup_str(id.id, SOLVABLE_DESCRIPTION));
 }
 
 AdvisoryId Advisory::get_id() const {
@@ -95,7 +95,7 @@ AdvisoryId Advisory::get_id() const {
 }
 
 std::vector<AdvisoryReference> Advisory::get_references(std::vector<std::string> types) const {
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     std::vector<AdvisoryReference> output;
 
@@ -119,7 +119,7 @@ std::vector<AdvisoryCollection> Advisory::get_collections() const {
     std::vector<AdvisoryCollection> output;
 
     Dataiterator di;
-    dataiterator_init(&di, *get_pool(base), 0, id.id, UPDATE_COLLECTIONLIST, 0, 0);
+    dataiterator_init(&di, *get_rpm_pool(base), 0, id.id, UPDATE_COLLECTIONLIST, 0, 0);
 
     for (int index = 0; dataiterator_step(&di); index++) {
         dataiterator_setpos(&di);

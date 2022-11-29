@@ -443,7 +443,7 @@ GoalProblem Goal::Impl::add_reason_change_specs_to_goal(base::Transaction & tran
 std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings) {
     auto sack = base->get_rpm_package_sack();
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     auto & cfg_main = base->get_config();
     bool strict = settings.resolve_strict(cfg_main);
     bool best = settings.resolve_best(cfg_main);
@@ -799,7 +799,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
     Id current_name = 0;
     Id current_arch = 0;
     std::vector<Solvable *> tmp_solvables;
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     for (auto package_id : *relevant_available.p_impl) {
         tmp_solvables.push_back(pool.id2solvable(package_id));
@@ -832,7 +832,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
 
 void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
     auto sack = base->get_rpm_package_sack();
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     auto & cfg_main = base->get_config();
 
     rpm::PackageQuery installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
@@ -1189,7 +1189,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
         case GoalAction::DOWNGRADE: {
             query.filter_available();
             query.filter_downgrades();
-            auto & pool = get_pool(base);
+            auto & pool = get_rpm_pool(base);
             std::vector<Solvable *> tmp_solvables;
             for (auto pkg_id : *query.p_impl) {
                 tmp_solvables.push_back(pool.id2solvable(pkg_id));

@@ -118,7 +118,7 @@ std::vector<Package> Group::get_packages() {
         return packages;
     }
 
-    libdnf::solv::Pool & pool = get_comps_pool(base);
+    libdnf::solv::CompsPool & pool = get_comps_pool(base);
 
     // Use only the first (highest priority) solvable for package lists
     Solvable * solvable = pool.id2solvable(group_ids[0].id);
@@ -206,7 +206,7 @@ void Group::serialize(const std::string & path) {
     std::string lang;
     xmlNodePtr node;
 
-    libdnf::solv::Pool & pool = get_comps_pool(base);
+    libdnf::solv::CompsPool & pool = get_comps_pool(base);
 
     for (auto group_id : group_ids) {
         Dataiterator di;
