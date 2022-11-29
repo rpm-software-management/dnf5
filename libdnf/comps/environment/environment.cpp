@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/comps/environment/environment.hpp"
 
-#include "comps/pool_utils.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/xml.hpp"
@@ -57,43 +56,45 @@ Environment & Environment::operator+=(const Environment & rhs) {
 
 
 std::string Environment::get_environmentid() const {
-    return split_solvable_name(lookup_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_NAME)).second;
+    return solv::CompsPool::split_solvable_name(
+               get_comps_pool(base).lookup_first_id_str<EnvironmentId>(environment_ids, SOLVABLE_NAME))
+        .second;
 }
 
 
 std::string Environment::get_name() const {
-    return lookup_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_SUMMARY);
+    return get_comps_pool(base).lookup_first_id_str<EnvironmentId>(environment_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Environment::get_description() const {
-    return lookup_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_DESCRIPTION);
+    return get_comps_pool(base).lookup_first_id_str<EnvironmentId>(environment_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Environment::get_translated_name(const char * lang) const {
-    return get_translated_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_SUMMARY, lang);
+    return get_comps_pool(base).get_translated_str<EnvironmentId>(environment_ids, SOLVABLE_SUMMARY, lang);
 }
 
 
 // TODO(pkratoch): Test this
 std::string Environment::get_translated_name() const {
-    return get_translated_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_SUMMARY);
+    return get_comps_pool(base).get_translated_str<EnvironmentId>(environment_ids, SOLVABLE_SUMMARY);
 }
 
 
 std::string Environment::get_translated_description(const char * lang) const {
-    return get_translated_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_DESCRIPTION, lang);
+    return get_comps_pool(base).get_translated_str<EnvironmentId>(environment_ids, SOLVABLE_DESCRIPTION, lang);
 }
 
 
 std::string Environment::get_translated_description() const {
-    return get_translated_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_DESCRIPTION);
+    return get_comps_pool(base).get_translated_str<EnvironmentId>(environment_ids, SOLVABLE_DESCRIPTION);
 }
 
 
 std::string Environment::get_order() const {
-    return lookup_str<EnvironmentId>(get_comps_pool(base), environment_ids, SOLVABLE_ORDER);
+    return get_comps_pool(base).lookup_first_id_str<EnvironmentId>(environment_ids, SOLVABLE_ORDER);
 }
 
 
@@ -113,7 +114,7 @@ std::vector<std::string> load_groups_from_pool(
     if (offset) {
         for (Id * r_id = solvable->repo->idarraydata + offset; *r_id; ++r_id) {
             group_solvable_name = pool.id2str(*r_id);
-            groups.push_back(split_solvable_name(group_solvable_name).second);
+            groups.push_back(solv::CompsPool::split_solvable_name(group_solvable_name).second);
         }
     }
 

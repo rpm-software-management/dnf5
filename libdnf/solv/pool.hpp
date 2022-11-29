@@ -246,7 +246,49 @@ class RpmPool : public Pool {
     // TODO(mblaha): Move rpm specific methods from parent Pool class here
 };
 
-class CompsPool : public Pool {};
+
+class CompsPool : public Pool {
+public:
+    // Search solvables that correspond to the environment_ids for given key
+    // Return first non-empty string
+    template <typename T>
+    std::string lookup_first_id_str(std::vector<T> ids, Id key) {
+        for (T id : ids) {
+            auto value = lookup_str(id.id, key);
+            if (value) {
+                return value;
+            }
+        }
+        return "";
+    }
+
+
+    template <typename T>
+    std::string get_translated_str(std::vector<T> ids, Id key, const char * lang = nullptr) {
+        // Go through all environment solvables and return first translation found.
+        for (T id : ids) {
+            Solvable * solvable = id2solvable(id.id);
+            const char * translation = nullptr;
+            if (lang) {
+                translation = solvable_lookup_str_lang(solvable, key, lang, 1);
+            } else {
+                translation = solvable_lookup_str_poollang(solvable, key);
+            }
+            if (translation) {
+                // Return translation only if it's different from the untranslated string
+                // (solvable_lookup_str_lang returns the untranslated string if there is no translation).
+                const char * untranslated = solvable_lookup_str(solvable, key);
+                if (translation != untranslated && strcmp(translation, untranslated) != 0) {
+                    return std::string(translation);
+                }
+            }
+        }
+        // If no translation was found, return the untranslated string.
+        return lookup_first_id_str(ids, key);
+    }
+
+    static std::pair<std::string, std::string> split_solvable_name(std::string_view solvable_name);
+};
 
 }  // namespace libdnf::solv
 
