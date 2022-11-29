@@ -594,6 +594,9 @@ public:
 
     void swap(PackageQuery & other) noexcept;
 
+    /// Filter packages to keep only duplicates of installed packages. Packages are duplicate if they have the same `name` and `arch` but different `evr`.
+    void filter_duplicates();
+
 private:
     friend libdnf::Goal;
     class PQImpl;
