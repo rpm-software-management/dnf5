@@ -106,7 +106,7 @@ static void filter_dataiterator_internal(
 }
 
 static void filter_reference_by_type_and_id(
-    libdnf::solv::Pool & pool,
+    libdnf::solv::RpmPool & pool,
     libdnf::solv::SolvMap & candidates,
     libdnf::sack::QueryCmp cmp_type,
     const std::vector<std::string> & patterns,
@@ -154,7 +154,7 @@ static void filter_reference_by_type_and_id(
 
 void AdvisoryQuery::filter_name(const std::string & pattern, sack::QueryCmp cmp_type) {
     filter_dataiterator_internal(
-        *get_pool(base),
+        *get_rpm_pool(base),
         SOLVABLE_NAME,
         *p_impl,
         cmp_type,
@@ -166,35 +166,35 @@ void AdvisoryQuery::filter_name(const std::vector<std::string> & patterns, sack:
     for (std::string pattern : patterns) {
         prefixed_patterns.push_back(std::string(libdnf::solv::SOLVABLE_NAME_ADVISORY_PREFIX) + pattern);
     }
-    filter_dataiterator_internal(*get_pool(base), SOLVABLE_NAME, *p_impl, cmp_type, prefixed_patterns);
+    filter_dataiterator_internal(*get_rpm_pool(base), SOLVABLE_NAME, *p_impl, cmp_type, prefixed_patterns);
 }
 
 void AdvisoryQuery::filter_type(const std::string & type, sack::QueryCmp cmp_type) {
-    filter_dataiterator_internal(*get_pool(base), SOLVABLE_PATCHCATEGORY, *p_impl, cmp_type, {type});
+    filter_dataiterator_internal(*get_rpm_pool(base), SOLVABLE_PATCHCATEGORY, *p_impl, cmp_type, {type});
 }
 
 void AdvisoryQuery::filter_type(const std::vector<std::string> & types, sack::QueryCmp cmp_type) {
-    filter_dataiterator_internal(*get_pool(base), SOLVABLE_PATCHCATEGORY, *p_impl, cmp_type, types);
+    filter_dataiterator_internal(*get_rpm_pool(base), SOLVABLE_PATCHCATEGORY, *p_impl, cmp_type, types);
 }
 
 void AdvisoryQuery::filter_reference(
     const std::string & pattern, sack::QueryCmp cmp_type, const std::optional<std::string> type) {
-    filter_reference_by_type_and_id(get_pool(base), *p_impl, cmp_type, {pattern}, type);
+    filter_reference_by_type_and_id(get_rpm_pool(base), *p_impl, cmp_type, {pattern}, type);
 }
 void AdvisoryQuery::filter_reference(
     const std::vector<std::string> & patterns, sack::QueryCmp cmp_type, const std::optional<std::string> type) {
-    filter_reference_by_type_and_id(get_pool(base), *p_impl, cmp_type, patterns, type);
+    filter_reference_by_type_and_id(get_rpm_pool(base), *p_impl, cmp_type, patterns, type);
 }
 
 void AdvisoryQuery::filter_severity(const std::string & severity, sack::QueryCmp cmp_type) {
-    filter_dataiterator_internal(*get_pool(base), UPDATE_SEVERITY, *p_impl, cmp_type, {severity});
+    filter_dataiterator_internal(*get_rpm_pool(base), UPDATE_SEVERITY, *p_impl, cmp_type, {severity});
 }
 void AdvisoryQuery::filter_severity(const std::vector<std::string> & severities, sack::QueryCmp cmp_type) {
-    filter_dataiterator_internal(*get_pool(base), UPDATE_SEVERITY, *p_impl, cmp_type, severities);
+    filter_dataiterator_internal(*get_rpm_pool(base), UPDATE_SEVERITY, *p_impl, cmp_type, severities);
 }
 
 void AdvisoryQuery::filter_packages(const libdnf::rpm::PackageSet & package_set, sack::QueryCmp cmp_type) {
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
     std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_name_arch_evr();
 
@@ -246,7 +246,7 @@ std::vector<AdvisoryPackage> AdvisoryQuery::get_advisory_packages_sorted(
     std::vector<AdvisoryPackage> adv_pkgs = get_advisory_packages_sorted_by_name_arch_evr();
     std::vector<AdvisoryPackage> after_filter;
 
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     switch (cmp_type) {
         case libdnf::sack::QueryCmp::EQ:

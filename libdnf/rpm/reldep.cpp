@@ -50,16 +50,16 @@ Reldep::Reldep(libdnf::Base & base, const std::string & reldep_string) : Reldep(
 Reldep::Reldep(Reldep && reldep) : base(std::move(reldep.base)), id(std::move(reldep.id)) {}
 
 const char * Reldep::get_name() const {
-    return get_pool(base).id2str(id.id);
+    return get_rpm_pool(base).id2str(id.id);
 }
 const char * Reldep::get_relation() const {
-    return get_pool(base).id2rel(id.id);
+    return get_rpm_pool(base).id2rel(id.id);
 }
 const char * Reldep::get_version() const {
-    return get_pool(base).id2evr(id.id);
+    return get_rpm_pool(base).id2evr(id.id);
 }
 std::string Reldep::to_string() const {
-    auto * cstring = get_pool(base).dep2str(id.id);
+    auto * cstring = get_rpm_pool(base).dep2str(id.id);
     return cstring ? std::string(cstring) : std::string();
 }
 
@@ -71,7 +71,7 @@ ReldepId Reldep::get_reldep_id(
         static_cast<int>(Reldep::CmpType::LT) == REL_LT, "Reldep::ComparisonType::LT is not identical to solv/REL_LT");
     static_assert(
         static_cast<int>(Reldep::CmpType::GT) == REL_GT, "Reldep::ComparisonType::GT is not identical to solv/REL_GT");
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     Id id = pool.str2id(name, create);
     if (id == 0) {
         return ReldepId();
@@ -86,7 +86,7 @@ ReldepId Reldep::get_reldep_id(
 
 ReldepId Reldep::get_reldep_id(const BaseWeakPtr & base, const std::string & reldep_str, int create) {
     if (is_rich_dependency(reldep_str)) {
-        Id id = pool_parserpmrichdep(*get_pool(base), reldep_str.c_str());
+        Id id = pool_parserpmrichdep(*get_rpm_pool(base), reldep_str.c_str());
         // TODO(jmracek) Replace runtime_error. Do we need to throw an error?
         if (id == 0) {
             throw RuntimeError(M_("Cannot parse a dependency string"));

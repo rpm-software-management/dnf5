@@ -65,7 +65,7 @@ public:
     explicit Impl(const BaseWeakPtr & base) : base(base) {}
 
     /// Return number of solvables in pool
-    int get_nsolvables() const noexcept { return get_pool(base)->nsolvables; };
+    int get_nsolvables() const noexcept { return get_rpm_pool(base)->nsolvables; };
 
     /// Return SolvMap with all package solvables
     libdnf::solv::SolvMap & get_solvables();
@@ -165,7 +165,7 @@ inline std::vector<Solvable *> & PackageSack::Impl::get_sorted_solvables() {
     auto & solvables_map = get_solvables();
     cached_sorted_solvables.clear();
     cached_sorted_solvables.reserve(static_cast<size_t>(nsolvables));
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     for (Id id : solvables_map) {
         cached_sorted_solvables.push_back(pool.id2solvable(id));
     }
@@ -175,7 +175,7 @@ inline std::vector<Solvable *> & PackageSack::Impl::get_sorted_solvables() {
 }
 
 inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_icase_solvables() {
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     auto nsolvables = get_nsolvables();
     if (nsolvables == cached_sorted_icase_solvables_size) {
         return cached_sorted_icase_solvables;
@@ -194,7 +194,7 @@ inline std::vector<std::pair<Id, Solvable *>> & PackageSack::Impl::get_sorted_ic
 }
 
 inline libdnf::solv::SolvMap & PackageSack::Impl::get_solvables() {
-    auto & spool = get_pool(base);
+    auto & spool = get_rpm_pool(base);
     ::Pool * pool = *spool;
 
     auto nsolvables = get_nsolvables();

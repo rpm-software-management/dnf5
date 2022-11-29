@@ -33,19 +33,19 @@ AdvisoryReference::AdvisoryReference(const libdnf::BaseWeakPtr & base, AdvisoryI
       index(index) {}
 
 std::string AdvisoryReference::get_id() const {
-    return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_ID, advisory.id, index));
+    return std::string(get_rpm_pool(base).get_str_from_pool(UPDATE_REFERENCE_ID, advisory.id, index));
 }
 std::string AdvisoryReference::get_type() const {
-    return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index));
+    return std::string(get_rpm_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index));
 }
 const char * AdvisoryReference::get_type_cstring() const {
-    return get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index);
+    return get_rpm_pool(base).get_str_from_pool(UPDATE_REFERENCE_TYPE, advisory.id, index);
 }
 std::string AdvisoryReference::get_title() const {
-    return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_TITLE, advisory.id, index));
+    return std::string(get_rpm_pool(base).get_str_from_pool(UPDATE_REFERENCE_TITLE, advisory.id, index));
 }
 std::string AdvisoryReference::get_url() const {
-    return std::string(get_pool(base).get_str_from_pool(UPDATE_REFERENCE_HREF, advisory.id, index));
+    return std::string(get_rpm_pool(base).get_str_from_pool(UPDATE_REFERENCE_HREF, advisory.id, index));
 }
 
 }  // namespace libdnf::advisory

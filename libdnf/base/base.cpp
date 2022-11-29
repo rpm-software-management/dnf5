@@ -140,8 +140,8 @@ void Base::setup() {
 
     p_impl->plugins.pre_base_setup();
 
-    pool.reset(new libdnf::solv::Pool);
-    p_impl->comps_pool.reset(new libdnf::solv::Pool);
+    pool.reset(new libdnf::solv::RpmPool);
+    p_impl->comps_pool.reset(new libdnf::solv::CompsPool);
     auto & config = get_config();
     auto & installroot = config.installroot();
     installroot.lock("Locked by Base::setup()");
@@ -179,7 +179,7 @@ void Base::setup() {
 
     config.varsdir().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
-    // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be synchronized with Pool
+    // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be synchronized with RpmPool
     // (and force to recompute provides) or locked
     pool_setarch(**pool, get_vars()->get_value("arch").c_str());
     pool_set_rootdir(**pool, installroot.get_value().c_str());

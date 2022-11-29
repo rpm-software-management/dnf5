@@ -63,7 +63,7 @@ private:
 
 
 inline PackageSet::Impl::Impl(const BaseWeakPtr & base)
-    : libdnf::solv::SolvMap::SolvMap(get_pool(base).get_nsolvables()),
+    : libdnf::solv::SolvMap::SolvMap(get_rpm_pool(base).get_nsolvables()),
       base(base) {}
 
 inline PackageSet::Impl::Impl(const BaseWeakPtr & base, libdnf::solv::SolvMap & solv_map)

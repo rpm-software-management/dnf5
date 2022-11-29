@@ -27,7 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::advisory {
 
 libdnf::solv::SolvMap & AdvisorySack::get_solvables() {
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     if (cached_solvables_size == pool.get_nsolvables()) {
         return data_map;

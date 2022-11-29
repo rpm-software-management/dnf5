@@ -114,7 +114,7 @@ bool is_unique(
 
 std::vector<std::pair<ProblemRules, std::vector<std::string>>> get_removal_of_protected(
     rpm::solv::GoalPrivate & solved_goal, const libdnf::solv::IdQueue & broken_installed) {
-    auto & pool = solved_goal.get_pool();
+    auto & pool = solved_goal.get_rpm_pool();
 
     auto protected_running_kernel = solved_goal.get_protect_running_kernel();
     std::vector<std::pair<ProblemRules, std::vector<std::string>>> problem_output;
@@ -267,7 +267,7 @@ std::string SolverProblems::to_string() const {
 
 std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> process_solver_problems(
     const libdnf::BaseWeakPtr & base, rpm::solv::GoalPrivate & solved_goal) {
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     // Required to discover of problems related to protected packages
     libdnf::solv::IdQueue broken_installed;

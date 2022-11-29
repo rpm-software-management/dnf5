@@ -56,11 +56,11 @@ void PackageSack::Impl::make_provides_ready() {
 
     // Temporarily replaces the considered map with an empty one. Ignores "excludes" during calculation provides.
     libdnf::solv::SolvMap original_considered_map(0);
-    get_pool(base).swap_considered_map(original_considered_map);
+    get_rpm_pool(base).swap_considered_map(original_considered_map);
 
     base->get_repo_sack()->internalize_repos();
 
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     libdnf::solv::IdQueue addedfileprovides;
     libdnf::solv::IdQueue addedfileprovides_inst;
     pool_addfileprovides_queue(*pool, &addedfileprovides.get_queue(), &addedfileprovides_inst.get_queue());
@@ -87,7 +87,7 @@ void PackageSack::Impl::make_provides_ready() {
     provides_ready = true;
 
     // Sets the original considered map.
-    get_pool(base).swap_considered_map(original_considered_map);
+    get_rpm_pool(base).swap_considered_map(original_considered_map);
 }
 
 void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
@@ -304,7 +304,7 @@ std::optional<libdnf::solv::SolvMap> PackageSack::Impl::compute_considered_map(l
         return {};
     }
 
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     libdnf::solv::SolvMap considered(pool.get_nsolvables());
 
@@ -373,10 +373,10 @@ void PackageSack::Impl::recompute_considered_in_pool() {
 
     auto considered = compute_considered_map(libdnf::sack::ExcludeFlags::APPLY_EXCLUDES);
     if (considered) {
-        get_pool(base).swap_considered_map(*considered);
+        get_rpm_pool(base).swap_considered_map(*considered);
     } else {
         libdnf::solv::SolvMap empty_map(0);
-        get_pool(base).swap_considered_map(empty_map);
+        get_rpm_pool(base).swap_considered_map(empty_map);
     }
 
     considered_uptodate = true;
@@ -487,7 +487,7 @@ rpm::PackageId PackageSack::Impl::get_running_kernel_id() {
         running_kernel.id = -1;
     } else {
         running_kernel = libdnf::rpm::PackageId(*query.p_impl->begin());
-        logger.debug("Found running kernel: {}", get_pool(base).id2str(running_kernel.id));
+        logger.debug("Found running kernel: {}", get_rpm_pool(base).id2str(running_kernel.id));
     }
     return running_kernel;
 }
