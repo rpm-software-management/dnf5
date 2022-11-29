@@ -47,3 +47,4 @@ install(DIRECTORY "config/etc/" DESTINATION "${CMAKE_INSTALL_FULL_SYSCONFDIR}")
 
 
 add_subdirectory(po)
+add_subdirectory("include")
