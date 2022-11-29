@@ -2148,6 +2148,13 @@ static void add_n_first_to_map(
     }
 }
 
+static void add_block_to_map(
+    libdnf::solv::SolvMap & result, libdnf::solv::IdQueue & samename, int start_block, int stop_block) {
+    for (int i = start_block; i < stop_block; ++i) {
+        result.add_unsafe(samename[i]);
+    }
+}
+
 static int latest_cmp(const Id * ap, const Id * bp, libdnf::solv::RpmPool * pool) {
     Solvable * sa = pool->id2solvable(*ap);
     Solvable * sb = pool->id2solvable(*bp);
@@ -2348,5 +2355,43 @@ void PackageQuery::swap(PackageQuery & other) noexcept {
     PackageSet::swap(other);
     p_pq_impl.swap(other.p_pq_impl);
 }
+
+void PackageQuery::filter_duplicates() {
+    auto & pool = get_rpm_pool(p_impl->base);
+
+    filter_installed();
+
+    libdnf::solv::IdQueue samename;
+    for (Id candidate_id : *p_impl) {
+        samename.push_back(candidate_id);
+    }
+    samename.sort(latest_cmp, &pool);
+
+    p_impl->clear();
+    // Create blocks per name, arch
+    Solvable * highest = nullptr;
+    int start_block = -1;
+    int i;
+    for (i = 0; i < samename.size(); ++i) {
+        Solvable * considered = pool.id2solvable(samename[i]);
+        if (!highest || highest->name != considered->name || highest->arch != considered->arch) {
+            /* start of a new block */
+            if (start_block == -1) {
+                highest = considered;
+                start_block = i;
+                continue;
+            }
+            if (start_block != i - 1) {
+                add_block_to_map(*p_impl, samename, start_block, i);
+            }
+            highest = considered;
+            start_block = i;
+        }
+    }
+    if (start_block != i - 1) {  // Add last block to the map if it is bigger than 1 (has duplicates)
+        add_block_to_map(*p_impl, samename, start_block, i);
+    }
+}
+
 
 }  //  namespace libdnf::rpm
