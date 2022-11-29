@@ -43,6 +43,8 @@ public:
     void run() override;
 
 private:
+    bool only_system_repo_needed = false;
+
     libdnf::OptionBool * available_option{nullptr};
     libdnf::OptionBool * installed_option{nullptr};
     libdnf::OptionBool * info_option{nullptr};
@@ -50,6 +52,8 @@ private:
     std::vector<std::string> pkg_specs;
     std::vector<std::string> pkg_file_paths;
     std::vector<libdnf::rpm::Package> cmdline_packages;
+
+    std::unique_ptr<libdnf::cli::session::BoolOption> duplicates{nullptr};
 
     std::unique_ptr<AdvisoryOption> advisory_name{nullptr};
     std::unique_ptr<SecurityOption> advisory_security{nullptr};
