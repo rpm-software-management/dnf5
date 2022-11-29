@@ -246,6 +246,23 @@ Library for working with a terminal in a command-line package manager.
 %license lgpl-2.1.txt
 %endif
 
+# ========== dnf5-devel ==========
+
+%package -n dnf5-devel
+Summary:        Development files for dnf5
+License:        LGPL-2.1-or-later
+Requires:       dnf5%{?_isa} = %{version}-%{release}
+Requires:       libdnf5-devel%{?_isa} = %{version}-%{release}
+Requires:       libdnf5-cli-devel%{?_isa} = %{version}-%{release}
+
+%description -n dnf5-devel
+Develpment files for dnf5.
+
+%files -n dnf5-devel
+%{_includedir}/dnf5/
+%license COPYING.md
+%license lgpl-2.1.txt
+
 
 # ========== libdnf5-devel ==========
 
