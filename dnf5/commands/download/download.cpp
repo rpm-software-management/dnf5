@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "download.hpp"
 
+#include "utils/bgettext/bgettext-mark-domain.h"
+
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_query.hpp>
@@ -86,6 +88,9 @@ void DownloadCommand::configure() {
     context.update_repo_load_flags_from_specs(pkg_specs);
     if (resolve_option->get_value() && !alldeps_option->get_value()) {
         context.set_load_system_repo(true);
+    } else if (!resolve_option->get_value() && alldeps_option->get_value()) {
+        throw libdnf::cli::ArgumentParserMissingDependentArgumentError(
+            M_("Option alldeps should be used with resolve"));
     } else {
         context.set_load_system_repo(false);
     }

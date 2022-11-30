@@ -709,6 +709,10 @@ int main(int argc, char * argv[]) try {
         std::cerr << ex.what() << std::endl;
         context.get_argument_parser().get_selected_command()->help();
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
+    } catch (libdnf::cli::ArgumentParserMissingDependentArgumentError & ex) {
+        std::cerr << ex.what() << std::endl;
+        context.get_argument_parser().get_selected_command()->help();
+        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (libdnf::cli::ArgumentParserError & ex) {
         std::cerr << ex.what() << std::endl;
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);

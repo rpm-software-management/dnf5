@@ -117,6 +117,13 @@ public:
     const char * get_name() const noexcept override { return "ArgumentParserIdAlreadyRegisteredError"; }
 };
 
+/// Exception is thrown when the command, named argument, positiona argument, or group needs an additional argument.
+class ArgumentParserMissingDependentArgumentError : public ArgumentParserError {
+public:
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserMissingDependentArgumentError"; }
+};
+
 /// Base class for user data used in ArgumentParser::Argument
 class ArgumentParserUserData {};
 
