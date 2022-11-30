@@ -43,74 +43,50 @@ void UTF8Test::tearDown() {}
 
 
 void UTF8Test::test_length_en() {
-    auto size = hello_world_en.size();
-    CPPUNIT_ASSERT_EQUAL(12ul, size);
-
-    auto length = libdnf::cli::utils::utf8::length(hello_world_en);
-    CPPUNIT_ASSERT_EQUAL(12ul, length);
+    CPPUNIT_ASSERT_EQUAL((size_t)12, hello_world_en.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)12, libdnf::cli::utils::utf8::length(hello_world_en));
 }
 
 
 void UTF8Test::test_length_cs() {
-    auto size = hello_world_cs.size();
-    CPPUNIT_ASSERT_EQUAL(12ul, size);
-
-    auto length = libdnf::cli::utils::utf8::length(hello_world_cs);
-    CPPUNIT_ASSERT_EQUAL(11ul, length);
+    CPPUNIT_ASSERT_EQUAL((size_t)12, hello_world_cs.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)11, libdnf::cli::utils::utf8::length(hello_world_cs));
 }
 
 
 void UTF8Test::test_length_cn() {
-    auto size = hello_world_cn.size();
-    CPPUNIT_ASSERT_EQUAL(18ul, size);
-
-    auto length = libdnf::cli::utils::utf8::length(hello_world_cn);
-    CPPUNIT_ASSERT_EQUAL(6ul, length);
+    CPPUNIT_ASSERT_EQUAL((size_t)18, hello_world_cn.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)6, libdnf::cli::utils::utf8::length(hello_world_cn));
 }
 
 
 void UTF8Test::test_length_ja() {
-    auto size = hello_world_ja.size();
-    CPPUNIT_ASSERT_EQUAL(24ul, size);
-
-    auto length = libdnf::cli::utils::utf8::length(hello_world_ja);
-    CPPUNIT_ASSERT_EQUAL(8ul, length);
+    CPPUNIT_ASSERT_EQUAL((size_t)24, hello_world_ja.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)8, libdnf::cli::utils::utf8::length(hello_world_ja));
 }
 
 
 void UTF8Test::test_width_en() {
-    auto size = hello_world_en.size();
-    CPPUNIT_ASSERT_EQUAL(12ul, size);
-
-    auto width = libdnf::cli::utils::utf8::width(hello_world_en);
-    CPPUNIT_ASSERT_EQUAL(12ul, width);
+    CPPUNIT_ASSERT_EQUAL((size_t)12, hello_world_en.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)12, libdnf::cli::utils::utf8::width(hello_world_en));
 }
 
 
 void UTF8Test::test_width_cs() {
-    auto size = hello_world_cs.size();
-    CPPUNIT_ASSERT_EQUAL(12ul, size);
-
-    auto width = libdnf::cli::utils::utf8::width(hello_world_cs);
-    CPPUNIT_ASSERT_EQUAL(11ul, width);
+    CPPUNIT_ASSERT_EQUAL((size_t)12, hello_world_cs.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)11, libdnf::cli::utils::utf8::width(hello_world_cs));
 }
 
 
 void UTF8Test::test_width_cn() {
-    auto size = hello_world_cn.size();
-    CPPUNIT_ASSERT_EQUAL(18ul, size);
-
-    auto width = libdnf::cli::utils::utf8::width(hello_world_cn);
-    CPPUNIT_ASSERT_EQUAL(12ul, width);
+    CPPUNIT_ASSERT_EQUAL((size_t)18, hello_world_cn.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)12, libdnf::cli::utils::utf8::width(hello_world_cn));
 }
 
 
 void UTF8Test::test_width_ja() {
-    auto size = hello_world_ja.size();
-    CPPUNIT_ASSERT_EQUAL(24ul, size);
-
-    auto width = libdnf::cli::utils::utf8::width(hello_world_ja);
-    CPPUNIT_ASSERT_EQUAL(16ul, width);
+    CPPUNIT_ASSERT_EQUAL((size_t)24, hello_world_ja.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)16, libdnf::cli::utils::utf8::width(hello_world_ja));
 }
 
 

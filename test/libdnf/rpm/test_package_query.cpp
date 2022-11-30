@@ -54,7 +54,7 @@ void RpmPackageQueryTest::test_size() {
     add_repo_solv("solv-repo1");
 
     PackageQuery query(base);
-    CPPUNIT_ASSERT_EQUAL(5LU, query.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)5, query.size());
 }
 
 void RpmPackageQueryTest::test_filter_latest_evr() {
@@ -308,12 +308,12 @@ void RpmPackageQueryTest::test_filter_nevra_packgset() {
 
     std::vector<Package> expected = {get_pkg("cmdline-0:1.2-3.noarch", true)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
-    CPPUNIT_ASSERT_EQUAL(1lu, query1.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, query1.size());
 
     PackageQuery query2(base);
     query2.filter_nevra(query1);
 
-    CPPUNIT_ASSERT_EQUAL(2lu, query2.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, query2.size());
     CPPUNIT_ASSERT_EQUAL(expected1, to_vector(query2));
 }
 
@@ -349,12 +349,12 @@ void RpmPackageQueryTest::test_filter_name_arch2() {
     query1.filter_installed();
     std::vector<Package> expected = {get_pkg("cmdline-0:1.2-3.noarch", true)};
     CPPUNIT_ASSERT_EQUAL(expected, to_vector(query1));
-    CPPUNIT_ASSERT_EQUAL(1lu, query1.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, query1.size());
 
     PackageQuery query2(base);
     query2.filter_name_arch(query1);
 
-    CPPUNIT_ASSERT_EQUAL(2lu, query2.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, query2.size());
     CPPUNIT_ASSERT_EQUAL(expected1, to_vector(query2));
 }
 
@@ -405,7 +405,7 @@ void RpmPackageQueryTest::test_filter_nevra() {
         // Test QueryCmp::EQ - argument with unknown version - single argument
         PackageQuery query(base);
         query.filter_nevra({"pkg-0:1.2-unknown2.x86_64"});
-        CPPUNIT_ASSERT_EQUAL(0LU, query.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)0, query.size());
         std::vector<Package> expected = {};
         CPPUNIT_ASSERT_EQUAL(expected, to_vector(query));
     }
@@ -689,10 +689,10 @@ void RpmPackageQueryTest::test_update() {
 
     PackageQuery query2(base);
     query2.filter_name({"pkg-libs"});
-    CPPUNIT_ASSERT_EQUAL(3LU, query2.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)3, query2.size());
 
     query1.update(query2);
-    CPPUNIT_ASSERT_EQUAL(5LU, query1.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)5, query1.size());
 
     // check the resulting NEVRAs
     std::vector<Package> expected = {
@@ -711,15 +711,15 @@ void RpmPackageQueryTest::test_intersection() {
     // packages with Release == "3"
     PackageQuery query1(base);
     query1.filter_release({"3"});
-    CPPUNIT_ASSERT_EQUAL(3LU, query1.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)3, query1.size());
 
     // packages with Name == "pkg-libs"
     PackageQuery query2(base);
     query2.filter_name({"pkg-libs"});
-    CPPUNIT_ASSERT_EQUAL(3LU, query2.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)3, query2.size());
 
     query1.intersection(query2);
-    CPPUNIT_ASSERT_EQUAL(1LU, query1.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, query1.size());
 
     // check the resulting NEVRAs
     std::vector<Package> expected = {get_pkg("pkg-libs-0:1.2-3.x86_64")};
@@ -733,16 +733,16 @@ void RpmPackageQueryTest::test_difference() {
     // packages with Release == "3"
     PackageQuery query1(base);
     query1.filter_release({"3"});
-    CPPUNIT_ASSERT_EQUAL(3LU, query1.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)3, query1.size());
 
     // packages with Release == "3" and name == "pkg-libs"
     PackageQuery query2(base);
     query2.filter_release({"3"});
     query2.filter_name({"pkg-libs"});
-    CPPUNIT_ASSERT_EQUAL(1LU, query2.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, query2.size());
 
     query1.difference(query2);
-    CPPUNIT_ASSERT_EQUAL(2LU, query1.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, query1.size());
 
     // check the resulting NEVRAs
     std::vector<Package> expected = {get_pkg("pkg-0:1.2-3.src"), get_pkg("pkg-0:1.2-3.x86_64")};

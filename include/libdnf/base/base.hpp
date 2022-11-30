@@ -28,7 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/conf/vars.hpp"
 #include "libdnf/logger/log_router.hpp"
 #include "libdnf/module/module_sack.hpp"
-#include "libdnf/plugin/plugins.hpp"
+#include "libdnf/plugin/iplugin.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/transaction/transaction_history.hpp"
@@ -91,7 +91,6 @@ public:
 
     void add_plugin(plugin::IPlugin & iplugin_instance);
     void load_plugins();
-    plugin::Plugins & get_plugins() { return plugins; }
 
     libdnf::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
@@ -102,9 +101,8 @@ private:
     friend class libdnf::base::Transaction;
     friend class libdnf::rpm::Package;
     friend class libdnf::advisory::AdvisoryQuery;
+    friend class libdnf::module::ModuleSack;
     friend class libdnf::repo::SolvRepo;
-
-    WeakPtrGuard<Base, false> base_guard;
 
     /// Loads the default configuration. To load distribution-specific configuration.
     void load_defaults();
@@ -123,21 +121,24 @@ private:
     /// The files in the directory are read in alphabetical order.
     void load_config_from_dir();
 
+    WeakPtrGuard<Base, false> base_guard;
+    // Impl has to be the second data member (right after base_guard which is needed for its construction) because it
+    // contains Pool and that has be destructed last.
+    // See commit: https://github.com/rpm-software-management/dnf5/commit/c8e26cb545aed0d6ca66545d51eda7568efdf232
+    ImplPtr<Impl> p_impl;
+
     LogRouter log_router;
     ConfigMain config;
     repo::RepoSack repo_sack;
     rpm::PackageSack rpm_package_sack;
     comps::Comps comps{*this};
     module::ModuleSack module_sack{get_weak_ptr()};
-    plugin::Plugins plugins{*this};
     std::map<std::string, std::string> variables;
     transaction::TransactionHistory transaction_history;
     Vars vars;
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;
     WeakPtrGuard<Vars, false> vars_gurad;
-
-    ImplPtr<Impl> p_impl;
 };
 
 }  // namespace libdnf

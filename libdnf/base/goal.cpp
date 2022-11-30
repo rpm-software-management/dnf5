@@ -443,7 +443,7 @@ GoalProblem Goal::Impl::add_reason_change_specs_to_goal(base::Transaction & tran
 std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     base::Transaction & transaction, GoalAction action, const std::string & spec, GoalJobSettings & settings) {
     auto sack = base->get_rpm_package_sack();
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     auto & cfg_main = base->get_config();
     bool strict = settings.resolve_strict(cfg_main);
     bool best = settings.resolve_best(cfg_main);
@@ -463,6 +463,15 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
             return {GoalProblem::NO_PROBLEM, result_queue};
         }
     }
+
+    // The correct evaluation of rich dependencies can be only performed by solver.
+    // There are some limitations - solver is unable to handle whan operation is limited to packages from the
+    // particular repository and multilib_policy `all`.
+    if (libdnf::rpm::Reldep::is_rich_dependency(spec) && settings.to_repo_ids.empty()) {
+        add_provide_install_to_goal(spec, settings);
+        return {GoalProblem::NO_PROBLEM, result_queue};
+    }
+
     bool has_just_name = nevra_pair.second.has_just_name();
     bool add_obsoletes = cfg_main.obsoletes().get_value() && has_just_name;
 
@@ -470,7 +479,13 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     installed.filter_installed();
     for (auto package_id : *installed.p_impl) {
         transaction.p_impl->add_resolve_log(
-            action, GoalProblem::ALREADY_INSTALLED, settings, spec, {pool.get_nevra(package_id)}, false);
+            action,
+            GoalProblem::ALREADY_INSTALLED,
+            settings,
+            base::LogEvent::SpecType::PACKAGE,
+            spec,
+            {pool.get_nevra(package_id)},
+            false);
     }
 
     if (multilib_policy == "all" || utils::is_glob_pattern(nevra_pair.second.get_arch().c_str())) {
@@ -478,7 +493,13 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
             query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
             if (query.empty()) {
                 transaction.p_impl->add_resolve_log(
-                    action, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
+                    action,
+                    GoalProblem::NOT_FOUND_IN_REPOSITORIES,
+                    settings,
+                    base::LogEvent::SpecType::PACKAGE,
+                    spec,
+                    {},
+                    strict);
                 return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
             }
             query |= installed;
@@ -561,7 +582,13 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                 query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
                 if (query.empty()) {
                     transaction.p_impl->add_resolve_log(
-                        action, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
+                        action,
+                        GoalProblem::NOT_FOUND_IN_REPOSITORIES,
+                        settings,
+                        base::LogEvent::SpecType::PACKAGE,
+                        spec,
+                        {},
+                        strict);
                     return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
                 }
                 query |= installed;
@@ -630,7 +657,13 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                 query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
                 if (query.empty()) {
                     transaction.p_impl->add_resolve_log(
-                        action, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
+                        action,
+                        GoalProblem::NOT_FOUND_IN_REPOSITORIES,
+                        settings,
+                        base::LogEvent::SpecType::PACKAGE,
+                        spec,
+                        {},
+                        strict);
                     return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
                 }
                 query |= installed;
@@ -679,7 +712,13 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
     query_installed.filter_installed();
     if (query_installed.empty()) {
         transaction.p_impl->add_resolve_log(
-            GoalAction::REINSTALL, GoalProblem::NOT_INSTALLED, settings, spec, {}, strict);
+            GoalAction::REINSTALL,
+            GoalProblem::NOT_INSTALLED,
+            settings,
+            base::LogEvent::SpecType::PACKAGE,
+            spec,
+            {},
+            strict);
         return strict ? GoalProblem::NOT_INSTALLED : GoalProblem::NO_PROBLEM;
     }
 
@@ -687,7 +726,13 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
     query -= query_installed;
     if (query.empty()) {
         transaction.p_impl->add_resolve_log(
-            GoalAction::REINSTALL, GoalProblem::NOT_AVAILABLE, settings, spec, {}, strict);
+            GoalAction::REINSTALL,
+            GoalProblem::NOT_AVAILABLE,
+            settings,
+            base::LogEvent::SpecType::PACKAGE,
+            spec,
+            {},
+            strict);
         return strict ? GoalProblem::NOT_AVAILABLE : GoalProblem::NO_PROBLEM;
     }
 
@@ -699,18 +744,36 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
         relevant_available_na.filter_name_arch(query_installed);
         if (!relevant_available_na.empty()) {
             transaction.p_impl->add_resolve_log(
-                GoalAction::REINSTALL, GoalProblem::INSTALLED_IN_DIFFERENT_VERSION, settings, spec, {}, strict);
+                GoalAction::REINSTALL,
+                GoalProblem::INSTALLED_IN_DIFFERENT_VERSION,
+                settings,
+                base::LogEvent::SpecType::PACKAGE,
+                spec,
+                {},
+                strict);
             return strict ? GoalProblem::INSTALLED_IN_DIFFERENT_VERSION : GoalProblem::NO_PROBLEM;
         } else {
             rpm::PackageQuery relevant_available_n(query);
             relevant_available_n.filter_name(query_installed);
             if (relevant_available_n.empty()) {
                 transaction.p_impl->add_resolve_log(
-                    GoalAction::REINSTALL, GoalProblem::NOT_INSTALLED, settings, spec, {}, strict);
+                    GoalAction::REINSTALL,
+                    GoalProblem::NOT_INSTALLED,
+                    settings,
+                    base::LogEvent::SpecType::PACKAGE,
+                    spec,
+                    {},
+                    strict);
                 return strict ? GoalProblem::NOT_INSTALLED : GoalProblem::NO_PROBLEM;
             } else {
                 transaction.p_impl->add_resolve_log(
-                    GoalAction::REINSTALL, GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec, {}, strict);
+                    GoalAction::REINSTALL,
+                    GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
+                    settings,
+                    base::LogEvent::SpecType::PACKAGE,
+                    spec,
+                    {},
+                    strict);
                 return strict ? GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE : GoalProblem::NO_PROBLEM;
             }
         }
@@ -722,7 +785,13 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
         relevant_available.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
         if (relevant_available.empty()) {
             transaction.p_impl->add_resolve_log(
-                GoalAction::REINSTALL, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, strict);
+                GoalAction::REINSTALL,
+                GoalProblem::NOT_FOUND_IN_REPOSITORIES,
+                settings,
+                base::LogEvent::SpecType::PACKAGE,
+                spec,
+                {},
+                strict);
             return strict ? GoalProblem::NOT_FOUND_IN_REPOSITORIES : GoalProblem::NO_PROBLEM;
         }
     }
@@ -730,7 +799,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
     Id current_name = 0;
     Id current_arch = 0;
     std::vector<Solvable *> tmp_solvables;
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
 
     for (auto package_id : *relevant_available.p_impl) {
         tmp_solvables.push_back(pool.id2solvable(package_id));
@@ -763,7 +832,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
 
 void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
     auto sack = base->get_rpm_package_sack();
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     auto & cfg_main = base->get_config();
 
     rpm::PackageQuery installed(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
@@ -784,7 +853,13 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 //  report aready installed packages with the same NEVRA
                 for (auto package_id : *query.p_impl) {
                     transaction.p_impl->add_resolve_log(
-                        action, GoalProblem::ALREADY_INSTALLED, settings, {}, {pool.get_nevra(package_id)}, strict);
+                        action,
+                        GoalProblem::ALREADY_INSTALLED,
+                        settings,
+                        base::LogEvent::SpecType::PACKAGE,
+                        {},
+                        {pool.get_nevra(package_id)},
+                        strict);
                     ids.push_back(package_id);
                 }
                 rpm_goal.add_install(ids, strict, best, clean_requirements_on_remove);
@@ -808,7 +883,13 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                     if (query.empty()) {
                         // Report when package with the same NEVRA is not installed
                         transaction.p_impl->add_resolve_log(
-                            action, GoalProblem::NOT_INSTALLED, settings, {pool.get_nevra(id)}, {}, strict);
+                            action,
+                            GoalProblem::NOT_INSTALLED,
+                            settings,
+                            base::LogEvent::SpecType::PACKAGE,
+                            {pool.get_nevra(id)},
+                            {},
+                            strict);
                     } else {
                         // Only installed packages can be reinstalled
                         ids_nevra_installed.push_back(id);
@@ -834,7 +915,13 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                     if (query.empty()) {
                         // Report when package with the same name is not installed
                         transaction.p_impl->add_resolve_log(
-                            action, GoalProblem::NOT_INSTALLED, settings, {pool.get_nevra(id)}, {}, false);
+                            action,
+                            GoalProblem::NOT_INSTALLED,
+                            settings,
+                            base::LogEvent::SpecType::PACKAGE,
+                            {pool.get_nevra(id)},
+                            {},
+                            false);
                         continue;
                     }
                     std::string arch = pool.get_arch(id);
@@ -847,6 +934,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                                 action,
                                 GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                                 settings,
+                                base::LogEvent::SpecType::PACKAGE,
                                 {pool.get_nevra(id)},
                                 {},
                                 false);
@@ -860,6 +948,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::ALREADY_INSTALLED,
                             settings,
+                            base::LogEvent::SpecType::PACKAGE,
                             {pool.get_nevra(id)},
                             {pool.get_name(id) + ("." + arch)},
                             false);
@@ -882,7 +971,13 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                     if (query.empty()) {
                         // Report when package with the same name is not installed
                         transaction.p_impl->add_resolve_log(
-                            action, GoalProblem::NOT_INSTALLED, settings, {pool.get_nevra(id)}, {}, strict);
+                            action,
+                            GoalProblem::NOT_INSTALLED,
+                            settings,
+                            base::LogEvent::SpecType::PACKAGE,
+                            {pool.get_nevra(id)},
+                            {},
+                            strict);
                         continue;
                     }
                     query.filter_arch({pool.get_arch(id)});
@@ -892,6 +987,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                             settings,
+                            base::LogEvent::SpecType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
                             strict);
@@ -907,6 +1003,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::INSTALLED_LOWEST_VERSION,
                             settings,
+                            base::LogEvent::SpecType::PACKAGE,
                             {pool.get_nevra(id)},
                             {name_arch},
                             strict);
@@ -997,10 +1094,17 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
             rpm::PackageQuery relevant_installed_n(all_installed);
             relevant_installed_n.filter_name(query);
             if (relevant_installed_n.empty()) {
-                transaction.p_impl->add_resolve_log(action, GoalProblem::NOT_INSTALLED, settings, spec, {}, false);
+                transaction.p_impl->add_resolve_log(
+                    action, GoalProblem::NOT_INSTALLED, settings, base::LogEvent::SpecType::PACKAGE, spec, {}, false);
             } else {
                 transaction.p_impl->add_resolve_log(
-                    action, GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE, settings, spec, {}, false);
+                    action,
+                    GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
+                    settings,
+                    base::LogEvent::SpecType::PACKAGE,
+                    spec,
+                    {},
+                    false);
             }
             return;
         }
@@ -1032,7 +1136,13 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
         query.filter_repo_id(settings.to_repo_ids, sack::QueryCmp::GLOB);
         if (query.empty()) {
             transaction.p_impl->add_resolve_log(
-                action, GoalProblem::NOT_FOUND_IN_REPOSITORIES, settings, spec, {}, false);
+                action,
+                GoalProblem::NOT_FOUND_IN_REPOSITORIES,
+                settings,
+                base::LogEvent::SpecType::PACKAGE,
+                spec,
+                {},
+                false);
             return;
         }
         query |= installed;
@@ -1050,9 +1160,23 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
     switch (action) {
         case GoalAction::UPGRADE_MINIMAL:
         case GoalAction::UPGRADE:
-            // For a correct upgrade of installonly packages keep only the latest installed packages
-            // Otherwise it will also install not the latest installonly packages
             query.filter_available();
+            // Given that we use libsolv's targeted transactions, we need to ensure that the transaction contains both
+            // the new targeted version and also the current installed version (for the upgraded package). This is
+            // because if it only contained the new version, libsolv would decide to reinstall the package even if it
+            // had just a different buildtime or vendor but the same version
+            // (https://github.com/openSUSE/libsolv/issues/287)
+            //   - Make sure that query contains both the new and installed versions (i.e. add installed versions)
+            //   - However we need to add installed versions of just the packages that are being upgraded. We don't want
+            //     to add all installed packages because it could increase the number of solutions for the transaction
+            //     (especially with --no-best) and since libsolv prefers the smallest possible upgrade it could result
+            //     in no upgrade even if there is one available. This is a problem in general but its critical with
+            //     --security transactions (https://bugzilla.redhat.com/show_bug.cgi?id=2097757)
+            all_installed.filter_name(query);
+            //   - We want to add only the latest versions of installed packages, this is specifically for installonly
+            //     packages. Otherwise if for example kernel-1 and kernel-3 were installed and present in the
+            //     transaction libsolv could decide to install kernel-2 because it is an upgrade for kernel-1 even
+            //     though we don't want it because there already is a newer version present.
             all_installed.filter_latest_evr();
             query |= all_installed;
             solv_map_to_id_queue(tmp_queue, *query.p_impl);
@@ -1065,7 +1189,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
         case GoalAction::DOWNGRADE: {
             query.filter_available();
             query.filter_downgrades();
-            auto & pool = get_pool(base);
+            auto & pool = get_rpm_pool(base);
             std::vector<Solvable *> tmp_solvables;
             for (auto pkg_id : *query.p_impl) {
                 tmp_solvables.push_back(pool.id2solvable(pkg_id));
@@ -1098,7 +1222,13 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                         name_arch.append(".");
                         name_arch.append(pool.get_arch(installed_id));
                         transaction.p_impl->add_resolve_log(
-                            action, GoalProblem::INSTALLED_LOWEST_VERSION, settings, spec, {name_arch}, false);
+                            action,
+                            GoalProblem::INSTALLED_LOWEST_VERSION,
+                            settings,
+                            base::LogEvent::SpecType::PACKAGE,
+                            spec,
+                            {name_arch},
+                            false);
                     } else {
                         rpm_goal.add_install(tmp_queue, strict, best, clean_requirements_on_remove);
                     }
@@ -1133,9 +1263,10 @@ GoalProblem Goal::Impl::add_group_install_to_goal(
         group_query |= group_query_name;
     }
     if (group_query.empty()) {
-        auto problem = transaction.p_impl->report_not_found(GoalAction::INSTALL, spec, GoalJobSettings(), strict);
+        transaction.p_impl->add_resolve_log(
+            GoalAction::INSTALL, GoalProblem::NOT_FOUND, settings, base::LogEvent::SpecType::GROUP, spec, {}, strict);
         if (strict) {
-            return problem;
+            return GoalProblem::NOT_FOUND;
         } else {
             return GoalProblem::NO_PROBLEM;
         }
@@ -1210,6 +1341,7 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
                 GoalAction::REASON_CHANGE,
                 GoalProblem::ALREADY_INSTALLED,
                 settings,
+                base::LogEvent::SpecType::PACKAGE,
                 pkg.get_nevra(),
                 {libdnf::transaction::transaction_item_reason_to_string(reason)},
                 false);
@@ -1299,7 +1431,13 @@ base::Transaction Goal::resolve() {
         p_impl->rpm_goal.write_debugdata(abs_debug_dir);
 
         transaction.p_impl->add_resolve_log(
-            GoalAction::RESOLVE, GoalProblem::WRITE_DEBUG, {}, "", {abs_debug_dir}, false);
+            GoalAction::RESOLVE,
+            GoalProblem::WRITE_DEBUG,
+            {},
+            base::LogEvent::SpecType::PACKAGE,
+            "",
+            {abs_debug_dir},
+            false);
     }
 
     transaction.p_impl->set_transaction(p_impl->rpm_goal, ret);

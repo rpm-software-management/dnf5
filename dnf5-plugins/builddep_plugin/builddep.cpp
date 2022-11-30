@@ -252,8 +252,7 @@ void BuildDepCommand::run() {
     // fill the goal with build dependencies
     auto goal = get_context().get_goal();
     for (const auto & spec : install_specs) {
-        if (spec[0] == '(') {
-            // rich dependencies require different method
+        if (libdnf::rpm::Reldep::is_rich_dependency(spec)) {
             goal->add_provide_install(spec);
         } else {
             goal->add_rpm_install(spec);

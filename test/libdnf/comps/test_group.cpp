@@ -127,7 +127,7 @@ void CompsGroupTest::test_load_defaults() {
     CPPUNIT_ASSERT_EQUAL(true, core_empty.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(false, core_empty.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core_empty.get_installed());
-    CPPUNIT_ASSERT_EQUAL(0lu, core_empty.get_packages().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, core_empty.get_packages().size());
 }
 
 
@@ -219,7 +219,7 @@ void CompsGroupTest::test_merge_with_empty() {
     CPPUNIT_ASSERT_EQUAL(true, core_empty.get_uservisible());
     CPPUNIT_ASSERT_EQUAL(false, core_empty.get_default());
     CPPUNIT_ASSERT_EQUAL(false, core_empty.get_installed());
-    CPPUNIT_ASSERT_EQUAL(0lu, core_empty.get_packages().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)0, core_empty.get_packages().size());
 }
 
 
@@ -301,7 +301,7 @@ void CompsGroupTest::test_solvables() {
 
     libdnf::comps::GroupQuery q_groups(base);
     auto groups = q_groups.list();
-    CPPUNIT_ASSERT_EQUAL(2lu, groups.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, groups.size());
 
     // Check that group core is only based on the group solvables
     // There is an environment with id core that has a translation for lang "ee", but it shouldn't be used for the group with id core.

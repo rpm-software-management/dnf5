@@ -117,8 +117,8 @@ protected:
 
 private:
     // ticks
-    int64_t ticks = 0;
-    int64_t total_ticks = 0;
+    int64_t ticks = -1;
+    int64_t total_ticks = -1;
 
     // numbers
     int32_t number = 0;
@@ -132,7 +132,7 @@ private:
 
     ProgressBarState state = ProgressBarState::READY;
 
-    int32_t percent_done = 0;
+    int32_t percent_done = -1;
     int64_t elapsed_seconds = 0;
     int64_t remaining_seconds = 0;
     int64_t average_speed = 0;

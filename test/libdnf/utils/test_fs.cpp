@@ -111,10 +111,10 @@ void UtilsFsTest::test_temp_file_operation() {
         CPPUNIT_ASSERT_GREATER(-1, temp_file.get_fd());
 
         char buf[8] = {};
-        CPPUNIT_ASSERT_EQUAL(6l, write(temp_file.get_fd(), "hello", 6));
-        CPPUNIT_ASSERT_EQUAL(0l, read(temp_file.get_fd(), buf, 6));
-        CPPUNIT_ASSERT_EQUAL(0l, lseek(temp_file.get_fd(), 0, SEEK_SET));
-        CPPUNIT_ASSERT_EQUAL(6l, read(temp_file.get_fd(), buf, 8));
+        CPPUNIT_ASSERT_EQUAL((ssize_t)6, write(temp_file.get_fd(), "hello", 6));
+        CPPUNIT_ASSERT_EQUAL((ssize_t)0, read(temp_file.get_fd(), buf, 6));
+        CPPUNIT_ASSERT_EQUAL((off_t)0, lseek(temp_file.get_fd(), 0, SEEK_SET));
+        CPPUNIT_ASSERT_EQUAL((ssize_t)6, read(temp_file.get_fd(), buf, 8));
         CPPUNIT_ASSERT_EQUAL(std::string("hello"), std::string(buf));
 
         auto & file = temp_file.open_as_file("w+");
@@ -191,7 +191,7 @@ void UtilsFsTest::test_file_simple_io() {
     // Read less than the size of the file
     file.open(path, "r");
     std::size_t res = file.read(data_r, 50);
-    CPPUNIT_ASSERT_EQUAL(50lu, res);  // in theory, the read() could read less and this would fail
+    CPPUNIT_ASSERT_EQUAL((size_t)50, res);  // in theory, the read() could read less and this would fail
     CPPUNIT_ASSERT_EQUAL(std::string(data_w, 50), std::string(data_r, 50));
     CPPUNIT_ASSERT(!file.is_at_eof());
     file.close();
@@ -199,7 +199,7 @@ void UtilsFsTest::test_file_simple_io() {
 
     // Attempt to read more than the size of the file
     res = file.read(data_r, 150);
-    CPPUNIT_ASSERT_EQUAL(100lu, res);  // in theory, the read() could read less and this would fail
+    CPPUNIT_ASSERT_EQUAL((size_t)100, res);  // in theory, the read() could read less and this would fail
     CPPUNIT_ASSERT_EQUAL(std::string(data_w, 100), std::string(data_r, 100));
     CPPUNIT_ASSERT(file.is_at_eof());
 }
@@ -390,7 +390,7 @@ void UtilsFsTest::test_file_release() {
     // make sure we can still read from the released FILE *
     char data_r[10] = {};
     std::size_t res = std::fread(data_r, sizeof(char), sizeof(data_r), file_p);
-    CPPUNIT_ASSERT_EQUAL(10lu, res);  // in theory, the read() could read less and this would fail
+    CPPUNIT_ASSERT_EQUAL((size_t)10, res);  // in theory, the read() could read less and this would fail
     CPPUNIT_ASSERT_EQUAL(data_w, std::string(data_r, sizeof(data_r)));
     CPPUNIT_ASSERT_EQUAL(0, std::fclose(file_p));
 }

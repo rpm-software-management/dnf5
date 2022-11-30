@@ -76,7 +76,7 @@ void TransactionTest::test_save_load() {
     auto base2 = new_base();
 
     auto ts_list = base2->get_transaction_history()->list_transactions({trans.get_id()});
-    CPPUNIT_ASSERT_EQUAL(1LU, ts_list.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, ts_list.size());
 
     auto trans2 = ts_list[0];
 
@@ -130,7 +130,7 @@ void TransactionTest::test_update() {
     // load the transction from the database
     auto base2 = new_base();
     auto ts_list = base2->get_transaction_history()->list_transactions({trans.get_id()});
-    CPPUNIT_ASSERT_EQUAL(1LU, ts_list.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, ts_list.size());
 
     auto trans2 = ts_list[0];
 
@@ -191,7 +191,7 @@ void TransactionTest::test_select_all() {
 
     // load the saved transaction from database and compare values
     auto ts_list = base->get_transaction_history()->list_all_transactions();
-    CPPUNIT_ASSERT_EQUAL(3LU, ts_list.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)3, ts_list.size());
 
     auto trans1_loaded = ts_list[0];
 
@@ -248,7 +248,7 @@ void TransactionTest::test_select_multiple() {
 
     // load the saved transaction from database and compare values
     auto ts_list = base->get_transaction_history()->list_transactions({1, 3});
-    CPPUNIT_ASSERT_EQUAL(2LU, ts_list.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, ts_list.size());
 
     auto trans1_loaded = ts_list[0];
 
@@ -293,7 +293,7 @@ void TransactionTest::test_select_range() {
 
     // load the saved transaction from database and compare values
     auto ts_list = base->get_transaction_history()->list_transactions(1, 2);
-    CPPUNIT_ASSERT_EQUAL(2LU, ts_list.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, ts_list.size());
 
     auto trans1_loaded = ts_list[0];
 

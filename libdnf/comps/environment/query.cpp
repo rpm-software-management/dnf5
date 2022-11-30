@@ -19,7 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/comps/environment/query.hpp"
 
-#include "comps/pool_utils.hpp"
 #include "solv/pool.hpp"
 
 #include "libdnf/base/base.hpp"
@@ -42,7 +41,7 @@ namespace libdnf::comps {
 
 
 EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
-    libdnf::solv::Pool & pool = get_pool(base);
+    libdnf::solv::CompsPool & pool = get_comps_pool(base);
 
     // Map of available environments:
     //     For each environmentid (SOLVABLE_NAME) have a vector of (repoid, solvable_id) pairs.
@@ -64,7 +63,7 @@ EnvironmentQuery::EnvironmentQuery(const BaseWeakPtr & base) : base(base) {
             continue;
         }
         // SOLVABLE_NAME is in a form "type:id"; include only solvables of type "environment"
-        solvable_name_pair = split_solvable_name(pool.lookup_str(solvable_id, SOLVABLE_NAME));
+        solvable_name_pair = solv::CompsPool::split_solvable_name(pool.lookup_str(solvable_id, SOLVABLE_NAME));
         if (solvable_name_pair.first != "environment") {
             continue;
         }

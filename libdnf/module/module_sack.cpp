@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/module/module_sack.hpp"
 
+#include "module/module_goal_private.hpp"
 #include "module/module_metadata.hpp"
 #include "module/module_sack_impl.hpp"
 #include "solv/solv_map.hpp"
@@ -28,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/module/module_errors.hpp"
 #include "libdnf/module/module_item.hpp"
+#include "libdnf/module/module_query.hpp"
 #include "libdnf/module/module_sack_weak.hpp"
 
 #include <modulemd-2.0/modulemd.h>
@@ -58,6 +60,22 @@ ModuleSack::~ModuleSack() {}
 const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::get_modules() {
     return p_impl->get_modules();
 }
+
+
+std::vector<ModuleItem *> ModuleSack::get_active_modules() {
+    std::vector<ModuleItem *> modules;
+    if (p_impl->get_modules().empty()) {
+        return modules;
+    }
+    if (!active_modules_resolved) {
+        resolve_active_module_items();
+    }
+    for (auto id_module_pair : p_impl->active_modules) {
+        modules.push_back(id_module_pair.second);
+    }
+    return modules;
+}
+
 
 void ModuleSack::add(const std::string & file_content, const std::string & repo_id) {
     ModuleMetadata md(get_base());
@@ -348,6 +366,148 @@ void ModuleSack::Impl::recompute_considered_in_pool() {
     }
 
     considered_uptodate = true;
+}
+
+
+void ModuleSack::Impl::set_active_modules(ModuleGoalPrivate & goal) {
+    if (!goal.get_transaction()) {
+        active_modules.clear();
+    }
+
+    std::set<std::string> solvable_names;
+    for (auto id : goal.list_installs()) {
+        Solvable * s = pool_id2solvable(pool, id);
+        const char * name = pool_id2str(pool, s->name);
+        solvable_names.emplace(name);
+    }
+    for (const auto & module_item : modules) {
+        std::string solvable_name = module_item->get_name_stream_context();
+        if (solvable_names.contains(solvable_name)) {
+            active_modules[module_item->id.id] = module_item.get();
+        }
+    }
+}
+
+
+std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> ModuleSack::Impl::module_solve(
+    std::vector<ModuleItem *> module_items) {
+    std::vector<std::vector<std::string>> problems;
+    if (module_items.empty()) {
+        active_modules.clear();
+        return std::make_pair(problems, ModuleSack::ModuleErrorType::NO_ERROR);
+    }
+
+    recompute_considered_in_pool();
+    make_provides_ready();
+
+    // Require both enabled and default module streams + require latest versions
+    ModuleGoalPrivate goal_strict(base->get_module_sack()->get_weak_ptr());
+    // Require only enabled module streams + require latest versions
+    ModuleGoalPrivate goal_best(base->get_module_sack()->get_weak_ptr());
+    // Require only enabled module streams
+    ModuleGoalPrivate goal(base->get_module_sack()->get_weak_ptr());
+    // No strict requirements
+    ModuleGoalPrivate goal_weak(base->get_module_sack()->get_weak_ptr());
+
+    ModuleState state;
+
+    for (const auto & module_item : module_items) {
+        // Create "module(name:stream)" provide reldep
+        const Id reldep_id =
+            pool_str2id(pool, libdnf::utils::sformat("module({})", module_item->get_name_stream()).c_str(), 1);
+
+        try {
+            state = base->p_impl->get_system_state().get_module_state(module_item->get_name());
+        } catch (libdnf::system::StateNotFoundError &) {
+            state = ModuleState::AVAILABLE;
+        }
+
+        goal_strict.add_provide_install(reldep_id, 1, 1);
+        goal_weak.add_provide_install(reldep_id, 0, 0);
+        if (state == ModuleState::ENABLED) {
+            goal_best.add_provide_install(reldep_id, 1, 1);
+            goal.add_provide_install(reldep_id, 1, 0);
+        } else {
+            goal_best.add_provide_install(reldep_id, 0, 1);
+            goal.add_provide_install(reldep_id, 0, 0);
+        }
+    }
+
+    auto ret = goal_strict.resolve();
+
+    // TODO(pkratoch): Write debugdata if debug_solver config option is set to true.
+
+    if (ret == libdnf::GoalProblem::NO_PROBLEM) {
+        set_active_modules(goal_strict);
+        return make_pair(problems, ModuleSack::ModuleErrorType::NO_ERROR);
+    }
+
+    // TODO(pkratoch): Get problems
+    // problems = goal.describe_all_problem_rules(false);
+
+    ret = goal_best.resolve();
+
+    if (ret == libdnf::GoalProblem::NO_PROBLEM) {
+        set_active_modules(goal_best);
+        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_DEFAULTS);
+    }
+
+    ret = goal.resolve();
+
+    if (ret == libdnf::GoalProblem::NO_PROBLEM) {
+        set_active_modules(goal);
+        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR_IN_LATEST);
+    }
+
+    // Conflicting modules has to be removed otherwice it could result than one of them will be active
+    for (auto conflicting_module_id : goal.list_conflicting()) {
+        excludes->add(conflicting_module_id);
+    }
+
+    ret = goal_weak.resolve();
+
+    if (ret == libdnf::GoalProblem::NO_PROBLEM) {
+        set_active_modules(goal_weak);
+        return make_pair(problems, ModuleSack::ModuleErrorType::ERROR);
+    }
+
+    auto logger = base->get_logger();
+    logger->critical("Modularity filtering totally broken\n");
+
+    active_modules.clear();
+    return make_pair(problems, ModuleSack::ModuleErrorType::CANNOT_RESOLVE_MODULES);
+}
+
+
+std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType>
+ModuleSack::resolve_active_module_items() {
+    p_impl->excludes.reset(new libdnf::solv::SolvMap(p_impl->pool->nsolvables));
+
+    auto system_state = p_impl->base->p_impl->get_system_state();
+    ModuleState state;
+    std::string enabled_stream;
+    std::vector<ModuleItem *> module_items_to_solve;
+    // Use only enabled or default modules for transaction
+    for (const auto & module_item : get_modules()) {
+        const auto & module_name = module_item->get_name();
+        try {
+            state = system_state.get_module_state(module_name);
+            enabled_stream = system_state.get_module_enabled_stream(module_name);
+        } catch (libdnf::system::StateNotFoundError &) {
+            state = ModuleState::AVAILABLE;
+        }
+        if (state == ModuleState::DISABLED) {
+            p_impl->excludes->add(module_item->id.id);
+        } else if (state == ModuleState::ENABLED && enabled_stream == module_item->get_stream()) {
+            module_items_to_solve.push_back(module_item.get());
+        } else if (get_default_stream(module_name) == module_item->get_stream()) {
+            module_items_to_solve.push_back(module_item.get());
+        }
+    }
+
+    auto problems = p_impl->module_solve(module_items_to_solve);
+    active_modules_resolved = true;
+    return problems;
 }
 
 

@@ -69,7 +69,7 @@ bool ReldepList::operator==(const ReldepList & other) const noexcept {
         }
     }
 
-    return *get_pool(p_impl->base) == *get_pool(other.p_impl->base);
+    return *get_rpm_pool(p_impl->base) == *get_rpm_pool(other.p_impl->base);
 }
 
 ReldepList & ReldepList::operator=(const ReldepList & src) {
@@ -92,7 +92,8 @@ bool ReldepList::add_reldep_with_glob(const std::string & reldep_str) {
         return false;
 
     Dataiterator di;
-    dataiterator_init(&di, *get_pool(p_impl->base), 0, 0, 0, dep_splitter.get_name_cstr(), SEARCH_STRING | SEARCH_GLOB);
+    dataiterator_init(
+        &di, *get_rpm_pool(p_impl->base), 0, 0, 0, dep_splitter.get_name_cstr(), SEARCH_STRING | SEARCH_GLOB);
     while (dataiterator_step(&di)) {
         switch (di.key->name) {
             case SOLVABLE_PROVIDES:

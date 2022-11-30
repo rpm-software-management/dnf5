@@ -35,20 +35,20 @@ AdvisoryModule & AdvisoryModule::operator=(AdvisoryModule && src) noexcept = def
 AdvisoryModule::~AdvisoryModule() = default;
 
 std::string AdvisoryModule::get_name() const {
-    return get_pool(p_impl->base).id2str(p_impl->name);
+    return get_rpm_pool(p_impl->base).id2str(p_impl->name);
 }
 
 std::string AdvisoryModule::get_stream() const {
-    return get_pool(p_impl->base).id2str(p_impl->stream);
+    return get_rpm_pool(p_impl->base).id2str(p_impl->stream);
 }
 std::string AdvisoryModule::get_version() const {
-    return get_pool(p_impl->base).id2str(p_impl->version);
+    return get_rpm_pool(p_impl->base).id2str(p_impl->version);
 }
 std::string AdvisoryModule::get_context() const {
-    return get_pool(p_impl->base).id2str(p_impl->context);
+    return get_rpm_pool(p_impl->base).id2str(p_impl->context);
 }
 std::string AdvisoryModule::get_arch() const {
-    return get_pool(p_impl->base).id2str(p_impl->arch);
+    return get_rpm_pool(p_impl->base).id2str(p_impl->arch);
 }
 std::string AdvisoryModule::get_nsvca() const {
     return std::string(get_name() + ":" + get_stream() + ":" + get_version() + ":" + get_context() + ":" + get_arch());

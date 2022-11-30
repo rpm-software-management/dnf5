@@ -37,9 +37,6 @@ class Transaction;
 
 namespace libdnf::plugin {
 
-/// Enum of all plugin hooks
-enum class HookId { LOAD_CONFIG_FROM_FILE };
-
 /// Plugin version
 struct Version {
     std::uint16_t major;
@@ -78,18 +75,24 @@ public:
     virtual void load_plugins() {}
 
     /// Plugin initialization.
+    /// Called before hooks.
     virtual void init() {}
 
+    /// The pre_base_setup hook.
+    /// It is called at the beginning of the `Base::setup` method (after the `init` hook).
     virtual void pre_base_setup() {}
 
+    /// The post_base_setup hook.
+    /// It is called at the end of the `Base::setup` method.
     virtual void post_base_setup() {}
 
+    /// The pre_transaction hook.
+    /// It is called just before the actual transaction starts.
     virtual void pre_transaction(const libdnf::base::Transaction &) {}
 
+    /// The post_transaction hook.
+    /// It is called after transactions.
     virtual void post_transaction(const libdnf::base::Transaction &) {}
-
-    /// It is called when a hook is reached. The argument describes what happened.
-    virtual bool hook(HookId) { return true; }
 
     /// Finish the plugin and release all resources obtained by the init method and in hooks.
     virtual void finish() noexcept {}

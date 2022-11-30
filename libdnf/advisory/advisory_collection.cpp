@@ -51,7 +51,7 @@ std::vector<AdvisoryModule> AdvisoryCollection::get_modules() {
 void AdvisoryCollection::get_packages(std::vector<AdvisoryPackage> & output, bool with_filemanes) {
     Dataiterator di;
     const char * filename = nullptr;
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     int count = 0;
 
     dataiterator_init(&di, *pool, 0, advisory.id, UPDATE_COLLECTIONLIST, 0, 0);
@@ -93,7 +93,7 @@ void AdvisoryCollection::get_packages(std::vector<AdvisoryPackage> & output, boo
 
 void AdvisoryCollection::get_modules(std::vector<AdvisoryModule> & output) {
     Dataiterator di;
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     int count = 0;
 
     dataiterator_init(&di, *pool, 0, advisory.id, UPDATE_COLLECTIONLIST, 0, 0);

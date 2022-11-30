@@ -99,24 +99,24 @@ AdvisoryPackage::Impl::Impl(
       base(base) {}
 
 std::string AdvisoryPackage::Impl::get_name() const {
-    return get_pool(base).id2str(name);
+    return get_rpm_pool(base).id2str(name);
 }
 
 std::string AdvisoryPackage::Impl::get_version() const {
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     return pool.split_evr(pool.id2str(evr)).v;
 }
 
 std::string AdvisoryPackage::Impl::get_evr() const {
-    return get_pool(base).id2str(evr);
+    return get_rpm_pool(base).id2str(evr);
 }
 
 std::string AdvisoryPackage::Impl::get_arch() const {
-    return get_pool(base).id2str(arch);
+    return get_rpm_pool(base).id2str(arch);
 }
 
 bool AdvisoryPackage::Impl::is_resolved_in(const libdnf::rpm::PackageSet & pkgs) const {
-    auto & pool = get_pool(base);
+    auto & pool = get_rpm_pool(base);
     auto sack = base->get_rpm_package_sack();
     auto & sorted_solvables = sack->p_impl->get_sorted_solvables();
 

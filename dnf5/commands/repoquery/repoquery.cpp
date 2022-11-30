@@ -101,6 +101,14 @@ void RepoqueryCommand::set_argument_parser() {
 
     info->add_conflict_argument(*nevra);
 
+    duplicates = std::make_unique<libdnf::cli::session::BoolOption>(
+        *this,
+        "duplicates",
+        '\0',
+        "Limit the resulting set to installed duplicate packages (i.e. more package versions for  the  same  name and "
+        "architecture). Installonly packages are excluded from this set.",
+        false);
+
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
     advisory_bugfix = std::make_unique<BugfixOption>(*this);
@@ -120,7 +128,8 @@ void RepoqueryCommand::set_argument_parser() {
 void RepoqueryCommand::configure() {
     auto & context = get_context();
     context.update_repo_load_flags_from_specs(pkg_specs);
-    context.set_load_system_repo(installed_option->get_value());
+    only_system_repo_needed = installed_option->get_value() || duplicates->get_value();
+    context.set_load_system_repo(only_system_repo_needed);
     bool updateinfo_needed = advisory_name->get_value().empty() || advisory_security->get_value() ||
                              advisory_bugfix->get_value() || advisory_enhancement->get_value() ||
                              advisory_newpackage->get_value() || advisory_severity->get_value().empty() ||
@@ -130,13 +139,13 @@ void RepoqueryCommand::configure() {
             context.get_available_repos_load_flags() | libdnf::repo::LoadFlags::UPDATEINFO);
     }
     context.set_load_available_repos(
-        available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()
+        available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !only_system_repo_needed
             ? Context::LoadAvailableRepos::ENABLED
             : Context::LoadAvailableRepos::NONE);
 }
 
 void RepoqueryCommand::load_additional_packages() {
-    if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !installed_option->get_value()) {
+    if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !only_system_repo_needed) {
         cmdline_packages = get_context().add_cmdline_packages(pkg_file_paths);
     }
 }
@@ -159,6 +168,15 @@ void RepoqueryCommand::run() {
         advisory_cve->get_value());
     if (advisories.has_value()) {
         full_package_query.filter_advisories(advisories.value(), libdnf::sack::QueryCmp::GTE);
+    }
+
+    if (duplicates->get_value()) {
+        auto & cfg_main = ctx.base.get_config();
+        const auto & installonly_packages = cfg_main.installonlypkgs().get_value();
+        auto installonly_query = full_package_query;
+        installonly_query.filter_provides(installonly_packages, libdnf::sack::QueryCmp::GLOB);
+        full_package_query -= installonly_query;
+        full_package_query.filter_duplicates();
     }
 
     if (pkg_specs.empty() && pkg_file_paths.empty()) {

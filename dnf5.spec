@@ -1,10 +1,10 @@
 %global project_version_major 5
 %global project_version_minor 0
-%global project_version_patch 0
+%global project_version_patch 1
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
-Release:        0~pre%{?dist}
+Release:        1%{?dist}
 Summary:        Command-line package manager
 License:        GPL-2.0-or-later
 URL:            https://github.com/rpm-software-management/dnf5
@@ -171,12 +171,11 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 
 %files
 %{_bindir}/dnf5
+%{_prefix}/share/dnf5
+%dir %{_sysconfdir}/dnf/dnf5-aliases.d
 %doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
-%dir %{_prefix}/lib/dnf5
-%dir %{_prefix}/lib/dnf5/aliases.d
-%config %{_prefix}/lib/dnf5/aliases.d/compatibility.conf
-%dir %{_libdir}/dnf5
-%dir %{_libdir}/dnf5/plugins
+%dir %{_libdir}/dnf5/
+%dir %{_libdir}/dnf5/plugins/
 %doc %{_libdir}/dnf5/plugins/README
 %dir %{_libdir}/libdnf5/plugins
 %dir %{_datadir}/bash-completion/
@@ -195,12 +194,12 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-environment.8.*
 %{_mandir}/man8/dnf5-group.8.*
 # TODO(jkolarik): history is not ready yet
-# %{_mandir}/man8/dnf5-history.8.*
+# %%{_mandir}/man8/dnf5-history.8.*
 %{_mandir}/man8/dnf5-install.8.*
 %{_mandir}/man8/dnf5-makecache.8.*
 %{_mandir}/man8/dnf5-mark.8.*
 # TODO(jkolarik): module is not ready yet
-# %{_mandir}/man8/dnf5-module.8.*
+# %%{_mandir}/man8/dnf5-module.8.*
 %{_mandir}/man8/dnf5-reinstall.8.*
 %{_mandir}/man8/dnf5-remove.8.*
 %{_mandir}/man8/dnf5-repo.8.*
@@ -209,10 +208,10 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_mandir}/man8/dnf5-upgrade.8.*
 %{_mandir}/man7/dnf5-comps.7.*
 # TODO(jkolarik): filtering is not ready yet
-# %{_mandir}/man7/dnf5-filtering.7.*
+# %%{_mandir}/man7/dnf5-filtering.7.*
 %{_mandir}/man7/dnf5-installroot.7.*
 # TODO(jkolarik): modularity is not ready yet
-# %{_mandir}/man7/dnf5-modularity.7.*
+# %%{_mandir}/man7/dnf5-modularity.7.*
 %{_mandir}/man7/dnf5-specs.7.*
 
 # ========== libdnf5 ==========
@@ -590,5 +589,19 @@ done
 
 
 %changelog
+* Thu Nov 24 2022 Nicola Sella <nsella@redhat.com> - 5.0.1-1
+- Fix loading known keys for RepoGpgme
+- Fix dnf5 progress_bar
+- Improve modules: conflicting packages, weak resolve, active modules resolving
+- plugins.hpp moved away from public headers and improvements logic
+
+* Wed Nov 2 2022 Nicola Sella <nsella@redhat.com> - 5.0.0-2~pre
+- Fix failing builds for i686 arch
+
+* Mon Oct 31 2022 Nicola Sella <nsella@redhat.com> - 5.0.0-1~pre
+- Add man pages to dnf5
+- Fix non x86_64 builds
+- Remove unimplemented commands
+
 * Fri Sep 16 2022 Nicola Sella - <nsella@redhat.com> - 5.0.0-0~pre
 - Dnf pre release build for Fedora

@@ -37,7 +37,7 @@ void NevraTest::test_nevra() {
     {
         auto nevras =
             libdnf::rpm::Nevra::parse("four-of-fish-8:3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
-        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
         CPPUNIT_ASSERT(nevra.get_epoch() == "8");
@@ -53,7 +53,7 @@ void NevraTest::test_nevra() {
     {
         auto nevras =
             libdnf::rpm::Nevra::parse("four-of-f:ish-3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
-        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     // cannot parse due to ':' presence twice
@@ -67,7 +67,7 @@ void NevraTest::test_nevra() {
     {
         auto nevras =
             libdnf::rpm::Nevra::parse("four-of-fish-3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
-        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
         CPPUNIT_ASSERT(nevra.get_epoch() == "");
@@ -78,7 +78,7 @@ void NevraTest::test_nevra() {
 
     {
         auto nevras = libdnf::rpm::Nevra::parse("four-of-fish-8:3.6.9", {libdnf::rpm::Nevra::Form::NEV});
-        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
         CPPUNIT_ASSERT(nevra.get_epoch() == "8");
@@ -89,7 +89,7 @@ void NevraTest::test_nevra() {
 
     {
         auto nevras = libdnf::rpm::Nevra::parse("fish-8:3.6.9", {libdnf::rpm::Nevra::Form::NEV});
-        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT_EQUAL(std::string("fish"), nevra.get_name());
         CPPUNIT_ASSERT_EQUAL(std::string("8"), nevra.get_epoch());
@@ -100,7 +100,7 @@ void NevraTest::test_nevra() {
 
     {
         auto nevras = libdnf::rpm::Nevra::parse("fish-3.6.9", {libdnf::rpm::Nevra::Form::NEV});
-        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT_EQUAL(std::string("fish"), nevra.get_name());
         CPPUNIT_ASSERT_EQUAL(std::string(""), nevra.get_epoch());
@@ -112,7 +112,7 @@ void NevraTest::test_nevra() {
 
     {
         auto nevras = libdnf::rpm::Nevra::parse("four-of-fish-3.6.9.i686", {libdnf::rpm::Nevra::Form::NA});
-        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish-3.6.9");
         CPPUNIT_ASSERT(nevra.get_epoch() == "");
@@ -123,22 +123,22 @@ void NevraTest::test_nevra() {
 
     {
         auto nevras = libdnf::rpm::Nevra::parse("name.ar-ch", {libdnf::rpm::Nevra::Form::NA});
-        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     {
         auto nevras = libdnf::rpm::Nevra::parse("name.-arch", {libdnf::rpm::Nevra::Form::NA});
-        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     {
         auto nevras = libdnf::rpm::Nevra::parse("name.", {libdnf::rpm::Nevra::Form::NA});
-        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     {
         auto nevras = libdnf::rpm::Nevra::parse("four-of-fish-3.6.9.i686", {libdnf::rpm::Nevra::Form::NEV});
-        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
         CPPUNIT_ASSERT(nevra.get_epoch() == "");
@@ -150,13 +150,13 @@ void NevraTest::test_nevra() {
     // When parsing fails return false
     {
         auto nevras = libdnf::rpm::Nevra::parse("four-of-fish", {libdnf::rpm::Nevra::Form::NA});
-        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     // When parsing fails return false => '-' after '.'
     {
         auto nevras = libdnf::rpm::Nevra::parse("four-o.f-fish", {libdnf::rpm::Nevra::Form::NA});
-        CPPUNIT_ASSERT_EQUAL(0ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)0, nevras.size());
     }
 
     // When parsing fails return false - not allowed characters '()'
@@ -170,7 +170,7 @@ void NevraTest::test_nevra() {
     {
         auto nevras =
             libdnf::rpm::Nevra::parse("four-of-fish-[01]:3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
-        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
         CPPUNIT_ASSERT(nevra.get_epoch() == "[01]");
@@ -183,7 +183,7 @@ void NevraTest::test_nevra() {
     {
         auto nevras =
             libdnf::rpm::Nevra::parse("four-of-fish-?:3.6.9-11.fc100.x86_64", {libdnf::rpm::Nevra::Form::NEVRA});
-        CPPUNIT_ASSERT_EQUAL(1ul, nevras.size());
+        CPPUNIT_ASSERT_EQUAL((size_t)1, nevras.size());
         auto & nevra = *nevras.begin();
         CPPUNIT_ASSERT(nevra.get_name() == "four-of-fish");
         CPPUNIT_ASSERT(nevra.get_epoch() == "?");

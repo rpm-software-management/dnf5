@@ -124,7 +124,7 @@ bool can_depend_on(Pool * pool, Solvable * sa, Id b) {
     return false;
 }
 
-static void same_name_subqueue(libdnf::solv::Pool & pool, Queue * in, Queue * out) {
+static void same_name_subqueue(libdnf::solv::RpmPool & pool, Queue * in, Queue * out) {
     Id el = queue_pop(in);
     Id name = pool.id2solvable(el)->name;
     queue_empty(out);
@@ -136,12 +136,12 @@ static void same_name_subqueue(libdnf::solv::Pool & pool, Queue * in, Queue * ou
 
 
 struct InstallonlyCmpData {
-    libdnf::solv::Pool & pool;
+    libdnf::solv::RpmPool & pool;
     Id running_kernel;
 };
 
 struct ObsoleteCmpData {
-    libdnf::solv::Pool & pool;
+    libdnf::solv::RpmPool & pool;
     Id obsolete;
 };
 
@@ -232,7 +232,7 @@ bool GoalPrivate::limit_installonly_packages(libdnf::solv::IdQueue & job, Id run
         return 0;
     }
 
-    auto & spool = get_pool();
+    auto & spool = get_rpm_pool();
     ::Pool * pool = *spool;
     bool reresolve = false;
 
@@ -329,7 +329,7 @@ libdnf::solv::IdQueue GoalPrivate::list_results(Id type_filter1, Id type_filter2
 
 
 libdnf::GoalProblem GoalPrivate::resolve() {
-    auto & pool = get_pool();
+    auto & pool = get_rpm_pool();
     libdnf::solv::IdQueue job(staging);
     construct_job(
         *pool,
@@ -464,7 +464,7 @@ size_t GoalPrivate::count_solver_problems() {
 }
 
 std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems() {
-    auto & pool = get_pool();
+    auto & pool = get_rpm_pool();
 
     libdnf_assert_goal_resolved();
 
@@ -595,7 +595,7 @@ libdnf::GoalProblem GoalPrivate::protected_in_removals() {
         return ret;
     }
 
-    auto & pool = get_pool();
+    auto & pool = get_rpm_pool();
 
     libdnf::solv::SolvMap pkg_remove_list(pool->nsolvables);
     for (auto index = 0; index < removes.size(); ++index) {
@@ -646,7 +646,7 @@ void GoalPrivate::set_user_installed_packages(const libdnf::solv::IdQueue & queu
 
 void GoalPrivate::add_transaction_user_installed(const libdnf::solv::IdQueue & idqueue) {
     if (!transaction_user_installed) {
-        auto & pool = get_pool();
+        auto & pool = get_rpm_pool();
         transaction_user_installed.reset(new libdnf::solv::SolvMap(pool->nsolvables));
     }
     for (const auto & id : idqueue) {
@@ -656,7 +656,7 @@ void GoalPrivate::add_transaction_user_installed(const libdnf::solv::IdQueue & i
 
 void GoalPrivate::add_transaction_group_installed(const libdnf::solv::IdQueue & idqueue) {
     if (!transaction_group_installed) {
-        auto & pool = get_pool();
+        auto & pool = get_rpm_pool();
         transaction_group_installed.reset(new libdnf::solv::SolvMap(pool->nsolvables));
     }
     for (const auto & id : idqueue) {
@@ -713,7 +713,7 @@ libdnf::solv::IdQueue GoalPrivate::list_obsoleted_by_package(Id id) {
     }
     libdnf::solv::IdQueue obsoletes;
     transaction_all_obs_pkgs(libsolv_transaction, id, &obsoletes.get_queue());
-    const ObsoleteCmpData obsoete_cmp_data{get_pool(), id};
+    const ObsoleteCmpData obsoete_cmp_data{get_rpm_pool(), id};
     obsoletes.sort(&obsq_cmp, &obsoete_cmp_data);
     return obsoletes;
 }

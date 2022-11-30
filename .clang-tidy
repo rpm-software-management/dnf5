@@ -1,5 +1,5 @@
 ---
-Checks:          '*,readability-*,-google-runtime-references,-modernize-use-trailing-return-type,-hicpp-signed-bitwise,-fuchsia*,-modernize-use-nodiscard'
+Checks:          'bugprone-*,cert-*,concurrency-*,cppcoreguidelines-*,misc-*,modernize-*,-modernize-use-trailing-return-type,-modernize-use-nodiscard,performance-*,portability-*,readability-*'
 WarningsAsErrors: ''
 HeaderFilterRegex: ''
 AnalyzeTemporaryDtors: false

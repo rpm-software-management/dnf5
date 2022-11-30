@@ -108,7 +108,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     create_comps_environment(trans);
 
     // check that there's exactly 1 environment
-    CPPUNIT_ASSERT_EQUAL(1LU, trans.get_comps_environments().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, trans.get_comps_environments().size());
 
     // save the transaction with all transaction items to the database
     (trans.*get(start{}))();
@@ -119,10 +119,10 @@ void TransactionCompsEnvironmentTest::test_save_load() {
 
     // get the written transaction
     auto ts_list = base2->get_transaction_history()->list_transactions({trans.get_id()});
-    CPPUNIT_ASSERT_EQUAL(1LU, ts_list.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, ts_list.size());
 
     auto trans2 = ts_list[0];
-    CPPUNIT_ASSERT_EQUAL(1LU, trans2.get_comps_environments().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, trans2.get_comps_environments().size());
 
     auto & env2 = trans2.get_comps_environments().at(0);
     CPPUNIT_ASSERT_EQUAL(std::string("minimal"), (env2.*get(get_environment_id{}))());
@@ -135,7 +135,7 @@ void TransactionCompsEnvironmentTest::test_save_load() {
     CPPUNIT_ASSERT_EQUAL(TransactionItemState::OK, (env2.*get(get_state{}))());
 
     // check if the environment has all expected groups in the same order as inserted
-    CPPUNIT_ASSERT_EQUAL(2LU, (env2.*get(get_groups{}))().size());
+    CPPUNIT_ASSERT_EQUAL((size_t)2, (env2.*get(get_groups{}))().size());
 
     auto & env2_group1 = (env2.*get(get_groups{}))().at(0);
     CPPUNIT_ASSERT_EQUAL(std::string("core"), (env2_group1.*get(get_group_id{}))());

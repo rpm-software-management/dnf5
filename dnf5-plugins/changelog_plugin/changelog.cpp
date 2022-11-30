@@ -116,7 +116,8 @@ void ChangelogCommand::run() {
     auto upgrades = upgrades_option->get_value();
 
     if (since > 0) {
-        std::cout << "Listing changelogs since " << std::put_time(std::localtime(&since), "%c") << std::endl;
+        const auto since_time = static_cast<time_t>(since);
+        std::cout << "Listing changelogs since " << std::put_time(std::localtime(&since_time), "%c") << std::endl;
     } else if (count != 0) {
         std::cout << "Listing only latest changelogs" << std::endl;
     } else if (upgrades) {

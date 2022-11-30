@@ -33,6 +33,9 @@ extern "C" {
 namespace libdnf::module {
 
 
+class ModuleGoalPrivate;
+
+
 class ModuleSack::Impl {
 public:
     Impl(const BaseWeakPtr & base) : base(base), module_metadata(base), pool(pool_create()) {}
@@ -65,9 +68,22 @@ public:
     void make_provides_ready();
     void recompute_considered_in_pool();
 
+    // Requires resolved goal. Takes list_installs() from goal and adds all modules with the same SOLVABLE_NAME
+    // (<name>:<stream>:<context>) into active_modules.
+    void set_active_modules(ModuleGoalPrivate & goal);
+
+    /// Resolve given module items.
+    ///
+    /// @param module_items Module Items to resolve.
+    /// @return `std::pair` of problems in resolving and ModuleErrorType.
+    /// @since 5.0
+    std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> module_solve(
+        std::vector<ModuleItem *> module_items);
+
 private:
     friend ModuleSack;
     friend ModuleItem;
+    friend ModuleGoalPrivate;
 
     BaseWeakPtr base;
     ModuleMetadata module_metadata;
@@ -87,6 +103,7 @@ private:
 
     std::map<std::string, std::string> module_defaults;
     std::unique_ptr<libdnf::solv::SolvMap> excludes;
+    std::map<Id, ModuleItem *> active_modules;
 };
 
 inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_modules() {

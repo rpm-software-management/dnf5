@@ -63,7 +63,7 @@ void PackageDownloaderTest::test_package_downloader() {
     query.filter_name({"one"});
     query.filter_version({"2"});
     query.filter_arch({"noarch"});
-    CPPUNIT_ASSERT_EQUAL(1lu, query.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, query.size());
 
     auto downloader = libdnf::repo::PackageDownloader();
 

@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "repo_downloader.hpp"
 #include "solv/id_queue.hpp"
+#include "solv/pool.hpp"
 #include "utils/fs/file.hpp"
 
 #include "libdnf/base/base_weak.hpp"
@@ -96,7 +97,7 @@ public:
     void set_needs_internalizing() { needs_internalizing = true; };
 
 private:
-    bool load_solv_cache(const char * type, int flags);
+    bool load_solv_cache(solv::Pool & pool, const char * type, int flags);
 
     /// Writes libsolv's .solv cache file with main libsolv repodata.
     void write_main(bool load_after_write);
@@ -120,11 +121,14 @@ private:
     int updateinfo_solvables_start{0};
     int updateinfo_solvables_end{0};
 
-    bool can_use_solvfile_cache(utils::fs::File & solvfile_cache);
+    bool can_use_solvfile_cache(solv::Pool & pool, utils::fs::File & solvfile_cache);
     void userdata_fill(SolvUserdata * userdata);
 
 public:
     ::Repo * repo{nullptr};  // libsolv pool retains ownership
+    // Solvables for groups and environments are kept in separate pool. It means
+    // we need also separate Repo object created in that pool.
+    ::Repo * comps_repo{nullptr};
 };
 
 }  // namespace libdnf::repo

@@ -252,6 +252,11 @@ public:
         const std::optional<std::string> & group_id,
         const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
+    /// Add group install request to the goal. The `spec` will be resolved to groups in the resolve() call.
+    /// Also packages of the types specified in setting.group_package_types be installed.
+    ///
+    /// @param spec      A string describing the Goal group install request.
+    /// @param settings  A structure to override default goal settings.
     void add_group_install(
         const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 

@@ -30,32 +30,35 @@ using namespace libdnf;
 
 static const std::string packages_contents{R"""(version = "1.0"
 [packages]
+"pkg-libs.x86_64" = {reason="Dependency"}
 "pkg.x86_64" = {reason="User"}
 "unresolvable.noarch" = {reason="Dependency"}
-"pkg-libs.x86_64" = {reason="Dependency"}
 )"""};
 
 static const std::string nevras_contents{R"""(version = "1.0"
 [nevras]
-"unresolvable-1.2-1.noarch" = {from_repo="repo2"}
-"pkg-libs-1.2-1.x86_64" = {from_repo=""}
 "pkg-1.2-1.x86_64" = {from_repo="repo1"}
+"pkg-libs-1.2-1.x86_64" = {from_repo=""}
+"unresolvable-1.2-1.noarch" = {from_repo="repo2"}
 )"""};
 
 // TODO(lukash) alphabetic sorting
 static const std::string groups_contents{R"""(version = "1.0"
 [groups]
-group-2 = {packages=["pkg1","pkg2"],userinstalled=false}
 group-1 = {packages=["foo","bar"],userinstalled=true}
+group-2 = {packages=["pkg1","pkg2"],userinstalled=false}
 )"""};
 
 static const std::string modules_contents{R"""(version = "1.0"
 [modules]
-module-2 = {installed_profiles=[],state="Disabled",enabled_stream="stream-2"}
 [modules.module-1]
+enabled_stream = "stream-1"
 installed_profiles = ["zigg","zagg"]
 state = "Enabled"
-enabled_stream = "stream-1"
+[modules.module-2]
+enabled_stream = "stream-2"
+installed_profiles = []
+state = "Disabled"
 )"""};
 
 static const std::string system_contents{R"""(version = "1.0"
@@ -170,8 +173,8 @@ void StateTest::test_state_write() {
 
     const std::string packages_contents_after_remove{R"""(version = "1.0"
 [packages]
-"unresolvable.noarch" = {reason="Dependency"}
 "pkg-libs.x86_64" = {reason="Dependency"}
+"unresolvable.noarch" = {reason="Dependency"}
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(
@@ -179,8 +182,8 @@ void StateTest::test_state_write() {
 
     const std::string nevras_contents_after_remove{R"""(version = "1.0"
 [nevras]
-"unresolvable-1.2-1.noarch" = {from_repo="repo2"}
 "pkg-libs-1.2-1.x86_64" = {from_repo=""}
+"unresolvable-1.2-1.noarch" = {from_repo="repo2"}
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(nevras_contents_after_remove, trim(libdnf::utils::fs::File(path / "nevras.toml", "r").read()));
@@ -194,7 +197,7 @@ groups = {group-2={packages=["pkg1","pkg2"],userinstalled=false}}
 
     const std::string modules_contents_after_remove{R"""(version = "1.0"
 [modules]
-module-2 = {installed_profiles=[],state="Disabled",enabled_stream="stream-2"}
+module-2 = {enabled_stream="stream-2",installed_profiles=[],state="Disabled"}
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(

@@ -6,8 +6,6 @@
 %module "libdnf5/common"
 #endif
 
-#define SWIGWORDSIZE64
-
 %include <exception.i>
 %include <stdint.i>
 %include <std_map.i>

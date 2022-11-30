@@ -57,5 +57,5 @@ void TransactionQueryTest::test_filter_id_eq() {
 
     // get the written transaction
     auto ts_list = base2->get_transaction_history()->list_transactions({trans.get_id()});
-    CPPUNIT_ASSERT_EQUAL(1LU, ts_list.size());
+    CPPUNIT_ASSERT_EQUAL((size_t)1, ts_list.size());
 }

@@ -17,7 +17,7 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "libdnf/plugin/plugins.hpp"
+#include "plugins.hpp"
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/library.hpp"
@@ -237,17 +237,6 @@ void Plugins::post_transaction(const libdnf::base::Transaction & transaction) {
             plugin->post_transaction(transaction);
         }
     }
-}
-
-bool Plugins::hook(HookId id) {
-    for (auto & plugin : plugins) {
-        if (plugin->get_enabled()) {
-            if (!plugin->hook(id)) {
-                return false;
-            }
-        }
-    }
-    return true;
 }
 
 void Plugins::finish() noexcept {

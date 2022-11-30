@@ -20,10 +20,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_PLUGIN_PLUGINS_HPP
 #define LIBDNF_PLUGIN_PLUGINS_HPP
 
-#include "iplugin.hpp"
-
 #include "libdnf/common/exception.hpp"
 #include "libdnf/conf/config_parser.hpp"
+#include "libdnf/plugin/iplugin.hpp"
 
 #include <memory>
 #include <string>
@@ -61,7 +60,6 @@ public:
     void post_base_setup();
     void pre_transaction(const libdnf::base::Transaction & transaction);
     void post_transaction(const libdnf::base::Transaction & transaction);
-    bool hook(HookId hook_id);
     void finish() noexcept;
 
 protected:
@@ -93,6 +91,7 @@ public:
     /// Call init of all allowed plugins.
     bool init();
 
+    /// Call hook of all allowed plugins.
     void pre_base_setup();
 
     void post_base_setup();
@@ -100,9 +99,6 @@ public:
     void pre_transaction(const libdnf::base::Transaction & transaction);
 
     void post_transaction(const libdnf::base::Transaction & transaction);
-
-    /// Call hook of all allowed plugins.
-    bool hook(HookId id);
 
     /// Call finish of all allowed plugins in reverse order.
     void finish() noexcept;
@@ -168,13 +164,6 @@ inline void Plugin::post_transaction(const libdnf::base::Transaction & transacti
     if (iplugin_instance) {
         iplugin_instance->post_transaction(transaction);
     }
-}
-
-inline bool Plugin::hook(HookId hook_id) {
-    if (iplugin_instance) {
-        return iplugin_instance->hook(hook_id);
-    }
-    return true;
 }
 
 inline void Plugin::finish() noexcept {

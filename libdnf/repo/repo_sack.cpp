@@ -229,7 +229,7 @@ void RepoSack::update_and_load_enabled_repos(bool load_system, LoadFlags flags) 
 
 
 void RepoSack::dump_debugdata(const std::string & dir) {
-    Solver * solver = solver_create(*get_pool(base));
+    Solver * solver = solver_create(*get_rpm_pool(base));
 
     try {
         std::filesystem::create_directory(dir);

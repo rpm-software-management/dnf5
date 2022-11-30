@@ -43,13 +43,12 @@ void print_transaction_list(std::vector<libdnf::transaction::Transaction> & ts_l
     }
 
     for (auto & ts : ts_list) {
+        const auto dt_start_time = static_cast<time_t>(ts.get_dt_start());
         struct libscols_line * ln = scols_table_new_line(table.get(), NULL);
         scols_line_set_data(ln, 0, std::to_string(ts.get_id()).c_str());
         scols_line_set_data(ln, 1, ts.get_description().c_str());
         scols_line_set_data(
-            ln,
-            2,
-            libdnf::utils::sformat("{:%F %X}", std::chrono::system_clock::from_time_t(ts.get_dt_start())).c_str());
+            ln, 2, libdnf::utils::sformat("{:%F %X}", std::chrono::system_clock::from_time_t(dt_start_time)).c_str());
         // TODO(lukash) fill the Actions(s), if we even want them?
         scols_line_set_data(ln, 3, "");
         scols_line_set_data(ln, 4, std::to_string(ts.get_packages().size()).c_str());

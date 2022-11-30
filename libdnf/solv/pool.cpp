@@ -162,4 +162,13 @@ const char * Pool::get_sourcerpm(Id id) const {
     return solvable_lookup_sourcepkg(solvable);
 }
 
+std::pair<std::string, std::string> CompsPool::split_solvable_name(std::string_view solvable_name) {
+    auto delimiter_position = solvable_name.find(":");
+    if (delimiter_position == std::string::npos) {
+        return std::pair<std::string, std::string>("", "");
+    }
+    return std::pair<std::string, std::string>(
+        solvable_name.substr(0, delimiter_position), solvable_name.substr(delimiter_position + 1, std::string::npos));
+}
+
 }  // namespace libdnf::solv

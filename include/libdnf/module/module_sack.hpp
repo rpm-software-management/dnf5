@@ -51,12 +51,32 @@ enum class ModuleState { AVAILABLE, ENABLED, DISABLED };
 /// Container with data and methods related to modules
 class ModuleSack {
 public:
+    enum class ModuleErrorType {
+        NO_ERROR = 0,
+        INFO,
+        /// Error in module defaults detected during resolvement of module dependencies
+        ERROR_IN_DEFAULTS,
+        /// Error detected during resolvement of module dependencies
+        ERROR,
+        /// Error detected during resolvement of module dependencies - Unexpected error!!!
+        CANNOT_RESOLVE_MODULES,
+        CANNOT_RESOLVE_MODULE_SPEC,
+        CANNOT_ENABLE_MULTIPLE_STREAMS,
+        CANNOT_MODIFY_MULTIPLE_TIMES_MODULE_STATE,
+        /// Problem with latest modules during resolvement of module dependencies
+        ERROR_IN_LATEST
+    };
+
     ~ModuleSack();
 
     ModuleSackWeakPtr get_weak_ptr();
 
-    /// Return module items in container
+    /// @return All module items.
+    /// @since 5.0
     const std::vector<std::unique_ptr<ModuleItem>> & get_modules();
+    /// @return Active module items. I.e. module items whose RPMs are included in the set of available packages.
+    /// @since 5.0
+    std::vector<ModuleItem *> get_active_modules();
 
     // TODO(pkratoch): Implement getting default streams and profiles.
     /// @return Default stream for given module.
@@ -66,11 +86,19 @@ public:
     /// @since 5.0
     std::vector<std::string> get_default_profiles(std::string module_name, std::string module_stream);
 
+    /// Resolve which module items are active. This means requesting all enabled streams or default streams (default
+    /// streams only from not-enabled non-disabled modules), while excluding all disabled module streams.
+    ///
+    /// @return A pair of problems in resolving to report and ModuleErrorType.
+    /// @since 5.0
+    std::pair<std::vector<std::vector<std::string>>, ModuleErrorType> resolve_active_module_items();
+
 private:
     friend class libdnf::Base;
     friend class libdnf::repo::Repo;
     friend class libdnf::repo::RepoSack;
     friend ModuleItem;
+    friend class ModuleGoalPrivate;
 
     ModuleSack(const BaseWeakPtr & base);
 
@@ -90,6 +118,8 @@ private:
     void add_defaults_from_disk();
 
     WeakPtrGuard<ModuleSack, false> data_guard;
+
+    bool active_modules_resolved = false;
 
     class Impl;
     std::unique_ptr<Impl> p_impl;

@@ -46,6 +46,9 @@ public:
 
     // TODO(dmach): add print() method
 
+    bool get_number_widget_visible() const noexcept { return number_widget.get_visible(); }
+    void set_number_widget_visible(bool value) { number_widget.set_visible(value); };
+
 protected:
     void to_stream(std::ostream & stream) override;
 

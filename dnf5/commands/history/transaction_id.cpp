@@ -80,6 +80,8 @@ std::vector<libdnf::transaction::Transaction> list_transactions_from_specs(
     std::vector<int64_t> single_ids_to_get;
     std::vector<libdnf::transaction::Transaction> result;
 
+    using trans_id_cache_it_type = std::vector<int64_t>::iterator::difference_type;
+
     for (auto & i : specs) {
         auto id_range = parse_transaction_id_range(i);
 
@@ -90,7 +92,7 @@ std::vector<libdnf::transaction::Transaction> list_transactions_from_specs(
 
             if (id_range.first < 0) {
                 if (static_cast<uint64_t>(std::abs(id_range.first)) <= trans_id_cache.size()) {
-                    id_range.first = trans_id_cache.end()[id_range.first];
+                    id_range.first = trans_id_cache.end()[static_cast<trans_id_cache_it_type>(id_range.first)];
                 } else {
                     // X in last-X goes out of range; we start with ID 0 if
                     // spec is a range, or search for ID 0 (which shouldn't
@@ -101,7 +103,7 @@ std::vector<libdnf::transaction::Transaction> list_transactions_from_specs(
 
             if (id_range.second < 0) {
                 if (static_cast<uint64_t>(std::abs(id_range.second)) <= trans_id_cache.size()) {
-                    id_range.second = trans_id_cache.end()[id_range.second];
+                    id_range.second = trans_id_cache.end()[static_cast<trans_id_cache_it_type>(id_range.second)];
                 } else {
                     // X in last-X goes out of range for a range upper
                     // boundary, we shouldn't match anything

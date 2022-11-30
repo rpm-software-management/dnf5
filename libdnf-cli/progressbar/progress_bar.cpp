@@ -33,14 +33,14 @@ ProgressBar::ProgressBar(int64_t total_ticks, const std::string & description)
 
 
 void ProgressBar::reset() {
-    ticks = 0;
-    total_ticks = 0;
+    ticks = -1;
+    total_ticks = -1;
     number = 0;
     total = 0;
     description = "";
     messages.clear();
     state = ProgressBarState::READY;
-    percent_done = 0;
+    percent_done = -1;
     elapsed_seconds = 0;
     remaining_seconds = 0;
     average_speed = 0;
@@ -88,16 +88,16 @@ void ProgressBar::update() {
         return;
     }
 
-    if (ticks >= total_ticks) {
-        percent_done = 100;
+    if (total_ticks < 0) {
+        // unknown total ticks
+        percent_done = -1;
     } else if (total_ticks == 0) {
         // can't divide by zero, consider progressbar 100% complete
         percent_done = 100;
-    } else if (total_ticks > 0) {
-        percent_done = static_cast<int32_t>(static_cast<float>(ticks) / static_cast<float>(total_ticks) * 100);
+    } else if (ticks >= total_ticks) {
+        percent_done = 100;
     } else {
-        // unknown total ticks
-        percent_done = -1;
+        percent_done = static_cast<int32_t>(static_cast<float>(ticks) / static_cast<float>(total_ticks) * 100);
     }
 
     auto now = std::chrono::high_resolution_clock::now();
