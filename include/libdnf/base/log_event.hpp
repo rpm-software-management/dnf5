@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/base/solver_problems.hpp"
+#include "libdnf/transaction/transaction_item_type.hpp"
 
 #include <optional>
 #include <set>
@@ -34,16 +35,13 @@ namespace libdnf::base {
 /// Contain information, hint, or a problem created during libdnf::Goal::resolve()
 class LogEvent {
 public:
-    /// What object type is the spec supposed to describe
-    enum class SpecType { PACKAGE, GROUP, ENVIRONMENT, MODULE };
-
     /// Public constructor
     LogEvent(
         libdnf::GoalAction action,
         libdnf::GoalProblem problem,
         const std::set<std::string> & additional_data,
         const libdnf::GoalJobSettings & settings,
-        const SpecType spec_type,
+        const libdnf::transaction::TransactionItemType spec_type,
         const std::string & spec);
     LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_problems);
     ~LogEvent() = default;
@@ -73,7 +71,7 @@ private:
         libdnf::GoalProblem problem,
         const std::set<std::string> & additional_data,
         const std::optional<libdnf::GoalJobSettings> & settings,
-        const std::optional<SpecType> & spec_type,
+        const std::optional<libdnf::transaction::TransactionItemType> & spec_type,
         const std::optional<std::string> & spec,
         const std::optional<SolverProblems> & solver_problems);
 
@@ -82,7 +80,7 @@ private:
 
     std::set<std::string> additional_data;
     std::optional<libdnf::GoalJobSettings> job_settings;
-    std::optional<SpecType> spec_type;
+    std::optional<libdnf::transaction::TransactionItemType> spec_type;
     std::optional<std::string> spec;
     std::optional<SolverProblems> solver_problems;
 };

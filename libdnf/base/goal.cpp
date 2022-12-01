@@ -503,7 +503,7 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
                 action,
                 GoalProblem::UNSUPPORTED_ACTION,
                 settings,
-                base::LogEvent::SpecType::GROUP,
+                libdnf::transaction::TransactionItemType::GROUP,
                 spec,
                 {},
                 log_level);
@@ -529,7 +529,13 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
         }
         if (group_query.empty()) {
             transaction.p_impl->add_resolve_log(
-                action, GoalProblem::NOT_FOUND, settings, base::LogEvent::SpecType::GROUP, spec, {}, log_level);
+                action,
+                GoalProblem::NOT_FOUND,
+                settings,
+                libdnf::transaction::TransactionItemType::GROUP,
+                spec,
+                {},
+                log_level);
             if (!skip_unavailable) {
                 ret |= GoalProblem::NOT_FOUND;
             }
@@ -604,7 +610,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
             action,
             GoalProblem::ALREADY_INSTALLED,
             settings,
-            base::LogEvent::SpecType::PACKAGE,
+            libdnf::transaction::TransactionItemType::PACKAGE,
             spec,
             {pool.get_nevra(package_id)},
             libdnf::Logger::Level::WARNING);
@@ -620,7 +626,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                     action,
                     GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                     settings,
-                    base::LogEvent::SpecType::PACKAGE,
+                    libdnf::transaction::TransactionItemType::PACKAGE,
                     spec,
                     {},
                     log_level);
@@ -709,7 +715,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                         action,
                         GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                         settings,
-                        base::LogEvent::SpecType::PACKAGE,
+                        libdnf::transaction::TransactionItemType::PACKAGE,
                         spec,
                         {},
                         log_level);
@@ -784,7 +790,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                         action,
                         GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                         settings,
-                        base::LogEvent::SpecType::PACKAGE,
+                        libdnf::transaction::TransactionItemType::PACKAGE,
                         spec,
                         {},
                         log_level);
@@ -840,7 +846,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
             GoalAction::REINSTALL,
             GoalProblem::NOT_INSTALLED,
             settings,
-            base::LogEvent::SpecType::PACKAGE,
+            libdnf::transaction::TransactionItemType::PACKAGE,
             spec,
             {},
             log_level);
@@ -854,7 +860,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
             GoalAction::REINSTALL,
             GoalProblem::NOT_AVAILABLE,
             settings,
-            base::LogEvent::SpecType::PACKAGE,
+            libdnf::transaction::TransactionItemType::PACKAGE,
             spec,
             {},
             log_level);
@@ -872,7 +878,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                 GoalAction::REINSTALL,
                 GoalProblem::INSTALLED_IN_DIFFERENT_VERSION,
                 settings,
-                base::LogEvent::SpecType::PACKAGE,
+                libdnf::transaction::TransactionItemType::PACKAGE,
                 spec,
                 {},
                 log_level);
@@ -885,7 +891,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                     GoalAction::REINSTALL,
                     GoalProblem::NOT_INSTALLED,
                     settings,
-                    base::LogEvent::SpecType::PACKAGE,
+                    libdnf::transaction::TransactionItemType::PACKAGE,
                     spec,
                     {},
                     log_level);
@@ -895,7 +901,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                     GoalAction::REINSTALL,
                     GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                     settings,
-                    base::LogEvent::SpecType::PACKAGE,
+                    libdnf::transaction::TransactionItemType::PACKAGE,
                     spec,
                     {},
                     log_level);
@@ -913,7 +919,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                 GoalAction::REINSTALL,
                 GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                 settings,
-                base::LogEvent::SpecType::PACKAGE,
+                libdnf::transaction::TransactionItemType::PACKAGE,
                 spec,
                 {},
                 log_level);
@@ -985,7 +991,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                         action,
                         GoalProblem::ALREADY_INSTALLED,
                         settings,
-                        base::LogEvent::SpecType::PACKAGE,
+                        libdnf::transaction::TransactionItemType::PACKAGE,
                         {},
                         {pool.get_nevra(package_id)},
                         log_level);
@@ -1017,7 +1023,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::NOT_INSTALLED,
                             settings,
-                            base::LogEvent::SpecType::PACKAGE,
+                            libdnf::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
                             log_level);
@@ -1049,7 +1055,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::NOT_INSTALLED,
                             settings,
-                            base::LogEvent::SpecType::PACKAGE,
+                            libdnf::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
                             libdnf::Logger::Level::WARNING);
@@ -1065,7 +1071,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                                 action,
                                 GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                                 settings,
-                                base::LogEvent::SpecType::PACKAGE,
+                                libdnf::transaction::TransactionItemType::PACKAGE,
                                 {pool.get_nevra(id)},
                                 {},
                                 libdnf::Logger::Level::WARNING);
@@ -1079,7 +1085,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::ALREADY_INSTALLED,
                             settings,
-                            base::LogEvent::SpecType::PACKAGE,
+                            libdnf::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {pool.get_name(id) + ("." + arch)},
                             libdnf::Logger::Level::WARNING);
@@ -1107,7 +1113,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::NOT_INSTALLED,
                             settings,
-                            base::LogEvent::SpecType::PACKAGE,
+                            libdnf::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
                             log_level);
@@ -1120,7 +1126,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                             settings,
-                            base::LogEvent::SpecType::PACKAGE,
+                            libdnf::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
                             log_level);
@@ -1136,7 +1142,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             action,
                             GoalProblem::INSTALLED_LOWEST_VERSION,
                             settings,
-                            base::LogEvent::SpecType::PACKAGE,
+                            libdnf::transaction::TransactionItemType::PACKAGE,
                             {pool.get_nevra(id)},
                             {name_arch},
                             log_level);
@@ -1231,7 +1237,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                     action,
                     GoalProblem::NOT_INSTALLED,
                     settings,
-                    base::LogEvent::SpecType::PACKAGE,
+                    libdnf::transaction::TransactionItemType::PACKAGE,
                     spec,
                     {},
                     libdnf::Logger::Level::WARNING);
@@ -1240,7 +1246,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                     action,
                     GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE,
                     settings,
-                    base::LogEvent::SpecType::PACKAGE,
+                    libdnf::transaction::TransactionItemType::PACKAGE,
                     spec,
                     {},
                     libdnf::Logger::Level::WARNING);
@@ -1278,7 +1284,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                 action,
                 GoalProblem::NOT_FOUND_IN_REPOSITORIES,
                 settings,
-                base::LogEvent::SpecType::PACKAGE,
+                libdnf::transaction::TransactionItemType::PACKAGE,
                 spec,
                 {},
                 libdnf::Logger::Level::WARNING);
@@ -1364,7 +1370,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                             action,
                             GoalProblem::INSTALLED_LOWEST_VERSION,
                             settings,
-                            base::LogEvent::SpecType::PACKAGE,
+                            libdnf::transaction::TransactionItemType::PACKAGE,
                             spec,
                             {name_arch},
                             libdnf::Logger::Level::WARNING);
@@ -1513,7 +1519,7 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
                 GoalAction::REASON_CHANGE,
                 GoalProblem::ALREADY_INSTALLED,
                 settings,
-                base::LogEvent::SpecType::PACKAGE,
+                libdnf::transaction::TransactionItemType::PACKAGE,
                 pkg.get_nevra(),
                 {libdnf::transaction::transaction_item_reason_to_string(reason)},
                 libdnf::Logger::Level::WARNING);
@@ -1633,7 +1639,7 @@ base::Transaction Goal::resolve() {
             GoalAction::RESOLVE,
             GoalProblem::WRITE_DEBUG,
             {},
-            base::LogEvent::SpecType::PACKAGE,
+            libdnf::transaction::TransactionItemType::PACKAGE,
             "",
             {abs_debug_dir},
             libdnf::Logger::Level::WARNING);
