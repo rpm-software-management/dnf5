@@ -116,7 +116,14 @@ GoalProblem Transaction::Impl::report_not_found(
     auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, settings, true);
     if (!nevra_pair_reports.first) {
         // RPM was not excluded or there is no related srpm
-        add_resolve_log(action, GoalProblem::NOT_FOUND, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, strict);
+        add_resolve_log(
+            action,
+            GoalProblem::NOT_FOUND,
+            settings,
+            libdnf::transaction::TransactionItemType::PACKAGE,
+            pkg_spec,
+            {},
+            strict);
         if (settings.report_hint) {
             rpm::PackageQuery hints(base);
             if (action == GoalAction::REMOVE) {
@@ -134,7 +141,7 @@ GoalProblem Transaction::Impl::report_not_found(
                         action,
                         GoalProblem::HINT_ICASE,
                         settings,
-                        LogEvent::SpecType::PACKAGE,
+                        libdnf::transaction::TransactionItemType::PACKAGE,
                         pkg_spec,
                         {(*icase.begin()).get_name()},
                         false);
@@ -152,7 +159,7 @@ GoalProblem Transaction::Impl::report_not_found(
                     action,
                     GoalProblem::HINT_ALTERNATIVES,
                     settings,
-                    LogEvent::SpecType::PACKAGE,
+                    libdnf::transaction::TransactionItemType::PACKAGE,
                     pkg_spec,
                     hints,
                     false);
@@ -162,11 +169,25 @@ GoalProblem Transaction::Impl::report_not_found(
     }
     query.filter_repo_id({"src", "nosrc"}, sack::QueryCmp::NEQ);
     if (query.empty()) {
-        add_resolve_log(action, GoalProblem::ONLY_SRC, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, strict);
+        add_resolve_log(
+            action,
+            GoalProblem::ONLY_SRC,
+            settings,
+            libdnf::transaction::TransactionItemType::PACKAGE,
+            pkg_spec,
+            {},
+            strict);
         return GoalProblem::ONLY_SRC;
     }
     // TODO(jmracek) make difference between regular excludes and modular excludes
-    add_resolve_log(action, GoalProblem::EXCLUDED, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, strict);
+    add_resolve_log(
+        action,
+        GoalProblem::EXCLUDED,
+        settings,
+        libdnf::transaction::TransactionItemType::PACKAGE,
+        pkg_spec,
+        {},
+        strict);
     return GoalProblem::EXCLUDED;
 }
 
@@ -174,7 +195,7 @@ void Transaction::Impl::add_resolve_log(
     GoalAction action,
     GoalProblem problem,
     const GoalJobSettings & settings,
-    const LogEvent::SpecType spec_type,
+    const libdnf::transaction::TransactionItemType spec_type,
     const std::string & spec,
     const std::set<std::string> & additional_data,
     bool strict) {
