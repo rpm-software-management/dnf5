@@ -67,7 +67,7 @@ public:
         GoalAction action,
         GoalProblem problem,
         const GoalJobSettings & settings,
-        const LogEvent::SpecType spec_type,
+        const libdnf::transaction::TransactionItemType spec_type,
         const std::string & spec,
         const std::set<std::string> & additional_data,
         libdnf::Logger::Level log_level);

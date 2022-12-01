@@ -33,7 +33,7 @@ LogEvent::LogEvent(
     libdnf::GoalProblem problem,
     const std::set<std::string> & additional_data,
     const libdnf::GoalJobSettings & settings,
-    const SpecType spec_type,
+    const libdnf::transaction::TransactionItemType spec_type,
     const std::string & spec)
     : action(action),
       problem(problem),
@@ -66,7 +66,7 @@ std::string LogEvent::to_string(
     libdnf::GoalProblem problem,
     const std::set<std::string> & additional_data,
     const std::optional<libdnf::GoalJobSettings> & settings,
-    const std::optional<LogEvent::SpecType> & spec_type,
+    const std::optional<libdnf::transaction::TransactionItemType> & spec_type,
     const std::optional<std::string> & spec,
     const std::optional<SolverProblems> & solver_problems) {
     std::string ret;
@@ -76,16 +76,16 @@ std::string LogEvent::to_string(
             if (action == GoalAction::REMOVE) {
                 std::string spec_type_str;
                 switch (*spec_type) {
-                    case LogEvent::SpecType::PACKAGE:
+                    case libdnf::transaction::TransactionItemType::PACKAGE:
                         spec_type_str = _("packages");
                         break;
-                    case LogEvent::SpecType::GROUP:
+                    case libdnf::transaction::TransactionItemType::GROUP:
                         spec_type_str = _("groups");
                         break;
-                    case LogEvent::SpecType::ENVIRONMENT:
+                    case libdnf::transaction::TransactionItemType::ENVIRONMENT:
                         spec_type_str = _("environmental groups");
                         break;
-                    case LogEvent::SpecType::MODULE:
+                    case libdnf::transaction::TransactionItemType::MODULE:
                         spec_type_str = _("modules");
                         break;
                 }
