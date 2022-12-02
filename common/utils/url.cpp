@@ -28,7 +28,7 @@ bool is_url(std::string path) {
         if (ch == ':' || ch == '/') {
             break;
         }
-        ch = static_cast<char>(std::tolower(ch));
+        ch = static_cast<char>(std::tolower(static_cast<unsigned char>(ch)));
     }
     return path.starts_with("file://") || path.starts_with("http://") || path.starts_with("ftp://") ||
            path.starts_with("https://");
