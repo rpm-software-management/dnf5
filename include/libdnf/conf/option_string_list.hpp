@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "option.hpp"
 
+#include <optional>
+#include <regex>
 #include <unordered_set>
 #include <vector>
 
@@ -55,6 +57,14 @@ public:
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
 
+    /// Adds items from an another container.
+    /// New items are stored in the container value and the runtime priority is set as this is intended to use only through the API.
+    void add(const ValueType & items);
+
+    /// Adds new item to the container.
+    /// New item is stored in the container value and the runtime priority is set as this is intended to use only through the API.
+    void add_item(const std::string & item);
+
     /// Gets the stored value.
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValue()
     const ValueType & get_value() const;
@@ -80,10 +90,18 @@ public:
     std::string to_string(const ValueType & value) const;
 
 protected:
+    /// Tests new container item value and throws exception if the item value is not allowed.
+    void test_item(const std::string & item) const;
+
+    std::optional<std::regex> regex_matcher;
     std::string regex;
     bool icase;
     ValueType default_value;
     ValueType value;
+
+private:
+    void init_regex_matcher();
+    void test_item_worker(const std::string & item) const;
 };
 
 template <typename T>
