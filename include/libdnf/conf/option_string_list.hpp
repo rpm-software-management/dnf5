@@ -22,26 +22,28 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "option.hpp"
 
+#include <unordered_set>
 #include <vector>
 
 
 namespace libdnf {
 
-/// Option that stores list of strings.
+/// Option that stores a container of strings. The type of the container is a template parameter.
 /// Support default value, and check of an input value using the regular expression
 /// @replaces libdnf:conf/OptionStringList.hpp:class:OptionStringList
-class OptionStringList : public Option {
+template <typename T>
+class OptionStringContainer : public Option {
 public:
-    using ValueType = std::vector<std::string>;
+    using ValueType = T;
 
-    explicit OptionStringList(const ValueType & default_value);
-    OptionStringList(const ValueType & default_value, std::string regex, bool icase);
-    explicit OptionStringList(const std::string & default_value);
-    OptionStringList(const std::string & default_value, std::string regex, bool icase);
+    explicit OptionStringContainer(const ValueType & default_value);
+    OptionStringContainer(const ValueType & default_value, std::string regex, bool icase);
+    explicit OptionStringContainer(const std::string & default_value);
+    OptionStringContainer(const std::string & default_value, std::string regex, bool icase);
 
     /// Makes copy (clone) of this object.
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.clone()
-    OptionStringList * clone() const override;
+    OptionStringContainer * clone() const override;
 
     /// Sets new value and priority (source).
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
@@ -67,7 +69,7 @@ public:
 
     /// Tests input value and throws exception if the value is not allowed.
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.test(const std::vector<std::string> & value)
-    void test(const std::vector<std::string> & value) const;
+    void test(const ValueType & value) const;
 
     /// Parses input string and returns result.
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.fromString(const std::string & value)
@@ -84,21 +86,28 @@ protected:
     ValueType value;
 };
 
-inline OptionStringList * OptionStringList::clone() const {
-    return new OptionStringList(*this);
+template <typename T>
+inline OptionStringContainer<T> * OptionStringContainer<T>::clone() const {
+    return new OptionStringContainer<T>(*this);
 }
 
-inline const OptionStringList::ValueType & OptionStringList::get_value() const {
+template <typename T>
+inline const T & OptionStringContainer<T>::get_value() const {
     return value;
 }
 
-inline const OptionStringList::ValueType & OptionStringList::get_default_value() const {
+template <typename T>
+inline const T & OptionStringContainer<T>::get_default_value() const {
     return default_value;
 }
 
-inline std::string OptionStringList::get_value_string() const {
+template <typename T>
+inline std::string OptionStringContainer<T>::get_value_string() const {
     return to_string(value);
 }
+
+using OptionStringList = OptionStringContainer<std::vector<std::string>>;
+using OptionStringSet = OptionStringContainer<std::unordered_set<std::string>>;
 
 }  // namespace libdnf
 

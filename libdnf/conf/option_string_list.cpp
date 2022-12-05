@@ -25,13 +25,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-OptionStringList::OptionStringList(const ValueType & default_value)
+template <typename T>
+OptionStringContainer<T>::OptionStringContainer(const ValueType & default_value)
     : Option(Priority::DEFAULT),
       icase(false),
       default_value(default_value),
       value(default_value) {}
 
-OptionStringList::OptionStringList(const ValueType & default_value, std::string regex, bool icase)
+template <typename T>
+OptionStringContainer<T>::OptionStringContainer(const ValueType & default_value, std::string regex, bool icase)
     : Option(Priority::DEFAULT),
       regex(std::move(regex)),
       icase(icase),
@@ -40,11 +42,15 @@ OptionStringList::OptionStringList(const ValueType & default_value, std::string 
     test(default_value);
 }
 
-OptionStringList::OptionStringList(const std::string & default_value) : Option(Priority::DEFAULT), icase(false) {
+template <typename T>
+OptionStringContainer<T>::OptionStringContainer(const std::string & default_value)
+    : Option(Priority::DEFAULT),
+      icase(false) {
     this->value = this->default_value = from_string(default_value);
 }
 
-OptionStringList::OptionStringList(const std::string & default_value, std::string regex, bool icase)
+template <typename T>
+OptionStringContainer<T>::OptionStringContainer(const std::string & default_value, std::string regex, bool icase)
     : Option(Priority::DEFAULT),
       regex(std::move(regex)),
       icase(icase) {
@@ -53,7 +59,8 @@ OptionStringList::OptionStringList(const std::string & default_value, std::strin
     value = this->default_value;
 }
 
-void OptionStringList::test(const std::vector<std::string> & value) const {
+template <typename T>
+void OptionStringContainer<T>::test(const ValueType & value) const {
     if (regex.empty()) {
         return;
     }
@@ -71,16 +78,17 @@ void OptionStringList::test(const std::vector<std::string> & value) const {
     }
 }
 
-OptionStringList::ValueType OptionStringList::from_string(const std::string & value) const {
-    std::vector<std::string> tmp;
+template <typename T>
+T OptionStringContainer<T>::from_string(const std::string & value) const {
+    ValueType tmp;
     auto start = value.find_first_not_of(' ');
     while (start != std::string::npos && start < value.length()) {
         auto end = value.find_first_of(" ,\n", start);
         if (end == std::string::npos) {
-            tmp.push_back(value.substr(start));
+            tmp.insert(tmp.end(), value.substr(start));
             break;
         }
-        tmp.push_back(value.substr(start, end - start));
+        tmp.insert(tmp.end(), value.substr(start, end - start));
         start = value.find_first_not_of(' ', end + 1);
         if (start != std::string::npos && value[start] == ',' && value[end] == ' ') {
             end = start;
@@ -93,7 +101,8 @@ OptionStringList::ValueType OptionStringList::from_string(const std::string & va
     return tmp;
 }
 
-void OptionStringList::set(Priority priority, const ValueType & value) {
+template <typename T>
+void OptionStringContainer<T>::set(Priority priority, const ValueType & value) {
     assert_not_locked();
 
     if (priority >= get_priority()) {
@@ -103,11 +112,13 @@ void OptionStringList::set(Priority priority, const ValueType & value) {
     }
 }
 
-void OptionStringList::set(Priority priority, const std::string & value) {
+template <typename T>
+void OptionStringContainer<T>::set(Priority priority, const std::string & value) {
     set(priority, from_string(value));
 }
 
-std::string OptionStringList::to_string(const ValueType & value) const {
+template <typename T>
+std::string OptionStringContainer<T>::to_string(const ValueType & value) const {
     std::ostringstream oss;
     bool next{false};
     for (auto & val : value) {
@@ -120,5 +131,8 @@ std::string OptionStringList::to_string(const ValueType & value) const {
     }
     return oss.str();
 }
+
+template class OptionStringContainer<std::vector<std::string>>;
+template class OptionStringContainer<std::unordered_set<std::string>>;
 
 }  // namespace libdnf

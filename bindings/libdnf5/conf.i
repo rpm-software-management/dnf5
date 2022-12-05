@@ -56,6 +56,8 @@
 %include "libdnf/conf/option_seconds.hpp"
 %include "libdnf/conf/option_string.hpp"
 %include "libdnf/conf/option_string_list.hpp"
+%template(OptionStringList) libdnf::OptionStringContainer<std::vector<std::string>>;
+%template(OptionStringSet) libdnf::OptionStringContainer<std::unordered_set<std::string>>;
 
 %ignore libdnf::OptionPathNotFoundError;
 %include "libdnf/conf/option_path.hpp"
@@ -64,6 +66,7 @@
 %template(OptionChildBool) libdnf::OptionChild<libdnf::OptionBool>;
 %template(OptionChildString) libdnf::OptionChild<libdnf::OptionString>;
 %template(OptionChildStringList) libdnf::OptionChild<libdnf::OptionStringList>;
+%template(OptionChildStringSet) libdnf::OptionChild<libdnf::OptionStringSet>;
 %template(OptionChildNumberInt32) libdnf::OptionChild<libdnf::OptionNumber<std::int32_t>>;
 %template(OptionChildNumberUInt32) libdnf::OptionChild<libdnf::OptionNumber<std::uint32_t>>;
 %template(OptionChildNumberFloat) libdnf::OptionChild<libdnf::OptionNumber<float>>;
