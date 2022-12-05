@@ -68,7 +68,7 @@ private:
 /// Exception used when non-standard exit code should be returned
 class CommandExitError : public Error {
 public:
-    /// Constructs the error with given exit code and with custom formated error
+    /// Constructs the error with given exit code and with custom formatted error
     /// message.
     ///
     /// @param exit_code The exit code

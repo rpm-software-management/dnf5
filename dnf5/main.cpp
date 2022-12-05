@@ -155,14 +155,14 @@ void RootCommand::set_argument_parser() {
                                     const char * value) {
         auto val = strchr(value + 1, '=');
         if (!val) {
-            throw std::runtime_error(fmt::format("setopt: Badly formated argument value \"{}\"", value));
+            throw std::runtime_error(fmt::format("setopt: Badly formatted argument value \"{}\"", value));
         }
         auto key = std::string(value, val);
         auto dot_pos = key.rfind('.');
         if (dot_pos != std::string::npos) {
             if (dot_pos == key.size() - 1) {
                 throw std::runtime_error(
-                    std::string("setopt: Badly formated argument value: Last key character cannot be '.': ") + value);
+                    std::string("setopt: Badly formatted argument value: Last key character cannot be '.': ") + value);
             }
             // Store repository option to vector. Use it later when repositories configuration will be loaded.
             ctx.setopts.emplace_back(key, val + 1);
@@ -190,7 +190,7 @@ void RootCommand::set_argument_parser() {
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
             auto val = strchr(value + 1, '=');
             if (!val) {
-                throw std::runtime_error(fmt::format("setvar: Badly formated argument value \"{}\"", value));
+                throw std::runtime_error(fmt::format("setvar: Badly formatted argument value \"{}\"", value));
             }
             auto name = std::string(value, val);
             ctx.base.get_vars()->set(name, val + 1, libdnf::Vars::Priority::COMMANDLINE);
