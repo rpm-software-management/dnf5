@@ -122,7 +122,7 @@ public:
     size_t count_solver_problems();
 
     ///  Return all solver problems
-    ///  Results are not formated, translated, and deduplucated
+    ///  Results are not formatted, translated, and deduplucated
     ///  Throw UnresolvedGoal when Goal is not resolved
     ///  Return std::vector<std::tuple<ProblemRules, Id source, Id dep, Id target, std::string Description for unknown rule>>>
     std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> get_problems();

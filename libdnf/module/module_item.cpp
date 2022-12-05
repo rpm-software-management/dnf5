@@ -321,7 +321,7 @@ void ModuleItem::create_solvable() {
 void ModuleItem::create_dependencies() const {
     Pool * pool = module_sack->p_impl->pool;
     Solvable * solvable = pool_id2solvable(pool, id.id);
-    std::string req_formated;
+    std::string req_formatted;
 
     for (const auto & dependency : get_module_dependencies()) {
         auto module_name = dependency.get_module_name();
@@ -329,24 +329,24 @@ void ModuleItem::create_dependencies() const {
         for (const auto & stream : dependency.get_streams()) {
             // If the stream require starts with "-", create conflict with the stream, otherwise, remember the stream require
             if (stream.find('-', 0) != std::string::npos) {
-                req_formated = libdnf::utils::sformat("module({}:{}", module_name, stream.substr(1));
-                solvable_add_deparray(solvable, SOLVABLE_CONFLICTS, pool_str2id(pool, req_formated.c_str(), 1), 0);
+                req_formatted = libdnf::utils::sformat("module({}:{}", module_name, stream.substr(1));
+                solvable_add_deparray(solvable, SOLVABLE_CONFLICTS, pool_str2id(pool, req_formatted.c_str(), 1), 0);
             } else {
-                req_formated = libdnf::utils::sformat("module({}:{})", module_name, stream);
-                required_streams.push_back(req_formated);
+                req_formatted = libdnf::utils::sformat("module({}:{})", module_name, stream);
+                required_streams.push_back(req_formatted);
             }
         }
         // If there are no required streams, require the whole module
         // If there is exactly one required stream, require the stream
         // If there are more required streams, add a rich dependency to require any of the streams
         if (required_streams.empty()) {
-            req_formated = libdnf::utils::sformat("module({})", module_name);
-            solvable_add_deparray(solvable, SOLVABLE_REQUIRES, pool_str2id(pool, req_formated.c_str(), 1), -1);
+            req_formatted = libdnf::utils::sformat("module({})", module_name);
+            solvable_add_deparray(solvable, SOLVABLE_REQUIRES, pool_str2id(pool, req_formatted.c_str(), 1), -1);
         } else if (required_streams.size() == 1) {
             solvable_add_deparray(solvable, SOLVABLE_REQUIRES, pool_str2id(pool, required_streams[0].c_str(), 1), -1);
         } else {
-            req_formated = libdnf::utils::sformat("({})", utils::string::join(required_streams, " or "));
-            Id dep_id = pool_parserpmrichdep(pool, req_formated.c_str());
+            req_formatted = libdnf::utils::sformat("({})", utils::string::join(required_streams, " or "));
+            Id dep_id = pool_parserpmrichdep(pool, req_formatted.c_str());
             if (!dep_id) {
                 throw std::runtime_error("Cannot parse module requires");
             }

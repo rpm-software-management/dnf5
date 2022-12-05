@@ -757,16 +757,16 @@ inline static void filter_version_internal(
     const char * c_pattern,
     libdnf::solv::SolvMap & candidates,
     libdnf::solv::SolvMap & filter_result) {
-    char * formated_c_pattern = solv_dupjoin(c_pattern, "-0", nullptr);
+    char * formatted_c_pattern = solv_dupjoin(c_pattern, "-0", nullptr);
     for (Id candidate_id : candidates) {
         std::string vr(pool.split_evr(pool.get_evr(candidate_id)).v);
         vr.append("-0");
-        int cmp = pool.evrcmp_str(vr.c_str(), formated_c_pattern, EVRCMP_COMPARE);
+        int cmp = pool.evrcmp_str(vr.c_str(), formatted_c_pattern, EVRCMP_COMPARE);
         if (cmp_eq(cmp)) {
             filter_result.add_unsafe(candidate_id);
         }
     }
-    solv_free(formated_c_pattern);
+    solv_free(formatted_c_pattern);
 }
 
 void PackageQuery::filter_version(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {
@@ -825,16 +825,16 @@ inline static void filter_release_internal(
     const char * c_pattern,
     libdnf::solv::SolvMap & candidates,
     libdnf::solv::SolvMap & filter_result) {
-    char * formated_c_pattern = solv_dupjoin("0-", c_pattern, nullptr);
+    char * formatted_c_pattern = solv_dupjoin("0-", c_pattern, nullptr);
     for (Id candidate_id : candidates) {
         std::string vr("0-");
         vr.append(pool.split_evr(pool.get_evr(candidate_id)).r);
-        int cmp = pool.evrcmp_str(vr.c_str(), formated_c_pattern, EVRCMP_COMPARE);
+        int cmp = pool.evrcmp_str(vr.c_str(), formatted_c_pattern, EVRCMP_COMPARE);
         if (cmp_eq(cmp)) {
             filter_result.add_unsafe(candidate_id);
         }
     }
-    solv_free(formated_c_pattern);
+    solv_free(formatted_c_pattern);
 }
 
 void PackageQuery::filter_release(const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type) {

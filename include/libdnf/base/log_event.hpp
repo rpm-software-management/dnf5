@@ -56,7 +56,7 @@ public:
     const std::optional<libdnf::GoalJobSettings> & get_job_settings() const { return job_settings; };
     /// @return SPEC if it is relevant for the particular GoalProblem
     const std::optional<std::string> & get_spec() const { return spec; };
-    /// @return Additional information (internal), that are required for formated string
+    /// @return Additional information (internal), that are required for formatted string
     const std::optional<std::set<std::string>> & get_additional_data() const { return additional_data; };
     /// @return SolverProblems if they are relevant for the particular GoalProblem
     const std::optional<SolverProblems> & get_solver_problems() const { return solver_problems; };
