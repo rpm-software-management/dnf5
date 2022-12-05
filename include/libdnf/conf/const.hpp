@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CONF_CONST_HPP
 
 #include <string>
+#include <unordered_set>
 #include <vector>
 
 
@@ -50,6 +51,15 @@ const std::vector<std::string> INSTALLONLYPKGS{
     "multiversion(kernel)"};
 
 constexpr const char * BUGTRACKER = "https://bugzilla.redhat.com/enter_bug.cgi?product=Fedora&component=dnf";
+
+constexpr const char * METADATA_TYPE_COMPS = "comps";
+constexpr const char * METADATA_TYPE_FILELISTS = "filelists";
+constexpr const char * METADATA_TYPE_OTHER = "other";
+constexpr const char * METADATA_TYPE_PRESTO = "presto";
+constexpr const char * METADATA_TYPE_UPDATEINFO = "updateinfo";
+
+const std::unordered_set<std::string> OPTIONAL_METADATA_TYPES{
+    METADATA_TYPE_COMPS, METADATA_TYPE_FILELISTS, METADATA_TYPE_OTHER, METADATA_TYPE_PRESTO, METADATA_TYPE_UPDATEINFO};
 
 }  // namespace libdnf
 
