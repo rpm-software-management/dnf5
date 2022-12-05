@@ -23,6 +23,7 @@
 }
 
 %{
+    #include "libdnf/conf/const.hpp"
     #include "libdnf/conf/option_child.hpp"
     #include "libdnf/conf/config_main.hpp"
     #include "libdnf/conf/config_parser.hpp"
@@ -36,6 +37,8 @@
 #define final
 
 %include "libdnf/version.hpp"
+
+%include "libdnf/conf/const.hpp"
 
 %ignore libdnf::OptionError;
 %ignore libdnf::OptionInvalidValueError;

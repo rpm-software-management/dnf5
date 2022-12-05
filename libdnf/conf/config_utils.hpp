@@ -40,7 +40,7 @@ static void option_T_list_append(T & option, Option::Priority priority, const st
             }
         } else {
             auto orig_value = option.get_value();
-            orig_value.push_back(item);
+            orig_value.insert(orig_value.end(), item);
             option.set(add_priority, orig_value);
         }
         first = false;

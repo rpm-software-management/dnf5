@@ -186,7 +186,8 @@ class ConfigMain::Impl {
     OptionBool debug_solver{false};
     OptionStringList installonlypkgs{INSTALLONLYPKGS};
     OptionStringList group_package_types{GROUP_PACKAGE_TYPES};
-
+    OptionStringSet optional_metadata_types{
+        std::unordered_set<std::string>{libdnf::METADATA_TYPE_COMPS, libdnf::METADATA_TYPE_UPDATEINFO}};
     OptionNumber<std::uint32_t> installonly_limit{3, 0, [](const std::string & value) -> std::uint32_t {
                                                       if (value == "<off>") {
                                                           return 0;
@@ -530,6 +531,15 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("deltarpm", deltarpm);
     owner.opt_binds().add("deltarpm_percentage", deltarpm_percentage);
     owner.opt_binds().add("skip_if_unavailable", skip_if_unavailable);
+
+    owner.opt_binds().add(
+        "optional_metadata_types",
+        optional_metadata_types,
+        [&](Option::Priority priority, const std::string & value) {
+            option_T_list_append(optional_metadata_types, priority, value);
+        },
+        nullptr,
+        true);
 }
 
 ConfigMain::ConfigMain() {
@@ -713,6 +723,13 @@ OptionStringList & ConfigMain::group_package_types() {
 }
 const OptionStringList & ConfigMain::group_package_types() const {
     return p_impl->group_package_types;
+}
+
+OptionStringSet & ConfigMain::optional_metadata_types() {
+    return p_impl->optional_metadata_types;
+}
+const OptionStringSet & ConfigMain::optional_metadata_types() const {
+    return p_impl->optional_metadata_types;
 }
 
 OptionNumber<std::uint32_t> & ConfigMain::installonly_limit() {

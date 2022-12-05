@@ -92,6 +92,8 @@ public:
     const OptionStringList & installonlypkgs() const;
     OptionStringList & group_package_types();
     const OptionStringList & group_package_types() const;
+    OptionStringSet & optional_metadata_types();
+    const OptionStringSet & optional_metadata_types() const;
 
     //  NOTE: If you set this to 2, then because it keeps the current
     // kernel it means if you ever install an "old" kernel it'll get rid
