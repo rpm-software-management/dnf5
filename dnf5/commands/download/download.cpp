@@ -85,7 +85,7 @@ void DownloadCommand::configure() {
         pkg_specs.push_back(option->get_value());
     }
 
-    context.update_repo_load_flags_from_specs(pkg_specs);
+    context.update_repo_metadata_from_specs(pkg_specs);
     if (resolve_option->get_value() && !alldeps_option->get_value()) {
         context.set_load_system_repo(true);
     } else if (!resolve_option->get_value() && alldeps_option->get_value()) {

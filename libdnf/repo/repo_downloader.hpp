@@ -26,7 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/repo/config_repo.hpp"
-#include "libdnf/repo/load_flags.hpp"
+#include "libdnf/repo/repo.hpp"
 #include "libdnf/repo/repo_callbacks.hpp"
 
 #include <librepo/librepo.h>
@@ -57,11 +57,10 @@ public:
     static constexpr const char * MD_FILENAME_GROUP = "group";
     static constexpr const char * MD_FILENAME_MODULES = "modules";
 
-    RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config);
+    RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, Repo::Type repo_type);
 
     ~RepoDownloader();
 
-    void set_load_flags(libdnf::repo::LoadFlags value) { load_flags = value; }
     void download_metadata(const std::string & destdir);
     bool is_metalink_in_sync();
     bool is_repomd_in_sync();
@@ -93,15 +92,16 @@ private:
     std::string get_persistdir() const;
     void add_countme_flag(LibrepoHandle & handle);
 
+    std::unordered_set<std::string> get_optional_metadata() const;
+
     libdnf::BaseWeakPtr base;
     const ConfigRepo & config;
+    Repo::Type repo_type;
     RepoPgp pgp;
 
     std::unique_ptr<RepoCallbacks> callbacks;
 
     // download input
-    LoadFlags load_flags = LoadFlags::ALL;
-    std::set<std::string> additional_metadata;
     bool preserve_remote_time = false;
     int max_mirror_tries = 0;  // try all mirrors
     std::map<std::string, std::string> substitutions;

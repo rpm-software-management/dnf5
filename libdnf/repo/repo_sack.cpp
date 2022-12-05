@@ -97,7 +97,7 @@ RepoWeakPtr RepoSack::get_system_repo() {
 }
 
 
-void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, LoadFlags flags) {
+void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
     std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
     std::exception_ptr except_ptr;                   // for pass exception from thread_sack_loader to main thread,
                                                      // a default-constructed std::exception_ptr is a null pointer
@@ -124,7 +124,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, LoadFlags 
                     break;  // nullptr mark - work is done, or exception in main thread
                 }
 
-                repo->load(flags);
+                repo->load();
                 ++num_repos_loaded;
             }
         } catch (std::runtime_error & ex) {
@@ -172,7 +172,6 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, LoadFlags 
         if (repo->get_type() != libdnf::repo::Repo::Type::AVAILABLE) {
             continue;
         }
-        repo->set_load_flags(flags);
         catch_thread_sack_loader_exceptions();
         try {
             repo->fetch_metadata();
@@ -208,7 +207,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, LoadFlags 
 }
 
 
-void RepoSack::update_and_load_enabled_repos(bool load_system, LoadFlags flags) {
+void RepoSack::update_and_load_enabled_repos(bool load_system) {
     if (load_system) {
         // create the system repository if it does not exist
         base->get_repo_sack()->get_system_repo();
@@ -221,7 +220,7 @@ void RepoSack::update_and_load_enabled_repos(bool load_system, LoadFlags flags) 
         repos.filter_type(Repo::Type::SYSTEM, libdnf::sack::QueryCmp::NEQ);
     }
 
-    update_and_load_repos(repos, flags);
+    update_and_load_repos(repos);
 
     // TODO(jmracek) Replace by call that will resolve active modules and apply modular filterring
     base->get_module_sack()->p_impl->module_filtering();

@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/string.hpp"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/conf/const.hpp"
 #include "libdnf/repo/repo_errors.hpp"
 
 #include <librepo/librepo.h>
@@ -128,9 +129,10 @@ LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error)
       code(lr_error->code) {}
 
 
-RepoDownloader::RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config)
+RepoDownloader::RepoDownloader(const libdnf::BaseWeakPtr & base, const ConfigRepo & config, Repo::Type repo_type)
     : base(base),
       config(config),
+      repo_type(repo_type),
       pgp(base, config) {}
 
 RepoDownloader::~RepoDownloader() = default;
@@ -435,30 +437,30 @@ LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirr
 void RepoDownloader::common_handle_setup(LibrepoHandle & h) {
     std::vector<const char *> dlist;
 
+    auto optional_metadata = get_optional_metadata();
+
+    dlist.push_back(MD_FILENAME_PRIMARY);
 #ifdef MODULEMD
     dlist.push_back(MD_FILENAME_MODULES);
 #endif
-
-    if (any(load_flags & LoadFlags::PRIMARY)) {
-        dlist.push_back(MD_FILENAME_PRIMARY);
-    }
-    if (any(load_flags & LoadFlags::FILELISTS)) {
+    if (optional_metadata.extract(libdnf::METADATA_TYPE_FILELISTS)) {
         dlist.push_back(MD_FILENAME_FILELISTS);
     }
-    if (any(load_flags & LoadFlags::OTHER)) {
+    if (optional_metadata.extract(libdnf::METADATA_TYPE_OTHER)) {
         dlist.push_back(MD_FILENAME_OTHER);
     }
-    if (any(load_flags & LoadFlags::PRESTO)) {
+    if (optional_metadata.extract(libdnf::METADATA_TYPE_PRESTO)) {
         dlist.push_back(MD_FILENAME_PRESTODELTA);
     }
-    if (any(load_flags & LoadFlags::COMPS)) {
+    if (optional_metadata.extract(libdnf::METADATA_TYPE_COMPS)) {
         dlist.push_back(MD_FILENAME_GROUP_GZ);
     }
-    if (any(load_flags & LoadFlags::UPDATEINFO)) {
+    if (optional_metadata.extract(libdnf::METADATA_TYPE_UPDATEINFO)) {
         dlist.push_back(MD_FILENAME_UPDATEINFO);
     }
 
-    for (auto & item : additional_metadata) {
+    // download the rest metadata added by 3rd parties
+    for (auto & item : optional_metadata) {
         dlist.push_back(item.c_str());
     }
     dlist.push_back(nullptr);
@@ -734,6 +736,16 @@ void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
 
     // Save the cookie
     utils::fs::File(file_path, "w").write(utils::sformat("{} {} {} {}", COUNTME_VERSION, epoch, win, budget));
+}
+
+
+// TODO(jkolarik): currently all metadata are loaded for system repo, maybe we want it configurable?
+std::unordered_set<std::string> RepoDownloader::get_optional_metadata() const {
+    if (repo_type == Repo::Type::SYSTEM) {
+        return libdnf::OPTIONAL_METADATA_TYPES;
+    } else {
+        return config.get_main_config().optional_metadata_types().get_value();
+    }
 }
 
 

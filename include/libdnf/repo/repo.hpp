@@ -23,7 +23,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define MODULEMD
 
 #include "config_repo.hpp"
-#include "load_flags.hpp"
 #include "repo_callbacks.hpp"
 
 #include "libdnf/base/base_weak.hpp"
@@ -152,11 +151,7 @@ public:
     /// Loads the repository objects into sacks.
     ///
     /// Also writes the libsolv's solv/solvx cache files.
-    ///
-    /// @param flags Types of repodata to be loaded. Loads all metadata by default. Used only
-    ///              if repository type is `Type::AVAILABLE`.
-    // TODO(jrohel): Provide/use configuration options for flags?
-    void load(libdnf::repo::LoadFlags flags = libdnf::repo::LoadFlags::ALL);
+    void load();
 
     /// Append a rpm database into the system repository. The type of the repo must be Type::SYSTEM.
     // TODO(jrohel) this will add packages with conflicting rpmdb ids, which will break some operations
@@ -171,10 +166,6 @@ public:
     /// If enabled, only packages listed in the "includepkgs" will be used from the repository.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setUseIncludes(bool enabled)
     void set_use_includes(bool enabled);
-
-    /// Determine which repodata types to download.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.setLoadMetadataOther(bool value)
-    void set_load_flags(libdnf::repo::LoadFlags value);
 
     /// Returns repository cost
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getCost()
@@ -208,20 +199,6 @@ public:
     /// Gets age of the local cache
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getAge()
     int64_t get_age() const;
-
-    /// Ask for additional repository metadata type to download.
-    /// Given metadata are appended to the default metadata set when repository is downloaded
-    /// @param metadataType metadata type (filelists, other, productid...)
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.addMetadataTypeToDownload(const std::string &metadataType)
-    void add_metadata_type_to_download(const std::string & metadata_type);
-
-    /// Stop asking for this additional repository metadata type.
-    /// Given metadata_type is no longer downloaded by default when this repository is downloaded.
-    /// TODO(jrohel): Enable better control of downloaded metadata. Add posibility to remove all not only additional metadata.
-    /// TODO(jrohel): Add method for get registered metadata type for download.
-    /// @param metadataType metadata type (filelists, other, productid...)
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.removeMetadataTypeFromDownload(const std::string &metadataType)
-    void remove_metadata_type_from_download(const std::string & metadata_type);
 
     /// Return path to the particular downloaded repository metadata in cache
     /// @param metadataType metadata type (filelists, other, productid...)
@@ -373,8 +350,8 @@ private:
 
     void make_solv_repo();
 
-    void load_available_repo(libdnf::repo::LoadFlags flags);
-    void load_system_repo(libdnf::repo::LoadFlags flags);
+    void load_available_repo();
+    void load_system_repo();
 
     void internalize();
 

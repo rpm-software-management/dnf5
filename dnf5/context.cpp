@@ -31,6 +31,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/tty.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/base/goal.hpp>
+#include <libdnf/conf/const.hpp>
 #include <libdnf/repo/file_downloader.hpp>
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/rpm/package_query.hpp>
@@ -237,18 +238,19 @@ void Context::print_info(const char * msg) {
 }
 
 
-void Context::update_repo_load_flags_from_specs(const std::vector<std::string> & pkg_specs) {
+void Context::update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs) {
+    // TODO(jkolarik): unify this behavior with internal libdnf detection of file specs
     // if a pkg_spec contains '/', it's a path and we need to load filelists
     for (auto & spec : pkg_specs) {
         if (spec.find("/") != std::string::npos) {
-            available_repos_load_flags = available_repos_load_flags | libdnf::repo::LoadFlags::FILELISTS;
+            base.get_config().optional_metadata_types().add_item(libdnf::METADATA_TYPE_FILELISTS);
             break;
         }
     }
 }
 
 
-void Context::load_repos(bool load_system, libdnf::repo::LoadFlags flags) {
+void Context::load_repos(bool load_system) {
     libdnf::repo::RepoQuery repos(base);
     repos.filter_enabled(true);
     repos.filter_type(libdnf::repo::Repo::Type::SYSTEM, libdnf::sack::QueryCmp::NEQ);
@@ -260,7 +262,7 @@ void Context::load_repos(bool load_system, libdnf::repo::LoadFlags flags) {
     }
 
     print_info("Updating and loading repositories:");
-    base.get_repo_sack()->update_and_load_enabled_repos(load_system, flags);
+    base.get_repo_sack()->update_and_load_enabled_repos(load_system);
     print_info("Repositories loaded.");
 }
 
@@ -966,6 +968,8 @@ std::vector<std::string> match_specs(
         try {
             // create rpm repositories according configuration files
             base.get_repo_sack()->create_repos_from_system_configuration();
+            base.get_config().optional_metadata_types().set(
+                libdnf::Option::Priority::RUNTIME, std::unordered_set<std::string>{});
 
             ctx.apply_repository_setopts();
 
@@ -977,7 +981,7 @@ std::vector<std::string> match_specs(
                 repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
             }
 
-            ctx.load_repos(false, libdnf::repo::LoadFlags::PRIMARY);
+            ctx.load_repos(false);
         } catch (...) {
             // Ignores errors when completing available packages, other completions may still work.
         }
