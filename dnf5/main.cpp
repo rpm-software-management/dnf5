@@ -669,7 +669,7 @@ int main(int argc, char * argv[]) try {
         command->configure();
         {
             if (context.get_load_available_repos() != dnf5::Context::LoadAvailableRepos::NONE) {
-                context.load_repos(context.get_load_system_repo(), context.get_available_repos_load_flags());
+                context.load_repos(context.get_load_system_repo());
             } else if (context.get_load_system_repo()) {
                 context.base.get_repo_sack()->get_system_repo()->load();
                 // TODO(lukash) this is inconvenient, we should try to call it automatically at the right time in libdnf

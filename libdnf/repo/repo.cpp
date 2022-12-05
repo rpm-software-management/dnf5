@@ -28,6 +28,7 @@ constexpr const char * REPOID_CHARS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmno
 #include "utils/string.hpp"
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/conf/const.hpp"
 #include "libdnf/logger/logger.hpp"
 
 extern "C" {
@@ -91,7 +92,7 @@ Repo::Repo(const BaseWeakPtr & base, const std::string & id, Repo::Type type)
     : base(base),
       config(base->get_config(), id),
       type(type),
-      downloader(new RepoDownloader(base, config)) {
+      downloader(new RepoDownloader(base, config, type)) {
     if (type == Type::AVAILABLE) {
         auto idx = verify_id(id);
         if (idx != std::string::npos) {
@@ -230,13 +231,13 @@ void Repo::download_metadata(const std::string & destdir) {
     downloader->download_metadata(destdir);
 }
 
-void Repo::load(LoadFlags flags) {
+void Repo::load() {
     make_solv_repo();
 
     if (type == Type::AVAILABLE) {
-        load_available_repo(flags);
+        load_available_repo();
     } else if (type == Type::SYSTEM) {
-        load_system_repo(flags);
+        load_system_repo();
     }
 
     solv_repo->set_needs_internalizing();
@@ -265,10 +266,6 @@ bool Repo::get_use_includes() const {
 
 void Repo::set_use_includes(bool enabled) {
     use_includes = enabled;
-}
-
-void Repo::set_load_flags(LoadFlags value) {
-    downloader->set_load_flags(value);
 }
 
 int Repo::get_cost() const {
@@ -319,14 +316,6 @@ int Repo::get_expires_in() const {
 
 void Repo::set_substitutions(const std::map<std::string, std::string> & substitutions) {
     downloader->substitutions = substitutions;
-}
-
-void Repo::add_metadata_type_to_download(const std::string & metadata_type) {
-    downloader->additional_metadata.insert(metadata_type);
-}
-
-void Repo::remove_metadata_type_from_download(const std::string & metadata_type) {
-    downloader->additional_metadata.erase(metadata_type);
 }
 
 std::string Repo::get_metadata_path(const std::string & metadata_type) {
@@ -433,7 +422,7 @@ void Repo::make_solv_repo() {
 }
 
 
-void Repo::load_available_repo(LoadFlags flags) {
+void Repo::load_available_repo() {
     auto primary_fn = downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY);
     if (primary_fn.empty()) {
         throw RepoError(M_("Failed to load repository: \"primary\" data not present or in unsupported format"));
@@ -441,23 +430,25 @@ void Repo::load_available_repo(LoadFlags flags) {
 
     solv_repo->load_repo_main(downloader->repomd_filename, primary_fn);
 
-    if (any(flags & LoadFlags::FILELISTS)) {
+    auto optional_metadata = config.get_main_config().optional_metadata_types().get_value();
+
+    if (optional_metadata.contains(libdnf::METADATA_TYPE_FILELISTS)) {
         solv_repo->load_repo_ext(RepodataType::FILELISTS, *downloader.get());
     }
 
-    if (any(flags & LoadFlags::OTHER)) {
+    if (optional_metadata.contains(libdnf::METADATA_TYPE_OTHER)) {
         solv_repo->load_repo_ext(RepodataType::OTHER, *downloader.get());
     }
 
-    if (any(flags & LoadFlags::PRESTO)) {
+    if (optional_metadata.contains(libdnf::METADATA_TYPE_PRESTO)) {
         solv_repo->load_repo_ext(RepodataType::PRESTO, *downloader.get());
     }
 
-    if (any(flags & LoadFlags::UPDATEINFO)) {
+    if (optional_metadata.contains(libdnf::METADATA_TYPE_UPDATEINFO)) {
         solv_repo->load_repo_ext(RepodataType::UPDATEINFO, *downloader.get());
     }
 
-    if (any(flags & LoadFlags::COMPS)) {
+    if (optional_metadata.contains(libdnf::METADATA_TYPE_COMPS)) {
         solv_repo->load_repo_ext(RepodataType::COMPS, *downloader.get());
     }
 
@@ -504,12 +495,10 @@ void Repo::load_available_repo(LoadFlags flags) {
 }
 
 
-void Repo::load_system_repo(LoadFlags flags) {
+// TODO(jkolarik): currently all metadata are loaded for system repo, maybe we want to have more control about that
+void Repo::load_system_repo() {
     solv_repo->load_system_repo();
-
-    if (any(flags & LoadFlags::COMPS)) {
-        solv_repo->load_system_repo_ext(RepodataType::COMPS);
-    }
+    solv_repo->load_system_repo_ext(RepodataType::COMPS);
 }
 
 

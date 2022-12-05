@@ -39,6 +39,9 @@ class BaseTestCase(unittest.TestCase):
         self.base.get_config().cachedir().set(
             libdnf5.conf.Option.Priority_RUNTIME,
             os.path.join(self.temp_dir, "cache"))
+        self.base.get_config().optional_metadata_types().set(
+            libdnf5.conf.Option.Priority_RUNTIME, 
+            libdnf5.conf.OPTIONAL_METADATA_TYPES)
 
         self.base.setup()
 

@@ -29,6 +29,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/environment/query.hpp"
 #include "libdnf/comps/group/group.hpp"
 #include "libdnf/comps/group/query.hpp"
+#include "libdnf/conf/const.hpp"
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package_query.hpp"
 
@@ -226,6 +227,7 @@ void BaseTestCase::setUp() {
 
     base.get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
     base.get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
+    base.get_config().optional_metadata_types().set(libdnf::Option::Priority::RUNTIME, libdnf::OPTIONAL_METADATA_TYPES);
 
     base.get_vars()->set("arch", "x86_64");
 

@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/group/group.hpp>
 #include <libdnf/comps/group/query.hpp>
+#include <libdnf/conf/const.hpp>
 
 namespace dnf5 {
 
@@ -43,7 +44,7 @@ void GroupListCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.set_available_repos_load_flags(libdnf::repo::LoadFlags::PRIMARY | libdnf::repo::LoadFlags::COMPS);
+    context.base.get_config().optional_metadata_types().add_item(libdnf::METADATA_TYPE_COMPS);
 }
 
 void GroupListCommand::run() {

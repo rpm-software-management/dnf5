@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "changelog.hpp"
 
+#include <libdnf/conf/const.hpp>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package.hpp>
 #include <libdnf/rpm/package_query.hpp>
@@ -105,7 +106,7 @@ void ChangelogCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.set_available_repos_load_flags(libdnf::repo::LoadFlags::ALL);
+    context.base.get_config().optional_metadata_types().add(libdnf::OPTIONAL_METADATA_TYPES);
 }
 
 void ChangelogCommand::run() {
