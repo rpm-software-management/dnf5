@@ -21,8 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-mark-domain.h"
 
-#include <regex>
-
 namespace libdnf {
 
 template <typename T>
@@ -39,6 +37,7 @@ OptionStringContainer<T>::OptionStringContainer(const ValueType & default_value,
       icase(icase),
       default_value(default_value),
       value(default_value) {
+    init_regex_matcher();
     test(default_value);
 }
 
@@ -54,9 +53,40 @@ OptionStringContainer<T>::OptionStringContainer(const std::string & default_valu
     : Option(Priority::DEFAULT),
       regex(std::move(regex)),
       icase(icase) {
+    init_regex_matcher();
     this->default_value = from_string(default_value);
     test(this->default_value);
     value = this->default_value;
+}
+
+template <typename T>
+void OptionStringContainer<T>::init_regex_matcher() {
+    if (regex.empty()) {
+        return;
+    }
+
+    regex_matcher = std::regex(
+        regex,
+        std::regex::nosubs | std::regex::extended | (icase ? std::regex::icase : std::regex_constants::ECMAScript));
+}
+
+template <typename T>
+void OptionStringContainer<T>::test_item_worker(const std::string & item) const {
+    if (!std::regex_match(item, *regex_matcher)) {
+        throw OptionValueNotAllowedError(
+            M_("Input item value \"{}\" not allowed, allowed values for this option are defined by regular expression "
+               "\"{}\""),
+            item,
+            regex);
+    }
+}
+
+template <typename T>
+void OptionStringContainer<T>::test_item(const std::string & item) const {
+    if (regex.empty()) {
+        return;
+    }
+    test_item_worker(item);
 }
 
 template <typename T>
@@ -64,17 +94,8 @@ void OptionStringContainer<T>::test(const ValueType & value) const {
     if (regex.empty()) {
         return;
     }
-    std::regex re(
-        regex,
-        std::regex::nosubs | std::regex::extended | (icase ? std::regex::icase : std::regex_constants::ECMAScript));
     for (const auto & val : value) {
-        if (!std::regex_match(val, re)) {
-            throw OptionValueNotAllowedError(
-                M_("Input value \"{}\" not allowed, allowed values for this option are defined by regular expression "
-                   "\"{}\""),
-                val,
-                regex);
-        }
+        test_item_worker(val);
     }
 }
 
@@ -115,6 +136,30 @@ void OptionStringContainer<T>::set(Priority priority, const ValueType & value) {
 template <typename T>
 void OptionStringContainer<T>::set(Priority priority, const std::string & value) {
     set(priority, from_string(value));
+}
+
+template <typename T>
+void OptionStringContainer<T>::add(const ValueType & items) {
+    assert_not_locked();
+
+    test(items);
+    for (const auto & item : items) {
+        value.insert(value.end(), item);
+    }
+    if (get_priority() < Priority::RUNTIME) {
+        set_priority(Priority::RUNTIME);
+    }
+}
+
+template <typename T>
+void OptionStringContainer<T>::add_item(const std::string & item) {
+    assert_not_locked();
+
+    test_item(item);
+    value.insert(value.end(), item);
+    if (get_priority() < Priority::RUNTIME) {
+        set_priority(Priority::RUNTIME);
+    }
 }
 
 template <typename T>
