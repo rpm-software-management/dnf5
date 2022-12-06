@@ -22,11 +22,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "common/sack/query_cmp_private.hpp"
 #include "package_query_impl.hpp"
 #include "package_set_impl.hpp"
-#include "utils/utils_internal.hpp"
+#include "utils/convert.hpp"
 
 #include "libdnf/advisory/advisory_query.hpp"
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/utils/patterns.hpp"
 
 extern "C" {
 #include <solv/evr.h>
