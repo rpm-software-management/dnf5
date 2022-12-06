@@ -30,12 +30,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_impl.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
-#include "utils/utils_internal.hpp"
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/reldep.hpp"
+#include "libdnf/utils/patterns.hpp"
 
 #include <filesystem>
 #include <iostream>

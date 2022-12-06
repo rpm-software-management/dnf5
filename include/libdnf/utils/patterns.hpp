@@ -17,41 +17,29 @@ You should have received a copy of the GNU Lesser General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-
-#ifndef LIBDNF_UTILS_UTILS_INTERNAL_HPP
-#define LIBDNF_UTILS_UTILS_INTERNAL_HPP
-
-
-#include <ctype.h>
-
-#include <cstring>
-#include <string>
-
+#ifndef LIBDNF_UTILS_PATTERNS_HPP
+#define LIBDNF_UTILS_PATTERNS_HPP
 
 namespace libdnf::utils {
 
+/// @brief Check if a given pattern is a GLOB.
+///
+/// @param pattern Text pattern to be test
+/// @return True if a given pattern is a GLOB
 inline bool is_glob_pattern(const char * pattern) {
     return strpbrk(pattern, "*[?") != nullptr;
 }
 
-/// @brief Test if pattern is file path
-/// Return true if pattern start with "/" or pattern[0] == '*' && pattern[1] == '/'
-static inline bool is_file_pattern(const std::string & pattern) {
+/// Return true if given pattern is a file path
+
+/// @brief Check if a given pattern is a file path.
+///
+/// @param pattern Text pattern to be test
+/// @return True if a given pattern is a file path
+inline bool is_file_pattern(const std::string & pattern) {
     return pattern[0] == '/' || (pattern[0] == '*' && pattern[1] == '/');
 }
 
-inline std::string to_lowercase(const std::string & source) {
-    auto length = source.size();
-    std::string result;
-    result.reserve(length);
-    for (unsigned index = 0; index < length; ++index) {
-        result += static_cast<char>(tolower(source[index]));
-    }
-    return result;
-}
-
-
 }  // namespace libdnf::utils
 
-
-#endif  // LIBDNF_UTILS_UTILS_INTERNAL_HPP
+#endif  // LIBDNF_UTILS_PATTERNS_HPP

@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/module/module_query.hpp"
 
 #include "module/module_sack_impl.hpp"
-#include "utils/utils_internal.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/module/module_item.hpp"

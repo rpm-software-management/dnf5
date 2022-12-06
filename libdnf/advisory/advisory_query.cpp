@@ -25,10 +25,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "common/sack/query_cmp_private.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
-#include "utils/utils_internal.hpp"
 
 #include "libdnf/advisory/advisory_set.hpp"
 #include "libdnf/rpm/package_set.hpp"
+#include "libdnf/utils/patterns.hpp"
 
 #include <solv/evr.h>
 
