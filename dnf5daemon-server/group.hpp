@@ -17,21 +17,25 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
-#include "dbus_goal_wrapper.hpp"
+#ifndef DNF5DAEMON_SERVER_GROUP_HPP
+#define DNF5DAEMON_SERVER_GROUP_HPP
 
-#include <libdnf/transaction/transaction_item_type.hpp>
+#include "dbus.hpp"
 
-namespace dnfdaemon::client {
+#include <libdnf/comps/group/group.hpp>
 
-DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> transaction) {
-    for (auto & ti : transaction) {
-        auto object_type = libdnf::transaction::transaction_item_type_from_string(std::get<0>(ti));
-        if (object_type == libdnf::transaction::TransactionItemType::PACKAGE) {
-            transaction_packages.push_back(DbusTransactionPackageWrapper(ti));
-        } else if (object_type == libdnf::transaction::TransactionItemType::GROUP) {
-            transaction_groups.push_back(DbusTransactionGroupWrapper(ti));
-        }
-    }
-}
+#include <string>
+#include <vector>
 
-}  // namespace dnfdaemon::client
+// group attributes available to be retrieved
+enum class GroupAttribute {
+    groupid,
+    name,
+    description
+    // TODO(mblaha): translated_name, translated_description, packages, reason
+};
+
+dnfdaemon::KeyValueMap group_to_map(
+    const libdnf::comps::Group & libdnf_group, const std::vector<std::string> & attributes);
+
+#endif
