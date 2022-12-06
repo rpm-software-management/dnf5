@@ -97,6 +97,14 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
             if (tspkg.get_reason_change_group_id()) {
                 trans_item_attrs.emplace("reason_change_group_id", *tspkg.get_reason_change_group_id());
             }
+            auto replaces = tspkg.get_replaces();
+            if (replaces.size() > 0) {
+                std::vector<int> replaces_ids{};
+                for (auto & r : replaces) {
+                    replaces_ids.emplace_back(r.get_id().id);
+                }
+                trans_item_attrs.emplace("replaces", replaces_ids);
+            }
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
                 transaction_item_type_to_string(libdnf::transaction::TransactionItemType::PACKAGE),
                 transaction_item_action_to_string(tspkg.get_action()),
