@@ -34,8 +34,12 @@ enum class RepoStatus { NOT_READY, PENDING, READY, ERROR };
 enum class ResolveResult { NO_PROBLEM, WARNING, ERROR };
 
 using DbusTransactionItem = sdbus::Struct<
-    unsigned int,  //action
-    KeyValueMap>;
+    std::string,   // libdnf::transaction::TransactionItemType
+    std::string,   // libdnf::transaction::TransactionItemAction
+    std::string,   // libdnf::transaction::TransactionItemReason
+    KeyValueMap,   // other transaction item attributes - e.g. group id for REASON_CHANGE to GROUP,
+                   // packages that are replaced by this transaction item
+    KeyValueMap>;  // transaction object (package / group / module)
 
 using Changelog = sdbus::Struct<int64_t, std::string, std::string>;
 

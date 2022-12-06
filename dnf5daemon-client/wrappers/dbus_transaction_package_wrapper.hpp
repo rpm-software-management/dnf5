@@ -34,10 +34,9 @@ namespace dnfdaemon::client {
 class DbusTransactionPackageWrapper {
 public:
     explicit DbusTransactionPackageWrapper(const dnfdaemon::DbusTransactionItem & dti)
-        : package(std::get<1>(dti)),
-          action(static_cast<libdnf::transaction::TransactionItemAction>(std::get<0>(dti))),
-          // TODO(lukash) reason needs to be added to dbus
-          reason(libdnf::transaction::TransactionItemReason::NONE) {}
+        : action(libdnf::transaction::transaction_item_action_from_string(std::get<1>(dti))),
+          reason(libdnf::transaction::transaction_item_reason_from_string(std::get<2>(dti))),
+          package(std::get<4>(dti)) {}
 
     DbusPackageWrapper get_package() const { return package; }
     libdnf::transaction::TransactionItemAction get_action() const { return action; }
@@ -47,9 +46,9 @@ public:
     const std::vector<DbusPackageWrapper> get_replaces() const noexcept { return {}; }
 
 private:
-    DbusPackageWrapper package;
     libdnf::transaction::TransactionItemAction action;
     libdnf::transaction::TransactionItemReason reason;
+    DbusPackageWrapper package;
 };
 
 }  // namespace dnfdaemon::client

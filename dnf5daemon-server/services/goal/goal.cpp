@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "callbacks.hpp"
 #include "dbus.hpp"
+#include "group.hpp"
 #include "package.hpp"
 #include "transaction.hpp"
 #include "utils.hpp"
@@ -29,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <fmt/format.h>
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/transaction/transaction_item.hpp>
+#include <libdnf/transaction/transaction_item_action.hpp>
 #include <sdbus-c++/sdbus-c++.h>
 
 #include <chrono>
@@ -42,7 +44,7 @@ void Goal::dbus_register() {
     // TODO(mblaha) Adjust resolve method to accomodate also groups, environments,
     // and modules as part of the transaction
     dbus_object->registerMethod(
-        dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(ua{sv})u", [this](sdbus::MethodCall call) -> void {
+        dnfdaemon::INTERFACE_GOAL, "resolve", "a{sv}", "a(sssa{sv}a{sv})u", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Goal::resolve, call, session.session_locale);
         });
     dbus_object->registerMethod(
@@ -78,7 +80,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
     auto overall_result = dnfdaemon::ResolveResult::ERROR;
     if (transaction.get_problems() == libdnf::GoalProblem::NO_PROBLEM) {
         // return the transaction only if there were no problems
-        std::vector<std::string> attr{
+        std::vector<std::string> pkg_attrs{
             "name",
             "epoch",
             "version",
@@ -91,8 +93,26 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
             "evr",
             "reason"};
         for (auto & tspkg : transaction.get_transaction_packages()) {
+            dnfdaemon::KeyValueMap trans_item_attrs{};
+            if (tspkg.get_reason_change_group_id()) {
+                trans_item_attrs.emplace("reason_change_group_id", *tspkg.get_reason_change_group_id());
+            }
             dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
-                static_cast<uint32_t>(tspkg.get_action()), package_to_map(tspkg.get_package(), attr)));
+                transaction_item_type_to_string(libdnf::transaction::TransactionItemType::PACKAGE),
+                transaction_item_action_to_string(tspkg.get_action()),
+                transaction_item_reason_to_string(tspkg.get_reason()),
+                trans_item_attrs,
+                package_to_map(tspkg.get_package(), pkg_attrs)));
+        }
+        std::vector<std::string> grp_attrs{"name"};
+        dnfdaemon::KeyValueMap trans_item_attrs{};
+        for (auto & tsgrp : transaction.get_transaction_groups()) {
+            dbus_transaction.push_back(dnfdaemon::DbusTransactionItem(
+                transaction_item_type_to_string(libdnf::transaction::TransactionItemType::GROUP),
+                transaction_item_action_to_string(tsgrp.get_action()),
+                transaction_item_reason_to_string(tsgrp.get_reason()),
+                trans_item_attrs,
+                group_to_map(tsgrp.get_group(), grp_attrs)));
         }
         // there are transactions resolved without problems but still resolve_logs
         // may contain some warnings / informations
