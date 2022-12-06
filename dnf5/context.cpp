@@ -37,6 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
 #include <libdnf/rpm/rpm_signature.hpp>
+#include <libdnf/utils/patterns.hpp>
 
 #include <algorithm>
 #include <cctype>
@@ -239,12 +240,10 @@ void Context::print_info(const char * msg) {
 
 
 void Context::update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs) {
-    // TODO(jkolarik): unify this behavior with internal libdnf detection of file specs
-    // if a pkg_spec contains '/', it's a path and we need to load filelists
     for (auto & spec : pkg_specs) {
-        if (spec.find("/") != std::string::npos) {
+        if (libdnf::utils::is_file_pattern(spec)) {
             base.get_config().optional_metadata_types().add_item(libdnf::METADATA_TYPE_FILELISTS);
-            break;
+            return;
         }
     }
 }
@@ -950,8 +949,8 @@ std::vector<std::string> match_specs(
     base.load_config_from_file();
     base.setup();
 
-    // optimization - if pattern contain '/', disable the search for matching installed and available packages
-    if (pattern.find('/') != std::string::npos) {
+    // optimization - disable the search for matching installed and available packages for file patterns
+    if (libdnf::utils::is_file_pattern(pattern)) {
         installed = available = false;
     }
 

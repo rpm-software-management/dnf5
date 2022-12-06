@@ -53,7 +53,7 @@ public:
     void apply_repository_setopts();
 
     /// Update required metadata types according to the provided `pkg_specs`.
-    /// If a pkg_spec contains '/' then assume it's a path and file lists need to be loaded.
+    /// If a `pkg_spec` is a file pattern, the file lists need to be loaded.
     void update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs);
 
     /// Sets callbacks for repositories and loads them, updating metadata if necessary.
