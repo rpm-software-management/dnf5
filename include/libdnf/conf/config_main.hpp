@@ -225,8 +225,8 @@ public:
     const OptionString & proxy_username() const;
     OptionString & proxy_password();
     const OptionString & proxy_password() const;
-    OptionEnum<std::string> & proxy_auth_method();
-    const OptionEnum<std::string> & proxy_auth_method() const;
+    OptionStringSet & proxy_auth_method();
+    const OptionStringSet & proxy_auth_method() const;
     OptionStringList & protected_packages();
     const OptionStringList & protected_packages() const;
     OptionString & username();

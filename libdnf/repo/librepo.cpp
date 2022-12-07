@@ -165,15 +165,20 @@ static void init_remote(LibrepoHandle & handle, const C & config) {
         handle.set_opt(LRO_PROXY, config.proxy().get_value().c_str());
     }
 
-    const std::string proxy_auth_method_str = config.proxy_auth_method().get_value();
-    auto proxy_auth_method = LR_AUTH_ANY;
-    for (auto & auth : PROXYAUTHMETHODS) {
-        if (proxy_auth_method_str == auth.name) {
-            proxy_auth_method = auth.code;
-            break;
+    long proxy_auth_methods = 0;
+    if (config.proxy_auth_method().empty()) {
+        proxy_auth_methods = LR_AUTH_ANY;
+    } else {
+        for (const auto & proxy_auth_method_str : config.proxy_auth_method().get_value()) {
+            for (auto & auth : PROXYAUTHMETHODS) {
+                if (proxy_auth_method_str == auth.name) {
+                    proxy_auth_methods |= auth.code;
+                    break;
+                }
+            }
         }
     }
-    handle.set_opt(LRO_PROXYAUTHMETHODS, static_cast<long>(proxy_auth_method));
+    handle.set_opt(LRO_PROXYAUTHMETHODS, proxy_auth_methods);
 
     if (!config.proxy_username().empty()) {
         auto userpwd = config.proxy_username().get_value();

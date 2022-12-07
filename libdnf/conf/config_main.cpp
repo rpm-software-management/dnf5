@@ -288,16 +288,7 @@ class ConfigMain::Impl {
     OptionString proxy{""};
     OptionString proxy_username{nullptr};
     OptionString proxy_password{nullptr};
-
-    OptionEnum<std::string> proxy_auth_method{
-        "any",
-        {"any", "none", "basic", "digest", "negotiate", "ntlm", "digest_ie", "ntlm_wb"},
-        [](const std::string & value) {
-            auto tmp = value;
-            std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
-            return tmp;
-        }};
-
+    OptionStringSet proxy_auth_method{"any", "any|none|basic|digest|negotiate|ntlm|digest_ie|ntlm_wb", false};
     OptionStringList protected_packages{resolve_globs("dnf glob:/etc/dnf/protected.d/*.conf")};
     OptionString username{""};
     OptionString password{""};
@@ -495,7 +486,20 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("proxy", proxy);
     owner.opt_binds().add("proxy_username", proxy_username);
     owner.opt_binds().add("proxy_password", proxy_password);
-    owner.opt_binds().add("proxy_auth_method", proxy_auth_method);
+
+    owner.opt_binds().add(
+        "proxy_auth_method",
+        proxy_auth_method,
+        [&](Option::Priority priority, const std::string & value) {
+            if (priority >= proxy_auth_method.get_priority()) {
+                auto tmp = value;
+                std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
+                proxy_auth_method.set(priority, tmp);
+            }
+        },
+        nullptr,
+        false);
+
     owner.opt_binds().add(
         "protected_packages",
         protected_packages,
@@ -1163,10 +1167,10 @@ const OptionString & ConfigMain::proxy_password() const {
     return p_impl->proxy_password;
 }
 
-OptionEnum<std::string> & ConfigMain::proxy_auth_method() {
+OptionStringSet & ConfigMain::proxy_auth_method() {
     return p_impl->proxy_auth_method;
 }
-const OptionEnum<std::string> & ConfigMain::proxy_auth_method() const {
+const OptionStringSet & ConfigMain::proxy_auth_method() const {
     return p_impl->proxy_auth_method;
 }
 

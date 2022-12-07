@@ -29,6 +29,12 @@ Combine `query.filter_priority()` with `query.filter_latest_evr()` or another fi
 The filter was replaced with `filter_latest_evr()` which has the same behavior as `HY_PKG_LATEST_PER_ARCH`
 
 
+### ConfigMain::proxy_auth_method() and ConfigRepo::proxy_auth_method()
+The return types were changed. `OptionEnum<std::string>` was replaced by `OptionStringSet`.
+A combination of several authentication methods (for example "basic" and "digest") can now be used.
+This allows using a list of authentication methods in configuration files and the DNF5 command line "--setopt=proxy_auth_method=".
+
+
 Changes on the command line:
 ----------------------------
 Commands cannot have optional subcommands and optional arguments. Is some cases subcommand can have the same string as
