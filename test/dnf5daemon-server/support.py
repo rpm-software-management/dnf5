@@ -36,6 +36,19 @@ IFACE_GOAL = '{}.Goal'.format(DNFDAEMON_BUS_NAME)
 
 class InstallrootCase(unittest.TestCase):
 
+    def sanitize_transaction(self, resolved):
+        '''Prepare resolved transaction for assert'''
+        for object_type, action, reason, trans_item_attrs, pkg in resolved:
+            # id of package depends on order of the repos in the sack which varies
+            # between runs so we can't rely on the value
+            pkg.pop('id')
+            # also package size differs according to the builder
+            pkg.pop('package_size')
+            # TODO(mblaha): calculate correct replaces value
+            if "replaces" in trans_item_attrs:
+                trans_item_attrs.pop("replaces")
+
+
     def setUp(self):
         super(InstallrootCase, self).setUp()
         self.maxDiff = None
