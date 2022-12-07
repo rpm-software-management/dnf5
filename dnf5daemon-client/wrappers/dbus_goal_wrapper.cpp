@@ -21,15 +21,47 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <libdnf/transaction/transaction_item_type.hpp>
 
+#include <iostream>
+
 namespace dnfdaemon::client {
 
 DbusGoalWrapper::DbusGoalWrapper(std::vector<dnfdaemon::DbusTransactionItem> transaction) {
-    for (auto & ti : transaction) {
+    // auxiliary map transaction_package.id -> index of package in transaction_package
+    // used to resolve replaces from id to DbusPackageWrapper instance
+    std::map<int, size_t> transaction_packages_by_id;
+
+    for (const auto & ti : transaction) {
         auto object_type = libdnf::transaction::transaction_item_type_from_string(std::get<0>(ti));
         if (object_type == libdnf::transaction::TransactionItemType::PACKAGE) {
             transaction_packages.push_back(DbusTransactionPackageWrapper(ti));
+            transaction_packages_by_id.emplace(
+                transaction_packages.back().get_package().get_id(), transaction_packages.size() - 1);
         } else if (object_type == libdnf::transaction::TransactionItemType::GROUP) {
             transaction_groups.push_back(DbusTransactionGroupWrapper(ti));
+        }
+    }
+    // set "replaces" for transaction_packages. Since transaction_package contains only
+    // id of replaced packages we must convert them to packages using transaction_packages_by_id map
+    for (auto & tpkg : transaction_packages) {
+        // ids of replaced packages are stored in "replaces" transaction item attribute
+        auto ti_attrs = tpkg.get_transaction_item_attrs();
+        auto ti_replaces = ti_attrs.find("replaces");
+        if (ti_replaces != ti_attrs.end()) {
+            std::vector<DbusPackageWrapper> replaces;
+            std::vector<int> replaces_id = ti_replaces->second;
+            for (const auto & pkg_id : replaces_id) {
+                auto replaced_pkg_idx = transaction_packages_by_id.find(pkg_id);
+                if (replaced_pkg_idx != transaction_packages_by_id.end()) {
+                    replaces.emplace_back(transaction_packages[replaced_pkg_idx->second].get_package());
+                } else {
+                    // TODO(mblaha): proper logging
+                    // log_router.warning()
+                    std::cerr << "Package with id \"" << pkg_id << "\" replaced by package \""
+                              << tpkg.get_package().get_name() << "-" << tpkg.get_package().get_evr()
+                              << "\" not found in the transaction." << std::endl;
+                }
+            }
+            tpkg.set_replaces(std::move(replaces));
         }
     }
 }
