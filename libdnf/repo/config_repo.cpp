@@ -54,7 +54,7 @@ class ConfigRepo::Impl {
     OptionChild<OptionString> proxy{main_config.proxy()};
     OptionChild<OptionString> proxy_username{main_config.proxy_username()};
     OptionChild<OptionString> proxy_password{main_config.proxy_password()};
-    OptionChild<OptionEnum<std::string>> proxy_auth_method{main_config.proxy_auth_method()};
+    OptionChild<OptionStringSet> proxy_auth_method{main_config.proxy_auth_method()};
     OptionChild<OptionString> username{main_config.username()};
     OptionChild<OptionString> password{main_config.password()};
     OptionChild<OptionStringList> protected_packages{main_config.protected_packages()};
@@ -151,7 +151,20 @@ ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::stri
 
     owner.opt_binds().add("proxy_username", proxy_username);
     owner.opt_binds().add("proxy_password", proxy_password);
-    owner.opt_binds().add("proxy_auth_method", proxy_auth_method);
+
+    owner.opt_binds().add(
+        "proxy_auth_method",
+        proxy_auth_method,
+        [&](Option::Priority priority, const std::string & value) {
+            if (priority >= proxy_auth_method.get_priority()) {
+                auto tmp = value;
+                std::transform(tmp.begin(), tmp.end(), tmp.begin(), ::tolower);
+                proxy_auth_method.set(priority, tmp);
+            }
+        },
+        nullptr,
+        false);
+
     owner.opt_binds().add("username", username);
     owner.opt_binds().add("password", password);
     owner.opt_binds().add("protected_packages", protected_packages);
@@ -305,10 +318,10 @@ const OptionChild<OptionString> & ConfigRepo::proxy_password() const {
     return p_impl->proxy_password;
 }
 
-OptionChild<OptionEnum<std::string>> & ConfigRepo::proxy_auth_method() {
+OptionChild<OptionStringSet> & ConfigRepo::proxy_auth_method() {
     return p_impl->proxy_auth_method;
 }
-const OptionChild<OptionEnum<std::string>> & ConfigRepo::proxy_auth_method() const {
+const OptionChild<OptionStringSet> & ConfigRepo::proxy_auth_method() const {
     return p_impl->proxy_auth_method;
 }
 

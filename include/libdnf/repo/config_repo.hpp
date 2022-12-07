@@ -70,8 +70,8 @@ public:
     const OptionChild<OptionString> & proxy_username() const;
     OptionChild<OptionString> & proxy_password();
     const OptionChild<OptionString> & proxy_password() const;
-    OptionChild<OptionEnum<std::string>> & proxy_auth_method();
-    const OptionChild<OptionEnum<std::string>> & proxy_auth_method() const;
+    OptionChild<OptionStringSet> & proxy_auth_method();
+    const OptionChild<OptionStringSet> & proxy_auth_method() const;
     OptionChild<OptionString> & username();
     const OptionChild<OptionString> & username() const;
     OptionChild<OptionString> & password();
