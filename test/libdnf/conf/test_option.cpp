@@ -276,54 +276,128 @@ void OptionTest::test_options_seconds() {
 void OptionTest::test_options_string() {
     const std::string DEFAULT{"default"};
     const std::string REGEX{"d.*t"};
-    constexpr bool ICASE{true};
 
-    OptionString option(DEFAULT, REGEX, ICASE);
-    CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
-    CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
-    CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+    {
+        constexpr bool ICASE{false};
+        OptionString option(DEFAULT, REGEX, ICASE);
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
+        CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
 
-    option.set(Option::Priority::COMMANDLINE, "donut");
-    CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
-    CPPUNIT_ASSERT_EQUAL(std::string("donut"), option.get_value());
+        option.set(Option::Priority::COMMANDLINE, "donut");
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL(std::string("donut"), option.get_value());
 
-    option.set(Option::Priority::RUNTIME, "do iT");
-    CPPUNIT_ASSERT_EQUAL(std::string("do iT"), option.get_value());
-    CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
+        // The test is case sensitive (icase = false) - uppercase 'T' is not allowed.
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donuT"), OptionValueNotAllowedError);
 
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "drain"), OptionValueNotAllowedError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "drain"), OptionValueNotAllowedError);
 
-    option.lock("option locked by test_option_string");
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "do iT"), AssertionError);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
+        option.lock("option locked by test_option_string");
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), AssertionError);
+    }
+
+    {
+        constexpr bool ICASE{true};
+        OptionString option(DEFAULT, REGEX, ICASE);
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
+        CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+
+        option.set(Option::Priority::COMMANDLINE, "donut");
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL(std::string("donut"), option.get_value());
+
+        // The test is not case sensitive (ICASE = true) - uppercase 'T' is fine.
+        option.set(Option::Priority::RUNTIME, "donuT");
+        CPPUNIT_ASSERT_EQUAL(std::string("donuT"), option.get_value());
+        CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
+
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "drain"), OptionValueNotAllowedError);
+
+        option.lock("option locked by test_option_string");
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), AssertionError);
+    }
 }
 
 void OptionTest::test_options_string_list() {
     const std::vector<std::string> DEFAULT{"dval1X", "dval2X"};
     const std::string REGEX{"[d|c].*X"};
-    constexpr bool ICASE{true};
 
-    OptionStringList option(DEFAULT, REGEX, ICASE);
-    CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
-    CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
-    CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+    {
+        constexpr bool ICASE{false};
+        OptionStringList option(DEFAULT, REGEX, ICASE);
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
+        CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
 
-    option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "cakex"});
-    CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
-    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"donutX", "cakex"}), option.get_value());
-    CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
+        option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "cakeX"});
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"donutX", "cakeX"}), option.get_value());
+        CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
 
-    option.set(Option::Priority::RUNTIME, "Dfirstx, DsecondX");
-    CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
-    CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Dfirstx", "DsecondX"}), option.get_value());
+        // The test is case sensitive (icase = false) - lowercase 'x' is not allowed.
+        CPPUNIT_ASSERT_THROW(
+            option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "cakex"}),
+            OptionValueNotAllowedError);
 
-    CPPUNIT_ASSERT_THROW(
-        option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "drain"}), OptionValueNotAllowedError);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donutX, drain"), OptionValueNotAllowedError);
+        CPPUNIT_ASSERT_THROW(
+            option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "drain"}),
+            OptionValueNotAllowedError);
 
-    option.lock("option locked by test_option_string_list");
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "do iT"), AssertionError);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
+        option.set(Option::Priority::RUNTIME, "dfirstX, dsecondX");
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"dfirstX", "dsecondX"}), option.get_value());
+
+        // The test is case sensitive (icase = false) - uppercase 'D' and lowercase 'x' is not allowed.
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "Dfirstx, DsecondX"), OptionValueNotAllowedError);
+
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donutX, drain"), OptionValueNotAllowedError);
+
+        option.lock("option locked by test_option_string_list");
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), AssertionError);
+    }
+
+    {
+        constexpr bool ICASE{true};
+        OptionStringList option(DEFAULT, REGEX, ICASE);
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_value());
+        CPPUNIT_ASSERT_EQUAL(Option::Priority::DEFAULT, option.get_priority());
+
+        option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "cakeX"});
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"donutX", "cakeX"}), option.get_value());
+        CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
+
+        // The test is not case sensitive (ICASE = true) - lowercase 'x' is fine.
+        option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "cakex"});
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"donutX", "cakex"}), option.get_value());
+        CPPUNIT_ASSERT_EQUAL(Option::Priority::RUNTIME, option.get_priority());
+
+        CPPUNIT_ASSERT_THROW(
+            option.set(Option::Priority::RUNTIME, std::vector<std::string>{"donutX", "drain"}),
+            OptionValueNotAllowedError);
+
+        option.set(Option::Priority::RUNTIME, "dfirstX, dsecondX");
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"dfirstX", "dsecondX"}), option.get_value());
+
+        // The test is not case sensitive (ICASE = true) - uppercase 'D' and lowercase 'x' is fine.
+        option.set(Option::Priority::RUNTIME, "Dfirstx, DsecondX");
+        CPPUNIT_ASSERT_EQUAL(DEFAULT, option.get_default_value());
+        CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Dfirstx", "DsecondX"}), option.get_value());
+
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donutX, drain"), OptionValueNotAllowedError);
+
+        option.lock("option locked by test_option_string_list");
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), AssertionError);
+    }
 }
 
 void OptionTest::test_options_string_list_delimiters() {
