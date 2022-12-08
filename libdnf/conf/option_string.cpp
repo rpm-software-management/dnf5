@@ -62,10 +62,12 @@ void OptionString::test(const std::string & value) const {
     if (regex.empty()) {
         return;
     }
-    std::regex re(
-        regex,
-        std::regex::nosubs | std::regex::extended | (icase ? std::regex::icase : std::regex_constants::ECMAScript));
-    if (!std::regex_match(value, re)) {
+
+    auto flags = std::regex::ECMAScript | std::regex::nosubs;
+    if (icase) {
+        flags |= std::regex::icase;
+    }
+    if (!std::regex_match(value, std::regex(regex, flags))) {
         throw OptionValueNotAllowedError(
             M_("Input value \"{}\" not allowed, allowed values for this option are defined by regular expression "
                "\"{}\""),

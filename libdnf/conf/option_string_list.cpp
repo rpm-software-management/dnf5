@@ -102,9 +102,11 @@ void OptionStringContainer<T>::init_regex_matcher() {
         return;
     }
 
-    regex_matcher = std::regex(
-        regex,
-        std::regex::nosubs | std::regex::extended | (icase ? std::regex::icase : std::regex_constants::ECMAScript));
+    auto flags = std::regex::ECMAScript | std::regex::nosubs;
+    if (icase) {
+        flags |= std::regex::icase;
+    }
+    regex_matcher = std::regex(regex, flags);
 }
 
 template <typename T>
