@@ -214,28 +214,18 @@ int main(int argc, char * argv[]) {
 
     //log_router.info("Dnf5daemon-client start");
 
-    // Register root command
-    //context.register_root_command(std::make_unique<dnfdaemon::client::RootCommand>(context));
-
     add_commands(context);
 
     // Parse command line arguments
-    bool print_help;
     try {
         context.get_argument_parser().parse(argc, argv);
-        const auto & help = context.get_argument_parser().get_named_arg("help", false);
-        print_help = help.get_parse_count() > 0;
-    } catch (std::exception & ex) {
-        // print help if fail to parse commands
+    } catch (libdnf::cli::ArgumentParserError & ex) {
         std::cout << ex.what() << std::endl;
         context.get_argument_parser().get_selected_command()->help();
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
-    }
-
-    // print help of the selected command if --help was used
-    if (print_help) {
-        context.get_argument_parser().get_selected_command()->help();
-        return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+    } catch (std::exception & ex) {
+        std::cout << ex.what() << std::endl;
+        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     }
 
     try {
