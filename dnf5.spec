@@ -1,6 +1,6 @@
 %global project_version_major 5
 %global project_version_minor 0
-%global project_version_patch 1
+%global project_version_patch 2
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
@@ -592,6 +592,22 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
 
 
 %changelog
+* Thu Dec 08 2022 Nicola Sella <nsella@redhat.com> - 5.0.2-1
+- Implement group remove command
+- Improved options in config
+- Add support for any number of user IDs in a PGP key
+- Use new librepo PGP API
+- remove gpgme dependency
+- Improved exceptions and dnf5 errors
+- Add dnf5-devel package
+- Update README.md with up to date information
+- Repoquery: Add --duplicates option
+- Improved documentation for Repoquery, Upgrande and About section
+- Add tutorials for python3 bindings
+- dnf5-changes-doc: Add more structure using different headings
+- Add ModuleQuery
+- Improvements in comps logic
+
 * Thu Nov 24 2022 Nicola Sella <nsella@redhat.com> - 5.0.1-1
 - Fix loading known keys for RepoGpgme
 - Fix dnf5 progress_bar
