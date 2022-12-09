@@ -34,7 +34,7 @@ public:
     void run() override;
 
 private:
-    std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
+    std::vector<std::string> pkg_specs;
 };
 
 }  // namespace dnfdaemon::client
