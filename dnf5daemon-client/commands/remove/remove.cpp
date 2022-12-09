@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "remove.hpp"
 
+#include "commands/shared_options.hpp"
 #include "context.hpp"
 #include "exception.hpp"
 #include "utils.hpp"
@@ -47,14 +48,9 @@ void RemoveCommand::set_argument_parser() {
 
     cmd.set_description("remove packages on the system");
 
-    patterns_options = parser.add_new_values();
-    auto keys = parser.add_new_positional_arg(
-        "keys_to_match",
-        libdnf::cli::ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns_options);
-    keys->set_description("List of packages to remove");
-    cmd.register_positional_arg(keys);
+    auto specs_arg = pkg_specs_argument(parser, libdnf::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE, pkg_specs);
+    specs_arg->set_description("List of packages to remove");
+    cmd.register_positional_arg(specs_arg);
 
     // run remove command allways with allow_erasing on
     context.allow_erasing.set(libdnf::Option::Priority::RUNTIME, true);
@@ -67,22 +63,12 @@ void RemoveCommand::run() {
         throw UnprivilegedUserError();
     }
 
-    // get package specs from command line and add them to the goal
-    std::vector<std::string> patterns;
-    if (patterns_options->size() > 0) {
-        patterns.reserve(patterns_options->size());
-        for (auto & pattern : *patterns_options) {
-            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-            patterns.emplace_back(option->get_value());
-        }
-    }
-
     dnfdaemon::KeyValueMap options = {};
 
     ctx.session_proxy->callMethod("remove")
         .onInterface(dnfdaemon::INTERFACE_RPM)
         .withTimeout(static_cast<uint64_t>(-1))
-        .withArguments(patterns, options);
+        .withArguments(pkg_specs, options);
 
     run_transaction();
 }

@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "install.hpp"
 
+#include "commands/shared_options.hpp"
 #include "context.hpp"
 #include "exception.hpp"
 #include "utils.hpp"
@@ -62,14 +63,9 @@ void InstallCommand::set_argument_parser() {
     skip_unavailable->link_value(&skip_unavailable_option);
     cmd.register_named_arg(skip_unavailable);
 
-    patterns_options = parser.add_new_values();
-    auto keys = parser.add_new_positional_arg(
-        "keys_to_match",
-        libdnf::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns_options);
-    keys->set_description("List of packages to install");
-    cmd.register_positional_arg(keys);
+    auto specs_arg = pkg_specs_argument(parser, libdnf::cli::ArgumentParser::PositionalArg::AT_LEAST_ONE, pkg_specs);
+    specs_arg->set_description("List of packages to install");
+    cmd.register_positional_arg(specs_arg);
 }
 
 void InstallCommand::run() {
@@ -77,16 +73,6 @@ void InstallCommand::run() {
 
     if (!am_i_root()) {
         throw UnprivilegedUserError();
-    }
-
-    // get package specs from command line and add them to the goal
-    std::vector<std::string> patterns;
-    if (patterns_options->size() > 0) {
-        patterns.reserve(patterns_options->size());
-        for (auto & pattern : *patterns_options) {
-            auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-            patterns.emplace_back(option->get_value());
-        }
     }
 
     dnfdaemon::KeyValueMap options = {};
@@ -101,7 +87,7 @@ void InstallCommand::run() {
     ctx.session_proxy->callMethod("install")
         .onInterface(dnfdaemon::INTERFACE_RPM)
         .withTimeout(static_cast<uint64_t>(-1))
-        .withArguments(patterns, options);
+        .withArguments(pkg_specs, options);
 
     run_transaction();
 }
