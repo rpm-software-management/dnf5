@@ -196,26 +196,26 @@ void OptionStringContainer<T>::set(const std::string & value) {
 }
 
 template <typename T>
-void OptionStringContainer<T>::add(const ValueType & items) {
+void OptionStringContainer<T>::add(Priority priority, const ValueType & items) {
     assert_not_locked();
 
     test(items);
     for (const auto & item : items) {
         value.insert(value.end(), item);
     }
-    if (get_priority() < Priority::RUNTIME) {
-        set_priority(Priority::RUNTIME);
+    if (get_priority() < priority) {
+        set_priority(priority);
     }
 }
 
 template <typename T>
-void OptionStringContainer<T>::add_item(const std::string & item) {
+void OptionStringContainer<T>::add_item(Priority priority, const std::string & item) {
     assert_not_locked();
 
     test_item(item);
     value.insert(value.end(), item);
-    if (get_priority() < Priority::RUNTIME) {
-        set_priority(Priority::RUNTIME);
+    if (get_priority() < priority) {
+        set_priority(priority);
     }
 }
 

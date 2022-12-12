@@ -131,7 +131,8 @@ void Context::print_info(std::string_view msg) const {
 void Context::update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs) {
     for (auto & spec : pkg_specs) {
         if (libdnf::utils::is_file_pattern(spec)) {
-            base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_FILELISTS);
+            base.get_config().get_optional_metadata_types_option().add_item(
+                libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_FILELISTS);
             return;
         }
     }
