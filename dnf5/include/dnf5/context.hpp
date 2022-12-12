@@ -159,7 +159,7 @@ private:
     Actions action;
 };
 
-/// Downoad packages to destdir. If destdir == nullptr, packages are downloaded to the cache.
+/// Download packages to destdir. If destdir == nullptr, packages are downloaded to the cache.
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir);
 void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir);
 
@@ -176,6 +176,8 @@ void parse_add_specs(
 /// Returns the names of matching packages and paths of matching package file names and directories.
 /// If `nevra_for_same_name` is true, it returns a full nevra for packages with the same name.
 /// Only files whose names match `file_name_regex` are returned.
+/// NOTE: This function is intended to be used only for autocompletion purposes as the argument parser's
+/// complete hook argument. It does the base setup and repos loading inside.
 std::vector<std::string> match_specs(
     Context & ctx,
     const std::string & pattern,
