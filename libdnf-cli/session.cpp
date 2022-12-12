@@ -152,12 +152,7 @@ StringListOption::StringListOption(
     arg->set_parse_hook_func(
         [this](
             [[maybe_unused]] ArgumentParser::NamedArg * arg, [[maybe_unused]] const char * option, const char * value) {
-            std::string conf_str_value = conf->get_value_string();
-            if (!conf_str_value.empty()) {
-                conf_str_value.append(",");
-            }
-            conf_str_value.append(value);
-            conf->set(libdnf::Option::Priority::COMMANDLINE, conf_str_value);
+            conf->add(libdnf::Option::Priority::COMMANDLINE, value);
             return true;
         });
 
