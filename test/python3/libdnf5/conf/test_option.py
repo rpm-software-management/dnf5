@@ -34,13 +34,13 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
     def test_container_add_item(self):
         auths_config = self.base.get_config().get_proxy_auth_method_option()
         auths_config.set(('basic', 'ntlm'))
-        auths_config.add_item('digest')
+        auths_config.add_item(libdnf5.conf.Option.Priority_RUNTIME, 'digest')
         self.assertEqual(auths_config.get_value(), ('basic', 'digest', 'ntlm'))
 
     def test_container_add(self):
         types_config = self.base.get_config().get_optional_metadata_types_option()
         types_config.set((libdnf5.conf.METADATA_TYPE_FILELISTS,))
-        types_config.add((libdnf5.conf.METADATA_TYPE_COMPS,
+        types_config.add(libdnf5.conf.Option.Priority_RUNTIME, (libdnf5.conf.METADATA_TYPE_COMPS,
                          libdnf5.conf.METADATA_TYPE_UPDATEINFO))
         self.assertEqual(types_config.get_value(), (libdnf5.conf.METADATA_TYPE_COMPS,
                          libdnf5.conf.METADATA_TYPE_FILELISTS, libdnf5.conf.METADATA_TYPE_UPDATEINFO))

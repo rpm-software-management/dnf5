@@ -72,12 +72,12 @@ public:
     void set(const std::string & value) override;
 
     /// Adds items from an another container.
-    /// New items are stored in the container value and the runtime priority is set as this is intended to use only through the API.
-    void add(const ValueType & items);
+    /// New items are stored in the container value
+    void add(Priority priority, const ValueType & items);
 
     /// Adds new item to the container.
-    /// New item is stored in the container value and the runtime priority is set as this is intended to use only through the API.
-    void add_item(const std::string & item);
+    /// New item is stored in the container value
+    void add_item(Priority priority, const std::string & item);
 
     /// Gets the stored value.
     // @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.getValue()

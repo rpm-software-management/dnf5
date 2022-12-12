@@ -84,7 +84,8 @@ void CheckUpgradeCommand::configure() {
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
     if (changelogs->get_value()) {
-        context.base.get_config().get_optional_metadata_types_option().add(libdnf::OPTIONAL_METADATA_TYPES);
+        context.base.get_config().get_optional_metadata_types_option().add(
+            libdnf::Option::Priority::RUNTIME, libdnf::OPTIONAL_METADATA_TYPES);
     }
 }
 

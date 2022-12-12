@@ -77,7 +77,8 @@ void InstallCommand::configure() {
                              advisory_newpackage->get_value() || advisory_severity->get_value().empty() ||
                              advisory_bz->get_value().empty() || advisory_cve->get_value().empty();
     if (updateinfo_needed) {
-        context.base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_UPDATEINFO);
+        context.base.get_config().get_optional_metadata_types_option().add_item(
+            libdnf::Option::Priority::RUNTIME, libdnf::METADATA_TYPE_UPDATEINFO);
     }
 
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
