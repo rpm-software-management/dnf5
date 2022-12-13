@@ -186,6 +186,8 @@ bool Session::check_authorization(const std::string & actionid, const std::strin
     const std::string destination_name = "org.freedesktop.PolicyKit1";
     const std::string object_path = "/org/freedesktop/PolicyKit1/Authority";
     const std::string interface_name = "org.freedesktop.PolicyKit1.Authority";
+    // allow polkit to ask user to enter root password
+    const uint ALLOW_USER_INTERACTION = 1;
     auto polkit_proxy = sdbus::createProxy(connection, destination_name, object_path);
     polkit_proxy->finishRegistration();
 
@@ -193,7 +195,7 @@ bool Session::check_authorization(const std::string & actionid, const std::strin
     sdbus::Struct<bool, bool, std::map<std::string, std::string>> auth_result;
     sdbus::Struct<std::string, dnfdaemon::KeyValueMap> subject{"system-bus-name", {{"name", sender}}};
     std::map<std::string, std::string> details{};
-    uint flags = 0;
+    uint flags = ALLOW_USER_INTERACTION;
     std::string cancelation_id = "";
     polkit_proxy->callMethod("CheckAuthorization")
         .onInterface(interface_name)
