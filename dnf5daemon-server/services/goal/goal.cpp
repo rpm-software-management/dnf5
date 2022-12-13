@@ -204,7 +204,8 @@ void download_packages(Session & session, libdnf::base::Transaction & transactio
     std::vector<std::unique_ptr<DbusPackageCB>> dbus_package_cbs;
 
     for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (transaction_item_action_is_inbound(tspkg.get_action())) {
+        if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+            tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
             auto & dbus_pkg_cb =
                 dbus_package_cbs.emplace_back(std::make_unique<DbusPackageCB>(session, tspkg.get_package()));
             downloader.add(tspkg.get_package(), dbus_pkg_cb.get());
@@ -223,9 +224,6 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
     // read options from dbus call
     dnfdaemon::KeyValueMap options;
     call >> options;
-
-    // TODO(mblaha): ensure that system repo is not loaded twice
-    //session.fill_sack();
 
     auto * transaction = session.get_transaction();
 
