@@ -76,7 +76,7 @@ private:
     friend class Repo;
 
     LibrepoHandle init_local_handle();
-    LibrepoHandle init_remote_handle(const char * destdir, bool mirror_setup = true);
+    LibrepoHandle init_remote_handle(const char * destdir, bool mirror_setup = true, bool set_callbacks = true);
     void common_handle_setup(LibrepoHandle & h);
 
     void apply_http_headers(LibrepoHandle & handle);
