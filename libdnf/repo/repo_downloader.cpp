@@ -328,9 +328,11 @@ void RepoDownloader::load_local() try {
 
 /// Returns a librepo handle, set as per the repo options.
 /// Note that destdir is None, and the handle is cached.
+// TODO(jrohel) The librepo handle callbacks are not set. If librepo itself downloads an extra file
+//              (eg metalink) we won't know about it.
 LibrepoHandle & RepoDownloader::get_cached_handle() {
     if (!handle) {
-        handle = init_remote_handle(nullptr);
+        handle = init_remote_handle(nullptr, true, false);
     }
     apply_http_headers(*handle);
     return *handle;
@@ -373,7 +375,7 @@ LibrepoHandle RepoDownloader::init_local_handle() {
     return h;
 }
 
-LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirror_setup) {
+LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirror_setup, bool set_callbacks) {
     LibrepoHandle h;
     h.init_remote(config);
 
@@ -425,11 +427,13 @@ LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirr
             M_("No valid source (baseurl, mirrorlist or metalink) found for repository \"{}\""), config.get_id());
     }
 
-    h.set_opt(LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
-    h.set_opt(LRO_PROGRESSDATA, callbacks.get());
-    h.set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
-    h.set_opt(LRO_FASTESTMIRRORDATA, callbacks.get());
-    h.set_opt(LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
+    if (set_callbacks) {
+        h.set_opt(LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
+        h.set_opt(LRO_PROGRESSDATA, callbacks.get());
+        h.set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
+        h.set_opt(LRO_FASTESTMIRRORDATA, callbacks.get());
+        h.set_opt(LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
+    }
 
     return h;
 }
