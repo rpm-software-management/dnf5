@@ -108,3 +108,4 @@ jobs:
         with:
           package-urls: ${{needs.copr-build.outputs.package-urls}}
           extra-run-args: ${{matrix.extra-run-args}}
+          build-type: dnf5
