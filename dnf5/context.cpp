@@ -280,6 +280,7 @@ public:
     int end(TransferStatus status, const char * msg) override {
         switch (status) {
             case TransferStatus::SUCCESSFUL:
+                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
             case TransferStatus::ALREADYEXISTS:
                 // skipping the download -> downloading 0 bytes
@@ -317,6 +318,7 @@ public:
         //std::cout << "Mirror failure: " << msg << " " << url << std::endl;
         std::string message = std::string(msg) + " - " + url;
         progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, message);
+        multi_progress_bar->print();
         return 0;
     }
 
