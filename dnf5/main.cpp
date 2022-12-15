@@ -721,7 +721,7 @@ int main(int argc, char * argv[]) try {
         return ex.get_exit_code();
     } catch (std::exception & ex) {
         std::cerr << ex.what() << std::endl;
-        log_router.error(fmt::format("Command returned error: {}", ex.what()));
+        log_router.error("Command returned error: {}", ex.what());
         return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     }
 
