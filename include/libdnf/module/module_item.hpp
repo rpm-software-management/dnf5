@@ -169,8 +169,8 @@ public:
 
     ModuleItem(const ModuleItem & mpkg);
     ModuleItem & operator=(const ModuleItem & mpkg);
-    ModuleItem(ModuleItem && mpkg) = default;
-    ModuleItem & operator=(ModuleItem && mpkg) = default;
+    ModuleItem(ModuleItem && mpkg);
+    ModuleItem & operator=(ModuleItem && mpkg);
 
 private:
     friend class ModuleQuery;
