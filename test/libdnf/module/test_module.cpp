@@ -114,46 +114,52 @@ void ModuleTest::test_resolve_broken_defaults() {
 void ModuleTest::test_query() {
     add_repo_repomd("repomd-modules");
 
-    auto module_sack = base.get_module_sack();
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("meson");
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("meson"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("master"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
 
-    ModuleQuery query = *new ModuleQuery(base, false);
-    query.filter_name("meson");
-    auto result = query.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("meson"), result.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("master"), result.get_stream());
-    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), result.get_version_str());
-    CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), result.get_context());
-    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("gooseberry");
+        query.filter_stream("5.4");
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("5.4"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("1"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string(""), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
 
-    query = *new ModuleQuery(base, false);
-    query.filter_name("gooseberry");
-    query.filter_stream("5.4");
-    result = query.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), result.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("5.4"), result.get_stream());
-    CPPUNIT_ASSERT_EQUAL(std::string("1"), result.get_version_str());
-    CPPUNIT_ASSERT_EQUAL(std::string(""), result.get_context());
-    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("gooseberry");
+        query.filter_stream("5.5");
+        query.filter_version("2");
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("5.5"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("2"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("72aaf46b6"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
 
-    query = *new ModuleQuery(base, false);
-    query.filter_name("gooseberry");
-    query.filter_stream("5.5");
-    query.filter_version("2");
-    result = query.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), result.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("5.5"), result.get_stream());
-    CPPUNIT_ASSERT_EQUAL(std::string("2"), result.get_version_str());
-    CPPUNIT_ASSERT_EQUAL(std::string("72aaf46b6"), result.get_context());
-    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
-
-    query = *new ModuleQuery(base, false);
-    query.filter_name("berries");
-    query.filter_context("6c81f848");
-    query.filter_arch("x86_64");
-    result = query.get();
-    CPPUNIT_ASSERT_EQUAL(std::string("berries"), result.get_name());
-    CPPUNIT_ASSERT_EQUAL(std::string("main"), result.get_stream());
-    CPPUNIT_ASSERT_EQUAL(std::string("4"), result.get_version_str());
-    CPPUNIT_ASSERT_EQUAL(std::string("6c81f848"), result.get_context());
-    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("berries");
+        query.filter_context("6c81f848");
+        query.filter_arch("x86_64");
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("berries"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("main"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("4"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("6c81f848"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
 }
