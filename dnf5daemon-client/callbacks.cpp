@@ -171,8 +171,8 @@ void PackageDownloadCB::start(sdbus::Signal & signal) {
         signal >> pkg_id;
         signal >> nevra;
         auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, nevra);
-        multi_progress_bar.add_bar(progress_bar.get());
-        package_bars.emplace(pkg_id, std::move(progress_bar));
+        package_bars.emplace(pkg_id, progress_bar.get());
+        multi_progress_bar.add_bar(std::move(progress_bar));
     }
 }
 
@@ -315,11 +315,10 @@ void TransactionCB::new_progress_bar(uint64_t total, const std::string & descrip
     }
     auto progress_bar =
         std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(static_cast<int64_t>(total), description);
-    multi_progress_bar.add_bar(progress_bar.get());
     progress_bar->set_auto_finish(false);
     progress_bar->start();
     active_progress_bar = progress_bar.get();
-    progress_bars.push_back(std::move(progress_bar));
+    multi_progress_bar.add_bar(std::move(progress_bar));
 }
 
 void TransactionCB::verify_start(sdbus::Signal & signal) {
