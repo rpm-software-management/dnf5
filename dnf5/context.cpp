@@ -83,10 +83,6 @@ public:
         return libdnf::cli::utils::userconfirm::userconfirm(*config);
     }
 
-    // Quiet empty implementation.
-    virtual void add_message(
-        [[maybe_unused]] libdnf::cli::progressbar::MessageType type, [[maybe_unused]] const std::string & message) {}
-
 private:
     libdnf::ConfigMain * config;
 };
@@ -112,15 +108,15 @@ public:
 
         if (error_message) {
             progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
-            add_message(libdnf::cli::progressbar::MessageType::ERROR, error_message);
+            progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, error_message);
         } else {
             // Correction of the total data size for the download.
             // Sometimes Librepo returns a larger data size for download than the actual file size.
             progress_bar->set_total_ticks(progress_bar->get_ticks());
 
             progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
-            print_progress_bar();
         }
+        print_progress_bar();
         std::cout << std::endl;
     }
 
@@ -153,13 +149,9 @@ public:
         [[maybe_unused]] const char * metadata) override {
         libdnf_assert(progress_bar != nullptr, "Called \"handle_mirror_failure\" callback before \"start\" callback");
 
-        add_message(libdnf::cli::progressbar::MessageType::WARNING, msg);
-        return 0;
-    }
-
-    void add_message(libdnf::cli::progressbar::MessageType type, const std::string & message) override {
-        progress_bar->add_message(type, message);
+        progress_bar->add_message(libdnf::cli::progressbar::MessageType::WARNING, msg);
         print_progress_bar();
+        return 0;
     }
 
 private:
