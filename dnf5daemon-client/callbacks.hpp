@@ -72,11 +72,11 @@ public:
 private:
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     // map {package id: progressbar}
-    std::map<int, std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar>> package_bars;
+    std::map<int, libdnf::cli::progressbar::DownloadProgressBar *> package_bars;
 
     libdnf::cli::progressbar::DownloadProgressBar * find_progress_bar(const int pkg_id) {
         if (package_bars.find(pkg_id) != package_bars.end()) {
-            return package_bars.at(pkg_id).get();
+            return package_bars.at(pkg_id);
         } else {
             return nullptr;
         }
@@ -112,7 +112,6 @@ public:
 private:
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
     libdnf::cli::progressbar::DownloadProgressBar * active_progress_bar{nullptr};
-    std::vector<std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar>> progress_bars;
 
     void new_progress_bar(uint64_t total, const std::string & description);
 };

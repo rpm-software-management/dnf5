@@ -47,10 +47,8 @@ MultiProgressBar::~MultiProgressBar() {
 }
 
 
-void MultiProgressBar::add_bar(ProgressBar * bar) {
-    bars_all.push_back(bar);
-    bars_todo.push_back(bar);
-    total.set_total(static_cast<int>(bars_all.size()));
+void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
+    bars_todo.push_back(bar.get());
 
     // if the number is not set, automatically find and set the next available
     if (bar->get_number() == 0) {
@@ -61,8 +59,11 @@ void MultiProgressBar::add_bar(ProgressBar * bar) {
         bar->set_number(number + 1);
     }
 
+    bars_all.push_back(std::move(bar));
+    total.set_total(static_cast<int>(bars_all.size()));
+
     // update total (in [num/total]) in all bars
-    for (auto i : bars_all) {
+    for (auto & i : bars_all) {
         i->set_total(total.get_total());
     }
 }

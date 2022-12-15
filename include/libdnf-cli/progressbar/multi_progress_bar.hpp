@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "progress_bar.hpp"
 
 #include <iostream>
+#include <memory>
 #include <vector>
 
 
@@ -37,8 +38,7 @@ public:
     explicit MultiProgressBar();
     ~MultiProgressBar();
 
-    // TODO(dmach): use std::unique_ptr instead of the raw pointer?
-    void add_bar(ProgressBar * bar);
+    void add_bar(std::unique_ptr<ProgressBar> && bar);
     void print() {
         std::cout << *this;
         std::cout << std::flush;
@@ -46,7 +46,7 @@ public:
     friend std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar);
 
 private:
-    std::vector<ProgressBar *> bars_all;
+    std::vector<std::unique_ptr<ProgressBar>> bars_all;
     std::vector<ProgressBar *> bars_todo;
     std::vector<ProgressBar *> bars_done;
     DownloadProgressBar total;
