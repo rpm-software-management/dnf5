@@ -121,6 +121,7 @@ public:
             progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
             print_progress_bar();
         }
+        std::cout << std::endl;
     }
 
     int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {

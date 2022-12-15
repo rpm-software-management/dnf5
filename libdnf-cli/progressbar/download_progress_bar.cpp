@@ -213,10 +213,6 @@ void DownloadProgressBar::to_stream(std::ostream & stream) {
             stream << tty::reset;
         }
     }
-
-    if (is_finished()) {
-        stream << std::endl;
-    }
 }
 
 
