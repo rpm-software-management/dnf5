@@ -243,7 +243,12 @@ ModuleItem::ModuleItem(
 }
 
 
-ModuleItem::ModuleItem(const ModuleItem & mpkg) : md_stream(mpkg.md_stream), id(mpkg.id), repo_id(mpkg.repo_id) {
+ModuleItem::ModuleItem(const ModuleItem & mpkg)
+    : md_stream(mpkg.md_stream),
+      module_sack(mpkg.module_sack),
+      id(mpkg.id),
+      repo_id(mpkg.repo_id),
+      computed_static_context(mpkg.computed_static_context) {
     if (md_stream != nullptr) {
         g_object_ref(md_stream);
     }
@@ -259,8 +264,36 @@ ModuleItem & ModuleItem::operator=(const ModuleItem & mpkg) {
         if (md_stream != nullptr) {
             g_object_ref(md_stream);
         }
-        repo_id = mpkg.repo_id;
+        module_sack = mpkg.module_sack;
         id = mpkg.id;
+        repo_id = mpkg.repo_id;
+        computed_static_context = mpkg.computed_static_context;
+    }
+    return *this;
+}
+
+
+ModuleItem::ModuleItem(ModuleItem && mpkg)
+    : md_stream(mpkg.md_stream),
+      module_sack(std::move(mpkg.module_sack)),
+      id(std::move(mpkg.id)),
+      repo_id(std::move(mpkg.repo_id)),
+      computed_static_context(std::move(mpkg.computed_static_context)) {
+    mpkg.md_stream = nullptr;
+}
+
+
+ModuleItem & ModuleItem::operator=(ModuleItem && mpkg) {
+    if (this != &mpkg) {
+        if (md_stream != nullptr) {
+            g_object_unref(md_stream);
+        }
+        md_stream = mpkg.md_stream;
+        mpkg.md_stream = nullptr;
+        module_sack = std::move(mpkg.module_sack);
+        id = std::move(mpkg.id);
+        repo_id = std::move(mpkg.repo_id);
+        computed_static_context = std::move(mpkg.computed_static_context);
     }
     return *this;
 }
