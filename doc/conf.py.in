@@ -122,6 +122,7 @@ man_pages = [
     ('commands/remove.8', 'dnf5-remove', 'Remove Command', AUTHORS, 8),
     ('commands/repo.8', 'dnf5-repo', 'Repo Command', AUTHORS, 8),
     ('commands/repoquery.8', 'dnf5-repoquery', 'Repoquery Command', AUTHORS, 8),
+    ('commands/search.8', 'dnf5-search', 'Search Command', AUTHORS, 8),
     ('commands/swap.8', 'dnf5-swap', 'Swap Command', AUTHORS, 8),
     ('commands/upgrade.8', 'dnf5-upgrade', 'Upgrade Command', AUTHORS, 8),
     ('misc/comps.7', 'dnf5-comps', 'Comps Groups And Environments', AUTHORS, 7),
