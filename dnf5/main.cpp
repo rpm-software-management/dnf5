@@ -34,8 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/remove/remove.hpp"
 #include "commands/repo/repo.hpp"
 #include "commands/repoquery/repoquery.hpp"
-// TODO(jmracek) The search commnd is not yet implemented
-// #include "commands/search/search.hpp"
+#include "commands/search/search.hpp"
 #include "commands/swap/swap.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "dnf5/context.hpp"
@@ -486,8 +485,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<MarkCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<RepoqueryCommand>(context));
-    // TODO(jmracek) The search commnd is not yet implemented
-    // context.add_and_initialize_command(std::make_unique<SearchCommand>(context));
+    context.add_and_initialize_command(std::make_unique<SearchCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<GroupCommand>(context));
     context.add_and_initialize_command(std::make_unique<EnvironmentCommand>(context));
