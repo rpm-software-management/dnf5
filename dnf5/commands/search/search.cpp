@@ -20,17 +20,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "search.hpp"
 
+#include "search_processor.hpp"
+
+#include <libdnf-cli/output/search.hpp>
 #include <libdnf/conf/option_string.hpp>
-
-
-namespace fs = std::filesystem;
-
+#include <libdnf/rpm/package_query.hpp>
+#include <libdnf/rpm/package_set.hpp>
 
 namespace dnf5 {
 
-
 using namespace libdnf::cli;
-
 
 void SearchCommand::set_parent_command() {
     auto * arg_parser_parent_cmd = get_session().get_argument_parser().get_root_command();
@@ -40,28 +39,23 @@ void SearchCommand::set_parent_command() {
 }
 
 void SearchCommand::set_argument_parser() {
-    auto & ctx = get_context();
-    auto & parser = ctx.get_argument_parser();
-
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Search for software matching all specified strings");
 
-    patterns = parser.add_new_values();
-    auto patterns_arg = parser.add_new_positional_arg(
-        "patterns",
-        ArgumentParser::PositionalArg::UNLIMITED,
-        parser.add_init_value(std::unique_ptr<libdnf::Option>(new libdnf::OptionString(nullptr))),
-        patterns);
-    patterns_arg->set_description("Patterns");
-    cmd.register_positional_arg(patterns_arg);
+    all = std::make_unique<SearchAllOption>(*this);
+    patterns = std::make_unique<SearchPatternsArguments>(*this, get_context());
 }
 
+void SearchCommand::configure() {
+    auto & context = get_context();
+    context.set_load_system_repo(true);
+    context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+}
 
 void SearchCommand::run() {
-    // auto & ctx = get_context();
-    // auto & package_sack = *ctx.base.get_rpm_package_sack();
-
-    // TODO(dmach): implement
+    auto & base = get_context().base;
+    SearchProcessor processor(base, patterns->get_value(), all->get_value());
+    libdnf::cli::output::print_search_results(processor.get_results());
 }
 
 
