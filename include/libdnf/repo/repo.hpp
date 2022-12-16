@@ -377,21 +377,6 @@ private:
     WeakPtrGuard<Repo, false> data_guard;
 };
 
-
-/// Logger for librepo
-/// TODO(jrohel): Rewrite to use global logger (LogRouter)
-struct LibrepoLog {
-public:
-    /// @replaces libdnf:repo/Repo.hpp:method:LibrepoLog.addHandler(const std::string & filePath, bool debug)
-    static long add_handler(const std::string & file_path, bool debug = false);
-
-    /// @replaces libdnf:repo/Repo.hpp:method:LibrepoLog.removeAllHandlers()
-    static void remove_handler(long uid);
-
-    /// @replaces libdnf:repo/Repo.hpp:method:LibrepoLog.removeHandler(long uid)
-    static void remove_all_handlers();
-};
-
 }  // namespace libdnf::repo
 
 #endif
