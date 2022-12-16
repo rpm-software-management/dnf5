@@ -20,6 +20,7 @@ DNF5 Commands
     remove.8
     repo.8
     repoquery.8
+    search.8
     swap.8
     upgrade.8
 
