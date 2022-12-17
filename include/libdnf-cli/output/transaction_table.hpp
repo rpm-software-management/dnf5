@@ -74,8 +74,10 @@ public:
     // ActionHeaderPrinter<Transaction::TransactionItem> action_header_printer(...);
     template <class T>
     struct libscols_line * print(const T & tspkg) {
-        if (!current_action || *current_action != tspkg.get_action() || !current_reason ||
-            *current_reason != tspkg.get_reason()) {
+        if (!current_action || *current_action != tspkg.get_action() ||
+            ((*current_action == libdnf::transaction::TransactionItemAction::INSTALL ||
+              *current_action == libdnf::transaction::TransactionItemAction::REMOVE) &&
+             *current_reason != tspkg.get_reason())) {
             auto reason = tspkg.get_reason();
             auto action = tspkg.get_action();
             current_header_line = scols_table_new_line(table, NULL);
@@ -261,7 +263,11 @@ static bool transaction_package_cmp(const TransactionPackage & tspkg1, const Tra
         return tspkg1.get_action() > tspkg2.get_action();
     }
 
-    if (tspkg1.get_reason() != tspkg2.get_reason()) {
+    // INSTALL and REMOVE actions are divided (printed) into groups according to the reason.
+    auto current_action = tspkg1.get_action();
+    if ((current_action == libdnf::transaction::TransactionItemAction::INSTALL ||
+         current_action == libdnf::transaction::TransactionItemAction::REMOVE) &&
+        tspkg1.get_reason() != tspkg2.get_reason()) {
         return tspkg1.get_reason() > tspkg2.get_reason();
     }
 
