@@ -52,6 +52,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/common/xdg.hpp>
+#include <libdnf/logger/global_logger.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
 #include <libdnf/logger/stream_logger.hpp>
 #include <libdnf/version.hpp>
@@ -581,6 +582,10 @@ int main(int argc, char * argv[]) try {
     libdnf::Base & base = context.base;
 
     auto & log_router = *base.get_logger();
+
+    //TODO(jrohel) Logger verbosity is hardcoded to DEBUG. Use configuration.
+    libdnf::GlobalLogger global_logger;
+    global_logger.set(log_router, libdnf::Logger::Level::DEBUG);
 
     context.set_prg_arguments(static_cast<size_t>(argc), argv);
 
