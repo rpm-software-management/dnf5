@@ -29,6 +29,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/logger/log_router.hpp"
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/plugin/iplugin.hpp"
+#include "libdnf/repo/download_callbacks.hpp"
+#include "libdnf/repo/file_downloader.hpp"
+#include "libdnf/repo/package_downloader.hpp"
 #include "libdnf/repo/repo_sack.hpp"
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/transaction/transaction_history.hpp"
@@ -92,6 +95,12 @@ public:
     void add_plugin(plugin::IPlugin & iplugin_instance);
     void load_plugins();
 
+    /// Set DownloadCallbacks factory class that will be used to create callbacks for
+    /// all downloads.
+    /// @param download_callbacks_factory   Instance of implementation of DownloadCallbacksFactory interface
+    void set_download_callbacks_factory(
+        std::unique_ptr<libdnf::repo::DownloadCallbacksFactory> && download_callbacks_factory);
+
     libdnf::BaseWeakPtr get_weak_ptr() { return BaseWeakPtr(this, &base_guard); }
 
     class Impl;
@@ -104,6 +113,8 @@ private:
     friend class libdnf::advisory::AdvisoryQuery;
     friend class libdnf::module::ModuleSack;
     friend class libdnf::repo::SolvRepo;
+    friend class libdnf::repo::FileDownloader;
+    friend class libdnf::repo::PackageDownloader;
 
     /// Loads the default configuration. To load distribution-specific configuration.
     void load_defaults();
@@ -122,6 +133,18 @@ private:
     /// The files in the directory are read in alphabetical order.
     void load_config_from_dir();
 
+    /// Create DownloadCallbacks instance using the DownloadCallbacksFactory
+    /// (see set_download_callbacks_factory() method). In case the factory is
+    /// not set, nullptr is returned.
+    /// @param what String that describes what is being downloaded (URL, package name...)
+    std::unique_ptr<libdnf::repo::DownloadCallbacks> create_download_callbacks(const std::string & what);
+
+    /// Create DownloadCallbacks instance using the DownloadCallbacksFactory
+    /// (see set_download_callbacks_factory() method). In case the factory is
+    /// not set, nullptr is returned.
+    /// @param package rpm::Package object that is being downloaded
+    std::unique_ptr<libdnf::repo::DownloadCallbacks> create_download_callbacks(const libdnf::rpm::Package & package);
+
     WeakPtrGuard<Base, false> base_guard;
     // Impl has to be the second data member (right after base_guard which is needed for its construction) because it
     // contains Pool and that has be destructed last.
@@ -137,6 +160,7 @@ private:
     std::map<std::string, std::string> variables;
     transaction::TransactionHistory transaction_history;
     Vars vars;
+    std::unique_ptr<repo::DownloadCallbacksFactory> download_callbacks_factory;
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;
     WeakPtrGuard<Vars, false> vars_gurad;

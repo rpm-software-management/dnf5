@@ -131,6 +131,27 @@ void Base::load_plugins() {
     }
 }
 
+void Base::set_download_callbacks_factory(
+    std::unique_ptr<libdnf::repo::DownloadCallbacksFactory> && callbacks_factory) {
+    download_callbacks_factory = std::move(callbacks_factory);
+}
+
+std::unique_ptr<libdnf::repo::DownloadCallbacks> Base::create_download_callbacks(const std::string & what) {
+    if (download_callbacks_factory) {
+        return download_callbacks_factory->create_callbacks(what);
+    } else {
+        return nullptr;
+    }
+}
+
+std::unique_ptr<libdnf::repo::DownloadCallbacks> Base::create_download_callbacks(const libdnf::rpm::Package & package) {
+    if (download_callbacks_factory) {
+        return download_callbacks_factory->create_callbacks(package);
+    } else {
+        return nullptr;
+    }
+}
+
 void Base::setup() {
     auto & pool = p_impl->pool;
     libdnf_assert(!pool, "Base was already initialized");
