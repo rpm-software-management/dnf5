@@ -343,7 +343,7 @@ std::chrono::time_point<std::chrono::steady_clock> DownloadCB::prev_print_time =
 void Context::download_urls(
     std::vector<std::pair<std::string, std::filesystem::path>> url_to_dest_path, bool fail_fast, bool resume) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
-    libdnf::repo::FileDownloader downloader(base.get_config());
+    libdnf::repo::FileDownloader downloader(base.get_weak_ptr());
 
     for (auto & [url, dest_path] : url_to_dest_path) {
         if (!libdnf::utils::url::is_url(url)) {
@@ -415,9 +415,10 @@ std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vecto
     return added_packages;
 }
 
-void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
+void download_packages(
+    const libdnf::BaseWeakPtr & base, const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
-    libdnf::repo::PackageDownloader downloader;
+    libdnf::repo::PackageDownloader downloader(base);
 
     for (auto & package : packages) {
         if (dest_dir != nullptr) {
@@ -440,7 +441,8 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
     // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
 }
 
-void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir) {
+void download_packages(
+    const libdnf::BaseWeakPtr & base, libdnf::base::Transaction & transaction, const char * dest_dir) {
     std::vector<libdnf::rpm::Package> downloads;
     for (auto & tspkg : transaction.get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action()) &&
@@ -450,7 +452,7 @@ void download_packages(libdnf::base::Transaction & transaction, const char * des
     }
 
     if (!downloads.empty()) {
-        download_packages(downloads, dest_dir);
+        download_packages(base, downloads, dest_dir);
     }
 }
 
@@ -796,7 +798,7 @@ bool Context::check_gpg_signatures(const libdnf::base::Transaction & transaction
 
 
 void Context::download_and_run(libdnf::base::Transaction & transaction) {
-    download_packages(transaction, nullptr);
+    download_packages(base.get_weak_ptr(), transaction, nullptr);
 
     std::cout << std::endl << "Verifying PGP signatures" << std::endl;
     if (!check_gpg_signatures(transaction)) {

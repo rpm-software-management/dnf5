@@ -154,7 +154,7 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
 // TODO (mblaha) shared download_packages with dnf5 / libdnf
 // TODO (mblaha) callbacks to report the status
 void download_packages(Session & session, libdnf::base::Transaction & transaction) {
-    libdnf::repo::PackageDownloader downloader;
+    libdnf::repo::PackageDownloader downloader(session.get_base()->get_weak_ptr());
 
     for (auto & tspkg : transaction.get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action())) {

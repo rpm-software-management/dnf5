@@ -137,7 +137,7 @@ void DownloadCommand::run() {
     }
 
     if (!download_pkgs.empty()) {
-        download_packages(download_pkgs, ".");
+        download_packages(ctx.base.get_weak_ptr(), download_pkgs, ".");
     }
 }
 

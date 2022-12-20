@@ -22,7 +22,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_downloader.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/repo/download_callbacks.hpp"
 #include "libdnf/repo/repo.hpp"
 
 #include <librepo/librepo.h>
@@ -89,20 +91,17 @@ class PackageDownloader::Impl {
 };
 
 
-PackageDownloader::PackageDownloader() : p_impl(std::make_unique<Impl>()) {}
+PackageDownloader::PackageDownloader(const BaseWeakPtr & base) : p_impl(std::make_unique<Impl>()), base(base) {}
 PackageDownloader::~PackageDownloader() = default;
 
 
-void PackageDownloader::add(const libdnf::rpm::Package & package, std::unique_ptr<DownloadCallbacks> && callbacks) {
-    add(package, std::filesystem::path(package.get_repo()->get_cachedir()) / "packages", std::move(callbacks));
+void PackageDownloader::add(const libdnf::rpm::Package & package) {
+    add(package, std::filesystem::path(package.get_repo()->get_cachedir()) / "packages");
 }
 
 
-void PackageDownloader::add(
-    const libdnf::rpm::Package & package,
-    const std::string & destination,
-    std::unique_ptr<DownloadCallbacks> && callbacks) {
-    p_impl->targets.emplace_back(package, destination, std::move(callbacks));
+void PackageDownloader::add(const libdnf::rpm::Package & package, const std::string & destination) {
+    p_impl->targets.emplace_back(package, destination, base->create_download_callbacks(package));
 }
 
 
