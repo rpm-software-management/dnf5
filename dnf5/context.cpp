@@ -262,22 +262,19 @@ void Context::load_repos(bool load_system) {
 
 void Context::download_urls(
     std::vector<std::pair<std::string, std::filesystem::path>> url_to_dest_path, bool fail_fast, bool resume) {
-    libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
+    base.set_download_callbacks_factory(std::make_unique<DownloadCBFactory>());
     libdnf::repo::FileDownloader downloader(base.get_weak_ptr());
 
     for (auto & [url, dest_path] : url_to_dest_path) {
         if (!libdnf::utils::url::is_url(url)) {
             continue;
         }
-        downloader.add(url, dest_path, std::make_unique<DownloadCB>(multi_progress_bar, url));
+        downloader.add(url, dest_path);
     }
 
     downloader.download(fail_fast, resume);
-
-    // print a completed progress bar
-    multi_progress_bar.print();
-    std::cout << std::endl;
-    // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
+    // reset the download callback in the base
+    base.set_download_callbacks_factory(nullptr);
 }
 
 std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vector<std::string> & packages_paths) {
@@ -337,15 +334,14 @@ std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vecto
 
 void download_packages(
     const libdnf::BaseWeakPtr & base, const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
-    libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
+    base->set_download_callbacks_factory(std::make_unique<DownloadCBFactory>());
     libdnf::repo::PackageDownloader downloader(base);
 
     for (auto & package : packages) {
         if (dest_dir != nullptr) {
-            downloader.add(
-                package, dest_dir, std::make_unique<DownloadCB>(multi_progress_bar, package.get_full_nevra()));
+            downloader.add(package, dest_dir);
         } else {
-            downloader.add(package, std::make_unique<DownloadCB>(multi_progress_bar, package.get_full_nevra()));
+            downloader.add(package);
         }
     }
 
@@ -355,10 +351,9 @@ void download_packages(
     } catch (const std::runtime_error & ex) {
         std::cout << "Exception: " << ex.what() << std::endl;
     }
-    // print a completed progress bar
-    multi_progress_bar.print();
-    std::cout << std::endl;
-    // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
+
+    // reset the download callback in the base
+    base->set_download_callbacks_factory(nullptr);
 }
 
 void download_packages(
