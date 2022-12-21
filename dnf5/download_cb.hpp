@@ -44,4 +44,21 @@ private:
     std::string what;
 };
 
+
+class DownloadCBFactory : public libdnf::repo::DownloadCallbacksFactory {
+public:
+    DownloadCBFactory();
+    ~DownloadCBFactory();
+
+    std::unique_ptr<libdnf::repo::DownloadCallbacks> create_callbacks(const std::string & url) override;
+
+    std::unique_ptr<libdnf::repo::DownloadCallbacks> create_callbacks(const libdnf::rpm::Package & package) override;
+
+    // true if a new progressbar was added to the multi_progress_bar
+    bool progressbar_created{false};
+
+private:
+    std::unique_ptr<libdnf::cli::progressbar::MultiProgressBar> multi_progress_bar;
+};
+
 #endif  // DNF5_DOWNLOAD_CB_HPP

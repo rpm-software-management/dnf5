@@ -91,3 +91,27 @@ bool DownloadCB::is_time_to_print() {
     }
     return false;
 }
+
+
+DownloadCBFactory::DownloadCBFactory()
+    : multi_progress_bar(std::make_unique<libdnf::cli::progressbar::MultiProgressBar>()) {}
+
+std::unique_ptr<libdnf::repo::DownloadCallbacks> DownloadCBFactory::create_callbacks(const std::string & url) {
+    progressbar_created = true;
+    return std::make_unique<DownloadCB>(*multi_progress_bar, url);
+}
+
+std::unique_ptr<libdnf::repo::DownloadCallbacks> DownloadCBFactory::create_callbacks(
+    const libdnf::rpm::Package & package) {
+    progressbar_created = true;
+    return std::make_unique<DownloadCB>(*multi_progress_bar, package.get_full_nevra());
+}
+
+DownloadCBFactory::~DownloadCBFactory() {
+    if (progressbar_created) {
+        // print a completed progress bar
+        multi_progress_bar->print();
+        std::cout << std::endl;
+        // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
+    }
+}
