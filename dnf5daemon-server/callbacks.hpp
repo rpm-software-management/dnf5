@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5DAEMON_SERVER_CALLBACKS_HPP
 #define DNF5DAEMON_SERVER_CALLBACKS_HPP
 
+#include <libdnf/repo/download_callbacks.hpp>
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/repo/repo_callbacks.hpp>
 #include <libdnf/rpm/transaction_callbacks.hpp>
@@ -67,6 +68,17 @@ private:
     double total = 0;
 
     sdbus::Signal create_signal(std::string interface, std::string signal_name) override;
+};
+
+class DbusPackageCBFactory : public libdnf::repo::DownloadCallbacksFactory {
+public:
+    DbusPackageCBFactory(Session & session);
+    ~DbusPackageCBFactory();
+
+    std::unique_ptr<libdnf::repo::DownloadCallbacks> create_callbacks(const libdnf::rpm::Package & package) override;
+
+private:
+    Session & session;
 };
 
 class DbusRepoCB : public libdnf::repo::RepoCallbacks, public DbusCallback {
