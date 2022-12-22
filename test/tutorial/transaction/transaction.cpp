@@ -38,17 +38,25 @@ class PackageDownloadCallbacks : public libdnf::repo::DownloadCallbacks {
     }
 };
 
+
+// Factory class that produces instances of PackageDownloadCallbacks class
+class PackageDownloadCallbacksFactory : public libdnf::repo::DownloadCallbacksFactory {
+    std::unique_ptr<libdnf::repo::DownloadCallbacks> create_callbacks([[maybe_unused]] const libdnf::rpm::Package & package) override {
+        return std::make_unique<PackageDownloadCallbacks>();
+    }
+};
+
 // Create a package downloader.
-libdnf::repo::PackageDownloader downloader;
+libdnf::repo::PackageDownloader downloader(base.get_weak_ptr());
+
+// register callbacks factory with base
+base.set_download_callbacks_factory(std::make_unique<PackageDownloadCallbacksFactory>());
 
 // Add the inbound packages (packages that are being installed on the system)
 // to the downloader.
 for (auto & tspkg : transaction.get_transaction_packages()) {
     if (transaction_item_action_is_inbound(tspkg.get_action())) {
-        downloader.add(
-            tspkg.get_package(),
-            std::make_unique<PackageDownloadCallbacks>()
-        );
+        downloader.add(tspkg.get_package());
     }
 }
 
