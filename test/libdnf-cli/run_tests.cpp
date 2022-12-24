@@ -51,7 +51,7 @@ int main() {
     // Uncomment to stop cppunit from catching exceptions (for e.g. gdb debugging)
     //controller.popProtector();
 
-    // Add a listener that colllects test result
+    // Add a listener that collects test result
     CPPUNIT_NS::TestResultCollector result;
     controller.addListener(&result);
 
