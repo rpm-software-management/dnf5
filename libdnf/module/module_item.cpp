@@ -122,6 +122,14 @@ std::string ModuleItem::get_name_stream_staticcontext() const {
 }
 
 
+std::string ModuleItem::get_name_stream_staticcontext_arch() const {
+    return libdnf::utils::sformat(
+        "{}:{}",
+        get_name_stream_staticcontext(),
+        libdnf::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream)));
+}
+
+
 std::string ModuleItem::get_full_identifier() const {
     return libdnf::utils::sformat(
         "{}:{}:{}:{}:{}",
