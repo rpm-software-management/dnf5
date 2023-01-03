@@ -33,6 +33,7 @@ class ModuleTest : public BaseTestCase {
     CPPUNIT_TEST(test_resolve);
     CPPUNIT_TEST(test_resolve_broken_defaults);
     CPPUNIT_TEST(test_query);
+    CPPUNIT_TEST(test_query_latest);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -40,6 +41,7 @@ public:
     void test_resolve();
     void test_resolve_broken_defaults();
     void test_query();
+    void test_query_latest();
 };
 
 #endif

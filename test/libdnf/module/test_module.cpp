@@ -163,3 +163,85 @@ void ModuleTest::test_query() {
         CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
     }
 }
+
+void ModuleTest::test_query_latest() {
+    add_repo_repomd("repomd-modules");
+    add_repo_repomd("repomd-modules-duplicit");
+
+    {  // Check we can see all the modules, even ones with duplicit nscva
+        ModuleQuery query(base, false);
+        CPPUNIT_ASSERT_EQUAL((size_t)13, query.size());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_latest(0);
+        CPPUNIT_ASSERT_EQUAL((size_t)0, query.size());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_latest();
+        CPPUNIT_ASSERT_EQUAL((size_t)11, query.size());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_latest(-1);
+        CPPUNIT_ASSERT_EQUAL((size_t)10, query.size());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("gooseberry");
+        query.filter_latest();
+        CPPUNIT_ASSERT_EQUAL((size_t)4, query.size());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("gooseberry");
+        query.filter_latest(2);
+        CPPUNIT_ASSERT_EQUAL((size_t)5, query.size());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("gooseberry");
+        query.filter_latest(-1);
+        CPPUNIT_ASSERT_EQUAL((size_t)3, query.size());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("gooseberry");
+        query.filter_latest(-2);
+        CPPUNIT_ASSERT_EQUAL((size_t)4, query.size());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("gooseberry");
+        query.filter_context("72aaf46b6");
+        query.filter_latest();
+        for (auto module_item : query) {
+            CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), module_item.get_name());
+            CPPUNIT_ASSERT_EQUAL(std::string("5.5"), module_item.get_stream());
+            CPPUNIT_ASSERT_EQUAL(std::string("3"), module_item.get_version_str());
+            CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), module_item.get_arch());
+        }
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_name("gooseberry");
+        query.filter_context("72aaf46b6");
+        query.filter_latest(-1);
+        for (auto module_item : query) {
+            CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), module_item.get_name());
+            CPPUNIT_ASSERT_EQUAL(std::string("5.5"), module_item.get_stream());
+            CPPUNIT_ASSERT_EQUAL(std::string("1"), module_item.get_version_str());
+            CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), module_item.get_arch());
+        }
+    }
+}
