@@ -195,6 +195,9 @@ private:
     /// @return The "name:stream:computed_static_context" string if computed_static_context exists, otherwise,
     ///         the "name:stream:version:context" string.
     std::string get_name_stream_staticcontext() const;
+    /// @return The "name:stream:computed_static_context:arch" string if computed_static_context exists, otherwise,
+    ///         the "name:stream:version:context:arch" string.
+    std::string get_name_stream_staticcontext_arch() const;
 
     std::vector<ModuleProfile> get_profiles_internal(const char * name) const;
 
