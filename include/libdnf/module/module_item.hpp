@@ -192,7 +192,9 @@ private:
     std::string get_name_stream() const;
     // @replaces libdnf:module/ModuleItem.hpp:method:ModuleItem.getNameStreamVersion()
     std::string get_name_stream_version() const;
-    std::string get_name_stream_context() const;
+    /// @return The "name:stream:computed_static_context" string if computed_static_context exists, otherwise,
+    ///         the "name:stream:version:context" string.
+    std::string get_name_stream_staticcontext() const;
 
     std::vector<ModuleProfile> get_profiles_internal(const char * name) const;
 

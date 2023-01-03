@@ -381,7 +381,7 @@ void ModuleSack::Impl::set_active_modules(ModuleGoalPrivate & goal) {
         solvable_names.emplace(name);
     }
     for (const auto & module_item : modules) {
-        std::string solvable_name = module_item->get_name_stream_context();
+        std::string solvable_name = module_item->get_name_stream_staticcontext();
         if (solvable_names.contains(solvable_name)) {
             active_modules[module_item->id.id] = module_item.get();
         }

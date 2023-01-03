@@ -111,7 +111,7 @@ std::string ModuleItem::get_name_stream_version() const {
 }
 
 
-std::string ModuleItem::get_name_stream_context() const {
+std::string ModuleItem::get_name_stream_staticcontext() const {
     // TODO(pkratoch): Find out what is the fastest way to concatenate strings.
     return libdnf::utils::sformat(
         "{}:{}:{}",
@@ -325,7 +325,7 @@ void ModuleItem::create_solvable() {
     Solvable * solvable = pool_id2solvable(pool, id.id);
 
     // Name: $name:$stream:$context
-    solvable_set_str(solvable, SOLVABLE_NAME, get_name_stream_context().c_str());
+    solvable_set_str(solvable, SOLVABLE_NAME, get_name_stream_staticcontext().c_str());
     // Version: $version
     solvable_set_str(solvable, SOLVABLE_EVR, get_version_str().c_str());
     // TODO(pkratoch): The test can be removed once modules always have arch
