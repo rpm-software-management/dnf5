@@ -100,4 +100,44 @@ void ModuleQuery::filter_arch(const std::vector<std::string> & patterns, libdnf:
 }
 
 
+bool ModuleQuery::latest_cmp(const ModuleItem * module_item_1, const ModuleItem * module_item_2) {
+    Pool * pool = module_item_1->module_sack->p_impl->pool;
+    const Solvable * s1 = pool_id2solvable(pool, module_item_1->id.id);
+    const Solvable * s2 = pool_id2solvable(pool, module_item_2->id.id);
+    if (s1->name != s2->name) {
+        return s1->name < s2->name;
+    }
+    if (s1->arch != s2->arch) {
+        return s1->arch < s2->arch;
+    }
+    return module_item_1->get_version() > module_item_2->get_version();
+}
+
+
+void ModuleQuery::filter_latest(int limit) {
+    std::vector<const ModuleItem *> same_nsca_vector;
+    same_nsca_vector.reserve(size());
+
+    for (auto & module_item : get_data()) {
+        same_nsca_vector.push_back(&module_item);
+    }
+    sort(same_nsca_vector.begin(), same_nsca_vector.end(), latest_cmp);
+
+    std::string last_nsca = same_nsca_vector.front()->get_name_stream_staticcontext_arch();
+    int kept_in_query = 0;
+    for (auto module_item : same_nsca_vector) {
+        std::string nsca = module_item->get_name_stream_staticcontext_arch();
+        if (last_nsca != nsca) {
+            last_nsca = nsca;
+            kept_in_query = 0;
+        }
+        if (kept_in_query < limit) {
+            kept_in_query += 1;
+        } else {
+            get_data().erase(*module_item);
+        }
+    }
+}
+
+
 }  // namespace libdnf::module

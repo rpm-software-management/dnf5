@@ -162,4 +162,22 @@ void ModuleTest::test_query() {
         CPPUNIT_ASSERT_EQUAL(std::string("6c81f848"), result.get_context());
         CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
     }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_latest();
+        CPPUNIT_ASSERT_EQUAL((size_t)9, query.size());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        query.filter_latest();
+        query.filter_name("gooseberry");
+        query.filter_context("72aaf46b6");
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("5.5"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("3"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
 }

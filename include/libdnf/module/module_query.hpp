@@ -133,6 +133,12 @@ public:
     void filter_arch(
         const std::vector<std::string> & patterns, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
+    /// Group ModuleItems by `name`, `stream`, `context` and `arch`. Then within each group, keep packages that correspond with up to `limit` of latest `version`s in the group.
+    ///
+    /// @param limit            Keep `limit` number `version`s in each group.
+    /// @since 5.0.4
+    void filter_latest(int limit = 1);
+
 private:
     // Getter callbacks that return attribute values from an object. Used in query filters.
     struct Get {
@@ -144,6 +150,8 @@ private:
     };
 
     friend ModuleItem;
+
+    static bool latest_cmp(const ModuleItem * module_item_1, const ModuleItem * module_item_2);
 
     BaseWeakPtr base;
 };

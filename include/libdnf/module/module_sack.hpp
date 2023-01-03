@@ -99,6 +99,7 @@ private:
     friend class libdnf::repo::RepoSack;
     friend ModuleItem;
     friend class ModuleGoalPrivate;
+    friend class ModuleQuery;
 
     ModuleSack(const BaseWeakPtr & base);
 
