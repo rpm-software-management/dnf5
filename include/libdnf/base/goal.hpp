@@ -282,7 +282,7 @@ public:
     void add_rpm_reason_change(
         const std::string & spec,
         const libdnf::transaction::TransactionItemReason reason,
-        const std::optional<std::string> & group_id,
+        const std::string & group_id = {},
         const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
 
     /// Add group install request to the goal. The `spec` will be resolved to groups in the resolve() call.
