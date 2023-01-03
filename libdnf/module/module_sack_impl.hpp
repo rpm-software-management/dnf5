@@ -84,6 +84,7 @@ private:
     friend ModuleSack;
     friend ModuleItem;
     friend ModuleGoalPrivate;
+    friend class ModuleQuery;
 
     BaseWeakPtr base;
     ModuleMetadata module_metadata;
