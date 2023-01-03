@@ -76,7 +76,7 @@ void MarkUserCommand::run() {
     auto goal = get_context().get_goal();
     for (auto & pattern : *pkg_specs) {
         auto option = dynamic_cast<libdnf::OptionString *>(pattern.get());
-        goal->add_rpm_reason_change(option->get_value(), reason, std::nullopt);
+        goal->add_rpm_reason_change(option->get_value(), reason);
     }
 }
 

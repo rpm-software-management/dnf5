@@ -284,10 +284,10 @@ void Goal::add_rpm_distro_sync(const rpm::PackageSet & package_set, const GoalJo
 void Goal::add_rpm_reason_change(
     const std::string & spec,
     const libdnf::transaction::TransactionItemReason reason,
-    const std::optional<std::string> & group_id,
+    const std::string & group_id,
     const libdnf::GoalJobSettings & settings) {
     libdnf_assert(
-        reason != libdnf::transaction::TransactionItemReason::GROUP || group_id != std::nullopt,
+        reason != libdnf::transaction::TransactionItemReason::GROUP || !group_id.empty(),
         "group_id is required for setting reason \"GROUP\"");
     p_impl->rpm_reason_change_specs.push_back(std::make_tuple(reason, spec, group_id, settings));
 }
