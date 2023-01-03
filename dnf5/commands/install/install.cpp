@@ -94,7 +94,7 @@ void InstallCommand::run() {
         advisory_bz->get_value(),
         advisory_cve->get_value());
     if (advisories.has_value()) {
-        settings.advisory_filter = advisories;
+        settings.set_advisory_filter(std::move(advisories.value()));
     }
     for (const auto & spec : pkg_specs) {
         goal->add_install(spec, settings);

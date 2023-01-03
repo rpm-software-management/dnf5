@@ -141,25 +141,25 @@ public:
     /// Return used value for clean_requirements_on_remove
     GoalUsedSetting get_used_clean_requirements_on_remove() const { return used_clean_requirements_on_remove; };
 
-    /// Set whether hints should be reported
-    bool report_hint{true};
-    /// Set strict, AUTO means that it is handled according the the default behavior
-    GoalSetting strict{GoalSetting::AUTO};
-    /// Set best, AUTO means that it is handled according the the default behavior
-    GoalSetting best{GoalSetting::AUTO};
-    /// Set clean_requirements_on_remove, AUTO means that it is handled according the the default behavior
-    GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
-    /// Define which installed packagies should be modified acording to repoid from which they were installed
-    std::vector<std::string> from_repo_ids;
-    /// Reduce candidates for the operation according repository ids
-    std::vector<std::string> to_repo_ids;
-
     /// Optionally assign AdvisoryQuery that is used to filter goal target packages (used for upgrade and install)
-    std::optional<libdnf::advisory::AdvisoryQuery> advisory_filter;
+    void set_advisory_filter(const libdnf::advisory::AdvisoryQuery & filter) { advisory_filter = filter; };
 
     // Which types of group packages are going to be installed with the group.
     // If not set, default is taken from ConfigMain.group_package_types
-    std::optional<libdnf::comps::PackageType> group_package_types{std::nullopt};
+    void set_group_package_types(const libdnf::comps::PackageType type) { group_package_types = type; }
+
+    /// Set whether hints should be reported
+    bool report_hint{true};
+    /// Set strict, AUTO means that it is handled according to the default behavior
+    GoalSetting strict{GoalSetting::AUTO};
+    /// Set best, AUTO means that it is handled according to the default behavior
+    GoalSetting best{GoalSetting::AUTO};
+    /// Set clean_requirements_on_remove, AUTO means that it is handled according to the default behavior
+    GoalSetting clean_requirements_on_remove{GoalSetting::AUTO};
+    /// Define which installed packages should be modified according to repoid from which they were installed
+    std::vector<std::string> from_repo_ids;
+    /// Reduce candidates for the operation according repository ids
+    std::vector<std::string> to_repo_ids;
 
 private:
     friend class Goal;
@@ -210,6 +210,8 @@ private:
     GoalUsedSetting used_best{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_clean_requirements_on_remove{GoalUsedSetting::UNUSED};
     std::optional<libdnf::comps::PackageType> used_group_package_types{std::nullopt};
+    std::optional<libdnf::advisory::AdvisoryQuery> advisory_filter{std::nullopt};
+    std::optional<libdnf::comps::PackageType> group_package_types{std::nullopt};
 };
 
 
