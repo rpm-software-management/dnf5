@@ -87,14 +87,14 @@ inline std::optional<libdnf::advisory::AdvisoryQuery> advisory_query_from_cli_in
         // Filter by advisory bz
         if (!advisory_bzs.empty()) {
             auto advisories_bzs = libdnf::advisory::AdvisoryQuery(base);
-            advisories_bzs.filter_reference(advisory_bzs, libdnf::sack::QueryCmp::EQ, {"bugzilla"});
+            advisories_bzs.filter_reference(advisory_bzs, {"bugzilla"});
             advisories |= advisories_bzs;
         }
 
         // Filter by advisory cve
         if (!advisory_cves.empty()) {
             auto advisories_cves = libdnf::advisory::AdvisoryQuery(base);
-            advisories_cves.filter_reference(advisory_cves, libdnf::sack::QueryCmp::EQ, {"cve"});
+            advisories_cves.filter_reference(advisory_cves, {"cve"});
             advisories |= advisories_cves;
         }
 

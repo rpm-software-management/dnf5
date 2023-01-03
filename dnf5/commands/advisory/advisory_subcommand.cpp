@@ -101,10 +101,10 @@ void AdvisorySubCommand::run() {
     auto advisories = advisories_opt.value_or(libdnf::advisory::AdvisoryQuery(ctx.base));
 
     if (with_bz->get_value()) {
-        advisories.filter_reference("*", libdnf::sack::QueryCmp::IGLOB, {"bugzilla"});
+        advisories.filter_reference("*", {"bugzilla"}, libdnf::sack::QueryCmp::IGLOB);
     }
     if (with_cve->get_value()) {
-        advisories.filter_reference("*", libdnf::sack::QueryCmp::IGLOB, {"cve"});
+        advisories.filter_reference("*", {"cve"}, libdnf::sack::QueryCmp::IGLOB);
     }
 
     process_and_print_queries(ctx, advisories, package_query);
