@@ -177,12 +177,17 @@ void AdvisoryQuery::filter_type(const std::vector<std::string> & types, sack::Qu
     filter_dataiterator_internal(*get_rpm_pool(base), SOLVABLE_PATCHCATEGORY, *p_impl, cmp_type, types);
 }
 
-void AdvisoryQuery::filter_reference(
-    const std::string & pattern, sack::QueryCmp cmp_type, const std::optional<std::string> type) {
+void AdvisoryQuery::filter_reference(const std::string & pattern, sack::QueryCmp cmp_type) {
+    filter_reference_by_type_and_id(get_rpm_pool(base), *p_impl, cmp_type, {pattern}, std::nullopt);
+}
+void AdvisoryQuery::filter_reference(const std::string & pattern, const std::string & type, sack::QueryCmp cmp_type) {
     filter_reference_by_type_and_id(get_rpm_pool(base), *p_impl, cmp_type, {pattern}, type);
 }
+void AdvisoryQuery::filter_reference(const std::vector<std::string> & patterns, sack::QueryCmp cmp_type) {
+    filter_reference_by_type_and_id(get_rpm_pool(base), *p_impl, cmp_type, patterns, std::nullopt);
+}
 void AdvisoryQuery::filter_reference(
-    const std::vector<std::string> & patterns, sack::QueryCmp cmp_type, const std::optional<std::string> type) {
+    const std::vector<std::string> & patterns, const std::string & type, sack::QueryCmp cmp_type) {
     filter_reference_by_type_and_id(get_rpm_pool(base), *p_impl, cmp_type, patterns, type);
 }
 
