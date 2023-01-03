@@ -209,6 +209,11 @@ void OptionStringContainer<T>::add(Priority priority, const ValueType & items) {
 }
 
 template <typename T>
+void OptionStringContainer<T>::add(Priority priority, const std::string & value) {
+    add(priority, from_string(value));
+}
+
+template <typename T>
 void OptionStringContainer<T>::add_item(Priority priority, const std::string & item) {
     assert_not_locked();
 

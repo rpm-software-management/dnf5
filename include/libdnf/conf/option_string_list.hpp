@@ -75,6 +75,10 @@ public:
     /// New items are stored in the container value
     void add(Priority priority, const ValueType & items);
 
+    /// Parses input string and adds new values and priority.
+    /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
+    void add(Priority priority, const std::string & value);
+
     /// Adds new item to the container.
     /// New item is stored in the container value
     void add_item(Priority priority, const std::string & item);
