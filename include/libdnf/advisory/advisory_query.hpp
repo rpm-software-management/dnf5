@@ -29,8 +29,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/rpm/package.hpp"
 
-#include <optional>
-
 
 namespace libdnf::advisory {
 
@@ -78,11 +76,11 @@ public:
     void filter_reference(
         const std::string & pattern,
         sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ,
-        const std::optional<std::string> type = {});
+        const std::string & type = {});
     void filter_reference(
         const std::vector<std::string> & pattern,
         sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ,
-        const std::optional<std::string> type = {});
+        const std::string & type = {});
 
     /// Filter Advisories by severity.
     ///
