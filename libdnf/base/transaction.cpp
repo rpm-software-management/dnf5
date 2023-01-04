@@ -597,7 +597,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
                 system_state.remove_package_nevra_state(pkg.get_nevra());
             } else if (tspkg.get_action() == TransactionPackage::Action::REASON_CHANGE) {
                 if (tspkg_reason == transaction::TransactionItemReason::GROUP) {
-                    auto group_id = tspkg.get_reason_change_group_id().value();
+                    auto group_id = *tspkg.get_reason_change_group_id();
                     auto state = system_state.get_group_state(group_id);
                     state.packages.emplace_back(pkg.get_name());
                     system_state.set_group_state(group_id, state);

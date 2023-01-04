@@ -69,7 +69,9 @@ public:
 
     /// The REASON_CHANGE action requires group id in case the reason is changed to GROUP
     /// @return id of group the package belongs to
-    const std::optional<std::string> & get_reason_change_group_id() const noexcept { return reason_change_group_id; }
+    const std::string * get_reason_change_group_id() const noexcept {
+        return reason_change_group_id ? &reason_change_group_id.value() : nullptr;
+    }
 
 private:
     friend class Transaction::Impl;
