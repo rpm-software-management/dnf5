@@ -14,6 +14,7 @@
 
 %import "common.i"
 %import "repo.i"
+%import "transaction.i"
 
 %{
     #include "libdnf/comps/group/package.hpp"
