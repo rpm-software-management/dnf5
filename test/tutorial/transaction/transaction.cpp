@@ -81,4 +81,4 @@ class TransactionCallbacks : public libdnf::rpm::TransactionCallbacks {
 // transaction. The third argument is user_id, omitted here for simplicity. The
 // fourth argument can be an arbitrary user comment.
 std::cout << std::endl << "Running the transaction:" << std::endl;
-transaction.run(std::make_unique<TransactionCallbacks>(), "install package one", std::nullopt, std::nullopt);
+transaction.run(std::make_unique<TransactionCallbacks>(), "install package one");

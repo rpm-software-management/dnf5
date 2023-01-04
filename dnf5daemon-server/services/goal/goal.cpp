@@ -187,14 +187,12 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
 
     download_packages(session, *transaction);
 
-    std::optional<std::string> comment{};
+    std::string comment;
     if (options.find("comment") != options.end()) {
         comment = key_value_map_get<std::string>(options, "comment");
     }
 
-    auto rpm_result =
-        transaction->run(std::make_unique<DbusTransactionCB>(session), "dnf5daemon-server", std::nullopt, comment);
-
+    auto rpm_result = transaction->run(std::make_unique<DbusTransactionCB>(session), "dnf5daemon-server", comment);
     if (rpm_result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
         throw sdbus::Error(
             dnfdaemon::ERROR_TRANSACTION,

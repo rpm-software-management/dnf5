@@ -76,7 +76,7 @@ public:
         std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
         const std::string & description,
         const std::optional<uint32_t> user_id,
-        const std::optional<std::string> comment);
+        const std::string & comment);
 
 private:
     friend Transaction;
