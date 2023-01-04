@@ -1,6 +1,6 @@
 %global project_version_major 5
 %global project_version_minor 0
-%global project_version_patch 2
+%global project_version_patch 3
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
@@ -592,6 +592,18 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
 
 
 %changelog
+* Wed Jan 04 2022 Nicola Sella <nsella@redhat.com> - 5.0.3-1
+- Add Python docs for: Base, Goal, RepoQuery, Package and PackageQuery
+- Add docs for Python bindings: they are auto generated now
+- Add --what* and --exactdeps options to repoquery
+- Add "user enter password" to dnf5daemon functionalities
+- Fix: remove repeating headers in transaction table
+- Fix: Set status of download progress bar after successful download
+- Fix: RepoDownloader::get_cache_handle: Don't set callbacks in LibrepoHandle
+- Refactor internal utils
+- Improved GlobalLogger
+- Improved C++ API docs
+
 * Thu Dec 08 2022 Nicola Sella <nsella@redhat.com> - 5.0.2-1
 - Implement group remove command
 - Improved options in config
