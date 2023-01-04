@@ -70,4 +70,4 @@ print("Running the transaction:")
 transaction_callbacks = TransactionCallbacks()
 transaction_callbacks_ptr = libdnf5.rpm.TransactionCallbacksUniquePtr(transaction_callbacks)
 
-transaction.run(transaction_callbacks_ptr, "install package one", None, None)
+transaction.run(transaction_callbacks_ptr, "install package one")

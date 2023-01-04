@@ -32,7 +32,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
-#include "libdnf/common/proc.hpp"
 #include "libdnf/rpm/package_query.hpp"
 
 #include <fmt/format.h>
@@ -226,8 +225,15 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
 Transaction::TransactionRunResult Transaction::run(
     std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
     const std::string & description,
-    const std::optional<uint32_t> user_id,
-    const std::optional<std::string> comment) {
+    const std::string & comment) {
+    return p_impl->run(std::move(callbacks), description, std::nullopt, comment);
+}
+
+Transaction::TransactionRunResult Transaction::run(
+    std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
+    const std::string & description,
+    const uint32_t user_id,
+    const std::string & comment) {
     return p_impl->run(std::move(callbacks), description, user_id, comment);
 }
 
@@ -391,7 +397,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
     const std::string & description,
     const std::optional<uint32_t> user_id,
-    const std::optional<std::string> comment) {
+    const std::string & comment) {
     // do not allow to run transaction multiple times
     if (history_db_id > 0) {
         return TransactionRunResult::ERROR_RERUN;
@@ -477,14 +483,11 @@ Transaction::TransactionRunResult Transaction::Impl::run(
         db_transaction.set_releasever(vars->get_value("releasever"));
     }
 
-    if (comment) {
-        db_transaction.set_comment(comment.value());
-    }
-
+    db_transaction.set_comment(comment);
     db_transaction.set_description(description);
 
     if (user_id) {
-        db_transaction.set_user_id(user_id.value());
+        db_transaction.set_user_id(*user_id);
     } else {
         db_transaction.set_user_id(get_login_uid());
     }

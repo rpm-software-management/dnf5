@@ -111,8 +111,8 @@ void RpmTransactionTest::test_transaction() {
     CPPUNIT_ASSERT_EQUAL(0, dl_callbacks_ptr->mirror_failure_cnt);
 
     // TODO(lukash) test transaction callbacks
-    libdnf::base::Transaction::TransactionRunResult res = transaction.run(
-        std::make_unique<libdnf::rpm::TransactionCallbacks>(), "install package one", std::nullopt, std::nullopt);
+    libdnf::base::Transaction::TransactionRunResult res =
+        transaction.run(std::make_unique<libdnf::rpm::TransactionCallbacks>(), "install package one");
 
     CPPUNIT_ASSERT_EQUAL(libdnf::base::Transaction::TransactionRunResult::SUCCESS, res);
     // TODO(lukash) assert the packages were installed

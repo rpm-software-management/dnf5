@@ -651,12 +651,7 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
         cmd_line += argv[i];
     }
 
-    auto result = transaction.run(
-        std::make_unique<RpmTransCB>(),
-        cmd_line,
-        std::nullopt,
-        comment == nullptr ? std::nullopt : std::make_optional<std::string>(comment));
-
+    auto result = transaction.run(std::make_unique<RpmTransCB>(), cmd_line, comment ? comment : "");
     if (result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
         std::cout << "Transaction failed: " << libdnf::base::Transaction::transaction_result_to_string(result)
                   << std::endl;
