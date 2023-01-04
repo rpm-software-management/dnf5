@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/base/log_event.hpp"
 #include "libdnf/base/solver_problems.hpp"
+#include "libdnf/common/proc.hpp"
 #include "libdnf/rpm/transaction_callbacks.hpp"
 
 #include <optional>
@@ -86,14 +87,14 @@ public:
     /// @param callbacks Callbacks to be called during rpm transaction.
     /// @param description Description of the transaction (the console command for CLI,
     //                     verbose description for API usage)
-    /// @param user_id UID of the user that started the transaction.
     /// @param comment Any comment to store in the history database along with the transaction.
+    /// @param user_id UID of the user that started the transaction.
     /// @return An enum describing the result of running the transaction.
     TransactionRunResult run(
         std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
         const std::string & description,
-        const std::optional<uint32_t> user_id,
-        const std::optional<std::string> comment);
+        const std::string & comment = {},
+        const uint32_t user_id = libdnf::INVALID_UID);
 
     /// Return string representation of the TransactionRunResult enum
     static std::string transaction_result_to_string(const TransactionRunResult result);
