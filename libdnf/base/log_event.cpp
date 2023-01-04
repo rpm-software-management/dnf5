@@ -31,16 +31,16 @@ namespace libdnf::base {
 LogEvent::LogEvent(
     libdnf::GoalAction action,
     libdnf::GoalProblem problem,
+    const std::set<std::string> & additional_data,
     const libdnf::GoalJobSettings & settings,
     const SpecType spec_type,
-    const std::string & spec,
-    const std::set<std::string> & additional_data)
+    const std::string & spec)
     : action(action),
       problem(problem),
+      additional_data(additional_data),
       job_settings(settings),
       spec_type(spec_type),
-      spec(spec),
-      additional_data(additional_data) {
+      spec(spec) {
     libdnf_assert(
         !(problem == libdnf::GoalProblem::SOLVER_ERROR ||
           problem == libdnf::GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT),
@@ -64,10 +64,10 @@ LogEvent::LogEvent(libdnf::GoalProblem problem, const SolverProblems & solver_pr
 std::string LogEvent::to_string(
     libdnf::GoalAction action,
     libdnf::GoalProblem problem,
+    const std::set<std::string> & additional_data,
     const std::optional<libdnf::GoalJobSettings> & settings,
     const std::optional<LogEvent::SpecType> & spec_type,
     const std::optional<std::string> & spec,
-    const std::optional<std::set<std::string>> & additional_data,
     const std::optional<SolverProblems> & solver_problems) {
     std::string ret;
     switch (problem) {
@@ -111,16 +111,16 @@ std::string LogEvent::to_string(
         case GoalProblem::HINT_ICASE:
             return ret.append(utils::sformat(_("  * Maybe you meant: {}"), *spec));
         case GoalProblem::HINT_ALTERNATIVES: {
-            auto elements = utils::string::join(*additional_data, ", ");
+            auto elements = utils::string::join(additional_data, ", ");
             return ret.append(utils::sformat(_("There are following alternatives for '{0}': {1}"), *spec, elements));
         }
         case GoalProblem::INSTALLED_LOWEST_VERSION: {
-            if (additional_data->size() != 1) {
+            if (additional_data.size() != 1) {
                 throw std::invalid_argument("Incorrect number of elements for INSTALLED_LOWEST_VERSION");
             }
             return ret.append(utils::sformat(
                 _("Package \"{}\" of lowest version already installed, cannot downgrade it."),
-                *additional_data->begin()));
+                *additional_data.begin()));
         }
         case GoalProblem::INSTALLED_IN_DIFFERENT_VERSION:
             if (action == GoalAction::REINSTALL) {
@@ -136,14 +136,14 @@ std::string LogEvent::to_string(
         case GoalProblem::NO_PROBLEM:
             throw std::invalid_argument("Unsupported elements for a goal problem");
         case GoalProblem::ALREADY_INSTALLED:
-            if (additional_data->size() != 1) {
+            if (additional_data.size() != 1) {
                 throw std::invalid_argument("Incorrect number of elements for ALREADY_INSTALLED");
             }
             if (action == GoalAction::REASON_CHANGE) {
                 return ret.append(utils::sformat(
-                    _("Package \"{}\" is already installed with reason \"{}\"."), *spec, *additional_data->begin()));
+                    _("Package \"{}\" is already installed with reason \"{}\"."), *spec, *additional_data.begin()));
             } else {
-                return ret.append(utils::sformat(_("Package \"{}\" is already installed."), *additional_data->begin()));
+                return ret.append(utils::sformat(_("Package \"{}\" is already installed."), *additional_data.begin()));
             }
         case GoalProblem::SOLVER_ERROR:
         case GoalProblem::SOLVER_PROBLEM_STRICT_RESOLVEMENT:
@@ -152,7 +152,7 @@ std::string LogEvent::to_string(
             }
             return ret.append(solver_problems->to_string());
         case GoalProblem::WRITE_DEBUG:
-            return ret.append(utils::sformat(_("Debug data written to \"{}\""), *additional_data->begin()));
+            return ret.append(utils::sformat(_("Debug data written to \"{}\""), *additional_data.begin()));
         case GoalProblem::UNSUPPORTED_ACTION:
             return ret.append(utils::sformat(
                 _("{} action for argument \"{}\" is not supported."), goal_action_to_string(action), *spec));

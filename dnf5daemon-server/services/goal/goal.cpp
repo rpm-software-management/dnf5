@@ -124,17 +124,17 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
             goal_resolve_log_item["goal_job_settings"] = goal_job_settings;
         }
         if (log.get_spec()) {
-            goal_resolve_log_item["spec"] = log.get_spec().value();
+            goal_resolve_log_item["spec"] = *log.get_spec();
         }
-        if (log.get_additional_data()) {
-            auto & data = log.get_additional_data();
+        if (log.get_additional_data().size() > 0) {
             // convert std::set<std::string> to std::vector<std::string>
-            goal_resolve_log_item["additional_data"] = std::vector<std::string>{data->begin(), data->end()};
+            goal_resolve_log_item["additional_data"] =
+                std::vector<std::string>{log.get_additional_data().begin(), log.get_additional_data().end()};
         }
         if (log.get_solver_problems()) {
             using DbusRule = sdbus::Struct<uint32_t, std::vector<std::string>>;
             std::vector<std::vector<DbusRule>> dbus_problems;
-            for (const auto & problem : log.get_solver_problems().value().get_problems()) {
+            for (const auto & problem : log.get_solver_problems()->get_problems()) {
                 std::vector<DbusRule> dbus_problem;
                 for (const auto & rule : problem) {
                     dbus_problem.emplace_back(DbusRule{static_cast<uint32_t>(rule.first), rule.second});

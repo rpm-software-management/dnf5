@@ -317,7 +317,7 @@ void BaseGoalTest::test_upgrade_not_downgrade_from_cmdline() {
     auto & first_event = *log.begin();
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalAction::UPGRADE, first_event.get_action());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalProblem::ALREADY_INSTALLED, first_event.get_problem());
-    CPPUNIT_ASSERT_EQUAL(std::string("one.noarch"), *first_event.get_additional_data()->begin());
+    CPPUNIT_ASSERT_EQUAL(std::string("one.noarch"), *first_event.get_additional_data().begin());
     CPPUNIT_ASSERT_EQUAL(
         libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_clean_requirements_on_remove());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_best());

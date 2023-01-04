@@ -178,7 +178,7 @@ void Transaction::Impl::add_resolve_log(
     const std::string & spec,
     const std::set<std::string> & additional_data,
     bool strict) {
-    resolve_logs.emplace_back(LogEvent(action, problem, settings, spec_type, spec, additional_data));
+    resolve_logs.emplace_back(LogEvent(action, problem, additional_data, settings, spec_type, spec));
     // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
     if (strict) {
