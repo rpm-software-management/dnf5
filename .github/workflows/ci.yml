@@ -42,7 +42,7 @@ jobs:
 
       - name: Build in Copr
         run: |
-          CHROOTS="fedora-35-x86_64, fedora-36-x86_64, fedora-rawhide-x86_64"
+          CHROOTS="fedora-36-x86_64, fedora-37-x86_64, fedora-rawhide-x86_64"
           PROJECT_NAME="CI-libdnf5-pr${{github.event.pull_request.number}}"
           if [[ -n "${{matrix.compiler}}" ]]; then
             PROJECT_NAME+="-${{matrix.compiler}}"
