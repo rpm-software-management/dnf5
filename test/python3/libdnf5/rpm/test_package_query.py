@@ -130,3 +130,10 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         self.assertEqual(nevra.get_name(), "pkg")
         self.assertEqual(nevra.get_arch(), "x86_64")
         self.assertFalse(nevra.has_just_name())
+
+    def test_pkg_reason_value(self):
+        # Test wrapper for reason enum
+        query = libdnf5.rpm.PackageQuery(self.base)
+        query.filter_name(["pkg"])
+        package = next(iter(query))
+        self.assertEqual(package.get_reason(), libdnf5.transaction.TransactionItemReason_NONE)
