@@ -32,7 +32,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/group/query.hpp"
 #include "libdnf/rpm/package_query.hpp"
 #include "libdnf/rpm/package_set.hpp"
-#include "libdnf/utils/format.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 
@@ -83,7 +82,7 @@ struct assertion_traits<libdnf::advisory::Advisory> {
     }
 
     inline static std::string toString(const libdnf::advisory::Advisory & advisory) {
-        return libdnf::utils::sformat("{} (id: {})", advisory.get_name(), advisory.get_id().id);
+        return fmt::format("{} (id: {})", advisory.get_name(), advisory.get_id().id);
     }
 };
 
@@ -115,7 +114,7 @@ struct assertion_traits<libdnf::comps::Environment> {
             repos += repo;
         }
 
-        return libdnf::utils::sformat("{} (repos: {})", environment.get_environmentid(), repos);
+        return fmt::format("{} (repos: {})", environment.get_environmentid(), repos);
     }
 };
 
@@ -147,7 +146,7 @@ struct assertion_traits<libdnf::comps::Group> {
             repos += repo;
         }
 
-        return libdnf::utils::sformat("{} (repos: {})", group.get_groupid(), repos);
+        return fmt::format("{} (repos: {})", group.get_groupid(), repos);
     }
 };
 
@@ -171,7 +170,7 @@ struct assertion_traits<libdnf::rpm::Package> {
     }
 
     inline static std::string toString(const libdnf::rpm::Package & pkg) {
-        return libdnf::utils::sformat(
+        return fmt::format(
             "{} (id: {} repo: {} {})",
             pkg.get_full_nevra(),
             pkg.get_id().id,
@@ -200,7 +199,7 @@ struct assertion_traits<libdnf::rpm::Reldep> {
     }
 
     inline static std::string toString(const libdnf::rpm::Reldep & reldep) {
-        return libdnf::utils::sformat("{} (id: {})", reldep.to_string(), reldep.get_id().id);
+        return fmt::format("{} (id: {})", reldep.to_string(), reldep.get_id().id);
     }
 };
 
@@ -213,7 +212,7 @@ struct assertion_traits<libdnf::base::TransactionPackage> {
     }
 
     inline static std::string toString(const libdnf::base::TransactionPackage & tspkg) {
-        return libdnf::utils::sformat(
+        return fmt::format(
             "TransactionPackage: package: {}, action: {}, reason: {}, state {}",
             to_string(tspkg.get_package()),
             transaction_item_action_to_string(tspkg.get_action()),
@@ -229,7 +228,7 @@ struct assertion_traits<libdnf::system::PackageState> {
     }
 
     inline static std::string toString(const libdnf::system::PackageState & pkg_state) {
-        return libdnf::utils::sformat("PackageState: reason: {}", pkg_state.reason);
+        return fmt::format("PackageState: reason: {}", pkg_state.reason);
     }
 };
 
@@ -240,7 +239,7 @@ struct assertion_traits<libdnf::system::NevraState> {
     }
 
     inline static std::string toString(const libdnf::system::NevraState & nevra_state) {
-        return libdnf::utils::sformat("NevraState: from_repo: {}", nevra_state.from_repo);
+        return fmt::format("NevraState: from_repo: {}", nevra_state.from_repo);
     }
 };
 
@@ -251,7 +250,7 @@ struct assertion_traits<libdnf::system::GroupState> {
     }
 
     inline static std::string toString(const libdnf::system::GroupState & group_state) {
-        return libdnf::utils::sformat(
+        return fmt::format(
             "GroupState: userinstalled: {}, packages: {}",
             group_state.userinstalled,
             assertion_traits<std::vector<std::string>>::toString(group_state.packages));
@@ -266,7 +265,7 @@ struct assertion_traits<libdnf::system::ModuleState> {
     }
 
     inline static std::string toString(const libdnf::system::ModuleState & module_state) {
-        return libdnf::utils::sformat(
+        return fmt::format(
             "ModuleState: enabled_stream: {}, state: {}, installed_profiles: {}",
             module_state.enabled_stream,
             libdnf::module::module_state_to_string(module_state.state),

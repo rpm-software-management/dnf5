@@ -26,7 +26,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/comps/comps.hpp"
 #include "libdnf/comps/group/package.hpp"
 #include "libdnf/comps/group/query.hpp"
-#include "libdnf/utils/format.hpp"
 
 #include <filesystem>
 
@@ -43,7 +42,7 @@ struct assertion_traits<libdnf::comps::Package> {
     }
 
     inline static std::string toString(const libdnf::comps::Package & package) {
-        return libdnf::utils::sformat(
+        return fmt::format(
             "{} (type: {}, condition: {})",
             package.get_name(),
             static_cast<int>(package.get_type()),

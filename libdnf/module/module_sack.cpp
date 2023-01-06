@@ -413,8 +413,7 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
 
     for (const auto & module_item : module_items) {
         // Create "module(name:stream)" provide reldep
-        const Id reldep_id =
-            pool_str2id(pool, libdnf::utils::sformat("module({})", module_item->get_name_stream()).c_str(), 1);
+        const Id reldep_id = pool_str2id(pool, fmt::format("module({})", module_item->get_name_stream()).c_str(), 1);
 
         try {
             state = base->p_impl->get_system_state().get_module_state(module_item->get_name());
