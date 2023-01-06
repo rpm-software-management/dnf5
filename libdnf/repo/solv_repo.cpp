@@ -682,7 +682,7 @@ void SolvRepo::write_ext(Id repodata_id, RepodataType type) {
 
 std::string SolvRepo::solv_file_name(const char * type) {
     if (type != nullptr) {
-        return utils::sformat("{}-{}.solvx", config.get_id(), type);
+        return fmt::format("{}-{}.solvx", config.get_id(), type);
     } else {
         return config.get_id() + ".solv";
     }

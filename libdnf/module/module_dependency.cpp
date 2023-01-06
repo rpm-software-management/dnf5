@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/module/module_item.hpp"
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/module/module_sack_weak.hpp"
-#include "libdnf/utils/format.hpp"
 
 #include <modulemd-2.0/modulemd-module-stream.h>
 #include <modulemd-2.0/modulemd-profile.h>
@@ -48,7 +47,7 @@ std::string ModuleDependency::to_string() {
         return module_name;
     }
     std::sort(streams.begin(), streams.end());
-    return libdnf::utils::sformat("{}:[{}]", module_name, utils::string::join(streams, ","));
+    return fmt::format("{}:[{}]", module_name, utils::string::join(streams, ","));
 }
 
 
