@@ -739,7 +739,7 @@ void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
     }
 
     // Save the cookie
-    utils::fs::File(file_path, "w").write(utils::sformat("{} {} {} {}", COUNTME_VERSION, epoch, win, budget));
+    utils::fs::File(file_path, "w").write(fmt::format("{} {} {} {}", COUNTME_VERSION, epoch, win, budget));
 }
 
 

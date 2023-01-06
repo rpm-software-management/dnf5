@@ -19,8 +19,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/logger/logger.hpp"
 
-#include "libdnf/utils/format.hpp"
-
 #include <fmt/chrono.h>
 
 
@@ -37,7 +35,7 @@ void StringLogger::write(
     Level level,
     const std::string & message) noexcept {
     try {
-        write(utils::sformat("{:%FT%T%z} [{}] {} {}\n", time, pid, level_to_cstr(level), message).c_str());
+        write(fmt::format("{:%FT%T%z} [{}] {} {}\n", time, pid, level_to_cstr(level), message).c_str());
     } catch (const std::exception & e) {
         write("Failed to format: ");
         write(message.c_str());

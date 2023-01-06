@@ -48,7 +48,7 @@ void print_transaction_list(std::vector<libdnf::transaction::Transaction> & ts_l
         scols_line_set_data(ln, 0, std::to_string(ts.get_id()).c_str());
         scols_line_set_data(ln, 1, ts.get_description().c_str());
         scols_line_set_data(
-            ln, 2, libdnf::utils::sformat("{:%F %X}", std::chrono::system_clock::from_time_t(dt_start_time)).c_str());
+            ln, 2, fmt::format("{:%F %X}", std::chrono::system_clock::from_time_t(dt_start_time)).c_str());
         // TODO(lukash) fill the Actions(s), if we even want them?
         scols_line_set_data(ln, 3, "");
         scols_line_set_data(ln, 4, std::to_string(ts.get_packages().size()).c_str());
