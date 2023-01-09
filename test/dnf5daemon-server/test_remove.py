@@ -35,28 +35,29 @@ class RemoveTest(support.InstallrootCase):
         self.iface_rpm.remove(['one'], dbus.Dictionary({}, signature='sv'))
 
         resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
-
-        # id of package depends on order of the repos in the sack which varies
-        # between runs so we can't rely on the value
-        for action, pkg in resolved:
-            pkg.pop('id')
-            pkg.pop('package_size')
+        self.sanitize_transaction(resolved)
 
         self.assertEqual(result, 0)
         self.assertCountEqual(
             resolved,
             dbus.Array([
                 dbus.Struct((
-                    dbus.UInt32(8),   # action
-                    dbus.Dictionary({ # package
+                    dbus.String('Package'),         # object type
+                    dbus.String('Remove'),          # action
+                    dbus.String('User'),            # reason
+                    dbus.Dictionary({               # transaction item attrs
+                        }, signature=dbus.Signature('sv')),
+                    dbus.Dictionary({               # package
                         dbus.String('arch'): dbus.String('noarch', variant_level=1),
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
                         dbus.String('evr'): dbus.String('1-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
                         dbus.String('install_size'): dbus.UInt64(0, variant_level=1),
                         dbus.String('release'): dbus.String('1', variant_level=1),
-                        dbus.String('repo'): dbus.String('@System', variant_level=1),
-                        dbus.String('version'): dbus.String('1', variant_level=1)
+                        dbus.String('repo_id'): dbus.String('@System', variant_level=1),
+                        dbus.String('version'): dbus.String('1', variant_level=1),
+                        dbus.String('from_repo_id'): dbus.String('<unknown>', variant_level=1),
+                        dbus.String('reason'): dbus.String('External User', variant_level=1),
                         }, signature=dbus.Signature('sv'))),
                     signature=None)
                 ], signature=dbus.Signature('(ua{sv})'))

@@ -31,7 +31,8 @@ const std::map<std::string, PackageAttribute> package_attributes{
     {"version", PackageAttribute::version},
     {"release", PackageAttribute::release},
     {"arch", PackageAttribute::arch},
-    {"repo", PackageAttribute::repo},
+    {"repo_id", PackageAttribute::repo_id},
+    {"from_repo_id", PackageAttribute::from_repo_id},
     {"is_installed", PackageAttribute::is_installed},
     {"install_size", PackageAttribute::install_size},
     {"package_size", PackageAttribute::package_size},
@@ -101,8 +102,11 @@ dnfdaemon::KeyValueMap package_to_map(
             case PackageAttribute::arch:
                 dbus_package.emplace(attr, libdnf_package.get_arch());
                 break;
-            case PackageAttribute::repo:
+            case PackageAttribute::repo_id:
                 dbus_package.emplace(attr, libdnf_package.get_repo_id());
+                break;
+            case PackageAttribute::from_repo_id:
+                dbus_package.emplace(attr, libdnf_package.get_from_repo_id());
                 break;
             case PackageAttribute::is_installed:
                 dbus_package.emplace(attr, libdnf_package.is_installed());
