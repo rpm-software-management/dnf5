@@ -23,11 +23,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/package_sack_impl.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
+#include "utils/url.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/option_bool.hpp"
+#include "libdnf/repo/file_downloader.hpp"
 
 extern "C" {
 #include <solv/testcase.h>
@@ -38,6 +40,7 @@ extern "C" {
 #include <condition_variable>
 #include <filesystem>
 #include <mutex>
+#include <sstream>
 #include <thread>
 
 
@@ -81,6 +84,95 @@ RepoWeakPtr RepoSack::get_cmdline_repo() {
     }
 
     return cmdline_repo->get_weak_ptr();
+}
+
+
+std::map<std::string, libdnf::rpm::Package> RepoSack::add_cmdline_packages(const std::vector<std::string> & paths) {
+    // find remote URLs and local file paths in the input
+    std::vector<std::string> rpm_urls;
+    std::vector<std::string> rpm_filepaths;
+    const std::string_view ext(".rpm");
+    for (const auto & spec : paths) {
+        if (libdnf::utils::url::is_url(spec)) {
+            rpm_urls.emplace_back(spec);
+        } else if (spec.length() > ext.length() && spec.ends_with(ext)) {
+            rpm_filepaths.emplace_back(spec);
+        }
+    }
+
+    if (rpm_urls.empty() && rpm_filepaths.empty()) {
+        // nothing to fill into cmdline repo
+        return {};
+    }
+
+    // map a path from the input paths to a Package object created in the cmdline repo
+    std::map<std::string, libdnf::rpm::Package> path_to_package;
+
+    auto cmdline_repo = get_cmdline_repo();
+    auto & main_config = base->get_config();
+
+    // Ensure that download location for command line repository exists
+    std::filesystem::path cmd_repo_pkgs_dir{main_config.cachedir().get_value()};
+    cmd_repo_pkgs_dir /= "commandline";
+    cmd_repo_pkgs_dir /= "packages";
+    std::filesystem::create_directories(cmd_repo_pkgs_dir);
+
+    // map remote URLs to local destination files
+    std::map<std::string, std::filesystem::path> url_to_path;
+    for (const auto & url : rpm_urls) {
+        if (url_to_path.find(url) != url_to_path.end()) {
+            // only unique URLs go to downloader
+            continue;
+        }
+        std::filesystem::path path{url.substr(url.find("://") + 3)};
+        // To deal with URLs that do not contain a filename
+        // (e.g. http://location/package/) prepend destination path with the
+        // hash of the URL.
+        // It also solves a corner case when multiple URLs share
+        // the same "filename" - e.g. http://location1/package.rpm and
+        // http://location2/package.rpm should be treated as two different
+        // packages.
+        // It's similar to constructing the cache dir for repository metadata.
+        std::stringstream sstream;
+        sstream << std::hex << std::hash<std::string>{}(url) << "-" << path.filename().string();
+        auto dest_path = sstream.str();
+        if (!dest_path.ends_with(ext)) {
+            // libsolv insists that each rpm file has the ".rpm" extension
+            // but some of URLs do not have it (e.g. http://location/package?name=test)
+            dest_path += ext;
+        }
+        url_to_path.emplace(url, cmd_repo_pkgs_dir / dest_path);
+    }
+
+    if (!url_to_path.empty()) {
+        auto & logger = *base->get_logger();
+        // download remote URLs
+        libdnf::repo::FileDownloader downloader(main_config);
+        for (auto & [url, dest_path] : url_to_path) {
+            logger.debug("Downloading package \"{}\" to file \"{}\"", url, dest_path.string());
+            // TODO(mblaha): temporarily used the dummy DownloadCallbacks instance
+            downloader.add(url, dest_path.string(), std::make_unique<libdnf::repo::DownloadCallbacks>());
+        }
+        downloader.download(true, true);
+
+        // fill the command line repo with downloaded URLs
+        for (const auto & [url, path] : url_to_path) {
+            path_to_package.emplace(url, cmdline_repo->add_rpm_package(path.string(), true));
+        }
+    }
+
+    // fill the command line repo with local files
+    for (const auto & path : rpm_filepaths) {
+        if (path_to_package.find(path) == path_to_package.end()) {
+            path_to_package.emplace(path, cmdline_repo->add_rpm_package(path, true));
+        }
+    }
+
+    if (!path_to_package.empty()) {
+        base->get_rpm_package_sack()->load_config_excludes_includes();
+    }
+
+    return path_to_package;
 }
 
 
