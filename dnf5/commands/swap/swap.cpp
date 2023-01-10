@@ -54,11 +54,13 @@ void SwapCommand::set_argument_parser() {
 
     auto install_spec_arg = parser.add_new_positional_arg("install_spec", 1, nullptr, nullptr);
     install_spec_arg->set_description("The spec that will be installed");
-    install_spec_arg->set_parse_hook_func(
-        [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
-            parse_add_specs(argc, argv, install_pkg_specs, install_pkg_file_paths);
-            return true;
-        });
+    install_spec_arg->set_parse_hook_func([this](
+                                              [[maybe_unused]] ArgumentParser::PositionalArg * arg,
+                                              [[maybe_unused]] int argc,
+                                              const char * const argv[]) {
+        install_pkg_spec = argv[0];
+        return true;
+    });
     install_spec_arg->set_complete_hook_func(
         [&ctx](const char * arg) { return match_specs(ctx, arg, false, true, true, false); });
     cmd.register_positional_arg(install_spec_arg);
@@ -72,19 +74,10 @@ void SwapCommand::configure() {
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
-void SwapCommand::load_additional_packages() {
-    cmdline_packages = get_context().add_cmdline_packages(install_pkg_file_paths);
-}
-
 void SwapCommand::run() {
     auto goal = get_context().get_goal();
     goal->set_allow_erasing(allow_erasing->get_value());
-    for (const auto & pkg : cmdline_packages) {
-        goal->add_rpm_install(pkg);
-    }
-    for (const auto & spec : install_pkg_specs) {
-        goal->add_rpm_install(spec);
-    }
+    goal->add_install(install_pkg_spec);
     goal->add_rpm_remove(remove_pkg_spec);
 }
 

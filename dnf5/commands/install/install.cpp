@@ -39,15 +39,17 @@ void InstallCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Install software");
 
-    auto keys =
-        parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
-    keys->set_description("List of keys to match");
+    auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
+    keys->set_description("List of package specs to install");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
-            parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);
+            for (int i = 0; i < argc; ++i) {
+                pkg_specs.emplace_back(argv[i]);
+            }
             return true;
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, false, true, true, false); });
+    cmd.register_positional_arg(keys);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
 
@@ -59,8 +61,6 @@ void InstallCommand::set_argument_parser() {
     advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
     advisory_bz = std::make_unique<BzOption>(*this);
     advisory_cve = std::make_unique<CveOption>(*this);
-
-    cmd.register_positional_arg(keys);
 }
 
 void InstallCommand::configure() {
@@ -76,10 +76,6 @@ void InstallCommand::configure() {
     }
 
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-}
-
-void InstallCommand::load_additional_packages() {
-    cmdline_packages = get_context().add_cmdline_packages(pkg_file_paths);
 }
 
 void InstallCommand::run() {
@@ -100,11 +96,8 @@ void InstallCommand::run() {
     if (advisories.has_value()) {
         settings.advisory_filter = advisories;
     }
-    for (const auto & pkg : cmdline_packages) {
-        goal->add_rpm_install(pkg, settings);
-    }
     for (const auto & spec : pkg_specs) {
-        goal->add_rpm_install(spec, settings);
+        goal->add_install(spec, settings);
     }
 }
 

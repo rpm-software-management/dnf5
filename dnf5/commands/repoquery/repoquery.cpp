@@ -89,7 +89,9 @@ void RepoqueryCommand::set_argument_parser() {
     keys->set_description("List of keys to match");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
-            parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);
+            for (int i = 0; i < argc; ++i) {
+                pkg_specs.emplace_back(argv[i]);
+            }
             return true;
         });
     keys->set_complete_hook_func([this, &ctx](const char * arg) {
@@ -256,7 +258,10 @@ void RepoqueryCommand::configure() {
 
 void RepoqueryCommand::load_additional_packages() {
     if (available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !only_system_repo_needed) {
-        cmdline_packages = get_context().add_cmdline_packages(pkg_file_paths);
+        auto & ctx = get_context();
+        for (auto & [path, package] : ctx.base.get_repo_sack()->add_cmdline_packages(pkg_specs)) {
+            cmdline_packages.push_back(std::move(package));
+        }
     }
 }
 
@@ -423,7 +428,7 @@ void RepoqueryCommand::run() {
         full_package_query.filter_duplicates();
     }
 
-    if (pkg_specs.empty() && pkg_file_paths.empty()) {
+    if (pkg_specs.empty()) {
         result_pset |= full_package_query;
     } else {
         for (const auto & pkg : cmdline_packages) {
