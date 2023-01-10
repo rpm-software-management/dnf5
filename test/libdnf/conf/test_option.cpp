@@ -115,6 +115,7 @@ void OptionTest::test_options_bool() {
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, true), AssertionError);
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, false), AssertionError);
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, std::string("true")), AssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(true), AssertionError);
 }
 
 

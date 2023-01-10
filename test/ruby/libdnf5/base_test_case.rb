@@ -33,8 +33,8 @@ class BaseTestCase < Test::Unit::TestCase
         @base = Base::Base.new()
         @temp_dir = Dir.mktmpdir("libdnf5_ruby_unittest.")
 
-        @base.get_config().installroot().set(Conf::Option::Priority_RUNTIME, File.join(@temp_dir, "installroot"))
-        @base.get_config().cachedir().set(Conf::Option::Priority_RUNTIME, File.join(@temp_dir, "cache"))
+        @base.get_config().installroot().set(File.join(@temp_dir, "installroot"))
+        @base.get_config().cachedir().set(File.join(@temp_dir, "cache"))
 
         # Sets Base internals according to configuration
         @base.setup()
@@ -51,7 +51,7 @@ class BaseTestCase < Test::Unit::TestCase
     def _add_repo(repoid, repo_path, load=true)
         repo = @repo_sack.create_repo(repoid)
 
-        repo.get_config().baseurl().set(Conf::Option::Priority_RUNTIME, "file://" + repo_path)
+        repo.get_config().baseurl().set("file://" + repo_path)
 
         if load
           repo.fetch_metadata()

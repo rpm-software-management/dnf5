@@ -41,10 +41,10 @@ void RepoQueryTest::test_query_basics() {
     repo2->disable();
     repo1_updates->disable();
     repo2_updates->enable();
-    repo1->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "file:///path/to/repo1");
-    repo2->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "https://host/path/to/repo2");
-    repo1_updates->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "https://host/path/to/repo1_updates");
-    repo2_updates->get_config().baseurl().set(libdnf::Option::Priority::RUNTIME, "https://host/path/to/repo2_updates");
+    repo1->get_config().baseurl().set("file:///path/to/repo1");
+    repo2->get_config().baseurl().set("https://host/path/to/repo2");
+    repo1_updates->get_config().baseurl().set("https://host/path/to/repo1_updates");
+    repo2_updates->get_config().baseurl().set("https://host/path/to/repo2_updates");
 
     // create a RepoQuery and test that it contains expected repos
     libdnf::repo::RepoQuery repo_query(base);

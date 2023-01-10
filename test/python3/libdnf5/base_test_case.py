@@ -33,15 +33,9 @@ class BaseTestCase(unittest.TestCase):
         self.base = libdnf5.base.Base()
         self.temp_dir = tempfile.mkdtemp(prefix="libdnf5_python3_unittest.")
 
-        self.base.get_config().installroot().set(
-            libdnf5.conf.Option.Priority_RUNTIME,
-            os.path.join(self.temp_dir, "installroot"))
-        self.base.get_config().cachedir().set(
-            libdnf5.conf.Option.Priority_RUNTIME,
-            os.path.join(self.temp_dir, "cache"))
-        self.base.get_config().optional_metadata_types().set(
-            libdnf5.conf.Option.Priority_RUNTIME, 
-            libdnf5.conf.OPTIONAL_METADATA_TYPES)
+        self.base.get_config().installroot().set(os.path.join(self.temp_dir, "installroot"))
+        self.base.get_config().cachedir().set(os.path.join(self.temp_dir, "cache"))
+        self.base.get_config().optional_metadata_types().set(libdnf5.conf.OPTIONAL_METADATA_TYPES)
 
         self.base.setup()
 
@@ -57,7 +51,7 @@ class BaseTestCase(unittest.TestCase):
         """
         repo = self.repo_sack.create_repo(repoid)
 
-        repo.get_config().baseurl().set(libdnf5.conf.Option.Priority_RUNTIME, "file://" + repo_path)
+        repo.get_config().baseurl().set("file://" + repo_path)
 
         if load:
             repo.fetch_metadata()
