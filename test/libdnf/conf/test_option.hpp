@@ -37,6 +37,9 @@ class OptionTest : public CppUnit::TestCase {
     CPPUNIT_TEST(test_options_string_list);
     CPPUNIT_TEST(test_options_string_list_delimiters);
     CPPUNIT_TEST(test_options_string_list_custom_delimiters);
+    CPPUNIT_TEST(test_options_string_set);
+    CPPUNIT_TEST(test_options_list_add);
+    CPPUNIT_TEST(test_options_list_add_item);
     CPPUNIT_TEST_SUITE_END();
 
 public:
@@ -50,6 +53,9 @@ public:
     void test_options_string_list();
     void test_options_string_list_delimiters();
     void test_options_string_list_custom_delimiters();
+    void test_options_string_set();
+    void test_options_list_add();
+    void test_options_list_add_item();
 };
 
 
