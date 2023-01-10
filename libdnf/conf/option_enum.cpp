@@ -104,8 +104,18 @@ void OptionEnum<T>::set(Priority priority, ValueType value) {
 }
 
 template <typename T>
+void OptionEnum<T>::set(ValueType value) {
+    set(Priority::RUNTIME, value);
+}
+
+template <typename T>
 void OptionEnum<T>::set(Priority priority, const std::string & value) {
     set(priority, from_string(value));
+}
+
+template <typename T>
+void OptionEnum<T>::set(const std::string & value) {
+    set(Priority::RUNTIME, value);
 }
 
 template <typename T>
@@ -171,6 +181,10 @@ void OptionEnum<std::string>::set(Priority priority, const std::string & value) 
         this->value = val;
         set_priority(priority);
     }
+}
+
+void OptionEnum<std::string>::set(const std::string & value) {
+    set(Priority::RUNTIME, value);
 }
 
 }  // namespace libdnf

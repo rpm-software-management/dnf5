@@ -101,8 +101,18 @@ void OptionNumber<T>::set(Priority priority, ValueType value) {
 }
 
 template <typename T>
+void OptionNumber<T>::set(ValueType value) {
+    set(Priority::RUNTIME, value);
+}
+
+template <typename T>
 void OptionNumber<T>::set(Option::Priority priority, const std::string & value) {
     set(priority, from_string(value));
+}
+
+template <typename T>
+void OptionNumber<T>::set(const std::string & value) {
+    set(Priority::RUNTIME, value);
 }
 
 template <typename T>

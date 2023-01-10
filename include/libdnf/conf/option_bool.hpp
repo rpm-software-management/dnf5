@@ -63,10 +63,16 @@ public:
     /// @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.set(Priority priority, bool value)
     void set(Priority priority, bool value);
 
+    /// Sets new value with the runtime priority.
+    void set(bool value);
+
     /// Parses input string and sets new value and priority.
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
     /// @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
+
+    /// Parses input string and sets new value and runtime priority.
+    void set(const std::string & value) override;
 
     /// Gets the stored value.
     /// @replaces libdnf:conf/OptionBool.hpp:method:OptionBool.getValue()

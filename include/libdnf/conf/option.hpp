@@ -93,6 +93,9 @@ public:
     /// @replaces libdnf:conf/Option.hpp:method:Option.set(Priority priority, const std::string & value)
     virtual void set(Priority priority, const std::string & value) = 0;
 
+    /// Parses input string and sets new value and runtime priority.
+    virtual void set(const std::string & value) = 0;
+
     /// Gets a string representation of the stored value.
     /// @replaces libdnf:conf/Option.hpp:method:Option.getValueString()
     virtual std::string get_value_string() const = 0;

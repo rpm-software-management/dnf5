@@ -69,10 +69,16 @@ public:
     /// @replaces libdnf:conf/OptionNumber.hpp:method:OptionNumber<T>.set(Priority priority, bool value)
     void set(Priority priority, ValueType value);
 
+    /// Sets new value and runtime priority.
+    void set(ValueType value);
+
     /// Parses input string and sets new value and priority.
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
     /// @replaces libdnf:conf/OptionNumber.hpp:method:OptionNumber<T>.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
+
+    /// Parses input string and sets new value and runtime priority.
+    void set(const std::string & value) override;
 
     /// Gets the stored value.
     /// @replaces libdnf:conf/OptionNumber.hpp:method:OptionNumber<T>.getValue()

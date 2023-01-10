@@ -86,6 +86,10 @@ void OptionString::set(Priority priority, const std::string & value) {
     }
 }
 
+void OptionString::set(const std::string & value) {
+    set(Priority::RUNTIME, value);
+}
+
 const std::string & OptionString::get_value() const {
     if (get_priority() == Priority::EMPTY) {
         //TODO(jrohel): We don't know the option name at this time. Add a text name to the options

@@ -70,6 +70,9 @@ public:
     /// @replaces libdnf:conf/OptionPath.hpp:method:OptionPath.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
 
+    /// Parses input string and sets new value and runtime priority.
+    void set(const std::string & value) override;
+
     /// Tests input value and throws exception if the value is not allowed.
     /// @replaces libdnf:conf/OptionPath.hpp:method:OptionPath.test(const std::string & value)
     void test(const std::string & value) const;
