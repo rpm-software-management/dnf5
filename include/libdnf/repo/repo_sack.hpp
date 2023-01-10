@@ -91,6 +91,11 @@ public:
     // TODO(lukash) this was private originally, but don't we want it on the public API?
     libdnf::repo::RepoWeakPtr get_cmdline_repo();
 
+    /// Add given paths to comdline repository.
+    /// @param paths Vector of paths to rpm files to be inserted to cmdline repo. Can contain paths to local files or URLs of remote rpm files. Specifications that are neither file paths, nor URLs are ignored.
+    /// @return Map path->rpm::Package which maps input path to newly created Package object in cmdline repo
+    std::map<std::string, libdnf::rpm::Package> add_cmdline_packages(const std::vector<std::string> & paths);
+
     /// @return `true` if the system repository has been initialized (via `get_system_repo()`).
     bool has_system_repo() const noexcept { return system_repo; }
 
