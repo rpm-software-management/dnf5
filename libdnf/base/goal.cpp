@@ -30,6 +30,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "transaction_impl.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
+#include "utils/url.hpp"
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/comps/group/query.hpp"
@@ -116,6 +117,16 @@ public:
         const std::optional<std::string> & group_id,
         GoalJobSettings & settings);
 
+    /// Parse the spec (package, group, remote or local rpm file) and process it.
+    /// Repository packages and groups are directly added to rpm_specs / group_specs,
+    /// files are stored for being later downloaded and added to command line repo.
+    void add_spec(GoalAction action, const std::string & spec, const GoalJobSettings & settings);
+
+    /// Add all (remote or local) rpm paths to the goal.
+    /// Remote URLs are first downloaded and all the paths are inserted into
+    /// cmdline repo.
+    void add_paths_to_goal();
+
 private:
     friend class Goal;
     BaseWeakPtr base;
@@ -129,6 +140,9 @@ private:
         rpm_reason_change_specs;
     /// <libdnf::GoalAction, rpm Ids, libdnf::GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, libdnf::solv::IdQueue, GoalJobSettings>> rpm_ids;
+    /// <libdnf::GoalAction, std::string filepath, libdnf::GoalJobSettings settings>
+    std::vector<std::tuple<GoalAction, std::string, GoalJobSettings>> rpm_filepaths;
+
     /// <libdnf::GoalAction, TransactionItemReason reason, std::string group_spec, GoalJobSettings settings>
     std::vector<std::tuple<GoalAction, libdnf::transaction::TransactionItemReason, std::string, GoalJobSettings>>
         group_specs;
@@ -149,6 +163,27 @@ Goal::Impl::~Impl() = default;
 void Goal::add_module_enable(const std::string & spec) {
     p_impl->module_enable_specs.push_back(spec);
 }
+
+void Goal::add_install(const std::string & spec, const libdnf::GoalJobSettings & settings) {
+    p_impl->add_spec(GoalAction::INSTALL, spec, settings);
+}
+
+void Goal::add_upgrade(const std::string & spec, const libdnf::GoalJobSettings & settings, bool minimal) {
+    p_impl->add_spec(minimal ? GoalAction::UPGRADE_MINIMAL : GoalAction::UPGRADE, spec, settings);
+}
+
+void Goal::add_downgrade(const std::string & spec, const libdnf::GoalJobSettings & settings) {
+    p_impl->add_spec(GoalAction::DOWNGRADE, spec, settings);
+}
+
+void Goal::add_reinstall(const std::string & spec, const GoalJobSettings & settings) {
+    p_impl->add_spec(GoalAction::REINSTALL, spec, settings);
+}
+
+void Goal::add_remove(const std::string & spec, const GoalJobSettings & settings) {
+    p_impl->add_spec(GoalAction::REMOVE, spec, settings);
+}
+
 
 void Goal::add_rpm_install(const std::string & spec, const GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::INSTALL, spec, settings));
@@ -259,6 +294,28 @@ void Goal::add_rpm_reason_change(
 
 void Goal::add_provide_install(const std::string & spec, const GoalJobSettings & settings) {
     p_impl->rpm_specs.push_back(std::make_tuple(GoalAction::INSTALL_VIA_PROVIDE, spec, settings));
+}
+
+void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const GoalJobSettings & settings) {
+    if (spec.starts_with("@")) {
+        // spec is a group, environment or a module
+        // TODO(mblaha): detect and process environmental groups (prefixed by '@^')
+        // TODO(mblaha): detect and process modules
+        group_specs.push_back(
+            std::make_tuple(action, libdnf::transaction::TransactionItemReason::USER, spec.substr(1), settings));
+    } else {
+        const std::string_view ext(".rpm");
+        if (libdnf::utils::url::is_url(spec) || (spec.length() > ext.length() && spec.ends_with(ext))) {
+            // spec is a remote rpm file or a local rpm file
+            if (action == GoalAction::REMOVE) {
+                libdnf_throw_assertion("Unsupported argument for REMOVE action: {}", spec);
+            }
+            rpm_filepaths.emplace_back(action, spec, settings);
+        } else {
+            // otherwise the spec is a repository package
+            rpm_specs.emplace_back(action, spec, settings);
+        }
+    }
 }
 
 void Goal::Impl::add_rpm_ids(GoalAction action, const rpm::Package & rpm_package, const GoalJobSettings & settings) {
@@ -1438,6 +1495,31 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
     return GoalProblem::NO_PROBLEM;
 }
 
+void Goal::Impl::add_paths_to_goal() {
+    if (rpm_filepaths.empty()) {
+        return;
+    }
+
+    // fill the command line repo with paths to rpm files
+    std::vector<std::string> paths;
+    for (const auto & [action, path, settings] : rpm_filepaths) {
+        paths.emplace_back(path);
+    }
+    auto cmdline_packages = base->get_repo_sack()->add_cmdline_packages(paths);
+
+    // add newly created packages to the goal
+    for (const auto & [action, path, settings] : rpm_filepaths) {
+        auto pkg = cmdline_packages.find(path);
+        if (pkg != cmdline_packages.end()) {
+            add_rpm_ids(action, pkg->second, settings);
+        }
+    }
+
+    // clear rpm_filepaths so that they do not get inserted into command line
+    // repo again in case the goal is resolved multiple times.
+    rpm_filepaths.clear();
+}
+
 void Goal::set_allow_erasing(bool value) {
     p_impl->allow_erasing = value;
 }
@@ -1448,6 +1530,8 @@ bool Goal::get_allow_erasing() const {
 
 base::Transaction Goal::resolve() {
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
+
+    p_impl->add_paths_to_goal();
 
     auto sack = p_impl->base->get_rpm_package_sack();
     base::Transaction transaction(p_impl->base);
@@ -1536,6 +1620,7 @@ void Goal::reset() {
     p_impl->rpm_specs.clear();
     p_impl->rpm_ids.clear();
     p_impl->group_specs.clear();
+    p_impl->rpm_filepaths.clear();
     p_impl->rpm_goal = rpm::solv::GoalPrivate(p_impl->base);
 }
 
