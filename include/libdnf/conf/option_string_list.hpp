@@ -60,10 +60,16 @@ public:
     /// @replaces libdnf:conf/OptionStingList.hpp:method:OptionStringList.set(Priority priority, bool value)
     virtual void set(Priority priority, const ValueType & value);
 
+    /// Sets new value and runtime priority.
+    void set(const ValueType & value);
+
     /// Parses input string and sets new value and priority.
     /// The value and priority are stored only if the new priority is equal to or higher than the stored priority.
     /// @replaces libdnf:conf/OptionStringList.hpp:method:OptionStringList.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
+
+    /// Parses input string and sets new value and runtime priority.
+    void set(const std::string & value) override;
 
     /// Adds items from an another container.
     /// New items are stored in the container value and the runtime priority is set as this is intended to use only through the API.
