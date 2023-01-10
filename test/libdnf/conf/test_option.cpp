@@ -492,3 +492,40 @@ void OptionTest::test_options_string_list_custom_delimiters() {
     option3.set(Option::Priority::RUNTIME, "     Dfirstx\n\n ; DsecondX");
     CPPUNIT_ASSERT_EQUAL((std::vector<std::string>{"Dfirstx", "DsecondX"}), option3.get_value());
 }
+
+void OptionTest::test_options_string_set() {
+    const std::unordered_set<std::string> initial{"x", "y", "z"};
+    OptionStringSet option(initial);
+    CPPUNIT_ASSERT(initial == option.get_value());
+
+    option.set(Option::Priority::RUNTIME, "a, b, c");
+    CPPUNIT_ASSERT((std::unordered_set<std::string>{"a", "b", "c"}) == option.get_value());
+
+    option.set(Option::Priority::RUNTIME, "a, b, a, a");
+    CPPUNIT_ASSERT((std::unordered_set<std::string>{"a", "b"}) == option.get_value());
+}
+
+void OptionTest::test_options_list_add() {
+    OptionStringSet option("1, 2, 3");
+    CPPUNIT_ASSERT((std::unordered_set<std::string>{"1", "2", "3"}) == option.get_value());
+
+    std::unordered_set<std::string> another_set{"4", "5", "6"};
+    option.add(another_set);
+    CPPUNIT_ASSERT((std::unordered_set<std::string>{"1", "2", "3", "4", "5", "6"}) == option.get_value());
+
+    std::unordered_set<std::string> set_with_existing_values{"7", "5", "4"};
+    option.add(set_with_existing_values);
+    CPPUNIT_ASSERT((std::unordered_set<std::string>{"1", "2", "3", "4", "5", "6", "7"}) == option.get_value());
+}
+
+void OptionTest::test_options_list_add_item() {
+    const std::unordered_set<std::string> initial{"item1"};
+    OptionStringSet option(initial);
+    CPPUNIT_ASSERT(initial == option.get_value());
+
+    option.add_item("item2");
+    CPPUNIT_ASSERT((std::unordered_set<std::string>{"item1", "item2"}) == option.get_value());
+
+    option.add_item("item1");
+    CPPUNIT_ASSERT((std::unordered_set<std::string>{"item1", "item2"}) == option.get_value());
+}
