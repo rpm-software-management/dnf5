@@ -37,12 +37,13 @@ void ReinstallCommand::set_argument_parser() {
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Reinstall software");
 
-    auto keys =
-        parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
-    keys->set_description("List of keys to match");
+    auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::AT_LEAST_ONE, nullptr, nullptr);
+    keys->set_description("List of package specs to reinstall");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
-            parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);
+            for (int i = 0; i < argc; ++i) {
+                pkg_specs.emplace_back(argv[i]);
+            }
             return true;
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, true); });
@@ -55,17 +56,10 @@ void ReinstallCommand::configure() {
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
-void ReinstallCommand::load_additional_packages() {
-    cmdline_packages = get_context().add_cmdline_packages(pkg_file_paths);
-}
-
 void ReinstallCommand::run() {
     auto goal = get_context().get_goal();
-    for (const auto & pkg : cmdline_packages) {
-        goal->add_rpm_reinstall(pkg);
-    }
     for (const auto & spec : pkg_specs) {
-        goal->add_rpm_reinstall(spec);
+        goal->add_reinstall(spec);
     }
 }
 
