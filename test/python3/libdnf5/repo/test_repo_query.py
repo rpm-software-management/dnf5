@@ -27,19 +27,19 @@ class TestRepoQuery(base_test_case.BaseTestCase):
         # Creates new repositories in the repo_sack
         repo1 = self.repo_sack.create_repo("repo1")
         repo1.enable();
-        repo1.get_config().baseurl().set(libdnf5.conf.Option.Priority_RUNTIME, "file:///path/to/repo1")
+        repo1.get_config().baseurl().set("file:///path/to/repo1")
 
         repo2 = self.repo_sack.create_repo("repo2")
         repo2.disable();
-        repo2.get_config().baseurl().set(libdnf5.conf.Option.Priority_RUNTIME, "https://host/path/to/repo2")
+        repo2.get_config().baseurl().set("https://host/path/to/repo2")
 
         repo1_updates = self.repo_sack.create_repo("repo1_updates")
         repo1_updates.disable();
-        repo1_updates.get_config().baseurl().set(libdnf5.conf.Option.Priority_RUNTIME, "https://host/path/to/repo1_updates")
+        repo1_updates.get_config().baseurl().set("https://host/path/to/repo1_updates")
 
         repo2_updates = self.repo_sack.create_repo("repo2_updates")
         repo2_updates.enable();
-        repo2_updates.get_config().baseurl().set(libdnf5.conf.Option.Priority_RUNTIME, "https://host/path/to/repo2_updates")
+        repo2_updates.get_config().baseurl().set("https://host/path/to/repo2_updates")
 
         # create a RepoQuery and test that it contains expected repos
         repo_query = libdnf5.repo.RepoQuery(self.base)

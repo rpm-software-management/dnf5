@@ -83,8 +83,8 @@ std::unique_ptr<libdnf::Base> TestCaseFixture::get_preconfigured_base() {
     std::filesystem::create_directory(temp->get_path() / "installroot");
 
     std::unique_ptr<libdnf::Base> base(new libdnf::Base());
-    base->get_config().installroot().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "installroot");
-    base->get_config().cachedir().set(libdnf::Option::Priority::RUNTIME, temp->get_path() / "cache");
+    base->get_config().installroot().set(temp->get_path() / "installroot");
+    base->get_config().cachedir().set(temp->get_path() / "cache");
 
     return base;
 }
