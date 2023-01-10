@@ -37,14 +37,11 @@ public:
     void set_parent_command() override;
     void set_argument_parser() override;
     void configure() override;
-    void load_additional_packages() override;
     void run() override;
 
 protected:
     libdnf::OptionBool * minimal{nullptr};
     std::vector<std::string> pkg_specs;
-    std::vector<std::string> pkg_file_paths;
-    std::vector<libdnf::rpm::Package> cmdline_packages;
 
     std::unique_ptr<AllowErasingOption> allow_erasing;
 

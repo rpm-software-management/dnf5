@@ -50,7 +50,6 @@ private:
     libdnf::OptionBool * info_option{nullptr};
     libdnf::OptionBool * nevra_option{nullptr};
     std::vector<std::string> pkg_specs;
-    std::vector<std::string> pkg_file_paths;
     std::vector<libdnf::rpm::Package> cmdline_packages;
 
     libdnf::OptionStringList * whatdepends_option{nullptr};
