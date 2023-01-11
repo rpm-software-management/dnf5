@@ -421,10 +421,9 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
 
     for (auto & package : packages) {
         if (dest_dir != nullptr) {
-            downloader.add(
-                package, dest_dir, std::make_unique<DownloadCB>(multi_progress_bar, package.get_full_nevra()));
+            downloader.add(package, dest_dir);
         } else {
-            downloader.add(package, std::make_unique<DownloadCB>(multi_progress_bar, package.get_full_nevra()));
+            downloader.add(package);
         }
     }
 

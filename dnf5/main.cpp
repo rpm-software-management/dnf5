@@ -39,6 +39,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/swap/swap.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "dnf5/context.hpp"
+#include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
 
@@ -602,6 +603,8 @@ int main(int argc, char * argv[]) try {
         context.get_argument_parser().complete(argc - 2, argv + 2, std::stoi(argv[1] + 11));
         return 0;
     }
+
+    base.set_download_callbacks(std::make_unique<dnf5::DownloadCallbacks>(base));
 
     // Parse command line arguments
     {

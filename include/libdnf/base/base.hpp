@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_BASE_HPP
 
 #include "libdnf/base/base_weak.hpp"
+#include "libdnf/base/download_callbacks.hpp"
 #include "libdnf/common/impl_ptr.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/comps/comps.hpp"
@@ -52,6 +53,9 @@ public:
     Base(std::vector<std::unique_ptr<Logger>> && loggers = {});
 
     ~Base();
+
+    void set_download_callbacks(std::unique_ptr<DownloadCallbacks> && download_callbacks) {this->download_callbacks = std::move(download_callbacks); }
+    DownloadCallbacks * get_download_callbacks() { return download_callbacks.get(); }
 
     /// Sets the pointer to the locked instance "Base" to "this" instance. Blocks if the pointer is already set.
     /// Pointer to a locked "Base" instance can be obtained using "get_locked_base()".
@@ -137,6 +141,7 @@ private:
     std::map<std::string, std::string> variables;
     transaction::TransactionHistory transaction_history;
     Vars vars;
+    std::unique_ptr<DownloadCallbacks> download_callbacks;
 
     WeakPtrGuard<LogRouter, false> log_router_gurad;
     WeakPtrGuard<Vars, false> vars_gurad;

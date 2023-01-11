@@ -22,6 +22,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_downloader.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
+#include "libdnf/base/base.hpp"
+#include "libdnf/base/download_callbacks.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/repo/repo.hpp"
 
@@ -42,31 +44,6 @@ struct default_delete<LrPackageTarget> {
 
 namespace libdnf::repo {
 
-static int end_callback(void * data, LrTransferStatus status, const char * msg) {
-    if (!data) {
-        return 0;
-    }
-
-    auto cb_status = static_cast<DownloadCallbacks::TransferStatus>(status);
-    return static_cast<DownloadCallbacks *>(data)->end(cb_status, msg);
-}
-
-static int progress_callback(void * data, double total_to_download, double downloaded) {
-    if (!data) {
-        return 0;
-    }
-
-    return static_cast<DownloadCallbacks *>(data)->progress(total_to_download, downloaded);
-}
-
-static int mirror_failure_callback(void * data, const char * msg, const char * url) {
-    if (!data) {
-        return 0;
-    }
-
-    return static_cast<DownloadCallbacks *>(data)->mirror_failure(msg, url);
-}
-
 class PackageTarget {
 public:
     PackageTarget(
@@ -79,8 +56,43 @@ public:
 
     libdnf::rpm::Package package;
     std::string destination;
+    libdnf::UserDownloadCallbackData * user_download_callback_data{nullptr};
     std::unique_ptr<DownloadCallbacks> callbacks;
 };
+
+static int end_callback(void * data, LrTransferStatus status, const char * msg) {
+    libdnf_assert(data != nullptr, "data in callback must be set");
+    auto * package_target = static_cast<PackageTarget *>(data);
+    if (!package_target->user_download_callback_data) {
+        return 0;
+    }
+
+    auto cb_status = static_cast<libdnf::DownloadCallbacks::TransferStatus>(status);
+    return package_target->package.get_base()->get_download_callbacks()->end(
+        package_target->user_download_callback_data, cb_status, msg);
+}
+
+static int progress_callback(void * data, double total_to_download, double downloaded) {
+    libdnf_assert(data != nullptr, "data in callback must be set");
+    auto * package_target = static_cast<PackageTarget *>(data);
+    if (!package_target->user_download_callback_data) {
+        return 0;
+    }
+
+    return package_target->package.get_base()->get_download_callbacks()->progress(
+        package_target->user_download_callback_data, total_to_download, downloaded);
+}
+
+static int mirror_failure_callback(void * data, const char * msg, const char * url) {
+    libdnf_assert(data != nullptr, "data in callback must be set");
+    auto * package_target = static_cast<PackageTarget *>(data);
+    if (!package_target->user_download_callback_data) {
+        return 0;
+    }
+
+    return package_target->package.get_base()->get_download_callbacks()->mirror_failure(
+        package_target->user_download_callback_data, msg, url);
+}
 
 
 class PackageDownloader::Impl {
@@ -114,6 +126,10 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
     for (auto it = p_impl->targets.rbegin(); it != p_impl->targets.rend(); ++it) {
         std::filesystem::create_directory(it->destination);
 
+        if (auto * download_callbacks = it->package.get_base()->get_download_callbacks()) {
+            it->user_download_callback_data = download_callbacks->new_download(it->package.get_full_nevra());
+        }
+
         auto lr_target = lr_packagetarget_new_v3(
             it->package.get_repo()->downloader->get_cached_handle().get(),
             it->package.get_location().c_str(),
@@ -124,7 +140,7 @@ void PackageDownloader::download(bool fail_fast, bool resume) try {
             it->package.get_baseurl().empty() ? nullptr : it->package.get_baseurl().c_str(),
             resume,
             progress_callback,
-            it->callbacks.get(),
+            &*it,
             end_callback,
             mirror_failure_callback,
             0,
