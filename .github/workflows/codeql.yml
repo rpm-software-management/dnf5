@@ -1,0 +1,68 @@
+# For most projects, this workflow file will not need changing; you simply need
+# to commit it to your repository.
+#
+# You may wish to alter this file to override the set of languages analyzed,
+# or to provide custom queries or build logic.
+#
+# ******** NOTE ********
+# We have attempted to detect the languages in your repository. Please check
+# the `language` matrix defined below to confirm you have the correct set of
+# supported CodeQL languages.
+#
+name: "CodeQL"
+
+on:
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  analyze:
+    name: Analyze
+    runs-on: ubuntu-22.04
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
+
+    strategy:
+      fail-fast: false
+      matrix:
+        language: [ 'cpp' ]
+
+    steps:
+
+    # Initializes the CodeQL tools for scanning.
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v2
+      with:
+        languages: ${{ matrix.language }}
+
+    - name: Install librepo dependencies
+      run: sudo apt update && sudo apt install git cmake make check gcc libglib2.0-dev libgpgme11-dev libattr1-dev libcurl4-openssl-dev libssl-dev libxml2-dev libzck-dev
+
+    - name: Install dnf5 dependencies
+      run: sudo apt install g++ libtoml11-dev libfmt-dev libjson-c-dev libmodulemd-dev libsmartcols-dev swig libsdbus-c++-dev libsystemd-dev libcppunit-dev sphinx-common python3-breathe python3-sphinx-rtd-theme
+
+    - name: Install libsolv dependencies
+      run: sudo apt install g++ liblzma-dev
+
+    - name: Install librepo
+      run: cd && git clone https://github.com/rpm-software-management/librepo.git && cd librepo && mkdir build && cd build && cmake .. -DENABLE_TESTS=OFF -DENABLE_DOCS=OFF -DENABLE_PYTHON=OFF && sudo make install
+
+    - name: Install libsolv
+      run: cd && git clone https://github.com/openSUSE/libsolv.git && cd libsolv && mkdir build && cd build && cmake .. -DFEDORA=1 -DENABLE_RPMDB=ON -DENABLE_RPMDB_BYRPMHEADER=ON -DENABLE_RPMDB_LIBRPM=ON -DENABLE_RPMPKG_LIBRPM=ON -DENABLE_RPMMD=ON -DENABLE_COMPS=ON -DENABLE_APPDATA=ON -DUSE_VENDORDIRS=ON -DWITH_LIBXML2=ON -DENABLE_HELIXREPO=ON -DENABLE_SUSEREPO=ON -DENABLE_DEBIAN=ON -DENABLE_ARCHREPO=ON -DMULTI_SEMANTICS=ON -DENABLE_COMPLEX_DEPS=ON && sudo make install
+
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+      # Workaround bug: https://bugs.launchpad.net/ubuntu/+source/toml11/+bug/1978418
+    - name: toml11 workaround
+      run: sudo mv /usr/share/cmake/toml11/ /lib/x86_64-linux-gnu/cmake/
+
+    - name: Compile project
+      run: mkdir build && cd build && cmake .. -DWITH_PERL5=OFF -DWITH_RUBY=OFF -DWITH_PYTHON3=OFF -DWITH_TESTS=OFF && make && make doc && sudo make install
+
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v2
+      with:
+        category: "/language:${{matrix.language}}"
