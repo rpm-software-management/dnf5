@@ -24,6 +24,7 @@
 %{
     #include "libdnf/logger/memory_buffer_logger.hpp"
     #include "libdnf/base/base.hpp"
+    #include "libdnf/base/download_callbacks.hpp"
     #include "libdnf/base/transaction.hpp"
     #include "libdnf/base/transaction_package.hpp"
     #include "libdnf/base/goal.hpp"
@@ -57,6 +58,8 @@
 
 %template(BaseWeakPtr) libdnf::WeakPtr<libdnf::Base, false>;
 %template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
+
+%include "libdnf/base/download_callbacks.hpp"
 
 %include "libdnf/base/base.hpp"
 %ignore libdnf::base::TransactionError;
