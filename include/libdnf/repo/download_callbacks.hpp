@@ -20,6 +20,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_DOWNLOAD_CALLBACKS_HPP
 #define LIBDNF_REPO_DOWNLOAD_CALLBACKS_HPP
 
+namespace libdnf {
+
+class Base;
+
+}
+
 namespace libdnf::repo {
 
 /// Base class for download callbacks.
@@ -31,23 +37,34 @@ public:
 
     virtual ~DownloadCallbacks() = default;
 
-    /// End of download callback.
-    /// @param status The transfer status.
-    /// @param msg The error message in case of error.
-    /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
-    virtual int end(TransferStatus status, const char * msg);
+    /// Notify the client that a new download has been created.
+    /// @param user_data User data entered together with url/package to download.
+    /// @param description The message describing new download (url/packagename).
+    /// @param total_to_download Total number of bytes to download.
+    /// @return Associated user data for new download.
+    virtual void * add_new_download(void * user_data, const char * description, double total_to_download);
 
     /// Download progress callback.
+    /// @param user_cb_data Associated user data obtained from new_download.
     /// @param total_to_download Total number of bytes to download.
     /// @param downloaded Number of bytes downloaded.
     /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
-    virtual int progress(double total_to_download, double downloaded);
+    virtual int progress(void * user_cb_data, double total_to_download, double downloaded);
+
+    /// End of download callback.
+    /// @param user_cb_data Associated user data obtained from new_download.
+    /// @param status The transfer status.
+    /// @param msg The error message in case of error.
+    /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
+    virtual int end(void * user_cb_data, TransferStatus status, const char * msg);
+
 
     /// Mirror failure callback.
+    /// @param user_cb_data Associated user data obtained from new_download.
     /// @param msg Error message.
     /// @param url Failed mirror URL.
     /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
-    virtual int mirror_failure(const char * msg, const char * url);
+    virtual int mirror_failure(void * user_cb_data, const char * msg, const char * url);
 };
 
 }  // namespace libdnf::repo

@@ -39,6 +39,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/swap/swap.hpp"
 #include "commands/upgrade/upgrade.hpp"
 #include "dnf5/context.hpp"
+#include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
 
@@ -603,6 +604,10 @@ int main(int argc, char * argv[]) try {
         return 0;
     }
 
+    auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacks>();
+    auto * download_callbacks = download_callbacks_uptr.get();
+    base.set_download_callbacks(std::move(download_callbacks_uptr));
+
     // Parse command line arguments
     {
         try {
@@ -689,6 +694,8 @@ int main(int argc, char * argv[]) try {
             context.set_transaction(goal->resolve());
 
             command->goal_resolved();
+
+            download_callbacks->reset_progress_bar();
 
             if (!libdnf::cli::output::print_transaction_table(*context.get_transaction())) {
                 return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);

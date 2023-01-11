@@ -35,6 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 #include <iostream>
 #include <string>
+#include <vector>
 
 void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
@@ -156,9 +157,14 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
 void download_packages(Session & session, libdnf::base::Transaction & transaction) {
     libdnf::repo::PackageDownloader downloader;
 
+    // container is owner of dbus package callbacks
+    std::vector<std::unique_ptr<DbusPackageCB>> dbus_package_cbs;
+
     for (auto & tspkg : transaction.get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action())) {
-            downloader.add(tspkg.get_package(), std::make_unique<DbusPackageCB>(session, tspkg.get_package()));
+            auto & dbus_pkg_cb =
+                dbus_package_cbs.emplace_back(std::make_unique<DbusPackageCB>(session, tspkg.get_package()));
+            downloader.add(tspkg.get_package(), dbus_pkg_cb.get());
         }
     }
 

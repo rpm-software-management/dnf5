@@ -21,13 +21,27 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::repo {
 
-int DownloadCallbacks::end([[maybe_unused]] TransferStatus status, [[maybe_unused]] const char * msg) {
+void * DownloadCallbacks::add_new_download(
+    [[maybe_unused]] void * user_data,
+    [[maybe_unused]] const char * description,
+    [[maybe_unused]] double total_to_download) {
+    return nullptr;
+}
+
+int DownloadCallbacks::end(
+    [[maybe_unused]] void * user_cb_data, [[maybe_unused]] TransferStatus status, [[maybe_unused]] const char * msg) {
     return 0;
 }
-int DownloadCallbacks::progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) {
+
+int DownloadCallbacks::progress(
+    [[maybe_unused]] void * user_cb_data,
+    [[maybe_unused]] double total_to_download,
+    [[maybe_unused]] double downloaded) {
     return 0;
 }
-int DownloadCallbacks::mirror_failure([[maybe_unused]] const char * msg, [[maybe_unused]] const char * url) {
+
+int DownloadCallbacks::mirror_failure(
+    [[maybe_unused]] void * user_cb_data, [[maybe_unused]] const char * msg, [[maybe_unused]] const char * url) {
     return 0;
 }
 

@@ -43,24 +43,24 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
             progress_cnt = 0
             mirror_failure_cnt = 0
 
-            def end(self, status, msg):
+            def end(self, user_cb_data, status, msg):
                 self.end_cnt += 1
                 self.end_status = status
                 self.end_msg = msg
                 return 0
 
-            def progress(self, total_to_download, downloaded):
+            def progress(self, user_cb_data, total_to_download, downloaded):
                 self.progress_cnt += 1
                 return 0
 
-            def mirror_failure(self, msg, url):
+            def mirror_failure(self, user_cb_data, msg, url):
                 self.mirror_failure_cnt += 1
                 return 0
 
         cbs = PackageDownloadCallbacks()
-        # TODO(lukash) try to wrap the creation of the unique_ptr so that cbs
-        # can be passed directly to downloader.add
-        downloader.add(query.begin().value(), libdnf5.repo.DownloadCallbacksUniquePtr(cbs))
+        self.base.set_download_callbacks(libdnf5.repo.DownloadCallbacksUniquePtr(cbs))
+
+        downloader.add(query.begin().value())
 
         downloader.download(True, True)
 

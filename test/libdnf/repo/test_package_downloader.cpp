@@ -31,19 +31,25 @@ CPPUNIT_TEST_SUITE_REGISTRATION(PackageDownloaderTest);
 
 class DownloadCallbacks : public libdnf::repo::DownloadCallbacks {
 public:
-    int end(TransferStatus status, const char * msg) override {
+    int end([[maybe_unused]] void * user_cb_data, TransferStatus status, const char * msg) override {
         ++end_cnt;
         end_status = status;
         end_msg = libdnf::utils::string::c_to_str(msg);
         return 0;
     }
 
-    int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
+    int progress(
+        [[maybe_unused]] void * user_cb_data,
+        [[maybe_unused]] double total_to_download,
+        [[maybe_unused]] double downloaded) override {
         ++progress_cnt;
         return 0;
     }
 
-    int mirror_failure([[maybe_unused]] const char * msg, [[maybe_unused]] const char * url) override {
+    int mirror_failure(
+        [[maybe_unused]] void * user_cb_data,
+        [[maybe_unused]] const char * msg,
+        [[maybe_unused]] const char * url) override {
         ++mirror_failure_cnt;
         return 0;
     }
@@ -69,7 +75,9 @@ void PackageDownloaderTest::test_package_downloader() {
 
     auto cbs_unique_ptr = std::make_unique<DownloadCallbacks>();
     auto cbs = cbs_unique_ptr.get();
-    downloader.add(*query.begin(), std::move(cbs_unique_ptr));
+    base.set_download_callbacks(std::move(cbs_unique_ptr));
+
+    downloader.add(*query.begin());
 
     downloader.download(true, true);
 

@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf/base/base.hpp"
+#include "libdnf/repo/download_callbacks.hpp"
 #include "libdnf/repo/repo.hpp"
 
 #include <librepo/librepo.h>
@@ -39,54 +40,65 @@ struct default_delete<LrDownloadTarget> {
 
 namespace libdnf::repo {
 
-static int end_callback(void * data, LrTransferStatus status, const char * msg) {
-    if (!data) {
-        return 0;
-    }
-
-    auto cb_status = static_cast<DownloadCallbacks::TransferStatus>(status);
-    return static_cast<DownloadCallbacks *>(data)->end(cb_status, msg);
-}
-
-static int progress_callback(void * data, double total_to_download, double downloaded) {
-    if (!data) {
-        return 0;
-    }
-
-    return static_cast<DownloadCallbacks *>(data)->progress(total_to_download, downloaded);
-}
-
-static int mirror_failure_callback(void * data, const char * msg, const char * url) {
-    if (!data) {
-        return 0;
-    }
-
-    return static_cast<DownloadCallbacks *>(data)->mirror_failure(msg, url);
-}
-
 class FileTarget {
 public:
     FileTarget(
+        BaseWeakPtr & base,
         RepoWeakPtr & repo,
         const std::string & url,
         const std::string & destination,
-        std::unique_ptr<DownloadCallbacks> && callbacks)
-        : repo(repo),
+        void * user_data)
+        : base(base),
+          repo(repo),
           url(url),
           destination(destination),
-          callbacks(std::move(callbacks)) {}
+          user_data(user_data) {}
 
-    FileTarget(
-        const std::string & url, const std::string & destination, std::unique_ptr<DownloadCallbacks> && callbacks)
-        : url(url),
+    FileTarget(BaseWeakPtr & base, const std::string & url, const std::string & destination, void * user_data)
+        : base(base),
+          url(url),
           destination(destination),
-          callbacks(std::move(callbacks)) {}
+          user_data(user_data) {}
 
+    BaseWeakPtr base;
     RepoWeakPtr repo;
     std::string url;
     std::string destination;
-    std::unique_ptr<DownloadCallbacks> callbacks;
+    void * user_data;
+    void * user_cb_data{nullptr};
 };
+
+
+static int end_callback(void * data, LrTransferStatus status, const char * msg) {
+    libdnf_assert(data != nullptr, "data in callback must be set");
+
+    auto * file_target = static_cast<FileTarget *>(data);
+    auto cb_status = static_cast<DownloadCallbacks::TransferStatus>(status);
+    if (auto * download_callbacks = file_target->base->get_download_callbacks()) {
+        return download_callbacks->end(file_target->user_cb_data, cb_status, msg);
+    }
+    return 0;
+}
+
+static int progress_callback(void * data, double total_to_download, double downloaded) {
+    libdnf_assert(data != nullptr, "data in callback must be set");
+
+    auto * file_target = static_cast<FileTarget *>(data);
+    if (auto * download_callbacks = file_target->base->get_download_callbacks()) {
+        return download_callbacks->progress(file_target->user_cb_data, total_to_download, downloaded);
+    }
+    return 0;
+}
+
+static int mirror_failure_callback(void * data, const char * msg, const char * url) {
+    libdnf_assert(data != nullptr, "data in callback must be set");
+
+    auto * file_target = static_cast<FileTarget *>(data);
+    if (auto * download_callbacks = file_target->base->get_download_callbacks()) {
+        return download_callbacks->mirror_failure(file_target->user_cb_data, msg, url);
+    }
+    return 0;
+}
 
 
 class FileDownloader::Impl {
@@ -104,44 +116,47 @@ FileDownloader::FileDownloader(Base & base) : p_impl(std::make_unique<Impl>(base
 FileDownloader::~FileDownloader() = default;
 
 void FileDownloader::add(
-    RepoWeakPtr & repo,
-    const std::string & url,
-    const std::string & destination,
-    std::unique_ptr<DownloadCallbacks> && callbacks) {
-    p_impl->targets.emplace_back(repo, url, destination, std::move(callbacks));
+    RepoWeakPtr & repo, const std::string & url, const std::string & destination, void * user_data) {
+    p_impl->targets.emplace_back(p_impl->base, repo, url, destination, user_data);
 }
 
-void FileDownloader::add(
-    const std::string & url, const std::string & destination, std::unique_ptr<DownloadCallbacks> && callbacks) {
-    p_impl->targets.emplace_back(url, destination, std::move(callbacks));
+void FileDownloader::add(const std::string & url, const std::string & destination, void * user_data) {
+    p_impl->targets.emplace_back(p_impl->base, url, destination, user_data);
 }
 
 void FileDownloader::download(bool fail_fast, bool resume) try {
-    GSList * list{nullptr};
     std::vector<std::unique_ptr<LrDownloadTarget>> lr_targets;
+    lr_targets.reserve(p_impl->targets.size());
 
     LibrepoHandle local_handle;
     local_handle.init_remote(p_impl->base->get_config());
 
-    for (auto it = p_impl->targets.rbegin(); it != p_impl->targets.rend(); ++it) {
+    auto * download_callbacks = p_impl->base->get_download_callbacks();
+
+    for (auto & file_target : p_impl->targets) {
         LrHandle * handle;
-        if (it->repo.is_valid()) {
-            handle = it->repo->downloader->get_cached_handle().get();
+        if (file_target.repo.is_valid()) {
+            handle = file_target.repo->downloader->get_cached_handle().get();
         } else {
             handle = local_handle.get();
         }
 
+        if (download_callbacks) {
+            file_target.user_cb_data =
+                download_callbacks->add_new_download(file_target.user_data, file_target.url.c_str(), -1);
+        }
+
         auto lr_target = lr_downloadtarget_new(
             handle,
-            it->url.c_str(),
+            file_target.url.c_str(),
             NULL,
             -1,
-            it->destination.c_str(),
+            file_target.destination.c_str(),
             NULL,
             0,
             resume,
             progress_callback,
-            it->callbacks.get(),
+            &file_target,
             end_callback,
             mirror_failure_callback,
             NULL,
@@ -152,9 +167,13 @@ void FileDownloader::download(bool fail_fast, bool resume) try {
             FALSE);
 
         lr_targets.emplace_back(lr_target);
-        list = g_slist_prepend(list, lr_target);
     }
 
+    // Adding items to the end of GSList is slow. We go from the back and add items to the beginning.
+    GSList * list{nullptr};
+    for (auto it = lr_targets.rbegin(); it != lr_targets.rend(); ++it) {
+        list = g_slist_prepend(list, it->get());
+    }
     std::unique_ptr<GSList, decltype(&g_slist_free)> list_holder(list, &g_slist_free);
 
     GError * err{nullptr};
