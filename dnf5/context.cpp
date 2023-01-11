@@ -258,78 +258,6 @@ void Context::load_repos(bool load_system) {
     print_info("Repositories loaded.");
 }
 
-
-void Context::download_urls(
-    std::vector<std::pair<std::string, std::filesystem::path>> url_to_dest_path, bool fail_fast, bool resume) {
-    libdnf::repo::FileDownloader downloader(base);
-
-    for (auto & [url, dest_path] : url_to_dest_path) {
-        if (!libdnf::utils::url::is_url(url)) {
-            continue;
-        }
-        downloader.add(url, dest_path);
-    }
-
-    downloader.download(fail_fast, resume);
-
-    std::cout << std::endl;
-}
-
-std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vector<std::string> & packages_paths) {
-    std::vector<libdnf::rpm::Package> added_packages;
-
-    if (!packages_paths.empty()) {
-        auto cmdline_repo = base.get_repo_sack()->get_cmdline_repo();
-
-        std::vector<std::string> urls;
-
-        for (const auto & path : packages_paths) {
-            if (libdnf::utils::url::is_url(path)) {
-                urls.emplace_back(path);
-                continue;
-            }
-            // Add local rpm files
-            added_packages.push_back(cmdline_repo->add_rpm_package(path, true));
-        }
-
-        // Download and add remote rpm files
-        if (!urls.empty()) {
-            std::filesystem::path cmd_repo_pkgs_dir{base.get_config().cachedir().get_value()};
-            cmd_repo_pkgs_dir /= "commandline";
-            cmd_repo_pkgs_dir /= "packages";
-
-            // Ensure that the command line repository packages directory exists.
-            std::filesystem::create_directories(cmd_repo_pkgs_dir);
-
-            // Create a mapping of URLs to paths to destination local files.
-            std::vector<std::pair<std::string, std::filesystem::path>> url2dest_path;
-            for (const auto & url : urls) {
-                // TODO(jrohel): Handle corner cases - not filename in url, "?query", "#fragment"?
-                std::filesystem::path path(url.substr(url.find("://") + 3));
-                auto dest_path = path.filename();
-                if (dest_path.empty()) {
-                    continue;
-                }
-                url2dest_path.emplace_back(url, cmd_repo_pkgs_dir / dest_path);
-            }
-
-            // Download files.
-            download_urls(url2dest_path, true, true);
-
-            // Add downloaded rpm files
-            for (const auto & [url, local_path] : url2dest_path) {
-                added_packages.push_back(cmdline_repo->add_rpm_package(local_path, true));
-            }
-        }
-
-        if (!added_packages.empty()) {
-            base.get_rpm_package_sack()->load_config_excludes_includes();
-        }
-    }
-
-    return added_packages;
-}
-
 void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
     libdnf::repo::PackageDownloader downloader;
 
@@ -751,27 +679,6 @@ void Command::goal_resolved() {
     auto & transaction = *get_context().get_transaction();
     if (transaction.get_problems() != libdnf::GoalProblem::NO_PROBLEM) {
         throw libdnf::cli::GoalResolveError(transaction);
-    }
-}
-
-void parse_add_specs(
-    int specs_count,
-    const char * const specs[],
-    std::vector<std::string> & pkg_specs,
-    std::vector<std::string> & filepaths) {
-    const std::string_view ext(".rpm");
-    std::set<std::string_view> unique_items;
-    for (int i = 0; i < specs_count; ++i) {
-        const std::string_view spec(specs[i]);
-        if (auto [it, inserted] = unique_items.emplace(spec); inserted) {
-            if (spec.length() > ext.length() && spec.ends_with(ext)) {
-                filepaths.emplace_back(spec);
-            } else if (libdnf::utils::url::is_url(specs[i])) {
-                filepaths.emplace_back(spec);
-            } else {
-                pkg_specs.emplace_back(spec);
-            }
-        }
     }
 }
 
