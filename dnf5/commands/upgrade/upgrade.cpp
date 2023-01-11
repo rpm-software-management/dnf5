@@ -50,15 +50,17 @@ void UpgradeCommand::set_argument_parser() {
     minimal_opt->link_value(minimal);
     cmd.register_named_arg(minimal_opt);
 
-    auto keys =
-        parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
-    keys->set_description("List of keys to match");
+    auto keys = parser.add_new_positional_arg("specs", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
+    keys->set_description("List of package specs to upgrade");
     keys->set_parse_hook_func(
         [this]([[maybe_unused]] ArgumentParser::PositionalArg * arg, int argc, const char * const argv[]) {
-            parse_add_specs(argc, argv, pkg_specs, pkg_file_paths);
+            for (int i = 0; i < argc; ++i) {
+                pkg_specs.emplace_back(argv[i]);
+            }
             return true;
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, false); });
+    cmd.register_positional_arg(keys);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
 
@@ -70,8 +72,6 @@ void UpgradeCommand::set_argument_parser() {
     advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
     advisory_bz = std::make_unique<BzOption>(*this);
     advisory_cve = std::make_unique<CveOption>(*this);
-
-    cmd.register_positional_arg(keys);
 }
 
 void UpgradeCommand::configure() {
@@ -86,10 +86,6 @@ void UpgradeCommand::configure() {
         context.base.get_config().optional_metadata_types().add_item(libdnf::METADATA_TYPE_UPDATEINFO);
     }
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-}
-
-void UpgradeCommand::load_additional_packages() {
-    cmdline_packages = get_context().add_cmdline_packages(pkg_file_paths);
 }
 
 void UpgradeCommand::run() {
@@ -125,14 +121,11 @@ void UpgradeCommand::run() {
         settings.advisory_filter = advisories;
     }
 
-    if (pkg_specs.empty() && pkg_file_paths.empty()) {
+    if (pkg_specs.empty()) {
         goal->add_rpm_upgrade(settings, minimal->get_value());
     } else {
-        for (const auto & pkg : cmdline_packages) {
-            goal->add_rpm_upgrade(pkg, settings, minimal->get_value());
-        }
         for (const auto & spec : pkg_specs) {
-            goal->add_rpm_upgrade(spec, settings, minimal->get_value());
+            goal->add_upgrade(spec, settings, minimal->get_value());
         }
     }
 }

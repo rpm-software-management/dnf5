@@ -40,6 +40,39 @@ public:
     // TODO(jmracek) Not yet implemented
     void add_module_enable(const std::string & spec);
 
+    /// High level API for an artifact installation. A spec can be either a package
+    /// specification matched against NEVRA, provides, and file provides, or it can
+    /// be a path to local rpm file, or URL of rpm to be installed.
+    /// By using `@` prefix you can also specify a group, environmental group,
+    /// or a module to be installed.
+    /// @param spec  A string with installation spec
+    /// @param settings  A structure to override default goal settings.
+    void add_install(const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
+    /// High level API for an artifact upgrade. See `add_install()` for details.
+    /// @param spec      A string with upgrade spec
+    /// @param settings  A structure to override default goal settings.
+    /// @param minimal   Whether to do smallest possible upgrade
+    void add_upgrade(
+        const std::string & spec,
+        const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings(),
+        bool minimal = false);
+
+    /// High level API for an artifact downgrade. See `add_install()` for details.
+    /// @param spec      A string with upgrade spec
+    /// @param settings  A structure to override default goal settings.
+    void add_downgrade(const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
+    /// High level API for an artifact reinstall. See `add_install()` for details.
+    /// @param spec      A string with reinstall spec
+    /// @param settings  A structure to override default goal settings.
+    void add_reinstall(const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
+    /// High level API for an artifact removal. See `add_install()` for details.
+    /// @param spec      A string with reinstall spec
+    /// @param settings  A structure to override default goal settings.
+    void add_remove(const std::string & spec, const libdnf::GoalJobSettings & settings = libdnf::GoalJobSettings());
+
     /// Add install request to the goal. The `spec` will be resolved to packages in the resolve() call. The operation will not
     /// result in a reinstall if the requested package is already installed. By default uses
     /// `clean_requirements_on_remove` set to `false`, which can be overridden in `settings`.
