@@ -49,8 +49,7 @@ void ConfTest::test_config_repo() {
     repo::ConfigRepo config_repo(config, "test-repo");
     ConfigParser parser;
     parser.read(PROJECT_SOURCE_DIR "/test/libdnf/conf/data/main.conf");
-    base->get_config().varsdir().set(
-        libdnf::Option::Priority::RUNTIME, std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
+    base->get_config().varsdir().set(std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
     base->setup();
     config_repo.load_from_parser(parser, "repo-1", *base->get_vars(), logger);
 

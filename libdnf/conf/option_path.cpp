@@ -99,4 +99,8 @@ void OptionPath::set(Priority priority, const std::string & value) {
     }
 }
 
+void OptionPath::set(const std::string & value) {
+    set(Priority::RUNTIME, value);
+}
+
 }  // namespace libdnf

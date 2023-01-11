@@ -17,7 +17,7 @@ base.load_config_from_file()
 # it to a different location. The Base instance will then work with the
 # installroot directory tree as its root for the rest of its lifetime.
 base_config = base.get_config()
-base_config.installroot().set(libdnf5.conf.Option.Priority_RUNTIME, installroot)
+base_config.installroot().set(installroot)
 
 # Load vars and do other initialization (of libsolv pool, etc.) based on the
 # configuration.  Locks the installroot and varsdir configuration values so

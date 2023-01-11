@@ -55,9 +55,9 @@ void BaseGoalTest::test_install_not_available() {
     add_repo_repomd("repomd-repo1");
 
     libdnf::Goal goal(base);
-    base.get_config().strict().set(libdnf::Option::Priority::RUNTIME, false);
-    base.get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
-    base.get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
+    base.get_config().strict().set(false);
+    base.get_config().best().set(true);
+    base.get_config().clean_requirements_on_remove().set(true);
     goal.add_rpm_install("not_available");
     auto transaction = goal.resolve();
 
@@ -95,7 +95,7 @@ void BaseGoalTest::test_install_from_cmdline() {
 
 void BaseGoalTest::test_install_multilib_all() {
     add_repo_solv("solv-multilib");
-    base.get_config().multilib_policy().set(libdnf::Option::Priority::RUNTIME, "all");
+    base.get_config().multilib_policy().set("all");
 
     libdnf::Goal goal(base);
     goal.add_rpm_install("multilib");
@@ -204,7 +204,7 @@ void BaseGoalTest::test_remove() {
 }
 
 void BaseGoalTest::test_remove_not_installed() {
-    base.get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
+    base.get_config().clean_requirements_on_remove().set(true);
 
     libdnf::Goal goal(base);
     goal.add_rpm_remove("not_installed");
@@ -325,8 +325,8 @@ void BaseGoalTest::test_upgrade_not_downgrade_from_cmdline() {
 }
 
 void BaseGoalTest::test_upgrade_not_available() {
-    base.get_config().best().set(libdnf::Option::Priority::RUNTIME, true);
-    base.get_config().clean_requirements_on_remove().set(libdnf::Option::Priority::RUNTIME, true);
+    base.get_config().best().set(true);
+    base.get_config().clean_requirements_on_remove().set(true);
 
     libdnf::rpm::PackageQuery query(base);
 

@@ -18,7 +18,7 @@ base.load_config_from_file();
 // Installroot is set to '/' when we're working with the system, but we can set
 // it to a different location. The Base instance will then work with the
 // installroot directory tree as its root for the rest of its lifetime.
-base.get_config().installroot().set(libdnf::Option::Priority::RUNTIME, installroot);
+base.get_config().installroot().set(installroot);
 
 // Load vars and do other initialization (of libsolv pool, etc.) based on the
 // configuration.  Locks the installroot and varsdir configuration values so

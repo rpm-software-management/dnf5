@@ -86,4 +86,8 @@ void OptionSeconds::set(Priority priority, const std::string & value) {
     set(priority, from_string(value));
 }
 
+void OptionSeconds::set(const std::string & value) {
+    set(Priority::RUNTIME, value);
+}
+
 }  // namespace libdnf

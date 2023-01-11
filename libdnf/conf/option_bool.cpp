@@ -93,8 +93,16 @@ void OptionBool::set(Priority priority, bool value) {
     }
 }
 
+void OptionBool::set(bool value) {
+    set(Priority::RUNTIME, value);
+}
+
 void OptionBool::set(Priority priority, const std::string & value) {
     set(priority, from_string(value));
+}
+
+void OptionBool::set(const std::string & value) {
+    set(Priority::RUNTIME, value);
 }
 
 std::string OptionBool::to_string(bool value) const {

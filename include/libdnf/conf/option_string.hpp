@@ -46,6 +46,9 @@ public:
     /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.set(Priority priority, const std::string & value)
     void set(Priority priority, const std::string & value) override;
 
+    /// Sets new value and runtime priority.
+    void set(const std::string & value) override;
+
     /// Gets the stored value.
     /// @replaces libdnf:conf/OptionString.hpp:method:OptionString.getValue()
     const std::string & get_value() const;
