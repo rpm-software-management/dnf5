@@ -53,14 +53,22 @@ public:
     /// @return GoalProblem that specify the type of report
     libdnf::GoalProblem get_problem() const { return problem; };
     /// @return GoalJobSetting if it is relevant for the particular GoalProblem
-    const std::optional<libdnf::GoalJobSettings> & get_job_settings() const { return job_settings; };
+    const libdnf::GoalJobSettings * get_job_settings() const { return job_settings ? &job_settings.value() : nullptr; };
     /// @return SPEC if it is relevant for the particular GoalProblem
-    const std::optional<std::string> & get_spec() const { return spec; };
+    const std::string * get_spec() const { return spec ? &spec.value() : nullptr; };
     /// @return Additional information (internal), that are required for formatted string
-    const std::optional<std::set<std::string>> & get_additional_data() const { return additional_data; };
+    const std::set<std::string> * get_additional_data() const {
+        return additional_data ? &additional_data.value() : nullptr;
+    };
     /// @return SolverProblems if they are relevant for the particular GoalProblem
-    const std::optional<SolverProblems> & get_solver_problems() const { return solver_problems; };
+    const SolverProblems * get_solver_problems() const { return solver_problems ? &solver_problems.value() : nullptr; };
 
+    /// Convert an element from resolve log to string;
+    std::string to_string() const {
+        return to_string(action, problem, job_settings, spec_type, spec, additional_data, solver_problems);
+    };
+
+private:
     /// Convert an element from resolve log to string;
     static std::string to_string(
         libdnf::GoalAction action,
@@ -71,16 +79,9 @@ public:
         const std::optional<std::set<std::string>> & additional_data,
         const std::optional<SolverProblems> & solver_problems);
 
-    /// Convert an element from resolve log to string;
-    std::string to_string() const {
-        return to_string(action, problem, job_settings, spec_type, spec, additional_data, solver_problems);
-    };
-
-private:
-    friend class Goal;
-
     libdnf::GoalAction action;
     libdnf::GoalProblem problem;
+
     std::optional<libdnf::GoalJobSettings> job_settings;
     std::optional<SpecType> spec_type;
     std::optional<std::string> spec;

@@ -51,9 +51,9 @@ void GroupInstallCommand::run() {
 
     libdnf::GoalJobSettings settings;
     if (with_optional->get_value()) {
-        settings.group_package_types =
+        auto group_package_types =
             libdnf::comps::package_type_from_string(ctx.base.get_config().group_package_types().get_value());
-        *settings.group_package_types |= libdnf::comps::PackageType::OPTIONAL;
+        settings.set_group_package_types(group_package_types | libdnf::comps::PackageType::OPTIONAL);
     }
     for (const auto & spec : group_specs->get_value()) {
         goal->add_group_install(spec, libdnf::transaction::TransactionItemReason::USER, settings);
