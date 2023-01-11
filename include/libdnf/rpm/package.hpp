@@ -463,6 +463,10 @@ public:
     // TODO(dmach): throw an exception when getting a reason for an available package (it should work only for installed)
     libdnf::transaction::TransactionItemReason get_reason() const;
 
+    /// @return The `Base` object to which this object belongs.
+    /// @since 5.0.5
+    libdnf::BaseWeakPtr get_base() const;
+
 protected:
     // @replaces libdnf:libdnf/dnf-package.h:function:dnf_package_new(DnfSack *sack, Id id)
     Package(const BaseWeakPtr & base, PackageId id);
