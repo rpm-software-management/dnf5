@@ -28,32 +28,47 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 CPPUNIT_TEST_SUITE_REGISTRATION(PackageDownloaderTest);
 
-
-class DownloadCallbacks : public libdnf::repo::DownloadCallbacks {
+class CallbacksStats {
 public:
-    int end(TransferStatus status, const char * msg) override {
-        ++end_cnt;
-        end_status = status;
-        end_msg = libdnf::utils::string::c_to_str(msg);
-        return 0;
-    }
-
-    int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
-        ++progress_cnt;
-        return 0;
-    }
-
-    int mirror_failure([[maybe_unused]] const char * msg, [[maybe_unused]] const char * url) override {
-        ++mirror_failure_cnt;
-        return 0;
-    }
-
     int end_cnt = 0;
-    TransferStatus end_status = TransferStatus::ERROR;
+    libdnf::repo::DownloadCallbacks::TransferStatus end_status = libdnf::repo::DownloadCallbacks::TransferStatus::ERROR;
     std::string end_msg;
 
     int progress_cnt = 0;
     int mirror_failure_cnt = 0;
+};
+
+class DownloadCallbacks : public libdnf::repo::DownloadCallbacks {
+public:
+    DownloadCallbacks(CallbacksStats * stats) : stats(stats) {}
+    int end(TransferStatus status, const char * msg) override {
+        ++stats->end_cnt;
+        stats->end_status = status;
+        stats->end_msg = libdnf::utils::string::c_to_str(msg);
+        return 0;
+    }
+
+    int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
+        ++stats->progress_cnt;
+        return 0;
+    }
+
+    int mirror_failure([[maybe_unused]] const char * msg, [[maybe_unused]] const char * url) override {
+        ++stats->mirror_failure_cnt;
+        return 0;
+    }
+
+    CallbacksStats * stats;
+};
+
+class DownloadCallbacksFactory : public libdnf::repo::DownloadCallbacksFactory {
+public:
+    DownloadCallbacksFactory(CallbacksStats * stats) : stats(stats) {}
+    std::unique_ptr<libdnf::repo::DownloadCallbacks> create_callbacks(
+        [[maybe_unused]] const libdnf::rpm::Package & package) override {
+        return std::make_unique<DownloadCallbacks>(stats);
+    }
+    CallbacksStats * stats;
 };
 
 void PackageDownloaderTest::test_package_downloader() {
@@ -65,18 +80,18 @@ void PackageDownloaderTest::test_package_downloader() {
     query.filter_arch({"noarch"});
     CPPUNIT_ASSERT_EQUAL((size_t)1, query.size());
 
-    auto downloader = libdnf::repo::PackageDownloader();
+    CallbacksStats stats;
+    auto downloader = libdnf::repo::PackageDownloader(base.get_weak_ptr());
+    base.set_download_callbacks_factory(std::make_unique<DownloadCallbacksFactory>(&stats));
 
-    auto cbs_unique_ptr = std::make_unique<DownloadCallbacks>();
-    auto cbs = cbs_unique_ptr.get();
-    downloader.add(*query.begin(), std::move(cbs_unique_ptr));
+    downloader.add(*query.begin());
 
     downloader.download(true, true);
 
-    CPPUNIT_ASSERT_EQUAL(1, cbs->end_cnt);
-    CPPUNIT_ASSERT_EQUAL(DownloadCallbacks::TransferStatus::SUCCESSFUL, cbs->end_status);
-    CPPUNIT_ASSERT_EQUAL(std::string(""), cbs->end_msg);
+    CPPUNIT_ASSERT_EQUAL(1, stats.end_cnt);
+    CPPUNIT_ASSERT_EQUAL(DownloadCallbacks::TransferStatus::SUCCESSFUL, stats.end_status);
+    CPPUNIT_ASSERT_EQUAL(std::string(""), stats.end_msg);
 
-    CPPUNIT_ASSERT_GREATEREQUAL(1, cbs->progress_cnt);
-    CPPUNIT_ASSERT_EQUAL(0, cbs->mirror_failure_cnt);
+    CPPUNIT_ASSERT_GREATEREQUAL(1, stats.progress_cnt);
+    CPPUNIT_ASSERT_EQUAL(0, stats.mirror_failure_cnt);
 }

@@ -31,4 +31,13 @@ int DownloadCallbacks::mirror_failure([[maybe_unused]] const char * msg, [[maybe
     return 0;
 }
 
+std::unique_ptr<DownloadCallbacks> DownloadCallbacksFactory::create_callbacks(
+    [[maybe_unused]] const std::string & what) {
+    return nullptr;
+}
+
+std::unique_ptr<DownloadCallbacks> DownloadCallbacksFactory::create_callbacks(const libdnf::rpm::Package & package) {
+    return create_callbacks(package.get_full_nevra());
+}
+
 }  // namespace libdnf::repo

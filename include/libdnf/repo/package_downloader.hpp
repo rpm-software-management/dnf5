@@ -21,7 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_REPO_PACKAGE_DOWNLOADER_HPP
 
 #include "libdnf/conf/config_main.hpp"
-#include "libdnf/repo/download_callbacks.hpp"
 #include "libdnf/rpm/package.hpp"
 
 #include <memory>
@@ -37,22 +36,17 @@ class PackageDownloadError : public Error {
 
 class PackageDownloader {
 public:
-    PackageDownloader();
+    explicit PackageDownloader(const libdnf::BaseWeakPtr & base);
     ~PackageDownloader();
 
     /// Adds a package to download to the standard location of repo cachedir/packages.
     /// @param package The package to download.
-    /// @param callbacks (optional) A pointer to an instance of the `PackageDownloadCallbacks` class.
-    void add(const libdnf::rpm::Package & package, std::unique_ptr<DownloadCallbacks> && callbacks = {});
+    void add(const libdnf::rpm::Package & package);
 
     /// Adds a package to download to a specific destination directory.
     /// @param package The package to download.
     /// @param destination The directory to which to download the package.
-    /// @param callbacks (optional) A pointer to an instance of the `PackageDownloadCallbacks` class.
-    void add(
-        const libdnf::rpm::Package & package,
-        const std::string & destination,
-        std::unique_ptr<DownloadCallbacks> && callbacks = {});
+    void add(const libdnf::rpm::Package & package, const std::string & destination);
 
     /// Download the previously added packages.
     /// @param fail_fast Whether to fail the whole download on a first error or keep downloading.
@@ -62,6 +56,7 @@ public:
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;
+    BaseWeakPtr base;
 };
 
 /// Wraps librepo PackageTarget

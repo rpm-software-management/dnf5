@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/context.hpp"
 
+#include "download_cb.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
@@ -259,105 +260,21 @@ void Context::load_repos(bool load_system) {
 }
 
 
-namespace {
-
-class DownloadCB : public libdnf::repo::DownloadCallbacks {
-public:
-    DownloadCB(libdnf::cli::progressbar::MultiProgressBar & mp_bar, const std::string & what)
-        : multi_progress_bar(&mp_bar),
-          what(what) {
-        auto pb = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, what);
-        progress_bar = pb.get();
-        multi_progress_bar->add_bar(std::move(pb));
-    }
-
-    int end(TransferStatus status, const char * msg) override {
-        switch (status) {
-            case TransferStatus::SUCCESSFUL:
-                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
-                break;
-            case TransferStatus::ALREADYEXISTS:
-                // skipping the download -> downloading 0 bytes
-                progress_bar->set_ticks(0);
-                progress_bar->set_total_ticks(0);
-                progress_bar->add_message(libdnf::cli::progressbar::MessageType::SUCCESS, msg);
-                progress_bar->start();
-                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
-                break;
-            case TransferStatus::ERROR:
-                progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg);
-                progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
-                break;
-        }
-        multi_progress_bar->print();
-        return 0;
-    }
-
-    int progress(double total_to_download, double downloaded) override {
-        auto total = static_cast<int64_t>(total_to_download);
-        if (total > 0) {
-            progress_bar->set_total_ticks(total);
-        }
-        if (progress_bar->get_state() == libdnf::cli::progressbar::ProgressBarState::READY) {
-            progress_bar->start();
-        }
-        progress_bar->set_ticks(static_cast<int64_t>(downloaded));
-        if (is_time_to_print()) {
-            multi_progress_bar->print();
-        }
-        return 0;
-    }
-
-    int mirror_failure(const char * msg, const char * url) override {
-        //std::cout << "Mirror failure: " << msg << " " << url << std::endl;
-        std::string message = std::string(msg) + " - " + url;
-        progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, message);
-        multi_progress_bar->print();
-        return 0;
-    }
-
-private:
-    static bool is_time_to_print() {
-        auto now = std::chrono::steady_clock::now();
-        auto delta = now - prev_print_time;
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-        if (ms > 100) {
-            // 100ms equals to 10 FPS and that seems to be smooth enough
-            prev_print_time = now;
-            return true;
-        }
-        return false;
-    }
-
-    static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
-
-    libdnf::cli::progressbar::MultiProgressBar * multi_progress_bar;
-    libdnf::cli::progressbar::DownloadProgressBar * progress_bar;
-    std::string what;
-};
-
-std::chrono::time_point<std::chrono::steady_clock> DownloadCB::prev_print_time = std::chrono::steady_clock::now();
-
-}  // namespace
-
 void Context::download_urls(
     std::vector<std::pair<std::string, std::filesystem::path>> url_to_dest_path, bool fail_fast, bool resume) {
-    libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
-    libdnf::repo::FileDownloader downloader(base.get_config());
+    base.set_download_callbacks_factory(std::make_unique<DownloadCBFactory>());
+    libdnf::repo::FileDownloader downloader(base.get_weak_ptr());
 
     for (auto & [url, dest_path] : url_to_dest_path) {
         if (!libdnf::utils::url::is_url(url)) {
             continue;
         }
-        downloader.add(url, dest_path, std::make_unique<DownloadCB>(multi_progress_bar, url));
+        downloader.add(url, dest_path);
     }
 
     downloader.download(fail_fast, resume);
-
-    // print a completed progress bar
-    multi_progress_bar.print();
-    std::cout << std::endl;
-    // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
+    // reset the download callback in the base
+    base.set_download_callbacks_factory(nullptr);
 }
 
 std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vector<std::string> & packages_paths) {
@@ -415,16 +332,16 @@ std::vector<libdnf::rpm::Package> Context::add_cmdline_packages(const std::vecto
     return added_packages;
 }
 
-void download_packages(const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
-    libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
-    libdnf::repo::PackageDownloader downloader;
+void download_packages(
+    const libdnf::BaseWeakPtr & base, const std::vector<libdnf::rpm::Package> & packages, const char * dest_dir) {
+    base->set_download_callbacks_factory(std::make_unique<DownloadCBFactory>());
+    libdnf::repo::PackageDownloader downloader(base);
 
     for (auto & package : packages) {
         if (dest_dir != nullptr) {
-            downloader.add(
-                package, dest_dir, std::make_unique<DownloadCB>(multi_progress_bar, package.get_full_nevra()));
+            downloader.add(package, dest_dir);
         } else {
-            downloader.add(package, std::make_unique<DownloadCB>(multi_progress_bar, package.get_full_nevra()));
+            downloader.add(package);
         }
     }
 
@@ -434,13 +351,13 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
     } catch (const std::runtime_error & ex) {
         std::cout << "Exception: " << ex.what() << std::endl;
     }
-    // print a completed progress bar
-    multi_progress_bar.print();
-    std::cout << std::endl;
-    // TODO(dmach): if a download gets interrupted, the "Total" bar should show reasonable data
+
+    // reset the download callback in the base
+    base->set_download_callbacks_factory(nullptr);
 }
 
-void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir) {
+void download_packages(
+    const libdnf::BaseWeakPtr & base, libdnf::base::Transaction & transaction, const char * dest_dir) {
     std::vector<libdnf::rpm::Package> downloads;
     for (auto & tspkg : transaction.get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action()) &&
@@ -450,7 +367,7 @@ void download_packages(libdnf::base::Transaction & transaction, const char * des
     }
 
     if (!downloads.empty()) {
-        download_packages(downloads, dest_dir);
+        download_packages(base, downloads, dest_dir);
     }
 }
 
@@ -796,7 +713,7 @@ bool Context::check_gpg_signatures(const libdnf::base::Transaction & transaction
 
 
 void Context::download_and_run(libdnf::base::Transaction & transaction) {
-    download_packages(transaction, nullptr);
+    download_packages(base.get_weak_ptr(), transaction, nullptr);
 
     std::cout << std::endl << "Verifying PGP signatures" << std::endl;
     if (!check_gpg_signatures(transaction)) {

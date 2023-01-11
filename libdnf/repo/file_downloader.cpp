@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_downloader.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
 
 #include <librepo/librepo.h>
@@ -90,26 +91,20 @@ public:
 
 class FileDownloader::Impl {
 public:
-    Impl(ConfigMain & config) : config(&config) {}
-    ConfigMain * config;
+    Impl() {}
     std::vector<FileTarget> targets;
 };
 
 
-FileDownloader::FileDownloader(ConfigMain & config) : p_impl(std::make_unique<Impl>(config)) {}
+FileDownloader::FileDownloader(const BaseWeakPtr & base) : p_impl(std::make_unique<Impl>()), base(base) {}
 FileDownloader::~FileDownloader() = default;
 
-void FileDownloader::add(
-    RepoWeakPtr & repo,
-    const std::string & url,
-    const std::string & destination,
-    std::unique_ptr<DownloadCallbacks> && callbacks) {
-    p_impl->targets.emplace_back(repo, url, destination, std::move(callbacks));
+void FileDownloader::add(RepoWeakPtr & repo, const std::string & url, const std::string & destination) {
+    p_impl->targets.emplace_back(repo, url, destination, base->create_download_callbacks(url));
 }
 
-void FileDownloader::add(
-    const std::string & url, const std::string & destination, std::unique_ptr<DownloadCallbacks> && callbacks) {
-    p_impl->targets.emplace_back(url, destination, std::move(callbacks));
+void FileDownloader::add(const std::string & url, const std::string & destination) {
+    p_impl->targets.emplace_back(url, destination, base->create_download_callbacks(url));
 }
 
 void FileDownloader::download(bool fail_fast, bool resume) try {
@@ -117,7 +112,7 @@ void FileDownloader::download(bool fail_fast, bool resume) try {
     std::vector<std::unique_ptr<LrDownloadTarget>> lr_targets;
 
     LibrepoHandle local_handle;
-    local_handle.init_remote(*p_impl->config);
+    local_handle.init_remote(base->get_config());
 
     for (auto it = p_impl->targets.rbegin(); it != p_impl->targets.rend(); ++it) {
         LrHandle * handle;

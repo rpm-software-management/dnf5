@@ -22,7 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/conf/config_main.hpp"
-#include "libdnf/repo/download_callbacks.hpp"
 #include "libdnf/repo/repo_weak.hpp"
 
 #include <memory>
@@ -38,26 +37,19 @@ class FileDownloadError : public Error {
 
 class FileDownloader {
 public:
-    explicit FileDownloader(ConfigMain & config);
+    explicit FileDownloader(const libdnf::BaseWeakPtr & base);
     ~FileDownloader();
 
     /// Adds a file (URL) to download.
     /// @param repo The repository whose settings are to be used.
     /// @param url The file (url) to download.
     /// @param destination The file path to which to download the file.
-    /// @param callbacks (optional) A pointer to an instance of the `FileDownloadCallbacks` class.
-    void add(
-        libdnf::repo::RepoWeakPtr & repo,
-        const std::string & url,
-        const std::string & destination,
-        std::unique_ptr<DownloadCallbacks> && callbacks = {});
+    void add(libdnf::repo::RepoWeakPtr & repo, const std::string & url, const std::string & destination);
 
     /// Adds a file (URL) to download. The settings from ConfigMain passed in the FileDownloader constructor are used.
     /// @param url The file (url) to download.
     /// @param destination The file path to which to download the file.
-    /// @param callbacks (optional) A pointer to an instance of the `FileDownloadCallbacks` class.
-    void add(
-        const std::string & url, const std::string & destination, std::unique_ptr<DownloadCallbacks> && callbacks = {});
+    void add(const std::string & url, const std::string & destination);
 
     /// Download the previously added files (URLs).
     /// @param fail_fast Whether to fail the whole download on a first error or keep downloading.
@@ -67,6 +59,7 @@ public:
 private:
     class Impl;
     std::unique_ptr<Impl> p_impl;
+    BaseWeakPtr base;
 };
 
 }  // namespace libdnf::repo

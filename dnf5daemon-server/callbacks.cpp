@@ -106,6 +106,14 @@ sdbus::Signal DbusPackageCB::create_signal(std::string interface, std::string si
 }
 
 
+DbusPackageCBFactory::DbusPackageCBFactory(Session & session) : session(session) {}
+DbusPackageCBFactory::~DbusPackageCBFactory() {}
+std::unique_ptr<libdnf::repo::DownloadCallbacks> DbusPackageCBFactory::create_callbacks(
+    const libdnf::rpm::Package & package) {
+    return std::make_unique<DbusPackageCB>(session, package);
+}
+
+
 void DbusRepoCB::start(const char * what) {
     try {
         auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_START);

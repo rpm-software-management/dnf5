@@ -207,7 +207,7 @@ std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
         } else {
             // download the remote key
             downloaded_key = std::make_unique<libdnf::utils::fs::TempFile>("rpmkey");
-            libdnf::repo::FileDownloader downloader(base->get_config());
+            libdnf::repo::FileDownloader downloader(base);
             downloader.add(key_url, downloaded_key->get_path());
             downloader.download(true, true);
             key_path = downloaded_key->get_path();
