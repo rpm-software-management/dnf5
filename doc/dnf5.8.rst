@@ -89,6 +89,9 @@ For more details see the separate man page for the specific command, f.e. ``man 
 :ref:`repoquery <repoquery_command_ref-label>`
     | Search for packages in repositories.
 
+:ref:`search <search_command_ref-label>`
+    | Search for packages using keywords.
+
 :ref:`swap <swap_command_ref-label>`
     | Remove software and install another in the single transaction.
 
@@ -297,6 +300,7 @@ Commands in detail:
     | :manpage:`dnf5-remove(8)`, :ref:`Remove command <remove_command_ref-label>`
     | :manpage:`dnf5-repo(8)`, :ref:`Repo command <repo_command_ref-label>`
     | :manpage:`dnf5-repoquery(8)`, :ref:`Repoquery command <repoquery_command_ref-label>`
+    | :manpage:`dnf5-search(8)`, :ref:`Search command <search_command_ref-label>`
     | :manpage:`dnf5-swap(8)`, :ref:`Swap command <swap_command_ref-label>`
     | :manpage:`dnf5-upgrade(8)`, :ref:`Upgrade command <upgrade_command_ref-label>`
 
