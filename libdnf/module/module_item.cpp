@@ -25,7 +25,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/module/module_dependency.hpp"
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/module/module_sack_weak.hpp"
-#include "libdnf/utils/format.hpp"
 
 #include <modulemd-2.0/modulemd-module-stream.h>
 #include <modulemd-2.0/modulemd-profile.h>
@@ -95,7 +94,7 @@ std::string ModuleItem::get_arch() const {
 
 
 std::string ModuleItem::get_name_stream(ModulemdModuleStream * md_stream) {
-    return libdnf::utils::sformat(
+    return fmt::format(
         "{}:{}",
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)));
@@ -103,7 +102,7 @@ std::string ModuleItem::get_name_stream(ModulemdModuleStream * md_stream) {
 
 
 std::string ModuleItem::get_name_stream_version() const {
-    return libdnf::utils::sformat(
+    return fmt::format(
         "{}:{}:{}",
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
@@ -111,9 +110,14 @@ std::string ModuleItem::get_name_stream_version() const {
 }
 
 
-std::string ModuleItem::get_name_stream_context() const {
+std::string ModuleItem::get_name_stream_staticcontext() const {
     // TODO(pkratoch): Find out what is the fastest way to concatenate strings.
-    return libdnf::utils::sformat(
+    // TODO(pkratoch): fmt::format accepts char * but it is unable to handle nullptr. We can avoid allocating memory
+    //                 for temporary std::string by replacing libdnf::utils::string::c_to_str with something like this:
+    //                 inline constexpr const char * null_to_empty(const char * str) noexcept {
+    //                     return str ? str : "";
+    //                 }
+    return fmt::format(
         "{}:{}:{}",
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
@@ -122,8 +126,16 @@ std::string ModuleItem::get_name_stream_context() const {
 }
 
 
+std::string ModuleItem::get_name_stream_staticcontext_arch() const {
+    return fmt::format(
+        "{}:{}",
+        get_name_stream_staticcontext(),
+        libdnf::utils::string::c_to_str(modulemd_module_stream_get_arch(md_stream)));
+}
+
+
 std::string ModuleItem::get_full_identifier() const {
-    return libdnf::utils::sformat(
+    return fmt::format(
         "{}:{}:{}:{}:{}",
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_module_name(md_stream)),
         libdnf::utils::string::c_to_str(modulemd_module_stream_get_stream_name(md_stream)),
@@ -325,7 +337,7 @@ void ModuleItem::create_solvable() {
     Solvable * solvable = pool_id2solvable(pool, id.id);
 
     // Name: $name:$stream:$context
-    solvable_set_str(solvable, SOLVABLE_NAME, get_name_stream_context().c_str());
+    solvable_set_str(solvable, SOLVABLE_NAME, get_name_stream_staticcontext().c_str());
     // Version: $version
     solvable_set_str(solvable, SOLVABLE_EVR, get_version_str().c_str());
     // TODO(pkratoch): The test can be removed once modules always have arch
@@ -336,13 +348,13 @@ void ModuleItem::create_solvable() {
     solvable_set_str(solvable, SOLVABLE_DESCRIPTION, get_name_stream().c_str());
 
     // Create Provides: module($name)
-    std::string provide = libdnf::utils::sformat("module({})", get_name());
+    std::string provide = fmt::format("module({})", get_name());
     auto dep_id = pool_str2id(pool, provide.c_str(), 1);
     solvable_add_deparray(solvable, SOLVABLE_PROVIDES, dep_id, -1);
     // Create Conflicts: module($name)
     solvable_add_deparray(solvable, SOLVABLE_CONFLICTS, dep_id, 0);
     // Create Provides: module($name:$stream)
-    provide = libdnf::utils::sformat("module({})", get_name_stream());
+    provide = fmt::format("module({})", get_name_stream());
     dep_id = pool_str2id(pool, provide.c_str(), 1);
     solvable_add_deparray(solvable, SOLVABLE_PROVIDES, dep_id, -1);
 
@@ -362,10 +374,10 @@ void ModuleItem::create_dependencies() const {
         for (const auto & stream : dependency.get_streams()) {
             // If the stream require starts with "-", create conflict with the stream, otherwise, remember the stream require
             if (stream.find('-', 0) != std::string::npos) {
-                req_formatted = libdnf::utils::sformat("module({}:{}", module_name, stream.substr(1));
+                req_formatted = fmt::format("module({}:{}", module_name, stream.substr(1));
                 solvable_add_deparray(solvable, SOLVABLE_CONFLICTS, pool_str2id(pool, req_formatted.c_str(), 1), 0);
             } else {
-                req_formatted = libdnf::utils::sformat("module({}:{})", module_name, stream);
+                req_formatted = fmt::format("module({}:{})", module_name, stream);
                 required_streams.push_back(req_formatted);
             }
         }
@@ -373,12 +385,12 @@ void ModuleItem::create_dependencies() const {
         // If there is exactly one required stream, require the stream
         // If there are more required streams, add a rich dependency to require any of the streams
         if (required_streams.empty()) {
-            req_formatted = libdnf::utils::sformat("module({})", module_name);
+            req_formatted = fmt::format("module({})", module_name);
             solvable_add_deparray(solvable, SOLVABLE_REQUIRES, pool_str2id(pool, req_formatted.c_str(), 1), -1);
         } else if (required_streams.size() == 1) {
             solvable_add_deparray(solvable, SOLVABLE_REQUIRES, pool_str2id(pool, required_streams[0].c_str(), 1), -1);
         } else {
-            req_formatted = libdnf::utils::sformat("({})", utils::string::join(required_streams, " or "));
+            req_formatted = fmt::format("({})", utils::string::join(required_streams, " or "));
             Id dep_id = pool_parserpmrichdep(pool, req_formatted.c_str());
             if (!dep_id) {
                 throw std::runtime_error("Cannot parse module requires");

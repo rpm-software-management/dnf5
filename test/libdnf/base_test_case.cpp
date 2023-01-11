@@ -37,7 +37,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <map>
 
 
-using libdnf::utils::sformat;
+using fmt::format;
 
 
 libdnf::repo::RepoWeakPtr BaseTestCase::add_repo(const std::string & repoid, const std::string & repo_path, bool load) {
@@ -87,9 +87,9 @@ libdnf::advisory::Advisory BaseTestCase::get_advisory(const std::string & name) 
     }
 
     if (found.empty()) {
-        CPPUNIT_FAIL(sformat("No advisory \"{}\" found. All pool advisories:{}", name, to_string(advisories)));
+        CPPUNIT_FAIL(format("No advisory \"{}\" found. All pool advisories:{}", name, to_string(advisories)));
     } else if (found.size() > 1) {
-        CPPUNIT_FAIL(sformat("More than one advisory matching \"{}\" found:{}", name, to_string(advisories)));
+        CPPUNIT_FAIL(format("More than one advisory matching \"{}\" found:{}", name, to_string(advisories)));
     }
 
     return *found.begin();
@@ -109,10 +109,10 @@ libdnf::comps::Environment BaseTestCase::get_environment(const std::string & env
 
     if (found.empty()) {
         CPPUNIT_FAIL(
-            sformat("No environment \"{}\" found. All pool environments:{}", environmentid, to_string(environments)));
+            format("No environment \"{}\" found. All pool environments:{}", environmentid, to_string(environments)));
     } else if (found.size() > 1) {
         CPPUNIT_FAIL(
-            sformat("More than one environment matching \"{}\" found:{}", environmentid, to_string(environments)));
+            format("More than one environment matching \"{}\" found:{}", environmentid, to_string(environments)));
     }
 
     return *found.begin();
@@ -131,9 +131,9 @@ libdnf::comps::Group BaseTestCase::get_group(const std::string & groupid, bool i
     }
 
     if (found.empty()) {
-        CPPUNIT_FAIL(sformat("No group \"{}\" found. All pool groups:{}", groupid, to_string(groups)));
+        CPPUNIT_FAIL(format("No group \"{}\" found. All pool groups:{}", groupid, to_string(groups)));
     } else if (found.size() > 1) {
-        CPPUNIT_FAIL(sformat("More than one group matching \"{}\" found:{}", groupid, to_string(groups)));
+        CPPUNIT_FAIL(format("More than one group matching \"{}\" found:{}", groupid, to_string(groups)));
     }
 
     return *found.begin();
@@ -166,7 +166,7 @@ libdnf::rpm::Package BaseTestCase::get_pkg_i(const std::string & nevra, size_t i
 
     if (query.size() <= index) {
         CPPUNIT_FAIL(
-            sformat("Package index {} out of bounds for \"{}\", query packages:{}", index, nevra, to_string(query)));
+            format("Package index {} out of bounds for \"{}\", query packages:{}", index, nevra, to_string(query)));
     }
 
     auto it = query.begin();
@@ -208,9 +208,9 @@ libdnf::rpm::Package BaseTestCase::add_cmdline_pkg(const std::string & relative_
 libdnf::rpm::Package BaseTestCase::first_query_pkg(libdnf::rpm::PackageQuery & query, const std::string & what) {
     if (query.empty()) {
         CPPUNIT_FAIL(
-            sformat("No package \"{}\" found. All sack packages:{}", what, to_string(libdnf::rpm::PackageQuery(base))));
+            format("No package \"{}\" found. All sack packages:{}", what, to_string(libdnf::rpm::PackageQuery(base))));
     } else if (query.size() > 1) {
-        CPPUNIT_FAIL(sformat("More than one package matching \"{}\" found:{}", what, to_string(query)));
+        CPPUNIT_FAIL(format("More than one package matching \"{}\" found:{}", what, to_string(query)));
     }
 
     return *query.begin();

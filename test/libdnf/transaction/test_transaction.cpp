@@ -55,8 +55,8 @@ static Transaction create_transaction(libdnf::Base & base, int nr) {
     auto trans = (*(base.get_transaction_history()).*get(new_transaction{}))();
     (trans.*get(set_dt_start{}))(nr * 10 + 1);
     (trans.*get(set_dt_end{}))(nr * 10 + 2);
-    (trans.*get(set_rpmdb_version_begin{}))(libdnf::utils::sformat("ts {} begin", nr));
-    (trans.*get(set_rpmdb_version_end{}))(libdnf::utils::sformat("ts {} end", nr));
+    (trans.*get(set_rpmdb_version_begin{}))(fmt::format("ts {} begin", nr));
+    (trans.*get(set_rpmdb_version_end{}))(fmt::format("ts {} end", nr));
     (trans.*get(set_releasever{}))("26");
     (trans.*get(set_user_id{}))(1000);
     (trans.*get(set_description{}))("dnf install foo");

@@ -193,7 +193,7 @@ const constexpr uint8_t version_minor{0};
 
 
 static std::string make_version() {
-    return libdnf::utils::sformat("{}.{}", version_major, version_minor);
+    return fmt::format("{}.{}", version_major, version_minor);
 }
 
 
