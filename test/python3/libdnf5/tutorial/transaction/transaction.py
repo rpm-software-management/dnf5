@@ -25,19 +25,21 @@ for tspkg in transaction.get_transaction_packages():
 # We only override one of the callbacks here, see
 # `libdnf.repo.DownloadCallbacks` documentation for a complete list.
 class PackageDownloadCallbacks(libdnf5.repo.DownloadCallbacks):
-    def mirror_failure(self, msg, url=""):
+    def mirror_failure(self, user_cb_data, msg, url=""):
         print("Mirror failure: ", msg)
+        return 0
 
 # Create a package downloader.
 downloader = libdnf5.repo.PackageDownloader()
+
 downloader_callbacks = PackageDownloadCallbacks()
-downloader_callbacks_ptr = libdnf5.repo.DownloadCallbacksUniquePtr(downloader_callbacks)
+base.set_download_callbacks(libdnf5.repo.DownloadCallbacksUniquePtr(downloader_callbacks))
 
 # Add the inbound packages (packages that are being installed on the system)
 # to the downloader.
 for tspkg in transaction.get_transaction_packages():
     if libdnf5.base.transaction.transaction_item_action_is_inbound(tspkg.get_action()):
-        downloader.add(tspkg.get_package(), downloader_callbacks_ptr)
+        downloader.add(tspkg.get_package())
 
 # Download the packages.
 #

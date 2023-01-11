@@ -19,12 +19,11 @@ auto transaction = goal.resolve();
 // We can iterate over the resolved transction and inspect the packages.
 std::cout << "Resolved transaction:" << std::endl;
 for (const auto & tspkg : transaction.get_transaction_packages()) {
-    std::cout
-        << tspkg.get_package().get_nevra() << ": "
-        << transaction_item_action_to_string(tspkg.get_action()) << std::endl;
+    std::cout << tspkg.get_package().get_nevra() << ": " << transaction_item_action_to_string(tspkg.get_action())
+              << std::endl;
 }
 
-// This class demonstrates user-defined callbacks for the package downloads.
+// This class demonstrates user-defined callbacks for the url/package downloads.
 //
 // The callbacks are implemented by inheriting from the callbacks base class
 // and overriding its methods.
@@ -32,11 +31,15 @@ for (const auto & tspkg : transaction.get_transaction_packages()) {
 // We only override one of the callbacks here, see
 // `libdnf::repo::DownloadCallbacks` documentation for a complete list.
 class PackageDownloadCallbacks : public libdnf::repo::DownloadCallbacks {
-    int mirror_failure(const char * msg, [[maybe_unused]] const char * url) override {
+private:
+    int mirror_failure(
+        [[maybe_unused]] void * user_cb_data, const char * msg, [[maybe_unused]] const char * url) override {
         std::cout << "Mirror failure: " << msg << std::endl;
         return 0;
     }
 };
+
+base.set_download_callbacks(std::make_unique<PackageDownloadCallbacks>());
 
 // Create a package downloader.
 libdnf::repo::PackageDownloader downloader;
@@ -45,10 +48,7 @@ libdnf::repo::PackageDownloader downloader;
 // to the downloader.
 for (auto & tspkg : transaction.get_transaction_packages()) {
     if (transaction_item_action_is_inbound(tspkg.get_action())) {
-        downloader.add(
-            tspkg.get_package(),
-            std::make_unique<PackageDownloadCallbacks>()
-        );
+        downloader.add(tspkg.get_package());
     }
 }
 
@@ -66,13 +66,9 @@ downloader.download(true, true);
 // complete list of the callbacks see `libdnf::rpm::TransactionCallbacks`
 // documentation.
 class TransactionCallbacks : public libdnf::rpm::TransactionCallbacks {
-    void install_start(
-        const libdnf::rpm::TransactionItem & item,
-        [[maybe_unused]] uint64_t total) override
-    {
-        std::cout
-            << transaction_item_action_to_string(item.get_action()) << " "
-            << item.get_package().get_nevra() << std::endl;
+    void install_start(const libdnf::rpm::TransactionItem & item, [[maybe_unused]] uint64_t total) override {
+        std::cout << transaction_item_action_to_string(item.get_action()) << " " << item.get_package().get_nevra()
+                  << std::endl;
     }
 };
 
@@ -85,9 +81,4 @@ class TransactionCallbacks : public libdnf::rpm::TransactionCallbacks {
 // transaction. The third argument is user_id, omitted here for simplicity. The
 // fourth argument can be an arbitrary user comment.
 std::cout << std::endl << "Running the transaction:" << std::endl;
-transaction.run(
-    std::make_unique<TransactionCallbacks>(),
-    "install package one",
-    std::nullopt,
-    std::nullopt
-);
+transaction.run(std::make_unique<TransactionCallbacks>(), "install package one", std::nullopt, std::nullopt);

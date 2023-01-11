@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils.hpp"
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/base/goal.hpp"
 #include "libdnf/base/transaction_package.hpp"
 #include "libdnf/repo/package_downloader.hpp"
@@ -37,19 +38,28 @@ using namespace libdnf::transaction;
 
 class PackageDownloadCallbacks : public libdnf::repo::DownloadCallbacks {
 public:
-    int end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) override {
+    int end(
+        [[maybe_unused]] void * user_cb_data,
+        libdnf::repo::DownloadCallbacks::TransferStatus status,
+        const char * msg) override {
         ++end_cnt;
         end_status = status;
         end_msg = msg ? msg : "";
         return 0;
     }
 
-    int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
+    int progress(
+        [[maybe_unused]] void * user_cb_data,
+        [[maybe_unused]] double total_to_download,
+        [[maybe_unused]] double downloaded) override {
         ++progress_cnt;
         return 0;
     }
 
-    int mirror_failure([[maybe_unused]] const char * msg, [[maybe_unused]] const char * url) override {
+    int mirror_failure(
+        [[maybe_unused]] void * user_cb_data,
+        [[maybe_unused]] const char * msg,
+        [[maybe_unused]] const char * url) override {
         ++mirror_failure_cnt;
         return 0;
     }
@@ -83,10 +93,11 @@ void RpmTransactionTest::test_transaction() {
 
     auto dl_callbacks = std::make_unique<PackageDownloadCallbacks>();
     auto dl_callbacks_ptr = dl_callbacks.get();
+    base.set_download_callbacks(std::move(dl_callbacks));
 
     for (auto & tspkg : transaction.get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action())) {
-            downloader.add(tspkg.get_package(), std::move(dl_callbacks));
+            downloader.add(tspkg.get_package());
         }
     }
 

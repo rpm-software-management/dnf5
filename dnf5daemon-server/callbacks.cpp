@@ -28,6 +28,44 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
+void * DownloadCallbacks::add_new_download(
+    void * user_data, [[maybe_unused]] const char * description, [[maybe_unused]] double total_to_download) {
+    return user_data;
+}
+
+int DownloadCallbacks::progress(void * user_cb_data, double total_to_download, double downloaded) {
+    if (auto * dbus_package_ck = static_cast<DbusPackageCB *>(user_cb_data)) {
+        return dbus_package_ck->progress(total_to_download, downloaded, is_time_to_print());
+    }
+    return 0;
+}
+
+int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const char * msg) {
+    if (auto * dbus_package_ck = static_cast<DbusPackageCB *>(user_cb_data)) {
+        return dbus_package_ck->end(status, msg);
+    }
+    return 0;
+}
+
+int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, const char * url) {
+    if (auto * dbus_package_ck = static_cast<DbusPackageCB *>(user_cb_data)) {
+        return dbus_package_ck->mirror_failure(msg, url);
+    }
+    return 0;
+}
+
+bool DownloadCallbacks::is_time_to_print() {
+    auto now = std::chrono::steady_clock::now();
+    auto delta = now - prev_print_time;
+    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
+    if (ms > 400) {
+        prev_print_time = now;
+        return true;
+    }
+    return false;
+}
+
+
 DbusCallback::DbusCallback(Session & session) : session(session) {
     dbus_object = session.get_dbus_object();
 }
@@ -54,12 +92,12 @@ DbusPackageCB::DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg
     }
 }
 
-int DbusPackageCB::end(TransferStatus status, const char * msg) {
+int DbusPackageCB::end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) {
     try {
         // Due to is_time_to_print() timeout it is possible that progress signal was not
         // emitted with correct downloaded / total_to_download value - especially for small packages.
         // Emit the progress signal at least once signalling that 100% of the package was downloaded.
-        if (status == TransferStatus::SUCCESSFUL) {
+        if (status == libdnf::repo::DownloadCallbacks::TransferStatus::SUCCESSFUL) {
             auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
             signal << total;
             signal << total;
@@ -74,10 +112,10 @@ int DbusPackageCB::end(TransferStatus status, const char * msg) {
     return 0;
 }
 
-int DbusPackageCB::progress(double total_to_download, double downloaded) {
+int DbusPackageCB::progress(double total_to_download, double downloaded, bool is_time_to_print) {
     total = total_to_download;
     try {
-        if (is_time_to_print()) {
+        if (is_time_to_print) {
             auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
             signal << downloaded;
             signal << total_to_download;

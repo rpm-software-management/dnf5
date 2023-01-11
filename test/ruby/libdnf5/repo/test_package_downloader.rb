@@ -39,19 +39,19 @@ class TestPackageDownloader < BaseTestCase
             @mirror_failure_cnt = 0
         end
 
-        def end(status, msg)
+        def end(user_data, status, msg)
             @end_cnt += 1
             @end_status = status
             @end_msg = msg
             return 0
         end
 
-        def progress(total_to_download, downloaded)
+        def progress(user_data, total_to_download, downloaded)
             @progress_cnt += 1
             return 0
         end
 
-        def mirror_failure(msg, url)
+        def mirror_failure(user_data, msg, url)
             @mirror_failure_cnt += 1
             return 0
         end
@@ -69,7 +69,9 @@ class TestPackageDownloader < BaseTestCase
         downloader = Repo::PackageDownloader.new()
 
         cbs = PackageDownloadCallbacks.new()
-        downloader.add(query.begin().value, Repo::DownloadCallbacksUniquePtr.new(cbs))
+        @base.set_download_callbacks(Repo::DownloadCallbacksUniquePtr.new(cbs))
+
+        downloader.add(query.begin().value)
 
         downloader.download(true, true)
 

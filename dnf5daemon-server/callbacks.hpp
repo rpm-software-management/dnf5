@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5DAEMON_SERVER_CALLBACKS_HPP
 #define DNF5DAEMON_SERVER_CALLBACKS_HPP
 
+#include <libdnf/repo/download_callbacks.hpp>
 #include <libdnf/repo/package_downloader.hpp>
 #include <libdnf/repo/repo_callbacks.hpp>
 #include <libdnf/rpm/transaction_callbacks.hpp>
@@ -29,6 +30,22 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 
 class Session;
+
+class DownloadCallbacks : public libdnf::repo::DownloadCallbacks {
+public:
+    void * add_new_download(void * user_data, const char * description, double total_to_download) override;
+
+    int progress(void * user_cb_data, double total_to_download, double downloaded) override;
+
+    int end(void * user_cb_data, TransferStatus status, const char * msg) override;
+
+    int mirror_failure(void * user_cb_data, const char * msg, const char * url) override;
+
+private:
+    bool is_time_to_print();
+
+    std::chrono::time_point<std::chrono::steady_clock> prev_print_time{std::chrono::steady_clock::now()};
+};
 
 class DbusCallback {
 public:
@@ -53,14 +70,14 @@ protected:
     }
 };
 
-class DbusPackageCB : public libdnf::repo::DownloadCallbacks, public DbusCallback {
+class DbusPackageCB : public DbusCallback {
 public:
     explicit DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg);
     virtual ~DbusPackageCB() = default;
 
-    int end(TransferStatus status, const char * msg) override;
-    int progress(double total_to_download, double downloaded) override;
-    int mirror_failure(const char * msg, const char * url) override;
+    int end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg);
+    int progress(double total_to_download, double downloaded, bool is_time_to_print);
+    int mirror_failure(const char * msg, const char * url);
 
 private:
     int pkg_id;

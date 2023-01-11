@@ -96,6 +96,8 @@ Session::Session(
         s->dbus_register();
     }
     dbus_object->finishRegistration();
+
+    base->set_download_callbacks(std::make_unique<DownloadCallbacks>());
 }
 
 Session::~Session() {
