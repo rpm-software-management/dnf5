@@ -20,8 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CONF_CONST_HPP
 #define LIBDNF_CONF_CONST_HPP
 
+#include <set>
 #include <string>
-#include <unordered_set>
 #include <vector>
 
 
@@ -58,7 +58,7 @@ constexpr const char * METADATA_TYPE_OTHER = "other";
 constexpr const char * METADATA_TYPE_PRESTO = "presto";
 constexpr const char * METADATA_TYPE_UPDATEINFO = "updateinfo";
 
-const std::unordered_set<std::string> OPTIONAL_METADATA_TYPES{
+const std::set<std::string> OPTIONAL_METADATA_TYPES{
     METADATA_TYPE_COMPS, METADATA_TYPE_FILELISTS, METADATA_TYPE_OTHER, METADATA_TYPE_PRESTO, METADATA_TYPE_UPDATEINFO};
 
 }  // namespace libdnf

@@ -744,7 +744,7 @@ void RepoDownloader::add_countme_flag(LibrepoHandle & handle) {
 
 
 // TODO(jkolarik): currently all metadata are loaded for system repo, maybe we want it configurable?
-std::unordered_set<std::string> RepoDownloader::get_optional_metadata() const {
+std::set<std::string> RepoDownloader::get_optional_metadata() const {
     if (repo_type == Repo::Type::SYSTEM) {
         return libdnf::OPTIONAL_METADATA_TYPES;
     } else {

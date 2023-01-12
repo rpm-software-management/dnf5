@@ -961,8 +961,7 @@ std::vector<std::string> match_specs(
         try {
             // create rpm repositories according configuration files
             base.get_repo_sack()->create_repos_from_system_configuration();
-            base.get_config().optional_metadata_types().set(
-                libdnf::Option::Priority::RUNTIME, std::unordered_set<std::string>{});
+            base.get_config().optional_metadata_types().set(libdnf::Option::Priority::RUNTIME, std::set<std::string>{});
 
             ctx.apply_repository_setopts();
 

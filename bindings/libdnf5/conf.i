@@ -59,8 +59,8 @@
 %include "libdnf/conf/option_seconds.hpp"
 %include "libdnf/conf/option_string.hpp"
 %include "libdnf/conf/option_string_list.hpp"
+%template(OptionStringSet) libdnf::OptionStringContainer<std::set<std::string>>;
 %template(OptionStringList) libdnf::OptionStringContainer<std::vector<std::string>>;
-%template(OptionStringSet) libdnf::OptionStringContainer<std::unordered_set<std::string>>;
 
 %ignore libdnf::OptionPathNotFoundError;
 %include "libdnf/conf/option_path.hpp"
