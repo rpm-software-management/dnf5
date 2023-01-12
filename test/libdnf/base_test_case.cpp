@@ -201,7 +201,8 @@ libdnf::rpm::Package BaseTestCase::add_system_pkg(
 
 
 libdnf::rpm::Package BaseTestCase::add_cmdline_pkg(const std::string & relative_path) {
-    return repo_sack->get_cmdline_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + relative_path, false);
+    std::string path = PROJECT_BINARY_DIR "/test/data/" + relative_path;
+    return repo_sack->add_cmdline_packages({path}).at(path);
 }
 
 
