@@ -495,38 +495,38 @@ void OptionTest::test_options_string_list_custom_delimiters() {
 }
 
 void OptionTest::test_options_string_set() {
-    const std::set<std::string> initial{"x", "y", "z"};
+    const OptionStringSet::ValueType initial{"x", "y", "z"};
     OptionStringSet option(initial);
     CPPUNIT_ASSERT(initial == option.get_value());
 
     option.set(Option::Priority::RUNTIME, "a, b, c");
-    CPPUNIT_ASSERT((std::set<std::string>{"a", "b", "c"}) == option.get_value());
+    CPPUNIT_ASSERT((OptionStringSet::ValueType{"a", "b", "c"}) == option.get_value());
 
     option.set(Option::Priority::RUNTIME, "a, b, a, a");
-    CPPUNIT_ASSERT((std::set<std::string>{"a", "b"}) == option.get_value());
+    CPPUNIT_ASSERT((OptionStringSet::ValueType{"a", "b"}) == option.get_value());
 }
 
 void OptionTest::test_options_list_add() {
     OptionStringSet option("1, 2, 3");
-    CPPUNIT_ASSERT((std::set<std::string>{"1", "2", "3"}) == option.get_value());
+    CPPUNIT_ASSERT((OptionStringSet::ValueType{"1", "2", "3"}) == option.get_value());
 
-    std::set<std::string> another_set{"4", "5", "6"};
+    OptionStringSet::ValueType another_set{"4", "5", "6"};
     option.add(another_set);
-    CPPUNIT_ASSERT((std::set<std::string>{"1", "2", "3", "4", "5", "6"}) == option.get_value());
+    CPPUNIT_ASSERT((OptionStringSet::ValueType{"1", "2", "3", "4", "5", "6"}) == option.get_value());
 
-    std::set<std::string> set_with_existing_values{"7", "5", "4"};
+    OptionStringSet::ValueType set_with_existing_values{"7", "5", "4"};
     option.add(set_with_existing_values);
-    CPPUNIT_ASSERT((std::set<std::string>{"1", "2", "3", "4", "5", "6", "7"}) == option.get_value());
+    CPPUNIT_ASSERT((OptionStringSet::ValueType{"1", "2", "3", "4", "5", "6", "7"}) == option.get_value());
 }
 
 void OptionTest::test_options_list_add_item() {
-    const std::set<std::string> initial{"item1"};
+    const OptionStringSet::ValueType initial{"item1"};
     OptionStringSet option(initial);
     CPPUNIT_ASSERT(initial == option.get_value());
 
     option.add_item("item2");
-    CPPUNIT_ASSERT((std::set<std::string>{"item1", "item2"}) == option.get_value());
+    CPPUNIT_ASSERT((OptionStringSet::ValueType{"item1", "item2"}) == option.get_value());
 
     option.add_item("item1");
-    CPPUNIT_ASSERT((std::set<std::string>{"item1", "item2"}) == option.get_value());
+    CPPUNIT_ASSERT((OptionStringSet::ValueType{"item1", "item2"}) == option.get_value());
 }
