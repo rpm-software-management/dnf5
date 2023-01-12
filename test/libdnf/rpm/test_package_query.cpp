@@ -61,10 +61,10 @@ void RpmPackageQueryTest::test_filter_latest_evr() {
     add_repo_solv("solv-repo1");
     add_repo_solv("solv-24pkgs");
 
-    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+    const std::string rpm_path = "cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     // also add 2 time the same package
-    repo_sack->get_cmdline_repo()->add_rpm_package(rpm_path, false);
-    repo_sack->get_cmdline_repo()->add_rpm_package(rpm_path, false);
+    add_cmdline_pkg(rpm_path);
+    add_cmdline_pkg(rpm_path);
 
     {
         PackageQuery query(base);
@@ -119,10 +119,10 @@ void RpmPackageQueryTest::test_filter_earliest_evr() {
     add_repo_solv("solv-repo1");
     add_repo_solv("solv-24pkgs");
 
-    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+    std::string rpm_path = "cmdline-rpms/cmdline-1.2-3.noarch.rpm";
     // also add 2 time the same package
-    repo_sack->get_cmdline_repo()->add_rpm_package(rpm_path, false);
-    repo_sack->get_cmdline_repo()->add_rpm_package(rpm_path, false);
+    add_cmdline_pkg(rpm_path);
+    add_cmdline_pkg(rpm_path);
 
     {
         PackageQuery query(base);
@@ -296,9 +296,9 @@ void RpmPackageQueryTest::test_filter_name_packgset() {
 void RpmPackageQueryTest::test_filter_nevra_packgset() {
     add_repo_solv("solv-repo1");
 
-    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
-    repo_sack->get_system_repo()->add_rpm_package(rpm_path, false);
-    repo_sack->get_cmdline_repo()->add_rpm_package(rpm_path, false);
+    std::string rpm_path = "cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+    repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + rpm_path, false);
+    add_cmdline_pkg(rpm_path);
 
     PackageQuery query1(base);
     query1.filter_name({"cmdline"});
@@ -337,9 +337,9 @@ void RpmPackageQueryTest::test_filter_name_arch() {
 void RpmPackageQueryTest::test_filter_name_arch2() {
     add_repo_solv("solv-repo1");
 
-    std::filesystem::path rpm_path = PROJECT_BINARY_DIR "/test/data/cmdline-rpms/cmdline-1.2-3.noarch.rpm";
-    repo_sack->get_system_repo()->add_rpm_package(rpm_path, false);
-    repo_sack->get_cmdline_repo()->add_rpm_package(rpm_path, false);
+    std::string rpm_path = "cmdline-rpms/cmdline-1.2-3.noarch.rpm";
+    repo_sack->get_system_repo()->add_rpm_package(PROJECT_BINARY_DIR "/test/data/" + rpm_path, false);
+    add_cmdline_pkg(rpm_path);
 
     PackageQuery query1(base);
     query1.filter_name({"cmdline"});
