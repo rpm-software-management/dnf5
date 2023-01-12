@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <optional>
 #include <regex>
-#include <unordered_set>
+#include <set>
 #include <vector>
 
 
@@ -156,7 +156,7 @@ inline const char * OptionStringContainer<T>::get_delimiters() const noexcept {
 }
 
 using OptionStringList = OptionStringContainer<std::vector<std::string>>;
-using OptionStringSet = OptionStringContainer<std::unordered_set<std::string>>;
+using OptionStringSet = OptionStringContainer<std::set<std::string>>;
 
 }  // namespace libdnf
 

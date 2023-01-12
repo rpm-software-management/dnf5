@@ -92,7 +92,7 @@ private:
     std::string get_persistdir() const;
     void add_countme_flag(LibrepoHandle & handle);
 
-    std::unordered_set<std::string> get_optional_metadata() const;
+    std::set<std::string> get_optional_metadata() const;
 
     libdnf::BaseWeakPtr base;
     const ConfigRepo & config;

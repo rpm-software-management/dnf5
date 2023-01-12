@@ -235,6 +235,6 @@ std::string OptionStringContainer<T>::to_string(const ValueType & value) const {
 }
 
 template class OptionStringContainer<std::vector<std::string>>;
-template class OptionStringContainer<std::unordered_set<std::string>>;
+template class OptionStringContainer<std::set<std::string>>;
 
 }  // namespace libdnf
