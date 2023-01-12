@@ -86,11 +86,6 @@ public:
     /// @return The system repository.
     libdnf::repo::RepoWeakPtr get_system_repo();
 
-    /// If not created yet, creates the cmdline repository and returns it.
-    /// @return The cmdline repository.
-    // TODO(lukash) this was private originally, but don't we want it on the public API?
-    libdnf::repo::RepoWeakPtr get_cmdline_repo();
-
     /// Add given paths to comdline repository.
     /// @param paths Vector of paths to rpm files to be inserted to cmdline repo. Can contain paths to local files or URLs of remote rpm files. Specifications that are neither file paths, nor URLs are ignored.
     /// @return Map path->rpm::Package which maps input path to newly created Package object in cmdline repo
@@ -142,6 +137,10 @@ private:
     friend class rpm::PackageSack;
 
     WeakPtrGuard<RepoSack, false> sack_guard;
+
+    /// If not created yet, creates the cmdline repository and returns it.
+    /// @return The cmdline repository.
+    libdnf::repo::RepoWeakPtr get_cmdline_repo();
 
     void internalize_repos();
 
