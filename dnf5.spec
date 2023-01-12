@@ -1,6 +1,6 @@
 %global project_version_major 5
 %global project_version_minor 0
-%global project_version_patch 3
+%global project_version_patch 4
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
@@ -592,6 +592,9 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
 
 
 %changelog
+* Thu Jan 12 2023 Nicola Sella <nsella@redhat.com> - 5.0.4-1
+
+
 * Wed Jan 04 2023 Nicola Sella <nsella@redhat.com> - 5.0.3-1
 - Add Python docs for: Base, Goal, RepoQuery, Package and PackageQuery
 - Add docs for Python bindings: they are auto generated now
