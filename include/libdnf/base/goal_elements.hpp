@@ -143,10 +143,16 @@ public:
 
     /// Optionally assign AdvisoryQuery that is used to filter goal target packages (used for upgrade and install)
     void set_advisory_filter(const libdnf::advisory::AdvisoryQuery & filter) { advisory_filter = filter; };
+    const libdnf::advisory::AdvisoryQuery * get_advisory_filter() const {
+        return advisory_filter ? &advisory_filter.value() : nullptr;
+    }
 
     // Which types of group packages are going to be installed with the group.
     // If not set, default is taken from ConfigMain.group_package_types
     void set_group_package_types(const libdnf::comps::PackageType type) { group_package_types = type; }
+    const libdnf::comps::PackageType * get_group_package_types() const {
+        return group_package_types ? &group_package_types.value() : nullptr;
+    }
 
     /// Set whether hints should be reported
     bool report_hint{true};
