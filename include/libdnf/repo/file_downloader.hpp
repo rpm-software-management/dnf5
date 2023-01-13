@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_REPO_FILE_DOWNLOADER_HPP
 #define LIBDNF_REPO_FILE_DOWNLOADER_HPP
 
+#include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/conf/config_main.hpp"
 #include "libdnf/repo/download_callbacks.hpp"
@@ -38,7 +39,8 @@ class FileDownloadError : public Error {
 
 class FileDownloader {
 public:
-    explicit FileDownloader(ConfigMain & config);
+    explicit FileDownloader(const libdnf::BaseWeakPtr & base);
+    explicit FileDownloader(libdnf::Base & base);
     ~FileDownloader();
 
     /// Adds a file (URL) to download.

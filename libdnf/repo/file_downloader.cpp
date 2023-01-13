@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_downloader.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 
+#include "libdnf/base/base.hpp"
 #include "libdnf/repo/repo.hpp"
 
 #include <librepo/librepo.h>
@@ -90,13 +91,16 @@ public:
 
 class FileDownloader::Impl {
 public:
-    Impl(ConfigMain & config) : config(&config) {}
-    ConfigMain * config;
+    Impl(const BaseWeakPtr & base) : base(base) {}
+    BaseWeakPtr base;
     std::vector<FileTarget> targets;
 };
 
 
-FileDownloader::FileDownloader(ConfigMain & config) : p_impl(std::make_unique<Impl>(config)) {}
+FileDownloader::FileDownloader(const BaseWeakPtr & base) : p_impl(std::make_unique<Impl>(base)) {}
+
+FileDownloader::FileDownloader(Base & base) : p_impl(std::make_unique<Impl>(base.get_weak_ptr())) {}
+
 FileDownloader::~FileDownloader() = default;
 
 void FileDownloader::add(
@@ -117,7 +121,7 @@ void FileDownloader::download(bool fail_fast, bool resume) try {
     std::vector<std::unique_ptr<LrDownloadTarget>> lr_targets;
 
     LibrepoHandle local_handle;
-    local_handle.init_remote(*p_impl->config);
+    local_handle.init_remote(p_impl->base->get_config());
 
     for (auto it = p_impl->targets.rbegin(); it != p_impl->targets.rend(); ++it) {
         LrHandle * handle;

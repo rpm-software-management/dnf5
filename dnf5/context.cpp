@@ -343,7 +343,7 @@ std::chrono::time_point<std::chrono::steady_clock> DownloadCB::prev_print_time =
 void Context::download_urls(
     std::vector<std::pair<std::string, std::filesystem::path>> url_to_dest_path, bool fail_fast, bool resume) {
     libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
-    libdnf::repo::FileDownloader downloader(base.get_config());
+    libdnf::repo::FileDownloader downloader(base);
 
     for (auto & [url, dest_path] : url_to_dest_path) {
         if (!libdnf::utils::url::is_url(url)) {
