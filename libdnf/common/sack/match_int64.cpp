@@ -59,11 +59,10 @@ bool match_int64(int64_t value, QueryCmp cmp, int64_t pattern) {
 
 
 bool match_int64(int64_t value, QueryCmp cmp, const std::vector<int64_t> & patterns) {
-    bool result = false;
+    bool result = (cmp & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     for (auto & pattern : patterns) {
-        if (match_int64(value, cmp, pattern)) {
-            result = true;
-            break;
+        if (match_int64(value, cmp, pattern) != result) {
+            return !result;
         }
     }
     return result;
@@ -71,11 +70,10 @@ bool match_int64(int64_t value, QueryCmp cmp, const std::vector<int64_t> & patte
 
 
 bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, int64_t pattern) {
-    bool result = false;
+    bool result = (cmp & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     for (auto & value : values) {
-        if (match_int64(value, cmp, pattern)) {
-            result = true;
-            break;
+        if (match_int64(value, cmp, pattern) != result) {
+            return !result;
         }
     }
     return result;
@@ -83,18 +81,12 @@ bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, int64_t patt
 
 
 bool match_int64(const std::vector<int64_t> & values, QueryCmp cmp, const std::vector<int64_t> & patterns) {
-    bool result = false;
-    bool found = false;
+    bool result = (cmp & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     for (auto & value : values) {
         for (auto & pattern : patterns) {
-            if (match_int64(value, cmp, pattern)) {
-                result = true;
-                found = true;
-                break;
+            if (match_int64(value, cmp, pattern) != result) {
+                return !result;
             }
-        }
-        if (found) {
-            break;
         }
     }
     return result;

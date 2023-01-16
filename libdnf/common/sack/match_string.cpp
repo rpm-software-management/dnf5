@@ -85,43 +85,41 @@ bool match_string(const std::string & value, QueryCmp cmp, const std::string & p
 }
 
 
+// cmp is positive: return true if the value matches at least one of patterns
+// cmp is negative: return true if value doesn't match any of patterns
 bool match_string(const std::string & value, QueryCmp cmp, const std::vector<std::string> & patterns) {
-    bool result = false;
+    bool result = (cmp & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     for (auto & pattern : patterns) {
-        if (match_string(value, cmp, pattern)) {
-            result = true;
-            break;
+        if (match_string(value, cmp, pattern) != result) {
+            return !result;
         }
     }
     return result;
 }
 
 
+// cmp is positive: return true if at least one of the values matches the pattern
+// cmp is negative: return true if neither of the values matches the pattern
 bool match_string(const std::vector<std::string> & values, QueryCmp cmp, const std::string & pattern) {
-    bool result = false;
+    bool result = (cmp & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     for (auto & value : values) {
-        if (match_string(value, cmp, pattern)) {
-            result = true;
-            break;
+        if (match_string(value, cmp, pattern) != result) {
+            return !result;
         }
     }
     return result;
 }
 
 
+// cmp is positive: return true if at least one of the values matches at least one of the patterns
+// cmp is negative: return true if none of the values matches none of the patterns
 bool match_string(const std::vector<std::string> & values, QueryCmp cmp, const std::vector<std::string> & patterns) {
-    bool result = false;
-    bool found = false;
+    bool result = (cmp & libdnf::sack::QueryCmp::NOT) == libdnf::sack::QueryCmp::NOT;
     for (auto & value : values) {
         for (auto & pattern : patterns) {
-            if (match_string(value, cmp, pattern)) {
-                result = true;
-                found = true;
-                break;
+            if (match_string(value, cmp, pattern) != result) {
+                return !result;
             }
-        }
-        if (found) {
-            break;
         }
     }
     return result;
