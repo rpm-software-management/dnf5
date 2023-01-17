@@ -102,7 +102,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
             toml::parse<::toml::discard_comments, libdnf::PreserveOrderMap, std::vector>(config_file_path);
 
         try {
-            const auto & version = toml::find<std::string>(arg_parser_elements, "version");
+            const auto version = toml::find<std::string>(arg_parser_elements, "version");
             if (version != CONF_FILE_VERSION) {
                 auto msg = fmt::format(
                     "Unsupported version \"{}\" in file \"{}\", \"{}\" expected",
@@ -186,7 +186,7 @@ void load_aliases_from_toml_file(Context & context, const fs::path & config_file
 
             enum class ElementType { GROUP, CLONED_NAMED_ARG, NAMED_ARG, COMMAND } element_type;
             try {
-                const auto & el_type = toml::find(element_options, "type");
+                const auto el_type = toml::find(element_options, "type");
                 const std::string type = el_type.as_string();
                 if (type == "group") {
                     element_type = ElementType::GROUP;
