@@ -252,7 +252,7 @@ public:
     // Search solvables that correspond to the environment_ids for given key
     // Return first non-empty string
     template <typename T>
-    std::string lookup_first_id_str(std::vector<T> ids, Id key) {
+    std::string lookup_first_id_str(const std::vector<T> & ids, Id key) {
         for (T id : ids) {
             auto value = lookup_str(id.id, key);
             if (value) {
@@ -264,7 +264,7 @@ public:
 
 
     template <typename T>
-    std::string get_translated_str(std::vector<T> ids, Id key, const char * lang = nullptr) {
+    std::string get_translated_str(const std::vector<T> & ids, Id key, const char * lang = nullptr) {
         // Go through all environment solvables and return first translation found.
         for (T id : ids) {
             Solvable * solvable = id2solvable(id.id);
