@@ -496,10 +496,13 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
     std::vector<std::tuple<std::string, transaction::TransactionItemReason, comps::GroupQuery, GoalJobSettings>>
         groups_remove, groups_install;
     for (auto & [action, reason, spec, settings] : group_specs) {
-        if (action != GoalAction::INSTALL && action != GoalAction::REMOVE) {
-            libdnf_throw_assertion("Unsupported group action.");
-        }
         bool strict = settings.resolve_strict(cfg_main);
+        if (action != GoalAction::INSTALL && action != GoalAction::REMOVE) {
+            transaction.p_impl->add_resolve_log(
+                action, GoalProblem::UNSUPPORTED_ACTION, settings, base::LogEvent::SpecType::GROUP, spec, {}, strict);
+            ret |= GoalProblem::UNSUPPORTED_ACTION;
+            continue;
+        }
         sack::QueryCmp cmp = settings.ignore_case ? sack::QueryCmp::IGLOB : sack::QueryCmp::GLOB;
         comps::GroupQuery group_query(base, true);
         comps::GroupQuery base_groups_query(base);
