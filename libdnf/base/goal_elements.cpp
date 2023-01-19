@@ -131,4 +131,40 @@ libdnf::comps::PackageType GoalJobSettings::resolve_group_package_types(const li
     return *used_group_package_types;
 }
 
+std::string goal_action_to_string(GoalAction action) {
+    switch (action) {
+        case GoalAction::INSTALL:
+            return "Install";
+        case GoalAction::INSTALL_VIA_PROVIDE:
+            return "Install via provide";
+        case GoalAction::INSTALL_BY_GROUP:
+            return "Install by group";
+        case GoalAction::UPGRADE:
+            return "Upgrade";
+        case GoalAction::UPGRADE_ALL:
+            return "Upgrade all";
+        case GoalAction::UPGRADE_MINIMAL:
+            return "Upgrade minimal";
+        case GoalAction::UPGRADE_ALL_MINIMAL:
+            return "Upgrade all minimal";
+        case GoalAction::DOWNGRADE:
+            return "Downgrade";
+        case GoalAction::REINSTALL:
+            return "Reinstall";
+        case GoalAction::INSTALL_OR_REINSTALL:
+            return "Install or reinstall";
+        case GoalAction::REMOVE:
+            return "Remove";
+        case GoalAction::DISTRO_SYNC:
+            return "Distrosync";
+        case GoalAction::DISTRO_SYNC_ALL:
+            return "Distrosync all";
+        case GoalAction::REASON_CHANGE:
+            return "Reason Change";
+        case GoalAction::RESOLVE:
+            return "Resolve";
+    }
+    return "";
+}
+
 }  // namespace libdnf

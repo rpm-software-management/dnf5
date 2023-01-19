@@ -153,6 +153,9 @@ std::string LogEvent::to_string(
             return ret.append(solver_problems->to_string());
         case GoalProblem::WRITE_DEBUG:
             return ret.append(utils::sformat(_("Debug data written to \"{}\""), *additional_data->begin()));
+        case GoalProblem::UNSUPPORTED_ACTION:
+            return ret.append(utils::sformat(
+                _("{} action for argument \"{}\" is not supported."), goal_action_to_string(action), *spec));
     }
     return ret;
 }

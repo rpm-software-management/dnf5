@@ -82,7 +82,8 @@ enum class GoalProblem : uint32_t {
     NOT_AVAILABLE = (1 << 11),
     ALREADY_INSTALLED = (1 << 12),
     SOLVER_PROBLEM_STRICT_RESOLVEMENT = (1 << 13),
-    WRITE_DEBUG = (1 << 14)
+    WRITE_DEBUG = (1 << 14),
+    UNSUPPORTED_ACTION = (1 << 15)
 };
 
 /// Types of Goal actions
@@ -103,6 +104,9 @@ enum class GoalAction {
     RESOLVE,
     REASON_CHANGE
 };
+
+/// Convert GoalAction enum to user-readable string
+std::string goal_action_to_string(GoalAction action);
 
 /// Settings for GoalJobSettings
 enum class GoalSetting { AUTO, SET_TRUE, SET_FALSE };
