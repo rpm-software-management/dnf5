@@ -65,6 +65,7 @@ public:
     bool is_metalink_in_sync();
     bool is_repomd_in_sync();
     void load_local();
+    void reset_loaded();
 
     LibrepoHandle & get_cached_handle();
 
@@ -73,6 +74,7 @@ public:
     void * get_user_data() const noexcept;
 
     const std::string & get_metadata_path(const std::string & metadata_type) const;
+
 
 private:
     friend class Repo;
