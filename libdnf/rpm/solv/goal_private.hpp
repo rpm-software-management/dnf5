@@ -305,7 +305,7 @@ inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool str
     Id what = get_rpm_pool().queuetowhatprovides(queue);
     staging.push_back(
         SOLVER_DISTUPGRADE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
-            (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
+            (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0) | SOLVER_TARGETED,
         what);
 }
 
