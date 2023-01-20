@@ -228,6 +228,9 @@ private:
     void create_dependencies() const;
     void create_solvable_and_dependencies();
 
+    static void create_platform_solvable(
+        const ModuleSackWeakPtr & module_sack, const std::string & name, const std::string & stream);
+
     // Corresponds to one yaml document
     _ModulemdModuleStream * md_stream;
 

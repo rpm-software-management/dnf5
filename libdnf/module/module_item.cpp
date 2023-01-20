@@ -329,37 +329,62 @@ std::string ModuleItem::get_yaml() const {
 }
 
 
-void ModuleItem::create_solvable() {
-    Pool * pool = module_sack->p_impl->pool;
-
-    // Create new solvable and store its id
-    id = ModuleItemId(repo_add_solvable(pool_id2repo(pool, Id(module_sack->p_impl->repositories[repo_id]))));
-    Solvable * solvable = pool_id2solvable(pool, id.id);
-
+static void create_solvable_worker(
+    Pool * pool,
+    Solvable * solvable,
+    const std::string & name,
+    const std::string & stream,
+    const std::string & version,
+    const std::string & context,
+    const char * arch) {
     // Name: $name:$stream:$context
-    solvable_set_str(solvable, SOLVABLE_NAME, get_name_stream_staticcontext().c_str());
+    solvable_set_str(solvable, SOLVABLE_NAME, fmt::format("{}:{}:{}", name, stream, context).c_str());
     // Version: $version
-    solvable_set_str(solvable, SOLVABLE_EVR, get_version_str().c_str());
+    solvable_set_str(solvable, SOLVABLE_EVR, version.c_str());
     // TODO(pkratoch): The test can be removed once modules always have arch
     // Arch: $arch (if arch is not defined, set "noarch")
-    auto arch = modulemd_module_stream_get_arch(md_stream);
     solvable_set_str(solvable, SOLVABLE_ARCH, arch ? arch : "noarch");
     // Store original $name:$stream in description
-    solvable_set_str(solvable, SOLVABLE_DESCRIPTION, get_name_stream().c_str());
+    solvable_set_str(solvable, SOLVABLE_DESCRIPTION, fmt::format("{}:{}", name, stream).c_str());
 
     // Create Provides: module($name)
-    std::string provide = fmt::format("module({})", get_name());
-    auto dep_id = pool_str2id(pool, provide.c_str(), 1);
+    auto dep_id = pool_str2id(pool, fmt::format("module({})", name).c_str(), 1);
     solvable_add_deparray(solvable, SOLVABLE_PROVIDES, dep_id, -1);
     // Create Conflicts: module($name)
     solvable_add_deparray(solvable, SOLVABLE_CONFLICTS, dep_id, 0);
     // Create Provides: module($name:$stream)
-    provide = fmt::format("module({})", get_name_stream());
-    dep_id = pool_str2id(pool, provide.c_str(), 1);
+    dep_id = pool_str2id(pool, fmt::format("module({}:{})", name, stream).c_str(), 1);
     solvable_add_deparray(solvable, SOLVABLE_PROVIDES, dep_id, -1);
 
     // TODO(pkratoch): Maybe store original context in summary
     // solvable_set_str(solvable, SOLVABLE_SUMMARY, original_context.c_str());
+}
+
+
+void ModuleItem::create_solvable() {
+    auto pool = module_sack->p_impl->pool;
+
+    // Create new solvable and store its id
+    id = ModuleItemId(repo_add_solvable(pool_id2repo(pool, Id(module_sack->p_impl->repositories[repo_id]))));
+    auto solvable = pool_id2solvable(pool, id.id);
+    auto context = computed_static_context.empty()
+                       ? libdnf::utils::string::c_to_str(modulemd_module_stream_get_context(md_stream))
+                       : computed_static_context;
+    auto arch = modulemd_module_stream_get_arch(md_stream);
+
+    create_solvable_worker(pool, solvable, get_name(), get_stream(), get_version_str(), std::move(context), arch);
+}
+
+
+void ModuleItem::create_platform_solvable(
+    const ModuleSackWeakPtr & module_sack, const std::string & name, const std::string & stream) {
+    auto pool = module_sack->p_impl->pool;
+
+    // TODO(jkolarik): Create constants for known repo ids
+    auto id = repo_add_solvable(repo_create(pool, "@System"));
+    auto solvable = pool_id2solvable(pool, id);
+
+    create_solvable_worker(pool, solvable, name, stream, "0", "00000000", "noarch");
 }
 
 
