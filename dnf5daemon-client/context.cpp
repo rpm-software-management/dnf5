@@ -77,27 +77,4 @@ void Context::on_repositories_ready(const bool & result) {
 }
 
 
-dnfdaemon::RepoStatus Context::wait_for_repos() {
-    if (repositories_status == dnfdaemon::RepoStatus::NOT_READY) {
-        auto callback = [this](const sdbus::Error * error, const bool & result) {
-            if (error == nullptr) {
-                // No error
-                this->on_repositories_ready(result);
-            } else {
-                // We got a D-Bus error...
-                this->on_repositories_ready(false);
-            }
-        };
-        repositories_status = dnfdaemon::RepoStatus::PENDING;
-        session_proxy->callMethodAsync("read_all_repos")
-            .onInterface(dnfdaemon::INTERFACE_BASE)
-            .withTimeout(static_cast<uint64_t>(-1))
-            .uponReplyInvoke(callback);
-    }
-    while (repositories_status == dnfdaemon::RepoStatus::PENDING) {
-        sleep(1);
-    }
-    return repositories_status;
-}
-
 }  // namespace dnfdaemon::client
