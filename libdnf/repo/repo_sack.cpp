@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "../module/module_sack_impl.hpp"
 #include "repo_cache_private.hpp"
+#include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "solv/solver.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
@@ -191,14 +192,16 @@ RepoWeakPtr RepoSack::get_system_repo() {
 
 
 void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
+    auto logger = base->get_logger();
+
     std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
     std::exception_ptr except_ptr;                   // for pass exception from thread_sack_loader to main thread,
                                                      // a default-constructed std::exception_ptr is a null pointer
 
-    std::vector<libdnf::repo::Repo *> prepared_repos;  // array of repositories prepared to load into solv sack
-    std::mutex prepared_repos_mutex;                   // mutex for the array
-    std::condition_variable signal_prepared_repo;      // signals that next item is added into array
-    std::size_t num_repos_loaded{0};                   // number of repositories already loaded into solv sack
+    std::vector<Repo *> prepared_repos;            // array of repositories prepared to load into solv sack
+    std::mutex prepared_repos_mutex;               // mutex for the array
+    std::condition_variable signal_prepared_repo;  // signals that next item is added into array
+    std::size_t num_repos_loaded{0};               // number of repositories already loaded into solv sack
 
     prepared_repos.reserve(repos.size() + 1);  // optimization: preallocate memory to avoid realocations, +1 stop tag
 
@@ -226,14 +229,18 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
         }
     });
 
-    // Adds information that all repos are updated (nullptr tag) and is waiting for thread_sack_loader to complete.
-    auto finish_sack_loader = [&]() {
+    // Add repository to array of repositories prepared to load into solv sack.
+    auto send_to_sack_loader = [&](repo::Repo * repo) {
         {
             std::lock_guard<std::mutex> lock(prepared_repos_mutex);
-            prepared_repos.push_back(nullptr);
+            prepared_repos.push_back(repo);
         }
         signal_prepared_repo.notify_one();
+    };
 
+    // Adds information that all repos are updated (nullptr tag) and is waiting for thread_sack_loader to complete.
+    auto finish_sack_loader = [&]() {
+        send_to_sack_loader(nullptr);
         thread_sack_loader.join();  // waits for the thread_sack_loader to finish its execution
     };
 
@@ -247,45 +254,121 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
         }
     };
 
-    // If the input RepoQuery contains a system repo, we load the system repo first.
-    for (auto & repo : repos) {
-        if (repo->get_type() == libdnf::repo::Repo::Type::SYSTEM) {
-            {
-                std::lock_guard<std::mutex> lock(prepared_repos_mutex);
-                prepared_repos.push_back(repo.get());
-            }
+    auto handle_repo_download_error = [&](const Repo * repo, const RepoDownloadError & e) {
+        if (!repo->get_config().get_skip_if_unavailable_option().get_value()) {
+            except_in_main_thread = true;
+            finish_sack_loader();
+            throw;
+        } else {
+            base->get_logger()->warning(
+                "Error loading repo \"{}\" (skipping due to \"skip_if_unavailable=true\"): {}",
+                repo->get_id(),
+                e.what());  // TODO(jrohel) we should print nested exceptions
+        }
+    };
 
-            signal_prepared_repo.notify_one();
-            break;
+    // If the input RepoQuery contains a system repo, we load the system repo first.
+    // Available repos are stored to array of repositories for processing
+    std::vector<Repo *> repos_for_processing;  // array of repositories for processing
+    for (const auto & repo : repos) {
+        switch (repo->get_type()) {
+            case Repo::Type::AVAILABLE:
+                repos_for_processing.emplace_back(repo.get());
+                break;
+            case Repo::Type::SYSTEM:
+                send_to_sack_loader(repo.get());
+                break;
+            case Repo::Type::COMMANDLINE:;
         }
     }
 
-    // Prepares available repositories metadata for thread sack loader.
-    for (auto & repo : repos) {
-        if (repo->get_type() != libdnf::repo::Repo::Type::AVAILABLE) {
-            continue;
-        }
+    // Prepares repositories that are not expired or have ONLY_CACHE or LAZY SynStrategy.
+    for (std::size_t idx = 0; idx < repos_for_processing.size();) {
+        auto * const repo = repos_for_processing[idx];
         catch_thread_sack_loader_exceptions();
         try {
-            repo->fetch_metadata();
-
-            {
-                std::lock_guard<std::mutex> lock(prepared_repos_mutex);
-                prepared_repos.push_back(repo.get());
+            bool valid_metadata{false};
+            try {
+                repo->read_metadata_cache();
+                if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
+                    // cache loaded
+                    repo->recompute_expired();
+                    valid_metadata = !repo->expired || repo->sync_strategy == Repo::SyncStrategy::ONLY_CACHE ||
+                                     repo->sync_strategy == Repo::SyncStrategy::LAZY;
+                }
+            } catch (const std::runtime_error & e) {
             }
 
-            signal_prepared_repo.notify_one();
-        } catch (const libdnf::repo::RepoDownloadError & e) {
-            if (!repo->get_config().get_skip_if_unavailable_option().get_value()) {
-                except_in_main_thread = true;
-                finish_sack_loader();
-                throw;
+            if (valid_metadata) {
+                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
+                logger->debug("Using cache for repo \"{}\"", repo->config.get_id());
+                send_to_sack_loader(repo);
             } else {
-                base->get_logger()->warning(
-                    "Error loading repo \"{}\" (skipping due to \"skip_if_unavailable=true\"): {}",
-                    repo->get_id(),
-                    e.what());  // TODO(lukash) we should print nested exceptions
+                if (repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE) {
+                    throw RepoDownloadError(
+                        M_("Cache-only enabled but no cache for repository \"{}\""), repo->config.get_id());
+                }
+                ++idx;
             }
+
+        } catch (const RepoDownloadError & e) {
+            handle_repo_download_error(repo, e);
+            repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
+        } catch (const std::runtime_error & e) {
+            except_in_main_thread = true;
+            finish_sack_loader();
+            throw;
+        }
+    }
+
+    // Prepares repositories that are expired but match the original.
+    for (std::size_t idx = 0; idx < repos_for_processing.size();) {
+        auto * const repo = repos_for_processing[idx];
+        catch_thread_sack_loader_exceptions();
+        try {
+            if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
+                repo->is_in_sync()) {
+                // the expired metadata still reflect the origin:
+                utimes(repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
+                RepoCache(base, repo->config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+                repo->expired = false;
+                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
+
+                logger->debug(
+                    "Using cache for repo \"{}\". It is expired, but matches the original.", repo->config.get_id());
+                send_to_sack_loader(repo);
+            } else {
+                ++idx;
+            }
+
+        } catch (const RepoDownloadError & e) {
+            handle_repo_download_error(repo, e);
+            repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
+        } catch (const std::runtime_error & e) {
+            except_in_main_thread = true;
+            finish_sack_loader();
+            throw;
+        }
+    }
+
+    // Prepares (downloads) remaining repositories.
+    for (std::size_t idx = 0; idx < repos_for_processing.size();) {
+        auto * const repo = repos_for_processing[idx];
+        catch_thread_sack_loader_exceptions();
+        try {
+            logger->debug("Downloading metadata for repo \"{}\"", repo->config.get_id());
+            auto cache_dir = repo->config.get_cachedir();
+            repo->download_metadata(cache_dir);
+            RepoCache(base, repo->config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+            repo->timestamp = -1;
+            repo->read_metadata_cache();
+            repo->expired = false;
+
+            repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
+            send_to_sack_loader(repo);
+        } catch (const RepoDownloadError & e) {
+            handle_repo_download_error(repo, e);
+            repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
         } catch (const std::runtime_error & e) {
             except_in_main_thread = true;
             finish_sack_loader();
