@@ -30,6 +30,8 @@ extern "C" {
 #include <solv/pool.h>
 }
 
+#include <optional>
+
 namespace libdnf::module {
 
 
@@ -40,7 +42,11 @@ class ModuleSack::Impl {
 public:
     /// Create libsolv pool and set POOL_FLAG_WHATPROVIDESWITHDISABLED to ensure excluded packages are not taken as
     /// candidates for solver
-    Impl(const BaseWeakPtr & base) : base(base), module_metadata(base), pool(pool_create()) {
+    Impl(ModuleSack & module_sack, const BaseWeakPtr & base)
+        : module_sack(&module_sack),
+          base(base),
+          module_metadata(base),
+          pool(pool_create()) {
         pool_set_flag(pool, POOL_FLAG_WHATPROVIDESWITHDISABLED, 1);
     }
     ~Impl() { pool_free(pool); }
@@ -90,6 +96,7 @@ private:
     friend ModuleGoalPrivate;
     friend class ModuleQuery;
 
+    ModuleSack * module_sack;
     BaseWeakPtr base;
     ModuleMetadata module_metadata;
     std::vector<std::unique_ptr<ModuleItem>> modules;
@@ -105,10 +112,14 @@ private:
 
     bool provides_ready = false;
     bool considered_uptodate = false;
+    bool platform_detected = false;
 
     std::map<std::string, std::string> module_defaults;
     std::unique_ptr<libdnf::solv::SolvMap> excludes;
     std::map<Id, ModuleItem *> active_modules;
+
+    // Autodetection of platform id. Returns a pair with detected name and stream.
+    std::optional<std::pair<std::string, std::string>> detect_platform_name_and_stream() const;
 };
 
 inline const std::vector<std::unique_ptr<ModuleItem>> & ModuleSack::Impl::get_modules() {

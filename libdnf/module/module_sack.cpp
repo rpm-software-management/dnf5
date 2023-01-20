@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "module/module_sack_impl.hpp"
 #include "solv/solv_map.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
+#include "utils/fs/file.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/base/base_weak.hpp"
@@ -53,7 +54,7 @@ namespace libdnf::module {
 static const std::string EMPTY_RESULT;
 
 
-ModuleSack::ModuleSack(const BaseWeakPtr & base) : p_impl(new Impl(base)) {}
+ModuleSack::ModuleSack(const BaseWeakPtr & base) : p_impl(new Impl(*this, base)) {}
 ModuleSack::~ModuleSack() {}
 
 
@@ -263,6 +264,19 @@ ModuleSack::Impl::collect_data_for_modular_filtering() {
 }
 
 void ModuleSack::Impl::module_filtering() {
+    if (get_modules().empty()) {
+        return;
+    }
+
+    // Try to automatically detect platform id
+    if (!platform_detected) {
+        auto platform_id = detect_platform_name_and_stream();
+        if (platform_id) {
+            ModuleItem::create_platform_solvable(module_sack->get_weak_ptr(), platform_id->first, platform_id->second);
+            platform_detected = true;
+        }
+    }
+
     auto [include_NEVRAs, exclude_NEVRAs, names, src_names, reldep_name_list] = collect_data_for_modular_filtering();
 
     // Pakages from system, commandline, and hotfix repositories are not targets for modular filterring
@@ -475,6 +489,158 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
 
     active_modules.clear();
     return make_pair(problems, ModuleSack::ModuleErrorType::CANNOT_RESOLVE_MODULES);
+}
+
+
+static std::pair<std::string, std::string> parse_platform_id_from_string(const std::string & platform_id) {
+    auto index = platform_id.find(':');
+    if (index == std::string::npos) {
+        return {};
+    } else {
+        return make_pair(platform_id.substr(0, index), platform_id.substr(index + 1));
+    }
+}
+
+
+class PlatformIdFormatError : public libdnf::Error {
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf::module"; }
+    const char * get_name() const noexcept override { return "PlatformIdFormatError"; }
+};
+
+
+static std::pair<std::string, std::string> parse_platform_id_from_file(const std::string & os_release_path) {
+    libdnf::utils::fs::File file{os_release_path, "r"};
+    std::string line;
+    while (file.read_line(line)) {
+        if (line.find("PLATFORM_ID") != std::string::npos) {
+            auto eq_position = line.find('=');
+            if (eq_position == std::string::npos) {
+                throw PlatformIdFormatError(M_("Missing '='"));
+            }
+            auto start_position = line.find('"', eq_position + 1);
+            if (start_position == std::string::npos) {
+                throw PlatformIdFormatError(M_("Missing '\"' in the value"));
+            }
+            auto colon_position = line.find(':', eq_position + 1);
+            if (colon_position == std::string::npos) {
+                throw PlatformIdFormatError(M_("Missing ':' in the value"));
+            }
+            auto end_position = line.find('"', colon_position + 1);
+            if (end_position == std::string::npos) {
+                throw PlatformIdFormatError(M_("Missing '\"' in the value"));
+            }
+
+            return make_pair(
+                line.substr(start_position + 1, colon_position - start_position - 1),
+                line.substr(colon_position + 1, end_position - colon_position - 1));
+        }
+    }
+    return {};
+}
+
+
+static std::set<std::string> get_strings_from_provide(
+    const libdnf::rpm::PackageSet & packages, const char * provide_name) {
+    std::set<std::string> strings;
+
+    auto provide_name_length = strlen(provide_name);
+    for (auto const & package : packages) {
+        auto const & provides = package.get_provides();
+        auto found_provide = std::find_if(provides.begin(), provides.end(), [&](const libdnf::rpm::Reldep & dep) {
+            return !strncmp(dep.get_name(), provide_name, strlen(provide_name));
+        });
+        if (found_provide != provides.end()) {
+            auto found_provide_name = (*found_provide).get_name();
+            auto found_provide_name_length = strlen(found_provide_name);
+            if (found_provide_name[provide_name_length] == '(' &&
+                found_provide_name[found_provide_name_length - 1] == ')') {
+                strings.emplace(
+                    found_provide_name + provide_name_length + 1, found_provide_name_length - provide_name_length - 2);
+            }
+        }
+    }
+
+    return strings;
+}
+
+
+std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_platform_name_and_stream() const {
+    // try to detect platform id from configuration
+    auto & config_platform_option = base->get_config().module_platform_id();
+    if (!config_platform_option.empty()) {
+        auto & config_platform = config_platform_option.get_value();
+        auto parsed_platform_id = parse_platform_id_from_string(config_platform);
+        if (!parsed_platform_id.first.empty() && !parsed_platform_id.second.empty()) {
+            return parsed_platform_id;
+        } else {
+            base->get_logger()->warning("Invalid format of platform ID in configuration: {}", config_platform);
+        }
+    }
+
+    libdnf::rpm::PackageQuery base_query(base);
+    base_query.filter_provides({"system-release"});
+    base_query.filter_latest_evr();
+
+    // try to detect platform id from available packages
+    libdnf::rpm::PackageQuery available_query(base_query);
+    available_query.filter_available();
+    auto available_provides = get_strings_from_provide(available_query, "base-module");
+    if (available_provides.size() == 1) {
+        auto & query_platform_id = *available_provides.begin();
+        auto parsed_platform_id = parse_platform_id_from_string(query_platform_id);
+        if (!parsed_platform_id.first.empty() && !parsed_platform_id.second.empty()) {
+            return parsed_platform_id;
+        } else {
+            base->get_logger()->warning(
+                "Invalid format of module platform queried from available packages: {}", query_platform_id);
+        }
+    } else {
+        base->get_logger()->warning("Multiple module platforms provided by available packages");
+    }
+
+    // try to detect platform id from installed packages
+    libdnf::rpm::PackageQuery installed_query(base_query);
+    installed_query.filter_installed();
+    auto installed_provides = get_strings_from_provide(installed_query, "base-module");
+    if (installed_provides.size() == 1) {
+        auto & query_platform_id = *installed_provides.begin();
+        auto parsed_platform_id = parse_platform_id_from_string(query_platform_id);
+        if (!parsed_platform_id.first.empty() && !parsed_platform_id.second.empty()) {
+            return parsed_platform_id;
+        } else {
+            base->get_logger()->warning(
+                "Invalid format of module platform queried from installed packages: {}", query_platform_id);
+        }
+    } else {
+        base->get_logger()->warning("Multiple module platforms provided by installed packages");
+    }
+
+    // try to detect platform id from release files
+    // TODO(jkolarik): Create constants for paths
+    std::vector<std::string> os_release_paths{"etc/os-release", "usr/lib/os-release"};
+    auto & installroot = base->get_config().installroot().get_value();
+    for (auto & os_release_path : os_release_paths) {
+        std::string full_path = std::filesystem::canonical(installroot) / os_release_path;
+        std::pair<std::string, std::string> parsed_platform_id;
+
+        try {
+            parsed_platform_id = parse_platform_id_from_file(full_path);
+        } catch (const PlatformIdFormatError & id_except) {
+            base->get_logger()->debug(
+                "Invalid format of PLATFORM_ID in '{}': {}", full_path, std::string(id_except.what()));
+        } catch (const std::filesystem::filesystem_error & fs_except) {
+            base->get_logger()->debug(
+                "Detection of module platform in '{}' failed: {}", full_path, std::string(fs_except.what()));
+        }
+
+        if (!parsed_platform_id.first.empty() && !parsed_platform_id.second.empty()) {
+            return parsed_platform_id;
+        }
+    }
+
+    base->get_logger()->debug("No valid Platform ID detected");
+    return std::nullopt;
 }
 
 
