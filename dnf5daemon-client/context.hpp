@@ -47,9 +47,6 @@ public:
     void init_session(sdbus::IConnection & connection);
     sdbus::ObjectPath & get_session_object_path() { return session_object_path; };
 
-    // initialize repository metadata loading on server side and wait for results
-    dnfdaemon::RepoStatus wait_for_repos();
-
     // signal handlers
     void on_repositories_ready(const bool & result);
 
