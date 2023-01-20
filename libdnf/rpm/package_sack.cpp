@@ -113,7 +113,9 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
     if (!only_main) {
         libdnf::repo::RepoQuery rq(base);
         rq.filter_enabled(true);
-        rq.filter_id(disable_excludes, libdnf::sack::QueryCmp::NOT_GLOB);
+        if (!disable_excludes.empty()) {
+            rq.filter_id(disable_excludes, libdnf::sack::QueryCmp::NOT_GLOB);
+        }
         for (const auto & repo : rq) {
             if (!repo->get_config().includepkgs().get_value().empty()) {
                 repo->set_use_includes(true);
