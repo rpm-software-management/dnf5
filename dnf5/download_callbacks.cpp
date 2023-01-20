@@ -44,7 +44,7 @@ int DownloadCallbacks::progress(void * user_cb_data, double total_to_download, d
     }
     progress_bar->set_ticks(static_cast<int64_t>(downloaded));
     if (is_time_to_print()) {
-        multi_progress_bar->print();
+        print();
     }
     return 0;
 }
@@ -68,7 +68,7 @@ int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const cha
             progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
             break;
     }
-    multi_progress_bar->print();
+    print();
     return 0;
 }
 
@@ -76,12 +76,15 @@ int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, con
     auto * progress_bar = reinterpret_cast<libdnf::cli::progressbar::DownloadProgressBar *>(user_cb_data);
     std::string message = std::string(msg) + " - " + url;
     progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, message);
-    multi_progress_bar->print();
+    print();
     return 0;
 }
 
 void DownloadCallbacks::reset_progress_bar() {
     multi_progress_bar.reset();
+    if (printed) {
+        std::cout << std::endl;
+    }
 }
 
 bool DownloadCallbacks::is_time_to_print() {
@@ -94,6 +97,11 @@ bool DownloadCallbacks::is_time_to_print() {
         return true;
     }
     return false;
+}
+
+void DownloadCallbacks::print() {
+    multi_progress_bar->print();
+    printed = true;
 }
 
 }  // namespace dnf5

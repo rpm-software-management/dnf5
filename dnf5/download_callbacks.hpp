@@ -41,9 +41,11 @@ public:
 
 private:
     bool is_time_to_print();
+    void print();
 
     std::unique_ptr<libdnf::cli::progressbar::MultiProgressBar> multi_progress_bar;
     std::chrono::time_point<std::chrono::steady_clock> prev_print_time{std::chrono::steady_clock::now()};
+    bool printed{false};
 };
 
 }  // namespace dnf5
