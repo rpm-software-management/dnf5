@@ -335,6 +335,16 @@ void RepoDownloader::load_local() try {
     throw_with_nested(RepoDownloadError(M_("Error loading local metadata for repository \"{}\""), config.get_id()));
 }
 
+void RepoDownloader::reset_loaded() {
+    repomd_filename.clear();
+    mirrors.clear();
+    revision.clear();
+    max_timestamp = 0;
+    content_tags.clear();
+    distro_tags.clear();
+    metadata_locations.clear();
+    metadata_paths.clear();
+}
 
 /// Returns a librepo handle, set as per the repo options.
 /// Note that destdir is None, and the handle is cached.

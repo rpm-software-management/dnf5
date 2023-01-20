@@ -220,6 +220,7 @@ bool Repo::fetch_metadata() {
 }
 
 void Repo::read_metadata_cache() {
+    downloader->reset_loaded();
     downloader->load_local();
 
     // set timestamp unless explicitly expired
