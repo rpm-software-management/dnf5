@@ -24,7 +24,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <unistd.h>
 
 #include <cstring>
-#include <filesystem>
 
 namespace libdnf::utils::fs {
 
@@ -74,5 +73,14 @@ bool have_files_same_content_noexcept(const char * file_path1, const char * file
     return ret;
 }
 
+
+void move_recursive(const std::filesystem::path & src, const std::filesystem::path & dest) {
+    try {
+        std::filesystem::rename(src, dest);
+    } catch (const std::filesystem::filesystem_error &) {
+        std::filesystem::copy(src, dest, std::filesystem::copy_options::recursive);
+        std::filesystem::remove_all(src);
+    }
+}
 
 }  // namespace libdnf::utils::fs

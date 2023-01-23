@@ -20,6 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_UTILS_FS_UTILS_HPP
 #define LIBDNF_UTILS_FS_UTILS_HPP
 
+#include <filesystem>
 #include <string>
 
 
@@ -29,6 +30,10 @@ namespace libdnf::utils::fs {
 /// Returns "true" if files have the same content.
 /// If content differs or error occurred (file doesn't exist, not readable, ...) returns "false".
 bool have_files_same_content_noexcept(const char * file_path1, const char * file_path2) noexcept;
+
+/// Recursive renames/moves file/directory.
+/// Implements copy and remove fallback.
+void move_recursive(const std::filesystem::path & src, const std::filesystem::path & dest);
 
 }  // namespace libdnf::utils::fs
 

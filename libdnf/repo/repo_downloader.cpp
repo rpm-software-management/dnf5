@@ -111,19 +111,6 @@ static int mirror_failure_cb(void * data, const char * msg, const char * url, co
 };
 
 
-/// Recursive renames/moves file/directory.
-/// Implements copy and remove fallback.
-// TODO(lukash) move to utils/fs
-static void move_recursive(const std::filesystem::path & src, const std::filesystem::path & dest) {
-    try {
-        std::filesystem::rename(src, dest);
-    } catch (const std::filesystem::filesystem_error & ex) {
-        std::filesystem::copy(src, dest, std::filesystem::copy_options::recursive);
-        std::filesystem::remove_all(src);
-    }
-}
-
-
 LibrepoError::LibrepoError(std::unique_ptr<GError> && lr_error)
     : Error(M_("Librepo error: {}"), std::string(lr_error->message)),
       code(lr_error->code) {}
@@ -152,7 +139,7 @@ void RepoDownloader::download_metadata(const std::string & destdir) try {
         auto target_item = destdir / tmp_item.filename();
         std::filesystem::remove_all(target_item);
 
-        move_recursive(tmp_item, target_item);
+        utils::fs::move_recursive(tmp_item, target_item);
     }
 } catch (const std::runtime_error & e) {
     auto src = get_source_info();
