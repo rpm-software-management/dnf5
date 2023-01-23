@@ -40,7 +40,10 @@ public:
     TempDir(std::filesystem::path destdir, const std::string & name_prefix);
 
     TempDir(const TempDir &) = delete;
+    TempDir(TempDir && src) noexcept;
+
     TempDir & operator=(const TempDir &) = delete;
+    TempDir & operator=(TempDir && src) noexcept;
 
     ~TempDir();
 
@@ -71,7 +74,10 @@ public:
     TempFile(std::filesystem::path destdir, const std::string & name_prefix);
 
     TempFile(const TempFile &) = delete;
+    TempFile(TempFile && src) noexcept;
+
     TempFile & operator=(const TempFile &) = delete;
+    TempFile & operator=(TempFile &&);
 
     ~TempFile();
 
