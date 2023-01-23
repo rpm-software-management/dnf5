@@ -48,6 +48,20 @@ TempDir::TempDir(std::filesystem::path destdir, const std::string & name_prefix)
 }
 
 
+TempDir::TempDir(TempDir && src) noexcept : path(std::move(src.path)) {
+    src.path.clear();
+}
+
+
+TempDir & TempDir::operator=(TempDir && src) noexcept {
+    if (&src != this) {
+        path = std::move(src.path);
+        src.path.clear();
+    }
+    return *this;
+}
+
+
 TempDir::~TempDir() {
     try {
         if (!path.empty()) {
@@ -61,7 +75,7 @@ TempDir::~TempDir() {
 
 
 void TempDir::release() noexcept {
-    path = "";
+    path.clear();
 }
 
 
@@ -80,6 +94,25 @@ TempFile::TempFile(std::filesystem::path destdir, const std::string & name_prefi
     }
 
     path = dest;
+}
+
+
+TempFile::TempFile(TempFile && src) noexcept : path(std::move(src.path)), fd(src.fd), file(std::move(src.file)) {
+    src.path.clear();
+    src.fd = -1;
+    src.file.reset();
+}
+
+
+TempFile & TempFile::operator=(TempFile && src) {
+    if (&src != this) {
+        file = std::move(src.file);
+        path = std::move(src.path);
+        src.path.clear();
+        fd = src.fd;
+        src.fd = -1;
+    }
+    return *this;
 }
 
 
@@ -125,7 +158,7 @@ void TempFile::release() noexcept {
         file.reset();
     }
     fd = -1;
-    path = "";
+    path.clear();
 }
 
 }  // namespace libdnf::utils::fs
