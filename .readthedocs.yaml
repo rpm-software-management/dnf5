@@ -1,7 +1,13 @@
 version: 2
 
+build:
+  os: ubuntu-22.04
+  apt_packages:
+    - swig
+  tools:
+    python: "3.11"
+
 python:
-  version: 3
   install:
     - requirements: doc/requirements.txt
     # the 'setuptools' method calls doc/setup.py that configures files and runs doxygen
