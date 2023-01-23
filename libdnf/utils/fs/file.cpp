@@ -44,7 +44,7 @@ File::File(int fd, const std::filesystem::path & path, const char * mode, bool u
 }
 
 
-File::File(File && f) : path(std::move(f.path)), file(f.file) {
+File::File(File && f) noexcept : path(std::move(f.path)), file(f.file) {
     f.file = nullptr;
 }
 
