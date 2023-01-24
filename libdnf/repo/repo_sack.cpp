@@ -88,7 +88,8 @@ RepoWeakPtr RepoSack::get_cmdline_repo() {
 }
 
 
-std::map<std::string, libdnf::rpm::Package> RepoSack::add_cmdline_packages(const std::vector<std::string> & paths) {
+std::map<std::string, libdnf::rpm::Package> RepoSack::add_cmdline_packages(
+    const std::vector<std::string> & paths, bool calculate_checksum) {
     // find remote URLs and local file paths in the input
     std::vector<std::string> rpm_urls;
     std::vector<std::string> rpm_filepaths;
@@ -156,14 +157,14 @@ std::map<std::string, libdnf::rpm::Package> RepoSack::add_cmdline_packages(const
 
         // fill the command line repo with downloaded URLs
         for (const auto & [url, path] : url_to_path) {
-            path_to_package.emplace(url, cmdline_repo->add_rpm_package(path.string(), true));
+            path_to_package.emplace(url, cmdline_repo->add_rpm_package(path.string(), calculate_checksum));
         }
     }
 
     // fill the command line repo with local files
     for (const auto & path : rpm_filepaths) {
         if (!path_to_package.contains(path)) {
-            path_to_package.emplace(path, cmdline_repo->add_rpm_package(path, true));
+            path_to_package.emplace(path, cmdline_repo->add_rpm_package(path, calculate_checksum));
         }
     }
 
