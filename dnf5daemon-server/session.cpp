@@ -142,14 +142,8 @@ bool Session::wait_for_key_confirmation(const std::string & key_id, sdbus::Signa
 }
 
 void Session::fill_sack() {
-    if (session_configuration_value<bool>("load_system_repo", true)) {
-        get_base()->get_repo_sack()->get_system_repo()->load();
-    }
-
-    if (session_configuration_value<bool>("load_available_repos", true)) {
-        if (!read_all_repos()) {
-            throw std::runtime_error("Cannot load repositories.");
-        }
+    if (!read_all_repos()) {
+        throw std::runtime_error("Cannot load repositories.");
     }
 }
 
@@ -163,20 +157,27 @@ bool Session::read_all_repos() {
         return false;
     }
     repositories_status = dnfdaemon::RepoStatus::PENDING;
-    //auto & logger = base->get_logger();
-    libdnf::repo::RepoQuery enabled_repos(*base);
-    enabled_repos.filter_enabled(true);
-    enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
-    for (auto & repo : enabled_repos) {
-        repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
-    }
 
     bool retval = true;
 
-    try {
-        base->get_repo_sack()->update_and_load_enabled_repos(false);
-    } catch (const std::runtime_error & ex) {
-        retval = false;
+    bool load_available_repo = session_configuration_value<bool>("load_available_repo", true);
+    bool load_system_repo = session_configuration_value<bool>("load_system_repo", true);
+    if (load_available_repo) {
+        //auto & logger = base->get_logger();
+        libdnf::repo::RepoQuery enabled_repos(*base);
+        enabled_repos.filter_enabled(true);
+        enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+        for (auto & repo : enabled_repos) {
+            repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
+        }
+
+        try {
+            base->get_repo_sack()->update_and_load_enabled_repos(load_system_repo);
+        } catch (const std::runtime_error & ex) {
+            retval = false;
+        }
+    } else if (load_system_repo) {
+        base->get_repo_sack()->get_system_repo()->load();
     }
 
     repositories_status = retval ? dnfdaemon::RepoStatus::READY : dnfdaemon::RepoStatus::ERROR;
