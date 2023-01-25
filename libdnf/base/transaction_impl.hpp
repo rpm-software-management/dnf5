@@ -72,6 +72,8 @@ public:
         GoalProblem problem,
         std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems);
 
+    TransactionRunResult test();
+
     TransactionRunResult run(
         std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
         const std::string & description,
@@ -97,6 +99,13 @@ private:
 
     // history db transaction id
     int64_t history_db_id = 0;
+
+    TransactionRunResult _run(
+        std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
+        const std::string & description,
+        const std::optional<uint32_t> user_id,
+        const std::string & comment,
+        const bool test_only);
 };
 
 

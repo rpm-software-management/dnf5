@@ -222,6 +222,10 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
     return {};
 }
 
+Transaction::TransactionRunResult Transaction::test() {
+    return p_impl->test();
+}
+
 Transaction::TransactionRunResult Transaction::run(
     std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
     const std::string & description,
@@ -393,12 +397,25 @@ static void process_scriptlets_output(int fd, Logger * logger) {
     close(fd);
 }
 
+Transaction::TransactionRunResult Transaction::Impl::test() {
+    return this->_run(std::make_unique<libdnf::rpm::TransactionCallbacks>(), "", std::nullopt, "", true);
+}
+
 Transaction::TransactionRunResult Transaction::Impl::run(
     std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
     const std::string & description,
     const std::optional<uint32_t> user_id,
     const std::string & comment) {
-    // do not allow to run transaction multiple times
+    return this->_run(std::move(callbacks), description, user_id, comment, false);
+}
+
+Transaction::TransactionRunResult Transaction::Impl::_run(
+    std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
+    const std::string & description,
+    const std::optional<uint32_t> user_id,
+    const std::string & comment,
+    const bool test_only) {
+    // do not allow running a transaction multiple times
     if (history_db_id > 0) {
         return TransactionRunResult::ERROR_RERUN;
     }
@@ -466,7 +483,7 @@ Transaction::TransactionRunResult Transaction::Impl::run(
     }
 
     // With RPMTRANS_FLAG_TEST return just before anything is stored permanently
-    if (rpm_transaction_flags & RPMTRANS_FLAG_TEST) {
+    if (test_only || rpm_transaction_flags & RPMTRANS_FLAG_TEST) {
         return TransactionRunResult::SUCCESS;
     }
 
