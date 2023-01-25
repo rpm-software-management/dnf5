@@ -163,6 +163,11 @@ void Transaction::fill(const base::Transaction & transaction) {
         }
     }
     libdnf_assert(implicit_ts_elements.empty(), "The rpm transaction contains more elements than requested");
+
+    // generate ordering for the rpm transaction
+    if (rpmtsOrder(ts)) {
+        throw TransactionError(M_("Failed to order the rpm transaction."));
+    };
 }
 
 int Transaction::run() {
