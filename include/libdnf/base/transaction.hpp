@@ -81,6 +81,14 @@ public:
     /// @return the transaction groups.
     std::vector<libdnf::base::TransactionGroup> & get_transaction_groups() const;
 
+    /// Check the transaction by running it with RPMTRANS_FLAG_TEST. The import
+    /// of any necessary public keys will be requested, and transaction checks
+    /// will be performed, but no changes to the installed package set will be
+    /// made. These checks are performed automatically by run(); it is
+    /// redundant to call test() before calling run().
+    /// @return An enum describing the result of the transaction
+    TransactionRunResult test();
+
     /// Prepare, check and run the transaction. All the transaction metadata
     /// (`description` and `comment`) are stored in the history database.
     ///
