@@ -63,10 +63,7 @@
 %include "libdnf/base/transaction.hpp"
 %include "libdnf/base/transaction_package.hpp"
 
-%ignore std::vector<libdnf::base::TransactionPackage>::vector(size_type);
-%ignore std::vector<libdnf::base::TransactionPackage>::vector(unsigned int);
-%ignore std::vector<libdnf::base::TransactionPackage>::resize;
-%template(VectorTransactionPackage) std::vector<libdnf::base::TransactionPackage>;
+%template(VectorBaseTransactionPackage) std::vector<libdnf::base::TransactionPackage>;
 
 %include "libdnf/base/goal.hpp"
 %include "libdnf/base/goal_elements.hpp"

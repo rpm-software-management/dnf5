@@ -43,6 +43,10 @@
     }
 }
 
+%ignore std::vector::vector(size_type);
+%ignore std::vector::vector(unsigned int);
+%ignore std::vector::resize;
+
 %template(VectorString) std::vector<std::string>;
 #if defined(SWIGPYTHON) || defined(SWIGRUBY)
 %template(SetString) std::set<std::string>;
