@@ -45,14 +45,14 @@ public:
     virtual void * add_new_download(void * user_data, const char * description, double total_to_download);
 
     /// Download progress callback.
-    /// @param user_cb_data Associated user data obtained from new_download.
+    /// @param user_cb_data Associated user data obtained from add_new_download.
     /// @param total_to_download Total number of bytes to download.
     /// @param downloaded Number of bytes downloaded.
     /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
     virtual int progress(void * user_cb_data, double total_to_download, double downloaded);
 
     /// End of download callback.
-    /// @param user_cb_data Associated user data obtained from new_download.
+    /// @param user_cb_data Associated user data obtained from add_new_download.
     /// @param status The transfer status.
     /// @param msg The error message in case of error.
     /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
@@ -60,7 +60,7 @@ public:
 
 
     /// Mirror failure callback.
-    /// @param user_cb_data Associated user data obtained from new_download.
+    /// @param user_cb_data Associated user data obtained from add_new_download.
     /// @param msg Error message.
     /// @param url Failed mirror URL.
     /// @return TODO(lukash) uses the LrCbReturnCode enum from librepo, we should translate that.
