@@ -1,6 +1,6 @@
 %global project_version_major 5
 %global project_version_minor 0
-%global project_version_patch 4
+%global project_version_patch 5
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
@@ -592,6 +592,12 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
 
 
 %changelog
+* Thu Jan 26 2023 Nicola Sella <nsella@redhat.com> - 5.0.5-1
+- Fix build fail in rawhide
+- Fixes in the concerning filesystem
+- Fixes in the concerning modules
+- Fixes in the concerning api
+
 * Thu Jan 12 2023 Nicola Sella <nsella@redhat.com> - 5.0.4-1
 - Many fixes in perl bindings
 - Test functions enhanced
