@@ -367,7 +367,12 @@ void RepoSack::create_repos_from_config_file() {
 }
 
 void RepoSack::create_repos_from_dir(const std::string & dir_path) {
-    std::filesystem::directory_iterator di(dir_path);
+    std::error_code ec;
+    std::filesystem::directory_iterator di(dir_path, ec);
+    if (ec) {
+        base->get_logger()->warning("Cannot read repositories from directory \"{}\": {}", dir_path, ec.message());
+        return;
+    }
     std::vector<std::filesystem::path> paths;
     for (auto & dentry : di) {
         auto & path = dentry.path();

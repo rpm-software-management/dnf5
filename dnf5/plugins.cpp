@@ -120,10 +120,15 @@ void Plugins::load_plugins(const std::string & dir_path) {
     auto logger = context->base.get_logger();
 
     std::vector<std::filesystem::path> lib_paths;
-    for (const auto & p : std::filesystem::directory_iterator(dir_path)) {
+    std::error_code ec;
+    for (const auto & p : std::filesystem::directory_iterator(dir_path, ec)) {
         if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".so") {
             lib_paths.emplace_back(p.path());
         }
+    }
+    if (ec) {
+        logger->warning("Cannot read dnf5 plugins directory \"{}\": {}", dir_path, ec.message());
+        return;
     }
     std::sort(lib_paths.begin(), lib_paths.end());
 

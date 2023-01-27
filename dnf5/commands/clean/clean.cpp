@@ -116,8 +116,9 @@ void CleanCommand::run() {
     auto & ctx = get_context();
     fs::path cachedir{ctx.base.get_config().cachedir().get_value()};
 
+    std::error_code ec;
     libdnf::repo::RepoCache::RemoveStatistics statistics{};
-    for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir)) {
+    for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir, ec)) {
         libdnf::repo::RepoCache cache(ctx.base.get_weak_ptr(), dir_entry.path());
 
         if (required_actions & CLEAN_ALL) {
@@ -136,6 +137,10 @@ void CleanCommand::run() {
         if (required_actions & EXPIRE_CACHE) {
             cache.write_attribute(libdnf::repo::RepoCache::ATTRIBUTE_EXPIRED);
         }
+    }
+
+    if (ec) {
+        throw std::runtime_error(fmt::format("Cannot iterate the cache directory: \"{}\"", cachedir.string()));
     }
 
     std::cout << fmt::format(

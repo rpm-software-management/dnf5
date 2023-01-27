@@ -102,11 +102,16 @@ void Base::load_config_from_file() {
 
 void Base::load_config_from_dir(const std::string & dir_path) {
     std::vector<std::filesystem::path> paths;
-    for (auto & dentry : std::filesystem::directory_iterator(dir_path)) {
+    std::error_code ec;
+    for (auto & dentry : std::filesystem::directory_iterator(dir_path, ec)) {
         auto & path = dentry.path();
         if (path.extension() == ".conf") {
             paths.push_back(path);
         }
+    }
+    if (ec) {
+        log_router.warning("Cannot read configuration from directory \"{}\": {}", dir_path, ec.message());
+        return;
     }
     std::sort(paths.begin(), paths.end());
     for (auto & path : paths) {
