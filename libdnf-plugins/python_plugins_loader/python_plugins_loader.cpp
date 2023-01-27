@@ -243,10 +243,15 @@ void PythonPluginLoader::load_plugins_from_dir(const fs::path & dir_path) {
         throw std::runtime_error("PythonPluginLoader::load_from_dir() dir_path cannot be empty");
 
     std::vector<fs::path> lib_names;
-    for (auto & p : std::filesystem::directory_iterator(dir_path)) {
+    std::error_code ec;
+    for (auto & p : std::filesystem::directory_iterator(dir_path, ec)) {
         if ((p.is_regular_file() || p.is_symlink()) && p.path().extension() == ".py") {
             lib_names.emplace_back(p.path());
         }
+    }
+    if (ec) {
+        logger.warning("PythonPluginLoader: Cannot read plugins directory \"{}\": {}", dir_path.string(), ec.message());
+        return;
     }
     std::sort(lib_names.begin(), lib_names.end());
 

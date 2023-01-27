@@ -418,7 +418,8 @@ void GoalPrivate::write_debugdata(const std::filesystem::path & abs_dest_dir) {
     libdnf_assert_goal_resolved();
 
     // Removes old debug data, if it exists.
-    for (const auto & dir_entry : std::filesystem::directory_iterator(abs_dest_dir)) {
+    std::error_code ec;
+    for (const auto & dir_entry : std::filesystem::directory_iterator(abs_dest_dir, ec)) {
         std::filesystem::remove(dir_entry);
     }
 
