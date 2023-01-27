@@ -203,7 +203,7 @@ void RepoqueryCommand::set_argument_parser() {
         "exactdeps",
         '\0',
         "This option is stackable with --whatrequires or --whatdepends only. Limit the resulting set only to packages "
-        "that require <capability> specified by –whatrequires.",
+        "that require <capability> specified by --whatrequires.",
         false);
     duplicates = std::make_unique<libdnf::cli::session::BoolOption>(
         *this,
