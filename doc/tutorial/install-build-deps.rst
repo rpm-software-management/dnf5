@@ -21,12 +21,12 @@ Python 3::
 
 Perl 5::
 
-    $ dnf install perl5-libdnf perl5-libdnf-cli
+    $ dnf install perl5-libdnf5 perl5-libdnf5-cli
 
 
 Ruby::
 
-    $ dnf install perl5-libdnf perl5-libdnf-cli
+    $ dnf install ruby-libdnf5 ruby-libdnf5-cli
 
 
 .. note::
