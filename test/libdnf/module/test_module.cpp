@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/module/module_item.hpp"
 #include "libdnf/module/module_query.hpp"
 #include "libdnf/module/module_sack.hpp"
+#include "libdnf/module/nsvcap.hpp"
 #include "libdnf/utils/format.hpp"
 
 #include <filesystem>
@@ -244,4 +245,185 @@ void ModuleTest::test_query_latest() {
             CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), module_item.get_arch());
         }
     }
+}
+
+
+void ModuleTest::test_nsvcap() {
+    Nsvcap nsvcap;
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613:06d0a27d:x86_64/default", Nsvcap::Form::NSVCAP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613:06d0a27d:x86_64", Nsvcap::Form::NSVCA));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613::x86_64/default", Nsvcap::Form::NSVAP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613::x86_64", Nsvcap::Form::NSVA));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master::x86_64/default", Nsvcap::Form::NSAP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master::x86_64", Nsvcap::Form::NSA));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613:06d0a27d/default", Nsvcap::Form::NSVCP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613:06d0a27d", Nsvcap::Form::NSVC));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613/default", Nsvcap::Form::NSVP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613", Nsvcap::Form::NSV));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master/default", Nsvcap::Form::NSP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master", Nsvcap::Form::NS));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson::x86_64/default", Nsvcap::Form::NAP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson::x86_64", Nsvcap::Form::NA));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson/default", Nsvcap::Form::NP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson", Nsvcap::Form::N));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:06d0a27d/default", Nsvcap::Form::NSCP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:06d0a27d", Nsvcap::Form::NSC));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    // There can be additional ':' before architecture even if it's full NSVCA
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613:06d0a27d::x86_64/default", Nsvcap::Form::NSVCAP));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string("default"), nsvcap.get_profile());
+    CPPUNIT_ASSERT(nsvcap.parse("meson:master:20180816151613:06d0a27d::x86_64", Nsvcap::Form::NSVCA));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string("master"), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    // Trailing '/' is allowed
+    CPPUNIT_ASSERT(nsvcap.parse("meson/", Nsvcap::Form::N));
+    CPPUNIT_ASSERT_EQUAL(std::string("meson"), nsvcap.get_name());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_stream());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_version());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_context());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_arch());
+    CPPUNIT_ASSERT_EQUAL(std::string(""), nsvcap.get_profile());
+
+    // The form must be matched exactly
+    CPPUNIT_ASSERT_EQUAL(false, nsvcap.parse("meson:master", Nsvcap::Form::N));
+    CPPUNIT_ASSERT_EQUAL(false, nsvcap.parse("meson:master:20180816151613:06d0a27d/default", Nsvcap::Form::NSVC));
+    CPPUNIT_ASSERT_EQUAL(false, nsvcap.parse("meson:master:20180816151613:06d0a27d:", Nsvcap::Form::NSVC));
+
+    // Empty fields are not allowed
+    CPPUNIT_ASSERT_EQUAL(false, nsvcap.parse("meson:master::06d0a27d", Nsvcap::Form::NSVC));
 }
