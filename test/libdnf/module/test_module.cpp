@@ -427,3 +427,57 @@ void ModuleTest::test_nsvcap() {
     // Empty fields are not allowed
     CPPUNIT_ASSERT_EQUAL(false, nsvcap.parse("meson:master::06d0a27d", Nsvcap::Form::NSVC));
 }
+
+
+void ModuleTest::test_query_spec() {
+    add_repo_repomd("repomd-modules");
+    Nsvcap nsvcap;
+
+    {
+        ModuleQuery query(base, false);
+        nsvcap.parse("meson", Nsvcap::Form::N);
+        query.filter_nsvca(nsvcap);
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("meson"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("master"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        nsvcap.parse("gooseberry:5.4", Nsvcap::Form::NS);
+        query.filter_nsvca(nsvcap);
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("5.4"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("1"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string(""), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        nsvcap.parse("gooseberry:5.5:2", Nsvcap::Form::NSV);
+        query.filter_nsvca(nsvcap);
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("5.5"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("2"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("72aaf46b6"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
+
+    {
+        ModuleQuery query(base, false);
+        nsvcap.parse("berries:main:4:6c81f848::x86_64", Nsvcap::Form::NSVCA);
+        query.filter_nsvca(nsvcap);
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("berries"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("main"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("4"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("6c81f848"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
+}

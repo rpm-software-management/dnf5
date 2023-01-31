@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/module/module_item.hpp"
 #include "libdnf/module/module_sack.hpp"
+#include "libdnf/module/nsvcap.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -155,6 +156,30 @@ void ModuleQuery::filter_latest(int limit) {
         } else {
             get_data().erase(*module_item);
         }
+    }
+}
+
+
+void ModuleQuery::filter_nsvca(const Nsvcap & nsvcap, libdnf::sack::QueryCmp cmp) {
+    const std::string & name = nsvcap.get_name();
+    if (!name.empty()) {
+        filter_name(name, cmp);
+    }
+    const std::string & stream = nsvcap.get_stream();
+    if (!stream.empty()) {
+        filter_stream(stream, cmp);
+    }
+    const std::string & version = nsvcap.get_version();
+    if (!version.empty()) {
+        filter_version(version, cmp);
+    }
+    const std::string & context = nsvcap.get_context();
+    if (!context.empty()) {
+        filter_context(context, cmp);
+    }
+    const std::string & arch = nsvcap.get_arch();
+    if (!arch.empty()) {
+        filter_arch(arch, cmp);
     }
 }
 

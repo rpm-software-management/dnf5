@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/module/module_item.hpp"
+#include "libdnf/module/nsvcap.hpp"
 
 #include <string>
 #include <vector>
@@ -139,6 +140,14 @@ public:
     ///                         If `limit` < 0, keep all **but** `limit` last `version`s in each group.
     /// @since 5.0.4
     void filter_latest(int limit = 1);
+
+    /// Filter ModuleItems by Nsvcap object.
+    ///
+    /// @param nsvcap           A Nsvcap object the filter is matched against.
+    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
+    /// @since 5.0.6
+    void filter_nsvca(const Nsvcap & nsvcap, libdnf::sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
 
 private:
     // Getter callbacks that return attribute values from an object. Used in query filters.
