@@ -38,7 +38,11 @@ class ModuleGoalPrivate;
 
 class ModuleSack::Impl {
 public:
-    Impl(const BaseWeakPtr & base) : base(base), module_metadata(base), pool(pool_create()) {}
+    /// Create libsolv pool and set POOL_FLAG_WHATPROVIDESWITHDISABLED to ensure excluded packages are not taken as
+    /// candidates for solver
+    Impl(const BaseWeakPtr & base) : base(base), module_metadata(base), pool(pool_create()) {
+        pool_set_flag(pool, POOL_FLAG_WHATPROVIDESWITHDISABLED, 1);
+    }
     ~Impl() { pool_free(pool); }
 
     const std::vector<std::unique_ptr<ModuleItem>> & get_modules();
