@@ -77,7 +77,12 @@ private:
 
 class Pool {
 public:
-    Pool() : considered(0) { pool = pool_create(); }
+    /// Create libsolv pool and set POOL_FLAG_WHATPROVIDESWITHDISABLED to ensure excluded packages are not taken as
+    /// candidates for solver
+    Pool() : considered(0) {
+        pool = pool_create();
+        pool_set_flag(pool, POOL_FLAG_WHATPROVIDESWITHDISABLED, 1);
+    }
 
     Pool(const Pool & pool) = delete;
     Pool & operator=(const Pool & pool) = delete;
