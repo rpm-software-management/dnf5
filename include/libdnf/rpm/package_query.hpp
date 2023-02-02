@@ -611,6 +611,10 @@ public:
     /// @param timestamp Only packages built after this will pass
     void filter_recent(const time_t timestamp);
 
+    /// Filter unneeded packages. Unneeded packages are those which are installed as
+    /// dependencies and are not required by any user-installed package any more.
+    void filter_unneeded();
+
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     // @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf::rpm::Nevra> resolve_pkg_spec(
