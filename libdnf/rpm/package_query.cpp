@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "common/sack/query_cmp_private.hpp"
 #include "package_query_impl.hpp"
 #include "package_set_impl.hpp"
+#include "solv/solver.hpp"
 #include "utils/convert.hpp"
 
 #include "libdnf/advisory/advisory_query.hpp"
@@ -37,6 +38,8 @@ extern "C" {
 }
 
 #include <fnmatch.h>
+
+#include <filesystem>
 
 namespace libdnf::rpm {
 
@@ -2453,6 +2456,56 @@ void PackageQuery::filter_recent(const time_t timestamp) {
     }
 }
 
+void PackageQuery::filter_unneeded() {
+    auto & pool = get_rpm_pool(p_impl->base);
+
+    // get a list of all installed packages
+    auto * installed_repo = pool->installed;
+    if (installed_repo == nullptr) {
+        (*p_impl).clear();
+        return;
+    }
+
+    libdnf::solv::SolvMap installed_solv_map(pool.get_nsolvables());
+    for (int it = installed_repo->start; it < installed_repo->end; ++it) {
+        installed_solv_map.add(it);
+    }
+
+    // find user-installed packages and add them to the solver job
+    libdnf::rpm::PackageSet installed_pset{p_impl->base, installed_solv_map};
+    libdnf::solv::IdQueue userinstalled;
+    for (const auto & pkg : installed_pset) {
+        auto reason = pkg.get_reason();
+        // package that is not dep / weak dep is considered user-installed here
+        if (reason != libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY &&
+            reason != libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+            userinstalled.push_back(SOLVER_SOLVABLE | SOLVER_USERINSTALLED, pkg.get_id().id);
+        }
+    }
+
+    // create a temporary libsolv solver to retrieve a list of unneeded packages
+    libdnf::solv::Solver solver{pool};
+    // run solver_solve to actually apply the list of user-installed packages
+    solver.solve(userinstalled);
+
+    // write autoremove debug data if required
+    auto & cfg_main = p_impl->base->get_config();
+    if (cfg_main.debug_solver().get_value()) {
+        auto debug_dir =
+            std::filesystem::absolute(std::filesystem::path(cfg_main.debugdir().get_value()) / "autoremove");
+        solver.write_debugdata(debug_dir);
+    }
+
+    // get unneeded packages from libsolv
+    auto unneeded_queue = solver.get_unneeded();
+
+    libdnf::solv::SolvMap unneeded_solv_map(pool.get_nsolvables());
+    for (int i = 0; i < unneeded_queue.size(); ++i) {
+        unneeded_solv_map.add(unneeded_queue[i]);
+    }
+
+    *p_impl &= unneeded_solv_map;
+}
 
 void PackageQuery::filter_extras(const bool exact_evr) {
     filter_installed();
