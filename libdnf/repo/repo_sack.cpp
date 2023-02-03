@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "../module/module_sack_impl.hpp"
 #include "repo_cache_private.hpp"
 #include "rpm/package_sack_impl.hpp"
+#include "solv/solver.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
@@ -320,20 +321,8 @@ void RepoSack::update_and_load_enabled_repos(bool load_system) {
 
 
 void RepoSack::dump_debugdata(const std::string & dir) {
-    Solver * solver = solver_create(*get_rpm_pool(base));
-
-    try {
-        std::filesystem::create_directory(dir);
-
-        int ret = testcase_write(solver, dir.c_str(), 0, NULL, NULL);
-        if (!ret) {
-            throw SystemError(errno, M_("Failed to write debug data to {}"), dir);
-        }
-    } catch (...) {
-        solver_free(solver);
-        throw;
-    }
-    solver_free(solver);
+    libdnf::solv::Solver solver{get_rpm_pool(base)};
+    solver.write_debugdata(dir, false);
 }
 
 
