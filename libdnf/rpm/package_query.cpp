@@ -2395,4 +2395,14 @@ void PackageQuery::filter_duplicates() {
 }
 
 
+void PackageQuery::filter_extras() {
+    filter_installed();
+    // Create query with available packages without non-modular excludes.
+    // As extras should be considered also packages in non-active modules.
+    PackageQuery available(p_impl->base, ExcludeFlags::IGNORE_REGULAR_EXCLUDES);
+    available.filter_available();
+    filter_name_arch(available, sack::QueryCmp::NEQ);
+}
+
+
 }  //  namespace libdnf::rpm
