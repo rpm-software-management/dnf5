@@ -587,6 +587,9 @@ public:
     // TODO(dmach): consider removing the installed packages during the filtering
     void filter_priority();
 
+    /// Filter packages, which are installed but not available in any enabled repository
+    void filter_extras();
+
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     // @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf::rpm::Nevra> resolve_pkg_spec(
