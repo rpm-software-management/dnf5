@@ -43,15 +43,6 @@ void ModuleGoalPrivate::add_provide_install(Id reldepid, bool strict, bool best)
 }
 
 
-void init_solver(Pool * pool, Solver ** solver) {
-    if (*solver) {
-        solver_free(*solver);
-    }
-
-    *solver = solver_create(pool);
-}
-
-
 libdnf::GoalProblem ModuleGoalPrivate::resolve() {
     Pool * pool = module_sack->p_impl->pool;
     libdnf::solv::IdQueue job(staging);
@@ -61,13 +52,13 @@ libdnf::GoalProblem ModuleGoalPrivate::resolve() {
         libsolv_transaction = NULL;
     }
 
-    init_solver(pool, &libsolv_solver);
+    libsolv_solver.init(pool);
 
-    if (solver_solve(libsolv_solver, &job.get_queue())) {
+    if (libsolv_solver.solve(job)) {
         return libdnf::GoalProblem::SOLVER_ERROR;
     }
 
-    libsolv_transaction = solver_create_transaction(libsolv_solver);
+    libsolv_transaction = libsolv_solver.create_transaction();
 
     return libdnf::GoalProblem::NO_PROBLEM;
 }
@@ -112,41 +103,33 @@ libdnf::solv::IdQueue ModuleGoalPrivate::list_installs() {
 }
 
 
-size_t ModuleGoalPrivate::count_solver_problems() {
-    libdnf_assert_goal_resolved();
-
-    return solver_problem_count(libsolv_solver);
-}
-
-
 std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> ModuleGoalPrivate::get_problems() {
     auto & pool = module_sack->p_impl->pool;
 
     libdnf_assert_goal_resolved();
 
-    auto count_problems = static_cast<int>(count_solver_problems());
+    auto count_problems = static_cast<int>(libsolv_solver.problem_count());
     if (count_problems == 0) {
         return {};
     }
     // std::tuple<ProblemRules, Id source, Id dep, Id target, std::string>>
     std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> problems;
 
-    libdnf::solv::IdQueue problem_queue;
-    libdnf::solv::IdQueue descriptions_queue;
     // libsolv counts problem from 1
     for (int i = 1; i <= count_problems; ++i) {
-        solver_findallproblemrules(libsolv_solver, i, &problem_queue.get_queue());
+        auto problem_queue = libsolv_solver.findallproblemrules(i);
         std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>> problem;
         for (int j = 0; j < problem_queue.size(); ++j) {
             Id rid = problem_queue[j];
-            if (solver_allruleinfos(libsolv_solver, rid, &descriptions_queue.get_queue())) {
+            auto descriptions_queue = libsolv_solver.allruleinfos(rid);
+            if (!descriptions_queue.empty()) {
                 for (int ir = 0; ir < descriptions_queue.size(); ir += 4) {
                     SolverRuleinfo type = static_cast<SolverRuleinfo>(descriptions_queue[ir]);
                     Id source = descriptions_queue[ir + 1];
                     Id target = descriptions_queue[ir + 2];
                     Id dep = descriptions_queue[ir + 3];
                     ProblemRules rule;
-                    const char * solv_strig = nullptr;
+                    const char * solv_string = nullptr;
                     switch (type) {
                         case SOLVER_RULE_DISTUPGRADE:
                             rule = ProblemRules::RULE_DISTUPGRADE;
@@ -225,11 +208,11 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Modu
                             break;
                         default:
                             rule = ProblemRules::RULE_UNKNOWN;
-                            solv_strig = solver_problemruleinfo2str(libsolv_solver, type, source, target, dep);
+                            solv_string = libsolv_solver.problemruleinfo2str(type, source, target, dep);
                             break;
                     }
                     problem.emplace_back(std::make_tuple(
-                        rule, source, dep, target, solv_strig ? std::string(solv_strig) : std::string()));
+                        rule, source, dep, target, solv_string ? std::string(solv_string) : std::string()));
                 }
             }
         }

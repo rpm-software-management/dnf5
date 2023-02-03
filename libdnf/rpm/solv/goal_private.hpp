@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "solv/id_queue.hpp"
 #include "solv/pool.hpp"
 #include "solv/solv_map.hpp"
+#include "solv/solver.hpp"
 
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/comps/group/group.hpp"
@@ -35,7 +36,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <filesystem>
 
 #define libdnf_assert_goal_resolved() \
-    libdnf_assert(libsolv_solver != nullptr, "Performing an operation that requires Goal to be resolved");
+    libdnf_assert(libsolv_solver.is_initialized(), "Performing an operation that requires Goal to be resolved");
 
 namespace libdnf::rpm::solv {
 
@@ -118,9 +119,6 @@ public:
     /// Set Ids of user-installed packages
     void set_user_installed_packages(const libdnf::solv::IdQueue & queue);
 
-    ///  Return count of problems detected by solver
-    size_t count_solver_problems();
-
     ///  Return all solver problems
     ///  Results are not formatted, translated, and deduplucated
     ///  Throw UnresolvedGoal when Goal is not resolved
@@ -169,7 +167,7 @@ private:
     // packages explicitely user-installed in this transaction
     std::unique_ptr<libdnf::solv::SolvMap> transaction_user_installed;
 
-    ::Solver * libsolv_solver{nullptr};
+    libdnf::solv::Solver libsolv_solver;
     ::Transaction * libsolv_transaction{nullptr};
 
     std::unique_ptr<libdnf::solv::SolvMap> protected_packages;
@@ -214,9 +212,6 @@ inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
 }
 
 inline GoalPrivate::~GoalPrivate() {
-    if (libsolv_solver) {
-        solver_free(libsolv_solver);
-    }
     if (libsolv_transaction) {
         transaction_free(libsolv_transaction);
     }
@@ -228,9 +223,8 @@ inline GoalPrivate & GoalPrivate::operator=(const GoalPrivate & src) {
         staging = src.staging;
         installonly = src.installonly;
         installonly_limit = src.installonly_limit;
-        if (libsolv_solver != nullptr) {
-            solver_free(libsolv_solver);
-            libsolv_solver = nullptr;
+        if (libsolv_solver.is_initialized()) {
+            libsolv_solver.reset();
         }
         if (libsolv_transaction != nullptr) {
             transaction_free(libsolv_transaction);

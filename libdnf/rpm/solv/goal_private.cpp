@@ -85,24 +85,20 @@ void construct_job(
     //         job->pushBack(SOLVER_VERIFY|SOLVER_SOLVABLE_ALL, 0);
 }
 
-void init_solver(Pool * pool, Solver ** solver) {
-    if (*solver) {
-        solver_free(*solver);
-    }
-
-    *solver = solver_create(pool);
+void init_solver(libdnf::solv::Pool & pool, libdnf::solv::Solver & solver) {
+    solver.init(pool);
 
     /* don't erase packages that are no longer in repo during distupgrade */
-    solver_set_flag(*solver, SOLVER_FLAG_KEEP_ORPHANS, 1);
+    solver.set_flag(SOLVER_FLAG_KEEP_ORPHANS, 1);
     /* no arch change for forcebest */
-    solver_set_flag(*solver, SOLVER_FLAG_BEST_OBEY_POLICY, 1);
+    solver.set_flag(SOLVER_FLAG_BEST_OBEY_POLICY, 1);
     /* support package splits via obsoletes */
-    solver_set_flag(*solver, SOLVER_FLAG_YUM_OBSOLETES, 1);
+    solver.set_flag(SOLVER_FLAG_YUM_OBSOLETES, 1);
 
 // TODO Ask Neal whether it is needed. See https://bugs.mageia.org/show_bug.cgi?id=18315
 #if defined(LIBSOLV_FLAG_URPMREORDER)
     /* support urpm-like solution reordering */
-    solver_set_flag(solv, SOLVER_FLAG_URPM_REORDER, 1);
+    solver.set_flag(SOLVER_FLAG_URPM_REORDER, 1);
 #endif
 }
 
@@ -246,7 +242,7 @@ bool GoalPrivate::limit_installonly_packages(libdnf::solv::IdQueue & job, Id run
             if (!spool.is_package(p)) {
                 continue;
             }
-            if (solver_get_decisionlevel(libsolv_solver, p) > 0) {
+            if (libsolv_solver.get_decisionlevel(p) > 0) {
                 q.push_back(p);
             }
         }
@@ -350,7 +346,7 @@ libdnf::GoalProblem GoalPrivate::resolve() {
         libsolv_transaction = NULL;
     }
 
-    init_solver(*pool, &libsolv_solver);
+    init_solver(pool, libsolv_solver);
 
     // Remove SOLVER_WEAK and add SOLVER_BEST to all transactions to allow report skipped packages and best candidates
     // with broken dependenies
@@ -362,17 +358,17 @@ libdnf::GoalProblem GoalPrivate::resolve() {
     }
 
     int ignore_weak_deps = install_weak_deps ? 0 : 1;
-    solver_set_flag(libsolv_solver, SOLVER_FLAG_IGNORE_RECOMMENDED, ignore_weak_deps);
+    libsolv_solver.set_flag(SOLVER_FLAG_IGNORE_RECOMMENDED, ignore_weak_deps);
 
     int downgrade = allow_downgrade ? 1 : 0;
-    solver_set_flag(libsolv_solver, SOLVER_FLAG_ALLOW_DOWNGRADE, downgrade);
+    libsolv_solver.set_flag(SOLVER_FLAG_ALLOW_DOWNGRADE, downgrade);
 
     // Set up vendor locking modes
     int vendor_change = allow_vendor_change ? 1 : 0;
-    solver_set_flag(libsolv_solver, SOLVER_FLAG_ALLOW_VENDORCHANGE, vendor_change);
-    solver_set_flag(libsolv_solver, SOLVER_FLAG_DUP_ALLOW_VENDORCHANGE, vendor_change);
+    libsolv_solver.set_flag(SOLVER_FLAG_ALLOW_VENDORCHANGE, vendor_change);
+    libsolv_solver.set_flag(SOLVER_FLAG_DUP_ALLOW_VENDORCHANGE, vendor_change);
 
-    if (solver_solve(libsolv_solver, &job.get_queue())) {
+    if (libsolv_solver.solve(job)) {
         return libdnf::GoalProblem::SOLVER_ERROR;
     }
 
@@ -380,12 +376,12 @@ libdnf::GoalProblem GoalPrivate::resolve() {
     if (limit_installonly_packages(job, 0)) {
         // allow erasing non-installonly packages that depend on a kernel about to be erased
         allow_uninstall_all_but_protected(*pool, job, protected_packages.get(), protected_running_kernel);
-        if (solver_solve(libsolv_solver, &job.get_queue())) {
+        if (libsolv_solver.solve(job)) {
             return libdnf::GoalProblem::SOLVER_ERROR;
         }
     }
 
-    libsolv_transaction = solver_create_transaction(libsolv_solver);
+    libsolv_transaction = libsolv_solver.create_transaction();
 
     return protected_in_removals();
 }
@@ -415,23 +411,7 @@ libdnf::solv::IdQueue GoalPrivate::list_obsoleted() {
 }
 
 void GoalPrivate::write_debugdata(const std::filesystem::path & abs_dest_dir) {
-    libdnf_assert_goal_resolved();
-
-    // Removes old debug data, if it exists.
-    std::error_code ec;
-    for (const auto & dir_entry : std::filesystem::directory_iterator(abs_dest_dir, ec)) {
-        std::filesystem::remove(dir_entry);
-    }
-
-    int flags = TESTCASE_RESULT_TRANSACTION | TESTCASE_RESULT_PROBLEMS;
-    auto ret = ::testcase_write(libsolv_solver, abs_dest_dir.c_str(), flags, NULL, NULL);
-
-    if (ret == 0) {
-        // TODO(jmracek) replace error with Goal Error
-        const auto * libsolv_err_msg = pool_errstr(libsolv_solver->pool);
-        throw RuntimeError(
-            M_("failed writing debugsolver data into \"{}\": {}"), abs_dest_dir.native(), libsolv_err_msg);
-    }
+    libsolv_solver.write_debugdata(abs_dest_dir);
 }
 
 // PackageSet
@@ -458,40 +438,33 @@ void GoalPrivate::write_debugdata(const std::filesystem::path & abs_dest_dir) {
 //     return pset;
 // }
 
-size_t GoalPrivate::count_solver_problems() {
-    libdnf_assert_goal_resolved();
-
-    return solver_problem_count(libsolv_solver);
-}
-
 std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> GoalPrivate::get_problems() {
     auto & pool = get_rpm_pool();
 
     libdnf_assert_goal_resolved();
 
-    auto count_problems = static_cast<int>(count_solver_problems());
+    auto count_problems = static_cast<int>(libsolv_solver.problem_count());
     if (count_problems == 0) {
         return {};
     }
     // std::tuple<ProblemRules, Id source, Id dep, Id target, std::string>>
     std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> problems;
 
-    libdnf::solv::IdQueue problem_queue;
-    libdnf::solv::IdQueue descriptions_queue;
     // libsolv counts problem from 1
     for (int i = 1; i <= count_problems; ++i) {
-        solver_findallproblemrules(libsolv_solver, i, &problem_queue.get_queue());
+        auto problem_queue = libsolv_solver.findallproblemrules(i);
         std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>> problem;
         for (int j = 0; j < problem_queue.size(); ++j) {
             Id rid = problem_queue[j];
-            if (solver_allruleinfos(libsolv_solver, rid, &descriptions_queue.get_queue())) {
+            auto descriptions_queue = libsolv_solver.allruleinfos(rid);
+            if (!descriptions_queue.empty()) {
                 for (int ir = 0; ir < descriptions_queue.size(); ir += 4) {
                     SolverRuleinfo type = static_cast<SolverRuleinfo>(descriptions_queue[ir]);
                     Id source = descriptions_queue[ir + 1];
                     Id target = descriptions_queue[ir + 2];
                     Id dep = descriptions_queue[ir + 3];
                     ProblemRules rule;
-                    const char * solv_strig = nullptr;
+                    const char * solv_string = nullptr;
                     switch (type) {
                         case SOLVER_RULE_DISTUPGRADE:
                             rule = ProblemRules::RULE_DISTUPGRADE;
@@ -570,11 +543,11 @@ std::vector<std::vector<std::tuple<ProblemRules, Id, Id, Id, std::string>>> Goal
                             break;
                         default:
                             rule = ProblemRules::RULE_UNKNOWN;
-                            solv_strig = solver_problemruleinfo2str(libsolv_solver, type, source, target, dep);
+                            solv_string = libsolv_solver.problemruleinfo2str(type, source, target, dep);
                             break;
                     }
                     problem.emplace_back(std::make_tuple(
-                        rule, source, dep, target, solv_strig ? std::string(solv_strig) : std::string()));
+                        rule, source, dep, target, solv_string ? std::string(solv_string) : std::string()));
                 }
             }
         }
@@ -678,11 +651,10 @@ transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
     libdnf_assert_goal_resolved();
 
     Id info;
-    int reason = solver_describe_decision(libsolv_solver, id, &info);
+    int reason = libsolv_solver.describe_decision(id, &info);
 
     if ((reason == SOLVER_REASON_UNIT_RULE || reason == SOLVER_REASON_RESOLVE_JOB) &&
-        (solver_ruleclass(libsolv_solver, info) == SOLVER_RULE_JOB ||
-         solver_ruleclass(libsolv_solver, info) == SOLVER_RULE_BEST)) {
+        (libsolv_solver.ruleclass(info) == SOLVER_RULE_JOB || libsolv_solver.ruleclass(info) == SOLVER_RULE_BEST)) {
         // explicitely user-installed
         if (transaction_user_installed && transaction_user_installed->contains(id)) {
             return transaction::TransactionItemReason::USER;
@@ -698,8 +670,7 @@ transaction::TransactionItemReason GoalPrivate::get_reason(Id id) {
         return transaction::TransactionItemReason::CLEAN;
     if (reason == SOLVER_REASON_WEAKDEP)
         return transaction::TransactionItemReason::WEAK_DEPENDENCY;
-    libdnf::solv::IdQueue cleanDepsQueue;
-    solver_get_cleandeps(libsolv_solver, &cleanDepsQueue.get_queue());
+    auto cleanDepsQueue = libsolv_solver.get_cleandeps();
     for (int i = 0; i < cleanDepsQueue.size(); ++i) {
         if (cleanDepsQueue[i] == id) {
             return transaction::TransactionItemReason::CLEAN;

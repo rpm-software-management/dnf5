@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_MODULE_MODULE_GOAL_PRIVATE_HPP
 
 #include "solv/id_queue.hpp"
+#include "solv/solver.hpp"
 
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/module/module_sack_weak.hpp"
@@ -56,9 +57,6 @@ public:
     /// @since 5.0
     libdnf::GoalProblem resolve();
 
-    /// @return Number of problems during resolving. The goal must be resolved first.
-    /// @since 5.0
-    size_t count_solver_problems();
     /// @return `std::vector` of problems during resolving. Each problem is a `std::vector` of items:
     ///          ProblemRules, source, dependency, target, solv string.
     ///          The goal must be resolved first.
@@ -82,8 +80,8 @@ private:
     ModuleSackWeakPtr module_sack;
 
     libdnf::solv::IdQueue staging;
+    libdnf::solv::Solver libsolv_solver;
 
-    ::Solver * libsolv_solver{nullptr};
     ::Transaction * libsolv_transaction{nullptr};
 };
 
@@ -94,9 +92,6 @@ inline ModuleGoalPrivate::ModuleGoalPrivate(const ModuleGoalPrivate & src)
 
 
 inline ModuleGoalPrivate::~ModuleGoalPrivate() {
-    if (libsolv_solver) {
-        solver_free(libsolv_solver);
-    }
     if (libsolv_transaction) {
         transaction_free(libsolv_transaction);
     }
@@ -107,9 +102,8 @@ inline ModuleGoalPrivate & ModuleGoalPrivate::operator=(const ModuleGoalPrivate 
     if (this != &src) {
         module_sack = src.module_sack;
         staging = src.staging;
-        if (libsolv_solver != nullptr) {
-            solver_free(libsolv_solver);
-            libsolv_solver = nullptr;
+        if (libsolv_solver.is_initialized()) {
+            libsolv_solver.reset();
         }
         if (libsolv_transaction != nullptr) {
             transaction_free(libsolv_transaction);
