@@ -600,6 +600,10 @@ public:
     ///                  which exact NEVRA is not present in any enabled repository.
     void filter_extras(const bool exact_evr = false);
 
+    /// Keep in the query only recent packages - those with build time after given timestamp
+    /// @param timestamp Only packages built after this will pass
+    void filter_recent(const time_t timestamp);
+
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     // @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf::rpm::Nevra> resolve_pkg_spec(

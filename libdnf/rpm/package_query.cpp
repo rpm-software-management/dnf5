@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 extern "C" {
 #include <solv/evr.h>
 #include <solv/selection.h>
+#include <solv/solvable.h>
 #include <solv/solver.h>
 }
 
@@ -2391,6 +2392,19 @@ void PackageQuery::filter_duplicates() {
     }
     if (start_block != i - 1) {  // Add last block to the map if it is bigger than 1 (has duplicates)
         add_block_to_map(*p_impl, samename, start_block, i);
+    }
+}
+
+void PackageQuery::filter_recent(const time_t timestamp) {
+    auto & pool = get_rpm_pool(p_impl->base);
+    const unsigned long long time_long = static_cast<unsigned long long>(timestamp);
+
+    for (const auto candidate_id : *p_impl) {
+        auto solvable = pool.id2solvable(candidate_id);
+        auto buildtime = solvable_lookup_num(solvable, SOLVABLE_BUILDTIME, 0);
+        if (buildtime < time_long) {
+            p_impl->remove_unsafe(candidate_id);
+        }
     }
 }
 
