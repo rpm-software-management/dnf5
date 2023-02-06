@@ -587,8 +587,18 @@ public:
     // TODO(dmach): consider removing the installed packages during the filtering
     void filter_priority();
 
-    /// Filter packages, which are installed but not available in any enabled repository
-    void filter_extras();
+    /// Keep in the query only packages that are installed but not available in any
+    /// enabled repository. Even excluded packages (e.g. using excludepkgs config
+    /// option) are considered as available in repositories for the purpose of extras
+    /// calculation.
+    /// Those installed packages that are only part of non-active modules are also
+    /// considered as extras.
+    /// @param exact_evr If false (default) extras calculation is based only on
+    ///                  `name.arch`. That means package is not in extras if any version
+    ///                  of the package exists in any of the enabled repositories.
+    ///                  If true, filter_extras is more strict and returns each package
+    ///                  which exact NEVRA is not present in any enabled repository.
+    void filter_extras(const bool exact_evr = false);
 
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     // @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
