@@ -86,7 +86,8 @@ target_link_libraries(libdnf ${GLIB2_LIBRARIES})
 
 pkg_check_modules(LIBREPO REQUIRED librepo>=1.15.0)
 list(APPEND LIBDNF5_PC_REQUIRES "${LIBREPO_MODULE_NAME}")
-target_link_libraries(libdnf ${LIBREPO_LIBRARIES})
+target_include_directories(libdnf PRIVATE ${LIBREPO_INCLUDE_DIRS})
+target_link_libraries(libdnf ${LIBREPO_LDFLAGS})
 
 # SQLite3
 pkg_check_modules(SQLite3 REQUIRED sqlite3)
