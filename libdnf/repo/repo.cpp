@@ -113,6 +113,14 @@ void Repo::set_callbacks(std::unique_ptr<RepoCallbacks> && callbacks) {
     downloader->set_callbacks(std::move(callbacks));
 }
 
+void Repo::set_user_data(void * user_data) noexcept {
+    downloader->set_user_data(user_data);
+}
+
+void * Repo::get_user_data() const noexcept {
+    return downloader->get_user_data();
+}
+
 std::string::size_type Repo::verify_id(const std::string & repo_id) {
     return repo_id.find_first_not_of(REPOID_CHARS);
 }

@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "dnf5/context.hpp"
 
+#include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
@@ -55,7 +56,7 @@ namespace dnf5 {
 
 namespace {
 
-// The `KeyImportRepoCB` class implements callback only for importing repository key, no progress information.
+// The `KeyImportRepoCB` class implements callback only for importing repository key.
 class KeyImportRepoCB : public libdnf::repo::RepoCallbacks {
 public:
     explicit KeyImportRepoCB(libdnf::ConfigMain & config) : config(&config) {}
@@ -86,110 +87,6 @@ public:
 private:
     libdnf::ConfigMain * config;
 };
-
-// Full implementation of repository callbacks. Adds progress bars.
-class ProgressAndKeyImportRepoCB : public KeyImportRepoCB {
-public:
-    explicit ProgressAndKeyImportRepoCB(libdnf::ConfigMain & config) : KeyImportRepoCB(config) {}
-
-    void start(const char * what) override {
-        progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, what);
-        progress_bar->set_number_widget_visible(false);
-        msg_lines = 0;
-        prev_total_tick = -1;
-        prev_downloaded = 0;
-        sum_prev_downloaded = 0;
-        progress_bar->set_auto_finish(false);
-        progress_bar->start();
-    }
-
-    void end(const char * error_message) override {
-        libdnf_assert(progress_bar != nullptr, "Called \"end\" callback before \"start\" callback");
-
-        if (error_message) {
-            progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
-            progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, error_message);
-        } else {
-            // Correction of the total data size for the download.
-            // Sometimes Librepo returns a larger data size for download than the actual file size.
-            progress_bar->set_total_ticks(progress_bar->get_ticks());
-
-            progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
-        }
-        print_progress_bar();
-        std::cout << std::endl;
-    }
-
-    int progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) override {
-        libdnf_assert(progress_bar != nullptr, "Called \"progress\" callback before \"start\" callback");
-
-        // "total_to_download" and "downloaded" are related to the currently downloaded file.
-        // We add the size of previously downloaded files.
-        auto total_ticks = static_cast<std::int64_t>(total_to_download);
-        // ignore zero progress events at the beginning of the download, so we don't start with 100% progress
-        if (total_ticks != 0 || prev_total_tick != -1) {
-            if (total_ticks != prev_total_tick) {
-                prev_total_tick = total_ticks;
-                sum_prev_downloaded += prev_downloaded;
-            }
-            prev_downloaded = static_cast<std::int64_t>(downloaded);
-            progress_bar->set_total_ticks(sum_prev_downloaded + total_ticks);
-            progress_bar->set_ticks(sum_prev_downloaded + prev_downloaded);
-        }
-
-        if (is_time_to_print()) {
-            print_progress_bar();
-        }
-        return 0;
-    }
-
-    int handle_mirror_failure(
-        [[maybe_unused]] const char * msg,
-        [[maybe_unused]] const char * url,
-        [[maybe_unused]] const char * metadata) override {
-        libdnf_assert(progress_bar != nullptr, "Called \"handle_mirror_failure\" callback before \"start\" callback");
-
-        progress_bar->add_message(libdnf::cli::progressbar::MessageType::WARNING, msg);
-        print_progress_bar();
-        return 0;
-    }
-
-private:
-    void print_progress_bar() {
-        if (libdnf::cli::tty::is_interactive()) {
-            std::cout << libdnf::cli::tty::clear_line;
-            for (std::size_t i = 0; i < msg_lines; i++) {
-                std::cout << libdnf::cli::tty::cursor_up << libdnf::cli::tty::clear_line;
-            }
-            std::cout << "\r";
-        }
-        std::cout << *progress_bar << std::flush;
-        msg_lines = progress_bar->get_messages().size();
-    }
-
-    static bool is_time_to_print() {
-        auto now = std::chrono::steady_clock::now();
-        auto delta = now - prev_print_time;
-        auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-        if (ms > 100) {
-            // 100ms equals to 10 FPS and that seems to be smooth enough
-            prev_print_time = now;
-            return true;
-        }
-        return false;
-    }
-
-    static std::chrono::time_point<std::chrono::steady_clock> prev_print_time;
-
-    std::unique_ptr<libdnf::cli::progressbar::DownloadProgressBar> progress_bar;
-    std::size_t msg_lines;
-    std::int64_t prev_total_tick;
-    std::int64_t prev_downloaded;
-    std::int64_t sum_prev_downloaded;
-};
-
-std::chrono::time_point<std::chrono::steady_clock> ProgressAndKeyImportRepoCB::prev_print_time =
-    std::chrono::steady_clock::now();
 
 }  // namespace
 
@@ -248,13 +145,14 @@ void Context::load_repos(bool load_system) {
     repos.filter_type(libdnf::repo::Repo::Type::SYSTEM, libdnf::sack::QueryCmp::NEQ);
 
     for (auto & repo : repos) {
-        auto callback = get_quiet() ? std::make_unique<dnf5::KeyImportRepoCB>(base.get_config())
-                                    : std::make_unique<dnf5::ProgressAndKeyImportRepoCB>(base.get_config());
-        repo->set_callbacks(std::move(callback));
+        repo->set_callbacks(std::make_unique<dnf5::KeyImportRepoCB>(base.get_config()));
     }
 
     print_info("Updating and loading repositories:");
     base.get_repo_sack()->update_and_load_enabled_repos(load_system);
+    if (auto download_callbacks = dynamic_cast<DownloadCallbacks *>(base.get_download_callbacks())) {
+        download_callbacks->reset_progress_bar();
+    }
     print_info("Repositories loaded.");
 }
 

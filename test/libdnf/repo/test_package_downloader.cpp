@@ -49,7 +49,8 @@ public:
     int mirror_failure(
         [[maybe_unused]] void * user_cb_data,
         [[maybe_unused]] const char * msg,
-        [[maybe_unused]] const char * url) override {
+        [[maybe_unused]] const char * url,
+        [[maybe_unused]] const char * metadata) override {
         ++mirror_failure_cnt;
         return 0;
     }

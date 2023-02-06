@@ -41,8 +41,16 @@ int DownloadCallbacks::progress(
 }
 
 int DownloadCallbacks::mirror_failure(
-    [[maybe_unused]] void * user_cb_data, [[maybe_unused]] const char * msg, [[maybe_unused]] const char * url) {
+    [[maybe_unused]] void * user_cb_data,
+    [[maybe_unused]] const char * msg,
+    [[maybe_unused]] const char * url,
+    [[maybe_unused]] const char * metadata) {
     return 0;
 }
+
+void DownloadCallbacks::fastest_mirror(
+    [[maybe_unused]] void * user_cb_data,
+    [[maybe_unused]] FastestMirrorStage stage,
+    [[maybe_unused]] const char * ptr) {}
 
 }  // namespace libdnf::repo

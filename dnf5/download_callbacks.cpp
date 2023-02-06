@@ -21,14 +21,28 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace dnf5 {
 
+void DownloadCallbacks::set_number_widget_visible(bool value) {
+    number_widget_visible = value;
+}
+
+void DownloadCallbacks::set_show_total_bar_limit(std::size_t limit) {
+    show_total_bar_limit = limit;
+    if (multi_progress_bar) {
+        multi_progress_bar->set_total_bar_visible_limit(limit);
+    }
+}
+
 void * DownloadCallbacks::add_new_download(
     [[maybe_unused]] void * user_data, const char * description, double total_to_download) {
     if (!multi_progress_bar) {
         multi_progress_bar = std::make_unique<libdnf::cli::progressbar::MultiProgressBar>();
+        multi_progress_bar->set_total_bar_visible_limit(show_total_bar_limit);
     }
     auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(
         total_to_download > 0 ? total_to_download : -1, description);
     auto * ppb = progress_bar.get();
+    ppb->set_number_widget_visible(number_widget_visible);
+    ppb->set_auto_finish(false);
     multi_progress_bar->add_bar(std::move(progress_bar));
     return ppb;
 }
@@ -53,6 +67,10 @@ int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const cha
     auto * progress_bar = reinterpret_cast<libdnf::cli::progressbar::DownloadProgressBar *>(user_cb_data);
     switch (status) {
         case TransferStatus::SUCCESSFUL:
+            // Correction of the total data size for the download.
+            // Sometimes Librepo returns a larger data size for download than the actual file size.
+            progress_bar->set_total_ticks(progress_bar->get_ticks());
+
             progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
             break;
         case TransferStatus::ALREADYEXISTS:
@@ -72,9 +90,12 @@ int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const cha
     return 0;
 }
 
-int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, const char * url) {
+int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) {
     auto * progress_bar = reinterpret_cast<libdnf::cli::progressbar::DownloadProgressBar *>(user_cb_data);
     std::string message = std::string(msg) + " - " + url;
+    if (metadata) {
+        message = message + " - " + metadata;
+    }
     progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, message);
     print();
     return 0;
@@ -84,6 +105,7 @@ void DownloadCallbacks::reset_progress_bar() {
     multi_progress_bar.reset();
     if (printed) {
         std::cout << std::endl;
+        printed = false;
     }
 }
 

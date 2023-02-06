@@ -28,41 +28,34 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
-void * DownloadCallbacks::add_new_download(
-    void * user_data, [[maybe_unused]] const char * description, [[maybe_unused]] double total_to_download) {
+void * DownloadCallbacksProxy::add_new_download(
+    void * user_data, const char * description, [[maybe_unused]] double total_to_download) {
+    if (auto * download_cb = static_cast<DownloadCB *>(user_data)) {
+        download_cb->start(description);
+    }
     return user_data;
 }
 
-int DownloadCallbacks::progress(void * user_cb_data, double total_to_download, double downloaded) {
-    if (auto * dbus_package_ck = static_cast<DbusPackageCB *>(user_cb_data)) {
-        return dbus_package_ck->progress(total_to_download, downloaded, is_time_to_print());
+int DownloadCallbacksProxy::progress(void * user_cb_data, double total_to_download, double downloaded) {
+    if (auto * download_cb = static_cast<DownloadCB *>(user_cb_data)) {
+        download_cb->progress(total_to_download, downloaded);
     }
     return 0;
 }
 
-int DownloadCallbacks::end(void * user_cb_data, TransferStatus status, const char * msg) {
-    if (auto * dbus_package_ck = static_cast<DbusPackageCB *>(user_cb_data)) {
-        return dbus_package_ck->end(status, msg);
+int DownloadCallbacksProxy::end(void * user_cb_data, TransferStatus status, const char * msg) {
+    if (auto * download_cb = static_cast<DownloadCB *>(user_cb_data)) {
+        download_cb->end(status, msg);
     }
     return 0;
 }
 
-int DownloadCallbacks::mirror_failure(void * user_cb_data, const char * msg, const char * url) {
-    if (auto * dbus_package_ck = static_cast<DbusPackageCB *>(user_cb_data)) {
-        return dbus_package_ck->mirror_failure(msg, url);
+int DownloadCallbacksProxy::mirror_failure(
+    void * user_cb_data, const char * msg, const char * url, [[maybe_unused]] const char * metadata) {
+    if (auto * download_cb = static_cast<DownloadCB *>(user_cb_data)) {
+        download_cb->mirror_failure(msg, url);
     }
     return 0;
-}
-
-bool DownloadCallbacks::is_time_to_print() {
-    auto now = std::chrono::steady_clock::now();
-    auto delta = now - prev_print_time;
-    auto ms = std::chrono::duration_cast<std::chrono::milliseconds>(delta).count();
-    if (ms > 400) {
-        prev_print_time = now;
-        return true;
-    }
-    return false;
 }
 
 
@@ -92,7 +85,7 @@ DbusPackageCB::DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg
     }
 }
 
-int DbusPackageCB::end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) {
+void DbusPackageCB::end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) {
     try {
         // Due to is_time_to_print() timeout it is possible that progress signal was not
         // emitted with correct downloaded / total_to_download value - especially for small packages.
@@ -109,13 +102,12 @@ int DbusPackageCB::end(libdnf::repo::DownloadCallbacks::TransferStatus status, c
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
-    return 0;
 }
 
-int DbusPackageCB::progress(double total_to_download, double downloaded, bool is_time_to_print) {
+void DbusPackageCB::progress(double total_to_download, double downloaded) {
     total = total_to_download;
     try {
-        if (is_time_to_print) {
+        if (is_time_to_print()) {
             auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
             signal << downloaded;
             signal << total_to_download;
@@ -123,10 +115,9 @@ int DbusPackageCB::progress(double total_to_download, double downloaded, bool is
         }
     } catch (...) {
     }
-    return 0;
 }
 
-int DbusPackageCB::mirror_failure(const char * msg, const char * url) {
+void DbusPackageCB::mirror_failure(const char * msg, const char * url) {
     try {
         auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE);
         signal << msg;
@@ -134,7 +125,6 @@ int DbusPackageCB::mirror_failure(const char * msg, const char * url) {
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
-    return 0;
 }
 
 sdbus::Signal DbusPackageCB::create_signal(std::string interface, std::string signal_name) {
@@ -153,7 +143,8 @@ void DbusRepoCB::start(const char * what) {
     }
 }
 
-void DbusRepoCB::end([[maybe_unused]] const char * error_message) {
+void DbusRepoCB::end(
+    [[maybe_unused]] libdnf::repo::DownloadCallbacks::TransferStatus status, [[maybe_unused]] const char * msg) {
     // TODO(lukash) forward the error message to the client?
     try {
         {
@@ -170,7 +161,7 @@ void DbusRepoCB::end([[maybe_unused]] const char * error_message) {
     }
 }
 
-int DbusRepoCB::progress(double total_to_download, double downloaded) {
+void DbusRepoCB::progress(double total_to_download, double downloaded) {
     total = static_cast<uint64_t>(total_to_download);
     try {
         if (is_time_to_print()) {
@@ -181,7 +172,6 @@ int DbusRepoCB::progress(double total_to_download, double downloaded) {
         }
     } catch (...) {
     }
-    return 0;
 }
 
 bool DbusRepoCB::repokey_import(
