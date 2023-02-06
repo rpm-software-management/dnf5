@@ -97,7 +97,7 @@ Session::Session(
     }
     dbus_object->finishRegistration();
 
-    base->set_download_callbacks(std::make_unique<DownloadCallbacks>());
+    base->set_download_callbacks(std::make_unique<DownloadCallbacksProxy>());
 }
 
 Session::~Session() {
@@ -168,6 +168,7 @@ bool Session::read_all_repos() {
         enabled_repos.filter_enabled(true);
         enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
         for (auto & repo : enabled_repos) {
+            repo->set_user_data(this);
             repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
         }
 

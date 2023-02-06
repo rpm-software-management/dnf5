@@ -83,7 +83,7 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 
     auto * package_target = static_cast<PackageTarget *>(data);
     if (auto * download_callbacks = package_target->package.get_base()->get_download_callbacks()) {
-        return download_callbacks->mirror_failure(package_target->user_cb_data, msg, url);
+        return download_callbacks->mirror_failure(package_target->user_cb_data, msg, url, nullptr);
     }
     return 0;
 }

@@ -69,6 +69,8 @@ public:
     LibrepoHandle & get_cached_handle();
 
     void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks) noexcept;
+    void set_user_data(void * user_data) noexcept;
+    void * get_user_data() const noexcept;
 
     const std::string & get_metadata_path(const std::string & metadata_type) const;
 
@@ -100,6 +102,15 @@ private:
     RepoPgp pgp;
 
     std::unique_ptr<RepoCallbacks> callbacks;
+    void * user_data{nullptr};
+    void * user_cb_data{nullptr};
+    double prev_total_to_download;
+    double prev_downloaded;
+    double sum_prev_downloaded;
+
+    static int progress_cb(void * data, double total_to_download, double downloaded);
+    static void fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr);
+    static int mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata);
 
     // download input
     bool preserve_remote_time = false;

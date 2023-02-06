@@ -33,7 +33,10 @@ for (const auto & tspkg : transaction.get_transaction_packages()) {
 class PackageDownloadCallbacks : public libdnf::repo::DownloadCallbacks {
 private:
     int mirror_failure(
-        [[maybe_unused]] void * user_cb_data, const char * msg, [[maybe_unused]] const char * url) override {
+        [[maybe_unused]] void * user_cb_data,
+        const char * msg,
+        [[maybe_unused]] const char * url,
+        [[maybe_unused]] const char * metadata) override {
         std::cout << "Mirror failure: " << msg << std::endl;
         return 0;
     }

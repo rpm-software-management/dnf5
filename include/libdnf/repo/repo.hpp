@@ -100,6 +100,14 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setCallbacks(std::unique_ptr<RepoCallbacks> && callbacks)
     void set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> && callbacks);
 
+    /// @brief Sets the associated user data. These are used in callbacks.
+    /// @param user_data  Pointer to user data
+    void set_user_data(void * user_data) noexcept;
+
+    /// @brief Gets the associated user data.
+    /// @return Pointer to user data
+    void * get_user_data() const noexcept;
+
     /// Verify repo object configuration
     /// Will throw exception if Repo has no mirror or baseurl set or if Repo type is unsupported.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.verify()

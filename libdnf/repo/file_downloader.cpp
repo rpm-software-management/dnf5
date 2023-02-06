@@ -95,7 +95,7 @@ static int mirror_failure_callback(void * data, const char * msg, const char * u
 
     auto * file_target = static_cast<FileTarget *>(data);
     if (auto * download_callbacks = file_target->base->get_download_callbacks()) {
-        return download_callbacks->mirror_failure(file_target->user_cb_data, msg, url);
+        return download_callbacks->mirror_failure(file_target->user_cb_data, msg, url, nullptr);
     }
     return 0;
 }

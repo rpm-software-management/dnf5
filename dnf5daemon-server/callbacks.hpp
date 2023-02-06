@@ -31,20 +31,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class Session;
 
-class DownloadCallbacks : public libdnf::repo::DownloadCallbacks {
+/// Proxy class. It will be registered in libdnf::Base.
+/// Redirects download callbacks to the appropriate DownloadCB instance (package or repository callbacks).
+class DownloadCallbacksProxy : public libdnf::repo::DownloadCallbacks {
 public:
     void * add_new_download(void * user_data, const char * description, double total_to_download) override;
-
     int progress(void * user_cb_data, double total_to_download, double downloaded) override;
-
     int end(void * user_cb_data, TransferStatus status, const char * msg) override;
-
-    int mirror_failure(void * user_cb_data, const char * msg, const char * url) override;
-
-private:
-    bool is_time_to_print();
-
-    std::chrono::time_point<std::chrono::steady_clock> prev_print_time{std::chrono::steady_clock::now()};
+    int mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) override;
 };
 
 class DbusCallback {
@@ -70,14 +64,23 @@ protected:
     }
 };
 
-class DbusPackageCB : public DbusCallback {
+class DownloadCB {
+public:
+    virtual void start([[maybe_unused]] const char * what) {}
+    virtual void end(
+        [[maybe_unused]] libdnf::repo::DownloadCallbacks::TransferStatus status, [[maybe_unused]] const char * msg) {}
+    virtual void progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) {}
+    virtual void mirror_failure([[maybe_unused]] const char * msg, [[maybe_unused]] const char * url) {}
+};
+
+class DbusPackageCB : public DbusCallback, public DownloadCB {
 public:
     explicit DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg);
     virtual ~DbusPackageCB() = default;
 
-    int end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg);
-    int progress(double total_to_download, double downloaded, bool is_time_to_print);
-    int mirror_failure(const char * msg, const char * url);
+    void end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) override;
+    void progress(double total_to_download, double downloaded) override;
+    void mirror_failure(const char * msg, const char * url) override;
 
 private:
     int pkg_id;
@@ -86,14 +89,14 @@ private:
     sdbus::Signal create_signal(std::string interface, std::string signal_name) override;
 };
 
-class DbusRepoCB : public libdnf::repo::RepoCallbacks, public DbusCallback {
+class DbusRepoCB : public libdnf::repo::RepoCallbacks, public DbusCallback, public DownloadCB {
 public:
     explicit DbusRepoCB(Session & session) : DbusCallback(session) {}
     virtual ~DbusRepoCB() = default;
 
     void start(const char * what) override;
-    void end(const char * error_message) override;
-    int progress(double total_to_download, double downloaded) override;
+    void end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) override;
+    void progress(double total_to_download, double downloaded) override;
 
     bool repokey_import(
         const std::string & id,

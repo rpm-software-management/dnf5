@@ -67,47 +67,70 @@ static LrYumRepoMd * get_yum_repomd(LibrepoResult & result) {
 }
 
 
-static int progress_cb(void * data, double total_to_download, double downloaded) {
+int RepoDownloader::progress_cb(void * data, double total_to_download, double downloaded) {
     if (!data) {
         return 0;
     }
-    auto cb_object = static_cast<libdnf::repo::RepoCallbacks *>(data);
-    return cb_object->progress(total_to_download, downloaded);
+    auto repo_downloader = static_cast<RepoDownloader *>(data);
+    if (auto * download_callbacks = repo_downloader->base->get_download_callbacks()) {
+        // "total_to_download" and "downloaded" from librepo are related to the currently downloaded file.
+        // We add the size of previously downloaded files.
+        // ignore zero progress events at the beginning of the download, so we don't start with 100% progress
+        if (total_to_download != 0 || repo_downloader->prev_total_to_download != 0) {
+            if (total_to_download != repo_downloader->prev_total_to_download) {
+                repo_downloader->prev_total_to_download = total_to_download;
+                repo_downloader->sum_prev_downloaded += repo_downloader->prev_downloaded;
+            }
+            repo_downloader->prev_downloaded = downloaded;
+        }
+        total_to_download += repo_downloader->sum_prev_downloaded;
+        downloaded += repo_downloader->sum_prev_downloaded;
+
+        return download_callbacks->progress(repo_downloader->user_cb_data, total_to_download, downloaded);
+    }
+    return 0;
 }
 
-static void fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr) {
+void RepoDownloader::fastest_mirror_cb(void * data, LrFastestMirrorStages stage, void * ptr) {
     if (!data) {
         return;
     }
-    auto cb_object = static_cast<libdnf::repo::RepoCallbacks *>(data);
-    const char * msg;
-    std::string msg_string;
-    if (ptr) {
-        switch (stage) {
-            case LR_FMSTAGE_CACHELOADING:
-            case LR_FMSTAGE_CACHELOADINGSTATUS:
-            case LR_FMSTAGE_STATUS:
-                msg = static_cast<const char *>(ptr);
-                break;
-            case LR_FMSTAGE_DETECTION:
-                msg_string = std::to_string(*(static_cast<long *>(ptr)));
-                msg = msg_string.c_str();
-                break;
-            default:
-                msg = nullptr;
+    auto repo_downloader = static_cast<RepoDownloader *>(data);
+    if (auto * download_callbacks = repo_downloader->base->get_download_callbacks()) {
+        const char * msg;
+        std::string msg_string;
+        if (ptr) {
+            switch (stage) {
+                case LR_FMSTAGE_CACHELOADING:
+                case LR_FMSTAGE_CACHELOADINGSTATUS:
+                case LR_FMSTAGE_STATUS:
+                    msg = static_cast<const char *>(ptr);
+                    break;
+                case LR_FMSTAGE_DETECTION:
+                    msg_string = std::to_string(*(static_cast<long *>(ptr)));
+                    msg = msg_string.c_str();
+                    break;
+                default:
+                    msg = nullptr;
+            }
+        } else {
+            msg = nullptr;
         }
-    } else {
-        msg = nullptr;
+        download_callbacks->fastest_mirror(
+            repo_downloader->user_cb_data, static_cast<DownloadCallbacks::FastestMirrorStage>(stage), msg);
     }
-    cb_object->fastest_mirror(static_cast<libdnf::repo::RepoCallbacks::FastestMirrorStage>(stage), msg);
 }
 
-static int mirror_failure_cb(void * data, const char * msg, const char * url, const char * metadata) {
+int RepoDownloader::mirror_failure_cb(
+    void * data, const char * msg, const char * url, [[maybe_unused]] const char * metadata) {
     if (!data) {
         return 0;
     }
-    auto cb_object = static_cast<libdnf::repo::RepoCallbacks *>(data);
-    return cb_object->handle_mirror_failure(msg, url, metadata);
+    auto repo_downloader = static_cast<RepoDownloader *>(data);
+    if (auto * download_callbacks = repo_downloader->base->get_download_callbacks()) {
+        return download_callbacks->mirror_failure(repo_downloader->user_cb_data, msg, url, metadata);
+    }
+    return 0;
 };
 
 
@@ -332,6 +355,14 @@ void RepoDownloader::set_callbacks(std::unique_ptr<libdnf::repo::RepoCallbacks> 
 }
 
 
+void RepoDownloader::set_user_data(void * user_data) noexcept {
+    this->user_data = user_data;
+}
+
+void * RepoDownloader::get_user_data() const noexcept {
+    return user_data;
+}
+
 const std::string & RepoDownloader::get_metadata_path(const std::string & metadata_type) const {
     auto it = metadata_paths.end();
 
@@ -415,11 +446,13 @@ LibrepoHandle RepoDownloader::init_remote_handle(const char * destdir, bool mirr
     }
 
     if (set_callbacks) {
-        h.set_opt(LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
-        h.set_opt(LRO_PROGRESSDATA, callbacks.get());
-        h.set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
-        h.set_opt(LRO_FASTESTMIRRORDATA, callbacks.get());
-        h.set_opt(LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
+        if (base->get_download_callbacks()) {
+            h.set_opt(LRO_PROGRESSCB, static_cast<LrProgressCb>(progress_cb));
+            h.set_opt(LRO_PROGRESSDATA, this);
+            h.set_opt(LRO_FASTESTMIRRORCB, static_cast<LrFastestMirrorCb>(fastest_mirror_cb));
+            h.set_opt(LRO_FASTESTMIRRORDATA, this);
+            h.set_opt(LRO_HMFCB, static_cast<LrHandleMirrorFailureCb>(mirror_failure_cb));
+        }
     }
 
     return h;
@@ -519,36 +552,38 @@ LibrepoResult RepoDownloader::perform(
     LrProgressCb progress_func;
     handle.get_info(LRI_PROGRESSCB, &progress_func);
 
+    auto * download_callbacks = base->get_download_callbacks();
+
     add_countme_flag(handle);
 
     bool bad_gpg = false;
     do {
-        if (callbacks && progress_func) {
-            callbacks->start(
+        if (progress_func && download_callbacks) {
+            user_cb_data = download_callbacks->add_new_download(
+                user_data,
                 !config.get_name_option().get_value().empty()
                     ? config.get_name_option().get_value().c_str()
-                    : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"));
+                    : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"),
+                -1);
+            prev_total_to_download = 0;
+            prev_downloaded = 0;
+            sum_prev_downloaded = 0;
         }
 
         try {
             auto result = handle.perform();
             // finished successfully
-            if (callbacks && progress_func) {
-                callbacks->end(nullptr);
+            if (progress_func && download_callbacks) {
+                download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
             }
             return result;
         } catch (const LibrepoError & ex) {
+            if (progress_func && download_callbacks) {
+                download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, ex.what());
+            }
             if (bad_gpg || ex.get_code() != LRE_BADGPG) {
-                if (callbacks && progress_func) {
-                    callbacks->end(ex.what());
-                }
                 throw;
             }
-        }
-
-        // TODO(lukash) we probably shouldn't call end() in this case
-        if (callbacks && progress_func) {
-            callbacks->end(nullptr);
         }
 
         bad_gpg = true;
@@ -560,25 +595,27 @@ LibrepoResult RepoDownloader::perform(
 
 
 void RepoDownloader::download_url(const char * url, int fd) {
-    if (callbacks) {
-        callbacks->start(
-            !config.get_name_option().get_value().empty()
-                ? config.get_name_option().get_value().c_str()
-                : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"));
+    auto * download_callbacks = base->get_download_callbacks();
+
+    if (download_callbacks) {
+        user_cb_data = download_callbacks->add_new_download(user_data, url, -1);
+        prev_total_to_download = 0;
+        prev_downloaded = 0;
+        sum_prev_downloaded = 0;
     }
 
     GError * err_p{nullptr};
     bool res = lr_download_url(get_cached_handle().get(), url, fd, &err_p);
 
     if (res) {
-        if (callbacks) {
-            callbacks->end(nullptr);
+        if (download_callbacks) {
+            download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
         }
     } else {
         std::unique_ptr<GError> err(err_p);
 
-        if (callbacks) {
-            callbacks->end(err->message);
+        if (download_callbacks) {
+            download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, err->message);
         }
 
         // TODO(lukash) does the error from librepo contain the URL or do we need to add it here somehow?

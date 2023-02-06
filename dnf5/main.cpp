@@ -606,7 +606,10 @@ int main(int argc, char * argv[]) try {
 
     auto download_callbacks_uptr = std::make_unique<dnf5::DownloadCallbacks>();
     auto * download_callbacks = download_callbacks_uptr.get();
-    base.set_download_callbacks(std::move(download_callbacks_uptr));
+    download_callbacks->set_show_total_bar_limit(static_cast<std::size_t>(-1));
+    if (!context.get_quiet()) {
+        base.set_download_callbacks(std::move(download_callbacks_uptr));
+    }
 
     // Parse command line arguments
     {
@@ -691,6 +694,8 @@ int main(int argc, char * argv[]) try {
             command->goal_resolved();
 
             download_callbacks->reset_progress_bar();
+            download_callbacks->set_number_widget_visible(true);
+            download_callbacks->set_show_total_bar_limit(0);
 
             if (!libdnf::cli::output::print_transaction_table(*context.get_transaction())) {
                 return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
