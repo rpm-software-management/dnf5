@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::solv {
 
 static const std::regex RELDEP_REGEX("^(\\S*)\\s*(\\S*)?\\s*(\\S*)$");
+#define MAX_RELDEP_LENGTH 2 << 10
 
 static bool set_cmp_type(libdnf::rpm::Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length) {
     if (length == 2) {
@@ -63,6 +64,10 @@ static bool set_cmp_type(libdnf::rpm::Reldep::CmpType * cmp_type, std::string cm
 bool ReldepParser::parse(const std::string & reldep) {
     enum { NAME = 1, CMP_TYPE = 2, EVR = 3 };
     std::smatch match;
+    if (reldep.length() > MAX_RELDEP_LENGTH) {
+        // GCC std::regex_match() exhausts a stack on very long strings.
+        return false;
+    }
     if (!std::regex_match(reldep, match, RELDEP_REGEX)) {
         return false;
     } else {
