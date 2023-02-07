@@ -87,16 +87,19 @@ public:
 };
 
 void RepoTest::test_load_repo() {
-    auto repo = add_repo_repomd("repomd-repo1", false);
+    std::string repoid("repomd-repo1");
+    auto repo = add_repo_repomd(repoid, false);
 
     auto callbacks = std::make_unique<RepoCallbacks>();
     auto cbs = callbacks.get();
     repo->set_callbacks(std::move(callbacks));
 
-    repo->fetch_metadata();
+    libdnf::repo::RepoQuery repos(base);
+    repos.filter_id(repoid);
+    repo_sack->update_and_load_repos(repos);
 
     CPPUNIT_ASSERT_EQUAL(1, cbs->start_cnt);
-    CPPUNIT_ASSERT_EQUAL(std::string("repomd-repo1"), cbs->start_what);
+    CPPUNIT_ASSERT_EQUAL(repoid, cbs->start_what);
 
     CPPUNIT_ASSERT_EQUAL(1, cbs->end_cnt);
     CPPUNIT_ASSERT_EQUAL(std::string(""), cbs->end_error_message);
@@ -105,11 +108,14 @@ void RepoTest::test_load_repo() {
     CPPUNIT_ASSERT_EQUAL(0, cbs->fastest_mirror_cnt);
     CPPUNIT_ASSERT_EQUAL(0, cbs->handle_mirror_failure_cnt);
     CPPUNIT_ASSERT_EQUAL(0, cbs->repokey_import_cnt);
-
-    repo->load();
 }
 
 void RepoTest::test_load_repo_nonexistent() {
-    auto repo = add_repo("nonexistent", "/path/thats/not/here", false);
-    CPPUNIT_ASSERT_THROW(repo->fetch_metadata(), libdnf::repo::RepoDownloadError);
+    std::string repoid("nonexistent");
+    auto repo = add_repo(repoid, "/path/thats/not/here", false);
+    repo->get_config().skip_if_unavailable().set(false);
+
+    libdnf::repo::RepoQuery repos(base);
+    repos.filter_id(repoid);
+    CPPUNIT_ASSERT_THROW(repo_sack->update_and_load_repos(repos), libdnf::repo::RepoDownloadError);
 }

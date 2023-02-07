@@ -50,12 +50,12 @@ class BaseTestCase < Test::Unit::TestCase
     # Add a repo from `repo_path`.
     def _add_repo(repoid, repo_path, load=true)
         repo = @repo_sack.create_repo(repoid)
-
         repo.get_config().baseurl().set("file://" + repo_path)
 
         if load
-          repo.fetch_metadata()
-          repo.load()
+          repos = Repo::RepoQuery.new(@base)
+          repos.filter_id(repoid)
+          @repo_sack.update_and_load_repos(repos)
         end
 
         return repo

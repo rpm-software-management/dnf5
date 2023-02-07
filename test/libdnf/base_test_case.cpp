@@ -42,12 +42,12 @@ using fmt::format;
 
 libdnf::repo::RepoWeakPtr BaseTestCase::add_repo(const std::string & repoid, const std::string & repo_path, bool load) {
     auto repo = repo_sack->create_repo(repoid);
-
     repo->get_config().baseurl().set("file://" + repo_path);
 
     if (load) {
-        repo->fetch_metadata();
-        repo->load();
+        libdnf::repo::RepoQuery repos(base);
+        repos.filter_id(repoid);
+        repo_sack->update_and_load_repos(repos);
     }
 
     return repo;

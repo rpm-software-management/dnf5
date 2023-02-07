@@ -40,7 +40,8 @@ $base->setup();
 my $repo_sack = $base->get_repo_sack();
 
 # Creates new repositories in the repo_sack
-my $repo = $repo_sack->create_repo("repomd-repo1");
+my $repoid = "repomd-repo1";
+my $repo = $repo_sack->create_repo($repoid);
 
 # Tunes repository configuration (baseurl is mandatory)
 my $project_source_dir = $ENV{"PROJECT_SOURCE_DIR"};
@@ -50,8 +51,9 @@ my $repo_cfg = $repo->get_config();
 $repo_cfg->baseurl()->set($libdnf5::conf::Option::Priority_RUNTIME, $baseurl);
 
 # fetch repo metadata and load it
-$repo->fetch_metadata();
-$repo->load();
+my $repos = new libdnf5::repo::RepoQuery($base);
+$repos->filter_id($repoid);
+$repo_sack->update_and_load_repos($repos);
 
 #test_size()
 {
