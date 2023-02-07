@@ -11,17 +11,17 @@ Enable COPR repo with the DNF 5 nightly builds::
 
 C++::
 
-    $ dnf install libdnf5-devel libdnf-cli-devel
+    $ dnf install libdnf5-devel libdnf5-cli-devel
 
 
 Python 3::
 
-    $ dnf install python3-libdnf5 python3-libdnf-cli-devel
+    $ dnf install python3-libdnf5 python3-libdnf5-cli
 
 
 Perl 5::
 
-    $ dnf install perl5-libdnf5 perl5-libdnf5-cli
+    $ dnf install perl-libdnf5 perl-libdnf5-cli
 
 
 Ruby::
