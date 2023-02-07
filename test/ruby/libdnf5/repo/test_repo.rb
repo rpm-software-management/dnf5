@@ -80,15 +80,18 @@ class TestRepo < BaseTestCase
     end
 
     def test_load_repo()
-        repo = add_repo_repomd("repomd-repo1", load=false)
+        repoid = "repomd-repo1"
+        repo = add_repo_repomd(repoid, load=false)
 
         cbs = RepoCallbacks.new()
         repo.set_callbacks(Repo::RepoCallbacksUniquePtr.new(cbs))
 
-        repo.fetch_metadata()
+        repos = Repo::RepoQuery.new(@base)
+        repos.filter_id(repoid)
+        @repo_sack.update_and_load_repos(repos)
 
         assert_equal(1, cbs.start_cnt)
-        assert_equal("repomd-repo1", cbs.start_what)
+        assert_equal(repoid, cbs.start_what)
 
         assert_equal(1, cbs.end_cnt)
         assert_equal(nil, cbs.end_error_message)
@@ -97,7 +100,5 @@ class TestRepo < BaseTestCase
         assert_equal(0, cbs.fastest_mirror_cnt)
         assert_equal(0, cbs.handle_mirror_failure_cnt)
         assert_equal(0, cbs.repokey_import_cnt)
-
-        repo.load()
     end
 end
