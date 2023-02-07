@@ -29,7 +29,8 @@ class TestRepo(base_test_case.BaseTestCase):
 
 
     def test_load_repo(self):
-        repo = self.add_repo_repomd("repomd-repo1", load=False)
+        repoid = "repomd-repo1"
+        repo = self.add_repo_repomd(repoid, load=False)
 
         class RepoCallbacks(libdnf5.repo.RepoCallbacks):
             start_cnt = 0
@@ -71,10 +72,12 @@ class TestRepo(base_test_case.BaseTestCase):
         # can be passed directly to repo.set_callbacks
         repo.set_callbacks(libdnf5.repo.RepoCallbacksUniquePtr(cbs))
 
-        repo.fetch_metadata()
+        repos = libdnf5.repo.RepoQuery(self.base)
+        repos.filter_id(repoid)
+        self.repo_sack.update_and_load_repos(repos)
 
         self.assertEqual(cbs.start_cnt, 1)
-        self.assertEqual(cbs.start_what, "repomd-repo1")
+        self.assertEqual(cbs.start_what, repoid)
 
         self.assertEqual(cbs.end_cnt, 1)
         self.assertEqual(cbs.end_error_message, None)
@@ -83,5 +86,3 @@ class TestRepo(base_test_case.BaseTestCase):
         self.assertEqual(cbs.fastest_mirror_cnt, 0)
         self.assertEqual(cbs.handle_mirror_failure_cnt, 0)
         self.assertEqual(cbs.repokey_import_cnt, 0)
-
-        repo.load()

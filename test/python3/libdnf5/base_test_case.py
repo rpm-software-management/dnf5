@@ -31,6 +31,9 @@ PROJECT_SOURCE_DIR = os.environ["PROJECT_SOURCE_DIR"]
 class BaseTestCase(unittest.TestCase):
     def setUp(self):
         self.base = libdnf5.base.Base()
+
+        self.base.get_config().disable_multithreading().set(True)
+
         self.temp_dir = tempfile.mkdtemp(prefix="libdnf5_python3_unittest.")
 
         self.base.get_config().installroot().set(os.path.join(self.temp_dir, "installroot"))
@@ -50,12 +53,12 @@ class BaseTestCase(unittest.TestCase):
         Add a repo from `repo_path`.
         """
         repo = self.repo_sack.create_repo(repoid)
-
         repo.get_config().baseurl().set("file://" + repo_path)
 
         if load:
-            repo.fetch_metadata()
-            repo.load()
+            repos = libdnf5.repo.RepoQuery(self.base)
+            repos.filter_id(repoid)
+            self.repo_sack.update_and_load_repos(repos)
 
         return repo
 
