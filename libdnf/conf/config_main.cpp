@@ -269,7 +269,7 @@ class ConfigMain::Impl {
     OptionString comment{nullptr};
     OptionBool downloadonly{false};  // runtime only option
     OptionBool ignorearch{false};
-    OptionString module_platform_id{nullptr};
+    OptionString module_platform_id{nullptr, ".+:.+", false};
     OptionBool module_stream_switch{false};
     OptionBool module_obsoletes{false};
 
