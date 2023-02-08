@@ -131,11 +131,6 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.isLocal()
     bool is_local() const;
 
-    /// Downloads repository metadata from the origin or reads the local metadata cache if still valid.
-    /// @return true if fresh metadata were downloaded, false otherwise.
-    /// @replaces libdnf:repo/Repo.hpp:method:Repo.load()
-    bool fetch_metadata();
-
     /// Reads metadata from local cache.
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.loadCache(bool throwExcept)
     void read_metadata_cache();
@@ -347,6 +342,11 @@ private:
     friend class FileDownloader;
     friend class PackageDownloader;
     friend class solv::Pool;
+
+    /// Downloads repository metadata from the origin or reads the local metadata cache if still valid.
+    /// @return true if fresh metadata were downloaded, false otherwise.
+    /// @replaces libdnf:repo/Repo.hpp:method:Repo.load()
+    bool fetch_metadata();
 
     void make_solv_repo();
 
