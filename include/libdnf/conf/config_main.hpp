@@ -94,6 +94,8 @@ public:
     const OptionStringList & get_group_package_types_option() const;
     OptionStringSet & get_optional_metadata_types_option();
     const OptionStringSet & get_optional_metadata_types_option() const;
+    OptionBool & get_use_host_environment_option();
+    const OptionBool & get_use_host_environment_option() const;
 
     //  NOTE: If you set this to 2, then because it keeps the current
     // kernel it means if you ever install an "old" kernel it'll get rid

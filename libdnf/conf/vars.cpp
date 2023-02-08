@@ -236,8 +236,9 @@ void Vars::set(const std::string & name, const std::string & value, Priority pri
 void Vars::load(const std::string & installroot, const std::vector<std::string> & directories) {
     load_from_env();
 
+    const std::filesystem::path installroot_path{installroot};
     for (const auto & dir : directories) {
-        load_from_dir(std::filesystem::path(installroot) / dir);
+        load_from_dir(installroot_path / std::filesystem::path(dir).relative_path());
     }
 
     detect_vars(installroot);
