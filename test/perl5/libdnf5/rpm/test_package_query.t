@@ -37,7 +37,7 @@ $base->get_config()->cachedir()->set($libdnf5::conf::Option::Priority_RUNTIME, $
 # Sets base internals according to configuration
 $base->setup();
 
-my $repo_sack = new libdnf5::repo::RepoSack($base);
+my $repo_sack = $base->get_repo_sack();
 
 # Creates new repositories in the repo_sack
 my $repo = $repo_sack->create_repo("repomd-repo1");
