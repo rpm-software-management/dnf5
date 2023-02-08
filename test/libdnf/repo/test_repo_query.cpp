@@ -27,8 +27,6 @@ CPPUNIT_TEST_SUITE_REGISTRATION(RepoQueryTest);
 
 void RepoQueryTest::test_query_basics() {
     auto repo_sack = base.get_repo_sack();
-    //libdnf::repo::RepoSack repo_sack(base);
-    //auto repo_sack_weak_ptr = repo_sack.get_weak_ptr();
 
     // Creates new repositories in the repo_sack
     auto repo1 = repo_sack->create_repo("repo1");
