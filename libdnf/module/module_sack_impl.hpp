@@ -118,7 +118,9 @@ private:
     std::unique_ptr<libdnf::solv::SolvMap> excludes;
     std::map<Id, ModuleItem *> active_modules;
 
-    // Autodetection of platform id. Returns a pair with detected name and stream.
+    /// @brief Method for autodetection of the platform id.
+    /// @return If platform id was detected, it returns a pair where the first item is the platform
+    ///         module name and second is the platform stream. Otherwise std::nullopt is returned.
     std::optional<std::pair<std::string, std::string>> detect_platform_name_and_stream() const;
 };
 

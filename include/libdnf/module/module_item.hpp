@@ -228,6 +228,10 @@ private:
     void create_dependencies() const;
     void create_solvable_and_dependencies();
 
+    /// @brief Create platform solvable. Intended to be used for autodetecting modular platform ID.
+    /// @param module_sack Reference to a modular sack where the target pool with solvables is located.
+    /// @param name Platform name.
+    /// @param stream Platform stream.
     static void create_platform_solvable(
         const ModuleSackWeakPtr & module_sack, const std::string & name, const std::string & stream);
 
