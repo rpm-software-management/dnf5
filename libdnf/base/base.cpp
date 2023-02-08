@@ -89,17 +89,25 @@ void Base::load_config_from_file(const std::string & path) {
     config.load_from_parser(parser, "main", vars, *get_logger());
 }
 
-void Base::load_config_from_file() try {
-    load_config_from_file(config.get_config_file_path_option().get_value());
-} catch (const MissingConfigError & e) {
-    // Ignore the missing config file unless the user specified it via --config=...
-    if (config.get_config_file_path_option().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
-        throw;
+void Base::load_config_from_file() {
+    std::filesystem::path conf_path{config.get_config_file_path_option().get_value()};
+    const auto & conf_path_priority = config.get_config_file_path_option().get_priority();
+    if (!config.get_use_host_environment_option().get_value() &&
+        conf_path_priority < Option::Priority::COMMANDLINE) {
+        conf_path = config.get_installroot_option().get_value() / conf_path.relative_path();
     }
-} catch (const InaccessibleConfigError & e) {
-    // Ignore the inaccessible config file unless the user specified it via --config=...
-    if (config.get_config_file_path_option().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
-        throw;
+    try {
+        load_config_from_file(conf_path);
+    } catch (const MissingConfigError & e) {
+        // Ignore the missing config file unless the user specified it via --config=...
+        if (conf_path_priority >= libdnf::Option::Priority::COMMANDLINE) {
+            throw;
+        }
+    } catch (const InaccessibleConfigError & e) {
+        // Ignore the inaccessible config file unless the user specified it via --config=...
+        if (conf_path_priority >= libdnf::Option::Priority::COMMANDLINE) {
+            throw;
+        }
     }
 }
 
@@ -123,7 +131,12 @@ void Base::load_config_from_dir(const std::string & dir_path) {
 }
 
 void Base::load_config_from_dir() {
-    load_config_from_dir(libdnf::CONF_DIRECTORY);
+    std::filesystem::path conf_dir{libdnf::CONF_DIRECTORY};
+    if (!config.use_host_environment().get_value()) {
+        conf_dir = config.installroot().get_value() / conf_dir.relative_path();
+    }
+
+    load_config_from_dir(conf_dir);
 }
 
 void Base::add_plugin(plugin::IPlugin & iplugin_instance) {
@@ -143,6 +156,26 @@ void Base::setup() {
     auto & pool = p_impl->pool;
     libdnf_user_assert(!pool, "Base was already initialized");
 
+    // Resolve installroot configuration
+    std::string vars_installroot{"/"};
+    if (!config.use_host_environment().get_value()) {
+        // Prepend installroot to each reposdir and varsdir
+        const std::filesystem::path installroot{config.installroot().get_value()};
+
+        std::vector<std::string> installroot_reposdirs;
+        for (const auto & reposdir : config.reposdir().get_value()) {
+            std::filesystem::path reposdir_path{reposdir};
+            installroot_reposdirs.push_back((installroot / reposdir_path.relative_path()).string());
+        }
+        config.reposdir().set(Option::Priority::INSTALLROOT, installroot_reposdirs);
+
+        // Unless varsdir paths are specified on the command line, load vars
+        // from the installroot
+        if (config.varsdir().get_priority() < Option::Priority::COMMANDLINE) {
+            vars_installroot = config.installroot().get_value();
+        }
+    }
+
     load_plugins();
     p_impl->plugins.init();
 
@@ -154,7 +187,7 @@ void Base::setup() {
     auto & installroot = config.get_installroot_option();
     installroot.lock("Locked by Base::setup()");
 
-    get_vars()->load(installroot.get_value(), config.get_varsdir_option().get_value());
+    get_vars()->load(vars_installroot, config.get_varsdir_option().get_value());
 
     // TODO(mblaha) - move system state load closer to the system repo loading
     std::filesystem::path system_state_dir{config.get_system_state_dir_option().get_value()};

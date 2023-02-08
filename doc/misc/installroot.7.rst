@@ -30,21 +30,21 @@ relative to where all packages will be installed. Think of it like doing
 ``chroot <root> dnf``, except using ``--installroot`` allows ``DNF5`` to work 
 before the chroot is created.
 
-`cachedir`, `log` files, `releasever`, and `gpgkey` are taken from or stored in 
-the installroot. Gpgkeys are imported into the installroot from a path relative 
-to the host which can be specified in the repository section of configuration files.
+`cachedir`, `log` files, `releasever`, and `gpgkey` are taken from or stored in
+the installroot. GPG keys are imported into the installroot from a path
+relative to the host which can be specified in the repository section of
+configuration files.
 
-`configuration` file and `reposdir` are searched inside the installroot first. 
-If they are not present, they are taken from the host system. 
+`configuration` file, `reposdir`, and `vars` are taken from inside the
+installroot, unless the command-line argument ``--use-host-environment`` is
+passed, in which case the configuration and environment from the host system
+will be used.
 
-Note: When a path is specified within a command line argument (``--config=CONFIG_FILE_PATH`` 
-in case of `configuration` file and ``--setopt=reposdir=REPO_DIR_PATH`` for `reposdir`), then 
-this path is always relative to the host with no exceptions.
-
-`vars` are taken from the host system or installroot according to `reposdir`. When `reposdir` 
-path is specified within a command line argument, vars are taken from the installroot. 
-When `varsdir` paths are specified within the command line argument (``--setopt=varsdir=<reposdir>``) 
-then those path are always relative to the host with no exceptions.
+Note: When a path is specified within a command line argument
+(``--config=CONFIG_FILE_PATH`` in case of `configuration` file,
+``--setopt=reposdir=/path/to/repodir`` for `reposdir` or
+``--setopt=varsdir=/paths/to/varsdir`` for `vars`), then this path is always
+relative to the host with no exceptions.
 
 `pluginpath` and `pluginconfpath` are relative to the host. 
 

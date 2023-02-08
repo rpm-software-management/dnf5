@@ -410,6 +410,13 @@ void RootCommand::set_argument_parser() {
     installroot->link_value(&config.get_installroot_option());
     global_options_group->register_argument(installroot);
 
+    auto use_host_environment = parser.add_new_named_arg("use-host-environment");
+    use_host_environment->set_long_name("use-host-environment");
+    use_host_environment->set_description("use configuration, reposdir, and vars from the host system rather than the installroot");
+    use_host_environment->set_const_value("true");
+    use_host_environment->link_value(&config.use_host_environment());
+    global_options_group->register_argument(use_host_environment);
+
     auto releasever = parser.add_new_named_arg("releasever");
     releasever->set_long_name("releasever");
     releasever->set_has_value(true);

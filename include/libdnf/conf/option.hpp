@@ -69,6 +69,7 @@ public:
         MAINCONFIG = 20,
         AUTOMATICCONFIG = 30,
         REPOCONFIG = 40,
+        INSTALLROOT = 45,
         PLUGINDEFAULT = 50,
         PLUGINCONFIG = 60,
         DROPINCONFIG = 65,
