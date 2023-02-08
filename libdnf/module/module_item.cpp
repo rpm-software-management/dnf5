@@ -329,6 +329,7 @@ std::string ModuleItem::get_yaml() const {
 }
 
 
+/// A common function to create a solvable based on passed parameters.
 static void create_solvable_worker(
     Pool * pool,
     Solvable * solvable,

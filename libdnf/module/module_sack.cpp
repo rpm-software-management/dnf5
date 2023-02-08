@@ -492,6 +492,9 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
 }
 
 
+/// @brief Parse platform id from string value.
+/// @param platform_id Platform id string.
+/// @return Pair where first item is the platform module name and second is the platform stream.
 static std::pair<std::string, std::string> parse_platform_id_from_string(const std::string & platform_id) {
     auto index = platform_id.find(':');
     if (index == std::string::npos) {
@@ -502,6 +505,7 @@ static std::pair<std::string, std::string> parse_platform_id_from_string(const s
 }
 
 
+/// @brief Custom exception to recognize an error in platform id string format.
 class PlatformIdFormatError : public libdnf::Error {
     using Error::Error;
     const char * get_domain_name() const noexcept override { return "libdnf::module"; }
@@ -509,6 +513,11 @@ class PlatformIdFormatError : public libdnf::Error {
 };
 
 
+/// @brief Parse platform id from string value inside the 'os-release' file.
+/// @param os_release_path Full path to the 'os-release' file.
+/// @return Pair where first item is the platform module name and second is the platform stream.
+/// @throws PlatformIdFormatError when platform id in the file has incorrect format.
+/// @throws std::filesystem::filesystem_error when there is any error during reading a file.
 static std::pair<std::string, std::string> parse_platform_id_from_file(const std::string & os_release_path) {
     libdnf::utils::fs::File file{os_release_path, "r"};
     std::string line;
@@ -540,6 +549,14 @@ static std::pair<std::string, std::string> parse_platform_id_from_file(const std
 }
 
 
+/// @brief Parse value inside parentheses of the provide string value.
+/// Example of a specific usecase:
+/// - when the \a provide_name is 'base-module'.
+/// - and the whole provides string is 'base-module(platform:f38)'.
+/// - then the parsed value is 'platform:f38'.
+/// @param packages Package set where the provides strings are searched for.
+/// @param provide_name Name of the provide to be parsed.
+/// @return Set of all parsed values found in \a packages from provides having the \a provide_name name.
 static std::set<std::string> get_strings_from_provide(
     const libdnf::rpm::PackageSet & packages, const char * provide_name) {
     std::set<std::string> strings;
@@ -574,7 +591,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
         if (!parsed_platform_id.first.empty() && !parsed_platform_id.second.empty()) {
             return parsed_platform_id;
         } else {
-            base->get_logger()->warning("Invalid format of platform ID in configuration: {}", config_platform);
+            base->get_logger()->debug("Invalid format of platform ID in configuration: {}", config_platform);
         }
     }
 
@@ -592,11 +609,11 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
         if (!parsed_platform_id.first.empty() && !parsed_platform_id.second.empty()) {
             return parsed_platform_id;
         } else {
-            base->get_logger()->warning(
+            base->get_logger()->debug(
                 "Invalid format of module platform queried from available packages: {}", query_platform_id);
         }
     } else {
-        base->get_logger()->warning("Multiple module platforms provided by available packages");
+        base->get_logger()->debug("Multiple module platforms provided by available packages");
     }
 
     // try to detect platform id from installed packages
@@ -609,11 +626,11 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
         if (!parsed_platform_id.first.empty() && !parsed_platform_id.second.empty()) {
             return parsed_platform_id;
         } else {
-            base->get_logger()->warning(
+            base->get_logger()->debug(
                 "Invalid format of module platform queried from installed packages: {}", query_platform_id);
         }
     } else {
-        base->get_logger()->warning("Multiple module platforms provided by installed packages");
+        base->get_logger()->debug("Multiple module platforms provided by installed packages");
     }
 
     // try to detect platform id from release files
