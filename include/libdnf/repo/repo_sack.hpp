@@ -37,9 +37,6 @@ using RepoSackWeakPtr = WeakPtr<RepoSack, false>;
 
 class RepoSack : public sack::Sack<Repo> {
 public:
-    explicit RepoSack(const libdnf::BaseWeakPtr & base) : base(base) {}
-    explicit RepoSack(libdnf::Base & base);
-
     /// Creates a new clear repository with default configuration.
     /// @param id The new repo id
     /// @return A weak pointer to the new repo
@@ -144,8 +141,12 @@ public:
     void enable_source_repos();
 
 private:
+    friend class libdnf::Base;
     friend class RepoQuery;
     friend class rpm::PackageSack;
+
+    explicit RepoSack(const libdnf::BaseWeakPtr & base) : base(base) {}
+    explicit RepoSack(libdnf::Base & base);
 
     WeakPtrGuard<RepoSack, false> sack_guard;
 
