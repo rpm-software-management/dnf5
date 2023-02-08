@@ -215,12 +215,63 @@ public:
 }  // namespace
 
 
+void NevraTest::test_evrcmp() {
+    TestPackage foo_0_1_1_noarch("foo-1-1.noarch");
+    TestPackage foo_1_1_1_noarch("foo-1:1-1.noarch");
+    TestPackage foo_0_2_1_noarch("foo-2-1.noarch");
+    TestPackage foo_0_1_2_noarch("foo-1-2.noarch");
+    TestPackage foo_0_1_4_noarch("foo-1-4.noarch");
+    TestPackage foo_0_1_1_1_noarch("foo-1.1-1.noarch");
+
+    // order by epoch
+    std::vector<TestPackage> actual = {foo_1_1_1_noarch, foo_0_2_1_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_2_1_noarch, foo_1_1_1_noarch}), actual);
+
+    // order by epoch - already ordered
+    actual = {foo_0_2_1_noarch, foo_1_1_1_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_2_1_noarch, foo_1_1_1_noarch}), actual);
+
+    // order by version
+    actual = {foo_0_2_1_noarch, foo_0_1_1_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_2_1_noarch}), actual);
+
+    // order by version - already ordered
+    actual = {foo_0_1_1_noarch, foo_0_2_1_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_2_1_noarch}), actual);
+
+    // order by release
+    actual = {foo_0_1_2_noarch, foo_0_1_1_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_2_noarch}), actual);
+
+    // order by release - already ordered
+    actual = {foo_0_1_1_noarch, foo_0_1_2_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_2_noarch}), actual);
+
+    // order by version (with minor version > release)
+    actual = {foo_0_1_1_1_noarch, foo_0_1_4_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
+
+    // order by version (with minor version > release) - already sorted
+    actual = {foo_0_1_4_noarch, foo_0_1_1_1_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
+}
+
 void NevraTest::test_cmp_nevra() {
     TestPackage foo_0_1_1_noarch("foo-1-1.noarch");
     TestPackage foo_1_1_1_noarch("foo-1:1-1.noarch");
     TestPackage foo_0_2_1_noarch("foo-2-1.noarch");
     TestPackage foo_0_1_2_noarch("foo-1-2.noarch");
     TestPackage foo_0_1_1_x86_64("foo-1-1.x86_64");
+    TestPackage foo_0_1_4_noarch("foo-1-4.noarch");
+    TestPackage foo_0_1_1_1_noarch("foo-1.1-1.noarch");
     TestPackage bar_0_1_1_noarch("bar-1-1.noarch");
 
     // order by name
@@ -272,6 +323,16 @@ void NevraTest::test_cmp_nevra() {
     actual = {foo_0_1_1_noarch, foo_0_1_1_x86_64};
     std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_1_x86_64}), actual);
+
+    // order by version (with minor version > release)
+    actual = {foo_0_1_1_1_noarch, foo_0_1_4_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
+
+    // order by version (with minor version > release) - already sorted
+    actual = {foo_0_1_4_noarch, foo_0_1_1_1_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_nevra<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
 }
 
 
@@ -281,6 +342,8 @@ void NevraTest::test_cmp_naevr() {
     TestPackage foo_0_2_1_noarch("foo-2-1.noarch");
     TestPackage foo_0_1_2_noarch("foo-1-2.noarch");
     TestPackage foo_0_1_0_x86_64("foo-1-0.x86_64");
+    TestPackage foo_0_1_4_noarch("foo-1-4.noarch");
+    TestPackage foo_0_1_1_1_noarch("foo-1.1-1.noarch");
     TestPackage bar_0_1_1_noarch("bar-1-1.noarch");
 
     // order by name
@@ -332,4 +395,14 @@ void NevraTest::test_cmp_naevr() {
     actual = {foo_0_1_1_noarch, foo_0_1_0_x86_64};
     std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
     CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_1_noarch, foo_0_1_0_x86_64}), actual);
+
+    // order by version (with minor version > release)
+    actual = {foo_0_1_1_1_noarch, foo_0_1_4_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
+
+    // order by version (with minor version > release) - already sorted
+    actual = {foo_0_1_4_noarch, foo_0_1_1_1_noarch};
+    std::sort(actual.begin(), actual.end(), libdnf::rpm::cmp_naevr<TestPackage>);
+    CPPUNIT_ASSERT_EQUAL(std::vector<TestPackage>({foo_0_1_4_noarch, foo_0_1_1_1_noarch}), actual);
 }
