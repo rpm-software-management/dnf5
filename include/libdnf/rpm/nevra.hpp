@@ -182,7 +182,26 @@ inline void copy_nevra_attributes(const F & from, T & to) {
 
 
 /// Compare alpha and numeric segments of two versions.
+/// @return 1 if `lhs` < `rhs`, -1 if `lhs` > `rhs`, 0 if they are equal
 int rpmvercmp(const char * lhs, const char * rhs);
+
+
+/// Compare evr part of two objects
+/// @return 1 if `lhs` < `rhs`, -1 if `lhs` > `rhs`, 0 if they are equal
+template <typename L, typename R>
+int evrcmp(const L & lhs, const R & rhs) {
+    int r = rpmvercmp(lhs.get_epoch().c_str(), rhs.get_epoch().c_str());
+    if (r != 0) {
+        return r;
+    }
+
+    r = rpmvercmp(lhs.get_version().c_str(), rhs.get_version().c_str());
+    if (r != 0) {
+        return r;
+    }
+
+    return rpmvercmp(lhs.get_release().c_str(), rhs.get_release().c_str());
+}
 
 
 /// Compare two objects by their Name, Epoch:Version-Release and Arch.
@@ -197,8 +216,8 @@ bool cmp_nevra(const T & lhs, const T & rhs) {
         return false;
     }
 
-    // names and equal, compare by evr using rpm's rpmvercmp()
-    r = rpmvercmp(lhs.get_evr().c_str(), rhs.get_evr().c_str());
+    // names are equal, compare by evr
+    r = evrcmp(lhs, rhs);
     if (r < 0) {
         return true;
     } else if (r > 0) {
@@ -234,11 +253,12 @@ bool cmp_naevr(const T & lhs, const T & rhs) {
         return false;
     }
 
-    // names and arches are equal, compare by evr using rpm's rpmvercmp()
-    r = rpmvercmp(lhs.get_evr().c_str(), rhs.get_evr().c_str());
+    // names and arches are equal, compare by evr
+    r = evrcmp(lhs, rhs);
     if (r < 0) {
         return true;
     }
+
     return false;
 };
 
