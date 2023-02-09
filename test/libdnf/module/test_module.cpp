@@ -480,4 +480,76 @@ void ModuleTest::test_query_spec() {
         CPPUNIT_ASSERT_EQUAL(std::string("6c81f848"), result.get_context());
         CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
     }
+
+    {
+        ModuleQuery query(base, false);
+        nsvcap.parse("gooseberry:5.5:2", Nsvcap::Form::NSV);
+        query.filter_nsvca(nsvcap);
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("gooseberry"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("5.5"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("2"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("72aaf46b6"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
+
+    {
+        // NA
+        ModuleQuery query(base);
+        auto return_value = query.resolve_module_spec("meson::x86_64");
+        CPPUNIT_ASSERT_EQUAL(return_value.first, true);
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("meson"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("master"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
+
+    {
+        // NSVCA glob
+        ModuleQuery query(base);
+        auto return_value = query.resolve_module_spec("mes*:mas*:2018081615161[13]:*:x8?_64");
+        CPPUNIT_ASSERT_EQUAL(return_value.first, true);
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("meson"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("master"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
+
+    {
+        // NSV
+        ModuleQuery query(base);
+        auto return_value = query.resolve_module_spec("meson:master:20180816151613");
+        CPPUNIT_ASSERT_EQUAL(return_value.first, true);
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("meson"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("master"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
+
+    {
+        // NSC
+        ModuleQuery query(base);
+        auto return_value = query.resolve_module_spec("meson:master:06d0a27d");
+        CPPUNIT_ASSERT_EQUAL(return_value.first, true);
+        auto result = query.get();
+        CPPUNIT_ASSERT_EQUAL(std::string("meson"), result.get_name());
+        CPPUNIT_ASSERT_EQUAL(std::string("master"), result.get_stream());
+        CPPUNIT_ASSERT_EQUAL(std::string("20180816151613"), result.get_version_str());
+        CPPUNIT_ASSERT_EQUAL(std::string("06d0a27d"), result.get_context());
+        CPPUNIT_ASSERT_EQUAL(std::string("x86_64"), result.get_arch());
+    }
+
+    {
+        // Incorrect spec
+        ModuleQuery query(base);
+        auto return_value = query.resolve_module_spec("meson/default:x86_64");
+        CPPUNIT_ASSERT_EQUAL(return_value.first, false);
+        CPPUNIT_ASSERT_EQUAL((size_t)0, query.size());
+    }
 }
