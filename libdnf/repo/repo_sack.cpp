@@ -192,7 +192,7 @@ RepoWeakPtr RepoSack::get_system_repo() {
 }
 
 
-void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
+void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, bool import_keys) {
     auto logger = base->get_logger();
 
     std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
@@ -282,8 +282,6 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
     std::vector<Repo *> repos_with_bad_signature;
 
     for (int run_count = 0; run_count < 2; ++run_count) {
-        const bool import_keys = run_count == 0;
-
         std::vector<Repo *> repos_for_processing;  // array of repositories for processing
 
         if (run_count == 0) {
@@ -306,6 +304,10 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
             // It will try to download and import keys for repositories with a bad signature.
             // Repositories with a bad signature are moved to the array of repositories for processing.
 
+            if (!import_keys || repos_with_bad_signature.empty()) {
+                break;
+            }
+
             // download keys files
             std::vector<std::tuple<Repo *, std::string, utils::fs::TempFile>> keys_files;
             for (auto * repo : repos_with_bad_signature) {
@@ -321,6 +323,8 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
                 lseek(key_file.get_fd(), SEEK_SET, 0);
                 repo->downloader->pgp.import_key(key_file.get_fd(), url);
             }
+
+            import_keys = false;
 
             repos_for_processing = std::move(repos_with_bad_signature);
         }
