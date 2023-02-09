@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/package_sack_impl.hpp"
 #include "solv/solver.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
+#include "utils/fs/temp.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
 
@@ -254,7 +255,17 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
         }
     };
 
-    auto handle_repo_download_error = [&](const Repo * repo, const RepoDownloadError & e) {
+    auto handle_repo_download_error = [&](const Repo * repo, const RepoDownloadError & e, bool report_key_err) {
+        if (report_key_err) {
+            try {
+                std::rethrow_if_nested(e);
+            } catch (const LibrepoError & lr_err) {
+                if (lr_err.get_code() == LRE_BADGPG) {
+                    return true;
+                }
+            } catch (...) {
+            }
+        }
         if (!repo->get_config().get_skip_if_unavailable_option().get_value()) {
             except_in_main_thread = true;
             finish_sack_loader();
@@ -265,116 +276,153 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
                 repo->get_id(),
                 e.what());  // TODO(jrohel) we should print nested exceptions
         }
+        return false;
     };
 
-    // If the input RepoQuery contains a system repo, we load the system repo first.
-    // Available repos are stored to array of repositories for processing
-    std::vector<Repo *> repos_for_processing;  // array of repositories for processing
-    for (const auto & repo : repos) {
-        switch (repo->get_type()) {
-            case Repo::Type::AVAILABLE:
-                repos_for_processing.emplace_back(repo.get());
-                break;
-            case Repo::Type::SYSTEM:
-                send_to_sack_loader(repo.get());
-                break;
-            case Repo::Type::COMMANDLINE:;
-        }
-    }
+    std::vector<Repo *> repos_with_bad_signature;
 
-    // Prepares repositories that are not expired or have ONLY_CACHE or LAZY SynStrategy.
-    for (std::size_t idx = 0; idx < repos_for_processing.size();) {
-        auto * const repo = repos_for_processing[idx];
-        catch_thread_sack_loader_exceptions();
-        try {
-            bool valid_metadata{false};
+    for (int run_count = 0; run_count < 2; ++run_count) {
+        const bool import_keys = run_count == 0;
+
+        std::vector<Repo *> repos_for_processing;  // array of repositories for processing
+
+        if (run_count == 0) {
+            // First run.
+            // If the input RepoQuery contains a system repo, we load the system repo first.
+            // Available repos are stored to array of repositories for processing
+            for (const auto & repo : repos) {
+                switch (repo->get_type()) {
+                    case Repo::Type::AVAILABLE:
+                        repos_for_processing.emplace_back(repo.get());
+                        break;
+                    case Repo::Type::SYSTEM:
+                        send_to_sack_loader(repo.get());
+                        break;
+                    case Repo::Type::COMMANDLINE:;
+                }
+            }
+        } else {
+            // Second run.
+            // It will try to download and import keys for repositories with a bad signature.
+            // Repositories with a bad signature are moved to the array of repositories for processing.
+
+            // download keys files
+            std::vector<std::tuple<Repo *, std::string, utils::fs::TempFile>> keys_files;
+            for (auto * repo : repos_with_bad_signature) {
+                for (const auto & gpgkey_url : repo->config.get_gpgkey_option().get_value()) {
+                    auto & key_file = keys_files.emplace_back(repo, gpgkey_url, "repokey");
+                    repo->downloader->download_url(gpgkey_url.c_str(), std::get<2>(key_file).get_fd());
+                }
+            }
+
+            // import keys files
+            for (auto & item : keys_files) {
+                auto & [repo, url, key_file] = item;
+                lseek(key_file.get_fd(), SEEK_SET, 0);
+                repo->downloader->pgp.import_key(key_file.get_fd(), url);
+            }
+
+            repos_for_processing = std::move(repos_with_bad_signature);
+        }
+
+        // Prepares repositories that are not expired or have ONLY_CACHE or LAZY SynStrategy.
+        for (std::size_t idx = 0; idx < repos_for_processing.size();) {
+            auto * const repo = repos_for_processing[idx];
+            catch_thread_sack_loader_exceptions();
             try {
-                repo->read_metadata_cache();
-                if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
-                    // cache loaded
-                    repo->recompute_expired();
-                    valid_metadata = !repo->expired || repo->sync_strategy == Repo::SyncStrategy::ONLY_CACHE ||
-                                     repo->sync_strategy == Repo::SyncStrategy::LAZY;
+                bool valid_metadata{false};
+                try {
+                    repo->read_metadata_cache();
+                    if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty()) {
+                        // cache loaded
+                        repo->recompute_expired();
+                        valid_metadata = !repo->expired || repo->sync_strategy == Repo::SyncStrategy::ONLY_CACHE ||
+                                         repo->sync_strategy == Repo::SyncStrategy::LAZY;
+                    }
+                } catch (const std::runtime_error & e) {
                 }
+
+                if (valid_metadata) {
+                    repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
+                    logger->debug("Using cache for repo \"{}\"", repo->config.get_id());
+                    send_to_sack_loader(repo);
+                } else {
+                    if (repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE) {
+                        throw RepoDownloadError(
+                            M_("Cache-only enabled but no cache for repository \"{}\""), repo->config.get_id());
+                    }
+                    ++idx;
+                }
+
+            } catch (const RepoDownloadError & e) {
+                handle_repo_download_error(repo, e, false);
+                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
             } catch (const std::runtime_error & e) {
+                except_in_main_thread = true;
+                finish_sack_loader();
+                throw;
             }
+        }
 
-            if (valid_metadata) {
-                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-                logger->debug("Using cache for repo \"{}\"", repo->config.get_id());
-                send_to_sack_loader(repo);
-            } else {
-                if (repo->get_sync_strategy() == Repo::SyncStrategy::ONLY_CACHE) {
-                    throw RepoDownloadError(
-                        M_("Cache-only enabled but no cache for repository \"{}\""), repo->config.get_id());
+        // Prepares repositories that are expired but match the original.
+        for (std::size_t idx = 0; idx < repos_for_processing.size();) {
+            auto * const repo = repos_for_processing[idx];
+            catch_thread_sack_loader_exceptions();
+            try {
+                if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
+                    repo->is_in_sync()) {
+                    // the expired metadata still reflect the origin
+                    utimes(repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
+                    RepoCache(base, repo->config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+                    repo->expired = false;
+                    repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
+
+                    logger->debug(
+                        "Using cache for repo \"{}\". It is expired, but matches the original.", repo->config.get_id());
+                    send_to_sack_loader(repo);
+                } else {
+                    ++idx;
                 }
-                ++idx;
-            }
 
-        } catch (const RepoDownloadError & e) {
-            handle_repo_download_error(repo, e);
-            repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-        } catch (const std::runtime_error & e) {
-            except_in_main_thread = true;
-            finish_sack_loader();
-            throw;
-        }
-    }
-
-    // Prepares repositories that are expired but match the original.
-    for (std::size_t idx = 0; idx < repos_for_processing.size();) {
-        auto * const repo = repos_for_processing[idx];
-        catch_thread_sack_loader_exceptions();
-        try {
-            if (!repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).empty() &&
-                repo->is_in_sync()) {
-                // the expired metadata still reflect the origin:
-                utimes(repo->downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str(), nullptr);
-                RepoCache(base, repo->config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-                repo->expired = false;
+            } catch (const RepoDownloadError & e) {
+                if (handle_repo_download_error(repo, e, import_keys)) {
+                    repos_with_bad_signature.emplace_back(repo);
+                }
                 repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-
-                logger->debug(
-                    "Using cache for repo \"{}\". It is expired, but matches the original.", repo->config.get_id());
-                send_to_sack_loader(repo);
-            } else {
-                ++idx;
+            } catch (const std::runtime_error & e) {
+                except_in_main_thread = true;
+                finish_sack_loader();
+                throw;
             }
-
-        } catch (const RepoDownloadError & e) {
-            handle_repo_download_error(repo, e);
-            repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-        } catch (const std::runtime_error & e) {
-            except_in_main_thread = true;
-            finish_sack_loader();
-            throw;
         }
-    }
 
-    // Prepares (downloads) remaining repositories.
-    for (std::size_t idx = 0; idx < repos_for_processing.size();) {
-        auto * const repo = repos_for_processing[idx];
-        catch_thread_sack_loader_exceptions();
-        try {
-            logger->debug("Downloading metadata for repo \"{}\"", repo->config.get_id());
-            auto cache_dir = repo->config.get_cachedir();
-            repo->download_metadata(cache_dir);
-            RepoCache(base, repo->config.get_cachedir()).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
-            repo->timestamp = -1;
-            repo->read_metadata_cache();
-            repo->expired = false;
+        // Prepares (downloads) remaining repositories.
+        for (std::size_t idx = 0; idx < repos_for_processing.size();) {
+            auto * const repo = repos_for_processing[idx];
+            catch_thread_sack_loader_exceptions();
+            try {
+                logger->debug("Downloading metadata for repo \"{}\"", repo->config.get_id());
+                auto cache_dir = repo->config.get_cachedir();
+                repo->download_metadata(cache_dir);
+                RepoCache(base, cache_dir).remove_attribute(RepoCache::ATTRIBUTE_EXPIRED);
+                repo->timestamp = -1;
+                repo->read_metadata_cache();
+                repo->expired = false;
 
-            repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-            send_to_sack_loader(repo);
-        } catch (const RepoDownloadError & e) {
-            handle_repo_download_error(repo, e);
-            repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
-        } catch (const std::runtime_error & e) {
-            except_in_main_thread = true;
-            finish_sack_loader();
-            throw;
+                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
+                send_to_sack_loader(repo);
+            } catch (const RepoDownloadError & e) {
+                if (handle_repo_download_error(repo, e, import_keys)) {
+                    repos_with_bad_signature.emplace_back(repo);
+                }
+                repos_for_processing.erase(repos_for_processing.begin() + static_cast<ssize_t>(idx));
+            } catch (const std::runtime_error & e) {
+                except_in_main_thread = true;
+                finish_sack_loader();
+                throw;
+            }
         }
-    }
+    };
 
     finish_sack_loader();
     catch_thread_sack_loader_exceptions();

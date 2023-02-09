@@ -78,6 +78,7 @@ public:
 
 private:
     friend class Repo;
+    friend class RepoSack;
 
     LibrepoHandle init_local_handle();
     LibrepoHandle init_remote_handle(const char * destdir, bool mirror_setup = true, bool set_callbacks = true);
@@ -85,7 +86,7 @@ private:
 
     void apply_http_headers(LibrepoHandle & handle);
 
-    LibrepoResult perform(LibrepoHandle & handle, const std::string & dest_directory, bool set_gpg_home_dir);
+    LibrepoResult perform(LibrepoHandle & handle, bool set_gpg_home_dir);
 
     void download_url(const char * url, int fd);
 
