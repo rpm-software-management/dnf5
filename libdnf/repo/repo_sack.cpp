@@ -25,6 +25,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "rpm/package_sack_impl.hpp"
 #include "solv/solver.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
+#include "utils/fs/file.hpp"
 #include "utils/fs/temp.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
@@ -310,18 +311,21 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, bool impor
 
             // download keys files
             std::vector<std::tuple<Repo *, std::string, utils::fs::TempFile>> keys_files;
+            FileDownloader downloader(base);
             for (auto * repo : repos_with_bad_signature) {
-                for (const auto & gpgkey_url : repo->config.get_gpgkey_option().get_value()) {
-                    auto & key_file = keys_files.emplace_back(repo, gpgkey_url, "repokey");
-                    repo->downloader->download_url(gpgkey_url.c_str(), std::get<2>(key_file).get_fd());
+                for (const auto & key_url : repo->config.get_gpgkey_option().get_value()) {
+                    auto & key_file = keys_files.emplace_back(repo, key_url, "repokey");
+                    auto & temp_file = std::get<2>(key_file);
+                    temp_file.close();
+                    downloader.add(key_url, temp_file.get_path(), repo->get_user_data());
                 }
             }
+            downloader.download(false, false);
 
             // import keys files
-            for (auto & item : keys_files) {
-                auto & [repo, url, key_file] = item;
-                lseek(key_file.get_fd(), SEEK_SET, 0);
-                repo->downloader->pgp.import_key(key_file.get_fd(), url);
+            for (const auto & [repo, key_url, key_file] : keys_files) {
+                utils::fs::File file(key_file.get_path(), "r");
+                repo->downloader->pgp.import_key(file.get_fd(), key_url);
             }
 
             import_keys = false;
