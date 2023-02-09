@@ -37,6 +37,7 @@ class RpmPackageQueryTest : public BaseTestCase {
     CPPUNIT_TEST(test_filter_name);
     CPPUNIT_TEST(test_filter_name_packgset);
     CPPUNIT_TEST(test_filter_nevra_packgset);
+    CPPUNIT_TEST(test_filter_nevra_packgset_cmp);
     CPPUNIT_TEST(test_filter_name_arch);
     CPPUNIT_TEST(test_filter_name_arch2);
     CPPUNIT_TEST(test_filter_nevra);
@@ -69,6 +70,7 @@ public:
     void test_filter_name();
     void test_filter_name_packgset();
     void test_filter_nevra_packgset();
+    void test_filter_nevra_packgset_cmp();
     void test_filter_name_arch();
     void test_filter_name_arch2();
     void test_filter_nevra();
