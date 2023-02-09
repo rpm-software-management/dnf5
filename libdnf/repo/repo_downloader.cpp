@@ -153,7 +153,7 @@ void RepoDownloader::download_metadata(const std::string & destdir) try {
     libdnf::utils::fs::TempDir tmpdir(destdir, "tmpdir");
 
     LibrepoHandle h(init_remote_handle(tmpdir.get_path().c_str()));
-    perform(h, tmpdir.get_path(), config.get_repo_gpgcheck_option().get_value());
+    perform(h, config.get_repo_gpgcheck_option().get_value());
 
     // move all downloaded object from tmpdir to destdir
     for (auto & dir : std::filesystem::directory_iterator(tmpdir.get_path())) {
@@ -180,7 +180,7 @@ bool RepoDownloader::is_metalink_in_sync() try {
     LibrepoHandle h(init_remote_handle(tmpdir.get_path().c_str()));
 
     h.set_opt(LRO_FETCHMIRRORS, 1L);
-    perform(h, tmpdir.get_path().c_str(), false);
+    perform(h, false);
     LrMetalink * metalink;
     h.get_info(LRI_METALINK, &metalink);
     if (!metalink) {
@@ -256,7 +256,7 @@ bool RepoDownloader::is_repomd_in_sync() try {
     LibrepoHandle h(init_remote_handle(tmpdir.get_path().c_str()));
 
     h.set_opt(LRO_YUMDLIST, dlist);
-    auto result = perform(h, tmpdir.get_path().c_str(), config.get_repo_gpgcheck_option().get_value());
+    auto result = perform(h, config.get_repo_gpgcheck_option().get_value());
     result.get_info(LRR_YUM_REPO, &yum_repo);
 
     auto same = utils::fs::have_files_same_content_noexcept(repomd_filename.c_str(), yum_repo->repomd);
@@ -278,7 +278,7 @@ bool RepoDownloader::is_repomd_in_sync() try {
 void RepoDownloader::load_local() try {
     LibrepoHandle h(init_local_handle());
 
-    auto result = perform(h, config.get_cachedir(), config.get_repo_gpgcheck_option().get_value());
+    auto result = perform(h, config.get_repo_gpgcheck_option().get_value());
 
     repomd_filename = libdnf::utils::string::c_to_str(get_yum_repo(result)->repomd);
 
@@ -551,8 +551,7 @@ void RepoDownloader::apply_http_headers(LibrepoHandle & handle) {
 }
 
 
-LibrepoResult RepoDownloader::perform(
-    LibrepoHandle & handle, const std::string & dest_directory, bool set_gpg_home_dir) {
+LibrepoResult RepoDownloader::perform(LibrepoHandle & handle, bool set_gpg_home_dir) {
     if (set_gpg_home_dir) {
         auto pubringdir = pgp.get_keyring_dir();
         handle.set_opt(LRO_GNUPGHOMEDIR, pubringdir.c_str());
@@ -566,41 +565,30 @@ LibrepoResult RepoDownloader::perform(
 
     add_countme_flag(handle);
 
-    bool bad_gpg = false;
-    do {
+    if (progress_func && download_callbacks) {
+        user_cb_data = download_callbacks->add_new_download(
+            user_data,
+            !config.get_name_option().get_value().empty()
+                ? config.get_name_option().get_value().c_str()
+                : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"),
+            -1);
+        prev_total_to_download = 0;
+        prev_downloaded = 0;
+        sum_prev_downloaded = 0;
+    }
+
+    try {
+        auto result = handle.perform();
         if (progress_func && download_callbacks) {
-            user_cb_data = download_callbacks->add_new_download(
-                user_data,
-                !config.get_name_option().get_value().empty()
-                    ? config.get_name_option().get_value().c_str()
-                    : (!config.get_id().empty() ? config.get_id().c_str() : "unknown"),
-                -1);
-            prev_total_to_download = 0;
-            prev_downloaded = 0;
-            sum_prev_downloaded = 0;
+            download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
         }
-
-        try {
-            auto result = handle.perform();
-            // finished successfully
-            if (progress_func && download_callbacks) {
-                download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::SUCCESSFUL, nullptr);
-            }
-            return result;
-        } catch (const LibrepoError & ex) {
-            if (progress_func && download_callbacks) {
-                download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, ex.what());
-            }
-            if (bad_gpg || ex.get_code() != LRE_BADGPG) {
-                throw;
-            }
+        return result;
+    } catch (const LibrepoError & ex) {
+        if (progress_func && download_callbacks) {
+            download_callbacks->end(user_cb_data, DownloadCallbacks::TransferStatus::ERROR, ex.what());
         }
-
-        bad_gpg = true;
-        // TODO(lukash) this calls callbacks->{start,end}() for the second time, doesn't seem right
-        import_repo_keys();
-        std::filesystem::remove_all(dest_directory + "/" + METADATA_RELATIVE_DIR);
-    } while (true);
+        throw;
+    }
 }
 
 
