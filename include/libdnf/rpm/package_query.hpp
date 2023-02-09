@@ -182,11 +182,18 @@ public:
     /// @since 5.0
     void filter_nevra(const libdnf::rpm::Nevra & nevra, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
-    /// Filter packages by their `name-[epoch:]version-release.arch` attributes of the packages in the `package_set`.
+    /// Filter packages by their `name-[epoch:]version-release.arch` attributes of
+    /// the packages in the `package_set`.
+    /// Only packages whose name.arch is present in the `package_set` are taken into
+    /// account. Their epoch:version-release are then compared according to the
+    /// value of `cmp_type` with those in `package_set`.
+    /// Only the matching packages are kept in the query. In case `NOT` is used in
+    /// `cmp_type`, the matching packages are removed from the query.
     ///
     /// @param package_set      PackageSet with Package objects the filter is matched against.
-    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
-    ///                         Supported values: `EQ`, `NEQ`.
+    /// @param cmp_type         A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`,
+    ///                         and their combinations with `NOT`.
     /// @since 5.0
     void filter_nevra(const PackageSet & package_set, libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
