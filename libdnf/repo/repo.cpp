@@ -148,6 +148,10 @@ ConfigRepo & Repo::get_config() noexcept {
     return config;
 }
 
+const ConfigRepo & Repo::get_config() const noexcept {
+    return config;
+}
+
 std::string Repo::get_id() const noexcept {
     return config.get_id();
 }

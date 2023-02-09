@@ -117,6 +117,10 @@ public:
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getConfig()
     ConfigRepo & get_config() noexcept;
 
+    /// Returns pointer to the repository configuration
+    /// @replaces libdnf:repo/Repo.hpp:method:Repo.getConfig()
+    const ConfigRepo & get_config() const noexcept;
+
     /// Returns repository id
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.getId()
     std::string get_id() const noexcept;
