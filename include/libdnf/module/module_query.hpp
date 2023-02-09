@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::module {
 
+// TODO(pkratoch): Store pointers to ModuleItems instead of ModuleItems to allow faster copying
 class ModuleQuery : public libdnf::sack::Query<ModuleItem> {
 public:
     /// Create a new ModuleQuery instance.
@@ -148,6 +149,14 @@ public:
     ///                         Supported values: `EQ`, `NEQ`, `GLOB`, `NOT_GLOB`, `IEXACT`, `NOT_IEXACT`, `ICONTAINS`, `NOT_ICONTAINS`, `IGLOB`, `NOT_IGLOB`, `CONTAINS`, `NOT_CONTAINS`.
     /// @since 5.0.6
     void filter_nsvca(const Nsvcap & nsvcap, libdnf::sack::QueryCmp cmp = libdnf::sack::QueryCmp::EQ);
+
+    /// Filter ModuleItems by module_spec.
+    ///
+    /// @param module_spec      A module_spec the filter is matched against.
+    /// @return                 `true` and matched Nsvcap if the module_spec was parsed sucessfully,
+    ///                         `false` and empty Nsvcap otherwise.
+    /// @since 5.0.6
+    std::pair<bool, Nsvcap> resolve_module_spec(const std::string & module_spec);
 
 private:
     // Getter callbacks that return attribute values from an object. Used in query filters.

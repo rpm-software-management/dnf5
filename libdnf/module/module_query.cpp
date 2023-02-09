@@ -26,6 +26,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/module/module_item.hpp"
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/module/nsvcap.hpp"
+#include "libdnf/utils/patterns.hpp"
 
 extern "C" {
 #include <solv/pool.h>
@@ -181,6 +182,25 @@ void ModuleQuery::filter_nsvca(const Nsvcap & nsvcap, libdnf::sack::QueryCmp cmp
     if (!arch.empty()) {
         filter_arch(arch, cmp);
     }
+}
+
+
+std::pair<bool, Nsvcap> ModuleQuery::resolve_module_spec(const std::string & module_spec) {
+    libdnf::sack::QueryCmp cmp =
+        libdnf::utils::is_glob_pattern(module_spec.c_str()) ? libdnf::sack::QueryCmp::GLOB : libdnf::sack::QueryCmp::EQ;
+
+    std::vector<Nsvcap> possible_nsvcaps = Nsvcap::parse(module_spec);
+    for (Nsvcap & nsvcap : possible_nsvcaps) {
+        ModuleQuery module_query(*this);
+        module_query.filter_nsvca(nsvcap, cmp);
+        if (!module_query.empty()) {
+            *this = std::move(module_query);
+            return {true, Nsvcap(nsvcap)};
+        }
+    }
+
+    clear();
+    return {false, Nsvcap()};
 }
 
 
