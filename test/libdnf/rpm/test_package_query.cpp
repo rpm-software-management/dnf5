@@ -317,6 +317,65 @@ void RpmPackageQueryTest::test_filter_nevra_packgset() {
     CPPUNIT_ASSERT_EQUAL(expected1, to_vector(query2));
 }
 
+void RpmPackageQueryTest::test_filter_nevra_packgset_cmp() {
+    add_repo_solv("solv-repo1");
+
+    // prepare query to compare packages with
+    PackageQuery patterns(base);
+    patterns.filter_nevra({"pkg-libs-1:1.2-4.x86_64"});
+    std::vector<Package> expected = {get_pkg("pkg-libs-1:1.2-4.x86_64")};
+    CPPUNIT_ASSERT_EQUAL_MESSAGE("Pattern preparation failed", expected, to_vector(patterns));
+
+    {
+        // comparator EQ
+        PackageQuery query(base);
+        query.filter_nevra(patterns, libdnf::sack::QueryCmp::EQ);
+        std::vector<Package> expected = {get_pkg("pkg-libs-1:1.2-4.x86_64")};
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("EQ comparator failed", expected, to_vector(query));
+    }
+
+    {
+        // comparator NEQ
+        PackageQuery query(base);
+        query.filter_name({"pkg-libs"});
+        query.filter_nevra(patterns, libdnf::sack::QueryCmp::NEQ);
+        std::vector<Package> expected = {get_pkg("pkg-libs-0:1.2-3.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("NEQ comparator failed", expected, to_vector(query));
+    }
+
+    {
+        // comparator LT
+        PackageQuery query(base);
+        query.filter_nevra(patterns, libdnf::sack::QueryCmp::LT);
+        std::vector<Package> expected = {get_pkg("pkg-libs-0:1.2-3.x86_64")};
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("LT comparator failed", expected, to_vector(query));
+    }
+
+    {
+        // comparator LTE
+        PackageQuery query(base);
+        query.filter_nevra(patterns, libdnf::sack::QueryCmp::LTE);
+        std::vector<Package> expected = {get_pkg("pkg-libs-0:1.2-3.x86_64"), get_pkg("pkg-libs-1:1.2-4.x86_64")};
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("LTE comparator failed", expected, to_vector(query));
+    }
+
+    {
+        // comparator GT
+        PackageQuery query(base);
+        query.filter_nevra(patterns, libdnf::sack::QueryCmp::GT);
+        std::vector<Package> expected = {get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("GT comparator failed", expected, to_vector(query));
+    }
+
+    {
+        // comparator GTE
+        PackageQuery query(base);
+        query.filter_nevra(patterns, libdnf::sack::QueryCmp::GTE);
+        std::vector<Package> expected = {get_pkg("pkg-libs-1:1.2-4.x86_64"), get_pkg("pkg-libs-1:1.3-4.x86_64")};
+        CPPUNIT_ASSERT_EQUAL_MESSAGE("GTE comparator failed", expected, to_vector(query));
+    }
+}
+
 void RpmPackageQueryTest::test_filter_name_arch() {
     add_repo_solv("solv-repo1");
 
