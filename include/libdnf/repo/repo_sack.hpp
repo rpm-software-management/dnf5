@@ -119,7 +119,8 @@ public:
     /// downloaded.
     ///
     /// @param repos The repositories to update and load
-    void update_and_load_repos(libdnf::repo::RepoQuery & repos);
+    /// @param import_keys If true, attempts to download and import keys for repositories that failed key validation
+    void update_and_load_repos(libdnf::repo::RepoQuery & repos, bool import_keys = true);
 
     RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
 
