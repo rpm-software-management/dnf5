@@ -34,7 +34,7 @@ class ProgressBar;
 class Widget {
 public:
     bool get_visible() const noexcept { return visible; }
-    void set_visible(bool value) { visible = value; };
+    void set_visible(bool value) noexcept { visible = value; };
 
     ProgressBar * get_bar() const noexcept { return bar; }
     void set_bar(ProgressBar * value) { bar = value; }
