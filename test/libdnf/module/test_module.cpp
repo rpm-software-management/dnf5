@@ -426,6 +426,10 @@ void ModuleTest::test_nsvcap() {
 
     // Empty fields are not allowed
     CPPUNIT_ASSERT_EQUAL(false, nsvcap.parse("meson:master::06d0a27d", Nsvcap::Form::NSVC));
+
+    // Strings longer than 2 KB are not allowed
+    CPPUNIT_ASSERT_EQUAL(true, nsvcap.parse(std::string(2048, 'a'), Nsvcap::Form::N));
+    CPPUNIT_ASSERT_EQUAL(false, nsvcap.parse(std::string(2048 + 1, 'a'), Nsvcap::Form::N));
 }
 
 

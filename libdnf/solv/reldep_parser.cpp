@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "reldep_parser.hpp"
 
+#include "utils/regex.hpp"
+
 #include <regex>
 #include <string>
 
@@ -26,7 +28,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace libdnf::solv {
 
 static const std::regex RELDEP_REGEX("^(\\S*)\\s*(\\S*)?\\s*(\\S*)$");
-#define MAX_RELDEP_LENGTH 2 << 10
 
 static bool set_cmp_type(libdnf::rpm::Reldep::CmpType * cmp_type, std::string cmp_type_string, long int length) {
     if (length == 2) {
@@ -64,7 +65,7 @@ static bool set_cmp_type(libdnf::rpm::Reldep::CmpType * cmp_type, std::string cm
 bool ReldepParser::parse(const std::string & reldep) {
     enum { NAME = 1, CMP_TYPE = 2, EVR = 3 };
     std::smatch match;
-    if (reldep.length() > MAX_RELDEP_LENGTH) {
+    if (reldep.length() > MAX_STRING_LENGTH_FOR_REGEX_MATCH) {
         // GCC std::regex_match() exhausts a stack on very long strings.
         return false;
     }
