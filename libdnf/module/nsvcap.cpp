@@ -25,6 +25,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/module/nsvcap.hpp"
 
+#include "utils/regex.hpp"
+
 #include <array>
 #include <regex>
 #include <string>
@@ -93,6 +95,12 @@ const std::vector<Nsvcap::Form> & Nsvcap::get_default_module_spec_forms() {
 
 bool Nsvcap::parse(const std::string nsvcap_str, Nsvcap::Form form) {
     enum { NAME = 1, STREAM = 2, VERSION = 3, CONTEXT = 4, ARCH = 5, PROFILE = 6, _LAST_ };
+
+    if (nsvcap_str.length() > MAX_STRING_LENGTH_FOR_REGEX_MATCH) {
+        // GCC std::regex_match() exhausts a stack on very long strings.
+        return false;
+    }
+
     std::smatch matched_result;
     auto matched = std::regex_match(nsvcap_str, matched_result, NSVCAP_FORM_REGEX[static_cast<unsigned>(form) - 1]);
     if (!matched || matched_result[NAME].str().size() == 0) {
