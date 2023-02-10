@@ -45,12 +45,20 @@ public:
     }
     friend std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar);
 
+    /// Sets the minimum number of registered progress bars to show the total bar.
+    void set_total_bar_visible_limit(std::size_t value) noexcept { total_bar_visible_limit = value; }
+
+    /// Sets the visibility of number widget in the total bar.
+    void set_total_bar_number_widget_visible(bool value) noexcept { total.set_number_widget_visible(value); }
+
 private:
+    std::size_t total_bar_visible_limit{0};
     std::vector<std::unique_ptr<ProgressBar>> bars_all;
     std::vector<ProgressBar *> bars_todo;
     std::vector<ProgressBar *> bars_done;
     DownloadProgressBar total;
-    std::size_t printed_lines = 0;
+    bool line_printed{false};
+    std::size_t num_of_lines_to_clear{0};
 };
 
 

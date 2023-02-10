@@ -70,14 +70,21 @@ void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
 
 
 std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
-    if (tty::is_interactive()) {
-        stream << tty::clear_line;
-        for (std::size_t i = 1; i < mbar.printed_lines; i++) {
-            stream << tty::cursor_up << tty::clear_line;
+    const bool is_interactive{tty::is_interactive()};
+
+    if (is_interactive) {
+        if (mbar.num_of_lines_to_clear > 0) {
+            stream << tty::clear_line;
+            for (std::size_t i = 1; i < mbar.num_of_lines_to_clear; i++) {
+                stream << tty::cursor_up << tty::clear_line;
+            }
+            stream << "\r";
+        } else if (mbar.line_printed) {
+            stream << std::endl;
         }
-        stream << "\r";
     }
-    mbar.printed_lines = 0;
+    mbar.num_of_lines_to_clear = 0;
+    mbar.line_printed = false;
 
     // store numbers of bars in progress
     std::vector<int32_t> numbers;
@@ -93,8 +100,11 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         }
         bar->set_number(numbers.back());
         numbers.pop_back();
+        if (mbar.line_printed) {
+            stream << std::endl;
+        }
         stream << *bar;
-        stream << std::endl;
+        mbar.line_printed = true;
         mbar.bars_done.push_back(bar);
         // TODO(dmach): use iterator
         mbar.bars_todo.erase(mbar.bars_todo.begin() + static_cast<int>(i));
@@ -112,14 +122,17 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
             continue;
         }
 
-        if (!tty::is_interactive()) {
+        if (!is_interactive) {
             bar->update();
             continue;
         }
+        if (mbar.line_printed) {
+            stream << std::endl;
+        }
         stream << *bar;
-        stream << std::endl;
-        mbar.printed_lines++;
-        mbar.printed_lines += bar->get_messages().size();
+        mbar.line_printed = true;
+        mbar.num_of_lines_to_clear++;
+        mbar.num_of_lines_to_clear += bar->get_messages().size();
     }
 
     // then print the "total" progress bar
@@ -142,7 +155,10 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
     }
 
 
-    if (tty::is_interactive() || mbar.bars_todo.empty()) {
+    if ((mbar.bars_all.size() >= mbar.total_bar_visible_limit) && (is_interactive || mbar.bars_todo.empty())) {
+        if (mbar.line_printed) {
+            stream << std::endl;
+        }
         // print divider
         int terminal_width = tty::get_width();
         stream << std::string(static_cast<std::size_t>(terminal_width), '-');
@@ -160,7 +176,7 @@ std::ostream & operator<<(std::ostream & stream, MultiProgressBar & mbar) {
         }
 
         stream << mbar.total;
-        mbar.printed_lines += 2;
+        mbar.num_of_lines_to_clear += 2;
     }
 
     return stream;
