@@ -309,23 +309,41 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, bool impor
                 break;
             }
 
-            // download keys files
-            std::vector<std::tuple<Repo *, std::string, utils::fs::TempFile>> keys_files;
-            FileDownloader downloader(base);
+            // Separates local and remote key files. Prepares local temporary files for storing downloaded remote keys.
+            std::vector<std::tuple<Repo *, std::string>> local_keys_files;
+            std::vector<std::tuple<Repo *, std::string, utils::fs::TempFile>> remote_keys_files;
             for (auto * repo : repos_with_bad_signature) {
                 for (const auto & key_url : repo->config.get_gpgkey_option().get_value()) {
-                    auto & key_file = keys_files.emplace_back(repo, key_url, "repokey");
-                    auto & temp_file = std::get<2>(key_file);
-                    temp_file.close();
-                    downloader.add(key_url, temp_file.get_path(), repo->get_user_data());
+                    if (key_url.starts_with("file:/")) {
+                        local_keys_files.emplace_back(repo, key_url);
+                    } else {
+                        auto & key_file = remote_keys_files.emplace_back(repo, key_url, "repokey");
+                        auto & temp_file = std::get<2>(key_file);
+                        temp_file.close();
+                    }
                 }
             }
-            downloader.download(false, false);
 
-            // import keys files
-            for (const auto & [repo, key_url, key_file] : keys_files) {
-                utils::fs::File file(key_file.get_path(), "r");
+            // import local keys files
+            for (auto & [repo, key_url] : local_keys_files) {
+                unsigned local_path_start_idx = key_url.starts_with("file:///") ? 7 : 5;
+                utils::fs::File file(key_url.substr(local_path_start_idx), "r");
                 repo->downloader->pgp.import_key(file.get_fd(), key_url);
+            }
+
+            if (!remote_keys_files.empty()) {
+                // download remote keys files to local temporary files
+                FileDownloader downloader(base);
+                for (const auto & [repo, key_url, key_file] : remote_keys_files) {
+                    downloader.add(key_url, key_file.get_path(), repo->get_user_data());
+                }
+                downloader.download(false, false);
+
+                // import downloaded keys files
+                for (const auto & [repo, key_url, temp_file] : remote_keys_files) {
+                    utils::fs::File file(temp_file.get_path(), "r");
+                    repo->downloader->pgp.import_key(file.get_fd(), key_url);
+                }
             }
 
             import_keys = false;
