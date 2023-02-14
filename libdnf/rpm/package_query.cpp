@@ -2456,6 +2456,17 @@ void PackageQuery::filter_recent(const time_t timestamp) {
     }
 }
 
+void PackageQuery::filter_userinstalled() {
+    filter_installed();
+    for (const auto & pkg : *this) {
+        auto reason = pkg.get_reason();
+        if (reason == libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY ||
+            reason == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+            p_impl->remove_unsafe(pkg.get_id().id);
+        }
+    }
+}
+
 void PackageQuery::filter_unneeded() {
     auto & pool = get_rpm_pool(p_impl->base);
 
