@@ -123,11 +123,6 @@ public:
     void setReleasever(std::string value);
     void add_console_output_line(int file_descriptor, const std::string & line);
 
-    /**
-    * @brief Remove packages from PackageSet that were installed as Dependency or WEAK_DEPENDENCY
-    */
-    void filterUserinstalled(libdnf::rpm::PackageSet & installed) const;
-
     libdnf::utils::SQLite3 & get_connection() const { return *conn; }
 
     Transaction * get_transaction_in_progress() { return transactionInProgress.get(); }

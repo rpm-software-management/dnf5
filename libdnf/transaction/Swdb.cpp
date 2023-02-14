@@ -465,23 +465,6 @@ Swdb::createCompsGroupItem()
 }
 */
 
-/**
- * Filter unneeded packages from pool
- *
- * \return list of user installed package IDs
- */
-void Swdb::filterUserinstalled(libdnf::rpm::PackageSet & installed) const {
-    // TODO(dmach): if performance is an issue, rewrite this using the libsolv layer
-    for (auto it = installed.begin(); it != installed.end(); it++) {
-        auto pkg = *it;
-        auto reason = Package::resolveTransactionItemReason(get_connection(), pkg.get_name(), pkg.get_arch(), -1);
-        // if not dep or weak, than consider it user installed
-        if (reason == TransactionItemReason::DEPENDENCY || reason == TransactionItemReason::WEAK_DEPENDENCY) {
-            installed.remove(pkg);
-        }
-    }
-}
-
 std::vector<int64_t> Swdb::searchTransactionsByRPM(const std::vector<std::string> & patterns) {
     return Package::searchTransactions(get_connection(), patterns);
 }
