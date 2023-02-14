@@ -32,6 +32,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/repo/package_downloader.hpp"
 #include "libdnf/rpm/package_query.hpp"
 
 #include <fmt/format.h>
@@ -220,6 +221,21 @@ std::string Transaction::transaction_result_to_string(const TransactionRunResult
             return TM_(TRANSACTION_RUN_RESULT_DICT.at(result), 1);
     }
     return {};
+}
+
+void Transaction::download(const std::string & dest_dir) {
+    libdnf::repo::PackageDownloader downloader;
+    for (auto & tspkg : this->get_transaction_packages()) {
+        if (transaction_item_action_is_inbound(tspkg.get_action()) &&
+            tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
+            if (dest_dir.empty()) {
+                downloader.add(tspkg.get_package());
+            } else {
+                downloader.add(tspkg.get_package(), dest_dir.c_str());
+            }
+        }
+    }
+    downloader.download(true, true);
 }
 
 Transaction::TransactionRunResult Transaction::test() {

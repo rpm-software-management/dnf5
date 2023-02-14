@@ -35,19 +35,8 @@ downloader = libdnf5.repo.PackageDownloader()
 downloader_callbacks = PackageDownloadCallbacks()
 base.set_download_callbacks(libdnf5.repo.DownloadCallbacksUniquePtr(downloader_callbacks))
 
-# Add the inbound packages (packages that are being installed on the system)
-# to the downloader.
-for tspkg in transaction.get_transaction_packages():
-    if libdnf5.base.transaction.transaction_item_action_is_inbound(tspkg.get_action()):
-        downloader.add(tspkg.get_package())
-
 # Download the packages.
-#
-# The first argument is `fail_fast`, meaning the download will fail right away
-# on a first package download failure. The second argument is `resume`, if
-# `true`, the downloader will try to resume downloads of any partially
-# downloaded RPMs.
-downloader.download(True, True)
+transaction.download()
 
 # A class for defining the RPM transaction callbacks.
 #
