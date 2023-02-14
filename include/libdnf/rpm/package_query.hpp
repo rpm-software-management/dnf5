@@ -611,6 +611,9 @@ public:
     /// @param timestamp Only packages built after this will pass
     void filter_recent(const time_t timestamp);
 
+    /// Keep in the query only user-installed packages.
+    void filter_userinstalled();
+
     /// Filter unneeded packages. Unneeded packages are those which are installed as
     /// dependencies and are not required by any user-installed package any more.
     void filter_unneeded();
