@@ -63,7 +63,8 @@ public:
     Transaction(Transaction && transaction);
     ~Transaction();
 
-    /// Return basic overvie about result of resolving transaction. The get complete informaion use get_resolve_logs()
+    /// Return basic overview about result of resolving transaction.
+    /// To get complete information, use get_resolve_logs().
     libdnf::GoalProblem get_problems();
 
     /// Returns information about resolvement of Goal.
@@ -96,33 +97,32 @@ public:
     /// @return An enum describing the result of the transaction
     TransactionRunResult test();
 
-    /// Prepare, check and run the transaction. All the transaction metadata
-    /// (`description` and `comment`) are stored in the history database.
+    /// @brief Prepare, check and run the transaction.
     ///
-    /// @param callbacks Callbacks to be called during rpm transaction.
-    /// @param description Description of the transaction (the console command for CLI,
-    //                     verbose description for API usage)
-    /// @param comment Any comment to store in the history database along with the transaction.
+    /// All the transaction metadata that was set (`description`, `user_id` or `comment`)
+    /// is stored in the history database.
+    ///
+    /// To watch progress or trigger actions during specific transactions events,
+    /// setup the `callbacks` object.
+    ///
     /// @return An enum describing the result of running the transaction.
-    TransactionRunResult run(
-        std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
-        const std::string & description,
-        const std::string & comment = {});
+    TransactionRunResult run();
 
-    /// Prepare, check and run the transaction. All the transaction metadata
-    /// (`description`, `user_id` and `comment`) are stored in the history database.
-    ///
-    /// @param callbacks Callbacks to be called during rpm transaction.
-    /// @param description Description of the transaction (the console command for CLI,
-    //                     verbose description for API usage)
-    /// @param user_id UID of the user that started the transaction.
-    /// @param comment Any comment to store in the history database along with the transaction.
-    /// @return An enum describing the result of running the transaction.
-    TransactionRunResult run(
-        std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
-        const std::string & description,
-        const uint32_t user_id,
-        const std::string & comment = {});
+    /// @brief Setup callbacks to be called during rpm transaction.
+    /// @param callbacks Implemented callbacks object.
+    void set_callbacks(std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks);
+
+    /// @brief Setup a description of the transaction.
+    /// @param description Value could be the console command for CLI or verbose description for API usage.
+    void set_description(const std::string & description);
+
+    /// @brief Setup the id of the user that started the transaction. If not set, current login user UID is used.
+    /// @param user_id UID value.
+    void set_user_id(const uint32_t user_id);
+
+    /// @brief Setup a comment to store in the history database along with the transaction.
+    /// @param comment Any string value.
+    void set_comment(const std::string & comment);
 
     /// Return string representation of the TransactionRunResult enum
     static std::string transaction_result_to_string(const TransactionRunResult result);
@@ -139,6 +139,11 @@ private:
 
     class Impl;
     std::unique_ptr<Impl> p_impl;
+
+    std::unique_ptr<libdnf::rpm::TransactionCallbacks> callbacks;
+    std::optional<uint32_t> user_id;
+    std::string comment;
+    std::string description;
 };
 
 }  // namespace libdnf::base

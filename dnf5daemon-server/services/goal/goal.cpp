@@ -192,7 +192,11 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
         comment = key_value_map_get<std::string>(options, "comment");
     }
 
-    auto rpm_result = transaction->run(std::make_unique<DbusTransactionCB>(session), "dnf5daemon-server", comment);
+    transaction->set_callbacks(std::make_unique<DbusTransactionCB>(session));
+    transaction->set_description("dnf5daemon-server");
+    transaction->set_comment(comment);
+
+    auto rpm_result = transaction->run();
     if (rpm_result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
         throw sdbus::Error(
             dnfdaemon::ERROR_TRANSACTION,
