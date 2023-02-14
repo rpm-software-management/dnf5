@@ -2470,34 +2470,23 @@ void PackageQuery::filter_userinstalled() {
 void PackageQuery::filter_unneeded() {
     auto & pool = get_rpm_pool(p_impl->base);
 
-    // get a list of all installed packages
     auto * installed_repo = pool->installed;
     if (installed_repo == nullptr) {
         (*p_impl).clear();
         return;
     }
 
-    libdnf::solv::SolvMap installed_solv_map(pool.get_nsolvables());
-    for (int it = installed_repo->start; it < installed_repo->end; ++it) {
-        installed_solv_map.add(it);
-    }
-
-    // find user-installed packages and add them to the solver job
-    libdnf::rpm::PackageSet installed_pset{p_impl->base, installed_solv_map};
-    libdnf::solv::IdQueue userinstalled;
-    for (const auto & pkg : installed_pset) {
-        auto reason = pkg.get_reason();
-        // package that is not dep / weak dep is considered user-installed here
-        if (reason != libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY &&
-            reason != libdnf::transaction::TransactionItemReason::DEPENDENCY) {
-            userinstalled.push_back(SOLVER_SOLVABLE | SOLVER_USERINSTALLED, pkg.get_id().id);
-        }
+    libdnf::solv::IdQueue job_userinstalled;
+    PackageQuery user_installed(p_impl->base);
+    user_installed.filter_userinstalled();
+    for (const auto & pkg : user_installed) {
+        job_userinstalled.push_back(SOLVER_SOLVABLE | SOLVER_USERINSTALLED, pkg.get_id().id);
     }
 
     // create a temporary libsolv solver to retrieve a list of unneeded packages
     libdnf::solv::Solver solver{pool};
     // run solver_solve to actually apply the list of user-installed packages
-    solver.solve(userinstalled);
+    solver.solve(job_userinstalled);
 
     // write autoremove debug data if required
     auto & cfg_main = p_impl->base->get_config();
