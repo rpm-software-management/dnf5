@@ -14,6 +14,7 @@
 
 %import "common.i"
 %import "conf.i"
+%import "repo.i"
 %import "transaction.i"
 
 %exception {
