@@ -11,6 +11,7 @@ URL:            https://github.com/rpm-software-management/dnf5
 Source0:        %{url}/archive/%{version}/dnf5-%{version}.tar.gz
 
 Requires:       libdnf5%{?_isa} = %{version}-%{release}
+Requires:       libdnf5-cli%{?_isa} = %{version}-%{release}
 Requires:       dnf-data
 Recommends:     bash-completion
 
