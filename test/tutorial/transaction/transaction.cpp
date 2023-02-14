@@ -72,13 +72,11 @@ class TransactionCallbacks : public libdnf::rpm::TransactionCallbacks {
     }
 };
 
+transaction.set_callbacks(std::make_unique<TransactionCallbacks>());
+
+// Add transaction metadata to be stored in the history database.
+transaction.set_description("install package one");
+
 // Run the transaction.
-//
-// The second through fourth arguments are transaction metadata that will be
-// stored in the history database.
-//
-// The second argument is expected to be a verbose description of the
-// transaction. The third argument is user_id, omitted here for simplicity. The
-// fourth argument can be an arbitrary user comment.
 std::cout << std::endl << "Running the transaction:" << std::endl;
-transaction.run(std::make_unique<TransactionCallbacks>(), "install package one");
+transaction.run();

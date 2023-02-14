@@ -226,23 +226,28 @@ Transaction::TransactionRunResult Transaction::test() {
     return p_impl->test();
 }
 
-Transaction::TransactionRunResult Transaction::run(
-    std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
-    const std::string & description,
-    const std::string & comment) {
-    return p_impl->run(std::move(callbacks), description, std::nullopt, comment);
-}
-
-Transaction::TransactionRunResult Transaction::run(
-    std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks,
-    const std::string & description,
-    const uint32_t user_id,
-    const std::string & comment) {
+Transaction::TransactionRunResult Transaction::run() {
     return p_impl->run(std::move(callbacks), description, user_id, comment);
 }
 
 std::vector<std::string> Transaction::get_transaction_problems() const noexcept {
     return p_impl->transaction_problems;
+}
+
+void Transaction::set_callbacks(std::unique_ptr<libdnf::rpm::TransactionCallbacks> && callbacks) {
+    this->callbacks = std::move(callbacks);
+}
+
+void Transaction::set_description(const std::string & description) {
+    this->description = description;
+}
+
+void Transaction::set_user_id(const uint32_t user_id) {
+    this->user_id = user_id;
+}
+
+void Transaction::set_comment(const std::string & comment) {
+    this->comment = comment;
 }
 
 void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems) {

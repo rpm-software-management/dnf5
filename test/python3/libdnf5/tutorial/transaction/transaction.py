@@ -58,16 +58,14 @@ class TransactionCallbacks(libdnf5.rpm.TransactionCallbacks):
     def install_start(self, item, total=0):
         print(libdnf5.base.transaction.transaction_item_action_to_string(item.get_action()), " ",
               item.get_package().get_nevra())
-# Run the transaction.
-#
-# The second through fourth arguments are transaction metadata that will be
-# stored in the history database.
-#
-# The second argument is expected to be a verbose description of the
-# transaction. The third argument is user_id, omitted here for simplicity. The
-# fourth argument can be an arbitrary user comment.
-print("Running the transaction:")
+
 transaction_callbacks = TransactionCallbacks()
 transaction_callbacks_ptr = libdnf5.rpm.TransactionCallbacksUniquePtr(transaction_callbacks)
+transaction.set_callbacks(transaction_callbacks_ptr)
 
-transaction.run(transaction_callbacks_ptr, "install package one")
+# Add transaction metadata to be stored in the history database.
+transaction.set_description("install package one")
+
+# Run the transaction.
+print("Running the transaction:")
+transaction.run()

@@ -651,7 +651,14 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
         cmd_line += argv[i];
     }
 
-    auto result = transaction.run(std::make_unique<RpmTransCB>(), cmd_line, comment ? comment : "");
+    transaction.set_callbacks(std::make_unique<RpmTransCB>());
+    transaction.set_description(cmd_line);
+
+    if (comment) {
+        transaction.set_comment(comment);
+    }
+
+    auto result = transaction.run();
     if (result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
         std::cout << "Transaction failed: " << libdnf::base::Transaction::transaction_result_to_string(result)
                   << std::endl;
@@ -660,7 +667,7 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
         }
     }
 
-    // TODO(mblaha): print a summary of successfull transaction
+    // TODO(mblaha): print a summary of successful transaction
 }
 
 libdnf::Goal * Context::get_goal(bool new_if_not_exist) {
