@@ -14,7 +14,7 @@ Welcome to DNF5's documentation!
     dnf5.8
     dnf_daemon/index
     misc/index
-    contributing/index
+    best_practices/index
     templates/index
     migration_guide
     changes
