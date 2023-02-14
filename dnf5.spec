@@ -182,12 +182,11 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %{_bindir}/microdnf
 %endif
 
-%{_prefix}/share/dnf5
 %dir %{_sysconfdir}/dnf/dnf5-aliases.d
 %doc %{_sysconfdir}/dnf/dnf5-aliases.d/README
-%dir %{_prefix}/lib/dnf5
-%dir %{_prefix}/lib/dnf5/aliases.d
-%config %{_prefix}/lib/dnf5/aliases.d/compatibility.conf
+%dir %{_datadir}/dnf5
+%dir %{_datadir}/dnf5/aliases.d
+%config %{_datadir}/dnf5/aliases.d/compatibility.conf
 %dir %{_libdir}/dnf5
 %dir %{_libdir}/dnf5/plugins
 %doc %{_libdir}/dnf5/plugins/README
