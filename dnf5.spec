@@ -1,6 +1,6 @@
 %global project_version_major 5
 %global project_version_minor 0
-%global project_version_patch 5
+%global project_version_patch 6
 
 Name:           dnf5
 Version:        %{project_version_major}.%{project_version_minor}.%{project_version_patch}
@@ -621,6 +621,14 @@ ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 
 
 %changelog
+* Tue Feb 14 2023 Nicola Sella <nsella@redhat.com> - 5.0.6-1
+- Add obsoletes of microdnf
+- Many improvements related to internal logic and bugfixes
+- Improvements in specfile
+- Improved API, drop std::optional
+- Use Autoapi instead of Autodoc to generate Python docs
+- Improved documentation for modules
+
 * Thu Jan 26 2023 Nicola Sella <nsella@redhat.com> - 5.0.5-1
 - Fix build fail in rawhide
 - Fixes in the concerning filesystem
