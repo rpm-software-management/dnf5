@@ -89,19 +89,11 @@ void RpmTransactionTest::test_transaction() {
         TransactionItemState::STARTED)};
     CPPUNIT_ASSERT_EQUAL(expected, transaction.get_transaction_packages());
 
-    libdnf::repo::PackageDownloader downloader;
-
     auto dl_callbacks = std::make_unique<PackageDownloadCallbacks>();
     auto dl_callbacks_ptr = dl_callbacks.get();
     base.set_download_callbacks(std::move(dl_callbacks));
 
-    for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (transaction_item_action_is_inbound(tspkg.get_action())) {
-            downloader.add(tspkg.get_package());
-        }
-    }
-
-    downloader.download(true, true);
+    transaction.download();
 
     CPPUNIT_ASSERT_EQUAL(1, dl_callbacks_ptr->end_cnt);
     CPPUNIT_ASSERT_EQUAL(PackageDownloadCallbacks::TransferStatus::SUCCESSFUL, dl_callbacks_ptr->end_status);

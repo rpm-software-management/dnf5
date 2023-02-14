@@ -41,24 +41,8 @@ private:
 
 base.set_download_callbacks(std::make_unique<PackageDownloadCallbacks>());
 
-// Create a package downloader.
-libdnf::repo::PackageDownloader downloader;
-
-// Add the inbound packages (packages that are being installed on the system)
-// to the downloader.
-for (auto & tspkg : transaction.get_transaction_packages()) {
-    if (transaction_item_action_is_inbound(tspkg.get_action())) {
-        downloader.add(tspkg.get_package());
-    }
-}
-
 // Download the packages.
-//
-// The first argument is `fail_fast`, meaning the download will fail right away
-// on a first package download failure. The second argument is `resume`, if
-// `true`, the downloader will try to resume downloads of any partially
-// downloaded RPMs.
-downloader.download(true, true);
+transaction.download();
 
 // A class for defining the RPM transaction callbacks.
 //
