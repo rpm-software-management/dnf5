@@ -2457,14 +2457,17 @@ void PackageQuery::filter_recent(const time_t timestamp) {
 }
 
 void PackageQuery::filter_userinstalled() {
+    auto & pool = get_rpm_pool(p_impl->base);
+    libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
     filter_installed();
     for (const auto & pkg : *this) {
         auto reason = pkg.get_reason();
-        if (reason == libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY ||
-            reason == libdnf::transaction::TransactionItemReason::DEPENDENCY) {
-            p_impl->remove_unsafe(pkg.get_id().id);
+        if (reason != libdnf::transaction::TransactionItemReason::WEAK_DEPENDENCY &&
+            reason != libdnf::transaction::TransactionItemReason::DEPENDENCY) {
+            filter_result.add_unsafe(pkg.get_id().id);
         }
     }
+    *p_impl &= filter_result;
 }
 
 void PackageQuery::filter_unneeded() {
