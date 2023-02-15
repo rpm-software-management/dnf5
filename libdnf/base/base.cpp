@@ -92,8 +92,7 @@ void Base::load_config_from_file(const std::string & path) {
 void Base::load_config_from_file() {
     std::filesystem::path conf_path{config.get_config_file_path_option().get_value()};
     const auto & conf_path_priority = config.get_config_file_path_option().get_priority();
-    if (!config.get_use_host_environment_option().get_value() &&
-        conf_path_priority < Option::Priority::COMMANDLINE) {
+    if (!config.get_use_host_config_option().get_value() && conf_path_priority < Option::Priority::COMMANDLINE) {
         conf_path = config.get_installroot_option().get_value() / conf_path.relative_path();
     }
     try {
@@ -132,8 +131,8 @@ void Base::load_config_from_dir(const std::string & dir_path) {
 
 void Base::load_config_from_dir() {
     std::filesystem::path conf_dir{libdnf::CONF_DIRECTORY};
-    if (!config.use_host_environment().get_value()) {
-        conf_dir = config.installroot().get_value() / conf_dir.relative_path();
+    if (!config.get_use_host_config_option().get_value()) {
+        conf_dir = config.get_installroot_option().get_value() / conf_dir.relative_path();
     }
 
     load_config_from_dir(conf_dir);
@@ -158,21 +157,21 @@ void Base::setup() {
 
     // Resolve installroot configuration
     std::string vars_installroot{"/"};
-    if (!config.use_host_environment().get_value()) {
+    if (!config.get_use_host_config_option().get_value()) {
         // Prepend installroot to each reposdir and varsdir
-        const std::filesystem::path installroot{config.installroot().get_value()};
+        const std::filesystem::path installroot{config.get_installroot_option().get_value()};
 
         std::vector<std::string> installroot_reposdirs;
-        for (const auto & reposdir : config.reposdir().get_value()) {
+        for (const auto & reposdir : config.get_reposdir_option().get_value()) {
             std::filesystem::path reposdir_path{reposdir};
             installroot_reposdirs.push_back((installroot / reposdir_path.relative_path()).string());
         }
-        config.reposdir().set(Option::Priority::INSTALLROOT, installroot_reposdirs);
+        config.get_reposdir_option().set(Option::Priority::INSTALLROOT, installroot_reposdirs);
 
         // Unless varsdir paths are specified on the command line, load vars
         // from the installroot
-        if (config.varsdir().get_priority() < Option::Priority::COMMANDLINE) {
-            vars_installroot = config.installroot().get_value();
+        if (config.get_varsdir_option().get_priority() < Option::Priority::COMMANDLINE) {
+            vars_installroot = config.get_installroot_option().get_value();
         }
     }
 

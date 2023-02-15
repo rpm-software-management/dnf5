@@ -164,7 +164,7 @@ class ConfigMain::Impl {
     OptionNumber<std::int32_t> debuglevel{2, 0, 10};
     OptionNumber<std::int32_t> errorlevel{3, 0, 10};
     OptionPath installroot{"/", false, true};
-    OptionBool use_host_environment{false};
+    OptionBool use_host_config{false};
     OptionPath config_file_path{CONF_FILENAME};
     OptionBool plugins{true};
     OptionPath pluginpath{DEFAULT_LIBDNF5_PLUGINS_LIB_DIR};
@@ -349,7 +349,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("debuglevel", debuglevel);
     owner.opt_binds().add("errorlevel", errorlevel);
     owner.opt_binds().add("installroot", installroot);
-    owner.opt_binds().add("use_host_environment", use_host_environment);
+    owner.opt_binds().add("use_host_config", use_host_config);
     owner.opt_binds().add("config_file_path", config_file_path);
     owner.opt_binds().add("plugins", plugins);
     owner.opt_binds().add("pluginpath", pluginpath);
@@ -590,11 +590,11 @@ const OptionPath & ConfigMain::get_installroot_option() const {
     return p_impl->installroot;
 }
 
-OptionBool & ConfigMain::get_use_host_environment_option() {
-    return p_impl->use_host_environment;
+OptionBool & ConfigMain::get_use_host_config_option() {
+    return p_impl->use_host_config;
 }
-const OptionBool & ConfigMain::get_use_host_environment_option() const {
-    return p_impl->use_host_environment;
+const OptionBool & ConfigMain::get_use_host_config_option() const {
+    return p_impl->use_host_config;
 }
 
 OptionPath & ConfigMain::get_config_file_path_option() {
