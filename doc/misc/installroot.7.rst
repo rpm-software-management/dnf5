@@ -36,7 +36,7 @@ relative to the host which can be specified in the repository section of
 configuration files.
 
 `configuration` file, `reposdir`, and `vars` are taken from inside the
-installroot, unless the command-line argument ``--use-host-environment`` is
+installroot, unless the command-line argument ``--use-host-config`` is
 passed, in which case the configuration and environment from the host system
 will be used.
 

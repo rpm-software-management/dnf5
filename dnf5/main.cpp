@@ -410,12 +410,13 @@ void RootCommand::set_argument_parser() {
     installroot->link_value(&config.get_installroot_option());
     global_options_group->register_argument(installroot);
 
-    auto use_host_environment = parser.add_new_named_arg("use-host-environment");
-    use_host_environment->set_long_name("use-host-environment");
-    use_host_environment->set_description("use configuration, reposdir, and vars from the host system rather than the installroot");
-    use_host_environment->set_const_value("true");
-    use_host_environment->link_value(&config.use_host_environment());
-    global_options_group->register_argument(use_host_environment);
+    auto use_host_config = parser.add_new_named_arg("use-host-config");
+    use_host_config->set_long_name("use-host-config");
+    use_host_config->set_description(
+        "use configuration, reposdir, and vars from the host system rather than the installroot");
+    use_host_config->set_const_value("true");
+    use_host_config->link_value(&config.get_use_host_config_option());
+    global_options_group->register_argument(use_host_config);
 
     auto releasever = parser.add_new_named_arg("releasever");
     releasever->set_long_name("releasever");
@@ -639,6 +640,10 @@ int main(int argc, char * argv[]) try {
 
     auto command = context.get_selected_command();
 
+    // Gets set to true when any repository is created from configuration or a
+    // .repo file
+    bool any_repos_from_system_configuration = false;
+
     try {
         command->pre_configure();
 
@@ -674,6 +679,7 @@ int main(int argc, char * argv[]) try {
         base.setup();
 
         base.get_repo_sack()->create_repos_from_system_configuration();
+        any_repos_from_system_configuration = base.get_repo_sack()->size() > 0;
 
         context.apply_repository_setopts();
 
@@ -718,6 +724,15 @@ int main(int argc, char * argv[]) try {
 
             context.download_and_run(*context.get_transaction());
         }
+    } catch (libdnf::cli::GoalResolveError & ex) {
+        if (!any_repos_from_system_configuration && base.get_config().get_installroot_option().get_value() != "/" &&
+            !base.get_config().get_use_host_config_option().get_value()) {
+            std::cout << "No repositories were loaded from the installroot. To use the configuration and repositories "
+                         "of the host system, pass --use-host-config."
+                      << std::endl;
+        }
+        std::cerr << ex.what() << std::endl;
+        return static_cast<int>(libdnf::cli::ExitCode::ERROR);
     } catch (libdnf::cli::ArgumentParserMissingCommandError & ex) {
         // print help if no command is provided
         std::cerr << ex.what() << std::endl;

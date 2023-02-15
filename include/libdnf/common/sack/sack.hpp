@@ -34,6 +34,8 @@ class Sack {
 public:
     using DataItemWeakPtr = WeakPtr<T, false>;
 
+    std::size_t size() const noexcept { return data.size(); }
+
     // EXCLUDES
 
     const Set<DataItemWeakPtr> & get_excludes() const noexcept { return excludes; }
