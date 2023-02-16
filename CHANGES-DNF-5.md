@@ -66,3 +66,8 @@ Together with these new config options there are also corresponding command line
 ### Repoquery command
 - Dropped: `-a/--all`, `--alldeps`, `--nevra` options, their behavior is and has been the default for both dnf4 and dnf5. The options are no longer needed.
 - Dopped: `--nvr`, `--envra` options. They are no longer supported.
+
+
+### List command
+- Dropped `--all` option since this behavior is now the default one.
+- Changed the list of `--available` packages. Previously, dnf4 only listed packages that are either not installed, or whose version is higher than the installed version. Now this behaviour is kept when no modifier is used - to skip packages already listed in the `Installed Packages` section to reduce duplicities. But if the `--available` modifier is used, dnf5 considers all versions available in the enabled repositories, regardless of which version is installed.
