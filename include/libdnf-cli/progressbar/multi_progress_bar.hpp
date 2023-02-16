@@ -53,6 +53,14 @@ public:
     /// Sets the visibility of number widget in the total bar.
     void set_total_bar_number_widget_visible(bool value) noexcept { total.set_number_widget_visible(value); }
 
+    /// Allows to preset the value of the total number of progress bars.
+    /// If the value is lower than the current number of registered progress bars, it is automatically increased.
+    void set_total_num_of_bars(std::size_t value) noexcept;
+
+    /// Returns the total number of progress bars.
+    /// It can be greater than the current number of registered progress bars.
+    std::size_t get_total_num_of_bars() const noexcept;
+
 private:
     std::size_t total_bar_visible_limit{0};
     std::vector<std::unique_ptr<ProgressBar>> bars_all;

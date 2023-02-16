@@ -60,12 +60,38 @@ void MultiProgressBar::add_bar(std::unique_ptr<ProgressBar> && bar) {
     }
 
     bars_all.push_back(std::move(bar));
-    total.set_total(static_cast<int>(bars_all.size()));
 
-    // update total (in [num/total]) in all bars
-    for (auto & i : bars_all) {
+    // update total (in [num/total]) in total progress bar
+    auto registered_bars_count = static_cast<int32_t>(bars_all.size());
+    if (total.get_total() < registered_bars_count) {
+        total.set_total(registered_bars_count);
+    }
+
+    // update total (in [num/total]) in all bars to do
+    for (auto & i : bars_todo) {
         i->set_total(total.get_total());
     }
+}
+
+
+void MultiProgressBar::set_total_num_of_bars(std::size_t value) noexcept {
+    if (value < bars_all.size()) {
+        value = bars_all.size();
+    }
+    auto num_of_bars = static_cast<int>(value);
+    if (num_of_bars != total.get_total()) {
+        total.set_total(num_of_bars);
+
+        // update total (in [num/total]) in all bars to do
+        for (auto & i : bars_todo) {
+            i->set_total(total.get_total());
+        }
+    }
+}
+
+
+std::size_t MultiProgressBar::get_total_num_of_bars() const noexcept {
+    return static_cast<std::size_t>(total.get_total());
 }
 
 
