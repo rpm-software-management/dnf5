@@ -11,6 +11,15 @@ base = libdnf5.base.Base()
 # configuration from a different location.
 base.load_config_from_file()
 
+# Optionally you can set and get vars
+# vars = base.get_vars().get()
+# vars.set('releasever', '33')
+#
+# Its value can be printed by get_value method
+# print(vars.get_value('releasever'))
+#
+# There are plans in the future to support the methods get() or get_priority()
+
 # Optionally set installroot.
 #
 # Installroot is set to '/' when we're working with the system, but we can set
@@ -23,4 +32,3 @@ base_config.installroot().set(installroot)
 # configuration.  Locks the installroot and varsdir configuration values so
 # that they can't be changed.
 base.setup()
-
