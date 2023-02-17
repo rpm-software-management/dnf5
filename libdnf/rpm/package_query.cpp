@@ -1390,7 +1390,9 @@ void PackageQuery::PQImpl::filter_provides(
             auto reldep_list_size = reldep_list.size();
             for (int index = 0; index < reldep_list_size; ++index) {
                 Id reldep_id = reldep_list.get_id(index).id;
-                FOR_PROVIDES(p, pp, reldep_id) { filter_result.add_unsafe(p); }
+                FOR_PROVIDES(p, pp, reldep_id) {
+                    filter_result.add_unsafe(p);
+                }
             }
             break;
         }
