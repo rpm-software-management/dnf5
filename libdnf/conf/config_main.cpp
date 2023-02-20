@@ -434,7 +434,21 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("history_record", history_record);
     owner.opt_binds().add("history_record_packages", history_record_packages);
     owner.opt_binds().add("rpmverbosity", rpmverbosity);
-    owner.opt_binds().add("strict", strict);
+
+    // If strict value has been explicitly set, use it's negated value as a default
+    // for skip_broken and skip_unavailable
+    owner.opt_binds().add(
+        "strict",
+        strict,
+        [&](Option::Priority priority, const std::string & value) {
+            bool val = strict.from_string(value);
+            strict.set(priority, val);
+            skip_broken.set(Option::Priority::DEFAULT, !val);
+            skip_unavailable.set(Option::Priority::DEFAULT, !val);
+        },
+        nullptr,
+        false);
+
     owner.opt_binds().add("skip_broken", skip_broken);
     owner.opt_binds().add("skip_unavailable", skip_unavailable);
     owner.opt_binds().add("autocheck_running_kernel", autocheck_running_kernel);
