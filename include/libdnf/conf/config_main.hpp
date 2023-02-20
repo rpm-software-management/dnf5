@@ -172,10 +172,15 @@ public:
     const OptionStringList & history_record_packages() const;
     OptionString & rpmverbosity();
     const OptionString & rpmverbosity() const;
-    OptionBool & strict();  // :api
+    /// Option `strict` is deprecated. Please use skip_broken and skip_unavailable
+    OptionBool & strict();
     const OptionBool & strict() const;
-    OptionBool & skip_broken();  // :yum-compatibility
+    /// Solver is allowed to skip transaction packages with broken dependencies
+    OptionBool & skip_broken();
     const OptionBool & skip_broken() const;
+    /// Solver is allowed to skip packages that are not available in repositories
+    OptionBool & skip_unavailable();
+    const OptionBool & skip_unavailable() const;
     OptionBool & autocheck_running_kernel();  // :yum-compatibility
     const OptionBool & autocheck_running_kernel() const;
     OptionBool & clean_requirements_on_remove();
