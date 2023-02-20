@@ -251,8 +251,9 @@ class ConfigMain::Impl {
     OptionBool history_record{true};
     OptionStringList history_record_packages{std::vector<std::string>{"dnf", "rpm"}};
     OptionString rpmverbosity{"info"};
-    OptionBool strict{true};                    // :api
-    OptionBool skip_broken{false};              // :yum-compatibility
+    OptionBool strict{true};  // deprecated
+    OptionBool skip_broken{false};
+    OptionBool skip_unavailable{false};
     OptionBool autocheck_running_kernel{true};  // :yum-compatibility
     OptionBool clean_requirements_on_remove{true};
 
@@ -435,6 +436,7 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("rpmverbosity", rpmverbosity);
     owner.opt_binds().add("strict", strict);
     owner.opt_binds().add("skip_broken", skip_broken);
+    owner.opt_binds().add("skip_unavailable", skip_unavailable);
     owner.opt_binds().add("autocheck_running_kernel", autocheck_running_kernel);
     owner.opt_binds().add("clean_requirements_on_remove", clean_requirements_on_remove);
     owner.opt_binds().add("history_list_view", history_list_view);
@@ -1000,6 +1002,13 @@ OptionBool & ConfigMain::skip_broken() {
 }
 const OptionBool & ConfigMain::skip_broken() const {
     return p_impl->skip_broken;
+}
+
+OptionBool & ConfigMain::skip_unavailable() {
+    return p_impl->skip_unavailable;
+}
+const OptionBool & ConfigMain::skip_unavailable() const {
+    return p_impl->skip_unavailable;
 }
 
 OptionBool & ConfigMain::autocheck_running_kernel() {
