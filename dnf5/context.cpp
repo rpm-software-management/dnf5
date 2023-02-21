@@ -270,26 +270,8 @@ void download_packages(const std::vector<libdnf::rpm::Package> & packages, const
     }
 
     std::cout << "Downloading Packages:" << std::endl;
-    try {
-        downloader.download(true, true);
-    } catch (const std::runtime_error & ex) {
-        std::cout << "Exception: " << ex.what() << std::endl;
-    }
+    downloader.download(true, true);
     std::cout << std::endl;
-}
-
-void download_packages(libdnf::base::Transaction & transaction, const char * dest_dir) {
-    std::vector<libdnf::rpm::Package> downloads;
-    for (auto & tspkg : transaction.get_transaction_packages()) {
-        if (transaction_item_action_is_inbound(tspkg.get_action()) &&
-            tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
-            downloads.push_back(tspkg.get_package());
-        }
-    }
-
-    if (!downloads.empty()) {
-        download_packages(downloads, dest_dir);
-    }
 }
 
 namespace {
@@ -634,7 +616,7 @@ bool Context::check_gpg_signatures(const libdnf::base::Transaction & transaction
 
 
 void Context::download_and_run(libdnf::base::Transaction & transaction) {
-    download_packages(transaction, nullptr);
+    transaction.download();
 
     std::cout << std::endl << "Verifying PGP signatures" << std::endl;
     if (!check_gpg_signatures(transaction)) {
