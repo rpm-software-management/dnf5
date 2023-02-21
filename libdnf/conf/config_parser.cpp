@@ -53,9 +53,17 @@ ConfigParserOptionNotFoundError::ConfigParserOptionNotFoundError(
     const std::string & section, const std::string & option)
     : ConfigParserError(M_("Section \"{}\" does not contain option \"{}\""), section, option) {}
 
-void ConfigParser::read(const std::string & file_path) {
+void ConfigParser::read(const std::string & file_path) try {
     IniParser parser(file_path);
     ::libdnf::read(*this, parser);
+} catch (const std::filesystem::filesystem_error & e) {
+    if (e.code().value() == ENOENT) {
+        std::throw_with_nested(MissingConfigError(M_("Configuration file \"{}\" not found"), file_path));
+    } else {
+        std::throw_with_nested(InaccessibleConfigError(M_("Unable to access configuration file \"{}\""), file_path));
+    }
+} catch (const Error & e) {
+    std::throw_with_nested(InvalidConfigError(M_("Error in configuration file \"{}\""), file_path));
 }
 
 static std::string create_raw_item(const std::string & value, const std::string & old_raw_item) {

@@ -34,6 +34,30 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
+/// Error accessing config file other than ENOENT; e.g. we don't have read permission
+class InaccessibleConfigError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_name() const noexcept override { return "InaccessibleConfigError"; }
+};
+
+/// Configuration file is missing
+class MissingConfigError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_name() const noexcept override { return "MissingConfigError"; }
+};
+
+/// Configuration file is invalid
+class InvalidConfigError : public Error {
+public:
+    using Error::Error;
+    const char * get_domain_name() const noexcept override { return "libdnf"; }
+    const char * get_name() const noexcept override { return "InvalidConfigError"; }
+};
+
 class ConfigParserError : public Error {
 public:
     using Error::Error;

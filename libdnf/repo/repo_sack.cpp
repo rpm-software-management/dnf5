@@ -352,7 +352,20 @@ void RepoSack::create_repos_from_file(const std::string & path) {
 }
 
 void RepoSack::create_repos_from_config_file() {
-    create_repos_from_file(std::filesystem::path(base->get_config().config_file_path().get_value()));
+    const auto & path = base->get_config().config_file_path().get_value();
+    try {
+        create_repos_from_file(std::filesystem::path(path));
+    } catch (const libdnf::MissingConfigError & e) {
+        // Ignore the missing config file unless user specified it via --config=...
+        if (base->get_config().config_file_path().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+            throw;
+        }
+    } catch (const libdnf::InaccessibleConfigError & e) {
+        // Ignore the inaccessible config file unless user specified it via --config=...
+        if (base->get_config().config_file_path().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+            throw;
+        }
+    }
 }
 
 void RepoSack::create_repos_from_dir(const std::string & dir_path) {

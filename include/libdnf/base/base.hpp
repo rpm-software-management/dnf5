@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_BASE_BASE_HPP
 
 #include "libdnf/base/base_weak.hpp"
+#include "libdnf/common/exception.hpp"
 #include "libdnf/common/impl_ptr.hpp"
 #include "libdnf/common/weak_ptr.hpp"
 #include "libdnf/comps/comps.hpp"
