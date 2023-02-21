@@ -30,12 +30,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 class BaseTest : public TestCaseFixture {
     CPPUNIT_TEST_SUITE(BaseTest);
     CPPUNIT_TEST(test_weak_ptr);
-    CPPUNIT_TEST(test_incorrect_workflow);
+    CPPUNIT_TEST(test_missing_setup);
+    CPPUNIT_TEST(test_repeated_setup);
+    CPPUNIT_TEST(test_unlock_not_locked);
     CPPUNIT_TEST_SUITE_END();
 
 public:
     void test_weak_ptr();
-    void test_incorrect_workflow();
+    void test_missing_setup();
+    void test_repeated_setup();
+    void test_unlock_not_locked();
 };
 
 

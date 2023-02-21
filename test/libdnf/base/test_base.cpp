@@ -50,13 +50,38 @@ void BaseTest::test_weak_ptr() {
     CPPUNIT_ASSERT_THROW(vars2->get_value("test_variable"), libdnf::AssertionError);
 }
 
-void BaseTest::test_incorrect_workflow() {
+void BaseTest::test_missing_setup() {
     // Creates a new Base object
     auto base = get_preconfigured_base();
 
     // Base object is not fully initialized - not initialized by Base::setup()
-    CPPUNIT_ASSERT_THROW(libdnf::rpm::PackageQuery(*base.get()), libdnf::AssertionError);
+    CPPUNIT_ASSERT_THROW(libdnf::rpm::PackageQuery(*base.get()), libdnf::UserAssertionError);
 
     base->setup();
     libdnf::rpm::PackageQuery(*base.get());
+}
+
+void BaseTest::test_repeated_setup() {
+    // Creates a new Base object
+    auto base = get_preconfigured_base();
+
+    // Initialize the Base
+    base->setup();
+
+    // Base was already initialized
+    CPPUNIT_ASSERT_THROW(base->setup(), libdnf::UserAssertionError);
+}
+
+void BaseTest::test_unlock_not_locked() {
+    // Creates a new Base object
+    auto base = get_preconfigured_base();
+
+    // Base::unlock() called on unlocked Base instance
+    CPPUNIT_ASSERT_THROW(base->unlock(), libdnf::UserAssertionError);
+
+    // Lock the Base first
+    base->lock();
+
+    // Unlocking should work now
+    base->unlock();
 }
