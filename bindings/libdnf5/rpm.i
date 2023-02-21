@@ -22,6 +22,8 @@
         $action
     } catch (const std::runtime_error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const libdnf::UserAssertionError & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
     }
 }
 
