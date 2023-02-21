@@ -52,6 +52,29 @@ const char * AssertionError::what() const noexcept {
     }
 }
 
+UserAssertionError::UserAssertionError(
+    const char * assertion, const SourceLocation & location, const std::string & message)
+    : logic_error(message),
+      condition(assertion),
+      location(location) {}
+
+
+const char * UserAssertionError::what() const noexcept {
+    try {
+        str_what = location.file_name + std::string(":") + std::to_string(location.source_line) + ": " +
+                   location.function_name;
+        if (condition) {
+            str_what += std::string(": API Assertion '") + condition + "' failed: ";
+        } else {
+            str_what += ": API Assertion failed: ";
+        }
+        str_what += logic_error::what();
+        return str_what.c_str();
+    } catch (...) {
+        return logic_error::what();
+    }
+}
+
 SystemError::SystemError(int error_code) : Error(M_("System error")), error_code(error_code), has_user_message(false) {}
 
 std::string SystemError::get_error_message() const {

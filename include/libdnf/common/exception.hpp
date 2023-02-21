@@ -51,6 +51,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
          ? void(0)                                \
          : throw libdnf::AssertionError(#condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
 
+/// An assert macro that throws `libdnf::UserAssertionError` when `condition` is not met.
+///
+/// @param condition The assertion condition. Throws UserAssertionError if it's not met.
+/// @param format The format string for the message.
+/// @param ... The format arguments.
+/// @exception libdnf::UserAssertionError Thrown when condition is not met.
+#define libdnf_user_assert(condition, msg_format, ...) \
+    (static_cast<bool>(condition)                      \
+         ? void(0)                                     \
+         : throw libdnf::UserAssertionError(#condition, LIBDNF_LOCATION, fmt::format(msg_format, ##__VA_ARGS__)))
+
 /// Indicates the availability of `libdnf_assert` and` libdnf_throw_assertion` macros.
 /// These macros may be removed in the future. E.g. when migrating the asserts implementation
 /// to C++20 `std::source_location`.
@@ -72,6 +83,31 @@ struct SourceLocation {
 class AssertionError : public std::logic_error {
 public:
     explicit AssertionError(const char * assertion, const SourceLocation & location, const std::string & message);
+
+    const char * what() const noexcept override;
+    const char * assertion() const noexcept { return condition; }
+    const char * file_name() const noexcept { return location.file_name; }
+    unsigned int source_line() const noexcept { return location.source_line; }
+    const char * function_name() const noexcept { return location.function_name; }
+    const char * message() const noexcept { return logic_error::what(); }
+
+private:
+    const char * condition;
+    SourceLocation location;
+    mutable std::string str_what;
+};
+
+/// A UserAssertionError is an error which is thrown when the
+/// libdnf public API is used in an unexpected way and continuing
+/// would led to an invalid state.
+
+/// For the bindings users, this exception is intended to be translated
+/// into a standard runtime exception which could be handled,
+/// whereas with the previous `AssertionError` exception the process
+/// is terminated and the system state is captured for debugging purposes.
+class UserAssertionError : public std::logic_error {
+public:
+    explicit UserAssertionError(const char * assertion, const SourceLocation & location, const std::string & message);
 
     const char * what() const noexcept override;
     const char * assertion() const noexcept { return condition; }
