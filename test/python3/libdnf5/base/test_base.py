@@ -53,3 +53,13 @@ class TestBase(unittest.TestCase):
         #    vars.get_value("test_variable")
         #with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
         #    vars2.get_value("test_variable")
+
+    def test_missing_setup_goal_resolve(self):
+        # Create a new Base object
+        base = libdnf5.base.Base()
+
+        # Create a new empty Goal
+        goal = libdnf5.base.Goal(base)
+
+        # Try to resolve the goal without running base.setup()
+        self.assertRaises(RuntimeError, goal.resolve)
