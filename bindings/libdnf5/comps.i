@@ -16,6 +16,14 @@
 %import "repo.i"
 %import "transaction.i"
 
+%exception {
+    try {
+        $action
+    } catch (const libdnf::UserAssertionError & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+}
+
 %{
     #include "libdnf/comps/group/package.hpp"
     #include "libdnf/comps/group/group.hpp"

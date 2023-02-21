@@ -21,6 +21,14 @@
 %import "rpm.i"
 %import "transaction.i"
 
+%exception {
+    try {
+        $action
+    } catch (const libdnf::UserAssertionError & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+}
+
 %{
     #include "libdnf/logger/memory_buffer_logger.hpp"
     #include "libdnf/base/base.hpp"
