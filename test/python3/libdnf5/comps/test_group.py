@@ -28,3 +28,10 @@ class TestGroup(base_test_case.BaseTestCase):
         self.add_repo_repomd("repomd-comps-core")
         q_core = libdnf5.comps.GroupQuery(self.base)
         core = q_core.get()
+
+    def test_group_query_without_setup(self):
+        # Create a new Base object
+        base = libdnf5.base.Base()
+
+        # Try to create a group query without running base.setup()
+        self.assertRaises(RuntimeError, libdnf5.comps.GroupQuery, base)

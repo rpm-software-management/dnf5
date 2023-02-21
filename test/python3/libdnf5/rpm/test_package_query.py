@@ -137,3 +137,10 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         query.filter_name(["pkg"])
         package = next(iter(query))
         self.assertEqual(package.get_reason(), libdnf5.transaction.TransactionItemReason_NONE)
+
+    def test_pkg_query_without_setup(self):
+        # Create a new Base object
+        base = libdnf5.base.Base()
+
+        # Try to create a packge query without running base.setup()
+        self.assertRaises(RuntimeError, libdnf5.rpm.PackageQuery, base)
