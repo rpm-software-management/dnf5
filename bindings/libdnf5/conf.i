@@ -93,6 +93,9 @@
 %include "libdnf/conf/option_binds.hpp"
 
 %ignore libdnf::ConfigParserError;
+%ignore libdnf::InaccessibleConfigError;
+%ignore libdnf::MissingConfigError;
+%ignore libdnf::InvalidConfigError;
 %ignore ConfigParserSectionNotFoundError;
 %ignore ConfigParserOptionNotFoundError;
 %include "libdnf/conf/config_parser.hpp"

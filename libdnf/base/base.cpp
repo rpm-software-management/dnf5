@@ -78,27 +78,29 @@ void Base::load_defaults() {
         ConfigParser parser;
         parser.read(file_path);
         config.load_from_parser(parser, "main", vars, *get_logger(), Option::Priority::DEFAULT);
-    } catch (const std::filesystem::filesystem_error & ex) {
-        if (ex.code().value() == ENOENT) {
-            log_router.debug("Configuration file \"{}\" not found", file_path);
-        } else {
-            std::throw_with_nested(RuntimeError(M_("Unable to load configuration file \"{}\""), file_path));
-        }
-    } catch (const libdnf::Error & ex) {
-        std::throw_with_nested(RuntimeError(M_("Error in configuration file \"{}\""), file_path));
+    } catch (const libdnf::MissingConfigError & ex) {
+        log_router.debug("Configuration file \"{}\" not found", file_path);
     }
 }
 
-void Base::load_config_from_file(const std::string & path) try {
+void Base::load_config_from_file(const std::string & path) {
     ConfigParser parser;
     parser.read(path);
     config.load_from_parser(parser, "main", vars, *get_logger());
-} catch (const Error & e) {
-    std::throw_with_nested(RuntimeError(M_("Unable to load configuration file \"{}\""), path));
 }
 
-void Base::load_config_from_file() {
+void Base::load_config_from_file() try {
     load_config_from_file(config.config_file_path().get_value());
+} catch (const MissingConfigError & e) {
+    // Ignore the missing config file unless the user specified it via --config=...
+    if (config.config_file_path().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+        throw;
+    }
+} catch (const InaccessibleConfigError & e) {
+    // Ignore the inaccessible config file unless the user specified it via --config=...
+    if (config.config_file_path().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+        throw;
+    }
 }
 
 void Base::load_config_from_dir(const std::string & dir_path) {
