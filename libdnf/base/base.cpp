@@ -60,8 +60,9 @@ void Base::lock() {
 }
 
 void Base::unlock() {
-    libdnf_assert(locked_base, "Base::unlock() called on unlocked \"Base\" instance");
-    libdnf_assert(locked_base == this, "Called Base::unlock(). But the lock is not owned by this \"Base\" instance.");
+    libdnf_user_assert(locked_base, "Base::unlock() called on unlocked \"Base\" instance");
+    libdnf_user_assert(
+        locked_base == this, "Called Base::unlock(). But the lock is not owned by this \"Base\" instance.");
     locked_base = nullptr;
     locked_base_mutex.unlock();
 }
@@ -138,7 +139,7 @@ void Base::load_plugins() {
 
 void Base::setup() {
     auto & pool = p_impl->pool;
-    libdnf_assert(!pool, "Base was already initialized");
+    libdnf_user_assert(!pool, "Base was already initialized");
 
     load_plugins();
     p_impl->plugins.init();

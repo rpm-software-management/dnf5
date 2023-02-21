@@ -45,12 +45,12 @@ public:
     libdnf::advisory::AdvisorySackWeakPtr get_rpm_advisory_sack() { return rpm_advisory_sack.get_weak_ptr(); }
 
     solv::RpmPool & get_rpm_pool() {
-        libdnf_assert(pool, "Base instance was not fully initialized by Base::setup()");
+        libdnf_user_assert(pool, "Base instance was not fully initialized by Base::setup()");
         return *pool;
     }
 
     solv::CompsPool & get_comps_pool() {
-        libdnf_assert(comps_pool, "Base instance was not fully initialized by Base::setup()");
+        libdnf_user_assert(comps_pool, "Base instance was not fully initialized by Base::setup()");
         return *comps_pool;
     }
 
