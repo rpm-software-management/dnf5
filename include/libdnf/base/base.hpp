@@ -85,7 +85,11 @@ public:
     /// The method is supposed to be called after configuration is updated, application plugins applied
     /// their pre configuration modification in configuration, but before repositories are loaded or any Package
     /// or Advisory query created.
+    /// Calling the method for the second time result in throwing an exception
     void setup();
+
+    /// Returns true when setup() (mandatory method in many workflows) was alredy called
+    bool is_initialized();
 
     // TODO(jmracek) Remove from public API due to unstability of the code
     transaction::TransactionHistoryWeakPtr get_transaction_history() { return transaction_history.get_weak_ptr(); }
