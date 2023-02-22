@@ -192,4 +192,8 @@ void Base::setup() {
     p_impl->plugins.post_base_setup();
 }
 
+bool Base::is_initialized() {
+    return p_impl->pool.get() != nullptr;
+}
+
 }  // namespace libdnf
