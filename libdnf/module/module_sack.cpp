@@ -435,14 +435,14 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
             state = ModuleState::AVAILABLE;
         }
 
-        goal_strict.add_provide_install(reldep_id, 1, 1);
-        goal_weak.add_provide_install(reldep_id, 0, 0);
+        goal_strict.add_provide_install(reldep_id, 0, 1);
+        goal_weak.add_provide_install(reldep_id, 1, 0);
         if (state == ModuleState::ENABLED) {
-            goal_best.add_provide_install(reldep_id, 1, 1);
-            goal.add_provide_install(reldep_id, 1, 0);
-        } else {
             goal_best.add_provide_install(reldep_id, 0, 1);
             goal.add_provide_install(reldep_id, 0, 0);
+        } else {
+            goal_best.add_provide_install(reldep_id, 1, 1);
+            goal.add_provide_install(reldep_id, 1, 0);
         }
     }
 

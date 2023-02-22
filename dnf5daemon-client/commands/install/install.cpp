@@ -46,14 +46,21 @@ void InstallCommand::set_argument_parser() {
 
     cmd.set_description("install packages on the system");
 
-    auto strict = parser.add_new_named_arg("strict");
-    strict->set_long_name("strict");
-    strict->set_description(
-        "Broken or unavailable packages cause the transaction to fail (yes) or will be skipped (no).");
-    strict->set_has_value(true);
-    strict->set_arg_value_help("<yes|no>");
-    strict->link_value(&strict_option);
-    cmd.register_named_arg(strict);
+    auto skip_broken = parser.add_new_named_arg("skip_broken");
+    skip_broken->set_long_name("skip-broken");
+    skip_broken->set_description("Whether broken packages can be skipped to resolve transaction problems.");
+    skip_broken->set_has_value(true);
+    skip_broken->set_arg_value_help("<yes|no>");
+    skip_broken->link_value(&skip_broken_option);
+    cmd.register_named_arg(skip_broken);
+
+    auto skip_unavailable = parser.add_new_named_arg("skip_unavailable");
+    skip_unavailable->set_long_name("skip-unavailable");
+    skip_unavailable->set_description("Whether unavailable packages can be skipped.");
+    skip_unavailable->set_has_value(true);
+    skip_unavailable->set_arg_value_help("<yes|no>");
+    skip_unavailable->link_value(&skip_unavailable_option);
+    cmd.register_named_arg(skip_unavailable);
 
     patterns_options = parser.add_new_values();
     auto keys = parser.add_new_positional_arg(
@@ -83,9 +90,12 @@ void InstallCommand::run() {
     }
 
     dnfdaemon::KeyValueMap options = {};
-    // pass the `strict` value to the server only when explicitly set by command line option
-    if (strict_option.get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
-        options["strict"] = strict_option.get_value();
+    // pass the `skip_*` value to the server only when explicitly set by command line option
+    if (skip_broken_option.get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+        options["skip_broken"] = skip_broken_option.get_value();
+    }
+    if (skip_unavailable_option.get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+        options["skip_unavailable"] = skip_unavailable_option.get_value();
     }
 
     ctx.session_proxy->callMethod("install")

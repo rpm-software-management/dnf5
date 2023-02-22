@@ -54,12 +54,12 @@ public:
     void set_installonly(const std::vector<std::string> & installonly_names);
     void set_installonly_limit(unsigned int limit) { installonly_limit = limit; };
 
-    void add_install(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps);
-    void add_provide_install(libdnf::rpm::ReldepId reldepid, bool strict, bool best, bool clean_deps);
+    void add_install(libdnf::solv::IdQueue & queue, bool skip_broken, bool best, bool clean_deps);
+    void add_provide_install(libdnf::rpm::ReldepId reldepid, bool skip_broken, bool best, bool clean_deps);
     void add_remove(const libdnf::solv::IdQueue & queue, bool clean_deps);
     void add_remove(const libdnf::solv::SolvMap & solv_map, bool clean_deps);
     void add_upgrade(libdnf::solv::IdQueue & queue, bool best, bool clean_deps);
-    void add_distro_sync(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps);
+    void add_distro_sync(libdnf::solv::IdQueue & queue, bool skip_broken, bool best, bool clean_deps);
     /// Store reason changes in the transaction
     /// @param queue    Packages to change reason for
     /// @param reason   New reason
@@ -249,20 +249,21 @@ inline void GoalPrivate::set_installonly(const std::vector<std::string> & instal
     }
 }
 
-inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
+inline void GoalPrivate::add_install(libdnf::solv::IdQueue & queue, bool skip_broken, bool best, bool clean_deps) {
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     clean_deps_present = clean_deps_present || clean_deps;
     Id what = get_rpm_pool().queuetowhatprovides(queue);
     staging.push_back(
-        SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
+        SOLVER_INSTALL | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (skip_broken ? SOLVER_WEAK : 0) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
         what);
 }
 
-inline void GoalPrivate::add_provide_install(libdnf::rpm::ReldepId reldepid, bool strict, bool best, bool clean_deps) {
+inline void GoalPrivate::add_provide_install(
+    libdnf::rpm::ReldepId reldepid, bool skip_broken, bool best, bool clean_deps) {
     clean_deps_present = clean_deps_present || clean_deps;
     staging.push_back(
-        SOLVER_INSTALL | SOLVER_SOLVABLE_PROVIDES | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
+        SOLVER_INSTALL | SOLVER_SOLVABLE_PROVIDES | SOLVER_SETARCH | SOLVER_SETEVR | (skip_broken ? SOLVER_WEAK : 0) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0),
         reldepid.id);
 }
@@ -293,12 +294,12 @@ inline void GoalPrivate::add_upgrade(libdnf::solv::IdQueue & queue, bool best, b
         what);
 }
 
-inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool strict, bool best, bool clean_deps) {
+inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool skip_broken, bool best, bool clean_deps) {
     clean_deps_present = clean_deps_present || clean_deps;
     // TODO dnf_sack_make_provides_ready(sack); When provides recomputed job musy be empty
     Id what = get_rpm_pool().queuetowhatprovides(queue);
     staging.push_back(
-        SOLVER_DISTUPGRADE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
+        SOLVER_DISTUPGRADE | SOLVER_SOLVABLE_ONE_OF | SOLVER_SETARCH | SOLVER_SETEVR | (skip_broken ? SOLVER_WEAK : 0) |
             (best ? SOLVER_FORCEBEST : 0) | (clean_deps ? SOLVER_CLEANDEPS : 0) | SOLVER_TARGETED,
         what);
 }
