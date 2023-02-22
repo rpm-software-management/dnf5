@@ -32,29 +32,6 @@
 
 #define CV __perl_CV
 
-#if defined(SWIGPYTHON)
-%typemap(in) std::optional<int> %{
-    if($input == Py_None)
-        $1 = std::optional<int>();
-    else
-        $1 = std::optional<int>(PyLong_AsLong($input));
-%}
-
-%typemap(in) std::optional<unsigned int> %{
-    if($input == Py_None)
-        $1 = std::optional<unsigned int>();
-    else
-        $1 = std::optional<unsigned int>(PyLong_AsUnsignedLong($input));
-%}
-
-%typemap(in) std::optional<std::string> %{
-    if($input == Py_None)
-        $1 = std::optional<std::string>();
-    else
-        $1 = std::optional<std::string>(PyString_AsString($input));
-%}
-#endif
-
 %template(BaseWeakPtr) libdnf::WeakPtr<libdnf::Base, false>;
 %template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
 
