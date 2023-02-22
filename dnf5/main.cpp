@@ -267,8 +267,8 @@ void RootCommand::set_argument_parser() {
     auto skip_broken = parser.add_new_named_arg("skip-broken");
     skip_broken->set_long_name("skip-broken");
     skip_broken->set_description("resolve depsolve problems by skipping packages");
-    skip_broken->set_const_value("false");
-    skip_broken->link_value(&config.strict());
+    skip_broken->set_const_value("true");
+    skip_broken->link_value(&config.skip_broken());
     global_options_group->register_argument(skip_broken);
 
     auto enable_repo_ids = parser.add_new_named_arg("enable-repo");

@@ -134,8 +134,10 @@ public:
 
 struct GoalJobSettings : public ResolveSpecSettings {
 public:
-    /// Return used value for strict
-    GoalUsedSetting get_used_strict() const { return used_strict; };
+    /// Return used value for skip_broken
+    GoalUsedSetting get_used_skip_broken() const { return used_skip_broken; };
+    /// Return used value for skip_unavailable
+    GoalUsedSetting get_used_skip_unavailable() const { return used_skip_unavailable; };
     /// Return used value for best
     GoalUsedSetting get_used_best() const { return used_best; };
     /// Return used value for clean_requirements_on_remove
@@ -156,8 +158,10 @@ public:
 
     /// Set whether hints should be reported
     bool report_hint{true};
-    /// Set strict, AUTO means that it is handled according to the default behavior
-    GoalSetting strict{GoalSetting::AUTO};
+    /// Set skip_broken, AUTO means that it is handled according to the default behavior
+    GoalSetting skip_broken{GoalSetting::AUTO};
+    /// Set skip_unavailable, AUTO means that it is handled according to the default behavior
+    GoalSetting skip_unavailable{GoalSetting::AUTO};
     /// Set best, AUTO means that it is handled according to the default behavior
     GoalSetting best{GoalSetting::AUTO};
     /// Set clean_requirements_on_remove, AUTO means that it is handled according to the default behavior
@@ -173,19 +177,28 @@ private:
     // TODO(lukash) fix the documentation of the methods below, "resolve FOO and store
     // the result" doesn't really describe what is actually going on
 
-    /// Resolve strict value and store the result as the value used.
+    /// Resolve skip_broken value and store the result as the value used.
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
     /// @return Resolved value.
     /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     /// @since 1.0
-    bool resolve_strict(const libdnf::ConfigMain & cfg_main);
-    /// Resolve strict value and store the result as the value used. When GoalSetting::auto it returns false
+    bool resolve_skip_broken(const libdnf::ConfigMain & cfg_main);
+    /// Resolve skip_broken value and store the result as the value used. When GoalSetting::auto it returns false
     ///
     /// @return Resolved value.
     /// @exception libdnf::AssertionError When a different value already stored
     /// @since 1.0
-    bool resolve_strict();
+    bool resolve_skip_broken();
+
+    /// Resolve skip_unavailable value and store the result as the value used.
+    ///
+    /// @param cfg_main Main config used to resolve GoalSetting::auto
+    /// @return Resolved value.
+    /// @exception libdnf::AssertionError When a different value already stored or when invalid value
+    /// @since 1.0
+    bool resolve_skip_unavailable(const libdnf::ConfigMain & cfg_main);
+
     /// Resolve best value and store the result as the value used.
     ///
     /// @param cfg_main Main config used to resolve GoalSetting::auto
@@ -212,7 +225,8 @@ private:
     /// @exception libdnf::AssertionError When a different value already stored or when invalid value
     libdnf::comps::PackageType resolve_group_package_types(const libdnf::ConfigMain & cfg_main);
 
-    GoalUsedSetting used_strict{GoalUsedSetting::UNUSED};
+    GoalUsedSetting used_skip_broken{GoalUsedSetting::UNUSED};
+    GoalUsedSetting used_skip_unavailable{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_best{GoalUsedSetting::UNUSED};
     GoalUsedSetting used_clean_requirements_on_remove{GoalUsedSetting::UNUSED};
     std::optional<libdnf::comps::PackageType> used_group_package_types{std::nullopt};

@@ -24,12 +24,12 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf {
 
-bool GoalJobSettings::resolve_strict(const libdnf::ConfigMain & cfg_main) {
+bool GoalJobSettings::resolve_skip_broken(const libdnf::ConfigMain & cfg_main) {
     auto resolved = GoalUsedSetting::UNUSED;
-    switch (strict) {
+    switch (skip_broken) {
         case GoalSetting::AUTO: {
-            bool strict = cfg_main.strict().get_value();
-            resolved = strict ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
+            bool skip_broken = cfg_main.skip_broken().get_value();
+            resolved = skip_broken ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
         } break;
         case GoalSetting::SET_TRUE:
             resolved = GoalUsedSetting::USED_TRUE;
@@ -40,23 +40,47 @@ bool GoalJobSettings::resolve_strict(const libdnf::ConfigMain & cfg_main) {
     }
 
     libdnf_assert(
-        used_strict == GoalUsedSetting::UNUSED || resolved == used_strict,
-        "\"strict\" is already set to a different value");
+        used_skip_broken == GoalUsedSetting::UNUSED || resolved == used_skip_broken,
+        "\"skip_broken\" is already set to a different value");
 
-    used_strict = resolved;
+    used_skip_broken = resolved;
     return resolved == GoalUsedSetting::USED_TRUE;
 }
 
-bool GoalJobSettings::resolve_strict() {
-    bool strict_bool = strict == GoalSetting::SET_TRUE;
-    auto resolved = strict_bool ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
+bool GoalJobSettings::resolve_skip_unavailable(const libdnf::ConfigMain & cfg_main) {
+    auto resolved = GoalUsedSetting::UNUSED;
+    switch (skip_unavailable) {
+        case GoalSetting::AUTO: {
+            bool skip_unavailable = cfg_main.skip_unavailable().get_value();
+            resolved = skip_unavailable ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
+        } break;
+        case GoalSetting::SET_TRUE:
+            resolved = GoalUsedSetting::USED_TRUE;
+            break;
+        case GoalSetting::SET_FALSE:
+            resolved = GoalUsedSetting::USED_FALSE;
+            break;
+    }
 
     libdnf_assert(
-        used_strict == GoalUsedSetting::UNUSED || resolved == used_strict, "Used value for 'used_strict' already set");
+        used_skip_unavailable == GoalUsedSetting::UNUSED || resolved == used_skip_unavailable,
+        "\"skip_unavailable\" is already set to a different value");
 
-    used_strict = resolved;
+    used_skip_unavailable = resolved;
+    return resolved == GoalUsedSetting::USED_TRUE;
+}
 
-    return strict_bool;
+bool GoalJobSettings::resolve_skip_broken() {
+    bool skip_broken_bool = skip_broken == GoalSetting::SET_TRUE;
+    auto resolved = skip_broken_bool ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
+
+    libdnf_assert(
+        used_skip_broken == GoalUsedSetting::UNUSED || resolved == used_skip_broken,
+        "Used value for 'used_skip_broken' already set");
+
+    used_skip_broken = resolved;
+
+    return skip_broken_bool;
 }
 
 bool GoalJobSettings::resolve_best(const libdnf::ConfigMain & cfg_main) {

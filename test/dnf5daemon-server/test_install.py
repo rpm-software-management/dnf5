@@ -55,9 +55,9 @@ class InstallTest(support.InstallrootCase):
 
         self.iface_goal.do_transaction(dbus.Dictionary({}, signature='sv'))
 
-    def test_install_strict(self):
-        '''with strict=True attempt to install nonexistent package returns error'''
-        self.iface_rpm.install(['no_one'], dbus.Dictionary({'strict': True}, signature='sv'))
+    def test_install_no_skip_unavailable(self):
+        '''with skip_unavailable=False attempt to install nonexistent package returns error'''
+        self.iface_rpm.install(['no_one'], dbus.Dictionary({'skip_unavailable': False}, signature='sv'))
         resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
 
         self.assertEqual(result, 2)
@@ -71,12 +71,12 @@ class InstallTest(support.InstallrootCase):
         self.assertEqual(errors, dbus.Array([
             dbus.String('No match for argument: no_one')], signature=dbus.Signature('s')))
 
-    def test_install_nostrict(self):
+    def test_install_skip_unavailable(self):
         '''
-        with strict=True attempt to install nonexistent package returns empty
+        with skip_unavailable=True attempt to install nonexistent package returns empty
         transaction
         '''
-        self.iface_rpm.install(['no_one'], dbus.Dictionary({'strict': False}, signature='sv'))
+        self.iface_rpm.install(['no_one'], dbus.Dictionary({'skip_unavailable': True}, signature='sv'))
 
         resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
 

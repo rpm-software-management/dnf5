@@ -55,7 +55,7 @@ void BaseGoalTest::test_install_not_available() {
     add_repo_repomd("repomd-repo1");
 
     libdnf::Goal goal(base);
-    base.get_config().strict().set(false);
+    base.get_config().skip_unavailable().set(true);
     base.get_config().best().set(true);
     base.get_config().clean_requirements_on_remove().set(true);
     goal.add_rpm_install("not_available");
@@ -72,7 +72,8 @@ void BaseGoalTest::test_install_not_available() {
     CPPUNIT_ASSERT_EQUAL(
         libdnf::GoalUsedSetting::USED_FALSE, fist_event.get_job_settings()->get_used_clean_requirements_on_remove());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, fist_event.get_job_settings()->get_used_best());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, fist_event.get_job_settings()->get_used_strict());
+    CPPUNIT_ASSERT_EQUAL(
+        libdnf::GoalUsedSetting::USED_TRUE, fist_event.get_job_settings()->get_used_skip_unavailable());
 }
 
 void BaseGoalTest::test_install_from_cmdline() {
@@ -221,7 +222,7 @@ void BaseGoalTest::test_remove_not_installed() {
     CPPUNIT_ASSERT_EQUAL(
         libdnf::GoalUsedSetting::USED_TRUE, first_event.get_job_settings()->get_used_clean_requirements_on_remove());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_best());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_strict());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_skip_unavailable());
 }
 
 void BaseGoalTest::test_install_installed_pkg() {
@@ -321,7 +322,7 @@ void BaseGoalTest::test_upgrade_not_downgrade_from_cmdline() {
     CPPUNIT_ASSERT_EQUAL(
         libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_clean_requirements_on_remove());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_best());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_strict());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_skip_unavailable());
 }
 
 void BaseGoalTest::test_upgrade_not_available() {
@@ -346,7 +347,7 @@ void BaseGoalTest::test_upgrade_not_available() {
     CPPUNIT_ASSERT_EQUAL(
         libdnf::GoalUsedSetting::USED_FALSE, first_event.get_job_settings()->get_used_clean_requirements_on_remove());
     CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::USED_TRUE, first_event.get_job_settings()->get_used_best());
-    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_strict());
+    CPPUNIT_ASSERT_EQUAL(libdnf::GoalUsedSetting::UNUSED, first_event.get_job_settings()->get_used_skip_unavailable());
 }
 
 void BaseGoalTest::test_upgrade_all() {

@@ -35,9 +35,9 @@ extern "C" {
 namespace libdnf::module {
 
 
-void ModuleGoalPrivate::add_provide_install(Id reldepid, bool strict, bool best) {
+void ModuleGoalPrivate::add_provide_install(Id reldepid, bool skip_broken, bool best) {
     staging.push_back(
-        SOLVER_INSTALL | SOLVER_SOLVABLE_PROVIDES | SOLVER_SETARCH | SOLVER_SETEVR | (strict ? 0 : SOLVER_WEAK) |
+        SOLVER_INSTALL | SOLVER_SOLVABLE_PROVIDES | SOLVER_SETARCH | SOLVER_SETEVR | (skip_broken ? SOLVER_WEAK : 0) |
             (best ? SOLVER_FORCEBEST : 0),
         reldepid);
 }

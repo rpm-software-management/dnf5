@@ -35,7 +35,8 @@ public:
     void run() override;
 
 private:
-    libdnf::OptionBool strict_option{false};
+    libdnf::OptionBool skip_broken_option{false};
+    libdnf::OptionBool skip_unavailable_option{false};
     std::vector<std::unique_ptr<libdnf::Option>> * patterns_options{nullptr};
 };
 

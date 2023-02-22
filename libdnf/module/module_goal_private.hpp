@@ -46,10 +46,10 @@ public:
     /// Adds an install operation for given provide.
     ///
     /// @param reldepid Id of the reldep to install.
-    /// @param strict Whether it's strictly or only weakly required.
+    /// @param skip_broken Whether solver can skip reldep with unmet dependencies
     /// @param best Whether the latest version is required or not.
     /// @since 5.0
-    void add_provide_install(Id reldepid, bool strict, bool best);
+    void add_provide_install(Id reldepid, bool skip_broken, bool best);
 
     /// Resolve all operations.
     ///

@@ -95,8 +95,10 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
             - repo_ids: list of strings
                 Identifiers of the repos from which the packages could be installed.
-            - strict: boolean, default true
-                Indicates whether existing but non-installable packages should be skipped (false) or cause transaction resolving fail (true).
+            - skip_broken: boolean, default false
+                Whether solver can skip packages with broken dependencies to resolve transaction
+            - skip_unavailable: boolean, default false
+                Whether nonexisting packages can be skipped.
 
         Unknown options are ignored.
     -->
