@@ -60,6 +60,10 @@ void RepoqueryCommand::set_argument_parser() {
     nevra_option = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
 
+    // The default format is full_nevra
+    query_format_option = dynamic_cast<libdnf::OptionString *>(
+        parser.add_init_value(std::make_unique<libdnf::OptionString>("%{full_nevra}\n")));
+
     auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
     available->set_description("display available packages (default)");
@@ -83,6 +87,14 @@ void RepoqueryCommand::set_argument_parser() {
     nevra->set_description("use name-epoch:version-release.architecture format for displaying packages (default)");
     nevra->set_const_value("true");
     nevra->link_value(nevra_option);
+
+    auto query_format = parser.add_new_named_arg("queryformat");
+    query_format->set_long_name("queryformat");
+    query_format->set_description(
+        "display format for listing packages: %{name} %{version} ... use --querytags to view full tag list");
+    query_format->set_has_value(true);
+    query_format->set_arg_value_help("QUERYFORMAT");
+    query_format->link_value(query_format_option);
 
     auto keys =
         parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
@@ -235,6 +247,7 @@ void RepoqueryCommand::set_argument_parser() {
     cmd.register_named_arg(whatenhances);
     cmd.register_named_arg(whatsupplements);
     cmd.register_named_arg(whatsuggests);
+    cmd.register_named_arg(query_format);
     cmd.register_positional_arg(keys);
 }
 
