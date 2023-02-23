@@ -52,7 +52,6 @@ private:
     std::vector<std::string> pkg_specs{};
     std::vector<std::string> spec_file_paths{};
     std::vector<std::string> srpm_file_paths{};
-    libdnf::OptionBool skip_unavailable_option{false};
     std::vector<std::pair<std::string, std::string>> rpm_macros{};
 };
 

@@ -58,13 +58,6 @@ void BuildDepCommand::set_argument_parser() {
     });
     cmd.register_positional_arg(specs);
 
-    auto skip_unavailable = parser.add_new_named_arg("skip-unavailable");
-    skip_unavailable->set_long_name("skip-unavailable");
-    skip_unavailable->set_description("Skip build dependencies not available in repositories");
-    skip_unavailable->set_const_value("true");
-    skip_unavailable->link_value(&skip_unavailable_option);
-    cmd.register_named_arg(skip_unavailable);
-
     auto defs = parser.add_new_named_arg("rpm_macros");
     defs->set_short_name('D');
     defs->set_long_name("define");
@@ -277,10 +270,12 @@ void BuildDepCommand::run() {
 }
 
 void BuildDepCommand::goal_resolved() {
-    auto & transaction = *get_context().get_transaction();
+    auto & ctx = get_context();
+    auto & transaction = *ctx.get_transaction();
     auto transaction_problems = transaction.get_problems();
     if (transaction_problems != libdnf::GoalProblem::NO_PROBLEM) {
-        if (transaction_problems != libdnf::GoalProblem::NOT_FOUND || !skip_unavailable_option.get_value()) {
+        auto skip_unavailable = ctx.base.get_config().skip_unavailable().get_value();
+        if (transaction_problems != libdnf::GoalProblem::NOT_FOUND || !skip_unavailable) {
             throw GoalResolveError(transaction);
         }
     }
