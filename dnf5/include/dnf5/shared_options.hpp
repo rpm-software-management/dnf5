@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "utils/bgettext/bgettext-lib.h"
 
+#include <dnf5/context.hpp>
 #include <libdnf-cli/session.hpp>
 
 namespace dnf5 {
@@ -31,6 +32,30 @@ public:
     explicit AllowErasingOption(libdnf::cli::session::Command & command)
         : BoolOption(
               command, "allowerasing", '\0', _("Allow erasing of installed packages to resolve problems"), false) {}
+};
+
+class SkipBrokenOption : public libdnf::cli::session::BoolOption {
+public:
+    explicit SkipBrokenOption(dnf5::Command & command)
+        : BoolOption(
+              command,
+              "skip-broken",
+              '\0',
+              _("Allow resolving of depsolve problems by skipping packages"),
+              false,
+              &command.get_context().base.get_config().skip_broken()) {}
+};
+
+class SkipUnavailableOption : public libdnf::cli::session::BoolOption {
+public:
+    explicit SkipUnavailableOption(dnf5::Command & command)
+        : BoolOption(
+              command,
+              "skip-unavailable",
+              '\0',
+              _("Allow skipping unavailable packages"),
+              false,
+              &command.get_context().base.get_config().skip_unavailable()) {}
 };
 
 

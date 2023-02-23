@@ -166,7 +166,8 @@ public:
         const std::string & long_name,
         char short_name,
         const std::string & desc,
-        bool default_value);
+        bool default_value,
+        libdnf::OptionBool * linked_option = nullptr);
 
     /// @return Parsed value.
     /// @since 5.0

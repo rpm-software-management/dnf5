@@ -98,10 +98,9 @@ BoolOption::BoolOption(
     const std::string & long_name,
     char short_name,
     const std::string & desc,
-    bool default_value) {
+    bool default_value,
+    libdnf::OptionBool * linked_option) {
     auto & parser = command.get_session().get_argument_parser();
-    conf =
-        dynamic_cast<libdnf::OptionBool *>(parser.add_init_value(std::make_unique<libdnf::OptionBool>(default_value)));
     arg = parser.add_new_named_arg(long_name);
 
     if (!long_name.empty()) {
@@ -114,6 +113,12 @@ BoolOption::BoolOption(
 
     arg->set_description(desc);
     arg->set_const_value(default_value ? "false" : "true");
+    if (linked_option) {
+        conf = linked_option;
+    } else {
+        conf = dynamic_cast<libdnf::OptionBool *>(
+            parser.add_init_value(std::make_unique<libdnf::OptionBool>(default_value)));
+    }
     arg->link_value(conf);
 
     command.get_argument_parser_command()->register_named_arg(arg);
