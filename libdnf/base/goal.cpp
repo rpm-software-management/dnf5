@@ -497,6 +497,7 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
         groups_remove, groups_install;
     for (auto & [action, reason, spec, settings] : group_specs) {
         bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
+        auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
         if (action != GoalAction::INSTALL && action != GoalAction::REMOVE) {
             transaction.p_impl->add_resolve_log(
                 action,
@@ -505,7 +506,7 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
                 base::LogEvent::SpecType::GROUP,
                 spec,
                 {},
-                !skip_unavailable);
+                log_level);
             ret |= GoalProblem::UNSUPPORTED_ACTION;
             continue;
         }
@@ -528,7 +529,7 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
         }
         if (group_query.empty()) {
             transaction.p_impl->add_resolve_log(
-                action, GoalProblem::NOT_FOUND, settings, base::LogEvent::SpecType::GROUP, spec, {}, !skip_unavailable);
+                action, GoalProblem::NOT_FOUND, settings, base::LogEvent::SpecType::GROUP, spec, {}, log_level);
             if (!skip_unavailable) {
                 ret |= GoalProblem::NOT_FOUND;
             }
@@ -566,6 +567,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     auto & pool = get_rpm_pool(base);
     auto & cfg_main = base->get_config();
     bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
+    auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
     bool best = settings.resolve_best(cfg_main);
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
 
@@ -576,7 +578,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        auto problem = transaction.p_impl->report_not_found(action, spec, settings, !skip_unavailable);
+        auto problem = transaction.p_impl->report_not_found(action, spec, settings, log_level);
         if (skip_unavailable) {
             return {GoalProblem::NO_PROBLEM, result_queue};
         } else {
@@ -605,7 +607,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
             base::LogEvent::SpecType::PACKAGE,
             spec,
             {pool.get_nevra(package_id)},
-            false);
+            libdnf::Logger::Level::WARNING);
     }
 
     bool skip_broken = settings.resolve_skip_broken(cfg_main);
@@ -621,7 +623,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                     base::LogEvent::SpecType::PACKAGE,
                     spec,
                     {},
-                    !skip_unavailable);
+                    log_level);
                 return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
             }
             query |= installed;
@@ -710,7 +712,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                         base::LogEvent::SpecType::PACKAGE,
                         spec,
                         {},
-                        !skip_unavailable);
+                        log_level);
                     return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
                 }
                 query |= installed;
@@ -785,7 +787,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
                         base::LogEvent::SpecType::PACKAGE,
                         spec,
                         {},
-                        !skip_unavailable);
+                        log_level);
                     return {GoalProblem::NOT_FOUND_IN_REPOSITORIES, result_queue};
                 }
                 query |= installed;
@@ -820,13 +822,14 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
     // Resolve all settings before the first report => they will be storred in settings
     auto & cfg_main = base->get_config();
     bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
+    auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
     bool best = settings.resolve_best(cfg_main);
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery query(base);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        return transaction.p_impl->report_not_found(GoalAction::REINSTALL, spec, settings, !skip_unavailable);
+        return transaction.p_impl->report_not_found(GoalAction::REINSTALL, spec, settings, log_level);
     }
 
     // Report when package is not installed
@@ -840,7 +843,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
             base::LogEvent::SpecType::PACKAGE,
             spec,
             {},
-            !skip_unavailable);
+            log_level);
         return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED;
     }
 
@@ -854,7 +857,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
             base::LogEvent::SpecType::PACKAGE,
             spec,
             {},
-            !skip_unavailable);
+            log_level);
         return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_AVAILABLE;
     }
 
@@ -872,7 +875,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                 base::LogEvent::SpecType::PACKAGE,
                 spec,
                 {},
-                !skip_unavailable);
+                log_level);
             return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::INSTALLED_IN_DIFFERENT_VERSION;
         } else {
             rpm::PackageQuery relevant_available_n(query);
@@ -885,7 +888,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                     base::LogEvent::SpecType::PACKAGE,
                     spec,
                     {},
-                    !skip_unavailable);
+                    log_level);
                 return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED;
             } else {
                 transaction.p_impl->add_resolve_log(
@@ -895,7 +898,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                     base::LogEvent::SpecType::PACKAGE,
                     spec,
                     {},
-                    !skip_unavailable);
+                    log_level);
                 return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_INSTALLED_FOR_ARCHITECTURE;
             }
         }
@@ -913,7 +916,7 @@ GoalProblem Goal::Impl::add_reinstall_to_goal(
                 base::LogEvent::SpecType::PACKAGE,
                 spec,
                 {},
-                !skip_unavailable);
+                log_level);
             return skip_unavailable ? GoalProblem::NO_PROBLEM : GoalProblem::NOT_FOUND_IN_REPOSITORIES;
         }
     }
@@ -966,6 +969,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
             case GoalAction::INSTALL: {
                 bool skip_broken = settings.resolve_skip_broken(cfg_main);
                 bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
+                auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
                 bool best = settings.resolve_best(cfg_main);
                 bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
                 //  include installed packages with the same NEVRA into transaction to prevent reinstall
@@ -984,7 +988,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                         base::LogEvent::SpecType::PACKAGE,
                         {},
                         {pool.get_nevra(package_id)},
-                        !skip_unavailable);
+                        log_level);
                     ids.push_back(package_id);
                 }
                 rpm_goal.add_install(ids, skip_broken, best, clean_requirements_on_remove);
@@ -999,6 +1003,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 break;
             case GoalAction::REINSTALL: {
                 bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
+                auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
                 bool skip_broken = settings.resolve_skip_broken(cfg_main);
                 bool best = settings.resolve_best(cfg_main);
                 bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
@@ -1015,7 +1020,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             base::LogEvent::SpecType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
-                            !skip_unavailable);
+                            log_level);
                     } else {
                         // Only installed packages can be reinstalled
                         ids_nevra_installed.push_back(id);
@@ -1047,7 +1052,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             base::LogEvent::SpecType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
-                            false);
+                            libdnf::Logger::Level::WARNING);
                         continue;
                     }
                     std::string arch = pool.get_arch(id);
@@ -1063,7 +1068,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                                 base::LogEvent::SpecType::PACKAGE,
                                 {pool.get_nevra(id)},
                                 {},
-                                false);
+                                libdnf::Logger::Level::WARNING);
                             continue;
                         }
                     }
@@ -1077,7 +1082,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             base::LogEvent::SpecType::PACKAGE,
                             {pool.get_nevra(id)},
                             {pool.get_name(id) + ("." + arch)},
-                            false);
+                            libdnf::Logger::Level::WARNING);
                         // include installed packages with higher or equal version into transaction to prevent downgrade
                         for (auto installed_id : *query.p_impl) {
                             ids.push_back(installed_id);
@@ -1088,6 +1093,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
             } break;
             case GoalAction::DOWNGRADE: {
                 bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
+                auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
                 bool skip_broken = settings.resolve_skip_broken(cfg_main);
                 bool best = settings.resolve_best(cfg_main);
                 bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
@@ -1104,7 +1110,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             base::LogEvent::SpecType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
-                            !skip_unavailable);
+                            log_level);
                         continue;
                     }
                     query.filter_arch({pool.get_arch(id)});
@@ -1117,7 +1123,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             base::LogEvent::SpecType::PACKAGE,
                             {pool.get_nevra(id)},
                             {},
-                            !skip_unavailable);
+                            log_level);
                         continue;
                     }
                     query.filter_evr({pool.get_evr(id)}, sack::QueryCmp::LTE);
@@ -1133,7 +1139,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                             base::LogEvent::SpecType::PACKAGE,
                             {pool.get_nevra(id)},
                             {name_arch},
-                            !skip_unavailable);
+                            log_level);
                         continue;
                     }
 
@@ -1167,7 +1173,7 @@ void Goal::Impl::add_remove_to_goal(
 
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        transaction.p_impl->report_not_found(GoalAction::REMOVE, spec, settings, false);
+        transaction.p_impl->report_not_found(GoalAction::REMOVE, spec, settings, libdnf::Logger::Level::WARNING);
         return;
     }
 
@@ -1199,7 +1205,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        transaction.p_impl->report_not_found(action, spec, settings, false);
+        transaction.p_impl->report_not_found(action, spec, settings, libdnf::Logger::Level::WARNING);
         return;
     }
     // Report when package is not installed
@@ -1222,7 +1228,13 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
             relevant_installed_n.filter_name(query);
             if (relevant_installed_n.empty()) {
                 transaction.p_impl->add_resolve_log(
-                    action, GoalProblem::NOT_INSTALLED, settings, base::LogEvent::SpecType::PACKAGE, spec, {}, false);
+                    action,
+                    GoalProblem::NOT_INSTALLED,
+                    settings,
+                    base::LogEvent::SpecType::PACKAGE,
+                    spec,
+                    {},
+                    libdnf::Logger::Level::WARNING);
             } else {
                 transaction.p_impl->add_resolve_log(
                     action,
@@ -1231,7 +1243,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                     base::LogEvent::SpecType::PACKAGE,
                     spec,
                     {},
-                    false);
+                    libdnf::Logger::Level::WARNING);
             }
             return;
         }
@@ -1269,7 +1281,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                 base::LogEvent::SpecType::PACKAGE,
                 spec,
                 {},
-                false);
+                libdnf::Logger::Level::WARNING);
             return;
         }
         query |= installed;
@@ -1355,7 +1367,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
                             base::LogEvent::SpecType::PACKAGE,
                             spec,
                             {name_arch},
-                            false);
+                            libdnf::Logger::Level::WARNING);
                     } else {
                         rpm_goal.add_install(tmp_queue, skip_broken, best, clean_requirements_on_remove);
                     }
@@ -1482,12 +1494,12 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
     GoalJobSettings & settings) {
     auto & cfg_main = base->get_config();
     bool skip_unavailable = settings.resolve_skip_unavailable(cfg_main);
+    auto log_level = skip_unavailable ? libdnf::Logger::Level::WARNING : libdnf::Logger::Level::ERROR;
     rpm::PackageQuery query(base);
     query.filter_installed();
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
     if (!nevra_pair.first) {
-        auto problem =
-            transaction.p_impl->report_not_found(GoalAction::REASON_CHANGE, spec, settings, !skip_unavailable);
+        auto problem = transaction.p_impl->report_not_found(GoalAction::REASON_CHANGE, spec, settings, log_level);
         if (skip_unavailable) {
             return GoalProblem::NO_PROBLEM;
         } else {
@@ -1504,7 +1516,7 @@ GoalProblem Goal::Impl::add_reason_change_to_goal(
                 base::LogEvent::SpecType::PACKAGE,
                 pkg.get_nevra(),
                 {libdnf::transaction::transaction_item_reason_to_string(reason)},
-                false);
+                libdnf::Logger::Level::WARNING);
             continue;
         }
         rpm_goal.add_reason_change(pkg, reason, group_id);
@@ -1624,7 +1636,7 @@ base::Transaction Goal::resolve() {
             base::LogEvent::SpecType::PACKAGE,
             "",
             {abs_debug_dir},
-            false);
+            libdnf::Logger::Level::WARNING);
     }
 
     transaction.p_impl->set_transaction(p_impl->rpm_goal, ret);

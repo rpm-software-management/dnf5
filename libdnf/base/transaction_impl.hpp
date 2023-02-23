@@ -59,7 +59,10 @@ public:
         rpm::PackageQuery installed_query);
 
     GoalProblem report_not_found(
-        GoalAction action, const std::string & pkg_spec, const GoalJobSettings & settings, bool strict);
+        GoalAction action,
+        const std::string & pkg_spec,
+        const GoalJobSettings & settings,
+        libdnf::Logger::Level log_level);
     void add_resolve_log(
         GoalAction action,
         GoalProblem problem,
@@ -67,7 +70,7 @@ public:
         const LogEvent::SpecType spec_type,
         const std::string & spec,
         const std::set<std::string> & additional_data,
-        bool strict);
+        libdnf::Logger::Level log_level);
     void add_resolve_log(
         GoalProblem problem,
         std::vector<std::vector<std::pair<libdnf::ProblemRules, std::vector<std::string>>>> problems);
