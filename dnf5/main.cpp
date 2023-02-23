@@ -264,20 +264,6 @@ void RootCommand::set_argument_parser() {
         global_options_group->register_argument(exclude);
     }
 
-    auto skip_broken = parser.add_new_named_arg("skip-broken");
-    skip_broken->set_long_name("skip-broken");
-    skip_broken->set_description("resolve depsolve problems by skipping packages");
-    skip_broken->set_const_value("true");
-    skip_broken->link_value(&config.skip_broken());
-    global_options_group->register_argument(skip_broken);
-
-    auto skip_unavailable = parser.add_new_named_arg("skip-unavailable");
-    skip_unavailable->set_long_name("skip-unavailable");
-    skip_unavailable->set_description("allow skipping unavailable packages");
-    skip_unavailable->set_const_value("true");
-    skip_unavailable->link_value(&config.skip_unavailable());
-    global_options_group->register_argument(skip_unavailable);
-
     auto enable_repo_ids = parser.add_new_named_arg("enable-repo");
     enable_repo_ids->set_long_name("enable-repo");
     enable_repo_ids->set_has_value(true);

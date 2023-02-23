@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "group_install.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf/comps/comps.hpp>
 #include <libdnf/comps/group/group.hpp>
 #include <libdnf/comps/group/query.hpp>
@@ -36,6 +37,9 @@ void GroupInstallCommand::set_argument_parser() {
 
     with_optional = std::make_unique<GroupWithOptionalOption>(*this);
     group_specs = std::make_unique<GroupSpecArguments>(*this, ArgumentParser::PositionalArg::AT_LEAST_ONE);
+
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
+    auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
 }
 
 void GroupInstallCommand::configure() {
