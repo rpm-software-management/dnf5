@@ -464,9 +464,7 @@ void RepoqueryCommand::run() {
             std::cout << '\n';
         }
     } else {
-        for (auto package : result_pset) {
-            std::cout << package.get_full_nevra() << '\n';
-        }
+        libdnf::cli::output::print_pkg_set_with_format(stdout, result_pset, query_format_option->get_value());
     }
 }
 
