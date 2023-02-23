@@ -21,11 +21,14 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_CLI_OUTPUT_REPOQUERY_HPP
 #define LIBDNF_CLI_OUTPUT_REPOQUERY_HPP
 
+#include "libdnf/rpm/package_set.hpp"
+
 #include <libsmartcols/libsmartcols.h>
 
 namespace libdnf::cli::output {
 
-static void add_line_into_package_info_table(struct libscols_table * table, const char * key, const char * value) {
+[[maybe_unused]] static void add_line_into_package_info_table(
+    struct libscols_table * table, const char * key, const char * value) {
     struct libscols_line * ln = scols_table_new_line(table, nullptr);
     scols_line_set_data(ln, 0, key);
     scols_line_set_data(ln, 1, value);
@@ -68,6 +71,8 @@ static void print_package_info_table(Package & package) {
     scols_unref_table(table);
 }
 
+void print_pkg_set_with_format(
+    std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & queryformat);
 
 }  // namespace libdnf::cli::output
 
