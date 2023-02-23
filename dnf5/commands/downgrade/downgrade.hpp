@@ -21,9 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 #define DNF5_COMMANDS_DOWNGRADE_DOWNGRADE_HPP
 
-#include "../shared_options.hpp"
-
 #include <dnf5/context.hpp>
+#include <dnf5/shared_options.hpp>
 
 #include <memory>
 #include <vector>

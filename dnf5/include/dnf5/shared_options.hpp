@@ -33,6 +33,7 @@ public:
               command, "allowerasing", '\0', _("Allow erasing of installed packages to resolve problems"), false) {}
 };
 
+
 }  // namespace dnf5
 
 #endif  // DNF5_COMMANDS_SHARED_OPTIONS_HPP
