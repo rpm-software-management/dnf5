@@ -107,7 +107,10 @@ std::vector<TransactionGroup> & Transaction::get_transaction_groups() const {
 }
 
 GoalProblem Transaction::Impl::report_not_found(
-    GoalAction action, const std::string & pkg_spec, const GoalJobSettings & settings, bool strict) {
+    GoalAction action,
+    const std::string & pkg_spec,
+    const GoalJobSettings & settings,
+    libdnf::Logger::Level log_level) {
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery query(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
     if (action == GoalAction::REMOVE) {
@@ -116,7 +119,7 @@ GoalProblem Transaction::Impl::report_not_found(
     auto nevra_pair_reports = query.resolve_pkg_spec(pkg_spec, settings, true);
     if (!nevra_pair_reports.first) {
         // RPM was not excluded or there is no related srpm
-        add_resolve_log(action, GoalProblem::NOT_FOUND, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, strict);
+        add_resolve_log(action, GoalProblem::NOT_FOUND, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, log_level);
         if (settings.report_hint) {
             rpm::PackageQuery hints(base);
             if (action == GoalAction::REMOVE) {
@@ -137,7 +140,7 @@ GoalProblem Transaction::Impl::report_not_found(
                         LogEvent::SpecType::PACKAGE,
                         pkg_spec,
                         {(*icase.begin()).get_name()},
-                        false);
+                        libdnf::Logger::Level::WARNING);
                 }
             }
             rpm::PackageQuery alternatives(hints);
@@ -155,18 +158,18 @@ GoalProblem Transaction::Impl::report_not_found(
                     LogEvent::SpecType::PACKAGE,
                     pkg_spec,
                     hints,
-                    false);
+                    libdnf::Logger::Level::WARNING);
             }
         }
         return GoalProblem::NOT_FOUND;
     }
     query.filter_repo_id({"src", "nosrc"}, sack::QueryCmp::NEQ);
     if (query.empty()) {
-        add_resolve_log(action, GoalProblem::ONLY_SRC, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, strict);
+        add_resolve_log(action, GoalProblem::ONLY_SRC, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, log_level);
         return GoalProblem::ONLY_SRC;
     }
     // TODO(jmracek) make difference between regular excludes and modular excludes
-    add_resolve_log(action, GoalProblem::EXCLUDED, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, strict);
+    add_resolve_log(action, GoalProblem::EXCLUDED, settings, LogEvent::SpecType::PACKAGE, pkg_spec, {}, log_level);
     return GoalProblem::EXCLUDED;
 }
 
@@ -177,15 +180,11 @@ void Transaction::Impl::add_resolve_log(
     const LogEvent::SpecType spec_type,
     const std::string & spec,
     const std::set<std::string> & additional_data,
-    bool strict) {
+    libdnf::Logger::Level log_level) {
     resolve_logs.emplace_back(LogEvent(action, problem, additional_data, settings, spec_type, spec));
     // TODO(jmracek) Use a logger properly
     auto & logger = *base->get_logger();
-    if (strict) {
-        logger.error(resolve_logs.back().to_string());
-    } else {
-        logger.warning(resolve_logs.back().to_string());
-    }
+    logger.log(log_level, resolve_logs.back().to_string());
 }
 
 void Transaction::Impl::add_resolve_log(
