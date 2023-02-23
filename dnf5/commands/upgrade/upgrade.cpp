@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "upgrade.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf/conf/const.hpp>
 
 namespace dnf5 {
@@ -63,6 +64,7 @@ void UpgradeCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);

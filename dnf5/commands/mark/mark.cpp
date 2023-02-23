@@ -20,6 +20,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "mark.hpp"
 
+#include <dnf5/shared_options.hpp>
+
 namespace dnf5 {
 
 using namespace libdnf::cli;
@@ -34,6 +36,7 @@ void MarkCommand::set_parent_command() {
 
 void MarkCommand::set_argument_parser() {
     get_argument_parser_command()->set_description("Change the reason of an installed package");
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
 }
 
 void MarkCommand::register_subcommands() {

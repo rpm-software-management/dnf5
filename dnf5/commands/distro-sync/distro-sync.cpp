@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "distro-sync.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf/conf/option_string.hpp>
 
 namespace dnf5 {
@@ -49,6 +50,8 @@ void DistroSyncCommand::set_argument_parser() {
     cmd.register_positional_arg(patterns_arg);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
+    auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
 }
 
 void DistroSyncCommand::configure() {

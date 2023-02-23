@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "libdnf-cli/exception.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <rpm/rpmbuild.h>
 
@@ -78,6 +79,8 @@ void BuildDepCommand::set_argument_parser() {
             return true;
         });
     cmd.register_named_arg(defs);
+
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
 }
 
 void BuildDepCommand::configure() {

@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "reinstall.hpp"
 
+#include <dnf5/shared_options.hpp>
+
 namespace dnf5 {
 
 using namespace libdnf::cli;
@@ -48,6 +50,9 @@ void ReinstallCommand::set_argument_parser() {
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, true); });
     cmd.register_positional_arg(keys);
+
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
+    auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
 }
 
 void ReinstallCommand::configure() {

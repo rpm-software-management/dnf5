@@ -19,6 +19,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "downgrade.hpp"
 
+#include <dnf5/shared_options.hpp>
+
 namespace dnf5 {
 
 using namespace libdnf::cli;
@@ -50,6 +52,8 @@ void DowngradeCommand::set_argument_parser() {
     cmd.register_positional_arg(keys);
 
     allow_erasing = std::make_unique<AllowErasingOption>(*this);
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
+    auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
 }
 
 void DowngradeCommand::configure() {

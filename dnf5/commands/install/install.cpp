@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "install.hpp"
 
+#include <dnf5/shared_options.hpp>
 #include <libdnf/conf/const.hpp>
 
 namespace dnf5 {
@@ -61,6 +62,9 @@ void InstallCommand::set_argument_parser() {
     advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
     advisory_bz = std::make_unique<BzOption>(*this);
     advisory_cve = std::make_unique<CveOption>(*this);
+
+    auto skip_unavailable = std::make_unique<SkipUnavailableOption>(*this);
+    auto skip_broken = std::make_unique<SkipBrokenOption>(*this);
 }
 
 void InstallCommand::configure() {
