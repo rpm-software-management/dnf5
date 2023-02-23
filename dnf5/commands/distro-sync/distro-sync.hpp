@@ -21,9 +21,8 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_DISTRO_SYNC_DISTRO_SYNC_HPP
 #define DNF5_COMMANDS_DISTRO_SYNC_DISTRO_SYNC_HPP
 
-#include "../shared_options.hpp"
-
 #include <dnf5/context.hpp>
+#include <dnf5/shared_options.hpp>
 #include <libdnf/conf/option_bool.hpp>
 
 #include <memory>

@@ -21,9 +21,9 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define DNF5_COMMANDS_INSTALL_INSTALL_HPP
 
 #include "../advisory_shared.hpp"
-#include "../shared_options.hpp"
 
 #include <dnf5/context.hpp>
+#include <dnf5/shared_options.hpp>
 #include <libdnf/rpm/package.hpp>
 
 #include <memory>
