@@ -16,7 +16,7 @@ include_directories(${PROJECT_SOURCE_DIR}/libdnf)
 
 add_executable(run_tests_cli ${TEST_LIBDNF5_CLI_SOURCES})
 target_link_directories(run_tests_cli PUBLIC ${CMAKE_BINARY_DIR}/libdnf)
-target_link_libraries(run_tests_cli stdc++ libdnf libdnf-cli cppunit)
+target_link_libraries(run_tests_cli stdc++ libdnf libdnf-cli cppunit test_shared)
 
 
 add_test(NAME test_libdnf_cli COMMAND run_tests_cli)
