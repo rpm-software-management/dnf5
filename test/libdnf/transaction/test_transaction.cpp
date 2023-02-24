@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_transaction.hpp"
 
-#include "private_accessor.hpp"
+#include "../shared/private_accessor.hpp"
 
 #include "libdnf/transaction/transaction.hpp"
 

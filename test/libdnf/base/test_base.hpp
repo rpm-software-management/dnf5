@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_BASE_BASE_HPP
 
 
-#include "test_case_fixture.hpp"
+#include "../shared/test_case_fixture.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

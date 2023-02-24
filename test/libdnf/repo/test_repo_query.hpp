@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_TEST_REPO_QUERY_HPP
 
 
-#include "base_test_case.hpp"
+#include "../shared/base_test_case.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

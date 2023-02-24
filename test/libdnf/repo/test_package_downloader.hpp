@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TEST_REPO_PACKAGE_DOWNLOADER_HPP
 #define LIBDNF_TEST_REPO_PACKAGE_DOWNLOADER_HPP
 
-#include "base_test_case.hpp"
+#include "../shared/base_test_case.hpp"
 
 #include <cppunit/extensions/HelperMacros.h>
 

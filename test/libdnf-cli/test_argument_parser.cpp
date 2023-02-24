@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_argument_parser.hpp"
 
-#include "../libdnf/utils.hpp"
+#include "../shared/utils.hpp"
 
 #include "libdnf-cli/argument_parser.hpp"
 

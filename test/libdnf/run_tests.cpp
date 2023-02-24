@@ -18,7 +18,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
 
-#include "base_test_case.hpp"
+#include "../shared/base_test_case.hpp"
 
 #include "libdnf/logger/memory_buffer_logger.hpp"
 #include "libdnf/logger/stream_logger.hpp"

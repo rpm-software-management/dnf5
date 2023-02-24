@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_package_sack.hpp"
 
-#include "utils.hpp"
+#include "../shared/utils.hpp"
 
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/rpm/package_set.hpp"

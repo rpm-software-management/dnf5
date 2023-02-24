@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_string.hpp"
 
-#include "utils.hpp"
+#include "../shared/utils.hpp"
 #include "utils/string.hpp"
 
 

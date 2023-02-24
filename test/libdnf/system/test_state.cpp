@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_state.hpp"
 
-#include "utils.hpp"
+#include "../shared/utils.hpp"
 #include "utils/fs/file.hpp"
 
 

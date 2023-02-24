@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_package.hpp"
 
-#include "utils.hpp"
+#include "../shared/utils.hpp"
 
 #include "libdnf/rpm/nevra.hpp"
 
