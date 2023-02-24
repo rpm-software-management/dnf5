@@ -175,6 +175,7 @@ DNF5 is a command-line package manager that automates the process of installing,
 upgrading, configuring, and removing computer programs in a consistent manner.
 It supports RPM packages, modulemd modules, and comps groups & environments.
 
+%if %{with dnf5}
 %files
 %{_bindir}/dnf5
 
@@ -191,7 +192,6 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %dir %{_libdir}/dnf5
 %dir %{_libdir}/dnf5/plugins
 %doc %{_libdir}/dnf5/plugins/README
-%dir %{_libdir}/libdnf5/plugins
 %dir %{_datadir}/bash-completion/
 %dir %{_datadir}/bash-completion/completions/
 %{_datadir}/bash-completion/completions/dnf5
@@ -230,6 +230,8 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 # %%{_mandir}/man7/dnf5-modularity.7.*
 %{_mandir}/man7/dnf5-specs.7.*
 %endif
+# with dnf5
+%endif
 
 # ========== libdnf5 ==========
 %package -n libdnf5
@@ -244,6 +246,7 @@ Package management library.
 
 %files -n libdnf5
 %dir %{_libdir}/libdnf5
+%dir %{_libdir}/libdnf5/plugins
 %{_libdir}/libdnf5.so.1*
 %license lgpl-2.1.txt
 %{_var}/cache/libdnf/
@@ -267,6 +270,8 @@ Library for working with a terminal in a command-line package manager.
 
 # ========== dnf5-devel ==========
 
+%if %{with dnf5}
+
 %package -n dnf5-devel
 Summary:        Development files for dnf5
 License:        LGPL-2.1-or-later
@@ -281,6 +286,9 @@ Develpment files for dnf5.
 %{_includedir}/dnf5/
 %license COPYING.md
 %license lgpl-2.1.txt
+
+# with dnf5
+%endif
 
 
 # ========== libdnf5-devel ==========
@@ -569,6 +577,7 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
     -DWITH_DNF5DAEMON_SERVER=%{?with_dnf5daemon_server:ON}%{!?with_dnf5daemon_server:OFF} \
     -DWITH_LIBDNF5_CLI=%{?with_libdnf_cli:ON}%{!?with_libdnf_cli:OFF} \
     -DWITH_DNF5=%{?with_dnf5:ON}%{!?with_dnf5:OFF} \
+    -DWITH_DNF5_PLUGINS=%{?with_dnf5_plugins:ON}%{!?with_dnf5_plugins:OFF} \
     -DWITH_PLUGIN_ACTIONS=%{?with_plugin_actions:ON}%{!?with_plugin_actions:OFF} \
     -DWITH_PYTHON_PLUGINS_LOADER=%{?with_python_plugins_loader:ON}%{!?with_python_plugins_loader:OFF} \
     \
@@ -607,6 +616,9 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
 %install
 %cmake_install
 
+install -d %{buildroot}/%{_libdir}/libdnf5/plugins
+
+%if %{with dnf5}
 # own dirs and files that dnf5 creates on runtime
 mkdir -p %{buildroot}%{_prefix}/lib/sysimage/dnf
 for files in \
@@ -617,11 +629,13 @@ for files in \
 do
     touch %{buildroot}%{_prefix}/lib/sysimage/dnf/$files
 done
+# with dnf5
+%endif
 
 #find_lang {name}
 
 # Remove if condition when Fedora 37 is EOL
-%if 0%{?fedora} > 37
+%if %{with dnf5} && 0%{?fedora} > 37
 ln -sr %{buildroot}%{_bindir}/dnf5 %{buildroot}%{_bindir}/microdnf
 %endif
 
