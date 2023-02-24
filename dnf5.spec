@@ -245,6 +245,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 %verify(not md5 size mtime) %ghost %{_prefix}/lib/sysimage/dnf/*
 %license COPYING.md
 %license gpl-2.0.txt
+%if %{with man}
 %{_mandir}/man8/dnf5.8.*
 %{_mandir}/man8/dnf5-advisory.8.*
 %{_mandir}/man8/dnf5-autoremove.8.*
@@ -276,6 +277,7 @@ It supports RPM packages, modulemd modules, and comps groups & environments.
 # TODO(jkolarik): modularity is not ready yet
 # %%{_mandir}/man7/dnf5-modularity.7.*
 %{_mandir}/man7/dnf5-specs.7.*
+%endif
 
 # ========== libdnf5 ==========
 %package -n libdnf5
@@ -556,7 +558,9 @@ Command-line interface for dnf5daemon-server.
 %{_bindir}/dnf5daemon-client
 %license COPYING.md
 %license gpl-2.0.txt
+%if %{with man}
 %{_mandir}/man8/dnf5daemon-client.8.*
+%endif
 %endif
 
 
@@ -595,8 +599,10 @@ Package management service with a DBus interface.
 %{_datadir}/polkit-1/actions/org.rpm.dnf.v0.policy
 %license COPYING.md
 %license gpl-2.0.txt
+%if %{with man}
 %{_mandir}/man8/dnf5daemon-server.8.*
 %{_mandir}/man8/dnf5daemon-dbus-api.8.*
+%endif
 %endif
 
 
