@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_option.hpp"
 
-#include "utils.hpp"
+#include "../shared/utils.hpp"
 
 #include "libdnf/conf/option_bool.hpp"
 #include "libdnf/conf/option_child.hpp"

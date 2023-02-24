@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_TEST_COMPS_ENVIRONMENT_HPP
 #define LIBDNF_TEST_COMPS_ENVIRONMENT_HPP
 
-#include "base_test_case.hpp"
+#include "../shared/base_test_case.hpp"
 
 #include <cppunit/TestCase.h>
 #include <cppunit/extensions/HelperMacros.h>

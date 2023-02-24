@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_RPM_PACKAGE_SACK_HPP
 
 
-#include "base_test_case.hpp"
+#include "../shared/base_test_case.hpp"
 
 #include "libdnf/rpm/package_set.hpp"
 

@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_comps_group.hpp"
 
-#include "private_accessor.hpp"
+#include "../shared/private_accessor.hpp"
 
 #include "libdnf/comps/group/package.hpp"
 #include "libdnf/transaction/comps_group.hpp"

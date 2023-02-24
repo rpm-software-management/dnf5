@@ -20,7 +20,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "test_workflow.hpp"
 
-#include "private_accessor.hpp"
+#include "../shared/private_accessor.hpp"
 
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/comps/group/package.hpp"

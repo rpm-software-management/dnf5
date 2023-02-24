@@ -22,7 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define TEST_LIBDNF_ADVISORY_ADVISORY_HPP
 
 
-#include "base_test_case.hpp"
+#include "../shared/base_test_case.hpp"
 
 #include "libdnf/advisory/advisory_collection.hpp"
 
