@@ -1,0 +1,45 @@
+name: 'tests'
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/tests.yml'
+      - '**.spec'
+      - '**CMakeLists.txt'
+      - 'contrib/test-spec-bconds.py'
+  # allow manual execution from the GitHub web interface
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  spec-bconds:
+    name: Test rebuilding spec with different --with bconds
+    runs-on: ubuntu-latest
+    container:
+      image: fedora:rawhide
+    steps:
+      - name: Install packages
+        run: |
+            dnf -y install ccache dnf-plugins-core git rpm-build
+
+      - name: Create ccache symlinks to prioritize it over gcc
+        run: |
+            ln -s /usr/bin/ccache /usr/local/bin/gcc
+            ln -s /usr/bin/ccache /usr/local/bin/g++
+            ln -s /usr/bin/ccache /usr/local/bin/cc
+            ln -s /usr/bin/ccache /usr/local/bin/c++
+
+      - name: Checkout sources
+        run: |
+            git clone $GITHUB_SERVER_URL/$GITHUB_REPOSITORY dnf5-pr
+            cd dnf5-pr
+            git fetch origin $GITHUB_REF:branch-pr
+            git switch branch-pr
+
+      - name: Run tests
+        run: |
+            cd dnf5-pr/contrib
+            ./test-spec-bconds.py
