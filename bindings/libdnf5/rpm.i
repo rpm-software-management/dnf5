@@ -63,6 +63,8 @@
 %include "libdnf/rpm/reldep_list.hpp"
 %include "libdnf/rpm/package.hpp"
 
+%template(VectorChangelog) std::vector<libdnf::rpm::Changelog>;
+
 %rename(next) libdnf::rpm::PackageSetIterator::operator++();
 %rename(value) libdnf::rpm::PackageSetIterator::operator*();
 %include "libdnf/rpm/package_set_iterator.hpp"
