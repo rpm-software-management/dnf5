@@ -144,3 +144,15 @@ class TestPackageQuery(base_test_case.BaseTestCase):
 
         # Try to create a packge query without running base.setup()
         self.assertRaises(RuntimeError, libdnf5.rpm.PackageQuery, base)
+
+    def test_pkg_get_changelogs(self):
+        # Test wrapper for changelogs vector
+        query = libdnf5.rpm.PackageQuery(self.base)
+        query.filter_name(["pkg"])
+        package = next(iter(query))
+        logs = package.get_changelogs()
+        self.assertEqual(2, logs.size())
+        log = next(iter(logs))
+        self.assertEqual('First change', log.text)
+        self.assertEqual('Joe Black', log.author)
+        self.assertEqual(1641027600, log.timestamp)
