@@ -49,6 +49,15 @@ options and implemented only for related commands
 Renaming boolean options to format `--<option>`, and `--no-<option>`
 `--nobest` -> `--no-best`. Proposing to keep `--nobest` as a deprecated option.
 
+### strict configuration option deprecation
+`strict` config option is now deprecated. The problem with this option is that it does two things:
+
+1. if disabled it allows the solver to skip uninstallable packages to resolve depsolv problems
+2. if disabled it allows dnf to skip unavailable packages (this is for `install` command mostly)
+
+The functionality is now split to two config options - `skip_broken` for the uninstallable packages and `skip_unavailable` for packages not present in repositories.
+Together with these new config options there are also corresponding command line options `--skip-broken` and `--skip-unavailable` for commands where it makes sense.
+
 
 ### Upgrade command
 - New dnf5 option `--minimal` (`upgrade-minimal` command still exists as a compatibility alias for `upgrade --minimal`).
