@@ -17,8 +17,8 @@
     <open-size>52911</open-size>
   </data>
   <data type="other">
-    <checksum type="sha256">6b1629e202cf424f893dda1ddec703165234c22f0ad5a1657dc77b357db2d189</checksum>
-    <open-checksum type="sha256">6b1629e202cf424f893dda1ddec703165234c22f0ad5a1657dc77b357db2d189</open-checksum>
+    <checksum type="sha256">10e89f037bb2fb624576f2b1268b123be3c5130e50cd6ccaa744ca0af17bf9a2</checksum>
+    <open-checksum type="sha256">10e89f037bb2fb624576f2b1268b123be3c5130e50cd6ccaa744ca0af17bf9a2</open-checksum>
     <location href="repodata/other.xml" />
     <timestamp>1597222003</timestamp>
     <size>13799</size>
