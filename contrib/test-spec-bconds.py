@@ -30,6 +30,7 @@ FLAGS = {
         "with": ["python3"],
     },
     "ruby": {},
+    "static_libsolv": {},
     "zchunk": {},
 }
 
