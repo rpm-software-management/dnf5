@@ -29,9 +29,6 @@ class PackageDownloadCallbacks(libdnf5.repo.DownloadCallbacks):
         print("Mirror failure: ", msg)
         return 0
 
-# Create a package downloader.
-downloader = libdnf5.repo.PackageDownloader()
-
 downloader_callbacks = PackageDownloadCallbacks()
 base.set_download_callbacks(libdnf5.repo.DownloadCallbacksUniquePtr(downloader_callbacks))
 
