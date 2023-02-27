@@ -35,6 +35,12 @@ Obsoletes:      microdnf < 4
 %bcond_without modulemd
 %bcond_without zchunk
 
+%if 0%{?is_opensuse}
+%bcond_without static_libsolv
+%else
+%bcond_with    static_libsolv
+%endif
+
 %bcond_with    html
 %if 0%{?rhel} == 8
 %bcond_with    man
@@ -83,6 +89,13 @@ BuildRequires:  pkgconfig(libsolvext) >= %{libsolv_version}
 BuildRequires:  pkgconfig(rpm) >= 4.17.0
 BuildRequires:  pkgconfig(sqlite3)
 BuildRequires:  toml11-static
+
+%if %{with static_libsolv}
+BuildRequires:  pkgconfig(bzip2)
+BuildRequires:  pkgconfig(liblzma)
+BuildRequires:  pkgconfig(zlib)
+BuildRequires:  pkgconfig(libzstd)
+%endif
 
 %if %{with clang}
 BuildRequires:  clang
@@ -583,6 +596,7 @@ Core DNF5 plugins that enhance dnf5 with builddep and changelog commands.
     \
     -DWITH_COMPS=%{?with_comps:ON}%{!?with_comps:OFF} \
     -DWITH_MODULEMD=%{?with_modulemd:ON}%{!?with_modulemd:OFF} \
+    -DWITH_STATIC_LIBSOLV=%{?with_static_libsolv:ON}%{!?with_static_libsolv:OFF} \
     -DWITH_ZCHUNK=%{?with_zchunk:ON}%{!?with_zchunk:OFF} \
     \
     -DWITH_HTML=%{?with_html:ON}%{!?with_html:OFF} \

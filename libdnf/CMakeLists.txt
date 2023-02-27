@@ -63,16 +63,34 @@ pkg_check_modules(LIBSOLVEXT REQUIRED libsolvext>=0.7.7)
 list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LIBSOLVEXT_MODULE_NAME}")
 target_link_libraries(libdnf ${LIBSOLVEXT_LIBRARIES})
 
-pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
-list(APPEND LIBDNF5_PC_REQUIRES "${RPM_MODULE_NAME}")
-target_link_libraries(libdnf ${RPM_LIBRARIES})
+if(WITH_STATIC_LIBSOLV)
+    pkg_check_modules(BZIP2 REQUIRED bzip2)
+    list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${BZIP2_MODULE_NAME}")
+    target_link_libraries(libdnf ${BZIP2_LIBRARIES})
 
-if(WITH_COMPS)
+    pkg_check_modules(LZMA REQUIRED liblzma)
+    list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LZMA_MODULE_NAME}")
+    target_link_libraries(libdnf ${LZMA_LIBRARIES})
+
+    pkg_check_modules(ZLIB REQUIRED zlib)
+    list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${ZLIB_MODULE_NAME}")
+    target_link_libraries(libdnf ${ZLIB_LIBRARIES})
+
+    pkg_check_modules(ZSTD REQUIRED libzstd)
+    list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${ZSTD_MODULE_NAME}")
+    target_link_libraries(libdnf ${ZSTD_LIBRARIES})
+endif()
+
+if(WITH_COMPS OR WITH_STATIC_LIBSOLV)
     pkg_check_modules(LIBXML2 REQUIRED libxml-2.0)
     list(APPEND LIBDNF5_PC_REQUIRES_PRIVATE "${LIBXML2_MODULE_NAME}")
     include_directories(${LIBXML2_INCLUDE_DIRS})
     target_link_libraries(libdnf ${LIBXML2_LIBRARIES})
 endif()
+
+pkg_check_modules(RPM REQUIRED rpm>=4.17.0)
+list(APPEND LIBDNF5_PC_REQUIRES "${RPM_MODULE_NAME}")
+target_link_libraries(libdnf ${RPM_LIBRARIES})
 
 if (WITH_ZCHUNK)
     pkg_check_modules(ZCHUNKLIB zck>=0.9.11 REQUIRED)
