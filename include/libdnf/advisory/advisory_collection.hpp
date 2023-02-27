@@ -63,12 +63,12 @@ public:
 
 private:
     friend Advisory;
-    friend AdvisoryQuery;
-    friend AdvisorySet;
-    friend AdvisoryPackage;
     friend AdvisoryModule;
+    friend AdvisoryPackage;
+    friend AdvisorySet;
+    friend class AdvisoryQuery;
 
-    AdvisoryCollection(const libdnf::BaseWeakPtr & base, AdvisoryId advisory, int index);
+    AdvisoryCollection(const BaseWeakPtr & base, AdvisoryId advisory, int index);
 
     //TODO(amatej): Hide into an Impl?
     /// Get all AdvisoryPackages stored in this AdvisoryCollection
@@ -87,7 +87,7 @@ private:
     ///                         them when collecting AdvisoryModules from multiple collections.
     void get_modules(std::vector<AdvisoryModule> & output);
 
-    libdnf::BaseWeakPtr base;
+    BaseWeakPtr base;
 
     AdvisoryId advisory;
 

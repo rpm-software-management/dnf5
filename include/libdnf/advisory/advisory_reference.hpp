@@ -66,9 +66,9 @@ private:
     /// @param advisory AdvisoryId into libsolv pool.
     /// @param index    Index of this reference in its advisory.
     /// @return New AdvisoryReference instance.
-    AdvisoryReference(const libdnf::BaseWeakPtr & base, AdvisoryId advisory, int index);
+    AdvisoryReference(const BaseWeakPtr & base, AdvisoryId advisory, int index);
 
-    libdnf::BaseWeakPtr base;
+    BaseWeakPtr base;
     AdvisoryId advisory;
 
     /// We cannot store IDs of reference data (id, type, title, url) because they

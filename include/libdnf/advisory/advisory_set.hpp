@@ -21,7 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_SET_HPP
 #define LIBDNF_ADVISORY_ADVISORY_SET_HPP
 
-
+#include "advisory_package.hpp"
 #include "advisory_set_iterator.hpp"
 
 #include "libdnf/common/exception.hpp"
@@ -35,12 +35,6 @@ namespace libdnf::solv {
 class SolvMap;
 
 }  // namespace libdnf::solv
-
-namespace libdnf::rpm {
-
-class PackageQuery;
-
-}  // namespace libdnf::rpm
 
 namespace libdnf::advisory {
 

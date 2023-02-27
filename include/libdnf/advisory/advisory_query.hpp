@@ -20,14 +20,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_QUERY_HPP
 #define LIBDNF_ADVISORY_ADVISORY_QUERY_HPP
 
-#include "libdnf/advisory/advisory.hpp"
-#include "libdnf/advisory/advisory_collection.hpp"
-#include "libdnf/advisory/advisory_package.hpp"
-#include "libdnf/advisory/advisory_reference.hpp"
-#include "libdnf/advisory/advisory_set.hpp"
+#include "advisory.hpp"
+#include "advisory_collection.hpp"
+#include "advisory_package.hpp"
+#include "advisory_reference.hpp"
+#include "advisory_set.hpp"
+
 #include "libdnf/base/base_weak.hpp"
 #include "libdnf/common/sack/query_cmp.hpp"
 #include "libdnf/rpm/package.hpp"
+#include "libdnf/rpm/package_set.hpp"
 
 
 namespace libdnf::advisory {
@@ -39,12 +41,12 @@ public:
     /// Create a new AdvisoryQuery instance.
     ///
     /// @param base     A weak pointer to Base
-    explicit AdvisoryQuery(const BaseWeakPtr & base);
+    explicit AdvisoryQuery(const libdnf::BaseWeakPtr & base);
 
     /// Create a new AdvisoryQuery instance.
     ///
     /// @param base     Reference to Base
-    explicit AdvisoryQuery(Base & base);
+    explicit AdvisoryQuery(libdnf::Base & base);
 
     AdvisoryQuery(const AdvisoryQuery & src) = default;
     AdvisoryQuery & operator=(const AdvisoryQuery & src) = default;
