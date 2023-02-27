@@ -20,13 +20,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef LIBDNF_ADVISORY_ADVISORY_HPP
 #define LIBDNF_ADVISORY_ADVISORY_HPP
 
-#include <libdnf/rpm/package_sack.hpp>
+#include "libdnf/base/base_weak.hpp"
 
+#include <string>
 #include <vector>
 
 
 namespace libdnf::advisory {
 
+class AdvisoryCollection;
 class AdvisoryReference;
 
 struct AdvisoryId {
@@ -127,10 +129,10 @@ public:
 protected:
     /// Construct the Advisory object
     ///
-    /// @param sack   WeakPtr to libdnf::rpm::PackageSack instance which holds the data.
+    /// @param base   WeakPtr to libdnf::base::Base instance which this object belongs to.
     /// @param id     AdvisoryId into libsolv pool.
     /// @return New Advisory instance.
-    Advisory(const libdnf::BaseWeakPtr & base, AdvisoryId id);
+    Advisory(const BaseWeakPtr & base, AdvisoryId id);
 
 private:
     friend class AdvisoryCollection;
@@ -139,7 +141,7 @@ private:
     friend class AdvisorySetIterator;
     friend class AdvisorySet;
 
-    libdnf::BaseWeakPtr base;
+    BaseWeakPtr base;
 
     AdvisoryId id;
 };
