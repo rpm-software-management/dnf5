@@ -12,6 +12,7 @@
 
 %include <shared.i>
 
+%import "advisory.i"
 %import "common.i"
 %import "comps.i"
 %import "conf.i"

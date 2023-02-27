@@ -28,8 +28,6 @@
 }
 
 %{
-    #include "libdnf/advisory/advisory_module.hpp"
-    #include "libdnf/advisory/advisory_query.hpp"
     #include "libdnf/rpm/checksum.hpp"
     #include "libdnf/rpm/nevra.hpp"
     #include "libdnf/rpm/package.hpp"
