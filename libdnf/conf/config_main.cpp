@@ -242,7 +242,7 @@ class ConfigMain::Impl {
     OptionString color_list_installed_extra{"bold,red"};
     OptionString color_list_available_upgrade{"bold,blue"};
     OptionString color_list_available_downgrade{"dim,magenta"};
-    OptionString color_list_available_reinstall{"bold,underline,green"};
+    OptionString color_list_available_reinstall{"bold,green"};
     OptionString color_list_available_install{"bold,cyan"};
     OptionString color_update_installed{"dim,red"};
     OptionString color_update_local{"dim,green"};
