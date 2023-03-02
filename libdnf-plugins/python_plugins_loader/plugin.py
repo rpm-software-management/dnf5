@@ -49,7 +49,7 @@ class Plugin(libdnf.plugin.IPlugin):
         if plugin_hook_id == libdnf.plugin.HookId_LOAD_CONFIG_FROM_FILE:
             logger = self.base.get_logger()
             config = self.base.get_config()
-            logger.info(self.get_name() + ' - skip_if_unavailable = ' + str(config.get_skip_if_unavailable_option().get_value()))
+            logger.info(self.get_name() + ' - skip_if_unavailable = ' + str(config.skip_if_unavailable))
         return True
 
     def finish(self):

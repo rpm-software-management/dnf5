@@ -14,8 +14,7 @@ repo = repo_sack.create_repo("rpm-repo1")
 # * /absolute/path/
 # * file:///absolute/path/url/
 # * https://example.com/url/
-base_config = repo.get_config()
-base_config.get_baseurl_option().set(baseurl);
+repo.get_config().baseurl = baseurl
 
 # If out of date, downloads fresh metadata of all available repositories and
 # loads the repositories into memory.

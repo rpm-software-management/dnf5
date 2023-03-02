@@ -27,19 +27,19 @@ class TestRepoQuery(base_test_case.BaseTestCase):
         # Creates new repositories in the repo_sack
         repo1 = self.repo_sack.create_repo("repo1")
         repo1.enable();
-        repo1.get_config().get_baseurl_option().set("file:///path/to/repo1")
+        repo1.get_config().baseurl = "file:///path/to/repo1"
 
         repo2 = self.repo_sack.create_repo("repo2")
         repo2.disable();
-        repo2.get_config().get_baseurl_option().set("https://host/path/to/repo2")
+        repo2.get_config().baseurl = "https://host/path/to/repo2"
 
         repo1_updates = self.repo_sack.create_repo("repo1_updates")
         repo1_updates.disable();
-        repo1_updates.get_config().get_baseurl_option().set("https://host/path/to/repo1_updates")
+        repo1_updates.get_config().baseurl = "https://host/path/to/repo1_updates"
 
         repo2_updates = self.repo_sack.create_repo("repo2_updates")
         repo2_updates.enable();
-        repo2_updates.get_config().get_baseurl_option().set("https://host/path/to/repo2_updates")
+        repo2_updates.get_config().baseurl = "https://host/path/to/repo2_updates"
 
         # create a RepoQuery and test that it contains expected repos
         repo_query = libdnf5.repo.RepoQuery(self.base)
