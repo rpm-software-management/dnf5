@@ -22,7 +22,7 @@ import base_test_case
 
 class TestConfigurationOptions(base_test_case.BaseTestCase):
     def test_set_with_runtime_priority(self):
-        proxy = self.base.get_config().proxy()
+        proxy = self.base.get_config().get_proxy_option()
         self.assertEqual(proxy.get_priority(), libdnf5.conf.Option.Priority_DEFAULT)
         
         proxy.set('abcd')
@@ -30,13 +30,13 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
         self.assertEqual(proxy.get_priority(), libdnf5.conf.Option.Priority_RUNTIME)
 
     def test_container_add_item(self):
-        auths_config = self.base.get_config().proxy_auth_method()
+        auths_config = self.base.get_config().get_proxy_auth_method_option()
         auths_config.set(('basic', 'ntlm'))
         auths_config.add_item('digest')
         self.assertEqual(auths_config.get_value(), ('basic', 'digest', 'ntlm'))
 
     def test_container_add(self):
-        types_config = self.base.get_config().optional_metadata_types()
+        types_config = self.base.get_config().get_optional_metadata_types_option()
         types_config.set((libdnf5.conf.METADATA_TYPE_FILELISTS,))
         types_config.add((libdnf5.conf.METADATA_TYPE_COMPS, libdnf5.conf.METADATA_TYPE_UPDATEINFO))
         self.assertEqual(types_config.get_value(), (libdnf5.conf.METADATA_TYPE_COMPS, libdnf5.conf.METADATA_TYPE_FILELISTS, libdnf5.conf.METADATA_TYPE_UPDATEINFO))

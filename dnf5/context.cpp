@@ -68,7 +68,7 @@ public:
         [[maybe_unused]] long int timestamp) override {
         // TODO(jrohel): In case `assumeno`==true, the key is not imported. Is it OK to skip import atempt information message?
         //               And what about `assumeyes`==true in silent mode? Print key import message or not?
-        if (config->assumeno().get_value()) {
+        if (config->get_assumeno_option().get_value()) {
             return false;
         }
 
@@ -235,7 +235,7 @@ void Context::print_info(const char * msg) {
 void Context::update_repo_metadata_from_specs(const std::vector<std::string> & pkg_specs) {
     for (auto & spec : pkg_specs) {
         if (libdnf::utils::is_file_pattern(spec)) {
-            base.get_config().optional_metadata_types().add_item(libdnf::METADATA_TYPE_FILELISTS);
+            base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_FILELISTS);
             return;
         }
     }
@@ -500,7 +500,7 @@ static bool user_confirm_key(libdnf::ConfigMain & config, const libdnf::rpm::Key
 
 
 Context::ImportRepoKeys Context::import_repo_keys(libdnf::repo::Repo & repo) {
-    auto key_urls = repo.get_config().gpgkey().get_value();
+    auto key_urls = repo.get_config().get_gpgkey_option().get_value();
     if (!key_urls.size()) {
         return ImportRepoKeys::NO_KEYS;
     }
@@ -547,7 +547,7 @@ Context::ImportRepoKeys Context::import_repo_keys(libdnf::repo::Repo & repo) {
 
 bool Context::check_gpg_signatures(const libdnf::base::Transaction & transaction) {
     auto & config = base.get_config();
-    if (!config.gpgcheck().get_value()) {
+    if (!config.get_gpgcheck_option().get_value()) {
         // gpg check switched off by configuration / command line option
         return true;
     }
@@ -738,7 +738,7 @@ std::vector<std::string> match_specs(
     const char * file_name_regex) {
     auto & base = ctx.base;
 
-    base.get_config().assumeno().set(libdnf::Option::Priority::RUNTIME, true);
+    base.get_config().get_assumeno_option().set(libdnf::Option::Priority::RUNTIME, true);
     ctx.set_quiet(true);
 
     base.load_config_from_file();
@@ -762,7 +762,7 @@ std::vector<std::string> match_specs(
         try {
             // create rpm repositories according configuration files
             base.get_repo_sack()->create_repos_from_system_configuration();
-            base.get_config().optional_metadata_types().set(
+            base.get_config().get_optional_metadata_types_option().set(
                 libdnf::Option::Priority::RUNTIME, libdnf::OptionStringSet::ValueType{});
 
             ctx.apply_repository_setopts();
@@ -772,7 +772,7 @@ std::vector<std::string> match_specs(
             enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
             for (auto & repo : enabled_repos.get_data()) {
                 repo->set_sync_strategy(libdnf::repo::Repo::SyncStrategy::ONLY_CACHE);
-                repo->get_config().skip_if_unavailable().set(libdnf::Option::Priority::RUNTIME, true);
+                repo->get_config().get_skip_if_unavailable_option().set(libdnf::Option::Priority::RUNTIME, true);
             }
 
             ctx.load_repos(false);

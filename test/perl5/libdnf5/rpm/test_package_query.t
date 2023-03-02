@@ -31,8 +31,8 @@ my $base = new libdnf5::base::Base();
 
 # Sets path to cache directory.
 my $tmpdir = tempdir("libdnf5_perl5_unittest.XXXX", TMPDIR => 1, CLEANUP => 1);
-$base->get_config()->installroot()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/installroot");
-$base->get_config()->cachedir()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/cache");
+$base->get_config()->get_installroot_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/installroot");
+$base->get_config()->get_cachedir_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/cache");
 
 # Sets base internals according to configuration
 $base->setup();
@@ -48,7 +48,7 @@ my $project_source_dir = $ENV{"PROJECT_SOURCE_DIR"};
 my $repo_path = catfile($project_source_dir, "/test/data/repos-repomd/repomd-repo1/");
 my $baseurl = "file://" . $repo_path;
 my $repo_cfg = $repo->get_config();
-$repo_cfg->baseurl()->set($libdnf5::conf::Option::Priority_RUNTIME, $baseurl);
+$repo_cfg->get_baseurl_option()->set($libdnf5::conf::Option::Priority_RUNTIME, $baseurl);
 
 # fetch repo metadata and load it
 my $repos = new libdnf5::repo::RepoQuery($base);

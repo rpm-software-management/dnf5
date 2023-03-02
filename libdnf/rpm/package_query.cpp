@@ -2495,9 +2495,9 @@ void PackageQuery::filter_unneeded() {
 
     // write autoremove debug data if required
     auto & cfg_main = p_impl->base->get_config();
-    if (cfg_main.debug_solver().get_value()) {
+    if (cfg_main.get_debug_solver_option().get_value()) {
         auto debug_dir =
-            std::filesystem::absolute(std::filesystem::path(cfg_main.debugdir().get_value()) / "autoremove");
+            std::filesystem::absolute(std::filesystem::path(cfg_main.get_debugdir_option().get_value()) / "autoremove");
         solver.write_debugdata(debug_dir);
     }
 

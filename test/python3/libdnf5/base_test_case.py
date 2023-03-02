@@ -34,9 +34,9 @@ class BaseTestCase(unittest.TestCase):
 
         self.temp_dir = tempfile.mkdtemp(prefix="libdnf5_python3_unittest.")
 
-        self.base.get_config().installroot().set(os.path.join(self.temp_dir, "installroot"))
-        self.base.get_config().cachedir().set(os.path.join(self.temp_dir, "cache"))
-        self.base.get_config().optional_metadata_types().set(libdnf5.conf.OPTIONAL_METADATA_TYPES)
+        self.base.get_config().get_installroot_option().set(os.path.join(self.temp_dir, "installroot"))
+        self.base.get_config().get_cachedir_option().set(os.path.join(self.temp_dir, "cache"))
+        self.base.get_config().get_optional_metadata_types_option().set(libdnf5.conf.OPTIONAL_METADATA_TYPES)
 
         self.base.setup()
 
@@ -51,7 +51,7 @@ class BaseTestCase(unittest.TestCase):
         Add a repo from `repo_path`.
         """
         repo = self.repo_sack.create_repo(repoid)
-        repo.get_config().baseurl().set("file://" + repo_path)
+        repo.get_config().get_baseurl_option().set("file://" + repo_path)
 
         if load:
             repos = libdnf5.repo.RepoQuery(self.base)

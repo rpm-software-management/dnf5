@@ -113,7 +113,7 @@ void RepoTest::test_load_repo() {
 void RepoTest::test_load_repo_nonexistent() {
     std::string repoid("nonexistent");
     auto repo = add_repo(repoid, "/path/thats/not/here", false);
-    repo->get_config().skip_if_unavailable().set(false);
+    repo->get_config().get_skip_if_unavailable_option().set(false);
 
     libdnf::repo::RepoQuery repos(base);
     repos.filter_id(repoid);

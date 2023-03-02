@@ -106,7 +106,7 @@ void Plugins::register_plugin(std::unique_ptr<Plugin> && plugin) {
 std::string Plugins::find_plugin_library(const std::string & plugin_conf_path) {
     auto library_name = std::filesystem::path(plugin_conf_path).stem();
     library_name += ".so";
-    std::filesystem::path library_path = base->get_config().pluginpath().get_value();
+    std::filesystem::path library_path = base->get_config().get_pluginpath_option().get_value();
     library_path /= library_name;
     if (std::filesystem::exists(library_path)) {
         return library_path;
@@ -154,7 +154,7 @@ void Plugins::load_plugin(const std::string & config_file_path) {
             throw OptionInvalidValueError(M_("Invalid option value: enabled={}"), enabled_str);
         }
     }
-    const auto & installroot = base->get_config().installroot().get_value();
+    const auto & installroot = base->get_config().get_installroot_option().get_value();
     const bool is_enabled = enabled == Enabled::YES || (enabled == Enabled::HOST_ONLY && installroot == "/") ||
                             (enabled == Enabled::INSTALLROOT_ONLY && installroot != "/");
     if (!is_enabled) {

@@ -446,7 +446,7 @@ GoalProblem Goal::Impl::add_specs_to_goal(base::Transaction & transaction) {
                 // Apply advisory filters
                 if (settings.advisory_filter.has_value()) {
                     filter_candidates_for_advisory_upgrade(
-                        base, query, settings.advisory_filter.value(), cfg_main.obsoletes().get_value());
+                        base, query, settings.advisory_filter.value(), cfg_main.get_obsoletes_option().get_value());
                 }
 
                 // Make the smallest possible upgrade
@@ -577,7 +577,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     bool best = settings.resolve_best(cfg_main);
     bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
 
-    auto multilib_policy = cfg_main.multilib_policy().get_value();
+    auto multilib_policy = cfg_main.get_multilib_policy_option().get_value();
     libdnf::solv::IdQueue result_queue;
     rpm::PackageQuery base_query(base);
 
@@ -601,7 +601,7 @@ std::pair<GoalProblem, libdnf::solv::IdQueue> Goal::Impl::add_install_to_goal(
     }
 
     bool has_just_name = nevra_pair.second.has_just_name();
-    bool add_obsoletes = cfg_main.obsoletes().get_value() && has_just_name;
+    bool add_obsoletes = cfg_main.get_obsoletes_option().get_value() && has_just_name;
 
     rpm::PackageQuery installed(query);
     installed.filter_installed();
@@ -1039,7 +1039,7 @@ void Goal::Impl::add_rpms_to_goal(base::Transaction & transaction) {
                 bool clean_requirements_on_remove = settings.resolve_clean_requirements_on_remove();
                 // TODO(jrohel): Now logs all packages that are not upgrades. It can be confusing in some cases.
                 for (auto id : ids) {
-                    if (cfg_main.obsoletes().get_value()) {
+                    if (cfg_main.get_obsoletes_option().get_value()) {
                         rpm::PackageQuery query_id(base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES, true);
                         query_id.add(rpm::Package(base, rpm::PackageId(id)));
                         query_id.filter_obsoletes(installed);
@@ -1206,7 +1206,7 @@ void Goal::Impl::add_up_down_distrosync_to_goal(
 
     auto sack = base->get_rpm_package_sack();
     rpm::PackageQuery base_query(base);
-    auto obsoletes = base->get_config().obsoletes().get_value();
+    auto obsoletes = base->get_config().get_obsoletes_option().get_value();
     libdnf::solv::IdQueue tmp_queue;
     rpm::PackageQuery query(base_query);
     auto nevra_pair = query.resolve_pkg_spec(spec, settings, false);
@@ -1586,11 +1586,11 @@ base::Transaction Goal::resolve() {
 
     auto & cfg_main = p_impl->base->get_config();
     // Set goal flags
-    p_impl->rpm_goal.set_allow_vendor_change(cfg_main.allow_vendor_change().get_value());
+    p_impl->rpm_goal.set_allow_vendor_change(cfg_main.get_allow_vendor_change_option().get_value());
     p_impl->rpm_goal.set_allow_erasing(p_impl->allow_erasing);
-    p_impl->rpm_goal.set_install_weak_deps(cfg_main.install_weak_deps().get_value());
+    p_impl->rpm_goal.set_install_weak_deps(cfg_main.get_install_weak_deps_option().get_value());
 
-    if (cfg_main.protect_running_kernel().get_value()) {
+    if (cfg_main.get_protect_running_kernel_option().get_value()) {
         p_impl->rpm_goal.set_protected_running_kernel(sack->p_impl->get_running_kernel_id());
     }
 
@@ -1610,7 +1610,7 @@ base::Transaction Goal::resolve() {
 
     // Add protected packages
     {
-        auto & protected_packages = cfg_main.protected_packages().get_value();
+        auto & protected_packages = cfg_main.get_protected_packages_option().get_value();
         rpm::PackageQuery protected_query(p_impl->base, rpm::PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
         protected_query.filter_name(protected_packages);
         p_impl->rpm_goal.add_protected_packages(*protected_query.p_impl);
@@ -1618,16 +1618,16 @@ base::Transaction Goal::resolve() {
 
     // Set installonly packages
     {
-        auto & installonly_packages = cfg_main.installonlypkgs().get_value();
+        auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
         p_impl->rpm_goal.set_installonly(installonly_packages);
-        p_impl->rpm_goal.set_installonly_limit(cfg_main.installonly_limit().get_value());
+        p_impl->rpm_goal.set_installonly_limit(cfg_main.get_installonly_limit_option().get_value());
     }
 
     ret |= p_impl->rpm_goal.resolve();
 
     // Write debug solver data
-    if (cfg_main.debug_solver().get_value()) {
-        auto debug_dir = std::filesystem::path(cfg_main.debugdir().get_value()) / "packages";
+    if (cfg_main.get_debug_solver_option().get_value()) {
+        auto debug_dir = std::filesystem::path(cfg_main.get_debugdir_option().get_value()) / "packages";
         auto abs_debug_dir = std::filesystem::absolute(debug_dir);
 
         // Ensures the presence of the directory.

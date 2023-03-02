@@ -27,8 +27,8 @@ PROJECT_SOURCE_DIR = os.environ["PROJECT_SOURCE_DIR"]
 class TestTutorial(base_test_case.BaseTestCase):
     def setUp(self):
         super().setUp()
-        self.installroot = self.base.get_config().installroot().get_value()
-        self.cachedir = self.base.get_config().cachedir().get_value()
+        self.installroot = self.base.get_config().get_installroot_option().get_value()
+        self.cachedir = self.base.get_config().get_cachedir_option().get_value()
         self.baseurl = pathlib.Path(os.path.join(PROJECT_BINARY_DIR, "test/data/repos-rpm/rpm-repo1/")).as_uri()
 
     def test_create_base(self):

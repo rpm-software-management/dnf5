@@ -110,7 +110,7 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, libdnf_repo->get_id());
                 break;
             case RepoAttribute::name:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().name().get_value());
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_name_option().get_value());
                 break;
             case RepoAttribute::enabled:
                 dbus_repo.emplace(attr, libdnf_repo->is_enabled());
@@ -156,24 +156,24 @@ dnfdaemon::KeyValueMap repo_to_map(
                 dbus_repo.emplace(attr, query.size());
             } break;
             case RepoAttribute::metalink: {
-                auto opt = libdnf_repo->get_config().metalink();
+                auto opt = libdnf_repo->get_config().get_metalink_option();
                 dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
             } break;
             case RepoAttribute::mirrorlist: {
-                auto opt = libdnf_repo->get_config().mirrorlist();
+                auto opt = libdnf_repo->get_config().get_mirrorlist_option();
                 dbus_repo.emplace(attr, (opt.empty() || opt.get_value().empty()) ? "" : opt.get_value());
             } break;
             case RepoAttribute::baseurl:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().baseurl().get_value());
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_baseurl_option().get_value());
                 break;
             case RepoAttribute::metadata_expire:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().metadata_expire().get_value());
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_metadata_expire_option().get_value());
                 break;
             case RepoAttribute::excludepkgs:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().excludepkgs().get_value());
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_excludepkgs_option().get_value());
                 break;
             case RepoAttribute::includepkgs:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().includepkgs().get_value());
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_includepkgs_option().get_value());
                 break;
             case RepoAttribute::repofile:
                 dbus_repo.emplace(attr, libdnf_repo->get_repo_file_path());
@@ -181,14 +181,14 @@ dnfdaemon::KeyValueMap repo_to_map(
 
             // proxy
             case RepoAttribute::proxy:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().proxy().get_value());
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_proxy_option().get_value());
                 break;
             case RepoAttribute::proxy_username:
-                //                dbus_repo.emplace(attr, libdnf_repo->get_config().proxy_username().get_value());
+                //                dbus_repo.emplace(attr, libdnf_repo->get_config().get_proxy_username_option().get_value());
                 dbus_repo.emplace(attr, "user foo");
                 break;
             case RepoAttribute::proxy_password:
-                dbus_repo.emplace(attr, libdnf_repo->get_config().proxy_password().get_value());
+                dbus_repo.emplace(attr, libdnf_repo->get_config().get_proxy_password_option().get_value());
                 break;
         }
     }

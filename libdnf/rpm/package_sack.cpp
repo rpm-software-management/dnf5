@@ -94,7 +94,7 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
     considered_uptodate = false;
 
     const auto & main_config = base->get_config();
-    const auto & disable_excludes = main_config.disable_excludes().get_value();
+    const auto & disable_excludes = main_config.get_disable_excludes_option().get_value();
 
     if (std::find(disable_excludes.begin(), disable_excludes.end(), "*") != disable_excludes.end()) {
         return;
@@ -117,7 +117,7 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
             rq.filter_id(disable_excludes, libdnf::sack::QueryCmp::NOT_GLOB);
         }
         for (const auto & repo : rq) {
-            if (!repo->get_config().includepkgs().get_value().empty()) {
+            if (!repo->get_config().get_includepkgs_option().get_value().empty()) {
                 repo->set_use_includes(true);
                 includes_used = true;
             }
@@ -125,7 +125,7 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
             PackageQuery query_repo_pkgs(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
             query_repo_pkgs.filter_repo_id({repo->get_id()});
 
-            for (const auto & name : repo->get_config().includepkgs().get_value()) {
+            for (const auto & name : repo->get_config().get_includepkgs_option().get_value()) {
                 PackageQuery query(query_repo_pkgs);
                 const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, true);
                 if (found) {
@@ -134,7 +134,7 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
                 }
             }
 
-            for (const auto & name : repo->get_config().excludepkgs().get_value()) {
+            for (const auto & name : repo->get_config().get_excludepkgs_option().get_value()) {
                 PackageQuery query(query_repo_pkgs);
                 const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, true);
                 if (found) {
@@ -148,7 +148,7 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
     // then main (global) includes/excludes because they can mask
     // repo specific settings
     if (std::find(disable_excludes.begin(), disable_excludes.end(), "main") == disable_excludes.end()) {
-        for (const auto & name : main_config.includepkgs().get_value()) {
+        for (const auto & name : main_config.get_includepkgs_option().get_value()) {
             PackageQuery query(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
             const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, true);
             if (found) {
@@ -157,7 +157,7 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
             }
         }
 
-        for (const auto & name : main_config.excludepkgs().get_value()) {
+        for (const auto & name : main_config.get_excludepkgs_option().get_value()) {
             PackageQuery query(base, PackageQuery::ExcludeFlags::IGNORE_EXCLUDES);
             const auto & [found, nevra] = query.resolve_pkg_spec(name, resolve_settings, true);
             if (found) {
@@ -166,7 +166,7 @@ void PackageSack::Impl::load_config_excludes_includes(bool only_main) {
             }
         }
 
-        if (!main_config.includepkgs().get_value().empty()) {
+        if (!main_config.get_includepkgs_option().get_value().empty()) {
             // enable the use of includes for all repositories
             for (const auto & repo : base->get_repo_sack()->get_data()) {
                 repo->set_use_includes(true);

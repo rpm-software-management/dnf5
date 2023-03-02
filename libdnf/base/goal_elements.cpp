@@ -28,7 +28,7 @@ bool GoalJobSettings::resolve_skip_broken(const libdnf::ConfigMain & cfg_main) {
     auto resolved = GoalUsedSetting::UNUSED;
     switch (skip_broken) {
         case GoalSetting::AUTO: {
-            bool skip_broken = cfg_main.skip_broken().get_value();
+            bool skip_broken = cfg_main.get_skip_broken_option().get_value();
             resolved = skip_broken ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
         } break;
         case GoalSetting::SET_TRUE:
@@ -51,7 +51,7 @@ bool GoalJobSettings::resolve_skip_unavailable(const libdnf::ConfigMain & cfg_ma
     auto resolved = GoalUsedSetting::UNUSED;
     switch (skip_unavailable) {
         case GoalSetting::AUTO: {
-            bool skip_unavailable = cfg_main.skip_unavailable().get_value();
+            bool skip_unavailable = cfg_main.get_skip_unavailable_option().get_value();
             resolved = skip_unavailable ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
         } break;
         case GoalSetting::SET_TRUE:
@@ -87,7 +87,7 @@ bool GoalJobSettings::resolve_best(const libdnf::ConfigMain & cfg_main) {
     auto resolved = GoalUsedSetting::UNUSED;
     switch (best) {
         case GoalSetting::AUTO: {
-            bool best = cfg_main.best().get_value();
+            bool best = cfg_main.get_best_option().get_value();
             resolved = best ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
         } break;
         case GoalSetting::SET_TRUE:
@@ -109,7 +109,7 @@ bool GoalJobSettings::resolve_clean_requirements_on_remove(const libdnf::ConfigM
     auto resolved = GoalUsedSetting::UNUSED;
     switch (clean_requirements_on_remove) {
         case GoalSetting::AUTO: {
-            bool clean_requirements_on_remove = cfg_main.clean_requirements_on_remove().get_value();
+            bool clean_requirements_on_remove = cfg_main.get_clean_requirements_on_remove_option().get_value();
             resolved = clean_requirements_on_remove ? GoalUsedSetting::USED_TRUE : GoalUsedSetting::USED_FALSE;
         } break;
         case GoalSetting::SET_TRUE:
@@ -144,7 +144,7 @@ bool GoalJobSettings::resolve_clean_requirements_on_remove() {
 libdnf::comps::PackageType GoalJobSettings::resolve_group_package_types(const libdnf::ConfigMain & cfg_main) {
     auto resolved = group_package_types;
     if (!resolved) {
-        resolved = libdnf::comps::package_type_from_string(cfg_main.group_package_types().get_value());
+        resolved = libdnf::comps::package_type_from_string(cfg_main.get_group_package_types_option().get_value());
     }
     libdnf_assert(
         !used_group_package_types || used_group_package_types == resolved,

@@ -62,7 +62,7 @@ void ListCommand::set_argument_parser() {
     showduplicates->set_long_name("showduplicates");
     showduplicates->set_description("Show all versions of the packages, not only the latest ones.");
     showduplicates->set_const_value("true");
-    showduplicates->link_value(&config.showdupesfromrepos());
+    showduplicates->link_value(&config.get_showdupesfromrepos_option());
     cmd.register_named_arg(showduplicates);
 
     auto conflicts =
@@ -149,7 +149,7 @@ std::unique_ptr<libdnf::cli::output::PackageListSections> ListCommand::create_ou
 void ListCommand::run() {
     auto & ctx = get_context();
     auto & config = ctx.base.get_config();
-    auto showduplicates = config.showdupesfromrepos().get_value();
+    auto showduplicates = config.get_showdupesfromrepos_option().get_value();
 
     libdnf::rpm::PackageQuery full_package_query(ctx.base);
     libdnf::rpm::PackageQuery base_query(ctx.base);
@@ -177,10 +177,10 @@ void ListCommand::run() {
     // are highlighted to make the output a bit saner
     auto colorizer = std::make_unique<libdnf::cli::output::PkgColorizer>(
         installed,
-        "",  //config.color_list_available_install().get_value(),
-        "",  //config.color_list_available_downgrade().get_value(),
-        config.color_list_available_reinstall().get_value(),
-        config.color_list_available_upgrade().get_value());
+        "",  //config.get_color_list_available_install_option().get_value(),
+        "",  //config.get_color_list_available_downgrade_option().get_value(),
+        config.get_color_list_available_reinstall_option().get_value(),
+        config.get_color_list_available_upgrade_option().get_value());
 
     switch (pkg_narrow) {
         case PkgNarrow::ALL: {
@@ -250,7 +250,7 @@ void ListCommand::run() {
                 base_query.filter_priority();
                 base_query.filter_latest_evr();
             }
-            auto recent_limit_days = config.recent().get_value();
+            auto recent_limit_days = config.get_recent_option().get_value();
             auto now = time(NULL);
             base_query.filter_recent(now - (recent_limit_days * 86400));
             package_matched |= sections->add_section("Recently added packages", base_query, colorizer);

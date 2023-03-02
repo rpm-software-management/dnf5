@@ -46,7 +46,7 @@ void GroupInstallCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().optional_metadata_types().add_item(libdnf::METADATA_TYPE_COMPS);
+    context.base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_COMPS);
 }
 
 void GroupInstallCommand::run() {
@@ -56,7 +56,7 @@ void GroupInstallCommand::run() {
     libdnf::GoalJobSettings settings;
     if (with_optional->get_value()) {
         auto group_package_types =
-            libdnf::comps::package_type_from_string(ctx.base.get_config().group_package_types().get_value());
+            libdnf::comps::package_type_from_string(ctx.base.get_config().get_group_package_types_option().get_value());
         settings.set_group_package_types(group_package_types | libdnf::comps::PackageType::OPTIONAL);
     }
     for (const auto & spec : group_specs->get_value()) {

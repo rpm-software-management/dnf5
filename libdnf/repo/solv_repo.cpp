@@ -273,7 +273,7 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
     main_solvables_start = solvables_start;
     main_solvables_end = pool->nsolvables;
 
-    if (config.build_cache().get_value()) {
+    if (config.get_build_cache_option().get_value()) {
         write_main(true);
     }
 }
@@ -397,7 +397,7 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
             pool_errstr(*get_rpm_pool(base)));
     }
 
-    if (config.build_cache().get_value()) {
+    if (config.get_build_cache_option().get_value()) {
         write_ext(repo->nrepodata - 1, type);
     }
 }
@@ -409,8 +409,8 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
 
     logger.debug("Loading system repo rpmdb from root \"{}\"", rootdir.empty() ? "/" : rootdir);
     if (rootdir.empty()) {
-        base->get_config().installroot().lock("installroot locked by loading system repo");
-        pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
+        base->get_config().get_installroot_option().lock("installroot locked by loading system repo");
+        pool_set_rootdir(*pool, base->get_config().get_installroot_option().get_value().c_str());
     } else {
         pool_set_rootdir(*pool, rootdir.c_str());
     }
@@ -427,7 +427,7 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
 
     if (!rootdir.empty()) {
         // if loading an extra repo, reset rootdir back to installroot
-        pool_set_rootdir(*pool, base->get_config().installroot().get_value().c_str());
+        pool_set_rootdir(*pool, base->get_config().get_installroot_option().get_value().c_str());
     }
 
     pool_set_installed(*pool, repo);
@@ -465,7 +465,7 @@ void SolvRepo::rewrite_repo(libdnf::solv::IdQueue & fileprovides) {
 
     logger.debug("Rewriting repo \"{}\" with added file provides", config.get_id());
 
-    if (!config.build_cache().get_value() || main_solvables_start == 0 || fileprovides.size() == 0) {
+    if (!config.get_build_cache_option().get_value() || main_solvables_start == 0 || fileprovides.size() == 0) {
         return;
     }
 
