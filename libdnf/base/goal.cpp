@@ -106,7 +106,6 @@ public:
         comps::GroupQuery group_query,
         GoalJobSettings & settings);
     void add_group_remove_to_goal(
-        base::Transaction & transaction,
         std::vector<std::tuple<std::string, transaction::TransactionItemReason, comps::GroupQuery, GoalJobSettings>> &
             groups_to_remove);
 
@@ -549,7 +548,7 @@ GoalProblem Goal::Impl::add_group_specs_to_goal(base::Transaction & transaction)
     }
 
     // process group removals first
-    add_group_remove_to_goal(transaction, groups_remove);
+    add_group_remove_to_goal(groups_remove);
 
     for (auto & [spec, reason, group_query, settings] : groups_install) {
         add_group_install_to_goal(transaction, reason, group_query, settings);
@@ -1435,9 +1434,14 @@ void Goal::Impl::add_group_install_to_goal(
 }
 
 void Goal::Impl::add_group_remove_to_goal(
-    base::Transaction & transaction,
     std::vector<std::tuple<std::string, transaction::TransactionItemReason, comps::GroupQuery, GoalJobSettings>> &
         groups_to_remove) {
+    if (groups_to_remove.empty()) {
+        return;
+    }
+
+    auto & cfg_main = base->get_config();
+
     // get list of group ids being removed in this transaction
     std::set<std::string> removed_groups_ids;
     for (auto & [spec, reason, group_query, settings] : groups_to_remove) {
@@ -1448,18 +1452,17 @@ void Goal::Impl::add_group_remove_to_goal(
     rpm::PackageQuery query_installed(base);
     query_installed.filter_installed();
     auto & system_state = base->p_impl->get_system_state();
+    // packages that are candidates for removal
+    rpm::PackageSet remove_candidates(base);
     for (auto & [spec, reason, group_query, settings] : groups_to_remove) {
         for (const auto & group : group_query) {
             // get all packages installed by the group
             rpm::PackageQuery group_packages(query_installed);
             group_packages.filter_name(system_state.get_group_state(group.get_groupid()).packages);
-            auto pkg_settings = GoalJobSettings();
-            // Remove packages installed by the group. A package is removed if
-            // it is not part of any other installed group, is not a dependency
-            // of another installed package, and is not user-installed.
+            // Remove packages installed by the group.
+            // First collect packages that are not part of any other
+            // installed group and are not user-installed.
             for (const auto & pkg : group_packages) {
-                const auto pkg_name = pkg.get_name();
-
                 // is the package part of another group which is not being removed?
                 auto pkg_groups = system_state.get_package_groups(pkg.get_name());
                 // remove from the list all groups being removed in this transaction
@@ -1475,21 +1478,44 @@ void Goal::Impl::add_group_remove_to_goal(
                     continue;
                 }
 
-                // if the package is required by another installed package, it is
-                // not removed, but it's reason is changed to DEPENDENCY
-                rpm::PackageQuery dependent(query_installed);
-                dependent.filter_requires(pkg.get_provides());
-                if (dependent.size() > 0) {
-                    rpm_goal.add_reason_change(pkg, transaction::TransactionItemReason::DEPENDENCY, std::nullopt);
-                    continue;
-                }
-
-                add_remove_to_goal(transaction, pkg_name, pkg_settings);
+                remove_candidates.add(pkg);
             }
-
             rpm_goal.add_group(group, transaction::TransactionItemAction::REMOVE, reason);
         }
     }
+    if (remove_candidates.empty()) {
+        return;
+    }
+
+    // all installed packages, that are not candidates for removal
+    rpm::PackageQuery dependent_base(query_installed);
+    {
+        // create auxiliary goal to resolve all unused dependencies that are going to be
+        // removed together with removal candidates
+        Goal goal_tmp(base);
+        goal_tmp.add_rpm_remove(remove_candidates);
+        for (const auto & tspkg : goal_tmp.resolve().get_transaction_packages()) {
+            if (transaction_item_action_is_outbound(tspkg.get_action())) {
+                dependent_base.remove(tspkg.get_package());
+            }
+        }
+    }
+
+    // The second step of packages removal - filter out packages that are
+    // dependencies of a package that is not also being removed.
+    libdnf::solv::IdQueue packages_to_remove_ids;
+    for (const auto & pkg : remove_candidates) {
+        // if the package is required by another installed package, it is
+        // not removed, but it's reason is changed to DEPENDENCY
+        rpm::PackageQuery dependent(dependent_base);
+        dependent.filter_requires(pkg.get_provides());
+        if (dependent.size() > 0) {
+            rpm_goal.add_reason_change(pkg, transaction::TransactionItemReason::DEPENDENCY, std::nullopt);
+        } else {
+            packages_to_remove_ids.push_back(pkg.get_id().id);
+        }
+    }
+    rpm_goal.add_remove(packages_to_remove_ids, cfg_main.get_clean_requirements_on_remove_option().get_value());
 }
 
 GoalProblem Goal::Impl::add_reason_change_to_goal(
