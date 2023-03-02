@@ -40,3 +40,20 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
         types_config.set((libdnf5.conf.METADATA_TYPE_FILELISTS,))
         types_config.add((libdnf5.conf.METADATA_TYPE_COMPS, libdnf5.conf.METADATA_TYPE_UPDATEINFO))
         self.assertEqual(types_config.get_value(), (libdnf5.conf.METADATA_TYPE_COMPS, libdnf5.conf.METADATA_TYPE_FILELISTS, libdnf5.conf.METADATA_TYPE_UPDATEINFO))
+
+    def test_set_by_attribute(self):
+        config = self.base.get_config()
+        config.comment = 'some comment'
+        comment_option = config.get_comment_option()
+        self.assertEqual(comment_option.get_value(), 'some comment')
+        self.assertEqual(comment_option.get_priority(), libdnf5.conf.Option.Priority_RUNTIME)
+
+    def test_get_by_attribute(self):
+        config = self.base.get_config()
+        config.get_comment_option().set('new comment')
+        self.assertEqual(config.comment, 'new comment')
+
+    def test_set_get_by_attribute(self):
+        config = self.base.get_config()
+        config.comment = 'test'
+        self.assertEqual(config.comment, 'test')
