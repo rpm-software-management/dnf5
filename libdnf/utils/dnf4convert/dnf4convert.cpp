@@ -146,7 +146,8 @@ std::map<std::string, libdnf::system::ModuleState> Dnf4Convert::read_module_stat
     std::map<std::string, libdnf::system::ModuleState> module_states;
 
     auto & config = base->get_config();
-    std::filesystem::path path = config.installroot().get_value() / std::filesystem::path{MODULES_PERSIST_DIR};
+    std::filesystem::path path =
+        config.get_installroot_option().get_value() / std::filesystem::path{MODULES_PERSIST_DIR};
 
     auto & logger = *base->get_logger();
     std::error_code ec;
@@ -186,8 +187,8 @@ bool Dnf4Convert::read_package_states_from_history(
     auto & logger = *base->get_logger();
     // get dnf4 history database path (installroot/persistdir/history.sqlite)
     auto & config = base->get_config();
-    std::filesystem::path path{config.installroot().get_value()};
-    path /= std::filesystem::path(config.persistdir().get_value()).relative_path();
+    std::filesystem::path path{config.get_installroot_option().get_value()};
+    path /= std::filesystem::path(config.get_persistdir_option().get_value()).relative_path();
     path /= "history.sqlite";
 
     logger.debug("Loading system state from dnf4 history database \"{}\"", path.string());

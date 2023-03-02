@@ -90,15 +90,15 @@ void Base::load_config_from_file(const std::string & path) {
 }
 
 void Base::load_config_from_file() try {
-    load_config_from_file(config.config_file_path().get_value());
+    load_config_from_file(config.get_config_file_path_option().get_value());
 } catch (const MissingConfigError & e) {
     // Ignore the missing config file unless the user specified it via --config=...
-    if (config.config_file_path().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+    if (config.get_config_file_path_option().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
         throw;
     }
 } catch (const InaccessibleConfigError & e) {
     // Ignore the inaccessible config file unless the user specified it via --config=...
-    if (config.config_file_path().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+    if (config.get_config_file_path_option().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
         throw;
     }
 }
@@ -132,10 +132,10 @@ void Base::add_plugin(plugin::IPlugin & iplugin_instance) {
 
 void Base::load_plugins() {
     const char * plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
-    if (plugins_config_dir && config.pluginconfpath().get_priority() < Option::Priority::COMMANDLINE) {
+    if (plugins_config_dir && config.get_pluginconfpath_option().get_priority() < Option::Priority::COMMANDLINE) {
         p_impl->plugins.load_plugins(plugins_config_dir);
     } else {
-        p_impl->plugins.load_plugins(config.pluginconfpath().get_value());
+        p_impl->plugins.load_plugins(config.get_pluginconfpath_option().get_value());
     }
 }
 
@@ -151,13 +151,13 @@ void Base::setup() {
     pool.reset(new libdnf::solv::RpmPool);
     p_impl->comps_pool.reset(new libdnf::solv::CompsPool);
     auto & config = get_config();
-    auto & installroot = config.installroot();
+    auto & installroot = config.get_installroot_option();
     installroot.lock("Locked by Base::setup()");
 
-    get_vars()->load(installroot.get_value(), config.varsdir().get_value());
+    get_vars()->load(installroot.get_value(), config.get_varsdir_option().get_value());
 
     // TODO(mblaha) - move system state load closer to the system repo loading
-    std::filesystem::path system_state_dir{config.system_state_dir().get_value()};
+    std::filesystem::path system_state_dir{config.get_system_state_dir_option().get_value()};
     p_impl->system_state.emplace(installroot.get_value() / system_state_dir.relative_path());
 
     auto & system_state = p_impl->get_system_state();
@@ -185,7 +185,7 @@ void Base::setup() {
         }
     }
 
-    config.varsdir().lock("Locked by Base::setup()");
+    config.get_varsdir_option().lock("Locked by Base::setup()");
     pool_setdisttype(**pool, DISTTYPE_RPM);
     // TODO(jmracek) - architecture variable is changable therefore architecture in vars must be synchronized with RpmPool
     // (and force to recompute provides) or locked

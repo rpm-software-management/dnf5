@@ -43,7 +43,7 @@ public:
               '\0',
               _("Allow resolving of depsolve problems by skipping packages"),
               false,
-              &command.get_context().base.get_config().skip_broken()) {}
+              &command.get_context().base.get_config().get_skip_broken_option()) {}
 };
 
 class SkipUnavailableOption : public libdnf::cli::session::BoolOption {
@@ -55,7 +55,7 @@ public:
               '\0',
               _("Allow skipping unavailable packages"),
               false,
-              &command.get_context().base.get_config().skip_unavailable()) {}
+              &command.get_context().base.get_config().get_skip_unavailable_option()) {}
 };
 
 

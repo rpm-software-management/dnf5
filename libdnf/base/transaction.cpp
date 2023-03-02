@@ -469,7 +469,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     auto & config = base->get_config();
 
     // acquire the lock
-    std::filesystem::path lock_file_path = config.installroot().get_value();
+    std::filesystem::path lock_file_path = config.get_installroot_option().get_value();
     lock_file_path /= "run/dnf/rpmtransaction.lock";
     std::filesystem::create_directories(lock_file_path.parent_path());
 
@@ -490,7 +490,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     }
 
     rpmtransFlags rpm_transaction_flags{RPMTRANS_FLAG_NONE};
-    for (const auto & tsflag : config.tsflags().get_value()) {
+    for (const auto & tsflag : config.get_tsflags_option().get_value()) {
         bool found = false;
         for (const auto & [string_name, enum_item] : string_tsflag_map) {
             if (tsflag == string_name) {

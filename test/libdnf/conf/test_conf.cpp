@@ -38,21 +38,22 @@ void ConfTest::setUp() {
 }
 
 void ConfTest::test_config_main() {
-    CPPUNIT_ASSERT_EQUAL(7, config.debuglevel().get_value());
-    CPPUNIT_ASSERT_EQUAL(std::string("hello"), config.persistdir().get_value());
-    CPPUNIT_ASSERT_EQUAL(false, config.plugins().get_value());
+    CPPUNIT_ASSERT_EQUAL(7, config.get_debuglevel_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(std::string("hello"), config.get_persistdir_option().get_value());
+    CPPUNIT_ASSERT_EQUAL(false, config.get_plugins_option().get_value());
     std::string pluginpath = "/foo";
-    CPPUNIT_ASSERT_EQUAL(pluginpath, config.pluginpath().get_value());
+    CPPUNIT_ASSERT_EQUAL(pluginpath, config.get_pluginpath_option().get_value());
 }
 
 void ConfTest::test_config_repo() {
     repo::ConfigRepo config_repo(config, "test-repo");
     ConfigParser parser;
     parser.read(PROJECT_SOURCE_DIR "/test/libdnf/conf/data/main.conf");
-    base->get_config().varsdir().set(std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
+    base->get_config().get_varsdir_option().set(
+        std::vector<std::string>{PROJECT_SOURCE_DIR "/test/libdnf/conf/data/vars"});
     base->setup();
     config_repo.load_from_parser(parser, "repo-1", *base->get_vars(), logger);
 
     std::vector<std::string> baseurl = {"http://example.com/value123", "http://example.com/456"};
-    CPPUNIT_ASSERT_EQUAL(baseurl, config_repo.baseurl().get_value());
+    CPPUNIT_ASSERT_EQUAL(baseurl, config_repo.get_baseurl_option().get_value());
 }

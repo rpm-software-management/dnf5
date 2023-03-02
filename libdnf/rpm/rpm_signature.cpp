@@ -47,7 +47,7 @@ auto ts_deleter = [](rpmts_s * ts) { rpmtsFree(ts); };
 static RpmTransactionPtr create_transaction(const BaseWeakPtr & base) {
     RpmTransactionPtr ts_ptr(rpmtsCreate(), ts_deleter);
     auto & config = base->get_config();
-    auto root_dir = config.installroot().get_value();
+    auto root_dir = config.get_installroot_option().get_value();
     if (rpmtsSetRootDir(ts_ptr.get(), root_dir.c_str()) != 0) {
         throw SignatureCheckError(M_("Failed to set rpm transaction rootDir \"{}\"."), std::string(root_dir));
     }
@@ -94,12 +94,12 @@ RpmSignature::CheckResult RpmSignature::check_package_signature(rpm::Package pkg
     // is package gpg check even required?
     auto repo = pkg.get_repo();
     if (repo->get_type() == libdnf::repo::Repo::Type::COMMANDLINE) {
-        if (!base->get_config().localpkg_gpgcheck().get_value()) {
+        if (!base->get_config().get_localpkg_gpgcheck_option().get_value()) {
             return CheckResult::OK;
         }
     } else {
         auto & repo_config = repo->get_config();
-        if (!repo_config.gpgcheck().get_value()) {
+        if (!repo_config.get_gpgcheck_option().get_value()) {
             return CheckResult::OK;
         }
     }

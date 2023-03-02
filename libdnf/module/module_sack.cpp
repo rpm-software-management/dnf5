@@ -288,7 +288,9 @@ void ModuleSack::Impl::module_filtering() {
     libdnf::repo::RepoQuery hotfix_repos(base);
     hotfix_repos.filter_enabled(true);
     hotfix_repos.filter(
-        [](const libdnf::repo::RepoWeakPtr & repo) { return repo->get_config().module_hotfixes().get_value(); },
+        [](const libdnf::repo::RepoWeakPtr & repo) {
+            return repo->get_config().get_module_hotfixes_option().get_value();
+        },
         true,
         libdnf::sack::QueryCmp::EQ);
     for (auto & repo : hotfix_repos) {
@@ -584,7 +586,7 @@ static std::set<std::string> get_strings_from_provide(
 
 std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_platform_name_and_stream() const {
     // try to detect platform id from configuration
-    auto & config_platform_option = base->get_config().module_platform_id();
+    auto & config_platform_option = base->get_config().get_module_platform_id_option();
     if (!config_platform_option.empty()) {
         auto & config_platform = config_platform_option.get_value();
         auto parsed_platform_id = parse_platform_id_from_string(config_platform);
@@ -636,7 +638,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
     // try to detect platform id from release files
     // TODO(jkolarik): Create constants for paths
     std::vector<std::string> os_release_paths{"etc/os-release", "usr/lib/os-release"};
-    auto & installroot = base->get_config().installroot().get_value();
+    auto & installroot = base->get_config().get_installroot_option().get_value();
     for (auto & os_release_path : os_release_paths) {
         std::string full_path = std::filesystem::canonical(installroot) / os_release_path;
         std::pair<std::string, std::string> parsed_platform_id;

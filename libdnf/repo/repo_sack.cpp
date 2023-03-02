@@ -80,7 +80,7 @@ RepoWeakPtr RepoSack::create_repo_from_libsolv_testcase(const std::string & id, 
 RepoWeakPtr RepoSack::get_cmdline_repo() {
     if (!cmdline_repo) {
         std::unique_ptr<Repo> repo(new Repo(base, CMDLINE_REPO_NAME, Repo::Type::COMMANDLINE));
-        repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, false);
+        repo->get_config().get_build_cache_option().set(libdnf::Option::Priority::RUNTIME, false);
         cmdline_repo = repo.get();
         add_item(std::move(repo));
     }
@@ -181,7 +181,7 @@ RepoWeakPtr RepoSack::get_system_repo() {
     if (!system_repo) {
         std::unique_ptr<Repo> repo(new Repo(base, SYSTEM_REPO_NAME, Repo::Type::SYSTEM));
         // TODO(mblaha): re-enable caching once we can reliably detect whether system repo is up-to-date
-        repo->get_config().build_cache().set(libdnf::Option::Priority::RUNTIME, false);
+        repo->get_config().get_build_cache_option().set(libdnf::Option::Priority::RUNTIME, false);
         system_repo = repo.get();
         add_item(std::move(repo));
     }
@@ -276,7 +276,7 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
 
             signal_prepared_repo.notify_one();
         } catch (const libdnf::repo::RepoDownloadError & e) {
-            if (!repo->get_config().skip_if_unavailable().get_value()) {
+            if (!repo->get_config().get_skip_if_unavailable_option().get_value()) {
                 except_in_main_thread = true;
                 finish_sack_loader();
                 throw;
@@ -344,25 +344,25 @@ void RepoSack::create_repos_from_file(const std::string & path) {
         auto & repo_cfg = repo->get_config();
         repo_cfg.load_from_parser(parser, section, *base->get_vars(), *base->get_logger());
 
-        if (repo_cfg.name().get_priority() == Option::Priority::DEFAULT) {
+        if (repo_cfg.get_name_option().get_priority() == Option::Priority::DEFAULT) {
             logger.debug("Repo \"{}\" is missing name in configuration file \"{}\", using id.", repo_id, path);
-            repo_cfg.name().set(Option::Priority::REPOCONFIG, repo_id);
+            repo_cfg.get_name_option().set(Option::Priority::REPOCONFIG, repo_id);
         }
     }
 }
 
 void RepoSack::create_repos_from_config_file() {
-    const auto & path = base->get_config().config_file_path().get_value();
+    const auto & path = base->get_config().get_config_file_path_option().get_value();
     try {
         create_repos_from_file(std::filesystem::path(path));
     } catch (const libdnf::MissingConfigError & e) {
         // Ignore the missing config file unless user specified it via --config=...
-        if (base->get_config().config_file_path().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+        if (base->get_config().get_config_file_path_option().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
             throw;
         }
     } catch (const libdnf::InaccessibleConfigError & e) {
         // Ignore the inaccessible config file unless user specified it via --config=...
-        if (base->get_config().config_file_path().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+        if (base->get_config().get_config_file_path_option().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
             throw;
         }
     }
@@ -389,7 +389,7 @@ void RepoSack::create_repos_from_dir(const std::string & dir_path) {
 }
 
 void RepoSack::create_repos_from_reposdir() {
-    for (auto & dir : base->get_config().reposdir().get_value()) {
+    for (auto & dir : base->get_config().get_reposdir_option().get_value()) {
         if (std::filesystem::exists(dir)) {
             create_repos_from_dir(dir);
         }

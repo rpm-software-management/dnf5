@@ -277,7 +277,7 @@ void BuildDepCommand::goal_resolved() {
     auto & transaction = *ctx.get_transaction();
     auto transaction_problems = transaction.get_problems();
     if (transaction_problems != libdnf::GoalProblem::NO_PROBLEM) {
-        auto skip_unavailable = ctx.base.get_config().skip_unavailable().get_value();
+        auto skip_unavailable = ctx.base.get_config().get_skip_unavailable_option().get_value();
         if (transaction_problems != libdnf::GoalProblem::NOT_FOUND || !skip_unavailable) {
             throw GoalResolveError(transaction);
         }

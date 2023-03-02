@@ -106,7 +106,7 @@ void ChangelogCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
-    context.base.get_config().optional_metadata_types().add(libdnf::OPTIONAL_METADATA_TYPES);
+    context.base.get_config().get_optional_metadata_types_option().add(libdnf::OPTIONAL_METADATA_TYPES);
 }
 
 void ChangelogCommand::run() {

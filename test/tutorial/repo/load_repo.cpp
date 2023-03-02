@@ -14,7 +14,7 @@ auto repo = repo_sack->create_repo("my_new_repo_id");
 // * /absolute/path/
 // * file:///absolute/path/url/
 // * https://example.com/url/
-repo->get_config().baseurl().set(baseurl);
+repo->get_config().get_baseurl_option().set(baseurl);
 
 // If out of date, downloads fresh metadata of all available repositories and
 // loads the repositories into memory.

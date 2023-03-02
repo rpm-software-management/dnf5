@@ -42,7 +42,7 @@ using fmt::format;
 
 libdnf::repo::RepoWeakPtr BaseTestCase::add_repo(const std::string & repoid, const std::string & repo_path, bool load) {
     auto repo = repo_sack->create_repo(repoid);
-    repo->get_config().baseurl().set("file://" + repo_path);
+    repo->get_config().get_baseurl_option().set("file://" + repo_path);
 
     if (load) {
         libdnf::repo::RepoQuery repos(base);
@@ -226,9 +226,9 @@ void BaseTestCase::setUp() {
     temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf5_unittest");
     std::filesystem::create_directory(temp->get_path() / "installroot");
 
-    base.get_config().installroot().set(temp->get_path() / "installroot");
-    base.get_config().cachedir().set(temp->get_path() / "cache");
-    base.get_config().optional_metadata_types().set(libdnf::OPTIONAL_METADATA_TYPES);
+    base.get_config().get_installroot_option().set(temp->get_path() / "installroot");
+    base.get_config().get_cachedir_option().set(temp->get_path() / "cache");
+    base.get_config().get_optional_metadata_types_option().set(libdnf::OPTIONAL_METADATA_TYPES);
 
     base.get_vars()->set("arch", "x86_64");
 

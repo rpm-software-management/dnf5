@@ -248,7 +248,7 @@ void RepoqueryCommand::configure() {
                              advisory_newpackage->get_value() || advisory_severity->get_value().empty() ||
                              advisory_bz->get_value().empty() || advisory_cve->get_value().empty();
     if (updateinfo_needed) {
-        context.base.get_config().optional_metadata_types().add_item(libdnf::METADATA_TYPE_UPDATEINFO);
+        context.base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_UPDATEINFO);
     }
     context.set_load_available_repos(
         available_option->get_priority() >= libdnf::Option::Priority::COMMANDLINE || !only_system_repo_needed
@@ -421,7 +421,7 @@ void RepoqueryCommand::run() {
 
     if (duplicates->get_value()) {
         auto & cfg_main = ctx.base.get_config();
-        const auto & installonly_packages = cfg_main.installonlypkgs().get_value();
+        const auto & installonly_packages = cfg_main.get_installonlypkgs_option().get_value();
         auto installonly_query = full_package_query;
         installonly_query.filter_provides(installonly_packages, libdnf::sack::QueryCmp::GLOB);
         full_package_query -= installonly_query;

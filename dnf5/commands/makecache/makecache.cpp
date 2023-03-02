@@ -45,7 +45,7 @@ void MakeCacheCommand::run() {
     if (enabled_repos_query.empty()) {
         std::string repos_paths;
         bool first = true;
-        for (const auto & val : ctx.base.get_config().reposdir().get_value()) {
+        for (const auto & val : ctx.base.get_config().get_reposdir_option().get_value()) {
             if (!first) {
                 repos_paths += ", ";
             }

@@ -118,12 +118,13 @@ std::string::size_type Repo::verify_id(const std::string & repo_id) {
 }
 
 void Repo::verify() const {
-    if (config.baseurl().empty() && (config.metalink().empty() || config.metalink().get_value().empty()) &&
-        (config.mirrorlist().empty() || config.mirrorlist().get_value().empty())) {
+    if (config.get_baseurl_option().empty() &&
+        (config.get_metalink_option().empty() || config.get_metalink_option().get_value().empty()) &&
+        (config.get_mirrorlist_option().empty() || config.get_mirrorlist_option().get_value().empty())) {
         throw RepoError(M_("Repository \"{}\" has no source (baseurl, mirrorlist or metalink) set."), config.get_id());
     }
 
-    const auto & type = config.type().get_value();
+    const auto & type = config.get_type_option().get_value();
     const char * supported_repo_types[]{"rpm-md", "rpm", "repomd", "rpmmd", "yum", "YUM"};
     if (!type.empty()) {
         for (auto supported : supported_repo_types) {
@@ -144,23 +145,24 @@ std::string Repo::get_id() const noexcept {
 }
 
 void Repo::enable() {
-    config.enabled().set(Option::Priority::RUNTIME, true);
+    config.get_enabled_option().set(Option::Priority::RUNTIME, true);
 }
 
 void Repo::disable() {
-    config.enabled().set(Option::Priority::RUNTIME, false);
+    config.get_enabled_option().set(Option::Priority::RUNTIME, false);
 }
 
 bool Repo::is_enabled() const {
-    return config.enabled().get_value();
+    return config.get_enabled_option().get_value();
 }
 
 bool Repo::is_local() const {
-    if ((!config.metalink().empty() && !config.metalink().get_value().empty()) ||
-        (!config.mirrorlist().empty() && !config.mirrorlist().get_value().empty())) {
+    if ((!config.get_metalink_option().empty() && !config.get_metalink_option().get_value().empty()) ||
+        (!config.get_mirrorlist_option().empty() && !config.get_mirrorlist_option().get_value().empty())) {
         return false;
     }
-    if (!config.baseurl().get_value().empty() && config.baseurl().get_value()[0].compare(0, 7, "file://") == 0) {
+    if (!config.get_baseurl_option().get_value().empty() &&
+        config.get_baseurl_option().get_value()[0].compare(0, 7, "file://") == 0) {
         return true;
     }
     return false;
@@ -220,7 +222,7 @@ void Repo::read_metadata_cache() {
 
 
 bool Repo::is_in_sync() {
-    if (!config.metalink().empty() && !config.metalink().get_value().empty()) {
+    if (!config.get_metalink_option().empty() && !config.get_metalink_option().get_value().empty()) {
         return downloader->is_metalink_in_sync();
     }
     return downloader->is_repomd_in_sync();
@@ -269,11 +271,11 @@ void Repo::set_use_includes(bool enabled) {
 }
 
 int Repo::get_cost() const {
-    return config.cost().get_value();
+    return config.get_cost_option().get_value();
 }
 
 void Repo::set_cost(int value, Option::Priority priority) {
-    auto & conf_cost = config.cost();
+    auto & conf_cost = config.get_cost_option();
     conf_cost.set(priority, value);
     if (solv_repo) {
         solv_repo->set_subpriority(-conf_cost.get_value());
@@ -281,11 +283,11 @@ void Repo::set_cost(int value, Option::Priority priority) {
 }
 
 int Repo::get_priority() const {
-    return config.priority().get_value();
+    return config.get_priority_option().get_value();
 }
 
 void Repo::set_priority(int value, Option::Priority priority) {
-    auto & conf_priority = config.priority();
+    auto & conf_priority = config.get_priority_option();
     conf_priority.set(priority, value);
     if (solv_repo) {
         solv_repo->set_priority(-conf_priority.get_value());
@@ -305,13 +307,13 @@ bool Repo::is_expired() const {
     if (expired)
         // explicitly requested expired state
         return true;
-    if (config.metadata_expire().get_value() == -1)
+    if (config.get_metadata_expire_option().get_value() == -1)
         return false;
-    return get_age() > config.metadata_expire().get_value();
+    return get_age() > config.get_metadata_expire_option().get_value();
 }
 
 int Repo::get_expires_in() const {
-    return config.metadata_expire().get_value() - static_cast<int>(get_age());
+    return config.get_metadata_expire_option().get_value() - static_cast<int>(get_age());
 }
 
 void Repo::set_substitutions(const std::map<std::string, std::string> & substitutions) {
@@ -430,7 +432,7 @@ void Repo::load_available_repo() {
 
     solv_repo->load_repo_main(downloader->repomd_filename, primary_fn);
 
-    auto optional_metadata = config.get_main_config().optional_metadata_types().get_value();
+    auto optional_metadata = config.get_main_config().get_optional_metadata_types_option().get_value();
 
     if (optional_metadata.contains(libdnf::METADATA_TYPE_FILELISTS)) {
         solv_repo->load_repo_ext(RepodataType::FILELISTS, *downloader.get());
@@ -541,16 +543,16 @@ void Repo::recompute_expired() {
         return;
     }
 
-    if (config.metadata_expire().get_value() == -1) {
+    if (config.get_metadata_expire_option().get_value() == -1) {
         return;
     }
 
-    if (config.get_main_config().check_config_file_age().get_value() && !repo_file_path.empty() &&
+    if (config.get_main_config().get_check_config_file_age_option().get_value() && !repo_file_path.empty() &&
         mtime(repo_file_path.c_str()) >
             mtime(downloader->get_metadata_path(RepoDownloader::MD_FILENAME_PRIMARY).c_str())) {
         expired = true;
     } else {
-        expired = get_age() > config.metadata_expire().get_value();
+        expired = get_age() > config.get_metadata_expire_option().get_value();
     }
 }
 

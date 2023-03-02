@@ -124,7 +124,7 @@ void RootCommand::set_argument_parser() {
     config_file_path->set_has_value(true);
     config_file_path->set_arg_value_help("CONFIG_FILE_PATH");
     config_file_path->set_description("Configuration file location");
-    config_file_path->link_value(&config.config_file_path());
+    config_file_path->link_value(&config.get_config_file_path_option());
     global_options_group->register_argument(config_file_path);
 
     auto quiet = parser.add_new_named_arg("quiet");
@@ -206,28 +206,28 @@ void RootCommand::set_argument_parser() {
     assume_yes->set_short_name('y');
     assume_yes->set_description("automatically answer yes for all questions");
     assume_yes->set_const_value("true");
-    assume_yes->link_value(&config.assumeyes());
+    assume_yes->link_value(&config.get_assumeyes_option());
     global_options_group->register_argument(assume_yes);
 
     auto assume_no = parser.add_new_named_arg("assumeno");
     assume_no->set_long_name("assumeno");
     assume_no->set_description("automatically answer no for all questions");
     assume_no->set_const_value("true");
-    assume_no->link_value(&config.assumeno());
+    assume_no->link_value(&config.get_assumeno_option());
     global_options_group->register_argument(assume_no);
 
     auto best = parser.add_new_named_arg("best");
     best->set_long_name("best");
     best->set_description("try the best available package versions in transactions");
     best->set_const_value("true");
-    best->link_value(&config.best());
+    best->link_value(&config.get_best_option());
     global_options_group->register_argument(best);
 
     auto no_best = parser.add_new_named_arg("no-best");
     no_best->set_long_name("no-best");
     no_best->set_description("do not limit the transaction to the best candidate");
     no_best->set_const_value("false");
-    no_best->link_value(&config.best());
+    no_best->link_value(&config.get_best_option());
     global_options_group->register_argument(no_best);
 
     no_best->add_conflict_argument(*best);
@@ -334,8 +334,8 @@ void RootCommand::set_argument_parser() {
                                           [[maybe_unused]] ArgumentParser::NamedArg * arg,
                                           [[maybe_unused]] const char * option,
                                           [[maybe_unused]] const char * value) {
-        ctx.base.get_config().gpgcheck().set(libdnf::Option::Priority::COMMANDLINE, 0);
-        ctx.base.get_config().repo_gpgcheck().set(libdnf::Option::Priority::COMMANDLINE, 0);
+        ctx.base.get_config().get_gpgcheck_option().set(libdnf::Option::Priority::COMMANDLINE, 0);
+        ctx.base.get_config().get_repo_gpgcheck_option().set(libdnf::Option::Priority::COMMANDLINE, 0);
         // Store to vector. Use it later when repositories configuration will be loaded.
         ctx.setopts.emplace_back("*.gpgcheck", "0");
         ctx.setopts.emplace_back("*.repo_gpgcheck", "0");
@@ -347,7 +347,7 @@ void RootCommand::set_argument_parser() {
     no_plugins->set_long_name("no-plugins");
     no_plugins->set_description("disable all plugins");
     no_plugins->set_const_value("false");
-    no_plugins->link_value(&config.plugins());
+    no_plugins->link_value(&config.get_plugins_option());
     global_options_group->register_argument(no_plugins);
 
     auto enable_plugins_names = parser.add_new_named_arg("enable-plugin");
@@ -407,7 +407,7 @@ void RootCommand::set_argument_parser() {
     installroot->set_has_value(true);
     installroot->set_arg_value_help("ABSOLUTE_PATH");
     installroot->set_description("set install root");
-    installroot->link_value(&config.installroot());
+    installroot->link_value(&config.get_installroot_option());
     global_options_group->register_argument(installroot);
 
     auto releasever = parser.add_new_named_arg("releasever");
@@ -428,7 +428,7 @@ void RootCommand::set_argument_parser() {
         debug_solver->set_long_name("debugsolver");
         debug_solver->set_description("Dump detailed solving results into files");
         debug_solver->set_const_value("true");
-        debug_solver->link_value(&config.debug_solver());
+        debug_solver->link_value(&config.get_debug_solver_option());
         global_options_group->register_argument(debug_solver);
     }
 
@@ -648,8 +648,8 @@ int main(int argc, char * argv[]) try {
             close(fd);
         }
 
-        auto log_dir_full_path = fs::path(base.get_config().installroot().get_value());
-        log_dir_full_path += base.get_config().logdir().get_value();
+        auto log_dir_full_path = fs::path(base.get_config().get_installroot_option().get_value());
+        log_dir_full_path += base.get_config().get_logdir_option().get_value();
         std::filesystem::create_directories(log_dir_full_path);
         auto log_file = log_dir_full_path / "dnf5.log";
         auto log_stream = std::make_unique<std::ofstream>(log_file, std::ios::app);
@@ -696,7 +696,7 @@ int main(int argc, char * argv[]) try {
                 return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
             }
 
-            for (const auto & tsflag : base.get_config().tsflags().get_value()) {
+            for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
                 if (tsflag == "test") {
                     std::cout
                         << "Test mode enabled: Only package downloads, pgp key installations and transaction checks "

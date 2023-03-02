@@ -269,7 +269,7 @@ public:
 
     /// Gets name of repository
     /// Alias
-    std::string get_name() { return this->get_config().name().get_value(); };
+    std::string get_name() { return this->get_config().get_name_option().get_value(); };
     /// Sets repository configuration file path
     /// @replaces libdnf:repo/Repo.hpp:method:Repo.setRepoFilePath(const std::string & path)
     void set_repo_file_path(const std::string & path);

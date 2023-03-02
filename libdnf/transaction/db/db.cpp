@@ -78,10 +78,10 @@ static void transaction_db_create(libdnf::utils::SQLite3 & conn) {
 
 std::unique_ptr<libdnf::utils::SQLite3> transaction_db_connect(libdnf::Base & base) {
     auto & config = base.get_config();
-    config.installroot().lock("installroot locked by transaction_db_connect");
+    config.get_installroot_option().lock("installroot locked by transaction_db_connect");
 
-    std::filesystem::path path{config.installroot().get_value()};
-    path /= std::filesystem::path(config.transaction_history_dir().get_value()).relative_path();
+    std::filesystem::path path{config.get_installroot_option().get_value()};
+    path /= std::filesystem::path(config.get_transaction_history_dir_option().get_value()).relative_path();
     std::filesystem::create_directories(path);
 
     auto conn = std::make_unique<libdnf::utils::SQLite3>((path / "transaction_history.sqlite").native());

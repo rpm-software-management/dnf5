@@ -92,7 +92,7 @@ RpmProblemSet::Iterator & RpmProblemSet::Iterator::operator++() {
 Transaction::Transaction(const BaseWeakPtr & base) : base(base), rpm_log_guard(base) {
     ts = rpmtsCreate();
     auto & config = base->get_config();
-    set_root_dir(config.installroot().get_value().c_str());
+    set_root_dir(config.get_installroot_option().get_value().c_str());
     auto vsflags = static_cast<rpmVSFlags>(rpmExpandNumeric("%{?__vsflags}"));
     set_signature_verify_flags(vsflags);
     rpmtsSetChangeCallback(ts, ts_change_callback, this);

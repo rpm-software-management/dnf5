@@ -363,10 +363,10 @@ void Actions::on_base_setup(const std::vector<Action> & trans_actions) {
 void Actions::parse_action_files() {
     const auto & config = get_base().get_config();
     const char * env_plugins_config_dir = std::getenv("LIBDNF_PLUGINS_CONFIG_DIR");
-    const std::string plugins_config_dir =
-        env_plugins_config_dir && config.pluginconfpath().get_priority() < libdnf::Option::Priority::COMMANDLINE
-            ? env_plugins_config_dir
-            : config.pluginconfpath().get_value();
+    const std::string plugins_config_dir = env_plugins_config_dir && config.get_pluginconfpath_option().get_priority() <
+                                                                         libdnf::Option::Priority::COMMANDLINE
+                                               ? env_plugins_config_dir
+                                               : config.get_pluginconfpath_option().get_value();
 
     auto action_dir_path = std::filesystem::path(plugins_config_dir) / "actions.d";
     std::vector<std::filesystem::path> action_paths;

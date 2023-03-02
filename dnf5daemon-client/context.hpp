@@ -56,9 +56,9 @@ public:
     /// proxy to dnf5daemon session
     std::unique_ptr<sdbus::IProxy> session_proxy;
 
-    libdnf::OptionBool assumeno() const { return assume_no; }
-    libdnf::OptionBool assumeyes() const { return assume_yes; }
-    libdnf::OptionBool defaultyes() const { return default_yes; }
+    libdnf::OptionBool get_assumeno_option() const { return assume_no; }
+    libdnf::OptionBool get_assumeyes_option() const { return assume_yes; }
+    libdnf::OptionBool get_defaultyes_option() const { return default_yes; }
 
     // global command line arguments
     std::vector<std::pair<std::string, std::string>> setopts;

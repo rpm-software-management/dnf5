@@ -37,7 +37,7 @@ void Configuration::read_main_config() {
     auto & logger = *session.get_base()->get_logger();
     auto base = session.get_base();
     auto & cfg_main = base->get_config();
-    auto main_config_path = cfg_main.config_file_path().get_value();
+    auto main_config_path = cfg_main.get_config_file_path_option().get_value();
 
     try {
         // create new main config parser and read the config file
@@ -81,7 +81,7 @@ void Configuration::read_repo_configs() {
     auto base = session.get_base();
     auto & logger = *base->get_logger();
     auto & cfg_main = base->get_config();
-    for (const auto & repos_dir : cfg_main.reposdir().get_value()) {
+    for (const auto & repos_dir : cfg_main.get_reposdir_option().get_value()) {
         // use canonical to resolve symlinks in repos_dir
         std::string pattern;
         try {

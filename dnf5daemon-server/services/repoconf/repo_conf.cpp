@@ -111,7 +111,7 @@ std::vector<std::string> RepoConf::enable_disable_repos(const std::vector<std::s
     std::vector<std::string> changed_config_files;
     for (auto & repoid : ids) {
         auto repoinfo = cfg.find_repo(repoid);
-        if (repoinfo && repoinfo->repoconfig->enabled().get_value() != enable) {
+        if (repoinfo && repoinfo->repoconfig->get_enabled_option().get_value() != enable) {
             auto parser = cfg.find_parser(repoinfo->file_path);
             if (parser) {
                 parser->set_value(repoid, "enabled", enable ? "1" : "0");

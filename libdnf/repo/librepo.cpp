@@ -111,12 +111,12 @@ LibrepoHandle & LibrepoHandle::operator=(LibrepoHandle && other) noexcept {
 
 template <typename C>
 static void init_remote(LibrepoHandle & handle, const C & config) {
-    handle.set_opt(LRO_USERAGENT, config.user_agent().get_value().c_str());
+    handle.set_opt(LRO_USERAGENT, config.get_user_agent_option().get_value().c_str());
 
-    auto minrate = config.minrate().get_value();
-    auto maxspeed = config.throttle().get_value();
+    auto minrate = config.get_minrate_option().get_value();
+    auto maxspeed = config.get_throttle_option().get_value();
     if (maxspeed > 0 && maxspeed <= 1) {
-        maxspeed *= static_cast<float>(config.bandwidth().get_value());
+        maxspeed *= static_cast<float>(config.get_bandwidth_option().get_value());
     }
     if (maxspeed != 0 && maxspeed < static_cast<float>(minrate)) {
         // TODO(lukash) not the best class for the error, possibly check in config parser?
@@ -127,49 +127,49 @@ static void init_remote(LibrepoHandle & handle, const C & config) {
     handle.set_opt(LRO_LOWSPEEDLIMIT, static_cast<int64_t>(minrate));
     handle.set_opt(LRO_MAXSPEED, static_cast<int64_t>(maxspeed));
 
-    long timeout = config.timeout().get_value();
+    long timeout = config.get_timeout_option().get_value();
     if (timeout > 0) {
         handle.set_opt(LRO_CONNECTTIMEOUT, timeout);
         handle.set_opt(LRO_LOWSPEEDTIME, timeout);
     }
 
-    auto & ip_resolve = config.ip_resolve().get_value();
+    auto & ip_resolve = config.get_ip_resolve_option().get_value();
     if (ip_resolve == "ipv4") {
         handle.set_opt(LRO_IPRESOLVE, LR_IPRESOLVE_V4);
     } else if (ip_resolve == "ipv6") {
         handle.set_opt(LRO_IPRESOLVE, LR_IPRESOLVE_V6);
     }
 
-    auto userpwd = config.username().get_value();
+    auto userpwd = config.get_username_option().get_value();
     if (!userpwd.empty()) {
         // TODO Use URL encoded form, needs support in librepo
-        userpwd = format_user_pass_string(userpwd, config.password().get_value(), false);
+        userpwd = format_user_pass_string(userpwd, config.get_password_option().get_value(), false);
         handle.set_opt(LRO_USERPWD, userpwd.c_str());
     }
 
-    if (!config.sslcacert().get_value().empty()) {
-        handle.set_opt(LRO_SSLCACERT, config.sslcacert().get_value().c_str());
+    if (!config.get_sslcacert_option().get_value().empty()) {
+        handle.set_opt(LRO_SSLCACERT, config.get_sslcacert_option().get_value().c_str());
     }
-    if (!config.sslclientcert().get_value().empty()) {
-        handle.set_opt(LRO_SSLCLIENTCERT, config.sslclientcert().get_value().c_str());
+    if (!config.get_sslclientcert_option().get_value().empty()) {
+        handle.set_opt(LRO_SSLCLIENTCERT, config.get_sslclientcert_option().get_value().c_str());
     }
-    if (!config.sslclientkey().get_value().empty()) {
-        handle.set_opt(LRO_SSLCLIENTKEY, config.sslclientkey().get_value().c_str());
+    if (!config.get_sslclientkey_option().get_value().empty()) {
+        handle.set_opt(LRO_SSLCLIENTKEY, config.get_sslclientkey_option().get_value().c_str());
     }
-    long sslverify = config.sslverify().get_value() ? 1L : 0L;
+    long sslverify = config.get_sslverify_option().get_value() ? 1L : 0L;
     handle.set_opt(LRO_SSLVERIFYHOST, sslverify);
     handle.set_opt(LRO_SSLVERIFYPEER, sslverify);
 
     // === proxy setup ===
-    if (!config.proxy().empty() && !config.proxy().get_value().empty()) {
-        handle.set_opt(LRO_PROXY, config.proxy().get_value().c_str());
+    if (!config.get_proxy_option().empty() && !config.get_proxy_option().get_value().empty()) {
+        handle.set_opt(LRO_PROXY, config.get_proxy_option().get_value().c_str());
     }
 
     long proxy_auth_methods = 0;
-    if (config.proxy_auth_method().empty()) {
+    if (config.get_proxy_auth_method_option().empty()) {
         proxy_auth_methods = LR_AUTH_ANY;
     } else {
-        for (const auto & proxy_auth_method_str : config.proxy_auth_method().get_value()) {
+        for (const auto & proxy_auth_method_str : config.get_proxy_auth_method_option().get_value()) {
             for (auto & auth : PROXYAUTHMETHODS) {
                 if (proxy_auth_method_str == auth.name) {
                     proxy_auth_methods |= auth.code;
@@ -180,24 +180,24 @@ static void init_remote(LibrepoHandle & handle, const C & config) {
     }
     handle.set_opt(LRO_PROXYAUTHMETHODS, proxy_auth_methods);
 
-    if (!config.proxy_username().empty()) {
-        auto userpwd = config.proxy_username().get_value();
+    if (!config.get_proxy_username_option().empty()) {
+        auto userpwd = config.get_proxy_username_option().get_value();
         if (!userpwd.empty()) {
-            userpwd = format_user_pass_string(userpwd, config.proxy_password().get_value(), true);
+            userpwd = format_user_pass_string(userpwd, config.get_proxy_password_option().get_value(), true);
             handle.set_opt(LRO_PROXYUSERPWD, userpwd.c_str());
         }
     }
 
-    if (!config.proxy_sslcacert().get_value().empty()) {
-        handle.set_opt(LRO_PROXY_SSLCACERT, config.proxy_sslcacert().get_value().c_str());
+    if (!config.get_proxy_sslcacert_option().get_value().empty()) {
+        handle.set_opt(LRO_PROXY_SSLCACERT, config.get_proxy_sslcacert_option().get_value().c_str());
     }
-    if (!config.proxy_sslclientcert().get_value().empty()) {
-        handle.set_opt(LRO_PROXY_SSLCLIENTCERT, config.proxy_sslclientcert().get_value().c_str());
+    if (!config.get_proxy_sslclientcert_option().get_value().empty()) {
+        handle.set_opt(LRO_PROXY_SSLCLIENTCERT, config.get_proxy_sslclientcert_option().get_value().c_str());
     }
-    if (!config.proxy_sslclientkey().get_value().empty()) {
-        handle.set_opt(LRO_PROXY_SSLCLIENTKEY, config.proxy_sslclientkey().get_value().c_str());
+    if (!config.get_proxy_sslclientkey_option().get_value().empty()) {
+        handle.set_opt(LRO_PROXY_SSLCLIENTKEY, config.get_proxy_sslclientkey_option().get_value().c_str());
     }
-    long proxy_sslverify = config.proxy_sslverify().get_value() ? 1L : 0L;
+    long proxy_sslverify = config.get_proxy_sslverify_option().get_value() ? 1L : 0L;
     handle.set_opt(LRO_PROXY_SSLVERIFYHOST, proxy_sslverify);
     handle.set_opt(LRO_PROXY_SSLVERIFYPEER, proxy_sslverify);
 }

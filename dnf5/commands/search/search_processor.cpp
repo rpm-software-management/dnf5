@@ -80,7 +80,7 @@ SearchProcessor::SearchProcessor(libdnf::Base & base, std::vector<std::string> p
       patterns(patterns),
       search_all(search_all),
       full_package_query(base),
-      showdupes(base.get_config().showdupesfromrepos().get_value()) {
+      showdupes(base.get_config().get_showdupesfromrepos_option().get_value()) {
     if (!showdupes) {
         full_package_query.filter_latest_evr();
     }

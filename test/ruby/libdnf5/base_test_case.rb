@@ -34,8 +34,8 @@ class BaseTestCase < Test::Unit::TestCase
 
         @temp_dir = Dir.mktmpdir("libdnf5_ruby_unittest.")
 
-        @base.get_config().installroot().set(File.join(@temp_dir, "installroot"))
-        @base.get_config().cachedir().set(File.join(@temp_dir, "cache"))
+        @base.get_config().get_installroot_option().set(File.join(@temp_dir, "installroot"))
+        @base.get_config().get_cachedir_option().set(File.join(@temp_dir, "cache"))
 
         # Sets Base internals according to configuration
         @base.setup()
@@ -51,7 +51,7 @@ class BaseTestCase < Test::Unit::TestCase
     # Add a repo from `repo_path`.
     def _add_repo(repoid, repo_path, load=true)
         repo = @repo_sack.create_repo(repoid)
-        repo.get_config().baseurl().set("file://" + repo_path)
+        repo.get_config().get_baseurl_option().set("file://" + repo_path)
 
         if load
           repos = Repo::RepoQuery.new(@base)

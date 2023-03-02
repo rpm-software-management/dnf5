@@ -114,7 +114,7 @@ void CleanCommand::set_argument_parser() {
 
 void CleanCommand::run() {
     auto & ctx = get_context();
-    fs::path cachedir{ctx.base.get_config().cachedir().get_value()};
+    fs::path cachedir{ctx.base.get_config().get_cachedir_option().get_value()};
 
     std::error_code ec;
     libdnf::repo::RepoCache::RemoveStatistics statistics{};

@@ -40,8 +40,8 @@ class ConfigRepo::Impl {
     std::string id;
 
     OptionString name{""};
-    OptionChild<OptionBool> enabled{main_config.enabled()};
-    OptionChild<OptionString> basecachedir{main_config.cachedir()};
+    OptionChild<OptionBool> enabled{main_config.get_enabled_option()};
+    OptionChild<OptionString> basecachedir{main_config.get_cachedir_option()};
     OptionStringList baseurl{std::vector<std::string>{}};
     OptionString mirrorlist{nullptr};
     OptionString metalink{nullptr};
@@ -50,44 +50,44 @@ class ConfigRepo::Impl {
     OptionStringList gpgkey{std::vector<std::string>{}};
     OptionStringList excludepkgs{std::vector<std::string>{}};
     OptionStringList includepkgs{std::vector<std::string>{}};
-    OptionChild<OptionBool> fastestmirror{main_config.fastestmirror()};
-    OptionChild<OptionString> proxy{main_config.proxy()};
-    OptionChild<OptionString> proxy_username{main_config.proxy_username()};
-    OptionChild<OptionString> proxy_password{main_config.proxy_password()};
-    OptionChild<OptionStringSet> proxy_auth_method{main_config.proxy_auth_method()};
-    OptionChild<OptionString> username{main_config.username()};
-    OptionChild<OptionString> password{main_config.password()};
-    OptionChild<OptionStringList> protected_packages{main_config.protected_packages()};
-    OptionChild<OptionBool> gpgcheck{main_config.gpgcheck()};
-    OptionChild<OptionBool> repo_gpgcheck{main_config.repo_gpgcheck()};
-    OptionChild<OptionBool> enablegroups{main_config.enablegroups()};
-    OptionChild<OptionNumber<std::uint32_t>> retries{main_config.retries()};
-    OptionChild<OptionNumber<std::uint32_t>> bandwidth{main_config.bandwidth()};
-    OptionChild<OptionNumber<std::uint32_t>> minrate{main_config.minrate()};
-    OptionChild<OptionEnum<std::string>> ip_resolve{main_config.ip_resolve()};
-    OptionChild<OptionNumber<float>> throttle{main_config.throttle()};
-    OptionChild<OptionSeconds> timeout{main_config.timeout()};
-    OptionChild<OptionNumber<std::uint32_t>> max_parallel_downloads{main_config.max_parallel_downloads()};
-    OptionChild<OptionSeconds> metadata_expire{main_config.metadata_expire()};
+    OptionChild<OptionBool> fastestmirror{main_config.get_fastestmirror_option()};
+    OptionChild<OptionString> proxy{main_config.get_proxy_option()};
+    OptionChild<OptionString> proxy_username{main_config.get_proxy_username_option()};
+    OptionChild<OptionString> proxy_password{main_config.get_proxy_password_option()};
+    OptionChild<OptionStringSet> proxy_auth_method{main_config.get_proxy_auth_method_option()};
+    OptionChild<OptionString> username{main_config.get_username_option()};
+    OptionChild<OptionString> password{main_config.get_password_option()};
+    OptionChild<OptionStringList> protected_packages{main_config.get_protected_packages_option()};
+    OptionChild<OptionBool> gpgcheck{main_config.get_gpgcheck_option()};
+    OptionChild<OptionBool> repo_gpgcheck{main_config.get_repo_gpgcheck_option()};
+    OptionChild<OptionBool> enablegroups{main_config.get_enablegroups_option()};
+    OptionChild<OptionNumber<std::uint32_t>> retries{main_config.get_retries_option()};
+    OptionChild<OptionNumber<std::uint32_t>> bandwidth{main_config.get_bandwidth_option()};
+    OptionChild<OptionNumber<std::uint32_t>> minrate{main_config.get_minrate_option()};
+    OptionChild<OptionEnum<std::string>> ip_resolve{main_config.get_ip_resolve_option()};
+    OptionChild<OptionNumber<float>> throttle{main_config.get_throttle_option()};
+    OptionChild<OptionSeconds> timeout{main_config.get_timeout_option()};
+    OptionChild<OptionNumber<std::uint32_t>> max_parallel_downloads{main_config.get_max_parallel_downloads_option()};
+    OptionChild<OptionSeconds> metadata_expire{main_config.get_metadata_expire_option()};
     OptionNumber<std::int32_t> cost{1000};
     OptionNumber<std::int32_t> priority{99};
     OptionBool module_hotfixes{false};
-    OptionChild<OptionString> sslcacert{main_config.sslcacert()};
-    OptionChild<OptionBool> sslverify{main_config.sslverify()};
-    OptionChild<OptionString> sslclientcert{main_config.sslclientcert()};
-    OptionChild<OptionString> sslclientkey{main_config.sslclientkey()};
-    OptionChild<OptionString> proxy_sslcacert{main_config.proxy_sslcacert()};
-    OptionChild<OptionBool> proxy_sslverify{main_config.proxy_sslverify()};
-    OptionChild<OptionString> proxy_sslclientcert{main_config.proxy_sslclientcert()};
-    OptionChild<OptionString> proxy_sslclientkey{main_config.proxy_sslclientkey()};
-    OptionChild<OptionBool> deltarpm{main_config.deltarpm()};
-    OptionChild<OptionNumber<std::uint32_t>> deltarpm_percentage{main_config.deltarpm_percentage()};
-    OptionChild<OptionBool> skip_if_unavailable{main_config.skip_if_unavailable()};
+    OptionChild<OptionString> sslcacert{main_config.get_sslcacert_option()};
+    OptionChild<OptionBool> sslverify{main_config.get_sslverify_option()};
+    OptionChild<OptionString> sslclientcert{main_config.get_sslclientcert_option()};
+    OptionChild<OptionString> sslclientkey{main_config.get_sslclientkey_option()};
+    OptionChild<OptionString> proxy_sslcacert{main_config.get_proxy_sslcacert_option()};
+    OptionChild<OptionBool> proxy_sslverify{main_config.get_proxy_sslverify_option()};
+    OptionChild<OptionString> proxy_sslclientcert{main_config.get_proxy_sslclientcert_option()};
+    OptionChild<OptionString> proxy_sslclientkey{main_config.get_proxy_sslclientkey_option()};
+    OptionChild<OptionBool> deltarpm{main_config.get_deltarpm_option()};
+    OptionChild<OptionNumber<std::uint32_t>> deltarpm_percentage{main_config.get_deltarpm_percentage_option()};
+    OptionChild<OptionBool> skip_if_unavailable{main_config.get_skip_if_unavailable_option()};
     OptionString enabled_metadata{""};
-    OptionChild<OptionString> user_agent{main_config.user_agent()};
-    OptionChild<OptionBool> countme{main_config.countme()};
+    OptionChild<OptionString> user_agent{main_config.get_user_agent_option()};
+    OptionChild<OptionBool> countme{main_config.get_countme_option()};
     OptionEnum<std::string> failovermethod{"priority", {"priority", "roundrobin"}};
-    OptionChild<OptionBool> build_cache{main_config.build_cache()};
+    OptionChild<OptionBool> build_cache{main_config.get_build_cache_option()};
 };
 
 ConfigRepo::Impl::Impl(Config & owner, ConfigMain & main_config, const std::string & id)
@@ -214,359 +214,359 @@ std::string ConfigRepo::get_id() const {
     return p_impl->id;
 }
 
-OptionString & ConfigRepo::name() {
+OptionString & ConfigRepo::get_name_option() {
     return p_impl->name;
 }
-const OptionString & ConfigRepo::name() const {
+const OptionString & ConfigRepo::get_name_option() const {
     return p_impl->name;
 }
-OptionChild<OptionBool> & ConfigRepo::enabled() {
+OptionChild<OptionBool> & ConfigRepo::get_enabled_option() {
     return p_impl->enabled;
 }
-const OptionChild<OptionBool> & ConfigRepo::enabled() const {
+const OptionChild<OptionBool> & ConfigRepo::get_enabled_option() const {
     return p_impl->enabled;
 }
 
-OptionChild<OptionString> & ConfigRepo::basecachedir() {
+OptionChild<OptionString> & ConfigRepo::get_basecachedir_option() {
     return p_impl->basecachedir;
 }
-const OptionChild<OptionString> & ConfigRepo::basecachedir() const {
+const OptionChild<OptionString> & ConfigRepo::get_basecachedir_option() const {
     return p_impl->basecachedir;
 }
 
-OptionStringList & ConfigRepo::baseurl() {
+OptionStringList & ConfigRepo::get_baseurl_option() {
     return p_impl->baseurl;
 }
-const OptionStringList & ConfigRepo::baseurl() const {
+const OptionStringList & ConfigRepo::get_baseurl_option() const {
     return p_impl->baseurl;
 }
 
-OptionString & ConfigRepo::mirrorlist() {
+OptionString & ConfigRepo::get_mirrorlist_option() {
     return p_impl->mirrorlist;
 }
-const OptionString & ConfigRepo::mirrorlist() const {
+const OptionString & ConfigRepo::get_mirrorlist_option() const {
     return p_impl->mirrorlist;
 }
 
-OptionString & ConfigRepo::metalink() {
+OptionString & ConfigRepo::get_metalink_option() {
     return p_impl->metalink;
 }
-const OptionString & ConfigRepo::metalink() const {
+const OptionString & ConfigRepo::get_metalink_option() const {
     return p_impl->metalink;
 }
 
-OptionString & ConfigRepo::type() {
+OptionString & ConfigRepo::get_type_option() {
     return p_impl->type;
 }
-const OptionString & ConfigRepo::type() const {
+const OptionString & ConfigRepo::get_type_option() const {
     return p_impl->type;
 }
 
-OptionString & ConfigRepo::mediaid() {
+OptionString & ConfigRepo::get_mediaid_option() {
     return p_impl->mediaid;
 }
-const OptionString & ConfigRepo::mediaid() const {
+const OptionString & ConfigRepo::get_mediaid_option() const {
     return p_impl->mediaid;
 }
 
-OptionStringList & ConfigRepo::gpgkey() {
+OptionStringList & ConfigRepo::get_gpgkey_option() {
     return p_impl->gpgkey;
 }
-const OptionStringList & ConfigRepo::gpgkey() const {
+const OptionStringList & ConfigRepo::get_gpgkey_option() const {
     return p_impl->gpgkey;
 }
 
-OptionStringList & ConfigRepo::excludepkgs() {
+OptionStringList & ConfigRepo::get_excludepkgs_option() {
     return p_impl->excludepkgs;
 }
-const OptionStringList & ConfigRepo::excludepkgs() const {
+const OptionStringList & ConfigRepo::get_excludepkgs_option() const {
     return p_impl->excludepkgs;
 }
 
-OptionStringList & ConfigRepo::includepkgs() {
+OptionStringList & ConfigRepo::get_includepkgs_option() {
     return p_impl->includepkgs;
 }
-const OptionStringList & ConfigRepo::includepkgs() const {
+const OptionStringList & ConfigRepo::get_includepkgs_option() const {
     return p_impl->includepkgs;
 }
 
-OptionChild<OptionBool> & ConfigRepo::fastestmirror() {
+OptionChild<OptionBool> & ConfigRepo::get_fastestmirror_option() {
     return p_impl->fastestmirror;
 }
-const OptionChild<OptionBool> & ConfigRepo::fastestmirror() const {
+const OptionChild<OptionBool> & ConfigRepo::get_fastestmirror_option() const {
     return p_impl->fastestmirror;
 }
 
-OptionChild<OptionString> & ConfigRepo::proxy() {
+OptionChild<OptionString> & ConfigRepo::get_proxy_option() {
     return p_impl->proxy;
 }
-const OptionChild<OptionString> & ConfigRepo::proxy() const {
+const OptionChild<OptionString> & ConfigRepo::get_proxy_option() const {
     return p_impl->proxy;
 }
 
-OptionChild<OptionString> & ConfigRepo::proxy_username() {
+OptionChild<OptionString> & ConfigRepo::get_proxy_username_option() {
     return p_impl->proxy_username;
 }
-const OptionChild<OptionString> & ConfigRepo::proxy_username() const {
+const OptionChild<OptionString> & ConfigRepo::get_proxy_username_option() const {
     return p_impl->proxy_username;
 }
 
-OptionChild<OptionString> & ConfigRepo::proxy_password() {
+OptionChild<OptionString> & ConfigRepo::get_proxy_password_option() {
     return p_impl->proxy_password;
 }
-const OptionChild<OptionString> & ConfigRepo::proxy_password() const {
+const OptionChild<OptionString> & ConfigRepo::get_proxy_password_option() const {
     return p_impl->proxy_password;
 }
 
-OptionChild<OptionStringSet> & ConfigRepo::proxy_auth_method() {
+OptionChild<OptionStringSet> & ConfigRepo::get_proxy_auth_method_option() {
     return p_impl->proxy_auth_method;
 }
-const OptionChild<OptionStringSet> & ConfigRepo::proxy_auth_method() const {
+const OptionChild<OptionStringSet> & ConfigRepo::get_proxy_auth_method_option() const {
     return p_impl->proxy_auth_method;
 }
 
-OptionChild<OptionString> & ConfigRepo::username() {
+OptionChild<OptionString> & ConfigRepo::get_username_option() {
     return p_impl->username;
 }
-const OptionChild<OptionString> & ConfigRepo::username() const {
+const OptionChild<OptionString> & ConfigRepo::get_username_option() const {
     return p_impl->username;
 }
 
-OptionChild<OptionString> & ConfigRepo::password() {
+OptionChild<OptionString> & ConfigRepo::get_password_option() {
     return p_impl->password;
 }
-const OptionChild<OptionString> & ConfigRepo::password() const {
+const OptionChild<OptionString> & ConfigRepo::get_password_option() const {
     return p_impl->password;
 }
 
-OptionChild<OptionStringList> & ConfigRepo::protected_packages() {
+OptionChild<OptionStringList> & ConfigRepo::get_protected_packages_option() {
     return p_impl->protected_packages;
 }
-const OptionChild<OptionStringList> & ConfigRepo::protected_packages() const {
+const OptionChild<OptionStringList> & ConfigRepo::get_protected_packages_option() const {
     return p_impl->protected_packages;
 }
 
-OptionChild<OptionBool> & ConfigRepo::gpgcheck() {
+OptionChild<OptionBool> & ConfigRepo::get_gpgcheck_option() {
     return p_impl->gpgcheck;
 }
-const OptionChild<OptionBool> & ConfigRepo::gpgcheck() const {
+const OptionChild<OptionBool> & ConfigRepo::get_gpgcheck_option() const {
     return p_impl->gpgcheck;
 }
 
-OptionChild<OptionBool> & ConfigRepo::repo_gpgcheck() {
+OptionChild<OptionBool> & ConfigRepo::get_repo_gpgcheck_option() {
     return p_impl->repo_gpgcheck;
 }
-const OptionChild<OptionBool> & ConfigRepo::repo_gpgcheck() const {
+const OptionChild<OptionBool> & ConfigRepo::get_repo_gpgcheck_option() const {
     return p_impl->repo_gpgcheck;
 }
 
-OptionChild<OptionBool> & ConfigRepo::enablegroups() {
+OptionChild<OptionBool> & ConfigRepo::get_enablegroups_option() {
     return p_impl->enablegroups;
 }
-const OptionChild<OptionBool> & ConfigRepo::enablegroups() const {
+const OptionChild<OptionBool> & ConfigRepo::get_enablegroups_option() const {
     return p_impl->enablegroups;
 }
 
-OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::retries() {
+OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_retries_option() {
     return p_impl->retries;
 }
-const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::retries() const {
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_retries_option() const {
     return p_impl->retries;
 }
 
-OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::bandwidth() {
+OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_bandwidth_option() {
     return p_impl->bandwidth;
 }
-const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::bandwidth() const {
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_bandwidth_option() const {
     return p_impl->bandwidth;
 }
 
-OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::minrate() {
+OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_minrate_option() {
     return p_impl->minrate;
 }
-const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::minrate() const {
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_minrate_option() const {
     return p_impl->minrate;
 }
 
-OptionChild<OptionEnum<std::string>> & ConfigRepo::ip_resolve() {
+OptionChild<OptionEnum<std::string>> & ConfigRepo::get_ip_resolve_option() {
     return p_impl->ip_resolve;
 }
-const OptionChild<OptionEnum<std::string>> & ConfigRepo::ip_resolve() const {
+const OptionChild<OptionEnum<std::string>> & ConfigRepo::get_ip_resolve_option() const {
     return p_impl->ip_resolve;
 }
 
-OptionChild<OptionNumber<float>> & ConfigRepo::throttle() {
+OptionChild<OptionNumber<float>> & ConfigRepo::get_throttle_option() {
     return p_impl->throttle;
 }
-const OptionChild<OptionNumber<float>> & ConfigRepo::throttle() const {
+const OptionChild<OptionNumber<float>> & ConfigRepo::get_throttle_option() const {
     return p_impl->throttle;
 }
 
-OptionChild<OptionSeconds> & ConfigRepo::timeout() {
+OptionChild<OptionSeconds> & ConfigRepo::get_timeout_option() {
     return p_impl->timeout;
 }
-const OptionChild<OptionSeconds> & ConfigRepo::timeout() const {
+const OptionChild<OptionSeconds> & ConfigRepo::get_timeout_option() const {
     return p_impl->timeout;
 }
 
-OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::max_parallel_downloads() {
+OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_max_parallel_downloads_option() {
     return p_impl->max_parallel_downloads;
 }
-const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::max_parallel_downloads() const {
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_max_parallel_downloads_option() const {
     return p_impl->max_parallel_downloads;
 }
 
-OptionChild<OptionSeconds> & ConfigRepo::metadata_expire() {
+OptionChild<OptionSeconds> & ConfigRepo::get_metadata_expire_option() {
     return p_impl->metadata_expire;
 }
-const OptionChild<OptionSeconds> & ConfigRepo::metadata_expire() const {
+const OptionChild<OptionSeconds> & ConfigRepo::get_metadata_expire_option() const {
     return p_impl->metadata_expire;
 }
 
-OptionNumber<std::int32_t> & ConfigRepo::cost() {
+OptionNumber<std::int32_t> & ConfigRepo::get_cost_option() {
     return p_impl->cost;
 }
-const OptionNumber<std::int32_t> & ConfigRepo::cost() const {
+const OptionNumber<std::int32_t> & ConfigRepo::get_cost_option() const {
     return p_impl->cost;
 }
 
-OptionNumber<std::int32_t> & ConfigRepo::priority() {
+OptionNumber<std::int32_t> & ConfigRepo::get_priority_option() {
     return p_impl->priority;
 }
-const OptionNumber<std::int32_t> & ConfigRepo::priority() const {
+const OptionNumber<std::int32_t> & ConfigRepo::get_priority_option() const {
     return p_impl->priority;
 }
 
-OptionBool & ConfigRepo::module_hotfixes() {
+OptionBool & ConfigRepo::get_module_hotfixes_option() {
     return p_impl->module_hotfixes;
 }
-const OptionBool & ConfigRepo::module_hotfixes() const {
+const OptionBool & ConfigRepo::get_module_hotfixes_option() const {
     return p_impl->module_hotfixes;
 }
 
-OptionChild<OptionString> & ConfigRepo::sslcacert() {
+OptionChild<OptionString> & ConfigRepo::get_sslcacert_option() {
     return p_impl->sslcacert;
 }
-const OptionChild<OptionString> & ConfigRepo::sslcacert() const {
+const OptionChild<OptionString> & ConfigRepo::get_sslcacert_option() const {
     return p_impl->sslcacert;
 }
 
-OptionChild<OptionBool> & ConfigRepo::sslverify() {
+OptionChild<OptionBool> & ConfigRepo::get_sslverify_option() {
     return p_impl->sslverify;
 }
-const OptionChild<OptionBool> & ConfigRepo::sslverify() const {
+const OptionChild<OptionBool> & ConfigRepo::get_sslverify_option() const {
     return p_impl->sslverify;
 }
 
-OptionChild<OptionString> & ConfigRepo::sslclientcert() {
+OptionChild<OptionString> & ConfigRepo::get_sslclientcert_option() {
     return p_impl->sslclientcert;
 }
-const OptionChild<OptionString> & ConfigRepo::sslclientcert() const {
+const OptionChild<OptionString> & ConfigRepo::get_sslclientcert_option() const {
     return p_impl->sslclientcert;
 }
 
-OptionChild<OptionString> & ConfigRepo::sslclientkey() {
+OptionChild<OptionString> & ConfigRepo::get_sslclientkey_option() {
     return p_impl->sslclientkey;
 }
-const OptionChild<OptionString> & ConfigRepo::sslclientkey() const {
+const OptionChild<OptionString> & ConfigRepo::get_sslclientkey_option() const {
     return p_impl->sslclientkey;
 }
 
-OptionChild<OptionString> & ConfigRepo::proxy_sslcacert() {
+OptionChild<OptionString> & ConfigRepo::get_proxy_sslcacert_option() {
     return p_impl->proxy_sslcacert;
 }
 
-const OptionChild<OptionString> & ConfigRepo::proxy_sslcacert() const {
+const OptionChild<OptionString> & ConfigRepo::get_proxy_sslcacert_option() const {
     return p_impl->proxy_sslcacert;
 }
 
-OptionChild<OptionBool> & ConfigRepo::proxy_sslverify() {
+OptionChild<OptionBool> & ConfigRepo::get_proxy_sslverify_option() {
     return p_impl->proxy_sslverify;
 }
 
-const OptionChild<OptionBool> & ConfigRepo::proxy_sslverify() const {
+const OptionChild<OptionBool> & ConfigRepo::get_proxy_sslverify_option() const {
     return p_impl->proxy_sslverify;
 }
 
-OptionChild<OptionString> & ConfigRepo::proxy_sslclientcert() {
+OptionChild<OptionString> & ConfigRepo::get_proxy_sslclientcert_option() {
     return p_impl->proxy_sslclientcert;
 }
 
-const OptionChild<OptionString> & ConfigRepo::proxy_sslclientcert() const {
+const OptionChild<OptionString> & ConfigRepo::get_proxy_sslclientcert_option() const {
     return p_impl->proxy_sslclientcert;
 }
 
-OptionChild<OptionString> & ConfigRepo::proxy_sslclientkey() {
+OptionChild<OptionString> & ConfigRepo::get_proxy_sslclientkey_option() {
     return p_impl->proxy_sslclientkey;
 }
 
-const OptionChild<OptionString> & ConfigRepo::proxy_sslclientkey() const {
+const OptionChild<OptionString> & ConfigRepo::get_proxy_sslclientkey_option() const {
     return p_impl->proxy_sslclientkey;
 }
 
-OptionChild<OptionBool> & ConfigRepo::deltarpm() {
+OptionChild<OptionBool> & ConfigRepo::get_deltarpm_option() {
     return p_impl->deltarpm;
 }
-const OptionChild<OptionBool> & ConfigRepo::deltarpm() const {
+const OptionChild<OptionBool> & ConfigRepo::get_deltarpm_option() const {
     return p_impl->deltarpm;
 }
 
-OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::deltarpm_percentage() {
+OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_deltarpm_percentage_option() {
     return p_impl->deltarpm_percentage;
 }
-const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::deltarpm_percentage() const {
+const OptionChild<OptionNumber<std::uint32_t>> & ConfigRepo::get_deltarpm_percentage_option() const {
     return p_impl->deltarpm_percentage;
 }
 
-OptionChild<OptionBool> & ConfigRepo::skip_if_unavailable() {
+OptionChild<OptionBool> & ConfigRepo::get_skip_if_unavailable_option() {
     return p_impl->skip_if_unavailable;
 }
-const OptionChild<OptionBool> & ConfigRepo::skip_if_unavailable() const {
+const OptionChild<OptionBool> & ConfigRepo::get_skip_if_unavailable_option() const {
     return p_impl->skip_if_unavailable;
 }
 
-OptionString & ConfigRepo::enabled_metadata() {
+OptionString & ConfigRepo::get_enabled_metadata_option() {
     return p_impl->enabled_metadata;
 }
-const OptionString & ConfigRepo::enabled_metadata() const {
+const OptionString & ConfigRepo::get_enabled_metadata_option() const {
     return p_impl->enabled_metadata;
 }
 
-OptionChild<OptionString> & ConfigRepo::user_agent() {
+OptionChild<OptionString> & ConfigRepo::get_user_agent_option() {
     return p_impl->user_agent;
 }
-const OptionChild<OptionString> & ConfigRepo::user_agent() const {
+const OptionChild<OptionString> & ConfigRepo::get_user_agent_option() const {
     return p_impl->user_agent;
 }
 
-OptionChild<OptionBool> & ConfigRepo::countme() {
+OptionChild<OptionBool> & ConfigRepo::get_countme_option() {
     return p_impl->countme;
 }
-const OptionChild<OptionBool> & ConfigRepo::countme() const {
+const OptionChild<OptionBool> & ConfigRepo::get_countme_option() const {
     return p_impl->countme;
 }
 
-OptionEnum<std::string> & ConfigRepo::failovermethod() {
+OptionEnum<std::string> & ConfigRepo::get_failovermethod_option() {
     return p_impl->failovermethod;
 }
-const OptionEnum<std::string> & ConfigRepo::failovermethod() const {
+const OptionEnum<std::string> & ConfigRepo::get_failovermethod_option() const {
     return p_impl->failovermethod;
 }
 
-OptionChild<OptionBool> & ConfigRepo::build_cache() {
+OptionChild<OptionBool> & ConfigRepo::get_build_cache_option() {
     return p_impl->build_cache;
 }
-const OptionChild<OptionBool> & ConfigRepo::build_cache() const {
+const OptionChild<OptionBool> & ConfigRepo::get_build_cache_option() const {
     return p_impl->build_cache;
 }
 
 
 std::string ConfigRepo::get_unique_id() const {
     std::string tmp;
-    if (metalink().empty() || (tmp = metalink().get_value()).empty()) {
-        if (mirrorlist().empty() || (tmp = mirrorlist().get_value()).empty()) {
-            if (!baseurl().get_value().empty())
-                tmp = baseurl().get_value()[0];
+    if (get_metalink_option().empty() || (tmp = get_metalink_option().get_value()).empty()) {
+        if (get_mirrorlist_option().empty() || (tmp = get_mirrorlist_option().get_value()).empty()) {
+            if (!get_baseurl_option().get_value().empty())
+                tmp = get_baseurl_option().get_value()[0];
             if (tmp.empty())
                 tmp = p_impl->id;
         }
@@ -590,13 +590,13 @@ std::string ConfigRepo::get_unique_id() const {
 
 
 std::string ConfigRepo::get_cachedir() const {
-    std::filesystem::path repo_dir{basecachedir().get_value()};
+    std::filesystem::path repo_dir{get_basecachedir_option().get_value()};
     return repo_dir / get_unique_id();
 }
 
 
 std::string ConfigRepo::get_persistdir() const {
-    std::filesystem::path main_persistdir{get_main_config().persistdir().get_value()};
+    std::filesystem::path main_persistdir{get_main_config().get_persistdir_option().get_value()};
     return main_persistdir / "repos" / get_unique_id();
 }
 
