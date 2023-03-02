@@ -74,3 +74,11 @@ wrap_unique_ptr(RepoCallbacksUniquePtr, libdnf::repo::RepoCallbacks);
 %template(RepoSackWeakPtr) libdnf::WeakPtr<libdnf::repo::RepoSack, false>;
 
 add_iterator(SetRepoWeakPtr)
+
+// Add configuration options attributes for Python.
+// See 'conf.i' for more info.
+#if defined(SWIGPYTHON)
+%pythoncode %{
+conf.create_config_option_attributes(ConfigRepo)
+%}
+#endif

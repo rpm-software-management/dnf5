@@ -105,3 +105,38 @@
 %include "libdnf/conf/config.hpp"
 %include "libdnf/conf/config_main.hpp"
 
+// The following adds shortcuts in Python for getting or setting
+// the configuration options using the configuration class attributes.
+//
+// To access all methods from the option, use standard getters as in C++ API.
+//
+// Example with the 'installroot':
+//
+// base = libdnf5.base.Base()
+// config = base.get_config()
+// config.installroot = '/tmp/installroot'
+// config.get_installroot_option().test('relative/path')
+//
+#if defined(SWIGPYTHON)
+%pythoncode %{
+import re
+
+def _config_option_getter(config_object, option_name):
+    return getattr(config_object, option_name)().get_value()
+
+def _config_option_setter(config_object, option_name, value):
+    getattr(config_object, option_name)().set(value)
+
+def create_config_option_attributes(cls):
+    for attr in dir(cls):
+        option_getter_match = re.search(r'get_(\w+)_option', attr)
+        if option_getter_match:
+            option_name = option_getter_match.group(1)
+            setattr(cls, option_name, property(
+                lambda self, attr=attr: _config_option_getter(self, attr),
+                lambda self, value, attr=attr: _config_option_setter(self, attr, value)
+            ))
+
+create_config_option_attributes(ConfigMain)
+%}
+#endif
