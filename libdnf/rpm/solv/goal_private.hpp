@@ -209,6 +209,9 @@ inline GoalPrivate::GoalPrivate(const GoalPrivate & src)
     if (src.protected_packages) {
         protected_packages.reset(new libdnf::solv::SolvMap(*src.protected_packages));
     }
+    if (src.user_installed_packages) {
+        user_installed_packages.reset(new libdnf::solv::IdQueue(*src.user_installed_packages));
+    }
 }
 
 inline GoalPrivate::~GoalPrivate() {
