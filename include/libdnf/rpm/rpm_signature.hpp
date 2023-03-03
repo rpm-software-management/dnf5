@@ -75,7 +75,7 @@ class RpmSignature {
 public:
     enum class CheckResult { OK, FAILED_KEY_MISSING, FAILED_NOT_TRUSTED, FAILED_NOT_SIGNED, FAILED };
 
-    explicit RpmSignature(const BaseWeakPtr & base) : base(base) {}
+    explicit RpmSignature(const libdnf::BaseWeakPtr & base) : base(base) {}
     explicit RpmSignature(Base & base) : RpmSignature(base.get_weak_ptr()) {}
     ~RpmSignature(){};
 

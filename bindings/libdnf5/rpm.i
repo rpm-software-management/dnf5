@@ -38,6 +38,7 @@
     #include "libdnf/rpm/reldep.hpp"
     #include "libdnf/rpm/reldep_list.hpp"
     #include "libdnf/rpm/reldep_list_iterator.hpp"
+    #include "libdnf/rpm/rpm_signature.hpp"
     #include "libdnf/rpm/transaction_callbacks.hpp"
 %}
 
@@ -79,3 +80,9 @@ add_iterator(ReldepList)
 %feature("director") TransactionCallbacks;
 %include "libdnf/rpm/transaction_callbacks.hpp"
 wrap_unique_ptr(TransactionCallbacksUniquePtr, libdnf::rpm::TransactionCallbacks);
+
+%ignore KeyImportError;
+%ignore SignatureCheckError;
+%include "libdnf/rpm/rpm_signature.hpp"
+
+%template(VectorKeyInfo) std::vector<libdnf::rpm::KeyInfo>;
