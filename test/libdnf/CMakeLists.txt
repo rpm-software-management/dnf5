@@ -7,6 +7,8 @@ file(GLOB_RECURSE TEST_LIBDNF5_SOURCES *.cpp)
 include_directories(.)
 include_directories(${PROJECT_SOURCE_DIR}/libdnf)
 
+execute_process (COMMAND capsh --print)
+
 add_executable(run_tests ${TEST_LIBDNF5_SOURCES})
 
 # Disable warnings for operations used intentionally to test how the case is handled
