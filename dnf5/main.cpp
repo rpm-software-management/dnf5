@@ -54,19 +54,16 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf-cli/session.hpp>
 #include <libdnf/base/base.hpp>
 #include <libdnf/common/xdg.hpp>
+#include <libdnf/logger/factory.hpp>
 #include <libdnf/logger/global_logger.hpp>
 #include <libdnf/logger/memory_buffer_logger.hpp>
-#include <libdnf/logger/stream_logger.hpp>
 #include <libdnf/version.hpp>
 #include <string.h>
 
 #include <algorithm>
 #include <cstring>
 #include <filesystem>
-#include <fstream>
 #include <iostream>
-
-namespace fs = std::filesystem;
 
 namespace dnf5 {
 
@@ -648,21 +645,11 @@ int main(int argc, char * argv[]) try {
             close(fd);
         }
 
-        auto log_dir_full_path = fs::path(base.get_config().get_installroot_option().get_value());
-        log_dir_full_path += base.get_config().get_logdir_option().get_value();
-        std::filesystem::create_directories(log_dir_full_path);
-        auto log_file = log_dir_full_path / "dnf5.log";
-        auto log_stream = std::make_unique<std::ofstream>(log_file, std::ios::app);
-        if (!log_stream->is_open()) {
-            throw std::runtime_error(fmt::format("Cannot open log file: {}: {}", log_file.c_str(), strerror(errno)));
-        }
-        // Throw exceptions if there is an error while writing to the log stream
-        log_stream->exceptions(std::ios::badbit | std::ios::failbit);
-        std::unique_ptr<libdnf::Logger> logger = std::make_unique<libdnf::StreamLogger>(std::move(log_stream));
+        auto file_logger = libdnf::create_file_logger(base);
         // Swap to destination stream logger (log to file)
-        log_router.swap_logger(logger, 0);
+        log_router.swap_logger(file_logger, 0);
         // Write messages from memory buffer logger to stream logger
-        dynamic_cast<libdnf::MemoryBufferLogger &>(*logger).write_to_logger(log_router);
+        dynamic_cast<libdnf::MemoryBufferLogger &>(*file_logger).write_to_logger(log_router);
 
         base.setup();
 
