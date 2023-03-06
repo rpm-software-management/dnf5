@@ -190,7 +190,39 @@ RepoWeakPtr RepoSack::get_system_repo() {
 }
 
 
-void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
+void RepoSack::update_and_load_repos_singlethreaded(const libdnf::repo::RepoQuery & repos) {
+    // If the input RepoQuery contains a system repo, we load the system repo first.
+    for (auto & repo : repos) {
+        if (repo->get_type() == libdnf::repo::Repo::Type::SYSTEM) {
+            repo->load();
+            break;
+        }
+    }
+
+    // Fetch and load available repositories.
+    for (auto & repo : repos) {
+        if (repo->get_type() != libdnf::repo::Repo::Type::AVAILABLE) {
+            continue;
+        }
+        try {
+            repo->fetch_metadata();
+            repo->load();
+        } catch (const RepoDownloadError & e) {
+            if (!repo->get_config().skip_if_unavailable().get_value()) {
+                throw;
+            }
+            base->get_logger()->warning(
+                "Error loading repo \"{}\" (skipping due to \"skip_if_unavailable=true\"): {}",
+                repo->get_id(),
+                e.what());  // TODO(lukash) we should print nested exceptions
+        }
+    }
+
+    base->get_rpm_package_sack()->load_config_excludes_includes();
+}
+
+
+void RepoSack::update_and_load_repos_multithreaded(const libdnf::repo::RepoQuery & repos) {
     std::atomic<bool> except_in_main_thread{false};  // set to true if an exception occurred in the main thread
     std::exception_ptr except_ptr;                   // for pass exception from thread_sack_loader to main thread,
                                                      // a default-constructed std::exception_ptr is a null pointer
@@ -297,6 +329,15 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos) {
     catch_thread_sack_loader_exceptions();
 
     base->get_rpm_package_sack()->load_config_excludes_includes();
+}
+
+
+void RepoSack::update_and_load_repos(const libdnf::repo::RepoQuery & repos) {
+    if (base->get_config().disable_multithreading().get_value()) {
+        update_and_load_repos_singlethreaded(repos);
+    } else {
+        update_and_load_repos_multithreaded(repos);
+    }
 }
 
 
