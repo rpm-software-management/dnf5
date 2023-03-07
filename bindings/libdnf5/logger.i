@@ -19,6 +19,7 @@ typedef int32_t pid_t;
 %{
     #include "libdnf/common/weak_ptr.hpp"
     #include "libdnf/logger/log_router.hpp"
+    #include "libdnf/logger/global_logger.hpp"
     #include "libdnf/logger/memory_buffer_logger.hpp"
     #include "libdnf/logger/factory.hpp"
 %}
@@ -45,5 +46,6 @@ wrap_unique_ptr(MemoryBufferLoggerUniquePtr, libdnf::MemoryBufferLogger);
 }
 
 %include "libdnf/logger/log_router.hpp"
+%include "libdnf/logger/global_logger.hpp"
 %include "libdnf/logger/memory_buffer_logger.hpp"
 %include "libdnf/logger/factory.hpp"
