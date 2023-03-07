@@ -45,3 +45,16 @@ class TestFileLogger(base_test_case.BaseTestCase):
         logger = libdnf5.logger.create_file_logger(self.base)
         log_router.add_logger(logger)
         self.assertEqual(loggers_count_before + 1, log_router.get_loggers_count())
+
+    def test_with_global_logger(self):
+        log_router = self.base.get_logger()
+        global_logger = libdnf5.logger.GlobalLogger()
+        global_logger.set(log_router.get(), libdnf5.logger.Logger.Level_DEBUG)
+        logger = libdnf5.logger.create_file_logger(self.base)
+        log_router.add_logger(logger)
+
+        # Run an action including librepo logging
+        self.add_repo_repomd("repomd-repo1")
+
+        with open(self.full_log_path) as logfile:
+            self.assertTrue('[librepo]' in logfile.read())
