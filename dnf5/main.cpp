@@ -19,6 +19,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "cmdline_aliases.hpp"
 #include "commands/advisory/advisory.hpp"
+#include "commands/check-upgrade/check-upgrade.hpp"
 #include "commands/clean/clean.hpp"
 #include "commands/distro-sync/distro-sync.hpp"
 #include "commands/downgrade/downgrade.hpp"
@@ -491,6 +492,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<SearchCommand>(context));
     context.add_and_initialize_command(std::make_unique<ListCommand>(context));
     context.add_and_initialize_command(std::make_unique<InfoCommand>(context));
+    context.add_and_initialize_command(std::make_unique<CheckUpgradeCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<GroupCommand>(context));
     context.add_and_initialize_command(std::make_unique<EnvironmentCommand>(context));
@@ -793,6 +795,8 @@ int main(int argc, char * argv[]) try {
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (libdnf::cli::CommandExitError & ex) {
         std::cerr << ex.what() << std::endl;
+        return ex.get_exit_code();
+    } catch (libdnf::cli::SilentCommandExitError & ex) {
         return ex.get_exit_code();
     } catch (std::runtime_error & ex) {
         std::cerr << ex.what() << std::endl;
