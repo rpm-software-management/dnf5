@@ -88,6 +88,29 @@ private:
     int exit_code;
 };
 
+/// Exception used when non-standard exit code should be returned
+class SilentCommandExitError : public Error {
+public:
+    /// Constructs the error with given exit code and with custom formatted error
+    /// message.
+    ///
+    /// @param exit_code The exit code
+    /// @format The format string for the message
+    /// @args The format arguments
+    template <typename... Ss>
+    explicit SilentCommandExitError(int exit_code, BgettextMessage format, Ss &&... args)
+        : Error(format, std::forward<Ss>(args)...),
+          exit_code(exit_code) {}
+
+    const char * get_name() const noexcept override { return "SilentCommandExitError"; }
+
+    /// @return The exit code
+    int get_exit_code() const noexcept { return exit_code; }
+
+private:
+    int exit_code;
+};
+
 }  // namespace libdnf::cli
 
 #endif
