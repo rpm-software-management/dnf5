@@ -32,8 +32,6 @@ class BaseTestCase < Test::Unit::TestCase
     def setup()
         @base = Base::Base.new()
 
-        @base.get_config().disable_multithreading().set(true)
-
         @temp_dir = Dir.mktmpdir("libdnf5_ruby_unittest.")
 
         @base.get_config().installroot().set(File.join(@temp_dir, "installroot"))

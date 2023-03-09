@@ -221,12 +221,6 @@ libdnf::rpm::Package BaseTestCase::first_query_pkg(libdnf::rpm::PackageQuery & q
 void BaseTestCase::setUp() {
     TestCaseFixture::setUp();
 
-    // TODO(jrohel) If a thread is created (even empty), the unit test will fail during COPR build.
-    // Change the root directory is not permited. Really strange:
-    // 2023-02-14T12:11:06+0000 [6695] TRACE [rpm] entering chroot /tmp/libdnf5_unittest.wkCbFF/installroot/
-    // 2023-02-14T12:11:06+0000 [6695] ERROR [rpm] Unable to change root directory: Operation not permitted
-    base.get_config().disable_multithreading().set(true);
-
     // TODO we could use get_preconfigured_base() for this now, but that would
     // need changing the `base` member to a unique_ptr
     temp = std::make_unique<libdnf::utils::fs::TempDir>("libdnf5_unittest");

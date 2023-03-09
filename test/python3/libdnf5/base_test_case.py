@@ -32,8 +32,6 @@ class BaseTestCase(unittest.TestCase):
     def setUp(self):
         self.base = libdnf5.base.Base()
 
-        self.base.get_config().disable_multithreading().set(True)
-
         self.temp_dir = tempfile.mkdtemp(prefix="libdnf5_python3_unittest.")
 
         self.base.get_config().installroot().set(os.path.join(self.temp_dir, "installroot"))
