@@ -14,6 +14,8 @@ macro(add_ruby_test)
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     )
 
+    set_property(TEST "${target}" PROPERTY RUN_SERIAL TRUE)
+
     # TODO the ODR violation seems like a problem with the Ruby bindings that
     # should be fixed
     set(ASAN_OPTIONS "${ASAN_OPTIONS},detect_odr_violation=0")
