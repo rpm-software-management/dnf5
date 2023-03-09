@@ -29,8 +29,6 @@ use libdnf5::base;
 
 my $base = new libdnf5::base::Base();
 
-$base->get_config()->disable_multithreading()->set(1);
-
 # Sets path to cache directory.
 my $tmpdir = tempdir("libdnf5_perl5_unittest.XXXX", TMPDIR => 1, CLEANUP => 1);
 $base->get_config()->installroot()->set($libdnf5::conf::Option::Priority_RUNTIME, $tmpdir."/installroot");
