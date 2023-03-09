@@ -24,6 +24,8 @@ macro(add_perl_test)
         WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
     )
 
+    set_property(TEST "${target}" PROPERTY RUN_SERIAL TRUE)
+
     set_property(TEST ${target} PROPERTY ENVIRONMENT
         "PROJECT_BINARY_DIR=${PROJECT_BINARY_DIR}"
         "PROJECT_SOURCE_DIR=${PROJECT_SOURCE_DIR}"

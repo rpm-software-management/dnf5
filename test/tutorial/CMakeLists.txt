@@ -12,3 +12,4 @@ target_link_libraries(run_tests_tutorial stdc++ libdnf libdnf-cli cppunit)
 
 
 add_test(NAME test_tutorial COMMAND run_tests_tutorial)
+set_tests_properties(test_tutorial PROPERTIES RUN_SERIAL TRUE)
