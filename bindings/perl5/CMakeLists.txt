@@ -16,15 +16,6 @@ include_directories(${PERL_INCLUDE_PATH})
 perl_get_info(PERL_CFLAGS "ccflags")
 separate_arguments(PERL_CFLAGS)
 
-# Temporarily remove Perl's FORTIFY_SOURCE define. Since fedora change
-# https://fedoraproject.org/wiki/Changes/Add_FORTIFY_SOURCE%3D3_to_distribution_build_flags
-# FORTIFY_SOURCE was changed from 2 to 3 however since current perl was compiled with the
-# old settings it has stored 2 in its configs which is then propagated into its ccflags.
-# Many (but not all) of the Perl's ccflags are already set and are therefore duplicated,
-# FORTIFY_SOURCE is one of them but it has different value: 3 vs. 2 which leads to:
-# <command-line>: error: "_FORTIFY_SOURCE" redefined [-Werror]
-list(REMOVE_ITEM PERL_CFLAGS -Wp,-D_FORTIFY_SOURCE=2)
-
 # remove options unused by clang
 if(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
     list(REMOVE_ITEM PERL_CFLAGS -flto=auto)
