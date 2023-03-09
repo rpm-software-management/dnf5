@@ -46,8 +46,6 @@ public:
     const OptionNumber<std::int32_t> & debuglevel() const;
     OptionNumber<std::int32_t> & errorlevel();
     const OptionNumber<std::int32_t> & errorlevel() const;
-    OptionBool & disable_multithreading();
-    const OptionBool & disable_multithreading() const;
     OptionPath & installroot();
     const OptionPath & installroot() const;
     OptionPath & config_file_path();

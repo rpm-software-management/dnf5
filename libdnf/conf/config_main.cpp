@@ -163,7 +163,6 @@ class ConfigMain::Impl {
 
     OptionNumber<std::int32_t> debuglevel{2, 0, 10};
     OptionNumber<std::int32_t> errorlevel{3, 0, 10};
-    OptionBool disable_multithreading{false};
     OptionPath installroot{"/", false, true};
     OptionPath config_file_path{CONF_FILENAME};
     OptionBool plugins{true};
@@ -348,7 +347,6 @@ class ConfigMain::Impl {
 ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("debuglevel", debuglevel);
     owner.opt_binds().add("errorlevel", errorlevel);
-    owner.opt_binds().add("disable_multithreading", disable_multithreading);
     owner.opt_binds().add("installroot", installroot);
     owner.opt_binds().add("config_file_path", config_file_path);
     owner.opt_binds().add("plugins", plugins);
@@ -581,13 +579,6 @@ OptionNumber<std::int32_t> & ConfigMain::errorlevel() {
 }
 const OptionNumber<std::int32_t> & ConfigMain::errorlevel() const {
     return p_impl->errorlevel;
-}
-
-OptionBool & ConfigMain::disable_multithreading() {
-    return p_impl->disable_multithreading;
-}
-const OptionBool & ConfigMain::disable_multithreading() const {
-    return p_impl->disable_multithreading;
 }
 
 OptionPath & ConfigMain::installroot() {
