@@ -109,12 +109,8 @@ public:
     /// @param load_system Whether to load the system repository
     void update_and_load_enabled_repos(bool load_system);
 
-    /// Downloads (if necessary) repository metadata and loads them.
+    /// Downloads (if necessary) repository metadata and loads them in parallel.
     ///
-    /// It works in parallel unless multithreading is disabled with
-    /// the "disable_multithreading" configuration option.
-    ///
-    /// Multi-threaded version:
     /// Launches a thread that picks repos from a queue and loads them into
     /// memory (calling their `load()` method). Then iterates over `repos`,
     /// potentially downloads fresh metadata (by calling the
@@ -122,13 +118,8 @@ public:
     /// speeds up the process by loading repos into memory while others are being
     /// downloaded.
     ///
-    /// Single-threaded version:
-    /// Iterates over `repos`. Potentially downloads fresh metadata
-    /// (by calling the `download_metadata()` method) and then loads them into memory
-    /// (calling their `load()` method).
-    ///
     /// @param repos The repositories to update and load
-    void update_and_load_repos(const libdnf::repo::RepoQuery & repos);
+    void update_and_load_repos(libdnf::repo::RepoQuery & repos);
 
     RepoSackWeakPtr get_weak_ptr() { return RepoSackWeakPtr(this, &sack_guard); }
 
@@ -155,9 +146,6 @@ private:
     libdnf::repo::RepoWeakPtr get_cmdline_repo();
 
     void internalize_repos();
-
-    void update_and_load_repos_singlethreaded(const libdnf::repo::RepoQuery & repos);
-    void update_and_load_repos_multithreaded(const libdnf::repo::RepoQuery & repos);
 
     BaseWeakPtr base;
 
