@@ -618,6 +618,9 @@ public:
     /// dependencies and are not required by any user-installed package any more.
     void filter_unneeded();
 
+    /// Resolve spec according to provided settings. It tests whether spec is NEVRA type, provide, file or binary.
+    /// It retuns only the first mach type. If spec has a mathes as NEVRA and provide type it only keeps matches with
+    /// the first tested type (NEVRA).
     // TODO(jmracek) return std::pair<bool, std::unique_ptr<libdnf::rpm::Nevra>>
     // @replaces libdnf/sack/query.hpp:method:std::pair<bool, std::unique_ptr<Nevra>> filterSubject(const char * subject, HyForm * forms, bool icase, bool with_nevra, bool with_provides, bool with_filenames);
     std::pair<bool, libdnf::rpm::Nevra> resolve_pkg_spec(

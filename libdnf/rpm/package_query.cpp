@@ -2386,7 +2386,8 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
             }
         }
     }
-    if (settings.with_filenames && libdnf::utils::is_file_pattern(pkg_spec)) {
+    auto is_file_pattern = libdnf::utils::is_file_pattern(pkg_spec);
+    if (settings.with_filenames && is_file_pattern) {
         filter_dataiterator(
             *pool,
             SOLVABLE_FILELIST,
@@ -2397,6 +2398,42 @@ std::pair<bool, libdnf::rpm::Nevra> PackageQuery::resolve_pkg_spec(
         if (!filter_result.empty()) {
             *p_impl &= filter_result;
             return {true, libdnf::rpm::Nevra()};
+        }
+    }
+    // If spec is file path than it is not a binary
+    if (settings.with_binaries and !is_file_pattern) {
+        ReldepList reldep_list(p_impl->base);
+        std::array<std::string, 2> binary_paths{"/usr/bin/", "/usr/sbin/"};
+        std::vector<std::string> binary_paths_string;
+        for (auto & path : binary_paths) {
+            std::string binary_path(path);
+            binary_path.append(pkg_spec);
+            binary_paths_string.push_back(binary_path);
+            PQImpl::str2reldep_internal(reldep_list, cmp, glob, binary_path);
+        }
+        // let first try to search in provides - it is much cheaper
+        if (reldep_list.size() != 0) {
+            sack->p_impl->make_provides_ready();
+            PQImpl::filter_provides(*pool, libdnf::sack::QueryCmp::EQ, reldep_list, filter_result);
+            filter_result &= *p_impl;
+            if (!filter_result.empty()) {
+                *p_impl &= filter_result;
+                return {true, libdnf::rpm::Nevra()};
+            }
+        }
+        // Seach for file provides - more expensive
+        for (auto & path : binary_paths_string) {
+            filter_dataiterator(
+                *pool,
+                SOLVABLE_FILELIST,
+                SEARCH_FILES | SEARCH_COMPLETE_FILELIST | (glob ? SEARCH_GLOB : SEARCH_STRING),
+                *p_impl,
+                filter_result,
+                path.c_str());
+            if (!filter_result.empty()) {
+                *p_impl &= filter_result;
+                return {true, libdnf::rpm::Nevra()};
+            }
         }
     }
     clear();
