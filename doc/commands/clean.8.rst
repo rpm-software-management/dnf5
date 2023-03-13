@@ -31,7 +31,7 @@ Synopsis
 Description
 ===========
 
-The ``clean`` command in ``DNF5`` is used to delete temporarily kept repository metadata 
+The ``clean`` command in ``DNF5`` is used to delete temporarily kept repository metadata
 or marking the cache expired.
 
 Arguments in ``cache_types`` specify which types of the cached data to cleanup:
@@ -44,15 +44,15 @@ Arguments in ``cache_types`` specify which types of the cached data to cleanup:
 
 `metadata`
     | Delete repository metadata.
-    | This will delete the files which ``DNF5`` uses to determine the remote availability of packages. 
+    | This will delete the files which ``DNF5`` uses to determine the remote availability of packages.
     | Using this option will make ``DNF5`` download all the metadata the next time it is run.
 
 `dbcache`
-    | Delete cache files generated from the repository metadata. 
+    | Delete cache files generated from the repository metadata.
     | This forces ``DNF5`` to regenerate the cache files the next time it is run.
 
 `expire-cache`
-    | Mark the repository metadata expired. 
+    | Mark the repository metadata expired.
     | This forces ``DNF5`` to check the validity of the cache the next time it is run.
 
 
@@ -64,4 +64,3 @@ Examples
 
 ``dnf5 clean packages dbcache``
     | Cleanup all cached packages and dbcache metadata.
-

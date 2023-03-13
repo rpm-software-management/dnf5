@@ -244,7 +244,7 @@ static std::string getItemIdentifier(CompsEnvironment * env) {
 //    auto comps_group = dynamic_cast<CompsGroup>(&ti);
 //    auto rpm = dynamic_cast<Package>(&ti);
 
-    
+
     std::string name;
     if (itemType == TransactionItemType::RPM) {
         auto rpm = std::dynamic_pointer_cast< Package >(item);

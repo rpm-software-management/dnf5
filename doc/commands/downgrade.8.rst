@@ -31,7 +31,7 @@ Synopsis
 Description
 ===========
 
-The ``downgrade`` command in ``DNF5`` is used to downgrade each package specified in ``package-spec`` list to the 
+The ``downgrade`` command in ``DNF5`` is used to downgrade each package specified in ``package-spec`` list to the
 highest installable version of all known lower versions if possible. When the version is explicitly given
 in the argument and it is lower than the version of the installed package then it downgrades to this one.
 
@@ -57,4 +57,3 @@ See Also
 ========
 
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-

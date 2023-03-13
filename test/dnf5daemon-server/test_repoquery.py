@@ -20,11 +20,13 @@ import os
 
 import support
 
+
 class RepoTest(support.InstallrootCase):
 
     def test_repoquery_all(self):
         # get list of all available packages
-        pkglist = self.iface_rpm.list({"package_attrs": ["full_nevra", "repo_id"]})
+        pkglist = self.iface_rpm.list(
+            {"package_attrs": ["full_nevra", "repo_id"]})
         # id of package depends on order of the repos in the sack which varies
         # between runs so we can't rely on the value
         for pkg in pkglist:
@@ -57,7 +59,7 @@ class RepoTest(support.InstallrootCase):
                     dbus.String('full_nevra'): dbus.String('two-0:2-2.src', variant_level=1),
                     dbus.String('repo_id'): dbus.String('rpm-repo2', variant_level=1)},
                     signature=dbus.Signature('sv')),
-                ],
+            ],
                 signature=dbus.Signature('a{sv}'))
         )
 
@@ -65,7 +67,7 @@ class RepoTest(support.InstallrootCase):
         # get list of all available packages
         pkglist = self.iface_rpm.list({
             "package_attrs": ["full_nevra", "repo_id"],
-            "patterns":["one"]})
+            "patterns": ["one"]})
         # id of package depends on order of the repos in the sack which varies
         # between runs so we can't rely on the value
         for pkg in pkglist:
@@ -91,5 +93,5 @@ class RepoTest(support.InstallrootCase):
                     dbus.String('repo_id'): dbus.String('rpm-repo1', variant_level=1)},
                     signature=dbus.Signature('sv')),
             ],
-            signature=dbus.Signature('a{sv}'))
+                signature=dbus.Signature('a{sv}'))
         )

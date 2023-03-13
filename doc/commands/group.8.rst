@@ -83,4 +83,3 @@ See Also
 
     | :manpage:`dnf5-comps(7)`, :ref:`Comps groups and environments <comps_misc_ref-label>`
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-

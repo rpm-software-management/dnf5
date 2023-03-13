@@ -45,19 +45,19 @@ Options
     | Expected values are advisory IDs, e.g. `FEDORA-2201-123`.
 
 ``--advisory-severities=ADVISORY_SEVERITY,...``
-    | Consider only content contained in advisories with specified severity. 
-    | This is a list option. 
+    | Consider only content contained in advisories with specified severity.
+    | This is a list option.
     | Accepted values are: `critical`, `important`, `moderate`, `low`, `none`.
 
 ``--bzs=BUGZILLA_ID,...``
-    | Consider only content contained in advisories that fix a ticket of given Bugzilla ID. 
+    | Consider only content contained in advisories that fix a ticket of given Bugzilla ID.
     | This is a list option.
     | Expected values are numeric IDs, e.g. `123123`.
 
 ``--cves=CVE_ID,...``
     | Consider only content contained in advisories that fix a ticket of given CVE (Common Vulnerabilities and Exposures) ID.
     | This is a list option.
-    | Expected values are string IDs in CVE format, e.g. `CVE-2201-0123`. 
+    | Expected values are string IDs in CVE format, e.g. `CVE-2201-0123`.
 
 ``--security``
     | Consider only content contained in security advisories.
@@ -105,4 +105,3 @@ See Also
 
     | :manpage:`dnf5-advisory(8)`, :ref:`Advisory command <advisory_command_ref-label>`
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-

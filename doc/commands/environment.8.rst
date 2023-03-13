@@ -34,7 +34,7 @@ Synopsis
 Description
 ===========
 
-The ``environment`` command in ``DNF5`` offers several queries for getting information 
+The ``environment`` command in ``DNF5`` offers several queries for getting information
 about environments and groups related to them.
 
 Optional ``environment-spec`` arguments could be passed to filter only environments with given names.
@@ -75,4 +75,3 @@ See Also
 
     | :manpage:`dnf5-comps(7)`, :ref:`Comps groups and environments <comps_misc_ref-label>`
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-

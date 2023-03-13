@@ -24,13 +24,17 @@ for tspkg in transaction.get_transaction_packages():
 #
 # We only override one of the callbacks here, see
 # `libdnf.repo.DownloadCallbacks` documentation for a complete list.
+
+
 class PackageDownloadCallbacks(libdnf5.repo.DownloadCallbacks):
     def mirror_failure(self, user_cb_data, msg, url=""):
         print("Mirror failure: ", msg)
         return 0
 
+
 downloader_callbacks = PackageDownloadCallbacks()
-base.set_download_callbacks(libdnf5.repo.DownloadCallbacksUniquePtr(downloader_callbacks))
+base.set_download_callbacks(
+    libdnf5.repo.DownloadCallbacksUniquePtr(downloader_callbacks))
 
 # Download the packages.
 transaction.download()
@@ -40,13 +44,17 @@ transaction.download()
 # Again, only a callback for when an RPM package installation starts, for a
 # complete list of the callbacks see `libdnf.rpm.TransactionCallbacks`
 # documentation.
+
+
 class TransactionCallbacks(libdnf5.rpm.TransactionCallbacks):
     def install_start(self, item, total=0):
         print(libdnf5.base.transaction.transaction_item_action_to_string(item.get_action()), " ",
               item.get_package().get_nevra())
 
+
 transaction_callbacks = TransactionCallbacks()
-transaction_callbacks_ptr = libdnf5.rpm.TransactionCallbacksUniquePtr(transaction_callbacks)
+transaction_callbacks_ptr = libdnf5.rpm.TransactionCallbacksUniquePtr(
+    transaction_callbacks)
 transaction.set_callbacks(transaction_callbacks_ptr)
 
 # Add transaction metadata to be stored in the history database.

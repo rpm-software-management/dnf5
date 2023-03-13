@@ -68,7 +68,8 @@ class TestPackageQuery(base_test_case.BaseTestCase):
             self.assertGreater(id, prev_id)
             prev_id = id
         self.assertLess(prev_id, self.package_sack.get_nsolvables())
-        self.assertGreaterEqual(prev_id, libdnf5.rpm.PackageQuery(self.base).size())
+        self.assertGreaterEqual(
+            prev_id, libdnf5.rpm.PackageQuery(self.base).size())
 
         # Another test. The iterator is created from the "query" reference, but the reference
         # is removed (set to "None") before starting the iteration.
@@ -85,7 +86,8 @@ class TestPackageQuery(base_test_case.BaseTestCase):
             except StopIteration:
                 break
         self.assertLess(prev_id, self.package_sack.get_nsolvables())
-        self.assertGreaterEqual(prev_id, libdnf5.rpm.PackageQuery(self.base).size())
+        self.assertGreaterEqual(
+            prev_id, libdnf5.rpm.PackageQuery(self.base).size())
 
     def test_filter_name(self):
         # Test QueryCmp::EQ
@@ -102,7 +104,8 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         query.filter_name(["pk*"], libdnf5.common.QueryCmp_GLOB)
         self.assertEqual(query.size(), 2)
         # TODO(dmach): implement __str__()
-        self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])
+        self.assertEqual([i.get_nevra() for i in query], [
+                         "pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])
 
     def test_resolve_pkg_spec(self):
         # Test passing empty forms
@@ -112,13 +115,14 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         match, nevra = query.resolve_pkg_spec("pkg*", settings, True)
 
         self.assertEqual(query.size(), 2)
-        self.assertEqual([i.get_nevra() for i in query], ["pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])
+        self.assertEqual([i.get_nevra() for i in query], [
+                         "pkg-1.2-3.x86_64", "pkg-libs-1:1.3-4.x86_64"])
         self.assertTrue(match)
         self.assertEqual(nevra.get_name(), "pkg*")
         self.assertTrue(nevra.has_just_name())
 
         # Test passing an explicit list of forms
-        query = libdnf5.rpm.PackageQuery(self.base)   
+        query = libdnf5.rpm.PackageQuery(self.base)
         settings = libdnf5.base.ResolveSpecSettings()
         settings.nevra_forms.append(libdnf5.rpm.Nevra.Form_NA)
 
@@ -136,7 +140,8 @@ class TestPackageQuery(base_test_case.BaseTestCase):
         query = libdnf5.rpm.PackageQuery(self.base)
         query.filter_name(["pkg"])
         package = next(iter(query))
-        self.assertEqual(package.get_reason(), libdnf5.transaction.TransactionItemReason_NONE)
+        self.assertEqual(package.get_reason(),
+                         libdnf5.transaction.TransactionItemReason_NONE)
 
     def test_pkg_query_without_setup(self):
         # Create a new Base object

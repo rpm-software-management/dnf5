@@ -19,21 +19,21 @@ At first I tried to use the glib extension of gettext. But glib is incomplete.
 
 #### `_(msgId)`
 This macro wraps gettext/dgettext. The macro attempts to translate a text string into the user's native language, by looking up the translation in a message catalog.
-The msgId argument identifies the message to be translated. By convention, it is the English version of the message, with non-ASCII characters replaced by ASCII approximationsUses gettext to get the translation for msgId. 
+The msgId argument identifies the message to be translated. By convention, it is the English version of the message, with non-ASCII characters replaced by ASCII approximationsUses gettext to get the translation for msgId.
 If you are using the `_()` macro, you need to make sure that you pass `--keyword=_` to xgettext when extracting messages. Note that this only works with GNU gettext >= 0.15.
 ##### Parameters
 `msgId` - a message id, must be a string literal
 ##### Returns
-If a translation was found in one of the specified catalogs, it is converted to the locale's codeset and returned. The resulting string is statically allocated and must not be modified or freed. Otherwise msgid is returned. 
+If a translation was found in one of the specified catalogs, it is converted to the locale's codeset and returned. The resulting string is statically allocated and must not be modified or freed. Otherwise msgid is returned.
 ##### Example
 `label = _("This is text for translation")`
- 
+
 #### `P_(msgId, msgIdPlural, n)`
 This macro wraps ngettext/dngettext. It is used for translate message and choose plural form.
 Plural forms are grammatical variants depending on the a number. Some languages have two forms, called singular and plural. Other languages have three or more forms.
 If you are using the `P_()` macro, you need to make sure that you pass `--keyword=P_:1,2` to xgettext when extracting messages. Note that this only works with GNU gettext >= 0.15.
 ##### Parameters
-`msgId` - a message id, must be a string 
+`msgId` - a message id, must be a string
 `msgIdPlural` - plural form of the message
 `n` - the quantity for which translation is needed
 ##### Returns
@@ -58,7 +58,7 @@ This is the most powerfull macro. It supports translation of message with contex
 If you are using the `CP_()` macro, you need to make sure that you pass `--keyword=CP_:1c,2,3` to xgettext when extracting messages. Note that this only works with GNU gettext >= 0.15.
 ##### Parameters
 `context` - a message context, must be a string literal
-`msgId` - a message id, must be a string 
+`msgId` - a message id, must be a string
 `msgIdPlural` - plural form of the message, must be a string literal
 `n` - the quantity for which translation is needed
 ##### Returns

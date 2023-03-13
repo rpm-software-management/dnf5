@@ -47,4 +47,3 @@ Examples
 
 ``dnf5 swap mlocate plocate``
     | Remove the ``mlocate`` package and install the ``plocate`` instead in the single transaction.
-

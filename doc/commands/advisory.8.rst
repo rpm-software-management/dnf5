@@ -31,7 +31,7 @@ Synopsis
 Description
 ===========
 
-The ``advisory`` command in ``DNF5`` offers several queries for getting information about 
+The ``advisory`` command in ``DNF5`` offers several queries for getting information about
 advisories and packages related to them.
 
 Optional ``advisory-spec`` arguments could be passed to filter only advisories with given names.
@@ -83,19 +83,19 @@ Options
     | Consider only content contained in newpackage advisories.
 
 ``--advisory-severities=ADVISORY_SEVERITY,...``
-    | Consider only content contained in advisories with specified severity. 
-    | This is a list option. 
+    | Consider only content contained in advisories with specified severity.
+    | This is a list option.
     | Accepted values are: `critical`, `important`, `moderate`, `low`, `none`.
 
 ``--bzs=BUGZILLA_ID,...``
-    | Consider only content contained in advisories that fix a ticket of given Bugzilla ID. 
+    | Consider only content contained in advisories that fix a ticket of given Bugzilla ID.
     | This is a list option.
     | Expected values are numeric IDs, e.g. `123123`.
 
 ``--cves=CVE_ID,...``
     | Consider only content contained in advisories that fix a ticket of given CVE (Common Vulnerabilities and Exposures) ID.
     | This is a list option.
-    | Expected values are string IDs in CVE format, e.g. `CVE-2201-0123`. 
+    | Expected values are string IDs in CVE format, e.g. `CVE-2201-0123`.
 
 ``--with-bz``
     | Show only advisories referencing a Bugzilla ticket.
@@ -115,4 +115,3 @@ Examples
 
 ``dnf5 advisory list --security --advisory-severities=important``
     | Show a list of security advisories or advisories with ``important`` severity.
-

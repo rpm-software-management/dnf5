@@ -11,4 +11,3 @@ Tutorial
     repos
     queries
     transaction
-

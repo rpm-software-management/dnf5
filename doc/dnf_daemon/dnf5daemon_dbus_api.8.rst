@@ -94,5 +94,3 @@ Interfaces
 
    .. literalinclude:: ../../dnf5daemon-server/dbus/interfaces/org.rpm.dnf.v0.rpm.Rpm.xml
       :language: xml
-
-

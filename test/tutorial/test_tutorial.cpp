@@ -36,48 +36,47 @@ void TutorialTest::setUp() {
 }
 
 
-void TutorialTest::tearDown() {
-}
+void TutorialTest::tearDown() {}
 
 
 void TutorialTest::test_create_base() {
-    #include "session/create_base.cpp"
+#include "session/create_base.cpp"
 }
 
 
 void TutorialTest::test_load_repo() {
-    #include "session/create_base.cpp"
+#include "session/create_base.cpp"
 
     base.get_config().get_cachedir_option().set(cachedir);
 
-    #include "repo/load_repo.cpp"
+#include "repo/load_repo.cpp"
 }
 
 
 void TutorialTest::test_load_system_repos() {
-    #include "session/create_base.cpp"
+#include "session/create_base.cpp"
 
     base.get_config().get_cachedir_option().set(cachedir);
 
-    #include "repo/load_system_repos.cpp"
+#include "repo/load_system_repos.cpp"
 }
 
 
 void TutorialTest::test_query() {
-    #include "session/create_base.cpp"
+#include "session/create_base.cpp"
 
     base.get_config().get_cachedir_option().set(cachedir);
 
-    #include "repo/load_repo.cpp"
-    #include "query/query.cpp"
+#include "query/query.cpp"
+#include "repo/load_repo.cpp"
 }
 
 
 void TutorialTest::test_transaction() {
-    #include "session/create_base.cpp"
+#include "session/create_base.cpp"
 
     base.get_config().get_cachedir_option().set(cachedir);
 
-    #include "repo/load_repo.cpp"
-    #include "transaction/transaction.cpp"
+#include "repo/load_repo.cpp"
+#include "transaction/transaction.cpp"
 }

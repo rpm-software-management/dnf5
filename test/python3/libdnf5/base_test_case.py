@@ -64,20 +64,22 @@ class BaseTestCase(unittest.TestCase):
         """
         Add a repo from PROJECT_SOURCE_DIR/test/data/repos-repomd/<repoid>/repodata
         """
-        repo_path = os.path.join(PROJECT_SOURCE_DIR, "test/data/repos-repomd", repoid)
+        repo_path = os.path.join(
+            PROJECT_SOURCE_DIR, "test/data/repos-repomd", repoid)
         return self._add_repo(repoid, repo_path, load)
 
     def add_repo_rpm(self, repoid, load=True):
         """
         Add a repo from PROJECT_BINARY_DIR/test/data/repos-rpm/<repoid>/repodata
         """
-        repo_path = os.path.join(PROJECT_BINARY_DIR, "test/data/repos-rpm", repoid)
+        repo_path = os.path.join(
+            PROJECT_BINARY_DIR, "test/data/repos-rpm", repoid)
         return self._add_repo(repoid, repo_path, load)
-
 
     def add_repo_solv(self, repoid):
         """
         Add a repo from PROJECT_SOURCE_DIR/test/data/repos-solv/<repoid>.repo
         """
-        repo_path = os.path.join(PROJECT_SOURCE_DIR, "test/data/repos-solv", repoid + ".repo")
+        repo_path = os.path.join(
+            PROJECT_SOURCE_DIR, "test/data/repos-solv", repoid + ".repo")
         return self.repo_sack.create_repo_from_libsolv_testcase(repoid, repo_path)

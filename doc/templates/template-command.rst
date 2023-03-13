@@ -61,4 +61,3 @@ Following this example you should have an output like this.
     Options:
       --bar                         print bar
       --foo                         print foo
-

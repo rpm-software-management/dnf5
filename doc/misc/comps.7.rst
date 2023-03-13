@@ -26,10 +26,10 @@ Description
 ===========
 
 Comps files are used for grouping of packages into functional groups. They are stored
-in repository metadata files under the ``comps.xml`` filename. 
+in repository metadata files under the ``comps.xml`` filename.
 
-There are two types of structures that can be used for grouping. The first is a 
-`group` which is composed of lists of packages. The second one is an `environment` 
+There are two types of structures that can be used for grouping. The first is a
+`group` which is composed of lists of packages. The second one is an `environment`
 that is composed from the groups.
 
 Each `environment` is made of mandatory and optional groups. All mandatory groups have
@@ -61,4 +61,3 @@ See Also
 
     | :manpage:`dnf5-group(8)`, :ref:`Group command <group_command_ref-label>`
     | :manpage:`dnf5-environment(8)`, :ref:`Environment command <environment_command_ref-label>`
-

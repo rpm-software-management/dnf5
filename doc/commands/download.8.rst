@@ -31,7 +31,7 @@ Synopsis
 Description
 ===========
 
-The ``download`` command in ``DNF5`` is used for downloading binary and source packages 
+The ``download`` command in ``DNF5`` is used for downloading binary and source packages
 defined in ``package-spec`` arguments.
 
 
@@ -62,4 +62,3 @@ See Also
 ========
 
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-

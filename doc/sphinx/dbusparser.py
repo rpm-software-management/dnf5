@@ -150,13 +150,13 @@ class DBusXMLParser:
                     colon_index = line.find(": ")
                     if colon_index == -1:
                         if line.endswith(":"):
-                            symbol = line[0 : len(line) - 1]
+                            symbol = line[0: len(line) - 1]
                             comment_state = DBusXMLParser.COMMENT_STATE_PARAMS
                         else:
                             comment_state = DBusXMLParser.COMMENT_STATE_SKIP
                     else:
                         symbol = line[0:colon_index]
-                        rest_of_line = line[colon_index + 2 :].strip()
+                        rest_of_line = line[colon_index + 2:].strip()
                         if len(rest_of_line) > 0:
                             body += rest_of_line + "\n"
                         comment_state = DBusXMLParser.COMMENT_STATE_PARAMS
@@ -170,7 +170,7 @@ class DBusXMLParser:
                         body += orig_line + "\n"
                     else:
                         param = line[1:colon_index]
-                        docs = line[colon_index + 2 :]
+                        docs = line[colon_index + 2:]
                         params[param] = docs
                 else:
                     comment_state = DBusXMLParser.COMMENT_STATE_BODY
@@ -230,7 +230,8 @@ class DBusXMLParser:
                     short_description = self.doc_comment_params["short_description"]
                     self._cur_object.doc_string_brief = short_description
                 if "since" in self.doc_comment_params:
-                    self._cur_object.since = self.doc_comment_params["since"].strip()
+                    self._cur_object.since = self.doc_comment_params["since"].strip(
+                    )
 
         elif self.state == DBusXMLParser.STATE_INTERFACE:
             if name == DBusXMLParser.STATE_METHOD:
@@ -262,7 +263,8 @@ class DBusXMLParser:
             if "name" in attrs and self.doc_comment_last_symbol == attrs["name"]:
                 self._cur_object.doc_string = self.doc_comment_body
                 if "since" in self.doc_comment_params:
-                    self._cur_object.since = self.doc_comment_params["since"].strip()
+                    self._cur_object.since = self.doc_comment_params["since"].strip(
+                    )
 
         elif self.state == DBusXMLParser.STATE_METHOD:
             if name == DBusXMLParser.STATE_ARG:
@@ -277,7 +279,8 @@ class DBusXMLParser:
                 elif direction == "out":
                     self._cur_object.out_args.append(arg)
                 else:
-                    raise ValueError('Invalid direction "{}"'.format(direction))
+                    raise ValueError(
+                        'Invalid direction "{}"'.format(direction))
                 self._cur_object = arg
             elif name == DBusXMLParser.STATE_ANNOTATION:
                 self.state = DBusXMLParser.STATE_ANNOTATION
