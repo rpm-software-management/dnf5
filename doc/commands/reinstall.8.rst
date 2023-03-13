@@ -50,4 +50,3 @@ See Also
 ========
 
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-

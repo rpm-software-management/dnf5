@@ -48,14 +48,15 @@ class InstallrootCase(unittest.TestCase):
             if "replaces" in trans_item_attrs:
                 trans_item_attrs.pop("replaces")
 
-
     def setUp(self):
         super(InstallrootCase, self).setUp()
         self.maxDiff = None
 
         self.installroot = tempfile.mkdtemp(prefix="dnf5daemon-test-")
-        self.reposdir = os.path.join(PROJECT_BINARY_DIR, "test/data/repos-rpm-conf.d")
-        self.config_file_path = os.path.join(self.installroot, 'etc/dnf/dnf.conf')
+        self.reposdir = os.path.join(
+            PROJECT_BINARY_DIR, "test/data/repos-rpm-conf.d")
+        self.config_file_path = os.path.join(
+            self.installroot, 'etc/dnf/dnf.conf')
         os.makedirs(os.path.dirname(self.config_file_path), exist_ok=True)
         with open(self.config_file_path, 'w') as f:
             f.write('')
@@ -81,7 +82,6 @@ class InstallrootCase(unittest.TestCase):
         self.iface_goal = dbus.Interface(
             self.bus.get_object(DNFDAEMON_BUS_NAME, self.session),
             dbus_interface=IFACE_GOAL)
-
 
     def tearDown(self):
         shutil.rmtree(self.installroot)

@@ -32,10 +32,10 @@ Description
 ===========
 
 The ``search`` command in ``DNF5`` is used for searching packages by matching
-given keywords from the user against various metadata. 
+given keywords from the user against various metadata.
 
-By default the command searches for all requested keys (AND operation) in 
-`Name` or `Summary` fields from the RPM package metadata. Matching is 
+By default the command searches for all requested keys (AND operation) in
+`Name` or `Summary` fields from the RPM package metadata. Matching is
 case-insensitive and globs are supported.
 
 
@@ -64,4 +64,3 @@ See Also
 ========
 
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-

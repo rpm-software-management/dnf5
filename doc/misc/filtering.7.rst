@@ -38,7 +38,7 @@ Exclude Filtering
 
 Exclude Filtering is a mechanism used by a user or by the ``DNF5`` plugin to modify the set of available
 packages. Exclude Filtering can be modified by either ``includepkgs`` or ``excludepkgs`` configuration options in
-configuration files. In addition to user-configured excludes, plugins can also extend the set of excluded packages. 
+configuration files. In addition to user-configured excludes, plugins can also extend the set of excluded packages.
 To disable excludes from the ``DNF5`` plugin you can use the ``--disable-plugin`` command line option.
 
 To disable all excludes for e.g. the install command you can use the following combination
@@ -67,4 +67,3 @@ To discover the module which contains an excluded package use ``dnf5 module prov
 
 Examples
 ========
-

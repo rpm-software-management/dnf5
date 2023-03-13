@@ -24,19 +24,21 @@ import base_test_case
 PROJECT_BINARY_DIR = os.environ["PROJECT_BINARY_DIR"]
 PROJECT_SOURCE_DIR = os.environ["PROJECT_SOURCE_DIR"]
 
+
 class TestTutorial(base_test_case.BaseTestCase):
     def setUp(self):
         super().setUp()
         self.installroot = self.base.get_config().installroot
         self.cachedir = self.base.get_config().cachedir
-        self.baseurl = pathlib.Path(os.path.join(PROJECT_BINARY_DIR, "test/data/repos-rpm/rpm-repo1/")).as_uri()
+        self.baseurl = pathlib.Path(os.path.join(
+            PROJECT_BINARY_DIR, "test/data/repos-rpm/rpm-repo1/")).as_uri()
 
     def test_create_base(self):
         file = ""
         with open("tutorial/session/create_base.py", "r") as f:
             file += f.read()
 
-        exec(file, { 'installroot': self.installroot })
+        exec(file, {'installroot': self.installroot})
 
     def test_load_repo(self):
         file = ""
@@ -46,7 +48,7 @@ class TestTutorial(base_test_case.BaseTestCase):
         with open("tutorial/repo/load_repo.py", "r") as f:
             file += f.read()
 
-        exec(file, { 'installroot': self.installroot, 'baseurl': self.baseurl })
+        exec(file, {'installroot': self.installroot, 'baseurl': self.baseurl})
 
     def test_load_system_repo(self):
         # TODO(nsella) This example does not 'compile' yet
@@ -71,7 +73,7 @@ class TestTutorial(base_test_case.BaseTestCase):
         with open("tutorial/query/query.py", "r") as f:
             file += f.read()
 
-        exec(file, { 'installroot': self.installroot, 'baseurl': self.baseurl })
+        exec(file, {'installroot': self.installroot, 'baseurl': self.baseurl})
 
     def test_transaction(self):
         file = ""
@@ -84,5 +86,4 @@ class TestTutorial(base_test_case.BaseTestCase):
         with open("tutorial/transaction/transaction.py", "r") as f:
             file += f.read()
 
-        exec(file, { 'installroot': self.installroot, 'baseurl': self.baseurl })
-
+        exec(file, {'installroot': self.installroot, 'baseurl': self.baseurl})

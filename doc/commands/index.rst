@@ -30,4 +30,3 @@ DNF5 Commands
 
     # TODO(jkolarik): module not ready yet
     module.8
-

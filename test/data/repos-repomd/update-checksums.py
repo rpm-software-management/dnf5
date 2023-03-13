@@ -33,7 +33,8 @@ for repoid in os.listdir(TOPDIR):
     data_nodes = root.findall('./data', namespaces=NAMESPACES)
     for data in data_nodes:
         # determine indexed file location
-        location = data.find("./location", namespaces=NAMESPACES).attrib["href"]
+        location = data.find(
+            "./location", namespaces=NAMESPACES).attrib["href"]
         location = os.path.join(repo_dir, location)
 
         # compute and store the current checksum

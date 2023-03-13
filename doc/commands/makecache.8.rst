@@ -34,6 +34,5 @@ Description
 The ``makecache`` command in ``DNF5`` is used for creating and downloading metadata
 for enabled repositories.
 
-It tries to avoid downloading whenever possible, e.g. when the local metadata hasn't 
+It tries to avoid downloading whenever possible, e.g. when the local metadata hasn't
 expired yet or when the metadata timestamp hasn't changed.
-

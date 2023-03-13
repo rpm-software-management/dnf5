@@ -58,7 +58,8 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
                 return 0
 
         cbs = PackageDownloadCallbacks()
-        self.base.set_download_callbacks(libdnf5.repo.DownloadCallbacksUniquePtr(cbs))
+        self.base.set_download_callbacks(
+            libdnf5.repo.DownloadCallbacksUniquePtr(cbs))
 
         downloader.add(query.begin().value())
 
@@ -69,7 +70,8 @@ class TestPackageDownloader(base_test_case.BaseTestCase):
         gc.collect()
 
         self.assertEqual(cbs.end_cnt, 1)
-        self.assertEqual(cbs.end_status, PackageDownloadCallbacks.TransferStatus_SUCCESSFUL)
+        self.assertEqual(
+            cbs.end_status, PackageDownloadCallbacks.TransferStatus_SUCCESSFUL)
         self.assertEqual(cbs.end_msg, None)
 
         self.assertGreaterEqual(cbs.progress_cnt, 1)

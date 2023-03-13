@@ -75,7 +75,7 @@ class RepoConfTest(support.InstallrootCase):
                     dbus.String('name'): dbus.String('Repository 2', variant_level=1),
                     dbus.String('repoid'): dbus.String('rpm-repo2', variant_level=1)},
                     signature=dbus.Signature('sv'))
-                ], signature=dbus.Signature('a{sv}'))
+            ], signature=dbus.Signature('a{sv}'))
         )
         # filter several repositories
         self.assertEqual(
@@ -99,13 +99,13 @@ class RepoConfTest(support.InstallrootCase):
                     dbus.String('name'): dbus.String('Repository 2', variant_level=1),
                     dbus.String('repoid'): dbus.String('rpm-repo2', variant_level=1)},
                     signature=dbus.Signature('sv'))
-                ], signature=dbus.Signature('a{sv}'))
+            ], signature=dbus.Signature('a{sv}'))
         )
         # filter non-existent repositories
         self.assertEqual(
             self.iface_repoconf.list({'ids': ['nonrepo-1', 'nonrepo-2']}),
             dbus.Array([
-                ], signature=dbus.Signature('a{sv}')))
+            ], signature=dbus.Signature('a{sv}')))
 
     def test_get_repository(self):
         self.assertEqual(
@@ -127,7 +127,8 @@ class RepoConfTest(support.InstallrootCase):
         # disable repo
         self.assertEqual(
             self.iface_repoconf.disable(['main_repo']),
-            dbus.Array([dbus.String('main_repo')], signature=dbus.Signature('s'))
+            dbus.Array([dbus.String('main_repo')],
+                       signature=dbus.Signature('s'))
         )
         self.assertEqual(
             self.iface_repoconf.get('main_repo'),
@@ -141,7 +142,8 @@ class RepoConfTest(support.InstallrootCase):
         # enable repo
         self.assertEqual(
             self.iface_repoconf.enable(['main_repo']),
-            dbus.Array([dbus.String('main_repo')], signature=dbus.Signature('s'))
+            dbus.Array([dbus.String('main_repo')],
+                       signature=dbus.Signature('s'))
         )
         self.assertEqual(
             self.iface_repoconf.get('main_repo'),

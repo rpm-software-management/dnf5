@@ -49,9 +49,9 @@ class TestBase(unittest.TestCase):
 
         # Base object is invalid. -> Both WeakPtr are invalid. The code must throw an exception.
         # Raises an AssertionError that is not caught by the SWIG binding.
-        #with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
+        # with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
         #    vars.get_value("test_variable")
-        #with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
+        # with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
         #    vars2.get_value("test_variable")
 
     def test_missing_setup_goal_resolve(self):

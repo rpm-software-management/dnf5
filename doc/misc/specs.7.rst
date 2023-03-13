@@ -28,8 +28,8 @@
 Description
 ===========
 
-Different pattern matching rules for arguments in ``*-spec`` form are defined 
-for operation with each entity type in ``DNF5``. In this section all rules are 
+Different pattern matching rules for arguments in ``*-spec`` form are defined
+for operation with each entity type in ``DNF5``. In this section all rules are
 described and explained in detail, with examples.
 
 
@@ -67,7 +67,7 @@ Each package can be uniquely identified by the `NEVRA` string. It consists of
     | Epoch number.
     | It is not always included.
 
-    The epoch number overrides other version checking, so it can be used to 
+    The epoch number overrides other version checking, so it can be used to
     force the package upgrade over some other one.
 
 `Version`
@@ -78,14 +78,14 @@ Each package can be uniquely identified by the `NEVRA` string. It consists of
 `Release`
     | Edition string.
 
-    It is an information about the particular package build, usually a number 
+    It is an information about the particular package build, usually a number
     increased with the newer build. It is not connected with the upstream software.
 
 `Architecture`
     | Target architecture string.
     | Defines the processor type the package is intended to be installed on.
 
-    It can be also a package containing source files (``src``) or architecture-independent 
+    It can be also a package containing source files (``src``) or architecture-independent
     package (``noarch``).
 
 When matching against NEVRAs, partial matching is supported. ``DNF5`` tries to match
@@ -175,7 +175,7 @@ Since `NEVRA` matching form is insufficient for modules, they are uniquely ident
     | All above combinations with ``/PROFILE`` (e.g. ``NAME/PROFILE``)
     |
 
-In case stream is not specified, the enabled or the default stream is used, in this order. 
+In case stream is not specified, the enabled or the default stream is used, in this order.
 In case profile is not specified, the system default profile or the 'default' profile is used.
 
 
@@ -187,4 +187,3 @@ specifies a transaction ID. Specifying ``last`` is the same as specifying the ID
 of the most recent transaction. The last form is ``last-<offset>``, where
 ``<offset>`` is a positive integer. It specifies offset-th transaction preceding
 the most recent transaction.
-

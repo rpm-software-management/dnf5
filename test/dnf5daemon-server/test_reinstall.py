@@ -21,20 +21,25 @@ import subprocess
 
 import support
 
+
 class ReinstallTest(support.InstallrootCase):
 
     def setUp(self):
         super(ReinstallTest, self).setUp()
         # install a package inside the installroot
-        pkg_file = os.path.join(support.PROJECT_BINARY_DIR, "test/data/repos-rpm/rpm-repo1/one-1-1.noarch.rpm")
-        res = subprocess.run(["rpm", "--root", self.installroot, "-U", pkg_file])
-        self.assertEqual(res.returncode, 0, "Installation of test package '{}' failed.".format(pkg_file))
+        pkg_file = os.path.join(
+            support.PROJECT_BINARY_DIR, "test/data/repos-rpm/rpm-repo1/one-1-1.noarch.rpm")
+        res = subprocess.run(
+            ["rpm", "--root", self.installroot, "-U", pkg_file])
+        self.assertEqual(
+            res.returncode, 0, "Installation of test package '{}' failed.".format(pkg_file))
 
     def test_reinstall_package(self):
         # reinstall an installed package
         self.iface_rpm.reinstall(['one'], dbus.Dictionary({}, signature='sv'))
 
-        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(
+            dbus.Dictionary({}, signature='sv'))
         self.sanitize_transaction(resolved)
 
         self.assertEqual(result, 0)
@@ -46,7 +51,7 @@ class ReinstallTest(support.InstallrootCase):
                     dbus.String('Reinstall'),       # action
                     dbus.String('External User'),   # reason
                     dbus.Dictionary({               # transaction item attrs
-                        }, signature=dbus.Signature('sv')),
+                    }, signature=dbus.Signature('sv')),
                     dbus.Dictionary({               # package
                         dbus.String('evr'): dbus.String('1-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
@@ -58,14 +63,14 @@ class ReinstallTest(support.InstallrootCase):
                         dbus.String('repo_id'): dbus.String('rpm-repo1', variant_level=1),
                         dbus.String('from_repo_id'): dbus.String('', variant_level=1),
                         dbus.String('reason'): dbus.String('External User', variant_level=1),
-                        }, signature=dbus.Signature('sv'))),
+                    }, signature=dbus.Signature('sv'))),
                     signature=None),
                 dbus.Struct((
                     dbus.String('Package'),         # object type
                     dbus.String('Replaced'),        # action
                     dbus.String('External User'),   # reason
                     dbus.Dictionary({               # transaction item attrs
-                        }, signature=dbus.Signature('sv')),
+                    }, signature=dbus.Signature('sv')),
                     dbus.Dictionary({               # package
                         dbus.String('evr'): dbus.String('1-1', variant_level=1),
                         dbus.String('name'): dbus.String('one', variant_level=1),
@@ -77,9 +82,9 @@ class ReinstallTest(support.InstallrootCase):
                         dbus.String('repo_id'): dbus.String('@System', variant_level=1),
                         dbus.String('from_repo_id'): dbus.String('<unknown>', variant_level=1),
                         dbus.String('reason'): dbus.String('External User', variant_level=1),
-                        }, signature=dbus.Signature('sv'))),
+                    }, signature=dbus.Signature('sv'))),
                     signature=None)
-                ], signature=dbus.Signature('(ua{sv})')),
+            ], signature=dbus.Signature('(ua{sv})')),
         )
 
         self.iface_goal.do_transaction(dbus.Dictionary({}, signature='sv'))
@@ -89,15 +94,17 @@ class ReinstallTest(support.InstallrootCase):
         attempt to reinstall package from repo that does not contain it returns
         empty transaction
         '''
-        self.iface_rpm.reinstall(['one'], dbus.Dictionary({'repo_ids': ['rpm-repo2']}, signature='sv'))
-        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        self.iface_rpm.reinstall(['one'], dbus.Dictionary(
+            {'repo_ids': ['rpm-repo2']}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(
+            dbus.Dictionary({}, signature='sv'))
 
         self.assertEqual(result, 2)
         self.assertCountEqual(
             resolved,
             dbus.Array([
-                ], signature=dbus.Signature('(ua{sv})'))
-            )
+            ], signature=dbus.Signature('(ua{sv})'))
+        )
 
         errors = self.iface_goal.get_transaction_problems_string()
         self.assertEqual(errors, dbus.Array([
@@ -109,15 +116,17 @@ class ReinstallTest(support.InstallrootCase):
         attempt to reinstall package available but not installed returns empty
         transaction
         '''
-        self.iface_rpm.reinstall(['two'], dbus.Dictionary({'repo_ids': ['rpm-repo2']}, signature='sv'))
-        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        self.iface_rpm.reinstall(['two'], dbus.Dictionary(
+            {'repo_ids': ['rpm-repo2']}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(
+            dbus.Dictionary({}, signature='sv'))
 
         self.assertEqual(result, 2)
         self.assertCountEqual(
             resolved,
             dbus.Array([
-                ], signature=dbus.Signature('(ua{sv})'))
-            )
+            ], signature=dbus.Signature('(ua{sv})'))
+        )
 
         errors = self.iface_goal.get_transaction_problems_string()
         self.assertEqual(errors, dbus.Array([
@@ -129,15 +138,17 @@ class ReinstallTest(support.InstallrootCase):
         attempt to reinstall package from repo that does not exist it returns
         empty transaction
         '''
-        self.iface_rpm.reinstall(['three'], dbus.Dictionary({}, signature='sv'))
-        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        self.iface_rpm.reinstall(
+            ['three'], dbus.Dictionary({}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(
+            dbus.Dictionary({}, signature='sv'))
 
         self.assertEqual(result, 2)
         self.assertCountEqual(
             resolved,
             dbus.Array([
-                ], signature=dbus.Signature('(ua{sv})'))
-            )
+            ], signature=dbus.Signature('(ua{sv})'))
+        )
 
         errors = self.iface_goal.get_transaction_problems_string()
         self.assertEqual(errors, dbus.Array([

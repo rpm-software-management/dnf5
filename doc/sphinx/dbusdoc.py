@@ -138,11 +138,13 @@ class DBusDocDirective(SphinxDirective):
         reporter = self.state.document.reporter
 
         try:
-            source, lineno = reporter.get_source_and_line(self.lineno)  # type: ignore
+            source, lineno = reporter.get_source_and_line(
+                self.lineno)  # type: ignore
         except AttributeError:
             source, lineno = (None, None)
 
-        logger.debug("[dbusdoc] %s:%s: input:\n%s", source, lineno, self.block_text)
+        logger.debug("[dbusdoc] %s:%s: input:\n%s",
+                     source, lineno, self.block_text)
 
         libdnf_docdir = os.path.abspath(".")
         qapidoc_srctree = os.path.join(libdnf_docdir, '..')

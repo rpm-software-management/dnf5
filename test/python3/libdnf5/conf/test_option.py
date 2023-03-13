@@ -23,11 +23,13 @@ import base_test_case
 class TestConfigurationOptions(base_test_case.BaseTestCase):
     def test_set_with_runtime_priority(self):
         proxy = self.base.get_config().get_proxy_option()
-        self.assertEqual(proxy.get_priority(), libdnf5.conf.Option.Priority_DEFAULT)
-        
+        self.assertEqual(proxy.get_priority(),
+                         libdnf5.conf.Option.Priority_DEFAULT)
+
         proxy.set('abcd')
         self.assertEqual(proxy.get_value(), 'abcd')
-        self.assertEqual(proxy.get_priority(), libdnf5.conf.Option.Priority_RUNTIME)
+        self.assertEqual(proxy.get_priority(),
+                         libdnf5.conf.Option.Priority_RUNTIME)
 
     def test_container_add_item(self):
         auths_config = self.base.get_config().get_proxy_auth_method_option()
@@ -38,15 +40,18 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
     def test_container_add(self):
         types_config = self.base.get_config().get_optional_metadata_types_option()
         types_config.set((libdnf5.conf.METADATA_TYPE_FILELISTS,))
-        types_config.add((libdnf5.conf.METADATA_TYPE_COMPS, libdnf5.conf.METADATA_TYPE_UPDATEINFO))
-        self.assertEqual(types_config.get_value(), (libdnf5.conf.METADATA_TYPE_COMPS, libdnf5.conf.METADATA_TYPE_FILELISTS, libdnf5.conf.METADATA_TYPE_UPDATEINFO))
+        types_config.add((libdnf5.conf.METADATA_TYPE_COMPS,
+                         libdnf5.conf.METADATA_TYPE_UPDATEINFO))
+        self.assertEqual(types_config.get_value(), (libdnf5.conf.METADATA_TYPE_COMPS,
+                         libdnf5.conf.METADATA_TYPE_FILELISTS, libdnf5.conf.METADATA_TYPE_UPDATEINFO))
 
     def test_set_by_attribute(self):
         config = self.base.get_config()
         config.comment = 'some comment'
         comment_option = config.get_comment_option()
         self.assertEqual(comment_option.get_value(), 'some comment')
-        self.assertEqual(comment_option.get_priority(), libdnf5.conf.Option.Priority_RUNTIME)
+        self.assertEqual(comment_option.get_priority(),
+                         libdnf5.conf.Option.Priority_RUNTIME)
 
     def test_get_by_attribute(self):
         config = self.base.get_config()

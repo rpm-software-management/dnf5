@@ -261,7 +261,7 @@ class DBusXRef(XRefRole):
                 title = title[1:]
                 dot = title.rfind(".")
                 if dot != -1:
-                    title = title[dot + 1 :]
+                    title = title[dot + 1:]
         # if the first character is a dot, search more specific namespaces first
         # else search builtins first
         if target[0:1] == ".":
@@ -301,14 +301,15 @@ class DBusIndex(Index):
 
             for ignore in ignores:
                 if name.startswith(ignore):
-                    name = name[len(ignore) :]
+                    name = name[len(ignore):]
                     stripped = ignore
                     break
             else:
                 stripped = ""
 
             entries = content.setdefault(name[0].lower(), [])
-            entries.append(IndexEntry(stripped + name, 0, docname, node_id, "", "", ""))
+            entries.append(IndexEntry(stripped + name, 0,
+                           docname, node_id, "", "", ""))
 
         # sort by first letter
         sorted_content = sorted(content.items())

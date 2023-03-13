@@ -27,7 +27,6 @@ class TestRepo(base_test_case.BaseTestCase):
         # TODO(lukash) there's no rpmdb in the installroot, create data for the test
         self.repo_sack.get_system_repo().load()
 
-
     def test_load_repo(self):
         repoid = "repomd-repo1"
         repo = self.add_repo_repomd(repoid, load=False)

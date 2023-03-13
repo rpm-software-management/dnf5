@@ -28,7 +28,8 @@ class libdnf5LoggerCB1(libdnf5.logger.Logger):
         self._stream = stream
 
     def log_line(self, level, message):
-        self._stream.write("{}: {}\n".format(self.level_to_cstr(level), message))
+        self._stream.write("{}: {}\n".format(
+            self.level_to_cstr(level), message))
 
     def write(self, time, pid, level, message):
         self._stream.write("Bad message\n")
@@ -41,7 +42,8 @@ class libdnf5LoggerCB2(libdnf5.logger.Logger):
         self._stream = stream
 
     def write(self, time, pid, level, message):
-        self._stream.write("{}: {}\n".format(self.level_to_cstr(level), message))
+        self._stream.write("{}: {}\n".format(
+            self.level_to_cstr(level), message))
 
 
 class TestLoggers(unittest.TestCase):
@@ -92,7 +94,8 @@ class TestLoggers(unittest.TestCase):
         # Create circular memory buffer logger with capacity 10 messages (4 pre-allocated from start).
         max_items_to_keep = 10
         reserve = 4
-        memory_buffer_logger = libdnf5.logger.MemoryBufferLogger(max_items_to_keep, reserve)
+        memory_buffer_logger = libdnf5.logger.MemoryBufferLogger(
+            max_items_to_keep, reserve)
         logger_uniq_ptr = libdnf5.logger.LoggerUniquePtr(memory_buffer_logger)
         log_router.add_logger(logger_uniq_ptr)
 
@@ -103,10 +106,13 @@ class TestLoggers(unittest.TestCase):
         # 2. Write messages into log_router. They will be routed into memory_buffer_logger.
         # ====================
         for i in range(2):
-            log_router.log(libdnf5.logger.Logger.Level_CRITICAL, "Critical message")
+            log_router.log(libdnf5.logger.Logger.Level_CRITICAL,
+                           "Critical message")
             log_router.log(libdnf5.logger.Logger.Level_ERROR, "Error message")
-            log_router.log(libdnf5.logger.Logger.Level_WARNING, "Warning message")
-            log_router.log(libdnf5.logger.Logger.Level_NOTICE, "Notice message")
+            log_router.log(libdnf5.logger.Logger.Level_WARNING,
+                           "Warning message")
+            log_router.log(libdnf5.logger.Logger.Level_NOTICE,
+                           "Notice message")
             log_router.log(libdnf5.logger.Logger.Level_INFO, "Info message")
             log_router.log(libdnf5.logger.Logger.Level_DEBUG, "Debug message")
             log_router.log(libdnf5.logger.Logger.Level_TRACE, "Trace message")
@@ -144,7 +150,8 @@ class TestLoggers(unittest.TestCase):
         # ====================
         # 5. Write aditional message into LogRouter instance.
         # ====================
-        log_router.log(libdnf5.logger.Logger.Level_INFO, "Info additional message")
+        log_router.log(libdnf5.logger.Logger.Level_INFO,
+                       "Info additional message")
 
         # ====================
         # 6. Check content of streams of both StreamLogger instances.

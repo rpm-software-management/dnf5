@@ -25,7 +25,7 @@ class TestCompsIterators(base_test_case.BaseTestCase):
     def test_group_query_iterable(self):
         query = libdnf5.comps.GroupQuery(self.base)
         _ = [grp.get_groupid() for grp in query]
-        
+
     def test_environment_query_iterable(self):
         query = libdnf5.comps.EnvironmentQuery(self.base)
         _ = [env.get_environmentid() for env in query]

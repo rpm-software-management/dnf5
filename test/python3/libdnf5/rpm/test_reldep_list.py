@@ -50,7 +50,8 @@ class TestReldepList(base_test_case.BaseTestCase):
         list1.add(c)
 
         self.assertEqual(list1.get(0), a)
-        self.assertEqual(list1.get(1).to_string(), "(lab-list if labirinto.txt)")
+        self.assertEqual(list1.get(1).to_string(),
+                         "(lab-list if labirinto.txt)")
         self.assertEqual(list1.get_id(2).id, c.get_id().id)
 
     def test_compare(self):
@@ -130,7 +131,8 @@ class TestReldepList(base_test_case.BaseTestCase):
         list1 = libdnf5.rpm.ReldepList(self.base)
         list1.add_reldep_with_glob("pkg*")
 
-        expected = ["pkg", "pkg.conf", "pkg.conf.d", "pkg-libs", "pkg", "pkg", "pkg", "pkg", "pkg", "pkg"]
+        expected = ["pkg", "pkg.conf", "pkg.conf.d", "pkg-libs",
+                    "pkg", "pkg", "pkg", "pkg", "pkg", "pkg"]
         # TODO(dmach): implement __str__()
         result = [reldep.to_string() for reldep in list1]
         self.assertEqual(expected, result)

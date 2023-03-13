@@ -17,5 +17,3 @@ Goal structures and enums
 .. doxygenenum:: libdnf::GoalSetting
 
 .. doxygenenum:: libdnf::GoalUsedSetting
-
-

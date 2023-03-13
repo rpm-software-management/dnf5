@@ -19,13 +19,15 @@ import dbus
 
 import support
 
+
 class InstallTest(support.InstallrootCase):
 
     def test_install_package(self):
         # install a package
         self.iface_rpm.install(['one'], dbus.Dictionary({}, signature='sv'))
 
-        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(
+            dbus.Dictionary({}, signature='sv'))
         self.sanitize_transaction(resolved)
 
         self.assertEqual(result, 0)
@@ -37,7 +39,7 @@ class InstallTest(support.InstallrootCase):
                     dbus.String('Install'),     # action
                     dbus.String('User'),        # reason
                     dbus.Dictionary({           # transaction item attrs
-                        }, signature=dbus.Signature('sv')),
+                    }, signature=dbus.Signature('sv')),
                     dbus.Dictionary({           # package
                         dbus.String('arch'): dbus.String('noarch', variant_level=1),
                         dbus.String('epoch'): dbus.String('0', variant_level=1),
@@ -49,24 +51,26 @@ class InstallTest(support.InstallrootCase):
                         dbus.String('version'): dbus.String('2', variant_level=1),
                         dbus.String('from_repo_id'): dbus.String('', variant_level=1),
                         dbus.String('reason'): dbus.String('None', variant_level=1),
-                        }, signature=dbus.Signature('sv'))),
+                    }, signature=dbus.Signature('sv'))),
                     signature=None)
-                ], signature=dbus.Signature('(ua{sv})'))
-            )
+            ], signature=dbus.Signature('(ua{sv})'))
+        )
 
         self.iface_goal.do_transaction(dbus.Dictionary({}, signature='sv'))
 
     def test_install_no_skip_unavailable(self):
         '''with skip_unavailable=False attempt to install nonexistent package returns error'''
-        self.iface_rpm.install(['no_one'], dbus.Dictionary({'skip_unavailable': False}, signature='sv'))
-        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        self.iface_rpm.install(['no_one'], dbus.Dictionary(
+            {'skip_unavailable': False}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(
+            dbus.Dictionary({}, signature='sv'))
 
         self.assertEqual(result, 2)
         self.assertCountEqual(
             resolved,
             dbus.Array([
-                ], signature=dbus.Signature('(ua{sv})'))
-            )
+            ], signature=dbus.Signature('(ua{sv})'))
+        )
 
         errors = self.iface_goal.get_transaction_problems_string()
         self.assertEqual(errors, dbus.Array([
@@ -77,16 +81,18 @@ class InstallTest(support.InstallrootCase):
         with skip_unavailable=True attempt to install nonexistent package returns empty
         transaction
         '''
-        self.iface_rpm.install(['no_one'], dbus.Dictionary({'skip_unavailable': True}, signature='sv'))
+        self.iface_rpm.install(['no_one'], dbus.Dictionary(
+            {'skip_unavailable': True}, signature='sv'))
 
-        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(
+            dbus.Dictionary({}, signature='sv'))
 
         self.assertEqual(result, 1)
         self.assertCountEqual(
             resolved,
             dbus.Array([
-                ], signature=dbus.Signature('(ua{sv})'))
-            )
+            ], signature=dbus.Signature('(ua{sv})'))
+        )
 
         errors = self.iface_goal.get_transaction_problems_string()
         self.assertEqual(errors, dbus.Array([
@@ -96,15 +102,17 @@ class InstallTest(support.InstallrootCase):
         '''
         attempt to install package from repo that does not contain it return error
         '''
-        self.iface_rpm.install(['one'], dbus.Dictionary({'repo_ids': ['rpm-repo2']}, signature='sv'))
-        resolved, result = self.iface_goal.resolve(dbus.Dictionary({}, signature='sv'))
+        self.iface_rpm.install(['one'], dbus.Dictionary(
+            {'repo_ids': ['rpm-repo2']}, signature='sv'))
+        resolved, result = self.iface_goal.resolve(
+            dbus.Dictionary({}, signature='sv'))
 
         self.assertEqual(result, 2)
         self.assertCountEqual(
             resolved,
             dbus.Array([
-                ], signature=dbus.Signature("(ua{sv})")),
-            )
+            ], signature=dbus.Signature("(ua{sv})")),
+        )
 
         errors = self.iface_goal.get_transaction_problems_string()
         self.assertEqual(errors, dbus.Array([

@@ -1,0 +1,23 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v3.2.0
+  hooks:
+  - id: trailing-whitespace
+    exclude:
+       test/libdnf/iniparser/test_iniparser.cpp
+  - id: end-of-file-fixer
+  - id: check-xml
+  - id: check-added-large-files
+  - id: check-merge-conflict
+- repo: https://github.com/pre-commit/mirrors-clang-format
+  rev: v15.0.7
+  hooks:
+  - id: clang-format
+    types_or:
+    - c++
+- repo: https://github.com/pre-commit/mirrors-autopep8
+  rev: v2.0.2
+  hooks:
+  - id: autopep8

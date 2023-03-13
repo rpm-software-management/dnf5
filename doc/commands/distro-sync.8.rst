@@ -31,8 +31,8 @@ Synopsis
 Description
 ===========
 
-The ``distro-sync`` command in ``DNF5`` serves to synchronize the installed packages 
-with their latest available version from any enabled repository. It upgrades, downgrades 
+The ``distro-sync`` command in ``DNF5`` serves to synchronize the installed packages
+with their latest available version from any enabled repository. It upgrades, downgrades
 or keeps packages as needed.
 
 Optional ``package-spec`` arguments could be passed to select only specific packages to be synced.
@@ -59,4 +59,3 @@ See Also
 ========
 
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
-

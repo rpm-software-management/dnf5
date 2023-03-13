@@ -7,4 +7,3 @@ Creating and configuring a session
 .. literalinclude:: ../../tests/bindings/python3/session/create_base.py
     :language: python
     :linenos:
-

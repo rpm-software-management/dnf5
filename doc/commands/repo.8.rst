@@ -31,7 +31,7 @@ Synopsis
 Description
 ===========
 
-The ``repo`` command in ``DNF5`` offers several queries for getting information 
+The ``repo`` command in ``DNF5`` offers several queries for getting information
 about repositories configured on the system.
 
 
@@ -67,4 +67,3 @@ Examples
 
 ``dnf5 repo list --disabled *-debuginfo``
     | Print disabled repositories related to debugging.
-

@@ -21,7 +21,7 @@
 ################################
 
 ..
-    # TODO(jkolarik): unify first man page structure with the help output, especially the commands 
+    # TODO(jkolarik): unify first man page structure with the help output, especially the commands
                       grouping - think about it, some groups and related commands don't make much sense
     # TODO(jkolarik): add notes about mutually exclusive options
     # TODO(jkolarik): add crosslinks where possible
@@ -37,7 +37,7 @@ Synopsis
 Description
 ===========
 
-`DNF5`_ is the new version of `DNF`_, a package manager for RPM-based Linux distributions. It has been completely 
+`DNF5`_ is the new version of `DNF`_, a package manager for RPM-based Linux distributions. It has been completely
 rewritten in C++ aiming for better performance and reducing external dependencies.
 
 
@@ -60,10 +60,10 @@ For more details see the separate man page for the specific command, f.e. ``man 
     | Downgrade packages.
 
 :ref:`download <download_command_ref-label>`
-    | Download packages. 
+    | Download packages.
 
 :ref:`environment <environment_command_ref-label>`
-    | Manage comps environments. 
+    | Manage comps environments.
 
 :ref:`group <group_command_ref-label>`
     | Manage comps groups.
@@ -84,7 +84,7 @@ For more details see the separate man page for the specific command, f.e. ``man 
     | Remove packages.
 
 :ref:`repo <repo_command_ref-label>`
-    | Manage repositories. 
+    | Manage repositories.
 
 :ref:`repoquery <repoquery_command_ref-label>`
     | Search for packages in repositories.
@@ -105,7 +105,7 @@ For more details see the separate man page for the specific command, f.e. ``man 
 
     # TODO(jkolarik): Module command is not ready yet
     :ref:`module <module_command_ref-label>`
-        | Manage modules. 
+        | Manage modules.
 
 
 Options
@@ -117,15 +117,15 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Automatically answer no for all questions.
 
 ``--best``
-    | Try the best available package versions in transactions. 
+    | Try the best available package versions in transactions.
 
-    Specifically during dnf upgrade, which by default skips over updates that can not be 
-    installed for dependency reasons, the switch forces ``DNF5`` to only consider the latest 
-    packages. When running into packages with broken dependencies, ``DNF5`` will fail giving 
+    Specifically during dnf upgrade, which by default skips over updates that can not be
+    installed for dependency reasons, the switch forces ``DNF5`` to only consider the latest
+    packages. When running into packages with broken dependencies, ``DNF5`` will fail giving
     the reason why the latest version can not be installed.
 
-    Note that the use of the newest available version is only guaranteed for the packages 
-    directly requested (e.g. as a command line arguments), and the solver may use older 
+    Note that the use of the newest available version is only guaranteed for the packages
+    directly requested (e.g. as a command line arguments), and the solver may use older
     versions of dependencies to meet their requirements.
 
 ``--comment=COMMENT``
@@ -180,7 +180,7 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Disable all plugins.
 
 ``-q, --quiet``
-    In combination with a non-interactive command, shows just the relevant content. 
+    In combination with a non-interactive command, shows just the relevant content.
     Suppresses messages notifying about the current state or actions of ``DNF5``.
 
 ``--repo=REPO_ID,...``
@@ -189,15 +189,15 @@ Following options are applicable in the general context for any ``dnf5`` command
     | Accepted values are ids, or a glob of ids.
 
 ``--releasever=RELEASEVER``
-    | Override the value of the distribution release in configuration files. 
+    | Override the value of the distribution release in configuration files.
     | This can affect cache paths, values in configuration files and mirrorlist URLs.
 
 ``--setopt=[REPO_ID.]OPTION=VALUE``
-    | Override a configuration option from the configuration file. 
+    | Override a configuration option from the configuration file.
     | The ``REPO_ID`` parameter is used to override options for repositories.
-    
-    Values for the options like ``excludepkgs``, ``includepkgs``, ``installonlypkgs`` and ``tsflags`` 
-    are appended to the original value, they do not override it. However, specifying an empty 
+
+    Values for the options like ``excludepkgs``, ``includepkgs``, ``installonlypkgs`` and ``tsflags``
+    are appended to the original value, they do not override it. However, specifying an empty
     value (e.g. ``--setopt=tsflags=``) will clear the option.
 
 ``--setvar=VAR_NAME=VALUE``
@@ -217,32 +217,32 @@ Following options are applicable in the general context for any ``dnf5`` command
 Metadata Synchronization
 ========================
 
-Correct operation of ``DNF5`` depends on having an access to up-to-date data from the all enabled 
-repositories, but contacting remote mirrors on every operation considerably slows it down and costs 
-bandwidth for both the client and the repository provider. The ``metadata_expire`` repository configuration 
-option is used by ``DNF5`` to determine whether a particular local copy of repository data is due 
-to be re-synced. It is crucial that the repository providers set the option well, namely to a value 
-where it is guaranteed that if particular metadata was available in time ``T`` on the server, 
-then all packages it references will still be available for download from the server 
+Correct operation of ``DNF5`` depends on having an access to up-to-date data from the all enabled
+repositories, but contacting remote mirrors on every operation considerably slows it down and costs
+bandwidth for both the client and the repository provider. The ``metadata_expire`` repository configuration
+option is used by ``DNF5`` to determine whether a particular local copy of repository data is due
+to be re-synced. It is crucial that the repository providers set the option well, namely to a value
+where it is guaranteed that if particular metadata was available in time ``T`` on the server,
+then all packages it references will still be available for download from the server
 in time ``T + metadata_expire``.
 
-To further reduce the bandwidth load, some of the commands where having up-to-date metadata 
-is not critical (e.g. the ``group list`` command) do not look at whether a repository is expired 
-and whenever any version of it is locally available to the user's account, it will be used. 
+To further reduce the bandwidth load, some of the commands where having up-to-date metadata
+is not critical (e.g. the ``group list`` command) do not look at whether a repository is expired
+and whenever any version of it is locally available to the user's account, it will be used.
 
-For non-root usages it can be also useful running entirely from the system cache, don't update the 
+For non-root usages it can be also useful running entirely from the system cache, don't update the
 cache and use it even in case it is expired by setting the ``cacheonly`` configuration option.
-``DNF5`` uses a separate cache for each user under which it executes. The cache for the root user 
-is called the system cache. This option allows a regular user read-only access to the system cache, 
+``DNF5`` uses a separate cache for each user under which it executes. The cache for the root user
+is called the system cache. This option allows a regular user read-only access to the system cache,
 which usually is more fresh than the user's and thus he does not have to wait for metadata sync.
 
 Configuration Files Replacement Policy
 ======================================
 
-The updated packages could replace the old modified configuration files with the new ones or keep 
-the older files. Neither of the files are actually replaced. To the conflicting ones ``RPM`` 
-gives additional suffix to the origin name. Which file should maintain the true name after 
-transaction is not controlled by package manager, but is specified by each package itself, 
+The updated packages could replace the old modified configuration files with the new ones or keep
+the older files. Neither of the files are actually replaced. To the conflicting ones ``RPM``
+gives additional suffix to the origin name. Which file should maintain the true name after
+transaction is not controlled by package manager, but is specified by each package itself,
 following packaging guideline.
 
 
@@ -325,4 +325,3 @@ Miscellaneous:
 
 Project homepage:
     | https://github.com/rpm-software-management/dnf5
-
