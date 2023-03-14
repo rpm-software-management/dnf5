@@ -53,9 +53,15 @@ Obsoletes:      microdnf < 4
 
 %bcond_with    clang
 %bcond_with    sanitizers
+%if 0%{?rhel} > 8
+%bcond_with tests
+%bcond_with performance_tests
+%bcond_with dnf5daemon_tests
+%else
 %bcond_without tests
 %bcond_with    performance_tests
 %bcond_with    dnf5daemon_tests
+%endif
 
 %if %{with clang}
     %global toolchain clang
