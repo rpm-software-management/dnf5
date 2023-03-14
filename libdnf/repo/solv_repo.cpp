@@ -398,7 +398,11 @@ void SolvRepo::load_repo_ext(RepodataType type, const RepoDownloader & downloade
     }
 
     if (config.get_build_cache_option().get_value()) {
-        write_ext(repo->nrepodata - 1, type);
+        if (type == RepodataType::COMPS) {
+            write_ext(comps_repo->nrepodata - 1, type);
+        } else {
+            write_ext(repo->nrepodata - 1, type);
+        }
     }
 }
 
