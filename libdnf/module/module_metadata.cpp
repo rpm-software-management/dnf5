@@ -168,6 +168,7 @@ std::pair<std::vector<ModuleItem *>, std::vector<ModuleItem *>> ModuleMetadata::
         }
     }
 
+    g_ptr_array_free(streams, TRUE);
     return std::make_pair(module_items, module_items_without_static_context);
 }
 
