@@ -49,7 +49,15 @@ public:
           pool(pool_create()) {
         pool_set_flag(pool, POOL_FLAG_WHATPROVIDESWITHDISABLED, 1);
     }
-    ~Impl() { pool_free(pool); }
+    ~Impl() {
+        //TODO(amatej): Perhaps it would be good to create and use ModulePool which would take care of considered.
+        //              It would also unify the approach with CompsPool and RpmPool.
+        if (pool->considered) {
+            map_free(pool->considered);
+            g_free(pool->considered);
+        }
+        pool_free(pool);
+    }
 
     const std::vector<std::unique_ptr<ModuleItem>> & get_modules();
 

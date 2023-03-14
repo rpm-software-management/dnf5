@@ -47,7 +47,7 @@ void ModuleTest::test_load() {
     auto module_sack = base.get_module_sack();
     CPPUNIT_ASSERT_EQUAL((size_t)10, module_sack->get_modules().size());
 
-    ModuleQuery query = *new ModuleQuery(base, false);
+    ModuleQuery query = ModuleQuery(base, false);
     query.filter_name("meson");
     auto meson = query.get();
     CPPUNIT_ASSERT_EQUAL(std::string("meson"), meson.get_name());
