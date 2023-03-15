@@ -120,13 +120,14 @@ void StateTest::test_state_read() {
     libdnf::system::GroupState grp_state_2{.userinstalled = false, .packages = {"pkg1", "pkg2"}};
     CPPUNIT_ASSERT_EQUAL(grp_state_2, state.get_group_state("group-2"));
 
-    CPPUNIT_ASSERT_EQUAL(std::string("stream-1"), state.get_module_enabled_stream("module-1"));
-    CPPUNIT_ASSERT_EQUAL(libdnf::module::ModuleState::ENABLED, state.get_module_state("module-1"));
-    std::vector<std::string> module_1_installed_profiles{"zigg", "zagg"};
-    CPPUNIT_ASSERT_EQUAL(module_1_installed_profiles, state.get_module_installed_profiles("module-1"));
-    CPPUNIT_ASSERT_EQUAL(std::string("stream-2"), state.get_module_enabled_stream("module-2"));
-    CPPUNIT_ASSERT_EQUAL(libdnf::module::ModuleState::DISABLED, state.get_module_state("module-2"));
-
+    libdnf::system::ModuleState module_state_1{
+        .enabled_stream = "stream-1",
+        .state = libdnf::module::ModuleState::ENABLED,
+        .installed_profiles = {"zigg", "zagg"}};
+    CPPUNIT_ASSERT_EQUAL(module_state_1, state.get_module_state("module-1"));
+    libdnf::system::ModuleState module_state_2{
+        .enabled_stream = "stream-2", .state = libdnf::module::ModuleState::DISABLED};
+    CPPUNIT_ASSERT_EQUAL(module_state_2, state.get_module_state("module-2"));
     CPPUNIT_ASSERT_EQUAL(std::string("foo"), state.get_rpmdb_cookie());
 }
 
@@ -146,12 +147,12 @@ void StateTest::test_state_write() {
     state.set_group_state("group-1", {.userinstalled = true, .packages = {"foo", "bar"}});
     state.set_group_state("group-2", {.userinstalled = false, .packages = {"pkg1", "pkg2"}});
 
-    state.set_module_enabled_stream("module-1", "stream-1");
-    state.set_module_state("module-1", libdnf::module::ModuleState::ENABLED);
-    state.set_module_installed_profiles("module-1", {"zigg", "zagg"});
-
-    state.set_module_enabled_stream("module-2", "stream-2");
-    state.set_module_state("module-2", libdnf::module::ModuleState::DISABLED);
+    state.set_module_state(
+        "module-1",
+        {.enabled_stream = "stream-1",
+         .state = libdnf::module::ModuleState::ENABLED,
+         .installed_profiles = {"zigg", "zagg"}});
+    state.set_module_state("module-2", {.enabled_stream = "stream-2", .state = libdnf::module::ModuleState::DISABLED});
 
     state.set_rpmdb_cookie("foo");
 

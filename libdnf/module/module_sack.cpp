@@ -432,7 +432,7 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
         const Id reldep_id = pool_str2id(pool, fmt::format("module({})", module_item->get_name_stream()).c_str(), 1);
 
         try {
-            state = base->p_impl->get_system_state().get_module_state(module_item->get_name());
+            state = base->p_impl->get_system_state().get_module_state(module_item->get_name()).state;
         } catch (libdnf::system::StateNotFoundError &) {
             state = ModuleState::AVAILABLE;
         }
@@ -668,6 +668,7 @@ ModuleSack::resolve_active_module_items() {
     p_impl->excludes.reset(new libdnf::solv::SolvMap(p_impl->pool->nsolvables));
 
     auto system_state = p_impl->base->p_impl->get_system_state();
+    system::ModuleState module_state;
     ModuleState state;
     std::string enabled_stream;
     std::vector<ModuleItem *> module_items_to_solve;
@@ -675,8 +676,9 @@ ModuleSack::resolve_active_module_items() {
     for (const auto & module_item : get_modules()) {
         const auto & module_name = module_item->get_name();
         try {
-            state = system_state.get_module_state(module_name);
-            enabled_stream = system_state.get_module_enabled_stream(module_name);
+            module_state = system_state.get_module_state(module_name);
+            state = module_state.state;
+            enabled_stream = module_state.enabled_stream;
         } catch (libdnf::system::StateNotFoundError &) {
             state = ModuleState::AVAILABLE;
         }
