@@ -45,8 +45,25 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 namespace {
 
 void add_obsoletes_to_data(const libdnf::rpm::PackageQuery & base_query, libdnf::rpm::PackageSet & data) {
+    libdnf::rpm::PackageQuery data_query(data);
+
+    // In case there is an installed package in the `data` behave consistently
+    // with upgrade and add all the obsoleters.
+    libdnf::rpm::PackageQuery installed_data(data_query);
+    installed_data.filter_installed();
+
+    if (installed_data.empty()) {
+        // If there is no installed package in the `data`, add only obsoleters
+        // of the latest versions.  This should prevent unexpected results in
+        // case a package has multiple versions and some older version is being
+        // obsoleted.
+        // See also https://bugzilla.redhat.com/show_bug.cgi?id=2176263
+        data_query.filter_priority();
+        data_query.filter_latest_evr();
+    }
+
     libdnf::rpm::PackageQuery obsoletes_query(base_query);
-    obsoletes_query.filter_obsoletes(data);
+    obsoletes_query.filter_obsoletes(data_query);
     data |= obsoletes_query;
 }
 
