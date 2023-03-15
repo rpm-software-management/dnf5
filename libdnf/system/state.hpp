@@ -63,7 +63,7 @@ class ModuleState {
 public:
     std::string enabled_stream;
     module::ModuleState state{module::ModuleState::AVAILABLE};
-    std::vector<std::string> installed_profiles;
+    std::vector<std::string> installed_profiles{};
 };
 
 class SystemState {
@@ -190,21 +190,19 @@ public:
     /// @since 5.0
     void remove_environment_state(const std::string & id);
 
+    /// @return The state of a module.
+    /// @param name The module id to get the state for.
+    /// @since 5.0.8
+    ModuleState get_module_state(const std::string & name);
 
-    std::string get_module_enabled_stream(const std::string & name);
+    /// Sets the state for a module name.
+    /// @param name The module name to set the state for.
+    /// @since 5.0.8
+    void set_module_state(const std::string & name, const ModuleState & module_state);
 
-    void set_module_enabled_stream(const std::string & name, const std::string & stream);
-
-    module::ModuleState get_module_state(const std::string & name);
-
-    // TODO(lukash) if not called, the state will be the default value: ModuleState::AVAILABLE
-    // might be better to ensure this always gets set?
-    void set_module_state(const std::string & name, module::ModuleState state);
-
-    std::vector<std::string> get_module_installed_profiles(const std::string & name);
-
-    void set_module_installed_profiles(const std::string & name, const std::vector<std::string> & profiles);
-
+    /// Removes the state for a module name.
+    /// @param name The module name to remove the state for.
+    /// @since 5.0.8
     void remove_module_state(const std::string & name);
 
     /// @return The rpmdb cookie from system state toml.

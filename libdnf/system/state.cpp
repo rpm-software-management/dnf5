@@ -379,48 +379,18 @@ std::vector<std::string> State::get_installed_groups() {
 }
 
 
-std::string State::get_module_enabled_stream(const std::string & name) {
+ModuleState State::get_module_state(const std::string & name) {
     auto it = module_states.find(name);
     if (it == module_states.end()) {
         throw StateNotFoundError("Module", name);
     }
 
-    return it->second.enabled_stream;
+    return it->second;
 }
 
 
-void State::set_module_enabled_stream(const std::string & name, const std::string & stream) {
-    module_states[name].enabled_stream = stream;
-}
-
-
-module::ModuleState State::get_module_state(const std::string & name) {
-    auto it = module_states.find(name);
-    if (it == module_states.end()) {
-        throw StateNotFoundError("Module", name);
-    }
-
-    return it->second.state;
-}
-
-
-void State::set_module_state(const std::string & name, module::ModuleState state) {
-    module_states[name].state = state;
-}
-
-
-std::vector<std::string> State::get_module_installed_profiles(const std::string & name) {
-    auto it = module_states.find(name);
-    if (it == module_states.end()) {
-        throw StateNotFoundError("Module", name);
-    }
-
-    return it->second.installed_profiles;
-}
-
-
-void State::set_module_installed_profiles(const std::string & name, const std::vector<std::string> & profiles) {
-    module_states[name].installed_profiles = profiles;
+void State::set_module_state(const std::string & name, const ModuleState & module_state) {
+    module_states[name] = module_state;
 }
 
 
