@@ -32,7 +32,7 @@ Description
 ===========
 
 The ``download`` command in ``DNF5`` is used for downloading binary and source packages
-defined in ``package-spec`` arguments.
+defined in ``package-spec`` arguments to the current working directory.
 
 
 Options
