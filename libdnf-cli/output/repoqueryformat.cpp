@@ -19,9 +19,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 
 #include "fmt/args.h"
+#include "utils/bgettext/bgettext-mark-domain.h"
 
 #include "libdnf-cli/output/repoquery.hpp"
 
+#include <set>
 #include <variant>
 
 namespace libdnf::cli::output {
@@ -218,6 +220,35 @@ void print_pkg_set_with_format(
 
     for (const auto & line : output) {
         fmt::print(target, "{}", line);
+    }
+}
+
+void print_pkg_attr_uniq_sorted(
+    std::FILE * target, const libdnf::rpm::PackageSet & pkgs, const std::string & getter_name) {
+    auto getter = NAME_TO_GETTER.find(getter_name);
+    if (getter == NAME_TO_GETTER.end()) {
+        throw RuntimeError(M_("package getter: %s not available"), getter_name);
+    }
+    std::set<std::string> output;
+    for (auto package : pkgs) {
+        std::visit(
+            [&output, &package](const auto & getter_func) {
+                using T = std::decay_t<decltype(getter_func)>;
+                if constexpr (std::is_same_v<T, ReldepListGetter>) {
+                    for (const auto & reldep : (package.*getter_func)()) {
+                        output.insert(std::move(reldep.to_string()));
+                    }
+                } else if constexpr (std::is_same_v<T, UnsignedLongLongGetter>) {
+                    output.insert(std::move(std::to_string((package.*getter_func)())));
+                } else {
+                    output.insert(std::move((package.*getter_func)()));
+                }
+            },
+            getter->second);
+    }
+
+    for (const auto & line : output) {
+        fmt::print(target, "{}\n", line);
     }
 }
 

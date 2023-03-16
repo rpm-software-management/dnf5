@@ -142,3 +142,38 @@ void RepoqueryTest::test_format_set_with_tags_with_spacing() {
         std::string(buf));
     free(buf);
 }
+
+void RepoqueryTest::test_pkg_attr_uniq_sorted() {
+    FILE * stream = nullptr;
+    char * buf = nullptr;
+    size_t len = 0;
+
+    // requires
+    stream = open_memstream(&buf, &len);
+    libdnf::cli::output::print_pkg_attr_uniq_sorted(stream, *pkgs, "requires");
+    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
+    CPPUNIT_ASSERT_EQUAL(std::string("prereq\nreq = 1:2-3\n"), std::string(buf));
+    free(buf);
+
+    // provides
+    stream = open_memstream(&buf, &len);
+    libdnf::cli::output::print_pkg_attr_uniq_sorted(stream, *pkgs, "provides");
+    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
+    CPPUNIT_ASSERT_EQUAL(
+        std::string("pkg = 1.2-3\npkg-libs = 1:1.3-4\nprv = 1:2-3\nunresolvable = 1:2-3\n"), std::string(buf));
+    free(buf);
+
+    // name
+    stream = open_memstream(&buf, &len);
+    libdnf::cli::output::print_pkg_attr_uniq_sorted(stream, *pkgs, "name");
+    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
+    CPPUNIT_ASSERT_EQUAL(std::string("pkg\npkg-libs\nunresolvable\n"), std::string(buf));
+    free(buf);
+
+    // deduplicated buildtimes
+    stream = open_memstream(&buf, &len);
+    libdnf::cli::output::print_pkg_attr_uniq_sorted(stream, *pkgs, "buildtime");
+    CPPUNIT_ASSERT_EQUAL(fclose(stream), 0);
+    CPPUNIT_ASSERT_EQUAL(std::string("456\n"), std::string(buf));
+    free(buf);
+}
