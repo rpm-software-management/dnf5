@@ -294,10 +294,10 @@ template <class Transaction>
 void print_resolve_logs(Transaction transaction) {
     const std::vector<std::string> logs = transaction.get_resolve_logs_as_strings();
     for (const auto & log : logs) {
-        std::cout << log << std::endl;
+        std::cerr << log << std::endl;
     }
     if (logs.size() > 0) {
-        std::cout << std::endl;
+        std::cerr << std::endl;
     }
 }
 
