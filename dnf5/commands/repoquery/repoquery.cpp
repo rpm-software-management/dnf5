@@ -63,6 +63,7 @@ void RepoqueryCommand::set_argument_parser() {
 
     auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
+    //TODO(amatej): Unify description of all repoquery options to use the same wording
     available->set_description("display available packages (default)");
     available->set_const_value("true");
     available->link_value(available_option);
@@ -223,9 +224,45 @@ void RepoqueryCommand::set_argument_parser() {
     advisory_bz = std::make_unique<BzOption>(*this);
     advisory_cve = std::make_unique<CveOption>(*this);
 
+    std::vector<std::string> pkg_attrs_options{
+        "conflicts",
+        "enhances",
+        "obsoletes",
+        "provides",
+        "recommends",
+        "requires",
+        "requires-pre",
+        "suggests",
+        "supplements",
+        "",  // empty when option is not used
+    };
+    pkg_attr_option = dynamic_cast<libdnf::OptionEnum<std::string> *>(
+        parser.add_init_value(std::make_unique<libdnf::OptionEnum<std::string>>("", pkg_attrs_options)));
+
+    auto * repoquery_formatting = get_context().get_argument_parser().add_new_group("repoquery_formatting");
+    repoquery_formatting->set_header("Formatting:");
+    cmd.register_group(repoquery_formatting);
+
+    // remove the last empty ("") option, it should not be an arg
+    pkg_attrs_options.pop_back();
+    for (const auto & pkg_attr : pkg_attrs_options) {
+        auto * arg = parser.add_new_named_arg(pkg_attr);
+        arg->set_long_name(pkg_attr);
+        arg->set_description("Like --queryformat=\"%{" + pkg_attr + "}\" but deduplicated and sorted.");
+        arg->set_has_value(false);
+        arg->set_const_value(pkg_attr);
+        arg->link_value(pkg_attr_option);
+        repoquery_formatting->register_argument(arg);
+        cmd.register_named_arg(arg);
+    }
+    repoquery_formatting->register_argument(info);
+    cmd.register_named_arg(info);
+    repoquery_formatting->register_argument(query_format);
+    cmd.register_named_arg(query_format);
+
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);
-    cmd.register_named_arg(info);
+
     cmd.register_named_arg(whatdepends);
     cmd.register_named_arg(whatconflicts);
     cmd.register_named_arg(whatprovides);
@@ -235,7 +272,7 @@ void RepoqueryCommand::set_argument_parser() {
     cmd.register_named_arg(whatenhances);
     cmd.register_named_arg(whatsupplements);
     cmd.register_named_arg(whatsuggests);
-    cmd.register_named_arg(query_format);
+
     cmd.register_positional_arg(keys);
 }
 
@@ -451,6 +488,8 @@ void RepoqueryCommand::run() {
             libdnf::cli::output::print_package_info_table(package);
             std::cout << '\n';
         }
+    } else if (!pkg_attr_option->get_value().empty()) {
+        libdnf::cli::output::print_pkg_attr_uniq_sorted(stdout, result_pset, pkg_attr_option->get_value());
     } else {
         libdnf::cli::output::print_pkg_set_with_format(stdout, result_pset, query_format_option->get_value());
     }

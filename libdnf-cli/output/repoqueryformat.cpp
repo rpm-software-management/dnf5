@@ -58,7 +58,8 @@ static const std::unordered_map<std::string, Getter> NAME_TO_GETTER = {
     {"description", &libdnf::rpm::Package::get_description},
     {"provides", &libdnf::rpm::Package::get_provides},
     {"requires", &libdnf::rpm::Package::get_requires},
-    {"requires_pre", &libdnf::rpm::Package::get_requires_pre},
+    {"requires_pre", &libdnf::rpm::Package::get_requires_pre},  // this is for --repoformat="%{requires_pre}"
+    {"requires-pre", &libdnf::rpm::Package::get_requires_pre},  // this is for option --requires-pre
     {"conflicts", &libdnf::rpm::Package::get_conflicts},
     {"obsoletes", &libdnf::rpm::Package::get_obsoletes},
     {"prereq_ignoreinst", &libdnf::rpm::Package::get_prereq_ignoreinst},
