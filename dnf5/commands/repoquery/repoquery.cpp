@@ -57,9 +57,6 @@ void RepoqueryCommand::set_argument_parser() {
     info_option = dynamic_cast<libdnf::OptionBool *>(
         parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(false))));
 
-    nevra_option = dynamic_cast<libdnf::OptionBool *>(
-        parser.add_init_value(std::unique_ptr<libdnf::OptionBool>(new libdnf::OptionBool(true))));
-
     // The default format is full_nevra
     query_format_option = dynamic_cast<libdnf::OptionString *>(
         parser.add_init_value(std::make_unique<libdnf::OptionString>("%{full_nevra}\n")));
@@ -81,12 +78,6 @@ void RepoqueryCommand::set_argument_parser() {
     info->set_description("show detailed information about the packages");
     info->set_const_value("true");
     info->link_value(info_option);
-
-    auto nevra = parser.add_new_named_arg("nevra");
-    nevra->set_long_name("nevra");
-    nevra->set_description("use name-epoch:version-release.architecture format for displaying packages (default)");
-    nevra->set_const_value("true");
-    nevra->link_value(nevra_option);
 
     auto query_format = parser.add_new_named_arg("queryformat");
     query_format->set_long_name("queryformat");
@@ -113,8 +104,6 @@ void RepoqueryCommand::set_argument_parser() {
             return match_specs(ctx, arg, false, true, true, false);
         }
     });
-
-    info->add_conflict_argument(*nevra);
 
     whatdepends_option = dynamic_cast<libdnf::OptionStringList *>(
         parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
@@ -237,7 +226,6 @@ void RepoqueryCommand::set_argument_parser() {
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);
     cmd.register_named_arg(info);
-    cmd.register_named_arg(nevra);
     cmd.register_named_arg(whatdepends);
     cmd.register_named_arg(whatconflicts);
     cmd.register_named_arg(whatprovides);
