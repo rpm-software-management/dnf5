@@ -65,6 +65,7 @@ private:
     std::unique_ptr<libdnf::cli::session::BoolOption> duplicates{nullptr};
 
     libdnf::OptionString * query_format_option{nullptr};
+    libdnf::OptionEnum<std::string> * pkg_attr_option{nullptr};
 
     std::unique_ptr<AdvisoryOption> advisory_name{nullptr};
     std::unique_ptr<SecurityOption> advisory_security{nullptr};
