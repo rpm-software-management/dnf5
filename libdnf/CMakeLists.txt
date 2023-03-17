@@ -90,7 +90,7 @@ target_include_directories(libdnf PRIVATE ${LIBREPO_INCLUDE_DIRS})
 target_link_libraries(libdnf ${LIBREPO_LDFLAGS})
 
 # SQLite3
-pkg_check_modules(SQLite3 REQUIRED sqlite3)
+pkg_check_modules(SQLite3 REQUIRED sqlite3>=3.35.0)
 list(APPEND LIBDNF5_PC_REQUIRES "${SQLite3_MODULE_NAME}")
 target_link_libraries(libdnf ${SQLite3_LIBRARIES})
 
