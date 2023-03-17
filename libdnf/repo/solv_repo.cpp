@@ -398,7 +398,8 @@ void SolvRepo::load_system_repo(const std::string & rootdir) {
 
     int solvables_start = pool->nsolvables;
 
-    int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR;
+    // TODO(egoode) investigate performance hit of RPM_ADD_WITH_CHANGELOG, possibly make this configurable
+    int flagsrpm = REPO_REUSE_REPODATA | RPM_ADD_WITH_HDRID | REPO_USE_ROOTDIR | RPM_ADD_WITH_CHANGELOG;
     if (repo_add_rpmdb(repo, nullptr, flagsrpm) != 0) {
         throw SolvError(
             M_("Failed to load system repo from root \"{}\": {}"),
