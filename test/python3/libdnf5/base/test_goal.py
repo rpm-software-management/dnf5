@@ -50,3 +50,21 @@ class TestGoal(unittest.TestCase):
         goal.add_install('https://i-dont-exist.com')
 
         self.assertRaises(RuntimeError, goal.resolve)
+
+    def test_unsupported_argument_add_remove(self):
+        # Try passing unsupported argument to add_remove() method
+        base = libdnf5.base.Base()
+        base.setup()
+
+        goal = libdnf5.base.Goal(base)
+
+        self.assertRaises(RuntimeError, goal.add_remove, 'pkg.rpm')
+
+    def test_group_rpm_reason_change_without_id(self):
+        # Try changing group reason without group_id
+        base = libdnf5.base.Base()
+        base.setup()
+
+        goal = libdnf5.base.Goal(base)
+
+        self.assertRaises(RuntimeError, goal.add_rpm_reason_change, '@fake-group-spec', libdnf5.base.transaction.TransactionItemReason_GROUP, '')
