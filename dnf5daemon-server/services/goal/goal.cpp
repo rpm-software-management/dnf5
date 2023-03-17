@@ -39,6 +39,13 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string>
 #include <vector>
 
+#define transaction_resolved_assert()                                                                  \
+    ({                                                                                                 \
+        if (!session.get_transaction()) {                                                              \
+            throw sdbus::Error(dnfdaemon::ERROR_TRANSACTION, "Transaction has to be resolved first."); \
+        }                                                                                              \
+    })
+
 void Goal::dbus_register() {
     auto dbus_object = session.get_dbus_object();
     // TODO(mblaha) Adjust resolve method to accomodate also groups, environments,
@@ -140,6 +147,7 @@ sdbus::MethodReply Goal::resolve(sdbus::MethodCall & call) {
 
 
 sdbus::MethodReply Goal::get_transaction_problems_string(sdbus::MethodCall & call) {
+    transaction_resolved_assert();
     auto reply = call.createReply();
     reply << session.get_transaction()->get_resolve_logs_as_strings();
     return reply;
@@ -147,6 +155,7 @@ sdbus::MethodReply Goal::get_transaction_problems_string(sdbus::MethodCall & cal
 
 
 sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
+    transaction_resolved_assert();
     auto * transaction = session.get_transaction();
 
     auto resolve_logs = transaction->get_resolve_logs();
@@ -210,6 +219,7 @@ void download_packages(Session & session, libdnf::base::Transaction & transactio
 }
 
 sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
+    transaction_resolved_assert();
     if (!session.check_authorization(dnfdaemon::POLKIT_EXECUTE_RPM_TRANSACTION, call.getSender())) {
         throw std::runtime_error("Not authorized");
     }
