@@ -247,8 +247,8 @@ void Repo::load() {
 }
 
 void Repo::load_extra_system_repo(const std::string & rootdir) {
-    libdnf_assert(type == Type::SYSTEM, "repo type must be SYSTEM to load an extra system repo");
-    libdnf_assert(solv_repo, "repo must be loaded to load an extra system repo");
+    libdnf_user_assert(type == Type::SYSTEM, "repo type must be SYSTEM to load an extra system repo");
+    libdnf_user_assert(solv_repo, "repo must be loaded to load an extra system repo");
     solv_repo->load_system_repo(rootdir);
 }
 
