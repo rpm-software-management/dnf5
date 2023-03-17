@@ -63,6 +63,7 @@ Obsoletes:      microdnf < 4
 %global libmodulemd_version 2.5.0
 %global librepo_version 1.15.0
 %global libsolv_version 0.7.21
+%global sqlite_version 3.35.0
 %global swig_version 4
 %global zchunk_version 0.9.11
 
@@ -81,7 +82,7 @@ BuildRequires:  pkgconfig(librepo) >= %{librepo_version}
 BuildRequires:  pkgconfig(libsolv) >= %{libsolv_version}
 BuildRequires:  pkgconfig(libsolvext) >= %{libsolv_version}
 BuildRequires:  pkgconfig(rpm) >= 4.17.0
-BuildRequires:  pkgconfig(sqlite3)
+BuildRequires:  pkgconfig(sqlite3) >= %{sqlite_version}
 BuildRequires:  toml11-static
 
 %if %{with clang}
@@ -236,6 +237,7 @@ License:        LGPL-2.1-or-later
 #Requires:       libmodulemd{?_isa} >= {libmodulemd_version}
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
+Requires:       sqlite-libs{%?_isa} >= %{sqlite_version}
 
 %description -n libdnf5
 Package management library.
