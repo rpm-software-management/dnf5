@@ -118,7 +118,7 @@ public:
     /// @since 1.0
     bool is_locked() const noexcept;
 
-    /// Asserts the option is not locked and throws a `libdnf::AssertionError` in case it is.
+    /// Asserts the option is not locked and throws a `libdnf::UserAssertionError` in case it is.
     ///
     /// @since 1.0
     void assert_not_locked() const;
@@ -159,7 +159,7 @@ inline bool Option::is_locked() const noexcept {
 }
 
 inline void Option::assert_not_locked() const {
-    libdnf_assert(!locked, "Attempting to write to a locked option: {}", get_lock_comment());
+    libdnf_user_assert(!locked, "Attempting to write to a locked option: {}", get_lock_comment());
 }
 
 inline const std::string & Option::get_lock_comment() const noexcept {
