@@ -237,7 +237,7 @@ License:        LGPL-2.1-or-later
 #Requires:       libmodulemd{?_isa} >= {libmodulemd_version}
 Requires:       libsolv%{?_isa} >= %{libsolv_version}
 Requires:       librepo%{?_isa} >= %{librepo_version}
-Requires:       sqlite-libs{%?_isa} >= %{sqlite_version}
+Requires:       sqlite-libs%{?_isa} >= %{sqlite_version}
 
 %description -n libdnf5
 Package management library.
