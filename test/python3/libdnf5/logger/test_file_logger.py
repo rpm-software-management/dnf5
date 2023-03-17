@@ -28,7 +28,8 @@ class TestFileLogger(base_test_case.BaseTestCase):
         super().setUp()
         config = self.base.get_config()
         config.logdir = "FileLoggerTestLogDir"
-        self.full_log_path = os.path.join(config.installroot, config.logdir, libdnf5.logger.FILE_LOGGER_FILENAME)
+        self.full_log_path = os.path.join(
+            config.installroot, config.logdir, libdnf5.logger.FILE_LOGGER_FILENAME)
 
     def tearDown(self):
         super().tearDown()
@@ -44,7 +45,8 @@ class TestFileLogger(base_test_case.BaseTestCase):
         loggers_count_before = log_router.get_loggers_count()
         logger = libdnf5.logger.create_file_logger(self.base)
         log_router.add_logger(logger)
-        self.assertEqual(loggers_count_before + 1, log_router.get_loggers_count())
+        self.assertEqual(loggers_count_before + 1,
+                         log_router.get_loggers_count())
 
     def test_with_global_logger(self):
         log_router = self.base.get_logger()
