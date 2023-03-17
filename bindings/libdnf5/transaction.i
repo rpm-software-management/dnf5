@@ -14,6 +14,18 @@
 
 %import "common.i"
 
+%exception {
+    try {
+        $action
+    } catch (const libdnf::UserAssertionError & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const libdnf::Error & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const std::runtime_error & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    }
+}
+
 %{
     // enums
     #include "libdnf/transaction/transaction_item_action.hpp"
