@@ -112,10 +112,10 @@ void OptionTest::test_options_bool() {
     CPPUNIT_ASSERT_THROW(option2.set(Option::Priority::RUNTIME, std::string("invalid")), OptionInvalidValueError);
 
     option.lock("option locked by test_options_bool");
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, true), AssertionError);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, false), AssertionError);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, std::string("true")), AssertionError);
-    CPPUNIT_ASSERT_THROW(option.set(true), AssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, true), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, false), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, std::string("true")), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(true), UserAssertionError);
 }
 
 
@@ -148,9 +148,9 @@ void OptionTest::test_options_child() {
 
     ochild.set(Option::Priority::RUNTIME, true);
     ochild.lock("ochild_bool locked by test_option_child");
-    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, true), AssertionError);
-    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, false), AssertionError);
-    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, std::string("true")), AssertionError);
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, true), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, false), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(ochild.set(Option::Priority::RUNTIME, std::string("true")), UserAssertionError);
 }
 
 void OptionTest::test_options_enum() {
@@ -170,8 +170,8 @@ void OptionTest::test_options_enum() {
 
     option.set(Option::Priority::RUNTIME, "aa");
     option.lock("option locked by test_option_enum");
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "aa"), AssertionError);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "dd"), AssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "aa"), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "dd"), UserAssertionError);
 }
 
 void OptionTest::test_options_number() {
@@ -195,8 +195,8 @@ void OptionTest::test_options_number() {
 
     option.set(Option::Priority::RUNTIME, 1);
     option.lock("option locked by test_option_number");
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, 1), AssertionError);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, 2), AssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, 1), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, 2), UserAssertionError);
 }
 
 void OptionTest::test_options_path() {
@@ -216,8 +216,8 @@ void OptionTest::test_options_path() {
     CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "not_absolute"), OptionValueNotAllowedError);
 
     option.lock("option locked by test_option_path");
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "/path2"), AssertionError);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "/next"), AssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "/path2"), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "/next"), UserAssertionError);
 }
 
 
@@ -242,8 +242,8 @@ void OptionTest::test_options_seconds() {
 
     option.set(Option::Priority::RUNTIME, 12);
     option.lock("option locked by test_option_seconds");
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, 12), AssertionError);
-    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, 10), AssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, 12), UserAssertionError);
+    CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, 10), UserAssertionError);
 
     OptionSeconds option2(DEFAULT);
     option2.set(Option::Priority::RUNTIME, "5s");
@@ -295,8 +295,8 @@ void OptionTest::test_options_string() {
         CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "drain"), OptionValueNotAllowedError);
 
         option.lock("option locked by test_option_string");
-        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
-        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), AssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), UserAssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), UserAssertionError);
     }
 
     {
@@ -318,8 +318,8 @@ void OptionTest::test_options_string() {
         CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "drain"), OptionValueNotAllowedError);
 
         option.lock("option locked by test_option_string");
-        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
-        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), AssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), UserAssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), UserAssertionError);
     }
 }
 
@@ -358,8 +358,8 @@ void OptionTest::test_options_string_list() {
         CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donutX, drain"), OptionValueNotAllowedError);
 
         option.lock("option locked by test_option_string_list");
-        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
-        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), AssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), UserAssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), UserAssertionError);
     }
 
     {
@@ -396,8 +396,8 @@ void OptionTest::test_options_string_list() {
         CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "donutX, drain"), OptionValueNotAllowedError);
 
         option.lock("option locked by test_option_string_list");
-        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), AssertionError);
-        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), AssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "doXXnut"), UserAssertionError);
+        CPPUNIT_ASSERT_THROW(option.set(Option::Priority::RUNTIME, "invalid"), UserAssertionError);
     }
 }
 
