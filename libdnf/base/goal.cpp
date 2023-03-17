@@ -285,7 +285,7 @@ void Goal::add_rpm_reason_change(
     const libdnf::transaction::TransactionItemReason reason,
     const std::string & group_id,
     const libdnf::GoalJobSettings & settings) {
-    libdnf_assert(
+    libdnf_user_assert(
         reason != libdnf::transaction::TransactionItemReason::GROUP || !group_id.empty(),
         "group_id is required for setting reason \"GROUP\"");
     p_impl->rpm_reason_change_specs.push_back(std::make_tuple(reason, spec, group_id, settings));
@@ -306,9 +306,7 @@ void Goal::Impl::add_spec(GoalAction action, const std::string & spec, const Goa
         const std::string_view ext(".rpm");
         if (libdnf::utils::url::is_url(spec) || (spec.length() > ext.length() && spec.ends_with(ext))) {
             // spec is a remote rpm file or a local rpm file
-            if (action == GoalAction::REMOVE) {
-                libdnf_throw_assertion("Unsupported argument for REMOVE action: {}", spec);
-            }
+            libdnf_user_assert(action != GoalAction::REMOVE, "Unsupported argument for REMOVE action: {}", spec);
             rpm_filepaths.emplace_back(action, spec, settings);
         } else {
             // otherwise the spec is a repository package
