@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/bgettext/bgettext-mark-domain.h"
 
 #include <dnf5/shared_options.hpp>
+#include <libdnf-cli/output/changelogs.hpp>
 #include <libdnf-cli/output/package_list_sections.hpp>
 #include <libdnf/conf/const.hpp>
 #include <libdnf/rpm/package_query.hpp>
@@ -73,6 +74,9 @@ void CheckUpgradeCommand::configure() {
     context.update_repo_metadata_from_specs(pkg_specs);
     context.set_load_system_repo(true);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
+    if (changelogs->get_value()) {
+        context.base.get_config().get_optional_metadata_types_option().add(libdnf::OPTIONAL_METADATA_TYPES);
+    }
 }
 
 std::unique_ptr<libdnf::cli::output::PackageListSections> CheckUpgradeCommand::create_output() {
@@ -84,34 +88,30 @@ std::unique_ptr<libdnf::cli::output::PackageListSections> CheckUpgradeCommand::c
 void CheckUpgradeCommand::run() {
     auto & ctx = get_context();
 
-    libdnf::rpm::PackageQuery base_query(ctx.base);
+    libdnf::rpm::PackageQuery full_package_query(ctx.base);
+    libdnf::rpm::PackageQuery upgrades_query(ctx.base);
 
     if (!pkg_specs.empty()) {
-        base_query = libdnf::rpm::PackageQuery(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
+        upgrades_query = libdnf::rpm::PackageQuery(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         libdnf::ResolveSpecSettings settings{.with_nevra = true, .with_provides = false, .with_filenames = false};
         for (const auto & spec : pkg_specs) {
-            libdnf::rpm::PackageQuery package_query(base_query);
+            libdnf::rpm::PackageQuery package_query(full_package_query);
             package_query.resolve_pkg_spec(spec, settings, true);
-            base_query |= package_query;
+            upgrades_query |= package_query;
         }
     }
 
-    base_query.filter_upgrades();
+    upgrades_query.filter_upgrades();
+
     auto sections = create_output();
 
-    bool package_matched = sections->add_section("Available upgrades", base_query);
+    bool package_matched = sections->add_section("", upgrades_query);
 
     if (package_matched) {
         sections->print();
 
         if (changelogs->get_value()) {
-            for (const auto & pkg : base_query) {
-                const auto & changelogs = pkg.get_changelogs();
-                std::cout << changelogs.size() << std::endl;
-                for (const auto & changelog : changelogs) {
-                    std::cout << changelog.text << std::endl;
-                }
-            }
+            libdnf::cli::output::print_changelogs(upgrades_query, full_package_query, true, 0, 0);
         }
         throw libdnf::cli::SilentCommandExitError(100, M_(""));
     }
