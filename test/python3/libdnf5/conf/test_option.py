@@ -62,3 +62,11 @@ class TestConfigurationOptions(base_test_case.BaseTestCase):
         config = self.base.get_config()
         config.comment = 'test'
         self.assertEqual(config.comment, 'test')
+
+    def test_writing_to_locked_option(self):
+        config = self.base.get_config()
+
+        option = config.get_cacheonly_option()
+        option.lock('')
+
+        self.assertRaises(RuntimeError, option.set, False)
