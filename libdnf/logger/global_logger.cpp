@@ -30,7 +30,7 @@ static GlibLogHandler * librepo_logger{nullptr};
 static GlibLogHandler * libmodulemd_logger{nullptr};
 
 GlobalLogger::GlobalLogger() {
-    libdnf_assert(librepo_logger == nullptr, "Only one GlobalLogger can exist at a time");
+    libdnf_user_assert(librepo_logger == nullptr, "Only one GlobalLogger can exist at a time");
 }
 
 GlobalLogger::~GlobalLogger() {
