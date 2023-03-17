@@ -18,6 +18,10 @@
 %exception {
     try {
         $action
+    } catch (const libdnf::UserAssertionError & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const libdnf::Error & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
     } catch (const std::runtime_error & e) {
         SWIG_exception(SWIG_RuntimeError, e.what());
     }

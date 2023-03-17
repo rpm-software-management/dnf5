@@ -17,6 +17,10 @@
 %exception {
     try {
         $action
+    } catch (const libdnf::UserAssertionError & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
+    } catch (const libdnf::Error & e) {
+        SWIG_exception(SWIG_RuntimeError, e.what());
     } catch (const std::out_of_range & e) {
         SWIG_exception(SWIG_IndexError, e.what());
     } catch (const std::runtime_error & e) {
@@ -140,3 +144,5 @@ def create_config_option_attributes(cls):
 create_config_option_attributes(ConfigMain)
 %}
 #endif
+
+%exception;  // beware this resets all exception handlers if you import this file after defining any
