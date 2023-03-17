@@ -54,12 +54,9 @@ class TestBase(unittest.TestCase):
         # with self.assertRaisesRegex(RuntimeError, 'Dereferencing an invalidated WeakPtr'):
         #    vars2.get_value("test_variable")
 
-    def test_missing_setup_goal_resolve(self):
-        # Create a new Base object
+    def test_non_existing_config_load(self):
+        # Try to load configuration from non-existing path
         base = libdnf5.base.Base()
+        base.get_config().config_file_path = 'this-path-does-not-exist.conf'
 
-        # Create a new empty Goal
-        goal = libdnf5.base.Goal(base)
-
-        # Try to resolve the goal without running base.setup()
-        self.assertRaises(RuntimeError, goal.resolve)
+        self.assertRaises(RuntimeError, base.load_config_from_file)
