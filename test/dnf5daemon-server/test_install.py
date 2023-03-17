@@ -118,3 +118,42 @@ class InstallTest(support.InstallrootCase):
         self.assertEqual(errors, dbus.Array([
             dbus.String("No match for argument 'one' in repositories 'rpm-repo2'")],
             signature=dbus.Signature('s')))
+
+    def test_install_file(self):
+        '''
+        Test installation using rpm file on the disk.
+        '''
+        self.iface_rpm.install([self.path_to_repo_rpm(
+            "rpm-repo1", "one-1-1.noarch.rpm")], dbus.Dictionary({}, signature='sv'))
+
+        resolved, result = self.iface_goal.resolve(
+            dbus.Dictionary({}, signature='sv'))
+        self.sanitize_transaction(resolved)
+
+        self.assertEqual(result, 0)
+        self.assertCountEqual(
+            resolved,
+            dbus.Array([
+                dbus.Struct((
+                    dbus.String('Package'),     # object type
+                    dbus.String('Install'),     # action
+                    dbus.String('User'),        # reason
+                    dbus.Dictionary({           # transaction item attrs
+                    }, signature=dbus.Signature('sv')),
+                    dbus.Dictionary({           # package
+                        dbus.String('arch'): dbus.String('noarch', variant_level=1),
+                        dbus.String('epoch'): dbus.String('0', variant_level=1),
+                        dbus.String('evr'): dbus.String('1-1', variant_level=1),
+                        dbus.String('name'): dbus.String('one', variant_level=1),
+                        dbus.String('install_size'): dbus.UInt64(0, variant_level=1),
+                        dbus.String('release'): dbus.String('1', variant_level=1),
+                        dbus.String('repo_id'): dbus.String('@commandline', variant_level=1),
+                        dbus.String('version'): dbus.String('1', variant_level=1),
+                        dbus.String('from_repo_id'): dbus.String('', variant_level=1),
+                        dbus.String('reason'): dbus.String('None', variant_level=1),
+                    }, signature=dbus.Signature('sv'))),
+                    signature=None)
+            ], signature=dbus.Signature('(ua{sv})'))
+        )
+
+        self.iface_goal.do_transaction(dbus.Dictionary({}, signature='sv'))

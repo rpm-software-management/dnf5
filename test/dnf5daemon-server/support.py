@@ -48,6 +48,9 @@ class InstallrootCase(unittest.TestCase):
             if "replaces" in trans_item_attrs:
                 trans_item_attrs.pop("replaces")
 
+    def path_to_repo_rpm(self, repo, rpm):
+        return os.path.join(self.repository_base, repo, rpm)
+
     def setUp(self):
         super(InstallrootCase, self).setUp()
         self.maxDiff = None
@@ -57,6 +60,8 @@ class InstallrootCase(unittest.TestCase):
             PROJECT_BINARY_DIR, "test/data/repos-rpm-conf.d")
         self.config_file_path = os.path.join(
             self.installroot, 'etc/dnf/dnf.conf')
+        self.repository_base = os.path.join(
+            PROJECT_BINARY_DIR, "test/data/repos-rpm")
         os.makedirs(os.path.dirname(self.config_file_path), exist_ok=True)
         with open(self.config_file_path, 'w') as f:
             f.write('')
