@@ -23,7 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <dnf5/context.hpp>
 #include <libdnf-cli/output/package_list_sections.hpp>
-#include <libdnf/conf/option_bool.hpp>
+#include <libdnf-cli/session.hpp>
 #include <libdnf/rpm/package_set.hpp>
 
 #include <memory>
@@ -60,6 +60,9 @@ private:
     std::unique_ptr<libdnf::cli::session::BoolOption> recent{nullptr};
     std::unique_ptr<libdnf::cli::session::BoolOption> upgrades{nullptr};
     std::unique_ptr<libdnf::cli::session::BoolOption> autoremove{nullptr};
+
+    // show all NEVRAs, not only the latest one
+    std::unique_ptr<libdnf::cli::session::BoolOption> show_duplicates{nullptr};
 };
 
 

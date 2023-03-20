@@ -75,12 +75,13 @@ static auto get_cmp_from_pattern(const std::string & pattern) {
     }
 }
 
-SearchProcessor::SearchProcessor(libdnf::Base & base, std::vector<std::string> patterns, bool search_all)
+SearchProcessor::SearchProcessor(
+    libdnf::Base & base, std::vector<std::string> patterns, bool search_all, bool show_duplicates)
     : base(base),
       patterns(patterns),
       search_all(search_all),
       full_package_query(base),
-      showdupes(base.get_config().get_showdupesfromrepos_option().get_value()) {
+      showdupes(show_duplicates) {
     if (!showdupes) {
         full_package_query.filter_latest_evr();
     }

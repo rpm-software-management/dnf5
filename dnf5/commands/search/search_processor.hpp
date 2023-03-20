@@ -35,7 +35,8 @@ namespace dnf5 {
 class SearchProcessor {
 public:
     /// Prepare the processor based on the parameters given by the user.
-    explicit SearchProcessor(libdnf::Base & base, std::vector<std::string> patterns, bool search_all);
+    explicit SearchProcessor(
+        libdnf::Base & base, std::vector<std::string> patterns, bool search_all, bool show_duplicates);
 
     /// Results computation method.
     libdnf::cli::output::SearchResults get_results();

@@ -209,7 +209,6 @@ class ConfigMain::Impl {
     OptionBool localpkg_gpgcheck{false};
     OptionBool gpgkey_dns_verification{false};
     OptionBool obsoletes{true};
-    OptionBool showdupesfromrepos{false};
     OptionBool exit_on_lock{false};
     OptionBool allow_vendor_change{true};
     OptionSeconds metadata_timer_sync{60 * 60 * 3};  // 3 hours
@@ -410,7 +409,6 @@ ConfigMain::Impl::Impl(Config & owner) : owner(owner) {
     owner.opt_binds().add("localpkg_gpgcheck", localpkg_gpgcheck);
     owner.opt_binds().add("gpgkey_dns_verification", gpgkey_dns_verification);
     owner.opt_binds().add("obsoletes", obsoletes);
-    owner.opt_binds().add("showdupesfromrepos", showdupesfromrepos);
     owner.opt_binds().add("exit_on_lock", exit_on_lock);
     owner.opt_binds().add("allow_vendor_change", allow_vendor_change);
     owner.opt_binds().add("metadata_timer_sync", metadata_timer_sync);
@@ -829,13 +827,6 @@ OptionBool & ConfigMain::get_obsoletes_option() {
 }
 const OptionBool & ConfigMain::get_obsoletes_option() const {
     return p_impl->obsoletes;
-}
-
-OptionBool & ConfigMain::get_showdupesfromrepos_option() {
-    return p_impl->showdupesfromrepos;
-}
-const OptionBool & ConfigMain::get_showdupesfromrepos_option() const {
-    return p_impl->showdupesfromrepos;
 }
 
 OptionBool & ConfigMain::get_exit_on_lock_option() {

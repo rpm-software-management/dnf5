@@ -41,7 +41,6 @@ void ListCommand::set_parent_command() {
 void ListCommand::set_argument_parser() {
     auto & ctx = get_context();
     auto & parser = ctx.get_argument_parser();
-    auto & config = ctx.base.get_config();
 
     auto & cmd = *get_argument_parser_command();
     cmd.set_description("Lists packages depending on the packages' relation to the system");
@@ -58,12 +57,8 @@ void ListCommand::set_argument_parser() {
     specs->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, true, false, false); });
     cmd.register_positional_arg(specs);
 
-    auto showduplicates = parser.add_new_named_arg("showduplicates");
-    showduplicates->set_long_name("showduplicates");
-    showduplicates->set_description("Show all versions of the packages, not only the latest ones.");
-    showduplicates->set_const_value("true");
-    showduplicates->link_value(&config.get_showdupesfromrepos_option());
-    cmd.register_named_arg(showduplicates);
+    show_duplicates = std::make_unique<libdnf::cli::session::BoolOption>(
+        *this, "showduplicates", '\0', "Show all versions of the packages, not only the latest ones.", false);
 
     auto conflicts =
         parser.add_conflict_args_group(std::make_unique<std::vector<libdnf::cli::ArgumentParser::Argument *>>());
@@ -149,7 +144,6 @@ std::unique_ptr<libdnf::cli::output::PackageListSections> ListCommand::create_ou
 void ListCommand::run() {
     auto & ctx = get_context();
     auto & config = ctx.base.get_config();
-    auto showduplicates = config.get_showdupesfromrepos_option().get_value();
 
     libdnf::rpm::PackageQuery full_package_query(ctx.base);
     libdnf::rpm::PackageQuery base_query(ctx.base);
@@ -186,7 +180,7 @@ void ListCommand::run() {
         case PkgNarrow::ALL: {
             libdnf::rpm::PackageQuery available(base_query);
             available.filter_available();
-            if (!showduplicates) {
+            if (!show_duplicates->get_value()) {
                 available.filter_priority();
                 available.filter_latest_evr();
                 // keep only those available packages that are either not installed or
@@ -205,7 +199,7 @@ void ListCommand::run() {
         }
         case PkgNarrow::AVAILABLE: {
             base_query.filter_available();
-            if (!showduplicates) {
+            if (!show_duplicates->get_value()) {
                 base_query.filter_priority();
                 base_query.filter_latest_evr();
             }
@@ -246,7 +240,7 @@ void ListCommand::run() {
             break;
         case PkgNarrow::RECENT:
             base_query.filter_available();
-            if (!showduplicates) {
+            if (!show_duplicates->get_value()) {
                 base_query.filter_priority();
                 base_query.filter_latest_evr();
             }
