@@ -399,6 +399,12 @@ public:
     // @replaces libdnf:libdnf/hy-package.h:function:dnf_package_get_local_baseurl(DnfPackage * pkg)
     std::string get_package_path() const;
 
+    /// @return `true` if the package is available locally, `false` otherwise.
+    /// @since 5.0.8
+    //
+    // @replaces dnf:dnf/package.py:method:Package.verifyLocalPkg(self)
+    bool is_available_locally() const;
+
     /// @return `true` if the package is installed on the system, `false` otherwise.
     /// @since 5.0
     //
@@ -481,6 +487,8 @@ private:
 
     // TODO(jrohel): Assumes unique `rpmdbid`. Support for opening more rpm databases at once?
     Package(const BaseWeakPtr & base, unsigned long long rpmdbid);
+
+    bool is_cached() const;
 
     BaseWeakPtr base;
     PackageId id;

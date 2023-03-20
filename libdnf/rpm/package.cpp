@@ -25,10 +25,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "reldep_list_impl.hpp"
 #include "solv/pool.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
+#include "utils/on_scope_exit.hpp"
 #include "utils/string.hpp"
 
 #include "libdnf/common/exception.hpp"
 #include "libdnf/rpm/package_query.hpp"
+
+#include <fcntl.h>
+#include <librepo/checksum.h>
+#include <unistd.h>
 
 #include <filesystem>
 
@@ -279,6 +284,36 @@ std::string Package::get_package_path() const {
     } else {
         return "";
     }
+}
+
+bool Package::is_available_locally() const {
+    Solvable * solvable = get_rpm_pool(base).id2solvable(id.id);
+    if (auto repo = static_cast<repo::Repo *>(solvable->repo->appdata)) {
+        if (repo->get_type() == repo::Repo::Type::COMMANDLINE || is_cached()) {
+            return true;
+        }
+    }
+    return false;
+}
+
+bool Package::is_cached() const {
+    gboolean cached{FALSE};
+    if (auto fd = ::open(get_package_path().c_str(), O_RDONLY); fd != -1) {
+        utils::OnScopeExit close_fd([fd]() noexcept { ::close(fd); });
+        auto length = static_cast<unsigned long long>(lseek(fd, 0, SEEK_END));
+        if (length == get_package_size()) {
+            lseek(fd, 0, SEEK_SET);
+            auto checksum = get_checksum();
+            lr_checksum_fd_cmp(
+                static_cast<LrChecksumType>(checksum.get_type()),
+                fd,
+                checksum.get_checksum().c_str(),
+                FALSE,
+                &cached,
+                NULL);
+        }
+    }
+    return cached;
 }
 
 bool Package::is_installed() const {
