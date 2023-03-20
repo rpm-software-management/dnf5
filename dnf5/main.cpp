@@ -61,6 +61,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <string.h>
 
 #include <algorithm>
+#include <cmath>
 #include <cstring>
 #include <filesystem>
 #include <iostream>
@@ -565,6 +566,62 @@ static void print_versions(Context & context) {
     }
 }
 
+static void print_transaction_size_stats(Context & context) {
+    int64_t in_pkgs_size{0};
+    int64_t download_pkgs_size{0};
+    int64_t install_size{0};
+    int64_t remove_size{0};
+
+    for (const auto & trans_pkg : context.get_transaction()->get_transaction_packages()) {
+        const auto pkg = trans_pkg.get_package();
+        if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
+            const auto pkg_size = pkg.get_package_size();
+            in_pkgs_size += pkg_size;
+            if (!pkg.is_available_locally()) {
+                download_pkgs_size += pkg_size;
+            }
+            install_size += pkg.get_install_size();
+        } else if (transaction_item_action_is_outbound(trans_pkg.get_action())) {
+            remove_size += pkg.get_install_size();
+        }
+    }
+
+    if (in_pkgs_size != 0) {
+        const auto [in_pkgs_size_value, in_pkgs_size_unit] = libdnf::cli::utils::units::to_size(in_pkgs_size);
+        const auto [dwnl_pkgs_size_value, dwnl_pkgs_size_unit] = libdnf::cli::utils::units::to_size(download_pkgs_size);
+        context.print_info(fmt::format(
+            "Total size of inbound packages is {:.0f} {:s}. Need to download {:.0f} {:s}.",
+            in_pkgs_size_value,
+            in_pkgs_size_unit,
+            dwnl_pkgs_size_value,
+            dwnl_pkgs_size_unit));
+    }
+
+    const auto [install_size_value, install_size_unit] = libdnf::cli::utils::units::to_size(install_size);
+    const auto [remove_size_value, remove_size_unit] = libdnf::cli::utils::units::to_size(remove_size);
+    const auto size_diff = install_size - remove_size;
+    const auto [size_diff_value, size_diff_unit] = libdnf::cli::utils::units::to_size(std::abs(size_diff));
+    if (size_diff >= 0) {
+        context.print_info(fmt::format(
+            "After this operation {:.0f} {:s} will be used (install {:.0f} {:s}, remove {:.0f} {:s}).",
+            size_diff_value,
+            size_diff_unit,
+            install_size_value,
+            install_size_unit,
+            remove_size_value,
+            remove_size_unit));
+    } else {
+        context.print_info(fmt::format(
+            "After this operation {:.0f} {:s} will be freed (install {:.0f} {:s}, remove {:.0f} {:s}).",
+            size_diff_value,
+            size_diff_unit,
+            install_size_value,
+            install_size_unit,
+            remove_size_value,
+            remove_size_unit));
+    }
+}
+
 }  // namespace dnf5
 
 
@@ -700,6 +757,8 @@ int main(int argc, char * argv[]) try {
             if (!libdnf::cli::output::print_transaction_table(*context.get_transaction())) {
                 return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
             }
+
+            dnf5::print_transaction_size_stats(context);
 
             for (const auto & tsflag : base.get_config().get_tsflags_option().get_value()) {
                 if (tsflag == "test") {
