@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
 #include "libdnf/repo/package_downloader.hpp"
+#include "libdnf/repo/repo_cache.hpp"
 #include "libdnf/rpm/package_query.hpp"
 
 #include <fmt/format.h>
@@ -715,6 +716,24 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     plugins.post_transaction(*transaction);
 
     if (ret == 0) {
+        // Cleanup temporary packages
+        if (!config.get_keepcache_option().get_value()) {
+            std::filesystem::path cachedir = {config.get_cachedir_option().get_value()};
+            std::error_code err;
+
+            for (const auto & dir_entry : std::filesystem::directory_iterator(cachedir, err)) {
+                libdnf::repo::RepoCache cache(base, dir_entry.path());
+                cache.remove_packages();
+            }
+
+            if (err) {
+                logger->debug(
+                    "Cannot iterate the cache directory \"{}\" when cleaning up temporary packages: {}",
+                    cachedir.string(),
+                    err.message());
+            }
+        }
+
         return TransactionRunResult::SUCCESS;
     } else {
         auto problems = rpm_transaction.get_problems();
