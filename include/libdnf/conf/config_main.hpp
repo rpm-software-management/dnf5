@@ -122,8 +122,6 @@ public:
     const OptionBool & get_gpgkey_dns_verification_option() const;
     OptionBool & get_obsoletes_option();
     const OptionBool & get_obsoletes_option() const;
-    OptionBool & get_showdupesfromrepos_option();
-    const OptionBool & get_showdupesfromrepos_option() const;
     OptionBool & get_exit_on_lock_option();
     const OptionBool & get_exit_on_lock_option() const;
     OptionBool & get_allow_vendor_change_option();

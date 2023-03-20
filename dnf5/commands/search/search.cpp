@@ -44,6 +44,9 @@ void SearchCommand::set_argument_parser() {
 
     all = std::make_unique<SearchAllOption>(*this);
     patterns = std::make_unique<SearchPatternsArguments>(*this, get_context());
+
+    auto show_duplicates = std::make_unique<libdnf::cli::session::BoolOption>(
+        *this, "showduplicates", '\0', "Show all versions of the packages, not only the latest ones.", false);
 }
 
 void SearchCommand::configure() {
@@ -54,7 +57,7 @@ void SearchCommand::configure() {
 
 void SearchCommand::run() {
     auto & base = get_context().base;
-    SearchProcessor processor(base, patterns->get_value(), all->get_value());
+    SearchProcessor processor(base, patterns->get_value(), all->get_value(), show_duplicates->get_value());
     libdnf::cli::output::print_search_results(processor.get_results());
 }
 

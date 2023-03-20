@@ -24,7 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "arguments.hpp"
 
 #include <dnf5/context.hpp>
-#include <libdnf/conf/option_bool.hpp>
+#include <libdnf-cli/session.hpp>
 
 #include <memory>
 #include <vector>
@@ -43,6 +43,7 @@ public:
 private:
     std::unique_ptr<SearchAllOption> all{nullptr};
     std::unique_ptr<SearchPatternsArguments> patterns{nullptr};
+    std::unique_ptr<libdnf::cli::session::BoolOption> show_duplicates{nullptr};
 };
 
 }  // namespace dnf5
