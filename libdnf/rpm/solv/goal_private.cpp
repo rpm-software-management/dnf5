@@ -373,7 +373,7 @@ libdnf::GoalProblem GoalPrivate::resolve() {
     }
 
     // either allow solutions callback or installonlies, both at the same time are not supported
-    if (limit_installonly_packages(job, 0)) {
+    if (limit_installonly_packages(job, protected_running_kernel.id)) {
         // allow erasing non-installonly packages that depend on a kernel about to be erased
         allow_uninstall_all_but_protected(*pool, job, protected_packages.get(), protected_running_kernel);
         if (libsolv_solver.solve(job)) {
