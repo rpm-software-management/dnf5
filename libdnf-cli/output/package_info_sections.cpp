@@ -91,11 +91,9 @@ bool PackageInfoSections::add_section(
             }
             if (!pkg.is_installed()) {
                 add_line(
-                    "Package size",
-                    libdnf::cli::utils::units::format_size(static_cast<int64_t>(pkg.get_package_size())));
+                    "Package size", utils::units::format_size_aligned(static_cast<int64_t>(pkg.get_package_size())));
             }
-            add_line(
-                "Installed size", libdnf::cli::utils::units::format_size(static_cast<int64_t>(pkg.get_install_size())));
+            add_line("Installed size", utils::units::format_size_aligned(static_cast<int64_t>(pkg.get_install_size())));
             if (pkg.get_arch() != "src") {
                 add_line("Source", pkg.get_sourcerpm());
             }

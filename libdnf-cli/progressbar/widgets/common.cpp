@@ -29,7 +29,7 @@ namespace libdnf::cli::progressbar {
 
 
 std::string format_size(int64_t num) {
-    auto result = libdnf::cli::utils::units::format_size(num);
+    auto result = libdnf::cli::utils::units::format_size_aligned(num);
     // add leading spaces up to 9 characters
     // to make sure that the formatted size has always the same length in the progressbar
     if (result.size() < 9) {

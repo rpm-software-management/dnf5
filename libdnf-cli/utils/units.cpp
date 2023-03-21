@@ -22,8 +22,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include <fmt/format.h>
 
-#include <cstring>
-
 
 namespace libdnf::cli::utils::units {
 
@@ -41,14 +39,20 @@ static const char * const SIZE_UNITS[] = {
 };
 
 
-std::string format_size(int64_t num) {
-    auto i = static_cast<float>(num);
+std::pair<float, const char *> to_size(int64_t num) {
+    auto value = static_cast<float>(num);
     int index = 0;
-    while (i > 999 || i < -999) {
-        i /= 1024;
-        index++;
+    while (value > 999 || value < -999) {
+        value /= 1024;
+        ++index;
     }
-    return fmt::format("{0:.1f} {1:>3s}", i, SIZE_UNITS[index]);
+    return {value, SIZE_UNITS[index]};
+}
+
+
+std::string format_size_aligned(int64_t num) {
+    auto [value, unit] = to_size(num);
+    return fmt::format("{0:.1f} {1:>3s}", value, unit);
 }
 
 
