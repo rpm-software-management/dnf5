@@ -267,6 +267,11 @@ PackageQuery::PackageQuery(const BaseWeakPtr & base, ExcludeFlags flags, bool em
 PackageQuery::PackageQuery(libdnf::Base & base, ExcludeFlags flags, bool empty)
     : PackageQuery(base.get_weak_ptr(), flags, empty) {}
 
+PackageQuery::PackageQuery(const PackageSet & pkgset, ExcludeFlags flags)
+    : PackageQuery(pkgset.get_base(), flags, true) {
+    update(pkgset);
+}
+
 PackageQuery::PackageQuery(const PackageQuery & src) : PackageSet(src), p_pq_impl(new PQImpl(*src.p_pq_impl)) {}
 
 PackageQuery::PackageQuery(PackageQuery && src) noexcept = default;

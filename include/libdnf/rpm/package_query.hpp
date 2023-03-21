@@ -58,6 +58,13 @@ public:
     explicit PackageQuery(
         const libdnf::BaseWeakPtr & base, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES, bool empty = false);
     explicit PackageQuery(libdnf::Base & base, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES, bool empty = false);
+
+    /// Construct a new PackageQuery based on given PackageSet. This is a shortcut to creating
+    /// an empty PackageQuery and then updating it with the content of pkgset.
+    /// @param pkgset  A packageset that the new query will contain
+    /// @param flags   Which excludes the query respects
+    explicit PackageQuery(const PackageSet & pkgset, ExcludeFlags flags = ExcludeFlags::APPLY_EXCLUDES);
+
     PackageQuery(const PackageQuery & src);
     PackageQuery(PackageQuery && src) noexcept;
     ~PackageQuery();
