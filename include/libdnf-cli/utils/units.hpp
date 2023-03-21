@@ -22,12 +22,15 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_CLI_UTILS_UNITS
 
 #include <string>
+#include <utility>
 
 
 namespace libdnf::cli::utils::units {
 
 
-std::string format_size(int64_t num);
+std::pair<float, const char *> to_size(int64_t num);
+
+std::string format_size_aligned(int64_t num);
 
 
 }  // namespace libdnf::cli::utils::units
