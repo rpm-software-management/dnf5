@@ -44,7 +44,7 @@ static const char * const SIZE_UNITS[] = {
 std::string format_size(int64_t num) {
     auto i = static_cast<float>(num);
     int index = 0;
-    while (i > 999) {
+    while (i > 999 || i < -999) {
         i /= 1024;
         index++;
     }
