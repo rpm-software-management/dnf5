@@ -352,17 +352,23 @@ void RepoSack::create_repos_from_file(const std::string & path) {
 }
 
 void RepoSack::create_repos_from_config_file() {
-    const auto & path = base->get_config().get_config_file_path_option().get_value();
+    std::filesystem::path conf_path{base->get_config().get_config_file_path_option().get_value()};
+    const auto & conf_path_priority = base->get_config().get_config_file_path_option().get_priority();
+    const auto & use_host_config = base->get_config().get_use_host_config_option().get_value();
+    if (!use_host_config && conf_path_priority < Option::Priority::COMMANDLINE) {
+        const auto & installroot = base->get_config().get_installroot_option().get_value();
+        conf_path = installroot / conf_path.relative_path();
+    }
     try {
-        create_repos_from_file(std::filesystem::path(path));
+        create_repos_from_file(conf_path);
     } catch (const libdnf::MissingConfigError & e) {
         // Ignore the missing config file unless user specified it via --config=...
-        if (base->get_config().get_config_file_path_option().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+        if (conf_path_priority >= libdnf::Option::Priority::COMMANDLINE) {
             throw;
         }
     } catch (const libdnf::InaccessibleConfigError & e) {
         // Ignore the inaccessible config file unless user specified it via --config=...
-        if (base->get_config().get_config_file_path_option().get_priority() >= libdnf::Option::Priority::COMMANDLINE) {
+        if (conf_path_priority >= libdnf::Option::Priority::COMMANDLINE) {
             throw;
         }
     }

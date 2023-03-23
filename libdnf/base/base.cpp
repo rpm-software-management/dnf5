@@ -92,7 +92,8 @@ void Base::load_config_from_file(const std::string & path) {
 void Base::load_config_from_file() {
     std::filesystem::path conf_path{config.get_config_file_path_option().get_value()};
     const auto & conf_path_priority = config.get_config_file_path_option().get_priority();
-    if (!config.get_use_host_config_option().get_value() && conf_path_priority < Option::Priority::COMMANDLINE) {
+    const auto & use_host_config = config.get_use_host_config_option().get_value();
+    if (!use_host_config && conf_path_priority < Option::Priority::COMMANDLINE) {
         conf_path = config.get_installroot_option().get_value() / conf_path.relative_path();
     }
     try {
