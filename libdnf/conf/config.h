@@ -21,6 +21,6 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define _LIBDNF_CONFIG_H_
 
 #define LIBDNF5_DISTRIBUTION_CONFIG_FILE "/usr/local/share/dnf5/libdnf.conf"
-#define DEFAULT_LIBDNF5_PLUGINS_LIB_DIR "/usr/local/lib64/libdnf5/plugins/"
+#define DEFAULT_LIBDNF5_PLUGINS_LIB_DIR  "/usr/local/lib64/libdnf5/plugins/"
 
-#endif // _LIBDNF_CONFIG_H_
+#endif  // _LIBDNF_CONFIG_H_
