@@ -1,0 +1,66 @@
+{
+  "dependencies": [],
+  "directories": {
+    "PyCharm": {}
+  },
+  "repos": {
+    "epel-7": {
+      "arch": {
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "epel-8": {
+      "arch": {
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "epel-9": {
+      "arch": {
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "fedora-35": {
+      "arch": {
+        "x86_64": {
+          "delete_after_days": 68,
+          "opts": {}
+        }
+      }
+    },
+    "fedora-36": {
+      "arch": {
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "fedora-37": {
+      "arch": {
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "fedora-38": {
+      "arch": {
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "fedora-rawhide": {
+      "arch": {
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    }
+  },
+  "results_url": "https://download.copr.fedorainfracloud.org/results"
+}

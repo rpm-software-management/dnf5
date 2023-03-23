@@ -56,6 +56,12 @@ class ArgumentParserMissingPositionalArgumentError : public ArgumentParserError 
     const char * get_name() const noexcept override { return "ArgumentParserMissingPositionalArgumentError"; }
 };
 
+/// Exception is thrown when a positional argument has invalid format.
+class ArgumentParserPositionalArgumentFormatError : public ArgumentParserError {
+    using ArgumentParserError::ArgumentParserError;
+    const char * get_name() const noexcept override { return "ArgumentParserPositionalArgumentFormatError"; }
+};
+
 /// Exception is generated in the case of an unexpected argument.
 class ArgumentParserUnknownArgumentError : public ArgumentParserError {
 public:

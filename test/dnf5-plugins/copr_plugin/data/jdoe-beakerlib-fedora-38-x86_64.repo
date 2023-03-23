@@ -1,0 +1,10 @@
+[copr:copr.example.com:jdoe:beakerlib]
+name=Copr repo for beakerlib owned by jdoe
+baseurl=http://coprbe.example.com/results/jdoe/beakerlib/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=http://coprbe.example.com/results/jdoe/beakerlib/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1

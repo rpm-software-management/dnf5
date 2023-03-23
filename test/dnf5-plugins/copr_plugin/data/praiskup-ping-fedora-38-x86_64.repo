@@ -1,0 +1,43 @@
+[copr:copr.fedorainfracloud.org:praiskup:ping]
+name=Copr repo for ping owned by praiskup
+baseurl=https://download.copr.fedorainfracloud.org/results/praiskup/ping/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/praiskup/ping/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+
+[copr:copr.fedorainfracloud.org:praiskup:ping:ml]
+name=Copr repo for ping owned by praiskup (i386)
+baseurl=https://download.copr.fedorainfracloud.org/results/praiskup/ping/fedora-$releasever-i386/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/praiskup/ping/pubkey.gpg
+repo_gpgcheck=0
+cost=1100
+enabled=1
+enabled_metadata=1
+
+[coprdep:copr.fedorainfracloud.org:group_copr:copr-dev]
+name=Copr copr.fedorainfracloud.org/praiskup/ping runtime dependency #1 - @copr/copr-dev
+baseurl=https://download.copr.fedorainfracloud.org/results/@copr/copr-dev/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=1
+gpgkey=https://download.copr.fedorainfracloud.org/results/@copr/copr-dev/pubkey.gpg
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
+
+[coprdep:https_download_copr_fedorainfracloud_org_results_copr_copr_dev_chroot]
+name=Copr copr.fedorainfracloud.org/praiskup/ping external runtime dependency #2 - https_download_copr_fedorainfracloud_org_results_copr_copr_dev_chroot
+baseurl=https://download.copr.fedorainfracloud.org/results/@copr/copr-dev/fedora-$releasever-$basearch/
+type=rpm-md
+skip_if_unavailable=True
+gpgcheck=0
+repo_gpgcheck=0
+enabled=1
+enabled_metadata=1
