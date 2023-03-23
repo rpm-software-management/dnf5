@@ -35,6 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/makecache/makecache.hpp"
 #include "commands/mark/mark.hpp"
 #include "commands/module/module.hpp"
+#include "commands/provides/provides.hpp"
 #include "commands/reinstall/reinstall.hpp"
 #include "commands/remove/remove.hpp"
 #include "commands/repo/repo.hpp"
@@ -555,6 +556,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<ListCommand>(context));
     context.add_and_initialize_command(std::make_unique<InfoCommand>(context));
     context.add_and_initialize_command(std::make_unique<CheckUpgradeCommand>(context));
+    context.add_and_initialize_command(std::make_unique<ProvidesCommand>(context));
 
     context.add_and_initialize_command(std::make_unique<GroupCommand>(context));
     context.add_and_initialize_command(std::make_unique<EnvironmentCommand>(context));
