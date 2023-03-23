@@ -1,0 +1,29 @@
+{
+  "results_url": "https://download.copr.fedorainfracloud.org/results",
+  "directories": {
+    "copr-dev": {},
+    "copr-dev:pr:1235": {}
+  },
+  "chroots": {
+    "fedora-rawhide-x86_64": {
+        "remove_timestamp": 1231231231231
+    },
+    "fedora-rawhide-ppc64le": {}
+  },
+  "args": {
+      "id": "Ignored if specified, it is generated like copr:<hub>:<owner>:<projectdir>",
+      "skip_if_unavailable": "True"
+  },
+  "dependencies": [
+    {
+      "id": "the_long_and_ugly_id",
+      "baseurl": "$results_url/surfzoid/HikNetExtractor/$chroot/",
+      "skip_if_unavailable": "False",
+      "priority": "9999"
+    },
+    {
+      "id": "other_long_and_ugly_id",
+      "baseurl": "...."
+    }
+  ]
+}

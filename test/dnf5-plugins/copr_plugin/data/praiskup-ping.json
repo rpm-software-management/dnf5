@@ -1,0 +1,412 @@
+{
+  "dependencies": [
+    {
+      "data": {
+        "owner": "@copr",
+        "projectname": "copr-dev"
+      },
+      "opts": {
+        "id": "coprdep:copr.fedorainfracloud.org:group_copr:copr-dev",
+        "name": "Copr copr.fedorainfracloud.org/praiskup/ping runtime dependency #1 - @copr/copr-dev"
+      },
+      "type": "copr"
+    },
+    {
+      "data": {
+        "pattern": "https://download.copr.fedorainfracloud.org/results/@copr/copr-dev/$chroot/"
+      },
+      "opts": {
+        "id": "coprdep:https_download_copr_fedorainfracloud_org_results_copr_copr_dev_chroot",
+        "name": "Copr copr.fedorainfracloud.org/praiskup/ping external runtime dependency #2 - https_download_copr_fedorainfracloud_org_results_copr_copr_dev_chroot"
+      },
+      "type": "external_baseurl"
+    }
+  ],
+  "directories": {
+    "ping": {},
+    "ping:custom:11": {},
+    "ping:custom:iso-1.2-lated2": {},
+    "ping:custom:isolated": {},
+    "ping:custom:isolated2": {},
+    "ping:custom:čučo": {},
+    "ping:subdir": {}
+  },
+  "repos": {
+    "centos-stream+epel-next-8": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "centos-stream+epel-next-9": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "s390x": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "centos-stream-8": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "centos-stream-9": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "s390x": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "epel-6": {
+      "arch": {
+        "i386": {
+          "opts": {}
+        },
+        "x86_64": {
+          "multilib": {
+            "i386": {
+              "opts": {
+                "cost": "1100"
+              }
+            }
+          },
+          "opts": {}
+        }
+      }
+    },
+    "epel-7": {
+      "arch": {
+        "ppc64le": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "epel-8": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "epel-9": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "s390x": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "fedora-35": {
+      "arch": {
+        "aarch64": {
+          "delete_after_days": 70,
+          "opts": {}
+        },
+        "armhfp": {
+          "delete_after_days": 70,
+          "opts": {}
+        },
+        "ppc64le": {
+          "delete_after_days": 70,
+          "opts": {}
+        },
+        "s390x": {
+          "delete_after_days": 70,
+          "opts": {}
+        },
+        "x86_64": {
+          "delete_after_days": 70,
+          "opts": {}
+        }
+      }
+    },
+    "fedora-36": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "armhfp": {
+          "opts": {}
+        },
+        "i386": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "s390x": {
+          "opts": {}
+        },
+        "x86_64": {
+          "multilib": {
+            "i386": {
+              "opts": {
+                "cost": "1100"
+              }
+            }
+          },
+          "opts": {}
+        }
+      }
+    },
+    "fedora-37": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "i386": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "s390x": {
+          "opts": {}
+        },
+        "x86_64": {
+          "multilib": {
+            "i386": {
+              "opts": {
+                "cost": "1100"
+              }
+            }
+          },
+          "opts": {}
+        }
+      }
+    },
+    "fedora-38": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "i386": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "s390x": {
+          "opts": {}
+        },
+        "x86_64": {
+          "multilib": {
+            "i386": {
+              "opts": {
+                "cost": "1100"
+              }
+            }
+          },
+          "opts": {}
+        }
+      }
+    },
+    "fedora-eln": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "i386": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "s390x": {
+          "opts": {}
+        },
+        "x86_64": {
+          "multilib": {
+            "i386": {
+              "opts": {
+                "cost": "1100"
+              }
+            }
+          },
+          "opts": {}
+        }
+      }
+    },
+    "fedora-rawhide": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "i386": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "s390x": {
+          "opts": {}
+        },
+        "x86_64": {
+          "multilib": {
+            "i386": {
+              "opts": {
+                "cost": "1100"
+              }
+            }
+          },
+          "opts": {}
+        }
+      }
+    },
+    "mageia-8": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "i586": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "mageia-cauldron": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "i586": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "openmandriva-cooker": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "i686": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "openmandriva-rolling": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "i686": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "opensuse-leap-15.2": {
+      "arch": {
+        "aarch64": {
+          "delete_after_days": 51,
+          "opts": {}
+        },
+        "x86_64": {
+          "delete_after_days": 51,
+          "opts": {}
+        }
+      }
+    },
+    "opensuse-leap-15.3": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "opensuse-tumbleweed": {
+      "arch": {
+        "aarch64": {
+          "opts": {}
+        },
+        "i586": {
+          "opts": {}
+        },
+        "ppc64le": {
+          "opts": {}
+        },
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "rhel-8": {
+      "arch": {
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    },
+    "rhel-9": {
+      "arch": {
+        "x86_64": {
+          "opts": {}
+        }
+      }
+    }
+  },
+  "results_url": "https://download.copr.fedorainfracloud.org/results"
+}
