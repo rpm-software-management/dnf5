@@ -96,24 +96,26 @@ std::unique_ptr<libdnf::cli::output::PackageListSections> CheckUpgradeCommand::c
 
 void CheckUpgradeCommand::run() {
     auto & ctx = get_context();
+    auto & config = ctx.base.get_config();
 
     libdnf::rpm::PackageQuery full_package_query(ctx.base);
     libdnf::rpm::PackageQuery upgrades_query(ctx.base);
 
+    // filter by provided specs, for `check-upgrade <pkg1> <pkg2> ...`
     if (!pkg_specs.empty()) {
         upgrades_query = libdnf::rpm::PackageQuery(ctx.base, libdnf::sack::ExcludeFlags::APPLY_EXCLUDES, true);
         libdnf::ResolveSpecSettings settings{.with_nevra = true, .with_provides = false, .with_filenames = false};
         for (const auto & spec : pkg_specs) {
-            libdnf::rpm::PackageQuery package_query(full_package_query);
+            libdnf::rpm::PackageQuery package_query(ctx.base);
             package_query.resolve_pkg_spec(spec, settings, true);
             upgrades_query |= package_query;
         }
     }
 
     upgrades_query.filter_upgrades();
-
     size_t size_before_filter_advisories = upgrades_query.size();
 
+    // filter by advisory flags, e.g. `--security`
     auto advisories = advisory_query_from_cli_input(
         ctx.base,
         advisory_name->get_value(),
@@ -128,17 +130,45 @@ void CheckUpgradeCommand::run() {
         upgrades_query.filter_advisories(std::move(advisories.value()), libdnf::sack::QueryCmp::EXACT);
     }
 
+    libdnf::rpm::PackageQuery installed_query(ctx.base);
+    installed_query.filter_installed();
+
+    libdnf::rpm::PackageQuery obsoletes_query(upgrades_query);
+    obsoletes_query.filter_obsoletes(installed_query);
+
+    // prepare a map of obsoleted packages {obsoleter_id: [obsoleted_pkgs]}
+    std::map<libdnf::rpm::PackageId, std::vector<libdnf::rpm::Package>> obsoletes;
+    for (const auto & pkg : obsoletes_query) {
+        std::vector<libdnf::rpm::Package> obsoleted;
+        libdnf::rpm::PackageQuery obs_q(installed_query);
+        obs_q.filter_provides(pkg.get_obsoletes());
+        for (const auto & pkg_ob : obs_q) {
+            obsoleted.emplace_back(pkg_ob);
+        }
+        obsoletes.emplace(pkg.get_id(), obsoleted);
+    }
+
+    auto colorizer = std::make_unique<libdnf::cli::output::PkgColorizer>(
+        installed_query,
+        "",  //config.get_color_list_available_install_option().get_value(),
+        "",  //config.get_color_list_available_downgrade_option().get_value(),
+        config.get_color_list_available_reinstall_option().get_value(),
+        config.get_color_list_available_upgrade_option().get_value());
     auto sections = create_output();
 
-    bool package_matched = sections->add_section("", upgrades_query);
+    bool package_matched = false;
+    package_matched |= sections->add_section("", upgrades_query);
+    package_matched |= sections->add_section("Obsoleting packages", obsoletes_query, colorizer, obsoletes);
 
     if (package_matched) {
+        // If any upgrades were found, print a table of them, and optionally print changelogs. Return exit code 100.
         sections->print();
         if (changelogs->get_value()) {
             libdnf::cli::output::print_changelogs(upgrades_query, full_package_query, true, 0, 0);
         }
         throw libdnf::cli::SilentCommandExitError(100, M_(""));
     } else if (
+        // Otherwise, main() will exit with code 0.
         size_before_filter_advisories > 0 &&
         (!advisory_name->get_value().empty() || advisory_security->get_value() || advisory_bugfix->get_value() ||
          advisory_newpackage->get_value() || !advisory_severity->get_value().empty() ||
