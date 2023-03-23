@@ -42,6 +42,7 @@ public:
           libsolv_transaction(src.libsolv_transaction ? transaction_create_clone(src.libsolv_transaction) : nullptr),
           problems(src.problems),
           packages(src.packages),
+          groups(src.groups),
           resolve_logs(src.resolve_logs),
           transaction_problems(src.transaction_problems) {}
     ~Impl();
