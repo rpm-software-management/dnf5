@@ -21,9 +21,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #ifndef DNF5_COMMANDS_CHECK_UPGRADE_CHECK_UPGRADE_HPP
 #define DNF5_COMMANDS_CHECK_UPGRADE_CHECK_UPGRADE_HPP
 
+#include "../advisory_shared.hpp"
+
 #include <dnf5/context.hpp>
-#include <libdnf-cli/output/package_list_sections.hpp>
 #include <dnf5/shared_options.hpp>
+#include <libdnf-cli/output/package_list_sections.hpp>
 #include <libdnf/conf/option_bool.hpp>
 #include <libdnf/rpm/package_set.hpp>
 
@@ -40,17 +42,24 @@ public:
     void set_parent_command() override;
     void set_argument_parser() override;
     void configure() override;
-
     void run() override;
 
+protected:
     libdnf::OptionBool * changelogs{nullptr};
     std::vector<std::string> pkg_specs;
+
+    std::unique_ptr<AdvisoryOption> advisory_name;
+    std::unique_ptr<SecurityOption> advisory_security;
+    std::unique_ptr<BugfixOption> advisory_bugfix;
+    std::unique_ptr<EnhancementOption> advisory_enhancement;
+    std::unique_ptr<NewpackageOption> advisory_newpackage;
+    std::unique_ptr<AdvisorySeverityOption> advisory_severity;
+    std::unique_ptr<BzOption> advisory_bz;
+    std::unique_ptr<CveOption> advisory_cve;
+
 private:
     virtual std::unique_ptr<libdnf::cli::output::PackageListSections> create_output();
 };
-
-// implementation of security options
-// --security 
 
 }  // namespace dnf5
 

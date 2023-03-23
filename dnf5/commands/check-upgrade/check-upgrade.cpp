@@ -67,6 +67,15 @@ void CheckUpgradeCommand::set_argument_parser() {
         });
     keys->set_complete_hook_func([&ctx](const char * arg) { return match_specs(ctx, arg, true, false, true, false); });
     cmd.register_positional_arg(keys);
+
+    advisory_name = std::make_unique<AdvisoryOption>(*this);
+    advisory_security = std::make_unique<SecurityOption>(*this);
+    advisory_bugfix = std::make_unique<BugfixOption>(*this);
+    advisory_enhancement = std::make_unique<EnhancementOption>(*this);
+    advisory_newpackage = std::make_unique<NewpackageOption>(*this);
+    advisory_severity = std::make_unique<AdvisorySeverityOption>(*this);
+    advisory_bz = std::make_unique<BzOption>(*this);
+    advisory_cve = std::make_unique<CveOption>(*this);
 }
 
 void CheckUpgradeCommand::configure() {
@@ -103,17 +112,39 @@ void CheckUpgradeCommand::run() {
 
     upgrades_query.filter_upgrades();
 
+    size_t size_before_filter_advisories = upgrades_query.size();
+
+    auto advisories = advisory_query_from_cli_input(
+        ctx.base,
+        advisory_name->get_value(),
+        advisory_security->get_value(),
+        advisory_bugfix->get_value(),
+        advisory_enhancement->get_value(),
+        advisory_newpackage->get_value(),
+        advisory_severity->get_value(),
+        advisory_bz->get_value(),
+        advisory_cve->get_value());
+    if (advisories.has_value()) {
+        upgrades_query.filter_advisories(std::move(advisories.value()), libdnf::sack::QueryCmp::EXACT);
+    }
+
     auto sections = create_output();
 
     bool package_matched = sections->add_section("", upgrades_query);
 
     if (package_matched) {
         sections->print();
-
         if (changelogs->get_value()) {
             libdnf::cli::output::print_changelogs(upgrades_query, full_package_query, true, 0, 0);
         }
         throw libdnf::cli::SilentCommandExitError(100, M_(""));
+    } else if (
+        size_before_filter_advisories > 0 &&
+        (!advisory_name->get_value().empty() || advisory_security->get_value() || advisory_bugfix->get_value() ||
+         advisory_newpackage->get_value() || !advisory_severity->get_value().empty() ||
+         !advisory_bz->get_value().empty() || !advisory_cve->get_value().empty())) {
+        std::cout << "No security updates needed, but " << size_before_filter_advisories << " update(s) available"
+                  << std::endl;
     }
 }
 
