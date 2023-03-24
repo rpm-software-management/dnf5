@@ -429,6 +429,7 @@ void Repo::make_solv_repo() {
         // TODO(lukash) move the below to SolvRepo? Requires sharing Type
         if (type == Type::SYSTEM) {
             pool_set_installed(*get_rpm_pool(base), solv_repo->repo);
+            pool_set_installed(*get_comps_pool(base), solv_repo->comps_repo);
         }
 
         solv_repo->set_priority(-get_priority());
