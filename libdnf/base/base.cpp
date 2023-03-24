@@ -89,7 +89,7 @@ void Base::load_config_from_file(const std::string & path) {
     config.load_from_parser(parser, "main", vars, *get_logger());
 }
 
-void Base::load_config_from_file() {
+void Base::with_config_file_path(std::function<void(const std::string &)> func) {
     std::filesystem::path conf_path{config.get_config_file_path_option().get_value()};
     const auto & conf_path_priority = config.get_config_file_path_option().get_priority();
     const auto & use_host_config = config.get_use_host_config_option().get_value();
@@ -97,7 +97,7 @@ void Base::load_config_from_file() {
         conf_path = config.get_installroot_option().get_value() / conf_path.relative_path();
     }
     try {
-        load_config_from_file(conf_path);
+        return func(conf_path.string());
     } catch (const MissingConfigError & e) {
         // Ignore the missing config file unless the user specified it via --config=...
         if (conf_path_priority >= libdnf::Option::Priority::COMMANDLINE) {
@@ -109,6 +109,11 @@ void Base::load_config_from_file() {
             throw;
         }
     }
+}
+
+void Base::load_config_from_file() {
+    with_config_file_path(
+        std::function<void(const std::string &)>{[this](const std::string & path) { load_config_from_file(path); }});
 }
 
 void Base::load_config_from_dir(const std::string & dir_path) {
