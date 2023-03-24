@@ -97,8 +97,9 @@ class TestRepo(base_test_case.BaseTestCase):
     def test_load_extra_system_repo_incorrectly(self):
         # Try to load extra system repo on non-system repo
         repo = self.repo_sack.create_repo('test')
-        self.assertRaises(RuntimeError, repo.load_extra_system_repo, 'some-root-dir')
-        
+        self.assertRaises(
+            RuntimeError, repo.load_extra_system_repo, 'some-root-dir')
+
         # Try to load extra system repo on non-loaded repo
         repo = self.repo_sack.get_system_repo()
         self.assertRaises(RuntimeError, repo.load_extra_system_repo, 'dir')
