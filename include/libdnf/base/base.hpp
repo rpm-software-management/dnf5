@@ -35,6 +35,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/rpm/package_sack.hpp"
 #include "libdnf/transaction/transaction_history.hpp"
 
+#include <functional>
 #include <map>
 
 
@@ -70,6 +71,9 @@ public:
 
     /// Returns a pointer to a locked "Base" instance or "nullptr" if no instance is locked.
     static Base * get_locked_base() noexcept;
+
+    /// Call a function that loads the config file, catching errors appropriately
+    void with_config_file_path(std::function<void(const std::string &)> func);
 
     /// Loads main configuration from file defined by the current configuration.
     void load_config_from_file();
