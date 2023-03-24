@@ -285,7 +285,6 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
                                                     : static_cast<solv::Pool &>(get_rpm_pool(base));
     int solvables_start = pool->nsolvables;
     auto type_name = repodata_type_to_name(type);
-    int res = 0;
     switch (type) {
         case RepodataType::COMPS: {
             // get installed groups from system state and load respective xml files
@@ -296,6 +295,7 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
             for (const auto & group_id : installed_groups) {
                 auto ext_fn = comps_dir / (group_id + ".xml");
                 fs::File ext_file;
+                bool read_success = true;
                 try {
                     ext_file = fs::File(ext_fn, "r", true);
                 } catch (std::filesystem::filesystem_error & e) {
@@ -304,13 +304,23 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
                         type_name,
                         ext_fn.string(),
                         e.what());
-                    continue;
+                    read_success = false;
                 }
-                logger.debug("Loading {} extension for system repo from \"{}\"", type_name, ext_fn.string());
-                if ((res = repo_add_comps(comps_repo, ext_file.get(), 0)) == 0) {
-                    comps_solvables_start = solvables_start;
-                    comps_solvables_end = pool->nsolvables;
+
+                if (read_success) {
+                    logger.debug("Loading {} extension for system repo from \"{}\"", type_name, ext_fn.string());
+                    read_success = repo_add_comps(comps_repo, ext_file.get(), 0) == 0;
                 }
+
+                if (!read_success) {
+                    // In case the xml file either not exists or not parseable by
+                    // libsolv, resort to creating a solvable based on info contained
+                    // in the system state.
+                    create_group_solvable(group_id, system_state.get_group_state(group_id));
+                }
+
+                comps_solvables_start = solvables_start;
+                comps_solvables_end = pool->nsolvables;
             }
             break;
         }
@@ -695,6 +705,60 @@ std::string SolvRepo::solv_file_name(const char * type) {
 
 std::filesystem::path SolvRepo::solv_file_path(const char * type) {
     return std::filesystem::path(config.get_cachedir()) / CACHE_SOLV_FILES_DIR / solv_file_name(type);
+}
+
+
+void SolvRepo::create_group_solvable(const std::string & groupid, const libdnf::system::GroupState & state) {
+    solv::Pool & pool = static_cast<solv::Pool &>(get_comps_pool(base));
+    libdnf_assert(
+        comps_repo == (*pool)->installed, "SolvRepo::create_group_solvable() call enabled only for @System repo.");
+
+    // create a new solvable for the group
+    auto group_solvable_id = repo_add_solvable(comps_repo);
+    Solvable * group_solvable = pool.id2solvable(group_solvable_id);
+
+    // Information about group contained in the system state is very limited.
+    // We have only repoid, name, and list of group packages.
+
+    // Set id with proper prefix
+    group_solvable->name = pool.str2id(("group:" + groupid).c_str(), 1);
+    // Set noarch and empty evr
+    group_solvable->arch = ARCH_NOARCH;
+    group_solvable->evr = ID_EMPTY;
+    // Make the new group provide it's own name
+    group_solvable->dep_provides = repo_addid_dep(
+        comps_repo, group_solvable->dep_provides, pool.rel2id(group_solvable->name, group_solvable->evr, REL_EQ, 1), 0);
+
+    // Add group packages
+    for (const auto & pkg : state.all_packages) {
+        auto pkg_id = pool.str2id(pkg.name.c_str(), 1);
+        Id type = SOLVABLE_RECOMMENDS;
+        switch (pkg.type) {
+            case libdnf::comps::PackageType::MANDATORY:
+                type = SOLVABLE_REQUIRES;
+                break;
+            case libdnf::comps::PackageType::OPTIONAL:
+                type = SOLVABLE_SUGGESTS;
+                break;
+            case libdnf::comps::PackageType::CONDITIONAL: {
+                auto condreq = pool.str2id(pkg.condition.c_str(), 1);
+                pkg_id = pool.rel2id(pkg_id, condreq, REL_COND, 1);
+                break;
+            }
+            case libdnf::comps::PackageType::DEFAULT:
+                break;
+        }
+        repo_add_idarray(comps_repo, group_solvable_id, type, pkg_id);
+    }
+
+    Repodata * data = repo_last_repodata(comps_repo);
+
+    // Mark the repo as user-visible
+    repodata_set_void(data, group_solvable_id, SOLVABLE_ISVISIBLE);
+    // Set the group name
+    repodata_set_str(data, group_solvable_id, SOLVABLE_SUMMARY, state.name.c_str());
+
+    repodata_internalize(data);
 }
 
 }  //namespace libdnf::repo

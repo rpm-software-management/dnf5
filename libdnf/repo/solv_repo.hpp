@@ -108,6 +108,12 @@ private:
     std::string solv_file_name(const char * type = nullptr);
     std::filesystem::path solv_file_path(const char * type = nullptr);
 
+    /// Create a group solvable based on what's available in system state. Used in
+    /// case we are not able to load metadata from xml file.
+    /// @param groupid  Id of the group
+    /// @param state    group state from the system state
+    void create_group_solvable(const std::string & groupid, const libdnf::system::GroupState & state);
+
     libdnf::BaseWeakPtr base;
     const ConfigRepo & config;
 
