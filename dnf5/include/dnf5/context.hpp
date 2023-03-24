@@ -33,6 +33,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <memory>
 #include <optional>
 #include <string>
+#include <string_view>
 #include <utility>
 #include <vector>
 
@@ -107,10 +108,10 @@ public:
     void set_load_available_repos(LoadAvailableRepos which) { load_available_repos = which; }
     LoadAvailableRepos get_load_available_repos() const noexcept { return load_available_repos; }
 
-private:
     /// If quiet mode is not active, it will print `msg` to standard output.
-    void print_info(const char * msg);
+    void print_info(std::string_view msg) const;
 
+private:
     /// Program arguments.
     size_t argc{0};
     const char * const * argv{nullptr};

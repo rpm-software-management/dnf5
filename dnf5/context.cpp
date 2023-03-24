@@ -122,7 +122,7 @@ void Context::apply_repository_setopts() {
 }
 
 
-void Context::print_info(const char * msg) {
+void Context::print_info(std::string_view msg) const {
     if (!quiet) {
         std::cout << msg << std::endl;
     }
