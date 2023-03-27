@@ -22,6 +22,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "download_callbacks.hpp"
 #include "plugins.hpp"
 #include "utils.hpp"
+#include "utils/bgettext/bgettext-lib.h"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/url.hpp"
 
@@ -403,119 +404,24 @@ static bool user_confirm_key(libdnf::ConfigMain & config, const libdnf::rpm::Key
 }  // namespace
 
 
-Context::ImportRepoKeys Context::import_repo_keys(libdnf::repo::Repo & repo) {
-    auto key_urls = repo.get_config().get_gpgkey_option().get_value();
-    if (!key_urls.size()) {
-        return ImportRepoKeys::NO_KEYS;
-    }
-
-    libdnf::rpm::RpmSignature rpm_signature(base);
-    bool already_present{true};
-    bool key_confirmed{false};
-    bool key_imported{false};
-    for (auto const & key_url : key_urls) {
-        for (auto & key_info : rpm_signature.parse_key_file(key_url)) {
-            if (rpm_signature.key_present(key_info)) {
-                std::cerr << fmt::format("Public key \"{}\" is already present, not importing.", key_url) << std::endl;
-                continue;
-            }
-            already_present = false;
-
-            if (user_confirm_key(base.get_config(), key_info)) {
-                key_confirmed = true;
-            } else {
-                continue;
-            }
-
-            try {
-                if (rpm_signature.import_key(key_info)) {
-                    key_imported = true;
-                    std::cout << "Key imported successfully." << std::endl;
-                }
-            } catch (const libdnf::rpm::KeyImportError & ex) {
-                std::cerr << ex.what() << std::endl;
-            }
+bool Context::check_gpg_signatures(libdnf::base::Transaction & transaction) {
+    bool any_import_confirmed = false;
+    std::function<bool(const libdnf::rpm::KeyInfo &)> bound_user_confirm = [&](const libdnf::rpm::KeyInfo & key_info) {
+        auto import_confirmed = user_confirm_key(base.get_config(), key_info);
+        if (import_confirmed) {
+            any_import_confirmed = true;
         }
-    }
+        return import_confirmed;
+    };
 
-    if (already_present) {
-        return ImportRepoKeys::ALREADY_PRESENT;
+    auto check_succeeded = transaction.check_gpg_signatures(bound_user_confirm);
+    for (auto const & entry : transaction.get_gpg_signature_problems()) {
+        std::cerr << entry << std::endl;
     }
-
-    if (!key_confirmed) {
-        throw libdnf::cli::AbortedByUserError();
+    if (check_succeeded && any_import_confirmed) {
+        std::cout << _("Keys were successfully imported.") << std::endl;
     }
-
-    return key_imported ? ImportRepoKeys::KEY_IMPORTED : ImportRepoKeys::IMPORT_FAILED;
-}
-
-bool Context::check_gpg_signatures(const libdnf::base::Transaction & transaction) {
-    auto & config = base.get_config();
-    if (!config.get_gpgcheck_option().get_value()) {
-        // gpg check switched off by configuration / command line option
-        return true;
-    }
-    // TODO(mblaha): DNSsec key verification
-    bool retval{true};
-    libdnf::rpm::RpmSignature rpm_signature(base);
-    std::set<std::string> repo_keys_imported{};
-    for (const auto & trans_pkg : transaction.get_transaction_packages()) {
-        if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
-            auto const & pkg = trans_pkg.get_package();
-            auto repo = pkg.get_repo();
-            auto err_msg = fmt::format(
-                "GPG check for package \"{}\" ({}) from repo \"{}\" has failed: ",
-                pkg.get_nevra(),
-                pkg.get_package_path(),
-                repo->get_id());
-            switch (rpm_signature.check_package_signature(pkg)) {
-                case libdnf::rpm::RpmSignature::CheckResult::OK:
-                    continue;
-                case libdnf::rpm::RpmSignature::CheckResult::FAILED:
-                    std::cerr << err_msg << "problem opening package." << std::endl;
-                    retval = false;
-                    break;
-                case libdnf::rpm::RpmSignature::CheckResult::FAILED_NOT_SIGNED:
-                    std::cerr << err_msg << "package is not signed." << std::endl;
-                    retval = false;
-                    break;
-                case libdnf::rpm::RpmSignature::CheckResult::FAILED_KEY_MISSING:
-                case libdnf::rpm::RpmSignature::CheckResult::FAILED_NOT_TRUSTED: {
-                    // these two errors are possibly recoverable by importing the correct public key
-                    // do not try to import keys for the same repo twice
-                    if (repo_keys_imported.find(repo->get_id()) != repo_keys_imported.end()) {
-                        std::cerr << err_msg << "public key is not installed." << std::endl;
-                        retval = false;
-                        break;
-                    }
-                    repo_keys_imported.emplace(repo->get_id());
-                    switch (import_repo_keys(*repo)) {
-                        case ImportRepoKeys::KEY_IMPORTED:
-                            if (rpm_signature.check_package_signature(pkg) !=
-                                libdnf::rpm::RpmSignature::CheckResult::OK) {
-                                std::cerr << err_msg << "import of the key didn't help, wrong key?" << std::endl;
-                                retval = false;
-                            }
-                            break;
-                        case ImportRepoKeys::ALREADY_PRESENT:
-                            std::cerr << err_msg << "public key is not installed." << std::endl;
-                            retval = false;
-                            break;
-                        case ImportRepoKeys::NO_KEYS:
-                            std::cerr << err_msg << "the repository does not have any pgp key configured." << std::endl;
-                            retval = false;
-                            break;
-                        case ImportRepoKeys::IMPORT_FAILED:
-                            std::cerr << err_msg << "public key import failed." << std::endl;
-                            retval = false;
-                            break;
-                    }
-                    break;
-                }
-            }
-        }
-    }
-    return retval;
+    return check_succeeded;
 }
 
 
