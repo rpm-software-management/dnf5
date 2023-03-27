@@ -99,6 +99,9 @@ public:
     /// @param key_url: URL of the public key to be imported.
     std::vector<KeyInfo> parse_key_file(const std::string & key_url);
 
+    /// Return string representation of the CheckResult enum
+    static std::string check_result_to_string(CheckResult result);
+
 private:
     BaseWeakPtr base;
 };

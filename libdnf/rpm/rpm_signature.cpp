@@ -38,6 +38,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::rpm {
 
+namespace {
+
+const std::map<rpm::RpmSignature::CheckResult, BgettextMessage> RPM_SIGNATURE_CHECK_RESULT_DICT = {
+    {rpm::RpmSignature::CheckResult::FAILED_KEY_MISSING, M_("No corresponding key was found.")},
+    {rpm::RpmSignature::CheckResult::FAILED_NOT_TRUSTED, M_("The signature is valid, but the key is not trusted.")},
+    {rpm::RpmSignature::CheckResult::FAILED_NOT_SIGNED, M_("The package is not signed.")},
+    {rpm::RpmSignature::CheckResult::FAILED, M_("Problem occurred when opening the package.")},
+};
+
+}  // namespace
+
 using RpmTransactionPtr = std::unique_ptr<rpmts_s, std::function<void(rpmts_s * ts)>>;
 // deleters for unique_ptrs that take ownership of rpm objects
 // once the ownership is transfered, rpm objects get automatically freed when out of scope
@@ -230,6 +241,19 @@ std::vector<KeyInfo> RpmSignature::parse_key_file(const std::string & key_url) {
     }
 
     return keys;
+}
+
+std::string RpmSignature::check_result_to_string(CheckResult result) {
+    switch (result) {
+        case CheckResult::OK:
+            return {};
+        case CheckResult::FAILED_KEY_MISSING:
+        case CheckResult::FAILED_NOT_TRUSTED:
+        case CheckResult::FAILED_NOT_SIGNED:
+        case CheckResult::FAILED:
+            return TM_(RPM_SIGNATURE_CHECK_RESULT_DICT.at(result), 1);
+    }
+    return {};
 }
 
 }  //  namespace libdnf::rpm
