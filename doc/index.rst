@@ -16,6 +16,7 @@ Welcome to DNF5's documentation!
     contributing/index
     templates/index
     migration_guide
+    changes
 
 
 Indices and tables
