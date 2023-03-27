@@ -102,6 +102,10 @@ std::vector<TransactionPackage> Transaction::get_transaction_packages() const {
     return p_impl->packages;
 }
 
+std::size_t Transaction::get_transaction_packages_count() const {
+    return p_impl->packages.size();
+}
+
 std::vector<TransactionGroup> & Transaction::get_transaction_groups() const {
     return p_impl->groups;
 }
