@@ -34,6 +34,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/common/exception.hpp"
 #include "libdnf/repo/package_downloader.hpp"
 #include "libdnf/rpm/package_query.hpp"
+#include "libdnf/utils/format.hpp"
 
 #include <fmt/format.h>
 #include <unistd.h>
@@ -70,6 +71,13 @@ const std::map<base::Transaction::TransactionRunResult, BgettextMessage> TRANSAC
     {base::Transaction::TransactionRunResult::ERROR_RPM_RUN, M_("Rpm transaction failed.")},
 };
 
+const std::map<base::ImportRepoKeysResult, BgettextMessage> IMPORT_REPO_KEYS_RESULT_DICT = {
+    {base::ImportRepoKeysResult::NO_KEYS, M_("The repository does not have any PGP keys configured.")},
+    {base::ImportRepoKeysResult::ALREADY_PRESENT, M_("Public key is not installed.")},
+    {base::ImportRepoKeysResult::IMPORT_DECLINED, M_("Canceled by the user.")},
+    {base::ImportRepoKeysResult::IMPORT_FAILED, M_("Public key import failed.")},
+};
+
 }  // namespace
 
 Transaction::Transaction(const BaseWeakPtr & base) : p_impl(new Impl(*this, base)) {}
@@ -87,10 +95,33 @@ Transaction::Impl::~Impl() {
     }
 }
 
+Transaction::Impl::Impl(Transaction & transaction, const BaseWeakPtr & base)
+    : transaction(&transaction),
+      base(base),
+      rpm_signature(base) {}
+
+Transaction::Impl::Impl(Transaction & transaction, const Impl & src)
+    : transaction(&transaction),
+      base(src.base),
+      libsolv_transaction(src.libsolv_transaction ? transaction_create_clone(src.libsolv_transaction) : nullptr),
+      problems(src.problems),
+      rpm_signature(src.rpm_signature),
+      packages(src.packages),
+      groups(src.groups),
+      resolve_logs(src.resolve_logs),
+      transaction_problems(src.transaction_problems),
+      signature_problems(src.signature_problems) {}
+
 Transaction::Impl & Transaction::Impl::operator=(const Impl & other) {
     base = other.base;
     libsolv_transaction = other.libsolv_transaction ? transaction_create_clone(other.libsolv_transaction) : nullptr;
+    problems = other.problems;
+    rpm_signature = other.rpm_signature;
     packages = other.packages;
+    groups = other.groups;
+    resolve_logs = other.resolve_logs;
+    transaction_problems = other.transaction_problems;
+    signature_problems = other.signature_problems;
     return *this;
 }
 
@@ -288,6 +319,22 @@ void Transaction::set_user_id(const uint32_t user_id) {
 
 void Transaction::set_comment(const std::string & comment) {
     this->comment = comment;
+}
+
+bool Transaction::check_gpg_signatures(bool import_keys) {
+    std::function<bool(const libdnf::rpm::KeyInfo &)> import_confirm_func = [=](const libdnf::rpm::KeyInfo &) {
+        return import_keys;
+    };
+
+    return p_impl->check_gpg_signatures(import_confirm_func);
+}
+
+bool Transaction::check_gpg_signatures(std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func) {
+    return p_impl->check_gpg_signatures(import_confirm_func);
+}
+
+std::vector<std::string> Transaction::get_gpg_signature_problems() const noexcept {
+    return p_impl->signature_problems;
 }
 
 void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, GoalProblem problems) {
@@ -730,5 +777,127 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
     }
 }
 
+static std::string import_repo_keys_result_to_string(const ImportRepoKeysResult result) {
+    switch (result) {
+        case ImportRepoKeysResult::OK:
+            return {};
+        case ImportRepoKeysResult::NO_KEYS:
+        case ImportRepoKeysResult::ALREADY_PRESENT:
+        case ImportRepoKeysResult::IMPORT_DECLINED:
+        case ImportRepoKeysResult::IMPORT_FAILED:
+            return TM_(IMPORT_REPO_KEYS_RESULT_DICT.at(result), 1);
+    }
+    return {};
+}
+
+ImportRepoKeysResult Transaction::Impl::import_repo_keys(
+    libdnf::repo::Repo & repo, std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func) {
+    auto key_urls = repo.get_config().get_gpgkey_option().get_value();
+    if (!key_urls.size()) {
+        return ImportRepoKeysResult::NO_KEYS;
+    }
+
+    bool all_keys_already_present{true};
+    bool some_key_import_failed{false};
+    bool some_key_declined{false};
+    for (auto const & key_url : key_urls) {
+        for (auto & key_info : rpm_signature.parse_key_file(key_url)) {
+            if (rpm_signature.key_present(key_info)) {
+                signature_problems.push_back(
+                    utils::sformat(_("Public key \"{}\" is already present, not importing."), key_url));
+                continue;
+            }
+
+            all_keys_already_present = false;
+
+            if (!import_confirm_func(key_info)) {
+                some_key_declined = true;
+                continue;
+            }
+
+            try {
+                if (rpm_signature.import_key(key_info)) {
+                    continue;
+                }
+            } catch (const libdnf::rpm::KeyImportError & ex) {
+                signature_problems.push_back(
+                    utils::sformat(_("An error occurred importing key \"{}\": {}"), key_url, ex.what()));
+            }
+
+            some_key_import_failed = true;
+        }
+    }
+
+    if (some_key_import_failed) {
+        return ImportRepoKeysResult::IMPORT_FAILED;
+    }
+
+    if (some_key_declined) {
+        return ImportRepoKeysResult::IMPORT_DECLINED;
+    }
+
+    if (all_keys_already_present) {
+        return ImportRepoKeysResult::ALREADY_PRESENT;
+    }
+
+    return ImportRepoKeysResult::OK;
+}
+
+bool Transaction::Impl::check_gpg_signatures(std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func) {
+    auto & config = base->get_config();
+    if (!config.get_gpgcheck_option().get_value()) {
+        // gpg check switched off by configuration / command line option
+        return true;
+    }
+    // TODO(mblaha): DNSsec key verification
+    bool result{true};
+    libdnf::rpm::RpmSignature rpm_signature(base);
+    std::set<std::string> processed_repos{};
+    for (const auto & trans_pkg : packages) {
+        if (transaction_item_action_is_inbound(trans_pkg.get_action())) {
+            auto const & pkg = trans_pkg.get_package();
+            auto repo = pkg.get_repo();
+            auto err_msg = utils::sformat(
+                _("PGP check for package \"{}\" ({}) from repo \"{}\" has failed: "),
+                pkg.get_nevra(),
+                pkg.get_package_path(),
+                repo->get_id());
+            auto check_result = rpm_signature.check_package_signature(pkg);
+            if (check_result != libdnf::rpm::RpmSignature::CheckResult::OK) {
+                // these two errors are possibly recoverable by importing the correct public key
+                auto is_error_recoverable =
+                    check_result == libdnf::rpm::RpmSignature::CheckResult::FAILED_KEY_MISSING ||
+                    check_result == libdnf::rpm::RpmSignature::CheckResult::FAILED_NOT_TRUSTED;
+                if (is_error_recoverable) {
+                    // do not try to import keys for the same repo twice
+                    auto repo_id = repo->get_id();
+                    if (processed_repos.contains(repo_id)) {
+                        signature_problems.push_back(
+                            err_msg + import_repo_keys_result_to_string(ImportRepoKeysResult::ALREADY_PRESENT));
+                        result = false;
+                        continue;
+                    }
+                    processed_repos.emplace(repo_id);
+
+                    auto import_result = import_repo_keys(*repo, import_confirm_func);
+                    if (import_result == ImportRepoKeysResult::OK) {
+                        auto check_again = rpm_signature.check_package_signature(pkg);
+                        if (check_again != libdnf::rpm::RpmSignature::CheckResult::OK) {
+                            signature_problems.push_back(err_msg + _("Import of the key didn't help, wrong key?"));
+                            result = false;
+                        }
+                    } else {
+                        signature_problems.push_back(err_msg + import_repo_keys_result_to_string(import_result));
+                        result = false;
+                    }
+                } else {
+                    signature_problems.push_back(err_msg + rpm_signature.check_result_to_string(check_result));
+                    result = false;
+                }
+            }
+        }
+    }
+    return result;
+}
 
 }  // namespace libdnf::base
