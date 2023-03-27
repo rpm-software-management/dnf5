@@ -128,7 +128,10 @@ public:
     ///         The returned pointer must **not** be freed manually.
     /// @since 5.0
     Command * get_parent_command() const noexcept {
-        return static_cast<Command *>(argument_parser_command->get_user_data());
+        auto * parser_parent = argument_parser_command->get_parent();
+        if (!parser_parent)
+            return nullptr;
+        return static_cast<Command *>(parser_parent->get_user_data());
     }
 
     /// @return Pointer to the underlying argument parser command.
