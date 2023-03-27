@@ -479,6 +479,9 @@ public:
         /// Gets the header of the positional arguments table. Used to generate help.
         const std::string & get_positional_args_help_header() const noexcept { return positional_args_help_header; }
 
+        /// Returns the pointer to the parent Command (as set by register_command()).
+        Command * get_parent() const noexcept { return parent; }
+
     private:
         friend class ArgumentParser;
 
