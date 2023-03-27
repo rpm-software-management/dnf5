@@ -31,6 +31,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <optional>
 
 
+namespace libdnf::rpm {
+class KeyInfo;
+}  // namespace libdnf::rpm
+
+
 namespace libdnf::base {
 
 class TransactionGroup;
@@ -132,6 +137,30 @@ public:
 
     /// Retrieve list of problems that occurred during transaction run attempt
     std::vector<std::string> get_transaction_problems() const noexcept;
+
+    /// @brief Check signatures of packages in the resolved transaction.
+    ///
+    /// @param import_keys When the parameter is on, problems related to missing GPG keys are
+    /// tried to be automatically recovered by importing the missing ones.
+    ///
+    /// @return True if all packages have correct signatures or checking is turned off with `gpgcheck` option,
+    /// otherwise false. More info about occurred problems can be retrieved using the `get_gpg_signature_problems`
+    /// method.
+    bool check_gpg_signatures(bool import_keys = true);
+
+    /// @brief Check signatures of packages in the resolved transaction.
+    ///
+    /// @param import_confirm_func This function is used for deciding whether to import the given GPG key
+    /// when a problem related to missing keys occurs.
+    ///
+    /// @return True if all packages have correct signatures or checking is turned off with `gpgcheck` option,
+    /// otherwise false. More info about occurred problems can be retrieved using the `get_gpg_signature_problems`
+    /// method.
+    // TODO(jkolarik): To be reworked as we don't want std::function exposed on the public API
+    bool check_gpg_signatures(std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func);
+
+    /// Retrieve a list of the problems that occurred during `check_gpg_signatures` procedure.
+    std::vector<std::string> get_gpg_signature_problems() const noexcept;
 
 private:
     friend class TransactionGroup;

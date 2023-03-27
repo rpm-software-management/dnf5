@@ -26,25 +26,19 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/transaction.hpp"
 #include "libdnf/base/transaction_group.hpp"
 #include "libdnf/base/transaction_package.hpp"
+#include "libdnf/rpm/rpm_signature.hpp"
 
 #include <solv/transaction.h>
 
 
 namespace libdnf::base {
 
+enum class ImportRepoKeysResult { OK, NO_KEYS, ALREADY_PRESENT, IMPORT_DECLINED, IMPORT_FAILED };
 
 class Transaction::Impl {
 public:
-    Impl(Transaction & transaction, const BaseWeakPtr & base) : transaction(&transaction), base(base) {}
-    Impl(Transaction & transaction, const Impl & src)
-        : transaction(&transaction),
-          base(src.base),
-          libsolv_transaction(src.libsolv_transaction ? transaction_create_clone(src.libsolv_transaction) : nullptr),
-          problems(src.problems),
-          packages(src.packages),
-          groups(src.groups),
-          resolve_logs(src.resolve_logs),
-          transaction_problems(src.transaction_problems) {}
+    Impl(Transaction & transaction, const BaseWeakPtr & base);
+    Impl(Transaction & transaction, const Impl & src);
     ~Impl();
 
     Impl & operator=(const Impl & other);
@@ -92,6 +86,7 @@ private:
     BaseWeakPtr base;
     ::Transaction * libsolv_transaction{nullptr};
     libdnf::GoalProblem problems{GoalProblem::NO_PROBLEM};
+    libdnf::rpm::RpmSignature rpm_signature;
 
     std::vector<TransactionPackage> packages;
     std::vector<TransactionGroup> groups;
@@ -100,6 +95,7 @@ private:
     std::vector<LogEvent> resolve_logs;
 
     std::vector<std::string> transaction_problems{};
+    std::vector<std::string> signature_problems{};
 
     // history db transaction id
     int64_t history_db_id = 0;
@@ -110,6 +106,10 @@ private:
         const std::optional<uint32_t> user_id,
         const std::string & comment,
         const bool test_only);
+
+    bool check_gpg_signatures(std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func);
+    ImportRepoKeysResult import_repo_keys(
+        libdnf::repo::Repo & repo, std::function<bool(const libdnf::rpm::KeyInfo &)> & import_confirm_func);
 };
 
 
