@@ -176,6 +176,10 @@ namespace {
 
 class RpmTransCB : public libdnf::rpm::TransactionCallbacks {
 public:
+    RpmTransCB() {
+        multi_progress_bar.set_total_bar_visible_limit(libdnf::cli::progressbar::MultiProgressBar::NEVER_VISIBLE_LIMIT);
+    }
+
     ~RpmTransCB() {
         if (active_progress_bar &&
             active_progress_bar->get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
@@ -539,6 +543,7 @@ void Context::download_and_run(libdnf::base::Transaction & transaction) {
     }
 
     auto result = transaction.run();
+    std::cout << std::endl;
     if (result != libdnf::base::Transaction::TransactionRunResult::SUCCESS) {
         std::cout << "Transaction failed: " << libdnf::base::Transaction::transaction_result_to_string(result)
                   << std::endl;
