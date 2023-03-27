@@ -79,6 +79,9 @@ public:
     // TODO(jrohel): Return reference instead of copy?
     std::vector<libdnf::base::TransactionPackage> get_transaction_packages() const;
 
+    /// @return the number of transaction packages.
+    std::size_t get_transaction_packages_count() const;
+
     /// @return the transaction groups.
     std::vector<libdnf::base::TransactionGroup> & get_transaction_groups() const;
 
