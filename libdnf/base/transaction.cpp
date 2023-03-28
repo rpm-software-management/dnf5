@@ -676,9 +676,15 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
             if (transaction_item_action_is_inbound(tsgroup.get_action())) {
                 libdnf::system::GroupState state;
                 state.userinstalled = tsgroup.get_reason() == transaction::TransactionItemReason::USER;
+                state.name = group.get_name();
                 // Remember packages installed by this group
                 for (const auto & pkg : group.get_packages()) {
                     auto pkg_name = pkg.get_name();
+                    libdnf::system::GroupPackage grp_pkg;
+                    grp_pkg.type = pkg.get_type();
+                    grp_pkg.name = pkg_name;
+                    grp_pkg.condition = pkg.get_condition();
+                    state.all_packages.push_back(std::move(grp_pkg));
                     if (inbound_packages_reason_group.find(pkg_name) != inbound_packages_reason_group.end()) {
                         // inbound package with reason GROUP from this transaction
                         state.packages.emplace_back(pkg_name);
