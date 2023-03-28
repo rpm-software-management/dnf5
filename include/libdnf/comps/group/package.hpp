@@ -66,6 +66,7 @@ inline constexpr bool any(PackageType flags) {
     return static_cast<std::underlying_type<PackageType>::type>(flags) != 0;
 }
 
+std::string package_type_to_string(const PackageType & type);
 PackageType package_type_from_string(const std::string & type);
 PackageType package_type_from_string(const std::vector<std::string> types);
 
@@ -102,19 +103,7 @@ public:
 
     /// @return std::string that corresponds to the PackageType.
     /// @since 5.0
-    std::string get_type_string() const {
-        switch (type) {
-            case PackageType::MANDATORY:
-                return "mandatory";
-            case PackageType::DEFAULT:
-                return "default";
-            case PackageType::OPTIONAL:
-                return "optional";
-            case PackageType::CONDITIONAL:
-                return "conditional";
-        }
-        return "";
-    }
+    std::string get_type_string() const { return package_type_to_string(type); }
 
     /// @return The condition (name of package) under which the package gets installed.
     /// @since 5.0

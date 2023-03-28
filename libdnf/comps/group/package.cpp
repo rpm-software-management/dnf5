@@ -51,4 +51,18 @@ PackageType package_type_from_string(const std::vector<std::string> types) {
     return retval;
 }
 
+std::string package_type_to_string(const PackageType & type) {
+    switch (type) {
+        case PackageType::MANDATORY:
+            return "mandatory";
+        case PackageType::DEFAULT:
+            return "default";
+        case PackageType::OPTIONAL:
+            return "optional";
+        case PackageType::CONDITIONAL:
+            return "conditional";
+    }
+    return "";
+}
+
 }  // namespace libdnf::comps
