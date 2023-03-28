@@ -27,6 +27,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "commands/group/group.hpp"
 #include "commands/history/history.hpp"
 #include "commands/install/install.hpp"
+#include "commands/leaves/leaves.hpp"
 #include "commands/list/info.hpp"
 #include "commands/list/list.hpp"
 #include "commands/makecache/makecache.hpp"
@@ -485,6 +486,7 @@ static void add_commands(Context & context) {
     context.add_and_initialize_command(std::make_unique<SwapCommand>(context));
     context.add_and_initialize_command(std::make_unique<MarkCommand>(context));
 
+    context.add_and_initialize_command(std::make_unique<LeavesCommand>(context));
     context.add_and_initialize_command(std::make_unique<RepoqueryCommand>(context));
     context.add_and_initialize_command(std::make_unique<SearchCommand>(context));
     context.add_and_initialize_command(std::make_unique<ListCommand>(context));
