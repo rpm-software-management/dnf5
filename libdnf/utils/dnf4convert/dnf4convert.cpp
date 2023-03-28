@@ -74,7 +74,8 @@ static constexpr const char * SQL_CURRENTLY_INSTALLED_GROUPS = R"**(
     SELECT
         "ti"."item_id",
         "ti"."reason",
-        "cg"."groupid"
+        "cg"."groupid",
+        "cg"."name"
     FROM
         "trans_item" "ti"
     JOIN
@@ -96,12 +97,11 @@ static constexpr const char * SQL_CURRENTLY_INSTALLED_GROUPS = R"**(
 // Query to get list of packages that were installed with given group.
 static constexpr const char * SQL_GROUP_PACKAGES = R"**(
 SELECT
-    DISTINCT "name"
+    DISTINCT "name", "installed", "pkg_type"
 FROM
     "comps_group_package"
 WHERE
-    "installed" = 1
-    AND "group_id" = ?
+    "group_id" = ?
 )**";
 
 
@@ -196,7 +196,13 @@ bool Dnf4Convert::read_package_states_from_history(
     // These arrays temporarily hold data read from sqlite database. They are converted
     // to libdnf::system::* objects once everything is read from db.
     std::vector<std::tuple<rpm::Nevra, transaction::TransactionItemReason, std::string>> installed_packages;
-    std::vector<std::tuple<std::string, transaction::TransactionItemReason, std::set<std::string>>> installed_groups;
+    std::vector<std::tuple<
+        std::string,
+        std::string,
+        transaction::TransactionItemReason,
+        std::set<std::string>,
+        std::vector<libdnf::system::GroupPackage>>>
+        installed_groups;
     std::vector<std::tuple<std::string, std::set<std::string>>> installed_environments;
 
     // Auxiliary map to optimalize looking up groups for package
@@ -230,23 +236,43 @@ bool Dnf4Convert::read_package_states_from_history(
         auto query_groups = std::make_unique<libdnf::utils::SQLite3::Query>(*conn, SQL_CURRENTLY_INSTALLED_GROUPS);
         while (query_groups->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
             auto group_id = query_groups->get<std::string>("groupid");
+            auto group_name = query_groups->get<std::string>("name");
             auto item_id = query_groups->get<int64_t>("item_id");
             auto pkgs_query = std::make_unique<libdnf::utils::SQLite3::Query>(*conn, SQL_GROUP_PACKAGES);
             pkgs_query->bindv(item_id);
-            std::set<std::string> packages;
+            std::set<std::string> installed_packages;
+            std::vector<libdnf::system::GroupPackage> all_packages;
             while (pkgs_query->step() == libdnf::utils::SQLite3::Statement::StepResult::ROW) {
                 auto pkg_name = pkgs_query->get<std::string>("name");
-                packages.emplace(pkg_name);
-                // keep track of every group the package is part of
-                package_groups[pkg_name].insert(group_id);
+                auto installed = pkgs_query->get<bool>("installed");
+                auto pkg_type = static_cast<libdnf::comps::PackageType>(pkgs_query->get<int>("pkg_type"));
+                libdnf::system::GroupPackage grp_pkg;
+                grp_pkg.name = pkg_name;
+                if (pkg_type != libdnf::comps::PackageType::MANDATORY &&
+                    pkg_type != libdnf::comps::PackageType::OPTIONAL) {
+                    // For conditional packages the condition itself is not stored in
+                    // historydb. So treat them as "default".
+                    // Also unknown values from database are treated as "default".
+                    pkg_type = libdnf::comps::PackageType::DEFAULT;
+                }
+                grp_pkg.type = pkg_type;
+                all_packages.emplace_back(std::move(grp_pkg));
+
+                if (installed) {
+                    installed_packages.emplace(pkg_name);
+                    // keep track of every group the package is part of
+                    package_groups[pkg_name].insert(group_id);
+                }
             }
             // reason stored in dnf4 history db is always USER
             // if the group is part of installed environment, mark it as DEPENDENCY
             installed_groups.emplace_back(
                 group_id,
+                group_name,
                 groups_in_environments.contains(group_id) ? transaction::TransactionItemReason::DEPENDENCY
                                                           : transaction::TransactionItemReason::USER,
-                std::move(packages));
+                std::move(installed_packages),
+                std::move(all_packages));
         }
 
         auto query_pkgs = std::make_unique<libdnf::utils::SQLite3::Query>(*conn, SQL_CURRENTLY_INSTALLED_PACKAGES);
@@ -304,8 +330,9 @@ bool Dnf4Convert::read_package_states_from_history(
     }
 
     // Store the groups state in groups.toml.
-    for (const auto & [group_id, reason, candidate_packages] : installed_groups) {
+    for (const auto & [group_id, group_name, reason, candidate_packages, all_packages] : installed_groups) {
         libdnf::system::GroupState group_state;
+        group_state.name = group_name;
         if (reason == transaction::TransactionItemReason::USER) {
             group_state.userinstalled = true;
         } else {
@@ -317,6 +344,7 @@ bool Dnf4Convert::read_package_states_from_history(
                 group_state.packages.emplace_back(std::move(candidate_pkg));
             }
         }
+        group_state.all_packages = all_packages;
         group_states.emplace(group_id, std::move(group_state));
     }
 
