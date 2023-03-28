@@ -254,3 +254,6 @@ del ClassName##__iter__
 %template(PreserveOrderMapStringPreserveOrderMapStringString) libdnf::PreserveOrderMap<std::string, libdnf::PreserveOrderMap<std::string, std::string>>;
 
 %exception;  // beware this resets all exception handlers if you import this file after defining any
+
+// Base weak ptr is used across the codebase
+%include "libdnf/base/base_weak.hpp"
