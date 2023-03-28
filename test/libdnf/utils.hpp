@@ -244,16 +244,36 @@ struct assertion_traits<libdnf::system::NevraState> {
 };
 
 template <>
+struct assertion_traits<libdnf::system::GroupPackage> {
+    inline static bool equal(const libdnf::system::GroupPackage & left, const libdnf::system::GroupPackage & right) {
+        return left.name == right.name && left.type == right.type && left.condition == right.condition;
+    }
+
+    inline static std::string toString(const libdnf::system::GroupPackage & group_package) {
+        return fmt::format(
+            "GroupPackage: name: {}, type: {}, condition: {}",
+            group_package.name,
+            libdnf::comps::package_type_to_string(group_package.type),
+            group_package.condition);
+    }
+};
+
+template <>
 struct assertion_traits<libdnf::system::GroupState> {
     inline static bool equal(const libdnf::system::GroupState & left, const libdnf::system::GroupState & right) {
-        return left.userinstalled == right.userinstalled && left.packages == right.packages;
+        return left.userinstalled == right.userinstalled && left.packages == right.packages &&
+               left.name == right.name &&
+               assertion_traits<std::vector<libdnf::system::GroupPackage>>::equal(
+                   left.all_packages, right.all_packages);
     }
 
     inline static std::string toString(const libdnf::system::GroupState & group_state) {
         return fmt::format(
-            "GroupState: userinstalled: {}, packages: {}",
+            "GroupState: userinstalled: {}, name: {}, packages: {}, all_packages: {}",
             group_state.userinstalled,
-            assertion_traits<std::vector<std::string>>::toString(group_state.packages));
+            group_state.name,
+            assertion_traits<std::vector<std::string>>::toString(group_state.packages),
+            assertion_traits<std::vector<libdnf::system::GroupPackage>>::toString(group_state.all_packages));
     }
 };
 

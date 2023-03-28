@@ -45,8 +45,16 @@ static const std::string nevras_contents{R"""(version = "1.0"
 // TODO(lukash) alphabetic sorting
 static const std::string groups_contents{R"""(version = "1.0"
 [groups]
-group-1 = {packages=["foo","bar"],userinstalled=true}
-group-2 = {packages=["pkg1","pkg2"],userinstalled=false}
+[groups.group-1]
+all_packages = [["foo","mandatory",""],["bar","default",""]]
+name = "Group 1"
+packages = ["foo","bar"]
+userinstalled = true
+[groups.group-2]
+all_packages = [["pkg1","mandatory",""],["pkg2","conditional","bar"]]
+name = "Group 2"
+packages = ["pkg1","pkg2"]
+userinstalled = false
 )"""};
 
 static const std::string modules_contents{R"""(version = "1.0"
@@ -115,9 +123,21 @@ void StateTest::test_state_read() {
     CPPUNIT_ASSERT_EQUAL(std::string("repo1"), state.get_package_from_repo("pkg-1.2-1.x86_64"));
     CPPUNIT_ASSERT_EQUAL(std::string("repo2"), state.get_package_from_repo("unresolvable-1.2-1.noarch"));
 
-    libdnf::system::GroupState grp_state_1{.userinstalled = true, .packages = {"foo", "bar"}};
+    libdnf::system::GroupState grp_state_1{
+        .userinstalled = true,
+        .packages = {"foo", "bar"},
+        .name = "Group 1",
+        .all_packages = {
+            {.name = "foo", .type = libdnf::comps::PackageType::MANDATORY, .condition = ""},
+            {.name = "bar", .type = libdnf::comps::PackageType::DEFAULT, .condition = ""}}};
     CPPUNIT_ASSERT_EQUAL(grp_state_1, state.get_group_state("group-1"));
-    libdnf::system::GroupState grp_state_2{.userinstalled = false, .packages = {"pkg1", "pkg2"}};
+    libdnf::system::GroupState grp_state_2{
+        .userinstalled = false,
+        .packages = {"pkg1", "pkg2"},
+        .name = "Group 2",
+        .all_packages = {
+            {.name = "pkg1", .type = libdnf::comps::PackageType::MANDATORY, .condition = ""},
+            {.name = "pkg2", .type = libdnf::comps::PackageType::CONDITIONAL, .condition = "bar"}}};
     CPPUNIT_ASSERT_EQUAL(grp_state_2, state.get_group_state("group-2"));
 
     CPPUNIT_ASSERT_EQUAL(std::string("stream-1"), state.get_module_enabled_stream("module-1"));
@@ -143,8 +163,22 @@ void StateTest::test_state_write() {
     state.set_package_from_repo("unresolvable-1.2-1.noarch", "repo2");
     state.set_package_from_repo("pkg-libs-1.2-1.x86_64", "");
 
-    state.set_group_state("group-1", {.userinstalled = true, .packages = {"foo", "bar"}});
-    state.set_group_state("group-2", {.userinstalled = false, .packages = {"pkg1", "pkg2"}});
+    state.set_group_state(
+        "group-1",
+        {.userinstalled = true,
+         .packages = {"foo", "bar"},
+         .name = "Group 1",
+         .all_packages = {
+             {.name = "foo", .type = libdnf::comps::PackageType::MANDATORY, .condition = ""},
+             {.name = "bar", .type = libdnf::comps::PackageType::DEFAULT, .condition = ""}}});
+    state.set_group_state(
+        "group-2",
+        {.userinstalled = false,
+         .packages = {"pkg1", "pkg2"},
+         .name = "Group 2",
+         .all_packages = {
+             {.name = "pkg1", .type = libdnf::comps::PackageType::MANDATORY, .condition = ""},
+             {.name = "pkg2", .type = libdnf::comps::PackageType::CONDITIONAL, .condition = "bar"}}});
 
     state.set_module_enabled_stream("module-1", "stream-1");
     state.set_module_state("module-1", libdnf::module::ModuleState::ENABLED);
@@ -190,7 +224,12 @@ void StateTest::test_state_write() {
 
     const std::string groups_contents_after_remove{
         R"""(version = "1.0"
-groups = {group-2={packages=["pkg1","pkg2"],userinstalled=false}}
+[groups]
+[groups.group-2]
+all_packages = [["pkg1","mandatory",""],["pkg2","conditional","bar"]]
+name = "Group 2"
+packages = ["pkg1","pkg2"]
+userinstalled = false
 )"""};
 
     CPPUNIT_ASSERT_EQUAL(groups_contents_after_remove, trim(libdnf::utils::fs::File(path / "groups.toml", "r").read()));
