@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_SYSTEM_STATE_HPP
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package.hpp"
@@ -46,10 +47,29 @@ public:
     std::string from_repo;
 };
 
+class GroupPackage {
+public:
+    std::string name;
+    libdnf::comps::PackageType type;
+    std::string condition;
+};
+
 class GroupState {
 public:
     bool userinstalled{false};
+    // List of packages that were installed along with the group
     std::vector<std::string> packages;
+
+    // name and all_packages attributes are kind of duplicit (information they
+    // contain is also part of the xml definition of the group also stored in the
+    // system state directory. But there are use cases where such xml is not
+    // available - e.g. in case the group state was re-created based on the
+    // history database.
+
+    // group name
+    std::string name;
+    // All packages as defined in the group in time it was installed.
+    std::vector<GroupPackage> all_packages;
 };
 
 class EnvironmentState {

@@ -79,6 +79,30 @@ struct into<libdnf::system::NevraState> {
 
 
 template <>
+struct from<libdnf::system::GroupPackage> {
+    static libdnf::system::GroupPackage from_toml(const value & v) {
+        auto gp = toml::get<std::tuple<std::string, std::string, std::string>>(v);
+
+        libdnf::system::GroupPackage group_package;
+        group_package.name = std::get<0>(gp);
+        group_package.type = libdnf::comps::package_type_from_string(std::get<1>(gp));
+        group_package.condition = std::get<2>(gp);
+
+        return group_package;
+    }
+};
+
+
+template <>
+struct into<libdnf::system::GroupPackage> {
+    static toml::value into_toml(const libdnf::system::GroupPackage & group_package) {
+        return toml::array{
+            group_package.name, libdnf::comps::package_type_to_string(group_package.type), group_package.condition};
+    }
+};
+
+
+template <>
 struct from<libdnf::system::GroupState> {
     static libdnf::system::GroupState from_toml(const value & v) {
         libdnf::system::GroupState group_state;
@@ -86,6 +110,12 @@ struct from<libdnf::system::GroupState> {
         group_state.userinstalled = toml::find<bool>(v, "userinstalled");
         if (v.contains("packages")) {
             group_state.packages = toml::find<std::vector<std::string>>(v, "packages");
+        }
+        if (v.contains("name")) {
+            group_state.name = toml::find<std::string>(v, "name");
+        }
+        if (v.contains("all_packages")) {
+            group_state.all_packages = toml::find<std::vector<libdnf::system::GroupPackage>>(v, "all_packages");
         }
 
         return group_state;
@@ -100,6 +130,8 @@ struct into<libdnf::system::GroupState> {
 
         res["userinstalled"] = group_state.userinstalled;
         res["packages"] = group_state.packages;
+        res["name"] = group_state.name;
+        res["all_packages"] = group_state.all_packages;
 
         return res;
     }
