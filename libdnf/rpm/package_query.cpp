@@ -227,6 +227,171 @@ static inline bool name_arch_compare_lower(const Solvable * first, const T * sec
     return first->arch < second->arch;
 }
 
+void add_edges(
+    Base & base,
+    std::set<unsigned int> & edges,
+    const PackageQuery & full_query,
+    const std::map<PackageId, unsigned int> & pkg_id2idx,
+    const ReldepList & deps) {
+    // resolve dependencies and add an edge if there is exactly one package satisfying it
+    for (int i = 0; i < deps.size(); ++i) {
+        ReldepList req_in_list(base);
+        req_in_list.add(deps.get_id(i));
+        PackageQuery query(full_query);
+        query.filter_provides(req_in_list);
+        if (query.size() == 1) {
+            auto pkg = *query.begin();
+            edges.insert(pkg_id2idx.at(pkg.get_id()));
+        }
+    }
+}
+
+std::vector<std::vector<unsigned int>> build_graph(
+    Base & base, const PackageQuery & full_query, const std::vector<Package> & pkgs, bool use_recommends) {
+    // create pkg_id2idx to map Packages to their index in pkgs
+    std::map<PackageId, unsigned int> pkg_id2idx;
+    for (size_t i = 0; i < pkgs.size(); ++i) {
+        pkg_id2idx.emplace(pkgs[i].get_id(), i);
+    }
+
+    std::vector<std::vector<unsigned int>> graph;
+    graph.reserve(pkgs.size());
+
+    for (unsigned int i = 0; i < pkgs.size(); ++i) {
+        std::set<unsigned int> edges;
+        const auto & package = pkgs[i];
+        add_edges(base, edges, full_query, pkg_id2idx, package.get_requires());
+        if (use_recommends) {
+            add_edges(base, edges, full_query, pkg_id2idx, package.get_recommends());
+        }
+        edges.erase(i);  // remove self-edges
+        graph.emplace_back(edges.begin(), edges.end());
+    }
+
+    return graph;
+}
+
+std::vector<std::vector<unsigned int>> reverse_graph(const std::vector<std::vector<unsigned int>> & graph) {
+    std::vector<std::vector<unsigned int>> rgraph(graph.size());
+
+    // pre-allocate (reserve) memory to prevent reallocations
+    std::vector<unsigned int> lengths(graph.size(), 0);
+    for (const auto & edges : graph) {
+        for (auto edge : edges) {
+            ++lengths[edge];
+        }
+    }
+    for (unsigned int i = 0; i < graph.size(); ++i) {
+        rgraph[i].reserve(lengths[i]);
+    }
+
+    // reverse graph
+    for (unsigned int i = 0; i < graph.size(); ++i) {
+        for (auto edge : graph[i]) {
+            rgraph[edge].push_back(i);
+        }
+    }
+
+    return rgraph;
+}
+
+std::vector<std::vector<unsigned int>> kosaraju(const std::vector<std::vector<unsigned int>> & graph) {
+    const auto N = static_cast<unsigned int>(graph.size());
+    std::vector<unsigned int> rstack(N);
+    std::vector<unsigned int> stack(N);
+    std::vector<bool> tag(N, false);
+    unsigned int r = N;
+    unsigned int top = 0;
+
+    // do depth-first searches in the graph and push nodes to rstack
+    // "on the way up" until all nodes have been pushed.
+    // tag nodes as they're processed so we don't visit them more than once
+    for (unsigned int i = 0; i < N; ++i) {
+        if (tag[i]) {
+            continue;
+        }
+
+        unsigned int u = i;
+        unsigned int j = 0;
+        tag[u] = true;
+        while (true) {
+            const auto & edges = graph[u];
+            if (j < edges.size()) {
+                const auto v = edges[j++];
+                if (!tag[v]) {
+                    rstack[top] = j;
+                    stack[top++] = u;
+                    u = v;
+                    j = 0;
+                    tag[u] = true;
+                }
+            } else {
+                rstack[--r] = u;
+                if (top == 0) {
+                    break;
+                }
+                u = stack[--top];
+                j = rstack[top];
+            }
+        }
+    }
+
+    if (r != 0) {
+        throw std::logic_error("leaves: kosaraju(): r != 0");
+    }
+
+    // now searches beginning at nodes popped from rstack in the graph with all
+    // edges reversed will give us the strongly connected components.
+    // this time all nodes are tagged, so let's remove the tags as we visit each
+    // node.
+    // the incoming edges to each component is the union of incoming edges to
+    // each node in the component minus the incoming edges from component nodes
+    // themselves.
+    // if there are no such incoming edges the component is a leaf and we
+    // add it to the array of leaves.
+    auto rgraph = reverse_graph(graph);
+    std::set<unsigned int> sccredges;
+    std::vector<std::vector<unsigned int>> leaves;
+    for (; r < N; ++r) {
+        unsigned int u = rstack[r];
+        if (!tag[u]) {
+            continue;
+        }
+
+        stack[top++] = u;
+        tag[u] = false;
+        unsigned int s = N;
+        while (top) {
+            u = stack[--s] = stack[--top];
+            const auto & redges = rgraph[u];
+            for (unsigned int j = 0; j < redges.size(); ++j) {
+                const unsigned int v = redges[j];
+                sccredges.insert(v);
+                if (!tag[v]) {
+                    continue;
+                }
+
+                stack[top++] = v;
+                tag[v] = false;
+            }
+        }
+
+        for (unsigned int i = s; i < N; ++i) {
+            sccredges.erase(stack[i]);
+        }
+
+        if (sccredges.empty()) {
+            std::vector scc(stack.begin() + s, stack.end());
+            std::sort(scc.begin(), scc.end());
+            leaves.emplace_back(std::move(scc));
+        } else {
+            sccredges.clear();
+        }
+    }
+
+    return leaves;
+}
+
 
 }  //  namespace
 
@@ -2485,6 +2650,54 @@ void PackageQuery::filter_duplicates() {
     if (start_block != i - 1) {  // Add last block to the map if it is bigger than 1 (has duplicates)
         add_block_to_map(*p_impl, samename, start_block, i);
     }
+}
+
+std::vector<std::vector<Package>> PackageQuery::filter_leaves(bool return_grouped_leaves) {
+    std::vector<std::vector<Package>> grouped_leaves;
+    auto & pool = get_rpm_pool(p_impl->base);
+
+    // get array of all packages
+    std::vector<Package> pkgs(begin(), end());
+
+    // build the directed graph of dependencies
+    bool use_recommends = p_impl->base->get_config().get_install_weak_deps_option().get_value();
+    auto graph = build_graph(*p_impl->base, *this, pkgs, use_recommends);
+
+    // run Kosaraju's algorithm to find strongly connected components
+    // without any incoming edges
+    auto leaves = kosaraju(graph);
+
+    libdnf::solv::SolvMap filter_result(pool.get_nsolvables());
+    if (return_grouped_leaves) {
+        grouped_leaves.reserve(leaves.size());
+        for (const auto & scc : leaves) {
+            auto & group = grouped_leaves.emplace_back();
+            group.reserve(scc.size());
+            for (unsigned int j = 0; j < scc.size(); ++j) {
+                const auto & package = pkgs[scc[j]];
+                group.emplace_back(package);
+                filter_result.add_unsafe(package.get_id().id);
+            }
+        }
+    } else {
+        for (const auto & scc : leaves) {
+            for (unsigned int j = 0; j < scc.size(); ++j) {
+                const auto & package = pkgs[scc[j]];
+                filter_result.add_unsafe(package.get_id().id);
+            }
+        }
+    }
+    *p_impl &= filter_result;
+
+    return grouped_leaves;
+}
+
+void PackageQuery::filter_leaves() {
+    filter_leaves(false);
+}
+
+std::vector<std::vector<Package>> PackageQuery::filter_leaves_groups() {
+    return filter_leaves(true);
 }
 
 void PackageQuery::filter_recent(const time_t timestamp) {
