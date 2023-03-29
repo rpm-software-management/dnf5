@@ -638,7 +638,26 @@ public:
     /// Filter packages to keep only duplicates of installed packages. Packages are duplicate if they have the same `name` and `arch` but different `evr`.
     void filter_duplicates();
 
+    /// Filter the leaf packages.
+    ///
+    /// Leaf packages are installed packages that are not required as a dependency of another installed package.
+    /// However, two or more installed packages might depend on each other in a dependency cycle. Packages
+    /// in such cycles that are not required by any other installed package are also leaf.
+    void filter_leaves();
+
+    /// Filter the leaf packages and return them grouped by their dependencies.
+    ///
+    /// Leaf packages are installed packages that are not required as a dependency of another installed package.
+    /// However, two or more installed packages might depend on each other in a dependency cycle. Packages
+    /// in such cycles that are not required by any other installed package are also leaf.
+    /// Packages in such cycles form a group of leaf packages.
+    ///
+    /// @return  Groups of one or more interdependent leaf packages.
+    std::vector<std::vector<Package>> filter_leaves_groups();
+
 private:
+    std::vector<std::vector<Package>> filter_leaves(bool return_grouped_leaves);
+
     friend libdnf::Goal;
     class PQImpl;
     std::unique_ptr<PQImpl> p_pq_impl;
