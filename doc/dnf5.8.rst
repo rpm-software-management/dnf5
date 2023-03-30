@@ -253,6 +253,9 @@ Following options are applicable in the general context for any ``dnf5`` command
 ``--setvar=VAR_NAME=VALUE``
     | Override a ``DNF5`` variable value, like ``arch``, ``releasever``, etc.
 
+``--show-new-leaves``
+    | Show newly installed leaf packages and packages that became leaves after a transaction.
+
 ``--skip-broken``
     | Resolve any dependency problems by removing packages that are causing problems from the transaction.
 

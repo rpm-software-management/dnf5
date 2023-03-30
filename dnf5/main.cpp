@@ -61,6 +61,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <libdnf5/logger/global_logger.hpp>
 #include <libdnf5/logger/memory_buffer_logger.hpp>
 #include <libdnf5/repo/repo_cache.hpp>
+#include <libdnf5/rpm/package_query.hpp>
 #include <libdnf5/utils/bgettext/bgettext-mark-domain.h>
 #include <libdnf5/version.hpp>
 #include <string.h>
@@ -499,6 +500,21 @@ void RootCommand::set_argument_parser() {
     global_options_group->register_argument(releasever);
 
     {
+        auto show_new_leaves = parser.add_new_named_arg("show-new-leaves");
+        show_new_leaves->set_long_name("show-new-leaves");
+        show_new_leaves->set_description(
+            "Show newly installed leaf packages and packages that became leaves after a transaction.");
+        show_new_leaves->set_parse_hook_func([&ctx](
+                                                 [[maybe_unused]] ArgumentParser::NamedArg * arg,
+                                                 [[maybe_unused]] const char * option,
+                                                 [[maybe_unused]] const char * value) {
+            ctx.set_show_new_leaves(true);
+            return true;
+        });
+        global_options_group->register_argument(show_new_leaves);
+    }
+
+    {
         auto debug_solver = parser.add_new_named_arg("debug_solver");
         debug_solver->set_long_name("debugsolver");
         debug_solver->set_description("Dump detailed solving results into files");
@@ -825,6 +841,47 @@ static void dump_variables(Context & context) {
     }
 }
 
+static void print_new_leaves(Context & context) {
+    libdnf5::rpm::PackageQuery pkg_query(context.base);
+    pkg_query.filter_installed();
+    libdnf5::rpm::PackageQuery pre_trans_leaves_query(pkg_query);
+    pre_trans_leaves_query.filter_leaves();
+
+    // Calculate the new system state (list of installed packages) after a successful transaction.
+    // Current state plus inbound minus outbound packages.
+    for (const auto & trans_pkg : context.get_transaction()->get_transaction_packages()) {
+        if (libdnf5::transaction::transaction_item_action_is_inbound(trans_pkg.get_action())) {
+            pkg_query.add(trans_pkg.get_package());
+        } else if (libdnf5::transaction::transaction_item_action_is_outbound(trans_pkg.get_action())) {
+            pkg_query.remove(trans_pkg.get_package());
+        }
+    }
+
+    pkg_query.filter_leaves();
+    pkg_query.difference(pre_trans_leaves_query);
+
+    std::set<std::string> pre_trans_leaves_na;
+    std::set<std::string> new_leaves_na;
+    for (const auto & package : pre_trans_leaves_query) {
+        pre_trans_leaves_na.insert(package.get_na());
+    }
+    for (const auto & package : pkg_query) {
+        auto na = package.get_na();
+        // Filters out new leaves packages with the same name and architecture as previously existing leaves.
+        if (!pre_trans_leaves_na.contains(na)) {
+            new_leaves_na.insert(package.get_na());
+        }
+    }
+
+    if (!new_leaves_na.empty()) {
+        std::cout << "New leaves:" << std::endl;
+        for (const auto & leaf_pkg : new_leaves_na) {
+            std::cout << " " << leaf_pkg << std::endl;
+        }
+        std::cout << std::endl;
+    }
+}
+
 }  // namespace dnf5
 
 
@@ -990,6 +1047,10 @@ int main(int argc, char * argv[]) try {
 
                 if (!libdnf5::cli::output::print_transaction_table(*context.get_transaction())) {
                     return static_cast<int>(libdnf5::cli::ExitCode::SUCCESS);
+                }
+
+                if (context.get_show_new_leaves()) {
+                    dnf5::print_new_leaves(context);
                 }
 
                 dnf5::print_transaction_size_stats(context);
