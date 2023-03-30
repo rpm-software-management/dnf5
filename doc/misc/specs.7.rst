@@ -54,6 +54,8 @@ Note: Curly brackets (``{}``) are not supported. You can still use them in
 shells that support them and let the shell do the expansion, but if quoted or
 escaped, ``DNF5`` will not expand them.
 
+.. _nevra_matching_ref-label:
+
 NEVRA matching
 ==============
 
@@ -125,6 +127,17 @@ Many commands take a ``<package-spec>`` parameter that selects a package for
 the operation. The ``<package-spec>`` argument is matched against package
 NEVRAs, provides and file provides.
 
+When ``<package-spec>`` is a package name or a provide, the user can provide
+additional restriction rules for matching the arguments. Basic version comparisons
+can be used for this purpose (=, >, <, >=, <=), like this ``<package-spec> >= <version>``,
+where the ``<version>`` argument is in a ``[EPOCH:]VERSION[-RELEASE]`` format
+as specified above in the :ref:`NEVRA matching <nevra_matching_ref-label>` section.
+
+To build more complex expressions, a rich dependency feature
+is also supported, which is always enclosed in parentheses. Boolean
+operators and nesting can be used, f.e. ``(<spec1> or (<spec2> and <spec3>))``.
+For more information, please see :ref:`RPM boolean dependencies <rpm_bool_deps_ref-label>`.
+
 ``<package-file-spec>`` is similar to ``<package-spec>``, except provides
 matching is not performed. Therefore, ``<package-file-spec>`` is matched only
 against NEVRAs and file provides.
@@ -187,3 +200,12 @@ specifies a transaction ID. Specifying ``last`` is the same as specifying the ID
 of the most recent transaction. The last form is ``last-<offset>``, where
 ``<offset>`` is a positive integer. It specifies offset-th transaction preceding
 the most recent transaction.
+
+
+See Also
+========
+
+.. _rpm_bool_deps_ref-label:
+
+RPM boolean dependencies:
+    | https://rpm-software-management.github.io/rpm/manual/boolean_dependencies.html
