@@ -114,6 +114,11 @@ public:
 
     bool get_dump_variables() const { return dump_variables; }
 
+    /// Set to true to show newly installed leaf packages and packages that became leaves after a transaction.
+    void set_show_new_leaves(bool show_new_leaves) { this->show_new_leaves = show_new_leaves; }
+
+    bool get_show_new_leaves() const { return show_new_leaves; }
+
     Plugins & get_plugins() { return *plugins; }
 
     libdnf5::Goal * get_goal(bool new_if_not_exist = true);
@@ -145,6 +150,7 @@ private:
     bool dump_main_config{false};
     std::vector<std::string> dump_repo_config_id_list;
     bool dump_variables{false};
+    bool show_new_leaves{false};
 
     std::unique_ptr<Plugins> plugins;
     std::unique_ptr<libdnf5::Goal> goal;
