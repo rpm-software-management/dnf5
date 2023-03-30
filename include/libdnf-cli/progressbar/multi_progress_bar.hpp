@@ -35,6 +35,8 @@ namespace libdnf::cli::progressbar {
 
 class MultiProgressBar {
 public:
+    static constexpr std::size_t NEVER_VISIBLE_LIMIT = static_cast<std::size_t>(-1);
+
     explicit MultiProgressBar();
     ~MultiProgressBar();
 
