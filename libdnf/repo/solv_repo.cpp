@@ -285,17 +285,16 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
                                                     : static_cast<solv::Pool &>(get_rpm_pool(base));
     int solvables_start = pool->nsolvables;
     auto type_name = repodata_type_to_name(type);
-    int res = 0;
     switch (type) {
         case RepodataType::COMPS: {
             // get installed groups from system state and load respective xml files
             // to the libsolv pool
             auto & system_state = base->p_impl->get_system_state();
             auto comps_dir = system_state.get_group_xml_dir();
-            auto installed_groups = system_state.get_installed_groups();
-            for (const auto & group_id : installed_groups) {
+            for (auto & group_id : system_state.get_installed_groups()) {
                 auto ext_fn = comps_dir / (group_id + ".xml");
                 fs::File ext_file;
+                bool read_success = true;
                 try {
                     ext_file = fs::File(ext_fn, "r", true);
                 } catch (std::filesystem::filesystem_error & e) {
@@ -304,12 +303,21 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
                         type_name,
                         ext_fn.string(),
                         e.what());
-                    continue;
+                    read_success = false;
                 }
-                logger.debug("Loading {} extension for system repo from \"{}\"", type_name, ext_fn.string());
-                if ((res = repo_add_comps(comps_repo, ext_file.get(), 0)) == 0) {
+                if (read_success) {
+                    logger.debug("Loading {} extension for system repo from \"{}\"", type_name, ext_fn.string());
+                    read_success = repo_add_comps(comps_repo, ext_file.get(), 0) == 0;
+                }
+                if (read_success) {
                     comps_solvables_start = solvables_start;
                     comps_solvables_end = pool->nsolvables;
+                } else {
+                    // The group xml file either not exists or is not parseable by
+                    // libsolv.
+                    logger.debug(
+                        "Loading {} extension for system repo from \"{}\" failed.", type_name, ext_fn.string());
+                    groups_missing_xml.push_back(std::move(group_id));
                 }
             }
             break;

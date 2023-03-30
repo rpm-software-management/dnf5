@@ -96,6 +96,8 @@ public:
 
     void set_needs_internalizing() { needs_internalizing = true; };
 
+    std::vector<std::string> & get_groups_missing_xml() { return groups_missing_xml; };
+
 private:
     bool load_solv_cache(solv::Pool & pool, const char * type, int flags);
 
@@ -123,6 +125,9 @@ private:
 
     bool can_use_solvfile_cache(solv::Pool & pool, utils::fs::File & solvfile_cache);
     void userdata_fill(SolvUserdata * userdata);
+
+    /// List of system repo groups without valid file with xml definition
+    std::vector<std::string> groups_missing_xml;
 
 public:
     ::Repo * repo{nullptr};  // libsolv pool retains ownership
