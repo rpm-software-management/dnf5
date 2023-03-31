@@ -138,7 +138,7 @@ struct from<libdnf::system::ModuleState> {
         libdnf::system::ModuleState module_state;
 
         module_state.enabled_stream = toml::find<std::string>(v, "enabled_stream");
-        module_state.state = libdnf::module::module_state_from_string(toml::find<std::string>(v, "state"));
+        module_state.status = libdnf::module::module_status_from_string(toml::find<std::string>(v, "state"));
         module_state.installed_profiles = toml::find<std::vector<std::string>>(v, "installed_profiles");
 
         return module_state;
@@ -152,7 +152,7 @@ struct into<libdnf::system::ModuleState> {
         toml::value res;
 
         res["enabled_stream"] = module_state.enabled_stream;
-        res["state"] = libdnf::module::module_state_to_string(module_state.state);
+        res["state"] = libdnf::module::module_status_to_string(module_state.status);
         res["installed_profiles"] = module_state.installed_profiles;
 
         return res;

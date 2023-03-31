@@ -425,21 +425,21 @@ std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType> Mo
     // No strict requirements
     ModuleGoalPrivate goal_weak(base->get_module_sack()->get_weak_ptr());
 
-    ModuleState state;
+    ModuleStatus status;
 
     for (const auto & module_item : module_items) {
         // Create "module(name:stream)" provide reldep
         const Id reldep_id = pool_str2id(pool, fmt::format("module({})", module_item->get_name_stream()).c_str(), 1);
 
         try {
-            state = base->p_impl->get_system_state().get_module_state(module_item->get_name()).state;
+            status = base->p_impl->get_system_state().get_module_state(module_item->get_name()).status;
         } catch (libdnf::system::StateNotFoundError &) {
-            state = ModuleState::AVAILABLE;
+            status = ModuleStatus::AVAILABLE;
         }
 
         goal_strict.add_provide_install(reldep_id, 0, 1);
         goal_weak.add_provide_install(reldep_id, 1, 0);
-        if (state == ModuleState::ENABLED) {
+        if (status == ModuleStatus::ENABLED) {
             goal_best.add_provide_install(reldep_id, 0, 1);
             goal.add_provide_install(reldep_id, 0, 0);
         } else {
@@ -669,7 +669,7 @@ ModuleSack::resolve_active_module_items() {
 
     auto system_state = p_impl->base->p_impl->get_system_state();
     system::ModuleState module_state;
-    ModuleState state;
+    ModuleStatus status;
     std::string enabled_stream;
     std::vector<ModuleItem *> module_items_to_solve;
     // Use only enabled or default modules for transaction
@@ -677,14 +677,14 @@ ModuleSack::resolve_active_module_items() {
         const auto & module_name = module_item->get_name();
         try {
             module_state = system_state.get_module_state(module_name);
-            state = module_state.state;
+            status = module_state.status;
             enabled_stream = module_state.enabled_stream;
         } catch (libdnf::system::StateNotFoundError &) {
-            state = ModuleState::AVAILABLE;
+            status = ModuleStatus::AVAILABLE;
         }
-        if (state == ModuleState::DISABLED) {
+        if (status == ModuleStatus::DISABLED) {
             p_impl->excludes->add(module_item->id.id);
-        } else if (state == ModuleState::ENABLED && enabled_stream == module_item->get_stream()) {
+        } else if (status == ModuleStatus::ENABLED && enabled_stream == module_item->get_stream()) {
             module_items_to_solve.push_back(module_item.get());
         } else if (get_default_stream(module_name) == module_item->get_stream()) {
             module_items_to_solve.push_back(module_item.get());
@@ -697,33 +697,33 @@ ModuleSack::resolve_active_module_items() {
 }
 
 
-InvalidModuleState::InvalidModuleState(const std::string & state)
-    : libdnf::Error(M_("Invalid module state: {}"), state) {}
+InvalidModuleStatus::InvalidModuleStatus(const std::string & status)
+    : libdnf::Error(M_("Invalid module status: {}"), status) {}
 
 
-std::string module_state_to_string(ModuleState state) {
-    switch (state) {
-        case ModuleState::AVAILABLE:
+std::string module_status_to_string(ModuleStatus status) {
+    switch (status) {
+        case ModuleStatus::AVAILABLE:
             return "Available";
-        case ModuleState::ENABLED:
+        case ModuleStatus::ENABLED:
             return "Enabled";
-        case ModuleState::DISABLED:
+        case ModuleStatus::DISABLED:
             return "Disabled";
     }
     return "";
 }
 
 
-ModuleState module_state_from_string(const std::string & state) {
-    if (state == "Available") {
-        return ModuleState::AVAILABLE;
-    } else if (state == "Enabled") {
-        return ModuleState::ENABLED;
-    } else if (state == "Disabled") {
-        return ModuleState::DISABLED;
+ModuleStatus module_status_from_string(const std::string & status) {
+    if (status == "Available") {
+        return ModuleStatus::AVAILABLE;
+    } else if (status == "Enabled") {
+        return ModuleStatus::ENABLED;
+    } else if (status == "Disabled") {
+        return ModuleStatus::DISABLED;
     }
 
-    throw InvalidModuleState(state);
+    throw InvalidModuleStatus(status);
 }
 
 }  // namespace libdnf::module
