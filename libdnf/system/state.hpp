@@ -57,12 +57,10 @@ public:
     std::vector<std::string> groups;
 };
 
-// TODO(lukash) same class name as module::ModuleState
-// probably better to name differently, although right now this class isn't on the interface and could be "hidden"
 class ModuleState {
 public:
     std::string enabled_stream;
-    module::ModuleState state{module::ModuleState::AVAILABLE};
+    module::ModuleStatus status{module::ModuleStatus::AVAILABLE};
     std::vector<std::string> installed_profiles{};
 };
 

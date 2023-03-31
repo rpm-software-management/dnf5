@@ -260,7 +260,7 @@ struct assertion_traits<libdnf::system::GroupState> {
 template <>
 struct assertion_traits<libdnf::system::ModuleState> {
     inline static bool equal(const libdnf::system::ModuleState & left, const libdnf::system::ModuleState & right) {
-        return left.enabled_stream == right.enabled_stream && left.state == right.state &&
+        return left.enabled_stream == right.enabled_stream && left.status == right.status &&
                left.installed_profiles == right.installed_profiles;
     }
 
@@ -268,7 +268,7 @@ struct assertion_traits<libdnf::system::ModuleState> {
         return fmt::format(
             "ModuleState: enabled_stream: {}, state: {}, installed_profiles: {}",
             module_state.enabled_stream,
-            libdnf::module::module_state_to_string(module_state.state),
+            libdnf::module::module_status_to_string(module_state.status),
             assertion_traits<std::vector<std::string>>::toString(module_state.installed_profiles));
     }
 };

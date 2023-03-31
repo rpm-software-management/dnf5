@@ -45,7 +45,7 @@ namespace libdnf::module {
 // ENABLED - a module that has an enabled stream.
 // DISABLED - a module that is disabled.
 // AVAILABLE - otherwise.
-enum class ModuleState { AVAILABLE, ENABLED, DISABLED };
+enum class ModuleStatus { AVAILABLE, ENABLED, DISABLED };
 
 
 /// Container with data and methods related to modules
@@ -62,7 +62,7 @@ public:
         CANNOT_RESOLVE_MODULES,
         CANNOT_RESOLVE_MODULE_SPEC,
         CANNOT_ENABLE_MULTIPLE_STREAMS,
-        CANNOT_MODIFY_MULTIPLE_TIMES_MODULE_STATE,
+        CANNOT_MODIFY_MULTIPLE_TIMES_MODULE_STATUS,
         /// Problem with latest modules during resolvement of module dependencies
         ERROR_IN_LATEST
     };
@@ -127,17 +127,17 @@ private:
 };
 
 
-class InvalidModuleState : public libdnf::Error {
+class InvalidModuleStatus : public libdnf::Error {
 public:
-    InvalidModuleState(const std::string & state);
+    InvalidModuleStatus(const std::string & status);
 
     const char * get_domain_name() const noexcept override { return "libdnf::module"; }
-    const char * get_name() const noexcept override { return "InvalidModuleState"; }
+    const char * get_name() const noexcept override { return "InvalidModuleStatus"; }
 };
 
 
-std::string module_state_to_string(ModuleState state);
-ModuleState module_state_from_string(const std::string & state);
+std::string module_status_to_string(ModuleStatus status);
+ModuleStatus module_status_from_string(const std::string & status);
 
 
 }  // namespace libdnf::module

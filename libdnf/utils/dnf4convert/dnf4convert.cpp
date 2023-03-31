@@ -165,12 +165,12 @@ std::map<std::string, libdnf::system::ModuleState> Dnf4Convert::read_module_stat
             libdnf::system::ModuleState state;
             state.enabled_stream = module_config.stream.get_value();
             state.installed_profiles = module_config.profiles.get_value();
-            state.state = libdnf::module::ModuleState::AVAILABLE;
+            state.status = libdnf::module::ModuleStatus::AVAILABLE;
             auto status_value = module_config.state.get_value();
             if (status_value == "enabled") {
-                state.state = libdnf::module::ModuleState::ENABLED;
+                state.status = libdnf::module::ModuleStatus::ENABLED;
             } else if (status_value == "disabled") {
-                state.state = libdnf::module::ModuleState::DISABLED;
+                state.status = libdnf::module::ModuleStatus::DISABLED;
             }
             module_states.emplace(name, state);
         }
