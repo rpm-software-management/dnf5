@@ -113,9 +113,17 @@ void CheckUpgradeCommand::run() {
     }
 
     upgrades_query.filter_upgrades();
-    size_t size_before_filter_advisories = upgrades_query.size();
+
+    // Source RPMs should not be reported as upgrades, e.g. when the binary
+    // package is marked exclude and only the source package is left in the
+    // repo
+    upgrades_query.filter_arch({"src"}, libdnf::sack::QueryCmp::NOT_EXACT);
+
+    // Only consider updates from the highest priority repo
+    upgrades_query.filter_priority();
 
     // filter by advisory flags, e.g. `--security`
+    size_t size_before_filter_advisories = upgrades_query.size();
     auto advisories = advisory_query_from_cli_input(
         ctx.base,
         advisory_name->get_value(),
