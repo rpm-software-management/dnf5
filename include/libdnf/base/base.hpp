@@ -118,6 +118,7 @@ private:
     friend class libdnf::rpm::Package;
     friend class libdnf::advisory::AdvisoryQuery;
     friend class libdnf::module::ModuleSack;
+    friend class libdnf::repo::RepoSack;
     friend class libdnf::repo::SolvRepo;
 
     /// Loads the default configuration. To load distribution-specific configuration.

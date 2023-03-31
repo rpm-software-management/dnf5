@@ -24,14 +24,17 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "repo_downloader.hpp"
 #include "rpm/package_sack_impl.hpp"
 #include "solv/solver.hpp"
+#include "solv_repo.hpp"
 #include "utils/bgettext/bgettext-mark-domain.h"
 #include "utils/fs/file.hpp"
 #include "utils/fs/temp.hpp"
 #include "utils/string.hpp"
 #include "utils/url.hpp"
+#include "utils/xml.hpp"
 
 #include "libdnf/base/base.hpp"
 #include "libdnf/common/exception.hpp"
+#include "libdnf/comps/group/query.hpp"
 #include "libdnf/conf/config_parser.hpp"
 #include "libdnf/conf/option_bool.hpp"
 #include "libdnf/repo/file_downloader.hpp"
@@ -453,6 +456,8 @@ void RepoSack::update_and_load_repos(libdnf::repo::RepoQuery & repos, bool impor
     finish_sack_loader();
     catch_thread_sack_loader_exceptions();
 
+    fix_group_missing_xml();
+
     base->get_rpm_package_sack()->load_config_excludes_includes();
 }
 
@@ -585,6 +590,63 @@ void RepoSack::internalize_repos() {
 
     if (cmdline_repo) {
         cmdline_repo->internalize();
+    }
+}
+
+void RepoSack::fix_group_missing_xml() {
+    if (has_system_repo()) {
+        auto & solv_repo = system_repo->solv_repo;
+        auto & group_missing_xml = solv_repo->get_groups_missing_xml();
+        if (group_missing_xml.empty()) {
+            return;
+        }
+        auto & logger = *base->get_logger();
+        auto & system_state = base->p_impl->get_system_state();
+        auto comps_xml_dir = system_state.get_group_xml_dir();
+        bool directory_exists = true;
+        std::error_code ec;
+        std::filesystem::create_directories(comps_xml_dir, ec);
+        if (ec) {
+            logger.debug("Failed to create directory \"{}\": {}", comps_xml_dir.string(), ec.message());
+            directory_exists = false;
+        }
+        libdnf::comps::GroupQuery available_groups(base);
+        available_groups.filter_installed(false);
+        for (const auto & group_id : group_missing_xml) {
+            bool xml_saved = false;
+            if (directory_exists) {
+                // try to find the repoid in availables
+                libdnf::comps::GroupQuery group_query(available_groups);
+                group_query.filter_groupid(group_id);
+                if (group_query.size() == 1) {
+                    // GroupQuery is basically a set thus iterators and `.get()` method
+                    // return `const Group` objects.
+                    // To call non-const serialize method we need to make a copy here.
+                    libdnf::comps::Group group = group_query.get();
+                    auto xml_file_name = comps_xml_dir / (group_id + ".xml");
+                    logger.debug(
+                        "Re-creating installed group \"{}\" definition to file \"{}\".",
+                        group_id,
+                        xml_file_name.string());
+                    try {
+                        group.serialize(xml_file_name);
+                        xml_saved = true;
+                    } catch (utils::xml::XMLSaveError & ex) {
+                        logger.debug(ex.what());
+                    }
+                    if (xml_saved) {
+                        solv_repo->read_group_solvable_from_xml(xml_file_name);
+                    }
+                }
+            }
+            if (!xml_saved) {
+                // fall-back to creating solvables only from system state
+                solv_repo->create_group_solvable(group_id, system_state.get_group_state(group_id));
+            }
+        }
+
+        // ensure we attempt to re-create xmls only once
+        group_missing_xml.clear();
     }
 }
 
