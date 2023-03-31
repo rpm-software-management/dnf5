@@ -127,10 +127,17 @@ public:
     /// @return The `Base` object to which this object belongs.
     /// @since 5.0
     libdnf::BaseWeakPtr get_base() const;
-    //
+
     /// For each enabled repository enable corresponding source repository.
     /// @since 5.0
     void enable_source_repos();
+
+    /// Re-create missing xml definitions for installed groups. Since we do not have
+    /// the state of the group in time of installation, current definition from
+    /// available repositories is going to be used.
+    /// In case the repo does not exist in repositories, only the minimal solvables
+    /// are created from info in system state.
+    void fix_group_missing_xml();
 
 private:
     friend class libdnf::Base;
