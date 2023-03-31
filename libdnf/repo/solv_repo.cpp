@@ -280,7 +280,6 @@ void SolvRepo::load_repo_main(const std::string & repomd_fn, const std::string &
 
 
 void SolvRepo::load_system_repo_ext(RepodataType type) {
-    auto & logger = *base->get_logger();
     solv::Pool & pool = type == RepodataType::COMPS ? static_cast<solv::Pool &>(get_comps_pool(base))
                                                     : static_cast<solv::Pool &>(get_rpm_pool(base));
     int solvables_start = pool->nsolvables;
@@ -293,30 +292,11 @@ void SolvRepo::load_system_repo_ext(RepodataType type) {
             auto comps_dir = system_state.get_group_xml_dir();
             for (auto & group_id : system_state.get_installed_groups()) {
                 auto ext_fn = comps_dir / (group_id + ".xml");
-                fs::File ext_file;
-                bool read_success = true;
-                try {
-                    ext_file = fs::File(ext_fn, "r", true);
-                } catch (std::filesystem::filesystem_error & e) {
-                    logger.warning(
-                        "Cannot load {} extension for system repo from \"{}\": {}",
-                        type_name,
-                        ext_fn.string(),
-                        e.what());
-                    read_success = false;
-                }
-                if (read_success) {
-                    logger.debug("Loading {} extension for system repo from \"{}\"", type_name, ext_fn.string());
-                    read_success = repo_add_comps(comps_repo, ext_file.get(), 0) == 0;
-                }
-                if (read_success) {
+                if (read_group_solvable_from_xml(ext_fn)) {
                     comps_solvables_start = solvables_start;
-                    comps_solvables_end = pool->nsolvables;
                 } else {
                     // The group xml file either not exists or is not parseable by
                     // libsolv.
-                    logger.debug(
-                        "Loading {} extension for system repo from \"{}\" failed.", type_name, ext_fn.string());
                     groups_missing_xml.push_back(std::move(group_id));
                 }
             }
@@ -703,6 +683,32 @@ std::string SolvRepo::solv_file_name(const char * type) {
 
 std::filesystem::path SolvRepo::solv_file_path(const char * type) {
     return std::filesystem::path(config.get_cachedir()) / CACHE_SOLV_FILES_DIR / solv_file_name(type);
+}
+
+bool SolvRepo::read_group_solvable_from_xml(const std::string & path) {
+    auto & logger = *base->get_logger();
+    solv::Pool & pool = static_cast<solv::Pool &>(get_comps_pool(base));
+    bool read_success = true;
+
+    fs::File ext_file;
+    try {
+        ext_file = fs::File(path, "r", true);
+    } catch (std::filesystem::filesystem_error & e) {
+        logger.warning("Cannot load group extension for system repo from \"{}\": {}", path, e.what());
+        read_success = false;
+    }
+
+    if (read_success) {
+        logger.debug("Loading group extension for system repo from \"{}\"", path);
+        read_success = repo_add_comps(comps_repo, ext_file.get(), 0) == 0;
+        if (read_success) {
+            comps_solvables_end = pool->nsolvables;
+        } else {
+            logger.debug("Loading group extension for system repo from \"{}\" failed.", path);
+        }
+    }
+
+    return read_success;
 }
 
 }  //namespace libdnf::repo
