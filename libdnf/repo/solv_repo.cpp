@@ -711,4 +711,40 @@ bool SolvRepo::read_group_solvable_from_xml(const std::string & path) {
     return read_success;
 }
 
+void SolvRepo::create_group_solvable(const std::string & groupid, const libdnf::system::GroupState & state) {
+    solv::Pool & pool = static_cast<solv::Pool &>(get_comps_pool(base));
+    libdnf_assert(
+        comps_repo == (*pool)->installed, "SolvRepo::create_group_solvable() call enabled only for @System repo.");
+
+    // create a new solvable for the group
+    auto group_solvable_id = repo_add_solvable(comps_repo);
+    Solvable * group_solvable = pool.id2solvable(group_solvable_id);
+
+    // Information about group contained in the system state is very limited.
+    // We have only repoid and list of installed packages.
+
+    // Set id with proper prefix
+    group_solvable->name = pool.str2id(("group:" + groupid).c_str(), 1);
+    // Set noarch and empty evr
+    group_solvable->arch = ARCH_NOARCH;
+    group_solvable->evr = ID_EMPTY;
+    // Make the new group provide it's own id
+    group_solvable->dep_provides = repo_addid_dep(
+        comps_repo, group_solvable->dep_provides, pool.rel2id(group_solvable->name, group_solvable->evr, REL_EQ, 1), 0);
+
+    // Add group packages
+    for (const auto & pkg_name : state.packages) {
+        auto pkg_id = pool.str2id(pkg_name.c_str(), 1);
+        Id type = SOLVABLE_RECOMMENDS;
+        repo_add_idarray(comps_repo, group_solvable_id, type, pkg_id);
+    }
+
+    Repodata * data = repo_last_repodata(comps_repo);
+
+    // Mark the repo as user-visible
+    repodata_set_void(data, group_solvable_id, SOLVABLE_ISVISIBLE);
+
+    repodata_internalize(data);
+}
+
 }  //namespace libdnf::repo
