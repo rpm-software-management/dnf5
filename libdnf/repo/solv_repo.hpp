@@ -98,6 +98,11 @@ public:
 
     std::vector<std::string> & get_groups_missing_xml() { return groups_missing_xml; };
 
+    /// Read comps group solvable from its xml file.
+    /// @param path  Path to xml file.
+    /// @return      True if the group was successfully read.
+    bool read_group_solvable_from_xml(const std::string & path);
+
 private:
     bool load_solv_cache(solv::Pool & pool, const char * type, int flags);
 
