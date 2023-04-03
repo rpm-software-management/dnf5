@@ -69,3 +69,18 @@ class TestGoal(unittest.TestCase):
 
         self.assertRaises(RuntimeError, goal.add_rpm_reason_change, '@fake-group-spec',
                           libdnf5.base.transaction.TransactionItemReason_GROUP, '')
+
+    def test_log_events_wrapper(self):
+        # Try accessing transaction.get_resolve_logs()
+        base = libdnf5.base.Base()
+        base.setup()
+
+        goal = libdnf5.base.Goal(base)
+        goal.add_install('unknown_spec')
+
+        transaction = goal.resolve()
+        logs = transaction.get_resolve_logs()
+        self.assertTrue(logs)
+        first_log = next(iter(logs))
+        self.assertEqual(libdnf5.base.GoalProblem_NOT_FOUND,
+                         first_log.get_problem())
