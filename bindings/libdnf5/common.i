@@ -6,6 +6,7 @@
 %module "libdnf5/common"
 #endif
 
+%include <cstring.i>
 %include <exception.i>
 %include <stdint.i>
 %include <std_map.i>
@@ -17,6 +18,14 @@
 %include <std_vector.i>
 
 %include <shared.i>
+
+%typemap(out) std::string * {
+    if ($1 == nullptr) {
+        $result = SWIG_FromCharPtrAndSize("", 0);
+    } else {
+        $result = SWIG_FromCharPtrAndSize($1->c_str(), $1->size());
+    }
+}
 
 %{
     #include "libdnf/common/weak_ptr.hpp"
