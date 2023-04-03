@@ -37,6 +37,8 @@
 %{
     #include "libdnf/logger/memory_buffer_logger.hpp"
     #include "libdnf/base/base.hpp"
+    #include "libdnf/base/solver_problems.hpp"
+    #include "libdnf/base/log_event.hpp"
     #include "libdnf/base/transaction.hpp"
     #include "libdnf/base/transaction_package.hpp"
     #include "libdnf/base/goal.hpp"
@@ -49,8 +51,15 @@
 %template(VarsWeakPtr) libdnf::WeakPtr<libdnf::Vars, false>;
 
 %include "libdnf/base/base.hpp"
+
+%include "libdnf/base/solver_problems.hpp"
+%include "libdnf/base/log_event.hpp"
+
 %ignore libdnf::base::TransactionError;
 %include "libdnf/base/transaction.hpp"
+
+%template(VectorLogEvent) std::vector<libdnf::base::LogEvent>;
+
 %include "libdnf/base/transaction_package.hpp"
 
 %template(VectorBaseTransactionPackage) std::vector<libdnf::base::TransactionPackage>;
