@@ -72,11 +72,13 @@ class TestGoal(unittest.TestCase):
 
     def test_log_events_wrapper(self):
         # Try accessing transaction.get_resolve_logs()
+        spec = 'unknown_spec'
+
         base = libdnf5.base.Base()
         base.setup()
 
         goal = libdnf5.base.Goal(base)
-        goal.add_install('unknown_spec')
+        goal.add_install(spec)
 
         transaction = goal.resolve()
         logs = transaction.get_resolve_logs()
@@ -84,3 +86,4 @@ class TestGoal(unittest.TestCase):
         first_log = next(iter(logs))
         self.assertEqual(libdnf5.base.GoalProblem_NOT_FOUND,
                          first_log.get_problem())
+        self.assertEqual(spec, first_log.get_spec())
