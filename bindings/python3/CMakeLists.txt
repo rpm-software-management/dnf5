@@ -15,6 +15,22 @@ function(add_python3_module LIBRARY_NAME MODULE_NAME)
     set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
         -Wno-redundant-decls
     )
+    # Currenly the SWIG_PYTHON_SILENT_MEMLEAK controls only whether message:
+    # "swig/python detected a memory leak of type '%s', no destructor found." is printed, used here:
+    # https://github.com/swig/swig/blob/33f6a2d0b2c3d90b928f56ddfa599afe87903f76/Lib/python/pyrun.swg#L776
+    # We want to supress this message due to a bug in Python part of swig.
+    # The core of the issue is that Python Swig has a global list of types used in all swig modules. This is
+    # needed because the modules are interlinked eg. libdnf::Base is used in all of them. During finalization
+    # of the Python runtime unused modules are cleaned up before garbage collector runs and cleans global objects.
+    # This can result in a situation where for example libdnf5.advisory module is destoyed, removing its types
+    # from the global swig types list includeing libdnf5.base.Base, and only after that a global libdnf5.base.Base
+    # is garbage collected which is now missing type information -> no destructor can be called -> swig want's to
+    # print the message
+    # There is an issue reported on SWIG with the same root cause: https://github.com/swig/swig/issues/2037 it
+    # also contains more details.
+    set(SWIG_COMPILE_OPTIONS ${SWIG_COMPILE_OPTIONS}
+        -DSWIG_PYTHON_SILENT_MEMLEAK
+    )
     set(CMAKE_SWIG_FLAGS ${CMAKE_SWIG_FLAGS}
         -doxygen
     )
