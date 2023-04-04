@@ -112,15 +112,17 @@ void CheckUpgradeCommand::run() {
         }
     }
 
+    // Only consider updates from the highest priority repo. Must be done
+    // before `filter_upgrades()` since the filter needs to consider
+    // currently-installed packages as well as upgrades.
+    upgrades_query.filter_priority();
+
     upgrades_query.filter_upgrades();
 
     // Source RPMs should not be reported as upgrades, e.g. when the binary
     // package is marked exclude and only the source package is left in the
     // repo
-    upgrades_query.filter_arch({"src"}, libdnf::sack::QueryCmp::NOT_EXACT);
-
-    // Only consider updates from the highest priority repo
-    upgrades_query.filter_priority();
+    upgrades_query.filter_arch({"src", "nosrc"}, libdnf::sack::QueryCmp::NOT_EXACT);
 
     // filter by advisory flags, e.g. `--security`
     size_t size_before_filter_advisories = upgrades_query.size();
