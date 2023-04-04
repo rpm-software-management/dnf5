@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #define LIBDNF_SYSTEM_STATE_HPP
 
 #include "libdnf/common/exception.hpp"
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/module/module_sack.hpp"
 #include "libdnf/rpm/nevra.hpp"
 #include "libdnf/rpm/package.hpp"
@@ -50,6 +51,8 @@ class GroupState {
 public:
     bool userinstalled{false};
     std::vector<std::string> packages;
+    /// List of allowed group package types installed with the group. Group upgrade needs to respect it.
+    libdnf::comps::PackageType package_types;
 };
 
 class EnvironmentState {
