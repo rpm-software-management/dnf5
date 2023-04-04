@@ -30,6 +30,9 @@ namespace libdnf::comps {
 InvalidPackageType::InvalidPackageType(const std::string & type)
     : libdnf::Error(M_("Invalid package type: {}"), type) {}
 
+InvalidPackageType::InvalidPackageType(const PackageType type)
+    : libdnf::Error(M_("Invalid package type: {}"), static_cast<int>(type)) {}
+
 PackageType package_type_from_string(const std::string & type) {
     if (type == "mandatory") {
         return PackageType::MANDATORY;
@@ -49,6 +52,31 @@ PackageType package_type_from_string(const std::vector<std::string> types) {
         retval |= package_type_from_string(type);
     }
     return retval;
+}
+
+std::string package_type_to_string(const PackageType type) {
+    switch (type) {
+        case PackageType::MANDATORY:
+            return "mandatory";
+        case PackageType::DEFAULT:
+            return "default";
+        case PackageType::CONDITIONAL:
+            return "conditional";
+        case PackageType::OPTIONAL:
+            return "optional";
+    }
+    throw InvalidPackageType(type);
+}
+
+std::vector<std::string> package_types_to_strings(const PackageType types) {
+    std::vector<std::string> result_types;
+    for (const auto available_type : std::vector<PackageType>{
+             PackageType::MANDATORY, PackageType::DEFAULT, PackageType::CONDITIONAL, PackageType::OPTIONAL}) {
+        if (any(types & available_type)) {
+            result_types.push_back(package_type_to_string(available_type));
+        }
+    }
+    return result_types;
 }
 
 }  // namespace libdnf::comps
