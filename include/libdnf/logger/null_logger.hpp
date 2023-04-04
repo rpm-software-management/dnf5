@@ -31,7 +31,11 @@ class NullLogger : public Logger {
 public:
     void log_line(Level /*level*/, const std::string & /*message*/) noexcept override {}
 
-    void write(time_t /*time*/, pid_t /*pid*/, Level /*level*/, const std::string & /*message*/) noexcept override {}
+    void write(
+        const std::chrono::time_point<std::chrono::system_clock> & /*time*/,
+        pid_t /*pid*/,
+        Level /*level*/,
+        const std::string & /*message*/) noexcept override {}
 };
 
 }  // namespace libdnf
