@@ -23,6 +23,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "utils/fs/file.hpp"
 #include "utils/string.hpp"
 
+#include <libdnf/comps/group/package.hpp>
 #include <toml.hpp>
 
 
@@ -79,11 +80,29 @@ struct into<libdnf::system::NevraState> {
 
 
 template <>
+struct from<libdnf::comps::PackageType> {
+    static libdnf::comps::PackageType from_toml(const value & v) {
+        return libdnf::comps::package_type_from_string(toml::get<std::vector<std::string>>(v));
+    }
+};
+
+
+template <>
+struct into<libdnf::comps::PackageType> {
+    static toml::value into_toml(const libdnf::comps::PackageType & package_types) {
+        return libdnf::comps::package_types_to_strings(package_types);
+    }
+};
+
+template <>
 struct from<libdnf::system::GroupState> {
     static libdnf::system::GroupState from_toml(const value & v) {
         libdnf::system::GroupState group_state;
 
         group_state.userinstalled = toml::find<bool>(v, "userinstalled");
+        if (v.contains("package_types")) {
+            group_state.package_types = toml::find<libdnf::comps::PackageType>(v, "package_types");
+        }
         if (v.contains("packages")) {
             group_state.packages = toml::find<std::vector<std::string>>(v, "packages");
         }
@@ -99,6 +118,7 @@ struct into<libdnf::system::GroupState> {
         toml::value res;
 
         res["userinstalled"] = group_state.userinstalled;
+        res["package_types"] = group_state.package_types;
         res["packages"] = group_state.packages;
 
         return res;
