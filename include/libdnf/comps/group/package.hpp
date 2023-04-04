@@ -28,19 +28,20 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 namespace libdnf::comps {
 
-class InvalidPackageType : public libdnf::Error {
-public:
-    InvalidPackageType(const std::string & action);
-
-    const char * get_domain_name() const noexcept override { return "libdnf::comps"; }
-    const char * get_name() const noexcept override { return "InvalidPackageType"; }
-};
-
 enum class PackageType : int {
     CONDITIONAL = 1 << 0,  // a weak dependency
     DEFAULT = 1 << 1,      // installed by default, but can be unchecked in the UI
     MANDATORY = 1 << 2,    // installed
     OPTIONAL = 1 << 3      // not installed by default, but can be checked in the UI
+};
+
+class InvalidPackageType : public libdnf::Error {
+public:
+    InvalidPackageType(const std::string & type);
+    InvalidPackageType(const PackageType type);
+
+    const char * get_domain_name() const noexcept override { return "libdnf::comps"; }
+    const char * get_name() const noexcept override { return "InvalidPackageType"; }
 };
 
 inline PackageType operator|(PackageType a, PackageType b) {
@@ -68,6 +69,8 @@ inline constexpr bool any(PackageType flags) {
 
 PackageType package_type_from_string(const std::string & type);
 PackageType package_type_from_string(const std::vector<std::string> types);
+std::string package_type_to_string(const PackageType type);
+std::vector<std::string> package_types_to_strings(const PackageType types);
 
 
 // TODO(dmach): isn't it more a package dependency rather than a package?
