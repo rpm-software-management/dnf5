@@ -24,6 +24,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include "libdnf/base/goal_elements.hpp"
 #include "libdnf/base/transaction.hpp"
 #include "libdnf/comps/group/group.hpp"
+#include "libdnf/comps/group/package.hpp"
 #include "libdnf/rpm/package.hpp"
 #include "libdnf/transaction/transaction_item_action.hpp"
 #include "libdnf/transaction/transaction_item_reason.hpp"
@@ -39,6 +40,7 @@ public:
     using Reason = transaction::TransactionItemReason;
     using State = transaction::TransactionItemState;
     using Action = transaction::TransactionItemAction;
+    using PackageType = libdnf::comps::PackageType;
 
     /// @return the underlying group.
     libdnf::comps::Group get_group() const { return group; }
@@ -58,13 +60,17 @@ public:
     // @replaces libdnf:transaction/TransactionItem.hpp:method:TransactionItemBase.getReason()
     Reason get_reason() const noexcept { return reason; }
 
+    /// @return package types requested to be installed with the group.
+    PackageType get_package_types() const noexcept { return package_types; }
+
 private:
     friend class Transaction::Impl;
 
-    TransactionGroup(const libdnf::comps::Group & grp, Action action, Reason reason)
+    TransactionGroup(const libdnf::comps::Group & grp, Action action, Reason reason, const PackageType types)
         : group(grp),
           action(action),
-          reason(reason) {}
+          reason(reason),
+          package_types(types) {}
 
     void set_state(State value) noexcept { state = value; }
 
@@ -72,6 +78,7 @@ private:
     Action action;
     Reason reason;
     State state{State::STARTED};
+    PackageType package_types;
 };
 
 }  // namespace libdnf::base

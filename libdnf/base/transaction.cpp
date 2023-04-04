@@ -356,8 +356,8 @@ void Transaction::Impl::set_transaction(rpm::solv::GoalPrivate & solved_goal, Go
     }
 
     // Add groups to the transaction
-    for (auto & [group, action, reason] : solved_goal.list_groups()) {
-        TransactionGroup tsgrp(group, action, reason);
+    for (auto & [group, action, reason, package_types] : solved_goal.list_groups()) {
+        TransactionGroup tsgrp(group, action, reason, package_types);
         groups.emplace_back(std::move(tsgrp));
     }
 
@@ -680,6 +680,7 @@ Transaction::TransactionRunResult Transaction::Impl::_run(
             if (transaction_item_action_is_inbound(tsgroup.get_action())) {
                 libdnf::system::GroupState state;
                 state.userinstalled = tsgroup.get_reason() == transaction::TransactionItemReason::USER;
+                state.package_types = tsgroup.get_package_types();
                 // Remember packages installed by this group
                 for (const auto & pkg : group.get_packages()) {
                     auto pkg_name = pkg.get_name();
