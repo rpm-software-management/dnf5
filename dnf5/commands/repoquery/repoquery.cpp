@@ -61,6 +61,9 @@ void RepoqueryCommand::set_argument_parser() {
     query_format_option = dynamic_cast<libdnf::OptionString *>(
         parser.add_init_value(std::make_unique<libdnf::OptionString>("%{full_nevra}\n")));
 
+    latest_limit_option = dynamic_cast<libdnf::OptionNumber<std::int32_t> *>(
+        parser.add_init_value(std::make_unique<libdnf::OptionNumber<std::int32_t>>(0)));
+
     auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
     //TODO(amatej): Unify description of all repoquery options to use the same wording
@@ -87,6 +90,14 @@ void RepoqueryCommand::set_argument_parser() {
     query_format->set_has_value(true);
     query_format->set_arg_value_help("QUERYFORMAT");
     query_format->link_value(query_format_option);
+
+    auto * latest_limit = parser.add_new_named_arg("latest-limit");
+    latest_limit->set_long_name("latest-limit");
+    latest_limit->set_description(
+        "show N latest packages for a given name.arch (or all except N latest if N is negative)");
+    latest_limit->set_arg_value_help("N");
+    latest_limit->set_has_value(true);
+    latest_limit->link_value(latest_limit_option);
 
     auto keys =
         parser.add_new_positional_arg("keys_to_match", ArgumentParser::PositionalArg::UNLIMITED, nullptr, nullptr);
@@ -262,6 +273,7 @@ void RepoqueryCommand::set_argument_parser() {
 
     cmd.register_named_arg(available);
     cmd.register_named_arg(installed);
+    cmd.register_named_arg(latest_limit);
 
     cmd.register_named_arg(whatdepends);
     cmd.register_named_arg(whatconflicts);
@@ -272,6 +284,7 @@ void RepoqueryCommand::set_argument_parser() {
     cmd.register_named_arg(whatenhances);
     cmd.register_named_arg(whatsupplements);
     cmd.register_named_arg(whatsuggests);
+
 
     cmd.register_positional_arg(keys);
 }
@@ -337,6 +350,10 @@ void RepoqueryCommand::run() {
         advisory_cve->get_value());
     if (advisories.has_value()) {
         full_package_query.filter_advisories(advisories.value(), libdnf::sack::QueryCmp::GTE);
+    }
+
+    if (latest_limit_option->get_value() != 0) {
+        full_package_query.filter_latest_evr(latest_limit_option->get_value());
     }
 
     if (!whatdepends_option->get_value().empty()) {
