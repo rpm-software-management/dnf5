@@ -17,6 +17,8 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "libdnf-cli/output/provides.hpp"
+
 #include "provides.hpp"
 
 #include <libdnf/rpm/package_query.hpp>
@@ -86,7 +88,7 @@ void ProvidesCommand::run() {
     }
 
     for (auto package : result_pset) {
-        std::cout << package.get_full_nevra() << '\n';
+        libdnf::cli::output::print_provides_table(package);
     }
 }
 
