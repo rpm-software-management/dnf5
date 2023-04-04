@@ -246,14 +246,17 @@ struct assertion_traits<libdnf::system::NevraState> {
 template <>
 struct assertion_traits<libdnf::system::GroupState> {
     inline static bool equal(const libdnf::system::GroupState & left, const libdnf::system::GroupState & right) {
-        return left.userinstalled == right.userinstalled && left.packages == right.packages;
+        return left.userinstalled == right.userinstalled && left.packages == right.packages &&
+               static_cast<int>(left.package_types) == static_cast<int>(right.package_types);
     }
 
     inline static std::string toString(const libdnf::system::GroupState & group_state) {
         return fmt::format(
-            "GroupState: userinstalled: {}, packages: {}",
+            "GroupState: userinstalled: {}, packages: {}, package_types: {}",
             group_state.userinstalled,
-            assertion_traits<std::vector<std::string>>::toString(group_state.packages));
+            assertion_traits<std::vector<std::string>>::toString(group_state.packages),
+            assertion_traits<std::vector<std::string>>::toString(
+                libdnf::comps::package_types_to_strings(group_state.package_types)));
     }
 };
 
