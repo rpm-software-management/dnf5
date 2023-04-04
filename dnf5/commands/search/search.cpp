@@ -17,12 +17,11 @@ You should have received a copy of the GNU General Public License
 along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 */
 
+#include "libdnf-cli/output/search.hpp"
 
 #include "search.hpp"
-
 #include "search_processor.hpp"
 
-#include <libdnf-cli/output/search.hpp>
 #include <libdnf/conf/option_string.hpp>
 #include <libdnf/rpm/package_query.hpp>
 #include <libdnf/rpm/package_set.hpp>
@@ -58,7 +57,8 @@ void SearchCommand::configure() {
 void SearchCommand::run() {
     auto & base = get_context().base;
     SearchProcessor processor(base, patterns->get_value(), all->get_value(), show_duplicates->get_value());
-    libdnf::cli::output::print_search_results(processor.get_results());
+    libdnf::cli::output::print_search_table(processor.get_results());
+    std::cout << "a" << std::endl;
 }
 
 
