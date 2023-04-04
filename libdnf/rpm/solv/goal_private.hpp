@@ -72,10 +72,12 @@ public:
     /// Remember group action in the transaction
     /// @param action Action to be commited - INSTALL, REMOVE, UPGRADE
     /// @param reason Reason for the group action - USER, DEPENDENCY
+    /// @param package_types Types of group packages requested to be installed along with the group. Used only for INSTALL action
     void add_group(
         const libdnf::comps::Group & group,
         transaction::TransactionItemAction action,
-        transaction::TransactionItemReason reason);
+        transaction::TransactionItemReason reason,
+        libdnf::comps::PackageType package_types);
 
     libdnf::GoalProblem resolve();
 
@@ -86,8 +88,11 @@ public:
     libdnf::solv::IdQueue list_removes();
     libdnf::solv::IdQueue list_obsoleted();
 
-    std::vector<
-        std::tuple<libdnf::comps::Group, transaction::TransactionItemAction, transaction::TransactionItemReason>>
+    std::vector<std::tuple<
+        libdnf::comps::Group,
+        transaction::TransactionItemAction,
+        transaction::TransactionItemReason,
+        libdnf::comps::PackageType>>
     list_groups() {
         return groups;
     };
@@ -183,8 +188,11 @@ private:
     bool run_in_strict_mode{false};
     bool clean_deps_present{false};
 
-    std::vector<
-        std::tuple<libdnf::comps::Group, transaction::TransactionItemAction, transaction::TransactionItemReason>>
+    std::vector<std::tuple<
+        libdnf::comps::Group,
+        transaction::TransactionItemAction,
+        transaction::TransactionItemReason,
+        libdnf::comps::PackageType>>
         groups;
 
     // Reason change requirements
@@ -310,8 +318,9 @@ inline void GoalPrivate::add_distro_sync(libdnf::solv::IdQueue & queue, bool ski
 inline void GoalPrivate::add_group(
     const libdnf::comps::Group & group,
     transaction::TransactionItemAction action,
-    transaction::TransactionItemReason reason) {
-    groups.emplace_back(group, action, reason);
+    transaction::TransactionItemReason reason,
+    libdnf::comps::PackageType package_types) {
+    groups.emplace_back(group, action, reason, package_types);
 }
 
 inline void GoalPrivate::add_reason_change(

@@ -1426,7 +1426,7 @@ void Goal::Impl::add_group_install_to_goal(
                 }
             }
         }
-        rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason);
+        rpm_goal.add_group(group, transaction::TransactionItemAction::INSTALL, reason, allowed_package_types);
     }
 }
 
@@ -1477,7 +1477,7 @@ void Goal::Impl::add_group_remove_to_goal(
 
                 remove_candidates.add(pkg);
             }
-            rpm_goal.add_group(group, transaction::TransactionItemAction::REMOVE, reason);
+            rpm_goal.add_group(group, transaction::TransactionItemAction::REMOVE, reason, {});
         }
     }
     if (remove_candidates.empty()) {
