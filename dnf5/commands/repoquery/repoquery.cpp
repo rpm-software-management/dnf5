@@ -66,27 +66,25 @@ void RepoqueryCommand::set_argument_parser() {
 
     auto available = parser.add_new_named_arg("available");
     available->set_long_name("available");
-    //TODO(amatej): Unify description of all repoquery options to use the same wording
-    available->set_description("display available packages (default)");
+    available->set_description("Limit to available packages (default).");
     available->set_const_value("true");
     available->link_value(available_option);
 
     auto installed = parser.add_new_named_arg("installed");
     installed->set_long_name("installed");
-    installed->set_description("display installed packages");
+    installed->set_description("Limit to installed packages.");
     installed->set_const_value("true");
     installed->link_value(installed_option);
 
     auto info = parser.add_new_named_arg("info");
     info->set_long_name("info");
-    info->set_description("show detailed information about the packages");
+    info->set_description("Show detailed information about the packages.");
     info->set_const_value("true");
     info->link_value(info_option);
 
     auto query_format = parser.add_new_named_arg("queryformat");
     query_format->set_long_name("queryformat");
-    query_format->set_description(
-        "display format for listing packages: %{name} %{version} ... use --querytags to view full tag list");
+    query_format->set_description("Display format for packages. Default is \"%{full_nevra}\".");
     query_format->set_has_value(true);
     query_format->set_arg_value_help("QUERYFORMAT");
     query_format->link_value(query_format_option);
@@ -94,7 +92,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto * latest_limit = parser.add_new_named_arg("latest-limit");
     latest_limit->set_long_name("latest-limit");
     latest_limit->set_description(
-        "show N latest packages for a given name.arch (or all except N latest if N is negative)");
+        "Limit to N latest packages for a given name.arch (or all except N latest if N is negative).");
     latest_limit->set_arg_value_help("N");
     latest_limit->set_has_value(true);
     latest_limit->link_value(latest_limit_option);
@@ -122,8 +120,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto * whatdepends = parser.add_new_named_arg("whatdepends");
     whatdepends->set_long_name("whatdepends");
     whatdepends->set_description(
-        "Limit the resulting set only to packages that require, enhance, recommend, suggest or supplement any of "
-        "<capabilities>");
+        "Limit to packages that require, enhance, recommend, suggest or supplement any of <capabilities>.");
     whatdepends->set_has_value(true);
     whatdepends->link_value(whatdepends_option);
     whatdepends->set_arg_value_help("CAPABILITY,...");
@@ -132,8 +129,7 @@ void RepoqueryCommand::set_argument_parser() {
         parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
     auto * whatconflicts = parser.add_new_named_arg("whatconflicts");
     whatconflicts->set_long_name("whatconflicts");
-    whatconflicts->set_description(
-        "Limit the resulting set only to packages that conflict with any of <capabilities>.");
+    whatconflicts->set_description("Limit to packages that conflict with any of <capabilities>.");
     whatconflicts->set_has_value(true);
     whatconflicts->link_value(whatconflicts_option);
     whatconflicts->set_arg_value_help("CAPABILITY,...");
@@ -142,7 +138,7 @@ void RepoqueryCommand::set_argument_parser() {
         parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
     auto * whatprovides = parser.add_new_named_arg("whatprovides");
     whatprovides->set_long_name("whatprovides");
-    whatprovides->set_description("Limit the resulting set only to packages that provide any of <capabilities>.");
+    whatprovides->set_description("Limit to packages that provide any of <capabilities>.");
     whatprovides->set_has_value(true);
     whatprovides->link_value(whatprovides_option);
     whatprovides->set_arg_value_help("CAPABILITY,...");
@@ -152,7 +148,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto * whatrequires = parser.add_new_named_arg("whatrequires");
     whatrequires->set_long_name("whatrequires");
     whatrequires->set_description(
-        "Limit the resulting set only to packages that require any of <capabilities>. Use --whatdepends if you want to "
+        "Limit to packages that require any of <capabilities>. Use --whatdepends if you want to "
         "list all depending packages.");
     whatrequires->set_has_value(true);
     whatrequires->link_value(whatrequires_option);
@@ -162,7 +158,7 @@ void RepoqueryCommand::set_argument_parser() {
         parser.add_init_value(std::make_unique<libdnf::OptionStringList>(std::vector<std::string>(), "", false, ",")));
     auto * whatobsoletes = parser.add_new_named_arg("whatobsoletes");
     whatobsoletes->set_long_name("whatobsoletes");
-    whatobsoletes->set_description("Limit the resulting set only to packages that obsolete any of <capabilities>.");
+    whatobsoletes->set_description("Limit to packages that obsolete any of <capabilities>.");
     whatobsoletes->set_has_value(true);
     whatobsoletes->link_value(whatobsoletes_option);
     whatobsoletes->set_arg_value_help("CAPABILITY,...");
@@ -172,7 +168,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto * whatrecommends = parser.add_new_named_arg("whatrecommends");
     whatrecommends->set_long_name("whatrecommends");
     whatrecommends->set_description(
-        "Limit the resulting set only to packages that recommend any of <capabilities>. Use --whatdepends if you want "
+        "Limit to packages that recommend any of <capabilities>. Use --whatdepends if you want "
         "to list all depending packages.");
     whatrecommends->set_has_value(true);
     whatrecommends->link_value(whatrecommends_option);
@@ -183,7 +179,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto * whatenhances = parser.add_new_named_arg("whatenhances");
     whatenhances->set_long_name("whatenhances");
     whatenhances->set_description(
-        "Limit the resulting set only to packages that enhance any of <capabilities>. Use --whatdepends if you want to "
+        "Limit to packages that enhance any of <capabilities>. Use --whatdepends if you want to "
         "list all depending packages.");
     whatenhances->set_has_value(true);
     whatenhances->link_value(whatenhances_option);
@@ -194,7 +190,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto * whatsupplements = parser.add_new_named_arg("whatsupplements");
     whatsupplements->set_long_name("whatsupplements");
     whatsupplements->set_description(
-        "Limit the resulting set only to packages that supplement any of <capabilities>. Use --whatdepends if you "
+        "Limit to packages that supplement any of <capabilities>. Use --whatdepends if you "
         "want to list all depending packages.");
     whatsupplements->set_has_value(true);
     whatsupplements->link_value(whatsupplements_option);
@@ -205,7 +201,7 @@ void RepoqueryCommand::set_argument_parser() {
     auto * whatsuggests = parser.add_new_named_arg("whatsuggests");
     whatsuggests->set_long_name("whatsuggests");
     whatsuggests->set_description(
-        "Limit the resulting set only to packages that suggest any of <capabilities>. Use --whatdepends if you want to "
+        "Limit to packages that suggest any of <capabilities>. Use --whatdepends if you want to "
         "list all depending packages.");
     whatsuggests->set_has_value(true);
     whatsuggests->link_value(whatsuggests_option);
@@ -215,14 +211,14 @@ void RepoqueryCommand::set_argument_parser() {
         *this,
         "exactdeps",
         '\0',
-        "This option is stackable with --whatrequires or --whatdepends only. Limit the resulting set only to packages "
-        "that require <capability> specified by --whatrequires.",
+        "Limit to packages that require <capability> specified by --whatrequires. This option is stackable "
+        "with --whatrequires or --whatdepends only.",
         false);
     duplicates = std::make_unique<libdnf::cli::session::BoolOption>(
         *this,
         "duplicates",
         '\0',
-        "Limit the resulting set to installed duplicate packages (i.e. more package versions for  the  same  name and "
+        "Limit to installed duplicate packages (i.e. more package versions for  the  same  name and "
         "architecture). Installonly packages are excluded from this set.",
         false);
 
