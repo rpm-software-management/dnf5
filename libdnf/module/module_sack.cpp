@@ -656,6 +656,7 @@ std::optional<std::pair<std::string, std::string>> ModuleSack::Impl::detect_plat
 
 std::pair<std::vector<std::vector<std::string>>, ModuleSack::ModuleErrorType>
 ModuleSack::resolve_active_module_items() {
+    p_impl->considered_uptodate = false;
     p_impl->excludes.reset(new libdnf::solv::SolvMap(p_impl->pool->nsolvables));
     p_impl->module_db->initialize();
 
