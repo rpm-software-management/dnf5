@@ -672,7 +672,7 @@ ModuleSack::resolve_active_module_items() {
             status == ModuleStatus::ENABLED &&
             p_impl->module_db->get_enabled_stream(module_name) == module_item->get_stream()) {
             module_items_to_solve.push_back(module_item.get());
-        } else if (get_default_stream(module_name) == module_item->get_stream()) {
+        } else if (status == ModuleStatus::AVAILABLE && get_default_stream(module_name) == module_item->get_stream()) {
             module_items_to_solve.push_back(module_item.get());
         }
     }
