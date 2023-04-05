@@ -137,7 +137,7 @@ void CheckUpgradeCommand::run() {
         advisory_bz->get_value(),
         advisory_cve->get_value());
     if (advisories.has_value()) {
-        upgrades_query.filter_advisories(std::move(advisories.value()), libdnf::sack::QueryCmp::EXACT);
+        upgrades_query.filter_advisories(std::move(advisories.value()), libdnf::sack::QueryCmp::GTE);
     }
 
     libdnf::rpm::PackageQuery installed_query(ctx.base);
