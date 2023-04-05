@@ -488,8 +488,9 @@ rpm::PackageId PackageSack::Impl::get_running_kernel_id() {
         logger.debug("Failed to find rpm package of a running kernel in sack");
         running_kernel.id = -1;
     } else {
-        running_kernel = libdnf::rpm::PackageId(*query.p_impl->begin());
-        logger.debug("Found running kernel: {}", get_rpm_pool(base).id2str(running_kernel.id));
+        libdnf::rpm::Package kernel_pkg = *query.begin();
+        running_kernel = kernel_pkg.get_id();
+        logger.debug("Found running kernel: {}", kernel_pkg.get_full_nevra());
     }
     return running_kernel;
 }
