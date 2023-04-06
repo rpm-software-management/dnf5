@@ -21,6 +21,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 #include "provides.hpp"
 
+#include <libdnf/conf/const.hpp>
 #include <libdnf/rpm/package_query.hpp>
 
 #include <iostream>
@@ -59,6 +60,7 @@ void ProvidesCommand::set_argument_parser() {
 void ProvidesCommand::configure() {
     auto & context = get_context();
     context.set_load_system_repo(true);
+    context.base.get_config().get_optional_metadata_types_option().add_item(libdnf::METADATA_TYPE_FILELISTS);
     context.set_load_available_repos(Context::LoadAvailableRepos::ENABLED);
 }
 
