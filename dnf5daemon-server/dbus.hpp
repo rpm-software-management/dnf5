@@ -59,15 +59,12 @@ const char * const INTERFACE_GROUP = "org.rpm.dnf.v0.comps.Group";
 const char * const INTERFACE_SESSION_MANAGER = "org.rpm.dnf.v0.SessionManager";
 
 // signals
-const char * const SIGNAL_REPO_LOAD_START = "repo_load_start";
-const char * const SIGNAL_REPO_LOAD_PROGRESS = "repo_load_progress";
-const char * const SIGNAL_REPO_LOAD_END = "repo_load_end";
-const char * const SIGNAL_REPO_KEY_IMPORT_REQUEST = "repo_key_import_request";
+const char * const SIGNAL_DOWNLOAD_ADD_NEW = "download_add_new";
+const char * const SIGNAL_DOWNLOAD_PROGRESS = "download_progress";
+const char * const SIGNAL_DOWNLOAD_END = "download_end";
+const char * const SIGNAL_DOWNLOAD_MIRROR_FAILURE = "download_mirror_failure";
 
-const char * const SIGNAL_PACKAGE_DOWNLOAD_START = "package_download_start";
-const char * const SIGNAL_PACKAGE_DOWNLOAD_PROGRESS = "package_download_progress";
-const char * const SIGNAL_PACKAGE_DOWNLOAD_END = "package_download_end";
-const char * const SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE = "package_download_mirror_failure";
+const char * const SIGNAL_REPO_KEY_IMPORT_REQUEST = "repo_key_import_request";
 
 const char * const SIGNAL_TRANSACTION_TRANSACTION_START = "transaction_transaction_start";
 const char * const SIGNAL_TRANSACTION_TRANSACTION_PROGRESS = "transaction_transaction_progress";

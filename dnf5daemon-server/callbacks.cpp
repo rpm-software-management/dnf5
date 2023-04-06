@@ -28,35 +28,7 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 #include <iostream>
 #include <string>
 
-void * DownloadCallbacksProxy::add_new_download(
-    void * user_data, const char * description, [[maybe_unused]] double total_to_download) {
-    if (auto * download_cb = static_cast<DownloadCB *>(user_data)) {
-        download_cb->start(description);
-    }
-    return user_data;
-}
-
-int DownloadCallbacksProxy::progress(void * user_cb_data, double total_to_download, double downloaded) {
-    if (auto * download_cb = static_cast<DownloadCB *>(user_cb_data)) {
-        download_cb->progress(total_to_download, downloaded);
-    }
-    return 0;
-}
-
-int DownloadCallbacksProxy::end(void * user_cb_data, TransferStatus status, const char * msg) {
-    if (auto * download_cb = static_cast<DownloadCB *>(user_cb_data)) {
-        download_cb->end(status, msg);
-    }
-    return 0;
-}
-
-int DownloadCallbacksProxy::mirror_failure(
-    void * user_cb_data, const char * msg, const char * url, [[maybe_unused]] const char * metadata) {
-    if (auto * download_cb = static_cast<DownloadCB *>(user_cb_data)) {
-        download_cb->mirror_failure(msg, url);
-    }
-    return 0;
-}
+namespace dnf5daemon {
 
 
 DbusCallback::DbusCallback(Session & session) : session(session) {
@@ -65,8 +37,7 @@ DbusCallback::DbusCallback(Session & session) : session(session) {
 
 sdbus::Signal DbusCallback::create_signal(std::string interface, std::string signal_name) {
     auto signal = dbus_object->createSignal(interface, signal_name);
-    // TODO(mblaha): uncomment once setDestination is available in sdbus-cpp
-    //signal.setDestination(session->get_sender());
+    signal.setDestination(session.get_sender());
     signal << session.get_object_path();
     return signal;
 }
@@ -74,107 +45,64 @@ sdbus::Signal DbusCallback::create_signal(std::string interface, std::string sig
 std::chrono::time_point<std::chrono::steady_clock> DbusCallback::prev_print_time = std::chrono::steady_clock::now();
 
 
-DbusPackageCB::DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg)
-    : DbusCallback(session),
-      pkg_id(pkg.get_id().id) {
+sdbus::Signal DownloadCB::create_signal_download(const std::string & signal_name, void * user_data) {
+    auto signal = create_signal(dnfdaemon::INTERFACE_BASE, signal_name);
+    if (user_data) {
+        auto * data = reinterpret_cast<DownloadUserData *>(user_data);
+        signal << data->download_id;
+    }
+    return signal;
+}
+
+void * DownloadCB::add_new_download(void * user_data, const char * description, double total_to_download) {
     try {
-        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_START);
-        signal << pkg.get_full_nevra();
+        auto signal = create_signal_download(dnfdaemon::SIGNAL_DOWNLOAD_ADD_NEW, user_data);
+        signal << description;
+        signal << static_cast<int64_t>(total_to_download);
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
+    return user_data;
 }
 
-void DbusPackageCB::end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) {
+int DownloadCB::progress(void * user_cb_data, double total_to_download, double downloaded) {
     try {
-        // Due to is_time_to_print() timeout it is possible that progress signal was not
-        // emitted with correct downloaded / total_to_download value - especially for small packages.
-        // Emit the progress signal at least once signalling that 100% of the package was downloaded.
-        if (status == libdnf::repo::DownloadCallbacks::TransferStatus::SUCCESSFUL) {
-            auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
-            signal << total;
-            signal << total;
+        if (is_time_to_print()) {
+            auto signal = create_signal_download(dnfdaemon::SIGNAL_DOWNLOAD_PROGRESS, user_cb_data);
+            signal << static_cast<int64_t>(total_to_download);
+            signal << static_cast<int64_t>(downloaded);
             dbus_object->emitSignal(signal);
         }
-        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_END);
+    } catch (...) {
+    }
+    return 0;
+}
+
+int DownloadCB::end(void * user_cb_data, TransferStatus status, const char * msg) {
+    try {
+        auto signal = create_signal_download(dnfdaemon::SIGNAL_DOWNLOAD_END, user_cb_data);
         signal << static_cast<int>(status);
         signal << msg;
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
+    return 0;
 }
 
-void DbusPackageCB::progress(double total_to_download, double downloaded) {
-    total = total_to_download;
+int DownloadCB::mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) {
     try {
-        if (is_time_to_print()) {
-            auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS);
-            signal << downloaded;
-            signal << total_to_download;
-            dbus_object->emitSignal(signal);
-        }
-    } catch (...) {
-    }
-}
-
-void DbusPackageCB::mirror_failure(const char * msg, const char * url) {
-    try {
-        auto signal = create_signal(dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE);
+        auto signal = create_signal_download(dnfdaemon::SIGNAL_DOWNLOAD_MIRROR_FAILURE, user_cb_data);
         signal << msg;
         signal << url;
+        signal << metadata;
         dbus_object->emitSignal(signal);
     } catch (...) {
     }
-}
-
-sdbus::Signal DbusPackageCB::create_signal(std::string interface, std::string signal_name) {
-    auto signal = DbusCallback::create_signal(interface, signal_name);
-    signal << pkg_id;
-    return signal;
+    return 0;
 }
 
 
-void DbusRepoCB::start(const char * what) {
-    try {
-        auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_START);
-        signal << what;
-        dbus_object->emitSignal(signal);
-    } catch (...) {
-    }
-}
-
-void DbusRepoCB::end(
-    [[maybe_unused]] libdnf::repo::DownloadCallbacks::TransferStatus status, [[maybe_unused]] const char * msg) {
-    // TODO(lukash) forward the error message to the client?
-    try {
-        {
-            auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
-            signal << total;
-            signal << total;
-            dbus_object->emitSignal(signal);
-        }
-        {
-            auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_END);
-            dbus_object->emitSignal(signal);
-        }
-    } catch (...) {
-    }
-}
-
-void DbusRepoCB::progress(double total_to_download, double downloaded) {
-    total = static_cast<uint64_t>(total_to_download);
-    try {
-        if (is_time_to_print()) {
-            auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS);
-            signal << static_cast<uint64_t>(downloaded);
-            signal << static_cast<uint64_t>(total_to_download);
-            dbus_object->emitSignal(signal);
-        }
-    } catch (...) {
-    }
-}
-
-bool DbusRepoCB::repokey_import(
+bool KeyImportRepoCB::repokey_import(
     const std::string & id,
     const std::vector<std::string> & user_ids,
     const std::string & fingerprint,
@@ -182,8 +110,8 @@ bool DbusRepoCB::repokey_import(
     long int timestamp) {
     bool confirmed;
     try {
-        auto signal = create_signal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST);
-        signal << id << (user_ids.empty() ? "" : user_ids[0]) << fingerprint << url << static_cast<int64_t>(timestamp);
+        auto signal = create_signal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST);
+        signal << id << user_ids << fingerprint << url << static_cast<int64_t>(timestamp);
         // wait for client's confirmation
         confirmed = session.wait_for_key_confirmation(id, signal);
     } catch (...) {
@@ -369,3 +297,5 @@ void DbusTransactionCB::finish() {
     } catch (...) {
     }
 }
+
+}  // namespace dnf5daemon

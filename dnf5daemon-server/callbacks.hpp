@@ -31,14 +31,11 @@ along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
 
 class Session;
 
-/// Proxy class. It will be registered in libdnf::Base.
-/// Redirects download callbacks to the appropriate DownloadCB instance (package or repository callbacks).
-class DownloadCallbacksProxy : public libdnf::repo::DownloadCallbacks {
-public:
-    void * add_new_download(void * user_data, const char * description, double total_to_download) override;
-    int progress(void * user_cb_data, double total_to_download, double downloaded) override;
-    int end(void * user_cb_data, TransferStatus status, const char * msg) override;
-    int mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) override;
+namespace dnf5daemon {
+
+
+struct DownloadUserData {
+    std::string download_id{};
 };
 
 class DbusCallback {
@@ -64,39 +61,27 @@ protected:
     }
 };
 
-class DownloadCB {
-public:
-    virtual void start([[maybe_unused]] const char * what) {}
-    virtual void end(
-        [[maybe_unused]] libdnf::repo::DownloadCallbacks::TransferStatus status, [[maybe_unused]] const char * msg) {}
-    virtual void progress([[maybe_unused]] double total_to_download, [[maybe_unused]] double downloaded) {}
-    virtual void mirror_failure([[maybe_unused]] const char * msg, [[maybe_unused]] const char * url) {}
-};
 
-class DbusPackageCB : public DbusCallback, public DownloadCB {
+class DownloadCB : public DbusCallback, public libdnf::repo::DownloadCallbacks {
 public:
-    explicit DbusPackageCB(Session & session, const libdnf::rpm::Package & pkg);
-    virtual ~DbusPackageCB() = default;
+    DownloadCB(Session & session) : DbusCallback(session), libdnf::repo::DownloadCallbacks() {}
 
-    void end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) override;
-    void progress(double total_to_download, double downloaded) override;
-    void mirror_failure(const char * msg, const char * url) override;
+    void * add_new_download(void * user_data, const char * description, double total_to_download) override;
+
+    int progress(void * user_cb_data, double total_to_download, double downloaded) override;
+
+    int end(void * user_cb_data, TransferStatus status, const char * msg) override;
+
+    int mirror_failure(void * user_cb_data, const char * msg, const char * url, const char * metadata) override;
 
 private:
-    int pkg_id;
-    double total = 0;
-
-    sdbus::Signal create_signal(std::string interface, std::string signal_name) override;
+    sdbus::Signal create_signal_download(const std::string & signal_name, void * user_data);
 };
 
-class DbusRepoCB : public libdnf::repo::RepoCallbacks, public DbusCallback, public DownloadCB {
-public:
-    explicit DbusRepoCB(Session & session) : DbusCallback(session) {}
-    virtual ~DbusRepoCB() = default;
 
-    void start(const char * what) override;
-    void end(libdnf::repo::DownloadCallbacks::TransferStatus status, const char * msg) override;
-    void progress(double total_to_download, double downloaded) override;
+class KeyImportRepoCB : public DbusCallback, public libdnf::repo::RepoCallbacks {
+public:
+    KeyImportRepoCB(Session & session) : DbusCallback(session) {}
 
     bool repokey_import(
         const std::string & id,
@@ -104,9 +89,6 @@ public:
         const std::string & fingerprint,
         const std::string & url,
         long int timestamp) override;
-
-private:
-    uint64_t total = 0;
 };
 
 
@@ -166,5 +148,7 @@ public:
 private:
     sdbus::Signal create_signal_pkg(std::string interface, std::string signal_name, const std::string & nevra);
 };
+
+}  // namespace dnf5daemon
 
 #endif

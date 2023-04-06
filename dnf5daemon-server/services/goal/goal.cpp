@@ -195,20 +195,18 @@ sdbus::MethodReply Goal::get_transaction_problems(sdbus::MethodCall & call) {
 }
 
 
-// TODO (mblaha) shared download_packages with dnf5 / libdnf
 // TODO (mblaha) callbacks to report the status
-void download_packages(Session & session, libdnf::base::Transaction & transaction) {
+void download_packages(libdnf::base::Transaction & transaction) {
     libdnf::repo::PackageDownloader downloader;
 
-    // container is owner of dbus package callbacks
-    std::vector<std::unique_ptr<DbusPackageCB>> dbus_package_cbs;
-
+    // container is owner of package callbacks user_data
+    std::vector<std::unique_ptr<dnf5daemon::DownloadUserData>> user_data;
     for (auto & tspkg : transaction.get_transaction_packages()) {
         if (transaction_item_action_is_inbound(tspkg.get_action()) &&
             tspkg.get_package().get_repo()->get_type() != libdnf::repo::Repo::Type::COMMANDLINE) {
-            auto & dbus_pkg_cb =
-                dbus_package_cbs.emplace_back(std::make_unique<DbusPackageCB>(session, tspkg.get_package()));
-            downloader.add(tspkg.get_package(), dbus_pkg_cb.get());
+            auto & data = user_data.emplace_back(std::make_unique<dnf5daemon::DownloadUserData>());
+            data->download_id = "package:" + std::to_string(tspkg.get_package().get_id().id);
+            downloader.add(tspkg.get_package(), data.get());
         }
     }
 
@@ -227,14 +225,14 @@ sdbus::MethodReply Goal::do_transaction(sdbus::MethodCall & call) {
 
     auto * transaction = session.get_transaction();
 
-    download_packages(session, *transaction);
+    download_packages(*transaction);
 
     std::string comment;
     if (options.find("comment") != options.end()) {
         comment = key_value_map_get<std::string>(options, "comment");
     }
 
-    transaction->set_callbacks(std::make_unique<DbusTransactionCB>(session));
+    transaction->set_callbacks(std::make_unique<dnf5daemon::DbusTransactionCB>(session));
     transaction->set_description("dnf5daemon-server");
     transaction->set_comment(comment);
 

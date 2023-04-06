@@ -67,11 +67,12 @@ public:
     libdnf::OptionString installroot{"/"};
     libdnf::OptionString releasever{""};
 
+    DownloadCB * get_download_cb() { return download_cb.get(); }
+
 private:
     sdbus::ObjectPath session_object_path;
     dnfdaemon::RepoStatus repositories_status;
-    std::unique_ptr<RepoCB> repocb;
-    std::unique_ptr<PackageDownloadCB> package_download_cb;
+    std::unique_ptr<DownloadCB> download_cb;
     std::unique_ptr<TransactionCB> transaction_cb;
 };
 

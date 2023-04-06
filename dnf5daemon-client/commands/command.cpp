@@ -67,6 +67,12 @@ void TransactionCommand::run_transaction() {
         dbus_goal_wrapper.set_resolve_logs(std::move(problems));
     }
 
+    if (auto download_cb = ctx.get_download_cb()) {
+        download_cb->reset_progress_bar();
+        download_cb->set_number_widget_visible(true);
+        download_cb->set_show_total_bar_limit(0);
+    }
+
     // print the transaction to the user and ask for confirmation
     if (!libdnf::cli::output::print_transaction_table(dbus_goal_wrapper)) {
         return;

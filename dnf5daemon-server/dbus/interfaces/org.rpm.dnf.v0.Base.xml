@@ -1,0 +1,126 @@
+<!DOCTYPE node PUBLIC "-//freedesktop//DTD D-BUS Object Introspection 1.0//EN"
+"http://www.freedesktop.org/standards/dbus/1.0/introspect.dtd">
+
+<!--
+Copyright Contributors to the libdnf project.
+
+This file is part of libdnf: https://github.com/rpm-software-management/libdnf/
+
+Libdnf is free software: you can redistribute it and/or modify
+it under the terms of the GNU Lesser General Public License as published by
+the Free Software Foundation, either version 2.1 of the License, or
+(at your option) any later version.
+
+Libdnf is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Lesser General Public License for more details.
+
+You should have received a copy of the GNU Lesser General Public License
+along with libdnf.  If not, see <https://www.gnu.org/licenses/>.
+-->
+
+<node>
+<!-- org.rpm.dnf.v0.Base:
+   @short_description: Interface to Base class
+-->
+<interface name="org.rpm.dnf.v0.Base">
+    <!--
+        read_all_repos:
+        @retval: `true` if repositories were successfuly loaded, `false` otherwise.
+
+        Explicitely ask for loading repositories metadata.
+    -->
+    <method name="read_all_repos">
+        <arg name="retval" type="b" direction="out"/>
+    </method>
+
+    <!--
+        download_add_new:
+        @session_object_path: object path of the dnf5daemon session
+        @download_id: unique id of downloaded object (repo or package)
+        @description: the description of the downloaded object
+        @total_to_download: total bytes to download
+
+        A new download has started.
+    -->
+    <signal name="download_add_new">
+        <arg name="session_object_path" type="o" />
+        <arg name="download_id" type="s" />
+        <arg name="description" type="s" />
+        <arg name="total_to_download" type="x" />
+    </signal>
+
+    <!--
+        download_progress:
+        @session_object_path: object path of the dnf5daemon session
+        @download_id: unique id of downloaded object (repo or package)
+        @total_to_download: total bytes to download
+        @downloaded: bytes already downloaded
+
+        Progress in downloading.
+    -->
+    <signal name="download_progress">
+        <arg name="session_object_path" type="o" />
+        <arg name="download_id" type="s" />
+        <arg name="total_to_download" type="x" />
+        <arg name="downloaded" type="x" />
+    </signal>
+
+    <!--
+        mirror_failure:
+        @session_object_path: object path of the dnf5daemon session
+        @download_id: unique id of downloaded object (repo or package)
+        @message: an error message
+        @url: URL being downloaded
+        @metadata: For repository metadata download contains metadata type
+
+        Mirror failure during the download.
+    -->
+    <signal name="mirror_failure">
+        <arg name="session_object_path" type="o" />
+        <arg name="download_id" type="s" />
+        <arg name="message" type="s" />
+        <arg name="url" type="s" />
+        <arg name="metadata" type="s" />
+    </signal>
+
+    <!--
+        download_end:
+        @session_object_path: object path of the dnf5daemon session
+        @download_id: unique id of downloaded object (repo or package)
+        @status: libdnf::repo::DownloadCallbacks::TransferStatus (0 - successful, 1 - already exists, 2 - error)
+        @error: error message in case of failed download
+
+        Downloading has ended.
+    -->
+    <signal name="repo_load_end">
+        <arg name="session_object_path" type="o" />
+        <arg name="download_id" type="s" />
+        <arg name="status" type="i" />
+        <arg name="message" type="s" />
+    </signal>
+
+    <!--
+        repo_key_import_request:
+        @session_object_path: object path of the dnf5daemon session
+        @key_id: PGP key id
+        @user_ids: User id
+        @key_fingerprint: Fingerprint of the PGP key
+        @key_url: URL of the PGP key
+        @timestamp: timestamp when the key was created
+
+        Request for repository key import confirmation.
+    -->
+    <signal name="repo_key_import_request">
+        <arg name="session_object_path" type="o" />
+        <arg name="key_id" type="s" />
+        <arg name="user_ids" type="as" />
+        <arg name="key_fingerprint" type="s" />
+        <arg name="key_url" type="s" />
+        <arg name="timestamp" type="x" />
+    </signal>
+
+</interface>
+
+</node>
