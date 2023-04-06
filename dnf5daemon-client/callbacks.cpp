@@ -43,156 +43,107 @@ bool DbusCallback::signature_valid(sdbus::Signal & signal) {
 }
 
 
-RepoCB::RepoCB(Context & context) : DbusCallback(context) {
+DownloadCB::DownloadCB(Context & context) : DbusCallback(context) {
     // register signal handlers
     auto proxy = context.session_proxy.get();
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_START, [this](sdbus::Signal & signal) -> void {
-            this->start(signal);
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_ADD_NEW, [this](sdbus::Signal & signal) -> void {
+            this->add_new_download(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_END, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_END, [this](sdbus::Signal & signal) -> void {
             this->end(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_LOAD_PROGRESS, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_PROGRESS, [this](sdbus::Signal & signal) -> void {
             this->progress(signal);
         });
     proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST, [this](sdbus::Signal & signal) -> void {
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_MIRROR_FAILURE, [this](sdbus::Signal & signal) -> void {
+            this->mirror_failure(signal);
+        });
+    proxy->registerSignalHandler(
+        dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST, [this](sdbus::Signal & signal) -> void {
             this->key_import(signal);
         });
 }
 
 
-void RepoCB::print_progress_bar() {
-    if (libdnf::cli::tty::is_interactive()) {
-        std::cout << libdnf::cli::tty::clear_line;
-        for (std::size_t i = 0; i < msg_lines; i++) {
-            std::cout << libdnf::cli::tty::cursor_up << libdnf::cli::tty::clear_line;
-        }
-        std::cout << "\r";
-    }
-    std::cout << progress_bar << std::flush;
-    msg_lines = progress_bar.get_messages().size();
-}
-
-void RepoCB::start(sdbus::Signal & signal) {
-    if (signature_valid(signal)) {
-        std::string what;
-        signal >> what;
-        progress_bar.set_description(what);
-        progress_bar.set_auto_finish(false);
-        progress_bar.set_total_ticks(0);
-        progress_bar.start();
+libdnf::cli::progressbar::DownloadProgressBar * DownloadCB::find_progress_bar(const std::string & download_id) {
+    auto iter = progress_bars.find(download_id);
+    if (iter != progress_bars.end()) {
+        return iter->second;
+    } else {
+        return nullptr;
     }
 }
 
-void RepoCB::end(sdbus::Signal & signal) {
-    if (signature_valid(signal)) {
-        progress_bar.set_ticks(progress_bar.get_total_ticks());
-        if (progress_bar.get_state() != libdnf::cli::progressbar::ProgressBarState::ERROR) {
-            progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
-        }
-        print_progress_bar();
+
+void DownloadCB::print() {
+    if (multi_progress_bar) {
+        multi_progress_bar->print();
+        printed = true;
+    }
+}
+
+
+void DownloadCB::reset_progress_bar() {
+    multi_progress_bar.reset();
+    if (printed) {
         std::cout << std::endl;
+        printed = false;
     }
 }
 
-void RepoCB::progress(sdbus::Signal & signal) {
+void DownloadCB::set_number_widget_visible(bool value) {
+    number_widget_visible = value;
+}
+
+void DownloadCB::set_show_total_bar_limit(std::size_t limit) {
+    show_total_bar_limit = limit;
+    if (multi_progress_bar) {
+        multi_progress_bar->set_total_bar_visible_limit(limit);
+    }
+}
+
+void DownloadCB::add_new_download(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
-        uint64_t downloaded;
-        uint64_t total_to_download;
-        signal >> downloaded;
+        std::string download_id;
+        std::string description;
+        int64_t total_to_download;
+        signal >> download_id;
+        signal >> description;
         signal >> total_to_download;
-        progress_bar.set_total_ticks(static_cast<int64_t>(total_to_download));
-        progress_bar.set_ticks(static_cast<int64_t>(downloaded));
-        print_progress_bar();
-    }
-}
-
-void RepoCB::key_import(sdbus::Signal & signal) {
-    if (signature_valid(signal)) {
-        std::string key_id;
-        std::string user_id;
-        std::string fingerprint;
-        std::string url;
-        signal >> key_id >> user_id >> fingerprint >> url;
-        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, "Importing PGP key: " + key_id);
-        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, " Userid     : " + user_id);
-        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, " Fingerprint: " + fingerprint);
-        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, " From       : " + url);
-        progress_bar.add_message(libdnf::cli::progressbar::MessageType::INFO, "");
-        print_progress_bar();
-
-        // ask user for the key import confirmation
-        auto confirmed = libdnf::cli::utils::userconfirm::userconfirm(context);
-
-        // signal the confirmation back to the server
-        try {
-            context.session_proxy->callMethod("confirm_key")
-                .onInterface(dnfdaemon::INTERFACE_REPO)
-                .withTimeout(static_cast<uint64_t>(-1))
-                .withArguments(key_id, confirmed);
-        } catch (const sdbus::Error & ex) {
-            progress_bar.add_message(libdnf::cli::progressbar::MessageType::ERROR, ex.what());
-            progress_bar.set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
+        if (!multi_progress_bar) {
+            multi_progress_bar = std::make_unique<libdnf::cli::progressbar::MultiProgressBar>();
+            multi_progress_bar->set_total_bar_visible_limit(show_total_bar_limit);
         }
-        print_progress_bar();
+        auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(
+            total_to_download > 0 ? total_to_download : -1, description);
+        progress_bar->set_auto_finish(false);
+        progress_bars.emplace(download_id, progress_bar.get());
+        multi_progress_bar->add_bar(std::move(progress_bar));
     }
 }
 
 
-PackageDownloadCB::PackageDownloadCB(Context & context) : DbusCallback(context) {
-    // register signal handlers
-    auto proxy = context.session_proxy.get();
-    proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_START, [this](sdbus::Signal & signal) -> void {
-            this->start(signal);
-        });
-    proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_END, [this](sdbus::Signal & signal) -> void {
-            this->end(signal);
-        });
-    proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM, dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_PROGRESS, [this](sdbus::Signal & signal) -> void {
-            this->progress(signal);
-        });
-    proxy->registerSignalHandler(
-        dnfdaemon::INTERFACE_RPM,
-        dnfdaemon::SIGNAL_PACKAGE_DOWNLOAD_MIRROR_FAILURE,
-        [this](sdbus::Signal & signal) -> void { this->mirror_failure(signal); });
-}
-
-
-void PackageDownloadCB::start(sdbus::Signal & signal) {
+void DownloadCB::end(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
-        int pkg_id;
-        std::string nevra;
-        signal >> pkg_id;
-        signal >> nevra;
-        auto progress_bar = std::make_unique<libdnf::cli::progressbar::DownloadProgressBar>(-1, nevra);
-        package_bars.emplace(pkg_id, progress_bar.get());
-        multi_progress_bar.add_bar(std::move(progress_bar));
-    }
-}
-
-void PackageDownloadCB::end(sdbus::Signal & signal) {
-    if (signature_valid(signal)) {
-        int pkg_id;
-        signal >> pkg_id;
-        auto progress_bar = find_progress_bar(pkg_id);
+        std::string download_id;
+        signal >> download_id;
+        auto progress_bar = find_progress_bar(download_id);
         if (progress_bar == nullptr) {
             return;
         }
+
         int status_i;
-        signal >> status_i;
         std::string msg;
+        signal >> status_i;
         signal >> msg;
-        using namespace libdnf::repo;
         auto status = static_cast<libdnf::repo::DownloadCallbacks::TransferStatus>(status_i);
         switch (status) {
             case libdnf::repo::DownloadCallbacks::TransferStatus::SUCCESSFUL:
+                progress_bar->set_total_ticks(progress_bar->get_ticks());
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::SUCCESS);
                 break;
             case libdnf::repo::DownloadCallbacks::TransferStatus::ALREADYEXISTS:
@@ -208,50 +159,87 @@ void PackageDownloadCB::end(sdbus::Signal & signal) {
                 progress_bar->set_state(libdnf::cli::progressbar::ProgressBarState::ERROR);
                 break;
         }
-        multi_progress_bar.print();
+        print();
     }
 }
 
-void PackageDownloadCB::progress(sdbus::Signal & signal) {
+void DownloadCB::progress(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
-        int pkg_id;
-        signal >> pkg_id;
-        auto progress_bar = find_progress_bar(pkg_id);
+        std::string download_id;
+        signal >> download_id;
+        auto progress_bar = find_progress_bar(download_id);
         if (progress_bar == nullptr) {
             return;
         }
-        double downloaded;
-        double total_to_download;
-        signal >> downloaded;
+        int64_t total_to_download;
+        int64_t downloaded;
         signal >> total_to_download;
+        signal >> downloaded;
         if (total_to_download > 0) {
-            progress_bar->set_total_ticks(static_cast<int64_t>(total_to_download));
+            progress_bar->set_total_ticks(total_to_download);
         }
         if (progress_bar->get_state() == libdnf::cli::progressbar::ProgressBarState::READY) {
             progress_bar->start();
         }
-        progress_bar->set_ticks(static_cast<int64_t>(downloaded));
-        multi_progress_bar.print();
+        progress_bar->set_ticks(downloaded);
+        print();
     }
 }
 
-void PackageDownloadCB::mirror_failure(sdbus::Signal & signal) {
+void DownloadCB::mirror_failure(sdbus::Signal & signal) {
     if (signature_valid(signal)) {
-        int pkg_id;
-        signal >> pkg_id;
-        auto progress_bar = find_progress_bar(pkg_id);
+        std::string download_id;
+        signal >> download_id;
+        auto progress_bar = find_progress_bar(download_id);
         if (progress_bar == nullptr) {
             return;
         }
         std::string msg;
         std::string url;
+        std::string metadata;
         signal >> msg;
         signal >> url;
-        progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, msg + " - " + url);
-        multi_progress_bar.print();
+        signal >> metadata;
+
+        std::string message = msg + " - " + url;
+        if (!metadata.empty()) {
+            message += " - " + metadata;
+        }
+        progress_bar->add_message(libdnf::cli::progressbar::MessageType::ERROR, message);
+        print();
     }
 }
 
+void DownloadCB::key_import(sdbus::Signal & signal) {
+    if (signature_valid(signal)) {
+        std::string key_id;
+        std::vector<std::string> user_ids;
+        std::string fingerprint;
+        std::string url;
+        signal >> key_id >> user_ids >> fingerprint >> url;
+
+        std::cout << "Importing PGP key: " + key_id << std::endl;
+        for (auto & user_id : user_ids) {
+            std::cout << " Userid     : " + user_id << std::endl;
+        }
+        std::cout << " Fingerprint: " + fingerprint << std::endl;
+        std::cout << " From       : " + url << std::endl;
+
+        // ask user for the key import confirmation
+        auto confirmed = libdnf::cli::utils::userconfirm::userconfirm(context);
+
+        // signal the confirmation back to the server
+        try {
+            context.session_proxy->callMethod("confirm_key")
+                .onInterface(dnfdaemon::INTERFACE_REPO)
+                .withTimeout(static_cast<uint64_t>(-1))
+                .withArguments(key_id, confirmed);
+        } catch (const sdbus::Error & ex) {
+            std::cerr << ex.what() << std::endl;
+        }
+        print();
+    }
+}
 
 TransactionCB::TransactionCB(Context & context) : DbusCallback(context) {
     // register signal handlers

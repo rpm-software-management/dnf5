@@ -37,6 +37,11 @@ void Base::dbus_register() {
         dnfdaemon::INTERFACE_BASE, "read_all_repos", "", "b", [this](sdbus::MethodCall call) -> void {
             session.get_threads_manager().handle_method(*this, &Base::read_all_repos, call, session.session_locale);
         });
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_REPO, dnfdaemon::SIGNAL_REPO_KEY_IMPORT_REQUEST, "ossssx");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_ADD_NEW, "os");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_PROGRESS, "ott");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_END, "o");
+    dbus_object->registerSignal(dnfdaemon::INTERFACE_BASE, dnfdaemon::SIGNAL_DOWNLOAD_MIRROR_FAILURE, "o");
 }
 
 sdbus::MethodReply Base::read_all_repos(sdbus::MethodCall & call) {

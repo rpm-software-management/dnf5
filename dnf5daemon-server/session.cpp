@@ -97,7 +97,7 @@ Session::Session(
     }
     dbus_object->finishRegistration();
 
-    base->set_download_callbacks(std::make_unique<DownloadCallbacksProxy>());
+    base->set_download_callbacks(std::make_unique<dnf5daemon::DownloadCB>(*this));
 }
 
 Session::~Session() {
@@ -167,9 +167,13 @@ bool Session::read_all_repos() {
         libdnf::repo::RepoQuery enabled_repos(*base);
         enabled_repos.filter_enabled(true);
         enabled_repos.filter_type(libdnf::repo::Repo::Type::AVAILABLE);
+        // container is owner of package callbacks user_data
+        std::vector<std::unique_ptr<dnf5daemon::DownloadUserData>> repos_user_data;
         for (auto & repo : enabled_repos) {
-            repo->set_user_data(this);
-            repo->set_callbacks(std::make_unique<DbusRepoCB>(*this));
+            auto & user_data = repos_user_data.emplace_back(std::make_unique<dnf5daemon::DownloadUserData>());
+            user_data->download_id = "repo:" + repo->get_id();
+            repo->set_user_data(user_data.get());
+            repo->set_callbacks(std::make_unique<dnf5daemon::KeyImportRepoCB>(*this));
         }
 
         try {

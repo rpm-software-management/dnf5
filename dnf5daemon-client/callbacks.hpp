@@ -42,45 +42,31 @@ protected:
 };
 
 
-class RepoCB final : public DbusCallback {
+class DownloadCB final : public DbusCallback {
 public:
-    explicit RepoCB(Context & context);
-    virtual ~RepoCB() = default;
+    explicit DownloadCB(Context & context);
+    virtual ~DownloadCB() = default;
 
-    void start(sdbus::Signal & signal);
-    void end(sdbus::Signal & signal);
+    void add_new_download(sdbus::Signal & signal);
     void progress(sdbus::Signal & signal);
+    void end(sdbus::Signal & signal);
+    void mirror_failure(sdbus::Signal & signal);
     void key_import(sdbus::Signal & signal);
 
-private:
-    libdnf::cli::progressbar::DownloadProgressBar progress_bar{-1, ""};
-    std::size_t msg_lines{0};
-    void print_progress_bar();
-};
-
-
-class PackageDownloadCB final : public DbusCallback {
-public:
-    explicit PackageDownloadCB(Context & context);
-    virtual ~PackageDownloadCB() = default;
-
-    void start(sdbus::Signal & signal);
-    void end(sdbus::Signal & signal);
-    void progress(sdbus::Signal & signal);
-    void mirror_failure(sdbus::Signal & signal);
+    void reset_progress_bar();
+    void set_number_widget_visible(bool value);
+    void set_show_total_bar_limit(std::size_t limit);
 
 private:
-    libdnf::cli::progressbar::MultiProgressBar multi_progress_bar;
-    // map {package id: progressbar}
-    std::map<int, libdnf::cli::progressbar::DownloadProgressBar *> package_bars;
+    libdnf::cli::progressbar::DownloadProgressBar * find_progress_bar(const std::string & download_id);
+    void print();
 
-    libdnf::cli::progressbar::DownloadProgressBar * find_progress_bar(const int pkg_id) {
-        if (package_bars.find(pkg_id) != package_bars.end()) {
-            return package_bars.at(pkg_id);
-        } else {
-            return nullptr;
-        }
-    }
+    bool printed{false};
+    bool number_widget_visible{false};
+    std::size_t show_total_bar_limit{static_cast<std::size_t>(-1)};
+    std::unique_ptr<libdnf::cli::progressbar::MultiProgressBar> multi_progress_bar;
+    // map {download_id: progressbar}
+    std::unordered_map<std::string, libdnf::cli::progressbar::DownloadProgressBar *> progress_bars;
 };
 
 
