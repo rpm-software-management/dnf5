@@ -672,8 +672,8 @@ int main(int argc, char * argv[]) try {
     {
         try {
             context.get_argument_parser().parse(argc, argv);
-        } catch (libdnf::cli::ArgumentParserUnknownArgumentError & ex) {
-            // print help if an unknown command is provided
+        } catch (libdnf::cli::ArgumentParserError & ex) {
+            // print help in case of argument parser error
             std::cerr << ex.what() << std::endl;
             context.get_argument_parser().get_selected_command()->help();
             return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
