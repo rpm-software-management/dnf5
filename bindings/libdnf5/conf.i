@@ -42,6 +42,8 @@
 #define CV __perl_CV
 #define final
 
+wrap_unique_ptr(StringUniquePtr, std::string);
+
 %include "libdnf/version.hpp"
 
 %include "libdnf/conf/const.hpp"
