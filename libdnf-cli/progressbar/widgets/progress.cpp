@@ -44,7 +44,7 @@ std::string ProgressWidget::to_string() const {
 
     os << get_delimiter_before();
     os << "[";
-    if (get_bar()->get_total_ticks() > 0) {
+    if (get_bar()->get_total_ticks() > 0 && get_bar()->get_ticks() > 0) {
         progress = static_cast<std::size_t>(rint(
             static_cast<double>(get_bar()->get_ticks()) / static_cast<double>(get_bar()->get_total_ticks()) *
             (static_cast<double>(width) - 2)));
