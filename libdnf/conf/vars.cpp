@@ -129,9 +129,13 @@ static const char * detect_arch() {
     return value;
 }
 
-static std::optional<std::string> detect_release(const BaseWeakPtr & base, const std::string & install_root_path) {
+
+// ==================================================================
+
+
+std::unique_ptr<std::string> Vars::detect_release(const BaseWeakPtr & base, const std::string & install_root_path) {
     init_lib_rpm();
-    std::optional<std::string> release_ver;
+    std::unique_ptr<std::string> release_ver;
 
     libdnf::rpm::RpmLogGuard rpm_log_guard(base);
 
@@ -153,7 +157,7 @@ static std::optional<std::string> detect_release(const BaseWeakPtr & base, const
             }
             if (version) {
                 // Is the result of rpmdsEVR(ds) valid after rpmdsFree(ds)? Make a copy to be sure.
-                release_ver = version;
+                release_ver = std::make_unique<std::string>(version);
             }
             rpmdsFree(ds);
         }
@@ -166,7 +170,6 @@ static std::optional<std::string> detect_release(const BaseWeakPtr & base, const
     return release_ver;
 }
 
-// ==================================================================
 
 Vars::Vars(Base & base) : Vars(base.get_weak_ptr()) {}
 
