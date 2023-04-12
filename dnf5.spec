@@ -376,6 +376,7 @@ Python 3 bindings for the libdnf library.
 
 %files -n python3-libdnf5
 %{python3_sitearch}/libdnf5
+%{python3_sitearch}/libdnf5-*.dist-info
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif
@@ -395,6 +396,7 @@ Python 3 bindings for the libdnf5-cli library.
 
 %files -n python3-libdnf5-cli
 %{python3_sitearch}/libdnf5_cli
+%{python3_sitearch}/libdnf5_cli-*.dist-info
 %license COPYING.md
 %license lgpl-2.1.txt
 %endif

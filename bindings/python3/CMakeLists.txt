@@ -46,8 +46,17 @@ function(add_python3_module LIBRARY_NAME MODULE_NAME)
     swig_link_libraries(${TARGET_NAME} ${C_LIBRARY_NAME})
     swig_link_libraries(${TARGET_NAME} ${Python3_LIBRARIES})
 
+    # generate a dist-info for the library (redundantly created for multi-module packages, oh well...)
+    set(DISTINFO_PATH "${CMAKE_CURRENT_BINARY_DIR}/${LIBRARY_NAME}-${CMAKE_PROJECT_VERSION}.dist-info")
+    set(METADATA_FILE "${DISTINFO_PATH}/METADATA")
+    file(MAKE_DIRECTORY ${DISTINFO_PATH})
+    file(WRITE ${METADATA_FILE} "Metadata-Version: 2.1\n")
+    file(APPEND ${METADATA_FILE} "Name: ${LIBRARY_NAME}\n")
+    file(APPEND ${METADATA_FILE} "Version: ${CMAKE_PROJECT_VERSION}\n")
+
     install(TARGETS ${TARGET_NAME} LIBRARY DESTINATION ${Python3_SITEARCH}/${LIBRARY_NAME})
     install(FILES ${CMAKE_CURRENT_BINARY_DIR}/${MODULE_NAME}.py DESTINATION ${Python3_SITEARCH}/${LIBRARY_NAME})
+    install(DIRECTORY ${DISTINFO_PATH} DESTINATION ${Python3_SITEARCH})
 endfunction()
 
 
