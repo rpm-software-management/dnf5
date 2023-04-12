@@ -670,27 +670,29 @@ int main(int argc, char * argv[]) try {
 
     // Parse command line arguments
     {
+        auto & arg_parser = context.get_argument_parser();
         try {
-            context.get_argument_parser().parse(argc, argv);
-        } catch (libdnf::cli::ArgumentParserUnknownArgumentError & ex) {
-            // print help if an unknown command is provided
-            std::cerr << ex.what() << std::endl;
-            context.get_argument_parser().get_selected_command()->help();
-            return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
-        } catch (const std::exception & ex) {
-            std::cout << ex.what() << std::endl;
+            arg_parser.parse(argc, argv);
+        } catch (libdnf::cli::ArgumentParserError & ex) {
+            // Error during parsing arguments. Try to find "--help"/"-h".
+            for (int idx = 1; idx < argc; ++idx) {
+                if (strcmp(argv[idx], "-h") == 0 || strcmp(argv[idx], "--help") == 0) {
+                    arg_parser.get_selected_command()->help();
+                    return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+                }
+            }
+            std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
             return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
         }
 
-        auto & arg_parser = context.get_argument_parser();
+        // print help of the selected command if --help was used
+        if (arg_parser.get_named_arg("help", false).get_parse_count() > 0) {
+            arg_parser.get_selected_command()->help();
+            return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
+        }
         // print version of program if --version was used
         if (arg_parser.get_named_arg("version", false).get_parse_count() > 0) {
             dnf5::print_versions(context);
-            return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
-        }
-        // print help of the selected command if --help was used
-        if (arg_parser.get_named_arg("help", false).get_parse_count() > 0) {
-            context.get_argument_parser().get_selected_command()->help();
             return static_cast<int>(libdnf::cli::ExitCode::SUCCESS);
         }
     }
@@ -784,17 +786,8 @@ int main(int argc, char * argv[]) try {
         }
         std::cerr << ex.what() << std::endl;
         return static_cast<int>(libdnf::cli::ExitCode::ERROR);
-    } catch (libdnf::cli::ArgumentParserMissingCommandError & ex) {
-        // print help if no command is provided
-        std::cerr << ex.what() << std::endl;
-        context.get_argument_parser().get_selected_command()->help();
-        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
-    } catch (libdnf::cli::ArgumentParserMissingDependentArgumentError & ex) {
-        std::cerr << ex.what() << std::endl;
-        context.get_argument_parser().get_selected_command()->help();
-        return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (libdnf::cli::ArgumentParserError & ex) {
-        std::cerr << ex.what() << std::endl;
+        std::cerr << ex.what() << _(". Add \"--help\" for more information about the arguments.") << std::endl;
         return static_cast<int>(libdnf::cli::ExitCode::ARGPARSER_ERROR);
     } catch (libdnf::cli::CommandExitError & ex) {
         std::cerr << ex.what() << std::endl;
