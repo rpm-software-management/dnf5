@@ -1,6 +1,10 @@
 ---
 name: DNF 5 CI
-on: pull_request_target
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize]
+  merge_group:
+    types: [checks_requested]
 
 jobs:
   package-build:
