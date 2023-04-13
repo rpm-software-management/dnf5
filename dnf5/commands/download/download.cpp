@@ -90,7 +90,8 @@ void DownloadCommand::configure() {
         context.set_load_system_repo(true);
     } else if (!resolve_option->get_value() && alldeps_option->get_value()) {
         throw libdnf::cli::ArgumentParserMissingDependentArgumentError(
-            M_("Option alldeps should be used with resolve"));
+            //TODO(jrohel): Add support for requiring an argument by another argument in ArgumentParser?
+            M_("Option \"--alldeps\" should be used with \"--resolve\""));
     } else {
         context.set_load_system_repo(false);
     }
