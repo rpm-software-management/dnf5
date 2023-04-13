@@ -557,6 +557,20 @@ public:
         const libdnf::advisory::AdvisoryQuery & advisory_query,
         libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::EQ);
 
+    /// Filter packages by the advisories they are included in, considering
+    /// only the latest advisories that are not resolved in the currently
+    /// installed package set.
+    ///
+    /// @param advisory_query   AdvisoryQuery with Advisories that contain package lists the filter is matched against.
+    /// @param installed        PackageQuery with currently installed packages.
+    /// @param cmp              A comparison (match) operator, defaults to `QueryCmp::EQ`.
+    ///                         Supported values: `EQ`, `NEQ`, `GT`, `GTE`, `LT`, `LTE`.
+    /// @since 5.0
+    void filter_latest_unresolved_advisories(
+        const libdnf::advisory::AdvisoryQuery & advisory_query,
+        PackageQuery & installed,
+        libdnf::sack::QueryCmp cmp_type = libdnf::sack::QueryCmp::GTE);
+
     void filter_installed();
 
     void filter_available();
