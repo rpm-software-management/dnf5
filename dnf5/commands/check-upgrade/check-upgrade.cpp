@@ -124,6 +124,9 @@ void CheckUpgradeCommand::run() {
     // repo
     upgrades_query.filter_arch({"src", "nosrc"}, libdnf::sack::QueryCmp::NOT_EXACT);
 
+    libdnf::rpm::PackageQuery installed_query(ctx.base);
+    installed_query.filter_installed();
+
     // filter by advisory flags, e.g. `--security`
     size_t size_before_filter_advisories = upgrades_query.size();
     auto advisories = advisory_query_from_cli_input(
@@ -137,11 +140,9 @@ void CheckUpgradeCommand::run() {
         advisory_bz->get_value(),
         advisory_cve->get_value());
     if (advisories.has_value()) {
-        upgrades_query.filter_advisories(std::move(advisories.value()), libdnf::sack::QueryCmp::GTE);
+        upgrades_query.filter_latest_unresolved_advisories(
+            std::move(advisories.value()), installed_query, libdnf::sack::QueryCmp::GTE);
     }
-
-    libdnf::rpm::PackageQuery installed_query(ctx.base);
-    installed_query.filter_installed();
 
     libdnf::rpm::PackageQuery obsoletes_query(upgrades_query);
     obsoletes_query.filter_obsoletes(installed_query);

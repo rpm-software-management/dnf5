@@ -1998,6 +1998,27 @@ void PackageQuery::filter_advisories(
     PQImpl::filter_sorted_advisory_pkgs(*this, adv_pkgs, cmp_type);
 }
 
+void PackageQuery::filter_latest_unresolved_advisories(
+    const libdnf::advisory::AdvisoryQuery & advisory_query, PackageQuery & installed, libdnf::sack::QueryCmp cmp_type) {
+    auto adv_pkgs = advisory_query.get_advisory_packages_sorted_by_name_arch_evr();
+    std::vector<libdnf::advisory::AdvisoryPackage> latest_unresolved_adv_pkgs;
+    for (std::vector<libdnf::advisory::AdvisoryPackage>::iterator i = adv_pkgs.begin(); i != adv_pkgs.end(); ++i) {
+        // Filter out already resolved advisories
+        if (i->p_impl->is_resolved_in(installed)) {
+            continue;
+        }
+
+        // Include only the advisory package with the most recent EVR
+        auto next_adv_pkg = std::next(i);
+        if (next_adv_pkg == adv_pkgs.end() || i->get_name() != next_adv_pkg->get_name() ||
+            i->get_arch() != next_adv_pkg->get_arch()) {
+            latest_unresolved_adv_pkgs.push_back(*i);
+        }
+    }
+
+    PQImpl::filter_sorted_advisory_pkgs(*this, latest_unresolved_adv_pkgs, cmp_type);
+}
+
 void PackageQuery::filter_installed() {
     auto & pool = get_rpm_pool(p_impl->base);
     auto * installed_repo = pool->installed;
