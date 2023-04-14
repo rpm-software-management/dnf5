@@ -1,7 +1,7 @@
 ---
 Language: Cpp
 BasedOnStyle: Google
-Standard: Cpp11
+Standard: c++20
 
 
 # Characters per line
