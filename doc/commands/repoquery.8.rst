@@ -78,6 +78,9 @@ Options
 ``--installed``
     | Display only installed packages.
 
+``--leaves``
+    | Display only leaf packages.
+
 ``--nevra``
     | Use the `NEVRA` format for the output.
     | This is the default behavior.
@@ -104,4 +107,5 @@ See Also
 ========
 
     | :manpage:`dnf5-advisory(8)`, :ref:`Advisory command <advisory_command_ref-label>`
+    | :manpage:`dnf5-leaves(8)`, :ref:`Leaves command <leaves_command_ref-label>`
     | :manpage:`dnf5-specs(7)`, :ref:`Patterns specification <specs_misc_ref-label>`
