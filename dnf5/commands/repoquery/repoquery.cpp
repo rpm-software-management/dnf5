@@ -241,6 +241,13 @@ void RepoqueryCommand::set_argument_parser() {
         "Limit to installed duplicate packages (i.e. more package versions for  the  same  name and "
         "architecture). Installonly packages are excluded from this set.",
         false);
+    unneeded = std::make_unique<libdnf::cli::session::BoolOption>(
+        *this,
+        "unneeded",
+        '\0',
+        "Limit to unneeded installed packages (i.e. packages that were installed as "
+        "dependencies but are no longer needed).",
+        false);
 
     advisory_name = std::make_unique<AdvisoryOption>(*this);
     advisory_security = std::make_unique<SecurityOption>(*this);
@@ -311,7 +318,7 @@ void RepoqueryCommand::configure() {
     auto & context = get_context();
     context.update_repo_metadata_from_specs(pkg_specs);
     only_system_repo_needed = installed_option->get_value() || userinstalled_option->get_value() ||
-                              duplicates->get_value() || leaves_option->get_value();
+                              duplicates->get_value() || leaves_option->get_value() || unneeded->get_value();
     context.set_load_system_repo(only_system_repo_needed);
     bool updateinfo_needed = advisory_name->get_value().empty() || advisory_security->get_value() ||
                              advisory_bugfix->get_value() || advisory_enhancement->get_value() ||
@@ -508,6 +515,10 @@ void RepoqueryCommand::run() {
         installonly_query.filter_provides(installonly_packages, libdnf::sack::QueryCmp::GLOB);
         full_package_query -= installonly_query;
         full_package_query.filter_duplicates();
+    }
+
+    if (unneeded->get_value()) {
+        full_package_query.filter_unneeded();
     }
 
     if (pkg_specs.empty()) {

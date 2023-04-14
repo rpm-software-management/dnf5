@@ -66,6 +66,7 @@ private:
 
     std::unique_ptr<libdnf::cli::session::BoolOption> exactdeps{nullptr};
     std::unique_ptr<libdnf::cli::session::BoolOption> duplicates{nullptr};
+    std::unique_ptr<libdnf::cli::session::BoolOption> unneeded{nullptr};
 
     libdnf::OptionString * query_format_option{nullptr};
     libdnf::OptionEnum<std::string> * pkg_attr_option{nullptr};
